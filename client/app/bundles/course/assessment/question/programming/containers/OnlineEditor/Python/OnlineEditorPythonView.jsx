@@ -284,7 +284,8 @@ class OnlineEditorPythonView extends React.Component {
           )
         }
         {
-          this.renderNewPackageFiles('data_files',
+          this.renderNewPackageFiles(
+            'data_files',
             this.props.intl.formatMessage(translations.newDataFilesHeader),
             intl.formatMessage(translations.addDataFileButton)
           )

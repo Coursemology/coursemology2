@@ -99,13 +99,13 @@ class SurveyResults extends React.Component {
         </Card>
         <Subheader><FormattedMessage {...surveyTranslations.questions} /></Subheader>
         {
-          this.props.sections.map((section, index) =>
-            (<ResultsSection
+          this.props.sections.map((section, index) => (
+            <ResultsSection
               key={section.id}
               includePhantoms={this.state.includePhantoms}
               {...{ section, index, anonymous }}
-            />)
-          )
+            />
+          ))
         }
       </div>
     );

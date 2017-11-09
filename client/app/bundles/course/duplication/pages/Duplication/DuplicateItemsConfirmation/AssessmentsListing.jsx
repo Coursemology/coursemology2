@@ -128,8 +128,8 @@ class AssessmentsListing extends React.Component {
     categories.forEach((category) => {
       const selectedTabs = [];
       category.tabs.forEach((tab) => {
-        const selectedAssessments = tab.assessments.filter(assessment =>
-          selectedItems[ASSESSMENT][assessment.id]
+        const selectedAssessments = tab.assessments.filter(
+          assessment => selectedItems[ASSESSMENT][assessment.id]
         );
 
         if (selectedItems[TAB][tab.id]) {
@@ -162,8 +162,8 @@ class AssessmentsListing extends React.Component {
         </Subheader>
         {
           categoriesTrees.map(category => (
-            AssessmentsListing.renderCategoryCard(category, null, null))
-          )
+            AssessmentsListing.renderCategoryCard(category, null, null)
+          ))
         }
         { (orphanTreesCount > 0) && AssessmentsListing.renderCategoryCard(null, tabTrees, assessmentTrees) }
       </div>

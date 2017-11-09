@@ -129,6 +129,6 @@ class PopupDialog extends React.Component {
   }
 }
 
-export default connect(state =>
-  ({ ...state.formDialog, pristine: isPristine(formNames.ASSESSMENT)(state) })
+export default connect(
+  state => ({ ...state.formDialog, pristine: isPristine(formNames.ASSESSMENT)(state) })
 )(injectIntl(PopupDialog));

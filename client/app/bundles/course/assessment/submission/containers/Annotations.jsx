@@ -26,7 +26,7 @@ class VisibleAnnotations extends Component {
     return (
       <Card onClick={() => this.setState({ fieldVisible: true })}>
         <CardText style={{ textAlign: 'left' }}>
-          {posts.map(post =>
+          {posts.map(post => (
             <CommentCard
               key={post.id}
               post={post}
@@ -35,7 +35,7 @@ class VisibleAnnotations extends Component {
               deleteComment={() => deleteComment(post.id)}
               handleChange={value => handleUpdateChange(post.id, value)}
             />
-          )}
+          ))}
           {posts.length === 0 || fieldVisible ? <CommentField
             value={commentForms.annotations[fileId][lineNumber]}
             createComment={createComment}

@@ -56,7 +56,7 @@ export default class Answers extends Component {
     const { readOnly, question, input: { onChange, value } } = props;
     return (
       <div>
-        {question.options.map(option =>
+        {question.options.map(option => (
           <RadioButton
             key={option.id}
             value={option.id}
@@ -70,7 +70,7 @@ export default class Answers extends Component {
             )}
             disabled={readOnly}
           />
-        )}
+        ))}
       </div>
     );
   }

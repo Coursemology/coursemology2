@@ -8,7 +8,7 @@ export default class CheckboxFormGroup extends Component {
     const { readOnly, options, input } = this.props;
     return (
       <div>
-        {options.map(option =>
+        {options.map(option => (
           <Checkbox
             disabled={readOnly}
             key={option.id}
@@ -31,7 +31,7 @@ export default class CheckboxFormGroup extends Component {
             )}
             labelStyle={{ verticalAlign: 'middle' }}
           />
-        )}
+        ))}
       </div>
     );
   }

@@ -316,7 +316,8 @@ class OnlineEditorJavaView extends React.Component {
                     )
                 }
                 {
-                  this.renderNewPackageFiles('solution_files',
+                  this.renderNewPackageFiles(
+                    'solution_files',
                     this.props.intl.formatMessage(javaTranslations.newSolutionFilesHeader),
                     intl.formatMessage(javaTranslations.addSolutionFileButton)
                   )
@@ -349,13 +350,14 @@ class OnlineEditorJavaView extends React.Component {
           this.renderExistingPackageFiles(
             'data_files',
             this.props.intl.formatMessage(translations.currentDataFilesHeader)
-            )
+          )
         }
         {
-          this.renderNewPackageFiles('data_files',
+          this.renderNewPackageFiles(
+            'data_files',
             this.props.intl.formatMessage(translations.newDataFilesHeader),
             intl.formatMessage(translations.addDataFileButton)
-            )
+          )
         }
         <h3>{ intl.formatMessage(translations.testCasesHeader) }</h3>
         <div style={{ marginBottom: '0.5em' }}>

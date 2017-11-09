@@ -20,7 +20,8 @@ export function create(submissionId, answerId, fileId, line, text) {
     dispatch({ type: actionTypes.CREATE_ANNOTATION_REQUEST });
 
     return CourseAPI.assessment.submissions.createProgrammingAnnotation(
-      submissionId, answerId, fileId, payload)
+      submissionId, answerId, fileId, payload
+    )
       .then(response => response.data)
       .then((data) => {
         dispatch({

@@ -86,7 +86,8 @@ export function fetchSubmission(id) {
       .then((data) => {
         data.answers.filter(a => a.autograding && a.autograding.path).forEach((answer, index) => {
           setTimeout(() => {
-            pollJob(answer.autograding.path, JOB_POLL_DELAY,
+            pollJob(
+              answer.autograding.path, JOB_POLL_DELAY,
               () => dispatch(getEvaluationResult(id, answer.fields.id, answer.questionId)),
               () => dispatch({ type: actionTypes.AUTOGRADE_FAILURE, questionId: answer.questionId })
             );
@@ -109,7 +110,8 @@ export function autogradeSubmission(id) {
     return CourseAPI.assessment.submissions.autoGrade(id)
       .then(response => response.data)
       .then((data) => {
-        pollJob(data.redirect_url, JOB_POLL_DELAY,
+        pollJob(
+          data.redirect_url, JOB_POLL_DELAY,
           () => {
             dispatch({ type: actionTypes.AUTOGRADE_SUBMISSION_SUCCESS });
             fetchSubmission(id)(dispatch);
@@ -198,7 +200,8 @@ export function submitAnswer(submissionId, rawAnswer) {
         if (data.redirect_url && data.format === 'html') {
           window.location = data.redirect_url;
         } else if (data.redirect_url) {
-          pollJob(data.redirect_url, JOB_POLL_DELAY,
+          pollJob(
+            data.redirect_url, JOB_POLL_DELAY,
             () => dispatch(getEvaluationResult(submissionId, answer.id, questionId)),
             (errorData) => {
               dispatch({ type: actionTypes.AUTOGRADE_FAILURE, questionId, payload: errorData });

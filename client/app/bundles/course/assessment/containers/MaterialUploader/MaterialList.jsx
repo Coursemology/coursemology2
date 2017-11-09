@@ -59,28 +59,24 @@ const MaterialList = (props) => {
       defaultMessage="Files"
     />);
 
-  const materialNodes = materials.map(material =>
-    (
-      <Material
-        key={material.id}
-        id={material.id}
-        name={material.name}
-        updatedAt={material.updated_at}
-        deleting={material.deleting}
-        onMaterialDelete={onMaterialDelete}
-      />
-    )
-  );
+  const materialNodes = materials.map(material => (
+    <Material
+      key={material.id}
+      id={material.id}
+      name={material.name}
+      updatedAt={material.updated_at}
+      deleting={material.deleting}
+      onMaterialDelete={onMaterialDelete}
+    />
+  ));
 
-  const uploadingMaterialNodes = uploadingMaterials.map(material =>
-    (
-      <Material
-        key={material.name}
-        name={material.name}
-        uploading
-      />
-    )
-  );
+  const uploadingMaterialNodes = uploadingMaterials.map(material => (
+    <Material
+      key={material.name}
+      name={material.name}
+      uploading
+    />
+  ));
 
   const newFileButton = (
     <FlatButton

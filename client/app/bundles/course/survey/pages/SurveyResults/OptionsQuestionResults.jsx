@@ -162,8 +162,8 @@ class OptionsQuestionResults extends React.Component {
     return (
       <div style={styles.optionStudentNames}>
         {
-          students.map(student =>
-            (<Chip key={student.id} style={styles.nameChip}>
+          students.map(student => (
+            <Chip key={student.id} style={styles.nameChip}>
               <Link to={student.response_path}>
                 {
                   student.phantom ?
@@ -171,8 +171,8 @@ class OptionsQuestionResults extends React.Component {
                     student.name
                 }
               </Link>
-            </Chip>)
-          )
+            </Chip>
+          ))
         }
       </div>
     );
@@ -300,8 +300,9 @@ class OptionsQuestionResults extends React.Component {
           </TableRow>
         </TableHeader>
         <TableBody displayRowCheckbox={false}>
-          {options.sort(sortMethod).map((option, index) =>
-            OptionsQuestionResults.renderOptionRow(breakdown, hasImage, option, index, anonymous)
+          {options.sort(sortMethod).map(
+            (option, index) =>
+              OptionsQuestionResults.renderOptionRow(breakdown, hasImage, option, index, anonymous)
           )}
         </TableBody>
       </Table>

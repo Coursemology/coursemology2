@@ -6,7 +6,6 @@
   },
   rules: {
     // temporary disable some rules
-    function-paren-newline: "off",
     object-curly-newline: "off",
     prefer-destructuring: "off",
     react/jsx-curly-brace-presence: "off",
@@ -18,7 +17,6 @@
     react/default-props-match-prop-types: "off",
 
     react/forbid-prop-types: ["error", { "forbid": ["any", "array"] }],
-    react/jsx-wrap-multilines: ["error", { arrow: false }],
     react/no-array-index-key: "warn",
     react/no-danger: "off",
     react/no-unused-prop-types: ["warn", { skipShapeProps: true }],
@@ -38,11 +36,12 @@
         exports: "always-multiline",
         functions: "never",
     }],
+    func-names: "off",
+    function-paren-newline: ["error", "consistent"],
     no-multi-str: "off",
     no-plusplus: ["error", { allowForLoopAfterthoughts: true }],
     // Use `_` to indicate that the method is private
-    no-underscore-dangle: "off",
-    func-names: "off"
+    no-underscore-dangle: "off"
   },
   globals: {
     window: true,

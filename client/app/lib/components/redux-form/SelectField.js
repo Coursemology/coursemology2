@@ -14,4 +14,5 @@ export default createComponent(
         onChangeFromField(value);
       }
     },
-  }));
+  })
+);

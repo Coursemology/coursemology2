@@ -65,8 +65,8 @@ export const sortSurveysByDate = surveys => surveys.sort((a, b) => {
 
 export const formatQuestionFormData = (data) => {
   const payload = new FormData();
-  const filledOptions = data.options.filter(option =>
-    option && (option.option || option.file || option.image_url)
+  const filledOptions = data.options.filter(
+    option => option && (option.option || option.file || option.image_url)
   );
   const filledOptionsCount = filledOptions.length;
 

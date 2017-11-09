@@ -35,13 +35,11 @@ export default function (state = {}, action) {
       // and passed values.
       Object.keys(state[questionId]).forEach((testType) => {
         if (testType !== 'stdout' && testType !== 'stderr') {
-          questionState[testType] = state[questionId][testType].map(testCase =>
-            ({
-              identifier: testCase.identifier,
-              expression: testCase.expression,
-              expected: testCase.expected,
-            })
-          );
+          questionState[testType] = state[questionId][testType].map(testCase => ({
+            identifier: testCase.identifier,
+            expression: testCase.expression,
+            expected: testCase.expected,
+          }));
         }
       });
 

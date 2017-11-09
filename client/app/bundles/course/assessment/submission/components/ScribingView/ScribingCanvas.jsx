@@ -81,9 +81,8 @@ export default class ScribingCanvas extends React.Component {
   }
 
   componentDidMount() {
-    this.initializeCanvas(
-      this.props.answerId,
-      this.props.scribing.answer.image_url);
+    const { answerId, scribing } = this.props;
+    this.initializeCanvas(answerId, scribing.answer.image_url);
   }
 
   shouldComponentUpdate(nextProps) {
@@ -628,7 +627,8 @@ export default class ScribingCanvas extends React.Component {
       const canvasElem = document.getElementById(`canvas-container-${answerId}`);
       canvasElem.tabIndex = 1000;
       // Minimise reflows
-      canvasElem.setAttribute('style',
+      canvasElem.setAttribute(
+        'style',
         `background: lightgrey;
         max-width: ${maxWidth}px;
         margin: 0px;

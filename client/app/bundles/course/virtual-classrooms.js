@@ -1,16 +1,18 @@
 import CourseAPI from 'api/course';
 
 function appendError($node, selector, text) {
-  (selector ? $node.closest(selector) : $node).append($('<i></i>')
-    .addClass('error')
-    .text(text)
+  (selector ? $node.closest(selector) : $node).append(
+    $('<i></i>')
+      .addClass('error')
+      .text(text)
   );
 }
 
 function appendInfo($node, selector, text) {
-  (selector ? $node.closest(selector) : $node).append($('<i></i>')
-    .addClass('info')
-    .text(text)
+  (selector ? $node.closest(selector) : $node).append(
+    $('<i></i>')
+      .addClass('info')
+      .text(text)
   );
 }
 
@@ -28,9 +30,10 @@ $(document).ready(() => {
           $link.attr('href', link);
         } else {
           $this.closest('.access-link')
-            .prepend($('<a></a>')
-              .attr({ id: `lec-link-${virtualClassroomId}`, target: '_blank', href: link })
-              .text('Go to virtual classroom')
+            .prepend(
+              $('<a></a>')
+                .attr({ id: `lec-link-${virtualClassroomId}`, target: '_blank', href: link })
+                .text('Go to virtual classroom')
             );
         }
         $this.remove();
@@ -64,13 +67,14 @@ $(document).ready(() => {
           let i;
           for (i = 0; i < recordings.length; i += 1) {
             const recording = recordings[i];
-            $div.append($('<a></a>')
-              .attr({
-                class: 'recorded-video-link',
-                'data-record-id': recording.id,
-                href: '#',
-              })
-              .text(recording.name)
+            $div.append(
+              $('<a></a>')
+                .attr({
+                  class: 'recorded-video-link',
+                  'data-record-id': recording.id,
+                  href: '#',
+                })
+                .text(recording.name)
             );
           }
         }

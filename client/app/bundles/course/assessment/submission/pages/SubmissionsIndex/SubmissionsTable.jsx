@@ -78,9 +78,10 @@ export default class SubmissionsTable extends React.Component {
 
   canDownload() {
     const { assessment, submissions } = this.props;
-    return assessment.downloadable && submissions.some(s =>
-      s.workflowState !== workflowStates.Unstarted &&
-      s.workflowState !== workflowStates.Attempting
+    return assessment.downloadable && submissions.some(
+      s =>
+        s.workflowState !== workflowStates.Unstarted &&
+        s.workflowState !== workflowStates.Attempting
     );
   }
 

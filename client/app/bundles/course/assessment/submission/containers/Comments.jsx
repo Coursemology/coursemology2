@@ -20,7 +20,7 @@ class VisibleComments extends Component {
     return (
       <div>
         <h3><FormattedMessage {...translations.comments} /></h3>
-        {posts.map(post =>
+        {posts.map(post => (
           <CommentCard
             key={post.id}
             post={post}
@@ -29,7 +29,7 @@ class VisibleComments extends Component {
             deleteComment={() => deleteComment(post.id)}
             handleChange={value => handleUpdateChange(post.id, value)}
           />
-        )}
+        ))}
         <CommentField
           value={commentForms.topics[topic.id]}
           createComment={createComment}

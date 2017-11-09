@@ -50,8 +50,7 @@ class SubmissionEmptyForm extends Component {
     const { handleSubmit, courseId, categoryId, tabId } = this.props;
     handleSubmit().then(() => history.push(
       `/courses/${courseId}/assessments?category=${categoryId}&tab=${tabId}`
-    )
-    ).then(() => {
+    )).then(() => {
       window.location.reload(true);
     });
   }

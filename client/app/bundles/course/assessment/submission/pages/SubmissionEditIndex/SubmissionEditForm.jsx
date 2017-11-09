@@ -308,7 +308,8 @@ class SubmissionEditForm extends Component {
       graderView, submitted, handleMark, isSaving } = this.props;
     if (delayedGradePublication && graderView && submitted) {
       const anyUngraded = Object.values(grading).some(
-        q => q.grade === undefined || q.grade === null);
+        q => q.grade === undefined || q.grade === null
+      );
       return (
         <RaisedButton
           style={styles.formButton}
@@ -345,7 +346,8 @@ class SubmissionEditForm extends Component {
       submitted, handlePublish, isSaving } = this.props;
     if (!delayedGradePublication && graderView && submitted) {
       const anyUngraded = Object.values(grading).some(
-        q => q.grade === undefined || q.grade === null);
+        q => q.grade === undefined || q.grade === null
+      );
 
       return (
         <RaisedButton

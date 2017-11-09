@@ -138,9 +138,9 @@ class QuestionCard extends React.Component {
         iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
         style={styles.adminMenu}
       >
-        {adminFunctions.map(({ label, handler }) =>
+        {adminFunctions.map(({ label, handler }) => (
           <MenuItem key={label} primaryText={label} onClick={handler} />
-        )}
+        ))}
       </IconMenu>
     );
   }
