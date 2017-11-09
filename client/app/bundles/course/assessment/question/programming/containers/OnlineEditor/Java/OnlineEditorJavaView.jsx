@@ -397,16 +397,16 @@ class OnlineEditorJavaView extends React.Component {
                   <p style={{ marginBottom: 0 }}>
                     {'int array [] = {0,0,0}; // Initialize variables'}
                   </p>
-                  <p style={{ marginBottom: 0 }}>{'addOneToArray(array); // Make function calls'}</p>
-                  <p style={{ marginBottom: 0 }}>{'int expected [] = {1,1,1}; // Make function calls'}</p>
+                  <p style={{ marginBottom: 0 }}>addOneToArray(array); // Make function calls</p>
+                  <p style={{ marginBottom: 0 }}>int expected [] = {'{'}1,1,1{'}'}; // Make function calls</p>
                   <p style={{ marginBottom: 0 }}>
                     {'setAttribute("expression", "addOneToArray([0,0,0])");'}
                     {' // Override the default expression displayed'}
                   </p>
                 </pre>,
               /* eslint-enable react/jsx-indent */
-              codeExampleExpected: <code>{'expected'}</code>,
-              codeExampleExpression: <code>{'array'}</code>,
+              codeExampleExpected: <code>expected</code>,
+              codeExampleExpression: <code>array</code>,
             }}
           />
         </div>

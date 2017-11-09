@@ -117,10 +117,10 @@ export default class ToolDropdown extends Component {
         <div role="button" tabIndex="0" style={style.innerTool} onClick={onClickIcon}>
           { this.renderIcon() }
           <MaterialTooltip
-            horizontalPosition={'center'}
+            horizontalPosition="center"
             label={tooltip}
             show={showTooltip}
-            verticalPosition={'top'}
+            verticalPosition="top"
           />
           { this.renderColorBar() }
         </div>

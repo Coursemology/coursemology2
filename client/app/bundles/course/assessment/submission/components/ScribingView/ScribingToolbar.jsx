@@ -631,10 +631,10 @@ class ScribingToolbar extends Component {
             hoverColor={blue500}
           >
             <MaterialTooltip
-              horizontalPosition={'center'}
+              horizontalPosition="center"
               label={intl.formatMessage(translations.select)}
               show={this.state.hoveredToolTip === scribingTools.SELECT}
-              verticalPosition={'top'}
+              verticalPosition="top"
             />
           </FontIcon>
           <FontIcon
@@ -646,10 +646,10 @@ class ScribingToolbar extends Component {
             hoverColor={blue500}
           >
             <MaterialTooltip
-              horizontalPosition={'center'}
+              horizontalPosition="center"
               label={intl.formatMessage(translations.undo)}
               show={this.state.hoveredToolTip === scribingTools.UNDO}
-              verticalPosition={'top'}
+              verticalPosition="top"
             />
           </FontIcon>
           <FontIcon
@@ -663,10 +663,10 @@ class ScribingToolbar extends Component {
             hoverColor={blue500}
           >
             <MaterialTooltip
-              horizontalPosition={'center'}
+              horizontalPosition="center"
               label={intl.formatMessage(translations.redo)}
               show={this.state.hoveredToolTip === scribingTools.REDO}
-              verticalPosition={'top'}
+              verticalPosition="top"
             />
           </FontIcon>
         </ToolbarGroup>
@@ -681,10 +681,10 @@ class ScribingToolbar extends Component {
             hoverColor={blue500}
           >
             <MaterialTooltip
-              horizontalPosition={'center'}
+              horizontalPosition="center"
               label={intl.formatMessage(translations.move)}
               show={this.state.hoveredToolTip === scribingTools.MOVE}
-              verticalPosition={'top'}
+              verticalPosition="top"
             />
           </FontIcon>
           <FontIcon
@@ -695,10 +695,10 @@ class ScribingToolbar extends Component {
             hoverColor={blue500}
           >
             <MaterialTooltip
-              horizontalPosition={'center'}
+              horizontalPosition="center"
               label={intl.formatMessage(translations.zoomIn)}
               show={this.state.hoveredToolTip === scribingTools.ZOOM_IN}
-              verticalPosition={'top'}
+              verticalPosition="top"
             />
           </FontIcon>
           <FontIcon
@@ -709,10 +709,10 @@ class ScribingToolbar extends Component {
             hoverColor={blue500}
           >
             <MaterialTooltip
-              horizontalPosition={'center'}
+              horizontalPosition="center"
               label={intl.formatMessage(translations.zoomOut)}
               show={this.state.hoveredToolTip === scribingTools.ZOOM_OUT}
-              verticalPosition={'top'}
+              verticalPosition="top"
             />
           </FontIcon>
         </ToolbarGroup>
@@ -725,10 +725,10 @@ class ScribingToolbar extends Component {
             hoverColor={blue500}
           >
             <MaterialTooltip
-              horizontalPosition={'center'}
+              horizontalPosition="center"
               label={intl.formatMessage(translations.delete)}
               show={this.state.hoveredToolTip === scribingTools.DELETE}
-              verticalPosition={'top'}
+              verticalPosition="top"
             />
           </FontIcon>
         </ToolbarGroup>

@@ -6,7 +6,6 @@
   },
   rules: {
     // temporary disable some rules
-    react/jsx-curly-brace-presence: "off",
     react/no-typos: "off",
     jsx-a11y/mouse-events-have-key-events: "off",
     jsx-a11y/click-events-have-key-events: "off",
