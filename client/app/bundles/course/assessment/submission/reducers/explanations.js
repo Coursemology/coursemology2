@@ -30,7 +30,8 @@ export default function (state = {}, action) {
       const { questionId } = action;
       return {
         ...state,
-        [questionId]: { correct: null,
+        [questionId]: {
+          correct: null,
           explanations: [],
         },
       };

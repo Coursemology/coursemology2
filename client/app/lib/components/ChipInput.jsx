@@ -94,7 +94,8 @@ const defaultChipRenderer =
     <Chip
       key={key}
       style={{
-        margin: '8px 8px 0 0', float: 'left', pointerEvents: isDisabled ? 'none' : undefined }}
+        margin: '8px 8px 0 0', float: 'left', pointerEvents: isDisabled ? 'none' : undefined,
+      }}
       backgroundColor={isFocused ? blue300 : null}
       onClick={handleClick}
       onRequestDelete={handleRequestDelete}
