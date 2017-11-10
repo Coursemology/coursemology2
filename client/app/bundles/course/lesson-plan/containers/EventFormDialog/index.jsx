@@ -54,8 +54,8 @@ EventFormDialog.defaultProps = {
 };
 
 EventFormDialog.propTypes = {
-  visible: PropTypes.bool.isRequired,
-  disabled: PropTypes.bool.isRequired,
+  visible: PropTypes.bool,
+  disabled: PropTypes.bool,
   formTitle: PropTypes.string,
   initialValues: PropTypes.shape({
     id: PropTypes.number,

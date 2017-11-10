@@ -28,10 +28,6 @@ class NewEventButton extends React.Component {
     intl: intlShape.isRequired,
   }
 
-  static defaultProps = {
-    disabled: false,
-  }
-
   createEventHandler = (data) => {
     const { dispatch } = this.props;
     const successMessage = <FormattedMessage {...translations.success} />;

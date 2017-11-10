@@ -41,7 +41,6 @@ const defaultProps = {
   playerState: playerStates.UNSTARTED,
   playerProgress: 0,
   duration: videoDefaults.placeHolderDuration,
-  bufferProgress: 0,
   playerVolume: videoDefaults.volume,
   playbackRate: 1,
   forceSeek: false,

@@ -34,10 +34,6 @@ class NewMilestoneButton extends React.Component {
     intl: intlShape.isRequired,
   }
 
-  static defaultProps = {
-    disabled: false,
-  }
-
   createMilestoneHandler = (data) => {
     const { dispatch } = this.props;
     const successMessage = <FormattedMessage {...translations.success} />;

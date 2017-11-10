@@ -8,7 +8,6 @@ exports[`<NewMilestoneButton /> is hidden when canManageLessonPlan is false 1`] 
   >
     <NewMilestoneButton
       canManageLessonPlan={false}
-      disabled={false}
       dispatch={[Function]}
       intl={
         Object {
