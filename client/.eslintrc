@@ -37,7 +37,7 @@
     document: true,
     AudioContext: true,
     navigator: true,
-    URL: ture,
+    URL: true,
     $: true,
     FormData: true,
     File: true,
