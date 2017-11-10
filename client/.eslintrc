@@ -5,11 +5,6 @@
     import/resolver: "webpack"
   },
   rules: {
-    // temporary disable some rules
-    jsx-a11y/mouse-events-have-key-events: "off",
-    jsx-a11y/click-events-have-key-events: "off",
-    jsx-a11y/anchor-is-valid: "off",
-
     react/forbid-prop-types: ["error", { "forbid": ["any", "array"] }],
     react/no-array-index-key: "warn",
     react/no-danger: "off",
@@ -20,10 +15,12 @@
     react/require-default-props: "off",
     import/no-extraneous-dependencies: ["warn", { devDependencies: true }],
     import/prefer-default-export: "warn",
+    jsx-a11y/anchor-is-valid: "off",
+    jsx-a11y/click-events-have-key-events: "off",
     jsx-a11y/label-has-for: "off",
+    jsx-a11y/mouse-events-have-key-events: "off",
     jsx-a11y/no-static-element-interactions: "off",
     max-len: ["warn", 120],
-    new-cap: ["error", { capIsNewExceptions: ["Set"] }],
     camelcase: ["warn", { properties: "never" }],
     comma-dangle: ["error", {
         arrays: "always-multiline",
