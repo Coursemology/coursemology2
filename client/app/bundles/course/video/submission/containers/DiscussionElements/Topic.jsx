@@ -7,11 +7,13 @@ import { formatTimestamp } from 'lib/helpers/videoHelpers';
 import styles from '../Discussion.scss';
 import PostContainer from './PostContainer';
 import Reply from './Reply';
+import { updatePlayerProgress } from '../../actions/video';
 
 const propTypes = {
   topicId: PropTypes.string.isRequired,
   timestamp: PropTypes.number.isRequired,
   postIds: PropTypes.arrayOf(PropTypes.string),
+  onTimeStampClick: PropTypes.func,
 };
 
 const defaultProps = {
@@ -28,7 +30,9 @@ function Topic(props) {
       <div className={styles.topicTimestamp}>
         <span className="glyphicon glyphicon-chevron-down" />
         &nbsp;
-        <b>Time: {formatTimestamp(props.timestamp)}</b>
+        <a style={{ cursor: 'pointer' }} onClick={props.onTimeStampClick}>
+          <b>Time: {formatTimestamp(props.timestamp)}</b>
+        </a>
         &nbsp;
         <span className="glyphicon glyphicon-chevron-down" />
       </div>
@@ -60,7 +64,22 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-const TopicContainer = connect(mapStateToProps)(Topic);
+function mapDispatchToProps(dispatch) {
+  return {
+    onTimeStampClick: timestamp => (() => dispatch(updatePlayerProgress(timestamp, true))),
+  };
+}
+
+function mergeProps(stateProps, dispatchProps) {
+  return Object.assign(
+    {},
+    stateProps,
+    dispatchProps,
+    { onTimeStampClick: dispatchProps.onTimeStampClick(stateProps.timestamp) }
+  );
+}
+
+const TopicContainer = connect(mapStateToProps, mapDispatchToProps, mergeProps)(Topic);
 
 TopicContainer.propTypes = containerPropTypes;
 
