@@ -61,6 +61,10 @@ class VisibleQuestionGrade extends Component {
           step={1}
           value={initialGrade === null ? '' : initialGrade}
           onChange={e => this.handleGradingField(e.target.value)}
+          ref={(ref) => {
+            this.inputRef = ref;
+          }}
+          onWheel={() => this.inputRef.blur()}
         />
         {` / ${maxGrade}`}
       </div>
