@@ -52,8 +52,7 @@ describe('Scribing question', () => {
     const assessmentsMock = new MockAdapter(assessmentsClient);
 
     assessmentsMock.onGet(`/courses/${courseId}/assessments/skills`)
-      .reply(200,
-      {
+      .reply(200, {
         skills: [
           {
             id: 487,
@@ -94,8 +93,7 @@ describe('Scribing question', () => {
     });
 
     mock.onGet(`/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}`)
-      .reply(200,
-      {
+      .reply(200, {
         question: {
           id: 59,
           title: 'Scribing Exercise',

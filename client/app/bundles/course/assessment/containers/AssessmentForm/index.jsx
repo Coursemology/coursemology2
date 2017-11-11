@@ -151,13 +151,13 @@ class AssessmentForm extends React.Component {
         floatingLabelFixed
         disabled={editing && submitting}
       >
-        {tabs && tabs.map(tab =>
+        {tabs && tabs.map(tab => (
           <MenuItem
             key={tab.tab_id}
             value={tab.tab_id}
             primaryText={tab.title}
           />
-        )}
+        ))}
       </Field>
     );
   }

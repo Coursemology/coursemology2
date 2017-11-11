@@ -36,7 +36,6 @@ const styles = {
 };
 
 class ProgressPanel extends Component {
-
   renderLateWarning() {
     const { intl } = this.props;
     return (

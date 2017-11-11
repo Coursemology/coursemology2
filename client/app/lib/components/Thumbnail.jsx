@@ -120,9 +120,9 @@ Thumbnail.propTypes = {
   alt: PropTypes.string,
   file: PropTypes.instanceOf(File),
   onClick: PropTypes.func,
-  style: PropTypes.shape(),
-  rootStyle: PropTypes.shape(),
-  containerStyle: PropTypes.shape(),
+  style: PropTypes.shape({}),
+  rootStyle: PropTypes.shape({}),
+  containerStyle: PropTypes.shape({}),
 };
 
 export default Thumbnail;

@@ -49,9 +49,8 @@ class SubmissionEmptyForm extends Component {
   submitAndRedirect = () => {
     const { handleSubmit, courseId, categoryId, tabId } = this.props;
     handleSubmit().then(() => history.push(
-        `/courses/${courseId}/assessments?category=${categoryId}&tab=${tabId}`
-      )
-    ).then(() => {
+      `/courses/${courseId}/assessments?category=${categoryId}&tab=${tabId}`
+    )).then(() => {
       window.location.reload(true);
     });
   }

@@ -1,7 +1,6 @@
 import BaseCourseAPI from './Base';
 
 export default class PostsAPI extends BaseCourseAPI {
-
   /**
    * Updates a discussion post
    *

@@ -38,7 +38,7 @@ class ItemRow extends React.Component {
       PropTypes.instanceOf(Date),
     ]),
     published: PropTypes.bool.isRequired,
-    visibility: PropTypes.shape().isRequired,
+    visibility: PropTypes.shape({}).isRequired,
 
     dispatch: PropTypes.func.isRequired,
   }

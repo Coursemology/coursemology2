@@ -18,7 +18,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-  childrenId: [],
+  childrenIds: [],
   editMode: false,
   isRoot: false,
 };

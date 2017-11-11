@@ -62,8 +62,7 @@ class MaterialSummernote extends React.Component {
       img.src = e.target.result;
     };
     img.onload = function onload() {
-      let width = img.width;
-      let height = img.height;
+      let { width, height } = img;
 
       if (width <= IMAGE_MAX_WIDTH && height <= IMAGE_MAX_HEIGHT) {
         onImageCompressed(img.src);

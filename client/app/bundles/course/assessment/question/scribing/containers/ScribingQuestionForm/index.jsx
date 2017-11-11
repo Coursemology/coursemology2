@@ -76,8 +76,8 @@ class ScribingQuestionForm extends React.Component {
     const { isSubmitting } = this.props.data;
     const { formatMessage } = this.props.intl;
     return (isSubmitting) ?
-           formatMessage(translations.submittingMessage) :
-           formatMessage(translations.submitButton);
+      formatMessage(translations.submittingMessage) :
+      formatMessage(translations.submitButton);
   }
 
   renderErrorMessage() {
@@ -85,8 +85,7 @@ class ScribingQuestionForm extends React.Component {
     return errors && errors.length > 0 ?
       <div className="alert alert-danger">
         {errors.map(errorMessage => (<div key={errorMessage}>{errorMessage}</div>))}
-      </div> : null
-    ;
+      </div> : null;
   }
 
   renderExistingAttachmentLabel() {
@@ -137,7 +136,7 @@ class ScribingQuestionForm extends React.Component {
 
   render() {
     const { handleSubmit, submitting,
-            intl, scribingId } = this.props;
+      intl, scribingId } = this.props;
     const question = this.props.data.question;
     const onSubmit = scribingId ? this.handleUpdateQuestion : this.handleCreateQuestion;
 
@@ -150,11 +149,11 @@ class ScribingQuestionForm extends React.Component {
     );
     const lessThan1000 = value => (
       value && value >= 1000 ?
-      intl.formatMessage(translations.valueMoreThanEqual1000Error) : undefined
+        intl.formatMessage(translations.valueMoreThanEqual1000Error) : undefined
     );
     const nonNegative = value => (
       value && value < 0 ?
-      intl.formatMessage(translations.positiveNumberValidationError) : undefined
+        intl.formatMessage(translations.positiveNumberValidationError) : undefined
     );
 
     return (
@@ -167,9 +166,9 @@ class ScribingQuestionForm extends React.Component {
             <div className={styles.titleInput}>
               <InputField
                 label={this.props.intl.formatMessage(translations.titleFieldLabel)}
-                field={'title'}
+                field="title"
                 required={false}
-                type={'text'}
+                type="text"
                 placeholder={this.props.data.question.error && this.props.data.question.error.title}
                 isLoading={this.props.data.isLoading}
                 value={this.props.formValues
@@ -181,21 +180,21 @@ class ScribingQuestionForm extends React.Component {
             <div className={styles.descriptionInput}>
               <SummernoteField
                 label={this.props.intl.formatMessage(translations.descriptionFieldLabel)}
-                field={'description'}
+                field="description"
                 isLoading={this.props.data.isLoading}
               />
             </div>
             <div className={styles.staffCommentsInput}>
               <SummernoteField
                 label={this.props.intl.formatMessage(translations.staffOnlyCommentsFieldLabel)}
-                field={'staff_only_comments'}
+                field="staff_only_comments"
                 isLoading={this.props.data.isLoading}
               />
             </div>
             <div className={styles.skillsInput}>
               <MultiSelectSkillsField
                 label={this.props.intl.formatMessage(translations.skillsFieldLabel)}
-                field={'skill_ids'}
+                field="skill_ids"
                 value={skillsValues}
                 options={skillsOptions}
                 isLoading={this.props.data.isLoading}
@@ -205,10 +204,10 @@ class ScribingQuestionForm extends React.Component {
             <div className={styles.maximumGradeInput}>
               <InputField
                 label={this.props.intl.formatMessage(translations.maximumGradeFieldLabel)}
-                field={'maximum_grade'}
+                field="maximum_grade"
                 required
                 validate={[required, lessThan1000, nonNegative]}
-                type={'number'}
+                type="number"
                 isLoading={this.props.data.isLoading}
                 value={ScribingQuestionForm.convertNull(
                   this.props.formValues
@@ -224,7 +223,7 @@ class ScribingQuestionForm extends React.Component {
                 this.renderExistingAttachmentLabel() :
                 <div className={styles.row} >
                   <FileUploadField
-                    field={'attachment'}
+                    field="attachment"
                     label={this.props.intl.formatMessage(translations.chooseFileButton)}
                     isLoading={this.props.data.isLoading}
                     validate={[required]}

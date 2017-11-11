@@ -33,7 +33,8 @@ describe('ColorPickerField', () => {
           intl: intlShape,
           muiTheme: PropTypes.object,
         },
-      });
+      }
+    );
 
     expect(colorPickerField.find('Checkbox').prop('checked')).toEqual(true);
   });

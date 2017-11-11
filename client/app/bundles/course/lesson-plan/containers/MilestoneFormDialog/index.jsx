@@ -42,8 +42,8 @@ MilestoneFormDialog.defaultProps = {
 };
 
 MilestoneFormDialog.propTypes = {
-  visible: PropTypes.bool.isRequired,
-  disabled: PropTypes.bool.isRequired,
+  visible: PropTypes.bool,
+  disabled: PropTypes.bool,
   formTitle: PropTypes.string,
   initialValues: PropTypes.shape({
     title: PropTypes.string,

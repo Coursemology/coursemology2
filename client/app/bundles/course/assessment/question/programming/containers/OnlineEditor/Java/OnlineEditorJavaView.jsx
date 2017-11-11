@@ -45,7 +45,6 @@ const contextTypes = {
 };
 
 class OnlineEditorJavaView extends React.Component {
-
   static getTestInputName(type, field) {
     return `question_programming[test_cases][${type}][][${field}]`;
   }
@@ -184,7 +183,7 @@ class OnlineEditorJavaView extends React.Component {
           intl: this.props.intl,
         }}
       />
-      ));
+    ));
 
     const editors = [...testCases.get(type).entries()].map(([index, test]) => {
       const showCodeEditor = test.get('show_code_editor') || false;
@@ -301,7 +300,7 @@ class OnlineEditorJavaView extends React.Component {
     >
       {testCaseError}
     </div>
-      );
+    );
 
     return (
       <div>
@@ -317,7 +316,8 @@ class OnlineEditorJavaView extends React.Component {
                     )
                 }
                 {
-                  this.renderNewPackageFiles('solution_files',
+                  this.renderNewPackageFiles(
+                    'solution_files',
                     this.props.intl.formatMessage(javaTranslations.newSolutionFilesHeader),
                     intl.formatMessage(javaTranslations.addSolutionFileButton)
                   )
@@ -350,13 +350,14 @@ class OnlineEditorJavaView extends React.Component {
           this.renderExistingPackageFiles(
             'data_files',
             this.props.intl.formatMessage(translations.currentDataFilesHeader)
-            )
+          )
         }
         {
-          this.renderNewPackageFiles('data_files',
+          this.renderNewPackageFiles(
+            'data_files',
             this.props.intl.formatMessage(translations.newDataFilesHeader),
             intl.formatMessage(translations.addDataFileButton)
-            )
+          )
         }
         <h3>{ intl.formatMessage(translations.testCasesHeader) }</h3>
         <div style={{ marginBottom: '0.5em' }}>
@@ -396,16 +397,16 @@ class OnlineEditorJavaView extends React.Component {
                   <p style={{ marginBottom: 0 }}>
                     {'int array [] = {0,0,0}; // Initialize variables'}
                   </p>
-                  <p style={{ marginBottom: 0 }}>{'addOneToArray(array); // Make function calls'}</p>
-                  <p style={{ marginBottom: 0 }}>{'int expected [] = {1,1,1}; // Make function calls'}</p>
+                  <p style={{ marginBottom: 0 }}>addOneToArray(array); // Make function calls</p>
+                  <p style={{ marginBottom: 0 }}>int expected [] = {'{'}1,1,1{'}'}; // Make function calls</p>
                   <p style={{ marginBottom: 0 }}>
                     {'setAttribute("expression", "addOneToArray([0,0,0])");'}
                     {' // Override the default expression displayed'}
                   </p>
                 </pre>,
               /* eslint-enable react/jsx-indent */
-              codeExampleExpected: <code>{'expected'}</code>,
-              codeExampleExpression: <code>{'array'}</code>,
+              codeExampleExpected: <code>expected</code>,
+              codeExampleExpression: <code>array</code>,
             }}
           />
         </div>

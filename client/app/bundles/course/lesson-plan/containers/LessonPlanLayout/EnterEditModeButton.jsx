@@ -23,7 +23,7 @@ const EnterEditModeButton = ({ match: { params: { courseId } } }) => (
     onClick={() => history.push(`/courses/${courseId}/lesson_plan/edit/`)}
     style={styles.button}
   />
-  );
+);
 
 EnterEditModeButton.propTypes = {
   match: PropTypes.shape({

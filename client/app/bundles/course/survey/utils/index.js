@@ -55,7 +55,7 @@ const sortResultsQuestionElements = (question) => {
  */
 export const sortResultsSectionElements = anonymous => section => (
   anonymous ? sortAttributeArray(section, 'questions') :
-  sortAttributeArray(section, 'questions', sortResultsQuestionElements)
+    sortAttributeArray(section, 'questions', sortResultsQuestionElements)
 );
 
 export const sortSurveysByDate = surveys => surveys.sort((a, b) => {
@@ -65,8 +65,8 @@ export const sortSurveysByDate = surveys => surveys.sort((a, b) => {
 
 export const formatQuestionFormData = (data) => {
   const payload = new FormData();
-  const filledOptions = data.options.filter(option =>
-    option && (option.option || option.file || option.image_url)
+  const filledOptions = data.options.filter(
+    option => option && (option.option || option.file || option.image_url)
   );
   const filledOptionsCount = filledOptions.length;
 

@@ -85,7 +85,6 @@ class UnsubmitButton extends React.Component {
   }
 }
 
-export default connect(state => (
-  { isUnsubmitting: state.surveysFlags.isUnsubmittingResponse }
-)
+export default connect(
+  state => ({ isUnsubmitting: state.surveysFlags.isUnsubmittingResponse })
 )(UnsubmitButton);

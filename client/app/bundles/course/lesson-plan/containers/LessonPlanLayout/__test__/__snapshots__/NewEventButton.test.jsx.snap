@@ -8,7 +8,6 @@ exports[`<NewEventButton /> is hidden when canManageLessonPlan is false 1`] = `
   >
     <NewEventButton
       canManageLessonPlan={false}
-      disabled={false}
       dispatch={[Function]}
       intl={
         Object {

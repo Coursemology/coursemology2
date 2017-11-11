@@ -24,21 +24,21 @@ export function updateScribingAnswer(answerId, answerActableId, scribblesInJSON)
     });
 
     return CourseAPI.assessment.answer.scribing.update(answerId, data)
-    .then(() => (
-      dispatch({
-        type: actions.UPDATE_SCRIBING_ANSWER_SUCCESS,
-        payload: { answerId },
-      })
-    ))
-    .catch((error) => {
-      dispatch({
-        type: actions.UPDATE_SCRIBING_ANSWER_FAILURE,
-        payload: { answerId },
+      .then(() => (
+        dispatch({
+          type: actions.UPDATE_SCRIBING_ANSWER_SUCCESS,
+          payload: { answerId },
+        })
+      ))
+      .catch((error) => {
+        dispatch({
+          type: actions.UPDATE_SCRIBING_ANSWER_FAILURE,
+          payload: { answerId },
+        });
+        if (error.response && error.response.data) {
+          throw new SubmissionError(error.response.data.errors);
+        }
       });
-      if (error.response && error.response.data) {
-        throw new SubmissionError(error.response.data.errors);
-      }
-    });
   };
 }
 

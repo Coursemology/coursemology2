@@ -27,7 +27,7 @@ class VisibleQuestionGrade extends Component {
     const maxGrade = question.maximumGrade;
     const parsedValue = parseFloat(value);
 
-    if (isNaN(parsedValue) || parsedValue < 0) {
+    if (Number.isNaN(parsedValue) || parsedValue < 0) {
       updateGrade(id, 0);
     } else if (parsedValue > maxGrade) {
       updateGrade(id, maxGrade);

@@ -55,7 +55,6 @@ const styles = {
 };
 
 export default class WideEditor extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -118,11 +117,11 @@ export default class WideEditor extends Component {
           <tbody>
             <tr>
               <td style={{ width: 50, userSelect: 'none', paddingBottom: 20 }}>
-                {content.map((line, index) =>
+                {content.map((line, index) => (
                   <div key={`${index}-${line}`}>
                     {this.renderLineNumberColumn(index + 1)}
                   </div>
-                )}
+                ))}
               </td>
               <td style={{ display: 'block', overflowX: 'scroll' }}>
                 <div style={{ display: 'inline-block' }}>
@@ -132,7 +131,8 @@ export default class WideEditor extends Component {
                         <code
                           dangerouslySetInnerHTML={{ __html: line }}
                           style={{ whiteSpace: 'inherit' }}
-                        /></pre>
+                        />
+                      </pre>
                     </div>
                   ))}
                 </div>

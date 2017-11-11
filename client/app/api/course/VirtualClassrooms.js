@@ -10,9 +10,10 @@ export default class VirtualClassroomsAPI extends BaseCourseAPI {
   * error response: { errors: String } - An error string will be returned upon validation error.
   */
   accessLink(virtualClassroomId) {
-    return this.getClient()
-      .get(`${this._getUrlPrefix()}/${virtualClassroomId}/access_link`,
-        this.getCourseId(), virtualClassroomId, { format: 'json' });
+    return this.getClient().get(
+      `${this._getUrlPrefix()}/${virtualClassroomId}/access_link`,
+      this.getCourseId(), virtualClassroomId, { format: 'json' }
+    );
   }
 
   /**
@@ -23,9 +24,10 @@ export default class VirtualClassroomsAPI extends BaseCourseAPI {
   * response: [video_info_hash]
   */
   recordedVideos(virtualClassroomId) {
-    return this.getClient()
-      .get(`${this._getUrlPrefix()}/${virtualClassroomId}/recorded_videos`,
-        this.getCourseId(), virtualClassroomId, { format: 'json' });
+    return this.getClient().get(
+      `${this._getUrlPrefix()}/${virtualClassroomId}/recorded_videos`,
+      this.getCourseId(), virtualClassroomId, { format: 'json' }
+    );
   }
 
   /**
@@ -37,9 +39,10 @@ export default class VirtualClassroomsAPI extends BaseCourseAPI {
    * error response: { errors: String } - An error string will be returned upon error.
    */
   recordedVideoLink(recordId) {
-    return this.getClient()
-      .get(`${this._getUrlPrefix()}/recorded_video_link/${recordId}`,
-        this.getCourseId(), { format: 'json' });
+    return this.getClient().get(
+      `${this._getUrlPrefix()}/recorded_video_link/${recordId}`,
+      this.getCourseId(), { format: 'json' }
+    );
   }
 
   _getUrlPrefix() {

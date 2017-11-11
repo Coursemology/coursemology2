@@ -101,7 +101,6 @@ function validation(data, pathOfKeysToData, intl) {
 }
 
 class ProgrammingQuestionForm extends React.Component {
-
   static getInputName(field) {
     return `question_programming[${field}]`;
   }
@@ -290,11 +289,11 @@ class ProgrammingQuestionForm extends React.Component {
   }
 
   renderDropdownSelectField(label, field, required, value, options, error, onChange) {
-    const selectOptions = options.map(opt =>
-      <option value={opt.id || ''} key={opt.id}>{opt.name}</option>
+    const selectOptions = options.map(
+      opt => <option value={opt.id || ''} key={opt.id}>{opt.name}</option>
     );
-    const selectFieldOptions = options.map(opt =>
-      <MenuItem value={opt.id} key={opt.id} primaryText={opt.name} />
+    const selectFieldOptions = options.map(
+      opt => <MenuItem value={opt.id} key={opt.id} primaryText={opt.name} />
     );
 
     return (
@@ -501,21 +500,24 @@ class ProgrammingQuestionForm extends React.Component {
                 this.renderInputField(
                   this.props.intl.formatMessage(translations.titleFieldLabel),
                   'title', false, 'text', question.get('title') || '',
-                  this.props.data.getIn(['question', 'error', 'title']))
+                  this.props.data.getIn(['question', 'error', 'title'])
+                )
               }
             </div>
             <div className={styles.descriptionInput}>
               {
                 this.renderSummernoteField(
                   this.props.intl.formatMessage(translations.descriptionFieldLabel),
-                  'description', false, question.get('description') || '')
+                  'description', false, question.get('description') || ''
+                )
               }
             </div>
             <div className={styles.staffCommentsInput}>
               {
                 this.renderSummernoteField(
                   this.props.intl.formatMessage(translations.staffOnlyCommentsFieldLabel),
-                  'staff_only_comments', false, question.get('staff_only_comments') || '')
+                  'staff_only_comments', false, question.get('staff_only_comments') || ''
+                )
              }
             </div>
             <div className={styles.skillsInput}>
@@ -523,7 +525,8 @@ class ProgrammingQuestionForm extends React.Component {
                 this.renderMultiSelectSkillsField(
                   this.props.intl.formatMessage(translations.skillsFieldLabel),
                   'skill_ids', skillsValues, skillsOptions,
-                  this.props.data.getIn(['question', 'error', 'skill_ids']))
+                  this.props.data.getIn(['question', 'error', 'skill_ids'])
+                )
               }
             </div>
             <div className={styles.maximumGradeInput}>
@@ -532,7 +535,8 @@ class ProgrammingQuestionForm extends React.Component {
                   this.props.intl.formatMessage(translations.maximumGradeFieldLabel),
                   'maximum_grade', true, 'number',
                   ProgrammingQuestionForm.convertNull(question.get('maximum_grade')),
-                  this.props.data.getIn(['question', 'error', 'maximum_grade']))
+                  this.props.data.getIn(['question', 'error', 'maximum_grade'])
+                )
               }
             </div>
             <div className={styles.languageInput}>
@@ -541,7 +545,8 @@ class ProgrammingQuestionForm extends React.Component {
                   this.props.intl.formatMessage(translations.languageFieldLabel),
                   'language_id', true, question.get('language_id') || undefined, languageOptions,
                   this.props.data.getIn(['question', 'error', 'language_id']),
-                  this.languageHandler('language_id'))
+                  this.languageHandler('language_id')
+                )
               }
             </div>
             <div className={styles.autogradeToggle}>
@@ -559,9 +564,7 @@ class ProgrammingQuestionForm extends React.Component {
                     disabled={this.props.data.get('is_loading')}
                     style={{ margin: '1em 0' }}
                     name="question_programming[autograded]"
-                  />
-                  :
-                  null
+                  /> : null
               }
             </div>
             <div className={styles.memoryLimitInput}>
@@ -571,9 +574,8 @@ class ProgrammingQuestionForm extends React.Component {
                     this.props.intl.formatMessage(translations.memoryLimitFieldLabel),
                     'memory_limit', false, 'number',
                     ProgrammingQuestionForm.convertNull(question.get('memory_limit')),
-                    this.props.data.getIn(['question', 'error', 'memory_limit']))
-                  :
-                  null
+                    this.props.data.getIn(['question', 'error', 'memory_limit'])
+                  ) : null
               }
             </div>
             <div className={styles.timeLimitInput}>
@@ -583,9 +585,8 @@ class ProgrammingQuestionForm extends React.Component {
                     this.props.intl.formatMessage(translations.timeLimitFieldLabel),
                     'time_limit', false, 'number',
                     question.get('time_limit') === null ? DEFAULT_TIME_LIMIT : question.get('time_limit'),
-                    this.props.data.getIn(['question', 'error', 'time_limit']))
-                  :
-                  null
+                    this.props.data.getIn(['question', 'error', 'time_limit'])
+                  ) : null
               }
             </div>
             {
@@ -597,11 +598,10 @@ class ProgrammingQuestionForm extends React.Component {
                       'attempt_limit', false, 'number',
                       ProgrammingQuestionForm.convertNull(question.get('attempt_limit')),
                       this.props.data.getIn(['question', 'error', 'attempt_limit']),
-                      this.props.intl.formatMessage(translations.attemptLimitPlaceholderMessage))
+                      this.props.intl.formatMessage(translations.attemptLimitPlaceholderMessage)
+                    )
                   }
-                </div>
-                :
-                null
+                </div> : null
             }
           </div>
 
@@ -612,7 +612,8 @@ class ProgrammingQuestionForm extends React.Component {
           {
             this.renderPackageField(
               this.props.intl.formatMessage(translations.templatePackageFieldLabel),
-              'file', pkg, this.props.data.getIn(['question', 'package_filename']), showEditOnline)
+              'file', pkg, this.props.data.getIn(['question', 'package_filename']), showEditOnline
+            )
           }
           { this.renderTestView(showEditOnline) }
           { this.renderBuildLogView() }

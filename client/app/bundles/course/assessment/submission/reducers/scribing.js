@@ -1,6 +1,6 @@
 import actions, { canvasActionTypes, scribingTools, scribingShapes,
-      scribingToolColor, scribingToolThickness, scribingToolLineStyle,
-      } from '../constants';
+  scribingToolColor, scribingToolThickness, scribingToolLineStyle,
+} from '../constants';
 
 function initializeToolColor() {
   const colors = {};
@@ -68,7 +68,7 @@ export default function (state = {}, action) {
               hasError: false,
             },
           })
-        , {}),
+          , {}),
       };
     }
     case actions.SET_CANVAS_LOADED: {

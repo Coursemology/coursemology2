@@ -59,17 +59,17 @@ export const buildResponsePayload = (data) => {
 
 class ResponseForm extends React.Component {
   static propTypes = {
-    readOnly: PropTypes.bool.isRequired,
+    readOnly: PropTypes.bool,
     flags: PropTypes.shape({
       canModify: PropTypes.bool.isRequired,
       canSubmit: PropTypes.bool.isRequired,
       isResponseCreator: PropTypes.bool.isRequired,
       isSubmitting: PropTypes.bool.isRequired,
     }),
-    response: responseShape.isRequired,
-    onSubmit: PropTypes.func.isRequired,
+    response: responseShape,
+    onSubmit: PropTypes.func,
     pristine: PropTypes.bool.isRequired,
-    formValues: PropTypes.shape(),
+    formValues: PropTypes.shape({}),
 
     handleSubmit: PropTypes.func.isRequired,
   };

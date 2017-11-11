@@ -6,7 +6,7 @@ import { Field, FieldArray } from 'redux-form';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { RadioButton } from 'material-ui/RadioButton';
 import { Table, TableBody, TableHeader, TableHeaderColumn,
-         TableRow, TableRowColumn } from 'material-ui/Table';
+  TableRow, TableRowColumn } from 'material-ui/Table';
 import { green50 } from 'material-ui/styles/colors';
 
 // eslint-disable-next-line import/extensions, import/no-extraneous-dependencies, import/no-unresolved
@@ -56,7 +56,7 @@ export default class Answers extends Component {
     const { readOnly, question, input: { onChange, value } } = props;
     return (
       <div>
-        {question.options.map(option =>
+        {question.options.map(option => (
           <RadioButton
             key={option.id}
             value={option.id}
@@ -70,7 +70,7 @@ export default class Answers extends Component {
             )}
             disabled={readOnly}
           />
-        )}
+        ))}
       </div>
     );
   }

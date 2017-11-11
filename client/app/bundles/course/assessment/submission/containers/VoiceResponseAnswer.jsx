@@ -53,7 +53,6 @@ const styles = {
 };
 
 class VoiceResponseAnswer extends Component {
-
   static propTypes = {
     answerId: PropTypes.number.isRequired,
     readOnly: PropTypes.bool.isRequired,
@@ -130,12 +129,11 @@ class VoiceResponseAnswer extends Component {
       finalUrl = url;
     }
     if (finalUrl) {
-      return (<audio
-        controls
-        src={finalUrl}
-      >
-        <track kind="captions" />
-      </audio>);
+      return (
+        <audio controls src={finalUrl}>
+          <track kind="captions" />
+        </audio>
+      );
     }
     return null;
   }

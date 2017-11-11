@@ -12,8 +12,7 @@ import { questionShape } from './propTypes';
 
 
 function buildInitialValues(scribingQuestion) {
-  return scribingQuestion.question ?
-  {
+  return scribingQuestion.question ? {
     question_scribing: {
       title: scribingQuestion.question.title,
       description: scribingQuestion.question.description,

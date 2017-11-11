@@ -57,7 +57,6 @@ class EditorCard extends React.Component {
       </Card>
     );
   }
-
 }
 
 export default injectIntl(EditorCard);

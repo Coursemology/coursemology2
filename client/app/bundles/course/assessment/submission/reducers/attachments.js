@@ -14,7 +14,7 @@ export default function (state = {}, action) {
         ...state,
         ...action.payload.answers.reduce((obj, answer) =>
           ({ ...obj, [answer.questionId]: answer.attachments })
-        , {}),
+          , {}),
       };
     case actions.AUTOGRADE_SUCCESS: {
       const { questionId } = action.payload;

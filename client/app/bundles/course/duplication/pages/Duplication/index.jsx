@@ -82,7 +82,7 @@ const styles = {
 class Duplication extends React.Component {
   static propTypes = {
     isLoading: PropTypes.bool.isRequired,
-    selectedItems: PropTypes.shape(),
+    selectedItems: PropTypes.shape({}),
     isExistingCourseSelected: PropTypes.bool.isRequired,
     newCourseFormValid: PropTypes.bool.isRequired,
     duplicationMode: PropTypes.string.isRequired,

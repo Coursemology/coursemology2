@@ -23,7 +23,7 @@ const ExitEditModeButton = ({ match: { params: { courseId } } }) => (
     onClick={() => history.push(`/courses/${courseId}/lesson_plan/`)}
     style={styles.button}
   />
-  );
+);
 
 ExitEditModeButton.propTypes = {
   match: PropTypes.shape({

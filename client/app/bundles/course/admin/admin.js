@@ -9,5 +9,6 @@ $(document).ready(() => {
         $('.advance-start-at-time input').val('');
         $('div.advance-start-at-time').hide();
       }
-    });
+    }
+  );
 });

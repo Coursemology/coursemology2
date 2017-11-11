@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { scribingTools, scribingShapes, scribingToolColor,
-         scribingToolThickness, scribingToolLineStyle } from '../../constants';
+  scribingToolThickness, scribingToolLineStyle } from '../../constants';
 
 import { scribingShape } from '../../propTypes';
 
@@ -81,9 +81,8 @@ export default class ScribingCanvas extends React.Component {
   }
 
   componentDidMount() {
-    this.initializeCanvas(
-        this.props.answerId,
-        this.props.scribing.answer.image_url);
+    const { answerId, scribing } = this.props;
+    this.initializeCanvas(answerId, scribing.answer.image_url);
   }
 
   shouldComponentUpdate(nextProps) {
@@ -475,7 +474,7 @@ export default class ScribingCanvas extends React.Component {
   // Limit moving of objects to within the canvas
   onObjectMovingCanvas = (options) => {
     const obj = options.target;
-     // if object is too big ignore
+    // if object is too big ignore
     if (obj.currentHeight > obj.canvas.height || obj.currentWidth > obj.canvas.width) {
       return;
     }
@@ -628,7 +627,8 @@ export default class ScribingCanvas extends React.Component {
       const canvasElem = document.getElementById(`canvas-container-${answerId}`);
       canvasElem.tabIndex = 1000;
       // Minimise reflows
-      canvasElem.setAttribute('style',
+      canvasElem.setAttribute(
+        'style',
         `background: lightgrey;
         max-width: ${maxWidth}px;
         margin: 0px;
@@ -792,94 +792,94 @@ export default class ScribingCanvas extends React.Component {
     switch (event.keyCode) {
       case 8: // Backspace key
       case 46: // Delete key
-        {
-          if (activeObject) {
-            this.canvas.remove(activeObject);
-          } else if (activeGroup) {
-            const objectsInGroup = activeGroup.getObjects();
-            this.canvas.discardActiveGroup();
-            objectsInGroup.forEach(object => (this.canvas.remove(object)));
-          }
-          break;
+      {
+        if (activeObject) {
+          this.canvas.remove(activeObject);
+        } else if (activeGroup) {
+          const objectsInGroup = activeGroup.getObjects();
+          this.canvas.discardActiveGroup();
+          objectsInGroup.forEach(object => (this.canvas.remove(object)));
         }
+        break;
+      }
       case 67: // Ctrl+C
-        {
-          if (event.ctrlKey || event.metaKey) {
-            event.preventDefault();
+      {
+        if (event.ctrlKey || event.metaKey) {
+          event.preventDefault();
 
-            this.copiedObjects = [];
-            if (activeGroup) {
-              activeGroup.getObjects().forEach(obj => (
-                this.copiedObjects.push(obj)
-              ));
+          this.copiedObjects = [];
+          if (activeGroup) {
+            activeGroup.getObjects().forEach(obj => (
+              this.copiedObjects.push(obj)
+            ));
 
-              this.copyLeft = activeGroup.getLeft();
-              this.copyTop = activeGroup.getTop();
-            } else if (activeObject) {
-              this.copyLeft = activeObject.getLeft();
-              this.copyTop = activeObject.getTop();
-              this.copiedObjects.push(activeObject);
-            }
+            this.copyLeft = activeGroup.getLeft();
+            this.copyTop = activeGroup.getTop();
+          } else if (activeObject) {
+            this.copyLeft = activeObject.getLeft();
+            this.copyTop = activeObject.getTop();
+            this.copiedObjects.push(activeObject);
           }
-          break;
         }
+        break;
+      }
       case 86: // Ctrl+V
-        {
-          if (event.ctrlKey || event.metaKey) {
-            event.preventDefault();
+      {
+        if (event.ctrlKey || event.metaKey) {
+          event.preventDefault();
 
-            this.canvas.discardActiveGroup();
-            this.canvas.discardActiveObject();
+          this.canvas.discardActiveGroup();
+          this.canvas.discardActiveObject();
 
-            const newObjects = [];
-            let newObj = {};
+          const newObjects = [];
+          let newObj = {};
 
-            // Don't wrap single object in group,
-            // in case it's i-text and we want it to be editable at first tap
-            if (this.copiedObjects.length === 1) {
-              const obj = this.copiedObjects[0];
+          // Don't wrap single object in group,
+          // in case it's i-text and we want it to be editable at first tap
+          if (this.copiedObjects.length === 1) {
+            const obj = this.copiedObjects[0];
+            if (obj.type === 'i-text') {
+              newObj = this.cloneText(obj);
+            } else {
+              newObj = fabric.util.object.clone(obj);
+            }
+
+            this.setCopiedCanvasObjectPosition(newObj);
+            this.canvas.add(newObj);
+            this.canvas.setActiveObject(newObj);
+            this.canvas.renderAll();
+          } else { // Cloning a group of objects
+            this.copiedObjects.forEach((obj) => {
               if (obj.type === 'i-text') {
                 newObj = this.cloneText(obj);
               } else {
                 newObj = fabric.util.object.clone(obj);
               }
-
-              this.setCopiedCanvasObjectPosition(newObj);
+              newObj.setCoords();
               this.canvas.add(newObj);
-              this.canvas.setActiveObject(newObj);
-              this.canvas.renderAll();
-            } else {  // Cloning a group of objects
-              this.copiedObjects.forEach((obj) => {
-                if (obj.type === 'i-text') {
-                  newObj = this.cloneText(obj);
-                } else {
-                  newObj = fabric.util.object.clone(obj);
-                }
-                newObj.setCoords();
-                this.canvas.add(newObj);
-                newObjects.push(newObj);
-              });
-              const group = new fabric.Group(newObjects, { canvas: this.canvas });
+              newObjects.push(newObj);
+            });
+            const group = new fabric.Group(newObjects, { canvas: this.canvas });
 
-              this.setCopiedCanvasObjectPosition(group);
-              this.canvas.setActiveGroup(group);
-              group.saveCoords();
-              this.canvas.renderAll();
-            }
+            this.setCopiedCanvasObjectPosition(group);
+            this.canvas.setActiveGroup(group);
+            group.saveCoords();
+            this.canvas.renderAll();
           }
-          break;
         }
+        break;
+      }
       case 90: // Ctrl-Z
-        {
-          if (event.ctrlKey || event.metaKey) {
-            if (event.shiftKey) {
-              this.redo();
-            } else {
-              this.undo();
-            }
+      {
+        if (event.ctrlKey || event.metaKey) {
+          if (event.shiftKey) {
+            this.redo();
+          } else {
+            this.undo();
           }
-          break;
         }
+        break;
+      }
       default:
     }
   }

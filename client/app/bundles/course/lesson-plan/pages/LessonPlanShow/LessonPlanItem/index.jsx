@@ -62,7 +62,7 @@ LessonPlanItem.propTypes = {
     end_at: PropTypes.string,
     item_path: PropTypes.string,
   }).isRequired,
-  visibility: PropTypes.shape().isRequired,
+  visibility: PropTypes.shape({}).isRequired,
 };
 
 export default connect(state => ({

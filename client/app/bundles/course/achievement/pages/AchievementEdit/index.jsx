@@ -80,6 +80,6 @@ class EditPage extends React.Component {
   }
 }
 
-export default connect(state =>
-   (state.editPage)
+export default connect(
+  state => state.editPage
 )(injectIntl(EditPage));

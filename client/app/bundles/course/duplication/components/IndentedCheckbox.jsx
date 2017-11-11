@@ -29,7 +29,7 @@ const IndentedCheckbox = ({ indentLevel, children, ...props }) => {
 };
 
 IndentedCheckbox.propTypes = {
-  indentLevel: PropTypes.number.isRequired,
+  indentLevel: PropTypes.number,
   children: PropTypes.node,
 };
 

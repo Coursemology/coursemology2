@@ -49,7 +49,7 @@ const TypeBadge = ({ text, itemType }) => (
   <span style={styles.badge}>
     { text || <FormattedMessage {...translations[itemType]} /> }
   </span>
-  );
+);
 
 TypeBadge.propTypes = {
   text: PropTypes.string,

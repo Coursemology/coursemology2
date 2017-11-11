@@ -38,7 +38,6 @@ const styles = {
 };
 
 export default class SubmissionsTable extends React.Component {
-
   static formatDate(date) {
     return date ? moment(date).format('DD MMM HH:mm') : null;
   }
@@ -70,7 +69,7 @@ export default class SubmissionsTable extends React.Component {
     const gradeString =
       ((submission.workflowState === workflowStates.Attempting) ||
       (submission.workflowState === workflowStates.Submitted)) ? '--' :
-      SubmissionsTable.formatGrade(submission.grade);
+        SubmissionsTable.formatGrade(submission.grade);
 
     const maximumGradeString = SubmissionsTable.formatGrade(assessment.maximumGrade);
 
@@ -79,9 +78,10 @@ export default class SubmissionsTable extends React.Component {
 
   canDownload() {
     const { assessment, submissions } = this.props;
-    return assessment.downloadable && submissions.some(s =>
-      s.workflowState !== workflowStates.Unstarted &&
-      s.workflowState !== workflowStates.Attempting
+    return assessment.downloadable && submissions.some(
+      s =>
+        s.workflowState !== workflowStates.Unstarted &&
+        s.workflowState !== workflowStates.Attempting
     );
   }
 
@@ -143,9 +143,11 @@ export default class SubmissionsTable extends React.Component {
         <TableRowColumn style={styles.tableCenterCell}>
           {this.getGradeString(submission)}
         </TableRowColumn>
-        {assessment.gamified ? <TableRowColumn style={styles.tableCenterCell}>
-          {submission.pointsAwarded !== undefined ? submission.pointsAwarded : null}
-        </TableRowColumn> : null}
+        {assessment.gamified ?
+          <TableRowColumn style={styles.tableCenterCell}>
+            {submission.pointsAwarded !== undefined ? submission.pointsAwarded : null}
+          </TableRowColumn>
+        : null}
         <TableRowColumn style={styles.tableCenterCell}>
           {SubmissionsTable.formatDate(submission.dateSubmitted)}
         </TableRowColumn>

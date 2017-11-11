@@ -101,11 +101,13 @@ class FileInput extends Component {
         </h4>
       );
     }
-    return (<div>
-      <div style={styles.wrapper}>
-        {files.map(f => (<Chip style={styles.chip} key={f.name}>{f.name}</Chip>))}
+    return (
+      <div>
+        <div style={styles.wrapper}>
+          {files.map(f => (<Chip style={styles.chip} key={f.name}>{f.name}</Chip>))}
+        </div>
       </div>
-    </div>);
+    );
   }
 
   render() {

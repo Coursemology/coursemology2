@@ -1,7 +1,6 @@
 import BaseCourseAPI from './Base';
 
 export default class CommentsAPI extends BaseCourseAPI {
-
   /**
    * post = {
    *   id: number, title: string, text: string, createdAt: datetime,

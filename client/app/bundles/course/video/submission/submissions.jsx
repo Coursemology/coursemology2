@@ -16,6 +16,7 @@ $(document).ready(() => {
       <ProviderWrapper {...{ store }}>
         <Submission />
       </ProviderWrapper>
-      , mountNode);
+      , mountNode
+    );
   }
 });

@@ -40,8 +40,8 @@ class LessonPlanEdit extends React.Component {
   renderGroup = (group) => {
     const { id, milestone, items } = group;
 
-    const rows = items ? items.map(item =>
-      (<ItemRow
+    const rows = items ? items.map(item => (
+      <ItemRow
         id={item.id}
         type={item.itemTypeKey}
         title={item.title}
@@ -49,8 +49,8 @@ class LessonPlanEdit extends React.Component {
         bonusEndAt={item.bonus_end_at}
         endAt={item.end_at}
         published={item.published}
-      />)
-    ) : [];
+      />
+    )) : [];
 
     if (milestone) {
       rows.unshift(

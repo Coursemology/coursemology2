@@ -34,7 +34,7 @@ class VisibleSubmissionEditIndex extends Component {
 
     const newSubmission = !!getUrlParameter('new_submission') && getUrlParameter('new_submission') === 'true';
     const stepString = getUrlParameter('step');
-    const step = isNaN(stepString) || stepString === '' ? null : parseInt(stepString, 10) - 1;
+    const step = Number.isNaN(stepString) || stepString === '' ? null : parseInt(stepString, 10) - 1;
 
     this.state = { newSubmission, step };
   }
@@ -126,7 +126,7 @@ class VisibleSubmissionEditIndex extends Component {
 
   handleSaveGrade() {
     const { dispatch, match: { params }, grading, exp,
-            submission: { workflowState } } = this.props;
+      submission: { workflowState } } = this.props;
     const published = workflowState === workflowStates.Published;
     dispatch(saveGrade(params.submissionId, Object.values(grading), exp, published));
   }
@@ -179,10 +179,12 @@ class VisibleSubmissionEditIndex extends Component {
   renderAssessment() {
     const { assessment, submission } = this.props;
 
-    const renderFile = (file, index) => (<div key={index}>
-      <FileIcon style={{ verticalAlign: 'middle' }} />
-      <a href={file.url}><span>{file.name}</span></a>
-    </div>);
+    const renderFile = (file, index) => (
+      <div key={index}>
+        <FileIcon style={{ verticalAlign: 'middle' }} />
+        <a href={file.url}><span>{file.name}</span></a>
+      </div>
+    );
 
     return (
       <Card style={{ marginBottom: 20 }}>
@@ -190,10 +192,12 @@ class VisibleSubmissionEditIndex extends Component {
         {assessment.description ? <CardText
           dangerouslySetInnerHTML={{ __html: assessment.description }}
         /> : null}
-        {assessment.files.length > 0 ? (<CardText>
-          <h4>Files</h4>
-          {assessment.files.map(renderFile)}
-        </CardText>) : null}
+        {assessment.files.length > 0 ? (
+          <CardText>
+            <h4>Files</h4>
+            {assessment.files.map(renderFile)}
+          </CardText>
+        ) : null}
         <CardActions>
           {submission.isGrader && this.renderStudentViewToggle()}
         </CardActions>
@@ -213,7 +217,7 @@ class VisibleSubmissionEditIndex extends Component {
     const { newSubmission, step } = this.state;
     const {
       assessment: { autograded, delayedGradePublication, tabbedView,
-                    skippable, questionIds, passwordProtected, categoryId, tabId },
+        skippable, questionIds, passwordProtected, categoryId, tabId },
       submission: { graderView, canUpdate, maxStep, workflowState },
       explanations,
       grading,

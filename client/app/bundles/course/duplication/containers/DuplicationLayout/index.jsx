@@ -11,6 +11,6 @@ const DuplicationLayout = () => (
       <Route exact path="/courses/:courseId/duplication" component={Duplication} />
     </Switch>
   </div>
- );
+);
 
 export default DuplicationLayout;

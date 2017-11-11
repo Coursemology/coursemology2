@@ -21,7 +21,7 @@ const translations = defineMessages({
 class SurveysSelector extends React.Component {
   static propTypes = {
     surveys: PropTypes.arrayOf(surveyShape),
-    selectedItems: PropTypes.shape(),
+    selectedItems: PropTypes.shape({}),
 
     dispatch: PropTypes.func.isRequired,
   }

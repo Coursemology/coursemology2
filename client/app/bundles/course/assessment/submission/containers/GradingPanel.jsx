@@ -51,7 +51,7 @@ class VisibleGradingPanel extends Component {
     const { updateMultiplier } = this.props;
     const parsedValue = parseFloat(value);
 
-    if (isNaN(parsedValue) || parsedValue < 0) {
+    if (Number.isNaN(parsedValue) || parsedValue < 0) {
       updateMultiplier(0);
     } else if (parsedValue > 1) {
       updateMultiplier(1);
@@ -68,19 +68,21 @@ class VisibleGradingPanel extends Component {
 
   renderSubmissionStatus() {
     const { intl, submission: { workflowState } } = this.props;
-    return (<div>
-      {intl.formatMessage(translations[workflowState])}
-      {workflowState === workflowStates.Graded ? (
-        <span style={{ display: 'inline-block', marginLeft: 5 }}>
-          <a data-tip data-for="unpublished-grades" data-offset="{'left' : -8}">
-            <i className="fa fa-exclamation-triangle" />
-          </a>
-          <ReactTooltip id="unpublished-grades" effect="solid">
-            <FormattedMessage {...translations.unpublishedGrades} />
-          </ReactTooltip>
-        </span>
-      ) : null}
-    </div>);
+    return (
+      <div>
+        {intl.formatMessage(translations[workflowState])}
+        {workflowState === workflowStates.Graded ? (
+          <span style={{ display: 'inline-block', marginLeft: 5 }}>
+            <a data-tip data-for="unpublished-grades" data-offset="{'left' : -8}">
+              <i className="fa fa-exclamation-triangle" />
+            </a>
+            <ReactTooltip id="unpublished-grades" effect="solid">
+              <FormattedMessage {...translations.unpublishedGrades} />
+            </ReactTooltip>
+          </span>
+        ) : null}
+      </div>
+    );
   }
 
   renderExperiencePoints() {
@@ -182,9 +184,11 @@ class VisibleGradingPanel extends Component {
         <TableHeaderColumn style={styles.headerColumn} colSpan={2}>
           {question.displayTitle}
         </TableHeaderColumn>
-        {showGrader ? <TableHeaderColumn style={styles.headerColumn}>
-          {graderInfo}
-        </TableHeaderColumn> : null}
+        {showGrader ?
+          <TableHeaderColumn style={styles.headerColumn}>
+            {graderInfo}
+          </TableHeaderColumn>
+        : null}
         <TableRowColumn>{`${questionGrade} / ${question.maximumGrade}`}</TableRowColumn>
       </TableRow>
     );
@@ -213,9 +217,11 @@ class VisibleGradingPanel extends Component {
               <TableHeaderColumn style={styles.headerColumn} colSpan={2}>
                 {intl.formatMessage(translations.question)}
               </TableHeaderColumn>
-              { showGrader ? <TableHeaderColumn style={styles.headerColumn}>
-                {intl.formatMessage(translations.grader)}
-              </TableHeaderColumn> : null }
+              { showGrader ?
+                <TableHeaderColumn style={styles.headerColumn}>
+                  {intl.formatMessage(translations.grader)}
+                </TableHeaderColumn>
+              : null }
               <TableHeaderColumn style={styles.headerColumn}>
                 {intl.formatMessage(translations.totalGrade)}
               </TableHeaderColumn>

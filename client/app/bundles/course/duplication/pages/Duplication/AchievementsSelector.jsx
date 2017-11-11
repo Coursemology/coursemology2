@@ -35,7 +35,7 @@ const styles = {
 class AchievementsSelector extends React.Component {
   static propTypes = {
     achievements: PropTypes.arrayOf(achievementShape),
-    selectedItems: PropTypes.shape(),
+    selectedItems: PropTypes.shape({}),
 
     dispatch: PropTypes.func.isRequired,
   }

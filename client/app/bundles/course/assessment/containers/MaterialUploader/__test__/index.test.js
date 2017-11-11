@@ -19,8 +19,7 @@ const materials = [1, 2].map(id => ({
   name: `Material ${id}`,
   updated_at: `2017-01-01T0${id}:00:00.0000000Z`,
   deleting: false,
-})
-);
+}));
 
 // Mock axios
 const client = CourseAPI.materialFolders.getClient();
@@ -76,7 +75,7 @@ describe('<MaterialUploader />', () => {
     materailUploder.find('input[type="file"]').simulate('change', {
       target: {
         files: [
-           { name: 'Uploading file' },
+          { name: 'Uploading file' },
         ],
       },
     });

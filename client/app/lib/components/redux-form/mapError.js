@@ -19,18 +19,18 @@ const formatMessage = (errorOrWarning, intl) => {
 };
 
 const mapError = (
-    {
-      meta: { touched, error, warning } = {},
-      input: { ...inputProps },
-      intl,
-      ...props
-    },
-    errorProp = 'errorText'
-  ) => {
+  {
+    meta: { touched, error, warning } = {},
+    input: { ...inputProps },
+    intl,
+    ...props
+  },
+  errorProp = 'errorText'
+) => {
   const errorOrWarning = error || warning;
   return touched && errorOrWarning ?
-          { ...inputProps, ...props, [errorProp]: formatMessage(errorOrWarning, intl) } :
-          { ...inputProps, ...props };
+    { ...inputProps, ...props, [errorProp]: formatMessage(errorOrWarning, intl) } :
+    { ...inputProps, ...props };
 };
 
 export default mapError;

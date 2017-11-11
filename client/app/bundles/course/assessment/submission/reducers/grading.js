@@ -10,10 +10,8 @@ function sum(array) {
 }
 
 function computeExp(questions, maximumGrade, basePoints, expMultiplier) {
-  return parseInt(
-    (sum(Object.values(questions).map(q => q.grade)) / maximumGrade)
-    * basePoints * expMultiplier,
-  10);
+  const totalGrade = sum(Object.values(questions).map(q => q.grade));
+  return parseInt((totalGrade / maximumGrade) * basePoints * expMultiplier, 10);
 }
 
 export default function (state = initialState, action) {
@@ -31,7 +29,7 @@ export default function (state = initialState, action) {
         questions: {
           ...action.payload.answers.reduce((obj, answer) =>
             ({ ...obj, [answer.questionId]: answer.grading })
-          , {}),
+            , {}),
         },
         exp: action.payload.submission.pointsAwarded,
         basePoints: action.payload.submission.basePoints,

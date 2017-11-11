@@ -42,7 +42,6 @@ const styles = {
 };
 
 class VisibleSubmissionsIndex extends React.Component {
-
   state = {
     publishConfirmation: false,
     includePhantoms: false,

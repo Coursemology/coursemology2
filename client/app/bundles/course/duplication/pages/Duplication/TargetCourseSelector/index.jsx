@@ -86,11 +86,12 @@ class TargetCourseSelector extends React.Component {
 
   renderCourseMenuItem = (course) => {
     const { currentHost } = this.props;
-    const title = currentHost === course.host ? course.title :
-    (<span>
-      <TypeBadge text={course.host} />
-      {course.title}
-    </span>);
+    const title = currentHost === course.host ? course.title : (
+      <span>
+        <TypeBadge text={course.host} />
+        {course.title}
+      </span>
+    );
 
     return <MenuItem key={course.id} value={course.id} primaryText={title} />;
   }

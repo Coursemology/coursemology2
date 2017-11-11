@@ -84,17 +84,17 @@ export default class ToolDropdown extends Component {
     }
 
     const colorBarStyle = disabled ?
-    {
-      width: '23px',
-      height: '8px',
-      background: '#c0c0c0',
-    } :
-    {
-      width: '23px',
-      height: '8px',
-      backgroundColor,
-      border: borderColor ? `${borderColor} 2px solid` : undefined,
-    };
+      {
+        width: '23px',
+        height: '8px',
+        background: '#c0c0c0',
+      } :
+      {
+        width: '23px',
+        height: '8px',
+        backgroundColor,
+        border: borderColor ? `${borderColor} 2px solid` : undefined,
+      };
 
     return <div style={colorBarStyle} />;
   }
@@ -117,10 +117,10 @@ export default class ToolDropdown extends Component {
         <div role="button" tabIndex="0" style={style.innerTool} onClick={onClickIcon}>
           { this.renderIcon() }
           <MaterialTooltip
-            horizontalPosition={'center'}
+            horizontalPosition="center"
             label={tooltip}
             show={showTooltip}
-            verticalPosition={'top'}
+            verticalPosition="top"
           />
           { this.renderColorBar() }
         </div>

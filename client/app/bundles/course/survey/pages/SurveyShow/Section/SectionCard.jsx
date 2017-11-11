@@ -78,13 +78,13 @@ class SectionCard extends React.Component {
               <Subheader><FormattedMessage {...translations.noQuestions} /></Subheader> : null
           }
           {
-            section.questions.map((question, index) =>
-              (<Question
+            section.questions.map((question, index) => (
+              <Question
                 key={question.id}
                 expanded={this.state.expanded}
                 {...{ question, index, sectionIndex, draggedQuestion }}
-              />)
-            )
+              />
+            ))
           }
         </CardText>
         { this.renderActions() }

@@ -114,18 +114,18 @@ export function updateScribingQuestion(questionId, fields) {
     dispatch({ type: actionTypes.UPDATE_SCRIBING_QUESTION_REQUEST });
     const parsedFields = processFields(fields);
     CourseAPI.question.scribing.scribings.update(questionId, parsedFields)
-    .then(() => {
-      redirectToAssessment();
-      dispatch({
-        scribingId: getScribingId(),
-        type: actionTypes.UPDATE_SCRIBING_QUESTION_SUCCESS,
+      .then(() => {
+        redirectToAssessment();
+        dispatch({
+          scribingId: getScribingId(),
+          type: actionTypes.UPDATE_SCRIBING_QUESTION_SUCCESS,
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: actionTypes.UPDATE_SCRIBING_QUESTION_FAILURE,
+          saveErrors: error.response && error.response.data && error.response.data.errors,
+        });
       });
-    })
-    .catch((error) => {
-      dispatch({
-        type: actionTypes.UPDATE_SCRIBING_QUESTION_FAILURE,
-        saveErrors: error.response && error.response.data && error.response.data.errors,
-      });
-    });
   };
 }
