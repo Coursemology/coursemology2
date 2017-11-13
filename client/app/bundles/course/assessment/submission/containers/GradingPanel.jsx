@@ -105,6 +105,10 @@ class VisibleGradingPanel extends Component {
             step={1}
             value={exp}
             onChange={e => this.handleExpField(e.target.value)}
+            ref={(ref) => {
+              this.expInputRef = ref;
+            }}
+            onWheel={() => this.expInputRef.blur()}
           />
           {` / ${basePoints}`}
         </div>
@@ -118,6 +122,10 @@ class VisibleGradingPanel extends Component {
             step={0.1}
             value={expMultiplier}
             onChange={e => this.handleMultiplierField(e.target.value)}
+            ref={(ref) => {
+              this.multiplierInputRef = ref;
+            }}
+            onWheel={() => this.multiplierInputRef.blur()}
           />
         </div>
       </div>
