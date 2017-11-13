@@ -134,54 +134,71 @@ class ResponseAnswer extends React.Component {
     );
   }
 
-  renderMultipleResponseField() {
-    const { member, question, disabled, intl } = this.props;
+
+  constructor(props) {
+    super(props);
+    this.checkQuantitySelected = this.checkQuantitySelected.bind(this);
+    this.checkMultipleChoiceRequired = this.checkMultipleChoiceRequired.bind(this);
+    this.checkTextResponseRequired = this.checkTextResponseRequired.bind(this);
+  }
+
+  checkQuantitySelected(options) {
+    const { question, intl } = this.props;
     const { required, min_options: minOptions, max_options: maxOptions } = question;
+    const optionCount = options.length;
 
-    const checkQuantitySelected = (options) => {
-      const optionCount = options.length;
+    // Skip checks if question is not required and student doesn't intend to answer it.
+    if (!required && optionCount === 0) { return undefined; }
 
-      // Skip checks if question is not required and student doesn't intend to answer it.
-      if (!required && optionCount === 0) { return undefined; }
+    if (minOptions && optionCount < minOptions) {
+      return intl.formatMessage(responseFormTranslations.selectAtLeast, { count: minOptions });
+    }
+    if (maxOptions && optionCount > maxOptions) {
+      return intl.formatMessage(responseFormTranslations.selectAtMost, { count: maxOptions });
+    }
 
-      if (minOptions && optionCount < minOptions) {
-        return intl.formatMessage(responseFormTranslations.selectAtLeast, { count: minOptions });
-      }
-      if (maxOptions && optionCount > maxOptions) {
-        return intl.formatMessage(responseFormTranslations.selectAtMost, { count: maxOptions });
-      }
+    return undefined;
+  }
 
-      return undefined;
-    };
+  checkMultipleChoiceRequired(value) {
+    const { question, intl } = this.props;
+    return question.required && (!value || value.length < 1) ?
+      intl.formatMessage(responseFormTranslations.selectAtLeast, { count: 1 }) : undefined;
+  }
+
+  checkTextResponseRequired(value) {
+    const { question } = this.props;
+    return question.required && !value ? formTranslations.required : undefined;
+  }
+
+  renderMultipleResponseField() {
+    const { member, question, disabled } = this.props;
 
     return (
       <Field
         name={`${member}.answer.question_option_ids`}
         component={ResponseAnswer.renderMultipleResponseOptions}
-        validate={checkQuantitySelected}
+        validate={this.checkQuantitySelected}
         {...{ question, disabled }}
       />
     );
   }
 
   renderMultipleChoiceField() {
-    const { member, question, disabled, intl } = this.props;
-    const checkRequired = value => ((question.required && (!value || value.length < 1)) ?
-      intl.formatMessage(responseFormTranslations.selectAtLeast, { count: 1 }) : undefined);
+    const { member, question, disabled } = this.props;
 
     return (
       <Field
         name={`${member}.answer.question_option_ids`}
         component={ResponseAnswer.renderMultipleChoiceOptions}
-        validate={checkRequired}
+        validate={this.checkMultipleChoiceRequired}
         {...{ question, disabled }}
       />
     );
   }
 
   renderTextResponseField() {
-    const { member, question, disabled } = this.props;
-    const checkRequired = value => ((question.required && !value) ? formTranslations.required : undefined);
+    const { member, disabled } = this.props;
 
     return (
       <Field
@@ -189,7 +206,7 @@ class ResponseAnswer extends React.Component {
         name={`${member}.answer.text_response`}
         component={TextField}
         disabled={disabled}
-        validate={checkRequired}
+        validate={this.checkTextResponseRequired}
         multiLine
       />
     );

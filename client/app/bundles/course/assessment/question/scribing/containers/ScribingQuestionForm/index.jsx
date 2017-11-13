@@ -39,6 +39,20 @@ const propTypes = {
   submitFailed: PropTypes.bool.isRequired,
 };
 
+// Field level validations
+const validations = {
+  required: value => (
+    value ? undefined : translations.cannotBeBlankValidationError
+  ),
+  lessThan1000: value => (
+    value && value >= 1000 ?
+      translations.valueMoreThanEqual1000Error : undefined
+  ),
+  nonNegative: value => (
+    value && value < 0 ? translations.positiveNumberValidationError : undefined
+  ),
+};
+
 class ScribingQuestionForm extends React.Component {
   static convertNull(value) {
     return value === null ? '' : value;
@@ -135,26 +149,12 @@ class ScribingQuestionForm extends React.Component {
   }
 
   render() {
-    const { handleSubmit, submitting,
-      intl, scribingId } = this.props;
+    const { handleSubmit, submitting, scribingId } = this.props;
     const question = this.props.data.question;
     const onSubmit = scribingId ? this.handleUpdateQuestion : this.handleCreateQuestion;
 
     const skillsOptions = question.skills;
     const skillsValues = question.skill_ids;
-
-    // Field level validations
-    const required = value => (
-      value ? undefined : intl.formatMessage(translations.cannotBeBlankValidationError)
-    );
-    const lessThan1000 = value => (
-      value && value >= 1000 ?
-        intl.formatMessage(translations.valueMoreThanEqual1000Error) : undefined
-    );
-    const nonNegative = value => (
-      value && value < 0 ?
-        intl.formatMessage(translations.positiveNumberValidationError) : undefined
-    );
 
     return (
       (this.props.data.isLoading) ? <LoadingIndicator /> :
@@ -206,7 +206,7 @@ class ScribingQuestionForm extends React.Component {
                 label={this.props.intl.formatMessage(translations.maximumGradeFieldLabel)}
                 field="maximum_grade"
                 required
-                validate={[required, lessThan1000, nonNegative]}
+                validate={[validations.required, validations.lessThan1000, validations.nonNegative]}
                 type="number"
                 isLoading={this.props.data.isLoading}
                 value={ScribingQuestionForm.convertNull(
@@ -226,7 +226,7 @@ class ScribingQuestionForm extends React.Component {
                     field="attachment"
                     label={this.props.intl.formatMessage(translations.chooseFileButton)}
                     isLoading={this.props.data.isLoading}
-                    validate={[required]}
+                    validate={[validations.required]}
                     errorMessage={this.props.intl.formatMessage(translations.fileAttachmentRequired)}
                   />
                   <div className={styles.warningText}>
