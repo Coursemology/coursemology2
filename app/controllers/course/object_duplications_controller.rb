@@ -86,7 +86,7 @@ class Course::ObjectDuplicationsController < Course::ComponentController
   end
 
   def objects_to_duplicate
-    create_duplication_params[:items].map do |item_type, ids|
+    create_duplication_params[:items].to_h.map do |item_type, ids|
       course_item_finders[item_type].call(ids)
     end.flatten
   end

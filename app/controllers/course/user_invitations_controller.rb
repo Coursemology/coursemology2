@@ -78,7 +78,7 @@ class Course::UserInvitationsController < Course::ComponentController
   # @return [Hash]
   def invitation_params
     @invitation_params ||= course_user_invitation_params[:invitations_file]&.tempfile ||
-                           course_user_invitation_params[:invitations_attributes]
+                           course_user_invitation_params[:invitations_attributes].to_h
   end
 
   # Returns the param on whether to enable or disable registration via registration code.
