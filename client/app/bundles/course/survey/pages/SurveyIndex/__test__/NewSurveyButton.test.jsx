@@ -17,8 +17,7 @@ describe('<NewSurveyButton />', () => {
     const newSurveyButton = mount(<NewSurveyButton />, contextOptions);
 
     // Click 'new survey' button
-    const newSurveyButtonNode = ReactDOM.findDOMNode(newSurveyButton.find('button').node);
-    ReactTestUtils.Simulate.click(newSurveyButtonNode);
+    newSurveyButton.find('button').simulate('click');
     expect(surveyFormDialogue.find('SurveyFormDialogue').first().props().visible).toBe(true);
 
     // Fill survey form
@@ -32,7 +31,7 @@ describe('<NewSurveyButton />', () => {
     };
 
     const startAt = '01-01-2017';
-    const dialogInline = surveyFormDialogue.find('RenderToLayer').first().node.layerElement;
+    const dialogInline = surveyFormDialogue.find('RenderToLayer').first().instance().layerElement;
     const surveyForm = new ReactWrapper(dialogInline, true).find('form');
     const titleInput = surveyForm.find('input[name="title"]');
     titleInput.simulate('change', { target: { value: survey.title } });
@@ -41,7 +40,7 @@ describe('<NewSurveyButton />', () => {
     startAtDateInput.simulate('blur');
 
     // Submit survey form
-    const submitButton = surveyFormDialogue.find('FormDialogue').first().node.submitButton;
+    const submitButton = surveyFormDialogue.find('FormDialogue').first().instance().submitButton;
     ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton));
     expect(spyCreate).toHaveBeenCalledWith({ survey });
   });

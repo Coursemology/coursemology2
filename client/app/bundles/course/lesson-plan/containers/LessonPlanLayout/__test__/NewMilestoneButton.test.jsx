@@ -17,8 +17,8 @@ describe('<NewMilestoneButton />', () => {
     const newMilestoneButton = mount(<NewMilestoneButton />, contextOptions);
 
     // Click 'new milestone' button
-    const newMilestoneButtonNode = ReactDOM.findDOMNode(newMilestoneButton.find('button').node);
-    ReactTestUtils.Simulate.click(newMilestoneButtonNode);
+    newMilestoneButton.find('button').simulate('click');
+    milestoneFormDialog.update();
     expect(milestoneFormDialog.find('MilestoneFormDialog').first().props().visible).toBe(true);
 
     // Fill milestone form
@@ -27,7 +27,7 @@ describe('<NewMilestoneButton />', () => {
       start_at: new Date('2016-12-31T16:00:00.000Z'),
     };
     const startAt = '01-01-2017';
-    const dialogInline = milestoneFormDialog.find('RenderToLayer').first().node.layerElement;
+    const dialogInline = milestoneFormDialog.find('RenderToLayer').first().instance().layerElement;
     const milestoneForm = new ReactWrapper(dialogInline, true).find('form');
     const titleInput = milestoneForm.find('input[name="title"]');
     titleInput.simulate('change', { target: { value: milestoneData.title } });
@@ -36,7 +36,7 @@ describe('<NewMilestoneButton />', () => {
     startAtDateInput.simulate('blur');
 
     // Submit milestone form
-    const submitButton = milestoneFormDialog.find('FormDialogue').first().node.submitButton;
+    const submitButton = milestoneFormDialog.find('FormDialogue').first().instance().submitButton;
     ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton));
     expect(spyCreate).toHaveBeenCalledWith({ lesson_plan_milestone: milestoneData });
   });

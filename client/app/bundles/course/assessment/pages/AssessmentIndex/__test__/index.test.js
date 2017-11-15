@@ -1,6 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import ReactTestUtils from 'react-dom/test-utils';
 import { mount } from 'enzyme';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 import storeCreator from '../../../store';
@@ -16,8 +14,8 @@ describe('<AssessmentIndex />', () => {
       </ProviderWrapper>
     );
 
-    const newBtn = ReactDOM.findDOMNode(indexPage.find('button').node);
-    ReactTestUtils.Simulate.click(newBtn);
+    const newBtn = indexPage.find('button');
+    newBtn.simulate('click');
     expect(indexPage.find('Dialog').first().props().open).toBe(true);
   });
 });

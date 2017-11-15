@@ -23,16 +23,15 @@ describe('<EditSectionButton />', () => {
     const contextOptions = buildContextOptions(storeCreator({}));
     const sectionFormDialogue = mount(<SectionFormDialogue />, contextOptions);
     const editSectionButton = mount(<EditSectionButton section={section} />, contextOptions);
-    const editSectionButtonNode = ReactDOM.findDOMNode(editSectionButton.find('button').node);
-    ReactTestUtils.Simulate.click(editSectionButtonNode);
+    editSectionButton.find('button').simulate('click');
 
     const newDescription = 'Added later';
-    const dialogInline = sectionFormDialogue.find('RenderToLayer').first().node.layerElement;
+    const dialogInline = sectionFormDialogue.find('RenderToLayer').first().instance().layerElement;
     const sectionForm = new ReactWrapper(dialogInline, true).find('form');
     const descriptionInput = sectionForm.find('textarea[name="description"]');
     descriptionInput.simulate('change', { target: { value: newDescription } });
 
-    const submitButton = sectionFormDialogue.find('FormDialogue').first().node.submitButton;
+    const submitButton = sectionFormDialogue.find('FormDialogue').first().instance().submitButton;
     ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton));
 
     const expectedPayload = { section: { title: section.title, description: newDescription } };

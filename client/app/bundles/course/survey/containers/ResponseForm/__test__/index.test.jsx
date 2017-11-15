@@ -1,7 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { mount } from 'enzyme';
-import ReactTestUtils from 'react-dom/test-utils';
 import storeCreator from 'course/survey/store';
 import ResponseForm, { buildInitialValues, buildResponsePayload } from '../index';
 
@@ -109,7 +107,7 @@ describe('<ResponseForm />', () => {
     lastMRQOptionCheckbox.props().onCheck(null, true);
 
     const submitButton = responseForm.find('button').last();
-    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton.node));
+    submitButton.simulate('click');
 
     const textResponseAnswerError = textResponseAnswer.find('div').last().text();
     expect(textResponseAnswerError).toEqual('Required');
@@ -123,7 +121,7 @@ describe('<ResponseForm />', () => {
     expect(multipleResponseAnswerError).toEqual('Please select at most 2 option(s).');
 
     const saveButton = responseForm.find('button').first();
-    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(saveButton.node));
+    saveButton.simulate('click');
     const saveExpectedPayload = {
       response: {
         answers_attributes: [{
@@ -151,7 +149,7 @@ describe('<ResponseForm />', () => {
     firstMCQOptionRadio.props().onCheck(null, firstMCQOptionRadio.props().value);
     lastMRQOptionCheckbox.props().onCheck(null, false);
 
-    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton.node));
+    submitButton.simulate('click');
     const submitExpectedPayload = {
       response: {
         answers_attributes: [{

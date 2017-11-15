@@ -57,11 +57,10 @@ describe('<DuplicateButton />', () => {
   it('allows duplication to be triggered with the correct parameters', () => {
     const spy = jest.spyOn(CourseAPI.duplication, 'duplicateItems');
     const duplicateButton = mount(<DuplicateButton />, buildContextOptions(storeCreator(data)));
-    const duplicateButtonNode = duplicateButton.find('button').first().node;
-    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(duplicateButtonNode));
+    duplicateButton.find('button').first().simulate('click');
 
-    const confirmButton = duplicateButton.find('ConfirmationDialog').first().node.confirmButton;
-    const confirmButtonNode = new ReactWrapper(confirmButton, true).find('button').first().node;
+    const confirmButton = duplicateButton.find('ConfirmationDialog').first().instance().confirmButton;
+    const confirmButtonNode = new ReactWrapper(confirmButton, true).find('button').first().instance();
     ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(confirmButtonNode));
 
     const expectedPayload = {

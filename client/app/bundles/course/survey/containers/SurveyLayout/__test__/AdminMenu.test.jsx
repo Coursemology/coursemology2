@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { mount, ReactWrapper } from 'enzyme';
 import ReactTestUtils from 'react-dom/test-utils';
+import { mount, ReactWrapper } from 'enzyme';
 import CourseAPI from 'api/course';
 import DeleteConfirmation from 'lib/containers/DeleteConfirmation';
 import storeCreator from 'course/survey/store';
@@ -40,14 +40,13 @@ describe('<AdminMenu />', () => {
     );
 
     const iconButton = adminMenu.find('button').first();
-    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(iconButton.node));
+    iconButton.simulate('click');
 
-    const menuCardNode = adminMenu.find('RenderToLayer').first().node.layerElement;
+    const menuCardNode = adminMenu.find('RenderToLayer').first().instance().layerElement;
     const deleteButton = new ReactWrapper(menuCardNode, true).find('EnhancedButton').first();
-    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(deleteButton.node));
+    deleteButton.simulate('click');
 
-    const confirmDeleteButton =
-      deleteConfirmation.find('ConfirmationDialog').first().node.confirmButton;
+    const confirmDeleteButton = deleteConfirmation.find('ConfirmationDialog').first().instance().confirmButton;
     ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(confirmDeleteButton));
 
     expect(spyDelete).toHaveBeenCalledWith(survey.id.toString());
@@ -80,20 +79,20 @@ describe('<AdminMenu />', () => {
     );
 
     const iconButton = adminMenu.find('button').first();
-    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(iconButton.node));
+    iconButton.simulate('click');
 
-    const menuCardNode = adminMenu.find('RenderToLayer').first().node.layerElement;
+    const menuCardNode = adminMenu.find('RenderToLayer').first().instance().layerElement;
     const updateButton = new ReactWrapper(menuCardNode, true).find('EnhancedButton').first();
-    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(updateButton.node));
+    updateButton.simulate('click');
 
-    const dialogInline = surveyFormDialogue.find('RenderToLayer').first().node.layerElement;
+    const dialogInline = surveyFormDialogue.find('RenderToLayer').first().instance().layerElement;
     const sectionForm = new ReactWrapper(dialogInline, true).find('form');
     const description = 'To update description';
     const descriptionInput = sectionForm.find('textarea[name="description"]');
     descriptionInput.simulate('change', { target: { value: description } });
 
-    const submitButton = surveyFormDialogue.find('FormDialogue').first().node.submitButton;
-    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton));
+    const submitButton = surveyFormDialogue.find('FormDialogue').first();
+    submitButton.simulate('click');
 
     const expectedPayload = {
       survey: {

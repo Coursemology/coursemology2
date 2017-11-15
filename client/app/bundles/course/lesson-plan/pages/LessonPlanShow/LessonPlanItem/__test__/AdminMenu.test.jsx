@@ -34,14 +34,14 @@ describe('<AdminMenu />', () => {
     );
 
     const iconButton = adminMenu.find('button').first();
-    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(iconButton.node));
+    iconButton.simulate('click');
 
-    const menuCardNode = adminMenu.find('RenderToLayer').first().node.layerElement;
+    const menuCardNode = adminMenu.find('RenderToLayer').first().instance().layerElement;
     const deleteButton = new ReactWrapper(menuCardNode, true).find('EnhancedButton').at(1);
-    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(deleteButton.node));
+    deleteButton.simulate('click');
 
     const confirmDeleteButton =
-      deleteConfirmation.find('ConfirmationDialog').first().node.confirmButton;
+      deleteConfirmation.find('ConfirmationDialog').first().instance().confirmButton;
     ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(confirmDeleteButton));
 
     expect(spy).toHaveBeenCalledWith(eventId);
@@ -75,19 +75,19 @@ describe('<AdminMenu />', () => {
     );
 
     const iconButton = adminMenu.find('button').first();
-    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(iconButton.node));
+    iconButton.simulate('click');
 
-    const menuCardNode = adminMenu.find('RenderToLayer').first().node.layerElement;
+    const menuCardNode = adminMenu.find('RenderToLayer').first().instance().layerElement;
     const updateButton = new ReactWrapper(menuCardNode, true).find('EnhancedButton').first();
-    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(updateButton.node));
+    updateButton.simulate('click');
 
-    const dialogInline = eventFormDialog.find('RenderToLayer').first().node.layerElement;
+    const dialogInline = eventFormDialog.find('RenderToLayer').first().instance().layerElement;
     const eventForm = new ReactWrapper(dialogInline, true).find('form');
     const description = 'Add nice description';
     const descriptionInput = eventForm.find('textarea[name="description"]');
     descriptionInput.simulate('change', { target: { value: description } });
 
-    const submitButton = eventFormDialog.find('FormDialogue').first().node.submitButton;
+    const submitButton = eventFormDialog.find('FormDialogue').first().instance().submitButton;
     ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton));
 
     const expectedPayload = {

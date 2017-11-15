@@ -12,12 +12,11 @@ describe('<RemindButton />', () => {
     const spyRemind = jest.spyOn(CourseAPI.survey.surveys, 'remind');
     const store = storeCreator({ surveys: {} });
     const remindButton = mount(<RemindButton />, buildContextOptions(store));
-    const remindButtonNode = ReactDOM.findDOMNode(remindButton.find('button').node);
-    ReactTestUtils.Simulate.click(remindButtonNode);
-    const cancelButton = remindButton.find('ConfirmationDialog').first().node.cancelButton;
+    remindButton.find('button').simulate('click');
+    const cancelButton = remindButton.find('ConfirmationDialog').first().instance().cancelButton;
     ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(cancelButton));
-    ReactTestUtils.Simulate.click(remindButtonNode);
-    const confirmButton = remindButton.find('ConfirmationDialog').first().node.confirmButton;
+    remindButton.find('button').simulate('click');
+    const confirmButton = remindButton.find('ConfirmationDialog').first().instance().confirmButton;
     ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(confirmButton));
     expect(spyRemind).toHaveBeenCalled();
   });
