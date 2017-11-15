@@ -98,16 +98,24 @@ describe('<ResponseForm />', () => {
       buildContextOptions(storeCreator({}))
     );
 
-    const responseAnswers = responseForm.find('ResponseAnswer');
-    const textResponseAnswer = responseAnswers.at(0);
-    const multipleChoiceAnswer = responseAnswers.at(1);
-    const multipleResponseAnswer = responseAnswers.at(2);
+    let textResponseAnswer;
+    let multipleChoiceAnswer;
+    let multipleResponseAnswer;
+    const updateResponse = () => {
+      responseForm.update();
+      const responseAnswers = responseForm.find('ResponseAnswer');
+      textResponseAnswer = responseAnswers.at(0);
+      multipleChoiceAnswer = responseAnswers.at(1);
+      multipleResponseAnswer = responseAnswers.at(2);
+    }
+    updateResponse();
 
     const lastMRQOptionCheckbox = multipleResponseAnswer.find('OptionsListItem').last().find('Checkbox');
     lastMRQOptionCheckbox.props().onCheck(null, true);
 
     const submitButton = responseForm.find('button').last();
     submitButton.simulate('click');
+    updateResponse();
 
     const textResponseAnswerError = textResponseAnswer.find('div').last().text();
     expect(textResponseAnswerError).toEqual('Required');

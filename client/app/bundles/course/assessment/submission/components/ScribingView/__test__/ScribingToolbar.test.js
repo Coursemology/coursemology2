@@ -213,6 +213,7 @@ describe('ScribingToolbar', () => {
     const coloringTool = scribingToolColor.TYPE;
     const color = 'rgba(231,12,12,1)';
     store.dispatch(setColoringToolColor(answerId, coloringTool, color));
+    editPage.update();
     expect(editPage.find('TypePopover').prop('colorPickerColor')).toEqual(color);
     expect(editPage.find('ToolDropdown').first().prop('colorBarBackground')).toEqual(color);
   });

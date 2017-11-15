@@ -81,6 +81,7 @@ describe('SavingIndicator', () => {
       type: actionTypes.UPDATE_SCRIBING_ANSWER_REQUEST,
       payload: { answerId },
     });
+    editPage.update();
     expect(editPage.find('SavingIndicator').prop('isSaving')).toEqual(true);
 
     Object.defineProperty(window.location, 'pathname', {
@@ -94,6 +95,7 @@ describe('SavingIndicator', () => {
     store.dispatch(updateScribingAnswer(answerId, {}));
     await sleep(1);
     expect(spyUpdate).toHaveBeenCalled();
+    editPage.update();
     expect(editPage.find('SavingIndicator').prop('isSaved')).toEqual(true);
   });
 
@@ -119,6 +121,7 @@ describe('SavingIndicator', () => {
     store.dispatch(updateScribingAnswer(answerId, {}));
     await sleep(1);
     expect(spyUpdate).toHaveBeenCalled();
+    editPage.update();
     expect(editPage.find('SavingIndicator').prop('hasError')).toEqual(true);
   });
 });

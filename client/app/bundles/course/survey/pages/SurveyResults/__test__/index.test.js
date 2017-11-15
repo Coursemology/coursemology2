@@ -68,9 +68,11 @@ describe('<SurveyResults />', () => {
     expect(spyResults).toHaveBeenCalled();
 
     // Toggling 'include phantoms' should result in one more entry
+    surveyResults.update();
     const rowsPriorToToggle = surveyResults.find('TableRow').length;
     const includePhantomToggle = surveyResults.find('Toggle').first();
     includePhantomToggle.props().onToggle(null, false);
+    surveyResults.update();
     const rowsAfterToggle = surveyResults.find('TableRow').length;
     expect(rowsAfterToggle).toBe(rowsPriorToToggle - 1);
   });

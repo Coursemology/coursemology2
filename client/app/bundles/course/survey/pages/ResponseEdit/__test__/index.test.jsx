@@ -72,6 +72,7 @@ describe('<ResponseEdit />', () => {
     );
     await sleep(1);
     expect(spyEdit).toHaveBeenCalled();
+    responseShow.update();
 
     // Fill and submit response form
     const responseForm = responseShow.find('ResponseForm').first();

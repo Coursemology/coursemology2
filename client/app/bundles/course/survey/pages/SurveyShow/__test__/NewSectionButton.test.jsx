@@ -16,6 +16,7 @@ describe('<NewSectionButton />', () => {
 
     // Click 'new section' button
     newSectionButton.find('button').simulate('click');
+    sectionFormDialogue.update();
     expect(sectionFormDialogue.find('SectionFormDialogue').first().props().visible).toBe(true);
 
     // Fill section form with title

@@ -78,6 +78,7 @@ describe('Scribing question', () => {
     // Wait for api call
     await sleep(1);
     expect(spyFetchSkills).toHaveBeenCalled();
+    newPage.update();
     expect(newPage.find('InputField').length).toBe(2);
     expect(newPage.find('MultiSelectSkillsField').length).toBe(1);
     expect(newPage.find('option').length).toBe(2);
@@ -137,6 +138,7 @@ describe('Scribing question', () => {
     // Wait for api call
     await sleep(1);
     expect(spyFetch).toHaveBeenCalled();
+    fetchPage.update();
     expect(fetchPage.find('InputField').length).toBe(2);
     expect(fetchPage.find('MultiSelectSkillsField').length).toBe(1);
     expect(fetchPage.find('option').length).toBe(2);
@@ -173,6 +175,7 @@ describe('Scribing question', () => {
     // Wait for api call
     await sleep(1);
     expect(spyUpdate).toHaveBeenCalled();
+    fetchPage.update();
     expect(fetchPage.find('div.alert').length).toBe(1);
   });
 
@@ -196,7 +199,8 @@ describe('Scribing question', () => {
     );
 
     await sleep(1);
-    newPage.find('[type="submit"]').get(0).click();
+    newPage.update();
+    newPage.find('[type="submit"]').first().simulate('click');
 
     await sleep(1);
     expect(spyCreate).toHaveBeenCalled();
@@ -225,7 +229,8 @@ describe('Scribing question', () => {
     );
 
     await sleep(1);
-    fetchPage.find('[type="submit"]').get(0).click();
+    fetchPage.update();
+    fetchPage.find('[type="submit"]').first().simulate('click');
 
     await sleep(1);
     expect(spyUpdate).toHaveBeenCalledWith(scribingId, mockUpdatedFields);

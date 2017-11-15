@@ -83,6 +83,7 @@ describe('<ResponseIndex />', () => {
     await sleep(1);
 
     expect(spyIndex).toHaveBeenCalled();
+    responseIndex.update();
     const tableBodies = responseIndex.find('TableBody');
     const phantomStudentRows = tableBodies.at(2).find('TableRow');
     const realStudentRows = tableBodies.at(1).find('TableRow');
