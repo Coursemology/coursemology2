@@ -2,6 +2,10 @@
 require 'rails_helper'
 
 RSpec.describe ApplicationThemingHelper, type: :helper do
+  module ApplicationThemingHelper
+    include RenderWithinLayoutHelper
+  end
+
   describe '#page_class' do
     subject { helper.page_class }
 
