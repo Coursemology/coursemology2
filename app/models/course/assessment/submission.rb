@@ -64,7 +64,7 @@ class Course::Assessment::Submission < ApplicationRecord
   #   The graders associated with this submission.
   has_many :graders, through: :answers, class_name: User.name
 
-  belongs_to :publisher, class_name: User.name, inverse_of: nil
+  belongs_to :publisher, class_name: User.name, inverse_of: nil, optional: true
 
   has_many :logs, class_name: Course::Assessment::Submission::Log.name,
                   inverse_of: :submission, dependent: :destroy

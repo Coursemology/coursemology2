@@ -13,7 +13,7 @@ class Course::UserInvitation < ApplicationRecord
   enum role: CourseUser.roles
 
   belongs_to :course, inverse_of: :invitations
-  belongs_to :confirmer, class_name: User.name, inverse_of: nil
+  belongs_to :confirmer, class_name: User.name, inverse_of: nil, optional: true
 
   # Invitations that haven't been confirmed, i.e. pending the user's acceptance.
   scope :unconfirmed, -> { where(confirmed_at: nil) }

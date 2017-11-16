@@ -4,7 +4,7 @@ class AttachmentReference < ApplicationRecord
 
   before_save :update_expires_at
 
-  belongs_to :attachable, polymorphic: true, inverse_of: nil
+  belongs_to :attachable, polymorphic: true, inverse_of: nil, optional: true
   belongs_to :attachment, inverse_of: :attachment_references
 
   delegate :open, :url, :path, to: :attachment

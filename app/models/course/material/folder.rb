@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Material::Folder < ApplicationRecord
-  acts_as_forest order: :name, dependent: :destroy
+  acts_as_forest order: :name, dependent: :destroy, optional: true
   include Course::ModelComponentHost::Component
   include DuplicationStateTrackingConcern
 
@@ -11,7 +11,7 @@ class Course::Material::Folder < ApplicationRecord
   has_many :materials, inverse_of: :folder, dependent: :destroy, foreign_key: :folder_id,
                        class_name: Course::Material.name, autosave: true
   belongs_to :course, inverse_of: :material_folders
-  belongs_to :owner, polymorphic: true, inverse_of: :folder
+  belongs_to :owner, polymorphic: true, inverse_of: :folder, optional: true
 
   validate :validate_name_is_unique_among_materials
   validates_with FilenameValidator

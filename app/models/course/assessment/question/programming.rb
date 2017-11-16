@@ -25,7 +25,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord
   validates :time_limit, numericality: { greater_than: 0, less_than_or_equal_to: CPU_TIMEOUT },
                          allow_nil: true
 
-  belongs_to :import_job, class_name: TrackableJob::Job.name, inverse_of: nil
+  belongs_to :import_job, class_name: TrackableJob::Job.name, inverse_of: nil, optional: true
   belongs_to :language, class_name: Coursemology::Polyglot::Language.name, inverse_of: nil
   has_one_attachment
   has_many :template_files, class_name: Course::Assessment::Question::ProgrammingTemplateFile.name,
