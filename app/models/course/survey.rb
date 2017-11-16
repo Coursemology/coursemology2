@@ -11,8 +11,8 @@ class Course::Survey < ApplicationRecord
   # with autoloading of files in production where eager_load is enabled.
   has_many :responses, inverse_of: :survey, dependent: :destroy,
                        class_name: Course::Survey::Response.name
-  has_many :questions, through: :sections
   has_many :sections, inverse_of: :survey, dependent: :destroy
+  has_many :questions, through: :sections
 
   def can_user_start?(_user)
     allow_response_after_end || end_at.nil? || Time.zone.now < end_at
