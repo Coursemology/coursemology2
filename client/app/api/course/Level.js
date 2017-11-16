@@ -6,10 +6,8 @@ export default class LevelAPI extends BaseCourseAPI {
   *
   * @return {Promise}
   * success response: {
-  *   levels: Array.<levelShape>,
+  *   levels: Array,
   * }
-  *
-  * See course/level/propTypes.js for levelShape.
   */
   fetch() {
     return this.getClient().get(`${this._getUrlPrefix()}`);

@@ -4,21 +4,25 @@ import { TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import { grey300 } from 'material-ui/styles/colors';
-import styles from './../pages/Level/LevelView.scss';
+
+const styles = {
+  deleteButtonCell: {
+    paddingLeft: 0,
+    textAlign: 'right',
+    verticalAlign: 'middle',
+    width: '50px',
+  },
+  levelNumber: {
+    fontSize: '16px',
+    textAlign: 'center',
+    verticalAlign: 'middle',
+  },
+}
 
 class LevelRow extends React.Component {
   static propTypes = {
     levelNumber: PropTypes.number.isRequired,
     experiencePointsThreshold: PropTypes.number.isRequired,
-  }
-
-  levelDeleteHandler(levelNumber) {
-    return (e) => {
-      e.preventDefault();
-      if (!this.props.isLoading) {
-        console.log('delete ' + levelNumber);
-      }
-    };
   }
 
   renderInput(levelNumber, experiencePointsThreshold) {
@@ -29,6 +33,7 @@ class LevelRow extends React.Component {
         onChange={(e, newValue) => {
           this.props.updateExpThreshold(levelNumber, newValue);
         }}
+        onBlur={(e) => { this.props.sortLevels() }}
         value={experiencePointsThreshold}
       />
     );
@@ -38,17 +43,17 @@ class LevelRow extends React.Component {
     const { levelNumber, experiencePointsThreshold } = this.props;
     return (
       <TableRow>
-        <TableHeaderColumn className={styles.deleteButtonCell}>
+        <TableRowColumn style={styles.levelNumber}>{ levelNumber }</TableRowColumn>
+        <TableRowColumn>{ this.renderInput(levelNumber, experiencePointsThreshold) }</TableRowColumn>
+        <TableHeaderColumn style={styles.deleteButtonCell}>
           <RaisedButton
             name={levelNumber}
             backgroundColor={grey300}
             icon={<i className="fa fa-trash" />}
-            onClick={this.levelDeleteHandler(levelNumber)}
+            onClick={this.props.deleteLevel(levelNumber)}
             style={{ minWidth: '40px', width: '40px' }}
           />
         </TableHeaderColumn>
-        <TableRowColumn>{ levelNumber }</TableRowColumn>
-        <TableRowColumn>{ this.renderInput(levelNumber, experiencePointsThreshold) }</TableRowColumn>
       </TableRow>
     );
   }

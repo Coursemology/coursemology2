@@ -17,3 +17,27 @@ export function fetchLevels() {
       });
   };
 }
+
+export function updateExpThreshold(levelNumber, newValue) {
+  return (dispatch) => {
+    dispatch({type: actionTypes.UPDATE_EXP_THRESHOLD, payload: {levelNumber, newValue}});
+  };
+}
+
+export function sortLevels() {
+  return (dispatch) => {
+    dispatch({type: actionTypes.SORT_LEVELS});
+  };
+}
+
+export function addLevel() {
+  return (dispatch) => {
+    dispatch({type: actionTypes.ADD_LEVEL});
+  };
+}
+
+export function deleteLevel(levelNumber) {
+  return (dispatch) => {
+    dispatch({type: actionTypes.DELETE_LEVEL, payload: {levelNumber}});
+  };
+}
