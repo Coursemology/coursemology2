@@ -1,8 +1,8 @@
 import { shallow } from 'enzyme';
 
 // See https://github.com/airbnb/enzyme/issues/539 and the `until` helper was borrowed from there.
-function until(selector, {context} = this.options) {
-  if (!selector || this.isEmptyRender() || typeof this.node.type === 'string')
+function until(selector, context = this.context) {
+  if (!selector || this.isEmptyRender() || typeof this.instance().type === 'string')
     return this;
 
   const instance = this.instance();
