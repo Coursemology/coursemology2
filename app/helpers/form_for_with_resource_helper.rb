@@ -1,10 +1,6 @@
 # frozen_string_literal: true
-module Extensions::FormForWithResource::ActionView::Helpers::FormHelper
+module FormForWithResourceHelper
   class << self
-    def included(module_)
-      module_.alias_method_chain :form_for, :resource
-    end
-
     # Handles the +:resource+ option in +form_for+.
     def form_for_with_resource_option(form_helper, record, options)
       case options[:resource]
@@ -64,11 +60,9 @@ module Extensions::FormForWithResource::ActionView::Helpers::FormHelper
     end
   end
 
-  def form_for_with_resource(record, options, &proc)
-    form_for_with_resource_module =
-      Extensions::FormForWithResource::ActionView::Helpers::FormHelper
-    form_for_with_resource_module.form_for_with_resource_option(self, record, options)
+  def form_for(record, options, &proc)
+    FormForWithResourceHelper.form_for_with_resource_option(self, record, options)
 
-    form_for_without_resource(record, options, &proc)
+    super(record, options, &proc)
   end
 end

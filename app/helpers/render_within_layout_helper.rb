@@ -1,10 +1,6 @@
 # frozen_string_literal: true
-module Extensions::RenderWithinLayout::ActionView::Helpers::RenderingHelper
-  def self.included(module_)
-    module_.alias_method_chain :render, :within_layout
-  end
-
-  def render_with_within_layout(*args, &proc)
+module RenderWithinLayoutHelper
+  def render(*args, &proc)
     arg = args.shift
     case arg
     when Hash
@@ -13,6 +9,6 @@ module Extensions::RenderWithinLayout::ActionView::Helpers::RenderingHelper
     end
 
     args.unshift(arg)
-    render_without_within_layout(*args, &proc)
+    super
   end
 end

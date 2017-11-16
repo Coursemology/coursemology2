@@ -12,6 +12,8 @@ module ApplicationHelper
   include ApplicationFormattersHelper
   include ApplicationSidebarHelper
   include RouteOverridesHelper
+  include FormForWithResourceHelper
+  include RenderWithinLayoutHelper
 
   # Accesses the header tags specified for the current page
   def header_tags(*args, &proc)
