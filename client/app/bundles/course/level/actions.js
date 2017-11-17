@@ -41,3 +41,18 @@ export function deleteLevel(levelNumber) {
     dispatch({type: actionTypes.DELETE_LEVEL, payload: {levelNumber}});
   };
 }
+
+export function saveLevels(levels, successMessage, failureMessage) {
+  return (dispatch) => {
+    dispatch({type: actionTypes.SAVE_LEVELS });
+    return CourseAPI.level.save(levels)
+      .then(() => {
+        setNotification(successMessage)(dispatch);
+        dispatch({ type: actionTypes.SAVE_LEVELS_SUCCESS });
+      })
+      .catch(() => {
+        setNotification(failureMessage)(dispatch);
+        dispatch({ type: actionTypes.SAVE_LEVELS_FAILURE });
+      });
+  };
+}

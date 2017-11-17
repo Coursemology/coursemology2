@@ -16,10 +16,11 @@ import Done from 'material-ui/svg-icons/action/done';
 import TitleBar from 'lib/components/TitleBar';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 
-import { fetchLevels, updateExpThreshold, sortLevels, addLevel, deleteLevel } from 'course/level/actions';
+import { fetchLevels, updateExpThreshold, sortLevels, addLevel, deleteLevel, saveLevels } from 'course/level/actions';
 import { defaultComponentTitles } from 'course/translations.intl';
 
 import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
 import {
   Table, TableBody, TableFooter, TableHeader, TableHeaderColumn, TableRow, TableRowColumn
 } from 'material-ui/Table';
@@ -30,6 +31,26 @@ const translations = defineMessages({
   levelsTitle: {
     id: 'course.level.Level.levelsTitle',
     defaultMessage: 'Levels',
+  },
+  thresholdHeader: {
+    id: 'course.level.Level.thresholdHeader',
+    defaultMessage: 'Threshold',
+  },
+  addNewLevel: {
+    id: 'course.level.Level.addNewLevel',
+    defaultMessage: 'Add New Level',
+  },
+  saveLevels: {
+    id: 'course.level.Level.saveLevels',
+    defaultMessage: 'Save Levels',
+  },
+  saveSuccess: {
+    id: 'course.level.Level.saveSuccess',
+    defaultMessage: 'Levels Saved',
+  },
+  saveFailure: {
+    id: 'course.level.Level.saveFailure',
+    defaultMessage: 'Level saving failed, please try again.',
   },
 });
 
@@ -69,7 +90,8 @@ const styles = {
 class Level extends React.Component {
   static propTypes = {
     isLoading: PropTypes.bool.isRequired,
-    levels: PropTypes.array.isRequired,
+    isSaving: PropTypes.bool.isRequired,
+    levels: PropTypes.arrayOf(PropTypes.number).isRequired,
 
     dispatch: PropTypes.func.isRequired,
   }
@@ -77,13 +99,11 @@ class Level extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-    };
-
     this.handleUpdateExpThreshold = this.handleUpdateExpThreshold.bind(this);
     this.handleLevelTextBlur = this.handleLevelTextBlur.bind(this);
-    this.createLevelHandler = this.createLevelHandler.bind(this);
+    this.handleCreateLevel = this.handleCreateLevel.bind(this);
     this.handleDeleteLevel = this.handleDeleteLevel.bind(this);
+    this.handleSaveLevels = this.handleSaveLevels.bind(this);
   }
 
   componentDidMount() {
@@ -98,20 +118,33 @@ class Level extends React.Component {
     this.props.dispatch(sortLevels());
   }
 
-  createLevelHandler() {
+  handleCreateLevel() {
     return (e) => {
       e.preventDefault();
-      if (!this.props.isLoading) {
-        this.props.dispatch(addLevel());
-      }
+      this.props.dispatch(addLevel());
     };
   }
 
   handleDeleteLevel(levelNumber) {
     return (e) => {
       e.preventDefault();
-      if(!this.props.isLoading) {
-        this.props.dispatch(deleteLevel(levelNumber));
+      this.props.dispatch(deleteLevel(levelNumber));
+    };
+  }
+
+  // Only the first element of the levels prop should be 0 as it is the default threshold.
+  // User input should not contain any zeroes for threshold.
+  levelsHaveError() {
+    return this.props.levels.slice(1).some(element => element === 0);
+  }
+
+  handleSaveLevels() {
+    return (e) => {
+      e.preventDefault();
+      if (this.levelsHaveError() === false) {
+        const successMessage = <FormattedMessage {...translations.saveSuccess} />;
+        const failureMessage = <FormattedMessage {...translations.saveFailure} />;
+        this.props.dispatch(saveLevels(this.props.levels, successMessage, failureMessage));
       }
     };
   }
@@ -125,7 +158,7 @@ class Level extends React.Component {
         updateExpThreshold={this.handleUpdateExpThreshold}
         sortLevels={this.handleLevelTextBlur}
         deleteLevel={this.handleDeleteLevel}
-        isLoading={this.props.isLoading}
+        disabled={this.props.isSaving}
       />
     ));
 
@@ -192,5 +225,6 @@ class Level extends React.Component {
 
 export default connect(({ levelEdit, ...state }) => ({
   isLoading: levelEdit.isLoading,
+  isSaving: levelEdit.isSaving,
   levels: levelEdit.levels,
 }))(Level);

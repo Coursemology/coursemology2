@@ -16,4 +16,8 @@ export default class LevelAPI extends BaseCourseAPI {
   _getUrlPrefix() {
     return `/courses/${this.getCourseId()}/levels`;
   }
+
+  save(levelFields) {
+    return this.getClient().post(this._getUrlPrefix(), {levels: levelFields});
+  }
 }

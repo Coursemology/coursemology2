@@ -1,9 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import { grey300 } from 'material-ui/styles/colors';
+
+const translations = defineMessages({
+  zeroThresholdError: {
+    id: 'course.level.LevelRow.zeroThresholdError',
+    defaultMessage: 'Experience points threshold cannot be 0',
+  },
+});
 
 const styles = {
   deleteButtonCell: {
@@ -17,11 +25,12 @@ const styles = {
     textAlign: 'center',
     verticalAlign: 'middle',
   },
-}
+};
 
 class LevelRow extends React.Component {
   static propTypes = {
     levelNumber: PropTypes.number.isRequired,
+    disabled: PropTypes.bool.isRequired,
     experiencePointsThreshold: PropTypes.number.isRequired,
   }
 
@@ -33,7 +42,9 @@ class LevelRow extends React.Component {
         onChange={(e, newValue) => {
           this.props.updateExpThreshold(levelNumber, newValue);
         }}
-        onBlur={(e) => { this.props.sortLevels() }}
+        disabled={this.props.disabled}
+        errorText={experiencePointsThreshold === 0 ? <FormattedMessage {...translations.zeroThresholdError} /> : ''}
+        onBlur={() => { this.props.sortLevels(); }}
         value={experiencePointsThreshold}
       />
     );
@@ -51,6 +62,7 @@ class LevelRow extends React.Component {
             backgroundColor={grey300}
             icon={<i className="fa fa-trash" />}
             onClick={this.props.deleteLevel(levelNumber)}
+            disabled={this.props.disabled}
             style={{ minWidth: '40px', width: '40px' }}
           />
         </TableHeaderColumn>

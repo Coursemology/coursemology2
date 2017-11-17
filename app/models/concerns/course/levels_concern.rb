@@ -25,4 +25,22 @@ module Course::LevelsConcern
   def default_level?
     any?(&:default_level?)
   end
+
+  # Delete and create Course::Level objects so they match new given thresholds.
+  #
+  # @param [Array<Integer>] new_thresholds Array of the new experience point thresholds.
+  # @return [Array<Course::Level>] Level objects with the new thresholds.
+  def mass_update_levels(new_thresholds)
+    # Ensure that the default level is still present in the new set of thresholds.
+    new_thresholds << 0 unless new_thresholds.include?(Course::Level::DEFAULT_THRESHOLD)
+
+    Course::Level.transaction do
+      # Delete Course::Level objects which are not in the new set of thresholds.
+      delete(select { |level| !new_thresholds.include?(level.experience_points_threshold) })
+
+      new_thresholds.map do |threshold|
+        find_or_create_by(experience_points_threshold: threshold)
+      end
+    end
+  end
 end

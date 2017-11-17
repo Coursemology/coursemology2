@@ -3,6 +3,7 @@ import actionTypes from 'course/level/constants';
 const initialState = {
   levels: [],
   isLoading: false,
+  isSaving: false,
 };
 
 function isNumeric(n) {
@@ -69,6 +70,15 @@ export default function (state = initialState, action) {
       copiedLevels.splice(payload.levelNumber, 1);
 
       return { ...state, levels: copiedLevels }
+    }
+    case actionTypes.SAVE_LEVELS: {
+      return { ...state, isSaving: true };
+    }
+    case actionTypes.SAVE_LEVELS_SUCCESS: {
+      return { ...state, isSaving: false };
+    }
+    case actionTypes.SAVE_LEVELS_FAILURE: {
+      return { ...state, isSaving: false };
     }
     default:
       return state;

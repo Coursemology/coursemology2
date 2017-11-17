@@ -5,6 +5,8 @@ class Course::Level < ApplicationRecord
 
   belongs_to :course, inverse_of: :levels
 
+  DEFAULT_THRESHOLD = 0
+
   # By default, levels should be returned with their level_number,
   # and arranged in ascending order by experience points threshold.
   default_scope { all.calculated(:level_number).order(:experience_points_threshold) }
@@ -30,7 +32,7 @@ class Course::Level < ApplicationRecord
   def self.after_course_initialize(course)
     return if course.persisted? || course.default_level?
 
-    course.levels.build(experience_points_threshold: 0)
+    course.levels.build(experience_points_threshold: DEFAULT_THRESHOLD)
   end
 
   # Returns true if level is a default level.
@@ -38,7 +40,7 @@ class Course::Level < ApplicationRecord
   #
   # @return [Boolean]
   def default_level?
-    experience_points_threshold == 0
+    experience_points_threshold == DEFAULT_THRESHOLD
   end
 
   # Returns the next higher level in the course

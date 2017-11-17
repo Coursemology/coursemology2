@@ -8,6 +8,9 @@ const actionTypes = mirrorCreator([
   'SORT_LEVELS',
   'ADD_LEVEL',
   'DELETE_LEVEL',
+  'SAVE_LEVELS',
+  'SAVE_LEVELS_SUCCESS',
+  'SAVE_LEVELS_FAILURE',
 ]);
 
 export default actionTypes;
