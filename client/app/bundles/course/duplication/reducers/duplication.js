@@ -23,6 +23,7 @@ const initialState = {
   surveyComponent: [],
   achievementsComponent: [],
   materialsComponent: [],
+  videosComponent: [],
 
   isLoading: false,
   isDuplicating: false,

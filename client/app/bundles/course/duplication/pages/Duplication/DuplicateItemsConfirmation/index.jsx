@@ -12,6 +12,7 @@ import AssessmentsListing from './AssessmentsListing';
 import SurveyListing from './SurveyListing';
 import AchievementsListing from './AchievementsListing';
 import MaterialsListing from './MaterialsListing';
+import VideosListing from './VideosListing';
 
 const translations = defineMessages({
   confirmationQuestion: {
@@ -77,6 +78,7 @@ class DuplicateItemsConfirmation extends React.Component {
         <SurveyListing />
         <AchievementsListing />
         <MaterialsListing />
+        <VideosListing />
 
         <ReactTooltip id="itemUnpublished">
           <FormattedMessage {...translations.itemUnpublished} />

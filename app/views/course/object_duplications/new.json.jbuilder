@@ -40,3 +40,7 @@ json.materialsComponent @folders do |folder|
     json.(material, :id, :name)
   end
 end
+
+json.videosComponent @videos do |video|
+  json.(video, :id, :title, :published)
+end

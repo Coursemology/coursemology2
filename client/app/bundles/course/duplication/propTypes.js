@@ -36,6 +36,12 @@ export const surveyShape = PropTypes.shape({
   published: PropTypes.bool,
 });
 
+export const videoShape = PropTypes.shape({
+  id: PropTypes.number,
+  title: PropTypes.string,
+  published: PropTypes.bool,
+});
+
 export const achievementShape = PropTypes.shape({
   id: PropTypes.number,
   title: PropTypes.string,
