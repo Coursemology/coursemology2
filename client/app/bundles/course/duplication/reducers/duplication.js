@@ -11,7 +11,7 @@ const initialState = {
   },
   targetCourseId: null,
   targetCourses: [],
-  duplicationMode: 'object',
+  duplicationMode: 'course',
 
   currentHost: '',
   currentCourse: {

@@ -179,8 +179,8 @@ class TargetCourseSelector extends React.Component {
           value={duplicationMode}
           onChange={mode => dispatch(setDuplicationMode(mode))}
         >
-          { this.renderExistingCourseTab() }
           { this.renderNewCourseTab() }
+          { this.renderExistingCourseTab() }
         </Tabs>
       </div>
     );
