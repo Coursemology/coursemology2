@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
+import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import TextField from 'material-ui/TextField';
 import { grey300 } from 'material-ui/styles/colors';
 
@@ -32,13 +33,16 @@ class LevelRow extends React.Component {
     levelNumber: PropTypes.number.isRequired,
     disabled: PropTypes.bool.isRequired,
     experiencePointsThreshold: PropTypes.number.isRequired,
+    updateExpThreshold: PropTypes.func.isRequired,
+    sortLevels: PropTypes.func.isRequired,
+    deleteLevel: PropTypes.func.isRequired,
   }
 
   renderInput(levelNumber, experiencePointsThreshold) {
     return (
       <TextField
         type="text"
-        name={'level_' + levelNumber}
+        name={`level_${levelNumber}`}
         onChange={(e, newValue) => {
           this.props.updateExpThreshold(levelNumber, newValue);
         }}
@@ -58,9 +62,10 @@ class LevelRow extends React.Component {
         <TableRowColumn>{ this.renderInput(levelNumber, experiencePointsThreshold) }</TableRowColumn>
         <TableHeaderColumn style={styles.deleteButtonCell}>
           <RaisedButton
-            name={levelNumber}
+            id={`delete_${levelNumber}`}
+            name={`delete_${levelNumber}`}
             backgroundColor={grey300}
-            icon={<i className="fa fa-trash" />}
+            icon={<DeleteIcon />}
             onClick={this.props.deleteLevel(levelNumber)}
             disabled={this.props.disabled}
             style={{ minWidth: '40px', width: '40px' }}

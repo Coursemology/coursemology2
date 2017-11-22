@@ -2,16 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import mirrorCreator from 'mirror-creator';
-import { isValid } from 'redux-form';
-
-import Paper from 'material-ui/Paper';
-import List from 'material-ui/List/List';
-import ListItem from 'material-ui/List/ListItem';
-import { red500, cyan500, grey50 } from 'material-ui/styles/colors';
-import Subheader from 'material-ui/Subheader';
-import Clear from 'material-ui/svg-icons/content/clear';
-import Done from 'material-ui/svg-icons/action/done';
 
 import TitleBar from 'lib/components/TitleBar';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
@@ -22,14 +12,14 @@ import { defaultComponentTitles } from 'course/translations.intl';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import {
-  Table, TableBody, TableFooter, TableHeader, TableHeaderColumn, TableRow, TableRowColumn
+  Table, TableBody, TableFooter, TableHeader, TableHeaderColumn, TableRow, TableRowColumn,
 } from 'material-ui/Table';
 
 import LevelRow from 'course/level/components/LevelRow';
 
 const translations = defineMessages({
-  levelsTitle: {
-    id: 'course.level.Level.levelsTitle',
+  levelHeader: {
+    id: 'course.level.Level.levelHeader',
     defaultMessage: 'Levels',
   },
   thresholdHeader: {
@@ -148,12 +138,12 @@ class Level extends React.Component {
       }
     };
   }
-  
+
   renderBody() {
     const rows = this.props.levels.slice(1).map((experiencePointsThreshold, index) => (
       <LevelRow
-        key={index+1}
-        levelNumber={index+1}
+        key={index + 1}
+        levelNumber={index + 1}
         experiencePointsThreshold={experiencePointsThreshold}
         updateExpThreshold={this.handleUpdateExpThreshold}
         sortLevels={this.handleLevelTextBlur}
@@ -184,6 +174,7 @@ class Level extends React.Component {
               <TableRowColumn />
               <TableRowColumn colSpan="1" style={styles.addNewLevel}>
                 <FlatButton
+                  id="add-level"
                   icon={<i className="fa fa-plus" />}
                   label={<FormattedMessage {...translations.addNewLevel} />}
                   disabled={this.props.isSaving}
@@ -216,14 +207,14 @@ class Level extends React.Component {
   render() {
     return (
       <div>
-        <TitleBar title={<FormattedMessage {...translations.levelsTitle} />} />
+        <TitleBar title={<FormattedMessage {...defaultComponentTitles.course_levels_component} />} />
         { this.props.isLoading ? <LoadingIndicator /> : this.renderBody() }
       </div>
     );
   }
 }
 
-export default connect(({ levelEdit, ...state }) => ({
+export default connect(({ levelEdit }) => ({
   isLoading: levelEdit.isLoading,
   isSaving: levelEdit.isSaving,
   levels: levelEdit.levels,

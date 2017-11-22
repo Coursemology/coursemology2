@@ -18,6 +18,6 @@ export default class LevelAPI extends BaseCourseAPI {
   }
 
   save(levelFields) {
-    return this.getClient().post(this._getUrlPrefix(), {levels: levelFields});
+    return this.getClient().post(this._getUrlPrefix(), { levels: levelFields });
   }
 }

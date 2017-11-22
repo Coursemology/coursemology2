@@ -5,13 +5,5 @@ en:
       index:
         header: 'Levels'
         level: 'Level'
-        threshold: 'Threshold'
       new:
         header: 'New Level'
-      create:
-        success: 'Level created with threshold at %{threshold} experience points.'
-      destroy:
-        success: 'Level with threshold at %{threshold} experience points removed.'
-        failure: 'Failed to remove level: %{error}'
-      form:
-        description: "A student will achieve this level when the student's experience points equals or exceeds this value."

@@ -23,44 +23,42 @@ export default function (state = initialState, action) {
       return {
         ...state,
         ...levelData,
-        isLoading: false
-      }
+        isLoading: false,
+      };
     }
     case actionTypes.LOAD_LEVELS_FAILURE: {
-      return { ...state, isLoading: false }
+      return { ...state, isLoading: false };
     }
     case actionTypes.UPDATE_EXP_THRESHOLD: {
       const { payload } = action;
       const { levels } = state;
       const copiedLevels = levels.slice();
-      if (payload.newValue === "") {
+      if (payload.newValue === '') {
         // Allows the textbox to be empty if the user removes all the digits.
-        copiedLevels[payload.levelNumber] = "";
-      }
-      else if (isNumeric(payload.newValue)) {
-        copiedLevels[payload.levelNumber] = parseInt(payload.newValue);
+        copiedLevels[payload.levelNumber] = '';
+      } else if (isNumeric(payload.newValue)) {
+        copiedLevels[payload.levelNumber] = parseInt(payload.newValue, 10);
       }
 
-      return { ...state, levels: copiedLevels }
+      return { ...state, levels: copiedLevels };
     }
     case actionTypes.SORT_LEVELS: {
-      const { payload } = action;
       const { levels } = state;
       const copiedLevels = levels.slice();
 
       // Must specify a sort function or will get lexicographical sort.
       const sortedLevels = copiedLevels.sort((a, b) => a - b);
 
-      return { ...state, levels: sortedLevels }
+      return { ...state, levels: sortedLevels };
     }
     case actionTypes.ADD_LEVEL: {
       const { levels } = state;
       const copiedLevels = levels.slice();
 
       // Add a new level with twice the exp of the previous level.
-      copiedLevels.push(levels[levels.length-1] * 2 );
+      copiedLevels.push(levels[levels.length - 1] * 2);
 
-      return { ...state, levels: copiedLevels }
+      return { ...state, levels: copiedLevels };
     }
     case actionTypes.DELETE_LEVEL: {
       const { payload } = action;
@@ -69,7 +67,7 @@ export default function (state = initialState, action) {
       // Delete 1 item from the levelNumber position.
       copiedLevels.splice(payload.levelNumber, 1);
 
-      return { ...state, levels: copiedLevels }
+      return { ...state, levels: copiedLevels };
     }
     case actionTypes.SAVE_LEVELS: {
       return { ...state, isSaving: true };

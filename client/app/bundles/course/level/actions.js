@@ -20,31 +20,31 @@ export function fetchLevels() {
 
 export function updateExpThreshold(levelNumber, newValue) {
   return (dispatch) => {
-    dispatch({type: actionTypes.UPDATE_EXP_THRESHOLD, payload: {levelNumber, newValue}});
+    dispatch({ type: actionTypes.UPDATE_EXP_THRESHOLD, payload: { levelNumber, newValue } });
   };
 }
 
 export function sortLevels() {
   return (dispatch) => {
-    dispatch({type: actionTypes.SORT_LEVELS});
+    dispatch({ type: actionTypes.SORT_LEVELS });
   };
 }
 
 export function addLevel() {
   return (dispatch) => {
-    dispatch({type: actionTypes.ADD_LEVEL});
+    dispatch({ type: actionTypes.ADD_LEVEL });
   };
 }
 
 export function deleteLevel(levelNumber) {
   return (dispatch) => {
-    dispatch({type: actionTypes.DELETE_LEVEL, payload: {levelNumber}});
+    dispatch({ type: actionTypes.DELETE_LEVEL, payload: { levelNumber } });
   };
 }
 
 export function saveLevels(levels, successMessage, failureMessage) {
   return (dispatch) => {
-    dispatch({type: actionTypes.SAVE_LEVELS });
+    dispatch({ type: actionTypes.SAVE_LEVELS });
     return CourseAPI.level.save(levels)
       .then(() => {
         setNotification(successMessage)(dispatch);
