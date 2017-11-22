@@ -24,7 +24,7 @@ module TrackableJob
     private
 
     def signal_finished
-      return unless status_changed?
+      return unless saved_change_to_status?
 
       execute_after_commit { signal }
     end

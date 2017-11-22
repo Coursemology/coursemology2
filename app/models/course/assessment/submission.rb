@@ -193,7 +193,7 @@ class Course::Assessment::Submission < ApplicationRecord
 
   # Queues the submission for auto grading, after the submission has changed to the submitted state.
   def auto_grade_submission
-    return unless workflow_state_changed?
+    return unless saved_change_to_workflow_state?
 
     execute_after_commit do
       auto_grade!
@@ -230,7 +230,7 @@ class Course::Assessment::Submission < ApplicationRecord
   end
 
   def send_submit_notification
-    return unless workflow_state_was == 'attempting'
+    return unless workflow_state_before_last_save == 'attempting'
     return if assessment.autograded?
     return if !course_user.real_student? && !phantom_submission_email_enabled?
 

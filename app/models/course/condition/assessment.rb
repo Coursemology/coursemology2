@@ -51,7 +51,7 @@ class Course::Condition::Assessment < ApplicationRecord
   end
 
   def self.on_dependent_status_change(submission)
-    return unless submission.changes.key?(:workflow_state)
+    return unless submission.saved_changes.key?(:workflow_state)
 
     submission.execute_after_commit do
       evaluate_conditional_for(submission.course_user) if submission.current_state >= :submitted

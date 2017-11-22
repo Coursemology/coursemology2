@@ -40,7 +40,7 @@ class Course::Condition::Achievement < ApplicationRecord
   end
 
   def self.on_dependent_status_change(achievement)
-    return unless achievement.changes.any? || achievement.destroyed?
+    return unless achievement.saved_changes.any? || achievement.destroyed?
     achievement.execute_after_commit { evaluate_conditional_for(achievement.course_user) }
   end
 

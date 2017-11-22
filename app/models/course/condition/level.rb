@@ -37,7 +37,7 @@ class Course::Condition::Level < ApplicationRecord
   end
 
   def self.on_dependent_status_change(record)
-    return unless record.changes.key?(:points_awarded)
+    return unless record.saved_changes.key?(:points_awarded)
     record.execute_after_commit { evaluate_conditional_for(record.course_user) }
   end
 end
