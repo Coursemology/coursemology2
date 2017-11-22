@@ -10,6 +10,7 @@ import { setItemSelectedBoolean } from 'course/duplication/actions';
 import { videoShape } from 'course/duplication/propTypes';
 import TypeBadge from 'course/duplication/components/TypeBadge';
 import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
+import BulkSelectors from 'course/duplication/components/BulkSelectors';
 
 const translations = defineMessages({
   noItems: {
@@ -24,6 +25,14 @@ class VideosSelector extends React.Component {
     selectedItems: PropTypes.shape({}),
 
     dispatch: PropTypes.func.isRequired,
+  }
+
+  setAllVideoSelection = (value) => {
+    const { dispatch, videos } = this.props;
+
+    videos.forEach((video) => {
+      dispatch(setItemSelectedBoolean(duplicableItemTypes.VIDEO, video.id, value));
+    });
   }
 
   renderRow(video) {
@@ -55,6 +64,10 @@ class VideosSelector extends React.Component {
     return (
       <div>
         <h2><FormattedMessage {...defaultComponentTitles.course_videos_component} /></h2>
+        <BulkSelectors
+          callback={this.setAllVideoSelection}
+          styles={{ selectLink: { marginLeft: 0 } }}
+        />
         {
           videos.length > 0 ?
           videos.map(video => this.renderRow(video)) :
