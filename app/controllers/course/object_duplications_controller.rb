@@ -11,6 +11,7 @@ class Course::ObjectDuplicationsController < Course::ComponentController
         load_survey_component_data
         load_achievements_component_data
         load_materials_component_data
+        load_videos_component_data
       end
     end
   end
@@ -56,6 +57,10 @@ class Course::ObjectDuplicationsController < Course::ComponentController
     @folders = current_course.material_folders.includes(:materials).concrete
   end
 
+  def load_videos_component_data
+    @videos = current_course.videos
+  end
+
   def create_duplication_params
     @create_duplication_params ||= begin
       items_params = course_item_finders.keys.map { |key| { key => [] } }
@@ -81,7 +86,8 @@ class Course::ObjectDuplicationsController < Course::ComponentController
       'SURVEY' => ->(ids) { current_course.surveys.find(ids) },
       'ACHIEVEMENT' => ->(ids) { current_course.achievements.find(ids) },
       'FOLDER' => ->(ids) { current_course.material_folders.concrete.find(ids) },
-      'MATERIAL' => ->(ids) { current_course.materials.in_concrete_folder.find(ids) }
+      'MATERIAL' => ->(ids) { current_course.materials.in_concrete_folder.find(ids) },
+      'VIDEO' => ->(ids) { current_course.videos.find(ids) }
     }
   end
 

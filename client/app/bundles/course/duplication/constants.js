@@ -8,6 +8,7 @@ export const duplicableItemTypes = mirrorCreator([
   'ACHIEVEMENT',
   'FOLDER',
   'MATERIAL',
+  'VIDEO',
 ]);
 
 export const formNames = mirrorCreator([

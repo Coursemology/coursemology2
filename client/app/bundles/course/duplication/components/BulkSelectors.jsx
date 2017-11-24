@@ -24,17 +24,17 @@ const styles = {
   },
 };
 
-const BulkSelectors = ({ callback }) => (
+const BulkSelectors = ({ callback, styles: userStyles = {} }) => (
   <div>
     <a
       onClick={() => callback(true)}
-      style={styles.selectLink}
+      style={{ ...styles.selectLink, ...userStyles.selectLink }}
     >
       <FormattedMessage {...translations.selectAll} />
     </a>
     <a
       onClick={() => callback(false)}
-      style={styles.deselectLink}
+      style={{ ...styles.deselectLink, ...userStyles.deselectLink }}
     >
       <FormattedMessage {...translations.deselectAll} />
     </a>
@@ -43,6 +43,7 @@ const BulkSelectors = ({ callback }) => (
 
 BulkSelectors.propTypes = {
   callback: PropTypes.func,
+  styles: PropTypes.object,
 };
 
 export default BulkSelectors;
