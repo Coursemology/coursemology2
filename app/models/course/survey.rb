@@ -15,7 +15,7 @@ class Course::Survey < ApplicationRecord
   has_many :sections, inverse_of: :survey, dependent: :destroy
 
   def can_user_start?(_user)
-    allow_response_after_end || Time.zone.now < end_at
+    allow_response_after_end || end_at.nil? || Time.zone.now < end_at
   end
 
   def has_student_response?
