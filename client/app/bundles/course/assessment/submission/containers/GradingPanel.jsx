@@ -203,7 +203,7 @@ class VisibleGradingPanel extends Component {
   }
 
   renderGradeTable() {
-    const { intl, questions, submission: { graderView, workflowState } } = this.props;
+    const { intl, questions, questionIds, submission: { graderView, workflowState } } = this.props;
 
     if (!graderView && workflowState !== workflowStates.Published) {
       return null;
@@ -236,7 +236,9 @@ class VisibleGradingPanel extends Component {
             </TableRow>
           </TableHeader>
           <TableBody displayRowCheckbox={false}>
-            {Object.values(questions).map(question => this.renderGradeRow(question, showGrader))}
+            {
+              questionIds.map(questionId => this.renderGradeRow(questions[questionId], showGrader))
+            }
           </TableBody>
         </Table>
       </div>
@@ -260,6 +262,7 @@ VisibleGradingPanel.propTypes = {
   intl: intlShape.isRequired,
   gamified: PropTypes.bool.isRequired,
   grading: gradingShape.isRequired,
+  questionIds: PropTypes.arrayOf(PropTypes.number),
   questions: PropTypes.objectOf(questionShape),
   submission: submissionShape.isRequired,
   updateExp: PropTypes.func.isRequired,
@@ -270,6 +273,7 @@ function mapStateToProps(state) {
   return {
     gamified: state.assessment.gamified,
     grading: state.grading,
+    questionIds: state.assessment.questionIds,
     questions: state.questions,
     submission: state.submission,
   };
