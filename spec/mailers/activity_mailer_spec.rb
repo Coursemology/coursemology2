@@ -9,7 +9,9 @@ RSpec.describe ActivityMailer, type: :mailer do
     let(:user) { create(:user, name: 'tester') }
     let(:activity) { create(:activity, object: user) }
     let(:notification) { create(:user_notification, activity: activity) }
-    let(:mail) { ActivityMailer.email(user, notification, template) }
+    let(:mail) do
+      ActivityMailer.email(recipient: user, notification: notification, view_path: template)
+    end
     let(:text) { mail.body.parts.find { |part| part.content_type.start_with?('text/plain') }.to_s }
     let(:html) { mail.body.parts.find { |part| part.content_type.start_with?('text/html') }.to_s }
 
@@ -37,5 +39,17 @@ RSpec.describe ActivityMailer, type: :mailer do
       expect(html).to include(user.email)
       expect(text).to include(user.email)
     end
+
+    context 'with no greeting mailer layout' do
+      let(:mail) do
+        ActivityMailer.email(recipient: user, notification: notification,
+                             view_path: template, layout_path: 'no_greeting_mailer')
+      end
+
+      it 'does not render salutation and sign-off' do
+        expect(text).not_to include(I18n.t('layouts.mailer.greeting', user: user.name))
+        expect(text).not_to include(I18n.t('layouts.mailer.complimentary_close'))
+        expect(text).not_to include(I18n.t('layouts.mailer.sign_off'))
+      end
   end
 end
