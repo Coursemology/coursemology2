@@ -8,7 +8,7 @@ en:
               user_notifications:
                 email:
                   subject: '%{course}: New comment on %{topic}'
-                  message: >
+                  message: |+
                     %{post_author} commented, %{post}
 
                     You can reply here:

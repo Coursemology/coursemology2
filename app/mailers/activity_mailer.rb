@@ -4,6 +4,9 @@
 # @api private
 class ActivityMailer < ApplicationMailer
   helper ApplicationFormattersHelper
+  attr_accessor :layout
+
+  layout :layout
 
   # Emails a recipient, informing him of an activity.
   #
@@ -11,10 +14,13 @@ class ActivityMailer < ApplicationMailer
   # @param [Course::Notification|UserNotification] notification The notification to be made
   #   available to the view, accessible using +@notification+.
   # @param [String] view_path The path to the view which should be rendered.
-  def email(recipient, notification, view_path)
+  # @param [String] layout_path The filename in app/views/layouts which should be rendered.
+  #   If not specified, the 'mailer' layout specified in ApplicationMailer is used.
+  def email(recipient:, notification:, view_path:, layout_path: nil)
     ActsAsTenant.without_tenant do
       @recipient = recipient
       @object = notification.activity.object
+      @layout = layout_path
       return unless @object # Object could be deleted already
       mail(to: recipient.email, template: view_path)
     end

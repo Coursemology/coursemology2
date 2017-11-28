@@ -55,8 +55,8 @@ class Notifier::Base
   # @param [Course::Notification] notification The notification which is used to generate emails
   def email_course(notification)
     notification.course.users.each do |user|
-      @pending_emails << ActivityMailer.email(user, notification,
-                                              notification_view_path(notification))
+      @pending_emails << ActivityMailer.email(recipient: user, notification: notification,
+                                              view_path: notification_view_path(notification))
     end
   end
 
@@ -64,8 +64,9 @@ class Notifier::Base
   #
   # @param [UserNotification] notification The notification which is used to generate the email
   def email_user(notification)
-    @pending_emails << ActivityMailer.email(notification.user, notification,
-                                            notification_view_path(notification))
+    @pending_emails << ActivityMailer.email(recipient: notification.user,
+                                            notification: notification,
+                                            view_path: notification_view_path(notification))
   end
 
   # Send out pending emails
