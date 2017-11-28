@@ -11,8 +11,8 @@ RSpec.describe Course::Forum::ForumsController, type: :controller do
       stub = create(:forum, course: course)
       allow(stub).to receive(:save).and_return(false)
       allow(stub).to receive(:destroy).and_return(false)
-      allow(stub.subscriptions).to receive(:create).and_return(false)
-      allow(stub.subscriptions).to receive_message_chain(:where, delete_all: 0)
+      allow(stub).to receive_message_chain(:subscriptions, :create).and_return(false)
+      allow(stub).to receive_message_chain(:subscriptions, :where, delete_all: 0)
       stub
     end
 
