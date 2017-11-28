@@ -48,7 +48,7 @@ class Course::Discussion::TopicsController < Course::ComponentController
               globally_displayed.
               ordered_by_updated_at.
               merge(Course::Discussion::Topic.from_user(my_student_ids)).
-              includes(:actable).
+              preload(:actable).
               page(page_param)
   end
 

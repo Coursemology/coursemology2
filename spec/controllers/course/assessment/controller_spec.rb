@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe Course::Assessment::Controller do
   controller(Course::Assessment::Controller) do
     def index
-      render nothing: true
+      render body: nil
     end
   end
 

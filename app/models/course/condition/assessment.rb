@@ -51,7 +51,7 @@ class Course::Condition::Assessment < ApplicationRecord
   end
 
   def self.on_dependent_status_change(submission)
-    return unless submission.changes.key?(:workflow_state)
+    return unless submission.saved_changes.key?(:workflow_state)
 
     submission.execute_after_commit do
       evaluate_conditional_for(submission.course_user) if submission.current_state >= :submitted
@@ -122,7 +122,7 @@ class Course::Condition::Assessment < ApplicationRecord
           FROM course_condition_assessments cca INNER JOIN course_conditions cc
           ON cc.actable_type = 'Course::Condition::Assessment' AND cc.actable_id = cca.id
           WHERE cc.conditional_id = #{conditional.id}
-            AND cc.conditional_type = #{ActiveRecord::Base.sanitize(conditional.class.name)}
+            AND cc.conditional_type = #{ActiveRecord::Base.connection.quote(conditional.class.name)}
         ) ids
       ON ids.assessment_id = course_assessments.id
     SQL

@@ -28,7 +28,8 @@ RSpec.describe Course::Discussion::Topic, type: :model do
 
       describe '#ordered_topologically' do
         it 'memoises its result' do
-          expect(topic.posts.ordered_topologically).to be(topic.posts.ordered_topologically)
+          posts = topic.posts
+          expect(posts.ordered_topologically).to be(posts.ordered_topologically)
         end
       end
     end

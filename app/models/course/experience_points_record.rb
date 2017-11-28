@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::ExperiencePointsRecord < ApplicationRecord
-  actable
+  actable optional: true
 
   before_save :send_notification, if: :reached_new_level?
   before_create :set_awarded_attributes, if: :manually_awarded?
@@ -8,8 +8,7 @@ class Course::ExperiencePointsRecord < ApplicationRecord
   validates :reason, presence: true, if: :manually_awarded?
 
   belongs_to :course_user, inverse_of: :experience_points_records
-  # TODO: Add an optional: true when moving to Rails 5.
-  belongs_to :awarder, class_name: User.name, inverse_of: nil
+  belongs_to :awarder, class_name: User.name, inverse_of: nil, optional: true
 
   scope :active, -> { where.not(points_awarded: nil) }
 

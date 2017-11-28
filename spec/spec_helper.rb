@@ -15,16 +15,20 @@
 # users commonly want.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
-require 'capybara/rspec'
 require 'coverage_helper'
+require 'rspec/retry' if ENV['CI']
+require File.expand_path('../../config/environment', __FILE__)
+
+# Prevent database truncation if the environment is production
+abort('The Rails environment is running in production mode!') if Rails.env.production?
+
+require 'capybara/rspec'
 require 'action_mailer'
 require 'email_spec'
 require 'email_spec/rspec'
 require 'should_not/rspec'
 require 'capybara/rspec'
 require 'capybara-screenshot/rspec'
-
-require 'rspec/retry' if ENV['CI']
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Assessment::Question < ApplicationRecord
-  actable
+  actable optional: true
   has_many_attachments
 
   has_many :question_assessments, class_name: Course::QuestionAssessment.name, inverse_of: :question,

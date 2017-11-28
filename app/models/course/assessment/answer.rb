@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Answer < ApplicationRecord
   include Workflow
-  actable inverse_of: :answer
+  actable optional: true, inverse_of: :answer
 
   workflow do
     state :attempting do
@@ -42,7 +42,7 @@ class Course::Assessment::Answer < ApplicationRecord
 
   belongs_to :submission, inverse_of: :answers
   belongs_to :question, class_name: Course::Assessment::Question.name, inverse_of: nil
-  belongs_to :grader, class_name: User.name, inverse_of: nil
+  belongs_to :grader, class_name: User.name, inverse_of: nil, optional: true
   has_one :auto_grading, class_name: Course::Assessment::Answer::AutoGrading.name,
                          dependent: :destroy, inverse_of: :answer, autosave: true
 

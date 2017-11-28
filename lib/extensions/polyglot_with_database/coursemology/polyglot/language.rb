@@ -11,7 +11,7 @@ module Extensions::PolyglotWithDatabase::Coursemology::Polyglot::Language
 
   included do
     self.table_name = 'polyglot_languages'
-    acts_as_forest
+    acts_as_forest optional: true
 
     after_initialize :set_readonly
     after_save :set_readonly

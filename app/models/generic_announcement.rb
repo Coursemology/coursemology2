@@ -7,7 +7,7 @@ class GenericAnnouncement < ApplicationRecord
 
   acts_as_readable on: :updated_at
 
-  belongs_to :instance, inverse_of: :announcements
+  belongs_to :instance, inverse_of: :announcements, optional: true
 
   # @!method self.system_announcements_first
   #   Orders the results such that system announcements appear earlier in the result set.

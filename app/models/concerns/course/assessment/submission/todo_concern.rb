@@ -3,7 +3,7 @@ module Course::Assessment::Submission::TodoConcern
   extend ActiveSupport::Concern
 
   included do
-    after_save :update_todo, if: :workflow_state_changed?
+    after_save :update_todo, if: :saved_change_to_workflow_state?
     after_destroy :restart_todo
   end
 

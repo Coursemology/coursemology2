@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Discussion::Topic < ApplicationRecord
-  actable
+  actable inverse_of: :discussion_topic
   class_attribute :global_topic_model_names
   self.global_topic_model_names = []
 

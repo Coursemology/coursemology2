@@ -2,7 +2,7 @@
 class Course::LessonPlan::Item < ApplicationRecord
   include Course::LessonPlan::ItemTodoConcern
 
-  actable
+  actable optional: true
   has_many_attachments
 
   after_initialize :set_default_values, if: :new_record?
@@ -22,7 +22,7 @@ class Course::LessonPlan::Item < ApplicationRecord
   end)
 
   belongs_to :course, inverse_of: :lesson_plan_items
-  has_many :todos, class_name: Course::LessonPlan::Todo, inverse_of: :item, dependent: :destroy
+  has_many :todos, class_name: Course::LessonPlan::Todo.name, inverse_of: :item, dependent: :destroy
 
   # Copy attributes for lesson plan item from the object being duplicated.
   # Shift the time related fields.

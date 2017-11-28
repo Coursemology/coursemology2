@@ -6,8 +6,11 @@ FactoryBot.define do
       course
     end
     survey { build(:survey, course: course) }
+    points_awarded nil
 
     trait :submitted do
+      after(:build, &:submit)
+
       transient do
         submitted_time { 1.day.ago }
       end

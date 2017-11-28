@@ -587,7 +587,10 @@ RSpec.describe Course::Assessment::Submission do
     end
 
     describe '#send_submit_notification' do
-      subject { submission1.send(:send_submit_notification) }
+      subject do
+        submission1.save
+        submission1.send(:send_submit_notification)
+      end
 
       it 'sends the email notification' do
         expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
