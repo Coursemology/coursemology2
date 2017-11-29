@@ -21,14 +21,14 @@ RSpec.describe Course::Achievement::AchievementsController, type: :controller do
     end
 
     describe '#update' do
-      subject do
-        patch :update, params: {
-          course_id: course, id: achievement_stub,
-          achievement: { course_user_ids: [course_user.id] }
-        }
-      end
-
       context 'when the achievement is automatically awarded' do
+        subject do
+          patch :update, params: {
+            course_id: course, id: achievement_stub,
+            achievement: { course_user_ids: [course_user.id] }
+          }
+        end
+
         let!(:course_user) { create(:course_student, course: course) }
         let!(:achievement_stub) do
           stub = create(:course_achievement, course: course)
@@ -90,6 +90,35 @@ RSpec.describe Course::Achievement::AchievementsController, type: :controller do
         it 'raises ArgumentError' do
           expect { subject }.
             to raise_error(ArgumentError, 'Invalid ordering for achievements')
+        end
+      end
+    end
+
+    describe '#achievement_params' do
+      describe '#badge attribute within the param' do
+        let!(:achievement) { create(:achievement, :with_badge, course: course) }
+        before do
+          patch :update, params: {
+            course_id: course, id: achievement,
+            achievement: { badge: badge_attribute }
+          }
+        end
+        subject { controller.send(:achievement_params)[:badge] }
+
+        context 'when the badge field is not an uploaded file' do
+          let(:badge_attribute) { 'null' }
+
+          it { is_expected.to be_nil }
+        end
+
+        context 'when the badge field is an uploaded file' do
+          let(:badge_attribute) do
+            Rack::Test::UploadedFile.new(
+              File.join(Rails.root,'/spec/fixtures/files/picture.jpg'), 'image/jpeg'
+            )
+          end
+
+          it { is_expected.not_to be_nil }
         end
       end
     end
