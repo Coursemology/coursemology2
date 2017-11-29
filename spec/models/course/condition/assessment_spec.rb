@@ -9,13 +9,18 @@ RSpec.describe Course::Condition::Assessment, type: :model do
     let(:course) { create(:course) }
 
     describe 'validations' do
-      context 'when an assessment is its own condition' do
-        subject do
-          assessment = create(:assessment, course: course)
-          build(:assessment_condition,
-                course: course, assessment: assessment, conditional: assessment)
-        end
+      subject do
+        assessment = create(:assessment, course: course)
+        build(:assessment_condition,
+              course: course, assessment: assessment, conditional: assessment)
+      end
 
+      it 'validates minimum_grade_percentage' do
+        expect(subject).to validate_numericality_of(:minimum_grade_percentage).allow_nil.
+          is_greater_than_or_equal_to(0).is_less_than_or_equal_to(100)
+      end
+
+      context 'when an assessment is its own condition' do
         it 'is not valid' do
           expect(subject).to_not be_valid
           expect(subject.errors[:assessment]).to include(I18n.t('activerecord.errors.models.' \
