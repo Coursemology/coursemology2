@@ -55,9 +55,11 @@ class Course::Achievement::AchievementsController < Course::Achievement::Control
   private
 
   def achievement_params #:nodoc:
-    @achievement_params ||= params.require(:achievement).
-                            permit(:title, :description, :weight, :published, :badge,
-                                   course_user_ids: [])
+    @achievement_params ||= begin
+      result = params.require(:achievement).
+               permit(:title, :description, :weight, :published, :badge, course_user_ids: [])
+      result[:badge].is_a?(ActionDispatch::Http::UploadedFile) ? result : result.except(:badge)
+    end
   end
 
   def achievement_order_params

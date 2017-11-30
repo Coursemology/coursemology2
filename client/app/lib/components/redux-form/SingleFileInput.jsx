@@ -60,6 +60,7 @@ const translations = defineMessages({
  *   },
  * }
  */
+// TODO: Use the input element as a controller component - https://reactjs.org/docs/forms.html
 class SingleFileInput extends React.Component {
   static propTypes = {
     value: PropTypes.shape({
@@ -77,6 +78,7 @@ class SingleFileInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = { file: null };
+    this.updateStore('');
   }
 
   onDrop = (files) => {
@@ -84,7 +86,7 @@ class SingleFileInput extends React.Component {
   }
 
   onCancel = () => {
-    this.setState({ file: null }, this.updateStore(undefined));
+    this.setState({ file: null }, this.updateStore(''));
   }
 
   updateStore = (file) => {
