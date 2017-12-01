@@ -54,7 +54,7 @@ class NewSurveyButton extends React.Component {
     return dispatch(showSurveyForm({
       onSubmit: this.createSurveyHandler,
       formTitle: intl.formatMessage(translations.newSurvey),
-      initialValues: Object.assign({ base_exp: 0 }, aWeekStartingTomorrow()),
+      initialValues: Object.assign({ base_exp: 0, allow_response_after_end: true }, aWeekStartingTomorrow()),
     }));
   }
 

@@ -23,11 +23,11 @@ describe('<NewSurveyButton />', () => {
 
     // Fill survey form
     const survey = {
+      allow_response_after_end: true,
       base_exp: 0,
-      time_bonus_exp: 0,
       start_at: new Date('2016-12-31T16:00:00.000Z'),
       end_at: new Date('2017-01-07T15:59:00.000Z'),
-      bonus_end_at: null,
+      bonus_end_at: new Date('2017-01-07T15:59:00.000Z'),
       title: 'Funky survey title',
     };
 
