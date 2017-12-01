@@ -32,6 +32,7 @@ const propTypes = {
     start_at: PropTypes.instanceOf(Date),
     end_at: PropTypes.instanceOf(Date),
     base_exp: PropTypes.number,
+    allow_response_after_end: PropTypes.bool,
   }).isRequired,
   formValues: PropTypes.object,
 };

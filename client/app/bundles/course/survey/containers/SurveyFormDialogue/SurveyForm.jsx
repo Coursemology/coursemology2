@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { defineMessages, injectIntl, intlShape } from 'react-intl';
+import { defineMessages, injectIntl, intlShape, FormattedMessage } from 'react-intl';
 import { reduxForm, Field, Form } from 'redux-form';
+import ReactTooltip from 'react-tooltip';
 import TextField from 'lib/components/redux-form/TextField';
 import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
 import Toggle from 'lib/components/redux-form/Toggle';
@@ -51,6 +52,10 @@ const surveyFormTranslations = defineMessages({
   hasStudentResponse: {
     id: 'course.surveys.SurveyForm.hasStudentResponse',
     defaultMessage: 'At least one student has responded to this survey. You may not remove anonymity.',
+  },
+  timeBonusExpTooltip: {
+    id: 'course.surveys.SurveyForm.timeBonusExpTooltip',
+    defaultMessage: 'You must allow responses after the survey expires to set bonus points.',
   },
 });
 
@@ -136,18 +141,23 @@ const SurveyForm = ({
           {...{ disabled }}
         />
       </div>
-      {
-        formValues && formValues.allow_response_after_end &&
-        <div style={styles.oneColumn}>
-          <Field
-            name="time_bonus_exp"
-            floatingLabelText={intl.formatMessage(translations.bonusPoints)}
-            component={TextField}
-            type="number"
-            {...{ disabled }}
-          />
-        </div>
-      }
+      <div
+        style={styles.oneColumn}
+        data-tip
+        data-for="timeBonusExpTooltip"
+        data-tip-disable={formValues && formValues.allow_response_after_end}
+      >
+        <Field
+          name="time_bonus_exp"
+          floatingLabelText={intl.formatMessage(translations.bonusPoints)}
+          component={TextField}
+          type="number"
+          disabled={formValues && !formValues.allow_response_after_end}
+        />
+        <ReactTooltip id="timeBonusExpTooltip">
+          <FormattedMessage {...surveyFormTranslations.timeBonusExpTooltip} />
+        </ReactTooltip>
+      </div>
     </div>
     <Field
       name="allow_response_after_end"
