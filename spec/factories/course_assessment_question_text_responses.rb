@@ -5,22 +5,27 @@ FactoryBot.define do
           parent: :course_assessment_question do
     allow_attachment false
     hide_text false
+    is_comprehension false
 
-    solutions do
+    groups do
       [
-        build(:course_assessment_question_text_response_solution, :exact_match, question: nil),
-        build(:course_assessment_question_text_response_solution, :keyword, question: nil)
+        build(:course_assessment_question_text_response_group, question: nil)
       ]
     end
 
-    trait :multiple do
-      solutions do
+    trait :multiple_groups do
+      groups do
         [
-          build(:course_assessment_question_text_response_solution, :exact_match, question: nil),
-          build(:course_assessment_question_text_response_solution, :keyword,
-                question: nil, solution: 'KeywordA'),
-          build(:course_assessment_question_text_response_solution, :keyword,
-                question: nil, solution: 'KeywordB')
+          build(:course_assessment_question_text_response_group, question: nil),
+          build(:course_assessment_question_text_response_group, question: nil)
+        ]
+      end
+    end
+
+    trait :multiple_solutions do
+      groups do
+        [
+          build(:course_assessment_question_text_response_group, :multiple_solutions, question: nil)
         ]
       end
     end
@@ -35,17 +40,25 @@ FactoryBot.define do
     end
 
     trait :multiline_windows do
-      solutions do
+      groups do
         [
-          build(:course_assessment_question_text_response_solution, :multiline_windows, question: nil)
+          build(:course_assessment_question_text_response_group, :multiline_windows, question: nil)
         ]
       end
     end
 
     trait :multiline_linux do
-      solutions do
+      groups do
         [
-          build(:course_assessment_question_text_response_solution, :multiline_linux, question: nil)
+          build(:course_assessment_question_text_response_group, :multiline_linux, question: nil)
+        ]
+      end
+    end
+
+    trait :comprehension_question do
+      groups do
+        [
+          build(:course_assessment_question_text_response_group, :comprehension_group, question: nil)
         ]
       end
     end

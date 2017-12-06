@@ -1,0 +1,8 @@
+en:
+  activerecord:
+    errors:
+      models:
+        course/assessment/question/text_response_point:
+          attributes:
+            maximum_point_grade:
+              invalid_point_grade: 'must be no more than the maximum grade of the group'

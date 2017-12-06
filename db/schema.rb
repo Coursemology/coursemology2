@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171026141412) do
+ActiveRecord::Schema.define(version: 20171206110300) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -317,14 +317,31 @@ ActiveRecord::Schema.define(version: 20171026141412) do
   create_table "course_assessment_question_text_responses", force: :cascade do |t|
     t.boolean "allow_attachment", :default=>false
     t.boolean "hide_text",        :default=>false
+    t.boolean "is_comprehension", :default=>false
+  end
+
+  create_table "course_assessment_question_text_response_groups", force: :cascade do |t|
+    t.integer "question_id",         :null=>false, :index=>{:name=>"fk__course_assessment_text_response_group_question"}, :foreign_key=>{:references=>"course_assessment_question_text_responses", :name=>"fk_course_assessment_questi_f0593a75a0d0ff61a477f70a5b89c974", :on_update=>:no_action, :on_delete=>:no_action}
+    t.decimal "maximum_group_grade", :precision=>4, :scale=>1, :default=>"0.0", :null=>false
+    t.integer "group_weight"
+  end
+
+  create_table "course_assessment_question_text_response_points", force: :cascade do |t|
+    t.integer "group_id",            :null=>false, :index=>{:name=>"fk__course_assessment_text_response_point_group"}, :foreign_key=>{:references=>"course_assessment_question_text_response_groups", :name=>"fk_course_assessment_question_text_response_points_group_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.decimal "maximum_point_grade", :precision=>4, :scale=>1, :default=>"0.0", :null=>false
+    t.integer "point_weight"
   end
 
   create_table "course_assessment_question_text_response_solutions", force: :cascade do |t|
-    t.integer "question_id",   :null=>false, :index=>{:name=>"fk__course_assessment_text_response_solution_question"}, :foreign_key=>{:references=>"course_assessment_question_text_responses", :name=>"fk_course_assessment_questi_2fbeabfad04f21c2d05c8b2d9100d1c4", :on_update=>:no_action, :on_delete=>:no_action}
-    t.integer "solution_type", :default=>0, :null=>false
-    t.text    "solution",      :null=>false
-    t.decimal "grade",         :precision=>4, :scale=>1, :default=>"0.0", :null=>false
+    t.integer "question_id",    :null=>false, :index=>{:name=>"fk__course_assessment_text_response_solution_question"}, :foreign_key=>{:references=>"course_assessment_question_text_responses", :name=>"fk_course_assessment_questi_2fbeabfad04f21c2d05c8b2d9100d1c4", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer "point_id",       :index=>{:name=>"fk__course_assessment_text_response_solution_point"}, :foreign_key=>{:references=>"course_assessment_question_text_response_points", :name=>"fk_course_assessment_questi_a9bcdc4c19beb7a3d73931d8ace1385a", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer "solution_type",  :default=>0, :null=>false
+    t.text    "solution_old",   :null=>false
+    t.text    "solution",       :default=>[], :null=>false, :array=>true
+    t.text    "solution_lemma", :default=>[], :array=>true
+    t.decimal "grade",          :precision=>4, :scale=>1, :default=>"0.0", :null=>false
     t.text    "explanation"
+    t.integer "weight"
   end
 
   create_table "course_assessment_question_voice_responses", force: :cascade do |t|
