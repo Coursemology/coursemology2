@@ -1,5 +1,9 @@
+- assessments = current_course.assessments.ordered_by_date_and_title
+- existing_conditions = @conditional.specific_conditions - [@assessment_condition]
+- available_assessments = assessments - existing_conditions.map(&:dependent_object)
+
 = simple_form_for [current_course, @conditional, @assessment_condition] do |f|
   = f.error_notification
-  = f.association :assessment, collection: current_course.assessments.ordered_by_date_and_title
+  = f.association :assessment, collection: available_assessments
   = f.input :minimum_grade_percentage, placeholder: t('.minimum_grade_placeholder')
   = f.button :submit

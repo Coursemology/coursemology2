@@ -1,4 +1,8 @@
+- achievements = current_course.achievements
+- existing_conditions = @conditional.specific_conditions - [@achievement_condition]
+- available_achievements = achievements - existing_conditions.map(&:dependent_object)
+
 = simple_form_for [current_course, @conditional, @achievement_condition] do |f|
   = f.error_notification
-  = f.association :achievement, collection: current_course.achievements
+  = f.association :achievement, collection: available_achievements
   = f.button :submit
