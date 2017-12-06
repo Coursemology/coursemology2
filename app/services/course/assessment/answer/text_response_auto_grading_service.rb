@@ -18,16 +18,23 @@ class Course::Assessment::Answer::TextResponseAutoGradingService < \
   def evaluate_answer(answer)
     question = answer.question.actable
     answer_text = answer.normalized_answer_text
-    exact_matches, keywords = question.solutions.partition(&:exact_match?)
+    all_question_solutions = question.groups.flat_map do |group|
+      group.points.flat_map do |point|
+        point.solutions.flat_map(&:itself)
+      end
+    end
 
+    exact_matches = all_question_solutions.select(&:exact_match?)
+    keywords = all_question_solutions.select(&:keyword?)
     solutions = find_exact_match(answer_text, exact_matches)
     # If there is no exact match, we fall back to keyword matches.
     # Solutions are always kept in an array for easier use of #grade_for and #explanations_for
     solutions = solutions.present? ? [solutions] : find_keywords(answer_text, keywords)
+    grade = grade_for(question, solutions)
 
     [
-      correctness_for(question, solutions),
-      grade_for(question, solutions),
+      correctness_for(question, grade),
+      grade,
       explanations_for(solutions)
     ]
   end
@@ -41,7 +48,7 @@ class Course::Assessment::Answer::TextResponseAutoGradingService < \
   #   the answer.
   def find_exact_match(answer_text, solutions)
     # comparison is case insensitive
-    solutions.find { |s| s.solution.encode(universal_newline: true).casecmp(answer_text) == 0 }
+    solutions.find { |s| s.solution.first.encode(universal_newline: true).casecmp(answer_text) == 0 }
   end
 
   # Returns the keywords found in the given answer text.
@@ -53,7 +60,7 @@ class Course::Assessment::Answer::TextResponseAutoGradingService < \
   #   the answer.
   def find_keywords(answer_text, solutions)
     # TODO(minqi): Add tokenizer and stemmer for more natural keyword matching.
-    solutions.select { |s| answer_text.downcase.include?(s.solution.downcase) }
+    solutions.select { |s| answer_text.downcase.include?(s.solution.first.downcase) }
   end
 
   # Returns the grade for a question with all matched solutions.
@@ -65,7 +72,19 @@ class Course::Assessment::Answer::TextResponseAutoGradingService < \
   # @param [Array<Course::Assessment::Question::TextResponseSolution>] solutions The solutions that
   #   matches the student's answer.
   def grade_for(question, solutions)
-    [solutions.map(&:grade).reduce(0, :+), question.maximum_grade].min
+    grade = 0
+    question.groups.map do |group|
+      all_groups_grade = 0
+      group.points.map do |point|
+        all_points_grade = 0
+        point.solutions.map do |s|
+          all_points_grade += solutions.include?(s) ? s.grade : 0
+        end
+        all_groups_grade += [all_points_grade, point.maximum_point_grade].min
+      end
+      grade += [all_groups_grade, group.maximum_group_grade].min
+    end
+    [grade, question.maximum_grade].min
   end
 
   # Returns the explanations for the given options.
@@ -81,9 +100,8 @@ class Course::Assessment::Answer::TextResponseAutoGradingService < \
   #
   # @param [Course::Assessment::Question::TextResponse] question The question answered by the
   #   student.
-  # @param [Array<Course::Assessment::Question::TextResponseSolution>] solutions The solutions that
-  #   matches the student's answer.
-  def correctness_for(question, solutions)
-    solutions.map(&:grade).sum >= question.maximum_grade
+  # @param [Decimal] grade The grade of the student's answer.
+  def correctness_for(question, grade)
+    grade >= question.maximum_grade
   end
 end

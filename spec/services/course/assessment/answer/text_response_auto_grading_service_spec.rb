@@ -28,9 +28,10 @@ RSpec.describe Course::Assessment::Answer::TextResponseAutoGradingService do
         it 'matches the entire answer' do
           subject.grade(answer)
           expect(answer).to be_correct
-          expect(answer.grade).to eq(question.solutions.exact_match.first.grade)
+          expect(answer.grade).to \
+            eq(question.groups.first.points.first.solutions.exact_match.first.grade)
           expect(grading.result['messages']).to \
-            contain_exactly(question.solutions.exact_match.first.explanation)
+            contain_exactly(question.groups.first.points.first.solutions.exact_match.first.explanation)
         end
       end
 
@@ -41,9 +42,10 @@ RSpec.describe Course::Assessment::Answer::TextResponseAutoGradingService do
         it 'treats different answer and question newlines as equivalent' do
           subject.grade(answer)
           expect(answer).to be_correct
-          expect(answer.grade).to eq(question.solutions.exact_match.first.grade)
+          expect(answer.grade).to \
+            eq(question.groups.first.points.first.solutions.exact_match.first.grade)
           expect(grading.result['messages']).to \
-            contain_exactly(question.solutions.exact_match.first.explanation)
+            contain_exactly(question.groups.first.points.first.solutions.exact_match.first.explanation)
         end
       end
 
@@ -54,9 +56,10 @@ RSpec.describe Course::Assessment::Answer::TextResponseAutoGradingService do
         it 'treats different answer and question newlines as equivalent' do
           subject.grade(answer)
           expect(answer).to be_correct
-          expect(answer.grade).to eq(question.solutions.exact_match.first.grade)
+          expect(answer.grade).to \
+            eq(question.groups.first.points.first.solutions.exact_match.first.grade)
           expect(grading.result['messages']).to \
-            contain_exactly(question.solutions.exact_match.first.explanation)
+            contain_exactly(question.groups.first.points.first.solutions.exact_match.first.explanation)
         end
       end
 
@@ -66,9 +69,10 @@ RSpec.describe Course::Assessment::Answer::TextResponseAutoGradingService do
         it 'matches the keyword' do
           subject.grade(answer)
           expect(answer).not_to be_correct
-          expect(answer.grade).to eq(question.solutions.keyword.first.grade)
+          expect(answer.grade).to \
+            eq(question.groups.first.points.first.solutions.keyword.first.grade)
           expect(grading.result['messages']).to \
-            contain_exactly(question.solutions.keyword.first.explanation)
+            contain_exactly(question.groups.first.points.first.solutions.keyword.first.explanation)
         end
       end
 
@@ -77,14 +81,14 @@ RSpec.describe Course::Assessment::Answer::TextResponseAutoGradingService do
 
         it 'matches all keywords' do
           answer.actable.answer_text = 'keywordA keywordB'
-          expected_grade = [question.solutions.keyword.map(&:grade).reduce(0, :+),
+          expected_grade = [question.groups.first.points.first.solutions.keyword.map(&:grade).reduce(0, :+),
                             question.maximum_grade].min
 
           subject.grade(answer)
           expect(answer).to be_correct
           expect(answer.grade).to eq(expected_grade)
           expect(grading.result['messages']).to \
-            match_array(question.solutions.keyword.map(&:explanation))
+            match_array(question.groups.first.points.first.solutions.keyword.map(&:explanation))
         end
       end
 
