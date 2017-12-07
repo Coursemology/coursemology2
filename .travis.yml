@@ -63,6 +63,3 @@ script:
   - 'if [ "$GROUP" != "misc" ]; then bundle exec parallel_rspec spec -n 8 --only-group $GROUP --runtime-log spec/fixtures/parallel_runtime_rspec.log; fi'
 after_script:
   - 'if [ "$GROUP" = "misc" ]; then bash <(curl -s https://codecov.io/bash) -F frontend -s client/coverage; fi'
-
-notifications:
-  slack: coursemology:kdSjdF4xtXGOBIvMsbIF4gQ6
