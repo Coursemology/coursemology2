@@ -123,13 +123,20 @@ class Course::Assessment::Java::JavaProgrammingTestCaseReport <
     end
 
     # If there's a failure, return the failure type and failure message.
+    # This encompasses both test failures and test errors
     #
     # @return [String|nil] A combined string with the failure type and failure message,
     # nil if no failure.
     def failure_message
       return nil unless failed?
-      failure_body = @test_case.search('exception/message').children[1].text
-      "#{failure_type}: #{failure_body}"
+      # Checks if it is an assertion failure
+      if @test_case.search('exception/message').any?
+        failure_body = @test_case.search('exception/message').children[1].nil? ?
+          '' : @test_case.search('exception/message').children[1].text
+        "#{failure_type}: #{failure_body}"
+      else
+        failure_type
+      end
     end
 
     # If there's a failure, return the contents of the failure tag.
@@ -138,7 +145,8 @@ class Course::Assessment::Java::JavaProgrammingTestCaseReport <
     # @return [String|nil] Full traceback of failure, nil if there's no failure.
     def failure_contents
       return nil unless failed?
-      @test_case.search('exception/full-stacktrace').children[1].text
+      @test_case.search('exception/full-stacktrace').children[1].nil? ?
+        '' : @test_case.search('exception/full-stacktrace').children[1].text
     end
 
     # If there's a failure, return the failure type attribute.
@@ -183,6 +191,7 @@ class Course::Assessment::Java::JavaProgrammingTestCaseReport <
     # @return [Hash]
     def messages
       # prune empty and nil values
+      # error_contents and failure_contents are only being stored and not displayed on the interface
       @messages ||= {
         'error': nil,
         'error_contents': nil,
@@ -203,7 +212,7 @@ class Course::Assessment::Java::JavaProgrammingTestCaseReport <
     # @return [String]
     def get_test_case_metadata(attribute_name)
       attribute = @test_case.search("./attributes/attribute[@name=#{attribute_name.inspect}]")
-      if attribute.present?
+      if attribute.present? && attribute.children[1]
         attribute.children[1].text
       else
         ''
