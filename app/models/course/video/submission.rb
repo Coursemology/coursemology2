@@ -11,6 +11,8 @@ class Course::Video::Submission < ApplicationRecord
 
   belongs_to :video, inverse_of: :submissions
 
+  has_many :watch_intervals, inverse_of: :submission, dependent: :destroy
+
   # @!method self.ordered_by_date
   #   Orders the submissions by date of creation. This defaults to reverse chronological order
   #   (newest submission first).
