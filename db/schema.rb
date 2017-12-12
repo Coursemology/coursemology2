@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171026141412) do
+ActiveRecord::Schema.define(version: 20171212151525) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -766,6 +766,29 @@ ActiveRecord::Schema.define(version: 20171026141412) do
     t.integer "timestamp",  :null=>false
     t.integer "creator_id", :null=>false, :index=>{:name=>"index_course_video_topics_on_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_video_topics_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer "updater_id", :null=>false, :index=>{:name=>"index_course_video_topics_on_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_video_topics_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
+  end
+
+  create_table "course_video_sessions", force: :cascade do |t|
+    t.integer  "submission_id", :null=>false, :index=>{:name=>"index_course_video_sessions_on_submission_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_video_sessions_on_submission_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.datetime "session_start", :null=>false
+    t.datetime "session_end",   :null=>false
+    t.datetime "created_at",    :null=>false
+    t.datetime "updated_at",    :null=>false
+    t.integer  "creator_id",    :null=>false, :index=>{:name=>"index_course_video_sessions_on_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_video_sessions_on_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer  "updater_id",    :null=>false, :index=>{:name=>"index_course_video_sessions_on_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_video_sessions_on_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
+  end
+
+  create_table "course_video_events", force: :cascade do |t|
+    t.integer  "session_id",         :null=>false, :index=>{:name=>"index_course_video_sessions_on_session_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_video_sessions_on_session_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer  "event_type",         :null=>false
+    t.integer  "sequence_num",       :null=>false
+    t.integer  "video_time_initial", :null=>false
+    t.integer  "video_time_final"
+    t.datetime "event_time",         :null=>false
+    t.datetime "created_at",         :null=>false
+    t.datetime "updated_at",         :null=>false
+
+    t.index ["session_id", "sequence_num"], :name=>"index_course_video_events_on_session_id_and_sequence_num", :unique=>true, :order=>{:session_id=>:asc, :sequence_num=>:asc}
   end
 
   create_table "course_virtual_classrooms", force: :cascade do |t|
