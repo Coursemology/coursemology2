@@ -20,6 +20,8 @@ module Course::VideosAbilityComponent
     allow_student_update_own_video_submission
     allow_student_show_video_topics
     allow_student_create_video_topics
+    allow_student_create_video_watch_interval
+    allow_student_update_own_video_watch_interval
   end
 
   def define_staff_video_permissions
@@ -59,6 +61,14 @@ module Course::VideosAbilityComponent
 
   def allow_student_update_own_video_submission
     can :update, Course::Video::Submission, video_submission_own_course_user_hash
+  end
+
+  def allow_student_create_video_watch_interval
+    can :create, Course::Video::WatchInterval, submission: video_submission_own_course_user_hash
+  end
+
+  def allow_student_update_own_video_watch_interval
+    can :update, Course::Video::WatchInterval, submission: video_submission_own_course_user_hash
   end
 
   def allow_staff_manage_video
