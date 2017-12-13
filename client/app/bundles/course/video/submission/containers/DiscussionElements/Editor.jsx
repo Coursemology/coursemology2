@@ -68,12 +68,14 @@ function Editor(props) {
           <RaisedButton
             label={props.cancelButtonText}
             onClick={props.onCancel}
+            disabled={props.disabled}
           />
         )}
         <RaisedButton
           label={props.submitButtonText}
           primary
           onClick={props.onSubmit}
+          disabled={props.disabled}
         />
       </div>
       <div style={{ clear: 'both' }} />
