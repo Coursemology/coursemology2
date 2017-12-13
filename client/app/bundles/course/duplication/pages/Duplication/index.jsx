@@ -20,12 +20,7 @@ import { duplicableItemTypes, formNames, itemSelectorPanels } from 'course/dupli
 import { fetchObjectsList, setItemSelectorPanel } from 'course/duplication/actions';
 import { defaultComponentTitles } from 'course/translations.intl';
 
-import TargetCourseSelector from './TargetCourseSelector';
-import AssessmentsSelector from './ItemsSelector/AssessmentsSelector';
-import SurveysSelector from './ItemsSelector/SurveysSelector';
-import AchievementsSelector from './ItemsSelector/AchievementsSelector';
-import MaterialsSelector from './ItemsSelector/MaterialsSelector';
-import VideosSelector from './ItemsSelector/VideosSelector';
+import ItemsSelector from './ItemsSelector';
 import DuplicateButton from './DuplicateButton';
 import DuplicateAllButton from './DuplicateAllButton';
 
@@ -78,7 +73,6 @@ class Duplication extends React.Component {
     isExistingCourseSelected: PropTypes.bool.isRequired,
     newCourseFormValid: PropTypes.bool.isRequired,
     duplicationMode: PropTypes.string.isRequired,
-    currentItemSelectorPanel: PropTypes.string,
 
     dispatch: PropTypes.func.isRequired,
   }
@@ -211,28 +205,13 @@ class Duplication extends React.Component {
     );
   }
 
-  renderMainPanel() {
-    const CurrentPanel = {
-      [itemSelectorPanels.TARGET_COURSE]: TargetCourseSelector,
-      [itemSelectorPanels.ASSESSMENTS]: AssessmentsSelector,
-      [itemSelectorPanels.SURVEYS]: SurveysSelector,
-      [itemSelectorPanels.ACHIEVEMENTS]: AchievementsSelector,
-      [itemSelectorPanels.MATERIALS]: MaterialsSelector,
-      [itemSelectorPanels.VIDEOS]: VideosSelector,
-    }[this.props.currentItemSelectorPanel || itemSelectorPanels.TARGET_COURSE];
-
-    return (
-      <Paper style={styles.mainPanel}>
-        <CurrentPanel />
-      </Paper>
-    );
-  }
-
   renderBody() {
     return (
       <div style={styles.body} >
         { this.renderSidebar() }
-        { this.renderMainPanel() }
+        <Paper style={styles.mainPanel}>
+          <ItemsSelector />
+        </Paper>
       </div>
     );
   }
@@ -252,6 +231,5 @@ export default connect(({ duplication, ...state }) => ({
   selectedItems: duplication.selectedItems,
   isExistingCourseSelected: !!duplication.targetCourseId,
   duplicationMode: duplication.duplicationMode,
-  currentItemSelectorPanel: duplication.currentItemSelectorPanel,
   newCourseFormValid: isValid(formNames.NEW_COURSE)(state),
 }))(Duplication);
