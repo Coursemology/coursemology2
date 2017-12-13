@@ -22,11 +22,11 @@ import { fetchObjectsList } from 'course/duplication/actions';
 import { defaultComponentTitles } from 'course/translations.intl';
 
 import TargetCourseSelector from './TargetCourseSelector';
-import AssessmentsSelector from './AssessmentsSelector';
-import SurveysSelector from './SurveysSelector';
-import AchievementsSelector from './AchievementsSelector';
-import MaterialsSelector from './MaterialsSelector';
-import VideosSelector from './VideosSelector';
+import AssessmentsSelector from './ItemsSelector/AssessmentsSelector';
+import SurveysSelector from './ItemsSelector/SurveysSelector';
+import AchievementsSelector from './ItemsSelector/AchievementsSelector';
+import MaterialsSelector from './ItemsSelector/MaterialsSelector';
+import VideosSelector from './ItemsSelector/VideosSelector';
 import DuplicateButton from './DuplicateButton';
 import DuplicateAllButton from './DuplicateAllButton';
 
