@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import mirrorCreator from 'mirror-creator';
 import { isValid } from 'redux-form';
 
 import Paper from 'material-ui/Paper';
@@ -17,8 +16,8 @@ import Done from 'material-ui/svg-icons/action/done';
 import TitleBar from 'lib/components/TitleBar';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 
-import { duplicableItemTypes, formNames } from 'course/duplication/constants';
-import { fetchObjectsList } from 'course/duplication/actions';
+import { duplicableItemTypes, formNames, itemSelectorPanels } from 'course/duplication/constants';
+import { fetchObjectsList, setItemSelectorPanel } from 'course/duplication/actions';
 import { defaultComponentTitles } from 'course/translations.intl';
 
 import TargetCourseSelector from './TargetCourseSelector';
@@ -31,15 +30,6 @@ import DuplicateButton from './DuplicateButton';
 import DuplicateAllButton from './DuplicateAllButton';
 
 const { TAB, ASSESSMENT, CATEGORY, SURVEY, ACHIEVEMENT, FOLDER, MATERIAL, VIDEO } = duplicableItemTypes;
-
-const panels = mirrorCreator([
-  'TARGET_COURSE',
-  'ASSESSMENTS',
-  'SURVEYS',
-  'ACHIEVEMENTS',
-  'MATERIALS',
-  'VIDEOS',
-]);
 
 const translations = defineMessages({
   duplicateData: {
@@ -88,6 +78,7 @@ class Duplication extends React.Component {
     isExistingCourseSelected: PropTypes.bool.isRequired,
     newCourseFormValid: PropTypes.bool.isRequired,
     duplicationMode: PropTypes.string.isRequired,
+    currentItemSelectorPanel: PropTypes.string,
 
     dispatch: PropTypes.func.isRequired,
   }
@@ -111,20 +102,12 @@ class Duplication extends React.Component {
     );
   }
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      panel: panels.TARGET_COURSE,
-    };
-  }
-
   componentDidMount() {
     this.props.dispatch(fetchObjectsList());
   }
 
   renderCourseSelector() {
-    const { isExistingCourseSelected, newCourseFormValid, duplicationMode } = this.props;
+    const { dispatch, isExistingCourseSelected, newCourseFormValid, duplicationMode } = this.props;
     const isCourseSelected =
       duplicationMode === 'course' ? newCourseFormValid : isExistingCourseSelected;
 
@@ -143,7 +126,7 @@ class Duplication extends React.Component {
               { isCourseSelected ? <Done color={grey50} /> : <Clear color={grey50} /> }
             </Avatar>
           }
-          onClick={() => this.setState({ panel: panels.TARGET_COURSE })}
+          onClick={() => dispatch(setItemSelectorPanel(itemSelectorPanels.TARGET_COURSE))}
         >
           <FormattedMessage {...translations.targetCourse} />
         </ListItem>
@@ -152,7 +135,7 @@ class Duplication extends React.Component {
   }
 
   renderItemsSelector() {
-    const { selectedItems } = this.props;
+    const { dispatch, selectedItems } = this.props;
 
     const counts = {};
     Object.keys(selectedItems).forEach((key) => {
@@ -171,35 +154,35 @@ class Duplication extends React.Component {
           Duplication.renderSidebarItem(
             defaultComponentTitles.course_assessments_component,
             assessmentsComponentCount,
-            () => this.setState({ panel: panels.ASSESSMENTS })
+            () => dispatch(setItemSelectorPanel(itemSelectorPanels.ASSESSMENTS))
           )
         }
         {
           Duplication.renderSidebarItem(
             defaultComponentTitles.course_survey_component,
             counts[SURVEY],
-            () => this.setState({ panel: panels.SURVEYS })
+            () => dispatch(setItemSelectorPanel(itemSelectorPanels.SURVEYS))
           )
         }
         {
           Duplication.renderSidebarItem(
             defaultComponentTitles.course_achievements_component,
             counts[ACHIEVEMENT],
-            () => this.setState({ panel: panels.ACHIEVEMENTS })
+            () => dispatch(setItemSelectorPanel(itemSelectorPanels.ACHIEVEMENTS))
           )
         }
         {
           Duplication.renderSidebarItem(
             defaultComponentTitles.course_materials_component,
             counts[FOLDER] + counts[MATERIAL],
-            () => this.setState({ panel: panels.MATERIALS })
+            () => dispatch(setItemSelectorPanel(itemSelectorPanels.MATERIALS))
           )
         }
         {
           Duplication.renderSidebarItem(
             defaultComponentTitles.course_videos_component,
             counts[VIDEO],
-            () => this.setState({ panel: panels.VIDEOS })
+            () => dispatch(setItemSelectorPanel(itemSelectorPanels.VIDEOS))
           )
         }
         <ListItem disabled style={styles.duplicateButton}>
@@ -230,13 +213,13 @@ class Duplication extends React.Component {
 
   renderMainPanel() {
     const CurrentPanel = {
-      [panels.TARGET_COURSE]: TargetCourseSelector,
-      [panels.ASSESSMENTS]: AssessmentsSelector,
-      [panels.SURVEYS]: SurveysSelector,
-      [panels.ACHIEVEMENTS]: AchievementsSelector,
-      [panels.MATERIALS]: MaterialsSelector,
-      [panels.VIDEOS]: VideosSelector,
-    }[this.state.panel];
+      [itemSelectorPanels.TARGET_COURSE]: TargetCourseSelector,
+      [itemSelectorPanels.ASSESSMENTS]: AssessmentsSelector,
+      [itemSelectorPanels.SURVEYS]: SurveysSelector,
+      [itemSelectorPanels.ACHIEVEMENTS]: AchievementsSelector,
+      [itemSelectorPanels.MATERIALS]: MaterialsSelector,
+      [itemSelectorPanels.VIDEOS]: VideosSelector,
+    }[this.props.currentItemSelectorPanel || itemSelectorPanels.TARGET_COURSE];
 
     return (
       <Paper style={styles.mainPanel}>
@@ -269,5 +252,6 @@ export default connect(({ duplication, ...state }) => ({
   selectedItems: duplication.selectedItems,
   isExistingCourseSelected: !!duplication.targetCourseId,
   duplicationMode: duplication.duplicationMode,
+  currentItemSelectorPanel: duplication.currentItemSelectorPanel,
   newCourseFormValid: isValid(formNames.NEW_COURSE)(state),
 }))(Duplication);

@@ -43,6 +43,10 @@ export function setDuplicationMode(duplicationMode) {
   return { type: actionTypes.SET_DUPLICATION_MODE, duplicationMode };
 }
 
+export function setItemSelectorPanel(panel) {
+  return { type: actionTypes.SET_ITEM_SELECTOR_PANEL, panel };
+}
+
 /**
 * Prepares the payload containing ids and types of items selected for duplication.
 *
