@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { itemSelectorPanels } from 'course/duplication/constants';
-import TargetCourseSelector from '../TargetCourseSelector';
+import DestinationCourseSelector from '../DestinationCourseSelector';
 import AssessmentsSelector from './AssessmentsSelector';
 import SurveysSelector from './SurveysSelector';
 import AchievementsSelector from './AchievementsSelector';
@@ -16,7 +16,7 @@ class ItemsSelector extends React.Component {
 
   render() {
     const CurrentPanel = {
-      [itemSelectorPanels.TARGET_COURSE]: TargetCourseSelector,
+      [itemSelectorPanels.TARGET_COURSE]: DestinationCourseSelector,
       [itemSelectorPanels.ASSESSMENTS]: AssessmentsSelector,
       [itemSelectorPanels.SURVEYS]: SurveysSelector,
       [itemSelectorPanels.ACHIEVEMENTS]: AchievementsSelector,
