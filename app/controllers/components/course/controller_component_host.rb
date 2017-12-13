@@ -92,6 +92,15 @@ class Course::ControllerComponentHost
       def settings_class
         @settings_class ||= "Course::Settings::#{name.demodulize}".safe_constantize
       end
+
+      # Override in the component definition with the names of the actable types
+      # if the component adds lesson plan items.
+      # A component can specify multiple actable types for display on the lesson plan page.
+      #
+      # @return [Array<String>] actable types as an array of strings
+      def lesson_plan_item_actable_names
+        []
+      end
     end
 
     # The settings interface instance for this component.

@@ -21,6 +21,14 @@ class Course::LessonPlan::Item < ApplicationRecord
     order(:start_at, :title)
   end)
 
+  # @!method self.with_actable_types
+  #   Scopes the lesson plan items to those which belong to the given actable_types
+  #
+  # @param actable_types [Array<String>] Array of strings with the actable type names.
+  scope :with_actable_types, lambda { |actable_types|
+    where(actable_type: actable_types)
+  }
+
   belongs_to :course, inverse_of: :lesson_plan_items
   has_many :todos, class_name: Course::LessonPlan::Todo.name, inverse_of: :item, dependent: :destroy
 
