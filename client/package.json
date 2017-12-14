@@ -41,11 +41,11 @@
       "<rootDir>/node_modules/enzyme-to-json/serializer"
     ],
     "moduleNameMapper": {
+      ".scss$": "<rootDir>/SassStub.js",
       "^api(.*)$": "<rootDir>/app/api$1",
       "^lib(.*)$": "<rootDir>/app/lib$1",
       "^utils(.*)$": "<rootDir>/app/__test__/utils$1",
-      "^course(.*)$": "<rootDir>/app/bundles/course$1",
-      ".scss$": "<rootDir>/SassStub.js"
+      "^course(.*)$": "<rootDir>/app/bundles/course$1"
     },
     "coveragePathIgnorePatterns": [
       "/node_modules/",

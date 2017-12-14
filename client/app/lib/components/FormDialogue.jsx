@@ -5,6 +5,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import formTranslations from 'lib/translations/form';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import modalFormStyles from '../styles/ModalForm.scss';
 
 const propTypes = {
   title: PropTypes.string,
@@ -75,6 +76,7 @@ class FormDialogue extends React.Component {
           modal={false}
           onRequestClose={this.handleFormClose}
           autoScrollBodyContent
+          bodyClassName={modalFormStyles.modalForm}
         >
           { children }
         </Dialog>
