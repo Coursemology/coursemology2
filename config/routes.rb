@@ -328,6 +328,7 @@ Rails.application.routes.draw do
           resources :topics, only: [:index, :create, :show]
           scope module: :submission do
             resources :submissions, only: [:index, :create, :edit]
+            resources :sessions, only: :update
           end
         end
       end
