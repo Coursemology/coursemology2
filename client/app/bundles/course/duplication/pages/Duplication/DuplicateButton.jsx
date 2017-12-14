@@ -13,7 +13,7 @@ const translations = defineMessages({
   },
   selectCourse: {
     id: 'course.duplication.DuplicateButton.selectCourse',
-    defaultMessage: 'Select Target Course!',
+    defaultMessage: 'Select Destination!',
   },
   selectItem: {
     id: 'course.duplication.DuplicateButton.selectItem',

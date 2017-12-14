@@ -1,217 +1,190 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { defineMessages, FormattedMessage } from 'react-intl';
-import { isValid } from 'redux-form';
+import { defineMessages, FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
 import Paper from 'material-ui/Paper';
-import Avatar from 'material-ui/Avatar';
-import List from 'material-ui/List/List';
-import ListItem from 'material-ui/List/ListItem';
-import { red500, cyan500, grey50 } from 'material-ui/styles/colors';
-import Subheader from 'material-ui/Subheader';
-import Clear from 'material-ui/svg-icons/content/clear';
-import Done from 'material-ui/svg-icons/action/done';
+import TextField from 'material-ui/TextField';
+import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 
 import TitleBar from 'lib/components/TitleBar';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
-
-import { duplicableItemTypes, formNames, itemSelectorPanels } from 'course/duplication/constants';
-import { fetchObjectsList, setItemSelectorPanel } from 'course/duplication/actions';
-import { defaultComponentTitles } from 'course/translations.intl';
+import DateTimePicker from 'lib/components/form/DateTimePicker';
+import { fetchObjectsList, setDuplicationMode } from 'course/duplication/actions';
 
 import ItemsSelector from './ItemsSelector';
-import DuplicateButton from './DuplicateButton';
 import DuplicateAllButton from './DuplicateAllButton';
-
-const { TAB, ASSESSMENT, CATEGORY, SURVEY, ACHIEVEMENT, FOLDER, MATERIAL, VIDEO } = duplicableItemTypes;
+import DestinationCourseSelector from './DestinationCourseSelector';
+import ItemsSelectorMenu from './ItemsSelectorMenu';
 
 const translations = defineMessages({
   duplicateData: {
     id: 'course.duplication.Duplication.duplicateData',
     defaultMessage: 'Duplicate Data',
   },
-  selectTargetCourse: {
-    id: 'course.duplication.Duplication.selectTargetCourse',
-    defaultMessage: 'Select Target Course',
+  fromCourse: {
+    id: 'course.duplication.Duplication.fromCourse',
+    defaultMessage: 'From',
   },
-  targetCourse: {
-    id: 'course.duplication.Duplication.targetCourse',
-    defaultMessage: 'Target Course',
+  toCourse: {
+    id: 'course.duplication.Duplication.toCourse',
+    defaultMessage: 'To',
   },
-  duplicableItemsHeader: {
-    id: 'course.duplication.Duplication.duplicableItemsHeader',
-    defaultMessage: 'Select Items to Duplicate',
+  items: {
+    id: 'course.duplication.Duplication.items',
+    defaultMessage: 'Items',
+  },
+  title: {
+    id: 'course.duplication.Duplication.title',
+    defaultMessage: 'Title',
+  },
+  startAt: {
+    id: 'course.duplication.Duplication.startAt',
+    defaultMessage: 'Start Date',
+  },
+  newCourse: {
+    id: 'course.duplication.Duplication.newCourse',
+    defaultMessage: 'New Course',
+  },
+  existingCourse: {
+    id: 'course.duplication.Duplication.existingCourse',
+    defaultMessage: 'Existing Course',
   },
 });
 
 const styles = {
-  body: {
-    display: 'flex',
+  bodyGrid: {
+    display: 'grid',
+    gridTemplateColumns: '210px auto',
+    gridTemplateRows: 'auto',
   },
   sidebar: {
-    width: 250,
+    padding: '25px 20px',
+  },
+  itemsSidebarHeader: {
+    padding: '25px 20px 0px 20px',
   },
   mainPanel: {
-    paddingLeft: 40,
-    paddingRight: 40,
-    width: '100%',
+    marginTop: 15,
+    padding: '5px 40px 20px 40px',
   },
-  countAvatar: {
-    margin: 5,
+  radioButtonGroup: {
+    marginTop: 20,
   },
-  duplicateButton: {
-    display: 'flex',
-    justifyContent: 'center',
+  duplicateAllButton: {
+    marginTop: 30,
   },
 };
 
 class Duplication extends React.Component {
   static propTypes = {
     isLoading: PropTypes.bool.isRequired,
-    selectedItems: PropTypes.shape({}),
-    isExistingCourseSelected: PropTypes.bool.isRequired,
-    newCourseFormValid: PropTypes.bool.isRequired,
+    isCourseSelected: PropTypes.bool.isRequired,
     duplicationMode: PropTypes.string.isRequired,
+    currentCourse: PropTypes.shape({
+      title: PropTypes.string,
+      start_at: PropTypes.string,
+    }).isRequired,
 
     dispatch: PropTypes.func.isRequired,
-  }
-
-  static renderSidebarItem(translation, count, onClick) {
-    return (
-      <ListItem
-        leftAvatar={
-          <Avatar
-            style={styles.countAvatar}
-            size={30}
-            backgroundColor={count > 0 ? cyan500 : null}
-          >
-            { count }
-          </Avatar>
-        }
-        onClick={onClick}
-      >
-        <FormattedMessage {...translation} />
-      </ListItem>
-    );
+    intl: intlShape,
   }
 
   componentDidMount() {
     this.props.dispatch(fetchObjectsList());
   }
 
-  renderCourseSelector() {
-    const { dispatch, isExistingCourseSelected, newCourseFormValid, duplicationMode } = this.props;
-    const isCourseSelected =
-      duplicationMode === 'course' ? newCourseFormValid : isExistingCourseSelected;
+  renderFromCourseMain() {
+    const { intl, currentCourse } = this.props;
 
     return (
       <div>
-        <Subheader>
-          <FormattedMessage {...translations.selectTargetCourse} />
-        </Subheader>
-        <ListItem
-          leftAvatar={
-            <Avatar
-              style={styles.countAvatar}
-              size={30}
-              backgroundColor={isCourseSelected ? cyan500 : red500}
-            >
-              { isCourseSelected ? <Done color={grey50} /> : <Clear color={grey50} /> }
-            </Avatar>
-          }
-          onClick={() => dispatch(setItemSelectorPanel(itemSelectorPanels.TARGET_COURSE))}
+        <TextField
+          disabled
+          fullWidth
+          value={currentCourse.title}
+          floatingLabelText={intl.formatMessage(translations.title)}
+        />
+        <DateTimePicker
+          disabled
+          value={currentCourse.start_at}
+          floatingLabelText={intl.formatMessage(translations.startAt)}
+        />
+      </div>
+    );
+  }
+
+  renderToCourseSidebar() {
+    const { dispatch, duplicationMode } = this.props;
+
+    return (
+      <div>
+        <h3><FormattedMessage {...translations.toCourse} /></h3>
+        <RadioButtonGroup
+          name="duplicationMode"
+          style={styles.radioButtonGroup}
+          valueSelected={duplicationMode}
+          onChange={(_, mode) => dispatch(setDuplicationMode(mode))}
         >
-          <FormattedMessage {...translations.targetCourse} />
-        </ListItem>
+          <RadioButton
+            value="course"
+            label={<FormattedMessage {...translations.newCourse} />}
+          />
+          <RadioButton
+            value="object"
+            label={<FormattedMessage {...translations.existingCourse} />}
+          />
+        </RadioButtonGroup>
       </div>
     );
   }
 
-  renderItemsSelector() {
-    const { dispatch, selectedItems } = this.props;
+  renderItemsSelectorSidebar() {
+    const { duplicationMode, isCourseSelected } = this.props;
 
-    const counts = {};
-    Object.keys(selectedItems).forEach((key) => {
-      const idsHash = selectedItems[key];
-      counts[key] = Object.keys(idsHash).reduce((count, id) => (idsHash[id] ? count + 1 : count), 0);
-    });
-
-    const assessmentsComponentCount = counts[TAB] + counts[ASSESSMENT] + counts[CATEGORY];
-
-    return (
-      <div>
-        <Subheader>
-          <FormattedMessage {...translations.duplicableItemsHeader} />
-        </Subheader>
-        {
-          Duplication.renderSidebarItem(
-            defaultComponentTitles.course_assessments_component,
-            assessmentsComponentCount,
-            () => dispatch(setItemSelectorPanel(itemSelectorPanels.ASSESSMENTS))
-          )
-        }
-        {
-          Duplication.renderSidebarItem(
-            defaultComponentTitles.course_survey_component,
-            counts[SURVEY],
-            () => dispatch(setItemSelectorPanel(itemSelectorPanels.SURVEYS))
-          )
-        }
-        {
-          Duplication.renderSidebarItem(
-            defaultComponentTitles.course_achievements_component,
-            counts[ACHIEVEMENT],
-            () => dispatch(setItemSelectorPanel(itemSelectorPanels.ACHIEVEMENTS))
-          )
-        }
-        {
-          Duplication.renderSidebarItem(
-            defaultComponentTitles.course_materials_component,
-            counts[FOLDER] + counts[MATERIAL],
-            () => dispatch(setItemSelectorPanel(itemSelectorPanels.MATERIALS))
-          )
-        }
-        {
-          Duplication.renderSidebarItem(
-            defaultComponentTitles.course_videos_component,
-            counts[VIDEO],
-            () => dispatch(setItemSelectorPanel(itemSelectorPanels.VIDEOS))
-          )
-        }
-        <ListItem disabled style={styles.duplicateButton}>
-          <DuplicateButton />
-        </ListItem>
-      </div>
-    );
-  }
-
-  renderSidebar() {
-    const { duplicationMode } = this.props;
-
-    return (
-      <Paper>
-        <List style={styles.sidebar}>
-          { this.renderCourseSelector() }
-          {
-            duplicationMode === 'course' ?
-              <ListItem disabled style={styles.duplicateButton}>
-                <DuplicateAllButton />
-              </ListItem> :
-            this.renderItemsSelector()
-          }
-        </List>
-      </Paper>
-    );
+    if (duplicationMode === 'course') {
+      return <div style={styles.sidebar}><DuplicateAllButton /></div>;
+    }
+    if (isCourseSelected) {
+      return (
+        <div>
+          <h3 style={styles.itemsSidebarHeader}>
+            <FormattedMessage {...translations.items} />
+          </h3>
+          <ItemsSelectorMenu />
+        </div>
+      );
+    }
+    return <div />;
   }
 
   renderBody() {
+    const { isLoading, isCourseSelected, duplicationMode } = this.props;
+    if (isLoading) { return <LoadingIndicator />; }
+
     return (
-      <div style={styles.body} >
-        { this.renderSidebar() }
+      <div style={styles.bodyGrid}>
+        <div style={styles.sidebar}>
+          <h3><FormattedMessage {...translations.fromCourse} /></h3>
+        </div>
         <Paper style={styles.mainPanel}>
-          <ItemsSelector />
+          { this.renderFromCourseMain() }
         </Paper>
+
+        <div style={styles.sidebar}>
+          { this.renderToCourseSidebar() }
+        </div>
+        <Paper style={styles.mainPanel}>
+          <DestinationCourseSelector />
+        </Paper>
+
+        { this.renderItemsSelectorSidebar() }
+        {
+          duplicationMode === 'object' && isCourseSelected ?
+            <Paper style={styles.mainPanel}>
+              <ItemsSelector />
+            </Paper> : <div />
+        }
       </div>
     );
   }
@@ -220,16 +193,15 @@ class Duplication extends React.Component {
     return (
       <div>
         <TitleBar title={<FormattedMessage {...translations.duplicateData} />} />
-        { this.props.isLoading ? <LoadingIndicator /> : this.renderBody() }
+        { this.renderBody() }
       </div>
     );
   }
 }
 
-export default connect(({ duplication, ...state }) => ({
+export default connect(({ duplication }) => ({
   isLoading: duplication.isLoading,
-  selectedItems: duplication.selectedItems,
-  isExistingCourseSelected: !!duplication.targetCourseId,
+  isCourseSelected: !!duplication.targetCourseId,
   duplicationMode: duplication.duplicationMode,
-  newCourseFormValid: isValid(formNames.NEW_COURSE)(state),
-}))(Duplication);
+  currentCourse: duplication.currentCourse,
+}))(injectIntl(Duplication));
