@@ -10,6 +10,8 @@ class Course::Video < ApplicationRecord
   has_many :topics, class_name: Course::Video::Topic.name,
                     dependent: :destroy, foreign_key: :video_id, inverse_of: :video
 
+  scope :from_course, ->(course) { where(course_id: course) }
+
   # TODO: Refactor this together with assessments.
   # @!method self.ordered_by_date_and_title
   #   Orders the videos by the starting date and title.
@@ -30,6 +32,12 @@ class Course::Video < ApplicationRecord
       preloader = ActiveRecord::Associations::Preloader::ManualPreloader.new
       preloader.preload(result, :submissions, submissions)
     end
+  end)
+
+  scope :unwatched_by, (lambda do |user|
+    where.not(id: Course::Video::Submission.
+                    by_user(user).
+                    pluck('DISTINCT video_id'))
   end)
 
   def self.use_relative_model_naming?
