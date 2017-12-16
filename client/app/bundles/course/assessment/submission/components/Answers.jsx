@@ -144,7 +144,7 @@ export default class Answers extends Component {
       rows={5}
     />);
 
-    const editableAnswer = question.solutions ? plaintextAnswer : richtextAnswer;
+    const editableAnswer = question.autogradable ? plaintextAnswer : richtextAnswer;
 
     return (
       <div>
