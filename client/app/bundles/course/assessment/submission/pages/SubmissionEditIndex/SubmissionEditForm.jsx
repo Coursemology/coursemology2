@@ -190,7 +190,7 @@ class SubmissionEditForm extends Component {
   }
 
   renderQuestions() {
-    const { attempting, questionIds, questions, topics } = this.props;
+    const { attempting, questionIds, questions, topics, graderView } = this.props;
     return (
       <div>
         {questionIds.map((id, index) => {
@@ -199,7 +199,7 @@ class SubmissionEditForm extends Component {
           const topic = topics[topicId];
           return (
             <Element name={`step${index}`} key={id} style={styles.questionContainer}>
-              <SubmissionAnswer {...{ readOnly: !attempting, answerId, question }} />
+              <SubmissionAnswer {...{ readOnly: !attempting, answerId, question, graderView }} />
               {question.type === questionTypes.Programming ? this.renderExplanationPanel(id) : null}
               {this.renderQuestionGrading(id)}
               {this.renderProgrammingQuestionActions(id)}
