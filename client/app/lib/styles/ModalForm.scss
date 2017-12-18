@@ -1,0 +1,31 @@
+// The styles here force scrollbars to display in Dialog modals regardless of the user's
+// OS X scrollbar settings. This makes it more obvious if a modal can't fit fully into
+// the screen and needs to be scrolled.
+// Styles were taken from http://blog.0100.tv/2012/11/webkit-scrollbars-on-os-x/
+.modalForm {
+  $base-scrollbar-color: #000000;
+
+  &::-webkit-scrollbar {
+    width: 9px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba($base-scrollbar-color, 0.1);
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba($base-scrollbar-color, 0.2);
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba($base-scrollbar-color, 0.4);
+  }
+
+  &::-webkit-scrollbar-thumb:window-inactive {
+    background: rgba($base-scrollbar-color, 0.05);
+  }
+}

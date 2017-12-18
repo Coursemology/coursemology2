@@ -9,6 +9,7 @@ import FlatButton from 'material-ui/FlatButton';
 import NotificationBar, { notificationShape } from 'lib/components/NotificationBar';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import formTranslations from 'lib/translations/form';
+import modalFormStyles from 'lib/styles/ModalForm.scss';
 import AchievementForm from '../../containers/AchievementForm';
 import * as actions from '../../actions';
 import translations from './translations.intl';
@@ -102,6 +103,7 @@ class PopupDialog extends React.Component {
           onRequestClose={this.handleClose}
           autoScrollBodyContent
           contentStyle={styles.dialog}
+          bodyClassName={modalFormStyles.modalForm}
         >
           <AchievementForm
             onSubmit={this.onFormSubmit}
