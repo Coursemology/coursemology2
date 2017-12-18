@@ -6,6 +6,10 @@ class Course::SurveyComponent < SimpleDelegator
     I18n.t('components.surveys.name')
   end
 
+  def self.lesson_plan_item_actable_names
+    [Course::Survey.name]
+  end
+
   def sidebar_items
     [
       {

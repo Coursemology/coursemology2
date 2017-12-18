@@ -6,6 +6,10 @@ class Course::VideosComponent < SimpleDelegator
     I18n.t('components.video.name')
   end
 
+  def self.lesson_plan_item_actable_names
+    [Course::Video.name]
+  end
+
   def self.enabled_by_default?
     false
   end

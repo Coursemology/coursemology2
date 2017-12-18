@@ -10,6 +10,7 @@ class Course::LessonPlan::ItemsController < Course::LessonPlan::Controller
                               parent: false
 
   def index
+    @items = @items.with_actable_types(enabled_lesson_plan_item_actable_type_names)
     respond_to do |format|
       format.html
       format.json { render_json_response }
@@ -64,5 +65,12 @@ class Course::LessonPlan::ItemsController < Course::LessonPlan::Controller
   def tab_title_array(tab)
     category_name = tab.category.title.singularize
     tab.category.tabs.size > 1 ? [category_name, tab.title] : [category_name]
+  end
+
+  # Gets the array of actable type names for lesson plan items of enabled components.
+  #
+  # @return [Array<String>] Array of actable_type names.
+  def enabled_lesson_plan_item_actable_type_names
+    current_component_host.enabled_components.map(&:lesson_plan_item_actable_names).flatten
   end
 end

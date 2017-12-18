@@ -6,6 +6,10 @@ class Course::LessonPlanComponent < SimpleDelegator
     I18n.t('components.lesson_plan.name')
   end
 
+  def self.lesson_plan_item_actable_names
+    [Course::LessonPlan::Event.name]
+  end
+
   def sidebar_items
     [
       {

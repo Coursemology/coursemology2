@@ -7,6 +7,10 @@ class Course::AssessmentsComponent < SimpleDelegator
     I18n.t('components.assessments.name')
   end
 
+  def self.lesson_plan_item_actable_names
+    [Course::Assessment.name]
+  end
+
   def sidebar_items
     main_sidebar_items + admin_sidebar_items + admin_settings_items
   end
