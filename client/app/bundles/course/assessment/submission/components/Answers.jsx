@@ -123,7 +123,7 @@ export default class Answers extends Component {
     /* eslint-enable react/no-array-index-key */
   }
 
-  static renderTextResponse(question, readOnly, answerId) {
+  static renderTextResponse(question, readOnly, answerId, graderView) {
     const allowUpload = question.allowAttachment;
 
     const readOnlyAnswer = (<Field
@@ -144,12 +144,12 @@ export default class Answers extends Component {
       rows={5}
     />);
 
-    const editableAnswer = question.solutions ? plaintextAnswer : richtextAnswer;
+    const editableAnswer = question.autogradable ? plaintextAnswer : richtextAnswer;
 
     return (
       <div>
         { readOnly ? readOnlyAnswer : editableAnswer }
-        {question.solutions ? Answers.renderTextResponseSolutions(question) : null}
+        {question.solutions && graderView ? Answers.renderTextResponseSolutions(question) : null}
         {allowUpload ? <UploadedFileView questionId={question.id} /> : null}
         {allowUpload && !readOnly ? Answers.renderFileUploader(question, readOnly, answerId) : null}
       </div>

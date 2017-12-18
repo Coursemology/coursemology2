@@ -316,7 +316,7 @@ class SubmissionEditStepForm extends Component {
 
   renderStepQuestion() {
     const { stepIndex } = this.state;
-    const { attempting, questionIds, questions, topics } = this.props;
+    const { attempting, questionIds, questions, topics, graderView } = this.props;
 
     const id = questionIds[stepIndex];
     const question = questions[id];
@@ -324,7 +324,7 @@ class SubmissionEditStepForm extends Component {
     const topic = topics[topicId];
     return (
       <div>
-        <SubmissionAnswer {...{ readOnly: !attempting, answerId, question }} />
+        <SubmissionAnswer {...{ readOnly: !attempting, answerId, question, graderView }} />
         {this.renderAutogradingErrorPanel(id)}
         {this.renderExplanationPanel(question)}
         {this.renderQuestionGrading(id)}

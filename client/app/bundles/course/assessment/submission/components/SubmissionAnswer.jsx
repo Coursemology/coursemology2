@@ -25,6 +25,7 @@ class SubmissionAnswer extends Component {
     readOnly: PropTypes.bool,
     question: questionShape,
     answerId: PropTypes.number,
+    graderView: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -80,7 +81,7 @@ class SubmissionAnswer extends Component {
   }
 
   render() {
-    const { readOnly, question, answerId } = this.props;
+    const { readOnly, question, answerId, graderView } = this.props;
 
     const renderer = this.getRenderer(question);
 
@@ -89,7 +90,7 @@ class SubmissionAnswer extends Component {
         <h3>{question.displayTitle}</h3>
         <div dangerouslySetInnerHTML={{ __html: question.description }} />
         <hr />
-        { answerId ? renderer(question, readOnly, answerId) : this.renderMissingAnswerPanel() }
+        { answerId ? renderer(question, readOnly, answerId, graderView) : this.renderMissingAnswerPanel() }
       </div>
     );
   }
