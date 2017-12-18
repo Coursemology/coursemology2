@@ -40,6 +40,10 @@ export const defaultComponentTitles = defineMessages({
     id: 'course.componentTitles.course_materials_component',
     defaultMessage: 'Materials',
   },
+  course_levels_component: {
+    id: 'course.componentTitles.course_levels_component',
+    defaultMessage: 'Levels',
+  },
 });
 
 export default translations;

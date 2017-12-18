@@ -96,6 +96,59 @@ RSpec.describe Course::Level, type: :model do
       end
     end
 
+    describe '.mass_update_levels' do
+      before { course.levels.concat(create_list(:course_level, 5, course: course)) }
+      subject { course.mass_update_levels(new_thresholds) }
+
+      context 'when new thresholds are correct' do
+        # Must be below the sequence numbers in the factory or there might be duplicates.
+        let(:new_thresholds) { [0, 10, 20, 30]  }
+
+        it 'updates the levels to the new thresholds' do
+          subject
+
+          updated_thresholds = course.levels.map(&:experience_points_threshold)
+          expect(updated_thresholds).to match_array(new_thresholds)
+        end
+
+        it 'does not recreate existing thresholds' do
+          # Sample the last original level and "keep" it in the new thresholds.
+          original_sample_level = course.levels.last
+          new_thresholds << original_sample_level.experience_points_threshold
+          subject
+
+          # Find back the level object with the original threshold.
+          sample_level = course.levels.select do |level|
+            level.experience_points_threshold == original_sample_level.experience_points_threshold
+          end.first
+
+          # Check that their properties are equal.
+          expect(original_sample_level.experience_points_threshold).
+            to eq(sample_level.experience_points_threshold)
+          expect(original_sample_level.id).to eq(sample_level.id)
+          expect(original_sample_level.updated_at).to eq(sample_level.updated_at)
+          expect(original_sample_level.created_at).to eq(sample_level.created_at)
+        end
+      end
+
+      context 'when new thresholds are missing the default level' do
+        let(:new_thresholds) { [10, 20, 30] }
+
+        it 'updates the levels but keeps the default level' do
+          original_thresholds_excluding_default = course.levels.map(&:experience_points_threshold).
+                                                  reject do |threshold|
+                                                    threshold == Course::Level::DEFAULT_THRESHOLD
+                                                  end
+          subject
+          updated_thresholds = course.levels.map(&:experience_points_threshold)
+
+          expect(course.default_level?).to be true
+          expect(updated_thresholds).to include(10, 20, 30)
+          expect(updated_thresholds).not_to include(*original_thresholds_excluding_default)
+        end
+      end
+    end
+
     describe '#next_level_threshold' do
       before { course.levels.concat(create_list(:course_level, 5, course: course)) }
 

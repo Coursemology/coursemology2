@@ -83,6 +83,7 @@ class Course < ApplicationRecord
   delegate :user?, to: :course_users
   delegate :level_for, to: :levels
   delegate :default_level?, to: :levels
+  delegate :mass_update_levels, to: :levels
 
   def self.use_relative_model_naming?
     true

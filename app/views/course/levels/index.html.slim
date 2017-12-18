@@ -1,10 +1,1 @@
-= page_header do
-  = new_button([current_course, :level]) if can?(:create, Course::Level.new(course: current_course))
-table.table.levels-list.table-hover
-  thead
-    tr
-      th = t('.level')
-      th = t('.threshold')
-      th
-  tbody
-    = render @levels
+div#course-level

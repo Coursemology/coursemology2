@@ -6,42 +6,37 @@ RSpec.describe Course::LevelsController, type: :controller do
 
   with_tenant(:instance) do
     let!(:user) { create(:administrator) }
+    let!(:normal_user) { create(:user) }
     let!(:course) { create(:course) }
-    let!(:level_stub) do
-      stub = create(:course_level, course: course)
-      allow(stub).to receive(:save).and_return(false)
-      allow(stub).to receive(:destroy).and_return(false)
-      stub
-    end
 
-    before { sign_in(user) }
+    describe '#create' do
+      context 'when user is allowed to edit levels' do
+        before { sign_in(user) }
 
-    describe '#destroy' do
-      subject { delete :destroy, params: { course_id: course, id: level_stub } }
+        it 'is expected to create new levels' do
+          post :create, params: { course_id: course.id, levels: [0, 100, 200, 400] }, format: :json
+          saved_levels = course.reload.levels.map(&:experience_points_threshold)
 
-      context 'when destroy fails' do
-        before do
-          controller.instance_variable_set(:@level, level_stub)
-          subject
-        end
-
-        it { is_expected.to redirect_to(course_levels_path(course)) }
-        it 'sets an error flash message' do
-          expect(flash[:danger]).to eq(I18n.t('course.levels.destroy.failure', error: ''))
+          expect(saved_levels).to match_array([0, 100, 200, 400])
         end
       end
-    end
 
-    describe '#save' do
-      subject { post :create, params: { course_id: course, level: level_stub } }
+      context 'when user cannot change levels' do
+        before { sign_in(normal_user) }
 
-      context 'when saving fails' do
-        before do
-          controller.instance_variable_set(:@level, level_stub)
-          subject
+        it 'is expected to deny access' do
+          original_levels = course.levels.map(&:experience_points_threshold)
+
+          # Unauthorized user should be denied access.
+          expect do
+            post :create, params: { course_id: course.id, levels: [0, 200, 400, 800] },
+                          format: :json
+          end.to raise_error(CanCan::AccessDenied)
+
+          # Levels should not be changed.
+          saved_levels = course.reload.levels.map(&:experience_points_threshold)
+          expect(saved_levels).to match_array(original_levels)
         end
-
-        it { is_expected.to render_template('new') }
       end
     end
   end

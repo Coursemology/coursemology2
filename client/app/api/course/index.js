@@ -10,6 +10,7 @@ import SurveyAPI from './Survey';
 import VideoAPI from './Video';
 import AdminAPI from './Admin';
 import ScribingQuestionAPI from './Assessment/question/scribing';
+import LevelAPI from './Level';
 
 const CourseAPI = {
   achievements: new AchievementsAPI(),
@@ -26,6 +27,7 @@ const CourseAPI = {
   question: {
     scribing: ScribingQuestionAPI,
   },
+  level: new LevelAPI(),
 };
 
 Object.freeze(CourseAPI);

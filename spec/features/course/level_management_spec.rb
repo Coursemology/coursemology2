@@ -27,27 +27,36 @@ RSpec.feature 'Course: Levels' do
         expect(page).to have_selector('li', text: 'course.levels.sidebar_title')
       end
 
-      scenario 'I can view course levels' do
+      scenario 'I can view course levels', js: true do
         visit course_levels_path(course)
 
         (1..3).each do |i|
-          expect(page.find('tr', text: i * 100)).to have_selector('td', text: i)
+          # Check for level number
+          expect(page.find('tbody')).to have_selector('td', text: i)
+          # Check for threshold
+          expect(page.find('tbody')).to have_xpath("//input[@value=#{i * 100}]")
         end
       end
 
-      scenario 'I can create a course level' do
+      scenario 'I can create a course level', js: true do
         visit course_levels_path(course)
-        find_link(nil, href: new_course_level_path(course)).click
-        fill_in 'level_experience_points_threshold', with: 400
+        find('#add-level').click
+        find('#save-levels').click
+        # Causes the test to wait for the server response.
+        expect(page.find('#course-level')).to have_selector('span', text: 'Levels Saved')
 
-        expect { click_button I18n.t('helpers.submit.level.create') }.
-          to change { course.levels.count }.by(1)
+        # 4 visible levels and the default 0 level.
+        expect(course.reload.levels.count).to eq 5
       end
 
-      scenario 'I can delete a course level' do
+      scenario 'I can delete a course level', js: true do
         visit course_levels_path(course)
-        expect { find_link(nil, href: course_level_path(course, levels[0])).click }.
-          to change { course.levels.count }.by(-1)
+        find('#delete_2').click
+        find('#save-levels').click
+        expect(page.find('#course-level')).to have_selector('span', text: 'Levels Saved')
+
+        # Level 2 with threshold 200 has been deleted.
+        expect(course.reload.levels.map(&:experience_points_threshold)).not_to include(200)
       end
     end
 

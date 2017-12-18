@@ -6,32 +6,13 @@ class Course::LevelsController < Course::ComponentController
   def index #:nodoc:
   end
 
-  def new #:nodoc:
-  end
-
   def create #:nodoc:
-    if @level.save
-      redirect_to course_levels_path(current_course),
-                  success: t('.success', threshold: @level.experience_points_threshold)
-    else
-      render 'new'
+    respond_to do |format|
+      if current_course.mass_update_levels(params[:levels])
+        format.json { render json: current_course.levels, status: :created }
+      else
+        format.json { render json: current_course.errors, status: :unprocessable_entity }
+      end
     end
-  end
-
-  def destroy #:nodoc:
-    if @level.destroy
-      redirect_to course_levels_path(current_course),
-                  success: t('.success',
-                             threshold: @level.experience_points_threshold)
-    else
-      redirect_to course_levels_path(current_course),
-                  danger: t('.failure', error: @level.errors.full_messages.to_sentence)
-    end
-  end
-
-  private
-
-  def level_params #:nodoc:
-    params.require(:level).permit(:experience_points_threshold)
   end
 end
