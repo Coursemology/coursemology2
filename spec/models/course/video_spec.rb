@@ -23,6 +23,20 @@ RSpec.describe Course::Video, type: :model do
       end
     end
 
+    describe '.unwatched_by' do
+      let!(:video3) { create(:video, course: course) }
+      let!(:submission1) { create(:video_submission, video: video1, creator: student1.user) }
+      let!(:submission2) { create(:video_submission, video: video1, creator: student2.user) }
+      let!(:submission3) { create(:video_submission, video: video3, creator: student2.user) }
+
+      it 'returns only unwatched videos' do
+        video1
+        video2
+        expect(course.videos.unwatched_by(student1.user)).to contain_exactly(video2, video3)
+        expect(course.videos.unwatched_by(student2.user)).to contain_exactly(video2)
+      end
+    end
+
     describe '.with_submissions_by' do
       let(:submission1) { create(:video_submission, video: video1, creator: student1.user) }
       let(:submission2) { create(:video_submission, video: video1, creator: student2.user) }

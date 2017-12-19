@@ -22,6 +22,20 @@ RSpec.describe Course::LessonPlan::Item, type: :model do
       end
     end
 
+    describe 'published' do
+      let!(:other_lesson_plan_item) do
+        create(:course_lesson_plan_item, course: course, published: true)
+      end
+
+      subject do
+        lesson_plan_item
+        Course::LessonPlan::Item.published
+      end
+
+      it { is_expected.not_to include(lesson_plan_item) }
+      it { is_expected.to include(other_lesson_plan_item) }
+    end
+
     describe '#set_default_values' do
       subject do
         item = Course::LessonPlan::Item.new
