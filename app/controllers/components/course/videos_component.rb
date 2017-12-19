@@ -50,7 +50,7 @@ class Course::VideosComponent < SimpleDelegator
     Course::Video.
       from_course(current_course).
       unwatched_by(current_user).
-      select(&:published?).
+      published.
       count
   end
 end
