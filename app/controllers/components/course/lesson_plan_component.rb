@@ -11,6 +11,12 @@ class Course::LessonPlanComponent < SimpleDelegator
   end
 
   def sidebar_items
+    main_sidebar_items + settings_sidebar_items
+  end
+
+  private
+
+  def main_sidebar_items
     [
       {
         key: :lesson_plan,
@@ -18,6 +24,17 @@ class Course::LessonPlanComponent < SimpleDelegator
         title: I18n.t('course.lesson_plan.items.sidebar_title'),
         weight: 8,
         path: course_lesson_plan_path(current_course)
+      }
+    ]
+  end
+
+  def settings_sidebar_items
+    [
+      {
+        title: t('layouts.course_admin.lesson_plan.title'),
+        type: :settings,
+        weight: 9,
+        path: course_admin_lesson_plan_path(current_course)
       }
     ]
   end
