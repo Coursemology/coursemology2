@@ -160,9 +160,7 @@ class SingleFileInput extends React.Component {
 
   renderRequiredErrorMessage = () => {
     const { meta } = this.props;
-    const imageSrc = this.getImage();
-
-    return (meta && meta.touched && !imageSrc ? // eslint-disable-line react/prop-types
+    return (meta && meta.touched && !this.state.file ? // eslint-disable-line react/prop-types
       <div className="error-message" style={styles.fileLabelError}>
         <FormattedMessage {...translations.fileAttachmentRequired} />
       </div>
