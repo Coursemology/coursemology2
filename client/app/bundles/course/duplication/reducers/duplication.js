@@ -11,7 +11,8 @@ const initialState = {
   },
   targetCourseId: null,
   targetCourses: [],
-  duplicationMode: 'object',
+  duplicationMode: 'course',
+  currentItemSelectorPanel: null,
 
   currentHost: '',
   currentCourse: {
@@ -64,6 +65,9 @@ export default function (state = initialState, action) {
     }
     case actionTypes.SET_DUPLICATION_MODE: {
       return { ...state, duplicationMode: action.duplicationMode };
+    }
+    case actionTypes.SET_ITEM_SELECTOR_PANEL: {
+      return { ...state, currentItemSelectorPanel: action.panel };
     }
 
     case actionTypes.SHOW_DUPLICATE_ITEMS_CONFIRMATION: {

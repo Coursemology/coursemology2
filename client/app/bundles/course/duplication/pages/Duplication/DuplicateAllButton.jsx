@@ -10,7 +10,7 @@ import { formNames } from 'course/duplication/constants';
 const translations = defineMessages({
   duplicateCourse: {
     id: 'course.duplication.DuplicateAllButton.duplicateCourse',
-    defaultMessage: 'Duplicate Entire Course',
+    defaultMessage: 'Duplicate Course',
   },
   info: {
     id: 'course.duplication.DuplicateAllButton.info',

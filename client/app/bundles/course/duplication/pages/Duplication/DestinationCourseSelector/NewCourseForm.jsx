@@ -8,13 +8,13 @@ import formTranslations from 'lib/translations/form';
 import { formNames } from 'course/duplication/constants';
 
 const translations = defineMessages({
-  title: {
-    id: 'course.duplication.NewCourseForm.title',
-    defaultMessage: 'Title',
+  newTitle: {
+    id: 'course.duplication.NewCourseForm.newTitle',
+    defaultMessage: 'New Title',
   },
-  startAt: {
-    id: 'course.duplication.NewCourseForm.startAt',
-    defaultMessage: 'Start Date',
+  newStartAt: {
+    id: 'course.duplication.NewCourseForm.newStartAt',
+    defaultMessage: 'New Start Date',
   },
 });
 
@@ -48,13 +48,13 @@ class NewCourseForm extends React.Component {
         <Field
           fullWidth
           name="new_title"
-          floatingLabelText={intl.formatMessage(translations.title)}
+          floatingLabelText={intl.formatMessage(translations.newTitle)}
           component={TextField}
           {...{ disabled }}
         />
         <Field
           name="new_start_at"
-          floatingLabelText={intl.formatMessage(translations.startAt)}
+          floatingLabelText={intl.formatMessage(translations.newStartAt)}
           component={DateTimePicker}
           {...{ disabled }}
         />
