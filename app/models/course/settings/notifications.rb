@@ -32,7 +32,9 @@ class Course::Settings::Notifications
     all_settings = settings_interfaces_hash.values.map do |settings|
       settings.respond_to?(:email_settings) ? settings.email_settings : nil
     end
-    all_settings.compact.flatten.sort_by { |item| item[:component] }
+    all_settings.compact.flatten.sort_by do |item|
+      [item[:component], item[:component_title], item[:key]]
+    end
   end
 
   # Updates a single email setting. It delegates the updating to the appropriate settings model.
