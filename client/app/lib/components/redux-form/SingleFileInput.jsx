@@ -33,21 +33,23 @@ const styles = {
   badgeIconInactive: {
     backgroundColor: grey300,
   },
-  dropzoneStyle1: {
-    backgroundColor: grey300,
-    borderRadius: 5,
-    height: 200,
-    paddingTop: 15,
-    textAlign: 'center',
-    width: '100%',
-  },
-  dropzoneStyle2: {
-    backgroundColor: grey300,
-    borderRadius: 5,
-    paddingTop: 15,
-    paddingBottom: 15,
-    textAlign: 'center',
-    width: '100%',
+  dropzone: {
+    badge: {
+      backgroundColor: grey300,
+      borderRadius: 5,
+      height: 200,
+      paddingTop: 15,
+      textAlign: 'center',
+      width: '100%',
+    },
+    file: {
+      backgroundColor: grey300,
+      borderRadius: 5,
+      paddingTop: 15,
+      paddingBottom: 15,
+      textAlign: 'center',
+      width: '100%',
+    },
   },
   fileLabelError: {
     color: red500,
@@ -233,7 +235,7 @@ class SingleFileInput extends React.Component {
 
   render() {
     const { children, accept, isNotBadge } = this.props;
-    const dropzoneStyle = isNotBadge ? styles.dropzoneStyle2 : styles.dropzoneStyle1;
+    const dropzoneStyle = isNotBadge ? styles.dropzone.file : styles.dropzone.badge;
     return (
       <Dropzone
         multiple={false}
