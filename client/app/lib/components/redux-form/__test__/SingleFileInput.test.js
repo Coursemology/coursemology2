@@ -15,6 +15,10 @@ describe('<SingleFileInput />', () => {
           },
           onChange: jest.fn(),
         }}
+        meta={{
+          touched: false,
+          error: undefined,
+        }}
       />,
       {
         context: { intl, muiTheme }, // eslint-disable-line no-undef
@@ -38,6 +42,10 @@ describe('<SingleFileInput />', () => {
         input={{
           value: {},
           onChange: jest.fn(),
+        }}
+        meta={{
+          touched: false,
+          error: undefined,
         }}
       />,
       {
@@ -67,6 +75,10 @@ describe('<SingleFileInput />', () => {
           },
           onChange: jest.fn(),
         }}
+        meta={{
+          touched: false,
+          error: undefined,
+        }}
       />,
       {
         context: { intl, muiTheme }, // eslint-disable-line no-undef
@@ -90,6 +102,10 @@ describe('<SingleFileInput />', () => {
           value: {},
           onChange: jest.fn(),
         }}
+        meta={{
+          touched: false,
+          error: undefined,
+        }}
       />,
       {
         context: { intl, muiTheme }, // eslint-disable-line no-undef
@@ -111,7 +127,13 @@ describe('<SingleFileInput />', () => {
       <SingleFileInput
         isNotBadge
         required
-        meta={{ touched: true }}
+        meta={{
+          touched: true,
+          error: {
+            id: 'course.assessment.question.scribing.scribingQuestionForm.fileAttachmentRequired',
+            defaultMessage: 'File attachment required.',
+          },
+        }}
         input={{
           value: {},
           onChange: jest.fn(),

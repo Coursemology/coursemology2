@@ -41,6 +41,9 @@ const propTypes = {
 
 // Field level validations
 const validations = {
+  fileRequired: options => (
+    options && options.file ? undefined : translations.fileAttachmentRequired
+  ),
   required: value => (
     value ? undefined : translations.cannotBeBlankValidationError
   ),
@@ -231,7 +234,7 @@ class ScribingQuestionForm extends React.Component {
                     field="attachment"
                     label={this.props.intl.formatMessage(translations.chooseFileButton)}
                     isLoading={this.props.data.isLoading}
-                    required
+                    validate={validations.fileRequired}
                   />
                   <div className={styles.warningText}>
                     {this.props.intl.formatMessage(translations.scribingQuestionWarning)}

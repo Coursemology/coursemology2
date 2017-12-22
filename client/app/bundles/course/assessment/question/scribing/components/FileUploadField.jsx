@@ -15,11 +15,11 @@ const propTypes = {
   field: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   isLoading: PropTypes.bool,
-  required: PropTypes.bool,
+  validate: PropTypes.func,
 };
 
 const FileUploadField = (props) => {
-  const { field, label, isLoading, required } = props;
+  const { field, label, isLoading, validate } = props;
 
   return (
     <Field
@@ -30,7 +30,7 @@ const FileUploadField = (props) => {
       label={label}
       disabled={isLoading}
       accept="image/gif, image/png, image/jpeg, image/pjpeg, application/pdf"
-      required={required}
+      validate={validate}
     />
   );
 };

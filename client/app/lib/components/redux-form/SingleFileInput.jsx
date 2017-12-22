@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { fieldMetaPropTypes } from 'redux-form';
 import { defineMessages, FormattedMessage, intlShape } from 'react-intl';
 import Dropzone from 'react-dropzone';
 import Avatar from 'material-ui/Avatar';
@@ -70,15 +71,12 @@ const translations = defineMessages({
     id: 'components.reduxForm.singleFileInput.removeFile',
     defaultMessage: 'Remove File',
   },
-  fileAttachmentRequired: {
-    id: 'course.assessment.question.scribing.scribingQuestionForm.fileAttachmentRequired',
-    defaultMessage: 'File attachment required.',
-  },
 });
 
 /**
  * Creates a Single file input component for use with Redux Forms.
- * Available in two display modes: circular Avatar/Badge display and non-circular image display.
+ * Available in two display modes: circular Avatar/Badge display (default) and non-circular image display.
+ * To use non-circular image display, pass in the prop `isNotBadge` with boolean value `true`.
  *
  * Additional format of form props (see createComponent for base set):
  * {
@@ -92,7 +90,7 @@ const translations = defineMessages({
 // TODO: Use the input element as a controller component - https://reactjs.org/docs/forms.html
 class SingleFileInput extends React.Component {
   static propTypes = {
-    meta: PropTypes.object,
+    meta: PropTypes.shape(fieldMetaPropTypes),
     value: PropTypes.shape({
       url: PropTypes.string,
       name: PropTypes.string,
@@ -160,11 +158,11 @@ class SingleFileInput extends React.Component {
     return this.getIsChanged() ? this.state.file.name : name;
   }
 
-  renderRequiredErrorMessage = () => {
-    const { meta } = this.props;
-    return (meta && meta.touched && !this.state.file ? // eslint-disable-line react/prop-types
+  renderErrorMessage = () => {
+    const { meta: { touched, error } } = this.props;
+    return (touched && error ?
       <div className="error-message" style={styles.fileLabelError}>
-        <FormattedMessage {...translations.fileAttachmentRequired} />
+        <FormattedMessage {...error} />
       </div>
       : null);
   }
@@ -207,7 +205,7 @@ class SingleFileInput extends React.Component {
   }
 
   renderFile = () => {
-    const { isNotBadge, required } = this.props;
+    const { isNotBadge } = this.props;
     const isChanged = this.getIsChanged();
     const fileName = this.getFileName();
     const badgeStyle = isNotBadge ? {} : styles.badge;
@@ -228,7 +226,7 @@ class SingleFileInput extends React.Component {
         <div>
           <FormattedMessage {...translations.dropzone} />
         </div>
-        { required ? this.renderRequiredErrorMessage() : null }
+        { this.renderErrorMessage() }
       </div>
     );
   }

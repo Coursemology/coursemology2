@@ -80,4 +80,8 @@ export default defineMessages({
     with every question taking on the same question details. \
     You can choose to leave the optional inputs blank and return to edit the questions again after creation.',
   },
+  fileAttachmentRequired: {
+    id: 'course.assessment.question.scribing.scribingQuestionForm.fileAttachmentRequired',
+    defaultMessage: 'File attachment required.',
+  },
 });
