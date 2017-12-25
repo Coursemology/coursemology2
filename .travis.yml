@@ -40,7 +40,6 @@ before_install:
   - npm list -g yarn --depth=0 || npm install -g yarn
   - yarn --version
   - docker --version
-  - gem update bundler
   - cd client && yarn install --production && cd -
 
 before_script:
