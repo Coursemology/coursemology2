@@ -30,6 +30,14 @@ FactoryBot.define do
       answer_text "hello world\nsecond line"
     end
 
+    trait :comprehension_lifted_word do
+      answer_text '<p>my answer contains lifting from text passage</p>'
+    end
+
+    trait :comprehension_keyword do
+      answer_text '<p>my answer contains keyword</p>'
+    end
+
     trait :no_match do
       # use default text, nothing to do
     end

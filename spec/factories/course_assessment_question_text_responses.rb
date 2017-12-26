@@ -13,7 +13,7 @@ FactoryBot.define do
       ]
     end
 
-    trait :multiple do
+    trait :multiple_keywords do
       solutions do
         [
           build(:course_assessment_question_text_response_solution, :exact_match, question: nil),
