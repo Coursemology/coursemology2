@@ -3,6 +3,7 @@ require 'rails_helper'
 
 RSpec.describe Course::Assessment::Question::TextResponse, type: :model do
   it { is_expected.to act_as(Course::Assessment::Question) }
+
   it 'has many solutions' do
     expect(subject).to have_many(:solutions).
       class_name(Course::Assessment::Question::TextResponseSolution.name).
@@ -10,12 +11,28 @@ RSpec.describe Course::Assessment::Question::TextResponse, type: :model do
   end
   it { is_expected.to accept_nested_attributes_for(:solutions) }
 
+  it 'has many groups' do
+    expect(subject).to have_many(:groups).
+      class_name(Course::Assessment::Question::TextResponseComprehensionGroup.name).
+      dependent(:destroy)
+  end
+  it { is_expected.to accept_nested_attributes_for(:groups) }
+
   let(:instance) { Instance.default }
   with_tenant(:instance) do
     describe '#auto_gradable?' do
-      subject { create(:course_assessment_question_text_response) }
-      it 'returns true' do
-        expect(subject.auto_gradable?).to be(true)
+      context 'text response question' do
+        subject { create(:course_assessment_question_text_response) }
+        it 'returns true' do
+          expect(subject.auto_gradable?).to be(true)
+        end
+      end
+
+      context 'comprehension question' do
+        subject { create(:course_assessment_question_text_response, :comprehension_question) }
+        it 'returns true' do
+          expect(subject.auto_gradable?).to be(true)
+        end
       end
     end
 
@@ -58,16 +75,18 @@ RSpec.describe Course::Assessment::Question::TextResponse, type: :model do
     end
 
     describe 'validations' do
-      subject { create(:course_assessment_question_text_response, maximum_grade: 10) }
+      context 'text response question' do
+        subject { create(:course_assessment_question_text_response, maximum_grade: 10) }
 
-      it 'validates that solution grade does not exceed maximum grade ' do
-        subject.solutions.first.grade = 20
+        it 'validates that solution grade does not exceed maximum grade ' do
+          subject.solutions.first.grade = 20
 
-        expect(subject.valid?).to be(false)
-        expect(subject.errors[:maximum_grade]).to include(
-          I18n.t('activerecord.errors.models.course/assessment/question/text_response.attributes'\
-            '.maximum_grade.invalid_grade')
-        )
+          expect(subject.valid?).to be(false)
+          expect(subject.errors[:maximum_grade]).to include(
+            I18n.t('activerecord.errors.models.course/assessment/question/text_response.attributes'\
+              '.maximum_grade.invalid_grade')
+          )
+        end
       end
     end
   end
