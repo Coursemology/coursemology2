@@ -18,8 +18,8 @@ FactoryBot.define do
 
     event_type 'pause'
     sequence_num 1
-    video_time_initial 20
-    video_time_final nil
+    video_time 20
     event_time Time.zone.now
+    playback_rate 1.0
   end
 end

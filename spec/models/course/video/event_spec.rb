@@ -9,8 +9,7 @@ RSpec.describe Course::Video::Event, type: :model do
     describe 'validations' do
       context 'when video time is negative' do
         subject do
-          build(:video_event,
-                video_time_initial: -1)
+          build(:video_event, video_time: -1)
         end
 
         it 'is not valid' do
