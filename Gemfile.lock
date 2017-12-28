@@ -181,6 +181,8 @@ GEM
     docker-api (1.34.0)
       excon (>= 0.47.0)
       multi_json
+    domain_name (0.5.20170404)
+      unf (>= 0.0.5, < 1.0.0)
     easy_translate (0.5.0)
       json
       thread
@@ -223,6 +225,8 @@ GEM
       html-pipeline (>= 1.11)
       rouge (>= 2.0.0, < 3)
     htmlentities (4.3.4)
+    http-cookie (1.0.3)
+      domain_name (~> 0.5)
     http_accept_language (2.1.1)
     i18n (0.9.1)
       concurrent-ruby (~> 1.0)
@@ -307,6 +311,7 @@ GEM
     multi_json (1.12.2)
     multi_xml (0.6.0)
     multipart-post (2.0.0)
+    netrc (0.11.0)
     nio4r (2.1.0)
     nokogiri (1.8.1)
       mini_portile2 (~> 2.3.0)
@@ -368,6 +373,11 @@ GEM
       rails (>= 3.2.0)
     rails-html-sanitizer (1.0.3)
       loofah (~> 2.0)
+    rails_real_favicon (0.0.7)
+      json (>= 1.7, < 3)
+      rails (>= 3.1)
+      rest-client (~> 2.0)
+      rubyzip (~> 1)
     rails_utils (4.0.0)
       rails (>= 3.2)
     railties (5.1.4)
@@ -390,6 +400,10 @@ GEM
     responders (2.4.0)
       actionpack (>= 4.2.0, < 5.3)
       railties (>= 4.2.0, < 5.3)
+    rest-client (2.0.2)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 4.0)
+      netrc (~> 0.8)
     rinku (2.0.4)
     rouge (2.2.1)
     rspec (3.7.0)
@@ -512,6 +526,9 @@ GEM
       thread_safe (~> 0.1)
     uglifier (4.0.2)
       execjs (>= 0.3.0, < 3)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.4)
     unicode-display_width (1.3.0)
     uniform_notifier (1.10.0)
     unread (0.9.1)
@@ -601,6 +618,7 @@ DEPENDENCIES
   rails (~> 5.1.0)
   rails-controller-testing
   rails-flog
+  rails_real_favicon
   rails_utils (>= 3.3.3)
   record_tag_helper
   rinku
@@ -637,6 +655,5 @@ DEPENDENCIES
   workflow
   yard
 
-
 BUNDLED WITH
-   1.15.4
+   1.16.0

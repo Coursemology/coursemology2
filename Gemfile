@@ -103,6 +103,9 @@ group :development do
   # bundle exec yardoc generates the API under doc/.
   # Use yard stats --list-undoc to find what needs documenting.
   gem 'yard', group: :doc
+
+  # Gem to generate favicon
+  gem 'rails_real_favicon'
 end
 
 group :test do
