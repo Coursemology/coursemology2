@@ -122,3 +122,20 @@ export function updateRestrictedTime(restrictContentAfter) {
     restrictContentAfter,
   };
 }
+
+/**
+ * Creates an action to denote that the user has started seeking.
+ *
+ * @return {{type: videoActionTypes}}
+ */
+export function seekStart() {
+  return { type: videoActionTypes.SEEK_START };
+}
+
+/**
+ * Creates an action to denote that the user has released the seek.
+ * @return {{type: videoActionTypes}}
+ */
+export function seekEnd() {
+  return { type: videoActionTypes.SEEK_END };
+}

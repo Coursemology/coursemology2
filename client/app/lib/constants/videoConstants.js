@@ -39,6 +39,8 @@ export const videoActionTypes = mirrorCreator([
   'UPDATE_BUFFER_PROGRESS',
   'UPDATE_PLAYER_DURATION',
   'UPDATE_RESTRICTED_TIME',
+  'SEEK_START',
+  'SEEK_END',
 ]);
 
 export const discussionActionTypes = mirrorCreator([
