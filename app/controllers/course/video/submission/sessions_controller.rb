@@ -4,7 +4,8 @@ class Course::Video::Submission::SessionsController < Course::Video::Submission:
 
   def update
     # We received a message from client, so time is updated regardless of how event records turn out
-    @session.update_attributes!(session_end: Time.zone.now)
+    @session.update_attributes!(session_end: Time.zone.now,
+                                last_video_time: session_params[:last_video_time])
     @session.merge_in_events!(session_params[:events])
   rescue ArgumentError => _
     head :bad_request
@@ -15,7 +16,8 @@ class Course::Video::Submission::SessionsController < Course::Video::Submission:
   private
 
   def session_params
-    params.require(:session).permit(events: [[:sequence_num, :event_type, :video_time_initial,
-                                              :video_time_final, :event_time]])
+    params.require(:session).permit(:last_video_time,
+                                    events: [[:sequence_num, :event_type, :video_time,
+                                              :playback_rate, :event_time]])
   end
 end

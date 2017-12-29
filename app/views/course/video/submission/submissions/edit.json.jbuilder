@@ -1,5 +1,6 @@
 json.video do
   json.videoUrl @video.url
+  json.sessionId @session.try(:id)
 end
 
 json.discussion do

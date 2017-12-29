@@ -23,6 +23,7 @@ class Course::Video::Submission::SubmissionsController < Course::Video::Submissi
     @topics = @topics.reject { |topic| topic.posts.empty? }
     @posts = @topics.map(&:posts).inject(Course::Discussion::Post.none, :+)
     @scroll_topic_id = scroll_topic_params
+    create_session
   end
 
   private
@@ -37,5 +38,11 @@ class Course::Video::Submission::SubmissionsController < Course::Video::Submissi
 
   def authorize_video!
     authorize!(:attempt, @video)
+  end
+
+  def create_session
+    return unless current_course_user.student? && @submission.course_user == current_course_user
+    time_now = Time.zone.now
+    @session = @submission.sessions.create!(session_start: time_now, session_end: time_now)
   end
 end
