@@ -59,6 +59,10 @@ export const discussionActionTypes = mirrorCreator([
   'REFRESH_ALL',
 ]);
 
+export const sessionActionTypes = mirrorCreator([
+  'REMOVE_EVENTS',
+]);
+
 export const notificationActionTypes = mirrorCreator([
   'SET_NOTIFICATION',
 ]);

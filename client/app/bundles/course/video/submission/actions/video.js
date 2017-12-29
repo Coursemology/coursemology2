@@ -1,4 +1,5 @@
-import { videoActionTypes } from 'lib/constants/videoConstants';
+import { sessionActionTypes, videoActionTypes } from 'lib/constants/videoConstants';
+import CourseAPI from '../../../../../api/course/index';
 
 /**
  * Creates action to change the playing state of the video player.
@@ -138,4 +139,41 @@ export function seekStart() {
  */
 export function seekEnd() {
   return { type: videoActionTypes.SEEK_END };
+}
+
+/**
+ * Creates an action to remove events from the state store.
+ * @param sequenceNums The event sequence numbers to remove
+ * @return {{type: videoActionTypes, sequenceNums: Set<number>}}
+ */
+function removeEvents(sequenceNums) {
+  return { type: sessionActionTypes.REMOVE_EVENTS, sequenceNums };
+}
+
+/**
+ * Sends current events to the server.
+ *
+ * Events will be removed from the state store if the API call is successful.
+ * @return {function(*, *)}
+ */
+export function sendEvents() {
+  return (dispatch, getState) => {
+    const videoState = getState().video;
+    const sessionId = videoState.sessionId;
+
+    if (sessionId === null) {
+      return;
+    }
+
+    const events = videoState.sessionEvents;
+    const videoTime = Math.round(videoState.playerProgress);
+
+    CourseAPI.video.sessions
+      .update(sessionId, videoTime, events.toArray())
+      .then(() => {
+        if (!events.isEmpty()) {
+          dispatch(removeEvents(events.map(event => event.sequence_num).toSet()));
+        }
+      });
+  };
 }

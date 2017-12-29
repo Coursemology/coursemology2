@@ -1,5 +1,5 @@
 import { List as makeImmutableList } from 'immutable';
-import { playerStates, videoActionTypes, videoDefaults } from 'lib/constants/videoConstants';
+import { playerStates, sessionActionTypes, videoActionTypes, videoDefaults } from 'lib/constants/videoConstants';
 import { isPlayingState, timeIsPastRestricted } from 'lib/helpers/videoHelpers';
 
 export const initialState = {
@@ -201,6 +201,10 @@ function videoSessionReducer(state = initialState, action) {
       return Object.assign({}, state, {
         sessionSequenceNum: state.sessionSequenceNum + 1,
         sessionEvents: events.push(generateEvent(state, 'seek_end')),
+      });
+    case sessionActionTypes.REMOVE_EVENTS:
+      return Object.assign({}, state, {
+        sessionEvents: events.filterNot(event => action.sequenceNums.has(event.sequence_num)),
       });
     default:
       return state;
