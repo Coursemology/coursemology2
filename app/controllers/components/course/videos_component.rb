@@ -27,7 +27,8 @@ class Course::VideosComponent < SimpleDelegator
         icon: 'video-camera',
         title: settings.title || t('course.video.videos.sidebar_title'),
         weight: 4,
-        path: course_videos_path(current_course)
+        path: course_videos_path(current_course),
+        unread: unread_count
       }
     ]
   end
@@ -41,5 +42,15 @@ class Course::VideosComponent < SimpleDelegator
         path: course_admin_videos_path(current_course)
       }
     ]
+  end
+
+  def unread_count
+    return 0 if current_course_user.staff?
+
+    Course::Video.
+      from_course(current_course).
+      unwatched_by(current_user).
+      published.
+      count
   end
 end

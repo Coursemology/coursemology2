@@ -21,6 +21,12 @@ class Course::LessonPlan::Item < ApplicationRecord
     order(:start_at, :title)
   end)
 
+  # @!method self.published
+  #   Returns only the lesson plan items that are published.
+  scope :published, (lambda do
+    where(published: true)
+  end)
+
   # @!method self.with_actable_types
   #   Scopes the lesson plan items to those which belong to the given actable_types
   #
