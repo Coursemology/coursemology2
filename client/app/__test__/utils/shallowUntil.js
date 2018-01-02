@@ -1,24 +1,24 @@
 import { shallow } from 'enzyme';
 
 // See https://github.com/airbnb/enzyme/issues/539 and the `until` helper was borrowed from there.
-function until(selector, context = this.context) {
-  if (!selector || this.isEmptyRender() || typeof this.instance().type === 'string')
+function until(selector, options) {
+  let context = options && options.context;
+  if (!selector || this.isEmptyRender() || typeof this.getElement().type === 'string') {
     return this;
+  }
 
-  const instance = this.instance();
+  const instance = this.getElement();
   if (instance.getChildContext) {
     context = {
       ...context,
       ...instance.getChildContext(),
-    }
+    };
   }
 
   return this.is(selector)
-    ? this.shallow({context})
-    : until.call(this.shallow({context}), selector, {context})
+    ? this.shallow({ context })
+    : until.call(this.shallow({ context }), selector, { context });
 }
-
-
 
 /**
  * Shallow renders the component until the component matches the selector.
@@ -37,5 +37,5 @@ export default function shallowUntil(component, options, selector) {
     selector = options;
     options = undefined;
   }
-  return until.call(shallow(component, options), selector);
+  return until.call(shallow(component, options), selector, options);
 }

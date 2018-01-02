@@ -92,7 +92,7 @@ class DateTimePicker extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const dateTime = nextProps.value;
-    this.state = DateTimePicker.displayState(dateTime);
+    this.setState(DateTimePicker.displayState(dateTime));
   }
 
   updateDateTime = (newDateTime) => {
