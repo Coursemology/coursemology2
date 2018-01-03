@@ -1,0 +1,62 @@
+/*
+  Used by rails_real_favicon gem to generate favicon.
+
+  Config file is generated from https://realfavicongenerator.net/
+*/
+{
+  "master_picture": "app/assets/images/favicon.svg",
+  "favicon_design": {
+    "ios": {
+      "picture_aspect": "background_and_margin",
+      "background_color": "#ffffff",
+      "margin": "14%",
+      "assets": {
+        "ios6_and_prior_icons": false,
+        "ios7_and_later_icons": false,
+        "precomposed_icons": false,
+        "declare_only_default_icon": true
+      }
+    },
+    "desktop_browser": [
+
+    ],
+    "windows": {
+      "picture_aspect": "no_change",
+      "background_color": "#ffc40d",
+      "on_conflict": "override",
+      "assets": {
+        "windows_80_ie_10_tile": false,
+        "windows_10_ie_11_edge_tiles": {
+          "small": false,
+          "medium": true,
+          "big": false,
+          "rectangle": false
+        }
+      }
+    },
+    "android_chrome": {
+      "picture_aspect": "no_change",
+      "theme_color": "#ffffff",
+      "manifest": {
+        "name": "Coursemology",
+        "display": "standalone",
+        "orientation": "not_set",
+        "on_conflict": "override",
+        "declared": true
+      },
+      "assets": {
+        "legacy_icon": false,
+        "low_resolution_icons": false
+      }
+    },
+    "safari_pinned_tab": {
+      "picture_aspect": "black_and_white",
+      "threshold": 50,
+      "theme_color": "#5bbad5"
+    }
+  },
+  "settings": {
+    "scaling_algorithm": "Mitchell",
+    "error_on_image_too_small": false
+  }
+}
