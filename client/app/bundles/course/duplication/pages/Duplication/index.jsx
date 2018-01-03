@@ -102,11 +102,13 @@ class Duplication extends React.Component {
         <TextField
           disabled
           fullWidth
+          name="title"
           value={currentCourse.title}
           floatingLabelText={intl.formatMessage(translations.title)}
         />
         <DateTimePicker
           disabled
+          name="start_at"
           value={currentCourse.start_at}
           floatingLabelText={intl.formatMessage(translations.startAt)}
         />
