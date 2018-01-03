@@ -5,7 +5,7 @@ import { formatTimestamp } from 'lib/helpers/videoHelpers';
 import 'rc-slider/assets/index.css';
 
 import styles from '../VideoPlayer.scss';
-import { updatePlayerProgress } from '../../actions/video';
+import { seekEnd, seekStart, updatePlayerProgress } from '../../actions/video';
 
 const unbufferedColour = '#e9e9e9';
 const bufferedColour = '#afe9ff';
@@ -32,6 +32,8 @@ const propTypes = {
   playerProgress: PropTypes.number,
   bufferProgress: PropTypes.number,
   onDragged: PropTypes.func,
+  onDragBegin: PropTypes.func,
+  onDragStop: PropTypes.func,
 };
 
 const defaultProps = {
@@ -64,6 +66,8 @@ class VideoPlayerSlider extends React.Component {
           railStyle={generateRailStyle(this.props.bufferProgress, this.props.duration)}
           tipFormatter={formatTimestamp}
           onChange={this.props.onDragged}
+          onBeforeChange={this.props.onDragBegin}
+          onAfterChange={this.props.onDragStop}
         />
       </span>
     );
@@ -83,7 +87,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    onDragBegin: () => dispatch(seekStart()),
     onDragged: newValue => dispatch(updatePlayerProgress(newValue, true)),
+    onDragStop: () => dispatch(seekEnd()),
   };
 }
 

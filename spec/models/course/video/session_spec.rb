@@ -38,9 +38,8 @@ RSpec.describe Course::Video::Session do
         let!(:time) { Time.zone.now }
         before do
           subject.merge_in_events!([{ sequence_num: 1,
-                                      video_time_initial: 2345,
-                                      video_time_final: 10,
-                                      event_type: 'seek',
+                                      video_time: 2345,
+                                      event_type: 'seek_start',
                                       event_time: time.midnight }])
         end
 
@@ -49,9 +48,8 @@ RSpec.describe Course::Video::Session do
           expect(subject.events.where(sequence_num: 1).count).to eq(1)
 
           old_event = subject.events.find_by(sequence_num: 1)
-          expect(old_event.video_time_initial).to eq(2345)
-          expect(old_event.video_time_final).to eq(10)
-          expect(old_event.event_type).to eq('seek')
+          expect(old_event.video_time).to eq(2345)
+          expect(old_event.event_type).to eq('seek_start')
           expect(old_event.event_time).to eq(time.midnight)
         end
       end
@@ -60,9 +58,8 @@ RSpec.describe Course::Video::Session do
         let!(:time) { Time.zone.now }
         before do
           subject.merge_in_events!([{ sequence_num: 100,
-                                      video_time_initial: 2345,
-                                      video_time_final: 10,
-                                      event_type: 'seek',
+                                      video_time: 2345,
+                                      event_type: 'seek_end',
                                       event_time: time.midnight }])
         end
 
@@ -71,9 +68,8 @@ RSpec.describe Course::Video::Session do
           expect(subject.events.exists?(sequence_num: 100)).to be_truthy
 
           new_event = subject.events.find_by(sequence_num: 100)
-          expect(new_event.video_time_initial).to eq(2345)
-          expect(new_event.video_time_final).to eq(10)
-          expect(new_event.event_type).to eq('seek')
+          expect(new_event.video_time).to eq(2345)
+          expect(new_event.event_type).to eq('seek_end')
           expect(new_event.event_time).to eq(time.midnight)
         end
       end

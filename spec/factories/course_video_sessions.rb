@@ -18,6 +18,8 @@ FactoryBot.define do
     session_start Time.zone.now - 5.minutes
     session_end Time.zone.now + 5.minutes
 
+    last_video_time 0
+
     trait :with_events do
       after(:build) do |session|
         session.events = (1..5).map { |n| build(:video_event, sequence_num: n) }

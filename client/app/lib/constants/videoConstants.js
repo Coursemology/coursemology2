@@ -39,6 +39,8 @@ export const videoActionTypes = mirrorCreator([
   'UPDATE_BUFFER_PROGRESS',
   'UPDATE_PLAYER_DURATION',
   'UPDATE_RESTRICTED_TIME',
+  'SEEK_START',
+  'SEEK_END',
 ]);
 
 export const discussionActionTypes = mirrorCreator([
@@ -55,6 +57,10 @@ export const discussionActionTypes = mirrorCreator([
   'CHANGE_AUTO_SCROLL',
   'UNSET_SCROLL_TOPIC',
   'REFRESH_ALL',
+]);
+
+export const sessionActionTypes = mirrorCreator([
+  'REMOVE_EVENTS',
 ]);
 
 export const notificationActionTypes = mirrorCreator([

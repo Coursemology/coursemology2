@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171212151525) do
+ActiveRecord::Schema.define(version: 20171221155021) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -772,6 +772,7 @@ ActiveRecord::Schema.define(version: 20171212151525) do
     t.integer  "submission_id", :null=>false, :index=>{:name=>"index_course_video_sessions_on_submission_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_video_sessions_on_submission_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.datetime "session_start", :null=>false
     t.datetime "session_end",   :null=>false
+    t.integer  "last_video_time"
     t.datetime "created_at",    :null=>false
     t.datetime "updated_at",    :null=>false
     t.integer  "creator_id",    :null=>false, :index=>{:name=>"index_course_video_sessions_on_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_video_sessions_on_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
@@ -782,8 +783,8 @@ ActiveRecord::Schema.define(version: 20171212151525) do
     t.integer  "session_id",         :null=>false, :index=>{:name=>"index_course_video_sessions_on_session_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_video_sessions_on_session_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer  "event_type",         :null=>false
     t.integer  "sequence_num",       :null=>false
-    t.integer  "video_time_initial", :null=>false
-    t.integer  "video_time_final"
+    t.integer  "video_time",         :null=>false
+    t.float    "playback_rate"
     t.datetime "event_time",         :null=>false
     t.datetime "created_at",         :null=>false
     t.datetime "updated_at",         :null=>false

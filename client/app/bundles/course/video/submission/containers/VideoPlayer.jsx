@@ -6,7 +6,7 @@ import { playerStates, videoDefaults, youtubeOpts } from 'lib/constants/videoCon
 import { isPlayingState } from 'lib/helpers/videoHelpers';
 
 import styles from './VideoPlayer.scss';
-import { changePlayerState, updatePlayerDuration, updateProgressAndBuffer } from '../actions/video';
+import { changePlayerState, sendEvents, updatePlayerDuration, updateProgressAndBuffer } from '../actions/video';
 import {
   PlayBackRateSelector,
   PlayButton,
@@ -15,6 +15,8 @@ import {
   VolumeButton,
   VolumeSlider,
 } from './VideoControls';
+
+const tickMilliseconds = 1000;
 
 const reactPlayerStyle = {
   position: 'absolute',
@@ -35,6 +37,7 @@ const propTypes = {
   onPlayerProgress: PropTypes.func,
   onDurationReceived: PropTypes.func,
   onPlayerStateChanged: PropTypes.func,
+  onTick: PropTypes.func,
 };
 
 const defaultProps = {
@@ -62,9 +65,22 @@ class VideoPlayer extends React.Component {
     });
   }
 
+  componentDidMount() {
+    if (this.props.onTick) {
+      this.timer = setInterval(this.props.onTick, tickMilliseconds);
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.forceSeek) {
       this.player.seekTo(nextProps.playerProgress);
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.timer) {
+      this.clearInterval(this.timer);
+      this.props.onTick(); // Will not be null as long as timer exists.
     }
   }
 
@@ -142,7 +158,15 @@ function mapDispatchToProps(dispatch) {
     onPlayerProgress: (progress, buffered) => dispatch(updateProgressAndBuffer(progress, buffered)),
     onDurationReceived: duration => dispatch(updatePlayerDuration(duration)),
     onPlayerStateChanged: newState => dispatch(changePlayerState(newState)),
+    onTick: () => dispatch(sendEvents()),
   };
 }
 
-export default connect(state => state.video, mapDispatchToProps)(VideoPlayer);
+function mergeProps(stateProps, dispatchProps) {
+  if (stateProps.sessionId === null) {
+    return Object.assign({}, stateProps, dispatchProps, { onTick: null });
+  }
+  return Object.assign({}, stateProps, dispatchProps);
+}
+
+export default connect(state => state.video, mapDispatchToProps, mergeProps)(VideoPlayer);
