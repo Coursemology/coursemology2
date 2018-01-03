@@ -6,4 +6,10 @@ class Course::LessonPlan::Event < ApplicationRecord
     copy_attributes(other, duplicator)
     self.course = duplicator.options[:target_course]
   end
+
+  # Used by the with_actable_types scope in Course::LessonPlan::Item.
+  # Edit this to remove items for display.
+  scope :ids_showable_in_lesson_plan, (lambda do |_|
+    joining { lesson_plan_item }.selecting { lesson_plan_item.id }
+  end)
 end

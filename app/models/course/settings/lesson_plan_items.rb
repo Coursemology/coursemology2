@@ -12,11 +12,7 @@
 # Lesson Plan Item settings are stored with the individual course components as all such items
 # e.g. Surveys and Videos, act as lesson plan items.
 #
-class Course::Settings::LessonPlanItems
-  def initialize(components)
-    @components = components
-  end
-
+class Course::Settings::LessonPlanItems < Course::Settings::PanComponent
   # Consolidates lesson plan item settings from each course component.
   # Each setting item should be a hash in the format similar to the this example:
   # The setting item hash format might have to change when other components need item settings.
@@ -33,10 +29,7 @@ class Course::Settings::LessonPlanItems
   #
   # @return [Array<Hash>] Array of setting items
   def lesson_plan_item_settings
-    all_settings = settings_interfaces_hash.values.map do |settings|
-      settings.respond_to?(:lesson_plan_item_settings) ? settings.lesson_plan_item_settings : nil
-    end
-    all_settings.compact.flatten.sort_by { |item| item[:component] }
+    consolidate_settings_from_components(:lesson_plan_item_settings)
   end
 
   # Updates a single lesson plan item setting.
@@ -54,20 +47,30 @@ class Course::Settings::LessonPlanItems
   # @param [Hash] attributes
   # @return [Boolean] true if updating succeeds, false otherwise
   def update(attributes)
-    settings_interface = settings_interfaces_hash[attributes['component']]
-    return false unless settings_interface
-    settings_interface.update_lesson_plan_item_setting(attributes)
+    update_setting_in_component(:update_lesson_plan_item_setting, attributes)
+  end
+
+  # Gets a hash of actable type names for lesson plan items of enabled components mapped to data
+  # that will be passed to actable's model scope for further processing.
+  #
+  # @return [Hash{String} => Array or nil] Hash of actable_type names.
+  def actable_hash
+    lesson_plan_item_actable_names.map do |component_name|
+      if component_name == Course::Assessment.name
+        [Course::Assessment.name, disabled_tab_ids_for_lesson_plan]
+      else
+        [component_name, nil]
+      end
+    end.to_h
   end
 
   private
 
-  # Maps component keys to component setting model instances.
-  #
-  # @return [Hash{String => Object}]
-  def settings_interfaces_hash
-    @settings_interfaces_hash ||= @components.map do |component|
-      settings = component.settings
-      settings && [component.key.to_s, settings]
-    end.compact.to_h
+  def lesson_plan_item_actable_names
+    @components.map(&:class).map(&:lesson_plan_item_actable_names).flatten
+  end
+
+  def disabled_tab_ids_for_lesson_plan
+    settings_interfaces_hash['course_assessments_component'].disabled_tab_ids_for_lesson_plan
   end
 end

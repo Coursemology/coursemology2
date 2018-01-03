@@ -86,6 +86,16 @@ class Course::Assessment < ApplicationRecord
     end
   end)
 
+  # Used by the with_actable_types scope in Course::LessonPlan::Item.
+  # Edit this to remove items for showing in the lesson plan.
+  #
+  # Here, actable_data contains the list of tab IDs to be removed.
+  scope :ids_showable_in_lesson_plan, (lambda do |actable_data|
+    joining { lesson_plan_item }.
+      where.not(tab_id: actable_data).
+      selecting { lesson_plan_item.id }
+  end)
+
   def self.use_relative_model_naming?
     true
   end

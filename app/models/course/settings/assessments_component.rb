@@ -27,16 +27,10 @@ class Course::Settings::AssessmentsComponent < Course::Settings::Component
     def valid_email_setting_key?(key)
       category_email_setting_items.key?(key)
     end
-
-    # Each item here is 1 tab under the category
-    def category_lesson_plan_item_settings(category)
-      category.tabs.map { |tab| [tab, { enabled_by_default: true }] }.to_h
-    end
   end
 
   delegate :category_email_setting_items, to: :class
   delegate :valid_email_setting_key?, to: :class
-  delegate :category_lesson_plan_item_settings, to: :class
 
   # Generates a list of concrete email settings meant for use on the notifications settings page.
   # See {Course::Settings::Notifications#email_settings} for details.
@@ -65,10 +59,14 @@ class Course::Settings::AssessmentsComponent < Course::Settings::Component
     true
   end
 
+  # Generates a list of concrete lesson plan item settings for use on the lesson plan settings page.
+  # Currently returns settings for assessment tabs.
+  #
+  # @return [Array<Hash>]
   def lesson_plan_item_settings
     current_course.assessment_categories.map do |category|
-      category_lesson_plan_item_settings(category).map do |tab, defaults|
-        lesson_plan_item_setting_hash(key, category, tab, defaults[:enabled_by_default])
+      category.tabs.map do |tab|
+        lesson_plan_item_setting_hash(key, tab.category, tab)
       end
     end
   end
@@ -78,6 +76,19 @@ class Course::Settings::AssessmentsComponent < Course::Settings::Component
     settings.settings(:lesson_plan_items, "tab_#{tab_id}").enabled = ActiveRecord::Type::Boolean.new.
                                                                      cast(attributes['enabled'])
     true
+  end
+
+  def disabled_tab_ids_for_lesson_plan
+    disabled_tab_keys = []
+    lesson_plan_item_keys = settings.lesson_plan_items
+
+    if lesson_plan_item_keys
+      disabled_tab_keys = lesson_plan_item_keys.keys.reject do |tab|
+        settings.settings(:lesson_plan_items, tab).enabled
+      end
+    end
+
+    disabled_tab_keys.map { |tab_key| tab_key[4..-1] }
   end
 
   private
@@ -115,15 +126,14 @@ class Course::Settings::AssessmentsComponent < Course::Settings::Component
   # @param [Symbol] component_key
   # @param [Course::Assessment::Category] category
   # @param [Course::Assessment::Tab] tab
-  # @param [Boolean] enabled_by_default
-  def lesson_plan_item_setting_hash(component_key, category, tab, enabled_by_default)
+  def lesson_plan_item_setting_hash(component_key, category, tab)
     setting = settings.settings(:lesson_plan_items, "tab_#{tab.id}").enabled
     {
       component: component_key,
       category_title: category.title,
       tab_title: tab.title,
       options: { category_id: category.id, tab_id: tab.id },
-      enabled: setting.nil? ? enabled_by_default : setting
+      enabled: setting.nil? ? true : setting
     }
   end
 end

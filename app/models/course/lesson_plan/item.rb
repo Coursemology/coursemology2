@@ -28,11 +28,19 @@ class Course::LessonPlan::Item < ApplicationRecord
   end)
 
   # @!method self.with_actable_types
-  #   Scopes the lesson plan items to those which belong to the given actable_types
+  #   Scopes the lesson plan items to those which belong to the given actable_types.
+  #   Each actable type is further scoped to return the IDs of items for display.
+  #   actable_data is provided to help the actable types figure out what should be displayed.
   #
   # @param actable_types [Array<String>] Array of strings with the actable type names.
-  scope :with_actable_types, lambda { |actable_types|
-    where(actable_type: actable_types)
+  # @param settings [SettingsOnRails::Settings] Course settings object.
+  scope :with_actable_types, lambda { |actable_hash|
+    where(
+      actable_hash.map do |actable_type, actable_data|
+        "course_lesson_plan_items.id IN (#{actable_type.constantize.
+        ids_showable_in_lesson_plan(actable_data).to_sql})"
+      end.join(' OR ')
+    )
   }
 
   belongs_to :course, inverse_of: :lesson_plan_items

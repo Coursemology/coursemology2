@@ -14,6 +14,12 @@ class Course::Survey < ApplicationRecord
   has_many :sections, inverse_of: :survey, dependent: :destroy
   has_many :questions, through: :sections
 
+  # Used by the with_actable_types scope in Course::LessonPlan::Item.
+  # Edit this to remove items for display.
+  scope :ids_showable_in_lesson_plan, (lambda do |_|
+    joining { lesson_plan_item }.selecting { lesson_plan_item.id }
+  end)
+
   def can_user_start?(_user)
     allow_response_after_end || end_at.nil? || Time.zone.now < end_at
   end

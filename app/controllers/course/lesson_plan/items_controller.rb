@@ -2,6 +2,7 @@
 class Course::LessonPlan::ItemsController < Course::LessonPlan::Controller
   # This can only be done with Bullet once Rails supports polymorphic +inverse_of+.
   prepend_around_action :without_bullet, only: [:index]
+  before_action :load_item_settings
 
   load_and_authorize_resource :item,
                               through: :course,
@@ -10,7 +11,8 @@ class Course::LessonPlan::ItemsController < Course::LessonPlan::Controller
                               parent: false
 
   def index
-    @items = @items.with_actable_types(enabled_lesson_plan_item_actable_type_names)
+    @items = @items.with_actable_types(@item_settings.actable_hash)
+
     respond_to do |format|
       format.html
       format.json { render_json_response }
@@ -67,10 +69,8 @@ class Course::LessonPlan::ItemsController < Course::LessonPlan::Controller
     tab.category.tabs.size > 1 ? [category_name, tab.title] : [category_name]
   end
 
-  # Gets the array of actable type names for lesson plan items of enabled components.
-  #
-  # @return [Array<String>] Array of actable_type names.
-  def enabled_lesson_plan_item_actable_type_names
-    current_component_host.enabled_components.map(&:lesson_plan_item_actable_names).flatten
+  # Load settings for the LessonPlan::Items
+  def load_item_settings
+    @item_settings ||= Course::Settings::LessonPlanItems.new(current_component_host.components)
   end
 end
