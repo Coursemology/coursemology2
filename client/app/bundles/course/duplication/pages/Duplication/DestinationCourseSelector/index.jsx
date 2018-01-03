@@ -6,6 +6,7 @@ import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 import moment, { shortDateTime } from 'lib/moment';
 import { setTargetCourseId, duplicateCourse } from 'course/duplication/actions';
+import { duplicationModes } from 'course/duplication/constants';
 import TypeBadge from 'course/duplication/components/TypeBadge';
 import { courseShape, currentCourseShape } from 'course/duplication/propTypes';
 import NewCourseForm from './NewCourseForm';
@@ -112,7 +113,7 @@ class DestinationCourseSelector extends React.Component {
     return (
       <div>
         {
-          duplicationMode === 'course' ?
+          duplicationMode === duplicationModes.COURSE ?
           this.renderNewCourseForm() :
           this.renderExistingCourseForm()
         }

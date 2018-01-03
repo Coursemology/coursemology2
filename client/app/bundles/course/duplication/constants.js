@@ -1,5 +1,10 @@
 import mirrorCreator from 'mirror-creator';
 
+export const duplicationModes = mirrorCreator([
+  'OBJECT',
+  'COURSE',
+]);
+
 export const duplicableItemTypes = mirrorCreator([
   'ASSESSMENT',
   'TAB',

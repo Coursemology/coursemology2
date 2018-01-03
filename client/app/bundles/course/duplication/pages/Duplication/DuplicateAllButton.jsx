@@ -5,7 +5,7 @@ import { submit, isValid } from 'redux-form';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import RaisedButton from 'material-ui/RaisedButton';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import { formNames } from 'course/duplication/constants';
+import { formNames, duplicationModes } from 'course/duplication/constants';
 
 const translations = defineMessages({
   duplicateCourse: {
@@ -41,7 +41,7 @@ class DuplicateAllButton extends React.Component {
   render() {
     const { dispatch, duplicationMode, newCourseFormValid, isDuplicating } = this.props;
 
-    if (duplicationMode !== 'course') { return null; }
+    if (duplicationMode !== duplicationModes.COURSE) { return null; }
 
     return (
       <div>
