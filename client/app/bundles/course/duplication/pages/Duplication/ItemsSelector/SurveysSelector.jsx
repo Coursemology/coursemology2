@@ -10,6 +10,7 @@ import { setItemSelectedBoolean } from 'course/duplication/actions';
 import { surveyShape } from 'course/duplication/propTypes';
 import TypeBadge from 'course/duplication/components/TypeBadge';
 import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
+import BulkSelectors from 'course/duplication/components/BulkSelectors';
 
 const translations = defineMessages({
   noItems: {
@@ -24,6 +25,14 @@ class SurveysSelector extends React.Component {
     selectedItems: PropTypes.shape({}),
 
     dispatch: PropTypes.func.isRequired,
+  }
+
+  setAllSurveysSelection = (value) => {
+    const { dispatch, surveys } = this.props;
+
+    surveys.forEach((survey) => {
+      dispatch(setItemSelectedBoolean(duplicableItemTypes.SURVEY, survey.id, value));
+    });
   }
 
   renderRow(survey) {
@@ -48,6 +57,30 @@ class SurveysSelector extends React.Component {
     );
   }
 
+  renderBody() {
+    const { surveys } = this.props;
+
+    if (surveys.length < 1) {
+      return (
+        <Subheader>
+          <FormattedMessage {...translations.noItems} />
+        </Subheader>
+      );
+    }
+
+    return (
+      <div>
+        {
+          surveys.length > 1 ? <BulkSelectors
+            callback={this.setAllSurveysSelection}
+            styles={{ selectLink: { marginLeft: 0 } }}
+          /> : null
+        }
+        { surveys.map(survey => this.renderRow(survey)) }
+      </div>
+    );
+  }
+
   render() {
     const { surveys } = this.props;
     if (!surveys) { return null; }
@@ -55,13 +88,7 @@ class SurveysSelector extends React.Component {
     return (
       <div>
         <h2><FormattedMessage {...defaultComponentTitles.course_survey_component} /></h2>
-        {
-          surveys.length > 0 ?
-          surveys.map(survey => this.renderRow(survey)) :
-          <Subheader>
-            <FormattedMessage {...translations.noItems} />
-          </Subheader>
-        }
+        { this.renderBody() }
       </div>
     );
   }
