@@ -57,6 +57,30 @@ class VideosSelector extends React.Component {
     );
   }
 
+  renderBody() {
+    const { videos } = this.props;
+
+    if (videos.length < 1) {
+      return (
+        <Subheader>
+          <FormattedMessage {...translations.noItems} />
+        </Subheader>
+      );
+    }
+
+    return (
+      <div>
+        {
+          videos.length > 1 ? <BulkSelectors
+            callback={this.setAllVideoSelection}
+            styles={{ selectLink: { marginLeft: 0 } }}
+          /> : null
+        }
+        { videos.map(video => this.renderRow(video)) }
+      </div>
+    );
+  }
+
   render() {
     const { videos } = this.props;
     if (!videos) { return null; }
@@ -64,17 +88,7 @@ class VideosSelector extends React.Component {
     return (
       <div>
         <h2><FormattedMessage {...defaultComponentTitles.course_videos_component} /></h2>
-        <BulkSelectors
-          callback={this.setAllVideoSelection}
-          styles={{ selectLink: { marginLeft: 0 } }}
-        />
-        {
-          videos.length > 0 ?
-          videos.map(video => this.renderRow(video)) :
-          <Subheader>
-            <FormattedMessage {...translations.noItems} />
-          </Subheader>
-        }
+        { this.renderBody() }
       </div>
     );
   }
