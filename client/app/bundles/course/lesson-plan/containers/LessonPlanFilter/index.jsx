@@ -54,6 +54,7 @@ class LessonPlanFilter extends React.Component {
     return (
       <div>
         <RaisedButton
+          secondary
           onClick={this.handleTouchTap}
           label={<FormattedMessage {...translations.filter} />}
           labelPosition="before"

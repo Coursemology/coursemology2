@@ -97,6 +97,7 @@ class LessonPlanNav extends React.Component {
       <div>
         { this.renderScrollSpies() }
         <RaisedButton
+          secondary
           onClick={this.handleTouchTap}
           label={this.state.text}
           labelPosition="before"
