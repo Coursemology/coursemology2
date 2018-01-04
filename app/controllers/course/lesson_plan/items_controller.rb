@@ -11,8 +11,6 @@ class Course::LessonPlan::ItemsController < Course::LessonPlan::Controller
                               parent: false
 
   def index
-    @items = @items.with_actable_types(@item_settings.actable_hash)
-
     respond_to do |format|
       format.html
       format.json { render_json_response }
@@ -34,7 +32,8 @@ class Course::LessonPlan::ItemsController < Course::LessonPlan::Controller
   end
 
   def render_json_response
-    @items = @items.order(start_at: :asc).includes(:actable).to_a.
+    @items = @items.with_actable_types(@item_settings.actable_hash).
+             order(start_at: :asc).includes(:actable).to_a.
              select { |item| can?(:show, item.actable) }
 
     @milestones = current_course.lesson_plan_milestones.order(start_at: :asc)
