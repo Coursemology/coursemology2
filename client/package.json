@@ -36,6 +36,7 @@
       "jsx",
       "json"
     ],
+    "setupFiles": [ "<rootDir>/app/__test__/requestAnimationFrame.js"],
     "setupTestFrameworkScriptFile": "<rootDir>/app/__test__/setup.js",
     "snapshotSerializers": [
       "<rootDir>/node_modules/enzyme-to-json/serializer"
