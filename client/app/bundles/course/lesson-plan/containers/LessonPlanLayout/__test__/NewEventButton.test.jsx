@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { mount, ReactWrapper } from 'enzyme';
+import { mount } from 'enzyme';
 import ReactTestUtils from 'react-dom/test-utils';
 import CourseAPI from 'api/course';
 import storeCreator from 'course/lesson-plan/store';
@@ -27,8 +27,8 @@ describe('<NewEventButton />', () => {
       start_at: new Date('2016-12-31T16:00:00.000Z'),
     };
     const startAt = '01-01-2017';
-    const dialogInline = eventFormDialog.find('RenderToLayer').first().instance().layerElement;
-    const eventForm = new ReactWrapper(dialogInline, true).find('form');
+    const dialogInline = eventFormDialog.find('RenderToLayer').first().instance();
+    const eventForm = mount(dialogInline.props.render(), contextOptions).find('form');
     const titleInput = eventForm.find('input[name="title"]');
     titleInput.simulate('change', { target: { value: eventData.title } });
     const eventTypeInput = eventForm.find('input[name="event_type"]');

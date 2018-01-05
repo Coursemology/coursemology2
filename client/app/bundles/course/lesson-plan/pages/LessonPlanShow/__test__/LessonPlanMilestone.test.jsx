@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { mount, ReactWrapper } from 'enzyme';
+import { mount } from 'enzyme';
 import ReactTestUtils from 'react-dom/test-utils';
 import CourseAPI from 'api/course';
 import DeleteConfirmation from 'lib/containers/DeleteConfirmation';
@@ -53,8 +53,8 @@ describe('<LessonPlanMilestone />', () => {
     const iconButton = lessonPlanMilestone.find('button').first();
     iconButton.simulate('click');
 
-    const menuCardNode = lessonPlanMilestone.find('RenderToLayer').first().instance().layerElement;
-    const deleteButton = new ReactWrapper(menuCardNode, true).find('EnhancedButton').at(1);
+    const menuCardNode = lessonPlanMilestone.find('RenderToLayer').first().instance();
+    const deleteButton = mount(menuCardNode.props.render(), contextOptions).find('EnhancedButton').at(1);
     deleteButton.simulate('click');
 
     const confirmDeleteButton =
@@ -84,18 +84,18 @@ describe('<LessonPlanMilestone />', () => {
     const iconButton = lessonPlanMilestone.find('button').first();
     iconButton.simulate('click');
 
-    const menuCardNode = lessonPlanMilestone.find('RenderToLayer').first().instance().layerElement;
-    const updateButton = new ReactWrapper(menuCardNode, true).find('EnhancedButton').first();
+    const menuCardNode = lessonPlanMilestone.find('RenderToLayer').first().instance();
+    const updateButton = mount(menuCardNode.props.render(), contextOptions).find('EnhancedButton').first();
     updateButton.simulate('click');
 
-    const dialogInline = milestoneFormDialog.find('RenderToLayer').first().instance().layerElement;
-    const milestoneForm = new ReactWrapper(dialogInline, true).find('form');
+    const dialogInline = milestoneFormDialog.find('RenderToLayer').first().instance();
+    const milestoneForm = mount(dialogInline.props.render(), contextOptions).find('form');
     const description = 'Add nice description';
     const descriptionInput = milestoneForm.find('textarea[name="description"]');
     descriptionInput.simulate('change', { target: { value: description } });
 
-    const submitButton = milestoneFormDialog.find('FormDialogue').first();
-    submitButton.simulate('click');
+    const submitButton = milestoneFormDialog.find('FormDialogue').first().instance().submitButton;
+    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton));
 
     const expectedPayload = {
       lesson_plan_milestone: {

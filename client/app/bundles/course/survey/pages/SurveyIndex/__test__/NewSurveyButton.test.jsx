@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { mount, ReactWrapper } from 'enzyme';
+import { mount } from 'enzyme';
 import ReactTestUtils from 'react-dom/test-utils';
 import CourseAPI from 'api/course';
 import storeCreator from 'course/survey/store';
@@ -32,8 +32,8 @@ describe('<NewSurveyButton />', () => {
     };
 
     const startAt = '01-01-2017';
-    const dialogInline = surveyFormDialogue.find('RenderToLayer').first().instance().layerElement;
-    const surveyForm = new ReactWrapper(dialogInline, true).find('form');
+    const dialogInline = surveyFormDialogue.find('RenderToLayer').first().instance();
+    const surveyForm = mount(dialogInline.props.render(), contextOptions).find('form');
     const titleInput = surveyForm.find('input[name="title"]');
     titleInput.simulate('change', { target: { value: survey.title } });
     const startAtDateInput = surveyForm.find('input[name="start_at"]').first();

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { mount, ReactWrapper } from 'enzyme';
+import { mount } from 'enzyme';
 import ReactTestUtils from 'react-dom/test-utils';
 import CourseAPI from 'api/course';
 import storeCreator from 'course/survey/store';
@@ -26,8 +26,8 @@ describe('<EditSectionButton />', () => {
     editSectionButton.find('button').simulate('click');
 
     const newDescription = 'Added later';
-    const dialogInline = sectionFormDialogue.find('RenderToLayer').first().instance().layerElement;
-    const sectionForm = new ReactWrapper(dialogInline, true).find('form');
+    const dialogInline = sectionFormDialogue.find('RenderToLayer').first().instance();
+    const sectionForm = mount(dialogInline.props.render(), contextOptions).find('form');
     const descriptionInput = sectionForm.find('textarea[name="description"]');
     descriptionInput.simulate('change', { target: { value: newDescription } });
 

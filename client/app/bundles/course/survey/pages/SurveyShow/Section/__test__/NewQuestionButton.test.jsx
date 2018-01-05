@@ -1,5 +1,6 @@
 import React from 'react';
-import { mount, ReactWrapper } from 'enzyme';
+import ReactTestUtils from 'react-dom/test-utils';
+import { mount } from 'enzyme';
 import CourseAPI from 'api/course';
 import storeCreator from 'course/survey/store';
 import QuestionFormDialogue from 'course/survey/containers/QuestionFormDialogue';
@@ -22,16 +23,16 @@ describe('<NewQuestionButton />', () => {
     // Fill section form with title
     const questionText = 'Question: Is it true?';
     const optionText = 'Yes';
-    const dialogInline = questionFormDialogue.find('RenderToLayer').first().instance().layerElement;
-    const questionForm = new ReactWrapper(dialogInline, true).find('form');
+    const dialogInline = questionFormDialogue.find('RenderToLayer').first().instance();
+    const questionForm = mount(dialogInline.props.render(), contextOptions).find('form');
     const descriptionInput = questionForm.find('textarea[name="description"]');
     descriptionInput.simulate('change', { target: { value: questionText } });
     const optionInput = questionForm.find('QuestionFormOption').first().find('textarea').last();
     optionInput.simulate('change', { target: { value: optionText } });
 
     // Submit question form
-    const submitButton = questionFormDialogue.find('FormDialogue').first();
-    submitButton.simulate('click');
+    const submitButton = questionFormDialogue.find('FormDialogue').first().instance().submitButton;
+    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton));
 
     expect(spyCreate).toHaveBeenCalled();
     const formData = spyCreate.mock.calls[0][0];
