@@ -7,11 +7,15 @@ const translations = defineMessages({
   },
   enabled: {
     id: 'course.admin.LessonPlanItemSettings.enabled',
-    defaultMessage: 'Display?',
+    defaultMessage: 'Show on Lesson Plan',
   },
   lessonPlanItemSettings: {
     id: 'course.admin.lessonPlanSettings.lessonPlanItemSettings',
     defaultMessage: 'Lesson Plan Item Settings',
+  },
+  visible: {
+    id: 'course.admin.LessonPlanItemSettings.visible',
+    defaultMessage: 'Visible by Default',
   },
   updateSuccess: {
     id: 'course.admin.LessonPlanItemSettings.updateSuccess',

@@ -42,7 +42,20 @@ class Course::LessonPlan::ItemsController < Course::LessonPlan::Controller
     @folder_loader = Course::Material::PreloadService.new(current_course)
 
     assessment_tabs_titles_hash
+    assessment_tabs_visibility_hash
     render 'index'
+  end
+
+  # Returns a hash that maps the array in `assessment_tabs_titles_hash` to its
+  # visiblity setting.
+  # Both the lesson_plan_item_settings and the assessment_tabs_titles_hash contain 1 entry
+  # for each assessment tab in the course.
+  #
+  # @return [Hash{Array<String> => Boolean]
+  def assessment_tabs_visibility_hash
+    @assessment_tabs_visibility_hash = @item_settings.lesson_plan_item_settings.map do |setting|
+      [assessment_tabs_titles_hash[setting[:options][:tab_id]], setting[:visible]]
+    end.to_h
   end
 
   # Returns a hash that maps tab ids to an array containing:

@@ -16,16 +16,32 @@ class LessonPlanItemSettings extends React.Component {
       category_title: PropTypes.string,
       tab_title: PropTypes.string,
       enabled: PropTypes.bool,
+      visible: PropTypes.bool,
       options: PropTypes.shape({}),
     })),
     dispatch: PropTypes.func.isRequired,
   };
 
-  handleLessonPlanItemSettingUpdate = (setting) => {
+  // Ensure both enabled and visible values are sent in the payload.
+  // Send the current value for visible when changing enabled.
+  handleLessonPlanItemEnabledUpdate = (setting) => {
     const { dispatch } = this.props;
     const { component, tab_title, options } = setting;
     return (_, enabled) => {
-      const payload = { component, tab_title, enabled, options };
+      const payload = { component, tab_title, enabled, visible: setting.visible, options };
+      const successMessage = <FormattedMessage {...translations.updateSuccess} values={{ setting: tab_title }} />;
+      const failureMessage = <FormattedMessage {...translations.updateFailure} values={{ setting: tab_title }} />;
+      dispatch(updateLessonPlanItemSetting(payload, successMessage, failureMessage));
+    };
+  }
+
+  // Ensure both enabled and visible values are sent in the payload
+  // Send the current value for enabled when changing visible.
+  handleLessonPlanItemVisibleUpdate = (setting) => {
+    const { dispatch } = this.props;
+    const { component, tab_title, options } = setting;
+    return (_, visible) => {
+      const payload = { component, tab_title, visible, enabled: setting.enabled, options };
       const successMessage = <FormattedMessage {...translations.updateSuccess} values={{ setting: tab_title }} />;
       const failureMessage = <FormattedMessage {...translations.updateFailure} values={{ setting: tab_title }} />;
       dispatch(updateLessonPlanItemSetting(payload, successMessage, failureMessage));
@@ -47,7 +63,13 @@ class LessonPlanItemSettings extends React.Component {
         <TableRowColumn>
           <Toggle
             toggled={setting.enabled}
-            onToggle={this.handleLessonPlanItemSettingUpdate(setting)}
+            onToggle={this.handleLessonPlanItemEnabledUpdate(setting)}
+          />
+        </TableRowColumn>
+        <TableRowColumn>
+          <Toggle
+            toggled={setting.visible}
+            onToggle={this.handleLessonPlanItemVisibleUpdate(setting)}
           />
         </TableRowColumn>
       </TableRow>
@@ -76,6 +98,9 @@ class LessonPlanItemSettings extends React.Component {
             </TableHeaderColumn>
             <TableHeaderColumn>
               <FormattedMessage {...translations.enabled} />
+            </TableHeaderColumn>
+            <TableHeaderColumn>
+              <FormattedMessage {...translations.visible} />
             </TableHeaderColumn>
           </TableRow>
         </TableHeader>
