@@ -11,6 +11,7 @@ import TitleBar from 'lib/components/TitleBar';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import DateTimePicker from 'lib/components/form/DateTimePicker';
 import { fetchObjectsList, setDuplicationMode } from 'course/duplication/actions';
+import { duplicationModes } from 'course/duplication/constants';
 
 import ItemsSelector from './ItemsSelector';
 import DuplicateAllButton from './DuplicateAllButton';
@@ -102,11 +103,13 @@ class Duplication extends React.Component {
         <TextField
           disabled
           fullWidth
+          name="title"
           value={currentCourse.title}
           floatingLabelText={intl.formatMessage(translations.title)}
         />
         <DateTimePicker
           disabled
+          name="start_at"
           value={currentCourse.start_at}
           floatingLabelText={intl.formatMessage(translations.startAt)}
         />
@@ -127,11 +130,11 @@ class Duplication extends React.Component {
           onChange={(_, mode) => dispatch(setDuplicationMode(mode))}
         >
           <RadioButton
-            value="course"
+            value={duplicationModes.COURSE}
             label={<FormattedMessage {...translations.newCourse} />}
           />
           <RadioButton
-            value="object"
+            value={duplicationModes.OBJECT}
             label={<FormattedMessage {...translations.existingCourse} />}
           />
         </RadioButtonGroup>
@@ -142,7 +145,7 @@ class Duplication extends React.Component {
   renderItemsSelectorSidebar() {
     const { duplicationMode, isCourseSelected } = this.props;
 
-    if (duplicationMode === 'course') {
+    if (duplicationMode === duplicationModes.COURSE) {
       return <div style={styles.sidebar}><DuplicateAllButton /></div>;
     }
     if (isCourseSelected) {
@@ -180,7 +183,7 @@ class Duplication extends React.Component {
 
         { this.renderItemsSelectorSidebar() }
         {
-          duplicationMode === 'object' && isCourseSelected ?
+          duplicationMode === duplicationModes.OBJECT && isCourseSelected ?
             <Paper style={styles.mainPanel}>
               <ItemsSelector />
             </Paper> : <div />

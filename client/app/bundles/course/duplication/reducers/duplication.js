@@ -1,4 +1,4 @@
-import actionTypes, { duplicableItemTypes } from 'course/duplication/constants';
+import actionTypes, { duplicableItemTypes, duplicationModes } from 'course/duplication/constants';
 import { nestFolders } from 'course/duplication/utils';
 
 const initialState = {
@@ -11,7 +11,7 @@ const initialState = {
   },
   targetCourseId: null,
   targetCourses: [],
-  duplicationMode: 'course',
+  duplicationMode: duplicationModes.COURSE,
   currentItemSelectorPanel: null,
 
   currentHost: '',

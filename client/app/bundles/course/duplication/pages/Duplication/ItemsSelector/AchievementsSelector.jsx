@@ -11,6 +11,7 @@ import { setItemSelectedBoolean } from 'course/duplication/actions';
 import { achievementShape } from 'course/duplication/propTypes';
 import TypeBadge from 'course/duplication/components/TypeBadge';
 import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
+import BulkSelectors from 'course/duplication/components/BulkSelectors';
 
 const translations = defineMessages({
   noItems: {
@@ -40,6 +41,14 @@ class AchievementsSelector extends React.Component {
     dispatch: PropTypes.func.isRequired,
   }
 
+  setAllAchievementsSelection = (value) => {
+    const { dispatch, achievements } = this.props;
+
+    achievements.forEach((achievement) => {
+      dispatch(setItemSelectedBoolean(duplicableItemTypes.ACHIEVEMENT, achievement.id, value));
+    });
+  }
+
   renderRow(achievement) {
     const { dispatch, selectedItems } = this.props;
     const checked = !!selectedItems[duplicableItemTypes.ACHIEVEMENT][achievement.id];
@@ -67,6 +76,31 @@ class AchievementsSelector extends React.Component {
     );
   }
 
+  renderBody() {
+    const { achievements } = this.props;
+
+    if (achievements.length < 1) {
+      return (
+        <Subheader>
+          <FormattedMessage {...translations.noItems} />
+        </Subheader>
+      );
+    }
+
+    return (
+      <div>
+        {
+          achievements.length > 1 ? <BulkSelectors
+            callback={this.setAllAchievementsSelection}
+            styles={{ selectLink: { marginLeft: 0 } }}
+          /> : null
+        }
+        { achievements.map(achievement => this.renderRow(achievement)) }
+      </div>
+    );
+  }
+
+
   render() {
     const { achievements } = this.props;
     if (!achievements) { return null; }
@@ -74,13 +108,7 @@ class AchievementsSelector extends React.Component {
     return (
       <div>
         <h2><FormattedMessage {...defaultComponentTitles.course_achievements_component} /></h2>
-        {
-          achievements.length > 0 ?
-          achievements.map(achievement => this.renderRow(achievement)) :
-          <Subheader>
-            <FormattedMessage {...translations.noItems} />
-          </Subheader>
-        }
+        { this.renderBody() }
       </div>
     );
   }
