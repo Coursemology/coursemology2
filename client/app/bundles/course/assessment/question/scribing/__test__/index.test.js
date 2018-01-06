@@ -20,9 +20,11 @@ const scribingId = '3';
 
 const mockFields = {
   question_scribing: {
-    title: 'Scribing Exercise',
+    description: '',
     maximum_grade: 10,
     skill_ids: [],
+    staff_only_comments: '',
+    title: 'Scribing Exercise',
   },
 };
 

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { mount } from 'enzyme';
 import SingleFileInput from '../SingleFileInput';
 
-
 describe('<SingleFileInput />', () => {
   it('renders with url and name when provided in badge/avatar style', () => {
     const singleFileInput = mount(
@@ -30,7 +29,6 @@ describe('<SingleFileInput />', () => {
     );
 
     const avatar = singleFileInput.find('Avatar').first();
-
     expect(singleFileInput.find('.file-name').text().includes('bar')).toBeTruthy();
     expect(avatar.prop('src')).toEqual('foo');
     expect(avatar.prop('icon')).toBeUndefined();

@@ -107,10 +107,10 @@ describe('<ResponseForm />', () => {
       textResponseAnswer = responseAnswers.at(0);
       multipleChoiceAnswer = responseAnswers.at(1);
       multipleResponseAnswer = responseAnswers.at(2);
-    }
+    };
     updateResponse();
 
-    const lastMRQOptionCheckbox = multipleResponseAnswer.find('OptionsListItem').last().find('Checkbox');
+    let lastMRQOptionCheckbox = multipleResponseAnswer.find('OptionsListItem').last().find('Checkbox');
     lastMRQOptionCheckbox.props().onCheck(null, true);
 
     const submitButton = responseForm.find('button').last();
@@ -155,6 +155,7 @@ describe('<ResponseForm />', () => {
     textResponse.simulate('change', { target: { value: newAnswer } });
     const firstMCQOptionRadio = multipleChoiceAnswer.find('OptionsListItem').first().find('RadioButton');
     firstMCQOptionRadio.props().onCheck(null, firstMCQOptionRadio.props().value);
+    lastMRQOptionCheckbox = multipleResponseAnswer.find('OptionsListItem').last().find('Checkbox');
     lastMRQOptionCheckbox.props().onCheck(null, false);
 
     submitButton.simulate('click');
