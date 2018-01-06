@@ -202,7 +202,7 @@ describe('Scribing question', () => {
 
     await sleep(1);
     newPage.update();
-    newPage.find('[type="submit"]').first().simulate('click');
+    newPage.find('button').first().simulate('submit');
 
     await sleep(1);
     expect(spyCreate).toHaveBeenCalled();
@@ -211,7 +211,7 @@ describe('Scribing question', () => {
   it('allows question to be updated', async () => {
     Object.defineProperty(window.location, 'pathname', {
       writable: true,
-      value: `/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}`,
+      value: `/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}/edit`,
     });
 
     const spyUpdate = jest.spyOn(CourseAPI.question.scribing.scribings, 'update');
@@ -223,16 +223,16 @@ describe('Scribing question', () => {
       <ProviderWrapper store={store}>
         <MemoryRouter
           initialEntries={[`/courses/${courseId}/assessments/${assessmentId}
-                            /question/scribing/${scribingId}`]}
+                            /question/scribing/${scribingId}/edit`]}
         >
-          <ScribingQuestion initialValues={mockFields} />
+          <ScribingQuestion />
         </MemoryRouter>
       </ProviderWrapper>
     );
 
     await sleep(1);
     fetchPage.update();
-    fetchPage.find('[type="submit"]').first().simulate('click');
+    fetchPage.find('button').first().simulate('submit');
 
     await sleep(1);
     expect(spyUpdate).toHaveBeenCalledWith(scribingId, mockUpdatedFields);
