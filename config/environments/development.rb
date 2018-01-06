@@ -7,8 +7,7 @@ Rails.application.configure do
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
 
-  # TODO: The active job behaves weirdly and failed to resolve certain constants if the eager load is not enabled.
-  config.eager_load = true
+  config.eager_load = false
 
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
