@@ -6,6 +6,7 @@ RSpec.describe Course::Settings::AssessmentsComponent do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:category) { course.assessment_categories.first }
+    let(:tab) { category.tabs.first }
     let(:settings) do
       context = OpenStruct.new(current_course: course, key: Course::AssessmentsComponent.key)
       Course::Settings::AssessmentsComponent.new(context)
@@ -64,6 +65,22 @@ RSpec.describe Course::Settings::AssessmentsComponent do
           to eq(Course::Settings::AssessmentsComponent.category_email_setting_items.length)
         expect(subject.last.keys).
           to contain_exactly(:component, :component_title, :enabled, :key, :options)
+      end
+    end
+
+    describe '#update_lesson_plan_item_settings' do
+      let(:payload) do
+        { 'enabled' => false, 'options' => { 'tab_id' => tab.id } }
+      end
+      subject { settings.update_lesson_plan_item_setting(payload) && course.save! }
+
+      it 'persists the setting' do
+        subject
+        tab_enabled_setting = settings.lesson_plan_item_settings.flatten.select do |setting|
+          setting[:options][:tab_id] == tab.id
+        end.first
+
+        expect(tab_enabled_setting[:enabled]).to eq(payload['enabled'])
       end
     end
   end
