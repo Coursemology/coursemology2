@@ -45,7 +45,7 @@ class Course::VideosComponent < SimpleDelegator
   end
 
   def unread_count
-    return 0 if current_course_user.staff?
+    return 0 unless current_course_user&.student?
 
     Course::Video.
       from_course(current_course).
