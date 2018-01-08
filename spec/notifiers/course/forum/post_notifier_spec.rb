@@ -7,8 +7,8 @@ RSpec.describe Course::Forum::PostNotifier, type: :notifier do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:forum) { create(:forum, course: course) }
-    let!(:topic) { create(:forum_topic, forum: forum) }
-    let(:post) { create(:course_discussion_post, topic: topic.acting_as) }
+    let!(:topic) { create(:forum_topic, forum: forum, course: course) }
+    let(:post) { create(:course_discussion_post, topic: topic.acting_as, creator: user) }
     let!(:user) do
       user = create(:course_user, course: course).user
       topic.subscriptions.create(user: user)

@@ -99,6 +99,10 @@ class CourseUser < ApplicationRecord
     where.has { course.instance_id == instance.id }
   end)
 
+  scope :for_user, (lambda do |user|
+    where.has { user_id == user.id }
+  end)
+
   # Test whether the current scope includes the current user.
   #
   # @param [User] user The user to check
