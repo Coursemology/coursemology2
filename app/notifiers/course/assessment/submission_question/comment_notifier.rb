@@ -17,7 +17,7 @@ class Course::Assessment::SubmissionQuestion::CommentNotifier < Notifier::Base
     Course::Settings::AssessmentsComponent.email_enabled?(category, :new_comment)
   end
 
-  # Create an email for a users based on a given user notification record.
+  # Create an email for a user based on a given user notification record.
   # Overrides email_user in Notifier::Base to pass a custom layout for this notifier.
   #
   # @param [UserNotification] notification The notification which is used to generate the email

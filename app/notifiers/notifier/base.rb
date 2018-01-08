@@ -60,7 +60,7 @@ class Notifier::Base
     end
   end
 
-  # Create an email for a users based on a given user notification record
+  # Create an email for a user based on a given user notification record
   #
   # @param [UserNotification] notification The notification which is used to generate the email
   def email_user(notification)
