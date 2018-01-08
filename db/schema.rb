@@ -780,7 +780,7 @@ ActiveRecord::Schema.define(version: 20171221155021) do
   end
 
   create_table "course_video_events", force: :cascade do |t|
-    t.integer  "session_id",         :null=>false, :index=>{:name=>"index_course_video_sessions_on_session_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_video_sessions_on_session_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer  "session_id",         :null=>false, :index=>{:name=>"index_course_video_events_on_session_id"}, :foreign_key=>{:references=>"course_video_sessions", :name=>"fk_course_video_events_on_session_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer  "event_type",         :null=>false
     t.integer  "sequence_num",       :null=>false
     t.integer  "video_time",         :null=>false
