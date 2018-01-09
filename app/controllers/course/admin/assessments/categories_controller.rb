@@ -19,7 +19,12 @@ class Course::Admin::Assessments::CategoriesController < Course::Admin::Controll
   end
 
   def destroy
+    tab_ids = @category.tabs.map(&:id)
     if @category.destroy
+      tab_ids.each do |tab_id|
+        Course::Settings::AssessmentsComponent.delete_lesson_plan_item_setting(current_course,
+                                                                               tab_id)
+      end
       redirect_to course_admin_assessments_path(current_course),
                   success: t('.success', title: @category.title)
     else

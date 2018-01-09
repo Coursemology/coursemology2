@@ -25,6 +25,8 @@ class Course::Admin::Assessments::TabsController < Course::Admin::Controller
 
   def destroy
     if @tab.destroy
+      Course::Settings::AssessmentsComponent.delete_lesson_plan_item_setting(current_course,
+                                                                             @tab.id)
       redirect_to course_admin_assessments_path(current_course),
                   success: t('.success', title: @tab.title)
     else

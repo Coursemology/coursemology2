@@ -27,6 +27,18 @@ class Course::Settings::AssessmentsComponent < Course::Settings::Component
     def valid_email_setting_key?(key)
       category_email_setting_items.key?(key)
     end
+
+    # Do not add this to a destroy callback in the Tab model as it will get invoked when
+    # the course is being destroyed and saving of the course here to save the settings
+    # will cause the course deletion to fail.
+    #
+    # @param [Course] current_course The current course, to get the settings object.
+    # @param [Integer] tab_id The tab ID of the lesson plan item setting to be cleared.
+    def delete_lesson_plan_item_setting(current_course, tab_id)
+      current_course.settings(Course::AssessmentsComponent.key, :lesson_plan_items).
+        send("tab_#{tab_id}=", nil)
+      current_course.save
+    end
   end
 
   delegate :category_email_setting_items, to: :class
