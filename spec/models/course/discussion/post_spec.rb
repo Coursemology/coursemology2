@@ -160,6 +160,25 @@ RSpec.describe Course::Discussion::Post, type: :model do
       end
     end
 
+    describe '#author_name' do
+      let(:user) { create(:user) }
+      let(:post) { create(:course_discussion_post, creator: user) }
+
+      context 'when the post creator is enrolled in the course' do
+        let!(:course_user) { create(:course_student, course: post.topic.course, user: user) }
+
+        it 'returns the CourseUser name' do
+          expect(post.author_name).to eq(course_user.name)
+        end
+      end
+
+      context 'when the post creator is not enrolled in the course' do
+        it 'returns the User name' do
+          expect(post.author_name).to eq(user.name)
+        end
+      end
+    end
+
     describe '.destroy' do
       let(:topic) { create(:course_discussion_topic) }
       let!(:parent_post) { create(:course_discussion_post, topic: topic) }
