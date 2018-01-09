@@ -5,6 +5,7 @@ module Course::DiscussionsAbilityComponent
   def define_permissions
     if user
       allow_course_users_show_topics
+      allow_course_users_mark_topics_as_read
       allow_staff_manage_discussion_topics
       allow_course_users_create_posts
       allow_course_users_reply_and_vote_posts
@@ -19,6 +20,10 @@ module Course::DiscussionsAbilityComponent
 
   def allow_course_users_show_topics
     can [:read, :pending], Course::Discussion::Topic, course_all_course_users_hash
+  end
+
+  def allow_course_users_mark_topics_as_read
+    can :mark_as_read, Course::Discussion::Topic, course_all_course_users_hash
   end
 
   def allow_staff_manage_discussion_topics

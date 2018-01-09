@@ -42,6 +42,11 @@ class Course::Discussion::TopicsController < Course::ComponentController
     head :bad_request unless success
   end
 
+  def mark_as_read
+    @topic.mark_as_read! for: current_user
+    redirect_back fallback_location: course_topics_path(current_course)
+  end
+
   private
 
   def all_topics

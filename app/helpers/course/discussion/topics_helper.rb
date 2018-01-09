@@ -62,4 +62,10 @@ module Course::Discussion::TopicsHelper
               method: :patch, remote: true
     end
   end
+
+  def link_to_mark_as_read(topic)
+    return unless topic.unread?(current_user)
+    link_to t('course.discussion.topics.mark_as_read'),
+            mark_as_read_course_topic_path(current_course, topic), method: :patch
+  end
 end

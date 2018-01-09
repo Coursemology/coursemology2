@@ -126,18 +126,24 @@ RSpec.feature 'Course: Topics: Management' do
         end
       end
 
-      scenario 'I can see my pending comments' do
+      scenario 'I can see my pending comments and mark as read' do
         other_comments = [
           staff_response_to_comment, staff_response_to_annotation, staff_response_to_video
         ].map(&:topic)
+        mark_as_read = other_comments.sample
 
         visit pending_course_topics_path(course)
 
         expect(page).to have_selector('.nav.nav-tabs')
 
-        other_comments.each do |comment|
-          expect(page).to have_content_tag_for(comment)
+        other_comments.each { |comment| expect(page).to have_content_tag_for(comment) }
+
+        within find(content_tag_selector(mark_as_read)) do
+          click_link I18n.t('course.discussion.topics.mark_as_read')
         end
+
+        expect(page).not_to have_content_tag_for(mark_as_read)
+        expect(mark_as_read.unread?(user)).to be_falsey
       end
 
       scenario 'I can reply to and delete a comment topic', js: true do

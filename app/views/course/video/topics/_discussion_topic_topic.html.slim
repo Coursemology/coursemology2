@@ -14,6 +14,9 @@
                                                 params: { scroll_to_topic: video_topic})
   - if can?(:manage, topic)
     = link_to_toggle_pending(topic)
+  - elsif current_course_user&.student?
+    = link_to_mark_as_read(topic)
+
   h4
     = t('.by_html', user: link_to_user(creator))
 
