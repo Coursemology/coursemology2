@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Video::Submission::SubmissionsController < Course::Video::Submission::Controller
   before_action :authorize_video!, only: :create
+  skip_authorize_resource :submission, only: :edit
 
   def index
     authorize!(:manage, @video)
@@ -19,11 +20,17 @@ class Course::Video::Submission::SubmissionsController < Course::Video::Submissi
   end
 
   def edit
+    # @submission is normally authorized in the super controller, and has to be manually authorized
+    # here for a custom access denied behaviour to be implemented
+    authorize!(:edit, @submission)
+
     @topics = @video.topics.includes(posts: :children).order(:timestamp)
     @topics = @topics.reject { |topic| topic.posts.empty? }
     @posts = @topics.map(&:posts).inject(Course::Discussion::Post.none, :+)
     @scroll_topic_id = scroll_topic_params
     create_session
+  rescue CanCan::AccessDenied
+    redirect_to course_video_path(current_course, @video)
   end
 
   private

@@ -34,5 +34,21 @@ RSpec.describe Course::Video::Submission::SubmissionsController do
         end
       end
     end
+
+    describe '#edit' do
+      subject do
+        get :edit, params: { course_id: course, video_id: video, id: submission }
+      end
+
+      context "when student accesses another student's submission" do
+        let(:student1) { create(:course_student, course: course) }
+        let(:student2) { create(:course_student, course: course) }
+        let(:submission) { create(:video_submission, video: video, creator: student2.user) }
+
+        before { sign_in(student1.user) }
+
+        it { is_expected.to redirect_to(course_video_path(course, video)) }
+      end
+    end
   end
 end
