@@ -5,6 +5,7 @@ FactoryBot.define do
           parent: :course_assessment_question do
     allow_attachment false
     hide_text false
+    is_comprehension false
 
     solutions do
       [
@@ -13,7 +14,7 @@ FactoryBot.define do
       ]
     end
 
-    trait :multiple do
+    trait :multiple_keywords do
       solutions do
         [
           build(:course_assessment_question_text_response_solution, :exact_match, question: nil),
@@ -46,6 +47,25 @@ FactoryBot.define do
       solutions do
         [
           build(:course_assessment_question_text_response_solution, :multiline_linux, question: nil)
+        ]
+      end
+    end
+
+    trait :multiple_comprehension_groups do
+      is_comprehension true
+      groups do
+        [
+          build(:course_assessment_question_text_response_comprehension_group, question: nil),
+          build(:course_assessment_question_text_response_comprehension_group, question: nil)
+        ]
+      end
+    end
+
+    trait :comprehension_question do
+      is_comprehension true
+      groups do
+        [
+          build(:course_assessment_question_text_response_comprehension_group, question: nil)
         ]
       end
     end
