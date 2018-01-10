@@ -25,6 +25,10 @@ const translations = defineMessages({
     id: 'lib.form.buttons.discard',
     defaultMessage: 'Discard',
   },
+  dismiss: {
+    id: 'lib.form.buttons.dismiss',
+    defaultMessage: 'Dismiss',
+  },
   continue: {
     id: 'lib.form.buttons.continue',
     defaultMessage: 'Continue',
