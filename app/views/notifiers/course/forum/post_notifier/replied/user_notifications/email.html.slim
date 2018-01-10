@@ -4,13 +4,10 @@
 - host = course.instance.host
 - unsubscribe_url = subscribe_course_forum_topic_url(course, topic.forum, topic, subscribe: false,
                                                      host: host)
-- post_author_user = post.creator
-- post_author_course_user = course.course_users.for_user(post_author_user).first
-- author_name = post_author_course_user&.name || post_author_user.name
 
 - course_title = format_inline_text(course.title)
 - topic_title = format_inline_text(topic.title)
-- post_author = format_inline_text(author_name)
+- post_author = format_inline_text(post.author_name)
 
 - message.subject = t('.subject', course: course_title, topic: topic_title)
 

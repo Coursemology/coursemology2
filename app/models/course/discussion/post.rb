@@ -96,6 +96,14 @@ class Course::Discussion::Post < ApplicationRecord
     true
   end
 
+  # Use the CourseUser name if available, else fallback to the User name.
+  #
+  # @return [String] The CourseUser/User name of the post author.
+  def author_name
+    course_user = topic.course.course_users.for_user(creator).first
+    course_user&.name || creator.name
+  end
+
   private
 
   def set_topic
