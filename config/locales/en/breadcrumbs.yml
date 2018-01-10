@@ -45,6 +45,8 @@ en:
           edit: :'course.video.videos.index.header'
         notification_settings:
           edit: :'layouts.course_admin.notifications.title'
+        lesson_plan_settings:
+          edit: :'layouts.course_admin.lesson_plan.title'
       users:
         index: 'Users'
         students: :'course.users.students.header'

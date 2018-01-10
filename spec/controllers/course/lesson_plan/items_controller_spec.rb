@@ -73,6 +73,37 @@ RSpec.describe Course::LessonPlan::ItemsController, type: :controller do
             end
           end
 
+          context 'when the course has assessments' do
+            let!(:assessment) { create(:course_assessment_assessment, course: course) }
+            let(:tab) { assessment.tab }
+
+            context 'when the assessment tab is enabled for display' do
+              it 'responds including the assessment data' do
+                subject
+
+                # 2 lesson plan events and the assessment item
+                expect(json_response['items'].length).to eq(3)
+
+                assessment_item_data = json_response['items'].last
+                expect(assessment_item_data['title']).to eq(assessment.title)
+              end
+            end
+
+            context 'when the assessment tab is disabled for display' do
+              before do
+                course.settings(:course_assessments_component, :lesson_plan_items, "tab_#{tab.id}").enabled = false
+                course.save!
+              end
+
+              it 'responds without the assessment data' do
+                subject
+
+                # Just the 2 lesson plan events
+                expect(json_response['items'].length).to eq(2)
+              end
+            end
+          end
+
           context 'when the video component is disabled on the course' do
             let(:instance_traits) { :with_video_component_enabled }
             let!(:video) { create(:video, course: course) }

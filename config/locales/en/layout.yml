@@ -30,6 +30,8 @@ en:
         title: 'Sidebar'
       notifications:
         title: 'Email'
+      lesson_plan:
+        title: 'Lesson Plan'
     course_users:
       title: 'Manage Users'
     duplication:

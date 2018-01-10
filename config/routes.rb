@@ -148,8 +148,11 @@ Rails.application.routes.draw do
         get 'comments' => 'discussion/topic_settings#edit', as: 'topics'
         patch 'comments' => 'discussion/topic_settings#update'
 
-        get'videos' => 'video_settings#edit'
+        get 'videos' => 'video_settings#edit'
         patch 'videos' => 'video_settings#update'
+
+        get 'lesson_plan' => 'lesson_plan_settings#edit'
+        patch 'lesson_plan' => 'lesson_plan_settings#update'
 
         namespace 'assessments' do
           resources :categories, only: [:new, :create, :destroy] do
