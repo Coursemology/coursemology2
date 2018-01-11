@@ -106,7 +106,8 @@ export function initializeVisibility(items, visibilitySettings) {
   const itemTypes = new Set(items.map(item => item.itemTypeKey));
   const visibility = {};
   itemTypes.forEach((itemType) => {
-    visibility[itemType] = visibilitySettings.hasOwnProperty(itemType) ? visibilitySettings[itemType] : true;
+    const hasVisibilitySetting = Object.prototype.hasOwnProperty.call(visibilitySettings, itemType);
+    visibility[itemType] = hasVisibilitySetting ? visibilitySettings[itemType] : true;
   });
   return visibility;
 }

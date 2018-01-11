@@ -45,7 +45,8 @@ RSpec.describe Course::LessonPlan::ItemsController, type: :controller do
           it 'responds with all items' do
             subject
 
-            expect(json_response.keys).to contain_exactly('milestones', 'items', 'flags')
+            expect(json_response.keys).to contain_exactly('milestones', 'items', 'flags',
+                                                          'visibilitySettings')
             expect(json_response['items'].length).to eq(2)
 
             milestone_data = json_response['milestones'][0]
