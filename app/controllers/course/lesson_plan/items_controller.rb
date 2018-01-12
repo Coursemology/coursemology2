@@ -41,8 +41,15 @@ class Course::LessonPlan::ItemsController < Course::LessonPlan::Controller
     @folder_loader = Course::Material::PreloadService.new(current_course)
 
     assessment_tabs_titles_hash
-    assessment_tabs_visibility_hash
+    visibility_hash
     render 'index'
+  end
+
+  # Merge the visibility setting hashes for assessment tabs and the component items.
+  #
+  # @return [Hash{Array<String> => Boolean}]
+  def visibility_hash
+    @visibility_hash ||= assessment_tabs_visibility_hash.merge(component_visibility_hash)
   end
 
   # Returns a hash that maps the array in `assessment_tabs_titles_hash` to its
@@ -50,10 +57,19 @@ class Course::LessonPlan::ItemsController < Course::LessonPlan::Controller
   # Both the lesson_plan_item_settings and the assessment_tabs_titles_hash contain 1 entry
   # for each assessment tab in the course.
   #
-  # @return [Hash{Array<String> => Boolean]
+  # @return [Hash{Array<String> => Boolean}]
   def assessment_tabs_visibility_hash
-    @assessment_tabs_visibility_hash = @item_settings.lesson_plan_item_settings.map do |setting|
+    @assessment_tabs_visibility_hash = assessment_item_settings.map do |setting|
       [assessment_tabs_titles_hash[setting[:options][:tab_id]], setting[:visible]]
+    end.to_h
+  end
+
+  # Returns a hash that maps the component title to its visibility setting.
+  #
+  # @return [Hash{Array<String> => Boolean}]
+  def component_visibility_hash
+    @component_visibility_hash = component_item_settings.map do |setting|
+      [[setting[:component_title]], setting[:visible]]
     end.to_h
   end
 
@@ -79,6 +95,26 @@ class Course::LessonPlan::ItemsController < Course::LessonPlan::Controller
   def tab_title_array(tab)
     category_name = tab.category.title.singularize
     tab.category.tabs.size > 1 ? [category_name, tab.title] : [category_name]
+  end
+
+  # Select settings which belong to the assessments component.
+  #
+  # @return [Array<Hash>]
+  def assessment_item_settings
+    @assessment_item_settings ||=
+      @item_settings.lesson_plan_item_settings.select do |setting|
+        setting[:component] == Course::AssessmentsComponent.key
+      end
+  end
+
+  # Select settings which belong to the Survey and Video components.
+  #
+  # @return [Array<Hash>]
+  def component_item_settings
+    @component_item_settings ||=
+      @item_settings.lesson_plan_item_settings.select do |setting|
+        [Course::VideosComponent.key, Course::SurveyComponent.key].include?(setting[:component])
+      end
   end
 
   # Load settings for the LessonPlan::Items
