@@ -51,9 +51,12 @@ class LessonPlanFilter extends React.Component {
     const { dispatch, visibility } = this.props;
     const itemTypes = Object.keys(visibility);
 
+    if (itemTypes.length < 1) { return null; }
+
     return (
       <div>
         <RaisedButton
+          secondary
           onClick={this.handleTouchTap}
           label={<FormattedMessage {...translations.filter} />}
           labelPosition="before"

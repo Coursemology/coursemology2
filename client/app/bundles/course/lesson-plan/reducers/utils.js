@@ -47,14 +47,21 @@ function sortByStartAt(a, b) {
  * An item falls under a milestone if the milestone is the latest milestone
  * to have an earlier start_at date-time than the item.
  * Items that precedes all milestones are grouped with an empty milestone.
+ * Items are sorted by startAt, then itemTypeKey, then title.
  *
  * @param {Array} items
  * @param {Array} milestones
  * @return {Array.<{ milestone: Object, items: Array }>}
  */
 export function groupItemsUnderMilestones(items, milestones) {
-  const sortedItems = [...items].sort(sortByStartAt);
   const sortedMilestones = [...milestones].sort(sortByStartAt);
+  const sortedItems = [...items].sort((a, b) => {
+    const startAtSortResult = sortByStartAt(a, b);
+    if (startAtSortResult !== 0) { return startAtSortResult; }
+    const itemTypeSortResult = a.itemTypeKey.localeCompare(b.itemTypeKey);
+    if (itemTypeSortResult !== 0) { return itemTypeSortResult; }
+    return a.title.localeCompare(b.title);
+  });
 
   const groups = [];
   const group = { id: null, milestone: null, items: [] };
