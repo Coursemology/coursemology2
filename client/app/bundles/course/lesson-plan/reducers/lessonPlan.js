@@ -1,6 +1,6 @@
 import { deleteIfFound, updateOrAppend } from 'lib/helpers/reducer-helpers';
 import actionTypes from '../constants';
-import { groupItemsUnderMilestones, initializeVisibility, generateTypeKey } from './utils';
+import { groupItemsUnderMilestones, initializeVisibility, generateTypeKey, generateVisibilitySettings } from './utils';
 
 const initialState = {
   items: [],
@@ -27,12 +27,13 @@ export default function (state = initialState, action) {
     }
     case actionTypes.LOAD_LESSON_PLAN_SUCCESS: {
       const items = action.items.map(generateTypeKey);
+      const visibilitySettings = generateVisibilitySettings(action.visibilitySettings);
       return {
         ...state,
         items,
         milestones: action.milestones,
         groups: groupItemsUnderMilestones(items, action.milestones),
-        visibilityByType: initializeVisibility(items),
+        visibilityByType: initializeVisibility(items, visibilitySettings),
         isLoading: false,
       };
     }
@@ -71,30 +72,32 @@ export default function (state = initialState, action) {
     }
     case actionTypes.EVENT_CREATE_SUCCESS: {
       const items = [...state.items, generateTypeKey(action.event)];
+      const { visibilityByType } = state;
       return {
         ...state,
         items,
         groups: groupItemsUnderMilestones(items, state.milestones),
-        visibilityByType: initializeVisibility(items),
+        visibilityByType: initializeVisibility(items, visibilityByType),
       };
     }
     case actionTypes.EVENT_UPDATE_SUCCESS: {
       const items = updateOrAppend(state.items, generateTypeKey(action.event));
-
+      const { visibilityByType } = state;
       return {
         ...state,
         items,
         groups: groupItemsUnderMilestones(items, state.milestones),
-        visibilityByType: initializeVisibility(items),
+        visibilityByType: initializeVisibility(items, visibilityByType),
       };
     }
     case actionTypes.EVENT_DELETE_SUCCESS: {
       const items = deleteIfFound(state.items, action.itemId);
+      const { visibilityByType } = state;
       return {
         ...state,
         items,
         groups: groupItemsUnderMilestones(items, state.milestones),
-        visibilityByType: initializeVisibility(items),
+        visibilityByType: initializeVisibility(items, visibilityByType),
       };
     }
     default:

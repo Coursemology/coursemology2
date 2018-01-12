@@ -87,6 +87,8 @@ class Course::Settings::AssessmentsComponent < Course::Settings::Component
     tab_id = attributes['options']['tab_id']
     settings.settings(:lesson_plan_items, "tab_#{tab_id}").enabled = ActiveRecord::Type::Boolean.new.
                                                                      cast(attributes['enabled'])
+    settings.settings(:lesson_plan_items, "tab_#{tab_id}").visible = ActiveRecord::Type::Boolean.new.
+                                                                     cast(attributes['visible'])
     true
   end
 
@@ -139,13 +141,15 @@ class Course::Settings::AssessmentsComponent < Course::Settings::Component
   # @param [Course::Assessment::Category] category
   # @param [Course::Assessment::Tab] tab
   def lesson_plan_item_setting_hash(component_key, category, tab)
-    setting = settings.settings(:lesson_plan_items, "tab_#{tab.id}").enabled
+    enabled_setting = settings.settings(:lesson_plan_items, "tab_#{tab.id}").enabled
+    visible_setting = settings.settings(:lesson_plan_items, "tab_#{tab.id}").visible
     {
       component: component_key,
       category_title: category.title,
       tab_title: tab.title,
       options: { category_id: category.id, tab_id: tab.id },
-      enabled: setting.nil? ? true : setting
+      enabled: enabled_setting.nil? ? true : enabled_setting,
+      visible: visible_setting.nil? ? true : visible_setting
     }
   end
 end

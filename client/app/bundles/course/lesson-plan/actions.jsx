@@ -23,6 +23,7 @@ export function fetchLessonPlan() {
           items: response.data.items,
           milestones: response.data.milestones,
           flags: response.data.flags,
+          visibilitySettings: response.data.visibilitySettings,
         });
       })
       .catch(() => {

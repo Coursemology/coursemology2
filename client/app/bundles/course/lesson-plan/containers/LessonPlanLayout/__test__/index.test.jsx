@@ -36,6 +36,9 @@ const lessonPlanData = {
     title: 'Post BBQ',
     start_at: '2017-01-08T02:03:00.000+08:00',
   }],
+  visibilitySettings: [
+    { setting_key: ['Assessment'], visible: true },
+  ],
 };
 
 describe('LessonPlan', () => {
