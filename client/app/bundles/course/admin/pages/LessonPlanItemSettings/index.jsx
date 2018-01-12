@@ -26,11 +26,11 @@ class LessonPlanItemSettings extends React.Component {
   // Send the current value for visible when changing enabled.
   handleLessonPlanItemEnabledUpdate = (setting) => {
     const { dispatch } = this.props;
-    const { component, tab_title, options } = setting;
+    const { component, tab_title, component_title, options } = setting;
     return (_, enabled) => {
       const payload = { component, tab_title, enabled, visible: setting.visible, options };
-      const successMessage = <FormattedMessage {...translations.updateSuccess} values={{ setting: tab_title }} />;
-      const failureMessage = <FormattedMessage {...translations.updateFailure} values={{ setting: tab_title }} />;
+      const successMessage = <FormattedMessage {...translations.updateSuccess} values={{ setting: tab_title || component_title }} />;
+      const failureMessage = <FormattedMessage {...translations.updateFailure} values={{ setting: tab_title || component_title }} />;
       dispatch(updateLessonPlanItemSetting(payload, successMessage, failureMessage));
     };
   }
@@ -39,16 +39,16 @@ class LessonPlanItemSettings extends React.Component {
   // Send the current value for enabled when changing visible.
   handleLessonPlanItemVisibleUpdate = (setting) => {
     const { dispatch } = this.props;
-    const { component, tab_title, options } = setting;
+    const { component, tab_title, component_title, options } = setting;
     return (_, visible) => {
       const payload = { component, tab_title, visible, enabled: setting.enabled, options };
-      const successMessage = <FormattedMessage {...translations.updateSuccess} values={{ setting: tab_title }} />;
-      const failureMessage = <FormattedMessage {...translations.updateFailure} values={{ setting: tab_title }} />;
+      const successMessage = <FormattedMessage {...translations.updateSuccess} values={{ setting: tab_title || component_title }} />;
+      const failureMessage = <FormattedMessage {...translations.updateFailure} values={{ setting: tab_title || component_title }} />;
       dispatch(updateLessonPlanItemSetting(payload, successMessage, failureMessage));
     };
   }
 
-  renderRow(setting) {
+  renderAssessmentSettingRow(setting) {
     const categoryTitle = setting.category_title || setting.component;
     const tabTitle = setting.tab_title;
 
@@ -76,40 +76,110 @@ class LessonPlanItemSettings extends React.Component {
     );
   }
 
-  renderLessonPlanItemSettingsTable() {
-    const { lessonPlanItemSettings } = this.props;
+  renderComponentSettingRow(setting) {
+    const componentTitle = setting.component_title || setting.component;
 
-    if (lessonPlanItemSettings.length < 1) {
+    return (
+      <TableRow key={setting.component}>
+        <TableRowColumn colSpan={5}>
+          { componentTitle }
+        </TableRowColumn>
+        <TableRowColumn>
+          <Toggle
+            toggled={setting.enabled}
+            onToggle={this.handleLessonPlanItemEnabledUpdate(setting)}
+          />
+        </TableRowColumn>
+        <TableRowColumn>
+          <Toggle
+            toggled={setting.visible}
+            onToggle={this.handleLessonPlanItemVisibleUpdate(setting)}
+          />
+        </TableRowColumn>
+      </TableRow>
+    );
+  }
+
+  // For the assessments component, as settings are for categories and tabs.
+  renderLessonPlanItemAssessmentSettingsTable() {
+    const { lessonPlanItemSettings } = this.props;
+    const assessmentItemSettings = lessonPlanItemSettings.filter(setting =>
+      setting.component === 'course_assessments_component');
+
+    if (assessmentItemSettings.length < 1) {
       return <Subheader><FormattedMessage {...translations.noLessonPlanItems} /></Subheader>;
     }
 
     return (
-      <Table>
-        <TableHeader
-          adjustForCheckbox={false}
-          displaySelectAll={false}
-        >
-          <TableRow>
-            <TableHeaderColumn colSpan={2}>
-              <FormattedMessage {...translations.assessmentCategory} />
-            </TableHeaderColumn>
-            <TableHeaderColumn colSpan={3}>
-              <FormattedMessage {...translations.assessmentTab} />
-            </TableHeaderColumn>
-            <TableHeaderColumn>
-              <FormattedMessage {...translations.enabled} />
-            </TableHeaderColumn>
-            <TableHeaderColumn>
-              <FormattedMessage {...translations.visible} />
-            </TableHeaderColumn>
-          </TableRow>
-        </TableHeader>
-        <TableBody
-          displayRowCheckbox={false}
-        >
-          { lessonPlanItemSettings.map(item => this.renderRow(item)) }
-        </TableBody>
-      </Table>
+      <div>
+        <h3><FormattedMessage {...translations.lessonPlanAssessmentItemSettings} /></h3>
+        <Table>
+          <TableHeader
+            adjustForCheckbox={false}
+            displaySelectAll={false}
+          >
+            <TableRow>
+              <TableHeaderColumn colSpan={2}>
+                <FormattedMessage {...translations.assessmentCategory} />
+              </TableHeaderColumn>
+              <TableHeaderColumn colSpan={3}>
+                <FormattedMessage {...translations.assessmentTab} />
+              </TableHeaderColumn>
+              <TableHeaderColumn>
+                <FormattedMessage {...translations.enabled} />
+              </TableHeaderColumn>
+              <TableHeaderColumn>
+                <FormattedMessage {...translations.visible} />
+              </TableHeaderColumn>
+            </TableRow>
+          </TableHeader>
+          <TableBody
+            displayRowCheckbox={false}
+          >
+            { assessmentItemSettings.map(item => this.renderAssessmentSettingRow(item)) }
+          </TableBody>
+        </Table>
+      </div>
+    );
+  }
+
+  // For the video and survey components, as settings are for component only.
+  renderLessonPlanItemSettingsForComponentsTable() {
+    const { lessonPlanItemSettings } = this.props;
+    const componentItemSettings = lessonPlanItemSettings.filter(setting =>
+      ['course_videos_component', 'course_survey_component'].includes(setting.component));
+
+    if (componentItemSettings.length < 1) {
+      return <Subheader><FormattedMessage {...translations.noLessonPlanItems} /></Subheader>;
+    }
+
+    return (
+      <div>
+        <h3><FormattedMessage {...translations.lessonPlanComponentItemSettings} /></h3>
+        <Table>
+          <TableHeader
+            adjustForCheckbox={false}
+            displaySelectAll={false}
+          >
+            <TableRow>
+              <TableHeaderColumn colSpan={5}>
+                <FormattedMessage {...translations.component} />
+              </TableHeaderColumn>
+              <TableHeaderColumn>
+                <FormattedMessage {...translations.enabled} />
+              </TableHeaderColumn>
+              <TableHeaderColumn>
+                <FormattedMessage {...translations.visible} />
+              </TableHeaderColumn>
+            </TableRow>
+          </TableHeader>
+          <TableBody
+            displayRowCheckbox={false}
+          >
+            { componentItemSettings.map(item => this.renderComponentSettingRow(item)) }
+          </TableBody>
+        </Table>
+      </div>
     );
   }
 
@@ -117,7 +187,8 @@ class LessonPlanItemSettings extends React.Component {
     return (
       <div>
         <h2><FormattedMessage {...translations.lessonPlanItemSettings} /></h2>
-        {this.renderLessonPlanItemSettingsTable()}
+        {this.renderLessonPlanItemAssessmentSettingsTable()}
+        {this.renderLessonPlanItemSettingsForComponentsTable()}
 
         <NotificationPopup />
       </div>

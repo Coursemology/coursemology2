@@ -6,7 +6,7 @@ import LessonPlanItemSettings from '../index';
 
 const itemSettings = [
   {
-    component: 'sample_component',
+    component: 'course_assessments_component',
     category_title: 'assessment_category_name',
     tab_title: 'tab title',
     enabled: false,
@@ -33,7 +33,7 @@ describe('<LessonPlanItemSettings />', () => {
     const expectedPayload = {
       lesson_plan_settings: {
         lesson_plan_item_settings: {
-          component: 'sample_component',
+          component: 'course_assessments_component',
           tab_title: 'tab title',
           enabled: true,
           options: { category_id: 8, tab_id: 145 },

@@ -2,6 +2,7 @@
 class Course::Settings::VideosComponent < Course::Settings::Component
   include ActiveModel::Conversion
   include Course::Settings::EmailSettingsConcern
+  include Course::Settings::LessonPlanSettingsConcern
 
   def self.email_setting_items
     {
@@ -12,6 +13,10 @@ class Course::Settings::VideosComponent < Course::Settings::Component
 
   def self.component_class
     Course::VideosComponent
+  end
+
+  def lesson_plan_item_settings
+    super.merge(component_title: I18n.t('course.video.videos.index.header'))
   end
 
   # Returns the title of video component
