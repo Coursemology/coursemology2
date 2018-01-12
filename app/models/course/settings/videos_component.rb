@@ -19,6 +19,10 @@ class Course::Settings::VideosComponent < Course::Settings::Component
     super.merge(component_title: I18n.t('course.video.videos.index.header'))
   end
 
+  def showable_in_lesson_plan?
+    settings.lesson_plan_items ? settings.lesson_plan_items['enabled'] : true
+  end
+
   # Returns the title of video component
   #
   # @return [String] The custom or default title of video component
