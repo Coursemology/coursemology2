@@ -104,7 +104,7 @@ class SurveysTable extends React.Component {
           {
             surveys.map(survey => (
               <TableRow key={survey.id}>
-                <TableRowColumn colSpan={6}>
+                <TableRowColumn colSpan={6} style={styles.wrap}>
                   <Link to={`/courses/${courseId}/surveys/${survey.id}`}>
                     { survey.title }
                   </Link>
@@ -115,10 +115,10 @@ class SurveysTable extends React.Component {
                 <TableRowColumn colSpan={3}>
                   { survey.allow_response_after_end ? survey.time_bonus_exp : '-' }
                 </TableRowColumn>
-                <TableRowColumn colSpan={5}>
+                <TableRowColumn colSpan={5} style={styles.wrap}>
                   { formatShortDateTime(survey.start_at) }
                 </TableRowColumn>
-                <TableRowColumn colSpan={5}>
+                <TableRowColumn colSpan={5} style={styles.wrap}>
                   { formatShortDateTime(survey.end_at) }
                 </TableRowColumn>
                 {
