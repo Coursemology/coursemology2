@@ -5,8 +5,7 @@ en:
         new:
           course_notifications:
             email:
-              subject: >
-                %{course} New Announcement: %{announcement}
+              subject: '%{course} New Announcement: %{announcement}'
               message: >
                 <p>New %{announcement} from course: %{course}</p>
                 %{content}
