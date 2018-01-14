@@ -11,6 +11,10 @@ class Course::Assessment::Question::TextResponsesController < Course::Assessment
       @text_response_question.hide_text = true
       @text_response_question.allow_attachment = true
     end
+    if params[:comprehension] == 'true'
+      @text_response_question.is_comprehension = true
+      @text_response_question.build_at_least_one_group_one_point
+    end
   end
 
   def create
@@ -24,6 +28,7 @@ class Course::Assessment::Question::TextResponsesController < Course::Assessment
 
   def edit
     @question_assessment = load_question_assessment_for(@text_response_question)
+    @text_response_question.build_at_least_one_group_one_point if @text_response_question.comprehension_question?
   end
 
   def update
@@ -31,6 +36,7 @@ class Course::Assessment::Question::TextResponsesController < Course::Assessment
       redirect_to course_assessment_path(current_course, @assessment),
                   success: t('.success', name: question_type)
     else
+      @question_assessment = load_question_assessment_for(@text_response_question)
       render 'edit'
     end
   end
@@ -50,12 +56,34 @@ class Course::Assessment::Question::TextResponsesController < Course::Assessment
   private
 
   def text_response_question_params
-    params.require(:question_text_response).permit(
+    permitted_params = [
       :title, :description, :staff_only_comments, :maximum_grade, :allow_attachment,
-      :hide_text,
-      skill_ids: [],
-      solutions_attributes: [:_destroy, :id, :solution_type, :solution, :grade, :explanation]
-    )
+      :hide_text, :is_comprehension,
+      skill_ids: []
+    ]
+    if params[:question_text_response][:is_comprehension] == 'true'
+      permitted_params.concat(
+        [
+          groups_attributes:
+          [
+            :_destroy, :id, :maximum_group_grade,
+            points_attributes:
+            [
+              :_destroy, :id, :point_grade,
+              solutions_attributes:
+              [
+                :_destroy, :id, :solution_type, :explanation, solution: []
+              ]
+            ]
+          ]
+        ]
+      )
+    else
+      permitted_params.concat(
+        [solutions_attributes: [:_destroy, :id, :solution_type, :solution, :grade, :explanation]]
+      )
+    end
+    params.require(:question_text_response).permit(*permitted_params)
   end
 
   def question_type
