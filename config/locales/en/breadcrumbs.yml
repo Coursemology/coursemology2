@@ -98,6 +98,7 @@ en:
           text_responses:
             new_text_response: :'course.assessment.question.text_responses.new.text_response'
             new_file_upload: :'course.assessment.question.text_responses.new.file_upload'
+            new_comprehension: :'course.assessment.question.text_responses.new.comprehension'
           programming:
             new: :'course.assessment.question.programming.new.header'
           scribing:

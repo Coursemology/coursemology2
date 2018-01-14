@@ -1,0 +1,20 @@
+= content_tag_for(:tr, f.object, class: 'nested-fields') do
+  td = f.input :solution_type,
+               collection: Course::Assessment::Question::TextResponseComprehensionSolution.solution_types.keys,
+               label_method: lambda { |key| t(".#{key}") },
+               input_html: { class: ['text-response-solution-type'] },
+               label: false
+  / TODO: Fix text to array.
+  td.td-solution *{:class => f.object_name}
+    = f.input :solution, as: :array, label: false, required: false,
+               input_html: { class: ['text-response-solution'] }
+    .has-error
+      = f.error :solution_lemma
+  td.td-solution-button
+    = link_to 'javascript:void(0)',
+              class: ['btn', 'btn-default', 'solution-button', f.object_name],
+              title: t('.add_solution_word') do
+      = fa_icon 'plus'.freeze
+  td = f.input :explanation, label: false, placeholder: t('.explanation_hint'),
+               input_html: { class: ['text-response-explanation', 'airmode'] }
+  td = link_to_remove_association t('.remove'), f

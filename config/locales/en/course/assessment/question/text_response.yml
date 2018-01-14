@@ -6,6 +6,7 @@ en:
           new:
             text_response: 'New Text Response Question'
             file_upload: 'New File Upload Question'
+            comprehension: 'New Comprehension Question'
           create:
             success: 'The %{name} was created.'
           update:
@@ -32,3 +33,28 @@ en:
           solution_fields:
             explanation_hint: 'The explanation to show after the student submits his answer.'
             remove: 'Remove'
+          form_comprehension:
+            multiline_explanation_comprehension_html: >
+              Adding solutions allows the question to be autograded. Students can only input plaintext.
+            add_group: 'Add Group'
+            comprehension: 'Comprehension Question'
+            text_response_autograde: 'Note: If no solutions are provided, the autograder will always award the maximum grade.'
+          comprehension_group_fields:
+            group: 'Group'
+            remove_group: 'Remove Group'
+            maximum_group_grade: 'Maximum Grade for this Group'
+            add_point: 'Add Point'
+          comprehension_point_fields:
+            point: 'Point'
+            remove_point: 'Remove Point'
+            point_grade: 'Grade for this Point'
+            add_solution: 'Add Solution'
+            solution_type: 'Type'
+            solution: 'Solution'
+            explanation: 'Explanation'
+          comprehension_solution_fields:
+            explanation_hint: 'The explanation to show after the student submits his answer.'
+            add_solution_word: 'Add Solution Word'
+            remove: 'Remove'
+            compre_keyword: 'Keyword'
+            compre_lifted_word: 'Lifted Word'
