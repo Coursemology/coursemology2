@@ -179,29 +179,73 @@ RSpec.describe Course::Discussion::Post, type: :model do
       end
     end
 
-    describe '.destroy' do
-      let(:topic) { create(:course_discussion_topic) }
-      let!(:parent_post) { create(:course_discussion_post, topic: topic) }
-      let!(:post) { create(:course_discussion_post, parent: parent_post, topic: topic) }
+    describe 'callbacks' do
+      context 'when post is destroyed' do
+        let(:topic) { create(:course_discussion_topic) }
+        let!(:parent_post) { create(:course_discussion_post, topic: topic) }
+        let!(:post) { create(:course_discussion_post, parent: parent_post, topic: topic) }
 
-      context 'when the post has children' do
-        let!(:children_posts) do
-          create_list(:course_discussion_post, 2, parent: post, topic: topic)
+        context 'when the post has children' do
+          let!(:children_posts) do
+            create_list(:course_discussion_post, 2, parent: post, topic: topic)
+          end
+
+          it 'makes them children of its parent' do
+            post.destroy
+
+            expect(children_posts.all? { |child| child.reload.parent_id == parent_post.id }).
+              to be_truthy
+          end
+
+          context 'when the post is destroyed by association' do
+            it 'destroys together with all children' do
+              expect(topic.reload.destroy).to be_truthy
+              all_posts_ids = topic.posts.map(&:id)
+              expect(Course::Discussion::Post.where(id: all_posts_ids).exists?).
+                to be_falsey
+            end
+          end
+        end
+      end
+
+      context 'after a commit' do
+        let!(:topic) { create(:course_discussion_topic, :with_post) }
+        let(:post_author) { create(:user) }
+        let(:post) { create(:course_discussion_post, topic: topic, creator: post_author) }
+
+        context 'when a new post is saved' do
+          before do
+            # Create post_author and set topic to be unread by post_author
+            post_author && topic.touch
+          end
+          it 'marks the topic as read' do
+            expect(topic.unread?(post_author)).to be_truthy
+            post
+            expect(topic.unread?(post_author)).to be_falsey
+          end
         end
 
-        it 'makes them children of its parent' do
-          post.destroy
+        context 'when the post exists' do
+          before do
+            # Create post and set topic to be updated to be unread
+            post && topic.touch
+          end
 
-          expect(children_posts.all? { |child| child.reload.parent_id == parent_post.id }).
-            to be_truthy
-        end
+          context 'when the post is updated' do
+            it 'marks the topic as read' do
+              expect(topic.unread?(post_author)).to be_truthy
+              post.text += 'foo'
+              post.save
+              expect(topic.unread?(post_author)).to be_falsey
+            end
+          end
 
-        context 'when the post is destroyed by association' do
-          it 'destroys together with all children' do
-            expect(topic.reload.destroy).to be_truthy
-            all_posts_ids = topic.posts.map(&:id)
-            expect(Course::Discussion::Post.where(id: all_posts_ids).exists?).
-              to be_falsey
+          context 'when the post is deleted' do
+            it 'marks the topic as read' do
+              expect(topic.unread?(post_author)).to be_truthy
+              post.destroy
+              expect(topic.unread?(post_author)).to be_falsey
+            end
           end
         end
       end

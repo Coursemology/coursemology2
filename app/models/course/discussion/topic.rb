@@ -4,6 +4,8 @@ class Course::Discussion::Topic < ApplicationRecord
   class_attribute :global_topic_model_names
   self.global_topic_model_names = []
 
+  acts_as_readable on: :updated_at
+
   belongs_to :course, inverse_of: :discussion_topics
   # Delete all the children and skip reparent callbacks
   has_many :posts, dependent: :destroy, inverse_of: :topic do

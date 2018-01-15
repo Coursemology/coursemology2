@@ -8,6 +8,7 @@ class Course::Discussion::Post < ApplicationRecord
   has_many_attachments
 
   after_initialize :set_topic, if: :new_record?
+  after_commit :mark_topic_as_read
   before_destroy :reparent_children, unless: :destroyed_by_association
   before_destroy :unparent_children, if: :destroyed_by_association
 
@@ -127,5 +128,9 @@ class Course::Discussion::Post < ApplicationRecord
   # the post belongs to is being destroyed.
   def unparent_children
     children.update_all(parent_id: nil)
+  end
+
+  def mark_topic_as_read
+    topic.mark_as_read! for: creator
   end
 end
