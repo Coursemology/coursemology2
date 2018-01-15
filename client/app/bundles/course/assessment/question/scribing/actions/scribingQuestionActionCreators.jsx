@@ -69,7 +69,7 @@ function processFields(fields) {
     getSkillIdsFromSkills(fields.question_scribing.skill_ids);
 
   if (fields.question_scribing.attachment) {
-    parsedFields.question_scribing.file = fields.question_scribing.attachment[0];
+    parsedFields.question_scribing.file = fields.question_scribing.attachment.file;
   } else {
     delete parsedFields.question_scribing.file;
   }
