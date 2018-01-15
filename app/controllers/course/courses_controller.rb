@@ -48,7 +48,7 @@ class Course::CoursesController < Course::Controller
       @todos = Course::LessonPlan::Todo.pending_for(current_course_user).
                includes(:user, item: [:actable, :course])
       # TODO: Fix n+1 query for #can_user_start?
-      @todos = @todos.select(&:can_user_start?).first(3)
+      @todos = @todos.select(&:can_user_start?)
     end
   end
 end
