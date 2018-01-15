@@ -4,6 +4,8 @@ import { isPlayingState, timeIsPastRestricted } from 'lib/helpers/videoHelpers';
 
 export const initialState = {
   videoUrl: null,
+  watchNextVideoUrl: null,
+  nextVideoSubmissionExists: false,
   playerState: playerStates.UNSTARTED,
   playerProgress: 0,
   duration: videoDefaults.placeHolderDuration,

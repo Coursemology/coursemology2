@@ -1,5 +1,6 @@
 json.video do
   json.videoUrl @video.url
+  json.partial! 'watch_next_video_url', locals: { next_video: @video.next_video }
   json.sessionId @session.try(:id)
 end
 
