@@ -38,6 +38,7 @@ class VisibleAnnotations extends Component {
           ))}
           {posts.length === 0 || fieldVisible ? <CommentField
             value={commentForms.annotations[fileId][lineNumber]}
+            isSubmitting={commentForms.isSubmitting}
             createComment={createComment}
             handleChange={handleCreateChange}
           /> : null}

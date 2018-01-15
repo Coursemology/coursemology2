@@ -32,6 +32,7 @@ class VisibleComments extends Component {
         ))}
         <CommentField
           value={commentForms.topics[topic.id]}
+          isSubmitting={commentForms.isSubmitting}
           createComment={createComment}
           handleChange={handleCreateChange}
         />
