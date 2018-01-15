@@ -63,7 +63,7 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
 
   # Load group managers
   def load_group_managers
-    course_staff = current_course.course_users.staff.without_phantom_users.includes(:groups)
+    course_staff = current_course.course_users.staff.includes(:groups)
     @service = Course::GroupManagerPreloadService.new(course_staff)
   end
 
