@@ -1,6 +1,7 @@
 import actions from '../constants';
 
 const initialState = {
+  isSubmitting: false,
   annotations: {},
   topics: {},
   posts: {},
@@ -32,6 +33,7 @@ export default function (state = initialState, action) {
       const { fileId, line } = action.payload;
       return {
         ...state,
+        isSubmitting: false,
         annotations: {
           ...state.annotations,
           [fileId]: {
@@ -55,6 +57,7 @@ export default function (state = initialState, action) {
       const { topicId } = action.payload;
       return {
         ...state,
+        isSubmitting: false,
         topics: {
           ...state.topics,
           [topicId]: '',
@@ -77,6 +80,7 @@ export default function (state = initialState, action) {
       const { id } = action.payload;
       return {
         ...state,
+        isSubmitting: false,
         posts: {
           ...state.posts,
           [id]: action.payload.text,
@@ -95,6 +99,22 @@ export default function (state = initialState, action) {
         }, {}),
       };
     }
+    case actions.CREATE_ANNOTATION_REQUEST:
+    case actions.CREATE_COMMENT_REQUEST:
+    case actions.UPDATE_ANNOTATION_REQUEST:
+    case actions.UPDATE_COMMENT_REQUEST:
+      return {
+        ...state,
+        isSubmitting: true,
+      };
+    case actions.CREATE_ANNOTATION_FAILURE:
+    case actions.CREATE_COMMENT_FAILURE:
+    case actions.UPDATE_ANNOTATION_FAILURE:
+    case actions.UPDATE_COMMENT_FAILURE:
+      return {
+        ...state,
+        isSubmitting: false,
+      };
     default:
       return state;
   }
