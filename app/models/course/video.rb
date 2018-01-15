@@ -46,8 +46,24 @@ class Course::Video < ApplicationRecord
     joining { lesson_plan_item }.selecting { lesson_plan_item.id }
   end)
 
+  scope :video_after, (lambda do |video|
+    from_course(video.course_id).
+      joins(:lesson_plan_item).
+      where('course_lesson_plan_items.start_at > :start_at OR '\
+            '(course_lesson_plan_items.start_at = :start_at AND '\
+            'course_lesson_plan_items.title > :title)',
+            start_at: video.start_at,
+            title: video.title).
+      ordered_by_date_and_title.
+      limit(1)
+  end)
+
   def self.use_relative_model_naming?
     true
+  end
+
+  def next_video
+    Course::Video.video_after(self).first
   end
 
   def to_partial_path
