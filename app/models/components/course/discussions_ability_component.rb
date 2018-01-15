@@ -18,7 +18,7 @@ module Course::DiscussionsAbilityComponent
   private
 
   def allow_course_users_show_topics
-    can :read, Course::Discussion::Topic, course_all_course_users_hash
+    can [:read, :pending], Course::Discussion::Topic, course_all_course_users_hash
   end
 
   def allow_staff_manage_discussion_topics

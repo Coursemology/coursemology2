@@ -97,14 +97,24 @@ RSpec.feature 'Course: Topics: Management' do
         create(:course_discussion_post, topic: student_video_comment.acting_as, creator: user,
                                         text: '<p>Content with html tags</p>')
       end
-
+      let(:staff_response_to_comment) do
+        create(:course_discussion_post, topic: student_comment.acting_as, creator: course.creator)
+      end
+      let(:staff_response_to_annotation) do
+        create(:course_discussion_post,
+               topic: student_annotation.acting_as, creator: course.creator)
+      end
+      let(:staff_response_to_video) do
+        create(:course_discussion_post,
+               topic: student_video_comment.acting_as, creator: course.creator)
+      end
 
       scenario 'I can see all my comments' do
         other_comments = [comment, code_annotation, video_comment].map(&:acting_as)
         my_comments = [student_comment, student_annotation, student_video_comment].map(&:acting_as)
         visit course_topics_path(course)
 
-        expect(page).not_to have_selector('.nav.nav-tabs')
+        expect(page).to have_selector('.nav.nav-tabs')
         expect(page).not_to have_link(I18n.t('course.discussion.topics.mark_as_pending'))
 
         other_comments.each do |comment|
@@ -112,6 +122,20 @@ RSpec.feature 'Course: Topics: Management' do
         end
 
         my_comments.each do |comment|
+          expect(page).to have_content_tag_for(comment)
+        end
+      end
+
+      scenario 'I can see my pending comments' do
+        other_comments = [
+          staff_response_to_comment, staff_response_to_annotation, staff_response_to_video
+        ].map(&:topic)
+
+        visit pending_course_topics_path(course)
+
+        expect(page).to have_selector('.nav.nav-tabs')
+
+        other_comments.each do |comment|
           expect(page).to have_content_tag_for(comment)
         end
       end

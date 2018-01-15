@@ -6,6 +6,7 @@ en:
         tabs:
           my_students_pending: 'My Students Pending'
           pending: 'Pending'
+          unread: 'Unread'
           my_students: 'My Students'
           all: 'All'
         index:
@@ -18,3 +19,4 @@ en:
           header: :'course.discussion.topics.index.header'
         mark_as_pending: 'Mark as pending'
         unmark_as_pending: 'Unmark as pending'
+        mark_as_read: 'Mark as read'

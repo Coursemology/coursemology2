@@ -13,8 +13,15 @@ class Course::Discussion::TopicsController < Course::ComponentController
     end
   end
 
+  # Loads topics pending staff reply for course_staff, and unread topics for students.
   def pending
-    @topics = all_topics.pending_staff_reply
+    @topics = begin
+      if current_course_user&.student?
+        unread_topics_for_student
+      else
+        all_topics.pending_staff_reply
+      end
+    end
   end
 
   def my_students
@@ -40,6 +47,10 @@ class Course::Discussion::TopicsController < Course::ComponentController
   def all_topics
     @topics.globally_displayed.ordered_by_updated_at.includes(:actable).page(page_param).
       per(@settings.pagination)
+  end
+
+  def unread_topics_for_student
+    all_topics.from_user(current_user.id).unread_by(current_user)
   end
 
   def my_students_topics

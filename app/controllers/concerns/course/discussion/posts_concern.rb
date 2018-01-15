@@ -11,8 +11,10 @@ module Course::Discussion::PostsConcern
   protected
 
   # Update pending status of the topic:
-  # If the student replies to the topic, set to true.
-  # If the staff replies the post, set to false.
+  #   If the student replies to the topic, set to true.
+  #   If the staff replies the post, set to false.
+  #
+  # @return [Boolean] Boolean on whether the update is successful.
   def update_topic_pending_status
     return true if !current_course_user || skip_update_topic_status
 

@@ -19,8 +19,11 @@ module Course::Discussion::TopicsHelper
     format_code_block(code, file.answer.question.actable.language, [line_start, 1].max)
   end
 
-  def all_unread_count
-    @unread ||= current_course.discussion_topics.
+  # Returns the count of topics pending staff reply.
+  #
+  # @return [Fixnum] Returns the count of topics pending staff reply.
+  def all_staff_unread_count
+    @staff_unread ||= current_course.discussion_topics.
                 globally_displayed.pending_staff_reply.distinct.count
   end
 
@@ -30,6 +33,19 @@ module Course::Discussion::TopicsHelper
         my_student_ids = current_course_user.my_students.pluck(:user_id)
         current_course.discussion_topics.globally_displayed.
           from_user(my_student_ids).pending_staff_reply.distinct.count
+      else
+        0
+      end
+  end
+
+  # Returns the count of unread topics for student course users. Otherwise, return 0.
+  #
+  # @return [Fixnum] Returns the count of unread topics
+  def all_student_unread_count
+    @student_unread ||=
+      if current_course_user&.student?
+        current_course.discussion_topics.globally_displayed.from_user(current_user.id).
+          unread_by(current_user).distinct.count
       else
         0
       end
