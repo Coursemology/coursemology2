@@ -27,6 +27,16 @@ class Activity < ApplicationRecord
     end
   end
 
+  # Checks if activity is from the given course. Ensure that `object` has `#course` defined on it
+  # for the current activity to be displayed as an in-course popup user notification.
+  #
+  # @param [Course] course The course to check.
+  # @return [Boolean] true if activity is from the given course, false otherwise.
+  def from_course?(course)
+    object_course = object&.course
+    !object_course.nil? && (object_course.id != course.id)
+  end
+
   private
 
   def notify_course(course, type)

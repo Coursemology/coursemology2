@@ -349,6 +349,10 @@ Rails.application.routes.draw do
           resources :sections, only: [:create, :update, :destroy]
         end
       end
+
+      resources :user_notifications do
+        post 'mark_as_read', on: :member
+      end
     end
   end
 

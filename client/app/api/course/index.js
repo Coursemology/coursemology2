@@ -11,6 +11,7 @@ import VideoAPI from './Video';
 import AdminAPI from './Admin';
 import ScribingQuestionAPI from './Assessment/question/scribing';
 import LevelAPI from './Level';
+import UserNotificationsAPI from './UserNotifications';
 
 const CourseAPI = {
   achievements: new AchievementsAPI(),
@@ -28,6 +29,7 @@ const CourseAPI = {
     scribing: ScribingQuestionAPI,
   },
   level: new LevelAPI(),
+  userNotifications: new UserNotificationsAPI(),
 };
 
 Object.freeze(CourseAPI);
