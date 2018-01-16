@@ -26,16 +26,31 @@ RSpec.describe Course::Video::Topic do
              creator: student2.user,
              posts: [build(:course_discussion_post, creator: student2.user)])
     end
+    let(:topic3) do
+      create(:video_topic,
+             course: course,
+             video: video,
+             creator: student1.user,
+             posts: [
+               build(:course_discussion_post, creator: student1.user),
+               build(:course_discussion_post, creator: student2.user)
+             ])
+    end
+
 
     describe '.from_user' do
       it 'only returns discussion_topic ids of the given user' do
         topic1_id = topic1.acting_as.id
-        expect(video.topics.from_user(student1.user).map(&:id)).to match_array([topic1_id])
-
         topic2_id = topic2.acting_as.id
-        expect(video.topics.from_user(student2.user).map(&:id)).to match_array([topic2_id])
+        topic3_id = topic3.acting_as.id
 
-        expect(video.topics.from_user(student3.user).empty?).to be_truthy
+        expect(video.topics.from_user(student1.user_id).map(&:id)).
+          to match_array([topic1_id, topic3_id])
+
+        expect(video.topics.from_user(student2.user_id).map(&:id)).
+          to match_array([topic2_id, topic3_id])
+
+        expect(video.topics.from_user(student3.user_id).empty?).to be_truthy
       end
     end
   end

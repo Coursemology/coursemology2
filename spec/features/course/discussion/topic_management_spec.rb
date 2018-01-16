@@ -80,18 +80,26 @@ RSpec.feature 'Course: Topics: Management' do
         create(:course_assessment_answer, course: course, creator: user)
       end
       let(:student_comment) do
-        create(:course_assessment_submission_question, :with_post, course: course, user: user)
+        create(:course_assessment_submission_question,
+               course: course,
+               user: user,
+               posts: [build(:course_discussion_post, creator: user)])
       end
       let(:student_annotation) do
-        create(:course_assessment_answer_programming_file_annotation, :with_post,
-               course: course, creator: user)
+        create(:course_assessment_answer_programming_file_annotation,
+               course: course,
+               creator: user,
+               posts: [build(:course_discussion_post, creator: user)])
       end
       let(:student_reply) do
         create(:course_discussion_post, topic: student_comment.acting_as, creator: user,
                                         text: '<p>Content with html tags</p>')
       end
       let(:student_video_comment) do
-        create(:course_video_topic, :with_post, :with_submission, course: course, creator: user)
+        create(:course_video_topic, :with_submission,
+               course: course,
+               creator: user,
+               posts: [build(:course_discussion_post, creator: user)])
       end
       let(:student_video_reply) do
         create(:course_discussion_post, topic: student_video_comment.acting_as, creator: user,
