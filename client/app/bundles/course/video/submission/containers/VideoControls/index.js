@@ -4,3 +4,4 @@ export { default as VideoPlayerSlider } from './VideoPlayerSlider';
 export { default as VideoTimestamp } from './VideoTimestamp';
 export { default as VolumeSlider } from './VolumeSlider';
 export { default as VolumeButton } from './VolumeButton';
+export { default as NextVideoButton } from './NextVideoButton';
