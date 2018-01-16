@@ -16,7 +16,7 @@ import {
   VolumeSlider,
 } from './VideoControls';
 
-const tickMilliseconds = 1000;
+const tickMilliseconds = 2000;
 
 const reactPlayerStyle = {
   position: 'absolute',
