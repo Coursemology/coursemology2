@@ -319,6 +319,7 @@ Rails.application.routes.draw do
           get 'my_students', on: :collection
           get 'my_students_pending', on: :collection
           patch 'toggle_pending', on: :member
+          patch 'mark_as_read', on: :member
           resources :posts, only: [:create, :update, :destroy]
         end
       end

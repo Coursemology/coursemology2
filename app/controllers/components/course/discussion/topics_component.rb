@@ -40,7 +40,7 @@ class Course::Discussion::TopicsComponent < SimpleDelegator
   def sidebar_path
     if staff_with_students?
       my_students_pending_course_topics_path(current_course)
-    elsif staff?
+    elsif current_course_user&.staff? || current_course_user&.student?
       pending_course_topics_path(current_course)
     else
       course_topics_path(current_course)
@@ -50,8 +50,10 @@ class Course::Discussion::TopicsComponent < SimpleDelegator
   def unread_count
     if staff_with_students?
       my_students_unread_count
-    elsif staff?
-      all_unread_count
+    elsif current_course_user&.staff?
+      all_staff_unread_count
+    elsif current_course_user&.student?
+      all_student_unread_count
     else
       0
     end
@@ -59,9 +61,5 @@ class Course::Discussion::TopicsComponent < SimpleDelegator
 
   def staff_with_students?
     current_course_user && current_course_user.staff? && !current_course_user.my_students.empty?
-  end
-
-  def staff?
-    current_course_user && current_course_user.staff?
   end
 end

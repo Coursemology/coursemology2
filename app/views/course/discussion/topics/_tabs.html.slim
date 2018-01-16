@@ -1,10 +1,16 @@
-- if current_course_user && current_course_user.staff? || can?(:manage, current_course)
+- if current_course_user&.staff? || can?(:manage, current_course)
   = tabs do
     = nav_to my_students_pending_course_topics_path(current_course) do
       = t('.my_students_pending')
       =< badge(my_students_unread_count) if my_students_unread_count > 0
     = nav_to pending_course_topics_path(current_course) do
       = t('.pending')
-      =< badge(all_unread_count) if all_unread_count > 0
+      =< badge(all_staff_unread_count) if all_staff_unread_count > 0
     = nav_to t('.my_students'), my_students_course_topics_path(current_course)
+    = nav_to t('.all'), course_topics_path(current_course)
+- elsif current_course_user&.student?
+  = tabs do
+    = nav_to pending_course_topics_path(current_course) do
+      = t('.unread')
+      =< badge(all_student_unread_count) if all_student_unread_count > 0
     = nav_to t('.all'), course_topics_path(current_course)

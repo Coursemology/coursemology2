@@ -7,8 +7,6 @@ class Course::Assessment::SubmissionQuestion::CommentsController < Course::Asses
                               class: Course::Assessment::SubmissionQuestion.name
   include Course::Discussion::PostsConcern
 
-  delegate :discussion_topic, to: :@submission_question
-
   def create
     result = @submission_question.class.transaction do
       @post.title = @assessment.title
@@ -17,6 +15,7 @@ class Course::Assessment::SubmissionQuestion::CommentsController < Course::Asses
 
       raise ActiveRecord::Rollback unless @post.save && create_topic_subscription && update_topic_pending_status
       raise ActiveRecord::Rollback unless @submission_question.save
+
       true
     end
 
@@ -50,6 +49,10 @@ class Course::Assessment::SubmissionQuestion::CommentsController < Course::Asses
   def last_post_from(submission_question)
     # @post is in submission_question.posts, so we filter out @post, which has no id yet.
     submission_question.posts.ordered_topologically.flatten.select(&:id).last
+  end
+
+  def discussion_topic
+    @submission_question.discussion_topic
   end
 
   def render_create_response

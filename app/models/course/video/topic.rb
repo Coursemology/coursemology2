@@ -10,9 +10,9 @@ class Course::Video::Topic < ApplicationRecord
   # called directly.
   scope :from_user, (lambda do |user_id|
     unscoped.
-      joins(:discussion_topic).
-      where(creator_id: user_id).
-      select('course_discussion_topics.id')
+      joining { discussion_topic.posts }.
+      where.has { discussion_topic.posts.creator_id.in(user_id) }.
+      selecting { discussion_topic.id }
   end)
 
   private

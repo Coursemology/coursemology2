@@ -12,6 +12,8 @@
     = link_to comment_title, edit_course_assessment_submission_path(current_course, assessment, submission, step: assessment.questions.index(question) +1)
   - if can?(:manage, topic)
     = link_to_toggle_pending(topic)
+  - elsif current_course_user&.student?
+    = link_to_mark_as_read(topic)
 
   h4
     = t('.by_html', user: link_to_user(submission.creator))

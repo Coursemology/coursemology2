@@ -71,7 +71,12 @@ RSpec.describe Course::Discussion::TopicsController do
       context 'when a course student visits the page' do
         before { sign_in(student) }
 
-        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+        it { is_expected.to render_template(:pending) }
+
+        it 'only shows the unread topics' do
+          subject
+          expect(topics).to contain_exactly(topic, pending_topic)
+        end
       end
     end
 

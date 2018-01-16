@@ -80,31 +80,49 @@ RSpec.feature 'Course: Topics: Management' do
         create(:course_assessment_answer, course: course, creator: user)
       end
       let(:student_comment) do
-        create(:course_assessment_submission_question, :with_post, course: course, user: user)
+        create(:course_assessment_submission_question,
+               course: course,
+               user: user,
+               posts: [build(:course_discussion_post, creator: user)])
       end
       let(:student_annotation) do
-        create(:course_assessment_answer_programming_file_annotation, :with_post,
-               course: course, creator: user)
+        create(:course_assessment_answer_programming_file_annotation,
+               course: course,
+               creator: user,
+               posts: [build(:course_discussion_post, creator: user)])
       end
       let(:student_reply) do
         create(:course_discussion_post, topic: student_comment.acting_as, creator: user,
                                         text: '<p>Content with html tags</p>')
       end
       let(:student_video_comment) do
-        create(:course_video_topic, :with_post, :with_submission, course: course, creator: user)
+        create(:course_video_topic, :with_submission,
+               course: course,
+               creator: user,
+               posts: [build(:course_discussion_post, creator: user)])
       end
       let(:student_video_reply) do
         create(:course_discussion_post, topic: student_video_comment.acting_as, creator: user,
                                         text: '<p>Content with html tags</p>')
       end
-
+      let(:staff_response_to_comment) do
+        create(:course_discussion_post, topic: student_comment.acting_as, creator: course.creator)
+      end
+      let(:staff_response_to_annotation) do
+        create(:course_discussion_post,
+               topic: student_annotation.acting_as, creator: course.creator)
+      end
+      let(:staff_response_to_video) do
+        create(:course_discussion_post,
+               topic: student_video_comment.acting_as, creator: course.creator)
+      end
 
       scenario 'I can see all my comments' do
         other_comments = [comment, code_annotation, video_comment].map(&:acting_as)
         my_comments = [student_comment, student_annotation, student_video_comment].map(&:acting_as)
         visit course_topics_path(course)
 
-        expect(page).not_to have_selector('.nav.nav-tabs')
+        expect(page).to have_selector('.nav.nav-tabs')
         expect(page).not_to have_link(I18n.t('course.discussion.topics.mark_as_pending'))
 
         other_comments.each do |comment|
@@ -114,6 +132,26 @@ RSpec.feature 'Course: Topics: Management' do
         my_comments.each do |comment|
           expect(page).to have_content_tag_for(comment)
         end
+      end
+
+      scenario 'I can see my pending comments and mark as read' do
+        other_comments = [
+          staff_response_to_comment, staff_response_to_annotation, staff_response_to_video
+        ].map(&:topic)
+        mark_as_read = other_comments.sample
+
+        visit pending_course_topics_path(course)
+
+        expect(page).to have_selector('.nav.nav-tabs')
+
+        other_comments.each { |comment| expect(page).to have_content_tag_for(comment) }
+
+        within find(content_tag_selector(mark_as_read)) do
+          click_link I18n.t('course.discussion.topics.mark_as_read')
+        end
+
+        expect(page).not_to have_content_tag_for(mark_as_read)
+        expect(mark_as_read.unread?(user)).to be_falsey
       end
 
       scenario 'I can reply to and delete a comment topic', js: true do
