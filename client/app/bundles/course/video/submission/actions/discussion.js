@@ -364,7 +364,8 @@ export function updatePostOnServer(postId) {
           editedContent: null,
           editMode: false,
           status: postRequestingStatuses.LOADED,
-          content: data.text,
+          content: data.formattedText,
+          rawContent: data.text,
         }));
         dispatch(setNotification('Comment edited'));
       })
