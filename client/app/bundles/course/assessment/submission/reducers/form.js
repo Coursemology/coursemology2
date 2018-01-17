@@ -22,6 +22,26 @@ function updateAnswerInState(state, answer) {
   }, { [id]: answer.fields });
 }
 
+function removeProgrammingFileFromState(state, questionId, fileId) {
+  return Object.keys(state).reduce((obj, key) => {
+    if (state[key].questionId !== questionId) {
+      return { ...obj, [key]: state[key] };
+    }
+    return {
+      ...obj,
+      [key]: {
+        ...state[key],
+        files_attributes: state[key].files_attributes.reduce((acc, file) => {
+          if (file.id !== fileId) {
+            return acc.concat(file);
+          }
+          return acc;
+        }, []),
+      },
+    };
+  }, {});
+}
+
 export default formReducer.plugin({
   [formNames.SUBMISSION]: (state, action) => {
     switch (action.type) {
@@ -41,6 +61,7 @@ export default formReducer.plugin({
           values: formValues,
         };
       }
+      case actions.IMPORT_FILES_SUCCESS:
       case actions.AUTOGRADE_SUCCESS:
       case actions.RESET_SUCCESS: {
         const answer = action.payload;
@@ -49,6 +70,40 @@ export default formReducer.plugin({
           ...state,
           initial: updateAnswerInState(state.initial, answer),
           values: updateAnswerInState(state.values, answer),
+        };
+      }
+      case actions.DELETE_FILE_SUCCESS: {
+        const { questionId, answer: { fileId } } = action.payload;
+        return {
+          ...state,
+          initial: removeProgrammingFileFromState(state.initial, questionId, fileId),
+          values: removeProgrammingFileFromState(state.values, questionId, fileId),
+        };
+      }
+      case actions.STAGE_FILES: {
+        const { answerId, files } = action;
+        const newFiles = Object(files).reduce((acc, obj) => {
+          const file = { filename: obj.name, staged: true };
+          const fr = new FileReader();
+          fr.onload = (e) => {
+            file.content = e.target.result;
+          };
+          fr.readAsText(obj);
+          return acc.concat(file);
+        }, []);
+
+        // Removes previously staged files
+        const filteredFiles = state.values[answerId].files_attributes.filter(file => !file.staged);
+
+        return {
+          ...state,
+          values: {
+            ...state.values,
+            [answerId]: {
+              ...state.values[answerId],
+              files_attributes: filteredFiles.concat(newFiles),
+            },
+          },
         };
       }
       default:

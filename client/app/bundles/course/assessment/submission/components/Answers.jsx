@@ -19,6 +19,7 @@ import TestCaseView from '../containers/TestCaseView';
 import ReadOnlyEditor from '../containers/ReadOnlyEditor';
 import UploadedFileView from '../containers/UploadedFileView';
 import ScribingView from '../containers/ScribingView';
+import ProgrammingImportEditor from '../containers/ProgrammingImportEditor';
 import { parseLanguages } from '../utils';
 import VoiceResponseAnswer from '../containers/VoiceResponseAnswer';
 
@@ -206,16 +207,30 @@ export default class Answers extends Component {
   }
 
   static renderProgramming(question, readOnly, answerId) {
+    const fileSubmission = question.fileSubmission;
     return (
       <div>
-        <FieldArray
-          name={`${answerId}[files_attributes]`}
-          component={Answers.renderProgrammingFiles}
-          {...{
-            readOnly,
-            language: parseLanguages(question.language),
-          }}
-        />
+        {
+          fileSubmission ?
+            <ProgrammingImportEditor
+              questionId={question.id}
+              answerId={answerId}
+              {...{
+                readOnly,
+                question,
+              }}
+            />
+            :
+            <FieldArray
+              name={`${answerId}[files_attributes]`}
+              component={Answers.renderProgrammingFiles}
+              {...{
+                readOnly,
+                question,
+                language: parseLanguages(question.language),
+              }}
+            />
+        }
         <TestCaseView questionId={question.id} />
       </div>
     );

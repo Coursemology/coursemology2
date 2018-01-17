@@ -459,7 +459,8 @@ class OnlineEditorJavaView extends React.Component {
                 '{file_submission}: Toggling this option on will allow you to upload java class files to be ' +
                 'compiled individually, and allows you to test (individual/multiple) java classes. ' +
                 'Toggled off, you will input code as templates, which will be used for you to test ' +
-                'java functions'
+                'java functions. Note that you will need to upload either a submission or solution ' +
+                'file at the very least for the compiler to compile the files correctly.'
               }
               values={{
                 file_submission: <b>{intl.formatMessage(javaTranslations.fileSubmissionDescriptionNote)}</b>,
