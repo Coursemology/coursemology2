@@ -53,15 +53,11 @@ class Course::Settings::LessonPlanItems < Course::Settings::PanComponent
   # Gets a hash of actable type names for lesson plan items of enabled components mapped to data
   # that will be passed to actable's model scope for further processing.
   #
-  # @return [Hash{String} => Array or nil] Hash of actable_type names.
+  # @return [Hash{String => Array or nil}] Hash of actable_type names to data.
   def actable_hash
-    lesson_plan_item_actable_names.map do |component_name|
-      if component_name == Course::Assessment.name
-        [Course::Assessment.name, disabled_tab_ids_for_lesson_plan]
-      else
-        [component_name, nil]
-      end
-    end.to_h
+    lesson_plan_item_actable_names.map do |actable_name|
+      actable_hash_data(actable_name)
+    end.compact.to_h
   end
 
   private
@@ -70,7 +66,26 @@ class Course::Settings::LessonPlanItems < Course::Settings::PanComponent
     @components.map(&:class).map(&:lesson_plan_item_actable_names).flatten
   end
 
-  def disabled_tab_ids_for_lesson_plan
-    settings_interfaces_hash['course_assessments_component'].disabled_tab_ids_for_lesson_plan
+  # Gets the data needed for actable_hash from each component's settings_interface.
+  #
+  # For Assessments, return the tab IDs which are disabled.
+  #
+  # For Survey and Video where the setting is all or nothing, return nil if they're not supposed to
+  # be shown so the key isn't even in actable_hash. This is the same mechanism used to prevent items
+  # belonging to disabled components from showing in the lesson plan.
+  #
+  # @param [String] actable_name The name of the actable type.
+  # @return [Array<String> or nil]
+  def actable_hash_data(actable_name)
+    case actable_name
+    when Course::Assessment.name
+      [actable_name, settings_interfaces_hash['course_assessments_component'].disabled_tab_ids_for_lesson_plan]
+    when Course::Survey.name
+      [actable_name, nil] if settings_interfaces_hash['course_survey_component'].showable_in_lesson_plan?
+    when Course::Video.name
+      [actable_name, nil] if settings_interfaces_hash['course_videos_component'].showable_in_lesson_plan?
+    when Course::LessonPlan::Event.name
+      [actable_name, nil]
+    end
   end
 end

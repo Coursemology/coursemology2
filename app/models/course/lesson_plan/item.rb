@@ -32,8 +32,7 @@ class Course::LessonPlan::Item < ApplicationRecord
   #   Each actable type is further scoped to return the IDs of items for display.
   #   actable_data is provided to help the actable types figure out what should be displayed.
   #
-  # @param actable_types [Array<String>] Array of strings with the actable type names.
-  # @param settings [SettingsOnRails::Settings] Course settings object.
+  # @param actable_hash [Hash{String => Array<String> or nil}] Hash of actable_names to data.
   scope :with_actable_types, lambda { |actable_hash|
     where(
       actable_hash.map do |actable_type, actable_data|
