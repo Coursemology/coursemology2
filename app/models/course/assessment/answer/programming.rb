@@ -58,7 +58,25 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
 
     params[:files_attributes]&.each do |file_attributes|
       file = files.find { |f| f.id == file_attributes[:id].to_i }
-      file.content = file_attributes[:content]
+      file.content = file_attributes[:content] if file.present?
     end
+  end
+
+  def create_and_update_files(params)
+    params[:files_attributes]&.each do |file_attributes|
+      file = files.find { |f| f.id == file_attributes[:id].to_i }
+      if file.present?
+        file.content = file_attributes[:content]
+      else
+        files.build(filename: file_attributes[:filename], content: file_attributes[:content])
+      end
+    end
+    save
+  end
+
+  def delete_file(file_id)
+    file = files.find { |f| f.id == file_id }
+    file.mark_for_destruction if file.present?
+    save
   end
 end
