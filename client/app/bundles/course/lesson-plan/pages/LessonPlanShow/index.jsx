@@ -12,20 +12,40 @@ class LessonPlanShow extends React.Component {
       milestone: PropTypes.object,
       items: PropTypes.array,
     })).isRequired,
+    visibility: PropTypes.shape({}).isRequired,
+    milestonesExpanded: PropTypes.string,
   }
 
-  componentDidMount() {
+  /**
+   * Searches for the last milestone that has just passed.
+   * The current group contains that milestone and the items that come after that milestone,
+   * but before the next one.
+   *
+   * @return {String} id of the current group
+   * @return {Null} if no milestones have passed yet
+   */
+  static currentGroupId(groups) {
     let currentGroupId = null;
-    this.props.groups.some((group) => {
+    groups.some((group) => {
       if (!group.milestone || moment(group.milestone.start_at).isSameOrBefore()) {
         currentGroupId = group.id;
         return false;
       }
       return true;
     });
+    return currentGroupId;
+  }
 
-    if (currentGroupId) {
-      scroller.scrollTo(currentGroupId, {
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentGroupId: LessonPlanShow.currentGroupId(props.groups),
+    };
+  }
+
+  componentDidMount() {
+    if (this.state.currentGroupId) {
+      scroller.scrollTo(this.state.currentGroupId, {
         duration: 200,
         delay: 100,
         smooth: true,
@@ -34,20 +54,39 @@ class LessonPlanShow extends React.Component {
     }
   }
 
+  renderGroup(group) {
+    const { visibility, milestonesExpanded } = this.props;
+    const { currentGroupId } = this.state;
+    const { id, items } = group;
+
+    const visibleItems = items.filter(item => visibility[item.itemTypeKey]);
+    const initiallyExpanded = {
+      current: currentGroupId ? (id === currentGroupId) : true,
+      all: true,
+      none: false,
+    }[milestonesExpanded];
+
+    return (
+      <LessonPlanGroup
+        key={id}
+        initiallyExpanded={initiallyExpanded === undefined ? true : initiallyExpanded}
+        group={{ ...group, items: visibleItems }}
+      />
+    );
+  }
+
   render() {
     return (
       <div>
-        {this.props.groups.map(group => (
-          <LessonPlanGroup
-            key={group.id}
-            group={group}
-          />
-        ))}
+        { this.props.groups.map(group => this.renderGroup(group)) }
       </div>
     );
   }
 }
 
+export const UnconnectedLessonPlanShow = LessonPlanShow;
 export default connect(state => ({
   groups: state.lessonPlan.groups,
+  visibility: state.lessonPlan.visibilityByType,
+  milestonesExpanded: state.flags.milestonesExpanded,
 }))(LessonPlanShow);
