@@ -23,6 +23,7 @@
 	<!-- To compile the submission files -->
 	<target name="src-compile" depends="aux-compile">
 		<mkdir dir="${build}"/>
+		<mkdir dir="${src}"/>
 		<javac srcdir="${src}" destdir="${build}" includeantruntime="false">
 			<classpath refid="classpath"></classpath>
 		</javac>
