@@ -35,6 +35,7 @@ const config = {
       'redux',
       'redux-form',
       'redux-immutable',
+      'redux-persist',
       'redux-promise',
       'redux-thunk',
       'webfontloader',

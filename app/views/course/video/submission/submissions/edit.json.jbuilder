@@ -11,3 +11,5 @@ json.discussion do
     json.scrollTopicId @scroll_topic_id
   end
 end
+
+json.courseUserId current_course_user&.id&.to_s

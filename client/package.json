@@ -107,6 +107,7 @@
     "redux": "^3.3.1",
     "redux-form": "^7.2.1",
     "redux-immutable": "^4.0.0",
+    "redux-persist": "^5.5.0",
     "redux-promise": "^0.5.3",
     "redux-thunk": "^2.0.1",
     "reselect": "^3.0.1",
