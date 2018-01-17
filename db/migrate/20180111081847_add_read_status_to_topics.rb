@@ -5,7 +5,10 @@ class AddReadStatusToTopics < ActiveRecord::Migration[5.1]
     #
     # This does not affect Forums because ReadMarks are declared on those
     # models rather than on Course::Discussion::Topic.
-    User.find_each { |user| Course::Discussion::Topic.mark_as_read! :all, for: user }
+    execute <<-SQL
+      INSERT INTO read_marks(readable_type, reader_id, timestamp, reader_type)
+        SELECT 'Course::Discussion::Topic', id, NOW(), 'User' FROM users
+    SQL
   end
 
   def down
