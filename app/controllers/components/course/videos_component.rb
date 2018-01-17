@@ -51,6 +51,7 @@ class Course::VideosComponent < SimpleDelegator
       from_course(current_course).
       unwatched_by(current_user).
       published.
+      active.
       count
   end
 end

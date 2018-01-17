@@ -30,6 +30,9 @@ module Extensions::ActsAsHelpers::ActiveRecord::Base
         attr_accessor :has_todo
       end
       self.has_todo = has_todo ? true : false
+
+      scope :active, -> { joins(:lesson_plan_item).merge(Course::LessonPlan::Item.currently_active) }
+
       extend LessonPlanItemClassMethods
       include LessonPlanItemInstanceMethods
     end
