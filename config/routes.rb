@@ -199,6 +199,8 @@ Rails.application.routes.draw do
               scope module: :answer do
                 resources :answers, only: [:show] do
                   namespace :programming do
+                    post 'create_programming_files' => 'programming#create_programming_files'
+                    post 'destroy_programming_file' => 'programming#destroy_programming_file'
                     resources :files, only: [] do
                       resources :annotations, only: [:create]
                     end
