@@ -38,9 +38,10 @@ const AchievementGainedPopup = ({ notification, onDismiss, intl }) => (
     <span style={styles.title}>
       { notification.title }
     </span>
-    <span style={styles.description}>
-      { notification.description }
-    </span>
+    <span
+      style={styles.description}
+      dangerouslySetInnerHTML={{ __html: notification.description }}
+    />
   </Popup>
 );
 
