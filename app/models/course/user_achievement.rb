@@ -15,7 +15,7 @@ class Course::UserAchievement < ApplicationRecord
   end
 
   def send_notification
-    return unless course_user.real_student?
+    return unless course_user.student?
 
     Course::AchievementNotifier.achievement_gained(course_user.user, achievement)
   end

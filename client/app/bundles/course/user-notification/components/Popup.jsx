@@ -41,6 +41,7 @@ class Popup extends React.Component {
         contentStyle={styles.dialog}
         titleStyle={styles.centralise}
         bodyStyle={styles.centralise}
+        onRequestClose={this.props.onDismiss}
       >
         { children }
       </Dialog>
