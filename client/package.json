@@ -36,7 +36,9 @@
       "jsx",
       "json"
     ],
-    "setupFiles": [ "<rootDir>/app/__test__/requestAnimationFrame.js"],
+    "setupFiles": [
+      "<rootDir>/app/__test__/requestAnimationFrame.js"
+    ],
     "setupTestFrameworkScriptFile": "<rootDir>/app/__test__/setup.js",
     "snapshotSerializers": [
       "<rootDir>/node_modules/enzyme-to-json/serializer"
@@ -78,7 +80,7 @@
     "jquery": "2.2.4",
     "jquery-ui": "^1.12.1",
     "json-loader": "^0.5.4",
-    "material-ui": "^0.19.4",
+    "material-ui": "^0.20.0",
     "mirror-creator": "1.1.0",
     "mkdirp": "^0.5.1",
     "moment": "^2.19.2",

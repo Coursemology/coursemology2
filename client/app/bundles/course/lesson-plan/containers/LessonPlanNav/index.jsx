@@ -39,7 +39,7 @@ class LessonPlanNav extends React.Component {
     };
   }
 
-  handleTouchTap = (event) => {
+  handleClick = (event) => {
     // This prevents ghost click.
     event.preventDefault();
 
@@ -98,7 +98,7 @@ class LessonPlanNav extends React.Component {
         { this.renderScrollSpies() }
         <RaisedButton
           secondary
-          onClick={this.handleTouchTap}
+          onClick={this.handleClick}
           label={this.state.text}
           labelPosition="before"
           icon={<KeyboardArrowUp />}
