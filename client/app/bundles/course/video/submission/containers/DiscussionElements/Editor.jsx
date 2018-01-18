@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import ReactSummernote from 'react-summernote';
 import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
 
 import style from '../Discussion.scss';
 
@@ -16,22 +16,6 @@ const translations = defineMessages({
     defaultMessage: 'Cancel',
   },
 });
-
-const editorOptions = {
-  airMode: true,
-  dialogsInBody: false,
-  popover: {
-    air: [
-      ['style', ['style']],
-      ['font', ['bold', 'underline', 'clear']],
-      ['script', ['superscript', 'subscript']],
-      ['color', ['color']],
-      ['para', ['ul', 'ol', 'paragraph']],
-      ['table', ['table']],
-      ['insert', ['link', 'picture']],
-    ],
-  },
-};
 
 const propTypes = {
   content: PropTypes.string.isRequired,
@@ -55,10 +39,14 @@ const defaultProps = {
 function Editor(props) {
   return (
     <div>
-      <ReactSummernote
-        options={Object.assign({}, editorOptions, { disabled: props.disabled })}
+      <TextField
+        fullWidth
+        multiLine
+        floatingLabelText="Enter your comment here"
+        rows={2}
+        rowsMax={4}
         value={props.content}
-        onChange={props.onContentUpdate}
+        onChange={event => props.onContentUpdate(event.target.value)}
       />
       <div className={style.editorExtraElement}>
         {props.children}

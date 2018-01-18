@@ -21,7 +21,7 @@ const propTypes = {
 function mapStateToProps(state, ownProps) {
   const postObject = state.discussion.posts.get(ownProps.postId);
   return {
-    content: postObject.editedContent || postObject.content,
+    content: postObject.editedContent || postObject.rawContent,
     disabled: postObject.status === postRequestingStatuses.LOADING,
     submitButtonText: (<FormattedMessage {...translations.edit} />),
   };
