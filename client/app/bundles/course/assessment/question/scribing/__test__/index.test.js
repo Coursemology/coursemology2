@@ -20,9 +20,11 @@ const scribingId = '3';
 
 const mockFields = {
   question_scribing: {
-    title: 'Scribing Exercise',
+    description: '',
     maximum_grade: 10,
     skill_ids: [],
+    staff_only_comments: '',
+    title: 'Scribing Exercise',
   },
 };
 
@@ -78,6 +80,7 @@ describe('Scribing question', () => {
     // Wait for api call
     await sleep(1);
     expect(spyFetchSkills).toHaveBeenCalled();
+    newPage.update();
     expect(newPage.find('InputField').length).toBe(2);
     expect(newPage.find('MultiSelectSkillsField').length).toBe(1);
     expect(newPage.find('option').length).toBe(2);
@@ -137,6 +140,7 @@ describe('Scribing question', () => {
     // Wait for api call
     await sleep(1);
     expect(spyFetch).toHaveBeenCalled();
+    fetchPage.update();
     expect(fetchPage.find('InputField').length).toBe(2);
     expect(fetchPage.find('MultiSelectSkillsField').length).toBe(1);
     expect(fetchPage.find('option').length).toBe(2);
@@ -173,6 +177,7 @@ describe('Scribing question', () => {
     // Wait for api call
     await sleep(1);
     expect(spyUpdate).toHaveBeenCalled();
+    fetchPage.update();
     expect(fetchPage.find('div.alert').length).toBe(1);
   });
 
@@ -196,7 +201,8 @@ describe('Scribing question', () => {
     );
 
     await sleep(1);
-    newPage.find('[type="submit"]').get(0).click();
+    newPage.update();
+    newPage.find('button').first().simulate('submit');
 
     await sleep(1);
     expect(spyCreate).toHaveBeenCalled();
@@ -205,7 +211,7 @@ describe('Scribing question', () => {
   it('allows question to be updated', async () => {
     Object.defineProperty(window.location, 'pathname', {
       writable: true,
-      value: `/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}`,
+      value: `/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}/edit`,
     });
 
     const spyUpdate = jest.spyOn(CourseAPI.question.scribing.scribings, 'update');
@@ -217,15 +223,16 @@ describe('Scribing question', () => {
       <ProviderWrapper store={store}>
         <MemoryRouter
           initialEntries={[`/courses/${courseId}/assessments/${assessmentId}
-                            /question/scribing/${scribingId}`]}
+                            /question/scribing/${scribingId}/edit`]}
         >
-          <ScribingQuestion initialValues={mockFields} />
+          <ScribingQuestion />
         </MemoryRouter>
       </ProviderWrapper>
     );
 
     await sleep(1);
-    fetchPage.find('[type="submit"]').get(0).click();
+    fetchPage.update();
+    fetchPage.find('button').first().simulate('submit');
 
     await sleep(1);
     expect(spyUpdate).toHaveBeenCalledWith(scribingId, mockUpdatedFields);

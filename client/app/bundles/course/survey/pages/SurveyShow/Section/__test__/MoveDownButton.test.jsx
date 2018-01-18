@@ -1,7 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { mount } from 'enzyme';
-import ReactTestUtils from 'react-dom/test-utils';
 import CourseAPI from 'api/course';
 import storeCreator from 'course/survey/store';
 import MoveDownButton from '../MoveDownButton';
@@ -29,8 +27,7 @@ describe('<MoveDownButton />', () => {
     });
     const moveSectionButton =
       mount(<MoveDownButton sectionIndex={sectionIndex} />, buildContextOptions(store));
-    const moveSectionButtonNode = ReactDOM.findDOMNode(moveSectionButton.find('button').node);
-    ReactTestUtils.Simulate.click(moveSectionButtonNode);
+    moveSectionButton.find('button').simulate('click');
 
     expect(spyMove).toHaveBeenCalledWith({ ordering: [3, 1, 4, 9, 5] });
   });

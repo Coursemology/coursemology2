@@ -1,9 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import ReactDOM from 'react-dom';
 import { MemoryRouter } from 'react-router-dom';
 import storeCreator from 'course/survey/store';
-import ReactTestUtils from 'react-dom/test-utils';
 import ResultsQuestion from '../ResultsQuestion';
 
 const surveyId = '6';
@@ -62,7 +60,7 @@ const testExpandLongQuestion = (question) => {
   );
   expect(resultsQuestion.find('Table')).toHaveLength(0);
   const expandButton = resultsQuestion.find('RaisedButton').first().find('button');
-  ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(expandButton.node));
+  expandButton.simulate('click');
   expect(resultsQuestion.find('Table')).toHaveLength(1);
 };
 
@@ -90,6 +88,7 @@ describe('<ResultsQuestion />', () => {
     expect(lastOptionCountBeforeSort).toBe('1');
     const sortToggle = resultsQuestion.find('Toggle').first();
     sortToggle.props().onToggle(null, true);
+    resultsQuestion.update();
     const lastOptionCountAfterSort = lastOptionCountCell().text();
     expect(lastOptionCountAfterSort).toBe('0');
   });

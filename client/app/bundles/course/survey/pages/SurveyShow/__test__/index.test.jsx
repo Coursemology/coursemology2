@@ -91,24 +91,27 @@ describe('<SurveyShow />', () => {
     await sleep(1);
     expect(spyFetch).toHaveBeenCalled();
 
-    const sections = showPage.find('DropTarget(Section)');
+    showPage.update();
+    let sections = showPage.find('DropTarget(Section)');
+    const updateSections = () => { sections = showPage.update().find('DropTarget(Section)'); };
+
     const questions = showPage.find('DropTarget(DragSource(Question))');
     const sourceQuestion = questions.first();
     const targetQuestion = questions.last();
 
     // Mock getBoundingClientRect for question drop target
     const targetQuestionDOMNode =
-      targetQuestion.node.getDecoratedComponentInstance().getDecoratedComponentInstance().DOMNode;
+      targetQuestion.instance().getDecoratedComponentInstance().getDecoratedComponentInstance().DOMNode;
     targetQuestionDOMNode.getBoundingClientRect = jest.fn();
     targetQuestionDOMNode.getBoundingClientRect
       .mockReturnValue({ bottom: 200, height: 100, left: 0, right: 0, top: 100, width: 0 });
 
     // Simulate dragging first question down past the mid-line of the second question
     const dragDropContext = showPage.find('DragDropContext(TestContextContainer)').first();
-    const dragDropBackend = dragDropContext.node.getManager().getBackend();
+    const dragDropBackend = dragDropContext.instance().getManager().getBackend();
     const sourceQuestionHandlerId =
-      sourceQuestion.node.getDecoratedComponentInstance().getHandlerId();
-    const targetQuestionHandlerId = targetQuestion.node.getHandlerId();
+      sourceQuestion.instance().getDecoratedComponentInstance().getHandlerId();
+    const targetQuestionHandlerId = targetQuestion.instance().getHandlerId();
     const questionWeights =
       () => sections.first().props().section.questions.map(question => question.weight);
     const questionWeightsBeforeReorder = questionWeights();
@@ -117,23 +120,25 @@ describe('<SurveyShow />', () => {
       getSourceClientOffset: () => ({ x: 0, y: 0 }),
     });
     dragDropBackend.simulateHover([targetQuestionHandlerId], { clientOffset: { x: 0, y: 175 } });
+    updateSections();
     const questionWeightsAfterReorder = questionWeights();
     expect(questionWeightsBeforeReorder[0]).toBeLessThan(questionWeightsBeforeReorder[1]);
     expect(questionWeightsAfterReorder[0]).not.toBeLessThan(questionWeightsAfterReorder[1]);
 
     // Mock getBoundingClientRect for section drop target
     const tragetSection = sections.last();
-    const targetSectionDOMNode = tragetSection.node.getDecoratedComponentInstance().DOMNode;
+    const targetSectionDOMNode = tragetSection.instance().getDecoratedComponentInstance().DOMNode;
     targetSectionDOMNode.getBoundingClientRect = jest.fn();
     targetSectionDOMNode.getBoundingClientRect
       .mockReturnValue({ bottom: 400, height: 100, left: 0, right: 0, top: 300, width: 0 });
 
     // Continue dragging question down into the next section
-    const targetSectionHandlerId = tragetSection.node.getHandlerId();
+    const targetSectionHandlerId = tragetSection.instance().getHandlerId();
     expect(sections.first().props().section.questions.length).toBe(2);
     expect(sections.last().props().section.questions.length).toBe(0);
     dragDropBackend.simulateHover([], { clientOffset: { x: 0, y: 350 } });
     dragDropBackend.simulateHover([targetSectionHandlerId]);
+    updateSections();
     expect(sections.first().props().section.questions.length).toBe(1);
     expect(sections.last().props().section.questions.length).toBe(1);
 

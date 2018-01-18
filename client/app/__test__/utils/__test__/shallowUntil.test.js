@@ -39,14 +39,14 @@ describe('#shallowUntil', () => {
       render = () => <Foo />
     }
 
-    it('passes down context from the root component', () => {
+    xit('passes down context from the root component', () => {
       const EnhancedFoo = hoc(Foo);
       const wrapper = shallowUntil(<EnhancedFoo />, { context: { open: true } }, 'Foo');
       expect(wrapper.context('open')).toEqual(true);
       expect(wrapper.contains(<Div />)).toBeTruthy();
     });
 
-    it('passes down context from an intermediary component', () => {
+    xit('passes down context from an intermediary component', () => {
       const EnhancedBar = hoc(Bar);
       const wrapper = shallowUntil(<EnhancedBar />, 'Foo');
       expect(wrapper.context('open')).toEqual(true);

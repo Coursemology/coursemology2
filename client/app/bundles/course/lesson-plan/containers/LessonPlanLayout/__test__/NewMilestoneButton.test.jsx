@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { mount, ReactWrapper } from 'enzyme';
+import { mount } from 'enzyme';
 import ReactTestUtils from 'react-dom/test-utils';
 import CourseAPI from 'api/course';
 import storeCreator from 'course/lesson-plan/store';
@@ -17,8 +17,8 @@ describe('<NewMilestoneButton />', () => {
     const newMilestoneButton = mount(<NewMilestoneButton />, contextOptions);
 
     // Click 'new milestone' button
-    const newMilestoneButtonNode = ReactDOM.findDOMNode(newMilestoneButton.find('button').node);
-    ReactTestUtils.Simulate.click(newMilestoneButtonNode);
+    newMilestoneButton.find('button').simulate('click');
+    milestoneFormDialog.update();
     expect(milestoneFormDialog.find('MilestoneFormDialog').first().props().visible).toBe(true);
 
     // Fill milestone form
@@ -27,8 +27,8 @@ describe('<NewMilestoneButton />', () => {
       start_at: new Date('2016-12-31T16:00:00.000Z'),
     };
     const startAt = '01-01-2017';
-    const dialogInline = milestoneFormDialog.find('RenderToLayer').first().node.layerElement;
-    const milestoneForm = new ReactWrapper(dialogInline, true).find('form');
+    const dialogInline = milestoneFormDialog.find('RenderToLayer').first().instance();
+    const milestoneForm = mount(dialogInline.props.render(), contextOptions).find('form');
     const titleInput = milestoneForm.find('input[name="title"]');
     titleInput.simulate('change', { target: { value: milestoneData.title } });
     const startAtDateInput = milestoneForm.find('input[name="start_at"]').first();
@@ -36,7 +36,7 @@ describe('<NewMilestoneButton />', () => {
     startAtDateInput.simulate('blur');
 
     // Submit milestone form
-    const submitButton = milestoneFormDialog.find('FormDialogue').first().node.submitButton;
+    const submitButton = milestoneFormDialog.find('FormDialogue').first().instance().submitButton;
     ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton));
     expect(spyCreate).toHaveBeenCalledWith({ lesson_plan_milestone: milestoneData });
   });

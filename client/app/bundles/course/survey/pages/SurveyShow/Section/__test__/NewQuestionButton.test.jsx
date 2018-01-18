@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { mount, ReactWrapper } from 'enzyme';
 import ReactTestUtils from 'react-dom/test-utils';
+import { mount } from 'enzyme';
 import CourseAPI from 'api/course';
 import storeCreator from 'course/survey/store';
 import QuestionFormDialogue from 'course/survey/containers/QuestionFormDialogue';
@@ -16,22 +16,23 @@ describe('<NewQuestionButton />', () => {
     const questionFormDialogue = mount(<QuestionFormDialogue />, contextOptions);
 
     // Click 'new question' button
-    const newQuestionButtonNode = ReactDOM.findDOMNode(newQuestionButton.find('button').node);
-    ReactTestUtils.Simulate.click(newQuestionButtonNode);
+    const newQuestionButtonNode = newQuestionButton.find('button');
+    newQuestionButtonNode.simulate('click');
+    questionFormDialogue.update();
     expect(questionFormDialogue.find('QuestionFormDialogue').first().props().visible).toBe(true);
 
     // Fill section form with title
     const questionText = 'Question: Is it true?';
     const optionText = 'Yes';
-    const dialogInline = questionFormDialogue.find('RenderToLayer').first().node.layerElement;
-    const questionForm = new ReactWrapper(dialogInline, true).find('form');
+    const dialogInline = questionFormDialogue.find('RenderToLayer').first().instance();
+    const questionForm = mount(dialogInline.props.render(), contextOptions).find('form');
     const descriptionInput = questionForm.find('textarea[name="description"]');
     descriptionInput.simulate('change', { target: { value: questionText } });
     const optionInput = questionForm.find('QuestionFormOption').first().find('textarea').last();
     optionInput.simulate('change', { target: { value: optionText } });
 
     // Submit question form
-    const submitButton = questionFormDialogue.find('FormDialogue').first().node.submitButton;
+    const submitButton = questionFormDialogue.find('FormDialogue').first().instance().submitButton;
     ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton));
 
     expect(spyCreate).toHaveBeenCalled();

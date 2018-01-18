@@ -1,7 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { mount } from 'enzyme';
-import ReactTestUtils from 'react-dom/test-utils';
 import storeCreator from 'course/survey/store';
 import ResponseForm, { buildInitialValues, buildResponsePayload } from '../index';
 
@@ -100,16 +98,24 @@ describe('<ResponseForm />', () => {
       buildContextOptions(storeCreator({}))
     );
 
-    const responseAnswers = responseForm.find('ResponseAnswer');
-    const textResponseAnswer = responseAnswers.at(0);
-    const multipleChoiceAnswer = responseAnswers.at(1);
-    const multipleResponseAnswer = responseAnswers.at(2);
+    let textResponseAnswer;
+    let multipleChoiceAnswer;
+    let multipleResponseAnswer;
+    const updateResponse = () => {
+      responseForm.update();
+      const responseAnswers = responseForm.find('ResponseAnswer');
+      textResponseAnswer = responseAnswers.at(0);
+      multipleChoiceAnswer = responseAnswers.at(1);
+      multipleResponseAnswer = responseAnswers.at(2);
+    };
+    updateResponse();
 
-    const lastMRQOptionCheckbox = multipleResponseAnswer.find('OptionsListItem').last().find('Checkbox');
+    let lastMRQOptionCheckbox = multipleResponseAnswer.find('OptionsListItem').last().find('Checkbox');
     lastMRQOptionCheckbox.props().onCheck(null, true);
 
     const submitButton = responseForm.find('button').last();
-    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton.node));
+    submitButton.simulate('click');
+    updateResponse();
 
     const textResponseAnswerError = textResponseAnswer.find('div').last().text();
     expect(textResponseAnswerError).toEqual('Required');
@@ -123,7 +129,7 @@ describe('<ResponseForm />', () => {
     expect(multipleResponseAnswerError).toEqual('Please select at most 2 option(s).');
 
     const saveButton = responseForm.find('button').first();
-    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(saveButton.node));
+    saveButton.simulate('click');
     const saveExpectedPayload = {
       response: {
         answers_attributes: [{
@@ -149,9 +155,10 @@ describe('<ResponseForm />', () => {
     textResponse.simulate('change', { target: { value: newAnswer } });
     const firstMCQOptionRadio = multipleChoiceAnswer.find('OptionsListItem').first().find('RadioButton');
     firstMCQOptionRadio.props().onCheck(null, firstMCQOptionRadio.props().value);
+    lastMRQOptionCheckbox = multipleResponseAnswer.find('OptionsListItem').last().find('Checkbox');
     lastMRQOptionCheckbox.props().onCheck(null, false);
 
-    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton.node));
+    submitButton.simulate('click');
     const submitExpectedPayload = {
       response: {
         answers_attributes: [{

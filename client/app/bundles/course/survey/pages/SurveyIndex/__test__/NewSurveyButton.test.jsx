@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { mount, ReactWrapper } from 'enzyme';
+import { mount } from 'enzyme';
 import ReactTestUtils from 'react-dom/test-utils';
 import CourseAPI from 'api/course';
 import storeCreator from 'course/survey/store';
@@ -17,8 +17,8 @@ describe('<NewSurveyButton />', () => {
     const newSurveyButton = mount(<NewSurveyButton />, contextOptions);
 
     // Click 'new survey' button
-    const newSurveyButtonNode = ReactDOM.findDOMNode(newSurveyButton.find('button').node);
-    ReactTestUtils.Simulate.click(newSurveyButtonNode);
+    newSurveyButton.find('button').simulate('click');
+    surveyFormDialogue.update();
     expect(surveyFormDialogue.find('SurveyFormDialogue').first().props().visible).toBe(true);
 
     // Fill survey form
@@ -32,8 +32,8 @@ describe('<NewSurveyButton />', () => {
     };
 
     const startAt = '01-01-2017';
-    const dialogInline = surveyFormDialogue.find('RenderToLayer').first().node.layerElement;
-    const surveyForm = new ReactWrapper(dialogInline, true).find('form');
+    const dialogInline = surveyFormDialogue.find('RenderToLayer').first().instance();
+    const surveyForm = mount(dialogInline.props.render(), contextOptions).find('form');
     const titleInput = surveyForm.find('input[name="title"]');
     titleInput.simulate('change', { target: { value: survey.title } });
     const startAtDateInput = surveyForm.find('input[name="start_at"]').first();
@@ -41,7 +41,7 @@ describe('<NewSurveyButton />', () => {
     startAtDateInput.simulate('blur');
 
     // Submit survey form
-    const submitButton = surveyFormDialogue.find('FormDialogue').first().node.submitButton;
+    const submitButton = surveyFormDialogue.find('FormDialogue').first().instance().submitButton;
     ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton));
     expect(spyCreate).toHaveBeenCalledWith({ survey });
   });

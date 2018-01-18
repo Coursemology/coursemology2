@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { mount, ReactWrapper } from 'enzyme';
+import { mount } from 'enzyme';
 import ReactTestUtils from 'react-dom/test-utils';
 import CourseAPI from 'api/course';
 import storeCreator from 'course/survey/store';
@@ -15,19 +15,19 @@ describe('<NewSectionButton />', () => {
     const sectionFormDialogue = mount(<SectionFormDialogue />, contextOptions);
 
     // Click 'new section' button
-    const newSectionButtonNode = ReactDOM.findDOMNode(newSectionButton.find('button').node);
-    ReactTestUtils.Simulate.click(newSectionButtonNode);
+    newSectionButton.find('button').simulate('click');
+    sectionFormDialogue.update();
     expect(sectionFormDialogue.find('SectionFormDialogue').first().props().visible).toBe(true);
 
     // Fill section form with title
     const section = { title: 'Funky section title' };
-    const dialogInline = sectionFormDialogue.find('RenderToLayer').first().node.layerElement;
-    const sectionForm = new ReactWrapper(dialogInline, true).find('form');
+    const dialogInline = sectionFormDialogue.find('RenderToLayer').first().instance();
+    const sectionForm = mount(dialogInline.props.render(), contextOptions).find('form');
     const titleInput = sectionForm.find('input[name="title"]');
     titleInput.simulate('change', { target: { value: section.title } });
 
     // Submit section form
-    const submitButton = sectionFormDialogue.find('FormDialogue').first().node.submitButton;
+    const submitButton = sectionFormDialogue.find('FormDialogue').first().instance().submitButton;
     ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton));
     expect(spyCreate).toHaveBeenCalledWith({ section });
   });

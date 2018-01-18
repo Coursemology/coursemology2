@@ -1,7 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { mount } from 'enzyme';
-import ReactTestUtils from 'react-dom/test-utils';
 import CourseAPI from 'api/course';
 import MockAdapter from 'axios-mock-adapter';
 import storeCreator from 'course/survey/store';
@@ -32,8 +30,7 @@ describe('<RespondButton />', () => {
       buildContextOptions(storeCreator({}))
     );
 
-    const respondButtonNode = respondButton.find('button').first().node;
-    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(respondButtonNode));
+    respondButton.find('button').simulate('click');
 
     await sleep(1);
     expect(spyCreate).toHaveBeenCalledWith(surveyId);

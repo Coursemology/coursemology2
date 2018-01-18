@@ -104,7 +104,7 @@ const ColorPickerField = (props) => {
             pointerEvents: 'inherit',
           }
           : { background: colorPickerColor, ...styles.colorPicker }}
-          onClick={!noFillValue && onClickColorPicker}
+          onClick={noFillValue ? undefined : onClickColorPicker}
         />
         <Popover
           style={styles.toolDropdowns}

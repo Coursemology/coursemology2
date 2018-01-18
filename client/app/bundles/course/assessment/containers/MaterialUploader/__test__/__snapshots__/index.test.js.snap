@@ -96,6 +96,7 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
     <Material
       deleting={false}
       id={1}
+      key="1"
       name="Material 1"
       onMaterialDelete={[Function]}
       updatedAt="2017-01-01T01:00:00.0000000Z"
@@ -103,6 +104,7 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
     <Material
       deleting={false}
       id={2}
+      key="2"
       name="Material 2"
       onMaterialDelete={[Function]}
       updatedAt="2017-01-01T02:00:00.0000000Z"

@@ -59,6 +59,7 @@ describe('LessonPlan', () => {
     await sleep(1);
     expect(spy).toHaveBeenCalled();
     // A milestone should be automatically generated since the event starts before the milestone
+    lessonPlan.update();
     expect(lessonPlan.find('LessonPlanMilestone').length).toBe(2);
     expect(lessonPlan.find('LessonPlanItem').length).toBe(1);
   });

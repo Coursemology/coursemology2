@@ -1,7 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { mount } from 'enzyme';
-import ReactTestUtils from 'react-dom/test-utils';
 import CourseAPI from 'api/course';
 import storeCreator from 'course/survey/store';
 import MoveUpButton from '../MoveUpButton';
@@ -29,8 +27,7 @@ describe('<MoveUpButton />', () => {
     });
     const moveSectionButton =
       mount(<MoveUpButton sectionIndex={sectionIndex} />, buildContextOptions(store));
-    const moveSectionButtonNode = ReactDOM.findDOMNode(moveSectionButton.find('button').node);
-    ReactTestUtils.Simulate.click(moveSectionButtonNode);
+    moveSectionButton.find('button').simulate('click');
 
     expect(spyMove).toHaveBeenCalledWith({ ordering: [3, 1, 5, 4, 9] });
   });

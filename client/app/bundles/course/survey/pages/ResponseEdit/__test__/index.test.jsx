@@ -1,8 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { mount } from 'enzyme';
-import ReactTestUtils from 'react-dom/test-utils';
 import CourseAPI from 'api/course';
 import MockAdapter from 'axios-mock-adapter';
 import storeCreator from 'course/survey/store';
@@ -74,6 +72,7 @@ describe('<ResponseEdit />', () => {
     );
     await sleep(1);
     expect(spyEdit).toHaveBeenCalled();
+    responseShow.update();
 
     // Fill and submit response form
     const responseForm = responseShow.find('ResponseForm').first();
@@ -81,7 +80,7 @@ describe('<ResponseEdit />', () => {
     const newAnswer = 'New Answer';
     textResponse.simulate('change', { target: { value: newAnswer } });
     const submitButton = responseForm.find('RaisedButton').at(1).find('button').first();
-    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton.node));
+    submitButton.simulate('click');
 
     const expectedPayload = {
       response: {

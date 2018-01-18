@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { mount } from 'enzyme';
 import ReactTestUtils from 'react-dom/test-utils';
+import { mount } from 'enzyme';
 import CourseAPI from 'api/course';
 import DeleteConfirmation from 'lib/containers/DeleteConfirmation';
 import storeCreator from 'course/survey/store';
@@ -21,11 +21,10 @@ describe('<DeleteSectionButton />', () => {
     const deleteSectionButton =
       mount(<DeleteSectionButton sectionId={sectionId} />, contextOptions);
 
-    const deleteSectionButtonNode = ReactDOM.findDOMNode(deleteSectionButton.find('button').node);
-    ReactTestUtils.Simulate.click(deleteSectionButtonNode);
+    deleteSectionButton.find('button').simulate('click');
 
     const confirmDeleteButton =
-      deleteConfirmation.find('ConfirmationDialog').first().node.confirmButton;
+      deleteConfirmation.find('ConfirmationDialog').first().instance().confirmButton;
     ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(confirmDeleteButton));
 
     expect(spyDelete).toHaveBeenCalledWith(sectionId);

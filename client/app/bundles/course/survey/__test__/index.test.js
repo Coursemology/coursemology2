@@ -46,6 +46,7 @@ describe('Surveys', () => {
     // Wait for api call
     await sleep(1);
     expect(spyIndex).toHaveBeenCalled();
+    indexPage.update();
     expect(indexPage.find('AddButton').length).toBe(1);
     expect(indexPage.find('Table')).toHaveLength(1);
   });
