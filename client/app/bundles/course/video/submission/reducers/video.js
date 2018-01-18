@@ -1,6 +1,7 @@
 import { List as makeImmutableList } from 'immutable';
 import { playerStates, sessionActionTypes, videoActionTypes, videoDefaults } from 'lib/constants/videoConstants';
 import { isPlayingState, timeIsPastRestricted } from 'lib/helpers/videoHelpers';
+import { createTransform } from 'redux-persist';
 
 export const initialState = {
   videoUrl: null,
@@ -18,6 +19,12 @@ export const initialState = {
   sessionSequenceNum: 0,
   sessionEvents: makeImmutableList(),
 };
+
+export const persistTransform = createTransform(
+  inboundState => ({ ...inboundState, sessionEvents: inboundState.sessionEvents.toJS() }),
+  outboundState => ({ ...outboundState, sessionEvents: makeImmutableList(outboundState.sessionEvents) }),
+  { whitelist: ['video'] }
+);
 
 /**
  * Calculates the state changes required for a playerProgress update.
