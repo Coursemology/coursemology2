@@ -2,52 +2,50 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import IconButton from 'material-ui/IconButton';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
+import DeleteIcon from 'material-ui/svg-icons/action/delete';
+import RaisedButton from 'material-ui/RaisedButton';
 import { showEventForm, updateEvent, deleteEvent, showDeleteConfirmation } from 'course/lesson-plan/actions';
 
 const translations = defineMessages({
-  deleteItemConfirmation: {
-    id: 'course.lessonPlan.LessonPlanShow.LessonPlanItem.AdminMenu.deleteConfirmation',
-    defaultMessage: 'Delete Lesson Plan Item?',
-  },
   editEvent: {
-    id: 'course.lessonPlan.LessonPlanShow.LessonPlanItem.AdminMenu.editEvent',
+    id: 'course.lessonPlan.LessonPlanShow.LessonPlanItem.AdminTools.editEvent',
     defaultMessage: 'Edit Event',
   },
-  deleteEvent: {
-    id: 'course.lessonPlan.LessonPlanShow.LessonPlanItem.AdminMenu.deleteEvent',
-    defaultMessage: 'Delete Event',
-  },
   updateSuccess: {
-    id: 'course.lessonPlan.LessonPlanShow.LessonPlanItem.AdminMenu.updateSuccess',
+    id: 'course.lessonPlan.LessonPlanShow.LessonPlanItem.AdminTools.updateSuccess',
     defaultMessage: 'Event updated.',
   },
   updateFailure: {
-    id: 'course.lessonPlan.LessonPlanShow.LessonPlanItem.AdminMenu.updateFailure',
+    id: 'course.lessonPlan.LessonPlanShow.LessonPlanItem.AdminTools.updateFailure',
     defaultMessage: 'Failed to update event.',
   },
   deleteSuccess: {
-    id: 'course.lessonPlan.LessonPlanShow.LessonPlanItem.AdminMenu.deleteSuccess',
+    id: 'course.lessonPlan.LessonPlanShow.LessonPlanItem.AdminTools.deleteSuccess',
     defaultMessage: 'Event deleted.',
   },
   deleteFailure: {
-    id: 'course.lessonPlan.LessonPlanShow.LessonPlanItem.AdminMenu.deleteFailure',
+    id: 'course.lessonPlan.LessonPlanShow.LessonPlanItem.AdminTools.deleteFailure',
     defaultMessage: 'Failed to delete event.',
   },
 });
 
 const styles = {
-  adminMenu: {
-    top: 4,
-    right: 4,
+  tools: {
+    top: 16,
+    right: 66,
     position: 'absolute',
+  },
+  edit: {
+    minWidth: 40,
+  },
+  delete: {
+    minWidth: 40,
+    marginLeft: 10,
   },
 };
 
-class AdminMenu extends React.PureComponent {
+class AdminTools extends React.PureComponent {
   static propTypes = {
     item: PropTypes.shape({
       id: PropTypes.number,
@@ -103,29 +101,26 @@ class AdminMenu extends React.PureComponent {
   }
 
   render() {
-    const { intl, item: { eventId }, canManageLessonPlan } = this.props;
+    const { item: { eventId }, canManageLessonPlan } = this.props;
     if (!canManageLessonPlan || eventId === undefined) { return null; }
 
     return (
-      <IconMenu
-        iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
-        anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
-        targetOrigin={{ horizontal: 'right', vertical: 'top' }}
-        style={styles.adminMenu}
-      >
-        <MenuItem
-          primaryText={intl.formatMessage(translations.editEvent)}
+      <span style={styles.tools}>
+        <RaisedButton
+          icon={<EditIcon />}
           onClick={this.showEditEventDialog}
+          style={styles.edit}
         />
-        <MenuItem
-          primaryText={intl.formatMessage(translations.deleteEvent)}
+        <RaisedButton
+          icon={<DeleteIcon />}
           onClick={this.deleteEventHandler}
+          style={styles.delete}
         />
-      </IconMenu>
+      </span>
     );
   }
 }
 
 export default connect(state => ({
   canManageLessonPlan: state.flags.canManageLessonPlan,
-}))(injectIntl(AdminMenu));
+}))(injectIntl(AdminTools));

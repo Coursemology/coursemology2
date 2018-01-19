@@ -1,38 +1,35 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { mount } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import ReactTestUtils from 'react-dom/test-utils';
 import CourseAPI from 'api/course';
 import DeleteConfirmation from 'lib/containers/DeleteConfirmation';
 import storeCreator from 'course/lesson-plan/store';
 import MilestoneFormDialog from 'course/lesson-plan/containers/MilestoneFormDialog';
-import LessonPlanMilestone from '../LessonPlanMilestone';
+import MilestoneAdminTools from '../MilestoneAdminTools';
 
-describe('<LessonPlanMilestone />', () => {
-  it('hides admin menu for dummy milestone', () => {
-    const store = storeCreator({ flags: { canManageLessonPlan: true } });
-    const lessonPlanMilestone = mount(
-      <LessonPlanMilestone
-        id={undefined}
-        title="Ungrouped Items"
-        startAt="2017-01-04T02:03:00.000+08:00"
-      />,
-      buildContextOptions(store)
-    );
-    expect(lessonPlanMilestone.find('IconMenu').length).toBe(0);
+const buildShallowWrapper = (canManageLessonPlan, milestone) => {
+  const store = storeCreator({ flags: { canManageLessonPlan } });
+  return shallow(
+    <MilestoneAdminTools milestone={milestone} />,
+    buildContextOptions(store)
+  ).dive().dive();
+};
+
+describe('<MilestoneAdminTools />', () => {
+  it('hides admin tools for dummy milestone', () => {
+    const milestone = { id: undefined, title: 'Ungrouped Items' };
+    expect(buildShallowWrapper(true, milestone).find('RaisedButton').length).toBe(0);
   });
 
-  it('hides admin menu when user does not have permissions', () => {
-    const store = storeCreator({ flags: { canManageLessonPlan: false } });
-    const lessonPlanMilestone = mount(
-      <LessonPlanMilestone
-        id={4}
-        title="Ungrouped Items"
-        startAt="2017-01-04T02:03:00.000+08:00"
-      />,
-      buildContextOptions(store)
-    );
-    expect(lessonPlanMilestone.find('IconMenu').length).toBe(0);
+  it('hides admin tools when user does not have permissions', () => {
+    const milestone = { id: 4, title: 'User-defined Milestone' };
+    expect(buildShallowWrapper(false, milestone).find('RaisedButton').length).toBe(0);
+  });
+
+  it('shows admin tools when user has permissions', () => {
+    const milestone = { id: 4, title: 'User-defined Milestone' };
+    expect(buildShallowWrapper(true, milestone).find('RaisedButton').length).toBe(2);
   });
 
   it('allows milestone to be deleted', () => {
@@ -41,25 +38,21 @@ describe('<LessonPlanMilestone />', () => {
     const contextOptions = buildContextOptions(store);
     const deleteConfirmation = mount(<DeleteConfirmation />, contextOptions);
     const milestoneId = 55;
-    const lessonPlanMilestone = mount(
-      <LessonPlanMilestone
-        id={milestoneId}
-        title="Original title"
-        startAt="2017-01-04T02:03:00.000+08:00"
+    const wrapper = mount(
+      <MilestoneAdminTools
+        milestone={{
+          id: milestoneId,
+          title: 'Original title',
+          start_at: '2017-01-04T02:03:00.000+08:00',
+        }}
       />,
       contextOptions
     );
 
-    const iconButton = lessonPlanMilestone.find('button').first();
-    iconButton.simulate('click');
-
-    const menuCardNode = lessonPlanMilestone.find('RenderToLayer').first().instance();
-    const deleteButton = mount(menuCardNode.props.render(), contextOptions).find('EnhancedButton').at(1);
+    const deleteButton = wrapper.find('RaisedButton').last().find('button');
     deleteButton.simulate('click');
-
-    const confirmDeleteButton =
-      deleteConfirmation.find('ConfirmationDialog').first().instance().confirmButton;
-    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(confirmDeleteButton));
+    const confirmButton = deleteConfirmation.find('ConfirmationDialog').first().instance().confirmButton;
+    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(confirmButton));
 
     expect(spyDelete).toHaveBeenCalledWith(milestoneId);
   });
@@ -72,21 +65,20 @@ describe('<LessonPlanMilestone />', () => {
     const milestoneTitle = 'Original title';
     const milestoneStart = '2017-01-04T02:03:00.000+08:00';
     const milestoneFormDialog = mount(<MilestoneFormDialog />, contextOptions);
-    const lessonPlanMilestone = mount(
-      <LessonPlanMilestone
-        id={milestoneId}
-        title={milestoneTitle}
-        startAt={milestoneStart}
+
+    const wrapper = mount(
+      <MilestoneAdminTools
+        milestone={{
+          id: milestoneId,
+          title: milestoneTitle,
+          start_at: milestoneStart,
+        }}
       />,
       contextOptions
     );
 
-    const iconButton = lessonPlanMilestone.find('button').first();
-    iconButton.simulate('click');
-
-    const menuCardNode = lessonPlanMilestone.find('RenderToLayer').first().instance();
-    const updateButton = mount(menuCardNode.props.render(), contextOptions).find('EnhancedButton').first();
-    updateButton.simulate('click');
+    const editButton = wrapper.find('RaisedButton').first().find('button');
+    editButton.simulate('click');
 
     const dialogInline = milestoneFormDialog.find('RenderToLayer').first().instance();
     const milestoneForm = mount(dialogInline.props.render(), contextOptions).find('form');

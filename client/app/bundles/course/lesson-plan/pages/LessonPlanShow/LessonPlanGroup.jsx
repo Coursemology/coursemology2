@@ -1,17 +1,43 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape, defineMessages } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { Element } from 'react-scroll';
-import Paper from 'material-ui/Paper';
+import Divider from 'material-ui/Divider';
+import { Card, CardText, CardTitle } from 'material-ui/Card';
+import { grey50 } from 'material-ui/styles/colors';
+import moment, { longDate } from 'lib/moment';
 import LessonPlanItem from './LessonPlanItem';
-import LessonPlanMilestone from './LessonPlanMilestone';
+import MilestoneAdminTools from './MilestoneAdminTools';
 
 const translations = defineMessages({
   ungroupedItems: {
     id: 'course.lessonPlan.LessonPlanGroup.ungroupedItems',
     defaultMessage: 'Ungrouped Items',
   },
+  noItems: {
+    id: 'course.lessonPlan.LessonPlanGroup.noItems',
+    defaultMessage: 'No items for this milestone.',
+  },
 });
+
+const styles = {
+  card: {
+    marginTop: 20,
+  },
+  cardContainer: {
+    paddingBottom: 0,
+  },
+  milestoneTitle: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  items: {
+    padding: 0,
+  },
+  divider: {
+    height: 2,
+  },
+};
 
 class LessonPlanGroup extends React.Component {
   static propTypes = {
@@ -20,42 +46,79 @@ class LessonPlanGroup extends React.Component {
       milestone: PropTypes.object,
       items: PropTypes.array,
     }).isRequired,
-
-    intl: intlShape.isRequired,
+    initiallyExpanded: PropTypes.bool,
   }
 
-  static renderMilestone(milestone) {
+  static renderMilestoneCardTitle(milestone) {
+    const { title, description, start_at } = milestone;
+
     return (
-      <LessonPlanMilestone
-        id={milestone.id}
-        title={milestone.title}
-        description={milestone.description}
-        startAt={milestone.start_at}
+      <CardTitle
+        showExpandableButton
+        title={
+          <div style={styles.milestoneTitle}>
+            { title }
+            <MilestoneAdminTools milestone={milestone} />
+          </div>
+        }
+        subtitle={
+          <span>
+            { moment(start_at).format(longDate) }
+            <br />
+            <span dangerouslySetInnerHTML={{ __html: description }} />
+          </span>
+        }
+        style={{ backgroundColor: grey50 }}
       />
+    );
+  }
+
+  static renderNoItemsMessage() {
+    return (
+      <div>
+        <Divider style={styles.divider} />
+        <CardText><FormattedMessage {...translations.noItems} /></CardText>
+      </div>
     );
   }
 
   renderDefaultMilestone() {
-    const { intl, group: { items } } = this.props;
-    return (
-      <LessonPlanMilestone
-        title={intl.formatMessage(translations.ungroupedItems)}
-        startAt={items[0].start_at}
-      />
-    );
+    const { group: { items } } = this.props;
+    return LessonPlanGroup.renderMilestoneCardTitle({
+      id: null,
+      title: <FormattedMessage {...translations.ungroupedItems} />,
+      description: null,
+      start_at: items[0].start_at,
+    });
   }
 
   render() {
-    const { group: { id, milestone, items } } = this.props;
+    const { initiallyExpanded, group: { id, milestone, items } } = this.props;
+    if (!milestone && items.length < 1) { return null; }
+
     return (
       <Element name={id}>
-        { milestone ? LessonPlanGroup.renderMilestone(milestone) : this.renderDefaultMilestone() }
-        <Paper>
-          { items.map(item => <LessonPlanItem key={item.id} {...{ item }} />) }
-        </Paper>
+        <Card
+          initiallyExpanded={initiallyExpanded}
+          style={styles.card}
+          containerStyle={styles.cardContainer}
+        >
+          {
+            milestone ?
+            LessonPlanGroup.renderMilestoneCardTitle(milestone) :
+            this.renderDefaultMilestone()
+          }
+          <CardText expandable style={styles.items}>
+            {
+              items.length > 0 ?
+              items.map(item => <LessonPlanItem key={item.id} {...{ item }} />) :
+              LessonPlanGroup.renderNoItemsMessage()
+            }
+          </CardText>
+        </Card>
       </Element>
     );
   }
 }
 
-export default injectIntl(LessonPlanGroup);
+export default LessonPlanGroup;

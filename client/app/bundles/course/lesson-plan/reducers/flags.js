@@ -2,6 +2,7 @@ import actionTypes from '../constants';
 
 const initialState = {
   canManageLessonPlan: false,
+  milestonesExpanded: 'all',
 };
 
 export default function (state = initialState, action) {

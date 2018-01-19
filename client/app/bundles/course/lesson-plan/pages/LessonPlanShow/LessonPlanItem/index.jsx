@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { CardText } from 'material-ui/Card';
 import Divider from 'material-ui/Divider';
 import Details from './Details';
 import Material from './Material';
-import AdminMenu from './AdminMenu';
+import AdminTools from './AdminTools';
 
 const styles = {
   item: {
@@ -15,7 +14,7 @@ const styles = {
 };
 
 const LessonPlanItem = (props) => {
-  const { item, visibility } = props;
+  const { item } = props;
   const {
     id, title, published, location, description, materials,
     itemTypeKey: itemType,
@@ -24,11 +23,9 @@ const LessonPlanItem = (props) => {
     item_path: itemPath,
   } = item;
 
-  const isHidden = !visibility[itemType];
-  if (isHidden) { return null; }
-
   return (
     <div id={`item-${id}`} style={styles.item}>
+      <Divider />
       <Details
         {...{ title, description, itemPath, published, itemType, startAt, endAt, location }}
       />
@@ -43,8 +40,7 @@ const LessonPlanItem = (props) => {
           ))
         }
       </CardText>
-      <AdminMenu {...{ item }} />
-      <Divider />
+      <AdminTools {...{ item }} />
     </div>
   );
 };
@@ -62,9 +58,6 @@ LessonPlanItem.propTypes = {
     end_at: PropTypes.string,
     item_path: PropTypes.string,
   }).isRequired,
-  visibility: PropTypes.shape({}).isRequired,
 };
 
-export default connect(state => ({
-  visibility: state.lessonPlan.visibilityByType,
-}))(LessonPlanItem);
+export default LessonPlanItem;

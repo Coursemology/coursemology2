@@ -1,23 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { mount } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import ReactTestUtils from 'react-dom/test-utils';
 import CourseAPI from 'api/course';
 import DeleteConfirmation from 'lib/containers/DeleteConfirmation';
 import storeCreator from 'course/lesson-plan/store';
 import EventFormDialog from 'course/lesson-plan/containers/EventFormDialog';
-import AdminMenu from '../AdminMenu';
+import AdminTools from '../AdminTools';
 
-describe('<AdminMenu />', () => {
+const buildShallowWrapper = (item) => {
+  const store = storeCreator({ flags: { canManageLessonPlan: true } });
+  return shallow(<AdminTools item={item} />, buildContextOptions(store)).dive().dive();
+};
+
+describe('<AdminTools />', () => {
+  it('does not show admin menu for lesson plan events', () => {
+    const wrapper = buildShallowWrapper({ title: 'Event', eventId: 7 });
+    expect(wrapper.find('RaisedButton').length).toBe(2);
+  });
+
   it('does not show admin menu for non-event lesson plan items', () => {
-    const store = storeCreator({ flags: { canManageLessonPlan: true } });
-    const adminMenu = mount(
-      <AdminMenu
-        item={{ title: 'This item does not have and eventId' }}
-      />,
-      buildContextOptions(store)
-    );
-    expect(adminMenu.find('IconMenu').length).toBe(0);
+    const wrapper = buildShallowWrapper({ title: 'eventId absent' });
+    expect(wrapper.find('RaisedButton').length).toBe(0);
   });
 
   it('allows event to be deleted', () => {
@@ -26,18 +30,9 @@ describe('<AdminMenu />', () => {
     const contextOptions = buildContextOptions(store);
     const deleteConfirmation = mount(<DeleteConfirmation />, contextOptions);
     const eventId = 55;
-    const adminMenu = mount(
-      <AdminMenu
-        item={{ eventId }}
-      />,
-      contextOptions
-    );
+    const wrapper = mount(<AdminTools item={{ eventId }} />, contextOptions);
 
-    const iconButton = adminMenu.find('button').first();
-    iconButton.simulate('click');
-
-    const menuCardNode = adminMenu.find('RenderToLayer').first().instance();
-    const deleteButton = mount(menuCardNode.props.render(), contextOptions).find('EnhancedButton').at(1);
+    const deleteButton = wrapper.find('RaisedButton').last().find('button');
     deleteButton.simulate('click');
 
     const confirmDeleteButton =
@@ -60,8 +55,8 @@ describe('<AdminMenu />', () => {
       event_type: 'Recitation',
     };
     const eventFormDialog = mount(<EventFormDialog />, contextOptions);
-    const adminMenu = mount(
-      <AdminMenu
+    const wrapper = mount(
+      <AdminTools
         item={{
           eventId,
           title: eventData.title,
@@ -74,12 +69,8 @@ describe('<AdminMenu />', () => {
       contextOptions
     );
 
-    const iconButton = adminMenu.find('button').first();
-    iconButton.simulate('click');
-
-    const menuCardNode = adminMenu.find('RenderToLayer').first().instance();
-    const updateButton = mount(menuCardNode.props.render(), contextOptions).find('EnhancedButton').first();
-    updateButton.simulate('click');
+    const editButton = wrapper.find('RaisedButton').first().find('button');
+    editButton.simulate('click');
 
     const dialogInline = eventFormDialog.find('RenderToLayer').first().instance();
     const eventForm = mount(dialogInline.props.render(), contextOptions).find('form');
