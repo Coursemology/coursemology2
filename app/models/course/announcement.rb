@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 class Course::Announcement < ApplicationRecord
   include AnnouncementConcern
+  include Course::ReminderConcern
 
   acts_as_readable on: :updated_at
   has_many_attachments on: :content
-
-  after_create :send_notification
 
   belongs_to :course, inverse_of: :announcements
 
@@ -18,7 +17,7 @@ class Course::Announcement < ApplicationRecord
 
   private
 
-  def send_notification
-    Course::AnnouncementNotifier.new_announcement(creator, self)
-  end
+  # Override this function from the ReminderConcern as we don't want closing reminders
+  # from announcements
+  def setup_closing_reminders; end
 end
