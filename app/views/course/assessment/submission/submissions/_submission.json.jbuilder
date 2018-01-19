@@ -3,7 +3,7 @@ json.submission do
   json.canUpdate can_update
   json.isCreator current_user == submission.creator
 
-  if assessment.autograded?
+  if assessment.autograded? && !assessment.skippable?
     question = assessment.questions.next_unanswered(submission)
     # If question does not exist, means the student have answered all questions
     json.maxStep question ? assessment.questions.index(question) : assessment.questions.length - 1
