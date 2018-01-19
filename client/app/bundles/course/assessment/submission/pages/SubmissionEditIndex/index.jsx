@@ -263,7 +263,7 @@ class VisibleSubmissionEditIndex extends Component {
           attempting={workflowState === workflowStates.Attempting}
           submitted={workflowState === workflowStates.Submitted}
           published={workflowState === workflowStates.Published}
-          maxStep={maxStep}
+          maxStep={maxStep || questionIds.length - 1}
           step={step}
           skippable={skippable}
           posts={posts}
