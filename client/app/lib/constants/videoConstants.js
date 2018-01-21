@@ -12,7 +12,7 @@ export const youtubeOpts = {
 
 export const videoDefaults = {
   volume: 0.8,
-  availablePlaybackRates: [0.5, 1, 1.5, 2, 2.5],
+  availablePlaybackRates: [0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 2.5],
   placeHolderDuration: 600,
   progressUpdateFrequencyMs: 500,
 };
