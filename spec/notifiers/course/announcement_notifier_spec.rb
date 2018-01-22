@@ -11,7 +11,7 @@ RSpec.describe Course::AnnouncementNotifier, type: :notifier do
       let(:announcement) { create(:course_announcement, course: course) }
 
       before do
-        allow_any_instance_of(Course::Announcement).to receive(:send_notification)
+        allow_any_instance_of(Course::Announcement).to receive(:setup_opening_reminders)
       end
 
       subject { Course::AnnouncementNotifier.new_announcement(user, announcement) }
