@@ -68,7 +68,7 @@ class Thumbnail extends React.PureComponent {
       objectFit: 'contain',
     };
 
-    const onThumbnailTouchTap = onClick && typeof (onClick) === 'function' ?
+    const onThumbnailClick = onClick && typeof (onClick) === 'function' ?
       (event) => {
         onClick(event);
         this.setState({ open: true });
@@ -86,7 +86,7 @@ class Thumbnail extends React.PureComponent {
     return (
       <div style={rootStyle}>
         <div style={containerStyle}>
-          <a onClick={onThumbnailTouchTap}>
+          <a onClick={onThumbnailClick}>
             <img
               src={source}
               alt={altText}

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { scroller, Helpers } from 'react-scroll';
+import { scroller, ScrollLink } from 'react-scroll';
 import RaisedButton from 'material-ui/RaisedButton';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
@@ -39,7 +39,7 @@ class LessonPlanNav extends React.Component {
     };
   }
 
-  handleTouchTap = (event) => {
+  handleClick = (event) => {
     // This prevents ghost click.
     event.preventDefault();
 
@@ -66,7 +66,7 @@ class LessonPlanNav extends React.Component {
    */
   renderScrollSpies() {
     const { groups } = this.props;
-    const ScrollSpy = Helpers.Scroll('span'); // eslint-disable-line new-cap
+    const ScrollSpy = ScrollLink('span');
 
     return (
       <span>
@@ -98,7 +98,7 @@ class LessonPlanNav extends React.Component {
         { this.renderScrollSpies() }
         <RaisedButton
           secondary
-          onClick={this.handleTouchTap}
+          onClick={this.handleClick}
           label={this.state.text}
           labelPosition="before"
           icon={<KeyboardArrowUp />}

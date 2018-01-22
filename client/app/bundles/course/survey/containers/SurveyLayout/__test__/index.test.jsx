@@ -32,7 +32,7 @@ describe('<SurveyLayout />', () => {
       buildContextOptions(store)
     );
 
-    surveyLayout.find('TitleBar').prop('onLeftIconButtonTouchTap')();
+    surveyLayout.find('TitleBar').prop('onLeftIconButtonClick')();
     expect(spyHistoryPush).toHaveBeenCalledWith(`/courses/${courseId}/surveys`);
   });
 });

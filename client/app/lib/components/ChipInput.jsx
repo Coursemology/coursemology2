@@ -193,7 +193,7 @@ class ChipInput extends React.Component {
       }
     };
 
-    this.autoComplete.handleItemTouchTap = (event, child) => {
+    this.autoComplete.handleItemClick = (event, child) => {
       const index = parseInt(child.key, 10);
       const chosenRequest = dataSource[index];
       this.handleAddChip(chosenRequest);

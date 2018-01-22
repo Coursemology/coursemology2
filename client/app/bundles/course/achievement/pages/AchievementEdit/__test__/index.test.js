@@ -46,7 +46,7 @@ describe('<AchievementEdit />', () => {
     formData.append('achievement[title]', newTitle);
     formData.append('achievement[description]', 'Awesome achievement');
     formData.append('achievement[published]', false);
-    formData.append('achievement[badge]', '');
+    formData.append('achievement[badge]', undefined);
     expect(spy).toHaveBeenCalledWith(id, formData);
   });
 });

@@ -31,7 +31,7 @@ class LessonPlanFilter extends React.Component {
     };
   }
 
-  handleTouchTap = (event) => {
+  handleClick = (event) => {
     // This prevents ghost click.
     event.preventDefault();
 
@@ -57,7 +57,7 @@ class LessonPlanFilter extends React.Component {
       <div>
         <RaisedButton
           secondary
-          onClick={this.handleTouchTap}
+          onClick={this.handleClick}
           label={<FormattedMessage {...translations.filter} />}
           labelPosition="before"
           icon={<KeyboardArrowUp />}

@@ -34,7 +34,7 @@ class SurveyLayout extends React.Component {
         title={survey.title}
         iconElementRight={showAdminMenu ? <AdminMenu {...{ survey, surveyId }} /> : null}
         iconElementLeft={<IconButton><ArrowBack /></IconButton>}
-        onLeftIconButtonTouchTap={() => history.push(backLocation)}
+        onLeftIconButtonClick={() => history.push(backLocation)}
       />
     );
   }
