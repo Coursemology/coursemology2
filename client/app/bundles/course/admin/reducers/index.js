@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import notificationPopup from 'lib/reducers/notificationPopup';
 import notificationSettings from './notificationSettings';
-import lessonPlanItemSettings from './lessonPlanItemSettings';
+import lessonPlanSettings from './lessonPlanSettings';
 
 export default combineReducers({
   notificationPopup,
   notificationSettings,
-  lessonPlanItemSettings,
+  lessonPlanSettings,
 });

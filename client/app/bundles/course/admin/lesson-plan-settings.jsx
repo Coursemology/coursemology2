@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
-import LessonPlanItemSettings from 'course/admin/pages/LessonPlanItemSettings';
+import LessonPlanSettings from 'course/admin/pages/LessonPlanSettings';
 import storeCreator from './store';
 
 $(document).ready(() => {
@@ -10,12 +10,12 @@ $(document).ready(() => {
   if (mountNode) {
     const data = mountNode.getAttribute('data');
     const attributes = JSON.parse(data);
-    const initialData = { admin: { lessonPlanItemSettings: attributes } };
+    const initialData = { admin: { lessonPlanSettings: attributes } };
     const store = storeCreator(initialData);
 
     const Page = () => (
       <ProviderWrapper store={store}>
-        <LessonPlanItemSettings />
+        <LessonPlanSettings />
       </ProviderWrapper>
     );
 

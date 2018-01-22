@@ -6,10 +6,10 @@ import Subheader from 'material-ui/Subheader';
 import Toggle from 'material-ui/Toggle';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import NotificationPopup from 'lib/containers/NotificationPopup';
-import { updateLessonPlanItemSetting } from 'course/admin/actions/lesson-plan-items';
+import { updateLessonPlanSettings } from 'course/admin/actions/lesson-plan-items';
 import translations from './translations.intl';
 
-class LessonPlanItemSettings extends React.Component {
+class LessonPlanSettings extends React.Component {
   static propTypes = {
     lessonPlanItemSettings: PropTypes.arrayOf(PropTypes.shape({
       component: PropTypes.string,
@@ -28,10 +28,10 @@ class LessonPlanItemSettings extends React.Component {
     const { dispatch } = this.props;
     const { component, tab_title, component_title, options } = setting;
     return (_, enabled) => {
-      const payload = { component, tab_title, enabled, visible: setting.visible, options };
+      const payload = { lesson_plan_item_settings: { component, tab_title, enabled, visible: setting.visible, options } };
       const successMessage = <FormattedMessage {...translations.updateSuccess} values={{ setting: tab_title || component_title }} />;
       const failureMessage = <FormattedMessage {...translations.updateFailure} values={{ setting: tab_title || component_title }} />;
-      dispatch(updateLessonPlanItemSetting(payload, successMessage, failureMessage));
+      dispatch(updateLessonPlanSettings(payload, successMessage, failureMessage));
     };
   }
 
@@ -41,10 +41,10 @@ class LessonPlanItemSettings extends React.Component {
     const { dispatch } = this.props;
     const { component, tab_title, component_title, options } = setting;
     return (_, visible) => {
-      const payload = { component, tab_title, visible, enabled: setting.enabled, options };
+      const payload = { lesson_plan_item_settings: { component, tab_title, visible, enabled: setting.enabled, options } };
       const successMessage = <FormattedMessage {...translations.updateSuccess} values={{ setting: tab_title || component_title }} />;
       const failureMessage = <FormattedMessage {...translations.updateFailure} values={{ setting: tab_title || component_title }} />;
-      dispatch(updateLessonPlanItemSetting(payload, successMessage, failureMessage));
+      dispatch(updateLessonPlanSettings(payload, successMessage, failureMessage));
     };
   }
 
@@ -197,5 +197,5 @@ class LessonPlanItemSettings extends React.Component {
 }
 
 export default connect(state => ({
-  lessonPlanItemSettings: state.lessonPlanItemSettings,
-}))(LessonPlanItemSettings);
+  lessonPlanItemSettings: state.lessonPlanSettings.items_settings,
+}))(LessonPlanSettings);

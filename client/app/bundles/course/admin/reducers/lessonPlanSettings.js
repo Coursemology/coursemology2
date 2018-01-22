@@ -1,6 +1,8 @@
 import actionTypes from '../constants';
 
-const initialState = [];
+const initialState = {
+  items_settings: [],
+};
 
 export default function (state = initialState, action) {
   const { type } = action;

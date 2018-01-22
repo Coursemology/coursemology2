@@ -3,8 +3,8 @@ import CourseAPI from 'api/course';
 import actionTypes from '../constants';
 import { setNotification } from './index';
 
-export function updateLessonPlanItemSetting(value, successMessage, failureMessage) {
-  const payload = { lesson_plan_settings: { lesson_plan_item_settings: value } };
+export function updateLessonPlanSettings(value, successMessage, failureMessage) {
+  const payload = { lesson_plan_settings: value };
   return (dispatch) => {
     dispatch({ type: actionTypes.LESSON_PLAN_ITEM_SETTING_UPDATE_REQUEST });
     return CourseAPI.admin.lessonPlan.update(payload)

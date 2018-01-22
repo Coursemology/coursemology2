@@ -35,7 +35,7 @@ RSpec.describe Course::Admin::LessonPlanSettingsController, type: :controller do
 
         it 'responds with the necessary fields' do
           tab_enabled_setting =
-            json_response.find { |setting| setting['options']['tab_id'] == tab.id }
+            json_response['items_settings'].find { |setting| setting['options']['tab_id'] == tab.id }
           expect(tab_enabled_setting['enabled']).to eq(false)
         end
       end

@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import CourseAPI from 'api/course';
 import storeCreator from 'course/admin/store';
-import LessonPlanItemSettings from '../index';
+import LessonPlanSettings from '../index';
 
 const itemSettings = [
   {
@@ -14,17 +14,17 @@ const itemSettings = [
   },
 ];
 
-describe('<LessonPlanItemSettings />', () => {
+describe('<LessonPlanSettings />', () => {
   it('allow lesson plan item settings to be set', () => {
     const spy = jest.spyOn(CourseAPI.admin.lessonPlan, 'update');
-    const store = storeCreator({ admin: { lessonPlanItemSettings: itemSettings } });
+    const store = storeCreator({ admin: { lessonPlanSettings: { items_settings: itemSettings } } });
 
-    const lessonPlanItemSettings = mount(
-      <LessonPlanItemSettings />,
+    const lessonPlanSettings = mount(
+      <LessonPlanSettings />,
       buildContextOptions(store)
     );
 
-    const toggles = lessonPlanItemSettings.find('Toggle');
+    const toggles = lessonPlanSettings.find('Toggle');
     // Enabled? and Visible? toggles.
     expect(toggles.length).toBe(2);
 
