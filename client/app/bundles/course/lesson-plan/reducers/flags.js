@@ -1,8 +1,8 @@
 import actionTypes from '../constants';
 
-const initialState = {
+export const initialState = {
   canManageLessonPlan: false,
-  milestonesExpanded: 'all',
+  milestonesExpanded: 'current',
 };
 
 export default function (state = initialState, action) {
@@ -10,7 +10,11 @@ export default function (state = initialState, action) {
 
   switch (type) {
     case actionTypes.LOAD_LESSON_PLAN_SUCCESS: {
-      return { ...state, ...action.flags };
+      const nextState = { ...state, ...action.flags };
+      if (!nextState.milestonesExpanded) {
+        nextState.milestonesExpanded = initialState.milestonesExpanded;
+      }
+      return nextState;
     }
     default:
       return state;
