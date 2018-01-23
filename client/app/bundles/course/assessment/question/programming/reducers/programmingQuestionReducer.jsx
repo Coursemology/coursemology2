@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import Immutable from 'immutable';
 
 import actionTypes from '../constants/programmingQuestionConstants';

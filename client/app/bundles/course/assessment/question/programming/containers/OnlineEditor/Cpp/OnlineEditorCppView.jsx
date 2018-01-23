@@ -306,8 +306,16 @@ class OnlineEditorCppView extends React.Component {
               expression: <b>{intl.formatMessage(translations.expressionHeader)}</b>,
               expected: <b>{intl.formatMessage(translations.expectedHeader)}</b>,
               expect_star: <code>EXPECT_*</code>,
-              googletest: <a href="https://github.com/google/googletest">{intl.formatMessage(translations.testCaseDescriptionGoogleTest)}</a>,
-              tostring: <code><a href="http://en.cppreference.com/w/cpp/string/basic_string/to_string">std::to_string</a></code>,
+              googletest: (
+                <a href="https://github.com/google/googletest">
+                  {intl.formatMessage(translations.testCaseDescriptionGoogleTest)}
+                </a>
+              ),
+              tostring: (
+                <code>
+                  <a href="http://en.cppreference.com/w/cpp/string/basic_string/to_string">std::to_string</a>
+                </code>
+              ),
             }}
           />
         </div>

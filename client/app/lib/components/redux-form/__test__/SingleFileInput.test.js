@@ -3,6 +3,23 @@ import PropTypes from 'prop-types';
 import { mount } from 'enzyme';
 import SingleFileInput from '../SingleFileInput';
 
+const reduxFormFieldMetaDefaults = {
+  touched: false,
+  active: false,
+  autofilled: false,
+  asyncValidating: false,
+  dirty: false,
+  dispatch: () => {},
+  error: undefined,
+  form: '',
+  invalid: false,
+  pristine: true,
+  submitting: false,
+  submitFailed: false,
+  valid: true,
+  visited: true,
+};
+
 describe('<SingleFileInput />', () => {
   it('renders with url and name when provided in badge/avatar style', () => {
     const singleFileInput = mount(
@@ -14,10 +31,7 @@ describe('<SingleFileInput />', () => {
           },
           onChange: jest.fn(),
         }}
-        meta={{
-          touched: false,
-          error: undefined,
-        }}
+        meta={reduxFormFieldMetaDefaults}
       />,
       {
         context: { intl, muiTheme }, // eslint-disable-line no-undef
@@ -41,10 +55,7 @@ describe('<SingleFileInput />', () => {
           value: {},
           onChange: jest.fn(),
         }}
-        meta={{
-          touched: false,
-          error: undefined,
-        }}
+        meta={reduxFormFieldMetaDefaults}
       />,
       {
         context: { intl, muiTheme }, // eslint-disable-line no-undef
@@ -73,10 +84,7 @@ describe('<SingleFileInput />', () => {
           },
           onChange: jest.fn(),
         }}
-        meta={{
-          touched: false,
-          error: undefined,
-        }}
+        meta={reduxFormFieldMetaDefaults}
       />,
       {
         context: { intl, muiTheme }, // eslint-disable-line no-undef
@@ -100,10 +108,7 @@ describe('<SingleFileInput />', () => {
           value: {},
           onChange: jest.fn(),
         }}
-        meta={{
-          touched: false,
-          error: undefined,
-        }}
+        meta={reduxFormFieldMetaDefaults}
       />,
       {
         context: { intl, muiTheme }, // eslint-disable-line no-undef
@@ -126,6 +131,7 @@ describe('<SingleFileInput />', () => {
         isNotBadge
         required
         meta={{
+          ...reduxFormFieldMetaDefaults,
           touched: true,
           error: {
             id: 'course.assessment.question.scribing.scribingQuestionForm.fileAttachmentRequired',
