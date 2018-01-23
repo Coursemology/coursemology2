@@ -29,12 +29,12 @@ export default defineMessages({
   },
   submissionFilesHeader: {
     id: 'course.assessment.question.programming.onlineEditorJavaView.submissionFilesHeader',
-    defaultMessage: 'Submission Files (Required)',
+    defaultMessage: 'Submission Files',
     description: 'Header for the submission files of the online editor.',
   },
   solutionFilesHeader: {
     id: 'course.assessment.question.programming.onlineEditorJavaView.solutionFilesHeader',
-    defaultMessage: 'Solution Files (Required)',
+    defaultMessage: 'Solution Files',
     description: 'Header for the solution files of the online editor.',
   },
   newSubmissionFilesHeader: {

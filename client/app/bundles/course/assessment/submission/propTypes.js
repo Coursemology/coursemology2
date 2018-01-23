@@ -26,9 +26,11 @@ export const questionShape = PropTypes.shape({
   autogradable: PropTypes.bool,
 });
 
-const fileShape = PropTypes.shape({
+export const fileShape = PropTypes.shape({
   content: PropTypes.string,
   filename: PropTypes.string,
+  id: PropTypes.number,
+  staged: PropTypes.bool,
 });
 
 export const questionGradeShape = PropTypes.shape({

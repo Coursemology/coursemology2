@@ -69,5 +69,9 @@ FactoryBot.define do
       test_case_count 1
       private_test_case_count 1
     end
+
+    trait :multiple_file_submission do
+      multiple_file_submission true
+    end
   end
 end

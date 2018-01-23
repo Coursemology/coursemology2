@@ -55,6 +55,16 @@ FactoryBot.define do
       end
     end
 
+    trait :with_programming_file_submission_question do
+      after(:build) do |assessment, evaluator|
+        evaluator.question_count.downto(1).each do |i|
+          question = build(:course_assessment_question_programming,
+                           :auto_gradable, :multiple_file_submission)
+          assessment.question_assessments.build(question: question.acting_as, weight: i)
+        end
+      end
+    end
+
     trait :with_text_response_question do
       after(:build) do |assessment, evaluator|
         evaluator.question_count.downto(1).each do |i|

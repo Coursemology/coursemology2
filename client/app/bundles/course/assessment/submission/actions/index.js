@@ -241,6 +241,76 @@ export function resetAnswer(submissionId, answerId, questionId) {
   };
 }
 
+export function deleteFile(answerId, fileId, answerFields) {
+  const answer = Object.values(answerFields).find(ans => ans.id === answerId);
+  const payload = { answer: { id: answerId, file_id: fileId } };
+
+  return (dispatch) => {
+    dispatch({ type: actionTypes.DELETE_FILE_REQUEST });
+
+    return CourseAPI.assessment.answer.programming.deleteProgrammingFile(answerId, payload)
+      .then(response => response.data)
+      .then((data) => {
+        const responsePayload = { questionId: answer.questionId, answer: data };
+        dispatch({ type: actionTypes.DELETE_FILE_SUCCESS, payload: responsePayload });
+        dispatch(setNotification(translations.deleteFileSuccess));
+      })
+      .catch((error) => {
+        dispatch({ type: actionTypes.DELETE_FILE_FAILURE });
+        dispatch(setNotification(translations.deleteFileFailure, buildErrorMessage(error)));
+      });
+  };
+}
+
+// Ensure that there are no existing files with the same filenames
+function validateFiles(files) {
+  const filenames = files.map(file => file.filename);
+  const uniqueFilenames = filenames.filter((name, index, self) => self.indexOf(name) === index);
+  return filenames.length === uniqueFilenames.length;
+}
+
+// Used to ensure that only java files can be uploaded.
+function validateJavaFiles(files) {
+  const regex = new RegExp('\\.java');
+  return files.filter(file => !regex.test(file.filename)).length === 0;
+}
+
+// Imports staged files into the question to be evaluated
+export function importFiles(answerId, answerFields, language) {
+  const answer = Object.values(answerFields).find(ans => ans.id === answerId);
+  const files = answerFields[answerId].files_attributes;
+  const payload = { answer: { id: answerId, ...answer } };
+
+  return (dispatch) => {
+    dispatch({ type: actionTypes.IMPORT_FILES_REQUEST });
+
+    if (!validateFiles(files)) {
+      dispatch({ type: actionTypes.IMPORT_FILES_FAILURE });
+      dispatch(setNotification(translations.similarFileNameExists));
+    } else if (language === 'Java' && !validateJavaFiles(files)) {
+      dispatch({ type: actionTypes.IMPORT_FILES_FAILURE });
+      dispatch(setNotification(translations.invalidJavaFileUpload));
+    } else {
+      CourseAPI.assessment.answer.programming.createProgrammingFiles(answerId, payload)
+        .then(response => response.data)
+        .then((data) => {
+          dispatch({ type: actionTypes.IMPORT_FILES_SUCCESS, payload: data });
+          dispatch(setNotification(translations.importFilesSuccess));
+        })
+        .catch((error) => {
+          dispatch({ type: actionTypes.IMPORT_FILES_FAILURE });
+          dispatch(setNotification(translations.importFilesFailure, buildErrorMessage(error)));
+        });
+    }
+  };
+}
+
+// Used to temporarily stage files to be import to the question
+export function stageFiles(submissionId, answerId, files) {
+  const payload = { type: actionTypes.STAGE_FILES, submissionId, answerId, files };
+  return dispatch => dispatch(payload);
+}
+
 export function saveGrade(submissionId, grades, exp, published) {
   const expParam = published ? 'points_awarded' : 'draft_points_awarded';
   const payload = {

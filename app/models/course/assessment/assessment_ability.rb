@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 module Course::Assessment::AssessmentAbility
+  include Course::Assessment::Answer::ProgrammingAbility
+
   def define_permissions
     if user
       define_student_assessment_permissions
@@ -26,7 +28,6 @@ module Course::Assessment::AssessmentAbility
     allow_manager_publish_assessment_submission_grades
     allow_staff_grade_assessment_submissions
     allow_staff_manage_assessment_annotations
-    allow_staff_read_assessment_answers
     allow_staff_read_assessment_tests
     allow_staff_read_submission_questions
   end
@@ -131,10 +132,6 @@ module Course::Assessment::AssessmentAbility
 
   def allow_students_read_own_assessment_answers
     can :read, Course::Assessment::Answer, submission: { creator_id: user.id }
-  end
-
-  def allow_staff_read_assessment_answers
-    can :read, Course::Assessment::Answer, discussion_topic: course_staff_hash
   end
 
   def allow_students_read_submission_question

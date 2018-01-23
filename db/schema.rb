@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180117025349) do
+ActiveRecord::Schema.define(version: 20180117025350) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -267,6 +267,7 @@ ActiveRecord::Schema.define(version: 20180117025349) do
     t.integer "attempt_limit"
     t.uuid    "import_job_id", :comment=>"The ID of the importing job", :index=>{:name=>"index_course_assessment_question_programming_on_import_job_id", :unique=>true}, :foreign_key=>{:references=>"jobs", :name=>"fk_course_assessment_question_programming_import_job_id", :on_update=>:no_action, :on_delete=>:nullify}
     t.integer "package_type",  :default=>0, :null=>false
+    t.boolean "multiple_file_submission", :default=>false, :null=>false
   end
 
   create_table "course_assessment_question_programming_test_cases", force: :cascade do |t|

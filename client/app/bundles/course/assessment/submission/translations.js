@@ -194,6 +194,34 @@ const translations = defineMessages({
     id: 'course.assessment.submission.requestFailure',
     defaultMessage: 'An error occurred while processing your request.',
   },
+  deleteFileSuccess: {
+    id: 'course.assessment.submission.deleteFileSuccess',
+    defaultMessage: 'File deleted successfully',
+  },
+  deleteFileFailure: {
+    id: 'course.assessment.submission.deleteFileFailure',
+    defaultMessage: 'File deletion failed: {errors}',
+  },
+  importFilesSuccess: {
+    id: 'course.assessment.submission.importFilesSuccess',
+    defaultMessage: 'Files uploaded successfully.',
+  },
+  importFilesFailure: {
+    id: 'course.assessment.submission.importFilesFailure',
+    defaultMessage: 'File uploads failed: {errors}',
+  },
+  invalidJavaFileUpload: {
+    id: 'course.assessment.submission.invalidFileUpload',
+    defaultMessage: 'File uploads failed: Only java files can be uploaded',
+  },
+  similarFileNameExists: {
+    id: 'course.assessment.submission.similarFileNameExists',
+    defaultMessage: 'File uploads failed: File already exists',
+  },
+  uploadFiles: {
+    id: 'course.assessment.submission.uploadFiles',
+    defaultMessage: 'Upload Files',
+  },
   autogradeFailure: {
     id: 'course.assessment.submission.autogradeFailure',
     defaultMessage: '(T_T) Sorry, the autograder is having mood swings and quit on us. \
