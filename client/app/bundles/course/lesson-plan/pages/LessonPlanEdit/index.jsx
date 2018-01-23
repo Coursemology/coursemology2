@@ -42,6 +42,7 @@ class LessonPlanEdit extends React.Component {
 
     const rows = items ? items.map(item => (
       <ItemRow
+        key={item.id}
         id={item.id}
         type={item.itemTypeKey}
         title={item.title}
@@ -55,6 +56,7 @@ class LessonPlanEdit extends React.Component {
     if (milestone) {
       rows.unshift(
         <MilestoneRow
+          key={`milestone-${id}`}
           groupId={id}
           id={milestone.id}
           title={milestone.title}

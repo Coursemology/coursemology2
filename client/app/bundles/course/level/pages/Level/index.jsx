@@ -140,17 +140,20 @@ class Level extends React.Component {
   }
 
   renderBody() {
-    const rows = this.props.levels.slice(1).map((experiencePointsThreshold, index) => (
-      <LevelRow
-        key={index + 1}
-        levelNumber={index + 1}
-        experiencePointsThreshold={experiencePointsThreshold}
-        updateExpThreshold={this.handleUpdateExpThreshold}
-        sortLevels={this.handleLevelTextBlur}
-        deleteLevel={this.handleDeleteLevel}
-        disabled={this.props.isSaving}
-      />
-    ));
+    const rows = this.props.levels.slice(1).map((experiencePointsThreshold, index) => {
+      const key = `${index}-${experiencePointsThreshold}`;
+      return (
+        <LevelRow
+          key={key}
+          levelNumber={index + 1}
+          experiencePointsThreshold={experiencePointsThreshold}
+          updateExpThreshold={this.handleUpdateExpThreshold}
+          sortLevels={this.handleLevelTextBlur}
+          deleteLevel={this.handleDeleteLevel}
+          disabled={this.props.isSaving}
+        />
+      );
+    });
 
     return (
       <div style={styles.body}>
