@@ -32,6 +32,9 @@ RSpec.feature 'Course: Lesson Plan' do
     end
 
     before do
+      course.settings.course_lesson_plan_component = { milestones_expanded: 'all' }
+      course.save!
+
       login_as(user, scope: :user)
     end
 

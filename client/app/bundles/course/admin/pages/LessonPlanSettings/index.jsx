@@ -8,6 +8,7 @@ import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowCol
 import NotificationPopup from 'lib/containers/NotificationPopup';
 import { updateLessonPlanSettings } from 'course/admin/actions/lesson-plan-items';
 import translations from './translations.intl';
+import MilestoneGroupSettings from './MilestoneGroupSettings';
 
 class LessonPlanSettings extends React.Component {
   static propTypes = {
@@ -186,6 +187,8 @@ class LessonPlanSettings extends React.Component {
   render() {
     return (
       <div>
+        <MilestoneGroupSettings />
+
         <h2><FormattedMessage {...translations.lessonPlanItemSettings} /></h2>
         {this.renderLessonPlanItemAssessmentSettingsTable()}
         {this.renderLessonPlanItemSettingsForComponentsTable()}

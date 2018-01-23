@@ -17,7 +17,14 @@ const itemSettings = [
 describe('<LessonPlanSettings />', () => {
   it('allow lesson plan item settings to be set', () => {
     const spy = jest.spyOn(CourseAPI.admin.lessonPlan, 'update');
-    const store = storeCreator({ admin: { lessonPlanSettings: { items_settings: itemSettings } } });
+    const store = storeCreator({
+      admin: {
+        lessonPlanSettings: {
+          items_settings: itemSettings,
+          component_settings: {},
+        },
+      },
+    });
 
     const lessonPlanSettings = mount(
       <LessonPlanSettings />,

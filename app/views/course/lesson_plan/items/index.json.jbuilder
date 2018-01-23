@@ -11,4 +11,5 @@ end
 
 json.flags do
   json.canManageLessonPlan can?(:manage, Course::LessonPlan::Item.new(course: current_course))
+  json.milestonesExpanded @settings.milestones_expanded
 end

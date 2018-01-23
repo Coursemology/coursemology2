@@ -8,7 +8,9 @@ class Course::Admin::LessonPlanSettingsController < Course::Admin::Controller
   end
 
   def update
-    if update_lesson_plan_items_settings && current_course.save
+    if update_lesson_plan_items_settings &&
+       update_lesson_plan_component_settings &&
+       current_course.save
       render json: page_data
     else
       head :bad_request
@@ -22,8 +24,16 @@ class Course::Admin::LessonPlanSettingsController < Course::Admin::Controller
     item_settings_params.nil? || @item_settings.update(item_settings_params)
   end
 
+  def update_lesson_plan_component_settings
+    component_settings_params = lesson_plan_item_settings_params[:lesson_plan_component_settings]
+    component_settings_params.nil? || @settings.update(component_settings_params)
+  end
+
   def lesson_plan_item_settings_params
-    params.require(:lesson_plan_settings).permit(lesson_plan_item_settings: {})
+    params.require(:lesson_plan_settings).permit(
+      lesson_plan_item_settings: {},
+      lesson_plan_component_settings: [:milestones_expanded]
+    )
   end
 
   def load_item_settings
@@ -32,7 +42,12 @@ class Course::Admin::LessonPlanSettingsController < Course::Admin::Controller
 
   def page_data
     {
-      items_settings: @item_settings.lesson_plan_item_settings
+      items_settings: @item_settings.lesson_plan_item_settings,
+      component_settings: { milestones_expanded: @settings.milestones_expanded }
     }
+  end
+
+  def component
+    current_component_host[:course_lesson_plan_component]
   end
 end
