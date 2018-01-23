@@ -63,7 +63,9 @@ const surveyData = {
  * Wraps a component into a DragDropContext that uses the TestBackend.
  */
 function wrapInTestContext(DecoratedComponent) {
-  const TestContextContainer = props => <DecoratedComponent {...props} />;
+  class TestContextContainer extends React.Component {
+    render() { return <DecoratedComponent {...this.props} />; }
+  }
   const mapStateToProps = state => ({ survey: state.surveys[0] || {} });
   return connect(mapStateToProps)(DragDropContext(TestBackend)(TestContextContainer));
 }
