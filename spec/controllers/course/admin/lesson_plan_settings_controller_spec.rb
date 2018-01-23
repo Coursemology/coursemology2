@@ -22,21 +22,24 @@ RSpec.describe Course::Admin::LessonPlanSettingsController, type: :controller do
         let(:tab) { create(:course_assessment_tab, course: course) }
         let(:payload) do
           {
-            lesson_plan_item_settings:
-              {
-                'component' => 'course_assessments_component',
-                'tab_title' => tab.title,
-                'options' => { category_id: tab.category.id, tab_id: tab.id },
-                'enabled' => false
-              }
+            lesson_plan_item_settings: {
+              'component' => 'course_assessments_component',
+              'tab_title' => tab.title,
+              'options' => { category_id: tab.category.id, tab_id: tab.id },
+              'enabled' => false
+            },
+            lesson_plan_component_settings: {
+              milestones_expanded: 'none'
+            }
           }
         end
         before { subject }
 
         it 'responds with the necessary fields' do
           tab_enabled_setting =
-            json_response.find { |setting| setting['options']['tab_id'] == tab.id }
+            json_response['items_settings'].find { |setting| setting['options']['tab_id'] == tab.id }
           expect(tab_enabled_setting['enabled']).to eq(false)
+          expect(json_response['component_settings']['milestones_expanded']).to eq('none')
         end
       end
 

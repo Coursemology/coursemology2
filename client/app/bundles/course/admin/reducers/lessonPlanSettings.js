@@ -1,6 +1,11 @@
 import actionTypes from '../constants';
 
-const initialState = [];
+const initialState = {
+  items_settings: [],
+  component_settings: {
+    milestones_expanded: null,
+  },
+};
 
 export default function (state = initialState, action) {
   const { type } = action;
