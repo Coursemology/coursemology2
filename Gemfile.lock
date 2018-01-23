@@ -165,7 +165,7 @@ GEM
     concurrent-ruby (1.0.5)
     consistency_fail (0.3.5)
     crass (1.0.3)
-    devise (4.4.0)
+    devise (4.3.0)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 4.1.0, < 5.2)
@@ -585,7 +585,7 @@ DEPENDENCIES
   codecov
   consistency_fail
   coursemology-polyglot!
-  devise
+  devise (<= 4.3.0)
   devise-multi_email
   devise_masquerade
   docker-api
@@ -655,7 +655,6 @@ DEPENDENCIES
   webpacker (<= 3.0.2)
   workflow
   yard
-
 
 BUNDLED WITH
    1.16.0

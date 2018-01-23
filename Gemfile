@@ -172,7 +172,9 @@ gem 'acts_as_tenant'
 gem 'http_accept_language'
 
 # User authentication
-gem 'devise'
+#   Prevent devise from upgrading to 4.4.0 from 4.3.0 because of a bug that is introduced.
+#   See plataformatec/devise#4302 and plataformatec/devise#4752.
+gem 'devise', '<= 4.3.0'
 gem 'devise_masquerade'
 gem 'devise-multi_email'
 
