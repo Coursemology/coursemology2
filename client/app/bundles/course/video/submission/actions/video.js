@@ -151,29 +151,80 @@ function removeEvents(sequenceNums) {
 }
 
 /**
+ * Creates an action to remove old sessions from the state store.
+ * @param sessionIds The ids of the sessions to remove
+ * @return {{type: videoActionTypes, sessionsIds: [number]}}
+ */
+function removeOldSessions(sessionIds) {
+  return { type: sessionActionTypes.REMOVE_OLD_SESSIONS, sessionIds };
+}
+
+/**
  * Sends current events to the server.
  *
- * Events will be removed from the state store if the API call is successful.
+ * If no events are present, no request to the server will be sent. Events will be removed from the state store if
+ * the API call is successful.
+ *
+ * If a request is sent, the video time will be updated on the server too.
+ * @param dispatch The Redux dispatch function
+ * @param videoState The Redux video state slice
+ */
+function sendCurrentEvents(dispatch, videoState) {
+  const sessionId = videoState.sessionId;
+  const events = videoState.sessionEvents;
+
+  if (sessionId === null || events.isEmpty()) {
+    return;
+  }
+
+  const videoTime = Math.round(videoState.playerProgress);
+  CourseAPI.video.sessions
+    .update(sessionId, videoTime, events.toArray())
+    .then(() => {
+      if (!events.isEmpty()) {
+        dispatch(removeEvents(events.map(event => event.sequence_num).toSet()));
+      }
+    });
+}
+
+/**
+ * Sends old events to the server.
+ *
+ * One request is sent to for every old session, regardless of whether they have events, so as to update the video
+ * time.
+ *
+ * Once the server responds, old sessions are removed permanently.
+ * @param dispatch The Redux dispatch function
+ * @param oldSessions The Redux oldSessions state in the form of an ImmutableMap
+ */
+function sendOldSessions(dispatch, oldSessions) {
+  if (oldSessions.isEmpty()) {
+    return;
+  }
+
+  const promises = oldSessions
+    .map((oldVideoState, sessionId) => {
+      const videoTime = Math.round(oldVideoState.playerProgress);
+      const events = oldVideoState.sessionEvents;
+
+      return CourseAPI.video.sessions
+        .update(sessionId, videoTime, events.toArray())
+        .then(() => sessionId)
+        .catch(() => null);
+    })
+    .values();
+
+  Promise.all(promises).then(sessionIds => dispatch(removeOldSessions(sessionIds.filter(id => id !== null))));
+}
+
+/**
+ * Sends both old sessions and new events to the server
  * @return {function(*, *)}
  */
 export function sendEvents() {
   return (dispatch, getState) => {
-    const videoState = getState().video;
-    const sessionId = videoState.sessionId;
-
-    if (sessionId === null) {
-      return;
-    }
-
-    const events = videoState.sessionEvents;
-    const videoTime = Math.round(videoState.playerProgress);
-
-    CourseAPI.video.sessions
-      .update(sessionId, videoTime, events.toArray())
-      .then(() => {
-        if (!events.isEmpty()) {
-          dispatch(removeEvents(events.map(event => event.sequence_num).toSet()));
-        }
-      });
+    const state = getState();
+    sendOldSessions(dispatch, state.oldSessions);
+    sendCurrentEvents(dispatch, state.video);
   };
 }
