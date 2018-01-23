@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::Announcement < ApplicationRecord
   include AnnouncementConcern
-  include Course::ReminderConcern
+  include Course::OpeningReminderConcern
 
   acts_as_readable on: :updated_at
   has_many_attachments on: :content
@@ -14,10 +14,4 @@ class Course::Announcement < ApplicationRecord
   def to_partial_path
     'course/announcements/announcement'
   end
-
-  private
-
-  # Override this function from the ReminderConcern as we don't want closing reminders
-  # from announcements
-  def setup_closing_reminders; end
 end
