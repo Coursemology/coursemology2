@@ -168,12 +168,13 @@ function removeOldSessions(sessionIds) {
  * If a request is sent, the video time will be updated on the server too.
  * @param dispatch The Redux dispatch function
  * @param videoState The Redux video state slice
+ * @param force Sends a request to the server even if there are no events if true
  */
-function sendCurrentEvents(dispatch, videoState) {
+function sendCurrentEvents(dispatch, videoState, force = false) {
   const sessionId = videoState.sessionId;
   const events = videoState.sessionEvents;
 
-  if (sessionId === null || events.isEmpty()) {
+  if (sessionId === null || (!force && events.isEmpty())) {
     return;
   }
 
@@ -208,7 +209,7 @@ function sendOldSessions(dispatch, oldSessions) {
       const events = oldVideoState.sessionEvents;
 
       return CourseAPI.video.sessions
-        .update(sessionId, videoTime, events.toArray())
+        .update(sessionId, videoTime, events.toArray(), true)
         .then(() => sessionId)
         .catch(() => null);
     })
@@ -226,5 +227,19 @@ export function sendEvents() {
     const state = getState();
     sendOldSessions(dispatch, state.oldSessions);
     sendCurrentEvents(dispatch, state.video);
+  };
+}
+
+/**
+ * Ends the session.
+ *
+ * Sends the events back to the server. Server request is forced so as to update the video time.
+ * @return {function(*, *)}
+ */
+export function endSession() {
+  return (dispatch, getState) => {
+    const state = getState();
+    sendOldSessions(dispatch, state.oldSessions);
+    sendCurrentEvents(dispatch, state.video, true);
   };
 }

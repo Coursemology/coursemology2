@@ -6,7 +6,13 @@ import { playerStates, videoDefaults, youtubeOpts } from 'lib/constants/videoCon
 import { isPlayingState } from 'lib/helpers/videoHelpers';
 
 import styles from './VideoPlayer.scss';
-import { changePlayerState, sendEvents, updatePlayerDuration, updateProgressAndBuffer } from '../actions/video';
+import {
+  changePlayerState,
+  endSession,
+  sendEvents,
+  updatePlayerDuration,
+  updateProgressAndBuffer,
+} from '../actions/video';
 import {
   PlayBackRateSelector,
   PlayButton,
@@ -17,7 +23,7 @@ import {
   NextVideoButton,
 } from './VideoControls';
 
-const tickMilliseconds = 1000;
+const tickMilliseconds = 5000;
 
 const reactPlayerStyle = {
   position: 'absolute',
@@ -39,6 +45,7 @@ const propTypes = {
   onDurationReceived: PropTypes.func,
   onPlayerStateChanged: PropTypes.func,
   onTick: PropTypes.func,
+  onUnmount: PropTypes.func,
 };
 
 const defaultProps = {
@@ -68,6 +75,8 @@ class VideoPlayer extends React.Component {
 
   componentDidMount() {
     if (this.props.onTick) {
+      this.props.onTick();
+      window.addEventListener('beforeunload', this.props.onUnmount);
       this.timer = setInterval(this.props.onTick, tickMilliseconds);
     }
   }
@@ -81,7 +90,8 @@ class VideoPlayer extends React.Component {
   componentWillUnmount() {
     if (this.timer) {
       this.clearInterval(this.timer);
-      this.props.onTick(); // Will not be null as long as timer exists.
+      this.props.onUnmount();
+      window.removeEventListener('beforeunload', this.props.onUnmount);
     }
   }
 
@@ -161,6 +171,7 @@ function mapDispatchToProps(dispatch) {
     onDurationReceived: duration => dispatch(updatePlayerDuration(duration)),
     onPlayerStateChanged: newState => dispatch(changePlayerState(newState)),
     onTick: () => dispatch(sendEvents()),
+    onUnmount: () => dispatch(endSession()),
   };
 }
 

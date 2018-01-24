@@ -23,12 +23,14 @@ export default class SessionsAPI extends BaseVideoAPI {
    * @param {number} lastVideoTime The last video playback time as of function call
    * @param {Array} events The array of new events (as per shape above) to push to the server. Omit to only update
    * session end time
+   * @param isOldSession true if we're updating a old session
    * @return {Promise} The response from the server
    * success response: 204
    */
-  update(id, lastVideoTime, events = []) {
+  update(id, lastVideoTime, events = [], isOldSession = false) {
     return this.getClient().patch(`${this._getUrlPrefix()}/${id}`, {
       session: { last_video_time: lastVideoTime, events },
+      is_old_session: isOldSession,
     });
   }
 
