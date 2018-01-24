@@ -1,13 +1,19 @@
 = page_header
 
-- total_users = User.count
-- active_users = User.active_in_past_7_days.count
 - if params[:search].blank?
   .panel.panel-default
     .panel-heading = t('common.summary')
     .panel-body
-      div = t('.total_users_html', count: params[:active] ? link_to(total_users) : total_users)
-      div = t('.active_users_html', count: params[:active] ? active_users : link_to(active_users, active: true))
+      div
+        = t('.total_users_html',
+            admin_count: user_count_link(params, @counts[:total][:administrator], { role: 'administrator' }),
+            normal_count: user_count_link(params, @counts[:total][:normal], { role: 'normal' }),
+            all_count: user_count_link(params, @counts[:total].values.sum, {}))
+      div
+        = t('.active_users_html',
+            admin_count: user_count_link(params, @counts[:active][:administrator], { active: 'true', role: 'administrator' }),
+            normal_count: user_count_link(params, @counts[:active][:normal], { active: 'true', role: 'normal' }),
+            all_count: user_count_link(params, @counts[:active].values.sum, { active: 'true' }))
 
 = render partial: 'layouts/search_form', locals: { url: admin_users_path, placeholder: t('.search_placeholder') }
 
