@@ -28,14 +28,14 @@ function PostPresentation(props) {
   const childrenNodes = props.childrenIds.map(childId => <PostContainer key={childId} postId={childId} />);
   if (childrenNodes.length > 0) {
     childrenElements = (
-      <div className={props.isRoot && styles.replyIndent}>
+      <div className={props.isRoot ? styles.replyIndent : undefined}>
         {childrenNodes}
       </div>
     );
   }
 
   return (
-    <div className={styles.postContainer}>
+    <div>
       {props.editMode || <PostMenu postId={props.postId} />}
       <span className={styles.userPic} dangerouslySetInnerHTML={{ __html: props.userPicElement }} />
       <div className={styles.contentContainer}>
