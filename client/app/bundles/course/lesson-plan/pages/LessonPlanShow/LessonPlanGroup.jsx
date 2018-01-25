@@ -54,6 +54,7 @@ class LessonPlanGroup extends React.Component {
 
     return (
       <CardTitle
+        actAsExpander
         showExpandableButton
         title={
           <div style={styles.milestoneTitle}>
