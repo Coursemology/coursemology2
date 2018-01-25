@@ -5,9 +5,8 @@ class System::Admin::Instance::UsersController < System::Admin::Instance::Contro
   add_breadcrumb :index, :admin_instance_users_path
 
   def index
-    @instance_users = @instance.instance_users.includes(user: [:emails, :courses]).
-                      page(page_param).search_and_ordered_by_username(search_param)
-    @instance_users = @instance_users.active_in_past_7_days if params[:active]
+    load_instance_users
+    load_counts
   end
 
   def update
@@ -27,6 +26,21 @@ class System::Admin::Instance::UsersController < System::Admin::Instance::Contro
   end
 
   private
+
+  def load_instance_users
+    @instance_users = @instance.instance_users.includes(user: [:emails, :courses]).
+                      page(page_param).search_and_ordered_by_username(search_param)
+    @instance_users = @instance_users.active_in_past_7_days if params[:active]
+    @instance_users = @instance_users.where(role: params[:role]) \
+      if params[:role] && InstanceUser.roles.key?(params[:role])
+  end
+
+  def load_counts
+    @counts = {
+      total: current_tenant.instance_users.group(:role).count,
+      active: current_tenant.instance_users.active_in_past_7_days.group(:role).count
+    }.with_indifferent_access
+  end
 
   def instance_user_params
     params.require(:instance_user).permit(:role)

@@ -22,6 +22,18 @@ RSpec.feature 'System: Administration: Instance: Users' do
         expect(page.all('tr.instance_user').count).to eq(instance.instance_users.count)
       end
 
+      scenario 'I can filter users by role and view only administrators' do
+        visit admin_instance_users_path(role: :administrator)
+
+        instance_users.each do |instance_users|
+          expect(page).not_to have_selector('tr.instance_user th', text: instance_users.user.name)
+          expect(page).not_to have_selector('tr.instance_user td', text: instance_users.user.email)
+        end
+
+        expect(page).to have_selector('tr.instance_user th', text: instance_admin.name)
+        expect(page).to have_selector('tr.instance_user td', text: instance_admin.email)
+      end
+
       scenario "I can change a user's role", js: true do
         visit admin_instance_users_path
 

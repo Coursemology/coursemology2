@@ -22,6 +22,18 @@ RSpec.feature 'System: Administration: Users' do
         end
       end
 
+      scenario 'I can filter users by role and view only administrators' do
+        visit admin_users_path(role: :administrator)
+
+        users.select(&:normal?).each do |user|
+          expect(page).not_to have_selector("tr.user input[value='#{user.name}']")
+          expect(page).not_to have_selector('tr.user td', text: user.email)
+        end
+
+        expect(page).to have_selector("tr.user input[value='#{admin.name}']")
+        expect(page).to have_selector('tr.user td', text: admin.email)
+      end
+
       scenario "I can change a user's record", js: true do
         visit admin_users_path
 

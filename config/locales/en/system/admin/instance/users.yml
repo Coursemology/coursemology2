@@ -7,8 +7,13 @@ en:
             header: 'Users'
             related_courses: 'Related Courses'
             search_placeholder: 'Search user name or emails'
-            total_users_html: 'Total Users: <strong>%{count}</strong>'
-            active_users_html: 'Active Users (in the past 7 days): <strong>%{count}</strong>'
+            total_users_html: >
+              <strong>Total Users</strong>: <strong>%{all_count}</strong>
+              (%{admin_count} Administrators, %{instructor_count} Instructors, %{normal_count} Normal)
+            active_users_html: >
+              <strong>Active Users</strong>: <strong>%{all_count}</strong>
+              (%{admin_count} Administrators, %{instructor_count} Instructors, %{normal_count} Normal)<br>
+              (active in the past 7 days)
           update:
             success: '%{user} was updated.'
           destroy:
