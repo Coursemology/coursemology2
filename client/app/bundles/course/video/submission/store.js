@@ -32,7 +32,7 @@ const stateReconciler = (inboundState, _, reducedState) => {
   const inboundOldSessions = inboundState.oldSessions || makeImmutableMap();
   let oldSessions = inboundOldSessions.merge(reducedState.oldSessions);
 
-  if (inboundState.video && inboundState.video.sessionId) {
+  if (inboundState.video && inboundState.video.sessionId && !inboundState.video.sessionClosed) {
     const inboundVideoState = inboundState.video;
     const inboundSessionId = inboundVideoState.sessionId;
     oldSessions = oldSessions.set(inboundSessionId, inboundVideoState);

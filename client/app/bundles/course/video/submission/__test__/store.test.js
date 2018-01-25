@@ -2,7 +2,7 @@ import { playerStates } from 'lib/constants/videoConstants';
 import store from '../store';
 import { changePlayerState, updatePlayerProgress } from '../actions/video';
 
-const videoStateFixture = JSON.stringify({
+const videoStateObject = {
   videoUrl: 'https://www.youtube.com/watch?v=sTSA_sWGM44',
   watchNextVideoUrl: '',
   nextVideoSubmissionExists: false,
@@ -18,7 +18,10 @@ const videoStateFixture = JSON.stringify({
   sessionSequenceNum: 1,
   sessionEvents: [{ sequence_num: 0, event_type: 'play', video_time: 0, playback_rate: 1, event_time: Date.now() }],
   sessionClosed: false,
-});
+};
+
+const videoStateFixture = JSON.stringify(videoStateObject);
+const closedVideoStateFixture = JSON.stringify({ ...videoStateObject, sessionClosed: true });
 
 const oldSessionsFixture = JSON.stringify({
   25: {
@@ -216,6 +219,47 @@ describe('store', () => {
       expect(newVideoState.sessionSequenceNum).toBe(0);
 
       expect(state.oldSessions.count()).toBe(0);
+    });
+  });
+
+  describe('when old video session is closed', () => {
+    beforeEach(() => {
+      localStorage.setItem('persist:videoWatchSessionStore:user-1', JSON.stringify({
+        video: closedVideoStateFixture,
+        oldSessions: oldSessionsFixture,
+      }));
+    });
+
+    it('does not append video state to oldSessions', async () => {
+      const createdStore = createStore();
+      await sleep(0.5); // Wait for state to restore
+
+      const state = createdStore.store.getState();
+      const newVideoState = state.video;
+      expect(newVideoState.videoUrl).toBe('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+      expect(newVideoState.sessionId).toBe('1');
+      expect(newVideoState.playerState).toBe(playerStates.UNSTARTED);
+      expect(newVideoState.playerProgress).toBe(0);
+      expect(newVideoState.sessionSequenceNum).toBe(0);
+
+      expect(state.oldSessions.count()).toBe(1);
+      expect(state.oldSessions.has('25')).toBeTruthy();
+      const oldVideoStateOriginal = state.oldSessions.get('25');
+      expect(oldVideoStateOriginal.videoUrl).toBe('https://www.youtube.com/watch?v=hSVNbxjdvv8');
+      expect(oldVideoStateOriginal.sessionId).toBe('25');
+      expect(oldVideoStateOriginal.playerState).toBe(playerStates.PAUSED);
+      expect(oldVideoStateOriginal.playerProgress).toBe(5);
+      expect(oldVideoStateOriginal.sessionSequenceNum).toBe(2);
+      expect(oldVideoStateOriginal.sessionEvents.count()).toBe(2);
+
+      const oldEvent1 = oldVideoStateOriginal.sessionEvents.get(0);
+      expect(oldEvent1.event_type).toBe('play');
+      expect(oldEvent1.sequence_num).toBe(0);
+      expect(oldEvent1.video_time).toBe(0);
+      const oldEvent2 = oldVideoStateOriginal.sessionEvents.get(1);
+      expect(oldEvent2.event_type).toBe('pause');
+      expect(oldEvent2.sequence_num).toBe(1);
+      expect(oldEvent2.video_time).toBe(5);
     });
   });
 });

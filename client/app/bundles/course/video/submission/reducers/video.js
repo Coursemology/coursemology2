@@ -18,6 +18,7 @@ export const initialState = {
   sessionId: null,
   sessionSequenceNum: 0,
   sessionEvents: makeImmutableList(),
+  sessionClosed: false,
 };
 
 export const persistTransform = createTransform(
@@ -214,6 +215,7 @@ function videoSessionReducer(state = initialState, action) {
     case sessionActionTypes.REMOVE_EVENTS:
       return Object.assign({}, state, {
         sessionEvents: events.filterNot(event => action.sequenceNums.has(event.sequence_num)),
+        sessionClosed: action.sessionClosed,
       });
     default:
       return state;

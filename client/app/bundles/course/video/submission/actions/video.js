@@ -144,10 +144,11 @@ export function seekEnd() {
 /**
  * Creates an action to remove events from the state store.
  * @param sequenceNums The event sequence numbers to remove
+ * @param sessionClosed If this event is in response to the final server request before close
  * @return {{type: videoActionTypes, sequenceNums: Set<number>}}
  */
-function removeEvents(sequenceNums) {
-  return { type: sessionActionTypes.REMOVE_EVENTS, sequenceNums };
+function removeEvents(sequenceNums, sessionClosed = false) {
+  return { type: sessionActionTypes.REMOVE_EVENTS, sequenceNums, sessionClosed };
 }
 
 /**
@@ -168,13 +169,13 @@ function removeOldSessions(sessionIds) {
  * If a request is sent, the video time will be updated on the server too.
  * @param dispatch The Redux dispatch function
  * @param videoState The Redux video state slice
- * @param force Sends a request to the server even if there are no events if true
+ * @param closeSession true if the server request is to be the last
  */
-function sendCurrentEvents(dispatch, videoState, force = false) {
+function sendCurrentEvents(dispatch, videoState, closeSession = false) {
   const sessionId = videoState.sessionId;
   const events = videoState.sessionEvents;
 
-  if (sessionId === null || (!force && events.isEmpty())) {
+  if (sessionId === null || (!closeSession && events.isEmpty())) {
     return;
   }
 
@@ -183,7 +184,7 @@ function sendCurrentEvents(dispatch, videoState, force = false) {
     .update(sessionId, videoTime, events.toArray())
     .then(() => {
       if (!events.isEmpty()) {
-        dispatch(removeEvents(events.map(event => event.sequence_num).toSet()));
+        dispatch(removeEvents(events.map(event => event.sequence_num).toSet()), closeSession);
       }
     });
 }
