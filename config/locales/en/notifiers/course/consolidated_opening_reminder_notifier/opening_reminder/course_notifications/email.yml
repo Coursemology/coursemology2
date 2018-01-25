@@ -1,0 +1,16 @@
+en:
+  notifiers:
+    course:
+      consolidated_opening_reminder_notifier:
+        opening_reminder:
+          course_notifications:
+            email:
+              subject: 'Opening Reminders for %{course}'
+              message: 'The following items are opening in the next 24 hours.'
+            course:
+              assessment:
+                section_header: 'New Assessments Available:'
+              survey:
+                section_header: 'New Surveys Available:'
+              video:
+                section_header: 'New Videos Available:'

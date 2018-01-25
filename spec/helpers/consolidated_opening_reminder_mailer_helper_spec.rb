@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe ApplicationNotificationsHelper, type: :helper do
+RSpec.describe ConsolidatedOpeningReminderMailerHelper, type: :helper do
   let!(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:activity) { create(:activity, event: :tested, notifier_type: 'UserNotifier') }
@@ -12,12 +12,12 @@ RSpec.describe ApplicationNotificationsHelper, type: :helper do
       notification
     end
 
-    describe '#notification_view_path' do
+    describe '#actable_type_partial_path' do
       context 'when valid notification is provided' do
-        subject { helper.notification_view_path(stub_notification) }
+        subject { helper.actable_type_partial_path(stub_notification, 'Course::Assessment') }
 
-        it 'returns the correct view path' do
-          is_expected.to eq('/notifiers/user_notifier/tested/open_structs/test_type')
+        it 'returns the correct partial path' do
+          is_expected.to eq('/notifiers/user_notifier/tested/open_structs/course/assessment')
         end
       end
     end

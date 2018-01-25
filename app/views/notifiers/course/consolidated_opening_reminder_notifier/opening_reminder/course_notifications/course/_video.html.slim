@@ -1,0 +1,4 @@
+= t('.section_header')
+ol
+  - items.each do |item|
+    li = link_to(item.title, course_video_url(course, item, host: course.instance.host))

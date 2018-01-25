@@ -77,4 +77,8 @@ class Course::Video < ApplicationRecord
     copy_attributes(other, duplicator)
     self.course = duplicator.options[:target_course]
   end
+
+  def include_in_consolidated_email?(event)
+    Course::Settings::VideosComponent.email_enabled?(course, "video_#{event}".to_sym)
+  end
 end

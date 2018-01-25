@@ -54,5 +54,13 @@ module Extensions::ActsAsHelpers::ActiveRecord::Base
     def can_user_start?(_user = nil)
       true
     end
+
+    # Override in the actable item if there's a need to check its settings component.
+    #
+    # @param event [String] The event to check for. e.g. 'opening', 'closing'.
+    # @return [Boolean]
+    def include_in_consolidated_email?(_event)
+      false
+    end
   end
 end

@@ -160,6 +160,11 @@ class Course::Assessment < ApplicationRecord
     set_duplication_flag
   end
 
+  def include_in_consolidated_email?(event)
+    Course::Settings::AssessmentsComponent.email_enabled?(tab.category,
+                                                          "assessment_#{event}".to_sym)
+  end
+
   private
 
   # Parents the assessment under its duplicated parent tab, if it exists.

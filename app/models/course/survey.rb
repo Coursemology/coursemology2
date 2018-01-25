@@ -39,4 +39,8 @@ class Course::Survey < ApplicationRecord
     self.sections = duplicator.duplicate(other.sections)
     self.course = duplicator.options[:target_course]
   end
+
+  def include_in_consolidated_email?(event)
+    Course::Settings::SurveyComponent.email_enabled?(course, "survey_#{event}".to_sym)
+  end
 end
