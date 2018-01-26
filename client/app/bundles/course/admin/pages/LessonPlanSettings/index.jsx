@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -29,9 +30,12 @@ class LessonPlanSettings extends React.Component {
     const { dispatch } = this.props;
     const { component, tab_title, component_title, options } = setting;
     return (_, enabled) => {
-      const payload = { lesson_plan_item_settings: { component, tab_title, enabled, visible: setting.visible, options } };
-      const successMessage = <FormattedMessage {...translations.updateSuccess} values={{ setting: tab_title || component_title }} />;
-      const failureMessage = <FormattedMessage {...translations.updateFailure} values={{ setting: tab_title || component_title }} />;
+      const payload = {
+        lesson_plan_item_settings: { component, tab_title, enabled, visible: setting.visible, options },
+      };
+      const values = { setting: tab_title || component_title };
+      const successMessage = <FormattedMessage {...translations.updateSuccess} values={values} />;
+      const failureMessage = <FormattedMessage {...translations.updateFailure} values={values} />;
       dispatch(updateLessonPlanSettings(payload, successMessage, failureMessage));
     };
   }
@@ -42,9 +46,12 @@ class LessonPlanSettings extends React.Component {
     const { dispatch } = this.props;
     const { component, tab_title, component_title, options } = setting;
     return (_, visible) => {
-      const payload = { lesson_plan_item_settings: { component, tab_title, visible, enabled: setting.enabled, options } };
-      const successMessage = <FormattedMessage {...translations.updateSuccess} values={{ setting: tab_title || component_title }} />;
-      const failureMessage = <FormattedMessage {...translations.updateFailure} values={{ setting: tab_title || component_title }} />;
+      const payload = {
+        lesson_plan_item_settings: { component, tab_title, visible, enabled: setting.enabled, options },
+      };
+      const values = { setting: tab_title || component_title };
+      const successMessage = <FormattedMessage {...translations.updateSuccess} values={values} />;
+      const failureMessage = <FormattedMessage {...translations.updateFailure} values={values} />;
       dispatch(updateLessonPlanSettings(payload, successMessage, failureMessage));
     };
   }

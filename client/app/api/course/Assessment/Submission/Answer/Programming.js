@@ -27,7 +27,8 @@ export default class ProgrammingAPI extends BaseAssessmentAPI {
     const formData = new FormData();
     ProgrammingAPI.appendFormData(formData, submissionFields);
 
-    return this.getClient().post(`${this._getUrlPrefix()}/${answerId}/programming/create_programming_files`, formData, config);
+    const url = `${this._getUrlPrefix()}/${answerId}/programming/create_programming_files`;
+    return this.getClient().post(url, formData, config);
   }
 
   /**

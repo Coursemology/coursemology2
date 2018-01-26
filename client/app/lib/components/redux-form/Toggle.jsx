@@ -10,19 +10,24 @@ const errorStyle = {
 };
 
 // Toggle implementation with an error displayed at the bottom.
-const Toggle = ({ errorText, ...props }) => (
-  <div>
-    <MaterialToggle {...props} />
-    {
-        errorText &&
-        <div style={errorStyle}>{errorText}</div>
-      }
-  </div>
-);
+class Toggle extends React.Component {
+  static propTypes = {
+    errorText: PropTypes.string,
+  }
 
-Toggle.propTypes = {
-  errorText: PropTypes.string,
-};
+  render() {
+    const { errorText, ...props } = this.props;
+    return (
+      <div>
+        <MaterialToggle {...props} />
+        {
+            errorText &&
+            <div style={errorStyle}>{errorText}</div>
+          }
+      </div>
+    );
+  }
+}
 
 export default createComponent(
   Toggle,
