@@ -23,6 +23,13 @@ class Course::Video::Submission < ApplicationRecord
   #   @param [User] user The user to filter submissions by
   scope :by_user, ->(user) { where(creator: user) }
 
+  # Finds a submission under the same video and and by the same user
+  def existing_submission
+    return nil unless @existing_submission || (video.present? && creator.present?)
+    @existing_submission ||=
+      Course::Video::Submission.find_by(video_id: video.id, creator_id: creator.id)
+  end
+
   private
 
   # Validate that the submission creator is the same user as the course_user in the associated
@@ -34,8 +41,7 @@ class Course::Video::Submission < ApplicationRecord
 
   # Validate that the submission creator does not have an existing submission for this assessment.
   def validate_unique_submission
-    existing = Course::Video::Submission.find_by(video_id: video.id, creator_id: creator.id)
-    return unless existing
+    return unless existing_submission
     errors.clear
     errors[:base] << I18n.t('activerecord.errors.models.course/video/submission.'\
                             'submission_already_exists')

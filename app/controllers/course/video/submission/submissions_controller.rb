@@ -13,6 +13,10 @@ class Course::Video::Submission::SubmissionsController < Course::Video::Submissi
   def create
     if @submission.save
       redirect_to edit_course_video_submission_path(current_course, @video, @submission)
+    elsif @submission.existing_submission.present?
+      redirect_to edit_course_video_submission_path(current_course,
+                                                    @video,
+                                                    @submission.existing_submission)
     else
       redirect_to course_videos_path(current_course),
                   danger: t('.failure', error: @submission.errors.full_messages.to_sentence)
