@@ -77,7 +77,7 @@
     "history": "^4.6.1",
     "immutable": "^3.8.1",
     "intl": "^1.2.5",
-    "jquery": "2.2.4",
+    "jquery": "3.3.1",
     "jquery-ui": "^1.12.1",
     "json-loader": "^0.5.4",
     "material-ui": "^0.20.0",
