@@ -13,7 +13,7 @@ class Course::Assessment::Question::TextResponseComprehensionPoint < Application
   accepts_nested_attributes_for :solutions, allow_destroy: true
 
   def auto_gradable_point?
-    solutions.map(&:auto_gradable_solution?).any?
+    solutions.any?(&:auto_gradable_solution?)
   end
 
   def initialize_duplicate(duplicator, other)
