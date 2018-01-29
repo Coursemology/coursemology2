@@ -8,11 +8,6 @@ RSpec.describe Course::Video::Submission::SubmissionsController do
     let(:user) { create(:user) }
     let!(:course) { create(:course, :with_video_component_enabled, creator: user) }
     let(:video) { create(:video, :published, course: course) }
-    let(:immutable_submission) do
-      create(:video_submission, video: video, creator: user).tap do |stub|
-        allow(stub).to receive(:save).and_return(false)
-      end
-    end
 
     before { sign_in(user) }
 
@@ -22,6 +17,13 @@ RSpec.describe Course::Video::Submission::SubmissionsController do
       end
 
       context 'when create fails' do
+        let(:immutable_submission) do
+          create(:video_submission, video: video, creator: user).tap do |stub|
+            allow(stub).to receive(:save).and_return(false)
+            allow(stub).to receive(:existing_submission).and_return(nil)
+          end
+        end
+
         before do
           controller.instance_variable_set(:@submission, immutable_submission)
           subject
@@ -32,6 +34,12 @@ RSpec.describe Course::Video::Submission::SubmissionsController do
           expect(flash[:danger]).
             to eq(I18n.t('course.video.submission.submissions.create.failure', error: ''))
         end
+      end
+
+      context 'when submission by user exists' do
+        let!(:old_submission) { create(:video_submission, video: video, creator: user) }
+
+        it { is_expected.to redirect_to(edit_course_video_submission_path(course, video, old_submission)) }
       end
     end
 

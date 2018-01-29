@@ -58,6 +58,26 @@ RSpec.describe Course::Video, type: :model do
       end
     end
 
+    describe '#next_video' do
+      let!(:video3) do
+        create(:video, course: course, start_at: Time.zone.now - 1.week, title: 'AAA')
+      end
+      let!(:video4) do
+        create(:video, course: course, start_at: Time.zone.now - 1.week, title: 'BBB')
+      end
+      before do
+        video1
+        video2
+      end
+
+      it 'returns the next video if it exists' do
+        expect(video1.next_video).to eq(nil)
+        expect(video2.next_video).to eq(video3)
+        expect(video3.next_video).to eq(video4)
+        expect(video4.next_video).to eq(video1)
+      end
+    end
+
     describe 'callbacks' do
       context 'when updating video url' do
         let(:youtube_embedded_url) { "https://www.youtube.com/embed/#{youtube_video_id}" }
@@ -87,7 +107,7 @@ RSpec.describe Course::Video, type: :model do
         context 'when url is invalid' do
           let(:invalid_urls) { ['https://google.com', 'http://youtube.com/fooooooo'] }
 
-          it' does not update and returns an error' do
+          it ' does not update and returns an error' do
             invalid_urls.each do |url|
               video1.reload.url = url
               expect(video1.save).to be_falsey

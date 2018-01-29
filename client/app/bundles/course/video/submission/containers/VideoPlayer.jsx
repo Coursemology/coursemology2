@@ -14,6 +14,7 @@ import {
   VideoTimestamp,
   VolumeButton,
   VolumeSlider,
+  NextVideoButton,
 } from './VideoControls';
 
 const tickMilliseconds = 1000;
@@ -137,6 +138,7 @@ class VideoPlayer extends React.Component {
           <VolumeSlider />
           <VideoTimestamp progress={this.props.playerProgress} duration={this.props.duration} />
           <PlayBackRateSelector />
+          <NextVideoButton />
         </div>
       </div>
     );
