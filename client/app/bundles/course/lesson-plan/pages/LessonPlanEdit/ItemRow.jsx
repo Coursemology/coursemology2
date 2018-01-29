@@ -6,7 +6,7 @@ import Toggle from 'material-ui/Toggle';
 import moment from 'lib/moment';
 import DateTimePicker from 'lib/components/form/DateTimePicker';
 import { updateItem } from 'course/lesson-plan/actions';
-import { columns } from 'course/lesson-plan/constants';
+import { fields } from 'course/lesson-plan/constants';
 
 const translations = defineMessages({
   updateSuccess: {
@@ -91,10 +91,10 @@ class ItemRow extends React.Component {
 
     return (
       <tr>
-        { columnsVisible[columns.ITEM_TYPE] ? <td>{ type }</td> : null }
+        { columnsVisible[fields.ITEM_TYPE] ? <td>{ type }</td> : null }
         <td>{ itemPath ? <a href={itemPath}>{ title }</a> : title }</td>
         {
-          columnsVisible[columns.START_AT] ?
+          columnsVisible[fields.START_AT] ?
             <td>
               <DateTimePicker
                 name="start_at"
@@ -104,7 +104,7 @@ class ItemRow extends React.Component {
             </td> : null
         }
         {
-          columnsVisible[columns.BONUS_END_AT] ?
+          columnsVisible[fields.BONUS_END_AT] ?
             <td>
               <DateTimePicker
                 name="bonus_end_at"
@@ -114,7 +114,7 @@ class ItemRow extends React.Component {
             </td> : null
         }
         {
-          columnsVisible[columns.END_AT] ?
+          columnsVisible[fields.END_AT] ?
             <td>
               <DateTimePicker
                 name="end_at"
@@ -124,7 +124,7 @@ class ItemRow extends React.Component {
             </td> : null
         }
         {
-          columnsVisible[columns.PUBLISHED] ?
+          columnsVisible[fields.PUBLISHED] ?
             <td>
               <Toggle
                 toggled={published}

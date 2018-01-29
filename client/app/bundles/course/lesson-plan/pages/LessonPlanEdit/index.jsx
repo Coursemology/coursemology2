@@ -3,9 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import translations from 'course/lesson-plan/translations';
-import { columns } from 'course/lesson-plan/constants';
+import { fields } from 'course/lesson-plan/constants';
 import MilestoneRow from './MilestoneRow';
 import ItemRow from './ItemRow';
+
+const { ITEM_TYPE, TITLE, START_AT, BONUS_END_AT, END_AT, PUBLISHED } = fields;
 
 const styles = {
   page: {
@@ -30,12 +32,12 @@ class LessonPlanEdit extends React.Component {
     return (
       <thead>
         <tr>
-          { columnsVisible[columns.ITEM_TYPE] ? headerFor('type') : null }
-          { headerFor('title') }
-          { columnsVisible[columns.START_AT] ? headerFor('startAt') : null }
-          { columnsVisible[columns.BONUS_END_AT] ? headerFor('bonusEndAt') : null }
-          { columnsVisible[columns.END_AT] ? headerFor('endAt') : null }
-          { columnsVisible[columns.PUBLISHED] ? headerFor('published') : null }
+          { columnsVisible[ITEM_TYPE] ? headerFor(ITEM_TYPE) : null }
+          { headerFor(TITLE) }
+          { columnsVisible[START_AT] ? headerFor(START_AT) : null }
+          { columnsVisible[BONUS_END_AT] ? headerFor(BONUS_END_AT) : null }
+          { columnsVisible[END_AT] ? headerFor(END_AT) : null }
+          { columnsVisible[PUBLISHED] ? headerFor(PUBLISHED) : null }
         </tr>
       </thead>
     );

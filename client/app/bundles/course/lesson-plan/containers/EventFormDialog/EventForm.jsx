@@ -10,7 +10,9 @@ import Toggle from 'lib/components/redux-form/Toggle';
 import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
 import formTranslations from 'lib/translations/form';
 import translations from 'course/lesson-plan/translations';
-import { formNames } from 'course/lesson-plan/constants';
+import { formNames, fields } from 'course/lesson-plan/constants';
+
+const { TITLE, EVENT_TYPE, LOCATION, DESCRIPTION, START_AT, END_AT, PUBLISHED } = fields;
 
 const styles = {
   columns: {
@@ -57,7 +59,7 @@ const EventForm = ({ handleSubmit, onSubmit, disabled, formValues, shiftEndDate,
     <Field
       fullWidth
       name="title"
-      floatingLabelText={<FormattedMessage {...translations.title} />}
+      floatingLabelText={<FormattedMessage {...translations[TITLE]} />}
       component={TextField}
       {...{ disabled }}
     />
@@ -66,7 +68,7 @@ const EventForm = ({ handleSubmit, onSubmit, disabled, formValues, shiftEndDate,
         fullWidth
         openOnFocus
         name="event_type"
-        floatingLabelText={<FormattedMessage {...translations.eventType} />}
+        floatingLabelText={<FormattedMessage {...translations[EVENT_TYPE]} />}
         component={AutoComplete}
         dataSource={eventTypes}
         filter={AutoCompleteFilters.caseInsensitiveFilter}
@@ -78,7 +80,7 @@ const EventForm = ({ handleSubmit, onSubmit, disabled, formValues, shiftEndDate,
         fullWidth
         openOnFocus
         name="location"
-        floatingLabelText={<FormattedMessage {...translations.location} />}
+        floatingLabelText={<FormattedMessage {...translations[LOCATION]} />}
         component={AutoComplete}
         dataSource={eventLocations}
         filter={AutoCompleteFilters.caseInsensitiveFilter}
@@ -90,7 +92,7 @@ const EventForm = ({ handleSubmit, onSubmit, disabled, formValues, shiftEndDate,
     <Field
       fullWidth
       name="description"
-      label={<FormattedMessage {...translations.description} />}
+      label={<FormattedMessage {...translations[DESCRIPTION]} />}
       component={RichTextField}
       multiLine
       rows={2}
@@ -99,7 +101,7 @@ const EventForm = ({ handleSubmit, onSubmit, disabled, formValues, shiftEndDate,
     <div style={styles.columns}>
       <Field
         name="start_at"
-        floatingLabelText={<FormattedMessage {...translations.startAt} />}
+        floatingLabelText={<FormattedMessage {...translations[START_AT]} />}
         component={DateTimePicker}
         afterChange={(_, newStartAt) => shiftEndDate(formNames.EVENT, newStartAt, formValues)}
         style={styles.oneColumn}
@@ -107,7 +109,7 @@ const EventForm = ({ handleSubmit, onSubmit, disabled, formValues, shiftEndDate,
       />
       <Field
         name="end_at"
-        floatingLabelText={<FormattedMessage {...translations.endAt} />}
+        floatingLabelText={<FormattedMessage {...translations[END_AT]} />}
         component={DateTimePicker}
         style={styles.oneColumn}
         {...{ disabled }}
@@ -117,7 +119,7 @@ const EventForm = ({ handleSubmit, onSubmit, disabled, formValues, shiftEndDate,
       name="published"
       component={Toggle}
       parse={Boolean}
-      label={<FormattedMessage {...translations.published} />}
+      label={<FormattedMessage {...translations[PUBLISHED]} />}
       labelPosition="right"
       style={styles.toggle}
       disabled={disabled}

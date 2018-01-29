@@ -6,7 +6,7 @@ import { Element } from 'react-scroll';
 import moment from 'lib/moment';
 import DateTimePicker from 'lib/components/form/DateTimePicker';
 import { updateMilestone } from 'course/lesson-plan/actions';
-import { columns } from 'course/lesson-plan/constants';
+import { fields } from 'course/lesson-plan/constants';
 
 const translations = defineMessages({
   updateSuccess: {
@@ -49,11 +49,11 @@ class MilestoneRow extends React.Component {
 
     return (
       <tr>
-        <td colSpan={columnsVisible[columns.ITEM_TYPE] ? 2 : 1}>
+        <td colSpan={columnsVisible[fields.ITEM_TYPE] ? 2 : 1}>
           <h3><Element name={groupId}>{ title }</Element></h3>
         </td>
         {
-          columnsVisible[columns.START_AT] ?
+          columnsVisible[fields.START_AT] ?
             <td>
               <DateTimePicker
                 name="start_at"
@@ -62,9 +62,9 @@ class MilestoneRow extends React.Component {
               />
             </td> : null
         }
-        { columnsVisible[columns.BONUS_END_AT] ? <td /> : null }
-        { columnsVisible[columns.END_AT] ? <td /> : null }
-        { columnsVisible[columns.PUBLISHED] ? <td /> : null }
+        { columnsVisible[fields.BONUS_END_AT] ? <td /> : null }
+        { columnsVisible[fields.END_AT] ? <td /> : null }
+        { columnsVisible[fields.PUBLISHED] ? <td /> : null }
       </tr>
     );
   }

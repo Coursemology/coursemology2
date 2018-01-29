@@ -1,14 +1,14 @@
-import actionTypes, { columns } from '../constants';
+import actionTypes, { fields } from '../constants';
 
 export const initialState = {
   canManageLessonPlan: false,
   milestonesExpanded: 'current',
   editPageColumnsVisible: {
-    [columns.ITEM_TYPE]: true,
-    [columns.START_AT]: true,
-    [columns.BONUS_END_AT]: true,
-    [columns.END_AT]: true,
-    [columns.PUBLISHED]: true,
+    [fields.ITEM_TYPE]: true,
+    [fields.START_AT]: true,
+    [fields.BONUS_END_AT]: true,
+    [fields.END_AT]: true,
+    [fields.PUBLISHED]: true,
   },
 };
 
