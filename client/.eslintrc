@@ -8,8 +8,6 @@
     react/forbid-prop-types: ["error", { "forbid": ["any", "array"] }],
     react/no-array-index-key: "warn",
     react/no-danger: "off",
-    // temporarily disable due to bug yannickcr/eslint-plugin-react#1389
-    react/no-typos: "off",
     react/no-unused-prop-types: ["warn", { skipShapeProps: true }],
     react/prefer-stateless-function: "off",
     react/require-default-props: "off",
