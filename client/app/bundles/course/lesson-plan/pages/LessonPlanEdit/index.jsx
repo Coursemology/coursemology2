@@ -22,16 +22,16 @@ class LessonPlanEdit extends React.Component {
   }
 
   static renderHeader() {
-    const rowFor = field => <th><FormattedMessage {...translations[field]} /></th>;
+    const headerFor = field => <th><FormattedMessage {...translations[field]} /></th>;
     return (
       <thead>
         <tr>
-          {rowFor('type')}
-          {rowFor('title')}
-          {rowFor('startAt')}
-          {rowFor('bonusEndAt')}
-          {rowFor('endAt')}
-          {rowFor('published')}
+          {headerFor('type')}
+          {headerFor('title')}
+          {headerFor('startAt')}
+          {headerFor('bonusEndAt')}
+          {headerFor('endAt')}
+          {headerFor('published')}
         </tr>
       </thead>
     );
