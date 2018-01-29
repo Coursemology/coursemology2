@@ -128,7 +128,7 @@ export default class ToolDropdown extends Component {
           <FontIcon
             className="fa fa-chevron-down"
             style={disabled ? { ...style.chevron, ...style.disabled } : style.chevron}
-            onClick={!disabled && onClickChevron}
+            onClick={!disabled ? onClickChevron : undefined}
           />
         </div>
       </div>
