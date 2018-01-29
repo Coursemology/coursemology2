@@ -74,6 +74,35 @@ RSpec.describe User do
       end
     end
 
+    describe '#time_zone' do
+      subject { create(:user) }
+      before { subject.update_column(:time_zone, persisted_time_zone) }
+
+      context 'when time_zone is not set' do
+        let(:persisted_time_zone) { nil }
+
+        it 'defaults to application default' do
+          expect(subject.time_zone).to eq(Application.config.x.default_user_time_zone)
+        end
+      end
+
+      context 'when persisted time_zone was set correctly' do
+        let(:persisted_time_zone) { 'Tokyo' }
+
+        it 'returns that time_zone' do
+          expect(subject.time_zone).to eq(persisted_time_zone)
+        end
+      end
+
+      context 'when persisted time_zone is incorrect' do
+        let(:persisted_time_zone) { 'Foo' }
+
+        it 'returns the application default' do
+          expect(subject.time_zone).to eq(Application.config.x.default_user_time_zone)
+        end
+      end
+    end
+
     describe '.new_with_session' do
       context 'when facebook data is provided' do
         let(:params) { {} }
@@ -161,7 +190,7 @@ RSpec.describe User do
       end
 
       describe '#time_zone' do
-        subject { build(:user) }
+        subject { create(:user) }
 
         context 'when time_zone is not set' do
           before { subject.time_zone = nil }
@@ -172,7 +201,12 @@ RSpec.describe User do
         context 'when time_zone is invalid' do
           before { subject.time_zone = 'LOL' }
 
-          it { is_expected.not_to be_valid }
+          it 'is not valid' do
+            expect(subject).not_to be_valid
+            expect(subject.errors[:time_zone]).to include(
+              I18n.t('activerecord.errors.models.user.attributes.time_zone.invalid_time_zone')
+            )
+          end
         end
 
         context 'when time_zone is valid' do

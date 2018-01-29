@@ -38,7 +38,7 @@ class User < ApplicationRecord
 
   validates :email, :encrypted_password, absence: true, if: :built_in?
   schema_validations except: [:encrypted_password]
-  validates :time_zone, inclusion: { in: ActiveSupport::TimeZone.all.map(&:name) }, allow_nil: true
+  validate :validate_time_zone
 
   has_many :emails, -> { order('primary' => :desc) }, class_name: User::Email.name,
                                                       inverse_of: :user, dependent: :destroy
@@ -97,6 +97,21 @@ class User < ApplicationRecord
                        creator: self, updater: self)
   end
 
+  # Override ActiveRecord's default time_zone getter method.
+  #
+  # If time_zone for user is not set, default it to Application Default.
+  # If time_zone for user is set and invalid, default to Application Default.
+  # If time_zone for user is set and valid, return user set time_zone.
+  #
+  # @return [String] time_zone to be applied on user.
+  def time_zone
+    if self[:time_zone] && ActiveSupport::TimeZone[self[:time_zone]].present?
+      self[:time_zone]
+    else
+      Application.config.x.default_user_time_zone
+    end
+  end
+
   private
 
   # Gets the default email address record.
@@ -109,5 +124,14 @@ class User < ApplicationRecord
     result = valid_emails.find(&:primary?)
     result ||= valid_emails.first
     result
+  end
+
+  # Custom time_zone validation as +#time_zone+ getter has been modified.
+  #
+  # Possible time_zones include +nil+ or those listed in ActiveSupport::TimeZone
+  def validate_time_zone
+    return if self[:time_zone].nil? || ActiveSupport::TimeZone[self[:time_zone]].present?
+
+    errors.add(:time_zone, :invalid_time_zone)
   end
 end
