@@ -39,6 +39,7 @@ class ItemRow extends React.Component {
     ]),
     published: PropTypes.bool.isRequired,
     visibility: PropTypes.shape({}).isRequired,
+    itemPath: PropTypes.string,
 
     dispatch: PropTypes.func.isRequired,
   }
@@ -79,7 +80,7 @@ class ItemRow extends React.Component {
   }
 
   render() {
-    const { type, title, startAt, bonusEndAt, endAt, published, visibility } = this.props;
+    const { type, title, startAt, bonusEndAt, endAt, published, visibility, itemPath } = this.props;
 
     const isHidden = !visibility[type];
     if (isHidden) { return null; }
@@ -87,7 +88,7 @@ class ItemRow extends React.Component {
     return (
       <tr>
         <td>{ type }</td>
-        <td>{ title }</td>
+        <td>{ itemPath ? <a href={itemPath}>{ title }</a> : title }</td>
         <td>
           <DateTimePicker
             name="start_at"

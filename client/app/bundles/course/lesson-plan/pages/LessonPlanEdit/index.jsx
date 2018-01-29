@@ -50,6 +50,7 @@ class LessonPlanEdit extends React.Component {
         bonusEndAt={item.bonus_end_at}
         endAt={item.end_at}
         published={item.published}
+        itemPath={item.item_path}
       />
     )) : [];
 
