@@ -51,8 +51,7 @@ RSpec.feature 'System: Administration: Users' do
         new_name = 'updated user name'
         within find(content_tag_selector(user_to_change)) do
           fill_in 'user_name', with: new_name
-          find('.dropdown-toggle').click
-          find('ul.dropdown-menu.inner').find('span', text: 'administrator').click
+          select 'administrator'
           click_button 'update'
         end
 

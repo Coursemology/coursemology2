@@ -49,8 +49,7 @@ RSpec.feature 'System: Administration: Instance: Users' do
         expect(page).to have_selector('div.alert.alert-danger')
 
         within find(content_tag_selector(user_to_change)) do
-          find('.dropdown-toggle').click
-          find('ul.dropdown-menu.inner').find('span', text: 'administrator').click
+          select 'administrator'
           click_button 'update'
         end
 
