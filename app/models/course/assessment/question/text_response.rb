@@ -16,7 +16,7 @@ class Course::Assessment::Question::TextResponse < ApplicationRecord
 
   def auto_gradable?
     if comprehension_question?
-      groups.map(&:auto_gradable_group?).any?
+      groups.any?(&:auto_gradable_group?)
     else
       !solutions.empty?
     end

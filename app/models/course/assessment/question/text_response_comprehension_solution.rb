@@ -21,10 +21,6 @@ class Course::Assessment::Question::TextResponseComprehensionSolution < Applicat
 
   private
 
-  def comprehension_solution?
-    compre_keyword? || compre_lifted_word?
-  end
-
   def remove_blank_solution
     solution.reject!(&:blank?)
   end

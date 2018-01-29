@@ -60,7 +60,7 @@ class Course::Assessment::Question::TextResponseComprehensionGroup < Application
   accepts_nested_attributes_for :points, allow_destroy: true
 
   def auto_gradable_group?
-    points.map(&:auto_gradable_point?).any?
+    points.any?(&:auto_gradable_point?)
   end
 
   def initialize_duplicate(duplicator, other)
