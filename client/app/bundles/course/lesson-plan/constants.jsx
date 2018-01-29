@@ -5,6 +5,14 @@ export const formNames = mirrorCreator([
   'MILESTONE',
 ]);
 
+export const columns = mirrorCreator([
+  'ITEM_TYPE',
+  'START_AT',
+  'BONUS_END_AT',
+  'END_AT',
+  'PUBLISHED',
+]);
+
 const actionTypes = mirrorCreator([
   'SET_ITEM_TYPE_VISIBILITY',
   'LOAD_LESSON_PLAN_REQUEST',

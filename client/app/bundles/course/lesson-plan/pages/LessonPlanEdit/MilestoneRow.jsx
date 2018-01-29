@@ -6,6 +6,7 @@ import { Element } from 'react-scroll';
 import moment from 'lib/moment';
 import DateTimePicker from 'lib/components/form/DateTimePicker';
 import { updateMilestone } from 'course/lesson-plan/actions';
+import { columns } from 'course/lesson-plan/constants';
 
 const translations = defineMessages({
   updateSuccess: {
@@ -29,6 +30,7 @@ class MilestoneRow extends React.Component {
       PropTypes.string,
       PropTypes.instanceOf(Date),
     ]).isRequired,
+    columnsVisible: PropTypes.shape({}).isRequired,
 
     dispatch: PropTypes.func.isRequired,
   }
@@ -43,26 +45,31 @@ class MilestoneRow extends React.Component {
   }
 
   render() {
-    const { title, startAt, groupId } = this.props;
+    const { title, startAt, groupId, columnsVisible } = this.props;
 
     return (
       <tr>
-        <td colSpan={2}>
+        <td colSpan={columnsVisible[columns.ITEM_TYPE] ? 2 : 1}>
           <h3><Element name={groupId}>{ title }</Element></h3>
         </td>
-        <td>
-          <DateTimePicker
-            name="start_at"
-            value={startAt}
-            onChange={this.updateMilestoneStartAt}
-          />
-        </td>
-        <td />
-        <td />
-        <td />
+        {
+          columnsVisible[columns.START_AT] ?
+            <td>
+              <DateTimePicker
+                name="start_at"
+                value={startAt}
+                onChange={this.updateMilestoneStartAt}
+              />
+            </td> : null
+        }
+        { columnsVisible[columns.BONUS_END_AT] ? <td /> : null }
+        { columnsVisible[columns.END_AT] ? <td /> : null }
+        { columnsVisible[columns.PUBLISHED] ? <td /> : null }
       </tr>
     );
   }
 }
 
-export default connect()(MilestoneRow);
+export default connect(state => ({
+  columnsVisible: state.flags.editPageColumnsVisible,
+}))(MilestoneRow);

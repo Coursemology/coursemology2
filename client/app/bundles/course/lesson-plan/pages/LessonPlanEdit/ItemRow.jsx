@@ -6,6 +6,7 @@ import Toggle from 'material-ui/Toggle';
 import moment from 'lib/moment';
 import DateTimePicker from 'lib/components/form/DateTimePicker';
 import { updateItem } from 'course/lesson-plan/actions';
+import { columns } from 'course/lesson-plan/constants';
 
 const translations = defineMessages({
   updateSuccess: {
@@ -39,6 +40,7 @@ class ItemRow extends React.Component {
     ]),
     published: PropTypes.bool.isRequired,
     visibility: PropTypes.shape({}).isRequired,
+    columnsVisible: PropTypes.shape({}).isRequired,
     itemPath: PropTypes.string,
 
     dispatch: PropTypes.func.isRequired,
@@ -80,42 +82,56 @@ class ItemRow extends React.Component {
   }
 
   render() {
-    const { type, title, startAt, bonusEndAt, endAt, published, visibility, itemPath } = this.props;
+    const {
+      type, title, startAt, bonusEndAt, endAt, published, visibility, columnsVisible, itemPath,
+    } = this.props;
 
     const isHidden = !visibility[type];
     if (isHidden) { return null; }
 
     return (
       <tr>
-        <td>{ type }</td>
+        { columnsVisible[columns.ITEM_TYPE] ? <td>{ type }</td> : null }
         <td>{ itemPath ? <a href={itemPath}>{ title }</a> : title }</td>
-        <td>
-          <DateTimePicker
-            name="start_at"
-            value={startAt}
-            onChange={this.updateItemDate(startAt, 'start_at')}
-          />
-        </td>
-        <td>
-          <DateTimePicker
-            name="bonus_end_at"
-            value={bonusEndAt}
-            onChange={this.updateItemDate(bonusEndAt, 'bonus_end_at')}
-          />
-        </td>
-        <td>
-          <DateTimePicker
-            name="end_at"
-            value={endAt}
-            onChange={this.updateItemDate(startAt, 'end_at')}
-          />
-        </td>
-        <td>
-          <Toggle
-            toggled={published}
-            onToggle={(_, isToggled) => this.updateItem({ published: isToggled })}
-          />
-        </td>
+        {
+          columnsVisible[columns.START_AT] ?
+            <td>
+              <DateTimePicker
+                name="start_at"
+                value={startAt}
+                onChange={this.updateItemDate(startAt, 'start_at')}
+              />
+            </td> : null
+        }
+        {
+          columnsVisible[columns.BONUS_END_AT] ?
+            <td>
+              <DateTimePicker
+                name="bonus_end_at"
+                value={bonusEndAt}
+                onChange={this.updateItemDate(bonusEndAt, 'bonus_end_at')}
+              />
+            </td> : null
+        }
+        {
+          columnsVisible[columns.END_AT] ?
+            <td>
+              <DateTimePicker
+                name="end_at"
+                value={endAt}
+                onChange={this.updateItemDate(startAt, 'end_at')}
+              />
+            </td> : null
+        }
+        {
+          columnsVisible[columns.PUBLISHED] ?
+            <td>
+              <Toggle
+                toggled={published}
+                onToggle={(_, isToggled) => this.updateItem({ published: isToggled })}
+              />
+            </td> : null
+        }
       </tr>
     );
   }
@@ -123,4 +139,5 @@ class ItemRow extends React.Component {
 
 export default connect(state => ({
   visibility: state.lessonPlan.visibilityByType,
+  columnsVisible: state.flags.editPageColumnsVisible,
 }))(ItemRow);

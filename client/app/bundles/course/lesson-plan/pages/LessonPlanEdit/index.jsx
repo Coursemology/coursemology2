@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import translations from 'course/lesson-plan/translations';
+import { columns } from 'course/lesson-plan/constants';
 import MilestoneRow from './MilestoneRow';
 import ItemRow from './ItemRow';
 
@@ -19,19 +20,22 @@ class LessonPlanEdit extends React.Component {
       milestone: PropTypes.object,
       items: PropTypes.array,
     })).isRequired,
+    columnsVisible: PropTypes.shape({}).isRequired,
   }
 
-  static renderHeader() {
+  renderHeader() {
+    const { columnsVisible } = this.props;
+
     const headerFor = field => <th><FormattedMessage {...translations[field]} /></th>;
     return (
       <thead>
         <tr>
-          {headerFor('type')}
-          {headerFor('title')}
-          {headerFor('startAt')}
-          {headerFor('bonusEndAt')}
-          {headerFor('endAt')}
-          {headerFor('published')}
+          { columnsVisible[columns.ITEM_TYPE] ? headerFor('type') : null }
+          { headerFor('title') }
+          { columnsVisible[columns.START_AT] ? headerFor('startAt') : null }
+          { columnsVisible[columns.BONUS_END_AT] ? headerFor('bonusEndAt') : null }
+          { columnsVisible[columns.END_AT] ? headerFor('endAt') : null }
+          { columnsVisible[columns.PUBLISHED] ? headerFor('published') : null }
         </tr>
       </thead>
     );
@@ -75,7 +79,7 @@ class LessonPlanEdit extends React.Component {
     return (
       <div style={styles.page}>
         <table>
-          { LessonPlanEdit.renderHeader() }
+          { this.renderHeader() }
           <tbody>
             { groups.map(this.renderGroup) }
           </tbody>
@@ -87,4 +91,5 @@ class LessonPlanEdit extends React.Component {
 
 export default connect(state => ({
   groups: state.lessonPlan.groups,
+  columnsVisible: state.flags.editPageColumnsVisible,
 }))(LessonPlanEdit);
