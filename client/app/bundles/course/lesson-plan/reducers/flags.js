@@ -6,7 +6,7 @@ export const initialState = {
   editPageColumnsVisible: {
     [fields.ITEM_TYPE]: true,
     [fields.START_AT]: true,
-    [fields.BONUS_END_AT]: true,
+    [fields.BONUS_END_AT]: false,
     [fields.END_AT]: true,
     [fields.PUBLISHED]: true,
   },
