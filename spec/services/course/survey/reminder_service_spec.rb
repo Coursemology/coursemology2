@@ -20,38 +20,6 @@ RSpec.describe Course::Survey::ReminderService do
     let(:unresponded_student_email) { unresponded_student.user.email }
     let(:responded_student_email) { responded_student.user.email }
 
-    describe '#opening_reminder' do
-      subject do
-        Course::Survey::ReminderService.opening_reminder(survey, survey.opening_reminder_token)
-      end
-
-      it 'notifies all course users' do
-        subject
-        emails = ActionMailer::Base.deliveries.map(&:to).map(&:first)
-        expect(emails).to include(course_creator_email)
-        expect(emails).to include(unresponded_student_email)
-        expect(emails).to include(responded_student_email)
-
-        email_body = ActionMailer::Base.deliveries.find do |mail|
-          mail.to.last == responded_student_email
-        end.body.parts.first.body
-        expect(email_body).to include('course.mailer.survey_opening_reminder_email.message')
-      end
-
-      context 'when "survey opening" emails are disabled' do
-        before do
-          context = OpenStruct.new(key: Course::SurveyComponent.key, current_course: course)
-          Course::Settings::SurveyComponent.new(context).
-            update_email_setting('key' => 'survey_opening', 'enabled' => false)
-          course.save!
-        end
-
-        it 'does not send email notifications' do
-          expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
-        end
-      end
-    end
-
     describe '#closing_reminder' do
       subject do
         Course::Survey::ReminderService.closing_reminder(survey, survey.closing_reminder_token)
@@ -72,7 +40,7 @@ RSpec.describe Course::Survey::ReminderService do
         expect(staff_email_body).to include('course.mailer.survey_closing_summary_email.message')
       end
 
-      context 'when "survey opening" emails are disabled' do
+      context 'when "survey closing" emails are disabled' do
         before do
           context = OpenStruct.new(key: Course::SurveyComponent.key, current_course: course)
           Course::Settings::SurveyComponent.new(context).

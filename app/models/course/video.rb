@@ -2,7 +2,7 @@
 class Course::Video < ApplicationRecord
   acts_as_lesson_plan_item has_todo: true
 
-  include Course::ReminderConcern
+  include Course::ClosingReminderConcern
   include Course::Video::UrlConcern
 
   belongs_to :tab, class_name: Course::Video::Tab.name, inverse_of: :videos

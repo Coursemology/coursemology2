@@ -63,36 +63,5 @@ RSpec.describe Course::AssessmentNotifier, type: :notifier do
         end
       end
     end
-
-    describe '#assessment_opening' do
-      let(:course) { create(:course) }
-      let!(:assessment) { create(:course_assessment_assessment, course: course) }
-      let!(:user) { create(:course_user, course: course).user }
-
-      subject { Course::AssessmentNotifier.assessment_opening(user, assessment) }
-
-      it 'sends a course notification' do
-        expect { subject }.to change(course.notifications, :count).by(1)
-      end
-
-      it 'sends an email notification' do
-        expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(2)
-      end
-
-      context 'when "assessment opening" emails are disabled' do
-        before do
-          setting = {
-            'key' => 'assessment_opening', 'enabled' => false,
-            'options' => { 'category_id' => assessment.tab.category.id }
-          }
-          Course::Settings::AssessmentsComponent.new(settings_context).update_email_setting(setting)
-          course.save!
-        end
-
-        it 'does not send email notifications' do
-          expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
-        end
-      end
-    end
   end
 end

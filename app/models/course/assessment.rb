@@ -9,7 +9,7 @@ class Course::Assessment < ApplicationRecord
 
   # Concern must be included below acts_as_lesson_plan_item to override #can_user_start?
   include Course::Assessment::TodoConcern
-  include Course::ReminderConcern
+  include Course::ClosingReminderConcern
   include DuplicationStateTrackingConcern
 
   after_initialize :set_defaults, if: :new_record?

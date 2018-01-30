@@ -5,14 +5,6 @@ class Course::VideoNotifier < Notifier::Base
       save!
   end
 
-  def video_opening(user, video)
-    return unless email_enabled?(video, :video_opening)
-
-    create_activity(actor: user, object: video, event: :opening).
-      notify(video.course, :email).
-      save!
-  end
-
   def video_closing(user, video)
     return unless email_enabled?(video, :video_closing)
 

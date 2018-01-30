@@ -2,7 +2,7 @@
 class Course::Survey < ApplicationRecord
   acts_as_lesson_plan_item has_todo: true
 
-  include Course::ReminderConcern
+  include Course::ClosingReminderConcern
 
   enum question_type: { text_response: 0, multiple_choice: 1, multiple_response: 2 }
   validates :end_at, presence: true, if: :allow_response_after_end

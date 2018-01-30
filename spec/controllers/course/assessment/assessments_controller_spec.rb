@@ -73,10 +73,7 @@ RSpec.describe Course::Assessment::AssessmentsController do
         wait_for_job
 
         emails = unread_emails_for(student.email).map(&:subject)
-        opening_subject = '.notifiers.course.assessment_notifier.opening.'\
-                          'course_notifications.email.subject'
         closing_subject = 'course.mailer.assessment_closing_reminder_email.subject'
-        expect(emails).to include(opening_subject)
         expect(emails).to include(closing_subject)
 
         manager_emails = unread_emails_for(user.email).map(&:subject)
