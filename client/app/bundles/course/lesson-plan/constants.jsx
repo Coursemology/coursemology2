@@ -19,6 +19,7 @@ export const fields = mirrorCreator([
 
 const actionTypes = mirrorCreator([
   'SET_ITEM_TYPE_VISIBILITY',
+  'SET_COLUMN_VISIBILITY',
   'LOAD_LESSON_PLAN_REQUEST',
   'LOAD_LESSON_PLAN_SUCCESS',
   'LOAD_LESSON_PLAN_FAILURE',

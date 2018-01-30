@@ -13,6 +13,14 @@ export function setItemTypeVisibility(itemType, isVisible) {
   };
 }
 
+export function setColumnVisibility(field, isVisible) {
+  return {
+    type: actionTypes.SET_COLUMN_VISIBILITY,
+    field,
+    isVisible,
+  };
+}
+
 export function fetchLessonPlan() {
   return (dispatch) => {
     dispatch({ type: actionTypes.LOAD_LESSON_PLAN_REQUEST });
