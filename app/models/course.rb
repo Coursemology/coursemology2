@@ -47,6 +47,7 @@ class Course < ApplicationRecord
   has_many :forums, dependent: :destroy, inverse_of: :course
   has_many :surveys, through: :lesson_plan_items, source: :actable, source_type: Course::Survey.name
   has_many :videos, through: :lesson_plan_items, source: :actable, source_type: Course::Video.name
+  has_many :video_tabs, class_name: Course::Video::Tab.name, inverse_of: :course, dependent: :destroy
 
   accepts_nested_attributes_for :invitations, :assessment_categories
 
@@ -139,6 +140,15 @@ class Course < ApplicationRecord
               nil
             end
     settings(:course).advance_start_at_duration = value
+  end
+
+  # Returns the first video tab in this course.
+  # Usually this will be the default video tab created automatically, but may vary
+  # according to settings.
+  #
+  # @return [Course::Video::Tab]
+  def default_video_tab
+    video_tabs.first
   end
 
   def initialize_duplicate(duplicator, other)
