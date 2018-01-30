@@ -13,7 +13,13 @@ class Course::Controller < ApplicationController
   # @return [Array] The array of ordered sidebar items of the given type.
   def sidebar_items(type: nil)
     weights_hash = sidebar_items_weights
-    sidebar_items_of_type(type).sort_by { |item| weights_hash[item[:key]] || item[:weight] }
+    items = sidebar_items_of_type(type)
+
+    items.sort do |a, b|
+      weight_a = weights_hash[a[:key]] || a[:weight]
+      weight_b = weights_hash[b[:key]] || b[:weight]
+      (weight_a <=> weight_b).nonzero? || a[:key].to_s <=> b[:key].to_s
+    end
   end
 
   # Fetches the first unread popup `UserNotification` for the current course and returns JSON data
