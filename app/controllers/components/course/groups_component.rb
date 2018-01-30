@@ -15,7 +15,7 @@ class Course::GroupsComponent < SimpleDelegator
         icon: 'share-alt',
         title: I18n.t('course.groups.sidebar_title'),
         type: :admin,
-        weight: 6,
+        weight: 7,
         path: course_groups_path(current_course)
       }
     ]

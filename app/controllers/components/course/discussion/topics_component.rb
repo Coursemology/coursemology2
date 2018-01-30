@@ -31,7 +31,7 @@ class Course::Discussion::TopicsComponent < SimpleDelegator
       {
         title: t('course.discussion.topics.sidebar_title'),
         type: :settings,
-        weight: 4,
+        weight: 7,
         path: course_admin_topics_path(current_course)
       }
     ]

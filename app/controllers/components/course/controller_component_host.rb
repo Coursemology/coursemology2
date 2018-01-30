@@ -236,7 +236,7 @@ class Course::ControllerComponentHost
   #
   # The elements are rendered on all Course controller subclasses as part of a nested template.
   def sidebar_items
-    @sidebar_items ||= components.map(&:sidebar_items).tap(&:flatten!)
+    @sidebar_items ||= components.flat_map(&:sidebar_items)
   end
 
   private

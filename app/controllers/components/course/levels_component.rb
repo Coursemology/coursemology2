@@ -19,7 +19,7 @@ class Course::LevelsComponent < SimpleDelegator
         icon: 'star-half-o',
         title: I18n.t('course.levels.sidebar_title'),
         type: :admin,
-        weight: 5,
+        weight: 6,
         path: course_levels_path(current_course)
       }
     ]

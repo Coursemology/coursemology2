@@ -13,7 +13,7 @@ class Course::DuplicationComponent < SimpleDelegator
         icon: 'clone',
         title: t('layouts.duplication.title'),
         type: :admin,
-        weight: 4,
+        weight: 5,
         path: course_duplication_path(current_course)
       }
     ]

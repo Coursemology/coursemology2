@@ -40,7 +40,7 @@ class Course::AssessmentsComponent < SimpleDelegator
         key: :assessments_submissions,
         icon: 'upload',
         title: t('course.assessment.submissions.sidebar_title'),
-        weight: 2,
+        weight: 3,
         path: assessment_submissions_url,
         unread: submission_count
       }
@@ -56,7 +56,7 @@ class Course::AssessmentsComponent < SimpleDelegator
         icon: 'bolt',
         title: t('course.assessment.skills.sidebar_title'),
         type: :admin,
-        weight: 7,
+        weight: 8,
         path: course_assessments_skills_path(current_course)
       }
     ]
@@ -67,7 +67,7 @@ class Course::AssessmentsComponent < SimpleDelegator
       {
         title: t('course.assessment.assessments.sidebar_title'),
         type: :settings,
-        weight: 3,
+        weight: 5,
         path: course_admin_assessments_path(current_course)
       }
     ]
