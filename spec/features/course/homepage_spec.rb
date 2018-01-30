@@ -126,7 +126,7 @@ RSpec.feature 'Course: Homepage' do
 
         visit course_path(course)
         feed_notifications.each do |notification|
-          expect(page).not_to have_content_tag_for(notification)
+          expect(page).to have_no_content_tag_for(notification)
         end
       end
 
@@ -137,7 +137,7 @@ RSpec.feature 'Course: Homepage' do
         visit course_path(course)
 
         [:completed, :unpublished].each do |status|
-          expect(page).not_to have_content_tag_for(assessment_todos[status])
+          expect(page).to have_no_content_tag_for(assessment_todos[status])
         end
 
         within find(content_tag_selector(assessment_todos[:not_started])) do
@@ -174,7 +174,7 @@ RSpec.feature 'Course: Homepage' do
       scenario 'I am not able to see announcements in course homepage' do
         valid_announcement = create(:course_announcement, course: course)
         visit course_path(course)
-        expect(page).not_to have_content_tag_for(valid_announcement)
+        expect(page).to have_no_content_tag_for(valid_announcement)
       end
 
       scenario 'I am not able to see the activity feed in course homepage' do
@@ -182,7 +182,7 @@ RSpec.feature 'Course: Homepage' do
 
         visit course_path(course)
         feed_notifications.each do |notification|
-          expect(page).not_to have_content_tag_for(notification)
+          expect(page).to have_no_content_tag_for(notification)
         end
       end
 

@@ -33,7 +33,7 @@ RSpec.feature 'Courses: Experience Points Records: Management' do
 
         expect(page).to have_content_tag_for(record)
         expect(page).to have_content_tag_for(manual_record)
-        expect(page).not_to have_content_tag_for(inactive_record)
+        expect(page).to have_no_content_tag_for(inactive_record)
         submission_path =
           edit_course_assessment_submission_path(course, submission.assessment, submission)
         expect(page).to have_link(submission.assessment.title, href: submission_path)
@@ -78,7 +78,7 @@ RSpec.feature 'Courses: Experience Points Records: Management' do
         find_link(nil, href: manual_record_path).click
         expect(current_path).
           to eq(course_user_experience_points_records_path(course, course_student))
-        expect(page).not_to have_content_tag_for(manual_record)
+        expect(page).to have_no_content_tag_for(manual_record)
       end
     end
 
@@ -91,7 +91,7 @@ RSpec.feature 'Courses: Experience Points Records: Management' do
 
         expect(page).to have_content_tag_for(record)
         expect(page).to have_content_tag_for(manual_record)
-        expect(page).not_to have_content_tag_for(inactive_record)
+        expect(page).to have_no_content_tag_for(inactive_record)
 
         # Can view experience points attributes but cannot edit the experience points record
         within find(content_tag_selector(manual_record)) do

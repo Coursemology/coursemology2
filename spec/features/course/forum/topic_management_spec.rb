@@ -99,7 +99,7 @@ RSpec.feature 'Course: Forum: Topic: Management' do
         end
         expect(current_path).to eq(course_forum_path(course, forum))
 
-        expect(page).not_to have_content_tag_for(topic)
+        expect(page).to have_no_content_tag_for(topic)
       end
 
       scenario 'I can subscribe to a topic' do
@@ -199,7 +199,7 @@ RSpec.feature 'Course: Forum: Topic: Management' do
         expect(page).to have_content_tag_for(topic)
         expect(page).not_to have_link(hidden_topic.title,
                                       href: course_forum_topic_path(course, forum, hidden_topic))
-        expect(page).not_to have_content_tag_for(hidden_topic)
+        expect(page).to have_no_content_tag_for(hidden_topic)
       end
 
       scenario 'I can create a new topic with normal and question types' do

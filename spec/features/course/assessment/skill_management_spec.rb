@@ -56,7 +56,7 @@ RSpec.describe 'Course: Skills' do
         end
 
         expect(current_path).to eq(course_assessments_skills_path(course))
-        expect(page).not_to have_content_tag_for(skill)
+        expect(page).to have_no_content_tag_for(skill)
       end
     end
   end

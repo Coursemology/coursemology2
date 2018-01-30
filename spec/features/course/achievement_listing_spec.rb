@@ -43,7 +43,7 @@ RSpec.feature 'Course: Achievements' do
 
         # Ensure no 'New' button for achievement creation
         expect(page).not_to have_selector('.page-header .new-btn')
-        expect(page).not_to have_content_tag_for(draft_achievement)
+        expect(page).to have_no_content_tag_for(draft_achievement)
 
         expect(page).not_to have_link(nil, href: edit_course_achievement_path(course, achievement1))
         expect(page).not_to have_link(nil, href: edit_course_achievement_path(course, achievement2))
@@ -71,9 +71,9 @@ RSpec.feature 'Course: Achievements' do
           not_obtained = course.course_users - obtained
 
           obtained.each { |course_user| expect(page).to have_content_tag_for(course_user) }
-          not_obtained.each { |course_user| expect(page).not_to have_content_tag_for(course_user) }
+          not_obtained.each { |course_user| expect(page).to have_no_content_tag_for(course_user) }
 
-          expect(page).not_to have_content_tag_for(phantom_user)
+          expect(page).to have_no_content_tag_for(phantom_user)
         end
       end
     end

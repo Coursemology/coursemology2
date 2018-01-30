@@ -27,8 +27,8 @@ RSpec.feature 'Course: Experience Points: Disbursement' do
 
         click_link group_1.name
         expect(page).to have_content_tag_for(group_1_student)
-        expect(page).not_to have_content_tag_for(group_2_student)
-        expect(page).not_to have_content_tag_for(ungrouped_student)
+        expect(page).to have_no_content_tag_for(group_2_student)
+        expect(page).to have_no_content_tag_for(ungrouped_student)
       end
 
       scenario 'I can copy points awarded for first student to all students', js: true do

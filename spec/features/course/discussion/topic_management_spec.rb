@@ -126,7 +126,7 @@ RSpec.feature 'Course: Topics: Management' do
         expect(page).not_to have_link(I18n.t('course.discussion.topics.mark_as_pending'))
 
         other_comments.each do |comment|
-          expect(page).not_to have_content_tag_for(comment)
+          expect(page).to have_no_content_tag_for(comment)
         end
 
         my_comments.each do |comment|
@@ -150,7 +150,7 @@ RSpec.feature 'Course: Topics: Management' do
           click_link I18n.t('course.discussion.topics.mark_as_read')
         end
 
-        expect(page).not_to have_content_tag_for(mark_as_read)
+        expect(page).to have_no_content_tag_for(mark_as_read)
         expect(mark_as_read.unread?(user)).to be_falsey
       end
 
@@ -181,7 +181,7 @@ RSpec.feature 'Course: Topics: Management' do
         expect(page).to have_selector('.confirm-btn')
         accept_confirm_dialog
         wait_for_ajax
-        expect(page).not_to have_content_tag_for(post)
+        expect(page).to have_no_content_tag_for(post)
 
         # Reply when last post of topic has just been deleted
         reply_text = 'WELCOME (:'

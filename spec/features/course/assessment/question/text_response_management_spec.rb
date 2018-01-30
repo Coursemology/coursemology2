@@ -132,7 +132,7 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management' do
         find_link(nil, href: delete_path).click
 
         expect(current_path).to eq(course_assessment_path(course, assessment))
-        expect(page).not_to have_content_tag_for(question)
+        expect(page).to have_no_content_tag_for(question)
       end
     end
 

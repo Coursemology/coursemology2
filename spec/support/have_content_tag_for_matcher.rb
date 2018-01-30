@@ -20,6 +20,13 @@ RSpec::Matchers.define :have_content_tag_for do |resource|
   end
 end
 
+RSpec::Matchers.define :have_no_content_tag_for do |resource|
+  include ContentTag::TestExampleHelpers::FeatureHelpers
+  match do |page|
+    expect(page).to have_no_selector(content_tag_selector(resource))
+  end
+end
+
 RSpec.configure do |config|
   config.include ContentTag::TestExampleHelpers::FeatureHelpers, type: :feature
 end
