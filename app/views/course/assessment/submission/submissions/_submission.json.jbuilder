@@ -7,7 +7,7 @@ json.submission do
   if assessment.autograded? && !assessment.skippable?
     question = assessment.questions.next_unanswered(submission)
     # If question does not exist, means the student have answered all questions
-    json.maxStep question ? assessment.questions.index(question) : assessment.questions.length - 1
+    json.maxStep assessment.questions.index(question) if question
   end
 
   # Show submission as submitted to students if grading is not published yet
