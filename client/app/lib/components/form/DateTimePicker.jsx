@@ -74,7 +74,7 @@ const propTypes = {
   style: PropTypes.object,
 };
 
-class DateTimePicker extends React.Component {
+class DateTimePicker extends React.PureComponent {
   static displayState(dateTime) {
     return {
       displayedDate: dateTime ? moment(dateTime).format('DD-MM-YYYY') : '',
