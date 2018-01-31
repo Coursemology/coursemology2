@@ -68,7 +68,7 @@ module Extensions::Conditional::ActiveRecord::Base
     extend ActiveSupport::Concern
 
     included do
-      after_save :on_condition_change, if: :changed?
+      after_save :on_condition_change, if: :saved_changes?
     end
 
     # A human-readable name for each condition; usually just wraps a title
