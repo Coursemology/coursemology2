@@ -69,6 +69,14 @@ RSpec.describe Course::Controller, type: :controller do
         expect(weights.each_cons(2).all? { |a, b| a <= b }).to be_truthy
       end
 
+      it 'orders sidebar items with the same weight by ascending key' do
+        controller.current_component_host.sidebar_items.each { |i| i[:weight] = 1 }
+
+        keys = controller.sidebar_items.map { |item| item[:key] }
+        expect(keys.length).not_to eq(0)
+        expect(keys.each_cons(2).all? { |a, b| a.to_s <= b.to_s }).to be_truthy
+      end
+
       context 'when no type is specified' do
         it 'returns all sidebar items' do
           expect(controller.sidebar_items).to \
