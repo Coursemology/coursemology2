@@ -34,7 +34,7 @@ RSpec.describe 'Extension: Acts as Condition', type: :model do
       describe 'after condition is saved' do
         context 'when there are changes' do
           it 'rebuild satisfiability graph' do
-            allow(subject).to receive(:changed?).and_return(true)
+            allow(subject).to receive(:saved_changes?).and_return(true)
             expect(subject).to receive(:rebuild_satisfiability_graph).once
             subject.run_callbacks(:save)
           end
