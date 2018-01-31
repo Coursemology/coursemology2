@@ -68,6 +68,7 @@ RSpec.describe 'Course: Assessments: Submissions: Programming File Submission An
         delete_button = file_view.find('svg')
         delete_button.click
         click_button('Continue')
+        expect(page).to have_no_button('Continue')
 
         # It should indicate that there are no files uploaded
         # Original programming file in the question should have been deleted
