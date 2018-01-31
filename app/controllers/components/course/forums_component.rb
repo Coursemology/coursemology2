@@ -30,7 +30,7 @@ class Course::ForumsComponent < SimpleDelegator
       {
         title: settings.title || t('course.forum.forums.sidebar_title'),
         type: :settings,
-        weight: 7,
+        weight: 11,
         path: course_admin_forums_path(current_course)
       }
     ]

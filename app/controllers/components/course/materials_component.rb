@@ -30,7 +30,7 @@ class Course::MaterialsComponent < SimpleDelegator
       {
         title: t('course.material.sidebar_title'),
         type: :settings,
-        weight: 6,
+        weight: 10,
         path: course_admin_materials_path(current_course)
       }
     ]

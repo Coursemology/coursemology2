@@ -26,7 +26,7 @@ class Course::VideosComponent < SimpleDelegator
         key: :videos,
         icon: 'video-camera',
         title: settings.title || t('course.video.videos.sidebar_title'),
-        weight: 4,
+        weight: 12,
         path: course_videos_path(current_course),
         unread: unread_count
       }
@@ -38,7 +38,7 @@ class Course::VideosComponent < SimpleDelegator
       {
         title: settings.title || t('course.video.videos.sidebar_title'),
         type: :settings,
-        weight: 4,
+        weight: 13,
         path: course_admin_videos_path(current_course)
       }
     ]

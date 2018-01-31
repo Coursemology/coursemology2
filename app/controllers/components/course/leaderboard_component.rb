@@ -33,7 +33,7 @@ class Course::LeaderboardComponent < SimpleDelegator
       {
         title: settings.title || t('course.leaderboards.title'),
         type: :settings,
-        weight: 5,
+        weight: 8,
         path: course_admin_leaderboard_path(current_course)
       }
     ]

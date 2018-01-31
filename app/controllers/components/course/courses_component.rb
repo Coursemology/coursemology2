@@ -24,7 +24,7 @@ class Course::CoursesComponent < SimpleDelegator
         icon: 'gear',
         title: t('layouts.course_admin.title'),
         type: :admin,
-        weight: 10,
+        weight: 9,
         path: course_admin_path(current_course)
       }
     ]
@@ -70,7 +70,7 @@ class Course::CoursesComponent < SimpleDelegator
     {
       title: t('layouts.course_admin.notifications.title'),
       type: :settings,
-      weight: 8,
+      weight: 12,
       path: course_admin_notifications_path(current_course)
     }
   end

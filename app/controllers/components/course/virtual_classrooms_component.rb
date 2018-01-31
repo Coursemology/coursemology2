@@ -33,7 +33,7 @@ class Course::VirtualClassroomsComponent < SimpleDelegator
       {
         title: settings.title || t('layouts.course_admin.virtual_classroom_settings.title'),
         type: :settings,
-        weight: 3,
+        weight: 6,
         path: course_admin_virtual_classrooms_path(current_course)
       }
     ]
