@@ -22,9 +22,18 @@ class Course::Achievement::AchievementsController < Course::Achievement::Control
 
   def update #:nodoc:
     if @achievement.update_attributes(achievement_params)
-      head :ok
+      respond_to do |format|
+        format.html do
+          redirect_to course_achievement_path(current_course, @achievement.id),
+                      success: t('.success')
+        end
+        format.json { head :ok }
+      end
     else
-      render json: { errors: @achievement.errors }, status: :bad_request
+      respond_to do |format|
+        format.html { render 'edit' }
+        format.json { render json: { errors: @achievement.errors }, status: :bad_request }
+      end
     end
   end
 

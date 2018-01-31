@@ -11,6 +11,8 @@ en:
           users_with_achievement: 'Students with this Achievement'
         edit:
           header: 'Edit Achievement'
+        update:
+          success: 'Achievement successfully updated'
         destroy:
           success: 'Achievement %{title} was deleted.'
           failure: 'Failed to delete achievement: %{error}'
