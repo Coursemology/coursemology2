@@ -22,6 +22,7 @@ class ApplicationController < ActionController::Base
   include ApplicationSignInCallbacksConcern
 
   rescue_from IllegalStateError, with: :handle_illegal_state_error
+  rescue_from ActionController::InvalidAuthenticityToken, with: :handle_csrf_error
 
   protected
 
@@ -58,5 +59,10 @@ class ApplicationController < ActionController::Base
   def handle_illegal_state_error(exception)
     @exception = exception
     render file: 'public/422', layout: false, status: 422
+  end
+
+  def handle_csrf_error(exception)
+    @exception = exception
+    render file: 'public/403', layout: false, status: 403
   end
 end
