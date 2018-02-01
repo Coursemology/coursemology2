@@ -11,7 +11,7 @@ import { changeAutoScroll, refreshDiscussion } from '../../actions/discussion';
 import translations from '../../translations';
 
 const propTypes = {
-  intl: intlShape.isRequried,
+  intl: intlShape.isRequired,
 
   autoScroll: PropTypes.bool,
   onAutoScrollToggle: PropTypes.func,
