@@ -43,9 +43,8 @@ module Capybara::TestGroupHelpers
     end
 
     def accept_confirm_dialog
-      find('.confirm-btn').click
-
       Timeout.timeout(Capybara.default_max_wait_time) do
+        find('.confirm-btn').click
         sleep 0.1 until page.all('.confirm-btn').empty?
       end
     end
