@@ -22,7 +22,7 @@ RSpec.describe 'Course: Video: Submissions Viewing' do
         visit course_video_submissions_path(course, video)
 
         # Submissions page should not have show staff submissions.
-        expect(page).not_to have_content_tag_for(staff_submission)
+        expect(page).to have_no_content_tag_for(staff_submission)
 
         within find(content_tag_selector(submission)) do
           expect(page).

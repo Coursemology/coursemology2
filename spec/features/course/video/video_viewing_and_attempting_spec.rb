@@ -19,7 +19,7 @@ RSpec.describe 'Course: Videos: Viewing' do
         videos
         visit course_videos_path(course)
 
-        expect(page).not_to have_content_tag_for(unpublished_video)
+        expect(page).to have_no_content_tag_for(unpublished_video)
         expect(page).to have_content_tag_for(published_video)
         expect(page).to have_content_tag_for(published_not_started_video)
 

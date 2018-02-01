@@ -46,7 +46,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
         empty_assessment
         visit course_assessments_path(course)
 
-        expect(page).not_to have_content_tag_for(empty_assessment)
+        expect(page).to have_no_content_tag_for(empty_assessment)
       end
 
       scenario 'I cannot attempt unsatisfied assessments' do

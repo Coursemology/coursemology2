@@ -134,7 +134,7 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
         accept_confirm_dialog
 
         wait_for_ajax
-        expect(page).not_to have_content_tag_for(post)
+        expect(page).to have_no_content_tag_for(post)
       end
     end
   end

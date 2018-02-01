@@ -30,7 +30,7 @@ RSpec.describe 'Course: Leaderboard: View' do
           end
         end
 
-        expect(page).not_to have_content_tag_for(phantom_user)
+        expect(page).to have_no_content_tag_for(phantom_user)
       end
 
       scenario 'I can view the leaderboard sorted by achievement count' do
@@ -51,7 +51,7 @@ RSpec.describe 'Course: Leaderboard: View' do
           end
         end
 
-        expect(page).not_to have_content_tag_for(phantom_user)
+        expect(page).to have_no_content_tag_for(phantom_user)
       end
 
       context 'when the group leaderboard is enabled for the course' do

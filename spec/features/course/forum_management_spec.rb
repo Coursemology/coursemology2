@@ -78,7 +78,7 @@ RSpec.feature 'Course: Forum: Management' do
         end
         expect(current_path).to eq(course_forums_path(course))
 
-        expect(page).not_to have_content_tag_for(forum)
+        expect(page).to have_no_content_tag_for(forum)
       end
 
       scenario 'I can subscribe and unsubscribe to a forum ', js: true do

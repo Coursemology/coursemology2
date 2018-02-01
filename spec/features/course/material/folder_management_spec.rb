@@ -51,7 +51,7 @@ RSpec.feature 'Course: Material: Folders: Management' do
         empty_linked_folders = parent_folder.children.
                                select { |f| f.owner && f.materials.empty? && f.children.empty? }
         empty_linked_folders.each do |subfolder|
-          expect(page).not_to have_content_tag_for(subfolder)
+          expect(page).to have_no_content_tag_for(subfolder)
         end
       end
 
@@ -163,7 +163,7 @@ RSpec.feature 'Course: Material: Folders: Management' do
         end
 
         invisible_folders.each do |subfolder|
-          expect(page).not_to have_content_tag_for(subfolder)
+          expect(page).to have_no_content_tag_for(subfolder)
         end
       end
 

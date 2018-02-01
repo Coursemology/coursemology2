@@ -57,7 +57,7 @@ RSpec.feature 'Course: Assessments: Management' do
         find_link(nil,
                   href: course_admin_assessments_category_tab_path(course, category, tab)).click
         expect(page).to have_selector('div.alert.alert-success')
-        expect(page).not_to have_content_tag_for(tab)
+        expect(page).to have_no_content_tag_for(tab)
         expect(page).to have_content_tag_for(tab2)
       end
 

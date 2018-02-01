@@ -43,11 +43,9 @@ module Capybara::TestGroupHelpers
     end
 
     def accept_confirm_dialog
-      find('.confirm-btn').click
-
-      Timeout.timeout(Capybara.default_max_wait_time) do
-        sleep 0.1 until page.all('.confirm-btn').empty?
-      end
+      expect(page).to have_selector('button.confirm-btn')
+      find('button.confirm-btn').click
+      expect(page).to have_no_selector('button.confirm-btn')
     end
 
     # Helper to fill in summernote textareas. Only to be used where javascript is enabled.

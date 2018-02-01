@@ -20,7 +20,7 @@ RSpec.feature 'Course: EnrolRequests' do
       wait_for_ajax
       course_user = course.course_users.find_by(user_id: enrol_request.user.id)
       expect(course_user).to be_present
-      expect(page).not_to have_content_tag_for(enrol_request)
+      expect(page).to have_no_content_tag_for(enrol_request)
       expect(page).to have_text('course.enrol_requests.approve.success')
 
       visit course_users_students_path(course)

@@ -128,7 +128,7 @@ RSpec.feature 'Courses: Invitations', js: true do
         expect(page).to have_selector('div.alert-success',
                                       text: I18n.t('course.user_invitations.destroy.success'))
         expect(current_path).to eq(course_user_invitations_path(course))
-        expect(page).not_to have_content_tag_for(invitation_to_delete)
+        expect(page).to have_no_content_tag_for(invitation_to_delete)
       end
     end
 

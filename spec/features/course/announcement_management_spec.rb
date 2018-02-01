@@ -109,7 +109,7 @@ RSpec.feature 'Course: Announcements' do
           expect(page).not_to have_link(nil, href: course_announcement_path(course, announcement))
         end
 
-        expect(page).not_to have_content_tag_for(not_started_announcement)
+        expect(page).to have_no_content_tag_for(not_started_announcement)
       end
     end
   end

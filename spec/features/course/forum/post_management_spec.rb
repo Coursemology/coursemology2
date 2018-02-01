@@ -73,7 +73,7 @@ RSpec.feature 'Course: Forum: Post: Management' do
         find_link(nil, href: course_forum_topic_post_path(course, forum, topic, post)).click
         expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
 
-        expect(page).not_to have_content_tag_for(post)
+        expect(page).to have_no_content_tag_for(post)
       end
 
       scenario 'I can reply to a post' do

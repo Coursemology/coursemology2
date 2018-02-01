@@ -27,8 +27,8 @@ RSpec.describe 'Course: Submissions Viewing' do
         expect(page).to have_selector('div.submissions-filter')
 
         # Submissions page should not show attempting submissions or staff submissions.
-        expect(page).not_to have_content_tag_for(attempting_submission)
-        expect(page).not_to have_content_tag_for(staff_submission)
+        expect(page).to have_no_content_tag_for(attempting_submission)
+        expect(page).to have_no_content_tag_for(staff_submission)
 
         within find(content_tag_selector(submitted_submission)) do
           expect(page).to have_link(
@@ -67,8 +67,8 @@ RSpec.describe 'Course: Submissions Viewing' do
         visit pending_course_submissions_path(course, my_students: false)
         expect(page).to have_content_tag_for(submitted_submission1)
         expect(page).to have_content_tag_for(submitted_submission2)
-        expect(page).not_to have_content_tag_for(attempting_submission)
-        expect(page).not_to have_content_tag_for(published_submission)
+        expect(page).to have_no_content_tag_for(attempting_submission)
+        expect(page).to have_no_content_tag_for(published_submission)
 
         # Pending submissions tab shows the tutors for the students if it exists.
         within find(content_tag_selector(submitted_submission1)) do
@@ -76,15 +76,15 @@ RSpec.describe 'Course: Submissions Viewing' do
         end
 
         # Pending submissions does not show submissions for autograded assessments
-        expect(page).not_to have_content_tag_for(autograded_submission)
+        expect(page).to have_no_content_tag_for(autograded_submission)
 
         # Staff with group view pending submissions of own group students
         visit pending_course_submissions_path(course, my_students: true)
 
         expect(page).to have_content_tag_for(submitted_submission1)
-        expect(page).not_to have_content_tag_for(submitted_submission2)
-        expect(page).not_to have_content_tag_for(attempting_submission)
-        expect(page).not_to have_content_tag_for(published_submission)
+        expect(page).to have_no_content_tag_for(submitted_submission2)
+        expect(page).to have_no_content_tag_for(attempting_submission)
+        expect(page).to have_no_content_tag_for(published_submission)
 
         # All Pending submissions can be assessed from the sidebar
         within find('.sidebar') do
@@ -140,7 +140,7 @@ RSpec.describe 'Course: Submissions Viewing' do
 
         visit course_submissions_path(course)
 
-        expect(page).not_to have_content_tag_for(attempting_submission)
+        expect(page).to have_no_content_tag_for(attempting_submission)
         expect(page).not_to have_selector('div.submissions-filter')
 
         [submitted_submission, graded_submission, published_submission].each do |submission|

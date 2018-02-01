@@ -66,7 +66,7 @@ RSpec.feature 'Global announcements' do
           expect(page).to have_content_tag_for(s)
         end
         announcements.reject(&:currently_active?).each do |s|
-          expect(page).not_to have_content_tag_for(s)
+          expect(page).to have_no_content_tag_for(s)
         end
       end
 
