@@ -197,4 +197,24 @@ RSpec.describe ApplicationController, type: :controller do
       expect(response.status).to eq(422)
     end
   end
+
+  context 'when the action raises ActionController::InvalidAuthenticityToken' do
+    run_rescue
+
+    before do
+      def controller.index
+        raise ActionController::InvalidAuthenticityToken
+      end
+    end
+
+    it 'renders the request rejected page /public/403' do
+      get :index
+      expect(response).to render_template(file: '403.html')
+    end
+
+    it 'returns HTTP status 403' do
+      expect { get :index }.to_not raise_error ActionController::InvalidAuthenticityToken
+      expect(response.status).to eq(403)
+    end
+  end
 end
