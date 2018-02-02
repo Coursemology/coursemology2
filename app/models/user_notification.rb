@@ -12,13 +12,19 @@ class UserNotification < ApplicationRecord
 
   scope :ordered_by_updated_at, -> { order(updated_at: :asc) }
 
-  # The oldest unread popup notification for the given course and user.
+  # Returns the oldest unread popup notification for the given course user.
+  # Popups with deleted objects will trigger destruction of that +Activity+ object.
+  # +nil+ is returned if all popups are read.
   #
-  # @return [UserNotification] The next popup notification to be shown.
-  # @return [nil] if there are no unread notifications.
-  def self.next_unread_popup_for_course_user(course, user)
-    popup.where(user: user).unread_by(user).ordered_by_updated_at.
-      includes(activity: { object: :course }).
-      drop_while { |popup| popup.activity.from_course?(course) }.first
+  # @param [CourseUser] The course_user to check notifications for.
+  # @return [UserNotification|nil] The next popup notification to be shown, or nil if all are read.
+  def self.next_unread_popup_for(course_user)
+    popup.where(user: course_user.user).ordered_by_updated_at.
+      includes(activity: { object: :course }).unread_by(course_user.user).
+      find do |popup|
+        present = popup.activity.object.present?
+        popup.activity.destroy unless present
+        present && popup.activity.from_course?(course_user.course)
+      end
   end
 end

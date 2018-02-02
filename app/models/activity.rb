@@ -34,7 +34,7 @@ class Activity < ApplicationRecord
   # @return [Boolean] true if activity is from the given course, false otherwise.
   def from_course?(course)
     object_course = object&.course
-    !object_course.nil? && (object_course.id != course.id)
+    object_course.present? && (object_course.id == course.id)
   end
 
   private

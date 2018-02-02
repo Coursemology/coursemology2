@@ -26,9 +26,10 @@ class Course::Controller < ApplicationController
   # for the frontend to display it.
   #
   # @return [String] JSON data for the next notification, if there is one.
-  # @return [nil] if there are no unread notifications for current user and course.
+  # @return [nil] if there are no unread notifications, or no +current_course_user+.
   def next_popup_notification
-    notification = UserNotification.next_unread_popup_for_course_user(current_course, current_user)
+    return unless current_course_user
+    notification = UserNotification.next_unread_popup_for(current_course_user)
     notification && render_to_string("#{helpers.notification_view_path(notification)}.json",
                                      locals: { notification: notification })
   end

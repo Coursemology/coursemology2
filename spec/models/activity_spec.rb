@@ -55,5 +55,44 @@ RSpec.describe Activity, type: :model do
         end
       end
     end
+
+    describe '#from_course?' do
+      let(:course_user) { create(:course_student, course: course) }
+      let(:achievement) { create(:achievement, course: course) }
+      let(:activity) do
+        create(:activity, :achievement_gained, object: achievement, actor: user)
+      end
+
+      context 'when activity object is from course' do
+        subject { activity.from_course?(course) }
+
+        it { is_expected.to be_truthy }
+
+        context 'when activity object is deleted' do
+          before do
+            achievement.destroy
+            activity.reload
+          end
+
+          it { is_expected.to be_falsey }
+        end
+      end
+
+      context 'when activity object is not from course' do
+        let(:other_course) { create(:course) }
+        subject { activity.from_course?(other_course) }
+
+        it { is_expected.to be_falsey }
+
+        context 'when activity object is deleted' do
+          before do
+            achievement.destroy
+            activity.reload
+          end
+
+          it { is_expected.to be_falsey }
+        end
+      end
+    end
   end
 end
