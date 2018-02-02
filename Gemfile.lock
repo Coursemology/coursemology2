@@ -40,9 +40,9 @@ GIT
 
 GIT
   remote: git://github.com/jeremyyap/simple_form-bootstrap.git
-  revision: 28ca2c5ef02a8b4ec4cead92d7bdbe71140b3de3
+  revision: 8813baad607c969460e631dbc241a02d8b4b62f9
   specs:
-    simple_form-bootstrap (1.5.0)
+    simple_form-bootstrap (1.6.0)
       actionpack (>= 4.1, < 6)
       activemodel (>= 4.1, < 6)
       bootstrap-sass (~> 3)
@@ -312,9 +312,9 @@ GEM
     multipart-post (2.0.0)
     netrc (0.11.0)
     nio4r (2.2.0)
-    nokogiri (1.8.1)
+    nokogiri (1.8.2)
       mini_portile2 (~> 2.3.0)
-    nokogumbo (1.4.13)
+    nokogumbo (1.5.0)
       nokogiri
     oauth2 (1.4.0)
       faraday (>= 0.8, < 0.13)
@@ -342,7 +342,7 @@ GEM
     progress (3.4.0)
     public_suffix (3.0.1)
     puma (3.11.2)
-    rack (2.0.3)
+    rack (2.0.4)
     rack-proxy (0.6.3)
       rack
     rack-test (0.8.2)
@@ -431,12 +431,12 @@ GEM
       rspec-support (~> 3.7.0)
     rspec-retry (0.5.6)
       rspec-core (> 3.3, < 3.8)
-    rspec-support (3.7.0)
+    rspec-support (3.7.1)
     rubyzip (1.2.1)
-    sanitize (4.5.0)
+    sanitize (4.6.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.4.4)
-      nokogumbo (~> 1.4.1)
+      nokogumbo (~> 1.4)
     sass (3.5.5)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
@@ -507,7 +507,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    summernote-rails (0.8.8.0)
+    summernote-rails (0.8.9.2)
       railties (>= 3.1)
     temple (0.8.0)
     terminal-table (1.8.0)
