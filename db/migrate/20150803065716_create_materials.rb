@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class CreateMaterials < ActiveRecord::Migration
+class CreateMaterials < ActiveRecord::Migration[4.2]
   def change
     create_table :course_material_folders do |t|
       t.references :parent_folder, foreign_key: { references: :course_material_folders }

@@ -1,4 +1,4 @@
-class AddFieldsToCourses < ActiveRecord::Migration
+class AddFieldsToCourses < ActiveRecord::Migration[4.2]
   def up
     add_column :courses, :published, :boolean, default: false, null: false
     add_column :courses, :enrollable, :boolean, default: false, null: false

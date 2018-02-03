@@ -1,4 +1,4 @@
-class CreateInstanceUserRoleRequests < ActiveRecord::Migration
+class CreateInstanceUserRoleRequests < ActiveRecord::Migration[4.2]
   def change
     create_table :instance_user_role_requests do |t|
       t.integer :instance_id, null: false

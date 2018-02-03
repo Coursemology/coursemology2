@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class CreateCourseUserAchievements < ActiveRecord::Migration
+class CreateCourseUserAchievements < ActiveRecord::Migration[4.2]
   def change
     create_table :course_user_achievements do |t|
       t.references :course_user

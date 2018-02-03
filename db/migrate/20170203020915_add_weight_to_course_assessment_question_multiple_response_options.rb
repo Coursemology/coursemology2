@@ -1,4 +1,4 @@
-class AddWeightToCourseAssessmentQuestionMultipleResponseOptions < ActiveRecord::Migration
+class AddWeightToCourseAssessmentQuestionMultipleResponseOptions < ActiveRecord::Migration[4.2]
   def change
     add_column :course_assessment_question_multiple_response_options, :weight, :integer
     populate_default_weights

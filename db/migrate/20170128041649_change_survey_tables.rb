@@ -1,4 +1,4 @@
-class ChangeSurveyTables < ActiveRecord::Migration
+class ChangeSurveyTables < ActiveRecord::Migration[4.2]
   def change
     drop_table :course_survey_answer_text_responses do |t|
       t.text :text_response

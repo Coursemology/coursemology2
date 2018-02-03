@@ -1,4 +1,4 @@
-class CreateLessonPlanTodos < ActiveRecord::Migration
+class CreateLessonPlanTodos < ActiveRecord::Migration[4.2]
   def change
     create_table :course_lesson_plan_todos do |t|
       t.references :item, null: false, references: :course_lesson_plan_items

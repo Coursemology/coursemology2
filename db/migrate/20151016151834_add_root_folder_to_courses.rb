@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class AddRootFolderToCourses < ActiveRecord::Migration
+class AddRootFolderToCourses < ActiveRecord::Migration[4.2]
   # Create root folders for existing courses
   def up
     all_courses = exec_query('SELECT * FROM courses')

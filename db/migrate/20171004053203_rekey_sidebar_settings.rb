@@ -1,4 +1,4 @@
-class RekeySidebarSettings < ActiveRecord::Migration
+class RekeySidebarSettings < ActiveRecord::Migration[4.2]
   def up
     ActsAsTenant.without_tenant do
       Course.all.each do |course|

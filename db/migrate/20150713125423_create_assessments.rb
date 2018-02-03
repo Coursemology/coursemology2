@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class CreateAssessments < ActiveRecord::Migration
+class CreateAssessments < ActiveRecord::Migration[4.2]
   def change
     create_table :course_assessment_categories do |t|
       t.references :course, null: false

@@ -1,4 +1,4 @@
-class ChangeCourseGroupsFromUserToCourseUser < ActiveRecord::Migration
+class ChangeCourseGroupsFromUserToCourseUser < ActiveRecord::Migration[4.2]
   def change
     remove_index :course_group_users,
                  column: [:user_id, :course_group_id],

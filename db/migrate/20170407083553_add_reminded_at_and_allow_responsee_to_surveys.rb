@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class AddRemindedAtAndAllowResponseeToSurveys < ActiveRecord::Migration
+class AddRemindedAtAndAllowResponseeToSurveys < ActiveRecord::Migration[4.2]
   def change
     add_column :course_surveys, :closing_reminded_at, :datetime
     rename_column :course_surveys, :allow_modify, :allow_modify_after_submit

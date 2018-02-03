@@ -1,4 +1,4 @@
-class CreateCourseLessonPlanEventMaterials < ActiveRecord::Migration
+class CreateCourseLessonPlanEventMaterials < ActiveRecord::Migration[4.2]
   def change
     create_table :course_lesson_plan_event_materials do |t|
       t.references :lesson_plan_event,

@@ -1,4 +1,4 @@
-class AddSubmittedAtToSubmissions < ActiveRecord::Migration
+class AddSubmittedAtToSubmissions < ActiveRecord::Migration[4.2]
   # Add original calculated declaration for submitted_at to be used for data migration.
   class Course::Assessment::Submission
     calculated :old_submitted_at, (lambda do

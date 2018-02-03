@@ -1,4 +1,4 @@
-class RemoveWorkflowStateFromCourseUsers < ActiveRecord::Migration
+class RemoveWorkflowStateFromCourseUsers < ActiveRecord::Migration[4.2]
   def up
     ActsAsTenant.without_tenant do
       CourseUser.where(workflow_state: ['invited', 'rejected']).destroy_all

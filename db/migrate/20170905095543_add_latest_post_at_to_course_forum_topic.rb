@@ -1,4 +1,4 @@
-class AddLatestPostAtToCourseForumTopic < ActiveRecord::Migration
+class AddLatestPostAtToCourseForumTopic < ActiveRecord::Migration[4.2]
   def change
     add_column :course_forum_topics, :latest_post_at, :datetime
 

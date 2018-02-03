@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class CreateCourseConditions < ActiveRecord::Migration
+class CreateCourseConditions < ActiveRecord::Migration[4.2]
   def change
     create_table :course_conditions do |t|
       t.actable

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class CreateSystemAnnouncements < ActiveRecord::Migration
+class CreateSystemAnnouncements < ActiveRecord::Migration[4.2]
   def change
     create_table :system_announcements do |t|
       t.string :title, null: false

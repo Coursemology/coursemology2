@@ -1,4 +1,4 @@
-class RenameProgrammingAutoGradingTestResultMessages < ActiveRecord::Migration
+class RenameProgrammingAutoGradingTestResultMessages < ActiveRecord::Migration[4.2]
   def change
     add_column :course_assessment_answer_programming_auto_grading_test_results, :messages, :jsonb,
                null: false, default: '{}'

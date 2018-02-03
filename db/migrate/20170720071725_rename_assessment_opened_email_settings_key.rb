@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class RenameAssessmentOpenedEmailSettingsKey < ActiveRecord::Migration
+class RenameAssessmentOpenedEmailSettingsKey < ActiveRecord::Migration[4.2]
   def change_assessment_email_key(old_key, new_key)
     ActsAsTenant.without_tenant do
       Course.all.each do |course|

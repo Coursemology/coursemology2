@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class UnreadMigration < ActiveRecord::Migration
+class UnreadMigration < ActiveRecord::Migration[4.2]
   def self.up
     create_table :read_marks, force: true do |t|
       t.references :readable, polymorphic: { null: false }

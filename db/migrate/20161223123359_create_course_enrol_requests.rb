@@ -1,4 +1,4 @@
-class CreateCourseEnrolRequests < ActiveRecord::Migration
+class CreateCourseEnrolRequests < ActiveRecord::Migration[4.2]
   def change
     create_table :course_enrol_requests do |t|
       t.references :course, null: false

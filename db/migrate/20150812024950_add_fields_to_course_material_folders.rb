@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class AddFieldsToCourseMaterialFolders < ActiveRecord::Migration
+class AddFieldsToCourseMaterialFolders < ActiveRecord::Migration[4.2]
   def change
     remove_column :course_material_folders, :parent_folder_id, :integer,
                   foreign_key: { references: :course_material_folders }

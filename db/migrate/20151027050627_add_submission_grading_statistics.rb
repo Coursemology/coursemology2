@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class AddSubmissionGradingStatistics < ActiveRecord::Migration
+class AddSubmissionGradingStatistics < ActiveRecord::Migration[4.2]
   def up
     change_table :course_assessment_answers do |t|
       t.datetime :submitted_at

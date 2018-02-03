@@ -1,4 +1,4 @@
-class ChangeCourseUserInvitations < ActiveRecord::Migration
+class ChangeCourseUserInvitations < ActiveRecord::Migration[4.2]
   def up
     add_column :course_user_invitations, :course_id, :integer
     add_column :course_user_invitations, :name, :string

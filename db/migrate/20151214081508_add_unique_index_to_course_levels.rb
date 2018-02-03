@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class AddUniqueIndexToCourseLevels < ActiveRecord::Migration
+class AddUniqueIndexToCourseLevels < ActiveRecord::Migration[4.2]
   def change
     add_index :course_levels,
               [:course_id, :experience_points_threshold],

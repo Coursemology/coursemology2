@@ -1,4 +1,4 @@
-class CreateCourseSurveyTables < ActiveRecord::Migration
+class CreateCourseSurveyTables < ActiveRecord::Migration[4.2]
   def change
     create_table :course_surveys do |t|
       t.userstamps null: false, foreign_key: { references: :users }

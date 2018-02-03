@@ -1,4 +1,4 @@
-class CreateCourseDiscussionPostVotes < ActiveRecord::Migration
+class CreateCourseDiscussionPostVotes < ActiveRecord::Migration[4.2]
   def change
     create_table :course_discussion_post_votes do |t|
       t.references :post, null: false, foreign_key: { references: :course_discussion_posts }

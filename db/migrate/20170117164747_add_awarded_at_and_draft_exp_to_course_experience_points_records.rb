@@ -1,4 +1,4 @@
-class AddAwardedAtAndDraftExpToCourseExperiencePointsRecords < ActiveRecord::Migration
+class AddAwardedAtAndDraftExpToCourseExperiencePointsRecords < ActiveRecord::Migration[4.2]
   def change
     add_column :course_experience_points_records, :draft_points_awarded, :integer
     add_column :course_experience_points_records, :awarded_at, :datetime

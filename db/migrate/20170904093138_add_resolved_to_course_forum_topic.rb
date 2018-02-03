@@ -1,4 +1,4 @@
-class AddResolvedToCourseForumTopic < ActiveRecord::Migration
+class AddResolvedToCourseForumTopic < ActiveRecord::Migration[4.2]
   def change
     add_column :course_forum_topics, :resolved, :boolean, default: false, null: false
     # Set all previous forum questions to resolved

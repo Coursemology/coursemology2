@@ -1,4 +1,4 @@
-class AddCourseAssessmentSubmissionQuestion < ActiveRecord::Migration
+class AddCourseAssessmentSubmissionQuestion < ActiveRecord::Migration[4.2]
   def change
     create_table :course_assessment_submission_questions do |t|
       t.references :submission, foreign_key: { references: :course_assessment_submissions },
