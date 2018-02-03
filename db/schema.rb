@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180213165515) do
+ActiveRecord::Schema.define(version: 20180213170056) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -765,11 +765,12 @@ ActiveRecord::Schema.define(version: 20180213165515) do
   end
 
   create_table "course_videos", force: :cascade do |t|
-    t.string   "url",        :limit=>255, :null=>false
-    t.integer  "creator_id", :null=>false, :index=>{:name=>"fk__course_videos_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_videos_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.integer  "updater_id", :null=>false, :index=>{:name=>"fk__course_videos_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_videos_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.datetime "created_at", :null=>false
-    t.datetime "updated_at", :null=>false
+    t.integer  "tab_id",      :null=>false, :index=>{:name=>"fk__course_videos_tab_id"}, :foreign_key=>{:references=>"course_video_tabs", :name=>"fk_course_videos_tab_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.string   "url",         :limit=>255, :null=>false
+    t.integer  "creator_id",  :null=>false, :index=>{:name=>"fk__course_videos_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_videos_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer  "updater_id",  :null=>false, :index=>{:name=>"fk__course_videos_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_videos_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.datetime "created_at",  :null=>false
+    t.datetime "updated_at",  :null=>false
   end
 
   create_table "course_video_tabs", force: :cascade do |t|

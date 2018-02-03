@@ -5,6 +5,7 @@ class Course::Video < ApplicationRecord
   include Course::ReminderConcern
   include Course::Video::UrlConcern
 
+  belongs_to :tab, class_name: Course::Video::Tab.name, inverse_of: :videos
   has_many :submissions, class_name: Course::Video::Submission.name,
                          inverse_of: :video, dependent: :destroy
   has_many :topics, class_name: Course::Video::Topic.name,

@@ -3,6 +3,7 @@ require 'rails_helper'
 
 RSpec.describe Course::Video::Tab, type: :model do
   it { is_expected.to belong_to(:course).inverse_of(:video_tabs) }
+  it { is_expected.to have_many(:videos).inverse_of(:tab).dependent(:destroy) }
 
   let!(:instance) { Instance.default }
   with_tenant(:instance) do

@@ -5,6 +5,7 @@ FactoryBot.define do
   factory :course_video, class: Course::Video.name, aliases: [:video],
                          parent: :course_lesson_plan_item do
     course
+    tab { course.default_video_tab }
     title { generate(:course_video_title) }
     description { generate(:course_video_description) }
     url 'https://www.youtube.com/embed/i_YiovUyMds'

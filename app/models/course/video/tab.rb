@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 class Course::Video::Tab < ApplicationRecord
   include Course::ModelComponentHost::Component
+
   belongs_to :course, class_name: Course.name, inverse_of: :video_tabs
+  has_many :videos, class_name: Course::Video.name, inverse_of: :tab, dependent: :destroy
 
   before_destroy :validate_before_destroy
 
