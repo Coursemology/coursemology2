@@ -63,8 +63,8 @@ class CoursemologyDockerContainer < Docker::Container
   #
   # This will time out for long running operations, so keep retrying until we return.
   #
-  # @param [Fixnum|nil] time The amount of time to wait.
-  # @return [Fixnum] The exit code of the container.
+  # @param [Integer|nil] time The amount of time to wait.
+  # @return [Integer] The exit code of the container.
   def wait(time = nil)
     container_state = info
     while container_state.fetch('State', {}).fetch('Running', true)
@@ -80,7 +80,7 @@ class CoursemologyDockerContainer < Docker::Container
 
   # Gets the exit code of the container.
   #
-  # @return [Fixnum] The exit code of the container, if +wait+ was called before.
+  # @return [Integer] The exit code of the container, if +wait+ was called before.
   # @return [nil] If the container is still running, or +wait+ was not called.
   def exit_code
     info.fetch('State', {})['ExitCode']

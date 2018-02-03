@@ -21,7 +21,7 @@ module Course::Discussion::TopicsHelper
 
   # Returns the count of topics pending staff reply.
   #
-  # @return [Fixnum] Returns the count of topics pending staff reply.
+  # @return [Integer] Returns the count of topics pending staff reply.
   def all_staff_unread_count
     @staff_unread ||= current_course.discussion_topics.
                 globally_displayed.pending_staff_reply.distinct.count
@@ -40,7 +40,7 @@ module Course::Discussion::TopicsHelper
 
   # Returns the count of unread topics for student course users. Otherwise, return 0.
   #
-  # @return [Fixnum] Returns the count of unread topics
+  # @return [Integer] Returns the count of unread topics
   def all_student_unread_count
     @student_unread ||=
       if current_course_user&.student?

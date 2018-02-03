@@ -46,7 +46,7 @@ class PreformattedTextLineNumbersFilter < HTML::Pipeline::Filter
 
   # Builds a tag for one line of the output.
   #
-  # @param [Fixnum] line_number The line number being build
+  # @param [Integer] line_number The line number being build
   # @param [String] line_content The HTML markup comprising the current line.
   # @param [Hash] container_attributes The attributes of the container +pre+ tag being replaced.
   # @return [Nokogiri::XML::Element] The tag representing the line.
@@ -61,7 +61,7 @@ class PreformattedTextLineNumbersFilter < HTML::Pipeline::Filter
 
   # Builds a tag for one line number.
   #
-  # @param [Fixnum] line_number The line number being build
+  # @param [Integer] line_number The line number being build
   # @return [Nokogiri::XML::Element] The tag representing the line.
   def build_line_number_tag(line_number)
     result = Nokogiri::XML::Element.new('td', doc)

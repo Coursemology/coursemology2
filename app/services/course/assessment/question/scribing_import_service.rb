@@ -93,7 +93,7 @@ class Course::Assessment::Question::ScribingImportService
 
   # Returns the maximum weight of the questions for the current assessment.
   #
-  # @return [Fixnum] Maximum weight of the questions for the current assessment.
+  # @return [Integer] Maximum weight of the questions for the current assessment.
   def max_weight
     Course::Assessment.find(@assessment_id).questions.pluck(:weight).max
   end
