@@ -507,7 +507,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    summernote-rails (0.8.9.2)
+    summernote-rails (0.8.8.1)
       railties (>= 3.1)
     temple (0.8.0)
     terminal-table (1.8.0)
@@ -642,7 +642,7 @@ DEPENDENCIES
   simplecov
   slim-rails
   spring
-  summernote-rails
+  summernote-rails (< 0.8.9)
   themes_on_rails (>= 0.3.1)!
   traceroute
   twitter-typeahead-rails
@@ -654,7 +654,6 @@ DEPENDENCIES
   webpacker (<= 3.0.2)
   workflow
   yard
-
 
 BUNDLED WITH
    1.16.0

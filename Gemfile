@@ -201,7 +201,8 @@ gem 'bootstrap3-datetimepicker-rails'
 gem 'bootstrap-select-rails'
 gem 'bootstrap_tokenfield_rails'
 gem 'twitter-typeahead-rails'
-gem 'summernote-rails'
+# Keep summernote at 0.8.8 due to bug in 0.8.9 summernote/summernote#2686
+gem 'summernote-rails', '< 0.8.9'
 
 # Using CarrierWave for file uploads
 gem 'carrierwave'
