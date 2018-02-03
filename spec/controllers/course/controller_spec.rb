@@ -70,7 +70,7 @@ RSpec.describe Course::Controller, type: :controller do
       end
 
       it 'orders sidebar items with the same weight by ascending key' do
-        controller.current_component_host.sidebar_items.each { |i| i[:weight] = 1 }
+        allow(controller).to receive(:sidebar_items_weights).and_return(Hash.new(1))
 
         keys = controller.sidebar_items.map { |item| item[:key] }
         expect(keys.length).not_to eq(0)
