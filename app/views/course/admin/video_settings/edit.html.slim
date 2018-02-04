@@ -1,4 +1,29 @@
 = simple_form_for @settings, url: course_admin_videos_path(current_course) do |f|
   = f.error_notification
   = f.input :title, as: :string, placeholder: t('.title_placeholder')
+
+  br
+  h3 = t('.tabs_title')
+  hr
+
+  = f.simple_fields_for(:course, current_course) do |course_form|
+    = course_form.error_notification
+    table.table.table-hover.category-items
+      thead
+        th = t('.tab_column_title')
+        th = Course::Video::Tab.human_attribute_name(:weight)
+        th
+        th
+      tbody
+        = course_form.simple_fields_for(:video_tabs, current_course.video_tabs) do |tab_form|
+          - tab = tab_form.object
+          = content_tag_for(:tr, tab) do
+            td = tab_form.input :title, label: false
+            td = tab_form.input :weight, as: :integer, label: false
+            td
+            td
+              div.btn-group
+                - if can?(:destroy, tab)
+                  = delete_button("")
+
   = f.button :submit

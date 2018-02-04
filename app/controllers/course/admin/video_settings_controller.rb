@@ -5,7 +5,10 @@ class Course::Admin::VideoSettingsController < Course::Admin::Controller
   def edit; end
 
   def update
-    if @settings.update(video_settings_params) && current_course.save
+    if @settings.update(video_settings_params) &&
+       current_course.update_attributes(video_tabs_params) &&
+       current_course.save
+
       redirect_to course_admin_videos_path(current_course), success: t('.success')
     else
       render 'edit'
@@ -16,6 +19,13 @@ class Course::Admin::VideoSettingsController < Course::Admin::Controller
 
   def video_settings_params #:nodoc:
     params.require(:settings_videos_component).permit(:title)
+  end
+
+  def video_tabs_params
+    params.
+      require(:settings_videos_component).
+      require(:course).
+      permit(video_tabs_attributes: [:id, :title, :weight])
   end
 
   def component
