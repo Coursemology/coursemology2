@@ -4,11 +4,11 @@ en:
       assessments:
         tabs:
           index:
-            header: 'Tabs'
+            header: 'Assessment Tabs'
           create:
             success: 'Tab %{title} was created.'
           destroy:
             success: 'Tab %{title} was deleted.'
             failure: 'Could not delete tab: %{error}'
           new:
-            header: 'New Tab'
+            header: 'New Assessment Tab'

@@ -1,0 +1,14 @@
+en:
+  course:
+    admin:
+      videos:
+        tabs:
+          index:
+            header: 'Video Tabs'
+          create:
+            success: 'Tab %{title} was created.'
+          destroy:
+            success: 'Tab %{title} was deleted.'
+            failure: 'Could not delete tab: %{error}'
+          new:
+            header: 'New Video Tab'

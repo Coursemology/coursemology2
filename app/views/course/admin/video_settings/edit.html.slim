@@ -2,9 +2,12 @@
   = f.error_notification
   = f.input :title, as: :string, placeholder: t('.title_placeholder')
 
-  br
-  h3 = t('.tabs_title')
   hr
+  div.pull-right
+    - if can?(:create, Course::Video::Tab.new(course: current_course))
+      = new_button([current_course, :admin, :videos, :tab])
+
+  h3 = t('.tabs_title')
 
   = f.simple_fields_for(:course, current_course) do |course_form|
     = course_form.error_notification
@@ -24,6 +27,6 @@
             td
               div.btn-group
                 - if can?(:destroy, tab)
-                  = delete_button("")
+                  = delete_button(course_admin_videos_tab_path(current_course, tab))
 
   = f.button :submit

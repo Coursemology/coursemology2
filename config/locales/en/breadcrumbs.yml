@@ -43,6 +43,10 @@ en:
             edit: :'course.discussion.topics.index.header'
         video_settings:
           edit: :'course.video.videos.index.header'
+        videos:
+           tabs:
+              index: :'course.admin.videos.tabs.index.header'
+              new: :'course.admin.videos.tabs.new.header'
         notification_settings:
           edit: :'layouts.course_admin.notifications.title'
         lesson_plan_settings:

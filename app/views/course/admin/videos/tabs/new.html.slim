@@ -1,0 +1,8 @@
+- add_breadcrumb :new
+= page_header
+= simple_form_for [current_course, @tab],
+  url: course_admin_videos_tabs_path(current_course, @tab) do |f|
+  = f.error_notification
+  = f.input :title
+  = f.input :weight, label: Course::Video::Tab.human_attribute_name(:weight)
+  = f.button :submit
