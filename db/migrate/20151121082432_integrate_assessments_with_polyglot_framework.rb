@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class IntegrateAssessmentsWithPolyglotFramework < ActiveRecord::Migration
+class IntegrateAssessmentsWithPolyglotFramework < ActiveRecord::Migration[4.2]
   def up
     change_table :course_assessment_question_programming do |t|
       t.references :language, foreign_key: { references: :polyglot_languages }

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class CreateUserEmails < ActiveRecord::Migration
+class CreateUserEmails < ActiveRecord::Migration[4.2]
   def change
     create_table :user_emails do |t|
       t.boolean :primary, null: false, default: false

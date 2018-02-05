@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class CreateCourseAnnouncements < ActiveRecord::Migration
+class CreateCourseAnnouncements < ActiveRecord::Migration[4.2]
   def change
     create_table :course_announcements do |t|
       t.references :course, null: false

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class CreateCourseGroupUsers < ActiveRecord::Migration
+class CreateCourseGroupUsers < ActiveRecord::Migration[4.2]
   def change
     create_table :course_group_users do |t|
       t.belongs_to :course_group, null: false

@@ -1,4 +1,4 @@
-class CreateAttachmentReferences < ActiveRecord::Migration
+class CreateAttachmentReferences < ActiveRecord::Migration[4.2]
   def change
     create_table :attachment_references do |t|
       t.references :attachable, polymorphic: true

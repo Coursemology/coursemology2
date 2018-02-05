@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class AddUserstampsToCourseUsers < ActiveRecord::Migration
+class AddUserstampsToCourseUsers < ActiveRecord::Migration[4.2]
   def change
     add_column :course_users,
                :creator_id,

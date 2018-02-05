@@ -1,4 +1,4 @@
-class CreateCourseVideoTables < ActiveRecord::Migration
+class CreateCourseVideoTables < ActiveRecord::Migration[4.2]
   def change
     create_table :course_videos do |t|
       t.string :url, null: false

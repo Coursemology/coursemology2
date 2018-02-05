@@ -1,4 +1,4 @@
-class AddMoreOptionsToCourseAssessments < ActiveRecord::Migration
+class AddMoreOptionsToCourseAssessments < ActiveRecord::Migration[4.2]
   def change
     add_column :course_assessments, :show_private, :boolean,
                default: false,

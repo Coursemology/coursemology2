@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class RenamePublishedToDraft < ActiveRecord::Migration
+class RenamePublishedToDraft < ActiveRecord::Migration[4.2]
   def up
     rename_column :course_achievements, :published, :draft
     rename_column :course_lesson_plan_items, :published, :draft

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class CreateFolderForCategoriesAndAssessments < ActiveRecord::Migration
+class CreateFolderForCategoriesAndAssessments < ActiveRecord::Migration[4.2]
   def up
     # Create folders for categories
     categories_without_folder = exec_query(<<-SQL)

@@ -1,4 +1,4 @@
-class AddTodosForExistingLessonPlanItems < ActiveRecord::Migration
+class AddTodosForExistingLessonPlanItems < ActiveRecord::Migration[4.2]
   def up
     Instance.all.each do |instance|
       ActsAsTenant.current_tenant = instance

@@ -1,4 +1,4 @@
-class DropCourseAssessmentProgrammingEvaluations < ActiveRecord::Migration
+class DropCourseAssessmentProgrammingEvaluations < ActiveRecord::Migration[4.2]
   def change
     drop_table :course_assessment_programming_evaluations
     # Delete autograder user

@@ -1,4 +1,4 @@
-class AddUniqueIndexToMultipleResponseAnswerOptions < ActiveRecord::Migration
+class AddUniqueIndexToMultipleResponseAnswerOptions < ActiveRecord::Migration[4.2]
   def change
     remove_duplicates
     add_index :course_assessment_answer_multiple_response_options, [:answer_id, :option_id],

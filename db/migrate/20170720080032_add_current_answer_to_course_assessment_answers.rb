@@ -1,4 +1,4 @@
-class AddCurrentAnswerToCourseAssessmentAnswers < ActiveRecord::Migration
+class AddCurrentAnswerToCourseAssessmentAnswers < ActiveRecord::Migration[4.2]
   def change
     add_column :course_assessment_answers, :current_answer, :boolean, null: false, default: false
 

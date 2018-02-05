@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class CreateActivitiesAndNotifications < ActiveRecord::Migration
+class CreateActivitiesAndNotifications < ActiveRecord::Migration[4.2]
   def change
     create_table :activities do |t|
       t.references :actor, null: false, foreign_key: { references: :users }

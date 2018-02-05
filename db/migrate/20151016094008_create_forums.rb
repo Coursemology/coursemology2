@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class CreateForums < ActiveRecord::Migration
+class CreateForums < ActiveRecord::Migration[4.2]
   def change
     create_table :course_forums do |t|
       t.references :course, null: false

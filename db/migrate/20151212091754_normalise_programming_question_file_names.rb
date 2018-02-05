@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class NormaliseProgrammingQuestionFileNames < ActiveRecord::Migration
+class NormaliseProgrammingQuestionFileNames < ActiveRecord::Migration[4.2]
   def change
     remove_index :course_assessment_answer_programming_files,
                  name: :index_course_assessment_answer_programming_files_filename

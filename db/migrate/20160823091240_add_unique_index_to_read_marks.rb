@@ -1,4 +1,4 @@
-class AddUniqueIndexToReadMarks < ActiveRecord::Migration
+class AddUniqueIndexToReadMarks < ActiveRecord::Migration[4.2]
   def change
     remove_duplicates
     remove_index :read_marks, name: :read_marks_reader_readable_index

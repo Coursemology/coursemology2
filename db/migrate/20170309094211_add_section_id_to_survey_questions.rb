@@ -1,4 +1,4 @@
-class AddSectionIdToSurveyQuestions < ActiveRecord::Migration
+class AddSectionIdToSurveyQuestions < ActiveRecord::Migration[4.2]
   def change
     add_reference :course_survey_questions, :section,
                   index: true, foreign_key: { references: :course_survey_sections }

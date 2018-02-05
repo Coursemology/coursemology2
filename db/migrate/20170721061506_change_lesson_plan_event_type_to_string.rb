@@ -1,4 +1,4 @@
-class ChangeLessonPlanEventTypeToString < ActiveRecord::Migration
+class ChangeLessonPlanEventTypeToString < ActiveRecord::Migration[4.2]
   def change
     event_type_names = ['Other', 'Lecture', 'Recitation', 'Tutorial']
     rename_column :course_lesson_plan_events, :event_type, :event_type_enum

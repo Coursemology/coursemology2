@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class RegroupCourseSettings < ActiveRecord::Migration
+class RegroupCourseSettings < ActiveRecord::Migration[4.2]
   def settings_key_mapping
     @settings_key_mapping ||= {
       announcement: :course_announcements_component,

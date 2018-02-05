@@ -1,4 +1,4 @@
-class ChangAttachmentReferences < ActiveRecord::Migration
+class ChangAttachmentReferences < ActiveRecord::Migration[4.2]
   def change
     add_column :attachment_references, :uuid, :uuid, default: 'uuid_generate_v4()', null: false
 

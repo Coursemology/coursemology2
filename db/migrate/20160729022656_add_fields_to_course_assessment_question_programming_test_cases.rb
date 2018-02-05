@@ -1,4 +1,4 @@
-class AddFieldsToCourseAssessmentQuestionProgrammingTestCases < ActiveRecord::Migration
+class AddFieldsToCourseAssessmentQuestionProgrammingTestCases < ActiveRecord::Migration[4.2]
   def change
     add_column :course_assessment_question_programming_test_cases, :expression, :string
     add_column :course_assessment_question_programming_test_cases, :expected, :string

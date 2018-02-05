@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class CreateInstanceAnnouncements < ActiveRecord::Migration
+class CreateInstanceAnnouncements < ActiveRecord::Migration[4.2]
   def change
     create_table :instance_announcements do |t|
       t.references :instance, null: false

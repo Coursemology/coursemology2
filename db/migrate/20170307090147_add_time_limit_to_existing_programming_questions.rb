@@ -1,4 +1,4 @@
-class AddTimeLimitToExistingProgrammingQuestions < ActiveRecord::Migration
+class AddTimeLimitToExistingProgrammingQuestions < ActiveRecord::Migration[4.2]
   def change
     add_lower_default_to_existing_programming_questions
   end
