@@ -41,7 +41,7 @@ html
                 a.dropdown-toggle data-toggle="dropdown"
                   => t('layout.navbar.courses')
                   span.caret
-                ul.dropdown-menu.pull-right
+                ul.dropdown-menu.pull-right.courses-menu
                   - my_courses.each do |course|
                     li = link_to(format_inline_text(course.title), course_path(course))
                   li.divider role='separator'
