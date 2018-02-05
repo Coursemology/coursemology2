@@ -43,7 +43,7 @@ module TrackableJob
 
   # Waits for the asynchronous job to finish.
   #
-  # @param [Fixnum] timeout The amount of time to wait.
+  # @param [Integer] timeout The amount of time to wait.
   # @raise [Timeout::Error] If the timeout was elapsed without the condition being met.
   def wait(timeout = nil)
     wait_result = job.wait(timeout: timeout, while_callback: -> { job.tap(&:reload).submitted? })

@@ -5,7 +5,7 @@ module Extensions::DatabaseEvent::ActiveRecord::Base
     # condition is met.
     #
     # @param [String] identifier The +NOTIFY+ signal to wait for.
-    # @param [Fixnum|nil] timeout The timeout to wait for a message. A +nil+ or zero timeout will
+    # @param [Integer|nil] timeout The timeout to wait for a message. A +nil+ or zero timeout will
     #   wait indefinitely. The timeout applies to the total time waiting for a notification, even
     #   if the function waits multiple times.
     # @param [Proc|nil] while_callback The callback that will be called after the +LISTEN+ statement
@@ -69,7 +69,7 @@ module Extensions::DatabaseEvent::ActiveRecord::Base
 
   # Waits for a signal on the current record. A signal can be sent by using {#signal}.
   #
-  # @param [Fixnum|nil] timeout The timeout to wait for a message. A +nil+ or zero timeout will
+  # @param [Integer|nil] timeout The timeout to wait for a message. A +nil+ or zero timeout will
   #   wait indefinitely.
   # @param [Proc] while_callback The callback that will be called after the +LISTEN+ statement is
   #   sent, and is used to check to see if the library should continue waiting for a notification

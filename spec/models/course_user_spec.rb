@@ -225,7 +225,7 @@ RSpec.describe CourseUser, type: :model do
         course.reload
       end
 
-      it { is_expected.to be_a(Fixnum) }
+      it { is_expected.to be_a(Integer) }
       it { is_expected.to be_between(0, 100) }
 
       context 'when the course user has 0% of progress within the level' do
