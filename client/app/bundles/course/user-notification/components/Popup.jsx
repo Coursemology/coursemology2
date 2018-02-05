@@ -21,23 +21,28 @@ class Popup extends React.Component {
     title: PropTypes.string,
     onDismiss: PropTypes.func,
     children: PropTypes.node,
+    actionButtons: PropTypes.arrayOf(PropTypes.node),
+  }
+
+  static defaultProps = {
+    actionButtons: [],
   }
 
   render() {
-    const { title, children } = this.props;
-    const actions = [
+    const { title, children, actionButtons, onDismiss } = this.props;
+    const dismissButton = (
       <FlatButton
         primary
         label={<FormattedMessage {...translations.dismiss} />}
-        onClick={this.props.onDismiss}
-      />,
-    ];
+        onClick={onDismiss}
+      />
+    );
 
     return (
       <Dialog
         open
         title={title}
-        actions={actions}
+        actions={[...actionButtons, dismissButton]}
         contentStyle={styles.dialog}
         titleStyle={styles.centralise}
         bodyStyle={styles.centralise}
