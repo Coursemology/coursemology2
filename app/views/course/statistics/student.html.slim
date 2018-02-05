@@ -10,8 +10,12 @@
 
   div.tab-content
     div.tab-pane.fade role="tabpanel" id="my-students"
-      = render 'table', students: current_course_user.my_students
+      = render 'course_student_statistics',
+               students: @students & current_course_user.my_students,
+               phantom_students: @phantom_students & current_course_user.my_students
     div.tab-pane.fade role="tabpanel" id="all-students"
-      = render 'course_student_statistics', students: @students, phantom_students: @phantom_students
+      = render 'course_student_statistics',
+               students: @students,
+               phantom_students: @phantom_students
 - else
   = render 'course_student_statistics', students: @students, phantom_students: @phantom_students
