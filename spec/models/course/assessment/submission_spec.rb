@@ -13,7 +13,7 @@ RSpec.describe Course::Assessment::Submission do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:assessment) { create(:assessment, *assessment_traits, course: course) }
-    let(:assessment_traits) { [] }
+    let(:assessment_traits) { [:with_mcq_question] }
 
     let(:course_student1) { create(:course_student, *course_student1_traits, course: course) }
     let(:user1) { course_student1.user }
@@ -368,6 +368,18 @@ RSpec.describe Course::Assessment::Submission do
           expect(not_current_answer).to be_attempting
           submission.finalise!
           expect(not_current_answer).to be_attempting
+        end
+      end
+
+      context 'when there are no questions' do
+        let(:assessment_traits) { [:published] }
+
+        it 'publishes the submission with 0 points' do
+          submission.finalise!
+          submission.save!
+
+          expect(submission.workflow_state).to eq 'published'
+          expect(submission.points_awarded).to eq 0
         end
       end
     end
