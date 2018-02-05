@@ -52,13 +52,13 @@ RSpec.feature 'Course: Experience Points: Disbursement' do
 
         fill_in 'experience_points_disbursement_reason', with: 'a reason'
 
-        student_to_award_points, student_to_set_zero,
-        student_to_leave_blank, student_to_set_negative = course_students
+        student_to_award_points, student_to_set_zero, student_to_set_one,
+        student_to_leave_blank = course_students
 
         expect(page).to have_content_tag_for(student_to_leave_blank)
         find(content_tag_selector(student_to_award_points)).find('input.points_awarded').set '100'
-        find(content_tag_selector(student_to_set_zero)).find('input.points_awarded').set '00'
-        find(content_tag_selector(student_to_set_negative)).find('input.points_awarded').set '-1'
+        find(content_tag_selector(student_to_set_one)).find('input.points_awarded').set '1'
+        find(content_tag_selector(student_to_set_zero)).find('input.points_awarded').set '0'
 
         expect do
           click_button I18n.t('course.experience_points.disbursement.new.submit')
