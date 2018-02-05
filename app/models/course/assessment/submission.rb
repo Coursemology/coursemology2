@@ -12,6 +12,9 @@ class Course::Assessment::Submission < ApplicationRecord
 
   workflow do
     state :attempting do
+      # TODO: Change the if condition to use a symbol when the Workflow gem is upgraded to 1.3.0.
+      event :finalise, transitions_to: :published,
+                       if: proc { |submission| submission.assessment.questions.empty? }
       event :finalise, transitions_to: :submitted
     end
     state :submitted do
