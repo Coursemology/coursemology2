@@ -154,7 +154,7 @@ RSpec.describe Course::Assessment::Answer do
     describe '#auto_grade!' do
       let(:course) { create(:course) }
       let(:student_user) { create(:course_student, course: course).user }
-      let(:assessment) { create(:assessment, course: course) }
+      let(:assessment) { create(:assessment, :with_mcq_question, course: course) }
       let(:question) do
         build(:course_assessment_question_multiple_response, assessment: assessment).question
       end

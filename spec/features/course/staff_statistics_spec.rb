@@ -24,7 +24,7 @@ RSpec.feature 'Course: Statistics: Staff' do
       let!(:tutor1_submissions) do
         submitted_at = 1.day.ago
         published_at = submitted_at + 1.day + 1.hour + 1.minute + 1.second
-        assessment = create(:assessment, course: course)
+        assessment = create(:assessment, :with_mcq_question, course: course)
         submission = create(:submission, :published,
                             assessment: assessment, course: course, publisher: tutor1.user,
                             published_at: published_at, submitted_at: submitted_at)
@@ -36,7 +36,7 @@ RSpec.feature 'Course: Statistics: Staff' do
       let!(:tutor2_submissions) do
         submitted_at = 2.days.ago
         published_at = submitted_at + 2.days
-        assessment = create(:assessment, course: course)
+        assessment = create(:assessment, :with_mcq_question, course: course)
         submission = create(:submission, :published,
                             assessment: assessment, course: course, publisher: tutor2.user,
                             published_at: published_at, submitted_at: submitted_at)
@@ -47,7 +47,7 @@ RSpec.feature 'Course: Statistics: Staff' do
 
       let!(:tutor3_submissions) do
         submitted_at, published_at = 2.days.ago, 2.days.ago
-        assessment = create(:assessment, course: course)
+        assessment = create(:assessment, :with_mcq_question, course: course)
         submission = create(:submission, :published,
                             assessment: assessment, course: course, publisher: tutor3.user,
                             published_at: published_at, submitted_at: submitted_at,

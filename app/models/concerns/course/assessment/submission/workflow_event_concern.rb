@@ -14,6 +14,8 @@ module Course::Assessment::Submission::WorkflowEventConcern
   def finalise(_ = nil)
     self.submitted_at = Time.zone.now
     current_answers.select(&:attempting?).each(&:finalise!)
+
+    assign_zero_experience_points if assessment.questions.empty?
   end
 
   # Handles the marking of a submission.
@@ -63,6 +65,13 @@ module Course::Assessment::Submission::WorkflowEventConcern
 
   def submission_graded_email_enabled?
     Course::Settings::AssessmentsComponent.email_enabled?(assessment.tab.category, :grades_released)
+  end
+
+  # finalise event (from attempting) - Assign 0 points as there are no questions.
+  def assign_zero_experience_points
+    self.points_awarded = 0
+    self.awarded_at = Time.zone.now
+    self.awarder = User.stamper || User.system
   end
 
   # Defined outside of the workflow transition as points_awarded and draft_points_awarded are

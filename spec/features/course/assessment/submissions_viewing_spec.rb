@@ -6,7 +6,9 @@ RSpec.describe 'Course: Submissions Viewing' do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:assessment) { create(:assessment, :published_with_mcq_question, course: course) }
-    let(:autograded_assessment) { create(:assessment, :autograded, course: course) }
+    let(:autograded_assessment) do
+      create(:assessment, :autograded, :with_mcq_question, course: course)
+    end
     before { login_as(user, scope: :user) }
 
     context 'As a Course Manager' do
@@ -132,7 +134,8 @@ RSpec.describe 'Course: Submissions Viewing' do
 
       scenario 'I can view my submitted, graded and published submissions' do
         # Attach a submission of each trait to a unique assessment
-        assessments = create_list(:course_assessment_assessment, 4, course: course)
+        assessments = create_list(:course_assessment_assessment, 4, :with_mcq_question,
+                                  course: course)
         attempting_submission, submitted_submission, graded_submission, published_submission =
           assessments.zip([:attempting, :submitted, :graded, :published]).map do |assessment, trait|
             create(:submission, trait, assessment: assessment, creator: user)

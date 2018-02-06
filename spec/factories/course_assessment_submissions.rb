@@ -8,7 +8,7 @@ FactoryBot.define do
       auto_grade true # Used only with any of the submitted or finalised traits.
       creator
     end
-    assessment { build(:assessment, course: course) }
+    assessment { create(:assessment, :with_mcq_question, course: course) }
     points_awarded nil
 
     trait :attempting do

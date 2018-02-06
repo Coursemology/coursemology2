@@ -92,8 +92,6 @@ FactoryBot.define do
       # TODO: To add scribing question once it is completed
     end
 
-    # Note: Not to be used alone, as a published assessment requires at
-    #   least 1 other question. Use the other published traits intead.
     trait :published do
       after(:build) do |assessment|
         assessment.published = true
