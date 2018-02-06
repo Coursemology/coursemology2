@@ -4,7 +4,7 @@ en:
       subject: 'New role request!'
       empty: '(Not specified)'
       message_html: >
-        %{user} (%{email}) requests to become an %{role}.
+        %{user} (%{email}) requests to become an %{role} in the %{instance} instance.
 
         <strong>Organization</strong>
 
