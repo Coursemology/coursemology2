@@ -1,6 +1,7 @@
 = simple_form_for [current_course, @video] do |f|
   = f.error_notification
   = f.input :title
+  = f.association :tab, collection: current_course.video_tabs
   = f.input :description, as: :text
   = f.input :url, placeholder: t('.url_placeholder')
   = f.input :start_at,

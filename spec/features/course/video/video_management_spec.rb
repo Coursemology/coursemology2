@@ -15,10 +15,11 @@ RSpec.feature 'Course: Videos: Management' do
         video = build_stubbed(:video)
         visit course_videos_path(course)
 
-        click_link(nil, href: new_course_video_path(course))
+        click_link(nil, href: new_course_video_path(course, tab: course.default_video_tab))
         expect(page).to have_selector('h1', text: I18n.t('course.video.videos.new.header'))
 
         fill_in 'video_title', with: video.title
+        select 'default', from: 'video_tab_id'
         fill_in 'video_description', with: video.description
         fill_in 'video_start_at', with: video.start_at
         fill_in 'video_url', with: video.url

@@ -1,6 +1,6 @@
 = page_header do
   - if can?(:manage, Course::Video.new(course: current_course))
-    = new_button([current_course, :video])
+    = new_button([current_course, :video, { tab: @tab }])
 
 = display_video_tabs
 
