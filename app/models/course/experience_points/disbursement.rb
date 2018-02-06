@@ -71,7 +71,7 @@ class Course::ExperiencePoints::Disbursement
   def valid_points_record_attributes?(attibutes)
     attibutes[:course_user_id].present? &&
       attibutes[:points_awarded].present? &&
-      attibutes[:points_awarded].to_i >= 0
+      attibutes[:points_awarded].to_i >= 1
   end
 
   # Returns a list of students filtered by group if one is specified, otherwise

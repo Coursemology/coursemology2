@@ -1,11 +1,11 @@
 = div_for(course, class: ['col-xs-12', 'col-sm-6', 'col-md-4', 'col-lg-3']) do
   div.box.text-center.thumbnail
-    = link_to course_path(course) do
-      div.course-logo
-        = display_course_logo(course)
-      div.caption
-        / TODO: Truncate text when text truncator is implemented for HTML pipeline
-        h4 = format_inline_text(course.title)
-        - unless course.description.blank?
-          div.description
-            = format_html(course.description)
+    = link_to '', course_path(course)
+    div.course-logo
+      = display_course_logo(course)
+    div.caption
+      / TODO: Truncate text when text truncator is implemented for HTML pipeline
+      h4 = format_inline_text(course.title)
+      - unless course.description.blank?
+        div.description
+          = format_html(course.description)

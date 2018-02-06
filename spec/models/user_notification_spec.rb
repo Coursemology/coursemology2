@@ -23,7 +23,7 @@ RSpec.describe UserNotification, type: :model do
           end
         end
 
-        it 'returns notifications in asending order' do
+        it 'returns notifications in ascending order' do
           earliest = notifications.sort_by(&:updated_at).first
           expect(subject).to eq(earliest)
         end

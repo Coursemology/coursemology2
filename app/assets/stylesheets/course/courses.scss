@@ -46,11 +46,17 @@
         box-shadow: 2px 2px 2px $course-course-hover-shadow;
       }
 
+      &.thumbnail {
+        position: relative;
+      }
+
       > a {
         display: block;
         height: 100%;
         margin: -4px;
         padding: 4px;
+        position: absolute;
+        width: 100%;
 
         &:hover {
           text-decoration: none;
