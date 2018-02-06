@@ -31,9 +31,10 @@ RSpec.describe UserNotification, type: :model do
         context 'when the activity object is destroyed' do
           before { achievements.first.destroy }
 
-          it 'returns the next notification and deletes the old activity' do
-            expect(subject).to eq(notifications[1])
-            expect(notifications.first.activity.persisted?).to be_falsey
+          it 'returns the next notification and deletes the invalid notification' do
+            notification = nil
+            expect { notification = subject }.to change { course_user.user.notifications.count }.by(-1)
+            expect(notification).to eq(notifications[1])
           end
         end
 
