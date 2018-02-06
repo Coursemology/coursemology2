@@ -2,6 +2,8 @@
   - if can?(:manage, Course::Video.new(course: current_course))
     = new_button([current_course, :video])
 
+= display_video_tabs
+
 table.table.videos-list.table-hover
   thead
     tr

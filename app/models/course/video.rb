@@ -13,6 +13,8 @@ class Course::Video < ApplicationRecord
 
   scope :from_course, ->(course) { where(course_id: course) }
 
+  scope :from_tab, ->(tab) { where(tab_id: tab) }
+
   # TODO: Refactor this together with assessments.
   # @!method self.ordered_by_date_and_title
   #   Orders the videos by the starting date and title.
