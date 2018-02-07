@@ -9,6 +9,7 @@ export const questionTypes = mirrorCreator([
   'MultipleResponse',
   'Programming',
   'TextResponse',
+  'Comprehension',
   'FileUpload',
   'Scribing',
   'VoiceResponse',

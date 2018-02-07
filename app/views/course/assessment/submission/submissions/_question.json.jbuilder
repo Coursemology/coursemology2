@@ -20,7 +20,13 @@ json.type case question.actable_type
           when Course::Assessment::Question::MultipleResponse.name
             question.actable.multiple_choice? ? 'MultipleChoice' : 'MultipleResponse'
           when Course::Assessment::Question::TextResponse.name
-            question.actable.hide_text? ? 'FileUpload' : 'TextResponse'
+            if question.actable.hide_text?
+              'FileUpload'
+            elsif question.actable.comprehension_question?
+              'Comprehension'
+            else
+              'TextResponse'
+            end
           when Course::Assessment::Question::Programming.name
             'Programming'
           when Course::Assessment::Question::VoiceResponse.name
