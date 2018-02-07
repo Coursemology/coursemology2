@@ -181,6 +181,16 @@ class Course::Assessment::Submission < ApplicationRecord
     answers.select(&:current_answer?).group_by(&:question_id).map { |pair| pair[1].first }
   end
 
+  # Loads the answer ids of the past answers of each question
+  def answer_history
+    answers.unscope(:order).order(created_at: :desc).pluck(:question_id, :id, :current_answer).group_by(&:first).map do |pair|
+      {
+        question_id: pair[0],
+        answer_ids: pair[1].reject(&:last).map(&:second).first(10)
+      }
+    end
+  end
+
   # Returns all graded answers of the question in current submission.
   def evaluated_or_graded_answers(question)
     answers.select { |a| a.question_id == question.id && (a.evaluated? || a.graded?) }

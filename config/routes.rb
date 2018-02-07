@@ -218,6 +218,7 @@ Rails.application.routes.draw do
           end
           scope module: :submission_question do
             resources :submission_questions, only: [] do
+              get :past_answers, on: :member
               resources :comments, only: [:create]
             end
           end

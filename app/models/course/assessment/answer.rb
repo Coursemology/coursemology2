@@ -52,6 +52,8 @@ class Course::Assessment::Answer < ApplicationRecord
 
   scope :without_attempting_state, -> { where.not(workflow_state: :attempting) }
 
+  scope :non_current_answers, -> { where(current_answer: false) }
+
   # Autogrades the answer. This saves the answer if there are pending changes.
   #
   # @param [String|nil] redirect_to_path The path to be redirected after auto grading job was

@@ -14,7 +14,7 @@ class Course::Assessment::Submission::Answer::Programming::ProgrammingController
     if update_answer_files_attributes(create_programming_files_params)
       render @programming_answer.answer
     else
-      render json: { errors: @programmi5ng_answer.answer.errors }, status: :bad_request
+      render json: { errors: @programming_answer.answer.errors }, status: :bad_request
     end
   end
 

@@ -12,14 +12,18 @@ module Course::Assessment::Answer::ProgrammingAbility
   def allow_students_create_programming_files
     can :create_programming_files, Course::Assessment::Answer::Programming do |programming_answer|
       multiple_file_submission?(programming_answer.question) &&
-        creator?(programming_answer.submission) && can_update_submission?(programming_answer.submission)
+        creator?(programming_answer.submission) &&
+        can_update_submission?(programming_answer.submission) &&
+        current_answer?(programming_answer)
     end
   end
 
   def allow_students_destroy_programming_files
     can :destroy_programming_file, Course::Assessment::Answer::Programming do |programming_answer|
       multiple_file_submission?(programming_answer.question) &&
-        creator?(programming_answer.submission) && can_update_submission?(programming_answer.submission)
+        creator?(programming_answer.submission) &&
+        can_update_submission?(programming_answer.submission) &&
+        current_answer?(programming_answer)
     end
   end
 
@@ -34,5 +38,9 @@ module Course::Assessment::Answer::ProgrammingAbility
 
   def creator?(submission)
     submission.creator_id == user.id
+  end
+
+  def current_answer?(programming_answer)
+    programming_answer.answer.current_answer?
   end
 end
