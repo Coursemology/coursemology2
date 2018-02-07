@@ -1,4 +1,6 @@
+json.id answer.id
 json.questionId answer.question_id
+json.createdAt answer.created_at
 
 specific_answer = answer.specific
 can_grade = can?(:grade, answer.submission)

@@ -5,6 +5,17 @@ json.id question.id
 json.description question.description
 json.maximumGrade question.maximum_grade.to_f
 
+# TODO: implementation for MCQ past answers
+json.canViewHistory case question.actable_type
+                    when Course::Assessment::Question::MultipleResponse.name
+                      # Not yet implemented
+                      false
+                    when Course::Assessment::Question::Programming.name
+                      true
+                    else
+                      false
+                    end
+
 json.type case question.actable_type
           when Course::Assessment::Question::MultipleResponse.name
             question.actable.multiple_choice? ? 'MultipleChoice' : 'MultipleResponse'
