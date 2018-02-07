@@ -69,10 +69,27 @@ class VisibleProgrammingImportEditor extends Component {
     this.setState({ displayFileIndex: 0 });
   }
 
+  renderProgrammingHistoryEditor(answer) {
+    const { displayFileIndex } = this.state;
+    const file = answer.files_attributes[displayFileIndex];
+    if (file) {
+      const content = file.content.split('\n');
+      return (
+        <ReadOnlyEditor
+          key={answer.id}
+          answerId={answer.id}
+          fileId={file.id}
+          content={content}
+        />
+      );
+    }
+    return null;
+  }
+
   render() {
     const {
       dispatch, submissionId, questionId, answerId,
-      readOnly, question, intl, answers, isSaving,
+      readOnly, question, intl, answers, isSaving, viewHistory,
     } = this.props;
     const { displayFileIndex } = this.state;
     const files = answers[answerId].files_attributes;
@@ -87,18 +104,24 @@ class VisibleProgrammingImportEditor extends Component {
           handleDeleteFile={this.handleDeleteFile}
           handleFileTabbing={index => this.setState({ displayFileIndex: index })}
           files={files}
+          viewHistory={viewHistory}
         />}
-        <FieldArray
-          name={`${answerId}[files_attributes]`}
-          component={VisibleProgrammingImportEditor.renderSelectProgrammingFileEditor}
-          {...{
-            readOnly,
-            question,
-            displayFileIndex,
-            language: parseLanguages(question.language),
-          }}
-        />
-        {readOnly ?
+        {viewHistory ?
+          this.renderProgrammingHistoryEditor(answers[answerId])
+          :
+          <FieldArray
+            name={`${answerId}[files_attributes]`}
+            component={VisibleProgrammingImportEditor.renderSelectProgrammingFileEditor}
+            {...{
+              readOnly,
+              question,
+              displayFileIndex,
+              viewHistory,
+              language: parseLanguages(question.language),
+            }}
+          />
+        }
+        {readOnly || viewHistory ?
           null
           :
           <React.Fragment>
@@ -129,6 +152,7 @@ VisibleProgrammingImportEditor.propTypes = {
   answerId: PropTypes.number,
   question: questionShape,
   readOnly: PropTypes.bool,
+  viewHistory: PropTypes.bool,
   isSaving: PropTypes.bool,
   answers: PropTypes.shape({
     id: PropTypes.number,
@@ -138,11 +162,16 @@ VisibleProgrammingImportEditor.propTypes = {
 };
 
 function mapStateToProps(state, ownProps) {
-  const { questionId, answerId, question, readOnly } = ownProps;
-  const { submission, form, dispatch, submissionFlags } = state;
+  const { questionId, answerId, question, readOnly, viewHistory } = ownProps;
+  const { submission, form, dispatch, submissionFlags, history } = state;
 
   const submissionId = submission.id;
-  const answers = form[formNames.SUBMISSION].values;
+  let answers;
+  if (viewHistory) {
+    answers = history.answers;
+  } else {
+    answers = form[formNames.SUBMISSION].values;
+  }
   const isSaving = submissionFlags.isSaving;
 
   return {
