@@ -13,7 +13,7 @@ import SvgIcon from 'material-ui/SvgIcon';
 
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import { explanationShape, questionShape, questionFlagsShape, topicShape } from '../../propTypes';
+import { explanationShape, questionShape, historyQuestionShape, questionFlagsShape, topicShape } from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
 import QuestionGrade from '../../containers/QuestionGrade';
 import GradingPanel from '../../containers/GradingPanel';
@@ -316,15 +316,27 @@ class SubmissionEditStepForm extends Component {
 
   renderStepQuestion() {
     const { stepIndex } = this.state;
-    const { attempting, questionIds, questions, topics, graderView } = this.props;
-
+    const {
+      attempting, questionIds, questions, historyQuestions,
+      topics, graderView, handleToggleViewHistoryMode, questionsFlags,
+    } = this.props;
     const id = questionIds[stepIndex];
     const question = questions[id];
     const { answerId, topicId } = question;
     const topic = topics[topicId];
     return (
       <React.Fragment>
-        <SubmissionAnswer {...{ readOnly: !attempting, answerId, question, graderView }} />
+        <SubmissionAnswer
+          {...{
+            readOnly: !attempting,
+            answerId,
+            question,
+            questionsFlags,
+            historyQuestions,
+            graderView,
+            handleToggleViewHistoryMode,
+          }}
+        />
         {this.renderAutogradingErrorPanel(id)}
         {this.renderExplanationPanel(question)}
         {this.renderQuestionGrading(id)}
@@ -471,6 +483,7 @@ SubmissionEditStepForm.propTypes = {
   allCorrect: PropTypes.bool.isRequired,
   questionIds: PropTypes.arrayOf(PropTypes.number),
   questions: PropTypes.objectOf(questionShape),
+  historyQuestions: PropTypes.objectOf(historyQuestionShape),
   questionsFlags: PropTypes.objectOf(questionFlagsShape),
   topics: PropTypes.objectOf(topicShape),
   isSaving: PropTypes.bool.isRequired,
@@ -482,6 +495,7 @@ SubmissionEditStepForm.propTypes = {
   handleSaveGrade: PropTypes.func,
   handleSubmitAnswer: PropTypes.func,
   handleReset: PropTypes.func,
+  handleToggleViewHistoryMode: PropTypes.func,
 };
 
 export default reduxForm({

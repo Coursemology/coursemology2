@@ -19,11 +19,11 @@ import SubmissionEmptyForm from './SubmissionEmptyForm';
 import {
   fetchSubmission, autogradeSubmission, saveDraft, finalise,
   unsubmit, submitAnswer, resetAnswer, saveGrade, mark, unmark, publish,
-  enterStudentView, exitStudentView,
+  enterStudentView, exitStudentView, toggleViewHistoryMode,
 } from '../../actions';
 import {
-  assessmentShape, explanationShape, gradingShape, postShape,
-  questionFlagsShape, questionShape, reduxFormShape, submissionShape, topicShape,
+  assessmentShape, explanationShape, gradingShape, postShape, answerShape,
+  questionFlagsShape, questionShape, historyQuestionShape, reduxFormShape, submissionShape, topicShape,
 } from '../../propTypes';
 import { formNames, workflowStates } from '../../constants';
 import translations from '../../translations';
@@ -37,6 +37,7 @@ class VisibleSubmissionEditIndex extends Component {
     const step = Number.isNaN(stepString) || stepString === '' ? null : parseInt(stepString, 10) - 1;
 
     this.state = { newSubmission, step };
+    this.handleToggleViewHistoryMode = this.handleToggleViewHistoryMode.bind(this);
   }
 
   componentDidMount() {
@@ -160,6 +161,12 @@ class VisibleSubmissionEditIndex extends Component {
     dispatch(publish(params.submissionId, Object.values(grading), exp));
   }
 
+  handleToggleViewHistoryMode(viewHistory, submissionQuestionId, questionId) {
+    const { dispatch, historyQuestions } = this.props;
+    const answersLoaded = historyQuestions[questionId].pastAnswersLoaded;
+    dispatch(toggleViewHistoryMode(viewHistory, submissionQuestionId, questionId, answersLoaded));
+  }
+
   renderStudentViewToggle() {
     return (
       <Toggle
@@ -223,6 +230,7 @@ class VisibleSubmissionEditIndex extends Component {
       grading,
       posts,
       questions,
+      historyQuestions,
       questionsFlags,
       topics,
       isAutograding,
@@ -257,6 +265,7 @@ class VisibleSubmissionEditIndex extends Component {
           handleSubmitAnswer={answerId => this.handleSubmitAnswer(answerId)}
           handleReset={answerId => this.handleReset(answerId)}
           handleAutogradeSubmission={() => this.handleAutogradeSubmission()}
+          handleToggleViewHistoryMode={this.handleToggleViewHistoryMode}
           explanations={explanations}
           allCorrect={this.allCorrect()}
           graderView={graderView}
@@ -269,6 +278,7 @@ class VisibleSubmissionEditIndex extends Component {
           posts={posts}
           questionIds={questionIds}
           questions={questions}
+          historyQuestions={historyQuestions}
           questionsFlags={questionsFlags}
           topics={topics}
           isSaving={isSaving}
@@ -287,6 +297,7 @@ class VisibleSubmissionEditIndex extends Component {
         handleMark={() => this.handleMark()}
         handleUnmark={() => this.handleUnmark()}
         handlePublish={() => this.handlePublish()}
+        handleToggleViewHistoryMode={this.handleToggleViewHistoryMode}
         explanations={explanations}
         grading={grading}
         graderView={graderView}
@@ -300,6 +311,7 @@ class VisibleSubmissionEditIndex extends Component {
         posts={posts}
         questionIds={questionIds}
         questions={questions}
+        historyQuestions={historyQuestions}
         questionsFlags={questionsFlags}
         step={step}
         tabbedView={tabbedView}
@@ -345,6 +357,8 @@ VisibleSubmissionEditIndex.propTypes = {
   notification: notificationShape,
   posts: PropTypes.objectOf(postShape),
   questions: PropTypes.objectOf(questionShape),
+  historyAnswers: PropTypes.objectOf(answerShape),
+  historyQuestions: PropTypes.objectOf(historyQuestionShape),
   questionsFlags: PropTypes.objectOf(questionFlagsShape),
   submission: submissionShape,
   topics: PropTypes.objectOf(topicShape),
@@ -364,6 +378,8 @@ function mapStateToProps(state) {
     posts: state.posts,
     submission: state.submission,
     questions: state.questions,
+    historyAnswers: state.history.answers,
+    historyQuestions: state.history.questions,
     questionsFlags: state.questionsFlags,
     isAutograding: state.submissionFlags.isAutograding,
     topics: state.topics,

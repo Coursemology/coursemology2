@@ -62,6 +62,12 @@ const errorSubmission = {
     },
     questionId: 1,
   }],
+  history: {
+    questions: [{
+      id: 1,
+      answerIds: [],
+    }],
+  },
 };
 
 const successSubmission = {
@@ -116,6 +122,12 @@ const successSubmission = {
     },
     questionId: 1,
   }],
+  history: {
+    questions: [{
+      id: 1,
+      answerIds: [],
+    }],
+  },
 };
 
 // stub import function

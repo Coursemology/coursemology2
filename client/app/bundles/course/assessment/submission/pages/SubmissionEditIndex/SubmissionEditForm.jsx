@@ -14,7 +14,7 @@ import { red100, red200, red900, yellow900, grey100, blue500, white } from 'mate
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import { explanationShape, questionShape, questionFlagsShape,
+import { explanationShape, questionShape, historyQuestionShape, questionFlagsShape,
   questionGradeShape, topicShape } from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
 import QuestionGrade from '../../containers/QuestionGrade';
@@ -154,7 +154,10 @@ class SubmissionEditForm extends Component {
   }
 
   renderTabbedQuestions() {
-    const { intl, attempting, questionIds, questions, topics, step } = this.props;
+    const {
+      intl, attempting, questionIds, questions, questionsFlags,
+      historyQuestions, topics, step, handleToggleViewHistoryMode,
+    } = this.props;
 
     let initialStep = step || 0;
     initialStep = initialStep < 0 ? 0 : initialStep;
@@ -168,7 +171,7 @@ class SubmissionEditForm extends Component {
       >
         {questionIds.map((id, index) => {
           const question = questions[id];
-          const { answerId, topicId } = question;
+          const { answerId, topicId, viewHistory } = question;
           const topic = topics[topicId];
           return (
             <Tab
@@ -176,10 +179,19 @@ class SubmissionEditForm extends Component {
               key={id}
               label={intl.formatMessage(translations.questionNumber, { number: index + 1 })}
             >
-              <SubmissionAnswer {...{ readOnly: !attempting, answerId, question }} />
-              {question.type === questionTypes.Programming ? this.renderExplanationPanel(id) : null}
-              {this.renderQuestionGrading(id)}
-              {this.renderProgrammingQuestionActions(id)}
+              <SubmissionAnswer
+                {...{
+                  readOnly: !attempting,
+                  answerId,
+                  question,
+                  questionsFlags,
+                  historyQuestions,
+                  handleToggleViewHistoryMode,
+                }}
+              />
+              {(question.type === questionTypes.Programming && !viewHistory) ? this.renderExplanationPanel(id) : null}
+              {viewHistory ? null : this.renderQuestionGrading(id)}
+              {viewHistory ? null : this.renderProgrammingQuestionActions(id)}
               <Comments topic={topic} />
               <hr />
             </Tab>
@@ -190,19 +202,32 @@ class SubmissionEditForm extends Component {
   }
 
   renderQuestions() {
-    const { attempting, questionIds, questions, topics, graderView } = this.props;
+    const {
+      attempting, questionIds, questions, historyQuestions,
+      topics, graderView, handleToggleViewHistoryMode, questionsFlags,
+    } = this.props;
     return (
       <React.Fragment>
         {questionIds.map((id, index) => {
           const question = questions[id];
-          const { answerId, topicId } = question;
+          const { answerId, topicId, viewHistory } = question;
           const topic = topics[topicId];
           return (
             <Element name={`step${index}`} key={id} style={styles.questionContainer}>
-              <SubmissionAnswer {...{ readOnly: !attempting, answerId, question, graderView }} />
-              {question.type === questionTypes.Programming ? this.renderExplanationPanel(id) : null}
-              {this.renderQuestionGrading(id)}
-              {this.renderProgrammingQuestionActions(id)}
+              <SubmissionAnswer
+                {...{
+                  readOnly: !attempting,
+                  answerId,
+                  question,
+                  questionsFlags,
+                  historyQuestions,
+                  graderView,
+                  handleToggleViewHistoryMode,
+                }}
+              />
+              {(question.type === questionTypes.Programming && !viewHistory) ? this.renderExplanationPanel(id) : null}
+              {viewHistory ? null : this.renderQuestionGrading(id)}
+              {viewHistory ? null : this.renderProgrammingQuestionActions(id)}
               <Comments topic={topic} />
               <hr />
             </Element>
@@ -479,6 +504,7 @@ SubmissionEditForm.propTypes = {
   grading: PropTypes.objectOf(questionGradeShape),
   questionIds: PropTypes.arrayOf(PropTypes.number),
   questions: PropTypes.objectOf(questionShape),
+  historyQuestions: PropTypes.objectOf(historyQuestionShape),
   questionsFlags: PropTypes.objectOf(questionFlagsShape),
   topics: PropTypes.objectOf(topicShape),
   isAutograding: PropTypes.bool.isRequired,
@@ -495,6 +521,7 @@ SubmissionEditForm.propTypes = {
   handleMark: PropTypes.func,
   handleUnmark: PropTypes.func,
   handlePublish: PropTypes.func,
+  handleToggleViewHistoryMode: PropTypes.func,
 };
 
 export default reduxForm({
