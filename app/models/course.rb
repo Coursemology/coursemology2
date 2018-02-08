@@ -2,6 +2,7 @@
 class Course < ApplicationRecord
   include Course::LessonPlanConcern
   include Course::SearchConcern
+  include TimeZoneConcern
 
   acts_as_tenant :instance, inverse_of: :courses
   has_settings_on :settings

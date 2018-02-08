@@ -15,6 +15,9 @@ en:
             Disabling gamification would hide these options, and students would not be able to
             see experience points either. This would also disable the following components -
             Achievements, Levels, Leaderboard and Points Disbursement.
+          time_zone_label: >
+            Sets the time zone for the course. Consolidated email reminders will be sent out
+            just after midnight for the time zone indicated here.
           self_directed_learning: 'Self Directed Learning'
           self_directed_learning_label: >
             Allow students to attempt the assessments that start at a future time provided they
