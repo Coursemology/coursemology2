@@ -50,7 +50,7 @@ class Course::Video < ApplicationRecord
   end)
 
   scope :video_after, (lambda do |video|
-    from_course(video.course_id).
+    from_tab(video.tab_id).
       joins(:lesson_plan_item).
       where('course_lesson_plan_items.start_at > :start_at OR '\
             '(course_lesson_plan_items.start_at = :start_at AND '\

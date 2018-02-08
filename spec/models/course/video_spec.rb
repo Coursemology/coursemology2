@@ -77,6 +77,26 @@ RSpec.describe Course::Video, type: :model do
         expect(video3.next_video).to eq(video4)
         expect(video4.next_video).to eq(video1)
       end
+
+      context 'when there are multiple tabs' do
+        let(:tab) { create(:video_tab, course: course) }
+        let!(:video5) do
+          create(:video, course: course, start_at: Time.zone.now - 1.week, title: 'ABB', tab: tab)
+        end
+        let!(:video6) do
+          create(:video, course: course, start_at: Time.zone.now + 1.week, title: 'CCC', tab: tab)
+        end
+
+        it 'does not consider videos in other tabs' do
+          expect(video1.next_video).to eq(nil)
+          expect(video2.next_video).to eq(video3)
+          expect(video3.next_video).to eq(video4)
+          expect(video4.next_video).to eq(video1)
+
+          expect(video6.next_video).to eq(nil)
+          expect(video5.next_video).to eq(video6)
+        end
+      end
     end
 
     describe 'callbacks' do
