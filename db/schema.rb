@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180130023617) do
+ActiveRecord::Schema.define(version: 20180208070853) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -867,7 +867,7 @@ ActiveRecord::Schema.define(version: 20180130023617) do
   create_table "read_marks", force: :cascade do |t|
     t.integer  "readable_id"
     t.string   "readable_type", :limit=>255, :null=>false
-    t.integer  "reader_id",     :null=>false, :index=>{:name=>"fk__read_marks_user_id"}, :foreign_key=>{:references=>"users", :name=>"fk_read_marks_user_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer  "reader_id",     :null=>false
     t.datetime "timestamp"
     t.string   "reader_type",   :limit=>255
 
