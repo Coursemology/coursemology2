@@ -7,7 +7,9 @@ import RichTextField from 'lib/components/redux-form/RichTextField';
 import formTranslations from 'lib/translations/form';
 import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
 import translations from 'course/lesson-plan/translations';
-import { formNames } from 'course/lesson-plan/constants';
+import { formNames, fields } from 'course/lesson-plan/constants';
+
+const { TITLE, DESCRIPTION, START_AT } = fields;
 
 const validate = (values) => {
   const errors = {};
@@ -27,7 +29,7 @@ const MilestoneForm = ({ handleSubmit, onSubmit, disabled }) => (
     <Field
       fullWidth
       name="title"
-      floatingLabelText={<FormattedMessage {...translations.title} />}
+      floatingLabelText={<FormattedMessage {...translations[TITLE]} />}
       component={TextField}
       {...{ disabled }}
     />
@@ -35,7 +37,7 @@ const MilestoneForm = ({ handleSubmit, onSubmit, disabled }) => (
     <Field
       fullWidth
       name="description"
-      label={<FormattedMessage {...translations.description} />}
+      label={<FormattedMessage {...translations[DESCRIPTION]} />}
       component={RichTextField}
       multiLine
       rows={2}
@@ -43,7 +45,7 @@ const MilestoneForm = ({ handleSubmit, onSubmit, disabled }) => (
     />
     <Field
       name="start_at"
-      floatingLabelText={<FormattedMessage {...translations.startAt} />}
+      floatingLabelText={<FormattedMessage {...translations[START_AT]} />}
       component={DateTimePicker}
       {...{ disabled }}
     />

@@ -16,6 +16,7 @@ import LessonPlanFilter from 'course/lesson-plan/containers/LessonPlanFilter';
 import LessonPlanNav from 'course/lesson-plan/containers/LessonPlanNav';
 import MilestoneFormDialog from 'course/lesson-plan/containers/MilestoneFormDialog';
 import EventFormDialog from 'course/lesson-plan/containers/EventFormDialog';
+import ColumnVisibilityDropdown from 'course/lesson-plan/containers/ColumnVisibilityDropdown';
 import ExitEditModeButton from './ExitEditModeButton';
 import EnterEditModeButton from './EnterEditModeButton';
 import NewMilestoneButton from './NewMilestoneButton';
@@ -77,6 +78,7 @@ class LessonPlanLayout extends React.Component {
           <Route exact path={`${lessonPlanPath}/edit`} component={ExitEditModeButton} />
           <NewMilestoneButton />
           <Route path={lessonPlanPath} component={NewEventButton} />
+          <Route exact path={`${lessonPlanPath}/edit`} component={ColumnVisibilityDropdown} />
         </CardText>
       </Card>
     );

@@ -3,8 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import translations from 'course/lesson-plan/translations';
+import { fields } from 'course/lesson-plan/constants';
 import MilestoneRow from './MilestoneRow';
 import ItemRow from './ItemRow';
+
+const { ITEM_TYPE, TITLE, START_AT, BONUS_END_AT, END_AT, PUBLISHED } = fields;
 
 const styles = {
   page: {
@@ -19,19 +22,22 @@ class LessonPlanEdit extends React.Component {
       milestone: PropTypes.object,
       items: PropTypes.array,
     })).isRequired,
+    columnsVisible: PropTypes.shape({}).isRequired,
   }
 
-  static renderHeader() {
-    const rowFor = field => <th><FormattedMessage {...translations[field]} /></th>;
+  renderHeader() {
+    const { columnsVisible } = this.props;
+
+    const headerFor = field => <th><FormattedMessage {...translations[field]} /></th>;
     return (
       <thead>
         <tr>
-          {rowFor('type')}
-          {rowFor('title')}
-          {rowFor('startAt')}
-          {rowFor('bonusEndAt')}
-          {rowFor('endAt')}
-          {rowFor('published')}
+          { columnsVisible[ITEM_TYPE] ? headerFor(ITEM_TYPE) : null }
+          { headerFor(TITLE) }
+          { columnsVisible[START_AT] ? headerFor(START_AT) : null }
+          { columnsVisible[BONUS_END_AT] ? headerFor(BONUS_END_AT) : null }
+          { columnsVisible[END_AT] ? headerFor(END_AT) : null }
+          { columnsVisible[PUBLISHED] ? headerFor(PUBLISHED) : null }
         </tr>
       </thead>
     );
@@ -50,6 +56,7 @@ class LessonPlanEdit extends React.Component {
         bonusEndAt={item.bonus_end_at}
         endAt={item.end_at}
         published={item.published}
+        itemPath={item.item_path}
       />
     )) : [];
 
@@ -74,7 +81,7 @@ class LessonPlanEdit extends React.Component {
     return (
       <div style={styles.page}>
         <table>
-          { LessonPlanEdit.renderHeader() }
+          { this.renderHeader() }
           <tbody>
             { groups.map(this.renderGroup) }
           </tbody>
@@ -86,4 +93,5 @@ class LessonPlanEdit extends React.Component {
 
 export default connect(state => ({
   groups: state.lessonPlan.groups,
+  columnsVisible: state.flags.editPageColumnsVisible,
 }))(LessonPlanEdit);
