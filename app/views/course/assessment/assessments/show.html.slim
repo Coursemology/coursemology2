@@ -90,6 +90,12 @@
             = link_to(t('.new_question.scribing'),
                       new_course_assessment_question_scribing_path(current_course, @assessment),
                       role: 'menuitem')
+          / TODO: Uncomment the line below when TextResponseComprehension is ready
+          / li role='presentation' id='comprehension-link'
+          /   = link_to(t('.new_question.comprehension'),
+          /             new_course_assessment_question_text_response_path(current_course, @assessment,
+          /                                                               { comprehension: true }),
+          /             role: 'menuitem')
 
     h3 = t('.questions')
     br
