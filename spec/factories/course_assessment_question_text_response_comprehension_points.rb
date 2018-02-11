@@ -7,9 +7,19 @@ FactoryBot.define do
 
     solutions do
       [
-        build(:course_assessment_question_text_response_comprehension_solution, :compre_lifted_word, point: nil),
-        build(:course_assessment_question_text_response_comprehension_solution, :compre_keyword, point: nil)
+        build(:course_assessment_question_text_response_comprehension_solution, :compre_keyword, point: nil),
+        build(:course_assessment_question_text_response_comprehension_solution, :compre_lifted_word, point: nil)
       ]
+    end
+
+    trait :multiple_compre_lifted_word do
+      solutions do
+        [
+          build(:course_assessment_question_text_response_comprehension_solution, :compre_keyword, point: nil),
+          build(:course_assessment_question_text_response_comprehension_solution, :compre_lifted_word, point: nil),
+          build(:course_assessment_question_text_response_comprehension_solution, :compre_lifted_word, point: nil)
+        ]
+      end
     end
   end
 end

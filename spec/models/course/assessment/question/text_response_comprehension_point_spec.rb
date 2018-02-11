@@ -37,6 +37,19 @@ RSpec.describe Course::Assessment::Question::TextResponseComprehensionPoint, typ
               'point_grade.invalid_point_grade'))
         end
       end
+
+      describe '#solutions' do
+        subject do
+          build_stubbed(:course_assessment_question_text_response_comprehension_point, :multiple_compre_lifted_word)
+        end
+
+        it 'validates at most one compre_lifted_word solution' do
+          expect(subject.valid?).to be(false)
+          expect(subject.errors[:solutions]).to include(I18n.t('activerecord.errors.models.' \
+              'course/assessment/question/text_response_comprehension_point.attributes.' \
+              'solutions.more_than_one_compre_lifted_word_solution'))
+        end
+      end
     end
   end
 end

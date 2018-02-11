@@ -2,7 +2,7 @@
 class Course::Assessment::Question::TextResponseComprehensionPoint < ApplicationRecord
   self.table_name = 'course_assessment_question_text_response_compre_points'
 
-  validate :validate_point_grade
+  validate :validate_point_grade, :validate_at_most_one_compre_lifted_word_solution
 
   has_many :solutions, class_name: Course::Assessment::Question::TextResponseComprehensionSolution.name,
                        dependent: :destroy, foreign_key: :point_id, inverse_of: :point
@@ -25,5 +25,9 @@ class Course::Assessment::Question::TextResponseComprehensionPoint < Application
 
   def validate_point_grade
     errors.add(:point_grade, :invalid_point_grade) if point_grade > group.maximum_group_grade
+  end
+
+  def validate_at_most_one_compre_lifted_word_solution
+    errors.add(:solutions, :more_than_one_compre_lifted_word_solution) if solutions.count(&:compre_lifted_word?) > 1
   end
 end
