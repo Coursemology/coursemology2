@@ -19,7 +19,7 @@ class VisiblePostPreview extends Component {
   render() {
     const { style, creator, text } = this.props;
     return (
-      <div style={Object.assign(styles.postPreview, style)}>
+      <div style={{ ...styles.postPreview, ...style }}>
         <span className="fa fa-chevron-down" style={styles.chevron} />{`${creator}: ${text}`}
       </div>
     );
