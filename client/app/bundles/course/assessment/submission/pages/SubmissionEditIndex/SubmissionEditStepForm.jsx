@@ -323,7 +323,7 @@ class SubmissionEditStepForm extends Component {
     const { answerId, topicId } = question;
     const topic = topics[topicId];
     return (
-      <div>
+      <React.Fragment>
         <SubmissionAnswer {...{ readOnly: !attempting, answerId, question, graderView }} />
         {this.renderAutogradingErrorPanel(id)}
         {this.renderExplanationPanel(question)}
@@ -345,7 +345,7 @@ class SubmissionEditStepForm extends Component {
         </div>
         <hr />
         <Comments topic={topic} />
-      </div>
+      </React.Fragment>
     );
   }
 

@@ -33,7 +33,7 @@ export default class CommentField extends Component {
   render() {
     const { value, createComment, isSubmitting } = this.props;
     return (
-      <div>
+      <React.Fragment>
         <TextField
           floatingLabelText={<h4><FormattedMessage {...translations.prompt} /></h4>}
           fullWidth
@@ -51,7 +51,7 @@ export default class CommentField extends Component {
           disabled={value === undefined || value === '' || isSubmitting}
           icon={isSubmitting ? <CircularProgress size={24} /> : null}
         />
-      </div>
+      </React.Fragment>
     );
   }
 }

@@ -37,9 +37,9 @@ function Topic(props) {
         <span className="glyphicon glyphicon-chevron-down" />
       </div>
       <Divider style={{ marginBottom: '1em' }} />
-      <div>
+      <React.Fragment>
         {props.postIds.map(id => <PostContainer key={id.toString()} postId={id} isRoot />)}
-      </div>
+      </React.Fragment>
       <Reply topicId={props.topicId} />
       <Divider />
     </div>

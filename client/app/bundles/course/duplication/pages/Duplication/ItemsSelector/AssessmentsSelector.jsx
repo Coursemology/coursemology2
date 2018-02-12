@@ -115,7 +115,7 @@ class AssessmentsSelector extends React.Component {
     if (!categories) { return null; }
 
     return (
-      <div>
+      <React.Fragment>
         <h2><FormattedMessage {...defaultComponentTitles.course_assessments_component} /></h2>
         {
           categories.length > 0 ?
@@ -124,7 +124,7 @@ class AssessmentsSelector extends React.Component {
             <FormattedMessage {...translations.noItems} />
           </Subheader>
         }
-      </div>
+      </React.Fragment>
     );
   }
 }

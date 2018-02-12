@@ -76,7 +76,7 @@ const ColorPickerField = (props) => {
   const rgbaValues = colorPickerColor.match(/^rgba\((\d+),(\d+),(\d+),(.*)\)$/);
 
   return (
-    <div>
+    <React.Fragment>
       <div>
         { noFillOnCheck ?
           <Checkbox
@@ -123,7 +123,7 @@ const ColorPickerField = (props) => {
           />
         </Popover>
       </div>
-    </div>
+    </React.Fragment>
   );
 };
 

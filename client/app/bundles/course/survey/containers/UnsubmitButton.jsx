@@ -65,7 +65,7 @@ class UnsubmitButton extends React.Component {
   render() {
     const { isUnsubmitting } = this.props;
     return (
-      <div>
+      <React.Fragment>
         <RaisedButton
           primary
           onClick={() => this.setState({ open: true })}
@@ -80,7 +80,7 @@ class UnsubmitButton extends React.Component {
           onCancel={() => this.setState({ open: false })}
           onConfirm={this.handleUnsubmitResponse}
         />
-      </div>
+      </React.Fragment>
     );
   }
 }

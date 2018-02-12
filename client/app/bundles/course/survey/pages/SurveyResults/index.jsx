@@ -76,7 +76,7 @@ class SurveyResults extends React.Component {
     const { totalStudents, realStudents } = this.getRespondentsCount();
     const responsesCount = this.state.includePhantoms ? totalStudents : realStudents;
     return (
-      <div>
+      <React.Fragment>
         <Card>
           <CardText>
             <h4>
@@ -107,7 +107,7 @@ class SurveyResults extends React.Component {
             />
           ))
         }
-      </div>
+      </React.Fragment>
     );
   }
 }

@@ -63,13 +63,13 @@ class QuestionCard extends React.Component {
 
   static renderOptionsList(question, Widget) {
     return (
-      <div>
+      <React.Fragment>
         {question.options.map((option) => {
           const { option: optionText, image_url: imageUrl } = option;
           const widget = <Widget disabled style={styles.optionWidget} />;
           return <OptionsListItem key={option.id} {...{ optionText, imageUrl, widget }} />;
         })}
-      </div>
+      </React.Fragment>
     );
   }
 

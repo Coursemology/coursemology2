@@ -80,14 +80,14 @@ class ResponseShow extends React.Component {
     const initialValues = buildInitialValues(survey, response);
 
     return (
-      <div>
+      <React.Fragment>
         { this.renderSubmissionInfo() }
         <Subheader><FormattedMessage {...surveyTranslations.questions} /></Subheader>
         <ResponseForm
           readOnly
           {...{ response, flags, initialValues }}
         />
-      </div>
+      </React.Fragment>
     );
   }
 
@@ -119,7 +119,7 @@ class ResponseShow extends React.Component {
     const { survey } = this.props;
 
     return (
-      <div>
+      <React.Fragment>
         {
           survey.description ?
             <Card><CardText dangerouslySetInnerHTML={{ __html: survey.description }} /></Card> :
@@ -128,7 +128,7 @@ class ResponseShow extends React.Component {
         { this.renderBody() }
         { this.renderRespondButton() }
         { this.renderUnsubmitButton() }
-      </div>
+      </React.Fragment>
     );
   }
 }

@@ -69,7 +69,7 @@ class VideosSelector extends React.Component {
     }
 
     return (
-      <div>
+      <React.Fragment>
         {
           videos.length > 1 ? <BulkSelectors
             callback={this.setAllVideoSelection}
@@ -77,7 +77,7 @@ class VideosSelector extends React.Component {
           /> : null
         }
         { videos.map(video => this.renderRow(video)) }
-      </div>
+      </React.Fragment>
     );
   }
 
@@ -86,10 +86,10 @@ class VideosSelector extends React.Component {
     if (!videos) { return null; }
 
     return (
-      <div>
+      <React.Fragment>
         <h2><FormattedMessage {...defaultComponentTitles.course_videos_component} /></h2>
         { this.renderBody() }
-      </div>
+      </React.Fragment>
     );
   }
 }

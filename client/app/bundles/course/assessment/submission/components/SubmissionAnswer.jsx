@@ -86,12 +86,12 @@ class SubmissionAnswer extends Component {
     const renderer = this.getRenderer(question);
 
     return (
-      <div>
+      <React.Fragment>
         <h3>{question.displayTitle}</h3>
         <div dangerouslySetInnerHTML={{ __html: question.description }} />
         <hr />
         { answerId ? renderer(question, readOnly, answerId, graderView) : this.renderMissingAnswerPanel() }
-      </div>
+      </React.Fragment>
     );
   }
 }

@@ -24,7 +24,7 @@ const defaultProps = {
 
 function Controls(props) {
   return (
-    <div>
+    <React.Fragment>
       <IconButton onClick={props.onRefresh}>
         <Refresh />
       </IconButton>
@@ -34,7 +34,7 @@ function Controls(props) {
       >
         <OnDemandVideo color={props.autoScroll ? activeColor : inactiveColor} />
       </IconButton>
-    </div>
+    </React.Fragment>
   );
 }
 

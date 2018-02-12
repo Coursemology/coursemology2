@@ -43,7 +43,7 @@ class VideoListing extends React.Component {
     if (selectedVideos.length < 1) { return null; }
 
     return (
-      <div>
+      <React.Fragment>
         <Subheader>
           <FormattedMessage {...defaultComponentTitles.course_videos_component} />
         </Subheader>
@@ -52,7 +52,7 @@ class VideoListing extends React.Component {
             { selectedVideos.map(VideoListing.renderRow) }
           </CardText>
         </Card>
-      </div>
+      </React.Fragment>
     );
   }
 }

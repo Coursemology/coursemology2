@@ -101,7 +101,7 @@ export default class CommentCard extends Component {
 
     if (editMode) {
       return (
-        <div>
+        <React.Fragment>
           <TextField
             id={id.toString()}
             fullWidth
@@ -126,7 +126,7 @@ export default class CommentCard extends Component {
               onClick={() => this.onSave()}
             />
           </div>
-        </div>
+        </React.Fragment>
       );
     }
 

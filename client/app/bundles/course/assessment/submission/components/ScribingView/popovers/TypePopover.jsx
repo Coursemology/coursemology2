@@ -66,9 +66,7 @@ const TypePopover = (props) => {
       animation={PopoverAnimationVertical}
     >
       <Menu style={styles.menu}>
-        <div>
-          <h4>{intl.formatMessage(translations.text)}</h4>
-        </div>
+        <h4>{intl.formatMessage(translations.text)}</h4>
         <FontFamilyField
           fontFamilyValue={fontFamilyValue}
           onChangeFontFamily={onChangeFontFamily}

@@ -166,22 +166,20 @@ class AssessmentForm extends React.Component {
     const { submitting } = this.props;
     if (this.props.autograded) {
       return (
-        <div>
-          <Field
-            name="skippable"
-            component={Toggle}
-            parse={Boolean}
-            label={<FormattedMessage {...translations.skippable} />}
-            labelPosition="right"
-            style={styles.toggle}
-            disabled={submitting}
-          />
-        </div>
+        <Field
+          name="skippable"
+          component={Toggle}
+          parse={Boolean}
+          label={<FormattedMessage {...translations.skippable} />}
+          labelPosition="right"
+          style={styles.toggle}
+          disabled={submitting}
+        />
       );
     }
 
     return (
-      <div>
+      <React.Fragment>
         <Field
           name="tabbed_view"
           component={SelectField}
@@ -235,7 +233,7 @@ class AssessmentForm extends React.Component {
         <div style={styles.hint}>
           <FormattedMessage {...translations.passwordProtectionHint} />
         </div>
-      </div>
+      </React.Fragment>
     );
   }
 
@@ -373,13 +371,13 @@ class AssessmentForm extends React.Component {
 
         {
           folderAttributes &&
-          <div>
+          <React.Fragment>
             <br />
             <MaterialUploader
               folderId={folderAttributes.folder_id}
               materials={folderAttributes.materials}
             />
-          </div>
+          </React.Fragment>
         }
         {
           editing && conditionAttributes &&

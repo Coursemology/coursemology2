@@ -127,10 +127,10 @@ class VisibleTestCaseView extends Component {
         <CardHeader
           showExpandableButton
           title={
-            <div>
+            <React.Fragment>
               <FormattedMessage {...translations[outputStreamType]} />
               {VisibleTestCaseView.renderStaffOnlyOutputStreamWarning()}
-            </div>
+            </React.Fragment>
           }
         />
         <CardText expandable><pre>{output}</pre></CardText>
@@ -140,10 +140,10 @@ class VisibleTestCaseView extends Component {
 
   static renderTitle(testCaseType, warn) {
     return (
-      <div>
+      <React.Fragment>
         <FormattedMessage {...translations[testCaseType]} />
         {warn ? VisibleTestCaseView.renderStaffOnlyTestCasesWarning() : null}
-      </div>
+      </React.Fragment>
     );
   }
 

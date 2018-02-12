@@ -49,7 +49,7 @@ class RemindButton extends React.Component {
 
   render() {
     return (
-      <div>
+      <React.Fragment>
         <RaisedButton
           label={<FormattedMessage {...translations.remind} />}
           onClick={() => this.setState({ open: true })}
@@ -57,16 +57,16 @@ class RemindButton extends React.Component {
         <ConfirmationDialog
           open={this.state.open}
           message={
-            <div>
+            <React.Fragment>
               <FormattedMessage {...translations.explanation} />
               <br /><br />
               <FormattedMessage {...translations.confirmation} />
-            </div>
+            </React.Fragment>
           }
           onCancel={() => this.setState({ open: false })}
           onConfirm={this.handleConfirm}
         />
-      </div>
+      </React.Fragment>
     );
   }
 }

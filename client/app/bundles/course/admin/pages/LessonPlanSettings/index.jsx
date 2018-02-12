@@ -119,7 +119,7 @@ class LessonPlanSettings extends React.Component {
     }
 
     return (
-      <div>
+      <React.Fragment>
         <h3><FormattedMessage {...translations.lessonPlanAssessmentItemSettings} /></h3>
         <Table>
           <TableHeader
@@ -147,7 +147,7 @@ class LessonPlanSettings extends React.Component {
             { assessmentItemSettings.map(item => this.renderAssessmentSettingRow(item)) }
           </TableBody>
         </Table>
-      </div>
+      </React.Fragment>
     );
   }
 
@@ -162,7 +162,7 @@ class LessonPlanSettings extends React.Component {
     }
 
     return (
-      <div>
+      <React.Fragment>
         <h3><FormattedMessage {...translations.lessonPlanComponentItemSettings} /></h3>
         <Table>
           <TableHeader
@@ -187,13 +187,13 @@ class LessonPlanSettings extends React.Component {
             { componentItemSettings.map(item => this.renderComponentSettingRow(item)) }
           </TableBody>
         </Table>
-      </div>
+      </React.Fragment>
     );
   }
 
   render() {
     return (
-      <div>
+      <React.Fragment>
         <MilestoneGroupSettings />
 
         <h2><FormattedMessage {...translations.lessonPlanItemSettings} /></h2>
@@ -201,7 +201,7 @@ class LessonPlanSettings extends React.Component {
         {this.renderLessonPlanItemSettingsForComponentsTable()}
 
         <NotificationPopup />
-      </div>
+      </React.Fragment>
     );
   }
 }

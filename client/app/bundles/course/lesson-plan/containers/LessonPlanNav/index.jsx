@@ -94,7 +94,7 @@ class LessonPlanNav extends React.Component {
     if (groups.length < 2) { return null; }
 
     return (
-      <div>
+      <React.Fragment>
         { this.renderScrollSpies() }
         <RaisedButton
           secondary
@@ -129,7 +129,7 @@ class LessonPlanNav extends React.Component {
             }
           </Menu>
         </Popover>
-      </div>
+      </React.Fragment>
     );
   }
 }

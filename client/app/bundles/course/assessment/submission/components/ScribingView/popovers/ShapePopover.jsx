@@ -67,13 +67,11 @@ class ShapePopover extends Component {
     const { currentShape, setSelectedShape, intl } = this.props;
 
     return (
-      <div>
-        <div>
-          <h4>{intl.formatMessage(translations.shape)} </h4>
-        </div>
+      <React.Fragment>
+        <h4>{intl.formatMessage(translations.shape)}</h4>
         <ShapeField currentShape={currentShape} setSelectedShape={setSelectedShape} />
         <Divider />
-      </div>
+      </React.Fragment>
     );
   }
 
@@ -87,10 +85,8 @@ class ShapePopover extends Component {
     } = this.props;
 
     return (
-      <div>
-        <div>
-          <h4>{intl.formatMessage(translations.border)}</h4>
-        </div>
+      <React.Fragment>
+        <h4>{intl.formatMessage(translations.border)}</h4>
         <LineStyleField
           lineToolType={lineToolType}
           selectedLineStyle={selectedLineStyle}
@@ -108,7 +104,7 @@ class ShapePopover extends Component {
           colorPickerColor={borderColorPickerColor}
           onChangeCompleteColorPicker={onChangeCompleteBorderColorPicker}
         />
-      </div>
+      </React.Fragment>
     );
   }
 
@@ -121,10 +117,8 @@ class ShapePopover extends Component {
     } = this.props;
 
     return (
-      <div>
-        <div>
-          <h4>{intl.formatMessage(translations.fill)}</h4>
-        </div>
+      <React.Fragment>
+        <h4>{intl.formatMessage(translations.fill)}</h4>
         <ColorPickerField
           onClickColorPicker={onClickFillColorPicker}
           colorPickerPopoverOpen={fillColorPickerPopoverOpen}
@@ -135,7 +129,7 @@ class ShapePopover extends Component {
           noFillValue={noFillValue}
           noFillOnCheck={noFillOnCheck}
         />
-      </div>
+      </React.Fragment>
     );
   }
 

@@ -53,7 +53,7 @@ class MilestoneGroupSettings extends React.Component {
 
   render() {
     return (
-      <div>
+      <React.Fragment>
         <h2><FormattedMessage {...translations.header} /></h2>
         <p><FormattedMessage {...translations.explanation} /></p>
         <RadioButtonGroup
@@ -74,7 +74,7 @@ class MilestoneGroupSettings extends React.Component {
             label={<FormattedMessage {...translations.expandCurrent} />}
           />
         </RadioButtonGroup>
-      </div>
+      </React.Fragment>
     );
   }
 }
