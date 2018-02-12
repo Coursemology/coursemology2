@@ -40,7 +40,7 @@ GIT
 
 GIT
   remote: git://github.com/jeremyyap/simple_form-bootstrap.git
-  revision: 8813baad607c969460e631dbc241a02d8b4b62f9
+  revision: ba048ab714904d9e4fc1407bee33e7b5a1f832b9
   specs:
     simple_form-bootstrap (1.6.0)
       actionpack (>= 4.1, < 6)
@@ -111,7 +111,7 @@ GEM
       io-like (~> 0.3.0)
     arel (8.0.0)
     ast (2.4.0)
-    autoprefixer-rails (7.2.5)
+    autoprefixer-rails (8.0.0)
       execjs
     awesome_print (1.8.0)
     baby_squeel (1.1.5)
@@ -156,8 +156,8 @@ GEM
       archive-zip (~> 0.10)
       nokogiri (~> 1.8)
     cocoon (1.2.11)
-    codeclimate-test-reporter (1.0.8)
-      simplecov (<= 0.13)
+    codeclimate-test-reporter (1.0.7)
+      simplecov
     codecov (0.1.10)
       json
       simplecov
@@ -227,7 +227,7 @@ GEM
     http-cookie (1.0.3)
       domain_name (~> 0.5)
     http_accept_language (2.1.1)
-    i18n (0.9.3)
+    i18n (0.9.4)
       concurrent-ruby (~> 1.0)
     i18n-js (3.0.4)
       i18n (~> 0.6, >= 0.6.6)
@@ -290,7 +290,7 @@ GEM
       actionpack (>= 3.0)
       activerecord (>= 3.0)
       railties (>= 3.0)
-    loofah (2.1.1)
+    loofah (2.2.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.0)
@@ -486,7 +486,7 @@ GEM
     simple_form (3.5.0)
       actionpack (> 4, < 5.2)
       activemodel (> 4, < 5.2)
-    simplecov (0.13.0)
+    simplecov (0.15.1)
       docile (~> 1.1.0)
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
@@ -516,7 +516,7 @@ GEM
     thread (0.2.2)
     thread_safe (0.3.6)
     tilt (2.0.8)
-    traceroute (0.5.0)
+    traceroute (0.6.0)
       rails (>= 3.0.0)
     twitter-typeahead-rails (0.11.1)
       actionpack (>= 3.1)
@@ -524,7 +524,7 @@ GEM
       railties (>= 3.1)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
-    uglifier (4.1.5)
+    uglifier (4.1.6)
       execjs (>= 0.3.0, < 3)
     unf (0.1.4)
       unf_ext
@@ -655,6 +655,5 @@ DEPENDENCIES
   workflow
   yard
 
-
 BUNDLED WITH
-   1.16.0
+   1.16.1
