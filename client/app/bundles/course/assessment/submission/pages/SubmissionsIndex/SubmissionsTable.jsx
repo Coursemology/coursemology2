@@ -32,7 +32,6 @@ const styles = {
     wordBreak: 'break-word',
   },
   tableCenterCell: {
-    ...this.tableCell,
     textAlign: 'center',
   },
 };
@@ -102,12 +101,12 @@ export default class SubmissionsTable extends React.Component {
     }
 
     return (
-      <div>
+      <React.Fragment>
         {SubmissionsTable.renderUnpublishedWarning(submission)}
         <a href={getEditSubmissionURL(courseId, assessmentId, submission.id)}>
           <FormattedMessage {...translations[submission.workflowState]} />
         </a>
-      </div>
+      </React.Fragment>
     );
   }
 
@@ -130,6 +129,9 @@ export default class SubmissionsTable extends React.Component {
 
   renderStudents() {
     const { courseId, assessment, submissions } = this.props;
+
+    const tableCenterCellStyle = { ...styles.tableCell, ...styles.tableCenterCell };
+
     return submissions.map(submission => (
       <TableRow key={submission.courseStudent.id}>
         <TableRowColumn style={styles.tableCell}>
@@ -137,21 +139,21 @@ export default class SubmissionsTable extends React.Component {
             {submission.courseStudent.name}
           </a>
         </TableRowColumn>
-        <TableRowColumn style={styles.tableCenterCell}>
+        <TableRowColumn style={tableCenterCellStyle}>
           {this.renderSubmissionWorkflowState(submission)}
         </TableRowColumn>
-        <TableRowColumn style={styles.tableCenterCell}>
+        <TableRowColumn style={tableCenterCellStyle}>
           {this.getGradeString(submission)}
         </TableRowColumn>
         {assessment.gamified ?
-          <TableRowColumn style={styles.tableCenterCell}>
+          <TableRowColumn style={tableCenterCellStyle}>
             {submission.pointsAwarded !== undefined ? submission.pointsAwarded : null}
           </TableRowColumn>
         : null}
-        <TableRowColumn style={styles.tableCenterCell}>
+        <TableRowColumn style={tableCenterCellStyle}>
           {SubmissionsTable.formatDate(submission.dateSubmitted)}
         </TableRowColumn>
-        <TableRowColumn style={styles.tableCenterCell}>
+        <TableRowColumn style={tableCenterCellStyle}>
           {SubmissionsTable.formatDate(submission.dateGraded)}
         </TableRowColumn>
         <TableRowColumn style={{ width: 48, padding: 12 }}>
@@ -166,24 +168,22 @@ export default class SubmissionsTable extends React.Component {
     const downloadAnswerDisabled = isDownloading || !this.canDownload();
     const downloadStatisticsDisabled = isStatisticsDownloading || !this.canDownloadStatistics();
     return (
-      <div>
-        <IconMenu iconButtonElement={<IconButton id="download-dropdown-icon"><MoreVertIcon /></IconButton>}>
-          <MenuItem
-            className={downloadAnswerDisabled ? 'download-submissions-disabled' : 'download-submissions-enabled'}
-            primaryText={<FormattedMessage {...submissionsTranslations.downloadAnswers} />}
-            disabled={downloadAnswerDisabled}
-            leftIcon={isDownloading ? <CircularProgress size={30} /> : <DownloadIcon />}
-            onClick={downloadAnswerDisabled ? null : handleDownload}
-          />
-          <MenuItem
-            className={downloadStatisticsDisabled ? 'download-statistics-disabled' : 'download-statistics-enabled'}
-            primaryText={<FormattedMessage {...submissionsTranslations.downloadStatistics} />}
-            disabled={downloadStatisticsDisabled}
-            leftIcon={isStatisticsDownloading ? <CircularProgress size={30} /> : <DownloadIcon />}
-            onClick={downloadStatisticsDisabled ? null : handleDownloadStatistics}
-          />
-        </IconMenu>
-      </div>
+      <IconMenu iconButtonElement={<IconButton id="download-dropdown-icon"><MoreVertIcon /></IconButton>}>
+        <MenuItem
+          className={downloadAnswerDisabled ? 'download-submissions-disabled' : 'download-submissions-enabled'}
+          primaryText={<FormattedMessage {...submissionsTranslations.downloadAnswers} />}
+          disabled={downloadAnswerDisabled}
+          leftIcon={isDownloading ? <CircularProgress size={30} /> : <DownloadIcon />}
+          onClick={downloadAnswerDisabled ? null : handleDownload}
+        />
+        <MenuItem
+          className={downloadStatisticsDisabled ? 'download-statistics-disabled' : 'download-statistics-enabled'}
+          primaryText={<FormattedMessage {...submissionsTranslations.downloadStatistics} />}
+          disabled={downloadStatisticsDisabled}
+          leftIcon={isStatisticsDownloading ? <CircularProgress size={30} /> : <DownloadIcon />}
+          onClick={downloadStatisticsDisabled ? null : handleDownloadStatistics}
+        />
+      </IconMenu>
     );
   }
 
@@ -197,7 +197,7 @@ export default class SubmissionsTable extends React.Component {
     );
 
     const tableHeaderCenterColumnFor = field => (
-      <TableHeaderColumn style={styles.tableCenterCell}>
+      <TableHeaderColumn style={{ ...styles.tableCell, ...styles.tableCenterCell }}>
         <FormattedMessage {...submissionsTranslations[field]} />
       </TableHeaderColumn>
     );
