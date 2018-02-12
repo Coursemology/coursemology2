@@ -6,6 +6,7 @@ import { i18nLocale } from 'lib/helpers/server-context';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import zh from 'react-intl/locale-data/zh';
 
+import ErrorBoundary from './ErrorBoundary';
 import translations from '../../../build/locales/locales.json';
 
 const propTypes = {
@@ -43,7 +44,7 @@ const ProviderWrapper = ({ store, children }) => {
     );
   }
 
-  return providers;
+  return <ErrorBoundary>{providers}</ErrorBoundary>;
 };
 
 ProviderWrapper.propTypes = propTypes;
