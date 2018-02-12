@@ -48,7 +48,7 @@ class DuplicateButton extends React.Component {
     }
 
     return (
-      <div>
+      <React.Fragment>
         <RaisedButton
           secondary
           disabled={!isCourseSelected || !isItemSelected}
@@ -57,7 +57,7 @@ class DuplicateButton extends React.Component {
           style={styles.button}
         />
         <DuplicateItemsConfirmation />
-      </div>
+      </React.Fragment>
     );
   }
 }

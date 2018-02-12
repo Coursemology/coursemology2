@@ -253,7 +253,7 @@ class OnlineEditorPythonView extends React.Component {
     );
 
     return (
-      <div>
+      <React.Fragment>
         <div style={{ marginBottom: '1em' }}>
           {
             this.renderEditorCard(
@@ -323,7 +323,7 @@ class OnlineEditorPythonView extends React.Component {
           this.renderTestCases(intl.formatMessage(translations.evaluationTestCases),
           testCases, 'evaluation')
         }
-      </div>
+      </React.Fragment>
     );
   }
 

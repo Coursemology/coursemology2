@@ -152,11 +152,11 @@ class TextResponseResults extends React.Component {
     });
 
     return (
-      <div>
+      <React.Fragment>
         { toggle }
         { this.state.expanded && TextResponseResults.renderTextResultsTable(nonEmptyAnswers, anonymous) }
         { this.state.expanded && toggle }
-      </div>
+      </React.Fragment>
     );
   }
 }

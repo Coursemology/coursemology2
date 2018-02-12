@@ -57,7 +57,7 @@ class QuestionFormOptions extends React.Component {
     const { intl, fields, disabled, ...props } = this.props;
 
     return (
-      <div>
+      <React.Fragment>
         {fields.map((member, index) => (
           <QuestionFormOption
             key={index}
@@ -86,7 +86,7 @@ class QuestionFormOptions extends React.Component {
             />
           </FlatButton>
         </div>
-      </div>
+      </React.Fragment>
     );
   }
 }

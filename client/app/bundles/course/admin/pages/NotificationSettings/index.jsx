@@ -110,12 +110,12 @@ class NotificationSettings extends React.Component {
 
   render() {
     return (
-      <div>
+      <React.Fragment>
         <h2><FormattedMessage {...translations.emailSettings} /></h2>
         {this.renderEmailSettingsTable()}
 
         <NotificationPopup />
-      </div>
+      </React.Fragment>
     );
   }
 }

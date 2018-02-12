@@ -99,7 +99,7 @@ class Duplication extends React.Component {
     const { intl, currentCourse } = this.props;
 
     return (
-      <div>
+      <React.Fragment>
         <TextField
           disabled
           fullWidth
@@ -113,7 +113,7 @@ class Duplication extends React.Component {
           value={currentCourse.start_at}
           floatingLabelText={intl.formatMessage(translations.startAt)}
         />
-      </div>
+      </React.Fragment>
     );
   }
 
@@ -121,7 +121,7 @@ class Duplication extends React.Component {
     const { dispatch, duplicationMode } = this.props;
 
     return (
-      <div>
+      <React.Fragment>
         <h3><FormattedMessage {...translations.toCourse} /></h3>
         <RadioButtonGroup
           name="duplicationMode"
@@ -138,7 +138,7 @@ class Duplication extends React.Component {
             label={<FormattedMessage {...translations.existingCourse} />}
           />
         </RadioButtonGroup>
-      </div>
+      </React.Fragment>
     );
   }
 

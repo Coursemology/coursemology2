@@ -38,7 +38,7 @@ const defaultProps = {
 
 function Editor(props) {
   return (
-    <div>
+    <React.Fragment>
       <TextField
         fullWidth
         multiLine
@@ -67,7 +67,7 @@ function Editor(props) {
         />
       </div>
       <div style={{ clear: 'both' }} />
-    </div>
+    </React.Fragment>
   );
 }
 

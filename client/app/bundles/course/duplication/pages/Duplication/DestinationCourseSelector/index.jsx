@@ -97,28 +97,20 @@ class DestinationCourseSelector extends React.Component {
     };
 
     return (
-      <div>
-        <NewCourseForm
-          onSubmit={values => dispatch(duplicateCourse(values, failureMessage))}
-          disabled={isDuplicating}
-          initialValues={initialValues}
-        />
-      </div>
+      <NewCourseForm
+        onSubmit={values => dispatch(duplicateCourse(values, failureMessage))}
+        disabled={isDuplicating}
+        initialValues={initialValues}
+      />
     );
   }
 
   render() {
     const { duplicationMode } = this.props;
 
-    return (
-      <div>
-        {
-          duplicationMode === duplicationModes.COURSE ?
-          this.renderNewCourseForm() :
-          this.renderExistingCourseForm()
-        }
-      </div>
-    );
+    return duplicationMode === duplicationModes.COURSE ?
+      this.renderNewCourseForm() :
+      this.renderExistingCourseForm();
   }
 }
 

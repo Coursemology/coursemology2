@@ -147,16 +147,14 @@ export default class WideEditor extends Component {
 
   render() {
     return (
-      <div>
-        <table>
-          <tbody>
-            <tr>
-              <td style={{ maxWidth: 200 }}>{this.renderComments()}</td>
-              <td style={{ width: '60%' }}>{this.renderEditor()}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <table>
+        <tbody>
+          <tr>
+            <td style={{ maxWidth: 200 }}>{this.renderComments()}</td>
+            <td style={{ width: '60%' }}>{this.renderEditor()}</td>
+          </tr>
+        </tbody>
+      </table>
     );
   }
 }

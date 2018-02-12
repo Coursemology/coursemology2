@@ -119,7 +119,7 @@ class UploadedPackageTestCaseView extends React.Component {
     const evaluationTests = testCases.get('evaluation');
 
     return (
-      <div>
+      <React.Fragment>
         <Card>
           <CardHeader
             className={styles.testCaseTypeHeader}
@@ -141,7 +141,7 @@ class UploadedPackageTestCaseView extends React.Component {
           />
           { this.renderTable(evaluationTests) }
         </Card>
-      </div>
+      </React.Fragment>
     );
   }
 }

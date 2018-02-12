@@ -77,9 +77,9 @@ class LessonPlanShow extends React.Component {
 
   render() {
     return (
-      <div>
+      <React.Fragment>
         { this.props.groups.map(group => this.renderGroup(group)) }
-      </div>
+      </React.Fragment>
     );
   }
 }

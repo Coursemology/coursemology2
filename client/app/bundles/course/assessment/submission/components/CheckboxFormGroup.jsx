@@ -7,7 +7,7 @@ export default class CheckboxFormGroup extends Component {
   render() {
     const { readOnly, options, input } = this.props;
     return (
-      <div>
+      <React.Fragment>
         {options.map(option => (
           <Checkbox
             disabled={readOnly}
@@ -32,7 +32,7 @@ export default class CheckboxFormGroup extends Component {
             labelStyle={{ verticalAlign: 'middle' }}
           />
         ))}
-      </div>
+      </React.Fragment>
     );
   }
 }

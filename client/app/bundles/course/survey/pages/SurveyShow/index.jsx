@@ -37,7 +37,7 @@ class SurveyShow extends React.Component {
     const lastIndex = sections.length - 1;
 
     return (
-      <div>
+      <React.Fragment>
         <Subheader>{ intl.formatMessage(surveyTranslations.questions) }</Subheader>
         {
           sections.map((section, index) => (
@@ -49,17 +49,17 @@ class SurveyShow extends React.Component {
             />
           ))
         }
-      </div>
+      </React.Fragment>
     );
   }
 
   render() {
     const { survey, disabled, courseId } = this.props;
     return (
-      <div>
+      <React.Fragment>
         <SurveyDetails {...{ survey, courseId, disabled }} />
         { this.renderBody(survey) }
-      </div>
+      </React.Fragment>
     );
   }
 }

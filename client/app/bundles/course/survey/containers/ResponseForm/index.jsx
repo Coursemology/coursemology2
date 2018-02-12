@@ -84,7 +84,7 @@ class ResponseForm extends React.Component {
   static renderSections(props) {
     const { fields, disabled } = props;
     return (
-      <div>
+      <React.Fragment>
         {
           fields.map((member, index) => {
             const section = fields.get(index);
@@ -96,7 +96,7 @@ class ResponseForm extends React.Component {
             );
           })
         }
-      </div>
+      </React.Fragment>
     );
   }
 

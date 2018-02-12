@@ -304,7 +304,7 @@ class OnlineEditorJavaView extends React.Component {
     );
 
     return (
-      <div>
+      <React.Fragment>
         <div style={{ marginBottom: '1em' }}>
           {
             submitAsFile ?
@@ -424,7 +424,7 @@ class OnlineEditorJavaView extends React.Component {
           this.renderTestCases(intl.formatMessage(translations.evaluationTestCases),
           testCases, 'evaluation')
         }
-      </div>
+      </React.Fragment>
     );
   }
 
@@ -470,7 +470,7 @@ class OnlineEditorJavaView extends React.Component {
         }
         {
           submitAsFile ?
-            <div>
+            <React.Fragment>
               <h3>{this.props.intl.formatMessage(javaTranslations.submissionFilesHeader)}</h3>
               {
                 this.renderExistingPackageFiles(
@@ -485,7 +485,7 @@ class OnlineEditorJavaView extends React.Component {
                   intl.formatMessage(javaTranslations.addSubmissionFileButton)
                 )
               }
-            </div>
+            </React.Fragment>
             :
             this.renderEditorCard(
               intl.formatMessage(translations.submissionTitle),

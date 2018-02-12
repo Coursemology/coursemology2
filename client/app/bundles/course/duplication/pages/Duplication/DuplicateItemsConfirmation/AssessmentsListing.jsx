@@ -156,7 +156,7 @@ class AssessmentsListing extends React.Component {
     if (totalTreesCount < 1) { return null; }
 
     return (
-      <div>
+      <React.Fragment>
         <Subheader>
           <FormattedMessage {...defaultComponentTitles.course_assessments_component} />
         </Subheader>
@@ -166,7 +166,7 @@ class AssessmentsListing extends React.Component {
           ))
         }
         { (orphanTreesCount > 0) && AssessmentsListing.renderCategoryCard(null, tabTrees, assessmentTrees) }
-      </div>
+      </React.Fragment>
     );
   }
 }

@@ -56,7 +56,7 @@ export default class Answers extends Component {
   static renderMultipleChoiceOptions(props) {
     const { readOnly, question, input: { onChange, value } } = props;
     return (
-      <div>
+      <React.Fragment>
         {question.options.map(option => (
           <RadioButton
             key={option.id}
@@ -72,7 +72,7 @@ export default class Answers extends Component {
             disabled={readOnly}
           />
         ))}
-      </div>
+      </React.Fragment>
     );
   }
 
@@ -89,16 +89,14 @@ export default class Answers extends Component {
 
   static renderFileUploader(question, readOnly, answerId) {
     return (
-      <div>
-        <FileInput name={`${answerId}[files]`} disabled={readOnly} />
-      </div>
+      <FileInput name={`${answerId}[files]`} disabled={readOnly} />
     );
   }
 
   static renderTextResponseSolutions(question) {
     /* eslint-disable react/no-array-index-key */
     return (
-      <div>
+      <React.Fragment>
         <hr />
         <h4><FormattedMessage {...translations.solutions} /></h4>
         <Table selectable={false}>
@@ -119,7 +117,7 @@ export default class Answers extends Component {
             ))}
           </TableBody>
         </Table>
-      </div>
+      </React.Fragment>
     );
     /* eslint-enable react/no-array-index-key */
   }
@@ -148,21 +146,21 @@ export default class Answers extends Component {
     const editableAnswer = question.autogradable ? plaintextAnswer : richtextAnswer;
 
     return (
-      <div>
+      <React.Fragment>
         { readOnly ? readOnlyAnswer : editableAnswer }
         {question.solutions && graderView ? Answers.renderTextResponseSolutions(question) : null}
         {allowUpload ? <UploadedFileView questionId={question.id} /> : null}
         {allowUpload && !readOnly ? Answers.renderFileUploader(question, readOnly, answerId) : null}
-      </div>
+      </React.Fragment>
     );
   }
 
   static renderFileUpload(question, readOnly, answerId) {
     return (
-      <div>
+      <React.Fragment>
         <UploadedFileView questionId={question.id} />
         {!readOnly ? Answers.renderFileUploader(question, readOnly, answerId) : null}
-      </div>
+      </React.Fragment>
     );
   }
 
@@ -194,7 +192,7 @@ export default class Answers extends Component {
   static renderProgrammingFiles(props) {
     const { fields, readOnly, language } = props;
     return (
-      <div>
+      <React.Fragment>
         {fields.map((answerId, index) => {
           const file = fields.get(index);
           if (readOnly) {
@@ -202,14 +200,14 @@ export default class Answers extends Component {
           }
           return Answers.renderProgrammingEditor(file, answerId, language);
         })}
-      </div>
+      </React.Fragment>
     );
   }
 
   static renderProgramming(question, readOnly, answerId) {
     const fileSubmission = question.fileSubmission;
     return (
-      <div>
+      <React.Fragment>
         {
           fileSubmission ?
             <ProgrammingImportEditor
@@ -232,7 +230,7 @@ export default class Answers extends Component {
             />
         }
         <TestCaseView questionId={question.id} />
-      </div>
+      </React.Fragment>
     );
   }
 

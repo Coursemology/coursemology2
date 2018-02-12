@@ -91,7 +91,7 @@ class SubmissionEditForm extends Component {
         intl.formatMessage(translations.runCode);
 
       return (
-        <div>
+        <React.Fragment>
           {jobError ?
             <Paper style={{ padding: 10, backgroundColor: red100, marginBottom: 20 }}>
               {intl.formatMessage(translations.autogradeFailure)}
@@ -113,7 +113,7 @@ class SubmissionEditForm extends Component {
             disabled={isAutograding || isResetting || isSaving || (!graderView && attemptsLeft === 0)}
           /> : null}
           {isAutograding || isResetting ? <CircularProgress size={36} style={{ position: 'absolute' }} /> : null}
-        </div>
+        </React.Fragment>
       );
     }
     return null;
@@ -192,7 +192,7 @@ class SubmissionEditForm extends Component {
   renderQuestions() {
     const { attempting, questionIds, questions, topics, graderView } = this.props;
     return (
-      <div>
+      <React.Fragment>
         {questionIds.map((id, index) => {
           const question = questions[id];
           const { answerId, topicId } = question;
@@ -208,7 +208,7 @@ class SubmissionEditForm extends Component {
             </Element>
           );
         })}
-      </div>
+      </React.Fragment>
     );
   }
 

@@ -27,7 +27,7 @@ const styles = {
 const MultiSelectSkillsField = (props) => {
   const { label, field, value, options, error, isLoading } = props;
   return (
-    <div>
+    <React.Fragment>
       <Field
         name={questionNamePrefix + field}
         id={questionIdPrefix + field}
@@ -65,7 +65,7 @@ const MultiSelectSkillsField = (props) => {
       >
         { options.map(opt => <option value={opt.id} key={opt.id}>{opt.title}</option>) }
       </select>
-    </div>
+    </React.Fragment>
   );
 };
 

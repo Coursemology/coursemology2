@@ -54,7 +54,7 @@ class DuplicateItemsConfirmation extends React.Component {
     const url = `${window.location.protocol}//${targetCourse.host}${targetCourse.path}`;
 
     return (
-      <div>
+      <React.Fragment>
         <Subheader><FormattedMessage {...translations.targetCourse} /></Subheader>
         <Card>
           <CardText>
@@ -65,13 +65,13 @@ class DuplicateItemsConfirmation extends React.Component {
             </h4>
           </CardText>
         </Card>
-      </div>
+      </React.Fragment>
     );
   }
 
   renderListing() {
     return (
-      <div>
+      <React.Fragment>
         <p><FormattedMessage {...translations.confirmationQuestion} /></p>
         { this.renderTargetCourseCard() }
         <AssessmentsListing />
@@ -83,7 +83,7 @@ class DuplicateItemsConfirmation extends React.Component {
         <ReactTooltip id="itemUnpublished">
           <FormattedMessage {...translations.itemUnpublished} />
         </ReactTooltip>
-      </div>
+      </React.Fragment>
     );
   }
 

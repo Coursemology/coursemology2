@@ -318,12 +318,12 @@ class VisibleSubmissionEditIndex extends Component {
       return <LoadingIndicator />;
     }
     return (
-      <div>
+      <React.Fragment>
         {this.renderAssessment()}
         {this.renderProgress()}
         {this.renderContent()}
         <NotificationBar notification={notification} />
-      </div>
+      </React.Fragment>
     );
   }
 }

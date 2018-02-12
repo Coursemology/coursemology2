@@ -153,22 +153,20 @@ export default class ReadOnlyEditor extends Component {
     const { answerId, fileId, annotations, content } = this.props;
     if (editorMode === EDITOR_MODE_NARROW) {
       return (
-        <div>
-          <NarrowEditor
-            expanded={expanded}
-            answerId={answerId}
-            fileId={fileId}
-            annotations={annotations}
-            content={content}
-            expandLine={lineNumber => this.setExpandedLine(lineNumber)}
-            collapseLine={lineNumber => this.setCollapsedLine(lineNumber)}
-            toggleLine={lineNumber => this.toggleCommentLine(lineNumber)}
-          />
-        </div>
+        <NarrowEditor
+          expanded={expanded}
+          answerId={answerId}
+          fileId={fileId}
+          annotations={annotations}
+          content={content}
+          expandLine={lineNumber => this.setExpandedLine(lineNumber)}
+          collapseLine={lineNumber => this.setCollapsedLine(lineNumber)}
+          toggleLine={lineNumber => this.toggleCommentLine(lineNumber)}
+        />
       );
     }
     return (
-      <div>
+      <React.Fragment>
         {this.renderExpandAllCheckbox()}
         <WideEditor
           expanded={expanded}
@@ -180,7 +178,7 @@ export default class ReadOnlyEditor extends Component {
           collapseLine={lineNumber => this.setCollapsedLine(lineNumber)}
           toggleLine={lineNumber => this.toggleCommentLine(lineNumber)}
         />
-      </div>
+      </React.Fragment>
     );
   }
 }

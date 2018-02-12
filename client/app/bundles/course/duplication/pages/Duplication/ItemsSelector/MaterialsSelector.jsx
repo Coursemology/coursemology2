@@ -86,14 +86,14 @@ class MaterialsSelector extends React.Component {
     if (!folders) { return null; }
 
     return (
-      <div>
+      <React.Fragment>
         <h2><FormattedMessage {...defaultComponentTitles.course_materials_component} /></h2>
         {
           folders.length > 0 ?
           folders.map(rootFolder => this.renderFolder(rootFolder, 0)) :
           <Subheader><FormattedMessage {...translations.noItems} /></Subheader>
         }
-      </div>
+      </React.Fragment>
     );
   }
 }
