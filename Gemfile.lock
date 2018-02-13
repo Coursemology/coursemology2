@@ -23,15 +23,6 @@ GIT
       activesupport (>= 4.2, < 5.2)
 
 GIT
-  remote: git://github.com/jeremyyap/cancancan-baby_squeel.git
-  revision: e8d6c23ba93e34405652f1d85c077feca9b48b41
-  specs:
-    cancancan-baby_squeel (0.1.6)
-      activerecord (>= 4.1)
-      baby_squeel (~> 1.1.5)
-      cancancan (>= 1.10)
-
-GIT
   remote: git://github.com/jeremyyap/polyglot.git
   revision: c726d3906c0b4a150fe8f38ee581f5bf3da1587e
   specs:
@@ -133,7 +124,11 @@ GEM
     calculated_attributes (0.2.0)
       activerecord (>= 3.2.20)
     cancancan (2.1.3)
-    capybara (2.17.0)
+    cancancan-baby_squeel (0.1.0)
+      activerecord (>= 4.1)
+      baby_squeel (~> 1.1.5)
+      cancancan (>= 1.10)
+    capybara (2.18.0)
       addressable
       mini_mime (>= 0.1.3)
       nokogiri (>= 1.3.3)
@@ -156,8 +151,8 @@ GEM
       archive-zip (~> 0.10)
       nokogiri (~> 1.8)
     cocoon (1.2.11)
-    codeclimate-test-reporter (1.0.7)
-      simplecov
+    codeclimate-test-reporter (1.0.8)
+      simplecov (<= 0.13)
     codecov (0.1.10)
       json
       simplecov
@@ -219,10 +214,10 @@ GEM
     html-pipeline (2.7.1)
       activesupport (>= 2)
       nokogiri (>= 1.4)
-    html-pipeline-rouge_filter (1.0.6)
+    html-pipeline-rouge_filter (1.0.7)
       activesupport
       html-pipeline (>= 1.11)
-      rouge (>= 2.0.0, < 3)
+      rouge (>= 2.0.0, < 4)
     htmlentities (4.3.4)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
@@ -340,7 +335,7 @@ GEM
     polyamorous (1.3.3)
       activerecord (>= 3.0)
     progress (3.4.0)
-    public_suffix (3.0.1)
+    public_suffix (3.0.2)
     puma (3.11.2)
     rack (2.0.4)
     rack-proxy (0.6.3)
@@ -405,7 +400,7 @@ GEM
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
     rinku (2.0.4)
-    rouge (2.2.1)
+    rouge (3.1.1)
     rspec (3.7.0)
       rspec-core (~> 3.7.0)
       rspec-expectations (~> 3.7.0)
@@ -486,7 +481,7 @@ GEM
     simple_form (3.5.0)
       actionpack (> 4, < 5.2)
       activemodel (> 4, < 5.2)
-    simplecov (0.15.1)
+    simplecov (0.13.0)
       docile (~> 1.1.0)
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
@@ -516,7 +511,7 @@ GEM
     thread (0.2.2)
     thread_safe (0.3.6)
     tilt (2.0.8)
-    traceroute (0.6.0)
+    traceroute (0.6.1)
       rails (>= 3.0.0)
     twitter-typeahead-rails (0.11.1)
       actionpack (>= 3.1)
@@ -573,7 +568,7 @@ DEPENDENCIES
   byebug
   calculated_attributes (>= 0.1.3)
   cancancan
-  cancancan-baby_squeel!
+  cancancan-baby_squeel
   capybara
   capybara-screenshot
   capybara-selenium
