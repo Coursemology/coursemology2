@@ -18,6 +18,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.answer.programming.sizeTooBig',
     defaultMessage: 'The file is too big and cannot be displayed.',
   },
+  downloadFile: {
+    id: 'course.assessment.submission.answer.programming.downloadFile',
+    defaultMessage: 'Download File',
+  },
 });
 
 const styles = {
@@ -54,7 +58,8 @@ class ProgrammingFile extends React.Component {
         <Paper style={{ backgroundColor: yellow100, padding: 10 }}>
           <WarningIcon style={styles.warningIcon} />
           <span>
-            <FormattedMessage {...translations.sizeTooBig} />
+            <FormattedMessage {...translations.sizeTooBig} />&nbsp;
+            <a href={downloadLink}><FormattedMessage {...translations.downloadFile} /></a>
           </span>
         </Paper>
       );

@@ -135,6 +135,8 @@ module ApplicationHTMLFormattersHelper
   # @param [Coursemology::Polyglot::Language] language The language to highlight the code block
   #   with.
   def highlight_code_block(code, language = nil)
+    return if code_size_exceeds_limit?(code)
+
     code = html_escape(code) unless code.html_safe?
     code = code.gsub(/\r\n|\r/, "\n").html_safe
 
