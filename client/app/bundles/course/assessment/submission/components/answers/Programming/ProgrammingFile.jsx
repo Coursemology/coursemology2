@@ -1,0 +1,95 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+
+import { yellow100 } from 'material-ui/styles/colors';
+import Paper from 'material-ui/Paper';
+import WarningIcon from 'material-ui/svg-icons/alert/warning';
+import { defineMessages, FormattedMessage } from 'react-intl';
+import { withRouter } from 'react-router';
+
+import { getProgrammingFileURL } from 'lib/helpers/url-builders';
+
+import Editor from '../../../components/Editor';
+import ReadOnlyEditor from '../../../containers/ReadOnlyEditor';
+import { fileShape } from '../../../propTypes';
+
+const translations = defineMessages({
+  sizeTooBig: {
+    id: 'course.assessment.submission.answer.programming.sizeTooBig',
+    defaultMessage: 'The file is too big and cannot be displayed.',
+  },
+});
+
+const styles = {
+  warningIcon: {
+    display: 'inline-block',
+    verticalAlign: 'middle',
+  },
+};
+
+class ProgrammingFile extends React.Component {
+  renderProgrammingEditor() {
+    const { file, answerId, language } = this.props;
+    return (
+      <React.Fragment>
+        <h5>{file.filename}</h5>
+        <Editor
+          name={`${answerId}[content]`}
+          filename={file.filename}
+          language={language}
+        />
+      </React.Fragment>
+    );
+  }
+
+  renderReadOnlyProgrammingEditor() {
+    const { file, answerId } = this.props;
+    const { courseId, assessmentId, submissionId } = this.props.match.params;
+
+    const downloadLink = getProgrammingFileURL(courseId, assessmentId, submissionId,
+      parseInt(answerId.split('[')[0], 10), file.id);
+
+    if (file.content === null) {
+      return (
+        <Paper style={{ backgroundColor: yellow100, padding: 10 }}>
+          <WarningIcon style={styles.warningIcon} />
+          <span>
+            <FormattedMessage {...translations.sizeTooBig} />
+          </span>
+        </Paper>
+      );
+    }
+
+    const content = file.content.split('\n');
+    return (
+      <ReadOnlyEditor
+        answerId={parseInt(answerId.split('[')[0], 10)}
+        fileId={file.id}
+        content={content}
+      />
+    );
+  }
+
+  render() {
+    if (this.props.readOnly) {
+      return this.renderReadOnlyProgrammingEditor();
+    }
+    return this.renderProgrammingEditor();
+  }
+}
+
+ProgrammingFile.propTypes = {
+  file: fileShape,
+  language: PropTypes.string,
+  readOnly: PropTypes.bool,
+  answerId: PropTypes.string,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      courseId: PropTypes.string,
+      assessmentId: PropTypes.string,
+      submissionId: PropTypes.string,
+    }),
+  }),
+};
+
+export default withRouter(ProgrammingFile);
