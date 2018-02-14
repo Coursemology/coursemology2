@@ -17,6 +17,7 @@ import scribing from './scribing';
 import topics from './topics';
 import grading from './grading';
 import testCases from './testCases';
+import history from './history';
 
 export default combineReducers({
   annotations,
@@ -37,4 +38,5 @@ export default combineReducers({
   grading,
   testCases,
   form,
+  history,
 });

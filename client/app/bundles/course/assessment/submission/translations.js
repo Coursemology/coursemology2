@@ -264,6 +264,18 @@ const translations = defineMessages({
     id: 'course.assessment.submission.answerSubmitted',
     defaultMessage: 'Answer Submitted',
   },
+  noAnswerSelected: {
+    id: 'course.assessment.submission.noAnswerSelected',
+    defaultMessage: 'You have not selected any past answers.',
+  },
+  pastAnswers: {
+    id: 'course.assessment.submission.pastAnswers',
+    defaultMessage: 'Past Answers',
+  },
+  getPastAnswersFailure: {
+    id: 'course.assessment.submission.getPastAnswersFailure',
+    defaultMessage: 'Failed to load past answers',
+  },
 });
 
 export const scribingTranslations = defineMessages({

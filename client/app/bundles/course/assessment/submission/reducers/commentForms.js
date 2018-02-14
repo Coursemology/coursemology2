@@ -115,6 +115,21 @@ export default function (state = initialState, action) {
         ...state,
         isSubmitting: false,
       };
+    case actions.AUTOGRADE_SUCCESS: {
+      const { latestAnswer } = action.payload;
+      if (latestAnswer) {
+        return {
+          ...state,
+          annotations: {
+            ...state.annotations,
+            ...latestAnswer.annotations.reduce((obj, annotation) => (
+              { ...obj, [annotation.fileId]: {} }
+            ), {}),
+          },
+        };
+      }
+      return state;
+    }
     default:
       return state;
   }

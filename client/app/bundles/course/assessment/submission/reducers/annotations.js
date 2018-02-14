@@ -67,6 +67,24 @@ export default function (state = {}, action) {
         },
       };
     }
+    case actions.AUTOGRADE_SUCCESS: {
+      const { latestAnswer } = action.payload;
+      if (latestAnswer) {
+        return {
+          ...state,
+          ...latestAnswer.annotations.reduce((obj, annotation) =>
+            ({
+              ...obj,
+              [annotation.fileId]: {
+                fileId: annotation.fileId,
+                topics: arrayToObjectById(annotation.topics),
+              },
+            })
+            , {}),
+        };
+      }
+      return state;
+    }
     default:
       return state;
   }
