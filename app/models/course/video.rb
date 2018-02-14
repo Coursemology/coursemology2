@@ -5,12 +5,15 @@ class Course::Video < ApplicationRecord
   include Course::ReminderConcern
   include Course::Video::UrlConcern
 
+  belongs_to :tab, class_name: Course::Video::Tab.name, inverse_of: :videos
   has_many :submissions, class_name: Course::Video::Submission.name,
                          inverse_of: :video, dependent: :destroy
   has_many :topics, class_name: Course::Video::Topic.name,
                     dependent: :destroy, foreign_key: :video_id, inverse_of: :video
 
   scope :from_course, ->(course) { where(course_id: course) }
+
+  scope :from_tab, ->(tab) { where(tab_id: tab) }
 
   # TODO: Refactor this together with assessments.
   # @!method self.ordered_by_date_and_title
@@ -47,7 +50,7 @@ class Course::Video < ApplicationRecord
   end)
 
   scope :video_after, (lambda do |video|
-    from_course(video.course_id).
+    from_tab(video.tab_id).
       joins(:lesson_plan_item).
       where('course_lesson_plan_items.start_at > :start_at OR '\
             '(course_lesson_plan_items.start_at = :start_at AND '\

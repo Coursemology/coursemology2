@@ -159,6 +159,10 @@ Rails.application.routes.draw do
             resources :tabs, only: [:new, :create, :destroy]
           end
         end
+
+        namespace 'videos' do
+          resources :tabs, only: [:new, :create, :destroy]
+        end
       end
 
       resources :virtual_classrooms, concerns: :paginatable do

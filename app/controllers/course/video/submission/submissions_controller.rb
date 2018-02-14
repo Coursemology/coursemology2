@@ -57,4 +57,8 @@ class Course::Video::Submission::SubmissionsController < Course::Video::Submissi
     time_now = Time.zone.now
     @session = @submission.sessions.create!(session_start: time_now, session_end: time_now)
   end
+
+  def current_tab
+    @video.tab
+  end
 end
