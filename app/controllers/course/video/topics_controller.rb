@@ -37,4 +37,8 @@ class Course::Video::TopicsController < Course::Video::Controller
   def create_topic_subscription
     @topic.ensure_subscribed_by(current_user)
   end
+
+  def current_tab
+    @tab ||= @video.tab
+  end
 end
