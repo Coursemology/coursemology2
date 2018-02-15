@@ -58,11 +58,17 @@ class ApplicationController < ActionController::Base
   # Handles +IllegalStateError+s with a HTTP 422.
   def handle_illegal_state_error(exception)
     @exception = exception
-    render file: 'public/422', layout: false, status: 422
+    respond_to do |format|
+      format.html { render file: 'public/422', layout: false, status: 422 }
+      format.json { render file: 'public/422.json', status: 422 }
+    end
   end
 
   def handle_csrf_error(exception)
     @exception = exception
-    render file: 'public/403', layout: false, status: 403
+    respond_to do |format|
+      format.html { render file: 'public/403', layout: false, status: 403 }
+      format.json { render file: 'public/403.json', status: 403 }
+    end
   end
 end

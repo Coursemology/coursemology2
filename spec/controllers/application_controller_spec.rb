@@ -189,12 +189,21 @@ RSpec.describe ApplicationController, type: :controller do
 
     it 'renders the request rejected page /public/422' do
       get :index
-      expect(response).to render_template(file: '422.html')
+      expect(response).to render_template(file: Rails.root.join('public', '422.html').to_s)
     end
 
     it 'returns HTTP status 422' do
       get :index
       expect(response.status).to eq(422)
+    end
+
+    context 'when the request only accepts a json response' do
+      before { request.accept = 'application/json' }
+
+      it 'renders the correct template' do
+        get :index
+        expect(response).to render_template(file: Rails.root.join('public', '422.json').to_s)
+      end
     end
   end
 
@@ -209,12 +218,21 @@ RSpec.describe ApplicationController, type: :controller do
 
     it 'renders the request rejected page /public/403' do
       get :index
-      expect(response).to render_template(file: '403.html')
+      expect(response).to render_template(file: Rails.root.join('public', '403.html').to_s)
     end
 
     it 'returns HTTP status 403' do
       expect { get :index }.to_not raise_error ActionController::InvalidAuthenticityToken
       expect(response.status).to eq(403)
+    end
+
+    context 'when the request only accepts a json response' do
+      before { request.accept = 'application/json' }
+
+      it 'renders the correct template' do
+        get :index
+        expect(response).to render_template(file: Rails.root.join('public', '403.json').to_s)
+      end
     end
   end
 end
