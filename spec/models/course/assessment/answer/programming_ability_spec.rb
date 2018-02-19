@@ -6,6 +6,9 @@ RSpec.describe Course::Assessment::Answer::Programming do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:course_user) { create(:course_student, course: course) }
+    let(:assessment) { create(:assessment, :published, :with_programming_question, course: course) }
+    let(:submission) { create(:submission, :submitted, assessment: assessment, creator: course_user.user) }
+    let(:answer) { submission.answers.first.specific }
     let(:multiple_file_assessment) do
       create(:assessment, :published, :with_programming_file_submission_question, course: course)
     end
@@ -13,6 +16,8 @@ RSpec.describe Course::Assessment::Answer::Programming do
     context 'when the user is the creator of the submission' do
       subject { Ability.new(user, course, course_user) }
       let(:user) { course_user.user }
+
+      it { is_expected.to be_able_to(:download, answer.files.first) }
 
       context 'when the assessment is multiple_file_submission' do
         let(:multiple_file_submission) do
@@ -78,6 +83,7 @@ RSpec.describe Course::Assessment::Answer::Programming do
 
           it { is_expected.not_to be_able_to(:create_programming_files, answer) }
           it { is_expected.not_to be_able_to(:destroy_programming_file, answer) }
+          it { is_expected.not_to be_able_to(:download, answer.files.first) }
         end
 
         context 'when the user is a course staff' do
@@ -85,6 +91,7 @@ RSpec.describe Course::Assessment::Answer::Programming do
 
           it { is_expected.not_to be_able_to(:create_programming_files, answer) }
           it { is_expected.not_to be_able_to(:destroy_programming_file, answer) }
+          it { is_expected.to be_able_to(:download, answer.files.first) }
         end
       end
     end

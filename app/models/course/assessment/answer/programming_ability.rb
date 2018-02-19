@@ -4,6 +4,9 @@ module Course::Assessment::Answer::ProgrammingAbility
     if user
       allow_students_create_programming_files
       allow_students_destroy_programming_files
+      allow_students_download_programming_files
+
+      allow_staff_download_programming_files if course_user&.staff?
     end
 
     super
@@ -21,6 +24,15 @@ module Course::Assessment::Answer::ProgrammingAbility
       multiple_file_submission?(programming_answer.question) &&
         creator?(programming_answer.submission) && can_update_submission?(programming_answer.submission)
     end
+  end
+
+  def allow_students_download_programming_files
+    can :download, Course::Assessment::Answer::ProgrammingFile,
+        answer: { submission: { creator_id: user.id } }
+  end
+
+  def allow_staff_download_programming_files
+    can :download, Course::Assessment::Answer::ProgrammingFile
   end
 
   # Checks if the question that the answer belongs to is a file_submission question
