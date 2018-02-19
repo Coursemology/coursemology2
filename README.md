@@ -82,11 +82,24 @@ GoRails should help you to get started on Ruby on Rails.
 
 ### Configuration
 
+#### Multi Tenancy
+
   To make sure that multi tenancy works correctly for you, change the default host in
   `config/application.rb` before deploying:
   ~~~ ruby
   config.x.default_host = 'your_domain.com'
   ~~~
+
+#### Opening Reminder Emails
+
+  Email reminders for items which are about to start are sent via a cronjob which should be run
+  once an hour.
+  See `config/initializers/sidekiq.rb` and `config/schedule.yml` for sample configuration which
+  assumes that the [Sidekiq](https://github.com/mperham/sidekiq) and
+  [Sidekiq-Cron](https://github.com/ondrejbartas/sidekiq-cron) gems are used.
+
+  If you use a different job scheduler, edit those files so your favourite job scheduler invokes
+  the `ConsolidatedItemEmailJob` job once an hour.
 
 ## Found Boogs?
 
