@@ -6,6 +6,8 @@ en:
         header: 'Groups'
         name: 'Name'
         members: 'Members'
+        phantom: 'Phantom'
+        total: 'Total'
         managers: 'Managers'
       new:
         header: 'New Group'
