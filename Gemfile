@@ -11,9 +11,7 @@ gem 'bundler', '>= 1.10.3'
 gem 'rails', '~> 5.1.0'
 
 # Use PostgreSQL for the backend
-#   Prevent pg from upgrading to 1.0.0 as Rails is not compatible yet
-#   To update after Rails 5.1.5 is released. See rails/rails#31671.
-gem 'pg', '~> 0.18'
+gem 'pg'
 
 # Schema Plus for some higher level database abstractions
 gem 'schema_plus_columns'
