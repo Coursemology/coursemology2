@@ -1,4 +1,12 @@
 GIT
+  remote: git://github.com/Coursemology/calculated_attributes.git
+  revision: 892d8b918dafe2597a6c2d4bbd5f02a7e351eca4
+  branch: coursemology
+  specs:
+    calculated_attributes (0.2.0)
+      activerecord (>= 3.2.20)
+
+GIT
   remote: git://github.com/Coursemology/themes_on_rails.git
   revision: c96d43d479fc307b5227ad18e891fcf347d1e22b
   branch: cache-theme-templates
@@ -121,8 +129,6 @@ GEM
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11.0)
     byebug (10.0.0)
-    calculated_attributes (0.2.0)
-      activerecord (>= 3.2.20)
     cancancan (2.1.3)
     cancancan-baby_squeel (0.1.0)
       activerecord (>= 4.1)
@@ -566,7 +572,7 @@ DEPENDENCIES
   bullet (>= 4.14.9)
   bundler (>= 1.10.3)
   byebug
-  calculated_attributes (>= 0.1.3)
+  calculated_attributes!
   cancancan
   cancancan-baby_squeel
   capybara
