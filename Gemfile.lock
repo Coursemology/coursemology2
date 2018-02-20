@@ -1,10 +1,37 @@
 GIT
+  remote: git://github.com/Coursemology/active_record-acts_as.git
+  revision: 84a2b5f0329870c6c4a72b097b6d7f1344b536e4
+  branch: rails5
+  specs:
+    active_record-acts_as (2.5.0.3)
+      activerecord (>= 4.2, < 5.2)
+      activesupport (>= 4.2, < 5.2)
+
+GIT
   remote: git://github.com/Coursemology/calculated_attributes.git
   revision: 892d8b918dafe2597a6c2d4bbd5f02a7e351eca4
   branch: coursemology
   specs:
     calculated_attributes (0.2.0)
       activerecord (>= 3.2.20)
+
+GIT
+  remote: git://github.com/Coursemology/polyglot.git
+  revision: b946657046bdd8e0a51e18b82bded9b71ffde596
+  specs:
+    coursemology-polyglot (0.2.9.2)
+      activesupport (>= 4.2, < 5.2)
+
+GIT
+  remote: git://github.com/Coursemology/simple_form-bootstrap.git
+  revision: ba048ab714904d9e4fc1407bee33e7b5a1f832b9
+  specs:
+    simple_form-bootstrap (1.6.0)
+      actionpack (>= 4.1, < 6)
+      activemodel (>= 4.1, < 6)
+      bootstrap-sass (~> 3)
+      railties (>= 4.1, < 6)
+      simple_form (>= 3.1.0)
 
 GIT
   remote: git://github.com/Coursemology/themes_on_rails.git
@@ -20,33 +47,6 @@ GIT
   specs:
     bootstrap-sass-extras (0.0.7)
       rails (>= 3.1.0)
-
-GIT
-  remote: git://github.com/jeremyyap/active_record-acts_as.git
-  revision: a5628108bc74e7d344a05718fdeba90a2c4e37ef
-  branch: coursemology
-  specs:
-    active_record-acts_as (2.5.0.3)
-      activerecord (>= 4.2, < 5.2)
-      activesupport (>= 4.2, < 5.2)
-
-GIT
-  remote: git://github.com/jeremyyap/polyglot.git
-  revision: c726d3906c0b4a150fe8f38ee581f5bf3da1587e
-  specs:
-    coursemology-polyglot (0.2.9.2)
-      activesupport (>= 4.2, < 5.2)
-
-GIT
-  remote: git://github.com/jeremyyap/simple_form-bootstrap.git
-  revision: ba048ab714904d9e4fc1407bee33e7b5a1f832b9
-  specs:
-    simple_form-bootstrap (1.6.0)
-      actionpack (>= 4.1, < 6)
-      activemodel (>= 4.1, < 6)
-      bootstrap-sass (~> 3)
-      railties (>= 4.1, < 6)
-      simple_form (>= 3.1.0)
 
 GIT
   remote: git://github.com/lowjoel/activerecord-userstamp.git

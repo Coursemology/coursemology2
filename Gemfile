@@ -38,7 +38,7 @@ gem 'calculated_attributes', github: 'Coursemology/calculated_attributes', branc
 gem 'baby_squeel'
 # For multiple table inheritance
 #   TODO: Figure out breaking changes in v2 as polymorphism is not working correctly.
-gem 'active_record-acts_as', github: 'jeremyyap/active_record-acts_as', branch: 'coursemology'
+gem 'active_record-acts_as', github: 'Coursemology/active_record-acts_as', branch: 'rails5'
 # Organise ActiveRecord model into a tree structure
 gem 'edge'
 # Create pretty URLs and work with human-friendly strings
@@ -194,7 +194,7 @@ gem 'themes_on_rails', '>= 0.3.1', github: 'Coursemology/themes_on_rails',
 
 # Forms made easy for Rails
 gem 'simple_form'
-gem 'simple_form-bootstrap', github: 'jeremyyap/simple_form-bootstrap'
+gem 'simple_form-bootstrap', github: 'Coursemology/simple_form-bootstrap'
 # Dynamic nested forms
 gem 'cocoon'
 gem 'bootstrap3-datetimepicker-rails'
@@ -216,7 +216,7 @@ gem 'rubyzip', require: 'zip'
 gem 'nokogiri', '>= 1.8.1'
 
 # Polyglot support
-gem 'coursemology-polyglot', github: 'jeremyyap/polyglot'
+gem 'coursemology-polyglot', github: 'Coursemology/polyglot'
 
 # To assist with bulk inserts into database
 gem 'activerecord-import', '>= 0.2.0'
