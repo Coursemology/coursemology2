@@ -11,12 +11,12 @@ import { parseLanguages } from '../../../utils';
 import { questionShape } from '../../../propTypes';
 
 class Programming extends React.Component {
-  static renderProgrammingFiles({ fields, readOnly, language }) {
+  static renderProgrammingFiles({ fields, readOnly, answerId, language }) {
     return (
       <React.Fragment>
-        {fields.map((answerId, index) => {
+        {fields.map((fieldName, index) => {
           const file = fields.get(index);
-          return <ProgrammingFile key={file.id} {...{ file, answerId, readOnly, language }} />;
+          return <ProgrammingFile key={file.id} {...{ file, fieldName, readOnly, answerId, language }} />;
         })}
       </React.Fragment>
     );
@@ -40,7 +40,7 @@ class Programming extends React.Component {
               component={Programming.renderProgrammingFiles}
               {...{
                 readOnly,
-                question,
+                answerId,
                 language: parseLanguages(question.language),
               }}
             />

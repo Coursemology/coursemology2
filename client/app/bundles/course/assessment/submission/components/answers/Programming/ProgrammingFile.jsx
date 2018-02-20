@@ -33,12 +33,12 @@ const styles = {
 
 class ProgrammingFile extends React.Component {
   renderProgrammingEditor() {
-    const { file, answerId, language } = this.props;
+    const { file, fieldName, language } = this.props;
     return (
       <React.Fragment>
         <h5>{file.filename}</h5>
         <Editor
-          name={`${answerId}[content]`}
+          name={`${fieldName}[content]`}
           filename={file.filename}
           language={language}
         />
@@ -51,7 +51,7 @@ class ProgrammingFile extends React.Component {
     const { courseId, assessmentId, submissionId } = this.props.match.params;
 
     const downloadLink = getProgrammingFileURL(courseId, assessmentId, submissionId,
-      parseInt(answerId.split('[')[0], 10), file.id);
+      answerId, file.id);
 
     if (file.content === null) {
       return (
@@ -68,7 +68,7 @@ class ProgrammingFile extends React.Component {
     const content = file.content.split('\n');
     return (
       <ReadOnlyEditor
-        answerId={parseInt(answerId.split('[')[0], 10)}
+        answerId={answerId}
         fileId={file.id}
         content={content}
       />
@@ -87,7 +87,8 @@ ProgrammingFile.propTypes = {
   file: fileShape,
   language: PropTypes.string,
   readOnly: PropTypes.bool,
-  answerId: PropTypes.string,
+  fieldName: PropTypes.string,
+  answerId: PropTypes.number,
   match: PropTypes.shape({
     params: PropTypes.shape({
       courseId: PropTypes.string,
