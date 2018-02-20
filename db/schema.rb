@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180215092210) do
+ActiveRecord::Schema.define(version: 20180220010332) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -616,7 +616,6 @@ ActiveRecord::Schema.define(version: 20180215092210) do
     t.datetime "start_at",               :null=>false
     t.datetime "bonus_end_at"
     t.datetime "end_at"
-    t.float    "opening_reminder_token"
     t.float    "closing_reminder_token"
     t.integer  "creator_id",             :null=>false, :index=>{:name=>"fk__course_lesson_plan_items_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_lesson_plan_items_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer  "updater_id",             :null=>false, :index=>{:name=>"fk__course_lesson_plan_items_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_lesson_plan_items_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
