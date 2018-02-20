@@ -335,8 +335,8 @@ GEM
     parallel (1.12.1)
     parallel_tests (2.21.1)
       parallel
-    parser (2.5.0.0)
-      ast (~> 2.4.0)
+    parser (2.4.0.2)
+      ast (~> 2.3)
     pg (1.0.0)
     polyamorous (1.3.3)
       activerecord (>= 3.0)
@@ -614,6 +614,7 @@ DEPENDENCIES
   omniauth
   omniauth-facebook
   parallel_tests
+  parser (< 2.5)
   pg
   puma
   rails (~> 5.1.0)

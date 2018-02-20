@@ -133,6 +133,8 @@ group :development, :test do
 
   # Checks that all translations are used and defined
   gem 'i18n-tasks', require: false
+  # Lock parser version to < 2.5 as it doesn't work with abilities
+  gem 'parser', '< 2.5'
 
   # Helps to prevent database consistency mistakes
   gem 'consistency_fail', require: false
