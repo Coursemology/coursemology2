@@ -11,9 +11,7 @@ gem 'bundler', '>= 1.10.3'
 gem 'rails', '~> 5.1.0'
 
 # Use PostgreSQL for the backend
-#   Prevent pg from upgrading to 1.0.0 as Rails is not compatible yet
-#   To update after Rails 5.1.5 is released. See rails/rails#31671.
-gem 'pg', '~> 0.18'
+gem 'pg'
 
 # Schema Plus for some higher level database abstractions
 gem 'schema_plus_columns'
@@ -35,12 +33,12 @@ gem 'activerecord-userstamp', github: 'lowjoel/activerecord-userstamp'
 # Allow actions to be deferred until after a record is committed.
 gem 'after_commit_action'
 # Allow declaring the calculated attributes of a record
-gem 'calculated_attributes', '>= 0.1.3'
+gem 'calculated_attributes', github: 'Coursemology/calculated_attributes', branch: 'coursemology'
 # Baby Squeel as an SQL-like DSL
 gem 'baby_squeel'
 # For multiple table inheritance
 #   TODO: Figure out breaking changes in v2 as polymorphism is not working correctly.
-gem 'active_record-acts_as', github: 'jeremyyap/active_record-acts_as', branch: 'coursemology'
+gem 'active_record-acts_as', github: 'Coursemology/active_record-acts_as', branch: 'rails5'
 # Organise ActiveRecord model into a tree structure
 gem 'edge'
 # Create pretty URLs and work with human-friendly strings
@@ -135,6 +133,8 @@ group :development, :test do
 
   # Checks that all translations are used and defined
   gem 'i18n-tasks', require: false
+  # Lock parser version to < 2.5 as it doesn't work with abilities
+  gem 'parser', '< 2.5'
 
   # Helps to prevent database consistency mistakes
   gem 'consistency_fail', require: false
@@ -194,7 +194,7 @@ gem 'themes_on_rails', '>= 0.3.1', github: 'Coursemology/themes_on_rails',
 
 # Forms made easy for Rails
 gem 'simple_form'
-gem 'simple_form-bootstrap', github: 'jeremyyap/simple_form-bootstrap'
+gem 'simple_form-bootstrap', github: 'Coursemology/simple_form-bootstrap'
 # Dynamic nested forms
 gem 'cocoon'
 gem 'bootstrap3-datetimepicker-rails'
@@ -216,7 +216,7 @@ gem 'rubyzip', require: 'zip'
 gem 'nokogiri', '>= 1.8.1'
 
 # Polyglot support
-gem 'coursemology-polyglot', github: 'jeremyyap/polyglot'
+gem 'coursemology-polyglot', github: 'Coursemology/polyglot'
 
 # To assist with bulk inserts into database
 gem 'activerecord-import', '>= 0.2.0'

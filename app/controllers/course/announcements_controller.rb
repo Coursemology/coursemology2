@@ -64,6 +64,6 @@ class Course::AnnouncementsController < Course::ComponentController
 
   def mark_announcements_as_read
     unread = Course::Announcement.where(id: @announcements.map(&:id)).unread_by(current_user)
-    Course::Announcement.mark_array_as_read(unread, current_user)
+    Course::Announcement.mark_as_read!(unread, for: current_user)
   end
 end

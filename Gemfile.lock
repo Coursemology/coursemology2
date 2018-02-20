@@ -1,4 +1,39 @@
 GIT
+  remote: git://github.com/Coursemology/active_record-acts_as.git
+  revision: 84a2b5f0329870c6c4a72b097b6d7f1344b536e4
+  branch: rails5
+  specs:
+    active_record-acts_as (2.5.0.3)
+      activerecord (>= 4.2, < 5.2)
+      activesupport (>= 4.2, < 5.2)
+
+GIT
+  remote: git://github.com/Coursemology/calculated_attributes.git
+  revision: 892d8b918dafe2597a6c2d4bbd5f02a7e351eca4
+  branch: coursemology
+  specs:
+    calculated_attributes (0.2.0)
+      activerecord (>= 3.2.20)
+
+GIT
+  remote: git://github.com/Coursemology/polyglot.git
+  revision: b946657046bdd8e0a51e18b82bded9b71ffde596
+  specs:
+    coursemology-polyglot (0.2.9.2)
+      activesupport (>= 4.2, < 5.2)
+
+GIT
+  remote: git://github.com/Coursemology/simple_form-bootstrap.git
+  revision: ba048ab714904d9e4fc1407bee33e7b5a1f832b9
+  specs:
+    simple_form-bootstrap (1.6.0)
+      actionpack (>= 4.1, < 6)
+      activemodel (>= 4.1, < 6)
+      bootstrap-sass (~> 3)
+      railties (>= 4.1, < 6)
+      simple_form (>= 3.1.0)
+
+GIT
   remote: git://github.com/Coursemology/themes_on_rails.git
   revision: c96d43d479fc307b5227ad18e891fcf347d1e22b
   branch: cache-theme-templates
@@ -14,33 +49,6 @@ GIT
       rails (>= 3.1.0)
 
 GIT
-  remote: git://github.com/jeremyyap/active_record-acts_as.git
-  revision: a5628108bc74e7d344a05718fdeba90a2c4e37ef
-  branch: coursemology
-  specs:
-    active_record-acts_as (2.5.0.3)
-      activerecord (>= 4.2, < 5.2)
-      activesupport (>= 4.2, < 5.2)
-
-GIT
-  remote: git://github.com/jeremyyap/polyglot.git
-  revision: c726d3906c0b4a150fe8f38ee581f5bf3da1587e
-  specs:
-    coursemology-polyglot (0.2.9.2)
-      activesupport (>= 4.2, < 5.2)
-
-GIT
-  remote: git://github.com/jeremyyap/simple_form-bootstrap.git
-  revision: ba048ab714904d9e4fc1407bee33e7b5a1f832b9
-  specs:
-    simple_form-bootstrap (1.6.0)
-      actionpack (>= 4.1, < 6)
-      activemodel (>= 4.1, < 6)
-      bootstrap-sass (~> 3)
-      railties (>= 4.1, < 6)
-      simple_form (>= 3.1.0)
-
-GIT
   remote: git://github.com/lowjoel/activerecord-userstamp.git
   revision: 752f1e30ed8a2f0b09408bcdfa2c2dad1e5523c4
   specs:
@@ -50,41 +58,41 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    actioncable (5.1.4)
-      actionpack (= 5.1.4)
+    actioncable (5.1.5)
+      actionpack (= 5.1.5)
       nio4r (~> 2.0)
       websocket-driver (~> 0.6.1)
-    actionmailer (5.1.4)
-      actionpack (= 5.1.4)
-      actionview (= 5.1.4)
-      activejob (= 5.1.4)
+    actionmailer (5.1.5)
+      actionpack (= 5.1.5)
+      actionview (= 5.1.5)
+      activejob (= 5.1.5)
       mail (~> 2.5, >= 2.5.4)
       rails-dom-testing (~> 2.0)
-    actionpack (5.1.4)
-      actionview (= 5.1.4)
-      activesupport (= 5.1.4)
+    actionpack (5.1.5)
+      actionview (= 5.1.5)
+      activesupport (= 5.1.5)
       rack (~> 2.0)
       rack-test (>= 0.6.3)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
-    actionview (5.1.4)
-      activesupport (= 5.1.4)
+    actionview (5.1.5)
+      activesupport (= 5.1.5)
       builder (~> 3.1)
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
-    activejob (5.1.4)
-      activesupport (= 5.1.4)
+    activejob (5.1.5)
+      activesupport (= 5.1.5)
       globalid (>= 0.3.6)
-    activemodel (5.1.4)
-      activesupport (= 5.1.4)
-    activerecord (5.1.4)
-      activemodel (= 5.1.4)
-      activesupport (= 5.1.4)
+    activemodel (5.1.5)
+      activesupport (= 5.1.5)
+    activerecord (5.1.5)
+      activemodel (= 5.1.5)
+      activesupport (= 5.1.5)
       arel (~> 8.0)
     activerecord-import (0.22.0)
       activerecord (>= 3.2)
-    activesupport (5.1.4)
+    activesupport (5.1.5)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (~> 0.7)
       minitest (~> 5.1)
@@ -117,12 +125,10 @@ GEM
       momentjs-rails (>= 2.8.1)
     bootstrap_tokenfield_rails (0.12.1)
     builder (3.2.3)
-    bullet (5.7.2)
+    bullet (5.7.3)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11.0)
     byebug (10.0.0)
-    calculated_attributes (0.2.0)
-      activerecord (>= 3.2.20)
     cancancan (2.1.3)
     cancancan-baby_squeel (0.1.0)
       activerecord (>= 4.1)
@@ -151,8 +157,8 @@ GEM
       archive-zip (~> 0.10)
       nokogiri (~> 1.8)
     cocoon (1.2.11)
-    codeclimate-test-reporter (1.0.8)
-      simplecov (<= 0.13)
+    codeclimate-test-reporter (1.0.7)
+      simplecov
     codecov (0.1.10)
       json
       simplecov
@@ -222,7 +228,7 @@ GEM
     http-cookie (1.0.3)
       domain_name (~> 0.5)
     http_accept_language (2.1.1)
-    i18n (0.9.4)
+    i18n (0.9.5)
       concurrent-ruby (~> 1.0)
     i18n-js (3.0.4)
       i18n (~> 0.6, >= 0.6.6)
@@ -331,7 +337,7 @@ GEM
       parallel
     parser (2.4.0.2)
       ast (~> 2.3)
-    pg (0.21.0)
+    pg (1.0.0)
     polyamorous (1.3.3)
       activerecord (>= 3.0)
     progress (3.4.0)
@@ -342,17 +348,17 @@ GEM
       rack
     rack-test (0.8.2)
       rack (>= 1.0, < 3)
-    rails (5.1.4)
-      actioncable (= 5.1.4)
-      actionmailer (= 5.1.4)
-      actionpack (= 5.1.4)
-      actionview (= 5.1.4)
-      activejob (= 5.1.4)
-      activemodel (= 5.1.4)
-      activerecord (= 5.1.4)
-      activesupport (= 5.1.4)
+    rails (5.1.5)
+      actioncable (= 5.1.5)
+      actionmailer (= 5.1.5)
+      actionpack (= 5.1.5)
+      actionview (= 5.1.5)
+      activejob (= 5.1.5)
+      activemodel (= 5.1.5)
+      activerecord (= 5.1.5)
+      activesupport (= 5.1.5)
       bundler (>= 1.3.0)
-      railties (= 5.1.4)
+      railties (= 5.1.5)
       sprockets-rails (>= 2.0.0)
     rails-controller-testing (1.0.2)
       actionpack (~> 5.x, >= 5.0.1)
@@ -374,9 +380,9 @@ GEM
       rubyzip (~> 1)
     rails_utils (4.0.0)
       rails (>= 3.2)
-    railties (5.1.4)
-      actionpack (= 5.1.4)
-      activesupport (= 5.1.4)
+    railties (5.1.5)
+      actionpack (= 5.1.5)
+      activesupport (= 5.1.5)
       method_source
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
@@ -478,10 +484,10 @@ GEM
     should_not (1.1.0)
     shoulda-matchers (3.1.2)
       activesupport (>= 4.0.0)
-    simple_form (3.5.0)
+    simple_form (3.5.1)
       actionpack (> 4, < 5.2)
       activemodel (> 4, < 5.2)
-    simplecov (0.13.0)
+    simplecov (0.15.1)
       docile (~> 1.1.0)
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
@@ -526,7 +532,7 @@ GEM
     unf_ext (0.0.7.5)
     unicode-display_width (1.3.0)
     uniform_notifier (1.11.0)
-    unread (0.9.1)
+    unread (0.10.0)
       activerecord (>= 3)
     url (0.3.2)
     validates_hostname (1.0.8)
@@ -566,7 +572,7 @@ DEPENDENCIES
   bullet (>= 4.14.9)
   bundler (>= 1.10.3)
   byebug
-  calculated_attributes (>= 0.1.3)
+  calculated_attributes!
   cancancan
   cancancan-baby_squeel
   capybara
@@ -608,7 +614,8 @@ DEPENDENCIES
   omniauth
   omniauth-facebook
   parallel_tests
-  pg (~> 0.18)
+  parser (< 2.5)
+  pg
   puma
   rails (~> 5.1.0)
   rails-controller-testing
