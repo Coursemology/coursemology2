@@ -12,7 +12,7 @@
     h2 = t('.instructors')
     #users-container
       = render partial: 'layouts/user',
-               collection: current_course.managers.includes(:user).map(&:user)
+               collection: current_course.managers.without_phantom_users.includes(:user).map(&:user)
 
   - if current_course.user?(current_user) || can?(:manage, current_course)
     - if @currently_active_announcements && !@currently_active_announcements.empty?
