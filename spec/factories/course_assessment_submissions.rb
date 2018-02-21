@@ -59,6 +59,19 @@ FactoryBot.define do
       end
     end
 
+    trait :attempting_with_past_answers do
+      attempting
+      after(:build) do |submission|
+        answers = submission.assessment.questions.attempt(submission)
+        answers.map do |answer|
+          answer.current_answer = false
+          answer.save!
+        end
+
+        submission.answers << answers
+      end
+    end
+
     # Ensure that creator of submission is the same as creator of experience_points_record
     after(:build) do |submission, evaluator|
       user = evaluator.creator ? evaluator.creator : submission.creator

@@ -1,8 +1,28 @@
 submission = answer.submission
 assessment = submission.assessment
 question = answer.question.specific
-last_attempt = last_attempt(answer)
-auto_grading = last_attempt&.auto_grading&.specific
+# If a non current_answer is being loaded, use it instead of loading the last_attempt.
+is_current_answer = answer.current_answer?
+latest_answer = last_attempt(answer)
+attempt = is_current_answer ? latest_answer : answer
+auto_grading = attempt&.auto_grading&.specific
+
+# Required in response of reload_answer and submit_answer to update past answers with the latest_attempt
+# Removing this check will cause it to render the latest_answer recursively
+if is_current_answer && !latest_answer.current_answer?
+  json.latestAnswer do
+    json.partial! latest_answer, answer: latest_answer
+    json.annotations latest_answer.specific.files do |file|
+      json.fileId file.id
+      json.topics file.annotations.reject { |a| a.discussion_topic.post_ids.empty? } do |annotation|
+        topic = annotation.discussion_topic
+        json.id topic.id
+        json.postIds topic.post_ids
+        json.line annotation.line
+      end
+    end
+  end
+end
 
 json.fields do
   json.questionId answer.question_id
@@ -13,14 +33,14 @@ json.fields do
   end
 end
 
-if last_attempt.submitted? && job = last_attempt&.auto_grading&.job
+if attempt.submitted? && job = attempt&.auto_grading&.job
   json.autograding do
     json.path job_path(job) if job.submitted?
     json.status job.status
   end
 end
 
-if last_attempt.submitted? && !last_attempt.auto_grading
+if attempt.submitted? && !attempt.auto_grading
   json.autograding do
     json.status :submitted
   end
@@ -64,7 +84,7 @@ end
 failed_test_cases_by_type = get_failed_test_cases_by_type(test_cases_and_results)
 
 json.explanation do
-  if last_attempt
+  if attempt
     explanations = []
 
     if failed_test_cases_by_type['public_test']
@@ -80,7 +100,7 @@ json.explanation do
       json.failureType 'private_test'
     end
 
-    json.correct last_attempt&.auto_grading && last_attempt.correct
+    json.correct attempt&.auto_grading && attempt.correct
     json.explanations explanations
   end
 end

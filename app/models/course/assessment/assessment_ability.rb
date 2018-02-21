@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 module Course::Assessment::AssessmentAbility
+  include Course::Assessment::SubmissionQuestionAbility
   include Course::Assessment::Answer::ProgrammingAbility
 
   def define_permissions

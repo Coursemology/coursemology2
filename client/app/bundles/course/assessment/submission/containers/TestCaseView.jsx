@@ -7,7 +7,7 @@ import ReactTooltip from 'react-tooltip';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import WrongIcon from 'material-ui/svg-icons/navigation/close';
 import CorrectIcon from 'material-ui/svg-icons/action/done';
-import { red50, yellow100, green50 } from 'material-ui/styles/colors';
+import { red50, yellow100, green50, red100, green100 } from 'material-ui/styles/colors';
 import { Table, TableHeader, TableHeaderColumn, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
 import Paper from 'material-ui/Paper';
 
@@ -148,11 +148,22 @@ class VisibleTestCaseView extends Component {
   }
 
   renderTestCases(testCases, title) {
-    const { graderView } = this.props;
+    const { graderView, collapsible } = this.props;
     const { showPublicTestCasesOutput } = this.props;
 
     if (!testCases || testCases.length === 0) {
       return null;
+    }
+
+    const passedTestCases = testCases.reduce((val, testCase) => {
+      if (testCase.passed !== undefined) {
+        return val && testCase.passed;
+      }
+      return val;
+    }, true);
+    let headerStyle = {};
+    if (collapsible) {
+      headerStyle = { backgroundColor: passedTestCases ? green100 : red100 };
     }
 
     const tableHeaderColumnFor = field => (
@@ -163,8 +174,8 @@ class VisibleTestCaseView extends Component {
 
     return (
       <Card>
-        <CardHeader title={title} />
-        <CardText>
+        <CardHeader title={title} actAsExpander={collapsible} showExpandableButton={collapsible} style={headerStyle} />
+        <CardText expandable={collapsible}>
           <Table selectable={false} style={{}}>
             <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
               <TableRow>
@@ -214,7 +225,10 @@ class VisibleTestCaseView extends Component {
   }
 
   render() {
-    const { submissionState, showPrivate, showEvaluation, graderView, isAutograding, testCases } = this.props;
+    const {
+      submissionState, showPrivate, showEvaluation, graderView,
+      isAutograding, testCases, collapsible,
+    } = this.props;
     if (!testCases) {
       return null;
     }
@@ -242,8 +256,8 @@ class VisibleTestCaseView extends Component {
           testCases.evaluation_test,
           VisibleTestCaseView.renderTitle('evaluationTestCases', graderView)
         )}
-        {graderView ? VisibleTestCaseView.renderOutputStream('standardOutput', testCases.stdout) : null}
-        {graderView ? VisibleTestCaseView.renderOutputStream('standardError', testCases.stderr) : null}
+        {graderView && !collapsible ? VisibleTestCaseView.renderOutputStream('standardOutput', testCases.stdout) : null}
+        {graderView && !collapsible ? VisibleTestCaseView.renderOutputStream('standardError', testCases.stderr) : null}
       </div>
     );
   }
@@ -258,6 +272,7 @@ VisibleTestCaseView.propTypes = {
   showPrivate: PropTypes.bool,
   showEvaluation: PropTypes.bool,
   isAutograding: PropTypes.bool,
+  collapsible: PropTypes.bool,
   testCases: PropTypes.shape({
     evaluation_test: PropTypes.arrayOf(testCaseShape),
     private_test: PropTypes.arrayOf(testCaseShape),
@@ -268,15 +283,26 @@ VisibleTestCaseView.propTypes = {
 };
 
 function mapStateToProps(state, ownProps) {
-  const { questionId } = ownProps;
+  const { questionId, answerId, viewHistory } = ownProps;
+  let testCases;
+  let isAutograding;
+  if (viewHistory) {
+    testCases = state.history.testCases[answerId];
+    isAutograding = false;
+  } else {
+    testCases = state.testCases[questionId];
+    isAutograding = state.questionsFlags[questionId].isAutograding;
+  }
+
   return {
     submissionState: state.submission.workflowState,
     graderView: state.submission.graderView,
     showPublicTestCasesOutput: state.submission.showPublicTestCasesOutput,
     showPrivate: state.assessment.showPrivate,
     showEvaluation: state.assessment.showEvaluation,
-    isAutograding: state.questionsFlags[questionId].isAutograding,
-    testCases: state.testCases[questionId],
+    collapsible: viewHistory,
+    isAutograding,
+    testCases,
   };
 }
 

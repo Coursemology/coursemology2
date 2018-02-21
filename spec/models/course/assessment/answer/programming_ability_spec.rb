@@ -53,6 +53,17 @@ RSpec.describe Course::Assessment::Answer::Programming do
           it { is_expected.not_to be_able_to(:create_programming_files, answer) }
           it { is_expected.not_to be_able_to(:destroy_programming_file, answer) }
         end
+
+        context 'when the answer is not a current_answer' do
+          let(:multiple_file_submission) do
+            create(:submission, :attempting_with_past_answers,
+                   assessment: multiple_file_assessment, creator: course_user.user)
+          end
+          let(:non_current_answer) { multiple_file_submission.answers.non_current_answers.first.specific }
+
+          it { is_expected.not_to be_able_to(:create_programming_files, non_current_answer) }
+          it { is_expected.not_to be_able_to(:destroy_programming_file, non_current_answer) }
+        end
       end
 
       context 'when the assessment is not multple_file_submission' do

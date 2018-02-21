@@ -13,7 +13,7 @@ import { workflowStates } from '../constants';
 const translations = defineMessages({
   uploadedFiles: {
     id: 'course.assessment.submission.ImportedFileView.uploadedFiles',
-    defaultMessage: 'Uploaded Files: (Tap through to edit)',
+    defaultMessage: 'Uploaded Files:',
   },
   deleteConfirmation: {
     id: 'course.assessment.submission.ImportedFileView.deleteConfirmation',
@@ -112,11 +112,11 @@ VisibleImportedFileView.propTypes = {
 };
 
 function mapStateToProps(state, ownProps) {
-  const { displayFileIndex, handleFileTabbing, handleDeleteFile, files } = ownProps;
+  const { displayFileIndex, handleFileTabbing, handleDeleteFile, files, viewHistory } = ownProps;
   const { submission } = state;
   const canDestroyFiles =
     submission.workflowState === workflowStates.Attempting &&
-    submission.isCreator;
+    submission.isCreator && !viewHistory;
 
   return {
     canDestroyFiles,

@@ -1,10 +1,6 @@
 # frozen_string_literal: true
-class Course::Assessment::SubmissionQuestion::CommentsController < Course::Assessment::Controller
-  helper Course::Assessment::Submission::SubmissionsHelper.name.sub(/Helper$/, '')
+class Course::Assessment::SubmissionQuestion::CommentsController < Course::Assessment::SubmissionQuestion::Controller
 
-  # PostsConcern MUST be included after loading subimssion_question
-  load_and_authorize_resource :submission_question,
-                              class: Course::Assessment::SubmissionQuestion.name
   include Course::Discussion::PostsConcern
 
   def create

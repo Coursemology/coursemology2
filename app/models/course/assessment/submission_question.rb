@@ -19,8 +19,23 @@ class Course::Assessment::SubmissionQuestion < ApplicationRecord
       joining { discussion_topic }.selecting { discussion_topic.id }
   end)
 
+  # Gets the SubmissionQuestion of a specific submission
+  scope :from_submission, (lambda do |submission_id|
+    find_by(submission_id: submission_id)
+  end)
+
   def notify(post)
     Course::Assessment::SubmissionQuestion::CommentNotifier.post_replied(post.creator, post)
+  end
+
+  def answers
+    Course::Assessment::Answer.where('submission_id = ? AND question_id = ?',
+                                     self.submission_id, self.question_id)
+  end
+
+  # Loads the past answers of a specific question
+  def past_answers(answers_to_load)
+    answers.unscope(:order).order(created_at: :desc).non_current_answers.first(answers_to_load)
   end
 
   private

@@ -12,6 +12,18 @@ export default class SubmissionQuestionsAPI extends BaseAssessmentAPI {
     return this.getClient().post(`${this._getUrlPrefix()}/${submissionQuestionId}/comments`, params);
   }
 
+  /**
+  * Gets the past answers from a SubmissionQuestion
+  * Can include answers_to_load in params to indicate how many to pull (default 10)
+  *
+  * @param {number} submissionQuestionId
+  * @return {Promise}
+  */
+  getPastAnswers(submissionQuestionId, answersToLoad = 10) {
+    const params = { answers_to_load: answersToLoad };
+    return this.getClient().get(`${this._getUrlPrefix()}/${submissionQuestionId}/past_answers`, { params });
+  }
+
   _getUrlPrefix() {
     return `/courses/${this.getCourseId()}/assessments/${this.getAssessmentId()}/submission_questions`;
   }

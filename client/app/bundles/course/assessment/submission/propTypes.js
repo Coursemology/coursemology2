@@ -24,6 +24,15 @@ export const questionShape = PropTypes.shape({
   answerId: PropTypes.number,
   topicId: PropTypes.number.isRequired,
   autogradable: PropTypes.bool,
+  viewHistory: PropTypes.bool,
+  canViewHistory: PropTypes.bool,
+});
+
+export const historyQuestionShape = PropTypes.shape({
+  loaded: PropTypes.bool,
+  isLoading: PropTypes.bool,
+  answerIds: PropTypes.arrayOf(PropTypes.number),
+  selected: PropTypes.arrayOf(PropTypes.number),
 });
 
 export const fileShape = PropTypes.shape({
@@ -68,6 +77,7 @@ export const answerShape = PropTypes.shape({
   file: PropTypes.object,
   files: PropTypes.arrayOf(fileShape),
   option_ids: PropTypes.arrayOf(PropTypes.number),
+  createdAt: PropTypes.string,
 });
 
 export const explanationShape = PropTypes.shape({
