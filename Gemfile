@@ -33,7 +33,7 @@ gem 'activerecord-userstamp', github: 'lowjoel/activerecord-userstamp'
 # Allow actions to be deferred until after a record is committed.
 gem 'after_commit_action'
 # Allow declaring the calculated attributes of a record
-gem 'calculated_attributes', github: 'Coursemology/calculated_attributes', branch: 'coursemology'
+gem 'calculated_attributes'
 # Baby Squeel as an SQL-like DSL
 gem 'baby_squeel'
 # For multiple table inheritance

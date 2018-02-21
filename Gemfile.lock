@@ -8,14 +8,6 @@ GIT
       activesupport (>= 4.2, < 5.2)
 
 GIT
-  remote: git://github.com/Coursemology/calculated_attributes.git
-  revision: 892d8b918dafe2597a6c2d4bbd5f02a7e351eca4
-  branch: coursemology
-  specs:
-    calculated_attributes (0.2.0)
-      activerecord (>= 3.2.20)
-
-GIT
   remote: git://github.com/Coursemology/polyglot.git
   revision: b946657046bdd8e0a51e18b82bded9b71ffde596
   specs:
@@ -129,6 +121,8 @@ GEM
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11.0)
     byebug (10.0.0)
+    calculated_attributes (0.3.0)
+      activerecord (>= 3.2.20)
     cancancan (2.1.3)
     cancancan-baby_squeel (0.1.0)
       activerecord (>= 4.1)
@@ -572,7 +566,7 @@ DEPENDENCIES
   bullet (>= 4.14.9)
   bundler (>= 1.10.3)
   byebug
-  calculated_attributes!
+  calculated_attributes
   cancancan
   cancancan-baby_squeel
   capybara
