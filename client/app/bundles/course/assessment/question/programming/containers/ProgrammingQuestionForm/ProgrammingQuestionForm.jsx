@@ -13,7 +13,7 @@ import Snackbar from 'material-ui/Snackbar';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import { red500 } from 'material-ui/styles/colors';
 import MaterialSummernote from 'lib/components/MaterialSummernote';
-import ChipInput from 'lib/components/ChipInput';
+import ChipInput from 'material-ui-chip-input';
 
 import BuildLog from './../../components/BuildLog';
 import OnlineEditor, { validation as editorValidation } from './../OnlineEditor/OnlineEditor';
@@ -123,7 +123,7 @@ class ProgrammingQuestionForm extends React.Component {
 
   onSelectSkills = (id) => {
     const currentSkills = this.props.data.getIn(['question', 'skill_ids']);
-    const currentSkillsWithoutId = currentSkills.filterNot(v => v.get('id') === id);
+    const currentSkillsWithoutId = currentSkills.filter(v => v.get('id') !== id);
 
     if (currentSkills.size === currentSkillsWithoutId.size) {
       // id is for a new skill to be added

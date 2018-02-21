@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import ChipInput from 'lib/components/ChipInput';
+import ChipInput from 'material-ui-chip-input';
 import { questionNamePrefix, questionIdPrefix } from '../constants';
 import { skillShape } from '../propTypes';
 
@@ -26,6 +26,7 @@ const styles = {
 
 const MultiSelectSkillsField = (props) => {
   const { label, field, value, options, error, isLoading } = props;
+
   return (
     <React.Fragment>
       <Field

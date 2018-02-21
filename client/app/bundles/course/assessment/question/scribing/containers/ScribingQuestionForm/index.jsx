@@ -206,7 +206,6 @@ class ScribingQuestionForm extends React.Component {
                 value={skillsValues}
                 options={skillsOptions}
                 isLoading={this.props.data.isLoading}
-                onSelectSkills={this.onSelectSkills}
               />
             </div>
             <div className={styles.maximumGradeInput}>
