@@ -53,7 +53,10 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
   end
 
   def destroy
-    if @post.destroy
+    if @topic.posts.count == 1 && @topic.destroy
+      redirect_to course_forum_path(current_course, @forum),
+                  success: t('course.forum.topics.destroy.success', title: @topic.title)
+    elsif @post.destroy
       @topic.update_column(:latest_post_at, @topic.posts.last&.created_at || @topic.created_at)
       redirect_to course_forum_topic_path(current_course, @forum, @topic),
                   success: t('course.discussion.posts.destroy.success')
