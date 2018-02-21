@@ -2,251 +2,40 @@ import 'brace/mode/python';
 import 'brace/theme/github';
 
 import React, { Component } from 'react';
-import { Field, FieldArray } from 'redux-form';
-import { defineMessages, FormattedMessage } from 'react-intl';
-import { RadioButton } from 'material-ui/RadioButton';
-import { Table, TableBody, TableHeader, TableHeaderColumn,
-  TableRow, TableRowColumn } from 'material-ui/Table';
-import { green50 } from 'material-ui/styles/colors';
-
-// eslint-disable-next-line import/extensions, import/no-extraneous-dependencies, import/no-unresolved
-import RichTextField from 'lib/components/redux-form/RichTextField';
-
-import CheckboxFormGroup from '../components/CheckboxFormGroup';
-import FileInput from '../components/FileInput';
-import Editor from '../components/Editor';
-import TestCaseView from '../containers/TestCaseView';
-import ReadOnlyEditor from '../containers/ReadOnlyEditor';
-import UploadedFileView from '../containers/UploadedFileView';
 import ScribingView from '../containers/ScribingView';
-import ProgrammingImportEditor from '../containers/ProgrammingImportEditor';
-import { parseLanguages } from '../utils';
 import VoiceResponseAnswer from '../containers/VoiceResponseAnswer';
-
-const translations = defineMessages({
-  solutions: {
-    id: 'course.assessment.submission.answer.solutions',
-    defaultMessage: 'Solutions',
-  },
-  type: {
-    id: 'course.assessment.submission.answer.type',
-    defaultMessage: 'Type',
-  },
-  solution: {
-    id: 'course.assessment.submission.answer.solution',
-    defaultMessage: 'Solution',
-  },
-  grade: {
-    id: 'course.assessment.submission.answer.grade',
-    defaultMessage: 'Grade',
-  },
-});
+import MultipleChoiceAnswer from './answers/MultipleChoice';
+import MultipleResponseAnswer from './answers/MultipleResponse';
+import TextResponseAnswer from './answers/TextResponse';
+import FileUploadAnswer from './answers/FileUpload';
+import ProgrammingAnswer from './answers/Programming';
 
 export default class Answers extends Component {
   static renderMultipleChoice(question, readOnly, answerId) {
-    return (
-      <Field
-        name={`${answerId}[option_ids][0]`}
-        component={Answers.renderMultipleChoiceOptions}
-        {...{ question, answerId, readOnly }}
-      />
-    );
-  }
-
-  static renderMultipleChoiceOptions(props) {
-    const { readOnly, question, input: { onChange, value } } = props;
-    return (
-      <React.Fragment>
-        {question.options.map(option => (
-          <RadioButton
-            key={option.id}
-            value={option.id}
-            onCheck={(event, buttonValue) => onChange(buttonValue)}
-            checked={option.id === value}
-            label={(
-              <div
-                style={option.correct && readOnly ? { backgroundColor: green50 } : null}
-                dangerouslySetInnerHTML={{ __html: option.option.trim() }}
-              />
-            )}
-            disabled={readOnly}
-          />
-        ))}
-      </React.Fragment>
-    );
+    return <MultipleChoiceAnswer {...{ question, readOnly, answerId }} />;
   }
 
   static renderMultipleResponse(question, readOnly, answerId) {
-    return (
-      <Field
-        name={`${answerId}[option_ids]`}
-        component={CheckboxFormGroup}
-        options={question.options}
-        {...{ readOnly }}
-      />
-    );
-  }
-
-  static renderFileUploader(question, readOnly, answerId) {
-    return (
-      <FileInput name={`${answerId}[files]`} disabled={readOnly} />
-    );
-  }
-
-  static renderTextResponseSolutions(question) {
-    /* eslint-disable react/no-array-index-key */
-    return (
-      <React.Fragment>
-        <hr />
-        <h4><FormattedMessage {...translations.solutions} /></h4>
-        <Table selectable={false}>
-          <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
-            <TableRow>
-              <TableHeaderColumn><FormattedMessage {...translations.type} /></TableHeaderColumn>
-              <TableHeaderColumn><FormattedMessage {...translations.solution} /></TableHeaderColumn>
-              <TableHeaderColumn><FormattedMessage {...translations.grade} /></TableHeaderColumn>
-            </TableRow>
-          </TableHeader>
-          <TableBody displayRowCheckbox={false}>
-            {question.solutions.map((solution, index) => (
-              <TableRow key={index}>
-                <TableRowColumn>{solution.solutionType}</TableRowColumn>
-                <TableRowColumn style={{ whiteSpace: 'pre-wrap' }}>{solution.solution}</TableRowColumn>
-                <TableRowColumn>{solution.grade}</TableRowColumn>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </React.Fragment>
-    );
-    /* eslint-enable react/no-array-index-key */
+    return <MultipleResponseAnswer {...{ question, readOnly, answerId }} />;
   }
 
   static renderTextResponse(question, readOnly, answerId, graderView) {
-    const allowUpload = question.allowAttachment;
-
-    const readOnlyAnswer = (<Field
-      name={`${answerId}[answer_text]`}
-      component={props => (<div dangerouslySetInnerHTML={{ __html: props.input.value }} />)}
-    />);
-
-    const richtextAnswer = (<Field
-      name={`${answerId}[answer_text]`}
-      component={RichTextField}
-      multiLine
-    />);
-
-    const plaintextAnswer = (<Field
-      name={`${answerId}[answer_text]`}
-      component="textarea"
-      style={{ width: '100%' }}
-      rows={5}
-    />);
-
-    const editableAnswer = question.autogradable ? plaintextAnswer : richtextAnswer;
-
-    return (
-      <React.Fragment>
-        { readOnly ? readOnlyAnswer : editableAnswer }
-        {question.solutions && graderView ? Answers.renderTextResponseSolutions(question) : null}
-        {allowUpload ? <UploadedFileView questionId={question.id} /> : null}
-        {allowUpload && !readOnly ? Answers.renderFileUploader(question, readOnly, answerId) : null}
-      </React.Fragment>
-    );
+    return <TextResponseAnswer {...{ question, readOnly, answerId, graderView }} />;
   }
 
   static renderFileUpload(question, readOnly, answerId) {
-    return (
-      <React.Fragment>
-        <UploadedFileView questionId={question.id} />
-        {!readOnly ? Answers.renderFileUploader(question, readOnly, answerId) : null}
-      </React.Fragment>
-    );
-  }
-
-  static renderProgrammingEditor(file, answerId, language) {
-    return (
-      <div key={file.filename}>
-        <h5>{file.filename}</h5>
-        <Editor
-          name={`${answerId}[content]`}
-          filename={file.filename}
-          language={language}
-        />
-      </div>
-    );
-  }
-
-  static renderReadOnlyProgrammingEditor(file, answerId) {
-    const content = file.content.split('\n');
-    return (
-      <ReadOnlyEditor
-        key={answerId}
-        answerId={parseInt(answerId.split('[')[0], 10)}
-        fileId={file.id}
-        content={content}
-      />
-    );
-  }
-
-  static renderProgrammingFiles(props) {
-    const { fields, readOnly, language } = props;
-    return (
-      <React.Fragment>
-        {fields.map((answerId, index) => {
-          const file = fields.get(index);
-          if (readOnly) {
-            return Answers.renderReadOnlyProgrammingEditor(file, answerId);
-          }
-          return Answers.renderProgrammingEditor(file, answerId, language);
-        })}
-      </React.Fragment>
-    );
-  }
-
-  static renderProgramming(question, readOnly, answerId) {
-    const fileSubmission = question.fileSubmission;
-    return (
-      <React.Fragment>
-        {
-          fileSubmission ?
-            <ProgrammingImportEditor
-              questionId={question.id}
-              answerId={answerId}
-              {...{
-                readOnly,
-                question,
-              }}
-            />
-            :
-            <FieldArray
-              name={`${answerId}[files_attributes]`}
-              component={Answers.renderProgrammingFiles}
-              {...{
-                readOnly,
-                question,
-                language: parseLanguages(question.language),
-              }}
-            />
-        }
-        <TestCaseView questionId={question.id} />
-      </React.Fragment>
-    );
+    return <FileUploadAnswer {...{ question, readOnly, answerId }} />;
   }
 
   static renderVoiceResponse(question, readOnly, answerId) {
-    return (
-      <VoiceResponseAnswer
-        question={question}
-        readOnly={readOnly}
-        answerId={answerId}
-      />
-    );
+    return <VoiceResponseAnswer question={question} readOnly={readOnly} answerId={answerId} />;
   }
 
   static renderScribing(scribing, readOnly, answerId) {
-    return (
-      <ScribingView scribing={scribing} readOnly={readOnly} answerId={answerId} />
-    );
+    return <ScribingView scribing={scribing} readOnly={readOnly} answerId={answerId} />;
+  }
+
+  static renderProgramming(question, readOnly, answerId) {
+    return <ProgrammingAnswer {...{ question, readOnly, answerId }} />;
   }
 }
