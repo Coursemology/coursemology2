@@ -8,6 +8,8 @@ class Course::Assessment::Question::TextResponseComprehensionSolution < Applicat
                     :strip_whitespace_solution,
                     :strip_whitespace_solution_lemma
 
+  validate :validate_solution_lemma_empty
+
   belongs_to :point, class_name: Course::Assessment::Question::TextResponseComprehensionPoint.name,
                      inverse_of: :solutions
 
@@ -31,5 +33,10 @@ class Course::Assessment::Question::TextResponseComprehensionSolution < Applicat
 
   def strip_whitespace_solution_lemma
     solution_lemma.each(&:strip!)
+  end
+
+  # add custom error message for `solution_lemma` instead of default :blank
+  def validate_solution_lemma_empty
+    errors.add(:solution_lemma, :solution_lemma_empty) if solution_lemma.empty?
   end
 end

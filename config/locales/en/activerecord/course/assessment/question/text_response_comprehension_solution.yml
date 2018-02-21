@@ -1,0 +1,8 @@
+en:
+  activerecord:
+    errors:
+      models:
+        course/assessment/question/text_response_comprehension_solution:
+          attributes:
+            solution_lemma:
+              solution_lemma_empty: 'could not generate any lemma form: please check your spelling'
