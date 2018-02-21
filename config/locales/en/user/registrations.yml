@@ -13,5 +13,7 @@ en:
           The provided invitation code has been claimed by %{email}, please use that account to log in instead.
       edit:
         header: 'Account Settings'
+        new_password: 'New password'
+        new_password_confirmation: 'Confirm your new password'
         new_password_hint: "Leave blank if you don't want to change it"
         current_password_required_hint: 'We need your current password to confirm your changes'

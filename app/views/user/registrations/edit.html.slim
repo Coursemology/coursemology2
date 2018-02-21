@@ -5,9 +5,9 @@
   = f.error_notification
 
   div.form-inputs
-    = f.input :password, autocomplete: 'off', hint: t('.new_password_hint'), required: false
-    = f.input :password_confirmation, required: false
     = f.input :current_password, hint: t('.current_password_required_hint'), required: true
+    = f.input :password, label: t('.new_password'), autocomplete: 'off', hint: t('.new_password_hint'), required: false
+    = f.input :password_confirmation, label: t('.new_password_confirmation'), required: false
 
   div.form-actions
     = f.button :submit
