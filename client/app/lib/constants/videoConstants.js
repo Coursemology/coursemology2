@@ -61,6 +61,7 @@ export const discussionActionTypes = mirrorCreator([
 
 export const sessionActionTypes = mirrorCreator([
   'REMOVE_EVENTS',
+  'REMOVE_OLD_SESSIONS',
 ]);
 
 export const notificationActionTypes = mirrorCreator([

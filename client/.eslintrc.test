@@ -9,6 +9,7 @@
     "intlShape": true,
     "sleep": true,
     "buildContextOptions": true,
+    "localStorage": true,
   },
   "rules": {
     "react/no-find-dom-node": "off",

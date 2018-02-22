@@ -144,36 +144,103 @@ export function seekEnd() {
 /**
  * Creates an action to remove events from the state store.
  * @param sequenceNums The event sequence numbers to remove
+ * @param sessionClosed If this event is in response to the final server request before close
  * @return {{type: videoActionTypes, sequenceNums: Set<number>}}
  */
-function removeEvents(sequenceNums) {
-  return { type: sessionActionTypes.REMOVE_EVENTS, sequenceNums };
+function removeEvents(sequenceNums, sessionClosed = false) {
+  return { type: sessionActionTypes.REMOVE_EVENTS, sequenceNums, sessionClosed };
+}
+
+/**
+ * Creates an action to remove old sessions from the state store.
+ * @param sessionIds The ids of the sessions to remove
+ * @return {{type: videoActionTypes, sessionsIds: [number]}}
+ */
+function removeOldSessions(sessionIds) {
+  return { type: sessionActionTypes.REMOVE_OLD_SESSIONS, sessionIds };
 }
 
 /**
  * Sends current events to the server.
  *
- * Events will be removed from the state store if the API call is successful.
+ * If no events are present, no request to the server will be sent. Events will be removed from the state store if
+ * the API call is successful.
+ *
+ * If a request is sent, the video time will be updated on the server too.
+ * @param dispatch The Redux dispatch function
+ * @param videoState The Redux video state slice
+ * @param closeSession true if the server request is to be the last
+ */
+function sendCurrentEvents(dispatch, videoState, closeSession = false) {
+  const sessionId = videoState.sessionId;
+  const events = videoState.sessionEvents;
+
+  if (sessionId === null || (!closeSession && events.isEmpty())) {
+    return;
+  }
+
+  const videoTime = Math.round(videoState.playerProgress);
+  CourseAPI.video.sessions
+    .update(sessionId, videoTime, events.toArray())
+    .then(() => {
+      if (!events.isEmpty()) {
+        dispatch(removeEvents(events.map(event => event.sequence_num).toSet()), closeSession);
+      }
+    });
+}
+
+/**
+ * Sends old events to the server.
+ *
+ * One request is sent to for every old session, regardless of whether they have events, so as to update the video
+ * time.
+ *
+ * Once the server responds, old sessions are removed permanently.
+ * @param dispatch The Redux dispatch function
+ * @param oldSessions The Redux oldSessions state in the form of an ImmutableMap
+ */
+function sendOldSessions(dispatch, oldSessions) {
+  if (oldSessions.isEmpty()) {
+    return;
+  }
+
+  const promises = oldSessions
+    .map((oldVideoState, sessionId) => {
+      const videoTime = Math.round(oldVideoState.playerProgress);
+      const events = oldVideoState.sessionEvents;
+
+      return CourseAPI.video.sessions
+        .update(sessionId, videoTime, events.toArray(), true)
+        .then(() => sessionId)
+        .catch(() => null);
+    })
+    .values();
+
+  Promise.all(promises).then(sessionIds => dispatch(removeOldSessions(sessionIds.filter(id => id !== null))));
+}
+
+/**
+ * Sends both old sessions and new events to the server
  * @return {function(*, *)}
  */
 export function sendEvents() {
   return (dispatch, getState) => {
-    const videoState = getState().video;
-    const sessionId = videoState.sessionId;
+    const state = getState();
+    sendOldSessions(dispatch, state.oldSessions);
+    sendCurrentEvents(dispatch, state.video);
+  };
+}
 
-    if (sessionId === null) {
-      return;
-    }
-
-    const events = videoState.sessionEvents;
-    const videoTime = Math.round(videoState.playerProgress);
-
-    CourseAPI.video.sessions
-      .update(sessionId, videoTime, events.toArray())
-      .then(() => {
-        if (!events.isEmpty()) {
-          dispatch(removeEvents(events.map(event => event.sequence_num).toSet()));
-        }
-      });
+/**
+ * Ends the session.
+ *
+ * Sends the events back to the server. Server request is forced so as to update the video time.
+ * @return {function(*, *)}
+ */
+export function endSession() {
+  return (dispatch, getState) => {
+    const state = getState();
+    sendOldSessions(dispatch, state.oldSessions);
+    sendCurrentEvents(dispatch, state.video, true);
   };
 }

@@ -10,10 +10,9 @@ $(document).ready(() => {
   if (mountNode) {
     const data = mountNode.getAttribute('data');
     const initialState = JSON.parse(data);
-    const store = storeCreator(initialState);
 
     render(
-      <ProviderWrapper {...{ store }}>
+      <ProviderWrapper {...storeCreator(initialState)}>
         <Submission />
       </ProviderWrapper>
       , mountNode
