@@ -5,6 +5,7 @@ class User < ApplicationRecord
   DELETED_USER_ID = -1
 
   include UserSearchConcern
+  include UserMasqueradeConcern
   model_stamper
   acts_as_reader
   mount_uploader :profile_photo, ImageUploader
