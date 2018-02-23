@@ -151,8 +151,8 @@ GEM
       archive-zip (~> 0.10)
       nokogiri (~> 1.8)
     cocoon (1.2.11)
-    codeclimate-test-reporter (1.0.7)
-      simplecov
+    codeclimate-test-reporter (1.0.8)
+      simplecov (<= 0.13)
     codecov (0.1.10)
       json
       simplecov
@@ -199,7 +199,7 @@ GEM
       railties (>= 3.0.0)
     faraday (0.12.2)
       multipart-post (>= 1.2, < 3)
-    ffi (1.9.21)
+    ffi (1.9.22)
     filename (0.1.2)
     font-awesome-rails (4.7.0.3)
       railties (>= 3.2, < 5.2)
@@ -481,7 +481,7 @@ GEM
     simple_form (3.5.1)
       actionpack (> 4, < 5.2)
       activemodel (> 4, < 5.2)
-    simplecov (0.15.1)
+    simplecov (0.13.0)
       docile (~> 1.1.0)
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
@@ -650,6 +650,7 @@ DEPENDENCIES
   webpacker (<= 3.0.2)
   workflow
   yard
+
 
 BUNDLED WITH
    1.16.1
