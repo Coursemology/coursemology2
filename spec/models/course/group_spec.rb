@@ -55,25 +55,6 @@ RSpec.describe Course::Group, type: :model do
         end
       end
 
-      context 'when all group managers are deleted from a group' do
-        let!(:group) { create(:course_group) }
-        subject do
-          group.group_users = []
-          group
-        end
-
-        it 'is an invalid group' do
-          expect(subject.save).to be(false)
-          expect(subject).not_to be_valid
-        end
-
-        it 'adds errors to group object' do
-          subject.valid?
-          expect(subject.errors.messages[:base]).
-            to include(I18n.t('activerecord.errors.models.course/group.no_manager'))
-        end
-      end
-
       context 'when multiple group_users reference a same user' do
         subject { create(:course_group, course: course) }
         let(:course_user) { create(:course_user, course: course) }

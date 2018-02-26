@@ -4,8 +4,9 @@ class Course::Group < ApplicationRecord
   before_validation :set_defaults, if: :new_record?
 
   belongs_to :course, inverse_of: :groups
-  has_many :group_users, inverse_of: :group, dependent: :destroy,
-                         class_name: Course::GroupUser.name, foreign_key: :group_id
+  has_many :group_users, -> { joins(:course_user).order('course_users.name ASC') },
+           inverse_of: :group, dependent: :destroy, class_name: Course::GroupUser.name,
+           foreign_key: :group_id
   has_many :course_users, through: :group_users
 
   accepts_nested_attributes_for :group_users,
@@ -13,7 +14,6 @@ class Course::Group < ApplicationRecord
                                 reject_if: -> (params) { params[:course_user_id].blank? }
 
   validate :validate_new_users_are_unique
-  validate :validate_presence_of_group_manager, on: :update
 
   # @!attribute [r] average_experience_points
   #   Returns the average experience points of group users in this group who are students.
@@ -106,14 +106,5 @@ class Course::Group < ApplicationRecord
     (new_group_users - new_group_users.uniq(&:course_user)).each do |group_user|
       group_user.errors.add(:course_user, :taken)
     end
-  end
-
-  # Validate that each group has at least 1 group manager.
-  #
-  # Validation is only called on update action, as the default group manager is created for new
-  # records.
-  def validate_presence_of_group_manager
-    return unless group_users.select(&:manager?).reject(&:marked_for_destruction?).empty?
-    errors.add(:base, :no_manager)
   end
 end
