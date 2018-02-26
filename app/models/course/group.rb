@@ -4,8 +4,9 @@ class Course::Group < ApplicationRecord
   before_validation :set_defaults, if: :new_record?
 
   belongs_to :course, inverse_of: :groups
-  has_many :group_users, inverse_of: :group, dependent: :destroy,
-                         class_name: Course::GroupUser.name, foreign_key: :group_id
+  has_many :group_users, -> { joins(:course_user).order('course_users.name ASC') },
+           inverse_of: :group, dependent: :destroy, class_name: Course::GroupUser.name,
+           foreign_key: :group_id
   has_many :course_users, through: :group_users
 
   accepts_nested_attributes_for :group_users,
