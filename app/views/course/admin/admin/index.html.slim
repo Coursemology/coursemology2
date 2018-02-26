@@ -15,6 +15,7 @@
     = f.input :start_at
     = f.input :end_at
     = f.input :gamified, hint: t('.gamified_label')
+    = f.input :time_zone, hint: t('.time_zone_label')
 
     - max_time = current_course.advance_start_at_duration
     .form-group.boolean.optional

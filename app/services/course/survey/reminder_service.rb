@@ -3,29 +3,14 @@ class Course::Survey::ReminderService
   include Course::ReminderServiceConcern
 
   class << self
-    delegate :opening_reminder, to: :new
     delegate :closing_reminder, to: :new
-    delegate :send_opening_reminder, to: :new
     delegate :send_closing_reminder, to: :new
-  end
-
-  def opening_reminder(survey, token)
-    return unless survey.opening_reminder_token == token && survey.published?
-    return unless email_enabled?(survey, :survey_opening)
-    send_opening_reminder(survey)
   end
 
   def closing_reminder(survey, token)
     return unless survey.closing_reminder_token == token && survey.published?
     return unless email_enabled?(survey, :survey_closing)
     send_closing_reminder(survey)
-  end
-
-  def send_opening_reminder(survey)
-    recipients = survey.course.course_users.includes(:user)
-    recipients.each do |recipient|
-      Course::Mailer.survey_opening_reminder_email(recipient.user, survey).deliver_later
-    end
   end
 
   def send_closing_reminder(survey)

@@ -1,8 +1,0 @@
-en:
-  activerecord:
-    errors:
-      models:
-        user:
-          attributes:
-            time_zone:
-              invalid_time_zone: 'The time zone selected is invalid'

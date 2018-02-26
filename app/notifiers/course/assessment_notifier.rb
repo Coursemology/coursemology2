@@ -22,14 +22,6 @@ class Course::AssessmentNotifier < Notifier::Base
     activity.save!
   end
 
-  def assessment_opening(user, assessment)
-    return unless email_enabled?(assessment, :assessment_opening)
-
-    create_activity(actor: user, object: assessment, event: :opening).
-      notify(assessment.course, :email).
-      save!
-  end
-
   private
 
   def email_enabled?(assessment, key)

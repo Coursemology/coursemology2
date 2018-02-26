@@ -2,7 +2,7 @@
 class Course::Survey < ApplicationRecord
   acts_as_lesson_plan_item has_todo: true
 
-  include Course::ReminderConcern
+  include Course::ClosingReminderConcern
 
   enum question_type: { text_response: 0, multiple_choice: 1, multiple_response: 2 }
   validates :end_at, presence: true, if: :allow_response_after_end
@@ -38,5 +38,9 @@ class Course::Survey < ApplicationRecord
     copy_attributes(other, duplicator)
     self.sections = duplicator.duplicate(other.sections)
     self.course = duplicator.options[:target_course]
+  end
+
+  def include_in_consolidated_email?(event)
+    Course::Settings::SurveyComponent.email_enabled?(course, "survey_#{event}".to_sym)
   end
 end

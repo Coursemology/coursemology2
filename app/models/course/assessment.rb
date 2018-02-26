@@ -9,7 +9,7 @@ class Course::Assessment < ApplicationRecord
 
   # Concern must be included below acts_as_lesson_plan_item to override #can_user_start?
   include Course::Assessment::TodoConcern
-  include Course::ReminderConcern
+  include Course::ClosingReminderConcern
   include DuplicationStateTrackingConcern
 
   after_initialize :set_defaults, if: :new_record?
@@ -158,6 +158,11 @@ class Course::Assessment < ApplicationRecord
     self.question_assessments = duplicator.duplicate(other.question_assessments)
     initialize_duplicate_conditions(duplicator, other)
     set_duplication_flag
+  end
+
+  def include_in_consolidated_email?(event)
+    Course::Settings::AssessmentsComponent.email_enabled?(tab.category,
+                                                          "assessment_#{event}".to_sym)
   end
 
   private

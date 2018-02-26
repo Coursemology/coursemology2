@@ -1,0 +1,6 @@
+- message.subject = t('.subject', course: format_inline_text(@course.title))
+p = t('.message')
+
+- @items_hash.sort.each do |actable_type, items|
+  = render partial: actable_type_partial_path(@notification, actable_type),
+    locals: { items: items, course: @course }

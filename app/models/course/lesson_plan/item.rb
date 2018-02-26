@@ -42,8 +42,35 @@ class Course::LessonPlan::Item < ApplicationRecord
     )
   }
 
+  # @!method self.opening_within_next_day
+  #   Scopes the lesson plan items to those which are opening in the next 24 hours.
+  scope :opening_within_next_day, (lambda do
+    where(start_at: (Time.zone.now)..(1.day.from_now))
+  end)
+
   belongs_to :course, inverse_of: :lesson_plan_items
   has_many :todos, class_name: Course::LessonPlan::Todo.name, inverse_of: :item, dependent: :destroy
+
+  # Finds the lesson plan items which are starting within the next day for a given course.
+  # Rearrange the items into a hash keyed by the actable type as a string.
+  # For example:
+  # {
+  #   ActableType_1_as_String => [ActableItems...],
+  #   ActableType_2_as_String => [ActableItems...]
+  # }
+  #
+  # @param course [Course] The course to check for published items starting within the next day.
+  # @return [Hash]
+  def self.upcoming_items_from_course_by_type(course)
+    opening_items = course.lesson_plan_items.published.opening_within_next_day.includes(:actable)
+    opening_items_hash = Hash.new { |hash, actable_type| hash[actable_type] = [] }
+    opening_items.select { |item| item.actable.include_in_consolidated_email?(:opening) }.
+      each do |item|
+        opening_items_hash[item.actable_type].push(item.actable)
+      end
+    # Sort the items for each actable type by start_at time, followed by title.
+    opening_items_hash.each_value { |items| items.sort_by! { |item| [item.start_at, item.title] } }
+  end
 
   # Copy attributes for lesson plan item from the object being duplicated.
   # Shift the time related fields.

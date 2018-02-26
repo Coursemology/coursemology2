@@ -204,7 +204,7 @@ RSpec.describe User do
           it 'is not valid' do
             expect(subject).not_to be_valid
             expect(subject.errors[:time_zone]).to include(
-              I18n.t('activerecord.errors.models.user.attributes.time_zone.invalid_time_zone')
+              I18n.t('activerecord.errors.messages.time_zone_validator.invalid_time_zone')
             )
           end
         end

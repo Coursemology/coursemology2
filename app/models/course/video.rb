@@ -2,7 +2,7 @@
 class Course::Video < ApplicationRecord
   acts_as_lesson_plan_item has_todo: true
 
-  include Course::ReminderConcern
+  include Course::ClosingReminderConcern
   include Course::Video::UrlConcern
 
   belongs_to :tab, class_name: Course::Video::Tab.name, inverse_of: :videos
@@ -76,5 +76,9 @@ class Course::Video < ApplicationRecord
   def initialize_duplicate(duplicator, other)
     copy_attributes(other, duplicator)
     self.course = duplicator.options[:target_course]
+  end
+
+  def include_in_consolidated_email?(event)
+    Course::Settings::VideosComponent.email_enabled?(course, "video_#{event}".to_sym)
   end
 end

@@ -17,45 +17,6 @@ RSpec.describe Course::VideoNotifier, type: :notifier do
       end
     end
 
-    describe '#video_opening' do
-      let(:course) { create(:course) }
-      let!(:video) { create(:course_video, course: course) }
-      let!(:user) { create(:course_user, course: course).user }
-      let(:activity) { Activity.find_by(object: video, event: :opening, actor: user) }
-
-      subject { Course::VideoNotifier.video_opening(user, video) }
-
-      it 'sends a course notification' do
-        expect { subject }.to change(course.notifications, :count).by(1)
-      end
-
-      it 'sends an email notification' do
-        expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(2)
-      end
-
-      it 'creates an activity' do
-        subject
-        expect(activity).not_to be_nil
-      end
-
-      context 'when email notification for video opening is disabled' do
-        before do
-          context = OpenStruct.new(key: Course::VideosComponent.key, current_course: course)
-          Course::Settings::VideosComponent.new(context).
-            update_email_setting('key' => 'video_opening', 'enabled' => false)
-          course.save!
-        end
-
-        it 'does not send a course notification' do
-          expect { subject }.to change(course.notifications, :count).by(0)
-        end
-
-        it 'does not send an email notification' do
-          expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
-        end
-      end
-    end
-
     describe '#video_closing' do
       let!(:now) { Time.zone.now }
       let(:activity) { Activity.find_by(object: video, event: :closing, actor: user) }

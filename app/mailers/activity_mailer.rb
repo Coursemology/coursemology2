@@ -4,6 +4,7 @@
 # @api private
 class ActivityMailer < ApplicationMailer
   helper ApplicationFormattersHelper
+  helper ApplicationNotificationsHelper
   attr_accessor :layout
 
   layout :layout
@@ -19,6 +20,7 @@ class ActivityMailer < ApplicationMailer
   def email(recipient:, notification:, view_path:, layout_path: nil)
     ActsAsTenant.without_tenant do
       @recipient = recipient
+      @notification = notification
       @object = notification.activity.object
       @layout = layout_path
       return unless @object # Object could be deleted already
