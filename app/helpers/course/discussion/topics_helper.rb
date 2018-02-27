@@ -31,11 +31,28 @@ module Course::Discussion::TopicsHelper
     @my_students_unread ||=
       if current_course_user
         my_student_ids = current_course_user.my_students.pluck(:user_id)
-        current_course.discussion_topics.globally_displayed.
-          from_user(my_student_ids).pending_staff_reply.distinct.count
+        topics = current_course.discussion_topics.globally_displayed.pending_staff_reply.distinct.
+                 includes(:actable)
+        topics.select { |topic| from_user(topic, my_student_ids) }.count
       else
         0
       end
+  end
+
+  # TODO: Consider adding `creator_id` column to the programming file annotation table.
+  # See https://github.com/Coursemology/coursemology2/issues/2880.
+  #
+  # This replaces what the `from_user` scopes in the specific models were doing when getting
+  # my_students_unread_count, for better performance.
+  def from_user(topic, my_student_ids)
+    case topic.actable_type
+    when 'Course::Assessment::SubmissionQuestion'
+      my_student_ids.include?(topic&.actable&.submission&.creator&.id)
+    when 'Course::Video::Topic'
+      my_student_ids.include?(topic&.actable&.creator&.id)
+    when 'Course::Assessment::Answer::ProgrammingFileAnnotation'
+      my_student_ids.include?(topic&.actable&.file&.answer&.submission&.creator&.id)
+    end
   end
 
   # Returns the count of unread topics for student course users. Otherwise, return 0.
