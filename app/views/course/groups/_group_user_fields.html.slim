@@ -1,5 +1,6 @@
 = content_tag_for(:tr, f.object, class: 'nested-fields') do
   td = f.association :course_user, collection: current_course.course_users.order_alphabetically,
-                                   label:  false
+                                   label: false,
+                                   label_method: lambda { |cu| cu.phantom ? t('.phantom_user_label', name: cu.name) : cu.name }
   td = f.input :role, as: :select, label: false, collection: Course::GroupUser.roles.keys
   td = link_to_remove_association  t('.remove'), f
