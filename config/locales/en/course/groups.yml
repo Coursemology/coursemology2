@@ -24,3 +24,4 @@ en:
         success: 'Group %{name} was deleted.'
       group_user_fields:
         remove: 'Remove'
+        phantom_user_label: '%{name} (Phantom User)'
