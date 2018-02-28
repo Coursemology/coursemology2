@@ -29,7 +29,7 @@ gem 'validates_hostname'
 # A Ruby state machine library
 gem 'workflow'
 # Add creator_id and updater_id attributes to models
-gem 'activerecord-userstamp', github: 'lowjoel/activerecord-userstamp'
+gem 'activerecord-userstamp', git: 'https://github.com/lowjoel/activerecord-userstamp'
 # Allow actions to be deferred until after a record is committed.
 gem 'after_commit_action'
 # Allow declaring the calculated attributes of a record
@@ -38,7 +38,7 @@ gem 'calculated_attributes'
 gem 'baby_squeel'
 # For multiple table inheritance
 #   TODO: Figure out breaking changes in v2 as polymorphism is not working correctly.
-gem 'active_record-acts_as', github: 'Coursemology/active_record-acts_as', branch: 'rails5'
+gem 'active_record-acts_as', git: 'https://github.com/Coursemology/active_record-acts_as', branch: 'rails5'
 # Organise ActiveRecord model into a tree structure
 gem 'edge'
 # Create pretty URLs and work with human-friendly strings
@@ -62,7 +62,7 @@ gem 'js-routes'
 gem 'jquery-rails'
 # Our Coursemology will be themed using Bootstrap
 gem 'bootstrap-sass'
-gem 'bootstrap-sass-extras', '>= 0.0.7', github: 'doabit/bootstrap-sass-extras'
+gem 'bootstrap-sass-extras', '>= 0.0.7', git: 'https://github.com/doabit/bootstrap-sass-extras'
 gem 'autoprefixer-rails'
 # Use font-awesome for icons
 gem 'font-awesome-rails'
@@ -189,12 +189,12 @@ gem 'cancancan-baby_squeel'
 gem 'rails_utils', '>= 3.3.3'
 
 # Themes for instances
-gem 'themes_on_rails', '>= 0.3.1', github: 'Coursemology/themes_on_rails',
+gem 'themes_on_rails', '>= 0.3.1', git: 'https://github.com/Coursemology/themes_on_rails',
                                    branch: 'cache-theme-templates'
 
 # Forms made easy for Rails
 gem 'simple_form'
-gem 'simple_form-bootstrap', github: 'Coursemology/simple_form-bootstrap'
+gem 'simple_form-bootstrap', git: 'https://github.com/Coursemology/simple_form-bootstrap'
 # Dynamic nested forms
 gem 'cocoon'
 gem 'bootstrap3-datetimepicker-rails'
@@ -216,7 +216,7 @@ gem 'rubyzip', require: 'zip'
 gem 'nokogiri', '>= 1.8.1'
 
 # Polyglot support
-gem 'coursemology-polyglot', github: 'Coursemology/polyglot'
+gem 'coursemology-polyglot', git: 'https://github.com/Coursemology/polyglot'
 
 # To assist with bulk inserts into database
 gem 'activerecord-import', '>= 0.2.0'
