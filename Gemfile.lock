@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/Coursemology/active_record-acts_as.git
+  remote: https://github.com/Coursemology/active_record-acts_as
   revision: 84a2b5f0329870c6c4a72b097b6d7f1344b536e4
   branch: rails5
   specs:
@@ -8,14 +8,14 @@ GIT
       activesupport (>= 4.2, < 5.2)
 
 GIT
-  remote: git://github.com/Coursemology/polyglot.git
+  remote: https://github.com/Coursemology/polyglot
   revision: b946657046bdd8e0a51e18b82bded9b71ffde596
   specs:
     coursemology-polyglot (0.2.9.2)
       activesupport (>= 4.2, < 5.2)
 
 GIT
-  remote: git://github.com/Coursemology/simple_form-bootstrap.git
+  remote: https://github.com/Coursemology/simple_form-bootstrap
   revision: ba048ab714904d9e4fc1407bee33e7b5a1f832b9
   specs:
     simple_form-bootstrap (1.6.0)
@@ -26,7 +26,7 @@ GIT
       simple_form (>= 3.1.0)
 
 GIT
-  remote: git://github.com/Coursemology/themes_on_rails.git
+  remote: https://github.com/Coursemology/themes_on_rails
   revision: c96d43d479fc307b5227ad18e891fcf347d1e22b
   branch: cache-theme-templates
   specs:
@@ -34,14 +34,14 @@ GIT
       rails (>= 3.2)
 
 GIT
-  remote: git://github.com/doabit/bootstrap-sass-extras.git
+  remote: https://github.com/doabit/bootstrap-sass-extras
   revision: 6aa549b91a66055a5f5e37400dbe44f4d17f09c3
   specs:
     bootstrap-sass-extras (0.0.7)
       rails (>= 3.1.0)
 
 GIT
-  remote: git://github.com/lowjoel/activerecord-userstamp.git
+  remote: https://github.com/lowjoel/activerecord-userstamp
   revision: 752f1e30ed8a2f0b09408bcdfa2c2dad1e5523c4
   specs:
     activerecord-userstamp (3.0.5)
