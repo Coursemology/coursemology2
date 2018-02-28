@@ -71,7 +71,8 @@ class SubmissionAnswer extends Component {
       MultipleChoice, MultipleResponse, TextResponse, Comprehension, FileUpload,
       Programming, VoiceResponse, Scribing,
     } = questionTypes;
-    const { viewHistory } = question;
+    const { historyQuestions } = this.props;
+    const viewHistory = historyQuestions[question.id].viewHistory;
 
     if (viewHistory) {
       return this.getHistoryRenderer(question);
@@ -132,8 +133,9 @@ class SubmissionAnswer extends Component {
 
   renderHistoryToggle(question) {
     const { handleToggleViewHistoryMode, historyQuestions, questionsFlags, intl } = this.props;
-    const { id, viewHistory, canViewHistory, submissionQuestionId } = question;
+    const { id, canViewHistory, submissionQuestionId } = question;
     const historyQuestion = historyQuestions[id];
+    const viewHistory = historyQuestion ? historyQuestion.viewHistory : false;
     const noPastAnswers = historyQuestion ? historyQuestion.answerIds.length === 0 : false;
     const answersLoaded = historyQuestion ? historyQuestion.pastAnswersLoaded : false;
     const isLoading = historyQuestion ? historyQuestion.isLoading : false;

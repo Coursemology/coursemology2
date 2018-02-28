@@ -19,8 +19,9 @@ import SubmissionEmptyForm from './SubmissionEmptyForm';
 import {
   fetchSubmission, autogradeSubmission, saveDraft, finalise,
   unsubmit, submitAnswer, resetAnswer, saveGrade, mark, unmark, publish,
-  enterStudentView, exitStudentView, toggleViewHistoryMode,
+  enterStudentView, exitStudentView,
 } from '../../actions';
+import { toggleViewHistoryMode } from '../../actions/history';
 import {
   assessmentShape, explanationShape, gradingShape, postShape, answerShape,
   questionFlagsShape, questionShape, historyQuestionShape, reduxFormShape, submissionShape, topicShape,
@@ -35,14 +36,16 @@ class VisibleSubmissionEditIndex extends Component {
     const newSubmission = !!getUrlParameter('new_submission') && getUrlParameter('new_submission') === 'true';
     const stepString = getUrlParameter('step');
     const step = Number.isNaN(stepString) || stepString === '' ? null : parseInt(stepString, 10) - 1;
+    const pastAnswer = getUrlParameter('past_answer');
 
-    this.state = { newSubmission, step };
+    this.state = { newSubmission, step, pastAnswer };
     this.handleToggleViewHistoryMode = this.handleToggleViewHistoryMode.bind(this);
   }
 
   componentDidMount() {
     const { dispatch, match: { params } } = this.props;
-    dispatch(fetchSubmission(params.submissionId));
+    const { pastAnswer } = this.state;
+    dispatch(fetchSubmission(params.submissionId, pastAnswer));
   }
 
   allCorrect() {

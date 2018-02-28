@@ -20,6 +20,11 @@ const styles = {
     marginTop: 40,
     marginBottom: 40,
   },
+  recentAnswersLabel: {
+    textAlign: 'center',
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
 };
 
 class ProgrammingAnswerHistory extends Component {
@@ -95,7 +100,10 @@ class ProgrammingAnswerHistory extends Component {
   }
 
   renderPastAnswerSelect() {
-    const { answers, answerIds, selectedAnswerIds, handleSelectPastAnswers, intl } = this.props;
+    const {
+      answers, answerIds, selectedAnswerIds, labelIndex,
+      handleSelectPastAnswers, numMoreRecentAnswers, intl,
+    } = this.props;
     const selectedAnswers = selectedAnswerIds.map(answerId => answers[answerId]);
 
     const renderOption = (answerId, index) => {
@@ -113,6 +121,17 @@ class ProgrammingAnswerHistory extends Component {
       );
     };
 
+    const options = answerIds.map(renderOption);
+    if (numMoreRecentAnswers > 0) {
+      options.splice(
+        labelIndex,
+        0,
+        <div key={-1} style={styles.recentAnswersLabel}>
+          {intl.formatMessage(translations.recentAnswersLabel, { numMoreRecentAnswers })}
+        </div>
+      );
+    }
+
     return (
       <SelectField
         floatingLabelText={intl.formatMessage(translations.pastAnswers)}
@@ -121,7 +140,7 @@ class ProgrammingAnswerHistory extends Component {
         onChange={handleSelectPastAnswers}
         style={{ float: 'right' }}
       >
-        {answerIds.map(renderOption)}
+        {options}
       </SelectField>
     );
   }
@@ -145,14 +164,16 @@ ProgrammingAnswerHistory.propTypes = {
   selectedAnswerIds: PropTypes.arrayOf(PropTypes.number),
   answerIds: PropTypes.arrayOf(PropTypes.number),
   answers: PropTypes.objectOf(answerShape),
+  numMoreRecentAnswers: PropTypes.number,
   question: questionShape,
+  labelIndex: PropTypes.number,
   handleSelectPastAnswers: PropTypes.func,
 };
 
 function mapStateToProps(state, ownProps) {
   const { question } = ownProps;
-  const selectedAnswerIds = state.history.questions[question.id].selected;
-  const answerIds = state.history.questions[question.id].answerIds;
+  const historyQuestion = state.history.questions[question.id];
+  const { answerIds, numMoreRecentAnswers, labelIndex, selected: selectedAnswerIds } = historyQuestion;
   const answers = state.history.answers;
 
   return {
@@ -160,6 +181,8 @@ function mapStateToProps(state, ownProps) {
     answerIds,
     answers,
     question,
+    labelIndex,
+    numMoreRecentAnswers,
   };
 }
 

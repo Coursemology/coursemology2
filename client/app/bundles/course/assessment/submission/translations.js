@@ -276,6 +276,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.getPastAnswersFailure',
     defaultMessage: 'Failed to load past answers',
   },
+  recentAnswersLabel: {
+    id: 'course.assessment.submission.numRecentAnswers',
+    defaultMessage: '... {numMoreRecentAnswers} more recent answer(s) ...',
+  },
 });
 
 export const scribingTranslations = defineMessages({
