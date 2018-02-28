@@ -27,4 +27,4 @@ json.partial! 'questions', assessment: @assessment, submission: @submission, can
                            answers: answers
 json.partial! 'answers', submission: @submission, answers: answers
 json.partial! 'topics', submission: @submission, can_grade: can_grade
-json.partial! 'history', submission: @submission
+json.partial! 'history', submission: @submission, past_answer: @past_answer

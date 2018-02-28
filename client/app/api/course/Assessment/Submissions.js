@@ -17,8 +17,8 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
     return this.getClient().patch(`${this._getUrlPrefix()}/publish_all`);
   }
 
-  edit(submissionId) {
-    return this.getClient().get(`${this._getUrlPrefix()}/${submissionId}/edit`);
+  edit(submissionId, pastAnswerId = null) {
+    return this.getClient().get(`${this._getUrlPrefix()}/${submissionId}/edit`, { params: { past_answer: pastAnswerId } });
   }
 
   update(submissionId, submissionFields) {

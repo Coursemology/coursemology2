@@ -48,6 +48,7 @@ class Course::Assessment::Submission::SubmissionsController < \
   end
 
   def edit
+    @past_answer = past_answer
     return if @submission.attempting?
 
     respond_to do |format|
@@ -138,6 +139,10 @@ class Course::Assessment::Submission::SubmissionsController < \
 
   def create_params
     { course_user: current_course_user }
+  end
+
+  def past_answer
+    params[:past_answer] == 'false' ? nil : params[:past_answer].to_i
   end
 
   def authorize_assessment!

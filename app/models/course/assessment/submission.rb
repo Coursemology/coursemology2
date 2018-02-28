@@ -182,11 +182,30 @@ class Course::Assessment::Submission < ApplicationRecord
   end
 
   # Loads the answer ids of the past answers of each question
-  def answer_history
+  # @param past_answer_id past_answer of question to pre-load past answers
+  def answer_history(past_answer_id)
+    past_answers_buffer = 5
+    past_answers_slice = past_answers_buffer * 2 + 1
+
     answers.unscope(:order).order(created_at: :desc).pluck(:question_id, :id, :current_answer).group_by(&:first).map do |pair|
+      question_id = pair[0]
+      answer_ids = pair[1].reject(&:last).map(&:second)
+      past_answer_index = answer_ids.index(past_answer_id)
+      if past_answer_id && !past_answer_index.nil?
+        has_more_recent_answers = past_answer_index - past_answers_buffer > 0
+        start_index = has_more_recent_answers ? past_answer_index - past_answers_buffer : 0
+        # Pre-load +/- 5 answers from the current past_answer
+        answer_ids_to_load = answer_ids.slice(start_index, past_answers_slice)
+        past_answers = answers.where(id: answer_ids_to_load)
+      else
+        answer_ids_to_load = answer_ids.first(10)
+      end
+
       {
-        question_id: pair[0],
-        answer_ids: pair[1].reject(&:last).map(&:second).first(10)
+        question_id: question_id,
+        answer_ids: answer_ids_to_load,
+        past_answers: past_answers || [],
+        num_more_recent_answers: start_index || 0
       }
     end
   end
