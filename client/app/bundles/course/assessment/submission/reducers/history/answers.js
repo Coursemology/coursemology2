@@ -2,6 +2,20 @@ import actions from '../../constants';
 
 export default function (state = {}, action) {
   switch (action.type) {
+    case actions.FETCH_SUBMISSION_SUCCESS: {
+      const answers = action.payload.history.questions.reduce((obj, question) =>
+        obj.concat(question.pastAnswers), []);
+      return {
+        ...state,
+        ...answers.reduce((obj, answer) => ({
+          ...obj,
+          [answer.id]: {
+            ...answer.fields,
+            createdAt: answer.createdAt,
+          },
+        }), {}),
+      };
+    }
     case actions.GET_PAST_ANSWERS_SUCCESS: {
       return {
         ...state,

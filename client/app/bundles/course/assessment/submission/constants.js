@@ -118,6 +118,7 @@ export const canvasActionTypes = mirrorCreator([
 ]);
 
 export const defaultPastAnswersDisplayed = 3;
+export const defaultPastAnswersSelectable = 10;
 
 const actionTypes = mirrorCreator([
   'FETCH_SUBMISSION_REQUEST', 'FETCH_SUBMISSION_SUCCESS', 'FETCH_SUBMISSION_FAILURE',

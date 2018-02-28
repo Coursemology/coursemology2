@@ -77,11 +77,11 @@ function getEvaluationResult(submissionId, answerId, questionId) {
   };
 }
 
-export function fetchSubmission(id) {
+export function fetchSubmission(id, pastAnswerId = null) {
   return (dispatch) => {
     dispatch({ type: actionTypes.FETCH_SUBMISSION_REQUEST });
 
-    return CourseAPI.assessment.submissions.edit(id)
+    return CourseAPI.assessment.submissions.edit(id, pastAnswerId)
       .then(response => response.data)
       .then((data) => {
         data.answers.filter(a => a.autograding && a.autograding.path).forEach((answer, index) => {
@@ -97,6 +97,7 @@ export function fetchSubmission(id) {
         dispatch({
           type: actionTypes.FETCH_SUBMISSION_SUCCESS,
           payload: data,
+          pastAnswerId,
         });
       })
       .catch(() => dispatch({ type: actionTypes.FETCH_SUBMISSION_FAILURE }));
@@ -431,34 +432,3 @@ export function exitStudentView() {
     dispatch({ type: actionTypes.EXIT_STUDENT_VIEW });
   };
 }
-
-export function toggleViewHistoryMode(viewHistory, submissionQuestionId, questionId, answersLoaded) {
-  return (dispatch) => {
-    if (!answersLoaded) {
-      dispatch({ type: actionTypes.GET_PAST_ANSWERS_REQUEST, payload: { questionId } });
-
-      CourseAPI.assessment.submissionQuestions.getPastAnswers(submissionQuestionId)
-        .then(response => response.data)
-        .then((data) => {
-          dispatch({
-            type: actionTypes.GET_PAST_ANSWERS_SUCCESS,
-            payload: { answers: data.answers, questionId },
-          });
-          dispatch({
-            type: actionTypes.TOGGLE_VIEW_HISTORY_MODE,
-            payload: { viewHistory, questionId },
-          });
-        })
-        .catch((error) => {
-          dispatch({ type: actionTypes.GET_PAST_ANSWERS_FAILURE, payload: { questionId } });
-          dispatch(setNotification(translations.getPastAnswersFailure, buildErrorMessage(error)));
-        });
-    } else {
-      dispatch({
-        type: actionTypes.TOGGLE_VIEW_HISTORY_MODE,
-        payload: { viewHistory, questionId },
-      });
-    }
-  };
-}
-
