@@ -41,6 +41,8 @@ en:
             file_upload: 'File Upload'
             programming: 'Programming'
             scribing: 'Scribing'
+            # TODO: Uncomment the line below when TextResponseComprehension is ready
+            # comprehension: 'Comprehension'
           non_auto_gradable_questions: >
             Some of the questions in this assessment are not auto-gradable.
             The autograder will always award the maximum grade for these questions.

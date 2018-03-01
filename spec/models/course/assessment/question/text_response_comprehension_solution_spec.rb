@@ -29,20 +29,6 @@ RSpec.describe Course::Assessment::Question::TextResponseComprehensionSolution, 
           expect(subject.solution_lemma).to eq(['content'])
         end
       end
-
-      describe '#solution_lemma' do
-        subject do
-          build_stubbed(:course_assessment_question_text_response_comprehension_solution, \
-                        solution_lemma: [])
-        end
-
-        it 'validates that solution_lemma is not empty' do
-          expect(subject.valid?).to be(false)
-          expect(subject.errors[:solution_lemma]).to include(I18n.t('activerecord.errors.models.' \
-              'course/assessment/question/text_response_comprehension_solution.attributes.' \
-              'solution_lemma.solution_lemma_empty'))
-        end
-      end
     end
   end
 end

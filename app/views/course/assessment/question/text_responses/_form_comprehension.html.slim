@@ -1,0 +1,29 @@
+= simple_form_for [current_course, @assessment, @text_response_question] do |f|
+  = f.error_notification
+  = render partial: 'course/assessment/questions/form', locals: { f: f }
+  = f.hidden_field :hide_text
+  = f.hidden_field :is_comprehension
+  = f.hidden_field :allow_attachment
+
+  b = t('.multiline_explanation_comprehension_html')
+  table.table.table-hover.table-comprehension
+    thead
+      tr
+        th = link_to_add_association t('.add_group'), f, :groups,
+                                     partial: 'comprehension_group_fields',
+                                     find_selector: 'tbody.tbody-form', insert_using: 'append'
+    tbody.tbody-form
+      = f.simple_fields_for :groups do |comprehension_groups_form|
+        = render 'comprehension_group_fields', f: comprehension_groups_form
+
+  - if @assessment.autograded?
+    p
+      b = t('.text_response_autograde')
+
+  - name = t('.comprehension')
+
+  - if f.object.persisted?
+    - button_text =  t('helpers.buttons.update', model: name)
+  - else
+    - button_text =  t('helpers.buttons.create', model: name)
+  = f.button :submit, button_text

@@ -1,0 +1,22 @@
+= content_tag_for(:tr, f.object, class: 'nested-fields') do
+  td
+    b = t('.group')
+    br
+    = link_to_remove_association t('.remove_group'), f
+    br
+    br
+    = f.input :maximum_group_grade, label: t('.maximum_group_grade'),
+              input_html: { class: ['text-response-group-maximum-group-grade'] }
+
+    - group_id = f.object_name
+
+    table.table.table-hover
+      thead
+        tr
+          th = link_to_add_association t('.add_point'), f, :points,
+                                       partial: 'comprehension_point_fields',
+                                       find_selector: 'tbody.tbody-groups.'+group_id,
+                                       insert_using: 'append'
+      tbody.tbody-groups *{:class => group_id}
+        = f.simple_fields_for :points do |comprehension_points_form|
+          = render 'comprehension_point_fields', f: comprehension_points_form

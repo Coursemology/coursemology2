@@ -1,7 +1,12 @@
 - if @text_response_question.file_upload_question?
   - add_breadcrumb :new_file_upload
   = page_header t('.file_upload')
+  = render partial: 'form'
+- elsif @text_response_question.comprehension_question?
+  - add_breadcrumb :new_comprehension
+  = page_header t('.comprehension')
+  = render partial: 'form_comprehension'
 - else
   - add_breadcrumb :new_text_response
   = page_header t('.text_response')
-= render partial: 'form'
+  = render partial: 'form'

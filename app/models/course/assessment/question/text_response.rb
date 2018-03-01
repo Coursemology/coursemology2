@@ -75,6 +75,11 @@ class Course::Assessment::Question::TextResponse < ApplicationRecord
     end
   end
 
+  def build_at_least_one_group_one_point
+    groups.build if groups.empty?
+    groups.first.points.build if groups.first.points.empty?
+  end
+
   private
 
   def validate_grade

@@ -2,9 +2,10 @@
 class Course::Assessment::Question::TextResponseComprehensionSolution < ApplicationRecord
   self.table_name = 'course_assessment_question_text_response_compre_solutions'
 
-  enum solution_type: [:compre_lifted_word, :compre_keyword]
+  enum solution_type: [:compre_keyword, :compre_lifted_word]
 
   before_validation :remove_blank_solution,
+                    :set_dummy_solution_lemma,
                     :strip_whitespace_solution,
                     :strip_whitespace_solution_lemma
 
@@ -25,6 +26,11 @@ class Course::Assessment::Question::TextResponseComprehensionSolution < Applicat
 
   def remove_blank_solution
     solution.reject!(&:blank?)
+  end
+
+  # TODO: Remove this function when lemmatiser is implemented
+  def set_dummy_solution_lemma
+    self.solution_lemma = solution
   end
 
   def strip_whitespace_solution

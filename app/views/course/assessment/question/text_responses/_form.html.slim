@@ -2,6 +2,7 @@
   = f.error_notification
   = render partial: 'course/assessment/questions/form', locals: { f: f }
   = f.hidden_field :hide_text
+  = f.hidden_field :is_comprehension
 
   - if f.object.file_upload_question?
     = f.hidden_field :allow_attachment

@@ -1,0 +1,31 @@
+= content_tag_for(:tr, f.object.group, class: 'nested-fields') do
+  td
+    b = t('.point')
+    br
+    = link_to_remove_association t('.remove_point'), f
+    br
+    br
+    = f.input :point_grade, label: t('.point_grade'),
+              input_html: { class: ['text-response-group-point-grade'] }
+
+    - point_id = f.object_name
+
+    .has-error
+      = f.error :solutions
+
+    table.table.table-striped.table-hover.table-points
+      thead
+        tr
+          th = t('.solution_type')
+          th = t('.solution')
+          th
+          th = t('.explanation')
+          th
+            div.pull-right
+              = link_to_add_association t('.add_solution'), f, :solutions,
+                                        partial: 'comprehension_solution_fields',
+                                        find_selector: 'tbody.tbody-points.'+point_id,
+                                        insert_using: 'append'
+      tbody.tbody-points *{:class => point_id}
+        = f.simple_fields_for :solutions do |comprehension_solutions_form|
+          = render 'comprehension_solution_fields', f: comprehension_solutions_form
