@@ -47,6 +47,9 @@ const mockSubmission = {
       user_id: 10,
     },
   }],
+  history: {
+    questions: [],
+  },
 };
 
 // stub import function

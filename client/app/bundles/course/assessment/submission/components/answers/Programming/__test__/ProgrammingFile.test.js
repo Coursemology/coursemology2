@@ -29,6 +29,9 @@ const mockSubmission = {
   questions: [],
   topics: [],
   answers: [],
+  history: {
+    questions: [],
+  },
 };
 
 describe('<ProgrammingFile />', () => {

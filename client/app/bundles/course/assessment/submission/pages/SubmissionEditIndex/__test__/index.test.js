@@ -63,10 +63,7 @@ const errorSubmission = {
     questionId: 1,
   }],
   history: {
-    questions: [{
-      id: 1,
-      answerIds: [],
-    }],
+    questions: [],
   },
 };
 
@@ -123,10 +120,7 @@ const successSubmission = {
     questionId: 1,
   }],
   history: {
-    questions: [{
-      id: 1,
-      answerIds: [],
-    }],
+    questions: [],
   },
 };
 

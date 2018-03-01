@@ -45,6 +45,9 @@ const mockSubmission = {
       user_id: 10,
     },
   }],
+  history: {
+    questions: [],
+  },
 };
 
 describe('updateScribingAnswerInLocal', () => {
