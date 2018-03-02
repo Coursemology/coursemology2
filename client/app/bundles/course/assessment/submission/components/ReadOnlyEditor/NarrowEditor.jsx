@@ -80,7 +80,7 @@ export default class NarrowEditor extends Component {
       >
         <OverlayTooltip
           placement={placement}
-          style={{ zIndex: activeComment === lineNumber ? 9999 : lineNumber }}
+          style={{ zIndex: activeComment === lineNumber ? 1000 : lineNumber }}
         >
           <div onClick={() => this.setState({ activeComment: lineNumber })}>
             <Annotations answerId={answerId} fileId={fileId} lineNumber={lineNumber} annotation={annotation} />

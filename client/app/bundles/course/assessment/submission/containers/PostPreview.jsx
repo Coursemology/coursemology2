@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { stripHtmlTags } from 'lib/helpers/htmlFormatHelpers';
 import { annotationShape } from '../propTypes';
 
 const styles = {
@@ -20,7 +21,8 @@ class VisiblePostPreview extends Component {
     const { style, creator, text } = this.props;
     return (
       <div style={{ ...styles.postPreview, ...style }}>
-        <span className="fa fa-chevron-down" style={styles.chevron} />{`${creator}: ${text}`}
+        <span className="fa fa-chevron-down" style={styles.chevron} />
+        {`${creator}: ${stripHtmlTags(text)}`}
       </div>
     );
   }

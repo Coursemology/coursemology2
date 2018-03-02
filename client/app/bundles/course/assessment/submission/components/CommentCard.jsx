@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Avatar from 'material-ui/Avatar';
-import TextField from 'material-ui/TextField';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import { red500, grey100 } from 'material-ui/styles/colors';
+import MaterialSummernote from 'lib/components/MaterialSummernote';
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import moment from 'lib/moment';
@@ -62,14 +62,22 @@ export default class CommentCard extends Component {
     return dateTime ? moment(dateTime).format('MMM DD, YYYY h:mma') : null;
   }
 
+  static editPostIdentifier(field) {
+    return `edit_post_${field}`;
+  }
+
+  static postIdentifier(field) {
+    return `post_${field}`;
+  }
+
   state = {
     editMode: false,
     deleteConfirmation: false,
   }
 
-  onChange(event) {
+  onChange(nextValue) {
     const { handleChange } = this.props;
-    handleChange(event.target.value);
+    handleChange(nextValue);
   }
 
   onSave() {
@@ -102,14 +110,12 @@ export default class CommentCard extends Component {
     if (editMode) {
       return (
         <React.Fragment>
-          <TextField
+          <MaterialSummernote
+            airMode
             id={id.toString()}
-            fullWidth
-            multiLine
-            rows={2}
-            rowsMax={4}
+            inputId={CommentCard.editPostIdentifier(id)}
+            onChange={nextValue => this.onChange(nextValue)}
             value={editValue}
-            onChange={event => this.onChange(event)}
           />
           <div style={styles.buttonContainer}>
             <FlatButton
@@ -134,9 +140,12 @@ export default class CommentCard extends Component {
   }
 
   render() {
-    const { creator: { name, avatar }, createdAt, canUpdate, canDestroy } = this.props.post;
+    const { creator: { name, avatar }, createdAt, canUpdate, canDestroy, id } = this.props.post;
     return (
-      <Card style={styles.card}>
+      <Card
+        id={CommentCard.postIdentifier(id)}
+        style={styles.card}
+      >
         <div style={styles.header}>
           <CardHeader
             style={styles.cardHeader}

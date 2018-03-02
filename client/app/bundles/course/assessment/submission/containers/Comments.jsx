@@ -10,6 +10,10 @@ import * as commentActions from '../actions/comments';
 import translations from '../translations';
 
 class VisibleComments extends Component {
+  static newCommentIdentifier(field) {
+    return `topic_${field}`;
+  }
+
   render() {
     const {
       commentForms, posts, topic,
@@ -31,10 +35,11 @@ class VisibleComments extends Component {
           />
         ))}
         <CommentField
-          value={commentForms.topics[topic.id]}
-          isSubmitting={commentForms.isSubmitting}
           createComment={createComment}
           handleChange={handleCreateChange}
+          inputId={VisibleComments.newCommentIdentifier(topic.id)}
+          isSubmitting={commentForms.isSubmitting}
+          value={commentForms.topics[topic.id]}
         />
       </div>
     );
