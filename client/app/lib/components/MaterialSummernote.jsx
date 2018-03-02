@@ -1,9 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import ReactSummernote from 'react-summernote';
 import TextFieldLabel from 'material-ui/TextField/TextFieldLabel';
 
+import { i18nLocale } from 'lib/helpers/server-context';
 import '../styles/MaterialSummernote.scss';
+
+const translations = defineMessages({
+  inlineCode: {
+    id: 'materialSummernote.InlineCode',
+    defaultMessage: 'Inline Code',
+  },
+});
 
 const propTypes = {
   field: PropTypes.string,
@@ -87,6 +96,33 @@ class MaterialSummernote extends React.Component {
     reader.readAsDataURL(image);
   };
 
+  /* eslint class-methods-use-this: "off" */
+  inlineCodeButton(context) {
+    const ui = $.summernote.ui;
+
+    const button = ui.button({
+      contents: '<i class="fa fa-code"' +
+                   'style="color: #c7254e;' +
+                   'font-weight: bold;' +
+                   'background-color: #f9f2f4"/>',
+      tooltip: <FormattedMessage {...translations.inlineCode} />,
+      click: () => {
+        const node = $(window.getSelection().getRangeAt(0).commonAncestorContainer);
+        if (node.parent().is('code')) {
+          node.unwrap();
+        } else {
+          const range = context.invoke('editor.createRange');
+          const text = range.toString();
+          if (text !== '') {
+            context.invoke('editor.insertNode', $(`<code>${text}</code>`)[0]);
+          }
+        }
+      },
+    });
+
+    return button.render();
+  }
+
   render() {
     const {
       baseTheme,
@@ -152,7 +188,7 @@ class MaterialSummernote extends React.Component {
               fontNamesIgnoreCheck: ['Roboto'],
               toolbar: [
                 ['style', ['style']],
-                ['font', ['bold', 'underline', 'clear']],
+                ['font', ['bold', 'underline', 'inlineCode', 'clear']],
                 ['script', ['superscript', 'subscript']],
                 ['fontname', ['fontname']],
                 ['color', ['color']],
@@ -164,7 +200,7 @@ class MaterialSummernote extends React.Component {
               popover: {
                 air: [
                   ['style', ['style']],
-                  ['font', ['bold', 'underline', 'clear']],
+                  ['font', ['bold', 'underline', 'inlineCode', 'clear']],
                   ['script', ['superscript', 'subscript']],
                   ['color', ['color']],
                   ['para', ['ul', 'ol', 'paragraph']],
@@ -172,6 +208,10 @@ class MaterialSummernote extends React.Component {
                   ['insert', ['link', 'picture']],
                 ],
               },
+              buttons: {
+                inlineCode: this.inlineCodeButton,
+              },
+              lang: i18nLocale,
             }}
             value={this.props.value}
             onChange={this.props.onChange}
