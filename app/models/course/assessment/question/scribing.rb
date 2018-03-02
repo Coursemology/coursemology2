@@ -19,4 +19,9 @@ class Course::Assessment::Question::Scribing < ApplicationRecord
     answer = Course::Assessment::Answer::Scribing.new(submission: submission, question: question)
     answer.acting_as
   end
+
+  # return the type of question i.e. Scribing
+  def question_type
+    I18n.t('course.assessment.question.scribing.question_type')
+  end
 end

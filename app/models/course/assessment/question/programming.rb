@@ -114,6 +114,11 @@ class Course::Assessment::Question::Programming < ApplicationRecord
     test_cases.clear
   end
 
+  # returns the type of question i.e. Programming
+  def question_type
+    I18n.t('course.assessment.question.programming.question_type')
+  end
+
   private
 
   # Create new package or re-evaluate the old package.

@@ -13,3 +13,4 @@ en:
           destroy:
             success: 'The scribing question was deleted.'
             failure: 'Could not delete scribing question: %{error}'
+          question_type: Scribing
