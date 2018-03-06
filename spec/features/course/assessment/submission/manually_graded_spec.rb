@@ -77,7 +77,9 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments', j
         expect(page).to have_selector('div', text: programming_question.description)
 
         click_button('Reset Answer')
-        accept_confirm_dialog
+        accept_confirm_dialog do
+          wait_for_job
+        end
 
         # Check that answer has been reset to template files
         expect(page).not_to have_selector('div.ace_line', text: file.content)
@@ -90,7 +92,9 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments', j
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         click_button('Finalise Submission')
-        accept_confirm_dialog
+        accept_confirm_dialog do
+          wait_for_job
+        end
 
         expect(page).to have_selector('span', text: 'Submission updated successfully.')
         expect(submission.reload).to be_submitted
@@ -99,7 +103,7 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments', j
         expect(page).not_to have_selector('div', text: 'Grading')
       end
 
-      scenario 'I can create, update and delete comment on answers', js: true do
+      scenario 'I can create, update and delete comment on answers' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
         expect(page).to have_selector('div', text: assessment.description)
 
@@ -135,7 +139,10 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments', j
 
         # Delete the reply
         first('button.delete-comment').click
-        accept_confirm_dialog
+        accept_confirm_dialog do
+          wait_for_job
+        end
+
         expect(page).not_to have_selector('p', text: updated_post_text)
         expect(comment_topic.reload.posts.count).to eq(1)
       end
@@ -144,7 +151,7 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments', j
     context 'As a Course Staff' do
       let(:user) { create(:course_teaching_assistant, course: course).user }
 
-      scenario "I can grade the student's work", js: true do
+      scenario "I can grade the student's work" do
         mrq_questions.each { |q| q.attempt(submission).save! }
         submission.finalise!
         submission.save!
