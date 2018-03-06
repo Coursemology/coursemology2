@@ -27,10 +27,33 @@ const translations = defineMessages({
     id: 'course.assessment.submission.answer.grade',
     defaultMessage: 'Grade',
   },
+  group: {
+    id: 'course.assessment.submission.answer.group',
+    defaultMessage: 'Group',
+  },
+  point: {
+    id: 'course.assessment.submission.answer.point',
+    defaultMessage: 'Point',
+  },
+  maximumGroupGrade: {
+    id: 'course.assessment.submission.answer.maximumGroupGrade',
+    defaultMessage: 'Maximum Grade for this Group',
+  },
+  pointGrade: {
+    id: 'course.assessment.submission.answer.pointGrade',
+    defaultMessage: 'Grade for this Point',
+  },
+  compre_keyword: {
+    id: 'course.assessment.submission.answer.compreKeyword',
+    defaultMessage: 'Keywords',
+  },
+  compre_lifted_word: {
+    id: 'course.assessment.submission.answer.compreLiftedWord',
+    defaultMessage: 'Lifted Words',
+  },
 });
 
 function renderTextResponseSolutions(question) {
-  /* eslint-disable react/no-array-index-key */
   return (
     <React.Fragment>
       <hr />
@@ -44,8 +67,8 @@ function renderTextResponseSolutions(question) {
           </TableRow>
         </TableHeader>
         <TableBody displayRowCheckbox={false}>
-          {question.solutions.map((solution, index) => (
-            <TableRow key={index}>
+          {question.solutions.map(solution => (
+            <TableRow key={solution.id}>
               <TableRowColumn>{solution.solutionType}</TableRowColumn>
               <TableRowColumn style={{ whiteSpace: 'pre-wrap' }}>{solution.solution}</TableRowColumn>
               <TableRowColumn>{solution.grade}</TableRowColumn>
@@ -55,7 +78,78 @@ function renderTextResponseSolutions(question) {
       </Table>
     </React.Fragment>
   );
-  /* eslint-enable react/no-array-index-key */
+}
+
+function renderTextResponseComprehensionPoint(point) {
+  return (
+    <React.Fragment>
+      <br />
+      <h5><FormattedMessage {...translations.point} /></h5>
+      <Table selectable={false}>
+        <TableBody displayRowCheckbox={false}>
+          <TableRow>
+            <TableRowColumn><FormattedMessage {...translations.pointGrade} /></TableRowColumn>
+            <TableRowColumn>{point.pointGrade}</TableRowColumn>
+          </TableRow>
+          <TableRow>
+            <TableHeaderColumn><FormattedMessage {...translations.type} /></TableHeaderColumn>
+            <TableHeaderColumn><FormattedMessage {...translations.solution} /></TableHeaderColumn>
+          </TableRow>
+          {point.solutions.map(solution => (
+            <TableRow key={solution.id}>
+              <TableRowColumn><FormattedMessage {...translations[solution.solutionType]} /></TableRowColumn>
+              <TableRowColumn style={{ whiteSpace: 'pre-wrap' }}>{solution.solution}</TableRowColumn>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </React.Fragment>
+  );
+}
+
+function renderTextResponseComprehensionGroup(group) {
+  return (
+    <React.Fragment>
+      <br />
+      <h4><FormattedMessage {...translations.group} /></h4>
+      <Table selectable={false}>
+        <TableBody displayRowCheckbox={false}>
+          <TableRow>
+            <TableRowColumn><FormattedMessage {...translations.maximumGroupGrade} /></TableRowColumn>
+            <TableRowColumn>{group.maximumGroupGrade}</TableRowColumn>
+          </TableRow>
+          {group.points.map(point => (
+            <TableRow key={point.id}>
+              <TableRowColumn colSpan={2}>
+                {renderTextResponseComprehensionPoint(point)}
+              </TableRowColumn>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </React.Fragment>
+  );
+}
+
+function renderTextResponseComprehension(question) {
+  return (
+    <React.Fragment>
+      <hr />
+      <h4><FormattedMessage {...translations.solutions} /></h4>
+      {question.groups.map(group => (
+        <div key={group.id}>{renderTextResponseComprehensionGroup(group)}</div>
+      ))}
+    </React.Fragment>
+  );
+}
+
+function solutionsTable(question) {
+  if (question.comprehension && question.groups) {
+    return renderTextResponseComprehension(question);
+  } else if (!question.comprehension && question.solutions) {
+    return renderTextResponseSolutions(question);
+  }
+  return null;
 }
 
 function TextResponse({ question, readOnly, answerId, graderView }) {
@@ -85,7 +179,7 @@ function TextResponse({ question, readOnly, answerId, graderView }) {
   return (
     <div>
       { readOnly ? readOnlyAnswer : editableAnswer }
-      {question.solutions && graderView ? renderTextResponseSolutions(question) : null}
+      { graderView ? solutionsTable(question) : null }
       {allowUpload ? <UploadedFileView questionId={question.id} /> : null}
       {allowUpload && !readOnly ? <FileInput name={`${answerId}[files]`} disabled={readOnly} /> : null}
     </div>

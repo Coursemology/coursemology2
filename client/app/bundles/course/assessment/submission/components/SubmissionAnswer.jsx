@@ -68,7 +68,7 @@ class SubmissionAnswer extends Component {
 
   getRenderer(question) {
     const {
-      MultipleChoice, MultipleResponse, TextResponse, FileUpload,
+      MultipleChoice, MultipleResponse, TextResponse, Comprehension, FileUpload,
       Programming, VoiceResponse, Scribing,
     } = questionTypes;
     const { viewHistory } = question;
@@ -83,6 +83,7 @@ class SubmissionAnswer extends Component {
       case MultipleResponse:
         return Answers.renderMultipleResponse;
       case TextResponse:
+      case Comprehension:
         return Answers.renderTextResponse;
       case FileUpload:
         return Answers.renderFileUpload;
