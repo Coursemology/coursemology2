@@ -4,10 +4,7 @@ class Course::Assessment::Question::TextResponseComprehensionSolution < Applicat
 
   enum solution_type: [:compre_keyword, :compre_lifted_word]
 
-  before_validation :remove_blank_solution,
-                    :set_dummy_solution_lemma,
-                    :strip_whitespace_solution,
-                    :strip_whitespace_solution_lemma
+  before_validation :sanitise_solution_and_derive_lemma
 
   validate :validate_solution_lemma_empty
 
@@ -24,17 +21,24 @@ class Course::Assessment::Question::TextResponseComprehensionSolution < Applicat
 
   private
 
+  def sanitise_solution_and_derive_lemma
+    remove_blank_solution
+    strip_whitespace_solution
+    convert_solution_to_lemma
+    strip_whitespace_solution_lemma
+  end
+
   def remove_blank_solution
     solution.reject!(&:blank?)
   end
 
-  # TODO: Remove this function when lemmatiser is implemented
-  def set_dummy_solution_lemma
-    self.solution_lemma = solution
-  end
-
   def strip_whitespace_solution
     solution.each(&:strip!)
+  end
+
+  def convert_solution_to_lemma
+    lemmatiser = Course::Assessment::Question::TextResponseLemmaService.new
+    self.solution_lemma = lemmatiser.lemmatise(solution)
   end
 
   def strip_whitespace_solution_lemma
