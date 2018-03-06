@@ -41,7 +41,7 @@ export default class WideComments extends Component {
           key={lineNumber}
           style={{
             ...styles.expanded,
-            zIndex: activeComment === lineNumber ? 9999 : lineNumber + styles.expanded.zIndex,
+            zIndex: activeComment === lineNumber ? 1000 : lineNumber + styles.expanded.zIndex,
           }}
           onClick={() => onClick(lineNumber)}
         >

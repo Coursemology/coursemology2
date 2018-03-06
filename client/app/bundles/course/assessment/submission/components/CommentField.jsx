@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
-import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import CircularProgress from 'material-ui/CircularProgress';
+import MaterialSummernote from 'lib/components/MaterialSummernote';
 
 const translations = defineMessages({
   prompt: {
@@ -18,31 +18,30 @@ const translations = defineMessages({
 
 export default class CommentField extends Component {
   static propTypes = {
-    value: PropTypes.string,
+    inputId: PropTypes.string,
     isSubmitting: PropTypes.bool,
+    value: PropTypes.string,
 
     createComment: PropTypes.func,
     handleChange: PropTypes.func,
   };
 
-  onChange(event) {
+  onChange(nextValue) {
     const { handleChange } = this.props;
-    handleChange(event.target.value);
+    handleChange(nextValue);
   }
 
   render() {
-    const { value, createComment, isSubmitting } = this.props;
+    const { createComment, inputId, isSubmitting, value } = this.props;
     return (
       <React.Fragment>
-        <TextField
-          floatingLabelText={<h4><FormattedMessage {...translations.prompt} /></h4>}
-          fullWidth
-          multiLine
-          rows={2}
-          rowsMax={4}
-          value={value}
+        <MaterialSummernote
+          airMode
           disabled={isSubmitting}
-          onChange={event => this.onChange(event)}
+          inputId={inputId}
+          label={<h4><FormattedMessage {...translations.prompt} /></h4>}
+          onChange={nextValue => this.onChange(nextValue)}
+          value={value}
         />
         <RaisedButton
           primary

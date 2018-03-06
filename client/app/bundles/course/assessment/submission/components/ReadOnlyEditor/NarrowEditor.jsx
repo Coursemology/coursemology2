@@ -76,11 +76,12 @@ export default class NarrowEditor extends Component {
         show={expanded[lineNumber - 1]}
         onHide={() => collapseLine(lineNumber)}
         placement={placement}
+        rootClose
         target={() => findDOMNode(this[`comment-${lineNumber}`])} // eslint-disable-line react/no-find-dom-node
       >
         <OverlayTooltip
           placement={placement}
-          style={{ zIndex: activeComment === lineNumber ? 9999 : lineNumber }}
+          style={{ zIndex: activeComment === lineNumber ? 1000 : lineNumber }}
         >
           <div onClick={() => this.setState({ activeComment: lineNumber })}>
             <Annotations answerId={answerId} fileId={fileId} lineNumber={lineNumber} annotation={annotation} />
@@ -95,18 +96,20 @@ export default class NarrowEditor extends Component {
     const { annotations } = this.props;
     const annotation = annotations.find(a => a.line === lineNumber);
     return (
-      <div
-        style={annotation ? styles.editorLineNumberWithComments : styles.editorLineNumber}
-        onClick={() => this.toggleComment(lineNumber)}
-        onMouseOver={() => this.setState({ lineHovered: lineNumber })}
-        onMouseOut={() => this.setState({ lineHovered: 0 })}
-      >
-        <div ref={(c) => { this[`comment-${lineNumber}`] = c; }}>
-          {lineNumber}
+      <React.Fragment>
+        <div
+          style={annotation ? styles.editorLineNumberWithComments : styles.editorLineNumber}
+          onClick={() => this.toggleComment(lineNumber)}
+          onMouseOver={() => this.setState({ lineHovered: lineNumber })}
+          onMouseOut={() => this.setState({ lineHovered: 0 })}
+        >
+          <div ref={(c) => { this[`comment-${lineNumber}`] = c; }}>
+            {lineNumber}
+          </div>
+          <AddCommentIcon onClick={() => this.expandComment(lineNumber)} hovered={lineHovered === lineNumber} />
         </div>
         {this.renderComments(lineNumber)}
-        <AddCommentIcon onClick={() => this.expandComment(lineNumber)} hovered={lineHovered === lineNumber} />
-      </div>
+      </React.Fragment>
     );
   }
 

@@ -108,8 +108,10 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments', j
 
         # Make a first comment
         comment_post_text = 'test comment'
-        first('textarea').set(comment_post_text)
+        summernote_topic_selector = "textarea#topic_#{comment_topic.id}"
+        fill_in_react_summernote summernote_topic_selector, comment_post_text
         click_button 'Comment'
+        expect(page).to have_selector('div[id^="post_"]', count: 1)
         expect(page).to have_selector('p', text: comment_post_text)
 
         comment_post = comment_topic.reload.posts.last
@@ -118,8 +120,9 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments', j
 
         # Reply to the first comment
         comment_reply_text = 'test reply'
-        first('textarea').set(comment_reply_text)
+        fill_in_react_summernote summernote_topic_selector, comment_reply_text
         click_button 'Comment'
+        expect(page).to have_selector('div[id^="post_"]', count: 2)
         expect(page).to have_selector('p', text: comment_reply_text)
 
         comment_reply = comment_topic.reload.posts.reject { |post| post.id == comment_post.id }.last
@@ -128,8 +131,9 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments', j
         # Edit the first comment made
         first('button.edit-comment').click
         updated_post_text = 'updated comment'
-        first('textarea').set('')
-        first('textarea').set(updated_post_text)
+        summernote_post_selector = "textarea#edit_post_#{comment_topic.posts.first.id}"
+        fill_in_react_summernote summernote_post_selector, ''
+        fill_in_react_summernote summernote_post_selector, updated_post_text
         click_button 'Save'
         expect(page).to have_selector('p', text: updated_post_text)
 

@@ -9,6 +9,12 @@ import CommentCard from '../components/CommentCard';
 import CommentField from '../components/CommentField';
 import * as annotationActions from '../actions/annotations';
 
+const styles = {
+  card: {
+    minWidth: 250,
+  },
+};
+
 class VisibleAnnotations extends Component {
   constructor(props) {
     super(props);
@@ -24,7 +30,10 @@ class VisibleAnnotations extends Component {
     } = this.props;
 
     return (
-      <Card onClick={() => this.setState({ fieldVisible: true })}>
+      <Card
+        onClick={() => this.setState({ fieldVisible: true })}
+        style={styles.card}
+      >
         <CardText style={{ textAlign: 'left' }}>
           {posts.map(post => (
             <CommentCard
