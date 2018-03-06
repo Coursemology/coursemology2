@@ -6,6 +6,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def show
+    @question_duplication_dropdown_data = ordered_assessments_by_tab
   end
 
   def new
@@ -150,5 +151,40 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   # @return [Boolean]
   def valid_ordering?(proposed_ordering)
     question_assessments_hash.keys.sort == proposed_ordering.sort
+  end
+
+  # Mapping of `tab_id`s to their compound titles. If the tab is the only one in its category,
+  # the category title is used. Otherwise, the category is prepended to the tab title.
+  #
+  # @return [Hash{Integer => String}]
+  def compound_tab_titles
+    @compound_tab_titles ||= begin
+      category_titles = current_course.assessment_categories.pluck(:id, :title).to_h
+      current_course.assessment_tabs.pluck(:id, :category_id, :title).
+        group_by { |_, category_id, _| category_id }.
+        flat_map do |category_id, tabs|
+          category_title = category_titles[category_id]
+          tabs.map do |id, _, title|
+            [id, tabs.length > 1 ? "#{category_title} - #{title}" : category_title]
+          end
+        end.to_h
+    end
+  end
+
+  # Data used to populate the 'duplicate question' downdown.
+  # The assessments are sectioned by tabs and ordered by date and time.
+  #
+  # @return [Array<Hash{title: String, assessments: Array}>] Array containing one hash per tab.
+  def ordered_assessments_by_tab
+    tabs = current_course.assessments.ordered_by_date_and_title.
+           pluck(:id, :tab_id, 'course_lesson_plan_items.title').
+           group_by { |_, tab_id, _| tab_id }.
+           map do |tab_id, assessments|
+             {
+               title: compound_tab_titles[tab_id],
+               assessments: assessments.map { |id, _, title| { id: id, title: title } }
+             }
+           end
+    tabs.sort_by { |tab_hash| tab_hash[:title] }
   end
 end

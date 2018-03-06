@@ -13,7 +13,25 @@
             => fa_icon 'exclamation-triangle'.freeze,
                     title: t('.non_auto_gradable'),
                     class: 'text-warning'
-          div.btn-group
+          .btn-group
+            .btn-group
+              .dropdown
+                button.btn.btn-default.dropdown-toggle#duplicate-question-dropdown data-toggle='dropdown'
+                  i.fa.fa-copy
+                  '
+                  span.caret
+                ul.dropdown-menu.dropdown-menu-right
+                  - @question_duplication_dropdown_data.each_with_index do |tab_hash, index|
+                    - unless index == 0
+                      li.divider role='separator'
+                    li.dropdown-header = tab_hash[:title]
+                    - tab_hash[:assessments].each do |assessment_hash|
+                      li
+                        = link_to assessment_hash[:title],
+                                  duplicate_course_assessment_question_path( \
+                                    current_course, assessment, question, assessment_hash[:id]),
+                                  class: 'dropdown-item', method: :post, remote: true,
+                                  data: { confirm: t('.confirm_duplicate_question', destination: assessment_hash[:title]) }
             = edit_button(edit_path)
             = delete_button(delete_path)
         h4 = format_inline_text(question_assessment.display_title)

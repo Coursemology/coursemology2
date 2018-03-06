@@ -184,6 +184,9 @@ Rails.application.routes.draw do
       scope module: :assessment do
         resources :assessments do
           post 'reorder', on: :member
+          resources :questions, only: [] do
+            post 'duplicate/:destination_assessment_id', on: :member, action: 'duplicate', as: :duplicate
+          end
           namespace :question do
             resources :multiple_responses, only: [:new, :create, :edit, :update, :destroy]
             resources :text_responses, only: [:new, :create, :edit, :update, :destroy]

@@ -86,6 +86,9 @@ module Course::Assessment::AssessmentAbility
   end
 
   def allow_manage_questions
+    question_assessments_current_course =
+      { question_assessments: { assessment: { tab: { category: { course: course } } } } }
+
     [
       Course::Assessment::Question::MultipleResponse,
       Course::Assessment::Question::TextResponse,
@@ -94,9 +97,9 @@ module Course::Assessment::AssessmentAbility
       Course::Assessment::Question::VoiceResponse
     ].each do |question_class|
       can :create, question_class
-      can :manage, question_class,
-          question: { question_assessments: { assessment: { tab: { category: { course: course } } } } }
+      can :manage, question_class, question: question_assessments_current_course
     end
+    can :duplicate, Course::Assessment::Question, question_assessments_current_course
   end
 
   # Only managers are allowed to publish assessment submission grades
