@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::TextResponsesController < Course::Assessment::QuestionsController
+class Course::Assessment::Question::TextResponsesController < Course::Assessment::Question::Controller
   build_and_authorize_new_question :text_response_question,
                                    class: Course::Assessment::Question::TextResponse, only: [:new, :create]
   load_and_authorize_resource :text_response_question,

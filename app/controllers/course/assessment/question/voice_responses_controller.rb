@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::VoiceResponsesController < Course::Assessment::QuestionsController
+class Course::Assessment::Question::VoiceResponsesController < Course::Assessment::Question::Controller
   build_and_authorize_new_question :voice_response_question,
                                    class: Course::Assessment::Question::VoiceResponse, only: [:new, :create]
   load_and_authorize_resource :voice_response_question,
