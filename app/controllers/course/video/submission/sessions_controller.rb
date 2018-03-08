@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class Course::Video::Submission::SessionsController < Course::Video::Submission::Controller
-  load_and_authorize_resource :session, class: Course::Video::Session.name
 
   def update
     # We received a message from client, so time is updated regardless of how event records turn out
@@ -18,6 +17,10 @@ class Course::Video::Submission::SessionsController < Course::Video::Submission:
   end
 
   private
+
+  def current_tab
+    @video.tab
+  end
 
   def session_params
     params.require(:session).permit(:last_video_time,
