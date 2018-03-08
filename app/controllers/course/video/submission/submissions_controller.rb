@@ -33,7 +33,7 @@ class Course::Video::Submission::SubmissionsController < Course::Video::Submissi
     @posts = @topics.map(&:posts).inject(Course::Discussion::Post.none, :+)
     @scroll_topic_id = scroll_topic_params
     # TODO: Re-enable when video sessions are fixed
-    # create_session
+    # set_monitoring
   rescue CanCan::AccessDenied
     redirect_to course_video_path(current_course, @video)
   end
@@ -52,10 +52,9 @@ class Course::Video::Submission::SubmissionsController < Course::Video::Submissi
     authorize!(:attempt, @video)
   end
 
-  def create_session
-    return unless current_course_user.student? && @submission.course_user == current_course_user
-    time_now = Time.zone.now
-    @session = @submission.sessions.create!(session_start: time_now, session_end: time_now)
+  def set_monitoring
+    @enable_monitoring =
+      current_course_user.student? && @submission.course_user == current_course_user
   end
 
   def current_tab
