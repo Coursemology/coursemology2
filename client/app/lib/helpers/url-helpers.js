@@ -1,4 +1,5 @@
 /* eslint-disable max-len */
+
 /* Get the given parameter from the URL.
 * e.g. With this URL -> http://dummy.com/?technology=jquery&blog=jquerybyexample
 *
@@ -82,5 +83,24 @@ function getVideoId() {
   return match && match[1];
 }
 
+/**
+ * Get the video submission id from URL.
+ *
+ * return {number}
+ */
+function getVideoSubmissionId() {
+  const match = window.location.pathname.match(/^\/courses\/\d+\/videos\/\d+\/submissions\/(\d+)/);
+  return match && match[1];
+}
+
 /* eslint-disable import/prefer-default-export */
-export { getUrlParameter, getCourseId, getSurveyId, getAssessmentId, getSubmissionId, getScribingId, getVideoId };
+export {
+  getUrlParameter,
+  getCourseId,
+  getSurveyId,
+  getAssessmentId,
+  getSubmissionId,
+  getScribingId,
+  getVideoId,
+  getVideoSubmissionId,
+};
