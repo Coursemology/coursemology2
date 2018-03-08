@@ -4,11 +4,14 @@ en:
       course_users:
         course_users_form:
           header: 'Award Achievement'
-          name: 'Name'
-          enabled: 'Obtained Achievement'
           button: 'Update Users'
           phantom_user_header: 'Phantom Users'
+          your_students_header: 'Your students'
+          students_header: 'Rest all students'
         index:
           notice: >
             If an Achievement has conditions associated with it, Coursemology will automatically
             award achievements when the student meets those conditions.
+        course_users_table:
+          name: 'Name'
+          enabled: 'Obtained Achievement'
