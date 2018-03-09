@@ -2,7 +2,7 @@
   = f.error_notification
   = f.error :achievement
 
-  - own_students = course.course_users.without_phantom_users.students.where(creator_id: current_user.id)
+  - own_students = current_user.my_students(current_course).without_phantom_users
   - students = course.course_users.without_phantom_users.students
   h4 = t('.your_students_header')
   = render partial: 'course_users_table', locals: { collection: own_students.order_alphabetically, f: f, phantom: false }

@@ -59,7 +59,7 @@ RSpec.feature 'Course: Achievements' do
                                                           'destroy.success'))
       end
 
-      context 'manually-awarded achievements' do
+      context 'Award a manually-awarded achievement to student' do
         let!(:manual_achievement) { create(:course_achievement, course: course) }
         let!(:course_condition) { create(:course_condition_achievement, course: course, conditional: auto_achievement) }
         let!(:auto_achievement) { create(:course_achievement, course: course) }

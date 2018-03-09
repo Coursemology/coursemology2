@@ -227,5 +227,24 @@ RSpec.describe User do
         end
       end
     end
+
+    describe '#my_students' do
+      subject { create(:user) }
+      let!(:course) { create(:course) }
+      let!(:group_owner) { create(:course_manager, course: course, user: subject) }
+      let(:student) { create(:course_student, course: course) }
+      let(:another_student) { create(:course_student, course: course) }
+
+      before do
+        group = create(:course_group, course: course, creator: subject)
+        another_group = create(:course_group, course: course)
+        create(:course_group_user, course: course, group: group, course_user: student)
+        create(:course_group_user, course: course, group: another_group, course_user: another_student)
+      end
+
+      it 'returns my normal course student for a particular course' do
+        expect(subject.my_students(course)).to contain_exactly(student)
+      end
+    end
   end
 end
