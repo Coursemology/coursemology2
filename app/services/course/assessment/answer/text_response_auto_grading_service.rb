@@ -60,12 +60,10 @@ class Course::Assessment::Answer::TextResponseAutoGradingService < \
   #
   # The grade is considered to be the sum of grades assigned to all matched solutions, but not
   # exceeding the maximum grade of the question.
-  #
   # @param [Course::Assessment::Question::TextResponse] question The question answered by the
   #   student.
   # @param [Array<Course::Assessment::Question::TextResponseSolution>] solutions The solutions that
   #   matches the student's answer.
-  # @return [Integer] The grade for the question.
   def grade_for(question, solutions)
     [solutions.map(&:grade).reduce(0, :+), question.maximum_grade].min
   end
@@ -79,13 +77,12 @@ class Course::Assessment::Answer::TextResponseAutoGradingService < \
     solutions.map(&:explanation).tap(&:compact!)
   end
 
-  # Mark the correctness of the answer based on solutions.
+  # Mark the correctness of the answer based on solutions
   #
   # @param [Course::Assessment::Question::TextResponse] question The question answered by the
   #   student.
   # @param [Array<Course::Assessment::Question::TextResponseSolution>] solutions The solutions that
   #   matches the student's answer.
-  # @return [Boolean] correct True if the answer is correct.
   def correctness_for(question, solutions)
     solutions.map(&:grade).sum >= question.maximum_grade
   end

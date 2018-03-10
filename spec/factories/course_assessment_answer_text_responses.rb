@@ -35,11 +35,7 @@ FactoryBot.define do
     end
 
     trait :comprehension_keyword do
-      answer_text '<p>my answer contains key word</p>'
-    end
-
-    trait :comprehension_lifted_word_keyword do
-      answer_text '<p>my answer contains lifting from text passage and key word</p>'
+      answer_text '<p>my answer contains keyword</p>'
     end
 
     trait :no_match do

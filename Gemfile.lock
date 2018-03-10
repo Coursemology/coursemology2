@@ -47,12 +47,6 @@ GIT
     activerecord-userstamp (3.0.5)
       rails (>= 4.1)
 
-GIT
-  remote: https://github.com/makqien/rwordnet
-  revision: 6342db3c2acb85de98ff422d7c55f4a1f561dd5c
-  specs:
-    rwordnet (2.0.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -628,7 +622,6 @@ DEPENDENCIES
   rspec-rails
   rspec-retry
   rubyzip
-  rwordnet!
   sanitize
   sass-rails
   schema_monkey

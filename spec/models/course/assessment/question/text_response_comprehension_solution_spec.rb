@@ -20,7 +20,7 @@ RSpec.describe Course::Assessment::Question::TextResponseComprehensionSolution, 
       describe '#answer_text' do
         subject do
           build_stubbed(:course_assessment_question_text_response_comprehension_solution, \
-                        solution: ['  content  '])
+                        solution: ['  content  '], solution_lemma: ['  content  '])
         end
 
         it 'strips whitespaces when validated' do

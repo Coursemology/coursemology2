@@ -45,11 +45,7 @@ class Course::Assessment::Question::TextResponse < ApplicationRecord
   end
 
   def auto_grader
-    if comprehension_question?
-      Course::Assessment::Answer::TextResponseComprehensionAutoGradingService.new
-    else
-      Course::Assessment::Answer::TextResponseAutoGradingService.new
-    end
+    Course::Assessment::Answer::TextResponseAutoGradingService.new
   end
 
   def attempt(submission, last_attempt = nil)
