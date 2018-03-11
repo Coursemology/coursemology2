@@ -25,3 +25,4 @@ en:
                 evaluation_timeout: >-
                   no response was received from an evaluator within the required time.
                 evaluation_error: 'an error occurred during evaluation, see logs.'
+          question_type: Programming

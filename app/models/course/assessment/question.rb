@@ -12,6 +12,7 @@ class Course::Assessment::Question < ApplicationRecord
                                   dependent: :destroy, inverse_of: :question
 
   delegate :to_partial_path, to: :actable
+  delegate :question_type, to: :actable
 
   # Checks if the given question is auto gradable. This defaults to false if the specific
   # question does not implement auto grading. If this returns true, +auto_grader+ is guaranteed

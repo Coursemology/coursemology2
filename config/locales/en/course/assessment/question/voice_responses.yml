@@ -14,3 +14,4 @@ en:
             failure: 'Could not delete audio response question: %{error}'
           form:
             voice_response_button: 'Audio Response Question'
+          question_type: Audio Response

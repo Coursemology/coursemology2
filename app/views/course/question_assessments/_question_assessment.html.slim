@@ -17,4 +17,6 @@
             = edit_button(edit_path)
             = delete_button(delete_path)
         h4 = format_inline_text(question_assessment.display_title)
-        = format_html(question.description)
+        span.label.label-primary
+          = format_inline_text(question_assessment.question.question_type)
+        p = format_html(question.description)

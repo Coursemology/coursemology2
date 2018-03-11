@@ -23,3 +23,6 @@ en:
           option_fields:
             explanation_hint: 'The explanation to show after the student submits his answer.'
             remove: 'Remove'
+          question_type:
+            multiple_response: Multiple Response
+            multiple_choice: Multiple Choice

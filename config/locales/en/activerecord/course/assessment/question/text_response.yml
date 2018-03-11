@@ -3,9 +3,9 @@ en:
     attributes:
       models:
         course/assessment/question/text_response:
-          text_response: 'text response question'
-          file_upload: 'file upload question'
-          comprehension: 'comprehension question'
+          text_response: 'Text Response Question'
+          file_upload: 'File Upload Question'
+          comprehension: 'Comprehension Question'
     errors:
       models:
         course/assessment/question/text_response:
