@@ -45,6 +45,8 @@ module Capybara::TestGroupHelpers
     def accept_confirm_dialog
       expect(page).to have_selector('button.confirm-btn')
       find('button.confirm-btn').click
+      yield if block_given?
+      wait_for_ajax
       expect(page).to have_no_selector('button.confirm-btn')
     end
 
