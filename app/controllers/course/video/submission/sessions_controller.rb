@@ -3,9 +3,6 @@ class Course::Video::Submission::SessionsController < Course::Video::Submission:
   load_and_authorize_resource :session, class: Course::Video::Session.name, through: :submission
 
   def create
-    time_now = Time.zone.now
-    @session.session_start = time_now
-    @session.session_end = time_now
     head :bad_request unless @session.save
   end
 
