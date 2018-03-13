@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::ProgrammingController < Course::Assessment::QuestionsController
+class Course::Assessment::Question::ProgrammingController < Course::Assessment::Question::Controller
   build_and_authorize_new_question :programming_question,
                                    class: Course::Assessment::Question::Programming, only: [:new, :create]
   load_and_authorize_resource :programming_question,

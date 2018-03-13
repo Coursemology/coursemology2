@@ -1,0 +1,6 @@
+en:
+  course:
+    assessment:
+      questions:
+        duplicate:
+          success: 'Question duplicated to <a href="%{destination_link}">%{destination_name}</a>.'

@@ -1,29 +1,33 @@
 # frozen_string_literal: true
-class Course::Assessment::QuestionsController < Course::Assessment::ComponentController
-  before_action :authorize_assessment
+class Course::Assessment::QuestionsController < Course::Assessment::Controller
+  load_and_authorize_resource :question, class: Course::Assessment::Question, through: :assessment
+  before_action :load_and_authorize_destination_assessment, only: :duplicate
 
-  # Use method to build new questions.
-  #
-  # Cancancan uses `assessment.specific_questions.build` to build a resource, which will break since the specific
-  # questions are nested through `question_assessments` and AR does not support build associations with nested
-  # has_many through.
-  def self.build_and_authorize_new_question(question_name, options)
-    before_action only: options[:only], except: options[:except] do
-      question = options[:class].new
-      question.question_assessments.build(assessment: @assessment)
-      question.assign_attributes(send("#{question_name}_params")) if action_name != 'new'
-      authorize!(action_name.to_sym, question)
-      instance_variable_set("@#{question_name}", question) unless instance_variable_get("@#{question_name}")
+  def duplicate
+    if @destination_assessment.questions << duplicated_question
+      flash.now[:success] =
+        t('.success', destination_name: @destination_assessment.title,
+                      destination_link: course_assessment_path(current_course, @destination_assessment))
+    else
+      flash.now[:danger] = @destination_assessment.errors.full_messages.to_sentence
     end
   end
 
-  def load_question_assessment_for(question)
-    @assessment.question_assessments.find_by!(question: question.acting_as)
+  private
+
+  def load_and_authorize_destination_assessment
+    @destination_assessment = Course::Assessment.find(params[:destination_assessment_id])
+    authorize! :update, @destination_assessment
   end
 
-  protected
-
-  def authorize_assessment
-    authorize!(:update, @assessment)
+  # Duplicates the target question and associates skills, if any.
+  # It currently assumes that the destination assessment's course is the current course.
+  #
+  # @return [Course::Assessment::Question] The duplicated question
+  def duplicated_question
+    duplicator = Duplicator.new({}, current_course: current_course)
+    duplicator.duplicate(@question.specific).tap do |duplicate|
+      duplicate.skills = @question.skills
+    end.acting_as
   end
 end
