@@ -79,6 +79,10 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
+    active_record_upsert (0.7.4)
+      activerecord (>= 5.0, < 6.0)
+      arel (> 7.0, < 10.0)
+      pg (>= 0.18, < 2.0)
     activejob (5.1.5)
       activesupport (= 5.1.5)
       globalid (>= 0.3.6)
@@ -557,6 +561,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_record-acts_as!
+  active_record_upsert
   activerecord-import (>= 0.2.0)
   activerecord-userstamp!
   acts_as_tenant

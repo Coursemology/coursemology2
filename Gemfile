@@ -41,6 +41,8 @@ gem 'baby_squeel'
 gem 'active_record-acts_as', git: 'https://github.com/Coursemology/active_record-acts_as', branch: 'rails5'
 # Organise ActiveRecord model into a tree structure
 gem 'edge'
+# Upsert action for Postgres
+gem 'active_record_upsert'
 # Create pretty URLs and work with human-friendly strings
 gem 'friendly_id'
 
