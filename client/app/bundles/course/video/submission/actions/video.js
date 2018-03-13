@@ -212,7 +212,7 @@ function sendOldSessions(dispatch, oldSessions) {
       return CourseAPI.video.sessions
         .update(sessionId, videoTime, events.toArray(), true)
         .then(() => sessionId)
-        .catch(() => null);
+        .catch(error => (error.response.status === 404 ? sessionId : null));
     })
     .values();
 
