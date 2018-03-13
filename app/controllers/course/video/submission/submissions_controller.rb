@@ -32,8 +32,7 @@ class Course::Video::Submission::SubmissionsController < Course::Video::Submissi
     @topics = @topics.reject { |topic| topic.posts.empty? }
     @posts = @topics.map(&:posts).inject(Course::Discussion::Post.none, :+)
     @scroll_topic_id = scroll_topic_params
-    # TODO: Re-enable when video sessions are fixed
-    # set_monitoring
+    set_monitoring
   rescue CanCan::AccessDenied
     redirect_to course_video_path(current_course, @video)
   end
