@@ -139,9 +139,7 @@ module Course::UserInvitationService::EmailInvitationConcern
   # @param [Array<String>] email_addresses An array of email addresses to query.
   # @return [Hash{String=>User}] The mapping from email address to users.
   def find_existing_users(email_addresses)
-    # TODO: Move this search query into the +User+ model.
-    found_users = @current_instance.users.includes(:emails).joins(:emails).
-                  where('user_emails.email IN (?)', email_addresses)
+    found_users = User.with_email_addresses(email_addresses)
 
     found_users.each.flat_map do |user|
       user.emails.map { |user_email| [user_email.email, user] }

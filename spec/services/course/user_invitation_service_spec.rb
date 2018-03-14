@@ -395,14 +395,10 @@ RSpec.describe Course::UserInvitationService, type: :service do
       end
 
       context 'when the user does not exist' do
-        let!(:user) do
-          other_instance = create(:instance)
-          ActsAsTenant.with_tenant(other_instance) do
-            create(:user, emails_count: 2)
-          end
-        end
+        let!(:user) { create(:user) }
+
         it 'does not define the key' do
-          result = subject.send(:find_existing_users, [user.email])
+          result = subject.send(:find_existing_users, ['foo' + user.email])
           expect(result).not_to have_key(user.email)
           expect(result).to be_empty
         end
