@@ -1,7 +1,6 @@
 json.video do
   json.videoUrl @video.url
   json.partial! 'watch_next_video_url', locals: { next_video: @video.next_video }
-  json.sessionId @session&.id&.to_s
 end
 
 json.discussion do
@@ -13,3 +12,4 @@ json.discussion do
 end
 
 json.courseUserId current_course_user&.id&.to_s
+json.enableMonitoring @enable_monitoring || false

@@ -16,11 +16,11 @@ module Course::VideosAbilityComponent
   def define_student_video_permissions
     allow_student_show_video
     allow_student_attempt_video
-    allow_student_create_video_submission
+    allow_student_create_and_read_video_submission
     allow_student_update_own_video_submission
     allow_student_show_video_topics
     allow_student_create_video_topics
-    allow_student_update_own_video_session
+    allow_student_create_and_update_own_video_session
   end
 
   def define_staff_video_permissions
@@ -54,15 +54,17 @@ module Course::VideosAbilityComponent
     end
   end
 
-  def allow_student_create_video_submission
+  def allow_student_create_and_read_video_submission
     can :create, Course::Video::Submission, video_submission_own_course_user_hash
+    can :read, Course::Video::Submission, video_submission_own_course_user_hash
   end
 
   def allow_student_update_own_video_submission
     can :update, Course::Video::Submission, video_submission_own_course_user_hash
   end
 
-  def allow_student_update_own_video_session
+  def allow_student_create_and_update_own_video_session
+    can :create, Course::Video::Session, submission: video_submission_own_course_user_hash
     can :update, Course::Video::Session, submission: video_submission_own_course_user_hash
   end
 

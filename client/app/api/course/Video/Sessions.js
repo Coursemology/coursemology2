@@ -1,5 +1,5 @@
+import { getVideoId, getVideoSubmissionId } from 'lib/helpers/url-helpers';
 import BaseVideoAPI from './Base';
-import { getVideoId } from '../../../lib/helpers/url-helpers';
 
 export default class SessionsAPI extends BaseVideoAPI {
   /**
@@ -15,6 +15,17 @@ export default class SessionsAPI extends BaseVideoAPI {
    *   playback_rate: float
    *     - The video playback rate
    */
+
+  /**
+   * Creates a new video session.
+   * @return {Promise} The response from the server.
+   * success response: {
+   *    id: string,
+   * }
+   */
+  create() {
+    return this.getClient().post(this._getUrlPrefix());
+  }
 
   /**
    * Updates a video session.
@@ -35,6 +46,6 @@ export default class SessionsAPI extends BaseVideoAPI {
   }
 
   _getUrlPrefix() {
-    return `/courses/${this.getCourseId()}/videos/${getVideoId()}/sessions`;
+    return `/courses/${this.getCourseId()}/videos/${getVideoId()}/submissions/${getVideoSubmissionId()}/sessions`;
   }
 }

@@ -36,14 +36,14 @@ const oldSessionsFixtures = makeImmutableMap({
 beforeAll(() => {
   Object.defineProperty(window.location, 'pathname', {
     configurable: true,
-    value: `/courses/${courseId}/videos/${videoId}/submission/1/edit`,
+    value: `/courses/${courseId}/videos/${videoId}/submissions/1/edit`,
   });
 });
 
 beforeEach(() => {
   mock.reset();
-  mock.onPatch(`/courses/${courseId}/videos/${videoId}/sessions/32`).reply(200);
-  mock.onPatch(`/courses/${courseId}/videos/${videoId}/sessions/25`).reply(200);
+  mock.onPatch(`/courses/${courseId}/videos/${videoId}/submissions/1/sessions/32`).reply(200);
+  mock.onPatch(`/courses/${courseId}/videos/${videoId}/submissions/1/sessions/25`).reply(200);
 });
 
 function createStore(oldSessions = {}) {

@@ -17,10 +17,32 @@ RSpec.describe Course::Video::Submission::SessionsController, type: :controller 
 
     before { sign_in(student.user) }
 
+    describe 'POST #create' do
+      subject do
+        post :create, as: :json, params: {
+          course_id: course.id, video_id: video.id, submission_id: session.submission.id
+        }
+      end
+
+      it 'creates a new session' do
+        expect { subject }.to change(Course::Video::Session, :count).by(1)
+      end
+
+      context "when student creates under another student's submission" do
+        let(:other_student) { create(:course_student, course: course) }
+        before { sign_in(other_student.user) }
+
+        it 'denies access' do
+          expect { subject }.to raise_error(CanCan::AccessDenied)
+        end
+      end
+    end
+
     describe 'PUT/PATCH #update' do
       subject do
         patch :update, as: :json, params: {
-          course_id: course.id, video_id: video.id, id: session.id,
+          course_id: course.id, video_id: video.id,
+          submission_id: session.submission.id, id: session.id,
           session: { last_video_time: 6, events: events }
         }
       end
