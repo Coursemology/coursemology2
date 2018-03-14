@@ -206,25 +206,25 @@ RSpec.describe Course::UserInvitationService, type: :service do
       end
     end
 
-    describe '#invite_from_file' do
+    describe '#parse_from_file' do
       subject { stubbed_user_invitation_service }
       let(:temp_csv) { temp_csv_from_attributes(users, roles) }
       after { temp_csv.close! }
 
       it 'accepts a file with name/header' do
-        result = subject.send(:invite_from_file, temp_csv)
+        result = subject.send(:parse_from_file, temp_csv)
         expect(result.length).to eq(users.length)
       end
 
       it 'calls #invite_users with appropriate user attributes' do
-        result = subject.send(:invite_from_file, temp_csv)
+        result = subject.send(:parse_from_file, temp_csv)
         expect(result).to eq(user_attributes)
       end
 
       context 'when the provided file is invalid' do
         it 'raises an exception' do
           expect do
-            subject.send(:invite_from_file,
+            subject.send(:parse_from_file,
                          File.open(File.join(__dir__,
                                              '../../fixtures/course/invalid_invitation.csv')))
           end.to raise_exception(CSV::MalformedCSVError)
@@ -235,8 +235,8 @@ RSpec.describe Course::UserInvitationService, type: :service do
         let(:temp_csv_without_role) { temp_csv_from_attributes(users) }
         after { temp_csv_without_role.close! }
 
-        it `defaults the role to student` do
-          result = subject.send(:invite_from_file, temp_csv_without_role)
+        it 'defaults the role to student' do
+          result = subject.send(:parse_from_file, temp_csv_without_role)
           result.each do |attr|
             expect(attr[:role]).to eq(Course::UserInvitation.roles[:student])
           end
@@ -246,7 +246,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
       context 'when the provided csv file has slightly invalid role specifications' do
         subject do
           stubbed_user_invitation_service.
-            send(:invite_from_file,
+            send(:parse_from_file,
                  File.open(File.join(__dir__,
                                      '../../fixtures/course/fuzzy_roles_invitation.csv')))
         end
@@ -264,7 +264,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
       context 'when the provided csv file has blanks' do
         subject do
           stubbed_user_invitation_service.
-            send(:invite_from_file,
+            send(:parse_from_file,
                  File.open(File.join(__dir__,
                                      '../../fixtures/course/empty_invitation.csv')))
         end
@@ -273,16 +273,16 @@ RSpec.describe Course::UserInvitationService, type: :service do
           expect { subject }.not_to raise_exception
         end
 
-        it 'ignores blank entries and only invites users with both name and emails' do
-          # Empty invitation CSV only has 1 full entry
-          expect(subject.flatten.count).to eq(1)
+        it 'ignores blank entries and invites users with both name and emails or emails only' do
+          # Empty invitation CSV only has 1 full entry and 1 entry only with email
+          expect(subject.flatten.count).to eq(2)
         end
       end
 
       context 'when the provided csv file has no header' do
         subject do
           stubbed_user_invitation_service.
-            send(:invite_from_file,
+            send(:parse_from_file,
                  File.open(File.join(__dir__,
                                      '../../fixtures/course/no_header_invitation.csv')))
         end
@@ -298,16 +298,16 @@ RSpec.describe Course::UserInvitationService, type: :service do
       end
     end
 
-    describe '#invite_from_form' do
+    describe '#parse_from_form' do
       subject { stubbed_user_invitation_service }
 
       it 'accepts a list of invitation form attributes' do
-        result = subject.send(:invite_from_form, user_form_attributes)
+        result = subject.send(:parse_from_form, user_form_attributes)
         expect(result.length).to eq(user_attributes.length)
       end
 
       it 'calls #invite_users with appropriate user attributes' do
-        result = subject.send(:invite_from_form, user_form_attributes)
+        result = subject.send(:parse_from_form, user_form_attributes)
         expect(result).to eq(user_attributes)
       end
     end
@@ -315,7 +315,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
     describe '#invite_users' do
       context 'when users already exist in the current instance' do
         it 'immediately adds users' do
-          subject.send(:invite_users, existing_user_attributes)
+          subject.send(:invite_users, temp_csv_from_attributes(existing_users, existing_roles))
           existing_users.each do |user|
             found_user = course.course_users.find { |course_user| course_user.user == user }
             expect(found_user).not_to be_nil
@@ -323,12 +323,13 @@ RSpec.describe Course::UserInvitationService, type: :service do
         end
 
         context 'when provided emails are capitalised' do
-          let(:modified_existing_user_attributes) do
-            existing_user_attributes.each { |attr| attr[:email] = attr[:email].upcase }
+          let(:modified_existing_users) do
+            existing_users.each { |user| user.email = user.email.upcase }
           end
 
           it 'adds the correct users' do
-            subject.send(:invite_users, modified_existing_user_attributes)
+            subject.send(:invite_users,
+                         temp_csv_from_attributes(modified_existing_users, existing_roles))
             existing_users.each do |user|
               found_user = course.course_users.find { |course_user| course_user.user == user }
               expect(found_user).not_to be_nil
@@ -339,7 +340,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
 
       context 'when users do not exist in the current instance' do
         it 'sends the invitations' do
-          subject.send(:invite_users, new_user_attributes)
+          subject.send(:invite_users, temp_csv_from_attributes(new_users, new_roles))
           new_users.each do |user|
             expect(course.invitations.any? do |invitation|
               invitation.email == user.email
@@ -349,12 +350,11 @@ RSpec.describe Course::UserInvitationService, type: :service do
       end
 
       context 'when no roles are specified' do
-        let(:user_attributes_without_role) do
-          user_attributes.map { |attr| attr.except(:role) }
-        end
+        let(:all_users) { existing_users + new_users }
 
         it 'defaults to :student for roles' do
-          result_new, _, result_existing = subject.send(:invite_users, user_attributes_without_role)
+          result_new, _, result_existing =
+            subject.send(:invite_users, temp_csv_from_attributes(all_users))
           (result_new + result_existing).each do |invit|
             expect(invit.student?).to be_truthy
           end
