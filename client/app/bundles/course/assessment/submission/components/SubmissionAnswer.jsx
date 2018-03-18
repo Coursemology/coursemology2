@@ -72,7 +72,7 @@ class SubmissionAnswer extends Component {
       Programming, VoiceResponse, Scribing,
     } = questionTypes;
     const { historyQuestions } = this.props;
-    const viewHistory = historyQuestions[question.id].viewHistory;
+    const viewHistory = historyQuestions[question.id] ? historyQuestions[question.id].viewHistory : false;
 
     if (viewHistory) {
       return this.getHistoryRenderer(question);

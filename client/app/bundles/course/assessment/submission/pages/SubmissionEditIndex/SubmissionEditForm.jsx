@@ -171,7 +171,8 @@ class SubmissionEditForm extends Component {
       >
         {questionIds.map((id, index) => {
           const question = questions[id];
-          const { answerId, topicId, viewHistory } = question;
+          const { answerId, topicId } = question;
+          const viewHistory = historyQuestions[id] ? historyQuestions[id].viewHistory : false;
           const topic = topics[topicId];
           return (
             <Tab

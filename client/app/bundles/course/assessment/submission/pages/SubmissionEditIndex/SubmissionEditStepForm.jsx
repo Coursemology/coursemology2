@@ -323,6 +323,7 @@ class SubmissionEditStepForm extends Component {
     const id = questionIds[stepIndex];
     const question = questions[id];
     const { answerId, topicId } = question;
+    const viewHistory = historyQuestions[id] ? historyQuestions[id].viewHistory : false;
     const topic = topics[topicId];
     return (
       <React.Fragment>
@@ -338,9 +339,9 @@ class SubmissionEditStepForm extends Component {
           }}
         />
         {this.renderAutogradingErrorPanel(id)}
-        {this.renderExplanationPanel(question)}
-        {this.renderQuestionGrading(id)}
-        {this.renderGradingPanel()}
+        {viewHistory ? null : this.renderExplanationPanel(question)}
+        {viewHistory ? null : this.renderQuestionGrading(id)}
+        {viewHistory ? null : this.renderGradingPanel()}
         {attempting ?
           <div>
             {this.renderResetButton()}
