@@ -114,7 +114,9 @@ class MaterialSummernote extends React.Component {
           const range = context.invoke('editor.createRange');
           const text = range.toString();
           if (text !== '') {
-            context.invoke('editor.insertNode', $(`<code>${text}</code>`)[0]);
+            const newNode = $('<code></code>').eq(0);
+            newNode.text(text);
+            context.invoke('editor.insertNode', newNode.get(0));
           }
         }
       },
