@@ -23,6 +23,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.answer.solution',
     defaultMessage: 'Solution',
   },
+  explanation: {
+    id: 'course.assessment.submission.answer.explanation',
+    defaultMessage: 'Explanation',
+  },
   grade: {
     id: 'course.assessment.submission.answer.grade',
     defaultMessage: 'Grade',
@@ -50,6 +54,10 @@ const translations = defineMessages({
   compre_lifted_word: {
     id: 'course.assessment.submission.answer.compreLiftedWord',
     defaultMessage: 'Lifted Words',
+  },
+  solutionLemma: {
+    id: 'course.assessment.submission.answer.solutionLemma',
+    defaultMessage: 'Solution (lemma form for autograding)',
   },
 });
 
@@ -94,11 +102,15 @@ function renderTextResponseComprehensionPoint(point) {
           <TableRow>
             <TableHeaderColumn><FormattedMessage {...translations.type} /></TableHeaderColumn>
             <TableHeaderColumn><FormattedMessage {...translations.solution} /></TableHeaderColumn>
+            <TableHeaderColumn><FormattedMessage {...translations.solutionLemma} /></TableHeaderColumn>
+            <TableHeaderColumn><FormattedMessage {...translations.explanation} /></TableHeaderColumn>
           </TableRow>
           {point.solutions.map(solution => (
             <TableRow key={solution.id}>
               <TableRowColumn><FormattedMessage {...translations[solution.solutionType]} /></TableRowColumn>
               <TableRowColumn style={{ whiteSpace: 'pre-wrap' }}>{solution.solution}</TableRowColumn>
+              <TableRowColumn style={{ whiteSpace: 'pre-wrap' }}>{solution.solutionLemma}</TableRowColumn>
+              <TableRowColumn style={{ whiteSpace: 'pre-wrap' }}>{solution.explanation}</TableRowColumn>
             </TableRow>
           ))}
         </TableBody>
@@ -117,10 +129,12 @@ function renderTextResponseComprehensionGroup(group) {
           <TableRow>
             <TableRowColumn><FormattedMessage {...translations.maximumGroupGrade} /></TableRowColumn>
             <TableRowColumn>{group.maximumGroupGrade}</TableRowColumn>
+            <TableRowColumn />
+            <TableRowColumn />
           </TableRow>
           {group.points.map(point => (
             <TableRow key={point.id}>
-              <TableRowColumn colSpan={2}>
+              <TableRowColumn colSpan={4}>
                 {renderTextResponseComprehensionPoint(point)}
               </TableRowColumn>
             </TableRow>
