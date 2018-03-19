@@ -20,7 +20,9 @@
         } else {
           var range = context.invoke('editor.createRange'), text = range.toString();
           if (text !== '') {
-            context.invoke('editor.insertNode', $('<code>'+text+'</code>')[0]);
+            const newNode = $('<code></code>').eq(0);
+            newNode.text(text);
+            context.invoke('editor.insertNode', newNode.get(0));
           }
         }
       },
