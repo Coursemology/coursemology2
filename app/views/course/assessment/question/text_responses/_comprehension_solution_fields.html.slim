@@ -5,7 +5,8 @@
                input_html: { class: ['text-response-solution-type'] },
                label: false
   / TODO: Fix text to array.
-  td.td-solution *{:class => f.object_name}
+  / f.object_name must not be the last class so that it will be correctly substituted by cocoon
+  td class=[f.object_name, 'td-solution']
     = f.input :solution, as: :array, label: false, required: false,
                input_html: { class: ['text-response-solution'] }
     .has-error

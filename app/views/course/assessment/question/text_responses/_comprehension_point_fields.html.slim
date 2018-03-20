@@ -26,6 +26,7 @@
                                         partial: 'comprehension_solution_fields',
                                         find_selector: 'tbody.tbody-points.'+point_id,
                                         insert_using: 'append'
-      tbody.tbody-points *{:class => point_id}
+      / point_id must not be the last class so that it will be correctly substituted by cocoon
+      tbody class=[point_id, 'tbody-points']
         = f.simple_fields_for :solutions do |comprehension_solutions_form|
           = render 'comprehension_solution_fields', f: comprehension_solutions_form

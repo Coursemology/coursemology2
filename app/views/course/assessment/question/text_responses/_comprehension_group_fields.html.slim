@@ -17,6 +17,7 @@
                                        partial: 'comprehension_point_fields',
                                        find_selector: 'tbody.tbody-groups.'+group_id,
                                        insert_using: 'append'
-      tbody.tbody-groups *{:class => group_id}
+      / group_id must not be the last class so that it will be correctly substituted by cocoon
+      tbody class=[group_id, 'tbody-groups']
         = f.simple_fields_for :points do |comprehension_points_form|
           = render 'comprehension_point_fields', f: comprehension_points_form
