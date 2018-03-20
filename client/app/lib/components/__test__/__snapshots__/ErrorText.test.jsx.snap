@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ErrorText /> when input is a string displays it 1`] = `
+<div
+  style={
+    Object {
+      "color": "#f44336",
+    }
+  }
+>
+  An error.
+</div>
+`;
+
+exports[`<ErrorText /> when input is an array displays each error 1`] = `
+<React.Fragment>
+  <ErrorText
+    errors="An error."
+    key="An error."
+  />
+  <ErrorText
+    errors="Another error."
+    key="Another error."
+  />
+</React.Fragment>
+`;

@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field, Form, formValueSelector, change } from 'redux-form';
 import { connect } from 'react-redux';
 import MenuItem from 'material-ui/MenuItem';
+import ErrorText, { errorProps } from 'lib/components/ErrorText';
 import ConditionList from 'lib/components/course/ConditionList';
 import TextField from 'lib/components/redux-form/TextField';
 import RichTextField from 'lib/components/redux-form/RichTextField';
@@ -84,6 +85,7 @@ class AssessmentForm extends React.Component {
       tab_id: PropTypes.number,
       title: PropTypes.string,
     })),
+    error: errorProps,
     // Above are props from redux-form.
 
     onSubmit: PropTypes.func.isRequired,
@@ -239,10 +241,11 @@ class AssessmentForm extends React.Component {
 
   render() {
     const { handleSubmit, onSubmit, gamified, modeSwitching, submitting, editing, folderAttributes,
-      conditionAttributes } = this.props;
+      conditionAttributes, error } = this.props;
 
     return (
       <Form onSubmit={handleSubmit(onSubmit)}>
+        <ErrorText errors={error} />
         <div style={styles.flexGroup}>
           <Field
             name="title"
