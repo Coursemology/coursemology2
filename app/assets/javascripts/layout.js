@@ -20,7 +20,7 @@
         } else {
           var range = context.invoke('editor.createRange'), text = range.toString();
           if (text !== '') {
-            const newNode = $('<code></code>').eq(0);
+            var newNode = $('<code></code>').eq(0);
             newNode.text(text);
             context.invoke('editor.insertNode', newNode.get(0));
           }
