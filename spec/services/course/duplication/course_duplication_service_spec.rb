@@ -122,6 +122,13 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
           end
         end
 
+        it 'duplicates video tabs' do
+          new_tab = new_course.video_tabs.first
+          expect(new_tab.title).to eq video.tab.title
+          expect(new_tab.weight).to eq video.tab.weight
+          expect(new_tab.creator).to eq video.tab.creator
+        end
+
         it 'duplicates videos' do
           new_video = new_course.videos.first
 
@@ -129,6 +136,7 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
           expect(new_video.url).to eq video.url
           expect(new_video.creator).to eq video.creator
           expect(new_video.start_at).to be_within(1.second).of video.start_at + time_shift
+          expect(new_video.tab).to eq new_course.video_tabs.first
         end
       end
 
