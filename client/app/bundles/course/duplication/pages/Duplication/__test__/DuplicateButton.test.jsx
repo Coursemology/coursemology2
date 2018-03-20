@@ -49,6 +49,7 @@ const data = {
           ],
         },
       ],
+      videosComponent: [],
     },
   },
 };

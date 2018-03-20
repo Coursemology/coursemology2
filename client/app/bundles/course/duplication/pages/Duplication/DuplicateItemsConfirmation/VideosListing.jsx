@@ -1,46 +1,100 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
-import Checkbox from 'material-ui/Checkbox';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import Subheader from 'material-ui/Subheader';
 import { Card, CardText } from 'material-ui/Card';
 import { defaultComponentTitles } from 'course/translations.intl';
 import { duplicableItemTypes } from 'course/duplication/constants';
-import { videoShape } from 'course/duplication/propTypes';
+import { videoTabShape } from 'course/duplication/propTypes';
 import TypeBadge from 'course/duplication/components/TypeBadge';
 import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
+import IndentedCheckbox from 'course/duplication/components/IndentedCheckbox';
+
+const { VIDEO_TAB, VIDEO } = duplicableItemTypes;
+
+const translations = defineMessages({
+  defaultTab: {
+    id: 'course.duplication.VideoListing.defaultTab',
+    defaultMessage: 'Default Tab',
+  },
+});
 
 class VideoListing extends React.Component {
   static propTypes = {
-    videos: PropTypes.arrayOf(videoShape),
+    tabs: PropTypes.arrayOf(videoTabShape),
     selectedItems: PropTypes.shape({}),
+  };
+
+  static renderDefaultTabRow() {
+    return (
+      <IndentedCheckbox
+        disabled
+        indentLevel={0}
+        label={<FormattedMessage {...translations.defaultTab} />}
+      />
+    );
   }
 
-  static renderRow(video) {
+  static renderTabRow(tab) {
     return (
-      <Checkbox
+      <IndentedCheckbox
+        checked
+        indentLevel={0}
+        label={<span><TypeBadge itemType={VIDEO_TAB} />{tab.title}</span>}
+      />
+    );
+  }
+
+  static renderTab(tab) {
+    return (
+      <div key={tab.id}>
+        {VideoListing.renderTabRow(tab)}
+        {tab.videos.map(VideoListing.renderVideoRow)}
+      </div>
+    );
+  }
+
+  static renderVideoRow(video) {
+    return (
+      <IndentedCheckbox
         checked
         key={video.id}
+        indentLevel={1}
         label={
           <span>
-            <TypeBadge itemType={duplicableItemTypes.VIDEO} />
+            <TypeBadge itemType={VIDEO} />
             <UnpublishedIcon tooltipId="itemUnpublished" />
-            { video.title }
+            {video.title}
           </span>
         }
       />
     );
   }
 
-  selectedVideos() {
-    const { videos, selectedItems } = this.props;
-    return videos ? videos.filter(video => selectedItems[duplicableItemTypes.VIDEO][video.id]) : [];
+  selectedSubtrees() {
+    const { tabs, selectedItems } = this.props;
+    const tabTrees = [];
+    const orphanedVideos = [];
+
+    tabs.forEach((tab) => {
+      const selectedVideos = tab.videos.filter(
+        video => selectedItems[VIDEO][video.id]
+      );
+
+      if (selectedItems[VIDEO_TAB][tab.id]) {
+        tabTrees.push({ ...tab, videos: selectedVideos });
+      } else {
+        orphanedVideos.push(...selectedVideos);
+      }
+    });
+
+    return [tabTrees, orphanedVideos];
   }
 
   render() {
-    const selectedVideos = this.selectedVideos();
-    if (selectedVideos.length < 1) { return null; }
+    const [tabTrees, orphanedVideos] = this.selectedSubtrees();
+    if (tabTrees.length + orphanedVideos.length < 1) { return null; }
 
     return (
       <React.Fragment>
@@ -49,7 +103,11 @@ class VideoListing extends React.Component {
         </Subheader>
         <Card>
           <CardText>
-            { selectedVideos.map(VideoListing.renderRow) }
+            {tabTrees.map(VideoListing.renderTab)}
+            <div key="default">
+              {orphanedVideos.length > 0 && VideoListing.renderDefaultTabRow()}
+              {orphanedVideos.map(VideoListing.renderVideoRow)}
+            </div>
           </CardText>
         </Card>
       </React.Fragment>
@@ -58,6 +116,6 @@ class VideoListing extends React.Component {
 }
 
 export default connect(({ duplication }) => ({
-  videos: duplication.videosComponent,
+  tabs: duplication.videosComponent,
   selectedItems: duplication.selectedItems,
 }))(VideoListing);
