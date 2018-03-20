@@ -68,7 +68,7 @@ gem 'autoprefixer-rails'
 gem 'font-awesome-rails'
 # HTML Pipeline and dependencies
 gem 'html-pipeline'
-gem 'sanitize'
+gem 'sanitize', '>= 4.6.3'
 gem 'rinku'
 gem 'html-pipeline-rouge_filter'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -229,3 +229,4 @@ gem 'rails-controller-testing'
 
 # WordNet corpus to obtain lemma form of words, for comprehension questions.
 gem "rwordnet", git: 'https://github.com/makqien/rwordnet'
+gem 'loofah', '>= 2.2.1'
