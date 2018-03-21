@@ -152,7 +152,7 @@
     EVENT_HELPERS.onNodesInserted($(document), initializeComponents);
 
     $(document).on('nested:fieldAdded', function(e) {
-        initializeComponents(e.field);
+      initializeComponents(e.field);
     });
   });
 })(jQuery, EVENT_HELPERS);

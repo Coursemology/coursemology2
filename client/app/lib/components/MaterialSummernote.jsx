@@ -180,7 +180,7 @@ class MaterialSummernote extends React.Component {
             }}
             options={{
               airMode: this.props.airMode,
-              dialogsInBody: false,
+              dialogsInBody: true,
               disabled: this.props.disabled,
               fontNames: [
                 'Arial', 'Arial Black', 'Comic Sans MS', 'Courier New',
