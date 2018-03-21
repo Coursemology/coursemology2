@@ -820,7 +820,7 @@ export default class ScribingCanvas extends React.Component {
             if (obj.type === 'i-text') {
               newObj = this.cloneText(obj);
             } else {
-              newObj = fabric.util.object.clone(obj);
+              obj.clone((c) => { newObj = c; });
             }
 
             this.setCopiedCanvasObjectPosition(newObj);
@@ -832,7 +832,7 @@ export default class ScribingCanvas extends React.Component {
               if (obj.type === 'i-text') {
                 newObj = this.cloneText(obj);
               } else {
-                newObj = fabric.util.object.clone(obj);
+                obj.clone((c) => { newObj = c; });
               }
               newObj.setCoords();
               this.canvas.add(newObj);
