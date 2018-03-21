@@ -62,7 +62,7 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
 
         context 'when an invalid CSV is uploaded' do
           let(:invite_params) do
-            { invitations_file: fixture_file_upload('course/invalid_invitation.csv') }
+            { invitations_file: fixture_file_upload('course/invitation_invalid.csv') }
           end
 
           it { is_expected.to render_template(:new) }
@@ -111,7 +111,7 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
 
       context 'when the CSV has invalid emails' do
         let(:invite_params) do
-          { invitations_file: fixture_file_upload('course/invalid_email_invitation.csv') }
+          { invitations_file: fixture_file_upload('course/invitation_invalid_email.csv') }
         end
 
         it 'propogates the course errors accurately' do

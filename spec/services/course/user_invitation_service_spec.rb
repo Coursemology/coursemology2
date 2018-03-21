@@ -224,17 +224,13 @@ RSpec.describe Course::UserInvitationService, type: :service do
       context 'when the provided file is invalid' do
         it 'raises an exception' do
           expect do
-            subject.send(:parse_from_file,
-                         File.open(File.join(__dir__,
-                                             '../../fixtures/course/invalid_invitation.csv')))
+            subject.send(:parse_from_file, file_fixture('course/invitation_invalid.csv'))
           end.to raise_exception(CSV::MalformedCSVError)
         end
       end
 
       context 'when the provided file is encoded with UTF-8 with byte order marks' do
-        let(:csv_file) do
-          File.open(File.join(__dir__,'../../fixtures/course/invitation_with_utf_bom.csv'))
-        end
+        let(:csv_file) { file_fixture('course/invitation_with_utf_bom.csv') }
 
         it 'removes the unnecessary characters' do
           result = subject.send(:parse_from_file, csv_file)
@@ -257,9 +253,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
       end
 
       context 'when the provided file has whitespace in the fields' do
-        let(:csv_file) do
-          File.open(File.join(__dir__,'../../fixtures/course/invitation_whitespace.csv'))
-        end
+        let(:csv_file) { file_fixture('course/invitation_whitespace.csv') }
 
         it 'strips the attributes of whitespace' do
           result = subject.send(:parse_from_file, csv_file)
@@ -273,9 +267,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
       context 'when the provided csv file has slightly invalid role specifications' do
         subject do
           stubbed_user_invitation_service.
-            send(:parse_from_file,
-                 File.open(File.join(__dir__,
-                                     '../../fixtures/course/fuzzy_roles_invitation.csv')))
+            send(:parse_from_file, file_fixture('course/invitation_fuzzy_roles.csv'))
         end
 
         it 'defaults blank columns to student' do
@@ -291,9 +283,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
       context 'when the provided csv file has blanks' do
         subject do
           stubbed_user_invitation_service.
-            send(:parse_from_file,
-                 File.open(File.join(__dir__,
-                                     '../../fixtures/course/empty_invitation.csv')))
+            send(:parse_from_file, file_fixture('course/invitation_empty.csv'))
         end
 
         it 'does not raise an exception' do
@@ -309,9 +299,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
       context 'when the provided csv file has no header' do
         subject do
           stubbed_user_invitation_service.
-            send(:parse_from_file,
-                 File.open(File.join(__dir__,
-                                     '../../fixtures/course/no_header_invitation.csv')))
+            send(:parse_from_file, file_fixture('course/invitation_no_header.csv'))
         end
 
         it 'does not raise an exception' do
