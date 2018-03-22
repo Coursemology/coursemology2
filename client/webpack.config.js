@@ -70,6 +70,7 @@ const config = {
     new webpack.optimize.CommonsChunkPlugin({
       names: ['vendor', 'lib', 'manifest'], // `vendor` depends on `lib` depends on `manifest`
     }),
+    ...(production ? [new webpack.optimize.UglifyJsPlugin({})] : []),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(env),
     }),
