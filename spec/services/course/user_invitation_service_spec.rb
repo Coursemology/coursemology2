@@ -243,6 +243,20 @@ RSpec.describe Course::UserInvitationService, type: :service do
         end
       end
 
+      context 'when the provided file has whitespace in the fields' do
+        let(:csv_file) do
+          File.open(File.join(__dir__,'../../fixtures/course/invitation_whitespace.csv'))
+        end
+
+        it 'strips the attributes of whitespace' do
+          result = subject.send(:parse_from_file, csv_file)
+          result.each do |attr|
+            expect(attr[:name]).to eq(attr[:name].strip)
+            expect(attr[:email]).to eq(attr[:email].strip)
+          end
+        end
+      end
+
       context 'when the provided csv file has slightly invalid role specifications' do
         subject do
           stubbed_user_invitation_service.

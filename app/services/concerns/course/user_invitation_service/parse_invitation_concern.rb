@@ -51,6 +51,7 @@ module Course::UserInvitationService::ParseInvitationConcern
   def parse_from_file(file)
     [].tap do |invites|
       CSV.foreach(file).with_index(1) do |row, row_number|
+        row = strip_row(row)
         # Ignore first row if it's a header row.
         next if row_number == 1 && header_row?(row)
 
@@ -68,6 +69,14 @@ module Course::UserInvitationService::ParseInvitationConcern
   # @return [Boolean] Whether the row is a header row
   def header_row?(row)
     row[0].casecmp('Name') == 0 && row[1].casecmp('Email') == 0
+  end
+
+  # Strips a row of whitespaces.
+  #
+  # @param[Array] row Array read from CSV file.
+  # @return [Array] Provided row with string stripped of whitespates.
+  def strip_row(row)
+    row.map { |item| item&.strip }
   end
 
   # Parses the given CSV row (array) and returns attributes for a user invitation.
