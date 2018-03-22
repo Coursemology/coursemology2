@@ -45,12 +45,17 @@ module Course::UserInvitationService::ParseInvitationConcern
   # The first row is ignored if it's a header row (contains "name, email"),
   # else it's treated like a row of student data.
   #
+  # This method also handles the presence of UTF-8 Byte Order Marks at the
+  # start of the file, if it exists. These are invisible characters that might
+  # be persisted as the name of the student if not caught.
+  #
   # @param [File] file Reads the given file, in CSV format, for the name and email.
   # @return [Array<Hash>] The array of records read from the file.
-  # @raise [CSV::MalformedCSVError] When the file provided is invalid.
+  # @raise [CSV::MalformedCSVError] When the file provided is invalid, eg. UTF-16 encoding.
   def parse_from_file(file)
     [].tap do |invites|
       CSV.foreach(file).with_index(1) do |row, row_number|
+        row[0] = remove_utf8_byte_order_mark(row[0]) if row_number == 1
         row = strip_row(row)
         # Ignore first row if it's a header row.
         next if row_number == 1 && header_row?(row)
@@ -103,5 +108,15 @@ module Course::UserInvitationService::ParseInvitationConcern
 
     symbol = role.parameterize(separator: '_').to_sym
     Course::UserInvitation.roles[symbol] || Course::UserInvitation.roles[:student]
+  end
+
+  # Removes the UTF-8 byte order mark (BOM) from the string.
+  # The BOM exists at the start of in CSVs (optionally) to indicate the
+  # encoding of the file.
+  #
+  # @param [String] String to remove UTF-8 BOM
+  # @return [String] String with removed UTF-8 BOM
+  def remove_utf8_byte_order_mark(str)
+    str.sub("\xEF\xBB\xBF", '')
   end
 end

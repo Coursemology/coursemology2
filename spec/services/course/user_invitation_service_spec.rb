@@ -231,6 +231,19 @@ RSpec.describe Course::UserInvitationService, type: :service do
         end
       end
 
+      context 'when the provided file is encoded with UTF-8 with byte order marks' do
+        let(:csv_file) do
+          File.open(File.join(__dir__,'../../fixtures/course/invitation_with_utf_bom.csv'))
+        end
+
+        it 'removes the unnecessary characters' do
+          result = subject.send(:parse_from_file, csv_file)
+          result.each do |invitation|
+            expect(invitation[:name].match("\xEF\xBB\xBF")).to be_nil
+          end
+        end
+      end
+
       context 'when the provided file has no roles' do
         let(:temp_csv_without_role) { temp_csv_from_attributes(users) }
         after { temp_csv_without_role.close! }
