@@ -1,4 +1,5 @@
-import actions, { canvasActionTypes, scribingTools, scribingShapes,
+import actions, {
+  canvasActionTypes, scribingTools, scribingShapes,
   scribingToolColor, scribingToolThickness, scribingToolLineStyle,
 } from '../constants';
 

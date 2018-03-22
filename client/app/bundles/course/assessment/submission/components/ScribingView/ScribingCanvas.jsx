@@ -120,7 +120,6 @@ export default class ScribingCanvas extends React.Component {
         if (isNonDrawingTool) {
           this.canvas.discardActiveObject();
         }
-        this.canvas.discardActiveGroup();
         this.canvas.renderAll();
         this.props.resetChangeTool(this.props.answerId);
       }
@@ -146,17 +145,9 @@ export default class ScribingCanvas extends React.Component {
         this.props.resetRedo(this.props.answerId);
       }
       if (nextProps.scribing.isDelete) {
-        const activeGroup = this.canvas.getActiveGroup();
-        const activeObject = this.canvas.getActiveObject();
-
-        if (activeObject) {
-          this.canvas.remove(activeObject);
-        } else if (activeGroup) {
-          const objectsInGroup = activeGroup.getObjects();
-          this.canvas.discardActiveGroup();
-          objectsInGroup.forEach(object => (this.canvas.remove(object)));
-        }
-        this.canvas.renderAll();
+        const activeObjects = this.canvas.getActiveObjects();
+        this.canvas.discardActiveObject();
+        activeObjects.forEach(object => (this.canvas.remove(object)));
         this.props.resetCanvasDelete(this.props.answerId);
       }
     }
@@ -648,7 +639,8 @@ export default class ScribingCanvas extends React.Component {
       this.canvas.on('object:moving', this.onObjectMovingCanvas);
       this.canvas.on('object:modified', this.saveScribbles);
       this.canvas.on('object:removed', this.saveScribbles);
-      this.canvas.on('object:selected', this.onObjectSelected);
+      this.canvas.on('selection:created', this.onObjectSelected);
+      this.canvas.on('selection:updated', this.onObjectSelected);
       this.canvas.on('selection:cleared', this.onSelectionCleared);
       this.canvas.on('text:editing:exited', this.onTextChanged);
 
@@ -786,20 +778,15 @@ export default class ScribingCanvas extends React.Component {
   onKeyDown = (event) => {
     if (!this.canvas) return;
 
-    const activeGroup = this.canvas.getActiveGroup();
     const activeObject = this.canvas.getActiveObject();
+    const activeObjects = this.canvas.getActiveObjects();
 
     switch (event.keyCode) {
       case 8: // Backspace key
       case 46: // Delete key
       {
-        if (activeObject) {
-          this.canvas.remove(activeObject);
-        } else if (activeGroup) {
-          const objectsInGroup = activeGroup.getObjects();
-          this.canvas.discardActiveGroup();
-          objectsInGroup.forEach(object => (this.canvas.remove(object)));
-        }
+        this.canvas.discardActiveObject();
+        activeObjects.forEach(object => (this.canvas.remove(object)));
         break;
       }
       case 67: // Ctrl+C
@@ -808,18 +795,11 @@ export default class ScribingCanvas extends React.Component {
           event.preventDefault();
 
           this.copiedObjects = [];
-          if (activeGroup) {
-            activeGroup.getObjects().forEach(obj => (
-              this.copiedObjects.push(obj)
-            ));
-
-            this.copyLeft = activeGroup.getLeft();
-            this.copyTop = activeGroup.getTop();
-          } else if (activeObject) {
-            this.copyLeft = activeObject.getLeft();
-            this.copyTop = activeObject.getTop();
-            this.copiedObjects.push(activeObject);
-          }
+          activeObjects.forEach(obj => (
+            this.copiedObjects.push(obj)
+          ));
+          this.copyLeft = activeObject.left;
+          this.copyTop = activeObject.top;
         }
         break;
       }
@@ -828,7 +808,6 @@ export default class ScribingCanvas extends React.Component {
         if (event.ctrlKey || event.metaKey) {
           event.preventDefault();
 
-          this.canvas.discardActiveGroup();
           this.canvas.discardActiveObject();
 
           const newObjects = [];
@@ -841,7 +820,7 @@ export default class ScribingCanvas extends React.Component {
             if (obj.type === 'i-text') {
               newObj = this.cloneText(obj);
             } else {
-              newObj = fabric.util.object.clone(obj);
+              obj.clone((c) => { newObj = c; });
             }
 
             this.setCopiedCanvasObjectPosition(newObj);
@@ -853,17 +832,16 @@ export default class ScribingCanvas extends React.Component {
               if (obj.type === 'i-text') {
                 newObj = this.cloneText(obj);
               } else {
-                newObj = fabric.util.object.clone(obj);
+                obj.clone((c) => { newObj = c; });
               }
               newObj.setCoords();
               this.canvas.add(newObj);
               newObjects.push(newObj);
             });
-            const group = new fabric.Group(newObjects, { canvas: this.canvas });
+            const selection = new fabric.ActiveSelection(newObjects, { canvas: this.canvas });
 
-            this.setCopiedCanvasObjectPosition(group);
-            this.canvas.setActiveGroup(group);
-            group.saveCoords();
+            this.setCopiedCanvasObjectPosition(selection);
+            this.canvas.setActiveObject(selection);
             this.canvas.renderAll();
           }
         }
@@ -887,8 +865,8 @@ export default class ScribingCanvas extends React.Component {
   // Utility Helpers
   cloneText = (obj) => {
     const newObj = new fabric.IText(obj.text, {
-      left: obj.getLeft(),
-      top: obj.getTop(),
+      left: obj.left,
+      top: obj.top,
       fontFamily: obj.fontFamily,
       fontSize: obj.fontSize,
       fill: obj.fill,
@@ -909,13 +887,13 @@ export default class ScribingCanvas extends React.Component {
 
   setCopiedCanvasObjectPosition(obj) {
     // Shift copied object to the left if there's space
-    this.copyLeft = (this.copyLeft + obj.getWidth() > this.canvas.getWidth()) ?
+    this.copyLeft = (this.copyLeft + obj.width > this.canvas.width) ?
       this.copyLeft : this.copyLeft + 10;
-    obj.setLeft(this.copyLeft);
+    obj.left = this.copyLeft; // eslint-disable-line no-param-reassign
     // Shift copied object down if there's space
-    this.copyTop = (this.copyTop + obj.getHeight() > this.canvas.getHeight()) ?
+    this.copyTop = (this.copyTop + obj.height > this.canvas.height) ?
       this.copyTop : this.copyTop + 10;
-    obj.setTop(this.copyTop);
+    obj.top = this.copyTop; // eslint-disable-line no-param-reassign
 
     obj.setCoords();
   }
