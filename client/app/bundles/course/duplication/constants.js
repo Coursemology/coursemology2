@@ -14,6 +14,7 @@ export const duplicableItemTypes = mirrorCreator([
   'FOLDER',
   'MATERIAL',
   'VIDEO',
+  'VIDEO_TAB',
 ]);
 
 export const itemSelectorPanels = mirrorCreator([

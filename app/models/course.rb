@@ -175,6 +175,7 @@ class Course < ApplicationRecord
       *assessment_skill_branches,
       *achievements,
       *surveys,
+      *video_tabs,
       *videos,
       *lesson_plan_events,
       *lesson_plan_milestones,

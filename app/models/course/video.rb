@@ -39,8 +39,8 @@ class Course::Video < ApplicationRecord
 
   scope :unwatched_by, (lambda do |user|
     where.not(id: Course::Video::Submission.
-                    by_user(user).
-                    pluck('DISTINCT video_id'))
+      by_user(user).
+      pluck('DISTINCT video_id'))
   end)
 
   # Used by the with_actable_types scope in Course::LessonPlan::Item.
@@ -76,9 +76,23 @@ class Course::Video < ApplicationRecord
   def initialize_duplicate(duplicator, other)
     copy_attributes(other, duplicator)
     self.course = duplicator.options[:target_course]
+    initialize_duplicate_tab(duplicator, other)
   end
 
   def include_in_consolidated_email?(event)
     Course::Settings::VideosComponent.email_enabled?(course, "video_#{event}".to_sym)
+  end
+
+  private
+
+  # Parents the video under its duplicated video tab, if it exists.
+  #
+  # @return [Course::Video::Tab] The duplicated video's tab
+  def initialize_duplicate_tab(duplicator, other)
+    self.tab = if duplicator.duplicated?(other.tab)
+                 duplicator.duplicate(other.tab)
+               else
+                 duplicator.options[:target_course].video_tabs.first
+               end
   end
 end

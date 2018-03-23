@@ -41,6 +41,9 @@ json.materialsComponent @folders do |folder|
   end
 end
 
-json.videosComponent @videos do |video|
-  json.(video, :id, :title, :published)
+json.videosComponent @video_tabs do |tab|
+  json.(tab, :id, :title)
+  json.videos tab.videos do |video|
+    json.(video, :id, :title, :published)
+  end
 end

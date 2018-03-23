@@ -460,6 +460,35 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
         end
       end
 
+      context 'when a video tab is selected' do
+        let(:video_tab) { create(:video_tab, course: source_course, title: 'TEST') }
+        let(:source_objects) { [video_tab] }
+
+        it 'duplicates it' do
+          expect { duplicate_objects }.to change { destination_course.video_tabs.count }.by(1)
+          expect(duplicate_objects.first.title).to eq(video_tab.title)
+        end
+
+        context 'when a video under the tab is also selected' do
+          let(:video) { create(:video, course: source_course, tab: video_tab) }
+          let(:source_objects) { [video_tab, video] }
+
+          it 'duplicates the video to the right tab' do
+            duplicate_objects
+            expect(destination_course.videos.first.tab).to eq(duplicate_objects.first)
+          end
+
+          context 'when a tab is duplicated after its video' do
+            let(:source_objects) { [video, video_tab] }
+
+            it 'associates the duplicates' do
+              duplicate_video, duplicate_tab = duplicate_objects
+              expect(duplicate_video.tab).to be(duplicate_tab)
+            end
+          end
+        end
+      end
+
       context 'when a video is selected' do
         let(:video) { create(:video, course: source_course) }
         let(:source_objects) { [video] }
@@ -467,6 +496,7 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
         it 'duplicates it' do
           expect { duplicate_objects }.to change { destination_course.videos.count }.by(1)
           expect(duplicate_objects.first.title).to eq(video.title)
+          expect(duplicate_objects.first.tab).to eq(destination_course.video_tabs.first)
         end
       end
     end

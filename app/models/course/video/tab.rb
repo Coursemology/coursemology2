@@ -24,6 +24,13 @@ class Course::Video::Tab < ApplicationRecord
     course.video_tabs.count > 1
   end
 
+  def initialize_duplicate(duplicator, other)
+    self.course = duplicator.options[:target_course]
+    other.videos.each do |video|
+      videos << duplicator.duplicate(video) if duplicator.duplicated?(video)
+    end
+  end
+
   private
 
   def validate_before_destroy

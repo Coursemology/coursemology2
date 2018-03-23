@@ -42,6 +42,12 @@ export const videoShape = PropTypes.shape({
   published: PropTypes.bool,
 });
 
+export const videoTabShape = PropTypes.shape({
+  id: PropTypes.number,
+  title: PropTypes.string,
+  videos: PropTypes.arrayOf(videoShape),
+});
+
 export const achievementShape = PropTypes.shape({
   id: PropTypes.number,
   title: PropTypes.string,

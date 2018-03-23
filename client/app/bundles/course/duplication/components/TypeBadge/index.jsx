@@ -47,6 +47,10 @@ const translations = defineMessages({
     id: 'course.duplication.TypeBadge.video',
     defaultMessage: 'Video',
   },
+  [duplicableItemTypes.VIDEO_TAB]: {
+    id: 'course.duplication.TypeBadge.video_tab',
+    defaultMessage: 'Tab',
+  },
 });
 
 const TypeBadge = ({ text, itemType }) => (

@@ -58,7 +58,7 @@ class Course::ObjectDuplicationsController < Course::ComponentController
   end
 
   def load_videos_component_data
-    @videos = current_course.videos
+    @video_tabs = current_course.video_tabs.includes(:videos)
   end
 
   def create_duplication_params
@@ -87,6 +87,7 @@ class Course::ObjectDuplicationsController < Course::ComponentController
       'ACHIEVEMENT' => ->(ids) { current_course.achievements.find(ids) },
       'FOLDER' => ->(ids) { current_course.material_folders.concrete.find(ids) },
       'MATERIAL' => ->(ids) { current_course.materials.in_concrete_folder.find(ids) },
+      'VIDEO_TAB' => ->(ids) { current_course.video_tabs.find(ids) },
       'VIDEO' => ->(ids) { current_course.videos.find(ids) }
     }
   end

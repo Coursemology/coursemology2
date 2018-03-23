@@ -5,7 +5,7 @@ FactoryBot.define do
   factory :course_video_tab, class: Course::Video::Tab.name,
                              aliases: [:video_tab] do
     course
-    title { generate(:course_video_title) }
+    title { generate(:course_video_tab_title) }
     weight { generate(:course_video_tab_weight) }
   end
 end
