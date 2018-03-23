@@ -10,7 +10,7 @@ import { setItemSelectorPanel } from 'course/duplication/actions';
 import { defaultComponentTitles } from 'course/translations.intl';
 import DuplicateButton from '../DuplicateButton';
 
-const { TAB, ASSESSMENT, CATEGORY, SURVEY, ACHIEVEMENT, FOLDER, MATERIAL, VIDEO } = duplicableItemTypes;
+const { TAB, ASSESSMENT, CATEGORY, SURVEY, ACHIEVEMENT, FOLDER, MATERIAL, VIDEO_TAB, VIDEO } = duplicableItemTypes;
 
 const styles = {
   countAvatar: {
@@ -57,6 +57,7 @@ class ItemsSelectorMenu extends React.Component {
     });
 
     const assessmentsComponentCount = counts[TAB] + counts[ASSESSMENT] + counts[CATEGORY];
+    const videosComponentCount = counts[VIDEO] + counts[VIDEO_TAB];
 
     return (
       <List>
@@ -91,7 +92,7 @@ class ItemsSelectorMenu extends React.Component {
         {
           ItemsSelectorMenu.renderSidebarItem(
             defaultComponentTitles.course_videos_component,
-            counts[VIDEO],
+            videosComponentCount,
             () => dispatch(setItemSelectorPanel(itemSelectorPanels.VIDEOS))
           )
         }
