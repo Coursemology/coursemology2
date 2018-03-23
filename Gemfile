@@ -230,3 +230,4 @@ gem 'rails-controller-testing'
 # WordNet corpus to obtain lemma form of words, for comprehension questions.
 gem "rwordnet", git: 'https://github.com/makqien/rwordnet'
 gem 'loofah', '>= 2.2.1'
+gem 'rails-html-sanitizer', '>= 1.0.4'
