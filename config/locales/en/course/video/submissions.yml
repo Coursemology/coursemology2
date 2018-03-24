@@ -10,6 +10,11 @@ en:
             other_header: 'Others'
           create:
             failure: 'Could not create submission: %{error}'
+          show:
+            header: 'Statistics: %{title} for %{student}'
+            watched_at: 'Watched at'
+            sessions_header: 'Sessions Statistics'
+            no_sessions: 'No watch statistics available for this submission'
           edit:
             description: 'Description'
             header: 'Viewing %{title}'
