@@ -10,6 +10,10 @@ class Course::Video::Submission::SubmissionsController < Course::Video::Submissi
     @course_students = current_course.course_users.students.order_alphabetically
   end
 
+  def show
+    @sessions = @submission.sessions.with_events_present
+  end
+
   def create
     if @submission.save
       redirect_to edit_course_video_submission_path(current_course, @video, @submission)
