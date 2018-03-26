@@ -68,6 +68,9 @@ class User < ApplicationRecord
   scope :active_in_past_7_days, (lambda do
     where(id: InstanceUser.unscoped.active_in_past_7_days.select(:user_id).distinct)
   end)
+  scope :with_email_addresses, (lambda do |email_addresses|
+    includes(:emails).joins(:emails).where('user_emails.email IN (?)', email_addresses)
+  end)
 
   # Gets whether the current user is one of the the built in users.
   #

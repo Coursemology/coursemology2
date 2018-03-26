@@ -178,8 +178,7 @@ class Course::UserInvitationsController < Course::ComponentController
   #
   # @return [Array<CourseUser>]
   def invalid_course_users
-    current_course.course_users.
-      reject { |course_user| course_user.errors.empty? }
+    current_course.course_users.reject(&:valid?)
   end
 
   # Aggregates errors in invitations.
@@ -196,7 +195,7 @@ class Course::UserInvitationsController < Course::ComponentController
   #
   # @return [Array<Course::UserInvitation>]
   def invalid_invitations
-    current_course.invitations.reject { |invitation| invitation.errors[:email].empty? }
+    current_course.invitations.reject(&:valid?)
   end
 
   # Returns the successful invitation creation message based on file or entry invitation.
