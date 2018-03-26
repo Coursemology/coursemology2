@@ -128,7 +128,7 @@ class VideoPlayer extends React.Component {
           onBuffer={() => this.props.onPlayerStateChanged(playerStates.BUFFERING)}
           onEnded={() => this.props.onPlayerStateChanged(playerStates.ENDED)}
           playsinline
-          progressFrequency={videoDefaults.progressUpdateFrequencyMs}
+          progressInterval={videoDefaults.progressUpdateFrequencyMs}
           style={reactPlayerStyle}
           width="100%"
           height="100%"
