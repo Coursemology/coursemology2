@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 class Course::Assessment::AssessmentsController < Course::Assessment::Controller
+  before_action :load_question_duplication_data, only: [:show, :reorder]
+
   def index
     @assessments = @assessments.ordered_by_date_and_title.with_submissions_by(current_user)
     @conditional_service = Course::Assessment::AchievementPreloadService.new(@assessments)
   end
 
   def show
-    @question_duplication_dropdown_data = ordered_assessments_by_tab
   end
 
   def new
@@ -134,6 +135,10 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
       else
         current_course.assessment_categories.first!
       end
+  end
+
+  def load_question_duplication_data
+    @question_duplication_dropdown_data = ordered_assessments_by_tab
   end
 
   # Maps question ids to their respective questions
