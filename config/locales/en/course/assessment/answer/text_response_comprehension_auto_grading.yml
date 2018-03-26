@@ -1,0 +1,11 @@
+en:
+  course:
+    assessment:
+      answer:
+        text_response_comprehension_auto_grading:
+          explanations:
+            html_line_break: '<br>'
+            html_keywords: 'The following words were <u>correctly expressed</u>:'
+            html_lifted_word: 'The following words were <u>lifted from the text passage</u>:'
+            grade: 'Grade: %{grade} / %{maximum_grade}'
+            incorrect_answer: 'One or more keywords are missing from your answer. Remove all lifted words (if any).'

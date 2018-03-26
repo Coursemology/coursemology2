@@ -34,11 +34,12 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
     }
 
     answer_grade = grade_for(question, answer_text_lemma_status)
+    correct = correctness_for(question, answer_grade)
 
     [
-      correctness_for(question, answer_grade),
+      correct,
       answer_grade,
-      explanations_for(question, answer_grade, answer_text_array, answer_text_lemma_status)
+      explanations_for(question, answer_grade, answer_text_array, answer_text_lemma_status, correct)
     ]
   end
 
@@ -210,12 +211,21 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
   #   in array form.
   # @param [Hash{String=>Array<nil or TextResponseComprehensionPoint or TextResponseComprehensionSolution>}]
   #   answer_text_lemma_status The status of each element in +answer_text_lemma+.
+  # @param [Boolean] correct True if the answer is correct.
   # @return [Array<String>] The explanations for the given question.
-  def explanations_for(question, grade, answer_text_array, answer_text_lemma_status)
+  def explanations_for(question, grade, answer_text_array, answer_text_lemma_status, correct)
     [
-      explanations_for_keyword(answer_text_array, answer_text_lemma_status[:compre_keyword]),
-      explanations_for_lifted_word(answer_text_array, answer_text_lemma_status[:compre_lifted_word]),
-      explanations_for_grade(question, grade)
+      explanations_for_answer(
+        answer_text_array,
+        answer_text_lemma_status[:compre_keyword],
+        I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.html_keywords')
+      ),
+      explanations_for_answer(
+        answer_text_array,
+        answer_text_lemma_status[:compre_lifted_word],
+        I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.html_lifted_word')
+      ),
+      explanations_for_grade(question, grade, correct)
     ].flatten
   end
 
@@ -223,35 +233,19 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
   #   in array form.
   # @param [Array<nil or TextResponseComprehensionPoint or TextResponseComprehensionSolution>] status
   #   A particular hash value in +answer_text_lemma_status+.
-  # @return [Array<String>] The explanations for keywords.
-  def explanations_for_keyword(answer_text_array, status)
-    if status.any?
-      explanations = []
-      status.each_index do |index|
-        next if status[index].nil?
-
-        word_explanation = answer_text_array[index]
-        word_explanation += " (#{status[index].explanation})" unless status[index].explanation.nil?
-        explanations.push(word_explanation)
-      end
-      ['Keywords correctly expressed:', explanations.join(', ')]
-    else
-      []
-    end
-  end
-
-  # @param [Array<String>] answer_text_array The normalized, downcased, letters-only answer text
-  #   in array form.
-  # @param [Array<nil or TextResponseComprehensionPoint or TextResponseComprehensionSolution>] status
-  #   A particular hash value in +answer_text_lemma_status+.
-  # @return [Array<String>] The explanations for lifted words.
-  def explanations_for_lifted_word(answer_text_array, status)
+  # @param [String] header The header to show before the explanations.
+  # @return [Array<String>] The explanations for keywords / lifted words.
+  def explanations_for_answer(answer_text_array, status, header)
     if status.any?
       explanations = []
       status.each_index do |index|
         explanations.push(answer_text_array[index]) unless status[index].nil?
       end
-      ['Lifted words:', explanations.join(', ')]
+      [
+        header,
+        explanations.join(', '),
+        I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.html_line_break')
+      ]
     else
       []
     end
@@ -260,8 +254,22 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
   # @param [Course::Assessment::Question::TextResponse] question The question answered by the
   #   student.
   # @param [Integer] grade The grade of the student answer for the question.
+  # @param [Boolean] correct True if the answer is correct.
   # @return [Array<String>] The explanations for grade.
-  def explanations_for_grade(question, grade)
-    ["Grade: #{grade} / #{question.maximum_grade}"]
+  def explanations_for_grade(question, grade, correct)
+    explanations = [
+      I18n.t(
+        'course.assessment.answer.text_response_comprehension_auto_grading.explanations.grade',
+        grade: grade,
+        maximum_grade: question.maximum_grade
+      )
+    ]
+    unless correct
+      explanations.push(
+        I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.html_line_break'),
+        I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.incorrect_answer')
+      )
+    end
+    explanations
   end
 end
