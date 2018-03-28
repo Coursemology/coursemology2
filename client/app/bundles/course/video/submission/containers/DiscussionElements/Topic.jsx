@@ -7,7 +7,7 @@ import { formatTimestamp } from 'lib/helpers/videoHelpers';
 import styles from '../Discussion.scss';
 import PostContainer from './PostContainer';
 import Reply from './Reply';
-import { updatePlayerProgress } from '../../actions/video';
+import { seekToDirectly } from '../../actions/video';
 
 const propTypes = {
   topicId: PropTypes.string.isRequired,
@@ -66,7 +66,7 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onTimeStampClick: timestamp => (() => dispatch(updatePlayerProgress(timestamp, true))),
+    onTimeStampClick: timestamp => (() => dispatch(seekToDirectly(timestamp, true))),
   };
 }
 
