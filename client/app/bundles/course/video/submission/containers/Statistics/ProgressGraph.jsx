@@ -90,6 +90,7 @@ const propTypes = {
       videoTime: PropTypes.number,
     })),
   })).isRequired,
+  submissionUrl: PropTypes.string.isRequired,
 };
 
 class ProgressGraph extends React.Component {
@@ -147,6 +148,20 @@ class ProgressGraph extends React.Component {
     };
   }
 
+  generateClickOptions(data) {
+    return {
+      onClick: (_, elements) => {
+        if (elements.length < 1) {
+          return;
+        }
+        const element = elements[0];
+        const { y } = data.datasets[element._datasetIndex].data[element._index];
+
+        window.open(`${this.props.submissionUrl}?seek_time=${y}`);
+      },
+    };
+  }
+
   renderPlot() {
     const displayData = this.computeData(this.state.selectedSessionId);
     if (!displayData) {
@@ -165,6 +180,7 @@ class ProgressGraph extends React.Component {
       data={data}
       options={{
         ...graphGlobalOptions,
+        ...this.generateClickOptions(data),
         ...this.generateToolTipOptions(),
       }}
     />);
