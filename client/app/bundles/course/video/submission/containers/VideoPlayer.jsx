@@ -9,18 +9,19 @@ import styles from './VideoPlayer.scss';
 import {
   changePlayerState,
   endSession,
+  seekToDirectly,
   sendEvents,
   updatePlayerDuration,
   updateProgressAndBuffer,
 } from '../actions/video';
 import {
+  NextVideoButton,
   PlayBackRateSelector,
   PlayButton,
   VideoPlayerSlider,
   VideoTimestamp,
   VolumeButton,
   VolumeSlider,
-  NextVideoButton,
 } from './VideoControls';
 
 const tickMilliseconds = 5000;
@@ -41,11 +42,13 @@ const propTypes = {
   playerVolume: PropTypes.number,
   playbackRate: PropTypes.number,
   forceSeek: PropTypes.bool,
+  initialSeekTime: PropTypes.number,
   onPlayerProgress: PropTypes.func,
   onDurationReceived: PropTypes.func,
   onPlayerStateChanged: PropTypes.func,
   onTick: PropTypes.func,
   onUnmount: PropTypes.func,
+  directSeek: PropTypes.func,
 };
 
 const defaultProps = {
@@ -106,6 +109,12 @@ class VideoPlayer extends React.Component {
     this.player = player;
   };
 
+  readyCallback = () => {
+    if (this.props.initialSeekTime) {
+      this.props.directSeek(this.props.initialSeekTime);
+    }
+  };
+
   render() {
     // do not attempt to create a player server-side, it won't work
     if (typeof document === 'undefined') return null;
@@ -123,6 +132,7 @@ class VideoPlayer extends React.Component {
           onProgress={({ playedSeconds, loadedSeconds }) => {
             this.props.onPlayerProgress(playedSeconds, loadedSeconds);
           }}
+          onReady={this.readyCallback}
           onPlay={() => this.props.onPlayerStateChanged(playerStates.PLAYING)}
           onPause={() => this.props.onPlayerStateChanged(playerStates.PAUSED)}
           onBuffer={() => this.props.onPlayerStateChanged(playerStates.BUFFERING)}
@@ -172,6 +182,9 @@ function mapDispatchToProps(dispatch) {
     onPlayerStateChanged: newState => dispatch(changePlayerState(newState)),
     onTick: () => dispatch(sendEvents()),
     onUnmount: () => dispatch(endSession()),
+    directSeek: (playerProgress) => {
+      dispatch(seekToDirectly(playerProgress));
+    },
   };
 }
 
