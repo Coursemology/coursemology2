@@ -142,6 +142,20 @@ export function seekEnd() {
 }
 
 /**
+ * Creates an thunk to seek to the time in the video directly.
+ *
+ * @param playerProgress The new player progress in seconds
+ * @return {function(*)} The thunk to perform the the direct seek.
+ */
+export function seekToDirectly(playerProgress) {
+  return (dispatch) => {
+    dispatch(seekStart());
+    dispatch(updatePlayerProgress(playerProgress, true));
+    dispatch(seekEnd());
+  };
+}
+
+/**
  * Creates an action to remove events from the state store.
  * @param sequenceNums The event sequence numbers to remove
  * @param sessionClosed If this event is in response to the final server request before close
@@ -212,7 +226,7 @@ function sendOldSessions(dispatch, oldSessions) {
       return CourseAPI.video.sessions
         .update(sessionId, videoTime, events.toArray(), true)
         .then(() => sessionId)
-        .catch(() => null);
+        .catch(error => (error.response.status === 404 ? sessionId : null));
     })
     .values();
 

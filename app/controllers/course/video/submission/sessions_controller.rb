@@ -15,6 +15,8 @@ class Course::Video::Submission::SessionsController < Course::Video::Submission:
                                   last_video_time: update_params[:last_video_time])
     end
     @session.merge_in_events!(update_params[:events])
+
+    head :no_content
   rescue ArgumentError => _
     head :bad_request
   rescue ActiveRecord::RecordInvalid => _
