@@ -17,8 +17,7 @@ class Course::Video::Session < ApplicationRecord
     params_list = events_attributes.respond_to?(:each) ? events_attributes : [events_attributes]
 
     params_list.each do |event_params|
-      events.find_or_initialize_by(session_id: id, sequence_num: event_params[:sequence_num]).
-        update_attributes!(event_params)
+      events.build(event_params).upsert!
     end
   end
 
