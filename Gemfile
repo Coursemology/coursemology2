@@ -234,3 +234,6 @@ gem 'rails-controller-testing'
 gem 'rwordnet', git: 'https://github.com/makqien/rwordnet'
 gem 'loofah', '>= 2.2.1'
 gem 'rails-html-sanitizer', '>= 1.0.4'
+
+# YouTube API helper for Videos
+gem 'yt'
