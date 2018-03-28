@@ -1,0 +1,11 @@
+// dialogsInBody is set to true in MaterialSummernote.scss. This causes modals from the
+// summernote editor to ignore the styles defined there.
+// Define the modal styles here instead, especially the z-index so it floats above the material
+// UI modal.
+.modal {
+  display: none;
+  outline: 0;
+  overflow: hidden;
+  position: fixed;
+  z-index: 1550;
+}
