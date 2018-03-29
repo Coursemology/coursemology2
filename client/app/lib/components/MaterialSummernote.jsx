@@ -6,6 +6,7 @@ import TextFieldLabel from 'material-ui/TextField/TextFieldLabel';
 
 import { i18nLocale } from 'lib/helpers/server-context';
 import '../styles/MaterialSummernote.scss';
+import '../styles/MaterialSummernoteModal.scss';
 
 const translations = defineMessages({
   inlineCode: {

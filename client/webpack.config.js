@@ -101,6 +101,7 @@ const config = {
         ],
         include: [
           path.resolve(__dirname, 'app/lib/styles/MaterialSummernote.scss'),
+          path.resolve(__dirname, 'app/lib/styles/MaterialSummernoteModal.scss'),
         ],
       },
       {
@@ -120,6 +121,7 @@ const config = {
         exclude: [
           /node_modules/,
           path.resolve(__dirname, 'app/lib/styles/MaterialSummernote.scss'),
+          path.resolve(__dirname, 'app/lib/styles/MaterialSummernoteModal.scss'),
         ],
       },
       {
