@@ -33,14 +33,13 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
       'compre_keyword': keyword_status
     }
 
-    answer_grade = grade_for(question, answer_text_lemma_status)
+    answer_grade, correct_points = grade_for(question, answer_text_lemma_status)
     correct = correctness_for(question, answer_grade)
+    explanations = explanations_for(
+      question, answer_grade, answer_text_array, answer_text_lemma_status, correct_points
+    )
 
-    [
-      correct,
-      answer_grade,
-      explanations_for(question, answer_grade, answer_text_array, answer_text_lemma_status, correct)
-    ]
+    [correct, answer_grade, explanations]
   end
 
   # All lifted words in a question as keys and
@@ -84,7 +83,7 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
         # for all TextResponseComprehensionSolution where solution_type == compre_keyword
         point.solutions.select(&:compre_keyword?).each do |s|
           s.solution_lemma.each do |solution_key|
-            if hash.key? solution_key
+            if hash.key?(solution_key)
               hash_value = hash[solution_key]
               hash_value.push(s) unless hash_value.include?(s)
             else
@@ -176,20 +175,28 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
   #   student.
   # @param [Hash{String=>Array<nil or TextResponseComprehensionPoint or TextResponseComprehensionSolution>}]
   #   answer_text_lemma_status The status of each element in +answer_text_lemma+.
-  # @return [Integer] The grade of the student answer for the question.
+  # @return [Array<(Integer, [Array<TextResponseComprehensionPoint])>] The grade of the
+  #   student answer for the question and array of correct Points.
   def grade_for(question, answer_text_lemma_status)
     lifted_word_points = answer_text_lemma_status[:compre_lifted_word]
     keyword_solutions = answer_text_lemma_status[:compre_keyword]
+    correct_points = []
 
     question_grade = question.groups.reduce(0) do |question_sum, group|
       group_grade = group.points.
                     reject { |point| lifted_word_points.include?(point) }.
                     select { |point| point.solutions.select(&:compre_keyword?).all? { |s| keyword_solutions.include?(s) } }.
-                    reduce(0) { |group_sum, point| group_sum + point.point_grade }
+                    reduce(0) do |group_sum, point|
+                      correct_points.push(point)
+                      group_sum + point.point_grade
+                    end
       question_sum + [group_grade, group.maximum_group_grade].min
     end
 
-    [question_grade, question.maximum_grade].min
+    [
+      [question_grade, question.maximum_grade].min,
+      correct_points
+    ]
   end
 
   # Mark the correctness of the answer based on grade.
@@ -211,65 +218,270 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
   #   in array form.
   # @param [Hash{String=>Array<nil or TextResponseComprehensionPoint or TextResponseComprehensionSolution>}]
   #   answer_text_lemma_status The status of each element in +answer_text_lemma+.
-  # @param [Boolean] correct True if the answer is correct.
+  # @param [Array<TextResponseComprehensionPoint]] correct_points The array of correct Points.
   # @return [Array<String>] The explanations for the given question.
-  def explanations_for(question, grade, answer_text_array, answer_text_lemma_status, correct)
+  def explanations_for(question, grade, answer_text_array, answer_text_lemma_status, correct_points)
+    hash_point_serial = hash_point_id(question)
     [
-      explanations_for_answer(
-        answer_text_array,
-        answer_text_lemma_status[:compre_keyword],
-        I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.html_keywords')
+      explanations_for_points_summary_incorrect(
+        question, answer_text_array, answer_text_lemma_status, correct_points, hash_point_serial
       ),
-      explanations_for_answer(
-        answer_text_array,
-        answer_text_lemma_status[:compre_lifted_word],
-        I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.html_lifted_word')
+      explanations_for_correct_paraphrase(
+        answer_text_array, answer_text_lemma_status[:compre_keyword], hash_point_serial
       ),
-      explanations_for_grade(question, grade, correct)
+      explanations_for_grade(
+        question, grade
+      )
     ].flatten
   end
 
+  # All Point ID as keys and serially 'numbered' letter (starting from 'a') as values.
+  #
+  # @param [Course::Assessment::Question::TextResponse] question The question answered by the
+  #   student.
+  # @return [Hash{Integer=>String}] The mapping from Point ID to serial 'number' (letter) for that Point.
+  def hash_point_id(question)
+    hash = {}
+    question.groups.flat_map(&:points).each_with_index do |point, index|
+      hash[point.id] = convert_number_to_letter(index + 1)
+    end
+    hash
+  end
+
+  # Converts a positive index number to letter format (e.g. 1 => 'a', 27 => 'aa').
+  # https://www.geeksforgeeks.org/find-excel-column-name-given-number/
+  #
+  # @param [Integer] number The positive index number.
+  # @return [String] The index in letter format.
+  def convert_number_to_letter(number)
+    hash_number_to_letter = Hash[(0..25).zip('a'..'z')]
+    output = ''
+    while number > 0
+      remainder = number % 26
+      number /= 26
+      if remainder == 0
+        output += 'z'
+        number -= 1
+      else
+        output += hash_number_to_letter[remainder - 1]
+      end
+    end
+    output.reverse!
+  end
+
+  # Returns the explanations (summary + incorrect) for all Points, split by each Point.
+  #
+  # @param [Course::Assessment::Question::TextResponse] question The question answered by the
+  #   student.
   # @param [Array<String>] answer_text_array The normalized, downcased, letters-only answer text
   #   in array form.
-  # @param [Array<nil or TextResponseComprehensionPoint or TextResponseComprehensionSolution>] status
-  #   A particular hash value in +answer_text_lemma_status+.
-  # @param [String] header The header to show before the explanations.
-  # @return [Array<String>] The explanations for keywords / lifted words.
-  def explanations_for_answer(answer_text_array, status, header)
-    if status.any?
-      explanations = []
-      status.each_index do |index|
-        explanations.push(answer_text_array[index]) unless status[index].nil?
+  # @param [Hash{String=>Array<nil or TextResponseComprehensionPoint or TextResponseComprehensionSolution>}]
+  #   answer_text_lemma_status The status of each element in +answer_text_lemma+.
+  # @param [Array<TextResponseComprehensionPoint]] correct_points The array of correct Points.
+  # @param [Hash{Integer=>String}] hash_point_serial The mapping from Point ID to serial 'number' (letter)
+  #   for that Point.
+  # @return [Array<String>] The explanations for the Points.
+  def explanations_for_points_summary_incorrect(question, answer_text_array, answer_text_lemma_status, correct_points, hash_point_serial)
+    explanations = []
+
+    question.groups.flat_map(&:points).each do |point|
+      explanations.push(
+        I18n.t(
+          'course.assessment.answer.text_response_comprehension_auto_grading.explanations.point_html',
+          index: hash_point_serial[point.id]
+        )
+      )
+
+      if correct_points.include?(point)
+        explanations.push(
+          I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.correct_point')
+        )
+      else
+        explanations.push(
+          explanations_for_incorrect_point(answer_text_array, answer_text_lemma_status, point)
+        )
       end
-      [
-        header,
-        explanations.join(', '),
-        I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.html_line_break')
-      ]
-    else
-      []
+      explanations.push(
+        I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.line_break_html')
+      )
     end
+
+    unless explanations.empty?
+      explanations.push(
+        I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.horizontal_break_html'),
+        I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.line_break_html')
+      )
+    end
+
+    explanations
+  end
+
+  # Returns the explanations for an incorrect Point.
+  #
+  # @param [Array<String>] answer_text_array The normalized, downcased, letters-only answer text
+  #   in array form.
+  # @param [Hash{String=>Array<nil or TextResponseComprehensionPoint or TextResponseComprehensionSolution>}]
+  #   answer_text_lemma_status The status of each element in +answer_text_lemma+.
+  # @param [TextResponseComprehensionPoint] point The incorrect Point to generate explanation for.
+  # @return [Array<String>] The explanations for the incorrect Point.
+  def explanations_for_incorrect_point(answer_text_array, answer_text_lemma_status, point)
+    explanations = []
+
+    if answer_text_lemma_status[:compre_lifted_word].include?(point)
+      explanations.push(
+        explanations_for_incorrect_point_lifted_words(answer_text_array, answer_text_lemma_status, point)
+      )
+    end
+
+    explanations.push(
+      explanations_for_incorrect_point_missing_keywords(answer_text_lemma_status, point)
+    )
+
+    explanations
+  end
+
+  # Returns the lifted words explanations for an incorrect Point.
+  #
+  # @param [Array<String>] answer_text_array The normalized, downcased, letters-only answer text
+  #   in array form.
+  # @param [Hash{String=>Array<nil or TextResponseComprehensionPoint or TextResponseComprehensionSolution>}]
+  #   answer_text_lemma_status The status of each element in +answer_text_lemma+.
+  # @param [TextResponseComprehensionPoint] point The incorrect Point to generate explanation for.
+  # @return [String] The lifted words explanations for the incorrect Point.
+  def explanations_for_incorrect_point_lifted_words(answer_text_array, answer_text_lemma_status, point)
+    lifted_words = []
+    answer_text_lemma_status[:compre_lifted_word].each_with_index do |status_point, status_index|
+      lifted_words.push(answer_text_array[status_index]) if status_point == point
+    end
+    if lifted_words.count == 1
+      I18n.t(
+        'course.assessment.answer.text_response_comprehension_auto_grading.explanations.lifted_word_singular',
+        word_string: lifted_words.first
+      )
+    else
+      lifted_words_string =
+        lifted_words[0..-2].join(
+          I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.concatenate')
+        ) +
+        I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.concatenate_last') +
+        lifted_words.last
+      I18n.t(
+        'course.assessment.answer.text_response_comprehension_auto_grading.explanations.lifted_word_plural',
+        words_string: lifted_words_string
+      )
+    end
+  end
+
+  # Returns the missing keywords explanations for an incorrect Point.
+  #
+  # @param [Hash{String=>Array<nil or TextResponseComprehensionPoint or TextResponseComprehensionSolution>}]
+  #   answer_text_lemma_status The status of each element in +answer_text_lemma+.
+  # @param [TextResponseComprehensionPoint] point The incorrect Point to generate explanation for.
+  # @return [String] The missing keywords explanations for the incorrect Point.
+  def explanations_for_incorrect_point_missing_keywords(answer_text_lemma_status, point)
+    empty_information = I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.empty_information')
+    missing_keywords = point.
+                       solutions.
+                       select(&:compre_keyword?).
+                       reject { |s| answer_text_lemma_status[:compre_keyword].include?(s) }.
+                       flat_map { |s| s.information.empty? ? empty_information : s.information }
+    if missing_keywords.empty?
+      []
+    elsif missing_keywords.count == 1
+      I18n.t(
+        'course.assessment.answer.text_response_comprehension_auto_grading.explanations.missing_keyword_singular',
+        word_string: missing_keywords.first
+      )
+    else
+      missing_keywords_string =
+        missing_keywords[0..-2].join(
+          I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.concatenate')
+        ) +
+        I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.concatenate_last') +
+        missing_keywords.last
+      I18n.t(
+        'course.assessment.answer.text_response_comprehension_auto_grading.explanations.missing_keyword_plural',
+        words_string: missing_keywords_string
+      )
+    end
+  end
+
+  # Returns the explanations for all correctly paraphrased keywords.
+  #
+  # @param [Array<String>] answer_text_array The normalized, downcased, letters-only answer text
+  #   in array form.
+  # @param [Array<nil or TextResponseComprehensionSolution>}] keyword_status
+  #   The keyword status of each element in +answer_text_lemma+.
+  # @param [Hash{Integer=>Integer}] hash_point_serial The mapping from Point ID to serial 'number' (letter)
+  #   for that Point.
+  # @return [Array<String>] The explanations for the correct keywords.
+  def explanations_for_correct_paraphrase(answer_text_array, keyword_status, hash_point_serial)
+    explanations = []
+    hash_keywords = {} # point_id => [word in answer_text, information]
+
+    keyword_status.each_with_index do |s, index|
+      unless s.nil?
+        hash_keywords[s.point.id] = [] unless hash_keywords.key?(s.point.id)
+        hash_keywords[s.point.id].push([answer_text_array[index], s.information])
+      end
+    end
+
+    explanations.push(explanations_for_correct_paraphrase_by_points(hash_keywords, hash_point_serial))
+
+    unless explanations.empty?
+      explanations.push(
+        I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.horizontal_break_html'),
+        I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.line_break_html')
+      )
+    end
+
+    explanations
+  end
+
+  # Returns the explanations for correctly paraphrased keywords, split by each Point.
+  #
+  # @param [Array<String>] answer_text_array The normalized, downcased, letters-only answer text
+  #   in array form.
+  # @param [Hash{Integer=>Array< Array<String, String> >}] hash_keywords The mapping from Point ID to serial 'number' (letter)
+  #   for that Point, to an array of nested arrays of [word in answer_text, information].
+  # @param [Hash{Integer=>Integer}] hash_point_serial The mapping from Point ID to serial 'number' (letter)
+  #   for that Point.
+  # @return [Array<String>] The explanations for the correct keywords.
+  def explanations_for_correct_paraphrase_by_points(hash_keywords, hash_point_serial)
+    explanations = []
+    empty_information = I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.empty_information')
+    hash_keywords.keys.sort.each do |key| # point_id
+      value = hash_keywords[key]
+      point_serial_number = hash_point_serial[key]
+      explanations.push(
+        I18n.t(
+          'course.assessment.answer.text_response_comprehension_auto_grading.explanations.point_html',
+          index: point_serial_number
+        )
+      )
+      explanations.push(
+        value.map do |v|
+          I18n.t(
+            'course.assessment.answer.text_response_comprehension_auto_grading.explanations.correct_keyword',
+            answer: v[0],
+            keyword: v[1].empty? ? empty_information : v[1]
+          )
+        end,
+        I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.line_break_html')
+      )
+    end
+    explanations
   end
 
   # @param [Course::Assessment::Question::TextResponse] question The question answered by the
   #   student.
   # @param [Integer] grade The grade of the student answer for the question.
-  # @param [Boolean] correct True if the answer is correct.
   # @return [Array<String>] The explanations for grade.
-  def explanations_for_grade(question, grade, correct)
-    explanations = [
-      I18n.t(
-        'course.assessment.answer.text_response_comprehension_auto_grading.explanations.grade',
-        grade: grade,
-        maximum_grade: question.maximum_grade
-      )
-    ]
-    unless correct
-      explanations.push(
-        I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.html_line_break'),
-        I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.incorrect_answer')
-      )
-    end
-    explanations
+  def explanations_for_grade(question, grade)
+    I18n.t(
+      'course.assessment.answer.text_response_comprehension_auto_grading.explanations.grade',
+      grade: grade,
+      maximum_grade: question.maximum_grade
+    )
   end
 end
