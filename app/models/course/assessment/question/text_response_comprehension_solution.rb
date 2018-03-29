@@ -6,7 +6,8 @@ class Course::Assessment::Question::TextResponseComprehensionSolution < Applicat
 
   before_validation :sanitise_solution_and_derive_lemma
 
-  validate :validate_solution_lemma_empty
+  validate :validate_solution_lemma_empty,
+           :validate_information_empty
 
   belongs_to :point, class_name: Course::Assessment::Question::TextResponseComprehensionPoint.name,
                      inverse_of: :solutions
@@ -26,7 +27,7 @@ class Course::Assessment::Question::TextResponseComprehensionSolution < Applicat
     strip_whitespace_solution
     convert_solution_to_lemma
     strip_whitespace_solution_lemma
-    strip_whitespace_explanation
+    strip_whitespace_information
   end
 
   def remove_blank_solution
@@ -46,12 +47,16 @@ class Course::Assessment::Question::TextResponseComprehensionSolution < Applicat
     solution_lemma.each(&:strip!)
   end
 
-  def strip_whitespace_explanation
-    explanation&.strip!
+  def strip_whitespace_information
+    information&.strip!
   end
 
   # add custom error message for `solution_lemma` instead of default :blank
   def validate_solution_lemma_empty
     errors.add(:solution_lemma, :solution_lemma_empty) if solution_lemma.empty?
+  end
+
+  def validate_information_empty
+    errors.add(:information, :information_empty) if compre_keyword? && information.empty?
   end
 end

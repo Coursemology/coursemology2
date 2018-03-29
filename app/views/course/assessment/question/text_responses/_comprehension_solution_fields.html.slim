@@ -16,5 +16,5 @@
               class: ['btn', 'btn-default', 'solution-button', f.object_name],
               title: t('.add_solution_word') do
       = fa_icon 'plus'.freeze
-  td = f.input :explanation, label: false, placeholder: t('.explanation_hint'), as: :string
+  td = f.input :information, label: false, placeholder: t('.information_hint')
   td = link_to_remove_association t('.remove'), f

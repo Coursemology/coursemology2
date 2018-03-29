@@ -5,7 +5,7 @@ FactoryBot.define do
     point { build(:course_assessment_question_text_response_comprehension_point) }
     solution ['key']
     solution_lemma ['key']
-    explanation 'explanation'
+    information 'key'
     solution_type :compre_keyword
 
     trait :compre_lifted_word do
