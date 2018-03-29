@@ -5,6 +5,8 @@ class Course::Video < ApplicationRecord
   include Course::ClosingReminderConcern
   include Course::Video::UrlConcern
 
+  before_validation :set_duration, if: :new_record?
+
   belongs_to :tab, class_name: Course::Video::Tab.name, inverse_of: :videos
   has_many :submissions, class_name: Course::Video::Submission.name,
                          inverse_of: :video, dependent: :destroy
@@ -94,5 +96,12 @@ class Course::Video < ApplicationRecord
                else
                  duplicator.options[:target_course].video_tabs.first
                end
+  end
+
+  def set_duration
+    return if duration
+
+    youtube_id = youtube_video_id_from_link(url)
+    self.duration = Yt::Video.new(id: youtube_id).duration
   end
 end
