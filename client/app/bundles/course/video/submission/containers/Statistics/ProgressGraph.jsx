@@ -148,7 +148,7 @@ class ProgressGraph extends React.Component {
     };
   }
 
-  generateClickOptions(data) {
+  generateMouseOptions(data) {
     return {
       onClick: (_, elements) => {
         if (elements.length < 1) {
@@ -158,6 +158,12 @@ class ProgressGraph extends React.Component {
         const { y } = data.datasets[element._datasetIndex].data[element._index];
 
         window.open(`${this.props.submissionUrl}?seek_time=${y}`);
+      },
+      hover: {
+        onHover: (event, elements) => {
+          const style = event.target.style;
+          style.cursor = elements.length > 0 ? 'pointer' : 'default';
+        },
       },
     };
   }
@@ -180,7 +186,7 @@ class ProgressGraph extends React.Component {
       data={data}
       options={{
         ...graphGlobalOptions,
-        ...this.generateClickOptions(data),
+        ...this.generateMouseOptions(data),
         ...this.generateToolTipOptions(),
       }}
     />);
