@@ -30,7 +30,7 @@ RSpec.describe Course::Video::Session do
     end
 
     describe 'events' do
-      let(:session) { create(:video_session, :with_events) }
+      let(:session) { create(:video_session, :with_events_paused) }
 
       it 'returns events in order of sequence number' do
         expect(session.events.pluck(:sequence_num)).to eq((1..session.events.count).to_a)
@@ -39,7 +39,7 @@ RSpec.describe Course::Video::Session do
 
     describe 'with_events_present' do
       let(:submission) { create(:video_submission) }
-      let!(:session1) { create(:video_session, :with_events, submission: submission) }
+      let!(:session1) { create(:video_session, :with_events_paused, submission: submission) }
       let!(:session2) { create(:video_session, submission: submission) }
 
       subject do
@@ -54,7 +54,7 @@ RSpec.describe Course::Video::Session do
 
     describe 'merge_in_events!' do
       subject do
-        create(:video_session, :with_events)
+        create(:video_session, :with_events_paused)
       end
 
       context 'when event already exists' do
@@ -67,7 +67,7 @@ RSpec.describe Course::Video::Session do
         end
 
         it 'overwrites the old event ' do
-          expect(subject.events.count).to eq(5)
+          expect(subject.events.count).to eq(12)
           expect(subject.events.where(sequence_num: 1).count).to eq(1)
 
           old_event = subject.events.find_by(sequence_num: 1)
@@ -87,7 +87,7 @@ RSpec.describe Course::Video::Session do
         end
 
         it `creates a new event` do
-          expect(subject.events.count).to eq(6)
+          expect(subject.events.count).to eq(13)
           expect(subject.events.exists?(sequence_num: 100)).to be_truthy
 
           new_event = subject.events.find_by(sequence_num: 100)
