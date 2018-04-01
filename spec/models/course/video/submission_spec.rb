@@ -62,6 +62,23 @@ RSpec.describe Course::Video::Submission do
       end
     end
 
+    describe '.watch_frequency' do
+      let!(:session1) { create(:video_session, :with_events_paused, submission: submission1) }
+      let!(:session2) { create(:video_session, :with_events_continuous, submission: submission1) }
+
+      it 'computes the right watch frequency distribution' do
+        intervals = [[0, 5], [30, 50], [19, 37], [0, 20], [39, 70], [10, 25]]
+        distribution = Array.new(71, 0)
+        intervals.each do |interval|
+          (interval[0]..interval[1]).each do |video_time|
+            distribution[video_time] += 1
+          end
+        end
+
+        expect(submission1.watch_frequency).to eq(distribution)
+      end
+    end
+
     describe 'callbacks from Course::Video::Submission::TodoConcern' do
       before { submission1 }
       subject do
