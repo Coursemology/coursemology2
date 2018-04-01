@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180322045000) do
+ActiveRecord::Schema.define(version: 20180329205900) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -346,7 +346,7 @@ ActiveRecord::Schema.define(version: 20180322045000) do
     t.integer "solution_type",  :default=>0, :null=>false
     t.string  "solution",       :default=>[], :null=>false, :array=>true
     t.string  "solution_lemma", :default=>[], :null=>false, :array=>true
-    t.text    "explanation"
+    t.string  "information",    :limit=>255
   end
 
   create_table "course_assessment_question_voice_responses", force: :cascade do |t|

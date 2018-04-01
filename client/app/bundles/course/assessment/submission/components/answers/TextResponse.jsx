@@ -23,9 +23,9 @@ const translations = defineMessages({
     id: 'course.assessment.submission.answer.solution',
     defaultMessage: 'Solution',
   },
-  explanation: {
-    id: 'course.assessment.submission.answer.explanation',
-    defaultMessage: 'Explanation',
+  information: {
+    id: 'course.assessment.submission.answer.information',
+    defaultMessage: 'Word from Text Passage',
   },
   grade: {
     id: 'course.assessment.submission.answer.grade',
@@ -103,14 +103,14 @@ function renderTextResponseComprehensionPoint(point) {
             <TableHeaderColumn><FormattedMessage {...translations.type} /></TableHeaderColumn>
             <TableHeaderColumn><FormattedMessage {...translations.solution} /></TableHeaderColumn>
             <TableHeaderColumn><FormattedMessage {...translations.solutionLemma} /></TableHeaderColumn>
-            <TableHeaderColumn><FormattedMessage {...translations.explanation} /></TableHeaderColumn>
+            <TableHeaderColumn><FormattedMessage {...translations.information} /></TableHeaderColumn>
           </TableRow>
           {point.solutions.map(solution => (
             <TableRow key={solution.id}>
               <TableRowColumn><FormattedMessage {...translations[solution.solutionType]} /></TableRowColumn>
               <TableRowColumn style={{ whiteSpace: 'pre-wrap' }}>{solution.solution}</TableRowColumn>
               <TableRowColumn style={{ whiteSpace: 'pre-wrap' }}>{solution.solutionLemma}</TableRowColumn>
-              <TableRowColumn style={{ whiteSpace: 'pre-wrap' }}>{solution.explanation}</TableRowColumn>
+              <TableRowColumn style={{ whiteSpace: 'pre-wrap' }}>{solution.information}</TableRowColumn>
             </TableRow>
           ))}
         </TableBody>

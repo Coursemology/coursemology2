@@ -51,9 +51,9 @@ en:
             add_solution: 'Add Solution'
             solution_type: 'Type'
             solution: 'Solution'
-            explanation: 'Explanation'
+            information: 'Word from Text Passage'
           comprehension_solution_fields:
-            explanation_hint: 'The explanation to show after the student submits his answer.'
+            information_hint: 'The exact word from the text passage.'
             add_solution_word: 'Add Solution Word'
             remove: 'Remove'
             compre_keyword: 'Keyword'

@@ -26,7 +26,7 @@ json.groups question.groups.each do |group|
       # Sanitization will be handled automatically by the React frontend.
       json.solution s.solution.join(', ')
       json.solutionLemma s.solution_lemma.join(', ')
-      json.explanation s.explanation
+      json.information s.information
     end
   end
 end if can_grade && question.auto_gradable? && question.comprehension_question?
