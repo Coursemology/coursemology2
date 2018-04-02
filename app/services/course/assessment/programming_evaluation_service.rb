@@ -92,8 +92,7 @@ class Course::Assessment::ProgrammingEvaluationService
 
   private
 
-  def initialize(language, memory_limit, # rubocop:disable Metrics/ParameterLists
-                 time_limit, package, timeout)
+  def initialize(language, memory_limit, time_limit, package, timeout)
     @language = language
     @memory_limit = memory_limit || MEMORY_LIMIT
     @time_limit = time_limit || CPU_TIMEOUT

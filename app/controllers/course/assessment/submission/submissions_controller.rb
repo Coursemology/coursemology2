@@ -188,7 +188,7 @@ class Course::Assessment::Submission::SubmissionsController < \
 
   # Check for zombie jobs, create new grading jobs if there's any zombie jobs.
   # TODO: Remove this method after found the cause of the dead jobs.
-  def check_zombie_jobs # rubocop:disable MethodLength, Metrics/AbcSize
+  def check_zombie_jobs # rubocop:disable Metrics/AbcSize
     return unless @submission.attempting?
 
     submitted_answers = @submission.answers.latest_answers.select(&:submitted?)

@@ -30,7 +30,7 @@ class Course::EnrolRequestsController < Course::ComponentController
   end
 
   # Approve the given role request and creates the course user.
-  def approve # rubocop:disable Metrics/AbcSize
+  def approve
     course_user = create_course_user
     if course_user.persisted?
       flash.now[:success] = t('.success', name: course_user.name, role: course_user.role)

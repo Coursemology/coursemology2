@@ -67,7 +67,7 @@ class Course::Forum::ForumsController < Course::Forum::Controller
     @search = Course::Forum::Search.new(search_params)
   end
 
-  def next_unread # rubocop:disable Metrics/AbcSize
+  def next_unread
     topic = Course::Forum::Topic.from_course(current_course).
             accessible_by(current_ability).unread_by(current_user).first
 

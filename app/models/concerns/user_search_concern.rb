@@ -8,7 +8,7 @@ module UserSearchConcern
     # @param [String] keyword The keywords for filtering users.
     # @return [Array<User>] The users which match the keyword. All users will be returned if
     #   keyword is blank.
-    def search(keyword) # rubocop:disable Metrics/AbcSize
+    def search(keyword)
       return all if keyword.blank?
 
       condition = "%#{keyword}%"
