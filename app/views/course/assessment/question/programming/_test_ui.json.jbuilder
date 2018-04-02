@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 if @meta
   json.test_ui do
     json.mode @meta[:editor_mode]

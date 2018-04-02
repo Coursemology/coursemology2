@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Forum::TopicNotifier < Notifier::Base
   # To be called when user created a new forum topic.
   def topic_created(user, topic)

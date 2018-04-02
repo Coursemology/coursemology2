@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Satisfiability graph to evaluate the satisfiability of the conditionals for a course user.
 class Course::Conditional::UserSatisfiabilityGraph
   class EdgeSet < Hash

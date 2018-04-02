@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 json.condition_attributes do
   json.new_condition_urls Course::Condition::ALL_CONDITIONS do |condition|
     next unless component_enabled?(condition)

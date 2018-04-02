@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 json.question do
   json.(@scribing_question, :id, :title, :description, :staff_only_comments, :maximum_grade)
 

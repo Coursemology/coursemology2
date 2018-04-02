@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # This extension disables the check introduced in rails/rails#24457, which disables the
 # accessing or mutation of the +MessageDelivery+ object through raising an exception.
 #

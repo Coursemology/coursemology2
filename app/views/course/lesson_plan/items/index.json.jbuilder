@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 json.milestones @milestones, partial: 'course/lesson_plan/milestones/milestone.json.jbuilder', as: :milestone
 
 json.items @items.map(&:specific) do |actable|

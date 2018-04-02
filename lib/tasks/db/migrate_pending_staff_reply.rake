@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 namespace :db do
   # Run this after migrating posts to the new SubmissionQuestion topics.
   task migrate_pending_staff_reply: :environment do

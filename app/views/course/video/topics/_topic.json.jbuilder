@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 json.timestamp topic.timestamp
 json.createdTimestamp topic.created_at.to_i
 json.discussionTopicId topic.discussion_topic.id.to_s

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 json.history do
   answer_history = submission.answer_history
 

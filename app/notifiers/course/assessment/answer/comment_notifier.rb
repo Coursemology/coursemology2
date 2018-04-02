@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Assessment::Answer::CommentNotifier < Notifier::Base
   # To be called when user adds a post to a programming annotation.
   def annotation_replied(user, post)

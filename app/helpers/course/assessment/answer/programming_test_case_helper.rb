@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Course::Assessment::Answer::ProgrammingTestCaseHelper
   # Get a hint message. Use the one from test_result if available, else fallback to the one from
   # the test case.

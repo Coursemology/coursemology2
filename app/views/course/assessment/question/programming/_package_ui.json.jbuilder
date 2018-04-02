@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 json.package_ui do
   json.templates @programming_question.template_files do |file|
     json.(file, :id, :filename)

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Course::Assessment::Answer::ProgrammingHelper
   # Generates HTML with formatted code and annotations.
   #

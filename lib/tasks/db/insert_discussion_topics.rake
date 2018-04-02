@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 namespace :db do
   task insert_discussion_topics: :environment do
     # Insert into course_discussion_topics with

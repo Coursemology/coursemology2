@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 json.import_result do
   json.alert import_result_alert(json: true)
 

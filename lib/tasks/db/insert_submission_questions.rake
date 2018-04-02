@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 namespace :db do
   task insert_submission_questions: :environment do
     ActsAsTenant.without_tenant do

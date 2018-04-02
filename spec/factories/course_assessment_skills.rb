@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryBot.define do
   factory :course_assessment_skill, class: Course::Assessment::Skill do
     course

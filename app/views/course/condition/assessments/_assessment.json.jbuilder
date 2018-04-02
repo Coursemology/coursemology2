@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 assessment_condition = condition
 json.type t('course.condition.assessment.title')
 json.description format_inline_text(assessment_condition.title)

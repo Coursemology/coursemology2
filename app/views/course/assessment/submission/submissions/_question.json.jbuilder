@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # This partial is required to DRY up the code because the abstract question model
 # directly renders the actable partial by delegating :to_partial_path to the actable.
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Course::Discussion::Topic::PostsConcern
   extend ActiveSupport::Concern
   include Course::Discussion::Post::OrderingConcern

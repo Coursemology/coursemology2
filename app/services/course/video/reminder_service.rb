@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Video::ReminderService
   class << self
     delegate :closing_reminder, to: :new

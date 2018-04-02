@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 namespace :factory_bot do
   desc 'Run Factory Bot Lint to make sure all factories in tests are valid'
   task lint: :environment do

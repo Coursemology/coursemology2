@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 json.(category, :id, :title, :weight)
 
 json.tabs do

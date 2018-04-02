@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::AnnouncementNotifier < Notifier::Base
   # To be called when an announcement is made.
   def new_announcement(user, announcement)

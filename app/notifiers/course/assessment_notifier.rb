@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::AssessmentNotifier < Notifier::Base
   # To be called when user attempted an assessment.
   def assessment_attempted(user, assessment)

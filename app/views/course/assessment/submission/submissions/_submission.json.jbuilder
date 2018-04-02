@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 json.submission do
   json.id submission.id
   json.canGrade can_grade
