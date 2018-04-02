@@ -58,7 +58,7 @@ namespace :db do
 
       # Remove duplicates.
       # http://stackoverflow.com/questions/6583916/delete-completely-duplicate-rows-in-postgresql-and-keep-only-1
-      puts "Removing duplicates in discussion topic subscriptions..."
+      puts 'Removing duplicates in discussion topic subscriptions...'
       start_time = Time.now
       connection.exec_query(<<-SQL)
         DELETE FROM course_discussion_topic_subscriptions a
