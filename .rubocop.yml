@@ -38,6 +38,9 @@ Rails/SkipsModelValidations:
 Rails/ApplicationRecord:
   Enabled: false
 
+Bundler/OrderedGems:
+  Enabled: false
+
 Style/ClassAndModuleChildren:
   EnforcedStyle: compact
 
