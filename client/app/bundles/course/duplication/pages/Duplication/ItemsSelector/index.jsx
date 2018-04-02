@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { itemSelectorPanels } from 'course/duplication/constants';
+import targetCourseSelector from 'course/duplication/selectors/targetCourse';
+import { courseShape } from 'course/duplication/propTypes';
 import AssessmentsSelector from './AssessmentsSelector';
 import SurveysSelector from './SurveysSelector';
 import AchievementsSelector from './AchievementsSelector';
@@ -14,10 +16,14 @@ const translations = defineMessages({
     id: 'course.duplication.ItemsSelector.pleaseSelectItems',
     defaultMessage: 'Please select items to duplicate via the sidebar.',
   },
+  componentDisabled: {
+    id: 'course.duplication.ItemsSelector.componentDisabled',
+    defaultMessage: 'This component is not enabled for the destination course.',
+  },
 });
 
 const styles = {
-  pleaseSelectItems: {
+  message: {
     marginTop: 25,
   },
 };
@@ -25,6 +31,7 @@ const styles = {
 class ItemsSelector extends React.Component {
   static propTypes = {
     currentPanel: PropTypes.string,
+    targetCourse: courseShape,
   }
 
   static panelComponentMap = {
@@ -36,12 +43,20 @@ class ItemsSelector extends React.Component {
   }
 
   render() {
-    const { currentPanel } = this.props;
+    const { currentPanel, targetCourse } = this.props;
 
     if (!currentPanel) {
       return (
-        <div style={styles.pleaseSelectItems}>
+        <div style={styles.message}>
           <FormattedMessage {...translations.pleaseSelectItems} />
+        </div>
+      );
+    }
+
+    if (!targetCourse.enabledComponents.includes(currentPanel)) {
+      return (
+        <div style={styles.message}>
+          <FormattedMessage {...translations.componentDisabled} />
         </div>
       );
     }
@@ -51,6 +66,7 @@ class ItemsSelector extends React.Component {
   }
 }
 
-export default connect(({ duplication }) => ({
-  currentPanel: duplication.currentItemSelectorPanel,
+export default connect(state => ({
+  currentPanel: state.duplication.currentItemSelectorPanel,
+  targetCourse: targetCourseSelector(state),
 }))(ItemsSelector);

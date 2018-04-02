@@ -17,6 +17,7 @@ export const duplicableItemTypes = mirrorCreator([
   'VIDEO_TAB',
 ]);
 
+// These are mirrored in app/helpers/course/object_duplications_helper.rb
 export const itemSelectorPanels = mirrorCreator([
   'TARGET_COURSE',
   'ASSESSMENTS',

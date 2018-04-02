@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import Avatar from 'material-ui/Avatar';
 import { List, ListItem } from 'material-ui/List';
 import { cyan500 } from 'material-ui/styles/colors';
-import { duplicableItemTypes, itemSelectorPanels } from 'course/duplication/constants';
+import { duplicableItemTypes, itemSelectorPanels as panels } from 'course/duplication/constants';
 import { setItemSelectorPanel } from 'course/duplication/actions';
 import { defaultComponentTitles } from 'course/translations.intl';
 import DuplicateButton from '../DuplicateButton';
@@ -25,10 +25,17 @@ const styles = {
 class ItemsSelectorMenu extends React.Component {
   static propTypes = {
     selectedItems: PropTypes.shape({}),
+    enabledComponents: PropTypes.arrayOf(PropTypes.string),
     dispatch: PropTypes.func.isRequired,
   }
 
-  static renderSidebarItem(translation, count, onClick) {
+  renderSidebarItem(panelKey, titleKey, count) {
+    const { dispatch, enabledComponents } = this.props;
+    if (!enabledComponents.includes(panelKey)) { return null; }
+    if (enabledComponents.length === 1) {
+      dispatch(setItemSelectorPanel(panelKey));
+    }
+
     return (
       <ListItem
         leftAvatar={
@@ -40,15 +47,15 @@ class ItemsSelectorMenu extends React.Component {
             { count }
           </Avatar>
         }
-        onClick={onClick}
+        onClick={() => dispatch(setItemSelectorPanel(panelKey))}
       >
-        <FormattedMessage {...translation} />
+        <FormattedMessage {...defaultComponentTitles[titleKey]} />
       </ListItem>
     );
   }
 
   render() {
-    const { dispatch, selectedItems } = this.props;
+    const { selectedItems } = this.props;
 
     const counts = {};
     Object.keys(selectedItems).forEach((key) => {
@@ -62,38 +69,28 @@ class ItemsSelectorMenu extends React.Component {
     return (
       <List>
         {
-          ItemsSelectorMenu.renderSidebarItem(
-            defaultComponentTitles.course_assessments_component,
-            assessmentsComponentCount,
-            () => dispatch(setItemSelectorPanel(itemSelectorPanels.ASSESSMENTS))
+          this.renderSidebarItem(
+            panels.ASSESSMENTS, 'course_assessments_component', assessmentsComponentCount
           )
         }
         {
-          ItemsSelectorMenu.renderSidebarItem(
-            defaultComponentTitles.course_survey_component,
-            counts[SURVEY],
-            () => dispatch(setItemSelectorPanel(itemSelectorPanels.SURVEYS))
+          this.renderSidebarItem(
+            panels.SURVEYS, 'course_survey_component', counts[SURVEY]
           )
         }
         {
-          ItemsSelectorMenu.renderSidebarItem(
-            defaultComponentTitles.course_achievements_component,
-            counts[ACHIEVEMENT],
-            () => dispatch(setItemSelectorPanel(itemSelectorPanels.ACHIEVEMENTS))
+          this.renderSidebarItem(
+            panels.ACHIEVEMENTS, 'course_achievements_component', counts[ACHIEVEMENT]
           )
         }
         {
-          ItemsSelectorMenu.renderSidebarItem(
-            defaultComponentTitles.course_materials_component,
-            counts[FOLDER] + counts[MATERIAL],
-            () => dispatch(setItemSelectorPanel(itemSelectorPanels.MATERIALS))
+          this.renderSidebarItem(
+            panels.MATERIALS, 'course_materials_component', counts[FOLDER] + counts[MATERIAL]
           )
         }
         {
-          ItemsSelectorMenu.renderSidebarItem(
-            defaultComponentTitles.course_videos_component,
-            videosComponentCount,
-            () => dispatch(setItemSelectorPanel(itemSelectorPanels.VIDEOS))
+          this.renderSidebarItem(
+            panels.VIDEOS, 'course_videos_component', videosComponentCount
           )
         }
         <ListItem disabled style={styles.duplicateButton}>
@@ -106,4 +103,5 @@ class ItemsSelectorMenu extends React.Component {
 
 export default connect(({ duplication }) => ({
   selectedItems: duplication.selectedItems,
+  enabledComponents: duplication.currentCourse.enabledComponents,
 }))(ItemsSelectorMenu);

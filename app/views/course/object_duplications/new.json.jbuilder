@@ -7,6 +7,7 @@ json.currentCourse do
     modes << 'COURSE' if current_course.course_duplicable?
     modes << 'OBJECT' if current_course.objects_duplicable?
   end)
+  json.enabledComponents map_components_to_frontend_tokens(current_component_host.enabled_components)
 end
 
 json.targetCourses @target_courses do |course|
@@ -18,6 +19,7 @@ json.targetCourses @target_courses do |course|
     json.subfolders root_folder.children.map(&:name)
     json.materials root_folder.materials.map(&:name)
   end
+  json.enabledComponents enabled_component_tokens(course)
 end
 
 json.assessmentsComponent @categories do |category|

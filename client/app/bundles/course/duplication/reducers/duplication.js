@@ -1,14 +1,14 @@
 import actionTypes, { duplicableItemTypes, duplicationModes } from 'course/duplication/constants';
 import { nestFolders } from 'course/duplication/utils';
 
+const emptySelectedItemsHash = () => Object.keys(duplicableItemTypes).reduce((hash, type) => {
+  hash[type] = {}; // eslint-disable-line no-param-reassign
+  return hash;
+}, {});
+
 const initialState = {
   confirmationOpen: false,
-  selectedItems: {
-    ...Object.keys(duplicableItemTypes).reduce((hash, type) => {
-      hash[type] = {}; // eslint-disable-line no-param-reassign
-      return hash;
-    }, {}),
-  },
+  selectedItems: emptySelectedItemsHash(),
   targetCourseId: null,
   targetCourses: [],
   duplicationMode: duplicationModes.COURSE,
@@ -56,7 +56,11 @@ export default function (state = initialState, action) {
     }
 
     case actionTypes.SET_TARGET_COURSE_ID: {
-      return { ...state, targetCourseId: action.targetCourseId };
+      return {
+        ...state,
+        targetCourseId: action.targetCourseId,
+        selectedItems: emptySelectedItemsHash(),
+      };
     }
     case actionTypes.SET_ITEM_SELECTED_BOOLEAN: {
       const selectedItems = { ...state.selectedItems };

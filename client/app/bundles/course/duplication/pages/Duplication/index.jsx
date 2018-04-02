@@ -56,6 +56,11 @@ const translations = defineMessages({
     id: 'course.duplication.Duplication.duplicationDisabled',
     defaultMessage: 'Duplication is disabled for this course.',
   },
+  noComponentsEnabled: {
+    id: 'course.duplication.Duplication.noComponentsEnabled',
+    defaultMessage: 'All components with duplicable items are disabled. \
+      You may enable them under course settings.',
+  },
 });
 
 const styles = {
@@ -88,6 +93,7 @@ class Duplication extends React.Component {
     isCourseSelected: PropTypes.bool.isRequired,
     duplicationMode: PropTypes.string.isRequired,
     modesAllowed: PropTypes.arrayOf(PropTypes.string),
+    enabledComponents: PropTypes.arrayOf(PropTypes.string),
     currentCourse: PropTypes.shape({
       title: PropTypes.string,
       start_at: PropTypes.string,
@@ -183,12 +189,16 @@ class Duplication extends React.Component {
   }
 
   renderBody() {
-    const { isLoading, isCourseSelected, duplicationMode, modesAllowed } = this.props;
+    const { isLoading, isCourseSelected, duplicationMode, modesAllowed, enabledComponents } = this.props;
     if (isLoading) { return <LoadingIndicator />; }
 
     if (!modesAllowed || modesAllowed.length < 1) {
       return <Subheader><FormattedMessage {...translations.duplicationDisabled} /></Subheader>;
     }
+    if (!enabledComponents || enabledComponents.length < 1) {
+      return <Subheader><FormattedMessage {...translations.noComponentsEnabled} /></Subheader>;
+    }
+
     return (
       <div style={styles.bodyGrid}>
         <div style={styles.sidebar}>
@@ -231,5 +241,6 @@ export default connect(({ duplication }) => ({
   isCourseSelected: !!duplication.targetCourseId,
   duplicationMode: duplication.duplicationMode,
   modesAllowed: duplication.currentCourse.duplicationModesAllowed,
+  enabledComponents: duplication.currentCourse.enabledComponents,
   currentCourse: duplication.currentCourse,
 }))(injectIntl(Duplication));
