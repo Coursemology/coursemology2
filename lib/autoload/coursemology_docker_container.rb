@@ -188,7 +188,7 @@ class CoursemologyDockerContainer < Docker::Container
       return test_report.force_encoding(Encoding::UTF_8) if test_report
     end
   rescue Docker::Error::NotFoundError
-    return nil
+    nil
   end
 
   # Extracts the test report from the container.

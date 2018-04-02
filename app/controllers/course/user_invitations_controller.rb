@@ -132,7 +132,7 @@ class Course::UserInvitationsController < Course::ComponentController
     invitation_service.invite(invitation_params)
   rescue CSV::MalformedCSVError => e
     current_course.errors.add(:invitations_file, e.message)
-    return false
+    false
   end
 
   # Creates a user invitation service object for this object.
