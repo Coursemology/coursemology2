@@ -18,7 +18,7 @@ module Extensions::Attachable::ActiveRecord::Base
     #
     #   For deletion of attachments, it is necessary for the model to implement the
     #   +:destroy_attachment+ CanCanCan permission on the +attachable+ object.
-    def has_many_attachments(options = {}) # rubocop:disable Style/PredicateName
+    def has_many_attachments(options = {}) # rubocop:disable Naming/PredicateName
       include HasManyAttachments
 
       if options[:on]
@@ -29,7 +29,7 @@ module Extensions::Attachable::ActiveRecord::Base
       end
     end
 
-    def has_one_attachment # rubocop:disable Style/PredicateName
+    def has_one_attachment # rubocop:disable Naming/PredicateName
       include HasOneAttachment
     end
   end
