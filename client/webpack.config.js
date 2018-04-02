@@ -40,6 +40,7 @@ const config = {
       'redux-persist',
       'redux-promise',
       'redux-thunk',
+      'reselect',
       'webfontloader',
     ],
     // Vendor contains the libraries that are not in a single bundle (size could change depends on
