@@ -98,6 +98,8 @@ function renderTextResponseComprehensionPoint(point) {
           <TableRow>
             <TableRowColumn><FormattedMessage {...translations.pointGrade} /></TableRowColumn>
             <TableRowColumn>{point.pointGrade}</TableRowColumn>
+            <TableRowColumn />
+            <TableRowColumn />
           </TableRow>
           <TableRow>
             <TableHeaderColumn><FormattedMessage {...translations.type} /></TableHeaderColumn>
