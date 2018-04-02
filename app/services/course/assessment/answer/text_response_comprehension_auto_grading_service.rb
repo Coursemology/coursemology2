@@ -416,25 +416,20 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
   #   for that Point.
   # @return [Array<String>] The explanations for the correct keywords.
   def explanations_for_correct_paraphrase(answer_text_array, keyword_status, hash_point_serial)
-    explanations = []
     hash_keywords = {} # point_id => [word in answer_text, information]
-
     keyword_status.each_with_index do |s, index|
       unless s.nil?
         hash_keywords[s.point.id] = [] unless hash_keywords.key?(s.point.id)
         hash_keywords[s.point.id].push([answer_text_array[index], s.information])
       end
     end
-
-    explanations.push(explanations_for_correct_paraphrase_by_points(hash_keywords, hash_point_serial))
-
+    explanations = explanations_for_correct_paraphrase_by_points(hash_keywords, hash_point_serial)
     unless explanations.empty?
       explanations.push(
         I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.horizontal_break_html'),
         I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.line_break_html')
       )
     end
-
     explanations
   end
 
