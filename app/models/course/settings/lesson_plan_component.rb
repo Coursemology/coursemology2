@@ -2,7 +2,7 @@
 class Course::Settings::LessonPlanComponent < Course::Settings::Component
   include ActiveModel::Conversion
 
-  MILESTONES_EXPANDED_VALUES = %w(all none current).freeze
+  MILESTONES_EXPANDED_VALUES = %w[all none current].freeze
 
   # Returns the setting which controls which milestones groups are expanded when
   # the lesson plan page is first loaded.
