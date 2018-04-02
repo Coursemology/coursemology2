@@ -30,7 +30,7 @@ RSpec.feature 'System: Administration: Instance: Courses' do
             expect(page).to have_selector('li', text: course_user.user.name)
           end
 
-          course.course_users.select { |u| !u.owner? }.each do |course_user|
+          course.course_users.reject(&:owner?).each do |course_user|
             expect(page).not_to have_selector('li', text: course_user.user.name)
           end
         end
