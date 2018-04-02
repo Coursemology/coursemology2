@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Attachment < ApplicationRecord
-  TEMPORARY_FILE_PREFIX = 'attachment'.freeze
+  TEMPORARY_FILE_PREFIX = 'attachment'
 
   mount_uploader :file_upload, FileUploader
 

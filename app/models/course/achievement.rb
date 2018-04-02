@@ -20,7 +20,7 @@ class Course::Achievement < ApplicationRecord
   default_scope { order(weight: :asc) }
 
   def to_partial_path
-    'course/achievement/achievements/achievement'.freeze
+    'course/achievement/achievements/achievement'
   end
 
   # Set default values

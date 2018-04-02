@@ -120,6 +120,6 @@ class Instance < ApplicationRecord
   private
 
   def should_validate_host? #:nodoc:
-    new_record? || changed_attributes.keys.include?('host'.freeze)
+    new_record? || changed_attributes.keys.include?('host')
   end
 end

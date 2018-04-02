@@ -29,7 +29,7 @@ module Capybara::TestGroupHelpers
         if action
           format('[action="%s"]', action)
         else
-          ''.freeze
+          ''
         end
 
       result = find('form' + attribute_selector)

@@ -50,7 +50,7 @@ class User < ApplicationRecord
   has_many :instance_users, dependent: :destroy
   has_many :instances, through: :instance_users
   has_many :identities, dependent: :destroy, class_name: User::Identity.name
-  has_many :activities, inverse_of: :actor, dependent: :destroy, foreign_key: 'actor_id'.freeze
+  has_many :activities, inverse_of: :actor, dependent: :destroy, foreign_key: 'actor_id'
   has_many :notifications, dependent: :destroy, class_name: UserNotification.name,
                            inverse_of: :user do
     include UserNotificationsConcern

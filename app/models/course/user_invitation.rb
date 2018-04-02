@@ -42,7 +42,7 @@ class Course::UserInvitation < ApplicationRecord
   #
   # @return [void]
   def generate_invitation_key
-    self.invitation_key ||= 'I'.freeze + SecureRandom.base64(8)
+    self.invitation_key ||= 'I' + SecureRandom.base64(8)
   end
 
   # Sets the default for non-null fields.

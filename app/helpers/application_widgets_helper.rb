@@ -24,8 +24,8 @@ module ApplicationWidgetsHelper
   def new_button(name, options = nil, html_options = nil, &block)
     name, options, html_options = [nil, name, options] unless html_options
     options = [:new] + [*options] unless options.is_a?(String)
-    block ||= proc { fa_icon 'file'.freeze }
-    resource_button(:new, 'btn-primary'.freeze, name || block, options, html_options&.dup)
+    block ||= proc { fa_icon 'file' }
+    resource_button(:new, 'btn-primary', name || block, options, html_options&.dup)
   end
 
   # Create a +edit+ button.
@@ -52,8 +52,8 @@ module ApplicationWidgetsHelper
   def edit_button(name, options = nil, html_options = nil, &block)
     name, options, html_options = [nil, name, options] unless html_options
     options = [:edit] + [*options] unless options.is_a?(String)
-    block ||= proc { fa_icon 'edit'.freeze }
-    resource_button(:edit, 'btn-default'.freeze, name || block, options, html_options&.dup)
+    block ||= proc { fa_icon 'edit' }
+    resource_button(:edit, 'btn-default', name || block, options, html_options&.dup)
   end
 
   # Create a +delete+ button.
@@ -79,12 +79,12 @@ module ApplicationWidgetsHelper
   #   +url_for+. This would create a button with the given body.
   def delete_button(name, options = nil, html_options = nil, &block)
     name, options, html_options = [nil, name, options] unless html_options
-    block ||= proc { fa_icon 'trash'.freeze }
+    block ||= proc { fa_icon 'trash' }
 
     html_options = html_options&.dup || {}
     html_options.reverse_merge!(method: :delete,
                                 data: { confirm: t('helpers.buttons.delete_confirm_message') })
-    resource_button(:delete, 'btn-danger'.freeze, name || block, options, html_options)
+    resource_button(:delete, 'btn-danger', name || block, options, html_options)
   end
 
   # Display a progress_bar with the given percentage and styling. The percentage is assumed to

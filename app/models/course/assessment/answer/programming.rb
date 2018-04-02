@@ -11,7 +11,7 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
   accepts_nested_attributes_for :files, allow_destroy: true
 
   def to_partial_path
-    'course/assessment/answer/programming/programming'.freeze
+    'course/assessment/answer/programming/programming'
   end
 
   # Specific implementation of Course::Assessment::Answer#reset_answer

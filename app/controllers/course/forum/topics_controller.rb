@@ -81,9 +81,9 @@ class Course::Forum::TopicsController < Course::Forum::ComponentController
 
   def authorize_topic_type!(type)
     case type
-    when 'sticky'.freeze
+    when 'sticky'
       authorize!(:set_sticky, @topic)
-    when 'announcement'.freeze
+    when 'announcement'
       authorize!(:set_announcement, @topic)
     end
   end

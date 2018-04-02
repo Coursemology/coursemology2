@@ -8,6 +8,6 @@ class System::Announcement < GenericAnnouncement
   scope :ordered_by_date, ->(direction = :desc) { order(start_at: direction) }
 
   def to_partial_path
-    'system/admin/announcements/announcement'.freeze
+    'system/admin/announcements/announcement'
   end
 end

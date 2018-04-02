@@ -10,13 +10,13 @@
 #   Rails.application.config.active_job.queue_adapter = :background_thread
 class ActiveJob::QueueAdapters::BackgroundThreadAdapter < ActiveJob::QueueAdapters::InlineAdapter
   # The ActiveSupport::Notification instrumentation event when a new job is enqueued.
-  ENQUEUE_EVENT = 'enqueue.background_thread_adapter.active_job'.freeze
+  ENQUEUE_EVENT = 'enqueue.background_thread_adapter.active_job'
 
   # The ActiveSupport::Notification instrumentation event when the pool grows.
-  GROW_EVENT = 'grow.background_thread_adapter.active_job'.freeze
+  GROW_EVENT = 'grow.background_thread_adapter.active_job'
 
   # The ActiveSupport::Notification instrumentation event when the pool shrinks.
-  SHRINK_EVENT = 'shrink.background_thread_adapter.active_job'.freeze
+  SHRINK_EVENT = 'shrink.background_thread_adapter.active_job'
 
   # The maximum number of threads to maintain in the thread pool.
   MAX_THREAD_POOL_SIZE = 3

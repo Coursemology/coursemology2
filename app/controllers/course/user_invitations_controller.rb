@@ -85,7 +85,7 @@ class Course::UserInvitationsController < Course::ComponentController
   #
   # @return [Boolean]
   def registration_params
-    @registration_params ||= course_user_invitation_params[:registration_key] == 'checked'.freeze
+    @registration_params ||= course_user_invitation_params[:registration_key] == 'checked'
   end
 
   # Strong params for resending of invitations.

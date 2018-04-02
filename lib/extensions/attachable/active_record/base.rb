@@ -59,7 +59,7 @@ module Extensions::Attachable::ActiveRecord::Base
       end
     end
 
-    ATTACHMENT_REMOVED_SUFFIX = '_attachment_references_removed'.freeze
+    ATTACHMENT_REMOVED_SUFFIX = '_attachment_references_removed'
 
     def self.define_attachment_references_readers(attachable_columns)
       attachable_columns.each do |column|

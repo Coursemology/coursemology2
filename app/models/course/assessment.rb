@@ -101,7 +101,7 @@ class Course::Assessment < ApplicationRecord
   end
 
   def to_partial_path
-    'course/assessment/assessments/assessment'.freeze
+    'course/assessment/assessments/assessment'
   end
 
   # Update assessment mode from params.
