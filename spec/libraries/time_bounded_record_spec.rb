@@ -14,8 +14,8 @@ RSpec.describe 'Extension: Time Bounded Record', type: :model do
       [
         [nil, nil],
         [nil, 1.day],
-        [-1.days, nil],
-        [-1.days, 1.day]
+        [-1.day, nil],
+        [-1.day, 1.day]
       ].map do |pair|
         options = {}
         options[:start_at] = Time.zone.now + pair[0] unless pair[0].nil?
