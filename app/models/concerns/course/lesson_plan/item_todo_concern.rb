@@ -7,11 +7,11 @@ module Course::LessonPlan::ItemTodoConcern
   end
 
   def has_todo?
-    actable && actable.class.has_todo?
+    actable&.class&.has_todo?
   end
 
   def can_user_start?(user)
-    actable && actable.can_user_start?(user)
+    actable&.can_user_start?(user)
   end
 
   # Create todos for the given lesson_plan_item for all course_users in the course.

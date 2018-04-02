@@ -23,7 +23,7 @@ module UserOmniauthConcern
     # @return [nil] If none is found.
     def find_by_omniauth(auth)
       identity = User::Identity.find_by(provider: auth.provider, uid: auth.uid)
-      identity.user if identity
+      identity&.user
     end
 
     # Create a user from omniauth data.

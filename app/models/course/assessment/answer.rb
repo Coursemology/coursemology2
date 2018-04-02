@@ -159,7 +159,7 @@ class Course::Assessment::Answer < ApplicationRecord
     self.grader = nil
     self.graded_at = nil
     self.submitted_at = nil
-    auto_grading.mark_for_destruction if auto_grading
+    auto_grading&.mark_for_destruction
   end
 
   def auto_grading_job_class(reduce_priority)

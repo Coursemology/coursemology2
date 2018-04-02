@@ -15,7 +15,7 @@ class Course::Assessment::Question::TextResponseSolution < ApplicationRecord
   private
 
   def strip_whitespace
-    solution.strip! unless solution.nil?
+    solution&.strip!
   end
 
   def validate_grade

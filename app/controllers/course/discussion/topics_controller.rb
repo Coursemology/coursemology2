@@ -8,7 +8,7 @@ class Course::Discussion::TopicsController < Course::ComponentController
   def index
     @topics = all_topics
 
-    if current_course_user && current_course_user.student?
+    if current_course_user&.student?
       @topics = @topics.merge(Course::Discussion::Topic.from_user(current_course_user.user_id))
     end
   end

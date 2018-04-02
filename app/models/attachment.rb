@@ -94,7 +94,7 @@ class Attachment < ApplicationRecord
     file.seek(0)
     file
   rescue
-    file.close! if file
+    file&.close!
     raise
   end
 

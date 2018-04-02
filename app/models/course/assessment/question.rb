@@ -46,7 +46,7 @@ class Course::Assessment::Question < ApplicationRecord
   #   should not be persisted.
   # @raise [NotImplementedError] question#attempt was not implemented.
   def attempt(submission, last_attempt = nil)
-    if actable && actable.self_respond_to?(:attempt)
+    if actable&.self_respond_to?(:attempt)
       return actable.attempt(submission, last_attempt ? last_attempt.actable : nil)
     end
     raise NotImplementedError, 'Questions must implement the #attempt method for submissions.'
