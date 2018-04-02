@@ -42,4 +42,12 @@ module Course::DuplicationConcern
   def objects_duplicable?
     true
   end
+
+  # Override this method to prevent certain items from being cherry-picked for duplication for
+  # the current course. See {Course::ObjectDuplicationsHelper} for list of cherrypickable items.
+  #
+  # @return [Array<Class>] Classes of disabled items
+  def disabled_cherrypickable_types
+    []
+  end
 end

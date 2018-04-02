@@ -11,6 +11,21 @@ module Course::ObjectDuplicationsHelper
     }.freeze
   end
 
+  # Map of ruby classes to tokens used by the frontend for cherry-pickable items.
+  def cherrypickable_items_hash
+    @cherrypickable_items_hash ||= {
+      Course::Assessment::Category => 'CATEGORY',
+      Course::Assessment::Tab => 'TAB',
+      Course::Assessment => 'ASSESSMENT',
+      Course::Survey => 'SURVEY',
+      Course::Achievement => 'ACHIEVEMENT',
+      Course::Material::Folder => 'FOLDER',
+      Course::Material => 'MATERIAL',
+      Course::Video => 'VIDEO',
+      Course::Video::Tab => 'VIDEO_TAB'
+    }.freeze
+  end
+
   # @param [Course] course
   # @return [Array<String>] Frontend-based strings representing the enabled components for the given course.
   def enabled_component_tokens(course)

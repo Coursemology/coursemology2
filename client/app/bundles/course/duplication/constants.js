@@ -5,6 +5,7 @@ export const duplicationModes = mirrorCreator([
   'COURSE',
 ]);
 
+// These are mirrored in app/helpers/course/object_duplications_helper.rb
 export const duplicableItemTypes = mirrorCreator([
   'ASSESSMENT',
   'TAB',

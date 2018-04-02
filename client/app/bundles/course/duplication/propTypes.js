@@ -12,6 +12,7 @@ export const currentCourseShape = PropTypes.shape({
   title: PropTypes.string,
   start_at: PropTypes.string,
   enabledComponents: PropTypes.arrayOf(PropTypes.string),
+  unduplicableObjectTypes: PropTypes.arrayOf(PropTypes.string),
   duplicationModesAllowed: PropTypes.arrayOf(PropTypes.string),
 });
 
