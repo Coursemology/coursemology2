@@ -44,7 +44,7 @@ namespace :db do
         # Print some time stats
         if timer_loop_counter == 1000
           end_time = Time.now
-          puts "#{topics_with_posts} / #{total_posts}: #{(end_time-start_time)*1000} ms"
+          puts "#{topics_with_posts} / #{total_posts}: #{(end_time - start_time) * 1000} ms"
 
           start_time = Time.now
           timer_loop_counter = 0
