@@ -15,6 +15,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.answer.solutions',
     defaultMessage: 'Solutions',
   },
+  solutionsWithMaximumGrade: {
+    id: 'course.assessment.submission.answer.solutionsWithMaximumGrade',
+    defaultMessage: 'Solutions (Maximum Grade for this Question: {maximumGrade})',
+  },
   type: {
     id: 'course.assessment.submission.answer.type',
     defaultMessage: 'Type',
@@ -151,7 +155,7 @@ function renderTextResponseComprehension(question) {
   return (
     <React.Fragment>
       <hr />
-      <h4><FormattedMessage {...translations.solutions} /></h4>
+      <h4><FormattedMessage {...translations.solutionsWithMaximumGrade} values={{ maximumGrade: question.maximumGrade }} /></h4>
       {question.groups.map(group => (
         <div key={group.id}>{renderTextResponseComprehensionGroup(group)}</div>
       ))}

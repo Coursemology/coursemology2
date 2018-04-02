@@ -1,6 +1,7 @@
 json.allowAttachment question.allow_attachment? unless question.hide_text?
 json.comprehension question.comprehension_question?
 json.autogradable question.auto_gradable?
+json.maximumGrade question.maximum_grade
 
 json.solutions question.solutions.each do |solution|
   json.id solution.id
