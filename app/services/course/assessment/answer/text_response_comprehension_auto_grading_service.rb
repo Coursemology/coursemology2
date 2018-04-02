@@ -312,8 +312,6 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
         I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.line_break_html')
       )
     end
-
-    explanations
   end
 
   # Returns the explanations for an incorrect Point.
@@ -326,18 +324,14 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
   # @return [Array<String>] The explanations for the incorrect Point.
   def explanations_for_incorrect_point(answer_text_array, answer_text_lemma_status, point)
     explanations = []
-
     if answer_text_lemma_status[:compre_lifted_word].include?(point)
       explanations.push(
         explanations_for_incorrect_point_lifted_words(answer_text_array, answer_text_lemma_status, point)
       )
     end
-
     explanations.push(
       explanations_for_incorrect_point_missing_keywords(answer_text_lemma_status, point)
     )
-
-    explanations
   end
 
   # Returns the lifted words explanations for an incorrect Point.
@@ -430,7 +424,6 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
         I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.line_break_html')
       )
     end
-    explanations
   end
 
   # Returns the explanations for correctly paraphrased keywords, split by each Point.
