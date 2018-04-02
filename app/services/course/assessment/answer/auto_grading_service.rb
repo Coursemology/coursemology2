@@ -67,7 +67,7 @@ class Course::Assessment::Answer::AutoGradingService
   #
   # @param [Course::Assessment::Answer] answer The answer to be evaluated.
   # @return [Integer] grade The grade of the answer.
-  def evaluate(answer)
+  def evaluate(_answer)
     raise 'Not Implemented'
   end
 end

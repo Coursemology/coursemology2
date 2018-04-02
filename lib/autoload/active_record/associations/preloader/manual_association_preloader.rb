@@ -14,7 +14,7 @@ module ActiveRecord::Associations::Preloader::ManualAssociationPreloader
     raise NotImplementedError
   end
 
-  def records_for(ids, &block)
+  def records_for(ids)
     ids.flat_map { |id| @records_by_owner[id] }.tap(&:compact!).tap do |result|
       # In ActiveRecord 5.0.1, an ActiveRecord::Relation is expected to be returned.
       result.define_singleton_method(:load) do
