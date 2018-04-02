@@ -9,7 +9,7 @@ class Course::Settings::TopicsComponent < Course::Settings::Component
   end
 
   def title=(title)
-    title = nil unless title.present?
+    title = nil if title.blank?
     settings.title = title
   end
 

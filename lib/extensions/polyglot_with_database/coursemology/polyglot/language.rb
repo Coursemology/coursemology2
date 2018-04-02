@@ -23,7 +23,7 @@ module Extensions::PolyglotWithDatabase::Coursemology::Polyglot::Language
     #
     #   @param [Array<String>] languages
     scope :with_language, (lambda do |languages|
-      if !languages || languages.empty?
+      if languages.blank?
         all
       else
         where(name: languages)

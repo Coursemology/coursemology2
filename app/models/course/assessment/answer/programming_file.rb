@@ -43,7 +43,7 @@ class Course::Assessment::Answer::ProgrammingFile < ApplicationRecord
   end
 
   def validate_content_size
-    return unless content.present?
+    return if content.blank?
     return if content.bytesize <= MAX_SIZE && content.lines.size <= MAX_LINES
 
     errors.add(:content, :exceed_size_limit)

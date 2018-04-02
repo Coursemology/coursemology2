@@ -93,7 +93,7 @@ class Course::LessonPlan::Item < ApplicationRecord
   # @return [Boolean]
   def self_directed_started?
     if course&.advance_start_at_duration
-      !start_at.present? || start_at - course.advance_start_at_duration < Time.zone.now
+      start_at.blank? || start_at - course.advance_start_at_duration < Time.zone.now
     else
       started?
     end

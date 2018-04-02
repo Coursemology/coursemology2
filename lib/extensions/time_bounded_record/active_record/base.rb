@@ -18,7 +18,7 @@ module Extensions::TimeBoundedRecord::ActiveRecord::Base
 
   # @return [Boolean] True if start_at is a future time.
   def started?
-    !start_at.present? || start_at <= Time.zone.now
+    start_at.blank? || start_at <= Time.zone.now
   end
 
   # @return [Boolean] True if current time is between start_at and end_at.

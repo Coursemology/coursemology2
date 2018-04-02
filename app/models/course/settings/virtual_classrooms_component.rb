@@ -57,7 +57,7 @@ class Course::Settings::VirtualClassroomsComponent < Course::Settings::Component
   #
   # @param [String] title The new title
   def title=(title)
-    title = nil unless title.present?
+    title = nil if title.blank?
     settings.title = title
   end
 
@@ -72,7 +72,7 @@ class Course::Settings::VirtualClassroomsComponent < Course::Settings::Component
   #
   # @param [String] max_duration The new max duration
   def max_duration=(max_duration)
-    max_duration = nil unless max_duration.present?
+    max_duration = nil if max_duration.blank?
     settings.max_duration = max_duration
   end
 
