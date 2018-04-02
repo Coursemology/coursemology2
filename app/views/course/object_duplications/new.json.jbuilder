@@ -3,6 +3,10 @@ json.currentHost current_tenant.host
 
 json.currentCourse do
   json.(current_course, :title, :start_at)
+  json.duplicationModesAllowed ([].tap do |modes|
+    modes << 'COURSE' if current_course.course_duplicable?
+    modes << 'OBJECT' if current_course.objects_duplicable?
+  end)
 end
 
 json.targetCourses @target_courses do |course|

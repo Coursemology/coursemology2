@@ -32,4 +32,14 @@ module Course::DuplicationConcern
       *forums
     ]
   end
+
+  # Override this method to prevent duplication of the course as a whole
+  def course_duplicable?
+    true
+  end
+
+  # Override this method to prevent duplication of individual objects in the course.
+  def objects_duplicable?
+    true
+  end
 end

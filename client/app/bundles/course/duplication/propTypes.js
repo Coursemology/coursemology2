@@ -10,6 +10,7 @@ export const courseShape = PropTypes.shape({
 export const currentCourseShape = PropTypes.shape({
   title: PropTypes.string,
   start_at: PropTypes.string,
+  duplicationModesAllowed: PropTypes.arrayOf(PropTypes.string),
 });
 
 export const assessmentShape = PropTypes.shape({

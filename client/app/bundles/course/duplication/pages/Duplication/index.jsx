@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
 import Paper from 'material-ui/Paper';
+import Subheader from 'material-ui/Subheader';
 import TextField from 'material-ui/TextField';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 
@@ -51,6 +52,10 @@ const translations = defineMessages({
     id: 'course.duplication.Duplication.existingCourse',
     defaultMessage: 'Existing Course',
   },
+  duplicationDisabled: {
+    id: 'course.duplication.Duplication.duplicationDisabled',
+    defaultMessage: 'Duplication is disabled for this course.',
+  },
 });
 
 const styles = {
@@ -82,6 +87,7 @@ class Duplication extends React.Component {
     isLoading: PropTypes.bool.isRequired,
     isCourseSelected: PropTypes.bool.isRequired,
     duplicationMode: PropTypes.string.isRequired,
+    modesAllowed: PropTypes.arrayOf(PropTypes.string),
     currentCourse: PropTypes.shape({
       title: PropTypes.string,
       start_at: PropTypes.string,
@@ -118,27 +124,42 @@ class Duplication extends React.Component {
   }
 
   renderToCourseSidebar() {
-    const { dispatch, duplicationMode } = this.props;
+    const { dispatch, modesAllowed } = this.props;
+    const header = <h3><FormattedMessage {...translations.toCourse} /></h3>;
+
+    const isSingleValidMode =
+      modesAllowed && modesAllowed.length === 1 && duplicationModes[modesAllowed[0]];
+    if (isSingleValidMode) {
+      dispatch(setDuplicationMode(modesAllowed[0]));
+      return header;
+    }
 
     return (
       <React.Fragment>
-        <h3><FormattedMessage {...translations.toCourse} /></h3>
-        <RadioButtonGroup
-          name="duplicationMode"
-          style={styles.radioButtonGroup}
-          valueSelected={duplicationMode}
-          onChange={(_, mode) => dispatch(setDuplicationMode(mode))}
-        >
-          <RadioButton
-            value={duplicationModes.COURSE}
-            label={<FormattedMessage {...translations.newCourse} />}
-          />
-          <RadioButton
-            value={duplicationModes.OBJECT}
-            label={<FormattedMessage {...translations.existingCourse} />}
-          />
-        </RadioButtonGroup>
+        { header }
+        { this.renderToCourseModeSelector() }
       </React.Fragment>
+    );
+  }
+
+  renderToCourseModeSelector() {
+    const { dispatch, duplicationMode } = this.props;
+    return (
+      <RadioButtonGroup
+        name="duplicationMode"
+        style={styles.radioButtonGroup}
+        valueSelected={duplicationMode}
+        onChange={(_, mode) => dispatch(setDuplicationMode(mode))}
+      >
+        <RadioButton
+          value={duplicationModes.COURSE}
+          label={<FormattedMessage {...translations.newCourse} />}
+        />
+        <RadioButton
+          value={duplicationModes.OBJECT}
+          label={<FormattedMessage {...translations.existingCourse} />}
+        />
+      </RadioButtonGroup>
     );
   }
 
@@ -162,9 +183,12 @@ class Duplication extends React.Component {
   }
 
   renderBody() {
-    const { isLoading, isCourseSelected, duplicationMode } = this.props;
+    const { isLoading, isCourseSelected, duplicationMode, modesAllowed } = this.props;
     if (isLoading) { return <LoadingIndicator />; }
 
+    if (!modesAllowed || modesAllowed.length < 1) {
+      return <Subheader><FormattedMessage {...translations.duplicationDisabled} /></Subheader>;
+    }
     return (
       <div style={styles.bodyGrid}>
         <div style={styles.sidebar}>
@@ -206,5 +230,6 @@ export default connect(({ duplication }) => ({
   isLoading: duplication.isLoading,
   isCourseSelected: !!duplication.targetCourseId,
   duplicationMode: duplication.duplicationMode,
+  modesAllowed: duplication.currentCourse.duplicationModesAllowed,
   currentCourse: duplication.currentCourse,
 }))(injectIntl(Duplication));
