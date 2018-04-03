@@ -339,6 +339,21 @@ RSpec.describe Course::UserInvitationService, type: :service do
         result = subject.send(:parse_from_form, user_form_attributes)
         expect(result).to eq(user_attributes)
       end
+
+      context 'when the name is blank' do
+        let(:attributes_without_name) do
+          user_form_attributes.map do |k, v|
+            [k, v.except(:name)]
+          end.to_h
+        end
+
+        it 'sets the email as the name' do
+          results = subject.send(:parse_from_form, attributes_without_name)
+          results.each do |result|
+            expect(result[:name]).to eq(result[:email])
+          end
+        end
+      end
     end
 
     describe '#invite_users' do

@@ -6,6 +6,7 @@ class Course::UserInvitation < ApplicationRecord
 
   schema_validations auto_create: false
   validates :email, format: { with: Devise.email_regexp }, if: :email_changed?
+  validates :name, presence: true
   validates :role, presence: true
   validates :phantom, inclusion: [true, false]
   validate :no_existing_unconfirmed_invitation

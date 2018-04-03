@@ -40,8 +40,9 @@ module Course::UserInvitationService::ParseInvitationConcern
   # @return [Array<Hash>] Array of users to be invited
   def parse_from_form(users)
     users.map do |(_, value)|
+      name = value[:name].presence || value[:email]
       phantom = ActiveRecord::Type::Boolean.new.cast(value[:phantom])
-      { name: value[:name], email: value[:email], role: value[:role], phantom: phantom }
+      { name: name, email: value[:email], role: value[:role], phantom: phantom }
     end
   end
 
