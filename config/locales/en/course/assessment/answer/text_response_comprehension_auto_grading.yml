@@ -13,7 +13,7 @@ en:
             empty_information: '<i>(word was not entered by staff)</i>'
             correct_keyword: 'You have correctly used "%{answer}" to paraphrase the keyword "%{keyword}".'
             concatenate: ', '
-            concatenate_last: ', and '
+            concatenate_last: ' and '
             line_break_html: '<br>'
             horizontal_break_html: '<hr>'
             grade: 'Grade: %{grade} / %{maximum_grade}'
