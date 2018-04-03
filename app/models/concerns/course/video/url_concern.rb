@@ -30,8 +30,8 @@ module Course::Video::UrlConcern
   # Extracts the video ID from the yout
   def youtube_video_id_from_link(url)
     url.strip!
-    YOUTUBE_FORMAT.find { |format| url =~ format } && $1
-    errors.add(:url, :invalid_url) unless $1
-    $1
+    YOUTUBE_FORMAT.find { |format| url =~ format } && Regexp.last_match(1)
+    errors.add(:url, :invalid_url) unless Regexp.last_match(1)
+    Regexp.last_match(1)
   end
 end
