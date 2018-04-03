@@ -112,6 +112,30 @@ RSpec.describe Course::UserRegistrationService, type: :service do
             expect(course.course_users.find_by(user_id: user.id).role).to eq('teaching_assistant')
           end
         end
+
+        context 'when the phantom option is not specified' do
+          let!(:invitation) { create(:course_user_invitation, course: course) }
+          let(:registration) do
+            Course::Registration.new(course: course, user: user, code: invitation.invitation_key.dup)
+          end
+
+          it 'sets phantom to false' do
+            expect(subject.send(:claim_registration_code, registration)).to be_truthy
+            expect(course.course_users.find_by(user_id: user.id).phantom).to be_falsey
+          end
+        end
+
+        context 'when the phantom option is specified as true' do
+          let!(:invitation) { create(:course_user_invitation, :phantom, course: course) }
+          let(:registration) do
+            Course::Registration.new(course: course, user: user, code: invitation.invitation_key.dup)
+          end
+
+          it 'sets phantom to true' do
+            expect(subject.send(:claim_registration_code, registration)).to be_truthy
+            expect(course.course_users.find_by(user_id: user.id).phantom).to be_truthy
+          end
+        end
       end
 
       context 'when the code is invalid' do

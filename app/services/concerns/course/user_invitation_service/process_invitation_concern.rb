@@ -10,8 +10,11 @@ module Course::UserInvitationService::ProcessInvitationConcern
   # Processes the invites of the given users into the course.
   #
   # @param [Array<Hash{Symbol=>String}>] users A mutable array of users to add.
-  #   Each hash must have three attributes: the +:name+, the +:email+ of the
-  #   user to add, as well as his intended +:role+ in the course.
+  #   Each hash must have four attributes:
+  #     the +:name+,
+  #     the +:email+ of the user to add,
+  #     the intended +:role+ in the course, as well as
+  #     whether the user is a +:phantom:+ or not.
   #   The provided +emails+ are NOT case sensitive.
   # @return
   #   [Array<(Array<Course::UserInvitation>, Array<Course::UserInvitation>, Array<CourseUser>, Array<CourseUser>)>]
@@ -61,7 +64,8 @@ module Course::UserInvitationService::ProcessInvitationConcern
         existing_course_users << course_user
       else
         new_course_users <<
-          @current_course.course_users.build(user: user[:user], name: user[:name], role: user[:role],
+          @current_course.course_users.build(user: user[:user], name: user[:name],
+                                             role: user[:role], phantom: user[:phantom],
                                              creator: @current_user, updater: @current_user)
       end
     end
@@ -84,7 +88,8 @@ module Course::UserInvitationService::ProcessInvitationConcern
         existing_invitations << invitation
       else
         new_invitations <<
-          @current_course.invitations.build(name: user[:name], email: user[:email], role: user[:role])
+          @current_course.invitations.build(name: user[:name], email: user[:email],
+                                            role: user[:role], phantom: user[:phantom])
       end
     end
 

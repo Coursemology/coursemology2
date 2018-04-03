@@ -7,6 +7,7 @@ class Course::UserInvitation < ApplicationRecord
   schema_validations auto_create: false
   validates :email, format: { with: Devise.email_regexp }, if: :email_changed?
   validates :role, presence: true
+  validates :phantom, inclusion: [true, false]
   validate :no_existing_unconfirmed_invitation
 
   enum role: CourseUser.roles
@@ -45,11 +46,12 @@ class Course::UserInvitation < ApplicationRecord
   end
 
   # Sets the default for non-null fields.
-  # Currently sets the role attribute to :student is it's null.
+  # Currently sets the role attribute to :student if null, and phantom to false if null.
   #
   # @return [void]
   def set_defaults
     self.role ||= Course::UserInvitation.roles[:student]
+    self.phantom ||= false
   end
 
   # Checks whether there are existing unconfirmed invitations with the same email.

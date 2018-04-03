@@ -1,0 +1,7 @@
+name,email,role,phantom
+Foo,bar@foo.com,,
+Non-Phantom Bar,foo@bar.com,Teaching Assistant,no
+Phantom Baz,example@name.com,teaching_AssisTant,y
+Phantom Student1,foo1@bar.com,student,t
+Phantom Student2,foo2@bar.com,student,yes
+Phantom Student3,foo3@bar.com,student,true
