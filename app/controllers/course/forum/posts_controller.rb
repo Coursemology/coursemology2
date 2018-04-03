@@ -105,9 +105,8 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
   end
 
   def send_created_notification(post)
-    if current_course_user && !current_course_user.phantom?
-      Course::Forum::PostNotifier.post_replied(current_user, post)
-    end
+    return unless current_course_user && !current_course_user.phantom?
+    Course::Forum::PostNotifier.post_replied(current_user, post)
   end
 
   def authorize_locked_topic

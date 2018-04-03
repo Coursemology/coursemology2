@@ -72,9 +72,8 @@ class Course::Discussion::PostsController < Course::ComponentController
   end
 
   def send_created_notification(post)
-    if current_course_user && !current_course_user.phantom?
-      topic_actable = post.topic.actable
-      topic_actable.notify(post) if topic_actable.respond_to?(:notify)
-    end
+    return unless current_course_user && !current_course_user.phantom?
+    topic_actable = post.topic.actable
+    topic_actable.notify(post) if topic_actable.respond_to?(:notify)
   end
 end

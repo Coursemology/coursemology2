@@ -165,14 +165,13 @@ class Course::Assessment::Submission::SubmissionsController < \
   def check_password
     return unless @submission.attempting?
     return if !@assessment.password_protected? || can?(:manage, @assessment)
+    return if authentication_service.authenticated?
 
-    unless authentication_service.authenticated?
-      log_service.log_submission_access(request)
+    log_service.log_submission_access(request)
 
-      respond_to do |format|
-        format.html { redirect_to new_session_path }
-        format.json { render json: { redirect_url: new_session_path, format: 'html' } }
-      end
+    respond_to do |format|
+      format.html { redirect_to new_session_path }
+      format.json { render json: { redirect_url: new_session_path, format: 'html' } }
     end
   end
 

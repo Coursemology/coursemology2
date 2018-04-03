@@ -34,9 +34,8 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   end
 
   def load_or_create_submission_questions
-    if create_missing_submission_questions && @submission.submission_questions.loaded?
-      @submission.submission_questions.reload
-    end
+    return unless create_missing_submission_questions && @submission.submission_questions.loaded?
+    @submission.submission_questions.reload
   end
 
   protected

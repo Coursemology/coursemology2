@@ -124,9 +124,8 @@ class Course::Assessment::Answer < ApplicationRecord
   end
 
   def validate_assessment_state
-    if !submission.attempting? && !submission.unsubmitting?
-      errors.add(:submission, :attemptable_state)
-    end
+    return unless !submission.attempting? && !submission.unsubmitting?
+    errors.add(:submission, :attemptable_state)
   end
 
   def validate_grade

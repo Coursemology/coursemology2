@@ -71,9 +71,8 @@ class Course::Assessment::Submission::Answer::Programming::AnnotationsController
   end
 
   def send_created_notification(post)
-    if current_course_user && !current_course_user.phantom?
-      post.topic.actable.notify(post)
-    end
+    return unless current_course_user && !current_course_user.phantom?
+    post.topic.actable.notify(post)
   end
 
   def render_create_response

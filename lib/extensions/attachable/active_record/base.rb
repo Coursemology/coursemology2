@@ -21,12 +21,11 @@ module Extensions::Attachable::ActiveRecord::Base
     def has_many_attachments(options = {}) # rubocop:disable Naming/PredicateName
       include HasManyAttachments
 
-      if options[:on]
-        self.attachable_columns = Array(options[:on])
-        before_save :update_attachment_references
+      return unless options[:on]
+      self.attachable_columns = Array(options[:on])
+      before_save :update_attachment_references
 
-        HasManyAttachments.define_attachment_references_readers(attachable_columns)
-      end
+      HasManyAttachments.define_attachment_references_readers(attachable_columns)
     end
 
     def has_one_attachment # rubocop:disable Naming/PredicateName
