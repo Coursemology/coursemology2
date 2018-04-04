@@ -2,13 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { Scatter } from 'react-chartjs-2';
 import { injectIntl, intlShape } from 'react-intl';
 import { formatTimestamp } from 'lib/helpers/videoHelpers';
+import { videoDefaults } from 'lib/constants/videoConstants';
+import { connect } from 'react-redux';
 
 import translations from '../../translations';
+import { seekToDirectly } from '../../actions/video';
 
-const graphGlobalOptions = intl => ({
+const graphGlobalOptions = (intl, videoDuration) => ({
   legend: {
     display: false,
   },
@@ -44,6 +48,7 @@ const graphGlobalOptions = intl => ({
       },
       ticks: {
         suggestedMin: 0,
+        max: videoDuration,
         callback: formatTimestamp,
       },
     }],
@@ -73,6 +78,12 @@ const propTypes = {
     })),
   })).isRequired,
   submissionUrl: PropTypes.string.isRequired,
+  videoDuration: PropTypes.number.isRequired,
+  onMarkerClick: PropTypes.func,
+};
+
+const defaultProps = {
+  onMarkerClick: () => {},
 };
 
 class ProgressGraph extends React.Component {
@@ -157,7 +168,7 @@ class ProgressGraph extends React.Component {
         const element = elements[0];
         const { y } = data.datasets[element._datasetIndex].data[element._index];
 
-        window.open(`${this.props.submissionUrl}?seek_time=${y}`);
+        this.props.onMarkerClick(y);
       },
       hover: {
         onHover: (event, elements) => {
@@ -185,7 +196,7 @@ class ProgressGraph extends React.Component {
     return (<Scatter
       data={data}
       options={{
-        ...graphGlobalOptions(this.props.intl),
+        ...graphGlobalOptions(this.props.intl, this.props.videoDuration),
         ...this.generateMouseOptions(data),
         ...this.generateToolTipOptions(),
       }}
@@ -213,6 +224,10 @@ class ProgressGraph extends React.Component {
   }
 
   render() {
+    if (this.props.videoDuration === videoDefaults.placeHolderDuration) {
+      return <LoadingIndicator />;
+    }
+
     return (
       <div>
         {this.renderDropDown()}
@@ -223,5 +238,19 @@ class ProgressGraph extends React.Component {
 }
 
 ProgressGraph.propTypes = propTypes;
+ProgressGraph.defaultProps = defaultProps;
 
-export default injectIntl(ProgressGraph);
+function mapStateToProps(state, ownProps) {
+  return {
+    videoDuration: state.video.duration,
+    ...ownProps,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    onMarkerClick: duration => dispatch(seekToDirectly(duration)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(ProgressGraph));

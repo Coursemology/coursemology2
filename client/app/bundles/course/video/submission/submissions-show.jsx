@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
-import ProgressGraph from './containers/Statistics/ProgressGraph';
+import Statistics from './containers/Statistics';
 
 $(document).ready(() => {
   const mountNode = document.getElementById('video-stats');
@@ -13,7 +13,7 @@ $(document).ready(() => {
 
   render(
     <ProviderWrapper>
-      <ProgressGraph sessions={initialState.sessions} submissionUrl={initialState.submissionUrl} />
+      <Statistics {...initialState} />
     </ProviderWrapper>
     , mountNode
   );
