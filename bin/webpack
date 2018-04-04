@@ -20,9 +20,8 @@ unless File.exist?(WEBPACK_CONFIG)
 end
 
 env = { 'NODE_PATH' => NODE_MODULES_PATH.shellescape }
-cmd = [ "#{NODE_MODULES_PATH}/.bin/webpack", '--config', WEBPACK_CONFIG ] + ARGV
+cmd = ENV['RAILS_ENV'] == 'development' ? [ 'yarn build:development' ] : [ 'yarn build:production' ]
 
 Dir.chdir(APP_PATH) do
-  success = system('yarn build:translations')
-  exec env, *cmd if success
+  exec env, *cmd
 end
