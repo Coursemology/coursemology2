@@ -9,7 +9,7 @@ en:
                 email:
                   subject: '%{course}: New annotation on %{topic}'
                   message: >
-                    %{post_author} added an annotation, %{post}
+                    <p>%{post_author} added an annotation, %{post}</p>
 
-                    You can reply here:
+                    <p>You can reply here:</p>
                     %{topic}

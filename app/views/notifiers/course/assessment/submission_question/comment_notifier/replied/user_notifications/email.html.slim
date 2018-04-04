@@ -9,9 +9,10 @@
 - message.subject = t('.subject', course: course.title, topic: "#{assessment.title}: #{question_assessment.display_title}")
 - step = assessment.questions.index(question) + 1
 
-= simple_format(t('.message',
-                  topic: link_to("#{assessment.title}: #{question_assessment.display_title}",
-                                  edit_course_assessment_submission_url(course, assessment, submission_question.submission,
-                                                                        step: step, host: host)),
-                                  post: post.text,
-                                  post_author: post.author_name))
+= format_html(t('.message',
+                topic: link_to("#{assessment.title}: #{question_assessment.display_title}",
+                               edit_course_assessment_submission_url(course, assessment,
+                                                                     submission_question.submission,
+                                                                     step: step, host: host)),
+                               post: post.text,
+                               post_author: post.author_name))
