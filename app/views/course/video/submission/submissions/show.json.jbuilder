@@ -8,5 +8,5 @@ json.statistics do
       end
     end
   end
-  json.submissionUrl edit_course_video_submission_url(current_course, @video, @submission)
+  json.watchFrequency @submission.watch_frequency
 end
