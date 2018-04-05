@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Bar } from 'react-chartjs-2';
+import Toggle from 'material-ui/Toggle';
 import { injectIntl, intlShape } from 'react-intl';
 import { formatTimestamp } from 'lib/helpers/videoHelpers';
 import { videoDefaults } from 'lib/constants/videoConstants';
@@ -10,6 +11,7 @@ import { seekToDirectly } from '../../actions/video';
 import translations from '../../translations';
 
 const graphGlobalOptions = {
+  maintainAspectRatio: false,
   legend: {
     display: false,
   },
@@ -50,7 +52,25 @@ const minResolution = 0.8;
 const maxWidth = fullResWidthThreshold / minResolution;
 const minWidth = 300;
 const heightOffset = 100;
-const heightScale = 0.85;
+const heightScale = 0.9;
+
+function calculateWidthAndResolution(duration) {
+  const widthCandidate = (duration * preferredExpandedBarWidth) + expandedChartOffset;
+
+  if (widthCandidate > maxWidth) {
+    return [maxWidth, minResolution];
+  }
+
+  if (widthCandidate > fullResWidthThreshold) {
+    return [widthCandidate, fullResWidthThreshold / widthCandidate];
+  }
+
+  if (widthCandidate < minWidth) {
+    return [minWidth, 1];
+  }
+
+  return [widthCandidate, 1];
+}
 
 const propTypes = {
   intl: intlShape.isRequired,
@@ -65,7 +85,12 @@ const defaultProps = {
 };
 
 class HeatMap extends React.Component {
-  mouseOptions = {
+  constructor(props) {
+    super(props);
+    this.state = { scaledMode: false };
+  }
+
+ mouseOptions = {
     onClick: (_, elements) => {
       if (elements.length < 1) {
         return;
@@ -80,22 +105,30 @@ class HeatMap extends React.Component {
     },
   };
 
-  calculateWidthAndResolution() {
-    const widthCandidate = (this.props.videoDuration * preferredExpandedBarWidth) + expandedChartOffset;
+  renderScaledChart(data) {
+    const [width, resolution] = calculateWidthAndResolution(this.props.videoDuration);
 
-    if (widthCandidate > maxWidth) {
-      return [maxWidth, minResolution];
-    }
+    const options = {
+      ...graphGlobalOptions,
+      devicePixelRatio: resolution,
+      ...this.mouseOptions,
+    };
 
-    if (widthCandidate > fullResWidthThreshold) {
-      return [widthCandidate, fullResWidthThreshold / widthCandidate];
-    }
+    return (
+      <div style={{ overflowX: 'scroll' }}>
+        <div style={{ width }}>
+          <Bar data={data} options={options} height={(window.innerHeight - heightOffset) * heightScale} />
+        </div>
+      </div>
+    );
+  }
 
-    if (widthCandidate < minWidth) {
-      return [minWidth, 1];
-    }
-
-    return [widthCandidate, 1];
+  static renderUnscaledChart(data) {
+    return (
+      <div style={{ width: '100%' }}>
+        <Bar data={data} options={graphGlobalOptions} height={(window.innerHeight - heightOffset) * heightScale} />
+      </div>
+    );
   }
 
   render() {
@@ -113,20 +146,19 @@ class HeatMap extends React.Component {
       ],
     };
 
-    const [width, resolution] = this.calculateWidthAndResolution();
-
-    const options = {
-      maintainAspectRatio: false,
-      devicePixelRatio: resolution,
-      ...graphGlobalOptions,
-      ...this.mouseOptions,
-    };
-
+    const chartElem = this.state.scaledMode ? this.renderScaledChart(data) : HeatMap.renderUnscaledChart(data);
     return (
-      <div style={{ overflowX: 'scroll' }}>
-        <div style={{ width }}>
-          <Bar data={data} options={options} height={(window.innerHeight - heightOffset) * heightScale} />
-        </div>
+      <div>
+        <Toggle
+          label="Scale Graph"
+          labelPosition="right"
+          onToggle={(_, toggled) => {
+            this.setState({ scaledMode: toggled });
+          }}
+          toggled={this.state.scaledMode}
+        />
+        <br />
+        {chartElem}
       </div>
     );
   }
