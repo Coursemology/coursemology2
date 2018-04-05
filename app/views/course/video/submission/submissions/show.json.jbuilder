@@ -7,3 +7,4 @@ json.sessions do
 end
 
 json.submissionUrl edit_course_video_submission_url(current_course, @video, @submission)
+json.videoDuration @video.duration
