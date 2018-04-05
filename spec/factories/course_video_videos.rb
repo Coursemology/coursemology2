@@ -8,6 +8,7 @@ FactoryBot.define do
     tab { course.default_video_tab }
     title { generate(:course_video_title) }
     description { generate(:course_video_description) }
+    duration 200
     url 'https://www.youtube.com/embed/i_YiovUyMds'
     published false
 
