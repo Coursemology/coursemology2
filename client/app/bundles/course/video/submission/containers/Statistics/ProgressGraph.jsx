@@ -8,7 +8,7 @@ import { formatTimestamp } from 'lib/helpers/videoHelpers';
 
 import translations from '../../translations';
 
-const graphGlobalOptions = {
+const graphGlobalOptions = intl => ({
   legend: {
     display: false,
   },
@@ -28,7 +28,7 @@ const graphGlobalOptions = {
     xAxes: [{
       scaleLabel: {
         display: true,
-        labelString: 'Real time',
+        labelString: intl.formatMessage(translations.eventRealTimeLabel),
         fontSize: 15,
       },
       ticks: {
@@ -39,7 +39,7 @@ const graphGlobalOptions = {
     yAxes: [{
       scaleLabel: {
         display: true,
-        labelString: 'Video time',
+        labelString: intl.formatMessage(translations.eventVideoTimeLabel),
         fontSize: 15,
       },
       ticks: {
@@ -48,7 +48,7 @@ const graphGlobalOptions = {
       },
     }],
   },
-};
+});
 
 const graphDataLineOptions = {
   showLine: true,
@@ -57,24 +57,6 @@ const graphDataLineOptions = {
   pointBorderColor: 'rgba(75,192,192,1)',
   pointBackgroundColor: '#fff',
 };
-
-function processEvents(events, sessionStartTime, sessionEndTime, videoEndTime) {
-  const processedEvents = events.map((event) => {
-    const eventTime = Date.parse(event.eventTime);
-    const x = (eventTime - sessionStartTime.getTime()) / 1000;
-    const y = event.videoTime;
-    const type = event.eventType;
-    return { x, y, type };
-  });
-
-  const endTimeOffset = (sessionEndTime.getTime() - sessionStartTime.getTime()) / 1000;
-
-  return [
-    { x: 0, y: 0, type: 'Session Start' },
-    ...processedEvents,
-    { x: endTimeOffset, y: videoEndTime, type: 'Session End' },
-  ];
-}
 
 const propTypes = {
   intl: intlShape.isRequired,
@@ -108,6 +90,24 @@ class ProgressGraph extends React.Component {
     }
   }
 
+  processEvents(events, sessionStartTime, sessionEndTime, videoEndTime) {
+    const processedEvents = events.map((event) => {
+      const eventTime = Date.parse(event.eventTime);
+      const x = (eventTime - sessionStartTime.getTime()) / 1000;
+      const y = event.videoTime;
+      const type = event.eventType;
+      return { x, y, type };
+    });
+
+    const endTimeOffset = (sessionEndTime.getTime() - sessionStartTime.getTime()) / 1000;
+
+    return [
+      { x: 0, y: 0, type: this.props.intl.formatMessage(translations.sessionStartLabel) },
+      ...processedEvents,
+      { x: endTimeOffset, y: videoEndTime, type: this.props.intl.formatMessage(translations.sessionEndLabel) },
+    ];
+  }
+
   computeData(id) {
     if (this.displayDataCache[id]) {
       return this.displayDataCache[id];
@@ -120,7 +120,7 @@ class ProgressGraph extends React.Component {
     const startTime = new Date(session.sessionStart);
     const endTime = new Date(session.sessionEnd);
     const videoEnd = session.lastVideoTime;
-    this.displayDataCache[id] = processEvents(session.events, startTime, endTime, videoEnd);
+    this.displayDataCache[id] = this.processEvents(session.events, startTime, endTime, videoEnd);
     return this.displayDataCache[id];
   }
 
@@ -185,7 +185,7 @@ class ProgressGraph extends React.Component {
     return (<Scatter
       data={data}
       options={{
-        ...graphGlobalOptions,
+        ...graphGlobalOptions(this.props.intl),
         ...this.generateMouseOptions(data),
         ...this.generateToolTipOptions(),
       }}
