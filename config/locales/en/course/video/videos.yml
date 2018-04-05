@@ -14,6 +14,7 @@ en:
         show:
           description: 'Description'
           start_at: :'course.video.videos.index.start_at'
+          statistics: 'Statistics'
         edit:
           header: 'Edit Video'
         update:
