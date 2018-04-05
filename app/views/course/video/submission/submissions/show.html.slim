@@ -2,9 +2,12 @@
 
 table.table.table-bordered.details-table
   tbody
+    tr.duration
+      th = t('.duration')
+      td = format_duration_for_display(@video.duration)
     tr.watched_at
       th = t('.watched_at')
-      td = @submission.created_at
+      td = format_datetime(@submission.created_at)
 
 br
 h4 = t('.sessions_header')
