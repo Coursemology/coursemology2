@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 json.partial! 'course/lesson_plan/items/item.json.jbuilder', item: item
 
 json.item_path course_video_path(current_course, item)

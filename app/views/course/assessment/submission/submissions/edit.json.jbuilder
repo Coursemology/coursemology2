@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 can_grade = can?(:grade, @submission)
 can_update = can?(:update, @submission)
 

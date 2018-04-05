@@ -2,7 +2,7 @@
 module Extensions::Materials::ActiveRecord::Base
   module ClassMethods
     # Declare this to allow models to support materials uploads.
-    def has_one_folder # rubocop:disable Style/PredicateName
+    def has_one_folder # rubocop:disable Naming/PredicateName
       after_initialize :build_new_record_folder, if: :new_record?
 
       has_one :folder, as: :owner, class_name: Course::Material::Folder.name,

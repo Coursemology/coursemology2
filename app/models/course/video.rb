@@ -70,7 +70,7 @@ class Course::Video < ApplicationRecord
   end
 
   def to_partial_path
-    'course/video/videos/video'.freeze
+    'course/video/videos/video'
   end
 
   def initialize_duplicate(duplicator, other)

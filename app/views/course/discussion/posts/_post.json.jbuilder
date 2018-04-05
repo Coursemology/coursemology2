@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 json.(post, :id, :title, :text)
 json.formattedText format_html(simple_format(post.text))
 creator = post.creator

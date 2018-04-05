@@ -60,6 +60,6 @@ class Course::Discussion::TopicsComponent < SimpleDelegator
   end
 
   def staff_with_students?
-    current_course_user && current_course_user.staff? && !current_course_user.my_students.empty?
+    current_course_user&.staff? && !current_course_user.my_students.empty?
   end
 end

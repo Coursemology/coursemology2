@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 json.attributes do
   json.(@achievement, :id, :title, :description, :published)
   json.badge do

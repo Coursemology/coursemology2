@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Conditional::ConditionalSatisfiabilityEvaluationService
   class << self
     # Evaluate the satifisability of the conditionals for the given course user

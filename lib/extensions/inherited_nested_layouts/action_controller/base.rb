@@ -29,7 +29,7 @@ module Extensions::InheritedNestedLayouts::ActionController::Base
       extension_module.class_hierarchy(self.class).
       select { |klass| klass < ActionController::Base }.
       map { |klass| extension_module.class_layout(klass, self, formats) }.
-      select { |layout| !layout.nil? }.
+      reject(&:nil?).
       uniq.
       reverse!
   end

@@ -18,18 +18,17 @@ module Extensions::Attachable::ActiveRecord::Base
     #
     #   For deletion of attachments, it is necessary for the model to implement the
     #   +:destroy_attachment+ CanCanCan permission on the +attachable+ object.
-    def has_many_attachments(options = {}) # rubocop:disable Style/PredicateName
+    def has_many_attachments(options = {}) # rubocop:disable Naming/PredicateName
       include HasManyAttachments
 
-      if options[:on]
-        self.attachable_columns = Array(options[:on])
-        before_save :update_attachment_references
+      return unless options[:on]
+      self.attachable_columns = Array(options[:on])
+      before_save :update_attachment_references
 
-        HasManyAttachments.define_attachment_references_readers(attachable_columns)
-      end
+      HasManyAttachments.define_attachment_references_readers(attachable_columns)
     end
 
-    def has_one_attachment # rubocop:disable Style/PredicateName
+    def has_one_attachment # rubocop:disable Naming/PredicateName
       include HasOneAttachment
     end
   end
@@ -59,7 +58,7 @@ module Extensions::Attachable::ActiveRecord::Base
       end
     end
 
-    ATTACHMENT_REMOVED_SUFFIX = '_attachment_references_removed'.freeze
+    ATTACHMENT_REMOVED_SUFFIX = '_attachment_references_removed'
 
     def self.define_attachment_references_readers(attachable_columns)
       attachable_columns.each do |column|

@@ -27,7 +27,7 @@ class Course::Settings::ForumsComponent < Course::Settings::Component
   #
   # @param [String] title The new title
   def title=(title)
-    title = nil unless title.present?
+    title = nil if title.blank?
     settings.title = title
   end
 

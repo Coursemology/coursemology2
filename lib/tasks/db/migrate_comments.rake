@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 namespace :db do
   task migrate_comments: :environment do
     ActsAsTenant.without_tenant do
@@ -43,7 +44,7 @@ namespace :db do
         # Print some time stats
         if timer_loop_counter == 1000
           end_time = Time.now
-          puts "#{topics_with_posts} / #{total_posts}: #{(end_time-start_time)*1000} ms"
+          puts "#{topics_with_posts} / #{total_posts}: #{(end_time - start_time) * 1000} ms"
 
           start_time = Time.now
           timer_loop_counter = 0
@@ -57,7 +58,7 @@ namespace :db do
 
       # Remove duplicates.
       # http://stackoverflow.com/questions/6583916/delete-completely-duplicate-rows-in-postgresql-and-keep-only-1
-      puts "Removing duplicates in discussion topic subscriptions..."
+      puts 'Removing duplicates in discussion topic subscriptions...'
       start_time = Time.now
       connection.exec_query(<<-SQL)
         DELETE FROM course_discussion_topic_subscriptions a

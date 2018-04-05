@@ -2,7 +2,7 @@
 
 class CoursemologyDockerContainer < Docker::Container
   # The path to the Coursemology user home directory.
-  HOME_PATH = '/home/coursemology'.freeze
+  HOME_PATH = '/home/coursemology'
 
   # The path to where the package will be extracted.
   PACKAGE_PATH = File.join(HOME_PATH, 'package')
@@ -188,7 +188,7 @@ class CoursemologyDockerContainer < Docker::Container
       return test_report.force_encoding(Encoding::UTF_8) if test_report
     end
   rescue Docker::Error::NotFoundError
-    return nil
+    nil
   end
 
   # Extracts the test report from the container.

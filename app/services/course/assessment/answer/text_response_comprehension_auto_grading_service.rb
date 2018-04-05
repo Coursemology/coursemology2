@@ -306,12 +306,11 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
       )
     end
 
-    unless explanations.empty?
-      explanations.push(
-        I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.horizontal_break_html'),
-        I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.line_break_html')
-      )
-    end
+    return if explanations.empty?
+    explanations.push(
+      I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.horizontal_break_html'),
+      I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.line_break_html')
+    )
   end
 
   # Returns the explanations for an incorrect Point.
@@ -418,12 +417,12 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
       end
     end
     explanations = explanations_for_correct_paraphrase_by_points(hash_keywords, hash_point_serial)
-    unless explanations.empty?
-      explanations.push(
-        I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.horizontal_break_html'),
-        I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.line_break_html')
-      )
-    end
+
+    return if explanations.empty?
+    explanations.push(
+      I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.horizontal_break_html'),
+      I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.line_break_html')
+    )
   end
 
   # Returns the explanations for correctly paraphrased keywords, split by each Point.

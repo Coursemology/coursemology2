@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 submission = answer.submission
 assessment = submission.assessment
 question = answer.question.specific

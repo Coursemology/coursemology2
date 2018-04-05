@@ -6,7 +6,7 @@ Style/CollectionMethods:
     find:
     detect: 'find'
 
-Style/FileName:
+Naming/FileName:
   Enabled: true
 
 Style/GuardClause:
@@ -30,7 +30,10 @@ Style/SingleLineMethods:
 Style/TrailingCommaInArguments:
   Enabled: true
 
-Style/TrailingCommaInLiteral:
+Style/TrailingCommaInArrayLiteral:
+  Enabled: true
+
+Style/TrailingCommaInHashLiteral:
   Enabled: true
 
 Metrics/AbcSize:
@@ -57,7 +60,7 @@ Metrics/PerceivedComplexity:
 Lint/AssignmentInCondition:
   Enabled: true
 
-Style/AccessorMethodName:
+Naming/AccessorMethodName:
   Enabled: true
 
 Style/Alias:
@@ -100,7 +103,7 @@ Lint/EachWithObjectArgument:
 Lint/HandleExceptions:
   Enabled: true
 
-Lint/LiteralInCondition:
+Lint/LiteralAsCondition:
   Description: Checks of literals used in conditions.
   Enabled: true
 

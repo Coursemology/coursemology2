@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Assessment::SkillBranchesController < Course::ComponentController
   load_and_authorize_resource :skill_branch, class: Course::Assessment::SkillBranch.name,
                                              through: :course,

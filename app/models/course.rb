@@ -93,7 +93,7 @@ class Course < ApplicationRecord
 
   # Generates a registration key for use with the course.
   def generate_registration_key
-    self.registration_key = 'C'.freeze + SecureRandom.base64(8)
+    self.registration_key = 'C' + SecureRandom.base64(8)
   end
 
   def code_registration_enabled?

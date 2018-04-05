@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 json.posts do
   posts.each do |post|
     json.set! post.id do

@@ -89,7 +89,7 @@ class User::RegistrationsController < Devise::RegistrationsController
   end
 
   def load_invitation
-    return unless invitation_param.present?
+    return if invitation_param.blank?
 
     @invitation = Course::UserInvitation.find_by(invitation_key: invitation_param)
   end

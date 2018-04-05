@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 json.partial! 'course/users/user', locals: { user: post.creator }
 
 json.createdAt format_datetime(post.created_at)

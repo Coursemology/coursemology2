@@ -43,6 +43,6 @@ class Course::Assessment::SubmissionQuestion < ApplicationRecord
   # Set the course as the same course of the assessment.
   # This is needed because it acts as a discussion topic.
   def set_course
-    self.course ||= submission.assessment.course if submission && submission.assessment
+    self.course ||= submission.assessment.course if submission&.assessment
   end
 end

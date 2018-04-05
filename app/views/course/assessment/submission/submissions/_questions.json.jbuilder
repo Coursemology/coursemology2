@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 answer_ids_hash = answers.map do |a|
   [a.question_id, a.id]
 end.to_h

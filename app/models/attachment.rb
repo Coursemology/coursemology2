@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Attachment < ApplicationRecord
-  TEMPORARY_FILE_PREFIX = 'attachment'.freeze
+  TEMPORARY_FILE_PREFIX = 'attachment'
 
   mount_uploader :file_upload, FileUploader
 
@@ -94,7 +94,7 @@ class Attachment < ApplicationRecord
     file.seek(0)
     file
   rescue
-    file.close! if file
+    file&.close!
     raise
   end
 

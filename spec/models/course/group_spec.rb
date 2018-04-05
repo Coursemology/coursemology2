@@ -67,7 +67,7 @@ RSpec.describe Course::Group, type: :model do
 
         it 'adds errors to group users' do
           subject.valid?
-          user_with_errors = subject.group_users.select { |group_user| !group_user.errors.empty? }
+          user_with_errors = subject.group_users.reject { |group_user| group_user.errors.empty? }
           expect(user_with_errors).not_to be_empty
           user_with_errors.each do |group_user|
             expect(group_user.errors.messages[:course_user]).

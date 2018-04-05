@@ -5,6 +5,6 @@ class Instance::Announcement < GenericAnnouncement
   validates :instance, presence: true
 
   def to_partial_path
-    'system/admin/instance/announcements/announcement'.freeze
+    'system/admin/instance/announcements/announcement'
   end
 end

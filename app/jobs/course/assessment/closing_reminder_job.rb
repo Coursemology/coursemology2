@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Assessment::ClosingReminderJob < ApplicationJob
   rescue_from(ActiveJob::DeserializationError) do |_|
     # Prevent the job from retrying due to deleted records

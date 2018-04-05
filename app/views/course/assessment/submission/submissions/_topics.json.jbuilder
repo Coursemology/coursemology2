@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 json.topics submission.submission_questions do |submission_question|
   topic = submission_question.discussion_topic
   json.id topic.id

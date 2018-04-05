@@ -79,7 +79,7 @@ class Course::Discussion::Post < ApplicationRecord
     vote_record = votes.find_by(creator: user)
 
     if vote == 0
-      vote_record.destroy! if vote_record
+      vote_record&.destroy!
     else
       vote_record ||= votes.build(creator: user)
       vote_record.vote_flag = vote > 0

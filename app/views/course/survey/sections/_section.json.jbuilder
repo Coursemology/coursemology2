@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 json.(section, :id, :title, :weight)
 json.description format_html(section.description)
 questions = @questions || section.questions

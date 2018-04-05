@@ -58,7 +58,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord
   end
 
   def to_partial_path
-    'course/assessment/question/programming/programming'.freeze
+    'course/assessment/question/programming/programming'
   end
 
   # This specifies the attachment which was imported.

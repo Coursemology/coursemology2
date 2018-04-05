@@ -12,7 +12,7 @@ class User::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
   def link_user_with_facebook
     auth = request.env['omniauth.auth']
-    if current_user && current_user.persisted? && current_user.link_with_omniauth!(auth)
+    if current_user&.persisted? && current_user.link_with_omniauth!(auth)
       redirect_to edit_user_profile_path, success: t('user.omniauth_callbacks.facebook.success')
     else
       redirect_to edit_user_profile_path, danger: t('user.omniauth_callbacks.facebook.failed')

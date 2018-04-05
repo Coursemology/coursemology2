@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 json.(option, :id, :weight)
 json.option format_html(option.option)
 unless option.attachment.nil?

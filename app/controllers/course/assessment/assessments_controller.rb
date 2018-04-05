@@ -91,7 +91,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
 
   # Infer the autograded state from @assessment or params.
   def autograded?
-    if @assessment && @assessment.autograded
+    if @assessment&.autograded
       true
     elsif @assessment && @assessment.autograded == false
       false

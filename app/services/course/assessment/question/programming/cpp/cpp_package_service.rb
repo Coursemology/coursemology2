@@ -166,7 +166,7 @@ class Course::Assessment::Question::Programming::Cpp::CppPackageService < \
     File.join(File.expand_path(File.dirname(__FILE__)), filename).freeze
   end
 
-  def zip_test_files(test_type, zip) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def zip_test_files(test_type, zip) # rubocop:disable Metrics/AbcSize
     tests = @test_params[:test_cases]
     tests[test_type]&.each&.with_index(1) do |test, index|
       # String types should be displayed with quotes, other types will be converted to string

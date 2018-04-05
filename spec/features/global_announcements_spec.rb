@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-# encoding: UTF-8
 require 'rails_helper'
 
 RSpec.feature 'Global announcements' do

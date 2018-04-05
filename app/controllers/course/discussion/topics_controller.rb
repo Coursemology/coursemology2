@@ -8,9 +8,8 @@ class Course::Discussion::TopicsController < Course::ComponentController
   def index
     @topics = all_topics
 
-    if current_course_user && current_course_user.student?
-      @topics = @topics.merge(Course::Discussion::Topic.from_user(current_course_user.user_id))
-    end
+    return unless current_course_user&.student?
+    @topics = @topics.merge(Course::Discussion::Topic.from_user(current_course_user.user_id))
   end
 
   # Loads topics pending staff reply for course_staff, and unread topics for students.

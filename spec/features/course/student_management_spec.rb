@@ -20,7 +20,7 @@ RSpec.feature 'Courses: Students' do
 
     scenario "Course staff can update students' records", js: true do
       student_to_update = course_students.sample
-      new_name = 'NewNamePerson'.freeze
+      new_name = 'NewNamePerson'
 
       visit course_users_students_path(course)
 

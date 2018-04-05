@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Forum::PostNotifier < Notifier::Base
   # To be called when user replied a forum post.
   def post_replied(user, post)

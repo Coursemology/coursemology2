@@ -34,9 +34,8 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   end
 
   def load_or_create_submission_questions
-    if create_missing_submission_questions && @submission.submission_questions.loaded?
-      @submission.submission_questions.reload
-    end
+    return unless create_missing_submission_questions && @submission.submission_questions.loaded?
+    @submission.submission_questions.reload
   end
 
   protected
@@ -133,7 +132,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     @submission.class.transaction do
       update_answers_params[:answers]&.each do |answer_params|
         next if answer_params[:id].blank?
-        answer = @submission.answers.includes(:actable).detect { |a| a.id == answer_params[:id].to_i }
+        answer = @submission.answers.includes(:actable).find { |a| a.id == answer_params[:id].to_i }
         raise ActiveRecord::Rollback if answer && !update_answer(answer, answer_params)
       end unless unsubmit? || unmark?
 

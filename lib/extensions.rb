@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 module Extensions
-  EXTENSIONS_PATH = "#{__dir__}/extensions".freeze
+  EXTENSIONS_PATH = "#{__dir__}/extensions"
 
   class << self
     # Loads all extensions defined in this directory.

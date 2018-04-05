@@ -15,7 +15,7 @@ class Course::Settings::LeaderboardComponent < Course::Settings::Component
   #
   # @param [String] title The new title
   def title=(title)
-    title = nil unless title.present?
+    title = nil if title.blank?
     settings.title = title
   end
 
@@ -61,7 +61,7 @@ class Course::Settings::LeaderboardComponent < Course::Settings::Component
   #
   # @param [String] title The new title
   def group_leaderboard_title=(group_leaderboard_title)
-    group_leaderboard_title = nil unless group_leaderboard_title.present?
+    group_leaderboard_title = nil if group_leaderboard_title.blank?
     group_leaderboard_settings.title = group_leaderboard_title
   end
 

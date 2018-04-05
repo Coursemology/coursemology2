@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 submissions_hash ||= @submissions.map { |s| [s.course_user_id, s] }.to_h
 
 json.assessment do

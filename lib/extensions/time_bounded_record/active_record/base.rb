@@ -8,17 +8,17 @@ module Extensions::TimeBoundedRecord::ActiveRecord::Base
     private
 
     def started
-      where.has { (start_at == nil) | (start_at <= Time.zone.now) }
+      where.has { (start_at == nil) | (start_at <= Time.zone.now) } # rubocop:disable Style/NilComparison
     end
 
     def ended
-      where.has { (end_at == nil) | (end_at >= Time.zone.now) }
+      where.has { (end_at == nil) | (end_at >= Time.zone.now) } # rubocop:disable Style/NilComparison
     end
   end
 
   # @return [Boolean] True if start_at is a future time.
   def started?
-    !start_at.present? || start_at <= Time.zone.now
+    start_at.blank? || start_at <= Time.zone.now
   end
 
   # @return [Boolean] True if current time is between start_at and end_at.

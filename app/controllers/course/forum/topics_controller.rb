@@ -81,16 +81,15 @@ class Course::Forum::TopicsController < Course::Forum::ComponentController
 
   def authorize_topic_type!(type)
     case type
-    when 'sticky'.freeze
+    when 'sticky'
       authorize!(:set_sticky, @topic)
-    when 'announcement'.freeze
+    when 'announcement'
       authorize!(:set_announcement, @topic)
     end
   end
 
   def send_created_notification(topic)
-    if current_course_user && !current_course_user.phantom?
-      Course::Forum::TopicNotifier.topic_created(current_user, topic)
-    end
+    return unless current_course_user && !current_course_user.phantom?
+    Course::Forum::TopicNotifier.topic_created(current_user, topic)
   end
 end

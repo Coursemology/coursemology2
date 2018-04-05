@@ -85,7 +85,7 @@ class Course::UserInvitationsController < Course::ComponentController
   #
   # @return [Boolean]
   def registration_params
-    @registration_params ||= course_user_invitation_params[:registration_key] == 'checked'.freeze
+    @registration_params ||= course_user_invitation_params[:registration_key] == 'checked'
   end
 
   # Strong params for resending of invitations.
@@ -132,7 +132,7 @@ class Course::UserInvitationsController < Course::ComponentController
     invitation_service.invite(invitation_params)
   rescue CSV::MalformedCSVError => e
     current_course.errors.add(:invitations_file, e.message)
-    return false
+    false
   end
 
   # Creates a user invitation service object for this object.

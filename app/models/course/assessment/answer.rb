@@ -124,9 +124,8 @@ class Course::Assessment::Answer < ApplicationRecord
   end
 
   def validate_assessment_state
-    if !submission.attempting? && !submission.unsubmitting?
-      errors.add(:submission, :attemptable_state)
-    end
+    return unless !submission.attempting? && !submission.unsubmitting?
+    errors.add(:submission, :attemptable_state)
   end
 
   def validate_grade
@@ -159,7 +158,7 @@ class Course::Assessment::Answer < ApplicationRecord
     self.grader = nil
     self.graded_at = nil
     self.submitted_at = nil
-    auto_grading.mark_for_destruction if auto_grading
+    auto_grading&.mark_for_destruction
   end
 
   def auto_grading_job_class(reduce_priority)

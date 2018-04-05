@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 ActsAsTenant.with_tenant(Instance.default) do
   # Create the default user account (administrator).
   user = User::Email.find_by_email('test@example.org')

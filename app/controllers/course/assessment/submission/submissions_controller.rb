@@ -165,14 +165,13 @@ class Course::Assessment::Submission::SubmissionsController < \
   def check_password
     return unless @submission.attempting?
     return if !@assessment.password_protected? || can?(:manage, @assessment)
+    return if authentication_service.authenticated?
 
-    unless authentication_service.authenticated?
-      log_service.log_submission_access(request)
+    log_service.log_submission_access(request)
 
-      respond_to do |format|
-        format.html { redirect_to new_session_path }
-        format.json { render json: { redirect_url: new_session_path, format: 'html' } }
-      end
+    respond_to do |format|
+      format.html { redirect_to new_session_path }
+      format.json { render json: { redirect_url: new_session_path, format: 'html' } }
     end
   end
 
@@ -188,7 +187,7 @@ class Course::Assessment::Submission::SubmissionsController < \
 
   # Check for zombie jobs, create new grading jobs if there's any zombie jobs.
   # TODO: Remove this method after found the cause of the dead jobs.
-  def check_zombie_jobs # rubocop:disable MethodLength, Metrics/AbcSize
+  def check_zombie_jobs # rubocop:disable Metrics/AbcSize
     return unless @submission.attempting?
 
     submitted_answers = @submission.answers.latest_answers.select(&:submitted?)
@@ -196,7 +195,7 @@ class Course::Assessment::Submission::SubmissionsController < \
 
     dead_answers = submitted_answers.select do |a|
       job = a.auto_grading&.job
-      job && job.submitted? &&
+      job&.submitted? &&
         job.created_at < Time.zone.now -
                          Course::Assessment::ProgrammingEvaluationService::DEFAULT_TIMEOUT
     end

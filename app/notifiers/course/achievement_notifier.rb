@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::AchievementNotifier < Notifier::Base
   # To be called when user gained an achievement.
   def achievement_gained(user, achievement)

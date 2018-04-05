@@ -44,11 +44,10 @@ class Course::CoursesController < Course::Controller
   end
 
   def load_todos
-    if current_course_user && current_course_user.student?
-      @todos = Course::LessonPlan::Todo.pending_for(current_course_user).
-               includes(:user, item: [:actable, :course])
-      # TODO: Fix n+1 query for #can_user_start?
-      @todos = @todos.select(&:can_user_start?)
-    end
+    return unless current_course_user&.student?
+    @todos = Course::LessonPlan::Todo.pending_for(current_course_user).
+             includes(:user, item: [:actable, :course])
+    # TODO: Fix n+1 query for #can_user_start?
+    @todos = @todos.select(&:can_user_start?)
   end
 end

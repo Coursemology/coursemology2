@@ -114,7 +114,7 @@ RSpec.describe Course::Achievement::AchievementsController, type: :controller do
         context 'when the badge field is an uploaded file' do
           let(:badge_attribute) do
             Rack::Test::UploadedFile.new(
-              File.join(Rails.root,'/spec/fixtures/files/picture.jpg'), 'image/jpeg'
+              Rails.root.join('spec', 'fixtures', 'files', 'picture.jpg'), 'image/jpeg'
             )
           end
 

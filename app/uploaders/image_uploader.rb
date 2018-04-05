@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-# encoding: utf-8
 
 class ImageUploader < CarrierWave::Uploader::Base
   # Include RMagick or MiniMagick support:
@@ -40,7 +39,7 @@ class ImageUploader < CarrierWave::Uploader::Base
   # Add a white list of extensions which are allowed to be uploaded.
   # For images you might use something like this:
   def extension_whitelist
-    %w(jpg jpeg gif png)
+    %w[jpg jpeg gif png]
   end
 
   def duplicate_from(other_uploader)

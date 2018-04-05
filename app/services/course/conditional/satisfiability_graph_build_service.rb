@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Conditional::SatisfiabilityGraphBuildService
   class << self
     # Build and cache the satisfiability graph for the given course.

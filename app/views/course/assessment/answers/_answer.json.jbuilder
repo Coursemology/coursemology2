@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 json.id answer.id
 json.questionId answer.question_id
 json.createdAt answer.created_at

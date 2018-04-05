@@ -79,9 +79,9 @@ class Course::AssessmentsComponent < SimpleDelegator
   #   course_user will see all their own submissions.
   #   Other users that can see this (instance admins) will see all submissions in the course.
   def assessment_submissions_url
-    if current_course_user && current_course_user.manager_or_owner?
+    if current_course_user&.manager_or_owner?
       pending_course_submissions_path(current_course, my_students: false)
-    elsif current_course_user && current_course_user.staff?
+    elsif current_course_user&.staff?
       pending_course_submissions_path(current_course, my_students: true)
     else
       course_submissions_path(current_course, category: current_course.assessment_categories.first)
@@ -93,9 +93,9 @@ class Course::AssessmentsComponent < SimpleDelegator
   #   course_owner & course_manager: Number of pending submissions in the course
   #   course_student or other users: 0
   def submission_count
-    if current_course_user && current_course_user.manager_or_owner?
+    if current_course_user&.manager_or_owner?
       pending_submissions_count
-    elsif current_course_user && current_course_user.staff?
+    elsif current_course_user&.staff?
       my_students_pending_submissions_count
     else
       0

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 json.topicId @topic.id.to_s
 json.topic @topic, partial: 'course/video/topics/topic', as: :topic
 

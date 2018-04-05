@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 responses = @responses.map { |r| [r.course_user_id, r] }.to_h
 json.responses @course_students do |student|
   response = responses[student.id]

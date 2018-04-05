@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 namespace :db do
   task insert_discussion_topics: :environment do
     # Insert into course_discussion_topics with
@@ -33,7 +34,7 @@ namespace :db do
         GROUP BY cac.course_id, casq.id, casq.submission_id, casq.question_id
       SQL
 
-      puts "DROP UNIQUE index"
+      puts 'DROP UNIQUE index'
       # DROP UNIQUE index
       connection.exec_query(<<-SQL)
         DROP INDEX index_course_discussion_topics_on_actable_type_and_actable_id
@@ -76,7 +77,7 @@ namespace :db do
         slice_index += 1
       end
 
-      puts "Removing duplicates..."
+      puts 'Removing duplicates...'
       # Remove duplicates
       # http://stackoverflow.com/questions/6583916/delete-completely-duplicate-rows-in-postgresql-and-keep-only-1
       start_time = Time.now
@@ -91,7 +92,7 @@ namespace :db do
       end_time = Time.now
       puts "Finished removing duplicates: #{(end_time - start_time) * 1000} milliseconds"
       
-      puts "Restoring unique index"
+      puts 'Restoring unique index'
       # Add back unique index
       connection.exec_query(<<-SQL)
         CREATE UNIQUE INDEX index_course_discussion_topics_on_actable_type_and_actable_id

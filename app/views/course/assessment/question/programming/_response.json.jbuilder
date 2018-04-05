@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 if check_import_job?
   json.import_job_url job_path(@programming_question.import_job)
 
