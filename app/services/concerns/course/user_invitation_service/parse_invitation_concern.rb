@@ -7,16 +7,19 @@ class Course::UserInvitationService; end
 module Course::UserInvitationService::ParseInvitationConcern
   extend ActiveSupport::Autoload
 
+  TRUE_VALUES = ['t', 'true', 'y', 'yes'].freeze
+
   private
 
   # Invites users to the given course.
   #
   # @param [Array<Hash>|File|TempFile] users Invites the given users.
   # @return [Array<Hash{Symbol=>String}>]
-  #   A mutable array of users to add. Each hash must have three attributes:
+  #   A mutable array of users to add. Each hash must have four attributes:
   #     the +:name+,
-  #     the +:email+ of the user to add, as well as
-  #     the intended +:role+ in the course.
+  #     the +:email+ of the user to add,
+  #     the intended +:role+ in the course, as well as
+  #     whether the user is a +:phantom:+ or not.
   #   The provided +emails+ are NOT case sensitive.
   # @raise [CSV::MalformedCSVError] When the file provided is invalid.
   def parse_invitations(users)
@@ -37,7 +40,9 @@ module Course::UserInvitationService::ParseInvitationConcern
   # @return [Array<Hash>] Array of users to be invited
   def parse_from_form(users)
     users.map do |(_, value)|
-      { name: value[:name], email: value[:email], role: value[:role] }
+      name = value[:name].presence || value[:email]
+      phantom = ActiveRecord::Type::Boolean.new.cast(value[:phantom])
+      { name: name, email: value[:email], role: value[:role], phantom: phantom }
     end
   end
 
@@ -94,7 +99,8 @@ module Course::UserInvitationService::ParseInvitationConcern
     row[0] = row[1] if row[0].blank?
 
     role = parse_file_role(row[2])
-    { name: row[0], email: row[1], role: role }
+    phantom = parse_file_phantom(row[3])
+    { name: row[0], email: row[1], role: role, phantom: phantom }
   end
 
   # Parses the role column from the CSV file.
@@ -108,6 +114,17 @@ module Course::UserInvitationService::ParseInvitationConcern
 
     symbol = role.parameterize(separator: '_').to_sym
     Course::UserInvitation.roles[symbol] || Course::UserInvitation.roles[:student]
+  end
+
+  # Parses file value for whether an invitation is a phantom or not.
+  # Sets phantom as false if value is not specified.
+  #
+  # @param [String|nil] Phantom column for the given user invitation.
+  # @return [Boolean] Whether the value is a true or false
+  def parse_file_phantom(phantom)
+    return false if phantom.blank?
+
+    TRUE_VALUES.include?(phantom.downcase)
   end
 
   # Removes the UTF-8 byte order mark (BOM) from the string.

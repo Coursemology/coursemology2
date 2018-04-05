@@ -1,6 +1,6 @@
 = content_tag_for(:tr, f.object, class: 'nested-fields') do
   td = f.input :name, label: false, input_html: { class: 'invitation_name' }
-  td = f.input :email, label: false, input_html: { class: 'invitation_email' }
+  td = f.input :email, required: true, label: false, input_html: { class: 'invitation_email' }
   td = f.input :role,
                as: :select,
                collection: Course::UserInvitation.roles.keys,
@@ -8,4 +8,5 @@
                label_method: lambda { |role_key| t("course.users.role.#{role_key}") },
                include_blank: false,
                input_html: { class: 'invitation_role' }
+  td = f.input :phantom, label: false
   td = link_to_remove_association  t('.remove'), f

@@ -13,6 +13,8 @@ en:
     summary: 'Summary'
     click_here: 'Click here'
     created_at: 'Created At'
+    truthy: 'Yes'
+    falsey: 'No'
   helpers:
     submit:
       condition_level:

@@ -35,8 +35,12 @@ en:
         file:
           format_html: >
            Files uploaded must be in the following format below:<br />
-           Roles are optional and can be either of [student, teaching_assistant, manager, owner], and defaults to
-           student if omitted
+           <ul>
+           <li>Roles are optional and can be either of [student, teaching_assistant, manager,
+           owner], and defaults to student if omitted</li>
+           <li>Phantom is also optional with the following recognised as true values ['t',
+           'true', 'y', 'yes'] (case insenstitive), and defaults to non-phantom if omitted.</li>
+           </ul>
         individual:
           add_user: 'Add User'
         registration_code:

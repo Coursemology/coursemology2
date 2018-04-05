@@ -9,7 +9,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
         file.write(CSV.generate do |csv|
           csv << [:name, :email, :role]
           records.zip(roles).each do |user, role|
-            csv << (role.blank? ? [user.name, user.email] : [user.name, user.email, role])
+            csv << (role.blank? ? [user.name, user.email] : [user.name, user.email, role, false])
           end
         end)
         file.rewind
@@ -35,7 +35,8 @@ RSpec.describe Course::UserInvitationService, type: :service do
     end
     let(:existing_user_attributes) do
       existing_users.each_with_index.map do |user, id|
-        { name: user.name, email: user.email, role: Course::UserInvitation.roles[existing_roles[id]] }
+        { name: user.name, email: user.email, phantom: false,
+          role: Course::UserInvitation.roles[existing_roles[id]] }
       end
     end
     let(:new_roles) { Course::UserInvitation.roles.keys.sample(3) }
@@ -46,7 +47,8 @@ RSpec.describe Course::UserInvitationService, type: :service do
     end
     let(:new_user_attributes) do
       new_users.each_with_index.map do |user, id|
-        { name: user.name, email: user.email, role: Course::UserInvitation.roles[new_roles[id]] }
+        { name: user.name, email: user.email, phantom: false,
+          role: Course::UserInvitation.roles[new_roles[id]] }
       end
     end
     let(:invalid_user_attributes) do
@@ -60,7 +62,8 @@ RSpec.describe Course::UserInvitationService, type: :service do
         [generate(:nested_attribute_new_id), {
           name: hash[:name],
           email: hash[:email],
-          role: hash[:role]
+          role: hash[:role],
+          phantom: hash[:phantom]
         }]
       end.to_h
     end
@@ -264,19 +267,30 @@ RSpec.describe Course::UserInvitationService, type: :service do
         end
       end
 
-      context 'when the provided csv file has slightly invalid role specifications' do
+      context 'when the csv file has slightly invalid role and/or phantom specifications' do
         subject do
           stubbed_user_invitation_service.
-            send(:parse_from_file, file_fixture('course/invitation_fuzzy_roles.csv'))
+            send(:parse_from_file, file_fixture('course/invitation_fuzzy_roles_and_phantom.csv'))
         end
 
-        it 'defaults blank columns to student' do
+        it 'defaults blank role column to student' do
           expect(subject[0][:role]).to eq(Course::UserInvitation.roles[:student])
+        end
+
+        it 'defaults blank phantom to false' do
+          expect(subject[0][:phantom]).to be_falsey
         end
 
         it 'parses roles correctly anyway' do
           expect(subject[1][:role]).to eq(Course::UserInvitation.roles[:teaching_assistant])
           expect(subject[2][:role]).to eq(Course::UserInvitation.roles[:teaching_assistant])
+        end
+
+        it 'parses phantom columns correctly anyway' do
+          expect(subject[1][:phantom]).to be_falsey
+          (2..5).each do |i|
+            expect(subject[i][:phantom]).to be_truthy
+          end
         end
       end
 
@@ -324,6 +338,21 @@ RSpec.describe Course::UserInvitationService, type: :service do
       it 'calls #invite_users with appropriate user attributes' do
         result = subject.send(:parse_from_form, user_form_attributes)
         expect(result).to eq(user_attributes)
+      end
+
+      context 'when the name is blank' do
+        let(:attributes_without_name) do
+          user_form_attributes.map do |k, v|
+            [k, v.except(:name)]
+          end.to_h
+        end
+
+        it 'sets the email as the name' do
+          results = subject.send(:parse_from_form, attributes_without_name)
+          results.each do |result|
+            expect(result[:name]).to eq(result[:email])
+          end
+        end
       end
     end
 

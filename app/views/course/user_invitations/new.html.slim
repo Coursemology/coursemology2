@@ -22,8 +22,9 @@ div.methods role='tabpanel'
           = t('.file.format_html')
           pre
             code
-              = "#{t('common.name')},#{t('common.email')}[,#{t('common.role')}]\n"
-              = "#{t('common.name')},test@example.org[,student]"
+              = "#{t('common.name')},#{t('common.email')}[,#{t('common.role')},#{t('course.users.role.phantom')}]\n"
+              = "John,test1@example.org[,student,y]\n"
+              = "Mary,test2@example.org[,teaching_assistant,n]"
 
       = simple_form_for current_course, url: invite_course_users_path, method: :post do |f|
         = f.error_notification
@@ -39,6 +40,7 @@ div.methods role='tabpanel'
               th = t('common.name')
               th = t('common.email')
               th = t('common.role')
+              th = t('course.users.role.phantom')
               th
                 div.pull-right
                   = link_to_add_association t('.individual.add_user'), f, :invitations,

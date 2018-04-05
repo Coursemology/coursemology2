@@ -2,6 +2,7 @@
   th = invitation.name
   td = invitation.email
   td = t("course.users.role.#{invitation.role}")
+  td = format_boolean(invitation.phantom)
   td = invitation.invitation_key
   - if !invitation.confirmed?
     td = t('course.users.status.invited')

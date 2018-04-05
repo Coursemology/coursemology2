@@ -49,10 +49,11 @@ class Course::UserRegistrationService
   def find_or_create_course_user!(registration, invitation = nil)
     name = invitation.try(:name) || registration.user.name
     role = invitation.try(:role) || CourseUser.roles[:student]
+    phantom = invitation.try(:phantom) || false
 
     registration.course_user =
       CourseUser.find_or_create_by!(course: registration.course, user: registration.user,
-                                    name: name, role: role)
+                                    name: name, role: role, phantom: phantom)
   end
 
   # Claims a given registration code. The correct type of code is deduced from the code itself and

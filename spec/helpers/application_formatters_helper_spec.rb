@@ -358,4 +358,20 @@ RSpec.describe ApplicationFormattersHelper do
       end
     end
   end
+
+  describe 'format_boolean' do
+    context 'when boolean is truthy' do
+      it 'returns the truthy value' do
+        expect(helper.format_boolean(true)).to eq(I18n.t('common.truthy'))
+        expect(helper.format_boolean(1)).to eq(I18n.t('common.truthy'))
+      end
+    end
+
+    context 'when boolean is falsey' do
+      it 'returns the falsey value' do
+        expect(helper.format_boolean(false)).to eq(I18n.t('common.falsey'))
+        expect(helper.format_boolean(nil)).to eq(I18n.t('common.falsey'))
+      end
+    end
+  end
 end

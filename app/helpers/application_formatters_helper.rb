@@ -173,4 +173,12 @@ module ApplicationFormattersHelper
       []
     end
   end
+
+  # Changes boolean values (True/False) into readable forms (Yes/No).
+  #
+  # @param [Boolean|nil] bool
+  # @return [String] A readable form of true and false, Yes and No.
+  def format_boolean(bool)
+    bool ? t('common.truthy') : t('common.falsey')
+  end
 end
