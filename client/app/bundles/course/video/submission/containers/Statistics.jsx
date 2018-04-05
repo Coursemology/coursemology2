@@ -1,14 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Tab, Tabs } from 'material-ui/Tabs';
-import { injectIntl, intlShape } from 'react-intl';
 import ProgressGraph from './Charts/ProgressGraph';
 import HeatMap from './Charts/HeatMap';
 import styles from './Statistics.scss';
 
 const propTypes = {
-  intl: intlShape.isRequired,
-
   sessions: PropTypes.objectOf(PropTypes.shape({
     sessionStart: PropTypes.string,
     sessionEnd: PropTypes.string,
@@ -41,4 +38,4 @@ class Statistics extends React.Component {
 
 Statistics.propTypes = propTypes;
 
-export default injectIntl(Statistics);
+export default Statistics;

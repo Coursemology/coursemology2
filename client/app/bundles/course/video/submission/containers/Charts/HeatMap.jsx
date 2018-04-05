@@ -10,7 +10,7 @@ import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { seekToDirectly } from '../../actions/video';
 import translations from '../../translations';
 
-const graphGlobalOptions = {
+const graphGlobalOptions = intl => ({
   maintainAspectRatio: false,
   legend: {
     display: false,
@@ -19,7 +19,7 @@ const graphGlobalOptions = {
     xAxes: [{
       scaleLabel: {
         display: true,
-        labelString: 'Video time',
+        labelString: intl.formatMessage(translations.eventVideoTimeLabel),
         fontSize: 15,
       },
       ticks: {
@@ -38,7 +38,7 @@ const graphGlobalOptions = {
       },
     }],
   },
-};
+});
 
 const barDataOptions = {
   backgroundColor: 'rgba(75,192,192, 1)',
@@ -90,7 +90,7 @@ class HeatMap extends React.Component {
     this.state = { scaledMode: false };
   }
 
- mouseOptions = {
+  mouseOptions = {
     onClick: (_, elements) => {
       if (elements.length < 1) {
         return;
@@ -105,28 +105,46 @@ class HeatMap extends React.Component {
     },
   };
 
-  renderScaledChart(data) {
+  generateToolTipOptions() {
+    return {
+      tooltips: {
+        displayColors: false,
+        callbacks: {
+          title: (tooltipItem) => {
+            const videoTime = tooltipItem[0].xLabel;
+            return this.props.intl.formatMessage(translations.eventVideoTime, { videoTime });
+          },
+          label: (tooltipItem, graphData) => {
+            const { datasetIndex, index } = tooltipItem;
+            const watchFrequency = graphData.datasets[datasetIndex].data[index];
+            return this.props.intl.formatMessage(translations.watchFrequency, { watchFrequency });
+          },
+        },
+      },
+    };
+  }
+
+  renderScaledChart(data, options) {
     const [width, resolution] = calculateWidthAndResolution(this.props.videoDuration);
 
-    const options = {
-      ...graphGlobalOptions,
+    const optionsWithResolution = {
+      ...options,
       devicePixelRatio: resolution,
-      ...this.mouseOptions,
     };
 
     return (
       <div style={{ overflowX: 'scroll' }}>
         <div style={{ width }}>
-          <Bar data={data} options={options} height={(window.innerHeight - heightOffset) * heightScale} />
+          <Bar data={data} options={optionsWithResolution} height={(window.innerHeight - heightOffset) * heightScale} />
         </div>
       </div>
     );
   }
 
-  static renderUnscaledChart(data) {
+  static renderUnscaledChart(data, options) {
     return (
       <div style={{ width: '100%' }}>
-        <Bar data={data} options={graphGlobalOptions} height={(window.innerHeight - heightOffset) * heightScale} />
+        <Bar data={data} options={options} height={(window.innerHeight - heightOffset) * heightScale} />
       </div>
     );
   }
@@ -146,11 +164,18 @@ class HeatMap extends React.Component {
       ],
     };
 
-    const chartElem = this.state.scaledMode ? this.renderScaledChart(data) : HeatMap.renderUnscaledChart(data);
+    const options = {
+      ...graphGlobalOptions(this.props.intl),
+      ...this.generateToolTipOptions(),
+      ...this.mouseOptions,
+    };
+
+    const chartElem =
+      this.state.scaledMode ? this.renderScaledChart(data, options) : HeatMap.renderUnscaledChart(data, options);
     return (
       <div>
         <Toggle
-          label="Scale Graph"
+          label={this.props.intl.formatMessage(translations.barGraphScalingLabel)}
           labelPosition="right"
           onToggle={(_, toggled) => {
             this.setState({ scaledMode: toggled });
