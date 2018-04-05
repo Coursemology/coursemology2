@@ -11,7 +11,7 @@ function sum(array) {
 
 function computeExp(questions, maximumGrade, basePoints, expMultiplier) {
   const totalGrade = sum(Object.values(questions).map(q => q.grade));
-  return parseInt((totalGrade / maximumGrade) * basePoints * expMultiplier, 10);
+  return Math.round((totalGrade / maximumGrade) * basePoints * expMultiplier);
 }
 
 export default function (state = initialState, action) {
