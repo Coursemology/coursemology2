@@ -5,11 +5,15 @@ export const courseShape = PropTypes.shape({
   host: PropTypes.string,
   path: PropTypes.string,
   title: PropTypes.string,
+  enabledComponents: PropTypes.arrayOf(PropTypes.string),
 });
 
 export const currentCourseShape = PropTypes.shape({
   title: PropTypes.string,
   start_at: PropTypes.string,
+  enabledComponents: PropTypes.arrayOf(PropTypes.string),
+  unduplicableObjectTypes: PropTypes.arrayOf(PropTypes.string),
+  duplicationModesAllowed: PropTypes.arrayOf(PropTypes.string),
 });
 
 export const assessmentShape = PropTypes.shape({

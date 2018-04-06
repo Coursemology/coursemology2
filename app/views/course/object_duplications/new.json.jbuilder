@@ -3,6 +3,14 @@ json.currentHost current_tenant.host
 
 json.currentCourse do
   json.(current_course, :title, :start_at)
+  json.duplicationModesAllowed ([].tap do |modes|
+    modes << 'COURSE' if current_course.course_duplicable?
+    modes << 'OBJECT' if current_course.objects_duplicable?
+  end)
+  json.enabledComponents map_components_to_frontend_tokens(current_component_host.enabled_components)
+  json.unduplicableObjectTypes (current_course.disabled_cherrypickable_types.map do |klass|
+    cherrypickable_items_hash[klass]
+  end)
 end
 
 json.targetCourses @target_courses do |course|
@@ -14,6 +22,7 @@ json.targetCourses @target_courses do |course|
     json.subfolders root_folder.children.map(&:name)
     json.materials root_folder.materials.map(&:name)
   end
+  json.enabledComponents enabled_component_tokens(course)
 end
 
 json.assessmentsComponent @categories do |category|

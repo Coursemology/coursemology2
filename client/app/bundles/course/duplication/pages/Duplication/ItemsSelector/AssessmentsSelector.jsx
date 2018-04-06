@@ -25,20 +25,23 @@ class AssessmentsSelector extends React.Component {
   static propTypes = {
     categories: PropTypes.arrayOf(categoryShape),
     selectedItems: PropTypes.shape({}),
+    tabDisabled: PropTypes.bool,
+    categoryDisabled: PropTypes.bool,
 
     dispatch: PropTypes.func.isRequired,
   }
 
   tabSetAll = tab => (value) => {
-    const { dispatch } = this.props;
-    dispatch(setItemSelectedBoolean(TAB, tab.id, value));
+    const { dispatch, tabDisabled } = this.props;
+    if (!tabDisabled) { dispatch(setItemSelectedBoolean(TAB, tab.id, value)); }
     tab.assessments.forEach((assessment) => {
       dispatch(setItemSelectedBoolean(ASSESSMENT, assessment.id, value));
     });
   }
 
   categorySetAll = category => (value) => {
-    this.props.dispatch(setItemSelectedBoolean(CATEGORY, category.id, value));
+    const { dispatch, categoryDisabled } = this.props;
+    if (!categoryDisabled) { dispatch(setItemSelectedBoolean(CATEGORY, category.id, value)); }
     category.tabs.forEach(tab => this.tabSetAll(tab)(value));
   }
 
@@ -68,7 +71,7 @@ class AssessmentsSelector extends React.Component {
   }
 
   renderTabTree(tab) {
-    const { dispatch, selectedItems } = this.props;
+    const { dispatch, selectedItems, tabDisabled } = this.props;
     const { id, title, assessments } = tab;
     const checked = !!selectedItems[TAB][id];
 
@@ -76,6 +79,7 @@ class AssessmentsSelector extends React.Component {
       <div key={id}>
         <IndentedCheckbox
           checked={checked}
+          disabled={tabDisabled}
           indentLevel={1}
           label={<span><TypeBadge itemType={TAB} />{ title }</span>}
           onCheck={(e, value) =>
@@ -90,7 +94,7 @@ class AssessmentsSelector extends React.Component {
   }
 
   renderCategoryTree(category) {
-    const { dispatch, selectedItems } = this.props;
+    const { dispatch, selectedItems, categoryDisabled } = this.props;
     const { id, title, tabs } = category;
     const checked = !!selectedItems[CATEGORY][id];
 
@@ -98,6 +102,7 @@ class AssessmentsSelector extends React.Component {
       <div key={id}>
         <IndentedCheckbox
           checked={checked}
+          disabled={categoryDisabled}
           label={<span><TypeBadge itemType={CATEGORY} />{ title }</span>}
           onCheck={(e, value) =>
             dispatch(setItemSelectedBoolean(CATEGORY, id, value))
@@ -132,4 +137,6 @@ class AssessmentsSelector extends React.Component {
 export default connect(({ duplication }) => ({
   categories: duplication.assessmentsComponent,
   selectedItems: duplication.selectedItems,
+  tabDisabled: duplication.currentCourse.unduplicableObjectTypes.includes(TAB),
+  categoryDisabled: duplication.currentCourse.unduplicableObjectTypes.includes(CATEGORY),
 }))(AssessmentsSelector);
