@@ -1,0 +1,16 @@
+= page_header t('.header', title: @video.title, student: @submission.creator.name)
+
+table.table.table-bordered.details-table
+  tbody
+    tr.watched_at
+      th = t('.watched_at')
+      td = @submission.created_at
+
+br
+h4 = t('.sessions_header')
+hr
+
+- if @sessions.empty?
+  div.alert.alert-warning = t('.no_sessions')
+- else
+  div#video-stats data=(render template: 'course/video/submission/submissions/show.json.jbuilder')

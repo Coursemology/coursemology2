@@ -1,8 +1,7 @@
 - if submission = submissions[course_user]
   = content_tag_for(:tr, submission) do
-    / TODO: Link to submission next time when there is more meaningful information
     td = format_inline_text(submission.course_user.name)
-    td = t('.watched')
+    td = link_to t('.watched'), course_video_submission_path(current_course, @video,submission)
     td = format_datetime(submission.created_at, :short)
     td
 - else

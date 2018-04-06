@@ -29,6 +29,29 @@ RSpec.describe Course::Video::Session do
       end
     end
 
+    describe 'events' do
+      let(:session) { create(:video_session, :with_events) }
+
+      it 'returns events in order of sequence number' do
+        expect(session.events.pluck(:sequence_num)).to eq((1..session.events.count).to_a)
+      end
+    end
+
+    describe 'with_events_present' do
+      let(:submission) { create(:video_submission) }
+      let!(:session1) { create(:video_session, :with_events, submission: submission) }
+      let!(:session2) { create(:video_session, submission: submission) }
+
+      subject do
+        submission.sessions.with_events_present
+      end
+
+      it 'returns only sessions with events' do
+        expect(subject.count).to eq(1)
+        expect(subject.first).to eq(session1)
+      end
+    end
+
     describe 'merge_in_events!' do
       subject do
         create(:video_session, :with_events)

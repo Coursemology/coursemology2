@@ -10,6 +10,10 @@ class Course::Video::Submission::SubmissionsController < Course::Video::Submissi
     @course_students = current_course.course_users.students.order_alphabetically
   end
 
+  def show
+    @sessions = @submission.sessions.with_events_present
+  end
+
   def create
     if @submission.save
       redirect_to edit_course_video_submission_path(current_course, @video, @submission)
@@ -31,7 +35,7 @@ class Course::Video::Submission::SubmissionsController < Course::Video::Submissi
     @topics = @video.topics.includes(posts: :children).order(:timestamp)
     @topics = @topics.reject { |topic| topic.posts.empty? }
     @posts = @topics.map(&:posts).inject(Course::Discussion::Post.none, :+)
-    @scroll_topic_id = scroll_topic_params
+    set_seek_and_scroll
     set_monitoring
   rescue CanCan::AccessDenied
     redirect_to course_video_path(current_course, @video)
@@ -47,8 +51,18 @@ class Course::Video::Submission::SubmissionsController < Course::Video::Submissi
     params[:scroll_to_topic]
   end
 
+  def seek_time_params
+    params[:seek_time]&.to_i
+  end
+
   def authorize_video!
     authorize!(:attempt, @video)
+  end
+
+  def set_seek_and_scroll
+    @scroll_topic_id = scroll_topic_params
+    @seek_time = seek_time_params
+    @seek_time = @video.topics.find(@scroll_topic_id).timestamp if @scroll_topic_id.present?
   end
 
   def set_monitoring

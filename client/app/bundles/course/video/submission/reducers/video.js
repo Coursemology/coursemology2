@@ -15,6 +15,7 @@ export const initialState = {
   playbackRate: 1,
   restrictContentAfter: null,
   forceSeek: false,
+  initialSeekTime: null,
   sessionId: null,
   sessionSequenceNum: 0,
   sessionEvents: makeImmutableList(),

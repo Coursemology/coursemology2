@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 class Course::Video::Session < ApplicationRecord
   belongs_to :submission, inverse_of: :sessions
-  has_many :events, inverse_of: :session, dependent: :destroy
+  has_many :events, -> { order(:sequence_num) }, inverse_of: :session, dependent: :destroy
+
+  scope :with_events_present, -> { joins(:events).distinct }
 
   before_validation :set_session_time, if: :new_record?
 
