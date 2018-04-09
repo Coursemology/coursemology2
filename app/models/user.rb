@@ -69,14 +69,6 @@ class User < ApplicationRecord
     where(id: InstanceUser.unscoped.active_in_past_7_days.select(:user_id).distinct)
   end)
 
-  # Returns all students of a user for a particular course
-  #
-  # @return[Array<CourseUser>]
-  def my_students(course)
-    course_user = course_users.find_by(course: course)
-    course_user.my_students unless course_user.nil?
-  end
-
   # Gets whether the current user is one of the the built in users.
   #
   # @return [Boolean]

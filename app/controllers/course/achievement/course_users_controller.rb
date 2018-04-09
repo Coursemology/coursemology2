@@ -3,6 +3,7 @@ class Course::Achievement::CourseUsersController < Course::Achievement::Controll
   before_action :authorize_achievement!, only: [:index]
 
   def index
+    @course_users = current_course.course_users.order_alphabetically
   end
 
   private
