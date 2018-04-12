@@ -11,6 +11,8 @@ class Course::Video < ApplicationRecord
   has_many :topics, class_name: Course::Video::Topic.name,
                     dependent: :destroy, foreign_key: :video_id, inverse_of: :video
 
+  validate :url_unchanged
+
   scope :from_course, ->(course) { where(course_id: course) }
 
   scope :from_tab, ->(tab) { where(tab_id: tab) }
@@ -94,5 +96,10 @@ class Course::Video < ApplicationRecord
                else
                  duplicator.options[:target_course].video_tabs.first
                end
+  end
+
+  def url_unchanged
+    errors.add(:url, 'should not be updated for existing videos') if url_changed? &&
+                                                                     persisted?
   end
 end
