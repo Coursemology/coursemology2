@@ -13,6 +13,9 @@ class Course::Video < ApplicationRecord
   has_many :topics, class_name: Course::Video::Topic.name,
                     dependent: :destroy, foreign_key: :video_id, inverse_of: :video
 
+  validate :url_unchanged
+  validate :duration_unchanged
+
   scope :from_course, ->(course) { where(course_id: course) }
 
   scope :from_tab, ->(tab) { where(tab_id: tab) }
@@ -103,5 +106,15 @@ class Course::Video < ApplicationRecord
 
     youtube_id = youtube_video_id_from_link(url)
     self.duration = Yt::Video.new(id: youtube_id).duration
+  end
+
+  def url_unchanged
+    errors.add(:url, 'should not be updated for existing videos') if url_changed? &&
+                                                                     persisted?
+  end
+
+  def duration_unchanged
+    errors.add(:duration, 'should not be updated for existing videos') if duration_changed? &&
+                                                                          persisted?
   end
 end
