@@ -8,7 +8,7 @@ import { formatTimestamp } from 'lib/helpers/videoHelpers';
 
 import translations from '../../translations';
 
-const graphGlobalOptions = intl => ({
+const graphGlobalOptions = (intl, videoDuration) => ({
   legend: {
     display: false,
   },
@@ -44,6 +44,7 @@ const graphGlobalOptions = intl => ({
       },
       ticks: {
         suggestedMin: 0,
+        max: videoDuration,
         callback: formatTimestamp,
       },
     }],
@@ -73,6 +74,7 @@ const propTypes = {
     })),
   })).isRequired,
   submissionUrl: PropTypes.string.isRequired,
+  videoDuration: PropTypes.number.isRequired,
 };
 
 class ProgressGraph extends React.Component {
@@ -185,7 +187,7 @@ class ProgressGraph extends React.Component {
     return (<Scatter
       data={data}
       options={{
-        ...graphGlobalOptions(this.props.intl),
+        ...graphGlobalOptions(this.props.intl, this.props.videoDuration),
         ...this.generateMouseOptions(data),
         ...this.generateToolTipOptions(),
       }}

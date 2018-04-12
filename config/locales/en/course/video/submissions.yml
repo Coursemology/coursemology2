@@ -13,6 +13,7 @@ en:
           show:
             header: 'Statistics: %{title} for %{student}'
             watched_at: 'Watched at'
+            duration: :'course.video.videos.index.duration'
             sessions_header: 'Sessions Statistics'
             no_sessions: 'No watch statistics available for this submission'
           edit:

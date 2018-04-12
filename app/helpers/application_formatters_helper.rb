@@ -106,12 +106,19 @@ module ApplicationFormattersHelper
     date.to_formatted_s(format)
   end
 
-  # @return the duration in the format of "HH:MM:SS", eg 04H05M11S
+  # @return [String] The duration in the format of "HH:MM:SS", eg 04H05M11S
   def format_duration(total_seconds)
     seconds = total_seconds % 60
     minutes = (total_seconds / 60) % 60
     hours = total_seconds / (60 * 60)
     format('%02dH%02dM%02dS', hours, minutes, seconds)
+  end
+
+  # @return [String] The duration in the format for displaying, eg 02:45:12, works for for
+  #                  durations less than 24hrs
+  def format_duration_for_display(total_seconds)
+    format_string = total_seconds < 3600 ? '%M:%S' : '%H:%M:%S'
+    Time.at(total_seconds).utc.strftime(format_string)
   end
 
   # A helper for generating CSS classes, based on the time-bounded status of the item.

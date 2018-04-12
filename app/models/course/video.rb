@@ -5,11 +5,16 @@ class Course::Video < ApplicationRecord
   include Course::ClosingReminderConcern
   include Course::Video::UrlConcern
 
+  before_validation :set_duration, if: :new_record?
+
   belongs_to :tab, class_name: Course::Video::Tab.name, inverse_of: :videos
   has_many :submissions, class_name: Course::Video::Submission.name,
                          inverse_of: :video, dependent: :destroy
   has_many :topics, class_name: Course::Video::Topic.name,
                     dependent: :destroy, foreign_key: :video_id, inverse_of: :video
+
+  validate :url_unchanged
+  validate :duration_unchanged
 
   scope :from_course, ->(course) { where(course_id: course) }
 
@@ -94,5 +99,22 @@ class Course::Video < ApplicationRecord
                else
                  duplicator.options[:target_course].video_tabs.first
                end
+  end
+
+  def set_duration
+    return if duration
+
+    youtube_id = youtube_video_id_from_link(url)
+    self.duration = Yt::Video.new(id: youtube_id).duration
+  end
+
+  def url_unchanged
+    errors.add(:url, 'should not be updated for existing videos') if url_changed? &&
+                                                                     persisted?
+  end
+
+  def duration_unchanged
+    errors.add(:duration, 'should not be updated for existing videos') if duration_changed? &&
+                                                                          persisted?
   end
 end

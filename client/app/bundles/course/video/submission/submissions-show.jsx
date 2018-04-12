@@ -13,7 +13,7 @@ $(document).ready(() => {
 
   render(
     <ProviderWrapper>
-      <ProgressGraph sessions={initialState.sessions} submissionUrl={initialState.submissionUrl} />
+      <ProgressGraph {...initialState} />
     </ProviderWrapper>
     , mountNode
   );

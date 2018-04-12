@@ -11,6 +11,15 @@ RSpec.feature 'Course: Videos: Management' do
     context 'As a Course Teaching Assistant' do
       let(:user) { create(:course_teaching_assistant, course: course).user }
 
+      before do
+        # Override the set_duration method to avoid an API call
+        Course::Video.class_eval do
+          def set_duration
+            self.duration = 123
+          end
+        end
+      end
+
       scenario 'I can create a video' do
         video = build_stubbed(:video)
         visit course_videos_path(course)
