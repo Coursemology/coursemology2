@@ -18,7 +18,6 @@ const propTypes = {
       videoTime: PropTypes.number,
     })),
   })).isRequired,
-  submissionUrl: PropTypes.string.isRequired,
 };
 
 class Statistics extends React.Component {
@@ -26,10 +25,7 @@ class Statistics extends React.Component {
     return (
       <Tabs>
         <Tab label="Progress Graph">
-          <ProgressGraph
-            sessions={this.props.sessions}
-            submissionUrl={this.props.submissionUrl}
-          />
+          <ProgressGraph sessions={this.props.sessions} />
         </Tab>
       </Tabs>
     );

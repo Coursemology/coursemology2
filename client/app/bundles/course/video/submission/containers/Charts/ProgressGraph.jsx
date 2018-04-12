@@ -77,7 +77,6 @@ const propTypes = {
       videoTime: PropTypes.number,
     })),
   })).isRequired,
-  submissionUrl: PropTypes.string.isRequired,
   videoDuration: PropTypes.number.isRequired,
   onMarkerClick: PropTypes.func,
 };
