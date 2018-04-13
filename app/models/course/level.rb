@@ -63,6 +63,6 @@ class Course::Level < ApplicationRecord
   end
 
   def initialize_duplicate(duplicator, _other)
-    self.course = duplicator.options[:target_course]
+    self.course = duplicator.options[:destination_course]
   end
 end

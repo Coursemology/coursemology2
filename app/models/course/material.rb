@@ -47,7 +47,7 @@ class Course::Material < ApplicationRecord
                     #
                     # If the material's folder is not selected for duplication, the current duplicated material will
                     # remain a child of the root folder.
-                    duplicator.options[:target_course].root_folder
+                    duplicator.options[:destination_course].root_folder
                   end
     self.updated_at = other.updated_at
     self.created_at = other.created_at

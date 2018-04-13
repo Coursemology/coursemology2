@@ -11,7 +11,7 @@ class Course::Assessment::Skill < ApplicationRecord
   scope :order_by_title, ->(direction = :asc) { order(title: direction) }
 
   def initialize_duplicate(duplicator, other)
-    self.course = duplicator.options[:target_course]
+    self.course = duplicator.options[:destination_course]
     self.skill_branch = duplicator.duplicated?(other.skill_branch) ? duplicator.duplicate(other.skill_branch) : nil
     questions << other.questions.map(&:actable).
                  select { |question| duplicator.duplicated?(question) }.

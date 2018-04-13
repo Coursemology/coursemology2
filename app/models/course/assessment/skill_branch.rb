@@ -5,7 +5,7 @@ class Course::Assessment::SkillBranch < ApplicationRecord
   scope :ordered_by_title, -> { order(:title) }
 
   def initialize_duplicate(duplicator, other)
-    self.course = duplicator.options[:target_course]
+    self.course = duplicator.options[:destination_course]
     skills << other.skills.
               select { |skill| duplicator.duplicated?(skill) }.
               map { |skill| duplicator.duplicate(skill) }

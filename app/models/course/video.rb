@@ -75,7 +75,7 @@ class Course::Video < ApplicationRecord
 
   def initialize_duplicate(duplicator, other)
     copy_attributes(other, duplicator)
-    self.course = duplicator.options[:target_course]
+    self.course = duplicator.options[:destination_course]
     initialize_duplicate_tab(duplicator, other)
   end
 
@@ -92,7 +92,7 @@ class Course::Video < ApplicationRecord
     self.tab = if duplicator.duplicated?(other.tab)
                  duplicator.duplicate(other.tab)
                else
-                 duplicator.options[:target_course].video_tabs.first
+                 duplicator.options[:destination_course].video_tabs.first
                end
   end
 end

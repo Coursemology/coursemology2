@@ -28,7 +28,7 @@ class Course::Condition::Level < ApplicationRecord
 
   def initialize_duplicate(duplicator, other)
     self.conditional = duplicator.duplicate(other.conditional)
-    self.course = duplicator.options[:target_course]
+    self.course = duplicator.options[:destination_course]
   end
 
   # Class that the condition depends on.

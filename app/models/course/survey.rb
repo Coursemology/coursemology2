@@ -37,7 +37,7 @@ class Course::Survey < ApplicationRecord
   def initialize_duplicate(duplicator, other)
     copy_attributes(other, duplicator)
     self.sections = duplicator.duplicate(other.sections)
-    self.course = duplicator.options[:target_course]
+    self.course = duplicator.options[:destination_course]
   end
 
   def include_in_consolidated_email?(event)

@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
-# Service to provide duplication of objects from current_course, to target_course.
+# Service to provide duplication of objects from source_course, to destination_course.
 class Course::Duplication::ObjectDuplicationService < Course::Duplication::BaseService
   class << self
     # Constructor for the object duplication service.
     #
-    # @param [Course] current_course Course to duplicate from.
-    # @param [Course] target_course Course to duplicate to.
+    # @param [Course] source_course Course to duplicate from.
+    # @param [Course] destination_course Course to duplicate to.
     # @param [Object|Array] objects The object(s) to duplicate.
     # @param [Hash] options The options to be sent to the Duplicator object.
     # @option options [User] :current_user (+User.system+) The user triggering the duplication.
     # @return [Object|Array] The duplicated object(s).
-    def duplicate_objects(current_course, target_course, objects, options = {})
-      options[:time_shift] = time_shift(current_course, target_course)
-      options[:current_course] = current_course
-      options[:target_course] = target_course
+    def duplicate_objects(source_course, destination_course, objects, options = {})
+      options[:time_shift] = time_shift(source_course, destination_course)
+      options[:source_course] = source_course
+      options[:destination_course] = destination_course
       options.reverse_merge!(DEFAULT_OBJECT_DUPLICATION_OPTIONS)
       service = new(options)
       service.duplicate_objects(objects)
@@ -22,11 +22,11 @@ class Course::Duplication::ObjectDuplicationService < Course::Duplication::BaseS
 
     # Calculates the time difference between the +start_at+ of the current and target course.
     #
-    # @param [Course] current_course
-    # @param [Course] target_course
+    # @param [Course] source_course
+    # @param [Course] destination_course
     # @return [Float] Time difference between the +start_at+ of both courses.
-    def time_shift(current_course, target_course)
-      shift = target_course.start_at - current_course.start_at
+    def time_shift(source_course, destination_course)
+      shift = destination_course.start_at - source_course.start_at
       shift >= 0 ? shift : 0
     end
   end

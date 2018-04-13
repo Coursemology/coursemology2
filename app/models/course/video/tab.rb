@@ -25,7 +25,7 @@ class Course::Video::Tab < ApplicationRecord
   end
 
   def initialize_duplicate(duplicator, other)
-    self.course = duplicator.options[:target_course]
+    self.course = duplicator.options[:destination_course]
     other.videos.each do |video|
       videos << duplicator.duplicate(video) if duplicator.duplicated?(video)
     end
