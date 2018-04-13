@@ -238,7 +238,7 @@ class Duplication extends React.Component {
 
 export default connect(({ duplication }) => ({
   isLoading: duplication.isLoading,
-  isCourseSelected: !!duplication.targetCourseId,
+  isCourseSelected: !!duplication.destinationCourseId,
   duplicationMode: duplication.duplicationMode,
   modesAllowed: duplication.currentCourse.duplicationModesAllowed,
   enabledComponents: duplication.currentCourse.enabledComponents,

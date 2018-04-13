@@ -25,8 +25,8 @@ RSpec.describe Course::ObjectDuplicationsController do
       subject { get :new, format: :json, params: { course_id: course.id } }
       before { subject }
 
-      it "includes user's courses from other instances in targetCourses" do
-        course_ids = json_response['targetCourses'].map { |course| course['id'] }
+      it "includes user's courses from other instances in destinationCourses" do
+        course_ids = json_response['destinationCourses'].map { |course| course['id'] }
         expect(course_ids).to contain_exactly(course.id, other_instance_course.id)
       end
     end
@@ -35,7 +35,7 @@ RSpec.describe Course::ObjectDuplicationsController do
       subject do
         post :create, as: :json, params: {
           course_id: course.id, object_duplication: {
-            target_course_id: other_instance_course.id, items: items_params
+            destination_course_id: other_instance_course.id, items: items_params
           }
         }
       end

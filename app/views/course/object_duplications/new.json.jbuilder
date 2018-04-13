@@ -13,7 +13,7 @@ json.currentCourse do
   end)
 end
 
-json.targetCourses @target_courses do |course|
+json.destinationCourses @destination_courses do |course|
   json.(course, :id, :title)
   json.path course_path(course)
   json.host course.instance.host

@@ -10,7 +10,7 @@ const client = CourseAPI.duplication.getClient();
 const mock = new MockAdapter(client);
 
 const responseData = {
-  targetCourses: [
+  destinationCourses: [
     { id: 54, title: 'Course B', path: '/courses/54' },
     { id: 55, title: 'Course A', path: '/courses/55' },
     { id: 56, title: 'Course C', path: '/courses/56' },
@@ -43,7 +43,7 @@ describe('<ObjectDuplication />', () => {
     expect(spy).toHaveBeenCalled();
 
     const sortedData = store.getState().duplication;
-    const courseTitles = sortedData.targetCourses.map(course => course.title);
+    const courseTitles = sortedData.destinationCourses.map(course => course.title);
     const rootFolder = sortedData.materialsComponent[0];
     expect(courseTitles).toEqual(['Course A', 'Course B', 'Course C']);
     expect(sortedData.materialsComponent.length).toBe(1);

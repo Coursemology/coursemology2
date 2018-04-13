@@ -8,7 +8,7 @@ export default class DuplicationAPI extends BaseCourseAPI {
   * success response: {
   *   assessmentComponent: Array.<categoryShape>,
   *   currentHost: string,
-  *   targetCourses: Array.<courseShape>,
+  *   destinationCourses: Array.<courseShape>,
   * }
   *
   * See course/duplication/propTypes.js for categoryShape and courseShape.
@@ -22,7 +22,7 @@ export default class DuplicationAPI extends BaseCourseAPI {
   *
   * @param {object} params in the form {
   *   items: { TAB: Array.<number>, ASSESSMENT: Array.<number>, ... },
-  *   target_course_id: number,
+  *   destination_course_id: number,
   * }
   * @return {Promise}
   * success response: { redirect_url: string }

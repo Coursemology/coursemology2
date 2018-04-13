@@ -9,8 +9,8 @@ const emptySelectedItemsHash = () => Object.keys(duplicableItemTypes).reduce((ha
 const initialState = {
   confirmationOpen: false,
   selectedItems: emptySelectedItemsHash(),
-  targetCourseId: null,
-  targetCourses: [],
+  destinationCourseId: null,
+  destinationCourses: [],
   duplicationMode: duplicationModes.COURSE,
   currentItemSelectorPanel: null,
 
@@ -38,8 +38,8 @@ export default function (state = initialState, action) {
       return { ...state, isLoading: true };
     }
     case actionTypes.LOAD_OBJECTS_LIST_SUCCESS: {
-      const { targetCourses, materialsComponent, ...data } = action.duplicationData;
-      const sortedTargetCourses = targetCourses.sort(
+      const { destinationCourses, materialsComponent, ...data } = action.duplicationData;
+      const sortedDestinationCourses = destinationCourses.sort(
         (a, b) => a.title.localeCompare(b.title)
       );
       const nestedFolders = nestFolders(materialsComponent);
@@ -47,7 +47,7 @@ export default function (state = initialState, action) {
         ...state,
         ...data,
         isLoading: false,
-        targetCourses: sortedTargetCourses,
+        destinationCourses: sortedDestinationCourses,
         materialsComponent: nestedFolders,
       };
     }
@@ -55,10 +55,10 @@ export default function (state = initialState, action) {
       return { ...state, isLoading: false };
     }
 
-    case actionTypes.SET_TARGET_COURSE_ID: {
+    case actionTypes.SET_DESTINATION_COURSE_ID: {
       return {
         ...state,
-        targetCourseId: action.targetCourseId,
+        destinationCourseId: action.destinationCourseId,
         selectedItems: emptySelectedItemsHash(),
       };
     }

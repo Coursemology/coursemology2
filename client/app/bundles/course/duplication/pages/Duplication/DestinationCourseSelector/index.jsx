@@ -5,7 +5,7 @@ import { defineMessages, FormattedMessage, injectIntl, intlShape } from 'react-i
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 import moment, { shortDateTime } from 'lib/moment';
-import { setTargetCourseId, duplicateCourse } from 'course/duplication/actions';
+import { setDestinationCourseId, duplicateCourse } from 'course/duplication/actions';
 import { duplicationModes } from 'course/duplication/constants';
 import TypeBadge from 'course/duplication/components/TypeBadge';
 import { courseShape, currentCourseShape } from 'course/duplication/propTypes';
@@ -38,7 +38,7 @@ const styles = {
 class DestinationCourseSelector extends React.Component {
   static propTypes = {
     currentHost: PropTypes.string,
-    targetCourseId: PropTypes.number,
+    destinationCourseId: PropTypes.number,
     courses: PropTypes.arrayOf(courseShape),
     currentCourse: currentCourseShape,
     duplicationMode: PropTypes.string.isRequired,
@@ -61,7 +61,7 @@ class DestinationCourseSelector extends React.Component {
   }
 
   renderExistingCourseForm = () => {
-    const { courses, targetCourseId, dispatch } = this.props;
+    const { courses, destinationCourseId, dispatch } = this.props;
 
     return (
       <div style={styles.existingCourseForm}>
@@ -69,8 +69,8 @@ class DestinationCourseSelector extends React.Component {
         <DropDownMenu
           autoWidth={false}
           style={styles.dropDown}
-          value={targetCourseId}
-          onChange={(e, index, value) => dispatch(setTargetCourseId(value))}
+          value={destinationCourseId}
+          onChange={(e, index, value) => dispatch(setDestinationCourseId(value))}
         >
           { courses.map(this.renderCourseMenuItem) }
         </DropDownMenu>
@@ -115,9 +115,9 @@ class DestinationCourseSelector extends React.Component {
 }
 
 export default connect(({ duplication }) => ({
-  courses: duplication.targetCourses,
+  courses: duplication.destinationCourses,
   currentHost: duplication.currentHost,
-  targetCourseId: duplication.targetCourseId,
+  destinationCourseId: duplication.destinationCourseId,
   duplicationMode: duplication.duplicationMode,
   currentCourse: duplication.currentCourse,
   isDuplicating: duplication.isDuplicating,

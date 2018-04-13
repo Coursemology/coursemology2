@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { itemSelectorPanels } from 'course/duplication/constants';
-import targetCourseSelector from 'course/duplication/selectors/targetCourse';
+import destinationCourseSelector from 'course/duplication/selectors/destinationCourse';
 import { courseShape } from 'course/duplication/propTypes';
 import AssessmentsSelector from './AssessmentsSelector';
 import SurveysSelector from './SurveysSelector';
@@ -31,7 +31,7 @@ const styles = {
 class ItemsSelector extends React.Component {
   static propTypes = {
     currentPanel: PropTypes.string,
-    targetCourse: courseShape,
+    destinationCourse: courseShape,
   }
 
   static panelComponentMap = {
@@ -43,7 +43,7 @@ class ItemsSelector extends React.Component {
   }
 
   render() {
-    const { currentPanel, targetCourse } = this.props;
+    const { currentPanel, destinationCourse } = this.props;
 
     if (!currentPanel) {
       return (
@@ -53,7 +53,7 @@ class ItemsSelector extends React.Component {
       );
     }
 
-    if (!targetCourse.enabledComponents.includes(currentPanel)) {
+    if (!destinationCourse.enabledComponents.includes(currentPanel)) {
       return (
         <div style={styles.message}>
           <FormattedMessage {...translations.componentDisabled} />
@@ -68,5 +68,5 @@ class ItemsSelector extends React.Component {
 
 export default connect(state => ({
   currentPanel: state.duplication.currentItemSelectorPanel,
-  targetCourse: targetCourseSelector(state),
+  destinationCourse: destinationCourseSelector(state),
 }))(ItemsSelector);

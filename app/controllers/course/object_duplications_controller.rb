@@ -6,7 +6,7 @@ class Course::ObjectDuplicationsController < Course::ComponentController
   def new
     respond_to do |format|
       format.json do
-        load_target_courses_data
+        load_destination_courses_data
         load_assessments_component_data
         load_survey_component_data
         load_achievements_component_data
@@ -18,7 +18,7 @@ class Course::ObjectDuplicationsController < Course::ComponentController
 
   def create
     job = Course::ObjectDuplicationJob.perform_later(
-      current_course, authorized_target_course, objects_to_duplicate, current_user: current_user
+      current_course, authorized_destination_course, objects_to_duplicate, current_user: current_user
     ).job
     render json: { redirect_url: job_path(job) }
   end
@@ -31,11 +31,11 @@ class Course::ObjectDuplicationsController < Course::ComponentController
 
   private
 
-  def load_target_courses_data
+  def load_destination_courses_data
     ActsAsTenant.without_tenant do
-      @target_courses = Course.accessible_by(current_ability, :duplicate_to).includes(:instance)
+      @destination_courses = Course.accessible_by(current_ability, :duplicate_to).includes(:instance)
       @root_folder_map = Course::Material::Folder.root.includes(:materials, :children).
-                         where(course_id: @target_courses.map(&:id)).map do |folder|
+                         where(course_id: @destination_courses.map(&:id)).map do |folder|
                            [folder.course_id, folder]
                          end.to_h
     end
@@ -64,14 +64,14 @@ class Course::ObjectDuplicationsController < Course::ComponentController
   def create_duplication_params
     @create_duplication_params ||= begin
       items_params = course_item_finders.keys.map { |key| { key => [] } }
-      params.require(:object_duplication).permit(:target_course_id, items: items_params)
+      params.require(:object_duplication).permit(:destination_course_id, items: items_params)
     end
   end
 
-  def authorized_target_course
+  def authorized_destination_course
     ActsAsTenant.without_tenant do
-      Course.find(create_duplication_params[:target_course_id]).tap do |target_course|
-        authorize!(:duplicate_to, target_course)
+      Course.find(create_duplication_params[:destination_course_id]).tap do |destination_course|
+        authorize!(:duplicate_to, destination_course)
       end
     end
   end

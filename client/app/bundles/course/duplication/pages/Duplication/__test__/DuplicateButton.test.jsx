@@ -10,10 +10,10 @@ import DuplicateButton from '../DuplicateButton';
 const data = {
   duplication: {
     duplication: {
-      targetCourseId: 9,
-      targetCourses: [{
+      destinationCourseId: 9,
+      destinationCourses: [{
         id: 9,
-        title: 'target',
+        title: 'destination',
         host: 'example.org',
         path: '/courses/9',
       }],
@@ -69,7 +69,7 @@ describe('<DuplicateButton />', () => {
           ASSESSMENT: ['7'],
           TAB: ['3', '4'],
         },
-        target_course_id: 9,
+        destination_course_id: 9,
       },
     };
     expect(spy).toHaveBeenCalledWith(expectedPayload);

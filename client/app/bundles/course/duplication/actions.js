@@ -35,8 +35,8 @@ export function hideDuplicateItemsConfirmation() {
   return { type: actionTypes.HIDE_DUPLICATE_ITEMS_CONFIRMATION };
 }
 
-export function setTargetCourseId(targetCourseId) {
-  return { type: actionTypes.SET_TARGET_COURSE_ID, targetCourseId };
+export function setDestinationCourseId(destinationCourseId) {
+  return { type: actionTypes.SET_DESTINATION_COURSE_ID, destinationCourseId };
 }
 
 export function setDuplicationMode(duplicationMode) {
@@ -67,10 +67,10 @@ function itemsPayload(selectedItemsHash) {
   }, {});
 }
 
-export function duplicateItems(targetCourseId, selectedItems, failureMessage) {
+export function duplicateItems(destinationCourseId, selectedItems, failureMessage) {
   const payload = {
     object_duplication: {
-      target_course_id: targetCourseId,
+      destination_course_id: destinationCourseId,
       items: itemsPayload(selectedItems),
     },
   };
