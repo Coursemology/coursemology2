@@ -91,6 +91,10 @@ const translations = defineMessages({
       not be immediately shown to the student. To publish all gradings for this assessment, click \
       on the 'Publish Grades' button on the top right of the submissions listing for this assessment.",
   },
+  passwordRequired: {
+    id: 'course.assessment.form.passwordRequired',
+    defaultMessage: 'At least one password is required',
+  },
   passwordProtection: {
     id: 'course.assessment.form.passwordProtection',
     defaultMessage: 'Password Protection',
@@ -102,8 +106,8 @@ const translations = defineMessages({
       not allowed unless the password is provided by the staff. This can be used to prevent \
       students from accessing each other's submissions in exams.",
   },
-  password: {
-    id: 'course.assessment.form.password',
+  submissionPassword: {
+    id: 'course.assessment.form.submissionPassword',
     defaultMessage: 'Input Password',
   },
   startEndValidationError: {

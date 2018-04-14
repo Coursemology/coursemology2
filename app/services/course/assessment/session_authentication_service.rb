@@ -20,7 +20,7 @@ class Course::Assessment::SessionAuthenticationService
   def authenticate(password)
     return true unless @assessment.session_password_protected?
 
-    if password == @assessment.password
+    if password == @assessment.session_password
       update_session_id if @submission
       true
     else
