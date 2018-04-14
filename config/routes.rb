@@ -184,6 +184,8 @@ Rails.application.routes.draw do
       scope module: :assessment do
         resources :assessments do
           post 'reorder', on: :member
+          post 'authenticate', on: :member
+
           resources :questions, only: [] do
             post 'duplicate/:destination_assessment_id', on: :member, action: 'duplicate', as: :duplicate
           end

@@ -1,0 +1,10 @@
+.password-panel.col-lg-4.col-md-5.col-sm-6.col-xs-7.text-center
+  span.fa-stack.fa-5x
+    = fa_icon 'circle-thin', class: 'fa-stack-2x'
+    = fa_icon 'lock', class: 'fa-stack-1x'
+  p.text-center = t('.message')
+
+  = simple_form_for :assessment, url: authenticate_course_assessment_path(current_course, @assessment), method: :post do |f|
+    = f.input :password, label: false, required: false, placeholder: t('.placeholder')
+
+    = f.submit t('.continue'), class: ['btn', 'btn-primary']

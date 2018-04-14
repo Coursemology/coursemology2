@@ -18,6 +18,29 @@
     .card:hover {
       box-shadow: 0 14px 28px $course-assessment-question-card-hover-shadow;
     }
+
+    .password-panel {
+      float: none;
+      margin: 100px auto;
+
+      span,
+      input.btn-primary {
+        display: block;
+        margin: 0 auto;
+      }
+
+      span {
+        color: $gray-light;
+      }
+
+      p {
+        color: $gray-light;
+      }
+
+      form {
+        margin-top: 30px;
+      }
+    }
   }
 
   &.index {

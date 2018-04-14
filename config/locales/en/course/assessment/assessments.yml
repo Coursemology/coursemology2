@@ -53,6 +53,11 @@ en:
         destroy:
           success: 'Assessment %{assessment} was deleted.'
           failure: 'Could not delete assessment: %{error}'
+        authenticate:
+          header: 'Input Password'
+          message: 'The assessment is locked, please input the password.'
+          placeholder: 'Password'
+          continue: 'Continue'
         assessment_management_buttons:
           attempt: 'Attempt'
           resume: 'Resume'

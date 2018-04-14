@@ -8,6 +8,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def show
+    render 'authenticate' unless can_access?(@assessment)
   end
 
   def new
@@ -54,6 +55,14 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
       question_order_ids.each_with_index do |id, index|
         question_assessments_hash[id].update_attribute(:weight, index)
       end
+    end
+  end
+
+  def authenticate
+    if authentication_service.authenticate(params.require(:assessment).permit(:password)[:password])
+      render json: { success: true }
+    else
+      render json: { success: false }
     end
   end
 
@@ -191,5 +200,20 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
              }
            end
     tabs.sort_by { |tab_hash| tab_hash[:title] }
+  end
+
+  def can_access?(assessment)
+    if assessment.password_protected? && !authentication_service.authenticated?
+      # Allow access for all course staff and students with at least one submission to the assessment.
+      return true if can?(:manage, assessment) || assessment.submissions.by_user(current_user).count > 0
+
+      return false
+    end
+
+    true
+  end
+
+  def authentication_service
+    @authentication_service ||= Course::Assessment::AuthenticationService.new(@assessment, session)
   end
 end
