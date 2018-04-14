@@ -6,7 +6,7 @@ json.assessment do
   json.maximumGrade @assessment.maximum_grade.to_f
   json.gamified current_course.gamified?
   json.downloadable @assessment.downloadable?
-  json.passwordProtected @assessment.password_protected?
+  json.passwordProtected @assessment.session_password_protected?
 end
 
 my_students_set = Set.new(@my_students.map(&:id))
