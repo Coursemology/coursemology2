@@ -37,6 +37,10 @@ const styles = {
   },
 };
 
+const isFieldBlank = str => str === undefined || str === '' || str === null;
+
+const isEndDatePassedStartDate = (startAt, endAt) => startAt && endAt && new Date(startAt) >= new Date(endAt);
+
 const validate = (values) => {
   const errors = {};
 
@@ -45,17 +49,19 @@ const validate = (values) => {
     requiredFields.push('tabbed_view');
   }
 
-  if (values.password_protected) {
-    requiredFields.push('password');
-  }
-
   requiredFields.forEach((field) => {
-    if (values[field] === undefined || values[field] === '' || values[field] === null) {
+    if (isFieldBlank(values[field])) {
       errors[field] = formTranslations.required;
     }
   });
 
-  if (values.start_at && values.end_at && new Date(values.start_at) >= new Date(values.end_at)) {
+  if (values.password_protected) {
+    if (isFieldBlank(values.view_password) && isFieldBlank(values.session_password)) {
+      errors.password_protected = translations.passwordRequired;
+    }
+  }
+
+  if (isEndDatePassedStartDate(values.start_at, values.end_at)) {
     errors.end_at = translations.startEndValidationError;
   }
 
@@ -224,11 +230,11 @@ class AssessmentForm extends React.Component {
         {
           this.props.password_protected &&
           <Field
-            name="password"
+            name="submission_password"
             component={TextField}
-            hintText={<FormattedMessage {...translations.password} />}
+            hintText={<FormattedMessage {...translations.submissionPassword} />}
             fullWidth
-            autoComplete={false}
+            autoComplete="off"
             disabled={submitting}
           />
         }

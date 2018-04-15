@@ -9,7 +9,7 @@ RSpec.describe 'Course: Assessment: Submissions: Logs' do
     let(:assessment) { create(:assessment, :published_with_mrq_question, course: course) }
     let(:protected_assessment) do
       create(:assessment, :published_with_mrq_question,
-             course: course, password: 'super_secret')
+             course: course, session_password: 'super_secret')
     end
     let(:student) { create(:course_student, course: course).user }
     let(:submission) do
@@ -52,7 +52,7 @@ RSpec.describe 'Course: Assessment: Submissions: Logs' do
         expect(submission.logs.last.valid_attempt?).to be(false)
 
         expect do
-          fill_in 'session_password', with: protected_assessment.password
+          fill_in 'session_password', with: protected_assessment.session_password
           click_button I18n.t('course.assessment.sessions.new.continue')
         end.to change { submission.logs.count }.by(1)
         expect(submission.logs.last.valid_attempt?).to be(true)

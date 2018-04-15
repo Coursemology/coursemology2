@@ -8,7 +8,7 @@ RSpec.describe 'Course: Assessment: Submissions: Exam' do
     let(:course) { create(:course) }
     let(:assessment) do
       create(:assessment, :published_with_mrq_question, :delay_grade_publication,
-             course: course, password: 'super_secret')
+             course: course, session_password: 'super_secret')
     end
     let(:mrq_questions) { assessment.reload.questions.map(&:specific) }
     let(:student) { create(:course_student, course: course).user }
@@ -47,7 +47,7 @@ RSpec.describe 'Course: Assessment: Submissions: Exam' do
         click_button I18n.t('course.assessment.sessions.new.continue')
         expect(current_path).to eq(new_course_assessment_session_path(course, assessment))
 
-        fill_in 'session_password', with: assessment.password
+        fill_in 'session_password', with: assessment.session_password
         click_button I18n.t('course.assessment.sessions.new.continue')
 
         expect(page).to have_selector('div#course-assessment-submission')
@@ -57,7 +57,7 @@ RSpec.describe 'Course: Assessment: Submissions: Exam' do
         submission
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
-        fill_in 'session_password', with: assessment.password
+        fill_in 'session_password', with: assessment.session_password
         click_button I18n.t('course.assessment.sessions.new.continue')
         expect(page).to have_selector('h1', text: assessment.title)
 

@@ -1,6 +1,6 @@
 - assessment = todo_assessment_button
 - if todo.not_started?
-  - if assessment.password_protected?
+  - if assessment.session_password_protected?
     = link_to t('.attempt'), new_course_assessment_session_path(current_course, assessment),
               class: ['btn', 'btn-info']
   - else

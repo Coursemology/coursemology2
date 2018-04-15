@@ -38,7 +38,7 @@ class Course::Assessment::Submission::SubmissionsController < \
   def create
     @submission.session_id = authentication_service.generate_authentication_token!
     if @submission.save
-      log_service.log_submission_access(request) if @assessment.password_protected?
+      log_service.log_submission_access(request) if @assessment.session_password_protected?
       redirect_to edit_course_assessment_submission_path(current_course, @assessment, @submission,
                                                          new_submission: true)
     else
@@ -164,7 +164,7 @@ class Course::Assessment::Submission::SubmissionsController < \
 
   def check_password
     return unless @submission.attempting?
-    return if !@assessment.password_protected? || can?(:manage, @assessment)
+    return if !@assessment.session_password_protected? || can?(:manage, @assessment)
     return if authentication_service.authenticated?
 
     log_service.log_submission_access(request)

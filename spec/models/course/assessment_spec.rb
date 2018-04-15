@@ -371,7 +371,7 @@ RSpec.describe Course::Assessment do
       end
 
       let(:manually_graded_assessment) do
-        build(:assessment, password: 'LOL')
+        build(:assessment, session_password: 'LOL')
       end
 
       it 'switches to autograded mode' do
@@ -379,7 +379,7 @@ RSpec.describe Course::Assessment do
         manually_graded_assessment.update_mode(params)
 
         expect(manually_graded_assessment).to be_autograded
-        expect(manually_graded_assessment.password).to be_nil
+        expect(manually_graded_assessment.session_password).to be_nil
       end
 
       it 'switches to manually graded mode' do

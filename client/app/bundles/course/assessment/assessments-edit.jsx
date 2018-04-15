@@ -27,7 +27,7 @@ $(document).ready(() => {
           initialValues={{
             ...data.attributes,
             tabs: [currentTab],
-            password_protected: !!data.attributes.password,
+            password_protected: !!(data.attributes.view_password || data.attributes.session_password),
           }}
         />
       </ProviderWrapper>

@@ -113,7 +113,7 @@ class Course::Assessment < ApplicationRecord
 
     if target_mode == true
       self.autograded = true
-      self.password = nil
+      self.session_password = nil
       self.delayed_grade_publication = false
     elsif target_mode == false # Ignore the case when the params is empty.
       self.autograded = false
@@ -142,8 +142,9 @@ class Course::Assessment < ApplicationRecord
     published?
   end
 
-  def password_protected?
-    password.present?
+  # The password to preventing attempting submission from multiple sessions.
+  def session_password_protected?
+    session_password.present?
   end
 
   def downloadable?

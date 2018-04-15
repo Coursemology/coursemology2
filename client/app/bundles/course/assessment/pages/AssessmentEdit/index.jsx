@@ -39,9 +39,10 @@ class EditPage extends React.Component {
   };
 
   onFormSubmit = (data) => {
-    // Remove password field if password is disabled
-    const password = data.password_protected ? data.password : null;
-    const atrributes = Object.assign({}, data, { password });
+    // Remove view_password and session_password field if password is disabled
+    const view_password = data.password_protected ? data.view_password : null;
+    const session_password = data.password_protected ? data.session_password : null;
+    const atrributes = Object.assign({}, data, { view_password, session_password });
 
     const { intl } = this.props;
 

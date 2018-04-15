@@ -86,7 +86,7 @@ RSpec.describe Course::Assessment::AssessmentsController do
         it 'does not update attributes tabbed_view and password' do
           patch :update, params: {
             course_id: course, id: assessment,
-            assessment: { skippable: true, tabbed_view: true, password: 'password' }
+            assessment: { skippable: true, tabbed_view: true, session_password: 'password' }
           }
 
           expect(assessment).not_to be_skippable
@@ -94,7 +94,7 @@ RSpec.describe Course::Assessment::AssessmentsController do
 
           expect(assessment).to be_skippable
           expect(assessment.tabbed_view).to be_falsy
-          expect(assessment.password).to be_blank
+          expect(assessment.session_password).to be_blank
         end
       end
 
@@ -103,17 +103,17 @@ RSpec.describe Course::Assessment::AssessmentsController do
         it 'does not update attribute skippable' do
           patch :update, params: {
             course_id: course, id: assessment,
-            assessment: { skippable: true, tabbed_view: true, password: 'password' }
+            assessment: { skippable: true, tabbed_view: true, session_password: 'password' }
           }
 
           expect(assessment).not_to be_skippable
           expect(assessment.tabbed_view).not_to be_truthy
-          expect(assessment.password).not_to be_present
+          expect(assessment.session_password).not_to be_present
           assessment.reload
 
           expect(assessment).not_to be_skippable
           expect(assessment.tabbed_view).to be_truthy
-          expect(assessment.password).to be_present
+          expect(assessment.session_password).to be_present
         end
       end
     end
