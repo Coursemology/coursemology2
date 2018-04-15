@@ -88,6 +88,40 @@ RSpec.describe Course::Assessment do
         # This duration to this assessment's starting date is long that the max self directed time.
         it { is_expected.not_to be_able_to(:attempt, published_not_started_assessment2) }
       end
+
+      context 'when the assessment is password protected' do
+        let(:assessment) do
+          create(:assessment, :published_with_all_question_types, course: course, view_password: 'LOL')
+        end
+        let(:authenticated_session) do
+          session = {}
+          service = Course::Assessment::AuthenticationService.new(assessment, session)
+          service.authenticate(assessment.view_password)
+          session
+        end
+        let(:unauthenticated_session) do
+          session = {}
+          service = Course::Assessment::AuthenticationService.new(assessment, session)
+          service.authenticate('WRONG PASSWORD')
+          session
+        end
+
+        context 'when the session is authenticated' do
+          subject { Ability.new(user, course, course_user, authenticated_session) }
+
+          it { is_expected.to be_able_to(:access, assessment) }
+          it { is_expected.to be_able_to(:attempt, assessment) }
+          it { is_expected.to be_able_to(:read_material, assessment) }
+        end
+
+        context 'when the session is not authenticated' do
+          subject { Ability.new(user, course, course_user, unauthenticated_session) }
+
+          it { is_expected.to be_able_to(:attempt, assessment) }
+          it { is_expected.not_to be_able_to(:access, assessment) }
+          it { is_expected.not_to be_able_to(:read_material, assessment) }
+        end
+      end
     end
 
     context 'when the user is a Course Teaching Assistant' do

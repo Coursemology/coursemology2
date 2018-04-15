@@ -35,6 +35,8 @@ class Course::Assessment::AuthenticationService
   #
   # @return [Boolean]
   def authenticated?
+    return true unless @session
+
     @session[session_key] == password_token
   end
 

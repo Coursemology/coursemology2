@@ -8,7 +8,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def show
-    render 'authenticate' unless can_access?(@assessment)
+    render 'authenticate' unless can_access_assessment?
   end
 
   def new
@@ -202,15 +202,10 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
     tabs.sort_by { |tab_hash| tab_hash[:title] }
   end
 
-  def can_access?(assessment)
-    if assessment.password_protected? && !authentication_service.authenticated?
-      # Allow access for all course staff and students with at least one submission to the assessment.
-      return true if can?(:manage, assessment) || assessment.submissions.by_user(current_user).count > 0
+  def can_access_assessment?
+    return true unless @assessment.view_password_protected?
 
-      return false
-    end
-
-    true
+    can?(:access, @assessment) || can?(:manage, @assessment)
   end
 
   def authentication_service

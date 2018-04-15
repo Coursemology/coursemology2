@@ -14,7 +14,9 @@ module Course::Assessment::AssessmentAbility
 
   def define_student_assessment_permissions
     allow_students_show_assessments
+    allow_students_access_assessment
     allow_students_attempt_assessment
+    allow_students_read_material
     allow_students_create_assessment_submission
     allow_students_update_own_assessment_submission
     allow_students_manage_annotations_for_own_assessment_submissions
@@ -57,14 +59,33 @@ module Course::Assessment::AssessmentAbility
     can :read_material, Course::Assessment::Category, course_all_course_users_hash
     can :read_material, Course::Assessment::Tab, category: course_all_course_users_hash
     can :read, Course::Assessment, assessment_published_all_course_users_hash
+    can :authenticate, Course::Assessment, assessment_published_all_course_users_hash
+  end
+
+  # 'access' refers to the ability to access password-protected assessments.
+  def allow_students_access_assessment
+    can :access, Course::Assessment do |assessment|
+      if assessment.view_password_protected?
+        Course::Assessment::AuthenticationService.new(assessment, session).authenticated? ||
+          assessment.submissions.by_user(user).count > 0
+      else
+        true
+      end
+    end
   end
 
   def allow_students_attempt_assessment
-    can [:attempt, :read_material], Course::Assessment do |assessment|
+    can :attempt, Course::Assessment do |assessment|
       assessment.published? && assessment.self_directed_started? &&
         assessment.conditions_satisfied_by?(
           user.course_users.find_by(course: assessment.course)
         )
+    end
+  end
+
+  def allow_students_read_material
+    can :read_material, Course::Assessment do |assessment|
+      can?(:access, assessment) && can?(:attempt, assessment)
     end
   end
 

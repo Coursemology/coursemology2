@@ -66,7 +66,7 @@ class Course::Controller < ApplicationController
 
   # Override of Cancancan#current_ability to provide current course.
   def current_ability
-    @current_ability ||= Ability.new(current_user, current_course, current_course_user)
+    @current_ability ||= Ability.new(current_user, current_course, current_course_user, session)
   end
 
   private
