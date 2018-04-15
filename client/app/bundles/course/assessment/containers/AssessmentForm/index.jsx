@@ -39,6 +39,8 @@ const styles = {
 
 const isFieldBlank = str => str === undefined || str === '' || str === null;
 
+const isEndDatePassedStartDate = (startAt, endAt) => startAt && endAt && new Date(startAt) >= new Date(endAt);
+
 const validate = (values) => {
   const errors = {};
 
@@ -59,7 +61,7 @@ const validate = (values) => {
     }
   }
 
-  if (values.start_at && values.end_at && new Date(values.start_at) >= new Date(values.end_at)) {
+  if (isEndDatePassedStartDate(values.start_at, values.end_at)) {
     errors.end_at = translations.startEndValidationError;
   }
 
