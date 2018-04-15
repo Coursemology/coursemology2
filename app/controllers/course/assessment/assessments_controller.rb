@@ -80,7 +80,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
     if autograded?
       base_params += [:skippable]
     else
-      base_params += [:session_password, :tabbed_view, :delayed_grade_publication]
+      base_params += [:view_password, :session_password, :tabbed_view, :delayed_grade_publication]
     end
     params.require(:assessment).permit(*base_params, folder_params)
   end

@@ -2,7 +2,7 @@
 json.attributes do
   json.(@assessment, :id, :title, :description, :start_at, :end_at, :bonus_end_at, :base_exp,
     :time_bonus_exp, :published, :autograded, :show_private, :show_evaluation, :skippable,
-    :tabbed_view, :session_password, :delayed_grade_publication, :tab_id)
+    :tabbed_view, :view_password, :session_password, :delayed_grade_publication, :tab_id)
 end
 
 json.tab_attributes do

@@ -170,6 +170,38 @@ class AssessmentForm extends React.Component {
     );
   }
 
+  renderPasswordFields() {
+    const { submitting } = this.props;
+
+    return (
+      <div>
+        <Field
+          name="view_password"
+          component={TextField}
+          hintText={<FormattedMessage {...translations.viewPassword} />}
+          fullWidth
+          autoComplete="off"
+          disabled={submitting}
+        />
+        <div style={styles.hint}>
+          <FormattedMessage {...translations.viewPasswordHint} />
+        </div>
+
+        <Field
+          name="session_password"
+          component={TextField}
+          hintText={<FormattedMessage {...translations.sessionPassword} />}
+          fullWidth
+          autoComplete="off"
+          disabled={submitting}
+        />
+        <div style={styles.hint}>
+          <FormattedMessage {...translations.sessionPasswordHint} />
+        </div>
+      </div>
+    );
+  }
+
   renderExtraOptions() {
     const { submitting } = this.props;
     if (this.props.autograded) {
@@ -227,20 +259,8 @@ class AssessmentForm extends React.Component {
           style={styles.toggle}
           disabled={submitting}
         />
-        {
-          this.props.password_protected &&
-          <Field
-            name="submission_password"
-            component={TextField}
-            hintText={<FormattedMessage {...translations.submissionPassword} />}
-            fullWidth
-            autoComplete="off"
-            disabled={submitting}
-          />
-        }
-        <div style={styles.hint}>
-          <FormattedMessage {...translations.passwordProtectionHint} />
-        </div>
+
+        {this.props.password_protected && this.renderPasswordFields()}
       </React.Fragment>
     );
   }

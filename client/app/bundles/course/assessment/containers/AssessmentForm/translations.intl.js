@@ -99,16 +99,26 @@ const translations = defineMessages({
     id: 'course.assessment.form.passwordProtection',
     defaultMessage: 'Password Protection',
   },
-  passwordProtectionHint: {
-    id: 'course.assessment.form.passwordProtectionHint',
-    defaultMessage: "When password protection is enabled, students are allowed to access their \
+  viewPasswordHint: {
+    id: 'course.assessment.form.viewPasswordHint',
+    defaultMessage: 'When assessment password is enabled, students are required to input the password in order to \
+      view/attempt the assessment.',
+  },
+  viewPassword: {
+    id: 'course.assessment.form.viewPassword',
+    defaultMessage: 'Input Assessment Password',
+  },
+  sessionPasswordHint: {
+    id: 'course.assessment.form.sessionPasswordHint',
+    defaultMessage: "When submission password is enabled, students are allowed to access their \
       submission once. Further attempts at editing the submission using a different session are \
       not allowed unless the password is provided by the staff. This can be used to prevent \
-      students from accessing each other's submissions in exams.",
+      students from accessing each other's submissions in exams. You should NOT give the submission password \
+      to the students.",
   },
-  submissionPassword: {
-    id: 'course.assessment.form.submissionPassword',
-    defaultMessage: 'Input Password',
+  sessionPassword: {
+    id: 'course.assessment.form.sessionPassword',
+    defaultMessage: 'Input Submission Password',
   },
   startEndValidationError: {
     id: 'course.assessment.form.startEndValidationError',
