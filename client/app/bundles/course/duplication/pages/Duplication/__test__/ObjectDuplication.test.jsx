@@ -10,6 +10,7 @@ const client = CourseAPI.duplication.getClient();
 const mock = new MockAdapter(client);
 
 const responseData = {
+  sourceCourse: { id: 5 },
   destinationCourses: [
     { id: 54, title: 'Course B', path: '/courses/54' },
     { id: 55, title: 'Course A', path: '/courses/55' },

@@ -14,10 +14,22 @@ RSpec.feature 'Course: Duplication' do
     context 'As a System Administrator' do
       let(:user) { create(:administrator) }
 
-      scenario 'I can view the Duplication Sidebar item' do
-        visit course_path(course)
+      context 'when I am not enrolled in the course' do
+        scenario 'I cannot view the Duplication Sidebar item' do
+          visit course_path(course)
 
-        expect(page).to have_selector('li', text: 'layouts.duplication.title')
+          expect(page).not_to have_selector('li', text: 'layouts.duplication.title')
+        end
+      end
+
+      context 'when I am enrolled in the course as a manager' do
+        let!(:course_user) { create(:course_manager, course: course, user: user) }
+
+        scenario 'I can view the Duplication Sidebar item' do
+          visit course_path(course)
+
+          expect(page).to have_selector('li', text: 'layouts.duplication.title')
+        end
       end
     end
 

@@ -29,6 +29,7 @@ const styles = {
 
 class DuplicateButton extends React.Component {
   static propTypes = {
+    isChangingCourse: PropTypes.bool,
     isCourseSelected: PropTypes.bool,
     isItemSelected: PropTypes.bool,
 
@@ -36,7 +37,7 @@ class DuplicateButton extends React.Component {
   }
 
   render() {
-    const { dispatch, isCourseSelected, isItemSelected } = this.props;
+    const { dispatch, isCourseSelected, isItemSelected, isChangingCourse } = this.props;
 
     let label;
     if (!isCourseSelected) {
@@ -51,7 +52,7 @@ class DuplicateButton extends React.Component {
       <React.Fragment>
         <RaisedButton
           secondary
-          disabled={!isCourseSelected || !isItemSelected}
+          disabled={!isCourseSelected || !isItemSelected || isChangingCourse}
           label={<FormattedMessage {...translations[label]} />}
           onClick={() => dispatch(showDuplicateItemsConfirmation())}
           style={styles.button}
@@ -63,6 +64,7 @@ class DuplicateButton extends React.Component {
 }
 
 export default connect(({ duplication }) => ({
+  isChangingCourse: duplication.isChangingCourse,
   isCourseSelected: !!duplication.destinationCourseId,
   isItemSelected: Object.values(duplication.selectedItems).some(hash => (
     Object.values(hash).some(value => value)

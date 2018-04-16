@@ -6,6 +6,7 @@ class Course::ObjectDuplicationsController < Course::ComponentController
   def new
     respond_to do |format|
       format.json do
+        load_source_courses_data
         load_destination_courses_data
         load_items_data
       end
@@ -19,6 +20,13 @@ class Course::ObjectDuplicationsController < Course::ComponentController
     render json: { redirect_url: job_path(job) }
   end
 
+  # Duplication data for the current course
+  def data
+    respond_to do |format|
+      format.json { load_items_data }
+    end
+  end
+
   protected
 
   def authorize_duplication
@@ -26,6 +34,12 @@ class Course::ObjectDuplicationsController < Course::ComponentController
   end
 
   private
+
+  def load_source_courses_data
+    ActsAsTenant.without_tenant do
+      @source_courses = Course.accessible_by(current_ability, :duplicate_from).includes(:instance)
+    end
+  end
 
   def load_destination_courses_data
     ActsAsTenant.without_tenant do

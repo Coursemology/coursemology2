@@ -21,6 +21,7 @@ class CourseDropdownMenu extends React.PureComponent {
     selectedCourseId: PropTypes.number,
     courses: courseListingShape.isRequired,
     onChange: PropTypes.func.isRequired,
+    disabled: PropTypes.bool.isRequired,
   }
 
   renderCourseMenuItem = (course) => {
@@ -36,7 +37,7 @@ class CourseDropdownMenu extends React.PureComponent {
   }
 
   render() {
-    const { prompt, selectedCourseId, courses, onChange } = this.props;
+    const { prompt, selectedCourseId, courses, onChange, disabled } = this.props;
     return (
       <React.Fragment>
         <p style={styles.prompt}>{ prompt }</p>
@@ -45,6 +46,7 @@ class CourseDropdownMenu extends React.PureComponent {
           style={styles.dropDown}
           value={selectedCourseId}
           onChange={onChange}
+          disabled={disabled}
         >
           { courses.map(this.renderCourseMenuItem) }
         </DropDownMenu>

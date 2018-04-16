@@ -15,6 +15,7 @@ const initialState = {
   currentItemSelectorPanel: null,
 
   currentHost: '',
+  currentCourseId: null,
   sourceCourse: {
     title: '',
     start_at: null,
@@ -30,6 +31,7 @@ const initialState = {
   videosComponent: [],
 
   isLoading: false,
+  isChangingCourse: false,
   isDuplicating: false,
 };
 
@@ -50,12 +52,32 @@ export default function (state = initialState, action) {
         ...state,
         ...data,
         isLoading: false,
+        currentCourseId: data.sourceCourse.id,
         destinationCourses: sortedDestinationCourses,
         materialsComponent: nestedFolders,
       };
     }
     case actionTypes.LOAD_OBJECTS_LIST_FAILURE: {
       return { ...state, isLoading: false };
+    }
+
+    case actionTypes.CHANGE_SOURCE_COURSE_REQUEST: {
+      return { ...state, isChangingCourse: true };
+    }
+    case actionTypes.CHANGE_SOURCE_COURSE_SUCCESS: {
+      const { materialsComponent, ...data } = action.courseData;
+      const nestedFolders = nestFolders(materialsComponent);
+      return {
+        ...state,
+        ...data,
+        materialsComponent: nestedFolders,
+        selectedItems: emptySelectedItemsHash(),
+        currentItemSelectorPanel: null,
+        isChangingCourse: false,
+      };
+    }
+    case actionTypes.CHANGE_SOURCE_COURSE_FAILURE: {
+      return { ...state, isChangingCourse: false };
     }
 
     case actionTypes.SET_DESTINATION_COURSE_ID: {
