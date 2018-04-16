@@ -16,6 +16,12 @@ export const sourceCourseShape = PropTypes.shape({
   duplicationModesAllowed: PropTypes.arrayOf(PropTypes.string),
 });
 
+export const courseListingShape = PropTypes.arrayOf(PropTypes.shape({
+  id: PropTypes.number,
+  title: PropTypes.string,
+  host: PropTypes.string,
+}));
+
 export const assessmentShape = PropTypes.shape({
   id: PropTypes.number,
   title: PropTypes.string,

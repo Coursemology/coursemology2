@@ -1,13 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { defineMessages, FormattedMessage, injectIntl, intlShape } from 'react-intl';
-import DropDownMenu from 'material-ui/DropDownMenu';
-import MenuItem from 'material-ui/MenuItem';
+import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import moment, { shortDateTime } from 'lib/moment';
 import { setDestinationCourseId, duplicateCourse } from 'course/duplication/actions';
 import { duplicationModes } from 'course/duplication/constants';
-import TypeBadge from 'course/duplication/components/TypeBadge';
+import CourseDropdownMenu from 'course/duplication/components/CourseDropdownMenu';
 import { courseShape, sourceCourseShape } from 'course/duplication/propTypes';
 import NewCourseForm from './NewCourseForm';
 
@@ -26,15 +24,6 @@ const translations = defineMessages({
   },
 });
 
-const styles = {
-  dropDown: {
-    width: '100%',
-  },
-  existingCourseForm: {
-    marginTop: 25,
-  },
-};
-
 class DestinationCourseSelector extends React.Component {
   static propTypes = {
     currentHost: PropTypes.string,
@@ -48,33 +37,17 @@ class DestinationCourseSelector extends React.Component {
     intl: intlShape,
   }
 
-  renderCourseMenuItem = (course) => {
-    const { currentHost } = this.props;
-    const title = currentHost === course.host ? course.title : (
-      <span>
-        <TypeBadge text={course.host} />
-        {course.title}
-      </span>
-    );
-
-    return <MenuItem key={course.id} value={course.id} primaryText={title} />;
-  }
-
   renderExistingCourseForm = () => {
-    const { courses, destinationCourseId, dispatch } = this.props;
+    const { currentHost, courses, destinationCourseId, dispatch, intl } = this.props;
 
     return (
-      <div style={styles.existingCourseForm}>
-        <p><FormattedMessage {...translations.selectDestinationCoursePrompt} /></p>
-        <DropDownMenu
-          autoWidth={false}
-          style={styles.dropDown}
-          value={destinationCourseId}
-          onChange={(e, index, value) => dispatch(setDestinationCourseId(value))}
-        >
-          { courses.map(this.renderCourseMenuItem) }
-        </DropDownMenu>
-      </div>
+      <CourseDropdownMenu
+        currentHost={currentHost}
+        courses={courses}
+        selectedCourseId={destinationCourseId}
+        prompt={intl.formatMessage(translations.selectDestinationCoursePrompt)}
+        onChange={(e, index, value) => dispatch(setDestinationCourseId(value))}
+      />
     );
   }
 
