@@ -25,6 +25,6 @@ module Course::DuplicationAbilityComponent
   end
 
   def allow_managers_duplicate_from_course
-    can :duplicate, Course, course_user_hash(*CourseUser::MANAGER_ROLES.to_a)
+    can :duplicate_from, Course, course_user_hash(*CourseUser::MANAGER_ROLES.to_a)
   end
 end

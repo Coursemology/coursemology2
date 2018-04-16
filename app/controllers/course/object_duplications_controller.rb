@@ -26,7 +26,7 @@ class Course::ObjectDuplicationsController < Course::ComponentController
   protected
 
   def authorize_duplication
-    authorize!(:duplicate, current_course)
+    authorize!(:duplicate_from, current_course)
   end
 
   private
