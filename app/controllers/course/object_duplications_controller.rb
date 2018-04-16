@@ -7,11 +7,7 @@ class Course::ObjectDuplicationsController < Course::ComponentController
     respond_to do |format|
       format.json do
         load_destination_courses_data
-        load_assessments_component_data
-        load_survey_component_data
-        load_achievements_component_data
-        load_materials_component_data
-        load_videos_component_data
+        load_items_data
       end
     end
   end
@@ -39,6 +35,14 @@ class Course::ObjectDuplicationsController < Course::ComponentController
                            [folder.course_id, folder]
                          end.to_h
     end
+  end
+
+  def load_items_data
+    load_assessments_component_data
+    load_survey_component_data
+    load_achievements_component_data
+    load_materials_component_data
+    load_videos_component_data
   end
 
   def load_assessments_component_data
