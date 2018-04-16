@@ -8,7 +8,7 @@ import moment, { shortDateTime } from 'lib/moment';
 import { setDestinationCourseId, duplicateCourse } from 'course/duplication/actions';
 import { duplicationModes } from 'course/duplication/constants';
 import TypeBadge from 'course/duplication/components/TypeBadge';
-import { courseShape, currentCourseShape } from 'course/duplication/propTypes';
+import { courseShape, sourceCourseShape } from 'course/duplication/propTypes';
 import NewCourseForm from './NewCourseForm';
 
 const translations = defineMessages({
@@ -40,7 +40,7 @@ class DestinationCourseSelector extends React.Component {
     currentHost: PropTypes.string,
     destinationCourseId: PropTypes.number,
     courses: PropTypes.arrayOf(courseShape),
-    currentCourse: currentCourseShape,
+    sourceCourse: sourceCourseShape,
     duplicationMode: PropTypes.string.isRequired,
     isDuplicating: PropTypes.bool.isRequired,
 
@@ -79,18 +79,18 @@ class DestinationCourseSelector extends React.Component {
   }
 
   renderNewCourseForm = () => {
-    const { intl, dispatch, currentCourse, isDuplicating } = this.props;
+    const { intl, dispatch, sourceCourse, isDuplicating } = this.props;
 
     const failureMessage = intl.formatMessage(translations.failure);
     const tomorrow = moment().add(1, 'day');
-    const defaultNewCourseStartAt = moment(currentCourse.start_at).set({
+    const defaultNewCourseStartAt = moment(sourceCourse.start_at).set({
       year: tomorrow.year(),
       month: tomorrow.month(),
       date: tomorrow.date(),
     });
 
     const timeNow = moment().format(shortDateTime);
-    const newTitleValues = { title: currentCourse.title, timestamp: timeNow };
+    const newTitleValues = { title: sourceCourse.title, timestamp: timeNow };
     const initialValues = {
       new_title: intl.formatMessage(translations.defaultTitle, newTitleValues),
       new_start_at: defaultNewCourseStartAt,
@@ -119,6 +119,6 @@ export default connect(({ duplication }) => ({
   currentHost: duplication.currentHost,
   destinationCourseId: duplication.destinationCourseId,
   duplicationMode: duplication.duplicationMode,
-  currentCourse: duplication.currentCourse,
+  sourceCourse: duplication.sourceCourse,
   isDuplicating: duplication.isDuplicating,
 }))(injectIntl(DestinationCourseSelector));

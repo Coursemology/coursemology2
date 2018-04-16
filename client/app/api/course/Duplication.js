@@ -6,12 +6,17 @@ export default class DuplicationAPI extends BaseCourseAPI {
   *
   * @return {Promise}
   * success response: {
-  *   assessmentComponent: Array.<categoryShape>,
   *   currentHost: string,
   *   destinationCourses: Array.<courseShape>,
+  *   sourceCourse: sourceCourseShape,
+  *   assessmentComponent: Array.<categoryShape>,
+  *   surveyComponent: Array.<surveyShape>,
+  *   achievementsComponent: Array.<achievementShape>,
+  *   materialsComponent: Array.<folderShape>,
+  *   videosComponent: Array.<videoTabShape>,
   * }
   *
-  * See course/duplication/propTypes.js for categoryShape and courseShape.
+  * See course/duplication/propTypes.js for custom propTypes.
   */
   fetch() {
     return this.getClient().get(`${this._getUrlPrefix()}/new`);

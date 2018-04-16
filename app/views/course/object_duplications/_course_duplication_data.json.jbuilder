@@ -1,4 +1,4 @@
-json.currentCourse do
+json.sourceCourse do
   json.(current_course, :id, :title, :start_at)
   json.duplicationModesAllowed ([].tap do |modes|
     modes << 'COURSE' if current_course.course_duplicable?

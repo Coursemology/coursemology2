@@ -8,7 +8,7 @@ export const courseShape = PropTypes.shape({
   enabledComponents: PropTypes.arrayOf(PropTypes.string),
 });
 
-export const currentCourseShape = PropTypes.shape({
+export const sourceCourseShape = PropTypes.shape({
   title: PropTypes.string,
   start_at: PropTypes.string,
   enabledComponents: PropTypes.arrayOf(PropTypes.string),

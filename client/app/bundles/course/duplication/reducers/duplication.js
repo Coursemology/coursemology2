@@ -15,9 +15,12 @@ const initialState = {
   currentItemSelectorPanel: null,
 
   currentHost: '',
-  currentCourse: {
+  sourceCourse: {
     title: '',
     start_at: null,
+    duplicationModesAllowed: [],
+    enabledComponents: [],
+    unduplicableObjectTypes: [],
   },
 
   assessmentsComponent: [],

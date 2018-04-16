@@ -13,6 +13,7 @@ import LoadingIndicator from 'lib/components/LoadingIndicator';
 import DateTimePicker from 'lib/components/form/DateTimePicker';
 import { fetchObjectsList, setDuplicationMode } from 'course/duplication/actions';
 import { duplicationModes } from 'course/duplication/constants';
+import { sourceCourseShape } from 'course/duplication/propTypes';
 
 import ItemsSelector from './ItemsSelector';
 import DuplicateAllButton from './DuplicateAllButton';
@@ -94,10 +95,7 @@ class Duplication extends React.Component {
     duplicationMode: PropTypes.string.isRequired,
     modesAllowed: PropTypes.arrayOf(PropTypes.string),
     enabledComponents: PropTypes.arrayOf(PropTypes.string),
-    currentCourse: PropTypes.shape({
-      title: PropTypes.string,
-      start_at: PropTypes.string,
-    }).isRequired,
+    sourceCourse: sourceCourseShape.isRequired,
 
     dispatch: PropTypes.func.isRequired,
     intl: intlShape,
@@ -108,7 +106,7 @@ class Duplication extends React.Component {
   }
 
   renderFromCourseMain() {
-    const { intl, currentCourse } = this.props;
+    const { intl, sourceCourse } = this.props;
 
     return (
       <React.Fragment>
@@ -116,13 +114,13 @@ class Duplication extends React.Component {
           disabled
           fullWidth
           name="title"
-          value={currentCourse.title}
+          value={sourceCourse.title}
           floatingLabelText={intl.formatMessage(translations.title)}
         />
         <DateTimePicker
           disabled
           name="start_at"
-          value={currentCourse.start_at}
+          value={sourceCourse.start_at}
           floatingLabelText={intl.formatMessage(translations.startAt)}
         />
       </React.Fragment>
@@ -240,7 +238,7 @@ export default connect(({ duplication }) => ({
   isLoading: duplication.isLoading,
   isCourseSelected: !!duplication.destinationCourseId,
   duplicationMode: duplication.duplicationMode,
-  modesAllowed: duplication.currentCourse.duplicationModesAllowed,
-  enabledComponents: duplication.currentCourse.enabledComponents,
-  currentCourse: duplication.currentCourse,
+  modesAllowed: duplication.sourceCourse.duplicationModesAllowed,
+  enabledComponents: duplication.sourceCourse.enabledComponents,
+  sourceCourse: duplication.sourceCourse,
 }))(injectIntl(Duplication));

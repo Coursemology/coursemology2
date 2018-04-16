@@ -137,6 +137,6 @@ class AssessmentsSelector extends React.Component {
 export default connect(({ duplication }) => ({
   categories: duplication.assessmentsComponent,
   selectedItems: duplication.selectedItems,
-  tabDisabled: duplication.currentCourse.unduplicableObjectTypes.includes(TAB),
-  categoryDisabled: duplication.currentCourse.unduplicableObjectTypes.includes(CATEGORY),
+  tabDisabled: duplication.sourceCourse.unduplicableObjectTypes.includes(TAB),
+  categoryDisabled: duplication.sourceCourse.unduplicableObjectTypes.includes(CATEGORY),
 }))(AssessmentsSelector);

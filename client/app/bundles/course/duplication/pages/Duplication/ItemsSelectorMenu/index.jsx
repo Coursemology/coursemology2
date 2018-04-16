@@ -103,5 +103,5 @@ class ItemsSelectorMenu extends React.Component {
 
 export default connect(({ duplication }) => ({
   selectedItems: duplication.selectedItems,
-  enabledComponents: duplication.currentCourse.enabledComponents,
+  enabledComponents: duplication.sourceCourse.enabledComponents,
 }))(ItemsSelectorMenu);
