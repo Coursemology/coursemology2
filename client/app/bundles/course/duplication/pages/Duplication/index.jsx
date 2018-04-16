@@ -97,6 +97,7 @@ class Duplication extends React.Component {
     modesAllowed: PropTypes.arrayOf(PropTypes.string),
     enabledComponents: PropTypes.arrayOf(PropTypes.string),
     currentHost: PropTypes.string.isRequired,
+    currentCourseId: PropTypes.number,
     sourceCourse: sourceCourseShape.isRequired,
     sourceCourses: courseListingShape,
 
@@ -110,7 +111,7 @@ class Duplication extends React.Component {
 
   renderFromCourseMain() {
     const {
-      currentHost, sourceCourse, sourceCourses, isChangingCourse, intl, dispatch,
+      currentHost, currentCourseId, sourceCourse, sourceCourses, isChangingCourse, intl, dispatch,
     } = this.props;
 
     return (
@@ -119,8 +120,10 @@ class Duplication extends React.Component {
           currentHost={currentHost}
           courses={sourceCourses}
           selectedCourseId={sourceCourse.id}
+          currentCourseId={currentCourseId}
           prompt={intl.formatMessage(translations.selectSourceCourse)}
           onChange={(e, index, value) => dispatch(changeSourceCourse(value))}
+          onHome={() => dispatch(changeSourceCourse(currentCourseId))}
           disabled={isChangingCourse}
         />
         <DateTimePicker
@@ -248,6 +251,7 @@ export default connect(({ duplication }) => ({
   modesAllowed: duplication.sourceCourse.duplicationModesAllowed,
   enabledComponents: duplication.sourceCourse.enabledComponents,
   currentHost: duplication.currentHost,
+  currentCourseId: duplication.currentCourseId,
   sourceCourse: duplication.sourceCourse,
   sourceCourses: duplication.sourceCourses,
 }))(injectIntl(Duplication));

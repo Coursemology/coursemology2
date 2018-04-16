@@ -28,6 +28,7 @@ class DestinationCourseSelector extends React.Component {
   static propTypes = {
     currentHost: PropTypes.string,
     destinationCourseId: PropTypes.number,
+    currentCourseId: PropTypes.number.isRequired,
     courses: PropTypes.arrayOf(courseShape),
     sourceCourse: sourceCourseShape,
     duplicationMode: PropTypes.string.isRequired,
@@ -38,15 +39,17 @@ class DestinationCourseSelector extends React.Component {
   }
 
   renderExistingCourseForm = () => {
-    const { currentHost, courses, destinationCourseId, dispatch, intl } = this.props;
+    const { currentHost, currentCourseId, courses, destinationCourseId, dispatch, intl } = this.props;
 
     return (
       <CourseDropdownMenu
         currentHost={currentHost}
         courses={courses}
         selectedCourseId={destinationCourseId}
+        currentCourseId={currentCourseId}
         prompt={intl.formatMessage(translations.selectDestinationCoursePrompt)}
         onChange={(e, index, value) => dispatch(setDestinationCourseId(value))}
+        onHome={() => dispatch(setDestinationCourseId(currentCourseId))}
       />
     );
   }
@@ -90,6 +93,7 @@ class DestinationCourseSelector extends React.Component {
 export default connect(({ duplication }) => ({
   courses: duplication.destinationCourses,
   currentHost: duplication.currentHost,
+  currentCourseId: duplication.currentCourseId,
   destinationCourseId: duplication.destinationCourseId,
   duplicationMode: duplication.duplicationMode,
   sourceCourse: duplication.sourceCourse,
