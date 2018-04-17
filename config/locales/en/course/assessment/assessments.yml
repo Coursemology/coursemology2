@@ -63,6 +63,8 @@ en:
           resume: 'Resume'
           view: 'View'
           submissions: 'Submissions'
+          enter_password: 'Enter Password'
         todo_assessment_button:
           attempt: :'course.assessment.assessments.assessment_management_buttons.attempt'
           resume: :'course.assessment.assessments.assessment_management_buttons.resume'
+          enter_password: :'course.assessment.assessments.assessment_management_buttons.enter_password'
