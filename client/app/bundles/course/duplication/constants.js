@@ -20,7 +20,6 @@ export const duplicableItemTypes = mirrorCreator([
 
 // These are mirrored in app/helpers/course/object_duplications_helper.rb
 export const itemSelectorPanels = mirrorCreator([
-  'TARGET_COURSE',
   'ASSESSMENTS',
   'SURVEYS',
   'ACHIEVEMENTS',
