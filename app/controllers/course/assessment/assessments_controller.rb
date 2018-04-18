@@ -8,6 +8,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def show
+    render 'authenticate' unless can_access_assessment?
   end
 
   def new
@@ -57,6 +58,14 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
     end
   end
 
+  def authenticate
+    if authentication_service.authenticate(params.require(:assessment).permit(:password)[:password])
+      render json: { success: true }
+    else
+      render json: { success: false }
+    end
+  end
+
   protected
 
   def load_assessment_options
@@ -80,7 +89,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
     if autograded?
       base_params += [:skippable]
     else
-      base_params += [:session_password, :tabbed_view, :delayed_grade_publication]
+      base_params += [:view_password, :session_password, :tabbed_view, :delayed_grade_publication]
     end
     params.require(:assessment).permit(*base_params, folder_params)
   end
@@ -191,5 +200,15 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
              }
            end
     tabs.sort_by { |tab_hash| tab_hash[:title] }
+  end
+
+  def can_access_assessment?
+    return true unless @assessment.view_password_protected?
+
+    can?(:access, @assessment) || can?(:manage, @assessment)
+  end
+
+  def authentication_service
+    @authentication_service ||= Course::Assessment::AuthenticationService.new(@assessment, session)
   end
 end
