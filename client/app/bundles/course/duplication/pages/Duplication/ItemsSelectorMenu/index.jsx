@@ -67,7 +67,7 @@ class ItemsSelectorMenu extends React.Component {
     const videosComponentCount = counts[VIDEO] + counts[VIDEO_TAB];
 
     return (
-      <List>
+      <List className="items-selector-menu">
         {
           this.renderSidebarItem(
             panels.ASSESSMENTS, 'course_assessments_component', assessmentsComponentCount

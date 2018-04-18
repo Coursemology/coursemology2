@@ -43,6 +43,7 @@ class DestinationCourseSelector extends React.Component {
 
     return (
       <CourseDropdownMenu
+        dropDownMenuProps={{ className: 'destination-course-dropdown' }}
         currentHost={currentHost}
         courses={courses}
         selectedCourseId={destinationCourseId}

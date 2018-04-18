@@ -117,6 +117,7 @@ class Duplication extends React.Component {
     return (
       <React.Fragment>
         <CourseDropdownMenu
+          dropDownMenuProps={{ className: 'source-course-dropdown' }}
           currentHost={currentHost}
           courses={sourceCourses}
           selectedCourseId={sourceCourse.id}

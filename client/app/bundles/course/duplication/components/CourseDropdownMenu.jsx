@@ -38,6 +38,7 @@ class CourseDropdownMenu extends React.PureComponent {
     onChange: PropTypes.func.isRequired,
     onHome: PropTypes.func.isRequired,
     disabled: PropTypes.bool,
+    dropDownMenuProps: PropTypes.object,
   }
 
   static defaultProps = {
@@ -59,7 +60,7 @@ class CourseDropdownMenu extends React.PureComponent {
   render() {
     const {
       prompt, courses, onChange, onHome, disabled,
-      currentCourseId, selectedCourseId,
+      currentCourseId, selectedCourseId, dropDownMenuProps,
     } = this.props;
     return (
       <React.Fragment>
@@ -71,6 +72,7 @@ class CourseDropdownMenu extends React.PureComponent {
             value={selectedCourseId}
             onChange={onChange}
             disabled={disabled}
+            {...dropDownMenuProps}
           >
             { courses.map(this.renderCourseMenuItem) }
           </DropDownMenu>
