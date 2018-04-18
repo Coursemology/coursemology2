@@ -17,8 +17,8 @@ class Course::Admin::AssessmentSettingsController < Course::Admin::Controller
   private
 
   def category_params
-    params.require(:course).permit(:show_public_test_cases_output, assessment_categories_attributes:
-                                     [:id, :title, :weight,
+    params.require(:course).permit(:show_public_test_cases_output, :show_stdout_and_stderr,
+                                   assessment_categories_attributes: [:id, :title, :weight,
                                       { tabs_attributes: [:id, :title, :weight, :category_id] }])
   end
 end
