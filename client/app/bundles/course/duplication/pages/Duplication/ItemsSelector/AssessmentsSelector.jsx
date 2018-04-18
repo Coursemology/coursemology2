@@ -11,6 +11,7 @@ import TypeBadge from 'course/duplication/components/TypeBadge';
 import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
 import IndentedCheckbox from 'course/duplication/components/IndentedCheckbox';
 import BulkSelectors from 'course/duplication/components/BulkSelectors';
+import destinationCourseSelector from 'course/duplication/selectors/destinationCourse';
 
 const { TAB, ASSESSMENT, CATEGORY } = duplicableItemTypes;
 
@@ -134,9 +135,20 @@ class AssessmentsSelector extends React.Component {
   }
 }
 
-export default connect(({ duplication }) => ({
-  categories: duplication.assessmentsComponent,
-  selectedItems: duplication.selectedItems,
-  tabDisabled: duplication.sourceCourse.unduplicableObjectTypes.includes(TAB),
-  categoryDisabled: duplication.sourceCourse.unduplicableObjectTypes.includes(CATEGORY),
-}))(AssessmentsSelector);
+const mapStateToProps = (state) => {
+  const destinationCourse = destinationCourseSelector(state);
+  const duplication = state.duplication;
+
+  return {
+    categories: duplication.assessmentsComponent,
+    selectedItems: duplication.selectedItems,
+    tabDisabled:
+      duplication.sourceCourse.unduplicableObjectTypes.includes(TAB) ||
+      destinationCourse.unduplicableObjectTypes.includes(TAB),
+    categoryDisabled:
+      duplication.sourceCourse.unduplicableObjectTypes.includes(CATEGORY) ||
+      destinationCourse.unduplicableObjectTypes.includes(CATEGORY),
+  };
+};
+
+export default connect(mapStateToProps)(AssessmentsSelector);

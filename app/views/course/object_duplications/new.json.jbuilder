@@ -16,6 +16,9 @@ json.destinationCourses @destination_courses do |course|
     json.materials root_folder.materials.map(&:name)
   end
   json.enabledComponents enabled_component_tokens(course)
+  json.unduplicableObjectTypes (course.disabled_cherrypickable_types.map do |klass|
+    cherrypickable_items_hash[klass]
+  end)
 end
 
 json.partial! 'course_duplication_data'
