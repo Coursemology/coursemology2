@@ -31,6 +31,7 @@ json.submission do
   json.maximumGrade assessment.maximum_grade.to_f
 
   json.showPublicTestCasesOutput current_course.show_public_test_cases_output
+  json.showStdoutAndStderr current_course.show_stdout_and_stderr
 
   json.late assessment.end_at && submission.submitted_at &&
     submission.submitted_at > assessment.end_at
