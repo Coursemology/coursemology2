@@ -76,6 +76,10 @@ RSpec.feature 'Course: Homepage' do
       todos[:unpublished] =
         Course::LessonPlan::Todo.find_by(user: user, item: assessment.lesson_plan_item)
 
+      assessment = create(:assessment, :published_with_mrq_question, :view_password, course: course)
+      todos[:enter_password] =
+        Course::LessonPlan::Todo.find_by(user: user, item: assessment.lesson_plan_item)
+
       todos
     end
 
@@ -136,6 +140,12 @@ RSpec.feature 'Course: Homepage' do
         survey_todo
         visit course_path(course)
 
+        within find(content_tag_selector(assessment_todos[:enter_password])) do
+          expect(page).to have_text(
+            I18n.t('course.assessment.assessments.todo_assessment_button.enter_password')
+          )
+        end
+
         [:completed, :unpublished].each do |status|
           expect(page).to have_no_content_tag_for(assessment_todos[status])
         end
@@ -145,6 +155,7 @@ RSpec.feature 'Course: Homepage' do
             I18n.t('course.assessment.assessments.todo_assessment_button.attempt')
           )
         end
+
         within find(content_tag_selector(assessment_todos[:in_progress])) do
           expect(page).to have_text(
             I18n.t('course.assessment.assessments.todo_assessment_button.resume')
