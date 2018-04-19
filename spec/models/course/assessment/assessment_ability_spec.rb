@@ -91,7 +91,7 @@ RSpec.describe Course::Assessment do
 
       context 'when the assessment is password protected' do
         let(:assessment) do
-          create(:assessment, :published_with_all_question_types, course: course, view_password: 'LOL')
+          create(:assessment, :published_with_all_question_types, :view_password, course: course)
         end
         let(:authenticated_session) do
           session = {}

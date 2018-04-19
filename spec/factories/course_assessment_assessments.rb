@@ -24,6 +24,10 @@ FactoryBot.define do
       delayed_grade_publication true
     end
 
+    trait :view_password do
+      view_password 'LOL'
+    end
+
     trait :not_started do
       start_at { 1.day.from_now }
     end
