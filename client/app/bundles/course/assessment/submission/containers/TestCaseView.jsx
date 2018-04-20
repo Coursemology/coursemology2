@@ -142,7 +142,7 @@ class VisibleTestCaseView extends Component {
     return (
       <React.Fragment>
         <FormattedMessage {...translations[testCaseType]} />
-        {warn ? VisibleTestCaseView.renderStaffOnlyTestCasesWarning() : null}
+        {warn && VisibleTestCaseView.renderStaffOnlyTestCasesWarning()}
       </React.Fragment>
     );
   }
@@ -179,10 +179,10 @@ class VisibleTestCaseView extends Component {
           <Table selectable={false} style={{}}>
             <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
               <TableRow>
-                { graderView ? tableHeaderColumnFor('identifier') : null }
+                { graderView && tableHeaderColumnFor('identifier') }
                 { tableHeaderColumnFor('expression') }
                 { tableHeaderColumnFor('expected') }
-                { graderView || showPublicTestCasesOutput ? tableHeaderColumnFor('output') : null }
+                { (graderView || showPublicTestCasesOutput) && tableHeaderColumnFor('output') }
                 { tableHeaderColumnFor('passed') }
               </TableRow>
             </TableHeader>
@@ -214,11 +214,11 @@ class VisibleTestCaseView extends Component {
 
     return (
       <TableRow key={testCase.identifier} style={styles.testCaseRow[testCaseResult]}>
-        { graderView ? tableRowColumnFor(testCase.identifier) : null }
+        { graderView && tableRowColumnFor(testCase.identifier) }
         {tableRowColumnFor(testCase.expression)}
         {tableRowColumnFor(<ExpandableText style={outputStyle} text={testCase.expected || ''} /> || '')}
-        { graderView || showPublicTestCasesOutput ?
-          tableRowColumnFor(<ExpandableText style={outputStyle} text={testCase.output || ''} /> || '') : null }
+        { (graderView || showPublicTestCasesOutput) &&
+          tableRowColumnFor(<ExpandableText style={outputStyle} text={testCase.output || ''} /> || '') }
         {tableRowColumnFor(testCaseIcon)}
       </TableRow>
     );
@@ -238,11 +238,10 @@ class VisibleTestCaseView extends Component {
     const showOutputStreams = (graderView || showStdoutAndStderr);
     return (
       <div style={styles.testCasesContainer}>
-        { !attempting && isAutograding ? (
+        { !attempting && isAutograding &&
           <Paper style={{ padding: 10, backgroundColor: yellow100, marginBottom: 20 }}>
             <FormattedMessage {...translations.autogradeProgress} />
           </Paper>
-          ) : null
         }
         <h3><FormattedMessage {...translations.testCases} /></h3>
         {this.renderTestCases(
