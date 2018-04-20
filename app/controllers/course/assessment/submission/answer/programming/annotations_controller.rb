@@ -11,8 +11,6 @@ class Course::Assessment::Submission::Answer::Programming::AnnotationsController
   load_resource :annotation, class: Course::Assessment::Answer::ProgrammingFileAnnotation.name,
                              through: :file
 
-  helper Course::Assessment::Answer::ProgrammingHelper.name.sub(/Helper$/, '')
-
   include Course::Discussion::PostsConcern
 
   def create
