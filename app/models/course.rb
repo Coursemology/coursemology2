@@ -164,6 +164,15 @@ class Course < ApplicationRecord
     settings(:course_assessments_component).show_public_test_cases_output = option
   end
 
+  def show_stdout_and_stderr
+    settings(:course_assessments_component).show_stdout_and_stderr
+  end
+
+  def show_stdout_and_stderr=(option)
+    option = ActiveRecord::Type::Boolean.new.cast(option)
+    settings(:course_assessments_component).show_stdout_and_stderr = option
+  end
+
   private
 
   # Set default values
