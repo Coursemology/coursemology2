@@ -93,6 +93,13 @@ class Course::Material::Folder < ApplicationRecord
     parent.next_uniq_child_name(self)
   end
 
+  # Take Course#advance_start_at_duration into account when calculating folder's start datetime.
+  #
+  # @return [DateTime] The shifted start_at datetime.
+  def effective_start_at
+    start_at - course&.advance_start_at_duration
+  end
+
   def initialize_duplicate(duplicator, other)
     # Do not shift the time of root folder
     self.start_at = other.parent_id.nil? ? Time.zone.now : duplicator.time_shift(other.start_at)

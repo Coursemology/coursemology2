@@ -21,16 +21,16 @@
     .form-group.boolean.optional
       .checkbox
           = label_tag 'self_directed_learning' do
-            = check_box_tag 'self_directed_learning', max_time.present?, max_time.present?,
+            = check_box_tag 'self_directed_learning', max_time > 0, max_time > 0,
                 class: 'self-directed-learning-checkbox'
             = t('.self_directed_learning')
       p.help-block = t('.self_directed_learning_label')
 
     - input = f.input :advance_start_at_duration_days,
                       as: :integer, label: false,
-                      input_html: { value: max_time.present? ? max_time / 1.day : nil },
+                      input_html: { value: max_time > 0 ? max_time / 1.day : nil },
                       wrapper_html: { class: 'form-inline advance-start-at-time' }
-    div.advance-start-at-time style="#{ max_time.present? ? '' : 'display: none' }"
+    div.advance-start-at-time style="#{ max_time > 0 ? '' : 'display: none' }"
       = t('.self_directed_learning_time_html', input: input)
     br
     = f.button :submit

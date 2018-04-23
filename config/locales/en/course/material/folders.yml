@@ -5,6 +5,7 @@ en:
         show:
           modified: 'Last Modified'
           name: 'Name'
+          start_at: 'Start At'
         new_subfolder:
           header: 'New Subfolder'
         create_subfolder:
@@ -26,3 +27,5 @@ en:
         upload_materials:
           success: 'Files were uploaded.'
           failure: 'Failed to upload files: %{error}'
+        folder:
+          unseen_by_students: "Hidden from students as folder's start time has not been reached."
