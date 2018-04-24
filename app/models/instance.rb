@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Instance < ApplicationRecord
+  include Instance::CourseComponentsConcern
+
   DEFAULT_INSTANCE_ID = 0
 
   has_settings_on :settings
