@@ -26,4 +26,10 @@ class Course::StatisticsController < Course::ComponentController
   def preload_levels
     current_course.levels.to_a
   end
+
+  # @return [Course::StatisticsComponent]
+  # @return [nil] If component is disabled.
+  def component
+    current_component_host[:course_statistics_component]
+  end
 end

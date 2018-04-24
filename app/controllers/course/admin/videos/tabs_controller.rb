@@ -33,4 +33,10 @@ class Course::Admin::Videos::TabsController < Course::Admin::Controller
   def tab_params
     params.require(:tab).permit(:title, :weight)
   end
+
+  # @return [Course::VideosComponent]
+  # @return [nil] If component is disabled.
+  def component
+    current_component_host[:course_videos_component]
+  end
 end

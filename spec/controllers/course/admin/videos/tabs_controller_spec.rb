@@ -2,10 +2,20 @@
 require 'rails_helper'
 
 RSpec.describe Course::Admin::Videos::TabsController, type: :controller do
-  let(:instance) { Instance.default }
+  let(:instance) do
+    Instance.default.tap do |instance|
+      instance.settings(:components).settings(:course_videos_component).enabled = true
+      instance.save!
+    end
+  end
   with_tenant(:instance) do
     let(:user) { create(:administrator) }
-    let(:course) { create(:course, creator: user) }
+    let(:course) do
+      create(:course, creator: user).tap do |course|
+        course.settings(:components).settings(:course_videos_component).enabled = true
+        course.save!
+      end
+    end
     let!(:tab_stub) do
       stub = create(:course_video_tab)
       allow(stub).to receive(:destroy).and_return(false)

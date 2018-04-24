@@ -40,4 +40,10 @@ class Course::Assessment::Controller < Course::ComponentController
     tab_path = course_assessments_path(course_id: current_course, category: category, tab: tab)
     add_breadcrumb(tab.title, tab_path)
   end
+
+  # @return [Course::AssessmentsComponent]
+  # @return [nil] If component is disabled.
+  def component
+    current_component_host[:course_assessments_component]
+  end
 end

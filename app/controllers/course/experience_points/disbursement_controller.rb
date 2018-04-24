@@ -47,4 +47,10 @@ class Course::ExperiencePoints::DisbursementController < Course::ComponentContro
   def recipient_count
     @disbursement.experience_points_records.length
   end
+
+  # @return [Course::ExperiencePointsComponent]
+  # @return [nil] If component is disabled.
+  def component
+    current_component_host[:course_experience_points_component]
+  end
 end

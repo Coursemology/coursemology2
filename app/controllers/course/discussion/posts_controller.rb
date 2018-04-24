@@ -76,4 +76,10 @@ class Course::Discussion::PostsController < Course::ComponentController
     topic_actable = post.topic.actable
     topic_actable.notify(post) if topic_actable.respond_to?(:notify)
   end
+
+  # @return [Course::Discussion::TopicsComponent]
+  # @return [nil] If component is disabled.
+  def component
+    current_component_host[:course_discussion_topics_component]
+  end
 end

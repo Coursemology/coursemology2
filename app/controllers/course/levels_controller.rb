@@ -15,4 +15,12 @@ class Course::LevelsController < Course::ComponentController
       end
     end
   end
+
+  private
+
+  # @return [Course::LevelsComponent]
+  # @return [nil] If component is disabled.
+  def component
+    current_component_host[:course_levels_component]
+  end
 end

@@ -70,4 +70,10 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
   def add_submissions_breadcrumb
     add_breadcrumb :index, course_submissions_path(current_course, category: category)
   end
+
+  # @return [Course::AssessmentsComponent]
+  # @return [nil] If component is disabled.
+  def component
+    current_component_host[:course_assessments_component]
+  end
 end

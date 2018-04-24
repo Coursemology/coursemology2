@@ -53,4 +53,10 @@ class Course::ExperiencePointsRecordsController < Course::ComponentController
     add_breadcrumb @course_user.name, course_user_path(current_course, @course_user)
     add_breadcrumb :index
   end
+
+  # @return [Course::ExperiencePointsComponent]
+  # @return [nil] If component is disabled.
+  def component
+    current_component_host[:course_experience_points_component]
+  end
 end

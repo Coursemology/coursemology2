@@ -46,4 +46,10 @@ class Course::GroupsController < Course::ComponentController
       permit(:name, course_user_ids: [],
                     group_users_attributes: [:id, :course_user_id, :role, :_destroy])
   end
+
+  # @return [Course::GroupsComponent]
+  # @return [nil] If component is disabled.
+  def component
+    current_component_host[:course_groups_component]
+  end
 end

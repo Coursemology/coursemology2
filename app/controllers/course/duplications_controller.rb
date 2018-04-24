@@ -33,4 +33,10 @@ class Course::DuplicationsController < Course::ComponentController
   def duplication_job_options
     create_duplication_params.merge(current_user: current_user).to_h
   end
+
+  # @return [Course::DuplicationComponent]
+  # @return [nil] If component is disabled.
+  def component
+    current_component_host[:course_duplication_component]
+  end
 end

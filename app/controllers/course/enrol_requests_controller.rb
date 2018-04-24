@@ -56,4 +56,10 @@ class Course::EnrolRequestsController < Course::ComponentController
   def course_user_params
     params.require(:course_user).permit(:name, :role, :phantom).to_h
   end
+
+  # @return [Course::UsersComponent]
+  # @return [nil] If component is disabled.
+  def component
+    current_component_host[:course_users_component]
+  end
 end

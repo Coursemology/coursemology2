@@ -38,4 +38,10 @@ class Course::Admin::Assessments::CategoriesController < Course::Admin::Controll
   def category_params
     params.require(:category).permit(:title, :weight)
   end
+
+  # @return [Course::AssessmentsComponent]
+  # @return [nil] If component is disabled.
+  def component
+    current_component_host[:course_assessments_component]
+  end
 end

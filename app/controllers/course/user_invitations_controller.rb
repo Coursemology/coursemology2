@@ -224,4 +224,10 @@ class Course::UserInvitationsController < Course::ComponentController
     end
     current_course.save
   end
+
+  # @return [Course::UsersComponent]
+  # @return [nil] If component is disabled.
+  def component
+    current_component_host[:course_users_component]
+  end
 end
