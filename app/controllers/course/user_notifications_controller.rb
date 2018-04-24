@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::UserNotificationsController < Course::ComponentController
+class Course::UserNotificationsController < Course::Controller
   load_and_authorize_resource :user_notification, class: UserNotification.name
 
   def mark_as_read
