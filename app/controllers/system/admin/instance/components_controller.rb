@@ -7,7 +7,6 @@ class System::Admin::Instance::ComponentsController < System::Admin::Instance::C
   end
 
   def update #:nodoc:
-    validate_params
     if @settings.update(settings_components_params) && current_tenant.save!
       redirect_to admin_instance_components_path, success: t('.success')
     else
@@ -24,10 +23,5 @@ class System::Admin::Instance::ComponentsController < System::Admin::Instance::C
   # Load our settings adapter to handle component settings
   def load_settings
     @settings ||= Instance::Settings::Components.new(current_tenant)
-  end
-
-  def validate_params
-    raise ArgumentError, 'Invalid list of selected components' \
-      unless @settings.valid_params?(settings_components_params)
   end
 end

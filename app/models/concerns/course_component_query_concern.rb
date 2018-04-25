@@ -42,10 +42,48 @@ module CourseComponentQueryConcern
     end
   end
 
+  # Set component's `enabled` key only if it is disableable
+  def set_component_enabled_boolean(key, value)
+    validate_settable_component_keys!([key])
+    unsafe_set_component_enabled_boolean(key, value)
+  end
+
+  # Sets and saves component's `enabled` key
+  def set_component_enabled_boolean!(key, value)
+    set_component_enabled_boolean(key, value)
+    save!
+  end
+
+  # Updates the list of enabled components given a list of key.
+  #
+  # @param [Array<Symbol|String>] keys
+  def enabled_components_keys=(keys)
+    keys = keys.reject(&:blank?).map(&:to_sym)
+    validate_settable_component_keys!(keys)
+    disableable_components.each do |component|
+      unsafe_set_component_enabled_boolean(component.key, keys.include?(component.key))
+    end
+  end
+
   private
 
   # Specify which subtree settings for component should be stored under.
   def component_setting(key)
     settings(:components, key)
+  end
+
+  # Set component's `enabled` key to be either true or false.
+  #
+  # @param [Symbol|String] key Component key
+  # @param [Boolean] value true if component is to be enabled, false otherwise.
+  def unsafe_set_component_enabled_boolean(key, value)
+    component_setting(key).enabled = value
+  end
+
+  # @param [Array<Symbol>] keys
+  def validate_settable_component_keys!(keys)
+    allowed_keys = disableable_components.map(&:key)
+    return if keys.to_set.subset?(allowed_keys.to_set)
+    raise ArgumentError, "Invalid component keys: #{keys - allowed_keys}."
   end
 end

@@ -149,11 +149,11 @@ RSpec.describe Course::ControllerComponentHost, type: :controller do
       subject { component_host }
 
       context 'when the key refers to a disabled component' do
-        let(:disabled_key) { self.class::DummyCourseModule.key }
-        before { course.settings(:components).settings(disabled_key).enabled = false }
+        let(:disabled_component) { self.class::DummyCourseModule }
+        before { course.set_component_enabled_boolean(disabled_component.key, false) }
 
         it 'returns nil' do
-          expect(subject[disabled_key]).to be_nil
+          expect(subject[disabled_component.key]).to be_nil
         end
       end
 
@@ -200,7 +200,7 @@ RSpec.describe Course::ControllerComponentHost, type: :controller do
         let(:undisableable_component) { default_enabled_components.drop_while(&:can_be_disabled?).first }
 
         context 'disable a component in course' do
-          before { course.settings(:components).settings(disableable_component.key).enabled = false }
+          before { course.set_component_enabled_boolean(disableable_component.key, false) }
 
           it 'does not include the disabled component' do
             expect(subject).not_to include(disableable_component)
@@ -208,7 +208,7 @@ RSpec.describe Course::ControllerComponentHost, type: :controller do
         end
 
         context 'disable an undisableable component in course' do
-          before { course.settings(:components).settings(undisableable_component.key).enabled = false }
+          before { course.send(:unsafe_set_component_enabled_boolean, undisableable_component.key, false) }
 
           it 'includes the disabled component' do
             expect(subject).to include(undisableable_component)
@@ -216,7 +216,7 @@ RSpec.describe Course::ControllerComponentHost, type: :controller do
         end
 
         context 'disable a component in instance' do
-          before { instance.settings(:components).settings(disableable_component.key).enabled = false }
+          before { instance.set_component_enabled_boolean(disableable_component.key, false) }
 
           it 'does not include the disabled component' do
             expect(subject).not_to include(disableable_component)
@@ -224,7 +224,7 @@ RSpec.describe Course::ControllerComponentHost, type: :controller do
         end
 
         context 'disable an undisableable component in instance' do
-          before { instance.settings(:components).settings(undisableable_component.key).enabled = false }
+          before { instance.send(:unsafe_set_component_enabled_boolean, undisableable_component.key, false) }
 
           it 'includes the disabled component' do
             expect(subject).to include(undisableable_component)
@@ -232,7 +232,7 @@ RSpec.describe Course::ControllerComponentHost, type: :controller do
         end
 
         context 'enable a component' do
-          before { course.settings(:components).settings(disableable_component.key).enabled = true }
+          before { course.set_component_enabled_boolean(disableable_component.key, true) }
 
           it 'includes the disabled component' do
             expect(subject).to include(disableable_component)
