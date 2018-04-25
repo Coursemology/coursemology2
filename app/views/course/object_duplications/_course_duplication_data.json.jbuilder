@@ -4,7 +4,7 @@ json.sourceCourse do
     modes << 'COURSE' if current_course.course_duplicable?
     modes << 'OBJECT' if current_course.objects_duplicable?
   end)
-  json.enabledComponents map_components_to_frontend_tokens(current_component_host.enabled_components)
+  json.enabledComponents map_components_to_frontend_tokens(current_course.enabled_components)
   json.unduplicableObjectTypes (current_course.disabled_cherrypickable_types.map do |klass|
     cherrypickable_items_hash[klass]
   end)
