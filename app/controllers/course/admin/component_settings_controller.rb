@@ -23,7 +23,7 @@ class Course::Admin::ComponentSettingsController < Course::Admin::Controller
 
   # Load our settings adapter to handle component settings
   def load_settings
-    @settings ||= Course::Settings::Components.new(current_course, current_component_host)
+    @settings ||= Course::Settings::Components.new(current_course)
   end
 
   def validate_params

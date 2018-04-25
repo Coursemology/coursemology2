@@ -21,11 +21,7 @@ RSpec.describe Course::Admin::ComponentSettingsController, type: :controller do
         all_component_ids.sample(1 + rand(all_component_ids.count))
       end
       let(:components_params) { { enabled_component_ids: ids_to_enable } }
-      let(:settings) do
-        # reset memoised result to force recomputation
-        controller.current_component_host.instance_variable_set(:@enabled_components, nil)
-        Course::Settings::Components.new(course.reload, controller.current_component_host)
-      end
+      let(:settings) { Course::Settings::Components.new(course.reload) }
 
       subject do
         patch :update, params: { settings_components: components_params, course_id: course }
