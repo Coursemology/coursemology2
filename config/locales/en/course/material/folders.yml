@@ -12,6 +12,9 @@ en:
           success: 'Folder %{name} was created.'
         edit:
           header: 'Edit Folder'
+          start_at:
+            one: "Start at (Students can access materials 1 day ahead of the start at time)"
+            other: "Start at (Students can access materials %{count} days ahead of the start at time)"
         update:
           success: 'Folder %{name} was updated.'
         destroy:

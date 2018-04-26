@@ -5,7 +5,7 @@
   = f.input :name
   = f.input :description, input_html: { class: ['no-summernote'] }
   = f.input :can_student_upload
-  = f.input :start_at
+  = f.input :start_at, label: t('.start_at', count: current_course.advance_start_at_duration / 1.day)
   = f.input :end_at
 
   = f.button :submit
