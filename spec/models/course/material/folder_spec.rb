@@ -89,5 +89,25 @@ RSpec.describe Course::Material::Folder, type: :model do
         expect(folder.children_count).to eq(count)
       end
     end
+
+    describe '#effective_start_at' do
+      context 'when course has no advance start date' do
+        let(:course) { create(:course) }
+        let(:folder) { create(:course_material_folder, course: course) }
+
+        it 'returns the same datetime as start_at' do
+          expect(folder.effective_start_at).to eq folder.start_at
+        end
+      end
+
+      context 'when course has advance start date set' do
+        let(:course) { create(:course, advance_start_at_duration_days: 3) }
+        let(:folder) { create(:course_material_folder, course: course) }
+
+        it "returns folder.start_at shifted by the course's advance_start_at_duration" do
+          expect(folder.effective_start_at).to eq(folder.start_at - 3.days)
+        end
+      end
+    end
   end
 end

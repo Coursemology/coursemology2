@@ -6,6 +6,8 @@ table.table.table-hover
     tr
       th = t('.name')
       th = t('.modified')
+      - if can?(:edit, @subfolders)
+        th = t('.start_at')
       th
   tbody
     - if @folder.parent

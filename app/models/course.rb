@@ -127,7 +127,7 @@ class Course < ApplicationRecord
   #
   # @return [ActiveSupport::Duration]
   def advance_start_at_duration
-    settings(:course).advance_start_at_duration
+    settings(:course).advance_start_at_duration || 0
   end
 
   def advance_start_at_duration=(time)

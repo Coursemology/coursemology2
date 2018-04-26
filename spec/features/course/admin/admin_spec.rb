@@ -63,7 +63,7 @@ RSpec.feature 'Course: Administration: Administration' do
         click_button 'submit'
 
         expect(page).to have_selector('div.alert-success')
-        expect(course.reload.advance_start_at_duration).to be_nil
+        expect(course.reload.advance_start_at_duration).to eq 0
       end
 
       scenario 'I can delete the course' do
