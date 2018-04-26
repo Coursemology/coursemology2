@@ -29,3 +29,4 @@ en:
           failure: 'Failed to upload files: %{error}'
         folder:
           unseen_by_students: "Hidden from students as folder's start time has not been reached."
+          visible_because_sdl: 'Visible to students before the start time because of Self-Directed Learning.'

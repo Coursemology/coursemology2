@@ -11,7 +11,12 @@
       = format_html(folder.description)
 
   td = format_datetime(folder.updated_at)
-  td = format_datetime(folder.start_at)
+  - if can?(:edit, folder)
+    td
+      - if show_sdl_warning?(folder)
+        span title=t('.visible_because_sdl')
+          => fa_icon 'eye'.freeze
+      = format_datetime(folder.start_at)
   td
     = edit_button([current_course, folder]) if @folder.concrete? && can?(:edit, folder)
     = delete_button([current_course, folder]) if @folder.concrete? && can?(:destroy, folder)
