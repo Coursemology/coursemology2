@@ -24,4 +24,10 @@ class Course::UsersController < Course::ComponentController
       @course_user ||= course_users.includes(:user).find(params[:id])
     end
   end
+
+  # @return [Course::UsersComponent]
+  # @return [nil] If component is disabled.
+  def component
+    current_component_host[:course_users_component]
+  end
 end

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::CoursesComponent < SimpleDelegator
+class Course::SettingsComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
 
   def self.can_be_disabled?
@@ -7,7 +7,7 @@ class Course::CoursesComponent < SimpleDelegator
   end
 
   def self.display_name
-    I18n.t('components.courses.name')
+    I18n.t('components.settings.name')
   end
 
   def sidebar_items

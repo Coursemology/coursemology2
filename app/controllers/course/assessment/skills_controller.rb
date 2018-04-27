@@ -56,4 +56,10 @@ class Course::Assessment::SkillsController < Course::ComponentController
     @skill_branches = current_course.assessment_skill_branches.
                       accessible_by(current_ability).ordered_by_title
   end
+
+  # @return [Course::AssessmentsComponent]
+  # @return [nil] If component is disabled.
+  def component
+    current_component_host[:course_assessments_component]
+  end
 end

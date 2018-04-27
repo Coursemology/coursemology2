@@ -97,4 +97,10 @@ class Course::ObjectDuplicationsController < Course::ComponentController
       course_item_finders[item_type].call(ids)
     end.flatten
   end
+
+  # @return [Course::DuplicationComponent]
+  # @return [nil] If component is disabled.
+  def component
+    current_component_host[:course_duplication_component]
+  end
 end

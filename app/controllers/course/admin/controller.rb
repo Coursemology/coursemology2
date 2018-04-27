@@ -10,4 +10,10 @@ class Course::Admin::Controller < Course::ComponentController
   def authorize_admin
     authorize!(:manage, current_course)
   end
+
+  # @return [Course::SettingsComponent]
+  # @return [nil] If component is disabled.
+  def component
+    current_component_host[:course_settings_component]
+  end
 end

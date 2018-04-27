@@ -44,4 +44,10 @@ class Course::Admin::Assessments::TabsController < Course::Admin::Controller
   def add_category_breadcrumb
     add_breadcrumb @category.title, course_admin_assessments_path(current_course)
   end
+
+  # @return [Course::AssessmentsComponent]
+  # @return [nil] If component is disabled.
+  def component
+    current_component_host[:course_assessments_component]
+  end
 end

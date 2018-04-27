@@ -50,4 +50,10 @@ class Course::UserRegistrationsController < Course::ComponentController
 
     redirect_to course_path(current_course), success: success
   end
+
+  # @return [Course::UsersComponent]
+  # @return [nil] If component is disabled.
+  def component
+    current_component_host[:course_users_component]
+  end
 end

@@ -21,4 +21,10 @@ class Course::Admin::AssessmentSettingsController < Course::Admin::Controller
                                    assessment_categories_attributes: [:id, :title, :weight,
                                       { tabs_attributes: [:id, :title, :weight, :category_id] }])
   end
+
+  # @return [Course::AssessmentsComponent]
+  # @return [nil] If component is disabled.
+  def component
+    current_component_host[:course_assessments_component]
+  end
 end

@@ -25,14 +25,14 @@ en:
         name: 'Comments Center'
     statistics:
       name: 'Statistics'
-    points_disbursement:
-      name: 'Points Disbursement'
+    experience_points:
+      name: 'Experience Points'
     duplication:
       name: 'Duplication'
     video:
       name: :'course.video.videos.index.header'
-    courses:
-      name: 'Courses'
+    settings:
+      name: 'Settings'
     users:
       name: 'Users'
     surveys:

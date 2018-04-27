@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::PointsDisbursementComponent < SimpleDelegator
+class Course::ExperiencePointsComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
 
   def self.gamified?
@@ -7,7 +7,7 @@ class Course::PointsDisbursementComponent < SimpleDelegator
   end
 
   def self.display_name
-    I18n.t('components.points_disbursement.name')
+    I18n.t('components.experience_points.name')
   end
 
   def sidebar_items
