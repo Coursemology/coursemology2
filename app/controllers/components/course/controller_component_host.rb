@@ -72,9 +72,9 @@ class Course::ControllerComponentHost
         false
       end
 
-      # @return [Boolean] States whether a component can be disabled. Value is true by default.
-      #   Used to hide
-      def can_be_disabled?
+      # @return [Boolean] true if component can be disabled (or enabled) for individual courses.
+      #   Otherwise, the component can only perhaps be disabled instance-wide.
+      def can_be_disabled_for_course?
         true
       end
 

@@ -2,7 +2,8 @@
 class Course::SettingsComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
 
-  def self.can_be_disabled?
+  # Prevent user from locking him/herself out of settings.
+  def self.can_be_disabled_for_course?
     false
   end
 
