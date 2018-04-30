@@ -99,6 +99,29 @@ RSpec.describe Course::Video, type: :model do
       end
     end
 
+    describe 'validations' do
+      let(:youtube_embedded_url) { "https://www.youtube.com/embed/#{youtube_video_id}" }
+      let(:youtube_video_id) { 'dQw4w9WgXcQ' }
+
+      context 'when video is new' do
+        it 'allows url to be changed' do
+          video = build(:video, course: course)
+          video.url = youtube_embedded_url
+          expect(video.valid?).to be_truthy
+          expect(video.save).to be_truthy
+        end
+      end
+
+      context 'when video exists ' do
+        it 'prevents the url from being changed' do
+          video1.url = youtube_embedded_url
+          expect(video1.valid?).to be_falsey
+          expect(video1.save).to be_falsey
+          expect { video1.save! }.to raise_exception(ActiveRecord::RecordInvalid)
+        end
+      end
+    end
+
     describe 'callbacks' do
       context 'when updating video url' do
         let(:youtube_embedded_url) { "https://www.youtube.com/embed/#{youtube_video_id}" }
@@ -119,9 +142,10 @@ RSpec.describe Course::Video, type: :model do
 
         it 'updates to the youtube embed url' do
           youtube_valid_urls.each do |url|
-            video1.reload.url = url
-            expect(video1.save).to be_truthy
-            expect(video1.reload.url).to eq(youtube_embedded_url)
+            video = build(:video, course: course)
+            video.url = url
+            expect(video.save).to be_truthy
+            expect(video.reload.url).to eq(youtube_embedded_url)
           end
         end
 
@@ -130,9 +154,10 @@ RSpec.describe Course::Video, type: :model do
 
           it ' does not update and returns an error' do
             invalid_urls.each do |url|
-              video1.reload.url = url
-              expect(video1.save).to be_falsey
-              expect { video1.save! }.to raise_exception(ActiveRecord::RecordInvalid)
+              video = build(:video, course: course)
+              video.url = url
+              expect(video.save).to be_falsey
+              expect { video.save! }.to raise_exception(ActiveRecord::RecordInvalid)
             end
           end
         end
