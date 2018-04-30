@@ -107,7 +107,7 @@ class Course::Material::Folder < ApplicationRecord
     self.updated_at = other.updated_at
     self.created_at = other.created_at
     self.owner = duplicator.duplicate(other.owner)
-    self.course = duplicator.options[:target_course]
+    self.course = duplicator.options[:destination_course]
     initialize_duplicate_parent(duplicator, other)
     initialize_duplicate_children(duplicator, other)
     set_duplication_flag
@@ -128,7 +128,7 @@ class Course::Material::Folder < ApplicationRecord
                     #
                     # If the folder's parent is not selected for duplication, the current duplicated folder
                     # will remain a child of the root folder.
-                    duplicator.options[:target_course].root_folder
+                    duplicator.options[:destination_course].root_folder
                   end
   end
 

@@ -1,14 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { defineMessages, FormattedMessage, injectIntl, intlShape } from 'react-intl';
-import DropDownMenu from 'material-ui/DropDownMenu';
-import MenuItem from 'material-ui/MenuItem';
+import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import moment, { shortDateTime } from 'lib/moment';
-import { setTargetCourseId, duplicateCourse } from 'course/duplication/actions';
+import { setDestinationCourseId, duplicateCourse } from 'course/duplication/actions';
 import { duplicationModes } from 'course/duplication/constants';
-import TypeBadge from 'course/duplication/components/TypeBadge';
-import { courseShape, currentCourseShape } from 'course/duplication/propTypes';
+import CourseDropdownMenu from 'course/duplication/components/CourseDropdownMenu';
+import { courseShape, sourceCourseShape } from 'course/duplication/propTypes';
 import NewCourseForm from './NewCourseForm';
 
 const translations = defineMessages({
@@ -26,21 +24,13 @@ const translations = defineMessages({
   },
 });
 
-const styles = {
-  dropDown: {
-    width: '100%',
-  },
-  existingCourseForm: {
-    marginTop: 25,
-  },
-};
-
 class DestinationCourseSelector extends React.Component {
   static propTypes = {
     currentHost: PropTypes.string,
-    targetCourseId: PropTypes.number,
+    destinationCourseId: PropTypes.number,
+    currentCourseId: PropTypes.number.isRequired,
     courses: PropTypes.arrayOf(courseShape),
-    currentCourse: currentCourseShape,
+    sourceCourse: sourceCourseShape,
     duplicationMode: PropTypes.string.isRequired,
     isDuplicating: PropTypes.bool.isRequired,
 
@@ -48,49 +38,36 @@ class DestinationCourseSelector extends React.Component {
     intl: intlShape,
   }
 
-  renderCourseMenuItem = (course) => {
-    const { currentHost } = this.props;
-    const title = currentHost === course.host ? course.title : (
-      <span>
-        <TypeBadge text={course.host} />
-        {course.title}
-      </span>
-    );
-
-    return <MenuItem key={course.id} value={course.id} primaryText={title} />;
-  }
-
   renderExistingCourseForm = () => {
-    const { courses, targetCourseId, dispatch } = this.props;
+    const { currentHost, currentCourseId, courses, destinationCourseId, dispatch, intl } = this.props;
 
     return (
-      <div style={styles.existingCourseForm}>
-        <p><FormattedMessage {...translations.selectDestinationCoursePrompt} /></p>
-        <DropDownMenu
-          autoWidth={false}
-          style={styles.dropDown}
-          value={targetCourseId}
-          onChange={(e, index, value) => dispatch(setTargetCourseId(value))}
-        >
-          { courses.map(this.renderCourseMenuItem) }
-        </DropDownMenu>
-      </div>
+      <CourseDropdownMenu
+        dropDownMenuProps={{ className: 'destination-course-dropdown' }}
+        currentHost={currentHost}
+        courses={courses}
+        selectedCourseId={destinationCourseId}
+        currentCourseId={currentCourseId}
+        prompt={intl.formatMessage(translations.selectDestinationCoursePrompt)}
+        onChange={(e, index, value) => dispatch(setDestinationCourseId(value))}
+        onHome={() => dispatch(setDestinationCourseId(currentCourseId))}
+      />
     );
   }
 
   renderNewCourseForm = () => {
-    const { intl, dispatch, currentCourse, isDuplicating } = this.props;
+    const { intl, dispatch, sourceCourse, isDuplicating } = this.props;
 
     const failureMessage = intl.formatMessage(translations.failure);
     const tomorrow = moment().add(1, 'day');
-    const defaultNewCourseStartAt = moment(currentCourse.start_at).set({
+    const defaultNewCourseStartAt = moment(sourceCourse.start_at).set({
       year: tomorrow.year(),
       month: tomorrow.month(),
       date: tomorrow.date(),
     });
 
     const timeNow = moment().format(shortDateTime);
-    const newTitleValues = { title: currentCourse.title, timestamp: timeNow };
+    const newTitleValues = { title: sourceCourse.title, timestamp: timeNow };
     const initialValues = {
       new_title: intl.formatMessage(translations.defaultTitle, newTitleValues),
       new_start_at: defaultNewCourseStartAt,
@@ -115,10 +92,11 @@ class DestinationCourseSelector extends React.Component {
 }
 
 export default connect(({ duplication }) => ({
-  courses: duplication.targetCourses,
+  courses: duplication.destinationCourses,
   currentHost: duplication.currentHost,
-  targetCourseId: duplication.targetCourseId,
+  currentCourseId: duplication.currentCourseId,
+  destinationCourseId: duplication.destinationCourseId,
   duplicationMode: duplication.duplicationMode,
-  currentCourse: duplication.currentCourse,
+  sourceCourse: duplication.sourceCourse,
   isDuplicating: duplication.isDuplicating,
 }))(injectIntl(DestinationCourseSelector));

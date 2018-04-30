@@ -60,7 +60,7 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
           let(:source_objects) { tab }
           before { category.update!(title: 'Non-default title') }
 
-          it "adds it to the target course's default category without assessments" do
+          it "adds it to the destination course's default category without assessments" do
             expect { duplicate_objects }.to change {
               destination_course.reload.assessment_categories.map(&:tabs).flatten.count
             }.by(1)
@@ -74,7 +74,7 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
           let(:source_objects) { [category, assessment] }
           before { tab.update!(title: 'Non-default title') }
 
-          it "adds it to the target course's default tab" do
+          it "adds it to the destination course's default tab" do
             expect { duplicate_objects }.to change { destination_course.assessments.count }.by(1)
             duplicate_category, duplicate_assessment = duplicate_objects
             expect(duplicate_assessment.title).to eq(assessment.title)
@@ -418,7 +418,7 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
           context 'when its containing folder is not duplicated' do
             let(:source_objects) { material }
 
-            it 'duplicates it to target course root folder' do
+            it 'duplicates it to destination course root folder' do
               expect { duplicate_objects }.to change { destination_course.root_folder.materials.count }.by(1)
               expect(duplicate_objects.folder_id).to be(destination_course.root_folder.id)
             end

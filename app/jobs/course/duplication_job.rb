@@ -8,12 +8,12 @@ class Course::DuplicationJob < ApplicationJob
 
   # Performs the duplication job.
   #
-  # @param [Course] current_course The course to duplicate.
+  # @param [Course] source_course The course to duplicate.
   # @param [Hash] option A hash of duplication options.
-  def perform_tracked(current_course, options = {})
+  def perform_tracked(source_course, options = {})
     ActsAsTenant.without_tenant do
       new_course =
-        Course::Duplication::CourseDuplicationService.duplicate_course(current_course, options)
+        Course::Duplication::CourseDuplicationService.duplicate_course(source_course, options)
       redirect_to course_path(new_course) if new_course.valid?
     end
   end

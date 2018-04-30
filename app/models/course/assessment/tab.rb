@@ -22,7 +22,7 @@ class Course::Assessment::Tab < ApplicationRecord
     self.category = if duplicator.duplicated?(other.category)
                       duplicator.duplicate(other.category)
                     else
-                      duplicator.options[:target_course].assessment_categories.first
+                      duplicator.options[:destination_course].assessment_categories.first
                     end
     assessments <<
       other.assessments.select { |assessment| duplicator.duplicated?(assessment) }.map do |assessment|

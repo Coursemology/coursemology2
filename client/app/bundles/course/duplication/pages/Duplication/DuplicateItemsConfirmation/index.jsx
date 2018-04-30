@@ -19,9 +19,9 @@ const translations = defineMessages({
     id: 'course.duplication.DuplicateItemsConfirmation.confirmationQuestion',
     defaultMessage: 'Duplicate items?',
   },
-  targetCourse: {
-    id: 'course.duplication.DuplicateItemsConfirmation.targetCourse',
-    defaultMessage: 'Target Course',
+  destinationCourse: {
+    id: 'course.duplication.DuplicateItemsConfirmation.destinationCourse',
+    defaultMessage: 'Destination Course',
   },
   duplicate: {
     id: 'course.duplication.DuplicateItemsConfirmation.duplicate',
@@ -41,26 +41,26 @@ class DuplicateItemsConfirmation extends React.Component {
   static propTypes = {
     open: PropTypes.bool,
     isDuplicating: PropTypes.bool,
-    targetCourseId: PropTypes.number,
-    targetCourses: PropTypes.arrayOf(courseShape),
+    destinationCourseId: PropTypes.number,
+    destinationCourses: PropTypes.arrayOf(courseShape),
     selectedItems: PropTypes.shape({}),
 
     dispatch: PropTypes.func.isRequired,
   }
 
-  renderTargetCourseCard() {
-    const { targetCourses, targetCourseId } = this.props;
-    const targetCourse = targetCourses.find(course => course.id === targetCourseId);
-    const url = `${window.location.protocol}//${targetCourse.host}${targetCourse.path}`;
+  renderdestinationCourseCard() {
+    const { destinationCourses, destinationCourseId } = this.props;
+    const destinationCourse = destinationCourses.find(course => course.id === destinationCourseId);
+    const url = `${window.location.protocol}//${destinationCourse.host}${destinationCourse.path}`;
 
     return (
       <React.Fragment>
-        <Subheader><FormattedMessage {...translations.targetCourse} /></Subheader>
+        <Subheader><FormattedMessage {...translations.destinationCourse} /></Subheader>
         <Card>
           <CardText>
             <h4>
               <a href={url} target="_blank">
-                {targetCourse.title}
+                {destinationCourse.title}
               </a>
             </h4>
           </CardText>
@@ -73,7 +73,7 @@ class DuplicateItemsConfirmation extends React.Component {
     return (
       <React.Fragment>
         <p><FormattedMessage {...translations.confirmationQuestion} /></p>
-        { this.renderTargetCourseCard() }
+        { this.renderdestinationCourseCard() }
         <AssessmentsListing />
         <SurveyListing />
         <AchievementsListing />
@@ -88,7 +88,7 @@ class DuplicateItemsConfirmation extends React.Component {
   }
 
   render() {
-    const { dispatch, open, targetCourseId, selectedItems, isDuplicating } = this.props;
+    const { dispatch, open, destinationCourseId, selectedItems, isDuplicating } = this.props;
     if (!open) { return null; }
     const failureMessage = <FormattedMessage {...translations.failureMessage} />;
 
@@ -96,7 +96,7 @@ class DuplicateItemsConfirmation extends React.Component {
       <ConfirmationDialog
         open={open}
         onCancel={() => dispatch(hideDuplicateItemsConfirmation())}
-        onConfirm={() => dispatch(duplicateItems(targetCourseId, selectedItems, failureMessage))}
+        onConfirm={() => dispatch(duplicateItems(destinationCourseId, selectedItems, failureMessage))}
         confirmButtonText={<FormattedMessage {...translations.duplicate} />}
         message={this.renderListing()}
         disableCancelButton={isDuplicating}
@@ -108,8 +108,8 @@ class DuplicateItemsConfirmation extends React.Component {
 
 export default connect(({ duplication }) => ({
   open: duplication.confirmationOpen,
-  targetCourses: duplication.targetCourses,
-  targetCourseId: duplication.targetCourseId,
+  destinationCourses: duplication.destinationCourses,
+  destinationCourseId: duplication.destinationCourseId,
   selectedItems: duplication.selectedItems,
   isDuplicating: duplication.isDuplicating,
 }))(DuplicateItemsConfirmation);

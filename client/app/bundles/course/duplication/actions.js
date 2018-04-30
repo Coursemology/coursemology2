@@ -18,6 +18,25 @@ export function fetchObjectsList() {
   };
 }
 
+export function changeSourceCourse(courseId) {
+  return (dispatch, getState) => {
+    const currentSourceCourseId = getState().duplication.sourceCourse.id;
+    if (courseId === currentSourceCourseId) { return null; }
+
+    dispatch({ type: actionTypes.CHANGE_SOURCE_COURSE_REQUEST });
+    return CourseAPI.duplication.data(courseId)
+      .then((response) => {
+        dispatch({
+          type: actionTypes.CHANGE_SOURCE_COURSE_SUCCESS,
+          courseData: response.data,
+        });
+      })
+      .catch(() => {
+        dispatch({ type: actionTypes.CHANGE_SOURCE_COURSE_FAILURE });
+      });
+  };
+}
+
 export function setItemSelectedBoolean(itemType, id, value) {
   return {
     type: actionTypes.SET_ITEM_SELECTED_BOOLEAN,
@@ -35,8 +54,8 @@ export function hideDuplicateItemsConfirmation() {
   return { type: actionTypes.HIDE_DUPLICATE_ITEMS_CONFIRMATION };
 }
 
-export function setTargetCourseId(targetCourseId) {
-  return { type: actionTypes.SET_TARGET_COURSE_ID, targetCourseId };
+export function setDestinationCourseId(destinationCourseId) {
+  return { type: actionTypes.SET_DESTINATION_COURSE_ID, destinationCourseId };
 }
 
 export function setDuplicationMode(duplicationMode) {
@@ -67,17 +86,19 @@ function itemsPayload(selectedItemsHash) {
   }, {});
 }
 
-export function duplicateItems(targetCourseId, selectedItems, failureMessage) {
+export function duplicateItems(destinationCourseId, selectedItems, failureMessage) {
   const payload = {
     object_duplication: {
-      target_course_id: targetCourseId,
+      destination_course_id: destinationCourseId,
       items: itemsPayload(selectedItems),
     },
   };
 
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const sourceCourseId = getState().duplication.sourceCourse.id;
+
     dispatch({ type: actionTypes.DUPLICATE_ITEMS_REQUEST });
-    return CourseAPI.duplication.duplicateItems(payload)
+    return CourseAPI.duplication.duplicateItems(sourceCourseId, payload)
       .then((response) => {
         dispatch({ type: actionTypes.DUPLICATE_ITEMS_SUCCESS });
         window.location = response.data.redirect_url;
@@ -93,9 +114,11 @@ export function duplicateItems(targetCourseId, selectedItems, failureMessage) {
 export function duplicateCourse(fields, failureMessage) {
   const payload = { duplication: fields };
 
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const sourceCourseId = getState().duplication.sourceCourse.id;
+
     dispatch({ type: actionTypes.DUPLICATE_COURSE_REQUEST });
-    return CourseAPI.duplication.duplicateCourse(payload)
+    return CourseAPI.duplication.duplicateCourse(sourceCourseId, payload)
       .then((response) => {
         window.location = response.data.redirect_url;
         dispatch({ type: actionTypes.DUPLICATE_COURSE_SUCCESS });

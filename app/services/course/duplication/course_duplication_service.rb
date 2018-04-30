@@ -5,7 +5,7 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
   class << self
     # Constructor for the course duplication service.
     #
-    # @param [Course] current_course The course to duplicate.
+    # @param [Course] source_course The course to duplicate.
     # @param [Hash] options The options to be sent to the Duplicator object.
     # @option options [User] :current_user (+User.system+) The user triggering the duplication.
     # @option options [String] :new_title ('Duplicated') The title for the duplicated course.
@@ -13,19 +13,19 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
     # @param [Array] all_objects All the objects in the course.
     # @param [Array] selected_objects The objects to duplicate.
     # @return [Course] The duplicated course
-    def duplicate_course(current_course, options = {}, all_objects = [], selected_objects = [])
+    def duplicate_course(source_course, options = {}, all_objects = [], selected_objects = [])
       excluded_objects = all_objects - selected_objects
       options[:excluded_objects] = excluded_objects
-      options[:current_course] = current_course
+      options[:source_course] = source_course
       options[:time_shift] =
         if options[:new_start_at]
-          Time.zone.parse(options[:new_start_at]) - current_course.start_at
+          Time.zone.parse(options[:new_start_at]) - source_course.start_at
         else
           0
         end
       options.reverse_merge!(DEFAULT_COURSE_DUPLICATION_OPTIONS)
       service = new(options)
-      service.duplicate_course(current_course)
+      service.duplicate_course(source_course)
     end
   end
 
@@ -36,17 +36,17 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
   # Do not just pass in @selected_objects or object parents could be set incorrectly.
   #
   # @return [Course] The duplicated course
-  def duplicate_course(current_course)
+  def duplicate_course(source_course)
     duplicated_course = Course.transaction do
-      new_course = duplicator.duplicate(current_course)
+      new_course = duplicator.duplicate(source_course)
       raise ActiveRecord::Rollback unless new_course.save
-      duplicator.set_option(:target_course, new_course)
+      duplicator.set_option(:destination_course, new_course)
 
-      current_course.duplication_manifest.each do |item|
+      source_course.duplication_manifest.each do |item|
         raise ActiveRecord::Rollback unless duplicator.duplicate(item).save
       end
-      raise ActiveRecord::Rollback unless update_course_settings(duplicator, new_course, current_course)
-      raise ActiveRecord::Rollback unless update_sidebar_settings(duplicator, new_course, current_course)
+      raise ActiveRecord::Rollback unless update_course_settings(duplicator, new_course, source_course)
+      raise ActiveRecord::Rollback unless update_sidebar_settings(duplicator, new_course, source_course)
       new_course
     end
     notify_duplication_complete(duplicated_course) unless duplicated_course.nil?
@@ -69,7 +69,7 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
   # @param [Course] new_course The duplicated course
   def notify_duplication_complete(new_course)
     Course::Mailer.
-      course_duplicated_email(@options[:current_course], new_course, @options[:current_user]).
+      course_duplicated_email(@options[:source_course], new_course, @options[:current_user]).
       deliver_now
   end
 

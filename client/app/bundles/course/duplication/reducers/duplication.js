@@ -9,15 +9,19 @@ const emptySelectedItemsHash = () => Object.keys(duplicableItemTypes).reduce((ha
 const initialState = {
   confirmationOpen: false,
   selectedItems: emptySelectedItemsHash(),
-  targetCourseId: null,
-  targetCourses: [],
+  destinationCourseId: null,
+  destinationCourses: [],
   duplicationMode: duplicationModes.COURSE,
   currentItemSelectorPanel: null,
 
   currentHost: '',
-  currentCourse: {
+  currentCourseId: null,
+  sourceCourse: {
     title: '',
     start_at: null,
+    duplicationModesAllowed: [],
+    enabledComponents: [],
+    unduplicableObjectTypes: [],
   },
 
   assessmentsComponent: [],
@@ -27,6 +31,7 @@ const initialState = {
   videosComponent: [],
 
   isLoading: false,
+  isChangingCourse: false,
   isDuplicating: false,
 };
 
@@ -38,8 +43,8 @@ export default function (state = initialState, action) {
       return { ...state, isLoading: true };
     }
     case actionTypes.LOAD_OBJECTS_LIST_SUCCESS: {
-      const { targetCourses, materialsComponent, ...data } = action.duplicationData;
-      const sortedTargetCourses = targetCourses.sort(
+      const { destinationCourses, materialsComponent, ...data } = action.duplicationData;
+      const sortedDestinationCourses = destinationCourses.sort(
         (a, b) => a.title.localeCompare(b.title)
       );
       const nestedFolders = nestFolders(materialsComponent);
@@ -47,7 +52,8 @@ export default function (state = initialState, action) {
         ...state,
         ...data,
         isLoading: false,
-        targetCourses: sortedTargetCourses,
+        currentCourseId: data.sourceCourse.id,
+        destinationCourses: sortedDestinationCourses,
         materialsComponent: nestedFolders,
       };
     }
@@ -55,10 +61,29 @@ export default function (state = initialState, action) {
       return { ...state, isLoading: false };
     }
 
-    case actionTypes.SET_TARGET_COURSE_ID: {
+    case actionTypes.CHANGE_SOURCE_COURSE_REQUEST: {
+      return { ...state, isChangingCourse: true };
+    }
+    case actionTypes.CHANGE_SOURCE_COURSE_SUCCESS: {
+      const { materialsComponent, ...data } = action.courseData;
+      const nestedFolders = nestFolders(materialsComponent);
       return {
         ...state,
-        targetCourseId: action.targetCourseId,
+        ...data,
+        materialsComponent: nestedFolders,
+        selectedItems: emptySelectedItemsHash(),
+        currentItemSelectorPanel: null,
+        isChangingCourse: false,
+      };
+    }
+    case actionTypes.CHANGE_SOURCE_COURSE_FAILURE: {
+      return { ...state, isChangingCourse: false };
+    }
+
+    case actionTypes.SET_DESTINATION_COURSE_ID: {
+      return {
+        ...state,
+        destinationCourseId: action.destinationCourseId,
         selectedItems: emptySelectedItemsHash(),
       };
     }

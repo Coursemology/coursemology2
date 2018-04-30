@@ -4,7 +4,7 @@ class Course::LessonPlan::Event < ApplicationRecord
 
   def initialize_duplicate(duplicator, other)
     copy_attributes(other, duplicator)
-    self.course = duplicator.options[:target_course]
+    self.course = duplicator.options[:destination_course]
   end
 
   # Used by the with_actable_types scope in Course::LessonPlan::Item.

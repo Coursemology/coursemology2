@@ -180,7 +180,7 @@ class Course::Assessment < ApplicationRecord
     if duplicator.duplicated?(other.tab)
       target_tab = duplicator.duplicate(other.tab)
     else
-      target_category = duplicator.options[:target_course].assessment_categories.first
+      target_category = duplicator.options[:destination_course].assessment_categories.first
       target_tab = target_category.tabs.first
     end
     self.tab = target_tab

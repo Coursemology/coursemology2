@@ -243,7 +243,9 @@ Rails.application.routes.draw do
       end
       resources :levels, only: [:index, :create]
       resource :duplication, only: [:show, :create]
-      resource :object_duplication, only: [:new, :create]
+      resource :object_duplication, only: [:new, :create] do
+        get 'data'
+      end
 
       resources :user_invitations, only: [:index, :new, :create, :destroy] do
         post 'resend_invitation'

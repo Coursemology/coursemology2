@@ -52,7 +52,7 @@ class Course::Condition::Achievement < ApplicationRecord
     if duplicator.mode == :course
       self.course = duplicator.duplicate(other.course)
     elsif duplicator.mode == :object
-      self.course = duplicator.options[:target_course]
+      self.course = duplicator.options[:destination_course]
     end
 
     set_duplication_flag

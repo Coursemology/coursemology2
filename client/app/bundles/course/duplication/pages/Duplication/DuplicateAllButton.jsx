@@ -27,8 +27,7 @@ const translations = defineMessages({
 class DuplicateAllButton extends React.Component {
   static propTypes = {
     duplicationMode: PropTypes.string.isRequired,
-    isDuplicating: PropTypes.bool.isRequired,
-    newCourseFormValid: PropTypes.bool.isRequired,
+    disabled: PropTypes.bool.isRequired,
 
     dispatch: PropTypes.func.isRequired,
   }
@@ -39,7 +38,7 @@ class DuplicateAllButton extends React.Component {
   }
 
   render() {
-    const { dispatch, duplicationMode, newCourseFormValid, isDuplicating } = this.props;
+    const { dispatch, duplicationMode, disabled } = this.props;
 
     if (duplicationMode !== duplicationModes.COURSE) { return null; }
 
@@ -47,7 +46,7 @@ class DuplicateAllButton extends React.Component {
       <React.Fragment>
         <RaisedButton
           secondary
-          disabled={!newCourseFormValid || isDuplicating}
+          disabled={disabled}
           label={<FormattedMessage {...translations.duplicateCourse} />}
           onClick={() => this.setState({ confirmationOpen: true })}
         />
@@ -73,6 +72,7 @@ class DuplicateAllButton extends React.Component {
 
 export default connect(({ duplication, ...state }) => ({
   duplicationMode: duplication.duplicationMode,
-  isDuplicating: duplication.isDuplicating,
-  newCourseFormValid: isValid(formNames.NEW_COURSE)(state),
+  disabled: !isValid(formNames.NEW_COURSE)(state) ||
+            duplication.isDuplicating ||
+            duplication.isChangingCourse,
 }))(DuplicateAllButton);

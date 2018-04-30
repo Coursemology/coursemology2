@@ -5,14 +5,15 @@ import { defineMessages, FormattedMessage, injectIntl, intlShape } from 'react-i
 
 import Paper from 'material-ui/Paper';
 import Subheader from 'material-ui/Subheader';
-import TextField from 'material-ui/TextField';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 
 import TitleBar from 'lib/components/TitleBar';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import DateTimePicker from 'lib/components/form/DateTimePicker';
-import { fetchObjectsList, setDuplicationMode } from 'course/duplication/actions';
+import { fetchObjectsList, setDuplicationMode, changeSourceCourse } from 'course/duplication/actions';
 import { duplicationModes } from 'course/duplication/constants';
+import { sourceCourseShape, courseListingShape } from 'course/duplication/propTypes';
+import CourseDropdownMenu from 'course/duplication/components/CourseDropdownMenu';
 
 import ItemsSelector from './ItemsSelector';
 import DuplicateAllButton from './DuplicateAllButton';
@@ -36,10 +37,6 @@ const translations = defineMessages({
     id: 'course.duplication.Duplication.items',
     defaultMessage: 'Items',
   },
-  title: {
-    id: 'course.duplication.Duplication.title',
-    defaultMessage: 'Title',
-  },
   startAt: {
     id: 'course.duplication.Duplication.startAt',
     defaultMessage: 'Start Date',
@@ -60,6 +57,10 @@ const translations = defineMessages({
     id: 'course.duplication.Duplication.noComponentsEnabled',
     defaultMessage: 'All components with duplicable items are disabled. \
       You may enable them under course settings.',
+  },
+  selectSourceCourse: {
+    id: 'course.duplication.Duplication.selectSourceCourse',
+    defaultMessage: 'Select course to duplicate from:',
   },
 });
 
@@ -91,13 +92,14 @@ class Duplication extends React.Component {
   static propTypes = {
     isLoading: PropTypes.bool.isRequired,
     isCourseSelected: PropTypes.bool.isRequired,
+    isChangingCourse: PropTypes.bool.isRequired,
     duplicationMode: PropTypes.string.isRequired,
     modesAllowed: PropTypes.arrayOf(PropTypes.string),
     enabledComponents: PropTypes.arrayOf(PropTypes.string),
-    currentCourse: PropTypes.shape({
-      title: PropTypes.string,
-      start_at: PropTypes.string,
-    }).isRequired,
+    currentHost: PropTypes.string.isRequired,
+    currentCourseId: PropTypes.number,
+    sourceCourse: sourceCourseShape.isRequired,
+    sourceCourses: courseListingShape,
 
     dispatch: PropTypes.func.isRequired,
     intl: intlShape,
@@ -108,21 +110,27 @@ class Duplication extends React.Component {
   }
 
   renderFromCourseMain() {
-    const { intl, currentCourse } = this.props;
+    const {
+      currentHost, currentCourseId, sourceCourse, sourceCourses, isChangingCourse, intl, dispatch,
+    } = this.props;
 
     return (
       <React.Fragment>
-        <TextField
-          disabled
-          fullWidth
-          name="title"
-          value={currentCourse.title}
-          floatingLabelText={intl.formatMessage(translations.title)}
+        <CourseDropdownMenu
+          dropDownMenuProps={{ className: 'source-course-dropdown' }}
+          currentHost={currentHost}
+          courses={sourceCourses}
+          selectedCourseId={sourceCourse.id}
+          currentCourseId={currentCourseId}
+          prompt={intl.formatMessage(translations.selectSourceCourse)}
+          onChange={(e, index, value) => dispatch(changeSourceCourse(value))}
+          onHome={() => dispatch(changeSourceCourse(currentCourseId))}
+          disabled={isChangingCourse}
         />
         <DateTimePicker
           disabled
           name="start_at"
-          value={currentCourse.start_at}
+          value={sourceCourse.start_at}
           floatingLabelText={intl.formatMessage(translations.startAt)}
         />
       </React.Fragment>
@@ -238,9 +246,13 @@ class Duplication extends React.Component {
 
 export default connect(({ duplication }) => ({
   isLoading: duplication.isLoading,
-  isCourseSelected: !!duplication.targetCourseId,
+  isChangingCourse: duplication.isChangingCourse,
+  isCourseSelected: !!duplication.destinationCourseId,
   duplicationMode: duplication.duplicationMode,
-  modesAllowed: duplication.currentCourse.duplicationModesAllowed,
-  enabledComponents: duplication.currentCourse.enabledComponents,
-  currentCourse: duplication.currentCourse,
+  modesAllowed: duplication.sourceCourse.duplicationModesAllowed,
+  enabledComponents: duplication.sourceCourse.enabledComponents,
+  currentHost: duplication.currentHost,
+  currentCourseId: duplication.currentCourseId,
+  sourceCourse: duplication.sourceCourse,
+  sourceCourses: duplication.sourceCourses,
 }))(injectIntl(Duplication));

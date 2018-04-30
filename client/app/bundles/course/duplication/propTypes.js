@@ -8,13 +8,19 @@ export const courseShape = PropTypes.shape({
   enabledComponents: PropTypes.arrayOf(PropTypes.string),
 });
 
-export const currentCourseShape = PropTypes.shape({
+export const sourceCourseShape = PropTypes.shape({
   title: PropTypes.string,
   start_at: PropTypes.string,
   enabledComponents: PropTypes.arrayOf(PropTypes.string),
   unduplicableObjectTypes: PropTypes.arrayOf(PropTypes.string),
   duplicationModesAllowed: PropTypes.arrayOf(PropTypes.string),
 });
+
+export const courseListingShape = PropTypes.arrayOf(PropTypes.shape({
+  id: PropTypes.number,
+  title: PropTypes.string,
+  host: PropTypes.string,
+}));
 
 export const assessmentShape = PropTypes.shape({
   id: PropTypes.number,

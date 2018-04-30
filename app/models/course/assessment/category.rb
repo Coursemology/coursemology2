@@ -36,7 +36,7 @@ class Course::Assessment::Category < ApplicationRecord
 
   def initialize_duplicate(duplicator, other)
     self.folder = duplicator.duplicate(other.folder)
-    self.course = duplicator.options[:target_course]
+    self.course = duplicator.options[:destination_course]
     tabs << other.tabs.select { |tab| duplicator.duplicated?(tab) }.map do |tab|
       duplicator.duplicate(tab).tap do |duplicate_tab|
         duplicate_tab.assessments.each { |assessment| assessment.folder.parent = folder }
