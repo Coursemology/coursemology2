@@ -3,12 +3,11 @@ class Course::Assessment::Submission < ApplicationRecord
   include Workflow
   include Course::Assessment::Submission::WorkflowEventConcern
   include Course::Assessment::Submission::TodoConcern
+  include Course::Assessment::Submission::NotificationConcern
 
   acts_as_experience_points_record
 
   after_save :auto_grade_submission, if: :submitted?
-  after_save :send_submit_notification, if: :submitted?
-  after_create :send_attempt_notification
 
   workflow do
     state :attempting do
@@ -234,24 +233,5 @@ class Course::Assessment::Submission < ApplicationRecord
   def validate_awarded_attributes
     return if awarded_at && awarder
     errors.add(:experience_points_record, :absent_award_attributes)
-  end
-
-  def send_attempt_notification
-    return unless course_user.real_student?
-
-    Course::AssessmentNotifier.assessment_attempted(creator, assessment)
-  end
-
-  def send_submit_notification
-    return unless workflow_state_before_last_save == 'attempting'
-    return if assessment.autograded?
-    return if !course_user.real_student? && !phantom_submission_email_enabled?
-
-    Course::AssessmentNotifier.assessment_submitted(creator, course_user, self)
-  end
-
-  def phantom_submission_email_enabled?
-    Course::Settings::AssessmentsComponent.
-      email_enabled?(assessment.tab.category, :new_phantom_submission)
   end
 end
