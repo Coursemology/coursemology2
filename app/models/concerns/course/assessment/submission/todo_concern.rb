@@ -7,14 +7,14 @@ module Course::Assessment::Submission::TodoConcern
     after_destroy :restart_todo
   end
 
-  private
-
   def todo
     @todo ||= begin
       lesson_plan_item_id = assessment.lesson_plan_item.id
       Course::LessonPlan::Todo.find_by(item_id: lesson_plan_item_id, user_id: creator_id)
     end
   end
+
+  private
 
   def update_todo
     return unless todo
