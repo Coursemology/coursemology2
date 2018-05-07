@@ -18,22 +18,39 @@ class AbilityHost
       { course_users: course_users }
     end
 
-    # @return [Hash] The hash is relative to a component which has a +belongs_to+ association with
-    #   a Course.
+    # @return [Hash] Hash relative to a component with a +has_many+ association with CourseUser.
+    def staff_hash
+      course_user_hash(*CourseUser::STAFF_ROLES.to_a)
+    end
+
+    # @return [Hash] Hash relative to a component with a +has_many+ association with CourseUser.
+    def teaching_staff_hash
+      course_user_hash(*CourseUser::TEACHING_STAFF_ROLES.to_a)
+    end
+
+    # @return [Hash] Hash relative to a component with a +has_many+ association with CourseUser.
+    def managers_hash
+      course_user_hash(*CourseUser::MANAGER_ROLES.to_a)
+    end
+
+    # @return [Hash] Hash is relative to a component with a +belongs_to+ association with a Course.
     def course_course_user_hash(*roles)
       { course: course_user_hash(*roles) }
     end
 
     alias_method :course_all_course_users_hash, :course_course_user_hash
 
-    # @return [Hash] The hash is relative to a component which has a +belongs_to+ association with
-    #   a Course.
+    # @return [Hash] Hash is relative to a component with a +belongs_to+ association with a Course.
     def course_staff_hash
       course_course_user_hash(*CourseUser::STAFF_ROLES.to_a)
     end
 
-    # @return [Hash] The hash is relative to a component which has a +belongs_to+ association with
-    #   a Course.
+    # @return [Hash] Hash is relative to a component with a +belongs_to+ association with a Course.
+    def course_teaching_staff_hash
+      course_course_user_hash(*CourseUser::TEACHING_STAFF_ROLES.to_a)
+    end
+
+    # @return [Hash] Hash is relative to a component with a +belongs_to+ association with a Course.
     def course_managers_hash
       course_course_user_hash(*CourseUser::MANAGER_ROLES.to_a)
     end

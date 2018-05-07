@@ -29,5 +29,10 @@ FactoryBot.define do
       role :owner
       sequence(:name) { |n| "owner #{n}" }
     end
+
+    factory :course_observer, parent: :course_user do
+      role :observer
+      sequence(:name) { |n| "observer #{n}" }
+    end
   end
 end

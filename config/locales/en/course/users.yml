@@ -5,6 +5,7 @@ en:
       role:
         student: 'Student'
         teaching_assistant: 'Teaching Assistant'
+        observer: 'Observer'
         manager: 'Manager'
         owner: 'Owner'
         phantom: 'Phantom'

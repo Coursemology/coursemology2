@@ -7,8 +7,8 @@ module Course::CourseAbilityComponent
       allow_instructors_create_courses
       allow_unregistered_users_registering_courses
       allow_registered_users_showing_course
-      allow_owners_managing_course
       allow_staff_manage_users
+      allow_owners_managing_course
     end
 
     super
@@ -29,13 +29,14 @@ module Course::CourseAbilityComponent
     can :read, Course, course_user_hash
   end
 
-  def allow_owners_managing_course
-    can :manage, Course, course_user_hash(*CourseUser::MANAGER_ROLES.to_a)
-    can :manage, CourseUser, course_managers_hash
-    can :manage, Course::EnrolRequest, course_managers_hash
+  def allow_staff_manage_users
+    can :show_users, Course, staff_hash
+    can :manage_users, Course, teaching_staff_hash
   end
 
-  def allow_staff_manage_users
-    can [:show_users, :manage_users], Course, course_user_hash(*CourseUser::STAFF_ROLES.to_a)
+  def allow_owners_managing_course
+    can :manage, Course, managers_hash
+    can :manage, CourseUser, course_managers_hash
+    can :manage, Course::EnrolRequest, course_managers_hash
   end
 end

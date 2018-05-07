@@ -17,6 +17,8 @@ RSpec.describe Course, type: :model do
       it { is_expected.not_to be_able_to(:show, published_course) }
       it { is_expected.not_to be_able_to(:show, enrollable_course) }
       it { is_expected.not_to be_able_to(:show, closed_course) }
+      it { is_expected.not_to be_able_to(:show_users, course) }
+      it { is_expected.not_to be_able_to(:manage_users, course) }
     end
 
     context 'when the user is a Course Student' do
@@ -24,6 +26,8 @@ RSpec.describe Course, type: :model do
 
       it { is_expected.to be_able_to(:show, course) }
       it { is_expected.not_to be_able_to(:manage, course) }
+      it { is_expected.not_to be_able_to(:show_users, course) }
+      it { is_expected.not_to be_able_to(:manage_users, course) }
     end
 
     context 'when the user is a Course Teaching Assistant' do
@@ -31,6 +35,8 @@ RSpec.describe Course, type: :model do
 
       it { is_expected.to be_able_to(:show, course) }
       it { is_expected.not_to be_able_to(:manage, course) }
+      it { is_expected.to be_able_to(:show_users, course) }
+      it { is_expected.to be_able_to(:manage_users, course) }
     end
 
     context 'when the user is a Course Manager' do
@@ -38,6 +44,17 @@ RSpec.describe Course, type: :model do
 
       it { is_expected.to be_able_to(:show, course) }
       it { is_expected.to be_able_to(:manage, course) }
+      it { is_expected.to be_able_to(:show_users, course) }
+      it { is_expected.to be_able_to(:manage_users, course) }
+    end
+
+    context 'when the user is a Course Observer' do
+      let(:user) { create(:course_observer, course: course).user }
+
+      it { is_expected.to be_able_to(:show, course) }
+      it { is_expected.not_to be_able_to(:manage, course) }
+      it { is_expected.to be_able_to(:show_users, course) }
+      it { is_expected.not_to be_able_to(:manage_users, course) }
     end
   end
 end
