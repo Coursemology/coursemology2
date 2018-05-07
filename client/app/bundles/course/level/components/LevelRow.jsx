@@ -39,23 +39,24 @@ class LevelRow extends React.Component {
   }
 
   renderInput(levelNumber, experiencePointsThreshold) {
+    const { updateExpThreshold, disabled, sortLevels } = this.props;
     return (
       <TextField
         type="text"
         name={`level_${levelNumber}`}
         onChange={(e, newValue) => {
-          this.props.updateExpThreshold(levelNumber, newValue);
+          updateExpThreshold(levelNumber, newValue);
         }}
-        disabled={this.props.disabled}
+        disabled={disabled}
         errorText={experiencePointsThreshold === 0 ? <FormattedMessage {...translations.zeroThresholdError} /> : ''}
-        onBlur={() => { this.props.sortLevels(); }}
+        onBlur={() => { sortLevels(); }}
         value={experiencePointsThreshold}
       />
     );
   }
 
   render() {
-    const { levelNumber, experiencePointsThreshold } = this.props;
+    const { levelNumber, experiencePointsThreshold, deleteLevel, disabled } = this.props;
     return (
       <TableRow>
         <TableRowColumn style={styles.levelNumber}>{ levelNumber }</TableRowColumn>
@@ -66,8 +67,8 @@ class LevelRow extends React.Component {
             name={`delete_${levelNumber}`}
             backgroundColor={grey300}
             icon={<DeleteIcon />}
-            onClick={this.props.deleteLevel(levelNumber)}
-            disabled={this.props.disabled}
+            onClick={deleteLevel(levelNumber)}
+            disabled={disabled}
             style={{ minWidth: '40px', width: '40px' }}
           />
         </TableHeaderColumn>
