@@ -2,7 +2,7 @@ import actionTypes from '../constants';
 
 const initialState = {
   popupNotification: {},
-  popupOpen: true,
+  popupOpen: false,
 };
 
 export default function (state = initialState, action) {
@@ -10,6 +10,7 @@ export default function (state = initialState, action) {
     case actionTypes.MARK_AS_READ_REQUEST: {
       return { ...state, popupOpen: false };
     }
+    case actionTypes.FETCH_NOTIFICATION_SUCCESS:
     case actionTypes.MARK_AS_READ_SUCCESS: {
       return {
         popupNotification: action.nextNotification,

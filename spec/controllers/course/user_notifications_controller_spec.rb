@@ -9,6 +9,51 @@ RSpec.describe Course::UserNotificationsController, type: :controller do
     let(:user) { create(:user) }
     let!(:course_student) { create(:course_student, course: course, user: user) }
 
+    describe '#fetch' do
+      render_views
+      let(:admin) { create(:administrator) }
+
+      before { sign_in(user) if user }
+      subject do
+        get :fetch, params: { course_id: course.id }, format: :json
+        json_response
+      end
+
+      context "when the next notification is 'level_reached'" do
+        before do
+          create(:course_level, course: course, experience_points_threshold: 10)
+          course.reload
+          create(:course_experience_points_record, course_user: course_student, points_awarded: 20, awarder: admin)
+        end
+
+        context 'when leaderboard is enabled' do
+          it 'returns the appropriate fields' do
+            expect(subject['notificationType']).to eq('levelReached')
+            expect(subject['levelNumber']).to eq(1)
+            expect(subject['leaderboardEnabled']).to eq(true)
+            expect(subject['leaderboardPosition']).to eq(1)
+          end
+        end
+
+        context 'when leaderboard is disabled' do
+          before do
+            # TODO: use setter
+            course.settings(:components, :course_leaderboard_component).enabled = false
+            course.save!
+
+            controller.instance_variable_set(:@course, nil)
+          end
+
+          it 'returns the appropriate fields' do
+            expect(subject['notificationType']).to eq('levelReached')
+            expect(subject['levelNumber']).to eq(1)
+            expect(subject['leaderboardEnabled']).to eq(false)
+            expect(subject['leaderboardPosition']).to eq(nil)
+          end
+        end
+      end
+    end
+
     describe '#mark_as_read' do
       context 'when there are some more unread popups' do
         render_views
