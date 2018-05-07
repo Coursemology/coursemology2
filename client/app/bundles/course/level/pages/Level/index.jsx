@@ -129,19 +129,21 @@ class Level extends React.Component {
   }
 
   handleSaveLevels() {
+    const { dispatch, levels } = this.props;
     return (e) => {
       e.preventDefault();
       if (this.levelsHaveError() === false) {
         const successMessage = <FormattedMessage {...translations.saveSuccess} />;
         const failureMessage = <FormattedMessage {...translations.saveFailure} />;
-        this.props.dispatch(saveLevels(this.props.levels, successMessage, failureMessage));
+        dispatch(saveLevels(levels, successMessage, failureMessage));
       }
     };
   }
 
   renderBody() {
-    const rows = this.props.levels.slice(1).map((experiencePointsThreshold, index) => {
-      const key = `${index}-${experiencePointsThreshold}`;
+    const { levels, isSaving } = this.props;
+    const rows = levels.slice(1).map((experiencePointsThreshold, index) => {
+      const key = `${index}`;
       return (
         <LevelRow
           key={key}
@@ -150,7 +152,7 @@ class Level extends React.Component {
           updateExpThreshold={this.handleUpdateExpThreshold}
           sortLevels={this.handleLevelTextBlur}
           deleteLevel={this.handleDeleteLevel}
-          disabled={this.props.isSaving}
+          disabled={isSaving}
         />
       );
     });
@@ -180,7 +182,7 @@ class Level extends React.Component {
                   id="add-level"
                   icon={<i className="fa fa-plus" />}
                   label={<FormattedMessage {...translations.addNewLevel} />}
-                  disabled={this.props.isSaving}
+                  disabled={isSaving}
                   onClick={this.handleCreateLevel()}
                 />
               </TableRowColumn>
@@ -193,7 +195,7 @@ class Level extends React.Component {
                   style={styles.formButton}
                   type="submit"
                   label={<FormattedMessage {...translations.saveLevels} />}
-                  disabled={this.props.isSaving}
+                  disabled={isSaving}
                   primary
                   onClick={this.handleSaveLevels()}
                 />
