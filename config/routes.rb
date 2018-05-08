@@ -368,6 +368,7 @@ Rails.application.routes.draw do
       end
 
       resources :user_notifications do
+        get 'fetch', on: :collection
         post 'mark_as_read', on: :member
       end
     end

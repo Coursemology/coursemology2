@@ -10,10 +10,7 @@ $(document).ready(() => {
   const mountNode = document.getElementById('popup-notifier');
 
   if (mountNode) {
-    const dataAttr = mountNode.getAttribute('data');
-    const data = JSON.parse(dataAttr);
-    if (data === null) { return; }
-    const store = storeCreator({ popupNotification: data });
+    const store = storeCreator({});
 
     render(
       <ProviderWrapper {...{ store }}>

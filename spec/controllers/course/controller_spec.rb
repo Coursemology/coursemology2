@@ -92,49 +92,5 @@ RSpec.describe Course::Controller, type: :controller do
         end
       end
     end
-
-    describe '#next_popup_notification' do
-      render_views
-      let(:student) { create(:course_student, course: course) }
-      let(:user) { student.user }
-
-      subject { JSON.parse(controller.next_popup_notification) }
-
-      context "when the next notification is 'level_reached'" do
-        before do
-          create(:course_level, course: course, experience_points_threshold: 10)
-          course.reload
-          build(:course_experience_points_record, course_user: student, points_awarded: 20, awarder: admin).tap(&:save)
-          get :show, params: { id: course.id }
-        end
-
-        context 'when leaderboard is enabled' do
-          before { get :show, params: { id: course.id } }
-
-          it 'returns the appropriate fields' do
-            expect(subject['notificationType']).to eq('levelReached')
-            expect(subject['levelNumber']).to eq(1)
-            expect(subject['leaderboardEnabled']).to eq(true)
-            expect(subject['leaderboardPosition']).to eq(1)
-          end
-        end
-
-        context 'when leaderboard is disabled' do
-          before do
-            course.settings(:components, :course_leaderboard_component).enabled = false
-            course.save
-            controller.instance_variable_set(:@course, nil)
-            get :show, params: { id: course.id }
-          end
-
-          it 'returns the appropriate fields' do
-            expect(subject['notificationType']).to eq('levelReached')
-            expect(subject['levelNumber']).to eq(1)
-            expect(subject['leaderboardEnabled']).to eq(false)
-            expect(subject['leaderboardPosition']).to eq(nil)
-          end
-        end
-      end
-    end
   end
 end

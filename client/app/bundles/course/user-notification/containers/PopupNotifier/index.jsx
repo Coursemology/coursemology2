@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import AchievementGainedPopup from 'course/user-notification/components/AchievementGainedPopup';
 import LevelReachedPopup from 'course/user-notification/components/LevelReachedPopup';
-import { markAsRead } from 'course/user-notification/actions';
+import { fetchNotification, markAsRead } from 'course/user-notification/actions';
 
 class PopupNotifier extends React.Component {
   static propTypes = {
@@ -16,6 +16,10 @@ class PopupNotifier extends React.Component {
     achievementGained: AchievementGainedPopup,
     levelReached: LevelReachedPopup,
   };
+
+  componentDidMount() {
+    this.props.dispatch(fetchNotification());
+  }
 
   render() {
     const { dispatch, notification, open } = this.props;

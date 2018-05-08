@@ -25,4 +25,5 @@
     div.col-lg-10.col-md-9.col-sm-8 class=page_class
       = yield
 
-    #popup-notifier data=controller.next_popup_notification
+    - if current_course_user && UserNotification.next_unread_popup_for(current_course_user).present?
+      #popup-notifier
