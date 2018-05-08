@@ -311,7 +311,7 @@ Rails.application.routes.draw do
       get 'staff' => 'users#staff', as: :users_staff
       patch 'upgrade_to_staff' => 'users#upgrade_to_staff', as: :users_upgrade_to_staff
 
-      resources :groups, except: [:show]
+      resources :groups
 
       namespace :material, path: 'materials' do
         resources :folders, except: [:index, :new, :create] do
