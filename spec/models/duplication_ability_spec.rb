@@ -35,5 +35,12 @@ RSpec.describe Course, type: :model do
       it { is_expected.to be_able_to(:duplicate_from, course) }
       it { is_expected.to be_able_to(:duplicate_to, course) }
     end
+
+    context 'when the user is a Course Observer' do
+      let(:user) { create(:course_observer, course: course).user }
+
+      it { is_expected.to be_able_to(:duplicate_from, course) }
+      it { is_expected.not_to be_able_to(:duplicate_to, course) }
+    end
   end
 end
