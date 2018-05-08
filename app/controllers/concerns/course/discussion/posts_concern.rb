@@ -18,7 +18,7 @@ module Course::Discussion::PostsConcern
   def update_topic_pending_status
     return true if !current_course_user || skip_update_topic_status
 
-    if current_course_user.staff?
+    if current_course_user.teaching_staff?
       @post.topic.unmark_as_pending
     else
       @post.topic.mark_as_pending

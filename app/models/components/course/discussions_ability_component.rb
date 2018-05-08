@@ -6,10 +6,10 @@ module Course::DiscussionsAbilityComponent
     if user
       allow_course_users_show_topics
       allow_course_users_mark_topics_as_read
-      allow_staff_manage_discussion_topics
+      allow_course_teaching_staff_manage_discussion_topics
       allow_course_users_create_posts
       allow_course_users_reply_and_vote_posts
-      allow_course_staff_manage_posts
+      allow_course_teaching_staff_manage_posts
       allow_course_users_update_delete_own_post
     end
 
@@ -26,8 +26,8 @@ module Course::DiscussionsAbilityComponent
     can :mark_as_read, Course::Discussion::Topic, course_all_course_users_hash
   end
 
-  def allow_staff_manage_discussion_topics
-    can :manage, Course::Discussion::Topic, course_staff_hash
+  def allow_course_teaching_staff_manage_discussion_topics
+    can :manage, Course::Discussion::Topic, course_teaching_staff_hash
   end
 
   def allow_course_users_create_posts
@@ -38,8 +38,8 @@ module Course::DiscussionsAbilityComponent
     can [:reply, :vote], Course::Discussion::Post, topic: course_all_course_users_hash
   end
 
-  def allow_course_staff_manage_posts
-    can :manage, Course::Discussion::Post, topic: course_staff_hash
+  def allow_course_teaching_staff_manage_posts
+    can :manage, Course::Discussion::Post, topic: course_teaching_staff_hash
   end
 
   def allow_course_users_update_delete_own_post

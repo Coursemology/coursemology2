@@ -1,4 +1,4 @@
-- if current_course_user&.staff? || can?(:manage, current_course)
+- if current_course_user&.teaching_staff? || can?(:manage, current_course)
   = tabs do
     = nav_to my_students_pending_course_topics_path(current_course) do
       = t('.my_students_pending')
