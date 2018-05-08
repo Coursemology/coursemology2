@@ -30,8 +30,8 @@ RSpec.describe Course::Achievement do
       end
     end
 
-    context 'when the user is a Course Staff' do
-      let(:course_user) { create(:course_manager, course: course) }
+    context 'when the user is a Course Teaching Staff' do
+      let(:course_user) { create(:course_teaching_assistant, course: course) }
       let(:user) { course_user.user }
 
       it { is_expected.to be_able_to(:manage, achievement) }
@@ -53,6 +53,18 @@ RSpec.describe Course::Achievement do
 
         it { is_expected.not_to be_able_to(:award, achievement) }
       end
+    end
+
+    context 'when the user is a Course Observer' do
+      let(:course_user) { create(:course_observer, course: course) }
+      let(:user) { course_user.user }
+
+      it { is_expected.to be_able_to(:read, achievement) }
+      it { is_expected.to be_able_to(:read, draft_achievement) }
+      it { is_expected.to be_able_to(:display_badge, achievement) }
+      it { is_expected.to be_able_to(:display_badge, draft_achievement) }
+      it { is_expected.not_to be_able_to(:manage, achievement) }
+      it { is_expected.not_to be_able_to(:manage, draft_achievement) }
     end
   end
 end
