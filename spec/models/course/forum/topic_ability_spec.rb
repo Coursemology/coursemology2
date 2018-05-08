@@ -43,5 +43,14 @@ RSpec.describe Course::Forum::Topic, type: :model do
       it { is_expected.to be_able_to(:manage, shown_topic) }
       it { is_expected.to be_able_to(:manage, hidden_topic) }
     end
+
+    context 'when the user is a Course Observer' do
+      let(:user) { create(:course_observer, course: course).user }
+
+      it { is_expected.to be_able_to(:show, shown_topic) }
+      it { is_expected.to be_able_to(:show, hidden_topic) }
+      it { is_expected.not_to be_able_to(:manage, hidden_topic) }
+      it { is_expected.not_to be_able_to(:manage, shown_topic) }
+    end
   end
 end
