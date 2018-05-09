@@ -14,8 +14,7 @@ RSpec.describe System::Admin::Instance::ComponentsController, type: :controller 
 
     describe '#update' do
       let(:ids_to_enable) do
-        all_component_ids =
-          Course::ControllerComponentHost.disableable_components.map { |c| c.key.to_s }
+        all_component_ids = instance.disableable_components.map { |c| c.key.to_s }
         all_component_ids.sample(1 + rand(all_component_ids.count))
       end
       let(:components_params) { { enabled_component_ids: ids_to_enable } }

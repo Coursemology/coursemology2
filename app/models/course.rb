@@ -3,6 +3,7 @@ class Course < ApplicationRecord
   include Course::LessonPlanConcern
   include Course::SearchConcern
   include Course::DuplicationConcern
+  include Course::CourseComponentsConcern
   include TimeZoneConcern
 
   acts_as_tenant :instance, inverse_of: :courses

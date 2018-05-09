@@ -10,7 +10,7 @@ RSpec.feature 'Course: Administration: Components' do
     let(:course) do
       create(:course, :with_video_component_enabled, :with_virtual_classroom_component_enabled)
     end
-    let(:components) { Course::ControllerComponentHost.components.select(&:can_be_disabled?) }
+    let(:components) { course.disableable_components }
     let(:sample_component_id) do
       "settings_components_enabled_component_ids_#{components.sample.key}"
     end
@@ -24,8 +24,7 @@ RSpec.feature 'Course: Administration: Components' do
 
         components.each do |component|
           expect(page).to have_selector('th', text: component.display_name)
-          enabled = course.reload.settings(:components, component.key).enabled
-          enabled = enabled.nil? ? component.enabled_by_default? : enabled
+          enabled = course.enabled_components.include?(component)
           checkbox = find("#settings_components_enabled_component_ids_#{component.key}")
           if enabled
             expect(checkbox).to be_checked

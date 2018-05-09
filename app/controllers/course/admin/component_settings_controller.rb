@@ -7,7 +7,6 @@ class Course::Admin::ComponentSettingsController < Course::Admin::Controller
   end
 
   def update #:nodoc:
-    validate_params
     if @settings.update(settings_components_params) && current_course.save!
       redirect_to course_admin_components_path(current_course), success: t('.success')
     else
@@ -23,11 +22,6 @@ class Course::Admin::ComponentSettingsController < Course::Admin::Controller
 
   # Load our settings adapter to handle component settings
   def load_settings
-    @settings ||= Course::Settings::Components.new(current_course, current_component_host)
-  end
-
-  def validate_params
-    raise ArgumentError, 'Invalid list of selected components' \
-      unless @settings.valid_params?(settings_components_params)
+    @settings ||= Course::Settings::Components.new(current_course)
   end
 end

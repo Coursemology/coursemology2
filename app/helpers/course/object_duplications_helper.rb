@@ -26,17 +26,7 @@ module Course::ObjectDuplicationsHelper
     }.freeze
   end
 
-  # @param [Course] course
-  # @return [Array<String>] Frontend-based strings representing the enabled components for the given course.
-  def enabled_component_tokens(course)
-    context = OpenStruct.new(current_course: course)
-    component_host = Course::ControllerComponentHost.new(
-      course.instance.settings(:components), course.settings(:components), context
-    )
-    map_components_to_frontend_tokens(component_host.components)
-  end
-
-  # @param [Course::ControllerComponentHost::Component] components
+  # @param [#key] components Either a component or its class.
   # @return [Array<String>] Frontend-based strings representing the given components.
   def map_components_to_frontend_tokens(components)
     components.map(&:key).map { |key| cherrypickable_components_hash[key] }.compact

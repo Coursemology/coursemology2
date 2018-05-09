@@ -11,13 +11,13 @@ FactoryBot.define do
 
     trait :with_video_component_enabled do
       after(:build) do |instance|
-        instance.settings(:components, :course_videos_component).enabled = true
+        instance.set_component_enabled_boolean(:course_videos_component, true)
       end
     end
 
     trait :with_virtual_classroom_component_enabled do
       after(:build) do |instance|
-        instance.settings(:components, :course_virtual_classrooms_component).enabled = true
+        instance.set_component_enabled_boolean(:course_virtual_classrooms_component, true)
       end
     end
   end
