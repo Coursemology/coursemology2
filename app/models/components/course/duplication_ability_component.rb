@@ -7,6 +7,7 @@ module Course::DuplicationAbilityComponent
       disallow_superusers_duplicate_via_frontend
       allow_managers_duplicate_to_course
       allow_managers_duplicate_from_course
+      allow_observers_duplicate_from_course
     end
 
     super
@@ -22,10 +23,14 @@ module Course::DuplicationAbilityComponent
   end
 
   def allow_managers_duplicate_to_course
-    can :duplicate_to, Course, course_user_hash(*CourseUser::MANAGER_ROLES.to_a)
+    can :duplicate_to, Course, managers_hash
   end
 
   def allow_managers_duplicate_from_course
-    can :duplicate_from, Course, course_user_hash(*CourseUser::MANAGER_ROLES.to_a)
+    can :duplicate_from, Course, managers_hash
+  end
+
+  def allow_observers_duplicate_from_course
+    can :duplicate_from, Course, course_user_hash(:observer)
   end
 end

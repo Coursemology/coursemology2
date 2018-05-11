@@ -7,6 +7,11 @@ class Course::GroupsController < Course::ComponentController
     @groups = @groups.ordered_by_name.includes(group_users: { course_user: :course })
   end
 
+  def show #:nodoc:
+    @group_users = @group.group_users.includes(:course_user)
+    @group_managers, @group_users = @group_users.partition(&:manager?)
+  end
+
   def new #:nodoc:
   end
 

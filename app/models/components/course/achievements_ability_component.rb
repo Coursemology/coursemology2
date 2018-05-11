@@ -6,9 +6,10 @@ module Course::AchievementsAbilityComponent
     if course_user
       allow_read_achievements
       allow_user_with_achievement_show_badges
-    end
 
-    allow_manage_achievements if course_user&.staff?
+      allow_read_draft_achievements_and_display_badge if course_user.staff?
+      allow_manage_achievements if course_user.teaching_staff?
+    end
 
     do_not_allow_award_automatically_awarded_achievements
 
@@ -23,6 +24,10 @@ module Course::AchievementsAbilityComponent
 
   def allow_user_with_achievement_show_badges
     can :display_badge, Course::Achievement, course_user_achievements: { course_user_id: course_user.id }
+  end
+
+  def allow_read_draft_achievements_and_display_badge
+    can [:read, :display_badge], Course::Achievement, course_id: course.id
   end
 
   def allow_manage_achievements

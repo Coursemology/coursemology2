@@ -7,10 +7,13 @@ class CourseUser < ApplicationRecord
   after_initialize :set_defaults, if: :new_record?
   before_validation :set_defaults, if: :new_record?
 
-  enum role: { student: 0, teaching_assistant: 1, manager: 2, owner: 3 }
+  enum role: { student: 0, teaching_assistant: 1, manager: 2, owner: 3, observer: 4 }
 
-  # A set of roles which comprise the staff of a course.
-  STAFF_ROLES = Set[:teaching_assistant, :manager, :owner].freeze
+  # A set of roles which comprise the staff of a course, including the observer.
+  STAFF_ROLES = Set[:teaching_assistant, :manager, :owner, :observer].freeze
+
+  # A set of roles which comprise of the teaching staff of a course.
+  TEACHING_STAFF_ROLES = Set[:teaching_assistant, :manager, :owner].freeze
 
   # A set of roles which comprise the teaching assistants and managers of a course.
   TA_AND_MANAGER_ROLES = Set[:teaching_assistant, :manager].freeze
@@ -65,6 +68,7 @@ class CourseUser < ApplicationRecord
   # Gets the staff associated with the course.
   # TODO: Remove the map when Rails 5 is released.
   scope :staff, -> { where(role: STAFF_ROLES.map { |x| roles[x] }) }
+  scope :teaching_staff, -> { where(role: TEACHING_STAFF_ROLES.map { |x| roles[x] }) }
   scope :teaching_assistant_and_manager, (lambda do
     where(role: TA_AND_MANAGER_ROLES.map { |x| roles[x] })
   end)
@@ -118,11 +122,18 @@ class CourseUser < ApplicationRecord
     MANAGER_ROLES.include?(role.to_sym)
   end
 
-  # Test whether this course_user is a staff (i.e. teaching_assistant, manager or owner)
+  # Test whether this course_user is a staff (i.e. teaching_assistant, manager, owner or observer)
   #
   # @return [Boolean] True if course_user is a staff
   def staff?
     STAFF_ROLES.include?(role.to_sym)
+  end
+
+  # Test whether this course_user is a teaching staff (i.e. teaching_assistant, manager or owner)
+  #
+  # @return [Boolean] True if course_user is a staff
+  def teaching_staff?
+    TEACHING_STAFF_ROLES.include?(role.to_sym)
   end
 
   # Test whether this course_user is a real student (i.e. not phantom and not staff)

@@ -9,6 +9,9 @@ en:
         phantom: 'Phantom'
         total: 'Total'
         managers: 'Managers'
+      show:
+        managers: :'course.groups.index.managers'
+        members: 'Members'
       new:
         header: 'New Group'
       create:

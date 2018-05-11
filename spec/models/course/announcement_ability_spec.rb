@@ -24,8 +24,8 @@ RSpec.describe Course::Announcement do
       end
     end
 
-    context 'when the user is a Course Staff' do
-      let(:user) { create(:course_manager, course: course).user }
+    context 'when the user is a Course Teaching Staff' do
+      let(:user) { create(:course_teaching_assistant, course: course).user }
 
       it { is_expected.to be_able_to(:manage, valid_announcement) }
       it { is_expected.to be_able_to(:manage, ended_announcement) }
@@ -35,6 +35,17 @@ RSpec.describe Course::Announcement do
         expect(course.announcements.accessible_by(subject)).
           to contain_exactly(not_started_announcement, valid_announcement, ended_announcement)
       end
+    end
+
+    context 'when the user is a Course Observer' do
+      let(:user) { create(:course_observer, course: course).user }
+
+      it { is_expected.to be_able_to(:read, valid_announcement) }
+      it { is_expected.to be_able_to(:read, ended_announcement) }
+      it { is_expected.to be_able_to(:read, not_started_announcement) }
+      it { is_expected.not_to be_able_to(:manage, valid_announcement) }
+      it { is_expected.not_to be_able_to(:manage, ended_announcement) }
+      it { is_expected.not_to be_able_to(:manage, not_started_announcement) }
     end
   end
 end

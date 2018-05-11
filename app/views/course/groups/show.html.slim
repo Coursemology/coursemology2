@@ -1,0 +1,24 @@
+- add_breadcrumb @group.name
+= page_header format_inline_text(@group.name) do
+  - if can?(:manage, @group)
+    div.pull-right.btn-group
+      = edit_button(edit_course_group_path(current_course, @group))
+      = delete_button(course_group_path(current_course, @group))
+
+- if @group_managers
+  h3 = t('.managers')
+  table.table.table-bordered
+    tbody
+      - @group_managers.each do |group_manager|
+        tr
+          th = link_to group_manager.course_user.name,
+                       course_user_path(current_course, group_manager.course_user)
+
+- if @group_users
+  h3 = t('.members')
+  table.table.table-bordered
+    tbody
+      - @group_users.each do |group_user|
+        tr
+          th = link_to group_user.course_user.name,
+                       course_user_path(current_course, group_user.course_user)

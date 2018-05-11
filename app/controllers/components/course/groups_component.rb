@@ -7,7 +7,7 @@ class Course::GroupsComponent < SimpleDelegator
   end
 
   def sidebar_items
-    return [] unless can_manage_group?
+    return [] unless show_group_sidebar_item?
 
     [
       {
@@ -23,8 +23,8 @@ class Course::GroupsComponent < SimpleDelegator
 
   private
 
-  def can_manage_group?
-    can?(:manage, Course::Group.new(course: current_course)) || !manageable_groups.empty?
+  def show_group_sidebar_item?
+    can?(:read, Course::Group.new(course: current_course)) || !manageable_groups.empty?
   end
 
   def manageable_groups

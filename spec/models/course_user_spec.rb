@@ -21,6 +21,7 @@ RSpec.describe CourseUser, type: :model do
     let(:course) { create(:course, creator: owner, updater: owner) }
     let!(:student) { create(:course_student, course: course) }
     let(:phantom_student) { create(:course_student, :phantom, course: course) }
+    let(:observer) { create(:course_observer, course: course) }
     let(:teaching_assistant) { create(:course_teaching_assistant, course: course) }
     let(:manager) { create(:course_manager, course: course) }
     let(:course_owner) { course.course_users.find_by!(user: owner) }
@@ -61,6 +62,12 @@ RSpec.describe CourseUser, type: :model do
     describe '.student' do
       it 'returns only student' do
         expect(course.course_users.student).to contain_exactly(student)
+      end
+    end
+
+    describe '.observer' do
+      it 'returns only observer' do
+        expect(course.course_users.observer).to contain_exactly(observer)
       end
     end
 
@@ -155,17 +162,29 @@ RSpec.describe CourseUser, type: :model do
     end
 
     describe '#staff?' do
-      it 'returns true if the role is teaching assistant, manager or owner' do
+      it 'returns true if the role is observer, teaching assistant, manager or owner' do
         expect(student.staff?).to be_falsey
+        expect(observer.staff?).to be_truthy
         expect(teaching_assistant.staff?).to be_truthy
         expect(manager.staff?).to be_truthy
         expect(course_owner.staff?).to be_truthy
       end
     end
 
+    describe '#teaching_staff?' do
+      it 'returns true if the role is teaching assistant, manager or owner' do
+        expect(student.teaching_staff?).to be_falsey
+        expect(observer.teaching_staff?).to be_falsey
+        expect(teaching_assistant.teaching_staff?).to be_truthy
+        expect(manager.teaching_staff?).to be_truthy
+        expect(course_owner.teaching_staff?).to be_truthy
+      end
+    end
+
     describe '#manager_or_owner?' do
       it 'returns true if the role is manager or owner' do
         expect(student.manager_or_owner?).to be_falsey
+        expect(observer.manager_or_owner?).to be_falsey
         expect(teaching_assistant.manager_or_owner?).to be_falsey
         expect(manager.manager_or_owner?).to be_truthy
         expect(course_owner.manager_or_owner?).to be_truthy
@@ -176,6 +195,7 @@ RSpec.describe CourseUser, type: :model do
       it 'returns true if the role is student and not phantom' do
         expect(student.real_student?).to be_truthy
         expect(phantom_student.real_student?).to be_falsey
+        expect(observer.manager_or_owner?).to be_falsey
         expect(teaching_assistant.real_student?).to be_falsey
         expect(manager.real_student?).to be_falsey
         expect(course_owner.real_student?).to be_falsey

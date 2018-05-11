@@ -1,5 +1,5 @@
 = content_tag_for(:tr, group) do
-  th = format_inline_text(group.name)
+  th = link_to format_inline_text(group.name), course_group_path(current_course, group)
   td = group.course_users.without_phantom_users.count
   td = group.course_users.phantom.count
   td = group.course_users.count
@@ -9,5 +9,6 @@
         = link_to_course_user(manager) do
           = format_inline_text(manager.name)
   td
-    = edit_button(edit_course_group_path(current_course, group))
-    = delete_button(course_group_path(current_course, group))
+    - if can?(:manage, group)
+      = edit_button(edit_course_group_path(current_course, group))
+      = delete_button(course_group_path(current_course, group))

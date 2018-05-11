@@ -10,8 +10,9 @@ module Course::ForumsAbilityComponent
       allow_students_update_topics
       allow_student_reply_unlocked_topics
       allow_student_resolve_own_topics
-      allow_staff_manage_forums
-      allow_staff_manage_topics
+      allow_staff_show_all_topics
+      allow_teaching_staff_manage_forums
+      allow_teaching_staff_manage_topics
     end
 
     super
@@ -25,6 +26,10 @@ module Course::ForumsAbilityComponent
 
   def topic_course_staff_hash
     { forum: course_staff_hash }
+  end
+
+  def topic_course_teaching_staff_hash
+    { forum: course_teaching_staff_hash }
   end
 
   def allow_students_show_forums
@@ -55,11 +60,16 @@ module Course::ForumsAbilityComponent
     can :toggle_answer, Course::Forum::Topic, creator_id: user.id
   end
 
-  def allow_staff_manage_forums
-    can :manage, Course::Forum, course_staff_hash
+  def allow_staff_show_all_topics
+    can :read, Course::Forum::Topic, topic_course_staff_hash
+    can :subscribe, Course::Forum::Topic, topic_course_staff_hash
   end
 
-  def allow_staff_manage_topics
-    can :manage, Course::Forum::Topic, topic_course_staff_hash
+  def allow_teaching_staff_manage_forums
+    can :manage, Course::Forum, course_teaching_staff_hash
+  end
+
+  def allow_teaching_staff_manage_topics
+    can :manage, Course::Forum::Topic, topic_course_teaching_staff_hash
   end
 end

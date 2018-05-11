@@ -14,10 +14,17 @@ RSpec.describe Course::Forum, type: :model do
       it { is_expected.to be_able_to(:show, forum) }
     end
 
-    context 'when the user is a Course Staff' do
-      let(:user) { create(:course_manager, course: course).user }
+    context 'when the user is a Course Teaching Staff' do
+      let(:user) { create(:course_teaching_assistant, course: course).user }
 
       it { is_expected.to be_able_to(:manage, forum) }
+    end
+
+    context 'when the user is a Course Observer' do
+      let(:user) { create(:course_observer, course: course).user }
+
+      it { is_expected.to be_able_to(:read, forum) }
+      it { is_expected.not_to be_able_to(:manage, forum) }
     end
   end
 end

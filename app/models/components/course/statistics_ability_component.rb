@@ -11,6 +11,6 @@ module Course::StatisticsAbilityComponent
   private
 
   def allow_staff_read_statistics
-    can :read_statistics, Course, course_user_hash(*CourseUser::STAFF_ROLES.to_a)
+    can :read_statistics, Course, staff_hash
   end
 end
