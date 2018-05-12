@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Tab, Tabs } from 'material-ui/Tabs';
 import { injectIntl, intlShape } from 'react-intl';
 import ProgressGraph from './Charts/ProgressGraph';
+import styles from './Statistics.scss';
 
 const propTypes = {
   intl: intlShape.isRequired,
@@ -23,7 +24,7 @@ const propTypes = {
 class Statistics extends React.Component {
   render() {
     return (
-      <Tabs>
+      <Tabs className={styles.statisticsGraphView}>
         <Tab label="Progress Graph">
           <ProgressGraph sessions={this.props.sessions} />
         </Tab>
