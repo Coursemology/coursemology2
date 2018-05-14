@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import ReactSummernote from 'react-summernote';
 import TextFieldLabel from 'material-ui/TextField/TextFieldLabel';
 
@@ -28,6 +28,7 @@ const propTypes = {
   required: PropTypes.bool,
   value: PropTypes.string,
   airMode: PropTypes.bool,
+  intl: intlShape,
 };
 
 const contextTypes = {
@@ -39,6 +40,7 @@ class MaterialSummernote extends React.Component {
     super(props);
     this.state = { isFocused: false };
     this.reactSummernote = null;
+    this.inlineCodeButton = this.inlineCodeButton.bind(this);
   }
 
   onChange = (e) => {
@@ -106,7 +108,7 @@ class MaterialSummernote extends React.Component {
                    'style="color: #c7254e;' +
                    'font-weight: bold;' +
                    'background-color: #f9f2f4"/>',
-      tooltip: <FormattedMessage {...translations.inlineCode} />,
+      tooltip: this.props.intl.formatMessage(translations.inlineCode),
       click: () => {
         const node = $(window.getSelection().getRangeAt(0).commonAncestorContainer);
         if (node.parent().is('code')) {
@@ -235,4 +237,4 @@ class MaterialSummernote extends React.Component {
 MaterialSummernote.propTypes = propTypes;
 MaterialSummernote.contextTypes = contextTypes;
 
-export default MaterialSummernote;
+export default injectIntl(MaterialSummernote);
