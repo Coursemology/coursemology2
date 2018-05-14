@@ -47,8 +47,9 @@ en:
     search_form:
       search_button: :'common.search'
     course_user_badge:
-      achievements: :'course.achievement.achievements.index.header'
-      levels: :'course.levels.index.level'
-      progress: '%{current} / %{next} EXP'
+      achievements: '+ %{difference} More'
+      level: 'Level %{level}'
+      experience_points: '%{exp} EXP'
+      next_level: '%{difference} EXP to Next Level'
     code_formatter:
       size_too_big: 'The file is too big and cannot be displayed.'

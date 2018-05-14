@@ -1,24 +1,45 @@
 .course-layout {
   @include timestamp;
 
-  #course-user-badge {
-    #course-user-progress {
-      .progress {
-        margin-bottom: 10px;
-        margin-top: 10px;
+  #course-badge-achievement {
+    margin-bottom: 0.5em;
+    margin-left: 0.5em;
 
-        .course-user-experience-points {
-          min-width: 10em;
-        }
-      }
+    .image > img {
+      height: $course-user-badge-achievement-badge;
+      width: $course-user-badge-achievement-badge;
     }
 
-    #course-user-achievements,
-    #course-user-level {
-      h5,
-      p {
-        text-align: center;
-      }
+    .achievement > a:hover {
+      text-decoration: none;
+    }
+
+    .achievement-difference {
+      margin-left: 6px;
+    }
+  }
+
+  #course-badge-level {
+    margin-left: 0.5em;
+
+    .experience-points {
+      font-weight: 300;
+    }
+
+    .level {
+      font-size: 150%;
+      margin-right: 0.5em;
+    }
+
+    .next-level {
+      font-size: 85%;
+      margin-bottom: 1em;
+    }
+
+    .progress {
+      height: 12px;
+      margin-bottom: 3px;
+      margin-top: 6px;
     }
   }
 

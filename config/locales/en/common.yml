@@ -15,6 +15,7 @@ en:
     created_at: 'Created At'
     truthy: 'Yes'
     falsey: 'No'
+    percentage: '%{percentage}%'
   helpers:
     submit:
       condition_level:

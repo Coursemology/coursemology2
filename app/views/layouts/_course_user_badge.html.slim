@@ -1,17 +1,32 @@
-div#course-user-badge
-  div.col-xs-12#course-user-progress
-    - progress_bar_classes = { class: ['progress-bar-info', 'progress-bar-striped',
-                                       'course-user-experience-points'] }
-    = display_progress_bar(course_user.level_progress_percentage, progress_bar_classes) do
-      = t('.progress', current: course_user.experience_points,
-                       next: course_user.next_level_threshold)
-  div.col-xs-6#course-user-achievements
-    - unless current_component_host[:course_achievements_component].nil?
-      = link_to course_achievements_path(course_user.course) do
-        h5 = t('.achievements')
-        p = course_user.achievement_count
-  div.col-xs-6#course-user-level
-    - unless current_component_host[:course_levels_component].nil?
-      = link_to_course_user(course_user) do
-        h5 = t('.levels')
-        p = course_user.level_number
+- levels_enabled = !current_component_host[:course_levels_component].nil?
+- achievements_enabled = !current_component_host[:course_achievements_component].nil?
+
+- if levels_enabled
+  - level_number = course_user.level_number
+  - percentage = course_user.level_progress_percentage
+  - experience_points = course_user.experience_points
+  - next_threshold = course_user.next_level_threshold
+  - difference = next_threshold - experience_points
+
+  div.col-xs-12#course-badge-level
+    = link_to_course_user(course_user) do
+      span.level = t('.level', level: level_number)
+      span.experience-points = t('.experience_points', exp: experience_points)
+
+    - progress_bar_options = { class: ['progress-bar-info', 'course-user-experience-points'],
+                               tooltip_text: t('common.percentage', percentage: percentage),
+                               tooltip_placement: 'right' }
+    = display_progress_bar(percentage, progress_bar_options)
+    div.next-level.text-center
+      = t('.next_level', difference: difference)
+
+- if achievements_enabled
+  div.col-xs-12#course-badge-achievement
+    - course_user.achievements.recently_obtained(3).each do |achievement|
+      = content_tag_for(:span, achievement) do
+        = link_to course_achievement_path(current_course, achievement) do
+          = display_achievement_badge(achievement)
+    - if course_user.achievement_count > 3
+      - difference = course_user.achievement_count - 3
+      = link_to t('.achievements', difference: difference),
+                course_achievements_path(current_course), class: ['achievement-difference']
