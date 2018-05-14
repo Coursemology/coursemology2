@@ -49,7 +49,7 @@ RSpec.describe Course::ControllerComponentHost, type: :controller do
   class self::DummyCoreCourseModule
     include Course::ControllerComponentHost::Component
 
-    def self.can_be_disabled?
+    def self.can_be_disabled_for_course?
       false
     end
 
@@ -196,46 +196,44 @@ RSpec.describe Course::ControllerComponentHost, type: :controller do
       end
 
       context 'with preferences' do
-        let(:disableable_component) { default_enabled_components.find(&:can_be_disabled?) }
-        let(:undisableable_component) { default_enabled_components.drop_while(&:can_be_disabled?).first }
+        let(:course_disableable_component) do
+          default_enabled_components.find(&:can_be_disabled_for_course?)
+        end
+        let(:course_undisableable_component) do
+          default_enabled_components.drop_while(&:can_be_disabled_for_course?).first
+        end
 
-        context 'disable a component in course' do
-          before { course.set_component_enabled_boolean(disableable_component.key, false) }
+        context 'when a component is disabled for the course' do
+          before { course.set_component_enabled_boolean(course_disableable_component.key, false) }
 
           it 'does not include the disabled component' do
-            expect(subject).not_to include(disableable_component)
+            expect(subject).not_to include(course_disableable_component)
           end
         end
 
         context 'disable an undisableable component in course' do
-          before { course.send(:unsafe_set_component_enabled_boolean, undisableable_component.key, false) }
+          before do
+            course.send(:unsafe_set_component_enabled_boolean, course_undisableable_component.key, false)
+          end
 
-          it 'includes the disabled component' do
-            expect(subject).to include(undisableable_component)
+          it 'ignores the setting and includes the disabled component' do
+            expect(subject).to include(course_undisableable_component)
           end
         end
 
-        context 'disable a component in instance' do
-          before { instance.set_component_enabled_boolean(disableable_component.key, false) }
+        context 'when a component is disabled for the instance' do
+          before { instance.set_component_enabled_boolean(course_disableable_component.key, false) }
 
           it 'does not include the disabled component' do
-            expect(subject).not_to include(disableable_component)
+            expect(subject).not_to include(course_disableable_component)
           end
         end
 
-        context 'disable an undisableable component in instance' do
-          before { instance.send(:unsafe_set_component_enabled_boolean, undisableable_component.key, false) }
+        context 'when a component is enabled' do
+          before { course.set_component_enabled_boolean(course_disableable_component.key, true) }
 
-          it 'includes the disabled component' do
-            expect(subject).to include(undisableable_component)
-          end
-        end
-
-        context 'enable a component' do
-          before { course.set_component_enabled_boolean(disableable_component.key, true) }
-
-          it 'includes the disabled component' do
-            expect(subject).to include(disableable_component)
+          it 'includes the component' do
+            expect(subject).to include(course_disableable_component)
           end
         end
       end

@@ -2,7 +2,7 @@
 class Course::UsersComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
 
-  def self.can_be_disabled?
+  def self.can_be_disabled_for_course?
     false
   end
 

@@ -11,6 +11,6 @@ module Course::CourseComponentsConcern
   end
 
   def disableable_components
-    @disableable_components ||= available_components.select(&:can_be_disabled?)
+    @disableable_components ||= available_components.select(&:can_be_disabled_for_course?)
   end
 end
