@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 class Course::Video::Submission::SubmissionsController < Course::Video::Submission::Controller
-  before_action :authorize_video!, only: :create
+  before_action :authorize_attempt_video!, only: :create
+  before_action :authorize_analyze_video!, only: [:index, :show]
   skip_authorize_resource :submission, only: :edit
 
   def index
-    authorize!(:manage, @video)
     @submissions = @submissions.includes(experience_points_record: :course_user)
     @my_students = current_course_user.try(:my_students) || []
     @course_students = current_course.course_users.students.order_alphabetically
@@ -55,8 +55,12 @@ class Course::Video::Submission::SubmissionsController < Course::Video::Submissi
     params[:seek_time]&.to_i
   end
 
-  def authorize_video!
+  def authorize_attempt_video!
     authorize!(:attempt, @video)
+  end
+
+  def authorize_analyze_video!
+    authorize!(:analyze, @video)
   end
 
   def set_seek_and_scroll
