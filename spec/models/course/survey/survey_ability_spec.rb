@@ -11,8 +11,8 @@ RSpec.describe Course::LessonPlan::Event do
     let(:survey) { create(:survey, *survey_traits, course: course) }
     let(:survey_traits) { [] }
 
-    context 'when the user is a Course Staff' do
-      let(:user) { create(:course_manager, course: course).user }
+    context 'when the user is a Course Teaching Staff' do
+      let(:user) { create(:course_teaching_assistant, course: course).user }
 
       it { is_expected.to be_able_to(:manage, survey) }
 
@@ -45,6 +45,57 @@ RSpec.describe Course::LessonPlan::Event do
           expect(subject).to be_able_to(:read, response)
           expect(subject).not_to be_able_to(:read_answers, response)
         end
+      end
+
+      context 'when the survey has a submitted response' do
+        let(:survey_traits) { [:published] }
+        let(:response) { build(:response, :submitted, survey: survey, creator: student.user) }
+
+        it { is_expected.to be_able_to(:unsubmit, response) }
+      end
+    end
+
+    context 'when the user is a Course Observer' do
+      let(:user) { create(:course_observer, course: course).user }
+
+      it { is_expected.not_to be_able_to(:manage, survey) }
+
+      it 'allows the user to see all surveys' do
+        expect(course.surveys.accessible_by(subject)).
+          to contain_exactly(survey)
+      end
+
+      context 'when the survey is being prepared' do
+        let(:survey_traits) { [:unpublished, :not_started] }
+        let(:response) { build(:response, survey: survey, creator: user) }
+        let(:submitted_response) do
+          build(:response, survey: survey, creator: user, submitted_at: Time.zone.now)
+        end
+
+        it 'allows the user to try out the survey before publishing it' do
+          expect(subject).to be_able_to(:create, response)
+          expect(subject).to be_able_to(:submit, response)
+          expect(subject).to be_able_to(:modify, response)
+          expect(subject).to be_able_to(:read_answers, response)
+          expect(subject).not_to be_able_to(:submit, submitted_response)
+        end
+      end
+
+      context 'when the survey is anonymous' do
+        let(:survey_traits) { [:anonymous] }
+        let(:response) { build(:response, survey: survey, creator: student.user) }
+
+        it 'allows user to view response meta-data but not answers' do
+          expect(subject).to be_able_to(:read, response)
+          expect(subject).not_to be_able_to(:read_answers, response)
+        end
+      end
+
+      context 'when the survey has a submitted response' do
+        let(:survey_traits) { [:published] }
+        let(:response) { build(:response, :submitted, survey: survey, creator: student.user) }
+
+        it { is_expected.not_to be_able_to(:unsubmit, response) }
       end
     end
 

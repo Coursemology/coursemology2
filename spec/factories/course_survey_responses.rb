@@ -9,7 +9,9 @@ FactoryBot.define do
     points_awarded nil
 
     trait :submitted do
-      after(:build, &:submit)
+      after(:build) do |response|
+        response.submit
+      end
 
       transient do
         submitted_time { 1.day.ago }
