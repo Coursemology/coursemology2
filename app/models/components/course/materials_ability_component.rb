@@ -6,7 +6,8 @@ module Course::MaterialsAbilityComponent
     if user
       allow_students_show_materials
       allow_students_upload_materials
-      allow_staff_manage_materials
+      allow_staff_read_materials
+      allow_teaching_staff_manage_materials
     end
 
     super
@@ -20,6 +21,10 @@ module Course::MaterialsAbilityComponent
 
   def material_course_staff_hash
     { folder: course_staff_hash }
+  end
+
+  def material_course_teaching_staff_hash
+    { folder: course_teaching_staff_hash }
   end
 
   def allow_students_show_materials
@@ -45,11 +50,17 @@ module Course::MaterialsAbilityComponent
     can :manage, Course::Material, creator: user
   end
 
-  def allow_staff_manage_materials
-    can :manage, Course::Material, material_course_staff_hash
+  def allow_staff_read_materials
+    can :read, Course::Material, material_course_staff_hash
+    can [:read, :download], Course::Material::Folder, course_staff_hash
+  end
 
-    can [:read, :upload], Course::Material::Folder, course_staff_hash
-    can :manage, Course::Material::Folder, course_staff_hash.reverse_merge(concrete_folder_hash)
+  def allow_teaching_staff_manage_materials
+    can :manage, Course::Material, material_course_teaching_staff_hash
+
+    can :upload, Course::Material::Folder, course_teaching_staff_hash
+    can :manage, Course::Material::Folder,
+        course_teaching_staff_hash.reverse_merge(concrete_folder_hash)
     # Do not allow admin to edit linked folders
     cannot [:update, :destroy], Course::Material::Folder do |folder|
       folder.owner_id.present?
