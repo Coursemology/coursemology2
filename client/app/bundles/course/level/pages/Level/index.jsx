@@ -79,11 +79,28 @@ const styles = {
 
 class Level extends React.Component {
   static propTypes = {
+    canManage: PropTypes.bool.isRequired,
     isLoading: PropTypes.bool.isRequired,
     isSaving: PropTypes.bool.isRequired,
     levels: PropTypes.arrayOf(PropTypes.number).isRequired,
 
     dispatch: PropTypes.func.isRequired,
+  }
+
+  static renderTableHeader() {
+    return (
+      <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+        <TableRow>
+          <TableHeaderColumn style={styles.levelHeader} >
+            <FormattedMessage {...translations.levelHeader} />
+          </TableHeaderColumn>
+          <TableHeaderColumn style={styles.thresholdHeader}>
+            <FormattedMessage {...translations.thresholdHeader} />
+          </TableHeaderColumn>
+          <TableHeaderColumn />
+        </TableRow>
+      </TableHeader>
+    );
   }
 
   constructor(props) {
@@ -140,19 +157,55 @@ class Level extends React.Component {
     };
   }
 
+  renderTableFooter() {
+    const { isSaving } = this.props;
+
+    return (
+      <TableFooter adjustForCheckbox={false}>
+        <TableRow>
+          <TableRowColumn />
+          <TableRowColumn colSpan="1" style={styles.addNewLevel}>
+            <FlatButton
+              id="add-level"
+              icon={<i className="fa fa-plus" />}
+              label={<FormattedMessage {...translations.addNewLevel} />}
+              disabled={isSaving}
+              onClick={this.handleCreateLevel()}
+            />
+          </TableRowColumn>
+          <TableRowColumn />
+        </TableRow>
+        <TableRow>
+          <TableRowColumn style={styles.saveLevels}>
+            <RaisedButton
+              id="save-levels"
+              style={styles.formButton}
+              type="submit"
+              label={<FormattedMessage {...translations.saveLevels} />}
+              disabled={isSaving}
+              primary
+              onClick={this.handleSaveLevels()}
+            />
+          </TableRowColumn>
+          <TableRowColumn />
+          <TableRowColumn />
+        </TableRow>
+      </TableFooter>
+    );
+  }
+
   renderBody() {
-    const { levels, isSaving } = this.props;
+    const { canManage, levels, isSaving } = this.props;
     const rows = levels.slice(1).map((experiencePointsThreshold, index) => {
       const key = `${index}`;
       return (
         <LevelRow
-          key={key}
-          levelNumber={index + 1}
-          experiencePointsThreshold={experiencePointsThreshold}
-          updateExpThreshold={this.handleUpdateExpThreshold}
-          sortLevels={this.handleLevelTextBlur}
           deleteLevel={this.handleDeleteLevel}
           disabled={isSaving}
+          levelNumber={index + 1}
+          sortLevels={this.handleLevelTextBlur}
+          updateExpThreshold={this.handleUpdateExpThreshold}
+          {...{ canManage, experiencePointsThreshold, key }}
         />
       );
     });
@@ -160,50 +213,11 @@ class Level extends React.Component {
     return (
       <div style={styles.body}>
         <Table className="table levels-list" fixedHeader={false}>
-          <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
-            <TableRow>
-              <TableHeaderColumn style={styles.levelHeader} >
-                <FormattedMessage {...translations.levelHeader} />
-              </TableHeaderColumn>
-              <TableHeaderColumn style={styles.thresholdHeader}>
-                <FormattedMessage {...translations.thresholdHeader} />
-              </TableHeaderColumn>
-              <TableHeaderColumn />
-            </TableRow>
-          </TableHeader>
+          {Level.renderTableHeader()}
           <TableBody>
             {rows}
           </TableBody>
-          <TableFooter adjustForCheckbox={false}>
-            <TableRow>
-              <TableRowColumn />
-              <TableRowColumn colSpan="1" style={styles.addNewLevel}>
-                <FlatButton
-                  id="add-level"
-                  icon={<i className="fa fa-plus" />}
-                  label={<FormattedMessage {...translations.addNewLevel} />}
-                  disabled={isSaving}
-                  onClick={this.handleCreateLevel()}
-                />
-              </TableRowColumn>
-              <TableRowColumn />
-            </TableRow>
-            <TableRow>
-              <TableRowColumn style={styles.saveLevels}>
-                <RaisedButton
-                  id="save-levels"
-                  style={styles.formButton}
-                  type="submit"
-                  label={<FormattedMessage {...translations.saveLevels} />}
-                  disabled={isSaving}
-                  primary
-                  onClick={this.handleSaveLevels()}
-                />
-              </TableRowColumn>
-              <TableRowColumn />
-              <TableRowColumn />
-            </TableRow>
-          </TableFooter>
+          {canManage && this.renderTableFooter()}
         </Table>
       </div>
     );
@@ -212,7 +226,9 @@ class Level extends React.Component {
   render() {
     return (
       <div>
-        <TitleBar title={<FormattedMessage {...defaultComponentTitles.course_levels_component} />} />
+        <TitleBar
+          title={<FormattedMessage {...defaultComponentTitles.course_levels_component} />}
+        />
         { this.props.isLoading ? <LoadingIndicator /> : this.renderBody() }
       </div>
     );
@@ -220,6 +236,7 @@ class Level extends React.Component {
 }
 
 export default connect(({ levelEdit }) => ({
+  canManage: levelEdit.canManage,
   isLoading: levelEdit.isLoading,
   isSaving: levelEdit.isSaving,
   levels: levelEdit.levels,

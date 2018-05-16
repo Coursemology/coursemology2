@@ -26,20 +26,27 @@ const styles = {
     textAlign: 'center',
     verticalAlign: 'middle',
   },
+  threshold: {
+    fontSize: '16px',
+    verticalAlign: 'middle',
+  },
 };
 
 class LevelRow extends React.Component {
   static propTypes = {
-    levelNumber: PropTypes.number.isRequired,
+    canManage: PropTypes.bool.isRequired,
+    deleteLevel: PropTypes.func.isRequired,
     disabled: PropTypes.bool.isRequired,
     experiencePointsThreshold: PropTypes.number.isRequired,
-    updateExpThreshold: PropTypes.func.isRequired,
+    levelNumber: PropTypes.number.isRequired,
     sortLevels: PropTypes.func.isRequired,
-    deleteLevel: PropTypes.func.isRequired,
+    updateExpThreshold: PropTypes.func.isRequired,
   }
 
-  renderInput(levelNumber, experiencePointsThreshold) {
-    const { updateExpThreshold, disabled, sortLevels } = this.props;
+  renderInput() {
+    const {
+      disabled, experiencePointsThreshold, levelNumber, sortLevels, updateExpThreshold,
+    } = this.props;
     return (
       <TextField
         type="text"
@@ -55,22 +62,35 @@ class LevelRow extends React.Component {
     );
   }
 
+  renderDeleteButton() {
+    const { deleteLevel, disabled, levelNumber } = this.props;
+
+    return (
+      <RaisedButton
+        id={`delete_${levelNumber}`}
+        name={`delete_${levelNumber}`}
+        backgroundColor={grey300}
+        icon={<DeleteIcon />}
+        onClick={deleteLevel(levelNumber)}
+        disabled={disabled}
+        style={{ minWidth: '40px', width: '40px' }}
+      />
+    );
+  }
+
   render() {
-    const { levelNumber, experiencePointsThreshold, deleteLevel, disabled } = this.props;
+    const { canManage, experiencePointsThreshold, levelNumber } = this.props;
+
     return (
       <TableRow>
-        <TableRowColumn style={styles.levelNumber}>{ levelNumber }</TableRowColumn>
-        <TableRowColumn>{ this.renderInput(levelNumber, experiencePointsThreshold) }</TableRowColumn>
+        <TableRowColumn style={styles.levelNumber}>
+          { levelNumber }
+        </TableRowColumn>
+        <TableRowColumn style={styles.threshold} >
+          {canManage ? this.renderInput() : experiencePointsThreshold}
+        </TableRowColumn>
         <TableHeaderColumn style={styles.deleteButtonCell}>
-          <RaisedButton
-            id={`delete_${levelNumber}`}
-            name={`delete_${levelNumber}`}
-            backgroundColor={grey300}
-            icon={<DeleteIcon />}
-            onClick={deleteLevel(levelNumber)}
-            disabled={disabled}
-            style={{ minWidth: '40px', width: '40px' }}
-          />
+          {canManage && this.renderDeleteButton()}
         </TableHeaderColumn>
       </TableRow>
     );
