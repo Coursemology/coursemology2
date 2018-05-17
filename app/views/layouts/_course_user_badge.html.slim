@@ -1,7 +1,7 @@
 div#course-user-badge
   div.col-xs-12#course-user-progress
-    - progress_bar_classes = ['progress-bar-info', 'progress-bar-striped',
-                              'course-user-experience-points']
+    - progress_bar_classes = { class: ['progress-bar-info', 'progress-bar-striped',
+                                       'course-user-experience-points'] }
     = display_progress_bar(course_user.level_progress_percentage, progress_bar_classes) do
       = t('.progress', current: course_user.experience_points,
                        next: course_user.next_level_threshold)

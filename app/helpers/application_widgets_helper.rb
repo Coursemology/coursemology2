@@ -94,14 +94,17 @@ module ApplicationWidgetsHelper
   # original view_context, rather than within the view_context of the progress bar layout.
   #
   # @param [Integer] percentage The percentage to be displayed on the progress bar.
-  # @param [Array<String>] classes An array of classes to apply to the progress bar.
+  # @param [Hash] opts Options to apply on the progress bar. Supports the following:
+  #                    class: css classes of progress bar (defaults to `progress-bar-info`),
+  #                    tooltip_text: text to be included in tooltip,
+  #                    tooltip_placement: 'left', 'top', 'bottom', or 'right'.
   # @yield The HTML text which will be passed to the partial as text to be shown in the bar.
   # @return [String] HTML string to render the progress bar.
-  def display_progress_bar(percentage, classes = ['progress-bar-info'], &block)
+  def display_progress_bar(percentage, opts = {}, &block)
+    opts[:class] = ['progress-bar-info'] unless opts[:class]
     text_in_block = capture(&block) if block_given?
-    render partial: 'layouts/progress_bar', locals: { percentage: percentage,
-                                                      progress_bar_classes: classes,
-                                                      progress_bar_text: text_in_block }
+    render partial: 'layouts/progress_bar',
+           locals: { percentage: percentage, opts: opts, progress_bar_text: text_in_block }
   end
 
   private

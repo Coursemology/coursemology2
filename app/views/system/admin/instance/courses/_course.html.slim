@@ -6,7 +6,7 @@
     = link_to format_inline_text(course.title), course_path(course)
   td = format_datetime(course.created_at, :date_only_long)
   td.active-level
-    = display_progress_bar(active_level, 'progress-bar-success')
+    = display_progress_bar(active_level, class: ['progress-bar-success'])
     = "#{course.active_user_count} / #{course.user_count}"
   td
     ul.list-unstyled

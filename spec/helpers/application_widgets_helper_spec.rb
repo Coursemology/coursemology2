@@ -199,6 +199,7 @@ RSpec.describe ApplicationWidgetsHelper, type: :helper do
     describe '#display_progress_bar' do
       let(:default_class) { 'progress-bar-info' }
       subject { helper.send(:display_progress_bar, 50) }
+
       it 'returns a progress bar' do
         expect(subject).to have_tag('div.progress-bar', with: { role: 'progressbar' })
       end
@@ -211,10 +212,14 @@ RSpec.describe ApplicationWidgetsHelper, type: :helper do
         expect(subject).to include(default_class)
       end
 
-      context 'when classes are specified' do
+      context 'when opts are specified' do
+        let(:tooltip_title) { 'Foo' }
+        let(:opts) { { class: ['progress-bar-striped'], title: tooltip_title } }
+        subject { helper.send(:display_progress_bar, 50, opts) }
+
         it 'is reflected in the progress bar' do
-          expect(helper.send(:display_progress_bar, 50, ['progress-bar-striped'])).
-            to have_tag('div.progress-bar.progress-bar-striped')
+          expect(subject).to have_tag('div.progress-bar.progress-bar-striped')
+          expect(subject).to have_tag('div.progress-bar', title: tooltip_title)
         end
       end
 

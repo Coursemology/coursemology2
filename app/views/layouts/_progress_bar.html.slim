@@ -1,5 +1,6 @@
 div.progress
-  div.progress-bar [ class=progress_bar_classes role='progressbar' aria-valuenow="#{percentage}"
-                     aria-valuemin='0' aria-valuemax='100' style="width: #{percentage}%" ]
+  div.progress-bar [ class=opts[:class] role='progressbar'  aria-valuenow="#{percentage}"
+                     aria-valuemin='0' aria-valuemax='100' style="width: #{percentage}%"
+                     title=opts[:tooltip_text] data-placement=opts[:tooltip_placement]]
     span.sr-only #{percentage}% Complete
     = progress_bar_text
