@@ -24,7 +24,7 @@ div.btn-group
   - else
     = link_to(t('.attempt'), '#', class: ['btn', 'btn-info', 'disabled'])
 
-  - if can?(:manage, assessment)
+  - if can?(:view_all_submissions, assessment)
     = link_to(course_assessment_submissions_path(current_course, assessment),
               class: ['btn', 'btn-default']) do
       span.visible-xs-block = fa_icon 'book'

@@ -8,6 +8,8 @@ RSpec.describe Course::Assessment do
     let(:course) { create(:course) }
     let(:course_user) { create(:course_student, course: course) }
     let(:coursemate) { create(:course_student, course: course) }
+    let(:category) { tab.category }
+    let(:tab) { unpublished_assessment.tab }
     let(:unpublished_assessment) do
       create(:assessment, :with_all_question_types, course: course, published: false)
     end
@@ -124,34 +126,64 @@ RSpec.describe Course::Assessment do
       end
     end
 
-    context 'when the user is a Course Teaching Assistant' do
-      let(:user) { create(:course_teaching_assistant, course: course).user }
-      it { is_expected.to be_able_to(:manage, published_started_assessment) }
-      it { is_expected.not_to be_able_to(:publish_grades, published_started_assessment) }
-      it do
-        is_expected.not_to be_able_to(:destroy_attachment,
-                                      get_text_response_answer_for(attempting_submission))
+    context 'when the user is a Course Observer' do
+      let(:user) { course_user.user }
+      let(:course_user) { create(:course_observer, course: course) }
+      let(:own_attachment) { get_text_response_answer_for(attempting_submission) }
+      let(:other_attachment) { get_text_response_answer_for(coursemate_attempting_submission) }
+
+      # Course Tabs and Categories
+      it { is_expected.not_to be_able_to(:manage, tab) }
+      it { is_expected.not_to be_able_to(:manage, category) }
+
+      # Course Assessments
+      it { is_expected.to be_able_to(:read, unpublished_assessment) }
+      it { is_expected.to be_able_to(:attempt, unpublished_assessment) }
+      it { is_expected.to be_able_to(:access, unpublished_assessment) }
+      it { is_expected.to be_able_to(:view_all_submissions, unpublished_assessment) }
+      it { is_expected.not_to be_able_to(:manage, unpublished_assessment) }
+      it 'cannot manage all questions in the assessment' do
+        unpublished_assessment.questions.each do |question|
+          expect(subject).not_to be_able_to(:manage, question.specific)
+        end
       end
+      it { is_expected.not_to be_able_to(:publish_grades, published_started_assessment) }
+
+      # Course Assessment Submissions
+      it { is_expected.to be_able_to(:read, coursemate_attempting_submission) }
+      it { is_expected.to be_able_to(:read_tests, coursemate_attempting_submission) }
+      it { is_expected.not_to be_able_to(:grade, coursemate_attempting_submission) }
+      it { is_expected.to be_able_to(:destroy_attachment, own_attachment) }
+      it { is_expected.not_to be_able_to(:destroy_attachment, other_attachment) }
     end
 
-    context 'when the user is a Course Staff' do
-      let(:course_user) { create(:course_manager, course: course) }
+    context 'when the user is a Course Teaching Assistant' do
       let(:user) { course_user.user }
+      let(:course_user) { create(:course_teaching_assistant, course: course) }
+      let(:own_attachment) { get_text_response_answer_for(attempting_submission) }
+      let(:other_attachment) { get_text_response_answer_for(coursemate_attempting_submission) }
+
+      # Course Tabs and Categories
+      it { is_expected.not_to be_able_to(:manage, tab) }
+      it { is_expected.not_to be_able_to(:manage, category) }
 
       # Course Assessments
       it { is_expected.to be_able_to(:manage, unpublished_assessment) }
       it { is_expected.to be_able_to(:manage, published_started_assessment) }
-      it { is_expected.to be_able_to(:publish_grades, published_started_assessment) }
+      it { is_expected.to be_able_to(:view_all_submissions, unpublished_assessment) }
       it 'can manage all questions in the assessment' do
         unpublished_assessment.questions.each do |question|
           expect(subject).to be_able_to(:manage, question.specific)
         end
       end
+      it { is_expected.not_to be_able_to(:publish_grades, published_started_assessment) }
 
       # Course Assessment Submissions
       it { is_expected.to be_able_to(:read, attempting_submission) }
       it { is_expected.to be_able_to(:grade, attempting_submission) }
       it { is_expected.to be_able_to(:grade, submitted_submission) }
+      it { is_expected.to be_able_to(:destroy_attachment, own_attachment) }
+      it { is_expected.not_to be_able_to(:destroy_attachment, other_attachment) }
 
       it 'sees attempting submission for a given assessment' do
         expect(published_assessment_with_attemping_submission.submissions.accessible_by(subject)).
@@ -162,6 +194,24 @@ RSpec.describe Course::Assessment do
         expect(published_started_assessment.submissions.accessible_by(subject)).
           to contain_exactly(submitted_submission)
       end
+    end
+
+    context 'when the user is a Course Manager' do
+      let(:user) { course_user.user }
+      let(:course_user) { create(:course_manager, course: course) }
+      let(:own_attachment) { get_text_response_answer_for(attempting_submission) }
+      let(:other_attachment) { get_text_response_answer_for(coursemate_attempting_submission) }
+
+      # Course Tabs and Categories
+      it { is_expected.to be_able_to(:manage, tab) }
+      it { is_expected.to be_able_to(:manage, category) }
+
+      # Course Assessments
+      it { is_expected.to be_able_to(:publish_grades, published_started_assessment) }
+
+      # Course Assessment Submissions
+      it { is_expected.to be_able_to(:destroy_attachment, own_attachment) }
+      it { is_expected.not_to be_able_to(:destroy_attachment, other_attachment) }
     end
   end
 end

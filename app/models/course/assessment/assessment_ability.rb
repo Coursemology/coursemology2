@@ -12,29 +12,6 @@ module Course::Assessment::AssessmentAbility
     super
   end
 
-  def define_student_assessment_permissions
-    allow_students_show_assessments
-    allow_students_access_assessment
-    allow_students_attempt_assessment
-    allow_students_read_material
-    allow_students_create_assessment_submission
-    allow_students_update_own_assessment_submission
-    allow_students_manage_annotations_for_own_assessment_submissions
-    allow_students_read_own_assessment_answers
-    allow_students_read_submission_question
-    allow_student_to_destroy_own_attachments_text_response_question
-  end
-
-  def define_staff_assessment_permissions
-    allow_managers_manage_tab_and_categories
-    allow_staff_manage_assessments
-    allow_manager_publish_assessment_submission_grades
-    allow_staff_grade_assessment_submissions
-    allow_staff_manage_assessment_annotations
-    allow_staff_read_assessment_tests
-    allow_staff_read_submission_questions
-  end
-
   private
 
   def assessment_all_course_users_hash
@@ -49,10 +26,27 @@ module Course::Assessment::AssessmentAbility
     { tab: { category: course_staff_hash } }
   end
 
+  def assessment_course_teaching_staff_hash
+    { tab: { category: course_teaching_staff_hash } }
+  end
+
   def assessment_submission_attempting_hash(user)
     { workflow_state: 'attempting' }.tap do |result|
       result.reverse_merge!(experience_points_record: { course_user: { user_id: user.id } }) if user
     end
+  end
+
+  def define_student_assessment_permissions
+    allow_students_show_assessments
+    allow_students_access_assessment
+    allow_students_attempt_assessment
+    allow_students_read_material
+    allow_students_create_assessment_submission
+    allow_students_update_own_assessment_submission
+    allow_students_manage_annotations_for_own_assessment_submissions
+    allow_students_read_own_assessment_answers
+    allow_students_read_submission_question
+    allow_student_to_destroy_own_attachments_text_response_question
   end
 
   def allow_students_show_assessments
@@ -101,9 +95,60 @@ module Course::Assessment::AssessmentAbility
     can :update, Course::Assessment::Answer, submission: assessment_submission_attempting_hash(user)
   end
 
-  def allow_staff_manage_assessments
-    can :manage, Course::Assessment, assessment_course_staff_hash
-    allow_manage_questions if course_user&.staff?
+  def allow_students_manage_annotations_for_own_assessment_submissions
+    can :manage, Course::Assessment::Answer::ProgrammingFileAnnotation,
+        file: { answer: { submission: { creator_id: user.id } } }
+  end
+
+  def allow_students_read_own_assessment_answers
+    can :read, Course::Assessment::Answer, submission: { creator_id: user.id }
+  end
+
+  def allow_students_read_submission_question
+    can :read, Course::Assessment::SubmissionQuestion, submission: { creator_id: user.id }
+  end
+
+  # Prevent everyone from destroying their own attachment, unless they are attempting the question.
+  def allow_student_to_destroy_own_attachments_text_response_question
+    cannot :destroy_attachment, Course::Assessment::Answer::TextResponse
+    can :destroy_attachment, Course::Assessment::Answer::TextResponse,
+        submission: assessment_submission_attempting_hash(user)
+  end
+
+  def define_staff_assessment_permissions
+    allow_staff_read_access_and_attempt_assessment
+    allow_staff_read_assessment_submissions
+    allow_staff_read_assessment_tests
+    allow_staff_read_submission_questions
+    allow_teaching_staff_manage_assessments
+    allow_teaching_staff_grade_assessment_submissions
+    allow_teaching_staff_manage_assessment_annotations
+    allow_managers_manage_tab_and_categories
+    allow_manager_publish_assessment_submission_grades
+  end
+
+  def allow_staff_read_access_and_attempt_assessment
+    can :read, Course::Assessment, assessment_course_staff_hash
+    can :attempt, Course::Assessment, assessment_course_staff_hash
+    can :access, Course::Assessment, assessment_course_staff_hash
+  end
+
+  def allow_staff_read_assessment_submissions
+    can :view_all_submissions, Course::Assessment, assessment_course_staff_hash
+    can :read, Course::Assessment::Submission, assessment: assessment_course_staff_hash
+  end
+
+  def allow_staff_read_assessment_tests
+    can :read_tests, Course::Assessment::Submission, assessment: assessment_course_staff_hash
+  end
+
+  def allow_staff_read_submission_questions
+    can :read, Course::Assessment::SubmissionQuestion, discussion_topic: course_staff_hash
+  end
+
+  def allow_teaching_staff_manage_assessments
+    can :manage, Course::Assessment, assessment_course_teaching_staff_hash
+    allow_manage_questions if course_user&.teaching_staff?
   end
 
   def allow_manage_questions
@@ -123,11 +168,16 @@ module Course::Assessment::AssessmentAbility
     can :duplicate, Course::Assessment::Question, question_assessments_current_course
   end
 
-  # Only managers are allowed to publish assessment submission grades
-  # Teaching assistants have all assessment abilities except :publish_grades
-  def allow_manager_publish_assessment_submission_grades
-    cannot :publish_grades, Course::Assessment, assessment_course_staff_hash
-    can :publish_grades, Course::Assessment, course_managers_hash
+  def allow_teaching_staff_grade_assessment_submissions
+    can [:update, :reload_answer, :grade],
+        Course::Assessment::Submission, assessment: assessment_course_teaching_staff_hash
+    can :grade, Course::Assessment::Answer,
+        submission: { assessment: assessment_course_teaching_staff_hash }
+  end
+
+  def allow_teaching_staff_manage_assessment_annotations
+    can :manage, Course::Assessment::Answer::ProgrammingFileAnnotation,
+        discussion_topic: course_teaching_staff_hash
   end
 
   def allow_managers_manage_tab_and_categories
@@ -135,42 +185,10 @@ module Course::Assessment::AssessmentAbility
     can :manage, Course::Assessment::Category, course_managers_hash
   end
 
-  def allow_staff_grade_assessment_submissions
-    can [:read, :update, :reload_answer, :grade],
-        Course::Assessment::Submission, assessment: assessment_course_staff_hash
-    can :grade, Course::Assessment::Answer, submission: { assessment: assessment_course_staff_hash }
-  end
-
-  def allow_staff_read_assessment_tests
-    can :read_tests, Course::Assessment::Submission, assessment: assessment_course_staff_hash
-  end
-
-  def allow_students_manage_annotations_for_own_assessment_submissions
-    can :manage, Course::Assessment::Answer::ProgrammingFileAnnotation,
-        file: { answer: { submission: { creator_id: user.id } } }
-  end
-
-  def allow_staff_manage_assessment_annotations
-    can :manage, Course::Assessment::Answer::ProgrammingFileAnnotation,
-        discussion_topic: course_staff_hash
-  end
-
-  def allow_students_read_own_assessment_answers
-    can :read, Course::Assessment::Answer, submission: { creator_id: user.id }
-  end
-
-  def allow_students_read_submission_question
-    can :read, Course::Assessment::SubmissionQuestion, submission: { creator_id: user.id }
-  end
-
-  def allow_staff_read_submission_questions
-    can :read, Course::Assessment::SubmissionQuestion, discussion_topic: course_staff_hash
-  end
-
-  # Prevent everyone from destroying their own attachment, unless they are attempting the question.
-  def allow_student_to_destroy_own_attachments_text_response_question
-    cannot :destroy_attachment, Course::Assessment::Answer::TextResponse
-    can :destroy_attachment, Course::Assessment::Answer::TextResponse,
-        submission: assessment_submission_attempting_hash(user)
+  # Only managers are allowed to publish assessment submission grades
+  # Teaching assistants have all assessment abilities except :publish_grades
+  def allow_manager_publish_assessment_submission_grades
+    cannot :publish_grades, Course::Assessment, assessment_course_staff_hash
+    can :publish_grades, Course::Assessment, course_managers_hash
   end
 end
