@@ -39,20 +39,6 @@ class ApplicationController < ActionController::Base
     Bullet.enable = old_bullet_enable
   end
 
-  # Redirects the browser to the page that issued the request (the referrer)
-  # if possible, otherwise redirects to the provided default fallback
-  # location.
-  #
-  # TODO: Remove this when upgrade to rails 5.
-  def redirect_back(fallback_location:, **args)
-    referer = request.headers['Referer']
-    if referer
-      redirect_to referer, **args
-    else
-      redirect_to fallback_location, **args
-    end
-  end
-
   private
 
   # Handles +IllegalStateError+s with a HTTP 422.
