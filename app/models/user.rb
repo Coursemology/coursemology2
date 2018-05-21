@@ -98,7 +98,7 @@ class User < ApplicationRecord
     self.email = invitation.email
     skip_confirmation!
     course_users.build(course: invitation.course, name: invitation.name, role: invitation.role,
-                       creator: self, updater: self)
+                       phantom: invitation.phantom, creator: self, updater: self)
   end
 
   private
