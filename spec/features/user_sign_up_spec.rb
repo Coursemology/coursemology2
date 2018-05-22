@@ -29,7 +29,7 @@ RSpec.feature 'Users: Sign Up' do
 
     context 'As a user invited by course staffs' do
       let(:course) { create(:course) }
-      let(:invitation) { create(:course_user_invitation, course: course) }
+      let(:invitation) { create(:course_user_invitation, :phantom, course: course) }
       let(:invited_email) { invitation.email }
 
       scenario 'I can register for an account' do
@@ -44,10 +44,13 @@ RSpec.feature 'Users: Sign Up' do
         end.to change(course.users, :count).by(1)
 
         email = User::Email.find_by(email: invited_email)
+        user = email.user
+        course_user = CourseUser.where(user: user, course: course).first
         expect(email).to be_primary
         expect(email).to be_confirmed
         expect(invitation.reload).to be_confirmed
         expect(invitation.confirmer).to eq(email.user)
+        expect(course_user).to be_phantom
       end
 
       context 'when the invitation code is confirmed' do
