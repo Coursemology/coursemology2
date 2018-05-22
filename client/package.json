@@ -75,6 +75,7 @@
     "expose-loader": "^0.7.5",
     "fabric": "2.2.2",
     "glob": "^7.1.2",
+    "hard-source-webpack-plugin": "^0.7.0-alpha.0",
     "history": "^4.6.1",
     "immutable": "^3.8.1",
     "intl": "^1.2.5",
