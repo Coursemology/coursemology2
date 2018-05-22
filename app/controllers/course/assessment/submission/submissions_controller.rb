@@ -22,7 +22,7 @@ class Course::Assessment::Submission::SubmissionsController < \
   STUDENTS = { my: 'my', phantom: 'phantom' }.freeze
 
   def index
-    authorize!(:manage, @assessment)
+    authorize!(:view_all_submissions, @assessment)
 
     respond_to do |format|
       format.html {}

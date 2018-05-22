@@ -45,14 +45,36 @@ RSpec.describe Course::Material do
       it { is_expected.not_to be_able_to(:download, not_started_linked_material.folder) }
     end
 
-    context 'when the user is a Course Staff' do
-      let(:user) { create(:course_manager, course: course).user }
+    context 'when the user is a Course Teaching Staff' do
+      let(:user) { create(:course_teaching_assistant, course: course).user }
 
       it { is_expected.to be_able_to(:manage, valid_material) }
       it { is_expected.to be_able_to(:manage, not_started_material) }
       it { is_expected.to be_able_to(:manage, ended_material) }
       it { is_expected.to be_able_to(:manage, not_started_linked_material) }
       it { is_expected.to be_able_to(:show, not_started_linked_material) }
+    end
+
+    context 'when the user is a Course Observer' do
+      let(:user) { create(:course_observer, course: course).user }
+
+      it { is_expected.to be_able_to(:show, valid_material) }
+      it { is_expected.to be_able_to(:show, not_started_material) }
+      it { is_expected.to be_able_to(:show, ended_material) }
+      it { is_expected.to be_able_to(:show, started_linked_material) }
+      it { is_expected.to be_able_to(:show, not_started_linked_material) }
+
+      it { is_expected.not_to be_able_to(:manage, valid_material) }
+      it { is_expected.not_to be_able_to(:manage, not_started_material) }
+      it { is_expected.not_to be_able_to(:manage, ended_material) }
+      it { is_expected.not_to be_able_to(:manage, started_linked_material) }
+      it { is_expected.not_to be_able_to(:manage, not_started_linked_material) }
+
+      it { is_expected.to be_able_to(:download, valid_material.folder) }
+      it { is_expected.to be_able_to(:download, not_started_material.folder) }
+      it { is_expected.to be_able_to(:download, ended_material.folder) }
+      it { is_expected.to be_able_to(:download, started_linked_material.folder) }
+      it { is_expected.to be_able_to(:download, not_started_linked_material.folder) }
     end
   end
 end

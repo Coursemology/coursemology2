@@ -1,6 +1,7 @@
 import actionTypes from 'course/level/constants';
 
 const initialState = {
+  canManage: false,
   levels: [],
   isLoading: false,
   isSaving: false,

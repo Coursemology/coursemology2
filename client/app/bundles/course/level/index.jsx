@@ -9,7 +9,7 @@ $(document).ready(() => {
   const mountNode = document.getElementById('course-level');
 
   if (mountNode) {
-    const store = storeCreator({ level: {} });
+    const store = storeCreator({});
 
     render(
       <ProviderWrapper store={store}>

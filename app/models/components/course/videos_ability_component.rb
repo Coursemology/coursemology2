@@ -23,17 +23,8 @@ module Course::VideosAbilityComponent
     allow_student_create_and_update_own_video_session
   end
 
-  def define_staff_video_permissions
-    allow_staff_manage_video
-    allow_staff_read_and_update_video_submission
-  end
-
   def video_all_course_users_hash
     { lesson_plan_item: course_all_course_users_hash }
-  end
-
-  def video_all_course_staff_hash
-    { lesson_plan_item: course_staff_hash }
   end
 
   def video_published_all_course_users_hash
@@ -68,19 +59,43 @@ module Course::VideosAbilityComponent
     can :update, Course::Video::Session, submission: video_submission_own_course_user_hash
   end
 
-  def allow_staff_manage_video
-    can :manage, Course::Video, video_all_course_staff_hash
-  end
-
-  def allow_staff_read_and_update_video_submission
-    can [:read, :update], Course::Video::Submission, video: video_all_course_staff_hash
-  end
-
   def allow_student_show_video_topics
     can :read, Course::Video::Topic, video: video_all_course_users_hash
   end
 
   def allow_student_create_video_topics
     can :create, Course::Video::Topic, video: video_all_course_users_hash
+  end
+
+  def define_staff_video_permissions
+    allow_staff_read_and_attempt_all_video
+    allow_staff_read_all_video_submission
+    allow_teaching_staff_manage_video
+    allow_teaching_staff_update_video_submission
+  end
+
+  def video_all_course_staff_hash
+    { lesson_plan_item: course_staff_hash }
+  end
+
+  def video_all_course_teaching_staff_hash
+    { lesson_plan_item: course_teaching_staff_hash }
+  end
+
+  def allow_staff_read_and_attempt_all_video
+    can :read, Course::Video, video_all_course_staff_hash
+    can :attempt, Course::Video, video_all_course_staff_hash
+  end
+
+  def allow_staff_read_all_video_submission
+    can :read, Course::Video::Submission, video: video_all_course_staff_hash
+  end
+
+  def allow_teaching_staff_manage_video
+    can :manage, Course::Video, video_all_course_teaching_staff_hash
+  end
+
+  def allow_teaching_staff_update_video_submission
+    can :update, Course::Video::Submission, video: video_all_course_teaching_staff_hash
   end
 end

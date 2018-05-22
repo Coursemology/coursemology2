@@ -4,54 +4,14 @@ module Course::SurveysAbilityComponent
 
   def define_permissions
     if user
-      define_staff_survey_permissions
       define_student_survey_permissions
+      define_staff_survey_permissions
     end
 
     super
   end
 
   private
-
-  def define_staff_survey_permissions
-    allow_staff_manage_surveys
-    allow_staff_manage_sections
-    allow_staff_manage_questions
-    allow_staff_manage_responses
-    allow_staff_test_survey
-  end
-
-  def survey_all_staff_hash
-    { survey: { lesson_plan_item: course_staff_hash } }
-  end
-
-  def allow_staff_manage_surveys
-    can :manage, Course::Survey, lesson_plan_item: course_staff_hash
-  end
-
-  def allow_staff_manage_sections
-    can :manage, Course::Survey::Section, survey_all_staff_hash
-  end
-
-  def allow_staff_manage_questions
-    can :manage, Course::Survey::Question, section: survey_all_staff_hash
-  end
-
-  def allow_staff_manage_responses
-    can :read, Course::Survey::Response, survey_all_staff_hash
-    can :unsubmit, Course::Survey::Response,
-        survey_all_staff_hash.merge(submitted_at: (Time.min..Time.max))
-    can :read_answers, Course::Survey::Response,
-        survey_all_staff_hash.merge(survey: { anonymous: false })
-  end
-
-  def allow_staff_test_survey
-    can :create, Course::Survey::Response, survey_all_staff_hash
-    can [:read_answers, :modify], Course::Survey::Response,
-        survey_all_staff_hash.merge(creator_id: user.id)
-    can :submit, Course::Survey::Response,
-        survey_all_staff_hash.merge(creator_id: user.id, submitted_at: nil)
-  end
 
   def define_student_survey_permissions
     allow_students_show_published_surveys
@@ -141,5 +101,58 @@ module Course::SurveysAbilityComponent
   def allow_students_modify_own_response_to_respondable_expired_survey
     can :modify, Course::Survey::Response, creator_id: user.id, submitted_at: nil,
                                            survey: survey_expired_but_respondable
+  end
+
+  def define_staff_survey_permissions
+    allow_staff_read_all_surveys
+    allow_staff_read_responses
+    allow_staff_test_survey
+    allow_teaching_staff_manage_surveys
+    allow_teaching_staff_manage_sections
+    allow_teaching_staff_manage_questions
+    allow_teaching_staff_unsubmit_responses
+  end
+
+  def survey_staff_hash
+    { survey: { lesson_plan_item: course_staff_hash } }
+  end
+
+  def survey_teaching_staff_hash
+    { survey: { lesson_plan_item: course_teaching_staff_hash } }
+  end
+
+  def allow_staff_read_all_surveys
+    can :read, Course::Survey, lesson_plan_item: course_staff_hash
+  end
+
+  def allow_staff_read_responses
+    can :read, Course::Survey::Response, survey_staff_hash
+    can :read_answers, Course::Survey::Response,
+        survey_staff_hash.merge(survey: { anonymous: false })
+  end
+
+  def allow_staff_test_survey
+    can :create, Course::Survey::Response, survey_staff_hash
+    can [:read_answers, :modify], Course::Survey::Response,
+        survey_staff_hash.merge(creator_id: user.id)
+    can :submit, Course::Survey::Response,
+        survey_staff_hash.merge(creator_id: user.id, submitted_at: nil)
+  end
+
+  def allow_teaching_staff_manage_surveys
+    can :manage, Course::Survey, lesson_plan_item: course_teaching_staff_hash
+  end
+
+  def allow_teaching_staff_manage_sections
+    can :manage, Course::Survey::Section, survey_teaching_staff_hash
+  end
+
+  def allow_teaching_staff_manage_questions
+    can :manage, Course::Survey::Question, section: survey_teaching_staff_hash
+  end
+
+  def allow_teaching_staff_unsubmit_responses
+    can :unsubmit, Course::Survey::Response,
+        survey_teaching_staff_hash.merge(submitted_at: (Time.min..Time.max))
   end
 end
