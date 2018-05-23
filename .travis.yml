@@ -24,7 +24,7 @@ cache:
     - $HOME/.cache/yarn
     - $(npm root -g)
     - $(npm prefix -g)/bin
-    - $TRAVIS_BUILD_DIR/client/node_modules/.cache
+    - $TRAVIS_BUILD_DIR/client/hard-source-cache
 env:
   global:
     - RAILS_ENV=test
@@ -46,8 +46,8 @@ before_install:
 before_script:
   - psql -c 'create database coursemology_test;' -U postgres
   - psql -c 'create database coursemology_test2;' -U postgres
-  - 'if [ -d "$TRAVIS_BUILD_DIR/client/node_modules/.cache/hard-source" ]; then ls -la $TRAVIS_BUILD_DIR/client/node_modules/.cache/hard-source; fi'
-  - ls -la $TRAVIS_BUILD_DIR/client/node_modules/
+  - 'if [ -d "$TRAVIS_BUILD_DIR/client/hard-source-cache" ]; then ls -la $TRAVIS_BUILD_DIR/client/hard-source-cache; fi'
+  - ls -la $TRAVIS_BUILD_DIR/client
   - cd client && yarn build:production && cd -
   - bundle exec rake parallel:setup[2]
 
