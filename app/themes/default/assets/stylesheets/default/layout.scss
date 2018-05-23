@@ -1,6 +1,10 @@
 @import 'application';
 @import 'pygments-css/github';
 
+body {
+  padding-top: $navbar-height + $navbar-margin-bottom;
+}
+
 .navbar {
   .courses-menu {
     max-height: 70vh;
