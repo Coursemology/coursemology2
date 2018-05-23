@@ -103,6 +103,7 @@ export const assessmentShape = PropTypes.shape({
   showPrivate: PropTypes.bool,
   showEvaluation: PropTypes.bool,
   questionIds: PropTypes.arrayOf(PropTypes.number),
+  canViewLogs: PropTypes.bool,
 });
 
 export const submissionShape = PropTypes.shape({

@@ -231,9 +231,9 @@ VisibleSubmissionsIndex.propTypes = {
   submissions: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,
-      workflowState: PropTypes.string,
       grade: PropTypes.number,
       pointsAwarded: PropTypes.number,
+      workflowState: PropTypes.string,
     })
   ),
   notification: notificationShape,
