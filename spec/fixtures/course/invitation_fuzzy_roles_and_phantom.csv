@@ -1,7 +1,10 @@
 name,email,role,phantom
 Foo,bar@foo.com,,
-Non-Phantom Bar,foo@bar.com,Teaching Assistant,no
-Phantom Baz,example@name.com,teaching_AssisTant,y
-Phantom Student1,foo1@bar.com,student,t
-Phantom Student2,foo2@bar.com,student,yes
-Phantom Student3,foo3@bar.com,student,true
+Non-Phantom Staff 1,foo1@bar.com,Teaching Assistant,no
+Non-Phantom Staff 2,foo2@bar.com,manager,no
+Non-Phantom Staff 3,foo3@bar.com,oWNER,no
+Non-Phantom Staff 4,foo4@bar.com,Observer,no
+Phantom Baz,foo5@bar.com,teaching_AssisTant,y
+Phantom Student1,foo6@bar.com,student,t
+Phantom Student2,foo7@bar.com,student,yes
+Phantom Student3,foo8@bar.com,student,true
