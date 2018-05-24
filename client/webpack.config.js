@@ -80,7 +80,7 @@ const config = {
     // Do not require all locles in moment
     new webpack.ContextReplacementPlugin(/moment\/locale$/, /^\.\/(en-.*|zh-.*)$/),
     new ManifestPlugin({ fileName: 'manifest.json', publicPath: '/webpack/', writeToFileEmit: true }),
-    new HardSourceWebpackPlugin(),
+    new HardSourceWebpackPlugin({ cacheDirectory: path.join(__dirname, 'hard-source-cache/[confighash]') }),
   ],
 
   module: {
