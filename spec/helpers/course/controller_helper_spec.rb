@@ -109,19 +109,21 @@ RSpec.describe Course::ControllerHelper do
             create(:course_experience_points_record, points_awarded: 140, course_user: user)
           end
 
-          it "shows the course user's experience points" do
-            expect(subject).to include(I18n.t('layouts.course_user_badge.progress'))
+          it "shows the course user's level and experience points" do
+            expect(subject).to include(I18n.t('layouts.course_user_badge.level'))
+            expect(subject).to include(I18n.t('layouts.course_user_badge.experience_points'))
           end
 
-          it "shows the course user's level number" do
-            expect(subject).to include(user.level_number.to_s)
+          it "shows the course user's next level" do
+            expect(subject).to include(I18n.t('layouts.course_user_badge.next_level'))
           end
 
           it 'displays the progress bar with current level progress' do
             expect(helper).to receive(:display_progress_bar).
               with(user.level_progress_percentage,
-                   ['progress-bar-info', 'progress-bar-striped',
-                    'course-user-experience-points'])
+                   class: ['progress-bar-info', 'course-user-experience-points'],
+                   tooltip_text: I18n.t('common.percentage'),
+                   tooltip_placement: 'right')
             subject
           end
         end
@@ -135,12 +137,12 @@ RSpec.describe Course::ControllerHelper do
           end
         end
 
-        context 'when course user has a number of achievements' do
-          before { create_list(:course_user_achievement, 3, course_user: user) }
+        context 'when course user has more than 3 achievements' do
+          before { create_list(:course_user_achievement, 4, course_user: user) }
 
           it "displays the achievement tab with the course user's achievement count" do
             expect(subject).to include(I18n.t('layouts.course_user_badge.achievements'))
-            expect(subject).to include(user.achievement_count.to_s)
+            expect(subject).to include((user.achievement_count - 3).to_s)
           end
         end
       end
@@ -154,7 +156,7 @@ RSpec.describe Course::ControllerHelper do
         end
 
         it 'does not display the level of the course user' do
-          expect(subject).not_to include(I18n.t('layouts.course_user_badge.levels'))
+          expect(subject).not_to include(I18n.t('layouts.course_user_badge.level'))
         end
 
         it 'does not display the achievement tab' do

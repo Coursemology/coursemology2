@@ -5,7 +5,7 @@
 
 - accepted_invitations, pending_invitations = @invitations.partition(&:confirmed?)
 - progress = accepted_invitations.size * 100 / [@invitations.length, 1].max
-= display_progress_bar(progress, []) do
+= display_progress_bar(progress) do
   = t('.progress', accepted: accepted_invitations.size, total: @invitations.size)
 
 = simple_format t('.manual_acceptance')

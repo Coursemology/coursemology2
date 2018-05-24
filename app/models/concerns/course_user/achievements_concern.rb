@@ -4,4 +4,8 @@ module CourseUser::AchievementsConcern
   def ordered_by_date_obtained
     order('course_user_achievements.obtained_at DESC')
   end
+
+  def recently_obtained(num = 3)
+    ordered_by_date_obtained.last(num)
+  end
 end

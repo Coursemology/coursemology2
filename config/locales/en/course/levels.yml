@@ -4,6 +4,3 @@ en:
       sidebar_title: :'course.levels.index.header'
       index:
         header: 'Levels'
-        level: 'Level'
-      new:
-        header: 'New Level'
