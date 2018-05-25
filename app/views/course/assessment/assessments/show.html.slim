@@ -52,50 +52,51 @@
     h3 = t('.files')
     = render partial: 'layouts/materials', locals: { folder: @assessment.folder }
 
-  - if can?(:manage, @assessment)
-    div.pull-right
-      div.dropdown
-        button.btn.btn-info.dropdown-toggle#new-question [type='button' data-toggle='dropdown'
-                                                          aria-expanded='true']
-          => t('common.new')
-          span.caret
-        ul.dropdown-menu.dropdown-menu-right role='menu' aria-labelledby='new-question'
-          li role='presentation'
-            = link_to(t('.new_question.multiple_choice'),
-                      new_course_assessment_question_multiple_response_path(current_course, @assessment,
-                                                                            { multiple_choice: true }),
-                      role: 'menuitem')
-          li role='presentation'
-            = link_to(t('.new_question.multiple_response'),
-                      new_course_assessment_question_multiple_response_path(current_course, @assessment),
-                      role: 'menuitem')
-          li role='presentation'
-            = link_to(t('.new_question.text_response'),
-                      new_course_assessment_question_text_response_path(current_course, @assessment),
-                      role: 'menuitem')
-          li role='presentation'
-            = link_to(t('.new_question.voice_response'),
-                      new_course_assessment_question_voice_response_path(current_course,
-                      @assessment), role: 'menuitem')
-          li role='presentation'
-            = link_to(t('.new_question.file_upload'),
-                      new_course_assessment_question_text_response_path(current_course, @assessment,
-                                                                        { file_upload: true }),
-                      role: 'menuitem')
-          li role='presentation' id='programming-link'
-            = link_to(t('.new_question.programming'),
-                      new_course_assessment_question_programming_path(current_course, @assessment),
-                      role: 'menuitem')
-          li role='presentation' id='scribing-link'
-            = link_to(t('.new_question.scribing'),
-                      new_course_assessment_question_scribing_path(current_course, @assessment),
-                      role: 'menuitem')
-          / TODO: Uncomment the line below when TextResponseComprehension is ready
-          / li role='presentation' id='comprehension-link'
-          /   = link_to(t('.new_question.comprehension'),
-          /             new_course_assessment_question_text_response_path(current_course, @assessment,
-          /                                                               { comprehension: true }),
-          /             role: 'menuitem')
+  - if can?(:observe, @assessment)
+    - if can?(:manage, @assessment)
+      div.pull-right
+        div.dropdown
+          button.btn.btn-info.dropdown-toggle#new-question [type='button' data-toggle='dropdown'
+                                                            aria-expanded='true']
+            => t('common.new')
+            span.caret
+          ul.dropdown-menu.dropdown-menu-right role='menu' aria-labelledby='new-question'
+            li role='presentation'
+              = link_to(t('.new_question.multiple_choice'),
+                        new_course_assessment_question_multiple_response_path(current_course, @assessment,
+                                                                              { multiple_choice: true }),
+                        role: 'menuitem')
+            li role='presentation'
+              = link_to(t('.new_question.multiple_response'),
+                        new_course_assessment_question_multiple_response_path(current_course, @assessment),
+                        role: 'menuitem')
+            li role='presentation'
+              = link_to(t('.new_question.text_response'),
+                        new_course_assessment_question_text_response_path(current_course, @assessment),
+                        role: 'menuitem')
+            li role='presentation'
+              = link_to(t('.new_question.voice_response'),
+                        new_course_assessment_question_voice_response_path(current_course,
+                        @assessment), role: 'menuitem')
+            li role='presentation'
+              = link_to(t('.new_question.file_upload'),
+                        new_course_assessment_question_text_response_path(current_course, @assessment,
+                                                                          { file_upload: true }),
+                        role: 'menuitem')
+            li role='presentation' id='programming-link'
+              = link_to(t('.new_question.programming'),
+                        new_course_assessment_question_programming_path(current_course, @assessment),
+                        role: 'menuitem')
+            li role='presentation' id='scribing-link'
+              = link_to(t('.new_question.scribing'),
+                        new_course_assessment_question_scribing_path(current_course, @assessment),
+                        role: 'menuitem')
+            / TODO: Uncomment the line below when TextResponseComprehension is ready
+            / li role='presentation' id='comprehension-link'
+            /   = link_to(t('.new_question.comprehension'),
+            /             new_course_assessment_question_text_response_path(current_course, @assessment,
+            /                                                               { comprehension: true }),
+            /             role: 'menuitem')
 
     h3 = t('.questions')
     br
@@ -105,5 +106,5 @@
           => fa_icon 'exclamation-triangle'
           = t('.non_auto_gradable_questions')
 
-    #sortable-questions
+    div id=('sortable-questions' if can?(:manage, @assessment))
       = render @assessment.question_assessments
