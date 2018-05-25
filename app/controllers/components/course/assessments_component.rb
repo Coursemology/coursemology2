@@ -48,7 +48,7 @@ class Course::AssessmentsComponent < SimpleDelegator
   end
 
   def admin_sidebar_items
-    return [] unless can?(:manage, Course::Assessment::Skill.new(course: current_course))
+    return [] unless can?(:read, Course::Assessment::Skill.new(course: current_course))
 
     [
       {
