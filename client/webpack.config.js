@@ -6,6 +6,7 @@ const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const env = process.env.NODE_ENV || 'development';
 const production = env === 'production';
 const development = env === 'development';
+const travis = process.env.TRAVIS === 'true';
 
 // must match config.webpack.dev_server.port
 const devServerPort = 8080;
@@ -84,7 +85,6 @@ const config = {
     // Do not require all locles in moment
     new webpack.ContextReplacementPlugin(/moment\/locale$/, /^\.\/(en-.*|zh-.*)$/),
     new ManifestPlugin({ fileName: 'manifest.json', publicPath: '/webpack/', writeToFileEmit: true }),
-    new HardSourceWebpackPlugin({ cacheDirectory: path.join(__dirname, 'hard-source-cache/[confighash]') }),
   ],
 
   module: {
@@ -168,6 +168,11 @@ if (development) {
   config.devtool = 'cheap-module-eval-source-map';
 } else {
   console.log(`\nWebpack ${env} build for Rails...`); // eslint-disable-line no-console
+}
+
+// Only enable HardSourceWebpackPlugin in Travis
+if (travis) {
+  config.plugins.push(new HardSourceWebpackPlugin({ cacheDirectory: path.join(__dirname, 'hard-source-cache/[confighash]') }));
 }
 
 module.exports = config;
