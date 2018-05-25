@@ -77,11 +77,11 @@ class Course::AssessmentsComponent < SimpleDelegator
   #   course_owner & course_manager will be directed to all pending submissions
   #   course_teaching_assistant will be directly to my students' pending submissions
   #   course_user will see all their own submissions.
-  #   Other users that can see this (instance admins) will see all submissions in the course.
+  #   course_observer and other users (instance admins) will see all submissions in the course.
   def assessment_submissions_url
     if current_course_user&.manager_or_owner?
       pending_course_submissions_path(current_course, my_students: false)
-    elsif current_course_user&.staff?
+    elsif current_course_user&.teaching_staff?
       pending_course_submissions_path(current_course, my_students: true)
     else
       course_submissions_path(current_course, category: current_course.assessment_categories.first)
