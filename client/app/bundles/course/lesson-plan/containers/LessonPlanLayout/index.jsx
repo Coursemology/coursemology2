@@ -13,7 +13,7 @@ import { fetchLessonPlan } from 'course/lesson-plan/actions';
 import LessonPlanShow from 'course/lesson-plan/pages/LessonPlanShow';
 import LessonPlanEdit from 'course/lesson-plan/pages/LessonPlanEdit';
 import LessonPlanFilter from 'course/lesson-plan/containers/LessonPlanFilter';
-// FIXME: import LessonPlanNav from 'course/lesson-plan/containers/LessonPlanNav';
+import LessonPlanNav from 'course/lesson-plan/containers/LessonPlanNav';
 import MilestoneFormDialog from 'course/lesson-plan/containers/MilestoneFormDialog';
 import EventFormDialog from 'course/lesson-plan/containers/EventFormDialog';
 import ColumnVisibilityDropdown from 'course/lesson-plan/containers/ColumnVisibilityDropdown';
@@ -108,7 +108,7 @@ class LessonPlanLayout extends React.Component {
         { this.renderHeader() }
         { this.renderBody() }
         <div style={styles.tools}>
-          { /* FIXME: <LessonPlanNav /> */ }
+          <LessonPlanNav />
           <LessonPlanFilter />
         </div>
         <NotificationPopup />
