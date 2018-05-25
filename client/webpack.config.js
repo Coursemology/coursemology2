@@ -68,6 +68,10 @@ const config = {
     },
   },
 
+  watchOptions: {
+    ignored: [/__test__/],
+  },
+
   plugins: [
     new webpack.IgnorePlugin(/__test__/),
     new webpack.HashedModuleIdsPlugin(),
