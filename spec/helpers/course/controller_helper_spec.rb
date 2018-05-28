@@ -114,10 +114,6 @@ RSpec.describe Course::ControllerHelper do
             expect(subject).to include(I18n.t('layouts.course_user_badge.experience_points'))
           end
 
-          it "shows the course user's next level" do
-            expect(subject).to include(I18n.t('layouts.course_user_badge.next_level'))
-          end
-
           it 'displays the progress bar with current level progress' do
             expect(helper).to receive(:display_progress_bar).
               with(user.level_progress_percentage,
@@ -125,6 +121,30 @@ RSpec.describe Course::ControllerHelper do
                    tooltip_text: I18n.t('common.percentage'),
                    tooltip_placement: 'right')
             subject
+          end
+
+          context 'when course user is at the max level' do
+            before do
+              create(:course_experience_points_record, points_awarded: 1000, course_user: user)
+            end
+
+            it 'shows the max level message' do
+              # Reload here as course_user#current_level caches and is unable to
+              # reload on updated experience points.
+              course_user = CourseUser.find(user.id)
+              expect(helper.display_course_user_badge(course_user)).
+                to include(I18n.t('layouts.course_user_badge.max_level'))
+            end
+          end
+
+          context 'when course user is not at the max level' do
+            it 'shows the next level message' do
+              # Reload here as course_user#current_level caches and is unable to
+              # reload on updated experience points.
+              course_user = CourseUser.find(user.id)
+              expect(helper.display_course_user_badge(course_user)).
+                to include(I18n.t('layouts.course_user_badge.next_level'))
+            end
           end
         end
       end

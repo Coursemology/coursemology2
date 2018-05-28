@@ -18,7 +18,10 @@
                                tooltip_placement: 'right' }
     = display_progress_bar(percentage, progress_bar_options)
     div.next-level.text-center
-      = t('.next_level', difference: difference)
+      - if difference > 0
+        = t('.next_level', difference: difference)
+      - else
+        = t('.max_level')
 
 - if achievements_enabled
   div.col-xs-12#course-badge-achievement
