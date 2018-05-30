@@ -76,7 +76,7 @@ class LessonPlanNav extends React.Component {
           targetOrigin={{ horizontal: 'left', vertical: 'bottom' }}
           onRequestClose={this.handleRequestClose}
         >
-          <Menu>
+          <Menu maxHeight={450}>
             {
               groups.map((group) => {
                 if (!group.milestone) { return null; }
