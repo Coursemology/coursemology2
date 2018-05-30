@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { scroller, ScrollLink } from 'react-scroll';
+import { scroller } from 'react-scroll';
 import RaisedButton from 'material-ui/RaisedButton';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
@@ -35,7 +35,6 @@ class LessonPlanNav extends React.Component {
 
     this.state = {
       open: false,
-      text: <FormattedMessage {...translations.goto} />,
     };
   }
 
@@ -55,39 +54,6 @@ class LessonPlanNav extends React.Component {
     });
   }
 
-  /**
-   * Sets up ScrollSpies for each milestone group. Each scrollspy will update the nav button
-   * text when the group it is spying on scrolls into view.
-   *
-   * Ideally, these scroll listeners should be mounted with the Popover MenuItems using
-   * react-scroll's Link component. However, if we do that, the button text will not be
-   * updated when the Popover Menu is closed, since the MenuItems (and hence the listeners)
-   * will not be mounted. Instead, we mount it on empty dummy spans.
-   */
-  renderScrollSpies() {
-    const { groups } = this.props;
-    const ScrollSpy = ScrollLink('span');
-
-    return (
-      <span>
-        {
-          groups.map((group) => {
-            if (!group.milestone) { return null; }
-            return (
-              <ScrollSpy
-                spy
-                key={group.id}
-                to={group.id}
-                onSetActive={() => { this.setState({ text: group.milestone.title }); }}
-                offset={-50}
-              />
-            );
-          })
-        }
-      </span>
-    );
-  }
-
   render() {
     const { groups } = this.props;
 
@@ -95,11 +61,10 @@ class LessonPlanNav extends React.Component {
 
     return (
       <React.Fragment>
-        { this.renderScrollSpies() }
         <RaisedButton
           secondary
           onClick={this.handleClick}
-          label={this.state.text}
+          label={<FormattedMessage {...translations.goto} />}
           labelPosition="before"
           icon={<KeyboardArrowUp />}
           style={styles.navButton}
@@ -111,7 +76,7 @@ class LessonPlanNav extends React.Component {
           targetOrigin={{ horizontal: 'left', vertical: 'bottom' }}
           onRequestClose={this.handleRequestClose}
         >
-          <Menu>
+          <Menu maxHeight={450}>
             {
               groups.map((group) => {
                 if (!group.milestone) { return null; }
