@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
+import MaterialSummernote from 'lib/components/MaterialSummernote';
 
 import style from '../Discussion.scss';
 
@@ -14,6 +14,10 @@ const translations = defineMessages({
   cancel: {
     id: 'course.video.DiscussionElements.Editor.cancelDefault',
     defaultMessage: 'Cancel',
+  },
+  prompt: {
+    id: 'course.video.DiscussionElements.Editor.prompt',
+    defaultMessage: 'Enter your comment here',
   },
 });
 
@@ -39,14 +43,12 @@ const defaultProps = {
 function Editor(props) {
   return (
     <React.Fragment>
-      <TextField
-        fullWidth
-        multiLine
-        floatingLabelText="Enter your comment here"
-        rows={2}
-        rowsMax={4}
+      <MaterialSummernote
+        airMode
+        disabled={props.disabled}
+        label={<FormattedMessage {...translations.prompt} />}
+        onChange={nextValue => props.onContentUpdate(nextValue)}
         value={props.content}
-        onChange={event => props.onContentUpdate(event.target.value)}
       />
       <div className={style.editorExtraElement}>
         {props.children}
