@@ -84,7 +84,7 @@ RSpec.feature 'System: Administration: Users' do
         expect(all('.user').count).to eq(2)
 
         # Search by email
-        random_user = User.order('RANDOM()').first
+        random_user = users_to_search.sample
         fill_in 'search', with: random_user.email
         click_button I18n.t('layouts.search_form.search_button')
 
