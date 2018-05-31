@@ -7,6 +7,7 @@ json.assessment do
   json.gamified current_course.gamified?
   json.downloadable @assessment.downloadable?
   json.passwordProtected @assessment.session_password_protected?
+  json.canViewLogs can? :manage, @assessment
 end
 
 my_students_set = Set.new(@my_students.map(&:id))

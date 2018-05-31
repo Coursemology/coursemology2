@@ -283,12 +283,15 @@ RSpec.describe Course::UserInvitationService, type: :service do
 
         it 'parses roles correctly anyway' do
           expect(subject[1][:role]).to eq(Course::UserInvitation.roles[:teaching_assistant])
-          expect(subject[2][:role]).to eq(Course::UserInvitation.roles[:teaching_assistant])
+          expect(subject[2][:role]).to eq(Course::UserInvitation.roles[:manager])
+          expect(subject[3][:role]).to eq(Course::UserInvitation.roles[:owner])
+          expect(subject[4][:role]).to eq(Course::UserInvitation.roles[:observer])
+          expect(subject[5][:role]).to eq(Course::UserInvitation.roles[:teaching_assistant])
         end
 
         it 'parses phantom columns correctly anyway' do
           expect(subject[1][:phantom]).to be_falsey
-          (2..5).each do |i|
+          (6..8).each do |i|
             expect(subject[i][:phantom]).to be_truthy
           end
         end

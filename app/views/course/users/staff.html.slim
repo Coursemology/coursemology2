@@ -11,11 +11,10 @@ div
       tr
         td = f.input :id, collection: @student_options,
                           label: false, selected: @student_options.first
-        / TODO: Change to CourseUser::STAFF_ROLES once Observer role is fully implemented.
-        td = f.input :role, collection: CourseUser::TEACHING_STAFF_ROLES,
+        td = f.input :role, collection: CourseUser::STAFF_ROLES,
                             label: false,
                             label_method: lambda { |role_key| t("course.users.role.#{role_key}") },
-                            selected: CourseUser::TEACHING_STAFF_ROLES.first
+                            selected: CourseUser::STAFF_ROLES.first
         td = f.button :submit, t('.upgrade_to_staff')
 
 div.users

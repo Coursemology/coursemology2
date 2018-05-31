@@ -123,6 +123,7 @@ module Course::SurveysAbilityComponent
 
   def allow_staff_read_all_surveys
     can :read, Course::Survey, lesson_plan_item: course_staff_hash
+    can :read, Course::Survey::Section, survey_staff_hash
   end
 
   def allow_staff_read_responses

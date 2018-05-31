@@ -51,6 +51,7 @@ RSpec.describe Course::Assessment do
 
       # Course Assessments
       it { is_expected.not_to be_able_to(:read, unpublished_assessment) }
+      it { is_expected.not_to be_able_to(:observe, published_started_assessment) }
       it { is_expected.to be_able_to(:read, published_started_assessment) }
       it { is_expected.to be_able_to(:read, published_not_started_assessment) }
 
@@ -138,6 +139,7 @@ RSpec.describe Course::Assessment do
 
       # Course Assessments
       it { is_expected.to be_able_to(:read, unpublished_assessment) }
+      it { is_expected.to be_able_to(:observe, unpublished_assessment) }
       it { is_expected.to be_able_to(:attempt, unpublished_assessment) }
       it { is_expected.to be_able_to(:access, unpublished_assessment) }
       it { is_expected.to be_able_to(:view_all_submissions, unpublished_assessment) }

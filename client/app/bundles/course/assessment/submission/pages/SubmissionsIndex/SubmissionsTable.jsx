@@ -113,10 +113,14 @@ export default class SubmissionsTable extends React.Component {
   renderSubmissionLogsLink(submission) {
     const { assessment, courseId, assessmentId } = this.props;
 
-    if (!assessment.passwordProtected || !submission.id) return null;
+    if (!assessment.passwordProtected || !assessment.canViewLogs || !submission.id) return null;
 
     return (
-      <div data-tip data-for={`access-logs-${submission.id}`}>
+      <div
+        className="submission-access-logs"
+        data-for={`access-logs-${submission.id}`}
+        data-tip
+      >
         <a href={getSubmissionLogsURL(courseId, assessmentId, submission.id)}>
           <HistoryIcon style={{ color: submission.logCount > 1 ? red600 : blue600 }} />
           <ReactTooltip id={`access-logs-${submission.id}`} effect="solid">
@@ -133,7 +137,10 @@ export default class SubmissionsTable extends React.Component {
     const tableCenterCellStyle = { ...styles.tableCell, ...styles.tableCenterCell };
 
     return submissions.map(submission => (
-      <TableRow key={submission.courseStudent.id}>
+      <TableRow
+        className="submission-row"
+        key={submission.courseStudent.id}
+      >
         <TableRowColumn style={styles.tableCell}>
           <a href={getCourseUserURL(courseId, submission.courseStudent.id)}>
             {submission.courseStudent.name}

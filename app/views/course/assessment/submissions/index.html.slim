@@ -2,7 +2,7 @@
 = page_header
 = render partial: 'tabs'
 
-- if current_course_user && current_course_user.staff? || can?(:manage, current_course)
+- if current_course_user&.staff? || can?(:manage, current_course)
   = render partial: 'filter', locals: { category: @category }
 
 = render partial: 'submissions', locals: { submissions: @submissions, pending: false }

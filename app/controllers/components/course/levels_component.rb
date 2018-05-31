@@ -11,7 +11,7 @@ class Course::LevelsComponent < SimpleDelegator
   end
 
   def sidebar_items
-    return [] unless can?(:manage, Course::Level.new(course: current_course))
+    return [] unless can?(:read, Course::Level.new(course: current_course))
 
     [
       {

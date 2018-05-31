@@ -73,6 +73,8 @@ RSpec.describe Course::LessonPlan::Event do
         end
 
         it 'allows the user to try out the survey before publishing it' do
+          expect(subject).to be_able_to(:read, survey)
+          expect(subject).to be_able_to(:read, survey.sections.first)
           expect(subject).to be_able_to(:create, response)
           expect(subject).to be_able_to(:submit, response)
           expect(subject).to be_able_to(:modify, response)
@@ -123,6 +125,8 @@ RSpec.describe Course::LessonPlan::Event do
         let(:survey_traits) { [:published, :currently_active] }
         let(:response) { build(:response, survey: survey, creator: user) }
 
+        it { is_expected.to be_able_to(:read, survey) }
+        it { is_expected.to be_able_to(:read, survey.sections.first) }
         it { is_expected.to be_able_to(:create, response) }
         it { is_expected.to be_able_to(:modify, response) }
         it { is_expected.to be_able_to(:submit, response) }

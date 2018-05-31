@@ -1,5 +1,5 @@
 = tabs do
-  - if current_course_user && current_course_user.staff? || can?(:manage, current_course)
+  - if current_course_user&.teaching_staff? || can?(:manage, current_course)
     = nav_to pending_course_submissions_path(current_course, my_students: true) do
       = t('.my_students_pending')
       =< badge(my_students_pending_submissions_count) if my_students_pending_submissions_count > 0

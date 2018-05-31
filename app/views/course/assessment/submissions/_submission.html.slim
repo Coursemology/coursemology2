@@ -32,7 +32,7 @@
   td.table-buttons
     - button_class = ['btn', 'btn-block']
     - link_path = edit_course_assessment_submission_path(current_course, assessment, submission)
-    - if current_course_user && current_course_user.staff? && submission.submitted?
+    - if current_course_user&.teaching_staff? && submission.submitted?
       = link_to(t('.grade'), link_path, class: button_class + ['btn-info'])
     - else
       = link_to(t('.view'), link_path, class: button_class + ['btn-primary'])

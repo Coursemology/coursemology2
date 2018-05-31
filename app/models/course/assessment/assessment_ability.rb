@@ -116,7 +116,7 @@ module Course::Assessment::AssessmentAbility
   end
 
   def define_staff_assessment_permissions
-    allow_staff_read_access_and_attempt_assessment
+    allow_staff_read_observe_access_and_attempt_assessment
     allow_staff_read_assessment_submissions
     allow_staff_read_assessment_tests
     allow_staff_read_submission_questions
@@ -127,8 +127,9 @@ module Course::Assessment::AssessmentAbility
     allow_manager_publish_assessment_submission_grades
   end
 
-  def allow_staff_read_access_and_attempt_assessment
+  def allow_staff_read_observe_access_and_attempt_assessment
     can :read, Course::Assessment, assessment_course_staff_hash
+    can :observe, Course::Assessment, assessment_course_staff_hash
     can :attempt, Course::Assessment, assessment_course_staff_hash
     can :access, Course::Assessment, assessment_course_staff_hash
   end
