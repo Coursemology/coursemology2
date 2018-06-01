@@ -15,13 +15,13 @@ RSpec.describe ApplicationFormattersHelper do
 
     describe '#format_inline_text' do
       it 'does not add a block element' do
-        expect(helper.format_inline_text('')).to eq('')
+        expect(helper.format_inline_text('')).to be_empty
       end
     end
 
     describe '#format_html' do
       it 'removes script tags' do
-        expect(helper.format_html('<script/>')).to eq('')
+        expect(helper.format_html('<script/>')).to be_empty
       end
 
       it 'does not remove span tags' do
@@ -39,40 +39,18 @@ RSpec.describe ApplicationFormattersHelper do
         expect(helper.format_html(html)).to eq(html)
       end
 
-      it 'does not remove image styling' do
-        html = '<img src="hello.jpg" style="float:right; width: 50%">'
+      it 'does not remove whitelisted css properties' do
+        html = '<div style="margin-left: 20px; font-family: Roboto"></div>'
         expect(helper.format_html(html)).to eq(html)
       end
 
       it 'removes forbidden css properties' do
-        html = '<div style="position: fixed; top: 0; left: 0;"></div>'
-        expect(helper.format_html(html)).not_to include('position')
-        expect(helper.format_html(html)).not_to include('top')
-        expect(helper.format_html(html)).not_to include('left')
-      end
-
-      it 'does not remove embedded videos from allowed sources' do
-        html = <<-HTML
-          <iframe src="//youtube.com/video1"></iframe>
-          <iframe src="//instagram.com/video2"></iframe>
-          <iframe src="//vimeo.com/video3"></iframe>
-          <iframe src="//vine.co/video4"></iframe>
-          <iframe src="//dailymotion.com/video5"></iframe>
-          <iframe src="//youku.com/video6"></iframe>
-        HTML
-        expect(helper.format_html(html)).to eq(html)
-      end
-
-      it 'removes forbidden embedded content' do
-        html = <<-HTML
-          <iframe src="//beta.coursemology.org"></iframe>
-          <iframe src="//www.youtubeXcom.com"></iframe>
-          <iframe src="//wwwXinstagram.com"></iframe>
-          <iframe src="//vine.com"></iframe>
-          <iframe src="//dailymotion.co"></iframe>
-          <iframe src="//vimeo.org"></iframe>
-        HTML
-        expect(helper.format_html(html)).not_to include('iframe')
+        html = '<div style="position: fixed; top: 0; left: 0; height: 20px"></div>'
+        output = helper.format_html(html)
+        expect(output).not_to include('position')
+        expect(output).not_to include('top')
+        expect(output).not_to include('left')
+        expect(output).not_to include('height')
       end
 
       it 'formats code' do
@@ -89,15 +67,56 @@ RSpec.describe ApplicationFormattersHelper do
         expect(helper.format_html('')).to be_html_safe
       end
 
-      context 'when base64 images are included' do
-        it 'does not filter them out' do
+      context 'when img tags are present' do
+        it 'does not remove image src' do
+          html = '<img src="hello.jpg">'
+          expect(helper.format_html(html)).to eq(html)
+        end
+
+        it 'does not remove image height and width' do
+          html = '<img src="hello.jpg" style="height: 50%; width: 50%">'
+          expect(helper.format_html(html)).to eq(html)
+        end
+
+        it 'removes all other css properties on images' do
+          html = '<img src="hello.jpg" style="margin-left: 10px; float: left;">'
+          output = helper.format_html(html)
+          expect(output).not_to include('margin-left')
+          expect(output).not_to include('float')
+        end
+
+        it 'does not filter out base64 images' do
           html = '<img src="data:image/png;base64,foodata">'
           expect(helper.format_html(html)).to include('data')
         end
       end
 
-      context 'when provided iframe does not have an src attribute' do
-        it 'removes the iframe tag' do
+      context 'when iframe tags are present' do
+        it 'does not remove embedded content from allowed sources' do
+          html = <<-HTML
+            <iframe src="//youtube.com/video1"></iframe>
+            <iframe src="//instagram.com/video2"></iframe>
+            <iframe src="//vimeo.com/video3"></iframe>
+            <iframe src="//vine.co/video4"></iframe>
+            <iframe src="//dailymotion.com/video5"></iframe>
+            <iframe src="//youku.com/video6"></iframe>
+          HTML
+          expect(helper.format_html(html)).to eq(html)
+        end
+
+        it 'removes forbidden embedded content' do
+          html = <<-HTML
+            <iframe src="//beta.coursemology.org"></iframe>
+            <iframe src="//www.youtubeXcom.com"></iframe>
+            <iframe src="//wwwXinstagram.com"></iframe>
+            <iframe src="//vine.com"></iframe>
+            <iframe src="//dailymotion.co"></iframe>
+            <iframe src="//vimeo.org"></iframe>
+          HTML
+          expect(helper.format_html(html)).not_to include('iframe')
+        end
+
+        it 'removes iframe tags without src attribute' do
           html = '<iframe></iframe>'
           expect(helper.format_html(html)).to be_empty
         end
@@ -162,7 +181,7 @@ RSpec.describe ApplicationFormattersHelper do
 
     describe '#sanitize' do
       it 'removes script tags' do
-        expect(helper.sanitize('<script/>')).to eq('')
+        expect(helper.sanitize('<script/>')).to be_empty
       end
     end
 

@@ -39,23 +39,37 @@ module ApplicationHTMLFormattersHelper
     { node_whitelist: [node] }
   end
 
-  # SanitizationFilter Custom Options
-  #
   # - Allow whitelisting of base64 encoded images for HTML text.
+  # TODO: Remove 'data' from whitelisted protocols once we disable Base64 encoding
+  IMAGE_WHITELIST_TRANSFORMER = lambda do |env|
+    node, node_name = env[:node], env[:node_name]
+
+    return if env[:is_whitelisted] || !node.element?
+
+    return unless node_name == 'img'
+
+    default_whitelist = HTML::Pipeline::SanitizationFilter::WHITELIST
+    Sanitize.node!(node, elements: ['img'],
+                         protocols: ['http', 'https', 'data', :relative],
+                         attributes: { 'img' => ['src', 'style'] },
+                         css: { properties: ['height', 'width'] })
+
+    { node_whitelist: [node] }
+  end
+
+  # SanitizationFilter Custom Options
   # Link: https://github.com/jch/html-pipeline#2-how-do-i-customize-a-whitelist-for-sanitizationfilters
-  # TODO: Remove 'data' once we disable Base64 encoding
   SANITIZATION_FILTER_WHITELIST = begin
     list = HTML::Pipeline::SanitizationFilter::WHITELIST
-    list[:protocols]['img']['src'] |= ['data']
     list[:elements] |= ['span', 'font', 'u']
     list[:attributes][:all] |= ['style']
     list[:attributes]['font'] = ['face']
     list[:attributes]['table'] = ['class']
     list[:css] = { properties: [
-      'background-color', 'color', 'float', 'font-family', 'height', 'margin',
-      'margin-bottom', 'margin-left', 'margin-right', 'margin-top', 'text-align', 'width'
+      'background-color', 'color', 'font-family', 'margin',
+      'margin-bottom', 'margin-left', 'margin-right', 'margin-top', 'text-align'
     ] }
-    list[:transformers] |= [VIDEO_WHITELIST_TRANSFORMER]
+    list[:transformers] |= [VIDEO_WHITELIST_TRANSFORMER, IMAGE_WHITELIST_TRANSFORMER]
     list
   end
 
