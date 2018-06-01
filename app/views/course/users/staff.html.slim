@@ -41,7 +41,7 @@ div.users
                                   include_blank: false,
                                   label: false,
                                   label_method: lambda { |role_key| t("course.users.role.#{role_key}") }
-              td = f.input :phantom
+              td = f.input :phantom, label: false
               td
                 = f.button :submit, id: 'update' do
                   = fa_icon 'save'.freeze
