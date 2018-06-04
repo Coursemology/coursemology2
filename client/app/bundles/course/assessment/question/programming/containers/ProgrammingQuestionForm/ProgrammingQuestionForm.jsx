@@ -151,7 +151,22 @@ class ProgrammingQuestionForm extends React.Component {
 
     const url = this.props.data.getIn(['form_data', 'path']);
     const method = this.props.data.getIn(['form_data', 'method']);
+
+    // Fix for FormData bug on Safari 11.1, Coursemology/coursemology2#2962
+    // Disable empty file inputs so that the constructed FormData does not contain any empty files
+    const fileInputs = this.form.querySelectorAll('input[type="file"]:not([disabled])');
+    fileInputs.forEach((input) => {
+      if (input.files.length === 0) {
+        input.setAttribute('disabled', '');
+      }
+    });
+
     const formData = new FormData(this.form);
+
+    // Re-enable the disabled file inputs
+    fileInputs.forEach((input) => {
+      input.removeAttribute('disabled');
+    });
 
     const failureMessage = this.props.intl.formatMessage(translations.submitFailureMessage);
 
