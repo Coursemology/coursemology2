@@ -212,6 +212,10 @@ class MaterialSummernote extends React.Component {
                   ['table', ['table']],
                   ['insert', ['link', 'picture']],
                 ],
+                image: [
+                  ['imagesize', ['imageSize100', 'imageSize50', 'imageSize25']],
+                  ['remove', ['removeMedia']],
+                ],
               },
               buttons: {
                 inlineCode: this.inlineCodeButton,

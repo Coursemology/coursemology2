@@ -110,6 +110,12 @@
           ['insert', ['link', 'picture', 'video']],
           ['view', ['fullscreen', 'codeview', 'help']],
         ],
+        popover: {
+          image: [
+            ['imagesize', ['imageSize100', 'imageSize50', 'imageSize25']],
+            ['remove', ['removeMedia']],
+          ],
+        },
         callbacks: {
           onImageUpload: function(files) {
             for (var i = 0; i < files.length; i++) {
@@ -126,7 +132,7 @@
         options = $.extend(true, options, airmodeOptions);
       }
       if ($(this).hasClass('focus')) {
-        options = $.extend(true, options, { focus: true} );
+        options = $.extend(true, options, { focus: true } );
       }
       $(this).summernote(options);
       $(this).addClass('summernote-initialised');
