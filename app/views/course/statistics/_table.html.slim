@@ -9,8 +9,9 @@ table.table.table-hover
         = t('.tutor')
     th.text-center
       = Course::Level.model_name.human
-    th.text-center
-      = t('.experience_points')
+    - if current_course.gamified?
+      th.text-center
+        = t('.experience_points')
 
   - students.each.with_index(1) do |student, index|
    = content_tag_for(:tr, student)
@@ -23,6 +24,7 @@ table.table.table-hover
          = @service.group_managers_of(student).map(&:name).join(', ')
      td.text-center
        = student.level_number
-     td.text-center
-       = link_to student.experience_points,
-                 course_user_experience_points_records_path(current_course, student)
+     - if current_course.gamified?
+       td.text-center
+         = link_to student.experience_points,
+                   course_user_experience_points_records_path(current_course, student)
