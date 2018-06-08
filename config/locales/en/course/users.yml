@@ -39,9 +39,12 @@ en:
         header: 'Profile'
         role: 'Role: %{role}'
         experience_points_earned_html: 'Experience points earned: %{points}'
+        achievements_header: 'Achievements'
         achievement_count:
           zero: 'No achievements'
           one: 'One achievement'
           other: '%{count} achievements'
+        topic_mastery: 'Topic Mastery'
+        grade_for_skill: '%{grade}/%{total_grade} points'
       index:
         header: 'Students'
