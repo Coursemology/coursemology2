@@ -140,7 +140,7 @@
     "react-test-renderer": "^16.2.0",
     "redux-logger": "^3.0.6",
     "webpack-cli": "^3.0.3",
-    "webpack-dev-server": "^2.11.1"
+    "webpack-dev-server": "^3.1.4"
   },
   "license": "MIT",
   "repository": "git+https://github.com/Coursemology/coursemology2.git",
