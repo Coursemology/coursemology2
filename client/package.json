@@ -120,6 +120,7 @@
     "style-loader": "^0.20.3",
     "webfontloader": "^1.6.27",
     "webpack": "^4.11.1",
+    "webpack-cli": "^3.0.3",
     "webpack-manifest-plugin": "^2.0.3"
   },
   "devDependencies": {
@@ -139,7 +140,6 @@
     "react-dnd-test-backend": "^2.4.0",
     "react-test-renderer": "^16.2.0",
     "redux-logger": "^3.0.6",
-    "webpack-cli": "^3.0.3",
     "webpack-dev-server": "^3.1.4"
   },
   "license": "MIT",
