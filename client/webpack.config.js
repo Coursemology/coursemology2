@@ -35,6 +35,7 @@ const config = {
 
   plugins: [
     new webpack.IgnorePlugin(/__test__/),
+    new webpack.HashedModuleIdsPlugin(),
     new ManifestPlugin({ publicPath: '/webpack/', writeToFileEmit: true }),
   ],
 
