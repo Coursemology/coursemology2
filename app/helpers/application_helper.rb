@@ -81,9 +81,9 @@ module ApplicationHelper
   # This helper will includes all webpack assets
   def webpack_assets_tag
     capture do
-      concat javascript_pack_tag('manifest')
+      # concat javascript_pack_tag('manifest')
       concat javascript_pack_tag('lib')
-      concat javascript_pack_tag('vendor')
+      # concat javascript_pack_tag('vendor')
       concat javascript_pack_tag('coursemology')
     end
   end
