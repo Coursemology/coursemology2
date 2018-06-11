@@ -37,6 +37,8 @@ const config = {
     new webpack.IgnorePlugin(/__test__/),
     new webpack.HashedModuleIdsPlugin(),
     new ManifestPlugin({ publicPath: '/webpack/', writeToFileEmit: true }),
+    // Do not require all locales in moment
+    new webpack.ContextReplacementPlugin(/moment\/locale$/, /^\.\/(en-.*|zh-.*)$/),
   ],
 
   module: {
