@@ -10,11 +10,9 @@ const config = {
 
   entry: {
     coursemology: [
+      'jquery',
       './app/index',
       './app/lib/moment-timezone',
-    ],
-    lib: [
-      'jquery',
     ],
   },
 
@@ -30,6 +28,12 @@ const config = {
       lib: path.resolve('./app/lib'),
       api: path.resolve('./app/api'),
       course: path.resolve('./app/bundles/course'),
+    },
+  },
+
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
     },
   },
 
