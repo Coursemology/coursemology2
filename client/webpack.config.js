@@ -1,9 +1,12 @@
 const webpack = require('webpack');
 const path = require('path');
 const ManifestPlugin = require('webpack-manifest-plugin');
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
 const env = process.env.NODE_ENV || 'development';
 const production = env === 'production';
+const development = env === 'development';
+const travis = process.env.TRAVIS === 'true';
 
 const config = {
   mode: env,
@@ -112,5 +115,24 @@ const config = {
     ],
   },
 };
+
+if (development) {
+  const devServerPort = 8080;
+  config.devServer = {
+    port: devServerPort,
+    headers: { 'Access-Control-Allow-Origin': '*' },
+  };
+  config.output.publicPath = `//localhost:${devServerPort}/webpack/`;
+  config.devtool = 'cheap-module-eval-source-map';
+} else {
+  console.log(`\nWebpack ${env} build for Rails...`); // eslint-disable-line no-console
+}
+
+// Only enable HardSourceWebpackPlugin in Travis
+if (travis) {
+  config.plugins.push(new HardSourceWebpackPlugin({
+    cacheDirectory: path.join(__dirname, 'hard-source-cache/[confighash]'),
+  }));
+}
 
 module.exports = config;
