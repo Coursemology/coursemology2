@@ -10,6 +10,7 @@ const config = {
 
   entry: {
     coursemology: [
+      'babel-polyfill',
       'jquery',
       './app/index',
       './app/lib/moment-timezone',
