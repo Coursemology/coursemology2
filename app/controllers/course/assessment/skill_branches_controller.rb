@@ -32,7 +32,7 @@ class Course::Assessment::SkillBranchesController < Course::ComponentController
   def destroy
     if @skill_branch.destroy
       redirect_to course_assessments_skills_path(current_course),
-                  success: t('.success', skill: @skill_branch.title)
+                  success: t('.success', skill_branch: @skill_branch.title)
     else
       redirect_to course_assessments_skills_path(current_course),
                   danger: t('.failure', error: @skill_branch.errors.full_messages.to_sentence)
