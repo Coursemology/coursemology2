@@ -20,3 +20,4 @@ en:
         students: '#Students'
         average_time: 'Average Time Per Assignment'
         stddev: 'Standard Deviation'
+        no_statistics: 'There are no staff statistics as nothing has been graded yet.'

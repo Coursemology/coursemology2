@@ -1,18 +1,24 @@
 = page_header
-table.table.table-middle-align.table-hover
-  thead
-    tr
-      th.text-center
-        = t('.serial_number')
-      th = t('.name')
-      th.text-center
-        = t('.marked')
-      th.text-center
-        = t('.students')
-      th.text-center
-        = t('.average_time')
-      th.text-center
-        = t('.stddev')
-  tbody
-    - @staffs.each.with_index(1) do |staff, index|
-      = render partial: 'staff_performance', locals: { staff: staff, index: index }
+
+- graded_staff = @staffs.reject { |staff| staff.published_submissions.empty? }
+- if graded_staff.empty?
+  div.alert.alert-info
+    = t('.no_statistics')
+- else
+  table.table.table-middle-align.table-hover
+    thead
+      tr
+        th.text-center
+          = t('.serial_number')
+        th = t('.name')
+        th.text-center
+          = t('.marked')
+        th.text-center
+          = t('.students')
+        th.text-center
+          = t('.average_time')
+        th.text-center
+          = t('.stddev')
+    tbody
+      - graded_staff.each.with_index(1) do |staff, index|
+        = render partial: 'staff_performance', locals: { staff: staff, index: index }
