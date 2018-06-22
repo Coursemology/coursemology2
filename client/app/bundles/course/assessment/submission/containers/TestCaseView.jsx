@@ -148,7 +148,7 @@ class VisibleTestCaseView extends Component {
   }
 
   renderTestCases(testCases, title) {
-    const { graderView, collapsible } = this.props;
+    const { collapsible, testCases: { canReadTests } } = this.props;
     const { showPublicTestCasesOutput } = this.props;
 
     if (!testCases || testCases.length === 0) {
@@ -179,10 +179,10 @@ class VisibleTestCaseView extends Component {
           <Table selectable={false} style={{}}>
             <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
               <TableRow>
-                { graderView && tableHeaderColumnFor('identifier') }
+                { canReadTests && tableHeaderColumnFor('identifier') }
                 { tableHeaderColumnFor('expression') }
                 { tableHeaderColumnFor('expected') }
-                { (graderView || showPublicTestCasesOutput) && tableHeaderColumnFor('output') }
+                { (canReadTests || showPublicTestCasesOutput) && tableHeaderColumnFor('output') }
                 { tableHeaderColumnFor('passed') }
               </TableRow>
             </TableHeader>
@@ -196,7 +196,7 @@ class VisibleTestCaseView extends Component {
   }
 
   renderTestCaseRow(testCase) {
-    const { graderView } = this.props;
+    const { testCases: { canReadTests } } = this.props;
     const { showPublicTestCasesOutput } = this.props;
 
     let testCaseResult = 'unattempted';
@@ -214,10 +214,10 @@ class VisibleTestCaseView extends Component {
 
     return (
       <TableRow key={testCase.identifier} style={styles.testCaseRow[testCaseResult]}>
-        { graderView && tableRowColumnFor(testCase.identifier) }
+        { canReadTests && tableRowColumnFor(testCase.identifier) }
         {tableRowColumnFor(testCase.expression)}
         {tableRowColumnFor(<ExpandableText style={outputStyle} text={testCase.expected || ''} /> || '')}
-        { (graderView || showPublicTestCasesOutput) &&
+        { (canReadTests || showPublicTestCasesOutput) &&
           tableRowColumnFor(<ExpandableText style={outputStyle} text={testCase.output || ''} /> || '') }
         {tableRowColumnFor(testCaseIcon)}
       </TableRow>
@@ -236,6 +236,8 @@ class VisibleTestCaseView extends Component {
     const attempting = (submissionState === workflowStates.Attempting);
     const published = (submissionState === workflowStates.Published);
     const showOutputStreams = (graderView || showStdoutAndStderr);
+    const showPrivateTest = testCases.canReadTests || (published && showPrivate);
+    const showEvaluationTest = testCases.canReadTests || (published && showEvaluation);
     return (
       <div style={styles.testCasesContainer}>
         { !attempting && isAutograding &&
@@ -248,16 +250,20 @@ class VisibleTestCaseView extends Component {
           testCases.public_test,
           VisibleTestCaseView.renderTitle('publicTestCases', false)
         )}
-        {(graderView || (published && showPrivate)) && this.renderTestCases(
+        {showPrivateTest && this.renderTestCases(
           testCases.private_test,
-          VisibleTestCaseView.renderTitle('privateTestCases', graderView)
+          VisibleTestCaseView.renderTitle('privateTestCases', testCases.canReadTests)
         )}
-        {(graderView || (published && showEvaluation)) && this.renderTestCases(
+        {showEvaluationTest && this.renderTestCases(
           testCases.evaluation_test,
-          VisibleTestCaseView.renderTitle('evaluationTestCases', graderView)
+          VisibleTestCaseView.renderTitle('evaluationTestCases', testCases.canReadTests)
         )}
-        {(showOutputStreams && !collapsible) && VisibleTestCaseView.renderOutputStream('standardOutput', testCases.stdout, !showStdoutAndStderr)}
-        {(showOutputStreams && !collapsible) && VisibleTestCaseView.renderOutputStream('standardError', testCases.stderr, !showStdoutAndStderr)}
+        {(showOutputStreams && !collapsible) && VisibleTestCaseView.renderOutputStream(
+          'standardOutput', testCases.stdout, !showStdoutAndStderr
+        )}
+        {(showOutputStreams && !collapsible) && VisibleTestCaseView.renderOutputStream(
+          'standardError', testCases.stderr, !showStdoutAndStderr
+        )}
       </div>
     );
   }
@@ -276,6 +282,7 @@ VisibleTestCaseView.propTypes = {
   isAutograding: PropTypes.bool,
   collapsible: PropTypes.bool,
   testCases: PropTypes.shape({
+    canReadTests: PropTypes.bool,
     evaluation_test: PropTypes.arrayOf(testCaseShape),
     private_test: PropTypes.arrayOf(testCaseShape),
     public_test: PropTypes.arrayOf(testCaseShape),

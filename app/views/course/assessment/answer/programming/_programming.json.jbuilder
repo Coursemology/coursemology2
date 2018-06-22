@@ -63,12 +63,14 @@ displayed_test_case_types << 'private_test' if show_private
 displayed_test_case_types << 'evaluation_test' if show_evaluation
 
 json.testCases do
+  json.canReadTests can_read_tests
   displayed_test_case_types.each do |test_case_type|
-    show_testcase_outputs = can_grade || ((test_case_type == 'public_test') && current_course.show_public_test_cases_output)
+    show_public = (test_case_type == 'public_test') && current_course.show_public_test_cases_output
+    show_testcase_outputs = can_read_tests || show_public
     json.set! test_case_type do
       if test_cases_and_results[test_case_type].present?
         json.array! test_cases_and_results[test_case_type] do |test_case, test_result|
-          json.identifier test_case.identifier if can_grade
+          json.identifier test_case.identifier if can_read_tests
           json.expression test_case.expression
           json.expected test_case.expected
           if test_result
