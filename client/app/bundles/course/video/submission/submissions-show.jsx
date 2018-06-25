@@ -1,19 +1,28 @@
 import React from 'react';
 import { render } from 'react-dom';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
-import ProgressGraph from './containers/Statistics/ProgressGraph';
+import Statistics from './containers/Statistics';
+import VideoPlayer from './containers/VideoPlayer';
+import storeCreator from './store';
+import styles from './containers/Statistics.scss';
 
 $(document).ready(() => {
   const mountNode = document.getElementById('video-stats');
 
   if (!mountNode) { return; }
 
-  const submissionData = mountNode.getAttribute('data');
-  const initialState = JSON.parse(submissionData);
+  const data = mountNode.getAttribute('data');
+  const { statistics, video } = JSON.parse(data);
 
   render(
-    <ProviderWrapper>
-      <ProgressGraph sessions={initialState.sessions} submissionUrl={initialState.submissionUrl} />
+    <ProviderWrapper {...storeCreator({ video })}>
+      <div>
+        <div className={styles.statisticsVideoView}>
+          <VideoPlayer />
+        </div>
+        <hr />
+        <Statistics {...statistics} />
+      </div>
     </ProviderWrapper>
     , mountNode
   );

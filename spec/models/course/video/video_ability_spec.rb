@@ -34,8 +34,10 @@ RSpec.describe Course::Video do
       it { is_expected.to be_able_to(:attempt, published_video) }
       it { is_expected.not_to be_able_to(:create, other_video_submission) }
       it { is_expected.not_to be_able_to(:update, other_video_submission) }
+      it { is_expected.not_to be_able_to(:analyze, other_video_submission) }
       it { is_expected.to be_able_to(:create, video_submission) }
       it { is_expected.to be_able_to(:update, video_submission) }
+      it { is_expected.not_to be_able_to(:analyze, video_submission) }
     end
 
     context 'when the user is a Course Teaching Staff' do
@@ -48,8 +50,10 @@ RSpec.describe Course::Video do
       # Course Video Submissions
       it { is_expected.to be_able_to(:update, other_video_submission) }
       it { is_expected.to be_able_to(:read, other_video_submission) }
+      it { is_expected.to be_able_to(:analyze, video_submission) }
       it { is_expected.to be_able_to(:update, video_submission) }
       it { is_expected.to be_able_to(:read, video_submission) }
+      it { is_expected.to be_able_to(:analyze, other_video_submission) }
     end
 
     context 'when the user is a Course Observer' do

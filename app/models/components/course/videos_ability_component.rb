@@ -69,7 +69,7 @@ module Course::VideosAbilityComponent
 
   def define_staff_video_permissions
     allow_staff_read_and_attempt_all_video
-    allow_staff_read_all_video_submission
+    allow_staff_read_and_analzye_all_video_submission
     allow_teaching_staff_manage_video
     allow_teaching_staff_update_video_submission
   end
@@ -87,8 +87,9 @@ module Course::VideosAbilityComponent
     can :attempt, Course::Video, video_all_course_staff_hash
   end
 
-  def allow_staff_read_all_video_submission
+  def allow_staff_read_and_analzye_all_video_submission
     can :read, Course::Video::Submission, video: video_all_course_staff_hash
+    can :analyze, Course::Video::Submission, video: video_all_course_staff_hash
   end
 
   def allow_teaching_staff_manage_video

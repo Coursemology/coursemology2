@@ -1,9 +1,5 @@
 # frozen_string_literal: true
-json.video do
-  json.videoUrl @video.url
-  json.partial! 'watch_next_video_url', locals: { next_video: @video.next_video }
-  json.initialSeekTime @seek_time
-end
+json.partial! @video, locals: { seek_time: @seek_time }
 
 json.discussion do
   json.partial! 'course/video/topics/topics', locals: { topics: @topics }
