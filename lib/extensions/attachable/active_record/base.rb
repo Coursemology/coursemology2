@@ -71,9 +71,9 @@ module Extensions::Attachable::ActiveRecord::Base
         # by comparing `column` and `column_was` (from ActiveRecord::Dirty).
         define_method(method_name) do
           return [] unless send("#{column}_changed?")
-          ids_was = parse_attachment_reference_ids_from_content(send("#{column}_was"))
-          ids = parse_attachment_reference_ids_from_content(send(column))
-          ids_was - ids
+          attachment_ids_was = parse_attachment_reference_ids_from_content(send("#{column}_was"))
+          attachment_ids = parse_attachment_reference_ids_from_content(send(column))
+          attachment_ids_was - attachment_ids
         end
       end
     end
