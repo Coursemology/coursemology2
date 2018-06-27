@@ -2,6 +2,14 @@
 class AttachmentReferencesController < ApplicationController
   load_resource :attachment_reference
 
+  def create
+    attachment = Attachment.find_or_create_by(file: file_params[:file]) if file_params[:file]
+    if attachment
+      @attachment_reference =
+        AttachmentReference.create(attachment: attachment, name: file_params[:name])
+    end
+  end
+
   def show
     redirect_to @attachment_reference.url(filename: @attachment_reference.name)
   end
@@ -34,5 +42,9 @@ class AttachmentReferencesController < ApplicationController
     else
       head :bad_request
     end
+  end
+
+  def file_params
+    params.permit(:file, :name)
   end
 end
