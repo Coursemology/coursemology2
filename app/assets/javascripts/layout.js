@@ -31,43 +31,23 @@
     return button.render();
   }
 
-  function compressImage(image, onImageCompressed) {
-    // Maximum image size, images larger than this will be compressed
-    var IMAGE_MAX_WIDTH = 1920;
-    var IMAGE_MAX_HEIGHT = 1080;
+  function uploadImage(image, onImageUploaded) {
+    var formData = new FormData();
+    formData.append('file', image);
+    formData.append('name', image.name);
 
-    var img = document.createElement('img');
-    var canvas = document.createElement('canvas');
-
-    var reader = new FileReader();
-    reader.onload = function(e) {
-      img.src = e.target.result;
-    };
-    img.onload = function() {
-      var width = img.width;
-      var height = img.height;
-
-      if (width <= IMAGE_MAX_WIDTH && height <= IMAGE_MAX_HEIGHT ) {
-       onImageCompressed(img.src);
-       return;
-      }
-      if (width > IMAGE_MAX_WIDTH) {
-        height *= IMAGE_MAX_WIDTH / width;
-        width = IMAGE_MAX_WIDTH;
-      }
-      if (height > IMAGE_MAX_HEIGHT) {
-        width *= IMAGE_MAX_HEIGHT / height;
-        height = IMAGE_MAX_HEIGHT;
-      }
-
-      canvas.width = width;
-      canvas.height = height;
-      var ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, width, height);
-
-      onImageCompressed(canvas.toDataURL('image/jpeg'));
-    };
-    reader.readAsDataURL(image);
+    $.ajax({
+      url: '/attachments',
+      type: 'POST',
+      data: formData,
+      contentType: false,
+      processData: false,
+      success: function(data) {
+        if (data.success) {
+          onImageUploaded(data.id);
+        }
+      },
+    });
   }
 
   // Initialises Summernote
@@ -92,10 +72,8 @@
 
     $('textarea.text').not('.summernote-initialised').not('.no-summernote').each(function() {
       var $summernote = $(this);
-      function onImageCompressed(dataUrl) {
-        var img = document.createElement('img');
-        img.src = dataUrl;
-        $summernote.summernote('insertNode', img);
+      function onImageUploaded(id) {
+        $summernote.summernote('insertImage', '/attachments/' + id);
       }
 
       var options = {
@@ -119,7 +97,7 @@
         callbacks: {
           onImageUpload: function(files) {
             for (var i = 0; i < files.length; i++) {
-              compressImage(files[i], onImageCompressed);
+              uploadImage(files[i], onImageUploaded);
             }
           }
         },
