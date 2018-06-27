@@ -41,7 +41,9 @@ RSpec.describe 'Extension: Acts as Attachable' do
       end
     end
 
-    describe '#parse_attachment_reference_id_from_url' do
+    describe '#parse_attachment_reference_uuid_from_url' do
+      let(:url_prefix) { '/attachments/' }
+
       context 'with valid UUIDs' do
         let(:uuids) do
           [
@@ -53,8 +55,8 @@ RSpec.describe 'Extension: Acts as Attachable' do
 
         it 'returns the uuid' do
           uuids.each do |uuid|
-            url = "/attachments/#{uuid}"
-            expect(attachable.send(:parse_attachment_reference_id_from_url, url)).to eq(uuid)
+            url = url_prefix + uuid
+            expect(attachable.send(:parse_attachment_reference_uuid_from_url, url)).to eq(uuid)
           end
         end
       end
@@ -68,11 +70,10 @@ RSpec.describe 'Extension: Acts as Attachable' do
             '04ecba9a_c53c_487b_9191_22454be2b407'
           ]
         end
-
         it 'returns nil' do
           uuids.each do |uuid|
-            url = "/attachments/#{uuid}"
-            expect(attachable.send(:parse_attachment_reference_id_from_url, url)).to be_nil
+            url = url_prefix + uuid
+            expect(attachable.send(:parse_attachment_reference_uuid_from_url, url)).to be_nil
           end
         end
       end
@@ -166,6 +167,50 @@ RSpec.describe 'Extension: Acts as Attachable' do
 
           it 'does not change the attachment' do
             expect(attachable.attachment_changed?).to be(false)
+          end
+        end
+      end
+    end
+  end
+
+  describe '#has_many_attachments declaration' do
+    let(:instance) { Instance.default }
+    with_tenant(:instance) do
+      def create_image_tag(id)
+        "<img src='/attachments/#{id}'>"
+      end
+
+      # Use announcement as attachable since this has been declared:
+      #   has_many_attachments on: :content
+      let!(:attachable) { create(:course_announcement, content: content) }
+      let(:attachment_reference) { create(:attachment_reference) }
+      let(:content) { "<p>foo #{create_image_tag(attachment_reference.id)}</p>" }
+
+      context 'when column has attachments in its column' do
+        describe 'column_attachment_reference_ids' do
+          subject { attachable.content_attachment_reference_ids }
+
+          it { is_expected.to contain_exactly(attachment_reference.id) }
+        end
+      end
+
+      context 'when column has changes in attachments in its column' do
+        let(:new_attachment_reference) { create(:attachment_reference) }
+        let(:new_content) { "<p>foo #{create_image_tag(new_attachment_reference.id)}</p>" }
+        before { attachable.content = new_content }
+
+        it 'updates the attachment_references correctly when saved' do
+          attachable.save
+          expect(AttachmentReference.exists?(attachment_reference.id)).to be_falsey
+          expect(new_attachment_reference.reload.attachable).to eq(attachable)
+        end
+
+        describe '#column_attachment_references_change' do
+          subject { attachable.content_attachment_references_change }
+
+          it 'returns the right values' do
+            ans = [[attachment_reference.id], [new_attachment_reference.id]]
+            expect(subject).to eq ans
           end
         end
       end

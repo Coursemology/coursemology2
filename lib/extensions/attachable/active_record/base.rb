@@ -1,23 +1,50 @@
 # frozen_string_literal: true
 module Extensions::Attachable::ActiveRecord::Base
   module ClassMethods
-    # This method should be declared in model, to let it have attachments.
+    # Declaration for a model having many attachments. This declaration supports two possible ways
+    # of association: direct association, or association via a column.
+    #
+    #   (i) Direct association denotes an object having multiple attachments (eg. Assessement has
+    #   multiple files attached to the object itself)
+    #
+    #   (ii) Association via a column is meant to support the embedding of attachment images
+    #   within columns containing HTML markup.
+    #
+    # For deletion of attachments, it is necessary for the model to implement the
+    # +:destroy_attachment+ CanCanCan permission on the +attachable+ object.
+    #
+    # For (ii), the `has_many_attachments on: :column` declaration provides some additional
+    # methods and logic:
+    #
+    #   1. +column_name_attachment_reference_ids+: Access ids of attachment_references within the
+    #   column. This is done by using a HTML parser for the column to locate img tags with the
+    #   attribute +data-attachment-reference-id+.
+    #
+    #   2. +column_name_attachment_references_change+: Similar to +ActiveModel::Dirty+, this
+    #   returns an array of old and current attachment_reference_ids. This is to allow custom
+    #   callback logic to be implemented by the model. The return value follows the following
+    #   shape:
+    #   [[Old ids on column], [Current ids on column]]
+    #
+    #   3. +update_attachment_references+ (before_save callback): This handles changes in
+    #   attachment_references. This includes assocating new attachment_references with the
+    #    current object, and marking removed attachment_references for destruction
+    #   (which will be deleted).
+    #   This facilitates the WYSIWYG editor to insert images into the content by creating an
+    #   attachment_reference first (with +nil+ attachable), then correctly associate the
+    #   attachment_reference when the model is saved.
     #
     # @param [Hash] options
-    # @option options [Symbol|Array<Symbol>] :on The column which is associated with attachments,
+    # @option options [Symbol|Array<Symbol>] :on The column associated with attachments, note that
     #   the column type should be string or text.
     #   This can be a symbol or an array of symbols.
     #   An attribute named `column_name_attachment_references` will be defined, you can override it
     #   to customise the way to retrieve the attachment_references for the specific column.
     # @example Has many attachments on a column
-    #   has_many_attachments on: :description #=> description is associated with the attachments
-    #   of the model, updating description will result in attachments changing.
+    #   has_many_attachments on: :description #=> description contains HTML markup and images
+    #   associated with the attachments. Updating description will result in attachments changing.
     #
-    #   You can further implement `description_attachment_references_removed` reader in this case to
-    #   override the default method. The attachment_references ids returned by it will be removed.
-    #
-    #   For deletion of attachments, it is necessary for the model to implement the
-    #   +:destroy_attachment+ CanCanCan permission on the +attachable+ object.
+    #   To change the provided logic, you can override `description_attachment_references_changes`.
     def has_many_attachments(options = {}) # rubocop:disable Naming/PredicateName
       include HasManyAttachments
 
@@ -58,22 +85,36 @@ module Extensions::Attachable::ActiveRecord::Base
       end
     end
 
-    ATTACHMENT_REMOVED_SUFFIX = '_attachment_references_removed'
+    ATTACHMENT_REFERENCE_SUFFIX = '_attachment_reference_ids'
+    ATTACHMENT_CHANGED_SUFFIX = '_attachment_references_change'
 
     def self.define_attachment_references_readers(attachable_columns)
       attachable_columns.each do |column|
-        method_name = "#{column}#{ATTACHMENT_REMOVED_SUFFIX}"
-        next if method_defined?(method_name)
+        reader_method_name = "#{column}#{ATTACHMENT_REFERENCE_SUFFIX}"
+        unless method_defined?(reader_method_name)
 
-        # Define a reader `#{column_name}_attachment_references_removed` to allow clients
-        # to implement logic when attachments are removed.
-        # This method returns the attachment_reference_ids of attachments that are removed,
-        # by comparing `column` and `column_was` (from ActiveRecord::Dirty).
-        define_method(method_name) do
+          # Define a reader to get attachment_reference_ids within the given content
+          define_method(reader_method_name) do
+            parse_attachment_reference_uuids_from_content(send(column))
+          end
+        end
+
+        changed_method_name = "#{column}#{ATTACHMENT_CHANGED_SUFFIX}"
+        next if method_defined?(changed_method_name)
+
+        # Define a reader `#{column_name}_attachment_references_change` to allow clients
+        # to implement logic when attachments have changed. This method returns previous
+        # attachment_reference_ids and current_attachment_reference_ids by comparing
+        # `column` and `column_was` (from ActiveRecord::Dirty).
+        #
+        # @return [Array<Array<String>>] Array with 2 elements:
+        #   i) previous set of attachment_reference_ids
+        #   ii) current set of attachment_reference_ids
+        define_method(changed_method_name) do
           return [] unless send("#{column}_changed?")
-          attachment_ids_was = parse_attachment_reference_ids_from_content(send("#{column}_was"))
-          attachment_ids = parse_attachment_reference_ids_from_content(send(column))
-          attachment_ids_was - attachment_ids
+          attachment_ids_was = parse_attachment_reference_uuids_from_content(send("#{column}_was"))
+          attachment_ids = parse_attachment_reference_uuids_from_content(send(column))
+          [attachment_ids_was, attachment_ids]
         end
       end
     end
@@ -86,52 +127,58 @@ module Extensions::Attachable::ActiveRecord::Base
 
     private
 
-    # Delete the attachment references which are removed in this update.
+    # Update attachment references which are added or removed in this update.
     def update_attachment_references
-      return if attachment_references.empty?
+      changes = attachment_reference_id_changes
+      added_ids, removed_ids = changes[1] - changes[0], changes[0] - changes[1]
 
-      ids = attachment_reference_ids_removed
       attachment_references.each do |attachment_reference|
-        attachment_reference.mark_for_destruction if ids.include?(attachment_reference.id)
+        attachment_reference.mark_for_destruction if removed_ids.include?(attachment_reference.id)
+      end
+      added_ids.each do |attachment_reference_id|
+        attachment_references << AttachmentReference.find(attachment_reference_id)
       end
     end
 
-    # Find all attachment_reference ids removed in the columns specified.
+    # Find all changes in attachment_reference_ids in the columns specified.
     #
-    # @return [Array<Integer>]
-    def attachment_reference_ids_removed
-      attachment_reference_ids = []
+    # @return [Array<Array<String>>] Array with 2 elements:
+    #   i) previous set of attachment_reference_ids
+    #   ii) current set of attachment_reference_ids
+    def attachment_reference_id_changes
+      attachment_reference_id_changes = Array.new(2, [])
       self.class.attachable_columns.each do |column|
-        attachment_reference_ids += send("#{column}#{ATTACHMENT_REMOVED_SUFFIX}")
+        old_ids, curr_ids = send("#{column}#{ATTACHMENT_CHANGED_SUFFIX}")
+        attachment_reference_id_changes[0] += old_ids if old_ids
+        attachment_reference_id_changes[1] += curr_ids if curr_ids
       end
 
-      attachment_reference_ids
+      attachment_reference_id_changes
     end
 
-    # Parse all attachment_reference ids in the content.
+    # Parse all attachment_reference uuids in the content.
     #
     # @param [String] content The content which associated with the attachments.
     # @return [Array<Integer>] the ids of the attachment references in the content.
-    def parse_attachment_reference_ids_from_content(content)
+    def parse_attachment_reference_uuids_from_content(content)
       ids = []
       doc = Nokogiri::HTML(content)
       doc.css('img').each do |image|
-        id = parse_attachment_reference_id_from_url(image['src'])
+        id = parse_attachment_reference_uuid_from_url(image['src'])
         ids << id if id
       end
 
       ids
     end
 
-    # Regex for filtering UUIDs.
+    # Regex for filtering Attachment IDs from URLs.
     ATTACHMENT_ID_REGEX = /\/attachments\/([0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12})$/
-    # Parse attachment_reference from the given url.
+
+    # Parse attachment_reference uuid from the given url.
     #
-    # @param [String] url The url.
-    # @return [Integer|nil] the id of the attachment references in the url, nil will be returned
-    #   if the url is not a valid attachment url.
-    def parse_attachment_reference_id_from_url(url)
-      # TODO: Attachments from a third party domain with the same path should not be returned.
+    # @param [String] uuid The uuid.
+    # @return [String|nil] the uuid of the attachment_references, or nil if invalid.
+    def parse_attachment_reference_uuid_from_url(url)
       result = url.match(ATTACHMENT_ID_REGEX)
       result ? result[1] : nil
     end
