@@ -59,36 +59,60 @@ RSpec.feature 'Course: Achievements' do
                                                           'destroy.success'))
       end
 
-      scenario 'I can award a manually-awarded achievement to a student' do
-        manual_achievement = create(:course_achievement, course: course)
-        auto_achievement = create(:course_achievement, course: course)
-        create(:course_condition_achievement, course: course, conditional: auto_achievement)
+      context 'Award a manually-awarded achievement to student' do
+        let!(:manual_achievement) { create(:course_achievement, course: course) }
+        let!(:course_condition) { create(:course_condition_achievement, course: course, conditional: auto_achievement) }
+        let!(:auto_achievement) { create(:course_achievement, course: course) }
 
-        student = create(:course_student, course: course)
-        course_user_id = "achievement_course_user_ids_#{student.id}"
-        phantom_user = create(:course_student, :phantom, course: course)
-        phantom_user_id = "achievement_course_user_ids_#{phantom_user.id}"
-
-        visit course_achievements_path(course)
-
-        expect(page).to have_content_tag_for(auto_achievement)
-        expect(page).
-          not_to have_link(nil,
-                           href: course_achievement_course_users_path(course, auto_achievement))
-
-        within find(content_tag_selector(manual_achievement)) do
-          # first is used because a duplicate set of buttons are used for mobile view.
-          first(:link, href: course_achievement_course_users_path(course, manual_achievement)).click
+        before do
+          visit course_achievements_path(course)
         end
 
-        expect(page).to have_unchecked_field(course_user_id)
-        expect(page).to have_unchecked_field(phantom_user_id)
-        check course_user_id
-        check phantom_user_id
+        scenario 'I can award a manually-awarded achievement to my student' do
+          my_student = create(:course_student, course: course, creator: user)
+          my_student_id = "achievement_course_user_ids_#{my_student.id}"
 
-        expect do
-          click_button I18n.t('course.achievement.course_users.course_users_form.button')
-        end.to change(manual_achievement.course_users, :count).by(2)
+          within find(content_tag_selector(manual_achievement)) do
+            # first is used because a duplicate set of buttons are used for mobile view.
+            first(:link, href: course_achievement_course_users_path(course, manual_achievement)).click
+          end
+
+          expect(page).to have_text(I18n.t('course.achievement.course_users.course_users_form.your_students_header'))
+          expect(page).to have_unchecked_field(my_student_id)
+          check my_student_id
+
+          expect do
+            click_button I18n.t('course.achievement.course_users.course_users_form.button')
+          end.to change(manual_achievement.course_users, :count).by(1)
+        end
+
+        scenario 'I can award a manually-awarded achievement to any student' do
+          student = create(:course_student, course: course)
+          course_user_id = "achievement_course_user_ids_#{student.id}"
+          phantom_user = create(:course_student, :phantom, course: course)
+          phantom_user_id = "achievement_course_user_ids_#{phantom_user.id}"
+
+          expect(page).to have_content_tag_for(auto_achievement)
+          expect(page).
+            not_to have_link(nil,
+                             href: course_achievement_course_users_path(course, auto_achievement))
+
+          within find(content_tag_selector(manual_achievement)) do
+            # first is used because a duplicate set of buttons are used for mobile view.
+            first(:link, href: course_achievement_course_users_path(course, manual_achievement)).click
+          end
+
+          expect(page).to have_text(I18n.t('course.achievement.course_users.course_users_form.students_header'))
+          expect(page).to have_text(I18n.t('course.achievement.course_users.course_users_form.phantom_user_header'))
+          expect(page).to have_unchecked_field(course_user_id)
+          expect(page).to have_unchecked_field(phantom_user_id)
+          check course_user_id
+          check phantom_user_id
+
+          expect do
+            click_button I18n.t('course.achievement.course_users.course_users_form.button')
+          end.to change(manual_achievement.course_users, :count).by(2)
+        end
       end
     end
   end

@@ -2,37 +2,17 @@
   = f.error_notification
   = f.error :achievement
 
-  - collection = course.course_users.without_phantom_users.students.order_alphabetically
-  table.table.table-hover
-    thead
-      th = t('.name')
-      th
-        input.toggle-all id="toggle-all-normal-achievements" type='checkbox' style='display: none'
-        '
-        label for='toggle-all-achievements'
-          = t('.enabled')
-    tbody
-      = f.collection_check_boxes :course_user_ids, collection, :id, :name do |f|
-        tr
-          th = link_to_course_user(f.object)
-          td = f.check_box 'data-for-select-all' => "toggle-all-normal-achievements"
+  - own_students = current_course_user.present? ? @course_users.merge(current_course_user.my_students).without_phantom_users : []
+  - students = @course_users.without_phantom_users.students
+  - phantom_students = @course_users.phantom
+  h4 = t('.your_students_header')
+  = render partial: 'course_users_table', locals: { collection: own_students, f: f, phantom: false }
+  br
+  h4 = t('.students_header')
+  = render partial: 'course_users_table', locals: { collection: students - own_students, f: f, phantom: false }
 
   br
   h4 = t('.phantom_user_header')
-
-  - collection = course.course_users.phantom.students.order_alphabetically
-  table.table.table-hover
-    thead
-      th = t('.name')
-      th
-        input.toggle-all id="toggle-all-phantom-achievements" type='checkbox' style='display: none'
-        '
-        label for='toggle-all-achievements'
-          = t('.enabled')
-    tbody
-      = f.collection_check_boxes :course_user_ids, collection, :id, :name do |f|
-        tr
-          th = link_to_course_user(f.object)
-          td = f.check_box 'data-for-select-all' => "toggle-all-phantom-achievements"
+  = render partial: 'course_users_table', locals: { collection: phantom_students, f: f, phantom: true }
 
   = f.button :submit, t(".button")
