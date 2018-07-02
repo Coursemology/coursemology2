@@ -51,8 +51,15 @@ describe('<AssessmentEdit />', () => {
     const spy = jest.spyOn(CourseAPI.assessment.assessments, 'update');
     const form = editPage.find('form');
     form.simulate('submit');
-    expect(spy).toHaveBeenCalledWith(id,
-      { assessment: { ...intitialValues, title: newTitle, autograded: true, view_password: null, session_password: null } });
+    expect(spy).toHaveBeenCalledWith(id, {
+      assessment: {
+        ...intitialValues,
+        title: newTitle,
+        autograded: true,
+        view_password: null,
+        session_password: null,
+      },
+    });
   });
 
   it('renders the gamified fields by default', () => {
