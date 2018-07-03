@@ -102,22 +102,16 @@ class VoiceResponseAnswer extends Component {
     return `voice_response_${question.id}`;
   }
 
-  renderSingleFileInputChildren = (field) => {
-    const { input } = field;
-    const { value = {} } = input;
-    const { file = {} } = value;
-    const { name: fileName } = file;
-    return (
-      <div style={styles.singleFileInputChildrenWrapper}>
-        <div style={styles.singleFileInputChildren}>
-          <div>
-            <FormattedMessage {...translations.chooseVoiceFileExplain} />
-          </div>
-          {fileName}
+  renderSingleFileInputChildren = props => (
+    <div style={styles.singleFileInputChildrenWrapper}>
+      <div style={styles.singleFileInputChildren}>
+        <div>
+          <FormattedMessage {...translations.chooseVoiceFileExplain} />
         </div>
+        {props.file && props.file.name}
       </div>
-    );
-  }
+    </div>
+  );
 
   renderAudio = (field) => {
     const { input: { value } } = field;
@@ -150,9 +144,8 @@ class VoiceResponseAnswer extends Component {
             disabled={readOnly}
             accept={sharedConstants.SUPPORTED_VOICE_FILE_TYPES.join()}
             {...field}
-          >
-            {this.renderSingleFileInputChildren(field)}
-          </SingleFileInput>
+            previewComponent={this.renderSingleFileInputChildren}
+          />
         </div>
         <div>
           <FlatButton
@@ -204,7 +197,6 @@ class VoiceResponseAnswer extends Component {
     );
   }
 }
-
 
 function mapStateToProps(state) {
   return {

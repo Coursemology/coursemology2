@@ -5,7 +5,7 @@ import { Field } from 'redux-form';
 import createComponent from 'lib/components/redux-form/createComponent';
 import mapError from 'lib/components/redux-form/mapError';
 
-import SingleFileInput from 'lib/components/redux-form/SingleFileInput';
+import SingleFileInput, { ImagePreview } from 'lib/components/redux-form/SingleFileInput';
 import { questionNamePrefix, questionIdPrefix } from '../constants';
 
 
@@ -26,7 +26,7 @@ class FileUploadField extends React.Component {
         name={questionNamePrefix + field}
         id={questionIdPrefix + field}
         component={SingleFileInput}
-        isNotBadge
+        previewComponent={ImagePreview}
         label={label}
         disabled={isLoading}
         accept="image/gif, image/png, image/jpeg, image/pjpeg, application/pdf"

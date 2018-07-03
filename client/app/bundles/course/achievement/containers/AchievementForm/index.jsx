@@ -6,7 +6,7 @@ import ConditionList from 'lib/components/course/ConditionList';
 import TextField from 'lib/components/redux-form/TextField';
 import RichTextField from 'lib/components/redux-form/RichTextField';
 import Toggle from 'lib/components/redux-form/Toggle';
-import SingleFileInput from 'lib/components/redux-form/SingleFileInput';
+import SingleFileInput, { BadgePreview } from 'lib/components/redux-form/SingleFileInput';
 import formTranslations from 'lib/translations/form';
 import translations from './translations.intl';
 import { formNames } from '../../constants';
@@ -67,6 +67,8 @@ const AchievementForm = ({
     <Field
       name="badge"
       component={SingleFileInput}
+      accept="image/*"
+      previewComponent={BadgePreview}
       label={<FormattedMessage {...translations.description} />}
       disabled={submitting}
     />
