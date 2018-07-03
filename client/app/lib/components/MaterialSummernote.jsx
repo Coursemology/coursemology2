@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import ReactSummernote from 'react-summernote';
 import TextFieldLabel from 'material-ui/TextField/TextFieldLabel';
+import axios from 'lib/axios';
 
 import { i18nLocale } from 'lib/helpers/server-context';
 import '../styles/MaterialSummernote.scss';
@@ -51,9 +52,10 @@ class MaterialSummernote extends React.Component {
 
   onImageUpload = (files) => {
     for (let i = 0; i < files.length; i += 1) {
-      this.compressImage(files[i], (dataUrl) => {
+      this.uploadImage(files[i], (dataId) => {
         const img = document.createElement('img');
-        img.src = dataUrl;
+        img.setAttribute('src', `/attachments/${dataId}`);
+
         if (this.reactSummernote != null) {
           this.reactSummernote.editor.summernote('insertNode', img);
         }
@@ -61,43 +63,19 @@ class MaterialSummernote extends React.Component {
     }
   }
 
-  compressImage = (image, onImageCompressed) => {
-    // Maximum image size, images larger than this will be compressed
-    const IMAGE_MAX_WIDTH = 1920;
-    const IMAGE_MAX_HEIGHT = 1080;
+  uploadImage = (image, onImageUploaded) => {
+    const formData = new FormData();
+    formData.append('file', image);
+    formData.append('name', image.name);
 
-    const img = document.createElement('img');
-    const canvas = document.createElement('canvas');
-
-    const reader = new FileReader();
-    reader.onload = function onload(e) {
-      img.src = e.target.result;
-    };
-    img.onload = function onload() {
-      let { width, height } = img;
-
-      if (width <= IMAGE_MAX_WIDTH && height <= IMAGE_MAX_HEIGHT) {
-        onImageCompressed(img.src);
-        return;
-      }
-      if (width > IMAGE_MAX_WIDTH) {
-        height *= IMAGE_MAX_WIDTH / width;
-        width = IMAGE_MAX_WIDTH;
-      }
-      if (height > IMAGE_MAX_HEIGHT) {
-        width *= IMAGE_MAX_HEIGHT / height;
-        height = IMAGE_MAX_HEIGHT;
-      }
-
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, width, height);
-
-      onImageCompressed(canvas.toDataURL('image/jpeg'));
-    };
-    reader.readAsDataURL(image);
-  };
+    axios.post('/attachments', formData)
+      .then(response => response.data)
+      .then((data) => {
+        if (data.success) {
+          onImageUploaded(data.id);
+        }
+      });
+  }
 
   /* eslint class-methods-use-this: "off" */
   inlineCodeButton(context) {
