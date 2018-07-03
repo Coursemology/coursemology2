@@ -70,6 +70,7 @@ RSpec.feature 'Course: Duplication' do
           click_on 'Duplicate'
 
           expect(page).not_to have_css('.source-course-dropdown')
+          expect(page).to have_css('.spinner')
           wait_for_job
           expect(course.assessments.where(title: assessment_title).count).to be(1)
         end
