@@ -159,7 +159,7 @@ RSpec.describe Course::Video, type: :model do
                    course: course,
                    video: video1,
                    creator: student1.user,
-                   posts:[])
+                   posts: [])
           end
 
           it 'prevents the url from being changed' do
