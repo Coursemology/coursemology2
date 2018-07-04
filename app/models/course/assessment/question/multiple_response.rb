@@ -38,7 +38,6 @@ class Course::Assessment::Question::MultipleResponse < ApplicationRecord
 
   def initialize_duplicate(duplicator, other)
     copy_attributes(other)
-    associate_duplicated_skills(duplicator, other)
 
     self.options = duplicator.duplicate(other.options)
   end

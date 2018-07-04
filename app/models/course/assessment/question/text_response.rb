@@ -70,7 +70,6 @@ class Course::Assessment::Question::TextResponse < ApplicationRecord
 
   def initialize_duplicate(duplicator, other)
     copy_attributes(other)
-    associate_duplicated_skills(duplicator, other)
 
     if comprehension_question?
       self.groups = duplicator.duplicate(other.groups)
