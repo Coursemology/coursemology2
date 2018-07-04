@@ -2,15 +2,7 @@
 
 require 'selenium/webdriver'
 
-Capybara.register_driver :chrome do |app|
-  Capybara::Selenium::Driver.new(app, browser: :chrome)
-end
-
 Capybara.javascript_driver = :selenium_chrome_headless
-
-Capybara::Screenshot.register_driver(:headless_chrome) do |driver, path|
-  driver.browser.save_screenshot(path)
-end
 
 # Adds extra matchers for Capybara
 module Capybara::TestGroupHelpers
