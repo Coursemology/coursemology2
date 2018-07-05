@@ -5,6 +5,8 @@ module AnnouncementConcern
   extend ActiveSupport::Concern
 
   included do
+    has_many_attachments on: :content
+
     after_initialize :set_defaults, if: :new_record?
     after_create :mark_as_read_by_creator
     after_update :mark_as_read_by_updater

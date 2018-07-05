@@ -5,7 +5,7 @@ class Course::Discussion::Post < ApplicationRecord
 
   acts_as_forest order: :created_at, optional: true
   acts_as_readable on: :updated_at
-  has_many_attachments
+  has_many_attachments on: :text
 
   after_initialize :set_topic, if: :new_record?
   after_commit :mark_topic_as_read

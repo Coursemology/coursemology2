@@ -2,7 +2,7 @@
 class Course::Achievement < ApplicationRecord
   acts_as_conditional
   mount_uploader :badge, ImageUploader
-  has_many_attachments
+  has_many_attachments on: :description
 
   after_initialize :set_defaults, if: :new_record?
 
