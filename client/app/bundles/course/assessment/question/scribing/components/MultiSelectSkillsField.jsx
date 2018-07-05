@@ -8,7 +8,7 @@ import { skillShape } from '../propTypes';
 const propTypes = {
   label: PropTypes.string.isRequired,
   field: PropTypes.string.isRequired,
-  value: PropTypes.arrayOf(skillShape),
+  value: PropTypes.arrayOf(PropTypes.number),
   options: PropTypes.arrayOf(skillShape),
   error: PropTypes.string,
   isLoading: PropTypes.bool,

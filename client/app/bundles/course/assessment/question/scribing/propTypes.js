@@ -1,10 +1,5 @@
 import PropTypes from 'prop-types';
 
-export const skillIdShape = PropTypes.shape({
-  id: PropTypes.number,
-  title: PropTypes.string,
-});
-
 export const skillShape = PropTypes.shape({
   id: PropTypes.number,
   title: PropTypes.string,
@@ -29,7 +24,7 @@ export const questionShape = PropTypes.shape({
   staff_only_comments: PropTypes.string,
   maximum_grade: PropTypes.number,
   weight: PropTypes.number,
-  skill_ids: PropTypes.arrayOf(skillIdShape),
+  skill_ids: PropTypes.arrayOf(PropTypes.number),
   skills: PropTypes.arrayOf(skillShape),
   attachment_reference: attachmentReferenceShape,
   error: errorShape,
