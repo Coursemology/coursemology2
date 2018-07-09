@@ -119,16 +119,12 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
 
   def generate_zip_file(data_files_to_keep, submission_files_to_keep, solution_files_to_keep)
     tmp = Tempfile.new(['package', '.zip'])
-    autograde_build_path = File.join(File.expand_path(File.dirname(__FILE__)),
-                'java_build.xml').freeze
-    autograde_pre_path = File.join(File.expand_path(File.dirname(__FILE__)),
-                'java_autograde_pre.java').freeze
-    autograde_run_path = File.join(File.expand_path(File.dirname(__FILE__)),
-                'RunTests.java').freeze
-    makefile_path = File.join(File.expand_path(File.dirname(__FILE__)),
-                'java_simple_makefile').freeze
-    standard_makefile_path = File.join(File.expand_path(File.dirname(__FILE__)),
-                'java_standard_makefile').freeze
+    autograde_build_path = File.join(File.expand_path(__dir__), 'java_build.xml').freeze
+    autograde_pre_path = File.join(File.expand_path(__dir__), 'java_autograde_pre.java').freeze
+    autograde_run_path = File.join(File.expand_path(__dir__), 'RunTests.java').freeze
+    autograde_result_path = File.join(File.expand_path(__dir__), 'AutograderResult.java').freeze
+    makefile_path = File.join(File.expand_path(__dir__), 'java_simple_makefile').freeze
+    standard_makefile_path = File.join(File.expand_path(__dir__), 'java_standard_makefile').freeze
 
     Zip::OutputStream.open(tmp.path) do |zip|
       if submit_as_file?
@@ -147,6 +143,10 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
       zip.put_next_entry 'tests/'
       zip.put_next_entry 'tests/RunTests.java'
       zip.print File.read(autograde_run_path)
+
+      # Create Java class source file for storing Autograder results
+      zip.put_next_entry 'tests/AutograderResult.java'
+      zip.print File.read(autograde_result_path)
 
       # Create Autograder test file containing all the test functions
       zip.put_next_entry 'tests/prepend'
@@ -246,10 +246,11 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
           ITestResult result = Reporter.getCurrentTestResult();
           result.setAttribute("expression", #{test[:expression].inspect});
           #{test[:inline_code]}
+          AutograderResult theResult = new AutograderResult(#{test[:expression]});
           result.setAttribute("expected", printValue(#{test[:expected]}));
-          result.setAttribute("output", printValue(#{test[:expression]}));
+          result.setAttribute("output", printValue(theResult.getResult()));
           #{hint}
-          expectEquals(#{test[:expression]}, #{test[:expected]});
+          expectEquals(theResult.getResult(), #{test[:expected]});
         }
       Java
 
