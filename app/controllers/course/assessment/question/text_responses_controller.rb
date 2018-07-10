@@ -5,6 +5,7 @@ class Course::Assessment::Question::TextResponsesController < Course::Assessment
   load_and_authorize_resource :text_response_question,
                               class: Course::Assessment::Question::TextResponse,
                               through: :assessment, parent: false, except: [:new, :create]
+  before_action :load_question_assessment, only: [:edit, :update]
 
   def new
     if params[:file_upload] == 'true'
@@ -27,16 +28,15 @@ class Course::Assessment::Question::TextResponsesController < Course::Assessment
   end
 
   def edit
-    @question_assessment = load_question_assessment_for(@text_response_question)
     @text_response_question.build_at_least_one_group_one_point if @text_response_question.comprehension_question?
   end
 
   def update
-    if @text_response_question.update_attributes(text_response_question_params)
+    @question_assessment.skill_ids = text_response_question_params[:question_assessment][:skill_ids]
+    if @text_response_question.update(text_response_question_params.except(:question_assessment))
       redirect_to course_assessment_path(current_course, @assessment),
                   success: t('.success', name: question_type)
     else
-      @question_assessment = load_question_assessment_for(@text_response_question)
       render 'edit'
     end
   end
@@ -59,7 +59,7 @@ class Course::Assessment::Question::TextResponsesController < Course::Assessment
     permitted_params = [
       :title, :description, :staff_only_comments, :maximum_grade, :allow_attachment,
       :hide_text, :is_comprehension,
-      skill_ids: []
+      question_assessment: { skill_ids: [] }
     ]
     if params[:question_text_response][:is_comprehension] == 'true'
       permitted_params.concat(
@@ -88,5 +88,9 @@ class Course::Assessment::Question::TextResponsesController < Course::Assessment
 
   def question_type
     @text_response_question.question_type
+  end
+
+  def load_question_assessment
+    @question_assessment = load_question_assessment_for(@text_response_question)
   end
 end
