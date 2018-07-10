@@ -5,6 +5,7 @@ class Course::Assessment::Question::MultipleResponsesController < Course::Assess
   load_and_authorize_resource :multiple_response_question,
                               class: Course::Assessment::Question::MultipleResponse,
                               through: :assessment, parent: false, except: [:new, :create]
+  before_action :load_question_assessment, only: [:edit, :update]
 
   def new
     @multiple_response_question.grading_scheme = :any_correct if params[:multiple_choice] == 'true'
@@ -20,12 +21,12 @@ class Course::Assessment::Question::MultipleResponsesController < Course::Assess
     end
   end
 
-  def edit
-    @question_assessment = load_question_assessment_for(@multiple_response_question)
-  end
+  def edit; end
 
   def update
-    if @multiple_response_question.update_attributes(multiple_response_question_params)
+    @question_assessment.skill_ids = multiple_response_question_params[:question_assessment][:skill_ids]
+    if @multiple_response_question.update(multiple_response_question_params.
+                                          except(:question_assessment))
       redirect_to course_assessment_path(current_course, @assessment),
                   success: t('.success')
     else
@@ -49,8 +50,12 @@ class Course::Assessment::Question::MultipleResponsesController < Course::Assess
   def multiple_response_question_params
     params.require(:question_multiple_response).permit(
       :title, :description, :staff_only_comments, :maximum_grade, :grading_scheme,
-      skill_ids: [],
+      question_assessment: { skill_ids: [] },
       options_attributes: [:_destroy, :id, :correct, :option, :explanation, :weight]
     )
+  end
+
+  def load_question_assessment
+    @question_assessment = load_question_assessment_for(@multiple_response_question)
   end
 end
