@@ -10,8 +10,12 @@ class Course::Assessment::Question::Controller < Course::Assessment::ComponentCo
   def self.build_and_authorize_new_question(question_name, options)
     before_action only: options[:only], except: options[:except] do
       question = options[:class].new
-      question.question_assessments.build(assessment: @assessment)
-      question.assign_attributes(send("#{question_name}_params")) if action_name != 'new'
+      @question_assessment = question.question_assessments.build(assessment: @assessment)
+      if action_name != 'new'
+        question_params = send("#{question_name}_params")
+        @question_assessment.skill_ids = question_params[:question_assessment].try(:[], :skill_ids)
+        question.assign_attributes(question_params.except(:question_assessment))
+      end
       authorize!(action_name.to_sym, question)
       instance_variable_set("@#{question_name}", question) unless instance_variable_get("@#{question_name}")
     end

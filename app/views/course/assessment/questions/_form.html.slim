@@ -2,5 +2,6 @@
 = f.input :description, as: :text
 = f.input :staff_only_comments, as: :text
 = f.input :maximum_grade
-= f.input :skill_ids, as: :token, collection: current_course.assessment_skills,
-  multiple: true, label: t('.skills')
+= f.simple_fields_for question_assessment do |qa_form|
+  = qa_form.input :skill_ids, as: :token, collection: current_course.assessment_skills,
+    multiple: true, label: t('.skills')
