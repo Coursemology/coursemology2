@@ -10,6 +10,8 @@ class Course::Video < ApplicationRecord
                          inverse_of: :video, dependent: :destroy
   has_many :topics, class_name: Course::Video::Topic.name,
                     dependent: :destroy, foreign_key: :video_id, inverse_of: :video
+  has_many :posts, through: :topics, class_name: Course::Discussion::Post.name
+  has_many :sessions, through: :submissions
 
   validate :url_unchanged
 
@@ -85,6 +87,10 @@ class Course::Video < ApplicationRecord
     Course::Settings::VideosComponent.email_enabled?(course, "video_#{event}".to_sym)
   end
 
+  def url_unchangeble?
+    sessions.exists? || posts.exists?
+  end
+
   private
 
   # Parents the video under its duplicated video tab, if it exists.
@@ -99,7 +105,8 @@ class Course::Video < ApplicationRecord
   end
 
   def url_unchanged
-    errors.add(:url, 'should not be updated for existing videos') if url_changed? &&
-                                                                     persisted?
+    errors.add(:url, 'cannot be updated for videos with comments or watch data') if url_changed? &&
+                                                                                    persisted? &&
+                                                                                    url_unchangeble?
   end
 end

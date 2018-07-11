@@ -30,3 +30,4 @@ en:
           url_placeholder: >
             Please provide a valid youtube URL,
             eg. https://www.youtube.com/watch?v=dQw4w9WgXcQ
+          url_fixed_desc: 'URL cannot be changed if video has comments or watch statistics.'

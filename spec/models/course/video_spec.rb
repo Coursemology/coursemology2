@@ -113,11 +113,78 @@ RSpec.describe Course::Video, type: :model do
       end
 
       context 'when video exists ' do
-        it 'prevents the url from being changed' do
-          video1.url = youtube_embedded_url
-          expect(video1.valid?).to be_falsey
-          expect(video1.save).to be_falsey
-          expect { video1.save! }.to raise_exception(ActiveRecord::RecordInvalid)
+        context 'when video does not have comments or sessions' do
+          let!(:submission) { create(:video_submission, video: video2, creator: student1.user) }
+
+          it 'allows url to be changed' do
+            video1.url = youtube_embedded_url
+            expect(video1.valid?).to be_truthy
+            expect(video1.save).to be_truthy
+
+            video2.url = youtube_embedded_url
+            expect(video2.valid?).to be_truthy
+            expect(video2.save).to be_truthy
+          end
+        end
+
+        context 'when video have topics without posts' do
+          let!(:topic) do
+            create(:video_topic,
+                   :with_submission,
+                   course: course,
+                   video: video1,
+                   creator: student1.user,
+                   posts: [])
+          end
+
+          it 'allows url to be changed' do
+            video1.url = youtube_embedded_url
+            expect(video1.valid?).to be_truthy
+            expect(video1.save).to be_truthy
+          end
+        end
+
+        context 'when video have topics with posts' do
+          let(:video1) { create(:video, course: course) }
+          let!(:topic1) do
+            create(:video_topic,
+                   :with_submission,
+                   course: course,
+                   video: video1,
+                   creator: student1.user)
+          end
+          let!(:topic2) do
+            create(:video_topic,
+                   :with_submission,
+                   course: course,
+                   video: video1,
+                   creator: student1.user,
+                   posts: [])
+          end
+
+          it 'prevents the url from being changed' do
+            video1.url = youtube_embedded_url
+            expect(video1.valid?).to be_falsey
+            expect(video1.save).to be_falsey
+            expect { video1.save! }.to raise_exception(ActiveRecord::RecordInvalid)
+          end
+        end
+
+        context 'when video has sessions' do
+          let!(:session1) { create(:video_session, :with_events, video: video1) }
+          let!(:session2) { create(:video_session, video: video2) }
+
+          it 'prevents the url from being changed' do
+            video1.url = youtube_embedded_url
+            expect(video1.valid?).to be_falsey
+            expect(video1.save).to be_falsey
+            expect { video1.save! }.to raise_exception(ActiveRecord::RecordInvalid)
+
+            video2.url = youtube_embedded_url
+            expect(video2.valid?).to be_falsey
+            expect(video2.save).to be_falsey
+            expect { video2.save! }.to raise_exception(ActiveRecord::RecordInvalid)
+          end
         end
       end
     end
