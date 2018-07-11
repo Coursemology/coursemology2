@@ -290,7 +290,7 @@ class ProgrammingQuestionForm extends React.Component {
           menuStyle={{ maxHeight: '80vh', overflowY: 'scroll' }}
         />
         <select
-          name={`${ProgrammingQuestionForm.getInputName(field)}[]`}
+          name={`${ProgrammingQuestionForm.getInputName('question_assessment')}[${field}][]`}
           multiple
           value={value.map(opt => opt.id)}
           style={{ display: 'none' }}

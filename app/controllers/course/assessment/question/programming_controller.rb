@@ -34,8 +34,10 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
 
   def update
     result = @programming_question.class.transaction do
-      @programming_question.assign_attributes programming_question_params
-      @programming_question.skills.clear if programming_question_params[:skill_ids].blank?
+      @question_assessment.skill_ids = programming_question_params[:question_assessment].
+                                       try(:[], :skill_ids)
+      @programming_question.assign_attributes(programming_question_params.
+                                              except(:question_assessment))
       process_package
 
       raise ActiveRecord::Rollback unless @programming_question.save
@@ -69,7 +71,7 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
       :title, :description, :staff_only_comments, :maximum_grade,
       :language_id, :memory_limit, :time_limit, :attempt_limit,
       *attachment_params,
-      skill_ids: []
+      question_assessment: { skill_ids: [] }
     )
   end
 
