@@ -651,7 +651,7 @@ DEPENDENCIES
   simplecov
   slim-rails
   spring
-  summernote-rails (<= 0.8.10.0)
+  summernote-rails
   themes_on_rails (>= 0.3.1)!
   traceroute
   twitter-typeahead-rails
@@ -665,4 +665,4 @@ DEPENDENCIES
   yard
 
 BUNDLED WITH
-   1.16.1
+   1.16.2
