@@ -619,7 +619,7 @@ DEPENDENCIES
   omniauth
   omniauth-facebook
   parallel_tests
-  parser (< 2.5)
+  parser
   pg
   puma
   rails (~> 5.1.0)
