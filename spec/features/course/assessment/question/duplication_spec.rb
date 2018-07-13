@@ -9,7 +9,8 @@ RSpec.describe 'Course: Assessments: Questions: Duplication Spec' do
     let(:source_assessment) do
       create(:assessment, :with_mcq_question, course: course).tap do |assessment|
         mcq_question = assessment.questions.first
-        mcq_question.skills << build(:course_assessment_skill, course: course)
+        mcq_question.question_assessments.first.skills <<
+          build(:course_assessment_skill, course: course)
       end
     end
     let(:destination_assessment) { create(:assessment, :with_programming_question, course: course) }
@@ -35,7 +36,8 @@ RSpec.describe 'Course: Assessments: Questions: Duplication Spec' do
         original_mcq_question = source_assessment.questions.last
         duplicated_mcq_question = destination_assessment.questions.last
         expect(duplicated_mcq_question.title).to eq(original_mcq_question.title)
-        expect(duplicated_mcq_question.skills.first.id).to eq(original_mcq_question.skills.first.id)
+        expect(duplicated_mcq_question.question_assessments.first.skills.first.id).
+          to eq(original_mcq_question.question_assessments.first.skills.first.id)
       end
     end
   end

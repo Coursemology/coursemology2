@@ -47,7 +47,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
         expect(page).
           to have_selector('div', text: I18n.t('course.assessment.question.multiple_responses.create.success'))
         expect(question_created).not_to be_multiple_choice
-        expect(question_created.skills).to contain_exactly(skill)
+        expect(question_created.question_assessments.first.skills).to contain_exactly(skill)
         expect(question_created.options).to be_present
       end
 

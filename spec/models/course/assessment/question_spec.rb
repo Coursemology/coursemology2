@@ -13,7 +13,6 @@ RSpec.describe Course::Assessment::Question do
   it { is_expected.to be_actable }
   it { is_expected.to have_many(:question_assessments).dependent(:destroy) }
   it { is_expected.to have_many(:answers).dependent(:destroy) }
-  it { is_expected.to have_and_belong_to_many(:skills) }
 
   let(:instance) { Instance.default }
   with_tenant(:instance) do

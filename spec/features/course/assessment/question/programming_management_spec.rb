@@ -32,8 +32,8 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
                                  question_attributes[:staff_only_comments]
         fill_in 'question_programming[maximum_grade]', with: question_attributes[:maximum_grade]
 
-        page.execute_script("$('select[name=\"question_programming[skill_ids][]\"]').show()")
-        within find_field('question_programming[skill_ids][]') do
+        page.execute_script("$('select[name=\"question_programming[question_assessment][skill_ids][]\"]').show()")
+        within find_field('question_programming[question_assessment][skill_ids][]') do
           select skill.title
         end
 
@@ -49,7 +49,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
           to include(question_attributes[:description])
         expect(question_created.staff_only_comments).
           to include(question_attributes[:staff_only_comments])
-        expect(question_created.skills).to contain_exactly(skill)
+        expect(question_created.question_assessments.first.skills).to contain_exactly(skill)
       end
 
       scenario 'I can upload a template package', js: true do

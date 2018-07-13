@@ -59,8 +59,7 @@ function processFields(fields) {
   parsedFields.question_scribing.question_assessment = {};
   if (fields.question_scribing.skill_ids.length < 1) {
     parsedFields.question_scribing.question_assessment.skill_ids = [''];
-  }
-  else {
+  } else {
     parsedFields.question_scribing.question_assessment.skill_ids =
       parsedFields.question_scribing.skill_ids;
   }

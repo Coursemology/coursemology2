@@ -33,7 +33,7 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management' do
 
         question_created = assessment.questions.first.specific
         expect(page).to have_selector('div', text: I18n.t('course.assessment.question.text_responses.create.success'))
-        expect(question_created.skills).to contain_exactly(skill)
+        expect(question_created.question_assessments.first.skills).to contain_exactly(skill)
         expect(question_created.allow_attachment).to be_truthy
       end
 
