@@ -49,25 +49,14 @@ export function fetchScribingQuestion() {
   };
 }
 
-// Helper function to convert array of skills to array of skill_ids
-function getSkillIdsFromSkills(skills) {
-  // Need to return array of empty string if nothing
-  // If not, backend will barf
-  if (skills.length <= 0) { return ['']; }
-
-  const skillIds = [];
-  skills.forEach(skill => skillIds.push(skill.id));
-  return skillIds;
-}
-
 // Helper function to process form fields before create/update
 function processFields(fields) {
   // Deep clone JSON fields
   const parsedFields = JSON.parse(JSON.stringify(fields));
 
-  parsedFields.question_scribing.skill_ids =
-    getSkillIdsFromSkills(fields.question_scribing.skill_ids);
-
+  if (fields.question_scribing.skill_ids.length < 1) {
+    parsedFields.question_scribing.skill_ids = [''];
+  }
   if (fields.question_scribing.attachment) {
     parsedFields.question_scribing.file = fields.question_scribing.attachment.file;
   } else {
