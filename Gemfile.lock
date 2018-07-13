@@ -161,8 +161,6 @@ GEM
       archive-zip (~> 0.10)
       nokogiri (~> 1.8)
     cocoon (1.2.11)
-    codeclimate-test-reporter (1.0.8)
-      simplecov (<= 0.13)
     codecov (0.1.10)
       json
       simplecov
@@ -585,7 +583,6 @@ DEPENDENCIES
   carrierwave
   chromedriver-helper
   cocoon
-  codeclimate-test-reporter
   codecov
   consistency_fail
   coursemology-polyglot!

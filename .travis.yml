@@ -50,6 +50,9 @@ before_script:
   - 'if [ -d "$TRAVIS_BUILD_DIR/client/hard-source-cache" ]; then ls -la $TRAVIS_BUILD_DIR/client/hard-source-cache; fi'
   - ls -la $TRAVIS_BUILD_DIR/client
   - cd client && yarn build:production && cd -
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
   - bundle exec rake parallel:setup[2]
 
 script:
@@ -66,6 +69,6 @@ script:
   - 'if [ "$GROUP" != "misc" ]; then bundle exec parallel_rspec spec -n 8 --only-group $GROUP --runtime-log spec/fixtures/parallel_runtime_rspec.log; fi'
 after_script:
   - 'if [ "$GROUP" = "misc" ]; then bash <(curl -s https://codecov.io/bash) -F frontend -s client/coverage; fi'
-
+  - 'if [ "$GROUP" != "misc" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi'
 notifications:
   slack: coursemology:kdSjdF4xtXGOBIvMsbIF4gQ6
