@@ -2,21 +2,7 @@
 
 require 'selenium/webdriver'
 
-Capybara.register_driver :chrome do |app|
-  Capybara::Selenium::Driver.new(app, browser: :chrome)
-end
-
-Capybara.register_driver :headless_chrome do |app|
-  chrome_options = %w[headless disable-gpu window-size=2500,1600]
-  capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(chromeOptions: { args: chrome_options })
-  Capybara::Selenium::Driver.new(app, browser: :chrome, desired_capabilities: capabilities)
-end
-
-Capybara.javascript_driver = :headless_chrome
-
-Capybara::Screenshot.register_driver(:headless_chrome) do |driver, path|
-  driver.browser.save_screenshot(path)
-end
+Capybara.javascript_driver = :selenium_chrome_headless
 
 # Adds extra matchers for Capybara
 module Capybara::TestGroupHelpers

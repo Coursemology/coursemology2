@@ -22,7 +22,6 @@ require File.expand_path('../../config/environment', __FILE__)
 # Prevent database truncation if the environment is production
 abort('The Rails environment is running in production mode!') if Rails.env.production?
 
-require 'capybara/rspec'
 require 'action_mailer'
 require 'email_spec'
 require 'email_spec/rspec'
@@ -114,10 +113,5 @@ RSpec.configure do |config|
   end
 end
 
-Capybara.register_server(:puma) do |app, port|
-  server = Puma::Server.new(app)
-  server.add_tcp_listener(Capybara.server_host, port)
-  server.run
-end
-
+Capybara.server = :puma, { Silent: true }
 Capybara.default_max_wait_time = 5

@@ -165,7 +165,7 @@ group :assets do
   gem 'image_optim_rails'
 end
 
-group :production do
+group :production, :test do
   # Puma will be our app server
   gem 'puma'
 end
