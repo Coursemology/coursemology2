@@ -10,7 +10,8 @@ class Course::Video < ApplicationRecord
                          inverse_of: :video, dependent: :destroy
   has_many :topics, class_name: Course::Video::Topic.name,
                     dependent: :destroy, foreign_key: :video_id, inverse_of: :video
-  has_many :posts, through: :topics, class_name: Course::Discussion::Post.name
+  has_many :discussion_topics, through: :topics, class_name: Course::Discussion::Topic.name
+  has_many :posts, through: :discussion_topics, class_name: Course::Discussion::Post.name
   has_many :sessions, through: :submissions
 
   validate :url_unchanged
