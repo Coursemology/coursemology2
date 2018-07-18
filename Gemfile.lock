@@ -112,7 +112,7 @@ GEM
       io-like (~> 0.3.0)
     arel (8.0.0)
     ast (2.4.0)
-    autoprefixer-rails (8.6.5)
+    autoprefixer-rails (9.0.0)
       execjs
     awesome_print (1.8.0)
     baby_squeel (1.1.5)
