@@ -8,7 +8,7 @@ RSpec.describe Course::Video, type: :model do
 
   let(:instance) { Instance.default }
   with_tenant(:instance) do
-    let(:course) { create(:course) }
+    let(:course) { create(:course, :with_video_component_enabled) }
     let(:student1) { create(:course_student, course: course) }
     let(:student2) { create(:course_student, course: course) }
     let(:video1) { create(:video, course: course) }
