@@ -136,7 +136,6 @@ group :development, :test do
 
   # Checks that all translations are used and defined
   gem 'i18n-tasks', require: false
-  gem 'parser'
 
   # Helps to prevent database consistency mistakes
   gem 'consistency_fail', require: false
