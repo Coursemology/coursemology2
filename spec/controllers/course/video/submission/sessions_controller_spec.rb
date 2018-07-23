@@ -9,10 +9,10 @@ RSpec.describe Course::Video::Submission::SessionsController, type: :controller 
     let(:student) { create(:course_student, course: course) }
     let(:video) { create(:video, :published, course: course) }
     let!(:session) do
-      create(:video_session, :with_events, course: course, video: video, student: student,
-                                           last_video_time: 0,
-                                           session_start: Time.zone.now - 5.seconds,
-                                           session_end: Time.zone.now - 5.seconds)
+      create(:video_session, :with_events_paused, course: course, video: video, student: student,
+                                                  last_video_time: 0,
+                                                  session_start: Time.zone.now - 5.seconds,
+                                                  session_end: Time.zone.now - 5.seconds)
     end
 
     before { sign_in(student.user) }
@@ -43,7 +43,7 @@ RSpec.describe Course::Video::Submission::SessionsController, type: :controller 
         patch :update, as: :json, params: {
           course_id: course.id, video_id: video.id,
           submission_id: session.submission.id, id: session.id,
-          session: { last_video_time: 6, events: events }
+          session: { last_video_time: 32, events: events }
         }
       end
 
@@ -60,7 +60,7 @@ RSpec.describe Course::Video::Submission::SessionsController, type: :controller 
         end
 
         it 'updates the video last time' do
-          expect { subject }.to change { session.reload.last_video_time }.by(6)
+          expect { subject }.to change { session.reload.last_video_time }.by(7)
         end
 
         it 'does not create any events' do
@@ -75,7 +75,7 @@ RSpec.describe Course::Video::Submission::SessionsController, type: :controller 
              playback_rate: 1,
              event_type: 'play',
              event_time: Time.zone.now },
-           { sequence_num: 10,
+           { sequence_num: 13,
              video_time: 1234,
              playback_rate: 1,
              event_type: 'seek_start',
@@ -92,7 +92,7 @@ RSpec.describe Course::Video::Submission::SessionsController, type: :controller 
         end
 
         it 'updates the video last time' do
-          expect { subject }.to change { session.reload.last_video_time }.by(6)
+          expect { subject }.to change { session.reload.last_video_time }.by(7)
         end
 
         it 'updates existing events' do

@@ -1,13 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Tab, Tabs } from 'material-ui/Tabs';
-import { injectIntl, intlShape } from 'react-intl';
 import ProgressGraph from './Charts/ProgressGraph';
+import HeatMap from './Charts/HeatMap';
 import styles from './Statistics.scss';
 
 const propTypes = {
-  intl: intlShape.isRequired,
-
   sessions: PropTypes.objectOf(PropTypes.shape({
     sessionStart: PropTypes.string,
     sessionEnd: PropTypes.string,
@@ -19,12 +17,17 @@ const propTypes = {
       videoTime: PropTypes.number,
     })),
   })).isRequired,
+  watchFrequency: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
 
 class Statistics extends React.Component {
   render() {
     return (
       <Tabs className={styles.statisticsGraphView}>
+        <Tab label="Frequency Graph">
+          <br />
+          <HeatMap watchFrequency={this.props.watchFrequency} />
+        </Tab>
         <Tab label="Progress Graph">
           <ProgressGraph sessions={this.props.sessions} />
         </Tab>
@@ -35,4 +38,4 @@ class Statistics extends React.Component {
 
 Statistics.propTypes = propTypes;
 
-export default injectIntl(Statistics);
+export default Statistics;

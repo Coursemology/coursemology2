@@ -45,4 +45,12 @@ export default defineMessages({
     id: 'course.video.submission.session.sessionEndLabel',
     defaultMessage: 'Session End',
   },
+  watchFrequency: {
+    id: 'course.video.submission.watchFrequency',
+    defaultMessage: 'Watched {watchFrequency} times',
+  },
+  barGraphScalingLabel: {
+    id: 'course.video.submission.barGraphScalingLabel',
+    defaultMessage: 'Expand Graph',
+  },
 });

@@ -2,6 +2,7 @@
 class Course::Video::Submission < ApplicationRecord
   include Course::Video::Submission::TodoConcern
   include Course::Video::Submission::NotificationConcern
+  include Course::Video::WatchStatisticsConcern
 
   acts_as_experience_points_record
 
@@ -11,6 +12,7 @@ class Course::Video::Submission < ApplicationRecord
   belongs_to :video, inverse_of: :submissions
 
   has_many :sessions, inverse_of: :submission, dependent: :destroy
+  has_many :events, through: :sessions
 
   # @!method self.ordered_by_date
   #   Orders the submissions by date of creation. This defaults to reverse chronological order
@@ -30,6 +32,12 @@ class Course::Video::Submission < ApplicationRecord
   end
 
   private
+
+  # Returns a scope for all events in this submission.
+  # Used for WatchStatisticsConcern
+  def relevant_events_scope
+    events
+  end
 
   # Validate that the submission creator is the same user as the course_user in the associated
   # experience_points_record.
