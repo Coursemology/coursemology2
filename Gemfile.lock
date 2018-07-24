@@ -221,7 +221,7 @@ GEM
     hashie (3.5.7)
     high_voltage (3.1.0)
     highline (2.0.0)
-    html-pipeline (2.8.3)
+    html-pipeline (2.8.4)
       activesupport (>= 2)
       nokogiri (>= 1.4)
     html-pipeline-rouge_filter (1.0.7)
