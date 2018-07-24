@@ -171,7 +171,7 @@ RSpec.describe Course::Video, type: :model do
         end
 
         context 'when video has sessions' do
-          let!(:session1) { create(:video_session, :with_events, video: video1) }
+          let!(:session1) { create(:video_session, :with_events_continuous, video: video1) }
           let!(:session2) { create(:video_session, video: video2) }
 
           it 'prevents the url from being changed' do
