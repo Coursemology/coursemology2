@@ -60,7 +60,7 @@ module ApplicationHTMLFormattersHelper
   # SanitizationFilter Custom Options
   # Link: https://github.com/jch/html-pipeline#2-how-do-i-customize-a-whitelist-for-sanitizationfilters
   SANITIZATION_FILTER_WHITELIST = begin
-    list = HTML::Pipeline::SanitizationFilter::WHITELIST.dup
+    list = HTML::Pipeline::SanitizationFilter::WHITELIST.deep_dup
     list[:elements] |= ['span', 'font', 'u']
     list[:attributes][:all] |= ['style']
     list[:attributes]['font'] = ['face']
