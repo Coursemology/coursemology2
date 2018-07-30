@@ -28,8 +28,9 @@ module Extensions::Attachable::ActiveRecord::Base
     #
     #   3. +update_attachment_references+ (before_save callback): This handles changes in
     #   attachment_references. This includes assocating new attachment_references with the
-    #    current object, and marking removed attachment_references for destruction
-    #   (which will be deleted).
+    #   current object, validating the current set of attachment_references (see
+    #   +get_valid_attachment_reference+), and marking removed attachment_references for
+    #   destruction (which will be deleted).
     #   This facilitates the WYSIWYG editor to insert images into the content by creating an
     #   attachment_reference first (with +nil+ attachable), then correctly associate the
     #   attachment_reference when the model is saved.
@@ -113,7 +114,8 @@ module Extensions::Attachable::ActiveRecord::Base
         define_method(changed_method_name) do
           return [] unless send("#{column}_changed?")
           attachment_ids_was = parse_attachment_reference_uuids_from_content(send("#{column}_was"))
-          attachment_ids = parse_attachment_reference_uuids_from_content(send(column))
+          attachment_ids = parse_and_validate_attachment_reference_uuids_from_content(send(column))
+
           [attachment_ids_was, attachment_ids]
         end
       end
@@ -127,7 +129,11 @@ module Extensions::Attachable::ActiveRecord::Base
 
     private
 
-    # Update attachment references which are added or removed in this update.
+    # Update attachment_references which are added or removed in this update. This also
+    # associates all attachment_references that have no attachable yet.
+    #
+    # +attachment_reference_id_changes+ is called, which validates the current
+    # attachment_references.
     def update_attachment_references
       changes = attachment_reference_id_changes
       added_ids, removed_ids = changes[1] - changes[0], changes[0] - changes[1]
@@ -141,6 +147,8 @@ module Extensions::Attachable::ActiveRecord::Base
     end
 
     # Find all changes in attachment_reference_ids in the columns specified.
+    # The method also validates associated attachment_references in the current
+    # object correctly.
     #
     # @return [Array<Array<String>>] Array with 2 elements:
     #   i) previous set of attachment_reference_ids
@@ -154,6 +162,29 @@ module Extensions::Attachable::ActiveRecord::Base
       end
 
       attachment_reference_id_changes
+    end
+
+    ATTACHMENT_URL_PREFIX = '/attachments/'
+
+    # Parse all attachment_reference ids in the content, and validate
+    # attachment_references. This runs +get_valid_attachment_reference+ through
+    # all ids to ensure that
+    #
+    # @param [String] content The content which associated with the attachments.
+    # @return [Array<Integer>] the ids of the attachment references in the content.
+    def parse_and_validate_attachment_reference_uuids_from_content(content)
+      ids = []
+      doc = Nokogiri::HTML(content)
+      doc.css('img').each do |image|
+        id = parse_attachment_reference_uuid_from_url(image['src']) if image['src']
+        valid_id = get_valid_attachment_reference(id) if id
+
+        next unless valid_id
+        image['src'] = "#{ATTACHMENT_URL_PREFIX}#{valid_id}" unless valid_id == id
+        ids << valid_id
+      end
+
+      ids
     end
 
     # Parse all attachment_reference uuids in the content.
@@ -181,6 +212,27 @@ module Extensions::Attachable::ActiveRecord::Base
     def parse_attachment_reference_uuid_from_url(url)
       result = url.match(ATTACHMENT_ID_REGEX)
       result ? result[1] : nil
+    end
+
+    # Gets the id of the attachment_reference associated with +self+. If an
+    # attachment_reference referencing a different attachable is provided, this method
+    # creates a new attachment_reference with the given attachment and name. If an
+    # incorrect UUID was provided, +nil+ is returned.
+    #
+    # This handles two cases:
+    #   i) Malformed attachment_reference id: returns +nil+.
+    #   ii) During duplication, or Copy/Paste: new attachment_references are
+    #       automatically created
+    #
+    # @param [String] id The given UUID of the attachment_reference
+    # @return [String|nil] nil if provided ID is not found, otherwise the UUID of the validated
+    #                      attachment_reference
+    def get_valid_attachment_reference(id)
+      object = AttachmentReference.find_by(id: id)
+      return nil unless object
+      return id if object.attachable == self || object.attachable.nil?
+
+      AttachmentReference.create(attachment: object.attachment, name: object.name).id
     end
   end
 

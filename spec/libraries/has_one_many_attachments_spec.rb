@@ -213,6 +213,31 @@ RSpec.describe 'Extension: Acts as Attachable' do
             expect(subject).to eq ans
           end
         end
+
+        context 'when the provided attachment_reference uuid references a different attachable' do
+          let(:other_file) do
+            Rack::Test::UploadedFile.new(
+              Rails.root.join('spec', 'fixtures', 'files', 'picture.jpg'), 'image/jpeg'
+            )
+          end
+          let(:other_attachable) { create(:course_announcement) }
+          let(:other_attachment_reference) { create(:attachment_reference, file: other_file) }
+          let(:other_content) { "<p>foo #{create_image_tag(other_attachment_reference.id)}</p>" }
+
+          before do
+            other_attachable.content = other_content
+            other_attachable.save
+            attachable.content = other_content
+          end
+
+          it 'creates a new attachment_reference and saves it when attachable is saved' do
+            attachable.save
+
+            expect(other_attachment_reference.reload.attachable).to eq(other_attachable)
+            expect(attachable.attachments.first.attachment).
+              to eq(other_attachment_reference.attachment)
+          end
+        end
       end
     end
   end
