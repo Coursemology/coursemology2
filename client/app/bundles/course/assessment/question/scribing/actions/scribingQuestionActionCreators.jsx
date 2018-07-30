@@ -54,9 +54,16 @@ function processFields(fields) {
   // Deep clone JSON fields
   const parsedFields = JSON.parse(JSON.stringify(fields));
 
+  // Modify the structure of `parsedFields` so it matches what non React forms
+  // pass to the Rails backend.
+  parsedFields.question_scribing.question_assessment = {};
   if (fields.question_scribing.skill_ids.length < 1) {
-    parsedFields.question_scribing.skill_ids = [''];
+    parsedFields.question_scribing.question_assessment.skill_ids = [''];
+  } else {
+    parsedFields.question_scribing.question_assessment.skill_ids =
+      parsedFields.question_scribing.skill_ids;
   }
+
   if (fields.question_scribing.attachment) {
     parsedFields.question_scribing.file = fields.question_scribing.attachment.file;
   } else {
@@ -64,6 +71,7 @@ function processFields(fields) {
   }
 
   delete parsedFields.question_scribing.attachment;
+  delete parsedFields.question_scribing.skill_ids;
 
   return parsedFields;
 }

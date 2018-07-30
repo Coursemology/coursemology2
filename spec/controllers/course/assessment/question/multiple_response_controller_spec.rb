@@ -46,6 +46,7 @@ RSpec.describe Course::Assessment::Question::MultipleResponsesController do
         question_multiple_response_attributes =
           attributes_for(:course_assessment_question_multiple_response).
           slice(:description, :maximum_grade)
+        question_multiple_response_attributes[:question_assessment] = { skill_ids: [''] }
         patch :update, params: {
           course_id: course, assessment_id: assessment, id: multiple_response,
           question_multiple_response: question_multiple_response_attributes
@@ -77,7 +78,8 @@ RSpec.describe Course::Assessment::Question::MultipleResponsesController do
                       id: multiple_response.options.second.id,
                       weight: multiple_response.options.second.weight
                     }
-                }
+                },
+              question_assessment: { skill_ids: [''] }
             }
           patch :update, params: {
             course_id: course, assessment_id: assessment, id: multiple_response,

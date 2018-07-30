@@ -5,6 +5,7 @@ class Course::Assessment::Question::ScribingController < Course::Assessment::Que
   load_and_authorize_resource :scribing_question,
                               class: Course::Assessment::Question::Scribing,
                               through: :assessment, parent: false, except: [:new, :create]
+  before_action :load_question_assessment, only: [:show, :edit, :update]
 
   def new
     respond_to do |format|
@@ -40,8 +41,6 @@ class Course::Assessment::Question::ScribingController < Course::Assessment::Que
   end
 
   def edit
-    @question_assessment = load_question_assessment_for(@scribing_question)
-
     respond_to do |format|
       format.html { render 'edit' }
       format.json { render_scribing_question_json }
@@ -51,8 +50,9 @@ class Course::Assessment::Question::ScribingController < Course::Assessment::Que
   # Update does not allow replacement of the attachment/file for the question.
   # TODO: To define and clarify behaviour for this controller action.
   def update
+    @question_assessment.skill_ids = scribing_question_params[:question_assessment][:skill_ids]
     respond_to do |format|
-      if @scribing_question.update(scribing_question_params)
+      if @scribing_question.update(scribing_question_params.except(:question_assessment))
         format.json { render_scribing_question_json }
       else
         format.json { render_failure_json t('.failure') }
@@ -73,13 +73,14 @@ class Course::Assessment::Question::ScribingController < Course::Assessment::Que
   private
 
   def scribing_question_params
-    permitted_params = [:title, :description, :staff_only_comments, :maximum_grade, skill_ids: []]
+    permitted_params = [:title, :description, :staff_only_comments, :maximum_grade,
+                        question_assessment: { skill_ids: [] }]
     permitted_params << attachment_params if params[:action] == 'create'
     params.require(:question_scribing).permit(*permitted_params)
   end
 
   def render_scribing_question_json
-    render partial: 'scribing_question', locals: { scribing_question: @scribing_question }
+    render partial: 'scribing_question'
   end
 
   def render_success_json(message)
@@ -97,5 +98,9 @@ class Course::Assessment::Question::ScribingController < Course::Assessment::Que
 
   def pdf_import_service
     @service ||= Course::Assessment::Question::ScribingImportService.new(params)
+  end
+
+  def load_question_assessment
+    @question_assessment = load_question_assessment_for(@scribing_question)
   end
 end

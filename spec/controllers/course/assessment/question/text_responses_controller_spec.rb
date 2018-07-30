@@ -66,6 +66,7 @@ RSpec.describe Course::Assessment::Question::TextResponsesController do
         question_text_response_attributes =
           attributes_for(:course_assessment_question_text_response).
           slice(:description, :maximum_grade)
+        question_text_response_attributes[:question_assessment] = { skill_ids: [''] }
         patch :update, params: {
           course_id: course, assessment_id: assessment, id: text_response,
           question_text_response: question_text_response_attributes

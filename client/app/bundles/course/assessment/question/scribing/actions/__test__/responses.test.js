@@ -33,7 +33,7 @@ const processedMockFields = {
   question_scribing: {
     title: 'Scribing Exercise',
     maximum_grade: 10,
-    skill_ids: [''],
+    question_assessment: { skill_ids: [''] },
   },
 };
 

@@ -4,6 +4,7 @@ class Course::QuestionAssessment < ApplicationRecord
 
   belongs_to :assessment, inverse_of: :question_assessments, class_name: Course::Assessment.name
   belongs_to :question, inverse_of: :question_assessments, class_name: Course::Assessment::Question.name
+  has_and_belongs_to_many :skills, inverse_of: :question_assessments, class_name: Course::Assessment::Skill.name
 
   default_scope { order(weight: :asc) }
 
@@ -22,6 +23,8 @@ class Course::QuestionAssessment < ApplicationRecord
   def initialize_duplicate(duplicator, other)
     self.weight = other.weight
     self.question = duplicator.duplicate(other.question.actable).acting_as
+    skills << other.skills.select { |skill| duplicator.duplicated?(skill) }.
+              map { |skill| duplicator.duplicate(skill) }
   end
 
   private

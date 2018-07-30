@@ -2,7 +2,7 @@
 class Course::Assessment::Skill < ApplicationRecord
   belongs_to :course, inverse_of: :assessment_skills
   belongs_to :skill_branch, class_name: Course::Assessment::SkillBranch.name, inverse_of: :skills, optional: true
-  has_and_belongs_to_many :questions, class_name: Course::Assessment::Question.name
+  has_and_belongs_to_many :question_assessments, class_name: Course::QuestionAssessment.name
 
   validate :validate_consistent_course
 
@@ -13,9 +13,8 @@ class Course::Assessment::Skill < ApplicationRecord
   def initialize_duplicate(duplicator, other)
     self.course = duplicator.options[:destination_course]
     self.skill_branch = duplicator.duplicated?(other.skill_branch) ? duplicator.duplicate(other.skill_branch) : nil
-    questions << other.questions.map(&:actable).
-                 select { |question| duplicator.duplicated?(question) }.
-                 map { |question| duplicator.duplicate(question).acting_as }
+    question_assessments << other.question_assessments.select { |qa| duplicator.duplicated?(qa) }.
+                            map { |qa| duplicator.duplicate(qa) }
   end
 
   private

@@ -13,7 +13,7 @@ json.question do
   end
 
   # TODO: Shift skills out into a separate partial.
-  json.skill_ids @scribing_question.skills.order_by_title.pluck(:id)
+  json.skill_ids @question_assessment.skills.order_by_title.pluck(:id)
   json.skills current_course.assessment_skills.order_by_title do |skill|
     json.(skill, :id, :title)
   end

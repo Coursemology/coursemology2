@@ -1,5 +1,6 @@
 import { getCourseId, getAssessmentId, getScribingId } from 'lib/helpers/url-helpers';
 import BaseAPI from '../../../../Base';
+import SubmissionsAPI from '../../Submissions';
 
 export default class ScribingsAPI extends BaseAPI {
   /**
@@ -29,27 +30,15 @@ export default class ScribingsAPI extends BaseAPI {
   }
 
   /**
-   * Helper method to generate FormData
+   * Helper method to generate FormData. Use SubmissionsAPI.appendFormData as it supports
+   * nested objects.
    *
    * @param {object} question object to be converted
    * @return {FormData}
    */
   static generateFormData(question) {
     const formData = new FormData();
-
-    Object.keys(question).forEach((key) => {
-      if (Object.prototype.hasOwnProperty.call(question, key)) {
-        const value = question[key];
-        if (Array.isArray(value)) {
-          value.forEach((val) => {
-            formData.append(`question_scribing[${key}][]`, val);
-          });
-        } else {
-          formData.append(`question_scribing[${key}]`, value);
-        }
-      }
-    });
-
+    SubmissionsAPI.appendFormData(formData, question, 'question_scribing');
     return formData;
   }
 

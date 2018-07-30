@@ -7,7 +7,6 @@ class Course::Assessment::Question < ApplicationRecord
                                   dependent: :destroy
   has_many :answers, class_name: Course::Assessment::Answer.name, dependent: :destroy,
                      inverse_of: :question
-  has_and_belongs_to_many :skills
   has_many :submission_questions, class_name: Course::Assessment::SubmissionQuestion.name,
                                   dependent: :destroy, inverse_of: :question
 
@@ -78,12 +77,5 @@ class Course::Assessment::Question < ApplicationRecord
     self.description = other.description
     self.staff_only_comments = other.staff_only_comments
     self.maximum_grade = other.maximum_grade
-  end
-
-  # Associates duplicated skills with the current question
-  def associate_duplicated_skills(duplicator, other)
-    skills << other.skills.
-              select { |skill| duplicator.duplicated?(skill) }.
-              map { |skill| duplicator.duplicate(skill) }
   end
 end

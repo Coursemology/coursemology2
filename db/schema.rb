@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180424030829) do
+ActiveRecord::Schema.define(version: 20180703023011) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -255,11 +255,6 @@ ActiveRecord::Schema.define(version: 20180424030829) do
     t.datetime "updated_at",          :null=>false
   end
 
-  create_table "course_assessment_questions_skills", force: :cascade do |t|
-    t.integer "question_id", :null=>false, :index=>{:name=>"course_assessment_question_skills_question_index", :order=>{:question_id=>:asc}}
-    t.integer "skill_id",    :null=>false, :index=>{:name=>"course_assessment_question_skills_skill_index", :order=>{:skill_id=>:asc}}
-  end
-
   create_table "course_assessment_skill_branches", force: :cascade do |t|
     t.integer  "course_id",   :null=>false, :index=>{:name=>"fk__course_assessment_skill_branches_course_id", :order=>{:course_id=>:asc}}
     t.string   "title",       :limit=>255, :null=>false
@@ -279,6 +274,13 @@ ActiveRecord::Schema.define(version: 20180424030829) do
     t.integer  "updater_id",      :null=>false, :index=>{:name=>"fk__course_assessment_skills_updater_id", :order=>{:updater_id=>:asc}}
     t.datetime "created_at",      :null=>false
     t.datetime "updated_at",      :null=>false
+  end
+
+  create_table "course_assessment_skills_question_assessments", force: :cascade do |t|
+    t.integer "question_assessment_id", :null=>false, :index=>{:name=>"index_course_assessment_skills_question_assessments_on_qa_id", :order=>{:question_assessment_id=>:asc}}
+    t.integer "skill_id",               :null=>false, :index=>{:name=>"index_course_assessment_skills_question_assessments_on_skill_id", :order=>{:skill_id=>:asc}}
+
+    t.index ["question_assessment_id", "skill_id"], :name=>"index_skills_qn_assessments_on_qa_id_and_skill_id", :unique=>true, :order=>{:question_assessment_id=>:asc, :skill_id=>:asc}
   end
 
   create_table "course_assessment_submission_logs", force: :cascade do |t|
@@ -948,8 +950,6 @@ ActiveRecord::Schema.define(version: 20180424030829) do
   add_foreign_key "course_assessment_question_text_response_solutions", "course_assessment_question_text_responses", column: "question_id", name: "fk_course_assessment_questi_2fbeabfad04f21c2d05c8b2d9100d1c4"
   add_foreign_key "course_assessment_questions", "users", column: "creator_id", name: "fk_course_assessment_questions_creator_id"
   add_foreign_key "course_assessment_questions", "users", column: "updater_id", name: "fk_course_assessment_questions_updater_id"
-  add_foreign_key "course_assessment_questions_skills", "course_assessment_questions", column: "question_id", name: "fk_course_assessment_questions_skills_question_id"
-  add_foreign_key "course_assessment_questions_skills", "course_assessment_skills", column: "skill_id", name: "fk_course_assessment_questions_skills_skill_id"
   add_foreign_key "course_assessment_skill_branches", "courses", name: "fk_course_assessment_skill_branches_course_id"
   add_foreign_key "course_assessment_skill_branches", "users", column: "creator_id", name: "fk_course_assessment_skill_branches_creator_id"
   add_foreign_key "course_assessment_skill_branches", "users", column: "updater_id", name: "fk_course_assessment_skill_branches_updater_id"
@@ -957,6 +957,8 @@ ActiveRecord::Schema.define(version: 20180424030829) do
   add_foreign_key "course_assessment_skills", "courses", name: "fk_course_assessment_skills_course_id"
   add_foreign_key "course_assessment_skills", "users", column: "creator_id", name: "fk_course_assessment_skills_creator_id"
   add_foreign_key "course_assessment_skills", "users", column: "updater_id", name: "fk_course_assessment_skills_updater_id"
+  add_foreign_key "course_assessment_skills_question_assessments", "course_assessment_skills", column: "skill_id"
+  add_foreign_key "course_assessment_skills_question_assessments", "course_question_assessments", column: "question_assessment_id"
   add_foreign_key "course_assessment_submission_logs", "course_assessment_submissions", column: "submission_id", name: "fk_course_assessment_submission_logs_submission_id"
   add_foreign_key "course_assessment_submission_questions", "course_assessment_questions", column: "question_id", name: "fk_course_assessment_submission_questions_question_id"
   add_foreign_key "course_assessment_submission_questions", "course_assessment_submissions", column: "submission_id", name: "fk_course_assessment_submission_questions_submission_id"

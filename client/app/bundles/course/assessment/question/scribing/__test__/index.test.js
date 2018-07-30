@@ -32,7 +32,7 @@ const mockUpdatedFields = {
   question_scribing: {
     description: '',
     maximum_grade: 10,
-    skill_ids: [''],
+    question_assessment: { skill_ids: [''] },
     staff_only_comments: '',
     title: 'Scribing Exercise',
   },

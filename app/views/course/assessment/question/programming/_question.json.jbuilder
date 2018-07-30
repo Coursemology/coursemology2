@@ -6,8 +6,8 @@ json.question do
     json.(lang, :id, :name)
     json.editor_mode lang.ace_mode
   end
-  json.skill_ids @programming_question.skills.order('LOWER(title) ASC').as_json(only: [:id, :title])
-  json.skills current_course.assessment_skills.order('LOWER(title) ASC') do |skill|
+  json.skill_ids @question_assessment.skills.order_by_title.as_json(only: [:id, :title])
+  json.skills current_course.assessment_skills.order_by_title do |skill|
     json.(skill, :id, :title)
   end
 

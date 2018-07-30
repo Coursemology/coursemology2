@@ -11,11 +11,13 @@ RSpec.describe Course::Assessment::Question::ScribingController do
     let(:scribing_question) { nil }
     let(:question_scribing_attributes) do
       attributes_for(:course_assessment_question_scribing).
-        slice(:title, :description, :staff_only_comments, :maximum_grade, :file)
+        slice(:title, :description, :staff_only_comments, :maximum_grade, :file).
+        merge(question_assessment: { skill_ids: [''] })
     end
     let(:question_scribing_update_attributes) do
       attributes_for(:course_assessment_question_scribing).
-        slice(:title, :description, :staff_only_comments, :maximum_grade)
+        slice(:title, :description, :staff_only_comments, :maximum_grade).
+        merge(question_assessment: { skill_ids: [''] })
     end
     let(:immutable_scribing_question) do
       create(:course_assessment_question_scribing, assessment: assessment).tap do |question|
