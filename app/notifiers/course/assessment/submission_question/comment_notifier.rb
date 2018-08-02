@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 class Course::Assessment::SubmissionQuestion::CommentNotifier < Notifier::Base
-  # To be called when user comments on an submission_question.
-  def post_replied(user, post)
-    return unless email_enabled?(post)
+  # Called when a user comments on an submission_question.
+  #
+  # @param[Course::Discussion::Post] post The post that was created.
+  def post_replied(post)
+    return unless email_notification_enabled?(post)
 
+    user = post.creator
     activity = create_activity(actor: user, object: post, event: :replied)
     post.topic.subscriptions.includes(:user).each do |subscription|
       activity.notify(subscription.user, :email) unless subscription.user == user
@@ -13,9 +16,17 @@ class Course::Assessment::SubmissionQuestion::CommentNotifier < Notifier::Base
 
   private
 
-  def email_enabled?(post)
+  def email_notification_enabled?(post)
+    course_user = CourseUser.find_by(user: post.creator, course: post.topic.course)
     category = post.topic.actable.submission.assessment.tab.category
-    Course::Settings::AssessmentsComponent.email_enabled?(category, :new_comment)
+
+    response = settings_with_key(category, :new_comment)
+    response &&= settings_with_key(category, :new_phantom_comment) if course_user&.phantom?
+    response
+  end
+
+  def settings_with_key(category, key)
+    Course::Settings::AssessmentsComponent.email_enabled?(category, key)
   end
 
   # Create an email for a user based on a given user notification record.

@@ -8,6 +8,7 @@ class Course::Settings::AssessmentsComponent < Course::Settings::Component
         new_submission: { enabled_by_default: true },
         new_phantom_submission: { enabled_by_default: true },
         new_comment: { enabled_by_default: true },
+        new_phantom_comment: { enabled_by_default: true },
         grades_released: { enabled_by_default: true }
       }
     end

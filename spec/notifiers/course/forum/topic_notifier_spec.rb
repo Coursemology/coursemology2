@@ -9,8 +9,9 @@ RSpec.describe Course::Forum::TopicNotifier, type: :notifier do
       let(:course) { create(:course) }
       let(:forum) { create(:forum, course: course) }
       let!(:topic) { create(:forum_topic, forum: forum) }
+      let(:course_user) { create(:course_user, course: course) }
       let!(:user) do
-        user = create(:course_user, course: course).user
+        user = course_user.user
         forum.subscriptions.create(user: user)
         user
       end
@@ -20,7 +21,7 @@ RSpec.describe Course::Forum::TopicNotifier, type: :notifier do
         subscriber
       end
 
-      subject { Course::Forum::TopicNotifier.topic_created(user, topic) }
+      subject { Course::Forum::TopicNotifier.topic_created(user, course_user, topic) }
 
       it 'sends a course notification' do
         expect { subject }.to change(course.notifications, :count).by(1)
@@ -28,6 +29,18 @@ RSpec.describe Course::Forum::TopicNotifier, type: :notifier do
 
       it 'sends an email notification' do
         expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
+      end
+
+      context 'when course_user is phantom' do
+        let(:course_user) { create(:course_user, :phantom, course: course) }
+
+        it 'does not send a course notification' do
+          expect { subject }.not_to change(course.notifications, :count)
+        end
+
+        it 'sends an email notification' do
+          expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
+        end
       end
 
       context 'when email notifications are disabled' do

@@ -69,7 +69,7 @@ class Course::Assessment::Submission::Answer::Programming::AnnotationsController
   end
 
   def send_created_notification(post)
-    return unless current_course_user && !current_course_user.phantom?
+    return unless current_course_user
     post.topic.actable.notify(post)
   end
 

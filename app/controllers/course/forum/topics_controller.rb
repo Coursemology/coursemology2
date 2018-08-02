@@ -89,7 +89,7 @@ class Course::Forum::TopicsController < Course::Forum::ComponentController
   end
 
   def send_created_notification(topic)
-    return unless current_course_user && !current_course_user.phantom?
-    Course::Forum::TopicNotifier.topic_created(current_user, topic)
+    return unless current_course_user
+    Course::Forum::TopicNotifier.topic_created(current_user, current_course_user, topic)
   end
 end
