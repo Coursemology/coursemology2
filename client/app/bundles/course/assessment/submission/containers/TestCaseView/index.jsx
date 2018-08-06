@@ -12,8 +12,8 @@ import { Table, TableHeader, TableHeaderColumn, TableBody, TableRow, TableRowCol
 import Paper from 'material-ui/Paper';
 
 import ExpandableText from 'lib/components/ExpandableText';
-import { testCaseShape } from '../propTypes';
-import { workflowStates } from '../constants';
+import { testCaseShape } from '../../propTypes';
+import { workflowStates } from '../../constants';
 
 const styles = {
   testCaseRow: {
@@ -94,7 +94,7 @@ const translations = defineMessages({
   },
 });
 
-class VisibleTestCaseView extends Component {
+export class VisibleTestCaseView extends Component {
   static renderStaffOnlyTestCasesWarning() {
     return (
       <span style={{ display: 'inline-block', marginLeft: 5 }}>
@@ -123,7 +123,7 @@ class VisibleTestCaseView extends Component {
 
   static renderOutputStream(outputStreamType, output, showStaffOnlyWarning) {
     return (
-      <Card>
+      <Card id={outputStreamType}>
         <CardHeader
           showExpandableButton
           title={
@@ -147,7 +147,7 @@ class VisibleTestCaseView extends Component {
     );
   }
 
-  renderTestCases(testCases, title) {
+  renderTestCases(testCases, testCaseType, warn) {
     const { collapsible, testCases: { canReadTests } } = this.props;
     const { showPublicTestCasesOutput } = this.props;
 
@@ -172,8 +172,10 @@ class VisibleTestCaseView extends Component {
       </TableHeaderColumn>
     );
 
+    const title = VisibleTestCaseView.renderTitle(testCaseType, warn);
+
     return (
-      <Card>
+      <Card id={testCaseType}>
         <CardHeader title={title} actAsExpander={collapsible} showExpandableButton={collapsible} style={headerStyle} />
         <CardText expandable={collapsible}>
           <Table selectable={false} style={{}}>
@@ -236,8 +238,11 @@ class VisibleTestCaseView extends Component {
     const attempting = (submissionState === workflowStates.Attempting);
     const published = (submissionState === workflowStates.Published);
     const showOutputStreams = (graderView || showStdoutAndStderr);
-    const showPrivateTest = testCases.canReadTests || (published && showPrivate);
-    const showEvaluationTest = testCases.canReadTests || (published && showEvaluation);
+    const showPrivateTestToStudents = published && showPrivate;
+    const showEvaluationTestToStudents = published && showEvaluation;
+    const showPrivateTest = (graderView && testCases.canReadTests) || showPrivateTestToStudents;
+    const showEvaluationTest = (graderView && testCases.canReadTests) || showEvaluationTestToStudents;
+
     return (
       <div style={styles.testCasesContainer}>
         { !attempting && isAutograding &&
@@ -247,16 +252,13 @@ class VisibleTestCaseView extends Component {
         }
         <h3><FormattedMessage {...translations.testCases} /></h3>
         {this.renderTestCases(
-          testCases.public_test,
-          VisibleTestCaseView.renderTitle('publicTestCases', false)
+          testCases.public_test, 'publicTestCases', false
         )}
         {showPrivateTest && this.renderTestCases(
-          testCases.private_test,
-          VisibleTestCaseView.renderTitle('privateTestCases', testCases.canReadTests)
+          testCases.private_test, 'privateTestCases', !showPrivateTestToStudents
         )}
         {showEvaluationTest && this.renderTestCases(
-          testCases.evaluation_test,
-          VisibleTestCaseView.renderTitle('evaluationTestCases', testCases.canReadTests)
+          testCases.evaluation_test, 'evaluationTestCases', !showEvaluationTestToStudents
         )}
         {(showOutputStreams && !collapsible) && VisibleTestCaseView.renderOutputStream(
           'standardOutput', testCases.stdout, !showStdoutAndStderr
