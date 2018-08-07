@@ -14,7 +14,7 @@
 = format_html(t('.message',
                 topic: link_to(topic_title,
                                course_forum_topic_url(course, topic.forum, topic, host: host)),
-                post: post.text,
+                post: post.text_to_email,
                 post_author: post_author))
 
 = simple_format(t('.unsubscribe.message',

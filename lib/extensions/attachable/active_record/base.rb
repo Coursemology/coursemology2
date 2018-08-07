@@ -26,7 +26,12 @@ module Extensions::Attachable::ActiveRecord::Base
     #   shape:
     #   [[Old ids on column], [Current ids on column]]
     #
-    #   3. +update_attachment_references+ (before_save callback): This handles changes in
+    #   3. +column_name_for_email+: Returns a rich-text string to be used when sending emails.
+    #   This is to allow models to send rich text emails with attachments embedded in them.
+    #   This is because emails could be read on a different machine, which might not have
+    #   access to the Coursemology server.
+    #
+    #   4. +update_attachment_references+ (before_save callback): This handles changes in
     #   attachment_references. This includes assocating new attachment_references with the
     #   current object, validating the current set of attachment_references (see
     #   +get_valid_attachment_reference+), and marking removed attachment_references for
@@ -88,9 +93,20 @@ module Extensions::Attachable::ActiveRecord::Base
 
     ATTACHMENT_REFERENCE_SUFFIX = '_attachment_reference_ids'
     ATTACHMENT_CHANGED_SUFFIX = '_attachment_references_change'
+    FOR_EMAIL_SUFFIX = '_to_email'
 
     def self.define_attachment_references_readers(attachable_columns)
       attachable_columns.each do |column|
+        email_method_name = "#{column}#{FOR_EMAIL_SUFFIX}"
+        unless method_defined?(email_method_name)
+
+          # Define a method to get the content with attachment urls for the given content.
+          # This is to be used for emails.
+          define_method(email_method_name) do
+            prepare_content_for_email(send(column))
+          end
+        end
+
         reader_method_name = "#{column}#{ATTACHMENT_REFERENCE_SUFFIX}"
         unless method_defined?(reader_method_name)
 
@@ -233,6 +249,23 @@ module Extensions::Attachable::ActiveRecord::Base
       return id if object.attachable == self || object.attachable.nil?
 
       AttachmentReference.create(attachment: object.attachment, name: object.name).id
+    end
+
+    # Given the rich-text content, transform the src of image nodes to direct URLs.
+    #
+    # If S3 is used as a storage with signed URLs, this would return a URL that has an
+    # expiry (based on configuration settings).
+    #
+    # @param [String] content The content to be prepared
+    # @return [String] The parsed content with the URL.
+    def prepare_content_for_email(content)
+      doc = Nokogiri::HTML.fragment(content)
+      doc.css('img').each do |image|
+        id = parse_attachment_reference_uuid_from_url(image['src'])
+        attachment = AttachmentReference.find(id)&.attachment if id
+        image['src'] = attachment.url
+      end
+      doc.to_html
     end
   end
 

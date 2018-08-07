@@ -11,7 +11,7 @@
 
 - message.subject = t('.subject', course: course_title, forum: forum_name)
 
-= format_html(t('.message', topic: topic_url, post: post.text))
+= format_html(t('.message', topic: topic_url, post: post.text_to_email))
 
 = simple_format(t('.unsubscribe.message',
                 unsubscribe_link: link_to(t('.unsubscribe.tag'), unsubscribe_url)))

@@ -186,6 +186,15 @@ RSpec.describe 'Extension: Acts as Attachable' do
       let(:attachment_reference) { create(:attachment_reference) }
       let(:content) { "<p>foo #{create_image_tag(attachment_reference.id)}</p>" }
 
+      describe '#column-name_to_email' do
+        it 'converts the src of the image tag to a url' do
+          parsed = Nokogiri::HTML(attachable.content_to_email)
+          parsed.css('img').each do |image|
+            expect(image['src']).not_to eq("/attachments/#{attachment_reference.id}")
+          end
+        end
+      end
+
       context 'when column has attachments in its column' do
         describe 'column_attachment_reference_ids' do
           subject { attachable.content_attachment_reference_ids }
