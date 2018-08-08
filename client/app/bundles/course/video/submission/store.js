@@ -38,7 +38,7 @@ const stateReconciler = (inboundState, _, reducedState) => {
     oldSessions = oldSessions.set(inboundSessionId, inboundVideoState);
   }
 
-  return Object.assign({}, reducedState, { oldSessions });
+  return { ...reducedState, oldSessions };
 };
 
 function persistConfig(courseUserId) {

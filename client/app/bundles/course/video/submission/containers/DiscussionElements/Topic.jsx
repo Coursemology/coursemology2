@@ -71,12 +71,11 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mergeProps(stateProps, dispatchProps) {
-  return Object.assign(
-    {},
-    stateProps,
-    dispatchProps,
-    { onTimeStampClick: dispatchProps.onTimeStampClick(stateProps.timestamp) }
-  );
+  return {
+    ...stateProps,
+    ...dispatchProps,
+    onTimeStampClick: dispatchProps.onTimeStampClick(stateProps.timestamp),
+  };
 }
 
 const TopicContainer = connect(mapStateToProps, mapDispatchToProps, mergeProps)(Topic);

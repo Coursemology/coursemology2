@@ -190,9 +190,9 @@ function mapDispatchToProps(dispatch) {
 
 function mergeProps(stateProps, dispatchProps) {
   if (stateProps.sessionId === null) {
-    return Object.assign({}, stateProps, dispatchProps, { onTick: null });
+    return { ...stateProps, ...dispatchProps, onTick: null };
   }
-  return Object.assign({}, stateProps, dispatchProps);
+  return { ...stateProps, ...dispatchProps };
 }
 
 export default connect(state => state.video, mapDispatchToProps, mergeProps)(VideoPlayer);
