@@ -1,11 +1,6 @@
-import Immutable from 'immutable';
-import { combineReducers } from 'redux-immutable';
-import programmingQuestionReducer, { initialState as programmingQuestionState } from './programmingQuestionReducer';
-
-export const initialStates = Immutable.fromJS({
-  programmingQuestion: programmingQuestionState,
-});
+import { combineReducers } from 'redux';
+import { reducer as formReducer } from 'redux-form';
 
 export default combineReducers({
-  programmingQuestion: programmingQuestionReducer,
+  form: formReducer,
 });

@@ -1,5 +1,3 @@
-import Immutable from 'immutable';
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
@@ -22,7 +20,7 @@ const translations = defineMessages({
 });
 
 const propTypes = {
-  data: PropTypes.instanceOf(Immutable.Map).isRequired,
+  data: PropTypes.object,
   actions: PropTypes.object.isRequired,
   isLoading: PropTypes.bool.isRequired,
   autograded: PropTypes.bool.isRequired,
@@ -49,15 +47,15 @@ export function validation(data, pathOfKeysToData, intl) {
 
 const OnlineEditor = (props) => {
   const { data, actions, intl, isLoading, autograded, autogradedAssessment, hasSubmissions } = props;
-  const mode = data.get('mode');
+  const { mode, dataFiles } = data;
   switch (mode) {
     case 'python':
       return (
         <OnlineEditorPythonView
           {...{
             actions,
-            data: data.get('python'),
-            dataFiles: data.get('data_files'),
+            data: data.python,
+            dataFiles,
             isLoading,
             autograded,
             autogradedAssessment,
@@ -70,8 +68,8 @@ const OnlineEditor = (props) => {
         <OnlineEditorCppView
           {...{
             actions,
-            data: data.get('c_cpp'),
-            dataFiles: data.get('data_files'),
+            data: data.c_cpp,
+            dataFiles,
             isLoading,
             autograded,
             autogradedAssessment,
@@ -84,7 +82,7 @@ const OnlineEditor = (props) => {
         <OnlineEditorJavaView
           {...{
             actions,
-            data: data.get('java'),
+            data: data.java,
             testData: data,
             isLoading,
             autograded,
