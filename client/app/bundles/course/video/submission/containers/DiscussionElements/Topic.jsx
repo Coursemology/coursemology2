@@ -66,7 +66,7 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onTimeStampClick: timestamp => (() => dispatch(seekToDirectly(timestamp, true))),
+    onTimeStampClick: timestamp => (() => dispatch(seekToDirectly(timestamp))),
   };
 }
 
