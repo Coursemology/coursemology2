@@ -47,17 +47,17 @@ export function organiseDiscussionEntities(discussion) {
     return {};
   }
   const immutableEntitiesStore = {
-    topics: makeImmutableMap(discussion.topics).map(topic => Object.assign({}, topicDefaults, topic)),
-    posts: makeImmutableMap(discussion.posts).map(post => Object.assign({}, postDefaults, post)),
+    topics: makeImmutableMap(discussion.topics).map(topic => ({ ...topicDefaults, ...topic })),
+    posts: makeImmutableMap(discussion.posts).map(post => ({ ...postDefaults, ...post })),
   };
 
-  return Object.assign({}, discussion, immutableEntitiesStore);
+  return { ...discussion, ...immutableEntitiesStore };
 }
 
 function newTopicPost(state = initialState.newTopicPost, action) {
   switch (action.type) {
     case discussionActionTypes.UPDATE_NEW_POST:
-      return Object.assign({}, state, action.postProps);
+      return { ...state, ...action.postProps };
     default:
       return state;
   }
@@ -66,13 +66,13 @@ function newTopicPost(state = initialState.newTopicPost, action) {
 function topics(state = initialState.topics, action) {
   switch (action.type) {
     case discussionActionTypes.ADD_TOPIC:
-      return state.set(action.topicId, Object.assign({}, topicDefaults, action.topicProps));
+      return state.set(action.topicId, { ...topicDefaults, ...(action.topicProps) });
     case discussionActionTypes.UPDATE_TOPIC:
-      return state.set(action.topicId, Object.assign({}, state.get(action.topicId), action.topicProps));
+      return state.set(action.topicId, { ...(state.get(action.topicId)), ...(action.topicProps) });
     case discussionActionTypes.REMOVE_TOPIC:
       return state.delete(action.topicId);
     case discussionActionTypes.REFRESH_ALL:
-      return makeImmutableMap(action.topics).map(topic => Object.assign({}, topicDefaults, topic));
+      return makeImmutableMap(action.topics).map(topic => ({ ...topicDefaults, ...topic }));
     default:
       return state;
   }
@@ -81,13 +81,13 @@ function topics(state = initialState.topics, action) {
 function posts(state = initialState.posts, action) {
   switch (action.type) {
     case discussionActionTypes.ADD_POST:
-      return state.set(action.postId, Object.assign({}, postDefaults, action.postProps));
+      return state.set(action.postId, { ...postDefaults, ...(action.postProps) });
     case discussionActionTypes.UPDATE_POST:
-      return state.set(action.postId, Object.assign({}, state.get(action.postId), action.postProps));
+      return state.set(action.postId, { ...(state.get(action.postId)), ...(action.postProps) });
     case discussionActionTypes.REMOVE_POST:
       return state.delete(action.postId);
     case discussionActionTypes.REFRESH_ALL:
-      return makeImmutableMap(action.posts).map(post => Object.assign({}, postDefaults, post));
+      return makeImmutableMap(action.posts).map(post => ({ ...postDefaults, ...post }));
     default:
       return state;
   }
@@ -96,9 +96,9 @@ function posts(state = initialState.posts, action) {
 function pendingReplyPosts(state = initialState.pendingReplyPosts, action) {
   switch (action.type) {
     case discussionActionTypes.ADD_REPLY:
-      return state.set(action.topicId, Object.assign({}, replyDefaults));
+      return state.set(action.topicId, { ...replyDefaults });
     case discussionActionTypes.UPDATE_REPLY:
-      return state.set(action.topicId, Object.assign({}, state.get(action.topicId), action.replyProps));
+      return state.set(action.topicId, { ...(state.get(action.topicId)), ...(action.replyProps) });
     case discussionActionTypes.REMOVE_REPLY:
       return state.delete(action.topicId);
     default:
@@ -110,14 +110,11 @@ function scrolling(state = initialState.scrolling, action) {
   switch (action.type) {
     case discussionActionTypes.CHANGE_AUTO_SCROLL:
       // We reset topic scrolling on auto scroll toggle
-      return Object.assign({}, state, {
-        autoScroll: action.autoScroll,
-        scrollTopicId: null,
-      });
+      return { ...state, autoScroll: action.autoScroll, scrollTopicId: null };
     case discussionActionTypes.ADD_TOPIC:
-      return Object.assign({}, state, { scrollTopicId: action.topicId });
+      return { ...state, scrollTopicId: action.topicId };
     case discussionActionTypes.UNSET_SCROLL_TOPIC:
-      return Object.assign({}, state, { scrollTopicId: null });
+      return { ...state, scrollTopicId: null };
     default:
       return state;
   }
