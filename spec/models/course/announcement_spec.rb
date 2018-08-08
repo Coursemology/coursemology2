@@ -76,31 +76,5 @@ RSpec.describe Course::Announcement, type: :model do
         end
       end
     end
-
-    describe '#has_many_attachments' do
-      # Announcement with image_tag in content.
-      let(:announcement) do
-        announcement = create(:course_announcement)
-        attachment = create(:attachment_reference, attachable: announcement)
-        content = "<img alt='Icon' src='/attachments/#{attachment.id}' />"
-        announcement.update_attributes(content: content)
-        announcement
-      end
-
-      it 'has an attachment_reference' do
-        expect(announcement.attachment_references.count).to eq(1)
-      end
-
-      context 'when image is removed from content' do
-        before do
-          announcement.content = ''
-          announcement.save
-        end
-
-        it 'removes the attachment_references' do
-          expect(announcement.attachment_references.count).to eq(0)
-        end
-      end
-    end
   end
 end

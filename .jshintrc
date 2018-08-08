@@ -23,5 +23,5 @@
 	"sub": true,
 	"trailing": true,
 	"undef": true,
-	"unused": true,
+	"unused": true
 }
