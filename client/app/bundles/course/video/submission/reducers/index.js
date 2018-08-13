@@ -18,9 +18,9 @@ import oldSessions, { initialState as oldSessionsState, persistTransform as oldS
  */
 export function createInitialState(props) {
   return {
-    video: Object.assign({}, videoState, props.video),
-    discussion: Object.assign({}, discussionState, organiseDiscussionEntities(props.discussion)),
-    notification: Object.assign({}, notificationState, props.notification),
+    video: { ...videoState, ...(props.video) },
+    discussion: { ...discussionState, ...(organiseDiscussionEntities(props.discussion)) },
+    notification: { ...notificationState, ...(props.notification) },
     oldSessions: oldSessionsState.merge(props.oldSessions),
   };
 }

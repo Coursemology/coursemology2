@@ -129,10 +129,10 @@ function mapDispatchToProps(dispatch) {
 
 function mergeProps(stateProps, dispatchProps) {
   if (stateProps.scrollTopicIdSet) {
-    return Object.assign({}, stateProps, dispatchProps);
+    return { ...stateProps, ...dispatchProps };
   }
 
-  return Object.assign({}, stateProps, dispatchProps, { onScroll: null });
+  return { ...stateProps, ...dispatchProps, onScroll: null };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(Discussion);

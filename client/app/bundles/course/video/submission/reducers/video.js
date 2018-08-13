@@ -93,7 +93,7 @@ function computePlayerState(state, newPlayerState) {
  * @returns {function(Object): Object} A function that produces the next state object when changes are provided
  */
 function generateStateTransformer(state) {
-  return changes => Object.assign({}, state, { forceSeek: false }, changes);
+  return changes => ({ ...state, forceSeek: false, ...changes });
 }
 
 /**
@@ -140,14 +140,14 @@ function videoStateReducer(state = initialState, action) {
  * @return {*} The event object to record.
  */
 function generateEvent(state, type, params = {}) {
-  const baseEvent = {
+  return {
     sequence_num: state.sessionSequenceNum,
     event_type: type,
     video_time: Math.round(state.playerProgress),
     playback_rate: state.playbackRate,
     event_time: new Date(),
+    ...params,
   };
-  return Object.assign(baseEvent, params);
 }
 
 /**
@@ -175,10 +175,11 @@ function handleSessionChangeState(state, action) {
     return state;
   }
 
-  return Object.assign({}, state, {
+  return {
+    ...state,
     sessionSequenceNum: state.sessionSequenceNum + 1,
     sessionEvents: state.sessionEvents.push(generateEvent(state, stateChange)),
-  });
+  };
 }
 
 /**
@@ -197,27 +198,31 @@ function videoSessionReducer(state = initialState, action) {
   const events = state.sessionEvents;
   switch (action.type) {
     case videoActionTypes.CHANGE_PLAYBACK_RATE:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         sessionSequenceNum: state.sessionSequenceNum + 1,
         sessionEvents: events.push(generateEvent(state, 'speed_change', { playback_rate: action.playbackRate })),
-      });
+      };
     case videoActionTypes.CHANGE_PLAYER_STATE:
       return handleSessionChangeState(state, action);
     case videoActionTypes.SEEK_START:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         sessionSequenceNum: state.sessionSequenceNum + 1,
         sessionEvents: events.push(generateEvent(state, 'seek_start')),
-      });
+      };
     case videoActionTypes.SEEK_END:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         sessionSequenceNum: state.sessionSequenceNum + 1,
         sessionEvents: events.push(generateEvent(state, 'seek_end')),
-      });
+      };
     case sessionActionTypes.REMOVE_EVENTS:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         sessionEvents: events.filterNot(event => action.sequenceNums.has(event.sequence_num)),
         sessionClosed: action.sessionClosed,
-      });
+      };
     default:
       return state;
   }
