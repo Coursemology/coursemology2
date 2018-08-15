@@ -263,7 +263,7 @@ module Extensions::Attachable::ActiveRecord::Base
       doc.css('img').each do |image|
         id = parse_attachment_reference_uuid_from_url(image['src'])
         attachment = AttachmentReference.find(id)&.attachment if id
-        image['src'] = attachment.url
+        image['src'] = attachment.url if attachment&.url
       end
       doc.to_html
     end
