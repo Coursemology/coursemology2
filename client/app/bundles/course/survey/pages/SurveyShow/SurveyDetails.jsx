@@ -55,7 +55,7 @@ class SurveyDetails extends React.Component {
         <h4>
           <FormattedMessage {...surveyTranslations.description} />
         </h4>
-        <p dangerouslySetInnerHTML={{ __html: survey.description }} />
+        <p style={{ whiteSpace: 'pre-line' }} dangerouslySetInnerHTML={{ __html: survey.description }} />
       </CardText>
     );
   }
