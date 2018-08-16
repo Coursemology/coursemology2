@@ -6,7 +6,7 @@ import {
 import RaisedButton from 'material-ui/RaisedButton';
 import { injectIntl } from 'react-intl';
 import { grey300 } from 'material-ui/styles/colors';
-import styles from './../containers/OnlineEditor/OnlineEditorView.scss';
+import styles from './OnlineEditorView.scss';
 
 class NewPackageFile extends React.Component {
   static propTypes = {

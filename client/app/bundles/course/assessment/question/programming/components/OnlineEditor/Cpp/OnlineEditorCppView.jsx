@@ -10,12 +10,13 @@ import {
 } from 'material-ui/Table';
 import transitions from 'material-ui/styles/transitions';
 
-import 'brace/mode/python';
+import 'brace/mode/c_cpp';
 import 'brace/theme/monokai';
 
-import styles from './../OnlineEditorView.scss';
-import translations from './../OnlineEditorView.intl';
-import { ExistingPackageFile, NewPackageFile, TestCase, EditorCard } from './../OnlineEditorBase';
+import styles from '../OnlineEditorView.scss';
+import translations from '../OnlineEditorView.intl';
+import cppTranslations from './OnlineEditorCppView.intl';
+import { ExistingPackageFile, NewPackageFile, TestCase, EditorCard } from '../OnlineEditorBase';
 
 const MAX_TEST_CASES = 99;
 
@@ -40,7 +41,7 @@ const contextTypes = {
   muiTheme: PropTypes.object.isRequired,
 };
 
-class OnlineEditorPythonView extends React.Component {
+class OnlineEditorCppView extends React.Component {
   testCaseCreateHandler(type) {
     return (e) => {
       e.preventDefault();
@@ -223,7 +224,7 @@ class OnlineEditorPythonView extends React.Component {
       <EditorCard
         {...{
           updateCodeBlock: this.props.actions.updateCodeBlock,
-          mode: 'python',
+          mode: 'c_cpp',
           field,
           value,
           header,
@@ -272,7 +273,7 @@ class OnlineEditorPythonView extends React.Component {
           {
             this.renderEditorCard(
               intl.formatMessage(translations.appendTitle),
-              intl.formatMessage(translations.appendSubtitle),
+              intl.formatMessage(cppTranslations.appendSubtitle),
               'append'
             )
           }
@@ -294,19 +295,27 @@ class OnlineEditorPythonView extends React.Component {
         <h3>{ intl.formatMessage(translations.testCasesHeader) }</h3>
         <div style={{ marginBottom: '0.5em' }}>
           <FormattedMessage
-            id="course.assessment.question.programming.OnlineEditorViewitorPythonView.testCasesDescription"
+            id="course.assessment.question.programming.onlineEditorCppView.testCasesDescription"
             defaultMessage={
               '{note}: The expression in the {expression} column will be compared with the ' +
-              'expression in the {expected} column using the equality operator. The return value ' +
-              'of {print} is {none} and the printed output should not be confused with the ' +
-              'return value.'
+              'expression in the {expected} column using {expect_star} assertions from the ' +
+              '{googletest}. Floating point numbers are formatted with {tostring}.'
             }
             values={{
               note: <b>{intl.formatMessage(translations.testCaseDescriptionNote)}</b>,
               expression: <b>{intl.formatMessage(translations.expressionHeader)}</b>,
               expected: <b>{intl.formatMessage(translations.expectedHeader)}</b>,
-              print: <code>{intl.formatMessage(translations.testCaseDescriptionPrint)}</code>,
-              none: <code>{intl.formatMessage(translations.testCaseDescriptionNone)}</code>,
+              expect_star: <code>EXPECT_*</code>,
+              googletest: (
+                <a href="https://github.com/google/googletest">
+                  {intl.formatMessage(translations.testCaseDescriptionGoogleTest)}
+                </a>
+              ),
+              tostring: (
+                <code>
+                  <a href="http://en.cppreference.com/w/cpp/string/basic_string/to_string">std::to_string</a>
+                </code>
+              ),
             }}
           />
         </div>
@@ -331,7 +340,7 @@ class OnlineEditorPythonView extends React.Component {
     const { intl, autograded } = this.props;
 
     return (
-      <div id="python-online-editor">
+      <div id="cpp-online-editor">
         {
           this.renderEditorCard(
             intl.formatMessage(translations.submissionTitle),
@@ -345,7 +354,7 @@ class OnlineEditorPythonView extends React.Component {
   }
 }
 
-OnlineEditorPythonView.propTypes = propTypes;
-OnlineEditorPythonView.contextTypes = contextTypes;
+OnlineEditorCppView.propTypes = propTypes;
+OnlineEditorCppView.contextTypes = contextTypes;
 
-export default injectIntl(OnlineEditorPythonView);
+export default injectIntl(OnlineEditorCppView);
