@@ -128,7 +128,7 @@ class ProgrammingQuestionReduxForm extends React.Component {
   }
 
   renderPackageEditor() {
-    const { autograded, autogradedAssessment, hasSubmissions,
+    const { autograded, autogradedAssessment, hasSubmissions, languageId,
       test_ui, isLoading } = this.props;
 
     return (
@@ -136,7 +136,7 @@ class ProgrammingQuestionReduxForm extends React.Component {
         {this.renderPackageLink()}
         <OnlineEditor
           {...{
-            data: test_ui,
+            languageId,
             isLoading,
             autograded,
             autogradedAssessment,
@@ -205,7 +205,7 @@ class ProgrammingQuestionReduxForm extends React.Component {
   }
 
   render() {
-    const { languages, skills, intl } = this.props;
+    const { autograded, languages, skills, intl, isLoading } = this.props;
 
     return (
       <Form onSubmit={() => undefined}>
@@ -248,7 +248,7 @@ class ProgrammingQuestionReduxForm extends React.Component {
           </Field>
         </div>
         {this.renderAutogradedToggle()}
-        {this.renderAutogradedFields()}
+        {autograded ? this.renderAutogradedFields() : this.renderPackageEditor()}
 
         <RaisedButton
           className={styles.submitButton}
@@ -258,7 +258,7 @@ class ProgrammingQuestionReduxForm extends React.Component {
           id="programmming-question-form-submit"
           type="submit"
           disabled={false}
-          icon={false ? <i className="fa fa-spinner fa-lg fa-spin" /> : null}
+          icon={isLoading ? <i className="fa fa-spinner fa-lg fa-spin" /> : null}
         />
       </Form>
     );
@@ -270,6 +270,8 @@ ProgrammingQuestionReduxForm.propTypes = {
   skills: PropTypes.arrayOf(optionShape).isRequired,
 
   autograded: PropTypes.bool.isRequired,
+  languageId: PropTypes.number.isRequired,
+
   autogradedAssessment: PropTypes.bool.isRequired,
   canEditOnline: PropTypes.bool.isRequired,
   canSwitchPackageType: PropTypes.bool.isRequired,

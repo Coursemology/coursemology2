@@ -14,9 +14,9 @@ const selector = formValueSelector(formNames.PROGRAMMING_QUESTION);
 
 function mapStateToProps(state) {
   const autograded = selector(state, 'question_programming[autograded]');
-  return {
-    autograded,
-  };
+  const languageId = selector(state, 'question_programming[language_id]');
+
+  return { autograded, languageId };
 }
 
 const ProgrammingQuestion = (props) => {
@@ -24,9 +24,28 @@ const ProgrammingQuestion = (props) => {
   const actions = bindActionCreators(programmingQuestionActionCreators, dispatch);
   const onlineEditorActions = bindActionCreators(onlineEditorActionCreators, dispatch);
 
+  const initialValues = {
+    question_programming: {
+      submission: '',
+      solution: '',
+      submit_as_file: false,
+      submission_files: [],
+      solution_files: [],
+      prepend: '',
+      append: '',
+      data_files: [],
+      test_cases: {
+        public: [],
+        private: [],
+        evaluation: [],
+      },
+      ...formValues,
+    },
+  };
+
   return (
     <ProgrammingQuestionForm
-      initialValues={formValues}
+      initialValues={initialValues}
       {...{
         actions,
         onlineEditorActions,
@@ -42,6 +61,8 @@ ProgrammingQuestion.propTypes = {
   skills: PropTypes.arrayOf(optionShape),
 
   autograded: PropTypes.bool,
+  languageId: PropTypes.number,
+
   autogradedAssessment: PropTypes.bool.isRequired,
   canEditOnline: PropTypes.bool.isRequired,
   canSwitchPackageType: PropTypes.bool.isRequired,
@@ -59,6 +80,7 @@ ProgrammingQuestion.propTypes = {
 
 ProgrammingQuestion.defaultProps = {
   autograded: false,
+  languageId: 0,
 };
 
 export default connect(mapStateToProps)(ProgrammingQuestion);

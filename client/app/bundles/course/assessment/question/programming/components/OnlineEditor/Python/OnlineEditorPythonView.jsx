@@ -1,38 +1,21 @@
-import Immutable from 'immutable';
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
-import FlatButton from 'material-ui/FlatButton';
 import {
-  Table, TableBody, TableFooter, TableHeader, TableHeaderColumn, TableRow, TableRowColumn,
+  Table, TableBody, TableHeader, TableHeaderColumn, TableRow,
 } from 'material-ui/Table';
-import transitions from 'material-ui/styles/transitions';
 
 import 'brace/mode/python';
 import 'brace/theme/monokai';
 
 import styles from '../OnlineEditorView.scss';
 import translations from '../OnlineEditorView.intl';
-import { ExistingPackageFile, NewPackageFile, TestCase, EditorCard } from '../OnlineEditorBase';
-
-const MAX_TEST_CASES = 99;
+import { ExistingPackageFile, NewPackageFile, EditorCard } from '../OnlineEditorBase';
+import TestCaseEditor from '../TestCaseEditor';
 
 const propTypes = {
-  data: PropTypes.instanceOf(Immutable.Map).isRequired,
-  dataFiles: PropTypes.instanceOf(Immutable.Map).isRequired,
-  actions: PropTypes.shape({
-    updateCodeBlock: PropTypes.func.isRequired,
-    createTestCase: PropTypes.func.isRequired,
-    updateTestCase: PropTypes.func.isRequired,
-    deleteTestCase: PropTypes.func.isRequired,
-    updateNewPackageFile: PropTypes.func.isRequired,
-    deleteNewPackageFile: PropTypes.func.isRequired,
-    deleteExistingPackageFile: PropTypes.func.isRequired,
-  }),
   isLoading: PropTypes.bool.isRequired,
-  autograded: PropTypes.bool.isRequired,
   intl: intlShape.isRequired,
 };
 
@@ -41,16 +24,6 @@ const contextTypes = {
 };
 
 class OnlineEditorPythonView extends React.Component {
-  testCaseCreateHandler(type) {
-    return (e) => {
-      e.preventDefault();
-
-      if (!this.props.isLoading) {
-        this.props.actions.createTestCase(type);
-      }
-    };
-  }
-
   renderExistingPackageFiles(fileType, header) {
     const numFiles = this.props.data.get(fileType).size;
     if (numFiles === 0) {
@@ -147,138 +120,33 @@ class OnlineEditorPythonView extends React.Component {
     );
   }
 
-  renderTestCases(header, testCases, type) {
-    const allTestCases = this.props.data.get('test_cases');
-    const numAllTestCases = allTestCases.get('public').size + allTestCases.get('private').size
-      + allTestCases.get('evaluation').size;
-
-    const identifier = this.props.intl.formatMessage(translations.identifierHeader);
-    const expression = this.props.intl.formatMessage(translations.expressionHeader);
-    const expected = this.props.intl.formatMessage(translations.expectedHeader);
-    const hint = this.props.intl.formatMessage(translations.hintHeader);
-
-    const rows = [...testCases.get(type).entries()].map(([index, test]) => (
-      <TestCase
-        key={index}
-        {...{
-          updateTestCase: this.props.actions.updateTestCase,
-          deleteTestCase: this.props.actions.deleteTestCase,
-          isLoading: this.props.isLoading,
-          type,
-          index,
-          test,
-          expression,
-          expected,
-          hint,
-          enableInlineCodeEditor: false,
-          showCodeEditor: test.get('showCodeEditor') || false,
-          intl: this.props.intl,
-        }}
-      />
-    ));
-
-    return (
-      <Card initiallyExpanded>
-        <CardHeader
-          title={header}
-          textStyle={{ fontWeight: 'bold' }}
-          actAsExpander
-          showExpandableButton
-        />
-        <CardText expandable style={{ padding: 0 }}>
-          <Table selectable={false}>
-            <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
-              <TableRow>
-                <TableHeaderColumn className={styles.deleteButtonCell} />
-                <TableHeaderColumn>{identifier}</TableHeaderColumn>
-                <TableHeaderColumn>{expression}</TableHeaderColumn>
-                <TableHeaderColumn>{expected}</TableHeaderColumn>
-                <TableHeaderColumn>{hint}</TableHeaderColumn>
-              </TableRow>
-            </TableHeader>
-            <TableBody displayRowCheckbox={false}>
-              {rows}
-            </TableBody>
-            <TableFooter adjustForCheckbox={false}>
-              <TableRow>
-                <TableRowColumn colSpan="5" style={{ textAlign: 'center' }}>
-                  <FlatButton
-                    label={this.props.intl.formatMessage(translations.addNewTestButton)}
-                    icon={<i className="fa fa-plus" />}
-                    disabled={this.props.isLoading || numAllTestCases >= MAX_TEST_CASES}
-                    onClick={this.testCaseCreateHandler(type)}
-                  />
-                </TableRowColumn>
-              </TableRow>
-            </TableFooter>
-          </Table>
-        </CardText>
-      </Card>
-    );
-  }
-
-  renderEditorCard(header, subtitle, field) {
-    const value = this.props.data.get(field) || '';
-    return (
-      <EditorCard
-        {...{
-          updateCodeBlock: this.props.actions.updateCodeBlock,
-          mode: 'python',
-          field,
-          value,
-          header,
-          subtitle,
-          isLoading: this.props.isLoading,
-        }}
-      />
-    );
-  }
-
-  renderAutogradedFields() {
-    const { intl, data } = this.props;
-    const testCases = data.get('test_cases');
-    const testCaseError = data.getIn(['test_cases', 'error']);
-    const errorTextElement = testCaseError && (
-    <div
-      style={{
-        fontSize: 12,
-        lineHeight: '12px',
-        color: this.context.muiTheme.textField.errorColor,
-        transition: transitions.easeOut(),
-        marginBottom: '1em',
-      }}
-    >
-      {testCaseError}
-    </div>
-    );
+  render() {
+    const { intl } = this.props;
 
     return (
       <>
         <div style={{ marginBottom: '1em' }}>
-          {
-            this.renderEditorCard(
-              intl.formatMessage(translations.solutionTitle),
-              intl.formatMessage(translations.solutionSubtitle),
-              'solution'
-            )
-          }
-          {
-            this.renderEditorCard(
-              intl.formatMessage(translations.prependTitle),
-              intl.formatMessage(translations.prependSubtitle),
-              'prepend'
-            )
-          }
-          {
-            this.renderEditorCard(
-              intl.formatMessage(translations.appendTitle),
-              intl.formatMessage(translations.appendSubtitle),
-              'append'
-            )
-          }
+          <EditorCard
+            mode="python"
+            header={intl.formatMessage(translations.solutionTitle)}
+            subtitle={intl.formatMessage(translations.solutionSubtitle)}
+            field="question_programming[solution]"
+          />
+          <EditorCard
+            mode="python"
+            header={intl.formatMessage(translations.prependTitle)}
+            subtitle={intl.formatMessage(translations.prependSubtitle)}
+            field="question_programming[prepend]"
+          />
+          <EditorCard
+            mode="python"
+            header={intl.formatMessage(translations.appendTitle)}
+            subtitle={intl.formatMessage(translations.appendSubtitle)}
+            field="question_programming[append]"
+          />
         </div>
         <h3>{ intl.formatMessage(translations.dataFilesHeader) }</h3>
-        {
+        {/* {
           this.renderExistingPackageFiles(
             'data_files',
             this.props.intl.formatMessage(translations.currentDataFilesHeader)
@@ -290,7 +158,7 @@ class OnlineEditorPythonView extends React.Component {
             this.props.intl.formatMessage(translations.newDataFilesHeader),
             intl.formatMessage(translations.addDataFileButton)
           )
-        }
+        } */}
         <h3>{ intl.formatMessage(translations.testCasesHeader) }</h3>
         <div style={{ marginBottom: '0.5em' }}>
           <FormattedMessage
@@ -310,37 +178,8 @@ class OnlineEditorPythonView extends React.Component {
             }}
           />
         </div>
-        { errorTextElement }
-        {
-          this.renderTestCases(intl.formatMessage(translations.publicTestCases),
-            testCases, 'public')
-        }
-        {
-          this.renderTestCases(intl.formatMessage(translations.privateTestCases),
-            testCases, 'private')
-        }
-        {
-          this.renderTestCases(intl.formatMessage(translations.evaluationTestCases),
-            testCases, 'evaluation')
-        }
+        <TestCaseEditor isLoading={false} />
       </>
-    );
-  }
-
-  render() {
-    const { intl, autograded } = this.props;
-
-    return (
-      <div id="python-online-editor">
-        {
-          this.renderEditorCard(
-            intl.formatMessage(translations.submissionTitle),
-            null,
-            'submission'
-          )
-        }
-        { autograded ? this.renderAutogradedFields() : null }
-      </div>
     );
   }
 }

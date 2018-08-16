@@ -7,13 +7,11 @@ end
 json.skills current_course.assessment_skills.order('LOWER(title) ASC').as_json(only: [:id, :title])
 
 json.formValues do
-  json.question_programming do
-    json.(@programming_question, :title, :description, :staff_only_comments, :maximum_grade,
-                                 :language_id, :memory_limit, :time_limit, :attempt_limit)
-    json.skill_ids @question_assessment.skills.order('LOWER(title) ASC').pluck(:id)
-    json.autograded @programming_question.persisted? ?
-      @programming_question.attachment.present? : @assessment.autograded?
-  end
+  json.(@programming_question, :title, :description, :staff_only_comments, :maximum_grade,
+                               :language_id, :memory_limit, :time_limit, :attempt_limit)
+  json.skill_ids @question_assessment.skills.order('LOWER(title) ASC').pluck(:id)
+  json.autograded @programming_question.persisted? ?
+    @programming_question.attachment.present? : @assessment.autograded?
 end
 
 has_submissions = @programming_question.answers.without_attempting_state.count > 0
