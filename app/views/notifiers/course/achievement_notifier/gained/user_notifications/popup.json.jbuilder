@@ -4,5 +4,5 @@ json.notificationType 'achievementGained'
 
 achievement = notification.activity.object
 json.badgeUrl achievement.badge.url
-json.title achievement.title
-json.description achievement.description
+json.title format_html(achievement.title)
+json.description format_html(achievement.description)
