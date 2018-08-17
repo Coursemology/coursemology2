@@ -20,7 +20,7 @@ function mapStateToProps(state) {
 }
 
 const ProgrammingQuestion = (props) => {
-  const { dispatch, formValues, ...otherProps } = props;
+  const { dispatch, formValues, test_ui, ...otherProps } = props;
   const actions = bindActionCreators(programmingQuestionActionCreators, dispatch);
   const onlineEditorActions = bindActionCreators(onlineEditorActionCreators, dispatch);
 
@@ -40,6 +40,7 @@ const ProgrammingQuestion = (props) => {
         evaluation: [],
       },
       ...formValues,
+      ...test_ui,
     },
   };
 

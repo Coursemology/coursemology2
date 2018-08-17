@@ -39,6 +39,15 @@ class ProgrammingQuestionReduxForm extends React.Component {
     this.setState({ canEditPackage });
   }
 
+  onSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(this.form);
+
+    const failureMessage = this.props.intl.formatMessage(translations.submitFailureMessage);
+
+    this.props.actions.submitForm(url, method, formData, failureMessage);
+  }
+
   renderAutogradedToggle() {
     const { autograded, autogradedAssessment, displayAutogradedToggle, hasAutoGradings } = this.props;
 
@@ -128,8 +137,7 @@ class ProgrammingQuestionReduxForm extends React.Component {
   }
 
   renderPackageEditor() {
-    const { autograded, autogradedAssessment, hasSubmissions, languageId,
-      test_ui, isLoading } = this.props;
+    const { autograded, autogradedAssessment, hasSubmissions, languageId, isLoading } = this.props;
 
     return (
       <React.Fragment>
@@ -208,7 +216,7 @@ class ProgrammingQuestionReduxForm extends React.Component {
     const { autograded, languages, skills, intl, isLoading } = this.props;
 
     return (
-      <Form onSubmit={() => undefined}>
+      <form onSubmit={this.handleSubmit}>
         <Field
           name={ProgrammingQuestionReduxForm.getInputName('title')}
           component={TextField}
@@ -260,7 +268,7 @@ class ProgrammingQuestionReduxForm extends React.Component {
           disabled={false}
           icon={isLoading ? <i className="fa fa-spinner fa-lg fa-spin" /> : null}
         />
-      </Form>
+      </form>
     );
   }
 }
@@ -281,7 +289,6 @@ ProgrammingQuestionReduxForm.propTypes = {
 
   packageFile: PropTypes.any,
   programmingPackage: PropTypes.any,
-  test_ui: PropTypes.any,
   import_result: PropTypes.any,
   intl: intlShape,
 };

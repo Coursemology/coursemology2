@@ -1,9 +1,7 @@
 /* eslint-disable camelcase */
 import Immutable from 'immutable';
 
-import actionTypes from '../constants/programmingQuestionConstants';
-import editorActionTypes from '../constants/onlineEditorConstants';
-import { javaAppend, cppAppend } from '../constants/onlineEditorDefaultTemplates';
+import { javaAppend, cppAppend, editorActionTypes, actionTypes } from '../constants';
 
 export const initialState = Immutable.fromJS({
   // this is the default state that would be used if one were not passed into the store
@@ -118,109 +116,6 @@ export const initialState = Immutable.fromJS({
     auth_token: null,
   },
 });
-
-function questionReducer(state, action) {
-  const { type } = action;
-
-  switch (type) {
-    case actionTypes.PROGRAMMING_QUESTION_UPDATE: {
-      const { field, newValue } = action;
-
-      if (field === 'autograded' && newValue === false) {
-        return state.set(field, newValue).set('edit_online', true);
-      }
-
-      return state.set(field, newValue).deleteIn(['error', field]);
-    }
-    case actionTypes.SKILLS_UPDATE: {
-      const { skills } = action;
-      return state.set('skill_ids', Immutable.fromJS(skills));
-    }
-    default: {
-      return state;
-    }
-  }
-}
-
-function testReducer(state, action) {
-  const { type } = action;
-  switch (type) {
-    case editorActionTypes.TOGGLE_SUBMIT_AS_FILE: {
-      const { newValue } = action;
-      return state.set('submit_as_file', newValue);
-    }
-    case editorActionTypes.CODE_BLOCK_UPDATE: {
-      const { field, newValue } = action;
-      return state.set(field, newValue);
-    }
-    case editorActionTypes.TEST_CASE_CREATE: {
-      const { testType } = action;
-      const newTest = {
-        expression: '',
-        expected: '',
-        hint: '',
-        inline_code: '',
-        show_code_editor: false,
-      };
-      const tests = state.get('test_cases').get(testType).push(Immutable.fromJS(newTest));
-      return state
-        .setIn(['test_cases', testType], tests)
-        .deleteIn(['test_cases', 'error']);
-    }
-    case editorActionTypes.TEST_CASE_UPDATE: {
-      const { testType, index, field, newValue } = action;
-      return state
-        .setIn(['test_cases', testType, index, field], newValue)
-        .deleteIn(['test_cases', testType, index, 'error']);
-    }
-    case editorActionTypes.TEST_CASE_DELETE: {
-      const { testType, index } = action;
-      const tests = state.get('test_cases').get(testType).splice(index, 1);
-      return state.setIn(['test_cases', testType], tests);
-    }
-    default: {
-      return state;
-    }
-  }
-}
-
-function packageFilesReducer(state, action) {
-  const { type } = action;
-
-  switch (type) {
-    case editorActionTypes.NEW_PACKAGE_FILE_UPDATE: {
-      const { index, filename } = action;
-      let newFiles = state.get('new')
-        .update(index, fileData => Immutable.fromJS({ key: fileData.get('key'), filename }));
-
-      // Adds a new entry if there are no more empty non-deleted files.
-      if (newFiles.last().get('filename') !== null) {
-        const newKey = state.get('key') + 1;
-        newFiles = newFiles.push(Immutable.fromJS({ key: newKey, filename: null }));
-        return state.set('key', newKey).set('new', newFiles);
-      }
-
-      return state.set('new', newFiles);
-    }
-    case editorActionTypes.NEW_PACKAGE_FILE_DELETE: {
-      const { index } = action;
-      return state.set('new', state.get('new').delete(index));
-    }
-    case editorActionTypes.EXISTING_PACKAGE_FILE_DELETE: {
-      const { filename, toDelete } = action;
-      const currentFilesToDelete = state.get('to_delete');
-
-      if (toDelete) {
-        return state.set('to_delete', currentFilesToDelete.add(filename));
-      }
-
-      return state.set('to_delete', currentFilesToDelete.delete(filename));
-    }
-    default: {
-      return state;
-    }
-  }
-}
 
 function apiReducer(state, action) {
   const { type } = action;

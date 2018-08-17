@@ -1,5 +1,5 @@
 import axios from 'axios';
-import actionTypes from '../constants/programmingQuestionConstants';
+import { actionTypes } from '../constants';
 
 export function updateProgrammingQuestion(field, newValue) {
   return {

@@ -1,3 +1,50 @@
+import mirrorCreator from 'mirror-creator';
+
+export const formNames = mirrorCreator([
+  'PROGRAMMING_QUESTION',
+]);
+
+export const programmingLanguages = {
+  JAVASCRIPT: 1,
+  PYTHON_2_7: 2,
+  PYTHON_3_4: 3,
+  PYTHON_3_5: 4,
+  PYTHON_3_6: 5,
+  C_CPP: 6,
+  JAVA: 7,
+};
+
+export const aceEditorModes = {
+  C_CPP: 'c_cpp',
+  JAVA: 'java',
+  PYTHON: 'python',
+};
+
+export const editorActionTypes = mirrorCreator([
+  'TOGGLE_SUBMIT_AS_FILE',
+  'CODE_BLOCK_UPDATE',
+  'TEST_CASE_CREATE',
+  'TEST_CASE_UPDATE',
+  'TEST_CASE_DELETE',
+  'NEW_PACKAGE_FILE_UPDATE',
+  'NEW_PACKAGE_FILE_DELETE',
+  'EXISTING_PACKAGE_FILE_DELETE',
+]);
+
+export const actionTypes = mirrorCreator([
+  'PROGRAMMING_QUESTION_UPDATE',
+  'SKILLS_UPDATE',
+  'EDITOR_MODE_UPDATE',
+  'HAS_ERROR_CLEAR',
+  'SUBMISSION_MESSAGE_SET',
+  'SUBMISSION_MESSAGE_CLEAR',
+  'SUBMIT_FORM_LOADING',
+  'SUBMIT_FORM_SUCCESS',
+  'SUBMIT_FORM_FAILURE',
+  'SUBMIT_FORM_EVALUATING',
+  'VALIDATION_ERRORS_SET',
+]);
+
 export const cppAppend = `// This is a global environment that is setup before the tests are run.
 // Since googletest does not allow function calls in the global scope
 class GlobalEnv : public testing::Environment {

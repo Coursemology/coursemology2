@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import OnlineEditorPythonView from './Python/OnlineEditorPythonView';
-import OnlineEditorCppView from './Cpp/OnlineEditorCppView';
+import PythonEditor from './PythonEditor';
+import CPPEditor from './CPPEditor';
 import OnlineEditorJavaView from './Java/OnlineEditorJavaView';
 import { validation as editorValidation } from './OnlineEditorBase';
 import { programmingLanguages, aceEditorModes } from '../../constants';
@@ -36,7 +36,7 @@ export function validation(data, pathOfKeysToData, intl) {
 }
 
 const OnlineEditor = (props) => {
-  const { data, intl, isLoading, autograded, autogradedAssessment, hasSubmissions,
+  const { data, intl, isLoading, autograded, hasSubmissions,
     languageId, dataFiles } = props;
 
   let editorMode = '';
@@ -61,7 +61,7 @@ const OnlineEditor = (props) => {
     return (
       <EditorCard
         header={intl.formatMessage(translations.submissionTitle)}
-        field="question_programming[submission]"
+        field="submission"
         mode={editorMode}
       />
     );
@@ -81,13 +81,13 @@ const OnlineEditor = (props) => {
     case programmingLanguages.PYTHON_3_4:
     case programmingLanguages.PYTHON_3_5:
     case programmingLanguages.PYTHON_3_6:
-      return (<OnlineEditorPythonView {...editorProps} />);
+      return (<PythonEditor {...editorProps} />);
 
     case programmingLanguages.C_CPP:
-      return (<OnlineEditorCppView {...editorProps} />);
+      return (<CPPEditor {...editorProps} />);
 
-    case programmingLanguages.JAVA:
-      return (<OnlineEditorJavaView {...editorProps} />);
+    // case programmingLanguages.JAVA:
+    //   return (<OnlineEditorJavaView {...editorProps} />);
 
     case null:
     case undefined:

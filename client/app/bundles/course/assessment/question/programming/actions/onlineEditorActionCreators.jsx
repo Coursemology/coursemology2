@@ -1,4 +1,4 @@
-import actionTypes from '../constants/onlineEditorConstants';
+import { editorActionTypes as actionTypes } from '../constants';
 
 export function toggleSubmitAsFile(newValue) {
   return {

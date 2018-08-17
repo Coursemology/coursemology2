@@ -5,10 +5,10 @@ import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
 import 'brace/mode/python';
 import 'brace/theme/monokai';
 
-import translations from '../OnlineEditorView.intl';
-import EditorCard from '../EditorCard';
-import TestCaseEditor from '../TestCaseEditor';
-import PackageFileManager from '../PackageFileManager';
+import translations from './OnlineEditorView.intl';
+import EditorCard from './EditorCard';
+import TestCaseEditor from './TestCaseEditor';
+import PackageFileManager from './PackageFileManager';
 
 const propTypes = {
   isLoading: PropTypes.bool.isRequired,
@@ -19,7 +19,7 @@ const contextTypes = {
   muiTheme: PropTypes.object.isRequired,
 };
 
-class OnlineEditorPythonView extends React.Component {
+class PythonEditor extends React.Component {
   render() {
     const { intl } = this.props;
 
@@ -29,25 +29,25 @@ class OnlineEditorPythonView extends React.Component {
           <EditorCard
             mode="python"
             header={intl.formatMessage(translations.submissionTitle)}
-            field="question_programming[submission]"
+            field="submission"
           />
           <EditorCard
             mode="python"
             header={intl.formatMessage(translations.solutionTitle)}
             subtitle={intl.formatMessage(translations.solutionSubtitle)}
-            field="question_programming[solution]"
+            field="solution"
           />
           <EditorCard
             mode="python"
             header={intl.formatMessage(translations.prependTitle)}
             subtitle={intl.formatMessage(translations.prependSubtitle)}
-            field="question_programming[prepend]"
+            field="prepend"
           />
           <EditorCard
             mode="python"
             header={intl.formatMessage(translations.appendTitle)}
             subtitle={intl.formatMessage(translations.appendSubtitle)}
-            field="question_programming[append]"
+            field="append"
           />
         </div>
         <PackageFileManager />
@@ -76,7 +76,7 @@ class OnlineEditorPythonView extends React.Component {
   }
 }
 
-OnlineEditorPythonView.propTypes = propTypes;
-OnlineEditorPythonView.contextTypes = contextTypes;
+PythonEditor.propTypes = propTypes;
+PythonEditor.contextTypes = contextTypes;
 
-export default injectIntl(OnlineEditorPythonView);
+export default injectIntl(PythonEditor);
