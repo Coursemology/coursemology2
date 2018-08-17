@@ -6,7 +6,7 @@ import { createScribingQuestion, updateScribingQuestion } from '../scribingQuest
 import { initialStates } from '../../reducers';
 
 // Mock axios
-const client = CourseAPI.question.scribing.scribings.getClient();
+const client = CourseAPI.assessment.question.scribing.getClient();
 const mock = new MockAdapter(client);
 
 beforeEach(() => {
@@ -39,7 +39,7 @@ const processedMockFields = {
 
 describe('createScribingQuestion', () => {
   const store = storeCreator({ initialStates });
-  const spyCreate = jest.spyOn(CourseAPI.question.scribing.scribings, 'create');
+  const spyCreate = jest.spyOn(CourseAPI.assessment.question.scribing, 'create');
 
   Object.defineProperty(window.location, 'pathname', {
     writable: true,
@@ -57,7 +57,7 @@ describe('createScribingQuestion', () => {
 
 describe('updateScribingQuestion', () => {
   const store = storeCreator({ initialStates });
-  const spyUpdate = jest.spyOn(CourseAPI.question.scribing.scribings, 'update');
+  const spyUpdate = jest.spyOn(CourseAPI.assessment.question.scribing, 'update');
 
   Object.defineProperty(window.location, 'pathname', {
     writable: true,

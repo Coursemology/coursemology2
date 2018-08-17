@@ -32,7 +32,7 @@ export function fetchSkills() {
 export function fetchScribingQuestion() {
   return (dispatch) => {
     dispatch({ type: actionTypes.FETCH_SCRIBING_QUESTION_REQUEST });
-    return CourseAPI.question.scribing.scribings.fetch()
+    return CourseAPI.assessment.question.scribing.fetch()
       .then((response) => {
         dispatch({
           scribingId: getScribingId(),
@@ -87,7 +87,7 @@ export function createScribingQuestion(fields) {
   return (dispatch) => {
     dispatch({ type: actionTypes.CREATE_SCRIBING_QUESTION_REQUEST });
     const parsedFields = processFields(fields);
-    CourseAPI.question.scribing.scribings.create(parsedFields)
+    CourseAPI.assessment.question.scribing.create(parsedFields)
       .then(() => {
         redirectToAssessment();
         dispatch({
@@ -109,7 +109,7 @@ export function updateScribingQuestion(questionId, fields) {
   return (dispatch) => {
     dispatch({ type: actionTypes.UPDATE_SCRIBING_QUESTION_REQUEST });
     const parsedFields = processFields(fields);
-    CourseAPI.question.scribing.scribings.update(questionId, parsedFields)
+    CourseAPI.assessment.question.scribing.update(questionId, parsedFields)
       .then(() => {
         redirectToAssessment();
         dispatch({
