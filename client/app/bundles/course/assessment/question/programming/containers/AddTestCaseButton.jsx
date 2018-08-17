@@ -9,18 +9,24 @@ const selector = formValueSelector(formNames.PROGRAMMING_QUESTION);
 
 const MAX_TEST_CASES = 99;
 
-const AddTestCaseButton = props => (
-  <FlatButton
-    icon={<i className="fa fa-plus" />}
-    // disabled={this.props.isLoading || numAllTestCases >= MAX_TEST_CASES}
-    {...props}
-  />
-);
+const AddTestCaseButton = (props) => {
+  const { dispatch, ...otherProps } = props;
+
+  return (
+    <FlatButton
+      icon={<i className="fa fa-plus" />}
+      // disabled={this.props.isLoading || numAllTestCases >= MAX_TEST_CASES}
+      {...otherProps}
+    />
+  );
+};
 
 AddTestCaseButton.propTypes = {
   label: PropTypes.string,
   onClick: PropTypes.func,
   disabled: PropTypes.bool.isRequired,
+
+  dispatch: PropTypes.func,
 };
 
 function mapStateToProps(state) {
