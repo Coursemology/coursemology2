@@ -18,3 +18,9 @@
       tr.start_at
         th = t('.start_at')
         td = format_datetime(@video.start_at)
+
+- if can?(:manage, @video)
+  br
+  h4 = t('.statistics')
+  hr
+  div#video-overall-stats data=(render partial: 'video_statistics.json.jbuilder')

@@ -59,6 +59,25 @@ RSpec.describe Course::Video, type: :model do
       end
     end
 
+    describe '.watch_frequency' do
+      let(:submission1) { create(:video_submission, video: video1, creator: student1.user) }
+      let(:submission2) { create(:video_submission, video: video1, creator: student2.user) }
+      let!(:session1) { create(:video_session, :with_events_paused, submission: submission1) }
+      let!(:session2) { create(:video_session, :with_events_continuous, submission: submission2) }
+
+      it 'computes the right watch frequency distribution' do
+        intervals = [[0, 5], [30, 50], [19, 37], [0, 20], [39, 70], [10, 25]]
+        distribution = Array.new(71, 0)
+        intervals.each do |interval|
+          (interval[0]..interval[1]).each do |video_time|
+            distribution[video_time] += 1
+          end
+        end
+
+        expect(video1.watch_frequency).to eq(distribution)
+      end
+    end
+
     describe '#next_video' do
       let!(:video3) do
         create(:video, course: course, start_at: Time.zone.now - 1.week, title: 'AAA')

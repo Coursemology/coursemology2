@@ -4,6 +4,7 @@ class Course::Video < ApplicationRecord
 
   include Course::ClosingReminderConcern
   include Course::Video::UrlConcern
+  include Course::Video::WatchStatisticsConcern
 
   belongs_to :tab, class_name: Course::Video::Tab.name, inverse_of: :videos
   has_many :submissions, class_name: Course::Video::Submission.name,
@@ -13,6 +14,7 @@ class Course::Video < ApplicationRecord
   has_many :discussion_topics, through: :topics, class_name: Course::Discussion::Topic.name
   has_many :posts, through: :discussion_topics, class_name: Course::Discussion::Post.name
   has_many :sessions, through: :submissions
+  has_many :events, through: :sessions
 
   validate :url_unchanged
 
@@ -93,6 +95,10 @@ class Course::Video < ApplicationRecord
   end
 
   private
+
+  def relevant_events_scope
+    events
+  end
 
   # Parents the video under its duplicated video tab, if it exists.
   #
