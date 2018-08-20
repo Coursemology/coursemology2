@@ -170,7 +170,6 @@ GEM
     concurrent-ruby (1.0.5)
     consistency_fail (0.3.5)
     crass (1.0.4)
-    deepl-rb (2.1.0)
     devise (4.5.0)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -189,9 +188,6 @@ GEM
       multi_json
     domain_name (0.5.20180417)
       unf (>= 0.0.5, < 1.0.0)
-    easy_translate (0.5.1)
-      thread
-      thread_safe
     edge (0.5.1)
       activerecord (>= 4.1.0)
     ejs (1.1.1)
@@ -237,13 +233,11 @@ GEM
       concurrent-ruby (~> 1.0)
     i18n-js (3.0.11)
       i18n (>= 0.6.6, < 2)
-    i18n-tasks (0.9.23)
+    i18n-tasks (0.9.24)
       activesupport (>= 4.0.2)
       ast (>= 2.1.0)
-      deepl-rb (>= 2.1.0)
-      easy_translate (>= 0.5.1)
       erubi
-      highline (>= 1.7.3)
+      highline (>= 2.0.0)
       i18n
       parser (>= 2.2.3.0)
       rainbow (>= 2.2.2, < 4.0)
@@ -519,7 +513,6 @@ GEM
     terminal-table (1.8.0)
       unicode-display_width (~> 1.1, >= 1.1.1)
     thor (0.20.0)
-    thread (0.2.2)
     thread_safe (0.3.6)
     tilt (2.0.8)
     traceroute (0.6.2)
