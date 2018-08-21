@@ -4,6 +4,6 @@ FactoryBot.define do
           class: Course::Assessment::Answer::ScribingScribble do
     answer { build(:course_assessment_answer_scribing) }
     creator { build(:user) }
-    content ''
+    content { '' }
   end
 end

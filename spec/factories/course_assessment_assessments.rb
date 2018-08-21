@@ -5,7 +5,7 @@ FactoryBot.define do
   factory :course_assessment_assessment, class: Course::Assessment, aliases: [:assessment],
                                          parent: :course_lesson_plan_item do
     transient do
-      question_count 1
+      question_count { 1 }
     end
 
     tab do
@@ -14,18 +14,18 @@ FactoryBot.define do
     end
     title { generate(:course_assessment_assessment_name) }
     description { generate(:course_assessment_assessment_description) }
-    base_exp 1000
-    autograded false
-    published false
-    tabbed_view false
-    delayed_grade_publication false
+    base_exp { 1000 }
+    autograded { false }
+    published { false }
+    tabbed_view { false }
+    delayed_grade_publication { false }
 
     trait :delay_grade_publication do
-      delayed_grade_publication true
+      delayed_grade_publication { true }
     end
 
     trait :view_password do
-      view_password 'LOL'
+      view_password { 'LOL' }
     end
 
     trait :not_started do
@@ -133,7 +133,7 @@ FactoryBot.define do
     end
 
     trait :autograded do
-      autograded true
+      autograded { true }
     end
 
     trait :with_attachments do

@@ -4,16 +4,16 @@ FactoryBot.define do
           class: Course::Assessment::Question::Programming,
           parent: :course_assessment_question do
     transient do
-      template_package false
-      template_file_count 1
-      test_case_count 0
-      private_test_case_count 0
-      evaluation_test_case_count 0
+      template_package { false }
+      template_file_count { 1 }
+      test_case_count { 0 }
+      private_test_case_count { 0 }
+      evaluation_test_case_count { 0 }
     end
 
-    memory_limit 32
-    time_limit 10
-    attempt_limit nil
+    memory_limit { 32 }
+    time_limit { 10 }
+    attempt_limit { nil }
     language { Coursemology::Polyglot::Language::Python::Python2Point7.instance }
     template_files do
       template_file_count.downto(1).map do
@@ -65,13 +65,13 @@ FactoryBot.define do
     end
 
     trait :auto_gradable do
-      template_package true
-      test_case_count 1
-      private_test_case_count 1
+      template_package { true }
+      test_case_count { 1 }
+      private_test_case_count { 1 }
     end
 
     trait :multiple_file_submission do
-      multiple_file_submission true
+      multiple_file_submission { true }
     end
   end
 end

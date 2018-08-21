@@ -27,11 +27,11 @@ FactoryBot.define do
     end
 
     trait :any_correct do
-      grading_scheme :any_correct
+      grading_scheme { :any_correct }
     end
 
     trait :multiple_choice do
-      grading_scheme :any_correct
+      grading_scheme { :any_correct }
     end
   end
 end

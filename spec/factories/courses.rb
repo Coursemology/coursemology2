@@ -5,19 +5,19 @@ FactoryBot.define do
       timestamp = Time.zone.now.to_i.to_s
       "Course #{timestamp + n.to_s}"
     end
-    description 'example course'
-    start_at Time.zone.now
-    end_at 7.days.from_now
-    gamified true
-    published false
-    enrollable false
+    description { 'example course' }
+    start_at { Time.zone.now }
+    end_at { 7.days.from_now }
+    gamified { true }
+    published { false }
+    enrollable { false }
 
     trait :published do
-      published true
+      published { true }
     end
 
     trait :enrollable do
-      enrollable true
+      enrollable { true }
     end
 
     trait :with_video_component_enabled do

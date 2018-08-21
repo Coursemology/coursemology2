@@ -4,8 +4,8 @@ FactoryBot.define do
     name { SecureRandom.hex(32) }
 
     transient do
-      binary false
-      content_type 'text/plain'
+      binary { false }
+      content_type { 'text/plain' }
       file { File.join(Rails.root, '/spec/fixtures/files/text.txt') }
     end
 

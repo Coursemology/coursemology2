@@ -3,11 +3,11 @@ FactoryBot.define do
   factory :trackable_job, class: TrackableJob::Job do
     id { SecureRandom.uuid }
     trait :completed do
-      status 'completed'
+      status { 'completed' }
     end
 
     trait :errored do
-      status 'errored'
+      status { 'errored' }
     end
   end
 end

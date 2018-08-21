@@ -8,7 +8,7 @@ FactoryBot.define do
     video { build(:video, course: course) }
     creator { build(:course_student, course: course).user }
     updater { creator }
-    timestamp 5
+    timestamp { 5 }
     posts { [build(:course_discussion_post, creator: creator, updater: updater)] }
 
     trait :with_submission do

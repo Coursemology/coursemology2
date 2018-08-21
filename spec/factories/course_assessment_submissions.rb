@@ -5,11 +5,11 @@ FactoryBot.define do
                                          aliases: [:submission] do
     transient do
       grader { User.stamper }
-      auto_grade true # Used only with any of the submitted or finalised traits.
+      auto_grade { true } # Used only with any of the submitted or finalised traits.
       creator
     end
     assessment { create(:assessment, :with_mcq_question, course: course) }
-    points_awarded nil
+    points_awarded { nil }
 
     trait :attempting do
       after(:build) do |submission|

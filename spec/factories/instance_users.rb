@@ -2,18 +2,18 @@
 FactoryBot.define do
   factory :instance_user do
     instance
-    role :normal
+    role { :normal }
 
     after(:build) do |instance_user|
       instance_user.user ||= build(:user, instance_users: [instance_user])
     end
 
     trait :instructor do
-      role :instructor
+      role { :instructor }
     end
   end
 
   factory :instance_administrator, parent: :instance_user do
-    role :administrator
+    role { :administrator }
   end
 end

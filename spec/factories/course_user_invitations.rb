@@ -4,14 +4,14 @@ FactoryBot.define do
     course
     sequence(:name) { |n| "course user #{n}" }
     email { generate(:email) }
-    phantom false
+    phantom { false }
 
     trait :phantom do
-      phantom true
+      phantom { true }
     end
 
     trait :confirmed do
-      confirmed_at 1.day.ago
+      confirmed_at { 1.day.ago }
       confirmer { build(:user) }
     end
   end

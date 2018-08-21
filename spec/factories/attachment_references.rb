@@ -2,8 +2,8 @@
 FactoryBot.define do
   factory :attachment_reference do
     transient do
-      binary false
-      content_type 'text/plain'
+      binary { false }
+      content_type { 'text/plain' }
       file_path { File.join(Rails.root, '/spec/fixtures/files/text.txt') }
     end
 

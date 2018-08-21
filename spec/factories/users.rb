@@ -6,12 +6,12 @@ FactoryBot.define do
 
   factory :user, aliases: [:creator, :updater, :actor] do
     transient do
-      emails_count 1
+      emails_count { 1 }
     end
 
     name
-    role :normal
-    password 'lolololol'
+    role { :normal }
+    password { 'lolololol' }
 
     after(:build) do |user, evaluator|
       emails = build_list(:user_email, evaluator.emails_count, primary: false, user: user)
@@ -20,7 +20,7 @@ FactoryBot.define do
     end
 
     factory :administrator, parent: :user do
-      role :administrator
+      role { :administrator }
     end
   end
 end

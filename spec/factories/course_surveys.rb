@@ -4,34 +4,34 @@ FactoryBot.define do
   factory :course_survey, class: Course::Survey.name,
                           aliases: [:survey], parent: :course_lesson_plan_item do
     transient do
-      section_count 1
-      section_traits []
+      section_count { 1 }
+      section_traits { [] }
     end
 
     title { generate(:course_survey_name) }
-    anonymous false
-    allow_response_after_end false
-    allow_modify_after_submit false
+    anonymous { false }
+    allow_response_after_end { false }
+    allow_modify_after_submit { false }
 
     trait :published do
-      published true
+      published { true }
     end
 
     trait :unpublished do
-      published false
+      published { false }
     end
 
     trait :anonymous do
-      anonymous true
+      anonymous { true }
     end
 
     trait :allow_response_after_end do
-      allow_response_after_end true
+      allow_response_after_end { true }
       bonus_end_at { end_at || 1.day.ago }
     end
 
     trait :allow_modify_after_submit do
-      allow_modify_after_submit true
+      allow_modify_after_submit { true }
     end
 
     trait :not_started do

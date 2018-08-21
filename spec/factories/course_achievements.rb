@@ -5,7 +5,7 @@ FactoryBot.define do
     sequence(:title) { |n| "Achievement #{n}" }
     sequence(:description) { |n| "Awesome achievement #{n}" }
     sequence(:weight)
-    published true
+    published { true }
 
     trait :with_badge do
       badge { Rack::Test::UploadedFile.new(File.join(Rails.root, 'spec', 'support', 'minion.png')) }

@@ -4,8 +4,8 @@ FactoryBot.define do
     course
     sequence(:name) { |n| "Folder #{n}" }
     sequence(:description) { |n| "Folder Description #{n}" }
-    start_at Time.zone.now
-    end_at 3.days.from_now
+    start_at { Time.zone.now }
+    end_at { 3.days.from_now }
 
     trait :not_started do
       start_at { 1.day.from_now }

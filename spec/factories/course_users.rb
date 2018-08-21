@@ -3,12 +3,12 @@ FactoryBot.define do
   factory :course_user do
     user
     course
-    phantom false
-    role :student
-    name 'default'
+    phantom { false }
+    role { :student }
+    name { 'default' }
 
     trait :phantom do
-      phantom true
+      phantom { true }
     end
 
     factory :course_student, parent: :course_user do
@@ -16,22 +16,22 @@ FactoryBot.define do
     end
 
     factory :course_teaching_assistant, parent: :course_user do
-      role :teaching_assistant
+      role { :teaching_assistant }
       sequence(:name) { |n| "teaching assistant #{n}" }
     end
 
     factory :course_manager, parent: :course_user do
-      role :manager
+      role { :manager }
       sequence(:name) { |n| "manager #{n}" }
     end
 
     factory :course_owner, parent: :course_user do
-      role :owner
+      role { :owner }
       sequence(:name) { |n| "owner #{n}" }
     end
 
     factory :course_observer, parent: :course_user do
-      role :observer
+      role { :observer }
       sequence(:name) { |n| "observer #{n}" }
     end
   end

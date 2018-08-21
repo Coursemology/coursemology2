@@ -2,7 +2,7 @@
 FactoryBot.define do
   factory :course_discussion_topic, class: Course::Discussion::Topic.name do
     course
-    pending_staff_reply false
+    pending_staff_reply { false }
 
     after(:build) do |topic|
       topic.actable = build(:forum_topic, discussion_topic: topic) unless topic.actable
@@ -15,7 +15,7 @@ FactoryBot.define do
     end
 
     trait :pending do
-      pending_staff_reply true
+      pending_staff_reply { true }
     end
   end
 end

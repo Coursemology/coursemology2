@@ -7,7 +7,7 @@ FactoryBot.define do
       creator { nil }
     end
     file factory: :course_assessment_answer_programming_file
-    line 1
+    line { 1 }
 
     after(:create) do |annotation, evaluator|
       if evaluator.creator

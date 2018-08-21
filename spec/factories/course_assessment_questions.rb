@@ -2,12 +2,12 @@
 FactoryBot.define do
   factory :course_assessment_question, class: Course::Assessment::Question do
     sequence(:title) { |n| "The awesome question #{n}" }
-    description 'Look at this awesome question'
-    staff_only_comments 'Deep pedagogical insight.'
-    maximum_grade 2
+    description { 'Look at this awesome question' }
+    staff_only_comments { 'Deep pedagogical insight.' }
+    maximum_grade { 2 }
 
     transient do
-      assessment nil
+      assessment { nil }
     end
 
     after(:build) do |question, evaluator|

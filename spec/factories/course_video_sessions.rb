@@ -15,10 +15,10 @@ FactoryBot.define do
     creator { student.user }
     updater { creator }
 
-    session_start Time.zone.now - 5.minutes
-    session_end Time.zone.now + 5.minutes
+    session_start { Time.zone.now - 5.minutes }
+    session_end { Time.zone.now + 5.minutes }
 
-    last_video_time 0
+    last_video_time { 0 }
 
     # Series of watch intervals with pauses after each interval
     # The intervals should be [[0, 20], [39, 70], [10, 25]]

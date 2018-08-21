@@ -8,15 +8,15 @@ FactoryBot.define do
     tab { course.default_video_tab }
     title { generate(:course_video_title) }
     description { generate(:course_video_description) }
-    url 'https://www.youtube.com/embed/i_YiovUyMds'
-    published false
+    url { 'https://www.youtube.com/embed/i_YiovUyMds' }
+    published { false }
 
     trait :not_started do
       start_at { 1.day.from_now }
     end
 
     trait :published do
-      published true
+      published { true }
     end
   end
 end

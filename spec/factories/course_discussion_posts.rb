@@ -2,15 +2,15 @@
 FactoryBot.define do
   factory :course_discussion_post, class: Course::Discussion::Post.name do
     transient do
-      upvoted_by []
-      downvoted_by []
+      upvoted_by { [] }
+      downvoted_by { [] }
     end
 
     creator
     updater
-    parent nil
+    parent { nil }
     association :topic, factory: :course_discussion_topic
-    text 'This is a test post'
+    text { 'This is a test post' }
 
     after(:create) do |post, evaluator|
       [*evaluator.upvoted_by].each do |user|

@@ -7,7 +7,7 @@ FactoryBot.define do
 
     course_user { association :course_user, course: course }
     achievement { association :achievement, course: course }
-    obtained_at '2015-10-11 23:20:07'
+    obtained_at { '2015-10-11 23:20:07' }
 
     after(:build) do |object|
       if object.course_user.course_id != object.achievement.course_id

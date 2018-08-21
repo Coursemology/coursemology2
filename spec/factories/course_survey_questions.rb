@@ -5,17 +5,17 @@ FactoryBot.define do
                                    aliases: [:survey_question] do
     transient do
       last_weight { section.questions.maximum(:weight) }
-      option_count 3
-      option_traits []
+      option_count { 3 }
+      option_traits { [] }
     end
 
     section
     weight { last_weight ? last_weight + 1 : 0 }
     description { generate(:course_survey_question_name) }
-    question_type :text
+    question_type { :text }
 
     trait :multiple_choice do
-      question_type :multiple_choice
+      question_type { :multiple_choice }
       after(:build) do |question, evaluator|
         evaluator.option_count.downto(1).each do
           option = build(:course_survey_question_option, *evaluator.option_traits,
@@ -26,7 +26,7 @@ FactoryBot.define do
     end
 
     trait :multiple_response do
-      question_type :multiple_response
+      question_type { :multiple_response }
       after(:build) do |question, evaluator|
         evaluator.option_count.downto(1).each do
           option = build(:course_survey_question_option, *evaluator.option_traits,
@@ -34,19 +34,19 @@ FactoryBot.define do
           question.options << option
         end
       end
-      min_options 1
-      max_options 2
+      min_options { 1 }
+      max_options { 2 }
     end
 
     trait :text do
     end
 
     trait :required do
-      required true
+      required { true }
     end
 
     trait :grid_view do
-      grid_view true
+      grid_view { true }
     end
   end
 end

@@ -5,7 +5,7 @@ FactoryBot.define do
       name { generate(:name) }
       email { generate(:email) }
     end
-    provider 'default'
+    provider { 'default' }
     sequence(:uid) { |n| SecureRandom.random_number(2**48) + n }
     info do
       {}.tap do |result|
@@ -16,10 +16,10 @@ FactoryBot.define do
   end
 
   factory :omniauth_facebook, parent: :omniauth_provider do
-    provider 'facebook'
+    provider { 'facebook' }
 
     trait :without_email do
-      email nil
+      email { nil }
     end
   end
 end

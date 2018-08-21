@@ -9,16 +9,16 @@ FactoryBot.define do
     sequence(:title) { |n| "forum topic #{n}" }
     creator
     updater
-    locked false
-    hidden false
-    topic_type :normal
+    locked { false }
+    hidden { false }
+    topic_type { :normal }
 
     trait :locked do
-      locked true
+      locked { true }
     end
 
     trait :hidden do
-      hidden true
+      hidden { true }
     end
 
     after(:build) do |forum_topic, evaluator|
