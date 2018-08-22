@@ -2,11 +2,11 @@
 FactoryBot.define do
   factory :course_assessment_skill_branch, class: Course::Assessment::SkillBranch do
     course
-    title 'Skill Branch'
-    description 'Branch description'
+    title { 'Skill Branch' }
+    description { 'Branch description' }
 
     transient do
-      skill_count 1
+      skill_count { 1 }
     end
 
     trait :with_skill do

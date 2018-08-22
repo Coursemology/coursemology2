@@ -5,11 +5,11 @@ FactoryBot.define do
     course
 
     trait :feed do
-      notification_type :feed
+      notification_type { :feed }
     end
 
     trait :email do
-      notification_type :email
+      notification_type { :email }
     end
   end
 end

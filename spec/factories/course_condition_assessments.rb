@@ -5,7 +5,7 @@ FactoryBot.define do
     course
     assessment
     association :conditional, factory: :assessment
-    minimum_grade_percentage nil
+    minimum_grade_percentage { nil }
 
     trait :achievement_conditional do
       association :conditional, factory: :achievement

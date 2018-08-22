@@ -8,11 +8,11 @@ FactoryBot.define do
     group { build(:course_group, course: course) }
     course_user { build(:course_user, course: course) }
 
-    role :normal
+    role { :normal }
 
     factory :course_group_student
     factory :course_group_manager do
-      role :manager
+      role { :manager }
     end
   end
 end

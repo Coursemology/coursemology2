@@ -8,7 +8,7 @@ FactoryBot.define do
     bonus_end_at { 1.day.from_now }
     end_at { nil }
     sequence(:title) { |n| "Example Lesson Plan Item #{n}" }
-    published false
+    published { false }
 
     trait :with_bonus_end_time do
       bonus_end_at { 2.days.from_now }

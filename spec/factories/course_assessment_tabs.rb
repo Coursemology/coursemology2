@@ -3,14 +3,14 @@ FactoryBot.define do
   sequence(:course_assessment_tab_weight) { |n| n }
   factory :course_assessment_tab, class: Course::Assessment::Tab do
     transient do
-      course nil
+      course { nil }
     end
     category do
       options = {}
       options[:course] = course if course
       build(:course_assessment_category, options)
     end
-    title 'Tab'
+    title { 'Tab' }
     weight { generate(:course_assessment_tab_weight) }
   end
 end

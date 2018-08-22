@@ -3,15 +3,15 @@ FactoryBot.define do
   factory :course_assessment_answer_programming_auto_grading_test_result,
           class: Course::Assessment::Answer::ProgrammingAutoGradingTestResult do
     auto_grading { build(:course_assessment_answer_programming_auto_grading) }
-    passed true
+    passed { true }
 
     trait :failed do
-      passed false
+      passed { false }
       messages { { 'failure': 'simulated failure message' } }
     end
 
     trait :errored do
-      passed false
+      passed { false }
       messages { { 'error': 'simulated error message' } }
     end
 
@@ -20,7 +20,7 @@ FactoryBot.define do
     end
 
     trait :failed_with_output do
-      passed false
+      passed { false }
       messages do
         {
           'failure': 'simulated failure message',

@@ -4,9 +4,9 @@ FactoryBot.define do
           class: Course::Assessment::Answer::Programming,
           parent: :course_assessment_answer do
     transient do
-      question_traits nil
-      file_count nil
-      file_contents nil
+      question_traits { nil }
+      file_count { nil }
+      file_contents { nil }
       creator { create(:user) }
     end
 

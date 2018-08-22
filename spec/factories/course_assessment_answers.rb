@@ -6,7 +6,7 @@ FactoryBot.define do
       assessment { build(:assessment, course: course) }
       # The creator in userstamps must be persisted.
       creator { create(:user) }
-      submission_traits []
+      submission_traits { [] }
     end
 
     current_answer { false }
@@ -22,7 +22,7 @@ FactoryBot.define do
     question { build(:course_assessment_question, assessment: assessment) }
 
     trait :submitted do
-      submission_traits :submitted
+      submission_traits { :submitted }
       after(:build) do |answer, evaluator|
         answer.finalise!
         # Revert submitted at if given.
@@ -31,7 +31,7 @@ FactoryBot.define do
     end
 
     trait :evaluated do
-      submission_traits :submitted
+      submission_traits { :submitted }
       submitted
       after(:build) do |answer, _evaluator|
         answer.evaluate!
@@ -39,9 +39,9 @@ FactoryBot.define do
     end
 
     trait :graded do
-      grade 0
+      grade { 0 }
       submitted
-      submission_traits :graded
+      submission_traits { :graded }
       after(:build) do |answer| # rubocop:disable Style/SymbolProc
         answer.publish!
       end

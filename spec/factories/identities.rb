@@ -7,6 +7,6 @@ FactoryBot.define do
   factory :identity, class: User::Identity.name do
     user
     uid
-    provider 'facebook'
+    provider { 'facebook' }
   end
 end

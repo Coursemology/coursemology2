@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :course_survey_section, class: Course::Survey::Section.name, aliases: [:section] do
     transient do
       last_weight { survey.sections.maximum(:weight) }
-      question_count 1
+      question_count { 1 }
     end
 
     survey

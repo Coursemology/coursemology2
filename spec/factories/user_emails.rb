@@ -6,7 +6,7 @@ FactoryBot.define do
   end
 
   factory :user_email, class: User::Email.name do
-    primary true
+    primary { true }
     email
     confirmed
 
@@ -19,7 +19,7 @@ FactoryBot.define do
     end
 
     trait :unconfirmed do
-      confirmed_at nil
+      confirmed_at { nil }
     end
 
     trait :without_user do

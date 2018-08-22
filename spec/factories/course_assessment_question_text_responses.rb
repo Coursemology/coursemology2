@@ -3,9 +3,9 @@ FactoryBot.define do
   factory :course_assessment_question_text_response,
           class: Course::Assessment::Question::TextResponse,
           parent: :course_assessment_question do
-    allow_attachment false
-    hide_text false
-    is_comprehension false
+    allow_attachment { false }
+    hide_text { false }
+    is_comprehension { false }
 
     solutions do
       [
@@ -27,12 +27,12 @@ FactoryBot.define do
     end
 
     trait :allow_attachment do
-      allow_attachment true
+      allow_attachment { true }
     end
 
     trait :file_upload_question do
-      allow_attachment true
-      hide_text true
+      allow_attachment { true }
+      hide_text { true }
     end
 
     trait :multiline_windows do
@@ -52,7 +52,7 @@ FactoryBot.define do
     end
 
     trait :multiple_comprehension_groups do
-      is_comprehension true
+      is_comprehension { true }
       groups do
         [
           build(:course_assessment_question_text_response_comprehension_group, question: nil),
@@ -62,7 +62,7 @@ FactoryBot.define do
     end
 
     trait :comprehension_question do
-      is_comprehension true
+      is_comprehension { true }
       groups do
         [
           build(:course_assessment_question_text_response_comprehension_group, question: nil)

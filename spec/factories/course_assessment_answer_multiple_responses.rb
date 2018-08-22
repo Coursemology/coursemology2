@@ -4,7 +4,7 @@ FactoryBot.define do
           class: Course::Assessment::Answer::MultipleResponse,
           parent: :course_assessment_answer do
     transient do
-      question_traits nil
+      question_traits { nil }
     end
 
     question do

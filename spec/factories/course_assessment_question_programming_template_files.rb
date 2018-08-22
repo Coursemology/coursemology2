@@ -4,6 +4,6 @@ FactoryBot.define do
           class: Course::Assessment::Question::ProgrammingTemplateFile do
     question { build(:course_assessment_question_programming) }
     sequence(:filename) { |n| "file_#{n}" }
-    content ''
+    content { '' }
   end
 end

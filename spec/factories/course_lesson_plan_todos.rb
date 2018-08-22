@@ -3,7 +3,7 @@ FactoryBot.define do
   factory :course_lesson_plan_todo, class: Course::LessonPlan::Todo.name, aliases: [:todo] do
     transient do
       course { create(:course) }
-      published false
+      published { false }
     end
     item { create(:course_lesson_plan_item, course: course, base_exp: 1000, published: published) }
     add_attribute(:ignore) { false }
@@ -14,11 +14,11 @@ FactoryBot.define do
     end
 
     trait :in_progress do
-      workflow_state :started
+      workflow_state { :started }
     end
 
     trait :completed do
-      workflow_state :completed
+      workflow_state { :completed }
     end
 
     trait :not_opened do

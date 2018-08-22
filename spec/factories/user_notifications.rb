@@ -5,7 +5,7 @@ FactoryBot.define do
     user
 
     trait :popup do
-      notification_type :popup
+      notification_type { :popup }
     end
 
     trait :popup_with_achievement_gained do
@@ -23,7 +23,7 @@ FactoryBot.define do
     end
 
     trait :email do
-      notification_type :email
+      notification_type { :email }
     end
   end
 end

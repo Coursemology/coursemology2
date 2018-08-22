@@ -16,10 +16,10 @@ FactoryBot.define do
                             submission: submission)
     end
 
-    event_type 'pause'
-    sequence_num 1
-    video_time 20
-    event_time Time.zone.now
-    playback_rate 1.0
+    event_type { 'pause' }
+    sequence_num { 1 }
+    video_time { 20 }
+    event_time { Time.zone.now }
+    playback_rate { 1.0 }
   end
 end

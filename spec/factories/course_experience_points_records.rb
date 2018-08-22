@@ -13,21 +13,21 @@ FactoryBot.define do
         create(:course_user, course: course, user: creator)
     end
     points_awarded { rand(1..20) * 100 }
-    draft_points_awarded nil
-    awarded_at nil
+    draft_points_awarded { nil }
+    awarded_at { nil }
     # Set factory behavior to be consistent with model
     awarder { manually_awarded? ? creator : nil }
     reason { 'Reason for manually-awarded experience points' if manually_awarded? }
 
     trait :inactive do
-      points_awarded nil
+      points_awarded { nil }
     end
 
     trait :draft do
       inactive
       draft_points_awarded { rand(1..20) * 100 }
-      awarded_at nil
-      awarder nil
+      awarded_at { nil }
+      awarder { nil }
     end
   end
 end
