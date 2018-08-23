@@ -8,54 +8,20 @@ const production = env === 'production';
 const development = env === 'development';
 const travis = process.env.TRAVIS === 'true';
 
-// must match config.webpack.dev_server.port
-const devServerPort = 8080;
-
 const config = {
+  mode: env,
+
   entry: {
-    coursemology: ['babel-polyfill', './app/index', './app/lib/moment-timezone'],
-    lib: [
+    coursemology: [
       'babel-polyfill',
-      'axios',
-      'brace',
-      'chart.js',
-      'immutable',
       'jquery',
-      'mirror-creator',
-      'moment',
-      'moment-timezone',
-      'react',
-      'react-ace',
-      'react-chartjs-2',
-      'react-dnd',
-      'react-dnd-html5-backend',
-      'react-dom',
-      'react-dropzone',
-      'react-intl',
-      'react-redux',
-      'react-router',
-      'react-scroll',
-      'react-summernote',
-      'redux',
-      'redux-form',
-      'redux-immutable',
-      'redux-persist',
-      'redux-promise',
-      'redux-thunk',
-      'reselect',
-      'webfontloader',
-    ],
-    // Vendor contains the libraries that are not in a single bundle (size could change depends on
-    // application code)
-    vendor: [
-      'jquery-ui',
-      'material-ui',
+      './app/index',
+      './app/lib/moment-timezone',
     ],
   },
 
   output: {
     filename: production ? '[name]-[chunkhash].js' : '[name].js',
-    chunkFilename: production ? '[name]-[chunkhash].js' : '[name].js',
     path: path.join(__dirname, '..', 'public', 'webpack'),
     publicPath: '/webpack/',
   },
@@ -69,22 +35,18 @@ const config = {
     },
   },
 
-  watchOptions: {
-    ignored: [/__test__/],
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+    },
   },
 
   plugins: [
     new webpack.IgnorePlugin(/__test__/),
     new webpack.HashedModuleIdsPlugin(),
-    new webpack.optimize.CommonsChunkPlugin({
-      names: ['vendor', 'lib', 'manifest'], // `vendor` depends on `lib` depends on `manifest`
-    }),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(env),
-    }),
-    // Do not require all locles in moment
+    new ManifestPlugin({ publicPath: '/webpack/', writeToFileEmit: true }),
+    // Do not require all locales in moment
     new webpack.ContextReplacementPlugin(/moment\/locale$/, /^\.\/(en-.*|zh-.*)$/),
-    new ManifestPlugin({ fileName: 'manifest.json', publicPath: '/webpack/', writeToFileEmit: true }),
   ],
 
   module: {
@@ -150,17 +112,13 @@ const config = {
           options: 'moment',
         }],
       },
-      {
-        test: /fabric\.js$/,
-        use: ['script-loader'],
-      },
     ],
   },
 };
 
 if (development) {
+  const devServerPort = 8080;
   config.devServer = {
-    compress: true,
     port: devServerPort,
     headers: { 'Access-Control-Allow-Origin': '*' },
   };
@@ -172,7 +130,9 @@ if (development) {
 
 // Only enable HardSourceWebpackPlugin in Travis
 if (travis) {
-  config.plugins.push(new HardSourceWebpackPlugin({ cacheDirectory: path.join(__dirname, 'hard-source-cache/[confighash]') }));
+  config.plugins.push(new HardSourceWebpackPlugin({
+    cacheDirectory: path.join(__dirname, 'hard-source-cache/[confighash]'),
+  }));
 }
 
 module.exports = config;
