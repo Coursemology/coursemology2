@@ -1236,5 +1236,9 @@
   .note-editor .note-editable {
     padding: 20px 23px;
   }
+
+  .note-toolbar-wrapper {
+    height: auto !important;
+  }
 }
 // scss-lint:enable ImportantRule MergeableSelector QualifyingElement ColorVariable
