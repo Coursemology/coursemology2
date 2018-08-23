@@ -6,8 +6,8 @@ import { TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import { grey300 } from 'material-ui/styles/colors';
-import styles from './../containers/OnlineEditor/OnlineEditorView.scss';
-import translations from './../containers/OnlineEditor/OnlineEditorView.intl';
+import styles from './OnlineEditorView.scss';
+import translations from './OnlineEditorView.intl';
 
 class TestCase extends React.Component {
   static propTypes = {

@@ -15,9 +15,9 @@ import { red500 } from 'material-ui/styles/colors';
 import MaterialSummernote from 'lib/components/MaterialSummernote';
 import ChipInput from 'material-ui-chip-input';
 
-import BuildLog from './../../components/BuildLog';
-import OnlineEditor, { validation as editorValidation } from './../OnlineEditor/OnlineEditor';
-import UploadedPackageView from './../../components/UploadedPackageView';
+import BuildLog from '../../components/BuildLog';
+import OnlineEditor, { validation as editorValidation } from '../../components/OnlineEditor';
+import UploadedPackageView from '../../components/UploadedPackageView';
 import styles from './ProgrammingQuestionForm.scss';
 import translations from './ProgrammingQuestionForm.intl';
 

@@ -1,8 +1,8 @@
 import translations from './OnlineEditorView.intl';
-import ExistingPackageFile from './../../components/ExistingPackageFile';
-import NewPackageFile from './../../components/NewPackageFile';
-import TestCase from './../../components/TestCase';
-import EditorCard from './../../components/EditorCard';
+import ExistingPackageFile from './ExistingPackageFile';
+import NewPackageFile from './NewPackageFile';
+import TestCase from './TestCase';
+import EditorCard from './EditorCard';
 
 export function validation(data, pathOfKeysToData, intl) {
   const errors = [];
