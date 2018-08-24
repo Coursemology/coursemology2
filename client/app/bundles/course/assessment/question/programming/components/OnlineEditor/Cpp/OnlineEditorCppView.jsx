@@ -297,9 +297,9 @@ class OnlineEditorCppView extends React.Component {
           <FormattedMessage
             id="course.assessment.question.programming.onlineEditorCppView.testCasesDescription"
             defaultMessage={
-              '{note}: The expression in the {expression} column will be compared with the ' +
-              'expression in the {expected} column using {expect_star} assertions from the ' +
-              '{googletest}. Floating point numbers are formatted with {tostring}.'
+              '{note}: The expression in the {expression} column will be compared with the '
+              + 'expression in the {expected} column using {expect_star} assertions from the '
+              + '{googletest}. Floating point numbers are formatted with {tostring}.'
             }
             values={{
               note: <b>{intl.formatMessage(translations.testCaseDescriptionNote)}</b>,
@@ -322,15 +322,15 @@ class OnlineEditorCppView extends React.Component {
         { errorTextElement }
         {
           this.renderTestCases(intl.formatMessage(translations.publicTestCases),
-          testCases, 'public')
+            testCases, 'public')
         }
         {
           this.renderTestCases(intl.formatMessage(translations.privateTestCases),
-          testCases, 'private')
+            testCases, 'private')
         }
         {
           this.renderTestCases(intl.formatMessage(translations.evaluationTestCases),
-          testCases, 'evaluation')
+            testCases, 'evaluation')
         }
       </React.Fragment>
     );

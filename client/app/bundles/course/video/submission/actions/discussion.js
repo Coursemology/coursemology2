@@ -351,7 +351,7 @@ export function updatePostOnServer(postId) {
     if (text === null) {
       dispatch(updatePost(postId, { editMode: false }));
       return;
-    } else if (text === '') {
+    } if (text === '') {
       dispatch(setNotification('Comment cannot be blank!'));
       return;
     }

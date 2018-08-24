@@ -71,8 +71,8 @@ class ResultsQuestion extends React.Component {
       <Card style={styles.card}>
         <CardText>
           <p dangerouslySetInnerHTML={{ __html: `${index + 1}. ${question.description}` }} />
-          { question.required ?
-            <p style={styles.required}><FormattedMessage {...formTranslations.starRequired} /></p> : null }
+          { question.required
+            ? <p style={styles.required}><FormattedMessage {...formTranslations.starRequired} /></p> : null }
         </CardText>
         {this.renderSpecificResults()}
       </Card>

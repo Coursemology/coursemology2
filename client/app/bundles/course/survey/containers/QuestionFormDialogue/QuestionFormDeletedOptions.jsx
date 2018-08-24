@@ -66,13 +66,15 @@ class QuestionFormDeletedOptions extends React.Component {
             <div style={styles.option} key={option.id}>
               {this.renderWidget()}
               {
-                option.image_url ?
-                  <Thumbnail
-                    src={option.image_url}
-                    style={styles.image}
-                    containerStyle={styles.imageContainer}
-                  /> :
-                  <div style={styles.imageSpacer} />
+                option.image_url
+                  ? (
+                    <Thumbnail
+                      src={option.image_url}
+                      style={styles.image}
+                      containerStyle={styles.imageContainer}
+                    />
+                  )
+                  : <div style={styles.imageSpacer} />
               }
               <span style={styles.optionBody}>{option.option}</span>
               <IconButton onClick={handleRestore} {...{ disabled }}>

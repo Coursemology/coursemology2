@@ -22,13 +22,13 @@ class SurveyListing extends React.Component {
       <Checkbox
         checked
         key={survey.id}
-        label={
+        label={(
           <span>
             <TypeBadge itemType={duplicableItemTypes.SURVEY} />
             <UnpublishedIcon tooltipId="itemUnpublished" />
             { survey.title }
           </span>
-        }
+)}
       />
     );
   }

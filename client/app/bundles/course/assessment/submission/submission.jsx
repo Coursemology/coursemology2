@@ -18,8 +18,8 @@ $(document).ready(() => {
         <Router history={history}>
           <SubmissionsLayout />
         </Router>
-      </ProviderWrapper>
-      , mountNode
+      </ProviderWrapper>,
+      mountNode
     );
   }
 });

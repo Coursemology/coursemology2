@@ -54,8 +54,8 @@ const sortResultsQuestionElements = (question) => {
  * @return {Object} The updated section
  */
 export const sortResultsSectionElements = anonymous => section => (
-  anonymous ? sortAttributeArray(section, 'questions') :
-    sortAttributeArray(section, 'questions', sortResultsQuestionElements)
+  anonymous ? sortAttributeArray(section, 'questions')
+    : sortAttributeArray(section, 'questions', sortResultsQuestionElements)
 );
 
 export const sortSurveysByDate = surveys => surveys.sort((a, b) => {

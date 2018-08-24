@@ -36,13 +36,13 @@ class AssessmentsListing extends React.Component {
         checked
         indentLevel={2}
         key={assessment.id}
-        label={
+        label={(
           <span>
             <TypeBadge itemType={ASSESSMENT} />
             <UnpublishedIcon tooltipId="itemUnpublished" />
             {assessment.title}
           </span>
-        }
+)}
       />
     );
   }
@@ -62,7 +62,12 @@ class AssessmentsListing extends React.Component {
       <IndentedCheckbox
         checked
         indentLevel={1}
-        label={<span><TypeBadge itemType={TAB} />{tab.title}</span>}
+        label={(
+          <span>
+            <TypeBadge itemType={TAB} />
+            {tab.title}
+          </span>
+)}
       />
     );
   }
@@ -92,7 +97,12 @@ class AssessmentsListing extends React.Component {
     return (
       <IndentedCheckbox
         checked
-        label={<span><TypeBadge itemType={CATEGORY} />{category.title}</span>}
+        label={(
+          <span>
+            <TypeBadge itemType={CATEGORY} />
+            {category.title}
+          </span>
+)}
       />
     );
   }
@@ -100,11 +110,11 @@ class AssessmentsListing extends React.Component {
   static renderCategoryCard(category, orphanTabs, orphanAssessments) {
     const hasOrphanAssessments = orphanAssessments && orphanAssessments.length > 0;
     const hasOrphanTabs = orphanTabs && orphanTabs.length > 0;
-    const categoryRow = category ?
-      AssessmentsListing.renderCategoryRow(category) :
-      AssessmentsListing.renderDefaultCategoryRow();
-    const tabsTrees = tabs => tabs &&
-      tabs.map(tab => AssessmentsListing.renderTabTree(tab, tab.assessments));
+    const categoryRow = category
+      ? AssessmentsListing.renderCategoryRow(category)
+      : AssessmentsListing.renderDefaultCategoryRow();
+    const tabsTrees = tabs => tabs
+      && tabs.map(tab => AssessmentsListing.renderTabTree(tab, tab.assessments));
 
     return (
       <Card key={category ? category.id : 'default'}>

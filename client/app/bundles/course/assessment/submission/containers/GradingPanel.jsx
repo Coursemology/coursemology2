@@ -192,11 +192,13 @@ class VisibleGradingPanel extends Component {
         <TableHeaderColumn style={styles.headerColumn} colSpan={2}>
           {question.displayTitle}
         </TableHeaderColumn>
-        {showGrader ?
-          <TableHeaderColumn style={styles.headerColumn}>
-            {graderInfo}
-          </TableHeaderColumn>
-        : null}
+        {showGrader
+          ? (
+            <TableHeaderColumn style={styles.headerColumn}>
+              {graderInfo}
+            </TableHeaderColumn>
+          )
+          : null}
         <TableRowColumn>{`${questionGrade} / ${question.maximumGrade}`}</TableRowColumn>
       </TableRow>
     );
@@ -225,11 +227,13 @@ class VisibleGradingPanel extends Component {
               <TableHeaderColumn style={styles.headerColumn} colSpan={2}>
                 {intl.formatMessage(translations.question)}
               </TableHeaderColumn>
-              { showGrader ?
-                <TableHeaderColumn style={styles.headerColumn}>
-                  {intl.formatMessage(translations.grader)}
-                </TableHeaderColumn>
-              : null }
+              { showGrader
+                ? (
+                  <TableHeaderColumn style={styles.headerColumn}>
+                    {intl.formatMessage(translations.grader)}
+                  </TableHeaderColumn>
+                )
+                : null }
               <TableHeaderColumn style={styles.headerColumn}>
                 {intl.formatMessage(translations.totalGrade)}
               </TableHeaderColumn>

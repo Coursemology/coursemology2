@@ -126,12 +126,12 @@ export class VisibleTestCaseView extends Component {
       <Card id={outputStreamType}>
         <CardHeader
           showExpandableButton
-          title={
+          title={(
             <React.Fragment>
               <FormattedMessage {...translations[outputStreamType]} />
               {showStaffOnlyWarning && VisibleTestCaseView.renderStaffOnlyOutputStreamWarning()}
             </React.Fragment>
-          }
+)}
         />
         <CardText expandable><pre>{output}</pre></CardText>
       </Card>
@@ -219,8 +219,8 @@ export class VisibleTestCaseView extends Component {
         { canReadTests && tableRowColumnFor(testCase.identifier) }
         {tableRowColumnFor(testCase.expression)}
         {tableRowColumnFor(<ExpandableText style={outputStyle} text={testCase.expected || ''} /> || '')}
-        { (canReadTests || showPublicTestCasesOutput) &&
-          tableRowColumnFor(<ExpandableText style={outputStyle} text={testCase.output || ''} /> || '') }
+        { (canReadTests || showPublicTestCasesOutput)
+          && tableRowColumnFor(<ExpandableText style={outputStyle} text={testCase.output || ''} /> || '') }
         {tableRowColumnFor(testCaseIcon)}
       </TableRow>
     );
@@ -245,10 +245,12 @@ export class VisibleTestCaseView extends Component {
 
     return (
       <div style={styles.testCasesContainer}>
-        { !attempting && isAutograding &&
+        { !attempting && isAutograding
+          && (
           <Paper style={{ padding: 10, backgroundColor: yellow100, marginBottom: 20 }}>
             <FormattedMessage {...translations.autogradeProgress} />
           </Paper>
+          )
         }
         <h3><FormattedMessage {...translations.testCases} /></h3>
         {this.renderTestCases(

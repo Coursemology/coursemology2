@@ -66,11 +66,13 @@ class ProgressPanel extends Component {
             <TableRowColumn>{intl.formatMessage(translations[displayedTime])}</TableRowColumn>
             <TableRowColumn>{formatDateTime(submission[displayedTime])}</TableRowColumn>
           </TableRow>
-          { workflowState === workflowStates.Graded || workflowState === workflowStates.Published ?
-            <TableRow>
-              <TableRowColumn>{intl.formatMessage(translations.totalGrade)}</TableRowColumn>
-              <TableRowColumn>{`${submission.grade} / ${submission.maximumGrade}`}</TableRowColumn>
-            </TableRow> : null }
+          { workflowState === workflowStates.Graded || workflowState === workflowStates.Published
+            ? (
+              <TableRow>
+                <TableRowColumn>{intl.formatMessage(translations.totalGrade)}</TableRowColumn>
+                <TableRowColumn>{`${submission.grade} / ${submission.maximumGrade}`}</TableRowColumn>
+              </TableRow>
+            ) : null }
         </TableBody>
       </Table>
     );

@@ -39,8 +39,7 @@ class MaterialUploader extends React.Component {
       .then(() => {
         // Remove material from the list
         const materials = this.state.materials.filter(m => m.id !== id);
-        const successMessage =
-          <FormattedMessage {...{ ...translations.deleteSuccess, values: { name } }} />;
+        const successMessage = <FormattedMessage {...{ ...translations.deleteSuccess, values: { name } }} />;
         this.setState({ materials, notification: { message: successMessage } });
       })
       .catch(() => {
@@ -51,8 +50,7 @@ class MaterialUploader extends React.Component {
           }
           return m;
         });
-        const failureMessage =
-          <FormattedMessage {...{ ...translations.deleteFail, values: { name } }} />;
+        const failureMessage = <FormattedMessage {...{ ...translations.deleteFail, values: { name } }} />;
         this.setState({ materials, notification: { message: failureMessage } });
       });
   }
@@ -85,8 +83,7 @@ class MaterialUploader extends React.Component {
   // Remove materials from uploading list and add new materials from server reponse to existing
   // materials list.
   updateMaterials(materials, response) {
-    const uploadingMaterials =
-      this.state.uploadingMaterials.filter(m => materials.indexOf(m) === -1);
+    const uploadingMaterials = this.state.uploadingMaterials.filter(m => materials.indexOf(m) === -1);
     const newState = {
       uploadingMaterials,
     };

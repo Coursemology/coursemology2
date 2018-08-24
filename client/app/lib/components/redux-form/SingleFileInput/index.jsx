@@ -87,10 +87,12 @@ class SingleFileInput extends React.Component {
 
   renderErrorMessage = () => {
     const { meta: { touched, error } } = this.props;
-    return (touched && error ?
-      <div className="error-message" style={styles.fileLabelError}>
-        <FormattedMessage {...error} />
-      </div>
+    return (touched && error
+      ? (
+        <div className="error-message" style={styles.fileLabelError}>
+          <FormattedMessage {...error} />
+        </div>
+      )
       : null);
   }
 

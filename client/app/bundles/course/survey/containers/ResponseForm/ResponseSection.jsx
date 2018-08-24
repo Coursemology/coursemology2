@@ -48,11 +48,13 @@ class ResponseSection extends React.Component {
                 <CardText>
                   <p dangerouslySetInnerHTML={{ __html: `${index + 1}. ${question.description}` }} />
                   {
-                    question.answer && question.answer.present ?
-                      <ResponseAnswer {...{ member, question, disabled }} /> :
-                      <div style={styles.errorText}>
-                        <FormattedMessage {...translations.noAnswer} />
-                      </div>
+                    question.answer && question.answer.present
+                      ? <ResponseAnswer {...{ member, question, disabled }} />
+                      : (
+                        <div style={styles.errorText}>
+                          <FormattedMessage {...translations.noAnswer} />
+                        </div>
+                      )
                   }
                 </CardText>
               </Card>

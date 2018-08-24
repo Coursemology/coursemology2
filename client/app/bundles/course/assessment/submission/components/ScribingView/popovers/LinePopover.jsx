@@ -70,7 +70,10 @@ const LinePopover = (props) => {
       animation={PopoverAnimationVertical}
     >
       <Menu style={styles.menu}>
-        <h4>{intl.formatMessage(translations.line)} </h4>
+        <h4>
+          {intl.formatMessage(translations.line)}
+          {' '}
+        </h4>
         <LineStyleField
           lineToolType={lineToolType}
           selectedLineStyle={selectedLineStyle}

@@ -56,13 +56,14 @@ class RemindButton extends React.Component {
         />
         <ConfirmationDialog
           open={this.state.open}
-          message={
+          message={(
             <React.Fragment>
               <FormattedMessage {...translations.explanation} />
-              <br /><br />
+              <br />
+              <br />
               <FormattedMessage {...translations.confirmation} />
             </React.Fragment>
-          }
+)}
           onCancel={() => this.setState({ open: false })}
           onConfirm={this.handleConfirm}
         />

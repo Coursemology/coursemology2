@@ -14,7 +14,7 @@ $(document).ready(() => {
   render(
     <ProviderWrapper>
       <HeatMap {...initialState} />
-    </ProviderWrapper>
-    , mountNode
+    </ProviderWrapper>,
+    mountNode
   );
 });

@@ -52,41 +52,47 @@ const OnlineEditor = (props) => {
   const mode = data.get('mode');
   switch (mode) {
     case 'python':
-      return (<OnlineEditorPythonView
-        {...{
-          actions,
-          data: data.get('python'),
-          dataFiles: data.get('data_files'),
-          isLoading,
-          autograded,
-          autogradedAssessment,
-        }}
-      />);
+      return (
+        <OnlineEditorPythonView
+          {...{
+            actions,
+            data: data.get('python'),
+            dataFiles: data.get('data_files'),
+            isLoading,
+            autograded,
+            autogradedAssessment,
+          }}
+        />
+      );
 
     case 'c_cpp':
-      return (<OnlineEditorCppView
-        {...{
-          actions,
-          data: data.get('c_cpp'),
-          dataFiles: data.get('data_files'),
-          isLoading,
-          autograded,
-          autogradedAssessment,
-        }}
-      />);
+      return (
+        <OnlineEditorCppView
+          {...{
+            actions,
+            data: data.get('c_cpp'),
+            dataFiles: data.get('data_files'),
+            isLoading,
+            autograded,
+            autogradedAssessment,
+          }}
+        />
+      );
 
     case 'java':
-      return (<OnlineEditorJavaView
-        {...{
-          actions,
-          data: data.get('java'),
-          testData: data,
-          isLoading,
-          autograded,
-          autogradedAssessment,
-          hasSubmissions,
-        }}
-      />);
+      return (
+        <OnlineEditorJavaView
+          {...{
+            actions,
+            data: data.get('java'),
+            testData: data,
+            isLoading,
+            autograded,
+            autogradedAssessment,
+            hasSubmissions,
+          }}
+        />
+      );
 
     case null:
       return (

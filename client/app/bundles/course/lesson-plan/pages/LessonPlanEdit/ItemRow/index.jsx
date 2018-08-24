@@ -63,20 +63,20 @@ class ItemRow extends React.Component {
         { columnsVisible[fields.ITEM_TYPE] ? <td>{ type }</td> : null }
         <td>{ itemPath ? <a href={itemPath}>{ title }</a> : title }</td>
         {
-          columnsVisible[fields.START_AT] ?
-            <DateCell fieldName="start_at" fieldValue={startAt} {...dateProps} /> : null
+          columnsVisible[fields.START_AT]
+            ? <DateCell fieldName="start_at" fieldValue={startAt} {...dateProps} /> : null
         }
         {
-          columnsVisible[fields.BONUS_END_AT] ?
-            <DateCell fieldName="bonus_end_at" fieldValue={bonusEndAt} {...dateProps} /> : null
+          columnsVisible[fields.BONUS_END_AT]
+            ? <DateCell fieldName="bonus_end_at" fieldValue={bonusEndAt} {...dateProps} /> : null
         }
         {
-          columnsVisible[fields.END_AT] ?
-            <DateCell fieldName="end_at" fieldValue={endAt} {...dateProps} /> : null
+          columnsVisible[fields.END_AT]
+            ? <DateCell fieldName="end_at" fieldValue={endAt} {...dateProps} /> : null
         }
         {
-          columnsVisible[fields.PUBLISHED] ?
-            <PublishedCell published={published} onToggle={this.updatePublished} /> : null
+          columnsVisible[fields.PUBLISHED]
+            ? <PublishedCell published={published} onToggle={this.updatePublished} /> : null
         }
       </tr>
     );

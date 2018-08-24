@@ -296,10 +296,10 @@ class OnlineEditorPythonView extends React.Component {
           <FormattedMessage
             id="course.assessment.question.programming.OnlineEditorViewitorPythonView.testCasesDescription"
             defaultMessage={
-              '{note}: The expression in the {expression} column will be compared with the ' +
-              'expression in the {expected} column using the equality operator. The return value ' +
-              'of {print} is {none} and the printed output should not be confused with the ' +
-              'return value.'
+              '{note}: The expression in the {expression} column will be compared with the '
+              + 'expression in the {expected} column using the equality operator. The return value '
+              + 'of {print} is {none} and the printed output should not be confused with the '
+              + 'return value.'
             }
             values={{
               note: <b>{intl.formatMessage(translations.testCaseDescriptionNote)}</b>,
@@ -313,15 +313,15 @@ class OnlineEditorPythonView extends React.Component {
         { errorTextElement }
         {
           this.renderTestCases(intl.formatMessage(translations.publicTestCases),
-          testCases, 'public')
+            testCases, 'public')
         }
         {
           this.renderTestCases(intl.formatMessage(translations.privateTestCases),
-          testCases, 'private')
+            testCases, 'private')
         }
         {
           this.renderTestCases(intl.formatMessage(translations.evaluationTestCases),
-          testCases, 'evaluation')
+            testCases, 'evaluation')
         }
       </React.Fragment>
     );

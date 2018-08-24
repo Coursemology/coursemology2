@@ -109,12 +109,14 @@ class QuestionFormOption extends React.Component {
     return (
       <div style={styles.optionBody}>
         {
-          fileOrSrc.file || fileOrSrc.src ?
-            <Thumbnail
-              {...fileOrSrc}
-              style={styles.image}
-              containerStyle={styles.imageContainer}
-            /> : null
+          fileOrSrc.file || fileOrSrc.src
+            ? (
+              <Thumbnail
+                {...fileOrSrc}
+                style={styles.image}
+                containerStyle={styles.imageContainer}
+              />
+            ) : null
         }
         <small>{imageFileName}</small>
         <Field

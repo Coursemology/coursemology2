@@ -27,9 +27,8 @@ export default function (state = initialState, action) {
       return {
         ...state,
         questions: {
-          ...action.payload.answers.reduce((obj, answer) =>
-            ({ ...obj, [answer.questionId]: answer.grading })
-            , {}),
+          ...action.payload.answers.reduce((obj, answer) => ({ ...obj, [answer.questionId]: answer.grading }),
+            {}),
         },
         exp: action.payload.submission.pointsAwarded,
         basePoints: action.payload.submission.basePoints,

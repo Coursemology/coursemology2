@@ -307,25 +307,26 @@ class OnlineEditorJavaView extends React.Component {
       <React.Fragment>
         <div style={{ marginBottom: '1em' }}>
           {
-            submitAsFile ?
-              <div style={{ marginBottom: '20px' }}>
-                <h3>{this.props.intl.formatMessage(javaTranslations.solutionFilesHeader)}</h3>
-                {
+            submitAsFile
+              ? (
+                <div style={{ marginBottom: '20px' }}>
+                  <h3>{this.props.intl.formatMessage(javaTranslations.solutionFilesHeader)}</h3>
+                  {
                   this.renderExistingPackageFiles(
                     'solution_files',
                     this.props.intl.formatMessage(javaTranslations.currentSolutionFilesHeader)
-                    )
+                  )
                 }
-                {
+                  {
                   this.renderNewPackageFiles(
                     'solution_files',
                     this.props.intl.formatMessage(javaTranslations.newSolutionFilesHeader),
                     intl.formatMessage(javaTranslations.addSolutionFileButton)
                   )
                 }
-              </div>
-              :
-              this.renderEditorCard(
+                </div>
+              )
+              : this.renderEditorCard(
                 intl.formatMessage(translations.solutionTitle),
                 intl.formatMessage(translations.solutionSubtitle),
                 'solution'
@@ -365,9 +366,9 @@ class OnlineEditorJavaView extends React.Component {
           <FormattedMessage
             id="course.assessment.question.programming.onlineEditorJavaView.testCasesDescription"
             defaultMessage={
-              '{note}: The expression in the {expression} column will be compared with the ' +
-              'expression in the {expected} column using the {expectEquals} method as described ' +
-              'in the append.'
+              '{note}: The expression in the {expression} column will be compared with the '
+              + 'expression in the {expected} column using the {expectEquals} method as described '
+              + 'in the append.'
             }
             values={{
               note: <b>{intl.formatMessage(translations.testCaseDescriptionNote)}</b>,
@@ -381,11 +382,11 @@ class OnlineEditorJavaView extends React.Component {
           <FormattedMessage
             id="course.assessment.question.programming.onlineEditorJavaView.testCasesCodeDescription"
             defaultMessage={
-              '{editor}: Clicking {code} will toggle a code editor for you to write code into each ' +
-              'test case. This allows you to initialize variables and call functions for each test. ' +
-              'For example: {codeExample}' +
-              '{codeExampleExpression} and {codeExampleExpected} can then be input into {expression} and ' +
-              '{expected} respectively.'
+              '{editor}: Clicking {code} will toggle a code editor for you to write code into each '
+              + 'test case. This allows you to initialize variables and call functions for each test. '
+              + 'For example: {codeExample}'
+              + '{codeExampleExpression} and {codeExampleExpected} can then be input into {expression} and '
+              + '{expected} respectively.'
             }
             values={{
               expression: <b>{intl.formatMessage(translations.expressionHeader)}</b>,
@@ -399,7 +400,13 @@ class OnlineEditorJavaView extends React.Component {
                     {'int array [] = {0,0,0}; // Initialize variables'}
                   </p>
                   <p style={{ marginBottom: 0 }}>addOneToArray(array); // Make function calls</p>
-                  <p style={{ marginBottom: 0 }}>int expected [] = {'{'}1,1,1{'}'}; // Make function calls</p>
+                  <p style={{ marginBottom: 0 }}>
+int expected [] =
+{'{'}
+1,1,1
+{'}'}
+; // Make function calls
+                  </p>
                   <p style={{ marginBottom: 0 }}>
                     {'setAttribute("expression", "addOneToArray([0,0,0])");'}
                     {' // Override the default expression displayed'}
@@ -414,15 +421,15 @@ class OnlineEditorJavaView extends React.Component {
         { errorTextElement }
         {
           this.renderTestCases(intl.formatMessage(translations.publicTestCases),
-          testCases, 'public')
+            testCases, 'public')
         }
         {
           this.renderTestCases(intl.formatMessage(translations.privateTestCases),
-          testCases, 'private')
+            testCases, 'private')
         }
         {
           this.renderTestCases(intl.formatMessage(translations.evaluationTestCases),
-          testCases, 'evaluation')
+            testCases, 'evaluation')
         }
       </React.Fragment>
     );
@@ -438,7 +445,8 @@ class OnlineEditorJavaView extends React.Component {
     return (
       <div id="java-online-editor">
         {
-          autograded &&
+          autograded
+          && (
           <div className={styles.submitAsFileToggle}>
             <Toggle
               label={toggleLabel}
@@ -456,38 +464,40 @@ class OnlineEditorJavaView extends React.Component {
             <FormattedMessage
               id="course.assessment.question.programming.onlineEditorJavaView.fileSubmissionDescription"
               defaultMessage={
-                '{file_submission}: Toggling this option on will allow you to upload java class files to be ' +
-                'compiled individually, and allows you to test (individual/multiple) java classes. ' +
-                'Toggled off, you will input code as templates, which will be used for you to test ' +
-                'java functions. Note that you will need to upload either a submission or solution ' +
-                'file at the very least for the compiler to compile the files correctly.'
+                '{file_submission}: Toggling this option on will allow you to upload java class files to be '
+                + 'compiled individually, and allows you to test (individual/multiple) java classes. '
+                + 'Toggled off, you will input code as templates, which will be used for you to test '
+                + 'java functions. Note that you will need to upload either a submission or solution '
+                + 'file at the very least for the compiler to compile the files correctly.'
               }
               values={{
                 file_submission: <b>{intl.formatMessage(javaTranslations.fileSubmissionDescriptionNote)}</b>,
               }}
             />
           </div>
+          )
         }
         {
-          submitAsFile ?
-            <React.Fragment>
-              <h3>{this.props.intl.formatMessage(javaTranslations.submissionFilesHeader)}</h3>
-              {
+          submitAsFile
+            ? (
+              <React.Fragment>
+                <h3>{this.props.intl.formatMessage(javaTranslations.submissionFilesHeader)}</h3>
+                {
                 this.renderExistingPackageFiles(
                   'submission_files',
                   this.props.intl.formatMessage(javaTranslations.currentSubmissionFilesHeader)
                 )
               }
-              {
+                {
                 this.renderNewPackageFiles(
                   'submission_files',
                   this.props.intl.formatMessage(javaTranslations.newSubmissionFilesHeader),
                   intl.formatMessage(javaTranslations.addSubmissionFileButton)
                 )
               }
-            </React.Fragment>
-            :
-            this.renderEditorCard(
+              </React.Fragment>
+            )
+            : this.renderEditorCard(
               intl.formatMessage(translations.submissionTitle),
               null,
               'submission'

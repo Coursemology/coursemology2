@@ -41,14 +41,14 @@ class NotificationSettings extends React.Component {
   }
 
   renderRow(setting) {
-    const componentTitle = setting.component_title ||
-      (defaultComponentTitles[setting.component] &&
-        <FormattedMessage {...defaultComponentTitles[setting.component]} />) ||
-      setting.component;
-    const settingTitle = (settingTitles[setting.key] &&
-      <FormattedMessage {...settingTitles[setting.key]} />) || setting.key;
-    const settingDescription = (settingDescriptions[setting.key] &&
-      <FormattedMessage {...settingDescriptions[setting.key]} />) || '';
+    const componentTitle = setting.component_title
+      || (defaultComponentTitles[setting.component]
+        && <FormattedMessage {...defaultComponentTitles[setting.component]} />)
+      || setting.component;
+    const settingTitle = (settingTitles[setting.key]
+      && <FormattedMessage {...settingTitles[setting.key]} />) || setting.key;
+    const settingDescription = (settingDescriptions[setting.key]
+      && <FormattedMessage {...settingDescriptions[setting.key]} />) || '';
 
     return (
       <TableRow key={setting.component + setting.component_title + setting.key}>

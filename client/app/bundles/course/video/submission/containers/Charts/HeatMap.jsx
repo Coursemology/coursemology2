@@ -170,8 +170,7 @@ class HeatMap extends React.Component {
       ...this.mouseOptions,
     };
 
-    const chartElem =
-      this.state.scaledMode ? this.renderScaledChart(data, options) : HeatMap.renderUnscaledChart(data, options);
+    const chartElem = this.state.scaledMode ? this.renderScaledChart(data, options) : HeatMap.renderUnscaledChart(data, options);
     return (
       <div>
         <Toggle
@@ -206,4 +205,3 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(HeatMap));
-

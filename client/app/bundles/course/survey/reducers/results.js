@@ -15,8 +15,8 @@ export default function (state = initialState, action) {
       const anonymous = action.survey.anonymous;
       return {
         isLoading: false,
-        sections: action.sections ?
-          action.sections.map(sortResultsSectionElements(anonymous)).sort(sorts.byWeight) : [],
+        sections: action.sections
+          ? action.sections.map(sortResultsSectionElements(anonymous)).sort(sorts.byWeight) : [],
       };
     }
     case actionTypes.LOAD_SURVEY_RESULTS_FAILURE: {

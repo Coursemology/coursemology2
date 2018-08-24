@@ -17,8 +17,8 @@ $(document).ready(() => {
         <Router history={history}>
           <DuplicationLayout />
         </Router>
-      </ProviderWrapper>
-      , mountNode
+      </ProviderWrapper>,
+      mountNode
     );
   }
 });

@@ -57,19 +57,19 @@ class LessonPlanGroup extends React.Component {
       <CardTitle
         actAsExpander
         showExpandableButton
-        title={
+        title={(
           <div style={styles.milestoneTitle}>
             { title }
             <MilestoneAdminTools milestone={milestone} />
           </div>
-        }
-        subtitle={
+)}
+        subtitle={(
           <span>
             { moment(start_at).format(longDate) }
             <br />
             <span dangerouslySetInnerHTML={{ __html: description }} />
           </span>
-        }
+)}
         style={{ backgroundColor: grey50 }}
       />
     );
@@ -106,15 +106,15 @@ class LessonPlanGroup extends React.Component {
           containerStyle={styles.cardContainer}
         >
           {
-            milestone ?
-            LessonPlanGroup.renderMilestoneCardTitle(milestone) :
-            this.renderDefaultMilestone()
+            milestone
+              ? LessonPlanGroup.renderMilestoneCardTitle(milestone)
+              : this.renderDefaultMilestone()
           }
           <CardText expandable style={styles.items}>
             {
-              items.length > 0 ?
-              items.map(item => <LessonPlanItem key={item.id} {...{ item }} />) :
-              LessonPlanGroup.renderNoItemsMessage()
+              items.length > 0
+                ? items.map(item => <LessonPlanItem key={item.id} {...{ item }} />)
+                : LessonPlanGroup.renderNoItemsMessage()
             }
           </CardText>
         </Card>

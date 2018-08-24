@@ -13,21 +13,20 @@ export default function (state = {}, action) {
     case actions.PUBLISH_SUCCESS: {
       return {
         ...state,
-        ...action.payload.annotations.reduce((obj, annotation) =>
-          ({
-            ...obj,
-            [annotation.fileId]: {
-              fileId: annotation.fileId,
-              topics: arrayToObjectById(annotation.topics),
-            },
-          })
-          , {}),
+        ...action.payload.annotations.reduce((obj, annotation) => ({
+          ...obj,
+          [annotation.fileId]: {
+            fileId: annotation.fileId,
+            topics: arrayToObjectById(annotation.topics),
+          },
+        }),
+        {}),
       };
     }
     case actions.CREATE_ANNOTATION_SUCCESS: {
       const { topicId, id: postId, fileId, line } = action.payload;
-      const topic = state[fileId].topics[topicId] ||
-        { id: topicId, line, postIds: [] };
+      const topic = state[fileId].topics[topicId]
+        || { id: topicId, line, postIds: [] };
 
       return {
         ...state,
@@ -72,15 +71,14 @@ export default function (state = {}, action) {
       if (latestAnswer) {
         return {
           ...state,
-          ...latestAnswer.annotations.reduce((obj, annotation) =>
-            ({
-              ...obj,
-              [annotation.fileId]: {
-                fileId: annotation.fileId,
-                topics: arrayToObjectById(annotation.topics),
-              },
-            })
-            , {}),
+          ...latestAnswer.annotations.reduce((obj, annotation) => ({
+            ...obj,
+            [annotation.fileId]: {
+              fileId: annotation.fileId,
+              topics: arrayToObjectById(annotation.topics),
+            },
+          }),
+          {}),
         };
       }
       return state;

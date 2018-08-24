@@ -151,10 +151,9 @@ class SubmissionAnswer extends Component {
             disabled={disabled}
             onToggle={() => handleToggleViewHistoryMode(!viewHistory, submissionQuestionId, id, answersLoaded)}
           />
-          {noPastAnswers ?
-            <div style={{ float: 'right' }}><FormattedMessage {...translations.noPastAnswers} /></div>
-            :
-            null
+          {noPastAnswers
+            ? <div style={{ float: 'right' }}><FormattedMessage {...translations.noPastAnswers} /></div>
+            : null
           }
         </div>
       );

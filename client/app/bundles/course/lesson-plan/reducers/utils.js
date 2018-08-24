@@ -36,7 +36,7 @@ function sortByStartAt(a, b) {
   const aStartAt = moment(a.start_at);
   if (aStartAt.isAfter(b.start_at)) {
     return 1;
-  } else if (aStartAt.isBefore(b.start_at)) {
+  } if (aStartAt.isBefore(b.start_at)) {
     return -1;
   }
   return 0;
@@ -82,8 +82,8 @@ export function groupItemsUnderMilestones(items, milestones) {
   sortedMilestones.forEach((milestone) => {
     // Group items that come before the current milestone under the previous milestone
     while (
-      sortedItems.length > 0 &&
-      moment(sortedItems[0].start_at).isBefore(milestone.start_at)
+      sortedItems.length > 0
+      && moment(sortedItems[0].start_at).isBefore(milestone.start_at)
     ) {
       group.items.push(sortedItems.shift());
     }

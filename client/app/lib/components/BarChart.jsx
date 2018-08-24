@@ -64,7 +64,7 @@ class BarChart extends React.Component {
       <div style={styles.legend}>
         {
           this.props.data.map(segment => (
-            <Chip key={segment.color} style={styles.chip} >
+            <Chip key={segment.color} style={styles.chip}>
               <Avatar backgroundColor={colors[segment.color]} />
               { segment.count }
               { ' ' }

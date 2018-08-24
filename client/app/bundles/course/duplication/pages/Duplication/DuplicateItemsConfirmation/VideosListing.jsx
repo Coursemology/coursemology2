@@ -41,7 +41,12 @@ class VideoListing extends React.Component {
       <IndentedCheckbox
         checked
         indentLevel={0}
-        label={<span><TypeBadge itemType={VIDEO_TAB} />{tab.title}</span>}
+        label={(
+          <span>
+            <TypeBadge itemType={VIDEO_TAB} />
+            {tab.title}
+          </span>
+)}
       />
     );
   }
@@ -61,13 +66,13 @@ class VideoListing extends React.Component {
         checked
         key={video.id}
         indentLevel={1}
-        label={
+        label={(
           <span>
             <TypeBadge itemType={VIDEO} />
             <UnpublishedIcon tooltipId="itemUnpublished" />
             {video.title}
           </span>
-        }
+)}
       />
     );
   }

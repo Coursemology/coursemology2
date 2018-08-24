@@ -10,8 +10,8 @@ function renderSubmission(state, node) {
   render(
     <ProviderWrapper {...storeCreator(state)}>
       <Submission />
-    </ProviderWrapper>
-    , node
+    </ProviderWrapper>,
+    node
   );
 }
 
@@ -27,8 +27,8 @@ $(document).ready(() => {
     render(
       <ProviderWrapper>
         <LoadingIndicator />
-      </ProviderWrapper>
-      , mountNode
+      </ProviderWrapper>,
+      mountNode
     );
 
     CourseAPI.video.sessions.create()

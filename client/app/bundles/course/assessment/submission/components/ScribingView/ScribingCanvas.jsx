@@ -887,12 +887,12 @@ export default class ScribingCanvas extends React.Component {
 
   setCopiedCanvasObjectPosition(obj) {
     // Shift copied object to the left if there's space
-    this.copyLeft = (this.copyLeft + obj.width > this.canvas.width) ?
-      this.copyLeft : this.copyLeft + 10;
+    this.copyLeft = (this.copyLeft + obj.width > this.canvas.width)
+      ? this.copyLeft : this.copyLeft + 10;
     obj.left = this.copyLeft; // eslint-disable-line no-param-reassign
     // Shift copied object down if there's space
-    this.copyTop = (this.copyTop + obj.height > this.canvas.height) ?
-      this.copyTop : this.copyTop + 10;
+    this.copyTop = (this.copyTop + obj.height > this.canvas.height)
+      ? this.copyTop : this.copyTop + 10;
     obj.top = this.copyTop; // eslint-disable-line no-param-reassign
 
     obj.setCoords();
@@ -927,11 +927,13 @@ export default class ScribingCanvas extends React.Component {
   render() {
     const answerId = this.props.answerId;
     const isCanvasLoaded = this.props.scribing.isCanvasLoaded;
-    return (answerId ?
-      <div style={styles.canvas_div} id={`canvas-container-${answerId}`}>
-        { !isCanvasLoaded ? <LoadingIndicator /> : null }
-        <canvas style={styles.canvas} id={`canvas-${answerId}`} />
-      </div> : null
+    return (answerId
+      ? (
+        <div style={styles.canvas_div} id={`canvas-container-${answerId}`}>
+          { !isCanvasLoaded ? <LoadingIndicator /> : null }
+          <canvas style={styles.canvas} id={`canvas-${answerId}`} />
+        </div>
+      ) : null
     );
   }
 }

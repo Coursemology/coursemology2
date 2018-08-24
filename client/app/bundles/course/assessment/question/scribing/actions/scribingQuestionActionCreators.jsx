@@ -60,8 +60,7 @@ function processFields(fields) {
   if (fields.question_scribing.skill_ids.length < 1) {
     parsedFields.question_scribing.question_assessment.skill_ids = [''];
   } else {
-    parsedFields.question_scribing.question_assessment.skill_ids =
-      parsedFields.question_scribing.skill_ids;
+    parsedFields.question_scribing.question_assessment.skill_ids = parsedFields.question_scribing.skill_ids;
   }
 
   if (fields.question_scribing.attachment) {

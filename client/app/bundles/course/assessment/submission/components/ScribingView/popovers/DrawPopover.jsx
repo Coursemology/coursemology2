@@ -65,7 +65,10 @@ const DrawPopover = (props) => {
       animation={PopoverAnimationVertical}
     >
       <Menu style={styles.menu}>
-        <h4>{intl.formatMessage(translations.pencil)} </h4>
+        <h4>
+          {intl.formatMessage(translations.pencil)}
+          {' '}
+        </h4>
         <LineThicknessField
           toolThicknessValue={toolThicknessValue}
           onChangeSliderThickness={onChangeSliderThickness}

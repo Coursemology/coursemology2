@@ -63,12 +63,14 @@ class TextResponseResults extends React.Component {
     return (
       <Link to={answer.response_path}>
         {
-          answer.phantom ?
-            <FormattedMessage
-              {...translations.phantomStudentName}
-              values={{ name: answer.course_user_name }}
-            /> :
-            answer.course_user_name
+          answer.phantom
+            ? (
+              <FormattedMessage
+                {...translations.phantomStudentName}
+                values={{ name: answer.course_user_name }}
+              />
+            )
+            : answer.course_user_name
         }
       </Link>
     );
@@ -83,10 +85,12 @@ class TextResponseResults extends React.Component {
               <FormattedMessage {...translations.serial} />
             </TableHeaderColumn>
             {
-              anonymous ? null :
-              <TableHeaderColumn colSpan={5}>
-                <FormattedMessage {...translations.respondent} />
-              </TableHeaderColumn>
+              anonymous ? null
+                : (
+                  <TableHeaderColumn colSpan={5}>
+                    <FormattedMessage {...translations.respondent} />
+                  </TableHeaderColumn>
+                )
             }
             <TableHeaderColumn colSpan={15}>
               <FormattedMessage {...translations.responses} />
@@ -100,10 +104,12 @@ class TextResponseResults extends React.Component {
                 { index + 1 }
               </TableRowColumn>
               {
-                anonymous ? null :
-                <TableRowColumn colSpan={5} style={styles.wrapText}>
-                  { TextResponseResults.renderStudentName(answer) }
-                </TableRowColumn>
+                anonymous ? null
+                  : (
+                    <TableRowColumn colSpan={5} style={styles.wrapText}>
+                      { TextResponseResults.renderStudentName(answer) }
+                    </TableRowColumn>
+                  )
               }
               <TableRowColumn colSpan={15} style={styles.wrapText}>
                 { answer.text_response }

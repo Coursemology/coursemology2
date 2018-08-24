@@ -14,8 +14,8 @@ function formatTimestamp(timestamp) {
   const seconds = (roundedTime % 3600) % 60;
 
   return (
-    `${(hour > 0 ? `${hour}:${minute < 10 ? '0' : ''}` : '') +
-    minute}:${seconds < 10 ? '0' : ''}${seconds}`
+    `${(hour > 0 ? `${hour}:${minute < 10 ? '0' : ''}` : '')
+    + minute}:${seconds < 10 ? '0' : ''}${seconds}`
   );
 }
 

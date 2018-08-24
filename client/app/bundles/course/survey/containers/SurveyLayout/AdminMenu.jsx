@@ -116,18 +116,22 @@ class AdminMenu extends React.Component {
         iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
       >
         {
-          survey.canUpdate ?
-            <MenuItem
-              primaryText={intl.formatMessage(translations.editSurvey)}
-              onClick={this.showEditSurveyForm}
-            /> : null
+          survey.canUpdate
+            ? (
+              <MenuItem
+                primaryText={intl.formatMessage(translations.editSurvey)}
+                onClick={this.showEditSurveyForm}
+              />
+            ) : null
         }
         {
-          survey.canDelete ?
-            <MenuItem
-              primaryText={intl.formatMessage(translations.deleteSurvey)}
-              onClick={this.deleteSurveyHandler}
-            /> : null
+          survey.canDelete
+            ? (
+              <MenuItem
+                primaryText={intl.formatMessage(translations.deleteSurvey)}
+                onClick={this.deleteSurveyHandler}
+              />
+            ) : null
         }
       </IconMenu>
     );

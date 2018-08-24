@@ -51,10 +51,14 @@ class VideosSelector extends React.Component {
       <div key={id}>
         <IndentedCheckbox
           checked={checked}
-          label={<span><TypeBadge itemType={VIDEO_TAB} />{ title }</span>}
+          label={(
+            <span>
+              <TypeBadge itemType={VIDEO_TAB} />
+              { title }
+            </span>
+)}
           indentLevel={0}
-          onCheck={(e, value) =>
-            dispatch(setItemSelectedBoolean(VIDEO_TAB, id, value))
+          onCheck={(e, value) => dispatch(setItemSelectedBoolean(VIDEO_TAB, id, value))
           }
         >
           <BulkSelectors callback={this.setAllInTab(tab)} />
@@ -71,17 +75,16 @@ class VideosSelector extends React.Component {
     return (
       <IndentedCheckbox
         key={video.id}
-        label={
+        label={(
           <span>
             <TypeBadge itemType={VIDEO} />
             { video.published || <UnpublishedIcon /> }
             { video.title }
           </span>
-        }
+)}
         checked={checked}
         indentLevel={1}
-        onCheck={(e, value) =>
-          dispatch(setItemSelectedBoolean(VIDEO, video.id, value))
+        onCheck={(e, value) => dispatch(setItemSelectedBoolean(VIDEO, video.id, value))
         }
       />
     );
@@ -101,10 +104,12 @@ class VideosSelector extends React.Component {
     return (
       <React.Fragment>
         {
-          tabs.length > 1 ? <BulkSelectors
-            callback={this.setEverything}
-            styles={{ selectLink: { marginLeft: 0 } }}
-          /> : null
+          tabs.length > 1 ? (
+            <BulkSelectors
+              callback={this.setEverything}
+              styles={{ selectLink: { marginLeft: 0 } }}
+            />
+          ) : null
         }
         { tabs.map(tab => this.renderTabTree(tab)) }
       </React.Fragment>

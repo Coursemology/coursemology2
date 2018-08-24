@@ -7,8 +7,7 @@
  * @param {Boolean} onlyTab Whether the given tab is the only tab of the given category.
  * @return {String} The form label to use for the specific tab.
  */
-export const categoryAndTabTitle = (category, tab, onlyTab) =>
-  (onlyTab ? category : `${category} > ${tab}`);
+export const categoryAndTabTitle = (category, tab, onlyTab) => (onlyTab ? category : `${category} > ${tab}`);
 
 /**
  * Maps the received Category APIs for rendering in the AssessmentForm.

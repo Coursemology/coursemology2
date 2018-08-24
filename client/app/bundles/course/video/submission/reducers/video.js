@@ -163,7 +163,7 @@ function handleSessionChangeState(state, action) {
   let stateChange = null;
   if (state.playerState === action.playerState) {
     return state;
-  } else if (action.playerState === playerStates.PLAYING) {
+  } if (action.playerState === playerStates.PLAYING) {
     stateChange = 'play';
   } else if (action.playerState === playerStates.PAUSED) {
     stateChange = 'pause';

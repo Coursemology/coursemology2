@@ -38,7 +38,7 @@ class ItemsSelectorMenu extends React.Component {
 
     return (
       <ListItem
-        leftAvatar={
+        leftAvatar={(
           <Avatar
             style={styles.countAvatar}
             size={30}
@@ -46,7 +46,7 @@ class ItemsSelectorMenu extends React.Component {
           >
             { count }
           </Avatar>
-        }
+)}
         onClick={() => dispatch(setItemSelectorPanel(panelKey))}
       >
         <FormattedMessage {...defaultComponentTitles[titleKey]} />

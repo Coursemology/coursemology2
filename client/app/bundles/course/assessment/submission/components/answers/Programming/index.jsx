@@ -28,22 +28,25 @@ class Programming extends React.Component {
     return (
       <div>
         {
-          fileSubmission ?
-            <ProgrammingImportEditor
-              questionId={question.id}
-              answerId={answerId}
-              {...{ readOnly, question }}
-            />
-            :
-            <FieldArray
-              name={`${answerId}[files_attributes]`}
-              component={Programming.renderProgrammingFiles}
-              {...{
-                readOnly,
-                answerId,
-                language: parseLanguages(question.language),
-              }}
-            />
+          fileSubmission
+            ? (
+              <ProgrammingImportEditor
+                questionId={question.id}
+                answerId={answerId}
+                {...{ readOnly, question }}
+              />
+            )
+            : (
+              <FieldArray
+                name={`${answerId}[files_attributes]`}
+                component={Programming.renderProgrammingFiles}
+                {...{
+                  readOnly,
+                  answerId,
+                  language: parseLanguages(question.language),
+                }}
+              />
+            )
         }
         <TestCaseView questionId={question.id} />
       </div>

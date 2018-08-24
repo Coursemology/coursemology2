@@ -17,8 +17,8 @@ $(document).ready(() => {
         <Router history={history}>
           <PopupNotifier />
         </Router>
-      </ProviderWrapper>
-      , mountNode
+      </ProviderWrapper>,
+      mountNode
     );
   }
 });

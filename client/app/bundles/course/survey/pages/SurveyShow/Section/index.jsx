@@ -44,10 +44,8 @@ const sectionTarget = {
     let moveDownwards;
     const pointerPosition = monitor.getClientOffset();
     const hoverBoundingRect = component.DOMNode.getBoundingClientRect();
-    const fromAbove =
-      sourceSectionIndex < hoverSectionIndex && pointerPosition.y > hoverBoundingRect.top;
-    const fromBelow =
-      sourceSectionIndex > hoverSectionIndex && pointerPosition.y < hoverBoundingRect.bottom;
+    const fromAbove = sourceSectionIndex < hoverSectionIndex && pointerPosition.y > hoverBoundingRect.top;
+    const fromBelow = sourceSectionIndex > hoverSectionIndex && pointerPosition.y < hoverBoundingRect.bottom;
     if (fromAbove) {
       moveDownwards = true;
     } else if (fromBelow) {

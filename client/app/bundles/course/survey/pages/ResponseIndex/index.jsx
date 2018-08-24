@@ -174,8 +174,8 @@ class ResponseIndex extends React.Component {
                 </TableRowColumn>
                 <TableRowColumn>
                   {
-                    response.status === responseStatus.SUBMITTED && response.canUnsubmit ?
-                      <UnsubmitButton responseId={response.id} /> : null
+                    response.status === responseStatus.SUBMITTED && response.canUnsubmit
+                      ? <UnsubmitButton responseId={response.id} /> : null
                   }
                 </TableRowColumn>
               </TableRow>
@@ -252,9 +252,9 @@ class ResponseIndex extends React.Component {
     const { NOT_STARTED, RESPONDING, SUBMITTED } = responseStatus;
     const dataColor = { [NOT_STARTED]: 'red', [RESPONDING]: 'yellow', [SUBMITTED]: 'green' };
     const chartData = [NOT_STARTED, RESPONDING, SUBMITTED].map((state) => {
-      const count = this.state.includePhantomsInStats ?
-        realResponsesStatuses[state] + phantomResponsesStatuses[state] :
-        realResponsesStatuses[state];
+      const count = this.state.includePhantomsInStats
+        ? realResponsesStatuses[state] + phantomResponsesStatuses[state]
+        : realResponsesStatuses[state];
       return {
         count,
         color: dataColor[state],
@@ -291,10 +291,8 @@ class ResponseIndex extends React.Component {
       { realResponses: [], phantomResponses: [] }
     );
 
-    const { responses: realResponsesWithStatuses, summary: realResponsesStatuses } =
-      ResponseIndex.computeStatuses(realResponses);
-    const { responses: phantomResponsesWithStatuses, summary: phantomResponsesStatuses } =
-      ResponseIndex.computeStatuses(phantomResponses);
+    const { responses: realResponsesWithStatuses, summary: realResponsesStatuses } = ResponseIndex.computeStatuses(realResponses);
+    const { responses: phantomResponsesWithStatuses, summary: phantomResponsesStatuses } = ResponseIndex.computeStatuses(phantomResponses);
 
     return (
       <div>

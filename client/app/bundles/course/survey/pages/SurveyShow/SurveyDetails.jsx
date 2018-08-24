@@ -154,24 +154,28 @@ class SurveyDetails extends React.Component {
         <CardText>
           { survey.canCreateSection ? <NewSectionButton {...{ disabled }} /> : null }
           {
-            survey.canViewResults ?
-              <RaisedButton
-                style={styles.button}
-                label={<FormattedMessage {...surveyTranslations.results} />}
-                onClick={() => history.push(
-                `/courses/${courseId}/surveys/${survey.id}/results`
-              )}
-              /> : null
+            survey.canViewResults
+              ? (
+                <RaisedButton
+                  style={styles.button}
+                  label={<FormattedMessage {...surveyTranslations.results} />}
+                  onClick={() => history.push(
+                    `/courses/${courseId}/surveys/${survey.id}/results`
+                  )}
+                />
+              ) : null
           }
           {
-            survey.canViewResults ?
-              <RaisedButton
-                style={styles.button}
-                label={<FormattedMessage {...surveyTranslations.responses} />}
-                onClick={() => history.push(
-                `/courses/${courseId}/surveys/${survey.id}/responses`
-              )}
-              /> : null
+            survey.canViewResults
+              ? (
+                <RaisedButton
+                  style={styles.button}
+                  label={<FormattedMessage {...surveyTranslations.responses} />}
+                  onClick={() => history.push(
+                    `/courses/${courseId}/surveys/${survey.id}/responses`
+                  )}
+                />
+              ) : null
           }
           <RespondButton
             courseId={courseId}

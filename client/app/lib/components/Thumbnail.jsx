@@ -68,12 +68,12 @@ class Thumbnail extends React.PureComponent {
       objectFit: 'contain',
     };
 
-    const onThumbnailClick = onClick && typeof (onClick) === 'function' ?
-      (event) => {
+    const onThumbnailClick = onClick && typeof (onClick) === 'function'
+      ? (event) => {
         onClick(event);
         this.setState({ open: true });
-      } :
-      () => this.setState({ open: true });
+      }
+      : () => this.setState({ open: true });
 
     const actions = [
       <FlatButton

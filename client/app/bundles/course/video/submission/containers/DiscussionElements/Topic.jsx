@@ -31,7 +31,10 @@ function Topic(props) {
         <span className="glyphicon glyphicon-chevron-down" />
         &nbsp;
         <a style={{ cursor: 'pointer' }} onClick={props.onTimeStampClick}>
-          <b>Time: {formatTimestamp(props.timestamp)}</b>
+          <b>
+Time:
+            {formatTimestamp(props.timestamp)}
+          </b>
         </a>
         &nbsp;
         <span className="glyphicon glyphicon-chevron-down" />

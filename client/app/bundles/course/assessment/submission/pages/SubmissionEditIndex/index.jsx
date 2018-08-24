@@ -196,9 +196,11 @@ class VisibleSubmissionEditIndex extends Component {
     return (
       <Card style={{ marginBottom: 20 }}>
         <CardHeader title={<h3>{assessment.title}</h3>} />
-        {assessment.description ? <CardText
-          dangerouslySetInnerHTML={{ __html: assessment.description }}
-        /> : null}
+        {assessment.description ? (
+          <CardText
+            dangerouslySetInnerHTML={{ __html: assessment.description }}
+          />
+        ) : null}
         {assessment.files.length > 0 ? (
           <CardText>
             <h4>Files</h4>
@@ -239,20 +241,22 @@ class VisibleSubmissionEditIndex extends Component {
     } = this.props;
 
     if (Object.values(questions).length === 0) {
-      return (<SubmissionEmptyForm
-        courseId={courseId}
-        categoryId={categoryId}
-        tabId={tabId}
-        handleSaveGrade={() => this.handleSaveGrade()}
-        handleSubmit={() => this.handleSubmit()}
-        handleUnsubmit={() => this.handleUnsubmit()}
-        graderView={graderView}
-        canUpdate={canUpdate}
-        attempting={workflowState === workflowStates.Attempting}
-        submitted={workflowState === workflowStates.Submitted}
-        published={workflowState === workflowStates.Published}
-        isSaving={isSaving}
-      />);
+      return (
+        <SubmissionEmptyForm
+          courseId={courseId}
+          categoryId={categoryId}
+          tabId={tabId}
+          handleSaveGrade={() => this.handleSaveGrade()}
+          handleSubmit={() => this.handleSubmit()}
+          handleUnsubmit={() => this.handleUnsubmit()}
+          graderView={graderView}
+          canUpdate={canUpdate}
+          attempting={workflowState === workflowStates.Attempting}
+          submitted={workflowState === workflowStates.Submitted}
+          published={workflowState === workflowStates.Published}
+          isSaving={isSaving}
+        />
+      );
     }
 
     if (autograded) {

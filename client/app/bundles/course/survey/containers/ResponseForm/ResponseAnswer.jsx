@@ -162,8 +162,8 @@ class ResponseAnswer extends React.Component {
 
   checkMultipleChoiceRequired(value) {
     const { question, intl } = this.props;
-    return question.required && (!value || value.length < 1) ?
-      intl.formatMessage(responseFormTranslations.selectAtLeast, { count: 1 }) : undefined;
+    return question.required && (!value || value.length < 1)
+      ? intl.formatMessage(responseFormTranslations.selectAtLeast, { count: 1 }) : undefined;
   }
 
   checkTextResponseRequired(value) {

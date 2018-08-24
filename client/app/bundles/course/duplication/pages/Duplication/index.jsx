@@ -141,8 +141,7 @@ class Duplication extends React.Component {
     const { dispatch, modesAllowed } = this.props;
     const header = <h3><FormattedMessage {...translations.toCourse} /></h3>;
 
-    const isSingleValidMode =
-      modesAllowed && modesAllowed.length === 1 && duplicationModes[modesAllowed[0]];
+    const isSingleValidMode = modesAllowed && modesAllowed.length === 1 && duplicationModes[modesAllowed[0]];
     if (isSingleValidMode) {
       dispatch(setDuplicationMode(modesAllowed[0]));
       return header;
@@ -225,10 +224,12 @@ class Duplication extends React.Component {
 
         { this.renderItemsSelectorSidebar() }
         {
-          duplicationMode === duplicationModes.OBJECT && isCourseSelected ?
-            <Paper style={styles.mainPanel}>
-              <ItemsSelector />
-            </Paper> : <div />
+          duplicationMode === duplicationModes.OBJECT && isCourseSelected
+            ? (
+              <Paper style={styles.mainPanel}>
+                <ItemsSelector />
+              </Paper>
+            ) : <div />
         }
       </div>
     );

@@ -461,4 +461,3 @@ export function toggleViewHistoryMode(viewHistory, submissionQuestionId, questio
     }
   };
 }
-

@@ -63,9 +63,9 @@ class ResponseShow extends React.Component {
           <TableRow selectable={false}>
             <TableHeaderColumn>Submitted At</TableHeaderColumn>
             <TableRowColumn>
-              {response.submitted_at ?
-                formatLongDateTime(response.submitted_at) :
-                <FormattedMessage {...translations.notSubmitted} />
+              {response.submitted_at
+                ? formatLongDateTime(response.submitted_at)
+                : <FormattedMessage {...translations.notSubmitted} />
               }
             </TableRowColumn>
           </TableRow>
@@ -121,9 +121,9 @@ class ResponseShow extends React.Component {
     return (
       <React.Fragment>
         {
-          survey.description ?
-            <Card><CardText dangerouslySetInnerHTML={{ __html: survey.description }} /></Card> :
-          null
+          survey.description
+            ? <Card><CardText dangerouslySetInnerHTML={{ __html: survey.description }} /></Card>
+            : null
         }
         { this.renderBody() }
         { this.renderRespondButton() }

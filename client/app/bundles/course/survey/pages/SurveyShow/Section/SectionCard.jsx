@@ -74,8 +74,8 @@ class SectionCard extends React.Component {
         { section.questions.length > 1 ? this.renderActions() : null }
         <CardText>
           {
-            section.questions.length < 1 ?
-              <Subheader><FormattedMessage {...translations.noQuestions} /></Subheader> : null
+            section.questions.length < 1
+              ? <Subheader><FormattedMessage {...translations.noQuestions} /></Subheader> : null
           }
           {
             section.questions.map((question, index) => (

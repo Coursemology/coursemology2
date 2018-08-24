@@ -70,8 +70,7 @@ export function updateAchievement(achievementId, data, successMessage, failureMe
         });
         // TODO: Remove redirection when achievement index is implemented using React.
         setTimeout(() => {
-          window.location =
-            `/courses/${getCourseId()}/achievements`;
+          window.location = `/courses/${getCourseId()}/achievements`;
         }, 500);
       })
       .catch((error) => {

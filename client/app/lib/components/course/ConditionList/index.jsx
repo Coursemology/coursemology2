@@ -119,7 +119,7 @@ class ConditionList extends React.Component {
   render() {
     return (
       <div>
-        <Table selectable={false} >
+        <Table selectable={false}>
           {this.renderHeaderRows()}
           <TableBody
             className="conditions-list"
@@ -129,8 +129,8 @@ class ConditionList extends React.Component {
           </TableBody>
         </Table>
         {
-          this.props.conditions.length === 0 &&
-          <Subheader><FormattedMessage {...translations.empty} /></Subheader>
+          this.props.conditions.length === 0
+          && <Subheader><FormattedMessage {...translations.empty} /></Subheader>
         }
       </div>
     );

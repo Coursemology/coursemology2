@@ -9,7 +9,7 @@ import { withRouter } from 'react-router';
 
 import { getProgrammingFileURL } from 'lib/helpers/url-builders';
 
-import Editor from '../../../components/Editor';
+import Editor from '../../Editor';
 import ReadOnlyEditor from '../../../containers/ReadOnlyEditor';
 import { fileShape } from '../../../propTypes';
 
@@ -58,7 +58,8 @@ class ProgrammingFile extends React.Component {
         <Paper style={{ backgroundColor: yellow100, padding: 10 }}>
           <WarningIcon style={styles.warningIcon} />
           <span>
-            <FormattedMessage {...translations.sizeTooBig} />&nbsp;
+            <FormattedMessage {...translations.sizeTooBig} />
+&nbsp;
             <a href={downloadLink}><FormattedMessage {...translations.downloadFile} /></a>
           </span>
         </Paper>

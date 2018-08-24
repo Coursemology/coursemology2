@@ -152,6 +152,7 @@ class QuestionForm extends React.Component {
       </React.Fragment>
     );
   }
+
   renderNumberOfResponsesField(name, floatingLabelText) {
     const { intl, disabled } = this.props;
     return (
