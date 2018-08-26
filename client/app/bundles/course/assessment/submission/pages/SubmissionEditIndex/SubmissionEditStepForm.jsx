@@ -158,7 +158,9 @@ class SubmissionEditStepForm extends Component {
           { explanation.explanations.every(exp => exp.trim().length === 0) ? null
             : (
               <CardText>
-                {explanation.explanations.map((exp, idx) => <div key={idx} dangerouslySetInnerHTML={{ __html: exp }} />)}
+                {explanation.explanations.map((exp, idx) => (
+                  <div key={idx} dangerouslySetInnerHTML={{ __html: exp }} />
+                ))}
               </CardText>
             ) }
         </Card>

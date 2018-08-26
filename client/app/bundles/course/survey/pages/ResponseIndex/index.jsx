@@ -291,8 +291,10 @@ class ResponseIndex extends React.Component {
       { realResponses: [], phantomResponses: [] }
     );
 
-    const { responses: realResponsesWithStatuses, summary: realResponsesStatuses } = ResponseIndex.computeStatuses(realResponses);
-    const { responses: phantomResponsesWithStatuses, summary: phantomResponsesStatuses } = ResponseIndex.computeStatuses(phantomResponses);
+    const { responses: realResponsesWithStatuses,
+      summary: realResponsesStatuses } = ResponseIndex.computeStatuses(realResponses);
+    const { responses: phantomResponsesWithStatuses,
+      summary: phantomResponsesStatuses } = ResponseIndex.computeStatuses(phantomResponses);
 
     return (
       <div>

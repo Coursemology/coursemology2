@@ -45,23 +45,6 @@ class VisibleSubmissionEditIndex extends Component {
     dispatch(fetchSubmission(params.submissionId));
   }
 
-  allCorrect() {
-    const { explanations, questions } = this.props;
-    if (Object.keys(explanations).length !== Object.keys(questions).length) {
-      return false;
-    }
-
-    const numIncorrect = Object.keys(explanations).filter(
-      qid => !explanations[qid] || !explanations[qid].correct
-    ).length;
-    return numIncorrect === 0;
-  }
-
-  handleAutogradeSubmission() {
-    const { dispatch, match: { params } } = this.props;
-    dispatch(autogradeSubmission(params.submissionId));
-  }
-
   validateSubmit = () => {
     const { dispatch, form } = this.props;
     const answers = Object.values(form.values);
@@ -104,6 +87,23 @@ class VisibleSubmissionEditIndex extends Component {
       return Promise.reject();
     }
     return Promise.resolve();
+  }
+
+  handleAutogradeSubmission() {
+    const { dispatch, match: { params } } = this.props;
+    dispatch(autogradeSubmission(params.submissionId));
+  }
+
+  allCorrect() {
+    const { explanations, questions } = this.props;
+    if (Object.keys(explanations).length !== Object.keys(questions).length) {
+      return false;
+    }
+
+    const numIncorrect = Object.keys(explanations).filter(
+      qid => !explanations[qid] || !explanations[qid].correct
+    ).length;
+    return numIncorrect === 0;
   }
 
   handleSubmit() {

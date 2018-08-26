@@ -111,7 +111,9 @@ class LessonPlanSettings extends React.Component {
   // For the assessments component, as settings are for categories and tabs.
   renderLessonPlanItemAssessmentSettingsTable() {
     const { lessonPlanItemSettings } = this.props;
-    const assessmentItemSettings = lessonPlanItemSettings.filter(setting => setting.component === 'course_assessments_component');
+    const assessmentItemSettings = lessonPlanItemSettings.filter(
+      setting => setting.component === 'course_assessments_component'
+    );
 
     if (assessmentItemSettings.length < 1) {
       return <Subheader><FormattedMessage {...translations.noLessonPlanItems} /></Subheader>;
@@ -153,7 +155,9 @@ class LessonPlanSettings extends React.Component {
   // For the video and survey components, as settings are for component only.
   renderLessonPlanItemSettingsForComponentsTable() {
     const { lessonPlanItemSettings } = this.props;
-    const componentItemSettings = lessonPlanItemSettings.filter(setting => ['course_videos_component', 'course_survey_component'].includes(setting.component));
+    const componentItemSettings = lessonPlanItemSettings.filter(
+      setting => ['course_videos_component', 'course_survey_component'].includes(setting.component)
+    );
 
     if (componentItemSettings.length < 1) {
       return <Subheader><FormattedMessage {...translations.noLessonPlanItems} /></Subheader>;

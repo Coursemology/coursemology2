@@ -35,7 +35,9 @@ describe('#shallowUntil', () => {
 
     class Bar extends React.Component {
       static childContextTypes = { open: PropTypes.bool }
+
       getChildContext = () => ({ open: true })
+
       render = () => <Foo />
     }
 

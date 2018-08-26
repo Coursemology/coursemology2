@@ -21,6 +21,19 @@ const styles = {
   },
 };
 
+function renderImage(imageSrc, fileName) {
+  return imageSrc ? <img src={imageSrc} style={styles.image} alt={fileName} /> : (
+    <div>
+      <InsertDriveFileIcon
+        style={{
+          ...styles.fileIcon,
+          color: fileName ? grey900 : grey400,
+        }}
+      />
+    </div>
+  );
+}
+
 export default class ImagePreview extends React.Component {
   static propTypes = {
     file: PropTypes.object,
@@ -64,17 +77,4 @@ export default class ImagePreview extends React.Component {
       </React.Fragment>
     );
   }
-}
-
-function renderImage(imageSrc, fileName) {
-  return imageSrc ? <img src={imageSrc} style={styles.image} alt={fileName} /> : (
-    <div>
-      <InsertDriveFileIcon
-        style={{
-          ...styles.fileIcon,
-          color: fileName ? grey900 : grey400,
-        }}
-      />
-    </div>
-  );
 }

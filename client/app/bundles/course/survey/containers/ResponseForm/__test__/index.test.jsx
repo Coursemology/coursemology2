@@ -120,12 +120,11 @@ describe('<ResponseForm />', () => {
     const textResponseAnswerError = textResponseAnswer.find('div').last().text();
     expect(textResponseAnswerError).toEqual('Required');
 
-    const multipleChoiceAnswerError =
-      multipleChoiceAnswer.find('renderMultipleChoiceOptions').find('p').first().text();
+    const multipleChoiceAnswerError = multipleChoiceAnswer.find('renderMultipleChoiceOptions').find('p').first().text();
     expect(multipleChoiceAnswerError).toEqual('Please select at least 1 option(s).');
 
-    const multipleResponseAnswerError =
-      multipleResponseAnswer.find('renderMultipleResponseOptions').find('p').first().text();
+    const multipleResponseAnswerError = multipleResponseAnswer
+      .find('renderMultipleResponseOptions').find('p').first().text();
     expect(multipleResponseAnswerError).toEqual('Please select at most 2 option(s).');
 
     const saveButton = responseForm.find('button').first();

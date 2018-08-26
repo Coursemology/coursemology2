@@ -138,7 +138,7 @@ class TextResponseResults extends React.Component {
       <CardText style={styles.expandToggleStyle}>
         <RaisedButton
           label={<FormattedMessage {...translations[labelTranslation]} values={values} />}
-          onClick={() => this.setState({ expanded: !this.state.expanded })}
+          onClick={() => this.setState(state => ({ expanded: !state.expanded }))}
         />
       </CardText>
     );

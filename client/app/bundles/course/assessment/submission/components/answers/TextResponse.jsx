@@ -155,7 +155,12 @@ function renderTextResponseComprehension(question) {
   return (
     <React.Fragment>
       <hr />
-      <h4><FormattedMessage {...translations.solutionsWithMaximumGrade} values={{ maximumGrade: question.maximumGrade }} /></h4>
+      <h4>
+        <FormattedMessage
+          {...translations.solutionsWithMaximumGrade}
+          values={{ maximumGrade: question.maximumGrade }}
+        />
+      </h4>
       {question.groups.map(group => (
         <div key={group.id}>{renderTextResponseComprehensionGroup(group)}</div>
       ))}
@@ -216,6 +221,9 @@ TextResponse.propTypes = {
   readOnly: PropTypes.bool,
   answerId: PropTypes.number,
   graderView: PropTypes.bool,
+  input: {
+    value: PropTypes.string,
+  },
 };
 
 export default TextResponse;

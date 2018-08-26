@@ -74,17 +74,17 @@ export default class SubmissionsTable extends React.Component {
     return `${gradeString} / ${maximumGradeString}`;
   }
 
+  canDownloadStatistics = () => {
+    const { submissions } = this.props;
+    return submissions.length > 0;
+  }
+
   canDownload() {
     const { assessment, submissions } = this.props;
     return assessment.downloadable && submissions.some(
       s => s.workflowState !== workflowStates.Unstarted
         && s.workflowState !== workflowStates.Attempting
     );
-  }
-
-  canDownloadStatistics = () => {
-    const { submissions } = this.props;
-    return submissions.length > 0;
   }
 
   renderSubmissionWorkflowState(submission) {

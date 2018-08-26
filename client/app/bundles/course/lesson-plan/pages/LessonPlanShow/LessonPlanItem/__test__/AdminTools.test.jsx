@@ -35,8 +35,7 @@ describe('<AdminTools />', () => {
     const deleteButton = wrapper.find('RaisedButton').last().find('button');
     deleteButton.simulate('click');
 
-    const confirmDeleteButton =
-      deleteConfirmation.find('ConfirmationDialog').first().instance().confirmButton;
+    const confirmDeleteButton = deleteConfirmation.find('ConfirmationDialog').first().instance().confirmButton;
     ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(confirmDeleteButton));
 
     expect(spy).toHaveBeenCalledWith(eventId);

@@ -102,8 +102,8 @@ describe('<SurveyShow />', () => {
     const targetQuestion = questions.last();
 
     // Mock getBoundingClientRect for question drop target
-    const targetQuestionDOMNode =
-      targetQuestion.instance().getDecoratedComponentInstance().getDecoratedComponentInstance().DOMNode;
+    const targetQuestionDOMNode = targetQuestion.instance()
+      .getDecoratedComponentInstance().getDecoratedComponentInstance().DOMNode;
     targetQuestionDOMNode.getBoundingClientRect = jest.fn();
     targetQuestionDOMNode.getBoundingClientRect
       .mockReturnValue({ bottom: 200, height: 100, left: 0, right: 0, top: 100, width: 0 });
@@ -111,11 +111,9 @@ describe('<SurveyShow />', () => {
     // Simulate dragging first question down past the mid-line of the second question
     const dragDropContext = showPage.find('DragDropContext(TestContextContainer)').first();
     const dragDropBackend = dragDropContext.instance().getManager().getBackend();
-    const sourceQuestionHandlerId =
-      sourceQuestion.instance().getDecoratedComponentInstance().getHandlerId();
+    const sourceQuestionHandlerId = sourceQuestion.instance().getDecoratedComponentInstance().getHandlerId();
     const targetQuestionHandlerId = targetQuestion.instance().getHandlerId();
-    const questionWeights =
-      () => sections.first().props().section.questions.map(question => question.weight);
+    const questionWeights = () => sections.first().props().section.questions.map(question => question.weight);
     const questionWeightsBeforeReorder = questionWeights();
     dragDropBackend.simulateBeginDrag([sourceQuestionHandlerId], {
       clientOffset: { x: 0, y: 175 },

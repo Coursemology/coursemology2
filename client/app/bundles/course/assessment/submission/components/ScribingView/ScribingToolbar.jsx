@@ -121,48 +121,44 @@ class ScribingToolbar extends Component {
   )
 
   onClickColorPicker = (event, toolType) => {
-    this.setState({
-      ...this.state,
+    this.setState(({ colorDropdowns }) => ({
       colorDropdowns: {
-        ...this.state.colorDropdowns,
+        ...colorDropdowns,
         [toolType]: true,
       },
       popoverColorPickerAnchor: event.currentTarget,
-    });
+    }));
   }
 
   onRequestCloseColorPicker = (toolType) => {
-    this.setState({
-      ...this.state,
+    this.setState(({ colorDropdowns }) => ({
       colorDropdowns: {
-        ...this.state.colorDropdowns,
+        ...colorDropdowns,
         [toolType]: false,
       },
-    });
+    }));
   }
 
   onClickPopover = (event, popoverType) => {
     const popoverAnchor = popoverType === scribingPopoverTypes.LAYER
       ? event.currentTarget
       : event.currentTarget.parentElement.parentElement;
-    this.setState({
-      ...this.state,
+    this.setState(({ popovers }) => ({
       popoverAnchor,
       popovers: {
-        ...this.state.popovers,
+        ...popovers,
         [popoverType]: true,
       },
-    });
+    }));
   }
 
   onRequestClosePopover = (popoverType) => {
-    this.setState({
-      ...this.state,
+    this.setState(({ popovers }) => ({
       popovers: {
-        ...this.state.popovers,
+        ...popovers,
         [popoverType]: false,
       },
-    });
+    }));
   }
 
   onClickLineStyleChip = (event, toolType, style) => {
@@ -248,14 +244,12 @@ class ScribingToolbar extends Component {
 
   onMouseEnter(toolType) {
     this.setState({
-      ...this.state,
       hoveredToolTip: toolType,
     });
   }
 
   onMouseLeave = () => {
     this.setState({
-      ...this.state,
       hoveredToolTip: '',
     });
   }
@@ -449,8 +443,9 @@ class ScribingToolbar extends Component {
                 {...drawPopoverProps}
                 onRequestClose={() => (this.onRequestClosePopover(scribingPopoverTypes.DRAW))}
                 toolThicknessValue={this.props.scribing.thickness[scribingToolThickness.DRAW]}
-                onChangeSliderThickness={(event, newValue) => (this.onChangeSliderThickness(event, scribingToolThickness.DRAW, newValue))
-              }
+                onChangeSliderThickness={(event, newValue) => (
+                  this.onChangeSliderThickness(event, scribingToolThickness.DRAW, newValue)
+                )}
                 colorPickerColor={this.props.scribing.colors[scribingToolColor.DRAW]}
                 onChangeCompleteColorPicker={color => (this.onChangeCompleteColor(color, scribingToolColor.DRAW))}
               />
@@ -517,8 +512,9 @@ class ScribingToolbar extends Component {
                 selectedLineStyle={this.props.scribing.lineStyles[scribingToolLineStyle.LINE]}
                 onClickLineStyleChip={this.onClickLineStyleChip}
                 toolThicknessValue={this.props.scribing.thickness[scribingToolThickness.LINE]}
-                onChangeSliderThickness={(event, newValue) => (this.onChangeSliderThickness(event, scribingToolThickness.LINE, newValue))
-              }
+                onChangeSliderThickness={(event, newValue) => (
+                  this.onChangeSliderThickness(event, scribingToolThickness.LINE, newValue)
+                )}
                 colorPickerColor={this.props.scribing.colors[scribingToolColor.LINE]}
                 onClickColorPicker={event => (this.onClickColorPicker(event, scribingToolColor.LINE))}
                 onChangeCompleteColorPicker={color => (this.onChangeCompleteColor(color, scribingToolColor.LINE))}
@@ -595,8 +591,9 @@ class ScribingToolbar extends Component {
                 selectedLineStyle={this.props.scribing.lineStyles[scribingToolLineStyle.SHAPE_BORDER]}
                 onClickLineStyleChip={this.onClickLineStyleChip}
                 toolThicknessValue={this.props.scribing.thickness[scribingToolThickness.SHAPE_BORDER]}
-                onChangeSliderThickness={(event, newValue) => (this.onChangeSliderThickness(event, scribingToolThickness.SHAPE_BORDER, newValue))
-                  }
+                onChangeSliderThickness={(event, newValue) => (
+                  this.onChangeSliderThickness(event, scribingToolThickness.SHAPE_BORDER, newValue)
+                )}
                 borderColorPickerColor={this.props.scribing.colors[scribingToolColor.SHAPE_BORDER]}
                 onChangeCompleteBorderColorPicker={
                     color => (this.onChangeCompleteColor(color, scribingToolColor.SHAPE_BORDER))
