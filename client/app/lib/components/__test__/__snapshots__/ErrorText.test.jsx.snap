@@ -13,7 +13,7 @@ exports[`<ErrorText /> when input is a string displays it 1`] = `
 `;
 
 exports[`<ErrorText /> when input is an array displays each error 1`] = `
-<React.Fragment>
+<Fragment>
   <ErrorText
     errors="An error."
     key="An error."
@@ -22,5 +22,5 @@ exports[`<ErrorText /> when input is an array displays each error 1`] = `
     errors="Another error."
     key="Another error."
   />
-</React.Fragment>
+</Fragment>
 `;
