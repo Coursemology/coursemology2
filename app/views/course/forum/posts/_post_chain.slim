@@ -1,0 +1,7 @@
+div class='course-forum-topics show'
+  div class='posts'
+    - unless post_chain.empty?
+      - replies_class = post_chain.length > 1 ? 'nested' : nil
+      = render partial: 'post', locals: { post: post_chain.first }
+      div.replies class=replies_class
+        = render partial: 'post_chain', locals: { post_chain: post_chain.slice(1..-1) }

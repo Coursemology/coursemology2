@@ -69,6 +69,15 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
 
   # Render a new post in a separate page
   def reply
+    node = @post
+    @post_chain = [node]
+    # Show up to reply-post + 2 parent posts
+    2.times do
+      break if node.parent.nil?
+      @post_chain << node.parent
+      node = node.parent
+    end
+    @post_chain = @post_chain.reverse
     @reply_post = @post.children.build
   end
 
