@@ -25,8 +25,7 @@ describe('<MoveDownButton />', () => {
     Object.defineProperty(window.location, 'pathname', {
       value: `/courses/${courseId}/surveys/${surveyId}`,
     });
-    const moveSectionButton =
-      mount(<MoveDownButton sectionIndex={sectionIndex} />, buildContextOptions(store));
+    const moveSectionButton = mount(<MoveDownButton sectionIndex={sectionIndex} />, buildContextOptions(store));
     moveSectionButton.find('button').simulate('click');
 
     expect(spyMove).toHaveBeenCalledWith({ ordering: [3, 1, 4, 9, 5] });

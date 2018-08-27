@@ -23,7 +23,7 @@ $(document).ready(() => {
         <hr />
         <Statistics {...statistics} />
       </div>
-    </ProviderWrapper>
-    , mountNode
+    </ProviderWrapper>,
+    mountNode
   );
 });

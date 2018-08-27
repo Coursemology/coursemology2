@@ -17,8 +17,8 @@ $(document).ready(() => {
           <NotificationPopup />
           <Level />
         </div>
-      </ProviderWrapper>
-      , mountNode
+      </ProviderWrapper>,
+      mountNode
     );
   }
 });

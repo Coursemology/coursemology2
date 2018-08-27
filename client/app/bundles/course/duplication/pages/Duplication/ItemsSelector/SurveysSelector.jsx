@@ -42,16 +42,15 @@ class SurveysSelector extends React.Component {
     return (
       <Checkbox
         key={survey.id}
-        label={
+        label={(
           <span>
             <TypeBadge itemType={duplicableItemTypes.SURVEY} />
             { survey.published || <UnpublishedIcon /> }
             {survey.title}
           </span>
-        }
+)}
         checked={checked}
-        onCheck={(e, value) =>
-          dispatch(setItemSelectedBoolean(duplicableItemTypes.SURVEY, survey.id, value))
+        onCheck={(e, value) => dispatch(setItemSelectedBoolean(duplicableItemTypes.SURVEY, survey.id, value))
         }
       />
     );
@@ -71,10 +70,12 @@ class SurveysSelector extends React.Component {
     return (
       <React.Fragment>
         {
-          surveys.length > 1 ? <BulkSelectors
-            callback={this.setAllSurveysSelection}
-            styles={{ selectLink: { marginLeft: 0 } }}
-          /> : null
+          surveys.length > 1 ? (
+            <BulkSelectors
+              callback={this.setAllSurveysSelection}
+              styles={{ selectLink: { marginLeft: 0 } }}
+            />
+          ) : null
         }
         { surveys.map(survey => this.renderRow(survey)) }
       </React.Fragment>

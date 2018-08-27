@@ -53,14 +53,16 @@ class MilestoneRow extends React.Component {
           <h3><Element name={groupId}>{ title }</Element></h3>
         </td>
         {
-          columnsVisible[fields.START_AT] ?
-            <td>
-              <DateTimePicker
-                name="start_at"
-                value={startAt}
-                onChange={this.updateMilestoneStartAt}
-              />
-            </td> : null
+          columnsVisible[fields.START_AT]
+            ? (
+              <td>
+                <DateTimePicker
+                  name="start_at"
+                  value={startAt}
+                  onChange={this.updateMilestoneStartAt}
+                />
+              </td>
+            ) : null
         }
         { columnsVisible[fields.BONUS_END_AT] ? <td /> : null }
         { columnsVisible[fields.END_AT] ? <td /> : null }

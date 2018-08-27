@@ -26,34 +26,41 @@ class MaterialUploader extends React.Component {
   }
 
   onMaterialDelete = (id, name) => {
-    // Update UI to show the loader.
-    const updatedMaterials = this.state.materials.map((m) => {
-      if (m.id === id) {
-        return Object.assign({}, m, { deleting: true });
-      }
-      return m;
+    this.setState((state) => {
+      // Update UI to show the loader.
+      const updatedMaterials = state.materials.map((m) => {
+        if (m.id === id) {
+          return Object.assign({}, m, { deleting: true });
+        }
+        return m;
+      });
+
+      return { materials: updatedMaterials };
     });
-    this.setState({ materials: updatedMaterials });
 
     CourseAPI.materials.destroy(this.props.folderId, id)
       .then(() => {
-        // Remove material from the list
-        const materials = this.state.materials.filter(m => m.id !== id);
-        const successMessage =
-          <FormattedMessage {...{ ...translations.deleteSuccess, values: { name } }} />;
-        this.setState({ materials, notification: { message: successMessage } });
+        this.setState((state) => {
+          // Remove material from the list
+          const materials = state.materials.filter(m => m.id !== id);
+          const successMessage = <FormattedMessage {...{ ...translations.deleteSuccess, values: { name } }} />;
+
+          return { materials, notification: { message: successMessage } };
+        });
       })
       .catch(() => {
-        // Display failure message and restore the material to not deleting state
-        const materials = this.state.materials.map((m) => {
-          if (m.id === id) {
-            return Object.assign({}, m, { deleting: false });
-          }
-          return m;
+        this.setState((state) => {
+          // Display failure message and restore the material to not deleting state
+          const materials = state.materials.map((m) => {
+            if (m.id === id) {
+              return Object.assign({}, m, { deleting: false });
+            }
+            return m;
+          });
+          const failureMessage = <FormattedMessage {...{ ...translations.deleteFail, values: { name } }} />;
+
+          return { materials, notification: { message: failureMessage } };
         });
-        const failureMessage =
-          <FormattedMessage {...{ ...translations.deleteFail, values: { name } }} />;
-        this.setState({ materials, notification: { message: failureMessage } });
       });
   }
 
@@ -67,9 +74,9 @@ class MaterialUploader extends React.Component {
     for (let i = 0; i < files.length; i += 1) {
       materials.push({ name: files[i].name });
     }
-    this.setState({
-      uploadingMaterials: this.state.uploadingMaterials.concat(materials),
-    });
+    this.setState(state => ({
+      uploadingMaterials: state.uploadingMaterials.concat(materials),
+    }));
 
     CourseAPI.materialFolders.upload(folderId, files)
       .then((response) => {
@@ -85,8 +92,7 @@ class MaterialUploader extends React.Component {
   // Remove materials from uploading list and add new materials from server reponse to existing
   // materials list.
   updateMaterials(materials, response) {
-    const uploadingMaterials =
-      this.state.uploadingMaterials.filter(m => materials.indexOf(m) === -1);
+    const uploadingMaterials = this.state.uploadingMaterials.filter(m => materials.indexOf(m) === -1);
     const newState = {
       uploadingMaterials,
     };
@@ -102,10 +108,10 @@ class MaterialUploader extends React.Component {
   removeUploads(materials, response) {
     const messageFromServer = response && response.data && response.data.message;
     const failureMessage = <FormattedMessage {...translations.uploadFail} />;
-    this.setState({
-      uploadingMaterials: this.state.uploadingMaterials.filter(m => materials.indexOf(m) === -1),
+    this.setState(state => ({
+      uploadingMaterials: state.uploadingMaterials.filter(m => materials.indexOf(m) === -1),
       notification: { message: messageFromServer || failureMessage },
-    });
+    }));
   }
 
   render() {

@@ -94,9 +94,9 @@ class FileInput extends Component {
     if (!files || !files.length) {
       return (
         <h4>
-          {disabled ?
-            <FormattedMessage {...translations.uploadDisabled} /> :
-            <FormattedMessage {...translations.uploadLabel} />
+          {disabled
+            ? <FormattedMessage {...translations.uploadDisabled} />
+            : <FormattedMessage {...translations.uploadLabel} />
           }
         </h4>
       );

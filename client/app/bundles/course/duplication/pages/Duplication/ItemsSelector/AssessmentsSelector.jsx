@@ -64,8 +64,7 @@ class AssessmentsSelector extends React.Component {
         label={label}
         checked={checked}
         indentLevel={2}
-        onCheck={(e, value) =>
-          dispatch(setItemSelectedBoolean(ASSESSMENT, id, value))
+        onCheck={(e, value) => dispatch(setItemSelectedBoolean(ASSESSMENT, id, value))
         }
       />
     );
@@ -82,9 +81,13 @@ class AssessmentsSelector extends React.Component {
           checked={checked}
           disabled={tabDisabled}
           indentLevel={1}
-          label={<span><TypeBadge itemType={TAB} />{ title }</span>}
-          onCheck={(e, value) =>
-            dispatch(setItemSelectedBoolean(TAB, id, value))
+          label={(
+            <span>
+              <TypeBadge itemType={TAB} />
+              { title }
+            </span>
+)}
+          onCheck={(e, value) => dispatch(setItemSelectedBoolean(TAB, id, value))
           }
         >
           <BulkSelectors callback={this.tabSetAll(tab)} />
@@ -104,9 +107,13 @@ class AssessmentsSelector extends React.Component {
         <IndentedCheckbox
           checked={checked}
           disabled={categoryDisabled}
-          label={<span><TypeBadge itemType={CATEGORY} />{ title }</span>}
-          onCheck={(e, value) =>
-            dispatch(setItemSelectedBoolean(CATEGORY, id, value))
+          label={(
+            <span>
+              <TypeBadge itemType={CATEGORY} />
+              { title }
+            </span>
+)}
+          onCheck={(e, value) => dispatch(setItemSelectedBoolean(CATEGORY, id, value))
           }
         >
           <BulkSelectors callback={this.categorySetAll(category)} />
@@ -124,11 +131,13 @@ class AssessmentsSelector extends React.Component {
       <React.Fragment>
         <h2><FormattedMessage {...defaultComponentTitles.course_assessments_component} /></h2>
         {
-          categories.length > 0 ?
-          categories.map(category => this.renderCategoryTree(category)) :
-          <Subheader>
-            <FormattedMessage {...translations.noItems} />
-          </Subheader>
+          categories.length > 0
+            ? categories.map(category => this.renderCategoryTree(category))
+            : (
+              <Subheader>
+                <FormattedMessage {...translations.noItems} />
+              </Subheader>
+            )
         }
       </React.Fragment>
     );
@@ -143,11 +152,11 @@ const mapStateToProps = (state) => {
     categories: duplication.assessmentsComponent,
     selectedItems: duplication.selectedItems,
     tabDisabled:
-      duplication.sourceCourse.unduplicableObjectTypes.includes(TAB) ||
-      destinationCourse.unduplicableObjectTypes.includes(TAB),
+      duplication.sourceCourse.unduplicableObjectTypes.includes(TAB)
+      || destinationCourse.unduplicableObjectTypes.includes(TAB),
     categoryDisabled:
-      duplication.sourceCourse.unduplicableObjectTypes.includes(CATEGORY) ||
-      destinationCourse.unduplicableObjectTypes.includes(CATEGORY),
+      duplication.sourceCourse.unduplicableObjectTypes.includes(CATEGORY)
+      || destinationCourse.unduplicableObjectTypes.includes(CATEGORY),
   };
 };
 

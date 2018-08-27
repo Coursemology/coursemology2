@@ -82,9 +82,9 @@ class ResponseEdit extends React.Component {
     return (
       <React.Fragment>
         {
-          survey.description ?
-            <Card><CardText dangerouslySetInnerHTML={{ __html: survey.description }} /></Card> :
-          null
+          survey.description
+            ? <Card><CardText dangerouslySetInnerHTML={{ __html: survey.description }} /></Card>
+            : null
         }
         { this.renderBody() }
       </React.Fragment>

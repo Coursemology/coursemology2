@@ -19,13 +19,11 @@ export function validation(data, pathOfKeysToData, intl) {
         let hasError = false;
 
         if (testCase.get('expression').trim() === '') {
-          testCaseError.expression =
-            intl.formatMessage(translations.cannotBeBlankValidationError);
+          testCaseError.expression = intl.formatMessage(translations.cannotBeBlankValidationError);
           hasError = true;
         }
         if (testCase.get('expected').trim() === '') {
-          testCaseError.expected =
-            intl.formatMessage(translations.cannotBeBlankValidationError);
+          testCaseError.expected = intl.formatMessage(translations.cannotBeBlankValidationError);
           hasError = true;
         }
 

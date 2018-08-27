@@ -54,10 +54,10 @@ function persistConfig(courseUserId) {
 
 export default (props) => {
   const initialState = createInitialState(props);
-  const storeCreator = (process.env.NODE_ENV === 'development') ?
+  const storeCreator = (process.env.NODE_ENV === 'development')
     // eslint-disable-next-line global-require
-    compose(applyMiddleware(thunkMiddleware, require('redux-logger').logger))(createStore) :
-    compose(applyMiddleware(thunkMiddleware))(createStore);
+    ? compose(applyMiddleware(thunkMiddleware, require('redux-logger').logger))(createStore)
+    : compose(applyMiddleware(thunkMiddleware))(createStore);
 
   if (props.courseUserId && props.video.sessionId) {
     const store = storeCreator(persistReducer(persistConfig(props.courseUserId), rootReducer), initialState);

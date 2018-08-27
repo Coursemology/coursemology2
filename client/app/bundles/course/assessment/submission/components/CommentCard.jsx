@@ -156,20 +156,24 @@ export default class CommentCard extends Component {
             avatar={<Avatar src={avatar} size={25} />}
           />
           <div style={styles.buttonContainer}>
-            { canUpdate ? <FlatButton
-              className="edit-comment"
-              style={styles.headerButton}
-              labelStyle={styles.headerButton}
-              icon={<EditIcon />}
-              onClick={() => this.toggleEditMode()}
-            /> : null }
-            { canDestroy ? <FlatButton
-              className="delete-comment"
-              style={styles.headerButton}
-              labelStyle={styles.headerButton}
-              icon={<DeleteIcon color={red500} />}
-              onClick={() => this.onDelete()}
-            /> : null }
+            { canUpdate ? (
+              <FlatButton
+                className="edit-comment"
+                style={styles.headerButton}
+                labelStyle={styles.headerButton}
+                icon={<EditIcon />}
+                onClick={() => this.toggleEditMode()}
+              />
+            ) : null }
+            { canDestroy ? (
+              <FlatButton
+                className="delete-comment"
+                style={styles.headerButton}
+                labelStyle={styles.headerButton}
+                icon={<DeleteIcon color={red500} />}
+                onClick={() => this.onDelete()}
+              />
+            ) : null }
           </div>
         </div>
         <CardText style={styles.commentContent}>

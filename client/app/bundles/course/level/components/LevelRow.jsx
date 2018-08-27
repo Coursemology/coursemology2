@@ -86,7 +86,7 @@ class LevelRow extends React.Component {
         <TableRowColumn style={styles.levelNumber}>
           { levelNumber }
         </TableRowColumn>
-        <TableRowColumn style={styles.threshold} >
+        <TableRowColumn style={styles.threshold}>
           {canManage ? this.renderInput() : experiencePointsThreshold}
         </TableRowColumn>
         <TableHeaderColumn style={styles.deleteButtonCell}>

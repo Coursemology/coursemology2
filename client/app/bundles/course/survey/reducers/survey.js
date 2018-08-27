@@ -70,8 +70,8 @@ export default function (survey = initialState, action) {
         ...sourceSectionQuestions.splice(action.sourceIndex, 1)[0],
         section_id: targetSection.id,
       };
-      const targetSectionQuestions = action.prepend ?
-        [sourceQuestion, ...targetSection.questions] : [...targetSection.questions, sourceQuestion];
+      const targetSectionQuestions = action.prepend
+        ? [sourceQuestion, ...targetSection.questions] : [...targetSection.questions, sourceQuestion];
 
       const sections = [...survey.sections];
       sections[action.sourceSectionIndex] = { ...sourceSection, questions: sourceSectionQuestions };

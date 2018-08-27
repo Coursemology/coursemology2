@@ -50,16 +50,16 @@ class MaterialsListing extends React.Component {
       <IndentedCheckbox
         checked
         key={item.id}
-        label={
+        label={(
           <span>
             <TypeBadge itemType={itemType} />
             {item.name}
             {
-              nameConflict &&
-              <div><FormattedMessage {...translations.nameConflictWarning} tagName="small" /></div>
+              nameConflict
+              && <div><FormattedMessage {...translations.nameConflictWarning} tagName="small" /></div>
             }
           </span>
-        }
+)}
         indentLevel={indentLevel}
       />
     );
@@ -72,15 +72,15 @@ class MaterialsListing extends React.Component {
     const childrenIndentLevel = checked ? indentLevel + 1 : ROOT_CHILDREN_LEVEL;
     const exisitingNames = targetRootFolder.subfolders.concat(targetRootFolder.materials)
       .map(name => name.toLowerCase());
-    const nameConflict = indentLevel === ROOT_CHILDREN_LEVEL &&
-      exisitingNames.includes(folder.name.toLowerCase());
+    const nameConflict = indentLevel === ROOT_CHILDREN_LEVEL
+      && exisitingNames.includes(folder.name.toLowerCase());
 
     const folderNode = checked ? MaterialsListing.renderRow(folder, FOLDER, indentLevel, nameConflict) : [];
     const materialNodes = folder.materials
       .filter(material => !!selectedItems[MATERIAL][material.id])
       .map((material) => {
-        const materialNameConflict = childrenIndentLevel === ROOT_CHILDREN_LEVEL &&
-          exisitingNames.includes(material.name.toLowerCase());
+        const materialNameConflict = childrenIndentLevel === ROOT_CHILDREN_LEVEL
+          && exisitingNames.includes(material.name.toLowerCase());
         return MaterialsListing.renderRow(material, MATERIAL, childrenIndentLevel, materialNameConflict);
       });
     const subfolderNodes = flatten(folder.subfolders.map(subfolder => (

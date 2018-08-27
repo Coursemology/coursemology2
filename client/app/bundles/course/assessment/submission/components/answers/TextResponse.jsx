@@ -155,7 +155,12 @@ function renderTextResponseComprehension(question) {
   return (
     <React.Fragment>
       <hr />
-      <h4><FormattedMessage {...translations.solutionsWithMaximumGrade} values={{ maximumGrade: question.maximumGrade }} /></h4>
+      <h4>
+        <FormattedMessage
+          {...translations.solutionsWithMaximumGrade}
+          values={{ maximumGrade: question.maximumGrade }}
+        />
+      </h4>
       {question.groups.map(group => (
         <div key={group.id}>{renderTextResponseComprehensionGroup(group)}</div>
       ))}
@@ -166,7 +171,7 @@ function renderTextResponseComprehension(question) {
 function solutionsTable(question) {
   if (question.comprehension && question.groups) {
     return renderTextResponseComprehension(question);
-  } else if (!question.comprehension && question.solutions) {
+  } if (!question.comprehension && question.solutions) {
     return renderTextResponseSolutions(question);
   }
   return null;
@@ -175,24 +180,29 @@ function solutionsTable(question) {
 function TextResponse({ question, readOnly, answerId, graderView }) {
   const allowUpload = question.allowAttachment;
 
-  const readOnlyAnswer = (<Field
-    name={`${answerId}[answer_text]`}
-    component={props =>
-      <div dangerouslySetInnerHTML={{ __html: props.input.value }} />} // eslint-disable-line react/prop-types
-  />);
+  const readOnlyAnswer = (
+    <Field
+      name={`${answerId}[answer_text]`}
+      component={props => <div dangerouslySetInnerHTML={{ __html: props.input.value }} />}
+    />
+  );
 
-  const richtextAnswer = (<Field
-    name={`${answerId}[answer_text]`}
-    component={RichTextField}
-    multiLine
-  />);
+  const richtextAnswer = (
+    <Field
+      name={`${answerId}[answer_text]`}
+      component={RichTextField}
+      multiLine
+    />
+  );
 
-  const plaintextAnswer = (<Field
-    name={`${answerId}[answer_text]`}
-    component="textarea"
-    style={{ width: '100%' }}
-    rows={5}
-  />);
+  const plaintextAnswer = (
+    <Field
+      name={`${answerId}[answer_text]`}
+      component="textarea"
+      style={{ width: '100%' }}
+      rows={5}
+    />
+  );
 
   const editableAnswer = question.autogradable ? plaintextAnswer : richtextAnswer;
 
@@ -211,6 +221,9 @@ TextResponse.propTypes = {
   readOnly: PropTypes.bool,
   answerId: PropTypes.number,
   graderView: PropTypes.bool,
+  input: {
+    value: PropTypes.string,
+  },
 };
 
 export default TextResponse;

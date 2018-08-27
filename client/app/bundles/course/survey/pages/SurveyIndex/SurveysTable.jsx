@@ -51,13 +51,12 @@ class SurveysTable extends React.Component {
       <Toggle
         labelPosition="right"
         toggled={survey.published}
-        onToggle={(event, value) =>
-          dispatch(updateSurvey(
-            survey.id,
-            { survey: { published: value } },
-            <FormattedMessage {...translations.updateSuccess} values={survey} />,
-            <FormattedMessage {...translations.updateFailure} values={survey} />
-          ))
+        onToggle={(event, value) => dispatch(updateSurvey(
+          survey.id,
+          { survey: { published: value } },
+          <FormattedMessage {...translations.updateSuccess} values={survey} />,
+          <FormattedMessage {...translations.updateFailure} values={survey} />
+        ))
         }
       />
     );
@@ -88,11 +87,13 @@ class SurveysTable extends React.Component {
               <FormattedMessage {...translations.expiresAt} />
             </TableHeaderColumn>
             {
-              canCreate ?
-                <TableHeaderColumn colSpan={2}>
-                  <FormattedMessage {...translations.published} />
-                </TableHeaderColumn> :
-                null
+              canCreate
+                ? (
+                  <TableHeaderColumn colSpan={2}>
+                    <FormattedMessage {...translations.published} />
+                  </TableHeaderColumn>
+                )
+                : null
             }
             <TableHeaderColumn colSpan={canCreate ? 14 : 4} />
           </TableRow>
@@ -122,35 +123,41 @@ class SurveysTable extends React.Component {
                   { formatShortDateTime(survey.end_at) }
                 </TableRowColumn>
                 {
-                  canCreate ?
-                    <TableHeaderColumn colSpan={2}>
-                      { this.renderPublishToggle(survey) }
-                    </TableHeaderColumn> :
-                    null
+                  canCreate
+                    ? (
+                      <TableHeaderColumn colSpan={2}>
+                        { this.renderPublishToggle(survey) }
+                      </TableHeaderColumn>
+                    )
+                    : null
                 }
                 <TableHeaderColumn colSpan={canCreate ? 14 : 4}>
                   <div style={styles.buttonsColumn}>
                     {
-                      survey.canViewResults ?
-                        <RaisedButton
-                          style={styles.button}
-                          label={<FormattedMessage {...translations.results} />}
-                          onClick={() => history.push(
-                            `/courses/${courseId}/surveys/${survey.id}/results`
-                          )}
-                        /> :
-                        null
+                      survey.canViewResults
+                        ? (
+                          <RaisedButton
+                            style={styles.button}
+                            label={<FormattedMessage {...translations.results} />}
+                            onClick={() => history.push(
+                              `/courses/${courseId}/surveys/${survey.id}/results`
+                            )}
+                          />
+                        )
+                        : null
                     }
                     {
-                      survey.canViewResults ?
-                        <RaisedButton
-                          style={styles.button}
-                          label={<FormattedMessage {...translations.responses} />}
-                          onClick={() => history.push(
-                            `/courses/${courseId}/surveys/${survey.id}/responses`
-                          )}
-                        /> :
-                        null
+                      survey.canViewResults
+                        ? (
+                          <RaisedButton
+                            style={styles.button}
+                            label={<FormattedMessage {...translations.responses} />}
+                            onClick={() => history.push(
+                              `/courses/${courseId}/surveys/${survey.id}/responses`
+                            )}
+                          />
+                        )
+                        : null
                     }
                     <RespondButton
                       courseId={courseId}

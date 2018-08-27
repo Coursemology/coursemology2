@@ -40,7 +40,12 @@ class ProgrammingAnswerHistory extends Component {
     }
     return (
       <div key={answer.id}>
-        <h4>{intl.formatMessage(translations.submittedAt)}: {date}</h4>
+        <h4>
+          {intl.formatMessage(translations.submittedAt)}
+:
+          {' '}
+          {date}
+        </h4>
         <ReadOnlyEditor
           answerId={answer.id}
           fileId={file.id}
@@ -58,7 +63,12 @@ class ProgrammingAnswerHistory extends Component {
     const date = formatDateTime(answer.createdAt);
     return (
       <div key={answer.id}>
-        <h4>{intl.formatMessage(translations.submittedAt)}: {date}</h4>
+        <h4>
+          {intl.formatMessage(translations.submittedAt)}
+:
+          {' '}
+          {date}
+        </h4>
         <ProgrammingImportEditor
           questionId={answer.questionId}
           answerId={answer.id}

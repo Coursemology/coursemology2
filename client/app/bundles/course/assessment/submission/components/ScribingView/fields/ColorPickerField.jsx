@@ -78,17 +78,19 @@ const ColorPickerField = (props) => {
   return (
     <React.Fragment>
       <div>
-        { noFillOnCheck ?
-          <Checkbox
-            label={intl.formatMessage(translations.noFill)}
-            checked={noFillValue}
-            onCheck={(event, checked) => {
-              noFillOnCheck(checked);
-              if (checked) {
-                onChangeCompleteColorPicker(`rgba(${rgbaValues[1]},${rgbaValues[2]},${rgbaValues[3]},0)`);
-              }
-            }}
-          /> : null
+        { noFillOnCheck
+          ? (
+            <Checkbox
+              label={intl.formatMessage(translations.noFill)}
+              checked={noFillValue}
+              onCheck={(event, checked) => {
+                noFillOnCheck(checked);
+                if (checked) {
+                  onChangeCompleteColorPicker(`rgba(${rgbaValues[1]},${rgbaValues[2]},${rgbaValues[3]},0)`);
+                }
+              }}
+            />
+          ) : null
         }
       </div>
       <div style={styles.colorPickerFieldDiv}>
@@ -96,14 +98,14 @@ const ColorPickerField = (props) => {
         <div
           role="button"
           tabIndex="0"
-          style={noFillValue ?
-          {
-            ...styles.colorPicker,
-            background: colorPickerColor,
-            cursor: 'not-allowed',
-            pointerEvents: 'inherit',
-          }
-          : { background: colorPickerColor, ...styles.colorPicker }}
+          style={noFillValue
+            ? {
+              ...styles.colorPicker,
+              background: colorPickerColor,
+              cursor: 'not-allowed',
+              pointerEvents: 'inherit',
+            }
+            : { background: colorPickerColor, ...styles.colorPicker }}
           onClick={noFillValue ? undefined : onClickColorPicker}
         />
         <Popover

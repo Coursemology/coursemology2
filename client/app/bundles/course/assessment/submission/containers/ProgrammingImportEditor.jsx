@@ -97,47 +97,51 @@ class VisibleProgrammingImportEditor extends Component {
     const disableImport = !stagedFiles || isSaving;
     return (
       <React.Fragment>
-        {readOnly ? null : <ImportedFileView
-          submissionId={submissionId}
-          questionId={questionId}
-          displayFileIndex={displayFileIndex}
-          handleDeleteFile={this.handleDeleteFile}
-          handleFileTabbing={index => this.setState({ displayFileIndex: index })}
-          files={files}
-          viewHistory={viewHistory}
-        />}
-        {viewHistory ?
-          this.renderProgrammingHistoryEditor(answers[answerId])
-          :
-          <FieldArray
-            name={`${answerId}[files_attributes]`}
-            component={VisibleProgrammingImportEditor.renderSelectProgrammingFileEditor}
-            {...{
-              readOnly,
-              question,
-              displayFileIndex,
-              viewHistory,
-              language: parseLanguages(question.language),
-            }}
+        {readOnly ? null : (
+          <ImportedFileView
+            submissionId={submissionId}
+            questionId={questionId}
+            displayFileIndex={displayFileIndex}
+            handleDeleteFile={this.handleDeleteFile}
+            handleFileTabbing={index => this.setState({ displayFileIndex: index })}
+            files={files}
+            viewHistory={viewHistory}
           />
+        )}
+        {viewHistory
+          ? this.renderProgrammingHistoryEditor(answers[answerId])
+          : (
+            <FieldArray
+              name={`${answerId}[files_attributes]`}
+              component={VisibleProgrammingImportEditor.renderSelectProgrammingFileEditor}
+              {...{
+                readOnly,
+                question,
+                displayFileIndex,
+                viewHistory,
+                language: parseLanguages(question.language),
+              }}
+            />
+          )
         }
-        {readOnly || viewHistory ?
-          null
-          :
-          <React.Fragment>
-            <FileInput
-              name={`${answerId}[import_files]`}
-              disabled={isSaving}
-              callback={filesToImport => dispatch(stageFiles(submissionId, answerId, filesToImport))}
-            />
-            <RaisedButton
-              style={styles.formButton}
-              backgroundColor={white}
-              label={intl.formatMessage(translations.uploadFiles)}
-              onClick={() => dispatch(importFiles(answerId, answers, question.language))}
-              disabled={disableImport}
-            />
-          </React.Fragment>
+        {readOnly || viewHistory
+          ? null
+          : (
+            <React.Fragment>
+              <FileInput
+                name={`${answerId}[import_files]`}
+                disabled={isSaving}
+                callback={filesToImport => dispatch(stageFiles(submissionId, answerId, filesToImport))}
+              />
+              <RaisedButton
+                style={styles.formButton}
+                backgroundColor={white}
+                label={intl.formatMessage(translations.uploadFiles)}
+                onClick={() => dispatch(importFiles(answerId, answers, question.language))}
+                disabled={disableImport}
+              />
+            </React.Fragment>
+          )
         }
       </React.Fragment>
     );

@@ -21,8 +21,8 @@ class Toggle extends React.Component {
       <div>
         <MaterialToggle {...props} />
         {
-            errorText &&
-            <div style={errorStyle}>{errorText}</div>
+            errorText
+            && <div style={errorStyle}>{errorText}</div>
           }
       </div>
     );

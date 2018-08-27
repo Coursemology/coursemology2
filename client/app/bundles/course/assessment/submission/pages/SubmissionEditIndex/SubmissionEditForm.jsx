@@ -86,17 +86,19 @@ class SubmissionEditForm extends Component {
     }
 
     if (question.type === questionTypes.Programming) {
-      const runCodeLabel = attemptLimit ?
-        intl.formatMessage(translations.runCodeWithLimit, { attemptsLeft }) :
-        intl.formatMessage(translations.runCode);
+      const runCodeLabel = attemptLimit
+        ? intl.formatMessage(translations.runCodeWithLimit, { attemptsLeft })
+        : intl.formatMessage(translations.runCode);
 
       return (
         <React.Fragment>
-          {jobError ?
-            <Paper style={{ padding: 10, backgroundColor: red100, marginBottom: 20 }}>
-              {intl.formatMessage(translations.autogradeFailure)}
-            </Paper>
-          : null}
+          {jobError
+            ? (
+              <Paper style={{ padding: 10, backgroundColor: red100, marginBottom: 20 }}>
+                {intl.formatMessage(translations.autogradeFailure)}
+              </Paper>
+            )
+            : null}
           <RaisedButton
             style={styles.formButton}
             backgroundColor={white}
@@ -104,14 +106,16 @@ class SubmissionEditForm extends Component {
             onClick={() => this.setState({ resetConfirmation: true, resetAnswerId: answerId })}
             disabled={isAutograding || isResetting || isSaving}
           />
-          {autogradable ? <RaisedButton
-            style={styles.formButton}
-            backgroundColor={red900}
-            secondary
-            label={runCodeLabel}
-            onClick={() => handleSubmitAnswer(answerId)}
-            disabled={isAutograding || isResetting || isSaving || (!graderView && attemptsLeft === 0)}
-          /> : null}
+          {autogradable ? (
+            <RaisedButton
+              style={styles.formButton}
+              backgroundColor={red900}
+              secondary
+              label={runCodeLabel}
+              onClick={() => handleSubmitAnswer(answerId)}
+              disabled={isAutograding || isResetting || isSaving || (!graderView && attemptsLeft === 0)}
+            />
+          ) : null}
           {isAutograding || isResetting ? <CircularProgress size={36} style={{ position: 'absolute' }} /> : null}
         </React.Fragment>
       );
@@ -143,10 +147,12 @@ class SubmissionEditForm extends Component {
             title={title}
             titleColor={red900}
           />
-          { explanation.explanations.every(exp => exp.trim().length === 0) ? null :
-          <CardText>
-            {explanation.explanations.map(exp => <div dangerouslySetInnerHTML={{ __html: exp }} />)}
-          </CardText> }
+          { explanation.explanations.every(exp => exp.trim().length === 0) ? null
+            : (
+              <CardText>
+                {explanation.explanations.map(exp => <div dangerouslySetInnerHTML={{ __html: exp }} />)}
+              </CardText>
+            ) }
         </Card>
       );
     }
@@ -444,13 +450,13 @@ class SubmissionEditForm extends Component {
     return (
       <Dialog
         title={intl.formatMessage(translations.examDialogTitle)}
-        actions={
+        actions={(
           <FlatButton
             primary
             label="OK"
             onClick={() => this.setState({ examNotice: false })}
           />
-        }
+)}
         modal
         open={this.state.examNotice}
       >

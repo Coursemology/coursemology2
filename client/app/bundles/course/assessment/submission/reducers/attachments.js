@@ -12,9 +12,8 @@ export default function (state = {}, action) {
     case actions.PUBLISH_SUCCESS:
       return {
         ...state,
-        ...action.payload.answers.reduce((obj, answer) =>
-          ({ ...obj, [answer.questionId]: answer.attachments })
-          , {}),
+        ...action.payload.answers.reduce((obj, answer) => ({ ...obj, [answer.questionId]: answer.attachments }),
+          {}),
       };
     case actions.AUTOGRADE_SUCCESS: {
       const { questionId } = action.payload;

@@ -85,9 +85,9 @@ class VisibleUploadedFileView extends Component {
       <React.Fragment>
         <strong>{intl.formatMessage(translations.uploadedFiles)}</strong>
         <div style={styles.wrapper}>
-          {attachments.length ?
-            attachments.map(this.renderAttachment, this) :
-            <span>{intl.formatMessage(translations.noFiles)}</span>
+          {attachments.length
+            ? attachments.map(this.renderAttachment, this)
+            : <span>{intl.formatMessage(translations.noFiles)}</span>
           }
         </div>
         {this.renderDeleteDialog()}
@@ -108,9 +108,8 @@ function mapStateToProps(state, ownProps) {
   const { questionId } = ownProps;
   const { submission } = state;
 
-  const canDestroyAttachments =
-    submission.workflowState === workflowStates.Attempting &&
-    submission.isCreator;
+  const canDestroyAttachments = submission.workflowState === workflowStates.Attempting
+    && submission.isCreator;
 
   return {
     canDestroyAttachments,

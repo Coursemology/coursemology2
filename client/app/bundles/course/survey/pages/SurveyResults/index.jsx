@@ -52,16 +52,15 @@ class SurveyResults extends React.Component {
   getRespondentsCount() {
     const { sections } = this.props;
     if (
-      (sections && sections.length) < 1 ||
-      (sections[0].questions && sections[0].questions.length < 1) ||
-      (sections[0].questions[0].answers && sections[0].questions[0].answers.length < 1)
+      (sections && sections.length) < 1
+      || (sections[0].questions && sections[0].questions.length < 1)
+      || (sections[0].questions[0].answers && sections[0].questions[0].answers.length < 1)
     ) {
       return { totalStudents: 0, realStudents: 0 };
     }
 
     const totalStudents = sections[0].questions[0].answers.length;
-    const realStudents =
-      sections[0].questions[0].answers.filter(answer => !answer.phantom).length;
+    const realStudents = sections[0].questions[0].answers.filter(answer => !answer.phantom).length;
     return { totalStudents, realStudents };
   }
 
@@ -86,14 +85,16 @@ class SurveyResults extends React.Component {
               />
             </h4>
             {
-              totalStudents === realStudents ?
-                <p><FormattedMessage {...translations.noPhantoms} /></p> :
-                <Toggle
-                  label={<FormattedMessage {...translations.includePhantoms} />}
-                  labelPosition="right"
-                  toggled={this.state.includePhantoms}
-                  onToggle={(_, value) => this.setState({ includePhantoms: value })}
-                />
+              totalStudents === realStudents
+                ? <p><FormattedMessage {...translations.noPhantoms} /></p>
+                : (
+                  <Toggle
+                    label={<FormattedMessage {...translations.includePhantoms} />}
+                    labelPosition="right"
+                    toggled={this.state.includePhantoms}
+                    onToggle={(_, value) => this.setState({ includePhantoms: value })}
+                  />
+                )
             }
           </CardText>
         </Card>

@@ -194,9 +194,9 @@ const SurveyForm = ({
     />
     <div style={styles.hint}>
       {
-        disableAnonymousToggle ?
-        intl.formatMessage(surveyFormTranslations.hasStudentResponse) :
-        intl.formatMessage(surveyFormTranslations.anonymousHint)
+        disableAnonymousToggle
+          ? intl.formatMessage(surveyFormTranslations.hasStudentResponse)
+          : intl.formatMessage(surveyFormTranslations.anonymousHint)
       }
     </div>
   </Form>

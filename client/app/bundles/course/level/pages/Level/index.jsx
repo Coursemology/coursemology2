@@ -91,7 +91,7 @@ class Level extends React.Component {
     return (
       <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
         <TableRow>
-          <TableHeaderColumn style={styles.levelHeader} >
+          <TableHeaderColumn style={styles.levelHeader}>
             <FormattedMessage {...translations.levelHeader} />
           </TableHeaderColumn>
           <TableHeaderColumn style={styles.thresholdHeader}>

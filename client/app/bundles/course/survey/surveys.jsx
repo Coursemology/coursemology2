@@ -17,8 +17,8 @@ $(document).ready(() => {
         <Router history={history}>
           <SurveysLayout />
         </Router>
-      </ProviderWrapper>
-      , mountNode
+      </ProviderWrapper>,
+      mountNode
     );
   }
 });

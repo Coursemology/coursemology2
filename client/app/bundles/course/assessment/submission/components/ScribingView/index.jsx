@@ -27,11 +27,13 @@ export default class ScribingViewComponent extends React.Component {
 
   render() {
     const { answerId, submission } = this.props;
-    return (answerId ?
-      <div style={styles.canvasDiv}>
-        {submission.canUpdate ? <ScribingToolbar {...this.props} /> : null }
-        <ScribingCanvas {...this.props} />
-      </div> : null
+    return (answerId
+      ? (
+        <div style={styles.canvasDiv}>
+          {submission.canUpdate ? <ScribingToolbar {...this.props} /> : null }
+          <ScribingCanvas {...this.props} />
+        </div>
+      ) : null
     );
   }
 }

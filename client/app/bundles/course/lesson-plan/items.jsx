@@ -17,8 +17,8 @@ $(document).ready(() => {
         <Router history={history}>
           <LessonPlanLayout />
         </Router>
-      </ProviderWrapper>
-      , mountNode
+      </ProviderWrapper>,
+      mountNode
     );
   }
 });

@@ -54,18 +54,19 @@ class VisibleImportedFileView extends Component {
     const staged = file.staged || false;
 
     return (
-      staged ?
-        null
-        :
-        <Chip
-          key={file.id}
-          style={styles.chip}
-          onRequestDelete={onRequestDelete}
-          backgroundColor={chipColor}
-          onClick={() => handleFileTabbing(index)}
-        >
-          {file.filename}
-        </Chip>
+      staged
+        ? null
+        : (
+          <Chip
+            key={file.id}
+            style={styles.chip}
+            onRequestDelete={onRequestDelete}
+            backgroundColor={chipColor}
+            onClick={() => handleFileTabbing(index)}
+          >
+            {file.filename}
+          </Chip>
+        )
     );
   }
 
@@ -91,9 +92,9 @@ class VisibleImportedFileView extends Component {
       <div>
         <strong>{intl.formatMessage(translations.uploadedFiles)}</strong>
         <div style={styles.wrapper}>
-          {files.length ?
-            files.map(this.renderFile, this) :
-            <span>{intl.formatMessage(translations.noFiles)}</span>
+          {files.length
+            ? files.map(this.renderFile, this)
+            : <span>{intl.formatMessage(translations.noFiles)}</span>
           }
         </div>
         {this.renderDeleteDialog()}
@@ -114,9 +115,8 @@ VisibleImportedFileView.propTypes = {
 function mapStateToProps(state, ownProps) {
   const { displayFileIndex, handleFileTabbing, handleDeleteFile, files, viewHistory } = ownProps;
   const { submission } = state;
-  const canDestroyFiles =
-    submission.workflowState === workflowStates.Attempting &&
-    submission.isCreator && !viewHistory;
+  const canDestroyFiles = submission.workflowState === workflowStates.Attempting
+    && submission.isCreator && !viewHistory;
 
   return {
     canDestroyFiles,

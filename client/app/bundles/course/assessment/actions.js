@@ -53,8 +53,7 @@ export function updateAssessment(assessmentId, data, successMessage, failureMess
         });
         // TODO: Remove redirection when assessment index is implemented using React.
         setTimeout(() => {
-          window.location =
-            `/courses/${getCourseId()}/assessments/${assessmentId}`;
+          window.location = `/courses/${getCourseId()}/assessments/${assessmentId}`;
         }, 500);
       })
       .catch((error) => {

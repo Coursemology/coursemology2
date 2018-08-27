@@ -155,10 +155,14 @@ class SubmissionEditStepForm extends Component {
             title={title}
             titleColor={explanation.correct ? green900 : red900}
           />
-          { explanation.explanations.every(exp => exp.trim().length === 0) ? null :
-          <CardText>
-            {explanation.explanations.map((exp, idx) => <div key={idx} dangerouslySetInnerHTML={{ __html: exp }} />)}
-          </CardText> }
+          { explanation.explanations.every(exp => exp.trim().length === 0) ? null
+            : (
+              <CardText>
+                {explanation.explanations.map((exp, idx) => (
+                  <div key={idx} dangerouslySetInnerHTML={{ __html: exp }} />
+                ))}
+              </CardText>
+            ) }
         </Card>
       );
       /* eslint-enable react/no-array-index-key */
@@ -341,14 +345,16 @@ class SubmissionEditStepForm extends Component {
         {this.renderExplanationPanel(question)}
         {this.renderQuestionGrading(id)}
         {this.renderGradingPanel()}
-        {attempting ?
-          <div>
-            {this.renderResetButton()}
-            {this.renderSubmitButton()}
-            {this.renderContinueButton()}
-            {this.renderAnswerLoadingIndicator()}
-          </div>
-        : null}
+        {attempting
+          ? (
+            <div>
+              {this.renderResetButton()}
+              {this.renderSubmitButton()}
+              {this.renderContinueButton()}
+              {this.renderAnswerLoadingIndicator()}
+            </div>
+          )
+          : null}
         <div>
           {this.renderSaveGradeButton()}
           {this.renderSaveDraftButton()}
@@ -382,14 +388,14 @@ class SubmissionEditStepForm extends Component {
               <Step key={questionId} active={index <= maxStep}>
                 <StepButton
                   iconContainerStyle={{ padding: 0 }}
-                  icon={
+                  icon={(
                     <SvgIcon color={index === stepIndex ? blue800 : lightBlue400}>
                       <circle cx="12" cy="12" r="12" />
                       <text x="12" y="16" textAnchor="middle" fontSize="12" fill="#fff">
                         {index + 1}
                       </text>
                     </SvgIcon>
-                  }
+)}
                   onClick={() => this.handleStepClick(index)}
                 />
               </Step>

@@ -52,13 +52,14 @@ class DuplicateAllButton extends React.Component {
         />
         <ConfirmationDialog
           open={this.state.confirmationOpen}
-          message={
+          message={(
             <React.Fragment>
               <FormattedMessage {...translations.info} />
-              <br /><br />
+              <br />
+              <br />
               <FormattedMessage {...translations.confirmationMessage} />
             </React.Fragment>
-          }
+)}
           onCancel={() => this.setState({ confirmationOpen: false })}
           onConfirm={() => {
             dispatch(submit(formNames.NEW_COURSE));
@@ -72,7 +73,7 @@ class DuplicateAllButton extends React.Component {
 
 export default connect(({ duplication, ...state }) => ({
   duplicationMode: duplication.duplicationMode,
-  disabled: !isValid(formNames.NEW_COURSE)(state) ||
-            duplication.isDuplicating ||
-            duplication.isChangingCourse,
+  disabled: !isValid(formNames.NEW_COURSE)(state)
+            || duplication.isDuplicating
+            || duplication.isChangingCourse,
 }))(DuplicateAllButton);

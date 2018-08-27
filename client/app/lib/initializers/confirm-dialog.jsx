@@ -20,28 +20,25 @@ function loadDialogue(element, successCallback) {
         onConfirmCallback={() => successCallback(element)}
         message={element.attr('data-confirm')}
       />
-    </ProviderWrapper>
-    , mountNode
+    </ProviderWrapper>,
+    mountNode
   );
 }
 
 // Create a form based on the link and submit.
 function submitLink(link) {
-  const form =
-  $('<form>', {
+  const form = $('<form>', {
     method: 'POST',
     action: link.attr('href'),
   });
 
-  const token =
-  $('<input>', {
+  const token = $('<input>', {
     type: 'hidden',
     name: 'authenticity_token',
     value: $.rails.csrfToken(),
   });
 
-  const method =
-  $('<input>', {
+  const method = $('<input>', {
     name: '_method',
     type: 'hidden',
     value: link.data('method'),

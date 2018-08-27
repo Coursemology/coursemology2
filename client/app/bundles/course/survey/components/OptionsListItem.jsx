@@ -58,17 +58,19 @@ class OptionsListItem extends React.PureComponent {
         style={styles.gridCard}
         containerStyle={styles.gridOption}
       >
-        { imageUrl ?
-          <Thumbnail
-            src={imageUrl}
-            style={styles.tiledImage}
-            containerStyle={styles.tiledImageContainer}
-          /> : [] }
+        { imageUrl
+          ? (
+            <Thumbnail
+              src={imageUrl}
+              style={styles.tiledImage}
+              containerStyle={styles.tiledImageContainer}
+            />
+          ) : [] }
         <div style={styles.gridOptionBody}>
           {
-            optionText ?
-              <CardText><p dangerouslySetInnerHTML={{ __html: optionText }} /></CardText> :
-              null
+            optionText
+              ? <CardText><p dangerouslySetInnerHTML={{ __html: optionText }} /></CardText>
+              : null
           }
           { widget }
         </div>
@@ -82,12 +84,14 @@ class OptionsListItem extends React.PureComponent {
       <div style={styles.option}>
         { widget }
         <React.Fragment>
-          { imageUrl ?
-            <Thumbnail
-              src={imageUrl}
-              style={styles.image}
-              containerStyle={styles.imageContainer}
-            /> : [] }
+          { imageUrl
+            ? (
+              <Thumbnail
+                src={imageUrl}
+                style={styles.image}
+                containerStyle={styles.imageContainer}
+              />
+            ) : [] }
           <p dangerouslySetInnerHTML={{ __html: optionText || null }} />
         </React.Fragment>
       </div>

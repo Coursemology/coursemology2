@@ -306,7 +306,8 @@ class AssessmentForm extends React.Component {
             disabled={submitting}
           />
           {
-            gamified &&
+            gamified
+            && (
             <Field
               name="bonus_end_at"
               component={DateTimePicker}
@@ -314,10 +315,12 @@ class AssessmentForm extends React.Component {
               style={styles.flexChild}
               disabled={submitting}
             />
+            )
           }
         </div>
         {
-          gamified &&
+          gamified
+          && (
           <div style={styles.flexGroup}>
             <Field
               name="base_exp"
@@ -336,10 +339,12 @@ class AssessmentForm extends React.Component {
               disabled={submitting}
             />
           </div>
+          )
         }
 
         {
-          editing &&
+          editing
+          && (
           <Field
             name="published"
             component={Toggle}
@@ -349,6 +354,7 @@ class AssessmentForm extends React.Component {
             style={styles.toggle}
             disabled={submitting}
           />
+          )
         }
 
         <Field
@@ -356,8 +362,8 @@ class AssessmentForm extends React.Component {
           component={Toggle}
           parse={Boolean}
           label={
-            modeSwitching ? <FormattedMessage {...translations.autograded} /> :
-            <FormattedMessage {...translations.modeSwitchingDisabled} />
+            modeSwitching ? <FormattedMessage {...translations.autograded} />
+              : <FormattedMessage {...translations.modeSwitchingDisabled} />
           }
           labelPosition="right"
           style={styles.toggle}
@@ -365,10 +371,12 @@ class AssessmentForm extends React.Component {
         />
 
         {
-          modeSwitching &&
+          modeSwitching
+          && (
           <div style={styles.hint}>
             <FormattedMessage {...translations.autogradedHint} />
           </div>
+          )
         }
 
         {this.renderExtraOptions()}
@@ -399,7 +407,8 @@ class AssessmentForm extends React.Component {
         </div>
 
         {
-          folderAttributes &&
+          folderAttributes
+          && (
           <React.Fragment>
             <br />
             <MaterialUploader
@@ -407,15 +416,18 @@ class AssessmentForm extends React.Component {
               materials={folderAttributes.materials}
             />
           </React.Fragment>
+          )
         }
         {
-          editing && conditionAttributes &&
+          editing && conditionAttributes
+          && (
           <div style={styles.conditions}>
             <ConditionList
               newConditionUrls={conditionAttributes.new_condition_urls}
               conditions={conditionAttributes.conditions}
             />
           </div>
+          )
         }
       </Form>
     );

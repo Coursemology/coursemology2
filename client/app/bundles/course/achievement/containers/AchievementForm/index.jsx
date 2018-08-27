@@ -82,13 +82,15 @@ const AchievementForm = ({
       disabled={submitting}
     />
     {
-      editing && conditionAttributes &&
+      editing && conditionAttributes
+      && (
       <div style={styles.conditions}>
         <ConditionList
           newConditionUrls={conditionAttributes.new_condition_urls}
           conditions={conditionAttributes.conditions}
         />
       </div>
+      )
     }
   </Form>
 );

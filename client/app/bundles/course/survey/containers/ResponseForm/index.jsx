@@ -124,8 +124,8 @@ class ResponseForm extends React.Component {
     if (!isResponseCreator) { return null; }
     if (!response.submitted_at && !canSubmit) { return null; }
 
-    const submitButtonTranslation =
-      response.submitted_at ? responseFormTranslations.submitted : formTranslations.submit;
+    const submitButtonTranslation = response.submitted_at
+      ? responseFormTranslations.submitted : formTranslations.submit;
 
     return (
       <RaisedButton

@@ -47,27 +47,23 @@ function validation(data, pathOfKeysToData, intl) {
   // Check maximum grade
   const maximumGrade = data.get('maximum_grade');
   if (!maximumGrade) {
-    questionErrors.maximum_grade =
-      intl.formatMessage(translations.cannotBeBlankValidationError);
+    questionErrors.maximum_grade = intl.formatMessage(translations.cannotBeBlankValidationError);
     hasError = true;
   } else if (maximumGrade < 0) {
-    questionErrors.maximum_grade =
-      intl.formatMessage(translations.positiveNumberValidationError);
+    questionErrors.maximum_grade = intl.formatMessage(translations.positiveNumberValidationError);
     hasError = true;
   }
 
   // Check language
   if (!data.get('language_id')) {
-    questionErrors.language_id =
-      intl.formatMessage(translations.cannotBeBlankValidationError);
+    questionErrors.language_id = intl.formatMessage(translations.cannotBeBlankValidationError);
     hasError = true;
   }
 
   // Check time limit
   const timeLimit = data.get('time_limit');
   if (timeLimit && (timeLimit > HARD_TIME_LIMIT || timeLimit <= 0)) {
-    questionErrors.time_limit =
-      intl.formatMessage(translations.timeLimitRangeValidationError);
+    questionErrors.time_limit = intl.formatMessage(translations.timeLimitRangeValidationError);
     hasError = true;
   }
 
@@ -75,8 +71,7 @@ function validation(data, pathOfKeysToData, intl) {
     const value = data.get(numberField);
 
     if (value && value <= 0) {
-      questionErrors[numberField] =
-        intl.formatMessage(translations.lessThanEqualZeroValidationError);
+      questionErrors[numberField] = intl.formatMessage(translations.lessThanEqualZeroValidationError);
       hasError = true;
     }
   });
@@ -84,8 +79,7 @@ function validation(data, pathOfKeysToData, intl) {
   // Check file uploaded when no previous package exists
   if (!data.get('edit_online')) {
     if (data.get('package') === null && data.get('package_filename') === null) {
-      questionErrors.package_filename =
-        intl.formatMessage(translations.noPackageValidationError);
+      questionErrors.package_filename = intl.formatMessage(translations.noPackageValidationError);
       hasError = true;
     }
   }
@@ -371,19 +365,20 @@ class ProgrammingQuestionForm extends React.Component {
     let downloadNode = null;
 
     if (pkg) {
-      const uploadedPackageLabel = showEditOnline ?
-        this.props.intl.formatMessage(translations.downloadPackageLabel)
-        :
-        this.props.intl.formatMessage(translations.uploadedPackageLabel);
+      const uploadedPackageLabel = showEditOnline
+        ? this.props.intl.formatMessage(translations.downloadPackageLabel)
+        : this.props.intl.formatMessage(translations.uploadedPackageLabel);
       const name = pkg.get('updater_name');
-      const author = showEditOnline ?
-        this.props.intl.formatMessage(translations.packageUpdatedBy, { name })
-        :
-        this.props.intl.formatMessage(translations.packageUploadedBy, { name });
+      const author = showEditOnline
+        ? this.props.intl.formatMessage(translations.packageUpdatedBy, { name })
+        : this.props.intl.formatMessage(translations.packageUploadedBy, { name });
       downloadNode = (
         <div className={styles.downloadPackageContainer}>
           <div>
-            <span className={styles.uploadedPackageLabel}>{uploadedPackageLabel}:</span>
+            <span className={styles.uploadedPackageLabel}>
+              {uploadedPackageLabel}
+:
+            </span>
             <a
               target="_blank"
               rel="noopener noreferrer"
@@ -490,14 +485,15 @@ class ProgrammingQuestionForm extends React.Component {
       <div>
         { this.renderImportAlertView() }
         {
-          this.props.data.get('save_errors') ?
-            <div className="alert alert-danger">
-              {
+          this.props.data.get('save_errors')
+            ? (
+              <div className="alert alert-danger">
+                {
                 this.props.data.get('save_errors').map((errorMessage, index) => <div key={index}>{errorMessage}</div>)
               }
-            </div>
-            :
-            null
+              </div>
+            )
+            : null
         }
         <form
           id="programmming-question-form"
@@ -566,26 +562,28 @@ class ProgrammingQuestionForm extends React.Component {
             </div>
             <div className={styles.autogradeToggle}>
               {
-                this.props.data.getIn(['question', 'display_autograded_toggle']) ?
-                  <Toggle
-                    label={autogradedLabel}
-                    labelPosition="right"
-                    toggled={autograded}
-                    onToggle={(e) => {
-                      if (hasAutoGradings) return;
-                      this.handleChange('autograded', e.target.checked);
-                    }}
-                    readOnly={hasAutoGradings}
-                    disabled={this.props.data.get('is_loading')}
-                    style={{ margin: '1em 0' }}
-                    name="question_programming[autograded]"
-                  /> : null
+                this.props.data.getIn(['question', 'display_autograded_toggle'])
+                  ? (
+                    <Toggle
+                      label={autogradedLabel}
+                      labelPosition="right"
+                      toggled={autograded}
+                      onToggle={(e) => {
+                        if (hasAutoGradings) return;
+                        this.handleChange('autograded', e.target.checked);
+                      }}
+                      readOnly={hasAutoGradings}
+                      disabled={this.props.data.get('is_loading')}
+                      style={{ margin: '1em 0' }}
+                      name="question_programming[autograded]"
+                    />
+                  ) : null
               }
             </div>
             <div className={styles.memoryLimitInput}>
               {
-                autograded ?
-                  this.renderInputField(
+                autograded
+                  ? this.renderInputField(
                     this.props.intl.formatMessage(translations.memoryLimitFieldLabel),
                     'memory_limit', false, 'number',
                     ProgrammingQuestionForm.convertNull(question.get('memory_limit')),
@@ -595,8 +593,8 @@ class ProgrammingQuestionForm extends React.Component {
             </div>
             <div className={styles.timeLimitInput}>
               {
-                autograded ?
-                  this.renderInputField(
+                autograded
+                  ? this.renderInputField(
                     this.props.intl.formatMessage(translations.timeLimitFieldLabel),
                     'time_limit', false, 'number',
                     question.get('time_limit') === null ? DEFAULT_TIME_LIMIT : question.get('time_limit'),
@@ -605,9 +603,10 @@ class ProgrammingQuestionForm extends React.Component {
               }
             </div>
             {
-              autograded && showAttemptLimit ?
-                <div className={styles.attemptLimitInput}>
-                  {
+              autograded && showAttemptLimit
+                ? (
+                  <div className={styles.attemptLimitInput}>
+                    {
                     this.renderInputField(
                       this.props.intl.formatMessage(translations.attemptLimitFieldLabel),
                       'attempt_limit', false, 'number',
@@ -616,7 +615,8 @@ class ProgrammingQuestionForm extends React.Component {
                       this.props.intl.formatMessage(translations.attemptLimitPlaceholderMessage)
                     )
                   }
-                </div> : null
+                  </div>
+                ) : null
             }
           </div>
 

@@ -45,12 +45,14 @@ class VisibleAnnotations extends Component {
               handleChange={value => handleUpdateChange(post.id, value)}
             />
           ))}
-          {posts.length === 0 || fieldVisible ? <CommentField
-            value={commentForms.annotations[fileId][lineNumber]}
-            isSubmitting={commentForms.isSubmitting}
-            createComment={createComment}
-            handleChange={handleCreateChange}
-          /> : null}
+          {posts.length === 0 || fieldVisible ? (
+            <CommentField
+              value={commentForms.annotations[fileId][lineNumber]}
+              isSubmitting={commentForms.isSubmitting}
+              createComment={createComment}
+              handleChange={handleCreateChange}
+            />
+          ) : null}
         </CardText>
       </Card>
     );

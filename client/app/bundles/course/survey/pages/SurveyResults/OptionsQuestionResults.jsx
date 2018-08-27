@@ -145,14 +145,14 @@ class OptionsQuestionResults extends React.Component {
       <div style={styles.barContainer}>
         <div style={{ ...styles.bar, width: `${percentage}%` }}>
           {
-            percentage >= styles.percentageBarThreshold ?
-            `${percentage.toFixed(1)}%` : null
+            percentage >= styles.percentageBarThreshold
+              ? `${percentage.toFixed(1)}%` : null
           }
         </div>
         {
-          percentage < styles.percentageBarThreshold ?
-            <span style={styles.percentage}>{`${percentage.toFixed(1)}%`}</span> :
-          null
+          percentage < styles.percentageBarThreshold
+            ? <span style={styles.percentage}>{`${percentage.toFixed(1)}%`}</span>
+            : null
         }
       </div>
     );
@@ -166,9 +166,9 @@ class OptionsQuestionResults extends React.Component {
             <Chip key={student.id} style={styles.nameChip}>
               <Link to={student.response_path}>
                 {
-                  student.phantom ?
-                    <FormattedMessage {...translations.phantomStudentName} values={{ name: student.name }} /> :
-                    student.name
+                  student.phantom
+                    ? <FormattedMessage {...translations.phantomStudentName} values={{ name: student.name }} />
+                    : student.name
                 }
               </Link>
             </Chip>
@@ -186,25 +186,29 @@ class OptionsQuestionResults extends React.Component {
       <TableRow key={id}>
         <TableRowColumn>{index + 1}</TableRowColumn>
         {
-          hasImage ?
-            <TableRowColumn>
-              { imageUrl ?
-                <Thumbnail
-                  src={imageUrl}
-                  style={styles.image}
-                  containerStyle={styles.imageContainer}
-                /> : [] }
-            </TableRowColumn> : null
+          hasImage
+            ? (
+              <TableRowColumn>
+                { imageUrl
+                  ? (
+                    <Thumbnail
+                      src={imageUrl}
+                      style={styles.image}
+                      containerStyle={styles.imageContainer}
+                    />
+                  ) : [] }
+              </TableRowColumn>
+            ) : null
         }
         <TableRowColumn colSpan={hasImage ? 3 : 6} style={styles.wrapText}>
           { optionText || imageName || null }
         </TableRowColumn>
         <TableRowColumn>{breakdown[id].count}</TableRowColumn>
-        <TableRowColumn colSpan={6} >
+        <TableRowColumn colSpan={6}>
           {
-            anonymous ?
-            OptionsQuestionResults.renderPercentageBar(percentage) :
-            OptionsQuestionResults.renderStudentList(breakdown[id].students)
+            anonymous
+              ? OptionsQuestionResults.renderPercentageBar(percentage)
+              : OptionsQuestionResults.renderStudentList(breakdown[id].students)
           }
         </TableRowColumn>
       </TableRow>
@@ -256,7 +260,7 @@ class OptionsQuestionResults extends React.Component {
       <CardText style={styles.expandToggleStyle}>
         <RaisedButton
           label={<FormattedMessage {...translations[labelTranslation]} values={{ quantity }} />}
-          onClick={() => this.setState({ expanded: !this.state.expanded })}
+          onClick={() => this.setState(state => ({ expanded: !state.expanded }))}
         />
       </CardText>
     );
@@ -288,8 +292,8 @@ class OptionsQuestionResults extends React.Component {
             <TableHeaderColumn>
               <FormattedMessage {...translations.count} />
             </TableHeaderColumn>
-            <TableHeaderColumn colSpan={6} >
-              <div style={styles.percentageHeader} >
+            <TableHeaderColumn colSpan={6}>
+              <div style={styles.percentageHeader}>
                 <FormattedMessage {...translations[anonymous ? 'percentage' : 'respondents']} />
                 <div style={styles.sortByPercentage}>
                   <FormattedMessage {...translations[anonymous ? 'sortByPercentage' : 'sortByCount']} />
@@ -301,8 +305,7 @@ class OptionsQuestionResults extends React.Component {
         </TableHeader>
         <TableBody displayRowCheckbox={false}>
           {options.sort(sortMethod).map(
-            (option, index) =>
-              OptionsQuestionResults.renderOptionRow(breakdown, hasImage, option, index, anonymous)
+            (option, index) => OptionsQuestionResults.renderOptionRow(breakdown, hasImage, option, index, anonymous)
           )}
         </TableBody>
       </Table>

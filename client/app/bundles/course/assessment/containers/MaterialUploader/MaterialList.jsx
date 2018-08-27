@@ -53,11 +53,12 @@ const styles = {
 
 const MaterialList = (props) => {
   const { materials, uploadingMaterials, onMaterialDelete, onFileInputChange } = props;
-  const header =
-    (<FormattedMessage
+  const header = (
+    <FormattedMessage
       id="course.assessment.MaterialList.uploadedFiles"
       defaultMessage="Files"
-    />);
+    />
+  );
 
   const materialNodes = materials.map(material => (
     <Material
@@ -95,8 +96,8 @@ const MaterialList = (props) => {
       <Divider />
       <List>
         {
-          (materials.length > 0 || uploadingMaterials.length > 0) &&
-          <Subheader>{header}</Subheader>
+          (materials.length > 0 || uploadingMaterials.length > 0)
+          && <Subheader>{header}</Subheader>
         }
         {materialNodes}
         {uploadingMaterialNodes}

@@ -85,9 +85,9 @@ class DestinationCourseSelector extends React.Component {
   render() {
     const { duplicationMode } = this.props;
 
-    return duplicationMode === duplicationModes.COURSE ?
-      this.renderNewCourseForm() :
-      this.renderExistingCourseForm();
+    return duplicationMode === duplicationModes.COURSE
+      ? this.renderNewCourseForm()
+      : this.renderExistingCourseForm();
   }
 }
 

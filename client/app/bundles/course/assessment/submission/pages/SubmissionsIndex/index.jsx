@@ -139,21 +139,23 @@ class VisibleSubmissionsIndex extends React.Component {
         inkBarStyle={{ backgroundColor: blue500, height: 5, marginTop: -5 }}
         tabItemContainerStyle={{ backgroundColor: grey100 }}
       >
-        {myStudentSubmissions.length > 0 ?
-          <Tab
-            id="my-students-tab"
-            buttonStyle={{ color: blue500 }}
-            icon={<GroupIcon style={{ color: blue500 }} />}
-            label={<FormattedMessage {...submissionsTranslations.myStudents} />}
-          >
-            <SubmissionsTable
-              submissions={myStudentSubmissions}
-              handleDownload={() => dispatch(downloadSubmissions('my'))}
-              handleDownloadStatistics={() => dispatch(downloadStatistics('my'))}
-              {...props}
-            />
-          </Tab>
-        : null}
+        {myStudentSubmissions.length > 0
+          ? (
+            <Tab
+              id="my-students-tab"
+              buttonStyle={{ color: blue500 }}
+              icon={<GroupIcon style={{ color: blue500 }} />}
+              label={<FormattedMessage {...submissionsTranslations.myStudents} />}
+            >
+              <SubmissionsTable
+                submissions={myStudentSubmissions}
+                handleDownload={() => dispatch(downloadSubmissions('my'))}
+                handleDownloadStatistics={() => dispatch(downloadStatistics('my'))}
+                {...props}
+              />
+            </Tab>
+          )
+          : null}
         <Tab
           id="students-tab"
           buttonStyle={{ color: blue500 }}

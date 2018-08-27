@@ -56,7 +56,7 @@ class AchievementsSelector extends React.Component {
     return (
       <Checkbox
         key={achievement.id}
-        label={
+        label={(
           <span>
             <TypeBadge itemType={duplicableItemTypes.ACHIEVEMENT} />
             { achievement.published || <UnpublishedIcon /> }
@@ -67,10 +67,9 @@ class AchievementsSelector extends React.Component {
             />
             { achievement.title }
           </span>
-        }
+)}
         checked={checked}
-        onCheck={(e, value) =>
-          dispatch(setItemSelectedBoolean(duplicableItemTypes.ACHIEVEMENT, achievement.id, value))
+        onCheck={(e, value) => dispatch(setItemSelectedBoolean(duplicableItemTypes.ACHIEVEMENT, achievement.id, value))
         }
       />
     );
@@ -90,10 +89,12 @@ class AchievementsSelector extends React.Component {
     return (
       <React.Fragment>
         {
-          achievements.length > 1 ? <BulkSelectors
-            callback={this.setAllAchievementsSelection}
-            styles={{ selectLink: { marginLeft: 0 } }}
-          /> : null
+          achievements.length > 1 ? (
+            <BulkSelectors
+              callback={this.setAllAchievementsSelection}
+              styles={{ selectLink: { marginLeft: 0 } }}
+            />
+          ) : null
         }
         { achievements.map(achievement => this.renderRow(achievement)) }
       </React.Fragment>

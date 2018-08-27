@@ -59,7 +59,7 @@ class DuplicateItemsConfirmation extends React.Component {
         <Card>
           <CardText>
             <h4>
-              <a href={url} target="_blank">
+              <a href={url} target="_blank" rel="noopener noreferrer">
                 {destinationCourse.title}
               </a>
             </h4>

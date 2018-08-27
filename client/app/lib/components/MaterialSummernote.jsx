@@ -82,10 +82,10 @@ class MaterialSummernote extends React.Component {
     const ui = $.summernote.ui;
 
     const button = ui.button({
-      contents: '<i class="fa fa-code"' +
-                   'style="color: #c7254e;' +
-                   'font-weight: bold;' +
-                   'background-color: #f9f2f4"/>',
+      contents: '<i class="fa fa-code"'
+                   + 'style="color: #c7254e;'
+                   + 'font-weight: bold;'
+                   + 'background-color: #f9f2f4"/>',
       tooltip: this.props.intl.formatMessage(translations.inlineCode),
       click: () => {
         const node = $(window.getSelection().getRangeAt(0).commonAncestorContainer);

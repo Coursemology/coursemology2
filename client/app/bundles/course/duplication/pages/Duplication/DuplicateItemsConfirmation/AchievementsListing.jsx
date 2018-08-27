@@ -30,7 +30,7 @@ class AchievementsListing extends React.Component {
       <Checkbox
         checked
         key={achievement.id}
-        label={
+        label={(
           <span>
             <TypeBadge itemType={duplicableItemTypes.ACHIEVEMENT} />
             <UnpublishedIcon tooltipId="itemUnpublished" />
@@ -41,7 +41,7 @@ class AchievementsListing extends React.Component {
             />
             { achievement.title }
           </span>
-        }
+)}
       />
     );
   }

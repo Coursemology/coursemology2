@@ -70,28 +70,31 @@ class TestCase extends React.Component {
     return (
       <TableRowColumn style={{ paddingLeft: 10, paddingRight: 10 }}>
         {
-          showCodeEditor ?
-            <RaisedButton
-              className={styles.codeEditorButtonCell}
-              label={this.props.intl.formatMessage(translations.hideTestCaseCodeEditorButton)}
-              labelPosition="before"
-              containerElement="label"
-              primary
-              disabled={this.props.isLoading}
-              onClick={this.inlineCodeEditorHandler(type, index, !showCodeEditor)}
-              style={{ marginRight: 0, width: 30 }}
-            />
-            :
-            <RaisedButton
-              className={styles.codeEditorButtonCell}
-              label={this.props.intl.formatMessage(translations.showTestCaseCodeEditorButton)}
-              labelPosition="before"
-              containerElement="label"
-              primary
-              disabled={this.props.isLoading}
-              onClick={this.inlineCodeEditorHandler(type, index, !showCodeEditor)}
-              style={{ marginRight: 0, width: 30 }}
-            />
+          showCodeEditor
+            ? (
+              <RaisedButton
+                className={styles.codeEditorButtonCell}
+                label={this.props.intl.formatMessage(translations.hideTestCaseCodeEditorButton)}
+                labelPosition="before"
+                containerElement="label"
+                primary
+                disabled={this.props.isLoading}
+                onClick={this.inlineCodeEditorHandler(type, index, !showCodeEditor)}
+                style={{ marginRight: 0, width: 30 }}
+              />
+            )
+            : (
+              <RaisedButton
+                className={styles.codeEditorButtonCell}
+                label={this.props.intl.formatMessage(translations.showTestCaseCodeEditorButton)}
+                labelPosition="before"
+                containerElement="label"
+                primary
+                disabled={this.props.isLoading}
+                onClick={this.inlineCodeEditorHandler(type, index, !showCodeEditor)}
+                style={{ marginRight: 0, width: 30 }}
+              />
+            )
         }
       </TableRowColumn>
     );
@@ -114,7 +117,10 @@ class TestCase extends React.Component {
           />
         </TableHeaderColumn>
         <TableRowColumn className={styles.testCell}>
-            test_{type}_{displayedIndex}
+            test_
+          {type}
+_
+          {displayedIndex}
         </TableRowColumn>
         <TableRowColumn className={styles.testCell}>
           { this.renderInput(test, 'expression', expression, index) }

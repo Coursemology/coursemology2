@@ -43,12 +43,12 @@ class MaterialsSelector extends React.Component {
     return (
       <IndentedCheckbox
         key={material.id}
-        label={
+        label={(
           <span>
             <TypeBadge itemType={MATERIAL} />
             { material.name }
           </span>
-        }
+)}
         onCheck={(e, value) => dispatch(setItemSelectedBoolean(MATERIAL, material.id, value))}
         {...{ checked, indentLevel }}
       />
@@ -64,12 +64,12 @@ class MaterialsSelector extends React.Component {
     return (
       <div key={id}>
         <IndentedCheckbox
-          label={
+          label={(
             <span>
               <TypeBadge itemType={FOLDER} />
               { name }
             </span>
-          }
+)}
           onCheck={(e, value) => dispatch(setItemSelectedBoolean(FOLDER, id, value))}
           {...{ checked, indentLevel }}
         >
@@ -89,9 +89,9 @@ class MaterialsSelector extends React.Component {
       <React.Fragment>
         <h2><FormattedMessage {...defaultComponentTitles.course_materials_component} /></h2>
         {
-          folders.length > 0 ?
-          folders.map(rootFolder => this.renderFolder(rootFolder, 0)) :
-          <Subheader><FormattedMessage {...translations.noItems} /></Subheader>
+          folders.length > 0
+            ? folders.map(rootFolder => this.renderFolder(rootFolder, 0))
+            : <Subheader><FormattedMessage {...translations.noItems} /></Subheader>
         }
       </React.Fragment>
     );

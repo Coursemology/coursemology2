@@ -98,9 +98,9 @@ class QuestionCard extends React.Component {
       [MULTIPLE_RESPONSE]: Checkbox,
     }[question.question_type];
     if (!widget) { return null; }
-    return question.grid_view ?
-      QuestionCard.renderOptionsGrid(question, widget) :
-      QuestionCard.renderOptionsList(question, widget);
+    return question.grid_view
+      ? QuestionCard.renderOptionsGrid(question, widget)
+      : QuestionCard.renderOptionsList(question, widget);
   }
 
   static renderTextField() {
@@ -158,8 +158,8 @@ class QuestionCard extends React.Component {
         <CardText style={styles.cardText}>
           { this.renderAdminMenu() }
           <p dangerouslySetInnerHTML={{ __html: question.description }} />
-          { question.required ?
-            <p style={styles.required}><FormattedMessage {...formTranslations.starRequired} /></p> : null }
+          { question.required
+            ? <p style={styles.required}><FormattedMessage {...formTranslations.starRequired} /></p> : null }
         </CardText>
         <CardText expandable style={styles.fields}>
           { QuestionCard.renderSpecificFields(question) }

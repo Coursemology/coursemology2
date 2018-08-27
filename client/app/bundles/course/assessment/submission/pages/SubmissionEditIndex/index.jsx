@@ -45,23 +45,6 @@ class VisibleSubmissionEditIndex extends Component {
     dispatch(fetchSubmission(params.submissionId));
   }
 
-  allCorrect() {
-    const { explanations, questions } = this.props;
-    if (Object.keys(explanations).length !== Object.keys(questions).length) {
-      return false;
-    }
-
-    const numIncorrect = Object.keys(explanations).filter(
-      qid => !explanations[qid] || !explanations[qid].correct
-    ).length;
-    return numIncorrect === 0;
-  }
-
-  handleAutogradeSubmission() {
-    const { dispatch, match: { params } } = this.props;
-    dispatch(autogradeSubmission(params.submissionId));
-  }
-
   validateSubmit = () => {
     const { dispatch, form } = this.props;
     const answers = Object.values(form.values);
@@ -104,6 +87,23 @@ class VisibleSubmissionEditIndex extends Component {
       return Promise.reject();
     }
     return Promise.resolve();
+  }
+
+  handleAutogradeSubmission() {
+    const { dispatch, match: { params } } = this.props;
+    dispatch(autogradeSubmission(params.submissionId));
+  }
+
+  allCorrect() {
+    const { explanations, questions } = this.props;
+    if (Object.keys(explanations).length !== Object.keys(questions).length) {
+      return false;
+    }
+
+    const numIncorrect = Object.keys(explanations).filter(
+      qid => !explanations[qid] || !explanations[qid].correct
+    ).length;
+    return numIncorrect === 0;
   }
 
   handleSubmit() {
@@ -196,9 +196,11 @@ class VisibleSubmissionEditIndex extends Component {
     return (
       <Card style={{ marginBottom: 20 }}>
         <CardHeader title={<h3>{assessment.title}</h3>} />
-        {assessment.description ? <CardText
-          dangerouslySetInnerHTML={{ __html: assessment.description }}
-        /> : null}
+        {assessment.description ? (
+          <CardText
+            dangerouslySetInnerHTML={{ __html: assessment.description }}
+          />
+        ) : null}
         {assessment.files.length > 0 ? (
           <CardText>
             <h4>Files</h4>
@@ -239,20 +241,22 @@ class VisibleSubmissionEditIndex extends Component {
     } = this.props;
 
     if (Object.values(questions).length === 0) {
-      return (<SubmissionEmptyForm
-        courseId={courseId}
-        categoryId={categoryId}
-        tabId={tabId}
-        handleSaveGrade={() => this.handleSaveGrade()}
-        handleSubmit={() => this.handleSubmit()}
-        handleUnsubmit={() => this.handleUnsubmit()}
-        graderView={graderView}
-        canUpdate={canUpdate}
-        attempting={workflowState === workflowStates.Attempting}
-        submitted={workflowState === workflowStates.Submitted}
-        published={workflowState === workflowStates.Published}
-        isSaving={isSaving}
-      />);
+      return (
+        <SubmissionEmptyForm
+          courseId={courseId}
+          categoryId={categoryId}
+          tabId={tabId}
+          handleSaveGrade={() => this.handleSaveGrade()}
+          handleSubmit={() => this.handleSubmit()}
+          handleUnsubmit={() => this.handleUnsubmit()}
+          graderView={graderView}
+          canUpdate={canUpdate}
+          attempting={workflowState === workflowStates.Attempting}
+          submitted={workflowState === workflowStates.Submitted}
+          published={workflowState === workflowStates.Published}
+          isSaving={isSaving}
+        />
+      );
     }
 
     if (autograded) {

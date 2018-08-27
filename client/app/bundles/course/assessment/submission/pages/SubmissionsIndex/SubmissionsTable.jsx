@@ -65,28 +65,26 @@ export default class SubmissionsTable extends React.Component {
 
     const { assessment } = this.props;
 
-    const gradeString =
-      ((submission.workflowState === workflowStates.Attempting) ||
-      (submission.workflowState === workflowStates.Submitted)) ? '--' :
-        SubmissionsTable.formatGrade(submission.grade);
+    const gradeString = ((submission.workflowState === workflowStates.Attempting)
+      || (submission.workflowState === workflowStates.Submitted)) ? '--'
+      : SubmissionsTable.formatGrade(submission.grade);
 
     const maximumGradeString = SubmissionsTable.formatGrade(assessment.maximumGrade);
 
     return `${gradeString} / ${maximumGradeString}`;
   }
 
-  canDownload() {
-    const { assessment, submissions } = this.props;
-    return assessment.downloadable && submissions.some(
-      s =>
-        s.workflowState !== workflowStates.Unstarted &&
-        s.workflowState !== workflowStates.Attempting
-    );
-  }
-
   canDownloadStatistics = () => {
     const { submissions } = this.props;
     return submissions.length > 0;
+  }
+
+  canDownload() {
+    const { assessment, submissions } = this.props;
+    return assessment.downloadable && submissions.some(
+      s => s.workflowState !== workflowStates.Unstarted
+        && s.workflowState !== workflowStates.Attempting
+    );
   }
 
   renderSubmissionWorkflowState(submission) {
@@ -152,11 +150,13 @@ export default class SubmissionsTable extends React.Component {
         <TableRowColumn style={tableCenterCellStyle}>
           {this.getGradeString(submission)}
         </TableRowColumn>
-        {assessment.gamified ?
-          <TableRowColumn style={tableCenterCellStyle}>
-            {submission.pointsAwarded !== undefined ? submission.pointsAwarded : null}
-          </TableRowColumn>
-        : null}
+        {assessment.gamified
+          ? (
+            <TableRowColumn style={tableCenterCellStyle}>
+              {submission.pointsAwarded !== undefined ? submission.pointsAwarded : null}
+            </TableRowColumn>
+          )
+          : null}
         <TableRowColumn style={tableCenterCellStyle}>
           {SubmissionsTable.formatDate(submission.dateSubmitted)}
         </TableRowColumn>

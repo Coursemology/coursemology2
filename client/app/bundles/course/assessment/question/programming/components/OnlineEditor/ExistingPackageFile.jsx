@@ -21,8 +21,8 @@ function ExistingPackageFile(props) {
   const { filename, fileType, filesize, toDelete, deleteExistingPackageFile, isLoading, isLast } = props;
   const buttonClass = toDelete ? 'fa fa-undo' : 'fa fa-trash';
   const buttonColor = toDelete ? white : grey300;
-  const rowStyle = toDelete ?
-    { textDecoration: 'line-through', backgroundColor: grey100 } : {};
+  const rowStyle = toDelete
+    ? { textDecoration: 'line-through', backgroundColor: grey100 } : {};
   if (isLast) {
     rowStyle.borderBottom = 'none';
   }

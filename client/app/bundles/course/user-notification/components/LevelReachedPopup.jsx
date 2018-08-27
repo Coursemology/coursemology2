@@ -55,10 +55,12 @@ const LevelReachedPopup = ({ notification, onDismiss, intl }) => {
         icon={<StarIcon />}
       />
       {
-        notification.leaderboardEnabled && notification.leaderboardPosition ?
-          <p style={styles.leaderboardMessage}>
-            { intl.formatMessage(translations.leaderboardMessage, { position: notification.leaderboardPosition }) }
-          </p> : null
+        notification.leaderboardEnabled && notification.leaderboardPosition
+          ? (
+            <p style={styles.leaderboardMessage}>
+              { intl.formatMessage(translations.leaderboardMessage, { position: notification.leaderboardPosition }) }
+            </p>
+          ) : null
       }
     </Popup>
   );

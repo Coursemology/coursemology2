@@ -63,7 +63,7 @@ describe('<MaterialUploader />', () => {
       });
 
     const materailUploder = mount(
-      <ProviderWrapper >
+      <ProviderWrapper>
         <MaterialUploader materials={materials} folderId={folderId} />
       </ProviderWrapper>
     );

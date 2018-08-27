@@ -52,14 +52,14 @@ class ExpandableText extends React.Component {
 
     return (
       <span style={style}>
-        { this.state.expanded ?
-          text :
-          `${text.substr(0, maxLength - showAll.length)}\u2026`
+        { this.state.expanded
+          ? text
+          : `${text.substr(0, maxLength - showAll.length)}\u2026`
         }
         <br />
-        { this.state.expanded ?
-          <a role="button" tabIndex={0} onClick={this.handleShowLess}>{showLess}</a> :
-          <a role="button" tabIndex={0} onClick={this.handleShowAll}>{showAll}</a>
+        { this.state.expanded
+          ? <a role="button" tabIndex={0} onClick={this.handleShowLess}>{showLess}</a>
+          : <a role="button" tabIndex={0} onClick={this.handleShowAll}>{showAll}</a>
         }
       </span>
     );

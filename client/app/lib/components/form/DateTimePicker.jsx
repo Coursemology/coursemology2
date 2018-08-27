@@ -105,17 +105,17 @@ class DateTimePicker extends React.PureComponent {
 
   updateDate = (_, newDate) => {
     const { date, months, years } = moment(newDate).toObject();
-    const newDateTime = this.props.value ?
-      moment(this.props.value).set({ date, months, years }) :
-      moment({ date, months, years });
+    const newDateTime = this.props.value
+      ? moment(this.props.value).set({ date, months, years })
+      : moment({ date, months, years });
     this.updateDateTime(newDateTime.toDate());
   }
 
   updateTime = (_, newTime) => {
     const { hours, minutes } = moment(newTime).toObject();
-    const newDateTime = this.props.value ?
-      moment(this.props.value).set({ hours, minutes }) :
-      moment({ hours, minutes });
+    const newDateTime = this.props.value
+      ? moment(this.props.value).set({ hours, minutes })
+      : moment({ hours, minutes });
     this.updateDateTime(newDateTime.toDate());
   }
 

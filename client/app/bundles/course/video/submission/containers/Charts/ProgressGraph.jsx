@@ -192,14 +192,16 @@ class ProgressGraph extends React.Component {
       }],
     };
 
-    return (<Scatter
-      data={data}
-      options={{
-        ...graphGlobalOptions(this.props.intl, this.props.videoDuration),
-        ...this.generateMouseOptions(data),
-        ...this.generateToolTipOptions(),
-      }}
-    />);
+    return (
+      <Scatter
+        data={data}
+        options={{
+          ...graphGlobalOptions(this.props.intl, this.props.videoDuration),
+          ...this.generateMouseOptions(data),
+          ...this.generateToolTipOptions(),
+        }}
+      />
+    );
   }
 
   renderDropDown() {
