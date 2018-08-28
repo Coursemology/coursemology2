@@ -89,9 +89,13 @@ class PopupDialog extends React.Component {
       base_exp: 0,
       time_bonus_exp: 0,
       skippable: false,
+      allow_partial_submission: false,
       autograded: false,
       delayed_grade_publication: false,
       tabbed_view: false,
+      use_public: false,
+      use_private: true,
+      use_evaluation: true,
     };
 
     return (

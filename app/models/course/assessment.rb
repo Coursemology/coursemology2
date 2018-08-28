@@ -171,6 +171,14 @@ class Course::Assessment < ApplicationRecord
                                                           "assessment_#{event}".to_sym)
   end
 
+  def graded_test_case_types
+    [].tap do |result|
+      result.push('public_test') if use_public
+      result.push('private_test') if use_private
+      result.push('evaluation_test') if use_evaluation
+    end
+  end
+
   private
 
   # Parents the assessment under its duplicated parent tab, if it exists.

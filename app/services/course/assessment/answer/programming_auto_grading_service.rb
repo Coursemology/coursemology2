@@ -24,7 +24,8 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
       package.save
 
       evaluation_result = evaluate_package(question, package)
-      build_result(question, evaluation_result, ignore_evaluation: assessment.autograded?)
+      build_result(question, evaluation_result, ignore_evaluation: assessment.autograded?,
+                   graded_test_case_types: assessment.graded_test_case_types)
     end
   end
 
@@ -58,12 +59,12 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
   #   determine the correctness of the answer.
   # @return [Array<(Boolean, Integer, Course::Assessment::Answer::ProgrammingAutoGrading)>] The
   #   correct status, grade and the programming auto grading record.
-  def build_result(question, evaluation_result, ignore_evaluation:)
+  def build_result(question, evaluation_result, ignore_evaluation:, graded_test_case_types:)
     auto_grading = Course::Assessment::Answer::ProgrammingAutoGrading.new(actable: nil)
     set_auto_grading_results(auto_grading, evaluation_result)
     build_test_case_records(question, auto_grading, evaluation_result.test_reports)
-    test_results = auto_grading.test_results
-    test_cases = question.test_cases
+    test_cases = question.test_cases.where(test_case_type: graded_test_case_types)
+    test_results = auto_grading.test_results.select { |r| graded_test_case_types.include?(r.test_case.test_case_type) }
 
     if ignore_evaluation
       test_results = test_results.reject { |r| r.test_case.evaluation_test? }

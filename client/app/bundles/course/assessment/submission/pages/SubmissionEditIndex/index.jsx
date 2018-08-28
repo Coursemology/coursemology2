@@ -226,7 +226,8 @@ class VisibleSubmissionEditIndex extends Component {
     const { newSubmission, step } = this.state;
     const {
       assessment: { autograded, delayedGradePublication, tabbedView,
-        skippable, questionIds, passwordProtected, categoryId, tabId },
+        skippable, questionIds, passwordProtected, categoryId, tabId,
+        allowPartialSubmission },
       submission: { graderView, canUpdate, maxStep, workflowState },
       explanations,
       grading,
@@ -272,6 +273,7 @@ class VisibleSubmissionEditIndex extends Component {
           handleToggleViewHistoryMode={this.handleToggleViewHistoryMode}
           explanations={explanations}
           allCorrect={this.allCorrect()}
+          allowPartialSubmission={allowPartialSubmission}
           graderView={graderView}
           attempting={workflowState === workflowStates.Attempting}
           submitted={workflowState === workflowStates.Submitted}

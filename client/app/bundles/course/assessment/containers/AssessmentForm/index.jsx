@@ -206,15 +206,26 @@ class AssessmentForm extends React.Component {
     const { submitting } = this.props;
     if (this.props.autograded) {
       return (
-        <Field
-          name="skippable"
-          component={Toggle}
-          parse={Boolean}
-          label={<FormattedMessage {...translations.skippable} />}
-          labelPosition="right"
-          style={styles.toggle}
-          disabled={submitting}
-        />
+        <>
+          <Field
+            name="skippable"
+            component={Toggle}
+            parse={Boolean}
+            label={<FormattedMessage {...translations.skippable} />}
+            labelPosition="right"
+            style={styles.toggle}
+            disabled={submitting}
+          />
+          <Field
+            name="allow_partial_submission"
+            component={Toggle}
+            parse={Boolean}
+            label={<FormattedMessage {...translations.allowPartialSubmission} />}
+            labelPosition="right"
+            style={styles.toggle}
+            disabled={submitting}
+          />
+        </>
       );
     }
 
@@ -380,6 +391,39 @@ class AssessmentForm extends React.Component {
         }
 
         {this.renderExtraOptions()}
+        <div style={styles.conditions}>
+          <FormattedMessage {...translations.autogradeTestCasesHint} />
+        </div>
+
+        <div style={styles.flexGroup}>
+          <Field
+            name="use_public"
+            component={Toggle}
+            parse={Boolean}
+            label={<FormattedMessage {...translations.usePublic} />}
+            labelPosition="right"
+            style={styles.flexChild}
+            disabled={submitting}
+          />
+          <Field
+            name="use_private"
+            component={Toggle}
+            parse={Boolean}
+            label={<FormattedMessage {...translations.usePrivate} />}
+            labelPosition="right"
+            style={styles.flexChild}
+            disabled={submitting}
+          />
+          <Field
+            name="use_evaluation"
+            component={Toggle}
+            parse={Boolean}
+            label={<FormattedMessage {...translations.useEvaluation} />}
+            labelPosition="right"
+            style={styles.flexChild}
+            disabled={submitting}
+          />
+        </div>
 
         <Field
           name="show_private"
