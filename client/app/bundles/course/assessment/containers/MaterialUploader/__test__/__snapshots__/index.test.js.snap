@@ -79,7 +79,7 @@ exports[`<Material /> renders the material 1`] = `
 `;
 
 exports[`<MaterialList /> renders the component with materials 1`] = `
-<React.Fragment>
+<Fragment>
   <Divider
     inset={false}
   />
@@ -150,5 +150,5 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
     inset={false}
   />
   <NotificationBar />
-</React.Fragment>
+</Fragment>
 `;

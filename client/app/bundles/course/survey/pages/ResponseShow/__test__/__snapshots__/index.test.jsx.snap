@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<ResponseShow /> shows form and admin buttons if user has permissions and page is loaded 1`] = `
-<React.Fragment>
+<Fragment>
   <Card
     expandable={false}
     expanded={null}
@@ -15,94 +15,92 @@ exports[`<ResponseShow /> shows form and admin buttons if user has permissions a
       }
     />
   </Card>
-  <React.Fragment>
-    <Table
+  <Table
+    allRowsSelected={false}
+    fixedFooter={true}
+    fixedHeader={true}
+    height="inherit"
+    multiSelectable={false}
+    selectable={true}
+    style={
+      Object {
+        "marginTop": 10,
+        "maxWidth": 600,
+      }
+    }
+  >
+    <TableBody
       allRowsSelected={false}
-      fixedFooter={true}
-      fixedHeader={true}
-      height="inherit"
+      deselectOnClickaway={true}
+      displayRowCheckbox={false}
       multiSelectable={false}
+      preScanRows={true}
       selectable={true}
-      style={
-        Object {
-          "marginTop": 10,
-          "maxWidth": 600,
-        }
-      }
+      style={Object {}}
     >
-      <TableBody
-        allRowsSelected={false}
-        deselectOnClickaway={true}
-        displayRowCheckbox={false}
-        multiSelectable={false}
-        preScanRows={true}
-        selectable={true}
-        style={Object {}}
+      <TableRow
+        displayBorder={true}
+        hoverable={false}
+        hovered={false}
+        selectable={false}
+        striped={false}
       >
-        <TableRow
-          displayBorder={true}
+        <TableHeaderColumn>
+          Student
+        </TableHeaderColumn>
+        <TableRowColumn
           hoverable={false}
-          hovered={false}
-          selectable={false}
-          striped={false}
         >
-          <TableHeaderColumn>
-            Student
-          </TableHeaderColumn>
-          <TableRowColumn
-            hoverable={false}
-          >
-            Staff
-          </TableRowColumn>
-        </TableRow>
-        <TableRow
-          displayBorder={true}
+          Staff
+        </TableRowColumn>
+      </TableRow>
+      <TableRow
+        displayBorder={true}
+        hoverable={false}
+        hovered={false}
+        selectable={false}
+        striped={false}
+      >
+        <TableHeaderColumn>
+          Submitted At
+        </TableHeaderColumn>
+        <TableRowColumn
           hoverable={false}
-          hovered={false}
-          selectable={false}
-          striped={false}
         >
-          <TableHeaderColumn>
-            Submitted At
-          </TableHeaderColumn>
-          <TableRowColumn
-            hoverable={false}
-          >
-            01 Jan 2100, 12:00am
-          </TableRowColumn>
-        </TableRow>
-      </TableBody>
-    </Table>
-    <Subheader
-      inset={false}
-    >
-      <FormattedMessage
-        defaultMessage="Questions"
-        id="course.surveys.questions"
-        values={Object {}}
-      />
-    </Subheader>
-    <ReduxForm
-      flags={
-        Object {
-          "canModify": true,
-          "canSubmit": true,
-          "canUnsubmit": true,
-          "isLoading": false,
-          "isResponseCreator": true,
-        }
-      }
-      initialValues={Object {}}
-      readOnly={true}
-      response={
-        Object {
-          "creator_name": "Staff",
-          "id": 2,
-          "submitted_at": "2099-12-31T16:00:00.000Z",
-        }
-      }
+          01 Jan 2100, 12:00am
+        </TableRowColumn>
+      </TableRow>
+    </TableBody>
+  </Table>
+  <Subheader
+    inset={false}
+  >
+    <FormattedMessage
+      defaultMessage="Questions"
+      id="course.surveys.questions"
+      values={Object {}}
     />
-  </React.Fragment>
+  </Subheader>
+  <ReduxForm
+    flags={
+      Object {
+        "canModify": true,
+        "canSubmit": true,
+        "canUnsubmit": true,
+        "isLoading": false,
+        "isResponseCreator": true,
+      }
+    }
+    initialValues={Object {}}
+    readOnly={true}
+    response={
+      Object {
+        "creator_name": "Staff",
+        "id": 2,
+        "submitted_at": "2099-12-31T16:00:00.000Z",
+      }
+    }
+  />
   <Connect(RespondButton)
     canModify={true}
     canSubmit={true}
@@ -114,11 +112,11 @@ exports[`<ResponseShow /> shows form and admin buttons if user has permissions a
   <Connect(UnsubmitButton)
     responseId={2}
   />
-</React.Fragment>
+</Fragment>
 `;
 
 exports[`<ResponseShow /> shows only title and loading indicator when loading 1`] = `
-<React.Fragment>
+<Fragment>
   <LoadingIndicator />
-</React.Fragment>
+</Fragment>
 `;
