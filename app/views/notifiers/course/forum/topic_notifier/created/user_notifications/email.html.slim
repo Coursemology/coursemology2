@@ -2,6 +2,7 @@
 - post = topic.posts.first
 - course = topic.course
 - host = course.instance.host
+- topic_author = format_inline_text(topic.creator.name)
 
 - unsubscribe_url = unsubscribe_course_forum_url(course, topic.forum, host: host)
 - topic_url = course_forum_topic_url(course, topic.forum, topic, host: host)
@@ -11,7 +12,7 @@
 
 - message.subject = t('.subject', course: course_title, forum: forum_name)
 
-= format_html(t('.message', topic: topic_url, post: post.text_to_email))
+= format_html(t('.message', topic: topic_url, post: post.text_to_email, topic_author: topic_author))
 
 = simple_format(t('.unsubscribe.message',
                 unsubscribe_link: link_to(t('.unsubscribe.tag'), unsubscribe_url)))
