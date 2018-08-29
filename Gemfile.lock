@@ -541,7 +541,7 @@ GEM
     valuable (0.9.14)
     warden (1.2.7)
       rack (>= 1.0)
-    webpacker (3.0.2)
+    webpacker (3.5.5)
       activesupport (>= 4.2)
       rack-proxy (>= 0.6.1)
       railties (>= 4.2)
@@ -656,7 +656,7 @@ DEPENDENCIES
   unread
   validates_hostname
   wdm (>= 0.0.3)
-  webpacker (<= 3.0.2)
+  webpacker (<= 3.5.6)
   workflow
   yard
 
