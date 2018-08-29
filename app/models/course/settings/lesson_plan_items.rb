@@ -86,6 +86,8 @@ class Course::Settings::LessonPlanItems < Course::Settings::PanComponent
       [actable_name, nil] if settings_interfaces_hash['course_videos_component'].showable_in_lesson_plan?
     when Course::LessonPlan::Event.name
       [actable_name, nil]
+    when Course::LessonPlan::Milestone.name
+      [actable_name, nil]
     end
   end
 end

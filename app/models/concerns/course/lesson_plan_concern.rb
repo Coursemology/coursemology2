@@ -11,8 +11,9 @@ module Course::LessonPlanConcern
   # @return [Hash{Course::LessonPlan::Milestone,nil=>Array<Course::LessonPlanItem>}]
   #   The items grouped by key, with a nil key indicating items not belonging to any milestone.
   def grouped_lesson_plan_items_with_milestones
-    milestones = lesson_plan_milestones.order(start_at: :asc).to_a
-    items = lesson_plan_items.order(start_at: :asc).includes(:actable).to_a
+    milestones = lesson_plan_milestones.ordered_by_date.to_a
+    items = lesson_plan_items.where.not(id: lesson_plan_items.where(actable_type: Course::LessonPlan::Milestone.name)).
+            order(start_at: :asc).includes(:actable).to_a
 
     group_lesson_plan_items_with_milestones(milestones, items)
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180703023011) do
+ActiveRecord::Schema.define(version: 20180829123352) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -525,14 +525,6 @@ ActiveRecord::Schema.define(version: 20180703023011) do
   end
 
   create_table "course_lesson_plan_milestones", force: :cascade do |t|
-    t.integer  "course_id",   :index=>{:name=>"fk__course_lesson_plan_milestones_course_id", :order=>{:course_id=>:asc}}
-    t.string   "title",       :limit=>255, :null=>false
-    t.text     "description"
-    t.datetime "start_at",    :null=>false
-    t.integer  "creator_id",  :null=>false, :index=>{:name=>"fk__course_lesson_plan_milestones_creator_id", :order=>{:creator_id=>:asc}}
-    t.integer  "updater_id",  :null=>false, :index=>{:name=>"fk__course_lesson_plan_milestones_updater_id", :order=>{:updater_id=>:asc}}
-    t.datetime "created_at",  :null=>false
-    t.datetime "updated_at",  :null=>false
   end
 
   create_table "course_lesson_plan_todos", force: :cascade do |t|
@@ -1015,9 +1007,6 @@ ActiveRecord::Schema.define(version: 20180703023011) do
   add_foreign_key "course_lesson_plan_items", "courses", name: "fk_course_lesson_plan_items_course_id"
   add_foreign_key "course_lesson_plan_items", "users", column: "creator_id", name: "fk_course_lesson_plan_items_creator_id"
   add_foreign_key "course_lesson_plan_items", "users", column: "updater_id", name: "fk_course_lesson_plan_items_updater_id"
-  add_foreign_key "course_lesson_plan_milestones", "courses", name: "fk_course_lesson_plan_milestones_course_id"
-  add_foreign_key "course_lesson_plan_milestones", "users", column: "creator_id", name: "fk_course_lesson_plan_milestones_creator_id"
-  add_foreign_key "course_lesson_plan_milestones", "users", column: "updater_id", name: "fk_course_lesson_plan_milestones_updater_id"
   add_foreign_key "course_lesson_plan_todos", "course_lesson_plan_items", column: "item_id", name: "fk_course_lesson_plan_todos_item_id"
   add_foreign_key "course_lesson_plan_todos", "users", column: "creator_id", name: "fk_course_lesson_plan_todos_creator_id"
   add_foreign_key "course_lesson_plan_todos", "users", column: "updater_id", name: "fk_course_lesson_plan_todos_updater_id"
