@@ -2,6 +2,10 @@
 class Course::LessonPlan::Item < ApplicationRecord
   include Course::LessonPlan::ItemTodoConcern
 
+  has_many :reference_times,
+           foreign_key: :lesson_plan_item, class_name: Course::ReferenceTime.name, inverse_of: :lesson_plan_item,
+           dependent: :destroy
+
   actable optional: true
   has_many_attachments on: :description
 
