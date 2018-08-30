@@ -40,9 +40,9 @@ Time:
         <span className="glyphicon glyphicon-chevron-down" />
       </div>
       <Divider style={{ marginBottom: '1em' }} />
-      <React.Fragment>
+      <>
         {props.postIds.map(id => <PostContainer key={id.toString()} postId={id} isRoot />)}
-      </React.Fragment>
+      </>
       <Reply topicId={props.topicId} />
       <Divider />
     </div>

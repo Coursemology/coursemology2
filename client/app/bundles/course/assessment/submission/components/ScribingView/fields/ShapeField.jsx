@@ -18,7 +18,7 @@ const ShapeField = (props) => {
   const { intl, currentShape, setSelectedShape } = props;
 
   return (
-    <React.Fragment>
+    <>
       <FlatButton
         label={intl.formatMessage(translations.rectangle)}
         primary={currentShape === scribingShapes.RECT}
@@ -43,7 +43,7 @@ const ShapeField = (props) => {
           />
 )}
       />
-    </React.Fragment>
+    </>
   );
 };
 

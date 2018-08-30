@@ -42,7 +42,7 @@ const defaultProps = {
 
 function Editor(props) {
   return (
-    <React.Fragment>
+    <>
       <MaterialSummernote
         airMode
         disabled={props.disabled}
@@ -69,7 +69,7 @@ function Editor(props) {
         />
       </div>
       <div style={{ clear: 'both' }} />
-    </React.Fragment>
+    </>
   );
 }
 

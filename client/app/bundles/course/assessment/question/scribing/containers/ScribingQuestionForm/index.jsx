@@ -124,7 +124,7 @@ class ScribingQuestionForm extends React.Component {
 
   renderSnackbars() {
     return (
-      <React.Fragment>
+      <>
         <Snackbar
           open={this.props.invalid && this.props.submitFailed}
           message={this.props.intl.formatMessage(translations.resolveErrorsMessage)}
@@ -154,7 +154,7 @@ class ScribingQuestionForm extends React.Component {
           message={this.props.intl.formatMessage(translations.submittingMessage)}
           autoHideDuration={2000}
         />
-      </React.Fragment>
+      </>
     );
   }
 
@@ -170,7 +170,7 @@ class ScribingQuestionForm extends React.Component {
       (this.props.data.isLoading) ? <LoadingIndicator />
 
         : (
-          <React.Fragment>
+          <>
             { this.renderErrorMessage() }
             <Form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
               <div className={styles.inputContainer}>
@@ -260,7 +260,7 @@ class ScribingQuestionForm extends React.Component {
                 icon={this.props.data.isSubmitting ? <i className="fa fa-spinner fa-lg fa-spin" /> : null}
               />
             </Form>
-          </React.Fragment>
+          </>
         )
     );
   }

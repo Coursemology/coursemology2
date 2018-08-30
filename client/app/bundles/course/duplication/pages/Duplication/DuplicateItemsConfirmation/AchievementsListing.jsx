@@ -58,7 +58,7 @@ class AchievementsListing extends React.Component {
     if (selectedAchievements.length < 1) { return null; }
 
     return (
-      <React.Fragment>
+      <>
         <Subheader>
           <FormattedMessage {...defaultComponentTitles.course_achievements_component} />
         </Subheader>
@@ -67,7 +67,7 @@ class AchievementsListing extends React.Component {
             { selectedAchievements.map(AchievementsListing.renderRow) }
           </CardText>
         </Card>
-      </React.Fragment>
+      </>
     );
   }
 }

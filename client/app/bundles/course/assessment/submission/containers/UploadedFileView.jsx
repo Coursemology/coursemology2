@@ -82,7 +82,7 @@ class VisibleUploadedFileView extends Component {
   render() {
     const { intl, attachments } = this.props;
     return (
-      <React.Fragment>
+      <>
         <strong>{intl.formatMessage(translations.uploadedFiles)}</strong>
         <div style={styles.wrapper}>
           {attachments.length
@@ -91,7 +91,7 @@ class VisibleUploadedFileView extends Component {
           }
         </div>
         {this.renderDeleteDialog()}
-      </React.Fragment>
+      </>
     );
   }
 }

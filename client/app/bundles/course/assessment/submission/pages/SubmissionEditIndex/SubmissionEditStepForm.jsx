@@ -329,7 +329,7 @@ class SubmissionEditStepForm extends Component {
     const { answerId, topicId } = question;
     const topic = topics[topicId];
     return (
-      <React.Fragment>
+      <>
         <SubmissionAnswer
           {...{
             readOnly: !attempting,
@@ -363,7 +363,7 @@ class SubmissionEditStepForm extends Component {
         </div>
         <hr />
         <Comments topic={topic} />
-      </React.Fragment>
+      </>
     );
   }
 

@@ -27,7 +27,7 @@ class VisibleProgrammingImportEditor extends Component {
   static renderSelectProgrammingFileEditor(props) {
     const { fields, readOnly, language, displayFileIndex } = props;
     return (
-      <React.Fragment>
+      <>
         {fields.map((answerId, index) => {
           const file = fields.get(index);
           if (readOnly) {
@@ -53,7 +53,7 @@ class VisibleProgrammingImportEditor extends Component {
           }
           return null;
         })}
-      </React.Fragment>
+      </>
     );
   }
 
@@ -96,7 +96,7 @@ class VisibleProgrammingImportEditor extends Component {
     const stagedFiles = files.filter(file => file.staged).length > 0;
     const disableImport = !stagedFiles || isSaving;
     return (
-      <React.Fragment>
+      <>
         {readOnly ? null : (
           <ImportedFileView
             submissionId={submissionId}
@@ -127,7 +127,7 @@ class VisibleProgrammingImportEditor extends Component {
         {readOnly || viewHistory
           ? null
           : (
-            <React.Fragment>
+            <>
               <FileInput
                 name={`${answerId}[import_files]`}
                 disabled={isSaving}
@@ -140,10 +140,10 @@ class VisibleProgrammingImportEditor extends Component {
                 onClick={() => dispatch(importFiles(answerId, answers, question.language))}
                 disabled={disableImport}
               />
-            </React.Fragment>
+            </>
           )
         }
-      </React.Fragment>
+      </>
     );
   }
 }

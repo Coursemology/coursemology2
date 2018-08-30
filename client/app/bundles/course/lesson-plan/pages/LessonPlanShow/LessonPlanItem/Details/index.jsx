@@ -35,11 +35,11 @@ class Details extends React.PureComponent {
   render() {
     const { published, itemType, startAt, endAt, location } = this.props;
     return (
-      <React.Fragment>
+      <>
         { this.renderTitle() }
         <Chips {...{ published, itemType, startAt, endAt, location }} />
         { this.renderDescription() }
-      </React.Fragment>
+      </>
     );
   }
 }

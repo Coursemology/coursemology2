@@ -96,7 +96,7 @@ export default class NarrowEditor extends Component {
     const { annotations } = this.props;
     const annotation = annotations.find(a => a.line === lineNumber);
     return (
-      <React.Fragment>
+      <>
         <div
           style={annotation ? styles.editorLineNumberWithComments : styles.editorLineNumber}
           onClick={() => this.toggleComment(lineNumber)}
@@ -109,7 +109,7 @@ export default class NarrowEditor extends Component {
           <AddCommentIcon onClick={() => this.expandComment(lineNumber)} hovered={lineHovered === lineNumber} />
         </div>
         {this.renderComments(lineNumber)}
-      </React.Fragment>
+      </>
     );
   }
 

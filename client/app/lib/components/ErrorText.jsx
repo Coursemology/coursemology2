@@ -12,9 +12,9 @@ const ErrorText = ({ errors }) => {
   }
   if (errors.constructor === Array) {
     return (
-      <React.Fragment>
+      <>
         { errors.map(error => <ErrorText key={error} errors={error} />) }
-      </React.Fragment>
+      </>
     );
   }
   return null;

@@ -167,7 +167,7 @@ class SubmissionAnswer extends Component {
     const renderer = this.getRenderer(question);
 
     return (
-      <React.Fragment>
+      <>
         <h3 style={{ display: 'inline-block' }}>
           {question.displayTitle}
         </h3>
@@ -175,7 +175,7 @@ class SubmissionAnswer extends Component {
         <div dangerouslySetInnerHTML={{ __html: question.description }} />
         <hr />
         { answerId ? renderer(question, readOnly, answerId, graderView) : this.renderMissingAnswerPanel() }
-      </React.Fragment>
+      </>
     );
   }
 }

@@ -47,13 +47,13 @@ class SurveyIndex extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
+      <>
         <TitleBar
           title={<FormattedMessage {...surveyTranslations.surveys} />}
         />
         { this.renderBody() }
         <NewSurveyButton />
-      </React.Fragment>
+      </>
     );
   }
 }

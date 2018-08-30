@@ -67,14 +67,14 @@ export default class ImagePreview extends React.Component {
     const imageSrc = file ? this.getImage() : originalUrl;
 
     return (
-      <React.Fragment>
+      <>
         <div style={styles.imageContainer}>
           {this.props.file && <DeleteButton handleCancel={handleCancel} />}
           {render(imageSrc, fileName)}
         </div>
         <div className="file-name">{fileName}</div>
         <div><FormattedMessage {...translations.dropzone} /></div>
-      </React.Fragment>
+      </>
     );
   }
 }

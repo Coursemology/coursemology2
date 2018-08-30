@@ -315,11 +315,11 @@ class OptionsQuestionResults extends React.Component {
   render() {
     const toggle = this.renderExpandToggle();
     return (
-      <React.Fragment>
+      <>
         { toggle }
         { this.state.expanded && this.renderOptionsResultsTable() }
         { this.state.expanded && toggle }
-      </React.Fragment>
+      </>
     );
   }
 }

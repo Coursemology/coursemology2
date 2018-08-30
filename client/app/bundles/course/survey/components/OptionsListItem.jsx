@@ -83,7 +83,7 @@ class OptionsListItem extends React.PureComponent {
     return (
       <div style={styles.option}>
         { widget }
-        <React.Fragment>
+        <>
           { imageUrl
             ? (
               <Thumbnail
@@ -93,7 +93,7 @@ class OptionsListItem extends React.PureComponent {
               />
             ) : [] }
           <p dangerouslySetInnerHTML={{ __html: optionText || null }} />
-        </React.Fragment>
+        </>
       </div>
     );
   }

@@ -60,7 +60,7 @@ class ResponseAnswer extends React.Component {
     } = props;
 
     return (
-      <React.Fragment>
+      <>
         { (dirty || touched) && error ? <p style={styles.errorText}>{error}</p> : null }
         <div style={grid ? styles.grid : {}}>
           {
@@ -92,7 +92,7 @@ class ResponseAnswer extends React.Component {
             })
           }
         </div>
-      </React.Fragment>
+      </>
     );
   }
 
@@ -106,7 +106,7 @@ class ResponseAnswer extends React.Component {
     const selectedOption = value && value.length > 0 && value[0];
 
     return (
-      <React.Fragment>
+      <>
         { (dirty || touched) && error ? <p style={styles.errorText}>{error}</p> : null }
         <div style={grid ? styles.grid : {}}>
           { options.map((option) => {
@@ -130,7 +130,7 @@ class ResponseAnswer extends React.Component {
             );
           })}
         </div>
-      </React.Fragment>
+      </>
     );
   }
 

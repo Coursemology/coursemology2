@@ -35,7 +35,7 @@ function PostPresentation(props) {
   }
 
   return (
-    <React.Fragment>
+    <>
       {props.editMode || <PostMenu postId={props.postId} />}
       <span className={styles.userPic} dangerouslySetInnerHTML={{ __html: props.userPicElement }} />
       <div className={styles.contentContainer}>
@@ -49,7 +49,7 @@ function PostPresentation(props) {
         )}
       </div>
       {childrenElements}
-    </React.Fragment>
+    </>
   );
 }
 

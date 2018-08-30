@@ -8,7 +8,7 @@ import { questionShape } from '../../propTypes';
 
 function MultipleResponseOptions({ readOnly, question, input }) {
   return (
-    <React.Fragment>
+    <>
       {question.options.map(option => (
         <Checkbox
           disabled={readOnly}
@@ -33,7 +33,7 @@ function MultipleResponseOptions({ readOnly, question, input }) {
           labelStyle={{ verticalAlign: 'middle' }}
         />
       ))}
-    </React.Fragment>
+    </>
   );
 }
 

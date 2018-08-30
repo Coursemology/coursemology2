@@ -11,7 +11,7 @@ import SurveyIndex from 'course/survey/pages/SurveyIndex';
 const SurveysLayout = () => {
   const surveyRoot = '/courses/:courseId/surveys';
   return (
-    <React.Fragment>
+    <>
       <SurveyFormDialogue />
       <QuestionFormDialogue />
       <SectionFormDialogue />
@@ -22,7 +22,7 @@ const SurveysLayout = () => {
         <Route exact path={surveyRoot} component={SurveyIndex} />
         <Route path={`${surveyRoot}/:surveyId`} component={SurveyLayout} />
       </Switch>
-    </React.Fragment>
+    </>
   );
 };
 

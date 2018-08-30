@@ -25,7 +25,7 @@ const styles = {
 };
 
 const BulkSelectors = ({ callback, styles: userStyles = {} }) => (
-  <React.Fragment>
+  <>
     <a
       onClick={() => callback(true)}
       style={{ ...styles.selectLink, ...userStyles.selectLink }}
@@ -38,7 +38,7 @@ const BulkSelectors = ({ callback, styles: userStyles = {} }) => (
     >
       <FormattedMessage {...translations.deselectAll} />
     </a>
-  </React.Fragment>
+  </>
 );
 
 BulkSelectors.propTypes = {

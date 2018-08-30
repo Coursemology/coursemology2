@@ -73,7 +73,7 @@ class LayersComponent extends Component {
     const { intl, layers, onClick, disabled } = this.props;
 
     return !disabled ? (
-      <React.Fragment>
+      <>
         <label style={popoverStyles.layersLabel}>{intl.formatMessage(translations.layersLabelText)}</label>
         <RaisedButton
           onClick={onClick}
@@ -81,7 +81,7 @@ class LayersComponent extends Component {
           disabled={disabled}
         />
         { this.renderLayersPopover() }
-      </React.Fragment>
+      </>
     ) : null;
   }
 }

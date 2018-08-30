@@ -175,7 +175,7 @@ export default class ReadOnlyEditor extends Component {
       );
     }
     return (
-      <React.Fragment>
+      <>
         {this.renderExpandAllCheckbox()}
         <WideEditor
           expanded={expanded}
@@ -187,7 +187,7 @@ export default class ReadOnlyEditor extends Component {
           collapseLine={lineNumber => this.setCollapsedLine(lineNumber)}
           toggleLine={lineNumber => this.toggleCommentLine(lineNumber)}
         />
-      </React.Fragment>
+      </>
     );
   }
 }

@@ -91,7 +91,7 @@ class SubmissionEditForm extends Component {
         : intl.formatMessage(translations.runCode);
 
       return (
-        <React.Fragment>
+        <>
           {jobError
             ? (
               <Paper style={{ padding: 10, backgroundColor: red100, marginBottom: 20 }}>
@@ -117,7 +117,7 @@ class SubmissionEditForm extends Component {
             />
           ) : null}
           {isAutograding || isResetting ? <CircularProgress size={36} style={{ position: 'absolute' }} /> : null}
-        </React.Fragment>
+        </>
       );
     }
     return null;
@@ -213,7 +213,7 @@ class SubmissionEditForm extends Component {
       topics, graderView, handleToggleViewHistoryMode, questionsFlags,
     } = this.props;
     return (
-      <React.Fragment>
+      <>
         {questionIds.map((id, index) => {
           const question = questions[id];
           const { answerId, topicId, viewHistory } = question;
@@ -239,7 +239,7 @@ class SubmissionEditForm extends Component {
             </Element>
           );
         })}
-      </React.Fragment>
+      </>
     );
   }
 

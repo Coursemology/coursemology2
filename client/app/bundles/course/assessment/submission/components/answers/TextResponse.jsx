@@ -67,7 +67,7 @@ const translations = defineMessages({
 
 function renderTextResponseSolutions(question) {
   return (
-    <React.Fragment>
+    <>
       <hr />
       <h4><FormattedMessage {...translations.solutions} /></h4>
       <Table selectable={false}>
@@ -88,13 +88,13 @@ function renderTextResponseSolutions(question) {
           ))}
         </TableBody>
       </Table>
-    </React.Fragment>
+    </>
   );
 }
 
 function renderTextResponseComprehensionPoint(point) {
   return (
-    <React.Fragment>
+    <>
       <br />
       <h5><FormattedMessage {...translations.point} /></h5>
       <Table selectable={false}>
@@ -121,13 +121,13 @@ function renderTextResponseComprehensionPoint(point) {
           ))}
         </TableBody>
       </Table>
-    </React.Fragment>
+    </>
   );
 }
 
 function renderTextResponseComprehensionGroup(group) {
   return (
-    <React.Fragment>
+    <>
       <br />
       <h4><FormattedMessage {...translations.group} /></h4>
       <Table selectable={false}>
@@ -147,13 +147,13 @@ function renderTextResponseComprehensionGroup(group) {
           ))}
         </TableBody>
       </Table>
-    </React.Fragment>
+    </>
   );
 }
 
 function renderTextResponseComprehension(question) {
   return (
-    <React.Fragment>
+    <>
       <hr />
       <h4>
         <FormattedMessage
@@ -164,7 +164,7 @@ function renderTextResponseComprehension(question) {
       {question.groups.map(group => (
         <div key={group.id}>{renderTextResponseComprehensionGroup(group)}</div>
       ))}
-    </React.Fragment>
+    </>
   );
 }
 
