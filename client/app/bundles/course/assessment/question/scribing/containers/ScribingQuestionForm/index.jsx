@@ -118,7 +118,7 @@ class ScribingQuestionForm extends React.Component {
           src={this.props.data.question.attachment_reference.image_url}
           alt={this.props.data.question.attachment_reference.name}
         />
-      </div> : []
+      </div>
     );
   }
 

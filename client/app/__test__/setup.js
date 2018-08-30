@@ -7,7 +7,7 @@ import Adapter from 'enzyme-adapter-react-16';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-require('babel-polyfill');
+require('@babel/polyfill');
 // Our jquery is from CDN and loaded at runtime, so this is required in test.
 const jQuery = require('jquery');
 
