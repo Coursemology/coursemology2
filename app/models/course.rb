@@ -52,6 +52,12 @@ class Course < ApplicationRecord
   has_many :videos, through: :lesson_plan_items, source: :actable, source_type: Course::Video.name
   has_many :video_tabs, class_name: Course::Video::Tab.name, inverse_of: :course, dependent: :destroy
 
+  has_many :reference_timelines, class_name: Course::ReferenceTimeline.name, inverse_of: :course, dependent: :destroy
+  has_one :default_reference_timeline, -> { where(default: true) },
+          class_name: Course::ReferenceTimeline.name, inverse_of: :course
+  validates :default_reference_timeline, presence: true
+  validate :validate_only_one_default_reference_time
+
   accepts_nested_attributes_for :invitations, :assessment_categories, :video_tabs
 
   calculated :user_count, (lambda do
@@ -180,8 +186,15 @@ class Course < ApplicationRecord
   def set_defaults
     self.start_at ||= Time.zone.now.beginning_of_hour
     self.end_at ||= self.start_at + 1.month
+    self.default_reference_timeline ||= reference_timelines.new(default: true)
 
     return unless creator && course_users.empty?
     course_users.build(user: creator, role: :owner, creator: creator, updater: updater)
+  end
+
+  def validate_only_one_default_reference_time
+    num_defaults = reference_timelines.where(course_reference_timelines: { default: true }).count
+    return if num_defaults <= 1 # Could be 0 if item is new
+    errors.add(:reference_timelines, 'cannot have more than 1 default')
   end
 end
