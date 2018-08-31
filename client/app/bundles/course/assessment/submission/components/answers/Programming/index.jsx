@@ -13,12 +13,12 @@ import { questionShape } from '../../../propTypes';
 class Programming extends React.Component {
   static renderProgrammingFiles({ fields, readOnly, answerId, language }) {
     return (
-      <React.Fragment>
+      <>
         {fields.map((fieldName, index) => {
           const file = fields.get(index);
           return <ProgrammingFile key={file.id} {...{ file, fieldName, readOnly, answerId, language }} />;
         })}
-      </React.Fragment>
+      </>
     );
   }
 

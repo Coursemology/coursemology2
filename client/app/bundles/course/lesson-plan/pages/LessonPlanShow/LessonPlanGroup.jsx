@@ -77,10 +77,10 @@ class LessonPlanGroup extends React.Component {
 
   static renderNoItemsMessage() {
     return (
-      <React.Fragment>
+      <>
         <Divider style={styles.divider} />
         <CardText><FormattedMessage {...translations.noItems} /></CardText>
-      </React.Fragment>
+      </>
     );
   }
 

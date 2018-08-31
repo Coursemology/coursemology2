@@ -210,12 +210,12 @@ class VisibleSubmissionsIndex extends React.Component {
     }
 
     return (
-      <React.Fragment>
+      <>
         {this.renderHeader()}
         {this.renderTabs()}
         {this.renderPublishConfirmation()}
         <NotificationBar notification={notification} />
-      </React.Fragment>
+      </>
     );
   }
 }

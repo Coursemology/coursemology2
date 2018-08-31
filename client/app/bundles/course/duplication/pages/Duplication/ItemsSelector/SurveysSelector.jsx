@@ -68,7 +68,7 @@ class SurveysSelector extends React.Component {
     }
 
     return (
-      <React.Fragment>
+      <>
         {
           surveys.length > 1 ? (
             <BulkSelectors
@@ -78,7 +78,7 @@ class SurveysSelector extends React.Component {
           ) : null
         }
         { surveys.map(survey => this.renderRow(survey)) }
-      </React.Fragment>
+      </>
     );
   }
 
@@ -87,10 +87,10 @@ class SurveysSelector extends React.Component {
     if (!surveys) { return null; }
 
     return (
-      <React.Fragment>
+      <>
         <h2><FormattedMessage {...defaultComponentTitles.course_survey_component} /></h2>
         { this.renderBody() }
-      </React.Fragment>
+      </>
     );
   }
 }

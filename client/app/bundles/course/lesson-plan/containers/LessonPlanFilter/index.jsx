@@ -54,7 +54,7 @@ class LessonPlanFilter extends React.Component {
     if (itemTypes.length < 1) { return null; }
 
     return (
-      <React.Fragment>
+      <>
         <RaisedButton
           secondary
           onClick={this.handleClick}
@@ -85,7 +85,7 @@ class LessonPlanFilter extends React.Component {
             }
           </Menu>
         </Popover>
-      </React.Fragment>
+      </>
     );
   }
 }

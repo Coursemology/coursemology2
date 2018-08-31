@@ -63,7 +63,7 @@ class CourseDropdownMenu extends React.PureComponent {
       currentCourseId, selectedCourseId, dropDownMenuProps,
     } = this.props;
     return (
-      <React.Fragment>
+      <>
         <p style={styles.prompt}>{ prompt }</p>
         <div style={styles.dropdownRow}>
           <DropDownMenu
@@ -83,7 +83,7 @@ class CourseDropdownMenu extends React.PureComponent {
             <MyLocation color={currentCourseId === selectedCourseId ? blue500 : null} />
           </IconButton>
         </div>
-      </React.Fragment>
+      </>
     );
   }
 }

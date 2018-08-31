@@ -11,10 +11,10 @@ class FilePreview extends React.Component {
   render() {
     const { file } = this.props;
     return (
-      <React.Fragment>
+      <>
         <div className="file-name">{file && file.name}</div>
         <div><FormattedMessage {...translations.dropzone} /></div>
-      </React.Fragment>
+      </>
     );
   }
 }

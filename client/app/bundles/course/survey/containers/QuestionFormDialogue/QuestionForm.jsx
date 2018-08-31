@@ -138,7 +138,7 @@ class QuestionForm extends React.Component {
   renderTiledViewToggle() {
     const { intl, disabled } = this.props;
     return (
-      <React.Fragment>
+      <>
         <Field
           name="grid_view"
           labelPosition="right"
@@ -149,7 +149,7 @@ class QuestionForm extends React.Component {
           {...{ disabled }}
         />
         <p style={styles.hint}>{ intl.formatMessage(questionFormTranslations.gridViewHint) }</p>
-      </React.Fragment>
+      </>
     );
   }
 

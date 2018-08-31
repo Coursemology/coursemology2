@@ -102,7 +102,7 @@ class VideoListing extends React.Component {
     if (tabTrees.length + orphanedVideos.length < 1) { return null; }
 
     return (
-      <React.Fragment>
+      <>
         <Subheader>
           <FormattedMessage {...defaultComponentTitles.course_videos_component} />
         </Subheader>
@@ -115,7 +115,7 @@ class VideoListing extends React.Component {
             </div>
           </CardText>
         </Card>
-      </React.Fragment>
+      </>
     );
   }
 }

@@ -109,7 +109,7 @@ export default class CommentCard extends Component {
 
     if (editMode) {
       return (
-        <React.Fragment>
+        <>
           <MaterialSummernote
             airMode
             id={id.toString()}
@@ -132,7 +132,7 @@ export default class CommentCard extends Component {
               onClick={() => this.onSave()}
             />
           </div>
-        </React.Fragment>
+        </>
       );
     }
 

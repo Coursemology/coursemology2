@@ -58,7 +58,7 @@ class EditPage extends React.Component {
     const { initialValues, conditionAttributes, dispatch } = this.props;
 
     return (
-      <React.Fragment>
+      <>
         <AchievementForm
           editing
           onSubmit={this.onFormSubmit}
@@ -75,7 +75,7 @@ class EditPage extends React.Component {
           />
         </div>
         <NotificationBar notification={this.props.notification} />
-      </React.Fragment>
+      </>
     );
   }
 }

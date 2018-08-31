@@ -1,12 +1,12 @@
 {
   "presets": [
-    "env",
-    "stage-2",
-    "react",
+    "@babel/preset-env",
+    "@babel/preset-react",
   ],
   "plugins": [
-    ["react-intl", {
-        "messagesDir": "./build/messages/"
-    }]
+    "@babel/plugin-syntax-dynamic-import",
+    "@babel/plugin-proposal-class-properties",
+
+    ["react-intl", { "messagesDir": "./build/messages/" }]
   ]
 }

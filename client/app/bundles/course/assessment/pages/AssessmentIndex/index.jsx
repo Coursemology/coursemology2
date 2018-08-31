@@ -95,7 +95,7 @@ class PopupDialog extends React.Component {
     };
 
     return (
-      <React.Fragment>
+      <>
         <RaisedButton
           label={intl.formatMessage(translations.new)}
           primary
@@ -126,7 +126,7 @@ class PopupDialog extends React.Component {
           onConfirm={() => dispatch({ type: actionTypes.ASSESSMENT_FORM_CONFIRM_DISCARD })}
         />
         <NotificationBar notification={this.props.notification} />
-      </React.Fragment>
+      </>
     );
   }
 }

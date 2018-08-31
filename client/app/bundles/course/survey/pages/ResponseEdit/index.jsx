@@ -67,27 +67,27 @@ class ResponseEdit extends React.Component {
 
     const initialValues = buildInitialValues(survey, response);
     return (
-      <React.Fragment>
+      <>
         <Subheader><FormattedMessage {...surveyTranslations.questions} /></Subheader>
         <ResponseForm
           onSubmit={this.handleUpdateResponse}
           {...{ response, flags, initialValues }}
         />
-      </React.Fragment>
+      </>
     );
   }
 
   render() {
     const { survey } = this.props;
     return (
-      <React.Fragment>
+      <>
         {
           survey.description
             ? <Card><CardText dangerouslySetInnerHTML={{ __html: survey.description }} /></Card>
             : null
         }
         { this.renderBody() }
-      </React.Fragment>
+      </>
     );
   }
 }

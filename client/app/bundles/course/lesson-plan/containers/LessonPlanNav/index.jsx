@@ -60,7 +60,7 @@ class LessonPlanNav extends React.Component {
     if (groups.length < 2) { return null; }
 
     return (
-      <React.Fragment>
+      <>
         <RaisedButton
           secondary
           onClick={this.handleClick}
@@ -94,7 +94,7 @@ class LessonPlanNav extends React.Component {
             }
           </Menu>
         </Popover>
-      </React.Fragment>
+      </>
     );
   }
 }

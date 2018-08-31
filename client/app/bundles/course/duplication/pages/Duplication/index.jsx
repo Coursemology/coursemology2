@@ -115,7 +115,7 @@ class Duplication extends React.Component {
     } = this.props;
 
     return (
-      <React.Fragment>
+      <>
         <CourseDropdownMenu
           dropDownMenuProps={{ className: 'source-course-dropdown' }}
           currentHost={currentHost}
@@ -133,7 +133,7 @@ class Duplication extends React.Component {
           value={sourceCourse.start_at}
           floatingLabelText={intl.formatMessage(translations.startAt)}
         />
-      </React.Fragment>
+      </>
     );
   }
 
@@ -148,10 +148,10 @@ class Duplication extends React.Component {
     }
 
     return (
-      <React.Fragment>
+      <>
         { header }
         { this.renderToCourseModeSelector() }
-      </React.Fragment>
+      </>
     );
   }
 

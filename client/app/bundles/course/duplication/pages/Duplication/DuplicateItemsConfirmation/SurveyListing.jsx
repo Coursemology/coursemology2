@@ -43,7 +43,7 @@ class SurveyListing extends React.Component {
     if (selectedSurveys.length < 1) { return null; }
 
     return (
-      <React.Fragment>
+      <>
         <Subheader>
           <FormattedMessage {...defaultComponentTitles.course_survey_component} />
         </Subheader>
@@ -52,7 +52,7 @@ class SurveyListing extends React.Component {
             { selectedSurveys.map(SurveyListing.renderRow) }
           </CardText>
         </Card>
-      </React.Fragment>
+      </>
     );
   }
 }

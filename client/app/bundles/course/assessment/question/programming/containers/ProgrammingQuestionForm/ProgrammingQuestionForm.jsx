@@ -401,7 +401,7 @@ class ProgrammingQuestionForm extends React.Component {
     const noFileMessage = this.props.intl.formatMessage(translations.noFileChosenMessage);
 
     return (
-      <React.Fragment>
+      <>
         <h3>{label}</h3>
         { downloadNode }
         <RaisedButton
@@ -423,7 +423,7 @@ class ProgrammingQuestionForm extends React.Component {
         </RaisedButton>
         <div style={{ display: 'inline-block' }}>{newFilename || noFileMessage}</div>
         <div style={{ color: red500, whiteSpace: 'pre-wrap' }}>{packageError}</div>
-      </React.Fragment>
+      </>
     );
   }
 

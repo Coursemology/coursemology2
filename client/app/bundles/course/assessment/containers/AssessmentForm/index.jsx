@@ -219,7 +219,7 @@ class AssessmentForm extends React.Component {
     }
 
     return (
-      <React.Fragment>
+      <>
         <Field
           name="tabbed_view"
           component={SelectField}
@@ -261,7 +261,7 @@ class AssessmentForm extends React.Component {
         />
 
         {this.props.password_protected && this.renderPasswordFields()}
-      </React.Fragment>
+      </>
     );
   }
 
@@ -409,13 +409,13 @@ class AssessmentForm extends React.Component {
         {
           folderAttributes
           && (
-          <React.Fragment>
+          <>
             <br />
             <MaterialUploader
               folderId={folderAttributes.folder_id}
               materials={folderAttributes.materials}
             />
-          </React.Fragment>
+          </>
           )
         }
         {

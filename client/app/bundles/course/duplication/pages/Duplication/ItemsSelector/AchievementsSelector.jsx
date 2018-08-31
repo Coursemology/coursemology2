@@ -87,7 +87,7 @@ class AchievementsSelector extends React.Component {
     }
 
     return (
-      <React.Fragment>
+      <>
         {
           achievements.length > 1 ? (
             <BulkSelectors
@@ -97,7 +97,7 @@ class AchievementsSelector extends React.Component {
           ) : null
         }
         { achievements.map(achievement => this.renderRow(achievement)) }
-      </React.Fragment>
+      </>
     );
   }
 
@@ -107,10 +107,10 @@ class AchievementsSelector extends React.Component {
     if (!achievements) { return null; }
 
     return (
-      <React.Fragment>
+      <>
         <h2><FormattedMessage {...defaultComponentTitles.course_achievements_component} /></h2>
         { this.renderBody() }
-      </React.Fragment>
+      </>
     );
   }
 }

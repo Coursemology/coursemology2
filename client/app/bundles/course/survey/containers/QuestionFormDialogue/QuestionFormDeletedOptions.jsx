@@ -54,7 +54,7 @@ class QuestionFormDeletedOptions extends React.Component {
     }
 
     return (
-      <React.Fragment>
+      <>
         {fields.map((member, index) => {
           const option = fields.get(index);
           const handleRestore = () => {
@@ -83,7 +83,7 @@ class QuestionFormDeletedOptions extends React.Component {
             </div>
           );
         })}
-      </React.Fragment>
+      </>
     );
   }
 }

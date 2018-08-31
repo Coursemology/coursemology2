@@ -254,7 +254,7 @@ class OnlineEditorCppView extends React.Component {
     );
 
     return (
-      <React.Fragment>
+      <>
         <div style={{ marginBottom: '1em' }}>
           {
             this.renderEditorCard(
@@ -332,7 +332,7 @@ class OnlineEditorCppView extends React.Component {
           this.renderTestCases(intl.formatMessage(translations.evaluationTestCases),
             testCases, 'evaluation')
         }
-      </React.Fragment>
+      </>
     );
   }
 

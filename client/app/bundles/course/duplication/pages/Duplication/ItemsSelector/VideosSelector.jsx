@@ -102,7 +102,7 @@ class VideosSelector extends React.Component {
     }
 
     return (
-      <React.Fragment>
+      <>
         {
           tabs.length > 1 ? (
             <BulkSelectors
@@ -112,7 +112,7 @@ class VideosSelector extends React.Component {
           ) : null
         }
         { tabs.map(tab => this.renderTabTree(tab)) }
-      </React.Fragment>
+      </>
     );
   }
 
@@ -121,10 +121,10 @@ class VideosSelector extends React.Component {
     if (!tabs) { return null; }
 
     return (
-      <React.Fragment>
+      <>
         <h2><FormattedMessage {...defaultComponentTitles.course_videos_component} /></h2>
         { this.renderBody() }
-      </React.Fragment>
+      </>
     );
   }
 }

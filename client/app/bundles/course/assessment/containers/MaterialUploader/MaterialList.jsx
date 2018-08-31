@@ -92,7 +92,7 @@ const MaterialList = (props) => {
   );
 
   return (
-    <React.Fragment>
+    <>
       <Divider />
       <List>
         {
@@ -105,7 +105,7 @@ const MaterialList = (props) => {
       </List>
       <Divider />
       <NotificationBar notification={props.notification} />
-    </React.Fragment>
+    </>
   );
 };
 

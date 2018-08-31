@@ -61,7 +61,7 @@ class EditPage extends React.Component {
       conditionAttributes, dispatch } = this.props;
 
     return (
-      <React.Fragment>
+      <>
         <AssessmentForm
           editing
           gamified={gamified}
@@ -80,7 +80,7 @@ class EditPage extends React.Component {
           />
         </div>
         <NotificationBar notification={this.props.notification} />
-      </React.Fragment>
+      </>
     );
   }
 }

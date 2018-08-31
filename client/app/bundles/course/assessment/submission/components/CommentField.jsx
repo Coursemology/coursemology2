@@ -34,7 +34,7 @@ export default class CommentField extends Component {
   render() {
     const { createComment, inputId, isSubmitting, value } = this.props;
     return (
-      <React.Fragment>
+      <>
         <MaterialSummernote
           airMode
           disabled={isSubmitting}
@@ -50,7 +50,7 @@ export default class CommentField extends Component {
           disabled={value === undefined || value === '' || isSubmitting}
           icon={isSubmitting ? <CircularProgress size={24} /> : null}
         />
-      </React.Fragment>
+      </>
     );
   }
 }

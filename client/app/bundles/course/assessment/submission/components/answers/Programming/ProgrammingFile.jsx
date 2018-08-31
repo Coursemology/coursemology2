@@ -35,14 +35,14 @@ class ProgrammingFile extends React.Component {
   renderProgrammingEditor() {
     const { file, fieldName, language } = this.props;
     return (
-      <React.Fragment>
+      <>
         <h5>{file.filename}</h5>
         <Editor
           name={`${fieldName}[content]`}
           filename={file.filename}
           language={language}
         />
-      </React.Fragment>
+      </>
     );
   }
 

@@ -99,12 +99,12 @@ export default class SubmissionsTable extends React.Component {
     }
 
     return (
-      <React.Fragment>
+      <>
         {SubmissionsTable.renderUnpublishedWarning(submission)}
         <a href={getEditSubmissionURL(courseId, assessmentId, submission.id)}>
           <FormattedMessage {...translations[submission.workflowState]} />
         </a>
-      </React.Fragment>
+      </>
     );
   }
 

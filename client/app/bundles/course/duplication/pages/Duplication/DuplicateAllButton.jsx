@@ -43,7 +43,7 @@ class DuplicateAllButton extends React.Component {
     if (duplicationMode !== duplicationModes.COURSE) { return null; }
 
     return (
-      <React.Fragment>
+      <>
         <RaisedButton
           secondary
           disabled={disabled}
@@ -53,12 +53,12 @@ class DuplicateAllButton extends React.Component {
         <ConfirmationDialog
           open={this.state.confirmationOpen}
           message={(
-            <React.Fragment>
+            <>
               <FormattedMessage {...translations.info} />
               <br />
               <br />
               <FormattedMessage {...translations.confirmationMessage} />
-            </React.Fragment>
+            </>
 )}
           onCancel={() => this.setState({ confirmationOpen: false })}
           onConfirm={() => {
@@ -66,7 +66,7 @@ class DuplicateAllButton extends React.Component {
             this.setState({ confirmationOpen: false });
           }}
         />
-      </React.Fragment>
+      </>
     );
   }
 }

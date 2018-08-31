@@ -8,7 +8,7 @@ import { questionShape } from '../../propTypes';
 
 function MultipleChoiceOptions({ readOnly, question, input: { onChange, value } }) {
   return (
-    <React.Fragment>
+    <>
       {question.options.map(option => (
         <RadioButton
           key={option.id}
@@ -24,7 +24,7 @@ function MultipleChoiceOptions({ readOnly, question, input: { onChange, value } 
           disabled={readOnly}
         />
       ))}
-    </React.Fragment>
+    </>
   );
 }
 
