@@ -12,6 +12,7 @@ json.formValues do
   json.skill_ids @question_assessment.skills.order('LOWER(title) ASC').pluck(:id)
   json.autograded @programming_question.persisted? ?
     @programming_question.attachment.present? : @assessment.autograded?
+  json.merge! @meta[:data] if @meta
 end
 
 has_submissions = @programming_question.answers.without_attempting_state.count > 0

@@ -7,12 +7,9 @@ import ProgrammingQuestion from './programming/ProgrammingQuestion';
 $(document).ready(() => {
   const mountNode = document.getElementById('programming-question');
   if (mountNode) {
-    const data = mountNode.getAttribute('data');
-    const props = JSON.parse(data);
-
     const Page = () => (
       <ProviderWrapper {...{ store }}>
-        <ProgrammingQuestion {...props} />
+        <ProgrammingQuestion />
       </ProviderWrapper>
     );
 

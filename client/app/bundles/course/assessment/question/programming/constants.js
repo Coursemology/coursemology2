@@ -20,29 +20,10 @@ export const aceEditorModes = {
   PYTHON: 'python',
 };
 
-export const editorActionTypes = mirrorCreator([
-  'TOGGLE_SUBMIT_AS_FILE',
-  'CODE_BLOCK_UPDATE',
-  'TEST_CASE_CREATE',
-  'TEST_CASE_UPDATE',
-  'TEST_CASE_DELETE',
-  'NEW_PACKAGE_FILE_UPDATE',
-  'NEW_PACKAGE_FILE_DELETE',
-  'EXISTING_PACKAGE_FILE_DELETE',
-]);
-
 export const actionTypes = mirrorCreator([
-  'PROGRAMMING_QUESTION_UPDATE',
-  'SKILLS_UPDATE',
-  'EDITOR_MODE_UPDATE',
-  'HAS_ERROR_CLEAR',
-  'SUBMISSION_MESSAGE_SET',
-  'SUBMISSION_MESSAGE_CLEAR',
-  'SUBMIT_FORM_LOADING',
+  'SUBMIT_FORM_REQUEST',
   'SUBMIT_FORM_SUCCESS',
   'SUBMIT_FORM_FAILURE',
-  'SUBMIT_FORM_EVALUATING',
-  'VALIDATION_ERRORS_SET',
 ]);
 
 export const cppAppend = `// This is a global environment that is setup before the tests are run.

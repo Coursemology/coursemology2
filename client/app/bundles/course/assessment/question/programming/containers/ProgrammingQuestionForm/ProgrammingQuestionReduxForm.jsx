@@ -31,21 +31,21 @@ class ProgrammingQuestionReduxForm extends React.Component {
     };
   }
 
-  submitButtonText() {
-    return this.props.intl.formatMessage(translations.submitButton);
-  }
-
   handlePackageTypeChange = (canEditPackage) => {
     this.setState({ canEditPackage });
   }
 
-  onSubmit = (e) => {
+  handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(this.form);
 
     const failureMessage = this.props.intl.formatMessage(translations.submitFailureMessage);
 
     this.props.actions.submitForm(url, method, formData, failureMessage);
+  }
+
+  submitButtonText() {
+    return this.props.intl.formatMessage(translations.submitButton);
   }
 
   renderAutogradedToggle() {

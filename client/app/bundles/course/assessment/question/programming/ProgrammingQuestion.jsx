@@ -6,23 +6,21 @@ import { formValueSelector } from 'redux-form';
 import { optionShape } from 'lib/components/redux-form/MultiSelect';
 
 import ProgrammingQuestionForm from './containers/ProgrammingQuestionForm/ProgrammingQuestionReduxForm';
-import * as onlineEditorActionCreators from './actions/onlineEditorActionCreators';
-import * as programmingQuestionActionCreators from './actions/programmingQuestionActionCreators';
+import * as programmingQuestionActionCreators from './actions';
 import { formNames } from './constants';
 
 const selector = formValueSelector(formNames.PROGRAMMING_QUESTION);
 
 function mapStateToProps(state) {
-  const autograded = selector(state, 'question_programming[autograded]');
-  const languageId = selector(state, 'question_programming[language_id]');
-
-  return { autograded, languageId };
+  return {
+    autograded: selector(state, 'question_programming[autograded]'),
+    languageId: selector(state, 'question_programming[language_id]'),
+  };
 }
 
 const ProgrammingQuestion = (props) => {
-  const { dispatch, formValues, test_ui, ...otherProps } = props;
+  const { dispatch, formValues, ...otherProps } = props;
   const actions = bindActionCreators(programmingQuestionActionCreators, dispatch);
-  const onlineEditorActions = bindActionCreators(onlineEditorActionCreators, dispatch);
 
   const initialValues = {
     question_programming: {
@@ -40,7 +38,6 @@ const ProgrammingQuestion = (props) => {
         evaluation: [],
       },
       ...formValues,
-      ...test_ui,
     },
   };
 
@@ -49,7 +46,6 @@ const ProgrammingQuestion = (props) => {
       initialValues={initialValues}
       {...{
         actions,
-        onlineEditorActions,
         ...otherProps,
       }}
     />
@@ -73,7 +69,6 @@ ProgrammingQuestion.propTypes = {
 
   packageFile: PropTypes.any,
   programmingPackage: PropTypes.any,
-  test_ui: PropTypes.any,
   import_result: PropTypes.any,
 
   dispatch: PropTypes.func.isRequired,

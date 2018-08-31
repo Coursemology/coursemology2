@@ -8,11 +8,13 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
   before_action :load_question_assessment, only: [:edit, :update]
 
   def new
-    @template = 'course/assessment/question/programming/new.json.jbuilder'
+    respond_to do |format|
+      format.html { render 'new' }
+      format.json { render partial: 'programming_question' }
+    end
   end
 
   def create
-    @template = 'course/assessment/question/programming/new.json.jbuilder'
     @programming_question.package_type =
       programming_question_params.key?(:file) ? :zip_upload : :online_editor
     process_package
@@ -28,8 +30,12 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
   end
 
   def edit
-    @template = 'course/assessment/question/programming/edit.json.jbuilder'
     @meta = programming_package_service.extract_meta if @programming_question.edit_online?
+
+    respond_to do |format|
+      format.html { render 'edit' }
+      format.json { render partial: 'programming_question' }
+    end
   end
 
   def update
