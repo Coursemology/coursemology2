@@ -11,7 +11,7 @@ import { initialStates } from '../reducers';
 import { updateScribingQuestion } from '../actions/scribingQuestionActionCreators';
 
 // Mock axios
-const client = CourseAPI.question.scribing.scribings.getClient();
+const client = CourseAPI.assessment.question.scribing.getClient();
 const mock = new MockAdapter(client);
 const store = storeCreator({ initialStates });
 
@@ -123,7 +123,7 @@ describe('Scribing question', () => {
         },
       });
 
-    const spyFetch = jest.spyOn(CourseAPI.question.scribing.scribings, 'fetch');
+    const spyFetch = jest.spyOn(CourseAPI.assessment.question.scribing, 'fetch');
 
     const fetchPage = mount(
       <ProviderWrapper store={store}>
@@ -158,7 +158,7 @@ describe('Scribing question', () => {
         errors: ['Maximum grade can\'t be blank'],
       });
 
-    const spyUpdate = jest.spyOn(CourseAPI.question.scribing.scribings, 'update');
+    const spyUpdate = jest.spyOn(CourseAPI.assessment.question.scribing, 'update');
 
     const fetchPage = mount(
       <ProviderWrapper store={store}>
@@ -185,7 +185,7 @@ describe('Scribing question', () => {
       value: `/courses/${courseId}/assessments/${assessmentId}/question/scribing/new`,
     });
 
-    const spyCreate = jest.spyOn(CourseAPI.question.scribing.scribings, 'create');
+    const spyCreate = jest.spyOn(CourseAPI.assessment.question.scribing, 'create');
 
     const postUrl = `/courses/${courseId}/assessments/${assessmentId}/question/scribing/`;
     mock.onPost(postUrl).reply(200, {});
@@ -212,7 +212,7 @@ describe('Scribing question', () => {
       value: `/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}/edit`,
     });
 
-    const spyUpdate = jest.spyOn(CourseAPI.question.scribing.scribings, 'update');
+    const spyUpdate = jest.spyOn(CourseAPI.assessment.question.scribing, 'update');
 
     const patchUrl = `/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}`;
     mock.onPatch(patchUrl).reply(200, {});

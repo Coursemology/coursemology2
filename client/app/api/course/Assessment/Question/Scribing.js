@@ -1,8 +1,8 @@
 import { getCourseId, getAssessmentId, getScribingId } from 'lib/helpers/url-helpers';
-import BaseAPI from '../../../../Base';
-import SubmissionsAPI from '../../Submissions';
+import BaseAPI from '../Base';
+import SubmissionsAPI from '../Submissions';
 
-export default class ScribingsAPI extends BaseAPI {
+export default class ScribingQuestionAPI extends BaseAPI {
   /**
    * question = {
   *   id: number,
@@ -26,7 +26,7 @@ export default class ScribingsAPI extends BaseAPI {
    * success response: scribing_question
    */
   fetch() {
-    return this.getClient().get(`${ScribingsAPI._getUrlPrefix()}/${getScribingId()}`);
+    return this.getClient().get(`${ScribingQuestionAPI._getUrlPrefix()}/${getScribingId()}`);
   }
 
   /**
@@ -58,9 +58,9 @@ export default class ScribingsAPI extends BaseAPI {
         Accept: 'file_types',
       },
     };
-    const formData = ScribingsAPI.generateFormData(scribingFields.question_scribing);
+    const formData = ScribingQuestionAPI.generateFormData(scribingFields.question_scribing);
 
-    return this.getClient().post(ScribingsAPI._getUrlPrefix(), formData, config);
+    return this.getClient().post(ScribingQuestionAPI._getUrlPrefix(), formData, config);
   }
 
   /**
@@ -80,9 +80,9 @@ export default class ScribingsAPI extends BaseAPI {
         Accept: 'file_types',
       },
     };
-    const formData = ScribingsAPI.generateFormData(scribingFields.question_scribing);
+    const formData = ScribingQuestionAPI.generateFormData(scribingFields.question_scribing);
 
-    return this.getClient().patch(`${ScribingsAPI._getUrlPrefix()}/${scribingId}`, formData, config);
+    return this.getClient().patch(`${ScribingQuestionAPI._getUrlPrefix()}/${scribingId}`, formData, config);
   }
 
   /**
@@ -94,7 +94,7 @@ export default class ScribingsAPI extends BaseAPI {
    * error response: {}
    */
   delete(scribingId) {
-    return this.getClient().delete(`${ScribingsAPI._getUrlPrefix()}/${scribingId}`);
+    return this.getClient().delete(`${ScribingQuestionAPI._getUrlPrefix()}/${scribingId}`);
   }
 
   static _getUrlPrefix() {

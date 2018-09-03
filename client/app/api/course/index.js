@@ -9,7 +9,6 @@ import DuplicationAPI from './Duplication';
 import SurveyAPI from './Survey';
 import VideoAPI from './Video';
 import AdminAPI from './Admin';
-import ScribingQuestionAPI from './Assessment/question/scribing';
 import LevelAPI from './Level';
 import UserNotificationsAPI from './UserNotifications';
 
@@ -25,9 +24,6 @@ const CourseAPI = {
   survey: SurveyAPI,
   video: VideoAPI,
   admin: AdminAPI,
-  question: {
-    scribing: ScribingQuestionAPI,
-  },
   level: new LevelAPI(),
   userNotifications: new UserNotificationsAPI(),
 };
