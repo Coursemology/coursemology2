@@ -1,6 +1,7 @@
 en:
   notifiers:
     course:
+      phantom: '(Phantom)'
       achievement_notifier:
         gained:
           course_notifications:

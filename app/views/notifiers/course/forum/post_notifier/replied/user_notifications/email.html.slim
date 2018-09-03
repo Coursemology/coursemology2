@@ -1,6 +1,7 @@
 - post = @object
 - topic = post.topic.actable
 - course = topic.course
+- course_user = CourseUser.find_by(course: course, user: post.creator)
 - host = course.instance.host
 - unsubscribe_url = subscribe_course_forum_topic_url(course, topic.forum, topic, subscribe: false,
                                                      host: host)
@@ -10,6 +11,7 @@
 - post_author = format_inline_text(post.author_name)
 
 - message.subject = t('.subject', course: course_title, topic: topic_title)
+- message.subject += ' ' + t('notifiers.course.phantom') if course_user.phantom?
 
 = format_html(t('.message',
                 topic: link_to(topic_title,

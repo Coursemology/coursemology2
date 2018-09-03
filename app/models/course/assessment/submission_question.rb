@@ -25,7 +25,7 @@ class Course::Assessment::SubmissionQuestion < ApplicationRecord
   end)
 
   def notify(post)
-    Course::Assessment::SubmissionQuestion::CommentNotifier.post_replied(post.creator, post)
+    Course::Assessment::SubmissionQuestion::CommentNotifier.post_replied(post)
   end
 
   def answers

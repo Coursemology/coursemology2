@@ -59,8 +59,9 @@ export const settingDescriptions = defineMessages({
   },
   new_phantom_submission: {
     id: 'course.admin.NotificationSettings.settingDescriptions.new_phantom_submission',
-    defaultMessage: "Sends 'New Submission' email for phantom students also. If 'New Submission' email\
-      notification is disabled, no emails will be sent even though this setting is enabled.",
+    defaultMessage: "Sends 'New Submission' email for phantom students also. If the 'New\
+     Submission' email notification is disabled, no emails will be sent even though this setting\
+      is enabled.",
   },
   grades_released: {
     id: 'course.admin.NotificationSettings.settingDescriptions.grades_released',
@@ -68,7 +69,14 @@ export const settingDescriptions = defineMessages({
   },
   new_comment: {
     id: 'course.admin.NotificationSettings.settingDescriptions.new_comment',
-    defaultMessage: 'Notify users when comments or programming question annotations are made.',
+    defaultMessage: 'Notify users when comments or programming question annotations are made by\
+      non-phantom student or staff.',
+  },
+  new_phantom_comment: {
+    id: 'course.admin.NotificationSettings.settingDescriptions.new_phantom_comment',
+    defaultMessage: "Notify users when comments or programming question annotations are made by\
+      phantom student or staff. If the 'New Comment' email notification is disabled, no emails\
+      will be sent even though this setting is enabled.",
   },
   new_enrol_request: {
     id: 'course.admin.NotificationSettings.settingDescriptions.new_enrol_request',
@@ -76,7 +84,14 @@ export const settingDescriptions = defineMessages({
   },
   post_replied: {
     id: 'course.admin.NotificationSettings.settingDescriptions.post_replied',
-    defaultMessage: 'Notify users who are subscribed to a forum topic when a replied is made to that topic.',
+    defaultMessage: 'Notify users who are subscribed to a forum topic when a reply by a\
+      non-phantom user is made to that topic.',
+  },
+  post_phantom_replied: {
+    id: 'course.admin.NotificationSettings.settingDescriptions.post_phantom_replied',
+    defaultMessage: "Notify users who are subscribed to a forum topic when a reply by a\
+      phantom user is made to that topic. If the 'Post Replied' email notification is disabled,\
+      no emails will be sent even though this setting is enabled.",
   },
   topic_created: {
     id: 'course.admin.NotificationSettings.settingDescriptions.topic_created',
@@ -119,7 +134,7 @@ export const settingTitles = defineMessages({
   },
   new_phantom_submission: {
     id: 'course.admin.NotificationSettings.settingTitles.new_phantom_submission',
-    defaultMessage: 'New Phantom Submission',
+    defaultMessage: 'New Submission by Phantom User',
   },
   grades_released: {
     id: 'course.admin.NotificationSettings.settingTitles.grades_released',
@@ -129,6 +144,10 @@ export const settingTitles = defineMessages({
     id: 'course.admin.NotificationSettings.settingTitles.new_comment',
     defaultMessage: 'New Comment',
   },
+  new_phantom_comment: {
+    id: 'course.admin.NotificationSettings.settingTitles.new_phantom_comment',
+    defaultMessage: 'New Comment by Phantom User',
+  },
   new_enrol_request: {
     id: 'course.admin.NotificationSettings.settingTitles.new_enrol_request',
     defaultMessage: 'New Enrol Request',
@@ -136,6 +155,10 @@ export const settingTitles = defineMessages({
   post_replied: {
     id: 'course.admin.NotificationSettings.settingTitles.post_replied',
     defaultMessage: 'Post Replied',
+  },
+  post_phantom_replied: {
+    id: 'course.admin.NotificationSettings.settingTitles.post_phantom_replied',
+    defaultMessage: 'Post Replied by Phantom User',
   },
   topic_created: {
     id: 'course.admin.NotificationSettings.settingTitles.topic_created',

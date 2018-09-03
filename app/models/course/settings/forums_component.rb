@@ -8,6 +8,7 @@ class Course::Settings::ForumsComponent < Course::Settings::Component
   def self.email_setting_items
     {
       post_replied: { enabled_by_default: true },
+      post_phantom_replied: { enabled_by_default: true },
       topic_created: { enabled_by_default: true }
     }
   end

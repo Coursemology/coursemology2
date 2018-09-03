@@ -1,10 +1,12 @@
 - submission = @object
 - assessment = submission.assessment
 - course = assessment.course
+- course_user = submission.course_user
 - host = course.instance.host
 - submission_url = edit_course_assessment_submission_url(course, assessment, submission, host: host)
 
 - message.subject = t('.subject', course: course.title, assessment: submission.assessment.title)
+- message.subject += ' ' + t('notifiers.course.phantom') if course_user.phantom?
 
 = simple_format(t('.message', submission: link_to(:submission, submission_url),
                               user: submission.course_user.name))

@@ -16,7 +16,7 @@ class Course::Assessment::Answer::ProgrammingFileAnnotation < ApplicationRecord
   end)
 
   def notify(post)
-    Course::Assessment::Answer::CommentNotifier.annotation_replied(post.creator, post)
+    Course::Assessment::Answer::CommentNotifier.annotation_replied(post)
   end
 
   private
