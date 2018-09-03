@@ -1,6 +1,7 @@
 - announcement = @object
 - course = announcement.course
 - host = course.instance.host
+- creator = format_inline_text(announcement.creator.name)
 
 - message.subject = t('.subject', course: course.title, announcement: announcement.title)
 
@@ -9,4 +10,5 @@
 
 = format_html(t('.message', course: course_link,
                             announcement: announcement_link,
-                            content: announcement.content_to_email))
+                            content: announcement.content_to_email,
+                            creator: creator))

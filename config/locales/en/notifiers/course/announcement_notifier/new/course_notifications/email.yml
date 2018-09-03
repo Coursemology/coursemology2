@@ -7,5 +7,5 @@ en:
             email:
               subject: '%{course} New Announcement: %{announcement}'
               message: >
-                <p>New %{announcement} from course: %{course}</p>
+                <p>%{creator} posted a new %{announcement} from course: %{course}</p>
                 %{content}
