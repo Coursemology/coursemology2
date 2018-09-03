@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import AceEditor from 'react-ace';
+import AceEditor from 'lib/components/redux-form/AceEditor';
 
-class Editor extends Component {
+export default class Editor extends Component {
   static propTypes = {
     readOnly: PropTypes.bool,
+    name: PropTypes.string,
     filename: PropTypes.string,
     language: PropTypes.string.isRequired,
-    input: PropTypes.shape({
-      onChange: PropTypes.func,
-    }).isRequired,
   }
 
   static defaultProps = {
@@ -18,17 +16,17 @@ class Editor extends Component {
   };
 
   render() {
-    const { readOnly, filename, language, input: { onChange, value } } = this.props;
+    const { readOnly, filename, name, language } = this.props;
     return (
-      <AceEditor
-        name={filename}
+      <Field
+        component={AceEditor}
+        name={name}
+        filename={filename}
         mode={language}
         theme="github"
         width="100%"
         minLines={25}
         maxLines={25}
-        value={value}
-        onChange={newValue => onChange(newValue)}
         editorProps={{ $blockScrolling: true }}
         setOptions={{ useSoftTabs: true }}
         readOnly={readOnly}
@@ -37,5 +35,3 @@ class Editor extends Component {
     );
   }
 }
-
-export default props => <Field {...props} component={Editor} />;
