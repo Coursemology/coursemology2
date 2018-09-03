@@ -36,7 +36,7 @@ class Course::LessonPlan::ItemsController < Course::LessonPlan::Controller
              order(start_at: :asc).includes(:actable).to_a.
              select { |item| can?(:show, item.actable) }
 
-    @milestones = current_course.lesson_plan_milestones.order(start_at: :asc)
+    @milestones = current_course.lesson_plan_milestones.ordered_by_date
 
     @folder_loader = Course::Material::PreloadService.new(current_course)
 
