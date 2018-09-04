@@ -34,6 +34,17 @@
       tr.end_at
         th = t('.end_at')
         td = format_datetime(@assessment.end_at) if @assessment.end_at.present?
+      - if can?(:observe, @assessment)
+        - if @assessment.autograded?
+          tr.skippable
+            th = t('.skippable')
+            td = @assessment.skippable ? t('.allow') : t('.disallow')
+          tr.allow_partial_submission
+            th = t('.allow_partial_submission')
+            td = @assessment.allow_partial_submission ? t('.allow') : t('.disallow')
+        tr.graded_test_case_types
+          th = t('.graded_test_case_types')
+          td = format_inline_text(display_graded_test_types(@assessment))
 
   - if cannot?(:attempt, @assessment)
     h3 = t('.requirements')

@@ -33,4 +33,12 @@ module Course::Assessment::AssessmentsHelper
       @assessments.any? { |assessment| assessment.end_at.present? }
     end
   end
+
+  def display_graded_test_types(assessment)
+    graded_test_case_types = []
+    graded_test_case_types.push(t('course.assessment.assessments.show.public_test')) if assessment.use_public
+    graded_test_case_types.push(t('course.assessment.assessments.show.private_test')) if assessment.use_private
+    graded_test_case_types.push(t('course.assessment.assessments.show.evaluation_test')) if assessment.use_evaluation
+    graded_test_case_types.join(', ')
+  end
 end

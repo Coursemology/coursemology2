@@ -51,7 +51,7 @@ const translations = defineMessages({
   },
   allowPartialSubmission: {
     id: 'course.assessment.form.allowPartialSubmission',
-    defaultMessage: 'Allow finalising assessment before all answers have passed',
+    defaultMessage: 'Allow submission with incorrect answers',
   },
   showPrivate: {
     id: 'course.assessment.form.showPrivate',
