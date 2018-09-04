@@ -17,9 +17,7 @@ describe('<EditSectionButton />', () => {
     const surveyId = 1;
     const spyUpdate = jest.spyOn(CourseAPI.survey.sections, 'update');
 
-    Object.defineProperty(window.location, 'pathname', {
-      value: `/courses/${courseId}/surveys/${surveyId}`,
-    });
+    window.history.pushState({}, '', `/courses/${courseId}/surveys/${surveyId}`);
     const contextOptions = buildContextOptions(storeCreator({}));
     const sectionFormDialogue = mount(<SectionFormDialogue />, contextOptions);
     const editSectionButton = mount(<EditSectionButton section={section} />, contextOptions);

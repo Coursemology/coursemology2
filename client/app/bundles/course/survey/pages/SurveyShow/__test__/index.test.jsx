@@ -83,7 +83,7 @@ describe('<SurveyShow />', () => {
     const spyFinalizeOrder = jest.spyOn(CourseAPI.survey.surveys, 'reorderQuestions');
 
     // Mount showPage and wait for survey data to load
-    Object.defineProperty(window.location, 'pathname', { value: surveyUrl });
+    window.history.pushState({}, '', surveyUrl);
     const store = storeCreator({ surveys: {} });
     const WrappedSurveyShow = wrapInTestContext(ConnectedSurveyShow);
     const showPage = mount(

@@ -22,9 +22,7 @@ describe('<MoveDownButton />', () => {
     const spyMove = jest.spyOn(CourseAPI.survey.surveys, 'reorderSections');
     const store = storeCreator({ surveys: { surveys } });
 
-    Object.defineProperty(window.location, 'pathname', {
-      value: `/courses/${courseId}/surveys/${surveyId}`,
-    });
+    window.history.pushState({}, '', `/courses/${courseId}/surveys/${surveyId}`);
     const moveSectionButton = mount(<MoveDownButton sectionIndex={sectionIndex} />, buildContextOptions(store));
     moveSectionButton.find('button').simulate('click');
 

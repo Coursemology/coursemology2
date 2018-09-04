@@ -84,10 +84,8 @@ describe('SavingIndicator', () => {
     editPage.update();
     expect(editPage.find('SavingIndicator').prop('isSaving')).toEqual(true);
 
-    Object.defineProperty(window.location, 'pathname', {
-      writable: true,
-      value: `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`,
-    });
+    const editUrl = `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`;
+    window.history.pushState({}, '', editUrl);
     mock.onPost(`/courses/${courseId}/assessments/${assessmentId}\
 /submissions/${submissionId}/answers/${answerId}/scribing/scribbles`)
       .reply(200);
@@ -110,10 +108,8 @@ describe('SavingIndicator', () => {
       </ProviderWrapper>
     );
 
-    Object.defineProperty(window.location, 'pathname', {
-      writable: true,
-      value: `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`,
-    });
+    const editUrl = `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`;
+    window.history.pushState({}, '', editUrl);
     mock.onPost(`/courses/${courseId}/assessments/${assessmentId}\
 /submissions/${submissionId}/answers/${answerId}/scribing/scribbles`)
       .reply(400);

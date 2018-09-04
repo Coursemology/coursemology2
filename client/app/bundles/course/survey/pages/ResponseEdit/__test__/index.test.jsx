@@ -65,7 +65,7 @@ describe('<ResponseEdit />', () => {
     const spyUpdate = jest.spyOn(CourseAPI.survey.responses, 'update');
 
     // Mount response show page and wait for data to load
-    Object.defineProperty(window.location, 'pathname', { value: responseUrl });
+    window.history.pushState({}, '', responseUrl);
     const responseShow = mount(
       <InjectedResponseEdit {...{ match: { params: { responseId } } }} />,
       buildContextOptions(storeCreator({}))

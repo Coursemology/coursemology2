@@ -44,10 +44,7 @@ beforeEach(() => {
 
 describe('Scribing question', () => {
   it('renders new question form', async () => {
-    Object.defineProperty(window.location, 'pathname', {
-      writable: true,
-      value: `/courses/${courseId}/assessments/${assessmentId}/question/scribing/new`,
-    });
+    window.history.pushState({}, '', `/courses/${courseId}/assessments/${assessmentId}/question/scribing/new`);
 
     // Mock assessment axios
     const assessmentsClient = CourseAPI.assessment.assessments.getClient();
@@ -89,10 +86,8 @@ describe('Scribing question', () => {
   });
 
   it('renders edit question form', async () => {
-    Object.defineProperty(window.location, 'pathname', {
-      writable: true,
-      value: `/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}/edit`,
-    });
+    const editUrl = `/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}/edit`;
+    window.history.pushState({}, '', editUrl);
 
     mock.onGet(`/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}`)
       .reply(200, {
@@ -148,10 +143,8 @@ describe('Scribing question', () => {
   });
 
   it('renders error message when submit fails from server', async () => {
-    Object.defineProperty(window.location, 'pathname', {
-      writable: true,
-      value: `/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}/edit`,
-    });
+    const editUrl = `/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}/edit`;
+    window.history.pushState({}, '', editUrl);
 
     mock.onPatch(`/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}`)
       .reply(400, {
@@ -180,10 +173,7 @@ describe('Scribing question', () => {
   });
 
   it('allows question to be created', async () => {
-    Object.defineProperty(window.location, 'pathname', {
-      writable: true,
-      value: `/courses/${courseId}/assessments/${assessmentId}/question/scribing/new`,
-    });
+    window.history.pushState({}, '', `/courses/${courseId}/assessments/${assessmentId}/question/scribing/new`);
 
     const spyCreate = jest.spyOn(CourseAPI.assessment.question.scribing, 'create');
 
@@ -207,10 +197,7 @@ describe('Scribing question', () => {
   });
 
   it('allows question to be updated', async () => {
-    Object.defineProperty(window.location, 'pathname', {
-      writable: true,
-      value: `/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}/edit`,
-    });
+    window.history.pushState({}, '', `/courses/${courseId}/assessments/${assessmentId}/question/scribing/edit`);
 
     const spyUpdate = jest.spyOn(CourseAPI.assessment.question.scribing, 'update');
 
