@@ -52,6 +52,10 @@ class Course < ApplicationRecord
   has_many :videos, through: :lesson_plan_items, source: :actable, source_type: Course::Video.name
   has_many :video_tabs, class_name: Course::Video::Tab.name, inverse_of: :course, dependent: :destroy
 
+  has_many :reference_timelines, class_name: Course::ReferenceTimeline.name, inverse_of: :course, dependent: :destroy
+  has_one :default_reference_timeline, -> { where(default: true) },
+          class_name: Course::ReferenceTimeline.name, inverse_of: :course
+
   accepts_nested_attributes_for :invitations, :assessment_categories, :video_tabs
 
   calculated :user_count, (lambda do
