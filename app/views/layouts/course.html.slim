@@ -11,6 +11,8 @@
           div.col-xs-12.user
             = display_user_image(current_user)
             span#user-sidebar = link_to_user(current_course_user || current_user)
+            button.btn.btn-default.navbar-toggle.collapsed.pull-right type="button" data-toggle="collapse" data-target="#course-navigation-sidebar" aria-expanded="false" aria-controls="navbar"
+              span.glyphicon.glyphicon-menu-hamburger
           - if current_course_user.student? && current_course.gamified?
             = display_course_user_badge(current_course_user)
       nav.navbar-default role='navigation'
