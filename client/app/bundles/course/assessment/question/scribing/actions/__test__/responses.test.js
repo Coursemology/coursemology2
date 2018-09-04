@@ -41,10 +41,8 @@ describe('createScribingQuestion', () => {
   const store = storeCreator({ initialStates });
   const spyCreate = jest.spyOn(CourseAPI.assessment.question.scribing, 'create');
 
-  Object.defineProperty(window.location, 'pathname', {
-    writable: true,
-    value: `/courses/${courseId}/assessments/${assessmentId}/question/scribing/new`,
-  });
+  const newUrl = `/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}/new`;
+  window.history.pushState({}, '', newUrl);
 
   it('redirects after creation of new scribing question', async () => {
     mock.onPost(createResponseUrl).reply(200, { message: 'The scribing question was created.' });
@@ -59,10 +57,8 @@ describe('updateScribingQuestion', () => {
   const store = storeCreator({ initialStates });
   const spyUpdate = jest.spyOn(CourseAPI.assessment.question.scribing, 'update');
 
-  Object.defineProperty(window.location, 'pathname', {
-    writable: true,
-    value: `/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}/edit`,
-  });
+  const editUrl = `/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}/edit`;
+  window.history.pushState({}, '', editUrl);
 
   it('redirects after updating of scribing question', async () => {
     mock.onPatch(updateResponseUrl).reply(200, { message: 'The scribing question was created.' });

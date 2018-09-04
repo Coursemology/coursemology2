@@ -13,9 +13,7 @@ describe('<DeleteSectionButton />', () => {
     const sectionId = 7;
     const spyDelete = jest.spyOn(CourseAPI.survey.sections, 'delete');
 
-    Object.defineProperty(window.location, 'pathname', {
-      value: `/courses/${courseId}/surveys/${surveyId}`,
-    });
+    window.history.pushState({}, '', `/courses/${courseId}/surveys/${surveyId}`);
     const contextOptions = buildContextOptions(storeCreator({}));
     const deleteConfirmation = mount(<DeleteConfirmation />, contextOptions);
     const deleteSectionButton = mount(<DeleteSectionButton sectionId={sectionId} />, contextOptions);

@@ -75,12 +75,14 @@ describe('persistor', () => {
 
     describe('when a video state change occurs', () => {
       it('persists the state to localStorage', async () => {
+        const spy = jest.spyOn(global.Storage.prototype, 'setItem');
+
         createdStore.store.dispatch(changePlayerState(playerStates.PLAYING));
         createdStore.store.dispatch(updatePlayerProgress(13));
         createdStore.persistor.flush();
 
-        expect(localStorage.setItem).toHaveBeenCalled();
-        const persistedState = JSON.parse(localStorage.__STORE__['persist:videoWatchSessionStore:user-1']);
+        expect(spy).toHaveBeenCalled();
+        const persistedState = JSON.parse(localStorage['persist:videoWatchSessionStore:user-1']);
         expect(persistedState).toHaveProperty('video');
         const videoState = JSON.parse(persistedState.video);
         expect(videoState.playerProgress).toBe(13);

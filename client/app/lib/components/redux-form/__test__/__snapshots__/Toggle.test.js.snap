@@ -7,7 +7,7 @@ exports[`<Toggle /> renders a toggle with an error 1`] = `
     disabled={false}
     labelPosition="left"
     name="Not very awesome toggle"
-    onToggle={[Function]}
+    onToggle={[MockFunction]}
     toggled={false}
   />
   <div
@@ -29,7 +29,7 @@ exports[`<Toggle /> renders a toggled toggle 1`] = `
     disabled={false}
     labelPosition="left"
     name="Awesome toggle"
-    onToggle={[Function]}
+    onToggle={[MockFunction]}
     toggled={true}
   />
 </div>

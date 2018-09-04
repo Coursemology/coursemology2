@@ -73,7 +73,7 @@ describe('<ResponseIndex />', () => {
     const spyIndex = jest.spyOn(CourseAPI.survey.responses, 'index');
 
     // Mount response index page and wait for data to load
-    Object.defineProperty(window.location, 'pathname', { value: responseUrl });
+    window.history.pushState({}, '', responseUrl);
     const responseIndex = mount(
       <MemoryRouter>
         <InjectedResponseIndex />

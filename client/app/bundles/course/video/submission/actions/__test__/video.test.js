@@ -34,10 +34,7 @@ const oldSessionsFixtures = makeImmutableMap({
 });
 
 beforeAll(() => {
-  Object.defineProperty(window.location, 'pathname', {
-    configurable: true,
-    value: `/courses/${courseId}/videos/${videoId}/submissions/1/edit`,
-  });
+  window.history.pushState({}, '', `/courses/${courseId}/videos/${videoId}/submissions/1/edit`);
 });
 
 beforeEach(() => {
