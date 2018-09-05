@@ -24,7 +24,7 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
       package.save
 
       evaluation_result = evaluate_package(question, package)
-      build_result(question, evaluation_result, ignore_evaluation: assessment.autograded?,
+      build_result(question, evaluation_result,
                    graded_test_case_types: assessment.graded_test_case_types)
     end
   end
@@ -55,32 +55,57 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
   #   graded.
   # @param [Course::Assessment::ProgrammingEvaluationService::Result] evaluation_result The
   #   result of evaluating the package.
-  # @param [Boolean] ignore_evaluation If set to true, the evaluation results will be ignored when
-  #   determine the correctness of the answer.
-  # @return [Array<(Boolean, Integer, Course::Assessment::Answer::ProgrammingAutoGrading)>] The
-  #   correct status, grade and the programming auto grading record.
-  def build_result(question, evaluation_result, ignore_evaluation:, graded_test_case_types:)
+  # @param [Array<String>] graded_test_case_types The types of test cases counted
+  #   towards grade/exp calculation
+  # @return [Array<(Boolean, Integer, Course::Assessment::Answer::ProgrammingAutoGrading), Integer>]
+  #   The correctness apparent to student ('True' if answer passes public and private test
+  #   cases), grade, the programming auto grading record, and the evaluation result's id.
+  def build_result(question, evaluation_result, graded_test_case_types:)
+    auto_grading = build_auto_grading(question, evaluation_result)
+    graded_test_count = question.test_cases.where(test_case_type: graded_test_case_types).size
+    passed_test_count = count_passed_test_cases(auto_grading, graded_test_case_types)
+
+    considered_correct = check_correctness(question, auto_grading)
+    grade = if graded_test_count == 0
+              question.maximum_grade
+            else
+              question.maximum_grade * passed_test_count / graded_test_count
+            end
+    [considered_correct, grade, auto_grading, evaluation_result.evaluation_id]
+  end
+
+  # Builds a ProgrammingAutoGrading instance from the question and package evaluation result.
+  #
+  # @param [Course::Assessment::Question::Programming] question The programming question being
+  #   graded.
+  # @param [Course::Assessment::ProgrammingEvaluationService::Result] evaluation_result The
+  #   result of evaluating the package.
+  # @return [Course::Assessment::Answer::ProgrammingAutoGrading] auto_grading The
+  #   ProgrammingAutoGrading instance
+  def build_auto_grading(question, evaluation_result)
     auto_grading = Course::Assessment::Answer::ProgrammingAutoGrading.new(actable: nil)
     set_auto_grading_results(auto_grading, evaluation_result)
     build_test_case_records(question, auto_grading, evaluation_result.test_reports)
-    test_cases = question.test_cases.where(test_case_type: graded_test_case_types)
-    test_results = auto_grading.test_results.select { |r| graded_test_case_types.include?(r.test_case.test_case_type) }
+    auto_grading
+  end
 
-    if ignore_evaluation
-      test_results = test_results.reject { |r| r.test_case.evaluation_test? }
-      test_cases = test_cases.reject(&:evaluation_test?)
-    end
+  # Checks if the answer passes all public and private test cases.
+  #
+  # @param [Course::Assessment::Question::Programming] question The programming question being
+  #   graded.
+  # @param [Course::Assessment::Answer::ProgrammingAutoGrading] auto_grading The
+  #   ProgrammingAutoGrading instance
+  # @return [Boolean] True if the evaluated answer passes all public and private test cases
+  def check_correctness(question, auto_grading)
+    check_test_types = ['public_test', 'private_test'].freeze
+    test_count = question.test_cases.reject(&:evaluation_test?).size
+    passed_test_count = count_passed_test_cases(auto_grading, check_test_types)
+    passed_test_count == test_count
+  end
 
-    number_correct = test_results.map(&:passed?).count(true)
-    test_count = test_cases.size
-
-    all_correct = number_correct == test_count
-    grade = if test_count == 0
-              question.maximum_grade
-            else
-              question.maximum_grade * number_correct / test_count
-            end
-    [all_correct, grade, auto_grading, evaluation_result.evaluation_id]
+  def count_passed_test_cases(auto_grading, test_case_types)
+    auto_grading.test_results.
+      select { |r| test_case_types.include?(r.test_case.test_case_type) && r.passed? }.count
   end
 
   # Checks presence of test report and builds the test case records.
