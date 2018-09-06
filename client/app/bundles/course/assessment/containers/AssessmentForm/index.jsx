@@ -41,6 +41,8 @@ const isFieldBlank = str => str === undefined || str === '' || str === null;
 
 const isEndDatePassedStartDate = (startAt, endAt) => startAt && endAt && new Date(startAt) >= new Date(endAt);
 
+const isTestCaseChosen = (usePublic, usePrivate, useEvaluation) => !(usePublic || usePrivate || useEvaluation)
+
 const validate = (values) => {
   const errors = {};
 
@@ -63,6 +65,10 @@ const validate = (values) => {
 
   if (isEndDatePassedStartDate(values.start_at, values.end_at)) {
     errors.end_at = translations.startEndValidationError;
+  }
+
+  if (isTestCaseChosen(values.use_public, values.use_private, values.use_evaluation)) {
+    errors.use_evaluation = translations.noTestCaseChosenError;
   }
 
   return errors;
@@ -395,7 +401,7 @@ class AssessmentForm extends React.Component {
           <FormattedMessage {...translations.autogradeTestCasesHint} />
         </div>
 
-        <div style={styles.flexGroup}>
+        <div style={{display: 'flex', flexDirection:'column'}}>
           <Field
             name="use_public"
             component={Toggle}

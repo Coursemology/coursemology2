@@ -47,6 +47,7 @@ class Course::Assessment < ApplicationRecord
                                    inverse_of: :assessment, dependent: :destroy
 
   validate :tab_in_same_course
+  validate :selected_test_type_for_grading
 
   scope :published, -> { where(published: true) }
 
@@ -222,5 +223,9 @@ class Course::Assessment < ApplicationRecord
   def tab_in_same_course
     return unless tab_id_changed?
     errors.add(:tab, :not_in_same_course) unless tab.category.course == course
+  end
+
+  def selected_test_type_for_grading
+    errors.add(:no_test_type_chosen) unless use_public || use_private || use_evaluation
   end
 end
