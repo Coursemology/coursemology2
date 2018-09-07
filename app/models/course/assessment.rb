@@ -15,6 +15,7 @@ class Course::Assessment < ApplicationRecord
   after_initialize :set_defaults, if: :new_record?
   before_validation :propagate_course, if: :new_record?
   before_validation :assign_folder_attributes
+  after_commit :grade_with_new_test_cases, on: :update
 
   belongs_to :tab, inverse_of: :assessments
 
@@ -227,5 +228,14 @@ class Course::Assessment < ApplicationRecord
 
   def selected_test_type_for_grading
     errors.add(:no_test_type_chosen) unless use_public || use_private || use_evaluation
+  end
+
+  # Re-grades all submissions to programming_questions after any change to
+  # test case booleans has been committed
+  def grade_with_new_test_cases
+    return if (previous_changes.keys & ['use_private', 'use_public', 'use_evaluation']).empty?
+    programming_questions.each do |question|
+      Course::Assessment::Question::AnswersEvaluationJob.perform_later(question)
+    end
   end
 end
