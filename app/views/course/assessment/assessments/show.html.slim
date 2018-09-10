@@ -55,7 +55,7 @@
   - if can?(:observe, @assessment)
     - if can?(:manage, @assessment)
       div.pull-right
-        div.dropdown
+        div.dropdown id='new-question-dropdown'
           button.btn.btn-info.dropdown-toggle#new-question [type='button' data-toggle='dropdown'
                                                             aria-expanded='true']
             => t('common.new')

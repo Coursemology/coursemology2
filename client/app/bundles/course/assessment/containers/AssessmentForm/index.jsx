@@ -41,7 +41,7 @@ const isFieldBlank = str => str === undefined || str === '' || str === null;
 
 const isEndDatePassedStartDate = (startAt, endAt) => startAt && endAt && new Date(startAt) >= new Date(endAt);
 
-const isTestCaseChosen = (usePublic, usePrivate, useEvaluation) => !(usePublic || usePrivate || useEvaluation)
+const isTestCaseChosen = (usePublic, usePrivate, useEvaluation) => !(usePublic || usePrivate || useEvaluation);
 
 const validate = (values) => {
   const errors = {};
@@ -401,7 +401,7 @@ class AssessmentForm extends React.Component {
           <FormattedMessage {...translations.autogradeTestCasesHint} />
         </div>
 
-        <div style={{display: 'flex', flexDirection:'column'}}>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
           <Field
             name="use_public"
             component={Toggle}
