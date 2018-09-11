@@ -2,7 +2,6 @@ en:
   layout:
     coursemology: 'Coursemology'
     navbar:
-      toggle_sidebar: 'Toggle Sidebar'
       toggle_navigation: 'Toggle Navigation'
       courses: 'Courses'
       all_courses: 'All Courses'
