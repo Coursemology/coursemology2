@@ -43,6 +43,11 @@
         box-shadow: 0 14px 28px $course-assessment-question-card-hover-shadow;
       }
     }
+    #options-table {
+      th {
+        width: 50px;
+      }
+    }
   }
 
   &.index {

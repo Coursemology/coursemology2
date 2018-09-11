@@ -4,3 +4,4 @@ en:
       question_assessment:
         non_auto_gradable: 'This question is not auto-gradable'
         confirm_duplicate_question: 'Duplicate question to "%{destination}"?'
+        show_options: 'Show options'
