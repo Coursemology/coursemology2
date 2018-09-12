@@ -94,7 +94,7 @@ class VisibleSubmissionEditIndex extends Component {
     dispatch(autogradeSubmission(params.submissionId));
   }
 
-  allCorrect() {
+  allConsideredCorrect() {
     const { explanations, questions } = this.props;
     if (Object.keys(explanations).length !== Object.keys(questions).length) {
       return false;
@@ -272,7 +272,7 @@ class VisibleSubmissionEditIndex extends Component {
           handleAutogradeSubmission={() => this.handleAutogradeSubmission()}
           handleToggleViewHistoryMode={this.handleToggleViewHistoryMode}
           explanations={explanations}
-          allCorrect={this.allCorrect()}
+          allConsideredCorrect={this.allConsideredCorrect()}
           allowPartialSubmission={allowPartialSubmission}
           graderView={graderView}
           attempting={workflowState === workflowStates.Attempting}
