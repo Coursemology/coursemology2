@@ -15,6 +15,7 @@ class Course::Assessment < ApplicationRecord
   after_initialize :set_defaults, if: :new_record?
   before_validation :propagate_course, if: :new_record?
   before_validation :assign_folder_attributes
+  after_commit :grade_with_new_test_cases, on: :update
 
   belongs_to :tab, inverse_of: :assessments
 
@@ -47,6 +48,7 @@ class Course::Assessment < ApplicationRecord
                                    inverse_of: :assessment, dependent: :destroy
 
   validate :tab_in_same_course
+  validate :selected_test_type_for_grading
 
   scope :published, -> { where(published: true) }
 
@@ -171,6 +173,14 @@ class Course::Assessment < ApplicationRecord
                                                           "assessment_#{event}".to_sym)
   end
 
+  def graded_test_case_types
+    [].tap do |result|
+      result.push('public_test') if use_public
+      result.push('private_test') if use_private
+      result.push('evaluation_test') if use_evaluation
+    end
+  end
+
   private
 
   # Parents the assessment under its duplicated parent tab, if it exists.
@@ -214,5 +224,18 @@ class Course::Assessment < ApplicationRecord
   def tab_in_same_course
     return unless tab_id_changed?
     errors.add(:tab, :not_in_same_course) unless tab.category.course == course
+  end
+
+  def selected_test_type_for_grading
+    errors.add(:no_test_type_chosen) unless use_public || use_private || use_evaluation
+  end
+
+  # Re-grades all submissions to programming_questions after any change to
+  # test case booleans has been committed
+  def grade_with_new_test_cases
+    return if (previous_changes.keys & ['use_private', 'use_public', 'use_evaluation']).empty?
+    programming_questions.each do |question|
+      Course::Assessment::Question::AnswersEvaluationJob.perform_later(question)
+    end
   end
 end

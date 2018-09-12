@@ -287,8 +287,8 @@ class SubmissionEditStepForm extends Component {
   }
 
   renderFinaliseButton() {
-    const { intl, attempting, allCorrect, isSaving } = this.props;
-    if (attempting && allCorrect) {
+    const { intl, attempting, allConsideredCorrect, isSaving, allowPartialSubmission } = this.props;
+    if (attempting && (allowPartialSubmission || allConsideredCorrect)) {
       return (
         <RaisedButton
           style={styles.formButton}
@@ -486,7 +486,8 @@ SubmissionEditStepForm.propTypes = {
   published: PropTypes.bool.isRequired,
 
   explanations: PropTypes.objectOf(explanationShape),
-  allCorrect: PropTypes.bool.isRequired,
+  allConsideredCorrect: PropTypes.bool.isRequired,
+  allowPartialSubmission: PropTypes.bool.isRequired,
   questionIds: PropTypes.arrayOf(PropTypes.number),
   questions: PropTypes.objectOf(questionShape),
   historyQuestions: PropTypes.objectOf(historyQuestionShape),

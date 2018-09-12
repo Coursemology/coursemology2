@@ -33,6 +33,26 @@ const translations = defineMessages({
     id: 'course.assessment.form.autograded',
     defaultMessage: 'Autograded',
   },
+  autogradeTestCasesHint: {
+    id: 'course.assessment.form.autogradeTestCasesHint',
+    defaultMessage: 'Select test case types for grade and exp calculation:',
+  },
+  usePublic: {
+    id: 'course.assessment.form.usePublic',
+    defaultMessage: 'Public',
+  },
+  usePrivate: {
+    id: 'course.assessment.form.usePrivate',
+    defaultMessage: 'Private',
+  },
+  useEvaluation: {
+    id: 'course.assessment.form.useEvaluation',
+    defaultMessage: 'Evaluation',
+  },
+  allowPartialSubmission: {
+    id: 'course.assessment.form.allowPartialSubmission',
+    defaultMessage: 'Allow submission with incorrect answers',
+  },
   showPrivate: {
     id: 'course.assessment.form.showPrivate',
     defaultMessage: 'Show private tests',
@@ -123,6 +143,10 @@ const translations = defineMessages({
   startEndValidationError: {
     id: 'course.assessment.form.startEndValidationError',
     defaultMessage: "Must be after 'Start At'",
+  },
+  noTestCaseChosenError: {
+    id: 'course.assessment.form.noTestCaseChosenError',
+    defaultMessage: 'Select at least one type of test case',
   },
   fetchTabFailure: {
     id: 'course.assessment.form.fetchCategoryFailure',

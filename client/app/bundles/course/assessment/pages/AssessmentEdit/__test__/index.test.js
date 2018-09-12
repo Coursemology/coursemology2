@@ -16,6 +16,9 @@ describe('<AssessmentEdit />', () => {
     start_at: new Date(),
     base_exp: 0,
     time_bonus_exp: 0,
+    use_public: true,
+    use_private: true,
+    use_evaluation: true,
   };
 
   it('renders the edit page', async () => {

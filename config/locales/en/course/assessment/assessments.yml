@@ -27,6 +27,14 @@ en:
           end_at: :'course.assessment.assessments.index.end_at'
           base_exp: 'Base Experience Points'
           bonus_exp: 'Bonus Experience Points'
+          skippable: 'Skip Steps'
+          allow_partial_submission: 'Allow Submission With Incorrect Answers'
+          allow: 'Allowed'
+          disallow: 'Disallowed'
+          graded_test_case_types: 'Graded Test Case Types'
+          public_test: 'Public'
+          private_test: 'Private'
+          evaluation_test: 'Evaluation'
           requirements: 'Requirements'
           condition_not_satisfied: >
             You must fulfill the following requirements before you can attempt this assessment:

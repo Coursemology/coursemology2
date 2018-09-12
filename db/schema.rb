@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180829123352) do
+ActiveRecord::Schema.define(version: 20180906084425) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -337,6 +337,10 @@ ActiveRecord::Schema.define(version: 20180829123352) do
     t.datetime "created_at",                :null=>false
     t.datetime "updated_at",                :null=>false
     t.string   "view_password",             :limit=>255
+    t.boolean  "use_public",                :default=>true
+    t.boolean  "use_private",               :default=>true
+    t.boolean  "use_evaluation",            :default=>false
+    t.boolean  "allow_partial_submission",  :default=>false
   end
 
   create_table "course_condition_achievements", force: :cascade do |t|

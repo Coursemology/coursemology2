@@ -12,6 +12,7 @@ json.assessment do
   json.delayedGradePublication @assessment.delayed_grade_publication
   json.tabbedView @assessment.tabbed_view
   json.showPrivate @assessment.show_private
+  json.allowPartialSubmission @assessment.allow_partial_submission
   json.showEvaluation @assessment.show_evaluation
   json.questionIds @assessment.questions.map(&:id)
   json.passwordProtected @assessment.session_password_protected?

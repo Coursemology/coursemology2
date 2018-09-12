@@ -15,7 +15,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
       scenario 'I can create a new question', js: true do
         skill = create(:course_assessment_skill, course: course)
         visit course_assessment_path(course, assessment)
-        page.find('.dropdown').click
+        page.find('#new-question-dropdown').click
         page.find('#programming-link').click
 
         expect(current_path).to eq(

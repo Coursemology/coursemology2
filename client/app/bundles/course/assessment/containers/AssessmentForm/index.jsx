@@ -41,6 +41,8 @@ const isFieldBlank = str => str === undefined || str === '' || str === null;
 
 const isEndDatePassedStartDate = (startAt, endAt) => startAt && endAt && new Date(startAt) >= new Date(endAt);
 
+const isTestCaseChosen = (usePublic, usePrivate, useEvaluation) => !(usePublic || usePrivate || useEvaluation);
+
 const validate = (values) => {
   const errors = {};
 
@@ -63,6 +65,10 @@ const validate = (values) => {
 
   if (isEndDatePassedStartDate(values.start_at, values.end_at)) {
     errors.end_at = translations.startEndValidationError;
+  }
+
+  if (isTestCaseChosen(values.use_public, values.use_private, values.use_evaluation)) {
+    errors.use_evaluation = translations.noTestCaseChosenError;
   }
 
   return errors;
@@ -206,15 +212,26 @@ class AssessmentForm extends React.Component {
     const { submitting } = this.props;
     if (this.props.autograded) {
       return (
-        <Field
-          name="skippable"
-          component={Toggle}
-          parse={Boolean}
-          label={<FormattedMessage {...translations.skippable} />}
-          labelPosition="right"
-          style={styles.toggle}
-          disabled={submitting}
-        />
+        <>
+          <Field
+            name="skippable"
+            component={Toggle}
+            parse={Boolean}
+            label={<FormattedMessage {...translations.skippable} />}
+            labelPosition="right"
+            style={styles.toggle}
+            disabled={submitting}
+          />
+          <Field
+            name="allow_partial_submission"
+            component={Toggle}
+            parse={Boolean}
+            label={<FormattedMessage {...translations.allowPartialSubmission} />}
+            labelPosition="right"
+            style={styles.toggle}
+            disabled={submitting}
+          />
+        </>
       );
     }
 
@@ -380,6 +397,39 @@ class AssessmentForm extends React.Component {
         }
 
         {this.renderExtraOptions()}
+        <div style={styles.conditions}>
+          <FormattedMessage {...translations.autogradeTestCasesHint} />
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <Field
+            name="use_public"
+            component={Toggle}
+            parse={Boolean}
+            label={<FormattedMessage {...translations.usePublic} />}
+            labelPosition="right"
+            style={styles.flexChild}
+            disabled={submitting}
+          />
+          <Field
+            name="use_private"
+            component={Toggle}
+            parse={Boolean}
+            label={<FormattedMessage {...translations.usePrivate} />}
+            labelPosition="right"
+            style={styles.flexChild}
+            disabled={submitting}
+          />
+          <Field
+            name="use_evaluation"
+            component={Toggle}
+            parse={Boolean}
+            label={<FormattedMessage {...translations.useEvaluation} />}
+            labelPosition="right"
+            style={styles.flexChild}
+            disabled={submitting}
+          />
+        </div>
 
         <Field
           name="show_private"
