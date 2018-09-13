@@ -34,7 +34,7 @@ class Course::EnrolRequestsController < Course::ComponentController
     course_user = create_course_user
     if course_user.persisted?
       flash.now[:success] = t('.success', name: course_user.name, role: course_user.role)
-      Course::Mailer.user_added_email(current_course, course_user).deliver_later
+      Course::Mailer.user_added_email(course_user).deliver_later
     else
       flash.now[:danger] = course_user.errors.full_messages.to_sentence
     end

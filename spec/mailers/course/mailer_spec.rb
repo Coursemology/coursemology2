@@ -12,7 +12,7 @@ RSpec.describe Course::Mailer, type: :mailer do
 
     describe '#user_invitation_email' do
       let(:invitation) { create(:course_user_invitation, course: course) }
-      let(:mail) { Course::Mailer.user_invitation_email(course, invitation) }
+      let(:mail) { Course::Mailer.user_invitation_email(invitation) }
 
       it 'sends to the correct person' do
         expect(subject.to).to contain_exactly(invitation.email)
@@ -30,7 +30,7 @@ RSpec.describe Course::Mailer, type: :mailer do
 
     describe '#user_added_email' do
       let(:course_user) { create(:course_user, course: course) }
-      let(:mail) { Course::Mailer.user_added_email(course, course_user) }
+      let(:mail) { Course::Mailer.user_added_email(course_user) }
 
       it 'sends to the correct person' do
         expect(subject.to).to contain_exactly(course_user.user.email)
