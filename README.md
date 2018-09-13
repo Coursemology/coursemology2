@@ -15,7 +15,7 @@ educators to increase student engagement and make learning fun.
 
 ### System Requirements
 
-1. Ruby (>= 2.3.1)
+1. Ruby (>= 2.4.0)
 1. Ruby on Rails
 1. PostgreSQL (>= 9.5)
 1. ImageMagick or GraphicsMagick (For [MiniMagick](https://github.com/minimagick/minimagick)-
@@ -31,7 +31,7 @@ GoRails should help you to get started on Ruby on Rails.
 
 ### Getting Started
 
- 1. We use submodules in the git repo; use this command to update submodules:  
+ 1. We use submodules in the git repo; use this command to update submodules:
     ~~~ sh
     git submodule update --init --recursive
     ~~~
