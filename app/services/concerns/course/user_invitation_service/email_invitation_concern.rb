@@ -13,7 +13,7 @@ module Course::UserInvitationService::EmailInvitationConcern
   # @return [Boolean] True if the emails were dispatched.
   def send_registered_emails(registered_users)
     registered_users.each do |user|
-      Course::Mailer.user_added_email(@current_course, user).deliver_later
+      Course::Mailer.user_added_email(user).deliver_later
     end
 
     true
@@ -28,7 +28,7 @@ module Course::UserInvitationService::EmailInvitationConcern
   # @return [Boolean] True if the invitations were updated.
   def send_invitation_emails(invitations)
     invitations.each do |invitation|
-      Course::Mailer.user_invitation_email(@current_course, invitation).deliver_later
+      Course::Mailer.user_invitation_email(invitation).deliver_later
     end
     ids = invitations.select(&:id)
     Course::UserInvitation.where(id: ids).update_all(sent_at: Time.zone.now)

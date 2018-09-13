@@ -3,10 +3,11 @@
 class Course::Mailer < ApplicationMailer
   # Sends an invitation email for the given invitation.
   #
-  # @param [Course] course The course that was involved.
   # @param [Course::UserInvitation] invitation The invitation which was generated.
-  def user_invitation_email(course, invitation)
-    @course = course
+  def user_invitation_email(invitation)
+    ActsAsTenant.without_tenant do
+      @course = invitation.course
+    end
     @invitation = invitation
     @recipient = invitation
 
@@ -15,10 +16,11 @@ class Course::Mailer < ApplicationMailer
 
   # Sends a notification email to a user informing his registration in a course.
   #
-  # @param [Course] course The course that was involved.
   # @param [CourseUser] user The user who was added.
-  def user_added_email(course, user)
-    @course = course
+  def user_added_email(user)
+    ActsAsTenant.without_tenant do
+      @course = user.course
+    end
     @recipient = user.user
 
     mail(to: @recipient.email, subject: t('.subject', course: @course.title))
