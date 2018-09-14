@@ -7,6 +7,6 @@ schedule_file = 'config/schedule.yml'
 #
 # If you use a different job scheduler, edit this initializer with your preferred method of running
 # cron jobs in Rails.
-if Rails.env.production? && File.exist?(schedule_file) && Sidekiq.server?
+if Rails.env.production? && File.exist?(schedule_file) && defined?(Sidekiq) && Sidekiq.server?
   Sidekiq::Cron::Job.load_from_hash YAML.load_file(schedule_file)
 end
