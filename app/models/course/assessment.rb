@@ -230,12 +230,21 @@ class Course::Assessment < ApplicationRecord
     errors.add(:no_test_type_chosen) unless use_public || use_private || use_evaluation
   end
 
+  # Check for changes to graded test case booleans for autograded assessments.
+  def regrade_programming_answers?
+    (previous_changes.keys & ['use_private', 'use_public', 'use_evaluation']).any? && autograded?
+  end
+
   # Re-grades all submissions to programming_questions after any change to
   # test case booleans has been committed
   def grade_with_new_test_cases
-    return if (previous_changes.keys & ['use_private', 'use_public', 'use_evaluation']).empty?
-    programming_questions.each do |question|
-      Course::Assessment::Question::AnswersEvaluationJob.perform_later(question)
+    return unless regrade_programming_answers?
+    # Regrade all published submissions' programming answers and update exp points awarded
+    submissions.select(&:published?).each do |submission|
+      submission.resubmit_programming!
+      submission.save!
+      submission.mark!
+      submission.publish!
     end
   end
 end

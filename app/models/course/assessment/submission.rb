@@ -28,6 +28,9 @@ class Course::Assessment::Submission < ApplicationRecord
     end
     state :published do
       event :unsubmit, transitions_to: :attempting
+      # Resubmit programming questions for grading, used to regrade autograded
+      # submissions when assessment booleans are modified
+      event :resubmit_programming, transitions_to: :submitted
     end
   end
 
@@ -157,9 +160,12 @@ class Course::Assessment::Submission < ApplicationRecord
   # Creates an Auto Grading job for this submission. This saves the submission if there are pending
   # changes.
   #
+  # @param [Boolean] only_ungraded Whether grading should be done ONLY for
+  #   ungraded_answers, or for all answers regardless of workflow state
+  #
   # @return [Course::Assessment::Submission::AutoGradingJob] The job instance.
-  def auto_grade!
-    AutoGradingJob.perform_later(self)
+  def auto_grade!(only_ungraded: false)
+    AutoGradingJob.perform_later(self, only_ungraded: only_ungraded)
   end
 
   def unsubmitting?
@@ -178,6 +184,11 @@ class Course::Assessment::Submission < ApplicationRecord
   # question in load_or_create_answers.
   def current_answers
     answers.select(&:current_answer?).group_by(&:question_id).map { |pair| pair[1].first }
+  end
+
+  # @return [Array<Course::Assessment::Answer>] Current answers to programming questions
+  def current_programming_answers
+    current_answers.select { |ans| ans.actable_type == Course::Assessment::Answer::Programming.name }
   end
 
   # Loads the answer ids of the past answers of each question
@@ -208,7 +219,10 @@ class Course::Assessment::Submission < ApplicationRecord
     return unless saved_change_to_workflow_state?
 
     execute_after_commit do
-      auto_grade!
+      # Grade only ungraded answers when submission state changes from published to submitted.
+      # Otherwise, grade all answers regardless of workflow state.
+      # only_ungraded is true when resubmit_programming event is called.
+      auto_grade!(only_ungraded: changes['workflow_state'] == ['published', 'submitted'])
     end
   end
 

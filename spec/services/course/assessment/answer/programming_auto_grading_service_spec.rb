@@ -98,7 +98,8 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
             it 'gives a grade proportional to the number of test cases' do
               subject
               test_case_count = answer.question.actable.test_cases.count
-              expect(answer.grade).to eq(answer.question.maximum_grade / test_case_count)
+              # 2/3 of of the test cases pass according to programming_single_test_suite_report.xml
+              expect(answer.grade).to eq(2 * answer.question.maximum_grade / test_case_count)
             end
           end
 
@@ -116,17 +117,24 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
             end
           end
 
-          context 'when an autograded assessment has evaluation tests' do
+          context "when answer fails autograded assessment's evaluation tests" do
+            let(:question_test_report_path) do
+              Rails.root.join('spec', 'fixtures', 'course', 'programming_single_test_suite_report.xml')
+            end
             let(:question_test_cases) do
+              # Create one ProgrammingTestCase object with test_case_type = nil
+              # for each test case in report
               report = File.read(question_test_report_path)
-              Course::Assessment::ProgrammingTestCaseReport.new(report).test_cases.map do |t|
-                Course::Assessment::Question::ProgrammingTestCase.new(
-                  identifier: t.identifier, test_case_type: :evaluation_test
-                )
+              Course::Assessment::ProgrammingTestCaseReport.new(report).test_cases.map do |test_case|
+                Course::Assessment::Question::ProgrammingTestCase.new(identifier: test_case.identifier)
               end
             end
 
             before do
+              # Assign test_case_type for the test cases created in :question_test_cases
+              answer.question.actable.test_cases.first.test_case_type = 'evaluation_test'
+              answer.question.actable.test_cases.second.test_case_type = 'private_test'
+              answer.question.actable.test_cases.third.test_case_type = 'public_test'
               allow(answer.submission.assessment).to receive(:autograded?).and_return(true)
             end
 
@@ -134,6 +142,18 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
               subject
               expect(answer).to be_correct
               expect(answer.grade).to eq(question.maximum_grade)
+            end
+
+            context 'when autograded assessment uses evaluation test for grade/exp assignment' do
+              before do
+                answer.submission.assessment.use_evaluation = true
+                subject.save!
+              end
+
+              it 'deducts grade for the failed evaluation test cases' do
+                Course::Assessment::Answer::AutoGradingService.grade(answer)
+                expect(answer.grade).to be < question.maximum_grade
+              end
             end
           end
         end
