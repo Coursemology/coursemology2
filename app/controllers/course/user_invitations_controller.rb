@@ -10,7 +10,6 @@ class Course::UserInvitationsController < Course::ComponentController
   end
 
   def new
-    current_course.invitations.build
   end
 
   def create
