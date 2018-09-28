@@ -517,7 +517,7 @@ GEM
     thor (0.20.0)
     thread_safe (0.3.6)
     tilt (2.0.8)
-    traceroute (0.7.0)
+    traceroute (0.7.1)
       rails (>= 3.0.0)
     twitter-typeahead-rails (0.11.1)
       actionpack (>= 3.1)
