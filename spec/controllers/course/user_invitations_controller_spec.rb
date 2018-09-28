@@ -42,7 +42,7 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
         context 'when no users are manually specified for invitations' do
           subject { post :create, params: { course_id: course } }
 
-          it 'redirects to the invitaions path without an error' do
+          it 'redirects to the invitations path without an error' do
             expect(subject).to redirect_to(course_user_invitations_path(course))
           end
         end
