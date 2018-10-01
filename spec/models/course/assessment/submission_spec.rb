@@ -572,6 +572,52 @@ RSpec.describe Course::Assessment::Submission do
       end
     end
 
+    describe '#resubmit_programming!' do
+      let(:assessment_traits) { [:with_all_question_types, :autograded] }
+      let!(:earlier_answer) do
+        answer = create(:course_assessment_answer_multiple_response, :graded,
+                        assessment: assessment,
+                        question: assessment.multiple_response_questions.first.acting_as,
+                        submission: submission1, creator: user1).acting_as
+        answer.update_column(:created_at, 1.day.ago)
+        submission1.reload
+        # Submission creates a grading job which could make answers go to the graded state, need to
+        # wait for them to finish.
+        wait_for_job
+        answer
+      end
+
+      subject { submission1 }
+
+      context 'when the submission is published' do
+        let(:submission1_traits) { :published }
+        before do
+          submission1.points_awarded = 200
+          submission1.save!
+        end
+
+        it 'resets experience points, publish_at and publisher attributes, but not submitted_at' do
+          expect(subject.points_awarded).not_to be_nil
+          expect(subject.submitted_at).not_to be_nil
+          original_submitted_at = subject.submitted_at
+          expect(subject.published_at).not_to be_nil
+          expect(subject.publisher).not_to be_nil
+          subject.resubmit_programming!
+          expect(subject.points_awarded).to be_nil
+          expect(subject.submitted_at).to equal(original_submitted_at)
+          expect(subject.published_at).to be_nil
+          expect(subject.publisher).to be_nil
+        end
+
+        it 'sets only current programming answers in the submission to submitted' do
+          subject.resubmit_programming!
+          expect(subject.current_programming_answers.all?(&:submitted?)).to be true
+          other_answers = subject.current_answers.reject { |ans| ans.actable_type =~ /Programming/ }
+          expect(other_answers.all?(&:graded?)).to be true
+        end
+      end
+    end
+
     describe '#current_points_awarded' do
       let(:assessment_traits) { [:published_with_mcq_question] }
       let(:submission1_traits) { [:submitted] }

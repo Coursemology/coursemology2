@@ -18,9 +18,11 @@ class Course::Assessment::Submission::AutoGradingService
   #
   # @param [Course::Assessment::Submission] submission The object to store grading
   #   results in.
+  # @param [Boolean] only_ungraded Whether grading should be done ONLY for
+  #   ungraded_answers, or for all answers regardless of workflow state
   # @return [Boolean] True if the grading could be saved.
-  def grade(submission)
-    grade_answers(submission)
+  def grade(submission, only_ungraded: false)
+    grade_answers(submission, only_ungraded: only_ungraded)
     submission.reload
     assign_exp_and_publish_grade(submission) if submission.assessment.autograded?
     submission.save!
@@ -33,20 +35,25 @@ class Course::Assessment::Submission::AutoGradingService
   # Retries are implemented in the case where a race condition occurs, ie. when a new
   # attempting answer is created after the submission is finalised, but before the
   # autograding job is run for the submission.
-  def grade_answers(submission)
+  def grade_answers(submission, only_ungraded: false)
     tries, jobs_by_qn = 0, {}
     # Force re-grade all current answers (even when they've been graded before).
-    answers_to_grade = submission.current_answers
+    answers_to_grade = only_ungraded ? ungraded_answers(submission) : submission.current_answers
     while answers_to_grade.any? && tries <= MAX_TRIES
-      new_jobs = answers_to_grade.map { |a| [a.question_id, grade_answer(a)] }.
-                 select { |e| e[1].present? }.to_h # Filter out answers which do not return a job
-      wait_for_jobs(new_jobs.values)
+      new_jobs = build_answer_grading_jobs(answers_to_grade)
 
       jobs_by_qn.merge!(new_jobs)
       answers_to_grade = ungraded_answers(submission)
       tries += 1
     end
     aggregate_failures(jobs_by_qn.map { |_, job| job.job.reload })
+  end
+
+  def build_answer_grading_jobs(answers_to_grade)
+    new_jobs = answers_to_grade.map { |a| [a.question_id, grade_answer(a)] }.
+               select { |e| e[1].present? }.to_h # Filter out answers which do not return a job
+    wait_for_jobs(new_jobs.values)
+    new_jobs
   end
 
   # Grades the provided answer

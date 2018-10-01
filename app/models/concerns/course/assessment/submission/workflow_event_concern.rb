@@ -61,6 +61,26 @@ module Course::Assessment::Submission::WorkflowEventConcern
     self.published_at = nil
   end
 
+  # Handles re-submitting a published submission's programming answers when there are
+  # changes in the assessment's graded test cases.
+  # Unlike calling unsubmit + finalise, this event will not rewrite submission's submitted_at time.
+  def resubmit_programming
+    # Skip the state validation in answers.
+    @unsubmitting = true
+
+    unsubmit_current_answers(only_programming: true)
+    self.points_awarded = nil
+    self.draft_points_awarded = nil
+    self.awarded_at = nil
+    self.awarder = nil
+    self.publisher = nil
+    self.published_at = nil
+
+    current_answers.select(&:attempting?).each(&:finalise!)
+
+    assign_zero_experience_points if assessment.questions.empty?
+  end
+
   private
 
   def submission_graded_email_enabled?
@@ -91,8 +111,11 @@ module Course::Assessment::Submission::WorkflowEventConcern
     end
   end
 
-  def unsubmit_current_answers
-    current_answers.each do |answer|
+  # @param [Boolean] only_programming Whether unsubmission should be done ONLY for
+  #   current programming aswers
+  def unsubmit_current_answers(only_programming: false)
+    answers_to_unsubmit = only_programming ? current_programming_answers : current_answers
+    answers_to_unsubmit.each do |answer|
       answer.unsubmit! unless answer.attempting?
     end
   end
