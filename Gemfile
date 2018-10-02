@@ -9,7 +9,10 @@ gem 'tzinfo-data', platforms: [:mswin, :mswin64]
 gem 'bundler', '>= 1.10.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.1.0'
+# We need a patched version of rails because stock 5.1.6 has_one associations ignores
+# joins in scope, which we use for Course::LessonPlan::Item.default_reference_time
+gem 'rails', '5.1.6', git: 'https://github.com/Coursemology/rails.git',
+                      branch: 'v5.1.6-fix_association_with_scope_including_joins'
 
 # Use PostgreSQL for the backend
 gem 'pg'
