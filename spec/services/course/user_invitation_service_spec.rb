@@ -133,7 +133,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
         end
 
         with_active_job_queue_adapter(:test) do
-          it 'does not send notification to the exiting users' do
+          it 'does not send notification to the existing users' do
             expect { invite }.to change { ActionMailer::Base.deliveries.count }.
               by(user_attributes.size - users_invited.size - users_in_course.size)
           end
