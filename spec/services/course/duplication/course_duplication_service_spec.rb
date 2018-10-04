@@ -23,7 +23,8 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
       context 'when saving fails' do
         let!(:invalid_event) do
           create(:course_lesson_plan_event, course: course).tap do |event|
-            event.acting_as.update_columns(time_bonus_exp: 1, bonus_end_at: nil)
+            event.acting_as.update_columns(time_bonus_exp: 1)
+            event.acting_as.default_reference_time.update_columns(bonus_end_at: nil)
           end
         end
 
@@ -51,8 +52,8 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
         end
 
         it 'sets the creator of the new course to the current user' do
-          expect(new_course.creator).to be admin
-          expect(new_course.creator).not_to be course.creator
+          expect(new_course.creator).to eq admin
+          expect(new_course.creator).not_to eq course.creator
         end
 
         it 'time shifts the new course' do

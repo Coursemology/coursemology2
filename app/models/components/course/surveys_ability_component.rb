@@ -3,7 +3,7 @@ module Course::SurveysAbilityComponent
   include AbilityHost::Component
 
   def define_permissions
-    if user
+    if user && !user.administrator?
       define_student_survey_permissions
       define_staff_survey_permissions
     end
@@ -30,7 +30,10 @@ module Course::SurveysAbilityComponent
   end
 
   def survey_open_all_course_users_hash
-    survey_published_all_course_users_hash.deep_merge(lesson_plan_item: already_started_hash)
+    # TODO(#3092): Check timings for individual users
+    survey_published_all_course_users_hash.deep_merge(
+      lesson_plan_item: { default_reference_time: already_started_hash }
+    )
   end
 
   def survey_active_all_course_users_hashes
@@ -40,8 +43,9 @@ module Course::SurveysAbilityComponent
   end
 
   def survey_expired_but_respondable
+    # TODO(#3092): Check timings for individual users
     survey_published_all_course_users_hash.deep_merge(
-      lesson_plan_item: { end_at: (Time.min..Time.zone.now) },
+      lesson_plan_item: { default_reference_time: { end_at: (Time.min..Time.zone.now) } },
       allow_response_after_end: true
     )
   end

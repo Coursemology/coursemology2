@@ -31,7 +31,9 @@ module Extensions::ActsAsHelpers::ActiveRecord::Base
       end
       self.has_todo = has_todo ? true : false
 
-      scope :active, -> { joins(:lesson_plan_item).merge(Course::LessonPlan::Item.currently_active) }
+      scope :active, (lambda do
+        joins(lesson_plan_item: :default_reference_time).merge(Course::ReferenceTime.currently_active)
+      end)
 
       extend LessonPlanItemClassMethods
       include LessonPlanItemInstanceMethods
