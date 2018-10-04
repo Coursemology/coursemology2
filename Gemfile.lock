@@ -15,6 +15,67 @@ GIT
       activesupport (>= 4.2, < 5.2)
 
 GIT
+  remote: https://github.com/Coursemology/rails.git
+  revision: 50223439829b6cb461783a322cdcc2a51515d84c
+  branch: v5.1.6-fix_association_with_scope_including_joins
+  specs:
+    actioncable (5.1.6)
+      actionpack (= 5.1.6)
+      nio4r (~> 2.0)
+      websocket-driver (~> 0.6.1)
+    actionmailer (5.1.6)
+      actionpack (= 5.1.6)
+      actionview (= 5.1.6)
+      activejob (= 5.1.6)
+      mail (~> 2.5, >= 2.5.4)
+      rails-dom-testing (~> 2.0)
+    actionpack (5.1.6)
+      actionview (= 5.1.6)
+      activesupport (= 5.1.6)
+      rack (~> 2.0)
+      rack-test (>= 0.6.3)
+      rails-dom-testing (~> 2.0)
+      rails-html-sanitizer (~> 1.0, >= 1.0.2)
+    actionview (5.1.6)
+      activesupport (= 5.1.6)
+      builder (~> 3.1)
+      erubi (~> 1.4)
+      rails-dom-testing (~> 2.0)
+      rails-html-sanitizer (~> 1.0, >= 1.0.3)
+    activejob (5.1.6)
+      activesupport (= 5.1.6)
+      globalid (>= 0.3.6)
+    activemodel (5.1.6)
+      activesupport (= 5.1.6)
+    activerecord (5.1.6)
+      activemodel (= 5.1.6)
+      activesupport (= 5.1.6)
+      arel (~> 8.0)
+    activesupport (5.1.6)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (>= 0.7, < 2)
+      minitest (~> 5.1)
+      tzinfo (~> 1.1)
+    rails (5.1.6)
+      actioncable (= 5.1.6)
+      actionmailer (= 5.1.6)
+      actionpack (= 5.1.6)
+      actionview (= 5.1.6)
+      activejob (= 5.1.6)
+      activemodel (= 5.1.6)
+      activerecord (= 5.1.6)
+      activesupport (= 5.1.6)
+      bundler (>= 1.3.0)
+      railties (= 5.1.6)
+      sprockets-rails (>= 2.0.0)
+    railties (5.1.6)
+      actionpack (= 5.1.6)
+      activesupport (= 5.1.6)
+      method_source
+      rake (>= 0.8.7)
+      thor (>= 0.18.1, < 2.0)
+
+GIT
   remote: https://github.com/Coursemology/simple_form-bootstrap
   revision: ba048ab714904d9e4fc1407bee33e7b5a1f832b9
   specs:
@@ -56,49 +117,12 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    actioncable (5.1.6)
-      actionpack (= 5.1.6)
-      nio4r (~> 2.0)
-      websocket-driver (~> 0.6.1)
-    actionmailer (5.1.6)
-      actionpack (= 5.1.6)
-      actionview (= 5.1.6)
-      activejob (= 5.1.6)
-      mail (~> 2.5, >= 2.5.4)
-      rails-dom-testing (~> 2.0)
-    actionpack (5.1.6)
-      actionview (= 5.1.6)
-      activesupport (= 5.1.6)
-      rack (~> 2.0)
-      rack-test (>= 0.6.3)
-      rails-dom-testing (~> 2.0)
-      rails-html-sanitizer (~> 1.0, >= 1.0.2)
-    actionview (5.1.6)
-      activesupport (= 5.1.6)
-      builder (~> 3.1)
-      erubi (~> 1.4)
-      rails-dom-testing (~> 2.0)
-      rails-html-sanitizer (~> 1.0, >= 1.0.3)
     active_record_upsert (0.9.4)
       activerecord (>= 5.0, < 6.0)
       arel (> 7.0, < 10.0)
       pg (>= 0.18, < 2.0)
-    activejob (5.1.6)
-      activesupport (= 5.1.6)
-      globalid (>= 0.3.6)
-    activemodel (5.1.6)
-      activesupport (= 5.1.6)
-    activerecord (5.1.6)
-      activemodel (= 5.1.6)
-      activesupport (= 5.1.6)
-      arel (~> 8.0)
     activerecord-import (0.25.0)
       activerecord (>= 3.2)
-    activesupport (5.1.6)
-      concurrent-ruby (~> 1.0, >= 1.0.2)
-      i18n (>= 0.7, < 2)
-      minitest (~> 5.1)
-      tzinfo (~> 1.1)
     acts_as_tenant (0.4.3)
       rails (>= 4.0)
       request_store (>= 1.0.5)
@@ -351,18 +375,6 @@ GEM
       rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
-    rails (5.1.6)
-      actioncable (= 5.1.6)
-      actionmailer (= 5.1.6)
-      actionpack (= 5.1.6)
-      actionview (= 5.1.6)
-      activejob (= 5.1.6)
-      activemodel (= 5.1.6)
-      activerecord (= 5.1.6)
-      activesupport (= 5.1.6)
-      bundler (>= 1.3.0)
-      railties (= 5.1.6)
-      sprockets-rails (>= 2.0.0)
     rails-controller-testing (1.0.2)
       actionpack (~> 5.x, >= 5.0.1)
       actionview (~> 5.x, >= 5.0.1)
@@ -383,12 +395,6 @@ GEM
       rubyzip (~> 1)
     rails_utils (4.0.0)
       rails (>= 3.2)
-    railties (5.1.6)
-      actionpack (= 5.1.6)
-      activesupport (= 5.1.6)
-      method_source
-      rake (>= 0.8.7)
-      thor (>= 0.18.1, < 2.0)
     rainbow (3.0.0)
     rake (12.3.1)
     rb-fsevent (0.10.3)
@@ -618,7 +624,7 @@ DEPENDENCIES
   parallel_tests
   pg
   puma
-  rails (~> 5.1.0)
+  rails (= 5.1.6)!
   rails-controller-testing
   rails-flog
   rails-html-sanitizer (>= 1.0.4)
@@ -661,4 +667,4 @@ DEPENDENCIES
   yard
 
 BUNDLED WITH
-   1.16.2
+   1.16.3
