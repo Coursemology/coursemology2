@@ -10,6 +10,18 @@ class Course::LessonPlan::Todo < ApplicationRecord
 
   after_initialize :set_default_values, if: :new_record?
 
+  validates_length_of :workflow_state, allow_nil: true, maximum: 255
+  validates_presence_of :workflow_state
+  validates_inclusion_of :ignore, in: [true, false], message: :blank
+  validates_presence_of :creator
+  validates_presence_of :updater
+  validates_presence_of :user
+  validates_presence_of :item
+  validates_uniqueness_of :user_id, scope: [:item_id], allow_nil: true,
+                                    if: -> { item_id? && user_id_changed? }
+  validates_uniqueness_of :item_id, scope: [:user_id], allow_nil: true,
+                                    if: -> { user_id? && item_id_changed? }
+
   belongs_to :user, inverse_of: :todos
   belongs_to :item, class_name: Course::LessonPlan::Item.name, inverse_of: :todos
 

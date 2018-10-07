@@ -6,6 +6,14 @@ class Course::Discussion::Topic < ApplicationRecord
 
   acts_as_readable on: :updated_at
 
+  validates_presence_of :course
+  validates_length_of :actable_type, allow_nil: true, maximum: 255
+  validates_inclusion_of :pending_staff_reply, in: [true, false], message: :blank
+  validates_uniqueness_of :actable_type, scope: [:actable_id], allow_nil: true,
+                                         if: -> { actable_id? && actable_type_changed? }
+  validates_uniqueness_of :actable_id, scope: [:actable_type], allow_nil: true,
+                                       if: -> { actable_type? && actable_id_changed? }
+
   belongs_to :course, inverse_of: :discussion_topics
   # Delete all the children and skip reparent callbacks
   has_many :posts, dependent: :destroy, inverse_of: :topic do

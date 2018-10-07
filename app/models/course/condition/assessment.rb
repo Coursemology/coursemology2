@@ -10,6 +10,8 @@ class Course::Condition::Assessment < ApplicationRecord
   end
 
   validate :validate_assessment_condition, if: :assessment_id_changed?
+  validates_numericality_of :minimum_grade_percentage, allow_nil: true
+  validates_presence_of :assessment
   validates :minimum_grade_percentage, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 },
                                        allow_nil: true
 

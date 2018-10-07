@@ -8,6 +8,10 @@ class Course::Assessment::Question::TextResponseComprehensionSolution < Applicat
 
   validate :validate_solution_lemma_empty,
            :validate_information_empty
+  validates_presence_of :solution_type
+  validates_presence_of :solution
+  validates_presence_of :solution_lemma
+  validates_presence_of :point
 
   belongs_to :point, class_name: Course::Assessment::Question::TextResponseComprehensionPoint.name,
                      inverse_of: :solutions

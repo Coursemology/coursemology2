@@ -5,7 +5,13 @@ class Course::Survey < ApplicationRecord
   include Course::ClosingReminderConcern
 
   enum question_type: { text_response: 0, multiple_choice: 1, multiple_response: 2 }
+
   validates :end_at, presence: true, if: :allow_response_after_end
+  validates_inclusion_of :anonymous, in: [true, false], message: :blank
+  validates_inclusion_of :allow_modify_after_submit, in: [true, false], message: :blank
+  validates_inclusion_of :allow_response_after_end, in: [true, false], message: :blank
+  validates_presence_of :creator
+  validates_presence_of :updater
 
   # To call Course::Survey::Response.name to force it to load. Otherwise, there might be issues
   # with autoloading of files in production where eager_load is enabled.

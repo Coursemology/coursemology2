@@ -5,6 +5,7 @@ class Course::Assessment::Question::MultipleResponse < ApplicationRecord
   enum grading_scheme: [:all_correct, :any_correct]
 
   validate :validate_multiple_choice_has_solution, if: :multiple_choice?
+  validates_presence_of :grading_scheme
 
   has_many :options, class_name: Course::Assessment::Question::MultipleResponseOption.name,
                      dependent: :destroy, foreign_key: :question_id, inverse_of: :question

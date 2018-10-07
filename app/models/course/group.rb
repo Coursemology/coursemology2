@@ -3,6 +3,17 @@ class Course::Group < ApplicationRecord
   after_initialize :set_defaults, if: :new_record?
   before_validation :set_defaults, if: :new_record?
 
+  validate :validate_new_users_are_unique
+  validates_length_of :name, allow_nil: true, maximum: 255
+  validates_presence_of :name
+  validates_presence_of :creator
+  validates_presence_of :updater
+  validates_presence_of :course
+  validates_uniqueness_of :name, scope: [:course_id], allow_nil: true,
+                                 if: -> { course_id? && name_changed? }
+  validates_uniqueness_of :course_id, scope: [:name], allow_nil: true,
+                                      if: -> { name? && course_id_changed? }
+
   belongs_to :course, inverse_of: :groups
   has_many :group_users, -> { joins(:course_user).order('course_users.name ASC') },
            inverse_of: :group, dependent: :destroy, class_name: Course::GroupUser.name,
@@ -12,8 +23,6 @@ class Course::Group < ApplicationRecord
   accepts_nested_attributes_for :group_users,
                                 allow_destroy: true,
                                 reject_if: -> (params) { params[:course_user_id].blank? }
-
-  validate :validate_new_users_are_unique
 
   # @!attribute [r] average_experience_points
   #   Returns the average experience points of group users in this group who are students.

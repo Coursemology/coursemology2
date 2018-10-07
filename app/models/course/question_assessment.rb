@@ -2,6 +2,16 @@
 class Course::QuestionAssessment < ApplicationRecord
   before_validation :set_defaults, if: :new_record?
 
+  validates_numericality_of :weight, allow_nil: true, only_integer: true,
+                                     greater_than_or_equal_to: -2147483648, less_than: 2147483648
+  validates_presence_of :weight
+  validates_presence_of :assessment
+  validates_presence_of :question
+  validates_uniqueness_of :assessment_id, scope: [:question_id], allow_nil: true,
+                                          if: -> { question_id? && assessment_id_changed? }
+  validates_uniqueness_of :question_id, scope: [:assessment_id], allow_nil: true,
+                                        if: -> { assessment_id? && question_id_changed? }
+
   belongs_to :assessment, inverse_of: :question_assessments, class_name: Course::Assessment.name
   belongs_to :question, inverse_of: :question_assessments, class_name: Course::Assessment::Question.name
   has_and_belongs_to_many :skills, inverse_of: :question_assessments, class_name: Course::Assessment::Skill.name

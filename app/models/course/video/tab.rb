@@ -2,6 +2,14 @@
 class Course::Video::Tab < ApplicationRecord
   include Course::ModelComponentHost::Component
 
+  validates_length_of :title, allow_nil: true, maximum: 255
+  validates_presence_of :title
+  validates_numericality_of :weight, allow_nil: true, only_integer: true, greater_than_or_equal_to: -2147483648, less_than: 2147483648
+  validates_presence_of :weight
+  validates_presence_of :creator
+  validates_presence_of :updater
+  validates_presence_of :course
+
   belongs_to :course, class_name: Course.name, inverse_of: :video_tabs
   has_many :videos, class_name: Course::Video.name, inverse_of: :tab, dependent: :destroy
 

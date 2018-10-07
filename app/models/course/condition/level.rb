@@ -8,6 +8,9 @@ class Course::Condition::Level < ApplicationRecord
   end
 
   validates :minimum_level, numericality: { greater_than: 0 }
+  validates_numericality_of :minimum_level, allow_nil: true, only_integer: true,
+                                            greater_than_or_equal_to: -2147483648, less_than: 2147483648
+  validates_presence_of :minimum_level
 
   def title
     self.class.human_attribute_name('title.title', value: minimum_level)

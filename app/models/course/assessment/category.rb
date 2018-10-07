@@ -4,6 +4,15 @@ class Course::Assessment::Category < ApplicationRecord
   include Course::ModelComponentHost::Component
   has_one_folder
 
+  validates_length_of :title, allow_nil: true, maximum: 255
+  validates_presence_of :title
+  validates_numericality_of :weight, allow_nil: true, only_integer: true,
+                                     greater_than_or_equal_to: -2147483648, less_than: 2147483648
+  validates_presence_of :weight
+  validates_presence_of :creator
+  validates_presence_of :updater
+  validates_presence_of :course
+
   belongs_to :course, inverse_of: :assessment_categories
   has_many :tabs, class_name: Course::Assessment::Tab.name,
                   inverse_of: :category,

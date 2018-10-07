@@ -40,6 +40,11 @@ class Instance < ApplicationRecord
   end
 
   validates :host, hostname: true, if: :should_validate_host?
+  validates_length_of :name, allow_nil: true, maximum: 255
+  validates_presence_of :name
+  validates_length_of :host, allow_nil: true, maximum: 255
+  validates_presence_of :host
+  validates_uniqueness_of :host, allow_nil: true, case_sensitive: false, if: :host_changed?
 
   # @!attribute [r] instance_users
   #   @note You are scoped by the current tenant, you might not see all.

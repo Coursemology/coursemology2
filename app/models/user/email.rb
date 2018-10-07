@@ -3,8 +3,11 @@
 class User::Email < ApplicationRecord
   after_destroy :set_new_user_primary_email, if: :primary?
 
-  schema_validations except: [:primary, :email]
   validates :primary, inclusion: [true, false]
+  validates_length_of :confirmation_token, allow_nil: true, maximum: 255
+  validates_uniqueness_of :confirmation_token, allow_nil: true, if: :confirmation_token_changed?
+  validates_uniqueness_of :user_id, scope: [:primary], allow_nil: true,
+                                    conditions: -> { where(primary: 'true') }, if: :user_id_changed?
 
   belongs_to :user, inverse_of: :emails
 

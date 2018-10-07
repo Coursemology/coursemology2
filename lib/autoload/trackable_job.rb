@@ -20,6 +20,8 @@ module TrackableJob
 
     validates :redirect_to, absence: true, if: :submitted?
     validates :error, absence: true, unless: :errored?
+    validates_presence_of :status
+    validates_length_of :redirect_to, allow_nil: true, maximum: 255
 
     private
 

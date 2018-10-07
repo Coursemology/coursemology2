@@ -1,10 +1,15 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::ProgrammingTemplateFile < ApplicationRecord
-  schema_validations except: :content
-
   before_validation :normalize_filename
 
   validates :content, exclusion: [nil]
+  validates_length_of :filename, allow_nil: true, maximum: 255
+  validates_presence_of :filename
+  validates_presence_of :question
+  validates_uniqueness_of :filename, scope: [:question_id], allow_nil: true, case_sensitive: false,
+                                     if: -> { question_id? && filename_changed? }
+  validates_uniqueness_of :question_id, scope: [:filename], allow_nil: true, case_sensitive: false,
+                                        if: -> { filename? && question_id_changed? }
 
   belongs_to :question, class_name: Course::Assessment::Question::Programming.name,
                         inverse_of: :template_files

@@ -2,6 +2,15 @@
 class Course::Level < ApplicationRecord
   include Course::ModelComponentHost::Component
   validates :experience_points_threshold, numericality: { greater_than_or_equal_to: 0 }
+  validates_numericality_of :experience_points_threshold, allow_nil: true, only_integer: true,
+                                                          greater_than_or_equal_to: -2147483648,
+                                                          less_than: 2147483648
+  validates_presence_of :experience_points_threshold
+  validates_presence_of :course
+  validates_uniqueness_of :experience_points_threshold, scope: [:course_id], allow_nil: true,
+                                                        if: -> { course_id? && experience_points_threshold_changed?}
+  validates_uniqueness_of :course_id, scope: [:experience_points_threshold], allow_nil: true,
+                                      if: -> { experience_points_threshold && course_id_changed? }
 
   belongs_to :course, inverse_of: :levels
 

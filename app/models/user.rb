@@ -39,7 +39,12 @@ class User < ApplicationRecord
   end
 
   validates :email, :encrypted_password, absence: true, if: :built_in?
-  schema_validations except: [:encrypted_password]
+  validates_length_of :name, allow_nil: true, maximum: 255
+  validates_presence_of :name
+  validates_presence_of :role
+  validates_length_of :time_zone, allow_nil: true, maximum: 255
+  validates_length_of :reset_password_token, allow_nil: true, maximum:255
+  validates_uniqueness_of :reset_password_token, allow_nil: true, if: :reset_password_token_changed?
 
   has_many :emails, -> { order('primary' => :desc) }, class_name: User::Email.name,
                                                       inverse_of: :user, dependent: :destroy

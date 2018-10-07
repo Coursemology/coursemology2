@@ -2,6 +2,10 @@
 class Course::LessonPlan::Event < ApplicationRecord
   acts_as_lesson_plan_item
 
+  validates_length_of :location, allow_nil: true, maximum: 255
+  validates_length_of :event_type, allow_nil: true, maximum: 255
+  validates_presence_of :event_type
+
   def initialize_duplicate(duplicator, other)
     self.course = duplicator.options[:destination_course]
     copy_attributes(other, duplicator)

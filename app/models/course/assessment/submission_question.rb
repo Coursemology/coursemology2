@@ -3,6 +3,13 @@
 class Course::Assessment::SubmissionQuestion < ApplicationRecord
   acts_as_discussion_topic display_globally: true
 
+  validates_presence_of :submission
+  validates_presence_of :question
+  validates_uniqueness_of :submission_id, scope: [:question_id], allow_nil: true,
+                                          if: -> { question_id? && submission_id_changed? }
+  validates_uniqueness_of :question_id, scope: [:submission_id], allow_nil: true,
+                                        if: -> { submission_id? && question_id_changed? }
+
   belongs_to :submission, class_name: Course::Assessment::Submission.name,
                           inverse_of: :submission_questions
   belongs_to :question, class_name: Course::Assessment::Question.name,

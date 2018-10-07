@@ -4,6 +4,14 @@ class Course::Survey::Response < ApplicationRecord
 
   acts_as_experience_points_record
 
+  validates_presence_of :creator
+  validates_presence_of :updater
+  validates_presence_of :survey
+  validates_uniqueness_of :creator_id, scope: [:survey_id], allow_nil: true,
+                                       if: -> { survey_id? && creator_id_changed? }
+  validates_uniqueness_of :survey_id, scope: [:creator_id], allow_nil: true,
+                                      if: -> { creator_id && survey_id_changed? }
+
   belongs_to :survey, inverse_of: :responses
   has_many :answers, inverse_of: :response, dependent: :destroy
 

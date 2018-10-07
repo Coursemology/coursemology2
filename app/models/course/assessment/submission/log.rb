@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Submission::Log < ApplicationRecord
+  validates_presence_of :submission
+
   belongs_to :submission, class_name: Course::Assessment::Submission.name,
                           inverse_of: :logs
 
