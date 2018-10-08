@@ -3,7 +3,6 @@ class Course::Group < ApplicationRecord
   after_initialize :set_defaults, if: :new_record?
   before_validation :set_defaults, if: :new_record?
 
-  validate :validate_new_users_are_unique
   validates_length_of :name, allow_nil: true, maximum: 255
   validates_presence_of :name
   validates_presence_of :creator
@@ -19,6 +18,9 @@ class Course::Group < ApplicationRecord
            inverse_of: :group, dependent: :destroy, class_name: Course::GroupUser.name,
            foreign_key: :group_id
   has_many :course_users, through: :group_users
+
+  # This needs to be declared after the association
+  validate :validate_new_users_are_unique
 
   accepts_nested_attributes_for :group_users,
                                 allow_destroy: true,
