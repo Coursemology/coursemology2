@@ -639,7 +639,6 @@ DEPENDENCIES
   rwordnet!
   sanitize (>= 4.6.3)
   sass-rails
-  schema_monkey
   schema_plus_association_inverses (>= 0.1.0)
   schema_plus_columns
   schema_plus_indexes
@@ -667,4 +666,4 @@ DEPENDENCIES
   yard
 
 BUNDLED WITH
-   1.16.3
+   1.16.6

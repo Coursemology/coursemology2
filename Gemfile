@@ -23,7 +23,6 @@ gem 'schema_plus_indexes'
 gem 'schema_plus_pg_indexes'
 gem 'schema_plus_association_inverses', '>= 0.1.0'
 gem 'schema_validations'
-gem 'schema_monkey'
 # Instance/Course settings
 gem 'settings_on_rails'
 # Manage read/unread status
