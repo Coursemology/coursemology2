@@ -186,7 +186,7 @@ GEM
       archive-zip (~> 0.10)
       nokogiri (~> 1.8)
     cocoon (1.2.11)
-    codeclimate-test-reporter (1.0.8)
+    codeclimate-test-reporter (1.0.9)
       simplecov (<= 0.13)
     codecov (0.1.10)
       json
