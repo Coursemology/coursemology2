@@ -1,3 +1,31 @@
+import mirrorCreator from 'mirror-creator';
+
+export const formNames = mirrorCreator([
+  'PROGRAMMING_QUESTION',
+]);
+
+export const programmingLanguages = {
+  JAVASCRIPT: 1,
+  PYTHON_2_7: 2,
+  PYTHON_3_4: 3,
+  PYTHON_3_5: 4,
+  PYTHON_3_6: 5,
+  C_CPP: 6,
+  JAVA: 7,
+};
+
+export const aceEditorModes = {
+  C_CPP: 'c_cpp',
+  JAVA: 'java',
+  PYTHON: 'python',
+};
+
+export const actionTypes = mirrorCreator([
+  'SUBMIT_FORM_REQUEST',
+  'SUBMIT_FORM_SUCCESS',
+  'SUBMIT_FORM_FAILURE',
+]);
+
 export const cppAppend = `// This is a global environment that is setup before the tests are run.
 // Since googletest does not allow function calls in the global scope
 class GlobalEnv : public testing::Environment {

@@ -1,5 +1,3 @@
-import Immutable from 'immutable';
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Card } from 'material-ui/Card';
@@ -7,13 +5,12 @@ import { Tabs, Tab } from 'material-ui/Tabs';
 import { cyan500, grey300 } from 'material-ui/styles/colors';
 
 const propTypes = {
-  templates: PropTypes.instanceOf(Immutable.List).isRequired,
+  templates: PropTypes.array.isRequired,
 };
 
-const UploadedPackageTemplateView = (props) => {
+const PackageTemplates = (props) => {
   const templateTabs = props.templates.map((template) => {
-    const id = template.get('id');
-    const name = template.get('filename');
+    const { id, name, content } = template;
 
     return (
       <Tab
@@ -25,7 +22,7 @@ const UploadedPackageTemplateView = (props) => {
       >
         <div
           className="template-content"
-          dangerouslySetInnerHTML={{ __html: template.get('content') }}
+          dangerouslySetInnerHTML={{ __html: content }}
         />
       </Tab>
     );
@@ -48,6 +45,6 @@ const UploadedPackageTemplateView = (props) => {
   );
 };
 
-UploadedPackageTemplateView.propTypes = propTypes;
+PackageTemplates.propTypes = propTypes;
 
-export default UploadedPackageTemplateView;
+export default PackageTemplates;

@@ -149,4 +149,14 @@ export default defineMessages({
     id: 'course.assessment.question.programming.onlineEditorView.cannotBeBlankValidationError',
     defaultMessage: 'Cannot be blank.',
   },
+  selectLanguageAlert: {
+    id: 'course.assessment.question.programming.onlineEditor.selectLanguageAlert',
+    defaultMessage: 'Please select a language.',
+    description: 'Alert message to be displayed when no language is selected.',
+  },
+  notYetImplementedAlert: {
+    id: 'course.assessment.question.programming.onlineEditor.notYetImplementedAlert',
+    defaultMessage: 'Not yet implemented :(',
+    description: 'Alert message to be displayed when selected language does not have an online editor.',
+  },
 });

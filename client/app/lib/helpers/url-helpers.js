@@ -8,7 +8,7 @@
 *
 * Taken from http://stackoverflow.com/questions/19491336/get-url-parameter-jquery-or-how-to-get-query-string-values-in-js
 */
-function getUrlParameter(sParam) {
+export function getUrlParameter(sParam) {
   const sPageURL = decodeURIComponent(window.location.search.substring(1));
   const sURLVariables = sPageURL.split('&');
   let sParameterName;
@@ -28,7 +28,7 @@ function getUrlParameter(sParam) {
  *
  * return {number}
  */
-function getCourseId() {
+export function getCourseId() {
   const match = window.location.pathname.match(/^\/courses\/(\d+)/);
   return match && match[1];
 }
@@ -38,7 +38,7 @@ function getCourseId() {
  *
  * return {number}
  */
-function getSurveyId() {
+export function getSurveyId() {
   const match = window.location.pathname.match(/^\/courses\/\d+\/surveys\/(\d+)/);
   return match && match[1];
 }
@@ -48,7 +48,7 @@ function getSurveyId() {
  *
  * return {number}
  */
-function getAssessmentId() {
+export function getAssessmentId() {
   const match = window.location.pathname.match(/^\/courses\/\d+\/assessments\/(\d+)/);
   return match && match[1];
 }
@@ -58,18 +58,28 @@ function getAssessmentId() {
  *
  * return {number}
  */
-function getSubmissionId() {
+export function getSubmissionId() {
   const match = window.location.pathname.match(/^\/courses\/\d+\/assessments\/\d+\/submissions\/(\d+)/);
   return match && match[1];
 }
 
 /**
- * Get the scribing id from URL.
+ * Get the scribing question id from URL.
  *
  * return {number}
  */
-function getScribingId() {
+export function getScribingId() {
   const match = window.location.pathname.match(/^\/courses\/\d+\/assessments\/\d+\/question\/scribing\/(\d+)/);
+  return match && match[1];
+}
+
+/**
+ * Get the programming question id from URL.
+ *
+ * return {number}
+ */
+export function getProgrammingQuestionId() {
+  const match = window.location.pathname.match(/^\/courses\/\d+\/assessments\/\d+\/question\/programming\/(\d+)/);
   return match && match[1];
 }
 
@@ -78,7 +88,7 @@ function getScribingId() {
  *
  * @returns {number}
  */
-function getVideoId() {
+export function getVideoId() {
   const match = window.location.pathname.match(/^\/courses\/\d+\/videos\/(\d+)/);
   return match && match[1];
 }
@@ -88,19 +98,7 @@ function getVideoId() {
  *
  * return {number}
  */
-function getVideoSubmissionId() {
+export function getVideoSubmissionId() {
   const match = window.location.pathname.match(/^\/courses\/\d+\/videos\/\d+\/submissions\/(\d+)/);
   return match && match[1];
 }
-
-/* eslint-disable import/prefer-default-export */
-export {
-  getUrlParameter,
-  getCourseId,
-  getSurveyId,
-  getAssessmentId,
-  getSubmissionId,
-  getScribingId,
-  getVideoId,
-  getVideoSubmissionId,
-};

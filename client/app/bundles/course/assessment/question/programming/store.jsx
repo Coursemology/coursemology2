@@ -1,12 +1,14 @@
-import { compose, createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
-import rootReducer, { initialStates as defaultInitialStates } from './reducers';
+import rootReducer from './reducers';
 
-export default (props) => {
-  const initialStates = defaultInitialStates.mergeDeep({ programmingQuestion: props });
-  const storeCreator = compose(
-    applyMiddleware(thunkMiddleware)
-  )(createStore);
+function generateStore() {
+  if (process.env.NODE_ENV === 'development') {
+    // eslint-disable-next-line global-require
+    return createStore(rootReducer, applyMiddleware(thunkMiddleware, require('redux-logger').logger));
+  }
+  return createStore(rootReducer, applyMiddleware(thunkMiddleware));
+}
 
-  return storeCreator(rootReducer, initialStates);
-};
+const store = generateStore();
+export default store;

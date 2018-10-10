@@ -1,15 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl } from 'react-intl';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
-import AceEditor from 'react-ace';
+import AceEditor from 'lib/components/redux-form/AceEditor';
+import { Field } from 'redux-form';
 
 class EditorCard extends React.Component {
   static propTypes = {
-    updateCodeBlock: PropTypes.func.isRequired,
     mode: PropTypes.string.isRequired,
     field: PropTypes.string,
-    value: PropTypes.string.isRequired,
     header: PropTypes.string.isRequired,
     subtitle: PropTypes.string,
     isLoading: PropTypes.bool.isRequired,
@@ -19,12 +17,8 @@ class EditorCard extends React.Component {
     return `question_programming[${field}]`;
   }
 
-  codeChangeHandler(field) {
-    return e => this.props.updateCodeBlock(field, e);
-  }
-
   render() {
-    const { mode, field, value, header, subtitle, isLoading } = this.props;
+    const { mode, field, header, subtitle, isLoading } = this.props;
     return (
       <Card containerStyle={{ paddingBottom: 0 }} initiallyExpanded>
         <CardHeader
@@ -35,21 +29,15 @@ class EditorCard extends React.Component {
           showExpandableButton
         />
         <CardText expandable style={{ padding: 0 }}>
-          <textarea
+          <Field
+            component={AceEditor}
             name={EditorCard.getInputName(field)}
-            value={value}
-            style={{ display: 'none' }}
-            readOnly="true"
-          />
-          <AceEditor
+            filename={field}
             mode={mode}
             theme="monokai"
             width="100%"
             minLines={10}
-            maxLines={Math.max(20, value.split(/\r\n|\r|\n/).length)}
-            name={EditorCard.getInputName(field)}
-            value={value}
-            onChange={this.codeChangeHandler(field)}
+            maxLines={20}
             editorProps={{ $blockScrolling: true }}
             setOptions={{ useSoftTabs: true, readOnly: isLoading }}
           />
@@ -59,4 +47,4 @@ class EditorCard extends React.Component {
   }
 }
 
-export default injectIntl(EditorCard);
+export default EditorCard;

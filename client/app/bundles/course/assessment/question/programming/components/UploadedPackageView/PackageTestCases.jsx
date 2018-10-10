@@ -6,7 +6,7 @@ import { Table, TableBody, TableHeader, TableHeaderColumn,
   TableRow, TableRowColumn } from 'material-ui/Table';
 import ExpandableText from 'lib/components/ExpandableText';
 
-import styles from './UploadedPackageTestCaseView.scss';
+import styles from './PackageTestCases.scss';
 
 const propTypes = {
   testCases: PropTypes.object.isRequired,
@@ -56,29 +56,33 @@ const translations = defineMessages({
   },
 });
 
-class UploadedPackageTestCaseView extends React.Component {
+class PackageTestCases extends React.Component {
   renderTable(tests) {
-    if (tests.size > 0) {
-      const rows = tests.map(test => (
-        <TableRow
-          className="question_programming_test_case"
-          id={`question_programming_test_case_${test.get('id')}`}
-          key={test.get('id')}
-        >
-          <TableHeaderColumn className={styles.testCaseCell}>
-            { test.get('identifier') }
-          </TableHeaderColumn>
-          <TableRowColumn className={styles.testCaseCell}>
-            { test.get('expression') }
-          </TableRowColumn>
-          <TableRowColumn className={styles.testCaseCell}>
-            <ExpandableText text={test.get('expected')} />
-          </TableRowColumn>
-          <TableRowColumn className={styles.testCaseCell}>
-            { test.get('hint') }
-          </TableRowColumn>
-        </TableRow>
-      ));
+    if (tests.length > 0) {
+      const rows = tests.map((test) => {
+        const { id, identifier, expression, expected, hint } = test;
+
+        return (
+          <TableRow
+            className="question_programming_test_case"
+            id={`question_programming_test_case_${id}`}
+            key={id}
+          >
+            <TableHeaderColumn className={styles.testCaseCell}>
+              { identifier }
+            </TableHeaderColumn>
+            <TableRowColumn className={styles.testCaseCell}>
+              { expression }
+            </TableRowColumn>
+            <TableRowColumn className={styles.testCaseCell}>
+              <ExpandableText text={expected} />
+            </TableRowColumn>
+            <TableRowColumn className={styles.testCaseCell}>
+              { hint }
+            </TableRowColumn>
+          </TableRow>
+        );
+      });
 
       return (
         <Table selectable={false}>
@@ -114,9 +118,7 @@ class UploadedPackageTestCaseView extends React.Component {
 
   render() {
     const { testCases, intl } = this.props;
-    const publicTests = testCases.get('public');
-    const privateTests = testCases.get('private');
-    const evaluationTests = testCases.get('evaluation');
+    const { public: publicTests, private: privateTests, evaluation: evaluationTests } = testCases;
 
     return (
       <>
@@ -146,6 +148,6 @@ class UploadedPackageTestCaseView extends React.Component {
   }
 }
 
-UploadedPackageTestCaseView.propTypes = propTypes;
+PackageTestCases.propTypes = propTypes;
 
-export default injectIntl(UploadedPackageTestCaseView);
+export default injectIntl(PackageTestCases);
