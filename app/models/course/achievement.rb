@@ -6,15 +6,12 @@ class Course::Achievement < ApplicationRecord
 
   after_initialize :set_defaults, if: :new_record?
 
-  validates_length_of :title, allow_nil: true, maximum: 255
-  validates_presence_of :title
-  validates_numericality_of :weight, allow_nil: true, only_integer: true,
-                                     greater_than_or_equal_to: -2147483648, less_than: 2147483648
-  validates_presence_of :weight
-  validates_inclusion_of :published, in: [true, false], message: :blank
-  validates_presence_of :creator
-  validates_presence_of :updater
-  validates_presence_of :course
+  validates :title, length: { maximum: 255 }, presence: true
+  validates :weight, numericality: { only_integer: true }, presence: true
+  validates :published, inclusion: { in: [true, false] }
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :course, presence: true
 
   belongs_to :course, inverse_of: :achievements
   has_many :course_user_achievements, class_name: Course::UserAchievement.name,

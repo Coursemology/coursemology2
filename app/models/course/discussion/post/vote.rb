@@ -1,13 +1,11 @@
 # frozen_string_literal: true
 class Course::Discussion::Post::Vote < ApplicationRecord
-  validates_inclusion_of :vote_flag, in: [true, false], message: :blank
-  validates_presence_of :creator
-  validates_presence_of :updater
-  validates_presence_of :post
-  validates_uniqueness_of :creator_id, scope: [:post_id], allow_nil: true,
-                                       if: -> { post_id? && creator_id_changed? }
-  validates_uniqueness_of :post_id, scope: [:creator_id], allow_nil: true,
-                                    if: -> { creator_id? && post_id_changed? }
+  validates :vote_flag, inclusion: { in: [true, false] }
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :post, presence: true
+  validates :creator_id, uniqueness: { scope: [:post_id], if: -> { post_id? && creator_id_changed? } }
+  validates :post_id, uniqueness: { scope: [:creator_id], if: -> { creator_id? && post_id_changed? } }
 
   belongs_to :post, inverse_of: :votes
 

@@ -14,18 +14,17 @@ class Course::Forum::Topic < ApplicationRecord
 
   enum topic_type: { normal: 0, question: 1, sticky: 2, announcement: 3 }
 
-  validates_length_of :title, allow_nil: true, maximum: 255
-  validates_presence_of :title
-  validates_length_of :slug, allow_nil: true, maximum: 255
-  validates_inclusion_of :resolved, in: [true, false], message: :blank
-  validates_presence_of :latest_post_at
-  validates_presence_of :creator
-  validates_presence_of :updater
-  validates_presence_of :forum
-  validates_uniqueness_of :forum_id, scope: [:slug], allow_nil: true,
-                                     if: -> { slug? && forum_id_changed? }
-  validates_uniqueness_of :slug, scope: [:forum_id], allow_nil: true,
-                                 if: -> { forum_id? && slug_changed? }
+  validates :title, length: { maximum: 255 }, presence: true
+  validates :slug, length: { maximum: 255 }, allow_nil: true
+  validates :resolved, inclusion: { in: [true, false] }
+  validates :latest_post_at, presence: true
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :forum, presence: true
+  validates :forum_id, uniqueness: { scope: [:slug], allow_nil: true,
+                                     if: -> { slug? && forum_id_changed? } }
+  validates :slug, uniqueness: { scope: [:forum_id], allow_nil: true,
+                                 if: -> { forum_id? && slug_changed? } }
 
   has_many :views, dependent: :destroy, inverse_of: :topic
   belongs_to :forum, inverse_of: :topics

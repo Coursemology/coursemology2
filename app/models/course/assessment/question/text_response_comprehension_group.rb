@@ -50,9 +50,8 @@ class Course::Assessment::Question::TextResponseComprehensionGroup < Application
   self.table_name = 'course_assessment_question_text_response_compre_groups'
 
   validate :validate_group_grade
-  validates_numericality_of :maximum_group_grade, allow_nil: true, greater_than: -1000, less_than: 1000
-  validates_presence_of :maximum_group_grade
-  validates_presence_of :question
+  validates :maximum_group_grade, numericality: { greater_than: -1000, less_than: 1000 }, presence: true
+  validates :question, presence: true
 
   has_many :points, class_name: Course::Assessment::Question::TextResponseComprehensionPoint.name,
                     dependent: :destroy, foreign_key: :group_id, inverse_of: :group

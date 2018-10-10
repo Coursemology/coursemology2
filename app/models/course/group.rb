@@ -3,15 +3,12 @@ class Course::Group < ApplicationRecord
   after_initialize :set_defaults, if: :new_record?
   before_validation :set_defaults, if: :new_record?
 
-  validates_length_of :name, allow_nil: true, maximum: 255
-  validates_presence_of :name
-  validates_presence_of :creator
-  validates_presence_of :updater
-  validates_presence_of :course
-  validates_uniqueness_of :name, scope: [:course_id], allow_nil: true,
-                                 if: -> { course_id? && name_changed? }
-  validates_uniqueness_of :course_id, scope: [:name], allow_nil: true,
-                                      if: -> { name? && course_id_changed? }
+  validates :name, length: { maximum: 255 }, presence: true
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :course, presence: true
+  validates :name, uniqueness: { scope: [:course_id], if: -> { course_id? && name_changed? } }
+  validates :course_id, uniqueness: { scope: [:name], if: -> { name? && course_id_changed? } }
 
   belongs_to :course, inverse_of: :groups
   has_many :group_users, -> { joins(:course_user).order('course_users.name ASC') },

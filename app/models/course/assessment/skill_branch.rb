@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 class Course::Assessment::SkillBranch < ApplicationRecord
-  validates_length_of :title, allow_nil: true, maximum: 255
-  validates_presence_of :title
-  validates_presence_of :creator
-  validates_presence_of :updater
-  validates_presence_of :course
+  validates :title, length: { maximum: 255 }, presence: true
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :course, presence: true
 
   belongs_to :course, inverse_of: :assessment_skill_branches
   has_many :skills, inverse_of: :skill_branch

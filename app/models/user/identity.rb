@@ -1,14 +1,10 @@
 # frozen_string_literal: true
 class User::Identity < ApplicationRecord
-  validates_length_of :provider, allow_nil: true, maximum: 255
-  validates_presence_of :provider
-  validates_length_of :uid, allow_nil: true, maximum: 255
-  validates_presence_of :uid
-  validates_presence_of :user
-  validates_uniqueness_of :provider, scope: [:uid], allow_nil: true,
-                                     if: -> { uid? && provider_changed? }
-  validates_uniqueness_of :uid, scope: [:provider], allow_nil: true,
-                                if: -> { provider? && uid_changed? }
+  validates :provider, length: { maximum: 255 }, presence: true
+  validates :uid, length: { maximum: 255 }, presence: true
+  validates :user, presence: true
+  validates :provider, uniqueness: { scope: [:uid], if: -> { uid? && provider_changed? } }
+  validates :uid, uniqueness: { scope: [:provider], if: -> { provider? && uid_changed? } }
 
   belongs_to :user, inverse_of: :identities
 

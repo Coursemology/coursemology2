@@ -6,15 +6,14 @@ class Course::Announcement < ApplicationRecord
   acts_as_readable on: :updated_at
   has_many_attachments on: :content
 
-  validates_length_of :title, allow_nil: true, maximum: 255
-  validates_presence_of :title
-  validates_inclusion_of :sticky, in: [true, false], message: :blank
-  validates_presence_of :start_at
-  validates_presence_of :end_at
-  validates_numericality_of :opening_reminder_token, allow_nil: true
-  validates_presence_of :creator
-  validates_presence_of :updater
-  validates_presence_of :course
+  validates :title, length: { maximum: 255 }, presence: true
+  validates :sticky, inclusion: { in: [true, false] }
+  validates :start_at, presence: true
+  validates :end_at, presence: true
+  validates :opening_reminder_token, numericality: true, allow_nil: true
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :course, presence: true
 
   belongs_to :course, inverse_of: :announcements
 

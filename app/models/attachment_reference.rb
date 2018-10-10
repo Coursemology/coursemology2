@@ -4,12 +4,12 @@ class AttachmentReference < ApplicationRecord
 
   before_save :update_expires_at
 
-  validates_length_of :attachable_type, allow_nil: true, maximum: 255
-  validates_length_of :name, allow_nil: true, maximum: 255
-  validates_presence_of :name
-  validates_presence_of :creator
-  validates_presence_of :updater
-  validates_presence_of :attachment
+  validates :attachable_type, length: { maximum: 255 }, allow_blank: true
+  validates :name, length: { maximum: 255 }, allow_blank: true
+  validates :name, presence: true
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :attachment, presence: true
 
   belongs_to :attachable, polymorphic: true, inverse_of: nil, optional: true
   belongs_to :attachment, inverse_of: :attachment_references

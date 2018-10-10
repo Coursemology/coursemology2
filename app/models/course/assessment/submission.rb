@@ -37,11 +37,10 @@ class Course::Assessment::Submission < ApplicationRecord
   validate :validate_consistent_user, :validate_unique_submission, on: :create
   validate :validate_awarded_attributes, if: :published?
   validates :submitted_at, presence: true, unless: :attempting?
-  validates_length_of :workflow_state, allow_nil: true, maximum: 255
-  validates_presence_of :workflow_state
-  validates_presence_of :creator
-  validates_presence_of :updater
-  validates_presence_of :assessment
+  validates :workflow_state, length: { maximum: 255 }, presence: true
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :assessment, presence: true
 
   belongs_to :assessment, inverse_of: :submissions
 

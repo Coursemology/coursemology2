@@ -7,11 +7,10 @@ class Course::Video < ApplicationRecord
   include Course::Video::WatchStatisticsConcern
 
   validate :url_unchanged
-  validates_length_of :url, allow_nil: true, maximum: 255
-  validates_presence_of :url
-  validates_presence_of :creator
-  validates_presence_of :updater
-  validates_presence_of :tab
+  validates :url, length: { maximum: 255 }, presence: true
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :tab, presence: true
 
   belongs_to :tab, class_name: Course::Video::Tab.name, inverse_of: :videos
   has_many :submissions, class_name: Course::Video::Submission.name,

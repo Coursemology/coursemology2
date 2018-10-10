@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 class Course::EnrolRequest < ApplicationRecord
   validate :validate_user_not_in_course, on: :create
-  validates_presence_of :course
-  validates_presence_of :user
-  validates_uniqueness_of :course_id, scope: [:user_id], allow_nil: true,
-                                      if: -> { user_id? && course_id_changed? }
-  validates_uniqueness_of :user_id, scope: [:course_id], allow_nil: true,
-                                    if: -> { course_id? && user_id_changed? }
+  validates :course, presence: true
+  validates :user, presence: true
+  validates :course_id, uniqueness: { scope: [:user_id], if: -> { user_id? && course_id_changed? } }
+  validates :user_id, uniqueness: { scope: [:course_id], if: -> { course_id? && user_id_changed? } }
 
   belongs_to :course, inverse_of: :enrol_requests
   belongs_to :user, inverse_of: :course_enrol_requests

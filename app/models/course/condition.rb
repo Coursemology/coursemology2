@@ -2,17 +2,16 @@
 class Course::Condition < ApplicationRecord
   actable
 
-  validates_length_of :actable_type, allow_nil: true, maximum: 255
-  validates_length_of :conditional_type, allow_nil: true, maximum: 255
-  validates_presence_of :conditional_type
-  validates_presence_of :creator
-  validates_presence_of :updater
-  validates_presence_of :course
-  validates_presence_of :conditional
-  validates_uniqueness_of :actable_type, scope: [:actable_id], allow_nil: true,
-                                         if: -> { actable_id? && actable_type_changed? }
-  validates_uniqueness_of :actable_id, scope: [:actable_type], allow_nil: true,
-                                       if: -> { actable_type? && actable_id_changed? }
+  validates :actable_type, length: { maximum: 255 }, allow_nil: true
+  validates :conditional_type, length: { maximum: 255 }, presence: true
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :course, presence: true
+  validates :conditional, presence: true
+  validates :actable_type, uniqueness: { scope: [:actable_id], allow_nil: true,
+                                         if: -> { actable_id? && actable_type_changed? } }
+  validates :actable_id, uniqueness: { scope: [:actable_type], allow_nil: true,
+                                       if: -> { actable_type? && actable_id_changed? } }
 
   belongs_to :course, inverse_of: false
   belongs_to :conditional, polymorphic: true

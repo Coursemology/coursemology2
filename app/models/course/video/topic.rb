@@ -2,11 +2,11 @@
 class Course::Video::Topic < ApplicationRecord
   acts_as_discussion_topic display_globally: true
 
-  validates_numericality_of :timestamp, allow_nil: true, only_integer: true, greater_than_or_equal_to: -2147483648, less_than: 2147483648
-  validates_presence_of :timestamp
-  validates_presence_of :creator
-  validates_presence_of :updater
-  validates_presence_of :video
+  validates :timestamp, numericality: { only_integer: true, greater_than_or_equal_to: -2_147_483_648,
+                                        less_than: 2_147_483_648 }, presence: true
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :video, presence: true
 
   belongs_to :video, inverse_of: :topics
 

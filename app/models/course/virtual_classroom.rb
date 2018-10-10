@@ -4,13 +4,12 @@ class Course::VirtualClassroom < ApplicationRecord
   before_validation :convert_duration_to_end_at
   acts_as_readable on: :updated_at
 
-  validates_length_of :title, allow_nil: true, maximum: 255
-  validates_presence_of :title
-  validates_presence_of :start_at
-  validates_presence_of :end_at
-  validates_presence_of :creator
-  validates_presence_of :updater
-  validates_presence_of :course
+  validates :title, length: { maximum: 255 }, presence: true
+  validates :start_at, presence: true
+  validates :end_at, presence: true
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :course, presence: true
 
   has_many_attachments on: :content
   belongs_to :instructor, class_name: 'User', foreign_key: :instructor_id, inverse_of: nil, optional: true

@@ -7,9 +7,9 @@ class Course::Video::Submission < ApplicationRecord
   acts_as_experience_points_record
 
   validate :validate_consistent_user, :validate_unique_submission, on: :create
-  validates_presence_of :creator
-  validates_presence_of :updater
-  validates_presence_of :video
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :video, presence: true
 
   belongs_to :video, inverse_of: :submissions
 

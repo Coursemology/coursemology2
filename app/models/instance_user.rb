@@ -5,13 +5,11 @@ class InstanceUser < ApplicationRecord
 
   enum role: { normal: 0, instructor: 1, administrator: 2 }
 
-  validates_presence_of :role
-  validates_presence_of :instance
-  validates_presence_of :user
-  validates_uniqueness_of :instance_id, scope: [:user_id], allow_nil: true,
-                                        if: -> { user_id? && instance_id_changed? }
-  validates_uniqueness_of :user_id, scope: [:instance_id], allow_nil: true,
-                                    if: -> { instance_id? && user_id_changed? }
+  validates :role, presence: true
+  validates :instance, presence: true
+  validates :user, presence: true
+  validates :instance_id, uniqueness: { scope: [:user_id], if: -> { user_id? && instance_id_changed? } }
+  validates :user_id, uniqueness: { scope: [:instance_id], if: -> { instance_id? && user_id_changed? } }
 
   belongs_to :user, inverse_of: :instance_users
 

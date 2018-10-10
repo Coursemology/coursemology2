@@ -4,14 +4,11 @@
 #
 # @api notifications
 class Activity < ApplicationRecord
-  validates_length_of :object_type, allow_nil: true, maximum: 255
-  validates_presence_of :object_type
-  validates_length_of :event, allow_nil: true, maximum: 255
-  validates_presence_of :event
-  validates_length_of :notifier_type, allow_nil: true, maximum: 255
-  validates_presence_of :notifier_type
-  validates_presence_of :object
-  validates_presence_of :actor
+  validates :object_type, length: { maximum: 255 }, presence: true
+  validates :event, length: { maximum: 255 }, presence: true
+  validates :notifier_type, length: { maximum: 255 }, presence: true
+  validates :object, presence: true
+  validates :actor, presence: true
 
   belongs_to :object, polymorphic: true
   belongs_to :actor, inverse_of: :activities, class_name: User.name

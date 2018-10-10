@@ -21,16 +21,14 @@ class Course::Assessment::Question::Programming < ApplicationRecord
   before_validation :assign_template_attributes
   before_validation :assign_test_case_attributes
 
-  validates :memory_limit, numericality: { greater_than: 0 }, allow_nil: true
-  validates :time_limit, numericality: { greater_than: 0, less_than_or_equal_to: CPU_TIMEOUT },
-                         allow_nil: true
-  validates_numericality_of :memory_limit, allow_nil: true, only_integer: true, greater_than_or_equal_to: -2147483648, less_than: 2147483648
-  validates_numericality_of :time_limit, allow_nil: true, only_integer: true, greater_than_or_equal_to: -2147483648, less_than: 2147483648
-  validates_numericality_of :attempt_limit, allow_nil: true, only_integer: true, greater_than_or_equal_to: -2147483648, less_than: 2147483648
-  validates_presence_of :package_type
-  validates_inclusion_of :multiple_file_submission, in: [true, false], message: :blank
-  validates_uniqueness_of :import_job_id, allow_nil: true, if: :import_job_id_changed?
-  validates_presence_of :language
+  validates :memory_limit, numericality: { greater_than: 0, less_than: 2_147_483_648 }, allow_nil: true
+  validates :time_limit, numericality: { greater_than: 0, less_than_or_equal_to: CPU_TIMEOUT }, allow_nil: true
+  validates :attempt_limit, numericality: { only_integer: true,
+                                            greater_than: 0, less_than: 2_147_483_648 }, allow_nil: true
+  validates :package_type, presence: true
+  validates :multiple_file_submission, inclusion: { in: [true, false] }
+  validates :import_job_id, uniqueness: { allow_nil: true, if: :import_job_id_changed? }
+  validates :language, presence: true
 
   belongs_to :import_job, class_name: TrackableJob::Job.name, inverse_of: nil, optional: true
   belongs_to :language, class_name: Coursemology::Polyglot::Language.name, inverse_of: nil

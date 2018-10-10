@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::TextResponseSolution < ApplicationRecord
   enum solution_type: [:exact_match, :keyword]
-  
+
   before_validation :strip_whitespace
   validate :validate_grade
-  validates_presence_of :solution_type
-  validates_presence_of :solution
-  validates_numericality_of :grade, allow_nil: true, greater_than: -1000, less_than: 1000
-  validates_presence_of :grade
-  validates_presence_of :question
+  validates :solution_type, presence: true
+  validates :solution, presence: true
+  validates :grade, numericality: { greater_than: -1000, less_than: 1000 }, presence: true
+  validates :question, presence: true
 
   belongs_to :question, class_name: Course::Assessment::Question::TextResponse.name,
                         inverse_of: :solutions

@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 class Course::Assessment::Tab < ApplicationRecord
-  validates_length_of :title, allow_nil: true, maximum: 255
-  validates_presence_of :title
-  validates_numericality_of :weight, allow_nil: true, only_integer: true, greater_than_or_equal_to: -2147483648, less_than: 2147483648
-  validates_presence_of :weight
-  validates_presence_of :creator
-  validates_presence_of :updater
-  validates_presence_of :category
+  validates :title, length: { maximum: 255 }, presence: true
+  validates :weight, numericality: { only_integer: true }, presence: true
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :category, presence: true
 
   belongs_to :category, class_name: Course::Assessment::Category.name, inverse_of: :tabs
   has_many :assessments, class_name: Course::Assessment.name, dependent: :destroy, inverse_of: :tab

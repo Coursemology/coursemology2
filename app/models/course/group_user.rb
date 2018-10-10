@@ -5,15 +5,13 @@ class Course::GroupUser < ApplicationRecord
   enum role: { normal: 0, manager: 1 }
 
   validate :course_user_and_group_in_same_course
-  validates_presence_of :role
-  validates_presence_of :creator
-  validates_presence_of :updater
-  validates_presence_of :course_user
-  validates_presence_of :group
-  validates_uniqueness_of :course_user_id, scope: [:group_id], allow_nil: true,
-                                           if: -> { group_id? && course_user_id_changed? }
-  validates_uniqueness_of :group_id, scope: [:course_user_id], allow_nil: true,
-                                     if: -> { course_user_id? && group_id_changed? }
+  validates :role, presence: true
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :course_user, presence: true
+  validates :group, presence: true
+  validates :course_user_id, uniqueness: { scope: [:group_id], if: -> { group_id? && course_user_id_changed? } }
+  validates :group_id, uniqueness: { scope: [:course_user_id], if: -> { course_user_id? && group_id_changed? } }
 
   belongs_to :course_user, inverse_of: :group_users
   belongs_to :group, class_name: Course::Group.name, inverse_of: :group_users

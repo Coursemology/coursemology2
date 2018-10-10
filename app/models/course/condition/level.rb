@@ -7,10 +7,7 @@ class Course::Condition::Level < ApplicationRecord
     Course::Condition::Level.on_dependent_status_change(record)
   end
 
-  validates :minimum_level, numericality: { greater_than: 0 }
-  validates_numericality_of :minimum_level, allow_nil: true, only_integer: true,
-                                            greater_than_or_equal_to: -2147483648, less_than: 2147483648
-  validates_presence_of :minimum_level
+  validates :minimum_level, numericality: { greater_than: 0, less_than: 2_147_483_648 }, presence: true
 
   def title
     self.class.human_attribute_name('title.title', value: minimum_level)

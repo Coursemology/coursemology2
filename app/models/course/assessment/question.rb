@@ -3,16 +3,15 @@ class Course::Assessment::Question < ApplicationRecord
   actable optional: true
   has_many_attachments
 
-  validates_length_of :actable_type, allow_nil: true, maximum: 255
-  validates_length_of :title, allow_nil: true, maximum: 255
-  validates_numericality_of :maximum_grade, allow_nil: true, greater_than: -1000, less_than: 1000
-  validates_presence_of :maximum_grade
-  validates_presence_of :creator
-  validates_presence_of :updater
-  validates_uniqueness_of :actable_type, scope: [:actable_id], allow_nil: true,
-                                         if: -> { actable_id? && actable_type_changed? }
-  validates_uniqueness_of :actable_id, scope: [:actable_type], allow_nil: true,
-                                       if: -> { actable_type? && actable_id_changed? }
+  validates :actable_type, length: { maximum: 255 }, allow_nil: true
+  validates :title, length: { maximum: 255 }, allow_nil: true
+  validates :maximum_grade, numericality: { greater_than: -1000, less_than: 1000 }, presence: true
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :actable_type, uniqueness: { scope: [:actable_id], allow_nil: true,
+                                         if: -> { actable_id? && actable_type_changed? } }
+  validates :actable_id, uniqueness: { scope: [:actable_type], allow_nil: true,
+                                       if: -> { actable_type? && actable_id_changed? } }
 
   has_many :question_assessments, class_name: Course::QuestionAssessment.name, inverse_of: :question,
                                   dependent: :destroy

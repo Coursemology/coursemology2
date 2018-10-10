@@ -17,13 +17,13 @@ class Course::Assessment < ApplicationRecord
   before_validation :assign_folder_attributes
   after_commit :grade_with_new_test_cases, on: :update
 
-  validates_inclusion_of :autograded, in: [true, false], message: :blank
-  validates_length_of :session_password, allow_nil: true, maximum: 255
-  validates_inclusion_of :tabbed_view, in: [true, false], message: :blank
-  validates_length_of :view_password, allow_nil: true, maximum: 255
-  validates_presence_of :creator
-  validates_presence_of :updater
-  validates_presence_of :tab
+  validates :autograded, inclusion: { in: [true, false] }
+  validates :session_password, length: { maximum: 255 }, allow_nil: true
+  validates :tabbed_view, inclusion: { in: [true, false] }
+  validates :view_password, length: { maximum: 255 }, allow_nil: true
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :tab, presence: true
 
   belongs_to :tab, inverse_of: :assessments
 

@@ -3,9 +3,8 @@ class Course::Assessment::Question::TextResponseComprehensionPoint < Application
   self.table_name = 'course_assessment_question_text_response_compre_points'
 
   validate :validate_point_grade, :validate_at_most_one_compre_lifted_word_solution
-  validates_numericality_of :point_grade, allow_nil: true, greater_than: -1000, less_than: 1000
-  validates_presence_of :point_grade
-  validates_presence_of :group
+  validates :point_grade, numericality: { greater_than: -1000, less_than: 1000 }, presence: true
+  validates :group, presence: true
 
   has_many :solutions, class_name: Course::Assessment::Question::TextResponseComprehensionSolution.name,
                        dependent: :destroy, foreign_key: :point_id, inverse_of: :point
