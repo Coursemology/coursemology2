@@ -188,7 +188,7 @@ GEM
     cocoon (1.2.11)
     codeclimate-test-reporter (1.0.8)
       simplecov (<= 0.13)
-    codecov (0.1.10)
+    codecov (0.1.13)
       json
       simplecov
       url
