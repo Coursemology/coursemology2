@@ -1,0 +1,22 @@
+- add_breadcrumb :new
+= page_header
+
+= render partial: 'system/admin/instance/users/tabs'
+
+= simple_form_for @instance, url: admin_instance_users_path, method: :post do |f|
+  = f.error_notification
+  table.table.table-hover
+    thead
+    tr
+      th = t('common.name')
+      th = t('common.email')
+      th = t('common.role')
+      th
+        div.pull-right
+          = link_to_add_association t('.individual.add_user'), f, :invitations,
+                  find_selector: 'tbody', insert_using: 'append'
+      tbody
+        = f.simple_fields_for :invitations, @instance.invitations.select(&:new_record?) do |invitation_form|
+          = render 'invitation_fields', f: invitation_form
+
+  = f.button :submit

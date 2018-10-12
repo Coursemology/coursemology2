@@ -52,11 +52,10 @@ class Instance < ApplicationRecord
   #   @note You are scoped by the current tenant, you might not see all.
   has_many :users, through: :instance_users
 
-  # @!attribute [r] invitations
+  # @!attribute [r] users
   #   @note You are scoped by the current tenant, you might not see all.
-  has_many :invitations, class_name: Instance::UserInvitation.name,
-                         dependent: :destroy,
-                         inverse_of: :instance
+  has_many :invitations, class_name: Instance::UserInvitation.name, dependent: :destroy,
+           inverse_of: :instance
 
   # @!attribute [r] announcements
   #   @note You are scoped by the current tenant, you might not see all.
@@ -64,8 +63,6 @@ class Instance < ApplicationRecord
   # @!attribute [r] courses
   #   @note You are scoped by the current tenant, you might not see all.
   has_many :courses, dependent: :destroy
-
-  accepts_nested_attributes_for :invitations
 
   # @!method self.order_by_id(direction = :asc)
   #   Orders the instances by ID.

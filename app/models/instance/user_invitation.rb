@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class Instance::UserInvitation < ApplicationRecord
   after_initialize :generate_invitation_key, if: :new_record?
   after_initialize :set_defaults, if: :new_record?
@@ -56,7 +55,7 @@ class Instance::UserInvitation < ApplicationRecord
   # Scope excludes the own invitation object.
   def no_existing_unconfirmed_invitation
     return unless Instance::UserInvitation.where(instance_id: instance_id, email: email).
-                    where.not(id: id).unconfirmed.exists?
+        where.not(id: id).unconfirmed.exists?
     errors.add(:base, :existing_invitation)
   end
 end

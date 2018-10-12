@@ -1,0 +1,12 @@
+= content_tag_for(:tr, invitation) do
+  th = invitation.name
+  td = invitation.email
+  td = t("instance.users.role.#{invitation.role}")
+  td = invitation.invitation_key
+  - if !invitation.confirmed?
+    td = t('instance.users.status.invited')
+    td = format_datetime(invitation.sent_at, :short) if invitation.sent_at
+  - else
+    td = t('instance.users.status.accepted')
+    td = format_datetime(invitation.confirmed_at, :short) if invitation.confirmed_at
+  td

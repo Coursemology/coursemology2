@@ -1,0 +1,7 @@
+en:
+  activerecord:
+    errors:
+      models:
+        instance/user_invitation:
+          existing_invitation: 'An open invitation exists for this email address'
+
