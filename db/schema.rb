@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180906084425) do
+ActiveRecord::Schema.define(version: 20180926081538) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -253,6 +253,11 @@ ActiveRecord::Schema.define(version: 20180906084425) do
     t.integer  "updater_id",          :null=>false, :index=>{:name=>"fk__course_assessment_questions_updater_id", :order=>{:updater_id=>:asc}}
     t.datetime "created_at",          :null=>false
     t.datetime "updated_at",          :null=>false
+  end
+
+  create_table "course_assessment_questions_skills", force: :cascade do |t|
+    t.integer "question_id", :null=>false, :index=>{:name=>"course_assessment_question_skills_question_index", :order=>{:question_id=>:asc}}
+    t.integer "skill_id",    :null=>false, :index=>{:name=>"course_assessment_question_skills_skill_index", :order=>{:skill_id=>:asc}}
   end
 
   create_table "course_assessment_skill_branches", force: :cascade do |t|
@@ -813,6 +818,23 @@ ActiveRecord::Schema.define(version: 20180906084425) do
     t.integer  "updater_id",  :null=>false, :index=>{:name=>"fk__generic_announcements_updater_id", :order=>{:updater_id=>:asc}}
     t.datetime "created_at",  :null=>false
     t.datetime "updated_at",  :null=>false
+  end
+
+  create_table "instance_user_invitations", force: :cascade do |t|
+    t.integer  "instance_id",    :null=>false, :index=>{:name=>"index_instance_user_invitations_on_instance_id", :order=>{:instance_id=>:asc}}
+    t.string   "name",           :limit=>255, :null=>false
+    t.string   "email",          :limit=>255, :null=>false, :index=>{:name=>"index_instance_user_invitations_on_email", :case_sensitive=>false}
+    t.integer  "role",           :default=>0, :null=>false
+    t.string   "invitation_key", :limit=>32, :null=>false, :index=>{:name=>"index_instance_user_invitations_on_invitation_key", :unique=>true, :order=>{:invitation_key=>:asc}}
+    t.datetime "sent_at"
+    t.datetime "confirmed_at"
+    t.integer  "confirmer_id"
+    t.integer  "creator_id",     :null=>false
+    t.integer  "updater_id",     :null=>false
+    t.datetime "created_at",     :null=>false
+    t.datetime "updated_at",     :null=>false
+
+    t.index ["instance_id", "email"], :name=>"index_instance_user_invitations_on_instance_id_and_email", :unique=>true, :order=>{:instance_id=>:asc, :email=>:asc}
   end
 
   create_table "instance_user_role_requests", force: :cascade do |t|
