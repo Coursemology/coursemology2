@@ -1,0 +1,9 @@
+en:
+  instance:
+    mailer:
+      user_added_email:
+        subject: 'Added to Instance %{instance}'
+        message: >
+          You have been added to the instance %{instance} on %{coursemology}.
+
+          To view the instance, please log in with %{email}.

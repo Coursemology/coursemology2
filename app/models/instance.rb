@@ -52,6 +52,11 @@ class Instance < ApplicationRecord
   #   @note You are scoped by the current tenant, you might not see all.
   has_many :users, through: :instance_users
 
+  # @!attribute [r] users
+  #   @note You are scoped by the current tenant, you might not see all.
+  has_many :invitations, class_name: Instance::UserInvitation.name, dependent: :destroy,
+           inverse_of: :instance
+
   # @!attribute [r] announcements
   #   @note You are scoped by the current tenant, you might not see all.
   has_many :announcements, class_name: Instance::Announcement.name, dependent: :destroy
