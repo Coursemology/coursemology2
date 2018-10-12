@@ -14,6 +14,15 @@ class Instance::UserInvitationService
     @current_instance = current_instance
   end
 
+  # Invites users to the given Instance.
+  #
+  # The result of the transaction is both saving the instance as well as validating validity
+  # because Rails does not handle duplicate nested attribute uniqueness constraints.
+  #
+  # @param [Array<Hash>|File|TempFile] users Invites the given users.
+  # @return [Array<Integer>|nil] An array containing the the size of new_invitations, existing_invitations,
+  #   new_instance_users and existing_instance_users respectively if success. nil when fail.
+  # @raise [CSV::MalformedCSVError] When the file provided is invalid.
   def invite(users)
     new_invitations = nil
     existing_invitations = nil
@@ -32,6 +41,19 @@ class Instance::UserInvitationService
     success ? [new_invitations, existing_invitations, new_instance_users, existing_instance_users].map(&:size) : nil
   end
 
+  # Invites the given users into the instance.
+  #
+  # @param [Array<Hash>|File|TempFile] users Invites the given users.
+  # @return
+  #   [
+  #     Array<(Array<Instance::UserInvitation>,
+  #     Array<Instance::UserInvitation>,
+  #     Array<InstanceUser>,
+  #     Array<InstanceUser>)>
+  #   ]
+  #   A tuple containing the users newly invited, already invited,
+  #     newly registered and already registered respectively.
+  # @raise [CSV::MalformedCSVError] When the file provided is invalid.
   def invite_users(users)
     users = parse_invitations(users)
     process_invitations(users)
