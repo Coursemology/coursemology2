@@ -23,7 +23,7 @@ class Duplicator
   # children. If a collection is given, some of the items to be duplicated might be associated.
   # `initialize_duplicate` may be used to associate the duplicates of associated items.
   #
-  # Since the duplicator does not have any knowledge of what these items are, expect for the fact that
+  # Since the duplicator does not have any knowledge of what these items are, except for the fact that
   # they respond to `initialize_duplicate`, the duplicator does not impose an order on which items are
   # duplicated first. To simplify the process of associating duplicated objects, we give the responsibility
   # of forming the association to the object that is duplicated later.
