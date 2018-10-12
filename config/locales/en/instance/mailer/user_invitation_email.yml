@@ -1,12 +1,13 @@
 en:
   instance:
-    user_invitation_email:
-      subject: 'Invitation to %{instance} instance with %{role} role'
-      click_here: 'Click here'
-      message: >
-        You are invited to register for the %{instance} instance on %{coursemology}.
+    mailer:
+      user_invitation_email:
+        subject: 'Invitation to %{instance} instance with %{role} role'
+        click_here: 'Click here'
+        message: >
+          You are invited to register for the %{instance} instance on %{coursemology}.
 
 
-        You do not seem to have an account registered at this email address (%{email});
+          You do not seem to have an account registered at this email address (%{email});
 
-        %{click_here} to create an account and accept the invitation.
+          %{click_here} to create an account and accept the invitation.
