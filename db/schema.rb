@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180906084425) do
+ActiveRecord::Schema.define(version: 20180929061522) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -518,14 +518,13 @@ ActiveRecord::Schema.define(version: 20180906084425) do
     t.boolean  "published",              :default=>false, :null=>false
     t.integer  "base_exp",               :null=>false
     t.integer  "time_bonus_exp",         :null=>false
-    t.datetime "start_at",               :null=>false
-    t.datetime "bonus_end_at"
-    t.datetime "end_at"
     t.float    "closing_reminder_token"
     t.integer  "creator_id",             :null=>false, :index=>{:name=>"fk__course_lesson_plan_items_creator_id", :order=>{:creator_id=>:asc}}
     t.integer  "updater_id",             :null=>false, :index=>{:name=>"fk__course_lesson_plan_items_updater_id", :order=>{:updater_id=>:asc}}
     t.datetime "created_at",             :null=>false
     t.datetime "updated_at",             :null=>false
+    t.boolean  "triggers_recomputation", :default=>false, :null=>false
+    t.boolean  "movable",                :default=>false, :null=>false
   end
 
   create_table "course_lesson_plan_milestones", force: :cascade do |t|
@@ -597,6 +596,23 @@ ActiveRecord::Schema.define(version: 20180906084425) do
     t.integer "weight",        :null=>false
 
     t.index ["question_id", "assessment_id"], :name=>"index_question_assessments_on_question_id_and_assessment_id", :unique=>true, :order=>{:question_id=>:asc, :assessment_id=>:asc}
+  end
+
+  create_table "course_reference_timelines", force: :cascade do |t|
+    t.bigint   "course_id",  :null=>false, :index=>{:name=>"index_course_reference_timelines_on_course_id", :order=>{:course_id=>:asc}}
+    t.boolean  "default",    :default=>false, :null=>false
+    t.datetime "created_at", :null=>false
+    t.datetime "updated_at", :null=>false
+  end
+
+  create_table "course_reference_times", force: :cascade do |t|
+    t.bigint   "reference_timeline_id", :null=>false, :index=>{:name=>"index_course_reference_times_on_reference_timeline_id", :order=>{:reference_timeline_id=>:asc}}
+    t.bigint   "lesson_plan_item_id",   :null=>false, :index=>{:name=>"index_course_reference_times_on_lesson_plan_item_id", :order=>{:lesson_plan_item_id=>:asc}}
+    t.datetime "start_at",              :null=>false
+    t.datetime "bonus_end_at"
+    t.datetime "end_at"
+    t.datetime "created_at",            :null=>false
+    t.datetime "updated_at",            :null=>false
   end
 
   create_table "course_survey_answer_options", force: :cascade do |t|
@@ -693,16 +709,17 @@ ActiveRecord::Schema.define(version: 20180906084425) do
   end
 
   create_table "course_users", force: :cascade do |t|
-    t.integer  "course_id",      :null=>false, :index=>{:name=>"fk__course_users_course_id", :order=>{:course_id=>:asc}}
-    t.integer  "user_id",        :null=>false, :index=>{:name=>"fk__course_users_user_id", :order=>{:user_id=>:asc}}
-    t.integer  "role",           :default=>0, :null=>false
-    t.string   "name",           :limit=>255, :null=>false
-    t.boolean  "phantom",        :default=>false, :null=>false
+    t.integer  "course_id",             :null=>false, :index=>{:name=>"fk__course_users_course_id", :order=>{:course_id=>:asc}}
+    t.integer  "user_id",               :null=>false, :index=>{:name=>"fk__course_users_user_id", :order=>{:user_id=>:asc}}
+    t.integer  "role",                  :default=>0, :null=>false
+    t.string   "name",                  :limit=>255, :null=>false
+    t.boolean  "phantom",               :default=>false, :null=>false
     t.datetime "last_active_at"
-    t.datetime "created_at",     :null=>false
-    t.datetime "updated_at",     :null=>false
-    t.integer  "creator_id",     :null=>false, :index=>{:name=>"fk__course_users_creator_id", :order=>{:creator_id=>:asc}}
-    t.integer  "updater_id",     :null=>false, :index=>{:name=>"fk__course_users_updater_id", :order=>{:updater_id=>:asc}}
+    t.datetime "created_at",            :null=>false
+    t.datetime "updated_at",            :null=>false
+    t.integer  "creator_id",            :null=>false, :index=>{:name=>"fk__course_users_creator_id", :order=>{:creator_id=>:asc}}
+    t.integer  "updater_id",            :null=>false, :index=>{:name=>"fk__course_users_updater_id", :order=>{:updater_id=>:asc}}
+    t.bigint   "reference_timeline_id", :index=>{:name=>"index_course_users_on_reference_timeline_id", :order=>{:reference_timeline_id=>:asc}}
 
     t.index ["course_id", "user_id"], :name=>"index_course_users_on_course_id_and_user_id", :unique=>true, :order=>{:course_id=>:asc, :user_id=>:asc}
   end
@@ -1027,6 +1044,9 @@ ActiveRecord::Schema.define(version: 20180906084425) do
   add_foreign_key "course_notifications", "courses", name: "fk_course_notifications_course_id"
   add_foreign_key "course_question_assessments", "course_assessment_questions", column: "question_id", name: "fk_course_question_assessments_question_id"
   add_foreign_key "course_question_assessments", "course_assessments", column: "assessment_id", name: "fk_course_question_assessments_assessment_id"
+  add_foreign_key "course_reference_timelines", "courses"
+  add_foreign_key "course_reference_times", "course_lesson_plan_items", column: "lesson_plan_item_id"
+  add_foreign_key "course_reference_times", "course_reference_timelines", column: "reference_timeline_id"
   add_foreign_key "course_survey_answer_options", "course_survey_answers", column: "answer_id", name: "fk_course_survey_answer_options_answer_id"
   add_foreign_key "course_survey_answer_options", "course_survey_question_options", column: "question_option_id", name: "fk_course_survey_answer_options_question_option_id"
   add_foreign_key "course_survey_answers", "course_survey_questions", column: "question_id", name: "fk_course_survey_answers_question_id"
@@ -1049,6 +1069,7 @@ ActiveRecord::Schema.define(version: 20180906084425) do
   add_foreign_key "course_user_invitations", "users", column: "confirmer_id", name: "fk_course_user_invitations_confirmer_id"
   add_foreign_key "course_user_invitations", "users", column: "creator_id", name: "fk_course_user_invitations_creator_id"
   add_foreign_key "course_user_invitations", "users", column: "updater_id", name: "fk_course_user_invitations_updater_id"
+  add_foreign_key "course_users", "course_reference_timelines", column: "reference_timeline_id"
   add_foreign_key "course_users", "courses", name: "fk_course_users_course_id"
   add_foreign_key "course_users", "users", column: "creator_id", name: "fk_course_users_creator_id"
   add_foreign_key "course_users", "users", column: "updater_id", name: "fk_course_users_updater_id"
