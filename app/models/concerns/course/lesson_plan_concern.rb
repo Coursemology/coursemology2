@@ -13,7 +13,7 @@ module Course::LessonPlanConcern
   def grouped_lesson_plan_items_with_milestones
     milestones = lesson_plan_milestones.ordered_by_date.to_a
     items = lesson_plan_items.where.not(id: lesson_plan_items.where(actable_type: Course::LessonPlan::Milestone.name)).
-            order(start_at: :asc).includes(:actable).to_a
+            ordered_by_date.to_a
 
     group_lesson_plan_items_with_milestones(milestones, items)
   end
