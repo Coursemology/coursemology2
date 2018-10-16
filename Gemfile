@@ -152,7 +152,6 @@ end
 
 group :ci do
   # Code Coverage reporters
-  gem 'codeclimate-test-reporter'
   gem 'codecov', :require => false
   gem 'rspec-retry'
 end
