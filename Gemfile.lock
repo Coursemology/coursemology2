@@ -459,8 +459,6 @@ GEM
     schema_monkey (2.1.5)
       activerecord (>= 4.2)
       modware (~> 0.1)
-    schema_plus_association_inverses (0.1.0)
-      schema_plus_core (>= 0.3.1)
     schema_plus_columns (0.3.0)
       activerecord (>= 4.2, < 5.3)
       its-it (~> 1.2)
@@ -639,7 +637,6 @@ DEPENDENCIES
   rwordnet!
   sanitize (>= 4.6.3)
   sass-rails
-  schema_plus_association_inverses (>= 0.1.0)
   schema_plus_columns
   schema_plus_indexes
   schema_plus_pg_indexes

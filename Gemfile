@@ -21,7 +21,6 @@ gem 'pg'
 gem 'schema_plus_columns'
 gem 'schema_plus_indexes'
 gem 'schema_plus_pg_indexes'
-gem 'schema_plus_association_inverses', '>= 0.1.0'
 gem 'schema_validations'
 # Instance/Course settings
 gem 'settings_on_rails'
