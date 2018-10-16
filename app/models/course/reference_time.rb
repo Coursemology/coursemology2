@@ -4,7 +4,7 @@ class Course::ReferenceTime < ApplicationRecord
   belongs_to :lesson_plan_item, class_name: Course::LessonPlan::Item.name, inverse_of: :reference_times
 
   validates :start_at, presence: true
-  validates :reference_timeline, presence: true
+  validates :reference_timeline, presence: true, uniqueness: { scope: :lesson_plan_item }
   validates :lesson_plan_item, presence: true
 
   def initialize_duplicate(duplicator, other)
