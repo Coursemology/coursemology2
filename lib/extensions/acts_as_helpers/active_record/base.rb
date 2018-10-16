@@ -24,14 +24,16 @@ module Extensions::ActsAsHelpers::ActiveRecord::Base
     #     1) _todo_#{actable.class.name}_title.html.slim    -> Title and any links if required.
     #     2) _todo_#{actable.class.name}_button.html.slim   -> Action button for todo.
     def acts_as_lesson_plan_item(has_todo: false)
-      acts_as :lesson_plan_item, class_name: Course::LessonPlan::Item.name
+      acts_as :lesson_plan_item, class_name: Course::LessonPlan::Item.name, autosave: true
 
       class << self
         attr_accessor :has_todo
       end
       self.has_todo = has_todo ? true : false
 
-      scope :active, -> { joins(:lesson_plan_item).merge(Course::LessonPlan::Item.currently_active) }
+      scope :active, (lambda do
+        joins(lesson_plan_item: :default_reference_time).merge(Course::ReferenceTime.currently_active)
+      end)
 
       extend LessonPlanItemClassMethods
       include LessonPlanItemInstanceMethods

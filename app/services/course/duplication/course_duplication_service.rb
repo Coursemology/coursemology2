@@ -42,8 +42,13 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
       raise ActiveRecord::Rollback unless new_course.save
       duplicator.set_option(:destination_course, new_course)
 
+      # Delete the auto-generated default reference timeline in favor of duplicating existing one
+      raise ActiveRecord::Rollback unless new_course.default_reference_timeline.destroy
+      new_course.reload
+
       source_course.duplication_manifest.each do |item|
         raise ActiveRecord::Rollback unless duplicator.duplicate(item).save
+        new_course.reload
       end
       raise ActiveRecord::Rollback unless update_course_settings(duplicator, new_course, source_course)
       raise ActiveRecord::Rollback unless update_sidebar_settings(duplicator, new_course, source_course)

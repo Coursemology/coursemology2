@@ -13,19 +13,28 @@ class Course::LessonPlan::Todo < ApplicationRecord
   belongs_to :user, inverse_of: :todos
   belongs_to :item, class_name: Course::LessonPlan::Item.name, inverse_of: :todos
 
-  default_scope { joins(:item).order('course_lesson_plan_items.start_at ASC') }
-
   # Started is not used as it is defined in Extensions::TimeBoundedRecord::ActiveRecord::Base
-  scope :opened, -> { joins(:item).where.has { item.start_at <= Time.zone.now } }
+  scope :opened, (lambda do
+    includes(item: { reference_times: :reference_timeline }).
+      where(course_reference_timelines: { default: true }).
+      merge(Course::ReferenceTime.where('course_reference_times.start_at <= ?', Time.zone.now)).
+      references(reference_times: :reference_timeline)
+  end)
   scope :published, -> { joins(:item).where('course_lesson_plan_items.published = ?', true) }
   scope :not_ignored, -> { where(ignore: false) }
   scope :not_completed, -> { where.not(workflow_state: :completed) }
   scope :from_course, (lambda do |course|
-    joins(:item).where('course_lesson_plan_items.course_id = ?', course.id)
+    includes(:item).where('course_lesson_plan_items.course_id = ?', course.id).references(:item)
   end)
   scope :pending_for, (lambda do |course_user|
     opened.published.not_ignored.from_course(course_user.course).not_completed.
       where('course_lesson_plan_todos.user_id = ?', course_user.user_id)
+  end)
+  scope :ordered_by_date, (lambda do
+    includes(item: { reference_times: :reference_timeline }).
+      where(course_reference_timelines: { default: true }).
+      merge(Course::ReferenceTime.order(:start_at)).
+      references(reference_times: :reference_timeline)
   end)
 
   class << self

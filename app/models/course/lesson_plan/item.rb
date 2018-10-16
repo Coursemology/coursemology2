@@ -2,9 +2,20 @@
 class Course::LessonPlan::Item < ApplicationRecord
   include Course::LessonPlan::ItemTodoConcern
 
+  has_many :reference_times,
+           foreign_key: :lesson_plan_item_id, class_name: Course::ReferenceTime.name, inverse_of: :lesson_plan_item,
+           dependent: :destroy, autosave: true
+  has_one :default_reference_time,
+          -> { joins(:reference_timeline).where(course_reference_timelines: { default: true }) },
+          foreign_key: :lesson_plan_item_id, class_name: Course::ReferenceTime.name, inverse_of: :lesson_plan_item,
+          autosave: true
+  validates :default_reference_time, presence: true
+  validate :validate_only_one_default_reference_time
+
   actable optional: true
   has_many_attachments on: :description
 
+  after_initialize :set_default_reference_time, if: :new_record?
   after_initialize :set_default_values, if: :new_record?
 
   validate :validate_presence_of_bonus_end_at,
@@ -14,11 +25,16 @@ class Course::LessonPlan::Item < ApplicationRecord
   # @!method self.ordered_by_date
   #   Orders the lesson plan items by the starting date.
   scope :ordered_by_date, (lambda do
-    order(:start_at)
+    includes(reference_times: :reference_timeline).
+      where(course_reference_timelines: { default: true }).
+      merge(Course::ReferenceTime.order(:start_at))
   end)
 
   scope :ordered_by_date_and_title, (lambda do
-    order(:start_at, :title)
+    includes(reference_times: :reference_timeline).
+      where(course_reference_timelines: { default: true }).
+      merge(Course::ReferenceTime.order(:start_at)).
+      order(:title)
   end)
 
   # @!method self.published
@@ -45,11 +61,20 @@ class Course::LessonPlan::Item < ApplicationRecord
   # @!method self.opening_within_next_day
   #   Scopes the lesson plan items to those which are opening in the next 24 hours.
   scope :opening_within_next_day, (lambda do
-    where(start_at: (Time.zone.now)..(1.day.from_now))
+    includes(reference_times: :reference_timeline).
+        where(course_reference_timelines: { default: true }).
+        merge(Course::ReferenceTime.where(start_at: (Time.zone.now)..(1.day.from_now))).
+        references(reference_times: :reference_timeline)
   end)
 
   belongs_to :course, inverse_of: :lesson_plan_items
   has_many :todos, class_name: Course::LessonPlan::Todo.name, inverse_of: :item, dependent: :destroy
+
+  # TODO(#3092): Figure out what to do with monkey-patched start_at / bonus_start_at / end_at
+  delegate :start_at, :start_at=, :start_at_changed?, :bonus_end_at, :bonus_end_at=, :bonus_end_at_changed?,
+           :end_at, :end_at=, :end_at_changed?,
+           to: :default_reference_time
+  before_validation :link_default_reference_time
 
   # Finds the lesson plan items which are starting within the next day for a given course.
   # Rearrange the items into a hash keyed by the actable type as a string.
@@ -62,7 +87,7 @@ class Course::LessonPlan::Item < ApplicationRecord
   # @param course [Course] The course to check for published items starting within the next day.
   # @return [Hash]
   def self.upcoming_items_from_course_by_type(course)
-    opening_items = course.lesson_plan_items.published.opening_within_next_day.includes(:actable)
+    opening_items = course.lesson_plan_items.published.opening_within_next_day
     opening_items_hash = Hash.new { |hash, actable_type| hash[actable_type] = [] }
     opening_items.select { |item| item.actable.include_in_consolidated_email?(:opening) }.
       each do |item|
@@ -78,14 +103,20 @@ class Course::LessonPlan::Item < ApplicationRecord
   # @param other [Object] The source object to copy attributes from.
   # @param duplicator [Duplicator] The Duplicator object
   def copy_attributes(other, duplicator)
+    self.course = duplicator.options[:destination_course]
+    self.default_reference_time = duplicator.duplicate(other.default_reference_time)
+
+    # TODO(#3092):
+    #   - For course duplication, we can copy all reference timelines
+    #   - For object duplication, we need to figure out which reference timelines
+    other_reference_times = other.reference_times - [other.default_reference_time]
+    self.reference_times = duplicator.duplicate(other_reference_times).unshift(default_reference_time)
+
     self.title = other.title
     self.description = other.description
     self.published = duplicator.options[:unpublish_all] ? false : other.published
     self.base_exp = other.base_exp
     self.time_bonus_exp = other.time_bonus_exp
-    self.start_at = duplicator.time_shift(other.start_at)
-    self.bonus_end_at = duplicator.time_shift(other.bonus_end_at) if other.bonus_end_at
-    self.end_at = duplicator.time_shift(other.end_at) if other.end_at
   end
 
   # Test if the lesson plan item has started for self directed learning.
@@ -105,6 +136,25 @@ class Course::LessonPlan::Item < ApplicationRecord
   def set_default_values
     self.base_exp ||= 0
     self.time_bonus_exp ||= 0
+  end
+
+  def set_default_reference_time
+    self.default_reference_time ||= Course::ReferenceTime.new(lesson_plan_item: self)
+  end
+
+  def link_default_reference_time
+    self.default_reference_time.reference_timeline = course.default_reference_timeline
+    self.default_reference_time.lesson_plan_item = self
+  end
+
+  # TODO(#3092): Validate only one for each reference timeline
+  def validate_only_one_default_reference_time
+    num_defaults = reference_times.
+                   includes(:reference_timeline).
+                   where(course_reference_timelines: { default: true }).
+                   count
+    return if num_defaults <= 1 # Could be 0 if item is new
+    errors.add(:reference_times, :must_have_at_most_one_default)
   end
 
   # User must set bonus_end_at if there's bonus exp
