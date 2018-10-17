@@ -40,7 +40,7 @@ class Course::Assessment::Answer < ApplicationRecord
   validates :submitted_at, :grade, :grader, :graded_at, absence: true, if: :attempting?
   validates :grade, :grader, :graded_at, presence: true, if: :graded?
   validates :actable_type, length: { maximum: 255 }, allow_nil: true
-  validates :workflow_state, length: { maximum: 255 }, allow_nil: true
+  validates :workflow_state, length: { maximum: 255 }
   validates :workflow_state, presence: true
   validates :grade, numericality: { greater_than: -1000, less_than: 1000 }, allow_nil: true
   validates :current_answer, inclusion: { in: [true, false] }
