@@ -6,7 +6,7 @@ class Course::Assessment::Answer::ProgrammingFile < ApplicationRecord
   validate :validate_content_size
   validates :filename, length: { maximum: 255 }, presence: true
   validates :answer, presence: true
-  validates :filename, uniqueness: { scope: [:answer_id], allow_nil: true,
+  validates :filename, uniqueness: { scope: [:answer_id],
                                      case_sensitive: false, if: -> { answer_id? && filename_changed? } }
   validates :answer_id, uniqueness: { scope: [:filename], allow_nil: true,
                                       case_sensitive: false, if: -> { filename? && answer_id_changed? } }
