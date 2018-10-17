@@ -8,7 +8,7 @@ class Course::Assessment::Answer::ProgrammingFile < ApplicationRecord
   validates :answer, presence: true
   validates :filename, uniqueness: { scope: [:answer_id],
                                      case_sensitive: false, if: -> { answer_id? && filename_changed? } }
-  validates :answer_id, uniqueness: { scope: [:filename], allow_nil: true,
+  validates :answer_id, uniqueness: { scope: [:filename],
                                       case_sensitive: false, if: -> { filename? && answer_id_changed? } }
 
   belongs_to :answer, class_name: Course::Assessment::Answer::Programming.name, inverse_of: :files
