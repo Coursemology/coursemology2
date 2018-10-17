@@ -5,6 +5,7 @@ class Course::ReferenceTimeline < ApplicationRecord
            class_name: Course::ReferenceTime.name, inverse_of: :reference_timeline, dependent: :destroy
 
   validates :default, inclusion: [true, false]
+  validates :course, presence: true
 
   def initialize_duplicate(duplicator, _other)
     self.course = duplicator.options[:destination_course]

@@ -24,11 +24,12 @@ class Course::LessonPlan::Item < ApplicationRecord
   validates :actable_type, length: { maximum: 255 }, allow_nil: true
   validates :title, length: { maximum: 255 }, presence: true
   validates :published, inclusion: { in: [true, false] }
+  validates :movable, inclusion: { in: [true, false] }
+  validates :triggers_recomputation, inclusion: { in: [true, false] }
   validates :base_exp, numericality: { only_integer: true, greater_than_or_equal_to: -2_147_483_648,
                                        less_than: 2_147_483_648 }, presence: true
   validates :time_bonus_exp, numericality: { only_integer: true, greater_than_or_equal_to: -2_147_483_648,
                                              less_than: 2_147_483_648 }, presence: true
-  validates :start_at, presence: true
   validates :closing_reminder_token, numericality: true, allow_nil: true
   validates :creator, presence: true
   validates :updater, presence: true
