@@ -5,7 +5,7 @@ class Course::Assessment::Question::ProgrammingTestCase < ApplicationRecord
   validates :identifier, length: { maximum: 255 }, presence: true
   validates :test_case_type, presence: true
   validates :question, presence: true
-  validates :identifier, uniqueness: { scope: [:question_id], allow_nil: true,
+  validates :identifier, uniqueness: { scope: [:question_id],
                                        if: -> { question_id? && identifier_changed? } }
   validates :question_id, uniqueness: { scope: [:identifier], allow_nil: true,
                                         if: -> { identifier? && question_id_changed? } }
