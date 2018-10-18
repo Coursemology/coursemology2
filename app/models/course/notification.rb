@@ -5,7 +5,6 @@
 class Course::Notification < ApplicationRecord
   enum notification_type: { feed: 0, email: 1 }
 
-  validates :notification_type, presence: true
   validates :activity, presence: true
   validates :course, presence: true
 

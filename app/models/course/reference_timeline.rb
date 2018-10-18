@@ -4,7 +4,7 @@ class Course::ReferenceTimeline < ApplicationRecord
   has_many :reference_times,
            class_name: Course::ReferenceTime.name, inverse_of: :reference_timeline, dependent: :destroy
 
-  validates :default, inclusion: [true, false]
+  validates :default, inclusion: { in: [true, false] }
   validates :course, presence: true
 
   def initialize_duplicate(duplicator, _other)

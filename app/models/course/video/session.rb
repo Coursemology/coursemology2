@@ -6,6 +6,8 @@ class Course::Video::Session < ApplicationRecord
   validates :last_video_time, numericality: { only_integer: true, greater_than_or_equal_to: -2_147_483_648,
                                               less_than: 2_147_483_648 }, allow_nil: true
   validates :submission, presence: true
+  validates :creator, presence: true
+  validates :updater, presence: true
 
   belongs_to :submission, inverse_of: :sessions
   has_many :events, -> { order(:sequence_num) }, inverse_of: :session, dependent: :destroy
