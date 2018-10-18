@@ -22,7 +22,7 @@ class Course::Material::Folder < ApplicationRecord
   validates :updater, presence: true
   validates :can_student_upload, inclusion: { in: [true, false] }
   validates :course, presence: true
-  validates :name, uniqueness: { scope: [:parent_id], allow_nil: true,
+  validates :name, uniqueness: { scope: [:parent_id],
                                  case_sensitive: false, if: -> { parent_id? && name_changed? } }
   validates :parent_id, uniqueness: { scope: [:name], allow_nil: true,
                                       case_sensitive: false, if: -> { name? && parent_id_changed? } }
