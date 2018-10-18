@@ -10,7 +10,7 @@ class Course::Forum < ApplicationRecord
   validates :course, presence: true
   validates :slug, uniqueness: { scope: [:course_id], allow_nil: true,
                                  if: -> { course_id? && slug_changed? } }
-  validates :course_id, uniqueness: { scope: [:slug], allow_nil: true,
+  validates :course_id, uniqueness: { scope: [:slug],
                                       if: -> { slug? && course_id_changed? } }
 
   belongs_to :course, inverse_of: :forums
