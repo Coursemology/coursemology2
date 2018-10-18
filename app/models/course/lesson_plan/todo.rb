@@ -17,7 +17,7 @@ class Course::LessonPlan::Todo < ApplicationRecord
   validates :user, presence: true
   validates :item, presence: true
   validates :user_id, uniqueness: { scope: [:item_id], if: -> { item_id? && user_id_changed? } }
-  validates :item_id, uniqueness: { scope: [:user_id], allow_nil: true, if: -> { user_id? && item_id_changed? } }
+  validates :item_id, uniqueness: { scope: [:user_id], if: -> { user_id? && item_id_changed? } }
 
   belongs_to :user, inverse_of: :todos
   belongs_to :item, class_name: Course::LessonPlan::Item.name, inverse_of: :todos
