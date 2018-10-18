@@ -7,7 +7,7 @@ class Course::Assessment::Question::ProgrammingTemplateFile < ApplicationRecord
   validates :question, presence: true
   validates :filename, uniqueness: { scope: [:question_id], case_sensitive: false,
                                      if: -> { question_id? && filename_changed? } }
-  validates :question_id, uniqueness: { scope: [:filename], allow_nil: true, case_sensitive: false,
+  validates :question_id, uniqueness: { scope: [:filename], case_sensitive: false,
                                         if: -> { filename? && question_id_changed? } }
 
   belongs_to :question, class_name: Course::Assessment::Question::Programming.name,
