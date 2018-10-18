@@ -7,7 +7,7 @@ class Course::Assessment::Question::ProgrammingTestCase < ApplicationRecord
   validates :question, presence: true
   validates :identifier, uniqueness: { scope: [:question_id],
                                        if: -> { question_id? && identifier_changed? } }
-  validates :question_id, uniqueness: { scope: [:identifier], allow_nil: true,
+  validates :question_id, uniqueness: { scope: [:identifier],
                                         if: -> { identifier? && question_id_changed? } }
 
   belongs_to :question, class_name: Course::Assessment::Question::Programming.name,
