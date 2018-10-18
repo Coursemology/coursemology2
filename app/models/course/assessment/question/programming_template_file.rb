@@ -5,7 +5,7 @@ class Course::Assessment::Question::ProgrammingTemplateFile < ApplicationRecord
   validates :content, exclusion: [nil]
   validates :filename, length: { maximum: 255 }, presence: true
   validates :question, presence: true
-  validates :filename, uniqueness: { scope: [:question_id], allow_nil: true, case_sensitive: false,
+  validates :filename, uniqueness: { scope: [:question_id], case_sensitive: false,
                                      if: -> { question_id? && filename_changed? } }
   validates :question_id, uniqueness: { scope: [:filename], allow_nil: true, case_sensitive: false,
                                         if: -> { filename? && question_id_changed? } }
