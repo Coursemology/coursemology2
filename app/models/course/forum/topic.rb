@@ -21,7 +21,7 @@ class Course::Forum::Topic < ApplicationRecord
   validates :creator, presence: true
   validates :updater, presence: true
   validates :forum, presence: true
-  validates :forum_id, uniqueness: { scope: [:slug], allow_nil: true,
+  validates :forum_id, uniqueness: { scope: [:slug],
                                      if: -> { slug? && forum_id_changed? } }
   validates :slug, uniqueness: { scope: [:forum_id], allow_nil: true,
                                  if: -> { forum_id? && slug_changed? } }
