@@ -199,6 +199,7 @@ class MaterialSummernote extends React.Component {
                 inlineCode: this.inlineCodeButton,
               },
               lang: i18nLocale,
+              followingToolbar: false,
             }}
             value={this.props.value}
             onChange={this.props.onChange}
