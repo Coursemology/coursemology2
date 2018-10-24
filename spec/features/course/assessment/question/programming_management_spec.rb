@@ -54,7 +54,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
 
       scenario 'I can upload a template package', js: true do
         question = create(:course_assessment_question_programming,
-                          assessment: assessment, template_file_count: 0, template_package: true)
+                          assessment: assessment, template_file_count: 0, package_type: :zip_upload)
         visit edit_course_assessment_question_programming_path(course, assessment, question)
         expect(page).to have_xpath('//form[@id=\'programmming-question-form\']')
 
@@ -76,7 +76,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         wait_for_job
 
         expect(page).to_not have_xpath('//form//*[contains(@class, \'fa-spinner\')]')
-        expect(current_path).to eq(course_assessment_path(course, assessment))
+        expect(page).to have_current_path(course_assessment_path(course, assessment))
         visit edit_course_assessment_question_programming_path(course, assessment, question)
 
         expect(page).to have_selector('div.alert.alert-success')
@@ -106,7 +106,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         page.find('#programmming-question-form-submit').click
 
         expect(page).to_not have_xpath('//form//*[contains(@class, \'fa-spinner\')]')
-        expect(current_path).to eq(course_assessment_path(course, assessment))
+        expect(page).to have_current_path(course_assessment_path(course, assessment))
         expect(question.reload.maximum_grade).to eq(maximum_grade)
       end
 
@@ -117,7 +117,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         delete_path = course_assessment_question_programming_path(course, assessment, question)
         find_link(nil, href: delete_path).click
 
-        expect(current_path).to eq(course_assessment_path(course, assessment))
+        expect(page).to have_current_path(course_assessment_path(course, assessment))
         expect(page).to have_no_content_tag_for(question)
       end
 
@@ -146,9 +146,9 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         page.find('#programmming-question-form-submit').click
         wait_for_job
 
-        expect(page).to_not have_xpath('//form//*[contains(@class, \'fa-spinner\')]')
-        expect(current_path).to \
-          start_with(course_assessment_path(course, assessment))
+        expect(page).to have_no_xpath('//form//*[contains(@class, \'fa-spinner\')]')
+        expect(page).to \
+          have_no_current_path(new_course_assessment_question_programming_path(course, assessment))
 
         question_created = assessment.questions.first.specific
         expect(question_created.memory_limit).to eq(question_attributes[:memory_limit])
