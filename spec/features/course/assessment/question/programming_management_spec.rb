@@ -39,7 +39,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
 
         page.execute_script("$('select[name=\"question_programming[language_id]\"]').show()")
         select question_attributes[:language].name, from: 'question_programming[language_id]'
-        page.find('#programmming-question-form-submit').click
+        page.find('#programming-question-form-submit').click
 
         expect(page).to_not have_xpath('//form//*[contains(@class, \'fa-spinner\')]')
         expect(current_path).to eq(course_assessment_path(course, assessment))
@@ -64,7 +64,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
                     File.join(ActionController::TestCase.fixture_path,
                               'course/empty_programming_question_template.zip'),
                     visible: false
-        page.find('#programmming-question-form-submit').click
+        page.find('#programming-question-form-submit').click
         wait_for_job
         expect(page).to have_selector('div.alert.alert-danger')
 
@@ -72,7 +72,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         attach_file 'question_programming[file]',
                     File.join(ActionController::TestCase.fixture_path, 'course/programming_question_template.zip'),
                     visible: false
-        page.find('#programmming-question-form-submit').click
+        page.find('#programming-question-form-submit').click
         wait_for_job
 
         expect(page).to_not have_xpath('//form//*[contains(@class, \'fa-spinner\')]')
@@ -103,7 +103,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         # the new value will append to the new value instead of replacing it.
         fill_in 'question_programming[maximum_grade]', with: ''
         fill_in 'question_programming[maximum_grade]', with: maximum_grade
-        page.find('#programmming-question-form-submit').click
+        page.find('#programming-question-form-submit').click
 
         expect(page).to_not have_xpath('//form//*[contains(@class, \'fa-spinner\')]')
         expect(page).to have_current_path(course_assessment_path(course, assessment))
@@ -143,7 +143,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         attach_file 'question_programming[file]',
                     File.join(ActionController::TestCase.fixture_path, 'course/programming_question_template.zip'),
                     visible: false
-        page.find('#programmming-question-form-submit').click
+        page.find('#programming-question-form-submit').click
         wait_for_job
 
         expect(page).to have_no_xpath('//form//*[contains(@class, \'fa-spinner\')]')
