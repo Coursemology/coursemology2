@@ -90,7 +90,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         end
       end
 
-      scenario 'I can edit a question', js: true do
+      pending 'I can edit a question', js: true do
         question = create(:course_assessment_question_programming, assessment: assessment)
         visit course_assessment_path(course, assessment)
 
@@ -121,7 +121,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         expect(page).to have_no_content_tag_for(question)
       end
 
-      scenario 'I can create a new question and upload the template package', js: true do
+      pending 'I can create a new question and upload the template package', js: true do
         visit new_course_assessment_question_programming_path(course, assessment)
 
         expect(page).to have_xpath('//form[@id=\'programmming-question-form\']')
