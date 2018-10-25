@@ -116,6 +116,7 @@ group :test do
   gem 'capybara-selenium'
   gem 'chromedriver-helper'
 
+  gem 'aws-sdk-s3'
   # Make screen shots in tests, helps with the debugging of JavaScript tests.
   gem 'capybara-screenshot'
 end

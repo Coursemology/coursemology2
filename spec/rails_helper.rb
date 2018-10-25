@@ -59,4 +59,22 @@ RSpec.configure do |config|
 
   # Old school have_tag, with_tag(and more) matchers for rspec 3
   config.include RSpecHtmlMatchers
+
+  # Upload Capybara screenshots to S3 in CI
+  if ENV['CI']
+    Capybara::Screenshot.s3_configuration = {
+      s3_client_credentials: {
+        access_key_id: ENV['CAPYBARA_SCREENSHOT_ACCESS_KEY_ID'],
+        secret_access_key: ENV['CAPYBARA_SCREENSHOT_SECRET_ACCESS_KEY'],
+        region: ENV['CAPYBARA_SCREENSHOT_REGION']
+      },
+      bucket_name: ENV['CAPYBARA_SCREENSHOT_BUCKET_NAME']
+    }
+
+    Capybara::Screenshot.s3_object_configuration = {
+      acl: 'public-read'
+    }
+
+    Capybara::Screenshot.prune_strategy = { keep: 10 }
+  end
 end
