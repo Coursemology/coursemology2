@@ -33,8 +33,6 @@ env:
   matrix:
     - GROUP="1,2"
     - GROUP="3,4"
-    - GROUP="5,6"
-    - GROUP="7,8"
     - GROUP="misc"
 
 before_install:
@@ -64,7 +62,7 @@ script:
   - 'if [ "$GROUP" = "misc" ]; then yarn test; fi'
   - 'if [ "$GROUP" = "misc" ]; then cd ..; fi'
   - 'if [ "$GROUP" != "misc" ]; then export CODECOV_FLAG=backend; fi'
-  - 'if [ "$GROUP" != "misc" ]; then bundle exec parallel_rspec spec -n 8 --only-group $GROUP --runtime-log spec/fixtures/parallel_runtime_rspec.log; fi'
+  - 'if [ "$GROUP" != "misc" ]; then bundle exec parallel_rspec spec -n 4 --only-group $GROUP --runtime-log spec/fixtures/parallel_runtime_rspec.log; fi'
 after_script:
   - 'if [ "$GROUP" = "misc" ]; then bash <(curl -s https://codecov.io/bash) -F frontend -s client/coverage; fi'
 
