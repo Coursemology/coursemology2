@@ -650,7 +650,7 @@ class ProgrammingQuestionForm extends React.Component {
             label={this.submitButtonText()}
             labelPosition="before"
             primary
-            id="programmming-question-form-submit"
+            id="programming-question-form-submit"
             type="submit"
             disabled={this.props.data.get('is_loading')}
             icon={this.props.data.get('is_loading') ? <i className="fa fa-spinner fa-lg fa-spin" /> : null}

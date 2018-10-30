@@ -123,6 +123,8 @@ RSpec.feature 'Course: Achievements' do
 
         # Create level condition
         find('.add-condition-btn').click
+        sleep 0.5 # need to wait for the menu to expand fully so we don't click the wrong button
+        # TODO: disable animations globally in test env
         find_link(nil, href: new_course_achievement_condition_level_path(course, achievement)).click
 
         expect(page).to have_text(I18n.t('course.condition.levels.new.header'))

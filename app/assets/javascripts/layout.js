@@ -104,6 +104,7 @@
         buttons: {
           inlineCode: inlineCodeButton,
         },
+        followingToolbar: false,
       };
 
       if ($(this).hasClass('airmode')) {
