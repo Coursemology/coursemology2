@@ -3,6 +3,6 @@
 
 = simple_form_for @folder, url: upload_materials_course_material_folder_path(current_course, @folder),
                            method: :put do |f|
-  = f.file_field :files_attributes, multiple: true
+  = f.file_field :files_attributes, multiple: true, required: true
 
   = f.button :submit, t('.submit')
