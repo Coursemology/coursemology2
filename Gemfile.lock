@@ -171,7 +171,7 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (~> 1.2)
       xpath (~> 3.2)
-    capybara-screenshot (1.0.21)
+    capybara-screenshot (1.0.22)
       capybara (>= 1.0, < 4)
       launchy
     capybara-selenium (0.0.6)
