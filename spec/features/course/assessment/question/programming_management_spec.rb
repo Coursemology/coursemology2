@@ -7,7 +7,11 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:assessment) { create(:assessment, course: course) }
-    before { login_as(user, scope: :user) }
+    before :each do
+      login_as(user, scope: :user)
+      assessment.save
+      assessment.reload
+    end
 
     context 'As a Course Manager' do
       let(:user) { create(:course_manager, course: course).user }
@@ -150,7 +154,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         expect(page).to \
           have_no_current_path(new_course_assessment_question_programming_path(course, assessment))
 
-        question_created = assessment.questions.first.specific
+        question_created = assessment.reload.questions.first.specific
         expect(question_created.memory_limit).to eq(question_attributes[:memory_limit])
         expect(question_created.time_limit).to eq(question_attributes[:time_limit])
         expect(question_created.attempt_limit).to eq(question_attributes[:attempt_limit])
