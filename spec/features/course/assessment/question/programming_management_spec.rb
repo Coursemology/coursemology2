@@ -22,7 +22,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
           new_course_assessment_question_programming_path(course, assessment)
         )
         visit new_course_assessment_question_programming_path(course, assessment)
-        expect(page).to have_xpath('//form[@id=\'programmming-question-form\']')
+        expect(page).to have_xpath('//form[@id=\'programming-question-form\']')
         question_attributes = attributes_for(:course_assessment_question_programming)
         fill_in 'question_programming[title]', with: question_attributes[:title]
 
@@ -56,7 +56,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         question = create(:course_assessment_question_programming,
                           assessment: assessment, template_file_count: 0, package_type: :zip_upload)
         visit edit_course_assessment_question_programming_path(course, assessment, question)
-        expect(page).to have_xpath('//form[@id=\'programmming-question-form\']')
+        expect(page).to have_xpath('//form[@id=\'programming-question-form\']')
 
         page.find('#question_programming_file', visible: false).click
 
@@ -90,13 +90,13 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         end
       end
 
-      pending 'I can edit a question', js: true do
+      scenario 'I can edit a question', js: true do
         question = create(:course_assessment_question_programming, assessment: assessment)
         visit course_assessment_path(course, assessment)
 
         edit_path = edit_course_assessment_question_programming_path(course, assessment, question)
         find_link(nil, href: edit_path).click
-        expect(page).to have_xpath('//form[@id=\'programmming-question-form\']')
+        expect(page).to have_xpath('//form[@id=\'programming-question-form\']')
 
         maximum_grade = 999.9
         # For some reasons we have to clear the old field first then can fill in the value, otherwise
@@ -121,10 +121,10 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         expect(page).to have_no_content_tag_for(question)
       end
 
-      pending 'I can create a new question and upload the template package', js: true do
+      scenario 'I can create a new question and upload the template package', js: true do
         visit new_course_assessment_question_programming_path(course, assessment)
 
-        expect(page).to have_xpath('//form[@id=\'programmming-question-form\']')
+        expect(page).to have_xpath('//form[@id=\'programming-question-form\']')
 
         question_attributes = attributes_for(:course_assessment_question_programming)
         fill_in 'question_programming[maximum_grade]', with: question_attributes[:maximum_grade]

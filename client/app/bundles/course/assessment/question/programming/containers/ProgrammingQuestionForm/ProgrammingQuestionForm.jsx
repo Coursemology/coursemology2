@@ -108,7 +108,7 @@ class ProgrammingQuestionForm extends React.Component {
   }
 
   componentDidMount() {
-    this.summernoteEditors = $('#programmming-question-form .note-editor .note-editable');
+    this.summernoteEditors = $('#programming-question-form .note-editor .note-editable');
   }
 
   componentWillReceiveProps(nextProps) {
@@ -496,7 +496,7 @@ class ProgrammingQuestionForm extends React.Component {
             : null
         }
         <form
-          id="programmming-question-form"
+          id="programming-question-form"
           action={formData.get('path')}
           method="post"
           encType="multipart/form-data"
