@@ -215,7 +215,7 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments', j
         expect(page).to have_selector('span', text: 'RUN CODE', count: 2)
       end
 
-      scenario 'I see submitted programmming answers with code tags' do
+      scenario 'I see submitted programming answers with code tags' do
         # Modify programming answer content
         programming_answer = programming_assessment_submission.answers.first.actable
         file = programming_answer.files.first
