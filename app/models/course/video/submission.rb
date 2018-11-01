@@ -6,8 +6,10 @@ class Course::Video::Submission < ApplicationRecord
 
   acts_as_experience_points_record
 
-  schema_validations except: [:creator_id, :video_id]
   validate :validate_consistent_user, :validate_unique_submission, on: :create
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :video, presence: true
 
   belongs_to :video, inverse_of: :submissions
 

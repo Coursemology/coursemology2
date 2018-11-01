@@ -9,6 +9,14 @@ class Course::Material < ApplicationRecord
 
   validate :validate_name_is_unique_among_folders
   validates_with FilenameValidator
+  validates :name, length: { maximum: 255 }, presence: true
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :folder, presence: true
+  validates :name, uniqueness: { scope: [:folder_id], case_sensitive: false,
+                                 if: -> { folder_id? && name_changed? } }
+  validates :folder_id, uniqueness: { scope: [:name], case_sensitive: false,
+                                      if: -> { name? && folder_id_changed? } }
 
   scope :in_concrete_folder, -> { joins(:folder).merge(Folder.concrete) }
 

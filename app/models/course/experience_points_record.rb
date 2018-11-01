@@ -7,6 +7,20 @@ class Course::ExperiencePointsRecord < ApplicationRecord
 
   validates :reason, presence: true, if: :manually_awarded?
 
+  validates :actable_type, length: { maximum: 255 }, allow_nil: true
+  validates :points_awarded, numericality: { only_integer: true, greater_than_or_equal_to: -2_147_483_648,
+                                             less_than: 2_147_483_648 }, allow_nil: true
+  validates :reason, length: { maximum: 255 }, allow_nil: true
+  validates :draft_points_awarded, numericality: { only_integer: true, greater_than_or_equal_to: -2_147_483_648,
+                                                   less_than: 2_147_483_648 }, allow_nil: true
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :course_user, presence: true
+  validates :actable_type, uniqueness: { scope: [:actable_id], allow_nil: true,
+                                         if: -> { actable_id? && actable_type_changed? } }
+  validates  :actable_id, uniqueness: { scope: [:actable_type], allow_nil: true,
+                                        if: -> { actable_type? && actable_id_changed? } }
+
   belongs_to :course_user, inverse_of: :experience_points_records
   belongs_to :awarder, class_name: User.name, inverse_of: nil, optional: true
 

@@ -34,10 +34,13 @@ class Course::Assessment::Submission < ApplicationRecord
     end
   end
 
-  schema_validations except: [:creator_id, :assessment_id]
   validate :validate_consistent_user, :validate_unique_submission, on: :create
   validate :validate_awarded_attributes, if: :published?
   validates :submitted_at, presence: true, unless: :attempting?
+  validates :workflow_state, length: { maximum: 255 }, presence: true
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :assessment, presence: true
 
   belongs_to :assessment, inverse_of: :submissions
 

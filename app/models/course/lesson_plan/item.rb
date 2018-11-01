@@ -21,6 +21,23 @@ class Course::LessonPlan::Item < ApplicationRecord
   validate :validate_presence_of_bonus_end_at,
            :validate_start_at_cannot_be_after_end_at
   validates :base_exp, :time_bonus_exp, numericality: { greater_than_or_equal_to: 0 }
+  validates :actable_type, length: { maximum: 255 }, allow_nil: true
+  validates :title, length: { maximum: 255 }, presence: true
+  validates :published, inclusion: { in: [true, false] }
+  validates :movable, inclusion: { in: [true, false] }
+  validates :triggers_recomputation, inclusion: { in: [true, false] }
+  validates :base_exp, numericality: { only_integer: true, greater_than_or_equal_to: -2_147_483_648,
+                                       less_than: 2_147_483_648 }, presence: true
+  validates :time_bonus_exp, numericality: { only_integer: true, greater_than_or_equal_to: -2_147_483_648,
+                                             less_than: 2_147_483_648 }, presence: true
+  validates :closing_reminder_token, numericality: true, allow_nil: true
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :course, presence: true
+  validates :actable_id, uniqueness: { scope: [:actable_type], allow_nil: true,
+                                       if: -> { actable_type? && actable_id_changed? } }
+  validates :actable_type, uniqueness: { scope: [:actable_id], allow_nil: true,
+                                         if: -> { actable_id? && actable_type_changed? } }
 
   # @!method self.ordered_by_date
   #   Orders the lesson plan items by the starting date.

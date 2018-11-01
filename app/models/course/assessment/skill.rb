@@ -1,10 +1,14 @@
 # frozen_string_literal: true
 class Course::Assessment::Skill < ApplicationRecord
+  validate :validate_consistent_course
+  validates :title, length: { maximum: 255 }, presence: true
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :course, presence: true
+
   belongs_to :course, inverse_of: :assessment_skills
   belongs_to :skill_branch, class_name: Course::Assessment::SkillBranch.name, inverse_of: :skills, optional: true
   has_and_belongs_to_many :question_assessments, class_name: Course::QuestionAssessment.name
-
-  validate :validate_consistent_course
 
   # @!method self.order_by_title(direction = :asc)
   #   Orders the skills alphabetically by title.

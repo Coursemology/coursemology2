@@ -3,9 +3,16 @@ class Course::VirtualClassroom < ApplicationRecord
   attr_writer :duration
   before_validation :convert_duration_to_end_at
   acts_as_readable on: :updated_at
+
+  validates :title, length: { maximum: 255 }, presence: true
+  validates :start_at, presence: true
+  validates :end_at, presence: true
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :course, presence: true
+
   has_many_attachments on: :content
   belongs_to :instructor, class_name: 'User', foreign_key: :instructor_id, inverse_of: nil, optional: true
-
   belongs_to :course, inverse_of: :virtual_classrooms
 
   scope :sorted_by_date, -> { order(start_at: :desc) }

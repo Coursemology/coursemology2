@@ -13,6 +13,7 @@ class Course::Condition::Achievement < ApplicationRecord
   end
 
   validate :validate_achievement_condition, if: :achievement_id_changed?
+  validates :achievement, presence: true
 
   belongs_to :achievement, class_name: Course::Achievement.name, inverse_of: :achievement_conditions
 

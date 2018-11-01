@@ -4,6 +4,12 @@
 #
 # @api notifications
 class Activity < ApplicationRecord
+  validates :object_type, length: { maximum: 255 }, presence: true
+  validates :event, length: { maximum: 255 }, presence: true
+  validates :notifier_type, length: { maximum: 255 }, presence: true
+  validates :object, presence: true
+  validates :actor, presence: true
+
   belongs_to :object, polymorphic: true
   belongs_to :actor, inverse_of: :activities, class_name: User.name
   has_many :course_notifications, class_name: Course::Notification.name, dependent: :destroy

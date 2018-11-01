@@ -1,11 +1,15 @@
 # frozen_string_literal: true
 class Course::Assessment::Answer::ProgrammingFile < ApplicationRecord
-  schema_validations except: [:content]
-
   before_validation :normalize_filename
 
   validates :content, exclusion: [nil]
   validate :validate_content_size
+  validates :filename, length: { maximum: 255 }, presence: true
+  validates :answer, presence: true
+  validates :filename, uniqueness: { scope: [:answer_id],
+                                     case_sensitive: false, if: -> { answer_id? && filename_changed? } }
+  validates :answer_id, uniqueness: { scope: [:filename],
+                                      case_sensitive: false, if: -> { filename? && answer_id_changed? } }
 
   belongs_to :answer, class_name: Course::Assessment::Answer::Programming.name, inverse_of: :files
   has_many :annotations, class_name: Course::Assessment::Answer::ProgrammingFileAnnotation.name,

@@ -6,6 +6,12 @@ class Course::Video < ApplicationRecord
   include Course::Video::UrlConcern
   include Course::Video::WatchStatisticsConcern
 
+  validate :url_unchanged
+  validates :url, length: { maximum: 255 }, presence: true
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :tab, presence: true
+
   belongs_to :tab, class_name: Course::Video::Tab.name, inverse_of: :videos
   has_many :submissions, class_name: Course::Video::Submission.name,
                          inverse_of: :video, dependent: :destroy
@@ -15,8 +21,6 @@ class Course::Video < ApplicationRecord
   has_many :posts, through: :discussion_topics, class_name: Course::Discussion::Post.name
   has_many :sessions, through: :submissions
   has_many :events, through: :sessions
-
-  validate :url_unchanged
 
   scope :from_course, ->(course) { where(course_id: course) }
 

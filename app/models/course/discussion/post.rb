@@ -14,6 +14,10 @@ class Course::Discussion::Post < ApplicationRecord
 
   validate :parent_topic_consistency
   validates :text, presence: true
+  validates :title, length: { maximum: 255 }, allow_nil: true
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :topic, presence: true
 
   belongs_to :topic, inverse_of: :posts, touch: true
   has_many :votes, inverse_of: :post, dependent: :destroy

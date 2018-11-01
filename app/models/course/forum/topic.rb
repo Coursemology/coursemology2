@@ -8,15 +8,26 @@ class Course::Forum::Topic < ApplicationRecord
 
   after_initialize :set_defaults, if: :new_record?
   after_initialize :generate_initial_post, unless: :persisted?
+  after_initialize :set_course, if: :new_record?
   after_create :mark_as_read_for_creator
   after_update :mark_as_read_for_updater
 
   enum topic_type: { normal: 0, question: 1, sticky: 2, announcement: 3 }
 
+  validates :title, length: { maximum: 255 }, presence: true
+  validates :slug, length: { maximum: 255 }, allow_nil: true
+  validates :resolved, inclusion: { in: [true, false] }
+  validates :latest_post_at, presence: true
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :forum, presence: true
+  validates :forum_id, uniqueness: { scope: [:slug],
+                                     if: -> { slug? && forum_id_changed? } }
+  validates :slug, uniqueness: { scope: [:forum_id], allow_nil: true,
+                                 if: -> { forum_id? && slug_changed? } }
+
   has_many :views, dependent: :destroy, inverse_of: :topic
   belongs_to :forum, inverse_of: :topics
-
-  after_initialize :set_course, if: :new_record?
 
   # @!attribute [r] vote_count
   #   The number of votes in this topic.

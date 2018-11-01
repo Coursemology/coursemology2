@@ -7,6 +7,10 @@ class UserNotification < ApplicationRecord
 
   enum notification_type: { popup: 0, email: 1 }
 
+  validates :notification_type, presence: true
+  validates :activity, presence: true
+  validates :user, presence: true
+
   belongs_to :activity, inverse_of: :user_notifications
   belongs_to :user, inverse_of: :notifications
 

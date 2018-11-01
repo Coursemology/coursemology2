@@ -3,6 +3,16 @@ class Course::Forum < ApplicationRecord
   extend FriendlyId
   friendly_id :slug_candidates, use: :scoped, scope: :course
 
+  validates :name, length: { maximum: 255 }, presence: true
+  validates :slug, length: { maximum: 255 }, allow_nil: true
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :course, presence: true
+  validates :slug, uniqueness: { scope: [:course_id], allow_nil: true,
+                                 if: -> { course_id? && slug_changed? } }
+  validates :course_id, uniqueness: { scope: [:slug],
+                                      if: -> { slug? && course_id_changed? } }
+
   belongs_to :course, inverse_of: :forums
   has_many :topics, dependent: :destroy, inverse_of: :forum
   has_many :subscriptions, dependent: :destroy, inverse_of: :forum

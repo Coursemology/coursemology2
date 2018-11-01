@@ -1,7 +1,13 @@
 # frozen_string_literal: true
 class Course::Level < ApplicationRecord
   include Course::ModelComponentHost::Component
-  validates :experience_points_threshold, numericality: { greater_than_or_equal_to: 0 }
+  validates :experience_points_threshold, numericality: { greater_than_or_equal_to: 0, less_than: 2_147_483_648 },
+                                          presence: true
+  validates :course, presence: true
+  validates :experience_points_threshold, uniqueness: { scope: [:course_id],
+                                                        if: -> { course_id? && experience_points_threshold_changed? } }
+  validates :course_id, uniqueness: { scope: [:experience_points_threshold],
+                                      if: -> { experience_points_threshold && course_id_changed? } }
 
   belongs_to :course, inverse_of: :levels
 

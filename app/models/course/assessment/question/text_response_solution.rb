@@ -4,6 +4,10 @@ class Course::Assessment::Question::TextResponseSolution < ApplicationRecord
 
   before_validation :strip_whitespace
   validate :validate_grade
+  validates :solution_type, presence: true
+  validates :solution, presence: true
+  validates :grade, numericality: { greater_than: -1000, less_than: 1000 }, presence: true
+  validates :question, presence: true
 
   belongs_to :question, class_name: Course::Assessment::Question::TextResponse.name,
                         inverse_of: :solutions

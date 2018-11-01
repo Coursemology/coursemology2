@@ -2,6 +2,9 @@
 class Course::Assessment::Answer::ProgrammingFileAnnotation < ApplicationRecord
   acts_as_discussion_topic display_globally: true
 
+  validates :line, numericality: { only_integer: true }, presence: true
+  validates :file, presence: true
+
   belongs_to :file, class_name: Course::Assessment::Answer::ProgrammingFile.name,
                     inverse_of: :annotations
 

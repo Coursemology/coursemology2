@@ -6,6 +6,13 @@ class Course::Achievement < ApplicationRecord
 
   after_initialize :set_defaults, if: :new_record?
 
+  validates :title, length: { maximum: 255 }, presence: true
+  validates :weight, numericality: { only_integer: true }, presence: true
+  validates :published, inclusion: { in: [true, false] }
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :course, presence: true
+
   belongs_to :course, inverse_of: :achievements
   has_many :course_user_achievements, class_name: Course::UserAchievement.name,
                                       inverse_of: :achievement, dependent: :destroy

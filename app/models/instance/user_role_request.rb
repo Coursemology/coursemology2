@@ -4,6 +4,12 @@ class Instance::UserRoleRequest < ApplicationRecord
 
   after_initialize :set_default_role, if: :new_record?
 
+  validates :role, presence: true
+  validates :organization, length: { maximum: 255 }, allow_nil: true
+  validates :designation, length: { maximum: 255 }, allow_nil: true
+  validates :instance, presence: true
+  validates :user, presence: true
+
   belongs_to :instance, inverse_of: :user_role_requests
   belongs_to :user, inverse_of: nil
 

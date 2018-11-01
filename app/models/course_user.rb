@@ -21,6 +21,14 @@ class CourseUser < ApplicationRecord
   # A set of roles which comprise the managers of a course.
   MANAGER_ROLES = Set[:manager, :owner].freeze
 
+  validates :role, presence: true
+  validates :name, length: { maximum: 255 }, presence: true
+  validates :phantom, inclusion: { in: [true, false] }
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :user, presence: true, uniqueness: { scope: [:course_id], if: -> { course_id? && user_id_changed? } }
+  validates :course, presence: true, uniqueness: { scope: [:user_id], if: -> { user_id? && course_id_changed? } }
+
   belongs_to :user, inverse_of: :course_users
   belongs_to :course, inverse_of: :course_users
   has_many :experience_points_records, class_name: Course::ExperiencePointsRecord.name,

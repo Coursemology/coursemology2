@@ -7,6 +7,12 @@ class GenericAnnouncement < ApplicationRecord
 
   acts_as_readable on: :updated_at
 
+  validates :title, length: { maximum: 255 }, presence: true
+  validates :start_at, presence: true
+  validates :end_at, presence: true
+  validates :creator, presence: true
+  validates :updater, presence: true
+
   belongs_to :instance, inverse_of: :announcements, optional: true
 
   # @!method self.system_announcements_first

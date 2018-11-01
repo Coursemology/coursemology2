@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::MultipleResponseOption < ApplicationRecord
+  validates :correct, inclusion: { in: [true, false] }
+  validates :option, presence: true
+  validates :weight, numericality: { only_integer: true }, presence: true
+  validates :question, presence: true
+
   belongs_to :question, class_name: Course::Assessment::Question::MultipleResponse.name,
                         inverse_of: :options
 

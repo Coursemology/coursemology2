@@ -13,6 +13,19 @@ class Course < ApplicationRecord
   after_initialize :set_defaults, if: :new_record?
   before_validation :set_defaults, if: :new_record?
 
+  validates :title, length: { maximum: 255 }, presence: true
+  validates :registration_key, length: { maximum: 16 }, uniqueness: { if: :registration_key_changed? }, allow_nil: true
+
+  validates :start_at, presence: true
+  validates :end_at, presence: true
+  validates :gamified, inclusion: { in: [true, false] }
+  validates :published, inclusion: { in: [true, false] }
+  validates :enrollable, inclusion: { in: [true, false] }
+  validates :time_zone, length: { maximum: 255 }, allow_nil: true
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :instance, presence: true
+
   belongs_to :instance, inverse_of: :courses
   has_many :enrol_requests, inverse_of: :course, dependent: :destroy
   has_many :course_users, inverse_of: :course, dependent: :destroy

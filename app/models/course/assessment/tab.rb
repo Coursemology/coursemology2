@@ -1,5 +1,11 @@
 # frozen_string_literal: true
 class Course::Assessment::Tab < ApplicationRecord
+  validates :title, length: { maximum: 255 }, presence: true
+  validates :weight, numericality: { only_integer: true }, presence: true
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :category, presence: true
+
   belongs_to :category, class_name: Course::Assessment::Category.name, inverse_of: :tabs
   has_many :assessments, class_name: Course::Assessment.name, dependent: :destroy, inverse_of: :tab
   has_many :folders, class_name: Course::Material::Folder.name, through: :assessments,

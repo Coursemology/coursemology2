@@ -2,6 +2,9 @@
 class Course::Assessment::Answer::ProgrammingAutoGrading < ApplicationRecord
   acts_as :auto_grading, class_name: Course::Assessment::Answer::AutoGrading.name,
                          inverse_of: :actable
+
+  validates :exit_code, numericality: { only_integer: true }, allow_nil: true
+
   has_one :programming_answer, through: :answer,
                                source: :actable,
                                source_type: Course::Assessment::Answer::Programming.name

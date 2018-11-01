@@ -15,6 +15,21 @@ class Course::Material::Folder < ApplicationRecord
 
   validate :validate_name_is_unique_among_materials
   validates_with FilenameValidator
+  validates :owner_type, length: { maximum: 255 }, allow_nil: true
+  validates :name, length: { maximum: 255 }, presence: true
+  validates :start_at, presence: true
+  validates :creator, presence: true
+  validates :updater, presence: true
+  validates :can_student_upload, inclusion: { in: [true, false] }
+  validates :course, presence: true
+  validates :name, uniqueness: { scope: [:parent_id],
+                                 case_sensitive: false, if: -> { parent_id? && name_changed? } }
+  validates :parent_id, uniqueness: { scope: [:name], allow_nil: true,
+                                      case_sensitive: false, if: -> { name? && parent_id_changed? } }
+  validates :owner_type, uniqueness: { scope: [:owner_id], allow_nil: true,
+                                       if: -> { owner_id? && owner_type_changed? } }
+  validates :owner_id, uniqueness: { scope: [:owner_type], allow_nil: true,
+                                     if: -> { owner_type? && owner_id_changed? } }
 
   # @!attribute [r] material_count
   #   Returns the number of files in current folder.

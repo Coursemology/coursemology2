@@ -35,10 +35,20 @@ class Course::Assessment::Answer < ApplicationRecord
 
   validate :validate_consistent_assessment
   validate :validate_assessment_state, if: :attempting?
+  validate :validate_grade, unless: :attempting?
   validates :submitted_at, presence: true, unless: :attempting?
   validates :submitted_at, :grade, :grader, :graded_at, absence: true, if: :attempting?
   validates :grade, :grader, :graded_at, presence: true, if: :graded?
-  validate :validate_grade, unless: :attempting?
+  validates :actable_type, length: { maximum: 255 }, allow_nil: true
+  validates :workflow_state, length: { maximum: 255 }, presence: true
+  validates :grade, numericality: { greater_than: -1000, less_than: 1000 }, allow_nil: true
+  validates :current_answer, inclusion: { in: [true, false] }
+  validates :submission, presence: true
+  validates :question, presence: true
+  validates :actable_type, uniqueness: { scope: [:actable_id], allow_nil: true,
+                                         if: -> { actable_id? && actable_type_changed? } }
+  validates :actable_id, uniqueness: { scope: [:actable_type], allow_nil: true,
+                                       if: -> { actable_type? && actable_id_changed? } }
 
   belongs_to :submission, inverse_of: :answers
   belongs_to :question, class_name: Course::Assessment::Question.name, inverse_of: nil

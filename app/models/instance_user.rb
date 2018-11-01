@@ -4,6 +4,13 @@ class InstanceUser < ApplicationRecord
   acts_as_tenant :instance, inverse_of: :instance_users
 
   enum role: { normal: 0, instructor: 1, administrator: 2 }
+
+  validates :role, presence: true
+  validates :instance, presence: true
+  validates :user, presence: true
+  validates :instance_id, uniqueness: { scope: [:user_id], if: -> { user_id? && instance_id_changed? } }
+  validates :user_id, uniqueness: { scope: [:instance_id], if: -> { instance_id? && user_id_changed? } }
+
   belongs_to :user, inverse_of: :instance_users
 
   scope :ordered_by_username, -> { joins(:user).merge(User.order(name: :asc)) }

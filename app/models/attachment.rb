@@ -4,6 +4,9 @@ class Attachment < ApplicationRecord
 
   mount_uploader :file_upload, FileUploader
 
+  validates :name, length: { maximum: 255 }, presence: true, uniqueness: { if: :name_changed? }
+  validates :file_upload, presence: true
+
   has_many :attachment_references, inverse_of: :attachment, dependent: :destroy
 
   # @!attribute [r] url

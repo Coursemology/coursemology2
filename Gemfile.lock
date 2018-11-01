@@ -481,10 +481,6 @@ GEM
       its-it (~> 1.2)
       schema_plus_core (~> 2.0)
       schema_plus_indexes (~> 0.2, >= 0.2.4)
-    schema_validations (2.3.0)
-      activerecord (~> 5.0)
-      schema_plus_columns
-      valuable
     selenium-webdriver (3.13.0)
       childprocess (~> 0.5)
       rubyzip (~> 1.2)
@@ -546,7 +542,6 @@ GEM
     validates_hostname (1.0.8)
       activerecord (>= 3.0)
       activesupport (>= 3.0)
-    valuable (0.9.14)
     warden (1.2.7)
       rack (>= 1.0)
     webpacker (3.5.5)
@@ -643,7 +638,6 @@ DEPENDENCIES
   schema_plus_columns
   schema_plus_indexes
   schema_plus_pg_indexes
-  schema_validations
   settings_on_rails
   should_not
   shoulda-matchers

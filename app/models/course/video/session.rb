@@ -1,15 +1,20 @@
 # frozen_string_literal: true
 class Course::Video::Session < ApplicationRecord
+  validate :validate_start_before_end
+  validates :session_start, presence: true
+  validates :session_end, presence: true
+  validates :last_video_time, numericality: { only_integer: true, greater_than_or_equal_to: -2_147_483_648,
+                                              less_than: 2_147_483_648 }, allow_nil: true
+  validates :submission, presence: true
+  validates :creator, presence: true
+  validates :updater, presence: true
+
   belongs_to :submission, inverse_of: :sessions
   has_many :events, -> { order(:sequence_num) }, inverse_of: :session, dependent: :destroy
 
   scope :with_events_present, -> { joins(:events).distinct }
 
   before_validation :set_session_time, if: :new_record?
-
-  validates :session_start, presence: true
-  validates :session_end, presence: true
-  validate :validate_start_before_end
 
   # Inserts (or updates if the sequence number collides) events into this session.
   #
