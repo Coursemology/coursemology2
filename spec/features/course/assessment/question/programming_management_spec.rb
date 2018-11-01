@@ -22,7 +22,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
           new_course_assessment_question_programming_path(course, assessment)
         )
         visit new_course_assessment_question_programming_path(course, assessment)
-        expect(page).to have_xpath('//form[@id=\'programmming-question-form\']')
+        expect(page).to have_xpath('//form[@id=\'programming-question-form\']')
         question_attributes = attributes_for(:course_assessment_question_programming)
         fill_in 'question_programming[title]', with: question_attributes[:title]
 
@@ -56,7 +56,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         question = create(:course_assessment_question_programming,
                           assessment: assessment, template_file_count: 0, package_type: :zip_upload)
         visit edit_course_assessment_question_programming_path(course, assessment, question)
-        expect(page).to have_xpath('//form[@id=\'programmming-question-form\']')
+        expect(page).to have_xpath('//form[@id=\'programming-question-form\']')
 
         page.find('#question_programming_file', visible: false).click
 
