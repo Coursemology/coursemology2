@@ -9,8 +9,6 @@ module Course::Video::IntervalQueryConcern
   end
 
   included do
-    private_class_method :type_sym_to_id
-
     START_TYPES = [:play, :seek_end].freeze
     END_TYPES = [:pause, :seek_start, :end].freeze
 
