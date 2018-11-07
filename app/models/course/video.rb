@@ -51,7 +51,7 @@ class Course::Video < ApplicationRecord
   scope :unwatched_by, (lambda do |user|
     where.not(id: Course::Video::Submission.
       by_user(user).
-      pluck('DISTINCT video_id'))
+      pluck(Arel.sql('DISTINCT video_id')))
   end)
 
   # Used by the with_actable_types scope in Course::LessonPlan::Item.

@@ -69,8 +69,9 @@ class Instance < ApplicationRecord
 
   # Custom ordering. Put default instance first, followed by the others, which are ordered by name.
   # This is for listing all the instances on the index page.
+  # Arel.sql wrapper is required to mark the raw sql string as safe
   scope :order_for_display, (lambda do
-    order("CASE \"id\" WHEN #{DEFAULT_INSTANCE_ID} THEN 0 ELSE 1 END").order_by_name
+    order(Arel.sql("CASE \"id\" WHEN #{DEFAULT_INSTANCE_ID} THEN 0 ELSE 1 END")).order_by_name
   end)
 
   # @!method containing_user
