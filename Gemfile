@@ -17,10 +17,6 @@ gem 'rails', '5.1.6', git: 'https://github.com/Coursemology/rails.git',
 # Use PostgreSQL for the backend
 gem 'pg'
 
-# Schema Plus for some higher level database abstractions
-gem 'schema_plus_columns'
-gem 'schema_plus_indexes'
-gem 'schema_plus_pg_indexes'
 # Instance/Course settings
 gem 'settings_on_rails'
 # Manage read/unread status
