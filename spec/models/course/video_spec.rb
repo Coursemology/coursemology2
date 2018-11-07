@@ -62,6 +62,7 @@ RSpec.describe Course::Video, type: :model do
     describe '.watch_frequency' do
       let(:submission1) { create(:video_submission, video: video1, creator: student1.user) }
       let(:submission2) { create(:video_submission, video: video1, creator: student2.user) }
+      let(:submission3) { create(:video_submission, video: video2, creator: student2.user) }
       let!(:session1) { create(:video_session, :with_events_paused, submission: submission1) }
       let!(:session2) { create(:video_session, :with_events_continuous, submission: submission2) }
 
@@ -75,6 +76,7 @@ RSpec.describe Course::Video, type: :model do
         end
 
         expect(video1.watch_frequency).to eq(distribution)
+        expect(video2.watch_frequency).to eq([])
       end
     end
 
