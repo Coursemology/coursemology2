@@ -11,8 +11,7 @@ gem 'bundler', '>= 1.10.3'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 # We need a patched version of rails because stock 5.1.6 has_one associations ignores
 # joins in scope, which we use for Course::LessonPlan::Item.default_reference_time
-gem 'rails', '5.1.6', git: 'https://github.com/Coursemology/rails.git',
-                      branch: 'v5.1.6-fix_association_with_scope_including_joins'
+gem 'rails', '< 5.2.1'
 
 # Use PostgreSQL for the backend
 gem 'pg'
@@ -35,7 +34,7 @@ gem 'calculated_attributes'
 gem 'baby_squeel'
 # For multiple table inheritance
 #   TODO: Figure out breaking changes in v2 as polymorphism is not working correctly.
-gem 'active_record-acts_as', git: 'https://github.com/Coursemology/active_record-acts_as', branch: 'rails5'
+gem 'active_record-acts_as', git: 'https://github.com/Coursemology/active_record-acts_as', branch: 'rails5-2'
 # Organise ActiveRecord model into a tree structure
 gem 'edge'
 # Upsert action for Postgres
@@ -44,6 +43,7 @@ gem 'active_record_upsert'
 gem 'friendly_id'
 
 # Use SCSS for stylesheets
+gem 'sass', '< 3.7' # TODO: remove this line after bootstrap-sass issue is resolved
 gem 'sass-rails'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
@@ -211,7 +211,7 @@ gem 'rubyzip', require: 'zip'
 gem 'nokogiri', '>= 1.8.1'
 
 # Polyglot support
-gem 'coursemology-polyglot', git: 'https://github.com/Coursemology/polyglot'
+gem 'coursemology-polyglot'
 
 # To assist with bulk inserts into database
 gem 'activerecord-import', '>= 0.2.0'
