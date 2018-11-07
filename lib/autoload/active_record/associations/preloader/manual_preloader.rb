@@ -8,16 +8,15 @@ class ActiveRecord::Associations::Preloader
       super
     end
 
-    def preloader_for(reflection, owners, rhs_klass)
+    def preloader_for(reflection, owners)
       preloader_class = super
-      case preloader_class.name
-      when HasMany.name
-        ActiveRecord::Associations::Preloader::ManualHasMany
-      when NullPreloader.name, AlreadyLoaded.name
-        preloader_class
-      else
-        raise NotImplementedError
+      return preloader_class if preloader_class.name == AlreadyLoaded.name
+
+      if reflection.instance_of? ActiveRecord::Reflection::HasManyReflection
+        return ActiveRecord::Associations::Preloader::ManualHasMany
       end
+
+      raise NotImplementedError
     end
   end
 end
