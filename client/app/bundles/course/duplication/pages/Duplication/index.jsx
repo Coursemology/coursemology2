@@ -35,7 +35,7 @@ const translations = defineMessages({
   },
   items: {
     id: 'course.duplication.Duplication.items',
-    defaultMessage: 'Items',
+    defaultMessage: 'Selected Items',
   },
   startAt: {
     id: 'course.duplication.Duplication.startAt',
