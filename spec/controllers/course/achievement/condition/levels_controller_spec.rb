@@ -12,15 +12,11 @@ RSpec.describe Course::Achievement::Condition::LevelsController, type: :controll
 
     describe '#destroy' do
       let(:level_condition) do
-        create(:course_condition_level, course: course).tap do |stub|
+        create(:course_condition_level, course: course, conditional: achievement).tap do |stub|
           allow(stub).to receive(:destroy).and_return(false)
         end
       end
-      let(:achievement) do
-        create(:course_achievement,
-               course: course,
-               conditions: [level_condition])
-      end
+      let(:achievement) { create(:course_achievement, course: course) }
 
       subject do
         delete :destroy, params: {
@@ -46,15 +42,11 @@ RSpec.describe Course::Achievement::Condition::LevelsController, type: :controll
 
     describe '#create' do
       let(:level_condition) do
-        create(:course_condition_level, course: course).tap do |stub|
+        create(:course_condition_level, course: course, conditional: achievement).tap do |stub|
           allow(stub).to receive(:save).and_return(false)
         end
       end
-      let!(:achievement) do
-        create(:course_achievement,
-               course: course,
-               conditions: [level_condition])
-      end
+      let!(:achievement) { create(:course_achievement, course: course) }
 
       subject do
         post :create, params: { course_id: course, achievement_id: achievement }
@@ -76,15 +68,12 @@ RSpec.describe Course::Achievement::Condition::LevelsController, type: :controll
     describe '#update' do
       let(:min_level) { 7 }
       let(:level_condition) do
-        create(:course_condition_level, course: course, minimum_level: min_level).tap do |stub|
+        create(:course_condition_level, course: course, minimum_level: min_level,
+                                        conditional: achievement).tap do |stub|
           allow(stub).to receive(:update_attributes).and_return(false)
         end
       end
-      let!(:achievement) do
-        create(:course_achievement,
-               course: course,
-               conditions: [level_condition])
-      end
+      let!(:achievement) { create(:course_achievement, course: course) }
 
       subject do
         patch :update, params: {

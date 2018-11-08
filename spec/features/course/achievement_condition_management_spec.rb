@@ -12,19 +12,16 @@ RSpec.feature 'Course: Achievements' do
     context 'As a Course Manager' do
       let(:user) { create(:course_manager, course: course).user }
       let(:other_achievement) { create(:course_achievement, course: course) }
-      let(:achievement_condition) do
-        create(:achievement_condition, course: course, achievement: other_achievement)
+      let!(:achievement_condition) do
+        create(:achievement_condition, course: course, achievement: other_achievement,
+                                       conditional: achievement)
       end
       let(:assessment) { create(:assessment, course: course) }
-      let(:assessment_condition) do
-        create(:assessment_condition, course: course, assessment: assessment)
+      let!(:assessment_condition) do
+        create(:assessment_condition, course: course, assessment: assessment, conditional: achievement)
       end
-      let(:level_condition) { create(:level_condition, course: course) }
-      let!(:achievement) do
-        create(:course_achievement,
-               course: course,
-               conditions: [achievement_condition, assessment_condition, level_condition])
-      end
+      let!(:level_condition) { create(:level_condition, course: course, conditional: achievement) }
+      let!(:achievement) { create(:course_achievement, course: course) }
 
       # Achievement condition
       scenario 'I can create, edit and delete an achievement condition', js: true do
