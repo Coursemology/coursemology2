@@ -103,7 +103,7 @@ class VisibleGradingPanel extends Component {
             type="number"
             min={0}
             step={1}
-            value={exp}
+            value={exp !== null ? exp : ''}
             onChange={e => this.handleExpField(e.target.value)}
             ref={(ref) => {
               this.expInputRef = ref;
