@@ -9,10 +9,10 @@ GIT
 
 GIT
   remote: https://github.com/Coursemology/polyglot
-  revision: b946657046bdd8e0a51e18b82bded9b71ffde596
+  revision: aee1351e1c8e3f42df1b8164473a5ece2dcde980
   specs:
-    coursemology-polyglot (0.2.9.2)
-      activesupport (>= 4.2, < 5.2)
+    coursemology-polyglot (0.2.9.3)
+      activesupport (>= 4.2, < 6)
 
 GIT
   remote: https://github.com/Coursemology/rails.git
