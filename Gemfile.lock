@@ -152,7 +152,7 @@ GEM
       momentjs-rails (>= 2.8.1)
     bootstrap_tokenfield_rails (0.12.1)
     builder (3.2.3)
-    bullet (5.8.1)
+    bullet (5.9.0)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
     byebug (10.0.2)
