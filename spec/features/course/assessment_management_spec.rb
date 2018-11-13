@@ -24,7 +24,8 @@ RSpec.feature 'Course: Assessments: Management' do
 
         fill_in 'title', with: assessment.title
         fill_in 'base_exp', with: assessment.base_exp
-        first("input[name='start_at']").set(assessment.start_at.strftime('%d-%m-%Y'))
+        # Need to click on the field first or `set` won't work.
+        first("input[name='start_at']").click.set(assessment.start_at.strftime('%d-%m-%Y'))
         find('button.btn-submit').click
 
         expect(page).not_to have_selector('h3', text: 'New Assessment')
