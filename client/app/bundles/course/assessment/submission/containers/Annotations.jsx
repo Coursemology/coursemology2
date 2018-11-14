@@ -3,11 +3,20 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Card, CardText } from 'material-ui/Card';
+import RaisedButton from 'material-ui/RaisedButton';
+import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { postShape, annotationShape } from '../propTypes';
 import CommentCard from '../components/CommentCard';
 import CommentField from '../components/CommentField';
 import * as annotationActions from '../actions/annotations';
+
+const translations = defineMessages({
+  comment: {
+    id: 'course.assessment.submission.commentField.comment',
+    defaultMessage: 'Add Comment',
+  },
+});
 
 const styles = {
   card: {
@@ -31,7 +40,6 @@ class VisibleAnnotations extends Component {
 
     return (
       <Card
-        onClick={() => this.setState({ fieldVisible: true })}
         style={styles.card}
       >
         <CardText style={{ textAlign: 'left' }}>
@@ -52,7 +60,13 @@ class VisibleAnnotations extends Component {
               createComment={createComment}
               handleChange={handleCreateChange}
             />
-          ) : null}
+          ) : (
+            <RaisedButton
+              primary
+              label={<FormattedMessage {...translations.comment} />}
+              onClick={() => this.setState({ fieldVisible: true })}
+            />
+          )}
         </CardText>
       </Card>
     );
