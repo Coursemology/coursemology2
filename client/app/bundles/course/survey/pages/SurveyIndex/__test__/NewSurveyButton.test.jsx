@@ -32,6 +32,7 @@ describe('<NewSurveyButton />', () => {
     };
 
     const startAt = '01-01-2017';
+    const startTime = '12:00 AM';
     const dialogInline = surveyFormDialogue.find('RenderToLayer').first().instance();
     const surveyForm = mount(dialogInline.props.render(), contextOptions).find('form');
     const titleInput = surveyForm.find('input[name="title"]');
@@ -39,6 +40,9 @@ describe('<NewSurveyButton />', () => {
     const startAtDateInput = surveyForm.find('input[name="start_at"]').first();
     startAtDateInput.simulate('change', { target: { value: startAt } });
     startAtDateInput.simulate('blur');
+    const startAtTimeInput = surveyForm.find('input[name="start_at"]').at(1);
+    startAtTimeInput.simulate('change', { target: { value: startTime } });
+    startAtTimeInput.simulate('blur');
 
     // Submit survey form
     const submitButton = surveyFormDialogue.find('FormDialogue').first().instance().submitButton;

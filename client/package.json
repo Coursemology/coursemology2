@@ -7,7 +7,7 @@
     "yarn": "^1.0.0"
   },
   "scripts": {
-    "test": "yarn run jest --coverage",
+    "test": "TZ=Asia/Singapore yarn run jest --coverage",
     "build:test": "export NODE_ENV=test && yarn run build:translations && webpack -pw",
     "build:production": "export NODE_ENV=production && yarn run build:translations && webpack -p",
     "build:development": "yarn run build:translations && webpack-dev-server",
