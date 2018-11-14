@@ -43,7 +43,6 @@ gem 'active_record_upsert'
 gem 'friendly_id'
 
 # Use SCSS for stylesheets
-gem 'sass', '< 3.7' # TODO: remove this line after bootstrap-sass issue is resolved
 gem 'sass-rails'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
