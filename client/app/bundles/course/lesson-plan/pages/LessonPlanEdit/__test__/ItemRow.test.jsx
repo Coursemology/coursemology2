@@ -66,4 +66,44 @@ describe('<ItemRow />', () => {
       }
     );
   });
+
+  it('clears end date', () => {
+    const spy = jest.spyOn(CourseAPI.lessonPlan, 'updateItem');
+    const store = storeCreator({
+      lessonPlan: {
+        visibilityByType: { [itemData.itemTypeKey]: true },
+        items: [itemData],
+      },
+    });
+
+    const table = mount(
+      <table>
+        <tbody>
+          <ItemRow
+            id={itemData.id}
+            type={itemData.itemTypeKey}
+            title={itemData.title}
+            startAt={itemData.start_at}
+            bonusEndAt={itemData.bonus_end_at}
+            endAt={itemData.end_at}
+            published={itemData.published}
+          />
+        </tbody>
+      </table>,
+      buildContextOptions(store)
+    );
+
+    const endAtDateInput = table.find('input[name="end_at"]').first();
+    endAtDateInput.simulate('change', { target: { value: '' } });
+    endAtDateInput.simulate('blur');
+
+    expect(spy).toHaveBeenCalledWith(
+      itemData.id,
+      {
+        item: {
+          end_at: null,
+        },
+      }
+    );
+  });
 });

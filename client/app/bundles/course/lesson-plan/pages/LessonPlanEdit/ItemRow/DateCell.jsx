@@ -57,6 +57,7 @@ class DateCell extends React.Component {
       <td>
         <DateTimePicker
           name={fieldName}
+          clearable={fieldName === 'end_at'}
           value={fieldValue}
           onChange={this.updateItemDate}
         />
