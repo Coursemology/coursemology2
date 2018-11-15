@@ -24,6 +24,7 @@ const propTypes = {
   ]),
   disabled: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
+  onKeyDown: PropTypes.func,
   name: PropTypes.string,
   inputId: PropTypes.string,
   required: PropTypes.bool,
@@ -206,6 +207,7 @@ class MaterialSummernote extends React.Component {
             onFocus={() => {
               this.setState({ isFocused: true });
             }}
+            onKeyDown={this.props.onKeyDown}
             onBlur={() => {
               this.setState({ isFocused: false });
             }}

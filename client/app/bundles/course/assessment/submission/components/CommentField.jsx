@@ -31,6 +31,14 @@ export default class CommentField extends Component {
     handleChange(nextValue);
   }
 
+  onKeyDown(e) {
+    const { createComment, isSubmitting, value } = this.props;
+    if (e.ctrlKey && e.keyCode === 13 && !isSubmitting) {
+      e.preventDefault();
+      createComment(value);
+    }
+  }
+
   render() {
     const { createComment, inputId, isSubmitting, value } = this.props;
     return (
@@ -41,6 +49,7 @@ export default class CommentField extends Component {
           inputId={inputId}
           label={<h4><FormattedMessage {...translations.prompt} /></h4>}
           onChange={nextValue => this.onChange(nextValue)}
+          onKeyDown={e => this.onKeyDown(e)}
           value={value}
         />
         <RaisedButton
