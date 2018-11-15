@@ -4,6 +4,6 @@ FactoryBot.define do
           class: Course::Condition::Level.name, aliases: [:level_condition] do
     course
     minimum_level { 1 }
-    association :conditional, factory: :course_level
+    association :conditional, factory: :course_achievement
   end
 end

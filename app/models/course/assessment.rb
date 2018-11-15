@@ -16,6 +16,7 @@ class Course::Assessment < ApplicationRecord
   before_validation :propagate_course, if: :new_record?
   before_validation :assign_folder_attributes
   after_commit :grade_with_new_test_cases, on: :update
+  before_save :save_tab, on: :create
 
   validates :autograded, inclusion: { in: [true, false] }
   validates :session_password, length: { maximum: 255 }, allow_nil: true
@@ -254,5 +255,11 @@ class Course::Assessment < ApplicationRecord
       submission.mark!
       submission.publish!
     end
+  end
+
+  # Somehow autosaving more than 1 level of association doesn't work in Rails 5.2
+  def save_tab
+    tab.category.save if tab&.category && !tab.category.persisted?
+    tab.save if tab && !tab.persisted?
   end
 end

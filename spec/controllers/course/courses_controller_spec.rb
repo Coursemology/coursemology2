@@ -24,7 +24,7 @@ RSpec.describe Course::CoursesController, type: :controller do
       context 'when there is no user logged in' do
         it 'allows unauthenticated access' do
           get :index
-          expect(response).to be_success
+          expect(response).to be_successful
         end
       end
 
@@ -34,7 +34,7 @@ RSpec.describe Course::CoursesController, type: :controller do
         it 'allows access' do
           sign_in(user)
           get :index
-          expect(response).to be_success
+          expect(response).to be_successful
         end
       end
     end

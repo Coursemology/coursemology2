@@ -12,15 +12,11 @@ RSpec.describe Course::Achievement::Condition::AssessmentsController, type: :con
 
     describe '#destroy' do
       let(:assessment_condition) do
-        create(:course_condition_assessment, course: course).tap do |stub|
+        create(:course_condition_assessment, course: course, conditional: achievement).tap do |stub|
           allow(stub).to receive(:destroy).and_return(false)
         end
       end
-      let(:achievement) do
-        create(:course_achievement,
-               course: course,
-               conditions: [assessment_condition])
-      end
+      let(:achievement) { create(:course_achievement, course: course) }
 
       subject do
         delete :destroy, params: {
@@ -46,15 +42,11 @@ RSpec.describe Course::Achievement::Condition::AssessmentsController, type: :con
 
     describe '#create' do
       let(:assessment_condition) do
-        create(:course_condition_assessment, course: course).tap do |stub|
+        create(:course_condition_assessment, course: course, conditional: achievement).tap do |stub|
           allow(stub).to receive(:save).and_return(false)
         end
       end
-      let!(:achievement) do
-        create(:course_achievement,
-               course: course,
-               conditions: [assessment_condition])
-      end
+      let(:achievement) { create(:course_achievement, course: course) }
 
       subject do
         post :create, params: { course_id: course, achievement_id: achievement }
@@ -75,15 +67,12 @@ RSpec.describe Course::Achievement::Condition::AssessmentsController, type: :con
       let(:assessment) { create(:assessment) }
       let(:minimum_grade_percentage) { 50.0 }
       let(:assessment_condition) do
-        create(:course_condition_assessment, course: course, assessment: assessment).tap do |stub|
+        create(:course_condition_assessment, course: course, assessment: assessment,
+                                             conditional: achievement).tap do |stub|
           allow(stub).to receive(:update_attributes).and_return(false)
         end
       end
-      let!(:achievement) do
-        create(:course_achievement,
-               course: course,
-               conditions: [assessment_condition])
-      end
+      let(:achievement) { create(:course_achievement, course: course) }
 
       subject do
         patch :update, params: {
