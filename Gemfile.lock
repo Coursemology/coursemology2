@@ -163,7 +163,7 @@ GEM
       activerecord (>= 4.1, < 5.2.1)
       baby_squeel (>= 1.1.5)
       cancancan (>= 1.10)
-    capybara (3.10.1)
+    capybara (3.11.0)
       addressable
       mini_mime (>= 0.1.3)
       nokogiri (~> 1.8)
@@ -401,7 +401,7 @@ GEM
       ffi (>= 0.5.0, < 2)
     record_tag_helper (1.0.0)
       actionview (~> 5.x)
-    regexp_parser (1.2.0)
+    regexp_parser (1.3.0)
     request_store (1.4.1)
       rack (>= 1.4)
     responders (2.4.0)
