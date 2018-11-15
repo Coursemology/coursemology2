@@ -35,7 +35,7 @@ class VisibleAnnotations extends Component {
     const {
       fileId, lineNumber, commentForms, posts,
       createComment, updateComment, deleteComment,
-      handleCreateChange, handleUpdateChange,
+      handleCreateChange, handleUpdateChange, airMode,
     } = this.props;
 
     return (
@@ -51,6 +51,7 @@ class VisibleAnnotations extends Component {
               updateComment={value => updateComment(post.id, value)}
               deleteComment={() => deleteComment(post.id)}
               handleChange={value => handleUpdateChange(post.id, value)}
+              airMode={airMode}
             />
           ))}
           {posts.length === 0 || fieldVisible ? (
@@ -59,6 +60,7 @@ class VisibleAnnotations extends Component {
               isSubmitting={commentForms.isSubmitting}
               createComment={createComment}
               handleChange={handleCreateChange}
+              airMode={airMode}
             />
           ) : (
             <RaisedButton
@@ -80,6 +82,7 @@ VisibleAnnotations.propTypes = {
   }),
   fileId: PropTypes.number.isRequired,
   lineNumber: PropTypes.number.isRequired,
+  airMode: PropTypes.bool,
   posts: PropTypes.arrayOf(postShape),
   /* eslint-disable react/no-unused-prop-types */
   match: PropTypes.shape({
@@ -98,6 +101,10 @@ VisibleAnnotations.propTypes = {
   createComment: PropTypes.func.isRequired,
   updateComment: PropTypes.func.isRequired,
   deleteComment: PropTypes.func.isRequired,
+};
+
+VisibleAnnotations.defaultProps = {
+  airMode: true,
 };
 
 function mapStateToProps(state, ownProps) {
