@@ -21,7 +21,7 @@ class FileUploader < CarrierWave::Uploader::Base
   # @return [String] The url with options.
   def url(filename: nil)
     query_option = { 'response-content-disposition' => 'attachment;' }
-    query_option['response-content-disposition'] += " filename=\"#{filename}\"" if filename
+    query_option['response-content-disposition'] += " filename=\"#{CGI.escape(filename)}\"" if filename
 
     super(query: query_option)
   end
