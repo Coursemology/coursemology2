@@ -84,7 +84,13 @@ export default class NarrowEditor extends Component {
           style={{ zIndex: activeComment === lineNumber ? 1000 : lineNumber }}
         >
           <div onClick={() => this.setState({ activeComment: lineNumber })}>
-            <Annotations answerId={answerId} fileId={fileId} lineNumber={lineNumber} annotation={annotation} />
+            <Annotations
+              answerId={answerId}
+              fileId={fileId}
+              lineNumber={lineNumber}
+              annotation={annotation}
+              airMode={false}
+            />
           </div>
         </OverlayTooltip>
       </Overlay>

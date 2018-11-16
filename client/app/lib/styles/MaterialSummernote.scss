@@ -1127,6 +1127,10 @@
     padding: 10px 15px;
   }
 
+  .note-btn-group.btn-group {
+    margin: 0;
+  }
+
   .note-editor .note-toolbar,
   .note-editor .popover-content,
   .note-popover .note-toolbar,
@@ -1134,7 +1138,7 @@
     background: #ffffff;
     border-color: #e4e4e4;
     margin: 0;
-    padding: 10px 0 15px 15px;
+    padding: 5px 10px;
     text-align: left;
   }
 
@@ -1152,6 +1156,7 @@
   .note-popover .note-toolbar > .btn-group .btn,
   .note-popover .popover-content > .btn-group .btn {
     margin: 0 1px;
+    padding: 0 10px;
   }
 
   .note-editor .note-toolbar > .btn-group > .active,
@@ -1168,7 +1173,7 @@
   .note-popover .popover-content .btn {
     border-radius: 2px !important;
     box-shadow: none !important;
-    height: 40px;
+    height: 35px;
   }
 
   .note-editor .note-toolbar .btn:active,

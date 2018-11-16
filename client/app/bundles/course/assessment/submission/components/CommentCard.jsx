@@ -52,11 +52,16 @@ export default class CommentCard extends Component {
   static propTypes = {
     post: postShape.isRequired,
     editValue: PropTypes.string,
+    airMode: PropTypes.bool,
 
     handleChange: PropTypes.func,
     updateComment: PropTypes.func,
     deleteComment: PropTypes.func,
   }
+
+  static defaultProps = {
+    airMode: true,
+  };
 
   static formatDateTime(dateTime) {
     return dateTime ? moment(dateTime).format('MMM DD, YYYY h:mma') : null;
@@ -105,13 +110,13 @@ export default class CommentCard extends Component {
 
   renderCommentContent() {
     const { editMode } = this.state;
-    const { editValue, post: { formattedText, id } } = this.props;
+    const { editValue, airMode, post: { formattedText, id } } = this.props;
 
     if (editMode) {
       return (
         <>
           <MaterialSummernote
-            airMode
+            airMode={airMode}
             id={id.toString()}
             inputId={CommentCard.editPostIdentifier(id)}
             onChange={nextValue => this.onChange(nextValue)}

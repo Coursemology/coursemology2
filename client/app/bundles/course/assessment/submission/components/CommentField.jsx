@@ -21,9 +21,14 @@ export default class CommentField extends Component {
     inputId: PropTypes.string,
     isSubmitting: PropTypes.bool,
     value: PropTypes.string,
+    airMode: PropTypes.bool,
 
     createComment: PropTypes.func,
     handleChange: PropTypes.func,
+  };
+
+  static defaultProps = {
+    airMode: true,
   };
 
   onChange(nextValue) {
@@ -40,11 +45,11 @@ export default class CommentField extends Component {
   }
 
   render() {
-    const { createComment, inputId, isSubmitting, value } = this.props;
+    const { createComment, inputId, isSubmitting, value, airMode } = this.props;
     return (
       <>
         <MaterialSummernote
-          airMode
+          airMode={airMode}
           disabled={isSubmitting}
           inputId={inputId}
           label={<h4><FormattedMessage {...translations.prompt} /></h4>}

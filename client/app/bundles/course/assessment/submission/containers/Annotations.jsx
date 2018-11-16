@@ -3,11 +3,20 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Card, CardText } from 'material-ui/Card';
+import RaisedButton from 'material-ui/RaisedButton';
+import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { postShape, annotationShape } from '../propTypes';
 import CommentCard from '../components/CommentCard';
 import CommentField from '../components/CommentField';
 import * as annotationActions from '../actions/annotations';
+
+const translations = defineMessages({
+  comment: {
+    id: 'course.assessment.submission.commentField.comment',
+    defaultMessage: 'Add Comment',
+  },
+});
 
 const styles = {
   card: {
@@ -26,12 +35,11 @@ class VisibleAnnotations extends Component {
     const {
       fileId, lineNumber, commentForms, posts,
       createComment, updateComment, deleteComment,
-      handleCreateChange, handleUpdateChange,
+      handleCreateChange, handleUpdateChange, airMode,
     } = this.props;
 
     return (
       <Card
-        onClick={() => this.setState({ fieldVisible: true })}
         style={styles.card}
       >
         <CardText style={{ textAlign: 'left' }}>
@@ -43,6 +51,7 @@ class VisibleAnnotations extends Component {
               updateComment={value => updateComment(post.id, value)}
               deleteComment={() => deleteComment(post.id)}
               handleChange={value => handleUpdateChange(post.id, value)}
+              airMode={airMode}
             />
           ))}
           {posts.length === 0 || fieldVisible ? (
@@ -51,8 +60,15 @@ class VisibleAnnotations extends Component {
               isSubmitting={commentForms.isSubmitting}
               createComment={createComment}
               handleChange={handleCreateChange}
+              airMode={airMode}
             />
-          ) : null}
+          ) : (
+            <RaisedButton
+              primary
+              label={<FormattedMessage {...translations.comment} />}
+              onClick={() => this.setState({ fieldVisible: true })}
+            />
+          )}
         </CardText>
       </Card>
     );
@@ -66,6 +82,7 @@ VisibleAnnotations.propTypes = {
   }),
   fileId: PropTypes.number.isRequired,
   lineNumber: PropTypes.number.isRequired,
+  airMode: PropTypes.bool,
   posts: PropTypes.arrayOf(postShape),
   /* eslint-disable react/no-unused-prop-types */
   match: PropTypes.shape({
@@ -84,6 +101,10 @@ VisibleAnnotations.propTypes = {
   createComment: PropTypes.func.isRequired,
   updateComment: PropTypes.func.isRequired,
   deleteComment: PropTypes.func.isRequired,
+};
+
+VisibleAnnotations.defaultProps = {
+  airMode: true,
 };
 
 function mapStateToProps(state, ownProps) {
