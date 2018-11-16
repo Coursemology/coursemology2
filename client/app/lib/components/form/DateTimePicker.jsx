@@ -2,31 +2,32 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import moment from 'lib/moment';
-import TextField from 'material-ui/TextField';
-import DatePicker from 'material-ui/DatePicker';
-import TimePicker from 'material-ui/TimePicker';
-import IconButton from 'material-ui/IconButton';
+import DatePicker from 'material-ui-pickers/DatePicker';
+import TimePicker from 'material-ui-pickers/TimePicker';
 import DateRange from 'material-ui/svg-icons/action/date-range';
+import KeyboardArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
+import KeyboardArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
 import Schedule from 'material-ui/svg-icons/action/schedule';
-import formTranslations from 'lib/translations/form';
+import MuiPickersUtilsProvider from 'material-ui-pickers/MuiPickersUtilsProvider';
+import MomentUtils from '@date-io/moment';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
 
 const translations = defineMessages({
   datePlaceholder: {
-    id: 'lib.componenets.form.DateTimePicker.datePlaceholder',
+    id: 'lib.components.form.DateTimePicker.datePlaceholder',
     defaultMessage: 'dd-mm-yyyy',
   },
   timePlaceholder: {
-    id: 'lib.componenets.form.DateTimePicker.timePlaceholder',
+    id: 'lib.components.form.DateTimePicker.timePlaceholder',
     defaultMessage: 'hh:mm',
   },
 });
 
 const styleConstants = {
-  dateFieldWidth: 90,
-  timeFieldWidth: 50,
-  iconButtonWidth: 30,
+  dateFieldWidth: 145,
+  timeFieldWidth: 130,
+  iconWidth: 30,
   dateTimeGap: 5,
-  labelLength: 270,
 };
 
 const styles = {
@@ -43,17 +44,26 @@ const styles = {
   },
   pickerIcon: {
     margins: 0,
-  },
-  pickerIconButton: {
     padding: 0,
-    width: styleConstants.iconButtonWidth,
-  },
-  label: {
-    marginLeft: -styleConstants.iconButtonWidth,
-    maxWidth: styleConstants.labelLength,
-    width: styleConstants.labelLength,
+    width: styleConstants.iconWidth,
   },
 };
+
+const datetimepickerTheme = createMuiTheme({
+  // https://material-ui.com/customization/themes/#typography---html-font-size
+  // https://material-ui.com/style/typography/#migration-to-typography-v2
+  typography: {
+    htmlFontSize: 10,
+    useNextVariants: true,
+  },
+  overrides: {
+    MuiModal: {
+      root: {
+        zIndex: 1800,
+      },
+    },
+  },
+});
 
 const propTypes = {
   name: PropTypes.string.isRequired,
@@ -103,7 +113,11 @@ class DateTimePicker extends React.PureComponent {
     if (onChange) { onChange(null, newDateTime); }
   }
 
-  updateDate = (_, newDate) => {
+  updateDate = (newDate) => {
+    if (newDate === null) {
+      this.updateDateTime(null);
+      return;
+    }
     const { date, months, years } = moment(newDate).toObject();
     const newDateTime = this.props.value
       ? moment(this.props.value).set({ date, months, years })
@@ -111,7 +125,11 @@ class DateTimePicker extends React.PureComponent {
     this.updateDateTime(newDateTime.toDate());
   }
 
-  updateTime = (_, newTime) => {
+  updateTime = (newTime) => {
+    if (newTime === null) {
+      this.updateDateTime(null);
+      return;
+    }
     const { hours, minutes } = moment(newTime).toObject();
     const newDateTime = this.props.value
       ? moment(this.props.value).set({ hours, minutes })
@@ -119,38 +137,8 @@ class DateTimePicker extends React.PureComponent {
     this.updateDateTime(newDateTime.toDate());
   }
 
-  handleDateFieldBlur = () => {
-    // Blanking out the date blanks out the whole field
-    if (this.state.displayedDate === '') {
-      this.updateDateTime(null, null);
-      return;
-    }
-
-    const editedDate = moment(this.state.displayedDate, ['D-M-YYYY', 'D/M/YYYY'], true);
-    if (editedDate.isValid()) {
-      this.updateDate(null, editedDate.toDate());
-    } else {
-      this.setState({ dateError: this.props.intl.formatMessage(formTranslations.invalid) });
-    }
-  }
-
-  handleTimeFieldBlur = () => {
-    // Blanking out the time also blanks out the whole field
-    if (this.state.displayedTime === '') {
-      this.updateDateTime(null, null);
-      return;
-    }
-
-    const editedTime = moment(this.state.displayedTime, 'H:mm', true);
-    if (editedTime.isValid()) {
-      this.updateTime(null, editedTime.toDate());
-    } else {
-      this.setState({ timeError: this.props.intl.formatMessage(formTranslations.invalid) });
-    }
-  }
-
   render() {
-    const { intl, floatingLabelText, errorText, name, disabled, style } = this.props;
+    const { intl, floatingLabelText, errorText, name, disabled, style, clearable } = this.props;
     let value = this.props.value;
     // Convert string value to Date, which is expected by Date/TimePicker
     if (value && typeof (value) === 'string') {
@@ -158,55 +146,40 @@ class DateTimePicker extends React.PureComponent {
     }
 
     return (
-      <div style={Object.assign({}, styles.dateTimePicker, style)}>
-        <IconButton
-          onClick={() => !disabled && this.datePicker.openDialog()}
-          style={styles.pickerIconButton}
-        >
-          <DateRange style={styles.pickerIcon} />
-        </IconButton>
-        <TextField
-          {...{ name, floatingLabelText, disabled }}
-          floatingLabelFixed
-          floatingLabelStyle={styles.label}
-          value={this.state.displayedDate}
-          placeholder={intl.formatMessage(translations.datePlaceholder)}
-          onChange={(_, date) => this.setState({ displayedDate: date })}
-          onBlur={this.handleDateFieldBlur}
-          style={styles.dateTextField}
-          errorText={errorText || this.state.dateError}
-        />
-        <DatePicker
-          {...{ name, disabled }}
-          textFieldStyle={{ display: 'none' }}
-          ref={(input) => { this.datePicker = input; }}
-          onChange={this.updateDate}
-          value={value || undefined}
-        />
-        <IconButton
-          onClick={() => !disabled && this.timePicker.openDialog()}
-          style={styles.pickerIconButton}
-        >
-          <Schedule style={styles.pickerIcon} />
-        </IconButton>
-        <TextField
-          {...{ name, disabled }}
-          value={this.state.displayedTime}
-          placeholder={intl.formatMessage(translations.timePlaceholder)}
-          floatingLabelFixed
-          onChange={(_, time) => this.setState({ displayedTime: time })}
-          onBlur={this.handleTimeFieldBlur}
-          style={styles.timeTextField}
-          errorText={this.state.timeError}
-        />
-        <TimePicker
-          {...{ name, disabled }}
-          textFieldStyle={{ display: 'none' }}
-          ref={(input) => { this.timePicker = input; }}
-          onChange={this.updateTime}
-          value={value || undefined}
-        />
-      </div>
+      <MuiPickersUtilsProvider utils={MomentUtils}>
+        <MuiThemeProvider theme={datetimepickerTheme}>
+          <div style={Object.assign({}, styles.dateTimePicker, style)}>
+            <DatePicker
+              {...{ name, disabled }}
+              style={styles.dateTextField}
+              onChange={this.updateDate}
+              clearable={clearable}
+              keyboard
+              keyboardIcon={<DateRange style={styles.pickerIcon} />}
+              leftArrowIcon={<KeyboardArrowLeft />}
+              rightArrowIcon={<KeyboardArrowRight />}
+              format="DD-MM-YYYY"
+              label={floatingLabelText}
+              emptyLabel={intl.formatMessage(translations.datePlaceholder)}
+              error={!!errorText || !!this.state.dateError}
+              helperText={errorText || this.state.dateError}
+              value={value || null}
+            />
+            <TimePicker
+              {...{ name, disabled }}
+              style={styles.timeTextField}
+              onChange={this.updateTime}
+              clearable={clearable}
+              keyboard
+              keyboardIcon={<Schedule style={styles.pickerIcon} />}
+              emptyLabel={intl.formatMessage(translations.timePlaceholder)}
+              error={!!this.state.timeError}
+              helperText={this.state.timeError}
+              value={value || null}
+            />
+          </div>
+        </MuiThemeProvider>
+      </MuiPickersUtilsProvider>
     );
   }
 }

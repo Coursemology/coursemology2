@@ -318,6 +318,7 @@ class AssessmentForm extends React.Component {
           <Field
             name="end_at"
             component={DateTimePicker}
+            clearable
             floatingLabelText={<FormattedMessage {...translations.endAt} />}
             style={styles.flexChild}
             disabled={submitting}
@@ -328,6 +329,7 @@ class AssessmentForm extends React.Component {
             <Field
               name="bonus_end_at"
               component={DateTimePicker}
+              clearable
               floatingLabelText={<FormattedMessage {...translations.bonusEndAt} />}
               style={styles.flexChild}
               disabled={submitting}

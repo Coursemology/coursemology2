@@ -8,7 +8,7 @@ import AssessmentEdit from '../index';
 describe('<AssessmentEdit />', () => {
   const store = storeCreator({});
   const id = 1;
-  const intitialValues = {
+  const initialValues = {
     id,
     title: 'Assessement',
     description: 'Awesome assessment',
@@ -27,7 +27,7 @@ describe('<AssessmentEdit />', () => {
         <AssessmentEdit
           id={id}
           modeSwitching
-          initialValues={intitialValues}
+          initialValues={initialValues}
         />
       </ProviderWrapper>
     );
@@ -56,7 +56,7 @@ describe('<AssessmentEdit />', () => {
     form.simulate('submit');
     expect(spy).toHaveBeenCalledWith(id, {
       assessment: {
-        ...intitialValues,
+        ...initialValues,
         title: newTitle,
         autograded: true,
         view_password: null,
@@ -71,7 +71,7 @@ describe('<AssessmentEdit />', () => {
         <AssessmentEdit
           id={id}
           modeSwitching
-          initialValues={intitialValues}
+          initialValues={initialValues}
         />
       </ProviderWrapper>
     );
@@ -88,7 +88,7 @@ describe('<AssessmentEdit />', () => {
           id={id}
           gamified={false}
           modeSwitching
-          initialValues={intitialValues}
+          initialValues={initialValues}
         />
       </ProviderWrapper>
     );
