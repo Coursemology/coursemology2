@@ -993,25 +993,6 @@ ActiveRecord::Schema.define(version: 20181018043204) do
     t.index ["updater_id"], name: "fk__generic_announcements_updater_id"
   end
 
-  create_table "instance_user_invitations", force: :cascade do |t|
-    t.integer "instance_id", null: false
-    t.string "name", limit: 255, null: false
-    t.string "email", limit: 255, null: false
-    t.integer "role", default: 0, null: false
-    t.string "invitation_key", limit: 32, null: false
-    t.datetime "sent_at"
-    t.datetime "confirmed_at"
-    t.integer "confirmer_id"
-    t.integer "creator_id", null: false
-    t.integer "updater_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index "lower((email)::text)", name: "index_instance_user_invitations_on_email"
-    t.index ["instance_id", "email"], name: "index_instance_user_invitations_on_instance_id_and_email", unique: true
-    t.index ["instance_id"], name: "index_instance_user_invitations_on_instance_id"
-    t.index ["invitation_key"], name: "index_instance_user_invitations_on_invitation_key", unique: true
-  end
-
   create_table "instance_user_role_requests", force: :cascade do |t|
     t.integer "instance_id", null: false
     t.integer "user_id", null: false
