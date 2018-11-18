@@ -50,7 +50,10 @@ class Course::Forum::Topic < ApplicationRecord
   # @!attribute [r] view_count
   #   The number of views in this topic.
   calculated :view_count, (lambda do
-    Course::Forum::Topic::View.where('topic_id = course_forum_topics.id').select("count('*')")
+    Course::Forum::Topic::View.
+      where('topic_id = course_forum_topics.id').
+      where('user_id != course_forum_topics.creator_id').
+      select("count('*')")
   end)
 
   # @!method self.order_by_latest_post
