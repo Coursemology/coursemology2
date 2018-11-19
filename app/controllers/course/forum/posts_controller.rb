@@ -26,6 +26,12 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
     end
   end
 
+  def edit
+    # Sanitize input before passing to the form helper for display when editing in case the text
+    # has not been sanitized before save.
+    @post.text = helpers.format_html(@post.text)
+  end
+
   def update
     if @post.update_attributes(post_params)
       redirect_to course_forum_topic_path(current_course, @forum, @topic),

@@ -11,6 +11,7 @@ class Course::Discussion::Post < ApplicationRecord
   after_commit :mark_topic_as_read
   before_destroy :reparent_children, unless: :destroyed_by_association
   before_destroy :unparent_children, if: :destroyed_by_association
+  before_save :sanitize_text
 
   validate :parent_topic_consistency
   validates :text, presence: true
@@ -136,5 +137,9 @@ class Course::Discussion::Post < ApplicationRecord
 
   def mark_topic_as_read
     topic.mark_as_read! for: creator
+  end
+
+  def sanitize_text
+    self.text = ApplicationController.helpers.format_html(text)
   end
 end
