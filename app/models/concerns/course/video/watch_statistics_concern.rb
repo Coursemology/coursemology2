@@ -13,7 +13,7 @@ module Course::Video::WatchStatisticsConcern
   #
   # @return [[Integer]] The watch frequency, with the indices matching up to video time in seconds.
   def watch_frequency
-    starts, ends = start_times, end_times
+    starts, ends = start_and_end_times.values_at(:start_times, :end_times)
     start_index, end_index = 0, 0
     frequencies = []
     active_intervals = 0
