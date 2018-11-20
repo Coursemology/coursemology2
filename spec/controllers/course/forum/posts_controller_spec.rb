@@ -50,5 +50,30 @@ RSpec.describe Course::Forum::PostsController, type: :controller do
         end
       end
     end
+
+    describe '#edit' do
+      subject do
+        get :edit,
+            params: { course_id: course, forum_id: forum, topic_id: topic, id: post.id }
+      end
+
+      context 'when edit page is loaded' do
+        let!(:topic) do
+          topic = create(:forum_topic, forum: forum)
+          create(:course_discussion_post, topic: topic.acting_as)
+          topic
+        end
+        let!(:post) do
+          # Bypass before_save callback which strips `script` tags.
+          topic.posts.first.update_column(:text, "<script>alert('boo');</script>")
+          topic.posts.first
+        end
+
+        it 'sanitizes the post text' do
+          subject
+          expect(assigns(:post).text).not_to include('script')
+        end
+      end
+    end
   end
 end
