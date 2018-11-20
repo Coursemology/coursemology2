@@ -208,6 +208,31 @@ RSpec.describe Course::Discussion::Post, type: :model do
         end
       end
 
+      context 'when post is saved' do
+        let(:topic) { build(:course_discussion_topic, :with_post) }
+
+        context 'when post is created with a topic' do
+          it 'does not save the <script> tags' do
+            topic.posts.first.text = "<script>alert('bad');</script>"
+            topic.save!
+            topic.reload
+            expect(topic.posts.first.text).not_to include('script')
+          end
+        end
+
+        context 'when a post is edited' do
+          let(:post) do
+            create(:course_discussion_post, topic: topic,
+                                            text: "<script>alert('boo');</script>")
+          end
+
+          it 'does not save the <script> tags' do
+            # `create` already saves the post and invokes the callback.
+            expect(post.text).not_to include('script')
+          end
+        end
+      end
+
       context 'after a commit' do
         let!(:topic) { create(:course_discussion_topic, :with_post) }
         let(:post_author) { create(:user) }
