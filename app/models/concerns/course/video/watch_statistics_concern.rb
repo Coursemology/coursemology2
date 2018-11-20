@@ -17,8 +17,8 @@ module Course::Video::WatchStatisticsConcern
     start_index, end_index = 0, 0
     frequencies = []
     active_intervals = 0
-    return [] if end_times.empty?
-    (0..end_times.last).each do |video_time|
+    return [] if ends.empty?
+    (0..ends.last).each do |video_time|
       start_advance = elements_till(starts, start_index) { |time| time <= video_time }
       end_advance = elements_till(ends, end_index) { |time| time < video_time }
 
