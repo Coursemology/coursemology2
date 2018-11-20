@@ -56,40 +56,6 @@ module Course::Video::WatchStatisticsConcern
     advance_count
   end
 
-  # The video times for the interval starts.
-  #
-  # @return [Integer] The start times.
-  def start_times
-    relevant_events_scope.
-      interval_starts.
-      unscope(:order).
-      order(:video_time).
-      pluck(:video_time)
-  end
-
-  # The video times for the interval ends.
-  #
-  # If no explicit end to an interval is recorded in an event, the last_video_time from the
-  # session is taken as the interval end.
-  #
-  # @return [Integer] The end times.
-  def end_times
-    interval_end_query = relevant_events_scope.
-                         interval_ends.
-                         select('course_video_events.video_time AS end_time').
-                         to_sql
-    implict_end_query = relevant_events_scope.
-                        unclosed_starts.
-                        joins(:session).
-                        select('course_video_sessions.last_video_time AS end_time').
-                        to_sql
-
-    ActiveRecord::Base.connection.
-      exec_query("(#{implict_end_query}) UNION ALL (#{interval_end_query}) ORDER BY end_time").
-      rows.
-      map { |row| row[0] }
-  end
-
   # The video times for the interval starts and ends.
   #
   # This method iterates through all relevant start and end events,
