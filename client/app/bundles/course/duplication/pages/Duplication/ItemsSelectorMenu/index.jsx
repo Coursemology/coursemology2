@@ -8,6 +8,7 @@ import { cyan500 } from 'material-ui/styles/colors';
 import { duplicableItemTypes, itemSelectorPanels as panels } from 'course/duplication/constants';
 import { setItemSelectorPanel } from 'course/duplication/actions';
 import { defaultComponentTitles } from 'course/translations.intl';
+import { courseShape } from 'course/duplication/propTypes';
 import DuplicateButton from '../DuplicateButton';
 
 const { TAB, ASSESSMENT, CATEGORY, SURVEY, ACHIEVEMENT, FOLDER, MATERIAL, VIDEO_TAB, VIDEO } = duplicableItemTypes;
@@ -26,6 +27,8 @@ class ItemsSelectorMenu extends React.Component {
   static propTypes = {
     selectedItems: PropTypes.shape({}),
     enabledComponents: PropTypes.arrayOf(PropTypes.string),
+    destinationCourseId: PropTypes.number,
+    courses: PropTypes.arrayOf(courseShape),
     dispatch: PropTypes.func.isRequired,
   }
 
@@ -55,7 +58,9 @@ class ItemsSelectorMenu extends React.Component {
   }
 
   render() {
-    const { selectedItems } = this.props;
+    const { selectedItems, courses, destinationCourseId } = this.props;
+    // Disabled models for cherry pick duplication as defined in `disabled_cherrypickable_types`.
+    const unduplicableObjectTypes = courses.find(course => course.id === destinationCourseId).unduplicableObjectTypes;
 
     const counts = {};
     Object.keys(selectedItems).forEach((key) => {
@@ -69,29 +74,34 @@ class ItemsSelectorMenu extends React.Component {
     return (
       <List className="items-selector-menu">
         {
-          this.renderSidebarItem(
-            panels.ASSESSMENTS, 'course_assessments_component', assessmentsComponentCount
-          )
+          unduplicableObjectTypes.includes('ASSESSMENT') ? null
+            : this.renderSidebarItem(
+              panels.ASSESSMENTS, 'course_assessments_component', assessmentsComponentCount
+            )
         }
         {
-          this.renderSidebarItem(
-            panels.SURVEYS, 'course_survey_component', counts[SURVEY]
-          )
+          unduplicableObjectTypes.includes('SURVEY') ? null
+            : this.renderSidebarItem(
+              panels.SURVEYS, 'course_survey_component', counts[SURVEY]
+            )
         }
         {
-          this.renderSidebarItem(
-            panels.ACHIEVEMENTS, 'course_achievements_component', counts[ACHIEVEMENT]
-          )
+          unduplicableObjectTypes.includes('ACHIEVEMENT') ? null
+            : this.renderSidebarItem(
+              panels.ACHIEVEMENTS, 'course_achievements_component', counts[ACHIEVEMENT]
+            )
         }
         {
-          this.renderSidebarItem(
-            panels.MATERIALS, 'course_materials_component', counts[FOLDER] + counts[MATERIAL]
-          )
+          unduplicableObjectTypes.includes('MATERIAL') ? null
+            : this.renderSidebarItem(
+              panels.MATERIALS, 'course_materials_component', counts[FOLDER] + counts[MATERIAL]
+            )
         }
         {
-          this.renderSidebarItem(
-            panels.VIDEOS, 'course_videos_component', videosComponentCount
-          )
+          unduplicableObjectTypes.includes('VIDEO') ? null
+            : this.renderSidebarItem(
+              panels.VIDEOS, 'course_videos_component', videosComponentCount
+            )
         }
         <ListItem disabled style={styles.duplicateButton}>
           <DuplicateButton />
@@ -104,4 +114,6 @@ class ItemsSelectorMenu extends React.Component {
 export default connect(({ duplication }) => ({
   selectedItems: duplication.selectedItems,
   enabledComponents: duplication.sourceCourse.enabledComponents,
+  destinationCourseId: duplication.destinationCourseId,
+  courses: duplication.destinationCourses,
 }))(ItemsSelectorMenu);
