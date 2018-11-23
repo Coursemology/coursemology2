@@ -34,7 +34,6 @@ const graphGlobalOptions = intl => ({
       },
       ticks: {
         suggestedMin: 0,
-        stepSize: 1,
       },
     }],
   },
