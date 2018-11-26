@@ -461,7 +461,7 @@ GEM
     should_not (1.1.0)
     shoulda-matchers (3.1.2)
       activesupport (>= 4.0.0)
-    simple_form (4.0.1)
+    simple_form (4.1.0)
       actionpack (>= 5.0)
       activemodel (>= 5.0)
     simplecov (0.16.1)
