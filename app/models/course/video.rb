@@ -19,8 +19,10 @@ class Course::Video < ApplicationRecord
                     dependent: :destroy, foreign_key: :video_id, inverse_of: :video
   has_many :discussion_topics, through: :topics, class_name: Course::Discussion::Topic.name
   has_many :posts, through: :discussion_topics, class_name: Course::Discussion::Post.name
-  has_many :sessions, through: :submissions
-  has_many :events, through: :sessions
+  has_many :sessions, through: :submissions, class_name: Course::Video::Session.name
+  has_many :events, through: :sessions, class_name: Course::Video::Event.name
+  has_one :statistic, class_name: Course::Video::Statistic.name, dependent: :destroy,
+                      foreign_key: :video_id, inverse_of: :video, autosave: true
 
   scope :from_course, ->(course) { where(course_id: course) }
 
