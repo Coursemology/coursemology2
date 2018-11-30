@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_04_070041) do
+ActiveRecord::Schema.define(version: 2018_12_06_042524) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -899,6 +899,14 @@ ActiveRecord::Schema.define(version: 2018_12_04_070041) do
     t.index ["updater_id"], name: "index_course_video_sessions_on_updater_id"
   end
 
+  create_table "course_video_statistics", force: :cascade do |t|
+    t.string "cacheable_type"
+    t.integer "cacheable_id"
+    t.integer "watch_freq", default: [], array: true
+    t.integer "percent_watched", default: 0, null: false
+    t.index ["cacheable_type", "cacheable_id"], name: "cacheable_index"
+  end
+
   create_table "course_video_submissions", force: :cascade do |t|
     t.integer "video_id", null: false
     t.integer "creator_id", null: false
@@ -942,6 +950,7 @@ ActiveRecord::Schema.define(version: 2018_12_04_070041) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "duration", default: 0, null: false
+    t.string "workflow_state", default: "uncached", null: false
     t.index ["creator_id"], name: "fk__course_videos_creator_id"
     t.index ["tab_id"], name: "fk__course_videos_tab_id"
     t.index ["updater_id"], name: "fk__course_videos_updater_id"
