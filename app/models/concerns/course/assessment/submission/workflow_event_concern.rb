@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 module Course::Assessment::Submission::WorkflowEventConcern
   extend ActiveSupport::Concern
+  include Course::LessonPlan::PersonalizationConcern
 
   included do
     before_validation :assign_experience_points, if: :workflow_state_changed?
@@ -13,9 +14,20 @@ module Course::Assessment::Submission::WorkflowEventConcern
   # This finalises all current answers as well.
   def finalise(_ = nil)
     self.submitted_at = Time.zone.now
+    save!
+
+    # Freeze personal time at whatever the current times for the user are
+    course_user = creator.course_users.find_by(course: assessment.course)
+    personal_time = assessment.find_or_create_personal_time_for(course_user)
+    personal_time.save! if personal_time.changed?
+
     current_answers.select(&:attempting?).each(&:finalise!)
 
     assign_zero_experience_points if assessment.questions.empty?
+
+    # Trigger timeline recomputation
+    # NB: We are not recomputing on unsubmission because unsubmit is not done by the student
+    update_personalized_timeline_for(course_user)
   end
 
   # Handles the marking of a submission.
