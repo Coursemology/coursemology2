@@ -20,7 +20,9 @@ class Course::Video < ApplicationRecord
   has_many :discussion_topics, through: :topics, class_name: Course::Discussion::Topic.name
   has_many :posts, through: :discussion_topics, class_name: Course::Discussion::Post.name
   has_many :sessions, through: :submissions
-  has_many :events, through: :sessions
+  has_many :events, through: :sessions, class_name: Course::Video::Event.name
+  has_one :statistic, as: :cacheable, class_name: Course::Video::Statistic.name,
+                      inverse_of: :cacheable, dependent: :destroy, autosave: true
 
   scope :from_course, ->(course) { where(course_id: course) }
 

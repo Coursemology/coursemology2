@@ -14,7 +14,9 @@ class Course::Video::Submission < ApplicationRecord
   belongs_to :video, inverse_of: :submissions
 
   has_many :sessions, inverse_of: :submission, dependent: :destroy
-  has_many :events, through: :sessions
+  has_many :events, through: :sessions, class_name: Course::Video::Event.name
+  has_one :statistic, as: :cacheable, class_name: Course::Video::Statistic.name,
+                      inverse_of: :cacheable, dependent: :destroy, autosave: true
 
   # @!method self.ordered_by_date
   #   Orders the submissions by date of creation. This defaults to reverse chronological order
