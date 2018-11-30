@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_19_060042) do
+ActiveRecord::Schema.define(version: 2019_01_08_042524) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -901,6 +901,21 @@ ActiveRecord::Schema.define(version: 2018_12_19_060042) do
     t.index ["updater_id"], name: "index_course_video_sessions_on_updater_id"
   end
 
+  create_table "course_video_statistics", force: :cascade do |t|
+    t.integer "video_id", null: false
+    t.integer "watch_freq", default: [], array: true
+    t.integer "percent_watched", default: 0, null: false
+    t.boolean "cached", default: false, null: false
+    t.index ["video_id"], name: "index_course_video_statistics_on_video_id"
+  end
+
+  create_table "course_video_submission_statistics", force: :cascade do |t|
+    t.integer "submission_id", null: false
+    t.integer "watch_freq", default: [], array: true
+    t.integer "percent_watched", default: 0, null: false
+    t.index ["submission_id"], name: "index_course_video_submission_statistics_on_submission_id"
+  end
+
   create_table "course_video_submissions", force: :cascade do |t|
     t.integer "video_id", null: false
     t.integer "creator_id", null: false
@@ -1266,6 +1281,8 @@ ActiveRecord::Schema.define(version: 2018_12_19_060042) do
   add_foreign_key "course_video_sessions", "course_video_submissions", column: "submission_id"
   add_foreign_key "course_video_sessions", "users", column: "creator_id"
   add_foreign_key "course_video_sessions", "users", column: "updater_id"
+  add_foreign_key "course_video_statistics", "course_videos", column: "video_id", on_delete: :cascade
+  add_foreign_key "course_video_submission_statistics", "course_video_submissions", column: "submission_id", on_delete: :cascade
   add_foreign_key "course_video_submissions", "course_videos", column: "video_id", name: "fk_course_video_submissions_video_id"
   add_foreign_key "course_video_submissions", "users", column: "creator_id", name: "fk_course_video_submissions_creator_id"
   add_foreign_key "course_video_submissions", "users", column: "updater_id", name: "fk_course_video_submissions_updater_id"
