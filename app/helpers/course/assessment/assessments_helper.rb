@@ -5,10 +5,17 @@ module Course::Assessment::AssessmentsHelper
 
   def display_assessment_tabs
     return nil if @category.tabs.count == 1
+    # Set the first tab as active if there's no tab parameter in the URL.
+    active_tab = params[:tab] || @category.tabs.first
     tabs do
       @category.tabs.each do |item|
+        # If this is the tab previously set as active because there was no tab parameter in the URL,
+        # pass a hash to `nav_to` so it will show the tab as active.
+        # See https://github.com/doabit/bootstrap-sass-extras/blob/6aa549b91a66055a5f5e37400dbe44f4d17f09c3/app/helpers/nav_helper.rb#L32
+        html_options = item == active_tab ? { active: true } : nil
         concat(nav_to(format_inline_text(item.title),
-                      course_assessments_path(current_course, category: @category, tab: item)))
+                      course_assessments_path(current_course, category: @category, tab: item),
+                      html_options))
       end
     end
   end
