@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Course::Video < ApplicationRecord
+  after_save :init_statistic
+
   acts_as_lesson_plan_item has_todo: true
 
   include Course::ClosingReminderConcern
@@ -122,5 +124,9 @@ class Course::Video < ApplicationRecord
     errors.add(:url, 'cannot be updated for videos with comments or watch data') if url_changed? &&
                                                                                     persisted? &&
                                                                                     url_unchangeble?
+  end
+
+  def init_statistic
+    create_statistic if statistic.nil?
   end
 end
