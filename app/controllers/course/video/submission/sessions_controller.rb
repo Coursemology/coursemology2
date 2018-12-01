@@ -17,6 +17,7 @@ class Course::Video::Submission::SessionsController < Course::Video::Submission:
     @session.merge_in_events!(update_params[:events])
     # Update video duration using data from frontend VideoPlayer
     @video.update(duration: video_params[:video_duration].round) if @video.duration < video_params[:video_duration]
+    @video.update(workflow_state: 'uncached') if @video.workflow_state == 'cached'
 
     head :no_content
   rescue ArgumentError => _
