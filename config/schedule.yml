@@ -3,3 +3,9 @@ consolidated_item_email_job:
   cron: "5 * * * *"
   class: "ConsolidatedItemEmailJob"
   queue: "default"
+
+# Run the VideoStatisticUpdateJob every day at 5:30 AM
+video_statistic_update_job:
+  cron: "30 5 * * *"
+  class: "VideoStatisticUpdateJob"
+  queue: "default"
