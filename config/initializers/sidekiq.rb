@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-# Sidekiq Cron configuration to invoke ConsolidatedItemEmailJob for opening reminder emails.
+# Sidekiq Cron configuration to invoke ConsolidatedItemEmailJob for opening reminder emails,
+# and VideoStatisticUpdateJob for per video watch_freq cache
 schedule_file = 'config/schedule.yml'
 
 # Use Sidekiq Cron gem (https://github.com/ondrejbartas/sidekiq-cron) to
