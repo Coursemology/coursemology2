@@ -9,7 +9,7 @@ gem 'tzinfo-data', platforms: [:mswin, :mswin64]
 gem 'bundler', '>= 1.10.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '< 5.2.1'
+gem 'rails', git: 'https://github.com/coursemology/rails', branch: '5-2-0-security-patches'
 
 # Use PostgreSQL for the backend
 gem 'pg'
