@@ -188,6 +188,7 @@ function removeOldSessions(sessionIds) {
 function sendCurrentEvents(dispatch, videoState, closeSession = false) {
   const sessionId = videoState.sessionId;
   const events = videoState.sessionEvents;
+  const duration = (events === undefined || events.length === 0) ? 0 : videoState.duration;
 
   if (sessionId === null || (!closeSession && events.isEmpty())) {
     return;
@@ -195,7 +196,7 @@ function sendCurrentEvents(dispatch, videoState, closeSession = false) {
 
   const videoTime = Math.round(videoState.playerProgress);
   CourseAPI.video.sessions
-    .update(sessionId, videoTime, events.toArray())
+    .update(sessionId, videoTime, events.toArray(), duration)
     .then(() => {
       if (!events.isEmpty()) {
         dispatch(removeEvents(events.map(event => event.sequence_num).toSet()), closeSession);
@@ -224,7 +225,7 @@ function sendOldSessions(dispatch, oldSessions) {
       const events = oldVideoState.sessionEvents;
 
       return CourseAPI.video.sessions
-        .update(sessionId, videoTime, events.toArray(), true)
+        .update(sessionId, videoTime, events.toArray(), 0, true)
         .then(() => sessionId)
         .catch(error => (error.response.status === 404 ? sessionId : null));
     })
