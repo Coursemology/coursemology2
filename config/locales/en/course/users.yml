@@ -12,6 +12,9 @@ en:
       status:
         accepted: 'Accepted'
         invited: 'Invited'
+      algorithm:
+        fixed: 'Fixed'
+        naive: 'Naive'
       tabs:
         students: :'course.users.students.header'
         staff: :'course.users.staff.header'

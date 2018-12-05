@@ -2,6 +2,7 @@ en:
   common:
     name: 'Name'
     email: 'Email'
+    algorithm: 'Timeline algorithm'
     new: 'New'
     role: 'Role'
     not_started: 'Not started'
