@@ -1,0 +1,9 @@
+- if item.time_for(course_user).is_a? Course::PersonalTime and item.time_for(course_user).fixed?
+  span title=t('course.lesson_plan.items.fixed_desc')
+    = fa_icon 'lock'
+=< format_datetime(item.time_for(course_user)[attribute], datetime_format)
+- if item.time_for(course_user).is_a? Course::PersonalTime
+  br
+  strike
+    = t('course.lesson_plan.items.ref')
+    = format_datetime(item.reference_time_for(course_user)[attribute], datetime_format)

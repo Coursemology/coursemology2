@@ -23,17 +23,22 @@
   td.table-start-at
     - if condition_not_satisfied(assessment)
       div.condition-not-satisfied data-toggle='tooltip' title="#{t('.condition_not_satisfied')}"
-        = format_datetime(assessment.start_at, :short)
+        = render partial: 'course/lesson_plan/items/personal_or_ref_time',
+                 locals: { item: assessment, course_user: current_course_user, attribute: :start_at, datetime_format: :short }
     - else
-      = format_datetime(assessment.start_at, :short)
+      = render partial: 'course/lesson_plan/items/personal_or_ref_time',
+               locals: { item: assessment, course_user: current_course_user, attribute: :start_at, datetime_format: :short }
   - if show_bonus_attributes?
     td.table-bonus-cut-off
       - if assessment.bonus_end_at.present? && assessment.time_bonus_exp > 0
-        = format_datetime(assessment.bonus_end_at, :short)
+        = render partial: 'course/lesson_plan/items/personal_or_ref_time',
+                 locals: { item: assessment, course_user: current_course_user, attribute: :bonus_end_at, datetime_format: :short }
       - else
         = '-'
   - if show_end_at?
     td.table-end-at
-      = format_datetime(assessment.end_at, :short) if assessment.end_at.present?
+      - if assessment.end_at.present?
+        = render partial: 'course/lesson_plan/items/personal_or_ref_time',
+                 locals: { item: assessment, course_user: current_course_user, attribute: :end_at, datetime_format: :short }
   td.table-buttons colspan=2
     = render 'assessment_management_buttons', assessment: assessment

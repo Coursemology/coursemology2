@@ -5,6 +5,9 @@ en:
         sidebar_title: :'course.lesson_plan.items.index.header'
         index:
           header: 'Lesson Plan'
+        ref: 'Ref: '
+        fixed_desc: >
+          The personalized timeline for this item has been fixed. It will no longer be automatically modified.
   activerecord:
     attributes:
       course/lesson_plan/item:
