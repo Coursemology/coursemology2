@@ -67,11 +67,11 @@ const translations = defineMessages({
   },
   multipleChoice: {
     id: 'course.surveys.questions.fields.questionTypes.multipleChoice',
-    defaultMessage: 'Mulitple Choice Question',
+    defaultMessage: 'Multiple Choice Question',
   },
   multipleResponse: {
     id: 'course.surveys.questions.fields.questionTypes.multipleResponse',
-    defaultMessage: 'Mulitple Response Question',
+    defaultMessage: 'Multiple Response Question',
   },
   maxOptions: {
     id: 'course.surveys.questions.fields.maxOptions',
