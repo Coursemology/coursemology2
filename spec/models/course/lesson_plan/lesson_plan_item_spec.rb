@@ -99,5 +99,73 @@ RSpec.describe Course::LessonPlan::Item, type: :model do
         end
       end
     end
+
+    describe 'personal times' do
+      let(:student1) { create(:course_student, course: course) }
+      let(:student2) { create(:course_student, course: course) }
+      let(:personal_time1) do
+        personal_time = lesson_plan_item.find_or_create_personal_time_for(student1)
+        personal_time.save!
+        personal_time
+      end
+      let(:personal_time2) do
+        personal_time = lesson_plan_item.find_or_create_personal_time_for(student2)
+        personal_time.save!
+        personal_time
+      end
+
+      it 'creates a personal time for course_user' do
+        student1
+        student2
+        expect(personal_time1.course_user).to eq student1
+        expect(personal_time1.lesson_plan_item).to eq lesson_plan_item
+        [:start_at, :end_at, :bonus_end_at].each do |attrib|
+          expect(personal_time1.send(attrib).to_i).to eq lesson_plan_item.send(attrib).to_i
+        end
+      end
+
+      it 'eager loads personal times for course_user' do
+        personal_time1
+        items = Course::LessonPlan::Item.where(id: lesson_plan_item).with_personal_times_for(student1).to_a
+        expect(items.first.personal_times.loaded?).to be true
+        expect(items.first.personal_time_for(student1)).to eq personal_time1
+      end
+
+      it 'does not eager load personal times for another course_user' do
+        personal_time1
+        personal_time2
+        items = Course::LessonPlan::Item.where(id: lesson_plan_item).with_personal_times_for(student2).to_a
+        expect(items.first.personal_times.loaded?).to be true
+        expect(items.first.personal_time_for(student1)).to be nil
+        expect(items.first.personal_time_for(student2)).to eq personal_time2
+      end
+
+      it 'eager loads reference times for course_user' do
+        default_rt = lesson_plan_item.default_reference_time
+        items = Course::LessonPlan::Item.where(id: lesson_plan_item).with_reference_times_for(student1).to_a
+        expect(items.first.reference_times.loaded?).to be true
+        expect(items.first.reference_time_for(student1)).to eq default_rt
+      end
+
+      describe '#time_for' do
+        context 'when personal time exists' do
+          it 'returns the personal time' do
+            personal_time1
+            time_for = lesson_plan_item.time_for(student1)
+            expect(time_for.is_a?(Course::PersonalTime)).to be true
+            expect(time_for).to eq personal_time1
+          end
+        end
+
+        context 'when personal time does not exist' do
+          it 'returns the reference time' do
+            reference_time = lesson_plan_item.reference_time_for(student2)
+            time_for = lesson_plan_item.time_for(student2)
+            expect(time_for.is_a?(Course::ReferenceTime)).to be true
+            expect(time_for).to eq reference_time
+          end
+        end
+      end
+    end
   end
 end
