@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181018043204) do
+ActiveRecord::Schema.define(version: 2018_11_30_061333) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -697,6 +697,17 @@ ActiveRecord::Schema.define(version: 20181018043204) do
     t.index ["course_id"], name: "index_course_notifications_on_course_id"
   end
 
+  create_table "course_personal_times", force: :cascade do |t|
+    t.bigint "course_user_id", null: false
+    t.bigint "lesson_plan_item_id", null: false
+    t.datetime "start_at", null: false
+    t.datetime "bonus_end_at"
+    t.datetime "end_at"
+    t.boolean "fixed", default: false, null: false
+    t.index ["course_user_id"], name: "index_course_personal_times_on_course_user_id"
+    t.index ["lesson_plan_item_id"], name: "index_course_personal_times_on_lesson_plan_item_id"
+  end
+
   create_table "course_question_assessments", force: :cascade do |t|
     t.integer "question_id", null: false
     t.integer "assessment_id", null: false
@@ -852,6 +863,7 @@ ActiveRecord::Schema.define(version: 20181018043204) do
     t.integer "creator_id", null: false
     t.integer "updater_id", null: false
     t.bigint "reference_timeline_id"
+    t.integer "timeline_algorithm", default: 0, null: false
     t.index ["course_id", "user_id"], name: "index_course_users_on_course_id_and_user_id", unique: true
     t.index ["course_id"], name: "fk__course_users_course_id"
     t.index ["creator_id"], name: "fk__course_users_creator_id"
@@ -1212,6 +1224,8 @@ ActiveRecord::Schema.define(version: 20181018043204) do
   add_foreign_key "course_materials", "users", column: "creator_id", name: "fk_course_materials_creator_id"
   add_foreign_key "course_materials", "users", column: "updater_id", name: "fk_course_materials_updater_id"
   add_foreign_key "course_notifications", "courses", name: "fk_course_notifications_course_id"
+  add_foreign_key "course_personal_times", "course_lesson_plan_items", column: "lesson_plan_item_id"
+  add_foreign_key "course_personal_times", "course_users"
   add_foreign_key "course_question_assessments", "course_assessment_questions", column: "question_id", name: "fk_course_question_assessments_question_id"
   add_foreign_key "course_question_assessments", "course_assessments", column: "assessment_id", name: "fk_course_question_assessments_assessment_id"
   add_foreign_key "course_reference_timelines", "courses"

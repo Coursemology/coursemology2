@@ -2,6 +2,9 @@
 class Course::LessonPlan::Item < ApplicationRecord
   include Course::LessonPlan::ItemTodoConcern
 
+  has_many :personal_times,
+           foreign_key: :lesson_plan_item_id, class_name: Course::PersonalTime.name,
+           inverse_of: :lesson_plan_item, dependent: :destroy, autosave: true
   has_many :reference_times,
            foreign_key: :lesson_plan_item_id, class_name: Course::ReferenceTime.name, inverse_of: :lesson_plan_item,
            dependent: :destroy, autosave: true
@@ -60,6 +63,21 @@ class Course::LessonPlan::Item < ApplicationRecord
     where(published: true)
   end)
 
+  scope :with_personal_times_for, (lambda do |course_user|
+    personal_times = Course::PersonalTime.where(course_user_id: course_user.id, lesson_plan_item_id: all).to_a
+
+    all.to_a.tap do |result|
+      preloader = ActiveRecord::Associations::Preloader::ManualPreloader.new
+      preloader.preload(result, :personal_times, personal_times)
+    end
+  end)
+
+  scope :with_reference_times_for, (lambda do |course_user|
+    eager_load(:reference_times).
+      where(course_reference_times: { reference_timeline_id: course_user.reference_timeline_id ||
+            course_user.course.default_reference_timeline.id })
+  end)
+
   # @!method self.with_actable_types
   #   Scopes the lesson plan items to those which belong to the given actable_types.
   #   Each actable type is further scoped to return the IDs of items for display.
@@ -92,6 +110,47 @@ class Course::LessonPlan::Item < ApplicationRecord
            :end_at, :end_at=, :end_at_changed?,
            to: :default_reference_time
   before_validation :link_default_reference_time
+
+  # Returns a frozen CourseReferenceTime or CoursePersonalTime.
+  # The calling function is responsible for eager-loading both associations if calling time_for on a lot of items.
+  # TODO(#3902): Lookup user's reference timeline before defaulting to default reference timeline
+  def time_for(course_user)
+    personal_time = personal_time_for(course_user)
+    reference_time = reference_time_for(course_user)
+    (personal_time || reference_time).freeze
+  end
+
+  def personal_time_for(course_user)
+    # Do not make a separate call to DB if personal_times has already been preloaded
+    if personal_times.loaded?
+      personal_times.find { |x| x.course_user_id == course_user.id }
+    else
+      personal_times.find_by(course_personal_times: { course_user_id: course_user.id })
+    end
+  end
+
+  def reference_time_for(course_user)
+    # Do not make a separate call to DB if reference_times has already been preloaded
+    reference_timeline_id = course_user.reference_timeline_id || course_user.course.default_reference_timeline.id
+    if reference_times.loaded?
+      reference_times.find { |x| x.reference_timeline_id == reference_timeline_id }
+    else
+      reference_times.find_by(course_reference_times: { reference_timeline_id: reference_timeline_id })
+    end
+  end
+
+  # Gets the existing personal time for course_user, or instantiates and returns a new one
+  def find_or_create_personal_time_for(course_user)
+    personal_time = personal_time_for(course_user)
+    return personal_time if personal_time.present?
+
+    personal_time = personal_times.new(course_user: course_user)
+    reference_time = reference_time_for(course_user)
+    personal_time.start_at = reference_time.start_at
+    personal_time.end_at = reference_time.end_at
+    personal_time.bonus_end_at = reference_time.bonus_end_at
+    personal_time
+  end
 
   # Finds the lesson plan items which are starting within the next day for a given course.
   # Rearrange the items into a hash keyed by the actable type as a string.

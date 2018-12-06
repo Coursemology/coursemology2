@@ -8,6 +8,7 @@ class CourseUser < ApplicationRecord
   before_validation :set_defaults, if: :new_record?
 
   enum role: { student: 0, teaching_assistant: 1, manager: 2, owner: 3, observer: 4 }
+  enum timeline_algorithm: { fixed: 0, naive: 1 }
 
   # A set of roles which comprise the staff of a course, including the observer.
   STAFF_ROLES = Set[:teaching_assistant, :manager, :owner, :observer].freeze
@@ -42,6 +43,10 @@ class CourseUser < ApplicationRecord
   has_many :group_users, class_name: Course::GroupUser.name,
                          inverse_of: :course_user, dependent: :destroy
   has_many :groups, through: :group_users, class_name: Course::Group.name, source: :group
+  has_many :personal_times, class_name: Course::PersonalTime.name, inverse_of: :course_user, dependent: :destroy
+  belongs_to :reference_timeline, class_name: Course::ReferenceTimeline.name, inverse_of: :course_users, optional: true
+
+  validate :validate_reference_timeline_belongs_to_course
 
   # @!attribute [r] experience_points
   #   Sums the total experience points for the course user.
@@ -176,5 +181,12 @@ class CourseUser < ApplicationRecord
   def set_defaults # :nodoc:
     self.name ||= user.name if user
     self.role ||= CourseUser.roles[:student]
+  end
+
+  # TODO(#3092): Validation is correct but everyone's reference timeline should be nil
+  def validate_reference_timeline_belongs_to_course
+    return if reference_timeline.nil?
+    return if reference_timeline.course == course
+    errors.add(:reference_timeline, :belongs_to_course)
   end
 end
