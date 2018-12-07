@@ -13,7 +13,7 @@ module Course::Video::WatchStatisticsConcern
   #
   # @return [[Integer]] The watch frequency, with the indices matching up to video time in seconds.
   def watch_frequency
-    starts, ends = start_times, end_times
+    starts, ends = start_and_end_times.values_at(:start_times, :end_times)
     start_index, end_index = 0, 0
     frequencies = []
     active_intervals = 0
@@ -56,37 +56,39 @@ module Course::Video::WatchStatisticsConcern
     advance_count
   end
 
-  # The video times for the interval starts.
+  # The video times for the interval starts and ends.
   #
-  # @return [Integer] The start times.
-  def start_times
-    relevant_events_scope.
-      interval_starts.
-      unscope(:order).
-      order(:video_time).
-      pluck(:video_time)
-  end
-
-  # The video times for the interval ends.
+  # This method iterates through all relevant start and end events,
+  # sorted by session_id and sequence_num, to find all interval start events
+  # and corresponding end events to push into respective arrays.
   #
-  # If no explicit end to an interval is recorded in an event, the last_video_time from the
-  # session is taken as the interval end.
+  # If a start event is followed by an event from another session, it is counted as an unclosed start,
+  # and the last_video_time from the session is taken as the interval end.
   #
-  # @return [Integer] The end times.
-  def end_times
-    interval_end_query = relevant_events_scope.
-                         interval_ends.
-                         select('course_video_events.video_time AS end_time').
-                         to_sql
-    implict_end_query = relevant_events_scope.
-                        unclosed_starts.
-                        joins(:session).
-                        select('course_video_sessions.last_video_time AS end_time').
-                        to_sql
-
-    ActiveRecord::Base.connection.
-      exec_query("(#{implict_end_query}) UNION ALL (#{interval_end_query}) ORDER BY end_time").
-      rows.
-      map { |row| row[0] }
+  # @return [Hash<Symbol, [Integer]>] The hash containing arrays of start times and end times.
+  #
+  # TODO: Remove logic to append last_video_time to end_times when session end event is implemented.
+  # Session end event is an even fired from VideoPlayer onUnmount. When recorded in DB as an end event,
+  # it can ensure that there would be no unclosed start, thereby rendering last_video_time redundant.
+  def start_and_end_times
+    result = { start_times: [], end_times: [] }
+    hash_keys = [:start_times, :end_times].cycle
+    session, flag = nil, hash_keys.next
+    event_types = { start_times: ['play', 'seek_end'], end_times: ['pause', 'seek_start', 'end'] }
+    relevant_events_scope.all_start_and_end_events.each do |event|
+      if event.session != session
+        if flag == :end_times
+          result[:end_times] << session.last_video_time
+          flag = hash_keys.next
+        end
+        session = event.session
+      end
+      if event_types[flag].include? event.event_type
+        result[flag] << event.video_time
+        flag = hash_keys.next
+      end
+    end
+    result[:end_times] << session.last_video_time unless flag == :start_times || result[:start_times].empty?
+    result.map { |k, v| [k, v.sort] }.to_h
   end
 end
