@@ -1,0 +1,66 @@
+- add_breadcrumb :index
+= page_header
+
+= render '/course/users/tabs'
+
+= simple_form_for :course_user do |f|
+  = f.input :user_id,
+      as: :select,
+      required: false,
+      label: 'Course User',
+      label_method: :second,
+      value_method: :third,
+      selected: lambda { |option| option.first == @course_user },
+      include_blank: '',
+      collection: @course.course_users.order_alphabetically.\
+                          map { |cu| [cu, cu.name, course_user_personal_times_path(user_id: cu.id)] },
+      input_html: { onchange: "location.href = $('#course_user_user_id option:selected').val()" }
+
+- if @items.present?
+  div.table-fluid
+    table.table.table-striped.table-hover
+      thead
+        tr
+          th rowspan='2' = t('.assessment')
+          th colspan='3' = t('.reference_timeline')
+          th colspan='5' = t('.personalized_timeline')
+        tr
+          th = t('.start_at')
+          th = t('.bonus_end_at')
+          th = t('.end_at')
+          th
+            span title=t('.fixed_desc')
+              = fa_icon 'lock'
+          th = t('.start_at')
+          th = t('.bonus_end_at')
+          th = t('.end_at')
+          th
+      tbody
+        - @items.each do |item|
+          - personal_time = item.find_or_create_personal_time_for(@course_user)
+          = simple_form_for personal_time,
+                            url: course_user_personal_times_path,
+                            action: :create,
+                            method: :post do |f|
+            = f.hidden_field :lesson_plan_item_id, value: personal_time.lesson_plan_item_id
+            tr
+              td = item.title
+              td = item.reference_time_for(@course_user).start_at.nil? ? nil : \
+                     format_datetime(item.reference_time_for(@course_user).start_at, :short)
+              td = item.reference_time_for(@course_user).bonus_end_at.nil? ? nil : \
+                     format_datetime(item.reference_time_for(@course_user).bonus_end_at, :short)
+              td = item.reference_time_for(@course_user).end_at.nil? ? nil : \
+                     format_datetime(item.reference_time_for(@course_user).end_at, :short)
+              - if personal_time.new_record?
+                td colspan='5' class="toggle-personal-time-#{personal_time.lesson_plan_item_id}"
+                  div.btn.btn-default.btn-block.toggle-personal-time-btn data-id=personal_time.lesson_plan_item_id
+                    = t('.create_new_personal_time')
+                - fields_class = "hidden personal-time-#{personal_time.lesson_plan_item_id}"
+              td class=fields_class = f.input :fixed, label: false, as: :boolean
+              td class=fields_class = f.input :start_at, label: false, input_html: { format: '%d %b %H:%M' }
+              td class=fields_class = f.input :bonus_end_at, label: false, input_html: { format: '%d %b %H:%M' }
+              td class=fields_class = f.input :end_at, label: false, input_html: { format: '%d %b %H:%M' }
+              td class=fields_class
+                = f.button :submit, id: 'update' do
+                  = fa_icon 'save'.freeze
+                = delete_button(course_user_personal_time_path(id: personal_time.id)) unless personal_time.new_record?

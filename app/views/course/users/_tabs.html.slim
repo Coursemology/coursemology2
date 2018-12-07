@@ -10,3 +10,4 @@
     = t('.invitations')
     - invitations_count = current_course.invitations.unconfirmed.count
     =< badge(invitations_count) if invitations_count > 0
+  = nav_to(t('.personal_times'), personal_times_course_users_path(current_course))

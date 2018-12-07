@@ -19,6 +19,7 @@ RSpec.describe Course, type: :model do
       it { is_expected.not_to be_able_to(:show, closed_course) }
       it { is_expected.not_to be_able_to(:show_users, course) }
       it { is_expected.not_to be_able_to(:manage_users, course) }
+      it { is_expected.not_to be_able_to(:manage_personal_times, course) }
     end
 
     context 'when the user is a Course Student' do
@@ -28,6 +29,7 @@ RSpec.describe Course, type: :model do
       it { is_expected.not_to be_able_to(:manage, course) }
       it { is_expected.not_to be_able_to(:show_users, course) }
       it { is_expected.not_to be_able_to(:manage_users, course) }
+      it { is_expected.not_to be_able_to(:manage_personal_times, course) }
     end
 
     context 'when the user is a Course Teaching Assistant' do
@@ -37,6 +39,7 @@ RSpec.describe Course, type: :model do
       it { is_expected.not_to be_able_to(:manage, course) }
       it { is_expected.to be_able_to(:show_users, course) }
       it { is_expected.to be_able_to(:manage_users, course) }
+      it { is_expected.to be_able_to(:manage_personal_times, course) }
     end
 
     context 'when the user is a Course Manager' do
@@ -46,6 +49,7 @@ RSpec.describe Course, type: :model do
       it { is_expected.to be_able_to(:manage, course) }
       it { is_expected.to be_able_to(:show_users, course) }
       it { is_expected.to be_able_to(:manage_users, course) }
+      it { is_expected.to be_able_to(:manage_personal_times, course) }
     end
 
     context 'when the user is a Course Observer' do
@@ -55,6 +59,7 @@ RSpec.describe Course, type: :model do
       it { is_expected.not_to be_able_to(:manage, course) }
       it { is_expected.to be_able_to(:show_users, course) }
       it { is_expected.not_to be_able_to(:manage_users, course) }
+      it { is_expected.not_to be_able_to(:manage_personal_times, course) }
     end
   end
 end

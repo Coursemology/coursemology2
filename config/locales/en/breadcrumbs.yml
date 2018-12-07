@@ -60,6 +60,8 @@ en:
       user_invitations:
         index: :'breadcrumbs.course.users.index'
         invite: :'course.user_invitations.new.header'
+      personal_times:
+        index: :'course.personal_times.index.header'
       announcements:
         index: :'course.announcements.index.header'
         new: :'course.announcements.new.header'

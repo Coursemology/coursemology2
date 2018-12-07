@@ -21,6 +21,7 @@ en:
         requests: :'course.enrol_requests.index.header'
         invite: :'course.user_invitations.new.header'
         invitations: :'course.user_invitations.index.header'
+        personal_times: :'course.personal_times.index.header'
       new:
         already_registered: 'You are already registered as a %{role}.'
       update:
