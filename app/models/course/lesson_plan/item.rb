@@ -117,7 +117,7 @@ class Course::LessonPlan::Item < ApplicationRecord
   def time_for(course_user)
     personal_time = personal_time_for(course_user)
     reference_time = reference_time_for(course_user)
-    (personal_time || reference_time).freeze
+    (personal_time || reference_time).clone.freeze
   end
 
   def personal_time_for(course_user)
