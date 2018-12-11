@@ -24,7 +24,8 @@ div.users
         tr
           th = t('common.name')
           th = t('common.email')
-          th = t('common.algorithm')
+          - if current_course.show_personalized_timeline_features?
+            th = t('common.algorithm')
           th = t('common.role')
           th = t('course.users.role.phantom')
           th
@@ -37,11 +38,12 @@ div.users
             = simple_fields_for user, resource: :course_user do |f|
               th = f.input :name, label: false
               td = f.object.user.email
-              td = f.input :timeline_algorithm, as: :select,
-                      collection: CourseUser.timeline_algorithms.keys,
-                      include_blank: false,
-                      label: false,
-                      label_method: lambda {|k| t("course.users.algorithm.#{k}")}
+              - if current_course.show_personalized_timeline_features?
+                td = f.input :timeline_algorithm, as: :select,
+                        collection: CourseUser.timeline_algorithms.keys,
+                        include_blank: false,
+                        label: false,
+                        label_method: lambda {|k| t("course.users.algorithm.#{k}")}
               td = f.input :role, as: :select,
                                   collection: CourseUser.roles.keys,
                                   include_blank: false,

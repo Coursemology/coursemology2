@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_04_070041) do
+ActiveRecord::Schema.define(version: 2018_12_11_133628) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -984,6 +984,7 @@ ActiveRecord::Schema.define(version: 2018_12_04_070041) do
     t.integer "updater_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "show_personalized_timeline_features", default: false, null: false
     t.index ["creator_id"], name: "fk__courses_creator_id"
     t.index ["instance_id"], name: "fk__courses_instance_id"
     t.index ["registration_key"], name: "index_courses_on_registration_key", unique: true
