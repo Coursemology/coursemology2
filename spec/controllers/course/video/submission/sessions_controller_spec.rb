@@ -43,7 +43,8 @@ RSpec.describe Course::Video::Submission::SessionsController, type: :controller 
         patch :update, as: :json, params: {
           course_id: course.id, video_id: video.id,
           submission_id: session.submission.id, id: session.id,
-          session: { last_video_time: 32, events: events }
+          session: { last_video_time: 32, events: events },
+          video_duration: 2456
         }
       end
 
@@ -65,6 +66,10 @@ RSpec.describe Course::Video::Submission::SessionsController, type: :controller 
 
         it 'does not create any events' do
           expect { subject }.to change(Course::Video::Session, :count).by(0)
+        end
+
+        it 'updates the video duration' do
+          expect { subject }.to change { video.reload.duration }.to(2456)
         end
       end
 

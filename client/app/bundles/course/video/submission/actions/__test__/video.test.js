@@ -57,7 +57,7 @@ describe('sendEvents', () => {
     const spyUpdate = jest.spyOn(CourseAPI.video.sessions, 'update');
     createdStore.dispatch(sendEvents());
 
-    expect(spyUpdate).toHaveBeenCalledWith('25', 5, oldSessionsFixtures.get('25').sessionEvents.toArray(), true);
+    expect(spyUpdate).toHaveBeenCalledWith('25', 5, oldSessionsFixtures.get('25').sessionEvents.toArray(), 0, true);
     await sleep(1);
     expect(createdStore.getState().oldSessions.count()).toBe(0);
   });
@@ -94,7 +94,7 @@ describe('endSession', () => {
       const spyUpdate = jest.spyOn(CourseAPI.video.sessions, 'update');
       createdStore.dispatch(endSession());
 
-      expect(spyUpdate).toHaveBeenCalledWith(32, 0, []);
+      expect(spyUpdate).toHaveBeenCalledWith(32, 0, [], 600);
     });
   });
 });

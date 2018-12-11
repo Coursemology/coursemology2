@@ -15,6 +15,8 @@ class Course::Video::Submission::SessionsController < Course::Video::Submission:
                                   last_video_time: update_params[:last_video_time])
     end
     @session.merge_in_events!(update_params[:events])
+    # Update video duration using data from frontend VideoPlayer
+    @video.update(duration: video_params[:video_duration].round) if @video.duration < video_params[:video_duration]
 
     head :no_content
   rescue ArgumentError => _
@@ -33,5 +35,9 @@ class Course::Video::Submission::SessionsController < Course::Video::Submission:
     params.require(:session).permit(:last_video_time,
                                     events: [[:sequence_num, :event_type, :video_time,
                                               :playback_rate, :event_time]])
+  end
+
+  def video_params
+    params.permit(:video_duration)
   end
 end

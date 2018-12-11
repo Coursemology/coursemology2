@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_30_061333) do
+ActiveRecord::Schema.define(version: 2018_12_04_070041) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -941,6 +941,7 @@ ActiveRecord::Schema.define(version: 2018_11_30_061333) do
     t.integer "updater_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "duration", default: 0, null: false
     t.index ["creator_id"], name: "fk__course_videos_creator_id"
     t.index ["tab_id"], name: "fk__course_videos_tab_id"
     t.index ["updater_id"], name: "fk__course_videos_updater_id"
