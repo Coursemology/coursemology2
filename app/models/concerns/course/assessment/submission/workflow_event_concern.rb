@@ -16,11 +16,6 @@ module Course::Assessment::Submission::WorkflowEventConcern
     self.submitted_at = Time.zone.now
     save!
 
-    # Freeze personal time at whatever the current times for the user are
-    course_user = creator.course_users.find_by(course: assessment.course)
-    personal_time = assessment.find_or_create_personal_time_for(course_user)
-    personal_time.save! if personal_time.changed?
-
     current_answers.select(&:attempting?).each(&:finalise!)
 
     assign_zero_experience_points if assessment.questions.empty?
