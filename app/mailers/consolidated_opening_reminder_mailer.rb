@@ -20,7 +20,8 @@ class ConsolidatedOpeningReminderMailer < ActivityMailer
       @notification = notification
       @course = notification.activity.object
       @layout = layout_path
-      @items_hash = Course::LessonPlan::Item.upcoming_items_from_course_by_type(@course)
+      course_user = @course.course_users.find_by(user: @recipient)
+      @items_hash = Course::LessonPlan::Item.upcoming_items_from_course_by_type_for_course_user(course_user)
       # Lesson plan item start at times could have been changed between the time the mailer job
       # was enqueued and the time this function is called to render the email.
       # Return if there are no items so a consolidated email with no items doesn't get sent.

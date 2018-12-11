@@ -2,7 +2,7 @@
 class Course::ConsolidatedOpeningReminderNotifier < Notifier::Base
   # Create an opening reminder activity if there are upcoming items for the course.
   def opening_reminder(course)
-    return if Course::LessonPlan::Item.upcoming_items_from_course_by_type(course).empty?
+    return unless Course::LessonPlan::Item.upcoming_for_exists?(course)
 
     create_activity(actor: User.system, object: course, event: :opening_reminder).
       notify(course, :email).save
