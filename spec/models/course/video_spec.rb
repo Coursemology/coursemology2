@@ -11,7 +11,7 @@ RSpec.describe Course::Video, type: :model do
     let(:course) { create(:course, :with_video_component_enabled) }
     let(:student1) { create(:course_student, course: course) }
     let(:student2) { create(:course_student, course: course) }
-    let(:video1) { create(:video, course: course) }
+    let(:video1) { create(:video, course: course, duration: 70) }
     let(:video2) { create(:video, course: course, start_at: Time.zone.now - 1.month) }
 
     describe '.ordered_by_date_and_title' do
@@ -65,9 +65,11 @@ RSpec.describe Course::Video, type: :model do
       let(:submission3) { create(:video_submission, video: video2, creator: student2.user) }
       let!(:session1) { create(:video_session, :with_events_paused, submission: submission1) }
       let!(:session2) { create(:video_session, :with_events_continuous, submission: submission2) }
+      let!(:session3) { create(:video_session, :with_events_unclosed, submission: submission1) }
+      let!(:session4) { create(:video_session, :with_events_replay, submission: submission1) }
 
       it 'computes the right watch frequency distribution' do
-        intervals = [[0, 5], [30, 50], [19, 37], [0, 20], [39, 70], [10, 25]]
+        intervals = [[0, 5], [30, 50], [19, 37], [0, 20], [39, 70], [10, 25], [0, 30], [39, 45], [0, 70], [0, 4]]
         distribution = Array.new(71, 0)
         intervals.each do |interval|
           (interval[0]..interval[1]).each do |video_time|

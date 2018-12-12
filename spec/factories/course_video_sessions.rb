@@ -83,5 +83,42 @@ FactoryBot.define do
         session.last_video_time = 37
       end
     end
+
+    # Series of watch intervals with unclosed start
+    # The intervals should be [[0, 30], [39, 45]]
+    trait :with_events_unclosed do
+      after(:build) do |session|
+        session.events << build(:video_event, sequence_num: 1, event_type: 'play',
+                                              video_time: 0)
+        session.events << build(:video_event, sequence_num: 2, event_type: 'pause',
+                                              video_time: 30)
+        session.events << build(:video_event, sequence_num: 3, event_type: 'seek_start',
+                                              video_time: 30)
+        session.events << build(:video_event, sequence_num: 4, event_type: 'buffer',
+                                              video_time: 30)
+        session.events << build(:video_event, sequence_num: 5, event_type: 'seek_end',
+                                              video_time: 39)
+        session.events << build(:video_event, sequence_num: 6, event_type: 'play',
+                                              video_time: 39)
+        session.last_video_time = 45
+      end
+    end
+
+    # Series of watch intervals where user presses play again after video ended
+    # then closes window at 4s
+    # The intervals should be [[0, 70], [0, 4]]
+    trait :with_events_replay do
+      after(:build) do |session|
+        session.events << build(:video_event, sequence_num: 1, event_type: 'play',
+                                              video_time: 0)
+        session.events << build(:video_event, sequence_num: 2, event_type: 'end',
+                                              video_time: 70)
+        session.events << build(:video_event, sequence_num: 3, event_type: 'play',
+                                              video_time: 70)
+        session.events << build(:video_event, sequence_num: 4, event_type: 'buffer',
+                                              video_time: 70)
+        session.last_video_time = 4
+      end
+    end
   end
 end
