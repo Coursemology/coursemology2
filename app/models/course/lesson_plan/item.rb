@@ -93,15 +93,6 @@ class Course::LessonPlan::Item < ApplicationRecord
     )
   }
 
-  # @!method self.opening_within_next_day
-  #   Scopes the lesson plan items to those which are opening in the next 24 hours.
-  scope :opening_within_next_day, (lambda do
-    includes(reference_times: :reference_timeline).
-        where(course_reference_timelines: { default: true }).
-        merge(Course::ReferenceTime.where(start_at: (Time.zone.now)..(1.day.from_now))).
-        references(reference_times: :reference_timeline)
-  end)
-
   belongs_to :course, inverse_of: :lesson_plan_items
   has_many :todos, class_name: Course::LessonPlan::Todo.name, inverse_of: :item, dependent: :destroy
 
