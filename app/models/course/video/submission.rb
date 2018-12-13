@@ -38,6 +38,13 @@ class Course::Video::Submission < ApplicationRecord
       Course::Video::Submission.find_by(video_id: video.id, creator_id: creator.id)
   end
 
+  # Recompute and update submission's watch statistic
+  def update_statistic
+    frequency_array = watch_frequency
+    coverage = (100 * (frequency_array.count { |x| x > 0 }) / (video.duration + 1)).round
+    build_statistic(watch_freq: frequency_array, percent_watched: coverage).upsert
+  end
+
   private
 
   # Returns a scope for all events in this submission.
