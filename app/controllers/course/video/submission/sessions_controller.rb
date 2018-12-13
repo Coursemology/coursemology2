@@ -15,6 +15,10 @@ class Course::Video::Submission::SessionsController < Course::Video::Submission:
                                   last_video_time: update_params[:last_video_time])
     end
     @session.merge_in_events!(update_params[:events])
+
+    # Update submission's statistic on session close
+    @submission.update_statistic if params[:close_session]
+
     # Update video duration using data from frontend VideoPlayer
     @video.update(duration: video_params[:video_duration].round) if @video.duration < video_params[:video_duration]
     @video.statistic.update(cached: false) if @video.statistic&.cached
