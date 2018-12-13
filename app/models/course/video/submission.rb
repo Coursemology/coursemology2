@@ -6,6 +6,8 @@ class Course::Video::Submission < ApplicationRecord
 
   acts_as_experience_points_record
 
+  after_save :init_statistic
+
   validate :validate_consistent_user, :validate_unique_submission, on: :create
   validates :creator, presence: true
   validates :updater, presence: true
@@ -57,5 +59,10 @@ class Course::Video::Submission < ApplicationRecord
     errors.clear
     errors[:base] << I18n.t('activerecord.errors.models.course/video/submission.'\
                             'submission_already_exists')
+  end
+
+  # Initialize statistic when submission is created
+  def init_statistic
+    create_statistic if statistic.nil?
   end
 end
