@@ -38,11 +38,12 @@ export default class SessionsAPI extends BaseVideoAPI {
    * @return {Promise} The response from the server
    * success response: 204
    */
-  update(id, lastVideoTime, events = [], duration = 0, isOldSession = false) {
+  update(id, lastVideoTime, events = [], duration = 0, isOldSession = false, closeSession = false) {
     return this.getClient().patch(`${this._getUrlPrefix()}/${id}`, {
       session: { last_video_time: lastVideoTime, events },
       is_old_session: isOldSession,
       video_duration: duration,
+      close_session: closeSession,
     });
   }
 
