@@ -12,6 +12,12 @@ class Course::Assessment::ReminderService
 
     # Send reminder emails to each student who hasn't submitted.
     recipients = uncompleted_students(assessment)
+
+    # Exclude students with personal times
+    # TODO(#3240): Send closing reminder emails based on personal times
+    recipients -=
+      Set.new(CourseUser.joins(:personal_times).where(course_personal_times: { lesson_plan_item_id: assessment }))
+
     recipients.each do |recipient|
       # Need to get the User model from the Course User because we need the email address.
       Course::Mailer.assessment_closing_reminder_email(assessment, recipient.user).deliver_later
