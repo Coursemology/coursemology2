@@ -4,7 +4,7 @@ table.table.submissions
       th = t('.student_name')
       th = t('.status')
       th = t('.start_at')
-      th
+      th = t('.percent_watched')
   tbody
     = render partial: 'submission', collection: course_users, as: :course_user,
              locals: { submissions: submissions }
