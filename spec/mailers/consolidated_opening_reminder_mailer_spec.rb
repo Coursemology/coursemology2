@@ -5,9 +5,9 @@ RSpec.describe ConsolidatedOpeningReminderMailer, type: :mailer do
   include ApplicationNotificationsHelper
 
   with_tenant(:instance) do
-    let(:user) { create(:user, name: 'tester') }
     let(:instance) { Instance.default }
     let(:course) { create(:course) }
+    let(:user) { create(:course_user, course: course, name: 'tester').user }
     let!(:assessments) do
       create_list(:course_assessment_assessment, 3, course: course,
                                                     start_at: 1.hour.from_now, published: true)
