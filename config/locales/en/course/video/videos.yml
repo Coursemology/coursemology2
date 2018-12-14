@@ -7,6 +7,9 @@ en:
           header: 'Videos'
           title: 'Title'
           start_at: 'Start At'
+          percent_watched: 'Average % Watched'
+        video:
+          progress: '%{progress} %'
         new:
           header: 'New Video'
         create:

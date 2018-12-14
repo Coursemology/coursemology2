@@ -11,6 +11,8 @@ table.table.videos-list.table-hover
       th
       th.table-start-at = t('.start_at')
       th
+      - if can?(:manage, @tab)
+        th.hidden-xs = t('.percent_watched')
       th.hidden-xs
   tbody
     = render partial: 'video', collection: @videos

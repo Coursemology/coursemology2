@@ -1,3 +1,5 @@
+- statistic = video.statistic
+
 = content_tag_for(:tr, video, class: time_period_class(video) + draft_class(video))
   th colspan=2
     - unless video.published?
@@ -10,6 +12,11 @@
   td.table-buttons
     div.btn-group.attempt
       = render partial: 'video_attempt_button', locals: { video: video }
+  - if can?(:manage, video)
+    td.table-buttons.hidden-xs
+      - if statistic
+        = display_progress_bar(statistic.percent_watched) do
+          = t('.progress', progress: statistic.percent_watched)
   td.table-buttons.hidden-xs
     - if can?(:manage, video)
       = render partial: 'video_management_buttons', locals: { video: video }
