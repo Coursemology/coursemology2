@@ -26,6 +26,14 @@
         @extend .hidden-xs;
         @extend .text-center;
       }
+
+      .btn-group {
+        display: flex;
+      }
+
+      .progress {
+        margin: 0;
+      }
     }
   }
 }
