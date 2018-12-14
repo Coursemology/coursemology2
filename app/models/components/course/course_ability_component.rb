@@ -9,6 +9,7 @@ module Course::CourseAbilityComponent
       allow_registered_users_showing_course
       allow_staff_manage_users
       allow_owners_managing_course
+      allow_staff_manage_personal_times
     end
 
     super
@@ -38,5 +39,9 @@ module Course::CourseAbilityComponent
     can :manage, Course, managers_hash
     can :manage, CourseUser, course_managers_hash
     can :manage, Course::EnrolRequest, course_managers_hash
+  end
+
+  def allow_staff_manage_personal_times
+    can :manage_personal_times, Course, teaching_staff_hash
   end
 end

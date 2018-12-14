@@ -9,6 +9,7 @@ FactoryBot.define do
     start_at { Time.zone.now }
     end_at { 7.days.from_now }
     gamified { true }
+    show_personalized_timeline_features { true }
     published { false }
     enrollable { false }
 

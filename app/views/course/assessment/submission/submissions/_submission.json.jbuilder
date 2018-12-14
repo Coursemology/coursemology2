@@ -18,7 +18,7 @@ json.submission do
   json.workflowState apparent_workflow_state
   json.submitter display_course_user(submission.course_user)
 
-  json.dueAt assessment.end_at
+  json.dueAt assessment.time_for(submission.creator.course_users.find_by(course: submission.assessment.course)).end_at
   json.attemptedAt submission.created_at
   json.submittedAt submission.submitted_at
   if ['graded', 'published'].include? apparent_workflow_state

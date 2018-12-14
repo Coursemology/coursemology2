@@ -26,14 +26,20 @@
           td = @assessment.time_bonus_exp
       tr.start_at
         th = t('.start_at')
-        td = format_datetime(@assessment.start_at)
+        td = render partial: 'course/lesson_plan/items/personal_or_ref_time',
+                    locals: { item: @assessment, course_user: current_course_user, attribute: :start_at, datetime_format: :long }
       - if current_course.gamified?
         tr.bonus_cut_off
           th = t('.bonus_cut_off')
-          td = format_datetime(@assessment.bonus_end_at) if @assessment.bonus_end_at.present?
+          - if @assessment.bonus_end_at.present?
+            td = render partial: 'course/lesson_plan/items/personal_or_ref_time',
+                        locals: { item: @assessment, course_user: current_course_user, attribute: :bonus_end_at,
+                                  datetime_format: :long }
       tr.end_at
         th = t('.end_at')
-        td = format_datetime(@assessment.end_at) if @assessment.end_at.present?
+        - if @assessment.end_at.present?
+          td = render partial: 'course/lesson_plan/items/personal_or_ref_time',
+                      locals: { item: @assessment, course_user: current_course_user, attribute: :end_at, datetime_format: :long }
       - if can?(:observe, @assessment)
         - if @assessment.autograded?
           tr.skippable

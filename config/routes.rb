@@ -295,6 +295,9 @@ Rails.application.routes.draw do
 
       resources :users, only: [:index, :show, :update, :destroy] do
         resources :experience_points_records, only: [:index, :update, :destroy]
+        resources :personal_times, only: [:index, :create, :destroy]
+        get 'personal_times' => 'personal_times#index', on: :collection
+
         get 'invite' => 'user_invitations#new', on: :collection
         post 'invite' => 'user_invitations#create', on: :collection
         post 'resend_invitations' => 'user_invitations#resend_invitations', on: :collection
