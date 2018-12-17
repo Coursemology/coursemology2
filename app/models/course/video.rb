@@ -36,6 +36,7 @@ class Course::Video < ApplicationRecord
   scope :ordered_by_date_and_title, (lambda do
     select('course_videos.*, course_reference_times.start_at, course_lesson_plan_items.title').
       joins(:lesson_plan_item).
+      includes(:statistic).references(:all).
       merge(Course::LessonPlan::Item.ordered_by_date_and_title)
   end)
 
