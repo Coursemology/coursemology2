@@ -145,19 +145,12 @@ RSpec.describe Course::UserInvitationService, type: :service do
           new_users.push(new_users.last)
         end
 
-        it 'fails' do
-          expect(invite).to be_falsey
+        it 'ignore duplicate users' do
+          expect(invite).to eq([new_user_attributes.size - 2, 0, existing_user_attributes.size, 0])
         end
 
-        it 'does not send any notifications' do
-          expect { invite }.to change { ActionMailer::Base.deliveries.count }.by(0)
-        end
-
-        it 'sets the proper errors' do
-          invite
-          errors = course.invitations.map(&:errors).tap(&:compact!).reject(&:empty?)
-          expect(errors.length).to eq(1)
-          expect(errors.first[:email].all? { |error| error =~ /been taken/ }).to be_truthy
+        it 'does not send any notifications to duplicate users' do
+          expect { invite }.to change { ActionMailer::Base.deliveries.count }.by(new_user_attributes.size - 2 + existing_user_attributes.size)
         end
       end
 

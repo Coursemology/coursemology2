@@ -29,7 +29,9 @@ module Course::UserInvitationService::ParseInvitationConcern
       else
         parse_from_form(users)
       end
-    result.each { |user| user[:email] = user[:email].downcase }
+    users = result.each { |user| user[:email] = user[:email].downcase }
+    emails = users.map { |user| user[:email] }
+    users.partition { |user| emails.count(user[:email]) == 1 }
   end
 
   # Invites the users from the form submission, which reflects the actual model associations.
