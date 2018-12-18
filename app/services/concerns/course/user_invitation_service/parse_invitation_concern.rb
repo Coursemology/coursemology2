@@ -21,6 +21,7 @@ module Course::UserInvitationService::ParseInvitationConcern
   #     the intended +:role+ in the course, as well as
   #     whether the user is a +:phantom:+ or not.
   #   The provided +emails+ are NOT case sensitive.
+  #   The second subarray contains the leftover duplicate users.
   # @raise [CSV::MalformedCSVError] When the file provided is invalid.
   def parse_invitations(users)
     result =
@@ -29,7 +30,29 @@ module Course::UserInvitationService::ParseInvitationConcern
       else
         parse_from_form(users)
       end
-    result.each { |user| user[:email] = user[:email].downcase }
+
+    partition_unique_users(result)
+  end
+
+  # Partition users into unique (including first duplicate instance) and duplicate users.
+  #
+  # @param [Array<Hash>] users
+  # @return [
+  #   [Array<Hash>],
+  #   [Array<Hash>]
+  # ]
+  def partition_unique_users(users)
+    users.each { |user| user[:email] = user[:email].downcase }
+    unique_users = {}
+    duplicate_users = []
+    users.each do |user|
+      if unique_users.key?(user[:email])
+        duplicate_users.push(user)
+      else
+        unique_users[user[:email]] = user
+      end
+    end
+    [unique_users.values, duplicate_users]
   end
 
   # Invites the users from the form submission, which reflects the actual model associations.
