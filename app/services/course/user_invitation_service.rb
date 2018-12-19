@@ -23,7 +23,7 @@ class Course::UserInvitationService
   #
   # @param [Array<Hash>|File|TempFile] users Invites the given users.
   # @return [Array<Integer>|nil] An array containing the the size of new_invitations, existing_invitations,
-  #   new_course_users and existing_course_users respectively if success. nil when fail.
+  #   new_course_users and existing_course_users, duplicate_users respectively if success. nil when fail.
   # @raise [CSV::MalformedCSVError] When the file provided is invalid.
   def invite(users)
     new_invitations = nil
@@ -65,10 +65,11 @@ class Course::UserInvitationService
   #     Array<(Array<Course::UserInvitation>,
   #     Array<Course::UserInvitation>,
   #     Array<CourseUser>,
-  #     Array<CourseUser>)>
+  #     Array<CourseUser>)>,
+  #     Array<Hash>,
   #   ]
   #   A tuple containing the users newly invited, already invited,
-  #     newly registered and already registered respectively.
+  #     newly registered and already registered, and duplicate users respectively.
   # @raise [CSV::MalformedCSVError] When the file provided is invalid.
   def invite_users(users)
     users, duplicate_users = parse_invitations(users)

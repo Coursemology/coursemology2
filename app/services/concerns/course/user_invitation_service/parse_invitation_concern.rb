@@ -14,13 +14,17 @@ module Course::UserInvitationService::ParseInvitationConcern
   # Invites users to the given course.
   #
   # @param [Array<Hash>|File|TempFile] users Invites the given users.
-  # @return [Array<Hash{Symbol=>String}>]
-  #   A mutable array of users to add. Each hash must have four attributes:
+  # @return [
+  #   [Array<Hash{Symbol=>String}>],
+  #   [Array<Hash>]
+  # ]
+  #   Both subarrays are mutable array of users to add. Each hash must have four attributes:
   #     the +:name+,
   #     the +:email+ of the user to add,
   #     the intended +:role+ in the course, as well as
   #     whether the user is a +:phantom:+ or not.
   #   The provided +emails+ are NOT case sensitive.
+  #   The second subarray contains the users with emails that occur more than once.
   # @raise [CSV::MalformedCSVError] When the file provided is invalid.
   def parse_invitations(users)
     result =
