@@ -59,7 +59,7 @@ en:
         file:
           success: >
             Successfully invited users from the uploaded file:
-            %{new_invitations}, %{already_invited}, %{new_course_users}, %{already_enrolled}.
+            %{new_invitations}, %{already_invited}, %{new_course_users}, %{already_enrolled}, %{duplicate_emails}.
           summary:
             new_invitations:
               one: '1 new invitation sent'
@@ -69,6 +69,7 @@ en:
               other: '%{count} users just enrolled'
             already_enrolled: '%{count} already enrolled'
             already_invited: '%{count} already invited'
+            duplicate_emails: '%{count} duplicate emails ignored'
         manual_entry:
           success: 'Successfully invited users with the given details.'
       invitation_fields:

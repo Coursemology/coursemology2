@@ -30,9 +30,10 @@ class Course::UserInvitationService
     existing_invitations = nil
     new_course_users = nil
     existing_course_users = nil
+    duplicate_users = nil
 
     success = Course.transaction do
-      new_invitations, existing_invitations, new_course_users, existing_course_users = invite_users(users)
+      new_invitations, existing_invitations, new_course_users, existing_course_users, duplicate_users = invite_users(users)
       raise ActiveRecord::Rollback unless new_invitations.all?(&:save)
       raise ActiveRecord::Rollback unless new_course_users.all?(&:save)
       true
@@ -40,7 +41,7 @@ class Course::UserInvitationService
 
     send_registered_emails(new_course_users) if success
     send_invitation_emails(new_invitations) if success
-    success ? [new_invitations, existing_invitations, new_course_users, existing_course_users].map(&:size) : nil
+    success ? [new_invitations, existing_invitations, new_course_users, existing_course_users, duplicate_users].map(&:size) : nil
   end
 
   # Resends invitation emails to CourseUsers to the given course.
@@ -70,6 +71,6 @@ class Course::UserInvitationService
   # @raise [CSV::MalformedCSVError] When the file provided is invalid.
   def invite_users(users)
     users, duplicate_users = parse_invitations(users)
-    process_invitations(users)
+    process_invitations(users) + [duplicate_users]
   end
 end
