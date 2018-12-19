@@ -124,6 +124,10 @@ RSpec.describe Course::LessonPlan::Item, type: :model do
         end
       end
 
+      it 'does not load personal times for a non-course_user' do
+        expect(lesson_plan_item.personal_time_for(nil)).to be nil
+      end
+
       it 'eager loads personal times for course_user' do
         personal_time1
         items = Course::LessonPlan::Item.where(id: lesson_plan_item).with_personal_times_for(student1).to_a
@@ -163,6 +167,13 @@ RSpec.describe Course::LessonPlan::Item, type: :model do
             time_for = lesson_plan_item.time_for(student2)
             expect(time_for.is_a?(Course::ReferenceTime)).to be true
             expect(time_for).to eq reference_time
+          end
+        end
+
+        context 'when loading for a non-course_user' do
+          it 'returns the reference time' do
+            default_reference_time = lesson_plan_item.default_reference_time
+            expect(lesson_plan_item.time_for(nil)).to eq default_reference_time
           end
         end
       end
