@@ -112,6 +112,8 @@ class Course::LessonPlan::Item < ApplicationRecord
   end
 
   def personal_time_for(course_user)
+    return nil if course_user.nil?
+
     # Do not make a separate call to DB if personal_times has already been preloaded
     if personal_times.loaded?
       personal_times.find { |x| x.course_user_id == course_user.id }
@@ -122,7 +124,7 @@ class Course::LessonPlan::Item < ApplicationRecord
 
   def reference_time_for(course_user)
     # Do not make a separate call to DB if reference_times has already been preloaded
-    reference_timeline_id = course_user.reference_timeline_id || course_user.course.default_reference_timeline.id
+    reference_timeline_id = course_user&.reference_timeline_id || course.default_reference_timeline.id
     if reference_times.loaded?
       reference_times.find { |x| x.reference_timeline_id == reference_timeline_id }
     else
