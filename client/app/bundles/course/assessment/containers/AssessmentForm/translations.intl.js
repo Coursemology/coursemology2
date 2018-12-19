@@ -71,6 +71,24 @@ const translations = defineMessages({
     defaultMessage:
       'Show evaluation tests to students after the submission is graded and published (For programming questions)',
   },
+  hasPersonalTimes: {
+    id: 'course.assessment.form.hasPersonalTimes',
+    defaultMessage: 'Has personal times',
+  },
+  hasPersonalTimesHint: {
+    id: 'course.assessment.form.hasPersonalTimesHint',
+    defaultMessage:
+      'Timings for this item will be automatically adjusted for users based on learning rate',
+  },
+  affectsPersonalTimes: {
+    id: 'course.assessment.form.affectsPersonalTimes',
+    defaultMessage: 'Affects personal times',
+  },
+  affectsPersonalTimesHint: {
+    id: 'course.assessment.form.affectsPersonalTimesHint',
+    defaultMessage:
+      'Student\'s submission time for this item will be taken into account when updating personal times for other items',
+  },
   published: {
     id: 'course.assessment.form.published',
     defaultMessage: 'Published',

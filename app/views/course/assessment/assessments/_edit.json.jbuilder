@@ -3,7 +3,8 @@ json.attributes do
   json.(@assessment, :id, :title, :description, :start_at, :end_at, :bonus_end_at, :base_exp,
     :time_bonus_exp, :published, :autograded, :show_private, :show_evaluation, :skippable,
     :tabbed_view, :view_password, :session_password, :delayed_grade_publication, :tab_id,
-    :use_public, :use_private, :use_evaluation, :allow_partial_submission)
+    :use_public, :use_private, :use_evaluation, :allow_partial_submission, :has_personal_times,
+    :affects_personal_times)
 end
 
 json.tab_attributes do
@@ -14,6 +15,7 @@ end
 
 json.mode_switching @assessment.allow_mode_switching?
 json.gamified current_course.gamified?
+json.show_personalized_timeline_features current_course.show_personalized_timeline_features?
 
 json.folder_attributes do
   json.folder_id @assessment.folder.id

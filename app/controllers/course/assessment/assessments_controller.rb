@@ -86,7 +86,8 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   def assessment_params
     base_params = [:title, :description, :base_exp, :time_bonus_exp, :start_at, :end_at, :tab_id,
                    :bonus_end_at, :published, :autograded, :show_private, :show_evaluation,
-                   :use_public, :use_private, :use_evaluation]
+                   :use_public, :use_private, :use_evaluation, :has_personal_times,
+                   :affects_personal_times]
     if autograded?
       base_params += [:skippable, :allow_partial_submission]
     else

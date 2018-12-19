@@ -97,4 +97,36 @@ describe('<AssessmentEdit />', () => {
     expect(editPage.find('input[name="base_exp"]')).toHaveLength(0);
     expect(editPage.find('input[name="time_bonus_exp"]')).toHaveLength(0);
   });
+
+  it('renders the has/affects personal time fields', () => {
+    const editPage = mount(
+      <ProviderWrapper store={store}>
+        <AssessmentEdit
+          id={id}
+          showPersonalizedTimelineFeatures
+          modeSwitching
+          initialValues={initialValues}
+        />
+      </ProviderWrapper>
+    );
+
+    expect(editPage.find('input[name="has_personal_times"]').length).toBeGreaterThan(0);
+    expect(editPage.find('input[name="affects_personal_times"]').length).toBeGreaterThan(0);
+  });
+
+  it('does not render the has/affects personal time fields', () => {
+    const editPage = mount(
+      <ProviderWrapper store={store}>
+        <AssessmentEdit
+          id={id}
+          showPersonalizedTimelineFeatures={false}
+          modeSwitching
+          initialValues={initialValues}
+        />
+      </ProviderWrapper>
+    );
+
+    expect(editPage.find('input[name="has_personal_times"]')).toHaveLength(0);
+    expect(editPage.find('input[name="affects_personal_times"]')).toHaveLength(0);
+  });
 });
