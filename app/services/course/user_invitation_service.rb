@@ -33,7 +33,8 @@ class Course::UserInvitationService
     duplicate_users = nil
 
     success = Course.transaction do
-      new_invitations, existing_invitations, new_course_users, existing_course_users, duplicate_users = invite_users(users)
+      new_invitations, existing_invitations,
+      new_course_users, existing_course_users, duplicate_users = invite_users(users)
       raise ActiveRecord::Rollback unless new_invitations.all?(&:save)
       raise ActiveRecord::Rollback unless new_course_users.all?(&:save)
       true
