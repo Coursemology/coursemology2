@@ -199,7 +199,8 @@ class Course::UserInvitationsController < Course::ComponentController
   end
 
   # Returns the successful invitation creation message based on file or entry invitation.
-  def create_success_message(new_invitations, existing_invitations, new_course_users, existing_course_users)
+  def create_success_message(new_invitations, existing_invitations, new_course_users,
+                             existing_course_users, _duplicate_users)
     t('.success',
       new_invitations: t('.summary.new_invitations', count: new_invitations),
       already_invited: t('.summary.already_invited', count: existing_invitations),

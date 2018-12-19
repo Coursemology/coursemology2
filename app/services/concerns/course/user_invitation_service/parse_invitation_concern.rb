@@ -14,8 +14,11 @@ module Course::UserInvitationService::ParseInvitationConcern
   # Invites users to the given course.
   #
   # @param [Array<Hash>|File|TempFile] users Invites the given users.
-  # @return [Array<Hash{Symbol=>String}>]
-  #   A mutable array of users to add. Each hash must have four attributes:
+  # @return [
+  #   [Array<Hash{Symbol=>String}>],
+  #   [Array<Hash>]
+  # ]
+  #   Both subarrays are mutable array of users to add. Each hash must have four attributes:
   #     the +:name+,
   #     the +:email+ of the user to add,
   #     the intended +:role+ in the course, as well as

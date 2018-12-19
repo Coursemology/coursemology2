@@ -93,24 +93,6 @@ module Course::UserInvitationService::ProcessInvitationConcern
       end
     end
 
-    [validate_new_invitation_emails(new_invitations), existing_invitations]
-  end
-
-  # Validate that the new invitation emails are unique.
-  #
-  # The uniqueness constraint of AR does not guarantee the new_records are unique among themselves.
-  # ( i.e Two new records with the same email will raise a {RecordNotUnique} error upon saving. )
-  #
-  # @param [Array<Course::UserInvitation>] invitations An array of invitations.
-  # @return [Array<Course::UserInvitation>] The validated invitations.
-  def validate_new_invitation_emails(invitations)
-    emails = invitations.map(&:email)
-    duplicates = emails.select { |email| emails.count(email) > 1 }
-    return invitations if duplicates.empty?
-
-    invitations.each do |invitation|
-      invitation.errors.add(:email, :taken) if duplicates.include?(invitation.email)
-    end
-    invitations
+    [new_invitations, existing_invitations]
   end
 end
