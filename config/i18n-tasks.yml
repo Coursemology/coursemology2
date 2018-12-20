@@ -82,6 +82,7 @@ ignore_missing:
 
 # I18n-tasks gives the wrong results for normal (non action) methods in the controller, ignore them here.
   - 'course.user_invitations.create_success_message.*'
+  - 'course.user_invitations.create_warning_message.*'
 
 ## Consider these keys used:
 ignore_unused:
