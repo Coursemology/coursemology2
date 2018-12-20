@@ -189,7 +189,7 @@ GEM
       json
       simplecov
       url
-    concurrent-ruby (1.1.3)
+    concurrent-ruby (1.1.4)
     consistency_fail (0.3.7)
     coursemology-polyglot (0.2.9.3)
       activesupport (>= 4.2, < 6)
@@ -219,7 +219,7 @@ GEM
       htmlentities (~> 4.3.3)
       launchy (~> 2.1)
       mail (~> 2.7)
-    erubi (1.7.1)
+    erubi (1.8.0)
     excon (0.62.0)
     execjs (2.7.0)
     exifr (1.3.4)
@@ -381,10 +381,10 @@ GEM
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
-    rails-flog (1.4.0)
-      anbt-sql-formatter
+    rails-flog (1.5.0)
+      anbt-sql-formatter (>= 0.0.7)
       awesome_print
-      rails (>= 3.2.0)
+      rails (>= 4.2.0)
     rails-html-sanitizer (1.0.4)
       loofah (~> 2.2, >= 2.2.2)
     rails-i18n (5.1.2)
@@ -398,7 +398,7 @@ GEM
     rails_utils (4.0.0)
       rails (>= 3.2)
     rainbow (3.0.0)
-    rake (12.3.1)
+    rake (12.3.2)
     rb-fsevent (0.10.3)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
