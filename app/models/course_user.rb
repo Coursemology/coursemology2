@@ -8,7 +8,7 @@ class CourseUser < ApplicationRecord
   before_validation :set_defaults, if: :new_record?
 
   enum role: { student: 0, teaching_assistant: 1, manager: 2, owner: 3, observer: 4 }
-  enum timeline_algorithm: { fixed: 0, naive: 1 }
+  enum timeline_algorithm: { fixed: 0, otot: 1 }
 
   # A set of roles which comprise the staff of a course, including the observer.
   STAFF_ROLES = Set[:teaching_assistant, :manager, :owner, :observer].freeze
