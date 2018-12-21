@@ -69,8 +69,6 @@ en:
               other: '%{count} users just enrolled'
             already_enrolled: '%{count} already enrolled'
             already_invited: '%{count} already invited'
-        manual_entry:
-          success: 'Successfully invited users with the given details.'
       invitation_fields:
         remove: 'Remove'
       resend_invitation:
