@@ -1,3 +1,5 @@
+- course_videos = current_course.videos
+
 table.table.table-hover
   tr
     th.text-center
@@ -12,10 +14,11 @@ table.table.table-hover
     - if current_course.gamified?
       th.text-center
         = t('.experience_points')
-    th.text-center
-      = t('.video_watched', total: current_course.videos.count)
-    th.text-center
-      = t('.percent_watched')
+    - if course_videos.exists? && can?(:analyze_videos, current_course)
+      th.text-center
+        = t('.video_watched', total: course_videos.count)
+      th.text-center
+        = t('.percent_watched')
 
   - students.each.with_index(1) do |student, index|
     = content_tag_for(:tr, student)
@@ -32,8 +35,10 @@ table.table.table-hover
         td.text-center
           = link_to student.experience_points,
                     course_user_experience_points_records_path(current_course, student)
-      td.text-center
-        = student.video_submission_count
-      td.text-center
-        = display_progress_bar(student.video_percent_watched) do
-          = t('.progress', progress: student.video_percent_watched)
+      - if course_videos.exists? && can?(:analyze_videos, current_course)
+        td.text-center
+          = link_to student.video_submission_count,
+                    course_user_video_submissions_path(current_course, student)
+        td.text-center
+          = display_progress_bar(student.video_percent_watched) do
+            = t('.progress', progress: student.video_percent_watched)
