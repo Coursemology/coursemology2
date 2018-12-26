@@ -10,6 +10,7 @@ module Course::CourseAbilityComponent
       allow_staff_manage_users
       allow_owners_managing_course
       allow_staff_manage_personal_times
+      allow_staff_analyze_videos
     end
 
     super
@@ -43,5 +44,9 @@ module Course::CourseAbilityComponent
 
   def allow_staff_manage_personal_times
     can :manage_personal_times, Course, teaching_staff_hash
+  end
+
+  def allow_staff_analyze_videos
+    can :analyze_videos, Course, teaching_staff_hash
   end
 end
