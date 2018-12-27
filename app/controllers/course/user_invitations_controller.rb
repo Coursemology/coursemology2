@@ -200,15 +200,11 @@ class Course::UserInvitationsController < Course::ComponentController
 
   # Returns the successful invitation creation message based on file or entry invitation.
   def create_success_message(new_invitations, existing_invitations, new_course_users, existing_course_users)
-    if invite_by_file?
-      t('.file.success',
-        new_invitations: t('.file.summary.new_invitations', count: new_invitations),
-        already_invited: t('.file.summary.already_invited', count: existing_invitations),
-        new_course_users: t('.file.summary.new_course_users', count: new_course_users),
-        already_enrolled: t('.file.summary.already_enrolled', count: existing_course_users))
-    else
-      t('.manual_entry.success')
-    end
+    t('.success',
+      new_invitations: t('.summary.new_invitations', count: new_invitations),
+      already_invited: t('.summary.already_invited', count: existing_invitations),
+      new_course_users: t('.summary.new_course_users', count: new_course_users),
+      already_enrolled: t('.summary.already_enrolled', count: existing_course_users))
   end
 
   # Enables or disables registration codes in the given course.
