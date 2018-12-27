@@ -57,9 +57,9 @@
                     = t('.create_new_personal_time')
                 - fields_class = "hidden personal-time-#{personal_time.lesson_plan_item_id}"
               td class=fields_class = f.input :fixed, label: false, as: :boolean
-              td class=fields_class = f.input :start_at, label: false, input_html: { format: '%d %b %H:%M' }
-              td class=fields_class = f.input :bonus_end_at, label: false, input_html: { format: '%d %b %H:%M' }
-              td class=fields_class = f.input :end_at, label: false, input_html: { format: '%d %b %H:%M' }
+              td class=fields_class = f.input :start_at, label: false, input_html: { format: '%d %b %y %H:%M' }
+              td class=fields_class = f.input :bonus_end_at, label: false, input_html: { format: '%d %b %y %H:%M' }
+              td class=fields_class = f.input :end_at, label: false, input_html: { format: '%d %b %y %H:%M' }
               td class=fields_class
                 = f.button :submit, id: 'update' do
                   = fa_icon 'save'.freeze
