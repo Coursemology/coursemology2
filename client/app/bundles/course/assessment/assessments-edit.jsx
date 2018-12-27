@@ -22,6 +22,7 @@ $(document).ready(() => {
         <AssessmentEditPage
           modeSwitching={data.mode_switching}
           gamified={data.gamified}
+          showPersonalizedTimelineFeatures={data.show_personalized_timeline_features}
           folderAttributes={data.folder_attributes}
           conditionAttributes={data.condition_attributes}
           initialValues={{

@@ -9,6 +9,8 @@ FactoryBot.define do
     end_at { nil }
     sequence(:title) { |n| "Example Lesson Plan Item #{n}" }
     published { false }
+    has_personal_times { true }
+    affects_personal_times { true }
 
     trait :with_bonus_end_time do
       bonus_end_at { 2.days.from_now }

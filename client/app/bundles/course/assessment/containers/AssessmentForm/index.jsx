@@ -105,6 +105,8 @@ class AssessmentForm extends React.Component {
     editing: PropTypes.bool,
     // if the EXP fields should be displayed
     gamified: PropTypes.bool,
+    // If the personalized timeline fields should be displayed
+    show_personalized_timeline_features: PropTypes.bool,
     // If allow to switch between autoraded and manually graded mode.
     modeSwitching: PropTypes.bool,
     folderAttributes: PropTypes.shape({
@@ -283,8 +285,8 @@ class AssessmentForm extends React.Component {
   }
 
   render() {
-    const { handleSubmit, onSubmit, gamified, modeSwitching, submitting, editing, folderAttributes,
-      conditionAttributes, error } = this.props;
+    const { handleSubmit, onSubmit, gamified, showPersonalizedTimelineFeatures, modeSwitching, submitting, editing,
+      folderAttributes, conditionAttributes, error } = this.props;
 
     return (
       <Form onSubmit={handleSubmit(onSubmit)}>
@@ -457,6 +459,38 @@ class AssessmentForm extends React.Component {
         <div style={styles.hint}>
           <FormattedMessage {...translations.showEvaluationHint} />
         </div>
+
+        {
+          showPersonalizedTimelineFeatures
+          && (
+          <>
+            <Field
+              name="has_personal_times"
+              component={Toggle}
+              parse={Boolean}
+              label={<FormattedMessage {...translations.hasPersonalTimes} />}
+              labelPosition="right"
+              style={styles.toggle}
+              disabled={submitting}
+            />
+            <div style={styles.hint}>
+              <FormattedMessage {...translations.hasPersonalTimesHint} />
+            </div>
+            <Field
+              name="affects_personal_times"
+              component={Toggle}
+              parse={Boolean}
+              label={<FormattedMessage {...translations.affectsPersonalTimes} />}
+              labelPosition="right"
+              style={styles.toggle}
+              disabled={submitting}
+            />
+            <div style={styles.hint}>
+              <FormattedMessage {...translations.affectsPersonalTimesHint} />
+            </div>
+          </>
+          )
+        }
 
         {
           folderAttributes
