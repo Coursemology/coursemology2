@@ -13,7 +13,7 @@ module Course::Video::WatchStatisticsConcern
   #
   # @return [[Integer]] The watch frequency, with the indices matching up to video time in seconds.
   def watch_frequency
-    starts, ends = start_and_end_times.values_at(:start_times, :end_times)
+    starts, ends = start_and_end_times.values_at(:start, :end)
     start_index, end_index = 0, 0
     frequencies = []
     active_intervals = 0
@@ -32,6 +32,8 @@ module Course::Video::WatchStatisticsConcern
   end
 
   private
+
+  EVENT_TYPES = { start: ['play', 'seek_end'], end: ['pause', 'seek_start', 'end'] }.freeze
 
   # The scope for events to compute statistics with.
   #
@@ -58,37 +60,85 @@ module Course::Video::WatchStatisticsConcern
 
   # The video times for the interval starts and ends.
   #
-  # This method iterates through all relevant start and end events,
+  # This method iterates through all relevant start and end events across video sessions,
   # sorted by session_id and sequence_num, to find all interval start events
   # and corresponding end events to push into respective arrays.
   #
-  # If a start event is followed by an event from another session, it is counted as an unclosed start,
-  # and the last_video_time from the session is taken as the interval end.
+  # @return [Hash<Symbol, [Integer]>] The hash containing arrays of start times and end times.
+  def start_and_end_times
+    video_duration = (is_a? Course::Video) ? duration : video.duration
+    result = { start: [], end: [] }
+    relevant_events_scope.all_start_and_end_events.to_a.group_by { |d| d[:session_id] }.each do |_, session_events|
+      session_intervals = filter_interval_events(session_events, video_duration)
+      result[:start] += session_intervals[:start]
+      result[:end] += session_intervals[:end]
+    end
+    result.map { |k, v| [k, v.sort] }.to_h
+  end
+
+  # This method iterates through all start and end events belonging to a single session,
+  # sorted by sequence_num, to generate a hash contaning arrays of start times and end times.
+  #
+  # @param [Array<Course::Video::Events>] session_events Array of events in the same session,
+  # ordered by sequence_num
+  # @param [int] video_duration The video duration, in seconds
   #
   # @return [Hash<Symbol, [Integer]>] The hash containing arrays of start times and end times.
-  #
-  # TODO: Remove logic to append last_video_time to end_times when session end event is implemented.
-  # Session end event is an even fired from VideoPlayer onUnmount. When recorded in DB as an end event,
-  # it can ensure that there would be no unclosed start, thereby rendering last_video_time redundant.
-  def start_and_end_times
-    result = { start_times: [], end_times: [] }
-    hash_keys = [:start_times, :end_times].cycle
-    session, flag = nil, hash_keys.next
-    event_types = { start_times: ['play', 'seek_end'], end_times: ['pause', 'seek_start', 'end'] }
-    relevant_events_scope.all_start_and_end_events.each do |event|
-      if event.session != session
-        if flag == :end_times
-          result[:end_times] << session.last_video_time
-          flag = hash_keys.next
-        end
-        session = event.session
-      end
-      if event_types[flag].include? event.event_type
-        result[flag] << event.video_time
-        flag = hash_keys.next
-      end
+  def filter_interval_events(session_events, video_duration)
+    result = { start: [], end: [] }
+    hash_keys = [:start, :end].cycle
+    last_start, flag = nil, hash_keys.next
+    session_events.each do |event|
+      next if EVENT_TYPES[flag].exclude?(event.event_type)
+      last_start = event if flag == :start
+      result[flag] << correct_interval(event, last_start, video_duration)
+      flag = hash_keys.next
     end
-    result[:end_times] << session.last_video_time unless flag == :start_times || result[:start_times].empty?
-    result.map { |k, v| [k, v.sort] }.to_h
+    handle_unclosed_interval(result, last_start, video_duration)
+  end
+
+  # This method parses video time from interval events, either start or end.
+  # It also handles edge cases by:
+  # replacing interval start's video_time with 0 when user presses start at the end of the video
+  # replacing interval end's video_time with an approximate value when the recorded interval is regative
+  #
+  # @param [Course::Video:Event] event The event to parse video_time from, i.e. current event
+  # @param [Course::Video:Event] last_start The start event observed right before current event
+  # in the same session
+  # @param [int] video_duration The video duration, in seconds
+  #
+  # @return [int] The video time at which the event was recorded
+  def correct_interval(event, last_start, video_duration)
+    if (EVENT_TYPES[:start].include? event.event_type) && event.video_time == video_duration
+      0
+    elsif (EVENT_TYPES[:end].include? event.event_type) && event.video_time < last_start.video_time
+      [(last_start.video_time + last_start.playback_rate *
+        (event.event_time - last_start.event_time)).to_i, video_duration].min
+    else
+      event.video_time
+    end
+  end
+
+  # This method handles unclosed intervals by:
+  # 1. adding session's last_video_time, or
+  # 2. HACK: removing the last interval start if option 1 results in a negative interval
+  # The hack is necessary to handle cases where the last request from VideoPlayer is lost,
+  # resulting in an unclosed start, and session's last_video_time to be outdated.
+  #
+  # @param [Hash<Symbol, [Integer]>] result The hash containing arrays of start times and end times.
+  # @param [Course::Video::Event] last_start The last start event in the session
+  # @param [int] video_duration The video duration, in seconds
+  #
+  # @return [Hash<Symbol, [Integer]>] The hash containing arrays of start times and end times
+  # of closed intervals.
+  def handle_unclosed_interval(result, last_start, video_duration)
+    if [result[:end].size, 0].include? result[:start].size
+      result
+    elsif last_start.session.last_video_time > correct_interval(last_start, last_start, video_duration)
+      result[:end] << last_start.session.last_video_time
+    else
+      result[:start].pop
+    end
+    result
   end
 end

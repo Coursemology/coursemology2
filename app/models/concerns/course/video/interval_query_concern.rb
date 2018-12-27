@@ -22,8 +22,8 @@ module Course::Video::IntervalQueryConcern
       where(event_type: type_sym_to_id(START_TYPES + END_TYPES)).
         unscope(:order).
         order(:session_id, :sequence_num).
-        includes(:session).
-        references(:session)
+        includes(session: { submission: :video }).
+        references(:all)
     }
   end
 end
