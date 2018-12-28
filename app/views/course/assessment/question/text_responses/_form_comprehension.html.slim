@@ -1,6 +1,6 @@
 = simple_form_for [current_course, @assessment, @text_response_question] do |f|
   = f.error_notification
-  = render partial: 'course/assessment/questions/form', locals: { f: f }
+  = render partial: 'course/assessment/questions/form', locals: { f: f, question_assessment: @question_assessment }
   = f.hidden_field :hide_text
   = f.hidden_field :is_comprehension
   = f.hidden_field :allow_attachment
