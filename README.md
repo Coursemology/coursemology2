@@ -119,7 +119,7 @@ If you are a student from NUS Computing looking for an FYP project, do check wit
 
 ## License
 
-Copyright (c) 2015-2018 Coursemology.org. This software is licensed under the MIT License.
+Copyright (c) 2015-2019 Coursemology.org. This software is licensed under the MIT License.
 
 ## Using Coursemology
 
