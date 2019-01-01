@@ -18,7 +18,8 @@ json.submission do
   json.workflowState apparent_workflow_state
   json.submitter display_course_user(submission.course_user)
 
-  json.dueAt assessment.time_for(submission.creator.course_users.find_by(course: submission.assessment.course)).end_at
+  end_at = assessment.time_for(submission.creator.course_users.find_by(course: submission.assessment.course)).end_at
+  json.dueAt end_at
   json.attemptedAt submission.created_at
   json.submittedAt submission.submitted_at
   if ['graded', 'published'].include? apparent_workflow_state
@@ -33,8 +34,8 @@ json.submission do
   json.showPublicTestCasesOutput current_course.show_public_test_cases_output
   json.showStdoutAndStderr current_course.show_stdout_and_stderr
 
-  json.late assessment.end_at && submission.submitted_at &&
-    submission.submitted_at > assessment.end_at
+  json.late end_at && submission.submitted_at &&
+    submission.submitted_at > end_at
 
   if current_course.gamified?
     json.basePoints assessment.base_exp
