@@ -209,9 +209,10 @@ class Course::LessonPlan::Item < ApplicationRecord
   # Test if the lesson plan item has started for self directed learning.
   #
   # @return [Boolean]
-  def self_directed_started?
+  def self_directed_started?(course_user = nil)
     if course&.advance_start_at_duration
-      start_at.blank? || start_at - course.advance_start_at_duration < Time.zone.now
+      time_for(course_user).start_at.blank? ||
+        time_for(course_user).start_at - course.advance_start_at_duration < Time.zone.now
     else
       started?
     end
