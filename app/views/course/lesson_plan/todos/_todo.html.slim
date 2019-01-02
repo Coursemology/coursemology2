@@ -1,7 +1,15 @@
 = content_tag_for(:tr, todo, class: todo_status_class(todo))
   td = render partial: todo.item.actable, prefix: 'todo', suffix: 'title'
-  td.text-center = format_datetime(todo.item.start_at) if todo.item.start_at
-  td.text-center = format_datetime(todo.item.end_at) if todo.item.end_at
+  td.text-center
+    - if todo.item.start_at
+      = render partial: 'course/lesson_plan/items/personal_or_ref_time',
+               locals: { item: todo.item, course_user: current_course_user, attribute: :start_at,
+                         datetime_format: :long }
+  td.text-center
+    - if todo.item.end_at
+      = render partial: 'course/lesson_plan/items/personal_or_ref_time',
+               locals: { item: todo.item, course_user: current_course_user, attribute: :end_at,
+                         datetime_format: :long }
   td.buttons
     = simple_form_for :todo, url: ignore_course_lesson_plan_todo_path(current_course, todo),
                              remote: true, method: :post do |f|
