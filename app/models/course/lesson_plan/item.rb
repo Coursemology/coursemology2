@@ -21,8 +21,7 @@ class Course::LessonPlan::Item < ApplicationRecord
   after_initialize :set_default_reference_time, if: :new_record?
   after_initialize :set_default_values, if: :new_record?
 
-  validate :validate_presence_of_bonus_end_at,
-           :validate_start_at_cannot_be_after_end_at
+  validate :validate_presence_of_bonus_end_at
   validates :base_exp, :time_bonus_exp, numericality: { greater_than_or_equal_to: 0 }
   validates :actable_type, length: { maximum: 255 }, allow_nil: true
   validates :title, length: { maximum: 255 }, presence: true
@@ -237,10 +236,5 @@ class Course::LessonPlan::Item < ApplicationRecord
   def validate_presence_of_bonus_end_at
     return unless time_bonus_exp && time_bonus_exp > 0 && bonus_end_at.blank?
     errors.add(:bonus_end_at, :required)
-  end
-
-  def validate_start_at_cannot_be_after_end_at
-    return unless end_at && start_at && start_at > end_at
-    errors.add(:start_at, :cannot_be_after_end_at)
   end
 end
