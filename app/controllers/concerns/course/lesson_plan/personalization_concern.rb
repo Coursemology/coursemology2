@@ -4,6 +4,7 @@ module Course::LessonPlan::PersonalizationConcern
 
   OTOT_LEARNING_RATE_MAX = 1.0
   OTOT_LEARNING_RATE_MIN = 0.5
+  OTOT_LEARNING_RATE_HARD_MIN = 0.5 # No matter how doomed the student is, refuse to go faster than this
   OTOT_DATE_ROUNDING_THRESHOLD = 0.8
 
   # Dispatches the call to the correct personalization algorithm
@@ -25,7 +26,7 @@ module Course::LessonPlan::PersonalizationConcern
     course_tz = course_user.course.time_zone
     submissions = retrieve_submissions(course_user)
     submitted_ids = submissions.keys.select { |k| submissions[k].submitted_at.present? }
-    items = course_user.course.lesson_plan_items.
+    items = course_user.course.lesson_plan_items.published.
             with_reference_times_for(course_user).
             with_personal_times_for(course_user).
             to_a
@@ -35,9 +36,11 @@ module Course::LessonPlan::PersonalizationConcern
     learning_rate_ema = compute_learning_rate_ema(course_user, items_affects_personal_times, submissions)
     return if learning_rate_ema.nil?
 
-    # Constrain lr
-    # TODO: Constrain based on overall lr and not instantaneous lr
-    learning_rate_ema = [OTOT_LEARNING_RATE_MAX, [learning_rate_ema, OTOT_LEARNING_RATE_MIN].max].min
+    # Constrain learning rate
+    effective_min, effective_max = compute_learning_rate_effective_limits(
+      course_user, items, submitted_ids, OTOT_LEARNING_RATE_MIN, OTOT_LEARNING_RATE_MAX
+    )
+    learning_rate_ema = [OTOT_LEARNING_RATE_HARD_MIN, effective_min, [learning_rate_ema, effective_max].min].max
 
     # Compute personal times for all items
     reference_point = items.first.reference_time_for(course_user).start_at
@@ -78,6 +81,35 @@ module Course::LessonPlan::PersonalizationConcern
                   with_submissions_by(course_user.user).
                   select { |x| x.submissions.present? }
     assessments.map { |x| [x.lesson_plan_item.id, x.submissions.first] }.to_h
+  end
+
+  # Min/max overall learning rate refers to how early/late a student is allowed to complete the course.
+  #
+  # E.g. if max_overall_lr = 2 means a student is allowed to complete a 1-month course over 2 months.
+  # However, if the student somehow managed to complete half of the course within the first day, then we can allow him
+  # to continue at lr = 4 and still have the student complete the course over 2 months. This method computes the
+  # effective limits to preserve the overall min/max lr.
+  #
+  # NOTE: It is completely possible for negative results (even -infinity), i.e. student needs to go back in time in
+  # order to have any hope of completing the course within the limits. The algorithm needs to take care of this.
+  def compute_learning_rate_effective_limits(
+    course_user, items, submitted_ids, min_overall_learning_rate, max_overall_learning_rate
+  )
+    course_start = items.first.start_at
+    course_end = items.last.start_at
+    last_submitted_item =
+      items.reverse_each.lazy.select { |item| item.affects_personal_times? && item.id.in?(submitted_ids) }.first
+    return [min_overall_learning_rate, max_overall_learning_rate] if last_submitted_item.nil?
+
+    reference_remaining_time = items.last.start_at - last_submitted_item.reference_time_for(course_user).start_at
+    min_personal_remaining_time =
+      course_start +
+      min_overall_learning_rate * (course_end - course_start) - last_submitted_item.time_for(course_user).start_at
+    max_personal_remaining_time =
+      course_start +
+      max_overall_learning_rate * (course_end - course_start) - last_submitted_item.time_for(course_user).start_at
+
+    [min_personal_remaining_time / reference_remaining_time, max_personal_remaining_time / reference_remaining_time]
   end
 
   # Exponential Moving Average (EMA) of the learning rate
