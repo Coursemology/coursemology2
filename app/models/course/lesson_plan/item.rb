@@ -145,18 +145,6 @@ class Course::LessonPlan::Item < ApplicationRecord
     personal_time
   end
 
-  def self.upcoming_for_exists?(course)
-    opening_items = course.lesson_plan_items.published.
-                    eager_load(:personal_times, :reference_times).
-                    preload(:actable)
-    opening_items.select { |item| item.actable.include_in_consolidated_email?(:opening) }.each do |item|
-      course.course_users.each do |course_user|
-        return true if item.time_for(course_user).start_at.in?((Time.zone.now)..(1.day.from_now))
-      end
-    end
-    false
-  end
-
   # Finds the lesson plan items which are starting within the next day for a given course user.
   # Rearrange the items into a hash keyed by the actable type as a string.
   # For example:

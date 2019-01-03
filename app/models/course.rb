@@ -193,6 +193,15 @@ class Course < ApplicationRecord
     settings(:course_assessments_component).show_stdout_and_stderr = option
   end
 
+  def upcoming_lesson_plan_items_exist?
+    opening_items = lesson_plan_items.published.eager_load(:personal_times, :reference_times).preload(:actable)
+    opening_items.select { |item| item.actable.include_in_consolidated_email?(:opening) }.any? do |item|
+      course_users.any? do |course_user|
+        item.time_for(course_user).start_at.in?((Time.zone.now)..(1.day.from_now))
+      end
+    end
+  end
+
   private
 
   # Set default values
