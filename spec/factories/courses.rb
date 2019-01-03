@@ -26,7 +26,7 @@ FactoryBot.define do
         # Save instance setting to the database so the video component remains enabled on reload.
         # Should help stop seemingly random video component spec failures.
         course.instance.set_component_enabled_boolean!(:course_videos_component, true)
-        course.set_component_enabled_boolean(:course_videos_component, true)
+        course.set_component_enabled_boolean!(:course_videos_component, true)
       end
     end
 
