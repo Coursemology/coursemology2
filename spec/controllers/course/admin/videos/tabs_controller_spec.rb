@@ -9,11 +9,7 @@ RSpec.describe Course::Admin::Videos::TabsController, type: :controller do
   end
   with_tenant(:instance) do
     let(:user) { create(:administrator) }
-    let(:course) do
-      create(:course, creator: user).tap do |course|
-        course.set_component_enabled_boolean!(:course_videos_component, true)
-      end
-    end
+    let!(:course) { create(:course, :with_video_component_enabled, creator: user) }
     let!(:tab_stub) do
       stub = create(:course_video_tab)
       allow(stub).to receive(:destroy).and_return(false)
