@@ -34,6 +34,8 @@ env:
     - GROUP="misc"
 
 before_install:
+  - gem update --system
+  - gem install bundler
   - nvm install 8
   - node --version
   - npm list -g yarn --depth=0 || npm install -g yarn
