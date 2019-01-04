@@ -1,14 +1,16 @@
 = tabs do
-  = nav_to(t('.students'), course_users_students_path(current_course))
-  = nav_to(t('.staff'), course_users_staff_path(current_course))
-  = nav_to(course_enrol_requests_path(current_course)) do
-    = t('.requests')
-    - requests_count = current_course.enrol_requests.count
-    =< badge(requests_count) if requests_count > 0
+  - if can?(:manage, CourseUser.new(course: current_course))
+    = nav_to(t('.students'), course_users_students_path(current_course))
+    = nav_to(t('.staff'), course_users_staff_path(current_course))
+  - if can?(:manage, Course::EnrolRequest.new(course: current_course))
+    = nav_to(course_enrol_requests_path(current_course)) do
+      = t('.requests')
+      - requests_count = current_course.enrol_requests.count
+      =< badge(requests_count) if requests_count > 0
   = nav_to(t('.invite'), invite_course_users_path(current_course), class: 'dropdown')
   = nav_to(course_user_invitations_path(current_course)) do
     = t('.invitations')
     - invitations_count = current_course.invitations.unconfirmed.count
     =< badge(invitations_count) if invitations_count > 0
-  - if current_course.show_personalized_timeline_features?
+  - if current_course.show_personalized_timeline_features? && can?(:manage_personal_times, current_course)
     = nav_to(t('.personal_times'), personal_times_course_users_path(current_course))
