@@ -61,7 +61,7 @@ class LessonPlanShow extends React.Component {
 
     const visibleItems = items.filter(item => visibility[item.itemTypeKey]);
     const initiallyExpanded = {
-      current: currentGroupId ? (id === currentGroupId) : true,
+      current: currentGroupId ? (id === currentGroupId) : false,
       all: true,
       none: false,
     }[milestonesExpanded];
