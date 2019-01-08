@@ -16,7 +16,8 @@ class Course::UserInvitationsController < Course::ComponentController
   def create
     result = invite
     if result
-      redirect_to course_user_invitations_path(current_course), success: create_success_message(*result)
+      redirect_to course_user_invitations_path(current_course), success: create_success_message(*result),
+                                                                warning: create_warning_message(*result)
     else
       propagate_errors
       render 'new'
@@ -199,12 +200,19 @@ class Course::UserInvitationsController < Course::ComponentController
   end
 
   # Returns the successful invitation creation message based on file or entry invitation.
-  def create_success_message(new_invitations, existing_invitations, new_course_users, existing_course_users)
+  def create_success_message(new_invitations, existing_invitations, new_course_users,
+                             existing_course_users, _duplicate_users)
     t('.success',
       new_invitations: t('.summary.new_invitations', count: new_invitations),
       already_invited: t('.summary.already_invited', count: existing_invitations),
       new_course_users: t('.summary.new_course_users', count: new_course_users),
       already_enrolled: t('.summary.already_enrolled', count: existing_course_users))
+  end
+
+  # Returns the warning invitation creation message based on file or entry invitation.
+  def create_warning_message(_new_invitations, _existing_invitations, _new_course_users,
+                             _existing_course_users, duplicate_users)
+    t('.summary.duplicate_emails', count: duplicate_users) if invite_by_file? && duplicate_users > 0
   end
 
   # Enables or disables registration codes in the given course.

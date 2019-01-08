@@ -87,7 +87,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
 
       context 'when a list of invitation form attributes are provided' do
         it 'registers everyone' do
-          expect(invite).to eq([new_users.size, 0, existing_users.size, 0])
+          expect(invite).to eq([new_users.size, 0, existing_users.size, 0, 0])
           verify_users
         end
 
@@ -103,7 +103,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
         it 'accepts a CSV file with a header' do
           expect(subject.invite(temp_csv_from_attributes(user_attributes.map do |attributes|
             OpenStruct.new(attributes)
-          end))).to eq([new_users.size, 0, existing_users.size, 0])
+          end))).to eq([new_users.size, 0, existing_users.size, 0, 0])
 
           verify_users
         end
@@ -129,7 +129,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
 
         it 'succeeds' do
           expect(invite).to eq([new_users.size - users_invited.size, users_invited.size,
-                                existing_users.size - users_in_course.size, users_in_course.size])
+                                existing_users.size - users_in_course.size, users_in_course.size, 0])
         end
 
         with_active_job_queue_adapter(:test) do
@@ -145,19 +145,15 @@ RSpec.describe Course::UserInvitationService, type: :service do
           new_users.push(new_users.last)
         end
 
-        it 'fails' do
-          expect(invite).to be_falsey
+        it 'processes duplicate users only once' do
+          expect(invite).to eq([new_user_attributes.size - 1, 0, existing_user_attributes.size, 0, 1])
         end
 
-        it 'does not send any notifications' do
-          expect { invite }.to change { ActionMailer::Base.deliveries.count }.by(0)
-        end
-
-        it 'sets the proper errors' do
-          invite
-          errors = course.invitations.map(&:errors).tap(&:compact!).reject(&:empty?)
-          expect(errors.length).to eq(1)
-          expect(errors.first[:email].all? { |error| error =~ /been taken/ }).to be_truthy
+        with_active_job_queue_adapter(:test) do
+          it 'sends only one invitation to duplicate users' do
+            expect { invite }.to change { ActionMailer::Base.deliveries.count }.
+              by(new_user_attributes.size - 1 + existing_user_attributes.size)
+          end
         end
       end
 
