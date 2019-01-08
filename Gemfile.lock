@@ -191,7 +191,7 @@ GEM
       url
     concurrent-ruby (1.1.4)
     consistency_fail (0.3.7)
-    coursemology-polyglot (0.2.9.3)
+    coursemology-polyglot (0.2.9.4)
       activesupport (>= 4.2, < 6)
     crass (1.0.4)
     devise (4.5.0)
