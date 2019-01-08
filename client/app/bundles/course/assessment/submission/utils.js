@@ -24,6 +24,7 @@ export function parseLanguages(language) {
       return 'c_cpp';
     case 'Java':
       return 'java';
+    case 'Python 3.7':
     case 'Python 3.6':
     case 'Python 3.5':
     case 'Python 3.4':
