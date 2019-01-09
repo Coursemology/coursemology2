@@ -1,5 +1,5 @@
 - if can?(:attempt, video) && current_course_user
-  - submission = video.submissions.select { |s| s.creator == current_user }.first
+  - submission = video.submissions.by_user(current_user).first
   - if submission
     = link_to t('.rewatch'),
       edit_course_video_submission_path(current_course, video, submission),
