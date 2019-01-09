@@ -5,10 +5,10 @@ RSpec.describe Course::Video::Tab, type: :model do
   it { is_expected.to belong_to(:course).inverse_of(:video_tabs) }
   it { is_expected.to have_many(:videos).inverse_of(:tab).dependent(:destroy) }
 
-  let!(:instance) { Instance.default }
+  let!(:instance) { create(:instance, :with_video_component_enabled) }
   with_tenant(:instance) do
     describe '.after_course_initialize' do
-      let(:course) { build(:course) }
+      let!(:course) { create(:course, :with_video_component_enabled) }
 
       it 'builds only one video tab' do
         expect(course.video_tabs.length).to eq(1)
