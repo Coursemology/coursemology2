@@ -12,6 +12,9 @@ en:
         serial_number: :'course.statistics.serial_number'
         tutor: 'Tutor'
         experience_points: 'Experience Points'
+        video_watched: 'Videos Watched (Total: %{total})'
+        percent_watched: 'Average % Watched'
+        progress: '%{progress} %'
       staff:
         header: 'Staff Statistics'
         serial_number: :'course.statistics.serial_number'

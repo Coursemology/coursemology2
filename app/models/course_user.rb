@@ -78,6 +78,24 @@ class CourseUser < ApplicationRecord
       where('course_user_achievements.course_user_id = course_users.id')
   end)
 
+  # @!attribute [r] video_percent_watched
+  #   Average the percent of videos watched by the course user.
+  calculated :video_percent_watched, (lambda do
+    Course::Video::Submission::Statistic.select('round(avg(percent_watched), 1)').
+      joins(submission: { video: :tab }).
+      where('course_video_submissions.creator_id = course_users.user_id').
+      where('course_video_tabs.course_id = course_users.course_id')
+  end)
+
+  # @!attribute [r] video_submission_count
+  #   Returns the total number of achievements obtained by CourseUser in this course
+  calculated :video_submission_count, (lambda do
+    Course::Video::Submission::Statistic.select('count(*)').
+      joins(submission: { video: :tab }).
+      where('course_video_submissions.creator_id = course_users.user_id').
+      where('course_video_tabs.course_id = course_users.course_id')
+  end)
+
   # Gets the staff associated with the course.
   # TODO: Remove the map when Rails 5 is released.
   scope :staff, -> { where(role: STAFF_ROLES.map { |x| roles[x] }) }
@@ -91,6 +109,7 @@ class CourseUser < ApplicationRecord
   scope :phantom, -> { where(phantom: true) }
   scope :without_phantom_users, -> { where(phantom: false) }
   scope :with_course_statistics, -> { all.calculated(:experience_points, :achievement_count) }
+  scope :with_video_statistics, -> { all.calculated(:video_percent_watched, :video_submission_count) }
 
   # Order course_users by experience points for use in the course leaderboard.
   #   In the event of a tie in points, the scope will then sort by course_users who

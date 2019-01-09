@@ -6,7 +6,7 @@ class Course::StatisticsController < Course::ComponentController
     preload_levels
     course_users = current_course.course_users.includes(:groups)
     staff = course_users.staff
-    all_students = course_users.students.ordered_by_experience_points
+    all_students = course_users.students.ordered_by_experience_points.with_video_statistics
     @phantom_students, @students = all_students.partition(&:phantom?)
     @service = Course::GroupManagerPreloadService.new(staff)
   end
