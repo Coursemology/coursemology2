@@ -3,11 +3,12 @@
 
 = render '/course/users/tabs'
 
-= simple_form_for :course_user do |f|
+- url = @course_user.nil? ? personal_times_course_users_path : course_user_personal_times_recompute_path
+= simple_form_for :course_user, method: :post, url: url do |f|
   = f.input :user_id,
       as: :select,
       required: false,
-      label: 'Course User',
+      label: t('.course_user'),
       label_method: :second,
       value_method: :third,
       selected: lambda { |option| option.first == @course_user },
@@ -15,6 +16,9 @@
       collection: @course.course_users.order_alphabetically.\
                           map { |cu| [cu, cu.name, course_user_personal_times_path(user_id: cu.id)] },
       input_html: { onchange: "location.href = $('#course_user_user_id option:selected').val()" }
+  - if @course_user.present?
+    p = t('.algorithm', algorithm: @course_user.timeline_algorithm.capitalize)
+    p = f.button :submit, t('.recompute')
 
 - if @items.present?
   div.table-fluid

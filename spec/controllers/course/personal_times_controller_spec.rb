@@ -172,5 +172,28 @@ RSpec.describe Course::PersonalTimesController, type: :controller do
         end
       end
     end
+
+    describe '#recompute' do
+      subject do
+        post :recompute, params: { course_id: course.id, user_id: course_user.id }
+      end
+
+      context 'when a normal user recomputes a personal timeline' do
+        let(:user) { create(:course_student, course: course).user }
+        before { sign_in(user) }
+        it 'is unsuccessful' do
+          expect { subject }.to raise_exception(CanCan::AccessDenied)
+        end
+      end
+
+      context 'when a course admin recomputes a personal timeline' do
+        let(:user) { create(:course_teaching_assistant, course: course).user }
+        before { sign_in(user) }
+        it 'is successful' do
+          subject
+          expect(flash[:success]).to eq(I18n.t('course.personal_times.recompute.success'))
+        end
+      end
+    end
   end
 end

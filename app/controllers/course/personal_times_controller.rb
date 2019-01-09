@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Course::PersonalTimesController < Course::ComponentController
+  include Course::LessonPlan::PersonalizationConcern
+
   before_action :authorize_personal_times!
 
   def index
@@ -35,6 +37,12 @@ class Course::PersonalTimesController < Course::ComponentController
     else
       redirect_to course_user_personal_times_path, danger: @personal_time.errors.full_messages.to_sentence
     end
+  end
+
+  def recompute
+    @course_user = CourseUser.find_by(course: @course, id: params[:user_id])
+    update_personalized_timeline_for(@course_user) if @course_user.present?
+    redirect_to course_user_personal_times_path, success: t('.success', name: @course_user.name)
   end
 
   private
