@@ -24,10 +24,10 @@ RSpec.feature 'Courses: Staff Management' do
       let(:user) { create(:user) }
       let!(:course_staff) { create(:course_teaching_assistant, course: course, user: user) }
 
-      scenario 'I cannot view the Users Management Sidebar item' do
+      scenario 'I can view the Users Management Sidebar item' do
         visit course_path(course)
 
-        expect(page).not_to have_selector('li', text: 'layouts.course_users.title')
+        expect(page).to have_selector('li', text: 'layouts.course_users.title')
       end
 
       scenario 'I cannot access the staff list' do
