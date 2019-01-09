@@ -10,7 +10,7 @@ RSpec.describe Course::Video::Submission do
     let(:course) { create(:course, :with_video_component_enabled) }
     let!(:student) { create(:course_student, course: course) }
     let!(:other_student) { create(:course_student, course: course) }
-    let(:video) { create(:video, :published, course: course) }
+    let(:video) { create(:video, :published, course: course, duration: 70) }
     let(:submission1) do
       create(:video_submission, video: video, creator: student.user, course_user: student)
     end
@@ -76,6 +76,21 @@ RSpec.describe Course::Video::Submission do
         end
 
         expect(submission1.watch_frequency).to eq(distribution)
+      end
+    end
+
+    describe '.update_statistic' do
+      let!(:session1) { create(:video_session, :with_events_unclosed, submission: submission1) }
+      let!(:session2) { create(:video_session, :with_events_paused, submission: submission1) }
+
+      it 'updates the statistic with correct watch_freq and percent_watched' do
+        expect(submission1.statistic.watch_freq).to eq([])
+        expect(submission1.statistic.percent_watched).to eq(0)
+
+        submission1.update_statistic
+
+        expect(submission1.statistic.watch_freq.size).to eq(71)
+        expect(submission1.statistic.percent_watched).to eq(88)
       end
     end
 

@@ -8,5 +8,5 @@ json.statistics do
       end
     end
   end
-  json.watchFrequency @submission.watch_frequency
+  json.watchFrequency @submission.statistic&.watch_freq || @submission.watch_frequency
 end

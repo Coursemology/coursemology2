@@ -5,7 +5,7 @@ class Course::Video::Submission::SubmissionsController < Course::Video::Submissi
   skip_authorize_resource :submission, only: :edit
 
   def index
-    @submissions = @submissions.includes(experience_points_record: :course_user)
+    @submissions = @submissions.includes([{ experience_points_record: :course_user }, :statistic])
     @my_students = current_course_user.try(:my_students) || []
     @course_students = current_course.course_users.students.order_alphabetically
   end

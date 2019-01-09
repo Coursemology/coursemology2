@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Course::Video < ApplicationRecord
+  after_save :init_statistic
+
   acts_as_lesson_plan_item has_todo: true
 
   include Course::ClosingReminderConcern
@@ -19,8 +21,10 @@ class Course::Video < ApplicationRecord
                     dependent: :destroy, foreign_key: :video_id, inverse_of: :video
   has_many :discussion_topics, through: :topics, class_name: Course::Discussion::Topic.name
   has_many :posts, through: :discussion_topics, class_name: Course::Discussion::Post.name
-  has_many :sessions, through: :submissions
-  has_many :events, through: :sessions
+  has_many :sessions, through: :submissions, class_name: Course::Video::Session.name
+  has_many :events, through: :sessions, class_name: Course::Video::Event.name
+  has_one :statistic, class_name: Course::Video::Statistic.name, dependent: :destroy,
+                      foreign_key: :video_id, inverse_of: :video, autosave: true
 
   scope :from_course, ->(course) { where(course_id: course) }
 
@@ -32,6 +36,7 @@ class Course::Video < ApplicationRecord
   scope :ordered_by_date_and_title, (lambda do
     select('course_videos.*, course_reference_times.start_at, course_lesson_plan_items.title').
       joins(:lesson_plan_item).
+      includes(:statistic).references(:all).
       merge(Course::LessonPlan::Item.ordered_by_date_and_title)
   end)
 
@@ -99,6 +104,19 @@ class Course::Video < ApplicationRecord
     sessions.exists? || posts.exists?
   end
 
+  def create_submission_statistics
+    submissions.select { |submission| submission.statistic.nil? }.map(&:update_statistic)
+  end
+
+  def calculate_percent_watched
+    if submissions.blank?
+      0
+    else
+      (submissions.map { |submission| submission.statistic.percent_watched }.
+        sum / submissions.size).round
+    end
+  end
+
   private
 
   def relevant_events_scope
@@ -120,5 +138,9 @@ class Course::Video < ApplicationRecord
     errors.add(:url, 'cannot be updated for videos with comments or watch data') if url_changed? &&
                                                                                     persisted? &&
                                                                                     url_unchangeble?
+  end
+
+  def init_statistic
+    create_statistic if statistic.nil?
   end
 end

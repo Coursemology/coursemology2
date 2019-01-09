@@ -196,7 +196,7 @@ function sendCurrentEvents(dispatch, videoState, closeSession = false) {
 
   const videoTime = Math.round(videoState.playerProgress);
   CourseAPI.video.sessions
-    .update(sessionId, videoTime, events.toArray(), duration)
+    .update(sessionId, videoTime, events.toArray(), duration, false, closeSession)
     .then(() => {
       if (!events.isEmpty()) {
         dispatch(removeEvents(events.map(event => event.sequence_num).toSet()), closeSession);
@@ -225,7 +225,7 @@ function sendOldSessions(dispatch, oldSessions) {
       const events = oldVideoState.sessionEvents;
 
       return CourseAPI.video.sessions
-        .update(sessionId, videoTime, events.toArray(), 0, true)
+        .update(sessionId, videoTime, events.toArray(), 0, true, true)
         .then(() => sessionId)
         .catch(error => (error.response.status === 404 ? sessionId : null));
     })

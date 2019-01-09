@@ -21,7 +21,9 @@ en:
           submission:
             watched: 'Watched'
             not_watched: 'Has Not Started'
+            progress: '%{progress} %'
           submissions:
             student_name: 'Name'
             status: 'Status'
             start_at: 'Watched At'
+            percent_watched: '% Watched'

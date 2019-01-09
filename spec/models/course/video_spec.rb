@@ -82,6 +82,22 @@ RSpec.describe Course::Video, type: :model do
       end
     end
 
+    describe '.calculate_percent_watched' do
+      let(:submission1) { create(:video_submission, video: video1, creator: student1.user) }
+      let(:submission2) { create(:video_submission, video: video1, creator: student2.user) }
+      let!(:session1) { create(:video_session, :with_events_paused, submission: submission1) }
+      let!(:session2) { create(:video_session, :with_events_continuous, submission: submission2) }
+      let!(:session3) { create(:video_session, :with_events_unclosed, submission: submission1) }
+      let!(:session4) { create(:video_session, :with_events_replay, submission: submission1) }
+
+      it 'computes the average percent watched per submission' do
+        submission1.update_statistic
+        submission2.update_statistic
+
+        expect(video1.calculate_percent_watched).to eq(76)
+      end
+    end
+
     describe '#next_video' do
       let!(:video3) do
         create(:video, course: course, start_at: Time.zone.now - 1.week, title: 'AAA')
