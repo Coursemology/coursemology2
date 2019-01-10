@@ -62,8 +62,8 @@ class LayersComponent extends Component {
               primaryText={layer.creator_name}
               onClick={() => (onClickLayer(layer))}
               rightIcon={layer.isDisplayed ? <Done /> : null}
-            />))
-          }
+            />
+          ))}
         </Menu>
       </Popover>
     ) : null;
