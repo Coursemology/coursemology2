@@ -24,14 +24,12 @@ module Course::LessonPlan::PersonalizationConcern
   # Delete all personal times that are not fixed or submitted
   def algorithm_fixed(course_user)
     submissions = retrieve_submissions(course_user)
-    submitted_ids = submissions.keys.select { |k| submissions[k].submitted_at.present? }
-    course_user.personal_times.where(fixed: false).where.not(lesson_plan_item_id: submitted_ids).delete_all
+    course_user.personal_times.where(fixed: false).where.not(lesson_plan_item_id: submissions.keys).delete_all
   end
 
   def algorithm_otot(course_user)
     course_tz = course_user.course.time_zone
     submissions = retrieve_submissions(course_user)
-    submitted_ids = submissions.keys.select { |k| submissions[k].submitted_at.present? }
     items = course_user.course.lesson_plan_items.published.
             with_reference_times_for(course_user).
             with_personal_times_for(course_user).
@@ -44,7 +42,7 @@ module Course::LessonPlan::PersonalizationConcern
 
     # Constrain learning rate
     effective_min, effective_max = compute_learning_rate_effective_limits(
-      course_user, items, submitted_ids, OTOT_LEARNING_RATE_MIN, OTOT_LEARNING_RATE_MAX
+      course_user, items, submissions, OTOT_LEARNING_RATE_MIN, OTOT_LEARNING_RATE_MAX
     )
     learning_rate_ema = [OTOT_LEARNING_RATE_HARD_MIN, effective_min, [learning_rate_ema, effective_max].min].max
 
@@ -54,12 +52,12 @@ module Course::LessonPlan::PersonalizationConcern
     course_user.transaction do
       items.each do |item|
         # Update reference point and personal point
-        if item.affects_personal_times? && item.id.in?(submitted_ids)
+        if item.affects_personal_times? && item.id.in?(submissions.keys)
           reference_point = item.reference_time_for(course_user).start_at
           personal_point = item.time_for(course_user).start_at
         end
 
-        next if !item.has_personal_times? || item.id.in?(submitted_ids) || item.personal_time_for(course_user)&.fixed?
+        next if !item.has_personal_times? || item.id.in?(submissions.keys) || item.personal_time_for(course_user)&.fixed?
 
         # Update personal time
         reference_time = item.reference_time_for(course_user)
@@ -82,7 +80,6 @@ module Course::LessonPlan::PersonalizationConcern
   def algorithm_stragglers(course_user)
     course_tz = course_user.course.time_zone
     submissions = retrieve_submissions(course_user)
-    submitted_ids = submissions.keys.select { |k| submissions[k].submitted_at.present? }
     items = course_user.course.lesson_plan_items.published.
             with_reference_times_for(course_user).
             with_personal_times_for(course_user).
@@ -95,7 +92,7 @@ module Course::LessonPlan::PersonalizationConcern
 
     # Constrain learning rate
     effective_min, effective_max = compute_learning_rate_effective_limits(
-      course_user, items, submitted_ids, STRAGGLERS_LEARNING_RATE_MIN, STRAGGLERS_LEARNING_RATE_MAX
+      course_user, items, submissions, STRAGGLERS_LEARNING_RATE_MIN, STRAGGLERS_LEARNING_RATE_MAX
     )
     learning_rate_ema = [STRAGGLERS_LEARNING_RATE_HARD_MIN, effective_min, [learning_rate_ema, effective_max].min].max
 
@@ -105,12 +102,12 @@ module Course::LessonPlan::PersonalizationConcern
     course_user.transaction do
       items.each do |item|
         # Update reference point and personal point
-        if item.affects_personal_times? && item.id.in?(submitted_ids)
+        if item.affects_personal_times? && item.id.in?(submissions.keys)
           reference_point = item.reference_time_for(course_user).start_at
           personal_point = item.time_for(course_user).start_at
         end
 
-        next if !item.has_personal_times? || item.id.in?(submitted_ids) || item.personal_time_for(course_user)&.fixed?
+        next if !item.has_personal_times? || item.id.in?(submissions.keys) || item.personal_time_for(course_user)&.fixed?
 
         # Update personal time
         reference_time = item.reference_time_for(course_user)
@@ -133,19 +130,34 @@ module Course::LessonPlan::PersonalizationConcern
     end
 
     # Fix next few items
-    items.select { |item| item.has_personal_times? && !item.id.in?(submitted_ids) }.
+    items.select { |item| item.has_personal_times? && !item.id.in?(submissions.keys) }.
       slice(0, STRAGGLERS_FIXES).
       each { |item| item.reload.find_or_create_personal_time_for(course_user).update(fixed: true) }
   end
 
   private
 
-  # Returns { lesson_plan_item_id => submission }
+  # Returns { lesson_plan_item_id => submitted_time or nil }
+  # If the lesson plan item is a key in this hash then we consider the item "submitted" regardless of whether we have a
+  # submission time for it.
   def retrieve_submissions(course_user)
-    assessments = course_user.course.assessments.
-                  with_submissions_by(course_user.user).
-                  select { |x| x.submissions.present? }
-    assessments.map { |x| [x.lesson_plan_item.id, x.submissions.first] }.to_h
+    submissions = {}
+
+    # Assessments - consider submitted only if submitted_at is present
+    submissions.merge!(
+      course_user.course.assessments.
+      with_submissions_by(course_user.user).
+      select { |x| x.submissions.present? && x.submissions.first.submitted_at.present? }.
+      map { |x| [x.lesson_plan_item.id, x.submissions.first.submitted_at] }.to_h
+    )
+
+    # Videos - consider submitted as long as submission exists
+    submissions.merge!(
+      course_user.course.videos.
+      with_submissions_by(course_user.user).
+      select { |x| x.submissions.present? }.
+      map { |x| [x.lesson_plan_item.id, nil] }.to_h
+    )
   end
 
   # Min/max overall learning rate refers to how early/late a student is allowed to complete the course.
@@ -158,12 +170,12 @@ module Course::LessonPlan::PersonalizationConcern
   # NOTE: It is completely possible for negative results (even -infinity), i.e. student needs to go back in time in
   # order to have any hope of completing the course within the limits. The algorithm needs to take care of this.
   def compute_learning_rate_effective_limits(
-    course_user, items, submitted_ids, min_overall_learning_rate, max_overall_learning_rate
+    course_user, items, submissions, min_overall_learning_rate, max_overall_learning_rate
   )
     course_start = items.first.start_at
     course_end = items.last.start_at
     last_submitted_item =
-      items.reverse_each.lazy.select { |item| item.affects_personal_times? && item.id.in?(submitted_ids) }.first
+      items.reverse_each.lazy.select { |item| item.affects_personal_times? && item.id.in?(submissions.keys) }.first
     return [min_overall_learning_rate, max_overall_learning_rate] if last_submitted_item.nil?
 
     reference_remaining_time = items.last.start_at - last_submitted_item.reference_time_for(course_user).start_at
@@ -179,9 +191,8 @@ module Course::LessonPlan::PersonalizationConcern
 
   # Exponential Moving Average (EMA) of the learning rate
   def compute_learning_rate_ema(course_user, course_assessments, submissions, alpha = 0.4)
-    submitted_ids = submissions.keys.select { |k| submissions[k].submitted_at.present? }
     submitted_assessments = course_assessments.
-                            select { |x| x.id.in? submitted_ids }.
+                            select { |x| x.id.in? submissions.keys }.
                             select { |x| x.time_for(course_user).end_at.present? }.
                             sort_by { |x| x.time_for(course_user).start_at }
     return nil if submitted_assessments.empty?
@@ -189,9 +200,9 @@ module Course::LessonPlan::PersonalizationConcern
     learning_rate_ema = 1.0
     submitted_assessments.each do |assessment|
       times = assessment.time_for(course_user)
-      next if times.end_at - times.start_at == 0
+      next if times.end_at - times.start_at == 0 || submissions[assessment.id].nil?
 
-      learning_rate = (submissions[assessment.id].submitted_at - times.start_at) / (times.end_at - times.start_at)
+      learning_rate = (submissions[assessment.id] - times.start_at) / (times.end_at - times.start_at)
       learning_rate = [learning_rate, 0].max
       learning_rate_ema = alpha * learning_rate + (1 - alpha) * learning_rate_ema
     end
