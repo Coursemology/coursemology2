@@ -140,7 +140,7 @@
     "eslint-plugin-jsx-a11y": "^6.1.2",
     "eslint-plugin-react": "^7.12.3",
     "jest": "^23.6.0",
-    "jest-localstorage-mock": "^2.2.0",
+    "jest-localstorage-mock": "2.4.0",
     "react-dnd-test-backend": "^7.0.2",
     "react-test-renderer": "^16.7.0",
     "redux-logger": "^3.0.6",
