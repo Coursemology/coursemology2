@@ -7,6 +7,12 @@ module Course::LessonPlan::PersonalizationConcern
   OTOT_LEARNING_RATE_HARD_MIN = 0.5 # No matter how doomed the student is, refuse to go faster than this
   OTOT_DATE_ROUNDING_THRESHOLD = 0.8
 
+  STRAGGLERS_LEARNING_RATE_MAX = 2.0
+  STRAGGLERS_LEARNING_RATE_MIN = 1.0
+  STRAGGLERS_LEARNING_RATE_HARD_MIN = 0.8
+  STRAGGLERS_DATE_ROUNDING_THRESHOLD = 0.2
+  STRAGGLERS_FIXES = 1
+
   # Dispatches the call to the correct personalization algorithm
   # If the algorithm takes too long (e.g. voodoo AI magic), it is responsible for scheduling an async job
   def update_personalized_timeline_for(course_user, timeline_algorithm = nil)
@@ -73,6 +79,65 @@ module Course::LessonPlan::PersonalizationConcern
     end
   end
 
+  def algorithm_stragglers(course_user)
+    course_tz = course_user.course.time_zone
+    submissions = retrieve_submissions(course_user)
+    submitted_ids = submissions.keys.select { |k| submissions[k].submitted_at.present? }
+    items = course_user.course.lesson_plan_items.published.
+            with_reference_times_for(course_user).
+            with_personal_times_for(course_user).
+            to_a
+    items = items.sort_by { |x| x.time_for(course_user).start_at }
+    items_affects_personal_times = items.select(&:affects_personal_times?)
+
+    learning_rate_ema = compute_learning_rate_ema(course_user, items_affects_personal_times, submissions)
+    return if learning_rate_ema.nil?
+
+    # Constrain learning rate
+    effective_min, effective_max = compute_learning_rate_effective_limits(
+      course_user, items, submitted_ids, STRAGGLERS_LEARNING_RATE_MIN, STRAGGLERS_LEARNING_RATE_MAX
+    )
+    learning_rate_ema = [STRAGGLERS_LEARNING_RATE_HARD_MIN, effective_min, [learning_rate_ema, effective_max].min].max
+
+    # Compute personal times for all items
+    reference_point = items.first.reference_time_for(course_user).start_at
+    personal_point = reference_point
+    course_user.transaction do
+      items.each do |item|
+        # Update reference point and personal point
+        if item.affects_personal_times? && item.id.in?(submitted_ids)
+          reference_point = item.reference_time_for(course_user).start_at
+          personal_point = item.time_for(course_user).start_at
+        end
+
+        next if !item.has_personal_times? || item.id.in?(submitted_ids) || item.personal_time_for(course_user)&.fixed?
+
+        # Update personal time
+        reference_time = item.reference_time_for(course_user)
+        personal_time = item.find_or_create_personal_time_for(course_user)
+        personal_time.start_at = reference_time.start_at
+        personal_time.bonus_end_at = reference_time.bonus_end_at
+        if reference_time.end_at.present?
+          personal_time.end_at = round_to_date(
+            personal_point + (reference_time.end_at - reference_point) * learning_rate_ema,
+            course_tz,
+            STRAGGLERS_DATE_ROUNDING_THRESHOLD
+          )
+          # Hard limits to make sure we don't fail bounds checks
+          personal_time.end_at = [personal_time.end_at, reference_time.end_at, reference_time.start_at].compact.max
+        else
+          personal_time.end_at = nil
+        end
+        personal_time.save!
+      end
+    end
+
+    # Fix next few items
+    items.select { |item| item.has_personal_times? && !item.id.in?(submitted_ids) }.
+      slice(0, STRAGGLERS_FIXES).
+      each { |item| item.reload.find_or_create_personal_time_for(course_user).update(fixed: true) }
+  end
+
   private
 
   # Returns { lesson_plan_item_id => submission }
@@ -121,19 +186,14 @@ module Course::LessonPlan::PersonalizationConcern
                             sort_by { |x| x.time_for(course_user).start_at }
     return nil if submitted_assessments.empty?
 
-    learning_rate_ema = nil
+    learning_rate_ema = 1.0
     submitted_assessments.each do |assessment|
       times = assessment.time_for(course_user)
       next if times.end_at - times.start_at == 0
 
       learning_rate = (submissions[assessment.id].submitted_at - times.start_at) / (times.end_at - times.start_at)
       learning_rate = [learning_rate, 0].max
-      learning_rate_ema =
-        if learning_rate_ema.nil?
-          learning_rate
-        else
-          alpha * learning_rate + (1 - alpha) * learning_rate_ema
-        end
+      learning_rate_ema = alpha * learning_rate + (1 - alpha) * learning_rate_ema
     end
     learning_rate_ema
   end
