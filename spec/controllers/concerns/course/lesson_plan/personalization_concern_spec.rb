@@ -11,9 +11,15 @@ RSpec.describe Course::LessonPlan::PersonalizationConcern do
     let(:dummy_controller) { self.class::DummyController.new }
 
     let!(:course) { create(:course) }
-    let!(:assessment1) { create(:course_assessment_assessment, course: course, end_at: 3.days.from_now) }
-    let!(:assessment2) { create(:course_assessment_assessment, course: course, end_at: 3.days.from_now) }
-    let!(:assessment3) { create(:course_assessment_assessment, course: course, end_at: 3.days.from_now) }
+    let!(:assessment1) do
+      create(:course_assessment_assessment, course: course, end_at: 3.days.from_now, published: true)
+    end
+    let!(:assessment2) do
+      create(:course_assessment_assessment, course: course, end_at: 3.days.from_now, published: true)
+    end
+    let!(:assessment3) do
+      create(:course_assessment_assessment, course: course, end_at: 3.days.from_now, published: true)
+    end
 
     context 'when course user is on the fixed algorithm' do
       let!(:course_user) { create(:course_user, course: course, timeline_algorithm: 'fixed') }
