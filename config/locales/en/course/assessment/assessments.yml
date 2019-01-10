@@ -17,11 +17,6 @@ en:
         assessment:
           attempt: 'Attempt'
           condition_not_satisfied: 'You do not fulfill the requirements of the assessment'
-          has_personal_times_hint: >
-            Has personal times. Timings for this item will be automatically adjusted for users based on learning rate.
-          affects_personal_times_hint: >
-            Affects personal times. Student's submission time for this item will be taken into account when updating
-            personal times for other items.
         show:
           type: 'Assessment Type'
           autograded: 'Autograded Assessment'

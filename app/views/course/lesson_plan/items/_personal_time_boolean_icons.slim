@@ -1,0 +1,6 @@
+- if current_course.show_personalized_timeline_features && item.has_personal_times?
+  span title=t('.has_personal_times_hint')
+    => fa_icon 'clock-o'.freeze
+- if current_course.show_personalized_timeline_features && item.affects_personal_times?
+  span title=t('.affects_personal_times_hint')
+    => fa_icon 'random'.freeze
