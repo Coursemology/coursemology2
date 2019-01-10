@@ -137,6 +137,21 @@ GEM
     autoprefixer-rails (9.4.4)
       execjs
     awesome_print (1.8.0)
+    aws-eventstream (1.0.1)
+    aws-partitions (1.106.0)
+    aws-sdk-core (3.35.0)
+      aws-eventstream (~> 1.0)
+      aws-partitions (~> 1.0)
+      aws-sigv4 (~> 1.0)
+      jmespath (~> 1.0)
+    aws-sdk-kms (1.11.0)
+      aws-sdk-core (~> 3, >= 3.26.0)
+      aws-sigv4 (~> 1.0)
+    aws-sdk-s3 (1.23.0)
+      aws-sdk-core (~> 3, >= 3.26.0)
+      aws-sdk-kms (~> 1)
+      aws-sigv4 (~> 1.0)
+    aws-sigv4 (1.0.3)
     baby_squeel (1.3.1)
       activerecord (>= 4.2.0)
       join_dependency (~> 0.1.2)
@@ -283,6 +298,7 @@ GEM
     jbuilder (2.8.0)
       activesupport (>= 4.2.0)
       multi_json (>= 1.2)
+    jmespath (1.4.0)
     join_dependency (0.1.4)
       activerecord (>= 4.2.0)
     jquery-rails (4.3.3)
@@ -548,6 +564,7 @@ DEPENDENCIES
   acts_as_tenant
   after_commit_action
   autoprefixer-rails
+  aws-sdk-s3
   baby_squeel
   bootstrap-sass
   bootstrap-sass-extras (>= 0.0.7)!
