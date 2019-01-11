@@ -86,8 +86,8 @@ const translations = defineMessages({
   },
   affectsPersonalTimesHint: {
     id: 'course.assessment.form.affectsPersonalTimesHint',
-    defaultMessage:
-      'Student\'s submission time for this item will be taken into account when updating personal times for other items',
+    defaultMessage: 'Student\'s submission time for this item will be taken into account \
+      when updating personal times for other items',
   },
   published: {
     id: 'course.assessment.form.published',

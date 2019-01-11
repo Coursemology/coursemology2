@@ -76,6 +76,7 @@ const propTypes = {
     PropTypes.instanceOf(moment),
     PropTypes.string, // Date format from JSON string ( e.g. 2017-01-01T12:00:00+08:00 )
   ]),
+  clearable: PropTypes.bool,
   errorText: PropTypes.string,
   onBlur: PropTypes.func,
   onChange: PropTypes.func,

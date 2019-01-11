@@ -92,6 +92,7 @@ class AssessmentForm extends React.Component {
     ]),
     autograded: PropTypes.bool,
     password_protected: PropTypes.bool,
+    showPersonalizedTimelineFeatures: PropTypes.bool,
     submitting: PropTypes.bool,
     tabs: PropTypes.arrayOf(PropTypes.shape({
       tab_id: PropTypes.number,

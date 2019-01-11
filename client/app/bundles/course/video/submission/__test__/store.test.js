@@ -75,7 +75,7 @@ describe('persistor', () => {
 
     describe('when a video state change occurs', () => {
       it('persists the state to localStorage', async () => {
-        const spy = jest.spyOn(global.Storage.prototype, 'setItem');
+        const spy = jest.spyOn(localStorage, 'setItem');
 
         createdStore.store.dispatch(changePlayerState(playerStates.PLAYING));
         createdStore.store.dispatch(updatePlayerProgress(13));

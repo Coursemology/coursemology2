@@ -31,7 +31,9 @@ exports[`<NewEventButton /> is hidden when canManageLessonPlan is false 1`] = `
           "locale": "en",
           "messages": Object {},
           "now": [Function],
+          "onError": [Function],
           "textComponent": "span",
+          "timeZone": "Asia/Singapore",
         }
       }
     >
