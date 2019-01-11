@@ -21,7 +21,7 @@ en:
           time_zone_label: >
             Sets the time zone for the course. Consolidated email reminders will be sent out
             just after midnight for the time zone indicated here.
-          self_directed_learning: 'Self Directed Learning'
+          self_directed_learning: 'Advanced Preview'
           self_directed_learning_label: >
             Allow students to attempt the assessments that start at a future time provided they
             have fulfilled the prerequisites.
