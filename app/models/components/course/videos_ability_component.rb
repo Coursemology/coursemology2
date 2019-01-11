@@ -41,7 +41,8 @@ module Course::VideosAbilityComponent
 
   def allow_student_attempt_video
     can :attempt, Course::Video do |video|
-      video.published? && video.self_directed_started?
+      course_user = user.course_users.find_by(course: video.course)
+      video.published? && video.self_directed_started?(course_user)
     end
   end
 

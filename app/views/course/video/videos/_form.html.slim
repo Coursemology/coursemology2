@@ -15,4 +15,7 @@
             input_html: { value: f.object.start_at || Date.today }
   = f.input :published, as: :boolean
 
+  / Videos cannot affect personal times because we have no clean measure of when they "complete" the video
+  = f.input :has_personal_times, as: :boolean if current_course.show_personalized_timeline_features?
+
   = f.button :submit

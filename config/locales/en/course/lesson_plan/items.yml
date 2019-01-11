@@ -8,6 +8,12 @@ en:
         ref: 'Ref: '
         fixed_desc: >
           The personalized timeline for this item has been fixed. It will no longer be automatically modified.
+        personal_time_boolean_icons:
+          has_personal_times_hint: >
+            Has personal times. Timings for this item will be automatically adjusted for users based on learning rate.
+          affects_personal_times_hint: >
+            Affects personal times. Student's submission time for this item will be taken into account when updating
+            personal times for other items.
   activerecord:
     attributes:
       course/lesson_plan/item:

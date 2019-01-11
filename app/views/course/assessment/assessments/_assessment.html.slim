@@ -3,12 +3,7 @@
     - unless assessment.published?
       span title=draft_message(assessment)
         => fa_icon 'ban'.freeze
-    - if current_course.show_personalized_timeline_features && assessment.has_personal_times?
-      span title=t('.has_personal_times_hint')
-        => fa_icon 'clock-o'.freeze
-    - if current_course.show_personalized_timeline_features && assessment.affects_personal_times?
-      span title=t('.affects_personal_times_hint')
-        => fa_icon 'random'.freeze
+    = render partial: 'course/lesson_plan/items/personal_time_boolean_icons', locals: { item: assessment }
     = link_to(format_inline_text(assessment.title),
               course_assessment_path(current_course, assessment))
 

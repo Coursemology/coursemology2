@@ -5,10 +5,12 @@
     - unless video.published?
       span title=draft_message(video)
         => fa_icon 'ban'.freeze
+    = render partial: 'course/lesson_plan/items/personal_time_boolean_icons', locals: { item: video }
     = link_to(format_inline_text(video.title),
       course_video_path(current_course, video))
   td.table-start-at
-    = format_datetime(video.start_at, :short)
+    = render partial: 'course/lesson_plan/items/personal_or_ref_time',
+             locals: {item: video, course_user: current_course_user, attribute: :start_at, datetime_format: :short}
   td.table-buttons
     div.btn-group.attempt
       = render partial: 'video_attempt_button', locals: { video: video }
