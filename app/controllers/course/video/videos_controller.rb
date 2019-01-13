@@ -5,6 +5,8 @@ class Course::Video::VideosController < Course::Video::Controller
               from_tab(current_tab).
               ordered_by_date_and_title.
               with_submissions_by(current_user)
+
+    @course_students = current_course.course_users.students
   end
 
   def show; end

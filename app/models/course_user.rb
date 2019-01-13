@@ -90,8 +90,8 @@ class CourseUser < ApplicationRecord
   # @!attribute [r] video_submission_count
   #   Returns the total number of achievements obtained by CourseUser in this course
   calculated :video_submission_count, (lambda do
-    Course::Video::Submission::Statistic.select('count(*)').
-      joins(submission: { video: :tab }).
+    Course::Video::Submission.select('count(*)').
+      joins(video: :tab).
       where('course_video_submissions.creator_id = course_users.user_id').
       where('course_video_tabs.course_id = course_users.course_id')
   end)

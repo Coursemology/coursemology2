@@ -1,7 +1,8 @@
 - statistic = video.statistic
+- submissions_count = video.submissions.count
 
 = content_tag_for(:tr, video, class: time_period_class(video) + draft_class(video))
-  th colspan=2
+  th
     - unless video.published?
       span title=draft_message(video)
         => fa_icon 'ban'.freeze
@@ -14,11 +15,13 @@
   td.table-buttons
     div.btn-group.attempt
       = render partial: 'video_attempt_button', locals: { video: video }
+  - if can?(:analyze, video)
+    td.hidden-xs
+      = t('.submissions_count', submissions_count:  submissions_count, students_count: student_count)
+      - if statistic
+        td.hidden-xs
+          = display_progress_bar(statistic.percent_watched) do
+            = t('.progress', progress: statistic.percent_watched)
   - if can?(:manage, video)
     td.table-buttons.hidden-xs
-      - if statistic
-        = display_progress_bar(statistic.percent_watched) do
-          = t('.progress', progress: statistic.percent_watched)
-  td.table-buttons.hidden-xs
-    - if can?(:manage, video)
       = render partial: 'video_management_buttons', locals: { video: video }

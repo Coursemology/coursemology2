@@ -8,11 +8,12 @@ table.table.videos-list.table-hover
   thead
     tr
       th = t('.title')
-      th
       th.table-start-at = t('.start_at')
       th
-      - if can?(:manage, @tab)
+      - if can?(:analyze, @videos)
+        th.hidden-xs = t('.submissions_count')
         th.hidden-xs = t('.percent_watched')
-      th.hidden-xs
+      - if can?(:manage, @videos)
+        th.hidden-xs
   tbody
-    = render partial: 'video', collection: @videos
+    = render partial: 'video', collection: @videos, locals: { student_count: @course_students.count }
