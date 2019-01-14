@@ -11,8 +11,8 @@ table.table.videos-list.table-hover
       th.table-start-at = t('.start_at')
       th
       - if can?(:analyze, @videos)
-        th.hidden-xs = t('.submissions_count')
-        th.hidden-xs = t('.percent_watched')
+        th.hidden-xs.text-center = t('.submissions_count')
+        th.hidden-xs.text-center = t('.percent_watched')
       - if can?(:manage, @videos)
         th.hidden-xs
   tbody
