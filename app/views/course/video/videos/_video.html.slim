@@ -5,7 +5,8 @@
     - unless video.published?
       span title=draft_message(video)
         => fa_icon 'ban'.freeze
-    = render partial: 'course/lesson_plan/items/personal_time_boolean_icons', locals: { item: video }
+    - unless current_course_user&.student? && current_course_user&.timeline_algorithm == 'fixed'
+      = render partial: 'course/lesson_plan/items/personal_time_boolean_icons', locals: { item: video }
     = link_to(format_inline_text(video.title),
       course_video_path(current_course, video))
   td.table-start-at
