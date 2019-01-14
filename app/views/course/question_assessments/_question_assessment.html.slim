@@ -40,13 +40,13 @@
           = format_inline_text(question_assessment.question.question_type)
         p = format_html(question.description)
       - if question.actable.is_a? Course::Assessment::Question::MultipleResponse
-          button.btn.btn-default type="button" data-toggle="collapse" data-target="#options" aria-expanded="false" aria-controls="panel"
+          button.btn.btn-default type="button" data-toggle="collapse" data-target="##{question.id}" aria-expanded="false" aria-controls="panel"
             => t('.show_options')
             span.caret
           div
             br
-          div.panel.collapse#options
-            table.table#options-table
+          div.panel.collapse id=("#{question.id}")
+            table.table
               - question.actable.options.each do |option|
                 tr
                   th
