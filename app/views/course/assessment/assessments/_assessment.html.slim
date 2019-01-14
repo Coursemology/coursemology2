@@ -3,7 +3,8 @@
     - unless assessment.published?
       span title=draft_message(assessment)
         => fa_icon 'ban'.freeze
-    = render partial: 'course/lesson_plan/items/personal_time_boolean_icons', locals: { item: assessment }
+    - unless current_course_user&.student? && current_course_user&.timeline_algorithm == 'fixed'
+      = render partial: 'course/lesson_plan/items/personal_time_boolean_icons', locals: { item: assessment }
     = link_to(format_inline_text(assessment.title),
               course_assessment_path(current_course, assessment))
 
