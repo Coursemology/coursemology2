@@ -1,0 +1,16 @@
+= page_header t('.header', name: display_course_user(@course_user))
+
+- video_submissions = @video_submissions.map { |s| [s.video, s] }.to_h
+
+table.table.submissions
+  thead
+    tr
+      th = t('.video_name')
+      th = t('.status')
+      th = t('.start_at')
+      th = t('.percent_watched')
+  tbody
+    = render partial: 'video_submission', collection: @videos, as: :video,
+             locals: { video_submissions: video_submissions }
+
+= paginate @video_submissions

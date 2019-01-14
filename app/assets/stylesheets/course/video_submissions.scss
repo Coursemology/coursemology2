@@ -1,0 +1,16 @@
+.course-video-submissions {
+
+  &.index {
+    .submissions {
+      .progress {
+        margin: 0;
+      }
+
+      .no-submission {
+        strong {
+          color: $course-video-submission-not-started;
+        }
+      }
+    }
+  }
+}

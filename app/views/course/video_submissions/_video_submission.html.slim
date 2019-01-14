@@ -1,0 +1,18 @@
+- submission = video_submissions[video]
+- percent_watched = submission&.statistic&.percent_watched
+- if submission
+  = content_tag_for(:tr, submission) do
+    td = format_inline_text(submission.video.title)
+    td = link_to t('.watched'), course_video_submission_path(current_course, video, submission)
+    td = format_datetime(submission.created_at, :short)
+    td
+      - if percent_watched && percent_watched > 0
+         = display_progress_bar(percent_watched) do
+            = t('.progress', progress: percent_watched)
+- else
+  tr.no-submission
+    td = format_inline_text(video.title)
+    td
+      strong = t('.not_watched')
+    td -
+    td

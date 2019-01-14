@@ -295,6 +295,7 @@ Rails.application.routes.draw do
 
       resources :users, only: [:index, :show, :update, :destroy] do
         resources :experience_points_records, only: [:index, :update, :destroy]
+        resources :video_submissions, only: [:index]
         resources :personal_times, only: [:index, :create, :destroy]
         get 'personal_times' => 'personal_times#index', on: :collection
         post 'personal_times/recompute' => 'personal_times#recompute'

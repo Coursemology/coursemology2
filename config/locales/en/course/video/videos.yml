@@ -8,8 +8,10 @@ en:
           title: 'Title'
           start_at: 'Start At'
           percent_watched: 'Average % Watched'
+          submissions_count: 'Submissions Count'
         video:
           progress: '%{progress} %'
+          submissions_count: '%{submissions_count} / %{students_count}'
         new:
           header: 'New Video'
         create:
