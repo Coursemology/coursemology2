@@ -4,8 +4,8 @@ consolidated_item_email_job:
   class: "ConsolidatedItemEmailJob"
   queue: "default"
 
-# Run the VideoStatisticUpdateJob every day at 5:30 AM
+# Run the VideoStatisticUpdateJob every day at 21:30 UTC, 5:30 AM SGT
 video_statistic_update_job:
-  cron: "30 5 * * *"
+  cron: "30 21 * * *"
   class: "VideoStatisticUpdateJob"
   queue: "default"
