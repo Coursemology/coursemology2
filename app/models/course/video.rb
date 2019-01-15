@@ -100,7 +100,7 @@ class Course::Video < ApplicationRecord
     Course::Settings::VideosComponent.email_enabled?(course, "video_#{event}".to_sym)
   end
 
-  def url_unchangeble?
+  def children_exist?
     sessions.exists? || posts.exists?
   end
 
@@ -138,7 +138,7 @@ class Course::Video < ApplicationRecord
   def url_unchanged
     errors.add(:url, 'cannot be updated for videos with comments or watch data') if url_changed? &&
                                                                                     persisted? &&
-                                                                                    url_unchangeble?
+                                                                                    children_exist?
   end
 
   def init_statistic
