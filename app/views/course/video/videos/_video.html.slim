@@ -18,7 +18,8 @@
       = render partial: 'video_attempt_button', locals: { video: video }
   - if can?(:analyze, video)
     td.hidden-xs.text-center
-      = t('.submissions_count', submissions_count:  submissions_count, students_count: student_count)
+      = link_to t('.submissions_count', submissions_count:  submissions_count, students_count: student_count),
+                course_video_submissions_path(current_course, video)
       - if statistic
         td.hidden-xs
           = display_progress_bar(statistic.percent_watched) do

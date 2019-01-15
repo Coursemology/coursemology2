@@ -1,7 +1,2 @@
-div.btn-group
-  = link_to course_video_submissions_path(current_course, video),
-            class: ['btn', 'btn-default'] do
-    span.visible-xs-block = fa_icon 'book'
-    span.hidden-xs = t('.submissions')
   = edit_button([current_course, video])
   = delete_button([current_course, video])
