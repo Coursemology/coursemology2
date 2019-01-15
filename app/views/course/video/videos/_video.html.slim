@@ -25,5 +25,5 @@
           = display_progress_bar(statistic.percent_watched) do
             = t('.progress', progress: statistic.percent_watched)
   - if can?(:manage, video)
-    td.table-buttons.hidden-xs
+    td.hidden-xs.management-btn-group
       = render partial: 'video_management_buttons', locals: { video: video }
