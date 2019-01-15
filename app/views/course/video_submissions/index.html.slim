@@ -10,7 +10,7 @@ table.table.submissions
       th = t('.start_at')
       th = t('.percent_watched')
   tbody
-    = render partial: 'video_submission', collection: @videos, as: :video,
+    = render partial: 'video_submission', collection: @videos.ordered_by_date_and_title, as: :video,
              locals: { video_submissions: video_submissions }
 
 = paginate @video_submissions

@@ -30,8 +30,6 @@ en:
         video_attempt_button:
           watch: 'Watch'
           rewatch: 'Re-Watch'
-        video_management_buttons:
-          submissions: 'Submissions'
         form:
           url_placeholder: >
             Please provide a valid youtube URL,

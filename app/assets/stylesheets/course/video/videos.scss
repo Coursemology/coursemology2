@@ -20,6 +20,8 @@
 
       .attempt .btn-info {
         width: 90px;
+        display: block;
+        margin: auto;
       }
 
       .table-start-at {
@@ -29,6 +31,15 @@
 
       .btn-group {
         display: flex;
+      }
+
+      .management-btn-group {
+        text-align: right;
+      }
+
+      .management-btn {
+        display: inline-block;
+        margin: auto;
       }
 
       .progress {

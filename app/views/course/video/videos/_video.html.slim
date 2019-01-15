@@ -17,12 +17,13 @@
     div.btn-group.attempt
       = render partial: 'video_attempt_button', locals: { video: video }
   - if can?(:analyze, video)
-    td.hidden-xs
-      = t('.submissions_count', submissions_count:  submissions_count, students_count: student_count)
+    td.hidden-xs.text-center
+      = link_to t('.submissions_count', submissions_count:  submissions_count, students_count: student_count),
+                course_video_submissions_path(current_course, video)
       - if statistic
         td.hidden-xs
           = display_progress_bar(statistic.percent_watched) do
             = t('.progress', progress: statistic.percent_watched)
   - if can?(:manage, video)
-    td.table-buttons.hidden-xs
+    td.hidden-xs.management-btn-group
       = render partial: 'video_management_buttons', locals: { video: video }
