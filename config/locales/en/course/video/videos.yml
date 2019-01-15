@@ -37,4 +37,3 @@ en:
           url_change_warning:  >
             Warning: Changing url for this video would cause all its submissions and
             sessions data to be destroyed.
-          url_fixed_desc: 'URL cannot be changed if video has comments or watch statistics.'
