@@ -112,8 +112,9 @@ class Course::Video < ApplicationRecord
     if submissions.blank?
       0
     else
+      submissions_count = submissions.size
       (submissions.map { |submission| submission.statistic.percent_watched }.
-        sum / submissions.size).round
+        sum / submissions_count).round
     end
   end
 
