@@ -22,6 +22,7 @@ gem 'unread'
 gem 'validates_hostname'
 # A Ruby state machine library
 gem 'workflow'
+gem 'workflow-activerecord', '>= 4.1', '< 6.0'
 # Add creator_id and updater_id attributes to models
 gem 'activerecord-userstamp', git: 'https://github.com/lowjoel/activerecord-userstamp'
 # Allow actions to be deferred until after a record is committed.
