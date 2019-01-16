@@ -4,7 +4,7 @@
   = f.association :tab, collection: current_course.video_tabs
   = f.input :description, as: :text
   - if @video.children_exist?
-    = f.input :url, hint: t('.url_change_warning'), hint_html: { class: 'text-warning' }, input_html: { onchange: "console.log(this.value)" }
+    = f.input :url, hint: t('.url_change_warning'), hint_html: { class: 'text-warning' }
   - else
     = f.input :url, placeholder: t('.url_placeholder')
   = f.input :start_at,
