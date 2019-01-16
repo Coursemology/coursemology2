@@ -94,7 +94,7 @@ describe('endSession', () => {
       const spyUpdate = jest.spyOn(CourseAPI.video.sessions, 'update');
       createdStore.dispatch(endSession());
 
-      expect(spyUpdate).toHaveBeenCalledWith(32, 0, [], 600, false, true);
+      expect(spyUpdate).toHaveBeenCalledWith(32, 0, [], 0, false, true);
     });
   });
 });
