@@ -70,9 +70,20 @@ class Course::LessonPlan::Item < ApplicationRecord
         Course::PersonalTime.where(course_user_id: course_user.id, lesson_plan_item_id: all).to_a
       end
 
-    all.to_a.tap do |result|
+    all.preload(:actable).to_a.tap do |result|
       preloader = ActiveRecord::Associations::Preloader::ManualPreloader.new
       preloader.preload(result, :personal_times, personal_times)
+
+      # Great big hack here because the acts-as gem happily discards all our painfully eager-loaded associations.
+      # The underlying problem is that `item` and `item.actable.acting_as` are not the same object instance. The
+      # following hack hence preloads the association for the latter as well.
+      result.each do |item|
+        next if item.actable.nil?
+
+        alt_items = [item.actable.acting_as]
+        preloader.preload(alt_items, :personal_times, item.personal_times) if item.personal_times.loaded?
+        preloader.preload(alt_items, :reference_times, item.reference_times) if item.reference_times.loaded?
+      end
     end
   end)
 
