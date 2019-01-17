@@ -103,7 +103,7 @@ class CourseUser < ApplicationRecord
   end)
   scope :managers, -> { where(role: MANAGER_ROLES) }
   scope :instructors, -> { staff }
-  scope :students, -> { where(role: roles[:student]) }
+  scope :students, -> { where(role: :student) }
   scope :phantom, -> { where(phantom: true) }
   scope :without_phantom_users, -> { where(phantom: false) }
   scope :with_course_statistics, -> { all.calculated(:experience_points, :achievement_count) }
@@ -197,7 +197,7 @@ class CourseUser < ApplicationRecord
 
   def set_defaults # :nodoc:
     self.name ||= user.name if user
-    self.role ||= CourseUser.roles[:student]
+    self.role ||= :student
   end
 
   # TODO(#3092): Validation is correct but everyone's reference timeline should be nil

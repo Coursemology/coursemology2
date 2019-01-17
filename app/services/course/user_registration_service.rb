@@ -48,7 +48,7 @@ class Course::UserRegistrationService
   # @return [CourseUser] The Course User object which was found or created.
   def find_or_create_course_user!(registration, invitation = nil)
     name = invitation.try(:name) || registration.user.name
-    role = invitation.try(:role) || CourseUser.roles[:student]
+    role = invitation.try(:role) || :student
     phantom = invitation.try(:phantom) || false
 
     registration.course_user =

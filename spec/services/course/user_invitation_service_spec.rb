@@ -27,7 +27,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
     end
     subject { Course::UserInvitationService.new(user, course) }
 
-    let(:existing_roles) { Course::UserInvitation.roles.keys.sample(3) }
+    let(:existing_roles) { Course::UserInvitation.roles.keys.sample(3).map(&:to_sym) }
     let(:existing_users) do
       (1..3).map do
         create(:instance_user).user
@@ -36,10 +36,10 @@ RSpec.describe Course::UserInvitationService, type: :service do
     let(:existing_user_attributes) do
       existing_users.each_with_index.map do |user, id|
         { name: user.name, email: user.email, phantom: false,
-          role: Course::UserInvitation.roles[existing_roles[id]] }
+          role: existing_roles[id] }
       end
     end
-    let(:new_roles) { Course::UserInvitation.roles.keys.sample(3) }
+    let(:new_roles) { Course::UserInvitation.roles.keys.sample(3).map(&:to_sym) }
     let(:new_users) do
       (1..3).map do
         build(:user)
@@ -48,7 +48,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
     let(:new_user_attributes) do
       new_users.each_with_index.map do |user, id|
         { name: user.name, email: user.email, phantom: false,
-          role: Course::UserInvitation.roles[new_roles[id]] }
+          role: new_roles[id] }
       end
     end
     let(:invalid_user_attributes) do
@@ -246,7 +246,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
         it 'defaults the role to student' do
           result = subject.send(:parse_from_file, temp_csv_without_role)
           result.each do |attr|
-            expect(attr[:role]).to eq(Course::UserInvitation.roles[:student])
+            expect(attr[:role]).to eq(:student)
           end
         end
       end
@@ -270,7 +270,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
         end
 
         it 'defaults blank role column to student' do
-          expect(subject[0][:role]).to eq(Course::UserInvitation.roles[:student])
+          expect(subject[0][:role]).to eq(:student)
         end
 
         it 'defaults blank phantom to false' do
@@ -278,11 +278,11 @@ RSpec.describe Course::UserInvitationService, type: :service do
         end
 
         it 'parses roles correctly anyway' do
-          expect(subject[1][:role]).to eq(Course::UserInvitation.roles[:teaching_assistant])
-          expect(subject[2][:role]).to eq(Course::UserInvitation.roles[:manager])
-          expect(subject[3][:role]).to eq(Course::UserInvitation.roles[:owner])
-          expect(subject[4][:role]).to eq(Course::UserInvitation.roles[:observer])
-          expect(subject[5][:role]).to eq(Course::UserInvitation.roles[:teaching_assistant])
+          expect(subject[1][:role]).to eq(:teaching_assistant)
+          expect(subject[2][:role]).to eq(:manager)
+          expect(subject[3][:role]).to eq(:owner)
+          expect(subject[4][:role]).to eq(:observer)
+          expect(subject[5][:role]).to eq(:teaching_assistant)
         end
 
         it 'parses phantom columns correctly anyway' do

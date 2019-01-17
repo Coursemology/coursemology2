@@ -102,7 +102,7 @@ RSpec.describe Course::UserRegistrationService, type: :service do
 
         context 'when a role is specified' do
           let!(:invitation_with_role) do
-            create(:course_user_invitation, course: course, role: Course::UserInvitation.roles[:teaching_assistant])
+            create(:course_user_invitation, course: course, role: :teaching_assistant)
           end
           let(:registration_with_role) do
             Course::Registration.new(course: course, user: user, code: invitation_with_role.invitation_key.dup)
