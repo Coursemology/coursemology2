@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Course::LessonPlan::Controller < Course::ComponentController
+  include Course::LessonPlan::ActsAsLessonPlanItemConcern
+
   add_breadcrumb :index, :course_lesson_plan_path
 
   private

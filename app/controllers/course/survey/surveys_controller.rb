@@ -2,6 +2,9 @@
 class Course::Survey::SurveysController < Course::Survey::Controller
   include Course::Survey::ReorderingConcern
 
+  skip_load_and_authorize_resource :survey, only: [:new, :create]
+  build_and_authorize_new_lesson_plan_item :survey, class: Course::Survey, through: :course, only: [:new, :create]
+
   def index
     respond_to do |format|
       format.html

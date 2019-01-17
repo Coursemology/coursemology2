@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 class Course::LessonPlan::EventsController < Course::LessonPlan::Controller
+  include Course::LessonPlan::ActsAsLessonPlanItemConcern
+
+  build_and_authorize_new_lesson_plan_item :event, class: Course::LessonPlan::Event, through: :course,
+                                                   through_association: :lesson_plan_events, only: [:new, :create]
   load_and_authorize_resource :event, class: Course::LessonPlan::Event.name, through: :course,
-                                      through_association: :lesson_plan_events
+                                      through_association: :lesson_plan_events, except: [:new, :create]
 
   def create #:nodoc:
     if @event.save

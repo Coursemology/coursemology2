@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Course::Video::Controller < Course::ComponentController
+  include Course::LessonPlan::ActsAsLessonPlanItemConcern
+
   load_and_authorize_resource :video, through: :course, class: Course::Video.name
   before_action :add_videos_breadcrumb
 
