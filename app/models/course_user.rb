@@ -96,14 +96,12 @@ class CourseUser < ApplicationRecord
       where('course_video_tabs.course_id = course_users.course_id')
   end)
 
-  # Gets the staff associated with the course.
-  # TODO: Remove the map when Rails 5 is released.
-  scope :staff, -> { where(role: STAFF_ROLES.map { |x| roles[x] }) }
-  scope :teaching_staff, -> { where(role: TEACHING_STAFF_ROLES.map { |x| roles[x] }) }
+  scope :staff, -> { where(role: STAFF_ROLES) }
+  scope :teaching_staff, -> { where(role: TEACHING_STAFF_ROLES) }
   scope :teaching_assistant_and_manager, (lambda do
-    where(role: TA_AND_MANAGER_ROLES.map { |x| roles[x] })
+    where(role: TA_AND_MANAGER_ROLES)
   end)
-  scope :managers, -> { where(role: MANAGER_ROLES.map { |x| roles[x] }) }
+  scope :managers, -> { where(role: MANAGER_ROLES) }
   scope :instructors, -> { staff }
   scope :students, -> { where(role: roles[:student]) }
   scope :phantom, -> { where(phantom: true) }
