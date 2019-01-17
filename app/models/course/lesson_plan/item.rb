@@ -15,7 +15,7 @@ class Course::LessonPlan::Item < ApplicationRecord
   validates :default_reference_time, presence: true
   validate :validate_only_one_default_reference_time
 
-  actable optional: true
+  actable optional: true, inverse_of: :lesson_plan_item
   has_many_attachments on: :description
 
   after_initialize :set_default_reference_time, if: :new_record?
