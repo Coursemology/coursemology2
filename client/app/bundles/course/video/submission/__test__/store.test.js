@@ -1,6 +1,6 @@
 import { playerStates } from 'lib/constants/videoConstants';
 import store from '../store';
-import { changePlayerState, updatePlayerProgress } from '../actions/video';
+import { changePlayerState, updatePlayerProgress, updatePlayerDuration } from '../actions/video';
 
 const videoStateObject = {
   videoUrl: 'https://www.youtube.com/watch?v=sTSA_sWGM44',
@@ -77,6 +77,7 @@ describe('persistor', () => {
       it('persists the state to localStorage', async () => {
         const spy = jest.spyOn(localStorage, 'setItem');
 
+        createdStore.store.dispatch(updatePlayerDuration(295));
         createdStore.store.dispatch(changePlayerState(playerStates.PLAYING));
         createdStore.store.dispatch(updatePlayerProgress(13));
         createdStore.persistor.flush();
@@ -85,6 +86,7 @@ describe('persistor', () => {
         const persistedState = JSON.parse(localStorage['persist:videoWatchSessionStore:user-1']);
         expect(persistedState).toHaveProperty('video');
         const videoState = JSON.parse(persistedState.video);
+        expect(videoState.duration).toBe(295);
         expect(videoState.playerProgress).toBe(13);
         expect(videoState.playerState).toBe(playerStates.PLAYING);
         expect(videoState.sessionSequenceNum).toBe(1);
