@@ -1,8 +1,13 @@
 # frozen_string_literal: true
 class Course::LessonPlan::MilestonesController < Course::LessonPlan::Controller
+  include Course::LessonPlan::ActsAsLessonPlanItemConcern
+
+  build_and_authorize_new_lesson_plan_item :milestone,
+                                           through: :course, through_association: :lesson_plan_milestones,
+                                           class: Course::LessonPlan::Milestone, only: [:new, :create]
   load_and_authorize_resource :milestone,
                               through: :course, through_association: :lesson_plan_milestones,
-                              class: Course::LessonPlan::Milestone.name
+                              class: Course::LessonPlan::Milestone.name, except: [:new, :create]
 
   def create #:nodoc:
     if @milestone.save

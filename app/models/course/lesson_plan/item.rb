@@ -15,7 +15,7 @@ class Course::LessonPlan::Item < ApplicationRecord
   validates :default_reference_time, presence: true
   validate :validate_only_one_default_reference_time
 
-  actable optional: true
+  actable optional: true, inverse_of: :lesson_plan_item
   has_many_attachments on: :description
 
   after_initialize :set_default_reference_time, if: :new_record?
@@ -63,7 +63,12 @@ class Course::LessonPlan::Item < ApplicationRecord
   end)
 
   scope :with_personal_times_for, (lambda do |course_user|
-    personal_times = Course::PersonalTime.where(course_user_id: course_user.id, lesson_plan_item_id: all).to_a
+    personal_times =
+      if course_user.nil?
+        []
+      else
+        Course::PersonalTime.where(course_user_id: course_user.id, lesson_plan_item_id: all).to_a
+      end
 
     all.to_a.tap do |result|
       preloader = ActiveRecord::Associations::Preloader::ManualPreloader.new
@@ -71,10 +76,16 @@ class Course::LessonPlan::Item < ApplicationRecord
     end
   end)
 
-  scope :with_reference_times_for, (lambda do |course_user|
-    eager_load(:reference_times).
-      where(course_reference_times: { reference_timeline_id: course_user.reference_timeline_id ||
-            course_user.course.default_reference_timeline.id })
+  # Loads the reference times for `course_user`. If `course_user` is nil, then we load the default reference time for
+  # `course`.
+  scope :with_reference_times_for, (lambda do |course_user, course = nil|
+    # Can't eager-load if we have no idea who we are eager-loading for
+    return if course_user.nil? && course.nil?
+
+    reference_timeline_id = course_user&.reference_timeline_id ||
+                            course_user&.course&.default_reference_timeline&.id ||
+                            course.default_reference_timeline.id
+    eager_load(:reference_times).where(course_reference_times: { reference_timeline_id: reference_timeline_id })
   end)
 
   # @!method self.with_actable_types
