@@ -2,7 +2,7 @@
 FactoryBot.define do
   base_time = Time.zone.now.to_i
   sequence :email do |n|
-    "user_#{n}@domain_#{base_time}_name.com"
+    "user_#{n}@domain-#{base_time}-name.com"
   end
 
   factory :user_email, class: User::Email.name do
