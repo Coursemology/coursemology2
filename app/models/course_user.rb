@@ -88,7 +88,7 @@ class CourseUser < ApplicationRecord
   end)
 
   # @!attribute [r] video_submission_count
-  #   Returns the total number of achievements obtained by CourseUser in this course
+  #   Returns the total number of video submissions by CourseUser in this course
   calculated :video_submission_count, (lambda do
     Course::Video::Submission.select('count(*)').
       joins(video: :tab).
