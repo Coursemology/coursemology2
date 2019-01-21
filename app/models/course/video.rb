@@ -26,9 +26,22 @@ class Course::Video < ApplicationRecord
   has_one :statistic, class_name: Course::Video::Statistic.name, dependent: :destroy,
                       foreign_key: :video_id, inverse_of: :video, autosave: true
 
+  # @!attribute [r] student_submission_count
+  #   Returns the total number of video submissions by students in this course.
+  #   Only submissions by students have sessions and statistic.
+  calculated :student_submission_count, (lambda do
+    Course::Video::Submission::Statistic.
+      select('count(*)').
+      joins(:submission).
+      where('course_video_submission_statistics.submission_id = course_video_submissions.id').
+      where('course_video_submissions.video_id = course_videos.id')
+  end)
+
   scope :from_course, ->(course) { where(course_id: course) }
 
   scope :from_tab, ->(tab) { where(tab_id: tab) }
+
+  scope :with_student_submission_count, -> { all.calculated(:student_submission_count) }
 
   # TODO: Refactor this together with assessments.
   # @!method self.ordered_by_date_and_title
