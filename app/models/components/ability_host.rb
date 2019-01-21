@@ -13,7 +13,7 @@ class AbilityHost
     # @return [Hash] This hash is relative to a Course.
     def course_user_hash(*roles)
       course_users = { user_id: user.id }
-      course_users[:role] = roles.map { |role| CourseUser.roles[role] } unless roles.empty?
+      course_users[:role] = roles unless roles.empty?
 
       { course_users: course_users }
     end
@@ -66,7 +66,7 @@ class AbilityHost
     # @return [Hash] This hash is relative to a Instance.
     def instance_user_hash(*roles)
       instance_users = { user_id: user.id }
-      instance_users[:role] = roles.map { |role| InstanceUser.roles[role] } unless roles.empty?
+      instance_users[:role] = roles unless roles.empty?
 
       { instance_users: instance_users }
     end

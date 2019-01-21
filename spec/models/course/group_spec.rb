@@ -17,7 +17,7 @@ RSpec.describe Course::Group, type: :model do
       subject { Course::Group.new(course: course, name: 'group') }
 
       # TODO: Remove when using Rails 5.0
-      self::MANAGER_ROLE = Course::GroupUser.roles[:manager]
+      self::MANAGER_ROLE = :manager
 
       context 'when the group creator is a course_user of the course' do
         subject { Course::Group.new(course: course, creator: owner) }

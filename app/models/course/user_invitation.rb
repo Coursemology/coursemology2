@@ -50,7 +50,7 @@ class Course::UserInvitation < ApplicationRecord
   #
   # @return [void]
   def set_defaults
-    self.role ||= Course::UserInvitation.roles[:student]
+    self.role ||= :student
     self.phantom ||= false
   end
 

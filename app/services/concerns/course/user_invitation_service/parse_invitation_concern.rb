@@ -136,10 +136,10 @@ module Course::UserInvitationService::ParseInvitationConcern
   # @return [Integer] The enum integer for +Course::UserInvitation.role+ matching the input.
   #                   (+Course::UserInvitation.roles[:student]+) is returned by default.
   def parse_file_role(role)
-    return Course::UserInvitation.roles[:student] if role.blank?
+    return :student if role.blank?
 
     symbol = role.parameterize(separator: '_').to_sym
-    Course::UserInvitation.roles[symbol] || Course::UserInvitation.roles[:student]
+    symbol || :student
   end
 
   # Parses file value for whether an invitation is a phantom or not.
