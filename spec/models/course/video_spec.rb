@@ -201,11 +201,11 @@ RSpec.describe Course::Video, type: :model do
                    posts: [])
           end
 
-          it 'prevents the url from being changed' do
+          it 'destroys all children when url is changed' do
             video1.url = youtube_embedded_url
-            expect(video1.valid?).to be_falsey
-            expect(video1.save).to be_falsey
-            expect { video1.save! }.to raise_exception(ActiveRecord::RecordInvalid)
+            expect(video1.valid?).to be_truthy
+            expect(video1.save).to be_truthy
+            expect(video1.topics.count).to eql(0)
           end
         end
 
@@ -213,16 +213,17 @@ RSpec.describe Course::Video, type: :model do
           let!(:session1) { create(:video_session, :with_events_continuous, video: video1) }
           let!(:session2) { create(:video_session, video: video2) }
 
-          it 'prevents the url from being changed' do
+          it 'destroys all children when url is changed' do
             video1.url = youtube_embedded_url
-            expect(video1.valid?).to be_falsey
-            expect(video1.save).to be_falsey
-            expect { video1.save! }.to raise_exception(ActiveRecord::RecordInvalid)
+            expect(video1.valid?).to be_truthy
+            expect(video1.save).to be_truthy
+            expect(video1.sessions.count).to eql(0)
+            expect(video1.events.count).to eql(0)
 
             video2.url = youtube_embedded_url
-            expect(video2.valid?).to be_falsey
-            expect(video2.save).to be_falsey
-            expect { video2.save! }.to raise_exception(ActiveRecord::RecordInvalid)
+            expect(video2.valid?).to be_truthy
+            expect(video2.save).to be_truthy
+            expect(video2.sessions.count).to eql(0)
           end
         end
       end

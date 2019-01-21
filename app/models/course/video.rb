@@ -8,7 +8,7 @@ class Course::Video < ApplicationRecord
   include Course::Video::UrlConcern
   include Course::Video::WatchStatisticsConcern
 
-  validate :url_unchanged
+  before_update :destroy_children, if: :changing_used_url?
   validates :url, length: { maximum: 255 }, presence: true
   validates :creator, presence: true
   validates :updater, presence: true
@@ -100,7 +100,7 @@ class Course::Video < ApplicationRecord
     Course::Settings::VideosComponent.email_enabled?(course, "video_#{event}".to_sym)
   end
 
-  def url_unchangeble?
+  def children_exist?
     sessions.exists? || posts.exists?
   end
 
@@ -135,10 +135,24 @@ class Course::Video < ApplicationRecord
                end
   end
 
-  def url_unchanged
-    errors.add(:url, 'cannot be updated for videos with comments or watch data') if url_changed? &&
-                                                                                    persisted? &&
-                                                                                    url_unchangeble?
+  def changing_used_url?
+    url_changed? && persisted? && children_exist?
+  end
+
+  def destroy_children
+    Course::Video.transaction do
+      # Eager load all events and sessions and delete from bottom up to avoid N+1
+      child_sessions = Course::Video::Session.where(submission: submissions)
+      child_events = Course::Video::Event.where(session: child_sessions)
+
+      statistic&.destroy!
+      discussion_topics.map(&:destroy!)
+      topics.map(&:destroy!)
+      child_events.delete_all
+      child_sessions.delete_all
+      submissions.delete_all
+      self.duration = 0
+    end
   end
 
   def init_statistic

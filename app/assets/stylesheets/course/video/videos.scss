@@ -5,6 +5,13 @@
     }
   }
 
+  &.edit {
+    .text-warning {
+      color: $red;
+      font-weight: bold;
+    }
+  }
+
   &.index {
     .videos-list {
       table-layout: fixed;
