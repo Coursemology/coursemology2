@@ -11,7 +11,6 @@ class VideoStatisticUpdateJob < ApplicationJob
   def perform
     ActsAsTenant.without_tenant do
       Course::Video.select { |vid| vid.statistic.nil? || !vid.statistic.cached }.each do |video|
-        video.create_submission_statistics
         video.build_statistic(watch_freq: video.watch_frequency,
                               percent_watched: video.calculate_percent_watched,
                               cached: true).upsert

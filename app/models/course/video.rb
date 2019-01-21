@@ -104,17 +104,12 @@ class Course::Video < ApplicationRecord
     sessions.exists? || posts.exists?
   end
 
-  def create_submission_statistics
-    submissions.select { |submission| submission.statistic.nil? }.map(&:update_statistic)
-  end
-
   def calculate_percent_watched
-    if submissions.blank?
+    submission_statistics = Course::Video::Submission::Statistic.where(submission: submissions)
+    if submission_statistics.blank?
       0
     else
-      submissions_count = submissions.size
-      (submissions.map { |submission| submission.statistic.percent_watched }.
-        sum / submissions_count).round
+      (submission_statistics.map(&:percent_watched).sum / submission_statistics.size).round
     end
   end
 
