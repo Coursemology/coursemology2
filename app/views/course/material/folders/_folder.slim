@@ -1,6 +1,6 @@
 = content_tag_for(:tr, folder)
   td
-    - if folder.effective_start_at > Time.zone.now
+    - if folder.effective_start_at > Time.zone.now && !(current_course_user&.student?)
       span title=t('.unseen_by_students')
         => fa_icon 'ban'.freeze
     = link_to course_material_folder_path(current_course, folder) do

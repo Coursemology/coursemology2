@@ -86,6 +86,22 @@ module Course::MaterialsAbilityComponent
     # Extend start_at time with self directed time from course settings.
     max_start_at += (course.advance_start_at_duration || 0) if course
 
+    # Add materials with parent assessments that open early due to personalized timeline
+    # Dealing with personal times is too complicated to represent as a hash of conditions
+    # Instead, we eagerly fetch all the ids we want and return a trivial hash that matches these ids
+    course_user = user && course && course.course_users.find_by(user: user)
+    personal_times_opened_folder_hash =
+      course_user &&
+      {
+        id: Course::Material::Folder.where(
+          owner_type: Course::Assessment.name,
+          owner_id: Course::LessonPlan::Item.where(
+            id: course_user.personal_times.where(start_at: (Time.min..max_start_at)).select(:lesson_plan_item_id),
+            actable_type: Course::Assessment.name
+          ).select(:actable_id)
+        ).select(:id).pluck(:id)
+      }
+
     [
       {
         start_at: (Time.min..max_start_at),
@@ -94,7 +110,8 @@ module Course::MaterialsAbilityComponent
       {
         start_at: (Time.min..max_start_at),
         end_at: (Time.zone.now..Time.max)
-      }
-    ]
+      },
+      personal_times_opened_folder_hash
+    ].compact
   end
 end
