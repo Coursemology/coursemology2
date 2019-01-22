@@ -34,6 +34,8 @@ const propTypes = {
   onDragged: PropTypes.func,
   onDragBegin: PropTypes.func,
   onDragStop: PropTypes.func,
+  startSecond: PropTypes.number,
+  endSecond: PropTypes.number,
 };
 
 const defaultProps = {
@@ -58,7 +60,8 @@ class VideoPlayerSlider extends React.Component {
     return (
       <span className={styles.progressBar}>
         <VideoPlayerSlider.TippedSlider
-          max={this.props.duration}
+          min={this.props.startSecond}
+          max={this.props.endSecond}
           step={1}
           value={this.props.playerProgress}
           handleStyle={[{ borderColor: playedColour }]}

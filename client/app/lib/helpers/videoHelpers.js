@@ -8,6 +8,9 @@ import { playerStates } from '../constants/videoConstants';
  * return {string} The timestamp formatted in [hh:]mm:ss
  */
 function formatTimestamp(timestamp) {
+  if (timestamp < 0) {
+    timestamp = 0;
+  }
   const roundedTime = Math.round(timestamp);
   const hour = Math.floor(roundedTime / 3600);
   const minute = Math.floor((roundedTime % 3600) / 60);
@@ -45,4 +48,36 @@ function isPlayingState(playerState) {
   return playerState === playerStates.PLAYING || playerState === playerStates.BUFFERING;
 }
 
-export { formatTimestamp, timeIsPastRestricted, isPlayingState };
+/**
+ * Extracts Youtube query params from video URL and compares with video duration
+ * to get effective start and end seconds.
+ */
+function getProperStartEnd(youtubeUrl, videoDuration) {
+  var result = { startSecond: 0, endSecond: videoDuration };
+  var query = youtubeUrl.split('?')[1];
+  if (query === undefined) {
+    return result;
+  }
+  query.split('&').forEach(function(part) {
+    var item = part.split('=');
+    if (item[0] === 'start') {
+      result['startSecond'] = Math.max(
+        parseInt(decodeURIComponent(item[1])),
+        result['startSecond']
+      );
+    } else if (item[0] === 'end') {
+      result['endSecond'] = Math.min(
+        parseInt(decodeURIComponent(item[1])),
+        result['endSecond']
+      );
+    }
+  });
+  return result;
+}
+
+export {
+  formatTimestamp,
+  timeIsPastRestricted,
+  isPlayingState,
+  getProperStartEnd
+};

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Paper from 'material-ui/Paper';
 import { connect } from 'react-redux';
 import { playerStates, videoDefaults, youtubeOpts } from 'lib/constants/videoConstants';
-import { isPlayingState } from 'lib/helpers/videoHelpers';
+import { isPlayingState, getProperStartEnd } from 'lib/helpers/videoHelpers';
 
 import styles from './VideoPlayer.scss';
 import {
@@ -120,6 +120,9 @@ class VideoPlayer extends React.Component {
     if (typeof document === 'undefined') return null;
     if (typeof VideoPlayer.ReactPlayer === 'undefined') return null;
 
+    const playerProgressLimit = getProperStartEnd(this.props.videoUrl, this.props.duration);
+    const { startSecond, endSecond } = playerProgressLimit;
+
     const videoPlayer = (
       <div className={styles.playerContainer}>
         <VideoPlayer.ReactPlayer
@@ -150,13 +153,14 @@ class VideoPlayer extends React.Component {
     const controls = (
       <div className={styles.controlsContainer}>
         <div className={styles.progressBar}>
-          <VideoPlayerSlider />
+          <VideoPlayerSlider startSecond={startSecond} endSecond={endSecond}/>
         </div>
         <div className={styles.controlsRow}>
           <PlayButton />
           <VolumeButton />
           <VolumeSlider />
-          <VideoTimestamp progress={this.props.playerProgress} duration={this.props.duration} />
+          <VideoTimestamp progress={this.props.playerProgress} duration={this.props.duration}
+                          startSecond={startSecond} endSecond={endSecond} />
           <PlayBackRateSelector />
           <NextVideoButton />
         </div>
