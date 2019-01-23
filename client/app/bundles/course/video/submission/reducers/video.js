@@ -1,7 +1,11 @@
 import { List as makeImmutableList } from 'immutable';
 import { playerStates, sessionActionTypes, videoActionTypes, videoDefaults } from 'lib/constants/videoConstants';
-import { isPlayingState, timeIsPastRestricted } from 'lib/helpers/videoHelpers';
 import { createTransform } from 'redux-persist';
+import {
+  isPlayingState,
+  timeIsPastRestricted,
+  getProperStartEnd
+} from "lib/helpers/videoHelpers";
 
 export const initialState = {
   videoUrl: null,
@@ -140,10 +144,19 @@ function videoStateReducer(state = initialState, action) {
  * @return {*} The event object to record.
  */
 function generateEvent(state, type, params = {}) {
+  const playerProgressLimit = getProperStartEnd(state.videoUrl, state.duration);
   return {
     sequence_num: state.sessionSequenceNum,
     event_type: type,
-    video_time: Math.round(state.playerProgress),
+    video_time: Math.round(
+      Math.min(
+        Math.max(
+          playerProgressLimit["startSecond"],
+          state.playerProgress
+        ),
+        playerProgressLimit["endSecond"]
+      )
+    ),
     playback_rate: state.playbackRate,
     event_time: new Date(),
     ...params,
