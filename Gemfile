@@ -181,7 +181,9 @@ gem 'cancancan'
 gem 'cancancan-baby_squeel'
 
 # Some helpers for structuring CSS/JavaScript
-gem 'rails_utils', '>= 3.3.3'
+# TODO: Switch back to the official version when https://github.com/winston/rails_utils/pull/30
+# is merged and released.
+gem 'rails_utils', git: 'https://github.com/fonglh/rails_utils', branch: 'sanitize-flash'
 
 # Themes for instances
 gem 'themes_on_rails', '>= 0.3.1', git: 'https://github.com/Coursemology/themes_on_rails',
