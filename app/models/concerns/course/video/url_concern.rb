@@ -14,6 +14,16 @@ module Course::Video::UrlConcern
     %r{(?:https?://)?(?:www\.)?youtube\.com/v/(.*?)(#|\?|$)}
   ].freeze
 
+  def effective_duration
+    youtube_params = youtube_hash_from_link(url)[:youtube_params]
+    if youtube_params
+      [youtube_params['end'], duration].compact.map(&:to_i).min - \
+        [youtube_params['start'], 0].compact.map(&:to_i).max
+    else
+      duration
+    end
+  end
+
   private
 
   # Changes the provided youtube URL to an embedded URL for display of videos.
