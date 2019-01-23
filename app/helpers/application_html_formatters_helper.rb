@@ -109,7 +109,7 @@ module ApplicationHTMLFormattersHelper
   end
 
   # Replaces the Rails sanitizer with the one configured with HTML Pipeline.
-  def sanitize(text)
+  def sanitize(text, _options = {})
     format_with_pipeline(HTMLSanitizerPipeline, text)
   end
 
