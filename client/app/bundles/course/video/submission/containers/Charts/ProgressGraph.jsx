@@ -5,14 +5,14 @@ import MenuItem from 'material-ui/MenuItem';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { Scatter } from 'react-chartjs-2';
 import { injectIntl, intlShape } from 'react-intl';
-import { formatTimestamp } from 'lib/helpers/videoHelpers';
+import { formatTimestamp, getProperStartEnd } from 'lib/helpers/videoHelpers';
 import { videoDefaults } from 'lib/constants/videoConstants';
 import { connect } from 'react-redux';
 
 import translations from '../../translations';
 import { seekToDirectly } from '../../actions/video';
 
-const graphGlobalOptions = (intl, videoDuration) => ({
+const graphGlobalOptions = (intl, playerProgressLimit) => ({
   legend: {
     display: false,
   },
@@ -47,8 +47,7 @@ const graphGlobalOptions = (intl, videoDuration) => ({
         fontSize: 15,
       },
       ticks: {
-        suggestedMin: 0,
-        max: videoDuration,
+        suggestedMin: playerProgressLimit['startSecond'],
         callback: formatTimestamp,
       },
     }],
@@ -77,6 +76,7 @@ const propTypes = {
       videoTime: PropTypes.number,
     })),
   })).isRequired,
+  videoUrl: PropTypes.string,
   videoDuration: PropTypes.number.isRequired,
   onMarkerClick: PropTypes.func,
 };
@@ -100,7 +100,7 @@ class ProgressGraph extends React.Component {
     }
   }
 
-  processEvents(events, sessionStartTime, sessionEndTime, videoEndTime) {
+  processEvents(events, sessionStartTime, sessionEndTime, videoEndTime, startSecond) {
     const processedEvents = events.map((event) => {
       const eventTime = Date.parse(event.eventTime);
       const x = (eventTime - sessionStartTime.getTime()) / 1000;
@@ -112,13 +112,13 @@ class ProgressGraph extends React.Component {
     const endTimeOffset = (sessionEndTime.getTime() - sessionStartTime.getTime()) / 1000;
 
     return [
-      { x: 0, y: 0, type: this.props.intl.formatMessage(translations.sessionStartLabel) },
+      { x: 0, y: startSecond, type: this.props.intl.formatMessage(translations.sessionStartLabel) },
       ...processedEvents,
       { x: endTimeOffset, y: videoEndTime, type: this.props.intl.formatMessage(translations.sessionEndLabel) },
     ];
   }
 
-  computeData(id) {
+  computeData(id, startSecond) {
     if (this.displayDataCache[id]) {
       return this.displayDataCache[id];
     }
@@ -130,7 +130,7 @@ class ProgressGraph extends React.Component {
     const startTime = new Date(session.sessionStart);
     const endTime = new Date(session.sessionEnd);
     const videoEnd = session.lastVideoTime;
-    this.displayDataCache[id] = this.processEvents(session.events, startTime, endTime, videoEnd);
+    this.displayDataCache[id] = this.processEvents(session.events, startTime, endTime, videoEnd, startSecond);
     return this.displayDataCache[id];
   }
 
@@ -179,7 +179,9 @@ class ProgressGraph extends React.Component {
   }
 
   renderPlot() {
-    const displayData = this.computeData(this.state.selectedSessionId);
+    const playerProgressLimit = getProperStartEnd(this.props.videoUrl, this.props.videoDuration);
+
+    const displayData = this.computeData(this.state.selectedSessionId, playerProgressLimit['startSecond']);
     if (!displayData) {
       return <Scatter />;
     }
@@ -196,7 +198,7 @@ class ProgressGraph extends React.Component {
       <Scatter
         data={data}
         options={{
-          ...graphGlobalOptions(this.props.intl, this.props.videoDuration),
+          ...graphGlobalOptions(this.props.intl, playerProgressLimit),
           ...this.generateMouseOptions(data),
           ...this.generateToolTipOptions(),
         }}
@@ -243,6 +245,7 @@ ProgressGraph.defaultProps = defaultProps;
 
 function mapStateToProps(state, ownProps) {
   return {
+    videoUrl: state.video.videoUrl,
     videoDuration: state.video.duration,
     ...ownProps,
   };
