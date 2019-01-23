@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Bar } from 'react-chartjs-2';
 import Toggle from 'material-ui/Toggle';
 import { injectIntl, intlShape } from 'react-intl';
-import { formatTimestamp } from 'lib/helpers/videoHelpers';
+import { formatTimestamp, getProperStartEnd } from 'lib/helpers/videoHelpers';
 import { videoDefaults } from 'lib/constants/videoConstants';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { seekToDirectly } from '../../actions/video';
@@ -73,9 +73,9 @@ function calculateWidthAndResolution(duration) {
 
 const propTypes = {
   intl: intlShape.isRequired,
-
   watchFrequency: PropTypes.arrayOf(PropTypes.number).isRequired,
   videoDuration: PropTypes.number.isRequired,
+  videoUrl: PropTypes.string,
   onBarClick: PropTypes.func,
 };
 
@@ -89,7 +89,10 @@ class HeatMap extends React.Component {
       if (elements.length < 1) {
         return;
       }
-      this.props.onBarClick(elements[0]._index); // Index is the video time
+
+      const playerProgressLimit = getProperStartEnd(this.props.videoUrl, this.props.videoDuration);
+
+      this.props.onBarClick(elements[0]._index + playerProgressLimit['startSecond']); // Index is the video time
     },
     hover: {
       onHover: (event, elements) => {
@@ -124,7 +127,9 @@ class HeatMap extends React.Component {
   }
 
   renderScaledChart(data, options) {
-    const [width, resolution] = calculateWidthAndResolution(this.props.videoDuration);
+    const playerProgressLimit = getProperStartEnd(this.props.videoUrl, this.props.videoDuration);
+
+    const [width, resolution] = calculateWidthAndResolution(playerProgressLimit['endSecond'] + 2);
 
     const optionsWithResolution = {
       ...options,
@@ -153,12 +158,14 @@ class HeatMap extends React.Component {
       return <LoadingIndicator />;
     }
 
+    const playerProgressLimit = getProperStartEnd(this.props.videoUrl, this.props.videoDuration);
+
     const data = {
-      labels: Array(this.props.videoDuration).fill(null).map((_, id) => formatTimestamp(id)),
+      labels: Array(playerProgressLimit['endSecond'] - playerProgressLimit['startSecond'] + 1).fill(null).map((_, id) => formatTimestamp(id + playerProgressLimit['startSecond'])),
       datasets: [
         {
           ...barDataOptions,
-          data: this.props.watchFrequency,
+          data: this.props.watchFrequency.slice(playerProgressLimit['startSecond']),
         },
       ],
     };
@@ -194,6 +201,7 @@ HeatMap.defaultProps = defaultProps;
 function mapStateToProps(state, ownProps) {
   return {
     videoDuration: state.video.duration,
+    videoUrl: state.video.videoUrl,
     ...ownProps,
   };
 }
