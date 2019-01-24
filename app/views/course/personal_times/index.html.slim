@@ -48,7 +48,8 @@
                             method: :post do |f|
             = f.hidden_field :lesson_plan_item_id, value: personal_time.lesson_plan_item_id
             tr
-              td = item.title
+              td = link_to item.title, \
+                     send("course_#{item.actable_type.demodulize.downcase}_path", id: item.actable_id)
               td = item.reference_time_for(@course_user).start_at.nil? ? nil : \
                      format_datetime(item.reference_time_for(@course_user).start_at, :short)
               td = item.reference_time_for(@course_user).bonus_end_at.nil? ? nil : \
