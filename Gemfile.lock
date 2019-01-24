@@ -581,7 +581,6 @@ DEPENDENCIES
   bootstrap3-datetimepicker-rails
   bootstrap_tokenfield_rails
   bullet (>= 4.14.9)
-  bundler (>= 1.10.3)
   byebug
   calculated_attributes
   cancancan
@@ -665,4 +664,4 @@ DEPENDENCIES
   yard
 
 BUNDLED WITH
-   2.0.1
+   1.17.3
