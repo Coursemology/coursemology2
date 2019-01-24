@@ -100,6 +100,14 @@ GIT
       rails (>= 3.1.0)
 
 GIT
+  remote: https://github.com/fonglh/rails_utils
+  revision: 42035cf0b8fc20c7732202b8882ffa4122b40c61
+  branch: sanitize-flash
+  specs:
+    rails_utils (4.0.0)
+      rails (>= 3.2, <= 5.2.2)
+
+GIT
   remote: https://github.com/lowjoel/activerecord-userstamp
   revision: 752f1e30ed8a2f0b09408bcdfa2c2dad1e5523c4
   specs:
@@ -411,8 +419,6 @@ GEM
       rails (>= 3.1)
       rest-client (~> 2.0)
       rubyzip (~> 1)
-    rails_utils (4.0.0)
-      rails (>= 3.2)
     rainbow (3.0.0)
     rake (12.3.2)
     rb-fsevent (0.10.3)
@@ -626,7 +632,7 @@ DEPENDENCIES
   rails-flog
   rails-html-sanitizer (>= 1.0.4)
   rails_real_favicon
-  rails_utils (>= 3.3.3)
+  rails_utils!
   record_tag_helper
   rinku
   rspec-html-matchers
@@ -659,4 +665,4 @@ DEPENDENCIES
   yard
 
 BUNDLED WITH
-   1.16.6
+   2.0.1
