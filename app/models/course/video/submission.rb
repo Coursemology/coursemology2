@@ -6,8 +6,6 @@ class Course::Video::Submission < ApplicationRecord
 
   acts_as_experience_points_record
 
-  after_save :init_statistic
-
   validate :validate_consistent_user, :validate_unique_submission, on: :create
   validates :creator, presence: true
   validates :updater, presence: true
@@ -38,7 +36,10 @@ class Course::Video::Submission < ApplicationRecord
       Course::Video::Submission.find_by(video_id: video.id, creator_id: creator.id)
   end
 
-  # Recompute and update submission's watch statistic
+  # Recompute and update submission's watch statistic.
+  # Triggered from session controller when session closes. Since only video submissions
+  # belonging to course students have sessions, submission statistic is only created for
+  # course students.
   def update_statistic
     frequency_array = watch_frequency
     coverage = (100 * (frequency_array.count { |x| x > 0 }) / (video.duration + 1)).round
@@ -66,10 +67,5 @@ class Course::Video::Submission < ApplicationRecord
     errors.clear
     errors[:base] << I18n.t('activerecord.errors.models.course/video/submission.'\
                             'submission_already_exists')
-  end
-
-  # Initialize statistic when submission is created
-  def init_statistic
-    create_statistic if statistic.nil?
   end
 end

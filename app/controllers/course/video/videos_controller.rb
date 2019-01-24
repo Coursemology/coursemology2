@@ -6,6 +6,7 @@ class Course::Video::VideosController < Course::Video::Controller
   def index #:nodoc:
     @videos = @videos.
               from_tab(current_tab).
+              with_student_submission_count.
               ordered_by_date_and_title.
               with_submissions_by(current_user)
 
