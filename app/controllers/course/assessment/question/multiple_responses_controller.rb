@@ -21,7 +21,9 @@ class Course::Assessment::Question::MultipleResponsesController < Course::Assess
     end
   end
 
-  def edit; end
+  def edit
+    @multiple_response_question.description = helpers.format_html(@multiple_response_question.description)
+  end
 
   def update
     @question_assessment.skill_ids = multiple_response_question_params[:question_assessment][:skill_ids]

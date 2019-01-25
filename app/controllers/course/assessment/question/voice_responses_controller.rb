@@ -29,7 +29,9 @@ class Course::Assessment::Question::VoiceResponsesController < Course::Assessmen
     end
   end
 
-  def edit; end
+  def edit
+    @voice_response_question.description = helpers.format_html(@voice_response_question.description)
+  end
 
   def destroy
     if @voice_response_question.destroy

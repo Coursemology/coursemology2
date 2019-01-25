@@ -28,6 +28,7 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
   end
 
   def edit
+    @programming_question.description = helpers.format_html(@programming_question.description)
     @template = 'course/assessment/question/programming/edit.json.jbuilder'
     @meta = programming_package_service.extract_meta if @programming_question.edit_online?
   end
