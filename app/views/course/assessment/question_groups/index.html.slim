@@ -1,0 +1,29 @@
+= page_header 'Question Groups'
+
+= link_to 'New Question Group', new_course_assessment_question_group_path(current_course, @assessment),
+          class: %w(btn btn-primary)
+
+table.table.table-hover
+  thead
+    tr
+      th = 'ID'
+      th = 'Title'
+      th = 'Question Bundles'
+      th = 'Weight'
+      th
+  tbody
+    - @question_groups.each do |question_group|
+      tr
+        td = question_group.id
+        td = question_group.title
+        td
+          ul
+            - question_group.question_bundles.each do |question_bundle|
+              li = question_bundle.title
+              ul
+                - question_bundle.question_bundle_questions.order(:weight).each do |question_bundle_question|
+                  li = question_bundle_question.question.title
+        td = question_group.weight
+        td
+          = edit_button(edit_course_assessment_question_group_path(current_course, @assessment, question_group))
+          = delete_button(course_assessment_question_group_path(current_course, @assessment, question_group))
