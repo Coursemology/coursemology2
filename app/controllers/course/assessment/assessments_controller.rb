@@ -23,6 +23,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def edit
+    @assessment.description = helpers.format_html(@assessment.description)
   end
 
   def update
