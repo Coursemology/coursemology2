@@ -17,7 +17,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
     end
 
     let(:course) { create(:course) }
-    let(:user) { create(:user) }
+    let(:user) { create(:course_manager, course: course).user }
     let(:stubbed_user_invitation_service) do
       Course::UserInvitationService.new(user, course).tap do |result|
         result.define_singleton_method(:invite_users) do |users|
@@ -398,8 +398,21 @@ RSpec.describe Course::UserInvitationService, type: :service do
         it 'defaults to :student for roles' do
           result_new, _, result_existing =
             subject.send(:invite_users, temp_csv_from_attributes(all_users))
-          (result_new + result_existing).each do |invit|
-            expect(invit.student?).to be_truthy
+          (result_new + result_existing).each do |invitee|
+            expect(invitee.student?).to be_truthy
+          end
+        end
+      end
+
+      context 'when teaching assistant invites roles other than student' do
+        let(:user) { create(:course_teaching_assistant, course: course).user }
+        let(:all_users) { existing_users + new_users }
+
+        it 'defaults to :student for roles' do
+          result_new, _, result_existing =
+            subject.send(:invite_users, temp_csv_from_attributes(all_users, roles))
+          (result_new + result_existing).each do |invitee|
+            expect(invitee.student?).to be_truthy
           end
         end
       end
