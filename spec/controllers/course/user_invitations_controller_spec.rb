@@ -49,7 +49,7 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
 
         context 'when the invitations do not get created successfully' do
           before do
-            stubbed_invitation_service = Course::UserInvitationService.new(user, course)
+            stubbed_invitation_service = Course::UserInvitationService.new(course_lecturer)
             stubbed_invitation_service.define_singleton_method(:invite) do |*|
               false
             end

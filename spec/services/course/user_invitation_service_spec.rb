@@ -17,15 +17,16 @@ RSpec.describe Course::UserInvitationService, type: :service do
     end
 
     let(:course) { create(:course) }
-    let(:user) { create(:course_manager, course: course).user }
+    let(:course_user) { create(:course_manager, course: course) }
+    let(:user) { course_user.user }
     let(:stubbed_user_invitation_service) do
-      Course::UserInvitationService.new(user, course).tap do |result|
+      Course::UserInvitationService.new(course_user).tap do |result|
         result.define_singleton_method(:invite_users) do |users|
           users
         end
       end
     end
-    subject { Course::UserInvitationService.new(user, course) }
+    subject { Course::UserInvitationService.new(course_user) }
 
     let(:existing_roles) { Course::UserInvitation.roles.keys.sample(3).map(&:to_sym) }
     let(:existing_users) do
@@ -405,7 +406,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
       end
 
       context 'when teaching assistant invites roles other than student' do
-        let(:user) { create(:course_teaching_assistant, course: course).user }
+        let(:course_user) { create(:course_teaching_assistant, course: course) }
         let(:all_users) { existing_users + new_users }
 
         it 'defaults to :student for roles' do

@@ -67,7 +67,7 @@ module Course::UserInvitationService::ParseInvitationConcern
   # @param [Array<Hash>] users
   # @return [Array<Hash>] users
   def restrict_invitee_role(users)
-    return users unless @current_user.course_users.where(course: @current_course).first.role == 'teaching_assistant'
+    return users unless @current_course_user.role == 'teaching_assistant'
     users.each { |invitee| invitee[:role] = :student }
   end
 
