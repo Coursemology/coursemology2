@@ -76,6 +76,30 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
       end
     end
 
+    describe '#edit' do
+      let!(:programming_question) do
+        programming_question = create(:course_assessment_question_programming, assessment: assessment)
+        programming_question.question.update_column(:description, "<script>alert('boo');</script>")
+        programming_question
+      end
+
+      subject do
+        get :edit,
+            params: {
+              course_id: course,
+              assessment_id: assessment,
+              id: programming_question
+            }
+      end
+
+      context 'when edit page is loaded' do
+        it 'sanitizes the description text' do
+          subject
+          expect(assigns(:programming_question).description).not_to include('script')
+        end
+      end
+    end
+
     describe '#update' do
       subject do
         request.accept = 'application/json'

@@ -60,6 +60,30 @@ RSpec.describe Course::Assessment::Question::TextResponsesController do
       end
     end
 
+    describe '#edit' do
+      let!(:text_response) do
+        text_response = create(:course_assessment_question_text_response, assessment: assessment)
+        text_response.question.update_column(:description, "<script>alert('boo');</script>")
+        text_response
+      end
+
+      subject do
+        get :edit,
+            params: {
+              course_id: course,
+              assessment_id: assessment,
+              id: text_response
+            }
+      end
+
+      context 'when edit page is loaded' do
+        it 'sanitizes the description text' do
+          subject
+          expect(assigns(:text_response_question).description).not_to include('script')
+        end
+      end
+    end
+
     describe '#update' do
       let(:text_response) { immutable_text_response_question }
       subject do

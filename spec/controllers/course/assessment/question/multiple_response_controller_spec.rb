@@ -40,6 +40,30 @@ RSpec.describe Course::Assessment::Question::MultipleResponsesController do
       end
     end
 
+    describe '#edit' do
+      let!(:multiple_response) do
+        mrq = create(:course_assessment_question_multiple_response, assessment: assessment)
+        mrq.question.update_column(:description, "<script>alert('boo');</script>")
+        mrq
+      end
+
+      subject do
+        get :edit,
+            params: {
+              course_id: course,
+              assessment_id: assessment,
+              id: multiple_response
+            }
+      end
+
+      context 'when edit page is loaded' do
+        it 'sanitizes the description text' do
+          subject
+          expect(assigns(:multiple_response_question).description).not_to include('script')
+        end
+      end
+    end
+
     describe '#update' do
       let(:multiple_response) { immutable_multiple_response_question }
       subject do

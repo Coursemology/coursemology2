@@ -113,6 +113,33 @@ RSpec.describe Course::Assessment::Question::ScribingController do
       end
     end
 
+    describe '#edit' do
+      let!(:scribing_question) do
+        scribing_question = create(:course_assessment_question_scribing, assessment: assessment)
+        scribing_question.question.update_column(:description, "<script>alert('boo');</script>")
+        scribing_question
+      end
+
+      subject do
+        get :edit,
+            params: {
+              course_id: course,
+              assessment_id: assessment,
+              id: scribing_question
+            },
+            format: :json
+      end
+
+      context 'when edit page is loaded' do
+        it 'sanitizes the description text' do
+          expect(scribing_question.description).to include('script')
+          subject
+          json_response = JSON.parse(response.body)['question']
+          expect(json_response['description']).not_to include('script')
+        end
+      end
+    end
+
     describe '#update' do
       subject do
         request.accept = 'application/json'
