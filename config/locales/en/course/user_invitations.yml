@@ -38,7 +38,7 @@ en:
            <ul>
            <li>Roles are optional and can be either of <code>[student, observer,
            teaching_assistant, manager, owner]</code>, and defaults to student if
-           omitted</li>
+           omitted. Teaching assistants can only invite users as students.</li>
            <li>Phantom is also optional with the following recognised as true values
            <code>['t', 'true', 'y', 'yes']</code> (case insenstitive), and defaults to
            non-phantom if omitted.</li>
