@@ -1,0 +1,5 @@
+= f.error_notification
+= f.input :weight
+= f.association :question_bundle, collection: @assessment.question_bundles
+= f.association :question, collection: @assessment.questions
+= f.button :submit

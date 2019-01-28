@@ -1,0 +1,6 @@
+- add_breadcrumb format_inline_text(@question_bundle_question.question.title)
+= page_header 'Edit Question Bundle Question'
+
+= simple_form_for @question_bundle_question,
+                  url: course_assessment_question_bundle_question_path(current_course, @assessment, @question_bundle_question) do |f|
+  = render partial: 'form', locals: { f: f }
