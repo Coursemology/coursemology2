@@ -1,0 +1,28 @@
+= page_header 'Question Bundle Assignment'
+
+= link_to 'New Question Bundle Assignment',
+          new_course_assessment_question_bundle_assignment_path(current_course, @assessment),
+          class: %w(btn btn-primary)
+
+table.table.table-hover
+  thead
+    tr
+      th = 'ID'
+      th = 'User'
+      th = 'Submission'
+      th = 'Question Bundle'
+      th
+  tbody
+    - @question_bundle_assignments.each do |question_bundle_assignment|
+      tr
+        td = question_bundle_assignment.id
+        td = question_bundle_assignment.user.name
+        td = question_bundle_assignment.submission
+        td
+          = question_bundle_assignment.question_bundle.title
+          ul
+            - question_bundle_assignment.question_bundle.question_bundle_questions.order(:weight).each do |question_bundle_question|
+              li = question_bundle_question.question.title
+        td
+          = edit_button(edit_course_assessment_question_bundle_assignment_path(current_course, @assessment, question_bundle_assignment))
+          = delete_button(course_assessment_question_bundle_assignment_path(current_course, @assessment, question_bundle_assignment))

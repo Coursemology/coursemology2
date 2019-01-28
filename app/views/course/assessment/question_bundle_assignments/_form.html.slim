@@ -1,0 +1,5 @@
+= f.error_notification
+= f.association :user, collection: current_course.users
+= f.association :submission, collection: @assessment.submissions
+= f.association :question_bundle, collection: @assessment.question_bundles
+= f.button :submit
