@@ -1,18 +1,23 @@
-dist: trusty
+dist: xenial
 sudo: true
 language: ruby
 branches:
   only:
     - master
 rvm:
-  - 2.4.2
+  - 2.4.5
 services:
   - docker
+  - postgresql
 addons:
-  chrome: stable
   apt:
+    sources:
+      - google-chrome
+      - docker-xenial
     packages:
       - ghostscript
+      - docker
+      - google-chrome-stable
   postgresql: "9.6"
   hosts:
     - coursemology.lvh.me
@@ -28,12 +33,20 @@ cache:
 env:
   global:
     - RAILS_ENV=test
+    - MAGICK_CONFIGURE_PATH=$HOME/imagemagick
   matrix:
     - GROUP="1,2"
     - GROUP="3,4"
     - GROUP="misc"
 
 before_install:
+  # Allow imagemagick to read PDF files for the scribing question tests.
+  - mkdir $HOME/imagemagick
+  - echo $MAGICK_CONFIGURE_PATH
+  - echo '<policymap>' > $HOME/imagemagick/policy.xml
+  - echo '<policy domain="coder" rights="read|write" pattern="{PDF}" />' >> $HOME/imagemagick/policy.xml
+  - echo '</policymap>' >> $HOME/imagemagick/policy.xml
+  - sudo rm /etc/ImageMagick-6/policy.xml
   - gem update --system
   - gem install bundler
   - nvm install 8
