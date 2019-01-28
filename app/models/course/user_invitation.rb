@@ -35,6 +35,15 @@ class Course::UserInvitation < ApplicationRecord
     confirmed_at.present?
   end
 
+  # Determines roles that current user can invite to current course
+  #
+  # @param [String] own_role Current user's role in current course
+  #
+  # @return [Array<Hash>] roles Roles current user can invite to the course
+  def self.invitable_roles(own_role)
+    own_role == 'teaching_assistant' ? roles.slice('student') : roles
+  end
+
   private
 
   # Generates the invitation key. All invitation keys generated start with I so we can

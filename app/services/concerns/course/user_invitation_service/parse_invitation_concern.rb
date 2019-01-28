@@ -34,7 +34,7 @@ module Course::UserInvitationService::ParseInvitationConcern
         parse_from_form(users)
       end
 
-    partition_unique_users(result)
+    partition_unique_users(restrict_invitee_role(result))
   end
 
   # Partition users into unique (including first duplicate instance) and duplicate users.
@@ -56,6 +56,19 @@ module Course::UserInvitationService::ParseInvitationConcern
       end
     end
     [unique_users.values, duplicate_users]
+  end
+
+  # Change all invitees' roles to :student if inviter is a teaching_assistant.
+  # Currently our course user roles are not ranked, so invitation's role are restricted
+  # such that TAs can only invite students.
+  # TODO: When TAs invite non-student roles, skip non-student invitees and alert users
+  # instead of silently changing invitee roles.
+  #
+  # @param [Array<Hash>] users
+  # @return [Array<Hash>] users
+  def restrict_invitee_role(users)
+    return users unless @current_course_user.role == 'teaching_assistant'
+    users.each { |invitee| invitee[:role] = :student }
   end
 
   # Invites the users from the form submission, which reflects the actual model associations.

@@ -140,7 +140,7 @@ class Course::UserInvitationsController < Course::ComponentController
   #
   # @return [Course::UserInvitationService]
   def invitation_service
-    @invitation_service ||= Course::UserInvitationService.new(current_user, current_course)
+    @invitation_service ||= Course::UserInvitationService.new(current_course_user)
   end
 
   # Propagate errors from the parameters depending on the type of the parameters.
