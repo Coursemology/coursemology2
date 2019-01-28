@@ -80,6 +80,7 @@ class Course::Assessment::Question::ScribingController < Course::Assessment::Que
   end
 
   def render_scribing_question_json
+    @scribing_question.description = helpers.format_html(@scribing_question.description)
     render partial: 'scribing_question'
   end
 

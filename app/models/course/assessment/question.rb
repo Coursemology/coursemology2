@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Question < ApplicationRecord
+  include Course::SanitizeDescriptionConcern
+
   actable optional: true
   has_many_attachments
 

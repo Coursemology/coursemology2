@@ -119,5 +119,17 @@ RSpec.describe Course::Assessment::Question do
         end
       end
     end
+
+    describe 'callbacks' do
+      let(:question) { create(:course_assessment_question) }
+      context 'when item is saved' do
+        it 'does not save <script> tags in the description' do
+          question.description = "<script>alert('bad);</script>"
+          question.save!
+          question.reload
+          expect(question.description).not_to include('script')
+        end
+      end
+    end
   end
 end

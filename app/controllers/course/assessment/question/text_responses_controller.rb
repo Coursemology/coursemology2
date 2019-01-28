@@ -28,6 +28,7 @@ class Course::Assessment::Question::TextResponsesController < Course::Assessment
   end
 
   def edit
+    @text_response_question.description = helpers.format_html(@text_response_question.description)
     @text_response_question.build_at_least_one_group_one_point if @text_response_question.comprehension_question?
   end
 

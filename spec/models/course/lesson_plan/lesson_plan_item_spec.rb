@@ -155,6 +155,17 @@ RSpec.describe Course::LessonPlan::Item, type: :model do
           end
         end
       end
+
+      describe 'callbacks' do
+        context 'when item is saved' do
+          it 'does not save <script> tags in the description' do
+            lesson_plan_item.description = "<script>alert('bad');</script>"
+            lesson_plan_item.save!
+            lesson_plan_item.reload
+            expect(lesson_plan_item.description).not_to include('script')
+          end
+        end
+      end
     end
   end
 end

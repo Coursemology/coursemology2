@@ -46,6 +46,23 @@ RSpec.describe Course::Assessment::AssessmentsController do
       end
     end
 
+    describe '#edit' do
+      let!(:assessment) do
+        assessment = create(:assessment, course: course)
+        assessment.acting_as.update_column(:description, "<script>alert('boo');</script>")
+        assessment
+      end
+
+      subject { get :edit, params: { course_id: course, id: assessment } }
+
+      context 'when edit page is loaded' do
+        it 'sanitizes the description text' do
+          subject
+          expect(assigns(:assessment).description).not_to include('script')
+        end
+      end
+    end
+
     describe '#update' do
       let(:student) { create(:course_student, course: course).user }
       let(:assessment) do
