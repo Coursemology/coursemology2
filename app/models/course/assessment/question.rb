@@ -7,7 +7,7 @@ class Course::Assessment::Question < ApplicationRecord
 
   validates :actable_type, length: { maximum: 255 }, allow_nil: true
   validates :title, length: { maximum: 255 }, allow_nil: true
-  validates :maximum_grade, numericality: { greater_than: -1000, less_than: 1000 }, presence: true
+  validates :maximum_grade, numericality: { greater_than_or_equal_to: 0, less_than: 1000 }, presence: true
   validates :creator, presence: true
   validates :updater, presence: true
   validates :actable_type, uniqueness: { scope: [:actable_id],
