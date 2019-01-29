@@ -43,7 +43,7 @@ class Course::Video::Submission < ApplicationRecord
   def update_statistic
     frequency_array = watch_frequency
     coverage = (100 * (frequency_array.count { |x| x > 0 }) / (video.duration + 1)).round
-    build_statistic(watch_freq: frequency_array, percent_watched: coverage).upsert
+    build_statistic(watch_freq: frequency_array, percent_watched: coverage, cached: true).upsert
   end
 
   private
