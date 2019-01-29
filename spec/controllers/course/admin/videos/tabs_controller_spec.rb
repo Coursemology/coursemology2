@@ -2,11 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe Course::Admin::Videos::TabsController, type: :controller do
-  let(:instance) do
-    Instance.default.tap do |instance|
-      instance.set_component_enabled_boolean!(:course_videos_component, true)
-    end
-  end
+  let!(:instance) { create(:instance, :with_video_component_enabled) }
   with_tenant(:instance) do
     let(:user) { create(:administrator) }
     let!(:course) { create(:course, :with_video_component_enabled, creator: user) }

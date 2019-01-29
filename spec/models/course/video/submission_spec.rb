@@ -84,8 +84,6 @@ RSpec.describe Course::Video::Submission do
       let!(:session2) { create(:video_session, :with_events_paused, submission: submission1) }
 
       it 'updates the statistic with correct watch_freq and percent_watched' do
-        expect(submission1.statistic).to be_nil
-
         submission1.update_statistic
 
         expect(submission1.statistic.watch_freq.size).to eq(71)
