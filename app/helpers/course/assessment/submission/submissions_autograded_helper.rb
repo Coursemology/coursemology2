@@ -5,22 +5,22 @@ module Course::Assessment::Submission::SubmissionsAutogradedHelper
     @max_step ||= begin
       question = next_unanswered_question
       if question && !@assessment.skippable && cannot?(:manage, @assessment)
-        @assessment.questions.index(question) + 1
+        @submission.questions.index(question) + 1
       else
         # All questions have been answered or assessment is skippable or user is a staff.
-        @assessment.questions.length
+        @submission.questions.length
       end
     end
   end
 
   def next_unanswered_question
-    @next_unanswered_question ||= @assessment.questions.next_unanswered(@submission)
+    @next_unanswered_question ||= @submission.questions.next_unanswered(@submission)
   end
 
   # The step that current user is on.
   def current_step
     @current_step ||= begin
-      @current_question ? @assessment.questions.index(@current_question) + 1 : nil
+      @current_question ? @submission.questions.index(@current_question) + 1 : nil
     end
   end
 

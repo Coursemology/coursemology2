@@ -6,8 +6,14 @@ RSpec.describe Course::Assessment::Submission::SubmissionsHelper do
 
   with_tenant(:instance) do
     describe '#max_step' do
+      let(:course) { create(:course) }
+      let(:student_user) { create(:course_student, course: course).user }
       let(:assessment) { build(:assessment, :autograded, :published_with_mcq_question) }
-      before { helper.instance_variable_set(:@assessment, assessment) }
+      let(:submission) { create(:submission, assessment: assessment, creator: student_user) }
+      before do
+        helper.instance_variable_set(:@assessment, assessment)
+        helper.instance_variable_set(:@submission, submission)
+      end
       subject { helper.max_step }
 
       context 'when all questions have been answered' do

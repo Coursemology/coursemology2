@@ -19,6 +19,7 @@ FactoryBot.define do
     published { false }
     tabbed_view { false }
     delayed_grade_publication { false }
+    randomization { nil }
 
     trait :delay_grade_publication do
       delayed_grade_publication { true }

@@ -16,6 +16,22 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
       end
     end
     let(:submission) { create(:submission, :attempting, assessment: assessment, creator: user) }
+    let(:randomized_assessment) do
+      create(:assessment, :published, :with_all_question_types, randomization: 'prepared', course: course).tap do |stub|
+        group = stub.question_groups.create!(title: 'Test Group', weight: 1)
+        bundle = group.question_bundles.create!(title: 'Test Bundle')
+        bundle.question_bundle_questions.create!(question: stub.questions.first, weight: 1)
+      end
+    end
+    let(:randomized_submission) do
+      create(:submission, assessment: randomized_assessment, creator: user).tap do |stub|
+        randomized_assessment.question_bundles.first.question_bundle_assignments.create(
+          user: user,
+          assessment: randomized_assessment,
+          submission: stub
+        )
+      end
+    end
 
     before { sign_in(user) }
 
@@ -47,6 +63,50 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         it 'sets the proper flash message' do
           expect(flash[:danger]).to eq(I18n.t('course.assessment.submission.submissions.create.'\
                                               'failure', error: ''))
+        end
+      end
+    end
+
+    describe '#edit' do
+      context 'when randomization is nil' do
+        render_views
+        subject do
+          get :edit, params: {
+            course_id: course, assessment_id: assessment.id, id: submission.id, format: :json
+          }
+        end
+
+        it 'renders all questions' do
+          expect(subject).to have_http_status(:success)
+          json_result = JSON.parse(response.body)
+          expect(json_result['questions'].count).to eq(5)
+        end
+
+        it 'renders the total grade' do
+          expect(subject).to have_http_status(:success)
+          json_result = JSON.parse(response.body)
+          expect(json_result['submission']['maximumGrade']).to eq(10)
+        end
+      end
+
+      context 'when randomization is prepared' do
+        render_views
+        subject do
+          get :edit, params: {
+            course_id: course, assessment_id: randomized_assessment.id, id: randomized_submission.id, format: :json
+          }
+        end
+
+        it 'renders only assigned questions' do
+          expect(subject).to have_http_status(:success)
+          json_result = JSON.parse(response.body)
+          expect(json_result['questions'].count).to eq(1)
+        end
+
+        it 'renders the total grade for assigned questions' do
+          expect(subject).to have_http_status(:success)
+          json_result = JSON.parse(response.body)
+          expect(json_result['submission']['maximumGrade']).to eq(2)
         end
       end
     end

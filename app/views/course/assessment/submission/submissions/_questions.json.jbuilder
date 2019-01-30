@@ -3,11 +3,12 @@ answer_ids_hash = answers.map do |a|
   [a.question_id, a.id]
 end.to_h
 
-topic_ids_hash = submission.submission_questions.map do |sq|
+topic_ids_hash = submission.submission_questions.where(question: submission.questions).map do |sq|
   [sq.question_id, sq.discussion_topic.id]
 end.to_h
 
-json.questions assessment.question_assessments.includes(:question) do |question_assessment|
+json.questions Course::QuestionAssessment.where(question: submission.questions, assessment: submission.assessment) \
+    do |question_assessment|
   question = question_assessment.question
   answerId = answer_ids_hash[question.id]
   submissionQuestion = question.submission_questions.from_submission(submission.id)

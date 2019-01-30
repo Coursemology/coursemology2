@@ -116,7 +116,7 @@ class Course::Assessment::Submission::AutoGradingService
       total_exp += assessment.time_bonus_exp
     end
 
-    maximum_grade = assessment.maximum_grade
+    maximum_grade = submission.questions.sum(:maximum_grade).to_f
     maximum_grade == 0 ? total_exp : submission.grade.to_f / maximum_grade * total_exp
   end
 end

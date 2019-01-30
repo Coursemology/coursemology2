@@ -182,13 +182,30 @@ class Course::Assessment::Submission < ApplicationRecord
     current_answers.map { |a| a.grade || 0 }.sum
   end
 
-  # The answers with current_answer flag set to true.
+  def questions
+    assessment.randomization.nil? ? assessment.questions : assigned_questions
+  end
+
+  # The assigned questions for this submission, ordered by question_group and question_bundle_question
+  def assigned_questions
+    Course::Assessment::Question.
+      joins(question_bundles: [:question_group, { question_bundle_assignments: :submission }]).
+      merge(Course::Assessment::Submission.where(id: self)).
+      merge(Course::Assessment::QuestionGroup.order(:weight)).
+      merge(Course::Assessment::QuestionBundleQuestion.order(:weight)).
+      extending(Course::Assessment::QuestionsConcern)
+  end
+
+  # The answers with current_answer flag set to true, filtering out orphaned answers to questions which are no longer
+  # assigned to the submission.
   #
   # If there are multiple current_answers for a particular question, return the first one.
   # This guards against a race condition creating multiple current_answers for a given
   # question in load_or_create_answers.
   def current_answers
-    answers.select(&:current_answer?).group_by(&:question_id).map { |pair| pair[1].first }
+    # Can't do filtering in AR because `answer` may not be persisted, and AR is dumb.
+    answers.select { |answer| answer.question_id.in? questions.pluck(:id) }.
+      select(&:current_answer?).group_by(&:question_id).map { |pair| pair[1].first }
   end
 
   # @return [Array<Course::Assessment::Answer>] Current answers to programming questions
