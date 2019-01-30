@@ -3,6 +3,7 @@ class Course::Assessment::Question::TextResponseSolution < ApplicationRecord
   enum solution_type: [:exact_match, :keyword]
 
   before_validation :strip_whitespace
+  before_save :sanitize_explanation
   validate :validate_grade
   validates :solution_type, presence: true
   validates :solution, presence: true
@@ -24,5 +25,9 @@ class Course::Assessment::Question::TextResponseSolution < ApplicationRecord
 
   def validate_grade
     errors.add(:grade, :invalid_grade) if grade > question.maximum_grade
+  end
+
+  def sanitize_explanation
+    self.explanation = ApplicationController.helpers.format_html(explanation)
   end
 end

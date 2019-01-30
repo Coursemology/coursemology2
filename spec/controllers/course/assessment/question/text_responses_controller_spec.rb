@@ -64,6 +64,7 @@ RSpec.describe Course::Assessment::Question::TextResponsesController do
       let!(:text_response) do
         text_response = create(:course_assessment_question_text_response, assessment: assessment)
         text_response.question.update_column(:description, "<script>alert('boo');</script>")
+        text_response.solutions.first.update_column(:explanation, "<script>alert('explain');</script>")
         text_response
       end
 
@@ -80,6 +81,11 @@ RSpec.describe Course::Assessment::Question::TextResponsesController do
         it 'sanitizes the description text' do
           subject
           expect(assigns(:text_response_question).description).not_to include('script')
+        end
+
+        it 'sanitizes the explanation text' do
+          subject
+          expect(assigns(:text_response_question).solutions.first.explanation).not_to include('script')
         end
       end
     end
