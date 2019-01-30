@@ -33,5 +33,20 @@ RSpec.describe Course::Assessment::Question::TextResponseSolution, type: :model 
         end
       end
     end
+
+    describe 'callbacks' do
+      subject do
+        build(:course_assessment_question_text_response_solution,
+              explanation: "<script>alert('bad');</script>")
+      end
+
+      context 'when solution is saved' do
+        it 'does not save <script> tags in the explanation' do
+          subject.save!
+          subject.reload
+          expect(subject.explanation).not_to include('script')
+        end
+      end
+    end
   end
 end

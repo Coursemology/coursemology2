@@ -29,6 +29,8 @@ class Course::Assessment::Question::TextResponsesController < Course::Assessment
 
   def edit
     @text_response_question.description = helpers.format_html(@text_response_question.description)
+    # The explanation field uses the Summernote editor so it needs sanitization.
+    @text_response_question.solutions.each { |sol| sol.explanation = helpers.format_html(sol.explanation) }
     @text_response_question.build_at_least_one_group_one_point if @text_response_question.comprehension_question?
   end
 
