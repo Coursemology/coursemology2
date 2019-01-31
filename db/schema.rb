@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_08_042524) do
+ActiveRecord::Schema.define(version: 2019_01_29_044142) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -913,6 +913,7 @@ ActiveRecord::Schema.define(version: 2019_01_08_042524) do
     t.integer "submission_id", null: false
     t.integer "watch_freq", default: [], array: true
     t.integer "percent_watched", default: 0, null: false
+    t.boolean "cached", default: false, null: false
     t.index ["submission_id"], name: "index_course_video_submission_statistics_on_submission_id"
   end
 
