@@ -127,7 +127,7 @@ GEM
       activerecord (>= 5.0, < 6.0)
       arel (> 7.0, < 10.0)
       pg (>= 0.18, < 2.0)
-    activerecord-import (0.28.2)
+    activerecord-import (1.0.0)
       activerecord (>= 3.2)
     acts_as_tenant (0.4.3)
       rails (>= 4.0)
