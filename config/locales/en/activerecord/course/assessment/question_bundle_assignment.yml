@@ -1,0 +1,8 @@
+en:
+  activerecord:
+    errors:
+      models:
+        course/assessment/question_bundle_assignment:
+          attributes:
+            submission:
+              must_belong_to_assessment_and_user: 'must belong to assessment and user'

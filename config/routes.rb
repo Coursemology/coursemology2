@@ -238,6 +238,11 @@ Rails.application.routes.draw do
             end
           end
           resources :sessions, only: [:new, :create]
+
+          resources :question_groups, except: :show
+          resources :question_bundles, except: :show
+          resources :question_bundle_questions, except: :show
+          resources :question_bundle_assignments, except: :show
         end
         resources :categories, only: [:index]
       end

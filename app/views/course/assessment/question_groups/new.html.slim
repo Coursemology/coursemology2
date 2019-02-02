@@ -1,0 +1,5 @@
+- add_breadcrumb 'New Question Group'
+= page_header 'New Question Group'
+
+= simple_form_for @question_group, url: course_assessment_question_groups_path(current_course, @assessment) do |f|
+  = render partial: 'form', locals: { f: f }

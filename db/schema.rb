@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_29_044142) do
+ActiveRecord::Schema.define(version: 2019_02_02_070915) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -187,6 +187,39 @@ ActiveRecord::Schema.define(version: 2019_01_29_044142) do
     t.index ["course_id"], name: "fk__course_assessment_categories_course_id"
     t.index ["creator_id"], name: "fk__course_assessment_categories_creator_id"
     t.index ["updater_id"], name: "fk__course_assessment_categories_updater_id"
+  end
+
+  create_table "course_assessment_question_bundle_assignments", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "assessment_id", null: false
+    t.bigint "submission_id"
+    t.bigint "bundle_id", null: false
+    t.index ["assessment_id"], name: "idx_course_assessment_question_bundle_assignments_on_assmt_id"
+    t.index ["bundle_id"], name: "idx_course_assessment_question_bundle_assignments_on_bundle_id"
+    t.index ["submission_id"], name: "idx_course_assessment_question_bundle_assignments_on_sub_id"
+    t.index ["user_id"], name: "index_course_assessment_question_bundle_assignments_on_user_id"
+  end
+
+  create_table "course_assessment_question_bundle_questions", force: :cascade do |t|
+    t.bigint "bundle_id", null: false
+    t.bigint "question_id", null: false
+    t.integer "weight", null: false
+    t.index ["bundle_id", "question_id"], name: "idx_course_assessment_question_bundle_questions_on_b_and_q_id", unique: true
+    t.index ["bundle_id"], name: "index_course_assessment_question_bundle_questions_on_bundle_id"
+    t.index ["question_id"], name: "idx_course_assessment_question_bundle_questions_on_q_id"
+  end
+
+  create_table "course_assessment_question_bundles", force: :cascade do |t|
+    t.string "title", null: false
+    t.bigint "group_id", null: false
+    t.index ["group_id"], name: "index_course_assessment_question_bundles_on_group_id"
+  end
+
+  create_table "course_assessment_question_groups", force: :cascade do |t|
+    t.string "title", null: false
+    t.bigint "assessment_id", null: false
+    t.integer "weight", null: false
+    t.index ["assessment_id"], name: "index_course_assessment_question_groups_on_assessment_id"
   end
 
   create_table "course_assessment_question_multiple_response_options", force: :cascade do |t|
@@ -393,6 +426,7 @@ ActiveRecord::Schema.define(version: 2019_01_29_044142) do
     t.boolean "use_private", default: true
     t.boolean "use_evaluation", default: false
     t.boolean "allow_partial_submission", default: false
+    t.integer "randomization"
     t.index ["creator_id"], name: "fk__course_assessments_creator_id"
     t.index ["tab_id"], name: "fk__course_assessments_tab_id"
     t.index ["updater_id"], name: "fk__course_assessments_updater_id"
@@ -1155,6 +1189,14 @@ ActiveRecord::Schema.define(version: 2019_01_29_044142) do
   add_foreign_key "course_assessment_categories", "courses", name: "fk_course_assessment_categories_course_id"
   add_foreign_key "course_assessment_categories", "users", column: "creator_id", name: "fk_course_assessment_categories_creator_id"
   add_foreign_key "course_assessment_categories", "users", column: "updater_id", name: "fk_course_assessment_categories_updater_id"
+  add_foreign_key "course_assessment_question_bundle_assignments", "course_assessment_question_bundles", column: "bundle_id"
+  add_foreign_key "course_assessment_question_bundle_assignments", "course_assessment_submissions", column: "submission_id"
+  add_foreign_key "course_assessment_question_bundle_assignments", "course_assessments", column: "assessment_id"
+  add_foreign_key "course_assessment_question_bundle_assignments", "users"
+  add_foreign_key "course_assessment_question_bundle_questions", "course_assessment_question_bundles", column: "bundle_id"
+  add_foreign_key "course_assessment_question_bundle_questions", "course_assessment_questions", column: "question_id"
+  add_foreign_key "course_assessment_question_bundles", "course_assessment_question_groups", column: "group_id"
+  add_foreign_key "course_assessment_question_groups", "course_assessments", column: "assessment_id"
   add_foreign_key "course_assessment_question_multiple_response_options", "course_assessment_question_multiple_responses", column: "question_id", name: "fk_course_assessment_question_multiple_response_options_questio"
   add_foreign_key "course_assessment_question_programming", "jobs", column: "import_job_id", name: "fk_course_assessment_question_programming_import_job_id", on_delete: :nullify
   add_foreign_key "course_assessment_question_programming", "polyglot_languages", column: "language_id", name: "fk_course_assessment_question_programming_language_id"

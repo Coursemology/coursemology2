@@ -21,6 +21,9 @@ class Course::Assessment::Question < ApplicationRecord
                      inverse_of: :question
   has_many :submission_questions, class_name: Course::Assessment::SubmissionQuestion.name,
                                   dependent: :destroy, inverse_of: :question
+  has_many :question_bundle_questions, class_name: Course::Assessment::QuestionBundleQuestion.name,
+                                       foreign_key: :question_id, dependent: :destroy, inverse_of: :question
+  has_many :question_bundles, through: :question_bundle_questions, class_name: Course::Assessment::QuestionBundle.name
 
   delegate :to_partial_path, to: :actable
   delegate :question_type, to: :actable

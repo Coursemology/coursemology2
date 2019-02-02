@@ -18,6 +18,8 @@ class Course::Assessment < ApplicationRecord
   after_commit :grade_with_new_test_cases, on: :update
   before_save :save_tab, on: :create
 
+  enum randomization: { prepared: 0 }
+
   validates :autograded, inclusion: { in: [true, false] }
   validates :session_password, length: { maximum: 255 }, allow_nil: true
   validates :tabbed_view, inclusion: { in: [true, false] }
@@ -55,6 +57,13 @@ class Course::Assessment < ApplicationRecord
            source_type: Course::Assessment::Question::VoiceResponse.name
   has_many :assessment_conditions, class_name: Course::Condition::Assessment.name,
                                    inverse_of: :assessment, dependent: :destroy
+  has_many :question_groups, class_name: Course::Assessment::QuestionGroup.name,
+                             inverse_of: :assessment, dependent: :destroy
+  has_many :question_bundles, class_name: Course::Assessment::QuestionBundle.name, through: :question_groups
+  has_many :question_bundle_questions, class_name: Course::Assessment::QuestionBundleQuestion.name,
+                                       through: :question_bundles
+  has_many :question_bundle_assignments, class_name: Course::Assessment::QuestionBundleAssignment.name,
+                                         inverse_of: :assessment, dependent: :destroy
 
   validate :tab_in_same_course
   validate :selected_test_type_for_grading

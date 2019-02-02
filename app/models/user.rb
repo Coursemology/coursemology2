@@ -64,6 +64,8 @@ class User < ApplicationRecord
   has_many :course_users, dependent: :destroy
   has_many :courses, through: :course_users
   has_many :todos, class_name: Course::LessonPlan::Todo.name, inverse_of: :user, dependent: :destroy
+  has_many :question_bundle_assignments, class_name: Course::Assessment::QuestionBundleAssignment.name,
+                                         inverse_of: :user, dependent: :destroy
 
   accepts_nested_attributes_for :emails
 
