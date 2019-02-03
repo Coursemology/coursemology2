@@ -3,7 +3,7 @@
   td = f.input :email, required: true, label: false, input_html: { class: 'invitation_email' }
   td = f.input :role,
                as: :select,
-               collection: Course::UserInvitation.invitable_roles(current_course_user.role).keys,
+               collection: Course::UserInvitation.invitable_roles(current_course_user&.role).keys,
                label: false,
                label_method: lambda { |role_key| t("course.users.role.#{role_key}") },
                include_blank: false,
