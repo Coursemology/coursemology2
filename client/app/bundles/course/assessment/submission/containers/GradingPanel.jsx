@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
-import { Card, CardHeader, CardText } from 'material-ui/Card';
+import { Card, CardText } from 'material-ui/Card';
 import { Table, TableHeader, TableBody, TableRow, TableHeaderColumn, TableRowColumn } from 'material-ui/Table';
 import ReactTooltip from 'react-tooltip';
 
@@ -154,19 +154,22 @@ class VisibleGradingPanel extends Component {
     );
 
     return (
-      <Table selectable={false} style={styles.table}>
-        <TableBody displayRowCheckbox={false}>
-          {tableRow('student', submitter)}
-          {tableRow('status', this.renderSubmissionStatus())}
-          {shouldRenderGrading ? tableRow('totalGrade', this.renderTotalGrade()) : null}
-          {shouldRenderGrading && gamified ? tableRow('expAwarded', this.renderExperiencePoints()) : null}
-          {tableRow('dueAt', formatDateTime(dueAt))}
-          {tableRow('attemptedAt', formatDateTime(attemptedAt))}
-          {tableRow('submittedAt', formatDateTime(submittedAt))}
-          {shouldRenderGrading ? tableRow('grader', grader) : null}
-          {shouldRenderGrading ? tableRow('gradedAt', formatDateTime(gradedAt)) : null}
-        </TableBody>
-      </Table>
+      <div>
+        <h4>Statistics</h4>
+        <Table selectable={false} style={styles.table}>
+          <TableBody displayRowCheckbox={false}>
+            {tableRow('student', submitter)}
+            {tableRow('status', this.renderSubmissionStatus())}
+            {shouldRenderGrading ? tableRow('totalGrade', this.renderTotalGrade()) : null}
+            {shouldRenderGrading && gamified ? tableRow('expAwarded', this.renderExperiencePoints()) : null}
+            {tableRow('dueAt', formatDateTime(dueAt))}
+            {tableRow('attemptedAt', formatDateTime(attemptedAt))}
+            {tableRow('submittedAt', formatDateTime(submittedAt))}
+            {shouldRenderGrading ? tableRow('grader', grader) : null}
+            {shouldRenderGrading ? tableRow('gradedAt', formatDateTime(gradedAt)) : null}
+          </TableBody>
+        </Table>
+      </div>
     );
   }
 
@@ -253,7 +256,6 @@ class VisibleGradingPanel extends Component {
     return (
       <div style={styles.panel}>
         <Card>
-          <CardHeader title="Statistics" />
           <CardText>{this.renderSubmissionTable()}</CardText>
           <CardText>{this.renderGradeTable()}</CardText>
         </Card>
