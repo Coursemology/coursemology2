@@ -377,8 +377,8 @@ GEM
       oauth2 (~> 1.1)
       omniauth (~> 1.2)
     orm_adapter (0.5.0)
-    parallel (1.12.1)
-    parallel_tests (2.27.1)
+    parallel (1.13.0)
+    parallel_tests (2.28.0)
       parallel
     parser (2.5.3.0)
       ast (~> 2.4.0)
