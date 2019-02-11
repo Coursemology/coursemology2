@@ -138,7 +138,7 @@ class VisibleGradingPanel extends Component {
         submitter, workflowState, dueAt, attemptedAt,
         submittedAt, grader, gradedAt, graderView,
       },
-      gamified,
+      gamified, intl,
     } = this.props;
 
     const published = workflowState === workflowStates.Published;
@@ -155,7 +155,7 @@ class VisibleGradingPanel extends Component {
 
     return (
       <div>
-        <h4>Statistics</h4>
+        <h4>{intl.formatMessage(translations.statistics)}</h4>
         <Table selectable={false} style={styles.table}>
           <TableBody displayRowCheckbox={false}>
             {tableRow('student', submitter)}
@@ -223,7 +223,7 @@ class VisibleGradingPanel extends Component {
 
     return (
       <div>
-        <h4>Grade Summary</h4>
+        <h4>{intl.formatMessage(translations.gradeSummary)}</h4>
         <Table selectable={false} style={styles.table}>
           <TableHeader adjustForCheckbox={false} displaySelectAll={false} enableSelectAll={false}>
             <TableRow>

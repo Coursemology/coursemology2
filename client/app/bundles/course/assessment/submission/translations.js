@@ -276,6 +276,14 @@ const translations = defineMessages({
     id: 'course.assessment.submission.getPastAnswersFailure',
     defaultMessage: 'Failed to load past answers',
   },
+  statistics: {
+    id: 'course.assessment.submission.statistics',
+    defaultMessage: 'Statistics',
+  },
+  gradeSummary: {
+    id: 'course.assessment.submission.gradeSummary',
+    defaultMessage: 'Grade Summary',
+  },
 });
 
 export const scribingTranslations = defineMessages({
