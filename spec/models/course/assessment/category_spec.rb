@@ -18,7 +18,7 @@ RSpec.describe Course::Assessment::Category do
       end
 
       describe 'after the category is saved' do
-        let(:category_attributes) { nil }
+        let(:category_attributes) { {} }
         subject { create(:course_assessment_category, category_attributes) }
 
         it 'sets the folder to have the same attributes as the category' do
