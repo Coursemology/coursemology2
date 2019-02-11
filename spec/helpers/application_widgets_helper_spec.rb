@@ -84,7 +84,7 @@ RSpec.describe ApplicationWidgetsHelper, type: :helper do
     end
 
     describe '#resource_button' do
-      let(:announcement) { build(:course_announcement) }
+      let(:announcement) { create(:course_announcement) }
       before { I18n.backend.store_translations(:en, en: { helpers: { buttons: { new: 'new' } } }) }
       after { I18n.backend.store_translations(:en, en: { helpers: { buttons: { new: nil } } }) }
 
