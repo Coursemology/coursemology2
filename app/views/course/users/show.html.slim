@@ -26,17 +26,19 @@ div.row
     div.row.automatically-clear
       = render partial: 'achievement', collection: @course_user.achievements
 
-- if can_read_progress
+- all_skill_branches = @skills_service.skill_branches
+- if can_read_progress && all_skill_branches.present?
   div.row
     h2 = t('.topic_mastery')
     table.table.skills-list
       tbody
-        - @skills_service.skill_branches.each do |skill_branch|
+        - all_skill_branches.each do |skill_branch|
           = content_tag_for(:tr, skill_branch) do
             th = skill_branch.title
             td
             td
-            - @skills_service.skills_in_branch(skill_branch).each do |skill|
+            - all_skills_in_branch = @skills_service.skills_in_branch(skill_branch)
+            - all_skills_in_branch&.each do |skill|
               - if skill.total_grade > 0
                 = content_tag_for(:tr, skill) do
                   - percentage = @skills_service.percentage_mastery(skill)
