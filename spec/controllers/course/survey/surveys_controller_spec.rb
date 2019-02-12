@@ -354,5 +354,19 @@ RSpec.describe Course::Survey::SurveysController do
         it { is_expected.to have_http_status(:bad_request) }
       end
     end
+
+    describe '#download' do
+      let(:user) { admin }
+
+      subject do
+        get :download, params: { course_id: course.id, id: survey.id }
+      end
+
+      it 'returns a html file' do
+        subject
+        expect(response.header['Content-Type']).to include('text/html')
+        expect(response.status).to eq(302)
+      end
+    end
   end
 end
