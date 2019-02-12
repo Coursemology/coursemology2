@@ -12,6 +12,7 @@ import translations from '../translations';
 import { answerShape, questionShape } from '../propTypes';
 import { formatDateTime } from '../utils';
 import PastProgrammingAnswer from '../components/pastAnswers/PastProgrammingAnswer';
+import PastMultipleResponseAnswer from '../components/pastAnswers/PastMultipleResponseAnswer';
 import { questionTypes } from '../constants';
 
 
@@ -35,6 +36,9 @@ class PastAnswers extends Component {
     switch (question.type) {
       case Programming:
         return <PastProgrammingAnswer question={question} answer={answer} />;
+      case MultipleChoice:
+      case MultipleResponse:
+        return <PastMultipleResponseAnswer question={question} answer={answer} />;
       default:
         return (
           <Card style={{ backgroundColor: yellow100 }}>
