@@ -288,6 +288,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.gradeSummary',
     defaultMessage: 'Grade Summary',
   },
+  rendererNotImplemented: {
+    id: 'course.assessment.submission.rendererNotImplemented',
+    defaultMessage: 'The display for this question type has not been implemented yet.',
+  },
 });
 
 export const scribingTranslations = defineMessages({
