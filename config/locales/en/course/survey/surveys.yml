@@ -3,3 +3,9 @@ en:
     surveys:
       todo_survey_button:
         respond: 'Respond'
+      survey_download_service:
+        timestamp: 'Timestamp'
+        course_user_id: 'Course User ID'
+        name: 'Name'
+        role: 'Role'
+        unknown_question_type: 'UNKNOWN QUESTION TYPE'
