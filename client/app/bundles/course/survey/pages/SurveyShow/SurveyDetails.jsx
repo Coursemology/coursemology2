@@ -14,6 +14,7 @@ import { surveyShape } from 'course/survey/propTypes';
 import { updateSurvey } from 'course/survey/actions/surveys';
 import RespondButton from 'course/survey/containers/RespondButton';
 import NewSectionButton from './NewSectionButton';
+import DownloadResponsesButton from './DownloadResponsesButton';
 
 const styles = {
   table: {
@@ -177,6 +178,7 @@ class SurveyDetails extends React.Component {
                 />
               ) : null
           }
+          <DownloadResponsesButton />
           <RespondButton
             courseId={courseId}
             surveyId={survey.id}

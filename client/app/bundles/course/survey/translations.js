@@ -89,6 +89,10 @@ const translations = defineMessages({
     id: 'course.surveys.updateFailure',
     defaultMessage: 'Failed to update survey.',
   },
+  requestFailure: {
+    id: 'course.surveys.requestFailure',
+    defaultMessage: 'An error occurred while processing your request.',
+  },
   deleteSuccess: {
     id: 'course.surveys.deleteSuccess',
     defaultMessage: 'Survey "{title}" deleted.',

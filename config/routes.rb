@@ -366,6 +366,7 @@ Rails.application.routes.draw do
       scope module: :survey do
         resources :surveys, only: [:index, :create, :show, :update, :destroy] do
           get 'results', on: :member
+          get 'download', on: :member
           post 'remind', on: :member
           post 'reorder_questions', on: :member
           post 'reorder_sections', on: :member

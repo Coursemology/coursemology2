@@ -58,6 +58,16 @@ class Course::Survey::SurveysController < Course::Survey::Controller
     head :ok
   end
 
+  def download
+    authorize!(:manage, @survey)
+    job = Course::Survey::SurveyDownloadJob.
+          perform_later(@survey).job
+    respond_to do |format|
+      format.html { redirect_to(job_path(job)) }
+      format.json { render json: { redirect_url: job_path(job) } }
+    end
+  end
+
   private
 
   def render_survey_with_questions_json
