@@ -90,6 +90,9 @@ const actionTypes = mirrorCreator([
   'SEND_REMINDER_REQUEST',
   'SEND_REMINDER_SUCCESS',
   'SEND_REMINDER_FAILURE',
+  'DOWNLOAD_SURVEY_REQUEST',
+  'DOWNLOAD_SURVEY_SUCCESS',
+  'DOWNLOAD_SURVEY_FAILURE',
 ]);
 
 export default actionTypes;

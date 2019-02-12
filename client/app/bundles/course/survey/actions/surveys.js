@@ -1,9 +1,13 @@
 import { submit, SubmissionError } from 'redux-form';
 import CourseAPI from 'api/course';
 import history from 'lib/history';
+import pollJob from 'lib/helpers/job-helpers';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import translations from '../translations';
 import actionTypes, { formNames } from '../constants';
 import { setNotification } from './index';
+
+const DOWNLOAD_JOB_POLL_INTERVAL = 2000;
 
 export function showSurveyForm(formParams) {
   return { type: actionTypes.SURVEY_FORM_SHOW, formParams };
@@ -158,5 +162,28 @@ export function sendReminderEmail(successMessage, failureMessage) {
         dispatch({ type: actionTypes.SEND_REMINDER_FAILURE });
         setNotification(failureMessage)(dispatch);
       });
+  };
+}
+
+export function downloadSurvey() {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.DOWNLOAD_SURVEY_REQUEST });
+
+    const handleSuccess = (successData) => {
+      window.location.href = successData.redirect_url;
+      dispatch({ type: actionTypes.DOWNLOAD_SURVEY_SUCCESS });
+    };
+
+    const handleFailure = () => {
+      dispatch({ type: actionTypes.DOWNLOAD_SURVEY_FAILURE });
+      dispatch(setNotification(translations.requestFailure));
+    };
+
+    return CourseAPI.survey.surveys.download()
+      .then(response => response.data)
+      .then((data) => {
+        pollJob(data.redirect_url, DOWNLOAD_JOB_POLL_INTERVAL, handleSuccess, handleFailure);
+      })
+      .catch(handleFailure);
   };
 }

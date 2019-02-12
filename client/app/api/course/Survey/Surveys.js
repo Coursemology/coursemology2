@@ -159,6 +159,10 @@ export default class SurveysAPI extends BaseSurveyAPI {
     return this.getClient().post(`${this._getUrlPrefix()}/${this.getSurveyId()}/reorder_sections`, ordering);
   }
 
+  download() {
+    return this.getClient().get(`${this._getUrlPrefix()}/${this.getSurveyId()}/download`);
+  }
+
   _getUrlPrefix() {
     return `/courses/${this.getCourseId()}/surveys`;
   }
