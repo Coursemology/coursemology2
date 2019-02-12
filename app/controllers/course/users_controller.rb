@@ -9,7 +9,10 @@ class Course::UsersController < Course::ComponentController
   def index # :nodoc:
   end
 
-  def show; end
+  def show
+    @skills_service = Course::SkillsMasteryPreloadService.new(current_course,
+                                                              @course_user)
+  end
 
   private
 

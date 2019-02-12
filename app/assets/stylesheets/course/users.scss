@@ -35,6 +35,10 @@
         margin: 1em;
       }
     }
+
+    table.skills-list tr.skill td.skill-title {
+      text-indent: 30px;
+    }
   }
 
   &.index {

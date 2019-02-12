@@ -61,8 +61,9 @@ class Course::Assessment::Answer < ApplicationRecord
   default_scope { order(:created_at) }
 
   scope :without_attempting_state, -> { where.not(workflow_state: :attempting) }
-
   scope :non_current_answers, -> { where(current_answer: false) }
+  scope :current_answers, -> { where(current_answer: true) }
+  scope :belonging_to_submissions, ->(submissions) { where(submission_id: submissions) }
 
   # Autogrades the answer. This saves the answer if there are pending changes.
   #

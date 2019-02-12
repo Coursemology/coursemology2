@@ -14,6 +14,21 @@ class Course::Assessment::Skill < ApplicationRecord
   #   Orders the skills alphabetically by title.
   scope :order_by_title, ->(direction = :asc) { order(title: direction) }
 
+  # @!attribute [r] total_grade
+  #   Sum of grades from questions tagged with this skill.
+  #   @return [Float]
+  calculated :total_grade, (lambda do
+    Course::Assessment::Question.select('coalesce(sum(maximum_grade), 0)').
+      from(
+        "course_assessment_questions caq \
+        INNER JOIN course_question_assessments cqa ON \
+        cqa.question_id = caq.id \
+        INNER JOIN course_assessment_skills_question_assessments casqa ON \
+        casqa.question_assessment_id = cqa.id \
+        WHERE casqa.skill_id = course_assessment_skills.id"
+      )
+  end)
+
   def initialize_duplicate(duplicator, other)
     self.course = duplicator.options[:destination_course]
     self.skill_branch = duplicator.duplicated?(other.skill_branch) ? duplicator.duplicate(other.skill_branch) : nil
