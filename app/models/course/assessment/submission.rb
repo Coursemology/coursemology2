@@ -34,7 +34,7 @@ class Course::Assessment::Submission < ApplicationRecord
     end
   end
 
-  validate :validate_consistent_user, :validate_unique_submission, on: :create
+  validate :validate_consistent_user, :validate_unique_attempting_submission, on: :create
   validate :validate_awarded_attributes, if: :published?
   validates :submitted_at, presence: true, unless: :attempting?
   validates :workflow_state, length: { maximum: 255 }, presence: true
@@ -238,11 +238,13 @@ class Course::Assessment::Submission < ApplicationRecord
     errors.add(:experience_points_record, :inconsistent_user)
   end
 
-  # Validate that the submission creator does not have an existing submission for this assessment.
-  def validate_unique_submission
-    existing = Course::Assessment::Submission.find_by(assessment_id: assessment.id,
-                                                      creator_id: creator.id)
-    return unless existing
+  # Validate that the submission creator does not have an existing attempting submission for this
+  # assessment.
+  def validate_unique_attempting_submission
+    existing_attempting = Course::Assessment::Submission.find_by(assessment_id: assessment.id,
+                                                                 creator_id: creator.id,
+                                                                 workflow_state: 'attempting')
+    return unless existing_attempting
     errors.clear
     errors[:base] << I18n.t('activerecord.errors.models.course/assessment/'\
                             'submission.submission_already_exists')

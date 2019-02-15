@@ -19,7 +19,7 @@ en:
             absent_award_attributes: >
               there is no award attributes for your submission, please try again
               or contact the Coursemology team
-          submission_already_exists: "Looks like you have already created a submission. Try again?"
+          submission_already_exists: "Looks like you are already attempting a submission. Try resuming it?"
         course/assessment/category:
           deletion: 'the last category cannot be deleted'
 
