@@ -188,3 +188,6 @@ en:
             new: :'system.admin.instance.announcements.new.header'
           components:
             edit: :'system.admin.instance.components.edit.header'
+          user_invitations:
+            index: :'breadcrumbs.system.admin.instance.users.index'
+            invite: :'system.admin.instance.user_invitations.new.header'

@@ -83,6 +83,8 @@ ignore_missing:
 # I18n-tasks gives the wrong results for normal (non action) methods in the controller, ignore them here.
   - 'course.user_invitations.create_success_message.*'
   - 'course.user_invitations.create_warning_message.*'
+  - 'system.admin.instance.user_invitations.create_success_message.*'
+  - 'system.admin.instance.user_invitations.create_warning_message.*'
 
 ## Consider these keys used:
 ignore_unused:
@@ -105,6 +107,7 @@ ignore_unused:
 
 # I18n-tasks gives the wrong results for normal (non action) methods in the controller, ignore them here.
 - 'course.user_invitations.create.*'
+- 'system.admin.instance.user_invitations.create.*'
 
 ## Exclude these keys from the `i18n-tasks eq-base' report:
 # ignore_eq_base:

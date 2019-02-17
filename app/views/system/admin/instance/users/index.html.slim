@@ -1,5 +1,7 @@
 = page_header
 
+= render partial: 'tabs'
+
 - if params[:search].blank?
   .panel.panel-default
     .panel-heading = t('common.summary')

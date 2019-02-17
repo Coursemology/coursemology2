@@ -104,6 +104,14 @@ Rails.application.routes.draw do
         get '/' => 'admin#index', as: :admin
         resources :announcements, except: [:show], concerns: :paginatable
         resources :users, only: [:index, :update, :destroy], concerns: :paginatable
+        resources :users do
+          get 'invite' => 'user_invitations#new', on: :collection
+          post 'invite' => 'user_invitations#create', on: :collection
+          post 'resend_invitations' => 'user_invitations#resend_invitations', on: :collection
+        end
+        resources :user_invitations, only: [:index, :destroy] do
+          post 'resend_invitation'
+        end
         resources :courses, only: [:index, :destroy], concerns: :paginatable
         get 'components' => 'components#edit'
         patch 'components' => 'components#update'

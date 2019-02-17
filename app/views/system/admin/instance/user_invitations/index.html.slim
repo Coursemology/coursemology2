@@ -1,0 +1,24 @@
+- add_breadcrumb :index
+= page_header
+
+= render partial: 'system/admin/instance/users/tabs'
+
+- accepted_invitations, pending_invitations = @invitations.partition(&:confirmed?)
+- progress = accepted_invitations.size * 100 / [@invitations.length, 1].max
+
+- unless pending_invitations.blank? && accepted_invitations.blank?
+  = display_progress_bar(progress) do
+    = t('.progress', accepted: accepted_invitations.size, total: @invitations.size)
+  = simple_format t('.manual_acceptance')
+- else
+  = simple_format t('.no_invitations')
+
+- unless pending_invitations.blank?
+  span.pull-right
+    = link_to t('.resend_button'), resend_invitations_admin_instance_users_path,
+              method: :post, class: ['btn', 'btn-info']
+  h4 = t('.invited_header')
+  = render partial: 'instance_user_invitations', locals: { invitations: pending_invitations }
+- unless accepted_invitations.blank?
+  h4 = t('.accepted_header')
+  = render partial: 'instance_user_invitations', locals: { invitations: accepted_invitations }

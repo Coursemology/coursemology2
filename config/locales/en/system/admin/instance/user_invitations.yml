@@ -1,0 +1,53 @@
+en:
+  system:
+    admin:
+      instance:
+        user_invitations:
+          index:
+            header: 'Invitations'
+            progress: '%{accepted} accepted / %{total} invited'
+            manual_acceptance: >
+              The following table lists all invitations which have been sent out to date.
+            no_invitations: >
+              There are no instance user invitations sent yet.
+            invited_header: 'Pending Invitations'
+            accepted_header: 'Accepted Invitations'
+            resend_button: 'Resend All Invitations'
+          destroy:
+            success: 'Invitation to %{name} was deleted.'
+          instance_user_invitation:
+            delete_tooltip: 'Delete Invitation'
+            resend_tooltip: 'Resend Invitation'
+          new:
+            header: 'Invite Users'
+            individual:
+              add_user: 'Add User'
+          create:
+            success: >
+              Successfully invited users from the uploaded file:
+              %{new_invitations}, %{already_invited}, %{new_instance_users}, %{already_in_instance}.
+            summary:
+              new_invitations:
+                one: '1 new invitation sent'
+                other: '%{count} new invitations sent'
+              new_instance_users:
+                one: '1 user just added'
+                other: '%{count} users just added'
+              already_in_instance: '%{count} already in the instance'
+              already_invited: '%{count} already invited'
+              duplicate_emails: '%{count} duplicate emails ignored.'
+          invitation_fields:
+            remove: 'Remove'
+          instance_user_invitations:
+            invitation_code: 'Invitation Code'
+            status: 'Status'
+            sent_at: 'Invitation Sent At'
+            confirmed_at: 'Invitation Accepted At'
+          resend_invitation:
+            success: >
+              The request to resend the email invitation to %{email}
+              is received, please wait while the email is sent out.
+            failure: 'The request to resend the email invitation failed.'
+          resend_invitations:
+            success: 'Email invitations were successfully resent.'
+            failure: 'The resending of email invitations failed.'

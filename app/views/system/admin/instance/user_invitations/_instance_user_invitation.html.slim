@@ -1,0 +1,21 @@
+= content_tag_for(:tr, invitation) do
+  th = invitation.name
+  td = invitation.email
+  td = t("system.admin.instance.users.role.#{invitation.role}")
+  td = invitation.invitation_key
+  - if !invitation.confirmed?
+    td = t('system.admin.instance.users.status.invited')
+    td = format_datetime(invitation.sent_at, :short) if invitation.sent_at
+    td
+      div.btn-group
+        = link_to admin_instance_user_invitation_resend_invitation_path(invitation),
+                  remote: true, class: ['btn', 'btn-info', 'btn-sm'], method: :post,
+                  title: t('.resend_tooltip') do
+          = fa_icon 'envelope'.freeze
+      = delete_button([:admin, :instance, invitation],
+        class: 'btn-sm', title: t('.delete_tooltip')) do
+        = fa_icon 'close'.freeze
+  - else
+    td = t('system.admin.instance.users.status.accepted')
+    td = format_datetime(invitation.confirmed_at, :short) if invitation.confirmed_at
+  td

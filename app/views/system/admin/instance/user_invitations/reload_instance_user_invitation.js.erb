@@ -1,0 +1,10 @@
+<% if @invitation %>
+  $('<%= "#user_invitation_#{@invitation.id}"%>').replaceWith(
+    '<%= escape_javascript(render partial: 'system/admin/instance/user_invitations/instance_user_invitation',
+                                  locals: { invitation: @invitation }) %>'
+  );
+<% end %>
+
+// Remove older flash messages, and show users the new flash message
+$('.system-admin-instance-user-invitations').parents('.container-fluid:first').parents('.container-fluid').find('.alert').remove();
+$('.system-admin-instance-user-invitations').parents('.container-fluid:first').parents('.container-fluid').prepend('<%= j(flash_messages) %>');
