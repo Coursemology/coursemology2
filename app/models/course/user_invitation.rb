@@ -18,6 +18,8 @@ class Course::UserInvitation < ApplicationRecord
   # Invitations that haven't been confirmed, i.e. pending the user's acceptance.
   scope :unconfirmed, -> { where(confirmed_at: nil) }
 
+  INVITATION_KEY_IDENTIFIER = 'I'
+
   # Finds an invitation that matches one of the user's registered emails.
   #
   # @param [User] user
@@ -51,7 +53,7 @@ class Course::UserInvitation < ApplicationRecord
   #
   # @return [void]
   def generate_invitation_key
-    self.invitation_key ||= 'I' + SecureRandom.base64(8)
+    self.invitation_key ||= INVITATION_KEY_IDENTIFIER + SecureRandom.base64(8)
   end
 
   # Sets the default for non-null fields.

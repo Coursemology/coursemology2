@@ -2,6 +2,7 @@
 class InstanceUser < ApplicationRecord
   include InstanceUserSearchConcern
   acts_as_tenant :instance, inverse_of: :instance_users
+  after_initialize :set_defaults, if: :new_record?
 
   enum role: { normal: 0, instructor: 1, administrator: 2 }
 
@@ -18,5 +19,11 @@ class InstanceUser < ApplicationRecord
 
   def self.search_and_ordered_by_username(keyword)
     keyword.blank? ? ordered_by_username : search(keyword).group('users.name').ordered_by_username
+  end
+
+  private
+
+  def set_defaults # :nodoc:
+    self.role ||= InstanceUser.roles[:normal]
   end
 end
