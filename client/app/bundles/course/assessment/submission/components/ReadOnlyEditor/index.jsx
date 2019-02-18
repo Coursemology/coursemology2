@@ -76,6 +76,9 @@ export default class ReadOnlyEditor extends Component {
   }
 
   setExpandedLine(lineNumber) {
+    // workaround for Firefox bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1495482
+    document.getSelection().removeAllRanges();
+
     const { expanded } = this.state;
     const newExpanded = expanded.slice(0);
     newExpanded[lineNumber - 1] = true;
