@@ -11,6 +11,7 @@ module UserAuthenticationConcern
 
     before_sign_in :create_instance_user, unless: :administrator?
     after_create :create_instance_user
+    after_create :delete_unused_instance_invitation
 
     include UserOmniauthConcern
     include ReplacementMethods
@@ -23,6 +24,11 @@ module UserAuthenticationConcern
 
     role = @instance_invitation&.role
     instance_users.create(role: role)
+  end
+
+  def delete_unused_instance_invitation
+    invitation = Instance::UserInvitation.find_by(email: email)
+    invitation.destroy if invitation && @instance_invitation.nil?
   end
 
   module ReplacementMethods
