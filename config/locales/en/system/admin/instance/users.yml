@@ -3,6 +3,17 @@ en:
     admin:
       instance:
         users:
+          role:
+            administrator: 'Administrator'
+            instructor: 'Instructor'
+            normal: 'Normal'
+          status:
+            accepted: 'Accepted'
+            invited: 'Invited'
+          tabs:
+            users: :'system.admin.instance.users.index.header'
+            invite: :'system.admin.instance.user_invitations.new.header'
+            invitations: :'system.admin.instance.user_invitations.index.header'
           index:
             header: 'Users'
             related_courses: 'Related Courses'

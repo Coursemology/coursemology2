@@ -91,7 +91,11 @@ class User::RegistrationsController < Devise::RegistrationsController
   def load_invitation
     return if invitation_param.blank?
 
-    @invitation = Course::UserInvitation.find_by(invitation_key: invitation_param)
+    if invitation_param.first == Course::UserInvitation::INVITATION_KEY_IDENTIFIER
+      @invitation = Course::UserInvitation.find_by(invitation_key: invitation_param)
+    elsif invitation_param.first == Instance::UserInvitation::INVITATION_KEY_IDENTIFIER
+      @invitation = Instance::UserInvitation.find_by(invitation_key: invitation_param)
+    end
   end
 
   def invitation_param

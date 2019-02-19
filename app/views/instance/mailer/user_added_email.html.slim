@@ -1,0 +1,6 @@
+= simple_format(\
+    t('.message', instance: link_to(@instance.name, @instance.host),
+                  coursemology: link_to(t('layout.coursemology'), @instance.host),
+                  email: @recipient.email\
+    )\
+  )

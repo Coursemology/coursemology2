@@ -103,8 +103,16 @@ class User < ApplicationRecord
     self.name = invitation.name
     self.email = invitation.email
     skip_confirmation!
-    course_users.build(course: invitation.course, name: invitation.name, role: invitation.role,
-                       phantom: invitation.phantom, creator: self, updater: self)
+    if invitation.invitation_key.first == Course::UserInvitation::INVITATION_KEY_IDENTIFIER
+      course_users.build(course: invitation.course,
+                         name: invitation.name,
+                         role: invitation.role,
+                         phantom: invitation.phantom,
+                         creator: self,
+                         updater: self)
+    elsif invitation.invitation_key.first == Instance::UserInvitation::INVITATION_KEY_IDENTIFIER
+      @instance_invitation = invitation
+    end
   end
 
   private

@@ -1,0 +1,5 @@
+<%= t('.message', instance: plain_link_to(@instance.name, @instance.host),
+                  coursemology: plain_link_to(t('layout.coursemology'), @instance.host),
+                  email: @invitation.email,
+                  click_here: plain_link_to(t('.click_here'), new_user_registration_url(invitation: @invitation.invitation_key,
+                                                                                        host: @instance.host))) %>

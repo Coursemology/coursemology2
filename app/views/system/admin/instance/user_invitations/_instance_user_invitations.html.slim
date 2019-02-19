@@ -1,0 +1,18 @@
+- pending = !invitations.first.confirmed?
+table.table.table-striped.table-hover class="#{pending ? 'pending' : 'confirmed'}"
+  thead
+    tr
+      th = t('common.name')
+      th = t('common.email')
+      th = t('common.role')
+      th = t('.invitation_code')
+      th = t('.status')
+      - if pending
+        th = t('.sent_at')
+      - else
+        th = t('.confirmed_at')
+      th
+      th
+
+  tbody
+    = render partial: 'instance_user_invitation', collection: invitations, as: :invitation
