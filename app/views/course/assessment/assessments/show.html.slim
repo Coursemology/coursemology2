@@ -31,15 +31,17 @@
       - if current_course.gamified?
         tr.bonus_cut_off
           th = t('.bonus_cut_off')
-          - if @assessment.bonus_end_at.present?
-            td = render partial: 'course/lesson_plan/items/personal_or_ref_time',
-                        locals: { item: @assessment, course_user: current_course_user, attribute: :bonus_end_at,
-                                  datetime_format: :long }
+          td
+            - if @assessment.bonus_end_at.present?
+              = render partial: 'course/lesson_plan/items/personal_or_ref_time',
+                       locals: { item: @assessment, course_user: current_course_user, attribute: :bonus_end_at,
+                                 datetime_format: :long }
       tr.end_at
         th = t('.end_at')
-        - if @assessment.end_at.present?
-          td = render partial: 'course/lesson_plan/items/personal_or_ref_time',
-                      locals: { item: @assessment, course_user: current_course_user, attribute: :end_at, datetime_format: :long }
+        td
+          - if @assessment.end_at.present?
+            = render partial: 'course/lesson_plan/items/personal_or_ref_time',
+                     locals: { item: @assessment, course_user: current_course_user, attribute: :end_at, datetime_format: :long }
       - if can?(:observe, @assessment)
         - if @assessment.autograded?
           tr.skippable
