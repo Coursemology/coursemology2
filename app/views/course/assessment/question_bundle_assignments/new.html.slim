@@ -1,5 +1,0 @@
-- add_breadcrumb 'New Question Bundle Assignment'
-= page_header 'New Question Bundle Assignment'
-
-= simple_form_for @question_bundle_assignment, url: course_assessment_question_bundle_assignments_path(current_course, @assessment) do |f|
-  = render partial: 'form', locals: { f: f }

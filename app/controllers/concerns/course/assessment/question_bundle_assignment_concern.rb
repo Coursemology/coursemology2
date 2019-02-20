@@ -32,6 +32,8 @@ module Course::Assessment::QuestionBundleAssignmentConcern
   end
 
   class AssignmentRandomizer
+    attr_accessor :assignments, :students, :group_bundles
+
     def initialize(assessment)
       @assessment = assessment
       @students = assessment.course.user_ids

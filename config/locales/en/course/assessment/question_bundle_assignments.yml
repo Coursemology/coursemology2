@@ -1,0 +1,15 @@
+en:
+  course:
+    assessment:
+      question_bundle_assignments:
+        index:
+          header: 'Question Bundle Assignments'
+          prepared_bundle_assignments: 'Prepared bundle assignments'
+          past_bundle_assignments: 'Past bundle assignments'
+          rerandomize_all: 'Re-randomize all'
+          rerandomize_unassigned: 'Re-randomize unassigned students'
+          user: 'User'
+          submission_id: 'Submission ID'
+          unbundled: 'Unbundled'
+          unbundled_tooltip: >
+            These are likely erroneously assigned bundles that don't fit into any existing question groups.

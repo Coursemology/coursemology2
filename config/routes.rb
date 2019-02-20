@@ -250,7 +250,9 @@ Rails.application.routes.draw do
           resources :question_groups, except: :show
           resources :question_bundles, except: :show
           resources :question_bundle_questions, except: :show
-          resources :question_bundle_assignments, except: :show
+          resources :question_bundle_assignments, except: [:show, :new] do
+            post 'recompute', on: :collection
+          end
         end
         resources :categories, only: [:index]
       end
