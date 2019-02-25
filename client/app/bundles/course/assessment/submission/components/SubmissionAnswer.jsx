@@ -124,7 +124,7 @@ class SubmissionAnswer extends Component {
     return (
       <Card style={{ backgroundColor: yellow100 }}>
         <CardText>
-          <span>{intl.formatMessage(translations.missingAnswer)}</span>
+          <span id="missing-answer">{intl.formatMessage(translations.missingAnswer)}</span>
         </CardText>
       </Card>
     );

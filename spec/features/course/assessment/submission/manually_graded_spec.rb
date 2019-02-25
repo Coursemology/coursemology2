@@ -163,8 +163,8 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments', j
         # Check that there is NO late submission warning.
         late_submission_text = /This submission is LATE! */
         visit edit_course_assessment_submission_path(course, assessment, submission)
-        expect(page).to have_selector('span', text: /Submission by */)
-        expect(page).not_to have_selector('span', text: late_submission_text)
+        expect(page).to have_css('#submission-by', text: /Submission by */)
+        expect(page).not_to have_css('#late-submission', text: late_submission_text)
 
         # Create a late submission
         assessment.end_at = Time.zone.now - 1.day
@@ -172,7 +172,7 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments', j
 
         # Refresh and check for the late submission warning.
         visit edit_course_assessment_submission_path(course, assessment, submission)
-        expect(page).to have_selector('span', text: late_submission_text)
+        expect(page).to have_css('#late-submission', text: late_submission_text)
 
         # Create an extra question after submission is submitted, user should still be able to
         # grade the submission in this case.
@@ -180,7 +180,7 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments', j
 
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
-        expect(page).to have_selector('span', text: /There is no answer submitted for this question */)
+        expect(page).to have_css('#missing-answer', text: /There is no answer submitted */)
 
         first('input.grade').set(0)
         click_button 'Publish Grade'
@@ -212,7 +212,7 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments', j
                                                      multiple_programming_submission)
 
         # The Run Code button is only shown for the auto_gradable? questions
-        expect(page).to have_selector('span', text: 'RUN CODE', count: 2)
+        expect(page).to have_css('#run-code', text: 'RUN CODE', count: 2)
       end
 
       scenario 'I see submitted programming answers with code tags' do
