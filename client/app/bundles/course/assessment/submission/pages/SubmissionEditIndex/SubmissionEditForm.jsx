@@ -108,6 +108,7 @@ class SubmissionEditForm extends Component {
           />
           {autogradable ? (
             <RaisedButton
+              id="run-code"
               style={styles.formButton}
               backgroundColor={red900}
               secondary

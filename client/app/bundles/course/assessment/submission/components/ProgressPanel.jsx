@@ -42,7 +42,7 @@ class ProgressPanel extends Component {
       <CardText>
         <Paper style={{ backgroundColor: red100, padding: 10 }}>
           <WarningIcon style={styles.warningIcon} />
-          <span>{intl.formatMessage(translations.lateSubmission)}</span>
+          <span id="late-submission">{intl.formatMessage(translations.lateSubmission)}</span>
         </Paper>
       </CardText>
     );
@@ -85,6 +85,7 @@ class ProgressPanel extends Component {
     return (
       <Card>
         <CardHeader
+          id="submission-by"
           title={intl.formatMessage(translations.submissionBy, { submitter })}
           subtitle={title}
           style={styles.header[workflowState]}
