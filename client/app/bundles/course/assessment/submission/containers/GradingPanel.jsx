@@ -100,6 +100,7 @@ class VisibleGradingPanel extends Component {
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <div>
           <input
+            className="exp"
             style={{ width: 50 }}
             type="number"
             min={0}
