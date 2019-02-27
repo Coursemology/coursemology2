@@ -135,7 +135,7 @@ class VisibleGradingPanel extends Component {
   renderSubmissionTable() {
     const {
       submission: {
-        submitter, workflowState, dueAt, attemptedAt,
+        submitter, workflowState, bonusEndAt, dueAt, attemptedAt,
         submittedAt, grader, gradedAt, graderView,
       },
       gamified, intl,
@@ -162,7 +162,8 @@ class VisibleGradingPanel extends Component {
             {tableRow('status', this.renderSubmissionStatus())}
             {shouldRenderGrading ? tableRow('totalGrade', this.renderTotalGrade()) : null}
             {shouldRenderGrading && gamified ? tableRow('expAwarded', this.renderExperiencePoints()) : null}
-            {tableRow('dueAt', formatDateTime(dueAt))}
+            {bonusEndAt ? tableRow('bonusEndAt', formatDateTime(bonusEndAt)) : null}
+            {dueAt ? tableRow('dueAt', formatDateTime(dueAt)) : null}
             {tableRow('attemptedAt', formatDateTime(attemptedAt))}
             {tableRow('submittedAt', formatDateTime(submittedAt))}
             {shouldRenderGrading ? tableRow('grader', grader) : null}

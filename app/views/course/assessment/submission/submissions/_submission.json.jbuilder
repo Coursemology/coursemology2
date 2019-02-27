@@ -18,7 +18,10 @@ json.submission do
   json.workflowState apparent_workflow_state
   json.submitter display_course_user(submission.course_user)
 
-  end_at = assessment.time_for(submission.creator.course_users.find_by(course: submission.assessment.course)).end_at
+  submitter_course_user = submission.creator.course_users.find_by(course: submission.assessment.course)
+  end_at = assessment.time_for(submitter_course_user).end_at
+  bonus_end_at = assessment.time_for(submitter_course_user).bonus_end_at
+  json.bonusEndAt bonus_end_at
   json.dueAt end_at
   json.attemptedAt submission.created_at
   json.submittedAt submission.submitted_at
@@ -39,6 +42,7 @@ json.submission do
 
   if current_course.gamified?
     json.basePoints assessment.base_exp
+    json.bonusPoints assessment.time_bonus_exp
     json.pointsAwarded submission.current_points_awarded
   end
 end
