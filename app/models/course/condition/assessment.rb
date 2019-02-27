@@ -41,8 +41,7 @@ class Course::Condition::Assessment < ApplicationRecord
     user = course_user.user
 
     if minimum_grade_percentage
-      minimum_grade = assessment.maximum_grade * minimum_grade_percentage / 100.0
-      published_submissions_with_minimum_grade(user, minimum_grade).exists?
+      published_submissions_with_minimum_grade_exists?(user, minimum_grade_percentage)
     else
       submitted_submissions_by_user(user).exists?
     end
@@ -82,11 +81,10 @@ class Course::Condition::Assessment < ApplicationRecord
     assessment.submissions.by_user(user).where(workflow_state: [:submitted, :graded, :published])
   end
 
-  def published_submissions_with_minimum_grade(user, minimum_grade)
-    assessment.submissions.by_user(user).with_published_state.
-      joins(:answers).
-      group('course_assessment_submissions.id').
-      when_having { coalesce(sum(answers.grade), 0) >= minimum_grade }
+  def published_submissions_with_minimum_grade_exists?(user, minimum_grade_percentage)
+    assessment.submissions.by_user(user).with_published_state.eager_load(:answers, assessment: :questions).any? do |sub|
+      sub.grade.to_f >= sub.questions.sum(:maximum_grade).to_f * minimum_grade_percentage / 100.0
+    end
   end
 
   def validate_assessment_condition

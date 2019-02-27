@@ -6,9 +6,9 @@ json.submission do
   json.isCreator current_user == submission.creator
 
   if assessment.autograded? && !assessment.skippable?
-    question = assessment.questions.next_unanswered(submission)
+    question = submission.questions.next_unanswered(submission)
     # If question does not exist, means the student have answered all questions
-    json.maxStep assessment.questions.index(question) if question
+    json.maxStep submission.questions.index(question) if question
   end
 
   # Show submission as submitted to students if grading is not published yet
@@ -29,7 +29,7 @@ json.submission do
     json.grader display_user(submission.publisher) if apparent_workflow_state == 'published'
     json.grade submission.grade.to_f
   end
-  json.maximumGrade assessment.maximum_grade.to_f
+  json.maximumGrade submission.questions.sum(:maximum_grade).to_f
 
   json.showPublicTestCasesOutput current_course.show_public_test_cases_output
   json.showStdoutAndStderr current_course.show_stdout_and_stderr

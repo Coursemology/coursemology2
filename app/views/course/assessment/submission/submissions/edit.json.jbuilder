@@ -14,7 +14,7 @@ json.assessment do
   json.showPrivate @assessment.show_private
   json.allowPartialSubmission @assessment.allow_partial_submission
   json.showEvaluation @assessment.show_evaluation
-  json.questionIds @assessment.questions.map(&:id)
+  json.questionIds @submission.questions.map(&:id)
   json.passwordProtected @assessment.session_password_protected?
   json.gamified @assessment.course.gamified?
   json.files @assessment.folder.materials do |material|
