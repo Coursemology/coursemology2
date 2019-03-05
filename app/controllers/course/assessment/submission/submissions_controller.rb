@@ -37,7 +37,25 @@ class Course::Assessment::Submission::SubmissionsController < \
 
   def create
     @submission.session_id = authentication_service.generate_authentication_token!
-    if @submission.save
+
+    success = false
+    if @assessment.randomization == 'prepared'
+      Course::Assessment::Submission.transaction do
+        qbas = @assessment.question_bundle_assignments.where(user: current_user).lock!
+        if qbas.empty? # TODO: More thorough validations here
+          @submission.errors.add(:base, :no_bundles_assigned)
+          raise ActiveRecord::Rollback
+        end
+        raise ActiveRecord::Rollback unless @submission.save
+        raise ActiveRecord::Rollback unless qbas.update_all(submission_id: @submission.id)
+
+        success = true
+      end
+    else
+      success = @submission.save
+    end
+
+    if success
       log_service.log_submission_access(request) if @assessment.session_password_protected?
       redirect_to edit_course_assessment_submission_path(current_course, @assessment, @submission,
                                                          new_submission: true)
