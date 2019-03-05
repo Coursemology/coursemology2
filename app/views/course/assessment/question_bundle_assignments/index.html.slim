@@ -1,28 +1,72 @@
-= page_header 'Question Bundle Assignment'
+= page_header
 
-= link_to 'New Question Bundle Assignment',
-          new_course_assessment_question_bundle_assignment_path(current_course, @assessment),
-          class: %w(btn btn-primary)
+h2 = t('.prepared_bundle_assignments')
 
+= link_to t('.rerandomize_all'),
+          recompute_course_assessment_question_bundle_assignments_path,
+          method: :post, class: %w(btn btn-primary)
+=< link_to t('.rerandomize_unassigned'),
+           recompute_course_assessment_question_bundle_assignments_path(only_unassigned: true),
+           method: :post, class: %w(btn btn-primary)
+
+- has_unbundled = @assignment_set.assignments.lazy.map { |k, v| v[nil].present? }.any?
 table.table.table-hover
   thead
     tr
-      th = 'ID'
-      th = 'User'
-      th = 'Submission'
-      th = 'Question Bundle'
+      th = t('.user')
+      - @question_group_lookup.each do |_, question_group_title|
+        th = question_group_title
+      - if has_unbundled
+        th
+          span title=t('.unbundled_tooltip')
+            = t('.unbundled')
       th
   tbody
-    - @question_bundle_assignments.each do |question_bundle_assignment|
+    - @assignment_set.assignments.each do |user_id, assignment|
       tr
-        td = question_bundle_assignment.id
-        td = question_bundle_assignment.user.name
-        td = question_bundle_assignment.submission
-        td
-          = question_bundle_assignment.question_bundle.title
-          ul
-            - question_bundle_assignment.question_bundle.question_bundle_questions.order(:weight).each do |question_bundle_question|
-              li = question_bundle_question.question.title
-        td
-          = edit_button(edit_course_assessment_question_bundle_assignment_path(current_course, @assessment, question_bundle_assignment))
-          = delete_button(course_assessment_question_bundle_assignment_path(current_course, @assessment, question_bundle_assignment))
+        = simple_form_for :assignment_set do |f|
+          = f.hidden_field :user_id, value: user_id
+          td = @name_lookup[user_id]
+          = f.simple_fields_for :bundles do |g|
+            - @question_group_lookup.each do |question_group_id, question_group|
+              td = g.input_field "group_#{question_group_id}".to_sym,
+                      collection: @assignment_randomizer.group_bundles[question_group_id],
+                      label_method: lambda { |qbid| @question_bundle_lookup[qbid] },
+                      selected: assignment[question_group_id],
+                      include_blank: true,
+                      label: false
+          - if has_unbundled
+            td
+              ul
+                - assignment[nil].each do |bundle|
+                  li = @question_bundle_lookup[bundle]
+          td
+            = f.button :submit, id: 'update' do
+              = fa_icon 'save'.freeze
+
+h2 = t('.past_bundle_assignments')
+
+- past_has_unbundled = @past_assignments.lazy.map {|k, v| v[nil].present?}.any?
+table.table.table-hover
+  thead
+    tr
+      th = t('.user')
+      th = t('.submission_id')
+      - @question_group_lookup.each do |_, question_group_title|
+        th = question_group_title
+      - if has_unbundled
+        th
+          span title=t('.unbundled_tooltip')
+            = t('.unbundled')
+  tbody
+    - @past_assignments.each do |user_id, assignment|
+      tr
+        td = @name_lookup[user_id]
+        td = assignment[:submission_id]
+        - @question_group_lookup.each do |question_group_id, question_group|
+          td = @question_bundle_lookup[assignment[question_group_id]]
+        - if has_unbundled
+          td
+            ul
+              - assignment[nil].each do |bundle|
+                li = @question_bundle_lookup[bundle]
