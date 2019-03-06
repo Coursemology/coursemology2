@@ -3,7 +3,6 @@ require 'rails_helper'
 
 RSpec.describe Course::Discussion::Post, type: :model do
   it { is_expected.to belong_to(:topic).inverse_of(:posts).touch(true) }
-  it { is_expected.to belong_to(:creator) }
   it { is_expected.to have_many(:votes).inverse_of(:post).dependent(:destroy) }
   it { is_expected.to have_many(:children) }
   it { is_expected.to validate_presence_of(:text) }
