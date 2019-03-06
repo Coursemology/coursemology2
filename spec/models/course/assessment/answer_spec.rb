@@ -3,8 +3,8 @@ require 'rails_helper'
 
 RSpec.describe Course::Assessment::Answer do
   it { is_expected.to be_actable }
-  it { is_expected.to belong_to(:submission) }
-  it { is_expected.to belong_to(:question) }
+  it { is_expected.to belong_to(:submission).without_validating_presence }
+  it { is_expected.to belong_to(:question).without_validating_presence }
   it { is_expected.to accept_nested_attributes_for(:actable) }
   it { is_expected.to have_one(:auto_grading).dependent(:destroy) }
 

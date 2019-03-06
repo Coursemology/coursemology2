@@ -4,7 +4,8 @@ require 'rails_helper'
 RSpec.describe Course::Assessment::Question::TextResponseComprehensionGroup, type: :model do
   it 'belongs to question' do
     expect(subject).to belong_to(:question).
-      class_name(Course::Assessment::Question::TextResponse.name)
+      class_name(Course::Assessment::Question::TextResponse.name).
+      without_validating_presence
   end
   it 'has many points' do
     expect(subject).to have_many(:points).

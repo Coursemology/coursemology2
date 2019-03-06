@@ -2,8 +2,16 @@
 require 'rails_helper'
 
 RSpec.describe Course::EnrolRequest, type: :model do
-  it { is_expected.to belong_to(:course).inverse_of(:enrol_requests) }
-  it { is_expected.to belong_to(:user).inverse_of(:course_enrol_requests) }
+  it 'belongs to a course' do
+    expect(subject).to belong_to(:course).
+      inverse_of(:enrol_requests).
+      without_validating_presence
+  end
+  it 'belongs to a user' do
+    expect(subject).to belong_to(:user).
+      inverse_of(:course_enrol_requests).
+      without_validating_presence
+  end
 
   let!(:instance) { create :instance }
   with_tenant(:instance) do

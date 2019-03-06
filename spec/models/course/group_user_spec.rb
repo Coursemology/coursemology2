@@ -2,8 +2,16 @@
 require 'rails_helper'
 
 RSpec.describe Course::GroupUser, type: :model do
-  it { is_expected.to belong_to(:course_user).inverse_of(:group_users) }
-  it { is_expected.to belong_to(:group).inverse_of(:group_users) }
+  it 'belongs to a course user' do
+    expect(subject).to belong_to(:course_user).
+      inverse_of(:group_users).
+      without_validating_presence
+  end
+  it 'belongs to a group' do
+    expect(subject).to belong_to(:group).
+      inverse_of(:group_users).
+      without_validating_presence
+  end
 
   let(:instance) { Instance.default }
   with_tenant(:instance) do

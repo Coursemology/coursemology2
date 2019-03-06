@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe Course::Assessment::Submission do
-  it { is_expected.to belong_to(:assessment) }
+  it { is_expected.to belong_to(:assessment).without_validating_presence }
   it { is_expected.to have_many(:answers).dependent(:destroy) }
   it { is_expected.to have_many(:multiple_response_answers).through(:answers) }
   it { is_expected.to have_many(:text_response_answers).through(:answers) }

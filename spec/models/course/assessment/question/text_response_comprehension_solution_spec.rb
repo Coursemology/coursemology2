@@ -4,7 +4,8 @@ require 'rails_helper'
 RSpec.describe Course::Assessment::Question::TextResponseComprehensionSolution, type: :model do
   it 'belongs to point' do
     expect(subject).to belong_to(:point).
-      class_name(Course::Assessment::Question::TextResponseComprehensionPoint.name)
+      class_name(Course::Assessment::Question::TextResponseComprehensionPoint.name).
+      without_validating_presence
   end
 
   let(:instance) { Instance.default }

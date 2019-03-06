@@ -2,7 +2,12 @@
 require 'rails_helper'
 
 RSpec.describe Course::Assessment::Answer::ProgrammingFile do
-  it { is_expected.to belong_to(:answer).class_name(Course::Assessment::Answer::Programming.name) }
+  it 'belongs to a answer' do
+    expect(subject).to belong_to(:answer).
+      class_name(Course::Assessment::Answer::Programming.name).
+      inverse_of(:files).
+      without_validating_presence
+  end
   it 'has many annotations' do
     expect(subject).to have_many(:annotations).
       class_name(Course::Assessment::Answer::ProgrammingFileAnnotation.name).
