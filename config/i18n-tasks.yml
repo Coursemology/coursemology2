@@ -104,6 +104,8 @@ ignore_unused:
 - 'activemodel.errors.*'
 # Used dynamically by the page_header helper
 - '*.*.header'
+# Dynamically constructed using t_scoped
+- 'course.assessment.question_bundle_assignments.validations.*'
 
 # I18n-tasks gives the wrong results for normal (non action) methods in the controller, ignore them here.
 - 'course.user_invitations.create.*'

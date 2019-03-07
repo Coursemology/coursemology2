@@ -7,16 +7,22 @@ class Course::Assessment::QuestionBundleAssignmentsController < Course::Assessme
   before_action :add_breadcrumbs
 
   def index
-    # Reverse lookup of user_id -> course_user.name or user.name
-    # Retrieve for current course users, users with submissions, and users with bundle assignments
-    @name_lookup = User.where(id: @assessment.question_bundle_assignments.select(:user_id)).
-                   select(:id, :name).map { |u| [u.id, u.name] }.to_h.
-                   merge(@course.course_users.select(:user_id, :name).map { |cu| [cu.user_id, cu.name] }.to_h)
     @question_group_lookup = @assessment.question_groups.select(:id, :title).map { |qg| [qg.id, qg.title] }.to_h
     @question_bundle_lookup = @assessment.question_bundles.select(:id, :title).map { |qb| [qb.id, qb.title] }.to_h
     @past_assignments = past_assignments_hash
     @assignment_randomizer = AssignmentRandomizer.new(@assessment)
     @assignment_set = @assignment_randomizer.load
+    @name_lookup = @assignment_randomizer.name_lookup
+    @validation_results = @assignment_randomizer.validate(@assignment_set)
+    @aggregated_offending_cells = {} # { [student_id, group_id]: [ error_string ] }
+    @validation_results.values.each do |result|
+      next if result.offending_cells.nil?
+
+      result.offending_cells.each do |cell, error_string|
+        @aggregated_offending_cells[cell] ||= []
+        @aggregated_offending_cells[cell] << error_string
+      end
+    end
   end
 
   def create
