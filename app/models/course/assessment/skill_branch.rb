@@ -6,7 +6,7 @@ class Course::Assessment::SkillBranch < ApplicationRecord
   validates :course, presence: true
 
   belongs_to :course, inverse_of: :assessment_skill_branches
-  has_many :skills, inverse_of: :skill_branch
+  has_many :skills, inverse_of: :skill_branch, dependent: :destroy
 
   scope :ordered_by_title, -> { order(:title) }
 
