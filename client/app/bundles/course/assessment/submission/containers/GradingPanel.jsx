@@ -48,16 +48,16 @@ class VisibleGradingPanel extends Component {
   }
 
   handleMultiplierField(value) {
-    const { updateMultiplier } = this.props;
+    const { updateMultiplier, bonusAwarded } = this.props;
     const parsedValue = parseFloat(value);
 
     if (Number.isNaN(parsedValue) || parsedValue < 0) {
-      updateMultiplier(0);
+      updateMultiplier(0, bonusAwarded);
     } else if (parsedValue > 1) {
-      updateMultiplier(1);
+      updateMultiplier(1, bonusAwarded);
     } else {
       const multiplier = parseFloat(parsedValue.toFixed(1));
-      updateMultiplier(multiplier);
+      updateMultiplier(multiplier, bonusAwarded);
     }
   }
 
@@ -89,6 +89,7 @@ class VisibleGradingPanel extends Component {
     const {
       grading: { exp, expMultiplier },
       submission: { basePoints, graderView },
+      bonusAwarded,
     } = this.props;
 
     if (!graderView) {
@@ -97,8 +98,9 @@ class VisibleGradingPanel extends Component {
 
     return (
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        <div style={{ width: 80 }}>
+        <div>
           <input
+            className="exp"
             style={{ width: 50 }}
             type="number"
             min={0}
@@ -110,7 +112,10 @@ class VisibleGradingPanel extends Component {
             }}
             onWheel={() => this.expInputRef.blur()}
           />
-          {` / ${basePoints}`}
+          {(bonusAwarded > 0)
+            ? ` / (${basePoints} + ${bonusAwarded})`
+            : ` / ${basePoints}`
+          }
         </div>
         <div style={{ marginLeft: 20 }}>
           <FormattedMessage {...translations.multiplier} />
@@ -135,7 +140,7 @@ class VisibleGradingPanel extends Component {
   renderSubmissionTable() {
     const {
       submission: {
-        submitter, workflowState, dueAt, attemptedAt,
+        submitter, workflowState, bonusEndAt, dueAt, attemptedAt,
         submittedAt, grader, gradedAt, graderView,
       },
       gamified, intl,
@@ -162,7 +167,8 @@ class VisibleGradingPanel extends Component {
             {tableRow('status', this.renderSubmissionStatus())}
             {shouldRenderGrading ? tableRow('totalGrade', this.renderTotalGrade()) : null}
             {shouldRenderGrading && gamified ? tableRow('expAwarded', this.renderExperiencePoints()) : null}
-            {tableRow('dueAt', formatDateTime(dueAt))}
+            {bonusEndAt ? tableRow('bonusEndAt', formatDateTime(bonusEndAt)) : null}
+            {dueAt ? tableRow('dueAt', formatDateTime(dueAt)) : null}
             {tableRow('attemptedAt', formatDateTime(attemptedAt))}
             {tableRow('submittedAt', formatDateTime(submittedAt))}
             {shouldRenderGrading ? tableRow('grader', grader) : null}
@@ -273,22 +279,30 @@ VisibleGradingPanel.propTypes = {
   submission: submissionShape.isRequired,
   updateExp: PropTypes.func.isRequired,
   updateMultiplier: PropTypes.func.isRequired,
+  bonusAwarded: PropTypes.number,
 };
 
 function mapStateToProps(state) {
+  const { submittedAt, bonusEndAt, bonusPoints } = state.submission;
+  const bonusAwarded = (new Date(submittedAt) < new Date(bonusEndAt)) ? bonusPoints : 0;
   return {
     gamified: state.assessment.gamified,
     grading: state.grading,
     questionIds: state.assessment.questionIds,
     questions: state.questions,
     submission: state.submission,
+    bonusAwarded,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     updateExp: exp => dispatch({ type: actionTypes.UPDATE_EXP, exp }),
-    updateMultiplier: multiplier => dispatch({ type: actionTypes.UPDATE_MULTIPLIER, multiplier }),
+    updateMultiplier: (multiplier, bonusAwarded) => dispatch({
+      type: actionTypes.UPDATE_MULTIPLIER,
+      multiplier,
+      bonusAwarded,
+    }),
   };
 }
 

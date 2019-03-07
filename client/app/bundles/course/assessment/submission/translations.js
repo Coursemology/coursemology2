@@ -101,6 +101,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.grader',
     defaultMessage: 'Grader',
   },
+  bonusEndAt: {
+    id: 'course.assessment.submission.bonusEndAt',
+    defaultMessage: 'Bonus End At',
+  },
   dueAt: {
     id: 'course.assessment.submission.dueAt',
     defaultMessage: 'Due At',

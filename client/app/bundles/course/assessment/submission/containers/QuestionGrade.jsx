@@ -20,19 +20,20 @@ class VisibleQuestionGrade extends Component {
     id: PropTypes.number.isRequired,
     question: questionShape,
     updateGrade: PropTypes.func.isRequired,
+    bonusAwarded: PropTypes.number,
   };
 
   handleGradingField(value) {
-    const { id, question, updateGrade } = this.props;
+    const { id, question, updateGrade, bonusAwarded } = this.props;
     const maxGrade = question.maximumGrade;
     const parsedValue = parseFloat(value);
 
     if (Number.isNaN(parsedValue) || parsedValue < 0) {
-      updateGrade(id, 0);
+      updateGrade(id, 0, bonusAwarded);
     } else if (parsedValue > maxGrade) {
-      updateGrade(id, maxGrade);
+      updateGrade(id, maxGrade, bonusAwarded);
     } else {
-      updateGrade(id, parseFloat(parsedValue.toFixed(1)));
+      updateGrade(id, parseFloat(parsedValue.toFixed(1)), bonusAwarded);
     }
   }
 
@@ -91,15 +92,20 @@ class VisibleQuestionGrade extends Component {
 
 function mapStateToProps(state, ownProps) {
   const { id } = ownProps;
+  const { submittedAt, bonusEndAt, bonusPoints } = state.submission;
+  const bonusAwarded = (new Date(submittedAt) < new Date(bonusEndAt)) ? bonusPoints : 0;
   return {
     question: state.questions[id],
     grading: state.grading.questions[id],
+    bonusAwarded,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    updateGrade: (id, grade) => dispatch({ type: actionTypes.UPDATE_GRADING, id, grade }),
+    updateGrade: (id, grade, bonusAwarded) => dispatch({
+      type: actionTypes.UPDATE_GRADING, id, grade, bonusAwarded,
+    }),
   };
 }
 

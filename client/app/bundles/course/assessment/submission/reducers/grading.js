@@ -9,9 +9,9 @@ function sum(array) {
   return array.filter(i => i).reduce((acc, i) => acc + i, 0);
 }
 
-function computeExp(questions, maximumGrade, basePoints, expMultiplier) {
+function computeExp(questions, maximumGrade, basePoints, expMultiplier, bonusAwarded = 0) {
   const totalGrade = sum(Object.values(questions).map(q => q.grade));
-  return Math.round((totalGrade / maximumGrade) * basePoints * expMultiplier);
+  return Math.round((totalGrade / maximumGrade) * basePoints * expMultiplier + bonusAwarded);
 }
 
 export default function (state = initialState, action) {
@@ -37,6 +37,7 @@ export default function (state = initialState, action) {
     }
     case actions.UPDATE_GRADING: {
       const { maximumGrade, basePoints, expMultiplier } = state;
+      const bonusAwarded = action.bonusAwarded;
       const questions = {
         ...state.questions,
         [action.id]: { ...state.questions[action.id], grade: action.grade },
@@ -45,7 +46,7 @@ export default function (state = initialState, action) {
       return {
         ...state,
         questions,
-        exp: computeExp(questions, maximumGrade, basePoints, expMultiplier),
+        exp: computeExp(questions, maximumGrade, basePoints, expMultiplier, bonusAwarded),
       };
     }
     case actions.UPDATE_EXP: {
@@ -56,10 +57,10 @@ export default function (state = initialState, action) {
     }
     case actions.UPDATE_MULTIPLIER: {
       const { questions, maximumGrade, basePoints } = state;
-
+      const bonusAwarded = action.bonusAwarded;
       return {
         ...state,
-        exp: computeExp(questions, maximumGrade, basePoints, action.multiplier),
+        exp: computeExp(questions, maximumGrade, basePoints, action.multiplier, bonusAwarded),
         expMultiplier: action.multiplier,
       };
     }

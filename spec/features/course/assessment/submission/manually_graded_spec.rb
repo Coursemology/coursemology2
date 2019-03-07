@@ -168,6 +168,7 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments', j
 
         # Create a late submission
         assessment.end_at = Time.zone.now - 1.day
+        assessment.bonus_end_at = Time.zone.now - 1.day
         assessment.save!
 
         # Refresh and check for the late submission warning.
@@ -204,6 +205,29 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments', j
         click_button 'Save'
         exp = submission.assessment.base_exp * submission.grade / submission.assessment.maximum_grade
         expect(submission.reload.points_awarded).to eq(exp)
+      end
+
+      scenario 'I can modify suggested exp' do
+        mrq_questions.each { |q| q.attempt(submission).save! }
+        submission.finalise!
+        submission.save!
+
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+
+        # Give answer grade 1/2 for the only question in this assessment
+        first('input.grade').set(1)
+        expect(page.all('td', text: '1 / 2').count).to eq(2)
+
+        # Check that bonus point is added to suggected exp award
+        exp = submission.assessment.base_exp / submission.assessment.maximum_grade +
+              submission.assessment.time_bonus_exp
+        expect(first('input.exp').value.to_i).to eq(exp)
+
+        # Manually modify exp awarded and publish grading
+        first('input.exp').set(exp + 50)
+        click_button 'Publish Grade'
+        expect(page).to have_selector('span', text: 'Submission updated successfully.')
+        expect(submission.reload.points_awarded).to eq(exp + 50)
       end
 
       scenario 'I can run code on autograded programming questions' do
