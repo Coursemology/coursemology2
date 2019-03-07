@@ -5,7 +5,7 @@ branches:
   only:
     - master
 rvm:
-  - 2.4.5
+  - 2.5.3
 services:
   - docker
   - postgresql
