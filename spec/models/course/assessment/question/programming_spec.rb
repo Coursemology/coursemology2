@@ -6,7 +6,8 @@ RSpec.describe Course::Assessment::Question::Programming do
 
   it 'belongs to an import job' do
     expect(subject).to belong_to(:import_job).
-      class_name(TrackableJob::Job.name)
+      class_name(TrackableJob::Job.name).
+      optional
   end
 
   it 'has many template files' do

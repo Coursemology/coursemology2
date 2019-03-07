@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe GenericAnnouncement, type: :model do
-  it { is_expected.to belong_to(:instance).inverse_of(:announcements) }
+  it { is_expected.to belong_to(:instance).optional.inverse_of(:announcements) }
   it { is_expected.to validate_presence_of(:title) }
 
   let(:instance) { create(:instance) }

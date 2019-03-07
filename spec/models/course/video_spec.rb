@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe Course::Video, type: :model do
   it { is_expected.to act_as(Course::LessonPlan::Item) }
-  it { is_expected.to belong_to(:tab).inverse_of(:videos) }
+  it { is_expected.to belong_to(:tab).inverse_of(:videos).without_validating_presence }
   it { is_expected.to have_many(:submissions).inverse_of(:video).dependent(:destroy) }
 
   let!(:instance) { create(:instance, :with_video_component_enabled) }

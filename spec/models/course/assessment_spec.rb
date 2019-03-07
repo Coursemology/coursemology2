@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe Course::Assessment do
   it { is_expected.to act_as(Course::LessonPlan::Item) }
-  it { is_expected.to belong_to(:tab) }
+  it { is_expected.to belong_to(:tab).without_validating_presence }
   it { is_expected.to have_many(:questions) }
   it { is_expected.to have_many(:multiple_response_questions).through(:questions) }
   it { is_expected.to have_many(:text_response_questions).through(:questions) }

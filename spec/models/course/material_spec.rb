@@ -3,7 +3,6 @@ require 'rails_helper'
 
 RSpec.describe Course::Material, type: :model do
   it { is_expected.to belong_to(:folder).inverse_of(:materials) }
-  it { is_expected.to belong_to(:creator) }
 
   let!(:instance) { Instance.default }
   with_tenant(:instance) do
