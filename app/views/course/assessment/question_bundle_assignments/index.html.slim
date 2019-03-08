@@ -24,12 +24,14 @@ table.table.table-hover
   tbody
     - @assignment_set.assignments.each do |user_id, assignment|
       tr
-        = simple_form_for :assignment_set do |f|
+        = simple_form_for :assignment_set, html: { id: "asg_set_#{user_id}" },
+                                           defaults: { input_html: { form: "asg_set_#{user_id}" } } do |f|
           = f.hidden_field :user_id, value: user_id
           td = @name_lookup[user_id]
           = f.simple_fields_for :bundles do |g|
             - @question_group_lookup.each do |question_group_id, question_group|
-              td = g.input_field "group_#{question_group_id}".to_sym,
+              td
+                = g.input "group_#{question_group_id}".to_sym,
                       collection: @assignment_randomizer.group_bundles[question_group_id],
                       label_method: lambda { |qbid| @question_bundle_lookup[qbid] },
                       selected: assignment[question_group_id],
