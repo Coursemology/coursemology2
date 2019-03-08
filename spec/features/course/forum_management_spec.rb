@@ -161,6 +161,17 @@ RSpec.feature 'Course: Forum: Management' do
         expect(Course::Forum::Subscription.where(user: user, forum: forum).empty?).to eq(true)
       end
 
+      scenario 'I can click unsubscribe forum link from an email' do
+        forum = create(:forum, course: course)
+        forum.subscriptions.create(user: user)
+        visit unsubscribe_course_forum_path(course, forum)
+        expect(current_path).to eq(course_forum_path(course, forum))
+        expect(page).to have_selector('div.alert.alert-success')
+        expect(page).to have_link(nil, href: subscribe_course_forum_path(course, forum))
+        expect(page).to have_text(I18n.t('course.forum.forums.unsubscribe.success'))
+        expect(Course::Forum::Subscription.where(user: user, forum: forum).empty?).to eq(true)
+      end
+
       scenario 'I can mark all forum topics in the course as read' do
         forum1 = create(:forum, course: course)
         forum2 = create(:forum, course: course)
