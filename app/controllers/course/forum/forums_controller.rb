@@ -60,7 +60,13 @@ class Course::Forum::ForumsController < Course::Forum::Controller
     else
       flash.now[:danger] = t('.failure')
     end
-    render 'update_subscribe_button'
+    if request.get?
+      # When forum unsubscribe link is clicked from email
+      redirect_to course_forum_path(current_course, @forum),
+                  success: t('.success', name: @forum.name)
+    else
+      render 'update_subscribe_button'
+    end
   end
 
   def search
