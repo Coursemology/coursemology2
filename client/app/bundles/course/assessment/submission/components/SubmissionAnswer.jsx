@@ -135,6 +135,7 @@ class SubmissionAnswer extends Component {
         <div style={styles.containerStyle}>
           {isLoading ? <CircularProgress size={30} style={styles.progressStyle} /> : null}
           <Toggle
+            className="toggle-history"
             label={intl.formatMessage(translations.viewPastAnswers)}
             style={styles.toggleStyle}
             toggled={viewHistory}

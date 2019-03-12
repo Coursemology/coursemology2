@@ -72,6 +72,36 @@ FactoryBot.define do
       end
     end
 
+    trait :with_past_answers do
+      after(:build) do |submission|
+        old_answers = submission.assessment.questions.attempt(submission)
+        old_answers.map do |answer|
+          answer.created_at = Time.zone.now - 1.day
+          answer.save!
+        end
+        submission.answers << old_answers
+
+        new_answers = submission.assessment.questions.attempt(submission)
+        new_answers.map do |answer|
+          answer.current_answer = true
+          answer.save!
+        end
+        submission.answers << new_answers
+      end
+    end
+
+    trait :submitted_with_past_answers do
+      with_past_answers
+      after(:build) do |submission, evaluator|
+        submission.finalise!
+        answer.send(:clear_attribute_changes, :workflow_state) unless evaluator.auto_grade
+
+        submission.awarder = nil
+        submission.awarded_at = nil
+        submission.submitted_at = evaluator.submitted_at if evaluator.submitted_at
+      end
+    end
+
     # Ensure that creator of submission is the same as creator of experience_points_record
     after(:build) do |submission, evaluator|
       user = evaluator.creator ? evaluator.creator : submission.creator
