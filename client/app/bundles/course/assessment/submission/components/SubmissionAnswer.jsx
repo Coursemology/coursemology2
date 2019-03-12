@@ -122,9 +122,9 @@ class SubmissionAnswer extends Component {
   renderMissingAnswerPanel() {
     const { intl } = this.props;
     return (
-      <Card style={{ backgroundColor: yellow100 }}>
+      <Card id="missing-answer" style={{ backgroundColor: yellow100 }}>
         <CardText>
-          <span id="missing-answer">{intl.formatMessage(translations.missingAnswer)}</span>
+          <span>{intl.formatMessage(translations.missingAnswer)}</span>
         </CardText>
       </Card>
     );
