@@ -47,7 +47,7 @@ table.table.table-hover
               = fa_icon 'save'.freeze
 
 h2 = t('.past_bundle_assignments')
- 
+
 - past_has_unbundled = @past_assignments.lazy.map {|k, v| v[nil].present?}.any?
 table.table.table-hover
   thead
