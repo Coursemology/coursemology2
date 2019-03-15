@@ -86,8 +86,17 @@ class Course::Assessment::ProgrammingEvaluationService
     #
     # @raise [Timeout::Error] When the operation times out.
     def execute(language, memory_limit, time_limit, package, timeout = nil)
-      new(language, memory_limit, time_limit, package, timeout).send(:execute)
+      new(language, memory_limit, time_limit, package, timeout).execute
     end
+  end
+
+  # Evaluate the package in a Docker container and return the output that matters.
+  #
+  # @return [Result]
+  # @raise [Timeout::Error] When the evaluation timeout has elapsed.
+  def execute
+    stdout, stderr, test_reports, exit_code = Timeout.timeout(@timeout) { evaluate_in_container }
+    Result.new(stdout, stderr, test_reports, exit_code)
   end
 
   private
@@ -98,15 +107,6 @@ class Course::Assessment::ProgrammingEvaluationService
     @time_limit = time_limit || CPU_TIMEOUT
     @package = package
     @timeout = timeout || DEFAULT_TIMEOUT
-  end
-
-  # Evaluate the package in a Docker container and return the output that matters.
-  #
-  # @return [Result]
-  # @raise [Timeout::Error] When the evaluation timeout has elapsed.
-  def execute
-    stdout, stderr, test_reports, exit_code = Timeout.timeout(@timeout) { evaluate_in_container }
-    Result.new(stdout, stderr, test_reports, exit_code)
   end
 
   def create_container(image)
