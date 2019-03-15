@@ -102,7 +102,7 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
       weight = old_course.settings(:sidebar, "assessments_#{old_category.id}").weight
       next unless weight
       new_course.settings(:sidebar).settings("assessments_#{new_category.id}").weight = weight
-      new_course.settings(:sidebar).send("assessments_#{old_category.id}=", nil)
+      new_course.settings(:sidebar).public_send("assessments_#{old_category.id}=", nil)
     end
     new_course.save
   end

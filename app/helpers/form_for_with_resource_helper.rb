@@ -7,7 +7,7 @@ module FormForWithResourceHelper
       when Symbol
         raise ArgumentError, ':resource and :url cannot both be specified' if options[:url]
         helper = url_helper_for_resource(record, options.delete(:resource))
-        options[:url] = form_helper.send(helper, *record)
+        options[:url] = form_helper.public_send(helper, *record)
       when nil
       else
         raise ArgumentError, 'Resource must be a symbol with the stem of route helper'

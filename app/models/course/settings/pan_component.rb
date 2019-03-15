@@ -16,7 +16,7 @@ class Course::Settings::PanComponent < SimpleDelegator
   # @param [Symbol] function_name The name of the function to be called.
   def consolidate_settings_from_components(function_name)
     all_settings = settings_interfaces_hash.values.map do |settings|
-      settings.respond_to?(function_name) ? settings.send(function_name) : nil
+      settings.respond_to?(function_name) ? settings.public_send(function_name) : nil
     end
     all_settings.compact.flatten.sort_by { |item| item[:component] }
   end
