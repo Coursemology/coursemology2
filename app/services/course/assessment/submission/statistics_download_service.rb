@@ -12,17 +12,9 @@ class Course::Assessment::Submission::StatisticsDownloadService
     def download(current_user, submission_ids)
       service = new(current_user, submission_ids)
       ActsAsTenant.without_tenant do
-        service.send(:generate_csv_report)
+        service.generate_csv_report
       end
     end
-  end
-
-  private
-
-  def initialize(current_user, submission_ids)
-    @current_user = current_user
-    @submission_ids = submission_ids
-    @base_dir = Dir.mktmpdir('coursemology-statistics-')
   end
 
   def generate_csv_report
@@ -37,6 +29,14 @@ class Course::Assessment::Submission::StatisticsDownloadService
       end
     end
     statistics_file_path
+  end
+
+  private
+
+  def initialize(current_user, submission_ids)
+    @current_user = current_user
+    @submission_ids = submission_ids
+    @base_dir = Dir.mktmpdir('coursemology-statistics-')
   end
 
   def download_statistics_header(csv)
