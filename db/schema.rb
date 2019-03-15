@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_02_070915) do
+ActiveRecord::Schema.define(version: 2019_02_15_080346) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -388,7 +388,7 @@ ActiveRecord::Schema.define(version: 2019_02_02_070915) do
     t.integer "publisher_id"
     t.datetime "published_at"
     t.datetime "submitted_at"
-    t.index ["assessment_id", "creator_id"], name: "unique_assessment_id_and_creator_id", unique: true
+    t.index ["assessment_id", "creator_id"], name: "unique_assessment_id_and_creator_id_when_attempting", unique: true, where: "((workflow_state)::text = 'attempting'::text)"
     t.index ["assessment_id"], name: "fk__course_assessment_submissions_assessment_id"
     t.index ["creator_id"], name: "fk__course_assessment_submissions_creator_id"
     t.index ["publisher_id"], name: "fk__course_assessment_submissions_publisher_id"
