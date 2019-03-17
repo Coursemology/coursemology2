@@ -27,7 +27,10 @@ class Course::Survey::SurveyDownloadService
                   where.not(submitted_at: nil).
                   includes(answers: [:options, :question]).
                   where(survey: survey)
-      questions = survey.questions.sort_by(&:weight)
+      questions = survey.questions.
+                  merge(Course::Survey::Section.order(:weight)).
+                  merge(Course::Survey::Question.order(:weight)).
+                  to_a
       header = generate_header(questions)
 
       CSV.generate(headers: true, force_quotes: true) do |csv|
