@@ -7,7 +7,12 @@ class Course::Assessment::QuestionBundleQuestionsController < Course::Assessment
   before_action :add_breadcrumbs
 
   def index
-    @question_bundle_questions = @question_bundle_questions.order(:weight)
+    @question_bundle_questions =
+      Course::Assessment::QuestionBundleQuestion.where(id: @question_bundle_questions).
+      joins(question_bundle: :question_group).
+      merge(Course::Assessment::QuestionGroup.order(:weight)).
+      merge(Course::Assessment::QuestionBundle.order(:id)).
+      merge(Course::Assessment::QuestionBundleQuestion.order(:weight))
   end
 
   def new
