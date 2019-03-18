@@ -8,7 +8,7 @@ import { yellow100 } from 'material-ui/styles/colors';
 import { questionShape, historyQuestionShape, questionFlagsShape } from '../propTypes';
 import { questionTypes } from '../constants';
 import Answers from './Answers';
-import AnswersHistory from './AnswersHistory';
+import PastAnswers from '../containers/PastAnswers';
 
 const translations = defineMessages({
   missingAnswer: {
@@ -74,7 +74,7 @@ class SubmissionAnswer extends Component {
     const { viewHistory } = question;
 
     if (viewHistory) {
-      return this.getHistoryRenderer(question);
+      return () => <PastAnswers question={question} />;
     }
 
     switch (question.type) {
@@ -93,16 +93,6 @@ class SubmissionAnswer extends Component {
         return Answers.renderScribing;
       case VoiceResponse:
         return Answers.renderVoiceResponse;
-      default:
-        return this.renderMissingRenderer.bind(this);
-    }
-  }
-
-  getHistoryRenderer(question) {
-    const { Programming } = questionTypes;
-    switch (question.type) {
-      case Programming:
-        return AnswersHistory.renderProgramming;
       default:
         return this.renderMissingRenderer.bind(this);
     }
@@ -145,6 +135,7 @@ class SubmissionAnswer extends Component {
         <div style={styles.containerStyle}>
           {isLoading ? <CircularProgress size={30} style={styles.progressStyle} /> : null}
           <Toggle
+            className="toggle-history"
             label={intl.formatMessage(translations.viewPastAnswers)}
             style={styles.toggleStyle}
             toggled={viewHistory}

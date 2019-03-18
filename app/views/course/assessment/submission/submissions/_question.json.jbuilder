@@ -9,8 +9,7 @@ json.maximumGrade question.maximum_grade.to_f
 # TODO: implementation for MCQ past answers
 json.canViewHistory case question.actable_type
                     when Course::Assessment::Question::MultipleResponse.name
-                      # Not yet implemented
-                      false
+                      true
                     when Course::Assessment::Question::Programming.name
                       true
                     else
