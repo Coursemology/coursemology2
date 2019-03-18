@@ -52,6 +52,9 @@ Rails.application.configure do
   config.after_initialize do
     Bullet.add_footer = true
   end
+
+  # Workaround for rails security issue CVE-2019-5420
+  config.secret_key_base = SecureRandom.hex(64)
 end
 
 # Pretty-print our HTML in development mode.
