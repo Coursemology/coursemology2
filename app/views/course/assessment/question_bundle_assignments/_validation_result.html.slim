@@ -1,0 +1,5 @@
+li.validation-desc
+  = fa_icon (result.pass ? 'check'.freeze : 'times'.freeze), class: 'fa-li'
+  = t("course.assessment.question_bundle_assignments.validations.#{validation_id}.desc")
+- if result.info.present?
+  li = result.info

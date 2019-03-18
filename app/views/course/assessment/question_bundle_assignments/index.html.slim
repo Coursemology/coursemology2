@@ -9,6 +9,11 @@ h2 = t('.prepared_bundle_assignments')
            recompute_course_assessment_question_bundle_assignments_path(only_unassigned: true),
            method: :post, class: %w(btn btn-primary)
 
+h3 = t('.validations')
+ul.fa-ul
+  - @validation_results.each do |validation_id, result|
+    = render partial: 'validation_result', locals: { validation_id: validation_id, result: result }
+
 - has_unbundled = @assignment_set.assignments.lazy.map { |k, v| v[nil].present? }.any?
 table.table.table-hover
   thead
@@ -31,14 +36,25 @@ table.table.table-hover
           = f.simple_fields_for :bundles do |g|
             - @question_group_lookup.each do |question_group_id, question_group|
               td
-                = g.input "group_#{question_group_id}".to_sym,
-                      collection: @assignment_randomizer.group_bundles[question_group_id],
-                      label_method: lambda { |qbid| @question_bundle_lookup[qbid] },
-                      selected: assignment[question_group_id],
-                      include_blank: true,
-                      label: false
+                div.question-group-select
+                  = g.input "group_#{question_group_id}".to_sym,
+                        collection: @assignment_randomizer.group_bundles[question_group_id],
+                        label_method: lambda { |qbid| @question_bundle_lookup[qbid] },
+                        selected: assignment[question_group_id],
+                        include_blank: true,
+                        label: false
+                - if @aggregated_offending_cells[[user_id, question_group_id]].present?
+                  div.question-group-errors
+                    - @aggregated_offending_cells[[user_id, question_group_id]].each do |error_string|
+                      span title=error_string
+                        = fa_icon 'exclamation-triangle'.freeze
           - if has_unbundled
             td
+              - if @aggregated_offending_cells[[user_id, question_group_id]].present?
+                - @aggregated_offending_cells[[user_id, question_group_id]].each do |error_string|
+                  span title=error_string
+                    = fa_icon 'exclamation-triangle'.freeze
+                br
               ul
                 - assignment[nil].each do |bundle|
                   li = @question_bundle_lookup[bundle]
