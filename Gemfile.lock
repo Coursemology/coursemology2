@@ -153,7 +153,7 @@ GEM
     bullet (5.9.0)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
-    byebug (11.0.0)
+    byebug (11.0.1)
     calculated_attributes (0.3.0)
       activerecord (>= 3.2.20)
     cancancan (2.3.0)
