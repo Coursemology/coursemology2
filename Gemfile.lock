@@ -8,6 +8,14 @@ GIT
       activesupport (>= 4.2)
 
 GIT
+  remote: https://github.com/Coursemology/rails_utils
+  revision: 69bb0c745d711edb3f761c8709c0bffa748d117d
+  branch: full-sanitize-flash
+  specs:
+    rails_utils (4.0.0)
+      rails (>= 3.2, <= 5.2.2)
+
+GIT
   remote: https://github.com/Coursemology/simple_form-bootstrap
   revision: ba048ab714904d9e4fc1407bee33e7b5a1f832b9
   specs:
@@ -32,14 +40,6 @@ GIT
   specs:
     bootstrap-sass-extras (0.0.7)
       rails (>= 3.1.0)
-
-GIT
-  remote: https://github.com/fonglh/rails_utils
-  revision: 42035cf0b8fc20c7732202b8882ffa4122b40c61
-  branch: sanitize-flash
-  specs:
-    rails_utils (4.0.0)
-      rails (>= 3.2, <= 5.2.2)
 
 GIT
   remote: https://github.com/lowjoel/activerecord-userstamp
