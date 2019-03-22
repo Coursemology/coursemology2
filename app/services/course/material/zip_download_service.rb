@@ -8,9 +8,13 @@ class Course::Material::ZipDownloadService
     # @return [String] The path to the zip file.
     def download_and_zip(folder, materials)
       service = new(folder, materials)
-      service.send(:download_to_base_dir)
-      service.send(:zip_base_dir)
+      service.download_and_zip
     end
+  end
+
+  def download_and_zip
+    download_to_base_dir
+    zip_base_dir
   end
 
   private

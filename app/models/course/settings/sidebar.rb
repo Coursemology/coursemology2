@@ -21,7 +21,7 @@ class Course::Settings::Sidebar
   #
   # @param [Hash] attributes The hash who stores the new settings
   def update(attributes)
-    attributes.each { |k, v| send("#{k}=", v) }
+    attributes.each { |k, v| public_send("#{k}=", v) }
     valid?
   end
 

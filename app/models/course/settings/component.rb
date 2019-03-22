@@ -10,7 +10,7 @@ class Course::Settings::Component < SimpleDelegator
   #
   # @param [Hash] attributes The hash for the new settings
   def update(attributes)
-    attributes.each { |k, v| send("#{k}=", v) }
+    attributes.each { |k, v| public_send("#{k}=", v) }
     valid?
   end
 

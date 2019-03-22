@@ -37,7 +37,7 @@ class Course::Settings::AssessmentsComponent < Course::Settings::Component
     # @param [Integer] tab_id The tab ID of the lesson plan item setting to be cleared.
     def delete_lesson_plan_item_setting(current_course, tab_id)
       current_course.settings(Course::AssessmentsComponent.key, :lesson_plan_items).
-        send("tab_#{tab_id}=", nil)
+        public_send("tab_#{tab_id}=", nil)
       current_course.save
     end
   end

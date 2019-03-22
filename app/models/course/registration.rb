@@ -38,7 +38,7 @@ class Course::Registration
 
   def update(params)
     params.each do |key, value|
-      send("#{key}=", value)
+      public_send("#{key}=", value)
     end
   end
 

@@ -10,11 +10,15 @@ class Course::Assessment::Submission::ZipDownloadService
     # @return [String] The path to the zip file.
     def download_and_zip(course_user, assessment, students)
       service = new(course_user, assessment, students)
-      ActsAsTenant.without_tenant do
-        service.send(:download_to_base_dir)
-      end
-      service.send(:zip_base_dir)
+      service.download_and_zip
     end
+  end
+
+  def download_and_zip
+    ActsAsTenant.without_tenant do
+      download_to_base_dir
+    end
+    zip_base_dir
   end
 
   STUDENTS = { my: 'my', phantom: 'phantom' }.freeze

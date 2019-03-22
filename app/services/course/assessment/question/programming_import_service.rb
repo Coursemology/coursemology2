@@ -10,19 +10,8 @@ class Course::Assessment::Question::ProgrammingImportService
     #   import.
     # @param [Attachment] attachment The attachment containing the package to import.
     def import(question, attachment)
-      new(question, attachment).send(:import)
+      new(question, attachment).import
     end
-  end
-
-  private
-
-  # Creates a new service import object.
-  #
-  # @param [Course::Assessment::Question::Programming] question The programming question for import.
-  # @param [Attachment] attachment The attachment containing the tests and files.
-  def initialize(question, attachment)
-    @question = question
-    @attachment = attachment
   end
 
   # Imports the templates and tests found in the package.
@@ -37,6 +26,17 @@ class Course::Assessment::Question::ProgrammingImportService
         package.close
       end
     end
+  end
+
+  private
+
+  # Creates a new service import object.
+  #
+  # @param [Course::Assessment::Question::Programming] question The programming question for import.
+  # @param [Attachment] attachment The attachment containing the tests and files.
+  def initialize(question, attachment)
+    @question = question
+    @attachment = attachment
   end
 
   # Imports the templates and tests from the given package.
