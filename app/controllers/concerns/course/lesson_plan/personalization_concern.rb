@@ -3,7 +3,7 @@ module Course::LessonPlan::PersonalizationConcern
   extend ActiveSupport::Concern
 
   OTOT_LEARNING_RATE_MAX = 1.0
-  OTOT_LEARNING_RATE_MIN = 0.5
+  OTOT_LEARNING_RATE_MIN = 0.67
   OTOT_LEARNING_RATE_HARD_MIN = 0.5 # No matter how doomed the student is, refuse to go faster than this
   OTOT_DATE_ROUNDING_THRESHOLD = 0.8
 
