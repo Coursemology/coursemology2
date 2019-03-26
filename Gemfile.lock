@@ -113,8 +113,6 @@ GEM
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
     anbt-sql-formatter (0.0.7)
-    archive-zip (0.12.0)
-      io-like (~> 0.3.0)
     arel (9.0.0)
     ast (2.4.0)
     autoprefixer-rails (9.5.0)
@@ -180,9 +178,6 @@ GEM
       mime-types (>= 1.16)
     childprocess (0.9.0)
       ffi (~> 1.0, >= 1.0.11)
-    chromedriver-helper (2.1.1)
-      archive-zip (~> 0.10)
-      nokogiri (~> 1.8)
     cocoon (1.2.12)
     codecov (0.1.14)
       json
@@ -274,7 +269,6 @@ GEM
       sprockets
     image_size (2.0.0)
     in_threads (1.5.0)
-    io-like (0.3.0)
     jbuilder (2.8.0)
       activesupport (>= 4.2.0)
       multi_json (>= 1.2)
@@ -333,6 +327,7 @@ GEM
     multi_json (1.13.1)
     multi_xml (0.6.0)
     multipart-post (2.0.0)
+    net_http_ssl_fix (0.0.10)
     nio4r (2.3.1)
     nokogiri (1.10.1)
       mini_portile2 (~> 2.4.0)
@@ -529,6 +524,11 @@ GEM
       activesupport (>= 3.0)
     warden (1.2.8)
       rack (>= 2.0.6)
+    webdrivers (3.7.1)
+      net_http_ssl_fix
+      nokogiri (~> 1.6)
+      rubyzip (~> 1.0)
+      selenium-webdriver (~> 3.0)
     webpacker (4.0.2)
       activesupport (>= 4.2)
       rack-proxy (>= 0.6.1)
@@ -571,7 +571,6 @@ DEPENDENCIES
   capybara-screenshot
   capybara-selenium
   carrierwave
-  chromedriver-helper
   cocoon
   codecov
   consistency_fail
@@ -640,6 +639,7 @@ DEPENDENCIES
   unread
   validates_hostname
   wdm (>= 0.0.3)
+  webdrivers
   webpacker (<= 4.0.3)
   workflow
   workflow-activerecord (>= 4.1, < 6.0)
