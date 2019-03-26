@@ -16,17 +16,6 @@ GIT
       rails (>= 3.2, <= 5.2.2)
 
 GIT
-  remote: https://github.com/Coursemology/simple_form-bootstrap
-  revision: ba048ab714904d9e4fc1407bee33e7b5a1f832b9
-  specs:
-    simple_form-bootstrap (1.6.0)
-      actionpack (>= 4.1, < 6)
-      activemodel (>= 4.1, < 6)
-      bootstrap-sass (~> 3)
-      railties (>= 4.1, < 6)
-      simple_form (>= 3.1.0)
-
-GIT
   remote: https://github.com/Coursemology/themes_on_rails
   revision: c96d43d479fc307b5227ad18e891fcf347d1e22b
   branch: cache-theme-templates
@@ -53,6 +42,18 @@ GIT
   revision: 54a85eed974002cb2cfb858cbcaed8e1069b5cb8
   specs:
     rwordnet (2.0.0)
+
+GIT
+  remote: https://github.com/trangmei/simple_form-bootstrap.git
+  revision: b37bb47af6eb81d2b6e0bc58f7036f61bdb5d0ed
+  branch: trang/bootstrap-hack
+  specs:
+    simple_form-bootstrap (1.6.0)
+      actionpack (>= 4.1, < 6)
+      activemodel (>= 4.1, < 6)
+      bootstrap-sass (~> 3)
+      railties (>= 4.1, < 6)
+      simple_form (>= 3.1.0)
 
 GEM
   remote: https://rubygems.org/

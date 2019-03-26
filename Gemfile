@@ -187,7 +187,8 @@ gem 'themes_on_rails', '>= 0.3.1', git: 'https://github.com/Coursemology/themes_
 
 # Forms made easy for Rails
 gem 'simple_form'
-gem 'simple_form-bootstrap', git: 'https://github.com/Coursemology/simple_form-bootstrap'
+gem 'simple_form-bootstrap', git: 'https://github.com/trangmei/simple_form-bootstrap.git', branch: 'trang/bootstrap-hack'
+
 # Dynamic nested forms
 gem 'cocoon'
 gem 'bootstrap3-datetimepicker-rails'
