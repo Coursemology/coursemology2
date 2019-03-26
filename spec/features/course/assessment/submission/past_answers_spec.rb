@@ -32,10 +32,8 @@ RSpec.describe 'Course: Assessment: Submissions: Past Answers', js: true do
             expect(page).to have_selector('div.toggle-history')
             find('div.toggle-history').click
             expect(page).to have_selector('label', text: 'Past Answers')
-            first('button[tabindex="0"]').click if step_number == 2
           end
         end
-        expect(page).to have_selector(%(div[role="menu"]))
       end
     end
 
@@ -49,10 +47,8 @@ RSpec.describe 'Course: Assessment: Submissions: Past Answers', js: true do
             expect(page).to have_selector('div.toggle-history')
             find('div.toggle-history').click
             expect(page).to have_selector('label', text: 'Past Answers')
-            first('button[tabindex="0"]').click if step_number == 2
           end
         end
-        expect(page).to have_selector(%(div[role="menu"]))
       end
     end
   end
