@@ -15,7 +15,12 @@ module ApplicationUserstampConcern
 
     def add_userstamp_associations(options)
       options.reverse_merge!(inverse_of: false)
-      super(options)
+      # Skip calling `add_userstamp_associations` in the gem during assets precompile.
+      # The env variable RAILS_GROUPS is set to 'assets'.
+      # https://github.com/lowjoel/activerecord-userstamp/blob/master/lib/active_record/userstamp/stampable.rb#L76
+      # calls https://github.com/lowjoel/activerecord-userstamp/blob/master/lib/active_record/userstamp/utilities.rb#L31
+      # which needs a database connection, needlessly complicating the build.
+      super(options) unless ENV['RAILS_GROUPS'] == 'assets'
     end
   end
 end
