@@ -524,7 +524,7 @@ GEM
       activesupport (>= 3.0)
     warden (1.2.8)
       rack (>= 2.0.6)
-    webdrivers (3.7.1)
+    webdrivers (3.7.2)
       net_http_ssl_fix
       nokogiri (~> 1.6)
       rubyzip (~> 1.0)
