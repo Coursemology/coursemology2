@@ -161,7 +161,7 @@ const translations = defineMessages({
   unsubmitConfirmation: {
     id: 'course.assessment.submission.unsubmitConfirmation',
     defaultMessage: 'This will reset the submission time and permit the student to change \
-                    his submission. NOTE THAT YOU CANNOT UNDO THIS!! Are you sure you want to proceed?',
+                    their submission. NOTE THAT YOU CANNOT UNDO THIS!! Are you sure you want to proceed?',
   },
   submitError: {
     id: 'course.assessment.submission.submitError',
