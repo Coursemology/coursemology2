@@ -17,7 +17,7 @@ addons:
     packages:
       - ghostscript
       - docker
-      - google-chrome-stable
+#      - google-chrome-stable
   postgresql: "9.6"
   hosts:
     - coursemology.lvh.me
@@ -40,6 +40,8 @@ env:
     - GROUP="misc"
 
 before_install:
+  # Remove when Google has updated their expired repository signing key.
+  - sudo -E apt-get -yq --no-install-suggests --no-install-recommends install google-chrome-stable --allow-unauthenticated
   # Allow imagemagick to read PDF files for the scribing question tests.
   - mkdir $HOME/imagemagick
   - echo $MAGICK_CONFIGURE_PATH
