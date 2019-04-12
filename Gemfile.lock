@@ -441,6 +441,8 @@ GEM
     rspec-retry (0.6.1)
       rspec-core (> 3.3)
     rspec-support (3.8.0)
+    rspec_junit_formatter (0.4.1)
+      rspec-core (>= 2, < 4, != 2.12.0)
     ruby_dep (1.5.0)
     rubyzip (1.2.3)
     sanitize (5.0.0)
@@ -614,6 +616,7 @@ DEPENDENCIES
   rspec-html-matchers
   rspec-rails
   rspec-retry
+  rspec_junit_formatter
   rubyzip
   rwordnet!
   sanitize (>= 4.6.3)
