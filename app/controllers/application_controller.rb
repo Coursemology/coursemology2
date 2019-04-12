@@ -46,7 +46,7 @@ class ApplicationController < ActionController::Base
     @exception = exception
     respond_to do |format|
       format.html { render file: 'public/422', layout: false, status: 422 }
-      format.json { render file: 'public/422.json', status: 422 }
+      format.json { render file: 'public/422.json', layout: false, status: 422 }
     end
   end
 
@@ -54,7 +54,7 @@ class ApplicationController < ActionController::Base
     @exception = exception
     respond_to do |format|
       format.html { render file: 'public/403', layout: false, status: 403 }
-      format.json { render file: 'public/403.json', status: 403 }
+      format.json { render file: 'public/403.json', layout: false, status: 403 }
     end
   end
 end
