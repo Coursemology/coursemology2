@@ -36,7 +36,7 @@ class Course::Assessment::Submission::SubmissionsController < \
   end
 
   def create
-    @submission.session_id = authentication_service.generate_authentication_token!
+    @submission.session_id = authentication_service.generate_authentication_token
 
     success = false
     if @assessment.randomization == 'prepared'
@@ -56,6 +56,7 @@ class Course::Assessment::Submission::SubmissionsController < \
     end
 
     if success
+      authentication_service.save_token_to_session(@submission.session_id)
       log_service.log_submission_access(request) if @assessment.session_password_protected?
       redirect_to edit_course_assessment_submission_path(current_course, @assessment, @submission,
                                                          new_submission: true)
