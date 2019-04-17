@@ -39,10 +39,10 @@ function TextResponse({ question, readOnly, answerId, graderView }) {
 
   return (
     <div>
-      { readOnly ? readOnlyAnswer : editableAnswer }
-      { graderView ? solutionsTable(question) : null }
-      {allowUpload ? <UploadedFileView questionId={question.id} /> : null}
-      {allowUpload && !readOnly ? <FileInput name={`${answerId}[files]`} disabled={readOnly} /> : null}
+      {readOnly ? readOnlyAnswer : editableAnswer}
+      {graderView && <TextResponseSolutions question={question} />}
+      {allowUpload && <UploadedFileView questionId={question.id} />}
+      {allowUpload && !readOnly && <FileInput name={`${answerId}[files]`} disabled={readOnly} />}
     </div>
   );
 }
@@ -52,9 +52,9 @@ TextResponse.propTypes = {
   readOnly: PropTypes.bool,
   answerId: PropTypes.number,
   graderView: PropTypes.bool,
-  input: {
+  input: PropTypes.shape({
     value: PropTypes.string,
-  },
+  }),
 };
 
 export default TextResponse;
