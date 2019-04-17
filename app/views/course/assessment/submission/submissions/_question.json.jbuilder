@@ -6,11 +6,10 @@ json.id question.id
 json.description format_html(question.description)
 json.maximumGrade question.maximum_grade.to_f
 
-# TODO: implementation for MCQ past answers
 json.canViewHistory case question.actable_type
-                    when Course::Assessment::Question::MultipleResponse.name
-                      true
-                    when Course::Assessment::Question::Programming.name
+                    when Course::Assessment::Question::MultipleResponse.name,
+                      Course::Assessment::Question::Programming.name,
+                      Course::Assessment::Question::TextResponse.name
                       true
                     else
                       false

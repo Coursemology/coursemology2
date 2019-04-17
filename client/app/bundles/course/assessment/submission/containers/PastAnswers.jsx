@@ -13,6 +13,7 @@ import { answerShape, questionShape } from '../propTypes';
 import { formatDateTime } from '../utils';
 import PastProgrammingAnswer from '../components/pastAnswers/PastProgrammingAnswer';
 import PastMultipleResponseAnswer from '../components/pastAnswers/PastMultipleResponseAnswer';
+import TextResponseSolutions from '../components/TextResponseSolutions';
 import { questionTypes } from '../constants';
 
 
@@ -32,13 +33,15 @@ class PastAnswers extends Component {
 
   getAnswersHistory(question, answer) {
     const { intl } = this.props;
-    const { Programming, MultipleChoice, MultipleResponse } = questionTypes;
     switch (question.type) {
-      case Programming:
+      case questionTypes.Programming:
         return <PastProgrammingAnswer question={question} answer={answer} />;
-      case MultipleChoice:
-      case MultipleResponse:
+      case questionTypes.MultipleChoice:
+      case questionTypes.MultipleResponse:
         return <PastMultipleResponseAnswer question={question} answer={answer} />;
+      case questionTypes.Comprehension:
+      case questionTypes.TextResponse:
+        return <div dangerouslySetInnerHTML={{ __html: answer.answer_text }} />;
       default:
         return (
           <Card style={{ backgroundColor: yellow100 }}>
@@ -113,7 +116,8 @@ class PastAnswers extends Component {
   }
 
   render() {
-    const { selectedAnswerIds } = this.props;
+    const { selectedAnswerIds, question, graderView } = this.props;
+    const { TextResponse, Comprehension } = questionTypes;
 
     return (
       <div>
@@ -121,6 +125,8 @@ class PastAnswers extends Component {
           {this.renderPastAnswerSelect()}
         </div>
         {this.renderSelectedPastAnswers(selectedAnswerIds)}
+        {[TextResponse, Comprehension].includes(question.type) && graderView
+          && <TextResponseSolutions question={question} />}
       </div>
     );
   }
@@ -133,6 +139,7 @@ PastAnswers.propTypes = {
   answers: PropTypes.objectOf(answerShape),
   question: questionShape,
   handleSelectPastAnswers: PropTypes.func,
+  graderView: PropTypes.bool,
 };
 
 function mapStateToProps(state, ownProps) {
@@ -140,12 +147,14 @@ function mapStateToProps(state, ownProps) {
   const selectedAnswerIds = state.history.questions[question.id].selected;
   const answerIds = state.history.questions[question.id].answerIds;
   const answers = state.history.answers;
+  const graderView = state.submission.graderView;
 
   return {
     selectedAnswerIds,
     answerIds,
     answers,
     question,
+    graderView,
   };
 }
 
