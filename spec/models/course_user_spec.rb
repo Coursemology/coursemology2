@@ -319,14 +319,14 @@ RSpec.describe CourseUser, type: :model do
     end
 
     describe '#ordered_by_date_obtained' do
-      let(:achievement1) { create(:course_achievement, course: course) }
-      let(:achievement2) { create(:course_achievement, course: course) }
+      let(:achievement1) { create(:course_achievement, course: course, weight: 2) }
+      let(:achievement2) { create(:course_achievement, course: course, weight: 1) }
       before do
         create(:course_user_achievement, course_user: student, achievement: achievement1)
         create(:course_user_achievement, course_user: student, achievement: achievement2)
       end
 
-      it 'returns achievement by date obtained' do
+      it 'returns achievement by date obtained and not by achievement weight' do
         expect(student.achievements.ordered_by_date_obtained).to eq([achievement1, achievement2])
       end
     end
