@@ -336,6 +336,14 @@ const translations = defineMessages({
     id: 'course.assessment.submission.solutionLemma',
     defaultMessage: 'Solution (lemma form for autograding)',
   },
+  expandComments: {
+    id: 'course.assessment.submission.readOnlyEditor.expandComments',
+    defaultMessage: 'Expand all comments',
+  },
+  hideCommentsPanel: {
+    id: 'course.assessment.submission.readOnlyEditor.hideCommentsPanel',
+    defaultMessage: 'Hide comments panel',
+  },
 });
 
 export const scribingTranslations = defineMessages({

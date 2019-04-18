@@ -1,21 +1,24 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { injectIntl, intlShape } from 'react-intl';
 
 import NarrowEditor from './NarrowEditor';
 import WideEditor from './WideEditor';
 import Checkbox from './Checkbox';
 import { annotationShape } from '../../propTypes';
+import translations from '../../translations';
 
 const EDITOR_THRESHOLD = 1063;
 const EDITOR_MODE_NARROW = 'narrow';
 const EDITOR_MODE_WIDE = 'wide';
 
-export default class ReadOnlyEditor extends Component {
+class ReadOnlyEditor extends Component {
   static propTypes = {
     annotations: PropTypes.arrayOf(annotationShape),
     answerId: PropTypes.number.isRequired,
     content: PropTypes.arrayOf(PropTypes.string),
     fileId: PropTypes.number.isRequired,
+    intl: intlShape.isRequired,
   }
 
   static defaultProps = {
@@ -150,6 +153,7 @@ export default class ReadOnlyEditor extends Component {
   }
 
   renderExpandAllCheckbox() {
+    const { intl } = this.props;
     return (
       <div style={{ display: 'flex', marginBottom: 5 }}>
         <Checkbox
@@ -185,6 +189,7 @@ export default class ReadOnlyEditor extends Component {
             disabled={false}
             checked={editorMode === EDITOR_MODE_NARROW}
           />
+          <span>{intl.formatMessage(translations.hideCommentsPanel)}</span>
         </div>
       )
     );
@@ -228,3 +233,5 @@ export default class ReadOnlyEditor extends Component {
     );
   }
 }
+
+export default injectIntl(ReadOnlyEditor);
