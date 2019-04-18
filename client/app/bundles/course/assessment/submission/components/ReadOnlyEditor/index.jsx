@@ -155,22 +155,25 @@ class ReadOnlyEditor extends Component {
   renderExpandAllCheckbox() {
     const { intl } = this.props;
     return (
-      <div style={{ display: 'flex', marginBottom: 5 }}>
-        <Checkbox
-          style={{ marginRight: 5 }}
-          onChange={(e) => {
-            if (e.target.checked) {
-              this.setAllCommentStateExpanded();
-            } else {
-              this.setAllCommentStateCollapsed();
-            }
-          }}
-          checked={this.isAllExpanded()}
-          disabled={this.props.annotations.length === 0}
-          indeterminate={this.isIndeterminateState()}
-        />
-        Expand all comments
-      </div>
+      this.props.annotations.length > 0
+      && (
+        <div style={{ display: 'flex', marginBottom: 5 }}>
+          <Checkbox
+            style={{ marginRight: 5 }}
+            onChange={(e) => {
+              if (e.target.checked) {
+                this.setAllCommentStateExpanded();
+              } else {
+                this.setAllCommentStateCollapsed();
+              }
+            }}
+            checked={this.isAllExpanded()}
+            disabled={this.props.annotations.length === 0}
+            indeterminate={this.isIndeterminateState()}
+          />
+          <span>{intl.formatMessage(translations.expandComments)}</span>
+        </div>
+      )
     );
   }
 
