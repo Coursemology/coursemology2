@@ -34,6 +34,7 @@ export default class ReadOnlyEditor extends Component {
     this.state = { expanded, editorMode: initialEditorMode };
 
     this.windowResizing = this.windowResizing.bind(this);
+    this.hideCommentsPanel = this.hideCommentsPanel.bind(this);
   }
 
   componentDidMount() {
@@ -139,6 +140,15 @@ export default class ReadOnlyEditor extends Component {
     }
   }
 
+  hideCommentsPanel() {
+    this.setAllCommentStateCollapsed();
+    if (this.state.editorMode === EDITOR_MODE_NARROW) {
+      this.setState({ editorMode: EDITOR_MODE_WIDE });
+    } else {
+      this.setState({ editorMode: EDITOR_MODE_NARROW });
+    }
+  }
+
   renderExpandAllCheckbox() {
     return (
       <div style={{ display: 'flex', marginBottom: 5 }}>
@@ -160,25 +170,49 @@ export default class ReadOnlyEditor extends Component {
     );
   }
 
+  renderHideCommentsPanel() {
+    const { intl } = this.props;
+    const { editorMode } = this.state;
+    return (
+      window.innerWidth > EDITOR_THRESHOLD
+      && (
+        <div style={{ display: 'flex', marginBottom: 5 }}>
+          <Checkbox
+            style={{ marginRight: 5 }}
+            onChange={() => {
+              this.hideCommentsPanel();
+            }}
+            disabled={false}
+            checked={editorMode === EDITOR_MODE_NARROW}
+          />
+        </div>
+      )
+    );
+  }
+
   render() {
     const { expanded, editorMode } = this.state;
     const { answerId, fileId, annotations, content } = this.props;
     if (editorMode === EDITOR_MODE_NARROW) {
       return (
-        <NarrowEditor
-          expanded={expanded}
-          answerId={answerId}
-          fileId={fileId}
-          annotations={annotations}
-          content={content}
-          expandLine={lineNumber => this.setExpandedLine(lineNumber)}
-          collapseLine={lineNumber => this.setCollapsedLine(lineNumber)}
-          toggleLine={lineNumber => this.toggleCommentLine(lineNumber)}
-        />
+        <>
+          {this.renderHideCommentsPanel()}
+          <NarrowEditor
+            expanded={expanded}
+            answerId={answerId}
+            fileId={fileId}
+            annotations={annotations}
+            content={content}
+            expandLine={lineNumber => this.setExpandedLine(lineNumber)}
+            collapseLine={lineNumber => this.setCollapsedLine(lineNumber)}
+            toggleLine={lineNumber => this.toggleCommentLine(lineNumber)}
+          />
+        </>
       );
     }
     return (
       <>
+        {this.renderHideCommentsPanel()}
         {this.renderExpandAllCheckbox()}
         <WideEditor
           expanded={expanded}
