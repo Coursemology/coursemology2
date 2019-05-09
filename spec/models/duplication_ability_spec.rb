@@ -5,7 +5,7 @@ RSpec.describe Course, type: :model do
   let(:instance) { create(:instance) }
 
   with_tenant(:instance) do
-    subject { Ability.new(user) }
+    subject { Ability.new(user, course, user.course_users.first) }
     let!(:course) { create(:course, :enrollable) }
 
     context 'when the user is a Normal User' do
