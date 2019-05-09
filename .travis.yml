@@ -10,14 +10,15 @@ services:
   - docker
   - postgresql
 addons:
+  firefox: latest
   apt:
     sources:
-      - google-chrome
+      # - google-chrome
       - docker-xenial
     packages:
       - ghostscript
       - docker
-      - google-chrome-stable
+      # - google-chrome-stable
   postgresql: "9.6"
   hosts:
     - coursemology.lvh.me
@@ -32,6 +33,7 @@ cache:
     - $TRAVIS_BUILD_DIR/client/hard-source-cache
 env:
   global:
+    - MOZ_HEADLESS=1
     - RAILS_ENV=test
     - MAGICK_CONFIGURE_PATH=$HOME/imagemagick
   matrix:

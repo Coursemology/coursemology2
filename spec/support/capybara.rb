@@ -2,7 +2,7 @@
 
 require 'selenium/webdriver'
 
-Capybara.javascript_driver = :selenium_chrome_headless
+Capybara.javascript_driver = :selenium_headless
 
 # Adds extra matchers for Capybara
 module Capybara::TestGroupHelpers
