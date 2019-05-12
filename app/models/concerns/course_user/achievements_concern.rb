@@ -2,6 +2,7 @@
 module CourseUser::AchievementsConcern
   # Order achievements based on when each course_user obtained the achievement.
   def ordered_by_date_obtained
+    unscope(:order).
     order('course_user_achievements.obtained_at DESC')
   end
 
