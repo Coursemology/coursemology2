@@ -21,20 +21,24 @@ class Course::Assessment::SessionAuthenticationService
     return true unless @assessment.session_password_protected?
 
     if password == @assessment.session_password
-      update_session_id if @submission
+      create_new_token if @submission
       true
     else
       false
     end
   end
 
-  # Generates a new authentication token and stores it in current session.
+  # Generates an authentication token, this token is supposed to be saved in both user session and submission.
+  # User can only access the submission if session token matches the one in submission or a password is provided.
   #
   # @return [String] the new authentication token.
-  def generate_authentication_token!
-    new_id = SecureRandom.hex(8)
-    @session[session_key] = new_id
-    new_id
+  def generate_authentication_token
+    SecureRandom.hex(8)
+  end
+
+  # Saves the token to session
+  def save_token_to_session(token)
+    @session[session_key] = token
   end
 
   # Check whether current session is the same session that created the submission or not.
@@ -46,8 +50,11 @@ class Course::Assessment::SessionAuthenticationService
 
   private
 
-  def update_session_id
-    @submission.update_column(:session_id, generate_authentication_token!)
+  def create_new_token
+    token = generate_authentication_token
+
+    @submission.update_column(:session_id, token)
+    save_token_to_session(token)
   end
 
   def current_authentication_token
