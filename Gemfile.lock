@@ -463,7 +463,7 @@ GEM
     sassc (2.0.1)
       ffi (~> 1.9)
       rake
-    selenium-webdriver (3.142.1)
+    selenium-webdriver (3.142.2)
       childprocess (>= 0.5, < 2.0)
       rubyzip (~> 1.2, >= 1.2.2)
     settings_on_rails (0.3.1)
@@ -523,7 +523,7 @@ GEM
       activesupport (>= 3.0)
     warden (1.2.8)
       rack (>= 2.0.6)
-    webdrivers (3.9.1)
+    webdrivers (3.9.2)
       nokogiri (~> 1.6)
       rubyzip (~> 1.0)
       selenium-webdriver (~> 3.0)
