@@ -269,9 +269,8 @@ GEM
       sprockets
     image_size (2.0.0)
     in_threads (1.5.0)
-    jbuilder (2.8.0)
+    jbuilder (2.9.1)
       activesupport (>= 4.2.0)
-      multi_json (>= 1.2)
     jmespath (1.4.0)
     join_dependency (0.1.4)
       activerecord (>= 4.2.0)
