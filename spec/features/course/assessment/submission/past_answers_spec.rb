@@ -7,10 +7,7 @@ RSpec.describe 'Course: Assessment: Submissions: Past Answers', js: true do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:assessment) do
-      # TODO: to use :published_with_all_question_types trait when past answer
-      # display is supported for all question types
-      create(:assessment, :with_programming_question, :with_mrq_question,
-             :with_mcq_question, :published, course: course)
+      create(:assessment, :published_with_all_question_types, course: course)
     end
     before { login_as(user, scope: :user) }
 
@@ -27,7 +24,7 @@ RSpec.describe 'Course: Assessment: Submissions: Past Answers', js: true do
 
       scenario 'I can view my past answers' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
-        (0..2).each do |step_number|
+        (0..4).each do |step_number|
           within(%([name="step#{step_number}"])) do
             expect(page).to have_selector('div.toggle-history')
             find('div.toggle-history').click
@@ -42,7 +39,7 @@ RSpec.describe 'Course: Assessment: Submissions: Past Answers', js: true do
 
       scenario "I can view my student's past answers" do
         visit edit_course_assessment_submission_path(course, assessment, submission)
-        (0..2).each do |step_number|
+        (0..4).each do |step_number|
           within(%([name="step#{step_number}"])) do
             expect(page).to have_selector('div.toggle-history')
             find('div.toggle-history').click

@@ -292,6 +292,50 @@ const translations = defineMessages({
     id: 'course.assessment.submission.rendererNotImplemented',
     defaultMessage: 'The display for this question type has not been implemented yet.',
   },
+  solutions: {
+    id: 'course.assessment.submission.solutions',
+    defaultMessage: 'Solutions',
+  },
+  solutionsWithMaximumGrade: {
+    id: 'course.assessment.submission.solutionsWithMaximumGrade',
+    defaultMessage: 'Solutions (Maximum Grade for this Question: {maximumGrade})',
+  },
+  type: {
+    id: 'course.assessment.submission.type',
+    defaultMessage: 'Type',
+  },
+  solution: {
+    id: 'course.assessment.submission.solution',
+    defaultMessage: 'Solution',
+  },
+  information: {
+    id: 'course.assessment.submission.information',
+    defaultMessage: 'Word from Text Passage',
+  },
+  grade: {
+    id: 'course.assessment.submission.grade',
+    defaultMessage: 'Grade',
+  },
+  group: {
+    id: 'course.assessment.submission.group',
+    defaultMessage: 'Group',
+  },
+  point: {
+    id: 'course.assessment.submission.point',
+    defaultMessage: 'Point',
+  },
+  maximumGroupGrade: {
+    id: 'course.assessment.submission.maximumGroupGrade',
+    defaultMessage: 'Maximum Grade for this Group',
+  },
+  pointGrade: {
+    id: 'course.assessment.submission.pointGrade',
+    defaultMessage: 'Grade for this Point',
+  },
+  solutionLemma: {
+    id: 'course.assessment.submission.solutionLemma',
+    defaultMessage: 'Solution (lemma form for autograding)',
+  },
 });
 
 export const scribingTranslations = defineMessages({
