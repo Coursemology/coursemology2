@@ -176,40 +176,34 @@ class ReadOnlyEditor extends Component {
     );
   }
 
+  renderEditor(editorProps) {
+    const { editorMode } = this.state;
+
+    return (
+      editorMode === EDITOR_MODE_NARROW
+        ? <NarrowEditor {...editorProps} />
+        : <WideEditor {...editorProps} />
+    );
+  }
+
   render() {
-    const { expanded, editorMode } = this.state;
+    const { expanded } = this.state;
     const { answerId, fileId, annotations, content } = this.props;
-    if (editorMode === EDITOR_MODE_NARROW) {
-      return (
-        <>
-          {this.renderHideCommentsPanel()}
-          <NarrowEditor
-            expanded={expanded}
-            answerId={answerId}
-            fileId={fileId}
-            annotations={annotations}
-            content={content}
-            expandLine={lineNumber => this.setExpandedLine(lineNumber)}
-            collapseLine={lineNumber => this.setCollapsedLine(lineNumber)}
-            toggleLine={lineNumber => this.toggleCommentLine(lineNumber)}
-          />
-        </>
-      );
-    }
+    const editorProps = {
+      expanded,
+      answerId,
+      fileId,
+      annotations,
+      content,
+      expandLine: lineNumber => this.setExpandedLine(lineNumber),
+      collapseLine: lineNumber => this.setCollapsedLine(lineNumber),
+      toggleLine: lineNumber => this.toggleCommentLine(lineNumber),
+    };
     return (
       <>
         {this.renderHideCommentsPanel()}
         {this.renderExpandAllCheckbox()}
-        <WideEditor
-          expanded={expanded}
-          answerId={answerId}
-          fileId={fileId}
-          annotations={annotations}
-          content={content}
-          expandLine={lineNumber => this.setExpandedLine(lineNumber)}
-          collapseLine={lineNumber => this.setCollapsedLine(lineNumber)}
-          toggleLine={lineNumber => this.toggleCommentLine(lineNumber)}
-        />
+        {this.renderEditor(editorProps)}
       </>
     );
   }
