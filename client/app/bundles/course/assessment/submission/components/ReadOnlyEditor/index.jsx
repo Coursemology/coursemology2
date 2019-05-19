@@ -8,7 +8,6 @@ import Checkbox from './Checkbox';
 import { annotationShape } from '../../propTypes';
 import translations from '../../translations';
 
-const EDITOR_THRESHOLD = 1063;
 const EDITOR_MODE_NARROW = 'narrow';
 const EDITOR_MODE_WIDE = 'wide';
 
@@ -33,15 +32,10 @@ class ReadOnlyEditor extends Component {
       expanded.push(false);
     }
 
-    const initialEditorMode = window.innerWidth < EDITOR_THRESHOLD ? EDITOR_MODE_NARROW : EDITOR_MODE_WIDE;
+    const initialEditorMode = props.annotations.length > 0 ? EDITOR_MODE_WIDE : EDITOR_MODE_NARROW;
     this.state = { expanded, editorMode: initialEditorMode };
 
-    this.windowResizing = this.windowResizing.bind(this);
     this.hideCommentsPanel = this.hideCommentsPanel.bind(this);
-  }
-
-  componentDidMount() {
-    window.addEventListener('resize', this.windowResizing);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -51,10 +45,6 @@ class ReadOnlyEditor extends Component {
     }
 
     this.setState({ expanded });
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.windowResizing);
   }
 
   setAllCommentStateExpanded() {
@@ -134,15 +124,6 @@ class ReadOnlyEditor extends Component {
     return false;
   }
 
-  windowResizing(e) {
-    this.setAllCommentStateCollapsed();
-    if (e.currentTarget.innerWidth < EDITOR_THRESHOLD) {
-      this.setState({ editorMode: EDITOR_MODE_NARROW });
-    } else {
-      this.setState({ editorMode: EDITOR_MODE_WIDE });
-    }
-  }
-
   hideCommentsPanel() {
     this.setAllCommentStateCollapsed();
     if (this.state.editorMode === EDITOR_MODE_NARROW) {
@@ -181,20 +162,17 @@ class ReadOnlyEditor extends Component {
     const { intl } = this.props;
     const { editorMode } = this.state;
     return (
-      window.innerWidth > EDITOR_THRESHOLD
-      && (
-        <div style={{ display: 'flex', marginBottom: 5 }}>
-          <Checkbox
-            style={{ marginRight: 5 }}
-            onChange={() => {
-              this.hideCommentsPanel();
-            }}
-            disabled={false}
-            checked={editorMode === EDITOR_MODE_NARROW}
-          />
-          <span>{intl.formatMessage(translations.hideCommentsPanel)}</span>
-        </div>
-      )
+      <div style={{ display: 'flex', marginBottom: 5 }}>
+        <Checkbox
+          style={{ marginRight: 5 }}
+          onChange={() => {
+            this.hideCommentsPanel();
+          }}
+          disabled={false}
+          checked={editorMode === EDITOR_MODE_NARROW}
+        />
+        <span>{intl.formatMessage(translations.hideCommentsPanel)}</span>
+      </div>
     );
   }
 
