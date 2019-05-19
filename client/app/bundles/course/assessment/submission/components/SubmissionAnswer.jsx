@@ -124,7 +124,7 @@ class SubmissionAnswer extends Component {
     const { handleToggleViewHistoryMode, historyQuestions, questionsFlags, intl } = this.props;
     const { id, viewHistory, canViewHistory, submissionQuestionId } = question;
     const historyQuestion = historyQuestions[id];
-    const noPastAnswers = historyQuestion ? historyQuestion.answerIds.length === 0 : false;
+    const noPastAnswers = historyQuestion ? historyQuestion.answerIds.length === 0 : true;
     const answersLoaded = historyQuestion ? historyQuestion.pastAnswersLoaded : false;
     const isLoading = historyQuestion ? historyQuestion.isLoading : false;
     const isAutograding = questionsFlags[id] ? questionsFlags[id].isAutograding : false;
