@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 
+import Toggle from 'material-ui/Toggle';
 import NarrowEditor from './NarrowEditor';
 import WideEditor from './WideEditor';
-import Checkbox from './Checkbox';
 import { annotationShape } from '../../propTypes';
 import translations from '../../translations';
 
@@ -35,7 +35,7 @@ class ReadOnlyEditor extends Component {
     const initialEditorMode = props.annotations.length > 0 ? EDITOR_MODE_WIDE : EDITOR_MODE_NARROW;
     this.state = { expanded, editorMode: initialEditorMode };
 
-    this.hideCommentsPanel = this.hideCommentsPanel.bind(this);
+    this.showCommentsPanel = this.showCommentsPanel.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -124,7 +124,7 @@ class ReadOnlyEditor extends Component {
     return false;
   }
 
-  hideCommentsPanel() {
+  showCommentsPanel() {
     this.setAllCommentStateCollapsed();
     if (this.state.editorMode === EDITOR_MODE_NARROW) {
       this.setState({ editorMode: EDITOR_MODE_WIDE });
@@ -133,46 +133,40 @@ class ReadOnlyEditor extends Component {
     }
   }
 
-  renderExpandAllCheckbox() {
+  renderExpandAllToggle() {
     const { intl } = this.props;
     return (
       this.props.annotations.length > 0
       && (
-        <div style={{ display: 'flex', marginBottom: 5 }}>
-          <Checkbox
-            style={{ marginRight: 5 }}
-            onChange={(e) => {
-              if (e.target.checked) {
-                this.setAllCommentStateExpanded();
-              } else {
-                this.setAllCommentStateCollapsed();
-              }
-            }}
-            checked={this.isAllExpanded()}
-            disabled={this.props.annotations.length === 0}
-            indeterminate={this.isIndeterminateState()}
-          />
-          <span>{intl.formatMessage(translations.expandComments)}</span>
-        </div>
+        <Toggle
+          label={intl.formatMessage(translations.expandComments)}
+          labelPosition="right"
+          toggled={this.isAllExpanded()}
+          disabled={this.props.annotations.length === 0}
+          onToggle={(e) => {
+            if (e.target.checked) {
+              this.setAllCommentStateExpanded();
+            } else {
+              this.setAllCommentStateCollapsed();
+            }
+          }}
+        />
       )
     );
   }
 
-  renderHideCommentsPanel() {
+  renderShowCommentsPanel() {
     const { intl } = this.props;
     const { editorMode } = this.state;
     return (
-      <div style={{ display: 'flex', marginBottom: 5 }}>
-        <Checkbox
-          style={{ marginRight: 5 }}
-          onChange={() => {
-            this.hideCommentsPanel();
-          }}
-          disabled={false}
-          checked={editorMode === EDITOR_MODE_NARROW}
-        />
-        <span>{intl.formatMessage(translations.hideCommentsPanel)}</span>
-      </div>
+      <Toggle
+        label={intl.formatMessage(translations.showCommentsPanel)}
+        labelPosition="right"
+        toggled={editorMode === EDITOR_MODE_WIDE}
+        onToggle={() => {
+          this.showCommentsPanel();
+        }}
+      />
     );
   }
 
@@ -201,8 +195,8 @@ class ReadOnlyEditor extends Component {
     };
     return (
       <>
-        {this.renderHideCommentsPanel()}
-        {this.renderExpandAllCheckbox()}
+        {this.renderShowCommentsPanel()}
+        {this.renderExpandAllToggle()}
         {this.renderEditor(editorProps)}
       </>
     );

@@ -340,9 +340,9 @@ const translations = defineMessages({
     id: 'course.assessment.submission.readOnlyEditor.expandComments',
     defaultMessage: 'Expand all comments',
   },
-  hideCommentsPanel: {
-    id: 'course.assessment.submission.readOnlyEditor.hideCommentsPanel',
-    defaultMessage: 'Hide comments panel',
+  showCommentsPanel: {
+    id: 'course.assessment.submission.readOnlyEditor.showCommentsPanel',
+    defaultMessage: 'Show comments panel',
   },
 });
 
