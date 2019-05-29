@@ -40,9 +40,7 @@ json.submission do
   json.late end_at && submission.submitted_at &&
     submission.submitted_at > end_at
 
-  if current_course.gamified?
-    json.basePoints assessment.base_exp
-    json.bonusPoints assessment.time_bonus_exp
-    json.pointsAwarded submission.current_points_awarded
-  end
+  json.basePoints assessment.base_exp
+  json.bonusPoints assessment.time_bonus_exp
+  json.pointsAwarded submission.current_points_awarded
 end
