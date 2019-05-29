@@ -71,6 +71,7 @@ module Course::VideosAbilityComponent
   def define_staff_video_permissions
     allow_staff_read_and_attempt_all_video
     allow_staff_read_and_analzye_all_video_submission
+    allow_course_managers_manage_video_tab
     allow_teaching_staff_manage_video
     allow_teaching_staff_update_video_submission
   end
@@ -95,6 +96,10 @@ module Course::VideosAbilityComponent
 
   def allow_teaching_staff_manage_video
     can :manage, Course::Video, video_all_course_teaching_staff_hash
+  end
+
+  def allow_course_managers_manage_video_tab
+    can :manage, Course::Video::Tab, course_managers_hash
   end
 
   def allow_teaching_staff_update_video_submission
