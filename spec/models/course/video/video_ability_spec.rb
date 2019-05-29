@@ -22,6 +22,10 @@ RSpec.describe Course::Video do
     context 'when the user is a Course Student' do
       let(:user) { course_user.user }
 
+      # Course Video Tabs
+      it { is_expected.not_to be_able_to(:create, published_video.tab) }
+      it { is_expected.not_to be_able_to(:update, published_video.tab) }
+
       # Course Video
       it { is_expected.not_to be_able_to(:read, other_video) }
       it { is_expected.not_to be_able_to(:read, draft_video) }
@@ -43,6 +47,10 @@ RSpec.describe Course::Video do
     context 'when the user is a Course Teaching Staff' do
       let(:user) { create(:course_teaching_assistant, course: course).user }
 
+      # Course Video Tabs
+      it { is_expected.not_to be_able_to(:create, published_video.tab) }
+      it { is_expected.not_to be_able_to(:update, published_video.tab) }
+
       # Course Video
       it { is_expected.to be_able_to(:manage, draft_video) }
       it { is_expected.to be_able_to(:manage, published_video) }
@@ -56,8 +64,19 @@ RSpec.describe Course::Video do
       it { is_expected.to be_able_to(:analyze, other_video_submission) }
     end
 
+    context 'when the user is a Course Manager' do
+      let(:user) { create(:course_manager, course: course).user }
+
+      # Course Video Tabs
+      it { is_expected.to be_able_to(:manage, published_video.tab) }
+    end
+
     context 'when the user is a Course Observer' do
       let(:user) { create(:course_observer, course: course).user }
+
+      # Course Video Tabs
+      it { is_expected.not_to be_able_to(:create, published_video.tab) }
+      it { is_expected.not_to be_able_to(:update, published_video.tab) }
 
       # Course Video
       it { is_expected.to be_able_to(:read, draft_video) }
