@@ -47,8 +47,8 @@ module ApplicationHTMLFormattersHelper
     return if env[:is_whitelisted] || !node.element?
 
     return unless node_name == 'img'
+    return node.unlink unless node['src']
 
-    default_whitelist = HTML::Pipeline::SanitizationFilter::WHITELIST
     Sanitize.node!(node, elements: ['img'],
                          protocols: ['http', 'https', 'data', :relative],
                          attributes: { 'img' => ['src', 'style'] },
