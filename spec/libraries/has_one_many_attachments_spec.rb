@@ -203,6 +203,14 @@ RSpec.describe 'Extension: Acts as Attachable' do
         end
       end
 
+      context 'when img tag without src is present' do
+        let(:content) { '<p><img></p>' }
+
+        subject { attachable.content_attachment_reference_ids }
+
+        it { is_expected.to be_empty }
+      end
+
       context 'when column has changes in attachments in its column' do
         let(:new_attachment_reference) { create(:attachment_reference) }
         let(:new_content) { "<p>foo #{create_image_tag(new_attachment_reference.id)}</p>" }

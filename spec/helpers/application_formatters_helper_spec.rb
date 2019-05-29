@@ -68,6 +68,11 @@ RSpec.describe ApplicationFormattersHelper do
       end
 
       context 'when img tags are present' do
+        it 'removes img tags without src' do
+          html = '<img>'
+          expect(helper.format_html(html)).to eq('')
+        end
+
         it 'does not remove image src' do
           html = '<img src="hello.jpg">'
           expect(helper.format_html(html)).to eq(html)

@@ -192,7 +192,7 @@ module Extensions::Attachable::ActiveRecord::Base
       ids = []
       doc = Nokogiri::HTML(content)
       doc.css('img').each do |image|
-        id = parse_attachment_reference_uuid_from_url(image['src']) if image['src']
+        id = parse_attachment_reference_uuid_from_url(image['src'])
         valid_id = get_valid_attachment_reference(id) if id
 
         next unless valid_id
@@ -226,7 +226,7 @@ module Extensions::Attachable::ActiveRecord::Base
     # @param [String] uuid The uuid.
     # @return [String|nil] the uuid of the attachment_references, or nil if invalid.
     def parse_attachment_reference_uuid_from_url(url)
-      result = url.match(ATTACHMENT_ID_REGEX)
+      result = url&.match(ATTACHMENT_ID_REGEX)
       result ? result[1] : nil
     end
 
