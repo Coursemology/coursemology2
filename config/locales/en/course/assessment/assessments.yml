@@ -17,6 +17,7 @@ en:
         assessment:
           attempt: 'Attempt'
           condition_not_satisfied: 'You do not fulfill the requirements of the assessment'
+          view_password_set: 'Students need a password to view the assessment'
         show:
           type: 'Assessment Type'
           autograded: 'Autograded Assessment'

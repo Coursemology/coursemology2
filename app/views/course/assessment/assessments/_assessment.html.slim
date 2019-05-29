@@ -1,5 +1,8 @@
 = content_tag_for(:tr, assessment, class: time_period_class(assessment) + draft_class(assessment))
   th colspan=2
+    - if assessment.view_password
+      span title=t('.view_password_set')
+        => fa_icon 'lock'.freeze
     - unless assessment.published?
       span title=draft_message(assessment)
         => fa_icon 'ban'.freeze
