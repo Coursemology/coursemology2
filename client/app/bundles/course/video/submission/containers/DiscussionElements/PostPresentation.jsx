@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import styles from '../Discussion.scss';
-import PostContainer from './PostContainer';
+import PostContainer from './PostContainer'; // eslint-disable-line import/no-cycle
 import EditPostContainer from './EditPostContainer';
 import PostMenu from './PostMenu';
 
