@@ -99,4 +99,14 @@
   .notification + .notification {
     margin-top: 10px;
   }
+
+  #hide-sidebar {
+    border: 0;
+  }
+
+  #show-sidebar {
+    border: 0;
+    position: absolute;
+    z-index: 999;
+  }
 }

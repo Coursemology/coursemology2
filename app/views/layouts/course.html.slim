@@ -2,9 +2,13 @@
 = render within_layout: layout do
   = render_breadcrumbs
   div.row.course-layout data-course-id=current_course.id
-    div.col-lg-2.col-md-3.col-sm-4
+    button.btn.btn-default.collapse#show-sidebar type="button" data-toggle="collapse" data-target="#full-sidebar,#show-sidebar" aria-expanded="false" aria-controls="navbar"
+      = fa_icon 'chevron-right'.freeze
+    div.col-lg-2.col-md-3.col-sm-4.collapse.in#full-sidebar
       div.row
         div.hidden-xs.text-center#course-sidebar-logo
+          button.btn.btn-default.pull-left#hide-sidebar type="button" data-toggle="collapse" data-target="#full-sidebar,#show-sidebar" aria-expanded="false" aria-controls="navbar"
+            = fa_icon 'chevron-left'.freeze
           = link_to course_path(current_course) do
             = display_course_logo(current_course)
         - if current_course_user.present? && can?(:read, current_course)
