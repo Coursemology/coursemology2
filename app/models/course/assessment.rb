@@ -134,6 +134,7 @@ class Course::Assessment < ApplicationRecord
     if target_mode == true
       self.autograded = true
       self.session_password = nil
+      self.view_password = nil
       self.delayed_grade_publication = false
     elsif target_mode == false # Ignore the case when the params is empty.
       self.autograded = false
