@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import PostPresentation from './PostPresentation';
+import PostPresentation from './PostPresentation'; // eslint-disable-line import/no-cycle
 
 const propTypes = {
   postId: PropTypes.string.isRequired,
