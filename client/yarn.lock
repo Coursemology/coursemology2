@@ -8180,12 +8180,12 @@ react-overlays@^0.8.3:
     react-transition-group "^2.2.0"
     warning "^3.0.0"
 
-react-player@^1.8.0:
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/react-player/-/react-player-1.8.0.tgz#83080c040c5a69b80e76531c60973a7ea812ec8f"
-  integrity sha512-DqIJvkL7itGLgs/8u+sgeD3DXq5kc/O6FsB6J9KEuoaiYiSKhluBRymZWIwfCuPNTdpPsA2roZ+NSCyLrHAA9g==
+react-player@^1.11.0:
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/react-player/-/react-player-1.11.0.tgz#07437dfa1baae8ab027409df9adb93fe81b44efb"
+  integrity sha512-KPvIK2gonPth3sIHWRSllFTNBRnAxR2jL9ofuOIQH2o/zAnkYoKFEGg9PFjy5xMEgOM8NUUrGTcG/6A3BbpSnQ==
   dependencies:
-    deepmerge "^2.0.1"
+    deepmerge "^3.0.0"
     load-script "^1.0.0"
     prop-types "^15.5.6"
 
