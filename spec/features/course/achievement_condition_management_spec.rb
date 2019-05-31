@@ -32,6 +32,9 @@ RSpec.feature 'Course: Achievements' do
 
         # Create achievement condition
         find('.add-condition-btn').click
+        # Wait for the menu to expand fully. This scenario didn't fail for this but added
+        # first for consistency.
+        sleep 0.5
         find_link(
           nil, href: new_course_achievement_condition_achievement_path(course, achievement)
         ).click
@@ -76,6 +79,7 @@ RSpec.feature 'Course: Achievements' do
 
         # Create assessment condition
         find('.add-condition-btn').click
+        sleep 0.5 # Wait for the menu to expand fully
         find_link(
           nil, href: new_course_achievement_condition_assessment_path(course, achievement)
         ).click
