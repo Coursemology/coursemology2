@@ -112,7 +112,7 @@
     "react-router-dom": "^4.3.1",
     "react-scroll": "^1.7.11",
     "react-summernote": "^2.0.0",
-    "react-tooltip": "^3.9.2",
+    "react-tooltip": "^3.10.0",
     "redux": "^4.0.1",
     "redux-form": "^7.4.2",
     "redux-immutable": "^4.0.0",
