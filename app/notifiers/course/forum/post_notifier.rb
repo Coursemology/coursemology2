@@ -11,7 +11,7 @@ class Course::Forum::PostNotifier < Notifier::Base
     activity = create_activity(actor: user, object: post, event: :replied)
     activity.notify(course, :feed) if course_user && !course_user.phantom?
 
-    if email_notification_enabled?(course_user)
+    if email_notification_enabled?(course_user, course)
       post.topic.subscriptions.includes(:user).each do |subscription|
         activity.notify(subscription.user, :email) unless subscription.user == user
       end
@@ -22,9 +22,7 @@ class Course::Forum::PostNotifier < Notifier::Base
 
   private
 
-  def email_notification_enabled?(course_user)
-    course = course_user.course
-
+  def email_notification_enabled?(course_user, course)
     response = settings_with_key(course, :post_replied)
     response &&= settings_with_key(course, :post_phantom_replied) if course_user&.phantom?
     response
