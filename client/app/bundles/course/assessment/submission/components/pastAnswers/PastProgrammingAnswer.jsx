@@ -35,7 +35,7 @@ export default class PastProgrammingAnswer extends Component {
     const content = file ? file.content.split('\n') : '';
 
     if (question.fileSubmission) {
-      return this.renderFileSubmissionPastAnswer().bind(this);
+      return this.renderFileSubmissionPastAnswer();
     }
 
     return (
