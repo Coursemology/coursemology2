@@ -17,7 +17,7 @@ GIT
 
 GIT
   remote: https://github.com/Coursemology/simple_form-bootstrap
-  revision: b2a6f2b53ad599955b8cc288a352a701e52a9693
+  revision: dbb964c0dbefbd916c0e9e8cc6b1115ed02da092
   specs:
     simple_form-bootstrap (1.6.0)
       actionpack (>= 4.1, < 6)
@@ -221,7 +221,7 @@ GEM
       railties (>= 4.2.0)
     faraday (0.15.3)
       multipart-post (>= 1.2, < 3)
-    ffi (1.10.0)
+    ffi (1.11.1)
     filename (0.1.2)
     font-awesome-rails (4.7.0.5)
       railties (>= 3.2, < 6.1)
