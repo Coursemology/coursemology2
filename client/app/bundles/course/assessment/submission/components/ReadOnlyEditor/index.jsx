@@ -139,8 +139,10 @@ class ReadOnlyEditor extends Component {
       this.props.annotations.length > 0
       && (
         <Toggle
+          style={{ width: 'auto', marginLeft: 'auto' }}
+          labelStyle={{ width: 'auto' }}
           label={intl.formatMessage(translations.expandComments)}
-          labelPosition="right"
+          labelPosition="left"
           toggled={this.isAllExpanded()}
           disabled={this.props.annotations.length === 0}
           onToggle={(e) => {
@@ -160,8 +162,10 @@ class ReadOnlyEditor extends Component {
     const { editorMode } = this.state;
     return (
       <Toggle
+        style={{ width: 'auto', marginLeft: 'auto' }}
+        labelStyle={{ width: 'auto' }}
         label={intl.formatMessage(translations.showCommentsPanel)}
-        labelPosition="right"
+        labelPosition="left"
         toggled={editorMode === EDITOR_MODE_WIDE}
         onToggle={() => {
           this.showCommentsPanel();
