@@ -1,21 +1,23 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { injectIntl, intlShape } from 'react-intl';
 
+import Toggle from 'material-ui/Toggle';
 import NarrowEditor from './NarrowEditor';
 import WideEditor from './WideEditor';
-import Checkbox from './Checkbox';
 import { annotationShape } from '../../propTypes';
+import translations from '../../translations';
 
-const EDITOR_THRESHOLD = 1063;
 const EDITOR_MODE_NARROW = 'narrow';
 const EDITOR_MODE_WIDE = 'wide';
 
-export default class ReadOnlyEditor extends Component {
+class ReadOnlyEditor extends Component {
   static propTypes = {
     annotations: PropTypes.arrayOf(annotationShape),
     answerId: PropTypes.number.isRequired,
     content: PropTypes.arrayOf(PropTypes.string),
     fileId: PropTypes.number.isRequired,
+    intl: intlShape.isRequired,
   }
 
   static defaultProps = {
@@ -30,14 +32,10 @@ export default class ReadOnlyEditor extends Component {
       expanded.push(false);
     }
 
-    const initialEditorMode = window.innerWidth < EDITOR_THRESHOLD ? EDITOR_MODE_NARROW : EDITOR_MODE_WIDE;
+    const initialEditorMode = props.annotations.length > 0 ? EDITOR_MODE_WIDE : EDITOR_MODE_NARROW;
     this.state = { expanded, editorMode: initialEditorMode };
 
-    this.windowResizing = this.windowResizing.bind(this);
-  }
-
-  componentDidMount() {
-    window.addEventListener('resize', this.windowResizing);
+    this.showCommentsPanel = this.showCommentsPanel.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -47,10 +45,6 @@ export default class ReadOnlyEditor extends Component {
     }
 
     this.setState({ expanded });
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.windowResizing);
   }
 
   setAllCommentStateExpanded() {
@@ -130,67 +124,87 @@ export default class ReadOnlyEditor extends Component {
     return false;
   }
 
-  windowResizing(e) {
+  showCommentsPanel() {
     this.setAllCommentStateCollapsed();
-    if (e.currentTarget.innerWidth < EDITOR_THRESHOLD) {
-      this.setState({ editorMode: EDITOR_MODE_NARROW });
-    } else {
+    if (this.state.editorMode === EDITOR_MODE_NARROW) {
       this.setState({ editorMode: EDITOR_MODE_WIDE });
+    } else {
+      this.setState({ editorMode: EDITOR_MODE_NARROW });
     }
   }
 
-  renderExpandAllCheckbox() {
+  renderExpandAllToggle() {
+    const { intl } = this.props;
     return (
-      <div style={{ display: 'flex', marginBottom: 5 }}>
-        <Checkbox
-          style={{ marginRight: 5 }}
-          onChange={(e) => {
+      this.props.annotations.length > 0
+      && (
+        <Toggle
+          style={{ width: 'auto', marginLeft: 'auto' }}
+          labelStyle={{ width: 'auto' }}
+          label={intl.formatMessage(translations.expandComments)}
+          labelPosition="left"
+          toggled={this.isAllExpanded()}
+          disabled={this.props.annotations.length === 0}
+          onToggle={(e) => {
             if (e.target.checked) {
               this.setAllCommentStateExpanded();
             } else {
               this.setAllCommentStateCollapsed();
             }
           }}
-          checked={this.isAllExpanded()}
-          disabled={this.props.annotations.length === 0}
-          indeterminate={this.isIndeterminateState()}
         />
-        Expand all comments
-      </div>
+      )
+    );
+  }
+
+  renderShowCommentsPanel() {
+    const { intl } = this.props;
+    const { editorMode } = this.state;
+    return (
+      <Toggle
+        style={{ width: 'auto', marginLeft: 'auto' }}
+        labelStyle={{ width: 'auto' }}
+        label={intl.formatMessage(translations.showCommentsPanel)}
+        labelPosition="left"
+        toggled={editorMode === EDITOR_MODE_WIDE}
+        onToggle={() => {
+          this.showCommentsPanel();
+        }}
+      />
+    );
+  }
+
+  renderEditor(editorProps) {
+    const { editorMode } = this.state;
+
+    return (
+      editorMode === EDITOR_MODE_NARROW
+        ? <NarrowEditor {...editorProps} />
+        : <WideEditor {...editorProps} />
     );
   }
 
   render() {
-    const { expanded, editorMode } = this.state;
+    const { expanded } = this.state;
     const { answerId, fileId, annotations, content } = this.props;
-    if (editorMode === EDITOR_MODE_NARROW) {
-      return (
-        <NarrowEditor
-          expanded={expanded}
-          answerId={answerId}
-          fileId={fileId}
-          annotations={annotations}
-          content={content}
-          expandLine={lineNumber => this.setExpandedLine(lineNumber)}
-          collapseLine={lineNumber => this.setCollapsedLine(lineNumber)}
-          toggleLine={lineNumber => this.toggleCommentLine(lineNumber)}
-        />
-      );
-    }
+    const editorProps = {
+      expanded,
+      answerId,
+      fileId,
+      annotations,
+      content,
+      expandLine: lineNumber => this.setExpandedLine(lineNumber),
+      collapseLine: lineNumber => this.setCollapsedLine(lineNumber),
+      toggleLine: lineNumber => this.toggleCommentLine(lineNumber),
+    };
     return (
       <>
-        {this.renderExpandAllCheckbox()}
-        <WideEditor
-          expanded={expanded}
-          answerId={answerId}
-          fileId={fileId}
-          annotations={annotations}
-          content={content}
-          expandLine={lineNumber => this.setExpandedLine(lineNumber)}
-          collapseLine={lineNumber => this.setCollapsedLine(lineNumber)}
-          toggleLine={lineNumber => this.toggleCommentLine(lineNumber)}
-        />
+        {this.renderShowCommentsPanel()}
+        {this.renderExpandAllToggle()}
+        {this.renderEditor(editorProps)}
       </>
     );
   }
 }
+
+export default injectIntl(ReadOnlyEditor);
