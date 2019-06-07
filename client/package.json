@@ -8,6 +8,7 @@
   },
   "scripts": {
     "test": "TZ=Asia/Singapore yarn run jest --coverage",
+    "testci": "TZ=Asia/Singapore yarn run jest --maxWorkers=4 --coverage",
     "build:test": "export NODE_ENV=test && yarn run build:translations && webpack -pw",
     "build:production": "export NODE_ENV=production && yarn run build:translations && webpack -p",
     "build:development": "yarn run build:translations && webpack-dev-server",

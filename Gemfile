@@ -144,6 +144,7 @@ group :ci do
   # Code Coverage reporters
   gem 'codecov', :require => false
   gem 'rspec-retry'
+  gem 'rspec_junit_formatter'
 end
 
 # This is used only when producing Production assets. Deals with things like minifying JavaScript

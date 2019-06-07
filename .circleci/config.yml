@@ -8,11 +8,8 @@ jobs:
     docker:
       # specify the version you desire here
       - image: circleci/ruby:2.5.3-node-browsers
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      - image: circleci/postgres:9.6.11
+        environment:
+          BUNDLE_APP_CONFIG: ~/repo/.bundle
 
     working_directory: ~/repo
 
@@ -22,14 +19,12 @@ jobs:
       # Checkout submodules
       - run: git submodule update --init --recursive
 
-      - setup_remote_docker
-
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "Gemfile.lock" }}
+            - v2-dependencies-{{ checksum "Gemfile.lock" }}
             # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
+            - v2-dependencies-
 
       - run:
           name: install dependencies
@@ -39,14 +34,73 @@ jobs:
       - save_cache:
           paths:
             - ./vendor/bundle
-          key: v1-dependencies-{{ checksum "Gemfile.lock" }}
+            - ./.bundle
+          key: v2-dependencies-{{ checksum "Gemfile.lock" }}
 
-      # Database setup
-      - run: bundle exec rake db:create
-      - run: bundle exec rake db:schema:load
+      - restore_cache:
+          keys:
+            - v1-yarn-{{ checksum "client/yarn.lock" }}
 
       # Build frontend JS
-      - run: cd client && yarn build:production && cd -
+      - run: cd client && yarn install && yarn build:production && cd -
+
+      - save_cache:
+          paths:
+            - ./client/node_modules
+            - ./client/build
+            - ./public/webpack
+          key: v1-yarn-{{ checksum "client/yarn.lock" }}
+
+  test:
+    docker:
+      # specify the version you desire here
+      - image: circleci/ruby:2.5.3-node-browsers
+        environment:
+          PG_HOST: localhost
+          PG_USER: ubuntu
+          RAILS_ENV: test
+          BUNDLE_APP_CONFIG: ~/repo/.bundle
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      - image: circleci/postgres:9.6.11
+        environment:
+          POSTGRES_USER: ubuntu
+          POSTGRES_DB: coursemology_test
+
+    parallelism: 4
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Checkout submodules
+      - run: git submodule update --init --recursive
+
+      - restore_cache:
+          keys:
+            - v2-dependencies-{{ checksum "Gemfile.lock" }}
+            # fallback to using the latest cache if no exact match is found
+            - v2-dependencies-
+
+      - restore_cache:
+          keys:
+            - v1-yarn-{{ checksum "client/yarn.lock" }}
+
+      # Install ghostscript so `identify` in ImageMagick works with PDF files.
+      - run: sudo apt update && sudo apt install ghostscript
+
+      - setup_remote_docker
+
+      # Database setup
+      - run:
+          name: Setup DB
+          command: |
+            bundle exec rake db:setup
+          environment:
+            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
 
       # run tests!
       - run:
@@ -62,6 +116,8 @@ jobs:
               --out /tmp/test-results/rspec.xml \
               --format progress \
               $TEST_FILES
+          environment:
+            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
 
       # collect reports
       - store_test_results:
@@ -69,3 +125,123 @@ jobs:
       - store_artifacts:
           path: /tmp/test-results
           destination: test-results
+
+  lint:
+    docker:
+      # specify the version you desire here
+      - image: circleci/ruby:2.5.3-node-browsers
+        environment:
+          RAILS_ENV: test
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Checkout submodules
+      - run: git submodule update --init --recursive
+
+      - restore_cache:
+          keys:
+            - v1-yarn-{{ checksum "client/yarn.lock" }}
+
+      - run:
+          name: run yarn checks
+          command: |
+            cd client
+            yarn lint
+
+  jstest:
+    docker:
+      # specify the version you desire here
+      - image: circleci/ruby:2.5.3-node-browsers
+        environment:
+          RAILS_ENV: test
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Checkout submodules
+      - run: git submodule update --init --recursive
+
+      - restore_cache:
+          keys:
+            - v1-yarn-{{ checksum "client/yarn.lock" }}
+
+      # Build frontend JS
+      - run:
+          name: run yarn checks
+          command: |
+            cd client && yarn
+            yarn testci
+
+  i18n:
+    docker:
+      # specify the version you desire here
+      - image: circleci/ruby:2.5.3-node-browsers
+        environment:
+          PG_HOST: localhost
+          PG_USER: ubuntu
+          RAILS_ENV: test
+          BUNDLE_APP_CONFIG: ~/repo/.bundle
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      - image: circleci/postgres:9.6.11
+        environment:
+          POSTGRES_USER: ubuntu
+          POSTGRES_DB: coursemology_test
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Checkout submodules
+      - run: git submodule update --init --recursive
+
+      - restore_cache:
+          keys:
+            - v2-dependencies-{{ checksum "Gemfile.lock" }}
+            # fallback to using the latest cache if no exact match is found
+            - v2-dependencies-
+
+      # Database setup
+      - run:
+          name: Setup DB
+          command: |
+            bundle exec rake db:setup
+          environment:
+            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+
+      # run i18n checks!
+      - run:
+          name: run i18n checks
+          command: |
+            bundle exec i18n-tasks unused
+            bundle exec i18n-tasks missing
+            bundle exec rake factory_bot:lint
+          environment:
+            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+workflows:
+  version: 2
+  build_and_test_and_lint:
+    jobs:
+      - build
+      - lint:
+          requires:
+            - build
+      - jstest:
+          requires:
+            - build
+      - i18n:
+          requires:
+            - build
+      - test:
+          requires:
+            - lint
+            - jstest
+            - i18n
