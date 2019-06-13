@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'workflow_activerecord'
+require 'workflow-activerecord'
 
 module Extensions::DeferredWorkflowStatePersistence::Workflow; end
 module Extensions::DeferredWorkflowStatePersistence::Workflow::Adapter; end
