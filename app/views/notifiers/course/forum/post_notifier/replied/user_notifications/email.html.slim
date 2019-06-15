@@ -11,7 +11,7 @@
 - post_author = format_inline_text(post.author_name)
 
 - message.subject = t('.subject', course: course_title, topic: topic_title)
-- message.subject += ' ' + t('notifiers.course.phantom') if course_user.phantom?
+- message.subject += ' ' + t('notifiers.course.phantom') if course_user&.phantom?
 
 = format_html(t('.message',
                 topic: link_to(topic_title,
