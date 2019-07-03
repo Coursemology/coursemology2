@@ -177,7 +177,7 @@ GEM
       mime-types (>= 1.16)
     childprocess (1.0.1)
       rake (< 13.0)
-    cocoon (1.2.12)
+    cocoon (1.2.14)
     codecov (0.1.14)
       json
       simplecov
