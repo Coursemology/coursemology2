@@ -7,7 +7,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/ruby:2.5.3-node-browsers
+      - image: circleci/ruby:2.6.3-node-browsers
         environment:
           BUNDLE_APP_CONFIG: ~/repo/.bundle
 
@@ -54,7 +54,7 @@ jobs:
   test:
     docker:
       # specify the version you desire here
-      - image: circleci/ruby:2.5.3-node-browsers
+      - image: circleci/ruby:2.6.3-node-browsers
         environment:
           PG_HOST: localhost
           PG_USER: ubuntu
@@ -129,7 +129,7 @@ jobs:
   lint:
     docker:
       # specify the version you desire here
-      - image: circleci/ruby:2.5.3-node-browsers
+      - image: circleci/ruby:2.6.3-node-browsers
         environment:
           RAILS_ENV: test
 
@@ -154,7 +154,7 @@ jobs:
   jstest:
     docker:
       # specify the version you desire here
-      - image: circleci/ruby:2.5.3-node-browsers
+      - image: circleci/ruby:2.6.3-node-browsers
         environment:
           RAILS_ENV: test
 
@@ -180,7 +180,7 @@ jobs:
   i18n:
     docker:
       # specify the version you desire here
-      - image: circleci/ruby:2.5.3-node-browsers
+      - image: circleci/ruby:2.6.3-node-browsers
         environment:
           PG_HOST: localhost
           PG_USER: ubuntu
