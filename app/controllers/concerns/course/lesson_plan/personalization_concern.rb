@@ -103,18 +103,19 @@ module Course::LessonPlan::PersonalizationConcern
     learning_rate_ema = [STRAGGLERS_LEARNING_RATE_HARD_MIN, effective_min, [learning_rate_ema, effective_max].min].max
 
     # Compute personal times for all items
-    reference_point = items.first.reference_time_for(course_user).start_at
+    reference_point = items.first.reference_time_for(course_user).end_at
     personal_point = reference_point
     course_user.transaction do
       items.each do |item|
         # Update reference point and personal point
-        if item.affects_personal_times? && item.id.in?(submitted_lesson_plan_item_ids.keys)
-          reference_point = item.reference_time_for(course_user).start_at
-          personal_point = item.time_for(course_user).start_at
+        if item.affects_personal_times? && item.id.in?(submitted_lesson_plan_item_ids.keys) &&
+           item.reference_time_for(course_user).end_at.present?
+          reference_point = item.reference_time_for(course_user).end_at
+          personal_point = item.time_for(course_user).end_at
         end
 
         next if !item.has_personal_times? || item.id.in?(submitted_lesson_plan_item_ids.keys) ||
-                item.personal_time_for(course_user)&.fixed?
+                item.personal_time_for(course_user)&.fixed? || reference_point.nil?
 
         # Update personal time
         reference_time = item.reference_time_for(course_user)
