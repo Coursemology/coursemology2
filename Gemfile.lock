@@ -470,7 +470,7 @@ GEM
     settings_on_rails (0.3.1)
       activerecord (>= 3.1)
     should_not (1.1.0)
-    shoulda-matchers (4.1.0)
+    shoulda-matchers (4.1.1)
       activesupport (>= 4.2.0)
     simple_form (4.1.0)
       actionpack (>= 5.0)
