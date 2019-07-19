@@ -1,4 +1,4 @@
-# Coursemology [![Build Status](https://travis-ci.com/Coursemology/coursemology2.svg?branch=master)](https://travis-ci.com/Coursemology/coursemology2)
+# Coursemology [![CircleCI](https://circleci.com/gh/Coursemology/coursemology2.svg?style=svg)](https://circleci.com/gh/Coursemology/coursemology2)
 [![Code Climate](https://codeclimate.com/github/Coursemology/coursemology2/badges/gpa.svg)](https://codeclimate.com/github/Coursemology/coursemology2)
 [![codecov](https://codecov.io/gh/Coursemology/coursemology2/branch/master/graph/badge.svg)](https://codecov.io/gh/Coursemology/coursemology2)
 [![Security](https://hakiri.io/github/Coursemology/coursemology2/master.svg)](https://hakiri.io/github/Coursemology/coursemology2/master)
