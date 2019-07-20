@@ -8,4 +8,4 @@
       h4 = format_inline_text(course.title)
       - unless course.description.blank?
         div.description
-          = format_html(course.description)
+          = strip_tags(course.description)
