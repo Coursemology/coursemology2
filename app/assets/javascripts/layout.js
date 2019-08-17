@@ -4,7 +4,7 @@
 (function($, EVENT_HELPERS) {
   'use strict';
 
-  function inlineCodeButton(context) {
+  function inlineCodeButton() {
     var ui = $.summernote.ui;
 
     var button = ui.button({
@@ -15,14 +15,15 @@
       tooltip: 'Inline Code',
       click: function() {
         var node = $(window.getSelection().getRangeAt(0).commonAncestorContainer);
+        var smrNote = $('.summernote-initialised');
         if(node.parent().is('code')) {
           node.unwrap();
         } else {
-          var range = context.invoke('editor.createRange'), text = range.toString();
+          var range = smrNote.summernote('editor.createRange'), text = range.toString();
           if (text !== '') {
             var newNode = $('<code></code>').eq(0);
             newNode.text(text);
-            context.invoke('editor.insertNode', newNode.get(0));
+            smrNote.summernote('editor.insertNode', newNode.get(0));
           }
         }
       },
