@@ -79,7 +79,7 @@ class MaterialSummernote extends React.Component {
   }
 
   /* eslint class-methods-use-this: "off" */
-  inlineCodeButton(context) {
+  inlineCodeButton() {
     const ui = $.summernote.ui;
 
     const button = ui.button({
@@ -90,15 +90,16 @@ class MaterialSummernote extends React.Component {
       tooltip: this.props.intl.formatMessage(translations.inlineCode),
       click: () => {
         const node = $(window.getSelection().getRangeAt(0).commonAncestorContainer);
+        const smrNote = this.reactSummernote.editor;
         if (node.parent().is('code')) {
           node.unwrap();
         } else {
-          const range = context.invoke('editor.createRange');
+          const range = smrNote.summernote('editor.createRange');
           const text = range.toString();
           if (text !== '') {
             const newNode = $('<code></code>').eq(0);
             newNode.text(text);
-            context.invoke('editor.insertNode', newNode.get(0));
+            smrNote.summernote('editor.insertNode', newNode.get(0));
           }
         }
       },
