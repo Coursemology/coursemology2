@@ -15,7 +15,7 @@
       tooltip: 'Inline Code',
       click: function() {
         var node = $(window.getSelection().getRangeAt(0).commonAncestorContainer);
-        var smrNote = $('.summernote-initialised');
+        var smrNote = node.closest('.note-editor').prev('.summernote-initialised');
         if(node.parent().is('code')) {
           node.unwrap();
         } else {
