@@ -1,12 +1,12 @@
 # frozen_string_literal: true
-require 'workflow_activerecord'
+require 'workflow-activerecord'
 
 module Extensions::DeferredWorkflowStatePersistence::Workflow; end
 module Extensions::DeferredWorkflowStatePersistence::Workflow::Adapter; end
 module Extensions::DeferredWorkflowStatePersistence::Workflow::Adapter::DeferredActiveRecord
   extend ActiveSupport::Concern
   included do
-    include WorkflowActiverecord::Adapter::ActiveRecord
+    include WorkflowActiverecord
     include InstanceMethods
   end
 
