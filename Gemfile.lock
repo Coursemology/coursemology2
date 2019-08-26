@@ -520,7 +520,7 @@ GEM
       execjs (>= 0.3.0, < 3)
     unicode-display_width (1.5.0)
     uniform_notifier (1.12.1)
-    unread (0.10.1)
+    unread (0.11.0)
       activerecord (>= 3)
     url (0.3.2)
     validates_hostname (1.0.8)
