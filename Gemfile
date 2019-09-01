@@ -99,6 +99,10 @@ group :development do
 
   # Gem to generate favicon
   gem 'rails_real_favicon'
+
+  # Analyze performance issues
+  gem 'stackprof'
+  gem 'derailed_benchmarks'
 end
 
 group :test do
@@ -224,3 +228,4 @@ gem 'rails-controller-testing'
 gem 'rwordnet', git: 'https://github.com/makqien/rwordnet'
 gem 'loofah', '>= 2.2.1'
 gem 'rails-html-sanitizer', '>= 1.0.4'
+
