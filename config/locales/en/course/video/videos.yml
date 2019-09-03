@@ -27,6 +27,8 @@ en:
         destroy:
           success: '%{title} was deleted.'
           failure: 'Could not delete video: %{error}'
+        todo_video_button:
+          watch: 'Watch'
         video_attempt_button:
           watch: 'Watch'
           rewatch: 'Re-Watch'
@@ -34,6 +36,6 @@ en:
           url_placeholder: >
             Please provide a valid youtube URL,
             eg. https://www.youtube.com/watch?v=dQw4w9WgXcQ
-          url_change_warning:  >
+          url_change_warning: >
             Warning: Changing url for this video would cause all its submissions and
             sessions data to be destroyed.

@@ -171,7 +171,7 @@ RSpec.feature 'Course: Homepage' do
         # Reload page to load other todos
         visit course_path(course)
         within find(content_tag_selector(video_todo)) do
-          expect(page).to have_text(I18n.t('course.video.videos.video_attempt_button.watch'))
+          expect(page).to have_text(I18n.t('course.video.videos.todo_video_button.watch'))
         end
 
         within find(content_tag_selector(survey_todo)) do
