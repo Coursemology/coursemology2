@@ -22,6 +22,12 @@
 /log/*.log
 /tmp
 
+# Ignore ruby-version file
+/.ruby-version
+
+# Ignore byebug_history file
+/.byebug_history
+
 # Ignore generated documentation
 /.yardoc/*
 /doc/*
