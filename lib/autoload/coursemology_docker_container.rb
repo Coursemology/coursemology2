@@ -40,11 +40,7 @@ class CoursemologyDockerContainer < Docker::Container
                                               image: image) do |payload|
         options = { 'Image' => image }
         options['Cmd'] = argv if argv.present?
-        options['HostConfig'] = {
-          'memory': CONTAINER_MEMORY_LIMIT,
-          'memory-swap': CONTAINER_MEMORY_LIMIT,
-          'LogConfig': LOG_CONFIG
-        }
+        options['HostConfig'] = { 'memory': CONTAINER_MEMORY_LIMIT, 'LogConfig': LOG_CONFIG }
         options['NetworkDisabled'] = true
 
         payload[:container] = super(options)
