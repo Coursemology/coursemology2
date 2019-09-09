@@ -21,17 +21,17 @@
         = render partial: @currently_active_announcements,
                  spacer_template: 'announcements/announcement_spacer'
 
-    - if @todos && !@todos.empty?
-      h2 = t('.pending_tasks')
-      table.table.table-hover.pending-tasks
-        thead
-          tr
-            th = t('.pending_tasks_title')
-            th.text-center = t('.pending_tasks_start_at')
-            th.text-center = t('.pending_tasks_end_at')
-            th
-        tbody
-          = render @todos
+    - if @assessment_todos && !@assessment_todos.empty?
+      = render partial: 'latest_todos',
+        locals: { todos: @assessment_todos, todo_type: 'Assessments', see_more_path: course_assessments_path(current_course) }
+
+    - if @video_todos && !@video_todos.empty?
+      = render partial: 'latest_todos',
+        locals: { todos: @video_todos, todo_type: 'Videos', see_more_path: course_videos_path(current_course) }
+
+    - if @survey_todos && !@survey_todos.empty?
+      = render partial: 'latest_todos',
+        locals: { todos: @survey_todos, todo_type: 'Surveys', see_more_path: course_surveys_path(current_course) }
 
     - if @activity_feeds && !@activity_feeds.empty?
       h2 = t('.activities')

@@ -21,7 +21,9 @@ en:
         instructors: 'Instructors'
         announcements: 'Announcements'
         activities: 'Latest Activity'
-        pending_tasks: 'Pending Tasks'
+      latest_todos:
+        pending_task_type: 'Pending %{task_type}'
         pending_tasks_title: 'Title'
         pending_tasks_start_at: 'Start At'
         pending_tasks_end_at: 'End At'
+        more_tasks: 'See all (%{unlisted_count} more pending)'
