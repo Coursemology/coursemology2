@@ -1,3 +1,3 @@
 - video = todo_video_button
-= render partial: 'course/video/videos/video_attempt_button',
-         locals: { video: video }
+= link_to t('.watch'), course_video_submissions_path(current_course, video),
+  class: ['btn', 'btn-info'], method: :post

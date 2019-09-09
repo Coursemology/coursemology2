@@ -45,9 +45,12 @@ class Course::CoursesController < Course::Controller
 
   def load_todos
     return unless current_course_user&.student?
-    @todos = Course::LessonPlan::Todo.pending_for(current_course_user).
-             includes(:user, item: :course)
+    todos = Course::LessonPlan::Todo.pending_for(current_course_user).
+            includes(:user, item: :course).order(updated_at: :desc)
     # TODO: Fix n+1 query for #can_user_start?
-    @todos = @todos.select(&:can_user_start?)
+    todos = todos.select(&:can_user_start?)
+    @video_todos = todos.select { |td| td.item.actable_type == Course::Video.name }
+    @assessment_todos = todos.select { |td| td.item.actable_type == Course::Assessment.name }
+    @survey_todos = todos.select { |td| td.item.actable_type == Course::Survey.name }
   end
 end

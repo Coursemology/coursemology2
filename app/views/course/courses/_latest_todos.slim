@@ -1,0 +1,15 @@
+- if todos && !todos.empty?
+  h2 = t('.pending_task_type', task_type: todo_type)
+  table.table.table-hover.pending-tasks
+    thead
+      tr
+        th = t('.pending_tasks_title')
+        th.text-center = t('.pending_tasks_start_at')
+        th.text-center = t('.pending_tasks_end_at')
+        th
+    tbody
+      = render todos.first(5)
+- if todos.size > 5
+  = link_to t('.more_tasks', unlisted_count: todos.size - 5),
+    see_more_path,
+    class: ['btn', 'btn-info', 'see-more']
