@@ -190,7 +190,7 @@ GEM
     coursemology-polyglot (0.2.9.4)
       activesupport (>= 4.2, < 6)
     crass (1.0.4)
-    devise (4.7.0)
+    devise (4.7.1)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 4.1.0)
