@@ -37,13 +37,23 @@ class Course::ObjectDuplicationsController < Course::ComponentController
 
   def load_source_courses_data
     ActsAsTenant.without_tenant do
-      @source_courses = Course.accessible_by(current_ability, :duplicate_from).includes(:instance)
+      # Workaround to get Courses where current user is allowed to duplicate contents from
+      # without having to use accessible_by, which can take up to 5 minutes with includes
+      course_copiers = CourseUser.where(user: current_user).
+                       where(role: CourseUser::MANAGER_ROLES.to_a) +
+                       CourseUser.where(user: current_user).
+                       where(role: :observer)
+      @source_courses = Course.includes(:instance).find(course_copiers.map(&:course_id))
     end
   end
 
   def load_destination_courses_data
     ActsAsTenant.without_tenant do
-      @destination_courses = Course.accessible_by(current_ability, :duplicate_to).includes(:instance)
+      # Workaround to get Courses where current user plays one of manager roles
+      # without having to use accessible_by, which can take up to 5 minutes with includes
+      course_managers = CourseUser.where(user: current_user).
+                        where(role: CourseUser::MANAGER_ROLES.to_a)
+      @destination_courses = Course.includes(:instance).find(course_managers.map(&:course_id))
       @root_folder_map = Course::Material::Folder.root.includes(:materials, :children).
                          where(course_id: @destination_courses.map(&:id)).map do |folder|
                            [folder.course_id, folder]
