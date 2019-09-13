@@ -47,7 +47,8 @@ class ImageUploader < CarrierWave::Uploader::Base
     when 'CarrierWave::Storage::File'
       cache!(File.new(other_uploader.file.path))
     when 'CarrierWave::Storage::Fog', 'CarrierWave::Storage::AWS'
-      download!(other_uploader.url)
+      # Decode url to prevent double-encoding after carrierwave 2.0 upgrade
+      download!(CGI.unescape(other_uploader.url))
     end
   end
 
