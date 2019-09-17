@@ -1,9 +1,11 @@
-- if item.time_for(course_user).is_a? Course::PersonalTime and item.time_for(course_user).fixed?
+- effective_time = item.time_for(course_user)
+- reference_time = item.reference_time_for(course_user)
+- if effective_time.is_a? Course::PersonalTime and effective_time.fixed?
   span title=t('course.lesson_plan.items.fixed_desc')
     = fa_icon 'lock'
-=< format_datetime(item.time_for(course_user)[attribute], datetime_format)
-- if item.time_for(course_user)[attribute] != item.reference_time_for(course_user)[attribute]
+=< format_datetime(effective_time[attribute], datetime_format)
+- if effective_time[attribute] != reference_time[attribute]
   br
   strike
     = t('course.lesson_plan.items.ref')
-    = format_datetime(item.reference_time_for(course_user)[attribute], datetime_format)
+    = format_datetime(reference_time[attribute], datetime_format)
