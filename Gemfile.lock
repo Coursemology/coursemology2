@@ -152,7 +152,7 @@ GEM
     byebug (11.0.1)
     calculated_attributes (0.4.0)
       activerecord (>= 3.2.20)
-    cancancan (2.3.0)
+    cancancan (3.0.1)
     cancancan-baby_squeel (0.2.0)
       activerecord (>= 4.1, < 5.2.1)
       baby_squeel (>= 1.1.5)
