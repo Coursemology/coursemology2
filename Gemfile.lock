@@ -309,7 +309,7 @@ GEM
       actionpack (>= 3.0, < 6.0)
       activerecord (>= 3.0, < 6.0)
       railties (>= 3.0, < 6.0)
-    loofah (2.2.3)
+    loofah (2.3.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
