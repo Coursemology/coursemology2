@@ -349,6 +349,7 @@ class AssessmentForm extends React.Component {
               component={TextField}
               floatingLabelText={<FormattedMessage {...translations.baseExp} />}
               type="number"
+              onWheel={event => event.currentTarget.blur()}
               style={styles.flexChild}
               disabled={submitting}
             />
@@ -357,6 +358,7 @@ class AssessmentForm extends React.Component {
               component={TextField}
               floatingLabelText={<FormattedMessage {...translations.timeBonusExp} />}
               type="number"
+              onWheel={event => event.currentTarget.blur()}
               style={styles.flexChild}
               disabled={submitting}
             />
