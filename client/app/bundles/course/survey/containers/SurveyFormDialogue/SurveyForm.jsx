@@ -138,6 +138,7 @@ const SurveyForm = ({
           floatingLabelText={intl.formatMessage(translations.basePoints)}
           component={TextField}
           type="number"
+          onWheel={event => event.currentTarget.blur()}
           {...{ disabled }}
         />
       </div>
@@ -152,6 +153,7 @@ const SurveyForm = ({
           floatingLabelText={intl.formatMessage(translations.bonusPoints)}
           component={TextField}
           type="number"
+          onWheel={event => event.currentTarget.blur()}
           disabled={formValues && !formValues.allow_response_after_end}
         />
         <ReactTooltip id="timeBonusExpTooltip">
