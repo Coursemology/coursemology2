@@ -180,7 +180,7 @@ GEM
       mini_mime (>= 0.1.3)
     childprocess (3.0.0)
     cocoon (1.2.14)
-    codecov (0.1.14)
+    codecov (0.1.15)
       json
       simplecov
       url
