@@ -10,5 +10,6 @@ en:
           destroy:
             success: 'Tab %{title} was deleted.'
             failure: 'Could not delete tab: %{error}'
+            confirm: 'Deleting this tab will delete all associated assessments. Are you sure?'
           new:
             header: 'New Assessment Tab'
