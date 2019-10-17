@@ -71,7 +71,7 @@ module Course::LessonPlan::PersonalizationConcern
             personal_point + (reference_time.start_at - reference_point) * learning_rate_ema,
             course_tz,
             FOMO_DATE_ROUNDING_THRESHOLD
-          )
+          ) unless personal_time.start_at < Time.zone.now
         # Hard limits to make sure we don't fail bounds checks
         personal_time.start_at = [personal_time.start_at, reference_time.start_at, reference_time.end_at].compact.min
         personal_time.bonus_end_at = reference_time.bonus_end_at
@@ -122,7 +122,7 @@ module Course::LessonPlan::PersonalizationConcern
         personal_time = item.find_or_create_personal_time_for(course_user)
         personal_time.start_at = reference_time.start_at
         personal_time.bonus_end_at = reference_time.bonus_end_at
-        if reference_time.end_at.present?
+        if reference_time.end_at.present? && personal_time.end_at > Time.zone.now
           personal_time.end_at = round_to_date(
             personal_point + (reference_time.end_at - reference_point) * learning_rate_ema,
             course_tz,
@@ -130,8 +130,6 @@ module Course::LessonPlan::PersonalizationConcern
           )
           # Hard limits to make sure we don't fail bounds checks
           personal_time.end_at = [personal_time.end_at, reference_time.end_at, reference_time.start_at].compact.max
-        else
-          personal_time.end_at = nil
         end
         personal_time.save!
       end
