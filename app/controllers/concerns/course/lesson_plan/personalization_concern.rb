@@ -2,10 +2,10 @@
 module Course::LessonPlan::PersonalizationConcern
   extend ActiveSupport::Concern
 
-  OTOT_LEARNING_RATE_MAX = 1.0
-  OTOT_LEARNING_RATE_MIN = 0.67
-  OTOT_LEARNING_RATE_HARD_MIN = 0.5 # No matter how doomed the student is, refuse to go faster than this
-  OTOT_DATE_ROUNDING_THRESHOLD = 0.8
+  FOMO_LEARNING_RATE_MAX = 1.0
+  FOMO_LEARNING_RATE_MIN = 0.67
+  FOMO_LEARNING_RATE_HARD_MIN = 0.5 # No matter how doomed the student is, refuse to go faster than this
+  FOMO_DATE_ROUNDING_THRESHOLD = 0.8
 
   STRAGGLERS_LEARNING_RATE_MAX = 2.0
   STRAGGLERS_LEARNING_RATE_MIN = 1.0
@@ -28,7 +28,7 @@ module Course::LessonPlan::PersonalizationConcern
       where.not(lesson_plan_item_id: submitted_lesson_plan_item_ids.keys).delete_all
   end
 
-  def algorithm_otot(course_user)
+  def algorithm_fomo(course_user)
     course_tz = course_user.course.time_zone
     submitted_lesson_plan_item_ids = lesson_plan_items_submission_time_hash(course_user)
     items = course_user.course.lesson_plan_items.published.
@@ -45,9 +45,9 @@ module Course::LessonPlan::PersonalizationConcern
 
     # Constrain learning rate
     effective_min, effective_max = compute_learning_rate_effective_limits(
-      course_user, items, submitted_lesson_plan_item_ids, OTOT_LEARNING_RATE_MIN, OTOT_LEARNING_RATE_MAX
+      course_user, items, submitted_lesson_plan_item_ids, FOMO_LEARNING_RATE_MIN, FOMO_LEARNING_RATE_MAX
     )
-    learning_rate_ema = [OTOT_LEARNING_RATE_HARD_MIN, effective_min, [learning_rate_ema, effective_max].min].max
+    learning_rate_ema = [FOMO_LEARNING_RATE_HARD_MIN, effective_min, [learning_rate_ema, effective_max].min].max
 
     # Compute personal times for all items
     reference_point = items.first.reference_time_for(course_user).start_at
@@ -70,7 +70,7 @@ module Course::LessonPlan::PersonalizationConcern
           round_to_date(
             personal_point + (reference_time.start_at - reference_point) * learning_rate_ema,
             course_tz,
-            OTOT_DATE_ROUNDING_THRESHOLD
+            FOMO_DATE_ROUNDING_THRESHOLD
           )
         # Hard limits to make sure we don't fail bounds checks
         personal_time.start_at = [personal_time.start_at, reference_time.start_at, reference_time.end_at].compact.min
