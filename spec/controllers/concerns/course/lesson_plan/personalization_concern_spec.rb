@@ -33,8 +33,8 @@ RSpec.describe Course::LessonPlan::PersonalizationConcern do
       end
     end
 
-    context 'when course user is on the otot algorithm' do
-      let!(:course_user) { create(:course_user, course: course, timeline_algorithm: 'otot') }
+    context 'when course user is on the fomo algorithm' do
+      let!(:course_user) { create(:course_user, course: course, timeline_algorithm: 'fomo') }
       let!(:submission1) do
         create(:course_assessment_submission, assessment: assessment1, creator: course_user.user).tap(&:finalise!)
       end
