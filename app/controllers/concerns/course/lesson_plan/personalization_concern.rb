@@ -84,17 +84,18 @@ module Course::LessonPlan::PersonalizationConcern
         # Update personal time
         reference_time = item.reference_time_for(course_user)
         personal_time = item.find_or_create_personal_time_for(course_user)
-        next if (personal_time.start_at, personal_time.bonus_end_at, personal_time.end_at).compact.min < Time.zone.now
         personal_time.start_at =
           round_to_date(
             personal_point + (reference_time.start_at - reference_point) * learning_rate_ema,
             course_tz,
             FOMO_DATE_ROUNDING_THRESHOLD
-          )
+          ) if personal_time.start_at > Time.zone.now
         # Hard limits to make sure we don't fail bounds checks
         personal_time.start_at = [personal_time.start_at, reference_time.start_at, reference_time.end_at].compact.min
-        personal_time.bonus_end_at = reference_time.bonus_end_at
-        personal_time.end_at = reference_time.end_at
+        if personal_time.bonus_end_at && personal_time.bonus_end_at > Time.zone.now
+          personal_time.bonus_end_at = reference_time.bonus_end_at
+        end
+        personal_time.end_at = reference_time.end_at if personal_time.end_at && personal_time.end_at > Time.zone.now
         personal_time.save!
       end
     end
@@ -139,10 +140,11 @@ module Course::LessonPlan::PersonalizationConcern
         # Update personal time
         reference_time = item.reference_time_for(course_user)
         personal_time = item.find_or_create_personal_time_for(course_user)
-        next if (personal_time.start_at, personal_time.bonus_end_at, personal_time.end_at).compact.min < Time.zone.now
-        personal_time.start_at = reference_time.start_at
-        personal_time.bonus_end_at = reference_time.bonus_end_at
-        if reference_time.end_at.present?
+        personal_time.start_at = reference_time.start_at if personal_time.start_at > Time.zone.now
+        if personal_time.bonus_end_at && personal_time.bonus_end_at > Time.zone.now
+          personal_time.bonus_end_at = reference_time.bonus_end_at
+        end
+        if reference_time.end_at.present? && personal_time.end_at > Time.zone.now
           personal_time.end_at = round_to_date(
             personal_point + (reference_time.end_at - reference_point) * learning_rate_ema,
             course_tz,
@@ -150,8 +152,6 @@ module Course::LessonPlan::PersonalizationConcern
           )
           # Hard limits to make sure we don't fail bounds checks
           personal_time.end_at = [personal_time.end_at, reference_time.end_at, reference_time.start_at].compact.max
-        else
-          personal_time.end_at = nil
         end
         personal_time.save!
       end
