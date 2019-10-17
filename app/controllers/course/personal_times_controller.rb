@@ -13,6 +13,19 @@ class Course::PersonalTimesController < Course::ComponentController
                ordered_by_date_and_title.
                with_reference_times_for(@course_user).
                with_personal_times_for(@course_user)
+
+      @learning_rate = compute_learning_rate_ema(@course_user, @items,
+                                                 lesson_plan_items_submission_time_hash(@course_user))
+
+      submissions = lesson_plan_items_submission_time_hash(@course_user)
+      items = @course_user.course.lesson_plan_items.published.
+              with_reference_times_for(@course_user).
+              with_personal_times_for(@course_user).
+              to_a
+      items = items.sort_by { |x| x.time_for(@course_user).start_at }
+      if items.any?
+        @learning_rate_limits = compute_learning_rate_effective_limits(@course_user, items, submissions, 0.5, 2)
+      end
     end
 
     render 'index'

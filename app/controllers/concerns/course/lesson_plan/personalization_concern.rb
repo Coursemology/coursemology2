@@ -143,8 +143,6 @@ module Course::LessonPlan::PersonalizationConcern
       each { |item| item.reload.find_or_create_personal_time_for(course_user).update(fixed: true) }
   end
 
-  private
-
   # Returns { lesson_plan_item_id => submitted_time or nil }
   # If the lesson plan item is a key in this hash then we consider the item "submitted" regardless of whether we have a
   # submission time for it.
@@ -217,6 +215,8 @@ module Course::LessonPlan::PersonalizationConcern
     end
     learning_rate_ema
   end
+
+  private
 
   # Round to "nearest" date in course's timezone, NOT user's timezone
   # `threshold` allows us to control how generously we snap.
