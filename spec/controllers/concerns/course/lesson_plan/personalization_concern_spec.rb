@@ -56,5 +56,17 @@ RSpec.describe Course::LessonPlan::PersonalizationConcern do
         expect(course_user.personal_times.count).to eq(course.assessments.count - 1)
       end
     end
+
+    context 'when course user is on the otot algorithm' do
+      let!(:course_user) { create(:course_user, course: course, timeline_algorithm: 'otot') }
+      let!(:submission1) do
+        create(:course_assessment_submission, assessment: assessment1, creator: course_user.user).tap(&:finalise!)
+      end
+
+      it 'creates personal times' do
+        dummy_controller.send(:update_personalized_timeline_for, course_user)
+        expect(course_user.personal_times.count).to eq(course.assessments.count - 1)
+      end
+    end
   end
 end
