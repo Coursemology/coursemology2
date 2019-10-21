@@ -28,6 +28,24 @@ module Course::LessonPlan::PersonalizationConcern
       where.not(lesson_plan_item_id: submitted_lesson_plan_item_ids.keys).delete_all
   end
 
+  def algorithm_otot(course_user)
+    submitted_lesson_plan_item_ids = lesson_plan_items_submission_time_hash(course_user)
+    items = course_user.course.lesson_plan_items.published.
+            with_reference_times_for(course_user).
+            with_personal_times_for(course_user).
+            to_a
+    items = items.sort_by { |x| x.time_for(course_user).start_at }
+    items_affects_personal_times = items.select(&:affects_personal_times?)
+
+    learning_rate_ema = compute_learning_rate_ema(
+      course_user, items_affects_personal_times, submitted_lesson_plan_item_ids
+    )
+    return if learning_rate_ema.nil?
+
+    # Apply the appropriate algo depending on student's leaning rate
+    learning_rate_ema < 1 ? algorithm_fomo(course_user) : algorithm_stragglers(course_user)
+  end
+
   def algorithm_fomo(course_user)
     course_tz = course_user.course.time_zone
     submitted_lesson_plan_item_ids = lesson_plan_items_submission_time_hash(course_user)
@@ -71,11 +89,13 @@ module Course::LessonPlan::PersonalizationConcern
             personal_point + (reference_time.start_at - reference_point) * learning_rate_ema,
             course_tz,
             FOMO_DATE_ROUNDING_THRESHOLD
-          )
+          ) if personal_time.start_at > Time.zone.now
         # Hard limits to make sure we don't fail bounds checks
         personal_time.start_at = [personal_time.start_at, reference_time.start_at, reference_time.end_at].compact.min
-        personal_time.bonus_end_at = reference_time.bonus_end_at
-        personal_time.end_at = reference_time.end_at
+        if personal_time.bonus_end_at && personal_time.bonus_end_at > Time.zone.now
+          personal_time.bonus_end_at = reference_time.bonus_end_at
+        end
+        personal_time.end_at = reference_time.end_at if personal_time.end_at && personal_time.end_at > Time.zone.now
         personal_time.save!
       end
     end
@@ -120,9 +140,11 @@ module Course::LessonPlan::PersonalizationConcern
         # Update personal time
         reference_time = item.reference_time_for(course_user)
         personal_time = item.find_or_create_personal_time_for(course_user)
-        personal_time.start_at = reference_time.start_at
-        personal_time.bonus_end_at = reference_time.bonus_end_at
-        if reference_time.end_at.present?
+        personal_time.start_at = reference_time.start_at if personal_time.start_at > Time.zone.now
+        if personal_time.bonus_end_at && personal_time.bonus_end_at > Time.zone.now
+          personal_time.bonus_end_at = reference_time.bonus_end_at
+        end
+        if reference_time.end_at.present? && personal_time.end_at > Time.zone.now
           personal_time.end_at = round_to_date(
             personal_point + (reference_time.end_at - reference_point) * learning_rate_ema,
             course_tz,
@@ -130,8 +152,6 @@ module Course::LessonPlan::PersonalizationConcern
           )
           # Hard limits to make sure we don't fail bounds checks
           personal_time.end_at = [personal_time.end_at, reference_time.end_at, reference_time.start_at].compact.max
-        else
-          personal_time.end_at = nil
         end
         personal_time.save!
       end
