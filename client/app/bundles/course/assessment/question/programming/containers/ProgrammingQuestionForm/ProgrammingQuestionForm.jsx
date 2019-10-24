@@ -239,6 +239,7 @@ class ProgrammingQuestionForm extends React.Component {
           name={ProgrammingQuestionForm.getInputName(field)}
           id={ProgrammingQuestionForm.getInputId(field)}
           onChange={(e, newValue) => { this.handleChange(field, newValue); }}
+          onWheel={type === 'number' && (event => event.currentTarget.blur())}
           errorText={error}
           floatingLabelText={(required ? '* ' : '') + label}
           floatingLabelFixed
