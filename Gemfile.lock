@@ -177,7 +177,7 @@ GEM
       mime-types (>= 1.16)
     childprocess (3.0.0)
     cocoon (1.2.14)
-    codecov (0.1.15)
+    codecov (0.1.16)
       json
       simplecov
       url
