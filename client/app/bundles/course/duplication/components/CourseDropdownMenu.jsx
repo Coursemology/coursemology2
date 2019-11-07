@@ -15,6 +15,9 @@ const styles = {
   },
   dropDown: {
     width: '100%',
+    boxShadow: '3px 3px 2px 1px rgba(231, 231, 231, 1)',
+    margin: '4px',
+    borderRadius: '4px',
   },
   dropdownRow: {
     display: 'flex',
