@@ -183,7 +183,7 @@ GEM
       url
     concurrent-ruby (1.1.5)
     consistency_fail (0.3.7)
-    coursemology-polyglot (0.2.9.4)
+    coursemology-polyglot (0.3)
       activesupport (>= 4.2, < 6)
     crass (1.0.5)
     devise (4.7.1)
@@ -317,7 +317,7 @@ GEM
     mini_magick (4.9.5)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
-    minitest (5.12.2)
+    minitest (5.13.0)
     momentjs-rails (2.20.1)
       railties (>= 3.1)
     multi_json (1.13.1)
