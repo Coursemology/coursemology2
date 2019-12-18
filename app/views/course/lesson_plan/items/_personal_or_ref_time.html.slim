@@ -3,7 +3,7 @@
 - if effective_time.is_a? Course::PersonalTime and effective_time.fixed?
   span title=t('course.lesson_plan.items.fixed_desc')
     = fa_icon 'lock'
-=< format_datetime(effective_time[attribute], datetime_format)
+=< format_datetime(effective_time[attribute], datetime_format) if effective_time[attribute]
 - if effective_time[attribute] != reference_time[attribute]
   br
   strike
