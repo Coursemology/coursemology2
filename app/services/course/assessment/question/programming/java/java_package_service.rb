@@ -122,7 +122,6 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
     autograde_build_path = File.join(File.expand_path(__dir__), 'java_build.xml').freeze
     autograde_pre_path = File.join(File.expand_path(__dir__), 'java_autograde_pre.java').freeze
     autograde_run_path = File.join(File.expand_path(__dir__), 'RunTests.java').freeze
-    autograde_result_path = File.join(File.expand_path(__dir__), 'AutograderResult.java').freeze
     makefile_path = File.join(File.expand_path(__dir__), 'java_simple_makefile').freeze
     standard_makefile_path = File.join(File.expand_path(__dir__), 'java_standard_makefile').freeze
 
@@ -143,10 +142,6 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
       zip.put_next_entry 'tests/'
       zip.put_next_entry 'tests/RunTests.java'
       zip.print File.read(autograde_run_path)
-
-      # Create Java class source file for storing Autograder results
-      zip.put_next_entry 'tests/AutograderResult.java'
-      zip.print File.read(autograde_result_path)
 
       # Create Autograder test file containing all the test functions
       zip.put_next_entry 'tests/prepend'
@@ -246,11 +241,10 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
           ITestResult result = Reporter.getCurrentTestResult();
           result.setAttribute("expression", #{test[:expression].inspect});
           #{test[:inline_code]}
-          AutograderResult theResult = new AutograderResult(#{test[:expression]});
           result.setAttribute("expected", printValue(#{test[:expected]}));
-          result.setAttribute("output", printValue(theResult.getResult()));
+          result.setAttribute("output", printValue(#{test[:expression]}));
           #{hint}
-          expectEquals(theResult.getResult(), #{test[:expected]});
+          expectEquals(#{test[:expression]}, #{test[:expected]});
         }
       Java
 
