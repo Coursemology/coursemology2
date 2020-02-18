@@ -217,7 +217,7 @@ export class VisibleTestCaseView extends Component {
     return (
       <TableRow key={testCase.identifier} style={styles.testCaseRow[testCaseResult]}>
         { canReadTests && tableRowColumnFor(testCase.identifier) }
-        {tableRowColumnFor(testCase.expression)}
+        {tableRowColumnFor(<ExpandableText style={outputStyle} text={testCase.expression} />)}
         {tableRowColumnFor(<ExpandableText style={outputStyle} text={testCase.expected || ''} /> || '')}
         { (canReadTests || showPublicTestCasesOutput)
           && tableRowColumnFor(<ExpandableText style={outputStyle} text={testCase.output || ''} /> || '') }
