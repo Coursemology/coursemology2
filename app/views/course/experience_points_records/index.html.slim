@@ -1,14 +1,27 @@
 = page_header t('.header', name: display_course_user(@course_user))
 
-table.table.levels-list.table-hover
-  thead
-    tr
-      th = Course::ExperiencePointsRecord.human_attribute_name(:updater)
-      th = Course::ExperiencePointsRecord.human_attribute_name(:reason)
-      th = Course::ExperiencePointsRecord.human_attribute_name(:points_awarded)
-      th = Course::ExperiencePointsRecord.human_attribute_name(:updated_at)
-      th
-  tbody
-    = render @experience_points_records
+- if @course.gamified
+  table.table.levels-list.table-hover
+    thead
+      tr
+        th = Course::ExperiencePointsRecord.human_attribute_name(:updater)
+        th = Course::ExperiencePointsRecord.human_attribute_name(:reason)
+        th = "Grade"
+        th = Course::ExperiencePointsRecord.human_attribute_name(:points_awarded)
+        th = Course::ExperiencePointsRecord.human_attribute_name(:updated_at)
+        th
+    tbody
+      = render @experience_points_records
+
+- else
+  table.table.levels-list.table-hover
+    thead
+      tr
+        th = Course::ExperiencePointsRecord.human_attribute_name(:updater)
+        th = Course::ExperiencePointsRecord.human_attribute_name(:reason)
+        th = "Grade"
+        th = Course::ExperiencePointsRecord.human_attribute_name(:updated_at)
+    tbody
+      = render @experience_points_records
 
 = paginate @experience_points_records

@@ -5,28 +5,52 @@
 - row_options_hash = { class: 'experience-points-record' }.tap do |hash|
   - hash.merge!({ 'data-action' => points_record_path, 'data-method' => 'patch' }) if can_update
 
-= content_tag_for(:tr, experience_points_record, row_options_hash)
-  = simple_fields_for experience_points_record do |f|
-    td
-      - updater_course_user = @course_user_preload_service.course_user_for(experience_points_record.updater)
-      = link_to_user(updater_course_user || experience_points_record.updater)
-    td
-      - if !experience_points_record.manually_awarded?
-        = render partial: experience_points_record.specific, suffix: 'experience_points_reason'
-      - elsif can_update
-        = f.input :reason, label: false
-      - else
-        = format_inline_text(experience_points_record.reason)
-    td
-      - if can_update
-        = f.input :points_awarded, label: false
-      - else
-        = experience_points_record.points_awarded
-    td
-      = experience_points_record.updated_at
-    td
-      - if can_update
-        = f.button :submit, id: 'update' do
-          = fa_icon 'save'.freeze
-      - if experience_points_record.manually_awarded? && can?(:destroy, experience_points_record)
-        = delete_button(points_record_path)
+- if @course.gamified
+  = content_tag_for(:tr, experience_points_record, row_options_hash)
+    = simple_fields_for experience_points_record do |f|
+      td
+        - updater_course_user = @course_user_preload_service.course_user_for(experience_points_record.updater)
+        = link_to_user(updater_course_user || experience_points_record.updater)
+      td
+        - if !experience_points_record.manually_awarded?
+          = render partial: experience_points_record.specific, suffix: 'experience_points_reason'
+        - elsif can_update
+          = f.input :reason, label: false
+        - else
+          = format_inline_text(experience_points_record.reason)
+      td 
+        = "#{experience_points_record.specific.grade} / #{experience_points_record.specific.assessment.calculated(:maximum_grade).maximum_grade}"
+      td
+        - if can_update
+          = f.input :points_awarded, label: false
+        - else
+          = experience_points_record.points_awarded
+      td
+        = experience_points_record.updated_at
+      td
+        - if can_update
+          = f.button :submit, id: 'update' do
+            = fa_icon 'save'.freeze
+        - if experience_points_record.manually_awarded? && can?(:destroy, experience_points_record)
+          = delete_button(points_record_path)
+
+- else
+  = content_tag_for(:tr, experience_points_record, row_options_hash)
+    = simple_fields_for experience_points_record do |f|
+      td
+        - updater_course_user = @course_user_preload_service.course_user_for(experience_points_record.updater)
+        = link_to_user(updater_course_user || experience_points_record.updater)
+      td
+        - if !experience_points_record.manually_awarded?
+          = render partial: experience_points_record.specific, suffix: 'experience_points_reason'
+        - elsif can_update
+          = f.input :reason, label: false
+        - else
+          = format_inline_text(experience_points_record.reason)
+      td 
+        = "#{experience_points_record.specific.grade} / #{experience_points_record.specific.assessment.calculated(:maximum_grade).maximum_grade}"
+      td
+        = experience_points_record.updated_at
+
+
+
