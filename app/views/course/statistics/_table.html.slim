@@ -9,8 +9,11 @@ table.table.table-hover
     - unless @service.no_group_managers?
       th
         = t('.tutor')
-    th.text-center
-      = Course::Level.model_name.human
+    - if current_course.gamified?
+      th.text-center
+        = Course::Level.model_name.human
+    - if !current_course.gamified?
+      th
     - if current_course.gamified?
       th.text-center
         = t('.experience_points')
@@ -29,8 +32,13 @@ table.table.table-hover
       - unless @service.no_group_managers?
         td
           = @service.group_managers_of(student).map(&:name).join(', ')
-      td.text-center
-        = student.level_number
+      - if !current_course.gamified?
+        td.text-center
+          = link_to course_user_experience_points_records_path(current_course, student), class:"btn btn-primary" do
+              = fa_icon 'table'.freeze
+      - if current_course.gamified?
+        td.text-center
+          = student.level_number
       - if current_course.gamified?
         td.text-center
           = link_to student.experience_points,
