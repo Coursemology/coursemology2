@@ -12,3 +12,4 @@ en:
           parent_category: 'Category'
           show_public_test_cases_output: 'Show output for public test cases to students'
           show_stdout_and_stderr: 'Show stdout and stderr to students'
+          allow_randomization: 'Allow randomization for assessments'

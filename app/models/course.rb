@@ -193,6 +193,15 @@ class Course < ApplicationRecord
     settings(:course_assessments_component).show_stdout_and_stderr = option
   end
 
+  def allow_randomization
+    settings(:course_assessments_component).allow_randomization
+  end
+
+  def allow_randomization=(option)
+    option = ActiveRecord::Type::Boolean.new.cast(option)
+    settings(:course_assessments_component).allow_randomization = option
+  end
+
   def upcoming_lesson_plan_items_exist?
     opening_items = lesson_plan_items.published.eager_load(:personal_times, :reference_times).preload(:actable)
     opening_items.select { |item| item.actable.include_in_consolidated_email?(:opening) }.any? do |item|
