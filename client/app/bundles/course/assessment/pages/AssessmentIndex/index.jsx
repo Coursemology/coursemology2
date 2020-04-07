@@ -32,6 +32,8 @@ class PopupDialog extends React.Component {
     intl: intlShape,
     // If the gamification feature is enabled in the course.
     gamified: PropTypes.bool,
+    // If randomization is allowed for assessments in the current course
+    randomizationAllowed: PropTypes.bool,
     categoryId: PropTypes.number.isRequired,
     tabId: PropTypes.number.isRequired,
     pristine: PropTypes.bool,
@@ -96,6 +98,7 @@ class PopupDialog extends React.Component {
       use_public: false,
       use_private: true,
       use_evaluation: true,
+      randomization: false,
     };
 
     return (
@@ -118,6 +121,7 @@ class PopupDialog extends React.Component {
         >
           <AssessmentForm
             gamified={this.props.gamified}
+            randomizationAllowed={this.props.randomizationAllowed}
             modeSwitching
             onSubmit={this.onFormSubmit}
             initialValues={initialValues}

@@ -98,6 +98,8 @@ class AssessmentForm extends React.Component {
       tab_id: PropTypes.number,
       title: PropTypes.string,
     })),
+    // If randomization is enabled for the assessment
+    randomization: PropTypes.bool,
     error: errorProps,
     // Above are props from redux-form.
 
@@ -108,6 +110,8 @@ class AssessmentForm extends React.Component {
     gamified: PropTypes.bool,
     // If the personalized timeline fields should be displayed
     show_personalized_timeline_features: PropTypes.bool,
+    // If randomization is allowed for assessments in the current course
+    randomizationAllowed: PropTypes.bool,
     // If allow to switch between autoraded and manually graded mode.
     modeSwitching: PropTypes.bool,
     folderAttributes: PropTypes.shape({
@@ -211,6 +215,27 @@ class AssessmentForm extends React.Component {
     );
   }
 
+  renderEnableRandomizationField() {
+    const { submitting } = this.props;
+
+    return (
+      <>
+        <Field
+          name="randomization"
+          component={Toggle}
+          parse={Boolean}
+          label={<FormattedMessage {...translations.enableRandomization} />}
+          labelPosition="right"
+          style={styles.toggle}
+          disabled={submitting}
+        />
+        <div style={styles.hint}>
+          <FormattedMessage {...translations.enableRandomizationHint} />
+        </div>
+      </>
+    );
+  }
+
   renderExtraOptions() {
     const { submitting } = this.props;
     if (this.props.autograded) {
@@ -287,7 +312,7 @@ class AssessmentForm extends React.Component {
 
   render() {
     const { handleSubmit, onSubmit, gamified, showPersonalizedTimelineFeatures, modeSwitching, submitting, editing,
-      folderAttributes, conditionAttributes, error } = this.props;
+      folderAttributes, conditionAttributes, randomizationAllowed, error } = this.props;
 
     return (
       <Form onSubmit={handleSubmit(onSubmit)}>
@@ -462,6 +487,8 @@ class AssessmentForm extends React.Component {
         <div style={styles.hint}>
           <FormattedMessage {...translations.showEvaluationHint} />
         </div>
+
+        {randomizationAllowed && this.renderEnableRandomizationField()}
 
         {
           showPersonalizedTimelineFeatures

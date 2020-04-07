@@ -174,6 +174,14 @@ const translations = defineMessages({
     id: 'course.assessment.form.tab',
     defaultMessage: 'Tab',
   },
+  enableRandomization: {
+    id: 'course.assessment.form.enable_randomization',
+    defaultMessage: 'Enable Randomization',
+  },
+  enableRandomizationHint: {
+    id: 'course.assessment.form.enable_randomization_hint',
+    defaultMessage: 'Enables randomized assignment of question bundles to students (per question group)',
+  },
 });
 
 export default translations;
