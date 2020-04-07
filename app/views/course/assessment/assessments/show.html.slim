@@ -1,5 +1,8 @@
 - add_breadcrumb format_inline_text(@assessment.title)
 = page_header format_inline_text(@assessment.title) do
+  - if @assessment.randomization.present?
+    = render 'assessment_question_bundle_buttons', assessment: @assessment
+
   = render 'assessment_management_buttons', assessment: @assessment
   - if can?(:manage, @assessment)
     div.btn-group
