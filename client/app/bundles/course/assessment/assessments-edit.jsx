@@ -23,6 +23,7 @@ $(document).ready(() => {
           modeSwitching={data.mode_switching}
           gamified={data.gamified}
           showPersonalizedTimelineFeatures={data.show_personalized_timeline_features}
+          randomizationAllowed={data.randomization_allowed}
           folderAttributes={data.folder_attributes}
           conditionAttributes={data.condition_attributes}
           initialValues={{

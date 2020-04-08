@@ -15,6 +15,7 @@ $(document).ready(() => {
       <ProviderWrapper store={store}>
         <AssessmentIndexPage
           gamified={attributes.gamified}
+          randomizationAllowed={attributes.randomization_allowed}
           categoryId={attributes.category_id}
           tabId={attributes.tab_id}
         />

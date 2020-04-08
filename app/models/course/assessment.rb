@@ -142,6 +142,13 @@ class Course::Assessment < ApplicationRecord
     end
   end
 
+  # Update assessment randomization from params
+  #
+  # @param [Hash] Params with randomization boolean from user
+  def update_randomization(params)
+    self.randomization = params[:randomization] ? :prepared : nil
+  end
+
   # Whether the assessment allows mode switching.
   # Allow mode switching if:
   # - The assessment don't have any submissions.

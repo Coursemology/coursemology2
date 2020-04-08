@@ -5,6 +5,8 @@ json.attributes do
     :tabbed_view, :view_password, :session_password, :delayed_grade_publication, :tab_id,
     :use_public, :use_private, :use_evaluation, :allow_partial_submission, :has_personal_times,
     :affects_personal_times)
+  # Pass as boolean since there is only one enum value
+  json.randomization @assessment.randomization.present?
 end
 
 json.tab_attributes do
@@ -16,6 +18,7 @@ end
 json.mode_switching @assessment.allow_mode_switching?
 json.gamified current_course.gamified?
 json.show_personalized_timeline_features current_course.show_personalized_timeline_features?
+json.randomization_allowed current_course.allow_randomization
 
 json.folder_attributes do
   json.folder_id @assessment.folder.id

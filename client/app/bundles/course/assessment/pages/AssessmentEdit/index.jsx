@@ -25,6 +25,8 @@ class EditPage extends React.Component {
     gamified: PropTypes.bool,
     // If personalized timeline features are shown for the course
     showPersonalizedTimelineFeatures: PropTypes.bool,
+    // If randomization is allowed for assessments in the current course
+    randomizationAllowed: PropTypes.bool,
     // If allow to switch between autoraded and manually graded mode.
     modeSwitching: PropTypes.bool,
     // An array of materials of current assessment.
@@ -59,8 +61,8 @@ class EditPage extends React.Component {
   };
 
   render() {
-    const { gamified, showPersonalizedTimelineFeatures, modeSwitching, initialValues, folderAttributes,
-      conditionAttributes, dispatch } = this.props;
+    const { gamified, showPersonalizedTimelineFeatures, modeSwitching, initialValues, randomizationAllowed,
+      folderAttributes, conditionAttributes, dispatch } = this.props;
 
     return (
       <>
@@ -68,6 +70,7 @@ class EditPage extends React.Component {
           editing
           gamified={gamified}
           showPersonalizedTimelineFeatures={showPersonalizedTimelineFeatures}
+          randomizationAllowed={randomizationAllowed}
           onSubmit={this.onFormSubmit}
           modeSwitching={modeSwitching}
           folderAttributes={folderAttributes}

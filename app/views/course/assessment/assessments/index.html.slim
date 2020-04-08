@@ -1,7 +1,8 @@
 = page_header format_inline_text(@category.title) do
   - if can?(:create, Course::Assessment.new(tab: @tab))
     div.pull-right
-      div.new-btn data="#{{ gamified: current_course.gamified?, tab_id: @tab.id, category_id: @category.id }.to_json}"
+      div.new-btn data="#{{ gamified: current_course.gamified?, tab_id: @tab.id, category_id: @category.id,
+        randomization_allowed: current_course.allow_randomization }.to_json}"
 
 = display_assessment_tabs
 
