@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_02_070915) do
+ActiveRecord::Schema.define(version: 2020_04_09_143131) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -102,6 +102,7 @@ ActiveRecord::Schema.define(version: 2019_02_02_070915) do
   end
 
   create_table "course_assessment_answer_multiple_responses", force: :cascade do |t|
+    t.decimal "random_seed"
   end
 
   create_table "course_assessment_answer_programming", force: :cascade do |t|
@@ -228,11 +229,13 @@ ActiveRecord::Schema.define(version: 2019_02_02_070915) do
     t.text "option", null: false
     t.text "explanation"
     t.integer "weight", null: false
+    t.boolean "ignore_randomization", default: false
     t.index ["question_id"], name: "fk__course_assessment_multiple_response_option_question"
   end
 
   create_table "course_assessment_question_multiple_responses", force: :cascade do |t|
     t.integer "grading_scheme", default: 0, null: false
+    t.boolean "randomize_options", default: false
   end
 
   create_table "course_assessment_question_programming", force: :cascade do |t|
