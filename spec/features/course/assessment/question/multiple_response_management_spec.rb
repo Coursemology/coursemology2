@@ -138,9 +138,9 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
             fill_in_rails_summernote '.question_multiple_response_options_explanation:last',
                                      option[:explanation]
             if option[:correct]
-              check find('input[type="checkbox"]')[:name]
+              check first('input[type="checkbox"]')[:name]
             else
-              uncheck find('input[type="checkbox"]')[:name]
+              uncheck first('input[type="checkbox"]')[:name]
             end
           end
         end
