@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 answer_ids_hash = answers.map do |a|
-  [a.question_id, a.id]
+  [a.question_id, a]
 end.to_h
 
 topic_ids_hash = submission.submission_questions.where(question: submission.questions).map do |sq|
@@ -10,9 +10,10 @@ end.to_h
 json.questions Course::QuestionAssessment.where(question: submission.questions, assessment: submission.assessment) \
     do |question_assessment|
   question = question_assessment.question
-  answerId = answer_ids_hash[question.id]
+  answer = answer_ids_hash[question.id]
+  answerId = answer.id
   submissionQuestion = question.submission_questions.from_submission(submission.id)
-  json.partial! 'question', question: question, can_grade: can_grade
+  json.partial! 'question', question: question, can_grade: can_grade, answer: answer
   json.displayTitle question_assessment.display_title
 
   json.answerId answerId

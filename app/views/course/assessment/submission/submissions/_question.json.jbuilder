@@ -34,4 +34,4 @@ json.type case question.actable_type
             'Scribing'
           end
 
-json.partial! question, question: question.specific, can_grade: can_grade
+json.partial! question, question: question.specific, can_grade: can_grade, answer: answer

@@ -52,6 +52,26 @@ class Course::Assessment::Question::MultipleResponse < ApplicationRecord
     end
   end
 
+  # A Multiple Response Question can randomize the order of its options for all students (ignoring their weights)
+  # Each student's answer stores a seed that is used to deterministically shuffle the options
+  # since each student has a different seed, they see a different order to the options
+  # Certain options can ignore randomization as well, these options are appended after the shuffled options
+  def ordered_options(seed)
+    return self.options if !self.randomize_options || seed.nil?
+
+    randomized_options = []
+    non_randomized_options = []
+    self.options.each do |option|
+      if option.ignore_randomization
+        non_randomized_options.append(option)
+      else
+        randomized_options.append(option)
+      end
+    end
+
+    randomized_options.shuffle(random: Random.new(seed)) + non_randomized_options
+  end
+
   private
 
   def validate_multiple_choice_has_solution
