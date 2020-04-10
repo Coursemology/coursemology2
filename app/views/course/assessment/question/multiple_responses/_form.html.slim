@@ -1,6 +1,10 @@
 = simple_form_for [current_course, @assessment, @multiple_response_question] do |f|
   = f.error_notification
   = render partial: 'course/assessment/questions/form', locals: { f: f, question_assessment: @question_assessment }
+
+  - if current_course.allow_mrq_options_randomization
+    = f.input :randomize_options, label: t('.randomize_options')
+
   = f.hidden_field :grading_scheme
 
   / workaround for plataformatec/simple_form#1284
@@ -14,6 +18,8 @@
         th = t('.correct')
         th = t('.option')
         th = t('.explanation')
+        - if current_course.allow_mrq_options_randomization
+          th = t('.ignore_randomization')
         th
           div.pull-right
             = link_to_add_association t('.add_option'), f, :options,

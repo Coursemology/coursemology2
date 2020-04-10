@@ -17,5 +17,8 @@ FactoryBot.define do
       option { 'Wrong' }
       explanation { 'Wrong because this is wrong' }
     end
+    trait :ignore_randomization do
+      ignore_randomization { true }
+    end
   end
 end

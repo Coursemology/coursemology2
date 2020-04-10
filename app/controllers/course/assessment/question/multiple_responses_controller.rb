@@ -52,8 +52,9 @@ class Course::Assessment::Question::MultipleResponsesController < Course::Assess
   def multiple_response_question_params
     params.require(:question_multiple_response).permit(
       :title, :description, :staff_only_comments, :maximum_grade, :grading_scheme,
-      question_assessment: { skill_ids: [] },
-      options_attributes: [:_destroy, :id, :correct, :option, :explanation, :weight]
+      :randomize_options, question_assessment: { skill_ids: [] },
+      options_attributes: [:_destroy, :id, :correct, :option,
+        :explanation, :weight, :ignore_randomization]
     )
   end
 

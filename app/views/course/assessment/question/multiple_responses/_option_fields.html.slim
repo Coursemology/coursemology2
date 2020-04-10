@@ -7,4 +7,6 @@
   td
     = f.input :explanation, label: false, placeholder: t('.explanation_hint'),
     input_html: { class: ['multiple-response-explanation', 'airmode'] }
+  - if current_course.allow_mrq_options_randomization
+    td = f.input :ignore_randomization, label: false
   td = link_to_remove_association t('.remove'), f

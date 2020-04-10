@@ -17,6 +17,8 @@ en:
             correct: 'Correct'
             option: 'Option'
             explanation: 'Explanation'
+            randomize_options: 'Randomize option order (options that ignore this will be shifted to the bottom)'
+            ignore_randomization: 'Ignore Randomization'
             add_option: 'Add Option'
             multiple_choice_button: 'Multiple Choice Question'
             multiple_response_button: 'Multiple Response Question'

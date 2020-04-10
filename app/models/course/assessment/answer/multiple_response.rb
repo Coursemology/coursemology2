@@ -19,4 +19,11 @@ class Course::Assessment::Answer::MultipleResponse < ApplicationRecord
     option_ids = params[:option_ids].map(&:to_i)
     self.options = question.specific.options.select { |option| option_ids.include?(option.id) }
   end
+
+  def get_random_seed
+    self.random_seed ||= Random.new_seed
+    save
+
+    self.random_seed
+  end
 end

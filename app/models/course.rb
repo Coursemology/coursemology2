@@ -193,6 +193,7 @@ class Course < ApplicationRecord
     settings(:course_assessments_component).show_stdout_and_stderr = option
   end
 
+  # Setting to allow randomization of assessment assignments
   def allow_randomization
     settings(:course_assessments_component).allow_randomization
   end
@@ -200,6 +201,16 @@ class Course < ApplicationRecord
   def allow_randomization=(option)
     option = ActiveRecord::Type::Boolean.new.cast(option)
     settings(:course_assessments_component).allow_randomization = option
+  end
+
+  # Setting to allow randomization of order of displaying mrq options
+  def allow_mrq_options_randomization
+    settings(:course_assessments_component).allow_mrq_options_randomization
+  end
+
+  def allow_mrq_options_randomization=(option)
+    option = ActiveRecord::Type::Boolean.new.cast(option)
+    settings(:course_assessments_component).allow_mrq_options_randomization = option
   end
 
   def upcoming_lesson_plan_items_exist?
