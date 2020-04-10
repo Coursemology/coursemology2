@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 FactoryBot.define do
   factory :course_assessment_answer, class: Course::Assessment::Answer do
+    sequence(:id)
+
     transient do
       course { build(:course) }
       assessment { build(:assessment, course: course) }
