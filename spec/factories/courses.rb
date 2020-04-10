@@ -38,5 +38,11 @@ FactoryBot.define do
           'FAKE_API_KEY'
       end
     end
+
+    trait :with_mrq_options_randomization_enabled do
+      after(:build) do |course|
+        course.allow_mrq_options_randomization = true
+      end
+    end
   end
 end
