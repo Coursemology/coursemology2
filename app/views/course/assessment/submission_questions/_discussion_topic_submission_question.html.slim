@@ -8,7 +8,7 @@
 = div_for(topic, 'data-topic-id' => topic.id) do
   h3
     - comment_title = "#{assessment.title}: #{question_assessment.display_title}"
-    = link_to comment_title, edit_course_assessment_submission_path(current_course, assessment, submission, step: assessment.questions.index(question) + 1)
+    = link_to comment_title, edit_course_assessment_submission_path(current_course, assessment, submission, step: submission.questions.index(question) + 1)
   - if can?(:manage, topic)
     = link_to_toggle_pending(topic)
   - elsif current_course_user&.student?

@@ -17,9 +17,10 @@ class Course::QuestionAssessment < ApplicationRecord
   # Prefixes a question number in front of the title
   #
   # @return [string]
-  def display_title
+  def display_title(num = nil)
+    idx = num.present? ? num : assessment.question_assessments.index(self) + 1
     question_number = I18n.t('activerecord.course/assessment/question.question_number',
-                             index: assessment.question_assessments.index(self) + 1)
+                             index: idx)
 
     return question_number if question.title.blank?
     I18n.t('activerecord.course/assessment/question.question_with_title',
