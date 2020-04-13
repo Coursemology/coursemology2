@@ -7,14 +7,14 @@ topic_ids_hash = submission.submission_questions.where(question: submission.ques
   [sq.question_id, sq.discussion_topic.id]
 end.to_h
 
-json.questions Course::QuestionAssessment.where(question: submission.questions, assessment: submission.assessment) \
-    do |question_assessment|
+question_assessments = Course::QuestionAssessment.where(question: submission.questions, assessment: submission.assessment)
+json.questions question_assessments.each_with_index.to_a do |(question_assessment, index)|
   question = question_assessment.question
   answer = answer_ids_hash[question.id]
-  answerId = answer.id
+  answerId = answer&.id
   submissionQuestion = question.submission_questions.from_submission(submission.id)
   json.partial! 'question', question: question, can_grade: can_grade, answer: answer
-  json.displayTitle question_assessment.display_title
+  json.displayTitle question_assessment.display_title(index+1)
 
   json.answerId answerId
   json.topicId topic_ids_hash[question.id]
