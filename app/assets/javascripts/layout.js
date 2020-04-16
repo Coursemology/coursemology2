@@ -109,8 +109,23 @@
       };
 
       if ($(this).hasClass('airmode')) {
-        options = $.extend(true, options, airmodeOptions);
+        var airmodeFinalOptions = {
+          ...airmodeOptions,
+          popover: {
+            ...airmodeOptions.popover,
+            air: [...airmodeOptions.popover.air],
+          },
+        }
+
+        // Rendering color palette takes a very long time.
+        if ($(this).hasClass('no-color-palette')) {
+          airmodeFinalOptions.popover.air = airmodeFinalOptions.popover.air.filter(function(opt) {
+            return opt[0] !== 'color';
+          })
+        }
+        options = $.extend(true, options, airmodeFinalOptions);
       }
+
       if ($(this).hasClass('focus')) {
         options = $.extend(true, options, { focus: true } );
       }

@@ -19,8 +19,8 @@
           th
             div.pull-right
               = link_to_add_association t('.add_solution'), f, :solutions,
-                                        find_selector: 'tbody', insert_using: 'append'
-      tbody
+                                        find_selector: 'tbody.solution_fields', insert_using: 'append'
+      tbody.solution_fields
         = f.simple_fields_for :solutions do |solutions_form|
           = render 'solution_fields', f: solutions_form
   - if @assessment.autograded?

@@ -10,12 +10,12 @@
         th = t('.name')
         th = t('.role')
         th
-    tbody
+    tbody.group_user_fields
       = f.simple_fields_for :group_users do |group_user_form|
         = render 'group_user_fields', f: group_user_form
 
   .links
     = link_to_add_association t('.add_user'), f, :group_users,
-                              find_selector: 'tbody', insert_using: 'append'
+                              find_selector: 'tbody.group_user_fields', insert_using: 'append'
 
   = f.button :submit
