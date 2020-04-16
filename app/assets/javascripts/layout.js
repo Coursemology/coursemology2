@@ -71,6 +71,21 @@
         }
       };
 
+    var airmodeOptionsNoPalette =
+      {
+        airMode: true,
+        popover: {
+          air: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'inlineCode', 'clear']],
+            ['script', ['superscript', 'subscript']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture']],
+          ]
+        }
+      };
+
     $('textarea.text').not('.summernote-initialised').not('.no-summernote').each(function() {
       var $summernote = $(this);
       function onImageUploaded(id) {
@@ -109,21 +124,12 @@
       };
 
       if ($(this).hasClass('airmode')) {
-        var airmodeFinalOptions = {
-          ...airmodeOptions,
-          popover: {
-            ...airmodeOptions.popover,
-            air: [...airmodeOptions.popover.air],
-          },
-        }
-
         // Rendering color palette takes a very long time.
         if ($(this).hasClass('no-color-palette')) {
-          airmodeFinalOptions.popover.air = airmodeFinalOptions.popover.air.filter(function(opt) {
-            return opt[0] !== 'color';
-          })
+          options = $.extend(true, options, airmodeOptionsNoPalette);
+        } else {
+          options = $.extend(true, options, airmodeOptions);
         }
-        options = $.extend(true, options, airmodeFinalOptions);
       }
 
       if ($(this).hasClass('focus')) {
