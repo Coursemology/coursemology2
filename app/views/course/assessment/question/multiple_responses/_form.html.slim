@@ -23,8 +23,8 @@
         th
           div.pull-right
             = link_to_add_association t('.add_option'), f, :options,
-                                      find_selector: 'tbody', insert_using: 'append'
-    tbody
+                                      find_selector: 'tbody.option_fields', insert_using: 'append'
+    tbody.option_fields
       = f.simple_fields_for :options do |options_form|
         = render 'option_fields', f: options_form
 

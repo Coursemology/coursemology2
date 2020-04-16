@@ -14,8 +14,8 @@
         th
           div.pull-right
             = link_to_add_association t('.individual.add_user'), f, :invitations,
-                    find_selector: 'tbody', insert_using: 'append'
-    tbody
+                    find_selector: 'tbody.invitation_fields', insert_using: 'append'
+    tbody.invitation_fields
       = f.simple_fields_for :invitations, @instance.invitations.select(&:new_record?) do |invitation_form|
         = render 'invitation_fields', f: invitation_form
 
