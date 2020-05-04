@@ -204,7 +204,8 @@ class Course::Assessment::Submission < ApplicationRecord
   # question in load_or_create_answers.
   def current_answers
     # Can't do filtering in AR because `answer` may not be persisted, and AR is dumb.
-    answers.select { |answer| answer.question_id.in? questions.pluck(:id) }.
+    question_ids = questions.pluck(:id)
+    answers.select { |answer| answer.question_id.in? question_ids }.
       select(&:current_answer?).group_by(&:question_id).map { |pair| pair[1].first }
   end
 
