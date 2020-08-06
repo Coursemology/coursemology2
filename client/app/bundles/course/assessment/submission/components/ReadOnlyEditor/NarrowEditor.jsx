@@ -26,6 +26,7 @@ const styles = {
     overflow: 'visible',
   },
   editorLineNumber: {
+    height: 20,
     alignItems: 'center',
     display: 'flex',
     justifyContent: 'space-between',
@@ -35,6 +36,7 @@ const styles = {
     padding: '0 5px',
   },
   editorLineNumberWithComments: {
+    height: 20,
     alignItems: 'center',
     backgroundColor: grey400,
     display: 'flex',
