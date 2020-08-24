@@ -25,6 +25,12 @@ export const playerStates = mirrorCreator([
   'BUFFERING',
 ]);
 
+export const captionsStates = mirrorCreator([
+  'NOT_LOADED',
+  'ON',
+  'OFF',
+]);
+
 export const postRequestingStatuses = mirrorCreator([
   'LOADING',
   'LOADED',

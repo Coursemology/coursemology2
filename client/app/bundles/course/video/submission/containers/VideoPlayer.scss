@@ -62,15 +62,18 @@ $button-width: 30px;
   order: 4;
 }
 
-.nextVideo {
-  margin-left: 1em;
-  margin-right: 2em;
+.captionsButton {
   order: 6;
 }
 
+.nextVideo {
+  margin-left: 1em;
+  margin-right: 2em;
+  order: 7;
+}
 
 .playbackRate {
-  order: 5;
+  order: 6;
   text-align: right;
   width: 100px;
 }
