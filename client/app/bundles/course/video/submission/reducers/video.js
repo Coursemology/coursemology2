@@ -1,5 +1,11 @@
 import { List as makeImmutableList } from 'immutable';
-import { playerStates, sessionActionTypes, videoActionTypes, videoDefaults } from 'lib/constants/videoConstants';
+import {
+  playerStates,
+  captionsStates,
+  sessionActionTypes,
+  videoActionTypes,
+  videoDefaults,
+} from 'lib/constants/videoConstants';
 import { isPlayingState, timeIsPastRestricted } from 'lib/helpers/videoHelpers';
 import { createTransform } from 'redux-persist';
 
@@ -13,6 +19,7 @@ export const initialState = {
   bufferProgress: 0,
   playerVolume: videoDefaults.volume,
   playbackRate: 1,
+  captionsState: captionsStates.NOT_LOADED,
   restrictContentAfter: null,
   forceSeek: false,
   initialSeekTime: null,
@@ -113,6 +120,8 @@ function videoStateReducer(state = initialState, action) {
       return transformState({ playerState: computePlayerState(state, action.playerState) });
     case videoActionTypes.CHANGE_PLAYER_VOLUME:
       return transformState({ playerVolume: action.playerVolume });
+    case videoActionTypes.CHANGE_CAPTIONS_STATE:
+      return transformState({ captionsState: action.captionsState });
     case videoActionTypes.CHANGE_PLAYBACK_RATE:
       return transformState({ playbackRate: action.playbackRate });
     case videoActionTypes.UPDATE_PLAYER_PROGRESS:

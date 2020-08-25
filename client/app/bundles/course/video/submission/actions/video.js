@@ -48,6 +48,22 @@ export function changePlaybackRate(playbackRate) {
 }
 
 /**
+ * Creates an action to transition between caption states.
+ *
+ * Captions state start as NOT_LOADED, and if later captions are found, can be switched
+ * to ON/OFF to turn them on or off.
+ *
+ * @param captionsState The state of the captions.
+ * @return {{type: videoActionTypes, captionsOn: captionsStates}} A change captions state Redux action
+ */
+export function changeCaptionsState(captionsState) {
+  return {
+    type: videoActionTypes.CHANGE_CAPTIONS_STATE,
+    captionsState,
+  };
+}
+
+/**
  * Creates an action to update the player progress.
  *
  * @param playerProgress The new player progress in seconds
