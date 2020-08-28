@@ -2,12 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Paper from 'material-ui/Paper';
 import { connect } from 'react-redux';
-import { playerStates, videoDefaults, youtubeOpts } from 'lib/constants/videoConstants';
+import {
+  playerStates,
+  captionsStates,
+  videoDefaults,
+  youtubeOpts,
+} from 'lib/constants/videoConstants';
 import { isPlayingState } from 'lib/helpers/videoHelpers';
 
 import styles from './VideoPlayer.scss';
 import {
   changePlayerState,
+  changeCaptionsState,
   endSession,
   seekToDirectly,
   sendEvents,
@@ -15,6 +21,7 @@ import {
   updateProgressAndBuffer,
 } from '../actions/video';
 import {
+  CaptionsButton,
   NextVideoButton,
   PlayBackRateSelector,
   PlayButton,
@@ -41,6 +48,7 @@ const propTypes = {
   duration: PropTypes.number,
   playerVolume: PropTypes.number,
   playbackRate: PropTypes.number,
+  captionsState: PropTypes.bool,
   forceSeek: PropTypes.bool,
   initialSeekTime: PropTypes.number,
   onPlayerProgress: PropTypes.func,
@@ -49,6 +57,7 @@ const propTypes = {
   onTick: PropTypes.func,
   onUnmount: PropTypes.func,
   directSeek: PropTypes.func,
+  setCaptionsState: PropTypes.func,
 };
 
 const defaultProps = {
@@ -57,6 +66,7 @@ const defaultProps = {
   duration: videoDefaults.placeHolderDuration,
   playerVolume: videoDefaults.volume,
   playbackRate: 1,
+  captionsState: captionsStates.NOT_LOADED,
   forceSeek: false,
 };
 
@@ -88,6 +98,10 @@ class VideoPlayer extends React.Component {
     if (nextProps.forceSeek) {
       this.player.seekTo(nextProps.playerProgress);
     }
+
+    if (this.props.captionsState !== nextProps.captionsState) {
+      this.toggleCaptions(nextProps.captionsState);
+    }
   }
 
   componentWillUnmount() {
@@ -109,6 +123,37 @@ class VideoPlayer extends React.Component {
     this.player = player;
   };
 
+  /**
+   * Loads or unloads the captions module for Youtube according to whether provided
+   * options sets captions to on or off.
+   *
+   * If captions are not loaded yet, check the component to see if they are present.
+   * If so, set captions to OFF to indicate that it's loaded.
+   *
+   * Only works for Youtube videos.
+   * @param captionsState - State of captions to toggle to, if NOT_LOADED is provided, method checks if captions exists
+   */
+  toggleCaptions = (captionsState) => {
+    const internalPlayer = this.player.getInternalPlayer();
+
+    if (!internalPlayer
+          || internalPlayer.loadModule === undefined
+          || internalPlayer.unloadModule === undefined
+          || internalPlayer.getOptions === undefined) {
+      return;
+    }
+
+    if (captionsState === captionsStates.NOT_LOADED) {
+      if (internalPlayer.getOptions().includes('captions')) {
+        this.props.setCaptionsState(captionsStates.OFF);
+      }
+    } else if (captionsState === captionsStates.ON) {
+      internalPlayer.loadModule('captions');
+    } else if (captionsState === captionsStates.OFF) {
+      internalPlayer.unloadModule('captions');
+    }
+  };
+
   readyCallback = () => {
     if (this.props.initialSeekTime) {
       this.props.directSeek(this.props.initialSeekTime);
@@ -128,6 +173,7 @@ class VideoPlayer extends React.Component {
           playing={isPlayingState(this.props.playerState)}
           volume={this.props.playerVolume}
           playbackRate={this.props.playbackRate}
+          onStart={() => { this.toggleCaptions(this.props.captionsState); }}
           onDuration={this.props.onDurationReceived}
           onProgress={({ playedSeconds, loadedSeconds }) => {
             this.props.onPlayerProgress(playedSeconds, loadedSeconds);
@@ -157,6 +203,7 @@ class VideoPlayer extends React.Component {
           <VolumeButton />
           <VolumeSlider />
           <VideoTimestamp progress={this.props.playerProgress} duration={this.props.duration} />
+          <CaptionsButton />
           <PlayBackRateSelector />
           <NextVideoButton />
         </div>
@@ -184,6 +231,9 @@ function mapDispatchToProps(dispatch) {
     onUnmount: () => dispatch(endSession()),
     directSeek: (playerProgress) => {
       dispatch(seekToDirectly(playerProgress));
+    },
+    setCaptionsState: (captionsState) => {
+      dispatch(changeCaptionsState(captionsState));
     },
   };
 }

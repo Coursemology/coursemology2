@@ -5,6 +5,7 @@ export const youtubeOpts = {
     showinfo: false,
     rel: false,
     iv_load_policy: 3,
+    cc_load_policy: 1,
     controls: 0,
     disablekb: true,
   },
