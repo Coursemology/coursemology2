@@ -5,6 +5,7 @@ export const youtubeOpts = {
     showinfo: false,
     rel: false,
     iv_load_policy: 3,
+    cc_load_policy: 1,
     controls: 0,
     disablekb: true,
   },
@@ -25,6 +26,12 @@ export const playerStates = mirrorCreator([
   'BUFFERING',
 ]);
 
+export const captionsStates = mirrorCreator([
+  'NOT_LOADED',
+  'ON',
+  'OFF',
+]);
+
 export const postRequestingStatuses = mirrorCreator([
   'LOADING',
   'LOADED',
@@ -35,6 +42,7 @@ export const videoActionTypes = mirrorCreator([
   'CHANGE_PLAYER_STATE',
   'CHANGE_PLAYER_VOLUME',
   'CHANGE_PLAYBACK_RATE',
+  'CHANGE_CAPTIONS_STATE',
   'UPDATE_PLAYER_PROGRESS',
   'UPDATE_BUFFER_PROGRESS',
   'UPDATE_PLAYER_DURATION',

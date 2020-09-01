@@ -1,3 +1,4 @@
+export { default as CaptionsButton } from './CaptionsButton';
 export { default as PlayBackRateSelector } from './PlayBackRateSelector';
 export { default as PlayButton } from './PlayButton';
 export { default as VideoPlayerSlider } from './VideoPlayerSlider';
