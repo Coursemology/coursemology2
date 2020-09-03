@@ -1,4 +1,4 @@
-#config/initializers/lograge.rb
+# config/initializers/lograge.rb
 require 'lograge/sql/extension'
 
 Rails.application.configure do
