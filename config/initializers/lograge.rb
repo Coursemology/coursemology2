@@ -8,8 +8,8 @@ Rails.application.configure do
   config.colorize_logging = false
 
   config.lograge.custom_options = lambda do |event|
-    { :params => event.payload[:params],
-      :level => event.payload[:level],
-      :time => Time.now }
+    { params: event.payload[:params],
+      level: event.payload[:level],
+      time: Time.zone.now }
   end
 end
