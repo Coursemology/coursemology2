@@ -57,3 +57,4 @@ node_modules
 
 # Ignore build for client
 /client/build
+.DS_Store
