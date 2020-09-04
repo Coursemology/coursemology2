@@ -57,4 +57,16 @@ class ApplicationController < ActionController::Base
       format.json { render file: 'public/403.json', layout: false, status: 403 }
     end
   end
+
+  # lograge
+  def append_info_to_payload(payload)
+    super
+    if payload[:status] == 200
+      payload[:level] = 'INFO'
+    elsif payload[:status] == 302
+      payload[:level] = 'WARN'
+    else
+      payload[:level] = 'ERROR'
+    end
+  end
 end
