@@ -5,6 +5,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
       load_or_create_answers if unsubmit?
       render 'edit'
     else
+      logger.error("failed to update submission: #{@submission.errors.inspect}")
       render json: { errors: @submission.errors }, status: :bad_request
     end
   end
@@ -14,6 +15,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     if update_answer(answer, submit_answer_params)
       auto_grade(answer)
     else
+      logger.error("failed to save answer: #{answer.errors.inspect}")
       render json: { errors: answer.errors }, status: :bad_request
     end
   end
@@ -133,7 +135,10 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
       update_answers_params[:answers]&.each do |answer_params|
         next if answer_params[:id].blank?
         answer = @submission.answers.includes(:actable).find { |a| a.id == answer_params[:id].to_i }
-        raise ActiveRecord::Rollback if answer && !update_answer(answer, answer_params)
+        if answer && !update_answer(answer, answer_params)
+          logger.error("failed to update answer #{answer.errors.inspect}")
+          raise ActiveRecord::Rollback
+        end
       end unless unsubmit? || unmark?
 
       @submission.update(update_submission_params)
