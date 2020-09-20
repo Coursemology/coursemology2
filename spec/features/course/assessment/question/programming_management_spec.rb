@@ -96,7 +96,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
 
         edit_path = edit_course_assessment_question_programming_path(course, assessment, question)
         find_link(nil, href: edit_path).click
-        expect(page).to have_xpath('//form[@id=\'programmming-question-form\']')
+        expect(page).to have_xpath('//form[@id=\'programming-question-form\']')
 
         maximum_grade = 999.9
         # For some reasons we have to clear the old field first then can fill in the value, otherwise
@@ -124,7 +124,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
       pending 'I can create a new question and upload the template package', js: true do
         visit new_course_assessment_question_programming_path(course, assessment)
 
-        expect(page).to have_xpath('//form[@id=\'programmming-question-form\']')
+        expect(page).to have_xpath('//form[@id=\'programming-question-form\']')
 
         question_attributes = attributes_for(:course_assessment_question_programming)
         fill_in 'question_programming[maximum_grade]', with: question_attributes[:maximum_grade]
