@@ -14,7 +14,7 @@
 }
 
 .tt-suggestion.tt-selectable:hover {
-  @extend .tt-suggestion.tt-cursor;
+  @extend .tt-suggestion, .tt-cursor;
 }
 
 @import 'font-awesome';
@@ -29,7 +29,7 @@ textarea.code {
 
 // Add frame to summernote editors in airMode
 .note-editor {
-  @extend .note-editor.note-frame;
+  @extend .note-editor, .note-frame;
   @extend .panel;
 }
 
