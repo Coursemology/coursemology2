@@ -2,9 +2,16 @@
 
 require 'selenium/webdriver'
 
+# How to make the screen bigger
+# Capybara.register_driver :selenium_chrome_headless do |app|
+#   capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
+#       chromeOptions: { args: %w(headless disable-gpu window-size=2500,2500) }
+#   )
+#   Capybara::Selenium::Driver.new app, browser: :chrome, desired_capabilities: capabilities
+# end
+
 Capybara.javascript_driver = :selenium_chrome_headless
 
-# Adds extra matchers for Capybara
 module Capybara::TestGroupHelpers
   module FeatureHelpers
     # Finds the given form with the given selector and target.
