@@ -46,9 +46,9 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
 
         question_created = assessment.questions.first.specific.reload
         expect(question_created.description).
-          to include(question_attributes[:description])
+            to include(question_attributes[:description])
         expect(question_created.staff_only_comments).
-          to include(question_attributes[:staff_only_comments])
+            to include(question_attributes[:staff_only_comments])
         expect(question_created.question_assessments.first.skills).to contain_exactly(skill)
       end
 
@@ -58,19 +58,21 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         visit edit_course_assessment_question_programming_path(course, assessment, question)
         expect(page).to have_xpath('//form[@id=\'programming-question-form\']')
 
-        page.find('#question_programming_file', visible: false).click
+        # since #question_programming_file is not visible, we can't find and click on it
+        find("span", :text => "CHOOSE NEW PACKAGE").first(:xpath,".//..").click
 
         attach_file 'question_programming[file]',
-                    File.join(ActionController::TestCase.fixture_path,
+                    File.join(fixture_path,
                               'course/empty_programming_question_template.zip'),
                     visible: false
         page.find('#programming-question-form-submit').click
         wait_for_job
         expect(page).to have_selector('div.alert.alert-danger')
 
-        page.find('#question_programming_file', visible: false).click
+        # page.find('#question_programming_file', visible: false).click
+        find("span", :text => "CHOOSE NEW PACKAGE").first(:xpath,".//..").click
         attach_file 'question_programming[file]',
-                    File.join(ActionController::TestCase.fixture_path, 'course/programming_question_template.zip'),
+                    File.join(fixture_path, 'course/programming_question_template.zip'),
                     visible: false
         page.find('#programming-question-form-submit').click
         wait_for_job
@@ -90,13 +92,13 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         end
       end
 
-      pending 'I can edit a question', js: true do
+      scenario 'I can edit a question', js: true do
         question = create(:course_assessment_question_programming, assessment: assessment)
         visit course_assessment_path(course, assessment)
 
         edit_path = edit_course_assessment_question_programming_path(course, assessment, question)
         find_link(nil, href: edit_path).click
-        expect(page).to have_xpath('//form[@id=\'programmming-question-form\']')
+        expect(page).to have_xpath('//form[@id=\'programming-question-form\']')
 
         maximum_grade = 999.9
         # For some reasons we have to clear the old field first then can fill in the value, otherwise
@@ -121,10 +123,10 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         expect(page).to have_no_content_tag_for(question)
       end
 
-      pending 'I can create a new question and upload the template package', js: true do
+      scenario 'I can create a new question and upload the template package', js: true do
         visit new_course_assessment_question_programming_path(course, assessment)
 
-        expect(page).to have_xpath('//form[@id=\'programmming-question-form\']')
+        expect(page).to have_xpath('//form[@id=\'programming-question-form\']')
 
         question_attributes = attributes_for(:course_assessment_question_programming)
         fill_in 'question_programming[maximum_grade]', with: question_attributes[:maximum_grade]
@@ -139,9 +141,10 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         fill_in 'question_programming[attempt_limit]', with: question_attributes[:attempt_limit]
 
         page.find('#upload-package-tab').click
-        page.find('#question_programming_file', visible: false).click
+        find("span", :text => "CHOOSE NEW PACKAGE").first(:xpath,".//..").click
+        # page.find('#question_programming_file', visible: false).click
         attach_file 'question_programming[file]',
-                    File.join(ActionController::TestCase.fixture_path, 'course/programming_question_template.zip'),
+                    File.join(file_fixture_path, 'course/programming_question_template.zip'),
                     visible: false
         page.find('#programming-question-form-submit').click
         wait_for_job
