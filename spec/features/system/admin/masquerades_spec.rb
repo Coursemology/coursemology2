@@ -18,7 +18,7 @@ RSpec.feature 'System: Administration: Masquerade' do
       scenario 'I can masquerade a user' do
         visit admin_users_path
 
-        find_link(nil, href: /\/users\/masquerade\/#{user_to_masquerade.id}.*/).click
+        first(:link, href: /\/users\/masquerade\/#{user_to_masquerade.id}.*/).click
 
         expect(page).to have_selector('li', text: user_to_masquerade.name)
       end
