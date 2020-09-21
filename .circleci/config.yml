@@ -242,6 +242,5 @@ workflows:
             - build
       - test:
           requires:
-            - lint
             - jstest
             - i18n
