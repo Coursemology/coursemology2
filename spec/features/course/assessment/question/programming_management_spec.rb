@@ -46,9 +46,9 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
 
         question_created = assessment.questions.first.specific.reload
         expect(question_created.description).
-            to include(question_attributes[:description])
+          to include(question_attributes[:description])
         expect(question_created.staff_only_comments).
-            to include(question_attributes[:staff_only_comments])
+          to include(question_attributes[:staff_only_comments])
         expect(question_created.question_assessments.first.skills).to contain_exactly(skill)
       end
 
@@ -59,7 +59,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         expect(page).to have_xpath('//form[@id=\'programming-question-form\']')
 
         # since #question_programming_file is not visible, we can't find and click on it
-        find("span", :text => "CHOOSE NEW PACKAGE").first(:xpath,".//..").click
+        find('span', text: 'CHOOSE NEW PACKAGE').first(:xpath, './/..').click
 
         attach_file 'question_programming[file]',
                     File.join(fixture_path,
@@ -69,8 +69,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         wait_for_job
         expect(page).to have_selector('div.alert.alert-danger')
 
-        # page.find('#question_programming_file', visible: false).click
-        find("span", :text => "CHOOSE NEW PACKAGE").first(:xpath,".//..").click
+        find('span', text: 'CHOOSE NEW PACKAGE').first(:xpath, './/..').click
         attach_file 'question_programming[file]',
                     File.join(fixture_path, 'course/programming_question_template.zip'),
                     visible: false
@@ -141,8 +140,8 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         fill_in 'question_programming[attempt_limit]', with: question_attributes[:attempt_limit]
 
         page.find('#upload-package-tab').click
-        find("span", :text => "CHOOSE NEW PACKAGE").first(:xpath,".//..").click
-        # page.find('#question_programming_file', visible: false).click
+        find('span', text: 'CHOOSE NEW PACKAGE').first(:xpath, './/..').click
+
         attach_file 'question_programming[file]',
                     File.join(file_fixture_path, 'course/programming_question_template.zip'),
                     visible: false
