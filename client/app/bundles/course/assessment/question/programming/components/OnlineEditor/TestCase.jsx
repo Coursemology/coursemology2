@@ -117,9 +117,9 @@ class TestCase extends React.Component {
           />
         </TableHeaderColumn>
         <TableRowColumn className={styles.testCell}>
-            test_
+          test_
           {type}
-_
+          _
           {displayedIndex}
         </TableRowColumn>
         <TableRowColumn className={styles.testCell}>

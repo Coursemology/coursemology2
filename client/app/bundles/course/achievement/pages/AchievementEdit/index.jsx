@@ -23,8 +23,20 @@ class EditPage extends React.Component {
     intl: intlShape,
     disabled: PropTypes.bool,
     conditionAttributes: PropTypes.shape({
-      new_condition_urls: PropTypes.array,
-      conditions: PropTypes.array,
+      new_condition_urls: PropTypes.arrayOf(
+        PropTypes.shape({
+          name: PropTypes.string,
+          url: PropTypes.string,
+        })
+      ),
+      conditions: PropTypes.arrayOf(
+        PropTypes.shape({
+          name: PropTypes.string,
+          description: PropTypes.string,
+          edit_url: PropTypes.string,
+          delete_url: PropTypes.string,
+        })
+      ),
     }),
     // A set of achievement attributes: {:id , :title, etc}.
     initialValues: PropTypes.shape({

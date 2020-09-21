@@ -41,8 +41,20 @@ const propTypes = {
   editing: PropTypes.bool,
   // Condtions will be displayed if the attributes are present.
   conditionAttributes: PropTypes.shape({
-    new_condition_urls: PropTypes.array,
-    conditions: PropTypes.array,
+    new_condition_urls: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string,
+        url: PropTypes.string,
+      })
+    ),
+    conditions: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string,
+        description: PropTypes.string,
+        edit_url: PropTypes.string,
+        delete_url: PropTypes.string,
+      })
+    ),
   }),
 };
 

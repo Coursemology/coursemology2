@@ -378,7 +378,7 @@ class ProgrammingQuestionForm extends React.Component {
           <div>
             <span className={styles.uploadedPackageLabel}>
               {uploadedPackageLabel}
-:
+              :
             </span>
             <a
               target="_blank"
