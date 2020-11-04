@@ -189,7 +189,8 @@ class Course::Material::Folder < ApplicationRecord
   def validate_name_is_unique_among_materials
     return if parent.nil?
 
-    conflicts = parent.materials.where.has { |parent| name =~ parent.name }
+    # conflicts = parent.materials.where.has { |parent| name =~ parent.name }
+    conflicts = parent.materials.where(Course::Material.arel_table[:name] =~ name)
     errors.add(:name, :taken) unless conflicts.empty?
   end
 

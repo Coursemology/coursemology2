@@ -13,9 +13,14 @@ class Course::Assessment::Answer::ProgrammingFileAnnotation < ApplicationRecord
   # Specific implementation of Course::Discussion::Topic#from_user, this is not supposed to be
   # called directly.
   scope :from_user, (lambda do |user_id|
-    joining { file.answer.answer.submission }.
-      where.has { file.answer.answer.submission.creator_id.in(user_id) }.
-      joining { discussion_topic }.selecting { discussion_topic.id }
+    # joining { file.answer.answer.submission }.
+    #   where.has { file.answer.answer.submission.creator_id.in(user_id) }.
+    #   joining { discussion_topic }.selecting { discussion_topic.id }
+    unscoped.
+      joins(:file => {:answer => {:answer => :submission}}).
+      where(Course::Assessment::Submission.arel_table[:creator_id].in(user_id)).
+      joins(:discussion_topic).
+      select(Course::Discussion::Topic.arel_table[:id])
   end)
 
   def notify(post)

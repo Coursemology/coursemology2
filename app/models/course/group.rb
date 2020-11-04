@@ -26,30 +26,41 @@ class Course::Group < ApplicationRecord
   # @!attribute [r] average_experience_points
   #   Returns the average experience points of group users in this group who are students.
   calculated :average_experience_points, (lambda do
+    # Course::GroupUser.where('course_group_users.group_id = course_groups.id').
+    #   joining { course_user.experience_points_records.outer }.
+    #   where('course_users.role = ?', CourseUser.roles[:student]).
+    #   # CAST is used to force a float division (integer division by default).
+    #   # greatest(#, 1) is used to avoid division by 0.
+    #   selecting do
+    #     cast(sql('coalesce(sum(course_experience_points_records.points_awarded), 0.0) as float')) /
+    #     greatest(sql('count(distinct(course_group_users.course_user_id)), 1.0'))
+    #   end
     Course::GroupUser.where('course_group_users.group_id = course_groups.id').
-      joining { course_user.experience_points_records.outer }.
-      where('course_users.role = ?', CourseUser.roles[:student]).
-      # CAST is used to force a float division (integer division by default).
-      # greatest(#, 1) is used to avoid division by 0.
-      selecting do
-        cast(sql('coalesce(sum(course_experience_points_records.points_awarded), 0.0) as float')) /
-        greatest(sql('count(distinct(course_group_users.course_user_id)), 1.0'))
-      end
+      left_outer_joins(course_user: :experience_points_records).
+      where(CourseUser.arel_table[:role].eq(CourseUser.roles[:student])).
+      select(Arel.sql('coalesce(sum(course_experience_points_records.points_awarded), 0.0)::float /'\
+            ' GREATEST(count(distinct(course_group_users.course_user_id)), 1.0)'))
   end)
 
   # @!attribute [r] average_achievement_count
   #   Returns the average number of achievements obtained by group users in this group who are
   #   students.
   calculated :average_achievement_count, (lambda do
+    # Course::GroupUser.where('course_group_users.group_id = course_groups.id').
+    #   joining { course_user.course_user_achievements.outer }.
+    #   where('course_users.role = ?', CourseUser.roles[:student]).
+    #   # CAST is used to force a float division (integer division by default).
+    #   # greatest(#, 1) is used to avoid division by 0.
+    #   selecting do
+    #     cast(sql('count(course_user_achievements.id) as float')) /
+    #     greatest(sql('count(distinct(course_group_users.course_user_id)), 1.0'))
+    # end
+
     Course::GroupUser.where('course_group_users.group_id = course_groups.id').
-      joining { course_user.course_user_achievements.outer }.
-      where('course_users.role = ?', CourseUser.roles[:student]).
-      # CAST is used to force a float division (integer division by default).
-      # greatest(#, 1) is used to avoid division by 0.
-      selecting do
-        cast(sql('count(course_user_achievements.id) as float')) /
-        greatest(sql('count(distinct(course_group_users.course_user_id)), 1.0'))
-      end
+      left_outer_joins(course_user: :course_user_achievements).
+      where(CourseUser.arel_table[:role].eq(CourseUser.roles[:student])).
+      select(Arel.sql('count(course_user_achievements.id)::float /'\
+            ' GREATEST(count(distinct(course_group_users.course_user_id)), 1.0)'))
   end)
 
   # @!attribute [r] last_obtained_achievement
@@ -58,7 +69,7 @@ class Course::Group < ApplicationRecord
   calculated :last_obtained_achievement, (lambda do
     Course::GroupUser.where('course_group_users.group_id = course_groups.id').
       joins(course_user: :course_user_achievements).
-      where('course_users.role = ?', CourseUser.roles[:student]).
+      where(CourseUser.arel_table[:role].eq(CourseUser.roles[:student])).
       select('course_user_achievements.obtained_at').limit(1).order('obtained_at DESC')
   end)
 
