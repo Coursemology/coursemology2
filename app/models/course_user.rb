@@ -11,7 +11,8 @@ class CourseUser < ApplicationRecord
   enum timeline_algorithm: { fixed: 0, fomo: 1, stragglers: 2, otot: 3 }
 
   # A set of roles which comprise the staff of a course, including the observer.
-  STAFF_ROLES = Set[:teaching_assistant, :manager, :owner, :observer].map { |v| roles[v] }.freeze
+  STAFF_ROLES_SYM = Set[:teaching_assistant, :manager, :owner, :observer]
+  STAFF_ROLES = STAFF_ROLES_SYM.map { |v| roles[v] }.freeze
 
   # A set of roles which comprise of the teaching staff of a course.
   TEACHING_STAFF_ROLES = Set[:teaching_assistant, :manager, :owner].map { |v| roles[v] }.freeze
