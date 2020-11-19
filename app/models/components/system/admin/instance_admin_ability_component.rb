@@ -16,18 +16,18 @@ module System::Admin::InstanceAdminAbilityComponent
   private
 
   def allow_instance_admin_manage_instance
-    can :manage, Instance, instance_user_hash(:administrator)
+    can :manage, Instance, instance_user_hash(InstanceUser.roles[:administrator])
   end
 
   def allow_instance_admin_manage_instance_users
-    can :manage, InstanceUser, instance_instance_user_hash(:administrator)
+    can :manage, InstanceUser, instance_instance_user_hash(InstanceUser.roles[:administrator])
   end
 
   def allow_instance_admin_manage_courses
-    can :manage, Course, instance_instance_user_hash(:administrator)
+    can :manage, Course, instance_instance_user_hash(InstanceUser.roles[:administrator])
   end
 
   def allow_instance_admin_manage_role_requests
-    can :manage, Instance::UserRoleRequest, instance_instance_user_hash(:administrator)
+    can :manage, Instance::UserRoleRequest, instance_instance_user_hash(InstanceUser.roles[:administrator])
   end
 end
