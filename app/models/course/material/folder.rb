@@ -190,7 +190,7 @@ class Course::Material::Folder < ApplicationRecord
     return if parent.nil?
 
     # conflicts = parent.materials.where.has { |parent| name =~ parent.name }
-    conflicts = parent.materials.where(Course::Material.arel_table[:name] =~ name)
+    conflicts = parent.materials.where(Course::Material.arel_table[:name].matches(name))
     errors.add(:name, :taken) unless conflicts.empty?
   end
 
