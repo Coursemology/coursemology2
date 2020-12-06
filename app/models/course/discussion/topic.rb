@@ -30,7 +30,7 @@ class Course::Discussion::Topic < ApplicationRecord
   # Topics to be displayed in the comments centre.
   scope :globally_displayed, (lambda do
     joins(:posts). # Make sure only topics with posts are returned.
-      where(actable_type: global_topic_models.map(&:name))
+      where(actable_type: global_topic_models.map(&:name)).distinct
   end)
 
   # Returns the topics from the user(s) specified.
