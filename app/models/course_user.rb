@@ -132,8 +132,9 @@ class CourseUser < ApplicationRecord
   scope :active_in_past_7_days, -> { where('last_active_at > ?', 7.days.ago) }
 
   scope :from_instance, (lambda do |instance|
-    joining { course }.
-    where.has { course.instance_id == instance.id }
+    joins(:course).where(Course.arel_table[:instance_id].eq(instance.id))
+    # joining { course }.
+    # where.has { course.instance_id == instance.id }
   end)
 
   scope :for_user, (lambda do |user|
