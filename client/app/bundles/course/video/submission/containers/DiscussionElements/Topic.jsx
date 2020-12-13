@@ -32,7 +32,7 @@ function Topic(props) {
         &nbsp;
         <a style={{ cursor: 'pointer' }} onClick={props.onTimeStampClick}>
           <b>
-Time:
+            Time:
             {formatTimestamp(props.timestamp)}
           </b>
         </a>

@@ -33,6 +33,7 @@ MultipleChoiceOptions.propTypes = {
   readOnly: PropTypes.bool,
   input: PropTypes.shape({
     onChange: PropTypes.func,
+    value: PropTypes.number,
   }).isRequired,
 };
 

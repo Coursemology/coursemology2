@@ -84,6 +84,7 @@ const propTypes = {
   formValues: PropTypes.shape({
     start_at: PropTypes.instanceOf(Date),
     end_at: PropTypes.instanceOf(Date),
+    allow_response_after_end: PropTypes.bool,
   }),
   shiftEndDate: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,

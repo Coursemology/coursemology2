@@ -42,6 +42,7 @@ MultipleResponseOptions.propTypes = {
   readOnly: PropTypes.bool,
   input: PropTypes.shape({
     onChange: PropTypes.func,
+    value: PropTypes.arrayOf(PropTypes.number),
   }).isRequired,
 };
 

@@ -45,7 +45,7 @@ class LessonPlanGroup extends React.Component {
     group: PropTypes.shape({
       id: PropTypes.string,
       milestone: PropTypes.object,
-      items: PropTypes.array,
+      items: PropTypes.arrayOf({}),
     }).isRequired,
     initiallyExpanded: PropTypes.bool,
   }

@@ -117,7 +117,13 @@ class AssessmentForm extends React.Component {
     folderAttributes: PropTypes.shape({
       folderId: PropTypes.number,
       // See MaterialFormContainer for detailed PropTypes.
-      materials: PropTypes.array,
+      materials: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.number,
+          name: PropTypes.string,
+          updated_at: PropTypes.string,
+        })
+      ),
     }),
     // Condtions will be displayed if the attributes are present.
     conditionAttributes: PropTypes.shape({

@@ -84,13 +84,6 @@ const translations = defineMessages({
 });
 
 class ResponseIndex extends React.Component {
-  static propTypes = {
-    survey: surveyShape,
-    dispatch: PropTypes.func.isRequired,
-    responses: PropTypes.arrayOf(responseShape),
-    isLoading: PropTypes.bool.isRequired,
-  };
-
   static computeStatuses(responses) {
     const summary = {
       [responseStatus.NOT_STARTED]: 0,
@@ -114,6 +107,13 @@ class ResponseIndex extends React.Component {
 
     return { responses: responsesWithStatuses, summary };
   }
+
+  static propTypes = {
+    survey: surveyShape,
+    dispatch: PropTypes.func.isRequired,
+    responses: PropTypes.arrayOf(responseShape),
+    isLoading: PropTypes.bool.isRequired,
+  };
 
   static renderReponseStatus(response, survey) {
     const status = <FormattedMessage {...translations[response.status]} />;

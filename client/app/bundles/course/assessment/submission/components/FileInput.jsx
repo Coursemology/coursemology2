@@ -52,6 +52,7 @@ class FileInput extends Component {
     }).isRequired,
     input: PropTypes.shape({
       onChange: PropTypes.func,
+      value: PropTypes.arrayOf(PropTypes.string),
     }).isRequired,
     callback: PropTypes.func,
   };

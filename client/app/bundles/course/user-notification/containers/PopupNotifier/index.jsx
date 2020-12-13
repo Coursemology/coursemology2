@@ -12,14 +12,14 @@ class PopupNotifier extends React.Component {
     open: PropTypes.bool,
   }
 
+  componentDidMount() {
+    this.props.dispatch(fetchNotification());
+  }
+
   static popupsHash = {
     achievementGained: AchievementGainedPopup,
     levelReached: LevelReachedPopup,
   };
-
-  componentDidMount() {
-    this.props.dispatch(fetchNotification());
-  }
 
   render() {
     const { dispatch, notification, open } = this.props;

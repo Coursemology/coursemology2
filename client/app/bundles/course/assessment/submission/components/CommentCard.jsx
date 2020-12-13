@@ -49,6 +49,18 @@ const styles = {
 };
 
 export default class CommentCard extends Component {
+  static formatDateTime(dateTime) {
+    return dateTime ? moment(dateTime).format('MMM DD, YYYY h:mma') : null;
+  }
+
+  static editPostIdentifier(field) {
+    return `edit_post_${field}`;
+  }
+
+  static postIdentifier(field) {
+    return `post_${field}`;
+  }
+
   static propTypes = {
     post: postShape.isRequired,
     editValue: PropTypes.string,
@@ -62,18 +74,6 @@ export default class CommentCard extends Component {
   static defaultProps = {
     airMode: true,
   };
-
-  static formatDateTime(dateTime) {
-    return dateTime ? moment(dateTime).format('MMM DD, YYYY h:mma') : null;
-  }
-
-  static editPostIdentifier(field) {
-    return `edit_post_${field}`;
-  }
-
-  static postIdentifier(field) {
-    return `post_${field}`;
-  }
 
   state = {
     editMode: false,
