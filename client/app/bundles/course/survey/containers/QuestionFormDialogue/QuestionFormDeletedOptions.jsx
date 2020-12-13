@@ -49,6 +49,7 @@ class QuestionFormDeletedOptions extends React.Component {
     const { fields, disabled, addToOptions } = this.props;
 
 
+    // eslint-disable-next-line react/prop-types
     if (!fields || fields.length < 1) {
       return null;
     }

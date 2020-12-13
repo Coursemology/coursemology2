@@ -168,6 +168,7 @@ class QuestionForm extends React.Component {
 
   renderValidOptionCount() {
     const { intl, formValues } = this.props;
+    // eslint-disable-next-line react/prop-types
     const numberOfFilledOptions = formValues ? countFilledOptions(formValues.options) : 0;
 
     return (
@@ -183,6 +184,7 @@ class QuestionForm extends React.Component {
 
   renderOptionsToDelete(props) {
     const { intl, disabled, formValues, addToOptions } = this.props;
+    // eslint-disable-next-line react/prop-types
     if (formValues && formValues.optionsToDelete && formValues.optionsToDelete.length > 0) {
       return (
         <div>
@@ -317,7 +319,7 @@ class QuestionForm extends React.Component {
 
 QuestionForm.propTypes = {
   formValues: PropTypes.shape({
-    quesion_type: PropTypes.string,
+    question_type: PropTypes.string,
   }),
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,

@@ -6,16 +6,6 @@ import moment from 'lib/moment';
 import LessonPlanGroup from './LessonPlanGroup';
 
 class LessonPlanShow extends React.Component {
-  static propTypes = {
-    groups: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.string,
-      milestone: PropTypes.object,
-      items: PropTypes.array,
-    })).isRequired,
-    visibility: PropTypes.shape({}).isRequired,
-    milestonesExpanded: PropTypes.string,
-  }
-
   /**
    * Searches for the last milestone that has just passed.
    * The current group contains that milestone and the items that come after that milestone,
@@ -34,6 +24,16 @@ class LessonPlanShow extends React.Component {
       return true;
     });
     return currentGroupId;
+  }
+
+  static propTypes = {
+    groups: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.string,
+      milestone: PropTypes.object,
+      items: PropTypes.arrayOf({}),
+    })).isRequired,
+    visibility: PropTypes.shape({}).isRequired,
+    milestonesExpanded: PropTypes.string,
   }
 
   constructor(props) {

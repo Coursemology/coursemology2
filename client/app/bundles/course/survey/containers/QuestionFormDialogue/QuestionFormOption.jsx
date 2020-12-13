@@ -149,7 +149,9 @@ class QuestionFormOption extends React.Component {
       if (fieldValue.id) {
         addToOptionsToDelete(fieldValue);
       }
+      // eslint-disable-next-line react/prop-types
       if (fields.length <= 1) {
+        // eslint-disable-next-line react/prop-types
         fields.push({});
       }
     };

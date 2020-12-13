@@ -45,6 +45,7 @@ MultipleResponseOptions.propTypes = {
   graderView: PropTypes.bool,
   input: PropTypes.shape({
     onChange: PropTypes.func,
+    value: PropTypes.arrayOf(PropTypes.number),
   }).isRequired,
 };
 

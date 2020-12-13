@@ -67,6 +67,8 @@ class SurveyLayout extends React.Component {
 SurveyLayout.propTypes = {
   surveys: PropTypes.arrayOf(surveyShape),
   match: PropTypes.shape({
+    url: PropTypes.string,
+    isExact: PropTypes.bool,
     params: PropTypes.shape({
       courseId: PropTypes.string.isRequired,
       surveyId: PropTypes.string.isRequired,

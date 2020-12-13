@@ -20,7 +20,7 @@ class LessonPlanEdit extends React.Component {
     groups: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.string,
       milestone: PropTypes.object,
-      items: PropTypes.array,
+      items: PropTypes.arrayOf({}),
     })).isRequired,
     columnsVisible: PropTypes.shape({}).isRequired,
   }

@@ -57,6 +57,7 @@ const SurveyFormDialogue = ({
     initialValues,
     onSubmit,
     disabled,
+    // eslint-disable-next-line react/prop-types
     disableAnonymousToggle: initialValues && initialValues.anonymous && hasStudentResponse,
   };
 
