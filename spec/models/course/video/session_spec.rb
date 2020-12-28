@@ -86,7 +86,7 @@ RSpec.describe Course::Video::Session do
                                       event_time: time.midnight }])
         end
 
-        it `creates a new event` do
+        it 'creates a new event' do
           expect(subject.events.count).to eq(13)
           expect(subject.events.exists?(sequence_num: 100)).to be_truthy
 

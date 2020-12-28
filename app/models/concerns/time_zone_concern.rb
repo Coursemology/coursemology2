@@ -17,7 +17,7 @@ module TimeZoneConcern
     if self[:time_zone] && ActiveSupport::TimeZone[self[:time_zone]].present?
       self[:time_zone]
     else
-      Application.config.x.default_user_time_zone
+      Application::Application.config.x.default_user_time_zone
     end
   end
 end

@@ -29,7 +29,7 @@ Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 ActiveRecord::Migration.maintain_test_schema!
 
 # Ensure that all database seeds are in the database.
-Application.load_tasks
+Application::Application.load_tasks
 Rake::Task['db:seed'].invoke
 
 RSpec.configure do |config|
@@ -77,4 +77,8 @@ RSpec.configure do |config|
 
     Capybara::Screenshot.prune_strategy = { keep: 10 }
   end
+end
+
+class ActiveSupport::TestCase
+  parallelize(workers: 10)
 end

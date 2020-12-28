@@ -37,6 +37,6 @@
       h2 = t('.activities')
       div.message-holder
         - @activity_feeds.each do |notification|
-          - if notification.activity.object
+          - if notification.activity
             = render partial: notification_view_path(notification),
                      locals: { notification: notification }
