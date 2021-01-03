@@ -1,6 +1,8 @@
 //= require helpers/course_helpers
+//= require routes
 
-var DELETE_DISCUSSION_POST = (function($, COURSE_HELPERS) {
+
+var DELETE_DISCUSSION_POST = (function($, COURSE_HELPERS, ROUTES) {
   /* global JST, Routes */
   'use strict';
 
@@ -18,7 +20,7 @@ var DELETE_DISCUSSION_POST = (function($, COURSE_HELPERS) {
     var topicId = $topic.data('topicId');
     var postId = $post.data('postId');
 
-    $.ajax({ url: Routes.course_topic_post_path(courseId, topicId, postId),
+    $.ajax({ url: ROUTES.course_topic_post_path(courseId, topicId, postId),
              method: 'delete' }).
       done(function(data) { onPostDeleteSuccess(data, $element); }).
       fail(function(data) { onPostDeleteFailure(data, $element); });
@@ -51,4 +53,4 @@ var DELETE_DISCUSSION_POST = (function($, COURSE_HELPERS) {
   return {
     initializeToolbarElement: initializeToolbarElement
   };
-}(jQuery, COURSE_HELPERS));
+}(jQuery, COURSE_HELPERS, ROUTES));

@@ -29,7 +29,7 @@ class Course::Discussion::PostsController < Course::ComponentController
   end
 
   def update
-    if @post.update_attributes(post_params)
+    if @post.update(post_params)
       respond_to do |format|
         format.js
         format.json { render @post }
