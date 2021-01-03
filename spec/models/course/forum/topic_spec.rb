@@ -168,7 +168,7 @@ RSpec.describe Course::Forum::Topic, type: :model do
 
       context 'after topic was updated' do
         it 'has been read by the updater' do
-          topic.update_attributes(title: 'New Topic')
+          topic.update(title: 'New Topic')
           expect(topic.updater.have_read?(topic)).to be_truthy
         end
       end
