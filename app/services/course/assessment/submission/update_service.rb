@@ -13,11 +13,25 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   def submit_answer
     answer = @submission.answers.find(submit_answer_params[:id].to_i)
     if update_answer(answer, submit_answer_params)
-      auto_grade(answer)
+      if should_auto_grade_on_submit(answer)
+        auto_grade(answer)
+      else
+        render answer
+      end
     else
       logger.error("failed to save answer: #{answer.errors.inspect}")
       render json: { errors: answer.errors }, status: :bad_request
     end
+    end
+
+  def should_auto_grade_on_submit(answer)
+    mcq = [I18n.t('course.assessment.question.multiple_responses.question_type.multiple_response'),
+           I18n.t('course.assessment.question.multiple_responses.question_type.multiple_choice')]
+
+    if mcq.include?(answer.question.question_type) && !@submission.assessment.show_mcq_answer
+      return false
+    end
+    true
   end
 
   def load_or_create_answers

@@ -92,7 +92,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
                    :use_public, :use_private, :use_evaluation, :has_personal_times,
                    :affects_personal_times]
     if autograded?
-      base_params += [:skippable, :allow_partial_submission]
+      base_params += [:skippable, :allow_partial_submission, :show_mcq_answer]
     else
       base_params += [:view_password, :session_password, :tabbed_view, :delayed_grade_publication]
     end

@@ -174,6 +174,22 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
       end
     end
 
+    context 'when the assessment does not show mcq answer' do
+      let(:assessment) {create(:assessment, :not_show_mcq_answer, :with_mrq_question, course: course)}
+      let!(:current_answer) { submission.answers.first }
+
+      describe '#submit_answer' do
+        subject do
+          put :submit_answer,
+              as: :json,
+              params: {
+                course_id: course, assessment_id: assessment, id: submission, answer_id: current_answer.id,
+                answer: { id: current_answer.id }
+              }
+        end
+      end
+    end
+
     context 'when the assessment is autograded' do
       let(:assessment) { create(:assessment, :autograded, :with_mrq_question, course: course) }
       let!(:current_answer) { submission.answers.first }

@@ -72,7 +72,7 @@ class SubmissionEditStepForm extends Component {
 
   shouldDisableContinueButton() {
     const { stepIndex } = this.state;
-    const { explanations, questionIds, isSaving } = this.props;
+    const { explanations, questionIds, isSaving, showMcqAnswer } = this.props;
     const questionId = questionIds[stepIndex];
 
     if (isSaving) {
@@ -82,7 +82,8 @@ class SubmissionEditStepForm extends Component {
     if (explanations[questionId] && explanations[questionId].correct) {
       return false;
     }
-    return true;
+
+    return showMcqAnswer;
   }
 
   handleNext() {
@@ -123,6 +124,10 @@ class SubmissionEditStepForm extends Component {
   renderExplanationPanel(question) {
     const { intl, explanations } = this.props;
     const explanation = explanations[question.id];
+
+    if ([questionTypes.MultipleChoice, questionTypes.MultipleResponse].includes(question.type) && question.autogradable && !question.showMcqAnswer) {
+      return null;
+    }
 
     if (explanation && explanation.correct !== null) {
       if (question.type === questionTypes.Programming && explanation.correct) {
@@ -488,6 +493,7 @@ SubmissionEditStepForm.propTypes = {
   explanations: PropTypes.objectOf(explanationShape),
   allConsideredCorrect: PropTypes.bool.isRequired,
   allowPartialSubmission: PropTypes.bool.isRequired,
+  showMcqAnswer: PropTypes.bool.isRequired,
   questionIds: PropTypes.arrayOf(PropTypes.number),
   questions: PropTypes.objectOf(questionShape),
   historyQuestions: PropTypes.objectOf(historyQuestionShape),
