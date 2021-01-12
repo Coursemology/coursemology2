@@ -75,6 +75,7 @@ class SubmissionEditStepForm extends Component {
     const { explanations, questionIds, isSaving, showMcqAnswer } = this.props;
     const questionId = questionIds[stepIndex];
 
+
     if (isSaving) {
       return true;
     }
@@ -212,13 +213,13 @@ class SubmissionEditStepForm extends Component {
 
   renderSubmitButton() {
     const { stepIndex } = this.state;
-    const { intl, questionIds, questions, questionsFlags, handleSubmitAnswer, isSaving } = this.props;
+    const { intl, questionIds, questions, questionsFlags, handleSubmitAnswer, isSaving, showMcqAnswer } = this.props;
     const id = questionIds[stepIndex];
     const question = questions[id];
     const { answerId } = question;
     const { isAutograding, isResetting } = questionsFlags[id] || {};
     if ([questionTypes.MultipleChoice, questionTypes.MultipleResponse].includes(question.type)
-        && question.autogradable && !question.showMcqAnswer) {
+        && question.autogradable && !showMcqAnswer) {
       return null;
     }
     return (

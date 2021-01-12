@@ -227,7 +227,7 @@ class VisibleSubmissionEditIndex extends Component {
     const {
       assessment: { autograded, delayedGradePublication, tabbedView,
         skippable, questionIds, passwordProtected, categoryId, tabId,
-        allowPartialSubmission },
+        allowPartialSubmission, showMcqAnswer },
       submission: { graderView, canUpdate, maxStep, workflowState },
       explanations,
       grading,
@@ -274,6 +274,7 @@ class VisibleSubmissionEditIndex extends Component {
           explanations={explanations}
           allConsideredCorrect={this.allConsideredCorrect()}
           allowPartialSubmission={allowPartialSubmission}
+          showMcqAnswer={showMcqAnswer}
           graderView={graderView}
           attempting={workflowState === workflowStates.Attempting}
           submitted={workflowState === workflowStates.Submitted}
