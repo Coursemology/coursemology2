@@ -125,9 +125,6 @@ class SubmissionEditStepForm extends Component {
     const { intl, explanations } = this.props;
     const explanation = explanations[question.id];
 
-    if ([questionTypes.MultipleChoice, questionTypes.MultipleResponse].includes(question.type) && question.autogradable && !question.showMcqAnswer) {
-      return null;
-    }
 
     if (explanation && explanation.correct !== null) {
       if (question.type === questionTypes.Programming && explanation.correct) {
@@ -220,6 +217,10 @@ class SubmissionEditStepForm extends Component {
     const question = questions[id];
     const { answerId } = question;
     const { isAutograding, isResetting } = questionsFlags[id] || {};
+    if ([questionTypes.MultipleChoice, questionTypes.MultipleResponse].includes(question.type)
+        && question.autogradable && !question.showMcqAnswer) {
+      return null;
+    }
     return (
       <RaisedButton
         style={styles.formButton}
