@@ -56,8 +56,7 @@ class VisibleGradingPanel extends Component {
     } else if (parsedValue > 1) {
       updateMultiplier(1, bonusAwarded);
     } else {
-      const multiplier = parseFloat(parsedValue.toFixed(1));
-      updateMultiplier(multiplier, bonusAwarded);
+      updateMultiplier(parsedValue, bonusAwarded);
     }
   }
 
@@ -120,11 +119,10 @@ class VisibleGradingPanel extends Component {
         <div style={{ marginLeft: 20 }}>
           <FormattedMessage {...translations.multiplier} />
           <input
-            style={{ marginLeft: 5, width: 50 }}
+            style={{ marginLeft: 5, width: 70 }}
             type="number"
             min={0}
             max={1}
-            step={0.1}
             value={expMultiplier}
             onChange={e => this.handleMultiplierField(e.target.value)}
             ref={(ref) => {
