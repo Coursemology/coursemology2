@@ -34,7 +34,6 @@ module Application
 
     config.action_mailer.delivery_job = "ActionMailer::MailDeliveryJob"
 
-    config.x.default_host = 'example.org'
     config.x.default_user_time_zone = 'Singapore'
     config.x.public_download_folder = 'downloads'
     config.x.temp_folder = config.root.join('tmp')

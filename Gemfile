@@ -160,6 +160,23 @@ group :production, :test do
   gem 'puma'
 end
 
+group :production do
+  # Use fog-aws as CarrierWave's storage provider
+  gem 'fog-aws'
+  gem 'rack-mini-profiler'
+  gem 'flamegraph'
+  gem 'stackprof'
+  gem 'sidekiq'
+  gem 'sidekiq-cron'
+  gem 'sinatra', :require => nil
+  gem 'redis-rails'
+  gem 'rollbar', '>= 1.5.3'
+
+  # better log format
+  gem 'lograge'
+  gem 'lograge-sql'
+end
+
 # Multitenancy
 gem 'acts_as_tenant'
 
