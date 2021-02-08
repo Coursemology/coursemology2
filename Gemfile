@@ -85,7 +85,7 @@ group :development do
   gem 'listen', '~> 3.2.0'
 
   # Gems to make development mode faster and less painful
-  gem 'rails-flog', require: 'flog'
+
   gem 'wdm', '>= 0.0.3', platforms: [:mswin, :mswin64]
 
   # Helps to prevent database slowdowns
@@ -157,7 +157,7 @@ end
 
 group :production, :test do
   # Puma will be our app server
-  gem 'puma'
+  gem 'puma', '4.3.6'
 end
 
 # Multitenancy

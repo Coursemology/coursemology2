@@ -53,6 +53,9 @@
           tr.allow_partial_submission
             th = t('.allow_partial_submission')
             td = @assessment.allow_partial_submission ? t('.allow') : t('.disallow')
+          tr.show_mcq_answer
+            th = t('.show_mcq_answer')
+            td = @assessment.show_mcq_answer ? t('.show') : t('.not_show')
         tr.graded_test_case_types
           th = t('.graded_test_case_types')
           td = format_inline_text(display_graded_test_types(@assessment))
