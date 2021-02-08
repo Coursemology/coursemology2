@@ -133,11 +133,9 @@ GEM
     after_commit_action (1.1.0)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
-    anbt-sql-formatter (0.1.0)
     ast (2.4.1)
     autoprefixer-rails (10.1.0.0)
       execjs
-    awesome_print (1.8.0)
     aws-eventstream (1.1.0)
     aws-partitions (1.412.0)
     aws-sdk-core (3.110.0)
@@ -308,7 +306,7 @@ GEM
     kaminari-core (1.2.1)
     launchy (2.5.0)
       addressable (~> 2.7)
-    listen (3.2.1)
+    listen (3.4.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     lol_dba (2.2.0)
@@ -361,7 +359,7 @@ GEM
     pg (1.2.3)
     progress (3.5.2)
     public_suffix (4.0.6)
-    puma (5.1.1)
+    puma (4.3.6)
       nio4r (~> 2.0)
     rack (2.2.3)
     rack-proxy (0.6.5)
@@ -598,7 +596,7 @@ DEPENDENCIES
   jquery-rails
   js-routes
   kaminari
-  listen (~> 3.2.0)
+  listen
   lol_dba
   loofah (>= 2.2.1)
   mini_magick

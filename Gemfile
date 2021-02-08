@@ -82,7 +82,7 @@ group :development do
   # Spring speeds up development by keeping your application running in the background.
   # Read more: https://github.com/rails/spring
   gem 'spring', platforms: [:ruby]
-  gem 'listen', '~> 3.2.0'
+  gem 'listen'
 
   # Gems to make development mode faster and less painful
 
@@ -157,7 +157,7 @@ end
 
 group :production, :test do
   # Puma will be our app server
-  gem 'puma', '4.3.6'
+  gem 'puma'
 end
 
 # Multitenancy
