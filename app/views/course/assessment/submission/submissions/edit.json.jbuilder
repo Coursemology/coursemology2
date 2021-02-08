@@ -13,6 +13,7 @@ json.assessment do
   json.tabbedView @assessment.tabbed_view
   json.showPrivate @assessment.show_private
   json.allowPartialSubmission @assessment.allow_partial_submission
+  json.showMcqAnswer @assessment.show_mcq_answer
   json.showEvaluation @assessment.show_evaluation
   json.questionIds @submission.questions.map(&:id)
   json.passwordProtected @assessment.session_password_protected?

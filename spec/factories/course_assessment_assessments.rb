@@ -20,6 +20,7 @@ FactoryBot.define do
     tabbed_view { false }
     delayed_grade_publication { false }
     randomization { nil }
+    show_mcq_answer { true }
 
     trait :delay_grade_publication do
       delayed_grade_publication { true }
@@ -135,6 +136,10 @@ FactoryBot.define do
 
     trait :autograded do
       autograded { true }
+    end
+
+    trait :not_show_mcq_answer do
+      show_mcq_answer { false }
     end
 
     trait :with_attachments do

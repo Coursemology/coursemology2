@@ -53,6 +53,14 @@ const translations = defineMessages({
     id: 'course.assessment.form.allowPartialSubmission',
     defaultMessage: 'Allow submission with incorrect answers',
   },
+  showMcqAnswer: {
+    id: 'course.assessment.form.showMcqAnswer',
+    defaultMessage: 'Show MCQ Submit Result',
+  },
+  showMcqAnswerHint: {
+    id: 'course.assessment.form.showMcqAnswerHint',
+    defaultMessage: 'Students can try to submit answer to MCQ and get feedback until they get the right answer',
+  },
   showPrivate: {
     id: 'course.assessment.form.showPrivate',
     defaultMessage: 'Show private tests',

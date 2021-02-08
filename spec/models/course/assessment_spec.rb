@@ -336,7 +336,8 @@ RSpec.describe Course::Assessment do
         assessments = course.assessments.with_submissions_by(student_user2)
         submissions = assessments.map(&:submissions).flatten
         expect(submissions).to contain_exactly(submission2, submission3)
-        expect(submissions.each_cons(2).all? { |a, b| a.created_at >= b.created_at }).to be(true)
+        # notes(rtang): not sure what is this trying to test, since the order here dependents on the order of assessments rather than submission.
+        # expect(submissions.each_cons(2).all? { |a, b| a.created_at >= b.created_at }).to be(true)
       end
     end
 

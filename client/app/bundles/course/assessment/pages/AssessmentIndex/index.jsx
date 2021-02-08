@@ -93,6 +93,7 @@ class PopupDialog extends React.Component {
       skippable: false,
       allow_partial_submission: false,
       autograded: false,
+      show_mcq_answer: true,
       delayed_grade_publication: false,
       tabbed_view: false,
       use_public: false,
