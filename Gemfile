@@ -140,7 +140,6 @@ group :development, :test do
   gem 'byebug', platform: :mri
 end
 
-
 group :ci do
   # Code Coverage reporters
   gem 'codecov', :require => false

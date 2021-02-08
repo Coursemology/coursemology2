@@ -22,7 +22,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
       logger.error("failed to save answer: #{answer.errors.inspect}")
       render json: { errors: answer.errors }, status: :bad_request
     end
-    end
+  end
 
   def should_auto_grade_on_submit(answer)
     mcq = [I18n.t('course.assessment.question.multiple_responses.question_type.multiple_response'),
