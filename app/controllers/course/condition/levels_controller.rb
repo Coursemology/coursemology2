@@ -21,7 +21,7 @@ class Course::Condition::LevelsController < Course::ConditionsController
   end
 
   def update
-    if @level_condition.update_attributes(level_condition_params)
+    if @level_condition.update(level_condition_params)
       redirect_to return_to_path, success: t('course.condition.levels.update.success')
     else
       render :edit

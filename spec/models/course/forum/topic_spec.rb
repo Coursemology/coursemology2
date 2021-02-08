@@ -59,7 +59,7 @@ RSpec.describe Course::Forum::Topic, type: :model do
 
       context 'when updating a topic' do
         before do
-          topic.update_attribute(:title, 'new title')
+          topic.update(:title, 'new title')
           topic.save
         end
 

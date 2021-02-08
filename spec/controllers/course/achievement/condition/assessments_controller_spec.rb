@@ -69,7 +69,7 @@ RSpec.describe Course::Achievement::Condition::AssessmentsController, type: :con
       let(:assessment_condition) do
         create(:course_condition_assessment, course: course, assessment: assessment,
                                              conditional: achievement).tap do |stub|
-          allow(stub).to receive(:update_attributes).and_return(false)
+          allow(stub).to receive(:update).and_return(false)
         end
       end
       let(:achievement) { create(:course_achievement, course: course) }

@@ -11,7 +11,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
     let(:immutable_submission) do
       create(:submission, assessment: assessment, creator: user).tap do |stub|
         allow(stub).to receive(:save).and_return(false)
-        allow(stub).to receive(:update_attributes).and_return(false)
+        allow(stub).to receive(:update).and_return(false)
         allow(stub).to receive(:destroy).and_return(false)
       end
     end

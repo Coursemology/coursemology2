@@ -7,7 +7,7 @@ class Course::Admin::AssessmentSettingsController < Course::Admin::Controller
   end
 
   def update
-    if current_course.update_attributes(category_params)
+    if current_course.update(category_params)
       redirect_to course_admin_assessments_path, success: t('.success')
     else
       render 'edit'

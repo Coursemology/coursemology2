@@ -93,7 +93,7 @@ class User < ApplicationRecord
   def set_next_email_as_primary
     return false unless default_email_record
 
-    default_email_record.update_attributes(primary: true)
+    default_email_record.update(primary: true)
   end
 
   # Update the user using the info from invitation.

@@ -28,7 +28,7 @@ class Course::GroupsController < Course::ComponentController
   end
 
   def update #:nodoc:
-    if @group.update_attributes(group_params)
+    if @group.update(group_params)
       redirect_to course_groups_path(current_course), success: t('.success', name: @group.name)
     else
       render 'edit'

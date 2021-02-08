@@ -70,7 +70,7 @@ RSpec.describe Course::Achievement::Condition::LevelsController, type: :controll
       let(:level_condition) do
         create(:course_condition_level, course: course, minimum_level: min_level,
                                         conditional: achievement).tap do |stub|
-          allow(stub).to receive(:update_attributes).and_return(false)
+          allow(stub).to receive(:update).and_return(false)
         end
       end
       let!(:achievement) { create(:course_achievement, course: course) }

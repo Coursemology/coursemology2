@@ -3,7 +3,7 @@ module Course::Forum::TopicControllerLockingConcern
   extend ActiveSupport::Concern
 
   def set_locked
-    if @topic.update_attributes(locked_params)
+    if @topic.update(locked_params)
       redirect_to course_forum_topic_path(current_course, @forum, @topic),
                   success: locked_state_text(true)
     else
