@@ -54,7 +54,7 @@ class Course::Achievement::AchievementsController < Course::Achievement::Control
 
     Course::Achievement.transaction do
       achievement_order_params.each_with_index do |id, index|
-        achievements_hash[id].update(:weight, index)
+        achievements_hash[id].update_attribute(:weight, index)
       end
     end
 
