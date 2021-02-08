@@ -4,7 +4,7 @@ class Course::Admin::AdminController < Course::Admin::Controller
   end
 
   def update #:nodoc:
-    if current_course.update_attributes(course_setting_params)
+    if current_course.update(course_setting_params)
       redirect_to course_admin_path(current_course),
                   success: t('.success', title: current_course.title)
     else

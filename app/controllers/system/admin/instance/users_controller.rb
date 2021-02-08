@@ -10,7 +10,7 @@ class System::Admin::Instance::UsersController < System::Admin::Instance::Contro
   end
 
   def update
-    if @instance_user.update_attributes(instance_user_params)
+    if @instance_user.update(instance_user_params)
       flash.now[:success] = t('.success', user: @instance_user.user.name)
     else
       flash.now[:danger] = @instance_user.errors.full_messages.to_sentence

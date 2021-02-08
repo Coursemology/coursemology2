@@ -33,7 +33,7 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
   end
 
   def update
-    if @post.update_attributes(post_params)
+    if @post.update(post_params)
       redirect_to course_forum_topic_path(current_course, @forum, @topic),
                   success: t('course.discussion.posts.update.success')
     else

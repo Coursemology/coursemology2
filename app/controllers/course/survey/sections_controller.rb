@@ -13,7 +13,7 @@ class Course::Survey::SectionsController < Course::Survey::Controller
   end
 
   def update
-    if @section.update_attributes(section_params)
+    if @section.update(section_params)
       render_section_json
     else
       render json: { errors: @section.errors }, status: :bad_request

@@ -21,7 +21,7 @@ class Course::Assessment::SkillBranchesController < Course::ComponentController
   end
 
   def update
-    if @skill_branch.update_attributes(skill_branch_params)
+    if @skill_branch.update(skill_branch_params)
       redirect_to course_assessments_skills_path(current_course),
                   success: t('.success', title: @skill_branch.title)
     else

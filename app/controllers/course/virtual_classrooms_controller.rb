@@ -60,7 +60,7 @@ class Course::VirtualClassroomsController < Course::ComponentController
   def edit; end #:nodoc:
 
   def update #:nodoc:
-    if @virtual_classroom.update_attributes(virtual_classroom_params)
+    if @virtual_classroom.update(virtual_classroom_params)
       redirect_to course_virtual_classrooms_path(current_course),
                   success: t('.success', title: @virtual_classroom.title)
     else

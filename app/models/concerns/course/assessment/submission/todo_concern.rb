@@ -20,9 +20,9 @@ module Course::Assessment::Submission::TodoConcern
     return unless todo
 
     if attempting?
-      todo.update_attribute(:workflow_state, 'in_progress') unless todo.in_progress?
+      todo.update(:workflow_state, 'in_progress') unless todo.in_progress?
     elsif submitted? || graded? || published?
-      todo.update_attribute(:workflow_state, 'completed') unless todo.completed?
+      todo.update(:workflow_state, 'completed') unless todo.completed?
     end
   rescue ActiveRecord::ActiveRecordError => error
     raise ActiveRecord::Rollback, error.message
@@ -32,7 +32,7 @@ module Course::Assessment::Submission::TodoConcern
   def restart_todo
     return if assessment.destroying? || todo.nil?
 
-    todo.update_attribute(:workflow_state, 'not_started') unless todo.not_started?
+    todo.update(:workflow_state, 'not_started') unless todo.not_started?
   rescue ActiveRecord::ActiveRecordError => error
     raise ActiveRecord::Rollback, error.message
   end

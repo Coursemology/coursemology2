@@ -57,7 +57,7 @@ RSpec.describe Course::UserRegistrationsController, type: :controller do
             end
 
             context 'when the course does not allow enrolment requests' do
-              before { course.update_attributes!(enrollable: false) }
+              before { course.update!(enrollable: false) }
               it 'rejects the request' do
                 expect { subject }.to change { course.course_users.count }.by(1)
               end
@@ -99,7 +99,7 @@ RSpec.describe Course::UserRegistrationsController, type: :controller do
             end
 
             context 'when the course does not allow enrolment requests' do
-              before { course.update_attributes!(enrollable: false) }
+              before { course.update!(enrollable: false) }
               it 'rejects the request' do
                 expect { subject }.to change { course.course_users.count }.by(1)
               end

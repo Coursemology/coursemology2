@@ -23,7 +23,7 @@ class System::Admin::InstancesController < System::Admin::Controller
   end
 
   def update #:nodoc:
-    if @instance.update_attributes(instance_params)
+    if @instance.update(instance_params)
       redirect_to admin_instances_path, success: t('.success')
     else
       render 'edit'

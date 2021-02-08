@@ -13,7 +13,7 @@ class Course::Survey::QuestionsController < Course::Survey::Controller
   end
 
   def update
-    if @question.update_attributes(question_params)
+    if @question.update(question_params)
       render_question_json
     else
       render json: { errors: @question.errors }, status: :bad_request
