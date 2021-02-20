@@ -115,7 +115,7 @@ class AssessmentForm extends React.Component {
     // If allow to switch between autoraded and manually graded mode.
     modeSwitching: PropTypes.bool,
     folderAttributes: PropTypes.shape({
-      folderId: PropTypes.number,
+      folder_id: PropTypes.number,
       // See MaterialFormContainer for detailed PropTypes.
       materials: PropTypes.arrayOf(
         PropTypes.shape({
@@ -558,7 +558,7 @@ class AssessmentForm extends React.Component {
           <>
             <br />
             <MaterialUploader
-              folderId={folderAttributes.folderId}
+              folderId={folderAttributes.folder_id}
               materials={folderAttributes.materials}
             />
           </>
