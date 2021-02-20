@@ -168,7 +168,7 @@ class CourseUser < ApplicationRecord
   #
   # @return [Boolean] True if course_user is a staff
   def teaching_staff?
-    TEACHING_STAFF_ROLES.include?( CourseUser.roles[role.to_sym] )
+    TEACHING_STAFF_ROLES.include?(CourseUser.roles[role.to_sym] )
   end
 
   # Test whether this course_user is a real student (i.e. not phantom and not staff)
@@ -186,7 +186,7 @@ class CourseUser < ApplicationRecord
   def my_students
     # CourseUser.joining { group_users.group }.merge(Course::GroupUser.normal).
     #   where.has { group_users.group.id.in(my_groups) }
-    CourseUser.joins(:group_users => :group).merge(Course::GroupUser.normal).
+    CourseUser.joins(group_users: :group).merge(Course::GroupUser.normal).
       where(Course::Group.arel_table[:id].in(group_users.manager.pluck(:group_id)))
   end
 
@@ -197,7 +197,7 @@ class CourseUser < ApplicationRecord
     my_groups = group_users.pluck(:group_id)
     # CourseUser.joining { group_users.group }.merge(Course::GroupUser.manager).
     #   where.has { group_users.group.id.in(my_groups) }
-    CourseUser.joins(:group_users => :group).merge(Course::GroupUser.manager).
+    CourseUser.joins(group_users: :group).merge(Course::GroupUser.manager).
       where(Course::Group.arel_table[:id].in(my_groups))
   end
 

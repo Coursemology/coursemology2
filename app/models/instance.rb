@@ -35,8 +35,8 @@ class Instance < ApplicationRecord
       # tenants = where.has do
       #   (self.host.lower == host.downcase) | (id == DEFAULT_INSTANCE_ID)
       # end.to_a
-      tenants = where(Instance.arel_table[:host].lower.eq(host.downcase)
-                        .or(Instance.arel_table[:id].eq(DEFAULT_INSTANCE_ID)))
+      tenants = where(Instance.arel_table[:host].lower.
+        eq(host.downcase).or(Instance.arel_table[:id].eq(DEFAULT_INSTANCE_ID)))
 
       tenants.find { |tenant| !tenant.default? } || tenants.first
     end

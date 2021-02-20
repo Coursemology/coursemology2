@@ -20,7 +20,7 @@ class Course::Video::Topic < ApplicationRecord
     #   where.has { discussion_topic.posts.creator_id.in(user_id) }.
     #   selecting { discussion_topic.id }
     unscoped.
-      joins(:discussion_topic => :posts).
+      joins(discussion_topic: :posts).
       where(Course::Discussion::Post.arel_table[:creator_id].in(user_id)).
       select(Course::Discussion::Topic.arel_table[:id])
   end)
