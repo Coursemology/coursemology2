@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-public_download_dir = File.join(Rails.public_path,  Application::Application.config.x.public_download_folder )
+public_download_dir = File.join(Rails.public_path, Application::Application.config.x.public_download_folder)
 
 if Rails.env.development? || Rails.env.test?
   if Rails.env.test? && !ParallelTests.first_process?

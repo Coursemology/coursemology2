@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Be sure to restart your server when you modify this file.
 #
 # This file contains migration options to ease your Rails 6.0 upgrade.
@@ -37,7 +38,7 @@ Rails.application.config.active_storage.replace_on_assign_to_many = true
 # If you send mail in the background, job workers need to have a copy of
 # MailDeliveryJob to ensure all delivery jobs are processed properly.
 # Make sure your entire app is migrated and stable on 6.0 before using this setting.
-Rails.application.config.action_mailer.delivery_job = "ActionMailer::MailDeliveryJob"
+Rails.application.config.action_mailer.delivery_job = 'ActionMailer::MailDeliveryJob'
 
 # Enable the same cache key to be reused when the object being cached of type
 # `ActiveRecord::Relation` changes by moving the volatile information (max updated at and count)
