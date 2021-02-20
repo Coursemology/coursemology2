@@ -245,4 +245,3 @@ gem 'loofah', '>= 2.2.1'
 gem 'rails-html-sanitizer', '>= 1.0.4'
 
 gem 'sprockets', '< 4.0.0'
-

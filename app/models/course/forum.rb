@@ -27,10 +27,10 @@ class Course::Forum < ApplicationRecord
   # @!attribute [r] topic_post_count
   #   The number of posts in this forum.
   calculated :topic_post_count, (lambda do
-  #   Course::Forum::Topic.
-  #     joining { discussion_topic.outer.posts.outer }.
-  #     where('course_forum_topics.forum_id = course_forums.id').
-  #     select("count('*')")
+    #   Course::Forum::Topic.
+    #     joining { discussion_topic.outer.posts.outer }.
+    #     where('course_forum_topics.forum_id = course_forums.id').
+    #     select("count('*')")
     Course::Forum::Topic.
       left_outer_joins(discussion_topic: :posts).
       where(Course::Forum::Topic.arel_table[:forum_id].eq(Course::Forum.arel_table[:id])).
