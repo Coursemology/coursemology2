@@ -26,12 +26,12 @@ module Application
     # Action Mailer default settings
     config.action_mailer.default_options = { from: ENV['RAILS_MAILER_DEFAULT_FROM_ADDRESS'] }
 
-    config.eager_load_paths << Rails.root.join('/lib/autoload')
-    config.eager_load_paths << Rails.root.join('/app/models/components')
-    config.eager_load_paths << Rails.root.join('/app/controllers/components')
-    config.eager_load_paths << Rails.root.join('/app/services')
-    config.eager_load_paths << Rails.root.join('/app/services/concerns')
-    config.eager_load_paths << Rails.root.join('/app/notifiers')
+    config.eager_load_paths << "#{Rails.root}/lib/autoload"
+    config.eager_load_paths << "#{Rails.root}/app/models/components"
+    config.eager_load_paths << "#{Rails.root}/app/controllers/components"
+    config.eager_load_paths << "#{Rails.root}/app/services"
+    config.eager_load_paths << "#{Rails.root}/app/services/concerns"
+    config.eager_load_paths << "#{Rails.root}/app/notifiers"
 
     config.action_mailer.delivery_job = 'ActionMailer::MailDeliveryJob'
 
