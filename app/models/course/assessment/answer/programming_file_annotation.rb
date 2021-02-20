@@ -17,7 +17,7 @@ class Course::Assessment::Answer::ProgrammingFileAnnotation < ApplicationRecord
     #   where.has { file.answer.answer.submission.creator_id.in(user_id) }.
     #   joining { discussion_topic }.selecting { discussion_topic.id }
     unscoped.
-      joins(:file => {:answer => {:answer => :submission}}).
+      joins(file: { answer: { answer: :submission } }).
       where(Course::Assessment::Submission.arel_table[:creator_id].in(user_id)).
       joins(:discussion_topic).
       select(Course::Discussion::Topic.arel_table[:id])
