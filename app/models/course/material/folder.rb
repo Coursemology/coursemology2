@@ -41,7 +41,7 @@ class Course::Material::Folder < ApplicationRecord
   # @!attribute [r] children_count
   #   Returns the number of subfolders in current folder.
   calculated :children_count, (lambda do
-    self.select("count('*')").
+    select("count('*')").
       from('course_material_folders children').
       where('children.parent_id = course_material_folders.id')
   end)
