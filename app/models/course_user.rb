@@ -168,7 +168,7 @@ class CourseUser < ApplicationRecord
   #
   # @return [Boolean] True if course_user is a staff
   def teaching_staff?
-    TEACHING_STAFF_ROLES.include?(CourseUser.roles[role.to_sym] )
+    TEACHING_STAFF_ROLES.include?(CourseUser.roles[role.to_sym])
   end
 
   # Test whether this course_user is a real student (i.e. not phantom and not staff)
@@ -212,6 +212,7 @@ class CourseUser < ApplicationRecord
   def validate_reference_timeline_belongs_to_course
     return if reference_timeline.nil?
     return if reference_timeline.course == course
+
     errors.add(:reference_timeline, :belongs_to_course)
   end
 end
