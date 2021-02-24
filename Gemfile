@@ -143,9 +143,10 @@ end
 
 group :ci do
   # Code Coverage reporters
-  gem 'codecov', :require => false
+  gem 'codecov', require: false
   gem 'rspec-retry'
   gem 'rspec_junit_formatter'
+  gem 'rubocop-rails'
 end
 
 # This is used only when producing Production assets. Deals with things like minifying JavaScript
@@ -168,7 +169,7 @@ group :production do
   gem 'stackprof'
   gem 'sidekiq'
   gem 'sidekiq-cron'
-  gem 'sinatra', :require => nil
+  gem 'sinatra', require: nil
   gem 'redis-rails'
   gem 'rollbar', '>= 1.5.3'
 

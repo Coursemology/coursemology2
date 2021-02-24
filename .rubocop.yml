@@ -1,3 +1,5 @@
+require: rubocop-rails
+
 inherit_from:
   - .rubocop.unhound.yml
 
@@ -24,18 +26,6 @@ Metrics/MethodLength:
   Max: 15
 
 Metrics/BlockLength:
-  Enabled: false
-
-Rails:
-  Enabled: true
-
-Rails/HasAndBelongsToMany:
-  Enabled: false
-
-Rails/SkipsModelValidations:
-  Enabled: false
-
-Rails/ApplicationRecord:
   Enabled: false
 
 Bundler/OrderedGems:
@@ -74,7 +64,7 @@ Style/SignalException:
 Layout/EmptyLineAfterMagicComment:
   Enabled: false
 
-Layout/IndentHash:
+Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
 
 Layout/DotPosition:
