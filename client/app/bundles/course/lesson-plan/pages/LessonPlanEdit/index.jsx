@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import translations from 'course/lesson-plan/translations';
 import { fields } from 'course/lesson-plan/constants';
+import { lessonPlanTypesGroups } from 'lib/types';
 import MilestoneRow from './MilestoneRow';
 import ItemRow from './ItemRow';
 
@@ -17,11 +18,7 @@ const styles = {
 
 class LessonPlanEdit extends React.Component {
   static propTypes = {
-    groups: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.string,
-      milestone: PropTypes.object,
-      items: PropTypes.arrayOf({}),
-    })).isRequired,
+    groups: lessonPlanTypesGroups.isRequired,
     columnsVisible: PropTypes.shape({}).isRequired,
   }
 

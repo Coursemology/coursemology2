@@ -12,6 +12,7 @@ import Toggle from 'lib/components/redux-form/Toggle';
 import SelectField from 'lib/components/redux-form/SelectField';
 import formTranslations from 'lib/translations/form';
 import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
+import { achievementTypesConditionAttributes, typeMaterial } from 'lib/types';
 import translations from './translations.intl';
 import { formNames } from '../../constants';
 import MaterialUploader from '../MaterialUploader';
@@ -117,31 +118,10 @@ class AssessmentForm extends React.Component {
     folderAttributes: PropTypes.shape({
       folder_id: PropTypes.number,
       // See MaterialFormContainer for detailed PropTypes.
-      materials: PropTypes.arrayOf(
-        PropTypes.shape({
-          id: PropTypes.number,
-          name: PropTypes.string,
-          updated_at: PropTypes.string,
-        })
-      ),
+      materials: typeMaterial,
     }),
     // Condtions will be displayed if the attributes are present.
-    conditionAttributes: PropTypes.shape({
-      new_condition_urls: PropTypes.arrayOf(
-        PropTypes.shape({
-          name: PropTypes.string,
-          url: PropTypes.string,
-        })
-      ),
-      conditions: PropTypes.arrayOf(
-        PropTypes.shape({
-          name: PropTypes.string,
-          description: PropTypes.string,
-          edit_url: PropTypes.string,
-          delete_url: PropTypes.string,
-        })
-      ),
-    }),
+    conditionAttributes: achievementTypesConditionAttributes,
   };
 
   static defaultProps = {

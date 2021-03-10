@@ -46,16 +46,6 @@ class Course::Group < ApplicationRecord
   #   Returns the average number of achievements obtained by group users in this group who are
   #   students.
   calculated :average_achievement_count, (lambda do
-    # Course::GroupUser.where('course_group_users.group_id = course_groups.id').
-    #   joining { course_user.course_user_achievements.outer }.
-    #   where('course_users.role = ?', CourseUser.roles[:student]).
-    #   # CAST is used to force a float division (integer division by default).
-    #   # greatest(#, 1) is used to avoid division by 0.
-    #   selecting do
-    #     cast(sql('count(course_user_achievements.id) as float')) /
-    #     greatest(sql('count(distinct(course_group_users.course_user_id)), 1.0'))
-    # end
-
     Course::GroupUser.where('course_group_users.group_id = course_groups.id').
       left_outer_joins(course_user: :course_user_achievements).
       where(CourseUser.arel_table[:role].eq(CourseUser.roles[:student])).
