@@ -9,6 +9,7 @@ import LoadingIndicator from 'lib/components/LoadingIndicator';
 import NotificationPopup from 'lib/containers/NotificationPopup';
 import DeleteConfirmation from 'lib/containers/DeleteConfirmation';
 import TitleBar from 'lib/components/TitleBar';
+import { lessonPlanTypesGroups } from 'lib/types';
 import { fetchLessonPlan } from 'course/lesson-plan/actions';
 import LessonPlanShow from 'course/lesson-plan/pages/LessonPlanShow';
 import LessonPlanEdit from 'course/lesson-plan/pages/LessonPlanEdit';
@@ -53,11 +54,7 @@ const lessonPlanPath = '/courses/:courseId/lesson_plan';
 class LessonPlanLayout extends React.Component {
   static propTypes = {
     isLoading: PropTypes.bool.isRequired,
-    groups: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.string,
-      milestone: PropTypes.object,
-      items: PropTypes.arrayOf({}),
-    })).isRequired,
+    groups: lessonPlanTypesGroups.isRequired,
     canManageLessonPlan: PropTypes.bool.isRequired,
 
     dispatch: PropTypes.func.isRequired,

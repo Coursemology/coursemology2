@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { scroller } from 'react-scroll';
 import moment from 'lib/moment';
+import { lessonPlanTypesGroups } from 'lib/types';
 import LessonPlanGroup from './LessonPlanGroup';
 
 class LessonPlanShow extends React.Component {
@@ -27,11 +28,7 @@ class LessonPlanShow extends React.Component {
   }
 
   static propTypes = {
-    groups: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.string,
-      milestone: PropTypes.object,
-      items: PropTypes.arrayOf({}),
-    })).isRequired,
+    groups: lessonPlanTypesGroups.isRequired,
     visibility: PropTypes.shape({}).isRequired,
     milestonesExpanded: PropTypes.string,
   }

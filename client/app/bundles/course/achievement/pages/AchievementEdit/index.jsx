@@ -5,6 +5,7 @@ import { submit } from 'redux-form';
 import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
 import RaisedButton from 'material-ui/RaisedButton';
 import NotificationBar, { notificationShape } from 'lib/components/NotificationBar';
+import { achievementTypesConditionAttributes } from 'lib/types';
 import AchievementForm from '../../containers/AchievementForm';
 import * as actions from '../../actions';
 import translations from './translations.intl';
@@ -22,22 +23,7 @@ class EditPage extends React.Component {
     dispatch: PropTypes.func.isRequired,
     intl: intlShape,
     disabled: PropTypes.bool,
-    conditionAttributes: PropTypes.shape({
-      new_condition_urls: PropTypes.arrayOf(
-        PropTypes.shape({
-          name: PropTypes.string,
-          url: PropTypes.string,
-        })
-      ),
-      conditions: PropTypes.arrayOf(
-        PropTypes.shape({
-          name: PropTypes.string,
-          description: PropTypes.string,
-          edit_url: PropTypes.string,
-          delete_url: PropTypes.string,
-        })
-      ),
-    }),
+    conditionAttributes: achievementTypesConditionAttributes,
     // A set of achievement attributes: {:id , :title, etc}.
     initialValues: PropTypes.shape({
       title: PropTypes.string,

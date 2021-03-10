@@ -8,6 +8,7 @@ import RichTextField from 'lib/components/redux-form/RichTextField';
 import Toggle from 'lib/components/redux-form/Toggle';
 import SingleFileInput, { BadgePreview } from 'lib/components/redux-form/SingleFileInput';
 import formTranslations from 'lib/translations/form';
+import { achievementTypesConditionAttributes } from 'lib/types';
 import translations from './translations.intl';
 import { formNames } from '../../constants';
 
@@ -40,22 +41,7 @@ const propTypes = {
   // If the Form is in editing mode, `Add Conditions` button will be displayed.
   editing: PropTypes.bool,
   // Condtions will be displayed if the attributes are present.
-  conditionAttributes: PropTypes.shape({
-    new_condition_urls: PropTypes.arrayOf(
-      PropTypes.shape({
-        name: PropTypes.string,
-        url: PropTypes.string,
-      })
-    ),
-    conditions: PropTypes.arrayOf(
-      PropTypes.shape({
-        name: PropTypes.string,
-        description: PropTypes.string,
-        edit_url: PropTypes.string,
-        delete_url: PropTypes.string,
-      })
-    ),
-  }),
+  conditionAttributes: achievementTypesConditionAttributes,
 };
 
 const AchievementForm = ({
