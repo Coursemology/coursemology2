@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -14,6 +15,14 @@ Rails.application.configure do
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
 
+  # Enable Rack::Cache to put a simple HTTP cache in front of your application
+  # Add `rack-cache` to your Gemfile before enabling this.
+  # For large-scale production use, consider using a caching reverse proxy like
+  # NGINX, varnish or squid.
+  # config.action_dispatch.rack_cache = true
+  # We will configure the host from the environment.
+  config.action_mailer.default_url_options = { host: ENV['RAILS_HOSTNAME'] }
+
   # Ensures that a master key has been made available in either ENV["RAILS_MASTER_KEY"]
   # or in config/master.key. This key is used to decrypt credentials (and other encrypted files).
   # config.require_master_key = true
@@ -22,11 +31,17 @@ Rails.application.configure do
   # Apache or NGINX already handles this.
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
-  # Compress CSS using a preprocessor.
+  # Compress JavaScripts and CSS.
+  config.assets.js_compressor = :uglifier
   # config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
   config.assets.compile = false
+
+  # Asset digests allow you to set far-future HTTP expiration dates on all assets,
+  # yet still be able to expire them through the digest params.
+  config.assets.digest = true
+
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = 'http://assets.example.com'
