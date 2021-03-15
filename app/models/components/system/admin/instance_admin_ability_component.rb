@@ -16,7 +16,7 @@ module System::Admin::InstanceAdminAbilityComponent
   private
 
   def allow_instance_admin_manage_instance
-    can :manage, Instance, instance_user_hash(InstanceUser.roles[:administrator])
+    can :manage, Instance, id: user.instance_users.administrator.map(&:instance_id)
   end
 
   def allow_instance_admin_manage_instance_users
