@@ -16,7 +16,9 @@ module System::Admin::InstanceAdminAbilityComponent
   private
 
   def allow_instance_admin_manage_instance
-    can :manage, Instance, id: user.instance_users.administrator.map(&:instance_id)
+    can :manage, Instance do | instance |
+      instance.instance_users.administrator.exists?(user_id: user.id)
+    end
   end
 
   def allow_instance_admin_manage_instance_users
@@ -24,7 +26,9 @@ module System::Admin::InstanceAdminAbilityComponent
   end
 
   def allow_instance_admin_manage_courses
-    can :manage, Course, instance_instance_user_hash(InstanceUser.roles[:administrator])
+    can :manage, Course do | course |
+      course.instance.instance_users.administrator.exists?(user_id: user.id)
+    end
   end
 
   def allow_instance_admin_manage_role_requests
