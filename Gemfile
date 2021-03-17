@@ -174,8 +174,8 @@ group :production do
   gem 'rollbar', '>= 1.5.3'
 
   # better log format
-  # gem 'lograge'
-  # gem 'lograge-sql'
+  gem 'lograge'
+  gem 'lograge-sql'
 end
 
 # Multitenancy
