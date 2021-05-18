@@ -156,7 +156,7 @@ end
 
 group :production, :test do
   # Puma will be our app server
-  gem 'puma', '4.3.6'
+  gem 'puma', '4.3.8'
 end
 
 # Multitenancy
