@@ -441,6 +441,20 @@ class AssessmentForm extends React.Component {
         }
 
         {this.renderExtraOptions()}
+
+        <Field
+          name="show_mcq_mrq_solution"
+          component={Toggle}
+          parse={Boolean}
+          label={<FormattedMessage {...translations.showMcqMrqSolution} />}
+          labelPosition="right"
+          style={styles.toggle}
+          disabled={submitting}
+        />
+        <div style={styles.hint}>
+          <FormattedMessage {...translations.showMcqMrqSolutionHint} />
+        </div>
+
         <div style={styles.conditions}>
           <FormattedMessage {...translations.autogradeTestCasesHint} />
         </div>

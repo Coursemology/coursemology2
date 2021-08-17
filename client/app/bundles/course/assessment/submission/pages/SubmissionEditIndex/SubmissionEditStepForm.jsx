@@ -359,8 +359,8 @@ class SubmissionEditStepForm extends Component {
   renderStepQuestion() {
     const { stepIndex } = this.state;
     const {
-      attempting, questionIds, questions, historyQuestions,
-      topics, graderView, handleToggleViewHistoryMode, questionsFlags,
+      attempting, questionIds, questions, historyQuestions, topics,
+      graderView, showMcqMrqSolution, handleToggleViewHistoryMode, questionsFlags,
     } = this.props;
     const id = questionIds[stepIndex];
     const question = questions[id];
@@ -376,6 +376,7 @@ class SubmissionEditStepForm extends Component {
             questionsFlags,
             historyQuestions,
             graderView,
+            showMcqMrqSolution,
             handleToggleViewHistoryMode,
           }}
         />
@@ -522,6 +523,8 @@ SubmissionEditStepForm.propTypes = {
 
   attempting: PropTypes.bool.isRequired,
   published: PropTypes.bool.isRequired,
+
+  showMcqMrqSolution: PropTypes.bool.isRequired,
 
   explanations: PropTypes.objectOf(explanationShape),
   allConsideredCorrect: PropTypes.bool.isRequired,
