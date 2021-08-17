@@ -56,6 +56,9 @@
           tr.show_mcq_answer
             th = t('.show_mcq_answer')
             td = @assessment.show_mcq_answer ? t('.show') : t('.not_show')
+        tr.show_mcq_mrq_solution
+          th = t('.show_mcq_mrq_solution')
+          td = @assessment.show_mcq_mrq_solution ? t('.show') : t('.not_show')
         tr.graded_test_case_types
           th = t('.graded_test_case_types')
           td = format_inline_text(display_graded_test_types(@assessment))
