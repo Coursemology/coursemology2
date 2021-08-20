@@ -35,7 +35,7 @@ const translations = defineMessages({
   },
   blockStudentViewingAfterSubmitted: {
     id: 'course.assessment.form.blockStudentViewingAfterSubmitted',
-    defaultMessage: 'Block Students from Viewing Finalized Submissions'
+    defaultMessage: 'Block Students from Viewing Finalized Submissions',
   },
   autogradeTestCasesHint: {
     id: 'course.assessment.form.autogradeTestCasesHint',
