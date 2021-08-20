@@ -104,6 +104,7 @@
     "react-dnd-html5-backend": "^5.0.1",
     "react-dom": "^16.8.6",
     "react-dropzone": "^5.0.1",
+    "react-hot-keys": "^2.6.2",
     "react-intl": "^2.9.0",
     "react-overlays": "^0.8.3",
     "react-player": "^1.11.0",

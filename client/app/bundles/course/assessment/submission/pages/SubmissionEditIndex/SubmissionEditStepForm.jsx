@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { injectIntl, intlShape } from 'react-intl';
+import Hotkeys from 'react-hot-keys';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import Paper from 'material-ui/Paper';
 import { white, red100, red200, red900, green200, green500, green900,
@@ -10,6 +11,7 @@ import { Stepper, Step, StepButton, StepLabel } from 'material-ui/Stepper';
 import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
 import SvgIcon from 'material-ui/SvgIcon';
+import MaterialTooltip from 'material-ui/internal/Tooltip';
 
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
@@ -61,7 +63,20 @@ class SubmissionEditStepForm extends Component {
       submitConfirmation: false,
       unsubmitConfirmation: false,
       resetConfirmation: false,
+      hoveredToolTip: '',
     };
+  }
+
+  onMouseEnter(toolType) {
+    this.setState({
+      hoveredToolTip: toolType,
+    });
+  }
+
+  onMouseLeave = () => {
+    this.setState({
+      hoveredToolTip: '',
+    });
   }
 
   shouldRenderContinueButton() {
@@ -223,13 +238,29 @@ class SubmissionEditStepForm extends Component {
       return null;
     }
     return (
-      <RaisedButton
-        style={styles.formButton}
-        secondary
-        label={intl.formatMessage(translations.submit)}
-        onClick={() => handleSubmitAnswer(answerId)}
-        disabled={isAutograding || isResetting || isSaving}
-      />
+      <>
+        <Hotkeys
+          keyName="command+enter,control+enter"
+          onKeyDown={() => handleSubmitAnswer(answerId)}
+          disabled={isAutograding || isResetting || isSaving}
+          filter={(event) => { return true; }}
+        />
+        <RaisedButton
+          style={styles.formButton}
+          secondary
+          label={intl.formatMessage(translations.submit)}
+          onClick={() => handleSubmitAnswer(answerId)}
+          disabled={isAutograding || isResetting || isSaving}
+          onMouseEnter={() => this.onMouseEnter('SUBMIT')}
+          onMouseLeave={this.onMouseLeave}
+        >
+          <MaterialTooltip
+            label={intl.formatMessage(translations.submitTooltip)}
+            show={this.state.hoveredToolTip === 'SUBMIT'}
+            verticalPosition="top"
+          />
+        </RaisedButton>
+      </>
     );
   }
 
