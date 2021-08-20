@@ -243,7 +243,7 @@ class SubmissionEditStepForm extends Component {
           keyName="command+enter,control+enter"
           onKeyDown={() => handleSubmitAnswer(answerId)}
           disabled={isAutograding || isResetting || isSaving}
-          filter={(event) => { return true; }}
+          filter={() => true }
         />
         <RaisedButton
           style={styles.formButton}
