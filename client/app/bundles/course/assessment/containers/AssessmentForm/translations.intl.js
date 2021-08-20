@@ -33,6 +33,10 @@ const translations = defineMessages({
     id: 'course.assessment.form.autograded',
     defaultMessage: 'Autograded',
   },
+  blockStudentViewingAfterSubmitted: {
+    id: 'course.assessment.form.blockStudentViewingAfterSubmitted',
+    defaultMessage: 'Block Students from Viewing Finalized Submissions'
+  },
   autogradeTestCasesHint: {
     id: 'course.assessment.form.autogradeTestCasesHint',
     defaultMessage: 'Select test case types for grade and exp calculation:',

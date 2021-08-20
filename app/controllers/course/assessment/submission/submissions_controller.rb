@@ -69,6 +69,10 @@ class Course::Assessment::Submission::SubmissionsController < \
   def edit
     return if @submission.attempting?
 
+    if @submission.assessment.block_student_viewing_after_submitted?
+      render 'blocked'
+    end
+
     respond_to do |format|
       format.html {}
       format.json do
