@@ -100,6 +100,7 @@ class PopupDialog extends React.Component {
       use_private: true,
       use_evaluation: true,
       randomization: false,
+      block_student_viewing_after_submitted: false,
     };
 
     return (
