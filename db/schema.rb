@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_12_074249) do
+ActiveRecord::Schema.define(version: 2021_08_21_030941) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -449,6 +449,11 @@ ActiveRecord::Schema.define(version: 2021_01_12_074249) do
 
   create_table "course_condition_levels", force: :cascade do |t|
     t.integer "minimum_level", null: false
+  end
+
+  create_table "course_condition_surveys", force: :cascade do |t|
+    t.bigint "survey_id", null: false
+    t.index ["survey_id"], name: "fk__course_condition_surveys_survey_id"
   end
 
   create_table "course_conditions", force: :cascade do |t|
@@ -1255,6 +1260,7 @@ ActiveRecord::Schema.define(version: 2021_01_12_074249) do
   add_foreign_key "course_assessments", "users", column: "updater_id", name: "fk_course_assessments_updater_id"
   add_foreign_key "course_condition_achievements", "course_achievements", column: "achievement_id", name: "fk_course_condition_achievements_achievement_id"
   add_foreign_key "course_condition_assessments", "course_assessments", column: "assessment_id", name: "fk_course_condition_assessments_assessment_id"
+  add_foreign_key "course_condition_surveys", "course_surveys", column: "survey_id"
   add_foreign_key "course_conditions", "courses", name: "fk_course_conditions_course_id"
   add_foreign_key "course_conditions", "users", column: "creator_id", name: "fk_course_conditions_creator_id"
   add_foreign_key "course_conditions", "users", column: "updater_id", name: "fk_course_conditions_updater_id"
