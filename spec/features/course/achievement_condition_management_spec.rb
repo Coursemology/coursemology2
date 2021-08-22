@@ -21,6 +21,10 @@ RSpec.feature 'Course: Achievements' do
         create(:assessment_condition, course: course, assessment: assessment, conditional: achievement)
       end
       let!(:level_condition) { create(:level_condition, course: course, conditional: achievement) }
+      let(:survey) { create(:survey, course: course) }
+      let!(:survey_condition) do
+        create(:survey_condition, course: course, survey: survey, conditional: achievement)
+      end
       let!(:achievement) { create(:course_achievement, course: course) }
 
       # Achievement condition
@@ -153,6 +157,53 @@ RSpec.feature 'Course: Achievements' do
         expect do
           find_link(
             nil, href: course_achievement_condition_level_path(course, achievement, level_condition)
+          ).click
+          accept_confirm_dialog
+        end.to change { achievement.conditions.count }.by(-1)
+      end
+
+      scenario 'I can create, edit and delete a survey condition', js: true do
+        valid_survey_as_condition = create(:survey, course: course)
+        survey_to_change_to = create(:survey, course: course)
+
+        visit edit_course_achievement_path(course, achievement)
+
+        # Create survey condition
+        find('.add-condition-btn').click
+        sleep 0.5 # need to wait for the menu to expand fully so we don't click the wrong button
+        # TODO: disable animations globally in test env
+        find_link(nil, href: new_course_achievement_condition_survey_path(course, achievement)).click
+
+        expect(page).to have_text(I18n.t('course.condition.surveys.new.header'))
+        find('#condition_survey_survey_id', visible: false).
+          find(:css, "option[value='#{valid_survey_as_condition.id}']", visible: false).
+          select_option
+        click_button I18n.t('helpers.submit.condition_survey.create')
+        expect(current_path).to eq edit_course_achievement_path(course, achievement)
+        title = I18n.t('activerecord.attributes.course/condition/survey/title.complete',
+                       survey_title: valid_survey_as_condition.title)
+        expect(page).to have_selector('.conditions-list', text: title)
+
+        # Edit survey condition
+        find_link(
+          nil, href: edit_course_achievement_condition_survey_path(course, achievement,
+                                                                   survey_condition)
+        ).click
+        expect(page).to have_text(I18n.t('course.condition.surveys.edit.header'))
+        find('#condition_survey_survey_id', visible: false).
+          find(:css, "option[value='#{survey_to_change_to.id}']", visible: false).
+          select_option
+        click_button I18n.t('helpers.submit.condition_survey.update')
+        expect(current_path).to eq edit_course_achievement_path(course, achievement)
+        title = I18n.t('activerecord.attributes.course/condition/survey/title.complete',
+                       survey_title: survey_to_change_to.title)
+        expect(page).to have_selector('.conditions-list', text: title)
+
+        # Delete survey condition
+        expect do
+          find_link(
+            nil, href: course_achievement_condition_survey_path(course, achievement,
+                                                                survey_condition)
           ).click
           accept_confirm_dialog
         end.to change { achievement.conditions.count }.by(-1)
