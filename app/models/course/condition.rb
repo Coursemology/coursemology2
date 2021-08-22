@@ -21,7 +21,8 @@ class Course::Condition < ApplicationRecord
   ALL_CONDITIONS = [
     Course::Condition::Achievement.name,
     Course::Condition::Assessment.name,
-    Course::Condition::Level.name
+    Course::Condition::Level.name,
+    Course::Condition::Survey.name
   ].freeze
 
   class << self
