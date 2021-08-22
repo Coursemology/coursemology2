@@ -1,0 +1,8 @@
+- surveys = current_course.surveys
+- existing_conditions = @conditional.specific_conditions - [@survey_condition]
+- available_surveys = surveys - existing_conditions.map(&:dependent_object)
+
+= simple_form_for [current_course, @conditional, @survey_condition] do |f|
+  = f.error_notification
+  = f.association :survey, collection: available_surveys
+  = f.button :submit
