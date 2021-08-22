@@ -28,6 +28,9 @@ en:
       condition_assessment:
         create: 'Create Assessment Condition'
         update: 'Update Assessment Condition'
+      condition_survey:
+        create: 'Create Survey Condition'
+        update: 'Update Survey Condition'
     buttons:
       new: 'New %{model}'
       create: 'Create %{model}'
