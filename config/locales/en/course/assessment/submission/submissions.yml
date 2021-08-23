@@ -10,7 +10,7 @@ en:
           edit:
             attempt: :'course.assessment.assessments.assessment.attempt'
           blocked:
-            message: 'This submission has been locked from viewing by the course staff.'
+            message: 'Submissions for this assessment cannot be viewed once finalised.'
           download_statistics:
             no_submission_statistics: 'No submission fulfilled your requirements for downloading'
           statistics_download_service:
