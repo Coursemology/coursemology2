@@ -73,11 +73,19 @@ class Course::Conditional::UserSatisfiabilityGraph
   def each_child
     lambda do |conditional, &b|
       conditional.specific_conditions.each do |condition|
-        # Append the condition as an outgoing edge for the condition's dependent object
-        @edges.add(condition.dependent_object, condition)
+        dependent_object = condition.dependent_object
+        # We only want conditionals as nodes in this graph. Not all dependent objects are conditionals.
+        next unless conditional_object?(dependent_object)
 
-        b.call(condition.dependent_object) unless condition.dependent_object.nil?
+        # Append the condition as an outgoing edge for the condition's dependent object
+        @edges.add(dependent_object, condition)
+
+        b.call(dependent_object)
       end
     end
+  end
+
+  def conditional_object?(object)
+    object.singleton_class.include?(ActiveRecord::Base::ConditionalInstanceMethods)
   end
 end
