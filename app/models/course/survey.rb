@@ -20,7 +20,7 @@ class Course::Survey < ApplicationRecord
   has_many :sections, inverse_of: :survey, dependent: :destroy
   has_many :questions, through: :sections
   has_many :survey_conditions, class_name: Course::Condition::Survey.name,
-           inverse_of: :survey, dependent: :destroy
+                               inverse_of: :survey, dependent: :destroy
 
   # Used by the with_actable_types scope in Course::LessonPlan::Item.
   # Edit this to remove items for display.
