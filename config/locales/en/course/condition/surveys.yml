@@ -1,8 +1,6 @@
 en:
   course:
     condition:
-      survey:
-        title: 'Survey'
       surveys:
         new:
           header: 'New Survey Condition'
