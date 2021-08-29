@@ -67,7 +67,7 @@ const translations = defineMessages({
   },
   submitTooltip: {
     id: 'course.assessment.submission.submitShortcut',
-    defaultMessage: '(Ctrl+Enter) or (Command+Enter)',
+    defaultMessage: '(Ctrl+Enter) or (⌘+Enter)',
   },
   runCode: {
     id: 'course.assessment.submission.runCode',
