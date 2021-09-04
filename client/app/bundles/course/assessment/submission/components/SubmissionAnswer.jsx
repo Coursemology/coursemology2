@@ -57,9 +57,10 @@ class SubmissionAnswer extends Component {
     historyQuestions: PropTypes.objectOf(historyQuestionShape),
     questionsFlags: PropTypes.objectOf(questionFlagsShape),
     readOnly: PropTypes.bool,
+    graderView: PropTypes.bool,
+    showMcqMrqSolution: PropTypes.bool,
     question: questionShape,
     answerId: PropTypes.number,
-    graderView: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -153,8 +154,7 @@ class SubmissionAnswer extends Component {
   }
 
   render() {
-    const { readOnly, question, answerId, graderView } = this.props;
-
+    const { readOnly, showMcqMrqSolution, question, answerId, graderView } = this.props;
     const renderer = this.getRenderer(question);
 
     return (
@@ -165,7 +165,8 @@ class SubmissionAnswer extends Component {
         {this.renderHistoryToggle(question)}
         <div dangerouslySetInnerHTML={{ __html: question.description }} />
         <hr />
-        { answerId ? renderer(question, readOnly, answerId, graderView) : this.renderMissingAnswerPanel() }
+        {answerId
+          ? renderer(question, readOnly, showMcqMrqSolution, answerId, graderView) : this.renderMissingAnswerPanel()}
       </>
     );
   }
