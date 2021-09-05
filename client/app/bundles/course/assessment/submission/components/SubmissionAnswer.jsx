@@ -166,7 +166,7 @@ class SubmissionAnswer extends Component {
         <div dangerouslySetInnerHTML={{ __html: question.description }} />
         <hr />
         {answerId
-          ? renderer(question, readOnly, showMcqMrqSolution, answerId, graderView) : this.renderMissingAnswerPanel()}
+          ? renderer(question, readOnly, answerId, graderView, showMcqMrqSolution) : this.renderMissingAnswerPanel()}
       </>
     );
   }
