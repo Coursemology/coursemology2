@@ -11,12 +11,12 @@ import FileUploadAnswer from './answers/FileUpload';
 import ProgrammingAnswer from './answers/Programming';
 
 export default class Answers extends Component {
-  static renderMultipleChoice(question, readOnly, showMcqMrqSolution, answerId, graderView) {
-    return <MultipleChoiceAnswer {...{ question, readOnly, showMcqMrqSolution, answerId, graderView }} />;
+  static renderMultipleChoice(question, readOnly, answerId, graderView, showMcqMrqSolution) {
+    return <MultipleChoiceAnswer {...{ question, readOnly, answerId, graderView, showMcqMrqSolution }} />;
   }
 
-  static renderMultipleResponse(question, readOnly, showMcqMrqSolution, answerId, graderView) {
-    return <MultipleResponseAnswer {...{ question, readOnly, showMcqMrqSolution, answerId, graderView }} />;
+  static renderMultipleResponse(question, readOnly, answerId, graderView, showMcqMrqSolution) {
+    return <MultipleResponseAnswer {...{ question, readOnly, answerId, graderView, showMcqMrqSolution }} />;
   }
 
   static renderTextResponse(question, readOnly, answerId, graderView) {
