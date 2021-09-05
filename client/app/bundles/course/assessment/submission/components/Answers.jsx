@@ -11,31 +11,65 @@ import FileUploadAnswer from './answers/FileUpload';
 import ProgrammingAnswer from './answers/Programming';
 
 export default class Answers extends Component {
-  static renderMultipleChoice(question, readOnly, answerId, graderView, showMcqMrqSolution) {
-    return <MultipleChoiceAnswer {...{ question, readOnly, answerId, graderView, showMcqMrqSolution }} />;
+  static renderMultipleChoice({
+    question,
+    readOnly,
+    answerId,
+    graderView,
+    showMcqMrqSolution,
+  }) {
+    return (
+      <MultipleChoiceAnswer
+        {...{ question, readOnly, answerId, graderView, showMcqMrqSolution }}
+      />
+    );
   }
 
-  static renderMultipleResponse(question, readOnly, answerId, graderView, showMcqMrqSolution) {
-    return <MultipleResponseAnswer {...{ question, readOnly, answerId, graderView, showMcqMrqSolution }} />;
+  static renderMultipleResponse({
+    question,
+    readOnly,
+    answerId,
+    graderView,
+    showMcqMrqSolution,
+  }) {
+    return (
+      <MultipleResponseAnswer
+        {...{ question, readOnly, answerId, graderView, showMcqMrqSolution }}
+      />
+    );
   }
 
-  static renderTextResponse(question, readOnly, answerId, graderView) {
-    return <TextResponseAnswer {...{ question, readOnly, answerId, graderView }} />;
+  static renderTextResponse({ question, readOnly, answerId, graderView }) {
+    return (
+      <TextResponseAnswer {...{ question, readOnly, answerId, graderView }} />
+    );
   }
 
-  static renderFileUpload(question, readOnly, answerId) {
+  static renderFileUpload({ question, readOnly, answerId }) {
     return <FileUploadAnswer {...{ question, readOnly, answerId }} />;
   }
 
-  static renderVoiceResponse(question, readOnly, answerId) {
-    return <VoiceResponseAnswer question={question} readOnly={readOnly} answerId={answerId} />;
+  static renderVoiceResponse({ question, readOnly, answerId }) {
+    return (
+      <VoiceResponseAnswer
+        question={question}
+        readOnly={readOnly}
+        answerId={answerId}
+      />
+    );
   }
 
-  static renderScribing(scribing, readOnly, answerId) {
-    return <ScribingView scribing={scribing} readOnly={readOnly} answerId={answerId} />;
+  static renderScribing({ question, readOnly, answerId }) {
+    return (
+      <ScribingView
+        scribing={question}
+        readOnly={readOnly}
+        answerId={answerId}
+      />
+    );
   }
 
-  static renderProgramming(question, readOnly, answerId) {
+  static renderProgramming({ question, readOnly, answerId }) {
     return <ProgrammingAnswer {...{ question, readOnly, answerId }} />;
   }
 }
