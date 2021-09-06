@@ -66,7 +66,7 @@ class ProgrammingFile extends React.Component {
       );
     }
 
-    const content = file.content.split('\n');
+    const content = file.highlighted_content.split('\n');
     return (
       <ReadOnlyEditor
         answerId={answerId}
