@@ -53,5 +53,6 @@ export const responseShape = PropTypes.shape({
   id: PropTypes.number,
   name: PropTypes.string,
   submitted_at: PropTypes.string,
+  updated_at: PropTypes.string,
   sections: PropTypes.arrayOf(sectionShape),
 });

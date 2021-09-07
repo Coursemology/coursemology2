@@ -69,6 +69,15 @@ class ResponseShow extends React.Component {
               }
             </TableRowColumn>
           </TableRow>
+          <TableRow selectable={false}>
+            <TableHeaderColumn>Updated At</TableHeaderColumn>
+            <TableRowColumn>
+              {response.submitted_at
+                ? formatLongDateTime(response.updated_at)
+                : <FormattedMessage {...translations.notSubmitted} />
+              }
+            </TableRowColumn>
+          </TableRow>
         </TableBody>
       </Table>
     );

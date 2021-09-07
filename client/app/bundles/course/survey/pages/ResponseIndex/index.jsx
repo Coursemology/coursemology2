@@ -69,6 +69,10 @@ const translations = defineMessages({
     id: 'course.surveys.ResponseIndex.submittedAt',
     defaultMessage: 'Submitted At',
   },
+  updatedAt: {
+    id: 'course.surveys.ResponseIndex.updatedAt',
+    defaultMessage: 'Updated At',
+  },
   phantoms: {
     id: 'course.surveys.ResponseIndex.phantoms',
     defaultMessage: 'Phantom Students',
@@ -134,6 +138,17 @@ class ResponseIndex extends React.Component {
     return submittedAt;
   }
 
+  static renderUpdatedAt(response, survey) {
+    if (!response.submitted_at) {
+      return null;
+    }
+    const updatedAt = formatLongDateTime(response.updated_at);
+    if (survey.end_at && moment(response.updated_at).isAfter(survey.end_at)) {
+      return <div style={styles.red}>{ updatedAt }</div>;
+    }
+    return updatedAt;
+  }
+
   static renderTable(responses, survey) {
     return (
       <Table>
@@ -150,6 +165,9 @@ class ResponseIndex extends React.Component {
             </TableHeaderColumn>
             <TableHeaderColumn>
               <FormattedMessage {...translations.submittedAt} />
+            </TableHeaderColumn>
+            <TableHeaderColumn>
+              <FormattedMessage {...translations.updatedAt} />
             </TableHeaderColumn>
             <TableHeaderColumn />
           </TableRow>
@@ -171,6 +189,9 @@ class ResponseIndex extends React.Component {
                 </TableRowColumn>
                 <TableRowColumn>
                   { ResponseIndex.renderSubmittedAt(response, survey) }
+                </TableRowColumn>
+                <TableRowColumn>
+                  { ResponseIndex.renderUpdatedAt(response, survey) }
                 </TableRowColumn>
                 <TableRowColumn>
                   {
