@@ -53,7 +53,7 @@ class ProgrammingFile extends React.Component {
     const downloadLink = getProgrammingFileURL(courseId, assessmentId, submissionId,
       answerId, file.id);
 
-    if (file.content === null) {
+    if (file.highlighted_content === null) {
       return (
         <Paper style={{ backgroundColor: yellow100, padding: 10 }}>
           <WarningIcon style={styles.warningIcon} />
