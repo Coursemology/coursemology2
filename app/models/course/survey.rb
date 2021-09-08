@@ -19,6 +19,8 @@ class Course::Survey < ApplicationRecord
                        class_name: Course::Survey::Response.name
   has_many :sections, inverse_of: :survey, dependent: :destroy
   has_many :questions, through: :sections
+  has_many :survey_conditions, class_name: Course::Condition::Survey.name,
+                               inverse_of: :survey, dependent: :destroy
 
   # Used by the with_actable_types scope in Course::LessonPlan::Item.
   # Edit this to remove items for display.
@@ -44,6 +46,9 @@ class Course::Survey < ApplicationRecord
     self.course = duplicator.options[:destination_course]
     copy_attributes(other, duplicator)
     self.sections = duplicator.duplicate(other.sections)
+    survey_conditions << other.survey_conditions.
+                         select { |condition| duplicator.duplicated?(condition.conditional) }.
+                         map { |condition| duplicator.duplicate(condition) }
   end
 
   def include_in_consolidated_email?(event)
