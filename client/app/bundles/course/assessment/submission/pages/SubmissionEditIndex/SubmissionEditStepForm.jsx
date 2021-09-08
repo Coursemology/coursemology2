@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { injectIntl, intlShape } from 'react-intl';
+import Hotkeys from 'react-hot-keys';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import Paper from 'material-ui/Paper';
 import { white, red100, red200, red900, green200, green500, green900,
@@ -10,6 +11,7 @@ import { Stepper, Step, StepButton, StepLabel } from 'material-ui/Stepper';
 import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
 import SvgIcon from 'material-ui/SvgIcon';
+import MaterialTooltip from 'material-ui/internal/Tooltip';
 
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
@@ -61,7 +63,20 @@ class SubmissionEditStepForm extends Component {
       submitConfirmation: false,
       unsubmitConfirmation: false,
       resetConfirmation: false,
+      hoveredToolTip: '',
     };
+  }
+
+  onMouseEnter(toolType) {
+    this.setState({
+      hoveredToolTip: toolType,
+    });
+  }
+
+  onMouseLeave = () => {
+    this.setState({
+      hoveredToolTip: '',
+    });
   }
 
   shouldRenderContinueButton() {
@@ -96,10 +111,10 @@ class SubmissionEditStepForm extends Component {
   }
 
   handleStepClick(index) {
-    const { skippable, graderView } = this.props;
+    const { published, skippable, graderView } = this.props;
     const { maxStep } = this.state;
 
-    if (skippable || graderView || index <= maxStep) {
+    if (published || skippable || graderView || index <= maxStep) {
       this.setState({
         stepIndex: index,
       });
@@ -223,13 +238,29 @@ class SubmissionEditStepForm extends Component {
       return null;
     }
     return (
-      <RaisedButton
-        style={styles.formButton}
-        secondary
-        label={intl.formatMessage(translations.submit)}
-        onClick={() => handleSubmitAnswer(answerId)}
-        disabled={isAutograding || isResetting || isSaving}
-      />
+      <>
+        <Hotkeys
+          keyName="command+enter,control+enter"
+          onKeyDown={() => handleSubmitAnswer(answerId)}
+          disabled={isAutograding || isResetting || isSaving}
+          filter={() => true}
+        />
+        <RaisedButton
+          style={styles.formButton}
+          secondary
+          label={intl.formatMessage(translations.submit)}
+          onClick={() => handleSubmitAnswer(answerId)}
+          disabled={isAutograding || isResetting || isSaving}
+          onMouseEnter={() => this.onMouseEnter('SUBMIT')}
+          onMouseLeave={this.onMouseLeave}
+        >
+          <MaterialTooltip
+            label={intl.formatMessage(translations.submitTooltip)}
+            show={this.state.hoveredToolTip === 'SUBMIT'}
+            verticalPosition="top"
+          />
+        </RaisedButton>
+      </>
     );
   }
 
@@ -328,8 +359,8 @@ class SubmissionEditStepForm extends Component {
   renderStepQuestion() {
     const { stepIndex } = this.state;
     const {
-      attempting, questionIds, questions, historyQuestions,
-      topics, graderView, handleToggleViewHistoryMode, questionsFlags,
+      attempting, questionIds, questions, historyQuestions, topics,
+      graderView, showMcqMrqSolution, handleToggleViewHistoryMode, questionsFlags,
     } = this.props;
     const id = questionIds[stepIndex];
     const question = questions[id];
@@ -345,6 +376,7 @@ class SubmissionEditStepForm extends Component {
             questionsFlags,
             historyQuestions,
             graderView,
+            showMcqMrqSolution,
             handleToggleViewHistoryMode,
           }}
         />
@@ -376,7 +408,7 @@ class SubmissionEditStepForm extends Component {
 
   renderStepper() {
     const { maxStep, stepIndex } = this.state;
-    const { skippable, graderView, questionIds = [] } = this.props;
+    const { published, skippable, graderView, questionIds = [] } = this.props;
 
     if (questionIds.length <= 1) {
       return null;
@@ -390,7 +422,7 @@ class SubmissionEditStepForm extends Component {
         style={{ justifyContent: 'center', flexWrap: 'wrap' }}
       >
         {questionIds.map((questionId, index) => {
-          if (skippable || graderView || index <= maxStep) {
+          if (published || skippable || graderView || index <= maxStep) {
             return (
               <Step key={questionId} active={index <= maxStep}>
                 <StepButton
@@ -491,6 +523,8 @@ SubmissionEditStepForm.propTypes = {
 
   attempting: PropTypes.bool.isRequired,
   published: PropTypes.bool.isRequired,
+
+  showMcqMrqSolution: PropTypes.bool.isRequired,
 
   explanations: PropTypes.objectOf(explanationShape),
   allConsideredCorrect: PropTypes.bool.isRequired,
