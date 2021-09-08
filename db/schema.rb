@@ -431,7 +431,7 @@ ActiveRecord::Schema.define(version: 2021_08_19_132022) do
     t.boolean "allow_partial_submission", default: false
     t.integer "randomization"
     t.boolean "show_mcq_answer", default: true
-    t.boolean "block_student_viewing_after_submitted", default: fals
+    t.boolean "block_student_viewing_after_submitted", default: false
     t.boolean "show_mcq_mrq_solution", default: true
     t.index ["creator_id"], name: "fk__course_assessments_creator_id"
     t.index ["tab_id"], name: "fk__course_assessments_tab_id"
