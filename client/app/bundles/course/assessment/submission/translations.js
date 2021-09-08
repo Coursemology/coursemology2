@@ -65,6 +65,10 @@ const translations = defineMessages({
     id: 'course.asssessment.submission.submit',
     defaultMessage: 'Submit',
   },
+  submitTooltip: {
+    id: 'course.assessment.submission.submitShortcut',
+    defaultMessage: '(Ctrl+Enter) or (⌘+Enter)',
+  },
   runCode: {
     id: 'course.assessment.submission.runCode',
     defaultMessage: 'Run Code',

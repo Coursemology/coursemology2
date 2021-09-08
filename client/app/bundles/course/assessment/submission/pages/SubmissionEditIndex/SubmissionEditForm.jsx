@@ -210,8 +210,8 @@ class SubmissionEditForm extends Component {
 
   renderQuestions() {
     const {
-      attempting, questionIds, questions, historyQuestions,
-      topics, graderView, handleToggleViewHistoryMode, questionsFlags,
+      attempting, questionIds, questions, historyQuestions, topics,
+      graderView, showMcqMrqSolution, handleToggleViewHistoryMode, questionsFlags,
     } = this.props;
     return (
       <>
@@ -229,6 +229,7 @@ class SubmissionEditForm extends Component {
                   questionsFlags,
                   historyQuestions,
                   graderView,
+                  showMcqMrqSolution,
                   handleToggleViewHistoryMode,
                 }}
               />
@@ -501,6 +502,8 @@ SubmissionEditForm.propTypes = {
   passwordProtected: PropTypes.bool.isRequired,
   tabbedView: PropTypes.bool.isRequired,
   step: PropTypes.number,
+
+  showMcqMrqSolution: PropTypes.bool.isRequired,
 
   attempting: PropTypes.bool.isRequired,
   submitted: PropTypes.bool.isRequired,

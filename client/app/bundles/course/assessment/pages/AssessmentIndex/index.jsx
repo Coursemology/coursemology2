@@ -96,10 +96,12 @@ class PopupDialog extends React.Component {
       show_mcq_answer: true,
       delayed_grade_publication: false,
       tabbed_view: false,
+      show_mcq_mrq_solution: true,
       use_public: false,
       use_private: true,
       use_evaluation: true,
       randomization: false,
+      block_student_viewing_after_submitted: false,
     };
 
     return (
