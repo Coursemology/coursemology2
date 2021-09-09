@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::MultipleResponsesController < Course::Assessment::Question::Controller
+  include Course::Assessment::Question::MultipleResponsesConcern
   build_and_authorize_new_question :multiple_response_question,
                                    class: Course::Assessment::Question::MultipleResponse, only: [:new, :create]
   load_and_authorize_resource :multiple_response_question,
@@ -27,8 +28,13 @@ class Course::Assessment::Question::MultipleResponsesController < Course::Assess
 
   def update
     @question_assessment.skill_ids = multiple_response_question_params[:question_assessment][:skill_ids]
+    if params.has_key?(:multiple_choice)
+      switch_mcq_mrq_type(params[:multiple_choice]) 
+      return render 'edit'
+    end
+
     if @multiple_response_question.update(multiple_response_question_params.
-                                          except(:question_assessment))
+                                          except(:question_assessment, :multiple_choice))
       redirect_to course_assessment_path(current_course, @assessment),
                   success: t('.success')
     else

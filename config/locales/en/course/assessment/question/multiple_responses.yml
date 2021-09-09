@@ -20,11 +20,24 @@ en:
             randomize_options: 'Randomize option order (options that ignore this will be shifted to the bottom)'
             ignore_randomization: 'Ignore Randomization'
             add_option: 'Add Option'
-            multiple_choice_button: 'Multiple Choice Question'
-            multiple_response_button: 'Multiple Response Question'
+            multiple_choice_button: 'Multiple Choice Question (MCQ)'
+            multiple_response_button: 'Multiple Response Question (MRQ)'
+            multiple_choice_option: 'Multiple Choice Question (MCQ) Options'
+            multiple_response_option: 'Multiple Response Question (MRQ) Options'
           option_fields:
             explanation_hint: 'The explanation to show after the student submits his answer.'
             remove: 'Remove'
+          switch_question_type_button:
+            switch_to_mcq: 'Change to Multiple Choice Question (MCQ)'
+            switch_to_mrq: 'Change to Multiple Response Question (MRQ)'
+            confirm_switch_to_mcq: > 
+              Are you sure you want to switch the question's type to MCQ?
+              ALL EXISTING SUBMISSIONS WILL BE UNSUBMITTED, ANY EXISTING ANSWERS WILL BE DISCARDED,
+              AND STUDENTS ARE REQUIRED TO RE-SUBMIT.
+            confirm_switch_to_mrq: >
+              Are you sure you want to switch the question's type to MRQ? 
+              ALL EXISTING SUBMISSIONS WILL BE UNSUBMITTED, ANY EXISTING ANSWERS WILL BE DISCARDED,
+              AND STUDENTS ARE REQUIRED TO RE-SUBMIT.
           question_type:
             multiple_response: Multiple Response
             multiple_choice: Multiple Choice
