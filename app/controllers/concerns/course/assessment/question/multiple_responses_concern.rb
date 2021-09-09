@@ -15,9 +15,7 @@ module Course::Assessment::Question::MultipleResponsesConcern
 
   def unsubmit_submissions
     @question_assessment.assessment.submissions.each do |submission|
-      unless submission.attempting?
-        submission.update({"unsubmit" => "true"})
-      end
+        submission.update('unsubmit' => 'true') unless submission.attempting?
     end
-  end  
+  end 
 end

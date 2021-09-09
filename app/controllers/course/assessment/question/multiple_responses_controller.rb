@@ -28,8 +28,8 @@ class Course::Assessment::Question::MultipleResponsesController < Course::Assess
 
   def update
     @question_assessment.skill_ids = multiple_response_question_params[:question_assessment][:skill_ids]
-    if params.has_key?(:multiple_choice)
-      switch_mcq_mrq_type(params[:multiple_choice]) 
+    if params.key?(:multiple_choice)
+      switch_mcq_mrq_type(params[:multiple_choice])
       return render 'edit'
     end
 
