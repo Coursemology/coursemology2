@@ -5,8 +5,8 @@ import { injectIntl, intlShape } from 'react-intl';
 import Hotkeys from 'react-hot-keys';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import Paper from 'material-ui/Paper';
-import { white, red100, red200, red900, green200, green500, green900,
-  lightBlue400, blue800 } from 'material-ui/styles/colors';
+import { white, red100, red200, red900, green200, green300, green500, green700,
+  green900, lightBlue400, blue800 } from 'material-ui/styles/colors';
 import { Stepper, Step, StepButton, StepLabel } from 'material-ui/Stepper';
 import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -422,10 +422,10 @@ class SubmissionEditStepForm extends Component {
         style={{ justifyContent: 'center', flexWrap: 'wrap' }}
       >
         {questionIds.map((questionId, index) => {
-          let stepButtonColor = '';;
-          const isCurrentQuestion = index === stepIndex
+          let stepButtonColor = '';
+          const isCurrentQuestion = index === stepIndex;
           if (explanations[questionId] && explanations[questionId].correct) {
-            stepButtonColor = isCurrentQuestion ? green900 : green500;
+            stepButtonColor = isCurrentQuestion ? green700 : green300;
           } else {
             stepButtonColor = isCurrentQuestion ? blue800 : lightBlue400;
           }
