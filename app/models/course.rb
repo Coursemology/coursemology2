@@ -217,6 +217,10 @@ class Course < ApplicationRecord
     end
   end
 
+  def materials_component_enabled?
+    settings(:components, :course_materials_component).enabled
+  end
+
   private
 
   # Set default values
