@@ -408,7 +408,7 @@ class SubmissionEditStepForm extends Component {
 
   renderStepper() {
     const { maxStep, stepIndex } = this.state;
-    const { published, skippable, graderView, questionIds = [] } = this.props;
+    const { published, skippable, graderView, questionIds = [], explanations } = this.props;
 
     if (questionIds.length <= 1) {
       return null;
@@ -422,13 +422,25 @@ class SubmissionEditStepForm extends Component {
         style={{ justifyContent: 'center', flexWrap: 'wrap' }}
       >
         {questionIds.map((questionId, index) => {
+          let stepButtonColor = '';
+          if (index === stepIndex) {
+            if (explanations[questionId] && explanations[questionId].correct) {
+              stepButtonColor = green900;
+            } else {
+              stepButtonColor = blue800;
+            }
+          } else if (explanations[questionId] && explanations[questionId].correct) {
+            stepButtonColor = green500;
+          } else {
+            stepButtonColor = lightBlue400;
+          }
           if (published || skippable || graderView || index <= maxStep) {
             return (
               <Step key={questionId} active={index <= maxStep}>
                 <StepButton
                   iconContainerStyle={{ padding: 0 }}
                   icon={(
-                    <SvgIcon color={index === stepIndex ? blue800 : lightBlue400}>
+                    <SvgIcon color={stepButtonColor}>
                       <circle cx="12" cy="12" r="12" />
                       <text x="12" y="16" textAnchor="middle" fontSize="12" fill="#fff">
                         {index + 1}
