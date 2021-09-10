@@ -134,7 +134,7 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
     >
       <FlatButton
         containerElement="label"
-        disabled={false}
+        disabled={true}
         fullWidth={true}
         icon={<ContentAdd />}
         label="Add Files"
@@ -153,6 +153,7 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
         }
       >
         <input
+          disabled={true}
           multiple={true}
           style={
             Object {
