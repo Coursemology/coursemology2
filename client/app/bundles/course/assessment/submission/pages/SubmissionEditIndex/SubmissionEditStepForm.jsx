@@ -422,17 +422,12 @@ class SubmissionEditStepForm extends Component {
         style={{ justifyContent: 'center', flexWrap: 'wrap' }}
       >
         {questionIds.map((questionId, index) => {
-          let stepButtonColor = '';
-          if (index === stepIndex) {
-            if (explanations[questionId] && explanations[questionId].correct) {
-              stepButtonColor = green900;
-            } else {
-              stepButtonColor = blue800;
-            }
-          } else if (explanations[questionId] && explanations[questionId].correct) {
-            stepButtonColor = green500;
+          let stepButtonColor = '';;
+          const isCurrentQuestion = index === stepIndex
+          if (explanations[questionId] && explanations[questionId].correct) {
+            stepButtonColor = isCurrentQuestion ? green900 : green500;
           } else {
-            stepButtonColor = lightBlue400;
+            stepButtonColor = isCurrentQuestion ? blue800 : lightBlue400;
           }
           if (published || skippable || graderView || index <= maxStep) {
             return (
