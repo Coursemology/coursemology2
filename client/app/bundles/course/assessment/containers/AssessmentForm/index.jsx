@@ -550,6 +550,7 @@ class AssessmentForm extends React.Component {
           <>
             <br />
             <MaterialUploader
+              enableMaterialsAction={folderAttributes.enable_materials_action}
               folderId={folderAttributes.folder_id}
               materials={folderAttributes.materials}
             />
@@ -609,6 +610,8 @@ AssessmentForm.propTypes = {
   modeSwitching: PropTypes.bool,
   folderAttributes: PropTypes.shape({
     folder_id: PropTypes.number,
+    // If any action (upload, delete and download) of the materials
+    enableMaterialsAction: PropTypes.bool,
     // See MaterialFormContainer for detailed PropTypes.
     materials: typeMaterial,
   }),

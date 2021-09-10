@@ -35,4 +35,5 @@ function initializeQuestionSorting() {
 
 $(document).ready(() => {
   initializeQuestionSorting();
+  $('[data-toggle="tooltip"]').tooltip();
 });

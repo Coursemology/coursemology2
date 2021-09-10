@@ -16,6 +16,7 @@ RSpec.feature 'Course: Assessments' do
         create(:assessment_condition,
                course: course, assessment: other_assessment, conditional: assessment)
       end
+      let(:settings) { Course::Settings::Components.new(course.reload) }
 
       # Assessment condition
 
