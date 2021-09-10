@@ -5,8 +5,8 @@ import { injectIntl, intlShape } from 'react-intl';
 import Hotkeys from 'react-hot-keys';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import Paper from 'material-ui/Paper';
-import { white, red100, red200, red900, green200, green500, green900,
-  lightBlue400, blue800 } from 'material-ui/styles/colors';
+import { white, red100, red200, red900, green200, green300, green500, green700,
+  green900, lightBlue400, blue800 } from 'material-ui/styles/colors';
 import { Stepper, Step, StepButton, StepLabel } from 'material-ui/Stepper';
 import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -408,7 +408,7 @@ class SubmissionEditStepForm extends Component {
 
   renderStepper() {
     const { maxStep, stepIndex } = this.state;
-    const { published, skippable, graderView, questionIds = [] } = this.props;
+    const { published, skippable, graderView, questionIds = [], explanations } = this.props;
 
     if (questionIds.length <= 1) {
       return null;
@@ -422,13 +422,20 @@ class SubmissionEditStepForm extends Component {
         style={{ justifyContent: 'center', flexWrap: 'wrap' }}
       >
         {questionIds.map((questionId, index) => {
+          let stepButtonColor = '';
+          const isCurrentQuestion = index === stepIndex;
+          if (explanations[questionId] && explanations[questionId].correct) {
+            stepButtonColor = isCurrentQuestion ? green700 : green300;
+          } else {
+            stepButtonColor = isCurrentQuestion ? blue800 : lightBlue400;
+          }
           if (published || skippable || graderView || index <= maxStep) {
             return (
               <Step key={questionId} active={index <= maxStep}>
                 <StepButton
                   iconContainerStyle={{ padding: 0 }}
                   icon={(
-                    <SvgIcon color={index === stepIndex ? blue800 : lightBlue400}>
+                    <SvgIcon color={stepButtonColor}>
                       <circle cx="12" cy="12" r="12" />
                       <text x="12" y="16" textAnchor="middle" fontSize="12" fill="#fff">
                         {index + 1}
