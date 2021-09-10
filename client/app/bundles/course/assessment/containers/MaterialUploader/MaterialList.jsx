@@ -6,11 +6,9 @@ import Subheader from 'material-ui/Subheader';
 import FlatButton from 'material-ui/FlatButton';
 import Divider from 'material-ui/Divider';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import NotificationBar, {
-  notificationShape,
-} from 'lib/components/NotificationBar';
-import Material from './Material';
+import NotificationBar, { notificationShape } from 'lib/components/NotificationBar';
 import ReactTooltip from 'react-tooltip';
+import Material from './Material';
 
 const translations = defineMessages({
   disableNewFile: {
@@ -109,11 +107,12 @@ const MaterialList = (props) => {
             multiple
             style={styles.uploadInput}
             onChange={onFileInputChange}
-            disabled={!enableMaterialsAction}/>
+            disabled={!enableMaterialsAction}
+          />
         </FlatButton>
       </div>
       <ReactTooltip id="add-files-button">
-        <FormattedMessage {...translations.disableNewFile}/>
+        <FormattedMessage {...translations.disableNewFile} />
       </ReactTooltip>
     </>
   );
