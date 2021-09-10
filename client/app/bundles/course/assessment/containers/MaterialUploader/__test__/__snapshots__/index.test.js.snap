@@ -54,7 +54,24 @@ exports[`<Material /> renders the material 1`] = `
       tooltipPosition="bottom-center"
       touch={false}
     >
-      <ActionDelete />
+      <ActionDelete
+        data-for="delete-file-button"
+        data-tip={true}
+        data-tip-disable={true}
+      />
+      <ReactTooltip
+        clickable={false}
+        id="delete-file-button"
+        insecure={true}
+        resizeHide={true}
+        wrapper="div"
+      >
+        <FormattedMessage
+          defaultMessage="This action is unavailable as the Materials Component is disabled in the Admin Settings"
+          id="course.material.disableDelete"
+          values={Object {}}
+        />
+      </ReactTooltip>
     </IconButton>
   }
   secondaryText={
@@ -95,6 +112,7 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
     </Subheader>
     <Material
       deleting={false}
+      disabled={true}
       id={1}
       key="1"
       name="Material 1"
@@ -103,52 +121,73 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
     />
     <Material
       deleting={false}
+      disabled={true}
       id={2}
       key="2"
       name="Material 2"
       onMaterialDelete={[MockFunction]}
       updatedAt="2017-01-01T02:00:00.0000000Z"
     />
-    <FlatButton
-      containerElement="label"
-      disabled={false}
-      fullWidth={true}
-      icon={<ContentAdd />}
-      label="Add Files"
-      labelPosition="after"
-      labelStyle={Object {}}
-      onKeyboardFocus={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
-      onTouchStart={[Function]}
-      primary={false}
-      secondary={false}
-      style={
-        Object {
-          "verticalAlign": "middle",
-        }
-      }
+    <div
+      data-for="add-files-button"
+      data-tip={true}
     >
-      <input
-        multiple={true}
+      <FlatButton
+        containerElement="label"
+        disabled={false}
+        fullWidth={true}
+        icon={<ContentAdd />}
+        label="Add Files"
+        labelPosition="after"
+        labelStyle={Object {}}
+        onKeyboardFocus={[Function]}
+        onMouseEnter={[Function]}
+        onMouseLeave={[Function]}
+        onTouchStart={[Function]}
+        primary={false}
+        secondary={false}
         style={
           Object {
-            "bottom": 0,
-            "cursor": "pointer",
-            "left": 0,
-            "opacity": 0,
-            "position": "absolute",
-            "right": 0,
-            "top": 0,
+            "verticalAlign": "middle",
           }
         }
-        type="file"
+      >
+        <input
+          multiple={true}
+          style={
+            Object {
+              "bottom": 0,
+              "cursor": "pointer",
+              "left": 0,
+              "opacity": 0,
+              "position": "absolute",
+              "right": 0,
+              "top": 0,
+            }
+          }
+          type="file"
+        />
+      </FlatButton>
+    </div>
+    <ReactTooltip
+      clickable={false}
+      id="add-files-button"
+      insecure={true}
+      resizeHide={true}
+      wrapper="div"
+    >
+      <FormattedMessage
+        defaultMessage="This action is unavailable as the Materials Component is disabled in the Admin Settings"
+        id="course.material.disableNewFile"
+        values={Object {}}
       />
-    </FlatButton>
+    </ReactTooltip>
   </List>
   <Divider
     inset={false}
   />
-  <NotificationBar />
+  <NotificationBar
+    autoHideDuration={5000}
+  />
 </Fragment>
 `;
