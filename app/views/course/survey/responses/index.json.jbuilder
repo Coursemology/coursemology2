@@ -12,7 +12,7 @@ json.responses @course_students do |student|
 
   json.present !!response
   if response
-    json.(response, :id, :submitted_at)
+    json.(response, :id, :submitted_at, :updated_at)
     json.canUnsubmit can?(:unsubmit, response)
     json.path course_survey_response_path(current_course, @survey, response) if canReadAnswers
   end

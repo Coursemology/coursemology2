@@ -22,6 +22,7 @@ module Course::SurveysAbilityComponent
     allow_students_submit_own_response
     allow_students_modify_own_response_to_active_survey
     allow_students_modify_own_response_to_modifiable_submitted_survey
+    disallow_students_modify_own_response_to_modifiable_expired_submitted_survey
     allow_students_modify_own_response_to_respondable_expired_survey
   end
 
@@ -47,6 +48,13 @@ module Course::SurveysAbilityComponent
     survey_published_all_course_users_hash.deep_merge(
       lesson_plan_item: { default_reference_time: { end_at: (Time.min..Time.zone.now) } },
       allow_response_after_end: true
+    )
+  end
+
+  def survey_expired_and_not_respondable
+    survey_published_all_course_users_hash.deep_merge(
+      lesson_plan_item: { default_reference_time: { end_at: (Time.min..Time.zone.now) } },
+      allow_response_after_end: false, allow_modify_after_submit: true
     )
   end
 
@@ -100,6 +108,10 @@ module Course::SurveysAbilityComponent
     can :modify, Course::Survey::Response,
         creator_id: user.id, submitted_at: (Time.min..Time.max),
         survey: survey_open_all_course_users_hash.deep_merge(allow_modify_after_submit: true)
+  end
+
+  def disallow_students_modify_own_response_to_modifiable_expired_submitted_survey
+    cannot :modify, Course::Survey::Response, survey: survey_expired_and_not_respondable
   end
 
   def allow_students_modify_own_response_to_respondable_expired_survey

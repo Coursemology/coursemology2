@@ -53,7 +53,7 @@ class ProgrammingFile extends React.Component {
     const downloadLink = getProgrammingFileURL(courseId, assessmentId, submissionId,
       answerId, file.id);
 
-    if (file.content === null) {
+    if (file.highlighted_content === null) {
       return (
         <Paper style={{ backgroundColor: yellow100, padding: 10 }}>
           <WarningIcon style={styles.warningIcon} />
@@ -66,7 +66,7 @@ class ProgrammingFile extends React.Component {
       );
     }
 
-    const content = file.content.split('\n');
+    const content = file.highlighted_content.split('\n');
     return (
       <ReadOnlyEditor
         answerId={answerId}

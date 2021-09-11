@@ -30,7 +30,8 @@ json.fields do
   json.id answer.acting_as.id
   json.files_attributes answer.files do |file|
     json.(file, :id, :filename)
-    json.content submission.attempting? ? file.content : highlight_code_block(file.content, question.language)
+    json.content file.content
+    json.highlighted_content highlight_code_block(file.content, question.language)
   end
 end
 

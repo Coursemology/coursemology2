@@ -32,7 +32,7 @@ export default class PastProgrammingAnswer extends Component {
   render() {
     const { question, answer } = this.props;
     const file = answer.files_attributes.length > 0 ? answer.files_attributes[0] : null;
-    const content = file ? file.content.split('\n') : '';
+    const content = file ? file.highlighted_content.split('\n') : '';
 
     if (question.fileSubmission) {
       return this.renderFileSubmissionPastAnswer();

@@ -54,6 +54,7 @@ class Course::Survey::ResponsesController < Course::Survey::Controller
       @response.submit
     else
       authorize!(:modify, @response)
+      @response.update_updated_at
     end
 
     if @response.update(response_update_params)

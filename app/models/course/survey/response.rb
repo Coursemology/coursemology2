@@ -44,6 +44,10 @@ class Course::Survey::Response < ApplicationRecord
     end
   end
 
+  def update_updated_at
+    self.updated_at = Time.zone.now if submitted?
+  end
+
   private
 
   def options_invalid(attributes)
