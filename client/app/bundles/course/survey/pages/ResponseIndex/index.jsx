@@ -71,7 +71,7 @@ const translations = defineMessages({
   },
   updatedAt: {
     id: 'course.surveys.ResponseIndex.updatedAt',
-    defaultMessage: 'Updated At',
+    defaultMessage: 'Last Updated At',
   },
   phantoms: {
     id: 'course.surveys.ResponseIndex.phantoms',

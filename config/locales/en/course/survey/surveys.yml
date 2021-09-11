@@ -5,7 +5,7 @@ en:
         respond: 'Respond'
       survey_download_service:
         created_at: 'Create Timestamp'
-        updated_at: 'Update Timestamp'
+        updated_at: 'Last Update Timestamp'
         course_user_id: 'Course User ID'
         name: 'Name'
         role: 'Role'

@@ -47,7 +47,7 @@ RSpec.describe Course::Survey::SurveyDownloadService do
       end
 
       context 'header' do
-        it 'fifth element onwards is question descriptions in increasing weight' do
+        it 'sixth element (inclusive) onwards is question descriptions in increasing weight' do
           question_descriptions = questions.sort_by(&:weight).map(&:description)
           expect(subject[0].slice(5..-1)).to eq(question_descriptions)
         end
@@ -87,11 +87,11 @@ RSpec.describe Course::Survey::SurveyDownloadService do
         ]
       end
 
-      it 'returns an array with four more elements than the no. of questions' do
+      it 'returns an array with five more elements than the no. of questions' do
         expect(subject.size).to eq(questions.size + 5)
       end
 
-      it 'first five elements are submit timestamp, update timestamp, course user id, name, and role' do
+      it 'first five elements are submit timestamp, last update timestamp, course user id, name, and role' do
         expect(subject.slice(0..4)).to eq(
           [
             response.submitted_at,
