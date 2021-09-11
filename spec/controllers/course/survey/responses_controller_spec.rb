@@ -51,7 +51,7 @@ RSpec.describe Course::Survey::ResponsesController do
 
           first_response = json_response['responses'].first
           expect(first_response.keys).to contain_exactly(
-            'present', 'course_user', 'canUnsubmit', 'id', 'path', 'submitted_at'
+            'present', 'course_user', 'canUnsubmit', 'id', 'path', 'submitted_at', 'updated_at'
           )
 
           expect(first_response['course_user'].keys).to contain_exactly(

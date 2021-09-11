@@ -31,6 +31,7 @@ describe('<ResponseShow />', () => {
         id: responseId,
         creator_name: 'Staff',
         submitted_at: '2099-12-31T16:00:00.000Z',
+        updated_at: '2100-01-12T16:00:00.000Z',
       },
       flags: {
         canModify: true,
