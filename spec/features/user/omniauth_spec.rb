@@ -3,6 +3,8 @@ require 'rails_helper'
 
 RSpec.feature 'User: Omniauth' do
   let(:instance) { Instance.default }
+  # Note: Facebook login feature is currently disabled.
+  before { skip }
 
   with_tenant(:instance) do
     context 'As a unregistered user' do

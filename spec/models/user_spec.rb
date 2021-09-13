@@ -103,7 +103,8 @@ RSpec.describe User do
       end
     end
 
-    describe '.new_with_session' do
+    # Note: Facebook login feature is currently disabled.
+    xdescribe '.new_with_session' do
       context 'when facebook data is provided' do
         let(:params) { {} }
         let(:facebook_data) { build(:omniauth_facebook) }
