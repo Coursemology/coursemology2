@@ -183,17 +183,17 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
     correct_points = []
 
     question_grade = question.groups.reduce(0) do |question_sum, group|
-      group_grade = group.points.
-                    reject { |point| lifted_word_points.include?(point) }.
-                    select do |point|
-                      point.solutions.select(&:compre_keyword?).all? do |s|
-                        keyword_solutions.include?(s)
-                      end
-                    end.
-                    reduce(0) do |group_sum, point|
-                      correct_points.push(point)
-                      group_sum + point.point_grade
-                    end
+      group_points = group.points.
+                     reject { |point| lifted_word_points.include?(point) }.
+                     select do |point|
+                       point.solutions.select(&:compre_keyword?).all? do |s|
+                         keyword_solutions.include?(s)
+                       end
+                     end
+      group_grade = group_points.reduce(0) do |group_sum, point|
+        correct_points.push(point)
+        group_sum + point.point_grade
+      end
       question_sum + [group_grade, group.maximum_group_grade].min
     end
 
