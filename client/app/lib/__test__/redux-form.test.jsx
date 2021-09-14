@@ -1,4 +1,3 @@
-import React from 'react';
 import { createStore, combineReducers } from 'redux';
 import { mount } from 'enzyme';
 import { reduxForm, reducer as formReducer, submit } from 'redux-form';

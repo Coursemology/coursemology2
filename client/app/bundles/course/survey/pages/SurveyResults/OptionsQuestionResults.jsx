@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -132,7 +132,7 @@ const translations = defineMessages({
   },
 });
 
-class OptionsQuestionResults extends React.Component {
+class OptionsQuestionResults extends Component {
   static renderPercentageBar(percentage) {
     return (
       <div style={styles.barContainer}>

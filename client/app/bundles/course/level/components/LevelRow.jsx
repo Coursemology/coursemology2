@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
@@ -32,7 +32,7 @@ const styles = {
   },
 };
 
-class LevelRow extends React.Component {
+class LevelRow extends Component {
   renderInput() {
     const {
       disabled,

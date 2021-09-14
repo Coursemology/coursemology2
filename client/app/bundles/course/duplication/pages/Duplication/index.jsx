@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
@@ -101,7 +101,7 @@ const styles = {
   },
 };
 
-class Duplication extends React.Component {
+class Duplication extends Component {
   componentDidMount() {
     this.props.dispatch(fetchObjectsList());
   }

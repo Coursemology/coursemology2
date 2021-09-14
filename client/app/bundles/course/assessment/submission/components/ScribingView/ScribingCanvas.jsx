@@ -1,7 +1,7 @@
 /* eslint no-mixed-operators: "off" */
 /* eslint react/sort-comp: "off" */
 /* eslint no-undef: "off" */ // For usage of fabric
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import LoadingIndicator from 'lib/components/LoadingIndicator';
@@ -72,7 +72,7 @@ const styles = {
   },
 };
 
-export default class ScribingCanvas extends React.Component {
+export default class ScribingCanvas extends Component {
   constructor(props) {
     super(props);
 

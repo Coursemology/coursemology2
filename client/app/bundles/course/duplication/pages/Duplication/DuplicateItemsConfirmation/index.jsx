@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -41,7 +41,7 @@ const translations = defineMessages({
   },
 });
 
-class DuplicateItemsConfirmation extends React.Component {
+class DuplicateItemsConfirmation extends Component {
   renderdestinationCourseCard() {
     const { destinationCourses, destinationCourseId } = this.props;
     const destinationCourse = destinationCourses.find(

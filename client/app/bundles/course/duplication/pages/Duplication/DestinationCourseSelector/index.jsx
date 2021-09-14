@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, injectIntl, intlShape } from 'react-intl';
@@ -27,7 +27,7 @@ const translations = defineMessages({
   },
 });
 
-class DestinationCourseSelector extends React.Component {
+class DestinationCourseSelector extends Component {
   renderExistingCourseForm = () => {
     const {
       currentHost,

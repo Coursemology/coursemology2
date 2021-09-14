@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { reduxForm, Form } from 'redux-form';
@@ -53,7 +53,7 @@ const validations = {
     value && value < 0 ? translations.positiveNumberValidationError : undefined,
 };
 
-class ScribingQuestionForm extends React.Component {
+class ScribingQuestionForm extends Component {
   static convertNull(value) {
     return value === null ? '' : value;
   }

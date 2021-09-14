@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import Dialog from 'material-ui/Dialog';
@@ -18,7 +18,7 @@ const propTypes = {
   children: PropTypes.node,
 };
 
-class FormDialogue extends React.Component {
+class FormDialogue extends Component {
   constructor(props) {
     super(props);
 

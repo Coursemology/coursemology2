@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { submit, isValid } from 'redux-form';
@@ -25,7 +25,7 @@ const translations = defineMessages({
   },
 });
 
-class DuplicateAllButton extends React.Component {
+class DuplicateAllButton extends Component {
   constructor(props) {
     super(props);
     this.state = { confirmationOpen: false };

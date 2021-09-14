@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { fieldMetaPropTypes } from 'redux-form';
 import { FormattedMessage, intlShape } from 'react-intl';
@@ -43,7 +43,7 @@ const styles = {
  * }
  */
 // TODO: Use the input element as a controller component - https://reactjs.org/docs/forms.html
-class SingleFileInput extends React.Component {
+class SingleFileInput extends Component {
   constructor(props) {
     super(props);
     this.state = { file: null };

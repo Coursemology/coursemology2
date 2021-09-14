@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -33,7 +33,7 @@ const styles = {
   },
 };
 
-class AchievementsSelector extends React.Component {
+class AchievementsSelector extends Component {
   setAllAchievementsSelection = (value) => {
     const { dispatch, achievements } = this.props;
 

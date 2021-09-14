@@ -1,9 +1,9 @@
-import React from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { CardText, CardTitle } from 'material-ui/Card';
 import Chips from './Chips';
 
-class Details extends React.PureComponent {
+class Details extends PureComponent {
   renderTitle() {
     const { title, itemPath } = this.props;
     return (

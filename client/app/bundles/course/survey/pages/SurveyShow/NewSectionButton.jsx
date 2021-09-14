@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
@@ -34,7 +34,7 @@ const styles = {
   },
 };
 
-class NewSectionButton extends React.Component {
+class NewSectionButton extends Component {
   createSectionHandler = (data) => {
     const { dispatch } = this.props;
     const payload = { section: data };

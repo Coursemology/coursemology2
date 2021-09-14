@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -75,7 +75,7 @@ export const buildResponsePayload = (data) => {
   return { response: { answers_attributes, submit: data.submit } };
 };
 
-class ResponseForm extends React.Component {
+class ResponseForm extends Component {
   static renderSections(props) {
     const { fields, disabled } = props;
     return (

@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Card, CardText } from 'material-ui/Card';
@@ -51,7 +51,7 @@ const styles = {
   },
 };
 
-class QuestionCard extends React.Component {
+class QuestionCard extends Component {
   static renderOptionsList(question, Widget) {
     return (
       <>

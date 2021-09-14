@@ -1,4 +1,3 @@
-import React from 'react';
 import shallowUntil from 'utils/shallowUntil';
 import Toggle from '../Toggle';
 

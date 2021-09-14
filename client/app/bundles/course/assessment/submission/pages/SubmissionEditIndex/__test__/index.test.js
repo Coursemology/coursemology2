@@ -1,4 +1,3 @@
-import React from 'react';
 import 'brace';
 import { mount } from 'enzyme';
 import ProviderWrapper from 'lib/components/ProviderWrapper';

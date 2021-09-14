@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { green50 } from 'material-ui/styles/colors';

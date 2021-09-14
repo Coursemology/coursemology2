@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment, { formatLongDateTime } from 'lib/moment';
@@ -94,7 +94,7 @@ const translations = defineMessages({
   },
 });
 
-class ResponseIndex extends React.Component {
+class ResponseIndex extends Component {
   static computeStatuses(responses) {
     const summary = {
       [responseStatus.NOT_STARTED]: 0,

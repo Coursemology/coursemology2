@@ -1,4 +1,4 @@
-import React from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Description from 'material-ui/svg-icons/action/description';
 import { grey700 } from 'material-ui/styles/colors';
@@ -20,7 +20,7 @@ const styles = {
   },
 };
 
-class Material extends React.PureComponent {
+class Material extends PureComponent {
   render() {
     const { name, url } = this.props;
     return (

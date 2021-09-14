@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
@@ -93,7 +93,7 @@ const defaultProps = {
   onMarkerClick: () => {},
 };
 
-class ProgressGraph extends React.Component {
+class ProgressGraph extends Component {
   constructor(props) {
     super(props);
     this.displayDataCache = {};

@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardText } from 'material-ui/Card';
 import { FormattedMessage } from 'react-intl';
@@ -17,7 +17,7 @@ const styles = {
   },
 };
 
-class ResultsQuestion extends React.Component {
+class ResultsQuestion extends Component {
   renderTextResults() {
     const {
       includePhantoms,

@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
@@ -29,7 +29,7 @@ const styles = {
   },
 };
 
-class NotificationSettings extends React.Component {
+class NotificationSettings extends Component {
   handleComponentNotificationSettingUpdate = (setting, settingTitle) => {
     const { dispatch } = this.props;
     const { component, key, options } = setting;

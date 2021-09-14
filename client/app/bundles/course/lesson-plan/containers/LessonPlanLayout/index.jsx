@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter, Route, Switch } from 'react-router-dom';
@@ -51,7 +51,7 @@ const styles = {
 
 const lessonPlanPath = '/courses/:courseId/lesson_plan';
 
-class LessonPlanLayout extends React.Component {
+class LessonPlanLayout extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch(fetchLessonPlan());

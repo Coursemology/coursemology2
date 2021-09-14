@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/extensions, import/no-extraneous-dependencies, import/no-unresolved
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import ReactTooltip from 'react-tooltip';
@@ -47,7 +47,7 @@ const styles = {
   },
 };
 
-export default class SubmissionsTable extends React.Component {
+export default class SubmissionsTable extends Component {
   static formatDate(date) {
     return date ? moment(date).format('DD MMM HH:mm') : null;
   }

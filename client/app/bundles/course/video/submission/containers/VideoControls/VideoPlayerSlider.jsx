@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { formatTimestamp } from 'lib/helpers/videoHelpers';
@@ -43,7 +43,7 @@ const defaultProps = {
   bufferProgress: 0,
 };
 
-class VideoPlayerSlider extends React.Component {
+class VideoPlayerSlider extends Component {
   UNSAFE_componentWillMount() {
     if (VideoPlayerSlider.TippedSlider !== undefined) return; // Already loaded
 

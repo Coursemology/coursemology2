@@ -1,7 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 import Immutable from 'immutable';
 
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import SelectField from 'material-ui/SelectField';
@@ -108,7 +108,7 @@ function validation(data, pathOfKeysToData, intl) {
   return errors;
 }
 
-class ProgrammingQuestionForm extends React.Component {
+class ProgrammingQuestionForm extends Component {
   static getInputName(field) {
     return `question_programming[${field}]`;
   }

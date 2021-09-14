@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 
@@ -12,7 +12,7 @@ import { questionNamePrefix, questionIdPrefix } from '../constants';
 
 const mapProps = (props) => ({ ...mapError(props) });
 
-class FileUploadField extends React.Component {
+class FileUploadField extends Component {
   render() {
     const { field, label, isLoading, validate } = this.props;
     return (

@@ -1,7 +1,7 @@
 import 'brace/mode/python';
 import 'brace/theme/github';
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import ScribingView from '../containers/ScribingView';
 import VoiceResponseAnswer from '../containers/VoiceResponseAnswer';
 import MultipleChoiceAnswer from './answers/MultipleChoice';

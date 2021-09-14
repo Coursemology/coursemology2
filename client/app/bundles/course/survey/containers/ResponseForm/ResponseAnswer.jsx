@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { defineMessages, injectIntl, intlShape } from 'react-intl';
@@ -42,7 +42,7 @@ const responseFormTranslations = defineMessages({
   },
 });
 
-class ResponseAnswer extends React.Component {
+class ResponseAnswer extends Component {
   static renderMultipleResponseOptions(props) {
     const {
       disabled,

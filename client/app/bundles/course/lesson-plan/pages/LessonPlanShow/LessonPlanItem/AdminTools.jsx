@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import React from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
@@ -51,7 +51,7 @@ const styles = {
   },
 };
 
-class AdminTools extends React.PureComponent {
+class AdminTools extends PureComponent {
   updateEventHandler = (data) => {
     const {
       dispatch,

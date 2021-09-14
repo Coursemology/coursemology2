@@ -1,4 +1,4 @@
-import React from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardText } from 'material-ui/Card';
 import Thumbnail from 'lib/components/Thumbnail';
@@ -43,7 +43,7 @@ const styles = {
   },
 };
 
-class OptionsListItem extends React.PureComponent {
+class OptionsListItem extends PureComponent {
   renderGridCard() {
     const { optionText, imageUrl, widget } = this.props;
     return (

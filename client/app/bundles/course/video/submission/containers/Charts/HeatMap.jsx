@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Bar } from 'react-chartjs-2';
@@ -88,7 +88,7 @@ const defaultProps = {
   onBarClick: () => {},
 };
 
-class HeatMap extends React.Component {
+class HeatMap extends Component {
   mouseOptions = {
     onClick: (_, elements) => {
       if (elements.length < 1) {

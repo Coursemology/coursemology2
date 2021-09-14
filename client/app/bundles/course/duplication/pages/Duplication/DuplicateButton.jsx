@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -27,7 +27,7 @@ const styles = {
   },
 };
 
-class DuplicateButton extends React.Component {
+class DuplicateButton extends Component {
   render() {
     const { dispatch, isCourseSelected, isItemSelected, isChangingCourse } =
       this.props;

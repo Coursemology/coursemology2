@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field, Form, formValueSelector, change } from 'redux-form';
@@ -86,7 +86,7 @@ const validate = (values) => {
   return errors;
 };
 
-class AssessmentForm extends React.Component {
+class AssessmentForm extends Component {
   componentDidMount() {
     const { dispatch, editing } = this.props;
     // TODO: Shift the fetchTabs only when the selection menu is clicked on. This would

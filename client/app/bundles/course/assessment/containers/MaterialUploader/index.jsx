@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import CourseAPI from 'api/course';
@@ -11,7 +11,7 @@ const propTypes = {
   materials: typeMaterial,
 };
 
-class MaterialUploader extends React.Component {
+class MaterialUploader extends Component {
   constructor(props) {
     super(props);
     this.state = {

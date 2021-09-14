@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import Avatar from 'material-ui/Avatar';
@@ -57,7 +57,7 @@ export const formatDateRange = (startAt, endAt) => {
   return `${start.format(shortDateTime)} - ${end.format(shortDateTime)}`;
 };
 
-class Chips extends React.Component {
+class Chips extends Component {
   renderNotPublishedChip() {
     if (this.props.published) {
       return null;

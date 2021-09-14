@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { mount } from 'enzyme';
 import CourseAPI from 'api/course';

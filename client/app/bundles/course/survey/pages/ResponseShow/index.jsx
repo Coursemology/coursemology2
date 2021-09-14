@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -36,7 +36,7 @@ const styles = {
   },
 };
 
-class ResponseShow extends React.Component {
+class ResponseShow extends Component {
   componentDidMount() {
     const {
       dispatch,

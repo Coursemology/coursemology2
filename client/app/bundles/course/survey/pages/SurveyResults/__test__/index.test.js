@@ -1,4 +1,3 @@
-import React from 'react';
 import { mount } from 'enzyme';
 import { connect } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';

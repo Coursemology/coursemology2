@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { yellow100 } from 'material-ui/styles/colors';
@@ -31,7 +31,7 @@ const styles = {
   },
 };
 
-class ProgrammingFile extends React.Component {
+class ProgrammingFile extends Component {
   renderProgrammingEditor() {
     const { file, fieldName, language } = this.props;
     return (

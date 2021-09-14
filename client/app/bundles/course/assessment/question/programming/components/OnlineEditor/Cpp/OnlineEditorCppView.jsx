@@ -1,6 +1,6 @@
 import Immutable from 'immutable';
 
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
@@ -52,7 +52,7 @@ const contextTypes = {
   muiTheme: PropTypes.object.isRequired,
 };
 
-class OnlineEditorCppView extends React.Component {
+class OnlineEditorCppView extends Component {
   testCaseCreateHandler(type) {
     return (e) => {
       e.preventDefault();

@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import Dialog from 'material-ui/Dialog';
@@ -9,7 +9,7 @@ const buttonStyle = {
   margin: 3,
 };
 
-class ConfirmationDialog extends React.Component {
+class ConfirmationDialog extends Component {
   render() {
     const {
       intl,

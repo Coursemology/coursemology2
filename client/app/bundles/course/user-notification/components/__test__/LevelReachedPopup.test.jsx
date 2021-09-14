@@ -1,4 +1,3 @@
-import React from 'react';
 import { mount } from 'enzyme';
 import storeCreator from 'course/user-notification/store';
 import LevelReachedPopup from '../LevelReachedPopup';

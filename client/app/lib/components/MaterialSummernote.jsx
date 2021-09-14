@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import ReactSummernote from 'react-summernote';
@@ -34,7 +34,7 @@ const contextTypes = {
   muiTheme: PropTypes.object.isRequired,
 };
 
-class MaterialSummernote extends React.Component {
+class MaterialSummernote extends Component {
   constructor(props) {
     super(props);
     this.state = { isFocused: false };

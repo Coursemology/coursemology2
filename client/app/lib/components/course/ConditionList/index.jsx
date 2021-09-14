@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
 import {
@@ -24,7 +24,7 @@ const styles = {
   },
 };
 
-class ConditionList extends React.Component {
+class ConditionList extends Component {
   renderTopHeader() {
     return (
       <TableRow>

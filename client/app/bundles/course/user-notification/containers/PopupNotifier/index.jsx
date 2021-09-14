@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import AchievementGainedPopup from 'course/user-notification/components/AchievementGainedPopup';
@@ -8,7 +8,7 @@ import {
   markAsRead,
 } from 'course/user-notification/actions';
 
-class PopupNotifier extends React.Component {
+class PopupNotifier extends Component {
   static popupsHash = {
     achievementGained: AchievementGainedPopup,
     levelReached: LevelReachedPopup,

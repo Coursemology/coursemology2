@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -54,7 +54,7 @@ const translations = defineMessages({
   },
 });
 
-class TextResponseResults extends React.Component {
+class TextResponseResults extends Component {
   static renderStudentName(answer) {
     return (
       <Link to={answer.response_path}>

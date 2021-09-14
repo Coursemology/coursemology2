@@ -1,6 +1,6 @@
 import Immutable from 'immutable';
 
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
 import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
@@ -56,7 +56,7 @@ const contextTypes = {
   muiTheme: PropTypes.object.isRequired,
 };
 
-class OnlineEditorJavaView extends React.Component {
+class OnlineEditorJavaView extends Component {
   static getTestInputName(type, field) {
     return `question_programming[test_cases][${type}][][${field}]`;
   }

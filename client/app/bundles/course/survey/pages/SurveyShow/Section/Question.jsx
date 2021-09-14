@@ -1,5 +1,5 @@
 /* eslint-disable new-cap */
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import { connect } from 'react-redux';
@@ -46,7 +46,7 @@ const translations = defineMessages({
   },
 });
 
-class Question extends React.Component {
+class Question extends Component {
   updateQuestionHandler = (data) => {
     const { dispatch, intl } = this.props;
     const { updateSurveyQuestion } = questionActions;

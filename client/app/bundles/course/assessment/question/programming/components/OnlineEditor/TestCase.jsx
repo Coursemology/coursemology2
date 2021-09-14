@@ -1,5 +1,5 @@
 import Immutable from 'immutable';
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
@@ -9,7 +9,7 @@ import { grey300 } from 'material-ui/styles/colors';
 import styles from './OnlineEditorView.scss';
 import translations from './OnlineEditorView.intl';
 
-class TestCase extends React.Component {
+class TestCase extends Component {
   static getTestInputName(type, field) {
     return `question_programming[test_cases][${type}][][${field}]`;
   }

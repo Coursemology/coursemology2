@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -90,7 +90,7 @@ const styles = {
   },
 };
 
-class Level extends React.Component {
+class Level extends Component {
   static renderTableHeader() {
     return (
       <TableHeader adjustForCheckbox={false} displaySelectAll={false}>

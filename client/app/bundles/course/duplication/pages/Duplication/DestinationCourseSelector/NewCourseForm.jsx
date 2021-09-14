@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import { reduxForm, Field, Form } from 'redux-form';
@@ -31,7 +31,7 @@ const validate = (values) => {
   return errors;
 };
 
-class NewCourseForm extends React.Component {
+class NewCourseForm extends Component {
   render() {
     const { handleSubmit, intl, onSubmit, disabled } = this.props;
 

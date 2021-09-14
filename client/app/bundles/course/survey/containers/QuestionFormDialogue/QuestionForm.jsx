@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import { reduxForm, Field, FieldArray, Form } from 'redux-form';
@@ -139,7 +139,7 @@ const validate = (values) => {
   return errors;
 };
 
-class QuestionForm extends React.Component {
+class QuestionForm extends Component {
   renderTiledViewToggle() {
     const { intl, disabled } = this.props;
     return (

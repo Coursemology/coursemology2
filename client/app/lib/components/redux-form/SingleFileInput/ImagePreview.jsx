@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import InsertDriveFileIcon from 'material-ui/svg-icons/editor/insert-drive-file';
@@ -36,7 +36,7 @@ function renderImage(imageSrc, fileName) {
   );
 }
 
-export default class ImagePreview extends React.Component {
+export default class ImagePreview extends Component {
   getImage() {
     const { originalUrl, file } = this.props;
     const isImage = file.type.includes('image/');

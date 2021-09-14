@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import React from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
@@ -48,7 +48,7 @@ const styles = {
   },
 };
 
-class MilestoneAdminTools extends React.PureComponent {
+class MilestoneAdminTools extends PureComponent {
   updateMilestoneHandler = (data) => {
     const {
       dispatch,

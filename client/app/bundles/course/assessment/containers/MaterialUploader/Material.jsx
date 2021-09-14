@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { formatLongDateTime } from 'lib/moment';
@@ -49,7 +49,7 @@ const propTypes = {
   uploading: PropTypes.bool,
 };
 
-class Material extends React.Component {
+class Material extends Component {
   onDelete = (e) => {
     e.preventDefault();
     const { id, name, onMaterialDelete } = this.props;

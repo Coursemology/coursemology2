@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
@@ -29,7 +29,7 @@ const translations = defineMessages({
   },
 });
 
-class EditSectionButton extends React.Component {
+class EditSectionButton extends Component {
   updateSectionHandler = (data) => {
     const { dispatch, section } = this.props;
     const payload = { section: data };

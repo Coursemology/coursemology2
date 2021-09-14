@@ -1,9 +1,9 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import translations from './translations';
 
-class FilePreview extends React.Component {
+class FilePreview extends Component {
   render() {
     const { file } = this.props;
     return (

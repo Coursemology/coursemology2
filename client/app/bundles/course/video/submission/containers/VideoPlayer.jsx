@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Paper from 'material-ui/Paper';
 import { connect } from 'react-redux';
@@ -70,7 +70,7 @@ const defaultProps = {
   forceSeek: false,
 };
 
-class VideoPlayer extends React.Component {
+class VideoPlayer extends Component {
   constructor(props) {
     super(props);
 

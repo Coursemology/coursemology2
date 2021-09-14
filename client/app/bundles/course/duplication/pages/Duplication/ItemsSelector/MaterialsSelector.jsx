@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -20,7 +20,7 @@ const translations = defineMessages({
   },
 });
 
-class MaterialsSelector extends React.Component {
+class MaterialsSelector extends Component {
   folderSetAll = (folder) => (value) => {
     this.props.dispatch(setItemSelectedBoolean(FOLDER, folder.id, value));
     folder.subfolders.forEach((subfolder) =>

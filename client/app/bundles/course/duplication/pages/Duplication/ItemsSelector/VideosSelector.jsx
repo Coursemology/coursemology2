@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -21,7 +21,7 @@ const translations = defineMessages({
   },
 });
 
-class VideosSelector extends React.Component {
+class VideosSelector extends Component {
   setAllInTab = (tab) => (value) => {
     const { dispatch } = this.props;
     dispatch(setItemSelectedBoolean(VIDEO_TAB, tab.id, value));
