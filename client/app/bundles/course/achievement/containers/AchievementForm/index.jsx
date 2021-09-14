@@ -6,7 +6,9 @@ import ConditionList from 'lib/components/course/ConditionList';
 import TextField from 'lib/components/redux-form/TextField';
 import RichTextField from 'lib/components/redux-form/RichTextField';
 import Toggle from 'lib/components/redux-form/Toggle';
-import SingleFileInput, { BadgePreview } from 'lib/components/redux-form/SingleFileInput';
+import SingleFileInput, {
+  BadgePreview,
+} from 'lib/components/redux-form/SingleFileInput';
 import formTranslations from 'lib/translations/form';
 import { achievementTypesConditionAttributes } from 'lib/types';
 import translations from './translations.intl';
@@ -26,7 +28,11 @@ const validate = (values) => {
   const requiredFields = ['title'];
 
   requiredFields.forEach((field) => {
-    if (values[field] === undefined || values[field] === '' || values[field] === null) {
+    if (
+      values[field] === undefined ||
+      values[field] === '' ||
+      values[field] === null
+    ) {
       errors[field] = formTranslations.required;
     }
   });
@@ -45,7 +51,11 @@ const propTypes = {
 };
 
 const AchievementForm = ({
-  handleSubmit, onSubmit, editing, submitting, conditionAttributes,
+  handleSubmit,
+  onSubmit,
+  editing,
+  submitting,
+  conditionAttributes,
 }) => (
   <Form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
     <Field
@@ -79,17 +89,14 @@ const AchievementForm = ({
       style={styles.toggle}
       disabled={submitting}
     />
-    {
-      editing && conditionAttributes
-      && (
+    {editing && conditionAttributes && (
       <div style={styles.conditions}>
         <ConditionList
           newConditionUrls={conditionAttributes.new_condition_urls}
           conditions={conditionAttributes.conditions}
         />
       </div>
-      )
-    }
+    )}
   </Form>
 );
 

@@ -2,9 +2,7 @@
 import moment from 'lib/moment';
 
 export function arrayToObjectById(array) {
-  return array.reduce((obj, item) => (
-    { ...obj, [item.id]: item }
-  ), {});
+  return array.reduce((obj, item) => ({ ...obj, [item.id]: item }), {});
 }
 
 export function formatDateTime(dateTime) {

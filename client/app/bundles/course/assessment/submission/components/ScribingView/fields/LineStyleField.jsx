@@ -50,10 +50,8 @@ const styles = {
 
 class LineStyleField extends Component {
   renderLineStyleChips() {
-    const {
-      intl, lineToolType, selectedLineStyle,
-      onClickLineStyleChip,
-    } = this.props;
+    const { intl, lineToolType, selectedLineStyle, onClickLineStyleChip } =
+      this.props;
     const lineStyles = [
       {
         key: intl.formatMessage(translations.solid),
@@ -69,17 +67,22 @@ class LineStyleField extends Component {
       },
     ];
     const chips = [];
-    lineStyles.forEach(style => (chips.push(
-      <Chip
-        backgroundColor={selectedLineStyle === style.value ? cyan500 : undefined}
-        labelColor={selectedLineStyle === style.value ? grey50 : undefined}
-        key={lineToolType + style.value}
-        style={styles.chip}
-        onClick={event => onClickLineStyleChip(event, lineToolType, style.value)}
-      >
-        {style.key}
-      </Chip>
-    )));
+    lineStyles.forEach((style) =>
+      chips.push(
+        <Chip
+          backgroundColor={
+            selectedLineStyle === style.value ? cyan500 : undefined
+          }
+          labelColor={selectedLineStyle === style.value ? grey50 : undefined}
+          key={lineToolType + style.value}
+          style={styles.chip}
+          onClick={(event) =>
+            onClickLineStyleChip(event, lineToolType, style.value)
+          }
+        >
+          {style.key}
+        </Chip>
+      ));
     return chips;
   }
 
@@ -88,10 +91,10 @@ class LineStyleField extends Component {
 
     return (
       <div style={styles.fieldDiv}>
-        <label htmlFor="line-style" style={styles.label}>{intl.formatMessage(translations.style)}</label>
-        <div style={styles.chipWrapper}>
-          { this.renderLineStyleChips() }
-        </div>
+        <label htmlFor="line-style" style={styles.label}>
+          {intl.formatMessage(translations.style)}
+        </label>
+        <div style={styles.chipWrapper}>{this.renderLineStyleChips()}</div>
       </div>
     );
   }

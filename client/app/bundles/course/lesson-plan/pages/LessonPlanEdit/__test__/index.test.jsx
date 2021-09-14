@@ -10,15 +10,17 @@ const groupData = {
     title: 'Week 1',
     start_at: '2017-01-01T02:03:00.000+08:00',
   },
-  items: [{
-    id: 9,
-    published: false,
-    itemTypeKey: 'Other',
-    title: 'Other Event',
-    start_at: '2017-01-04T02:03:00.000+08:00',
-    bonus_end_at: '2017-01-06T02:03:00.000+08:00',
-    end_at: '2017-01-08T02:03:00.000+08:00',
-  }],
+  items: [
+    {
+      id: 9,
+      published: false,
+      itemTypeKey: 'Other',
+      title: 'Other Event',
+      start_at: '2017-01-04T02:03:00.000+08:00',
+      bonus_end_at: '2017-01-06T02:03:00.000+08:00',
+      end_at: '2017-01-08T02:03:00.000+08:00',
+    },
+  ],
 };
 
 describe('<LessonPlanEdit />', () => {

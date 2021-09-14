@@ -51,11 +51,20 @@ const popoverStyles = {
 
 const LinePopover = (props) => {
   const {
-    intl, lineToolType, open, anchorEl, onRequestClose,
-    selectedLineStyle, onClickLineStyleChip,
-    toolThicknessValue, onChangeSliderThickness,
-    colorPickerColor, onClickColorPicker, colorPickerPopoverOpen,
-    colorPickerPopoverAnchorEl, onRequestCloseColorPickerPopover,
+    intl,
+    lineToolType,
+    open,
+    anchorEl,
+    onRequestClose,
+    selectedLineStyle,
+    onClickLineStyleChip,
+    toolThicknessValue,
+    onChangeSliderThickness,
+    colorPickerColor,
+    onClickColorPicker,
+    colorPickerPopoverOpen,
+    colorPickerPopoverAnchorEl,
+    onRequestCloseColorPickerPopover,
     onChangeCompleteColorPicker,
   } = props;
 
@@ -70,10 +79,7 @@ const LinePopover = (props) => {
       animation={PopoverAnimationVertical}
     >
       <Menu style={styles.menu}>
-        <h4>
-          {intl.formatMessage(translations.line)}
-          {' '}
-        </h4>
+        <h4>{intl.formatMessage(translations.line)} </h4>
         <LineStyleField
           lineToolType={lineToolType}
           selectedLineStyle={selectedLineStyle}

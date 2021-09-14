@@ -29,7 +29,8 @@ export default defineMessages({
   noFileChosenMessage: {
     id: 'course.assessment.question.scribing.scribingQuestionForm.noFileChosenMessage',
     defaultMessage: 'No file chosen',
-    description: 'Message to be displayed when no file is chosen for a file input.',
+    description:
+      'Message to be displayed when no file is chosen for a file input.',
   },
   chooseFileButton: {
     id: 'course.assessment.question.scribing.scribingQuestionForm.chooseFileButton',
@@ -52,7 +53,8 @@ export default defineMessages({
   submittingMessage: {
     id: 'course.assessment.question.scribing.scribingQuestionForm.submittingMessage',
     defaultMessage: 'Submitting...',
-    description: 'Text to be displayed when waiting for server response after form submission.',
+    description:
+      'Text to be displayed when waiting for server response after form submission.',
   },
   resolveErrorsMessage: {
     id: 'course.assessment.question.scribing.scribingQuestionForm.resolveErrorsMessage',
@@ -76,7 +78,8 @@ export default defineMessages({
   },
   scribingQuestionWarning: {
     id: 'course.assessment.question.scribing.scribingQuestionForm.scribingQuestionWarning',
-    defaultMessage: 'NOTE: Each page of a PDF file will be created as a single Scribing question \
+    defaultMessage:
+      'NOTE: Each page of a PDF file will be created as a single Scribing question \
     with every question taking on the same question details. \
     You can choose to leave the optional inputs blank and return to edit the questions again after creation.',
   },

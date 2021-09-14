@@ -73,7 +73,8 @@ describe('<SingleFileInput />', () => {
           ...reduxFormFieldMetaDefaults,
           touched: true,
           error: {
-            id: 'course.assessment.question.scribing.scribingQuestionForm.fileAttachmentRequired',
+            id:
+              'course.assessment.question.scribing.scribingQuestionForm.fileAttachmentRequired',
             defaultMessage: 'File attachment required.',
           },
         }}

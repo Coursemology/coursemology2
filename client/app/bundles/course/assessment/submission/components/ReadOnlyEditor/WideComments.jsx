@@ -31,8 +31,13 @@ const styles = {
 export default class WideComments extends Component {
   renderComments(lineNumber, annotation) {
     const {
-      activeComment, answerId, fileId, expanded,
-      expandLine, collapseLine, onClick,
+      activeComment,
+      answerId,
+      fileId,
+      expanded,
+      expandLine,
+      collapseLine,
+      onClick,
     } = this.props;
 
     if (expanded[lineNumber - 1]) {
@@ -41,7 +46,10 @@ export default class WideComments extends Component {
           key={lineNumber}
           style={{
             ...styles.expanded,
-            zIndex: activeComment === lineNumber ? 1000 : lineNumber + styles.expanded.zIndex,
+            zIndex:
+              activeComment === lineNumber
+                ? 1000
+                : lineNumber + styles.expanded.zIndex,
           }}
           onClick={() => onClick(lineNumber)}
         >
@@ -51,7 +59,12 @@ export default class WideComments extends Component {
           >
             <span className="fa fa-chevron-down" />
           </RaisedButton>
-          <Annotations answerId={answerId} fileId={fileId} lineNumber={lineNumber} annotation={annotation} />
+          <Annotations
+            answerId={answerId}
+            fileId={fileId}
+            lineNumber={lineNumber}
+            annotation={annotation}
+          />
         </div>
       );
     }
@@ -71,7 +84,9 @@ export default class WideComments extends Component {
     const { expanded, annotations } = this.props;
     const comments = [];
     for (let i = 1; i <= expanded.length; i++) {
-      const filtered = annotations.filter(annotation => annotation.line === i);
+      const filtered = annotations.filter(
+        (annotation) => annotation.line === i
+      );
       if (filtered.length > 0 || expanded[i - 1]) {
         comments.push(this.renderComments(i, filtered[0]));
       } else {

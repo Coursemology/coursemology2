@@ -12,27 +12,48 @@ describe('<NewQuestionButton />', () => {
     const spyCreate = jest.spyOn(CourseAPI.survey.questions, 'create');
     const sectionId = 7;
     const contextOptions = buildContextOptions(storeCreator({}));
-    const newQuestionButton = mount(<NewQuestionButton sectionId={sectionId} />, contextOptions);
-    const questionFormDialogue = mount(<QuestionFormDialogue />, contextOptions);
+    const newQuestionButton = mount(
+      <NewQuestionButton sectionId={sectionId} />,
+      contextOptions
+    );
+    const questionFormDialogue = mount(
+      <QuestionFormDialogue />,
+      contextOptions
+    );
 
     // Click 'new question' button
     const newQuestionButtonNode = newQuestionButton.find('button');
     newQuestionButtonNode.simulate('click');
     questionFormDialogue.update();
-    expect(questionFormDialogue.find('QuestionFormDialogue').first().props().visible).toBe(true);
+    expect(
+      questionFormDialogue.find('QuestionFormDialogue').first().props().visible
+    ).toBe(true);
 
     // Fill section form with title
     const questionText = 'Question: Is it true?';
     const optionText = 'Yes';
-    const dialogInline = questionFormDialogue.find('RenderToLayer').first().instance();
-    const questionForm = mount(dialogInline.props.render(), contextOptions).find('form');
+    const dialogInline = questionFormDialogue
+      .find('RenderToLayer')
+      .first()
+      .instance();
+    const questionForm = mount(
+      dialogInline.props.render(),
+      contextOptions
+    ).find('form');
     const descriptionInput = questionForm.find('textarea[name="description"]');
     descriptionInput.simulate('change', { target: { value: questionText } });
-    const optionInput = questionForm.find('QuestionFormOption').first().find('textarea').last();
+    const optionInput = questionForm
+      .find('QuestionFormOption')
+      .first()
+      .find('textarea')
+      .last();
     optionInput.simulate('change', { target: { value: optionText } });
 
     // Submit question form
-    const submitButton = questionFormDialogue.find('FormDialogue').first().instance().submitButton;
+    const submitButton = questionFormDialogue
+      .find('FormDialogue')
+      .first()
+      .instance().submitButton;
     ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton));
 
     expect(spyCreate).toHaveBeenCalled();
@@ -43,6 +64,8 @@ describe('<NewQuestionButton />', () => {
     expect(formData.get('question[question_type]')).toBe('multiple_response');
     expect(formData.get('question[required]')).toBe('false');
     expect(formData.get('question[description]')).toBe(questionText);
-    expect(formData.get('question[options_attributes][0][option]')).toBe(optionText);
+    expect(formData.get('question[options_attributes][0][option]')).toBe(
+      optionText
+    );
   });
 });

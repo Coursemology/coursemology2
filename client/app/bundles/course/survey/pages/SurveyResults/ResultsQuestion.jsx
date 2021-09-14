@@ -18,37 +18,26 @@ const styles = {
 };
 
 class ResultsQuestion extends React.Component {
-  static propTypes = {
-    index: PropTypes.number.isRequired,
-    includePhantoms: PropTypes.bool.isRequired,
-    anonymous: PropTypes.bool.isRequired,
-    question: PropTypes.shape({
-      id: PropTypes.number,
-      description: PropTypes.string,
-      weight: PropTypes.number,
-      question_type: PropTypes.string,
-      required: PropTypes.bool,
-      max_options: PropTypes.number,
-      min_options: PropTypes.number,
-      options: PropTypes.arrayOf(optionShape),
-      answers: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number,
-        course_user_id: PropTypes.number,
-        course_user_name: PropTypes.string,
-        phantom: PropTypes.bool,
-        question_option_ids: PropTypes.arrayOf(PropTypes.number),
-      })),
-    }).isRequired,
-  }
-
   renderTextResults() {
-    const { includePhantoms, question: { answers }, anonymous } = this.props;
+    const {
+      includePhantoms,
+      question: { answers },
+      anonymous,
+    } = this.props;
     return <TextResponseResults {...{ includePhantoms, answers, anonymous }} />;
   }
 
   renderOptionsResults() {
-    const { question: { options, answers, question_type: questionType }, anonymous, includePhantoms } = this.props;
-    return <OptionsQuestionResults {...{ options, answers, questionType, anonymous, includePhantoms }} />;
+    const {
+      question: { options, answers, question_type: questionType },
+      anonymous,
+      includePhantoms,
+    } = this.props;
+    return (
+      <OptionsQuestionResults
+        {...{ options, answers, questionType, anonymous, includePhantoms }}
+      />
+    );
   }
 
   renderSpecificResults() {
@@ -60,7 +49,9 @@ class ResultsQuestion extends React.Component {
       [MULTIPLE_RESPONSE]: this.renderOptionsResults,
     }[question.question_type];
 
-    if (!renderer) { return null; }
+    if (!renderer) {
+      return null;
+    }
     return renderer.call(this);
   }
 
@@ -70,14 +61,46 @@ class ResultsQuestion extends React.Component {
     return (
       <Card style={styles.card}>
         <CardText>
-          <p dangerouslySetInnerHTML={{ __html: `${index + 1}. ${question.description}` }} />
-          { question.required
-            ? <p style={styles.required}><FormattedMessage {...formTranslations.starRequired} /></p> : null }
+          <p
+            dangerouslySetInnerHTML={{
+              __html: `${index + 1}. ${question.description}`,
+            }}
+          />
+          {question.required ? (
+            <p style={styles.required}>
+              <FormattedMessage {...formTranslations.starRequired} />
+            </p>
+          ) : null}
         </CardText>
         {this.renderSpecificResults()}
       </Card>
     );
   }
 }
+
+ResultsQuestion.propTypes = {
+  index: PropTypes.number.isRequired,
+  includePhantoms: PropTypes.bool.isRequired,
+  anonymous: PropTypes.bool.isRequired,
+  question: PropTypes.shape({
+    id: PropTypes.number,
+    description: PropTypes.string,
+    weight: PropTypes.number,
+    question_type: PropTypes.string,
+    required: PropTypes.bool,
+    max_options: PropTypes.number,
+    min_options: PropTypes.number,
+    options: PropTypes.arrayOf(optionShape),
+    answers: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number,
+        course_user_id: PropTypes.number,
+        course_user_name: PropTypes.string,
+        phantom: PropTypes.bool,
+        question_option_ids: PropTypes.arrayOf(PropTypes.number),
+      })
+    ),
+  }).isRequired,
+};
 
 export default ResultsQuestion;

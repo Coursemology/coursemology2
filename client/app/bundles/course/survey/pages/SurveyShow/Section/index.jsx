@@ -8,13 +8,13 @@ import { changeSection } from 'course/survey/actions/questions';
 import SectionCard from './SectionCard';
 
 class Section extends React.Component {
-  static propTypes = {
-    connectDropTarget: PropTypes.func.isRequired,
-  }
-
   render() {
     return this.props.connectDropTarget(
-      <div ref={(node) => { this.DOMNode = node; }}>
+      <div
+        ref={(node) => {
+          this.DOMNode = node;
+        }}
+      >
         <SectionCard {...this.props} />
       </div>
     );
@@ -38,14 +38,20 @@ const sectionTarget = {
     const hoverSectionId = props.section.id;
 
     // Only handle questions cards that are dragged in from other sections
-    if (sourceSectionId === hoverSectionId) { return; }
+    if (sourceSectionId === hoverSectionId) {
+      return;
+    }
 
     // Determine whether question is being dragged in from the section above or the one below
     let moveDownwards;
     const pointerPosition = monitor.getClientOffset();
     const hoverBoundingRect = component.DOMNode.getBoundingClientRect();
-    const fromAbove = sourceSectionIndex < hoverSectionIndex && pointerPosition.y > hoverBoundingRect.top;
-    const fromBelow = sourceSectionIndex > hoverSectionIndex && pointerPosition.y < hoverBoundingRect.bottom;
+    const fromAbove =
+      sourceSectionIndex < hoverSectionIndex &&
+      pointerPosition.y > hoverBoundingRect.top;
+    const fromBelow =
+      sourceSectionIndex > hoverSectionIndex &&
+      pointerPosition.y < hoverBoundingRect.bottom;
     if (fromAbove) {
       moveDownwards = true;
     } else if (fromBelow) {
@@ -54,13 +60,19 @@ const sectionTarget = {
       return;
     }
 
-    props.dispatch(changeSection(
-      moveDownwards,
-      sourceIndex,
-      sourceSectionIndex,
-      hoverSectionIndex
-    ));
+    props.dispatch(
+      changeSection(
+        moveDownwards,
+        sourceIndex,
+        sourceSectionIndex,
+        hoverSectionIndex
+      )
+    );
   },
+};
+
+Section.propTypes = {
+  connectDropTarget: PropTypes.func.isRequired,
 };
 
 export default connect()(

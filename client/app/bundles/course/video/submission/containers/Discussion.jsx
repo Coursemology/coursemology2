@@ -9,7 +9,10 @@ import NewPostContainer from './DiscussionElements/NewPostContainer';
 import Topic from './DiscussionElements/Topic';
 import Controls from './DiscussionElements/Controls';
 import { unsetScrollTopic } from '../actions/discussion';
-import { inverseCreatedAtOrderedTopicsSelector, orderedTopicIdsSelector } from '../selectors/discussion';
+import {
+  inverseCreatedAtOrderedTopicsSelector,
+  orderedTopicIdsSelector,
+} from '../selectors/discussion';
 
 const propTypes = {
   topicIds: PropTypes.arrayOf(PropTypes.string),
@@ -48,7 +51,9 @@ class Discussion extends React.Component {
       return;
     }
 
-    const topicElem = document.getElementById(`discussion-topic-${this.props.scrollTopicId}`);
+    const topicElem = document.getElementById(
+      `discussion-topic-${this.props.scrollTopicId}`
+    );
     if (topicElem.offsetParent !== this.topicPane) {
       this.topicPane.scrollTop = topicElem.offsetTop - this.topicPane.offsetTop;
     } else {
@@ -70,7 +75,9 @@ class Discussion extends React.Component {
           className={styles.topicsContainer}
           onScroll={this.props.onScroll}
         >
-          {this.props.topicIds.map(id => <Topic key={id.toString()} topicId={id} />)}
+          {this.props.topicIds.map((id) => (
+            <Topic key={id.toString()} topicId={id} />
+          ))}
         </div>
       </Paper>
     );
@@ -104,8 +111,9 @@ function getScrollTopicId(state) {
   }
 
   const currentPlayerProgress = state.video.playerProgress;
-  const autoScrollTopic = inverseCreatedAtOrderedTopicsSelector(state)
-    .findLastEntry(topic => topic.timestamp < currentPlayerProgress);
+  const autoScrollTopic = inverseCreatedAtOrderedTopicsSelector(
+    state
+  ).findLastEntry((topic) => topic.timestamp < currentPlayerProgress);
 
   if (autoScrollTopic === undefined) {
     return null;
@@ -135,4 +143,8 @@ function mergeProps(stateProps, dispatchProps) {
   return { ...stateProps, ...dispatchProps, onScroll: null };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(Discussion);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+  mergeProps
+)(Discussion);

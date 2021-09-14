@@ -37,37 +37,45 @@ const errorSubmission = {
   },
   annotations: [],
   posts: [],
-  questions: [{
-    id: 1,
-    displayTitle: 'Audio Question',
-    description: 'Audio Question description',
-    type: questionTypes.VoiceResponse,
-    topicId: 1,
-    maximumGrade: 70,
-  }],
-  topics: [{
-    id: 1,
-    postIds: [],
-    questionId: 1,
-    submissionQuestionId: 1,
-  }],
-  answers: [{
-    fields: {
-      id: answerId,
-      questionId: 1,
-      file: {},
-    },
-    grading: {
-      grade: null,
-      id: answerId,
-    },
-    questionId: 1,
-  }],
-  history: {
-    questions: [{
+  questions: [
+    {
       id: 1,
-      answerIds: [],
-    }],
+      displayTitle: 'Audio Question',
+      description: 'Audio Question description',
+      type: questionTypes.VoiceResponse,
+      topicId: 1,
+      maximumGrade: 70,
+    },
+  ],
+  topics: [
+    {
+      id: 1,
+      postIds: [],
+      questionId: 1,
+      submissionQuestionId: 1,
+    },
+  ],
+  answers: [
+    {
+      fields: {
+        id: answerId,
+        questionId: 1,
+        file: {},
+      },
+      grading: {
+        grade: null,
+        id: answerId,
+      },
+      questionId: 1,
+    },
+  ],
+  history: {
+    questions: [
+      {
+        id: 1,
+        answerIds: [],
+      },
+    ],
   },
 };
 
@@ -98,42 +106,53 @@ const successSubmission = {
   },
   annotations: [],
   posts: [],
-  questions: [{
-    id: 1,
-    displayTitle: 'Audio Question',
-    description: 'Audio Question description',
-    type: questionTypes.VoiceResponse,
-    topicId: 1,
-    maximumGrade: 70,
-  }],
-  topics: [{
-    id: 1,
-    postIds: [],
-    questionId: 1,
-    submissionQuestionId: 1,
-  }],
-  answers: [{
-    fields: {
-      id: answerId,
-      questionId: 1,
-      file: { url: 'http://test.org/file.wav', name: 'file.wav' },
-    },
-    grading: {
-      grade: null,
-      id: answerId,
-    },
-    questionId: 1,
-  }],
-  history: {
-    questions: [{
+  questions: [
+    {
       id: 1,
-      answerIds: [],
-    }],
+      displayTitle: 'Audio Question',
+      description: 'Audio Question description',
+      type: questionTypes.VoiceResponse,
+      topicId: 1,
+      maximumGrade: 70,
+    },
+  ],
+  topics: [
+    {
+      id: 1,
+      postIds: [],
+      questionId: 1,
+      submissionQuestionId: 1,
+    },
+  ],
+  answers: [
+    {
+      fields: {
+        id: answerId,
+        questionId: 1,
+        file: { url: 'http://test.org/file.wav', name: 'file.wav' },
+      },
+      grading: {
+        grade: null,
+        id: answerId,
+      },
+      questionId: 1,
+    },
+  ],
+  history: {
+    questions: [
+      {
+        id: 1,
+        answerIds: [],
+      },
+    ],
   },
 };
 
 // stub import function
-jest.mock('course/assessment/submission/loaders/ScribingViewLoader', () => (() => Promise.resolve()));
+jest.mock(
+  'course/assessment/submission/loaders/ScribingViewLoader',
+  () => () => Promise.resolve()
+);
 
 describe('SubmissionEditIndex', () => {
   it('render submission with errors', async () => {
@@ -145,13 +164,21 @@ describe('SubmissionEditIndex', () => {
     mount(
       <ProviderWrapper store={store}>
         <SubmissionEditIndex
-          match={{ params: { courseId, assessmentId: `${assessmentId}`, submissionId: `${submissionId}` } }}
+          match={{
+            params: {
+              courseId,
+              assessmentId: `${assessmentId}`,
+              submissionId: `${submissionId}`,
+            },
+          }}
         />
       </ProviderWrapper>
     );
 
     const syncErrors = store.getState().form[formNames.SUBMISSION].syncErrors;
-    expect(Object.keys((syncErrors || {})[answerId] || {}).length !== 0).toEqual(true);
+    expect(
+      Object.keys((syncErrors || {})[answerId] || {}).length !== 0
+    ).toEqual(true);
   });
 
   it('render submission without errors', async () => {
@@ -163,12 +190,20 @@ describe('SubmissionEditIndex', () => {
     mount(
       <ProviderWrapper store={store}>
         <SubmissionEditIndex
-          match={{ params: { courseId, assessmentId: `${assessmentId}`, submissionId: `${submissionId}` } }}
+          match={{
+            params: {
+              courseId,
+              assessmentId: `${assessmentId}`,
+              submissionId: `${submissionId}`,
+            },
+          }}
         />
       </ProviderWrapper>
     );
 
     const syncErrors = store.getState().form[formNames.SUBMISSION].syncErrors;
-    expect(Object.keys((syncErrors || {}).answerId || {}).length === 0).toEqual(true);
+    expect(Object.keys((syncErrors || {}).answerId || {}).length === 0).toEqual(
+      true
+    );
   });
 });

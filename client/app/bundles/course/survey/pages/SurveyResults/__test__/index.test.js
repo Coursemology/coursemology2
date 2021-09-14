@@ -11,31 +11,38 @@ const client = CourseAPI.survey.surveys.getClient();
 const mock = new MockAdapter(client);
 
 const resultsData = {
-  sections: [{
-    id: 2,
-    weight: 0,
-    title: 'Only section',
-    description: 'Has one question',
-    questions: [{
-      id: 5,
-      question_type: 'text',
-      description: 'Why?',
+  sections: [
+    {
+      id: 2,
       weight: 0,
-      answers: [{
-        id: 123,
-        course_user_name: 'Normal student',
-        phantom: false,
-        text_response: 'Normal answer',
-        response_path: `/courses/${courseId}/surveys/6/responses/9`,
-      }, {
-        id: 124,
-        course_user_name: 'Phantom student',
-        phantom: true,
-        text_response: 'Phantom answer',
-        response_path: `/courses/${courseId}/surveys/6/responses/10`,
-      }],
-    }],
-  }],
+      title: 'Only section',
+      description: 'Has one question',
+      questions: [
+        {
+          id: 5,
+          question_type: 'text',
+          description: 'Why?',
+          weight: 0,
+          answers: [
+            {
+              id: 123,
+              course_user_name: 'Normal student',
+              phantom: false,
+              text_response: 'Normal answer',
+              response_path: `/courses/${courseId}/surveys/6/responses/9`,
+            },
+            {
+              id: 124,
+              course_user_name: 'Phantom student',
+              phantom: true,
+              text_response: 'Phantom answer',
+              response_path: `/courses/${courseId}/surveys/6/responses/10`,
+            },
+          ],
+        },
+      ],
+    },
+  ],
   survey: {
     id: 6,
     title: 'Test Response',
@@ -43,9 +50,9 @@ const resultsData = {
   },
 };
 
-const InjectedSurveyResults = connect(
-  state => ({ survey: state.surveys[0] || {} })
-)(SurveyResults);
+const InjectedSurveyResults = connect((state) => ({
+  survey: state.surveys[0] || {},
+}))(SurveyResults);
 
 beforeEach(() => {
   mock.reset();

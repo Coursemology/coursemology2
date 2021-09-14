@@ -8,7 +8,14 @@ import mirrorCreator from 'mirror-creator';
 import { Card, CardText } from 'material-ui/Card';
 import Toggle from 'material-ui/Toggle';
 import { red500 } from 'material-ui/styles/colors';
-import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
+import {
+  Table,
+  TableBody,
+  TableHeader,
+  TableHeaderColumn,
+  TableRow,
+  TableRowColumn,
+} from 'material-ui/Table';
 import BarChart from 'lib/components/BarChart';
 import { fetchResponses } from 'course/survey/actions/responses';
 import surveyTranslations from 'course/survey/translations';
@@ -112,19 +119,12 @@ class ResponseIndex extends React.Component {
     return { responses: responsesWithStatuses, summary };
   }
 
-  static propTypes = {
-    survey: surveyShape,
-    dispatch: PropTypes.func.isRequired,
-    responses: PropTypes.arrayOf(responseShape),
-    isLoading: PropTypes.bool.isRequired,
-  };
-
   static renderReponseStatus(response, survey) {
     const status = <FormattedMessage {...translations[response.status]} />;
     if (response.status === responseStatus.NOT_STARTED) {
-      return <div style={styles.red}>{ status }</div>;
+      return <div style={styles.red}>{status}</div>;
     }
-    return survey.anonymous ? status : <Link to={response.path}>{ status }</Link>;
+    return survey.anonymous ? status : <Link to={response.path}>{status}</Link>;
   }
 
   static renderSubmittedAt(response, survey) {
@@ -133,7 +133,7 @@ class ResponseIndex extends React.Component {
     }
     const submittedAt = formatLongDateTime(response.submitted_at);
     if (survey.end_at && moment(response.submitted_at).isAfter(survey.end_at)) {
-      return <div style={styles.red}>{ submittedAt }</div>;
+      return <div style={styles.red}>{submittedAt}</div>;
     }
     return submittedAt;
   }
@@ -144,7 +144,7 @@ class ResponseIndex extends React.Component {
     }
     const updatedAt = formatLongDateTime(response.updated_at);
     if (survey.end_at && moment(response.updated_at).isAfter(survey.end_at)) {
-      return <div style={styles.red}>{ updatedAt }</div>;
+      return <div style={styles.red}>{updatedAt}</div>;
     }
     return updatedAt;
   }
@@ -152,10 +152,7 @@ class ResponseIndex extends React.Component {
   static renderTable(responses, survey) {
     return (
       <Table>
-        <TableHeader
-          displaySelectAll={false}
-          adjustForCheckbox={false}
-        >
+        <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
           <TableRow>
             <TableHeaderColumn colSpan={2}>
               <FormattedMessage {...translations.name} />
@@ -172,48 +169,47 @@ class ResponseIndex extends React.Component {
             <TableHeaderColumn />
           </TableRow>
         </TableHeader>
-        <TableBody
-          displayRowCheckbox={false}
-          showRowHover
-        >
-          {
-            responses.map(response => (
-              <TableRow key={response.course_user.id}>
-                <TableRowColumn colSpan={2}>
-                  <a href={response.course_user.path}>
-                    { response.course_user.name }
-                  </a>
-                </TableRowColumn>
-                <TableRowColumn>
-                  { ResponseIndex.renderReponseStatus(response, survey) }
-                </TableRowColumn>
-                <TableRowColumn>
-                  { ResponseIndex.renderSubmittedAt(response, survey) }
-                </TableRowColumn>
-                <TableRowColumn>
-                  { ResponseIndex.renderUpdatedAt(response, survey) }
-                </TableRowColumn>
-                <TableRowColumn>
-                  {
-                    response.status === responseStatus.SUBMITTED && response.canUnsubmit
-                      ? <UnsubmitButton responseId={response.id} /> : null
-                  }
-                </TableRowColumn>
-              </TableRow>
-            ))
-          }
+        <TableBody displayRowCheckbox={false} showRowHover>
+          {responses.map((response) => (
+            <TableRow key={response.course_user.id}>
+              <TableRowColumn colSpan={2}>
+                <a href={response.course_user.path}>
+                  {response.course_user.name}
+                </a>
+              </TableRowColumn>
+              <TableRowColumn>
+                {ResponseIndex.renderReponseStatus(response, survey)}
+              </TableRowColumn>
+              <TableRowColumn>
+                {ResponseIndex.renderSubmittedAt(response, survey)}
+              </TableRowColumn>
+              <TableRowColumn>
+                {ResponseIndex.renderUpdatedAt(response, survey)}
+              </TableRowColumn>
+              <TableRowColumn>
+                {response.status === responseStatus.SUBMITTED &&
+                response.canUnsubmit ? (
+                  <UnsubmitButton responseId={response.id} />
+                ) : null}
+              </TableRowColumn>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     );
   }
 
   static renderPhantomTable(responses, survey) {
-    if (responses.length < 1) { return null; }
+    if (responses.length < 1) {
+      return null;
+    }
 
     return (
       <div>
-        <h1><FormattedMessage {...translations.phantoms} /></h1>
-        { ResponseIndex.renderTable(responses, survey) }
+        <h1>
+          <FormattedMessage {...translations.phantoms} />
+        </h1>
+        {ResponseIndex.renderTable(responses, survey)}
       </div>
     );
   }
@@ -241,7 +237,7 @@ class ResponseIndex extends React.Component {
                 <FormattedMessage {...surveyTranslations.opensAt} />
               </TableRowColumn>
               <TableRowColumn>
-                { formatLongDateTime(survey.start_at) }
+                {formatLongDateTime(survey.start_at)}
               </TableRowColumn>
             </TableRow>
             <TableRow>
@@ -249,7 +245,7 @@ class ResponseIndex extends React.Component {
                 <FormattedMessage {...surveyTranslations.expiresAt} />
               </TableRowColumn>
               <TableRowColumn>
-                { formatLongDateTime(survey.end_at) }
+                {formatLongDateTime(survey.end_at)}
               </TableRowColumn>
             </TableRow>
             <TableRow>
@@ -257,7 +253,7 @@ class ResponseIndex extends React.Component {
                 <FormattedMessage {...surveyTranslations.closingRemindedAt} />
               </TableRowColumn>
               <TableRowColumn>
-                { formatLongDateTime(survey.closing_reminded_at, '-') }
+                {formatLongDateTime(survey.closing_reminded_at, '-')}
               </TableRowColumn>
             </TableRow>
           </TableBody>
@@ -271,7 +267,11 @@ class ResponseIndex extends React.Component {
 
   renderStats(realResponsesStatuses, phantomResponsesStatuses) {
     const { NOT_STARTED, RESPONDING, SUBMITTED } = responseStatus;
-    const dataColor = { [NOT_STARTED]: 'red', [RESPONDING]: 'yellow', [SUBMITTED]: 'green' };
+    const dataColor = {
+      [NOT_STARTED]: 'red',
+      [RESPONDING]: 'yellow',
+      [SUBMITTED]: 'green',
+    };
     const chartData = [NOT_STARTED, RESPONDING, SUBMITTED].map((state) => {
       const count = this.state.includePhantomsInStats
         ? realResponsesStatuses[state] + phantomResponsesStatuses[state]
@@ -286,13 +286,17 @@ class ResponseIndex extends React.Component {
     return (
       <Card style={styles.statsCard}>
         <CardText>
-          <h3 style={styles.statsHeader}><FormattedMessage {...translations.stats} /></h3>
+          <h3 style={styles.statsHeader}>
+            <FormattedMessage {...translations.stats} />
+          </h3>
           <BarChart data={chartData} />
           <Toggle
             style={styles.toggle}
             labelPosition="right"
             label={<FormattedMessage {...translations.includePhantoms} />}
-            onToggle={(_, value) => this.setState({ includePhantomsInStats: value })}
+            onToggle={(_, value) =>
+              this.setState({ includePhantomsInStats: value })
+            }
           />
         </CardText>
       </Card>
@@ -301,27 +305,35 @@ class ResponseIndex extends React.Component {
 
   renderBody() {
     const { survey, responses, isLoading } = this.props;
-    if (isLoading) { return <LoadingIndicator />; }
+    if (isLoading) {
+      return <LoadingIndicator />;
+    }
 
     const { realResponses, phantomResponses } = responses.reduce(
       (categories, response) => {
-        const cateogry = response.course_user.phantom ? 'phantomResponses' : 'realResponses';
+        const cateogry = response.course_user.phantom
+          ? 'phantomResponses'
+          : 'realResponses';
         categories[cateogry].push(response);
         return categories;
       },
       { realResponses: [], phantomResponses: [] }
     );
 
-    const { responses: realResponsesWithStatuses,
-      summary: realResponsesStatuses } = ResponseIndex.computeStatuses(realResponses);
-    const { responses: phantomResponsesWithStatuses,
-      summary: phantomResponsesStatuses } = ResponseIndex.computeStatuses(phantomResponses);
+    const {
+      responses: realResponsesWithStatuses,
+      summary: realResponsesStatuses,
+    } = ResponseIndex.computeStatuses(realResponses);
+    const {
+      responses: phantomResponsesWithStatuses,
+      summary: phantomResponsesStatuses,
+    } = ResponseIndex.computeStatuses(phantomResponses);
 
     return (
       <div>
-        { this.renderStats(realResponsesStatuses, phantomResponsesStatuses) }
-        { ResponseIndex.renderTable(realResponsesWithStatuses, survey) }
-        { ResponseIndex.renderPhantomTable(phantomResponsesWithStatuses, survey) }
+        {this.renderStats(realResponsesStatuses, phantomResponsesStatuses)}
+        {ResponseIndex.renderTable(realResponsesWithStatuses, survey)}
+        {ResponseIndex.renderPhantomTable(phantomResponsesWithStatuses, survey)}
       </div>
     );
   }
@@ -329,11 +341,18 @@ class ResponseIndex extends React.Component {
   render() {
     return (
       <div>
-        { this.renderHeader() }
-        { this.renderBody() }
+        {this.renderHeader()}
+        {this.renderBody()}
       </div>
     );
   }
 }
 
-export default connect(state => state.responses)(ResponseIndex);
+ResponseIndex.propTypes = {
+  survey: surveyShape,
+  dispatch: PropTypes.func.isRequired,
+  responses: PropTypes.arrayOf(responseShape),
+  isLoading: PropTypes.bool.isRequired,
+};
+
+export default connect((state) => state.responses)(ResponseIndex);

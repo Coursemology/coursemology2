@@ -61,7 +61,14 @@ const QuestionFormDialogue = ({
       open={visible}
     >
       <QuestionForm
-        {...{ formValues, initialValues, onSubmit, disabled, addToOptions, addToOptionsToDelete }}
+        {...{
+          formValues,
+          initialValues,
+          onSubmit,
+          disabled,
+          addToOptions,
+          addToOptionsToDelete,
+        }}
       />
     </FormDialogue>
   );

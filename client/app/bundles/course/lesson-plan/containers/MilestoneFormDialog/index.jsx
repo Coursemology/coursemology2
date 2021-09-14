@@ -17,10 +17,10 @@ const MilestoneFormDialog = ({
   pristine,
   dispatch,
 }) => {
-  const {
-    hideMilestoneForm,
-    submitMilestoneForm,
-  } = bindActionCreators(actionCreators, dispatch);
+  const { hideMilestoneForm, submitMilestoneForm } = bindActionCreators(
+    actionCreators,
+    dispatch
+  );
 
   return (
     <FormDialogue

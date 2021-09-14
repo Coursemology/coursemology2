@@ -16,7 +16,10 @@ export default function (state = initialState, action) {
       return {
         isLoading: false,
         sections: action.sections
-          ? action.sections.map(sortResultsSectionElements(anonymous)).sort(sorts.byWeight) : [],
+          ? action.sections
+              .map(sortResultsSectionElements(anonymous))
+              .sort(sorts.byWeight)
+          : [],
       };
     }
     case actionTypes.LOAD_SURVEY_RESULTS_FAILURE: {

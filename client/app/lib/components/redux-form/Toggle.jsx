@@ -11,34 +11,24 @@ const errorStyle = {
 
 // Toggle implementation with an error displayed at the bottom.
 class Toggle extends React.Component {
-  static propTypes = {
-    errorText: PropTypes.string,
-  }
-
   render() {
     const { errorText, ...props } = this.props;
     return (
       <div>
         <MaterialToggle {...props} />
-        {
-            errorText
-            && <div style={errorStyle}>{errorText}</div>
-          }
+        {errorText && <div style={errorStyle}>{errorText}</div>}
       </div>
     );
   }
 }
 
+Toggle.propTypes = {
+  errorText: PropTypes.string,
+};
+
 export default createComponent(
   Toggle,
-  ({
-    input: {
-      onChange,
-      value,
-      ...inputProps
-    },
-    ...props
-  }) => ({
+  ({ input: { onChange, value, ...inputProps }, ...props }) => ({
     // Take out the required fields and send the rest of the props to mapError().
     ...mapError({ ...props, input: inputProps }),
     toggled: !!value,

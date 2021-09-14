@@ -22,10 +22,7 @@ describe('<AchievementEdit />', () => {
   it('renders the edit page', async () => {
     const editPage = mount(
       <ProviderWrapper store={store}>
-        <AchievementEdit
-          id={id}
-          initialValues={intitialValues}
-        />
+        <AchievementEdit id={id} initialValues={intitialValues} />
       </ProviderWrapper>
     );
 

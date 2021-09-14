@@ -62,22 +62,6 @@ const styles = {
 };
 
 class SubmissionAnswer extends Component {
-  static propTypes = {
-    intl: intlShape.isRequired,
-    handleToggleViewHistoryMode: PropTypes.func.isRequired,
-    historyQuestions: PropTypes.objectOf(historyQuestionShape),
-    questionsFlags: PropTypes.objectOf(questionFlagsShape),
-    readOnly: PropTypes.bool,
-    graderView: PropTypes.bool,
-    showMcqMrqSolution: PropTypes.bool,
-    question: questionShape,
-    answerId: PropTypes.number,
-  };
-
-  static defaultProps = {
-    readOnly: false,
-  };
-
   getRenderer(question) {
     const {
       MultipleChoice,
@@ -171,12 +155,13 @@ class SubmissionAnswer extends Component {
             style={styles.toggleStyle}
             toggled={viewHistory}
             disabled={disabled}
-            onToggle={() => handleToggleViewHistoryMode(
-              !viewHistory,
-              submissionQuestionId,
-              id,
-              answersLoaded
-            )
+            onToggle={() =>
+              handleToggleViewHistoryMode(
+                !viewHistory,
+                submissionQuestionId,
+                id,
+                answersLoaded
+              )
             }
           />
           {noPastAnswers ? (
@@ -191,7 +176,8 @@ class SubmissionAnswer extends Component {
   }
 
   render() {
-    const { readOnly, showMcqMrqSolution, question, answerId, graderView } = this.props;
+    const { readOnly, showMcqMrqSolution, question, answerId, graderView } =
+      this.props;
     const renderer = this.getRenderer(question);
 
     return (
@@ -202,16 +188,32 @@ class SubmissionAnswer extends Component {
         <hr />
         {answerId
           ? renderer({
-            question,
-            readOnly,
-            answerId,
-            graderView,
-            showMcqMrqSolution,
-          })
+              question,
+              readOnly,
+              answerId,
+              graderView,
+              showMcqMrqSolution,
+            })
           : this.renderMissingAnswerPanel()}
       </>
     );
   }
 }
+
+SubmissionAnswer.propTypes = {
+  intl: intlShape.isRequired,
+  handleToggleViewHistoryMode: PropTypes.func.isRequired,
+  historyQuestions: PropTypes.objectOf(historyQuestionShape),
+  questionsFlags: PropTypes.objectOf(questionFlagsShape),
+  readOnly: PropTypes.bool,
+  graderView: PropTypes.bool,
+  showMcqMrqSolution: PropTypes.bool,
+  question: questionShape,
+  answerId: PropTypes.number,
+};
+
+SubmissionAnswer.defaultProps = {
+  readOnly: false,
+};
 
 export default injectIntl(SubmissionAnswer);

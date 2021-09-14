@@ -1,5 +1,8 @@
 import { Map as makeImmutableMap } from 'immutable';
-import { discussionActionTypes, postRequestingStatuses } from 'lib/constants/videoConstants';
+import {
+  discussionActionTypes,
+  postRequestingStatuses,
+} from 'lib/constants/videoConstants';
 import { combineReducers } from 'redux';
 
 export const initialState = {
@@ -47,8 +50,14 @@ export function organiseDiscussionEntities(discussion) {
     return {};
   }
   const immutableEntitiesStore = {
-    topics: makeImmutableMap(discussion.topics).map(topic => ({ ...topicDefaults, ...topic })),
-    posts: makeImmutableMap(discussion.posts).map(post => ({ ...postDefaults, ...post })),
+    topics: makeImmutableMap(discussion.topics).map((topic) => ({
+      ...topicDefaults,
+      ...topic,
+    })),
+    posts: makeImmutableMap(discussion.posts).map((post) => ({
+      ...postDefaults,
+      ...post,
+    })),
   };
 
   return { ...discussion, ...immutableEntitiesStore };
@@ -66,13 +75,22 @@ function newTopicPost(state = initialState.newTopicPost, action) {
 function topics(state = initialState.topics, action) {
   switch (action.type) {
     case discussionActionTypes.ADD_TOPIC:
-      return state.set(action.topicId, { ...topicDefaults, ...(action.topicProps) });
+      return state.set(action.topicId, {
+        ...topicDefaults,
+        ...action.topicProps,
+      });
     case discussionActionTypes.UPDATE_TOPIC:
-      return state.set(action.topicId, { ...(state.get(action.topicId)), ...(action.topicProps) });
+      return state.set(action.topicId, {
+        ...state.get(action.topicId),
+        ...action.topicProps,
+      });
     case discussionActionTypes.REMOVE_TOPIC:
       return state.delete(action.topicId);
     case discussionActionTypes.REFRESH_ALL:
-      return makeImmutableMap(action.topics).map(topic => ({ ...topicDefaults, ...topic }));
+      return makeImmutableMap(action.topics).map((topic) => ({
+        ...topicDefaults,
+        ...topic,
+      }));
     default:
       return state;
   }
@@ -81,13 +99,19 @@ function topics(state = initialState.topics, action) {
 function posts(state = initialState.posts, action) {
   switch (action.type) {
     case discussionActionTypes.ADD_POST:
-      return state.set(action.postId, { ...postDefaults, ...(action.postProps) });
+      return state.set(action.postId, { ...postDefaults, ...action.postProps });
     case discussionActionTypes.UPDATE_POST:
-      return state.set(action.postId, { ...(state.get(action.postId)), ...(action.postProps) });
+      return state.set(action.postId, {
+        ...state.get(action.postId),
+        ...action.postProps,
+      });
     case discussionActionTypes.REMOVE_POST:
       return state.delete(action.postId);
     case discussionActionTypes.REFRESH_ALL:
-      return makeImmutableMap(action.posts).map(post => ({ ...postDefaults, ...post }));
+      return makeImmutableMap(action.posts).map((post) => ({
+        ...postDefaults,
+        ...post,
+      }));
     default:
       return state;
   }
@@ -98,7 +122,10 @@ function pendingReplyPosts(state = initialState.pendingReplyPosts, action) {
     case discussionActionTypes.ADD_REPLY:
       return state.set(action.topicId, { ...replyDefaults });
     case discussionActionTypes.UPDATE_REPLY:
-      return state.set(action.topicId, { ...(state.get(action.topicId)), ...(action.replyProps) });
+      return state.set(action.topicId, {
+        ...state.get(action.topicId),
+        ...action.replyProps,
+      });
     case discussionActionTypes.REMOVE_REPLY:
       return state.delete(action.topicId);
     default:

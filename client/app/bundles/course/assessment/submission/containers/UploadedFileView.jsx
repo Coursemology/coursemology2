@@ -41,22 +41,35 @@ class VisibleUploadedFileView extends Component {
     return `/attachments/${attachment.id}`;
   }
 
-  state = {
-    deleteConfirmation: false,
-    deleteAttachmentId: null,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      deleteConfirmation: false,
+      deleteAttachmentId: null,
+    };
+  }
 
   renderAttachment(attachment) {
     const { canDestroyAttachments } = this.props;
 
-    const onRequestDelete = canDestroyAttachments ? () => this.setState({
-      deleteConfirmation: true,
-      deleteAttachmentId: attachment.id,
-    }) : null;
+    const onRequestDelete = canDestroyAttachments
+      ? () =>
+          this.setState({
+            deleteConfirmation: true,
+            deleteAttachmentId: attachment.id,
+          })
+      : null;
 
     return (
-      <Chip key={attachment.id} style={styles.chip} onRequestDelete={onRequestDelete}>
-        <a href={VisibleUploadedFileView.buildAttachmentUrl(attachment)} download>
+      <Chip
+        key={attachment.id}
+        style={styles.chip}
+        onRequestDelete={onRequestDelete}
+      >
+        <a
+          href={VisibleUploadedFileView.buildAttachmentUrl(attachment)}
+          download
+        >
           {attachment.name}
         </a>
       </Chip>
@@ -69,10 +82,15 @@ class VisibleUploadedFileView extends Component {
     return (
       <ConfirmationDialog
         open={deleteConfirmation}
-        onCancel={() => this.setState({ deleteConfirmation: false, deleteAttachmentId: null })}
+        onCancel={() =>
+          this.setState({ deleteConfirmation: false, deleteAttachmentId: null })
+        }
         onConfirm={() => {
           deleteAttachment(deleteAttachmentId);
-          this.setState({ deleteConfirmation: false, deleteAttachmentId: null });
+          this.setState({
+            deleteConfirmation: false,
+            deleteAttachmentId: null,
+          });
         }}
         message={intl.formatMessage(translations.deleteConfirmation)}
       />
@@ -85,10 +103,11 @@ class VisibleUploadedFileView extends Component {
       <>
         <strong>{intl.formatMessage(translations.uploadedFiles)}</strong>
         <div style={styles.wrapper}>
-          {attachments.length
-            ? attachments.map(this.renderAttachment, this)
-            : <span>{intl.formatMessage(translations.noFiles)}</span>
-          }
+          {attachments.length ? (
+            attachments.map(this.renderAttachment, this)
+          ) : (
+            <span>{intl.formatMessage(translations.noFiles)}</span>
+          )}
         </div>
         {this.renderDeleteDialog()}
       </>
@@ -108,8 +127,9 @@ function mapStateToProps(state, ownProps) {
   const { questionId } = ownProps;
   const { submission } = state;
 
-  const canDestroyAttachments = submission.workflowState === workflowStates.Attempting
-    && submission.isCreator;
+  const canDestroyAttachments =
+    submission.workflowState === workflowStates.Attempting &&
+    submission.isCreator;
 
   return {
     canDestroyAttachments,
@@ -120,7 +140,8 @@ function mapStateToProps(state, ownProps) {
 function mapDispatchToProps(dispatch, ownProps) {
   const { questionId } = ownProps;
   return {
-    deleteAttachment: attachmentId => dispatch(destroy(questionId, attachmentId)),
+    deleteAttachment: (attachmentId) =>
+      dispatch(destroy(questionId, attachmentId)),
   };
 }
 

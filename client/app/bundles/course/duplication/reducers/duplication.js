@@ -1,10 +1,14 @@
-import actionTypes, { duplicableItemTypes, duplicationModes } from 'course/duplication/constants';
+import actionTypes, {
+  duplicableItemTypes,
+  duplicationModes,
+} from 'course/duplication/constants';
 import { nestFolders } from 'course/duplication/utils';
 
-const emptySelectedItemsHash = () => Object.keys(duplicableItemTypes).reduce((hash, type) => {
-  hash[type] = {}; // eslint-disable-line no-param-reassign
-  return hash;
-}, {});
+const emptySelectedItemsHash = () =>
+  Object.keys(duplicableItemTypes).reduce((hash, type) => {
+    hash[type] = {}; // eslint-disable-line no-param-reassign
+    return hash;
+  }, {});
 
 const initialState = {
   confirmationOpen: false,
@@ -43,10 +47,10 @@ export default function (state = initialState, action) {
       return { ...state, isLoading: true };
     }
     case actionTypes.LOAD_OBJECTS_LIST_SUCCESS: {
-      const { destinationCourses, materialsComponent, ...data } = action.duplicationData;
-      const sortedDestinationCourses = destinationCourses.sort(
-        (a, b) => a.title.localeCompare(b.title)
-      );
+      const { destinationCourses, materialsComponent, ...data } =
+        action.duplicationData;
+      const sortedDestinationCourses = destinationCourses.sort((a, b) =>
+        a.title.localeCompare(b.title));
       const nestedFolders = nestFolders(materialsComponent);
       return {
         ...state,

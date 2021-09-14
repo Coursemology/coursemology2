@@ -26,11 +26,16 @@ const getTextResponseData = (answerCount) => {
 };
 
 const getMultipleChoiceData = (optionCount) => {
-  const options = optionCount < 1 ? [] : [{
-    id: 0,
-    image_url: 'a.png',
-    image_name: 'a.png',
-  }];
+  const options =
+    optionCount < 1
+      ? []
+      : [
+          {
+            id: 0,
+            image_url: 'a.png',
+            image_name: 'a.png',
+          },
+        ];
   for (let i = 1; i < optionCount; i++) {
     options.push({ id: i, option: `O${i}` });
   }
@@ -40,26 +45,36 @@ const getMultipleChoiceData = (optionCount) => {
     question_type: 'multiple_choice',
     description: 'Which?',
     options,
-    answers: [{
-      id: 22,
-      course_user_id: 122,
-      course_user_name: 'Lee',
-      response_path: `/courses/${courseId}/surveys/${surveyId}/responses/222`,
-      phantom: false,
-      question_option_ids: [optionCount > 0 ? optionCount - 1 : 0],
-    }],
+    answers: [
+      {
+        id: 22,
+        course_user_id: 122,
+        course_user_name: 'Lee',
+        response_path: `/courses/${courseId}/surveys/${surveyId}/responses/222`,
+        phantom: false,
+        question_option_ids: [optionCount > 0 ? optionCount - 1 : 0],
+      },
+    ],
   };
 };
 
 const testExpandLongQuestion = (question) => {
   const resultsQuestion = mount(
     <MemoryRouter>
-      <ResultsQuestion {...{ question }} includePhantoms anonymous={false} index={1} />
+      <ResultsQuestion
+        {...{ question }}
+        includePhantoms
+        anonymous={false}
+        index={1}
+      />
     </MemoryRouter>,
     buildContextOptions(storeCreator({}))
   );
   expect(resultsQuestion.find('Table')).toHaveLength(0);
-  const expandButton = resultsQuestion.find('RaisedButton').first().find('button');
+  const expandButton = resultsQuestion
+    .find('RaisedButton')
+    .first()
+    .find('button');
   expandButton.simulate('click');
   expect(resultsQuestion.find('Table')).toHaveLength(1);
 };
@@ -79,11 +94,17 @@ describe('<ResultsQuestion />', () => {
     const question = getMultipleChoiceData(2);
     const resultsQuestion = mount(
       <MemoryRouter>
-        <ResultsQuestion {...{ question }} includePhantoms={false} anonymous={false} index={1} />
+        <ResultsQuestion
+          {...{ question }}
+          includePhantoms={false}
+          anonymous={false}
+          index={1}
+        />
       </MemoryRouter>,
       buildContextOptions(storeCreator({}))
     );
-    const lastOptionCountCell = () => resultsQuestion.find('TableRow').last().find('td').at(3);
+    const lastOptionCountCell = () =>
+      resultsQuestion.find('TableRow').last().find('td').at(3);
     const lastOptionCountBeforeSort = lastOptionCountCell().text();
     expect(lastOptionCountBeforeSort).toBe('1');
     const sortToggle = resultsQuestion.find('Toggle').first();

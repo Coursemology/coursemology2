@@ -17,7 +17,7 @@ function mapStateToProps(state, ownProps) {
 function mapDispatchToProps(dispatch) {
   return {
     onSubmit: () => dispatch(submitNewPostToServer()),
-    onContentUpdate: content => dispatch(updateNewPost({ content })),
+    onContentUpdate: (content) => dispatch(updateNewPost({ content })),
   };
 }
 

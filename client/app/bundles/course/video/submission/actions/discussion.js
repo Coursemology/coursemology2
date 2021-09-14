@@ -1,5 +1,8 @@
 import CourseAPI from 'api/course';
-import { discussionActionTypes, postRequestingStatuses } from 'lib/constants/videoConstants';
+import {
+  discussionActionTypes,
+  postRequestingStatuses,
+} from 'lib/constants/videoConstants';
 import setNotification from './notification';
 
 /**
@@ -228,14 +231,17 @@ function refreshTopic(topicId) {
         if (topic !== undefined && topic.topLevelPostIds.length !== 0) {
           dispatch(updateTopic(topicId, topic));
           if (posts !== undefined) {
-            Object.entries(posts).forEach(([postId, post]) => dispatch(updatePost(postId, post)));
+            Object.entries(posts).forEach(([postId, post]) =>
+              dispatch(updatePost(postId, post)));
           }
         } else {
           dispatch(removeTopic(topicId));
         }
       })
       .catch(() => {
-        dispatch(setNotification('Failed to refresh comments, try again later.'));
+        dispatch(
+          setNotification('Failed to refresh comments, try again later.')
+        );
       });
   };
 }
@@ -277,7 +283,8 @@ export function submitNewReplyToServer(topicId) {
 
     const state = getState();
     const text = state.discussion.pendingReplyPosts.get(topicId).content;
-    const discussionTopicId = state.discussion.topics.get(topicId).discussionTopicId;
+    const discussionTopicId =
+      state.discussion.topics.get(topicId).discussionTopicId;
 
     if (text === '') {
       dispatch(setNotification('Comment cannot be blank!'));
@@ -291,7 +298,9 @@ export function submitNewReplyToServer(topicId) {
         dispatch(removeReply(topicId));
       })
       .catch(() => {
-        dispatch(updateReply(topicId, { status: postRequestingStatuses.ERROR }));
+        dispatch(
+          updateReply(topicId, { status: postRequestingStatuses.ERROR })
+        );
         dispatch(setNotification('Error replying, please try again later.'));
       });
   };
@@ -324,12 +333,16 @@ export function submitNewPostToServer() {
         dispatch(addPost(postId, post));
         dispatch(addTopic(topicId, topic)); // Topic may be new, we just overwrite anyway
 
-        dispatch(updateNewPost({ content: '', status: postRequestingStatuses.LOADED }));
+        dispatch(
+          updateNewPost({ content: '', status: postRequestingStatuses.LOADED })
+        );
         dispatch(setNotification('Comment Added'));
       })
       .catch(() => {
         dispatch(updateNewPost({ status: postRequestingStatuses.ERROR }));
-        dispatch(setNotification('Error adding new comment, please try again later.'));
+        dispatch(
+          setNotification('Error adding new comment, please try again later.')
+        );
       });
   };
 }
@@ -351,7 +364,8 @@ export function updatePostOnServer(postId) {
     if (text === null) {
       dispatch(updatePost(postId, { editMode: false }));
       return;
-    } if (text === '') {
+    }
+    if (text === '') {
       dispatch(setNotification('Comment cannot be blank!'));
       return;
     }
@@ -360,18 +374,22 @@ export function updatePostOnServer(postId) {
     CourseAPI.comments
       .update(discussionTopicId, postId, { discussion_post: { text } })
       .then(({ data }) => {
-        dispatch(updatePost(postId, {
-          editedContent: null,
-          editMode: false,
-          status: postRequestingStatuses.LOADED,
-          content: data.formattedText,
-          rawContent: data.text,
-        }));
+        dispatch(
+          updatePost(postId, {
+            editedContent: null,
+            editMode: false,
+            status: postRequestingStatuses.LOADED,
+            content: data.formattedText,
+            rawContent: data.text,
+          })
+        );
         dispatch(setNotification('Comment edited'));
       })
       .catch(() => {
         dispatch(updatePost(postId, { status: postRequestingStatuses.ERROR }));
-        dispatch(setNotification('Failed to edit comment, please try again later.'));
+        dispatch(
+          setNotification('Failed to edit comment, please try again later.')
+        );
       });
   };
 }
@@ -402,7 +420,9 @@ export function deletePostFromServer(postId) {
       })
       .catch(() => {
         dispatch(updatePost(postId, { status: postRequestingStatuses.ERROR }));
-        dispatch(setNotification('Failed to delete comment, please try again later.'));
+        dispatch(
+          setNotification('Failed to delete comment, please try again later.')
+        );
       });
   };
 }

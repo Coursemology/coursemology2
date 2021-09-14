@@ -23,7 +23,9 @@ function CaptionsButton(props) {
       className={styles.captionsButton}
       onClick={() => props.onClick(props.captionsState)}
     >
-      <ClosedCaption color={props.captionsState === captionsStates.ON ? black : grey400} />
+      <ClosedCaption
+        color={props.captionsState === captionsStates.ON ? black : grey400}
+      />
     </IconButton>
   );
 }

@@ -9,7 +9,9 @@ function FileUpload({ question, readOnly, answerId }) {
   return (
     <div>
       <UploadedFileView questionId={question.id} />
-      {!readOnly ? <FileInput name={`${answerId}[files]`} disabled={readOnly} /> : null}
+      {!readOnly ? (
+        <FileInput name={`${answerId}[files]`} disabled={readOnly} />
+      ) : null}
     </div>
   );
 }

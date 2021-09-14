@@ -53,7 +53,9 @@ describe('<ProgrammingFile />', () => {
 
     const programmingFile = mount(
       <MemoryRouter
-        initialEntries={[`/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`]}
+        initialEntries={[
+          `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`,
+        ]}
       >
         <ProgrammingFile {...programmingFileProps} />
       </MemoryRouter>,
@@ -84,7 +86,9 @@ describe('<ProgrammingFile />', () => {
 
     const programmingFile = mount(
       <MemoryRouter
-        initialEntries={[`/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`]}
+        initialEntries={[
+          `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`,
+        ]}
       >
         <ProgrammingFile {...programmingFileProps} />
       </MemoryRouter>,

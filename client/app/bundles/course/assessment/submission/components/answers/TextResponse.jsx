@@ -14,7 +14,9 @@ function TextResponse({ question, readOnly, answerId, graderView }) {
   const readOnlyAnswer = (
     <Field
       name={`${answerId}[answer_text]`}
-      component={props => <div dangerouslySetInnerHTML={{ __html: props.input.value }} />}
+      component={(props) => (
+        <div dangerouslySetInnerHTML={{ __html: props.input.value }} />
+      )}
     />
   );
 
@@ -35,14 +37,18 @@ function TextResponse({ question, readOnly, answerId, graderView }) {
     />
   );
 
-  const editableAnswer = question.autogradable ? plaintextAnswer : richtextAnswer;
+  const editableAnswer = question.autogradable
+    ? plaintextAnswer
+    : richtextAnswer;
 
   return (
     <div>
       {readOnly ? readOnlyAnswer : editableAnswer}
       {graderView && <TextResponseSolutions question={question} />}
       {allowUpload && <UploadedFileView questionId={question.id} />}
-      {allowUpload && !readOnly && <FileInput name={`${answerId}[files]`} disabled={readOnly} />}
+      {allowUpload && !readOnly && (
+        <FileInput name={`${answerId}[files]`} disabled={readOnly} />
+      )}
     </div>
   );
 }

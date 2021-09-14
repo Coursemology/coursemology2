@@ -15,9 +15,12 @@ export default function (state = {}, action) {
         ...state,
         ...arrayToObjectById(
           action.payload.questions.map((question) => {
-            const answer = action.payload.answers.find(a => a.questionId === question.id);
+            const answer = action.payload.answers.find(
+              (a) => a.questionId === question.id
+            );
             return answer && answer.attemptsLeft !== undefined
-              ? { ...question, attemptsLeft: answer.attemptsLeft } : question;
+              ? { ...question, attemptsLeft: answer.attemptsLeft }
+              : question;
           })
         ),
       };

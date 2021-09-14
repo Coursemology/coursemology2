@@ -2,15 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 export default class AddCommentIcon extends Component {
-  static propTypes = {
-    onClick: PropTypes.func,
-    hovered: PropTypes.bool,
-  };
-
-  static defaultProps = {
-    onClick: () => {},
-  };
-
   shouldComponentUpdate(nextProps) {
     return nextProps.hovered !== this.props.hovered;
   }
@@ -19,8 +10,20 @@ export default class AddCommentIcon extends Component {
     const { hovered, onClick } = this.props;
     return (
       <div onClick={onClick}>
-        <i className="fa fa-plus-square" style={{ visibility: hovered ? 'visible' : 'hidden' }} />
+        <i
+          className="fa fa-plus-square"
+          style={{ visibility: hovered ? 'visible' : 'hidden' }}
+        />
       </div>
     );
   }
 }
+
+AddCommentIcon.propTypes = {
+  onClick: PropTypes.func,
+  hovered: PropTypes.bool,
+};
+
+AddCommentIcon.defaultProps = {
+  onClick: () => {},
+};

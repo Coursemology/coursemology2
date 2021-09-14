@@ -33,19 +33,13 @@ const styles = {
 };
 
 class LevelRow extends React.Component {
-  static propTypes = {
-    canManage: PropTypes.bool.isRequired,
-    deleteLevel: PropTypes.func.isRequired,
-    disabled: PropTypes.bool.isRequired,
-    experiencePointsThreshold: PropTypes.number.isRequired,
-    levelNumber: PropTypes.number.isRequired,
-    sortLevels: PropTypes.func.isRequired,
-    updateExpThreshold: PropTypes.func.isRequired,
-  }
-
   renderInput() {
     const {
-      disabled, experiencePointsThreshold, levelNumber, sortLevels, updateExpThreshold,
+      disabled,
+      experiencePointsThreshold,
+      levelNumber,
+      sortLevels,
+      updateExpThreshold,
     } = this.props;
     return (
       <TextField
@@ -55,8 +49,16 @@ class LevelRow extends React.Component {
           updateExpThreshold(levelNumber, newValue);
         }}
         disabled={disabled}
-        errorText={experiencePointsThreshold === 0 ? <FormattedMessage {...translations.zeroThresholdError} /> : ''}
-        onBlur={() => { sortLevels(); }}
+        errorText={
+          experiencePointsThreshold === 0 ? (
+            <FormattedMessage {...translations.zeroThresholdError} />
+          ) : (
+            ''
+          )
+        }
+        onBlur={() => {
+          sortLevels();
+        }}
         value={experiencePointsThreshold}
       />
     );
@@ -84,7 +86,7 @@ class LevelRow extends React.Component {
     return (
       <TableRow>
         <TableRowColumn style={styles.levelNumber}>
-          { levelNumber }
+          {levelNumber}
         </TableRowColumn>
         <TableRowColumn style={styles.threshold}>
           {canManage ? this.renderInput() : experiencePointsThreshold}
@@ -96,5 +98,15 @@ class LevelRow extends React.Component {
     );
   }
 }
+
+LevelRow.propTypes = {
+  canManage: PropTypes.bool.isRequired,
+  deleteLevel: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  experiencePointsThreshold: PropTypes.number.isRequired,
+  levelNumber: PropTypes.number.isRequired,
+  sortLevels: PropTypes.func.isRequired,
+  updateExpThreshold: PropTypes.func.isRequired,
+};
 
 export default LevelRow;

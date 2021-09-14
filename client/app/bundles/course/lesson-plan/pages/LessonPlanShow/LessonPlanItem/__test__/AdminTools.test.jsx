@@ -10,7 +10,9 @@ import AdminTools from '../AdminTools';
 
 const buildShallowWrapper = (item) => {
   const store = storeCreator({ flags: { canManageLessonPlan: true } });
-  return shallow(<AdminTools item={item} />, buildContextOptions(store)).dive().dive();
+  return shallow(<AdminTools item={item} />, buildContextOptions(store))
+    .dive()
+    .dive();
 };
 
 describe('<AdminTools />', () => {
@@ -35,7 +37,10 @@ describe('<AdminTools />', () => {
     const deleteButton = wrapper.find('RaisedButton').last().find('button');
     deleteButton.simulate('click');
 
-    const confirmDeleteButton = deleteConfirmation.find('ConfirmationDialog').first().instance().confirmButton;
+    const confirmDeleteButton = deleteConfirmation
+      .find('ConfirmationDialog')
+      .first()
+      .instance().confirmButton;
     ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(confirmDeleteButton));
 
     expect(spy).toHaveBeenCalledWith(eventId);
@@ -71,13 +76,21 @@ describe('<AdminTools />', () => {
     const editButton = wrapper.find('RaisedButton').first().find('button');
     editButton.simulate('click');
 
-    const dialogInline = eventFormDialog.find('RenderToLayer').first().instance();
-    const eventForm = mount(dialogInline.props.render(), contextOptions).find('form');
+    const dialogInline = eventFormDialog
+      .find('RenderToLayer')
+      .first()
+      .instance();
+    const eventForm = mount(dialogInline.props.render(), contextOptions).find(
+      'form'
+    );
     const description = 'Add nice description';
     const descriptionInput = eventForm.find('textarea[name="description"]');
     descriptionInput.simulate('change', { target: { value: description } });
 
-    const submitButton = eventFormDialog.find('FormDialogue').first().instance().submitButton;
+    const submitButton = eventFormDialog
+      .find('FormDialogue')
+      .first()
+      .instance().submitButton;
     ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton));
 
     const expectedPayload = {

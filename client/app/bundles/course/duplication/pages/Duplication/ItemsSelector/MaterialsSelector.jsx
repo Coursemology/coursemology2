@@ -21,20 +21,14 @@ const translations = defineMessages({
 });
 
 class MaterialsSelector extends React.Component {
-  static propTypes = {
-    folders: PropTypes.arrayOf(folderShape),
-    selectedItems: PropTypes.shape(),
-
-    dispatch: PropTypes.func.isRequired,
-  }
-
-  folderSetAll = folder => (value) => {
+  folderSetAll = (folder) => (value) => {
     this.props.dispatch(setItemSelectedBoolean(FOLDER, folder.id, value));
-    folder.subfolders.forEach(subfolder => this.folderSetAll(subfolder)(value));
+    folder.subfolders.forEach((subfolder) =>
+      this.folderSetAll(subfolder)(value));
     folder.materials.forEach((material) => {
       this.props.dispatch(setItemSelectedBoolean(MATERIAL, material.id, value));
     });
-  }
+  };
 
   renderMaterial(material, indentLevel) {
     const { dispatch, selectedItems } = this.props;
@@ -43,13 +37,15 @@ class MaterialsSelector extends React.Component {
     return (
       <IndentedCheckbox
         key={material.id}
-        label={(
+        label={
           <span>
             <TypeBadge itemType={MATERIAL} />
-            { material.name }
+            {material.name}
           </span>
-)}
-        onCheck={(e, value) => dispatch(setItemSelectedBoolean(MATERIAL, material.id, value))}
+        }
+        onCheck={(e, value) =>
+          dispatch(setItemSelectedBoolean(MATERIAL, material.id, value))
+        }
         {...{ checked, indentLevel }}
       />
     );
@@ -59,44 +55,65 @@ class MaterialsSelector extends React.Component {
     const { dispatch, selectedItems } = this.props;
     const { id, name, materials, subfolders } = folder;
     const checked = !!selectedItems[FOLDER][folder.id];
-    const hasChildren = (materials.length + subfolders.length) > 0;
+    const hasChildren = materials.length + subfolders.length > 0;
 
     return (
       <div key={id}>
         <IndentedCheckbox
-          label={(
+          label={
             <span>
               <TypeBadge itemType={FOLDER} />
-              { name }
+              {name}
             </span>
-)}
-          onCheck={(e, value) => dispatch(setItemSelectedBoolean(FOLDER, id, value))}
+          }
+          onCheck={(e, value) =>
+            dispatch(setItemSelectedBoolean(FOLDER, id, value))
+          }
           {...{ checked, indentLevel }}
         >
-          { hasChildren ? <BulkSelectors callback={this.folderSetAll(folder)} /> : null }
+          {hasChildren ? (
+            <BulkSelectors callback={this.folderSetAll(folder)} />
+          ) : null}
         </IndentedCheckbox>
-        { materials.map(material => this.renderMaterial(material, indentLevel + 1)) }
-        { subfolders.map(subfolder => this.renderFolder(subfolder, indentLevel + 1)) }
+        {materials.map((material) =>
+          this.renderMaterial(material, indentLevel + 1))}
+        {subfolders.map((subfolder) =>
+          this.renderFolder(subfolder, indentLevel + 1))}
       </div>
     );
   }
 
   render() {
     const { folders } = this.props;
-    if (!folders) { return null; }
+    if (!folders) {
+      return null;
+    }
 
     return (
       <>
-        <h2><FormattedMessage {...defaultComponentTitles.course_materials_component} /></h2>
-        {
-          folders.length > 0
-            ? folders.map(rootFolder => this.renderFolder(rootFolder, 0))
-            : <Subheader><FormattedMessage {...translations.noItems} /></Subheader>
-        }
+        <h2>
+          <FormattedMessage
+            {...defaultComponentTitles.course_materials_component}
+          />
+        </h2>
+        {folders.length > 0 ? (
+          folders.map((rootFolder) => this.renderFolder(rootFolder, 0))
+        ) : (
+          <Subheader>
+            <FormattedMessage {...translations.noItems} />
+          </Subheader>
+        )}
       </>
     );
   }
 }
+
+MaterialsSelector.propTypes = {
+  folders: PropTypes.arrayOf(folderShape),
+  selectedItems: PropTypes.shape(),
+
+  dispatch: PropTypes.func.isRequired,
+};
 
 export default connect(({ duplication }) => ({
   folders: duplication.materialsComponent,

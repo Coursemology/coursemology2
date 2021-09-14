@@ -43,14 +43,6 @@ const responseFormTranslations = defineMessages({
 });
 
 class ResponseAnswer extends React.Component {
-  static propTypes = {
-    member: PropTypes.string.isRequired,
-    question: questionShape,
-    disabled: PropTypes.bool.isRequired,
-
-    intl: intlShape,
-  };
-
   static renderMultipleResponseOptions(props) {
     const {
       disabled,
@@ -61,36 +53,36 @@ class ResponseAnswer extends React.Component {
 
     return (
       <>
-        { (dirty || touched) && error ? <p style={styles.errorText}>{error}</p> : null }
+        {(dirty || touched) && error ? (
+          <p style={styles.errorText}>{error}</p>
+        ) : null}
         <div style={grid ? styles.grid : {}}>
-          {
-            options.map((option) => {
-              const widget = (
-                <Checkbox
-                  style={grid ? styles.gridOptionWidget : styles.listOptionWidget}
-                  iconStyle={grid ? styles.gridOptionWidgetIcon : {}}
-                  disabled={disabled}
-                  checked={value.indexOf(option.id) !== -1}
-                  onCheck={(event, isChecked) => {
-                    const newValue = [...value];
-                    if (isChecked) {
-                      newValue.push(option.id);
-                    } else {
-                      newValue.splice(newValue.indexOf(option.id), 1);
-                    }
-                    return onChange(newValue);
-                  }}
-                />
-              );
-              const { option: optionText, image_url: imageUrl } = option;
-              return (
-                <OptionsListItem
-                  key={option.id}
-                  {...{ optionText, imageUrl, widget, grid }}
-                />
-              );
-            })
-          }
+          {options.map((option) => {
+            const widget = (
+              <Checkbox
+                style={grid ? styles.gridOptionWidget : styles.listOptionWidget}
+                iconStyle={grid ? styles.gridOptionWidgetIcon : {}}
+                disabled={disabled}
+                checked={value.indexOf(option.id) !== -1}
+                onCheck={(event, isChecked) => {
+                  const newValue = [...value];
+                  if (isChecked) {
+                    newValue.push(option.id);
+                  } else {
+                    newValue.splice(newValue.indexOf(option.id), 1);
+                  }
+                  return onChange(newValue);
+                }}
+              />
+            );
+            const { option: optionText, image_url: imageUrl } = option;
+            return (
+              <OptionsListItem
+                key={option.id}
+                {...{ optionText, imageUrl, widget, grid }}
+              />
+            );
+          })}
         </div>
       </>
     );
@@ -107,9 +99,11 @@ class ResponseAnswer extends React.Component {
 
     return (
       <>
-        { (dirty || touched) && error ? <p style={styles.errorText}>{error}</p> : null }
+        {(dirty || touched) && error ? (
+          <p style={styles.errorText}>{error}</p>
+        ) : null}
         <div style={grid ? styles.grid : {}}>
-          { options.map((option) => {
+          {options.map((option) => {
             const { option: optionText, image_url: imageUrl } = option;
             const id = option.id;
             const widget = (
@@ -134,27 +128,37 @@ class ResponseAnswer extends React.Component {
     );
   }
 
-
   constructor(props) {
     super(props);
     this.checkQuantitySelected = this.checkQuantitySelected.bind(this);
-    this.checkMultipleChoiceRequired = this.checkMultipleChoiceRequired.bind(this);
+    this.checkMultipleChoiceRequired =
+      this.checkMultipleChoiceRequired.bind(this);
     this.checkTextResponseRequired = this.checkTextResponseRequired.bind(this);
   }
 
   checkQuantitySelected(options) {
     const { question, intl } = this.props;
-    const { required, min_options: minOptions, max_options: maxOptions } = question;
+    const {
+      required,
+      min_options: minOptions,
+      max_options: maxOptions,
+    } = question;
     const optionCount = options.length;
 
     // Skip checks if question is not required and student doesn't intend to answer it.
-    if (!required && optionCount === 0) { return undefined; }
+    if (!required && optionCount === 0) {
+      return undefined;
+    }
 
     if (minOptions && optionCount < minOptions) {
-      return intl.formatMessage(responseFormTranslations.selectAtLeast, { count: minOptions });
+      return intl.formatMessage(responseFormTranslations.selectAtLeast, {
+        count: minOptions,
+      });
     }
     if (maxOptions && optionCount > maxOptions) {
-      return intl.formatMessage(responseFormTranslations.selectAtMost, { count: maxOptions });
+      return intl.formatMessage(responseFormTranslations.selectAtMost, {
+        count: maxOptions,
+      });
     }
 
     return undefined;
@@ -163,7 +167,8 @@ class ResponseAnswer extends React.Component {
   checkMultipleChoiceRequired(value) {
     const { question, intl } = this.props;
     return question.required && (!value || value.length < 1)
-      ? intl.formatMessage(responseFormTranslations.selectAtLeast, { count: 1 }) : undefined;
+      ? intl.formatMessage(responseFormTranslations.selectAtLeast, { count: 1 })
+      : undefined;
   }
 
   checkTextResponseRequired(value) {
@@ -215,17 +220,29 @@ class ResponseAnswer extends React.Component {
   render() {
     const { TEXT, MULTIPLE_CHOICE, MULTIPLE_RESPONSE } = questionTypes;
     const { question } = this.props;
-    if (!question) { return <div />; }
+    if (!question) {
+      return <div />;
+    }
 
     const renderer = {
       [TEXT]: this.renderTextResponseField,
       [MULTIPLE_CHOICE]: this.renderMultipleChoiceField,
       [MULTIPLE_RESPONSE]: this.renderMultipleResponseField,
     }[question.question_type];
-    if (!renderer) { return <div />; }
+    if (!renderer) {
+      return <div />;
+    }
 
     return renderer.call(this);
   }
 }
+
+ResponseAnswer.propTypes = {
+  member: PropTypes.string.isRequired,
+  question: questionShape,
+  disabled: PropTypes.bool.isRequired,
+
+  intl: intlShape,
+};
 
 export default injectIntl(ResponseAnswer);

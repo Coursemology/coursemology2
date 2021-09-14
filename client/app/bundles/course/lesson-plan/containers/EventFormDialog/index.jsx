@@ -20,15 +20,25 @@ const EventFormDialog = ({
   formValues,
   items,
 }) => {
-  const { hideEventForm, submitEventForm } = bindActionCreators(actionCreators, dispatch);
+  const { hideEventForm, submitEventForm } = bindActionCreators(
+    actionCreators,
+    dispatch
+  );
   const { shiftEndDate } = bindActionCreators(libActionCreators, dispatch);
 
-  const { eventTypes, eventLocations } = items.reduce((values, item) => {
-    if (!item.eventId) { return values; }
-    if (item.location) { values.eventLocations.push(item.location); }
-    values.eventTypes.push(item.lesson_plan_item_type[0]);
-    return values;
-  }, { eventTypes: [], eventLocations: [] });
+  const { eventTypes, eventLocations } = items.reduce(
+    (values, item) => {
+      if (!item.eventId) {
+        return values;
+      }
+      if (item.location) {
+        values.eventLocations.push(item.location);
+      }
+      values.eventTypes.push(item.lesson_plan_item_type[0]);
+      return values;
+    },
+    { eventTypes: [], eventLocations: [] }
+  );
 
   return (
     <FormDialogue
@@ -68,11 +78,13 @@ EventFormDialog.propTypes = {
     end_at: PropTypes.string,
     published: PropTypes.bool,
   }),
-  items: PropTypes.arrayOf(PropTypes.shape({
-    eventId: PropTypes.number,
-    location: PropTypes.string,
-    lesson_plan_item_type: PropTypes.arrayOf(PropTypes.string),
-  })),
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      eventId: PropTypes.number,
+      location: PropTypes.string,
+      lesson_plan_item_type: PropTypes.arrayOf(PropTypes.string),
+    })
+  ),
   formValues: PropTypes.shape({}),
   onSubmit: PropTypes.func.isRequired,
   pristine: PropTypes.bool.isRequired,

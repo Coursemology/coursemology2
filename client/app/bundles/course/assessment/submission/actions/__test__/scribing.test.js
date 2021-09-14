@@ -25,26 +25,30 @@ const mockSubmission = {
   posts: [],
   questions: [],
   topics: [],
-  answers: [{
-    fields: {
-      id: answerId,
+  answers: [
+    {
+      fields: {
+        id: answerId,
+        questionId: 1,
+      },
+      grading: {
+        grade: null,
+        id: answerId,
+      },
       questionId: 1,
+      scribing_answer: {
+        answer_id: 23,
+        image_path: '/attachments/image1',
+        scribbles: [
+          {
+            creator_id: 10,
+            content: 'oldScribble',
+          },
+        ],
+        user_id: 10,
+      },
     },
-    grading: {
-      grade: null,
-      id: answerId,
-    },
-    questionId: 1,
-    scribing_answer: {
-      answer_id: 23,
-      image_path: '/attachments/image1',
-      scribbles: [{
-        creator_id: 10,
-        content: 'oldScribble',
-      }],
-      user_id: 10,
-    },
-  }],
+  ],
 };
 
 describe('updateScribingAnswerInLocal', () => {
@@ -53,8 +57,12 @@ describe('updateScribingAnswerInLocal', () => {
       type: actionTypes.FETCH_SUBMISSION_SUCCESS,
       payload: mockSubmission,
     });
-    expect(store.getState().scribing[answerId].answer.scribbles[0].content).toBe('oldScribble');
+    expect(
+      store.getState().scribing[answerId].answer.scribbles[0].content
+    ).toBe('oldScribble');
     store.dispatch(updateScribingAnswerInLocal(answerId, scribblesInJSON));
-    expect(store.getState().scribing[answerId].answer.scribbles[0].content).toBe('newScribble');
+    expect(
+      store.getState().scribing[answerId].answer.scribbles[0].content
+    ).toBe('newScribble');
   });
 });

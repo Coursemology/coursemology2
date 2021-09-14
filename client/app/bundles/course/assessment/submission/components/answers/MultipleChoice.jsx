@@ -6,22 +6,31 @@ import { RadioButton } from 'material-ui/RadioButton';
 
 import { questionShape } from '../../propTypes';
 
-function MultipleChoiceOptions({ readOnly, showMcqMrqSolution, graderView, question, input: { onChange, value } }) {
+function MultipleChoiceOptions({
+  readOnly,
+  showMcqMrqSolution,
+  graderView,
+  question,
+  input: { onChange, value },
+}) {
   return (
     <>
-      {question.options.map(option => (
+      {question.options.map((option) => (
         <RadioButton
           key={option.id}
           value={option.id}
           onCheck={(event, buttonValue) => onChange(buttonValue)}
           checked={option.id === value}
-          label={(
+          label={
             <div
-              style={option.correct && readOnly && (showMcqMrqSolution || graderView)
-                ? { backgroundColor: green50 } : null}
+              style={
+                option.correct && readOnly && (showMcqMrqSolution || graderView)
+                  ? { backgroundColor: green50 }
+                  : null
+              }
               dangerouslySetInnerHTML={{ __html: option.option.trim() }}
             />
-          )}
+          }
           disabled={readOnly}
         />
       ))}
@@ -40,7 +49,13 @@ MultipleChoiceOptions.propTypes = {
   }).isRequired,
 };
 
-function MultipleChoice({ question, readOnly, showMcqMrqSolution, graderView, answerId }) {
+function MultipleChoice({
+  question,
+  readOnly,
+  showMcqMrqSolution,
+  graderView,
+  answerId,
+}) {
   return (
     <Field
       name={`${answerId}[option_ids][0]`}

@@ -1,10 +1,12 @@
 import PropTypes from 'prop-types';
 
-export const lessonPlanTypesGroups = PropTypes.arrayOf(PropTypes.shape({
-  id: PropTypes.string,
-  milestone: PropTypes.object,
-  items: PropTypes.arrayOf({}),
-}));
+export const lessonPlanTypesGroups = PropTypes.arrayOf(
+  PropTypes.shape({
+    id: PropTypes.string,
+    milestone: PropTypes.object,
+    items: PropTypes.arrayOf({}),
+  })
+);
 
 export const achievementTypesConditionAttributes = PropTypes.shape({
   new_condition_urls: PropTypes.arrayOf(

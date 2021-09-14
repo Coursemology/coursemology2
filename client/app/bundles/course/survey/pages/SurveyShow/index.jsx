@@ -29,26 +29,30 @@ class SurveyShow extends React.Component {
   renderBody(survey) {
     const { intl, isLoading, disabled } = this.props;
     const { sections, canUpdate } = survey;
-    if (isLoading) { return <LoadingIndicator />; }
-    if (!canUpdate) { return null; }
+    if (isLoading) {
+      return <LoadingIndicator />;
+    }
+    if (!canUpdate) {
+      return null;
+    }
     if (!sections || sections.length < 1) {
-      return <Subheader>{ intl.formatMessage(translations.empty) }</Subheader>;
+      return <Subheader>{intl.formatMessage(translations.empty)}</Subheader>;
     }
     const lastIndex = sections.length - 1;
 
     return (
       <>
-        <Subheader>{ intl.formatMessage(surveyTranslations.questions) }</Subheader>
-        {
-          sections.map((section, index) => (
-            <Section
-              key={section.id}
-              first={index === 0}
-              last={index === lastIndex}
-              {...{ section, index, survey, disabled }}
-            />
-          ))
-        }
+        <Subheader>
+          {intl.formatMessage(surveyTranslations.questions)}
+        </Subheader>
+        {sections.map((section, index) => (
+          <Section
+            key={section.id}
+            first={index === 0}
+            last={index === lastIndex}
+            {...{ section, index, survey, disabled }}
+          />
+        ))}
       </>
     );
   }
@@ -58,7 +62,7 @@ class SurveyShow extends React.Component {
     return (
       <>
         <SurveyDetails {...{ survey, courseId, disabled }} />
-        { this.renderBody(survey) }
+        {this.renderBody(survey)}
       </>
     );
   }
@@ -74,9 +78,11 @@ SurveyShow.propTypes = {
   surveyId: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   isLoading: state.surveysFlags.isLoadingSurvey,
   disabled: state.surveysFlags.disableSurveyShow,
 });
-export const ConnectedSurveyShow = connect(mapStateToProps)(injectIntl(SurveyShow));
+export const ConnectedSurveyShow = connect(mapStateToProps)(
+  injectIntl(SurveyShow)
+);
 export default DragDropContext(HTML5Backend)(ConnectedSurveyShow);

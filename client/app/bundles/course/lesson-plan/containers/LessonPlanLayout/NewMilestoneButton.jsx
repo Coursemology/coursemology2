@@ -1,7 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { injectIntl, defineMessages, intlShape, FormattedMessage } from 'react-intl';
+import {
+  injectIntl,
+  defineMessages,
+  intlShape,
+  FormattedMessage,
+} from 'react-intl';
 import RaisedButton from 'material-ui/RaisedButton';
 import { showMilestoneForm, createMilestone } from 'course/lesson-plan/actions';
 
@@ -27,31 +32,28 @@ const styles = {
 };
 
 class NewMilestoneButton extends React.Component {
-  static propTypes = {
-    canManageLessonPlan: PropTypes.bool.isRequired,
-
-    dispatch: PropTypes.func.isRequired,
-    intl: intlShape.isRequired,
-  }
-
   createMilestoneHandler = (data) => {
     const { dispatch } = this.props;
     const successMessage = <FormattedMessage {...translations.success} />;
     const failureMessage = <FormattedMessage {...translations.failure} />;
     return dispatch(createMilestone(data, successMessage, failureMessage));
-  }
+  };
 
   showForm = () => {
     const { dispatch, intl } = this.props;
-    return dispatch(showMilestoneForm({
-      onSubmit: this.createMilestoneHandler,
-      formTitle: intl.formatMessage(translations.newMilestone),
-      initialValues: {},
-    }));
-  }
+    return dispatch(
+      showMilestoneForm({
+        onSubmit: this.createMilestoneHandler,
+        formTitle: intl.formatMessage(translations.newMilestone),
+        initialValues: {},
+      })
+    );
+  };
 
   render() {
-    if (!this.props.canManageLessonPlan) { return <div />; }
+    if (!this.props.canManageLessonPlan) {
+      return <div />;
+    }
 
     return (
       <RaisedButton
@@ -64,6 +66,13 @@ class NewMilestoneButton extends React.Component {
   }
 }
 
-export default connect(state => ({
+NewMilestoneButton.propTypes = {
+  canManageLessonPlan: PropTypes.bool.isRequired,
+
+  dispatch: PropTypes.func.isRequired,
+  intl: intlShape.isRequired,
+};
+
+export default connect((state) => ({
   canManageLessonPlan: state.flags.canManageLessonPlan,
 }))(injectIntl(NewMilestoneButton));

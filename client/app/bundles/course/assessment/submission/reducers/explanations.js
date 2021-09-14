@@ -12,18 +12,26 @@ export default function (state = {}, action) {
     case actions.PUBLISH_SUCCESS:
       return {
         ...state,
-        ...action.payload.answers.reduce((obj, answer) => ({ ...obj, [answer.questionId]: answer.explanation }),
-          {}),
+        ...action.payload.answers.reduce(
+          (obj, answer) => ({
+            ...obj,
+            [answer.questionId]: answer.explanation,
+          }),
+          {}
+        ),
       };
     case actions.AUTOGRADE_SUCCESS:
     case actions.RESET_SUCCESS: {
       const { questionId } = action.payload;
-      return Object.keys(state).reduce((obj, key) => {
-        if (key !== questionId.toString()) {
-          return { ...obj, [key]: state[key] };
-        }
-        return obj;
-      }, { [questionId]: action.payload.explanation });
+      return Object.keys(state).reduce(
+        (obj, key) => {
+          if (key !== questionId.toString()) {
+            return { ...obj, [key]: state[key] };
+          }
+          return obj;
+        },
+        { [questionId]: action.payload.explanation }
+      );
     }
     case actions.AUTOGRADE_FAILURE: {
       const { questionId } = action;

@@ -14,7 +14,7 @@ const uploadedMaterial = {
   updated_at: '2017-01-01T08:00:00.0000000Z',
   deleting: false,
 };
-const materials = [1, 2].map(id => ({
+const materials = [1, 2].map((id) => ({
   id,
   name: `Material ${id}`,
   updated_at: `2017-01-01T0${id}:00:00.0000000Z`,
@@ -32,10 +32,7 @@ beforeEach(() => {
 describe('<MaterialList />', () => {
   it('renders the component with materials', () => {
     const materialList = shallow(
-      <MaterialList
-        materials={materials}
-        onMaterialDelete={jest.fn()}
-      />
+      <MaterialList materials={materials} onMaterialDelete={jest.fn()} />
     );
 
     expect(materialList).toMatchSnapshot();
@@ -57,7 +54,10 @@ describe('<Material />', () => {
 
 describe('<MaterialUploader />', () => {
   it('uploads the material', async () => {
-    mock.onPut(`/courses/${courseId}/materials/folders/${folderId}/upload_materials`)
+    mock
+      .onPut(
+        `/courses/${courseId}/materials/folders/${folderId}/upload_materials`
+      )
       .reply(200, {
         materials: [uploadedMaterial],
       });
@@ -74,9 +74,7 @@ describe('<MaterialUploader />', () => {
     // Upload a file
     materailUploder.find('input[type="file"]').simulate('change', {
       target: {
-        files: [
-          { name: 'Uploading file' },
-        ],
+        files: [{ name: 'Uploading file' }],
       },
     });
 

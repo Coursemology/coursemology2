@@ -28,7 +28,10 @@ export default class CommentsAPI extends BaseCourseAPI {
    * success response: post
    */
   create(topicId, params) {
-    return this.getClient().post(`${this._getUrlPrefix()}/${topicId}/posts/`, params);
+    return this.getClient().post(
+      `${this._getUrlPrefix()}/${topicId}/posts/`,
+      params
+    );
   }
 
   /**
@@ -42,7 +45,10 @@ export default class CommentsAPI extends BaseCourseAPI {
    * success response: post
    */
   update(topicId, postId, params) {
-    return this.getClient().patch(`${this._getUrlPrefix()}/${topicId}/posts/${postId}`, params);
+    return this.getClient().patch(
+      `${this._getUrlPrefix()}/${topicId}/posts/${postId}`,
+      params
+    );
   }
 
   /**
@@ -54,7 +60,9 @@ export default class CommentsAPI extends BaseCourseAPI {
    * success response: {}
    */
   delete(topicId, postId) {
-    return this.getClient().delete(`${this._getUrlPrefix()}/${topicId}/posts/${postId}`);
+    return this.getClient().delete(
+      `${this._getUrlPrefix()}/${topicId}/posts/${postId}`
+    );
   }
 
   _getUrlPrefix() {

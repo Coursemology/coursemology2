@@ -6,9 +6,15 @@ import { Card, CardText } from 'material-ui/Card';
 import Subheader from 'material-ui/Subheader';
 import surveyTranslations from 'course/survey/translations';
 import { surveyShape, responseShape } from 'course/survey/propTypes';
-import { fetchEditableResponse, updateResponse } from 'course/survey/actions/responses';
+import {
+  fetchEditableResponse,
+  updateResponse,
+} from 'course/survey/actions/responses';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
-import ResponseForm, { buildInitialValues, buildResponsePayload } from 'course/survey/containers/ResponseForm';
+import ResponseForm, {
+  buildInitialValues,
+  buildResponsePayload,
+} from 'course/survey/containers/ResponseForm';
 
 const translations = defineMessages({
   saveSuccess: {
@@ -30,45 +36,50 @@ const translations = defineMessages({
 });
 
 class ResponseEdit extends React.Component {
-  static propTypes = {
-    survey: surveyShape,
-    response: responseShape,
-    flags: PropTypes.shape({
-      isLoading: PropTypes.bool.isRequired,
-    }),
-    match: PropTypes.shape({
-      params: PropTypes.shape({
-        responseId: PropTypes.string.isRequired,
-      }).isRequired,
-    }).isRequired,
-    dispatch: PropTypes.func.isRequired,
-  };
-
   componentDidMount() {
-    const { dispatch, match: { params: { responseId } } } = this.props;
+    const {
+      dispatch,
+      match: {
+        params: { responseId },
+      },
+    } = this.props;
     dispatch(fetchEditableResponse(responseId));
   }
 
   handleUpdateResponse = (data) => {
-    const { dispatch, match: { params: { responseId } } } = this.props;
-    const { saveSuccess, saveFailure, submitSuccess, submitFailure } = translations;
+    const {
+      dispatch,
+      match: {
+        params: { responseId },
+      },
+    } = this.props;
+    const { saveSuccess, saveFailure, submitSuccess, submitFailure } =
+      translations;
     const payload = buildResponsePayload(data);
-    const successMessage = <FormattedMessage {...(data.submit ? submitSuccess : saveSuccess)} />;
-    const failureMessage = <FormattedMessage {...(data.submit ? submitFailure : saveFailure)} />;
+    const successMessage = (
+      <FormattedMessage {...(data.submit ? submitSuccess : saveSuccess)} />
+    );
+    const failureMessage = (
+      <FormattedMessage {...(data.submit ? submitFailure : saveFailure)} />
+    );
 
     return dispatch(
       updateResponse(responseId, payload, successMessage, failureMessage)
     );
-  }
+  };
 
   renderBody() {
     const { survey, response, flags } = this.props;
-    if (flags.isLoading) { return <LoadingIndicator />; }
+    if (flags.isLoading) {
+      return <LoadingIndicator />;
+    }
 
     const initialValues = buildInitialValues(survey, response);
     return (
       <>
-        <Subheader><FormattedMessage {...surveyTranslations.questions} /></Subheader>
+        <Subheader>
+          <FormattedMessage {...surveyTranslations.questions} />
+        </Subheader>
         <ResponseForm
           onSubmit={this.handleUpdateResponse}
           {...{ response, flags, initialValues }}
@@ -81,15 +92,31 @@ class ResponseEdit extends React.Component {
     const { survey } = this.props;
     return (
       <>
-        {
-          survey.description
-            ? <Card><CardText dangerouslySetInnerHTML={{ __html: survey.description }} /></Card>
-            : null
-        }
-        { this.renderBody() }
+        {survey.description ? (
+          <Card>
+            <CardText
+              dangerouslySetInnerHTML={{ __html: survey.description }}
+            />
+          </Card>
+        ) : null}
+        {this.renderBody()}
       </>
     );
   }
 }
 
-export default connect(state => state.responseForm)(ResponseEdit);
+ResponseEdit.propTypes = {
+  survey: surveyShape,
+  response: responseShape,
+  flags: PropTypes.shape({
+    isLoading: PropTypes.bool.isRequired,
+  }),
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      responseId: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
+  dispatch: PropTypes.func.isRequired,
+};
+
+export default connect((state) => state.responseForm)(ResponseEdit);

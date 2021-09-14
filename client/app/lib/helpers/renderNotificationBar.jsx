@@ -14,9 +14,7 @@ function renderNotificationBar(id, message) {
   const mountNode = getOrCreateNode(id);
   render(
     <ProviderWrapper>
-      <NotificationBar
-        notification={{ message }}
-      />
+      <NotificationBar notification={{ message }} />
     </ProviderWrapper>,
     mountNode
   );

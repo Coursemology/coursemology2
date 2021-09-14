@@ -26,11 +26,7 @@ export const playerStates = mirrorCreator([
   'BUFFERING',
 ]);
 
-export const captionsStates = mirrorCreator([
-  'NOT_LOADED',
-  'ON',
-  'OFF',
-]);
+export const captionsStates = mirrorCreator(['NOT_LOADED', 'ON', 'OFF']);
 
 export const postRequestingStatuses = mirrorCreator([
   'LOADING',
@@ -72,6 +68,4 @@ export const sessionActionTypes = mirrorCreator([
   'REMOVE_OLD_SESSIONS',
 ]);
 
-export const notificationActionTypes = mirrorCreator([
-  'SET_NOTIFICATION',
-]);
+export const notificationActionTypes = mirrorCreator(['SET_NOTIFICATION']);

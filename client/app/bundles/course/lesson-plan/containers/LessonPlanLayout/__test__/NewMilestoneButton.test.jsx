@@ -19,7 +19,9 @@ describe('<NewMilestoneButton />', () => {
     // Click 'new milestone' button
     newMilestoneButton.find('button').simulate('click');
     milestoneFormDialog.update();
-    expect(milestoneFormDialog.find('MilestoneFormDialog').first().props().visible).toBe(true);
+    expect(
+      milestoneFormDialog.find('MilestoneFormDialog').first().props().visible
+    ).toBe(true);
 
     // Fill milestone form
     const milestoneData = {
@@ -27,18 +29,31 @@ describe('<NewMilestoneButton />', () => {
       start_at: new Date('2016-12-31T16:00:00.000Z'),
     };
     const startAt = '01-01-2017';
-    const dialogInline = milestoneFormDialog.find('RenderToLayer').first().instance();
-    const milestoneForm = mount(dialogInline.props.render(), contextOptions).find('form');
+    const dialogInline = milestoneFormDialog
+      .find('RenderToLayer')
+      .first()
+      .instance();
+    const milestoneForm = mount(
+      dialogInline.props.render(),
+      contextOptions
+    ).find('form');
     const titleInput = milestoneForm.find('input[name="title"]');
     titleInput.simulate('change', { target: { value: milestoneData.title } });
-    const startAtDateInput = milestoneForm.find('input[name="start_at"]').first();
+    const startAtDateInput = milestoneForm
+      .find('input[name="start_at"]')
+      .first();
     startAtDateInput.simulate('change', { target: { value: startAt } });
     startAtDateInput.simulate('blur');
 
     // Submit milestone form
-    const submitButton = milestoneFormDialog.find('FormDialogue').first().instance().submitButton;
+    const submitButton = milestoneFormDialog
+      .find('FormDialogue')
+      .first()
+      .instance().submitButton;
     ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton));
-    expect(spyCreate).toHaveBeenCalledWith({ lesson_plan_milestone: milestoneData });
+    expect(spyCreate).toHaveBeenCalledWith({
+      lesson_plan_milestone: milestoneData,
+    });
   });
 
   it('is hidden when canManageLessonPlan is false', () => {

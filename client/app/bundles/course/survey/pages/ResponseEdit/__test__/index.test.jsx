@@ -13,31 +13,37 @@ const responseData = {
   response: {
     id: 5,
     creator_name: 'user',
-    answers: [{
-      id: 3,
-      question_id: 4,
-      present: true,
-      text_response: 'Current answer',
-      options: [],
-    }],
+    answers: [
+      {
+        id: 3,
+        question_id: 4,
+        present: true,
+        text_response: 'Current answer',
+        options: [],
+      },
+    ],
   },
   survey: {
     id: 6,
     title: 'Test Response',
     description: 'Form working?',
-    sections: [{
-      id: 2,
-      weight: 0,
-      title: 'Only section',
-      description: 'Has one question',
-      questions: [{
-        id: 4,
-        question_type: 'text',
-        description: 'Why?',
-        required: true,
+    sections: [
+      {
+        id: 2,
         weight: 0,
-      }],
-    }],
+        title: 'Only section',
+        description: 'Has one question',
+        questions: [
+          {
+            id: 4,
+            question_type: 'text',
+            description: 'Why?',
+            required: true,
+            weight: 0,
+          },
+        ],
+      },
+    ],
   },
   flags: {
     canModify: true,
@@ -51,9 +57,9 @@ beforeEach(() => {
   mock.reset();
 });
 
-const InjectedResponseEdit = connect(
-  state => ({ survey: state.surveys[0] || {} })
-)(ResponseEdit);
+const InjectedResponseEdit = connect((state) => ({
+  survey: state.surveys[0] || {},
+}))(ResponseEdit);
 
 describe('<ResponseEdit />', () => {
   it('allows responses to be saved', async () => {
@@ -79,12 +85,18 @@ describe('<ResponseEdit />', () => {
     const textResponse = responseForm.find('textarea').last();
     const newAnswer = 'New Answer';
     textResponse.simulate('change', { target: { value: newAnswer } });
-    const submitButton = responseForm.find('RaisedButton').at(1).find('button').first();
+    const submitButton = responseForm
+      .find('RaisedButton')
+      .at(1)
+      .find('button')
+      .first();
     submitButton.simulate('click');
 
     const expectedPayload = {
       response: {
-        answers_attributes: [{ id: 3, text_response: newAnswer, question_option_ids: [] }],
+        answers_attributes: [
+          { id: 3, text_response: newAnswer, question_option_ids: [] },
+        ],
         submit: true,
       },
     };

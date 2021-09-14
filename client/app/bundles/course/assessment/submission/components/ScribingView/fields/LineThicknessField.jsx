@@ -45,7 +45,9 @@ const LineThicknessField = (props) => {
 
   return (
     <div style={styles.fieldDiv}>
-      <label htmlFor="line-thickness" style={styles.label}>{intl.formatMessage(translations.thickness)}</label>
+      <label htmlFor="line-thickness" style={styles.label}>
+        {intl.formatMessage(translations.thickness)}
+      </label>
       <Slider
         style={styles.slider}
         min={0}

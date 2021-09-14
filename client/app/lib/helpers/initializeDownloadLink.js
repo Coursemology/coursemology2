@@ -29,22 +29,24 @@ function waitForJob(url, $link) {
       method: 'GET',
       dataType: 'json',
       global: false,
-    }).done((response) => {
-      if (response.status === 'completed') {
-        if (response.redirect_url) {
-          window.location.href = response.redirect_url;
+    })
+      .done((response) => {
+        if (response.status === 'completed') {
+          if (response.redirect_url) {
+            window.location.href = response.redirect_url;
+          }
+          hideSpinner($link);
+        } else if (response.status === 'submitted') {
+          waitForJob(url, $link);
+        } else if (response.status === 'errored') {
+          hideSpinner($link);
+          showError($link);
         }
-        hideSpinner($link);
-      } else if (response.status === 'submitted') {
-        waitForJob(url, $link);
-      } else if (response.status === 'errored') {
+      })
+      .fail(() => {
         hideSpinner($link);
         showError($link);
-      }
-    }).fail(() => {
-      hideSpinner($link);
-      showError($link);
-    });
+      });
   }, DELAY);
 }
 
@@ -58,14 +60,16 @@ function onDownload(e) {
     method: 'GET',
     dataType: 'json',
     global: false,
-  }).done((response) => {
-    if (response.redirect_url) {
-      waitForJob(response.redirect_url, $link);
-    }
-  }).fail(() => {
-    hideSpinner($link);
-    showError($link);
-  });
+  })
+    .done((response) => {
+      if (response.redirect_url) {
+        waitForJob(response.redirect_url, $link);
+      }
+    })
+    .fail(() => {
+      hideSpinner($link);
+      showError($link);
+    });
 }
 
 /**

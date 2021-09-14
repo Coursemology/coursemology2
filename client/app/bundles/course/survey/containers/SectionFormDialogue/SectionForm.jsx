@@ -20,7 +20,6 @@ const validate = (values) => {
   return errors;
 };
 
-
 const SectionForm = ({ handleSubmit, intl, onSubmit, disabled }) => (
   <Form onSubmit={handleSubmit(onSubmit)}>
     <Field

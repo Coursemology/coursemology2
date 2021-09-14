@@ -26,7 +26,10 @@ export default class AchievementsAPI extends BaseCourseAPI {
    * error response: { errors: [] } - An array of errors will be returned upon validation error.
    */
   update(achievementId, params) {
-    return this.getClient().patch(`${this._getUrlPrefix()}/${achievementId}`, params);
+    return this.getClient().patch(
+      `${this._getUrlPrefix()}/${achievementId}`,
+      params
+    );
   }
 
   _getUrlPrefix() {

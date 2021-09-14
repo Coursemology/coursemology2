@@ -1,7 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
-import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
+import {
+  Table,
+  TableBody,
+  TableHeader,
+  TableHeaderColumn,
+  TableRow,
+  TableRowColumn,
+} from 'material-ui/Table';
 import Subheader from 'material-ui/Subheader';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
@@ -18,50 +25,28 @@ const styles = {
 };
 
 class ConditionList extends React.Component {
-  static propTypes = {
-    intl: intlShape,
-    newConditionUrls: PropTypes.arrayOf(
-      PropTypes.shape({
-        name: PropTypes.string,
-        url: PropTypes.string,
-      })
-    ).isRequired,
-    conditions: PropTypes.arrayOf(
-      PropTypes.shape({
-        name: PropTypes.string,
-        description: PropTypes.string,
-        edit_url: PropTypes.string,
-        delete_url: PropTypes.string,
-      })
-    ),
-  }
-
-  static defaultProps = {
-    conditions: [],
-  }
-
   renderTopHeader() {
     return (
       <TableRow>
         <TableHeaderColumn colSpan="4">
-          <h3><FormattedMessage {...translations.title} /></h3>
+          <h3>
+            <FormattedMessage {...translations.title} />
+          </h3>
         </TableHeaderColumn>
         <TableHeaderColumn colSpan="2" style={styles.alignRight}>
           <IconMenu
-            iconButtonElement={<IconButton><NewIcon /></IconButton>}
+            iconButtonElement={
+              <IconButton>
+                <NewIcon />
+              </IconButton>
+            }
             anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
             targetOrigin={{ horizontal: 'right', vertical: 'top' }}
             className="add-condition-btn"
           >
-            {
-            this.props.newConditionUrls.map(url => (
-              <MenuItem
-                key={url.name}
-                primaryText={url.name}
-                href={url.url}
-              />
-            ))
-          }
+            {this.props.newConditionUrls.map((url) => (
+              <MenuItem key={url.name} primaryText={url.name} href={url.url} />
+            ))}
           </IconMenu>
         </TableHeaderColumn>
       </TableRow>
@@ -93,27 +78,27 @@ class ConditionList extends React.Component {
   }
 
   renderConditionRows() {
-    return (
-      this.props.conditions.map(condition => (
-        <TableRow key={condition.edit_url}>
-          <TableRowColumn colSpan="1">{condition.type}</TableRowColumn>
-          <TableRowColumn colSpan="3">{condition.description}</TableRowColumn>
-          <TableRowColumn colSpan="2" style={styles.alignRight}>
-            <IconButton href={condition.edit_url}>
-              <EditIcon />
-            </IconButton>
+    return this.props.conditions.map((condition) => (
+      <TableRow key={condition.edit_url}>
+        <TableRowColumn colSpan="1">{condition.type}</TableRowColumn>
+        <TableRowColumn colSpan="3">{condition.description}</TableRowColumn>
+        <TableRowColumn colSpan="2" style={styles.alignRight}>
+          <IconButton href={condition.edit_url}>
+            <EditIcon />
+          </IconButton>
 
-            <IconButton
-              href={condition.delete_url}
-              data-method="delete"
-              data-confirm={this.props.intl.formatMessage(translations.deleteConfirm)}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </TableRowColumn>
-        </TableRow>
-      ))
-    );
+          <IconButton
+            href={condition.delete_url}
+            data-method="delete"
+            data-confirm={this.props.intl.formatMessage(
+              translations.deleteConfirm
+            )}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </TableRowColumn>
+      </TableRow>
+    ));
   }
 
   render() {
@@ -121,20 +106,40 @@ class ConditionList extends React.Component {
       <div>
         <Table selectable={false}>
           {this.renderHeaderRows()}
-          <TableBody
-            className="conditions-list"
-            displayRowCheckbox={false}
-          >
+          <TableBody className="conditions-list" displayRowCheckbox={false}>
             {this.renderConditionRows()}
           </TableBody>
         </Table>
-        {
-          this.props.conditions.length === 0
-          && <Subheader><FormattedMessage {...translations.empty} /></Subheader>
-        }
+        {this.props.conditions.length === 0 && (
+          <Subheader>
+            <FormattedMessage {...translations.empty} />
+          </Subheader>
+        )}
       </div>
     );
   }
 }
+
+ConditionList.propTypes = {
+  intl: intlShape,
+  newConditionUrls: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      url: PropTypes.string,
+    })
+  ).isRequired,
+  conditions: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      description: PropTypes.string,
+      edit_url: PropTypes.string,
+      delete_url: PropTypes.string,
+    })
+  ),
+};
+
+ConditionList.defaultProps = {
+  conditions: [],
+};
 
 export default injectIntl(ConditionList);
