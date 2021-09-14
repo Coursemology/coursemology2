@@ -2,9 +2,7 @@ inherit_from:
   - .rubocop.unhound.yml
 
 AllCops:
-  Include:
-    - '**/Gemfile'
-    - '**/Rakefile'
+  NewCops: enable
   Exclude:
    - 'bin/*'
    - 'db/seeds.rb'
@@ -12,52 +10,13 @@ AllCops:
    - 'db/migrate/*'
    - 'vendor/bundle/**/*'
    - 'client/**/*'
-  TargetRubyVersion: 2.4
-
-Metrics/LineLength:
-  Max: 120
-
-Metrics/AbcSize:
-  Max: 20
-
-Metrics/MethodLength:
-  Max: 15
-
-Metrics/BlockLength:
-  Enabled: false
+  TargetRubyVersion: 2.5
 
 Bundler/OrderedGems:
   Enabled: false
 
-Style/ClassAndModuleChildren:
-  EnforcedStyle: compact
-
-Style/Documentation:
-  Enabled: false
-
-Style/ParallelAssignment:
-  Enabled: false
-
-Style/StringLiterals:
-  EnforcedStyle: single_quotes
-
-Style/WordArray:
-  Enabled: false
-
-Style/SymbolArray:
-  Enabled: false
-
-Style/RegexpLiteral:
-  AllowInnerSlashes: true
-
-Style/NumericPredicate:
-  EnforcedStyle: comparison
-
-Style/EmptyMethod:
-  Enabled: false
-
-Style/SignalException:
-  EnforcedStyle: only_raise
+Layout/DotPosition:
+  EnforcedStyle: trailing
 
 Layout/EmptyLineAfterMagicComment:
   Enabled: false
@@ -65,5 +24,58 @@ Layout/EmptyLineAfterMagicComment:
 Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
 
-Layout/DotPosition:
-  EnforcedStyle: trailing
+Layout/LineLength:
+  Max: 120
+
+Metrics/AbcSize:
+  Max: 20
+
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/MethodLength:
+  Max: 15
+  CountAsOne: ['array', 'hash', 'heredoc']
+
+Style/AsciiComments:
+  AllowedChars: ['©', '├', '─', '└']
+
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact
+
+Style/Documentation:
+  Enabled: false
+
+Style/EmptyMethod:
+  Enabled: false
+
+Style/HashAsLastArrayItem:
+  EnforcedStyle: no_braces
+
+Style/LambdaCall:
+  Exclude:
+    - '**/*.json.jbuilder'
+
+Style/NumericPredicate:
+  EnforcedStyle: comparison
+
+Style/ParallelAssignment:
+  Enabled: false
+
+Style/RegexpLiteral:
+  AllowInnerSlashes: true
+
+Style/SignalException:
+  EnforcedStyle: only_raise
+
+Style/StringLiterals:
+  EnforcedStyle: single_quotes
+
+Style/SymbolArray:
+  Enabled: false
+
+Style/TernaryParentheses:
+  EnforcedStyle: require_parentheses_when_complex
+
+Style/WordArray:
+  Enabled: false

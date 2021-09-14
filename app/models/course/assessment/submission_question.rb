@@ -40,7 +40,7 @@ class Course::Assessment::SubmissionQuestion < ApplicationRecord
 
   def answers
     Course::Assessment::Answer.where('submission_id = ? AND question_id = ?',
-                                     self.submission_id, self.question_id)
+                                     submission_id, question_id)
   end
 
   # Loads the past answers of a specific question

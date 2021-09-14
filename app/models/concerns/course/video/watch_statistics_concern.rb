@@ -18,6 +18,7 @@ module Course::Video::WatchStatisticsConcern
     frequencies = []
     active_intervals = 0
     return [] if ends.empty?
+
     (0..ends.last).each do |video_time|
       start_advance = elements_till(starts, start_index) { |time| time <= video_time }
       end_advance = elements_till(ends, end_index) { |time| time < video_time }
@@ -73,7 +74,7 @@ module Course::Video::WatchStatisticsConcern
       result[:start] += session_intervals[:start]
       result[:end] += session_intervals[:end]
     end
-    result.map { |k, v| [k, v.sort] }.to_h
+    result.transform_values(&:sort)
   end
 
   # This method iterates through all start and end events belonging to a single session,
@@ -90,6 +91,7 @@ module Course::Video::WatchStatisticsConcern
     last_start, flag = nil, hash_keys.next
     session_events.each do |event|
       next if EVENT_TYPES[flag].exclude?(event.event_type)
+
       last_start = event if flag == :start
       result[flag] << correct_interval(event, last_start, video_duration)
       flag = hash_keys.next

@@ -18,6 +18,7 @@ class AddSubmissionGradingStatistics < ActiveRecord::Migration[4.2]
       end
 
       next unless row['workflow_state'] == 'graded'
+
       execute(<<-SQL)
         UPDATE course_assessment_answers
         SET graded_at=NOW(), grader_id=#{root_user_id}

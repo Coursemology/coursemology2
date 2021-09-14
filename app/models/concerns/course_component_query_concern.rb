@@ -84,6 +84,7 @@ module CourseComponentQueryConcern
   def validate_settable_component_keys!(keys)
     allowed_keys = disableable_components.map(&:key)
     return if keys.to_set.subset?(allowed_keys.to_set)
+
     raise ArgumentError, "Invalid component keys: #{keys - allowed_keys}."
   end
 end

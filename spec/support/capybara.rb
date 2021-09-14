@@ -20,12 +20,12 @@ module Capybara::TestGroupHelpers
     def find_form(selector, action: nil)
       attribute_selector =
         if action
-          format('[action="%s"]', action)
+          format('[action="%<action>s"]', action: action)
         else
           ''
         end
 
-      result = find('form' + attribute_selector)
+      result = find("form#{attribute_selector}")
       selector ? result.find(selector) : result
     end
 

@@ -9,7 +9,7 @@ class AddMultipleFileSubmissionToQuestionProgramming < ActiveRecord::Migration[5
         service = Course::Assessment::Question::Programming::ProgrammingPackageService.new(question, nil)
         meta = service.extract_meta
         question.update_column(:multiple_file_submission, true) if meta && meta[:data] && meta[:data]['submit_as_file']
-      rescue
+      rescue StandardError
       end
     end
   end

@@ -4,8 +4,6 @@ class Course::LessonPlan::TodosController < Course::LessonPlan::Controller
   load_and_authorize_resource :todo, class: Course::LessonPlan::Todo.name, except: [:new, :create]
 
   def ignore
-    if @todo.update_column(:ignore, true) # rubocop:disable Style/GuardClause:
-      flash.now[:success] = t('.success')
-    end
+    flash.now[:success] = t('.success') if @todo.update_column(:ignore, true)
   end
 end

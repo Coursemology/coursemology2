@@ -16,7 +16,7 @@ json.destinationCourses @destination_courses do |course|
     json.materials root_folder.materials.map(&:name)
   end
   json.enabledComponents map_components_to_frontend_tokens(course.enabled_components)
-  json.unduplicableObjectTypes (course.disabled_cherrypickable_types.map do |klass|
+  json.unduplicableObjectTypes(course.disabled_cherrypickable_types.map do |klass|
     cherrypickable_items_hash[klass]
   end)
 end

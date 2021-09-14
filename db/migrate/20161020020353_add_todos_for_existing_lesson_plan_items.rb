@@ -12,7 +12,7 @@ class AddTodosForExistingLessonPlanItems < ActiveRecord::Migration[4.2]
     Course::LessonPlan::Todo.delete_all
   end
 
-  def create_todos_for(course) # rubocop:disable Metrics/AbcSize
+  def create_todos_for(course)
     # Submissions hash from course with the following format:
     #   { [submission.assessment.lesson_plan_item.id, creator_id]: '#{workflow_state}' }
     submissions_hash =

@@ -13,6 +13,7 @@ class ConvertVideoPostsToPlainText < ActiveRecord::Migration[5.1]
                   strip
 
       next if post_text.empty?
+
       sanitized_text = Sanitize.
                        fragment(post_text, Sanitize::Config::BASIC).
                        strip.

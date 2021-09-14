@@ -22,7 +22,7 @@ class Course::DuplicationsController < Course::ComponentController
 
   private
 
-  def create_duplication_params # :nodoc
+  def create_duplication_params # :nodoc:
     params.require(:duplication).permit(:new_start_at, :new_title)
   end
 

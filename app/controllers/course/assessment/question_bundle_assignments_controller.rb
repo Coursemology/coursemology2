@@ -15,7 +15,7 @@ class Course::Assessment::QuestionBundleAssignmentsController < Course::Assessme
     @name_lookup = @assignment_randomizer.name_lookup
     @validation_results = @assignment_randomizer.validate(@assignment_set)
     @aggregated_offending_cells = {} # { [student_id, group_id]: [ error_string ] }
-    @validation_results.values.each do |result|
+    @validation_results.each_value do |result|
       next if result.offending_cells.nil?
 
       result.offending_cells.each do |cell, error_string|
@@ -26,7 +26,7 @@ class Course::Assessment::QuestionBundleAssignmentsController < Course::Assessme
   end
 
   def create
-    assignment_set_params = params.require(:assignment_set).permit([:user_id, { bundles: {} }])
+    assignment_set_params = params.require(:assignment_set).permit([:user_id, bundles: {}])
     user = User.find(assignment_set_params[:user_id])
     bundles = Course::Assessment::QuestionBundle.where(id: assignment_set_params[:bundles].values).
               joins(:question_group).merge(Course::Assessment::QuestionGroup.where(assessment: @assessment))

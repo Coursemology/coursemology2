@@ -36,7 +36,7 @@ RSpec.describe Instance do
     end
 
     context 'when hostname is too long' do
-      subject { build(:instance, host: 'a' * 255 + '.com') }
+      subject { build(:instance, host: "#{'a' * 255}.com") }
 
       it { is_expected.not_to be_valid }
     end

@@ -9,6 +9,7 @@ class Course::Discussion::TopicsController < Course::ComponentController
     @topics = all_topics
 
     return unless current_course_user&.student?
+
     @topics = @topics.merge(Course::Discussion::Topic.from_user(current_course_user.user_id))
   end
 

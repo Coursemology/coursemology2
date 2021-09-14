@@ -57,12 +57,12 @@ class Course::Assessment::Question::MultipleResponse < ApplicationRecord
   # since each student has a different seed, they see a different order to the options
   # Certain options can ignore randomization as well, these options are appended after the shuffled options
   # NOTE: If current_course does not allow mrq option randomization, it returns the normal order by default.
-  def ordered_options(seed = nil, current_course)
-    return self.options if !current_course.allow_mrq_options_randomization || !self.randomize_options || seed.nil?
+  def ordered_options(current_course, seed = nil)
+    return options if !current_course.allow_mrq_options_randomization || !randomize_options || seed.nil?
 
     randomized_options = []
     non_randomized_options = []
-    self.options.each do |option|
+    options.each do |option|
       if option.ignore_randomization
         non_randomized_options.append(option)
       else

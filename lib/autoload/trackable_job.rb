@@ -71,6 +71,7 @@ module TrackableJob
   def job_id=(job_id)
     super.tap do
       next unless @job
+
       @job = find_job(job_id)
     end
   end

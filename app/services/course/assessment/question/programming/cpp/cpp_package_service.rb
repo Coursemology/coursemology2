@@ -39,14 +39,13 @@ class Course::Assessment::Question::Programming::Cpp::CppPackageService < \
 
   def extract_autograded_meta(attachment)
     attachment.open(binmode: true) do |temporary_file|
-      begin
-        package = Course::Assessment::ProgrammingPackage.new(temporary_file)
-        meta = package.meta_file
-        @old_meta = meta.present? ? JSON.parse(meta) : nil
-      ensure
-        next unless package
-        temporary_file.close
-      end
+      package = Course::Assessment::ProgrammingPackage.new(temporary_file)
+      meta = package.meta_file
+      @old_meta = meta.present? ? JSON.parse(meta) : nil
+    ensure
+      next unless package
+
+      temporary_file.close
     end
   end
 
@@ -71,6 +70,7 @@ class Course::Assessment::Question::Programming::Cpp::CppPackageService < \
         next if data_files_to_delete.try(:include?, (file['filename']))
         # new files overrides old ones
         next if new_data_filenames.include?(file['filename'])
+
         data_files_to_keep.append(File.new(File.join(@tmp_dir, file['filename'])))
       end
     end
@@ -82,13 +82,12 @@ class Course::Assessment::Question::Programming::Cpp::CppPackageService < \
     new_filenames = (@test_params[:data_files] || []).reject(&:nil?).map(&:original_filename)
 
     attachment.open(binmode: true) do |temporary_file|
-      begin
-        package = Course::Assessment::ProgrammingPackage.new(temporary_file)
-        return extract_from_package(package, new_filenames, @test_params[:data_files_to_delete])
-      ensure
-        next unless package
-        temporary_file.close
-      end
+      package = Course::Assessment::ProgrammingPackage.new(temporary_file)
+      return extract_from_package(package, new_filenames, @test_params[:data_files_to_delete])
+    ensure
+      next unless package
+
+      temporary_file.close
     end
   end
 
@@ -148,6 +147,7 @@ class Course::Assessment::Question::Programming::Cpp::CppPackageService < \
     Zip::File.open(tmp.path) do |zip|
       @test_params[:data_files].try(:each) do |file|
         next if file.nil?
+
         zip.add(file.original_filename, file.tempfile.path)
       end
 
@@ -163,7 +163,7 @@ class Course::Assessment::Question::Programming::Cpp::CppPackageService < \
   #
   # @param [String] filename The filename of the file to get the path of
   def get_file_path(filename)
-    File.join(File.expand_path(File.dirname(__FILE__)), filename).freeze
+    File.join(__dir__, filename).freeze
   end
 
   def zip_test_files(test_type, zip) # rubocop:disable Metrics/AbcSize
@@ -171,16 +171,16 @@ class Course::Assessment::Question::Programming::Cpp::CppPackageService < \
     tests[test_type]&.each&.with_index(1) do |test, index|
       # String types should be displayed with quotes, other types will be converted to string
       # with the str method.
-      expected = string?(test[:expected]) ? test[:expected].inspect : "#{test[:expected]}"
+      expected = string?(test[:expected]) ? test[:expected].inspect : (test[:expected]).to_s
       hint = test[:hint].blank? ? String(nil) : "RecordProperty(\"hint\", #{test[:hint].inspect})"
 
-      test_fn = <<-CPlusPlus
-        TEST(Autograder, test_#{test_type}_#{format('%02i', index)}) {
+      test_fn = <<-CPP
+        TEST(Autograder, test_#{test_type}_#{format('%<index>02i', index: index)}) {
           RecordProperty("expression", #{test[:expression].inspect});
           custom_evaluation(#{test[:expected]}, #{test[:expression]});
           #{hint};
         }
-      CPlusPlus
+      CPP
 
       zip.print test_fn
     end

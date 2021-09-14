@@ -5,6 +5,7 @@ class RenameAssessmentOpenedEmailSettingsKey < ActiveRecord::Migration[4.2]
       Course.all.each do |course|
         course.settings.course_assessments_component&.each do |category_id, value|
           next unless value['emails'] && !value['emails'][old_key].nil?
+
           settings = course.settings(:course_assessments_component, category_id, :emails)
           settings.public_send("#{new_key}=", value['emails'][old_key])
           settings.public_send("#{old_key}=", nil)

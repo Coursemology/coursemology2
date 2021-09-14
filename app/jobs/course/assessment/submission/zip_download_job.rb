@@ -13,6 +13,6 @@ class Course::Assessment::Submission::ZipDownloadJob < ApplicationJob
   def perform_tracked(course_user, assessment, students = nil)
     zip_file = Course::Assessment::Submission::ZipDownloadService.
                download_and_zip(course_user, assessment, students)
-    redirect_to SendFile.send_file(zip_file, Pathname.normalize_filename(assessment.title) + '.zip')
+    redirect_to SendFile.send_file(zip_file, "#{Pathname.normalize_filename(assessment.title)}.zip")
   end
 end

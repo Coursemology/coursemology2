@@ -28,10 +28,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     mcq = [I18n.t('course.assessment.question.multiple_responses.question_type.multiple_response'),
            I18n.t('course.assessment.question.multiple_responses.question_type.multiple_choice')]
 
-    if mcq.include?(answer.question.question_type) && !@submission.assessment.show_mcq_answer
-      return false
-    end
-    true
+    !mcq.include?(answer.question.question_type) || @submission.assessment.show_mcq_answer
   end
 
   def load_or_create_answers
@@ -45,12 +42,13 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
         answer.save!
       end
     end
-    new_answers_created = new_answers_created.reduce(false) { |a, e| a || e }
+    new_answers_created = new_answers_created.reduce(false) { |acc, elem| acc || elem }
     @submission.answers.reload if new_answers_created && @submission.answers.loaded?
   end
 
   def load_or_create_submission_questions
     return unless create_missing_submission_questions && @submission.submission_questions.loaded?
+
     @submission.submission_questions.reload
   end
 
@@ -146,14 +144,17 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
 
   def update_submission
     @submission.class.transaction do
-      update_answers_params[:answers]&.each do |answer_params|
-        next if answer_params[:id].blank?
-        answer = @submission.answers.includes(:actable).find { |a| a.id == answer_params[:id].to_i }
-        if answer && !update_answer(answer, answer_params)
-          logger.error("failed to update answer #{answer.errors.inspect}")
-          raise ActiveRecord::Rollback
+      unless unsubmit? || unmark?
+        update_answers_params[:answers]&.each do |answer_params|
+          next if answer_params[:id].blank?
+
+          answer = @submission.answers.includes(:actable).find { |a| a.id == answer_params[:id].to_i }
+          if answer && !update_answer(answer, answer_params)
+            logger.error("failed to update answer #{answer.errors.inspect}")
+            raise ActiveRecord::Rollback
+          end
         end
-      end unless unsubmit? || unmark?
+      end
 
       @submission.update(update_submission_params)
     end
@@ -175,6 +176,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
 
   def auto_grade(answer)
     return unless valid_for_grading?(answer)
+
     job = reattempt_and_grade_answer(answer)
     if job
       render json: { redirect_url: job_path(job.job) }

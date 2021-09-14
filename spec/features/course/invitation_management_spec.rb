@@ -37,7 +37,7 @@ RSpec.feature 'Courses: Invitations', js: true do
         users = build_list(:user, 2)
         invitation_file = Tempfile.new('invitation')
         invitation_file.
-          write("Name,Email\n" + users.map { |u| [u.name, u.email].join(',') }.join("\n"))
+          write("Name,Email\n#{users.map { |u| [u.name, u.email].join(',') }.join("\n")}")
         invitation_file.close
 
         visit invite_course_users_path(course)

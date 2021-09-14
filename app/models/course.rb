@@ -87,7 +87,7 @@ class Course < ApplicationRecord
   scope :ordered_by_start_at, ->(direction = :desc) { order(start_at: direction) }
   scope :ordered_by_end_at, ->(direction = :desc) { order(end_at: direction) }
   scope :publicly_accessible, -> { where(published: true) }
-  scope :current, -> { where('end_at > ?', Time.zone.now)}
+  scope :current, -> { where('end_at > ?', Time.zone.now) }
   scope :completed, -> { where('end_at <= ?', Time.zone.now) }
 
   # @!method containing_user
@@ -114,7 +114,7 @@ class Course < ApplicationRecord
 
   # Generates a registration key for use with the course.
   def generate_registration_key
-    self.registration_key = 'C' + SecureRandom.base64(8)
+    self.registration_key = "C#{SecureRandom.base64(8)}"
   end
 
   def code_registration_enabled?
@@ -156,11 +156,7 @@ class Course < ApplicationRecord
 
   # Convert the days to time duration and store it.
   def advance_start_at_duration_days=(value)
-    value = if value.present? && value.to_i > 0
-              value.to_i.days
-            else
-              nil
-            end
+    value = (value.to_i.days if value.present? && value.to_i > 0)
     settings(:course).advance_start_at_duration = value
   end
 
@@ -231,12 +227,14 @@ class Course < ApplicationRecord
     self.default_reference_timeline ||= reference_timelines.new(default: true)
 
     return unless creator && course_users.empty?
+
     course_users.build(user: creator, role: :owner, creator: creator, updater: updater)
   end
 
   def validate_only_one_default_reference_timeline
     num_defaults = reference_timelines.where(course_reference_timelines: { default: true }).count
     return if num_defaults <= 1 # Could be 0 if item is new
+
     errors.add(:reference_timelines, :must_have_at_most_one_default)
   end
 end

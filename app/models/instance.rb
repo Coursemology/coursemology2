@@ -13,6 +13,7 @@ class Instance < ApplicationRecord
     def default
       @default ||= find_by(id: DEFAULT_INSTANCE_ID)
       raise 'Unknown instance. Did you run rake db:seed?' unless @default
+
       @default
     end
 
@@ -130,6 +131,7 @@ class Instance < ApplicationRecord
   # Replace the hostname of the default instance.
   def host
     return Application::Application.config.x.default_host if default?
+
     super
   end
 

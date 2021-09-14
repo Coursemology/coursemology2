@@ -165,7 +165,7 @@ RSpec.describe Course, type: :model do
     describe '.search' do
       let(:keyword) { 'KeyWord' }
       let!(:course_with_keyword_in_title) do
-        course = create(:course, title: 'Course' + keyword)
+        course = create(:course, title: "Course#{keyword}")
         # We should be able to find the course even it doesn't have any course_users
         course.course_users.destroy_all
         course

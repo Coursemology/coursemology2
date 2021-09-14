@@ -27,7 +27,7 @@ RSpec.feature 'Global announcements' do
         visit announcements_path
 
         expect(page).to have_tag('div.global-announcement') do
-          with_tag('div.panel-heading', text: format('×%s', announcement.title))
+          with_tag('div.panel-heading', text: format('×%<title>s', title: announcement.title))
           with_tag('div.panel-body', text: announcement.content)
         end
         expect(page).to have_content_tag_for(announcement)
@@ -38,7 +38,7 @@ RSpec.feature 'Global announcements' do
         visit announcements_path
 
         expect(page).to have_tag('div.global-announcement') do
-          with_tag('div.panel-heading', text: format('×%s', announcement.title))
+          with_tag('div.panel-heading', text: format('×%<title>s', title: announcement.title))
           with_tag('div.panel-body', text: announcement.content)
         end
         expect(page).to have_content_tag_for(announcement)
@@ -57,7 +57,7 @@ RSpec.feature 'Global announcements' do
         visit announcements_path
 
         expect(page).to have_tag('div.global-announcement') do
-          with_tag('div.panel-heading', text: format('×%s', announcements.last.title))
+          with_tag('div.panel-heading', text: format('×%<title>s', title: announcements.last.title))
           with_tag('div.panel-body', text: announcements.last.content)
         end
 

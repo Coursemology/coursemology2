@@ -2,6 +2,4 @@
 success = @attachment_reference&.persisted?
 
 json.success success
-if success
-  json.id @attachment_reference.id
-end
+json.id @attachment_reference.id if success

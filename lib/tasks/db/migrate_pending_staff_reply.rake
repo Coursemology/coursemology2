@@ -15,7 +15,7 @@ namespace :db do
       old_topic_ids.each do |old_topic_id|
         answer = Course::Assessment::Answer.find(old_topic_id)
         new_topic = Course::Assessment::SubmissionQuestion.
-                      find_by(submission: answer.submission, question: answer.question).acting_as
+                    find_by(submission: answer.submission, question: answer.question).acting_as
         new_topic.pending_staff_reply = true
         new_topic.save!
       end

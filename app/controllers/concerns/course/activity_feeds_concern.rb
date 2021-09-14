@@ -7,6 +7,7 @@ module Course::ActivityFeedsConcern
   # @return [Array<Course::Notification>] Recent activity feed notifications
   def recent_activity_feeds
     return [] if current_course.nil?
+
     current_course.notifications.feed.order(created_at: :desc)
   end
 end

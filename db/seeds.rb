@@ -15,12 +15,8 @@ Instance.find_or_initialize_by(id: Instance::DEFAULT_INSTANCE_ID, name: 'Default
 
 ActsAsTenant.with_tenant(Instance.default) do
   # Create the Coursemology built in accounts.
-  unless User.exists?(User::SYSTEM_USER_ID)
-    User.create!(id: User::SYSTEM_USER_ID, name: 'System')
-  end
-  unless User.exists?(User::DELETED_USER_ID)
-    User.create!(id: User::DELETED_USER_ID, name: 'Deleted')
-  end
+  User.create!(id: User::SYSTEM_USER_ID, name: 'System') unless User.exists?(User::SYSTEM_USER_ID)
+  User.create!(id: User::DELETED_USER_ID, name: 'Deleted') unless User.exists?(User::DELETED_USER_ID)
 end
 
-load(Rails.root.join( 'db', 'seeds', "#{Rails.env.downcase}.rb"))
+load(Rails.root.join('db', 'seeds', "#{Rails.env.downcase}.rb"))

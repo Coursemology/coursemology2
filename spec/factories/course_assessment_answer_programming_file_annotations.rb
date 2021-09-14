@@ -10,9 +10,7 @@ FactoryBot.define do
     line { 1 }
 
     after(:create) do |annotation, evaluator|
-      if evaluator.creator
-        annotation.file.answer.answer.submission.update_column(:creator_id, evaluator.creator.id)
-      end
+      annotation.file.answer.answer.submission.update_column(:creator_id, evaluator.creator.id) if evaluator.creator
     end
   end
 end

@@ -25,7 +25,7 @@ RSpec.describe Course::GroupsController, type: :controller do
           let!(:course_user_to_add) { create(:course_user, course: course) }
 
           it 'adds the user to the group' do
-            expect { subject }.to change { group.course_users.count }.by(1)
+            expect { subject }.to(change { group.course_users.count }.by(1))
           end
 
           it 'sets the proper flash message' do
@@ -39,7 +39,7 @@ RSpec.describe Course::GroupsController, type: :controller do
           let!(:course_user_to_add) { create(:course_user, course: other_course) }
 
           it 'does not add the user to group' do
-            expect { subject }.not_to change { group.course_users.count }
+            expect { subject }.not_to(change { group.course_users.count })
           end
 
           it { is_expected.to render_template(:edit) }

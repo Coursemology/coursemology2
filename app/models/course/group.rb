@@ -21,7 +21,7 @@ class Course::Group < ApplicationRecord
 
   accepts_nested_attributes_for :group_users,
                                 allow_destroy: true,
-                                reject_if: -> (params) { params[:course_user_id].blank? }
+                                reject_if: ->(params) { params[:course_user_id].blank? }
 
   # @!attribute [r] average_experience_points
   #   Returns the average experience points of group users in this group who are students.
@@ -81,8 +81,10 @@ class Course::Group < ApplicationRecord
 
   # Set default values
   def set_defaults
+    return unless should_create_manager?
+
     group_users.build(course_user: default_group_manager, role: :manager,
-                      creator: creator, updater: updater) if should_create_manager?
+                      creator: creator, updater: updater)
   end
 
   # Checks if the current group has sufficient information to have a manager, but does not
