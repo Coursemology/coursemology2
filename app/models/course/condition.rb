@@ -36,7 +36,7 @@ class Course::Condition < ApplicationRecord
         )
 
         conditional_name.constantize.where(course_id: course)
-      end.flatten
+      end.flatten.compact
     end
 
     # Finds all conditionals that depend on the given object.

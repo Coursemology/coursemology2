@@ -99,6 +99,7 @@ export const assessmentShape = PropTypes.shape({
   delayedGradePublication: PropTypes.bool,
   published: PropTypes.bool,
   skippable: PropTypes.bool,
+  showMcqMrqSolution: PropTypes.bool,
   tabbedView: PropTypes.bool,
   showPrivate: PropTypes.bool,
   showEvaluation: PropTypes.bool,

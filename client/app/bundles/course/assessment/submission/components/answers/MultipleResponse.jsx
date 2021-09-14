@@ -6,7 +6,7 @@ import Checkbox from 'material-ui/Checkbox';
 
 import { questionShape } from '../../propTypes';
 
-function MultipleResponseOptions({ readOnly, question, input }) {
+function MultipleResponseOptions({ readOnly, showMcqMrqSolution, graderView, question, input }) {
   return (
     <>
       {question.options.map(option => (
@@ -26,7 +26,8 @@ function MultipleResponseOptions({ readOnly, question, input }) {
           }}
           label={(
             <div
-              style={option.correct && readOnly ? { backgroundColor: green50 } : null}
+              style={option.correct && readOnly && (showMcqMrqSolution || graderView)
+                ? { backgroundColor: green50 } : null}
               dangerouslySetInnerHTML={{ __html: option.option.trim() }}
             />
           )}
@@ -40,6 +41,8 @@ function MultipleResponseOptions({ readOnly, question, input }) {
 MultipleResponseOptions.propTypes = {
   question: questionShape,
   readOnly: PropTypes.bool,
+  showMcqMrqSolution: PropTypes.bool,
+  graderView: PropTypes.bool,
   input: PropTypes.shape({
     onChange: PropTypes.func,
     value: PropTypes.arrayOf(PropTypes.number),
@@ -50,12 +53,12 @@ MultipleResponseOptions.defaultProps = {
   readOnly: false,
 };
 
-function MultipleResponse({ question, readOnly, answerId }) {
+function MultipleResponse({ question, readOnly, showMcqMrqSolution, graderView, answerId }) {
   return (
     <Field
       name={`${answerId}[option_ids]`}
       component={MultipleResponseOptions}
-      {...{ question, readOnly }}
+      {...{ question, readOnly, showMcqMrqSolution, graderView }}
     />
   );
 }
@@ -63,6 +66,8 @@ function MultipleResponse({ question, readOnly, answerId }) {
 MultipleResponse.propTypes = {
   question: questionShape,
   readOnly: PropTypes.bool,
+  showMcqMrqSolution: PropTypes.bool,
+  graderView: PropTypes.bool,
   answerId: PropTypes.number,
 };
 

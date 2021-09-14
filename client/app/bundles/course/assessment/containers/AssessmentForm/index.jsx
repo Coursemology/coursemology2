@@ -438,7 +438,31 @@ class AssessmentForm extends React.Component {
           )
         }
 
+        <Field
+          name="block_student_viewing_after_submitted"
+          component={Toggle}
+          parse={Boolean}
+          label={<FormattedMessage {...translations.blockStudentViewingAfterSubmitted} />}
+          labelPosition="right"
+          style={styles.toggle}
+          disabled={submitting}
+        />
+
         {this.renderExtraOptions()}
+
+        <Field
+          name="show_mcq_mrq_solution"
+          component={Toggle}
+          parse={Boolean}
+          label={<FormattedMessage {...translations.showMcqMrqSolution} />}
+          labelPosition="right"
+          style={styles.toggle}
+          disabled={submitting}
+        />
+        <div style={styles.hint}>
+          <FormattedMessage {...translations.showMcqMrqSolutionHint} />
+        </div>
+
         <div style={styles.conditions}>
           <FormattedMessage {...translations.autogradeTestCasesHint} />
         </div>

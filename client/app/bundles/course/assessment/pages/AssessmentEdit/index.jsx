@@ -28,7 +28,7 @@ class EditPage extends React.Component {
     showPersonalizedTimelineFeatures: PropTypes.bool,
     // If randomization is allowed for assessments in the current course
     randomizationAllowed: PropTypes.bool,
-    // If allow to switch between autoraded and manually graded mode.
+    // If allowed to switch between autograded and manually graded mode.
     modeSwitching: PropTypes.bool,
     // An array of materials of current assessment.
     folderAttributes: PropTypes.shape({}),
