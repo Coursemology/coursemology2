@@ -33,7 +33,7 @@ class Thumbnail extends React.PureComponent {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { src, file } = nextProps;
     const isFromFile = !src && file;
 

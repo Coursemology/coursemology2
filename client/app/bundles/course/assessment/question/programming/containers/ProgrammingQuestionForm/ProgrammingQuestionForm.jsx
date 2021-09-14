@@ -127,7 +127,7 @@ class ProgrammingQuestionForm extends React.Component {
     );
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.summernoteEditors.attr(
       'contenteditable',
       !nextProps.data.get('is_loading'),

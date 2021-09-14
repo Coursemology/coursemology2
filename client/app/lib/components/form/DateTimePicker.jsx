@@ -98,7 +98,7 @@ class DateTimePicker extends React.PureComponent {
     this.state = DateTimePicker.displayState(props.value);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const dateTime = nextProps.value;
     this.setState(DateTimePicker.displayState(dateTime));
   }

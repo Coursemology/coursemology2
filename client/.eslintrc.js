@@ -33,7 +33,7 @@ module.exports = {
     'jsx-a11y/mouse-events-have-key-events': 'off',
     'jsx-a11y/no-static-element-interactions': 'off',
     'max-len': ['warn', 120],
-    camelcase: ['warn', { properties: 'never' }],
+    camelcase: ['warn', { properties: 'never', allow: ['^UNSAFE_'] }],
     'comma-dangle': ['error', 'always-multiline'],
     'func-names': 'off',
     'no-multi-str': 'off',

@@ -72,7 +72,7 @@ class ScribingQuestionForm extends React.Component {
     );
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.summernoteEditors.attr('contenteditable', !nextProps.data.isLoading);
   }
 

@@ -19,7 +19,7 @@ const styles = {
 };
 
 export default class ScribingViewComponent extends React.Component {
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     scribingViewLoader().then(() => {
       this.forceUpdate();
     });

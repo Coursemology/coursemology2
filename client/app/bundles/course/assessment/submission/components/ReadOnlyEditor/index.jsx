@@ -27,7 +27,7 @@ class ReadOnlyEditor extends Component {
     this.showCommentsPanel = this.showCommentsPanel.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const expanded = [];
     for (let i = 0; i < nextProps.content.length; i += 1) {
       expanded.push(false);

@@ -77,7 +77,7 @@ class VideoPlayer extends React.Component {
     this.player = null;
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     if (VideoPlayer.ReactPlayer !== undefined) return; // Already loaded
 
     import(/* webpackChunkName: "video" */ 'react-player').then(
@@ -96,7 +96,7 @@ class VideoPlayer extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.forceSeek) {
       this.player.seekTo(nextProps.playerProgress);
     }

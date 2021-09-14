@@ -44,7 +44,7 @@ const defaultProps = {
 };
 
 class VideoPlayerSlider extends React.Component {
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     if (VideoPlayerSlider.TippedSlider !== undefined) return; // Already loaded
 
     import(/* webpackChunkName: "video" */ 'rc-slider').then((rcSlider) => {

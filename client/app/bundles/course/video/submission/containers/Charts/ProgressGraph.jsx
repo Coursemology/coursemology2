@@ -101,7 +101,7 @@ class ProgressGraph extends React.Component {
     this.state = { selectedSessionId: Object.keys(props.sessions)[0] };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.displayDataCache = {};
     if (!nextProps[this.state.selectedSessionId]) {
       this.setState({ selectedSessionId: Object.keys(nextProps.sessions)[0] });
