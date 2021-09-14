@@ -405,14 +405,14 @@
     border-radius: 0;
   }
 
-  /* prettier-ignore */
+  // prettier-ignore
   .btn-group-vertical > .btn-group:first-child:not(:last-child) > .btn:last-child,
   .btn-group-vertical > .btn-group:first-child:not(:last-child) > .dropdown-toggle {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
   }
 
-  /* prettier-ignore */
+  // prettier-ignore
   .btn-group-vertical > .btn-group:last-child:not(:first-child) > .btn:first-child {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
