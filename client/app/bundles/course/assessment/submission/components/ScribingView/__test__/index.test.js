@@ -52,8 +52,9 @@ const mockSubmission = {
 };
 
 // stub import function
-jest.mock('course/assessment/submission/loaders/ScribingViewLoader', () => () =>
-  Promise.resolve(),
+jest.mock(
+  'course/assessment/submission/loaders/ScribingViewLoader',
+  () => () => Promise.resolve(),
 );
 
 describe('ScribingView', () => {

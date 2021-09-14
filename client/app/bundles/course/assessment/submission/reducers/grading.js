@@ -22,7 +22,7 @@ function computeExp(
   );
 }
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_SUCCESS:
     case actions.SAVE_DRAFT_SUCCESS:

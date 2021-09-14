@@ -14,8 +14,7 @@ import NewCourseForm from './NewCourseForm';
 
 const translations = defineMessages({
   selectDestinationCoursePrompt: {
-    id:
-      'course.duplication.DestinationCourseSelector.selectDestinationCoursePrompt',
+    id: 'course.duplication.DestinationCourseSelector.selectDestinationCoursePrompt',
     defaultMessage: 'Select destination course:',
   },
   defaultTitle: {

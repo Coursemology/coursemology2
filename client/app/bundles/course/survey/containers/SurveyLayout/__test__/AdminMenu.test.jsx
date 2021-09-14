@@ -42,10 +42,7 @@ describe('<AdminMenu />', () => {
     const iconButton = adminMenu.find('button').first();
     iconButton.simulate('click');
 
-    const menuCardNode = adminMenu
-      .find('RenderToLayer')
-      .first()
-      .instance();
+    const menuCardNode = adminMenu.find('RenderToLayer').first().instance();
     const deleteButton = mount(menuCardNode.props.render(), contextOptions)
       .find('EnhancedButton')
       .first();
@@ -89,10 +86,7 @@ describe('<AdminMenu />', () => {
     const iconButton = adminMenu.find('button').first();
     iconButton.simulate('click');
 
-    const menuCardNode = adminMenu
-      .find('RenderToLayer')
-      .first()
-      .instance();
+    const menuCardNode = adminMenu.find('RenderToLayer').first().instance();
     const updateButton = mount(menuCardNode.props.render(), contextOptions)
       .find('EnhancedButton')
       .first();

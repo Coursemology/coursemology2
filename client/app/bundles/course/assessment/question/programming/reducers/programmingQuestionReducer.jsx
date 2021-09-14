@@ -175,10 +175,7 @@ function testReducer(state, action) {
     }
     case editorActionTypes.TEST_CASE_DELETE: {
       const { testType, index } = action;
-      const tests = state
-        .get('test_cases')
-        .get(testType)
-        .splice(index, 1);
+      const tests = state.get('test_cases').get(testType).splice(index, 1);
       return state.setIn(['test_cases', testType], tests);
     }
     default: {
@@ -250,13 +247,8 @@ function apiReducer(state, action) {
 
       if (data) {
         // Evaluation has completed, updated data retrieved from server.
-        const {
-          form_data,
-          question,
-          package_ui,
-          test_ui,
-          import_result,
-        } = data;
+        const { form_data, question, package_ui, test_ui, import_result } =
+          data;
         const key = state.getIn(['test_ui', 'data_files', 'key']);
         const submissionKey = state.getIn([
           'test_ui',

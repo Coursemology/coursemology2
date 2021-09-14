@@ -2,22 +2,18 @@ import CourseAPI from 'api/course';
 
 function appendError($node, selector, text) {
   (selector ? $node.closest(selector) : $node).append(
-    $('<i></i>')
-      .addClass('error')
-      .text(text),
+    $('<i></i>').addClass('error').text(text),
   );
 }
 
 function appendInfo($node, selector, text) {
   (selector ? $node.closest(selector) : $node).append(
-    $('<i></i>')
-      .addClass('info')
-      .text(text),
+    $('<i></i>').addClass('info').text(text),
   );
 }
 
 $(document).ready(() => {
-  $(document).on('click', '.gen-access-link', function() {
+  $(document).on('click', '.gen-access-link', function () {
     const $this = $(this);
     const splits = $this.attr('id').split('-');
     const virtualClassroomId = splits[2];
@@ -58,7 +54,7 @@ $(document).ready(() => {
       });
   });
 
-  $(document).on('click', '.fetch-recorded-videos', function() {
+  $(document).on('click', '.fetch-recorded-videos', function () {
     const $this = $(this);
     const $div = $this.closest('.recorded-videos');
     const splits = $this.attr('id').split('-');
@@ -104,7 +100,7 @@ $(document).ready(() => {
       });
   });
 
-  $(document).on('click', '.recorded-video-link', function(event) {
+  $(document).on('click', '.recorded-video-link', function (event) {
     event.preventDefault();
     const $this = $(this);
     const recordId = $this.attr('data-record-id');

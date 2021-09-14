@@ -159,11 +159,8 @@ class AssessmentsListing extends React.Component {
   }
 
   render() {
-    const [
-      categoriesTrees,
-      tabTrees,
-      assessmentTrees,
-    ] = this.selectedSubtrees();
+    const [categoriesTrees, tabTrees, assessmentTrees] =
+      this.selectedSubtrees();
     const orphanTreesCount = tabTrees.length + assessmentTrees.length;
     const totalTreesCount = orphanTreesCount + categoriesTrees.length;
     if (totalTreesCount < 1) {

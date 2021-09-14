@@ -224,13 +224,8 @@ class SubmissionEditStepForm extends Component {
 
   renderResetButton() {
     const { stepIndex } = this.state;
-    const {
-      intl,
-      questionIds,
-      questions,
-      questionsFlags,
-      isSaving,
-    } = this.props;
+    const { intl, questionIds, questions, questionsFlags, isSaving } =
+      this.props;
     const id = questionIds[stepIndex];
     const question = questions[id];
     const { answerId } = question;
@@ -333,13 +328,8 @@ class SubmissionEditStepForm extends Component {
   }
 
   renderSaveDraftButton() {
-    const {
-      intl,
-      pristine,
-      attempting,
-      handleSaveDraft,
-      isSaving,
-    } = this.props;
+    const { intl, pristine, attempting, handleSaveDraft, isSaving } =
+      this.props;
     if (attempting) {
       return (
         <RaisedButton

@@ -143,8 +143,9 @@ const props = {
 };
 
 // stub import function
-jest.mock('course/assessment/submission/loaders/ScribingViewLoader', () => () =>
-  Promise.resolve(),
+jest.mock(
+  'course/assessment/submission/loaders/ScribingViewLoader',
+  () => () => Promise.resolve(),
 );
 
 beforeEach(() => {
@@ -239,10 +240,7 @@ describe('ScribingToolbar', () => {
       color,
     );
     expect(
-      editPage
-        .find('ToolDropdown')
-        .first()
-        .prop('colorBarBackground'),
+      editPage.find('ToolDropdown').first().prop('colorBarBackground'),
     ).toEqual(color);
   });
 });

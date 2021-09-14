@@ -12,7 +12,7 @@ const initialState = {
   },
 };
 
-export default function(survey = initialState, action) {
+export default function (survey = initialState, action) {
   if (String(survey.id) !== String(action.surveyId)) {
     return survey;
   }

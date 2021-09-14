@@ -20,12 +20,9 @@ describe('<SingleFileInput />', () => {
     );
 
     const img = imagePreview.find('img').first();
-    expect(
-      imagePreview
-        .find('.file-name')
-        .text()
-        .includes('bar'),
-    ).toEqual(true);
+    expect(imagePreview.find('.file-name').text().includes('bar')).toEqual(
+      true,
+    );
     expect(img.prop('src')).toEqual('foo');
     expect(img.prop('icon')).toBeUndefined();
   });
@@ -63,10 +60,7 @@ describe('<SingleFileInput />', () => {
 
     const img = imagePreview.find('img').first();
     expect(
-      imagePreview
-        .find('.file-name')
-        .text()
-        .includes('non-image file'),
+      imagePreview.find('.file-name').text().includes('non-image file'),
     ).toEqual(true);
     expect(img.prop('src')).toEqual('foo');
   });

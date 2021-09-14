@@ -3,8 +3,7 @@ import { questionTypes } from '../../constants';
 
 const translations = defineMessages({
   pleaseRecordYourVoice: {
-    id:
-      'course.assessment.submission.pages.SubmissionEditIndex.submissionFormValidate.pleaseRecordYourVoice',
+    id: 'course.assessment.submission.pages.SubmissionEditIndex.submissionFormValidate.pleaseRecordYourVoice',
     defaultMessage: 'Please record your voice',
   },
 });

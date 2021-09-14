@@ -323,13 +323,8 @@ class SubmissionEditForm extends Component {
   }
 
   renderSaveDraftButton() {
-    const {
-      intl,
-      pristine,
-      attempting,
-      handleSaveDraft,
-      isSaving,
-    } = this.props;
+    const { intl, pristine, attempting, handleSaveDraft, isSaving } =
+      this.props;
     if (attempting) {
       return (
         <RaisedButton
@@ -345,13 +340,8 @@ class SubmissionEditForm extends Component {
   }
 
   renderSaveGradeButton() {
-    const {
-      intl,
-      graderView,
-      attempting,
-      handleSaveGrade,
-      isSaving,
-    } = this.props;
+    const { intl, graderView, attempting, handleSaveGrade, isSaving } =
+      this.props;
     if (graderView && !attempting) {
       return (
         <RaisedButton

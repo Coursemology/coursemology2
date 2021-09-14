@@ -19,9 +19,7 @@ function serializedOrdering() {
 }
 
 function getAssessmentId(target) {
-  return $(target)
-    .parents('.assessment:first')
-    .data('assessment-id');
+  return $(target).parents('.assessment:first').data('assessment-id');
 }
 
 function initializeQuestionSorting() {

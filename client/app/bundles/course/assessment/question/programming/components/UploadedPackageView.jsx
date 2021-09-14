@@ -8,14 +8,12 @@ import UploadedPackageTestCaseView from './UploadedPackageTestCaseView';
 
 const translations = defineMessages({
   templateHeader: {
-    id:
-      'course.assessment.question.programming.uploadedPackageViewer.templateHeader',
+    id: 'course.assessment.question.programming.uploadedPackageViewer.templateHeader',
     defaultMessage: 'Templates',
     description: 'Header for submission templates of the uploaded package.',
   },
   testCasesHeader: {
-    id:
-      'course.assessment.question.programming.uploadedPackageViewer.testCasesHeader',
+    id: 'course.assessment.question.programming.uploadedPackageViewer.testCasesHeader',
     defaultMessage: 'Test Cases',
     description: 'Header for the test cases of the uploaded package.',
   },

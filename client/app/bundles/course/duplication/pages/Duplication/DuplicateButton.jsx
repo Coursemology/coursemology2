@@ -29,12 +29,8 @@ const styles = {
 
 class DuplicateButton extends React.Component {
   render() {
-    const {
-      dispatch,
-      isCourseSelected,
-      isItemSelected,
-      isChangingCourse,
-    } = this.props;
+    const { dispatch, isCourseSelected, isItemSelected, isChangingCourse } =
+      this.props;
 
     let label;
     if (!isCourseSelected) {

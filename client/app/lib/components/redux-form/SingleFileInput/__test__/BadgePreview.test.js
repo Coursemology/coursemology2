@@ -17,12 +17,9 @@ describe('<SingleFileInput />', () => {
     );
 
     const avatar = badgePreview.find('Avatar').first();
-    expect(
-      badgePreview
-        .find('.file-name')
-        .text()
-        .includes('bar'),
-    ).toEqual(true);
+    expect(badgePreview.find('.file-name').text().includes('bar')).toEqual(
+      true,
+    );
     expect(avatar.prop('src')).toEqual('foo');
     expect(avatar.prop('icon')).toBeUndefined();
   });

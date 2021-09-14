@@ -92,11 +92,7 @@ describe('<ResponseIndex />', () => {
     const tableBodies = responseIndex.find('TableBody');
     const phantomStudentRows = tableBodies.at(2).find('TableRow');
     const realStudentRows = tableBodies.at(1).find('TableRow');
-    const getStatus = (row) =>
-      row
-        .find('td')
-        .at(1)
-        .text();
+    const getStatus = (row) => row.find('td').at(1).text();
     expect(getStatus(phantomStudentRows.first())).toBe('Submitted');
     expect(getStatus(realStudentRows.first())).toBe('Not Started');
     expect(getStatus(realStudentRows.last())).toBe('Responding');
@@ -105,11 +101,7 @@ describe('<ResponseIndex />', () => {
     const statsCard = responseIndex.find('Card').last();
     const submittedChip = statsCard.find('Chip').last();
     expect(submittedChip.text()).toEqual('0 Submitted');
-    statsCard
-      .find('Toggle')
-      .first()
-      .props()
-      .onToggle(null, true);
+    statsCard.find('Toggle').first().props().onToggle(null, true);
     expect(submittedChip.text()).toEqual('2 Submitted');
   });
 });

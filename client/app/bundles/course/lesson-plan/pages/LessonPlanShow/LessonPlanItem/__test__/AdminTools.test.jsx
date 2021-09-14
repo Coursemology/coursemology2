@@ -34,10 +34,7 @@ describe('<AdminTools />', () => {
     const eventId = 55;
     const wrapper = mount(<AdminTools item={{ eventId }} />, contextOptions);
 
-    const deleteButton = wrapper
-      .find('RaisedButton')
-      .last()
-      .find('button');
+    const deleteButton = wrapper.find('RaisedButton').last().find('button');
     deleteButton.simulate('click');
 
     const confirmDeleteButton = deleteConfirmation
@@ -76,10 +73,7 @@ describe('<AdminTools />', () => {
       contextOptions,
     );
 
-    const editButton = wrapper
-      .find('RaisedButton')
-      .first()
-      .find('button');
+    const editButton = wrapper.find('RaisedButton').first().find('button');
     editButton.simulate('click');
 
     const dialogInline = eventFormDialog

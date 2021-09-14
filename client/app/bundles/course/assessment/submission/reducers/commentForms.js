@@ -7,7 +7,7 @@ const initialState = {
   posts: {},
 };
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_SUCCESS:
       return {

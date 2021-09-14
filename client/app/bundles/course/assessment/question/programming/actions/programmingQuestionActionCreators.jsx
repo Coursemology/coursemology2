@@ -154,7 +154,7 @@ function submitFormEvaluate(
             $('.breadcrumb .active').text(redirectEdit.page_header);
 
             // Reload when the user tries to return the the new programming question page
-            window.onpopstate = function(event) {
+            window.onpopstate = function (event) {
               if (event && event.state === null) {
                 window.location.reload();
               }

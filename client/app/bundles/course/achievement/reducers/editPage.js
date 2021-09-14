@@ -5,7 +5,7 @@ const initialState = {
   notification: null,
 };
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   switch (action.type) {
     case actionTypes.UPDATE_ACHIEVEMENT_REQUEST: {
       return { ...state, disabled: true };

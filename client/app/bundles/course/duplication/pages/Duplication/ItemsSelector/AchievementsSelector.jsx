@@ -50,9 +50,8 @@ class AchievementsSelector extends React.Component {
 
   renderRow(achievement) {
     const { dispatch, selectedItems } = this.props;
-    const checked = !!selectedItems[duplicableItemTypes.ACHIEVEMENT][
-      achievement.id
-    ];
+    const checked =
+      !!selectedItems[duplicableItemTypes.ACHIEVEMENT][achievement.id];
 
     return (
       <Checkbox

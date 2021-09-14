@@ -6,7 +6,7 @@ const initialState = {
   sections: [],
 };
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   switch (action.type) {
     case actionTypes.LOAD_SURVEY_RESULTS_REQUEST: {
       return { ...state, isLoading: true };

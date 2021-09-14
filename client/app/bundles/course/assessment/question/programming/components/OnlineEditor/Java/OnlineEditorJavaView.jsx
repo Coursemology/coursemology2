@@ -91,8 +91,8 @@ class OnlineEditorJavaView extends React.Component {
             toDelete: this.props.testData
               .getIn([fileType, 'to_delete'])
               .has(filename),
-            deleteExistingPackageFile: this.props.actions
-              .deleteExistingPackageFile,
+            deleteExistingPackageFile:
+              this.props.actions.deleteExistingPackageFile,
             isLoading: this.props.isLoading,
             isLast: numFiles === index + 1,
           }}

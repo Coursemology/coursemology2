@@ -54,12 +54,8 @@ const styles = {
 };
 
 const MaterialList = (props) => {
-  const {
-    materials,
-    uploadingMaterials,
-    onMaterialDelete,
-    onFileInputChange,
-  } = props;
+  const { materials, uploadingMaterials, onMaterialDelete, onFileInputChange } =
+    props;
   const header = (
     <FormattedMessage
       id="course.assessment.MaterialList.uploadedFiles"

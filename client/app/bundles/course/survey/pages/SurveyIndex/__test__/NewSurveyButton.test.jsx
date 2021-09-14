@@ -22,10 +22,7 @@ describe('<NewSurveyButton />', () => {
     newSurveyButton.find('button').simulate('click');
     surveyFormDialogue.update();
     expect(
-      surveyFormDialogue
-        .find('SurveyFormDialogue')
-        .first()
-        .props().visible,
+      surveyFormDialogue.find('SurveyFormDialogue').first().props().visible,
     ).toBe(true);
 
     // Fill survey form
