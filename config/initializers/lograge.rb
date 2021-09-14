@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # config/initializers/lograge.rb
 
 if Rails.env.production?
@@ -14,13 +15,13 @@ if Rails.env.production?
         time: Time.zone.now }
     end
 
-    config.lograge_sql.extract_event = Proc.new do |event|
+    config.lograge_sql.extract_event = proc do |event|
       { n: event.payload[:name],
         d: event.duration.to_f.round(2) }
     end
 
     # Format the array of extracted events
-    config.lograge_sql.formatter = Proc.new do |sql_queries|
+    config.lograge_sql.formatter = proc do |sql_queries|
       sql_queries
     end
   end

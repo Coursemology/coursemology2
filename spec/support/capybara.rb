@@ -5,7 +5,7 @@ require 'selenium/webdriver'
 # How to make the screen bigger,  window-size=2500,2500
 # Capybara.register_driver :selenium_chrome_headless do |app|
 #   capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
-#       chromeOptions: { args: %w(headless disable-gpu) }
+#     chromeOptions: { args: %w(headless disable-gpu) }
 #   )
 #   Capybara::Selenium::Driver.new app, browser: :chrome, desired_capabilities: capabilities
 # end
