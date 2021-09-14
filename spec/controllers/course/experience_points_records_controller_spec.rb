@@ -14,7 +14,7 @@ RSpec.describe Course::ExperiencePointsRecordsController, type: :controller do
     let(:points_record_stub) do
       stub = build_stubbed(:course_experience_points_record, course_user: course_student)
       allow(stub).to receive(:destroy).and_return(false)
-      allow(stub).to receive(:update_attributes).and_return(false)
+      allow(stub).to receive(:update).and_return(false)
       stub
     end
 

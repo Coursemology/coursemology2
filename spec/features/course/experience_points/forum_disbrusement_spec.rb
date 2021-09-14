@@ -16,7 +16,7 @@ RSpec.feature 'Course: Experience Points: Forum Disbursement' do
       let(:user) { course_teaching_assistant.user }
 
       scenario 'I can compute and award forum participation points' do
-        recent_date = Time.use_zone(Application.config.x.default_user_time_zone) do
+        recent_date = Time.use_zone(Application::Application.config.x.default_user_time_zone) do
           DateTime.current.at_beginning_of_week.end_of_day.in_time_zone - 2.days
         end
         create(:course_discussion_post, topic: forum_topic.acting_as,

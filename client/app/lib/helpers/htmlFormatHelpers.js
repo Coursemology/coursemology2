@@ -10,6 +10,4 @@ function stripHtmlTags(str) {
   return str.replace(/<[^>]*>/g, '');
 }
 
-export {
-  stripHtmlTags,
-};
+export default stripHtmlTags;

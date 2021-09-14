@@ -79,6 +79,8 @@ VisibleAnnotations.propTypes = {
   commentForms: PropTypes.shape({
     topics: PropTypes.objectOf(PropTypes.string),
     posts: PropTypes.objectOf(PropTypes.string),
+    isSubmitting: PropTypes.bool,
+    annotations: {},
   }),
   fileId: PropTypes.number.isRequired,
   lineNumber: PropTypes.number.isRequired,

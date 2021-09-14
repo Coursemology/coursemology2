@@ -129,6 +129,7 @@ export const submissionShape = PropTypes.shape({
 
 export const reduxFormShape = PropTypes.shape({
   registeredField: PropTypes.object,
+  // eslint-disable-next-line react/forbid-prop-types
   values: PropTypes.any,
 });
 
@@ -175,6 +176,7 @@ export const scribingShape = PropTypes.shape({
   activeObject: PropTypes.object,
   cursor: PropTypes.string,
   currentStateIndex: PropTypes.number,
+  // eslint-disable-next-line react/forbid-prop-types
   canvasStates: PropTypes.array,
   canvasZoom: PropTypes.number,
   canvasWidth: PropTypes.number,

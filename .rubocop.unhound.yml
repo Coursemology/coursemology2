@@ -100,7 +100,7 @@ Style/WhenThen:
 Lint/EachWithObjectArgument:
   Enabled: true
 
-Lint/HandleExceptions:
+Lint/SuppressedException:
   Enabled: true
 
 Lint/LiteralAsCondition:

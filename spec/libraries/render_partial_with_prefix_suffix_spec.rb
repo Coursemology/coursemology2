@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe 'Extension: render partial with prefix/suffix', type: :view do
+RSpec.describe 'Extension: render partial with prefix suffix', type: :view do
   let(:views_directory) do
     path = Pathname.new("#{__dir__}/../fixtures/libraries/render_partial_with_prefix_suffix")
     path.realpath

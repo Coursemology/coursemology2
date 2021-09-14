@@ -49,7 +49,7 @@ RSpec.describe Course::Material, type: :model do
         expect(material.send(:next_valid_name)).to eq(common_name + ' (0)')
 
         # When there is another name conflict with a sibling folder
-        sibling_folder.save
+        sibling_folder.save!
         expect(material.send(:next_valid_name)).to eq(common_name + ' (1)')
       end
     end

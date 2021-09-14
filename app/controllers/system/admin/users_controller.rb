@@ -10,7 +10,7 @@ class System::Admin::UsersController < System::Admin::Controller
   end
 
   def update
-    if @user.update_attributes(user_params)
+    if @user.update(user_params)
       flash.now[:success] = t('.success', user: @user.name)
     else
       flash.now[:danger] = @user.errors.full_messages.to_sentence

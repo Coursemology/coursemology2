@@ -7,7 +7,7 @@ module SendFile
   # @return [String] The url to the publicly accessible file
   def self.send_file(file, public_name = File.basename(file))
     # TODO: Support remote path and publish the file on the load balancing server.
-    downloads_dir = Application.config.x.public_download_folder
+    downloads_dir = Application::Application.config.x.public_download_folder
     public_dir = File.join(Rails.public_path, downloads_dir)
 
     temporary_dir = File.basename(Dir.mktmpdir(nil, public_dir))

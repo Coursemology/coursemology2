@@ -3,19 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { scroller } from 'react-scroll';
 import moment from 'lib/moment';
+import { lessonPlanTypesGroups } from 'lib/types';
 import LessonPlanGroup from './LessonPlanGroup';
 
 class LessonPlanShow extends React.Component {
-  static propTypes = {
-    groups: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.string,
-      milestone: PropTypes.object,
-      items: PropTypes.array,
-    })).isRequired,
-    visibility: PropTypes.shape({}).isRequired,
-    milestonesExpanded: PropTypes.string,
-  }
-
   /**
    * Searches for the last milestone that has just passed.
    * The current group contains that milestone and the items that come after that milestone,
@@ -34,6 +25,12 @@ class LessonPlanShow extends React.Component {
       return true;
     });
     return currentGroupId;
+  }
+
+  static propTypes = {
+    groups: lessonPlanTypesGroups.isRequired,
+    visibility: PropTypes.shape({}).isRequired,
+    milestonesExpanded: PropTypes.string,
   }
 
   constructor(props) {

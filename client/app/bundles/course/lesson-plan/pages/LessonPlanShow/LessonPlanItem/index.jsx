@@ -53,6 +53,7 @@ LessonPlanItem.propTypes = {
     location: PropTypes.string,
     description: PropTypes.string,
     itemTypeKey: PropTypes.string,
+    // eslint-disable-next-line react/forbid-prop-types
     materials: PropTypes.array,
     start_at: PropTypes.string,
     end_at: PropTypes.string,

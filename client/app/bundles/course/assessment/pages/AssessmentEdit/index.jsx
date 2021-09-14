@@ -5,6 +5,7 @@ import { submit } from 'redux-form';
 import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
 import RaisedButton from 'material-ui/RaisedButton';
 import NotificationBar, { notificationShape } from 'lib/components/NotificationBar';
+import { achievementTypesConditionAttributes } from 'lib/types';
 import AssessmentForm from '../../containers/AssessmentForm';
 import * as actions from '../../actions';
 import translations from './translations.intl';
@@ -31,10 +32,7 @@ class EditPage extends React.Component {
     modeSwitching: PropTypes.bool,
     // An array of materials of current assessment.
     folderAttributes: PropTypes.shape({}),
-    conditionAttributes: PropTypes.shape({
-      new_condition_urls: PropTypes.array,
-      conditions: PropTypes.array,
-    }),
+    conditionAttributes: achievementTypesConditionAttributes,
     // A set of assessment attributes: {:id , :title, etc}.
     initialValues: PropTypes.shape({}),
     // Whether to disable the inner form.
@@ -44,9 +42,9 @@ class EditPage extends React.Component {
 
   onFormSubmit = (data) => {
     // Remove view_password and session_password field if password is disabled
-    const view_password = data.password_protected ? data.view_password : null;
-    const session_password = data.password_protected ? data.session_password : null;
-    const atrributes = Object.assign({}, data, { view_password, session_password });
+    const viewPassword = data.password_protected ? data.view_password : null;
+    const sessionPassword = data.password_protected ? data.session_password : null;
+    const atrributes = Object.assign({}, data, { view_password: viewPassword, session_password: sessionPassword });
 
     const { intl } = this.props;
 

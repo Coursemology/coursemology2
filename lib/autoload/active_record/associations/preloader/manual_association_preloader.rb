@@ -3,7 +3,7 @@ module ActiveRecord::Associations::Preloader::ManualAssociationPreloader
   def initialize(klass, owners, reflection, records)
     super(klass, owners, reflection, nil)
 
-    @records_by_owner = records.each_with_object({}) do |record, h|
+    @records_by_owner_id = records.each_with_object({}) do |record, h|
       owner_id = convert_key(record[association_key_name])
       records = (h[owner_id] ||= [])
       records << record
@@ -15,7 +15,7 @@ module ActiveRecord::Associations::Preloader::ManualAssociationPreloader
   end
 
   def records_for(ids)
-    ids.flat_map { |id| @records_by_owner[id] }.tap(&:compact!).tap do |result|
+    ids.flat_map { |id| @records_by_owner_id[id] }.tap(&:compact!).tap do |result|
       # In ActiveRecord 5.0.1, an ActiveRecord::Relation is expected to be returned.
       result.define_singleton_method(:load) do
         self

@@ -34,6 +34,7 @@ class ResponseShow extends React.Component {
     courseId: PropTypes.string.isRequired,
     response: responseShape,
     flags: PropTypes.shape({
+      canUnsubmit: PropTypes.bool,
       isLoading: PropTypes.bool.isRequired,
       canModify: PropTypes.bool,
       canSubmit: PropTypes.bool,

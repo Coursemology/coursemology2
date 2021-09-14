@@ -12,6 +12,7 @@ import Toggle from 'lib/components/redux-form/Toggle';
 import SelectField from 'lib/components/redux-form/SelectField';
 import formTranslations from 'lib/translations/form';
 import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
+import { achievementTypesConditionAttributes, typeMaterial } from 'lib/types';
 import translations from './translations.intl';
 import { formNames } from '../../constants';
 import MaterialUploader from '../MaterialUploader';
@@ -115,15 +116,12 @@ class AssessmentForm extends React.Component {
     // If allow to switch between autoraded and manually graded mode.
     modeSwitching: PropTypes.bool,
     folderAttributes: PropTypes.shape({
-      folderId: PropTypes.number,
+      folder_id: PropTypes.number,
       // See MaterialFormContainer for detailed PropTypes.
-      materials: PropTypes.array,
+      materials: typeMaterial,
     }),
     // Condtions will be displayed if the attributes are present.
-    conditionAttributes: PropTypes.shape({
-      new_condition_urls: PropTypes.array,
-      conditions: PropTypes.array,
-    }),
+    conditionAttributes: achievementTypesConditionAttributes,
   };
 
   static defaultProps = {

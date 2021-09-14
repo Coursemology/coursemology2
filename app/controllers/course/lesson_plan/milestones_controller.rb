@@ -18,7 +18,7 @@ class Course::LessonPlan::MilestonesController < Course::LessonPlan::Controller
   end
 
   def update #:nodoc:
-    if @milestone.update_attributes(milestone_params)
+    if @milestone.update(milestone_params)
       render partial: 'milestone', locals: { milestone: @milestone }
     else
       render json: { errors: @milestone.errors }, status: :bad_request

@@ -82,7 +82,7 @@ RSpec.describe User do
         let(:persisted_time_zone) { nil }
 
         it 'defaults to application default' do
-          expect(subject.time_zone).to eq(Application.config.x.default_user_time_zone)
+          expect(subject.time_zone).to eq(Application::Application.config.x.default_user_time_zone)
         end
       end
 
@@ -98,7 +98,7 @@ RSpec.describe User do
         let(:persisted_time_zone) { 'Foo' }
 
         it 'returns the application default' do
-          expect(subject.time_zone).to eq(Application.config.x.default_user_time_zone)
+          expect(subject.time_zone).to eq(Application::Application.config.x.default_user_time_zone)
         end
       end
     end

@@ -22,7 +22,8 @@ class Instance < ApplicationRecord
     #   as www) are not handled automatically.
     # @return [Instance]
     def find_tenant_by_host(host)
-      where.has { self.host.lower == host.downcase }.take
+      # where.has { self.host.lower == host.downcase }.take
+      where(Instance.arel_table[:host].lower.eq(host.downcase)).take
     end
 
     # Finds the given tenant by host, falling back to the default is none is found.
@@ -31,9 +32,11 @@ class Instance < ApplicationRecord
     #   as www) are not handled automatically.
     # @return [Instance]
     def find_tenant_by_host_or_default(host)
-      tenants = where.has do
-        (self.host.lower == host.downcase) | (id == DEFAULT_INSTANCE_ID)
-      end.to_a
+      # tenants = where.has do
+      #   (self.host.lower == host.downcase) | (id == DEFAULT_INSTANCE_ID)
+      # end.to_a
+      tenants = where(Instance.arel_table[:host].lower.
+        eq(host.downcase).or(Instance.arel_table[:id].eq(DEFAULT_INSTANCE_ID)))
 
       tenants.find { |tenant| !tenant.default? } || tenants.first
     end
@@ -126,7 +129,7 @@ class Instance < ApplicationRecord
 
   # Replace the hostname of the default instance.
   def host
-    return Application.config.x.default_host if default?
+    return Application::Application.config.x.default_host if default?
     super
   end
 

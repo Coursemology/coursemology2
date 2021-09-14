@@ -51,6 +51,7 @@ VisibleComments.propTypes = {
   commentForms: PropTypes.shape({
     topics: PropTypes.objectOf(PropTypes.string),
     posts: PropTypes.objectOf(PropTypes.string),
+    isSubmitting: PropTypes.bool,
   }),
   posts: PropTypes.arrayOf(postShape),
   topic: topicShape,

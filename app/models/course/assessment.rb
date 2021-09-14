@@ -16,7 +16,7 @@ class Course::Assessment < ApplicationRecord
   before_validation :propagate_course, if: :new_record?
   before_validation :assign_folder_attributes
   after_commit :grade_with_new_test_cases, on: :update
-  before_save :save_tab, on: :create
+  before_save :save_tab
 
   enum randomization: { prepared: 0 }
 
@@ -111,9 +111,13 @@ class Course::Assessment < ApplicationRecord
   #
   # Here, actable_data contains the list of tab IDs to be removed.
   scope :ids_showable_in_lesson_plan, (lambda do |actable_data|
-    joining { lesson_plan_item }.
+    # joining { lesson_plan_item }.
+    #   where.not(tab_id: actable_data).
+    #   selecting { lesson_plan_item.id }
+    unscoped.
+      joins(:lesson_plan_item).
       where.not(tab_id: actable_data).
-      selecting { lesson_plan_item.id }
+      select(Course::LessonPlan::Item.arel_table[:id])
   end)
 
   def self.use_relative_model_naming?

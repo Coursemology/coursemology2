@@ -2,18 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import CourseAPI from 'api/course';
+import typeMaterial from 'lib/types';
 import MaterialList from './MaterialList';
 import translations from './translations.intl';
 
 const propTypes = {
   folderId: PropTypes.number.isRequired,
-  materials: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-      name: PropTypes.string,
-      updated_at: PropTypes.string,
-    })
-  ),
+  materials: typeMaterial,
 };
 
 class MaterialUploader extends React.Component {
