@@ -64,9 +64,8 @@ class VisibleSubmissionEditIndex extends Component {
         : parseInt(stepString, 10) - 1;
 
     this.state = { newSubmission, step };
-    this.handleToggleViewHistoryMode = this.handleToggleViewHistoryMode.bind(
-      this,
-    );
+    this.handleToggleViewHistoryMode =
+      this.handleToggleViewHistoryMode.bind(this);
   }
 
   componentDidMount() {

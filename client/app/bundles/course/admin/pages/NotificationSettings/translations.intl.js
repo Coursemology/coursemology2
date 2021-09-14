@@ -33,8 +33,7 @@ const translations = defineMessages({
 
 export const settingDescriptions = defineMessages({
   new_announcement: {
-    id:
-      'course.admin.NotificationSettings.settingDescriptions.new_announcement',
+    id: 'course.admin.NotificationSettings.settingDescriptions.new_announcement',
     defaultMessage: 'Notify all users whenever a new announcement is made.',
   },
   survey_opening: {
@@ -46,13 +45,11 @@ export const settingDescriptions = defineMessages({
     defaultMessage: 'Notify students when a survey is about to expire.',
   },
   assessment_opening: {
-    id:
-      'course.admin.NotificationSettings.settingDescriptions.assessment_opening',
+    id: 'course.admin.NotificationSettings.settingDescriptions.assessment_opening',
     defaultMessage: 'Notify students when a new assessment is available.',
   },
   assessment_closing: {
-    id:
-      'course.admin.NotificationSettings.settingDescriptions.assessment_closing',
+    id: 'course.admin.NotificationSettings.settingDescriptions.assessment_closing',
     defaultMessage: 'Notify students when an assessment is about to be due.',
   },
   new_submission: {
@@ -62,8 +59,7 @@ export const settingDescriptions = defineMessages({
       send this notification for phantom students via the 'New Phantom Submission' setting.",
   },
   new_phantom_submission: {
-    id:
-      'course.admin.NotificationSettings.settingDescriptions.new_phantom_submission',
+    id: 'course.admin.NotificationSettings.settingDescriptions.new_phantom_submission',
     defaultMessage:
       "Sends 'New Submission' email for phantom students also. If the 'New\
      Submission' email notification is disabled, no emails will be sent even though this setting\
@@ -81,16 +77,14 @@ export const settingDescriptions = defineMessages({
       non-phantom student or staff.',
   },
   new_phantom_comment: {
-    id:
-      'course.admin.NotificationSettings.settingDescriptions.new_phantom_comment',
+    id: 'course.admin.NotificationSettings.settingDescriptions.new_phantom_comment',
     defaultMessage:
       "Notify users when comments or programming question annotations are made by\
       phantom student or staff. If the 'New Comment' email notification is disabled, no emails\
       will be sent even though this setting is enabled.",
   },
   new_enrol_request: {
-    id:
-      'course.admin.NotificationSettings.settingDescriptions.new_enrol_request',
+    id: 'course.admin.NotificationSettings.settingDescriptions.new_enrol_request',
     defaultMessage: 'Notify staff when users request to enrol in the course.',
   },
   post_replied: {
@@ -100,8 +94,7 @@ export const settingDescriptions = defineMessages({
       non-phantom user is made to that topic.',
   },
   post_phantom_replied: {
-    id:
-      'course.admin.NotificationSettings.settingDescriptions.post_phantom_replied',
+    id: 'course.admin.NotificationSettings.settingDescriptions.post_phantom_replied',
     defaultMessage:
       "Notify users who are subscribed to a forum topic when a reply by a\
       phantom user is made to that topic. If the 'Post Replied' email notification is disabled,\
@@ -149,8 +142,7 @@ export const settingTitles = defineMessages({
     defaultMessage: 'New Submission',
   },
   new_phantom_submission: {
-    id:
-      'course.admin.NotificationSettings.settingTitles.new_phantom_submission',
+    id: 'course.admin.NotificationSettings.settingTitles.new_phantom_submission',
     defaultMessage: 'New Submission by Phantom User',
   },
   grades_released: {

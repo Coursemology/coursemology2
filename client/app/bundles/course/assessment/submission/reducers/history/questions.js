@@ -1,6 +1,6 @@
 import actions, { defaultPastAnswersDisplayed } from '../../constants';
 
-export default function(state = {}, action) {
+export default function (state = {}, action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_SUCCESS: {
       if (action.payload.history) {

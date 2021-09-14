@@ -104,11 +104,7 @@ describe('<ResultsQuestion />', () => {
       buildContextOptions(storeCreator({})),
     );
     const lastOptionCountCell = () =>
-      resultsQuestion
-        .find('TableRow')
-        .last()
-        .find('td')
-        .at(3);
+      resultsQuestion.find('TableRow').last().find('td').at(3);
     const lastOptionCountBeforeSort = lastOptionCountCell().text();
     expect(lastOptionCountBeforeSort).toBe('1');
     const sortToggle = resultsQuestion.find('Toggle').first();

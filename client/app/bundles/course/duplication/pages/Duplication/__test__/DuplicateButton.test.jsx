@@ -66,10 +66,7 @@ describe('<DuplicateButton />', () => {
       <DuplicateButton />,
       buildContextOptions(storeCreator(data)),
     );
-    duplicateButton
-      .find('button')
-      .first()
-      .simulate('click');
+    duplicateButton.find('button').first().simulate('click');
 
     const confirmButton = duplicateButton
       .find('ConfirmationDialog')

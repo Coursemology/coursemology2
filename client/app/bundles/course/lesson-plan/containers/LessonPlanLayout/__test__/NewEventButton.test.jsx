@@ -19,11 +19,7 @@ describe('<NewEventButton />', () => {
     // Click 'new event' button
     newEventButton.find('button').simulate('click');
     expect(
-      eventFormDialog
-        .update()
-        .find('EventFormDialog')
-        .first()
-        .props().visible,
+      eventFormDialog.update().find('EventFormDialog').first().props().visible,
     ).toBe(true);
 
     // Fill event form

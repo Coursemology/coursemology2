@@ -349,17 +349,15 @@ class ScribingToolbar extends Component {
       setSelectedShape: (shape) => this.setSelectedShape(shape),
       onClickBorderColorPicker: (event) =>
         this.onClickColorPicker(event, scribingToolColor.SHAPE_BORDER),
-      borderColorPickerPopoverOpen: this.state.colorDropdowns[
-        scribingToolColor.SHAPE_BORDER
-      ],
+      borderColorPickerPopoverOpen:
+        this.state.colorDropdowns[scribingToolColor.SHAPE_BORDER],
       borderColorPickerPopoverAnchorEl: this.state.popoverColorPickerAnchor,
       onRequestCloseBorderColorPickerPopover: () =>
         this.onRequestCloseColorPicker(scribingToolColor.SHAPE_BORDER),
       onClickFillColorPicker: (event) =>
         this.onClickColorPicker(event, scribingToolColor.SHAPE_FILL),
-      fillColorPickerPopoverOpen: this.state.colorDropdowns[
-        scribingToolColor.SHAPE_FILL
-      ],
+      fillColorPickerPopoverOpen:
+        this.state.colorDropdowns[scribingToolColor.SHAPE_FILL],
       fillColorPickerPopoverAnchorEl: this.state.popoverColorPickerAnchor,
       noFillValue: scribing.hasNoFill,
       noFillOnCheck: (checked) =>

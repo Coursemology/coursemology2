@@ -52,13 +52,8 @@ export default class ImagePreview extends React.Component {
   }
 
   render() {
-    const {
-      file,
-      originalName,
-      originalUrl,
-      handleCancel,
-      render,
-    } = this.props;
+    const { file, originalName, originalUrl, handleCancel, render } =
+      this.props;
     const fileName = file ? file.name : originalName;
     const imageSrc = file ? this.getImage() : originalUrl;
 

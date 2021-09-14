@@ -15,7 +15,7 @@ const initialState = {
   isLoading: false,
 };
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   switch (action.type) {
     case actionTypes.SET_ITEM_TYPE_VISIBILITY: {
       const visibilityByType = {

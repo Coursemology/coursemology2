@@ -19,23 +19,19 @@ const translations = defineMessages({
     defaultMessage: 'Edit Event',
   },
   updateSuccess: {
-    id:
-      'course.lessonPlan.LessonPlanShow.LessonPlanItem.AdminTools.updateSuccess',
+    id: 'course.lessonPlan.LessonPlanShow.LessonPlanItem.AdminTools.updateSuccess',
     defaultMessage: 'Event updated.',
   },
   updateFailure: {
-    id:
-      'course.lessonPlan.LessonPlanShow.LessonPlanItem.AdminTools.updateFailure',
+    id: 'course.lessonPlan.LessonPlanShow.LessonPlanItem.AdminTools.updateFailure',
     defaultMessage: 'Failed to update event.',
   },
   deleteSuccess: {
-    id:
-      'course.lessonPlan.LessonPlanShow.LessonPlanItem.AdminTools.deleteSuccess',
+    id: 'course.lessonPlan.LessonPlanShow.LessonPlanItem.AdminTools.deleteSuccess',
     defaultMessage: 'Event deleted.',
   },
   deleteFailure: {
-    id:
-      'course.lessonPlan.LessonPlanShow.LessonPlanItem.AdminTools.deleteFailure',
+    id: 'course.lessonPlan.LessonPlanShow.LessonPlanItem.AdminTools.deleteFailure',
     defaultMessage: 'Failed to delete event.',
   },
 });

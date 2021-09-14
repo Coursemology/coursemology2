@@ -179,9 +179,8 @@ export default class ScribingCanvas extends React.Component {
   // This method clears the selection-disabled scribbles
   // and reloads them to enable selection again
   enableObjectSelection() {
-    const canvasState = this.props.scribing.canvasStates[
-      this.props.scribing.currentStateIndex
-    ];
+    const canvasState =
+      this.props.scribing.canvasStates[this.props.scribing.currentStateIndex];
     const userScribbles = this.getFabricObjectsFromJson(canvasState);
     this.canvas.clear();
     this.canvas.setBackground();
@@ -265,9 +264,8 @@ export default class ScribingCanvas extends React.Component {
           ],
           {
             stroke: `${this.props.scribing.colors[scribingToolColor.LINE]}`,
-            strokeWidth: this.props.scribing.thickness[
-              scribingToolThickness.LINE
-            ],
+            strokeWidth:
+              this.props.scribing.thickness[scribingToolThickness.LINE],
             strokeDashArray,
             selectable: true,
           },
@@ -295,9 +293,10 @@ export default class ScribingCanvas extends React.Component {
               stroke: `${
                 this.props.scribing.colors[scribingToolColor.SHAPE_BORDER]
               }`,
-              strokeWidth: this.props.scribing.thickness[
-                scribingToolThickness.SHAPE_BORDER
-              ],
+              strokeWidth:
+                this.props.scribing.thickness[
+                  scribingToolThickness.SHAPE_BORDER
+                ],
               strokeDashArray,
               fill: `${
                 this.props.scribing.colors[scribingToolColor.SHAPE_FILL]
@@ -323,9 +322,10 @@ export default class ScribingCanvas extends React.Component {
               stroke: `${
                 this.props.scribing.colors[scribingToolColor.SHAPE_BORDER]
               }`,
-              strokeWidth: this.props.scribing.thickness[
-                scribingToolThickness.SHAPE_BORDER
-              ],
+              strokeWidth:
+                this.props.scribing.thickness[
+                  scribingToolThickness.SHAPE_BORDER
+                ],
               strokeDashArray,
               fill: `${
                 this.props.scribing.colors[scribingToolColor.SHAPE_FILL]
@@ -712,9 +712,8 @@ export default class ScribingCanvas extends React.Component {
         outline: none;`,
       );
       canvasElem.addEventListener('keydown', this.onKeyDown, false);
-      const canvasContainerElem = canvasElem.getElementsByClassName(
-        'canvas-container',
-      )[0];
+      const canvasContainerElem =
+        canvasElem.getElementsByClassName('canvas-container')[0];
       canvasContainerElem.style.margin = '0 auto';
 
       this.initializeScribblesAndBackground();

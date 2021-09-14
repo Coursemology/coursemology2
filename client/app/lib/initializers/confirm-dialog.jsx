@@ -44,10 +44,7 @@ function submitLink(link) {
     value: link.data('method'),
   });
 
-  form
-    .append(token, method)
-    .appendTo(document.body)
-    .submit();
+  form.append(token, method).appendTo(document.body).submit();
 }
 
 function overrideConfirmDialog() {

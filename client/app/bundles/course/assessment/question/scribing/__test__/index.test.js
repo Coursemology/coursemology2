@@ -233,10 +233,7 @@ describe('Scribing question', () => {
 
     await sleep(1);
     newPage.update();
-    newPage
-      .find('button')
-      .first()
-      .simulate('submit');
+    newPage.find('button').first().simulate('submit');
 
     await sleep(1);
     expect(spyCreate).toHaveBeenCalled();
@@ -272,10 +269,7 @@ describe('Scribing question', () => {
 
     await sleep(1);
     fetchPage.update();
-    fetchPage
-      .find('button')
-      .first()
-      .simulate('submit');
+    fetchPage.find('button').first().simulate('submit');
 
     await sleep(1);
     expect(spyUpdate).toHaveBeenCalledWith(scribingId, mockUpdatedFields);

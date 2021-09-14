@@ -176,13 +176,8 @@ class SubmissionAnswer extends Component {
   }
 
   render() {
-    const {
-      readOnly,
-      showMcqMrqSolution,
-      question,
-      answerId,
-      graderView,
-    } = this.props;
+    const { readOnly, showMcqMrqSolution, question, answerId, graderView } =
+      this.props;
     const renderer = this.getRenderer(question);
 
     return (

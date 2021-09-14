@@ -50,12 +50,8 @@ const styles = {
 
 class LineStyleField extends Component {
   renderLineStyleChips() {
-    const {
-      intl,
-      lineToolType,
-      selectedLineStyle,
-      onClickLineStyleChip,
-    } = this.props;
+    const { intl, lineToolType, selectedLineStyle, onClickLineStyleChip } =
+      this.props;
     const lineStyles = [
       {
         key: intl.formatMessage(translations.solid),

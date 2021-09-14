@@ -16,11 +16,6 @@ describe('<AchievementIndex />', () => {
 
     const newBtn = indexPage.find('button');
     newBtn.simulate('click');
-    expect(
-      indexPage
-        .find('Dialog')
-        .first()
-        .props().open,
-    ).toBe(true);
+    expect(indexPage.find('Dialog').first().props().open).toBe(true);
   });
 });

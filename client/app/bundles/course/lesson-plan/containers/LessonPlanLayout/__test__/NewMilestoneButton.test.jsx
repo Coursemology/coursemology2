@@ -20,10 +20,7 @@ describe('<NewMilestoneButton />', () => {
     newMilestoneButton.find('button').simulate('click');
     milestoneFormDialog.update();
     expect(
-      milestoneFormDialog
-        .find('MilestoneFormDialog')
-        .first()
-        .props().visible,
+      milestoneFormDialog.find('MilestoneFormDialog').first().props().visible,
     ).toBe(true);
 
     // Fill milestone form

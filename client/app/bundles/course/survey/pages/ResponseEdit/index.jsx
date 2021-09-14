@@ -53,12 +53,8 @@ class ResponseEdit extends React.Component {
         params: { responseId },
       },
     } = this.props;
-    const {
-      saveSuccess,
-      saveFailure,
-      submitSuccess,
-      submitFailure,
-    } = translations;
+    const { saveSuccess, saveFailure, submitSuccess, submitFailure } =
+      translations;
     const payload = buildResponsePayload(data);
     const successMessage = (
       <FormattedMessage {...(data.submit ? submitSuccess : saveSuccess)} />

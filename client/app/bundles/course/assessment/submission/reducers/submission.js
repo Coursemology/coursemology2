@@ -13,7 +13,7 @@ function calculateGraderView(state, canGrade) {
   return canGrade;
 }
 
-export default function(state = {}, action) {
+export default function (state = {}, action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_SUCCESS:
     case actions.SAVE_DRAFT_SUCCESS:

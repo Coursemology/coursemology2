@@ -17,13 +17,15 @@ function generateRailStyle(buffered, total) {
 
   if (bufferedFrac < 0.5) {
     return {
-      backgroundImage: `linear-gradient(270deg, ${unbufferedColour} ${unbufferedFrac *
-        100}%, ${bufferedColour} ${bufferedFrac * 100}%)`,
+      backgroundImage: `linear-gradient(270deg, ${unbufferedColour} ${
+        unbufferedFrac * 100
+      }%, ${bufferedColour} ${bufferedFrac * 100}%)`,
     };
   }
   return {
-    backgroundImage: `linear-gradient(90deg, ${bufferedColour} ${bufferedFrac *
-      100}%, ${unbufferedColour} ${unbufferedFrac * 100}%)`,
+    backgroundImage: `linear-gradient(90deg, ${bufferedColour} ${
+      bufferedFrac * 100
+    }%, ${unbufferedColour} ${unbufferedFrac * 100}%)`,
   };
 }
 

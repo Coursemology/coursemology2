@@ -49,13 +49,8 @@ const propTypes = {
 };
 
 const ScribingQuestion = (props) => {
-  const {
-    dispatch,
-    scribingQuestion,
-    formValues,
-    initialValues,
-    scribingId,
-  } = props;
+  const { dispatch, scribingQuestion, formValues, initialValues, scribingId } =
+    props;
   const actions = bindActionCreators(scribingQuestionActionCreators, dispatch);
 
   return (

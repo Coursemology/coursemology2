@@ -7,7 +7,7 @@ const initialState = {
   notification: null,
 };
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   switch (action.type) {
     case actionTypes.ACHIEVEMENT_FORM_SHOW: {
       return { ...state, visible: true };

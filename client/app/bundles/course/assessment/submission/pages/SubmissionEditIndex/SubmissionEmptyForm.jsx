@@ -68,13 +68,8 @@ class SubmissionEmptyForm extends Component {
   }
 
   renderSaveGradeButton() {
-    const {
-      intl,
-      graderView,
-      attempting,
-      handleSaveGrade,
-      isSaving,
-    } = this.props;
+    const { intl, graderView, attempting, handleSaveGrade, isSaving } =
+      this.props;
     if (graderView && !attempting) {
       return (
         <RaisedButton
@@ -142,13 +137,8 @@ class SubmissionEmptyForm extends Component {
   }
 
   render() {
-    const {
-      canUpdate,
-      attempting,
-      graderView,
-      submitted,
-      published,
-    } = this.props;
+    const { canUpdate, attempting, graderView, submitted, published } =
+      this.props;
     const needShowSubmitButton = attempting && canUpdate;
     const needShowUnsubmitButton = graderView && (submitted || published);
     if (!needShowSubmitButton && !needShowUnsubmitButton) {

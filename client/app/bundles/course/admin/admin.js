@@ -1,5 +1,5 @@
 $(document).ready(() => {
-  $('input.self-directed-learning-checkbox:checkbox').change(function() {
+  $('input.self-directed-learning-checkbox:checkbox').change(function () {
     if ($(this).is(':checked')) {
       $('div.advance-start-at-time').show();
       $('.advance-start-at-time input').prop('required', true);

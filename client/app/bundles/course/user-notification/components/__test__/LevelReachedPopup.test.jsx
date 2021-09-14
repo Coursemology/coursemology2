@@ -9,10 +9,7 @@ function popupDialogWrapper(notification) {
     <LevelReachedPopup notification={notification} />,
     contextOptions,
   );
-  const dialogInline = wrapper
-    .find('RenderToLayer')
-    .first()
-    .instance();
+  const dialogInline = wrapper.find('RenderToLayer').first().instance();
   return mount(dialogInline.props.render(), contextOptions);
 }
 

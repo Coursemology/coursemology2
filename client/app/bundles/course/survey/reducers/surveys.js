@@ -3,7 +3,7 @@ import actionTypes from '../constants';
 import surveyReducer from './survey';
 import { sortSurveyElements, sortSurveysByDate } from '../utils';
 
-export default function(state = [], action) {
+export default function (state = [], action) {
   switch (action.type) {
     case actionTypes.CREATE_SURVEY_SUCCESS: {
       return sortSurveysByDate([...state, sortSurveyElements(action.survey)]);

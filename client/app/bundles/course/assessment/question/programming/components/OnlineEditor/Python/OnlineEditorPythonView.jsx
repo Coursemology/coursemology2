@@ -80,8 +80,8 @@ class OnlineEditorPythonView extends React.Component {
             fileType,
             filesize: fileData.get('size'),
             toDelete: this.props.dataFiles.get('to_delete').has(filename),
-            deleteExistingPackageFile: this.props.actions
-              .deleteExistingPackageFile,
+            deleteExistingPackageFile:
+              this.props.actions.deleteExistingPackageFile,
             isLoading: this.props.isLoading,
             isLast: numFiles === index + 1,
           }}

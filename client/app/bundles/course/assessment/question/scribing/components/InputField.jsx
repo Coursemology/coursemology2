@@ -15,15 +15,8 @@ const propTypes = {
 };
 
 const InputField = (props) => {
-  const {
-    placeholder,
-    field,
-    validate,
-    label,
-    required,
-    type,
-    isLoading,
-  } = props;
+  const { placeholder, field, validate, label, required, type, isLoading } =
+    props;
 
   return (
     <div title={placeholder}>
