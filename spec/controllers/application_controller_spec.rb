@@ -44,7 +44,7 @@ RSpec.describe ApplicationController, type: :controller do
         end
 
         context 'when the host has a www subdomain' do
-          let(:instance_host) { 'www.' + instance.host.upcase }
+          let(:instance_host) { "www.#{instance.host.upcase}" }
           it 'finds the host without the www subdomain' do
             get :index
 
@@ -53,7 +53,7 @@ RSpec.describe ApplicationController, type: :controller do
         end
 
         context 'when the host has a subdomain other than www' do
-          let(:instance_host) { 'random.' + instance.host.upcase }
+          let(:instance_host) { "random.#{instance.host.upcase}" }
           it 'finds the actual host' do
             get :index
 

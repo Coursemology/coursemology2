@@ -15,7 +15,7 @@ class Course::Assessment::QuestionBundleAssignmentsController < Course::Assessme
     @name_lookup = @assignment_randomizer.name_lookup
     @validation_results = @assignment_randomizer.validate(@assignment_set)
     @aggregated_offending_cells = {} # { [student_id, group_id]: [ error_string ] }
-    @validation_results.values.each do |result|
+    @validation_results.each_value do |result|
       next if result.offending_cells.nil?
 
       result.offending_cells.each do |cell, error_string|

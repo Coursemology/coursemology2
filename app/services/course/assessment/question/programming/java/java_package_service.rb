@@ -92,10 +92,11 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
   end
 
   def resolve_folder_path(tmp_dir, file_type)
-    if file_type == 'submission_files'
-      tmp_dir + '/submission'
-    elsif file_type == 'solution_files'
-      tmp_dir + '/solution'
+    case file_type
+    when 'submission_files'
+      "#{tmp_dir}/submission"
+    when 'solution_files'
+      "#{tmp_dir}/solution"
     # Data files do not need resolution
     else
       tmp_dir
@@ -107,7 +108,7 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
 
     attachment.open(binmode: true) do |temporary_file|
       package = Course::Assessment::ProgrammingPackage.new(temporary_file)
-      files_to_delete = file_type + '_to_delete'
+      files_to_delete = "#{file_type}_to_delete"
       return extract_from_package(package, file_type, new_filenames, @test_params[files_to_delete])
     ensure
       next unless package
@@ -210,22 +211,22 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
     @test_params[:submission_files].try(:each) do |file|
       next if file.nil?
 
-      zip.add('submission/' + file.original_filename, file.tempfile.path)
+      zip.add("submission/#{file.original_filename}", file.tempfile.path)
     end
 
     submission_files_to_keep.each do |file|
-      zip.add('submission/' + File.basename(file.path), file.path)
+      zip.add("submission/#{File.basename(file.path)}", file.path)
     end
 
     zip.mkdir('solution')
     @test_params[:solution_files].try(:each) do |file|
       next if file.nil?
 
-      zip.add('solution/' + file.original_filename, file.tempfile.path)
+      zip.add("solution/#{file.original_filename}", file.tempfile.path)
     end
 
     solution_files_to_keep.each do |file|
-      zip.add('solution/' + File.basename(file.path), file.path)
+      zip.add("solution/#{File.basename(file.path)}", file.path)
     end
   end
 

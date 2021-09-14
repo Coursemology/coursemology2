@@ -14,6 +14,6 @@ class Course::Material::ZipDownloadJob < ApplicationJob
   #   root folder).
   def perform_tracked(folder, materials, filename = folder.name)
     zip_file = Course::Material::ZipDownloadService.download_and_zip(folder, materials)
-    redirect_to SendFile.send_file(zip_file, Pathname.normalize_filename(filename) + '.zip')
+    redirect_to SendFile.send_file(zip_file, "#{Pathname.normalize_filename(filename)}.zip")
   end
 end

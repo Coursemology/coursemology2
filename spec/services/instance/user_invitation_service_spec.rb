@@ -196,8 +196,8 @@ RSpec.describe Instance::UserInvitationService, type: :service do
 
       context 'when the name is blank' do
         let(:attributes_without_name) do
-          user_form_attributes.map do |k, v|
-            [k, v.except(:name)]
+          user_form_attributes.transform_values do |v|
+            v.except(:name)
           end.to_h
         end
 
@@ -298,7 +298,7 @@ RSpec.describe Instance::UserInvitationService, type: :service do
         let!(:user) { create(:user) }
 
         it 'does not define the key' do
-          result = subject.send(:find_existing_users, ['foo' + user.email])
+          result = subject.send(:find_existing_users, ["foo#{user.email}"])
           expect(result).not_to have_key(user.email)
           expect(result).to be_empty
         end

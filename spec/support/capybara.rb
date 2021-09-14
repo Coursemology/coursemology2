@@ -25,7 +25,7 @@ module Capybara::TestGroupHelpers
           ''
         end
 
-      result = find('form' + attribute_selector)
+      result = find("form#{attribute_selector}")
       selector ? result.find(selector) : result
     end
 

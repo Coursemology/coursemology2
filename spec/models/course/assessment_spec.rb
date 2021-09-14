@@ -350,7 +350,7 @@ RSpec.describe Course::Assessment do
         it 'create a folder with proper name' do
           subject.save
 
-          expect(subject.folder.name).to eq(common_title + ' (0)')
+          expect(subject.folder.name).to eq("#{common_title} (0)")
         end
       end
 
@@ -361,7 +361,7 @@ RSpec.describe Course::Assessment do
           subject.title = common_title
           subject.save
 
-          expect(subject.folder.name).to eq(common_title + ' (0)')
+          expect(subject.folder.name).to eq("#{common_title} (0)")
         end
       end
     end

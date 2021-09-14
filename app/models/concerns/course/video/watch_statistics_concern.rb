@@ -74,7 +74,7 @@ module Course::Video::WatchStatisticsConcern
       result[:start] += session_intervals[:start]
       result[:end] += session_intervals[:end]
     end
-    result.map { |k, v| [k, v.sort] }.to_h
+    result.transform_values(&:sort)
   end
 
   # This method iterates through all start and end events belonging to a single session,

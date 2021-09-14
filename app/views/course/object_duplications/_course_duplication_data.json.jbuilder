@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 json.sourceCourse do
   json.(current_course, :id, :title, :start_at)
   json.duplicationModesAllowed([].tap do |modes|

@@ -28,9 +28,7 @@ class System::Admin::CoursesController < System::Admin::Controller
     params.permit(:search)[:search]
   end
 
-  def unscope_resources
-    Course.unscoped do
-      yield
-    end
+  def unscope_resources(&block)
+    Course.unscoped(&block)
   end
 end

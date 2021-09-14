@@ -65,9 +65,10 @@ class Course::Condition::Assessment < ApplicationRecord
     self.conditional_type = other.conditional_type
     self.conditional = duplicator.duplicate(other.conditional)
 
-    if duplicator.mode == :course
+    case duplicator.mode
+    when :course
       self.course = duplicator.duplicate(other.course)
-    elsif duplicator.mode == :object
+    when :object
       self.course = duplicator.options[:destination_course]
     end
 

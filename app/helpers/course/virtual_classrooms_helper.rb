@@ -21,7 +21,7 @@ module Course::VirtualClassroomsHelper
 
   def list_recorded_videos(virtual_classroom)
     content_tag :p do
-      result = content_tag(:span, t('course.virtual_classrooms.recorded_videos') + ': ')
+      result = content_tag(:span, "#{t('course.virtual_classrooms.recorded_videos')}: ")
       result = recorded_video_links(result, virtual_classroom)
       result
     end
