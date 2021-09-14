@@ -11,7 +11,7 @@ describe('<DownloadResponsesButton />', () => {
     const store = storeCreator({ surveys: {} });
     const downloadButton = mount(
       <DownloadResponsesButton />,
-      buildContextOptions(store)
+      buildContextOptions(store),
     );
     downloadButton.find('button').simulate('click');
     expect(spyRemind).toHaveBeenCalled();

@@ -18,7 +18,10 @@ describe('<NewSectionButton />', () => {
     newSectionButton.find('button').simulate('click');
     sectionFormDialogue.update();
     expect(
-      sectionFormDialogue.find('SectionFormDialogue').first().props().visible
+      sectionFormDialogue
+        .find('SectionFormDialogue')
+        .first()
+        .props().visible,
     ).toBe(true);
 
     // Fill section form with title
@@ -28,7 +31,7 @@ describe('<NewSectionButton />', () => {
       .first()
       .instance();
     const sectionForm = mount(dialogInline.props.render(), contextOptions).find(
-      'form'
+      'form',
     );
     const titleInput = sectionForm.find('input[name="title"]');
     titleInput.simulate('change', { target: { value: section.title } });

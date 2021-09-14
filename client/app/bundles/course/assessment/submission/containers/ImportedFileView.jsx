@@ -141,6 +141,6 @@ function mapStateToProps(state, ownProps) {
 }
 
 const ImportedFileView = connect(mapStateToProps)(
-  injectIntl(VisibleImportedFileView)
+  injectIntl(VisibleImportedFileView),
 );
 export default ImportedFileView;

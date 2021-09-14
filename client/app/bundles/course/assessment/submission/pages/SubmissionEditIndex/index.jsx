@@ -64,8 +64,9 @@ class VisibleSubmissionEditIndex extends Component {
         : parseInt(stepString, 10) - 1;
 
     this.state = { newSubmission, step };
-    this.handleToggleViewHistoryMode =
-      this.handleToggleViewHistoryMode.bind(this);
+    this.handleToggleViewHistoryMode = this.handleToggleViewHistoryMode.bind(
+      this,
+    );
   }
 
   componentDidMount() {
@@ -134,7 +135,7 @@ class VisibleSubmissionEditIndex extends Component {
     } = this.props;
     const published = workflowState === workflowStates.Published;
     dispatch(
-      saveGrade(params.submissionId, Object.values(grading), exp, published)
+      saveGrade(params.submissionId, Object.values(grading), exp, published),
     );
   }
 
@@ -147,7 +148,7 @@ class VisibleSubmissionEditIndex extends Component {
     const answers = Object.values(form.values);
     return this.validateSubmit().then(
       () => dispatch(finalise(params.submissionId, answers)),
-      () => setNotification(translations.submitError)(dispatch)
+      () => setNotification(translations.submitError)(dispatch),
     );
   }
 
@@ -160,7 +161,7 @@ class VisibleSubmissionEditIndex extends Component {
     const answer = form.values[answerId] || {};
     return this.validateSubmitAnswer(answerId).then(
       () => dispatch(submitAnswer(params.submissionId, answer)),
-      () => setNotification(translations.submitError)(dispatch)
+      () => setNotification(translations.submitError)(dispatch),
     );
   }
 
@@ -172,8 +173,8 @@ class VisibleSubmissionEditIndex extends Component {
         viewHistory,
         submissionQuestionId,
         questionId,
-        answersLoaded
-      )
+        answersLoaded,
+      ),
     );
   }
 
@@ -210,7 +211,7 @@ class VisibleSubmissionEditIndex extends Component {
     });
 
     const hasError = Object.values(form.syncErrors || {}).some(
-      (answerError) => Object.keys(answerError).length !== 0
+      (answerError) => Object.keys(answerError).length !== 0,
     );
 
     if (hasError) {
@@ -245,7 +246,7 @@ class VisibleSubmissionEditIndex extends Component {
     }
 
     const numIncorrect = Object.keys(explanations).filter(
-      (qid) => !explanations[qid] || !explanations[qid].correct
+      (qid) => !explanations[qid] || !explanations[qid].correct,
     ).length;
     return numIncorrect === 0;
   }
@@ -495,6 +496,6 @@ function mapStateToProps(state) {
 }
 
 const SubmissionEditIndex = connect(mapStateToProps)(
-  VisibleSubmissionEditIndex
+  VisibleSubmissionEditIndex,
 );
 export default SubmissionEditIndex;

@@ -107,7 +107,7 @@ function updateBufferProgress(bufferProgress) {
 export function updateProgressAndBuffer(
   playerProgress,
   bufferProgress,
-  forceSeek = false
+  forceSeek = false,
 ) {
   return (dispatch) => {
     if (playerProgress !== undefined) {
@@ -230,13 +230,13 @@ function sendCurrentEvents(dispatch, videoState, closeSession = false) {
       events.toArray(),
       duration,
       false,
-      closeSession
+      closeSession,
     )
     .then(() => {
       if (!events.isEmpty()) {
         dispatch(
           removeEvents(events.map((event) => event.sequence_num).toSet()),
-          closeSession
+          closeSession,
         );
       }
     });
@@ -270,7 +270,8 @@ function sendOldSessions(dispatch, oldSessions) {
     .values();
 
   Promise.all(promises).then((sessionIds) =>
-    dispatch(removeOldSessions(sessionIds.filter((id) => id !== null))));
+    dispatch(removeOldSessions(sessionIds.filter((id) => id !== null))),
+  );
 }
 
 /**

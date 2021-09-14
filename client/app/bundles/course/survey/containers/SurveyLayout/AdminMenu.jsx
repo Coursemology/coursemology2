@@ -49,7 +49,7 @@ class AdminMenu extends React.Component {
     const successMessage = intl.formatMessage(translations.updateSuccess, data);
     const failureMessage = intl.formatMessage(translations.updateFailure);
     return dispatch(
-      updateSurvey(surveyId, payload, successMessage, failureMessage)
+      updateSurvey(surveyId, payload, successMessage, failureMessage),
     );
   };
 
@@ -89,7 +89,7 @@ class AdminMenu extends React.Component {
           start_at: new Date(start_at),
           end_at: end_at && new Date(end_at),
         },
-      })
+      }),
     );
   };
 
@@ -99,7 +99,7 @@ class AdminMenu extends React.Component {
 
     const successMessage = intl.formatMessage(
       translations.deleteSuccess,
-      survey
+      survey,
     );
     const failureMessage = intl.formatMessage(translations.deleteFailure);
     const handleDelete = () =>

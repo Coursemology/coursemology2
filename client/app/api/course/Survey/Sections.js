@@ -41,7 +41,7 @@ export default class SectionsAPI extends BaseSurveyAPI {
   update(sectionId, sectionFields) {
     return this.getClient().patch(
       `${this._getUrlPrefix()}/${sectionId}`,
-      sectionFields
+      sectionFields,
     );
   }
 

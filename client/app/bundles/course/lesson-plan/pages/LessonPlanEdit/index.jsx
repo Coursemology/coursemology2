@@ -66,7 +66,7 @@ class LessonPlanEdit extends React.Component {
           id={milestone.id}
           title={milestone.title}
           startAt={milestone.start_at}
-        />
+        />,
       );
     }
 

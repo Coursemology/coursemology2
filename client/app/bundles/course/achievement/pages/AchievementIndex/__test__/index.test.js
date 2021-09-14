@@ -11,11 +11,16 @@ describe('<AchievementIndex />', () => {
     const indexPage = mount(
       <ProviderWrapper store={store}>
         <AchievementIndex badge={{ url: 'some-url.com' }} />
-      </ProviderWrapper>
+      </ProviderWrapper>,
     );
 
     const newBtn = indexPage.find('button');
     newBtn.simulate('click');
-    expect(indexPage.find('Dialog').first().props().open).toBe(true);
+    expect(
+      indexPage
+        .find('Dialog')
+        .first()
+        .props().open,
+    ).toBe(true);
   });
 });

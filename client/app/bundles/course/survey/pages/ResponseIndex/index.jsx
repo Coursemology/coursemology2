@@ -317,7 +317,7 @@ class ResponseIndex extends React.Component {
         categories[cateogry].push(response);
         return categories;
       },
-      { realResponses: [], phantomResponses: [] }
+      { realResponses: [], phantomResponses: [] },
     );
 
     const {

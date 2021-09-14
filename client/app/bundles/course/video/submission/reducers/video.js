@@ -38,7 +38,7 @@ export const persistTransform = createTransform(
     ...outboundState,
     sessionEvents: makeImmutableList(outboundState.sessionEvents),
   }),
-  { whitelist: ['video'] }
+  { whitelist: ['video'] },
 );
 
 /**
@@ -68,7 +68,7 @@ function computeTimeAdjustChange(state, suggestedTime, forceSeek = false) {
 
   stateChange.playerProgress = Math.max(
     0,
-    Math.min(state.duration, stateChange.playerProgress)
+    Math.min(state.duration, stateChange.playerProgress),
   );
   // No point seeking if the progress is not changed
   stateChange.forceSeek =
@@ -149,13 +149,13 @@ function videoStateReducer(state = initialState, action) {
       return transformState({ playbackRate: action.playbackRate });
     case videoActionTypes.UPDATE_PLAYER_PROGRESS:
       return transformState(
-        computeTimeAdjustChange(state, action.playerProgress, action.forceSeek)
+        computeTimeAdjustChange(state, action.playerProgress, action.forceSeek),
       );
     case videoActionTypes.UPDATE_BUFFER_PROGRESS:
       return transformState({
         bufferProgress: Math.max(
           0,
-          Math.min(state.duration, action.bufferProgress)
+          Math.min(state.duration, action.bufferProgress),
         ),
       });
     case videoActionTypes.UPDATE_PLAYER_DURATION:
@@ -249,7 +249,7 @@ function videoSessionReducer(state = initialState, action) {
         sessionEvents: events.push(
           generateEvent(state, 'speed_change', {
             playback_rate: action.playbackRate,
-          })
+          }),
         ),
       };
     case videoActionTypes.CHANGE_PLAYER_STATE:
@@ -270,7 +270,8 @@ function videoSessionReducer(state = initialState, action) {
       return {
         ...state,
         sessionEvents: events.filterNot((event) =>
-          action.sequenceNums.has(event.sequence_num)),
+          action.sequenceNums.has(event.sequence_num),
+        ),
         sessionClosed: action.sessionClosed,
       };
     default:
@@ -278,6 +279,6 @@ function videoSessionReducer(state = initialState, action) {
   }
 }
 
-export default function (state = initialState, action) {
+export default function(state = initialState, action) {
   return videoStateReducer(videoSessionReducer(state, action), action);
 }

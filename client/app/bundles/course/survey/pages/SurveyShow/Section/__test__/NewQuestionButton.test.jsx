@@ -14,11 +14,11 @@ describe('<NewQuestionButton />', () => {
     const contextOptions = buildContextOptions(storeCreator({}));
     const newQuestionButton = mount(
       <NewQuestionButton sectionId={sectionId} />,
-      contextOptions
+      contextOptions,
     );
     const questionFormDialogue = mount(
       <QuestionFormDialogue />,
-      contextOptions
+      contextOptions,
     );
 
     // Click 'new question' button
@@ -26,7 +26,10 @@ describe('<NewQuestionButton />', () => {
     newQuestionButtonNode.simulate('click');
     questionFormDialogue.update();
     expect(
-      questionFormDialogue.find('QuestionFormDialogue').first().props().visible
+      questionFormDialogue
+        .find('QuestionFormDialogue')
+        .first()
+        .props().visible,
     ).toBe(true);
 
     // Fill section form with title
@@ -38,7 +41,7 @@ describe('<NewQuestionButton />', () => {
       .instance();
     const questionForm = mount(
       dialogInline.props.render(),
-      contextOptions
+      contextOptions,
     ).find('form');
     const descriptionInput = questionForm.find('textarea[name="description"]');
     descriptionInput.simulate('change', { target: { value: questionText } });
@@ -65,7 +68,7 @@ describe('<NewQuestionButton />', () => {
     expect(formData.get('question[required]')).toBe('false');
     expect(formData.get('question[description]')).toBe(questionText);
     expect(formData.get('question[options_attributes][0][option]')).toBe(
-      optionText
+      optionText,
     );
   });
 });

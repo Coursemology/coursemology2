@@ -143,9 +143,8 @@ const props = {
 };
 
 // stub import function
-jest.mock(
-  'course/assessment/submission/loaders/ScribingViewLoader',
-  () => () => Promise.resolve()
+jest.mock('course/assessment/submission/loaders/ScribingViewLoader', () => () =>
+  Promise.resolve(),
 );
 
 beforeEach(() => {
@@ -167,7 +166,7 @@ describe('ScribingToolbar', () => {
           muiTheme: PropTypes.object,
         },
       },
-      'ScribingToolbar'
+      'ScribingToolbar',
     );
 
     scribingToolbar.setState({
@@ -177,7 +176,7 @@ describe('ScribingToolbar', () => {
     });
     scribingToolbar.update();
     expect(
-      scribingToolbar.find('InjectIntl(TypePopover)').prop('open')
+      scribingToolbar.find('InjectIntl(TypePopover)').prop('open'),
     ).toEqual(true);
   });
 
@@ -191,7 +190,7 @@ describe('ScribingToolbar', () => {
           muiTheme: PropTypes.object,
         },
       },
-      'ScribingToolbar'
+      'ScribingToolbar',
     );
 
     scribingToolbar.setState({
@@ -203,7 +202,7 @@ describe('ScribingToolbar', () => {
     expect(
       scribingToolbar
         .find('InjectIntl(TypePopover)')
-        .prop('colorPickerPopoverOpen')
+        .prop('colorPickerPopoverOpen'),
     ).toEqual(true);
 
     scribingToolbar.setState({
@@ -215,7 +214,7 @@ describe('ScribingToolbar', () => {
     expect(
       scribingToolbar
         .find('InjectIntl(TypePopover)')
-        .prop('colorPickerPopoverOpen')
+        .prop('colorPickerPopoverOpen'),
     ).toEqual(false);
   });
 
@@ -229,7 +228,7 @@ describe('ScribingToolbar', () => {
         >
           <ScribingView answerId={answerId} />
         </MemoryRouter>
-      </ProviderWrapper>
+      </ProviderWrapper>,
     );
 
     const coloringTool = scribingToolColor.TYPE;
@@ -237,10 +236,13 @@ describe('ScribingToolbar', () => {
     store.dispatch(setColoringToolColor(answerId, coloringTool, color));
     editPage.update();
     expect(editPage.find('TypePopover').prop('colorPickerColor')).toEqual(
-      color
+      color,
     );
     expect(
-      editPage.find('ToolDropdown').first().prop('colorBarBackground')
+      editPage
+        .find('ToolDropdown')
+        .first()
+        .prop('colorBarBackground'),
     ).toEqual(color);
   });
 });

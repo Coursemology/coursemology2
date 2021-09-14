@@ -13,7 +13,7 @@ export function setCanvasLoaded(answerId, loaded, canvas) {
 export function updateScribingAnswer(
   answerId,
   answerActableId,
-  scribblesInJSON
+  scribblesInJSON,
 ) {
   const data = {
     content: scribblesInJSON,
@@ -32,7 +32,8 @@ export function updateScribingAnswer(
         dispatch({
           type: actions.UPDATE_SCRIBING_ANSWER_SUCCESS,
           payload: { answerId },
-        }))
+        }),
+      )
       .catch((error) => {
         dispatch({
           type: actions.UPDATE_SCRIBING_ANSWER_FAILURE,
@@ -132,7 +133,7 @@ export function setCanvasProperties(
   answerId,
   canvasWidth,
   canvasHeight,
-  canvasMaxWidth
+  canvasMaxWidth,
 ) {
   return (dispatch) =>
     dispatch({

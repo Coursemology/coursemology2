@@ -91,7 +91,7 @@ const ColorPickerField = (props) => {
               noFillOnCheck(checked);
               if (checked) {
                 onChangeCompleteColorPicker(
-                  `rgba(${rgbaValues[1]},${rgbaValues[2]},${rgbaValues[3]},0)`
+                  `rgba(${rgbaValues[1]},${rgbaValues[2]},${rgbaValues[3]},0)`,
                 );
               }
             }}
@@ -131,7 +131,7 @@ const ColorPickerField = (props) => {
             color={colorPickerColor}
             onChange={(color) =>
               onChangeCompleteColorPicker(
-                `rgba(${color.rgb.r},${color.rgb.g},${color.rgb.b},${color.rgb.a})`
+                `rgba(${color.rgb.r},${color.rgb.g},${color.rgb.b},${color.rgb.a})`,
               )
             }
           />

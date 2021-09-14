@@ -175,7 +175,10 @@ function testReducer(state, action) {
     }
     case editorActionTypes.TEST_CASE_DELETE: {
       const { testType, index } = action;
-      const tests = state.get('test_cases').get(testType).splice(index, 1);
+      const tests = state
+        .get('test_cases')
+        .get(testType)
+        .splice(index, 1);
       return state.setIn(['test_cases', testType], tests);
     }
     default: {
@@ -193,13 +196,14 @@ function packageFilesReducer(state, action) {
       let newFiles = state
         .get('new')
         .update(index, (fileData) =>
-          Immutable.fromJS({ key: fileData.get('key'), filename }));
+          Immutable.fromJS({ key: fileData.get('key'), filename }),
+        );
 
       // Adds a new entry if there are no more empty non-deleted files.
       if (newFiles.last().get('filename') !== null) {
         const newKey = state.get('key') + 1;
         newFiles = newFiles.push(
-          Immutable.fromJS({ key: newKey, filename: null })
+          Immutable.fromJS({ key: newKey, filename: null }),
         );
         return state.set('key', newKey).set('new', newFiles);
       }
@@ -246,8 +250,13 @@ function apiReducer(state, action) {
 
       if (data) {
         // Evaluation has completed, updated data retrieved from server.
-        const { form_data, question, package_ui, test_ui, import_result } =
-          data;
+        const {
+          form_data,
+          question,
+          package_ui,
+          test_ui,
+          import_result,
+        } = data;
         const key = state.getIn(['test_ui', 'data_files', 'key']);
         const submissionKey = state.getIn([
           'test_ui',
@@ -264,15 +273,15 @@ function apiReducer(state, action) {
           .merge({ form_data, package_ui, import_result })
           .setIn(
             ['test_ui', 'data_files', 'new'],
-            Immutable.fromJS([{ key, filename: null }])
+            Immutable.fromJS([{ key, filename: null }]),
           )
           .setIn(
             ['test_ui', 'submission_files', 'new'],
-            Immutable.fromJS([{ key: submissionKey, filename: null }])
+            Immutable.fromJS([{ key: submissionKey, filename: null }]),
           )
           .setIn(
             ['test_ui', 'solution_files', 'new'],
-            Immutable.fromJS([{ key: solutionKey, filename: null }])
+            Immutable.fromJS([{ key: solutionKey, filename: null }]),
           );
 
         if (import_result.import_errored) {
@@ -291,16 +300,16 @@ function apiReducer(state, action) {
               .setIn(['test_ui', 'mode'], editorMode)
               .setIn(
                 ['test_ui', editorMode],
-                Immutable.fromJS(test_ui[editorMode])
+                Immutable.fromJS(test_ui[editorMode]),
               )
               .setIn(['test_ui', 'data_files', 'to_delete'], Immutable.Set())
               .setIn(
                 ['test_ui', 'submission_files', 'to_delete'],
-                Immutable.Set()
+                Immutable.Set(),
               )
               .setIn(
                 ['test_ui', 'solution_files', 'to_delete'],
-                Immutable.Set()
+                Immutable.Set(),
               );
           }
 
@@ -329,7 +338,7 @@ function apiReducer(state, action) {
       if (editorMode && test_ui[editorMode] !== undefined) {
         newState = newState.setIn(
           ['test_ui', editorMode],
-          Immutable.fromJS(test_ui[editorMode])
+          Immutable.fromJS(test_ui[editorMode]),
         );
       }
 
@@ -346,7 +355,7 @@ function apiReducer(state, action) {
 
 export default function programmingQuestionReducer(
   state = initialState,
-  action
+  action,
 ) {
   const { type } = action;
   switch (type) {
@@ -354,7 +363,7 @@ export default function programmingQuestionReducer(
     case actionTypes.PROGRAMMING_QUESTION_UPDATE: {
       return state.set(
         'question',
-        questionReducer(state.get('question'), action)
+        questionReducer(state.get('question'), action),
       );
     }
     case actionTypes.EDITOR_MODE_UPDATE: {
@@ -377,7 +386,7 @@ export default function programmingQuestionReducer(
       const packageFiles = state.get('test_ui').get(fileType);
       return state.setIn(
         ['test_ui', fileType],
-        packageFilesReducer(packageFiles, action)
+        packageFilesReducer(packageFiles, action),
       );
     }
     case actionTypes.SUBMIT_FORM_EVALUATING:

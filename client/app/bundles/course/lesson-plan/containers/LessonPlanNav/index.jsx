@@ -99,7 +99,7 @@ LessonPlanNav.propTypes = {
     PropTypes.shape({
       id: PropTypes.string,
       milestone: PropTypes.object,
-    })
+    }),
   ).isRequired,
 };
 

@@ -48,7 +48,7 @@ const config = {
     // Do not require all locales in moment
     new webpack.ContextReplacementPlugin(
       /moment\/locale$/,
-      /^\.\/(en-.*|zh-.*)$/
+      /^\.\/(en-.*|zh-.*)$/,
     ),
   ],
 
@@ -70,7 +70,7 @@ const config = {
           path.resolve(__dirname, 'app/lib/styles/MaterialSummernote.scss'),
           path.resolve(
             __dirname,
-            'app/lib/styles/MaterialSummernoteModal.scss'
+            'app/lib/styles/MaterialSummernoteModal.scss',
           ),
         ],
       },
@@ -93,7 +93,7 @@ const config = {
           path.resolve(__dirname, 'app/lib/styles/MaterialSummernote.scss'),
           path.resolve(
             __dirname,
-            'app/lib/styles/MaterialSummernoteModal.scss'
+            'app/lib/styles/MaterialSummernoteModal.scss',
           ),
         ],
       },
@@ -140,7 +140,7 @@ if (travis) {
   config.plugins.push(
     new HardSourceWebpackPlugin({
       cacheDirectory: path.join(__dirname, 'hard-source-cache/[confighash]'),
-    })
+    }),
   );
 }
 

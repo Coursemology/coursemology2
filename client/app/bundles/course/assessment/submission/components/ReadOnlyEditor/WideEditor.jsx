@@ -102,8 +102,13 @@ export default class WideEditor extends Component {
 
   renderComments() {
     const { activeComment } = this.state;
-    const { answerId, fileId, expanded, annotations, collapseLine } =
-      this.props;
+    const {
+      answerId,
+      fileId,
+      expanded,
+      annotations,
+      collapseLine,
+    } = this.props;
     return (
       <WideComments
         activeComment={activeComment}

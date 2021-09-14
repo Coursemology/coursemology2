@@ -29,8 +29,12 @@ const styles = {
 
 class DuplicateButton extends React.Component {
   render() {
-    const { dispatch, isCourseSelected, isItemSelected, isChangingCourse } =
-      this.props;
+    const {
+      dispatch,
+      isCourseSelected,
+      isItemSelected,
+      isChangingCourse,
+    } = this.props;
 
     let label;
     if (!isCourseSelected) {
@@ -68,5 +72,6 @@ export default connect(({ duplication }) => ({
   isChangingCourse: duplication.isChangingCourse,
   isCourseSelected: !!duplication.destinationCourseId,
   isItemSelected: Object.values(duplication.selectedItems).some((hash) =>
-    Object.values(hash).some((value) => value)),
+    Object.values(hash).some((value) => value),
+  ),
 }))(DuplicateButton);

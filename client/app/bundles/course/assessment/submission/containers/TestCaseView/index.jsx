@@ -265,7 +265,7 @@ export class VisibleTestCaseView extends Component {
               style={outputStyle}
               text={testCase.expected || ''}
             />
-          ) || ''
+          ) || '',
         )}
         {(canReadTests || showPublicTestCasesOutput) &&
           tableRowColumnFor(
@@ -274,7 +274,7 @@ export class VisibleTestCaseView extends Component {
                 style={outputStyle}
                 text={testCase.output || ''}
               />
-            ) || ''
+            ) || '',
           )}
         {tableRowColumnFor(testCaseIcon)}
       </TableRow>
@@ -327,27 +327,27 @@ export class VisibleTestCaseView extends Component {
           this.renderTestCases(
             testCases.private_test,
             'privateTestCases',
-            !showPrivateTestToStudents
+            !showPrivateTestToStudents,
           )}
         {showEvaluationTest &&
           this.renderTestCases(
             testCases.evaluation_test,
             'evaluationTestCases',
-            !showEvaluationTestToStudents
+            !showEvaluationTestToStudents,
           )}
         {showOutputStreams &&
           !collapsible &&
           VisibleTestCaseView.renderOutputStream(
             'standardOutput',
             testCases.stdout,
-            !showStdoutAndStderr
+            !showStdoutAndStderr,
           )}
         {showOutputStreams &&
           !collapsible &&
           VisibleTestCaseView.renderOutputStream(
             'standardError',
             testCases.stderr,
-            !showStdoutAndStderr
+            !showStdoutAndStderr,
           )}
       </div>
     );

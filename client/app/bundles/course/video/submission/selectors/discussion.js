@@ -8,7 +8,8 @@ const topicsSelector = (state) => state.discussion.topics;
  * Selector returns an Immutable Map from topic ids to topic objects.
  */
 const nonEmptyTopicsSelector = createSelector(topicsSelector, (topics) =>
-  topics.filter((topic) => topic.topLevelPostIds.length > 0));
+  topics.filter((topic) => topic.topLevelPostIds.length > 0),
+);
 
 /**
  * A memoized selector that returns the topic ids ordered according to topic timestamp, then createdAt time in ascending
@@ -27,7 +28,7 @@ export const orderedTopicIdsSelector = createSelector(
         return topic1.timestamp - topic2.timestamp;
       })
       .keySeq()
-      .toArray()
+      .toArray(),
 );
 
 /**
@@ -44,5 +45,5 @@ export const inverseCreatedAtOrderedTopicsSelector = createSelector(
         return topic2.createdTimestamp - topic1.createdTimestamp;
       }
       return topic1.timestamp - topic2.timestamp;
-    })
+    }),
 );

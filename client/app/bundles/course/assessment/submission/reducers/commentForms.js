@@ -7,18 +7,18 @@ const initialState = {
   posts: {},
 };
 
-export default function (state = initialState, action) {
+export default function(state = initialState, action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_SUCCESS:
       return {
         ...state,
         topics: action.payload.topics.reduce(
           (obj, topic) => ({ ...obj, [topic.id]: '' }),
-          {}
+          {},
         ),
         annotations: action.payload.annotations.reduce(
           (obj, annotation) => ({ ...obj, [annotation.fileId]: {} }),
-          {}
+          {},
         ),
       };
     case actions.CREATE_ANNOTATION_CHANGE: {
@@ -126,7 +126,7 @@ export default function (state = initialState, action) {
             ...state.annotations,
             ...latestAnswer.annotations.reduce(
               (obj, annotation) => ({ ...obj, [annotation.fileId]: {} }),
-              {}
+              {},
             ),
           },
         };

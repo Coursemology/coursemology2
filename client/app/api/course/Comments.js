@@ -30,7 +30,7 @@ export default class CommentsAPI extends BaseCourseAPI {
   create(topicId, params) {
     return this.getClient().post(
       `${this._getUrlPrefix()}/${topicId}/posts/`,
-      params
+      params,
     );
   }
 
@@ -47,7 +47,7 @@ export default class CommentsAPI extends BaseCourseAPI {
   update(topicId, postId, params) {
     return this.getClient().patch(
       `${this._getUrlPrefix()}/${topicId}/posts/${postId}`,
-      params
+      params,
     );
   }
 
@@ -61,7 +61,7 @@ export default class CommentsAPI extends BaseCourseAPI {
    */
   delete(topicId, postId) {
     return this.getClient().delete(
-      `${this._getUrlPrefix()}/${topicId}/posts/${postId}`
+      `${this._getUrlPrefix()}/${topicId}/posts/${postId}`,
     );
   }
 

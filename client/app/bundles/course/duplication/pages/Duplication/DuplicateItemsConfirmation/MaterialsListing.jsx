@@ -86,12 +86,13 @@ class MaterialsListing extends React.Component {
           material,
           MATERIAL,
           childrenIndentLevel,
-          materialNameConflict
+          materialNameConflict,
         );
       });
     const subfolderNodes = flatten(
       folder.subfolders.map((subfolder) =>
-        this.renderFolderTree(subfolder, childrenIndentLevel))
+        this.renderFolderTree(subfolder, childrenIndentLevel),
+      ),
     );
     return flatten([folderNode, materialNodes, subfolderNodes]);
   }
@@ -100,7 +101,8 @@ class MaterialsListing extends React.Component {
     const { folders } = this.props;
     const folderTrees = flatten(
       folders.map((folder) =>
-        this.renderFolderTree(folder, ROOT_CHILDREN_LEVEL))
+        this.renderFolderTree(folder, ROOT_CHILDREN_LEVEL),
+      ),
     );
     if (folderTrees.length < 1) {
       return null;
@@ -137,6 +139,6 @@ export default connect(({ duplication }) => ({
   folders: duplication.materialsComponent,
   selectedItems: duplication.selectedItems,
   targetRootFolder: duplication.destinationCourses.find(
-    (course) => course.id === duplication.destinationCourseId
+    (course) => course.id === duplication.destinationCourseId,
   ).rootFolder,
 }))(MaterialsListing);

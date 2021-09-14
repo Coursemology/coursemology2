@@ -68,7 +68,7 @@ const testExpandLongQuestion = (question) => {
         index={1}
       />
     </MemoryRouter>,
-    buildContextOptions(storeCreator({}))
+    buildContextOptions(storeCreator({})),
   );
   expect(resultsQuestion.find('Table')).toHaveLength(0);
   const expandButton = resultsQuestion
@@ -101,10 +101,14 @@ describe('<ResultsQuestion />', () => {
           index={1}
         />
       </MemoryRouter>,
-      buildContextOptions(storeCreator({}))
+      buildContextOptions(storeCreator({})),
     );
     const lastOptionCountCell = () =>
-      resultsQuestion.find('TableRow').last().find('td').at(3);
+      resultsQuestion
+        .find('TableRow')
+        .last()
+        .find('td')
+        .at(3);
     const lastOptionCountBeforeSort = lastOptionCountCell().text();
     expect(lastOptionCountBeforeSort).toBe('1');
     const sortToggle = resultsQuestion.find('Toggle').first();

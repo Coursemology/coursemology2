@@ -54,7 +54,7 @@ class SurveyResults extends React.Component {
 
     const totalStudents = sections[0].questions[0].answers.length;
     const realStudents = sections[0].questions[0].answers.filter(
-      (answer) => !answer.phantom
+      (answer) => !answer.phantom,
     ).length;
     return { totalStudents, realStudents };
   }

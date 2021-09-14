@@ -10,7 +10,7 @@ $(document).ready(() => {
     'cocoon:after-insert cocoon:after-remove',
     () => {
       updateWeights();
-    }
+    },
   );
 
   $('.multiple-response-options tbody').sortable({

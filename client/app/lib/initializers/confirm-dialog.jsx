@@ -21,7 +21,7 @@ function loadDialogue(element, successCallback) {
         message={element.attr('data-confirm')}
       />
     </ProviderWrapper>,
-    mountNode
+    mountNode,
   );
 }
 
@@ -44,7 +44,10 @@ function submitLink(link) {
     value: link.data('method'),
   });
 
-  form.append(token, method).appendTo(document.body).submit();
+  form
+    .append(token, method)
+    .appendTo(document.body)
+    .submit();
 }
 
 function overrideConfirmDialog() {
@@ -70,7 +73,8 @@ function overrideConfirmDialog() {
       element.trigger('click');
       if ($.rails.isRemote(element)) {
         $(document).ajaxComplete(() =>
-          unmountComponentAtNode(getOrCreateNode(DIALOG_ID)));
+          unmountComponentAtNode(getOrCreateNode(DIALOG_ID)),
+        );
       }
     }
   }

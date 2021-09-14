@@ -79,7 +79,7 @@ class VideoListing extends React.Component {
 
     tabs.forEach((tab) => {
       const selectedVideos = tab.videos.filter(
-        (video) => selectedItems[VIDEO][video.id]
+        (video) => selectedItems[VIDEO][video.id],
       );
 
       if (selectedItems[VIDEO_TAB][tab.id]) {

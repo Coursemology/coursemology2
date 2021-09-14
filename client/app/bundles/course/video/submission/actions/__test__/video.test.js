@@ -49,7 +49,7 @@ beforeAll(() => {
   window.history.pushState(
     {},
     '',
-    `/courses/${courseId}/videos/${videoId}/submissions/1/edit`
+    `/courses/${courseId}/videos/${videoId}/submissions/1/edit`,
   );
 });
 
@@ -87,7 +87,7 @@ describe('sendEvents', () => {
       oldSessionsFixtures.get('25').sessionEvents.toArray(),
       0,
       true,
-      true
+      true,
     );
     await sleep(1);
     expect(createdStore.getState().oldSessions.count()).toBe(0);

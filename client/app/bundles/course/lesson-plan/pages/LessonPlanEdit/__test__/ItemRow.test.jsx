@@ -49,7 +49,7 @@ describe('<ItemRow />', () => {
           />
         </tbody>
       </table>,
-      buildContextOptions(store)
+      buildContextOptions(store),
     );
 
     const startAtDateInput = table.find('input[name="start_at"]').first();
@@ -89,7 +89,7 @@ describe('<ItemRow />', () => {
           />
         </tbody>
       </table>,
-      buildContextOptions(store)
+      buildContextOptions(store),
     );
 
     const endAtDateInput = table.find('input[name="end_at"]').first();

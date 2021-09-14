@@ -81,8 +81,8 @@ class OnlineEditorCppView extends React.Component {
             fileType,
             filesize: fileData.get('size'),
             toDelete: this.props.dataFiles.get('to_delete').has(filename),
-            deleteExistingPackageFile:
-              this.props.actions.deleteExistingPackageFile,
+            deleteExistingPackageFile: this.props.actions
+              .deleteExistingPackageFile,
             isLoading: this.props.isLoading,
             isLast: numFiles === index + 1,
           }}
@@ -170,10 +170,10 @@ class OnlineEditorCppView extends React.Component {
       allTestCases.get('evaluation').size;
 
     const identifier = this.props.intl.formatMessage(
-      translations.identifierHeader
+      translations.identifierHeader,
     );
     const expression = this.props.intl.formatMessage(
-      translations.expressionHeader
+      translations.expressionHeader,
     );
     const expected = this.props.intl.formatMessage(translations.expectedHeader);
     const hint = this.props.intl.formatMessage(translations.hintHeader);
@@ -223,7 +223,7 @@ class OnlineEditorCppView extends React.Component {
                 <TableRowColumn colSpan="5" style={{ textAlign: 'center' }}>
                   <FlatButton
                     label={this.props.intl.formatMessage(
-                      translations.addNewTestButton
+                      translations.addNewTestButton,
                     )}
                     icon={<i className="fa fa-plus" />}
                     disabled={
@@ -281,28 +281,28 @@ class OnlineEditorCppView extends React.Component {
           {this.renderEditorCard(
             intl.formatMessage(translations.solutionTitle),
             intl.formatMessage(translations.solutionSubtitle),
-            'solution'
+            'solution',
           )}
           {this.renderEditorCard(
             intl.formatMessage(translations.prependTitle),
             intl.formatMessage(translations.prependSubtitle),
-            'prepend'
+            'prepend',
           )}
           {this.renderEditorCard(
             intl.formatMessage(translations.appendTitle),
             intl.formatMessage(cppTranslations.appendSubtitle),
-            'append'
+            'append',
           )}
         </div>
         <h3>{intl.formatMessage(translations.dataFilesHeader)}</h3>
         {this.renderExistingPackageFiles(
           'data_files',
-          this.props.intl.formatMessage(translations.currentDataFilesHeader)
+          this.props.intl.formatMessage(translations.currentDataFilesHeader),
         )}
         {this.renderNewPackageFiles(
           'data_files',
           this.props.intl.formatMessage(translations.newDataFilesHeader),
-          intl.formatMessage(translations.addDataFileButton)
+          intl.formatMessage(translations.addDataFileButton),
         )}
         <h3>{intl.formatMessage(translations.testCasesHeader)}</h3>
         <div style={{ marginBottom: '0.5em' }}>
@@ -329,7 +329,7 @@ class OnlineEditorCppView extends React.Component {
               googletest: (
                 <a href="https://github.com/google/googletest">
                   {intl.formatMessage(
-                    translations.testCaseDescriptionGoogleTest
+                    translations.testCaseDescriptionGoogleTest,
                   )}
                 </a>
               ),
@@ -347,17 +347,17 @@ class OnlineEditorCppView extends React.Component {
         {this.renderTestCases(
           intl.formatMessage(translations.publicTestCases),
           testCases,
-          'public'
+          'public',
         )}
         {this.renderTestCases(
           intl.formatMessage(translations.privateTestCases),
           testCases,
-          'private'
+          'private',
         )}
         {this.renderTestCases(
           intl.formatMessage(translations.evaluationTestCases),
           testCases,
-          'evaluation'
+          'evaluation',
         )}
       </>
     );
@@ -371,7 +371,7 @@ class OnlineEditorCppView extends React.Component {
         {this.renderEditorCard(
           intl.formatMessage(translations.submissionTitle),
           null,
-          'submission'
+          'submission',
         )}
         {autograded ? this.renderAutogradedFields() : null}
       </div>

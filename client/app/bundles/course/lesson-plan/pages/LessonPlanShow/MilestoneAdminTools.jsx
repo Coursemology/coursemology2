@@ -73,7 +73,7 @@ class MilestoneAdminTools extends React.PureComponent {
         onSubmit: this.updateMilestoneHandler,
         formTitle: intl.formatMessage(translations.editMilestone),
         initialValues: { title, description, start_at },
-      })
+      }),
     );
   };
 

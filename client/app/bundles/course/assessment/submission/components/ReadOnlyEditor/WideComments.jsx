@@ -85,7 +85,7 @@ export default class WideComments extends Component {
     const comments = [];
     for (let i = 1; i <= expanded.length; i++) {
       const filtered = annotations.filter(
-        (annotation) => annotation.line === i
+        (annotation) => annotation.line === i,
       );
       if (filtered.length > 0 || expanded[i - 1]) {
         comments.push(this.renderComments(i, filtered[0]));

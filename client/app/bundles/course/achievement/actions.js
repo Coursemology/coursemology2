@@ -64,7 +64,7 @@ export function updateAchievement(
   achievementId,
   data,
   successMessage,
-  failureMessage
+  failureMessage,
 ) {
   const attributes = formatAttributes(data.achievement);
   return (dispatch) => {

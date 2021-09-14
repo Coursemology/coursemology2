@@ -6,7 +6,7 @@ import { setNotification } from './index';
 export function updateLessonPlanSettings(
   value,
   successMessage,
-  failureMessage
+  failureMessage,
 ) {
   const payload = { lesson_plan_settings: value };
   return (dispatch) => {

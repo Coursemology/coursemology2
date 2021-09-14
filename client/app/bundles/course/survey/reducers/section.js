@@ -4,7 +4,7 @@ import { sortSectionElements } from '../utils';
 
 const initialState = {};
 
-export default function (section = initialState, action) {
+export default function(section = initialState, action) {
   if (String(section.id) !== String(action.sectionId)) {
     return section;
   }

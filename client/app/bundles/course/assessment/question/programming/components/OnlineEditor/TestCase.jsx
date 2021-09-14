@@ -58,7 +58,7 @@ class TestCase extends React.Component {
           <RaisedButton
             className={styles.codeEditorButtonCell}
             label={this.props.intl.formatMessage(
-              translations.hideTestCaseCodeEditorButton
+              translations.hideTestCaseCodeEditorButton,
             )}
             labelPosition="before"
             containerElement="label"
@@ -71,7 +71,7 @@ class TestCase extends React.Component {
           <RaisedButton
             className={styles.codeEditorButtonCell}
             label={this.props.intl.formatMessage(
-              translations.showTestCaseCodeEditorButton
+              translations.showTestCaseCodeEditorButton,
             )}
             labelPosition="before"
             containerElement="label"

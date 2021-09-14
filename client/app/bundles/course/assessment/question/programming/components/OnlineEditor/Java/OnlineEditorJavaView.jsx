@@ -91,8 +91,8 @@ class OnlineEditorJavaView extends React.Component {
             toDelete: this.props.testData
               .getIn([fileType, 'to_delete'])
               .has(filename),
-            deleteExistingPackageFile:
-              this.props.actions.deleteExistingPackageFile,
+            deleteExistingPackageFile: this.props.actions
+              .deleteExistingPackageFile,
             isLoading: this.props.isLoading,
             isLast: numFiles === index + 1,
           }}
@@ -181,10 +181,10 @@ class OnlineEditorJavaView extends React.Component {
       allTestCases.get('evaluation').size;
 
     const identifier = this.props.intl.formatMessage(
-      translations.identifierHeader
+      translations.identifierHeader,
     );
     const expression = this.props.intl.formatMessage(
-      translations.expressionHeader
+      translations.expressionHeader,
     );
     const expected = this.props.intl.formatMessage(translations.expectedHeader);
     const hint = this.props.intl.formatMessage(translations.hintHeader);
@@ -280,7 +280,7 @@ class OnlineEditorJavaView extends React.Component {
                 <TableRowColumn colSpan="6" style={{ textAlign: 'center' }}>
                   <FlatButton
                     label={this.props.intl.formatMessage(
-                      translations.addNewTestButton
+                      translations.addNewTestButton,
                     )}
                     icon={<i className="fa fa-plus" />}
                     disabled={
@@ -340,50 +340,50 @@ class OnlineEditorJavaView extends React.Component {
             <div style={{ marginBottom: '20px' }}>
               <h3>
                 {this.props.intl.formatMessage(
-                  javaTranslations.solutionFilesHeader
+                  javaTranslations.solutionFilesHeader,
                 )}
               </h3>
               {this.renderExistingPackageFiles(
                 'solution_files',
                 this.props.intl.formatMessage(
-                  javaTranslations.currentSolutionFilesHeader
-                )
+                  javaTranslations.currentSolutionFilesHeader,
+                ),
               )}
               {this.renderNewPackageFiles(
                 'solution_files',
                 this.props.intl.formatMessage(
-                  javaTranslations.newSolutionFilesHeader
+                  javaTranslations.newSolutionFilesHeader,
                 ),
-                intl.formatMessage(javaTranslations.addSolutionFileButton)
+                intl.formatMessage(javaTranslations.addSolutionFileButton),
               )}
             </div>
           ) : (
             this.renderEditorCard(
               intl.formatMessage(translations.solutionTitle),
               intl.formatMessage(translations.solutionSubtitle),
-              'solution'
+              'solution',
             )
           )}
           {this.renderEditorCard(
             intl.formatMessage(translations.prependTitle),
             intl.formatMessage(javaTranslations.prependSubtitle),
-            'prepend'
+            'prepend',
           )}
           {this.renderEditorCard(
             intl.formatMessage(translations.appendTitle),
             intl.formatMessage(javaTranslations.appendSubtitle),
-            'append'
+            'append',
           )}
         </div>
         <h3>{intl.formatMessage(translations.dataFilesHeader)}</h3>
         {this.renderExistingPackageFiles(
           'data_files',
-          this.props.intl.formatMessage(translations.currentDataFilesHeader)
+          this.props.intl.formatMessage(translations.currentDataFilesHeader),
         )}
         {this.renderNewPackageFiles(
           'data_files',
           this.props.intl.formatMessage(translations.newDataFilesHeader),
-          intl.formatMessage(translations.addDataFileButton)
+          intl.formatMessage(translations.addDataFileButton),
         )}
         <h3>{intl.formatMessage(translations.testCasesHeader)}</h3>
         <div style={{ marginBottom: '0.5em' }}>
@@ -437,7 +437,7 @@ class OnlineEditorJavaView extends React.Component {
               editor: (
                 <b>
                   {intl.formatMessage(
-                    javaTranslations.testCaseDescriptionEditor
+                    javaTranslations.testCaseDescriptionEditor,
                   )}
                 </b>
               ),
@@ -477,17 +477,17 @@ class OnlineEditorJavaView extends React.Component {
         {this.renderTestCases(
           intl.formatMessage(translations.publicTestCases),
           testCases,
-          'public'
+          'public',
         )}
         {this.renderTestCases(
           intl.formatMessage(translations.privateTestCases),
           testCases,
-          'private'
+          'private',
         )}
         {this.renderTestCases(
           intl.formatMessage(translations.evaluationTestCases),
           testCases,
-          'evaluation'
+          'evaluation',
         )}
       </>
     );
@@ -499,7 +499,7 @@ class OnlineEditorJavaView extends React.Component {
     let toggleLabel = intl.formatMessage(javaTranslations.submitAsFileToggle);
     if (hasSubmissions) {
       toggleLabel = intl.formatMessage(
-        javaTranslations.submitAsFileToggleDisabled
+        javaTranslations.submitAsFileToggleDisabled,
       );
     }
     return (
@@ -536,7 +536,7 @@ class OnlineEditorJavaView extends React.Component {
                 file_submission: (
                   <b>
                     {intl.formatMessage(
-                      javaTranslations.fileSubmissionDescriptionNote
+                      javaTranslations.fileSubmissionDescriptionNote,
                     )}
                   </b>
                 ),
@@ -548,28 +548,28 @@ class OnlineEditorJavaView extends React.Component {
           <>
             <h3>
               {this.props.intl.formatMessage(
-                javaTranslations.submissionFilesHeader
+                javaTranslations.submissionFilesHeader,
               )}
             </h3>
             {this.renderExistingPackageFiles(
               'submission_files',
               this.props.intl.formatMessage(
-                javaTranslations.currentSubmissionFilesHeader
-              )
+                javaTranslations.currentSubmissionFilesHeader,
+              ),
             )}
             {this.renderNewPackageFiles(
               'submission_files',
               this.props.intl.formatMessage(
-                javaTranslations.newSubmissionFilesHeader
+                javaTranslations.newSubmissionFilesHeader,
               ),
-              intl.formatMessage(javaTranslations.addSubmissionFileButton)
+              intl.formatMessage(javaTranslations.addSubmissionFileButton),
             )}
           </>
         ) : (
           this.renderEditorCard(
             intl.formatMessage(translations.submissionTitle),
             null,
-            'submission'
+            'submission',
           )
         )}
         {autograded ? this.renderAutogradedFields() : null}

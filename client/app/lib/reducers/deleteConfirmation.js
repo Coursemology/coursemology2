@@ -5,7 +5,7 @@ const initialState = {
   onConfirm: () => {},
 };
 
-export default function (state = initialState, action) {
+export default function(state = initialState, action) {
   const { type } = action;
 
   switch (type) {

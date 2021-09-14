@@ -16,7 +16,7 @@ describe('<SingleFileInput />', () => {
           intl: intlShape,
           muiTheme: PropTypes.object,
         },
-      }
+      },
     );
 
     const img = imagePreview.find('img').first();
@@ -24,7 +24,7 @@ describe('<SingleFileInput />', () => {
       imagePreview
         .find('.file-name')
         .text()
-        .includes('bar')
+        .includes('bar'),
     ).toEqual(true);
     expect(img.prop('src')).toEqual('foo');
     expect(img.prop('icon')).toBeUndefined();
@@ -58,7 +58,7 @@ describe('<SingleFileInput />', () => {
           intl: intlShape,
           muiTheme: PropTypes.object,
         },
-      }
+      },
     );
 
     const img = imagePreview.find('img').first();
@@ -66,7 +66,7 @@ describe('<SingleFileInput />', () => {
       imagePreview
         .find('.file-name')
         .text()
-        .includes('non-image file')
+        .includes('non-image file'),
     ).toEqual(true);
     expect(img.prop('src')).toEqual('foo');
   });
@@ -92,7 +92,7 @@ describe('<SingleFileInput />', () => {
           intl: intlShape,
           muiTheme: PropTypes.object,
         },
-      }
+      },
     );
 
     expect(imagePreview.find('Badge').exists()).toEqual(true);

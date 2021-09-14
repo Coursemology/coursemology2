@@ -7,7 +7,7 @@ const initialState = {
   recordingComponentId: '',
 };
 
-export default function (state = initialState, action) {
+export default function(state = initialState, action) {
   switch (action.type) {
     case actionTypes.RECORDER_SET_RECORDING: {
       const { recordingComponentId } = action.payload || {};

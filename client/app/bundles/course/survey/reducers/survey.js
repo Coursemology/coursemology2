@@ -12,7 +12,7 @@ const initialState = {
   },
 };
 
-export default function (survey = initialState, action) {
+export default function(survey = initialState, action) {
   if (String(survey.id) !== String(action.surveyId)) {
     return survey;
   }
@@ -22,7 +22,8 @@ export default function (survey = initialState, action) {
     case actionTypes.UPDATE_SURVEY_QUESTION_SUCCESS:
     case actionTypes.CREATE_SURVEY_QUESTION_SUCCESS: {
       const sections = survey.sections.map((section) =>
-        sectionReducer(section, action));
+        sectionReducer(section, action),
+      );
       return { ...survey, sections };
     }
     case actionTypes.UPDATE_SURVEY_SECTION_SUCCESS:

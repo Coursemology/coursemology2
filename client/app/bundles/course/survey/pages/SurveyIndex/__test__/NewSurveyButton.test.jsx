@@ -22,7 +22,10 @@ describe('<NewSurveyButton />', () => {
     newSurveyButton.find('button').simulate('click');
     surveyFormDialogue.update();
     expect(
-      surveyFormDialogue.find('SurveyFormDialogue').first().props().visible
+      surveyFormDialogue
+        .find('SurveyFormDialogue')
+        .first()
+        .props().visible,
     ).toBe(true);
 
     // Fill survey form
@@ -42,7 +45,7 @@ describe('<NewSurveyButton />', () => {
       .first()
       .instance();
     const surveyForm = mount(dialogInline.props.render(), contextOptions).find(
-      'form'
+      'form',
     );
     const titleInput = surveyForm.find('input[name="title"]');
     titleInput.simulate('change', { target: { value: survey.title } });

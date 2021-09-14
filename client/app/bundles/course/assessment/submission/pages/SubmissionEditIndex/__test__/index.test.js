@@ -149,9 +149,8 @@ const successSubmission = {
 };
 
 // stub import function
-jest.mock(
-  'course/assessment/submission/loaders/ScribingViewLoader',
-  () => () => Promise.resolve()
+jest.mock('course/assessment/submission/loaders/ScribingViewLoader', () => () =>
+  Promise.resolve(),
 );
 
 describe('SubmissionEditIndex', () => {
@@ -172,12 +171,12 @@ describe('SubmissionEditIndex', () => {
             },
           }}
         />
-      </ProviderWrapper>
+      </ProviderWrapper>,
     );
 
     const syncErrors = store.getState().form[formNames.SUBMISSION].syncErrors;
     expect(
-      Object.keys((syncErrors || {})[answerId] || {}).length !== 0
+      Object.keys((syncErrors || {})[answerId] || {}).length !== 0,
     ).toEqual(true);
   });
 
@@ -198,12 +197,12 @@ describe('SubmissionEditIndex', () => {
             },
           }}
         />
-      </ProviderWrapper>
+      </ProviderWrapper>,
     );
 
     const syncErrors = store.getState().form[formNames.SUBMISSION].syncErrors;
     expect(Object.keys((syncErrors || {}).answerId || {}).length === 0).toEqual(
-      true
+      true,
     );
   });
 });

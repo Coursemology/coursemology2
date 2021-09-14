@@ -29,7 +29,7 @@ export default class AssessmentsAPI extends BaseCourseAPI {
   update(assessmentId, params) {
     return this.getClient().patch(
       `${this._getUrlPrefix()}/${assessmentId}`,
-      params
+      params,
     );
   }
 

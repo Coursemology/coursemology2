@@ -40,7 +40,7 @@ class NewEventButton extends React.Component {
         onSubmit: this.createEventHandler,
         formTitle: intl.formatMessage(translations.newEvent),
         initialValues: {},
-      })
+      }),
     );
   };
 

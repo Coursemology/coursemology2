@@ -21,7 +21,7 @@ export const courseListingShape = PropTypes.arrayOf(
     id: PropTypes.number,
     title: PropTypes.string,
     host: PropTypes.string,
-  })
+  }),
 );
 
 export const assessmentShape = PropTypes.shape({

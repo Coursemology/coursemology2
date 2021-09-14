@@ -95,7 +95,7 @@ const questionFormTranslations = defineMessages({
 
 const countFilledOptions = (options) =>
   options.filter(
-    (option) => option && (option.option || option.file || option.image_url)
+    (option) => option && (option.option || option.file || option.image_url),
   ).length;
 
 const validate = (values) => {
@@ -187,7 +187,7 @@ class QuestionForm extends React.Component {
         value={numberOfFilledOptions}
         {...styles.numberOfResponsesField}
         floatingLabelText={intl.formatMessage(
-          questionFormTranslations.optionCount
+          questionFormTranslations.optionCount,
         )}
       />
     );
@@ -257,11 +257,11 @@ class QuestionForm extends React.Component {
           {this.renderValidOptionCount()}
           {this.renderNumberOfResponsesField(
             'min_options',
-            intl.formatMessage(translations.minOptions)
+            intl.formatMessage(translations.minOptions),
           )}
           {this.renderNumberOfResponsesField(
             'max_options',
-            intl.formatMessage(translations.maxOptions)
+            intl.formatMessage(translations.maxOptions),
           )}
         </div>
         {this.renderOptionFields({ multipleResponse: true })}

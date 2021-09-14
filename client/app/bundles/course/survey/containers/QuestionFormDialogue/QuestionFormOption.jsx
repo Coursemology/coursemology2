@@ -145,8 +145,13 @@ class QuestionFormOption extends React.Component {
   }
 
   render() {
-    const { member, index, fields, disabled, addToOptionsToDelete } =
-      this.props;
+    const {
+      member,
+      index,
+      fields,
+      disabled,
+      addToOptionsToDelete,
+    } = this.props;
     const fieldValue = fields.get(index);
     const handleRemove = () => {
       fields.remove(index);

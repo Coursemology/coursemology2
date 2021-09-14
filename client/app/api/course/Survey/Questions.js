@@ -40,7 +40,7 @@ export default class QuestionsAPI extends BaseSurveyAPI {
   update(questionId, questionFields) {
     return this.getClient().patch(
       `${this._getUrlPrefix()}/${questionId}`,
-      questionFields
+      questionFields,
     );
   }
 

@@ -35,25 +35,14 @@ module.exports = {
     'jsx-a11y/no-static-element-interactions': 'off',
     'max-len': ['warn', 120],
     camelcase: ['warn', { properties: 'never' }],
-    'comma-dangle': [
-      'error',
-      {
-        arrays: 'always-multiline',
-        objects: 'always-multiline',
-        imports: 'always-multiline',
-        exports: 'always-multiline',
-        functions: 'never',
-      },
-    ],
+    'comma-dangle': ['error', 'always-multiline'],
     'func-names': 'off',
-    'function-paren-newline': ['error', 'consistent'],
     'no-multi-str': 'off',
     'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
     // Use `_` to indicate that the method is private
     'no-underscore-dangle': 'off',
     'object-curly-newline': ['error', { consistent: true }],
     'prefer-destructuring': 'off',
-    quotes: ['error', 'single'],
   },
   globals: {
     window: true,

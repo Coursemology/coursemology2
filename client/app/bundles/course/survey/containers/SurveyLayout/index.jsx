@@ -60,18 +60,17 @@ class SurveyLayout extends React.Component {
         : {};
     const surveyUrl = url.slice(-1) === '/' ? url : `${url}/`;
 
-    const renderWithProps = (Page) => (props) =>
-      (
-        <>
-          {SurveyLayout.renderTitleBar(
-            survey,
-            surveyId,
-            isExact,
-            backLocations(courseId, surveyId, Page)
-          )}
-          <Page {...{ survey, courseId, surveyId }} {...props} />
-        </>
-      );
+    const renderWithProps = (Page) => (props) => (
+      <>
+        {SurveyLayout.renderTitleBar(
+          survey,
+          surveyId,
+          isExact,
+          backLocations(courseId, surveyId, Page),
+        )}
+        <Page {...{ survey, courseId, surveyId }} {...props} />
+      </>
+    );
 
     return (
       <Switch>

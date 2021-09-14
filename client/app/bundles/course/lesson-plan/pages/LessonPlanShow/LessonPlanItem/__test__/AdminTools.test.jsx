@@ -34,7 +34,10 @@ describe('<AdminTools />', () => {
     const eventId = 55;
     const wrapper = mount(<AdminTools item={{ eventId }} />, contextOptions);
 
-    const deleteButton = wrapper.find('RaisedButton').last().find('button');
+    const deleteButton = wrapper
+      .find('RaisedButton')
+      .last()
+      .find('button');
     deleteButton.simulate('click');
 
     const confirmDeleteButton = deleteConfirmation
@@ -70,10 +73,13 @@ describe('<AdminTools />', () => {
           lesson_plan_item_type: [eventData.event_type],
         }}
       />,
-      contextOptions
+      contextOptions,
     );
 
-    const editButton = wrapper.find('RaisedButton').first().find('button');
+    const editButton = wrapper
+      .find('RaisedButton')
+      .first()
+      .find('button');
     editButton.simulate('click');
 
     const dialogInline = eventFormDialog
@@ -81,7 +87,7 @@ describe('<AdminTools />', () => {
       .first()
       .instance();
     const eventForm = mount(dialogInline.props.render(), contextOptions).find(
-      'form'
+      'form',
     );
     const description = 'Add nice description';
     const descriptionInput = eventForm.find('textarea[name="description"]');

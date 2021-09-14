@@ -9,7 +9,7 @@ function buildInitialValues(answers) {
       ...obj,
       [answer.fields.id]: answer.fields,
     }),
-    {}
+    {},
   );
 }
 
@@ -27,7 +27,7 @@ function updateAnswerInState(state, answer) {
       }
       return obj;
     },
-    { [id]: answer.fields }
+    { [id]: answer.fields },
   );
 }
 
@@ -91,12 +91,12 @@ export default formReducer.plugin({
           initial: removeProgrammingFileFromState(
             state.initial,
             questionId,
-            fileId
+            fileId,
           ),
           values: removeProgrammingFileFromState(
             state.values,
             questionId,
-            fileId
+            fileId,
           ),
         };
       }
@@ -114,7 +114,7 @@ export default formReducer.plugin({
 
         // Removes previously staged files
         const filteredFiles = state.values[answerId].files_attributes.filter(
-          (file) => !file.staged
+          (file) => !file.staged,
         );
 
         return {

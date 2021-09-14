@@ -84,7 +84,7 @@ class VideoPlayer extends React.Component {
       (ReactPlayer) => {
         VideoPlayer.ReactPlayer = ReactPlayer.default;
         this.forceUpdate();
-      }
+      },
     );
   }
 
@@ -260,5 +260,5 @@ function mergeProps(stateProps, dispatchProps) {
 export default connect(
   (state) => state.video,
   mapDispatchToProps,
-  mergeProps
+  mergeProps,
 )(VideoPlayer);

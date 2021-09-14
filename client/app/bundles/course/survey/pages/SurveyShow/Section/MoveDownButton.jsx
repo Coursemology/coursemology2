@@ -30,8 +30,8 @@ class MoveDownButton extends React.Component {
         sectionIndex,
         sectionIndex + 1,
         successMessage,
-        failureMessage
-      )
+        failureMessage,
+      ),
     );
   };
 

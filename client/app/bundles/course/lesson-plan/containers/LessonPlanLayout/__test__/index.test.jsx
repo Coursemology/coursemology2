@@ -61,7 +61,7 @@ describe('LessonPlan', () => {
         <MemoryRouter initialEntries={[lessonPlanUrl]}>
           <LessonPlanLayout />
         </MemoryRouter>
-      </ProviderWrapper>
+      </ProviderWrapper>,
     );
 
     await sleep(1);

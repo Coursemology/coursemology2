@@ -41,7 +41,7 @@ describe('Surveys', () => {
         <MemoryRouter initialEntries={[`/courses/${courseId}/surveys`]}>
           <SurveysLayout />
         </MemoryRouter>
-      </ProviderWrapper>
+      </ProviderWrapper>,
     );
 
     // Wait for api call

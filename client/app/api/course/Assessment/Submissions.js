@@ -39,14 +39,14 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
     return this.getClient().patch(
       `${this._getUrlPrefix()}/${submissionId}`,
       formData,
-      config
+      config,
     );
   }
 
   reloadAnswer(submissionId, params) {
     return this.getClient().post(
       `${this._getUrlPrefix()}/${submissionId}/reload_answer`,
-      params
+      params,
     );
   }
 
@@ -64,13 +64,13 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
     return this.getClient().patch(
       `${this._getUrlPrefix()}/${submissionId}/submit_answer`,
       formData,
-      config
+      config,
     );
   }
 
   autoGrade(submissionId) {
     return this.getClient().post(
-      `${this._getUrlPrefix()}/${submissionId}/auto_grade`
+      `${this._getUrlPrefix()}/${submissionId}/auto_grade`,
     );
   }
 

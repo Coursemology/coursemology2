@@ -61,7 +61,7 @@ const FontFamilyField = (props) => {
 
   fontFamilies.forEach((font) => {
     menuItems.push(
-      <MenuItem key={font.key} value={font.value} primaryText={font.key} />
+      <MenuItem key={font.key} value={font.value} primaryText={font.key} />,
     );
   });
 

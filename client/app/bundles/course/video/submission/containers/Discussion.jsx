@@ -52,7 +52,7 @@ class Discussion extends React.Component {
     }
 
     const topicElem = document.getElementById(
-      `discussion-topic-${this.props.scrollTopicId}`
+      `discussion-topic-${this.props.scrollTopicId}`,
     );
     if (topicElem.offsetParent !== this.topicPane) {
       this.topicPane.scrollTop = topicElem.offsetTop - this.topicPane.offsetTop;
@@ -112,7 +112,7 @@ function getScrollTopicId(state) {
 
   const currentPlayerProgress = state.video.playerProgress;
   const autoScrollTopic = inverseCreatedAtOrderedTopicsSelector(
-    state
+    state,
   ).findLastEntry((topic) => topic.timestamp < currentPlayerProgress);
 
   if (autoScrollTopic === undefined) {
@@ -146,5 +146,5 @@ function mergeProps(stateProps, dispatchProps) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-  mergeProps
+  mergeProps,
 )(Discussion);

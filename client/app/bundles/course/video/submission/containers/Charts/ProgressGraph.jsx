@@ -81,9 +81,9 @@ const propTypes = {
           eventType: PropTypes.string,
           eventTime: PropTypes.string,
           videoTime: PropTypes.number,
-        })
+        }),
       ),
-    })
+    }),
   ).isRequired,
   videoDuration: PropTypes.number.isRequired,
   onMarkerClick: PropTypes.func,
@@ -151,7 +151,7 @@ class ProgressGraph extends React.Component {
       session.events,
       startTime,
       endTime,
-      videoEnd
+      videoEnd,
     );
     return this.displayDataCache[id];
   }
@@ -171,15 +171,15 @@ class ProgressGraph extends React.Component {
 
             const typeLabel = this.props.intl.formatMessage(
               translations.eventTypeLabel,
-              { type }
+              { type },
             );
             const realTimeLabel = this.props.intl.formatMessage(
               translations.eventRealTime,
-              { realTime }
+              { realTime },
             );
             const videoTimeLabel = this.props.intl.formatMessage(
               translations.eventVideoTime,
-              { videoTime }
+              { videoTime },
             );
 
             return [typeLabel, '', realTimeLabel, videoTimeLabel];
@@ -220,7 +220,7 @@ class ProgressGraph extends React.Component {
         {
           ...graphDataLineOptions,
           label: new Date(
-            this.props.sessions[this.state.selectedSessionId].sessionStart
+            this.props.sessions[this.state.selectedSessionId].sessionStart,
           ).toLocaleString(),
           data: displayData,
         },
@@ -256,7 +256,7 @@ class ProgressGraph extends React.Component {
     return (
       <SelectField
         floatingLabelText={this.props.intl.formatMessage(
-          translations.selectSession
+          translations.selectSession,
         )}
         maxHeight={300}
         value={this.state.selectedSessionId}
@@ -301,5 +301,5 @@ function mapDispatchToProps(dispatch) {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(injectIntl(ProgressGraph));

@@ -131,8 +131,9 @@ class ResponseAnswer extends React.Component {
   constructor(props) {
     super(props);
     this.checkQuantitySelected = this.checkQuantitySelected.bind(this);
-    this.checkMultipleChoiceRequired =
-      this.checkMultipleChoiceRequired.bind(this);
+    this.checkMultipleChoiceRequired = this.checkMultipleChoiceRequired.bind(
+      this,
+    );
     this.checkTextResponseRequired = this.checkTextResponseRequired.bind(this);
   }
 

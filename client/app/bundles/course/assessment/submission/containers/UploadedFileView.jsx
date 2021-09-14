@@ -147,6 +147,6 @@ function mapDispatchToProps(dispatch, ownProps) {
 
 const UploadedFileView = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(injectIntl(VisibleUploadedFileView));
 export default UploadedFileView;

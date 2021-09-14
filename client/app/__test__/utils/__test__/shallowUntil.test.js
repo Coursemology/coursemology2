@@ -32,14 +32,14 @@ describe('#shallowUntil', () => {
       <div>
         <Div />
       </div>,
-      'Div'
+      'Div',
     );
     expect(
       wrapper.contains(
         <div>
           <Div />
-        </div>
-      )
+        </div>,
+      ),
     ).toBeTruthy();
   });
 
@@ -60,7 +60,7 @@ describe('#shallowUntil', () => {
       const wrapper = shallowUntil(
         <EnhancedFoo />,
         { context: { open: true } },
-        'Foo'
+        'Foo',
       );
       expect(wrapper.context('open')).toEqual(true);
       expect(wrapper.contains(<Div />)).toBeTruthy();

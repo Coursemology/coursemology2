@@ -26,6 +26,6 @@ $(document).ready(() => {
         <Statistics {...statistics} />
       </div>
     </ProviderWrapper>,
-    mountNode
+    mountNode,
   );
 });

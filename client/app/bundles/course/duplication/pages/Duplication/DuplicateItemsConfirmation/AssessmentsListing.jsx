@@ -138,7 +138,7 @@ class AssessmentsListing extends React.Component {
       const selectedTabs = [];
       category.tabs.forEach((tab) => {
         const selectedAssessments = tab.assessments.filter(
-          (assessment) => selectedItems[ASSESSMENT][assessment.id]
+          (assessment) => selectedItems[ASSESSMENT][assessment.id],
         );
 
         if (selectedItems[TAB][tab.id]) {
@@ -159,8 +159,11 @@ class AssessmentsListing extends React.Component {
   }
 
   render() {
-    const [categoriesTrees, tabTrees, assessmentTrees] =
-      this.selectedSubtrees();
+    const [
+      categoriesTrees,
+      tabTrees,
+      assessmentTrees,
+    ] = this.selectedSubtrees();
     const orphanTreesCount = tabTrees.length + assessmentTrees.length;
     const totalTreesCount = orphanTreesCount + categoriesTrees.length;
     if (totalTreesCount < 1) {
@@ -175,12 +178,13 @@ class AssessmentsListing extends React.Component {
           />
         </Subheader>
         {categoriesTrees.map((category) =>
-          AssessmentsListing.renderCategoryCard(category, null, null))}
+          AssessmentsListing.renderCategoryCard(category, null, null),
+        )}
         {orphanTreesCount > 0 &&
           AssessmentsListing.renderCategoryCard(
             null,
             tabTrees,
-            assessmentTrees
+            assessmentTrees,
           )}
       </>
     );

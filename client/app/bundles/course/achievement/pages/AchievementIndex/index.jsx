@@ -35,8 +35,8 @@ class PopupDialog extends React.Component {
       actions.createAchievement(
         { achievement: data },
         intl.formatMessage(translations.creationSuccess),
-        intl.formatMessage(translations.creationFailure)
-      )
+        intl.formatMessage(translations.creationFailure),
+      ),
     );
   };
 

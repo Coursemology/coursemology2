@@ -349,15 +349,17 @@ class ScribingToolbar extends Component {
       setSelectedShape: (shape) => this.setSelectedShape(shape),
       onClickBorderColorPicker: (event) =>
         this.onClickColorPicker(event, scribingToolColor.SHAPE_BORDER),
-      borderColorPickerPopoverOpen:
-        this.state.colorDropdowns[scribingToolColor.SHAPE_BORDER],
+      borderColorPickerPopoverOpen: this.state.colorDropdowns[
+        scribingToolColor.SHAPE_BORDER
+      ],
       borderColorPickerPopoverAnchorEl: this.state.popoverColorPickerAnchor,
       onRequestCloseBorderColorPickerPopover: () =>
         this.onRequestCloseColorPicker(scribingToolColor.SHAPE_BORDER),
       onClickFillColorPicker: (event) =>
         this.onClickColorPicker(event, scribingToolColor.SHAPE_FILL),
-      fillColorPickerPopoverOpen:
-        this.state.colorDropdowns[scribingToolColor.SHAPE_FILL],
+      fillColorPickerPopoverOpen: this.state.colorDropdowns[
+        scribingToolColor.SHAPE_FILL
+      ],
       fillColorPickerPopoverAnchorEl: this.state.popoverColorPickerAnchor,
       noFillValue: scribing.hasNoFill,
       noFillOnCheck: (checked) =>
@@ -494,7 +496,7 @@ class ScribingToolbar extends Component {
                 this.onChangeSliderThickness(
                   event,
                   scribingToolThickness.DRAW,
-                  newValue
+                  newValue,
                 )
               }
               colorPickerColor={
@@ -587,7 +589,7 @@ class ScribingToolbar extends Component {
                 this.onChangeSliderThickness(
                   event,
                   scribingToolThickness.LINE,
-                  newValue
+                  newValue,
                 )
               }
               colorPickerColor={
@@ -692,7 +694,7 @@ class ScribingToolbar extends Component {
                 this.onChangeSliderThickness(
                   event,
                   scribingToolThickness.SHAPE_BORDER,
-                  newValue
+                  newValue,
                 )
               }
               borderColorPickerColor={
@@ -701,7 +703,7 @@ class ScribingToolbar extends Component {
               onChangeCompleteBorderColorPicker={(color) =>
                 this.onChangeCompleteColor(
                   color,
-                  scribingToolColor.SHAPE_BORDER
+                  scribingToolColor.SHAPE_BORDER,
                 )
               }
               fillColorPickerColor={
@@ -735,7 +737,7 @@ class ScribingToolbar extends Component {
                   this.props.setLayerDisplay(
                     this.props.answerId,
                     layer.creator_id,
-                    newDisplay
+                    newDisplay,
                   );
                   l.showLayer(newDisplay);
                 }

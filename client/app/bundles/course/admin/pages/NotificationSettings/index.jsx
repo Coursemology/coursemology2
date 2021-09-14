@@ -48,7 +48,7 @@ class NotificationSettings extends React.Component {
         />
       );
       dispatch(
-        updateNotificationSetting(payload, successMessage, failureMessage)
+        updateNotificationSetting(payload, successMessage, failureMessage),
       );
     };
   };
@@ -83,7 +83,7 @@ class NotificationSettings extends React.Component {
             toggled={setting.enabled}
             onToggle={this.handleComponentNotificationSettingUpdate(
               setting,
-              settingTitle
+              settingTitle,
             )}
           />
         </TableRowColumn>
@@ -149,7 +149,7 @@ NotificationSettings.propTypes = {
       key: PropTypes.string,
       enabled: PropTypes.bool,
       options: PropTypes.shape({}),
-    })
+    }),
   ),
   dispatch: PropTypes.func.isRequired,
 };

@@ -105,9 +105,9 @@ function reassignLabelsToAce($from, $editor) {
   $(`label[for="${fromId}"]`).attr('for', $editorTextarea[0].id);
 }
 
-$.fn.ace = function (opt) {
+$.fn.ace = function(opt) {
   const options = $.extend({}, $.fn.ace.defaults, opt);
-  return this.each(function () {
+  return this.each(function() {
     const $this = $(this);
     const elementOptions = $.extend({}, options, {
       lang: this.lang,

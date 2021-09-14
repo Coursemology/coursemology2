@@ -19,7 +19,7 @@ const MilestoneFormDialog = ({
 }) => {
   const { hideMilestoneForm, submitMilestoneForm } = bindActionCreators(
     actionCreators,
-    dispatch
+    dispatch,
   );
 
   return (

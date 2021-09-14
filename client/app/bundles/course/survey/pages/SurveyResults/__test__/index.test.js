@@ -69,7 +69,7 @@ describe('<SurveyResults />', () => {
       <MemoryRouter>
         <InjectedSurveyResults {...{ courseId, surveyId }} />
       </MemoryRouter>,
-      buildContextOptions(storeCreator({}))
+      buildContextOptions(storeCreator({})),
     );
     await sleep(1);
     expect(spyResults).toHaveBeenCalled();

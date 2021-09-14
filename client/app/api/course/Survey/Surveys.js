@@ -80,7 +80,7 @@ export default class SurveysAPI extends BaseSurveyAPI {
   update(surveyId, surveyFields) {
     return this.getClient().patch(
       `${this._getUrlPrefix()}/${surveyId}`,
-      surveyFields
+      surveyFields,
     );
   }
 
@@ -134,7 +134,7 @@ export default class SurveysAPI extends BaseSurveyAPI {
    */
   remind() {
     return this.getClient().post(
-      `${this._getUrlPrefix()}/${this.getSurveyId()}/remind`
+      `${this._getUrlPrefix()}/${this.getSurveyId()}/remind`,
     );
   }
 
@@ -151,7 +151,7 @@ export default class SurveysAPI extends BaseSurveyAPI {
   reorderQuestions(ordering) {
     return this.getClient().post(
       `${this._getUrlPrefix()}/${this.getSurveyId()}/reorder_questions`,
-      ordering
+      ordering,
     );
   }
 
@@ -166,13 +166,13 @@ export default class SurveysAPI extends BaseSurveyAPI {
   reorderSections(ordering) {
     return this.getClient().post(
       `${this._getUrlPrefix()}/${this.getSurveyId()}/reorder_sections`,
-      ordering
+      ordering,
     );
   }
 
   download() {
     return this.getClient().get(
-      `${this._getUrlPrefix()}/${this.getSurveyId()}/download`
+      `${this._getUrlPrefix()}/${this.getSurveyId()}/download`,
     );
   }
 

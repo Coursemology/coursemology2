@@ -45,7 +45,7 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onVolumeChange: newVolume => dispatch(changePlayerVolume(newVolume)),
+    onVolumeChange: (newVolume) => dispatch(changePlayerVolume(newVolume)),
   };
 }
 

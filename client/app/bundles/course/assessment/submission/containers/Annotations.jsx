@@ -153,8 +153,8 @@ function mapDispatchToProps(dispatch, ownProps) {
             answerId,
             fileId,
             lineNumber,
-            comment
-          )
+            comment,
+          ),
         ),
       updateComment: () => {},
       deleteComment: () => {},
@@ -172,8 +172,8 @@ function mapDispatchToProps(dispatch, ownProps) {
           answerId,
           fileId,
           lineNumber,
-          comment
-        )
+          comment,
+        ),
       ),
     updateComment: (postId, comment) =>
       dispatch(annotationActions.update(annotation.id, postId, comment)),
@@ -183,6 +183,6 @@ function mapDispatchToProps(dispatch, ownProps) {
 }
 
 const Annotations = withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(VisibleAnnotations)
+  connect(mapStateToProps, mapDispatchToProps)(VisibleAnnotations),
 );
 export default Annotations;

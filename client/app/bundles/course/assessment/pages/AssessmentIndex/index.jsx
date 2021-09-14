@@ -37,8 +37,8 @@ class PopupDialog extends React.Component {
         tabId,
         { assessment: data },
         intl.formatMessage(translations.creationSuccess),
-        intl.formatMessage(translations.creationFailure)
-      )
+        intl.formatMessage(translations.creationFailure),
+      ),
     );
   };
 

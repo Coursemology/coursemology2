@@ -180,7 +180,7 @@ class VoiceResponseAnswer extends Component {
           readOnly,
           recording,
           recordingComponentId,
-          field
+          field,
         )}
         {this.renderAudio(field)}
         {touched && error ? (
@@ -193,8 +193,13 @@ class VoiceResponseAnswer extends Component {
   };
 
   render() {
-    const { question, recording, recordingComponentId, readOnly, answerId } =
-      this.props;
+    const {
+      question,
+      recording,
+      recordingComponentId,
+      readOnly,
+      answerId,
+    } = this.props;
     return (
       <div>
         <Field

@@ -142,5 +142,5 @@ export default withRouter(
     isLoading: state.lessonPlan.isLoading,
     groups: state.lessonPlan.groups,
     canManageLessonPlan: state.flags.canManageLessonPlan,
-  }))(LessonPlanLayout)
+  }))(LessonPlanLayout),
 );

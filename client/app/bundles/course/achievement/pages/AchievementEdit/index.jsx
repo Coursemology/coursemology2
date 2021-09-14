@@ -30,8 +30,8 @@ class EditPage extends React.Component {
         data.id,
         { achievement: attributes },
         intl.formatMessage(translations.updateSuccess),
-        intl.formatMessage(translations.updateFailure)
-      )
+        intl.formatMessage(translations.updateFailure),
+      ),
     );
   };
 

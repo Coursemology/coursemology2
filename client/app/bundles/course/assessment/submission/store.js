@@ -7,7 +7,7 @@ function generateStore() {
     return createStore(
       rootReducer,
       // eslint-disable-next-line global-require
-      applyMiddleware(thunkMiddleware, require('redux-logger').logger)
+      applyMiddleware(thunkMiddleware, require('redux-logger').logger),
     );
   }
   return createStore(rootReducer, applyMiddleware(thunkMiddleware));

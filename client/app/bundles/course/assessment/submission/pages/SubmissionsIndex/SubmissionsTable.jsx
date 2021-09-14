@@ -83,7 +83,7 @@ export default class SubmissionsTable extends React.Component {
         : SubmissionsTable.formatGrade(submission.grade);
 
     const maximumGradeString = SubmissionsTable.formatGrade(
-      assessment.maximumGrade
+      assessment.maximumGrade,
     );
 
     return `${gradeString} / ${maximumGradeString}`;
@@ -101,7 +101,7 @@ export default class SubmissionsTable extends React.Component {
       submissions.some(
         (s) =>
           s.workflowState !== workflowStates.Unstarted &&
-          s.workflowState !== workflowStates.Attempting
+          s.workflowState !== workflowStates.Attempting,
       )
     );
   }
@@ -303,7 +303,7 @@ SubmissionsTable.propTypes = {
       pointsAwarded: PropTypes.number,
       dateSubmitted: PropTypes.string,
       dateGraded: PropTypes.string,
-    })
+    }),
   ),
   assessment: assessmentShape.isRequired,
   courseId: PropTypes.string.isRequired,

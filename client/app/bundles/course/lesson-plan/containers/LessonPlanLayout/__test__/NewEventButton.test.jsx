@@ -19,7 +19,11 @@ describe('<NewEventButton />', () => {
     // Click 'new event' button
     newEventButton.find('button').simulate('click');
     expect(
-      eventFormDialog.update().find('EventFormDialog').first().props().visible
+      eventFormDialog
+        .update()
+        .find('EventFormDialog')
+        .first()
+        .props().visible,
     ).toBe(true);
 
     // Fill event form
@@ -34,7 +38,7 @@ describe('<NewEventButton />', () => {
       .first()
       .instance();
     const eventForm = mount(dialogInline.props.render(), contextOptions).find(
-      'form'
+      'form',
     );
     const titleInput = eventForm.find('input[name="title"]');
     titleInput.simulate('change', { target: { value: eventData.title } });

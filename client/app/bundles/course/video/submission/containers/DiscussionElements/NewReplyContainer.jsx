@@ -20,7 +20,7 @@ const propTypes = {
 
 function mapStateToProps(state, ownProps) {
   const pendingReplyPost = state.discussion.pendingReplyPosts.get(
-    ownProps.topicId
+    ownProps.topicId,
   );
 
   return {

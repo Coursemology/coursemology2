@@ -8,7 +8,7 @@ const initialState = {
   initialValues: {},
 };
 
-export default function (state = initialState, action) {
+export default function(state = initialState, action) {
   const { type } = action;
   switch (type) {
     case actionTypes.SECTION_FORM_SHOW: {

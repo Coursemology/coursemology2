@@ -77,7 +77,7 @@ const validate = (values) => {
     isTestCaseChosen(
       values.use_public,
       values.use_private,
-      values.use_evaluation
+      values.use_evaluation,
     )
   ) {
     errors.use_evaluation = translations.noTestCaseChosenError;
@@ -130,7 +130,7 @@ class AssessmentForm extends React.Component {
       oldStartTime <= oldBonusTime
     ) {
       const newBonusTime = new Date(
-        oldBonusTime + (newStartTime - oldStartTime)
+        oldBonusTime + (newStartTime - oldStartTime),
       );
       dispatch(change(formNames.ASSESSMENT, 'bonus_end_at', newBonusTime));
     }
@@ -589,7 +589,7 @@ AssessmentForm.propTypes = {
     PropTypes.shape({
       tab_id: PropTypes.number,
       title: PropTypes.string,
-    })
+    }),
   ),
   // If randomization is enabled for the assessment
   randomization: PropTypes.bool,
@@ -628,7 +628,7 @@ function mapStateToProps(state) {
       'end_at',
       'bonus_end_at',
       'autograded',
-      'password_protected'
+      'password_protected',
     ),
   };
 }
@@ -637,5 +637,5 @@ export default connect(mapStateToProps)(
   reduxForm({
     form: formNames.ASSESSMENT,
     validate,
-  })(AssessmentForm)
+  })(AssessmentForm),
 );

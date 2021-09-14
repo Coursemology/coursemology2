@@ -45,7 +45,7 @@ class DuplicateItemsConfirmation extends React.Component {
   renderdestinationCourseCard() {
     const { destinationCourses, destinationCourseId } = this.props;
     const destinationCourse = destinationCourses.find(
-      (course) => course.id === destinationCourseId
+      (course) => course.id === destinationCourseId,
     );
     const url = `${window.location.protocol}//${destinationCourse.host}${destinationCourse.path}`;
 
@@ -108,7 +108,7 @@ class DuplicateItemsConfirmation extends React.Component {
         onCancel={() => dispatch(hideDuplicateItemsConfirmation())}
         onConfirm={() =>
           dispatch(
-            duplicateItems(destinationCourseId, selectedItems, failureMessage)
+            duplicateItems(destinationCourseId, selectedItems, failureMessage),
           )
         }
         confirmButtonText={<FormattedMessage {...translations.duplicate} />}

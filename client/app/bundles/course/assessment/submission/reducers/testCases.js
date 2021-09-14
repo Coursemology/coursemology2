@@ -1,6 +1,6 @@
 import actions from '../constants';
 
-export default function (state = {}, action) {
+export default function(state = {}, action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_SUCCESS:
     case actions.SAVE_DRAFT_SUCCESS:
@@ -14,7 +14,7 @@ export default function (state = {}, action) {
         ...state,
         ...action.payload.answers.reduce(
           (obj, answer) => ({ ...obj, [answer.questionId]: answer.testCases }),
-          {}
+          {},
         ),
       };
     case actions.AUTOGRADE_SUCCESS:
@@ -27,7 +27,7 @@ export default function (state = {}, action) {
           }
           return obj;
         },
-        { [questionId]: action.payload.testCases }
+        { [questionId]: action.payload.testCases },
       );
     }
     case actions.AUTOGRADE_FAILURE: {
@@ -44,7 +44,7 @@ export default function (state = {}, action) {
               identifier: testCase.identifier,
               expression: testCase.expression,
               expected: testCase.expected,
-            })
+            }),
           );
         }
       });

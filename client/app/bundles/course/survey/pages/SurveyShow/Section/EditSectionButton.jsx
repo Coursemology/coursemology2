@@ -36,7 +36,7 @@ class EditSectionButton extends React.Component {
     const successMessage = <FormattedMessage {...translations.success} />;
     const failureMessage = <FormattedMessage {...translations.failure} />;
     return dispatch(
-      updateSurveySection(section.id, payload, successMessage, failureMessage)
+      updateSurveySection(section.id, payload, successMessage, failureMessage),
     );
   };
 
@@ -51,7 +51,7 @@ class EditSectionButton extends React.Component {
         onSubmit: this.updateSectionHandler,
         formTitle: intl.formatMessage(translations.editSection),
         initialValues: { title, description },
-      })
+      }),
     );
   };
 

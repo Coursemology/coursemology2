@@ -21,11 +21,11 @@ const ProgrammingQuestion = (props) => {
   const { dispatch, programmingQuestion } = props;
   const actions = bindActionCreators(
     programmingQuestionActionCreators,
-    dispatch
+    dispatch,
   );
   const onlineEditorActions = bindActionCreators(
     onlineEditorActionCreators,
-    dispatch
+    dispatch,
   );
 
   return (

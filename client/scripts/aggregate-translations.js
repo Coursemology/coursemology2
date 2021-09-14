@@ -13,12 +13,12 @@ const translations = globSync('./locales/*.json')
   .map(([locale, file]) => [locale, JSON.parse(file)])
   .reduce(
     (collection, [locale, messages]) => ({ ...collection, [locale]: messages }),
-    {}
+    {},
   );
 
 // Write the messages to this directory
 mkdirpSync(OUTPUT_DIR);
 fs.writeFileSync(
   `${OUTPUT_DIR}locales.json`,
-  JSON.stringify(translations, null, 2)
+  JSON.stringify(translations, null, 2),
 );

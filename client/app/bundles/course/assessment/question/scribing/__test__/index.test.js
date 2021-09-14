@@ -47,7 +47,7 @@ describe('Scribing question', () => {
     window.history.pushState(
       {},
       '',
-      `/courses/${courseId}/assessments/${assessmentId}/question/scribing/new`
+      `/courses/${courseId}/assessments/${assessmentId}/question/scribing/new`,
     );
 
     // Mock assessment axios
@@ -71,7 +71,7 @@ describe('Scribing question', () => {
 
     const spyFetchSkills = jest.spyOn(
       CourseAPI.assessment.assessments,
-      'fetchSkills'
+      'fetchSkills',
     );
 
     const newPage = mount(
@@ -83,7 +83,7 @@ describe('Scribing question', () => {
         >
           <ScribingQuestion />
         </MemoryRouter>
-      </ProviderWrapper>
+      </ProviderWrapper>,
     );
 
     // Wait for api call
@@ -95,7 +95,7 @@ describe('Scribing question', () => {
     expect(newPage.find('SummernoteField').length).toBe(2);
     expect(newPage.find('FileUploadField').length).toBe(1);
     expect(
-      newPage.find('[htmlFor="question_scribing_attachment"]').length
+      newPage.find('[htmlFor="question_scribing_attachment"]').length,
     ).toBe(0);
   });
 
@@ -105,7 +105,7 @@ describe('Scribing question', () => {
 
     mock
       .onGet(
-        `/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}`
+        `/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}`,
       )
       .reply(200, {
         question: {
@@ -137,7 +137,7 @@ describe('Scribing question', () => {
 
     const spyFetch = jest.spyOn(
       CourseAPI.assessment.question.scribing,
-      'fetch'
+      'fetch',
     );
 
     const fetchPage = mount(
@@ -150,7 +150,7 @@ describe('Scribing question', () => {
         >
           <ScribingQuestion />
         </MemoryRouter>
-      </ProviderWrapper>
+      </ProviderWrapper>,
     );
 
     // Wait for api call
@@ -162,7 +162,7 @@ describe('Scribing question', () => {
     expect(fetchPage.find('SummernoteField').length).toBe(2);
     expect(fetchPage.find('FileUploadField').length).toBe(0);
     expect(
-      fetchPage.find('[htmlFor="question_scribing_attachment"]').length
+      fetchPage.find('[htmlFor="question_scribing_attachment"]').length,
     ).toBe(1);
   });
 
@@ -172,7 +172,7 @@ describe('Scribing question', () => {
 
     mock
       .onPatch(
-        `/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}`
+        `/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}`,
       )
       .reply(400, {
         errors: ["Maximum grade can't be blank"],
@@ -180,7 +180,7 @@ describe('Scribing question', () => {
 
     const spyUpdate = jest.spyOn(
       CourseAPI.assessment.question.scribing,
-      'update'
+      'update',
     );
 
     const fetchPage = mount(
@@ -193,7 +193,7 @@ describe('Scribing question', () => {
         >
           <ScribingQuestion />
         </MemoryRouter>
-      </ProviderWrapper>
+      </ProviderWrapper>,
     );
 
     store.dispatch(updateScribingQuestion(scribingId, mockFields));
@@ -208,12 +208,12 @@ describe('Scribing question', () => {
     window.history.pushState(
       {},
       '',
-      `/courses/${courseId}/assessments/${assessmentId}/question/scribing/new`
+      `/courses/${courseId}/assessments/${assessmentId}/question/scribing/new`,
     );
 
     const spyCreate = jest.spyOn(
       CourseAPI.assessment.question.scribing,
-      'create'
+      'create',
     );
 
     const postUrl = `/courses/${courseId}/assessments/${assessmentId}/question/scribing/`;
@@ -228,12 +228,15 @@ describe('Scribing question', () => {
         >
           <ScribingQuestion />
         </MemoryRouter>
-      </ProviderWrapper>
+      </ProviderWrapper>,
     );
 
     await sleep(1);
     newPage.update();
-    newPage.find('button').first().simulate('submit');
+    newPage
+      .find('button')
+      .first()
+      .simulate('submit');
 
     await sleep(1);
     expect(spyCreate).toHaveBeenCalled();
@@ -243,12 +246,12 @@ describe('Scribing question', () => {
     window.history.pushState(
       {},
       '',
-      `/courses/${courseId}/assessments/${assessmentId}/question/scribing/edit`
+      `/courses/${courseId}/assessments/${assessmentId}/question/scribing/edit`,
     );
 
     const spyUpdate = jest.spyOn(
       CourseAPI.assessment.question.scribing,
-      'update'
+      'update',
     );
 
     const patchUrl = `/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}`;
@@ -264,12 +267,15 @@ describe('Scribing question', () => {
         >
           <ScribingQuestion />
         </MemoryRouter>
-      </ProviderWrapper>
+      </ProviderWrapper>,
     );
 
     await sleep(1);
     fetchPage.update();
-    fetchPage.find('button').first().simulate('submit');
+    fetchPage
+      .find('button')
+      .first()
+      .simulate('submit');
 
     await sleep(1);
     expect(spyUpdate).toHaveBeenCalledWith(scribingId, mockUpdatedFields);

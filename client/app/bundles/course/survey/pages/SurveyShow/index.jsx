@@ -83,6 +83,6 @@ const mapStateToProps = (state) => ({
   disabled: state.surveysFlags.disableSurveyShow,
 });
 export const ConnectedSurveyShow = connect(mapStateToProps)(
-  injectIntl(SurveyShow)
+  injectIntl(SurveyShow),
 );
 export default DragDropContext(HTML5Backend)(ConnectedSurveyShow);

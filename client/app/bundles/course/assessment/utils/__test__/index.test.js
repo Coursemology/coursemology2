@@ -48,7 +48,7 @@ describe('categoryAndTabTitle', () => {
 
     expect(categoryAndTabTitle(title1, title2, true)).toEqual(title1);
     expect(categoryAndTabTitle(title1, title2, false)).toEqual(
-      `${title1} > ${title2}`
+      `${title1} > ${title2}`,
     );
   });
 });

@@ -319,17 +319,17 @@ class OptionsQuestionResults extends React.Component {
           </TableRow>
         </TableHeader>
         <TableBody displayRowCheckbox={false}>
-          {options.sort(sortMethod).map(
-            (option, index) =>
+          {options
+            .sort(sortMethod)
+            .map((option, index) =>
               OptionsQuestionResults.renderOptionRow(
                 breakdown,
                 hasImage,
                 option,
                 index,
-                anonymous
-              )
-            // eslint-disable-next-line function-paren-newline
-          )}
+                anonymous,
+              ),
+            )}
         </TableBody>
       </Table>
     );
@@ -359,7 +359,7 @@ OptionsQuestionResults.propTypes = {
       course_user_name: PropTypes.string,
       phantom: PropTypes.bool,
       question_option_ids: PropTypes.arrayOf(PropTypes.number),
-    })
+    }),
   ),
 };
 

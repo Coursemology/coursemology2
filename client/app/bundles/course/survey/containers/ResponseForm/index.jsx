@@ -70,7 +70,7 @@ export const buildResponsePayload = (data) => {
   const answers_attributes = data.sections.reduce(
     (accumulator, section) =>
       accumulator.concat(section.questions.map(getFormattedAnswer)),
-    []
+    [],
   );
   return { response: { answers_attributes, submit: data.submit } };
 };
@@ -199,5 +199,5 @@ export default reduxForm({
 })(
   connect((state) => ({
     formValues: getFormValues(formNames.SURVEY_RESPONSE)(state),
-  }))(ResponseForm)
+  }))(ResponseForm),
 );

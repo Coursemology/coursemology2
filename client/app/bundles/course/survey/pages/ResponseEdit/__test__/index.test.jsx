@@ -74,7 +74,7 @@ describe('<ResponseEdit />', () => {
     window.history.pushState({}, '', responseUrl);
     const responseShow = mount(
       <InjectedResponseEdit {...{ match: { params: { responseId } } }} />,
-      buildContextOptions(storeCreator({}))
+      buildContextOptions(storeCreator({})),
     );
     await sleep(1);
     expect(spyEdit).toHaveBeenCalled();

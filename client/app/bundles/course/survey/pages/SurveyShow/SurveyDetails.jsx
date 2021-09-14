@@ -39,8 +39,8 @@ class SurveyDetails extends React.Component {
         <FormattedMessage
           {...surveyTranslations.updateFailure}
           values={survey}
-        />
-      )
+        />,
+      ),
     );
   };
 
@@ -177,7 +177,7 @@ class SurveyDetails extends React.Component {
               label={<FormattedMessage {...surveyTranslations.results} />}
               onClick={() =>
                 history.push(
-                  `/courses/${courseId}/surveys/${survey.id}/results`
+                  `/courses/${courseId}/surveys/${survey.id}/results`,
                 )
               }
             />
@@ -188,7 +188,7 @@ class SurveyDetails extends React.Component {
               label={<FormattedMessage {...surveyTranslations.responses} />}
               onClick={() =>
                 history.push(
-                  `/courses/${courseId}/surveys/${survey.id}/responses`
+                  `/courses/${courseId}/surveys/${survey.id}/responses`,
                 )
               }
             />

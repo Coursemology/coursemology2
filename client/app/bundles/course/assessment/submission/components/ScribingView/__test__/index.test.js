@@ -52,9 +52,8 @@ const mockSubmission = {
 };
 
 // stub import function
-jest.mock(
-  'course/assessment/submission/loaders/ScribingViewLoader',
-  () => () => Promise.resolve()
+jest.mock('course/assessment/submission/loaders/ScribingViewLoader', () => () =>
+  Promise.resolve(),
 );
 
 describe('ScribingView', () => {
@@ -76,7 +75,7 @@ describe('ScribingView', () => {
         >
           <ScribingView answerId={answerId} />
         </MemoryRouter>
-      </ProviderWrapper>
+      </ProviderWrapper>,
     );
     expect(editPage.find('canvas').length).toBe(1);
   });

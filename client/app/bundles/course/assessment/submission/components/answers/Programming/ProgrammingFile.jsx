@@ -55,7 +55,7 @@ class ProgrammingFile extends React.Component {
       assessmentId,
       submissionId,
       answerId,
-      file.id
+      file.id,
     );
 
     if (file.highlighted_content === null) {

@@ -6,7 +6,7 @@ import { setNotification } from './index';
 export function updateNotificationSetting(
   value,
   successMessage,
-  failureMessage
+  failureMessage,
 ) {
   const payload = { notification_settings: value };
   return (dispatch) => {

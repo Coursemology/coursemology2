@@ -37,7 +37,7 @@ describe('<SurveyLayout />', () => {
       <Router history={history}>
         <SurveyLayout {...routerParams} />
       </Router>,
-      buildContextOptions(store)
+      buildContextOptions(store),
     );
 
     surveyLayout.find('TitleBar').prop('onLeftIconButtonClick')();

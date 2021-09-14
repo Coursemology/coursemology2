@@ -7,9 +7,12 @@ const contextOptions = buildContextOptions(storeCreator({}));
 function popupDialogWrapper(notification) {
   const wrapper = mount(
     <LevelReachedPopup notification={notification} />,
-    contextOptions
+    contextOptions,
   );
-  const dialogInline = wrapper.find('RenderToLayer').first().instance();
+  const dialogInline = wrapper
+    .find('RenderToLayer')
+    .first()
+    .instance();
   return mount(dialogInline.props.render(), contextOptions);
 }
 

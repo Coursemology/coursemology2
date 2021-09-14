@@ -5,7 +5,7 @@ const initialState = {
   confirmationDialogOpen: false,
 };
 
-export default function (state = initialState, action) {
+export default function(state = initialState, action) {
   switch (action.type) {
     case actionTypes.ASSESSMENT_FORM_SHOW: {
       return { ...state, visible: true };

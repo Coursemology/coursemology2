@@ -27,7 +27,7 @@ const SectionFormDialogue = ({
 }) => {
   const { hideSectionForm, submitSectionForm } = bindActionCreators(
     actionCreators,
-    dispatch
+    dispatch,
   );
 
   return (

@@ -74,7 +74,7 @@ class VisibleGradingPanel extends Component {
     } = this.props;
     return (
       <div>{`${VisibleGradingPanel.calculateTotalGrade(
-        questions
+        questions,
       )} / ${maximumGrade}`}</div>
     );
   }
@@ -296,7 +296,8 @@ class VisibleGradingPanel extends Component {
           </TableHeader>
           <TableBody displayRowCheckbox={false}>
             {questionIds.map((questionId) =>
-              this.renderGradeRow(questions[questionId], showGrader))}
+              this.renderGradeRow(questions[questionId], showGrader),
+            )}
           </TableBody>
         </Table>
       </div>
@@ -355,6 +356,6 @@ function mapDispatchToProps(dispatch) {
 
 const GradingPanel = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(injectIntl(VisibleGradingPanel));
 export default GradingPanel;

@@ -57,7 +57,7 @@ describe('TestCaseView', () => {
       const testCaseView = mount(
         <ProviderWrapper>
           <VisibleTestCaseView {...defaultStaffViewProps} />
-        </ProviderWrapper>
+        </ProviderWrapper>,
       );
 
       expect(testCaseView.find('#publicTestCases').exists()).toBe(true);
@@ -71,32 +71,32 @@ describe('TestCaseView', () => {
       const testCaseView = mount(
         <ProviderWrapper>
           <VisibleTestCaseView {...defaultStaffViewProps} />
-        </ProviderWrapper>
+        </ProviderWrapper>,
       );
 
       expect(
         testCaseView
           .find('#privateTestCases')
           .find('i.fa-exclamation-triangle')
-          .exists()
+          .exists(),
       ).toBe(true);
       expect(
         testCaseView
           .find('#evaluationTestCases')
           .find('i.fa-exclamation-triangle')
-          .exists()
+          .exists(),
       ).toBe(true);
       expect(
         testCaseView
           .find('#standardOutput')
           .find('i.fa-exclamation-triangle')
-          .exists()
+          .exists(),
       ).toBe(true);
       expect(
         testCaseView
           .find('#standardError')
           .find('i.fa-exclamation-triangle')
-          .exists()
+          .exists(),
       ).toBe(true);
     });
 
@@ -110,20 +110,20 @@ describe('TestCaseView', () => {
               showEvaluation
               submissionState={workflowStates.Attempting}
             />
-          </ProviderWrapper>
+          </ProviderWrapper>,
         );
 
         expect(
           testCaseView
             .find('#privateTestCases')
             .find('i.fa-exclamation-triangle')
-            .exists()
+            .exists(),
         ).toBe(true);
         expect(
           testCaseView
             .find('#evaluationTestCases')
             .find('i.fa-exclamation-triangle')
-            .exists()
+            .exists(),
         ).toBe(true);
       });
 
@@ -135,20 +135,20 @@ describe('TestCaseView', () => {
               showPrivate
               showEvaluation
             />
-          </ProviderWrapper>
+          </ProviderWrapper>,
         );
 
         expect(
           testCaseView
             .find('#privateTestCases')
             .find('i.fa-exclamation-triangle')
-            .exists()
+            .exists(),
         ).toBe(false);
         expect(
           testCaseView
             .find('#evaluationTestCases')
             .find('i.fa-exclamation-triangle')
-            .exists()
+            .exists(),
         ).toBe(false);
       });
     });
@@ -161,20 +161,20 @@ describe('TestCaseView', () => {
               {...defaultStaffViewProps}
               showStdoutAndStderr
             />
-          </ProviderWrapper>
+          </ProviderWrapper>,
         );
 
         expect(
           testCaseView
             .find('#standardOutput')
             .find('i.fa-exclamation-triangle')
-            .exists()
+            .exists(),
         ).toBe(false);
         expect(
           testCaseView
             .find('#standardError')
             .find('i.fa-exclamation-triangle')
-            .exists()
+            .exists(),
         ).toBe(false);
       });
     });
@@ -190,11 +190,11 @@ describe('TestCaseView', () => {
             showEvaluation
             showStdoutAndStderr
           />
-        </ProviderWrapper>
+        </ProviderWrapper>,
       );
 
       expect(testCaseView.find('i.fa-exclamation-triangle').exists()).toBe(
-        false
+        false,
       );
     });
 
@@ -205,7 +205,7 @@ describe('TestCaseView', () => {
             {...defaultTestCaseViewProps}
             showStdoutAndStderr
           />
-        </ProviderWrapper>
+        </ProviderWrapper>,
       );
 
       expect(testCaseView.find('#standardOutput').exists()).toBe(true);
@@ -221,7 +221,7 @@ describe('TestCaseView', () => {
               showPrivate
               showEvaluation
             />
-          </ProviderWrapper>
+          </ProviderWrapper>,
         );
 
         expect(testCaseView.find('#privateTestCases').exists()).toBe(true);
@@ -237,7 +237,7 @@ describe('TestCaseView', () => {
               showEvaluation
               submissionState={workflowStates.Attempting}
             />
-          </ProviderWrapper>
+          </ProviderWrapper>,
         );
 
         expect(testCaseView.find('#privateTestCases').exists()).toBe(false);

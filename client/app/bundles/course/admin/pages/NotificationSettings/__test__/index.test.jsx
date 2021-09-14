@@ -23,7 +23,7 @@ describe('<NotificationSettings />', () => {
 
     const notificationSettings = mount(
       <NotificationSettings />,
-      buildContextOptions(store)
+      buildContextOptions(store),
     );
 
     const toggles = notificationSettings.find('Toggle');

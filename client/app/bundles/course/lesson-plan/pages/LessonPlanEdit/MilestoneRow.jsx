@@ -34,7 +34,12 @@ class MilestoneRow extends React.Component {
     );
     const failureMessage = <FormattedMessage {...translations.updateFailed} />;
     dispatch(
-      updateMilestone(id, { start_at: newDate }, successMessage, failureMessage)
+      updateMilestone(
+        id,
+        { start_at: newDate },
+        successMessage,
+        failureMessage,
+      ),
     );
   };
 

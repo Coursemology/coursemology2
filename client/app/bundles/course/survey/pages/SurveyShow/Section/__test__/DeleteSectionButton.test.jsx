@@ -16,13 +16,13 @@ describe('<DeleteSectionButton />', () => {
     window.history.pushState(
       {},
       '',
-      `/courses/${courseId}/surveys/${surveyId}`
+      `/courses/${courseId}/surveys/${surveyId}`,
     );
     const contextOptions = buildContextOptions(storeCreator({}));
     const deleteConfirmation = mount(<DeleteConfirmation />, contextOptions);
     const deleteSectionButton = mount(
       <DeleteSectionButton sectionId={sectionId} />,
-      contextOptions
+      contextOptions,
     );
 
     deleteSectionButton.find('button').simulate('click');

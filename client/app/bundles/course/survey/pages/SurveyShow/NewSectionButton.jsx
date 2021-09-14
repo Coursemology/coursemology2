@@ -41,7 +41,7 @@ class NewSectionButton extends React.Component {
     const successMessage = <FormattedMessage {...translations.success} />;
     const failureMessage = <FormattedMessage {...translations.failure} />;
     return dispatch(
-      createSurveySection(payload, successMessage, failureMessage)
+      createSurveySection(payload, successMessage, failureMessage),
     );
   };
 
@@ -51,7 +51,7 @@ class NewSectionButton extends React.Component {
       showSectionForm({
         onSubmit: this.createSectionHandler,
         formTitle: intl.formatMessage(translations.newSection),
-      })
+      }),
     );
   };
 

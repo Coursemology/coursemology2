@@ -10,7 +10,7 @@ import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { seekToDirectly } from '../../actions/video';
 import translations from '../../translations';
 
-const graphGlobalOptions = intl => ({
+const graphGlobalOptions = (intl) => ({
   maintainAspectRatio: false,
   legend: {
     display: false,
@@ -114,7 +114,7 @@ class HeatMap extends React.Component {
       tooltips: {
         displayColors: false,
         callbacks: {
-          title: tooltipItem => {
+          title: (tooltipItem) => {
             const videoTime = tooltipItem[0].xLabel;
             return this.props.intl.formatMessage(translations.eventVideoTime, {
               videoTime,
@@ -134,7 +134,7 @@ class HeatMap extends React.Component {
 
   renderScaledChart(data, options) {
     const [width, resolution] = calculateWidthAndResolution(
-      this.props.videoDuration
+      this.props.videoDuration,
     );
 
     const optionsWithResolution = {
@@ -197,7 +197,7 @@ class HeatMap extends React.Component {
       <div>
         <Toggle
           label={this.props.intl.formatMessage(
-            translations.barGraphScalingLabel
+            translations.barGraphScalingLabel,
           )}
           labelPosition="right"
           onToggle={(_, toggled) => {
@@ -224,11 +224,11 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onBarClick: duration => dispatch(seekToDirectly(duration)),
+    onBarClick: (duration) => dispatch(seekToDirectly(duration)),
   };
 }
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(injectIntl(HeatMap));

@@ -9,11 +9,11 @@ export function createResponse(surveyId) {
   const courseId = getCourseId();
   const goToResponse = (responseId) =>
     history.push(
-      `/courses/${courseId}/surveys/${surveyId}/responses/${responseId}`
+      `/courses/${courseId}/surveys/${surveyId}/responses/${responseId}`,
     );
   const goToResponseEdit = (responseId) =>
     history.push(
-      `/courses/${courseId}/surveys/${surveyId}/responses/${responseId}/edit`
+      `/courses/${courseId}/surveys/${surveyId}/responses/${responseId}/edit`,
     );
 
   return (dispatch) => {
@@ -37,7 +37,7 @@ export function createResponse(surveyId) {
         const data = error.response.data;
         if (error.response.status === 303) {
           (data.canModify || data.canSubmit ? goToResponseEdit : goToResponse)(
-            data.responseId
+            data.responseId,
           );
         } else if (data.error) {
           setNotification(error.response.data.error)(dispatch);
@@ -92,7 +92,7 @@ export function updateResponse(
   responseId,
   payload,
   successMessage,
-  failureMessage
+  failureMessage,
 ) {
   return (dispatch) => {
     dispatch({ type: actionTypes.UPDATE_RESPONSE_REQUEST });

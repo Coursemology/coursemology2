@@ -33,5 +33,5 @@ export default createComponent(
     ...mapError({ ...props, input: inputProps }),
     toggled: !!value,
     onToggle: onChange,
-  })
+  }),
 );

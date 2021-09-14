@@ -7,7 +7,7 @@ export default class UserNotificationsAPI extends BaseCourseAPI {
 
   markAsRead(userNotificationId) {
     return this.getClient().post(
-      `${this._getUrlPrefix()}/${userNotificationId}/mark_as_read`
+      `${this._getUrlPrefix()}/${userNotificationId}/mark_as_read`,
     );
   }
 
