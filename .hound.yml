@@ -1,6 +1,9 @@
 ruby:
   config_file: .rubocop.yml
 
+rubocop:
+  version: 0.91.0
+
 jshint:
   config_file: .jshintrc
   ignore_file: .jshintignore
