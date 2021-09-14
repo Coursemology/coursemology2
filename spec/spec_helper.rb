@@ -113,5 +113,5 @@ RSpec.configure do |config|
   end
 end
 
-Capybara.server = :puma,  Silent: true 
+Capybara.server = :puma, { Silent: true } # rubocop:disable Style/HashAsLastArrayItem
 Capybara.default_max_wait_time = 5

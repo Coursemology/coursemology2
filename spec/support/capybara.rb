@@ -20,7 +20,7 @@ module Capybara::TestGroupHelpers
     def find_form(selector, action: nil)
       attribute_selector =
         if action
-          format('[action="%s"]', action)
+          format('[action="%<action>s"]', action: action)
         else
           ''
         end

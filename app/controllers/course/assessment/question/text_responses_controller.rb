@@ -12,10 +12,10 @@ class Course::Assessment::Question::TextResponsesController < Course::Assessment
       @text_response_question.hide_text = true
       @text_response_question.allow_attachment = true
     end
-    if params[:comprehension] == 'true'
-      @text_response_question.is_comprehension = true
-      @text_response_question.build_at_least_one_group_one_point
-    end
+    return unless params[:comprehension] == 'true'
+
+    @text_response_question.is_comprehension = true
+    @text_response_question.build_at_least_one_group_one_point
   end
 
   def create

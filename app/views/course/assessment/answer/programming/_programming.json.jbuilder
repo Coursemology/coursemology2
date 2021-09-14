@@ -15,7 +15,7 @@ if is_current_answer && !latest_answer.current_answer?
     json.partial! latest_answer, answer: latest_answer
     json.annotations latest_answer.specific.files do |file|
       json.fileId file.id
-      json.topics file.annotations.reject { |a| a.discussion_topic.post_ids.empty? } do |annotation|
+      json.topics(file.annotations.reject { |a| a.discussion_topic.post_ids.empty? }) do |annotation|
         topic = annotation.discussion_topic
         json.id topic.id
         json.postIds topic.post_ids
@@ -35,7 +35,7 @@ json.fields do
   end
 end
 
-if attempt.submitted? && job = attempt&.auto_grading&.job
+if attempt.submitted? && (job = attempt&.auto_grading&.job)
   json.autograding do
     json.path job_path(job) if job.submitted?
     json.status job.status

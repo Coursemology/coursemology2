@@ -42,7 +42,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
         answer.save!
       end
     end
-    new_answers_created = new_answers_created.reduce(false) { |a, e| a || e }
+    new_answers_created = new_answers_created.reduce(false) { |acc, elem| acc || elem }
     @submission.answers.reload if new_answers_created && @submission.answers.loaded?
   end
 

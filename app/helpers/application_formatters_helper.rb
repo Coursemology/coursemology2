@@ -111,7 +111,7 @@ module ApplicationFormattersHelper
     seconds = total_seconds % 60
     minutes = (total_seconds / 60) % 60
     hours = total_seconds / (60 * 60)
-    format('%02dH%02dM%02dS', hours, minutes, seconds)
+    format('%<hours>02dH%<minutes>02dM%<seconds>02dS', hours: hours, minutes: minutes, seconds: seconds)
   end
 
   # A helper for generating CSS classes, based on the time-bounded status of the item.

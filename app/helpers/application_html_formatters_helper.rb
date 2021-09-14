@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 module ApplicationHTMLFormattersHelper
-  DefaultPipelineOptions = {
+  DEFAULT_PIPELINE_OPTIONS = {
     css_class: 'codehilite',
     replace_br: true
   }.freeze
@@ -9,7 +9,7 @@ module ApplicationHTMLFormattersHelper
   DefaultPipeline = HTML::Pipeline.new([
                                          HTML::Pipeline::AutolinkFilter,
                                          HTML::Pipeline::RougeFilter
-                                       ], DefaultPipelineOptions)
+                                       ], DEFAULT_PIPELINE_OPTIONS)
 
   # List of video hosting site URLs to allow
   VIDEO_URL_WHITELIST = Regexp.union(
@@ -75,16 +75,16 @@ module ApplicationHTMLFormattersHelper
   end
 
   # The HTML sanitizer options to use.
-  HTMLSanitizerOptions = {
+  HTML_SANITIZER_OPTIONS = {
     whitelist: SANITIZATION_FILTER_WHITELIST
   }.freeze
 
   # The HTML sanitizer to use.
   HTMLSanitizerPipeline = HTML::Pipeline.new([HTML::Pipeline::SanitizationFilter],
-                                             HTMLSanitizerOptions)
+                                             HTML_SANITIZER_OPTIONS)
 
   # The default HTML pipeline options.
-  DefaultHTMLPipelineOptions = DefaultPipelineOptions.merge(HTMLSanitizerOptions).freeze
+  DefaultHTMLPipelineOptions = DEFAULT_PIPELINE_OPTIONS.merge(HTML_SANITIZER_OPTIONS).freeze
 
   # The default HTML pipeline.
   DefaultHTMLPipeline = HTML::Pipeline.new(HTMLSanitizerPipeline.filters +
@@ -92,7 +92,7 @@ module ApplicationHTMLFormattersHelper
                                            DefaultHTMLPipelineOptions)
 
   # The Code formatter options to use.
-  DefaultCodePipelineOptions = DefaultPipelineOptions.merge(css_table_class: 'table').freeze
+  DefaultCodePipelineOptions = DEFAULT_PIPELINE_OPTIONS.merge(css_table_class: 'table').freeze
 
   # Constants that defines the size/lines limit of the code
   MAX_CODE_SIZE = 50 * 1024 # 50 KB

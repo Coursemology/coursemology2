@@ -2,7 +2,7 @@
 namespace :db do
   task insert_submission_questions: :environment do
     ActsAsTenant.without_tenant do
-      SLICE_SIZE = 5_000
+      slice_size = 5_000
       connection = ActiveRecord::Base.connection
 
       # Each row contains course id, submission id, and question id
@@ -27,10 +27,10 @@ namespace :db do
 
       # This will insert duplicate submission_id, question_id pairs.
       # Duplicates will be removed in a later query.
-      submission_question_tuples.each_slice(SLICE_SIZE) do |sq_tuples|
+      submission_question_tuples.each_slice(slice_size) do |sq_tuples|
         submission_ids = sq_tuples.map { |x| x['submission_id'] }
         question_ids = sq_tuples.map { |x| x['question_id'] }
-        now_strings = ['NOW()'] * SLICE_SIZE
+        now_strings = ['NOW()'] * slice_size
         combined_arr = submission_ids.zip(question_ids, now_strings, now_strings)
         sub_qn_values = combined_arr.map { |x| "(#{x.join(',')})" }.join(',')
 

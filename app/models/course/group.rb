@@ -81,10 +81,10 @@ class Course::Group < ApplicationRecord
 
   # Set default values
   def set_defaults
-    if should_create_manager?
-      group_users.build(course_user: default_group_manager, role: :manager,
-                        creator: creator, updater: updater)
-    end
+    return unless should_create_manager?
+
+    group_users.build(course_user: default_group_manager, role: :manager,
+                      creator: creator, updater: updater)
   end
 
   # Checks if the current group has sufficient information to have a manager, but does not
