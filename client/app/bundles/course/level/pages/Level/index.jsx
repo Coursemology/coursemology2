@@ -107,43 +107,29 @@ class Level extends React.Component {
     );
   }
 
-  constructor(props) {
-    super(props);
-
-    this.handleUpdateExpThreshold = this.handleUpdateExpThreshold.bind(this);
-    this.handleLevelTextBlur = this.handleLevelTextBlur.bind(this);
-    this.handleCreateLevel = this.handleCreateLevel.bind(this);
-    this.handleDeleteLevel = this.handleDeleteLevel.bind(this);
-    this.handleSaveLevels = this.handleSaveLevels.bind(this);
-  }
-
   componentDidMount() {
     this.props.dispatch(fetchLevels());
   }
 
-  handleUpdateExpThreshold(levelNumber, newValue) {
+  handleUpdateExpThreshold = (levelNumber, newValue) => {
     this.props.dispatch(updateExpThreshold(levelNumber, newValue));
-  }
+  };
 
-  handleLevelTextBlur() {
+  handleLevelTextBlur = () => {
     this.props.dispatch(sortLevels());
-  }
+  };
 
-  handleCreateLevel() {
-    return (e) => {
-      e.preventDefault();
-      this.props.dispatch(addLevel());
-    };
-  }
+  handleCreateLevel = () => (e) => {
+    e.preventDefault();
+    this.props.dispatch(addLevel());
+  };
 
-  handleDeleteLevel(levelNumber) {
-    return (e) => {
-      e.preventDefault();
-      this.props.dispatch(deleteLevel(levelNumber));
-    };
-  }
+  handleDeleteLevel = (levelNumber) => (e) => {
+    e.preventDefault();
+    this.props.dispatch(deleteLevel(levelNumber));
+  };
 
-  handleSaveLevels() {
+  handleSaveLevels = () => {
     const { dispatch, levels } = this.props;
     return (e) => {
       e.preventDefault();
@@ -157,7 +143,7 @@ class Level extends React.Component {
         dispatch(saveLevels(levels, successMessage, failureMessage));
       }
     };
-  }
+  };
 
   // Only the first element of the levels prop should be 0 as it is the default threshold.
   // User input should not contain any zeroes for threshold.

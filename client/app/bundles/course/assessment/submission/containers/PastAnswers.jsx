@@ -24,12 +24,6 @@ const styles = {
 };
 
 class PastAnswers extends Component {
-  constructor(props) {
-    super(props);
-
-    this.renderReadOnlyPastAnswer = this.renderReadOnlyPastAnswer.bind(this);
-  }
-
   getAnswersHistory(question, answer) {
     const { intl } = this.props;
     switch (question.type) {
@@ -56,7 +50,7 @@ class PastAnswers extends Component {
     }
   }
 
-  renderReadOnlyPastAnswer(answerId) {
+  renderReadOnlyPastAnswer = (answerId) => {
     const { answers, intl, question } = this.props;
     const answer = answers[answerId];
     const date = formatDateTime(answer.createdAt);
@@ -70,7 +64,7 @@ class PastAnswers extends Component {
         <hr style={styles.horizontalRule} />
       </div>
     );
-  }
+  };
 
   renderSelectedPastAnswers(selectedAnswerIds) {
     if (selectedAnswerIds.length > 0) {

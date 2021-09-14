@@ -128,15 +128,7 @@ class ResponseAnswer extends React.Component {
     );
   }
 
-  constructor(props) {
-    super(props);
-    this.checkQuantitySelected = this.checkQuantitySelected.bind(this);
-    this.checkMultipleChoiceRequired =
-      this.checkMultipleChoiceRequired.bind(this);
-    this.checkTextResponseRequired = this.checkTextResponseRequired.bind(this);
-  }
-
-  checkQuantitySelected(options) {
+  checkQuantitySelected = (options) => {
     const { question, intl } = this.props;
     const {
       required,
@@ -162,19 +154,19 @@ class ResponseAnswer extends React.Component {
     }
 
     return undefined;
-  }
+  };
 
-  checkMultipleChoiceRequired(value) {
+  checkMultipleChoiceRequired = (value) => {
     const { question, intl } = this.props;
     return question.required && (!value || value.length < 1)
       ? intl.formatMessage(responseFormTranslations.selectAtLeast, { count: 1 })
       : undefined;
-  }
+  };
 
-  checkTextResponseRequired(value) {
+  checkTextResponseRequired = (value) => {
     const { question } = this.props;
     return question.required && !value ? formTranslations.required : undefined;
-  }
+  };
 
   renderMultipleResponseField() {
     const { member, question, disabled } = this.props;

@@ -64,8 +64,6 @@ class VisibleSubmissionEditIndex extends Component {
         : parseInt(stepString, 10) - 1;
 
     this.state = { newSubmission, step };
-    this.handleToggleViewHistoryMode =
-      this.handleToggleViewHistoryMode.bind(this);
   }
 
   componentDidMount() {
@@ -164,7 +162,11 @@ class VisibleSubmissionEditIndex extends Component {
     );
   }
 
-  handleToggleViewHistoryMode(viewHistory, submissionQuestionId, questionId) {
+  handleToggleViewHistoryMode = (
+    viewHistory,
+    submissionQuestionId,
+    questionId,
+  ) => {
     const { dispatch, historyQuestions } = this.props;
     const answersLoaded = historyQuestions[questionId].pastAnswersLoaded;
     dispatch(
@@ -175,7 +177,7 @@ class VisibleSubmissionEditIndex extends Component {
         answersLoaded,
       ),
     );
-  }
+  };
 
   handleUnmark() {
     const {

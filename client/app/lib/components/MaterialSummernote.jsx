@@ -39,7 +39,6 @@ class MaterialSummernote extends React.Component {
     super(props);
     this.state = { isFocused: false };
     this.reactSummernote = null;
-    this.inlineCodeButton = this.inlineCodeButton.bind(this);
   }
 
   onChange = (e) => {
@@ -76,8 +75,7 @@ class MaterialSummernote extends React.Component {
       });
   };
 
-  /* eslint class-methods-use-this: "off" */
-  inlineCodeButton() {
+  inlineCodeButton = () => {
     const ui = $.summernote.ui;
 
     const button = ui.button({
@@ -107,7 +105,7 @@ class MaterialSummernote extends React.Component {
     });
 
     return button.render();
-  }
+  };
 
   render() {
     const {

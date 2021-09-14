@@ -23,8 +23,6 @@ class ReadOnlyEditor extends Component {
     const initialEditorMode =
       props.annotations.length > 0 ? EDITOR_MODE_WIDE : EDITOR_MODE_NARROW;
     this.state = { expanded, editorMode: initialEditorMode };
-
-    this.showCommentsPanel = this.showCommentsPanel.bind(this);
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -115,14 +113,14 @@ class ReadOnlyEditor extends Component {
     return false;
   }
 
-  showCommentsPanel() {
+  showCommentsPanel = () => {
     this.setAllCommentStateCollapsed();
     if (this.state.editorMode === EDITOR_MODE_NARROW) {
       this.setState({ editorMode: EDITOR_MODE_WIDE });
     } else {
       this.setState({ editorMode: EDITOR_MODE_NARROW });
     }
-  }
+  };
 
   renderExpandAllToggle() {
     const { intl } = this.props;
