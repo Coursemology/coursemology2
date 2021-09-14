@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { stripHtmlTags } from 'lib/helpers/htmlFormatHelpers';
+import stripHtmlTags from 'lib/helpers/htmlFormatHelpers';
 import { annotationShape } from '../propTypes';
 
 const styles = {

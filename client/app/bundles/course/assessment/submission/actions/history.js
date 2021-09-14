@@ -1,6 +1,6 @@
 import actionTypes from '../constants';
 
-export function selectPastAnswers(questionId, answers) {
+export default function selectPastAnswers(questionId, answers) {
   const sortedAnswers = answers.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   const sortedAnswerIds = sortedAnswers.map(answer => answer.id);
   return (dispatch) => {

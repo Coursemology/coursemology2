@@ -7,7 +7,7 @@ import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { Card, CardText } from 'material-ui/Card';
 import { yellow100 } from 'material-ui/styles/colors';
 
-import { selectPastAnswers } from '../actions/history';
+import selectPastAnswers from '../actions/history';
 import translations from '../translations';
 import { answerShape, questionShape } from '../propTypes';
 import { formatDateTime } from '../utils';
