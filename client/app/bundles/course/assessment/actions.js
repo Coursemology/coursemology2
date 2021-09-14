@@ -8,7 +8,7 @@ export function createAssessment(
   tabId,
   data,
   successMessage,
-  failureMessage
+  failureMessage,
 ) {
   const attributes = { ...data, category: categoryId, tab: tabId };
   return (dispatch) => {
@@ -47,7 +47,7 @@ export function updateAssessment(
   assessmentId,
   data,
   successMessage,
-  failureMessage
+  failureMessage,
 ) {
   const attributes = data;
   return (dispatch) => {

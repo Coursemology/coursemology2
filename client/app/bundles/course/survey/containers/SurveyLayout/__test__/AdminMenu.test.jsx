@@ -18,7 +18,7 @@ describe('<AdminMenu />', () => {
     };
     const adminMenu = mount(
       <AdminMenu survey={survey} surveyId={survey.id.toString()} />,
-      buildContextOptions(storeCreator({}))
+      buildContextOptions(storeCreator({})),
     );
 
     expect(adminMenu).toMatchSnapshot();
@@ -36,13 +36,16 @@ describe('<AdminMenu />', () => {
     const deleteConfirmation = mount(<DeleteConfirmation />, contextOptions);
     const adminMenu = mount(
       <AdminMenu survey={survey} surveyId={survey.id.toString()} />,
-      contextOptions
+      contextOptions,
     );
 
     const iconButton = adminMenu.find('button').first();
     iconButton.simulate('click');
 
-    const menuCardNode = adminMenu.find('RenderToLayer').first().instance();
+    const menuCardNode = adminMenu
+      .find('RenderToLayer')
+      .first()
+      .instance();
     const deleteButton = mount(menuCardNode.props.render(), contextOptions)
       .find('EnhancedButton')
       .first();
@@ -80,13 +83,16 @@ describe('<AdminMenu />', () => {
     const surveyFormDialogue = mount(<SurveyFormDialogue />, contextOptions);
     const adminMenu = mount(
       <AdminMenu survey={survey} surveyId={survey.id.toString()} />,
-      contextOptions
+      contextOptions,
     );
 
     const iconButton = adminMenu.find('button').first();
     iconButton.simulate('click');
 
-    const menuCardNode = adminMenu.find('RenderToLayer').first().instance();
+    const menuCardNode = adminMenu
+      .find('RenderToLayer')
+      .first()
+      .instance();
     const updateButton = mount(menuCardNode.props.render(), contextOptions)
       .find('EnhancedButton')
       .first();
@@ -97,7 +103,7 @@ describe('<AdminMenu />', () => {
       .first()
       .instance();
     const sectionForm = mount(dialogInline.props.render(), contextOptions).find(
-      'form'
+      'form',
     );
     const description = 'To update description';
     const descriptionInput = sectionForm.find('textarea[name="description"]');
@@ -120,7 +126,7 @@ describe('<AdminMenu />', () => {
     };
     expect(spyUpdate).toHaveBeenCalledWith(
       survey.id.toString(),
-      expectedPayload
+      expectedPayload,
     );
   });
 });

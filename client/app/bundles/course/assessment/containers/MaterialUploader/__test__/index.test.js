@@ -32,7 +32,7 @@ beforeEach(() => {
 describe('<MaterialList />', () => {
   it('renders the component with materials', () => {
     const materialList = shallow(
-      <MaterialList materials={materials} onMaterialDelete={jest.fn()} />
+      <MaterialList materials={materials} onMaterialDelete={jest.fn()} />,
     );
 
     expect(materialList).toMatchSnapshot();
@@ -45,7 +45,7 @@ describe('<Material />', () => {
       <Material
         updatedAt={uploadedMaterial.updated_at}
         {...uploadedMaterial}
-      />
+      />,
     );
 
     expect(material).toMatchSnapshot();
@@ -56,7 +56,7 @@ describe('<MaterialUploader />', () => {
   it('uploads the material', async () => {
     mock
       .onPut(
-        `/courses/${courseId}/materials/folders/${folderId}/upload_materials`
+        `/courses/${courseId}/materials/folders/${folderId}/upload_materials`,
       )
       .reply(200, {
         materials: [uploadedMaterial],
@@ -65,7 +65,7 @@ describe('<MaterialUploader />', () => {
     const materailUploder = mount(
       <ProviderWrapper>
         <MaterialUploader materials={materials} folderId={folderId} />
-      </ProviderWrapper>
+      </ProviderWrapper>,
     );
 
     expect(materailUploder.find('Material')).toHaveLength(2);

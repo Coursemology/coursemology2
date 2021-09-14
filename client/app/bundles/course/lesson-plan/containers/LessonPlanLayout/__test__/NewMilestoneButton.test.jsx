@@ -20,7 +20,10 @@ describe('<NewMilestoneButton />', () => {
     newMilestoneButton.find('button').simulate('click');
     milestoneFormDialog.update();
     expect(
-      milestoneFormDialog.find('MilestoneFormDialog').first().props().visible
+      milestoneFormDialog
+        .find('MilestoneFormDialog')
+        .first()
+        .props().visible,
     ).toBe(true);
 
     // Fill milestone form
@@ -35,7 +38,7 @@ describe('<NewMilestoneButton />', () => {
       .instance();
     const milestoneForm = mount(
       dialogInline.props.render(),
-      contextOptions
+      contextOptions,
     ).find('form');
     const titleInput = milestoneForm.find('input[name="title"]');
     titleInput.simulate('change', { target: { value: milestoneData.title } });

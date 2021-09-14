@@ -9,7 +9,7 @@ const initialState = {
   isStatisticsDownloading: false,
 };
 
-export default function (state = initialState, action) {
+export default function(state = initialState, action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_SUCCESS:
     case actions.FETCH_SUBMISSION_FAILURE:

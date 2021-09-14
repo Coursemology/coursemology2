@@ -22,7 +22,7 @@ const EventFormDialog = ({
 }) => {
   const { hideEventForm, submitEventForm } = bindActionCreators(
     actionCreators,
-    dispatch
+    dispatch,
   );
   const { shiftEndDate } = bindActionCreators(libActionCreators, dispatch);
 
@@ -37,7 +37,7 @@ const EventFormDialog = ({
       values.eventTypes.push(item.lesson_plan_item_type[0]);
       return values;
     },
-    { eventTypes: [], eventLocations: [] }
+    { eventTypes: [], eventLocations: [] },
   );
 
   return (
@@ -83,7 +83,7 @@ EventFormDialog.propTypes = {
       eventId: PropTypes.number,
       location: PropTypes.string,
       lesson_plan_item_type: PropTypes.arrayOf(PropTypes.string),
-    })
+    }),
   ),
   formValues: PropTypes.shape({}),
   onSubmit: PropTypes.func.isRequired,

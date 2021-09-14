@@ -21,11 +21,11 @@ describe('<MoveUpButton />', () => {
     window.history.pushState(
       {},
       '',
-      `/courses/${courseId}/surveys/${surveyId}`
+      `/courses/${courseId}/surveys/${surveyId}`,
     );
     const moveSectionButton = mount(
       <MoveUpButton sectionIndex={sectionIndex} />,
-      buildContextOptions(store)
+      buildContextOptions(store),
     );
     moveSectionButton.find('button').simulate('click');
 

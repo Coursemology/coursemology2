@@ -44,7 +44,7 @@ describe('createScribingQuestion', () => {
   const store = storeCreator({ initialStates });
   const spyCreate = jest.spyOn(
     CourseAPI.assessment.question.scribing,
-    'create'
+    'create',
   );
 
   const newUrl = `/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}/new`;
@@ -65,7 +65,7 @@ describe('updateScribingQuestion', () => {
   const store = storeCreator({ initialStates });
   const spyUpdate = jest.spyOn(
     CourseAPI.assessment.question.scribing,
-    'update'
+    'update',
   );
 
   const editUrl = `/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}/edit`;

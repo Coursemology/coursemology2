@@ -94,7 +94,7 @@ class PastAnswers extends Component {
       intl,
     } = this.props;
     const selectedAnswers = selectedAnswerIds.map(
-      (answerId) => answers[answerId]
+      (answerId) => answers[answerId],
     );
 
     const renderOption = (answerId, index) => {
@@ -176,5 +176,5 @@ function mapDispatchToProps(dispatch, ownProps) {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(injectIntl(PastAnswers));

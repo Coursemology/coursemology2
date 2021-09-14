@@ -98,7 +98,7 @@ class MaterialUploader extends React.Component {
   // materials list.
   updateMaterials(materials, response) {
     const uploadingMaterials = this.state.uploadingMaterials.filter(
-      (m) => materials.indexOf(m) === -1
+      (m) => materials.indexOf(m) === -1,
     );
     const newState = {
       uploadingMaterials,
@@ -118,7 +118,7 @@ class MaterialUploader extends React.Component {
     const failureMessage = <FormattedMessage {...translations.uploadFail} />;
     this.setState((state) => ({
       uploadingMaterials: state.uploadingMaterials.filter(
-        (m) => materials.indexOf(m) === -1
+        (m) => materials.indexOf(m) === -1,
       ),
       notification: { message: messageFromServer || failureMessage },
     }));

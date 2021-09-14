@@ -13,7 +13,7 @@ export default class NotificationsAPI extends BaseAdminAPI {
   update(params) {
     return this.getClient().patch(
       `${this._getUrlPrefix()}/notifications`,
-      params
+      params,
     );
   }
 }

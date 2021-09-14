@@ -40,7 +40,7 @@ function getCourseId() {
  */
 function getSurveyId() {
   const match = window.location.pathname.match(
-    /^\/courses\/\d+\/surveys\/(\d+)/
+    /^\/courses\/\d+\/surveys\/(\d+)/,
   );
   return match && match[1];
 }
@@ -52,7 +52,7 @@ function getSurveyId() {
  */
 function getAssessmentId() {
   const match = window.location.pathname.match(
-    /^\/courses\/\d+\/assessments\/(\d+)/
+    /^\/courses\/\d+\/assessments\/(\d+)/,
   );
   return match && match[1];
 }
@@ -64,7 +64,7 @@ function getAssessmentId() {
  */
 function getSubmissionId() {
   const match = window.location.pathname.match(
-    /^\/courses\/\d+\/assessments\/\d+\/submissions\/(\d+)/
+    /^\/courses\/\d+\/assessments\/\d+\/submissions\/(\d+)/,
   );
   return match && match[1];
 }
@@ -76,7 +76,7 @@ function getSubmissionId() {
  */
 function getScribingId() {
   const match = window.location.pathname.match(
-    /^\/courses\/\d+\/assessments\/\d+\/question\/scribing\/(\d+)/
+    /^\/courses\/\d+\/assessments\/\d+\/question\/scribing\/(\d+)/,
   );
   return match && match[1];
 }
@@ -88,7 +88,7 @@ function getScribingId() {
  */
 function getVideoId() {
   const match = window.location.pathname.match(
-    /^\/courses\/\d+\/videos\/(\d+)/
+    /^\/courses\/\d+\/videos\/(\d+)/,
   );
   return match && match[1];
 }
@@ -100,7 +100,7 @@ function getVideoId() {
  */
 function getVideoSubmissionId() {
   const match = window.location.pathname.match(
-    /^\/courses\/\d+\/videos\/\d+\/submissions\/(\d+)/
+    /^\/courses\/\d+\/videos\/\d+\/submissions\/(\d+)/,
   );
   return match && match[1];
 }

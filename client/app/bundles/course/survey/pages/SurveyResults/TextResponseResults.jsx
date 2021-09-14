@@ -147,7 +147,8 @@ class TextResponseResults extends React.Component {
       ? answers
       : answers.filter((answer) => !answer.phantom);
     const nonEmptyAnswers = filteredAnswers.filter(
-      (answer) => answer.text_response && answer.text_response.trim().length > 0
+      (answer) =>
+        answer.text_response && answer.text_response.trim().length > 0,
     );
     const validPhantomResponses = includePhantoms
       ? nonEmptyAnswers.filter((answer) => answer.phantom)
@@ -164,7 +165,7 @@ class TextResponseResults extends React.Component {
         {this.state.expanded &&
           TextResponseResults.renderTextResultsTable(
             nonEmptyAnswers,
-            anonymous
+            anonymous,
           )}
         {this.state.expanded && toggle}
       </>
@@ -182,7 +183,7 @@ TextResponseResults.propTypes = {
       course_user_name: PropTypes.string,
       phantom: PropTypes.bool,
       question_option_ids: PropTypes.arrayOf(PropTypes.number),
-    })
+    }),
   ),
 };
 

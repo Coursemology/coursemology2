@@ -19,7 +19,7 @@ $(document).ready(() => {
           <SubmissionsLayout />
         </Router>
       </ProviderWrapper>,
-      mountNode
+      mountNode,
     );
   }
 });

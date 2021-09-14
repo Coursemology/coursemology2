@@ -32,7 +32,7 @@ class SurveyListing extends React.Component {
     const { surveys, selectedItems } = this.props;
     return surveys
       ? surveys.filter(
-          (survey) => selectedItems[duplicableItemTypes.SURVEY][survey.id]
+          (survey) => selectedItems[duplicableItemTypes.SURVEY][survey.id],
         )
       : [];
   }

@@ -36,7 +36,7 @@ describe('<SingleFileInput />', () => {
           intl: intlShape,
           muiTheme: PropTypes.object,
         },
-      }
+      },
     );
 
     expect(singleFileInput.find('.file-name').exists()).toEqual(true);
@@ -58,7 +58,7 @@ describe('<SingleFileInput />', () => {
           intl: intlShape,
           muiTheme: PropTypes.object,
         },
-      }
+      },
     );
 
     expect(singleFileInput.find('span').exists()).toEqual(true);
@@ -89,7 +89,7 @@ describe('<SingleFileInput />', () => {
           intl: intlShape,
           muiTheme: PropTypes.object,
         },
-      }
+      },
     );
 
     expect(singleFileInput.find('.error-message').length).toBe(1);

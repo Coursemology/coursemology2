@@ -22,7 +22,7 @@ describe('<MilestoneRow />', () => {
   it('allows milestone start_at to be updated', () => {
     mock
       .onPatch(
-        `/courses/${courseId}/lesson_plan/milestones/${milestoneData.id}`
+        `/courses/${courseId}/lesson_plan/milestones/${milestoneData.id}`,
       )
       .reply(200);
     const spy = jest.spyOn(CourseAPI.lessonPlan, 'updateMilestone');
@@ -39,7 +39,7 @@ describe('<MilestoneRow />', () => {
           />
         </tbody>
       </table>,
-      buildContextOptions(store)
+      buildContextOptions(store),
     );
 
     const startAtDateInput = table.find('input[name="start_at"]').first();

@@ -26,6 +26,6 @@ $(document).ready(() => {
       <hr />
       <HeatMap {...statistics} />
     </ProviderWrapper>,
-    mountNode
+    mountNode,
   );
 });

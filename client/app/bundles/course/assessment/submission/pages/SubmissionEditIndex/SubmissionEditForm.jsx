@@ -185,7 +185,7 @@ class SubmissionEditForm extends Component {
             titleColor={red900}
           />
           {explanation.explanations.every(
-            (exp) => exp.trim().length === 0
+            (exp) => exp.trim().length === 0,
           ) ? null : (
             <CardText>
               {explanation.explanations.map((exp, index) => {
@@ -323,8 +323,13 @@ class SubmissionEditForm extends Component {
   }
 
   renderSaveDraftButton() {
-    const { intl, pristine, attempting, handleSaveDraft, isSaving } =
-      this.props;
+    const {
+      intl,
+      pristine,
+      attempting,
+      handleSaveDraft,
+      isSaving,
+    } = this.props;
     if (attempting) {
       return (
         <RaisedButton
@@ -340,8 +345,13 @@ class SubmissionEditForm extends Component {
   }
 
   renderSaveGradeButton() {
-    const { intl, graderView, attempting, handleSaveGrade, isSaving } =
-      this.props;
+    const {
+      intl,
+      graderView,
+      attempting,
+      handleSaveGrade,
+      isSaving,
+    } = this.props;
     if (graderView && !attempting) {
       return (
         <RaisedButton
@@ -427,7 +437,7 @@ class SubmissionEditForm extends Component {
     } = this.props;
     if (delayedGradePublication && graderView && submitted) {
       const anyUngraded = Object.values(grading).some(
-        (q) => q.grade === undefined || q.grade === null
+        (q) => q.grade === undefined || q.grade === null,
       );
       return (
         <RaisedButton
@@ -472,7 +482,7 @@ class SubmissionEditForm extends Component {
     } = this.props;
     if (!delayedGradePublication && graderView && submitted) {
       const anyUngraded = Object.values(grading).some(
-        (q) => q.grade === undefined || q.grade === null
+        (q) => q.grade === undefined || q.grade === null,
       );
 
       return (

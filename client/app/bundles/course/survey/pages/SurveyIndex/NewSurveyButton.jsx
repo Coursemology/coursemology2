@@ -29,8 +29,13 @@ const propTypes = {
 };
 
 const aWeekStartingTomorrow = () => {
-  const startAt = moment().add(1, 'd').startOf('day');
-  const endAt = moment(startAt).add(6, 'd').endOf('day').startOf('minute');
+  const startAt = moment()
+    .add(1, 'd')
+    .startOf('day');
+  const endAt = moment(startAt)
+    .add(6, 'd')
+    .endOf('day')
+    .startOf('minute');
 
   return {
     start_at: startAt.toDate(),
@@ -60,7 +65,7 @@ class NewSurveyButton extends React.Component {
           allow_response_after_end: true,
           ...aWeekStartingTomorrow(),
         },
-      })
+      }),
     );
   };
 
@@ -73,5 +78,5 @@ class NewSurveyButton extends React.Component {
 NewSurveyButton.propTypes = propTypes;
 
 export default connect((state) => state.surveysFlags)(
-  injectIntl(NewSurveyButton)
+  injectIntl(NewSurveyButton),
 );

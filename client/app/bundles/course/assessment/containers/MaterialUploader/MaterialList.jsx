@@ -18,7 +18,7 @@ const propTypes = {
       name: PropTypes.string,
       updated_at: PropTypes.string,
       deleting: PropTypes.bool,
-    })
+    }),
   ),
   // The popup notification message
   notification: notificationShape,
@@ -28,7 +28,7 @@ const propTypes = {
     PropTypes.shape({
       name: PropTypes.string,
       uploading: PropTypes.bool,
-    })
+    }),
   ),
   onFileInputChange: PropTypes.func,
 };
@@ -54,8 +54,12 @@ const styles = {
 };
 
 const MaterialList = (props) => {
-  const { materials, uploadingMaterials, onMaterialDelete, onFileInputChange } =
-    props;
+  const {
+    materials,
+    uploadingMaterials,
+    onMaterialDelete,
+    onFileInputChange,
+  } = props;
   const header = (
     <FormattedMessage
       id="course.assessment.MaterialList.uploadedFiles"

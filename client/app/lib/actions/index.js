@@ -31,7 +31,7 @@ export function shiftEndDate(
   newStartAt,
   oldValues,
   startAtField = 'start_at',
-  endAtField = 'end_at'
+  endAtField = 'end_at',
 ) {
   return (dispatch) => {
     const { [startAtField]: oldStartAt, [endAtField]: oldEndAt } = oldValues;

@@ -88,7 +88,7 @@ class ColumnVisibilityDropdown extends React.Component {
                     }
                   />
                 );
-              }
+              },
             )}
           </Menu>
         </Popover>

@@ -55,7 +55,7 @@ class Question extends React.Component {
     const successMessage = intl.formatMessage(translations.updateSuccess);
     const failureMessage = intl.formatMessage(translations.updateFailure);
     return dispatch(
-      updateSurveyQuestion(data.id, payload, successMessage, failureMessage)
+      updateSurveyQuestion(data.id, payload, successMessage, failureMessage),
     );
   };
 
@@ -71,7 +71,7 @@ class Question extends React.Component {
           ...question,
           question_type: question.question_type.toString(),
         },
-      })
+      }),
     );
   };
 
@@ -128,8 +128,8 @@ class Question extends React.Component {
             {...{ question, expanded }}
             adminFunctions={this.adminFunctions()}
           />
-        </div>
-      )
+        </div>,
+      ),
     );
   }
 }
@@ -144,8 +144,8 @@ const questionSource = {
       questionActions.setDraggedQuestion(
         props.index,
         props.sectionIndex,
-        props.question.section_id
-      )
+        props.question.section_id,
+      ),
     );
 
     return { id: props.question.id };
@@ -153,13 +153,13 @@ const questionSource = {
 
   endDrag(props) {
     const successMessage = props.intl.formatMessage(
-      translations.reorderSuccess
+      translations.reorderSuccess,
     );
     const failureMessage = props.intl.formatMessage(
-      translations.reorderFailure
+      translations.reorderFailure,
     );
     props.dispatch(
-      questionActions.finalizeOrder(successMessage, failureMessage)
+      questionActions.finalizeOrder(successMessage, failureMessage),
     );
   },
 };
@@ -201,7 +201,7 @@ const questionTarget = {
       sourceIndex < hoverIndex && pointerY > hoverMiddleY;
     if (draggedUpwardPastMidLine || draggedDownwardPastMidLine) {
       props.dispatch(
-        questionActions.reorder(sourceSectionIndex, sourceIndex, hoverIndex)
+        questionActions.reorder(sourceSectionIndex, sourceIndex, hoverIndex),
       );
     }
   },
@@ -238,13 +238,13 @@ export default connect()(
     DropTarget(
       draggableTypes.QUESTION,
       questionTarget,
-      targetCollect
+      targetCollect,
     )(
       DragSource(
         draggableTypes.QUESTION,
         questionSource,
-        sourceCollect
-      )(Question)
-    )
-  )
+        sourceCollect,
+      )(Question),
+    ),
+  ),
 );

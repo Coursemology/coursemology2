@@ -21,11 +21,11 @@ describe('<MoveDownButton />', () => {
     window.history.pushState(
       {},
       '',
-      `/courses/${courseId}/surveys/${surveyId}`
+      `/courses/${courseId}/surveys/${surveyId}`,
     );
     const moveSectionButton = mount(
       <MoveDownButton sectionIndex={sectionIndex} />,
-      buildContextOptions(store)
+      buildContextOptions(store),
     );
     moveSectionButton.find('button').simulate('click');
 

@@ -58,11 +58,11 @@ describe('updateScribingAnswerInLocal', () => {
       payload: mockSubmission,
     });
     expect(
-      store.getState().scribing[answerId].answer.scribbles[0].content
+      store.getState().scribing[answerId].answer.scribbles[0].content,
     ).toBe('oldScribble');
     store.dispatch(updateScribingAnswerInLocal(answerId, scribblesInJSON));
     expect(
-      store.getState().scribing[answerId].answer.scribbles[0].content
+      store.getState().scribing[answerId].answer.scribbles[0].content,
     ).toBe('newScribble');
   });
 });

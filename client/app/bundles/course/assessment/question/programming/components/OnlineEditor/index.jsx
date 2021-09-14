@@ -10,12 +10,14 @@ import { validation as editorValidation } from './OnlineEditorBase';
 
 const translations = defineMessages({
   selectLanguageAlert: {
-    id: 'course.assessment.question.programming.onlineEditor.selectLanguageAlert',
+    id:
+      'course.assessment.question.programming.onlineEditor.selectLanguageAlert',
     defaultMessage: 'Please select a language.',
     description: 'Alert message to be displayed when no language is selected.',
   },
   notYetImplementedAlert: {
-    id: 'course.assessment.question.programming.onlineEditor.notYetImplementedAlert',
+    id:
+      'course.assessment.question.programming.onlineEditor.notYetImplementedAlert',
     defaultMessage: 'Not yet implemented :(',
     description:
       'Alert message to be displayed when selected language does not have an online editor.',
@@ -41,7 +43,7 @@ export function validation(data, pathOfKeysToData, intl) {
     case 'c_cpp':
     case 'java':
       return errors.concat(
-        editorValidation(data, pathOfKeysToData.concat([mode]), intl)
+        editorValidation(data, pathOfKeysToData.concat([mode]), intl),
       );
     default:
       return errors;

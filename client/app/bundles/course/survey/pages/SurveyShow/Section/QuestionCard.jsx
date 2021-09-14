@@ -186,7 +186,7 @@ QuestionCard.propTypes = {
     PropTypes.shape({
       label: PropTypes.string,
       handler: PropTypes.func,
-    })
+    }),
   ),
   expanded: PropTypes.bool.isRequired,
 };

@@ -64,9 +64,12 @@ describe('<DuplicateButton />', () => {
     const spy = jest.spyOn(CourseAPI.duplication, 'duplicateItems');
     const duplicateButton = mount(
       <DuplicateButton />,
-      buildContextOptions(storeCreator(data))
+      buildContextOptions(storeCreator(data)),
     );
-    duplicateButton.find('button').first().simulate('click');
+    duplicateButton
+      .find('button')
+      .first()
+      .simulate('click');
 
     const confirmButton = duplicateButton
       .find('ConfirmationDialog')
@@ -85,7 +88,7 @@ describe('<DuplicateButton />', () => {
     };
     expect(spy).toHaveBeenCalledWith(
       data.duplication.duplication.sourceCourse.id,
-      expectedPayload
+      expectedPayload,
     );
   });
 });

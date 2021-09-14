@@ -42,16 +42,17 @@ class AchievementsSelector extends React.Component {
         setItemSelectedBoolean(
           duplicableItemTypes.ACHIEVEMENT,
           achievement.id,
-          value
-        )
+          value,
+        ),
       );
     });
   };
 
   renderRow(achievement) {
     const { dispatch, selectedItems } = this.props;
-    const checked =
-      !!selectedItems[duplicableItemTypes.ACHIEVEMENT][achievement.id];
+    const checked = !!selectedItems[duplicableItemTypes.ACHIEVEMENT][
+      achievement.id
+    ];
 
     return (
       <Checkbox
@@ -74,8 +75,8 @@ class AchievementsSelector extends React.Component {
             setItemSelectedBoolean(
               duplicableItemTypes.ACHIEVEMENT,
               achievement.id,
-              value
-            )
+              value,
+            ),
           )
         }
       />

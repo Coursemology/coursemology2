@@ -39,7 +39,7 @@ const initialState = {
   isDuplicating: false,
 };
 
-export default function (state = initialState, action) {
+export default function(state = initialState, action) {
   const { type } = action;
 
   switch (type) {
@@ -47,10 +47,14 @@ export default function (state = initialState, action) {
       return { ...state, isLoading: true };
     }
     case actionTypes.LOAD_OBJECTS_LIST_SUCCESS: {
-      const { destinationCourses, materialsComponent, ...data } =
-        action.duplicationData;
+      const {
+        destinationCourses,
+        materialsComponent,
+        ...data
+      } = action.duplicationData;
       const sortedDestinationCourses = destinationCourses.sort((a, b) =>
-        a.title.localeCompare(b.title));
+        a.title.localeCompare(b.title),
+      );
       const nestedFolders = nestFolders(materialsComponent);
       return {
         ...state,

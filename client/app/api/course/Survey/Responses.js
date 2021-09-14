@@ -112,7 +112,7 @@ export default class ResponsesAPI extends BaseSurveyAPI {
   update(responseId, responseFields) {
     return this.getClient().patch(
       `${this._getUrlPrefix()}/${responseId}`,
-      responseFields
+      responseFields,
     );
   }
 
@@ -126,7 +126,7 @@ export default class ResponsesAPI extends BaseSurveyAPI {
    */
   unsubmit(responseId) {
     return this.getClient().post(
-      `${this._getUrlPrefix()}/${responseId}/unsubmit`
+      `${this._getUrlPrefix()}/${responseId}/unsubmit`,
     );
   }
 

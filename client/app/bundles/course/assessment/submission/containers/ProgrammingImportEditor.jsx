@@ -203,6 +203,6 @@ function mapStateToProps(state, ownProps) {
 }
 
 const ProgrammingImportEditor = connect(mapStateToProps)(
-  injectIntl(VisibleProgrammingImportEditor)
+  injectIntl(VisibleProgrammingImportEditor),
 );
 export default ProgrammingImportEditor;

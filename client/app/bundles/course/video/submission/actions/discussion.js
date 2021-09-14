@@ -232,7 +232,8 @@ function refreshTopic(topicId) {
           dispatch(updateTopic(topicId, topic));
           if (posts !== undefined) {
             Object.entries(posts).forEach(([postId, post]) =>
-              dispatch(updatePost(postId, post)));
+              dispatch(updatePost(postId, post)),
+            );
           }
         } else {
           dispatch(removeTopic(topicId));
@@ -240,7 +241,7 @@ function refreshTopic(topicId) {
       })
       .catch(() => {
         dispatch(
-          setNotification('Failed to refresh comments, try again later.')
+          setNotification('Failed to refresh comments, try again later.'),
         );
       });
   };
@@ -283,8 +284,8 @@ export function submitNewReplyToServer(topicId) {
 
     const state = getState();
     const text = state.discussion.pendingReplyPosts.get(topicId).content;
-    const discussionTopicId =
-      state.discussion.topics.get(topicId).discussionTopicId;
+    const discussionTopicId = state.discussion.topics.get(topicId)
+      .discussionTopicId;
 
     if (text === '') {
       dispatch(setNotification('Comment cannot be blank!'));
@@ -299,7 +300,7 @@ export function submitNewReplyToServer(topicId) {
       })
       .catch(() => {
         dispatch(
-          updateReply(topicId, { status: postRequestingStatuses.ERROR })
+          updateReply(topicId, { status: postRequestingStatuses.ERROR }),
         );
         dispatch(setNotification('Error replying, please try again later.'));
       });
@@ -334,14 +335,14 @@ export function submitNewPostToServer() {
         dispatch(addTopic(topicId, topic)); // Topic may be new, we just overwrite anyway
 
         dispatch(
-          updateNewPost({ content: '', status: postRequestingStatuses.LOADED })
+          updateNewPost({ content: '', status: postRequestingStatuses.LOADED }),
         );
         dispatch(setNotification('Comment Added'));
       })
       .catch(() => {
         dispatch(updateNewPost({ status: postRequestingStatuses.ERROR }));
         dispatch(
-          setNotification('Error adding new comment, please try again later.')
+          setNotification('Error adding new comment, please try again later.'),
         );
       });
   };
@@ -381,14 +382,14 @@ export function updatePostOnServer(postId) {
             status: postRequestingStatuses.LOADED,
             content: data.formattedText,
             rawContent: data.text,
-          })
+          }),
         );
         dispatch(setNotification('Comment edited'));
       })
       .catch(() => {
         dispatch(updatePost(postId, { status: postRequestingStatuses.ERROR }));
         dispatch(
-          setNotification('Failed to edit comment, please try again later.')
+          setNotification('Failed to edit comment, please try again later.'),
         );
       });
   };
@@ -421,7 +422,7 @@ export function deletePostFromServer(postId) {
       .catch(() => {
         dispatch(updatePost(postId, { status: postRequestingStatuses.ERROR }));
         dispatch(
-          setNotification('Failed to delete comment, please try again later.')
+          setNotification('Failed to delete comment, please try again later.'),
         );
       });
   };

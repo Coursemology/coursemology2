@@ -124,6 +124,6 @@ function mapDispatchToProps(dispatch) {
 
 const QuestionGrade = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(VisibleQuestionGrade);
 export default QuestionGrade;

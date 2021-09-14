@@ -17,7 +17,7 @@ $(document).ready(() => {
       title: categoryAndTabTitle(
         tabAttr.category_title,
         tabAttr.tab_title,
-        tabAttr.only_tab
+        tabAttr.only_tab,
       ),
     };
 

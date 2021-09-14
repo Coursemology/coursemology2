@@ -120,7 +120,7 @@ export function initializeVisibility(items, visibilitySettings) {
   itemTypes.forEach((itemType) => {
     const hasVisibilitySetting = Object.prototype.hasOwnProperty.call(
       visibilitySettings,
-      itemType
+      itemType,
     );
     visibility[itemType] = hasVisibilitySetting
       ? visibilitySettings[itemType]

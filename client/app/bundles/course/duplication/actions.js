@@ -98,7 +98,7 @@ function itemsPayload(selectedItemsHash) {
 export function duplicateItems(
   destinationCourseId,
   selectedItems,
-  failureMessage
+  failureMessage,
 ) {
   const payload = {
     object_duplication: {

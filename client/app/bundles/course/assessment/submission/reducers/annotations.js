@@ -1,7 +1,7 @@
 import actions from '../constants';
 import { arrayToObjectById } from '../utils';
 
-export default function (state = {}, action) {
+export default function(state = {}, action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_SUCCESS:
     case actions.SAVE_DRAFT_SUCCESS:
@@ -21,7 +21,7 @@ export default function (state = {}, action) {
               topics: arrayToObjectById(annotation.topics),
             },
           }),
-          {}
+          {},
         ),
       };
     }
@@ -50,7 +50,7 @@ export default function (state = {}, action) {
     case actions.DELETE_ANNOTATION_SUCCESS: {
       const { fileId, topicId, postId } = action.payload;
       const postIds = state[fileId].topics[topicId].postIds.filter(
-        (id) => id !== postId
+        (id) => id !== postId,
       );
       const topics = Object.keys(state[fileId].topics).reduce((obj, key) => {
         if (key !== topicId.toString()) {
@@ -88,7 +88,7 @@ export default function (state = {}, action) {
                 topics: arrayToObjectById(annotation.topics),
               },
             }),
-            {}
+            {},
           ),
         };
       }

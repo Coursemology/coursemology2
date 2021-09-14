@@ -15,7 +15,7 @@ const initialState = {
   isLoading: false,
 };
 
-export default function (state = initialState, action) {
+export default function(state = initialState, action) {
   switch (action.type) {
     case actionTypes.SET_ITEM_TYPE_VISIBILITY: {
       const visibilityByType = {
@@ -33,7 +33,7 @@ export default function (state = initialState, action) {
     case actionTypes.LOAD_LESSON_PLAN_SUCCESS: {
       const items = action.items.map(generateTypeKey);
       const visibilitySettings = generateVisibilitySettings(
-        action.visibilitySettings
+        action.visibilitySettings,
       );
       return {
         ...state,

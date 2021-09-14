@@ -13,7 +13,7 @@ const destinationCourseSelector = createSelector(
       return null;
     }
     return courses.find((course) => course.id === id);
-  }
+  },
 );
 
 export default destinationCourseSelector;

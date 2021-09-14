@@ -31,7 +31,7 @@ export default class ScribingQuestionAPI extends BaseAPI {
    */
   fetch() {
     return this.getClient().get(
-      `${ScribingQuestionAPI._getUrlPrefix()}/${getScribingId()}`
+      `${ScribingQuestionAPI._getUrlPrefix()}/${getScribingId()}`,
     );
   }
 
@@ -65,13 +65,13 @@ export default class ScribingQuestionAPI extends BaseAPI {
       },
     };
     const formData = ScribingQuestionAPI.generateFormData(
-      scribingFields.question_scribing
+      scribingFields.question_scribing,
     );
 
     return this.getClient().post(
       ScribingQuestionAPI._getUrlPrefix(),
       formData,
-      config
+      config,
     );
   }
 
@@ -93,13 +93,13 @@ export default class ScribingQuestionAPI extends BaseAPI {
       },
     };
     const formData = ScribingQuestionAPI.generateFormData(
-      scribingFields.question_scribing
+      scribingFields.question_scribing,
     );
 
     return this.getClient().patch(
       `${ScribingQuestionAPI._getUrlPrefix()}/${scribingId}`,
       formData,
-      config
+      config,
     );
   }
 
@@ -113,7 +113,7 @@ export default class ScribingQuestionAPI extends BaseAPI {
    */
   delete(scribingId) {
     return this.getClient().delete(
-      `${ScribingQuestionAPI._getUrlPrefix()}/${scribingId}`
+      `${ScribingQuestionAPI._getUrlPrefix()}/${scribingId}`,
     );
   }
 

@@ -62,14 +62,14 @@ export default (props) => {
     process.env.NODE_ENV === 'development'
       ? compose(
           // eslint-disable-next-line global-require
-          applyMiddleware(thunkMiddleware, require('redux-logger').logger)
+          applyMiddleware(thunkMiddleware, require('redux-logger').logger),
         )(createStore)
       : compose(applyMiddleware(thunkMiddleware))(createStore);
 
   if (props.courseUserId && props.video.sessionId) {
     const store = storeCreator(
       persistReducer(persistConfig(props.courseUserId), rootReducer),
-      initialState
+      initialState,
     );
     const persistor = persistStore(store);
     return { store, persistor };

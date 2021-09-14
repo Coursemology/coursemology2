@@ -13,7 +13,7 @@ export default class ScribingsAPI extends BaseAssessmentAPI {
   update(answerId, data) {
     return this.getClient().post(
       `${this._getUrlPrefix()}/${answerId}/scribing/scribbles`,
-      data
+      data,
     );
   }
 

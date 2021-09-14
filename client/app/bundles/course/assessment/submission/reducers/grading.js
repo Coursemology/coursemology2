@@ -14,15 +14,15 @@ function computeExp(
   maximumGrade,
   basePoints,
   expMultiplier,
-  bonusAwarded = 0
+  bonusAwarded = 0,
 ) {
   const totalGrade = sum(Object.values(questions).map((q) => q.grade));
   return Math.round(
-    (totalGrade / maximumGrade) * basePoints * expMultiplier + bonusAwarded
+    (totalGrade / maximumGrade) * basePoints * expMultiplier + bonusAwarded,
   );
 }
 
-export default function (state = initialState, action) {
+export default function(state = initialState, action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_SUCCESS:
     case actions.SAVE_DRAFT_SUCCESS:
@@ -37,13 +37,13 @@ export default function (state = initialState, action) {
         questions: {
           ...action.payload.answers.reduce(
             (obj, answer) => ({ ...obj, [answer.questionId]: answer.grading }),
-            {}
+            {},
           ),
         },
         exp: action.payload.submission.pointsAwarded,
         basePoints: action.payload.submission.basePoints,
         maximumGrade: sum(
-          Object.values(action.payload.questions).map((q) => q.maximumGrade)
+          Object.values(action.payload.questions).map((q) => q.maximumGrade),
         ),
       };
     }
@@ -63,7 +63,7 @@ export default function (state = initialState, action) {
           maximumGrade,
           basePoints,
           expMultiplier,
-          bonusAwarded
+          bonusAwarded,
         ),
       };
     }
@@ -83,7 +83,7 @@ export default function (state = initialState, action) {
           maximumGrade,
           basePoints,
           action.multiplier,
-          bonusAwarded
+          bonusAwarded,
         ),
         expMultiplier: action.multiplier,
       };

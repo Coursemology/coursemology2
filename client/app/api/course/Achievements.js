@@ -28,7 +28,7 @@ export default class AchievementsAPI extends BaseCourseAPI {
   update(achievementId, params) {
     return this.getClient().patch(
       `${this._getUrlPrefix()}/${achievementId}`,
-      params
+      params,
     );
   }
 

@@ -56,21 +56,29 @@ function enableReordering() {
     },
     disabled: false,
   });
-  $(BUTTON_SELECTOR).removeClass('btn-default').addClass('btn-danger');
+  $(BUTTON_SELECTOR)
+    .removeClass('btn-default')
+    .addClass('btn-danger');
   $(REORDER_ICON_SELECTOR).removeClass('hidden');
 }
 
 // Disables the sortable element, toggles the button and hides the reordering icons.
 function disableReordering() {
   $(ACHIEVEMENTS_SELECTOR).sortable({ disabled: true });
-  $(BUTTON_SELECTOR).removeClass('btn-danger').addClass('btn-default');
+  $(BUTTON_SELECTOR)
+    .removeClass('btn-danger')
+    .addClass('btn-default');
   $(REORDER_ICON_SELECTOR).addClass('hidden');
 }
 
 // Declare the necessary transitions for the toggle reordering of achievements button.
 function initializeReorderingButton() {
   $(BUTTON_SELECTOR).on('click', () => {
-    if ($(BUTTON_SELECTOR).attr('class').indexOf('btn-default') !== -1) {
+    if (
+      $(BUTTON_SELECTOR)
+        .attr('class')
+        .indexOf('btn-default') !== -1
+    ) {
       enableReordering();
     } else {
       disableReordering();

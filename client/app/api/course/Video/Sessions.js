@@ -44,7 +44,7 @@ export default class SessionsAPI extends BaseVideoAPI {
     events = [],
     duration = 0,
     isOldSession = false,
-    closeSession = false
+    closeSession = false,
   ) {
     return this.getClient().patch(`${this._getUrlPrefix()}/${id}`, {
       session: { last_video_time: lastVideoTime, events },

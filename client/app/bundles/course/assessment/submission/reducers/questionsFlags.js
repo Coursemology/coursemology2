@@ -1,6 +1,6 @@
 import actions from '../constants';
 
-export default function (state = {}, action) {
+export default function(state = {}, action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_SUCCESS:
     case actions.FINALISE_SUCCESS:
@@ -15,7 +15,7 @@ export default function (state = {}, action) {
               !!answer.autograding && answer.autograding.status === 'errored',
           },
         }),
-        {}
+        {},
       );
     case actions.AUTOGRADE_REQUEST: {
       const { questionId } = action;

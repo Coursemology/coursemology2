@@ -14,7 +14,7 @@ $(document).ready(() => {
       <ProviderWrapper store={store}>
         <ScribingQuestion />
       </ProviderWrapper>,
-      mountNode
+      mountNode,
     );
   }
 });

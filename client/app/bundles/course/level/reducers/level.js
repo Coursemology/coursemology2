@@ -11,7 +11,7 @@ function isNumeric(n) {
   return Number.isFinite(parseInt(n, 10));
 }
 
-export default function (state = initialState, action) {
+export default function(state = initialState, action) {
   const { type } = action;
 
   switch (type) {

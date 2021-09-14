@@ -12,7 +12,7 @@ export const getProgrammingFileURL = (
   assessmentId,
   submissionId,
   answerId,
-  fileId
+  fileId,
 ) =>
   `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}` +
   `/answers/${answerId}/programming/files/${fileId}/download`;

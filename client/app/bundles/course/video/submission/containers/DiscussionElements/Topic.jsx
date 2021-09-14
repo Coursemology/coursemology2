@@ -65,7 +65,8 @@ function mapStateToProps(state, ownProps) {
   const topic = state.discussion.topics.get(ownProps.topicId);
   const postsStore = state.discussion.posts;
   const postIds = topic.topLevelPostIds.filter((postId) =>
-    postsStore.has(postId));
+    postsStore.has(postId),
+  );
   return {
     topicId: ownProps.topicId,
     timestamp: topic.timestamp,
@@ -90,7 +91,7 @@ function mergeProps(stateProps, dispatchProps) {
 const TopicContainer = connect(
   mapStateToProps,
   mapDispatchToProps,
-  mergeProps
+  mergeProps,
 )(Topic);
 
 TopicContainer.propTypes = containerPropTypes;

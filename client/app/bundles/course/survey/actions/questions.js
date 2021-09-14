@@ -64,7 +64,7 @@ export function changeSection(
   prepend,
   sourceIndex,
   sourceSectionIndex,
-  targetSectionIndex
+  targetSectionIndex,
 ) {
   return {
     type: actionTypes.CHANGE_QUESTION_SECTION,
@@ -167,7 +167,7 @@ export function updateSurveyQuestion(
   questionId,
   data,
   successMessage,
-  failureMessage
+  failureMessage,
 ) {
   return (dispatch) => {
     dispatch({ type: actionTypes.UPDATE_SURVEY_QUESTION_REQUEST });

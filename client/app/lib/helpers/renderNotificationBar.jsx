@@ -16,7 +16,7 @@ function renderNotificationBar(id, message) {
     <ProviderWrapper>
       <NotificationBar notification={{ message }} />
     </ProviderWrapper>,
-    mountNode
+    mountNode,
   );
 }
 

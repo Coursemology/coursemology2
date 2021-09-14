@@ -20,13 +20,13 @@ export function validation(data, pathOfKeysToData, intl) {
 
         if (testCase.get('expression').trim() === '') {
           testCaseError.expression = intl.formatMessage(
-            translations.cannotBeBlankValidationError
+            translations.cannotBeBlankValidationError,
           );
           hasError = true;
         }
         if (testCase.get('expected').trim() === '') {
           testCaseError.expected = intl.formatMessage(
-            translations.cannotBeBlankValidationError
+            translations.cannotBeBlankValidationError,
           );
           hasError = true;
         }

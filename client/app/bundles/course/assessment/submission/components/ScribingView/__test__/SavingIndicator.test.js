@@ -57,9 +57,8 @@ const mockSubmission = {
 };
 
 // stub import function
-jest.mock(
-  'course/assessment/submission/loaders/ScribingViewLoader',
-  () => () => Promise.resolve()
+jest.mock('course/assessment/submission/loaders/ScribingViewLoader', () => () =>
+  Promise.resolve(),
 );
 
 beforeEach(() => {
@@ -81,7 +80,7 @@ describe('SavingIndicator', () => {
         >
           <ScribingView answerId={answerId} />
         </MemoryRouter>
-      </ProviderWrapper>
+      </ProviderWrapper>,
     );
 
     store.dispatch({
@@ -96,12 +95,12 @@ describe('SavingIndicator', () => {
     mock
       .onPost(
         `/courses/${courseId}/assessments/${assessmentId}\
-/submissions/${submissionId}/answers/${answerId}/scribing/scribbles`
+/submissions/${submissionId}/answers/${answerId}/scribing/scribbles`,
       )
       .reply(200);
     const spyUpdate = jest.spyOn(
       CourseAPI.assessment.answer.scribing,
-      'update'
+      'update',
     );
     store.dispatch(updateScribingAnswer(answerId, {}));
     await sleep(1);
@@ -120,7 +119,7 @@ describe('SavingIndicator', () => {
         >
           <ScribingView answerId={answerId} />
         </MemoryRouter>
-      </ProviderWrapper>
+      </ProviderWrapper>,
     );
 
     const editUrl = `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`;
@@ -128,12 +127,12 @@ describe('SavingIndicator', () => {
     mock
       .onPost(
         `/courses/${courseId}/assessments/${assessmentId}\
-/submissions/${submissionId}/answers/${answerId}/scribing/scribbles`
+/submissions/${submissionId}/answers/${answerId}/scribing/scribbles`,
       )
       .reply(400);
     const spyUpdate = jest.spyOn(
       CourseAPI.assessment.answer.scribing,
-      'update'
+      'update',
     );
     store.dispatch(updateScribingAnswer(answerId, {}));
     await sleep(1);

@@ -80,7 +80,7 @@ class VisibleSubmissionsIndex extends React.Component {
 
     const initialCounts = workflowStatesArray.reduce(
       (counts, w) => ({ ...counts, [w]: 0 }),
-      {}
+      {},
     );
 
     const submissionStateCounts = submissions.reduce((counts, submission) => {
@@ -163,10 +163,10 @@ class VisibleSubmissionsIndex extends React.Component {
       isStatisticsDownloading,
     } = this.props;
     const myStudentSubmissions = submissions.filter(
-      (s) => s.courseStudent.myStudent
+      (s) => s.courseStudent.myStudent,
     );
     const studentSubmissions = submissions.filter(
-      (s) => !s.courseStudent.phantom
+      (s) => !s.courseStudent.phantom,
     );
     const otherSubmissions = submissions.filter((s) => s.courseStudent.phantom);
 
@@ -282,7 +282,7 @@ VisibleSubmissionsIndex.propTypes = {
       grade: PropTypes.number,
       pointsAwarded: PropTypes.number,
       workflowState: PropTypes.string,
-    })
+    }),
   ),
   notification: notificationShape,
   isLoading: PropTypes.bool.isRequired,

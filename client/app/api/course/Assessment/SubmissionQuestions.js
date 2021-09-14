@@ -11,7 +11,7 @@ export default class SubmissionQuestionsAPI extends BaseAssessmentAPI {
   createComment(submissionQuestionId, params) {
     return this.getClient().post(
       `${this._getUrlPrefix()}/${submissionQuestionId}/comments`,
-      params
+      params,
     );
   }
 
@@ -26,7 +26,7 @@ export default class SubmissionQuestionsAPI extends BaseAssessmentAPI {
     const params = { answers_to_load: answersToLoad };
     return this.getClient().get(
       `${this._getUrlPrefix()}/${submissionQuestionId}/past_answers`,
-      { params }
+      { params },
     );
   }
 

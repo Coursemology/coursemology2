@@ -51,7 +51,7 @@ export function publishSubmissions() {
             data.redirect_url,
             PUBLISH_JOB_POLL_INTERVAL,
             handleSuccess,
-            handleFailure
+            handleFailure,
           );
         } else {
           handleSuccess();
@@ -83,7 +83,7 @@ export function downloadSubmissions(type) {
           data.redirect_url,
           DOWNLOAD_JOB_POLL_INTERVAL,
           handleSuccess,
-          handleFailure
+          handleFailure,
         );
       })
       .catch(handleFailure);
@@ -118,7 +118,7 @@ export function downloadStatistics(type) {
           data.redirect_url,
           DOWNLOAD_STATISTICS_JOB_POLL_INTERNAL,
           handleSuccess,
-          handleFailure
+          handleFailure,
         );
       })
       .catch(handleFailure);

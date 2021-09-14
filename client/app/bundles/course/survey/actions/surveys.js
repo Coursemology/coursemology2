@@ -89,7 +89,7 @@ export function updateSurvey(
   surveyId,
   surveyFields,
   successMessage,
-  failureMessage
+  failureMessage,
 ) {
   return (dispatch) => {
     dispatch({ type: actionTypes.UPDATE_SURVEY_REQUEST, surveyId });
@@ -190,7 +190,7 @@ export function downloadSurvey() {
           data.redirect_url,
           DOWNLOAD_JOB_POLL_INTERVAL,
           handleSuccess,
-          handleFailure
+          handleFailure,
         );
       })
       .catch(handleFailure);

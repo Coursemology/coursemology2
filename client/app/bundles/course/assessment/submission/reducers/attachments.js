@@ -1,6 +1,6 @@
 import actions from '../constants';
 
-export default function (state = {}, action) {
+export default function(state = {}, action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_SUCCESS:
     case actions.SAVE_DRAFT_SUCCESS:
@@ -17,7 +17,7 @@ export default function (state = {}, action) {
             ...obj,
             [answer.questionId]: answer.attachments,
           }),
-          {}
+          {},
         ),
       };
     case actions.AUTOGRADE_SUCCESS: {
@@ -32,7 +32,7 @@ export default function (state = {}, action) {
       return {
         ...state,
         [questionId]: state[questionId].filter(
-          (attachment) => attachment.id !== attachmentId
+          (attachment) => attachment.id !== attachmentId,
         ),
       };
     }

@@ -31,7 +31,7 @@ function initializeLineStyles() {
   return lineStyles;
 }
 
-export default function (state = {}, action) {
+export default function(state = {}, action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_SUCCESS: {
       return {
@@ -73,7 +73,7 @@ export default function (state = {}, action) {
               hasError: false,
             },
           }),
-          {}
+          {},
         ),
       };
     }
@@ -271,8 +271,12 @@ export default function (state = {}, action) {
       };
     }
     case canvasActionTypes.SET_CANVAS_PROPERTIES: {
-      const { answerId, canvasWidth, canvasHeight, canvasMaxWidth } =
-        action.payload;
+      const {
+        answerId,
+        canvasWidth,
+        canvasHeight,
+        canvasMaxWidth,
+      } = action.payload;
       return {
         ...state,
         [answerId]: {

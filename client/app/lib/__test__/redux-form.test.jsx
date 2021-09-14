@@ -32,7 +32,7 @@ describe('SubmissionError', () => {
       ));
       const dummyStore = createStore(
         combineReducers({ form: formReducer }),
-        {}
+        {},
       );
       const wrapper = mount(
         <DummyForm
@@ -40,7 +40,7 @@ describe('SubmissionError', () => {
             throw new SubmissionError(errors);
           }}
         />,
-        buildContextOptions(dummyStore)
+        buildContextOptions(dummyStore),
       );
 
       dummyStore.dispatch(submit('dummy'));

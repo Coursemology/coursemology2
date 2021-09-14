@@ -189,7 +189,7 @@ class SubmissionEditStepForm extends Component {
             titleColor={explanation.correct ? green900 : red900}
           />
           {explanation.explanations.every(
-            (exp) => exp.trim().length === 0
+            (exp) => exp.trim().length === 0,
           ) ? null : (
             <CardText>
               {explanation.explanations.map((exp, idx) => (
@@ -224,8 +224,13 @@ class SubmissionEditStepForm extends Component {
 
   renderResetButton() {
     const { stepIndex } = this.state;
-    const { intl, questionIds, questions, questionsFlags, isSaving } =
-      this.props;
+    const {
+      intl,
+      questionIds,
+      questions,
+      questionsFlags,
+      isSaving,
+    } = this.props;
     const id = questionIds[stepIndex];
     const question = questions[id];
     const { answerId } = question;
@@ -264,7 +269,7 @@ class SubmissionEditStepForm extends Component {
     const { isAutograding, isResetting } = questionsFlags[id] || {};
     if (
       [questionTypes.MultipleChoice, questionTypes.MultipleResponse].includes(
-        question.type
+        question.type,
       ) &&
       question.autogradable &&
       !showMcqAnswer
@@ -328,8 +333,13 @@ class SubmissionEditStepForm extends Component {
   }
 
   renderSaveDraftButton() {
-    const { intl, pristine, attempting, handleSaveDraft, isSaving } =
-      this.props;
+    const {
+      intl,
+      pristine,
+      attempting,
+      handleSaveDraft,
+      isSaving,
+    } = this.props;
     if (attempting) {
       return (
         <RaisedButton

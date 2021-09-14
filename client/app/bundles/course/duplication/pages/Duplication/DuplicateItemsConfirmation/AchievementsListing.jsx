@@ -46,7 +46,7 @@ class AchievementsListing extends React.Component {
     return achievements
       ? achievements.filter(
           (achievement) =>
-            selectedItems[duplicableItemTypes.ACHIEVEMENT][achievement.id]
+            selectedItems[duplicableItemTypes.ACHIEVEMENT][achievement.id],
         )
       : [];
   }

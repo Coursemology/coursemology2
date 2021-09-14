@@ -70,7 +70,7 @@ function mapDispatchToProps(dispatch, ownProps) {
 
 const PostMenuContainer = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(PostMenu);
 
 PostMenuContainer.propTypes = containerPropTypes;

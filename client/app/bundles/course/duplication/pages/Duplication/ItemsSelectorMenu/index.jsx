@@ -68,7 +68,7 @@ class ItemsSelectorMenu extends React.Component {
     const { selectedItems, courses, destinationCourseId } = this.props;
     // Disabled models for cherry pick duplication as defined in `disabled_cherrypickable_types`.
     const unduplicableObjectTypes = courses.find(
-      (course) => course.id === destinationCourseId
+      (course) => course.id === destinationCourseId,
     ).unduplicableObjectTypes;
 
     const counts = {};
@@ -76,7 +76,7 @@ class ItemsSelectorMenu extends React.Component {
       const idsHash = selectedItems[key];
       counts[key] = Object.keys(idsHash).reduce(
         (count, id) => (idsHash[id] ? count + 1 : count),
-        0
+        0,
       );
     });
 
@@ -91,35 +91,35 @@ class ItemsSelectorMenu extends React.Component {
           : this.renderSidebarItem(
               panels.ASSESSMENTS,
               'course_assessments_component',
-              assessmentsComponentCount
+              assessmentsComponentCount,
             )}
         {unduplicableObjectTypes.includes('SURVEY')
           ? null
           : this.renderSidebarItem(
               panels.SURVEYS,
               'course_survey_component',
-              counts[SURVEY]
+              counts[SURVEY],
             )}
         {unduplicableObjectTypes.includes('ACHIEVEMENT')
           ? null
           : this.renderSidebarItem(
               panels.ACHIEVEMENTS,
               'course_achievements_component',
-              counts[ACHIEVEMENT]
+              counts[ACHIEVEMENT],
             )}
         {unduplicableObjectTypes.includes('MATERIAL')
           ? null
           : this.renderSidebarItem(
               panels.MATERIALS,
               'course_materials_component',
-              counts[FOLDER] + counts[MATERIAL]
+              counts[FOLDER] + counts[MATERIAL],
             )}
         {unduplicableObjectTypes.includes('VIDEO')
           ? null
           : this.renderSidebarItem(
               panels.VIDEOS,
               'course_videos_component',
-              videosComponentCount
+              videosComponentCount,
             )}
         <ListItem disabled style={styles.duplicateButton}>
           <DuplicateButton />

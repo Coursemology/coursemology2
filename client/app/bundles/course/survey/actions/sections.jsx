@@ -47,7 +47,7 @@ export function updateSurveySection(
   sectionId,
   data,
   successMessage,
-  failureMessage
+  failureMessage,
 ) {
   return (dispatch) => {
     dispatch({ type: actionTypes.UPDATE_SURVEY_SECTION_REQUEST });
@@ -106,7 +106,7 @@ export function changeSectionOrder(
   oldIndex,
   newIndex,
   successMessage,
-  failureMessage
+  failureMessage,
 ) {
   return (dispatch, getState) => {
     const { surveys } = getState();

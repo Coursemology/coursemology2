@@ -42,7 +42,7 @@ class NewQuestionButton extends React.Component {
     const successMessage = <FormattedMessage {...translations.success} />;
     const failureMessage = <FormattedMessage {...translations.failure} />;
     return dispatch(
-      createSurveyQuestion(payload, successMessage, failureMessage)
+      createSurveyQuestion(payload, successMessage, failureMessage),
     );
   };
 
@@ -62,7 +62,7 @@ class NewQuestionButton extends React.Component {
           max_options: null,
           options: [{}, {}, {}, {}],
         },
-      })
+      }),
     );
   };
 

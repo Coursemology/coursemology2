@@ -1,7 +1,7 @@
 import actions from '../constants';
 import { arrayToObjectById } from '../utils';
 
-export default function (state = {}, action) {
+export default function(state = {}, action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_SUCCESS:
     case actions.SAVE_DRAFT_SUCCESS:
@@ -16,12 +16,12 @@ export default function (state = {}, action) {
         ...arrayToObjectById(
           action.payload.questions.map((question) => {
             const answer = action.payload.answers.find(
-              (a) => a.questionId === question.id
+              (a) => a.questionId === question.id,
             );
             return answer && answer.attemptsLeft !== undefined
               ? { ...question, attemptsLeft: answer.attemptsLeft }
               : question;
-          })
+          }),
         ),
       };
     case actions.AUTOGRADE_SUCCESS:

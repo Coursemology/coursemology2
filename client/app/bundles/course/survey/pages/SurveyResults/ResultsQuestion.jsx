@@ -98,7 +98,7 @@ ResultsQuestion.propTypes = {
         course_user_name: PropTypes.string,
         phantom: PropTypes.bool,
         question_option_ids: PropTypes.arrayOf(PropTypes.number),
-      })
+      }),
     ),
   }).isRequired,
 };

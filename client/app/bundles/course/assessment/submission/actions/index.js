@@ -98,14 +98,14 @@ export function fetchSubmission(id) {
                     getEvaluationResult(
                       id,
                       answer.fields.id,
-                      answer.questionId
-                    )
+                      answer.questionId,
+                    ),
                   ),
                 () =>
                   dispatch({
                     type: actionTypes.AUTOGRADE_FAILURE,
                     questionId: answer.questionId,
-                  })
+                  }),
               );
             }, JOB_STAGGER_DELAY * index);
           });
@@ -135,11 +135,12 @@ export function autogradeSubmission(id) {
             fetchSubmission(id)(dispatch);
             dispatch(setNotification(translations.autogradeSubmissionSuccess));
           },
-          () => dispatch({ type: actionTypes.AUTOGRADE_SUBMISSION_FAILURE })
+          () => dispatch({ type: actionTypes.AUTOGRADE_SUBMISSION_FAILURE }),
         );
       })
       .catch(() =>
-        dispatch({ type: actionTypes.AUTOGRADE_SUBMISSION_FAILURE }));
+        dispatch({ type: actionTypes.AUTOGRADE_SUBMISSION_FAILURE }),
+      );
   };
 }
 
@@ -162,7 +163,7 @@ export function saveDraft(submissionId, rawAnswers) {
       .catch((error) => {
         dispatch({ type: actionTypes.SAVE_DRAFT_FAILURE });
         dispatch(
-          setNotification(translations.updateFailure, buildErrorMessage(error))
+          setNotification(translations.updateFailure, buildErrorMessage(error)),
         );
       });
   };
@@ -187,7 +188,7 @@ export function finalise(submissionId, rawAnswers) {
       .catch((error) => {
         dispatch({ type: actionTypes.FINALISE_FAILURE });
         dispatch(
-          setNotification(translations.updateFailure, buildErrorMessage(error))
+          setNotification(translations.updateFailure, buildErrorMessage(error)),
         );
       });
   };
@@ -208,7 +209,7 @@ export function unsubmit(submissionId) {
       .catch((error) => {
         dispatch({ type: actionTypes.UNSUBMIT_FAILURE });
         dispatch(
-          setNotification(translations.updateFailure, buildErrorMessage(error))
+          setNotification(translations.updateFailure, buildErrorMessage(error)),
         );
       });
   };
@@ -234,7 +235,7 @@ export function submitAnswer(submissionId, rawAnswer) {
             JOB_POLL_DELAY,
             () =>
               dispatch(
-                getEvaluationResult(submissionId, answer.id, questionId)
+                getEvaluationResult(submissionId, answer.id, questionId),
               ),
             (errorData) => {
               dispatch({
@@ -243,7 +244,7 @@ export function submitAnswer(submissionId, rawAnswer) {
                 payload: errorData,
               });
               dispatch(setNotification(translations.requestFailure));
-            }
+            },
           );
         } else {
           dispatch({
@@ -302,8 +303,8 @@ export function deleteFile(answerId, fileId, answerFields) {
         dispatch(
           setNotification(
             translations.deleteFileFailure,
-            buildErrorMessage(error)
-          )
+            buildErrorMessage(error),
+          ),
         );
       });
   };
@@ -313,7 +314,7 @@ export function deleteFile(answerId, fileId, answerFields) {
 function validateFiles(files) {
   const filenames = files.map((file) => file.filename);
   const uniqueFilenames = filenames.filter(
-    (name, index, self) => self.indexOf(name) === index
+    (name, index, self) => self.indexOf(name) === index,
   );
   return filenames.length === uniqueFilenames.length;
 }
@@ -352,8 +353,8 @@ export function importFiles(answerId, answerFields, language) {
           dispatch(
             setNotification(
               translations.importFilesFailure,
-              buildErrorMessage(error)
-            )
+              buildErrorMessage(error),
+            ),
           );
         });
     }
@@ -393,7 +394,7 @@ export function saveGrade(submissionId, grades, exp, published) {
       .catch((error) => {
         dispatch({ type: actionTypes.SAVE_GRADE_FAILURE });
         dispatch(
-          setNotification(translations.updateFailure, buildErrorMessage(error))
+          setNotification(translations.updateFailure, buildErrorMessage(error)),
         );
       });
   };
@@ -421,7 +422,7 @@ export function mark(submissionId, grades, exp) {
       .catch((error) => {
         dispatch({ type: actionTypes.MARK_FAILURE });
         dispatch(
-          setNotification(translations.updateFailure, buildErrorMessage(error))
+          setNotification(translations.updateFailure, buildErrorMessage(error)),
         );
       });
   };
@@ -442,7 +443,7 @@ export function unmark(submissionId) {
       .catch((error) => {
         dispatch({ type: actionTypes.UNMARK_FAILURE });
         dispatch(
-          setNotification(translations.updateFailure, buildErrorMessage(error))
+          setNotification(translations.updateFailure, buildErrorMessage(error)),
         );
       });
   };
@@ -471,8 +472,8 @@ export function publish(submissionId, grades, exp) {
         dispatch(
           setNotification(
             translations.getPastAnswersFailure,
-            buildErrorMessage(error)
-          )
+            buildErrorMessage(error),
+          ),
         );
       });
   };
@@ -516,7 +517,7 @@ export function toggleViewHistoryMode(
   viewHistory,
   submissionQuestionId,
   questionId,
-  answersLoaded
+  answersLoaded,
 ) {
   return (dispatch) => {
     if (!answersLoaded) {
@@ -546,8 +547,8 @@ export function toggleViewHistoryMode(
           dispatch(
             setNotification(
               translations.getPastAnswersFailure,
-              buildErrorMessage(error)
-            )
+              buildErrorMessage(error),
+            ),
           );
         });
     } else {

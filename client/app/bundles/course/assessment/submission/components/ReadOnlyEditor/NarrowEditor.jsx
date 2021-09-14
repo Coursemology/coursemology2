@@ -69,8 +69,13 @@ export default class NarrowEditor extends Component {
 
   renderComments(lineNumber) {
     const { activeComment } = this.state;
-    const { answerId, fileId, annotations, expanded, collapseLine } =
-      this.props;
+    const {
+      answerId,
+      fileId,
+      annotations,
+      expanded,
+      collapseLine,
+    } = this.props;
     const annotation = annotations.find((a) => a.line === lineNumber);
     const placement = 'right';
 

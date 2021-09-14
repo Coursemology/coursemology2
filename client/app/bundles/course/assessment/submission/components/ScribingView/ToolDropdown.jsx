@@ -47,8 +47,13 @@ const style = {
 
 export default class ToolDropdown extends Component {
   renderIcon() {
-    const { disabled, iconClassname, currentTool, toolType, iconComponent } =
-      this.props;
+    const {
+      disabled,
+      iconClassname,
+      currentTool,
+      toolType,
+      iconComponent,
+    } = this.props;
     const iconStyle = disabled
       ? style.disabled
       : { color: currentTool === toolType ? blue500 : 'rgba(0, 0, 0, 0.4)' };
@@ -61,8 +66,12 @@ export default class ToolDropdown extends Component {
   }
 
   renderColorBar() {
-    const { activeObject, disabled, colorBarBorder, colorBarBackground } =
-      this.props;
+    const {
+      activeObject,
+      disabled,
+      colorBarBorder,
+      colorBarBackground,
+    } = this.props;
 
     let backgroundColor = colorBarBackground;
     let borderColor = colorBarBorder;

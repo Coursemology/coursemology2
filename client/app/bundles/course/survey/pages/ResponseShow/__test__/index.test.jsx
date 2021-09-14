@@ -19,7 +19,7 @@ describe('<ResponseShow />', () => {
           match: { params: { responseId } },
         }}
       />,
-      buildContextOptions(storeCreator({}))
+      buildContextOptions(storeCreator({})),
     );
     await sleep(1);
     expect(spyFetch).toHaveBeenCalled();
@@ -60,7 +60,7 @@ describe('<ResponseShow />', () => {
         {...responseFormData}
         {...urlParams}
       />,
-      buildContextOptions(storeCreator({}))
+      buildContextOptions(storeCreator({})),
     );
     expect(responseShow).toMatchSnapshot();
   });
@@ -93,7 +93,7 @@ describe('<ResponseShow />', () => {
         {...responseFormData}
         {...urlParams}
       />,
-      buildContextOptions(storeCreator({}))
+      buildContextOptions(storeCreator({})),
     );
     expect(responseShow).toMatchSnapshot();
   });

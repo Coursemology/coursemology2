@@ -46,7 +46,7 @@ class NewMilestoneButton extends React.Component {
         onSubmit: this.createMilestoneHandler,
         formTitle: intl.formatMessage(translations.newMilestone),
         initialValues: {},
-      })
+      }),
     );
   };
 

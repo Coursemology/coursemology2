@@ -7,7 +7,7 @@ export default (initialStates) => {
     process.env.NODE_ENV === 'development'
       ? compose(
           // eslint-disable-next-line global-require
-          applyMiddleware(thunkMiddleware, require('redux-logger').logger)
+          applyMiddleware(thunkMiddleware, require('redux-logger').logger),
         )(createStore)
       : compose(applyMiddleware(thunkMiddleware))(createStore);
 

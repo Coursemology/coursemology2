@@ -50,7 +50,7 @@ const SurveyFormDialogue = ({
 }) => {
   const { hideSurveyForm, submitSurveyForm } = bindActionCreators(
     actionCreators,
-    dispatch
+    dispatch,
   );
   const { shiftEndDate } = bindActionCreators(libActionCreators, dispatch);
 

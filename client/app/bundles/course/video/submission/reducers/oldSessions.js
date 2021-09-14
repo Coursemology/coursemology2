@@ -20,7 +20,7 @@ export const persistTransform = createTransform(
       ...videoState,
       sessionEvents: makeImmutableList(videoState.sessionEvents),
     })),
-  { whitelist: ['oldSessions'] }
+  { whitelist: ['oldSessions'] },
 );
 
 function removeSessionIds(oldSessionsMap, sessionIdsArray) {
@@ -32,7 +32,7 @@ function removeSessionIds(oldSessionsMap, sessionIdsArray) {
   return oldSessionsMapFiltered;
 }
 
-export default function (state = initialState, action) {
+export default function(state = initialState, action) {
   switch (action.type) {
     case sessionActionTypes.REMOVE_OLD_SESSIONS:
       return removeSessionIds(state, action.sessionIds);

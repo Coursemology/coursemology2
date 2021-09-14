@@ -115,7 +115,7 @@ describe('<ResponseForm />', () => {
         {...{ response, flags, onSubmit }}
         initialValues={buildInitialValues(survey, response)}
       />,
-      buildContextOptions(storeCreator({}))
+      buildContextOptions(storeCreator({})),
     );
 
     let textResponseAnswer;
@@ -152,7 +152,7 @@ describe('<ResponseForm />', () => {
       .first()
       .text();
     expect(multipleChoiceAnswerError).toEqual(
-      'Please select at least 1 option(s).'
+      'Please select at least 1 option(s).',
     );
 
     const multipleResponseAnswerError = multipleResponseAnswer
@@ -161,7 +161,7 @@ describe('<ResponseForm />', () => {
       .first()
       .text();
     expect(multipleResponseAnswerError).toEqual(
-      'Please select at most 2 option(s).'
+      'Please select at most 2 option(s).',
     );
 
     const saveButton = responseForm.find('button').first();

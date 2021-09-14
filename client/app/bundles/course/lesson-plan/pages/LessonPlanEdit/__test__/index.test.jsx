@@ -34,7 +34,7 @@ describe('<LessonPlanEdit />', () => {
 
     const lessonPlanEdit = mount(
       <LessonPlanEdit />,
-      buildContextOptions(store)
+      buildContextOptions(store),
     );
 
     expect(lessonPlanEdit.find('ItemRow').length).toBe(1);

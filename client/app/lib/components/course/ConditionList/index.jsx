@@ -91,7 +91,7 @@ class ConditionList extends React.Component {
             href={condition.delete_url}
             data-method="delete"
             data-confirm={this.props.intl.formatMessage(
-              translations.deleteConfirm
+              translations.deleteConfirm,
             )}
           >
             <DeleteIcon />
@@ -126,7 +126,7 @@ ConditionList.propTypes = {
     PropTypes.shape({
       name: PropTypes.string,
       url: PropTypes.string,
-    })
+    }),
   ).isRequired,
   conditions: PropTypes.arrayOf(
     PropTypes.shape({
@@ -134,7 +134,7 @@ ConditionList.propTypes = {
       description: PropTypes.string,
       edit_url: PropTypes.string,
       delete_url: PropTypes.string,
-    })
+    }),
   ),
 };
 

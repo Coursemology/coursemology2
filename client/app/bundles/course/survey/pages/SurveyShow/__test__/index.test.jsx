@@ -76,7 +76,7 @@ function wrapInTestContext(DecoratedComponent) {
   }
   const mapStateToProps = (state) => ({ survey: state.surveys[0] || {} });
   return connect(mapStateToProps)(
-    DragDropContext(TestBackend)(TestContextContainer)
+    DragDropContext(TestBackend)(TestContextContainer),
   );
 }
 
@@ -92,7 +92,7 @@ describe('<SurveyShow />', () => {
     const spyFetch = jest.spyOn(CourseAPI.survey.surveys, 'fetch');
     const spyFinalizeOrder = jest.spyOn(
       CourseAPI.survey.surveys,
-      'reorderQuestions'
+      'reorderQuestions',
     );
 
     // Mount showPage and wait for survey data to load
@@ -103,7 +103,7 @@ describe('<SurveyShow />', () => {
       <WrappedSurveyShow
         {...{ courseId, surveyId: surveyData.id.toString() }}
       />,
-      buildContextOptions(store)
+      buildContextOptions(store),
     );
     await sleep(1);
     expect(spyFetch).toHaveBeenCalled();
@@ -162,10 +162,10 @@ describe('<SurveyShow />', () => {
     updateSections();
     const questionWeightsAfterReorder = questionWeights();
     expect(questionWeightsBeforeReorder[0]).toBeLessThan(
-      questionWeightsBeforeReorder[1]
+      questionWeightsBeforeReorder[1],
     );
     expect(questionWeightsAfterReorder[0]).not.toBeLessThan(
-      questionWeightsAfterReorder[1]
+      questionWeightsAfterReorder[1],
     );
 
     // Mock getBoundingClientRect for section drop target

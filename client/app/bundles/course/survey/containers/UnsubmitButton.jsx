@@ -51,7 +51,7 @@ class UnsubmitButton extends React.Component {
 
     this.setState({ open: false });
     return dispatch(
-      unsubmitResponse(responseId, successMessage, failureMessage)
+      unsubmitResponse(responseId, successMessage, failureMessage),
     );
   };
 

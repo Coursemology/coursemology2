@@ -57,7 +57,7 @@ export default class LessonPlanAPI extends BaseCourseAPI {
   updateMilestone(id, payload) {
     return this.getClient().patch(
       `${this._getUrlPrefix()}/milestones/${id}`,
-      payload
+      payload,
     );
   }
 
@@ -100,7 +100,7 @@ export default class LessonPlanAPI extends BaseCourseAPI {
   updateEvent(id, payload) {
     return this.getClient().patch(
       `${this._getUrlPrefix()}/events/${id}`,
-      payload
+      payload,
     );
   }
 
@@ -129,7 +129,7 @@ export default class LessonPlanAPI extends BaseCourseAPI {
   updateItem(id, payload) {
     return this.getClient().patch(
       `${this._getUrlPrefix()}/items/${id}`,
-      payload
+      payload,
     );
   }
 

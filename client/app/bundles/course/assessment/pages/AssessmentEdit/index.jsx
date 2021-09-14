@@ -40,8 +40,8 @@ class EditPage extends React.Component {
         data.id,
         { assessment: atrributes },
         intl.formatMessage(translations.updateSuccess),
-        intl.formatMessage(translations.updateFailure)
-      )
+        intl.formatMessage(translations.updateFailure),
+      ),
     );
   };
 

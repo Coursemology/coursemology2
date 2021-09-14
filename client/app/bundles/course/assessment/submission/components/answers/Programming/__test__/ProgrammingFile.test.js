@@ -59,7 +59,7 @@ describe('<ProgrammingFile />', () => {
       >
         <ProgrammingFile {...programmingFileProps} />
       </MemoryRouter>,
-      buildContextOptions(store)
+      buildContextOptions(store),
     );
 
     expect(programmingFile.find('a').length).toBe(1);
@@ -92,7 +92,7 @@ describe('<ProgrammingFile />', () => {
       >
         <ProgrammingFile {...programmingFileProps} />
       </MemoryRouter>,
-      buildContextOptions(store)
+      buildContextOptions(store),
     );
 
     expect(programmingFile.find('a').length).toBe(0);

@@ -20,13 +20,13 @@ describe('<EditSectionButton />', () => {
     window.history.pushState(
       {},
       '',
-      `/courses/${courseId}/surveys/${surveyId}`
+      `/courses/${courseId}/surveys/${surveyId}`,
     );
     const contextOptions = buildContextOptions(storeCreator({}));
     const sectionFormDialogue = mount(<SectionFormDialogue />, contextOptions);
     const editSectionButton = mount(
       <EditSectionButton section={section} />,
-      contextOptions
+      contextOptions,
     );
     editSectionButton.find('button').simulate('click');
 
@@ -36,7 +36,7 @@ describe('<EditSectionButton />', () => {
       .first()
       .instance();
     const sectionForm = mount(dialogInline.props.render(), contextOptions).find(
-      'form'
+      'form',
     );
     const descriptionInput = sectionForm.find('textarea[name="description"]');
     descriptionInput.simulate('change', { target: { value: newDescription } });

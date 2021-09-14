@@ -17,7 +17,7 @@ export const sortAttributeArray = (
   item,
   attribute,
   mapMethod = (attr) => attr,
-  sortMethod = sorts.byWeight
+  sortMethod = sorts.byWeight,
 ) => {
   const attributeArray = item[attribute];
   if (!attributeArray) {
@@ -51,7 +51,7 @@ const sortResultsQuestionElements = (question) => {
     question,
     'answers',
     (attr) => attr,
-    sortAnswersByStudentName
+    sortAnswersByStudentName,
   );
 };
 
@@ -77,7 +77,7 @@ export const sortSurveysByDate = (surveys) =>
 export const formatQuestionFormData = (data) => {
   const payload = new FormData();
   const filledOptions = data.options.filter(
-    (option) => option && (option.option || option.file || option.image_url)
+    (option) => option && (option.option || option.file || option.image_url),
   );
   const filledOptionsCount = filledOptions.length;
 
@@ -100,7 +100,7 @@ export const formatQuestionFormData = (data) => {
       if (option[field] !== undefined && option[field] !== null) {
         payload.append(
           `question[options_attributes][${index}][${field}]`,
-          option[field]
+          option[field],
         );
       }
     });
@@ -112,11 +112,11 @@ export const formatQuestionFormData = (data) => {
       const arrayIndex = filledOptionsCount + index;
       payload.append(
         `question[options_attributes][${arrayIndex}][id]`,
-        option.id
+        option.id,
       );
       payload.append(
         `question[options_attributes][${arrayIndex}][_destroy]`,
-        true
+        true,
       );
     });
   }

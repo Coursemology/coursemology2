@@ -74,7 +74,7 @@ export default class DuplicationAPI extends BaseCourseAPI {
   duplicateCourse(sourceCourseId, params) {
     return this.getClient().post(
       `/courses/${sourceCourseId}/duplication`,
-      params
+      params,
     );
   }
 

@@ -17,9 +17,9 @@ const propTypes = {
           eventType: PropTypes.string,
           eventTime: PropTypes.string,
           videoTime: PropTypes.number,
-        })
+        }),
       ),
-    })
+    }),
   ).isRequired,
   watchFrequency: PropTypes.arrayOf(PropTypes.number).isRequired,
 };

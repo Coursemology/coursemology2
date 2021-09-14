@@ -42,7 +42,7 @@ class LessonPlanSettings extends React.Component {
         <FormattedMessage {...translations.updateFailure} values={values} />
       );
       dispatch(
-        updateLessonPlanSettings(payload, successMessage, failureMessage)
+        updateLessonPlanSettings(payload, successMessage, failureMessage),
       );
     };
   };
@@ -70,7 +70,7 @@ class LessonPlanSettings extends React.Component {
         <FormattedMessage {...translations.updateFailure} values={values} />
       );
       dispatch(
-        updateLessonPlanSettings(payload, successMessage, failureMessage)
+        updateLessonPlanSettings(payload, successMessage, failureMessage),
       );
     };
   };
@@ -127,7 +127,7 @@ class LessonPlanSettings extends React.Component {
   renderLessonPlanItemAssessmentSettingsTable() {
     const { lessonPlanItemSettings } = this.props;
     const assessmentItemSettings = lessonPlanItemSettings.filter(
-      (setting) => setting.component === 'course_assessments_component'
+      (setting) => setting.component === 'course_assessments_component',
     );
 
     if (assessmentItemSettings.length < 1) {
@@ -164,7 +164,8 @@ class LessonPlanSettings extends React.Component {
           </TableHeader>
           <TableBody displayRowCheckbox={false}>
             {assessmentItemSettings.map((item) =>
-              this.renderAssessmentSettingRow(item))}
+              this.renderAssessmentSettingRow(item),
+            )}
           </TableBody>
         </Table>
       </>
@@ -176,8 +177,9 @@ class LessonPlanSettings extends React.Component {
     const { lessonPlanItemSettings } = this.props;
     const componentItemSettings = lessonPlanItemSettings.filter((setting) =>
       ['course_videos_component', 'course_survey_component'].includes(
-        setting.component
-      ));
+        setting.component,
+      ),
+    );
 
     if (componentItemSettings.length < 1) {
       return (
@@ -208,7 +210,8 @@ class LessonPlanSettings extends React.Component {
           </TableHeader>
           <TableBody displayRowCheckbox={false}>
             {componentItemSettings.map((item) =>
-              this.renderComponentSettingRow(item))}
+              this.renderComponentSettingRow(item),
+            )}
           </TableBody>
         </Table>
       </>
@@ -241,7 +244,7 @@ LessonPlanSettings.propTypes = {
       enabled: PropTypes.bool,
       visible: PropTypes.bool,
       options: PropTypes.shape({}),
-    })
+    }),
   ),
   dispatch: PropTypes.func.isRequired,
 };

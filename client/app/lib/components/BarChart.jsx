@@ -65,7 +65,7 @@ class BarChart extends React.Component {
   render() {
     const total = this.props.data.reduce(
       (sum, segment) => sum + segment.count,
-      0
+      0,
     );
     if (total < 1) {
       return <div />;
@@ -86,7 +86,7 @@ BarChart.propTypes = {
       count: PropTypes.number.isRequired,
       color: PropTypes.string.isRequired,
       label: PropTypes.node.isRequired,
-    })
+    }),
   ).isRequired,
 };
 

@@ -25,7 +25,7 @@ class SurveysSelector extends React.Component {
 
     surveys.forEach((survey) => {
       dispatch(
-        setItemSelectedBoolean(duplicableItemTypes.SURVEY, survey.id, value)
+        setItemSelectedBoolean(duplicableItemTypes.SURVEY, survey.id, value),
       );
     });
   };
@@ -47,7 +47,11 @@ class SurveysSelector extends React.Component {
         checked={checked}
         onCheck={(e, value) =>
           dispatch(
-            setItemSelectedBoolean(duplicableItemTypes.SURVEY, survey.id, value)
+            setItemSelectedBoolean(
+              duplicableItemTypes.SURVEY,
+              survey.id,
+              value,
+            ),
           )
         }
       />

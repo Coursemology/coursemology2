@@ -5,7 +5,7 @@ export const lessonPlanTypesGroups = PropTypes.arrayOf(
     id: PropTypes.string,
     milestone: PropTypes.object,
     items: PropTypes.arrayOf({}),
-  })
+  }),
 );
 
 export const achievementTypesConditionAttributes = PropTypes.shape({
@@ -13,7 +13,7 @@ export const achievementTypesConditionAttributes = PropTypes.shape({
     PropTypes.shape({
       name: PropTypes.string,
       url: PropTypes.string,
-    })
+    }),
   ),
   conditions: PropTypes.arrayOf(
     PropTypes.shape({
@@ -21,7 +21,7 @@ export const achievementTypesConditionAttributes = PropTypes.shape({
       description: PropTypes.string,
       edit_url: PropTypes.string,
       delete_url: PropTypes.string,
-    })
+    }),
   ),
 });
 
@@ -30,5 +30,5 @@ export const typeMaterial = PropTypes.arrayOf(
     id: PropTypes.number,
     name: PropTypes.string,
     updated_at: PropTypes.string,
-  })
+  }),
 );

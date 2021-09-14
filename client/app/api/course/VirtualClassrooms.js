@@ -14,7 +14,7 @@ export default class VirtualClassroomsAPI extends BaseCourseAPI {
       `${this._getUrlPrefix()}/${virtualClassroomId}/access_link`,
       this.getCourseId(),
       virtualClassroomId,
-      { format: 'json' }
+      { format: 'json' },
     );
   }
 
@@ -30,7 +30,7 @@ export default class VirtualClassroomsAPI extends BaseCourseAPI {
       `${this._getUrlPrefix()}/${virtualClassroomId}/recorded_videos`,
       this.getCourseId(),
       virtualClassroomId,
-      { format: 'json' }
+      { format: 'json' },
     );
   }
 
@@ -46,7 +46,7 @@ export default class VirtualClassroomsAPI extends BaseCourseAPI {
     return this.getClient().get(
       `${this._getUrlPrefix()}/recorded_video_link/${recordId}`,
       this.getCourseId(),
-      { format: 'json' }
+      { format: 'json' },
     );
   }
 

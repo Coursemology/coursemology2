@@ -12,7 +12,7 @@ const buildShallowWrapper = (canManageLessonPlan, milestone) => {
   const store = storeCreator({ flags: { canManageLessonPlan } });
   return shallow(
     <MilestoneAdminTools milestone={milestone} />,
-    buildContextOptions(store)
+    buildContextOptions(store),
   )
     .dive()
     .dive();
@@ -22,21 +22,21 @@ describe('<MilestoneAdminTools />', () => {
   it('hides admin tools for dummy milestone', () => {
     const milestone = { id: undefined, title: 'Ungrouped Items' };
     expect(
-      buildShallowWrapper(true, milestone).find('RaisedButton').length
+      buildShallowWrapper(true, milestone).find('RaisedButton').length,
     ).toBe(0);
   });
 
   it('hides admin tools when user does not have permissions', () => {
     const milestone = { id: 4, title: 'User-defined Milestone' };
     expect(
-      buildShallowWrapper(false, milestone).find('RaisedButton').length
+      buildShallowWrapper(false, milestone).find('RaisedButton').length,
     ).toBe(0);
   });
 
   it('shows admin tools when user has permissions', () => {
     const milestone = { id: 4, title: 'User-defined Milestone' };
     expect(
-      buildShallowWrapper(true, milestone).find('RaisedButton').length
+      buildShallowWrapper(true, milestone).find('RaisedButton').length,
     ).toBe(2);
   });
 
@@ -54,10 +54,13 @@ describe('<MilestoneAdminTools />', () => {
           start_at: '2017-01-04T02:03:00.000+08:00',
         }}
       />,
-      contextOptions
+      contextOptions,
     );
 
-    const deleteButton = wrapper.find('RaisedButton').last().find('button');
+    const deleteButton = wrapper
+      .find('RaisedButton')
+      .last()
+      .find('button');
     deleteButton.simulate('click');
     const confirmButton = deleteConfirmation
       .find('ConfirmationDialog')
@@ -85,10 +88,13 @@ describe('<MilestoneAdminTools />', () => {
           start_at: milestoneStart,
         }}
       />,
-      contextOptions
+      contextOptions,
     );
 
-    const editButton = wrapper.find('RaisedButton').first().find('button');
+    const editButton = wrapper
+      .find('RaisedButton')
+      .first()
+      .find('button');
     editButton.simulate('click');
 
     const dialogInline = milestoneFormDialog
@@ -97,7 +103,7 @@ describe('<MilestoneAdminTools />', () => {
       .instance();
     const milestoneForm = mount(
       dialogInline.props.render(),
-      contextOptions
+      contextOptions,
     ).find('form');
     const description = 'Add nice description';
     const descriptionInput = milestoneForm.find('textarea[name="description"]');

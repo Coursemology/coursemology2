@@ -24,7 +24,8 @@ class MaterialsSelector extends React.Component {
   folderSetAll = (folder) => (value) => {
     this.props.dispatch(setItemSelectedBoolean(FOLDER, folder.id, value));
     folder.subfolders.forEach((subfolder) =>
-      this.folderSetAll(subfolder)(value));
+      this.folderSetAll(subfolder)(value),
+    );
     folder.materials.forEach((material) => {
       this.props.dispatch(setItemSelectedBoolean(MATERIAL, material.id, value));
     });
@@ -76,9 +77,11 @@ class MaterialsSelector extends React.Component {
           ) : null}
         </IndentedCheckbox>
         {materials.map((material) =>
-          this.renderMaterial(material, indentLevel + 1))}
+          this.renderMaterial(material, indentLevel + 1),
+        )}
         {subfolders.map((subfolder) =>
-          this.renderFolder(subfolder, indentLevel + 1))}
+          this.renderFolder(subfolder, indentLevel + 1),
+        )}
       </div>
     );
   }

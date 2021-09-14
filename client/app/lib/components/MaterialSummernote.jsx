@@ -89,7 +89,7 @@ class MaterialSummernote extends React.Component {
       tooltip: this.props.intl.formatMessage(translations.inlineCode),
       click: () => {
         const node = $(
-          window.getSelection().getRangeAt(0).commonAncestorContainer
+          window.getSelection().getRangeAt(0).commonAncestorContainer,
         );
         const smrNote = this.reactSummernote.editor;
         if (node.parent().is('code')) {

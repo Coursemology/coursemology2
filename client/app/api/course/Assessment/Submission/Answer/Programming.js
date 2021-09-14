@@ -46,7 +46,7 @@ export default class ProgrammingAPI extends BaseAssessmentAPI {
   deleteProgrammingFile(answerId, payload) {
     return this.getClient().post(
       `${this._getUrlPrefix()}/${answerId}/programming/destroy_programming_file`,
-      payload
+      payload,
     );
   }
 

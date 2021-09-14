@@ -16,7 +16,7 @@ class Section extends React.Component {
         }}
       >
         <SectionCard {...this.props} />
-      </div>
+      </div>,
     );
   }
 }
@@ -65,8 +65,8 @@ const sectionTarget = {
         moveDownwards,
         sourceIndex,
         sourceSectionIndex,
-        hoverSectionIndex
-      )
+        hoverSectionIndex,
+      ),
     );
   },
 };
@@ -76,5 +76,5 @@ Section.propTypes = {
 };
 
 export default connect()(
-  DropTarget(draggableTypes.QUESTION, sectionTarget, collect)(Section)
+  DropTarget(draggableTypes.QUESTION, sectionTarget, collect)(Section),
 );

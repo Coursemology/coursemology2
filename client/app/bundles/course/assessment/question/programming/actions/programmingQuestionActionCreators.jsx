@@ -118,7 +118,7 @@ function submitFormEvaluate(
   redirectEdit,
   redirectAssessment,
   successMessage,
-  failureMessage
+  failureMessage,
 ) {
   return (dispatch) => {
     const delay = 500;
@@ -140,8 +140,8 @@ function submitFormEvaluate(
                 redirectEdit,
                 redirectAssessment,
                 successMessage,
-                failureMessage
-              )
+                failureMessage,
+              ),
             );
           }, delay);
         } else {
@@ -154,7 +154,7 @@ function submitFormEvaluate(
             $('.breadcrumb .active').text(redirectEdit.page_header);
 
             // Reload when the user tries to return the the new programming question page
-            window.onpopstate = function (event) {
+            window.onpopstate = function(event) {
               if (event && event.state === null) {
                 window.location.reload();
               }
@@ -165,8 +165,8 @@ function submitFormEvaluate(
             fetchImportResult(
               redirectAssessment,
               successMessage,
-              failureMessage
-            )
+              failureMessage,
+            ),
           );
         }
       })
@@ -205,8 +205,8 @@ export function submitForm(url, method, data, failureMessage) {
               redirectEdit,
               redirectAssessment,
               successMessage,
-              failureMessage
-            )
+              failureMessage,
+            ),
           );
         } else if (redirectAssessment) {
           // No need for package evaluation, redirect back to assessment page
@@ -228,7 +228,7 @@ export function submitForm(url, method, data, failureMessage) {
 
           if (errors) {
             dispatch(
-              setValidationErrors([{ path: ['save_errors'], error: errors }])
+              setValidationErrors([{ path: ['save_errors'], error: errors }]),
             );
           } else {
             dispatch(setSubmissionMessage(message || failureMessage));
