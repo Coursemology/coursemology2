@@ -63,6 +63,7 @@ Rails.application.routes.draw do
       resources :achievements, except: [:index]
       resources :levels, except: [:index]
       resources :assessments, except: [:index]
+      resources :surveys, except: [:index]
     end
   end
 
