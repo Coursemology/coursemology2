@@ -6,7 +6,9 @@ import Subheader from 'material-ui/Subheader';
 import FlatButton from 'material-ui/FlatButton';
 import Divider from 'material-ui/Divider';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import NotificationBar, { notificationShape } from 'lib/components/NotificationBar';
+import NotificationBar, {
+  notificationShape,
+} from 'lib/components/NotificationBar';
 import Material from './Material';
 
 const propTypes = {
@@ -52,7 +54,8 @@ const styles = {
 };
 
 const MaterialList = (props) => {
-  const { materials, uploadingMaterials, onMaterialDelete, onFileInputChange } = props;
+  const { materials, uploadingMaterials, onMaterialDelete, onFileInputChange } =
+    props;
   const header = (
     <FormattedMessage
       id="course.assessment.MaterialList.uploadedFiles"
@@ -60,7 +63,7 @@ const MaterialList = (props) => {
     />
   );
 
-  const materialNodes = materials.map(material => (
+  const materialNodes = materials.map((material) => (
     <Material
       key={material.id}
       id={material.id}
@@ -71,12 +74,8 @@ const MaterialList = (props) => {
     />
   ));
 
-  const uploadingMaterialNodes = uploadingMaterials.map(material => (
-    <Material
-      key={material.name}
-      name={material.name}
-      uploading
-    />
+  const uploadingMaterialNodes = uploadingMaterials.map((material) => (
+    <Material key={material.name} name={material.name} uploading />
   ));
 
   const newFileButton = (
@@ -87,7 +86,12 @@ const MaterialList = (props) => {
       containerElement="label"
       style={styles.newFileButton}
     >
-      <input type="file" multiple style={styles.uploadInput} onChange={onFileInputChange} />
+      <input
+        type="file"
+        multiple
+        style={styles.uploadInput}
+        onChange={onFileInputChange}
+      />
     </FlatButton>
   );
 
@@ -95,10 +99,9 @@ const MaterialList = (props) => {
     <>
       <Divider />
       <List>
-        {
-          (materials.length > 0 || uploadingMaterials.length > 0)
-          && <Subheader>{header}</Subheader>
-        }
+        {(materials.length > 0 || uploadingMaterials.length > 0) && (
+          <Subheader>{header}</Subheader>
+        )}
         {materialNodes}
         {uploadingMaterialNodes}
         {newFileButton}

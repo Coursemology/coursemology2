@@ -16,7 +16,9 @@ const styles = {
 };
 
 const UnpublishedIcon = ({ tooltipId }) => {
-  if (!tooltipId) { return <Block style={styles.unpublishedIcon} />; }
+  if (!tooltipId) {
+    return <Block style={styles.unpublishedIcon} />;
+  }
   return (
     <Block
       data-tip

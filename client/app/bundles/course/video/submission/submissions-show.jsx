@@ -9,7 +9,9 @@ import styles from './containers/Statistics.scss';
 $(document).ready(() => {
   const mountNode = document.getElementById('video-stats');
 
-  if (!mountNode) { return; }
+  if (!mountNode) {
+    return;
+  }
 
   const data = mountNode.getAttribute('data');
   const { statistics, video } = JSON.parse(data);

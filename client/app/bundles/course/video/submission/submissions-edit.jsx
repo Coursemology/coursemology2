@@ -18,7 +18,9 @@ function renderSubmission(state, node) {
 $(document).ready(() => {
   const mountNode = document.getElementById('video-component');
 
-  if (!mountNode) { return; }
+  if (!mountNode) {
+    return;
+  }
 
   const submissionData = mountNode.getAttribute('data');
   const initialState = JSON.parse(submissionData);
@@ -31,7 +33,8 @@ $(document).ready(() => {
       mountNode
     );
 
-    CourseAPI.video.sessions.create()
+    CourseAPI.video.sessions
+      .create()
       .then(({ data }) => {
         initialState.video.sessionId = data.id;
         renderSubmission(initialState, mountNode);

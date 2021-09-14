@@ -12,7 +12,15 @@ import formTranslations from 'lib/translations/form';
 import translations from 'course/lesson-plan/translations';
 import { formNames, fields } from 'course/lesson-plan/constants';
 
-const { TITLE, EVENT_TYPE, LOCATION, DESCRIPTION, START_AT, END_AT, PUBLISHED } = fields;
+const {
+  TITLE,
+  EVENT_TYPE,
+  LOCATION,
+  DESCRIPTION,
+  START_AT,
+  END_AT,
+  PUBLISHED,
+} = fields;
 
 const styles = {
   columns: {
@@ -47,14 +55,26 @@ const validate = (values) => {
     }
   });
 
-  if (values.end_at && values.start_at && new Date(values.start_at) >= new Date(values.end_at)) {
+  if (
+    values.end_at &&
+    values.start_at &&
+    new Date(values.start_at) >= new Date(values.end_at)
+  ) {
     errors.end_at = validationTranslations.startEndValidationError;
   }
 
   return errors;
 };
 
-const EventForm = ({ handleSubmit, onSubmit, disabled, formValues, shiftEndDate, eventTypes, eventLocations }) => (
+const EventForm = ({
+  handleSubmit,
+  onSubmit,
+  disabled,
+  formValues,
+  shiftEndDate,
+  eventTypes,
+  eventLocations,
+}) => (
   <Form onSubmit={handleSubmit(onSubmit)}>
     <Field
       fullWidth
@@ -103,7 +123,9 @@ const EventForm = ({ handleSubmit, onSubmit, disabled, formValues, shiftEndDate,
         name="start_at"
         floatingLabelText={<FormattedMessage {...translations[START_AT]} />}
         component={DateTimePicker}
-        afterChange={(_, newStartAt) => shiftEndDate(formNames.EVENT, newStartAt, formValues)}
+        afterChange={(_, newStartAt) =>
+          shiftEndDate(formNames.EVENT, newStartAt, formValues)
+        }
         style={styles.oneColumn}
         {...{ disabled }}
       />

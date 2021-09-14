@@ -29,29 +29,33 @@ const graphGlobalOptions = (intl, videoDuration) => ({
     },
   },
   scales: {
-    xAxes: [{
-      scaleLabel: {
-        display: true,
-        labelString: intl.formatMessage(translations.eventRealTimeLabel),
-        fontSize: 15,
+    xAxes: [
+      {
+        scaleLabel: {
+          display: true,
+          labelString: intl.formatMessage(translations.eventRealTimeLabel),
+          fontSize: 15,
+        },
+        ticks: {
+          suggestedMin: 0,
+          callback: formatTimestamp,
+        },
       },
-      ticks: {
-        suggestedMin: 0,
-        callback: formatTimestamp,
+    ],
+    yAxes: [
+      {
+        scaleLabel: {
+          display: true,
+          labelString: intl.formatMessage(translations.eventVideoTimeLabel),
+          fontSize: 15,
+        },
+        ticks: {
+          suggestedMin: 0,
+          max: videoDuration,
+          callback: formatTimestamp,
+        },
       },
-    }],
-    yAxes: [{
-      scaleLabel: {
-        display: true,
-        labelString: intl.formatMessage(translations.eventVideoTimeLabel),
-        fontSize: 15,
-      },
-      ticks: {
-        suggestedMin: 0,
-        max: videoDuration,
-        callback: formatTimestamp,
-      },
-    }],
+    ],
   },
 });
 
@@ -66,17 +70,21 @@ const graphDataLineOptions = {
 const propTypes = {
   intl: intlShape.isRequired,
 
-  sessions: PropTypes.objectOf(PropTypes.shape({
-    sessionStart: PropTypes.string,
-    sessionEnd: PropTypes.string,
-    lastVideoTime: PropTypes.number,
-    events: PropTypes.arrayOf(PropTypes.shape({
-      sequenceNum: PropTypes.number,
-      eventType: PropTypes.string,
-      eventTime: PropTypes.string,
-      videoTime: PropTypes.number,
-    })),
-  })).isRequired,
+  sessions: PropTypes.objectOf(
+    PropTypes.shape({
+      sessionStart: PropTypes.string,
+      sessionEnd: PropTypes.string,
+      lastVideoTime: PropTypes.number,
+      events: PropTypes.arrayOf(
+        PropTypes.shape({
+          sequenceNum: PropTypes.number,
+          eventType: PropTypes.string,
+          eventTime: PropTypes.string,
+          videoTime: PropTypes.number,
+        })
+      ),
+    })
+  ).isRequired,
   videoDuration: PropTypes.number.isRequired,
   onMarkerClick: PropTypes.func,
 };
@@ -109,12 +117,21 @@ class ProgressGraph extends React.Component {
       return { x, y, type };
     });
 
-    const endTimeOffset = (sessionEndTime.getTime() - sessionStartTime.getTime()) / 1000;
+    const endTimeOffset =
+      (sessionEndTime.getTime() - sessionStartTime.getTime()) / 1000;
 
     return [
-      { x: 0, y: 0, type: this.props.intl.formatMessage(translations.sessionStartLabel) },
+      {
+        x: 0,
+        y: 0,
+        type: this.props.intl.formatMessage(translations.sessionStartLabel),
+      },
       ...processedEvents,
-      { x: endTimeOffset, y: videoEndTime, type: this.props.intl.formatMessage(translations.sessionEndLabel) },
+      {
+        x: endTimeOffset,
+        y: videoEndTime,
+        type: this.props.intl.formatMessage(translations.sessionEndLabel),
+      },
     ];
   }
 
@@ -130,7 +147,12 @@ class ProgressGraph extends React.Component {
     const startTime = new Date(session.sessionStart);
     const endTime = new Date(session.sessionEnd);
     const videoEnd = session.lastVideoTime;
-    this.displayDataCache[id] = this.processEvents(session.events, startTime, endTime, videoEnd);
+    this.displayDataCache[id] = this.processEvents(
+      session.events,
+      startTime,
+      endTime,
+      videoEnd
+    );
     return this.displayDataCache[id];
   }
 
@@ -147,9 +169,18 @@ class ProgressGraph extends React.Component {
             const realTime = formatTimestamp(x);
             const videoTime = formatTimestamp(y);
 
-            const typeLabel = this.props.intl.formatMessage(translations.eventTypeLabel, { type });
-            const realTimeLabel = this.props.intl.formatMessage(translations.eventRealTime, { realTime });
-            const videoTimeLabel = this.props.intl.formatMessage(translations.eventVideoTime, { videoTime });
+            const typeLabel = this.props.intl.formatMessage(
+              translations.eventTypeLabel,
+              { type }
+            );
+            const realTimeLabel = this.props.intl.formatMessage(
+              translations.eventRealTime,
+              { realTime }
+            );
+            const videoTimeLabel = this.props.intl.formatMessage(
+              translations.eventVideoTime,
+              { videoTime }
+            );
 
             return [typeLabel, '', realTimeLabel, videoTimeLabel];
           },
@@ -185,11 +216,15 @@ class ProgressGraph extends React.Component {
     }
 
     const data = {
-      datasets: [{
-        ...graphDataLineOptions,
-        label: new Date(this.props.sessions[this.state.selectedSessionId].sessionStart).toLocaleString(),
-        data: displayData,
-      }],
+      datasets: [
+        {
+          ...graphDataLineOptions,
+          label: new Date(
+            this.props.sessions[this.state.selectedSessionId].sessionStart
+          ).toLocaleString(),
+          data: displayData,
+        },
+      ],
     };
 
     return (
@@ -209,15 +244,25 @@ class ProgressGraph extends React.Component {
     const items = sessionKeys.map((key) => {
       const session = this.props.sessions[key];
       const startTime = new Date(session.sessionStart);
-      return <MenuItem key={key} value={key} primaryText={startTime.toLocaleString()} />;
+      return (
+        <MenuItem
+          key={key}
+          value={key}
+          primaryText={startTime.toLocaleString()}
+        />
+      );
     });
 
     return (
       <SelectField
-        floatingLabelText={this.props.intl.formatMessage(translations.selectSession)}
+        floatingLabelText={this.props.intl.formatMessage(
+          translations.selectSession
+        )}
         maxHeight={300}
         value={this.state.selectedSessionId}
-        onChange={(_event, _key, selectedSessionId) => this.setState({ selectedSessionId })}
+        onChange={(_event, _key, selectedSessionId) =>
+          this.setState({ selectedSessionId })
+        }
       >
         {items}
       </SelectField>
@@ -250,8 +295,11 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onMarkerClick: duration => dispatch(seekToDirectly(duration)),
+    onMarkerClick: (duration) => dispatch(seekToDirectly(duration)),
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(ProgressGraph));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(injectIntl(ProgressGraph));

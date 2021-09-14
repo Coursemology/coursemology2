@@ -6,7 +6,7 @@ export default function destroy(questionId, attachmentId) {
     dispatch({ type: actionTypes.DELETE_ATTACHMENT_REQUEST });
 
     return AttachmentsAPI.delete(attachmentId)
-      .then(response => response.data)
+      .then((response) => response.data)
       .then(() => {
         dispatch({
           type: actionTypes.DELETE_ATTACHMENT_SUCCESS,

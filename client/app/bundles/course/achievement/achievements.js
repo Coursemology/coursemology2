@@ -29,7 +29,8 @@ function renderNotification(message) {
 function submitReordering(ordering) {
   const action = `${window.location.pathname}/reorder`;
 
-  return axios.post(action, ordering)
+  return axios
+    .post(action, ordering)
     .then(() => {
       renderNotification(translations.updateSuccess.defaultMessage);
     })

@@ -2,17 +2,13 @@ import CourseAPI from 'api/course';
 
 function appendError($node, selector, text) {
   (selector ? $node.closest(selector) : $node).append(
-    $('<i></i>')
-      .addClass('error')
-      .text(text)
+    $('<i></i>').addClass('error').text(text)
   );
 }
 
 function appendInfo($node, selector, text) {
   (selector ? $node.closest(selector) : $node).append(
-    $('<i></i>')
-      .addClass('info')
-      .text(text)
+    $('<i></i>').addClass('info').text(text)
   );
 }
 
@@ -22,25 +18,35 @@ $(document).ready(() => {
     const splits = $this.attr('id').split('-');
     const virtualClassroomId = splits[2];
     $this.addClass('disabled');
-    CourseAPI.virtualClassrooms.accessLink(virtualClassroomId)
+    CourseAPI.virtualClassrooms
+      .accessLink(virtualClassroomId)
       .then((response) => {
-        const { data: { link } } = response;
+        const {
+          data: { link },
+        } = response;
         const $link = $(`#lec-link-${virtualClassroomId}`);
         if ($link.length) {
           $link.attr('href', link);
         } else {
-          $this.closest('.access-link')
-            .prepend(
-              $('<a></a>')
-                .attr({ id: `lec-link-${virtualClassroomId}`, target: '_blank', href: link })
-                .text('Go to virtual classroom')
-            );
+          $this.closest('.access-link').prepend(
+            $('<a></a>')
+              .attr({
+                id: `lec-link-${virtualClassroomId}`,
+                target: '_blank',
+                href: link,
+              })
+              .text('Go to virtual classroom')
+          );
         }
         $this.remove();
       })
       .catch((error) => {
         $this.removeClass('disabled');
-        const { response: { data: { errors } } } = error;
+        const {
+          response: {
+            data: { errors },
+          },
+        } = error;
         if (errors) {
           $this.closest('.access-link').append($('<br/>'));
           appendError($this, '.access-link', errors);
@@ -55,7 +61,8 @@ $(document).ready(() => {
     const virtualClassroomId = splits[2];
     $this.addClass('disabled');
 
-    CourseAPI.virtualClassrooms.recordedVideos(virtualClassroomId)
+    CourseAPI.virtualClassrooms
+      .recordedVideos(virtualClassroomId)
       .then((response) => {
         const { data: recordings } = response;
         $this.closest('.recorded-videos').html('');
@@ -82,7 +89,11 @@ $(document).ready(() => {
       })
       .catch((error) => {
         $div.closest('.recorded-videos').html('');
-        const { response: { data: { errors } } } = error;
+        const {
+          response: {
+            data: { errors },
+          },
+        } = error;
         if (errors) {
           appendError($div, null, 'A network error has occurred');
         }
@@ -96,15 +107,22 @@ $(document).ready(() => {
     const text = $this.text();
     $this.text('Please Wait...');
 
-    CourseAPI.virtualClassrooms.recordedVideoLink(recordId)
+    CourseAPI.virtualClassrooms
+      .recordedVideoLink(recordId)
       .then((response) => {
-        const { data: { link } } = response;
+        const {
+          data: { link },
+        } = response;
         window.open(link, '_blank');
         $this.text(text);
       })
       .catch((error) => {
         $this.removeClass('disabled');
-        const { response: { data: { errors } } } = error;
+        const {
+          response: {
+            data: { errors },
+          },
+        } = error;
         if (errors) {
           appendError($this, 'A network error has occurred');
         }

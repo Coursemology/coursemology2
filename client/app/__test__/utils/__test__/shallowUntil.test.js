@@ -4,7 +4,10 @@ import shallowUntil from '../shallowUntil';
 
 describe('#shallowUntil', () => {
   const Div = () => <div />;
-  const hoc = Component => () => <Component />;
+  const hoc = (Component) => {
+    const component = () => <Component />;
+    return component;
+  };
 
   it('shallow renders the current wrapper one level deep', () => {
     const EnhancedDiv = hoc(Div);
@@ -25,8 +28,19 @@ describe('#shallowUntil', () => {
   });
 
   it('stops shallow rendering when it encounters a DOM element', () => {
-    const wrapper = shallowUntil(<div><Div /></div>, 'Div');
-    expect(wrapper.contains(<div><Div /></div>)).toBeTruthy();
+    const wrapper = shallowUntil(
+      <div>
+        <Div />
+      </div>,
+      'Div'
+    );
+    expect(
+      wrapper.contains(
+        <div>
+          <Div />
+        </div>
+      )
+    ).toBeTruthy();
   });
 
   describe('with context', () => {
@@ -34,16 +48,20 @@ describe('#shallowUntil', () => {
     Foo.contextTypes = { open: PropTypes.bool.isRequired };
 
     class Bar extends React.Component {
-      static childContextTypes = { open: PropTypes.bool }
+      getChildContext = () => ({ open: true });
 
-      getChildContext = () => ({ open: true })
-
-      render = () => <Foo />
+      render = () => <Foo />;
     }
+
+    Bar.childContextTypes = { open: PropTypes.bool };
 
     xit('passes down context from the root component', () => {
       const EnhancedFoo = hoc(Foo);
-      const wrapper = shallowUntil(<EnhancedFoo />, { context: { open: true } }, 'Foo');
+      const wrapper = shallowUntil(
+        <EnhancedFoo />,
+        { context: { open: true } },
+        'Foo'
+      );
       expect(wrapper.context('open')).toEqual(true);
       expect(wrapper.contains(<Div />)).toBeTruthy();
     });

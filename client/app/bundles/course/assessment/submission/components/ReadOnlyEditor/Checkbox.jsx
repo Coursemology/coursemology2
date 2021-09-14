@@ -2,20 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 export default class Checkbox extends Component {
-  static propTypes = {
-    style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-    checked: PropTypes.bool.isRequired,
-    disabled: PropTypes.bool.isRequired,
-    indeterminate: PropTypes.bool,
-    onChange: PropTypes.func,
-  };
-
-  static defaultProps = {
-    style: {},
-    indeterminate: false,
-    onChange: () => {},
-  };
-
   render() {
     const { disabled, style, checked, indeterminate, onChange } = this.props;
     return (
@@ -34,3 +20,17 @@ export default class Checkbox extends Component {
     );
   }
 }
+
+Checkbox.propTypes = {
+  style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  checked: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  indeterminate: PropTypes.bool,
+  onChange: PropTypes.func,
+};
+
+Checkbox.defaultProps = {
+  style: {},
+  indeterminate: false,
+  onChange: () => {},
+};

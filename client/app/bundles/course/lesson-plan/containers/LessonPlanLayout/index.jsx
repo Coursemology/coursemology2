@@ -52,30 +52,32 @@ const styles = {
 const lessonPlanPath = '/courses/:courseId/lesson_plan';
 
 class LessonPlanLayout extends React.Component {
-  static propTypes = {
-    isLoading: PropTypes.bool.isRequired,
-    groups: lessonPlanTypesGroups.isRequired,
-    canManageLessonPlan: PropTypes.bool.isRequired,
-
-    dispatch: PropTypes.func.isRequired,
-  }
-
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch(fetchLessonPlan());
   }
 
   renderHeader() {
-    if (!this.props.canManageLessonPlan) { return null; }
+    if (!this.props.canManageLessonPlan) {
+      return null;
+    }
 
     return (
       <Card>
         <CardText>
           <Route exact path={lessonPlanPath} component={EnterEditModeButton} />
-          <Route exact path={`${lessonPlanPath}/edit`} component={ExitEditModeButton} />
+          <Route
+            exact
+            path={`${lessonPlanPath}/edit`}
+            component={ExitEditModeButton}
+          />
           <NewMilestoneButton />
           <Route path={lessonPlanPath} component={NewEventButton} />
-          <Route exact path={`${lessonPlanPath}/edit`} component={ColumnVisibilityDropdown} />
+          <Route
+            exact
+            path={`${lessonPlanPath}/edit`}
+            component={ColumnVisibilityDropdown}
+          />
         </CardText>
       </Card>
     );
@@ -84,16 +86,26 @@ class LessonPlanLayout extends React.Component {
   renderBody() {
     const { isLoading, groups } = this.props;
 
-    if (isLoading) { return <LoadingIndicator />; }
+    if (isLoading) {
+      return <LoadingIndicator />;
+    }
 
     if (!groups || groups.length < 1) {
-      return <Subheader><FormattedMessage {...translations.empty} /></Subheader>;
+      return (
+        <Subheader>
+          <FormattedMessage {...translations.empty} />
+        </Subheader>
+      );
     }
 
     return (
       <Switch>
         <Route exact path={lessonPlanPath} component={LessonPlanShow} />
-        <Route exact path={`${lessonPlanPath}/edit`} component={LessonPlanEdit} />
+        <Route
+          exact
+          path={`${lessonPlanPath}/edit`}
+          component={LessonPlanEdit}
+        />
       </Switch>
     );
   }
@@ -102,8 +114,8 @@ class LessonPlanLayout extends React.Component {
     return (
       <div style={styles.mainBody}>
         <TitleBar title={<FormattedMessage {...translations.lessonPlan} />} />
-        { this.renderHeader() }
-        { this.renderBody() }
+        {this.renderHeader()}
+        {this.renderBody()}
         <div style={styles.tools}>
           <LessonPlanNav />
           <LessonPlanFilter />
@@ -117,8 +129,18 @@ class LessonPlanLayout extends React.Component {
   }
 }
 
-export default withRouter(connect(state => ({
-  isLoading: state.lessonPlan.isLoading,
-  groups: state.lessonPlan.groups,
-  canManageLessonPlan: state.flags.canManageLessonPlan,
-}))(LessonPlanLayout));
+LessonPlanLayout.propTypes = {
+  isLoading: PropTypes.bool.isRequired,
+  groups: lessonPlanTypesGroups.isRequired,
+  canManageLessonPlan: PropTypes.bool.isRequired,
+
+  dispatch: PropTypes.func.isRequired,
+};
+
+export default withRouter(
+  connect((state) => ({
+    isLoading: state.lessonPlan.isLoading,
+    groups: state.lessonPlan.groups,
+    canManageLessonPlan: state.flags.canManageLessonPlan,
+  }))(LessonPlanLayout)
+);

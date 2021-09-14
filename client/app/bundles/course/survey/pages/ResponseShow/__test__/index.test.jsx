@@ -11,7 +11,14 @@ describe('<ResponseShow />', () => {
     const spyFetch = jest.spyOn(CourseAPI.survey.responses, 'fetch');
 
     mount(
-      <ResponseShow {...{ survey: {}, courseId, surveyId, match: { params: { responseId } } }} />,
+      <ResponseShow
+        {...{
+          survey: {},
+          courseId,
+          surveyId,
+          match: { params: { responseId } },
+        }}
+      />,
       buildContextOptions(storeCreator({}))
     );
     await sleep(1);
@@ -52,7 +59,8 @@ describe('<ResponseShow />', () => {
         survey={survey}
         {...responseFormData}
         {...urlParams}
-      />, buildContextOptions(storeCreator({}))
+      />,
+      buildContextOptions(storeCreator({}))
     );
     expect(responseShow).toMatchSnapshot();
   });
@@ -84,7 +92,8 @@ describe('<ResponseShow />', () => {
         survey={{}}
         {...responseFormData}
         {...urlParams}
-      />, buildContextOptions(storeCreator({}))
+      />,
+      buildContextOptions(storeCreator({}))
     );
     expect(responseShow).toMatchSnapshot();
   });

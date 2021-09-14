@@ -13,10 +13,9 @@ function formatTimestamp(timestamp) {
   const minute = Math.floor((roundedTime % 3600) / 60);
   const seconds = (roundedTime % 3600) % 60;
 
-  return (
-    `${(hour > 0 ? `${hour}:${minute < 10 ? '0' : ''}` : '')
-    + minute}:${seconds < 10 ? '0' : ''}${seconds}`
-  );
+  return `${(hour > 0 ? `${hour}:${minute < 10 ? '0' : ''}` : '') + minute}:${
+    seconds < 10 ? '0' : ''
+  }${seconds}`;
 }
 
 /**
@@ -42,7 +41,10 @@ function timeIsPastRestricted(restrictedTimeInSec, timeInSec) {
  * @returns {boolean} If the playerState provided is a playing state
  */
 function isPlayingState(playerState) {
-  return playerState === playerStates.PLAYING || playerState === playerStates.BUFFERING;
+  return (
+    playerState === playerStates.PLAYING ||
+    playerState === playerStates.BUFFERING
+  );
 }
 
 export { formatTimestamp, timeIsPastRestricted, isPlayingState };

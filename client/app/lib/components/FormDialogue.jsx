@@ -38,16 +38,16 @@ class FormDialogue extends React.Component {
     } else {
       this.setState({ discardConfirmationOpen: true });
     }
-  }
+  };
 
   handleDiscardCancel = () => {
     this.setState({ discardConfirmationOpen: false });
-  }
+  };
 
   handleDiscard = () => {
     this.setState({ discardConfirmationOpen: false });
     this.props.hideForm();
-  }
+  };
 
   render() {
     const { intl, title, disabled, open, submitForm, children } = this.props;
@@ -56,14 +56,18 @@ class FormDialogue extends React.Component {
         label={intl.formatMessage(formTranslations.cancel)}
         primary
         onClick={this.handleFormClose}
+        key="form-dialogue-cancel-button"
         {...{ disabled }}
       />,
       <FlatButton
-        ref={(button) => { this.submitButton = button; }}
+        ref={(button) => {
+          this.submitButton = button;
+        }}
         label={intl.formatMessage(formTranslations.submit)}
         primary
         keyboardFocused
         onClick={submitForm}
+        key="form-dialogue-submit-button"
         {...{ disabled }}
       />,
     ];
@@ -78,7 +82,7 @@ class FormDialogue extends React.Component {
           autoScrollBodyContent
           bodyClassName={modalFormStyles.modalForm}
         >
-          { children }
+          {children}
         </Dialog>
         <ConfirmationDialog
           confirmDiscard

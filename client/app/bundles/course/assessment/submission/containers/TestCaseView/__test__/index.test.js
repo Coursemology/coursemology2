@@ -16,21 +16,27 @@ const defaultTestCaseViewProps = {
   collapsible: false,
   testCases: {
     canReadTests: false,
-    public_test: [{
-      identifier: 'public_test_1_identifier',
-      expression: 'public_test_1_expression',
-      expected: 'public_test_1_expected',
-    }],
-    private_test: [{
-      identifier: 'private_test_1_identifier',
-      expression: 'private_test_1_expression',
-      expected: 'private_test_1_expected',
-    }],
-    evaluation_test: [{
-      identifier: 'evaluation_test_1_identifier',
-      expression: 'evaluation_test_1_expression',
-      expected: 'evaluation_test_1_expected',
-    }],
+    public_test: [
+      {
+        identifier: 'public_test_1_identifier',
+        expression: 'public_test_1_expression',
+        expected: 'public_test_1_expected',
+      },
+    ],
+    private_test: [
+      {
+        identifier: 'private_test_1_identifier',
+        expression: 'private_test_1_expression',
+        expected: 'private_test_1_expected',
+      },
+    ],
+    evaluation_test: [
+      {
+        identifier: 'evaluation_test_1_identifier',
+        expression: 'evaluation_test_1_expression',
+        expected: 'evaluation_test_1_expected',
+      },
+    ],
     stdout: 'stdout',
     stderr: 'stderr',
   },
@@ -68,10 +74,30 @@ describe('TestCaseView', () => {
         </ProviderWrapper>
       );
 
-      expect(testCaseView.find('#privateTestCases').find('i.fa-exclamation-triangle').exists()).toBe(true);
-      expect(testCaseView.find('#evaluationTestCases').find('i.fa-exclamation-triangle').exists()).toBe(true);
-      expect(testCaseView.find('#standardOutput').find('i.fa-exclamation-triangle').exists()).toBe(true);
-      expect(testCaseView.find('#standardError').find('i.fa-exclamation-triangle').exists()).toBe(true);
+      expect(
+        testCaseView
+          .find('#privateTestCases')
+          .find('i.fa-exclamation-triangle')
+          .exists()
+      ).toBe(true);
+      expect(
+        testCaseView
+          .find('#evaluationTestCases')
+          .find('i.fa-exclamation-triangle')
+          .exists()
+      ).toBe(true);
+      expect(
+        testCaseView
+          .find('#standardOutput')
+          .find('i.fa-exclamation-triangle')
+          .exists()
+      ).toBe(true);
+      expect(
+        testCaseView
+          .find('#standardError')
+          .find('i.fa-exclamation-triangle')
+          .exists()
+      ).toBe(true);
     });
 
     describe('when showEvaluation & showPrivate are true', () => {
@@ -87,19 +113,43 @@ describe('TestCaseView', () => {
           </ProviderWrapper>
         );
 
-        expect(testCaseView.find('#privateTestCases').find('i.fa-exclamation-triangle').exists()).toBe(true);
-        expect(testCaseView.find('#evaluationTestCases').find('i.fa-exclamation-triangle').exists()).toBe(true);
+        expect(
+          testCaseView
+            .find('#privateTestCases')
+            .find('i.fa-exclamation-triangle')
+            .exists()
+        ).toBe(true);
+        expect(
+          testCaseView
+            .find('#evaluationTestCases')
+            .find('i.fa-exclamation-triangle')
+            .exists()
+        ).toBe(true);
       });
 
       it('does not render staff-only warnings when assessment is published', () => {
         const testCaseView = mount(
           <ProviderWrapper>
-            <VisibleTestCaseView {...defaultStaffViewProps} showPrivate showEvaluation />
+            <VisibleTestCaseView
+              {...defaultStaffViewProps}
+              showPrivate
+              showEvaluation
+            />
           </ProviderWrapper>
         );
 
-        expect(testCaseView.find('#privateTestCases').find('i.fa-exclamation-triangle').exists()).toBe(false);
-        expect(testCaseView.find('#evaluationTestCases').find('i.fa-exclamation-triangle').exists()).toBe(false);
+        expect(
+          testCaseView
+            .find('#privateTestCases')
+            .find('i.fa-exclamation-triangle')
+            .exists()
+        ).toBe(false);
+        expect(
+          testCaseView
+            .find('#evaluationTestCases')
+            .find('i.fa-exclamation-triangle')
+            .exists()
+        ).toBe(false);
       });
     });
 
@@ -107,12 +157,25 @@ describe('TestCaseView', () => {
       it('does not render staff-only warnings', () => {
         const testCaseView = mount(
           <ProviderWrapper>
-            <VisibleTestCaseView {...defaultStaffViewProps} showStdoutAndStderr />
+            <VisibleTestCaseView
+              {...defaultStaffViewProps}
+              showStdoutAndStderr
+            />
           </ProviderWrapper>
         );
 
-        expect(testCaseView.find('#standardOutput').find('i.fa-exclamation-triangle').exists()).toBe(false);
-        expect(testCaseView.find('#standardError').find('i.fa-exclamation-triangle').exists()).toBe(false);
+        expect(
+          testCaseView
+            .find('#standardOutput')
+            .find('i.fa-exclamation-triangle')
+            .exists()
+        ).toBe(false);
+        expect(
+          testCaseView
+            .find('#standardError')
+            .find('i.fa-exclamation-triangle')
+            .exists()
+        ).toBe(false);
       });
     });
   });
@@ -121,17 +184,27 @@ describe('TestCaseView', () => {
     it('does not show any staff-only warnings', () => {
       const testCaseView = mount(
         <ProviderWrapper>
-          <VisibleTestCaseView {...defaultTestCaseViewProps} showPrivate showEvaluation showStdoutAndStderr />
+          <VisibleTestCaseView
+            {...defaultTestCaseViewProps}
+            showPrivate
+            showEvaluation
+            showStdoutAndStderr
+          />
         </ProviderWrapper>
       );
 
-      expect(testCaseView.find('i.fa-exclamation-triangle').exists()).toBe(false);
+      expect(testCaseView.find('i.fa-exclamation-triangle').exists()).toBe(
+        false
+      );
     });
 
     it('shows standard streams when the flag is enabled', () => {
       const testCaseView = mount(
         <ProviderWrapper>
-          <VisibleTestCaseView {...defaultTestCaseViewProps} showStdoutAndStderr />
+          <VisibleTestCaseView
+            {...defaultTestCaseViewProps}
+            showStdoutAndStderr
+          />
         </ProviderWrapper>
       );
 
@@ -143,7 +216,11 @@ describe('TestCaseView', () => {
       it('shows private and evaluation tests after assessment is published', () => {
         const testCaseView = mount(
           <ProviderWrapper>
-            <VisibleTestCaseView {...defaultTestCaseViewProps} showPrivate showEvaluation />
+            <VisibleTestCaseView
+              {...defaultTestCaseViewProps}
+              showPrivate
+              showEvaluation
+            />
           </ProviderWrapper>
         );
 

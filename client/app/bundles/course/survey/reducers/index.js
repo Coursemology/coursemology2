@@ -11,7 +11,6 @@ import surveysFlags from './surveysFlags';
 import results from './results';
 import responses from './responses';
 
-
 export default combineReducers({
   notificationPopup,
   deleteConfirmation,

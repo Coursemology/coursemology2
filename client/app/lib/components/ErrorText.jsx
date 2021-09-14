@@ -6,14 +6,18 @@ import { red500 } from 'material-ui/styles/colors';
  * Standardises the way errors are shown in redux forms.
  */
 const ErrorText = ({ errors }) => {
-  if (!errors) { return null; }
+  if (!errors) {
+    return null;
+  }
   if (errors.constructor === String) {
-    return <div style={{ color: red500 }}>{ errors }</div>;
+    return <div style={{ color: red500 }}>{errors}</div>;
   }
   if (errors.constructor === Array) {
     return (
       <>
-        { errors.map(error => <ErrorText key={error} errors={error} />) }
+        {errors.map((error) => (
+          <ErrorText key={error} errors={error} />
+        ))}
       </>
     );
   }

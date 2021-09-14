@@ -1,9 +1,6 @@
 import mirrorCreator from 'mirror-creator';
 
-export const formNames = mirrorCreator([
-  'EVENT',
-  'MILESTONE',
-]);
+export const formNames = mirrorCreator(['EVENT', 'MILESTONE']);
 
 export const fields = mirrorCreator([
   'ITEM_TYPE',

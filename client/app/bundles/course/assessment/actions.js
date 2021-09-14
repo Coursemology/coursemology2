@@ -14,7 +14,8 @@ export function createAssessment(
   return (dispatch) => {
     dispatch({ type: actionTypes.CREATE_ASSESSMENT_REQUEST });
 
-    return CourseAPI.assessment.assessments.create(attributes)
+    return CourseAPI.assessment.assessments
+      .create(attributes)
       .then((response) => {
         dispatch({
           type: actionTypes.CREATE_ASSESSMENT_SUCCESS,
@@ -23,7 +24,9 @@ export function createAssessment(
         // TODO: Remove redirection when assessment index is implemented using React.
         setTimeout(() => {
           if (response.data && response.data.id) {
-            window.location = `/courses/${getCourseId()}/assessments/${response.data.id}`;
+            window.location = `/courses/${getCourseId()}/assessments/${
+              response.data.id
+            }`;
           }
         }, 200);
       })
@@ -40,12 +43,18 @@ export function createAssessment(
   };
 }
 
-export function updateAssessment(assessmentId, data, successMessage, failureMessage) {
+export function updateAssessment(
+  assessmentId,
+  data,
+  successMessage,
+  failureMessage
+) {
   const attributes = data;
   return (dispatch) => {
     dispatch({ type: actionTypes.UPDATE_ASSESSMENT_REQUEST });
 
-    return CourseAPI.assessment.assessments.update(assessmentId, attributes)
+    return CourseAPI.assessment.assessments
+      .update(assessmentId, attributes)
       .then(() => {
         dispatch({
           type: actionTypes.UPDATE_ASSESSMENT_SUCCESS,

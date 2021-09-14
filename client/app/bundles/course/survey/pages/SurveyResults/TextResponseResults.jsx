@@ -4,7 +4,14 @@ import { Link } from 'react-router-dom';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
-import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
+import {
+  Table,
+  TableBody,
+  TableHeader,
+  TableHeaderColumn,
+  TableRow,
+  TableRowColumn,
+} from 'material-ui/Table';
 
 const styles = {
   expandableThreshold: 10,
@@ -33,7 +40,8 @@ const translations = defineMessages({
   },
   showResponses: {
     id: 'course.surveys.TextResponseResults.showResponses',
-    defaultMessage: 'Show Responses ({quantity}/{total} responded{phantoms, plural, \
+    defaultMessage:
+      'Show Responses ({quantity}/{total} responded{phantoms, plural, \
       =0 {} one {, {phantoms} Phantom} other {, {phantoms} Phantoms}})',
   },
   hideResponses: {
@@ -47,31 +55,17 @@ const translations = defineMessages({
 });
 
 class TextResponseResults extends React.Component {
-  static propTypes = {
-    includePhantoms: PropTypes.bool.isRequired,
-    anonymous: PropTypes.bool.isRequired,
-    answers: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number,
-      course_user_id: PropTypes.number,
-      course_user_name: PropTypes.string,
-      phantom: PropTypes.bool,
-      question_option_ids: PropTypes.arrayOf(PropTypes.number),
-    })),
-  }
-
   static renderStudentName(answer) {
     return (
       <Link to={answer.response_path}>
-        {
-          answer.phantom
-            ? (
-              <FormattedMessage
-                {...translations.phantomStudentName}
-                values={{ name: answer.course_user_name }}
-              />
-            )
-            : answer.course_user_name
-        }
+        {answer.phantom ? (
+          <FormattedMessage
+            {...translations.phantomStudentName}
+            values={{ name: answer.course_user_name }}
+          />
+        ) : (
+          answer.course_user_name
+        )}
       </Link>
     );
   }
@@ -84,14 +78,11 @@ class TextResponseResults extends React.Component {
             <TableHeaderColumn colSpan={2}>
               <FormattedMessage {...translations.serial} />
             </TableHeaderColumn>
-            {
-              anonymous ? null
-                : (
-                  <TableHeaderColumn colSpan={5}>
-                    <FormattedMessage {...translations.respondent} />
-                  </TableHeaderColumn>
-                )
-            }
+            {anonymous ? null : (
+              <TableHeaderColumn colSpan={5}>
+                <FormattedMessage {...translations.respondent} />
+              </TableHeaderColumn>
+            )}
             <TableHeaderColumn colSpan={15}>
               <FormattedMessage {...translations.responses} />
             </TableHeaderColumn>
@@ -100,19 +91,14 @@ class TextResponseResults extends React.Component {
         <TableBody displayRowCheckbox={false}>
           {answers.map((answer, index) => (
             <TableRow key={answer.id}>
-              <TableRowColumn colSpan={2}>
-                { index + 1 }
-              </TableRowColumn>
-              {
-                anonymous ? null
-                  : (
-                    <TableRowColumn colSpan={5} style={styles.wrapText}>
-                      { TextResponseResults.renderStudentName(answer) }
-                    </TableRowColumn>
-                  )
-              }
+              <TableRowColumn colSpan={2}>{index + 1}</TableRowColumn>
+              {anonymous ? null : (
+                <TableRowColumn colSpan={5} style={styles.wrapText}>
+                  {TextResponseResults.renderStudentName(answer)}
+                </TableRowColumn>
+              )}
               <TableRowColumn colSpan={15} style={styles.wrapText}>
-                { answer.text_response }
+                {answer.text_response}
               </TableRowColumn>
             </TableRow>
           ))}
@@ -132,13 +118,24 @@ class TextResponseResults extends React.Component {
   }
 
   renderExpandToggle(values) {
-    if (!this.state.expandable) { return null; }
-    const labelTranslation = this.state.expanded ? 'hideResponses' : 'showResponses';
+    if (!this.state.expandable) {
+      return null;
+    }
+    const labelTranslation = this.state.expanded
+      ? 'hideResponses'
+      : 'showResponses';
     return (
       <CardText style={styles.expandToggleStyle}>
         <RaisedButton
-          label={<FormattedMessage {...translations[labelTranslation]} values={values} />}
-          onClick={() => this.setState(state => ({ expanded: !state.expanded }))}
+          label={
+            <FormattedMessage
+              {...translations[labelTranslation]}
+              values={values}
+            />
+          }
+          onClick={() =>
+            this.setState((state) => ({ expanded: !state.expanded }))
+          }
         />
       </CardText>
     );
@@ -146,11 +143,15 @@ class TextResponseResults extends React.Component {
 
   render() {
     const { includePhantoms, answers, anonymous } = this.props;
-    const filteredAnswers = includePhantoms ? answers : answers.filter(answer => !answer.phantom);
-    const nonEmptyAnswers = filteredAnswers.filter(answer => (
-      answer.text_response && answer.text_response.trim().length > 0
-    ));
-    const validPhantomResponses = includePhantoms ? nonEmptyAnswers.filter(answer => answer.phantom) : [];
+    const filteredAnswers = includePhantoms
+      ? answers
+      : answers.filter((answer) => !answer.phantom);
+    const nonEmptyAnswers = filteredAnswers.filter(
+      (answer) => answer.text_response && answer.text_response.trim().length > 0
+    );
+    const validPhantomResponses = includePhantoms
+      ? nonEmptyAnswers.filter((answer) => answer.phantom)
+      : [];
     const toggle = this.renderExpandToggle({
       total: filteredAnswers.length,
       quantity: nonEmptyAnswers.length,
@@ -159,12 +160,30 @@ class TextResponseResults extends React.Component {
 
     return (
       <>
-        { toggle }
-        { this.state.expanded && TextResponseResults.renderTextResultsTable(nonEmptyAnswers, anonymous) }
-        { this.state.expanded && toggle }
+        {toggle}
+        {this.state.expanded &&
+          TextResponseResults.renderTextResultsTable(
+            nonEmptyAnswers,
+            anonymous
+          )}
+        {this.state.expanded && toggle}
       </>
     );
   }
 }
+
+TextResponseResults.propTypes = {
+  includePhantoms: PropTypes.bool.isRequired,
+  anonymous: PropTypes.bool.isRequired,
+  answers: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      course_user_id: PropTypes.number,
+      course_user_name: PropTypes.string,
+      phantom: PropTypes.bool,
+      question_option_ids: PropTypes.arrayOf(PropTypes.number),
+    })
+  ),
+};
 
 export default TextResponseResults;

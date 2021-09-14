@@ -1,8 +1,6 @@
 import mirrorCreator from 'mirror-creator';
 
-export const formNames = mirrorCreator([
-  'QUESTION_SCRIBING',
-]);
+export const formNames = mirrorCreator(['QUESTION_SCRIBING']);
 
 export const questionNamePrefix = 'question_scribing.';
 export const questionIdPrefix = 'question_scribing_';

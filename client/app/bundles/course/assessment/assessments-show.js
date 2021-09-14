@@ -9,7 +9,10 @@ function submitReordering(assessmentId, ordering) {
 }
 
 function serializedOrdering() {
-  const options = { attribute: 'data-question-dom-id', key: 'question_order[]' };
+  const options = {
+    attribute: 'data-question-dom-id',
+    key: 'question_order[]',
+  };
   const ordering = $(QUESTIONS_SELECTOR).sortable('serialize', options);
 
   return ordering;

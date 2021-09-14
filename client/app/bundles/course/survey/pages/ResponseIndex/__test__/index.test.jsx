@@ -11,45 +11,50 @@ const client = CourseAPI.survey.responses.getClient();
 const mock = new MockAdapter(client);
 
 const responsesData = {
-  responses: [{
-    course_user: {
-      id: 1,
-      name: 'Student A',
-      phantom: true,
-      path: '/courses/1/users/1',
+  responses: [
+    {
+      course_user: {
+        id: 1,
+        name: 'Student A',
+        phantom: true,
+        path: '/courses/1/users/1',
+      },
+      present: true,
+      submitted_at: '2017-03-01T09:10:01.180+08:00',
+      path: '/courses/1/surveys/2/responses/5',
     },
-    present: true,
-    submitted_at: '2017-03-01T09:10:01.180+08:00',
-    path: '/courses/1/surveys/2/responses/5',
-  }, {
-    course_user: {
-      id: 2,
-      name: 'Student B',
-      phantom: false,
-      path: '/courses/1/users/2',
+    {
+      course_user: {
+        id: 2,
+        name: 'Student B',
+        phantom: false,
+        path: '/courses/1/users/2',
+      },
+      present: false,
     },
-    present: false,
-  }, {
-    course_user: {
-      id: 3,
-      name: 'Student C',
-      phantom: false,
-      path: '/courses/1/users/3',
+    {
+      course_user: {
+        id: 3,
+        name: 'Student C',
+        phantom: false,
+        path: '/courses/1/users/3',
+      },
+      present: true,
+      submitted_at: null,
+      path: '/courses/1/surveys/2/responses/6',
     },
-    present: true,
-    submitted_at: null,
-    path: '/courses/1/surveys/2/responses/6',
-  }, {
-    course_user: {
-      id: 4,
-      name: 'Student D',
-      phantom: true,
-      path: '/courses/1/users/4',
+    {
+      course_user: {
+        id: 4,
+        name: 'Student D',
+        phantom: true,
+        path: '/courses/1/users/4',
+      },
+      present: true,
+      submitted_at: '2017-03-03T09:10:01.180+08:00',
+      path: '/courses/1/surveys/2/responses/7',
     },
-    present: true,
-    submitted_at: '2017-03-03T09:10:01.180+08:00',
-    path: '/courses/1/surveys/2/responses/7',
-  }],
+  ],
   survey: {
     id: 2,
     title: 'Test Responses Page',
@@ -61,9 +66,9 @@ beforeEach(() => {
   mock.reset();
 });
 
-const InjectedResponseIndex = connect(
-  state => ({ survey: state.surveys[0] || {} })
-)(ResponseIndex);
+const InjectedResponseIndex = connect((state) => ({
+  survey: state.surveys[0] || {},
+}))(ResponseIndex);
 
 describe('<ResponseIndex />', () => {
   it('allows responses to be saved', async () => {
@@ -87,7 +92,7 @@ describe('<ResponseIndex />', () => {
     const tableBodies = responseIndex.find('TableBody');
     const phantomStudentRows = tableBodies.at(2).find('TableRow');
     const realStudentRows = tableBodies.at(1).find('TableRow');
-    const getStatus = row => row.find('td').at(1).text();
+    const getStatus = (row) => row.find('td').at(1).text();
     expect(getStatus(phantomStudentRows.first())).toBe('Submitted');
     expect(getStatus(realStudentRows.first())).toBe('Not Started');
     expect(getStatus(realStudentRows.last())).toBe('Responding');

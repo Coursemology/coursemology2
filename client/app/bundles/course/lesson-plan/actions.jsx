@@ -1,6 +1,10 @@
 import CourseAPI from 'api/course';
 import { submit, SubmissionError } from 'redux-form';
-import { setNotification, resetDeleteConfirmation, showDeleteConfirmation } from 'lib/actions';
+import {
+  setNotification,
+  resetDeleteConfirmation,
+  showDeleteConfirmation,
+} from 'lib/actions';
 import actionTypes, { formNames } from 'course/lesson-plan/constants';
 
 export { setNotification, resetDeleteConfirmation, showDeleteConfirmation };
@@ -22,10 +26,11 @@ export function setColumnVisibility(field, isVisible) {
 }
 
 export function fetchLessonPlan() {
-  return (dispatch) => {
+  return dispatch => {
     dispatch({ type: actionTypes.LOAD_LESSON_PLAN_REQUEST });
-    return CourseAPI.lessonPlan.fetch()
-      .then((response) => {
+    return CourseAPI.lessonPlan
+      .fetch()
+      .then(response => {
         dispatch({
           type: actionTypes.LOAD_LESSON_PLAN_SUCCESS,
           items: response.data.items,
@@ -49,7 +54,7 @@ export function hideMilestoneForm() {
 }
 
 export function submitMilestoneForm() {
-  return (dispatch) => {
+  return dispatch => {
     dispatch(submit(formNames.MILESTONE));
   };
 }
@@ -63,16 +68,17 @@ export function hideEventForm() {
 }
 
 export function submitEventForm() {
-  return (dispatch) => {
+  return dispatch => {
     dispatch(submit(formNames.EVENT));
   };
 }
 
 export function createMilestone(values, successMessage, failureMessage) {
-  return (dispatch) => {
+  return dispatch => {
     dispatch({ type: actionTypes.MILESTONE_CREATE_REQUEST });
-    return CourseAPI.lessonPlan.createMilestone({ lesson_plan_milestone: values })
-      .then((response) => {
+    return CourseAPI.lessonPlan
+      .createMilestone({ lesson_plan_milestone: values })
+      .then(response => {
         dispatch({
           type: actionTypes.MILESTONE_CREATE_SUCCESS,
           milestone: response.data,
@@ -80,7 +86,7 @@ export function createMilestone(values, successMessage, failureMessage) {
         dispatch(hideMilestoneForm());
         setNotification(successMessage)(dispatch);
       })
-      .catch((error) => {
+      .catch(error => {
         dispatch({ type: actionTypes.MILESTONE_CREATE_FAILURE });
         if (error.response && error.response.data) {
           throw new SubmissionError(error.response.data.errors);
@@ -92,10 +98,11 @@ export function createMilestone(values, successMessage, failureMessage) {
 }
 
 export function updateMilestone(id, values, successMessage, failureMessage) {
-  return (dispatch) => {
+  return dispatch => {
     dispatch({ type: actionTypes.MILESTONE_UPDATE_REQUEST });
-    return CourseAPI.lessonPlan.updateMilestone(id, { lesson_plan_milestone: values })
-      .then((response) => {
+    return CourseAPI.lessonPlan
+      .updateMilestone(id, { lesson_plan_milestone: values })
+      .then(response => {
         dispatch({
           type: actionTypes.MILESTONE_UPDATE_SUCCESS,
           milestoneId: id,
@@ -104,7 +111,7 @@ export function updateMilestone(id, values, successMessage, failureMessage) {
         dispatch(hideMilestoneForm());
         setNotification(successMessage)(dispatch);
       })
-      .catch((error) => {
+      .catch(error => {
         dispatch({ type: actionTypes.MILESTONE_UPDATE_FAILURE });
         if (error.response && error.response.data) {
           throw new SubmissionError(error.response.data.errors);
@@ -116,9 +123,10 @@ export function updateMilestone(id, values, successMessage, failureMessage) {
 }
 
 export function deleteMilestone(id, successMessage, failureMessage) {
-  return (dispatch) => {
+  return dispatch => {
     dispatch({ type: actionTypes.MILESTONE_DELETE_REQUEST });
-    return CourseAPI.lessonPlan.deleteMilestone(id)
+    return CourseAPI.lessonPlan
+      .deleteMilestone(id)
       .then(() => {
         dispatch({
           type: actionTypes.MILESTONE_DELETE_SUCCESS,
@@ -134,9 +142,10 @@ export function deleteMilestone(id, successMessage, failureMessage) {
 }
 
 export function updateItem(id, values, successMessage, failureMessage) {
-  return (dispatch) => {
+  return dispatch => {
     dispatch({ type: actionTypes.ITEM_UPDATE_REQUEST });
-    return CourseAPI.lessonPlan.updateItem(id, { item: values })
+    return CourseAPI.lessonPlan
+      .updateItem(id, { item: values })
       .then(() => {
         dispatch({
           type: actionTypes.ITEM_UPDATE_SUCCESS,
@@ -152,10 +161,11 @@ export function updateItem(id, values, successMessage, failureMessage) {
 }
 
 export function createEvent(values, successMessage, failureMessage) {
-  return (dispatch) => {
+  return dispatch => {
     dispatch({ type: actionTypes.EVENT_CREATE_REQUEST });
-    return CourseAPI.lessonPlan.createEvent({ lesson_plan_event: values })
-      .then((response) => {
+    return CourseAPI.lessonPlan
+      .createEvent({ lesson_plan_event: values })
+      .then(response => {
         dispatch({
           type: actionTypes.EVENT_CREATE_SUCCESS,
           event: response.data,
@@ -163,7 +173,7 @@ export function createEvent(values, successMessage, failureMessage) {
         dispatch(hideEventForm());
         setNotification(successMessage)(dispatch);
       })
-      .catch((error) => {
+      .catch(error => {
         dispatch({ type: actionTypes.EVENT_CREATE_FAILURE });
         if (error.response && error.response.data) {
           throw new SubmissionError(error.response.data.errors);
@@ -175,10 +185,11 @@ export function createEvent(values, successMessage, failureMessage) {
 }
 
 export function updateEvent(eventId, values, successMessage, failureMessage) {
-  return (dispatch) => {
+  return dispatch => {
     dispatch({ type: actionTypes.EVENT_UPDATE_REQUEST });
-    return CourseAPI.lessonPlan.updateEvent(eventId, { lesson_plan_event: values })
-      .then((response) => {
+    return CourseAPI.lessonPlan
+      .updateEvent(eventId, { lesson_plan_event: values })
+      .then(response => {
         dispatch({
           type: actionTypes.EVENT_UPDATE_SUCCESS,
           eventId,
@@ -187,7 +198,7 @@ export function updateEvent(eventId, values, successMessage, failureMessage) {
         dispatch(hideEventForm());
         setNotification(successMessage)(dispatch);
       })
-      .catch((error) => {
+      .catch(error => {
         dispatch({ type: actionTypes.EVENT_UPDATE_FAILURE });
         if (error.response && error.response.data) {
           throw new SubmissionError(error.response.data.errors);
@@ -199,9 +210,10 @@ export function updateEvent(eventId, values, successMessage, failureMessage) {
 }
 
 export function deleteEvent(itemId, eventId, successMessage, failureMessage) {
-  return (dispatch) => {
+  return dispatch => {
     dispatch({ type: actionTypes.EVENT_DELETE_REQUEST });
-    return CourseAPI.lessonPlan.deleteEvent(eventId)
+    return CourseAPI.lessonPlan
+      .deleteEvent(eventId)
       .then(() => {
         dispatch({
           type: actionTypes.EVENT_DELETE_SUCCESS,

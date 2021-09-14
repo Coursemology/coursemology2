@@ -17,7 +17,10 @@ export default class MaterialFoldersAPI extends BaseCourseAPI {
       formData.append('material_folder[files_attributes][]', files[i]);
     }
 
-    return this.getClient().put(`${this._getUrlPrefix()}/${folderId}/upload_materials`, formData);
+    return this.getClient().put(
+      `${this._getUrlPrefix()}/${folderId}/upload_materials`,
+      formData
+    );
   }
 
   _getUrlPrefix() {

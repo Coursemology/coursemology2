@@ -1,6 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { defineMessages, injectIntl, intlShape, FormattedMessage } from 'react-intl';
+import {
+  defineMessages,
+  injectIntl,
+  intlShape,
+  FormattedMessage,
+} from 'react-intl';
 import { reduxForm, Field, Form } from 'redux-form';
 import ReactTooltip from 'react-tooltip';
 import TextField from 'lib/components/redux-form/TextField';
@@ -33,29 +38,34 @@ const surveyFormTranslations = defineMessages({
   },
   allowResponseAfterEndHint: {
     id: 'course.surveys.SurveyForm.allowResponseAfterEndHint',
-    defaultMessage: 'Allow students to submit responses after the survey has expired. \
+    defaultMessage:
+      'Allow students to submit responses after the survey has expired. \
       If this is enabled, students who submit before the deadline will get both the base and bonus \
       points, whereas students who submit after the deadline will only be awarded the base points.',
   },
   allowModifyAfterSubmitHint: {
     id: 'course.surveys.SurveyForm.allowModifyAfterSubmitHint',
-    defaultMessage: 'Allow students to modify their responses after they have submitted it. If \
+    defaultMessage:
+      'Allow students to modify their responses after they have submitted it. If \
       this is disabled, you will have to manually unsubmit their responses to allow them to \
       edit it.',
   },
   anonymousHint: {
     id: 'course.surveys.SurveyForm.anonymousHint',
-    defaultMessage: 'If you make the survey anonymous, you will be able to see aggregate survey \
+    defaultMessage:
+      'If you make the survey anonymous, you will be able to see aggregate survey \
       results but not individual responses. You may not toggle this setting once there is one \
       or more student submissions.',
   },
   hasStudentResponse: {
     id: 'course.surveys.SurveyForm.hasStudentResponse',
-    defaultMessage: 'At least one student has responded to this survey. You may not remove anonymity.',
+    defaultMessage:
+      'At least one student has responded to this survey. You may not remove anonymity.',
   },
   timeBonusExpTooltip: {
     id: 'course.surveys.SurveyForm.timeBonusExpTooltip',
-    defaultMessage: 'You must allow responses after the survey expires to set bonus points.',
+    defaultMessage:
+      'You must allow responses after the survey expires to set bonus points.',
   },
 });
 
@@ -95,7 +105,13 @@ const propTypes = {
 };
 
 const SurveyForm = ({
-  handleSubmit, intl, onSubmit, disabled, disableAnonymousToggle, shiftEndDate, formValues,
+  handleSubmit,
+  intl,
+  onSubmit,
+  disabled,
+  disableAnonymousToggle,
+  shiftEndDate,
+  formValues,
 }) => (
   <Form onSubmit={handleSubmit(onSubmit)}>
     <Field
@@ -120,7 +136,9 @@ const SurveyForm = ({
         name="start_at"
         floatingLabelText={intl.formatMessage(translations.opensAt)}
         component={DateTimePicker}
-        afterChange={(_, newStartAt) => shiftEndDate(formNames.SURVEY, newStartAt, formValues)}
+        afterChange={(_, newStartAt) =>
+          shiftEndDate(formNames.SURVEY, newStartAt, formValues)
+        }
         style={styles.oneColumn}
         {...{ disabled }}
       />
@@ -139,7 +157,7 @@ const SurveyForm = ({
           floatingLabelText={intl.formatMessage(translations.basePoints)}
           component={TextField}
           type="number"
-          onWheel={event => event.currentTarget.blur()}
+          onWheel={(event) => event.currentTarget.blur()}
           {...{ disabled }}
         />
       </div>
@@ -154,7 +172,7 @@ const SurveyForm = ({
           floatingLabelText={intl.formatMessage(translations.bonusPoints)}
           component={TextField}
           type="number"
-          onWheel={event => event.currentTarget.blur()}
+          onWheel={(event) => event.currentTarget.blur()}
           disabled={formValues && !formValues.allow_response_after_end}
         />
         <ReactTooltip id="timeBonusExpTooltip">
@@ -172,7 +190,7 @@ const SurveyForm = ({
       disabled={disabled}
     />
     <div style={styles.hint}>
-      { intl.formatMessage(surveyFormTranslations.allowResponseAfterEndHint) }
+      {intl.formatMessage(surveyFormTranslations.allowResponseAfterEndHint)}
     </div>
     <Field
       name="allow_modify_after_submit"
@@ -184,7 +202,7 @@ const SurveyForm = ({
       disabled={disabled}
     />
     <div style={styles.hint}>
-      { intl.formatMessage(surveyFormTranslations.allowModifyAfterSubmitHint) }
+      {intl.formatMessage(surveyFormTranslations.allowModifyAfterSubmitHint)}
     </div>
     <Field
       name="anonymous"
@@ -196,11 +214,9 @@ const SurveyForm = ({
       disabled={disableAnonymousToggle || disabled}
     />
     <div style={styles.hint}>
-      {
-        disableAnonymousToggle
-          ? intl.formatMessage(surveyFormTranslations.hasStudentResponse)
-          : intl.formatMessage(surveyFormTranslations.anonymousHint)
-      }
+      {disableAnonymousToggle
+        ? intl.formatMessage(surveyFormTranslations.hasStudentResponse)
+        : intl.formatMessage(surveyFormTranslations.anonymousHint)}
     </div>
   </Form>
 );

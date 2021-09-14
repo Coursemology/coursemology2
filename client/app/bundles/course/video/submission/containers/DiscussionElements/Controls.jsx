@@ -5,7 +5,10 @@ import IconButton from 'material-ui/IconButton';
 import OnDemandVideo from 'material-ui/svg-icons/notification/ondemand-video';
 import Refresh from 'material-ui/svg-icons/navigation/refresh';
 import { intlShape, injectIntl } from 'react-intl';
-import { cyan500 as activeColor, grey700 as inactiveColor } from 'material-ui/styles/colors';
+import {
+  cyan500 as activeColor,
+  grey700 as inactiveColor,
+} from 'material-ui/styles/colors';
 
 import { changeAutoScroll, refreshDiscussion } from '../../actions/discussion';
 import translations from '../../translations';
@@ -49,9 +52,12 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onAutoScrollToggle: newState => dispatch(changeAutoScroll(newState)),
+    onAutoScrollToggle: (newState) => dispatch(changeAutoScroll(newState)),
     onRefresh: () => dispatch(refreshDiscussion()),
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(Controls));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(injectIntl(Controls));

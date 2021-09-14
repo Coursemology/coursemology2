@@ -24,7 +24,9 @@ const itemData = {
 
 describe('<ItemRow />', () => {
   it('shifts end dates when start date is shifted', () => {
-    mock.onPatch(`/courses/${courseId}/lesson_plan/items/${itemData.id}`).reply(200);
+    mock
+      .onPatch(`/courses/${courseId}/lesson_plan/items/${itemData.id}`)
+      .reply(200);
     const spy = jest.spyOn(CourseAPI.lessonPlan, 'updateItem');
     const store = storeCreator({
       lessonPlan: {
@@ -55,16 +57,13 @@ describe('<ItemRow />', () => {
     startAtDateInput.simulate('change', { target: { value: newStartAt } });
     startAtDateInput.simulate('blur');
 
-    expect(spy).toHaveBeenCalledWith(
-      itemData.id,
-      {
-        item: {
-          start_at: '2017-01-31T18:03:00.000Z',
-          bonus_end_at: '2017-02-02T18:03:00.000Z',
-          end_at: '2017-02-04T18:03:00.000Z',
-        },
-      }
-    );
+    expect(spy).toHaveBeenCalledWith(itemData.id, {
+      item: {
+        start_at: '2017-01-31T18:03:00.000Z',
+        bonus_end_at: '2017-02-02T18:03:00.000Z',
+        end_at: '2017-02-04T18:03:00.000Z',
+      },
+    });
   });
 
   it('clears end date', () => {
@@ -97,13 +96,10 @@ describe('<ItemRow />', () => {
     endAtDateInput.simulate('change', { target: { value: '' } });
     endAtDateInput.simulate('blur');
 
-    expect(spy).toHaveBeenCalledWith(
-      itemData.id,
-      {
-        item: {
-          end_at: null,
-        },
-      }
-    );
+    expect(spy).toHaveBeenCalledWith(itemData.id, {
+      item: {
+        end_at: null,
+      },
+    });
   });
 });

@@ -34,27 +34,17 @@ const styles = {
 };
 
 class BarChart extends React.Component {
-  static propTypes = {
-    data: PropTypes.arrayOf(PropTypes.shape({
-      count: PropTypes.number.isRequired,
-      color: PropTypes.string.isRequired,
-      label: PropTypes.node.isRequired,
-    })).isRequired,
-  }
-
   renderChart(total) {
     return (
       <div style={styles.bar}>
-        {
-          this.props.data.map((segment) => {
-            const segmentStyle = {
-              width: `${(100 * segment.count) / total}%`,
-              height: styles.segment.height,
-              backgroundColor: colors[segment.color],
-            };
-            return <div key={segment.color} style={segmentStyle} />;
-          })
-        }
+        {this.props.data.map((segment) => {
+          const segmentStyle = {
+            width: `${(100 * segment.count) / total}%`,
+            height: styles.segment.height,
+            backgroundColor: colors[segment.color],
+          };
+          return <div key={segment.color} style={segmentStyle} />;
+        })}
       </div>
     );
   }
@@ -62,31 +52,42 @@ class BarChart extends React.Component {
   renderLegend() {
     return (
       <div style={styles.legend}>
-        {
-          this.props.data.map(segment => (
-            <Chip key={segment.color} style={styles.chip}>
-              <Avatar backgroundColor={colors[segment.color]} />
-              { segment.count }
-              { ' ' }
-              { segment.label }
-            </Chip>
-          ))
-        }
+        {this.props.data.map((segment) => (
+          <Chip key={segment.color} style={styles.chip}>
+            <Avatar backgroundColor={colors[segment.color]} />
+            {segment.count} {segment.label}
+          </Chip>
+        ))}
       </div>
     );
   }
 
   render() {
-    const total = this.props.data.reduce((sum, segment) => sum + segment.count, 0);
-    if (total < 1) { return <div />; }
+    const total = this.props.data.reduce(
+      (sum, segment) => sum + segment.count,
+      0
+    );
+    if (total < 1) {
+      return <div />;
+    }
 
     return (
       <div>
-        { this.renderChart(total) }
-        { this.renderLegend() }
+        {this.renderChart(total)}
+        {this.renderLegend()}
       </div>
     );
   }
 }
+
+BarChart.propTypes = {
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      count: PropTypes.number.isRequired,
+      color: PropTypes.string.isRequired,
+      label: PropTypes.node.isRequired,
+    })
+  ).isRequired,
+};
 
 export default BarChart;

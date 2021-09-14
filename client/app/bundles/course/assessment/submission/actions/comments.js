@@ -16,8 +16,9 @@ export function create(submissionQuestionId, text) {
   return (dispatch) => {
     dispatch({ type: actionTypes.CREATE_COMMENT_REQUEST });
 
-    return CourseAPI.assessment.submissionQuestions.createComment(submissionQuestionId, payload)
-      .then(response => response.data)
+    return CourseAPI.assessment.submissionQuestions
+      .createComment(submissionQuestionId, payload)
+      .then((response) => response.data)
       .then((data) => {
         dispatch({
           type: actionTypes.CREATE_COMMENT_SUCCESS,
@@ -42,8 +43,9 @@ export function update(topicId, postId, text) {
   return (dispatch) => {
     dispatch({ type: actionTypes.UPDATE_COMMENT_REQUEST });
 
-    return CourseAPI.comments.update(topicId, postId, payload)
-      .then(response => response.data)
+    return CourseAPI.comments
+      .update(topicId, postId, payload)
+      .then((response) => response.data)
       .then((data) => {
         dispatch({
           type: actionTypes.UPDATE_COMMENT_SUCCESS,
@@ -58,8 +60,9 @@ export function destroy(topicId, postId) {
   return (dispatch) => {
     dispatch({ type: actionTypes.DELETE_COMMENT_REQUEST });
 
-    return CourseAPI.comments.delete(topicId, postId)
-      .then(response => response.data)
+    return CourseAPI.comments
+      .delete(topicId, postId)
+      .then((response) => response.data)
       .then(() => {
         dispatch({
           type: actionTypes.DELETE_COMMENT_SUCCESS,

@@ -8,7 +8,13 @@ import { Card, CardHeader, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import Toggle from 'material-ui/Toggle';
 import {
-  Table, TableBody, TableFooter, TableHeader, TableHeaderColumn, TableRow, TableRowColumn,
+  Table,
+  TableBody,
+  TableFooter,
+  TableHeader,
+  TableHeaderColumn,
+  TableRow,
+  TableRowColumn,
 } from 'material-ui/Table';
 import transitions from 'material-ui/styles/transitions';
 
@@ -18,7 +24,12 @@ import 'brace/theme/monokai';
 import styles from '../OnlineEditorView.scss';
 import translations from '../OnlineEditorView.intl';
 import javaTranslations from './OnlineEditorJavaView.intl';
-import { ExistingPackageFile, NewPackageFile, TestCase, EditorCard } from '../OnlineEditorBase';
+import {
+  ExistingPackageFile,
+  NewPackageFile,
+  TestCase,
+  EditorCard,
+} from '../OnlineEditorBase';
 
 const MAX_TEST_CASES = 99;
 
@@ -77,8 +88,11 @@ class OnlineEditorJavaView extends React.Component {
             filename,
             fileType,
             filesize: fileData.get('size'),
-            toDelete: this.props.testData.getIn([fileType, 'to_delete']).has(filename),
-            deleteExistingPackageFile: this.props.actions.deleteExistingPackageFile,
+            toDelete: this.props.testData
+              .getIn([fileType, 'to_delete'])
+              .has(filename),
+            deleteExistingPackageFile:
+              this.props.actions.deleteExistingPackageFile,
             isLoading: this.props.isLoading,
             isLast: numFiles === index + 1,
           }}
@@ -126,7 +140,8 @@ class OnlineEditorJavaView extends React.Component {
             index,
             fileType,
             filename: fileData.get('filename'),
-            showDeleteButton: this.props.testData.getIn([fileType, 'key']) !== key,
+            showDeleteButton:
+              this.props.testData.getIn([fileType, 'key']) !== key,
             isLoading: this.props.isLoading,
             updateNewPackageFile: this.props.actions.updateNewPackageFile,
             deleteNewPackageFile: this.props.actions.deleteNewPackageFile,
@@ -135,7 +150,9 @@ class OnlineEditorJavaView extends React.Component {
         />
       );
     };
-    const newPackageFilesRows = this.props.testData.getIn([fileType, 'new']).map(renderNewFile);
+    const newPackageFilesRows = this.props.testData
+      .getIn([fileType, 'new'])
+      .map(renderNewFile);
 
     return (
       <Card initiallyExpanded>
@@ -148,7 +165,7 @@ class OnlineEditorJavaView extends React.Component {
         <CardText expandable style={{ padding: 0 }}>
           <Table selectable={false}>
             <TableBody displayRowCheckbox={false}>
-              { newPackageFilesRows }
+              {newPackageFilesRows}
             </TableBody>
           </Table>
         </CardText>
@@ -158,11 +175,17 @@ class OnlineEditorJavaView extends React.Component {
 
   renderTestCases(header, testCases, type) {
     const allTestCases = this.props.data.get('test_cases');
-    const numAllTestCases = allTestCases.get('public').size + allTestCases.get('private').size
-      + allTestCases.get('evaluation').size;
+    const numAllTestCases =
+      allTestCases.get('public').size +
+      allTestCases.get('private').size +
+      allTestCases.get('evaluation').size;
 
-    const identifier = this.props.intl.formatMessage(translations.identifierHeader);
-    const expression = this.props.intl.formatMessage(translations.expressionHeader);
+    const identifier = this.props.intl.formatMessage(
+      translations.identifierHeader
+    );
+    const expression = this.props.intl.formatMessage(
+      translations.expressionHeader
+    );
     const expected = this.props.intl.formatMessage(translations.expectedHeader);
     const hint = this.props.intl.formatMessage(translations.hintHeader);
 
@@ -194,8 +217,11 @@ class OnlineEditorJavaView extends React.Component {
         editorStyle = {};
       }
       return (
-        <TableRow id={index} style={editorStyle}>
-          <TableRowColumn colSpan="6" style={{ textAlign: 'center', paddingLeft: 0, paddingRight: 0 }}>
+        <TableRow id={index} style={editorStyle} key={`java-editor-${index}`}>
+          <TableRowColumn
+            colSpan="6"
+            style={{ textAlign: 'center', paddingLeft: 0, paddingRight: 0 }}
+          >
             <textarea
               name={OnlineEditorJavaView.getTestInputName(type, 'inline_code')}
               value={test.get('inline_code')}
@@ -210,7 +236,9 @@ class OnlineEditorJavaView extends React.Component {
               maxLines={Math.max(20, inlineCode.split(/\r\n|\r|\n/).length)}
               name={OnlineEditorJavaView.getTestInputName(type, 'inline_code')}
               value={test.get('inline_code')}
-              onChange={e => this.props.actions.updateTestCase(type, index, 'inline_code', e)}
+              onChange={(e) =>
+                this.props.actions.updateTestCase(type, index, 'inline_code', e)
+              }
               editorProps={{ $blockScrolling: true }}
               setOptions={{ useSoftTabs: true, readOnly: this.props.isLoading }}
             />
@@ -246,16 +274,18 @@ class OnlineEditorJavaView extends React.Component {
                 <TableHeaderColumn />
               </TableRow>
             </TableHeader>
-            <TableBody displayRowCheckbox={false}>
-              {testCaseRows}
-            </TableBody>
+            <TableBody displayRowCheckbox={false}>{testCaseRows}</TableBody>
             <TableFooter adjustForCheckbox={false}>
               <TableRow>
                 <TableRowColumn colSpan="6" style={{ textAlign: 'center' }}>
                   <FlatButton
-                    label={this.props.intl.formatMessage(translations.addNewTestButton)}
+                    label={this.props.intl.formatMessage(
+                      translations.addNewTestButton
+                    )}
                     icon={<i className="fa fa-plus" />}
-                    disabled={this.props.isLoading || numAllTestCases >= MAX_TEST_CASES}
+                    disabled={
+                      this.props.isLoading || numAllTestCases >= MAX_TEST_CASES
+                    }
                     onClick={this.testCaseCreateHandler(type)}
                   />
                 </TableRowColumn>
@@ -290,91 +320,95 @@ class OnlineEditorJavaView extends React.Component {
     const testCases = data.get('test_cases');
     const testCaseError = data.getIn(['test_cases', 'error']);
     const errorTextElement = testCaseError && (
-    <div
-      style={{
-        fontSize: 12,
-        lineHeight: '12px',
-        color: this.context.muiTheme.textField.errorColor,
-        transition: transitions.easeOut(),
-        marginBottom: '1em',
-      }}
-    >
-      {testCaseError}
-    </div>
+      <div
+        style={{
+          fontSize: 12,
+          lineHeight: '12px',
+          color: this.context.muiTheme.textField.errorColor,
+          transition: transitions.easeOut(),
+          marginBottom: '1em',
+        }}
+      >
+        {testCaseError}
+      </div>
     );
 
     return (
       <>
         <div style={{ marginBottom: '1em' }}>
-          {
-            submitAsFile
-              ? (
-                <div style={{ marginBottom: '20px' }}>
-                  <h3>{this.props.intl.formatMessage(javaTranslations.solutionFilesHeader)}</h3>
-                  {
-                  this.renderExistingPackageFiles(
-                    'solution_files',
-                    this.props.intl.formatMessage(javaTranslations.currentSolutionFilesHeader)
-                  )
-                }
-                  {
-                  this.renderNewPackageFiles(
-                    'solution_files',
-                    this.props.intl.formatMessage(javaTranslations.newSolutionFilesHeader),
-                    intl.formatMessage(javaTranslations.addSolutionFileButton)
-                  )
-                }
-                </div>
-              )
-              : this.renderEditorCard(
-                intl.formatMessage(translations.solutionTitle),
-                intl.formatMessage(translations.solutionSubtitle),
-                'solution'
-              )
-          }
-          {
+          {submitAsFile ? (
+            <div style={{ marginBottom: '20px' }}>
+              <h3>
+                {this.props.intl.formatMessage(
+                  javaTranslations.solutionFilesHeader
+                )}
+              </h3>
+              {this.renderExistingPackageFiles(
+                'solution_files',
+                this.props.intl.formatMessage(
+                  javaTranslations.currentSolutionFilesHeader
+                )
+              )}
+              {this.renderNewPackageFiles(
+                'solution_files',
+                this.props.intl.formatMessage(
+                  javaTranslations.newSolutionFilesHeader
+                ),
+                intl.formatMessage(javaTranslations.addSolutionFileButton)
+              )}
+            </div>
+          ) : (
             this.renderEditorCard(
-              intl.formatMessage(translations.prependTitle),
-              intl.formatMessage(javaTranslations.prependSubtitle),
-              'prepend'
+              intl.formatMessage(translations.solutionTitle),
+              intl.formatMessage(translations.solutionSubtitle),
+              'solution'
             )
-          }
-          {
-            this.renderEditorCard(
-              intl.formatMessage(translations.appendTitle),
-              intl.formatMessage(javaTranslations.appendSubtitle),
-              'append'
-            )
-          }
+          )}
+          {this.renderEditorCard(
+            intl.formatMessage(translations.prependTitle),
+            intl.formatMessage(javaTranslations.prependSubtitle),
+            'prepend'
+          )}
+          {this.renderEditorCard(
+            intl.formatMessage(translations.appendTitle),
+            intl.formatMessage(javaTranslations.appendSubtitle),
+            'append'
+          )}
         </div>
-        <h3>{ intl.formatMessage(translations.dataFilesHeader) }</h3>
-        {
-          this.renderExistingPackageFiles(
-            'data_files',
-            this.props.intl.formatMessage(translations.currentDataFilesHeader)
-          )
-        }
-        {
-          this.renderNewPackageFiles(
-            'data_files',
-            this.props.intl.formatMessage(translations.newDataFilesHeader),
-            intl.formatMessage(translations.addDataFileButton)
-          )
-        }
-        <h3>{ intl.formatMessage(translations.testCasesHeader) }</h3>
+        <h3>{intl.formatMessage(translations.dataFilesHeader)}</h3>
+        {this.renderExistingPackageFiles(
+          'data_files',
+          this.props.intl.formatMessage(translations.currentDataFilesHeader)
+        )}
+        {this.renderNewPackageFiles(
+          'data_files',
+          this.props.intl.formatMessage(translations.newDataFilesHeader),
+          intl.formatMessage(translations.addDataFileButton)
+        )}
+        <h3>{intl.formatMessage(translations.testCasesHeader)}</h3>
         <div style={{ marginBottom: '0.5em' }}>
           <FormattedMessage
             id="course.assessment.question.programming.onlineEditorJavaView.testCasesDescription"
             defaultMessage={
-              '{note}: The expression in the {expression} column will be compared with the '
-              + 'expression in the {expected} column using the {expectEquals} method as described '
-              + 'in the append.'
+              '{note}: The expression in the {expression} column will be compared with the ' +
+              'expression in the {expected} column using the {expectEquals} method as described ' +
+              'in the append.'
             }
             values={{
-              note: <b>{intl.formatMessage(translations.testCaseDescriptionNote)}</b>,
-              expression: <b>{intl.formatMessage(translations.expressionHeader)}</b>,
-              expected: <b>{intl.formatMessage(translations.expectedHeader)}</b>,
-              expectEquals: <code>{intl.formatMessage(javaTranslations.expectEquals)}</code>,
+              note: (
+                <b>
+                  {intl.formatMessage(translations.testCaseDescriptionNote)}
+                </b>
+              ),
+              expression: (
+                <b>{intl.formatMessage(translations.expressionHeader)}</b>
+              ),
+              expected: (
+                <b>{intl.formatMessage(translations.expectedHeader)}</b>
+              ),
+              expectEquals: (
+                <code>{intl.formatMessage(javaTranslations.expectEquals)}</code>
+              ),
             }}
           />
         </div>
@@ -382,55 +416,79 @@ class OnlineEditorJavaView extends React.Component {
           <FormattedMessage
             id="course.assessment.question.programming.onlineEditorJavaView.testCasesCodeDescription"
             defaultMessage={
-              '{editor}: Clicking {code} will toggle a code editor for you to write code into each '
-              + 'test case. This allows you to initialize variables and call functions for each test. '
-              + 'For example: {codeExample}'
-              + '{codeExampleExpression} and {codeExampleExpected} can then be input into {expression} and '
-              + '{expected} respectively.'
+              '{editor}: Clicking {code} will toggle a code editor for you to write code into each ' +
+              'test case. This allows you to initialize variables and call functions for each test. ' +
+              'For example: {codeExample}' +
+              '{codeExampleExpression} and {codeExampleExpected} can then be input into {expression} and ' +
+              '{expected} respectively.'
             }
             values={{
-              expression: <b>{intl.formatMessage(translations.expressionHeader)}</b>,
-              expected: <b>{intl.formatMessage(translations.expectedHeader)}</b>,
-              code: <b>{intl.formatMessage(javaTranslations.testCaseDescriptionCode)}</b>,
-              editor: <b>{intl.formatMessage(javaTranslations.testCaseDescriptionEditor)}</b>,
+              expression: (
+                <b>{intl.formatMessage(translations.expressionHeader)}</b>
+              ),
+              expected: (
+                <b>{intl.formatMessage(translations.expectedHeader)}</b>
+              ),
+              code: (
+                <b>
+                  {intl.formatMessage(javaTranslations.testCaseDescriptionCode)}
+                </b>
+              ),
+              editor: (
+                <b>
+                  {intl.formatMessage(
+                    javaTranslations.testCaseDescriptionEditor
+                  )}
+                </b>
+              ),
               /* eslint-disable react/jsx-indent */
-              codeExample:
-                <pre style={{ marginTop: '0.5em', paddingTop: '3px', paddingBottom: '3px' }}>
+              codeExample: (
+                <pre
+                  style={{
+                    marginTop: '0.5em',
+                    paddingTop: '3px',
+                    paddingBottom: '3px',
+                  }}
+                >
                   <p style={{ marginBottom: 0 }}>
                     {'int array [] = {0,0,0}; // Initialize variables'}
                   </p>
-                  <p style={{ marginBottom: 0 }}>addOneToArray(array); // Make function calls</p>
                   <p style={{ marginBottom: 0 }}>
-int expected [] =
-{'{'}
-1,1,1
-{'}'}
-; // Make function calls
+                    addOneToArray(array); // Make function calls
+                  </p>
+                  <p style={{ marginBottom: 0 }}>
+                    int expected [] ={'{'}
+                    1,1,1
+                    {'}'}; // Make function calls
                   </p>
                   <p style={{ marginBottom: 0 }}>
                     {'setAttribute("expression", "addOneToArray([0,0,0])");'}
                     {' // Override the default expression displayed'}
                   </p>
-                </pre>,
+                </pre>
+              ),
               /* eslint-enable react/jsx-indent */
               codeExampleExpected: <code>expected</code>,
               codeExampleExpression: <code>array</code>,
             }}
           />
         </div>
-        { errorTextElement }
-        {
-          this.renderTestCases(intl.formatMessage(translations.publicTestCases),
-            testCases, 'public')
-        }
-        {
-          this.renderTestCases(intl.formatMessage(translations.privateTestCases),
-            testCases, 'private')
-        }
-        {
-          this.renderTestCases(intl.formatMessage(translations.evaluationTestCases),
-            testCases, 'evaluation')
-        }
+        {errorTextElement}
+        {this.renderTestCases(
+          intl.formatMessage(translations.publicTestCases),
+          testCases,
+          'public'
+        )}
+        {this.renderTestCases(
+          intl.formatMessage(translations.privateTestCases),
+          testCases,
+          'private'
+        )}
+        {this.renderTestCases(
+          intl.formatMessage(translations.evaluationTestCases),
+          testCases,
+          'evaluation'
+        )}
       </>
     );
   }
@@ -440,13 +498,13 @@ int expected [] =
     const submitAsFile = this.props.data.get('submit_as_file');
     let toggleLabel = intl.formatMessage(javaTranslations.submitAsFileToggle);
     if (hasSubmissions) {
-      toggleLabel = intl.formatMessage(javaTranslations.submitAsFileToggleDisabled);
+      toggleLabel = intl.formatMessage(
+        javaTranslations.submitAsFileToggleDisabled
+      );
     }
     return (
       <div id="java-online-editor">
-        {
-          autograded
-          && (
+        {autograded && (
           <div className={styles.submitAsFileToggle}>
             <Toggle
               label={toggleLabel}
@@ -460,50 +518,61 @@ int expected [] =
               disabled={isLoading}
               style={{ margin: '1em 0', paddingTop: 10 }}
             />
-            <input hidden name="question_programming[submit_as_file]" value={submitAsFile} />
+            <input
+              hidden
+              name="question_programming[submit_as_file]"
+              value={submitAsFile}
+            />
             <FormattedMessage
               id="course.assessment.question.programming.onlineEditorJavaView.fileSubmissionDescription"
               defaultMessage={
-                '{file_submission}: Toggling this option on will allow you to upload java class files to be '
-                + 'compiled individually, and allows you to test (individual/multiple) java classes. '
-                + 'Toggled off, you will input code as templates, which will be used for you to test '
-                + 'java functions. Note that you will need to upload either a submission or solution '
-                + 'file at the very least for the compiler to compile the files correctly.'
+                '{file_submission}: Toggling this option on will allow you to upload java class files to be ' +
+                'compiled individually, and allows you to test (individual/multiple) java classes. ' +
+                'Toggled off, you will input code as templates, which will be used for you to test ' +
+                'java functions. Note that you will need to upload either a submission or solution ' +
+                'file at the very least for the compiler to compile the files correctly.'
               }
               values={{
-                file_submission: <b>{intl.formatMessage(javaTranslations.fileSubmissionDescriptionNote)}</b>,
+                file_submission: (
+                  <b>
+                    {intl.formatMessage(
+                      javaTranslations.fileSubmissionDescriptionNote
+                    )}
+                  </b>
+                ),
               }}
             />
           </div>
+        )}
+        {submitAsFile ? (
+          <>
+            <h3>
+              {this.props.intl.formatMessage(
+                javaTranslations.submissionFilesHeader
+              )}
+            </h3>
+            {this.renderExistingPackageFiles(
+              'submission_files',
+              this.props.intl.formatMessage(
+                javaTranslations.currentSubmissionFilesHeader
+              )
+            )}
+            {this.renderNewPackageFiles(
+              'submission_files',
+              this.props.intl.formatMessage(
+                javaTranslations.newSubmissionFilesHeader
+              ),
+              intl.formatMessage(javaTranslations.addSubmissionFileButton)
+            )}
+          </>
+        ) : (
+          this.renderEditorCard(
+            intl.formatMessage(translations.submissionTitle),
+            null,
+            'submission'
           )
-        }
-        {
-          submitAsFile
-            ? (
-              <>
-                <h3>{this.props.intl.formatMessage(javaTranslations.submissionFilesHeader)}</h3>
-                {
-                this.renderExistingPackageFiles(
-                  'submission_files',
-                  this.props.intl.formatMessage(javaTranslations.currentSubmissionFilesHeader)
-                )
-              }
-                {
-                this.renderNewPackageFiles(
-                  'submission_files',
-                  this.props.intl.formatMessage(javaTranslations.newSubmissionFilesHeader),
-                  intl.formatMessage(javaTranslations.addSubmissionFileButton)
-                )
-              }
-              </>
-            )
-            : this.renderEditorCard(
-              intl.formatMessage(translations.submissionTitle),
-              null,
-              'submission'
-            )
-        }
-        { autograded ? this.renderAutogradedFields() : null }
+        )}
+        {autograded ? this.renderAutogradedFields() : null}
       </div>
     );
   }

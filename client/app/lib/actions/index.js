@@ -2,10 +2,11 @@ import actionTypes from 'lib/constants';
 import { change } from 'redux-form';
 
 export function setNotification(message) {
-  return dispatch => dispatch({
-    type: actionTypes.SET_NOTIFICATION,
-    message,
-  });
+  return (dispatch) =>
+    dispatch({
+      type: actionTypes.SET_NOTIFICATION,
+      message,
+    });
 }
 
 export function resetDeleteConfirmation() {
@@ -18,14 +19,25 @@ export function showDeleteConfirmation(onConfirm) {
       onConfirm();
       dispatch(resetDeleteConfirmation());
     };
-    dispatch({ type: actionTypes.SHOW_DELETE_CONFIRMATION, onConfirm: confirmAndDismiss });
+    dispatch({
+      type: actionTypes.SHOW_DELETE_CONFIRMATION,
+      onConfirm: confirmAndDismiss,
+    });
   };
 }
 
-export function shiftEndDate(formName, newStartAt, oldValues, startAtField = 'start_at', endAtField = 'end_at') {
+export function shiftEndDate(
+  formName,
+  newStartAt,
+  oldValues,
+  startAtField = 'start_at',
+  endAtField = 'end_at'
+) {
   return (dispatch) => {
     const { [startAtField]: oldStartAt, [endAtField]: oldEndAt } = oldValues;
-    if (!oldStartAt || !oldEndAt) { return; }
+    if (!oldStartAt || !oldEndAt) {
+      return;
+    }
     const oldStartTime = oldStartAt.getTime();
     const oldEndTime = oldEndAt.getTime();
 

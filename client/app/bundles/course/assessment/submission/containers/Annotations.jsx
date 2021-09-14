@@ -33,24 +33,29 @@ class VisibleAnnotations extends Component {
   render() {
     const { fieldVisible } = this.state;
     const {
-      fileId, lineNumber, commentForms, posts,
-      createComment, updateComment, deleteComment,
-      handleCreateChange, handleUpdateChange, airMode,
+      fileId,
+      lineNumber,
+      commentForms,
+      posts,
+      createComment,
+      updateComment,
+      deleteComment,
+      handleCreateChange,
+      handleUpdateChange,
+      airMode,
     } = this.props;
 
     return (
-      <Card
-        style={styles.card}
-      >
+      <Card style={styles.card}>
         <CardText style={{ textAlign: 'left' }}>
-          {posts.map(post => (
+          {posts.map((post) => (
             <CommentCard
               key={post.id}
               post={post}
               editValue={commentForms.posts[post.id]}
-              updateComment={value => updateComment(post.id, value)}
+              updateComment={(value) => updateComment(post.id, value)}
               deleteComment={() => deleteComment(post.id)}
-              handleChange={value => handleUpdateChange(post.id, value)}
+              handleChange={(value) => handleUpdateChange(post.id, value)}
               airMode={airMode}
             />
           ))}
@@ -120,33 +125,64 @@ function mapStateToProps(state, ownProps) {
   }
   return {
     commentForms: state.commentForms,
-    posts: annotation.postIds.map(postId => state.posts[postId]),
+    posts: annotation.postIds.map((postId) => state.posts[postId]),
   };
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
-  const { match: { params: { submissionId } }, answerId, fileId, lineNumber, annotation } = ownProps;
+  const {
+    match: {
+      params: { submissionId },
+    },
+    answerId,
+    fileId,
+    lineNumber,
+    annotation,
+  } = ownProps;
 
   if (!annotation) {
     return {
-      handleCreateChange: comment => dispatch(annotationActions.onCreateChange(fileId, lineNumber, comment)),
-      handleUpdateChange: (postId, comment) => dispatch(annotationActions.onUpdateChange(postId, comment)),
-      createComment: comment => dispatch(annotationActions.create(submissionId, answerId, fileId, lineNumber, comment)),
+      handleCreateChange: (comment) =>
+        dispatch(annotationActions.onCreateChange(fileId, lineNumber, comment)),
+      handleUpdateChange: (postId, comment) =>
+        dispatch(annotationActions.onUpdateChange(postId, comment)),
+      createComment: (comment) =>
+        dispatch(
+          annotationActions.create(
+            submissionId,
+            answerId,
+            fileId,
+            lineNumber,
+            comment
+          )
+        ),
       updateComment: () => {},
       deleteComment: () => {},
     };
   }
   return {
-    handleCreateChange: comment => dispatch(annotationActions.onCreateChange(fileId, lineNumber, comment)),
-    handleUpdateChange: (postId, comment) => dispatch(annotationActions.onUpdateChange(postId, comment)),
-    createComment: comment => dispatch(annotationActions.create(submissionId, answerId, fileId, lineNumber, comment)),
-    updateComment: (postId, comment) => dispatch(annotationActions.update(annotation.id, postId, comment)),
-    deleteComment: postId => dispatch(annotationActions.destroy(fileId, annotation.id, postId)),
+    handleCreateChange: (comment) =>
+      dispatch(annotationActions.onCreateChange(fileId, lineNumber, comment)),
+    handleUpdateChange: (postId, comment) =>
+      dispatch(annotationActions.onUpdateChange(postId, comment)),
+    createComment: (comment) =>
+      dispatch(
+        annotationActions.create(
+          submissionId,
+          answerId,
+          fileId,
+          lineNumber,
+          comment
+        )
+      ),
+    updateComment: (postId, comment) =>
+      dispatch(annotationActions.update(annotation.id, postId, comment)),
+    deleteComment: (postId) =>
+      dispatch(annotationActions.destroy(fileId, annotation.id, postId)),
   };
 }
 
-const Annotations = withRouter(connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(VisibleAnnotations));
+const Annotations = withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(VisibleAnnotations)
+);
 export default Annotations;

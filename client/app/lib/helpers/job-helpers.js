@@ -2,8 +2,9 @@ import axios from 'axios';
 
 export default function pollJob(url, interval, onSuccess, onFailure) {
   const poller = setInterval(() => {
-    axios.get(url, { params: { format: 'json' } })
-      .then(response => response.data)
+    axios
+      .get(url, { params: { format: 'json' } })
+      .then((response) => response.data)
       .then((data) => {
         if (data.status === 'completed') {
           clearInterval(poller);

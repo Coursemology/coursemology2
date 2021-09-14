@@ -21,20 +21,20 @@ const styles = {
 };
 
 class Material extends React.PureComponent {
-  static propTypes = {
-    name: PropTypes.string.isRequired,
-    url: PropTypes.string.isRequired,
-  }
-
   render() {
     const { name, url } = this.props;
     return (
       <div style={styles.material}>
         <Description style={styles.icon} color={grey700} />
-        <a href={url}>{ name }</a>
+        <a href={url}>{name}</a>
       </div>
     );
   }
 }
+
+Material.propTypes = {
+  name: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
+};
 
 export default Material;

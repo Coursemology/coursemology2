@@ -1,21 +1,25 @@
-import { getCourseId, getAssessmentId, getScribingId } from 'lib/helpers/url-helpers';
+import {
+  getCourseId,
+  getAssessmentId,
+  getScribingId,
+} from 'lib/helpers/url-helpers';
 import BaseAPI from '../Base';
 import SubmissionsAPI from '../Submissions';
 
 export default class ScribingQuestionAPI extends BaseAPI {
   /**
    * question = {
-  *   id: number,
-  *   title: string,
-  *   description: string,
-  *   staff_only_comments: string,
-  *   maximum_grade: string,
-  *   weight: number,
-  *   skill_ids [],
-  *   skills: [],
-  *   published_assessment: boolean,
-  *   attempt_limit: number,
-  * }
+   *   id: number,
+   *   title: string,
+   *   description: string,
+   *   staff_only_comments: string,
+   *   maximum_grade: string,
+   *   weight: number,
+   *   skill_ids [],
+   *   skills: [],
+   *   published_assessment: boolean,
+   *   attempt_limit: number,
+   * }
    */
 
   /**
@@ -26,7 +30,9 @@ export default class ScribingQuestionAPI extends BaseAPI {
    * success response: scribing_question
    */
   fetch() {
-    return this.getClient().get(`${ScribingQuestionAPI._getUrlPrefix()}/${getScribingId()}`);
+    return this.getClient().get(
+      `${ScribingQuestionAPI._getUrlPrefix()}/${getScribingId()}`
+    );
   }
 
   /**
@@ -58,9 +64,15 @@ export default class ScribingQuestionAPI extends BaseAPI {
         Accept: 'file_types',
       },
     };
-    const formData = ScribingQuestionAPI.generateFormData(scribingFields.question_scribing);
+    const formData = ScribingQuestionAPI.generateFormData(
+      scribingFields.question_scribing
+    );
 
-    return this.getClient().post(ScribingQuestionAPI._getUrlPrefix(), formData, config);
+    return this.getClient().post(
+      ScribingQuestionAPI._getUrlPrefix(),
+      formData,
+      config
+    );
   }
 
   /**
@@ -80,9 +92,15 @@ export default class ScribingQuestionAPI extends BaseAPI {
         Accept: 'file_types',
       },
     };
-    const formData = ScribingQuestionAPI.generateFormData(scribingFields.question_scribing);
+    const formData = ScribingQuestionAPI.generateFormData(
+      scribingFields.question_scribing
+    );
 
-    return this.getClient().patch(`${ScribingQuestionAPI._getUrlPrefix()}/${scribingId}`, formData, config);
+    return this.getClient().patch(
+      `${ScribingQuestionAPI._getUrlPrefix()}/${scribingId}`,
+      formData,
+      config
+    );
   }
 
   /**
@@ -94,7 +112,9 @@ export default class ScribingQuestionAPI extends BaseAPI {
    * error response: {}
    */
   delete(scribingId) {
-    return this.getClient().delete(`${ScribingQuestionAPI._getUrlPrefix()}/${scribingId}`);
+    return this.getClient().delete(
+      `${ScribingQuestionAPI._getUrlPrefix()}/${scribingId}`
+    );
   }
 
   static _getUrlPrefix() {

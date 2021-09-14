@@ -27,19 +27,29 @@ const responseFormTranslations = defineMessages({
  * Merges response answers into survey data to form initialValues for redux-form.
  */
 export const buildInitialValues = (survey, response) => {
-  if (!survey || !response || !response.answers) { return {}; }
+  if (!survey || !response || !response.answers) {
+    return {};
+  }
 
   const answersHash = {};
-  response.answers.forEach((answer) => { answersHash[answer.question_id] = answer; });
+  response.answers.forEach((answer) => {
+    answersHash[answer.question_id] = answer;
+  });
 
-  const augmentQuestionWithAnswer = question => (
-    { ...question, answer: answersHash[question.id] }
-  );
-  const augmentSectionWithAnswers = section => (
-    { ...section, questions: section.questions && section.questions.map(augmentQuestionWithAnswer) }
-  );
+  const augmentQuestionWithAnswer = (question) => ({
+    ...question,
+    answer: answersHash[question.id],
+  });
+  const augmentSectionWithAnswers = (section) => ({
+    ...section,
+    questions:
+      section.questions && section.questions.map(augmentQuestionWithAnswer),
+  });
 
-  return { ...survey, sections: survey.sections && survey.sections.map(augmentSectionWithAnswers) };
+  return {
+    ...survey,
+    sections: survey.sections && survey.sections.map(augmentSectionWithAnswers),
+  };
 };
 
 /**
@@ -47,62 +57,52 @@ export const buildInitialValues = (survey, response) => {
  */
 export const buildResponsePayload = (data) => {
   const getFormattedAnswer = (question) => {
-    if (!question.answer) { return {}; }
+    if (!question.answer) {
+      return {};
+    }
     const { id, text_response, question_option_ids } = question.answer;
-    return { id, text_response, question_option_ids: question_option_ids || [] };
+    return {
+      id,
+      text_response,
+      question_option_ids: question_option_ids || [],
+    };
   };
-  const answers_attributes = data.sections.reduce((accumulator, section) => (
-    accumulator.concat(section.questions.map(getFormattedAnswer))
-  ), []);
+  const answers_attributes = data.sections.reduce(
+    (accumulator, section) =>
+      accumulator.concat(section.questions.map(getFormattedAnswer)),
+    []
+  );
   return { response: { answers_attributes, submit: data.submit } };
 };
 
 class ResponseForm extends React.Component {
-  static propTypes = {
-    readOnly: PropTypes.bool,
-    flags: PropTypes.shape({
-      canModify: PropTypes.bool.isRequired,
-      canSubmit: PropTypes.bool.isRequired,
-      isResponseCreator: PropTypes.bool.isRequired,
-      isSubmitting: PropTypes.bool.isRequired,
-    }),
-    response: responseShape,
-    onSubmit: PropTypes.func,
-    pristine: PropTypes.bool.isRequired,
-    formValues: PropTypes.shape({}),
-
-    handleSubmit: PropTypes.func.isRequired,
-  };
-
-  static defaultProps = {
-    readOnly: false,
-    response: {},
-    // onSubmit will not be passed in when form is read-only
-    onSubmit: () => {},
-  }
-
   static renderSections(props) {
     const { fields, disabled } = props;
     return (
       <>
-        {
-          fields.map((member, index) => {
-            const section = fields.get(index);
-            return (
-              <ResponseSection
-                key={section.id}
-                {...{ member, index, fields, disabled }}
-              />
-            );
-          })
-        }
+        {fields.map((member, index) => {
+          const section = fields.get(index);
+          return (
+            <ResponseSection
+              key={section.id}
+              {...{ member, index, fields, disabled }}
+            />
+          );
+        })}
       </>
     );
   }
 
   renderSaveButton() {
-    const { pristine, onSubmit, formValues, flags: { canModify, isSubmitting } } = this.props;
-    if (!canModify) { return null; }
+    const {
+      pristine,
+      onSubmit,
+      formValues,
+      flags: { canModify, isSubmitting },
+    } = this.props;
+    if (!canModify) {
+      return null;
+    }
 
     return (
       <RaisedButton
@@ -118,14 +118,22 @@ class ResponseForm extends React.Component {
 
   renderSubmitButton() {
     const {
-      handleSubmit, onSubmit, response, flags: { canSubmit, isResponseCreator, isSubmitting },
+      handleSubmit,
+      onSubmit,
+      response,
+      flags: { canSubmit, isResponseCreator, isSubmitting },
     } = this.props;
 
-    if (!isResponseCreator) { return null; }
-    if (!response.submitted_at && !canSubmit) { return null; }
+    if (!isResponseCreator) {
+      return null;
+    }
+    if (!response.submitted_at && !canSubmit) {
+      return null;
+    }
 
     const submitButtonTranslation = response.submitted_at
-      ? responseFormTranslations.submitted : formTranslations.submit;
+      ? responseFormTranslations.submitted
+      : formTranslations.submit;
 
     return (
       <RaisedButton
@@ -133,7 +141,7 @@ class ResponseForm extends React.Component {
         type="submit"
         primary
         label={<FormattedMessage {...submitButtonTranslation} />}
-        onClick={handleSubmit(data => onSubmit({ ...data, submit: true }))}
+        onClick={handleSubmit((data) => onSubmit({ ...data, submit: true }))}
         disabled={isSubmitting || !!response.submitted_at}
       />
     );
@@ -141,7 +149,10 @@ class ResponseForm extends React.Component {
 
   render() {
     const {
-      handleSubmit, onSubmit, flags: { canSubmit, canModify, isSubmitting }, readOnly,
+      handleSubmit,
+      onSubmit,
+      flags: { canSubmit, canModify, isSubmitting },
+      readOnly,
     } = this.props;
 
     return (
@@ -152,16 +163,41 @@ class ResponseForm extends React.Component {
           disabled={isSubmitting || readOnly || !(canModify || canSubmit)}
         />
         <br />
-        { !readOnly && this.renderSaveButton() }
-        { !readOnly && this.renderSubmitButton() }
+        {!readOnly && this.renderSaveButton()}
+        {!readOnly && this.renderSubmitButton()}
       </Form>
     );
   }
 }
 
+ResponseForm.propTypes = {
+  readOnly: PropTypes.bool,
+  flags: PropTypes.shape({
+    canModify: PropTypes.bool.isRequired,
+    canSubmit: PropTypes.bool.isRequired,
+    isResponseCreator: PropTypes.bool.isRequired,
+    isSubmitting: PropTypes.bool.isRequired,
+  }),
+  response: responseShape,
+  onSubmit: PropTypes.func,
+  pristine: PropTypes.bool.isRequired,
+  formValues: PropTypes.shape({}),
+
+  handleSubmit: PropTypes.func.isRequired,
+};
+
+ResponseForm.defaultProps = {
+  readOnly: false,
+  response: {},
+  // onSubmit will not be passed in when form is read-only
+  onSubmit: () => {},
+};
+
 export default reduxForm({
   form: formNames.SURVEY_RESPONSE,
   enableReinitialize: true,
-})(connect(state => ({
-  formValues: getFormValues(formNames.SURVEY_RESPONSE)(state),
-}))(ResponseForm));
+})(
+  connect((state) => ({
+    formValues: getFormValues(formNames.SURVEY_RESPONSE)(state),
+  }))(ResponseForm)
+);

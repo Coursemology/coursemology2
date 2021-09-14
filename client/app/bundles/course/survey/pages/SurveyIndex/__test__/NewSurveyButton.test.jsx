@@ -10,7 +10,9 @@ import NewSurveyButton from '../NewSurveyButton';
 describe('<NewSurveyButton />', () => {
   it('injects handlers that allow surveys to be created', () => {
     const spyCreate = jest.spyOn(CourseAPI.survey.surveys, 'create');
-    const store = storeCreator({ surveys: { surveysFlags: { canCreate: true } } });
+    const store = storeCreator({
+      surveys: { surveysFlags: { canCreate: true } },
+    });
     const contextOptions = buildContextOptions(store);
 
     const surveyFormDialogue = mount(<SurveyFormDialogue />, contextOptions);
@@ -19,7 +21,9 @@ describe('<NewSurveyButton />', () => {
     // Click 'new survey' button
     newSurveyButton.find('button').simulate('click');
     surveyFormDialogue.update();
-    expect(surveyFormDialogue.find('SurveyFormDialogue').first().props().visible).toBe(true);
+    expect(
+      surveyFormDialogue.find('SurveyFormDialogue').first().props().visible
+    ).toBe(true);
 
     // Fill survey form
     const survey = {
@@ -33,8 +37,13 @@ describe('<NewSurveyButton />', () => {
 
     const startAt = '01-01-2017';
     const startTime = '12:00 AM';
-    const dialogInline = surveyFormDialogue.find('RenderToLayer').first().instance();
-    const surveyForm = mount(dialogInline.props.render(), contextOptions).find('form');
+    const dialogInline = surveyFormDialogue
+      .find('RenderToLayer')
+      .first()
+      .instance();
+    const surveyForm = mount(dialogInline.props.render(), contextOptions).find(
+      'form'
+    );
     const titleInput = surveyForm.find('input[name="title"]');
     titleInput.simulate('change', { target: { value: survey.title } });
     const startAtDateInput = surveyForm.find('input[name="start_at"]').first();
@@ -45,7 +54,10 @@ describe('<NewSurveyButton />', () => {
     startAtTimeInput.simulate('blur');
 
     // Submit survey form
-    const submitButton = surveyFormDialogue.find('FormDialogue').first().instance().submitButton;
+    const submitButton = surveyFormDialogue
+      .find('FormDialogue')
+      .first()
+      .instance().submitButton;
     ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton));
     expect(spyCreate).toHaveBeenCalledWith({ survey });
   });

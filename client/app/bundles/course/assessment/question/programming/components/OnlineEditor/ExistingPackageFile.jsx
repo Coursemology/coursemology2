@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
-import {
-  TableHeaderColumn, TableRow, TableRowColumn,
-} from 'material-ui/Table';
+import { TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
 import { grey100, grey300, white } from 'material-ui/styles/colors';
 import styles from './OnlineEditorView.scss';
@@ -14,15 +12,24 @@ function formatBytes(bytes, decimals) {
   const dm = decimals || 3;
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return `${parseFloat((bytes / (k ** i)).toFixed(dm))} ${sizes[i]}`;
+  return `${parseFloat((bytes / k ** i).toFixed(dm))} ${sizes[i]}`;
 }
 
 function ExistingPackageFile(props) {
-  const { filename, fileType, filesize, toDelete, deleteExistingPackageFile, isLoading, isLast } = props;
+  const {
+    filename,
+    fileType,
+    filesize,
+    toDelete,
+    deleteExistingPackageFile,
+    isLoading,
+    isLast,
+  } = props;
   const buttonClass = toDelete ? 'fa fa-undo' : 'fa fa-trash';
   const buttonColor = toDelete ? white : grey300;
   const rowStyle = toDelete
-    ? { textDecoration: 'line-through', backgroundColor: grey100 } : {};
+    ? { textDecoration: 'line-through', backgroundColor: grey100 }
+    : {};
   if (isLast) {
     rowStyle.borderBottom = 'none';
   }
@@ -34,7 +41,9 @@ function ExistingPackageFile(props) {
           backgroundColor={buttonColor}
           icon={<i className={buttonClass} />}
           disabled={isLoading}
-          onClick={() => { deleteExistingPackageFile(props.fileType, filename, !toDelete); }}
+          onClick={() => {
+            deleteExistingPackageFile(props.fileType, filename, !toDelete);
+          }}
           style={{ minWidth: '40px', width: '40px' }}
         />
         <input

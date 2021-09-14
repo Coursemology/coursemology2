@@ -25,24 +25,19 @@ const translations = defineMessages({
 });
 
 class AssessmentsListing extends React.Component {
-  static propTypes = {
-    categories: PropTypes.arrayOf(categoryShape),
-    selectedItems: PropTypes.shape({}),
-  }
-
   static renderAssessmentRow(assessment) {
     return (
       <IndentedCheckbox
         checked
         indentLevel={2}
         key={assessment.id}
-        label={(
+        label={
           <span>
             <TypeBadge itemType={ASSESSMENT} />
             <UnpublishedIcon tooltipId="itemUnpublished" />
             {assessment.title}
           </span>
-)}
+        }
       />
     );
   }
@@ -62,12 +57,12 @@ class AssessmentsListing extends React.Component {
       <IndentedCheckbox
         checked
         indentLevel={1}
-        label={(
+        label={
           <span>
             <TypeBadge itemType={TAB} />
             {tab.title}
           </span>
-)}
+        }
       />
     );
   }
@@ -75,11 +70,12 @@ class AssessmentsListing extends React.Component {
   static renderTabTree(tab, children) {
     return (
       <div key={tab ? tab.id : 'default'}>
-        { tab ? AssessmentsListing.renderTabRow(tab) : AssessmentsListing.renderDefaultTabRow() }
-        {
-          children && (children.length > 0)
-          && children.map(AssessmentsListing.renderAssessmentRow)
-        }
+        {tab
+          ? AssessmentsListing.renderTabRow(tab)
+          : AssessmentsListing.renderDefaultTabRow()}
+        {children &&
+          children.length > 0 &&
+          children.map(AssessmentsListing.renderAssessmentRow)}
       </div>
     );
   }
@@ -97,32 +93,35 @@ class AssessmentsListing extends React.Component {
     return (
       <IndentedCheckbox
         checked
-        label={(
+        label={
           <span>
             <TypeBadge itemType={CATEGORY} />
             {category.title}
           </span>
-)}
+        }
       />
     );
   }
 
   static renderCategoryCard(category, orphanTabs, orphanAssessments) {
-    const hasOrphanAssessments = orphanAssessments && orphanAssessments.length > 0;
+    const hasOrphanAssessments =
+      orphanAssessments && orphanAssessments.length > 0;
     const hasOrphanTabs = orphanTabs && orphanTabs.length > 0;
     const categoryRow = category
       ? AssessmentsListing.renderCategoryRow(category)
       : AssessmentsListing.renderDefaultCategoryRow();
-    const tabsTrees = tabs => tabs
-      && tabs.map(tab => AssessmentsListing.renderTabTree(tab, tab.assessments));
+    const tabsTrees = (tabs) =>
+      tabs &&
+      tabs.map((tab) => AssessmentsListing.renderTabTree(tab, tab.assessments));
 
     return (
       <Card key={category ? category.id : 'default'}>
         <CardText>
-          { categoryRow }
-          { hasOrphanAssessments && AssessmentsListing.renderTabTree(null, orphanAssessments) }
-          { hasOrphanTabs && tabsTrees(orphanTabs) }
-          { category && tabsTrees(category.tabs) }
+          {categoryRow}
+          {hasOrphanAssessments &&
+            AssessmentsListing.renderTabTree(null, orphanAssessments)}
+          {hasOrphanTabs && tabsTrees(orphanTabs)}
+          {category && tabsTrees(category.tabs)}
         </CardText>
       </Card>
     );
@@ -139,7 +138,7 @@ class AssessmentsListing extends React.Component {
       const selectedTabs = [];
       category.tabs.forEach((tab) => {
         const selectedAssessments = tab.assessments.filter(
-          assessment => selectedItems[ASSESSMENT][assessment.id]
+          (assessment) => selectedItems[ASSESSMENT][assessment.id]
         );
 
         if (selectedItems[TAB][tab.id]) {
@@ -160,26 +159,38 @@ class AssessmentsListing extends React.Component {
   }
 
   render() {
-    const [categoriesTrees, tabTrees, assessmentTrees] = this.selectedSubtrees();
+    const [categoriesTrees, tabTrees, assessmentTrees] =
+      this.selectedSubtrees();
     const orphanTreesCount = tabTrees.length + assessmentTrees.length;
     const totalTreesCount = orphanTreesCount + categoriesTrees.length;
-    if (totalTreesCount < 1) { return null; }
+    if (totalTreesCount < 1) {
+      return null;
+    }
 
     return (
       <>
         <Subheader>
-          <FormattedMessage {...defaultComponentTitles.course_assessments_component} />
+          <FormattedMessage
+            {...defaultComponentTitles.course_assessments_component}
+          />
         </Subheader>
-        {
-          categoriesTrees.map(category => (
-            AssessmentsListing.renderCategoryCard(category, null, null)
-          ))
-        }
-        { (orphanTreesCount > 0) && AssessmentsListing.renderCategoryCard(null, tabTrees, assessmentTrees) }
+        {categoriesTrees.map((category) =>
+          AssessmentsListing.renderCategoryCard(category, null, null))}
+        {orphanTreesCount > 0 &&
+          AssessmentsListing.renderCategoryCard(
+            null,
+            tabTrees,
+            assessmentTrees
+          )}
       </>
     );
   }
 }
+
+AssessmentsListing.propTypes = {
+  categories: PropTypes.arrayOf(categoryShape),
+  selectedItems: PropTypes.shape({}),
+};
 
 export default connect(({ duplication }) => ({
   categories: duplication.assessmentsComponent,

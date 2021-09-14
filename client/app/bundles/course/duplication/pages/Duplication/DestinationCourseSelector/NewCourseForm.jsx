@@ -32,14 +32,6 @@ const validate = (values) => {
 };
 
 class NewCourseForm extends React.Component {
-  static propTypes = {
-    onSubmit: PropTypes.func.isRequired,
-    disabled: PropTypes.bool.isRequired,
-
-    handleSubmit: PropTypes.func.isRequired,
-    intl: intlShape,
-  }
-
   render() {
     const { handleSubmit, intl, onSubmit, disabled } = this.props;
 
@@ -62,6 +54,14 @@ class NewCourseForm extends React.Component {
     );
   }
 }
+
+NewCourseForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
+
+  handleSubmit: PropTypes.func.isRequired,
+  intl: intlShape,
+};
 
 export default reduxForm({
   form: formNames.NEW_COURSE,

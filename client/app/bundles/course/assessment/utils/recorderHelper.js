@@ -3,10 +3,11 @@ import Recorder from '../../../../../vendor/recorderjs';
 let recorder;
 let recording = false;
 
-const initRecorder = () => Promise.resolve()
-  .then(() => {
+const initRecorder = () =>
+  Promise.resolve().then(() => {
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
-    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
+    navigator.getUserMedia =
+      navigator.getUserMedia || navigator.webkitGetUserMedia;
     window.URL = window.URL || window.webkitURL;
     const audioContext = new AudioContext();
 
@@ -16,7 +17,8 @@ const initRecorder = () => Promise.resolve()
       return recorder;
     };
 
-    return navigator.mediaDevices.getUserMedia({ audio: true })
+    return navigator.mediaDevices
+      .getUserMedia({ audio: true })
       .then(startUserMedia);
   });
 
@@ -53,7 +55,7 @@ const stopRecord = () => {
     recorder.stop();
     recording = false;
     recorder.exportWAV((blob) => {
-      const fileName = `${Math.round((new Date()).getTime() / 1000)}.wav`;
+      const fileName = `${Math.round(new Date().getTime() / 1000)}.wav`;
       const file = new File([blob], fileName, {
         lastModified: new Date(),
         type: blob.type || 'audio/wav',

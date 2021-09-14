@@ -36,7 +36,8 @@ function sortByStartAt(a, b) {
   const aStartAt = moment(a.start_at);
   if (aStartAt.isAfter(b.start_at)) {
     return 1;
-  } if (aStartAt.isBefore(b.start_at)) {
+  }
+  if (aStartAt.isBefore(b.start_at)) {
     return -1;
   }
   return 0;
@@ -57,9 +58,13 @@ export function groupItemsUnderMilestones(items, milestones) {
   const sortedMilestones = [...milestones].sort(sortByStartAt);
   const sortedItems = [...items].sort((a, b) => {
     const startAtSortResult = sortByStartAt(a, b);
-    if (startAtSortResult !== 0) { return startAtSortResult; }
+    if (startAtSortResult !== 0) {
+      return startAtSortResult;
+    }
     const itemTypeSortResult = a.itemTypeKey.localeCompare(b.itemTypeKey);
-    if (itemTypeSortResult !== 0) { return itemTypeSortResult; }
+    if (itemTypeSortResult !== 0) {
+      return itemTypeSortResult;
+    }
     return a.title.localeCompare(b.title);
   });
 
@@ -82,8 +87,8 @@ export function groupItemsUnderMilestones(items, milestones) {
   sortedMilestones.forEach((milestone) => {
     // Group items that come before the current milestone under the previous milestone
     while (
-      sortedItems.length > 0
-      && moment(sortedItems[0].start_at).isBefore(milestone.start_at)
+      sortedItems.length > 0 &&
+      moment(sortedItems[0].start_at).isBefore(milestone.start_at)
     ) {
       group.items.push(sortedItems.shift());
     }
@@ -110,11 +115,16 @@ export function groupItemsUnderMilestones(items, milestones) {
  * @return {Object}
  */
 export function initializeVisibility(items, visibilitySettings) {
-  const itemTypes = new Set(items.map(item => item.itemTypeKey));
+  const itemTypes = new Set(items.map((item) => item.itemTypeKey));
   const visibility = {};
   itemTypes.forEach((itemType) => {
-    const hasVisibilitySetting = Object.prototype.hasOwnProperty.call(visibilitySettings, itemType);
-    visibility[itemType] = hasVisibilitySetting ? visibilitySettings[itemType] : true;
+    const hasVisibilitySetting = Object.prototype.hasOwnProperty.call(
+      visibilitySettings,
+      itemType
+    );
+    visibility[itemType] = hasVisibilitySetting
+      ? visibilitySettings[itemType]
+      : true;
   });
   return visibility;
 }

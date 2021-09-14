@@ -20,20 +20,15 @@ const translations = defineMessages({
 });
 
 class SurveysSelector extends React.Component {
-  static propTypes = {
-    surveys: PropTypes.arrayOf(surveyShape),
-    selectedItems: PropTypes.shape({}),
-
-    dispatch: PropTypes.func.isRequired,
-  }
-
   setAllSurveysSelection = (value) => {
     const { dispatch, surveys } = this.props;
 
     surveys.forEach((survey) => {
-      dispatch(setItemSelectedBoolean(duplicableItemTypes.SURVEY, survey.id, value));
+      dispatch(
+        setItemSelectedBoolean(duplicableItemTypes.SURVEY, survey.id, value)
+      );
     });
-  }
+  };
 
   renderRow(survey) {
     const { dispatch, selectedItems } = this.props;
@@ -42,15 +37,18 @@ class SurveysSelector extends React.Component {
     return (
       <Checkbox
         key={survey.id}
-        label={(
+        label={
           <span>
             <TypeBadge itemType={duplicableItemTypes.SURVEY} />
-            { survey.published || <UnpublishedIcon /> }
+            {survey.published || <UnpublishedIcon />}
             {survey.title}
           </span>
-)}
+        }
         checked={checked}
-        onCheck={(e, value) => dispatch(setItemSelectedBoolean(duplicableItemTypes.SURVEY, survey.id, value))
+        onCheck={(e, value) =>
+          dispatch(
+            setItemSelectedBoolean(duplicableItemTypes.SURVEY, survey.id, value)
+          )
         }
       />
     );
@@ -69,31 +67,42 @@ class SurveysSelector extends React.Component {
 
     return (
       <>
-        {
-          surveys.length > 1 ? (
-            <BulkSelectors
-              callback={this.setAllSurveysSelection}
-              styles={{ selectLink: { marginLeft: 0 } }}
-            />
-          ) : null
-        }
-        { surveys.map(survey => this.renderRow(survey)) }
+        {surveys.length > 1 ? (
+          <BulkSelectors
+            callback={this.setAllSurveysSelection}
+            styles={{ selectLink: { marginLeft: 0 } }}
+          />
+        ) : null}
+        {surveys.map((survey) => this.renderRow(survey))}
       </>
     );
   }
 
   render() {
     const { surveys } = this.props;
-    if (!surveys) { return null; }
+    if (!surveys) {
+      return null;
+    }
 
     return (
       <>
-        <h2><FormattedMessage {...defaultComponentTitles.course_survey_component} /></h2>
-        { this.renderBody() }
+        <h2>
+          <FormattedMessage
+            {...defaultComponentTitles.course_survey_component}
+          />
+        </h2>
+        {this.renderBody()}
       </>
     );
   }
 }
+
+SurveysSelector.propTypes = {
+  surveys: PropTypes.arrayOf(surveyShape),
+  selectedItems: PropTypes.shape({}),
+
+  dispatch: PropTypes.func.isRequired,
+};
 
 export default connect(({ duplication }) => ({
   surveys: duplication.surveyComponent,

@@ -18,14 +18,11 @@ export function submitSectionForm() {
   };
 }
 
-export function createSurveySection(
-  fields,
-  successMessage,
-  failureMessage
-) {
+export function createSurveySection(fields, successMessage, failureMessage) {
   return (dispatch) => {
     dispatch({ type: actionTypes.CREATE_SURVEY_SECTION_REQUEST });
-    return CourseAPI.survey.sections.create(fields)
+    return CourseAPI.survey.sections
+      .create(fields)
       .then((response) => {
         dispatch({
           surveyId: getSurveyId(),
@@ -54,7 +51,8 @@ export function updateSurveySection(
 ) {
   return (dispatch) => {
     dispatch({ type: actionTypes.UPDATE_SURVEY_SECTION_REQUEST });
-    return CourseAPI.survey.sections.update(sectionId, data)
+    return CourseAPI.survey.sections
+      .update(sectionId, data)
       .then((response) => {
         dispatch({
           surveyId: getSurveyId(),
@@ -75,14 +73,11 @@ export function updateSurveySection(
   };
 }
 
-export function deleteSurveySection(
-  sectionId,
-  successMessage,
-  failureMessage
-) {
+export function deleteSurveySection(sectionId, successMessage, failureMessage) {
   return (dispatch) => {
     dispatch({ type: actionTypes.DELETE_SURVEY_SECTION_REQUEST });
-    return CourseAPI.survey.sections.delete(sectionId)
+    return CourseAPI.survey.sections
+      .delete(sectionId)
       .then(() => {
         dispatch({
           surveyId: getSurveyId(),
@@ -107,16 +102,22 @@ export function deleteSurveySection(
  * @param {string} successMessage
  * @param {string} failureMessage
  */
-export function changeSectionOrder(oldIndex, newIndex, successMessage, failureMessage) {
+export function changeSectionOrder(
+  oldIndex,
+  newIndex,
+  successMessage,
+  failureMessage
+) {
   return (dispatch, getState) => {
     const { surveys } = getState();
     const surveyId = getSurveyId();
-    const survey = surveys.find(item => String(item.id) === surveyId);
-    const ordering = survey.sections.map(section => section.id);
+    const survey = surveys.find((item) => String(item.id) === surveyId);
+    const ordering = survey.sections.map((section) => section.id);
     ordering.splice(newIndex, 0, ordering.splice(oldIndex, 1)[0]);
 
     dispatch({ type: actionTypes.UPDATE_SECTION_ORDER_REQUEST });
-    CourseAPI.survey.surveys.reorderSections({ ordering })
+    CourseAPI.survey.surveys
+      .reorderSections({ ordering })
       .then((response) => {
         dispatch({
           type: actionTypes.UPDATE_SECTION_ORDER_SUCCESS,

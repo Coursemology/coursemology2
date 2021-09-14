@@ -1,25 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  TableHeaderColumn, TableRow, TableRowColumn,
-} from 'material-ui/Table';
+import { TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
 import { injectIntl } from 'react-intl';
 import { grey300 } from 'material-ui/styles/colors';
 import styles from './OnlineEditorView.scss';
 
 class NewPackageFile extends React.Component {
-  static propTypes = {
-    index: PropTypes.number.isRequired,
-    fileType: PropTypes.string.isRequired,
-    filename: PropTypes.string,
-    showDeleteButton: PropTypes.bool.isRequired,
-    isLoading: PropTypes.bool.isRequired,
-    updateNewPackageFile: PropTypes.func.isRequired,
-    deleteNewPackageFile: PropTypes.func.isRequired,
-    buttonLabel: PropTypes.string.isRequired,
-  }
-
   static getPackageFileName(fileType) {
     return `question_programming[${fileType}][]`;
   }
@@ -44,7 +31,9 @@ class NewPackageFile extends React.Component {
           backgroundColor={grey300}
           icon={<i className="fa fa-trash" />}
           disabled={isLoading}
-          onClick={() => { this.props.deleteNewPackageFile(this.props.fileType, index); }}
+          onClick={() => {
+            this.props.deleteNewPackageFile(this.props.fileType, index);
+          }}
           style={{ minWidth: '40px', width: '40px' }}
         />
       );
@@ -55,7 +44,7 @@ class NewPackageFile extends React.Component {
     return (
       <TableRow style={rowStyle}>
         <TableHeaderColumn className={styles.deleteButtonCell}>
-          { deleteButton }
+          {deleteButton}
         </TableHeaderColumn>
         <TableRowColumn>
           <RaisedButton
@@ -81,5 +70,16 @@ class NewPackageFile extends React.Component {
     );
   }
 }
+
+NewPackageFile.propTypes = {
+  index: PropTypes.number.isRequired,
+  fileType: PropTypes.string.isRequired,
+  filename: PropTypes.string,
+  showDeleteButton: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  updateNewPackageFile: PropTypes.func.isRequired,
+  deleteNewPackageFile: PropTypes.func.isRequired,
+  buttonLabel: PropTypes.string.isRequired,
+};
 
 export default injectIntl(NewPackageFile);

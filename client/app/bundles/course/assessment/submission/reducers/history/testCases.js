@@ -5,10 +5,13 @@ export default function (state = {}, action) {
     case actions.GET_PAST_ANSWERS_SUCCESS: {
       return {
         ...state,
-        ...action.payload.answers.reduce((obj, answer) => ({
-          ...obj,
-          [answer.id]: answer.testCases,
-        }), {}),
+        ...action.payload.answers.reduce(
+          (obj, answer) => ({
+            ...obj,
+            [answer.id]: answer.testCases,
+          }),
+          {}
+        ),
       };
     }
     case actions.AUTOGRADE_SUCCESS: {

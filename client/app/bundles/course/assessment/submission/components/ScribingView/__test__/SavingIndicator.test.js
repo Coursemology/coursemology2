@@ -35,27 +35,32 @@ const mockSubmission = {
   posts: [],
   questions: [],
   topics: [],
-  answers: [{
-    fields: {
-      id: answerId,
+  answers: [
+    {
+      fields: {
+        id: answerId,
+        questionId: 1,
+      },
+      grading: {
+        grade: null,
+        id: answerId,
+      },
       questionId: 1,
+      scribing_answer: {
+        answer_id: 23,
+        image_path: '/attachments/image1',
+        scribbles: [],
+        user_id: 10,
+      },
     },
-    grading: {
-      grade: null,
-      id: answerId,
-    },
-    questionId: 1,
-    scribing_answer: {
-      answer_id: 23,
-      image_path: '/attachments/image1',
-      scribbles: [],
-      user_id: 10,
-    },
-  }],
+  ],
 };
 
 // stub import function
-jest.mock('course/assessment/submission/loaders/ScribingViewLoader', () => (() => Promise.resolve()));
+jest.mock(
+  'course/assessment/submission/loaders/ScribingViewLoader',
+  () => () => Promise.resolve()
+);
 
 beforeEach(() => {
   mock.reset();
@@ -70,7 +75,9 @@ describe('SavingIndicator', () => {
     const editPage = mount(
       <ProviderWrapper store={store}>
         <MemoryRouter
-          initialEntries={[`/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`]}
+          initialEntries={[
+            `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`,
+          ]}
         >
           <ScribingView answerId={answerId} />
         </MemoryRouter>
@@ -86,10 +93,16 @@ describe('SavingIndicator', () => {
 
     const editUrl = `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`;
     window.history.pushState({}, '', editUrl);
-    mock.onPost(`/courses/${courseId}/assessments/${assessmentId}\
-/submissions/${submissionId}/answers/${answerId}/scribing/scribbles`)
+    mock
+      .onPost(
+        `/courses/${courseId}/assessments/${assessmentId}\
+/submissions/${submissionId}/answers/${answerId}/scribing/scribbles`
+      )
       .reply(200);
-    const spyUpdate = jest.spyOn(CourseAPI.assessment.answer.scribing, 'update');
+    const spyUpdate = jest.spyOn(
+      CourseAPI.assessment.answer.scribing,
+      'update'
+    );
     store.dispatch(updateScribingAnswer(answerId, {}));
     await sleep(1);
     expect(spyUpdate).toHaveBeenCalled();
@@ -101,7 +114,9 @@ describe('SavingIndicator', () => {
     const editPage = mount(
       <ProviderWrapper store={store}>
         <MemoryRouter
-          initialEntries={[`/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`]}
+          initialEntries={[
+            `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`,
+          ]}
         >
           <ScribingView answerId={answerId} />
         </MemoryRouter>
@@ -110,10 +125,16 @@ describe('SavingIndicator', () => {
 
     const editUrl = `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`;
     window.history.pushState({}, '', editUrl);
-    mock.onPost(`/courses/${courseId}/assessments/${assessmentId}\
-/submissions/${submissionId}/answers/${answerId}/scribing/scribbles`)
+    mock
+      .onPost(
+        `/courses/${courseId}/assessments/${assessmentId}\
+/submissions/${submissionId}/answers/${answerId}/scribing/scribbles`
+      )
       .reply(400);
-    const spyUpdate = jest.spyOn(CourseAPI.assessment.answer.scribing, 'update');
+    const spyUpdate = jest.spyOn(
+      CourseAPI.assessment.answer.scribing,
+      'update'
+    );
     store.dispatch(updateScribingAnswer(answerId, {}));
     await sleep(1);
     expect(spyUpdate).toHaveBeenCalled();

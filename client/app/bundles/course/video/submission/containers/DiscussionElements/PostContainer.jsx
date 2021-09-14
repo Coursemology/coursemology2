@@ -15,7 +15,7 @@ const defaultProps = {
 function mapStateToProps(state, ownProps) {
   const postsStore = state.discussion.posts;
   const post = postsStore.get(ownProps.postId);
-  const children = post.childrenIds.filter(postId => postsStore.has(postId));
+  const children = post.childrenIds.filter((postId) => postsStore.has(postId));
 
   return {
     postId: ownProps.postId,

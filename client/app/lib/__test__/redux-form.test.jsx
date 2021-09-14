@@ -18,18 +18,28 @@ describe('SubmissionError', () => {
     const errors = { title: 'is absent', base: baseError };
 
     it('copies ActiveModel base errors to it', () => {
-      expect(new SubmissionError(errors).errors).toEqual({ ...errors, _error: baseError });
+      expect(new SubmissionError(errors).errors).toEqual({
+        ...errors,
+        _error: baseError,
+      });
     });
 
     it('is caught and displayed by redux-form', () => {
-      const DummyForm = reduxForm({ form: 'dummy' })(({ error, handleSubmit }) => (
-        <form onSubmit={handleSubmit}>
-          { error }
-        </form>
+      const DummyForm = reduxForm({
+        form: 'dummy',
+      })(({ error, handleSubmit }) => (
+        <form onSubmit={handleSubmit}>{error}</form>
       ));
-      const dummyStore = createStore(combineReducers({ form: formReducer }), {});
+      const dummyStore = createStore(
+        combineReducers({ form: formReducer }),
+        {}
+      );
       const wrapper = mount(
-        <DummyForm onSubmit={() => { throw new SubmissionError(errors); }} />,
+        <DummyForm
+          onSubmit={() => {
+            throw new SubmissionError(errors);
+          }}
+        />,
         buildContextOptions(dummyStore)
       );
 

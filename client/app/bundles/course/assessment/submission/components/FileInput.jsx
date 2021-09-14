@@ -38,34 +38,12 @@ const styles = {
 };
 
 class FileInput extends Component {
-  static propTypes = {
-    name: PropTypes.string,
-    className: PropTypes.string,
-    inputOptions: PropTypes.shape({
-      multiple: PropTypes.bool,
-      accept: PropTypes.string,
-    }),
-    disabled: PropTypes.bool,
-    meta: PropTypes.shape({
-      error: PropTypes.bool,
-      touched: PropTypes.bool,
-    }).isRequired,
-    input: PropTypes.shape({
-      onChange: PropTypes.func,
-      value: PropTypes.arrayOf(PropTypes.string),
-    }).isRequired,
-    callback: PropTypes.func,
-  };
-
-  static defaultProps = {
-    className: '',
-    disabled: false,
-    callback: () => {},
-  };
-
-  state = {
-    dropzoneActive: false,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      dropzoneActive: false,
+    };
+  }
 
   onDragEnter() {
     this.setState({ dropzoneActive: true });
@@ -76,7 +54,11 @@ class FileInput extends Component {
   }
 
   onDrop(files) {
-    const { callback, disabled, input: { onChange } } = this.props;
+    const {
+      callback,
+      disabled,
+      input: { onChange },
+    } = this.props;
     this.setState({ dropzoneActive: false });
     if (!disabled) {
       callback(files);
@@ -95,23 +77,32 @@ class FileInput extends Component {
     if (!files || !files.length) {
       return (
         <h4>
-          {disabled
-            ? <FormattedMessage {...translations.uploadDisabled} />
-            : <FormattedMessage {...translations.uploadLabel} />
-          }
+          {disabled ? (
+            <FormattedMessage {...translations.uploadDisabled} />
+          ) : (
+            <FormattedMessage {...translations.uploadLabel} />
+          )}
         </h4>
       );
     }
     return (
       <div style={styles.wrapper}>
-        {files.map(f => (<Chip style={styles.chip} key={f.name}>{f.name}</Chip>))}
+        {files.map((f) => (
+          <Chip style={styles.chip} key={f.name}>
+            {f.name}
+          </Chip>
+        ))}
       </div>
     );
   }
 
   render() {
     const {
-      name, className, inputOptions, disabled, meta: { error, touched },
+      name,
+      className,
+      inputOptions,
+      disabled,
+      meta: { error, touched },
       input: { value },
     } = this.props;
 
@@ -122,7 +113,7 @@ class FileInput extends Component {
           disableClick={disabled}
           onDragEnter={() => this.onDragEnter()}
           onDragLeave={() => this.onDragLeave()}
-          onDrop={files => this.onDrop(files)}
+          onDrop={(files) => this.onDrop(files)}
           className="dropzone-input"
           name={name}
         >
@@ -135,4 +126,34 @@ class FileInput extends Component {
     );
   }
 }
-export default props => <Field {...props} component={FileInput} />;
+
+FileInput.propTypes = {
+  name: PropTypes.string,
+  className: PropTypes.string,
+  inputOptions: PropTypes.shape({
+    multiple: PropTypes.bool,
+    accept: PropTypes.string,
+  }),
+  disabled: PropTypes.bool,
+  meta: PropTypes.shape({
+    error: PropTypes.bool,
+    touched: PropTypes.bool,
+  }).isRequired,
+  input: PropTypes.shape({
+    onChange: PropTypes.func,
+    value: PropTypes.arrayOf(PropTypes.string),
+  }).isRequired,
+  callback: PropTypes.func,
+};
+
+FileInput.defaultProps = {
+  className: '',
+  disabled: false,
+  callback: () => {},
+};
+
+const FieldWithFileInput = (props) => (
+  <Field {...props} component={FileInput} />
+);
+
+export default FieldWithFileInput;

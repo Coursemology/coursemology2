@@ -2,7 +2,10 @@ import CourseAPI from 'api/course';
 import MockAdapter from 'axios-mock-adapter';
 import storeCreator from 'course/survey/store';
 import history from 'lib/history';
-import { createScribingQuestion, updateScribingQuestion } from '../scribingQuestionActionCreators';
+import {
+  createScribingQuestion,
+  updateScribingQuestion,
+} from '../scribingQuestionActionCreators';
 import { initialStates } from '../../reducers';
 
 // Mock axios
@@ -39,13 +42,18 @@ const processedMockFields = {
 
 describe('createScribingQuestion', () => {
   const store = storeCreator({ initialStates });
-  const spyCreate = jest.spyOn(CourseAPI.assessment.question.scribing, 'create');
+  const spyCreate = jest.spyOn(
+    CourseAPI.assessment.question.scribing,
+    'create'
+  );
 
   const newUrl = `/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}/new`;
   window.history.pushState({}, '', newUrl);
 
   it('redirects after creation of new scribing question', async () => {
-    mock.onPost(createResponseUrl).reply(200, { message: 'The scribing question was created.' });
+    mock
+      .onPost(createResponseUrl)
+      .reply(200, { message: 'The scribing question was created.' });
     store.dispatch(createScribingQuestion(mockFields));
     await sleep(1);
     expect(spyCreate).toHaveBeenCalledWith(processedMockFields);
@@ -55,13 +63,18 @@ describe('createScribingQuestion', () => {
 
 describe('updateScribingQuestion', () => {
   const store = storeCreator({ initialStates });
-  const spyUpdate = jest.spyOn(CourseAPI.assessment.question.scribing, 'update');
+  const spyUpdate = jest.spyOn(
+    CourseAPI.assessment.question.scribing,
+    'update'
+  );
 
   const editUrl = `/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}/edit`;
   window.history.pushState({}, '', editUrl);
 
   it('redirects after updating of scribing question', async () => {
-    mock.onPatch(updateResponseUrl).reply(200, { message: 'The scribing question was created.' });
+    mock
+      .onPatch(updateResponseUrl)
+      .reply(200, { message: 'The scribing question was created.' });
     store.dispatch(updateScribingQuestion(scribingId, mockFields));
     await sleep(1);
     expect(spyUpdate).toHaveBeenCalledWith(scribingId, processedMockFields);

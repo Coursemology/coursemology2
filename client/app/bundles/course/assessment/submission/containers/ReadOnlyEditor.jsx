@@ -6,13 +6,6 @@ import ReadOnlyEditorComponent from '../components/ReadOnlyEditor';
 import { topicShape } from '../propTypes';
 
 class ReadOnlyEditorContainer extends Component {
-  static propTypes = {
-    annotations: PropTypes.objectOf(topicShape),
-    answerId: PropTypes.number.isRequired,
-    content: PropTypes.arrayOf(PropTypes.string),
-    fileId: PropTypes.number.isRequired,
-  };
-
   shouldComponentUpdate(nextProps) {
     return nextProps.annotations !== this.props.annotations;
   }
@@ -30,6 +23,13 @@ class ReadOnlyEditorContainer extends Component {
   }
 }
 
+ReadOnlyEditorContainer.propTypes = {
+  annotations: PropTypes.objectOf(topicShape),
+  answerId: PropTypes.number.isRequired,
+  content: PropTypes.arrayOf(PropTypes.string),
+  fileId: PropTypes.number.isRequired,
+};
+
 function mapStateToProps(state, ownProps) {
   const { fileId } = ownProps;
 
@@ -38,7 +38,5 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-const ReadOnlyEditor = connect(
-  mapStateToProps
-)(ReadOnlyEditorContainer);
+const ReadOnlyEditor = connect(mapStateToProps)(ReadOnlyEditorContainer);
 export default ReadOnlyEditor;

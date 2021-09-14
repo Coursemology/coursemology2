@@ -4,7 +4,11 @@ import mapError from './mapError';
 
 export default createComponent(
   SelectField,
-  ({ input: { onChange, ...inputProps }, onChange: onChangeFromField, ...props }) => ({
+  ({
+    input: { onChange, ...inputProps },
+    onChange: onChangeFromField,
+    ...props
+  }) => ({
     floatingLabelFixed: true,
     ...mapError(props),
     ...inputProps,

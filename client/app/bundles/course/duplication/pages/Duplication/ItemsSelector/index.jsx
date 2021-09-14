@@ -29,18 +29,13 @@ const styles = {
 };
 
 class ItemsSelector extends React.Component {
-  static propTypes = {
-    currentPanel: PropTypes.string,
-    destinationCourse: courseShape,
-  }
-
   static panelComponentMap = {
     [itemSelectorPanels.ASSESSMENTS]: AssessmentsSelector,
     [itemSelectorPanels.SURVEYS]: SurveysSelector,
     [itemSelectorPanels.ACHIEVEMENTS]: AchievementsSelector,
     [itemSelectorPanels.MATERIALS]: MaterialsSelector,
     [itemSelectorPanels.VIDEOS]: VideosSelector,
-  }
+  };
 
   render() {
     const { currentPanel, destinationCourse } = this.props;
@@ -66,7 +61,12 @@ class ItemsSelector extends React.Component {
   }
 }
 
-export default connect(state => ({
+ItemsSelector.propTypes = {
+  currentPanel: PropTypes.string,
+  destinationCourse: courseShape,
+};
+
+export default connect((state) => ({
   currentPanel: state.duplication.currentItemSelectorPanel,
   destinationCourse: destinationCourseSelector(state),
 }))(ItemsSelector);

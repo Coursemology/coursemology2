@@ -1,6 +1,10 @@
 import CourseAPI from 'api/course';
 import history from 'lib/history';
-import { getCourseId, getAssessmentId, getScribingId } from 'lib/helpers/url-helpers';
+import {
+  getCourseId,
+  getAssessmentId,
+  getScribingId,
+} from 'lib/helpers/url-helpers';
 import { SubmissionError } from 'redux-form';
 import actionTypes from '../constants';
 
@@ -13,7 +17,8 @@ function redirectToAssessment() {
 export function fetchSkills() {
   return (dispatch) => {
     dispatch({ type: actionTypes.FETCH_SKILLS_REQUEST });
-    return CourseAPI.assessment.assessments.fetchSkills()
+    return CourseAPI.assessment.assessments
+      .fetchSkills()
       .then((response) => {
         dispatch({
           type: actionTypes.FETCH_SKILLS_SUCCESS,
@@ -32,7 +37,8 @@ export function fetchSkills() {
 export function fetchScribingQuestion() {
   return (dispatch) => {
     dispatch({ type: actionTypes.FETCH_SCRIBING_QUESTION_REQUEST });
-    return CourseAPI.assessment.question.scribing.fetch()
+    return CourseAPI.assessment.question.scribing
+      .fetch()
       .then((response) => {
         dispatch({
           scribingId: getScribingId(),
@@ -60,11 +66,13 @@ function processFields(fields) {
   if (fields.question_scribing.skill_ids.length < 1) {
     parsedFields.question_scribing.question_assessment.skill_ids = [''];
   } else {
-    parsedFields.question_scribing.question_assessment.skill_ids = parsedFields.question_scribing.skill_ids;
+    parsedFields.question_scribing.question_assessment.skill_ids =
+      parsedFields.question_scribing.skill_ids;
   }
 
   if (fields.question_scribing.attachment) {
-    parsedFields.question_scribing.file = fields.question_scribing.attachment.file;
+    parsedFields.question_scribing.file =
+      fields.question_scribing.attachment.file;
   } else {
     delete parsedFields.question_scribing.file;
   }
@@ -87,7 +95,8 @@ export function createScribingQuestion(fields) {
   return (dispatch) => {
     dispatch({ type: actionTypes.CREATE_SCRIBING_QUESTION_REQUEST });
     const parsedFields = processFields(fields);
-    CourseAPI.assessment.question.scribing.create(parsedFields)
+    CourseAPI.assessment.question.scribing
+      .create(parsedFields)
       .then(() => {
         redirectToAssessment();
         dispatch({
@@ -99,7 +108,8 @@ export function createScribingQuestion(fields) {
       .catch((error) => {
         dispatch({
           type: actionTypes.CREATE_SCRIBING_QUESTION_FAILURE,
-          saveErrors: error.response && error.response.data && error.response.data.errors,
+          saveErrors:
+            error.response && error.response.data && error.response.data.errors,
         });
       });
   };
@@ -109,7 +119,8 @@ export function updateScribingQuestion(questionId, fields) {
   return (dispatch) => {
     dispatch({ type: actionTypes.UPDATE_SCRIBING_QUESTION_REQUEST });
     const parsedFields = processFields(fields);
-    CourseAPI.assessment.question.scribing.update(questionId, parsedFields)
+    CourseAPI.assessment.question.scribing
+      .update(questionId, parsedFields)
       .then(() => {
         redirectToAssessment();
         dispatch({
@@ -120,7 +131,8 @@ export function updateScribingQuestion(questionId, fields) {
       .catch((error) => {
         dispatch({
           type: actionTypes.UPDATE_SCRIBING_QUESTION_FAILURE,
-          saveErrors: error.response && error.response.data && error.response.data.errors,
+          saveErrors:
+            error.response && error.response.data && error.response.data.errors,
         });
       });
   };

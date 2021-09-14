@@ -22,27 +22,15 @@ const translations = defineMessages({
 });
 
 class DeleteSectionButton extends React.PureComponent {
-  static propTypes = {
-    sectionId: PropTypes.number.isRequired,
-    disabled: PropTypes.bool,
-
-    dispatch: PropTypes.func.isRequired,
-  };
-
-  static defaultProps = {
-    disabled: false,
-  }
-
   deleteSectionHandler = () => {
     const { dispatch, sectionId } = this.props;
 
     const successMessage = <FormattedMessage {...translations.success} />;
     const failureMessage = <FormattedMessage {...translations.failure} />;
-    const handleDelete = () => dispatch(
-      deleteSurveySection(sectionId, successMessage, failureMessage)
-    );
+    const handleDelete = () =>
+      dispatch(deleteSurveySection(sectionId, successMessage, failureMessage));
     return dispatch(showDeleteConfirmation(handleDelete));
-  }
+  };
 
   render() {
     return (
@@ -54,5 +42,16 @@ class DeleteSectionButton extends React.PureComponent {
     );
   }
 }
+
+DeleteSectionButton.propTypes = {
+  sectionId: PropTypes.number.isRequired,
+  disabled: PropTypes.bool,
+
+  dispatch: PropTypes.func.isRequired,
+};
+
+DeleteSectionButton.defaultProps = {
+  disabled: false,
+};
 
 export default connect()(DeleteSectionButton);

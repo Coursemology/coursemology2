@@ -24,11 +24,7 @@ describe('<AssessmentEdit />', () => {
   it('renders the edit page', async () => {
     const editPage = mount(
       <ProviderWrapper store={store}>
-        <AssessmentEdit
-          id={id}
-          modeSwitching
-          initialValues={initialValues}
-        />
+        <AssessmentEdit id={id} modeSwitching initialValues={initialValues} />
       </ProviderWrapper>
     );
 
@@ -68,17 +64,17 @@ describe('<AssessmentEdit />', () => {
   it('renders the gamified fields by default', () => {
     const editPage = mount(
       <ProviderWrapper store={store}>
-        <AssessmentEdit
-          id={id}
-          modeSwitching
-          initialValues={initialValues}
-        />
+        <AssessmentEdit id={id} modeSwitching initialValues={initialValues} />
       </ProviderWrapper>
     );
 
-    expect(editPage.find('input[name="bonus_end_at"]').length).toBeGreaterThan(0);
+    expect(editPage.find('input[name="bonus_end_at"]').length).toBeGreaterThan(
+      0
+    );
     expect(editPage.find('input[name="base_exp"]').length).toBeGreaterThan(0);
-    expect(editPage.find('input[name="time_bonus_exp"]').length).toBeGreaterThan(0);
+    expect(
+      editPage.find('input[name="time_bonus_exp"]').length
+    ).toBeGreaterThan(0);
   });
 
   it('does not render the gamified fields', () => {
@@ -110,8 +106,12 @@ describe('<AssessmentEdit />', () => {
       </ProviderWrapper>
     );
 
-    expect(editPage.find('input[name="has_personal_times"]').length).toBeGreaterThan(0);
-    expect(editPage.find('input[name="affects_personal_times"]').length).toBeGreaterThan(0);
+    expect(
+      editPage.find('input[name="has_personal_times"]').length
+    ).toBeGreaterThan(0);
+    expect(
+      editPage.find('input[name="affects_personal_times"]').length
+    ).toBeGreaterThan(0);
   });
 
   it('does not render the has/affects personal time fields', () => {
@@ -127,6 +127,8 @@ describe('<AssessmentEdit />', () => {
     );
 
     expect(editPage.find('input[name="has_personal_times"]')).toHaveLength(0);
-    expect(editPage.find('input[name="affects_personal_times"]')).toHaveLength(0);
+    expect(editPage.find('input[name="affects_personal_times"]')).toHaveLength(
+      0
+    );
   });
 });
