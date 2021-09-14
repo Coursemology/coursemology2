@@ -10,8 +10,9 @@
 
   = f.button :submit, t('.submit')
 
-  hr
-  span
+  // Note: Facebook login feature is currently disabled.
+  // hr
+  // span
     - if current_user.identities.facebook.empty?
       div.facebook
         = link_to user_facebook_omniauth_authorize_path do

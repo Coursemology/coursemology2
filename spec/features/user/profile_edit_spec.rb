@@ -32,7 +32,8 @@ RSpec.feature 'User: Profile' do
         expect(user.reload.time_zone).to eq(time_zone)
       end
 
-      scenario 'I can link my account to facebook' do
+      # Note: Facebook login feature is currently disabled.
+      xscenario 'I can link my account to facebook' do
         facebook_link = find_link(nil, href: user_facebook_omniauth_authorize_path)
         expect { facebook_link.click }.to change { user.identities.count }.by(1)
         expect(page).to have_selector('div',
