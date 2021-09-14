@@ -15,5 +15,6 @@ module Course::ConditionsAbilityComponent
     can :manage, Course::Condition::Achievement, condition: course_teaching_staff_hash
     can :manage, Course::Condition::Assessment, condition: course_teaching_staff_hash
     can :manage, Course::Condition::Level, condition: course_teaching_staff_hash
+    can :manage, Course::Condition::Survey, condition: course_teaching_staff_hash
   end
 end
