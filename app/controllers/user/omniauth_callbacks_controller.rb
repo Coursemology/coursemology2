@@ -12,7 +12,7 @@ class User::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
   def link_user_with_facebook
     auth = request.env['omniauth.auth']
-    if current_user&.persisted? && current_user.link_with_omniauth!(auth)
+    if current_user&.persisted? && current_user&.link_with_omniauth!(auth)
       redirect_to edit_user_profile_path, success: t('user.omniauth_callbacks.facebook.success')
     else
       redirect_to edit_user_profile_path, danger: t('user.omniauth_callbacks.facebook.failed')
@@ -30,8 +30,10 @@ class User::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
   def facebook_sign_in_success_redirect(user)
     sign_in_and_redirect(user, event: :authentication)
-    set_flash_message(:notice, :success,
-                      kind: t('user.omniauth_callbacks.facebook.kind')) if is_navigational_format?
+    if is_navigational_format?
+      set_flash_message(:notice, :success,
+                        kind: t('user.omniauth_callbacks.facebook.kind'))
+    end
   end
 
   def facebook_sign_in_fail_redirect(user)

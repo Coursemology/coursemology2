@@ -58,6 +58,7 @@ class ActiveJob::QueueAdapters::BackgroundThreadAdapter < ActiveJob::QueueAdapte
   def wait_for_jobs
     with_thread_pool do
       return if @pending_jobs.empty? && @running_jobs == 0
+
       @finish_jobs_condition.wait(@thread_pool_mutex)
     end
   end

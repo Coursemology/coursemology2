@@ -153,11 +153,11 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
           solution_array.delete_if { |solution| solution.equal? first_solution }
         end
 
-        unless lifted_word_status.include?(first_solution_point)
-          # keyword (Solution) does NOT belong to a "lifted" Point
-          keyword_status[index] = first_solution
-          break
-        end
+        next if lifted_word_status.include?(first_solution_point)
+
+        # keyword (Solution) does NOT belong to a "lifted" Point
+        keyword_status[index] = first_solution
+        break
       end
 
       keyword_status
@@ -307,6 +307,7 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
     end
 
     return if explanations.empty?
+
     explanations.push(
       I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.horizontal_break_html'),
       I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.line_break_html')
@@ -419,6 +420,7 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
     explanations = explanations_for_correct_paraphrase_by_points(hash_keywords, hash_point_serial)
 
     return if explanations.empty?
+
     explanations.push(
       I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.horizontal_break_html'),
       I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.line_break_html')

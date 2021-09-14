@@ -31,6 +31,7 @@ class Course::Settings::PanComponent < SimpleDelegator
   def update_setting_in_component(function_name, attributes)
     settings_interface = settings_interfaces_hash[attributes['component']]
     return false unless settings_interface
+
     settings_interface.send(function_name, attributes)
   end
 

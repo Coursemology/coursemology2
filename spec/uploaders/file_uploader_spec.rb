@@ -20,6 +20,6 @@ RSpec.describe FileUploader, type: :model do
   end
 
   it 'sets the correct permission' do
-    expect(@uploader).to have_permissions(0644)
+    expect(@uploader).to have_permissions(0o644)
   end
 end

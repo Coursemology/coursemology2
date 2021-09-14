@@ -69,7 +69,8 @@ class Course::UserInvitation < ApplicationRecord
   # Scope excludes the own invitation object.
   def no_existing_unconfirmed_invitation
     return unless Course::UserInvitation.where(course_id: course_id, email: email).
-                    where.not(id: id).unconfirmed.exists?
+                  where.not(id: id).unconfirmed.exists?
+
     errors.add(:base, :existing_invitation)
   end
 end

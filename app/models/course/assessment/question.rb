@@ -45,6 +45,7 @@ class Course::Assessment::Question < ApplicationRecord
   # @raise [NotImplementedError] The question does not have a suitable auto grader for use.
   def auto_grader
     raise NotImplementedError unless auto_gradable? && actable.self_respond_to?(:auto_grader)
+
     actable.auto_grader || (raise NotImplementedError)
   end
 
@@ -63,6 +64,7 @@ class Course::Assessment::Question < ApplicationRecord
     if actable&.self_respond_to?(:attempt)
       return actable.attempt(submission, last_attempt ? last_attempt.actable : nil)
     end
+
     raise NotImplementedError, 'Questions must implement the #attempt method for submissions.'
   end
 

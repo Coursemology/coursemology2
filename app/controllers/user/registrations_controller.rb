@@ -18,9 +18,7 @@ class User::RegistrationsController < Devise::RegistrationsController
   def create
     User.transaction do
       super
-      if @invitation && !@invitation.confirmed? && resource.persisted?
-        @invitation.confirm!(confirmer: resource)
-      end
+      @invitation.confirm!(confirmer: resource) if @invitation && !@invitation.confirmed? && resource.persisted?
     end
   end
 

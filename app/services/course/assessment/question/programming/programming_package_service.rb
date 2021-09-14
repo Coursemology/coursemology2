@@ -51,5 +51,4 @@ class Course::Assessment::Question::Programming::ProgrammingPackageService
         raise NotImplementedError
       end
   end
-
 end

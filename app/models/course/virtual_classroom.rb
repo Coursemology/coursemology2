@@ -19,6 +19,7 @@ class Course::VirtualClassroom < ApplicationRecord
 
   def duration
     return nil unless start_at && end_at
+
     @duration ||= ((end_at - start_at) / 60).to_i
   end
 

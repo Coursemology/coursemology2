@@ -17,6 +17,7 @@ class Course::Duplication::BaseService
     @options = options
     @duplicator = initialize_duplicator(options)
     return if options[:time_shift] && options[:mode]
+
     raise KeyError, 'Options must include both time_shift and mode'
   end
 

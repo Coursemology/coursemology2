@@ -11,6 +11,7 @@ class ConvertAutogradedTextResponseAnswersToPlaintext < ActiveRecord::Migration[
       find_each do |ans|
       answer_text = ans.actable.answer_text
       next if answer_text.empty?
+
       sanitized_answer = Sanitize.fragment(answer_text).strip.encode(universal_newline: true)
       ans.actable.update_column(:answer_text, sanitized_answer)
     end

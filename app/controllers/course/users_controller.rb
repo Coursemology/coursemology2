@@ -24,6 +24,7 @@ class Course::UsersController < Course::ComponentController
                         includes(:user).order_alphabetically
     else
       return if super
+
       @course_user ||= course_users.includes(:user).find(params[:id])
     end
   end

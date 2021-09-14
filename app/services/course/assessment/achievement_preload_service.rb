@@ -17,6 +17,7 @@ class Course::Assessment::AchievementPreloadService
   def achievement_conditional_for(assessment)
     achievement_ids = assessment_achievement_hash[assessment.id]
     return [] unless achievement_ids
+
     achievements.select { |ach| achievement_ids.include?(ach.id) }
   end
 

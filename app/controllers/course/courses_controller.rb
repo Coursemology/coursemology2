@@ -45,6 +45,7 @@ class Course::CoursesController < Course::Controller
 
   def load_todos
     return unless current_course_user&.student?
+
     todos = Course::LessonPlan::Todo.pending_for(current_course_user).
             includes(:user, item: :course).order(updated_at: :desc)
     # TODO: Fix n+1 query for #can_user_start?

@@ -20,7 +20,6 @@ class ChangeMilestonesToActsAsLessonPlanItem < ActiveRecord::Migration[5.1]
     remove_column :course_lesson_plan_milestones, :updater_id
     remove_column :course_lesson_plan_milestones, :created_at
     remove_column :course_lesson_plan_milestones, :updated_at
-
   end
 
   def down

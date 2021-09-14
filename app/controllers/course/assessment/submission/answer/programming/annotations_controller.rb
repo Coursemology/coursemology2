@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class Course::Assessment::Submission::Answer::Programming::AnnotationsController < \
   Course::Assessment::Submission::Answer::Programming::Controller
-
   load_resource :actable, class: Course::Assessment::Answer::Programming.name,
                           singleton: true, through: :answer
   before_action :set_programming_answer
@@ -19,6 +18,7 @@ class Course::Assessment::Submission::Answer::Programming::AnnotationsController
 
       raise ActiveRecord::Rollback unless @post.save && create_topic_subscription && update_topic_pending_status
       raise ActiveRecord::Rollback unless @annotation.save
+
       true
     end
 
@@ -70,6 +70,7 @@ class Course::Assessment::Submission::Answer::Programming::AnnotationsController
 
   def send_created_notification(post)
     return unless current_course_user
+
     post.topic.actable.notify(post)
   end
 

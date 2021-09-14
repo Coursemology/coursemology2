@@ -23,6 +23,7 @@ class User < ApplicationRecord
     def system
       @system ||= find(User::SYSTEM_USER_ID)
       raise 'No system user. Did you run rake db:seed?' unless @system
+
       @system
     end
 
@@ -34,6 +35,7 @@ class User < ApplicationRecord
     def deleted
       @deleted ||= find(User::DELETED_USER_ID)
       raise 'No deleted user. Did you run rake db:seed?' unless @deleted
+
       @deleted
     end
   end

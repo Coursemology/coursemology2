@@ -40,6 +40,7 @@ class Notifier::Base
   # @param [Course::Notification] notification The target notification
   def notify(recipient, notification)
     return unless notification.email?
+
     case recipient
     when Course
       email_course(notification)

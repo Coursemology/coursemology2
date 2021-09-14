@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::Programming::Java::JavaPackageService < \
   Course::Assessment::Question::Programming::LanguagePackageService
-
   def initialize(params)
     @test_params = test_params params if params.present?
   end
@@ -25,6 +24,7 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
 
   def generate_package(old_attachment)
     return nil if @test_params.blank?
+
     @tmp_dir = Dir.mktmpdir
     @old_meta = old_attachment.present? ? extract_meta(old_attachment, nil) : nil
     data_files_to_keep = old_attachment.present? ? find_files_to_keep('data_files', old_attachment) : []
@@ -59,6 +59,7 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
         @old_meta = meta.present? ? JSON.parse(meta) : nil
       ensure
         next unless package
+
         temporary_file.close
       end
     end
@@ -84,6 +85,7 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
         next if files_to_delete.try(:include?, (file['filename']))
         # new files overrides old ones
         next if new_filenames.include?(file['filename'])
+
         files_to_keep.append(File.new(File.join(resolve_folder_path(@tmp_dir, file_type), file['filename'])))
       end
     end
@@ -112,6 +114,7 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
         return extract_from_package(package, file_type, new_filenames, @test_params[files_to_delete])
       ensure
         next unless package
+
         temporary_file.close
       end
     end
@@ -177,6 +180,7 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
 
       @test_params[:data_files].try(:each) do |file|
         next if file.nil?
+
         zip.add(file.original_filename, file.tempfile.path)
       end
 
@@ -209,6 +213,7 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
     zip.mkdir('submission')
     @test_params[:submission_files].try(:each) do |file|
       next if file.nil?
+
       zip.add('submission/' + file.original_filename, file.tempfile.path)
     end
 
@@ -219,6 +224,7 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
     zip.mkdir('solution')
     @test_params[:solution_files].try(:each) do |file|
       next if file.nil?
+
       zip.add('solution/' + file.original_filename, file.tempfile.path)
     end
 
@@ -232,7 +238,7 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
     tests[test_type]&.each&.with_index(1) do |test, index|
       # String types should be displayed with quotes, other types will be converted to string
       # with the str method.
-      expected = string?(test[:expected]) ? test[:expected].inspect : "#{test[:expected]}"
+      expected = string?(test[:expected]) ? test[:expected].inspect : (test[:expected]).to_s
       hint = test[:hint].blank? ? String(nil) : "result.setAttribute(\"hint\", #{test[:hint].inspect});"
 
       test_fn = <<-Java

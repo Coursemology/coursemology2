@@ -95,16 +95,19 @@ class Course::Condition::Assessment < ApplicationRecord
 
   def validate_references_self
     return unless assessment == conditional
+
     errors.add(:assessment, :references_self)
   end
 
   def validate_unique_dependency
     return unless required_assessments_for(conditional).include?(assessment)
+
     errors.add(:assessment, :unique_dependency)
   end
 
   def validate_acyclic_dependency
     return unless cyclic?
+
     errors.add(:assessment, :cyclic_dependency)
   end
 

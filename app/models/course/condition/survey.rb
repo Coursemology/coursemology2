@@ -29,6 +29,7 @@ class Course::Condition::Survey < ApplicationRecord
   def satisfied_by?(course_user)
     # Unpublished surveys are considered not satisfied.
     return false unless survey.published?
+
     submitted_response_by_user(course_user)
   end
 
@@ -39,6 +40,7 @@ class Course::Condition::Survey < ApplicationRecord
 
   def self.on_dependent_status_change(response)
     return unless response.saved_changes.key?(:submitted_at)
+
     response.execute_after_commit { evaluate_conditional_for(response.course_user) }
   end
 
@@ -68,6 +70,7 @@ class Course::Condition::Survey < ApplicationRecord
 
   def validate_unique_dependency
     return unless required_surveys_for(conditional).include?(survey)
+
     errors.add(:survey, :unique_dependency)
   end
 

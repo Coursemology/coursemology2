@@ -104,7 +104,7 @@ FactoryBot.define do
 
     # Ensure that creator of submission is the same as creator of experience_points_record
     after(:build) do |submission, evaluator|
-      user = evaluator.creator ? evaluator.creator : submission.creator
+      user = evaluator.creator || submission.creator
       submission.experience_points_record.creator = user
     end
   end
