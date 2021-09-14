@@ -12,4 +12,3 @@ json.condition_attributes do
     json.partial! "#{actable.to_partial_path}.json", course: current_course, condition: actable, conditional: conditional
   end
 end
-

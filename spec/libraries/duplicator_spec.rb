@@ -46,8 +46,7 @@ RSpec.describe Duplicator, type: :model do
 
     # ComplexObject has children
     class ComplexObject
-      attr_reader :id
-      attr_reader :children
+      attr_reader :id, :children
 
       def initialize(id, children)
         @id = id

@@ -24,9 +24,9 @@ module Course::Survey::ReorderingConcern
 
   def ordered_section_ids
     @section_ids ||= begin
-                       integer_type = ActiveModel::Type::Integer.new
-                       reorder_params.map { |id| integer_type.cast(id) }
-                     end
+      integer_type = ActiveModel::Type::Integer.new
+      reorder_params.map { |id| integer_type.cast(id) }
+    end
   end
 
   def reorder_params

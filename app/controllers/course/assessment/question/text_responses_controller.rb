@@ -71,13 +71,13 @@ class Course::Assessment::Question::TextResponsesController < Course::Assessment
           [
             :_destroy, :id, :maximum_group_grade,
             points_attributes:
+           [
+             :_destroy, :id, :point_grade,
+             solutions_attributes:
             [
-              :_destroy, :id, :point_grade,
-              solutions_attributes:
-              [
-                :_destroy, :id, :solution_type, :information, solution: []
-              ]
+              :_destroy, :id, :solution_type, :information, solution: []
             ]
+           ]
           ]
         ]
       )

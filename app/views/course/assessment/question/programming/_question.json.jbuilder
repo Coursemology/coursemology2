@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 json.question do
   json.(@programming_question, :id, :title, :description, :staff_only_comments, :maximum_grade,
-                               :language_id, :memory_limit, :time_limit)
+        :language_id, :memory_limit, :time_limit)
   json.languages Coursemology::Polyglot::Language.all.order(:name) do |lang|
     json.(lang, :id, :name)
     json.editor_mode lang.ace_mode
@@ -12,8 +12,11 @@ json.question do
   end
 
   has_submissions = @programming_question.answers.without_attempting_state.count > 0
-  json.autograded @programming_question.persisted? ?
-    @programming_question.attachment.present? : @assessment.autograded?
+  json.autograded if @programming_question.persisted?
+  @programming_question.attachment.present?
+else
+  @assessment.autograded?
+end
   json.has_auto_gradings @programming_question.auto_gradable? && has_submissions
   json.has_submissions has_submissions
   json.display_autograded_toggle display_autograded_toggle?

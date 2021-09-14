@@ -175,7 +175,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
     end
 
     context 'when the assessment does not show mcq answer' do
-      let(:assessment) {create(:assessment, :not_show_mcq_answer, :with_mrq_question, course: course)}
+      let(:assessment) { create(:assessment, :not_show_mcq_answer, :with_mrq_question, course: course) }
       let!(:current_answer) { submission.answers.first }
 
       describe '#submit_answer' do

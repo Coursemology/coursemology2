@@ -12,8 +12,11 @@ json.submission do
   end
 
   # Show submission as submitted to students if grading is not published yet
-  apparent_workflow_state = cannot?(:grade, submission) && submission.graded? ?
-    'submitted' : submission.workflow_state
+  apparent_workflow_state = if cannot?(:grade, submission) && submission.graded?
+                              'submitted'
+                            else
+                              submission.workflow_state
+                            end
 
   json.workflowState apparent_workflow_state
   json.submitter display_course_user(submission.course_user)
@@ -38,7 +41,7 @@ json.submission do
   json.showStdoutAndStderr current_course.show_stdout_and_stderr
 
   json.late end_at && submission.submitted_at &&
-    submission.submitted_at > end_at
+            submission.submitted_at > end_at
 
   json.basePoints assessment.base_exp
   json.bonusPoints assessment.time_bonus_exp

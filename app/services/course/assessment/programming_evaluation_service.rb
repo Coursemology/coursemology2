@@ -43,8 +43,7 @@ class Course::Assessment::ProgrammingEvaluationService
 
   # Represents an error while evaluating the package.
   class Error < StandardError
-    attr_reader :stdout
-    attr_reader :stderr
+    attr_reader :stdout, :stderr
 
     def initialize(message = self.class.name, stdout = nil, stderr = nil)
       super(message)

@@ -3,7 +3,7 @@ class FilenameValidator < ActiveModel::Validator
   def validate(record)
     errors = record.errors[:name]
     # \ : * ? " < > | are not allowed
-    if record.name =~ /[\/\\:\*\?"<>\|]/
+    if record.name =~ /[\/\\:*?"<>|]/
       errors <<
         I18n.t('activerecord.errors.messages.filename_validator.invalid_characters',
                characters: '\ : * ? " < > |')

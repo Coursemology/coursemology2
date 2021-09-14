@@ -27,7 +27,7 @@ module Course::Assessment::QuestionBundleAssignmentConcern
     attr_accessor :assignments, :group_bundles
 
     def initialize(students, group_bundles)
-      @assignments = students.map { |x| [x, { nil => [] }] }.to_h
+      @assignments = students.map { |x| [x, nil => []] }.to_h
       @group_bundles = group_bundles
       @group_bundles_lookup = group_bundles.flat_map do |group, bundles|
         bundles.map { |bundle| [bundle, group] }
