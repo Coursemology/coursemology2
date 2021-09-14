@@ -85,7 +85,7 @@ RSpec.describe Course::Assessment::Question::MultipleResponse do
           expected_ordered_options = subject.options.shuffle(random: Random.new(seed))
 
           expect(subject.ordered_options(seed, course_mrq_randomized).map(&:option)).to(
-              eq expected_ordered_options.map(&:option)
+            eq expected_ordered_options.map(&:option)
           )
         end
       end

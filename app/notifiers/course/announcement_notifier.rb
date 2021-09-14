@@ -5,9 +5,11 @@ class Course::AnnouncementNotifier < Notifier::Base
     email_enabled = Course::Settings::AnnouncementsComponent.
                     email_enabled?(announcement.course, :new_announcement)
 
-    create_activity(actor: user, object: announcement, event: :new).
-      notify(announcement.course, :email).
-      save if email_enabled
+    if email_enabled
+      create_activity(actor: user, object: announcement, event: :new).
+        notify(announcement.course, :email).
+        save
+    end
   end
 
   private

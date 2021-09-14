@@ -79,8 +79,10 @@ module Extensions
 
       expected_module_name = module_name(path)
       class_to_extend = expected_module_name.constantize
-      warn "Class does not match: expected #{module_name(path)}, got #{class_to_extend}. Maybe "\
-        "#{module_name(path)} has not been defined?" if expected_module_name != class_to_extend.name
+      if expected_module_name != class_to_extend.name
+        warn "Class does not match: expected #{module_name(path)}, got #{class_to_extend}. Maybe "\
+          "#{module_name(path)} has not been defined?"
+      end
 
       module_to_include = "#{module_.name}::#{class_to_extend}".constantize
       extend_class(class_to_extend, module_to_include)

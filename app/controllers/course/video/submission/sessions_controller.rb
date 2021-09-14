@@ -12,7 +12,7 @@ class Course::Video::Submission::SessionsController < Course::Video::Submission:
       @session.update!(last_video_time: update_params[:last_video_time])
     else
       @session.update!(session_end: Time.zone.now,
-                                  last_video_time: update_params[:last_video_time])
+                       last_video_time: update_params[:last_video_time])
     end
     @session.merge_in_events!(update_params[:events])
 
@@ -28,9 +28,9 @@ class Course::Video::Submission::SessionsController < Course::Video::Submission:
     @video.statistic.update(cached: false) if @video.statistic&.cached
 
     head :no_content
-  rescue ArgumentError => _
+  rescue ArgumentError => _e
     head :bad_request
-  rescue ActiveRecord::RecordInvalid => _
+  rescue ActiveRecord::RecordInvalid => _e
     head :bad_request
   end
 

@@ -18,6 +18,7 @@ RSpec.describe Course::Assessment::Question::MultipleResponsesController do
     before do
       sign_in(user)
       return unless multiple_response
+
       controller.instance_variable_set(:@multiple_response_question, multiple_response)
     end
 

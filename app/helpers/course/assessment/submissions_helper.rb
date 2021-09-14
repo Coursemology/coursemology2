@@ -28,6 +28,7 @@ module Course::Assessment::SubmissionsHelper
   # @return [Integer] The required count
   def pending_submission_count_for(student_ids)
     return 0 if student_ids.blank?
+
     Course::Assessment::Submission.
       from_course(current_course).by_users(student_ids).pending_for_grading.count
   end

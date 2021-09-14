@@ -71,6 +71,7 @@ class Course::Discussion::Topic < ApplicationRecord
     errors = e.record.errors
     return true if e.is_a?(ActiveRecord::RecordInvalid) &&
                    !errors[:topic_id].empty? && !errors[:user_id].empty?
+
     raise e
   end
 

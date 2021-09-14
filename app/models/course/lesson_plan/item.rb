@@ -241,12 +241,14 @@ class Course::LessonPlan::Item < ApplicationRecord
                    where(course_reference_timelines: { default: true }).
                    count
     return if num_defaults <= 1 # Could be 0 if item is new
+
     errors.add(:reference_times, :must_have_at_most_one_default)
   end
 
   # User must set bonus_end_at if there's bonus exp
   def validate_presence_of_bonus_end_at
     return unless time_bonus_exp && time_bonus_exp > 0 && bonus_end_at.blank?
+
     errors.add(:bonus_end_at, :required)
   end
 end

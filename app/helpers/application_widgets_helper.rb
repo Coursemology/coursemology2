@@ -183,6 +183,7 @@ module ApplicationWidgetsHelper
   def deduce_resource_button_resource(resource)
     return resource unless resource.is_a?(Array)
     return resource[-2] if resource.last.is_a?(Hash)
+
     resource.last
   end
 

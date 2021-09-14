@@ -100,7 +100,7 @@ class Attachment < ApplicationRecord
     file.write(contents)
     file.seek(0)
     file
-  rescue
+  rescue StandardError
     file&.close!
     raise
   end

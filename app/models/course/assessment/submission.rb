@@ -148,9 +148,7 @@ class Course::Assessment::Submission < ApplicationRecord
     if filter_params[:category_id].present?
       result = result.from_category(Course::Assessment::Category.find(filter_params[:category_id]))
     end
-    if filter_params[:assessment_id].present?
-      result = result.where(assessment_id: filter_params[:assessment_id])
-    end
+    result = result.where(assessment_id: filter_params[:assessment_id]) if filter_params[:assessment_id].present?
     result = result.from_group(filter_params[:group_id]) if filter_params[:group_id].present?
     result = result.by_user(filter_params[:user_id]) if filter_params[:user_id].present?
     result
@@ -253,6 +251,7 @@ class Course::Assessment::Submission < ApplicationRecord
   # experience_points_record.
   def validate_consistent_user
     return if course_user && course_user.user == creator
+
     errors.add(:experience_points_record, :inconsistent_user)
   end
 
@@ -261,6 +260,7 @@ class Course::Assessment::Submission < ApplicationRecord
     existing = Course::Assessment::Submission.find_by(assessment_id: assessment.id,
                                                       creator_id: creator.id)
     return unless existing
+
     errors.clear
     errors[:base] << I18n.t('activerecord.errors.models.course/assessment/'\
                             'submission.submission_already_exists')
@@ -269,6 +269,7 @@ class Course::Assessment::Submission < ApplicationRecord
   # Validate that the awarder and awarded_at is present for published submissions
   def validate_awarded_attributes
     return if awarded_at && awarder
+
     errors.add(:experience_points_record, :absent_award_attributes)
   end
 end

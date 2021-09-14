@@ -9,13 +9,16 @@ class Course::VirtualClassroom::BraincertApiService
   def handle_access_link(user, is_instructor)
     msg = virtual_classroom_inactive?
     return [nil, msg] if msg
+
     _, error = create_classroom
     return [nil, error] if error
+
     generate_classroom_link(user, is_instructor)
   end
 
   def fetch_recorded_videos
     return nil unless @virtual_classroom.classroom_id && @virtual_classroom.ended?
+
     response = call_braincert_api '/v2/getclassrecording', class_id: @virtual_classroom.classroom_id
     response_body = [JSON.parse(response.body)].flatten.select do |h|
       h['id'].present? || h['status'] == 'error'
@@ -48,10 +51,11 @@ class Course::VirtualClassroom::BraincertApiService
   # @return [Array] of format [link, errors]
   def generate_classroom_link(user, is_instructor)
     response = call_braincert_api('/v2/getclasslaunch',
-                             generate_classroom_link_params(user, is_instructor))
+                                  generate_classroom_link_params(user, is_instructor))
     response_body = JSON.parse(response.body)
     error = response_body['error']
     return [nil, I18n.t(:'course.virtual_classrooms.error_generating_link', error: error)] if error
+
     access_link = response_body['encryptedlaunchurl']
     save_instructor_info(access_link, user) if is_instructor
     [access_link, nil]
@@ -77,6 +81,7 @@ class Course::VirtualClassroom::BraincertApiService
 
   def virtual_classroom_inactive?
     return if @virtual_classroom.currently_active?
+
     diff = @virtual_classroom.start_at - Time.zone.now
     if diff > 0
       desc = ActionController::Base.helpers.distance_of_time_in_words(
@@ -100,6 +105,7 @@ class Course::VirtualClassroom::BraincertApiService
 
   def create_classroom
     return [@virtual_classroom.classroom_id, nil] if @virtual_classroom.classroom_id
+
     response = call_braincert_api '/v2/schedule', create_classroom_params
     response_body = JSON.parse(response.body)
     error = response_body['error']

@@ -96,6 +96,7 @@ class Course::Assessment::Answer < ApplicationRecord
   # @raise [NotImplementedError] answer#reset_answer was not implemented.
   def reset_answer
     raise NotImplementedError unless actable.self_respond_to?(:reset_answer)
+
     actable.reset_answer
   end
 
@@ -136,6 +137,7 @@ class Course::Assessment::Answer < ApplicationRecord
 
   def validate_assessment_state
     return unless !submission.attempting? && !submission.unsubmitting?
+
     errors.add(:submission, :attemptable_state)
   end
 
@@ -160,6 +162,7 @@ class Course::Assessment::Answer < ApplicationRecord
     end
   rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique => e
     raise e if e.is_a?(ActiveRecord::RecordInvalid) && e.record.errors[:answer_id].empty?
+
     association(:auto_grading).reload
     auto_grading
   end

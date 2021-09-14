@@ -37,7 +37,6 @@ RSpec.describe Course::Video::Topic do
              ])
     end
 
-
     describe '.from_user' do
       it 'only returns discussion_topic ids of the given user' do
         topic1_id = topic1.acting_as.id

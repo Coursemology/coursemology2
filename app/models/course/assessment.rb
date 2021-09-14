@@ -242,6 +242,7 @@ class Course::Assessment < ApplicationRecord
   def assign_folder_attributes
     # Folder attributes are handled during duplication by folder duplication code
     return if duplicating?
+
     folder.assign_attributes(name: title, course: course, parent: tab.category.folder,
                              start_at: start_at)
   end
@@ -253,6 +254,7 @@ class Course::Assessment < ApplicationRecord
 
   def tab_in_same_course
     return unless tab_id_changed?
+
     errors.add(:tab, :not_in_same_course) unless tab.category.course == course
   end
 
@@ -269,6 +271,7 @@ class Course::Assessment < ApplicationRecord
   # test case booleans has been committed
   def grade_with_new_test_cases
     return unless regrade_programming_answers?
+
     # Regrade all published submissions' programming answers and update exp points awarded
     submissions.select(&:published?).each do |submission|
       submission.resubmit_programming!

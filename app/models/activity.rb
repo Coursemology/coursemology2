@@ -48,12 +48,14 @@ class Activity < ApplicationRecord
   def notify_course(course, type)
     raise ArgumentError, 'Invalid course notification type' unless COURSE_NOTIFICATION_TYPES.
                                                                    include?(type)
+
     course_notifications.build(course: course, notification_type: type)
   end
 
   def notify_user(user, type)
     raise ArgumentError, 'Invalid user notification type' unless USER_NOTIFICATION_TYPES.
                                                                  include?(type)
+
     user_notifications.build(user: user, notification_type: type)
   end
 end

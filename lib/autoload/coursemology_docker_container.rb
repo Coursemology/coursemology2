@@ -224,6 +224,7 @@ class CoursemologyDockerContainer < Docker::Container
 
     while (block = parse_docker_stream_read_block(stream))
       next if block.stream >= result.length
+
       result[block.stream] << block.bytes
     end
 
@@ -240,7 +241,7 @@ class CoursemologyDockerContainer < Docker::Container
   def parse_docker_stream_read_block(stream)
     header = stream.read(8)
     return nil if header.blank?
-    fail IOError unless header.length == 8
+    raise IOError unless header.length == 8
 
     console_stream, _, _, _, length = header.unpack('C4N')
     DockerAttachBlock.new(console_stream, length, stream.read(length))

@@ -27,6 +27,7 @@ module Componentize
   # @param [Class] host The host to convert into a host.
   def self.become_component_host(host)
     return if host.include?(ComponentHost)
+
     host.const_set(:Component, base_component_for_host(host))
 
     host.class_eval do
@@ -77,6 +78,7 @@ module Componentize
       def eager_load_components(in_path)
         if in_path.is_a?(String)
           return unless Dir.exist?(in_path)
+
           in_path = Dir.open(in_path)
         end
 

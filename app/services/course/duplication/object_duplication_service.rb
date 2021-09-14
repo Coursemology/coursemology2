@@ -47,6 +47,7 @@ class Course::Duplication::ObjectDuplicationService < Course::Duplication::BaseS
       save_success = duplicated.respond_to?(:save) ? duplicated.save : duplicated.all?(&:save)
       after_save_success = save_success && after_save(objects, duplicated)
       raise ActiveRecord::Rollback unless after_save_success
+
       duplicated
     end
   end

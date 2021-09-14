@@ -60,8 +60,10 @@ class Course::Assessment::Category < ApplicationRecord
   private
 
   def build_initial_tab
-    tabs.build(title: Course::Assessment::Tab.human_attribute_name('title.default'),
-               weight: 0, category: self) if tabs.empty?
+    if tabs.empty?
+      tabs.build(title: Course::Assessment::Tab.human_attribute_name('title.default'),
+                 weight: 0, category: self)
+    end
   end
 
   def set_folder_start_at
@@ -74,6 +76,7 @@ class Course::Assessment::Category < ApplicationRecord
 
   def validate_before_destroy
     return true if course.destroying? || other_categories_remaining?
+
     errors.add(:base, :deletion)
     throw(:abort)
   end

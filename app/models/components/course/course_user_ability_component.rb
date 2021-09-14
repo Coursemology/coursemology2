@@ -3,9 +3,7 @@ module Course::CourseUserAbilityComponent
   include AbilityHost::Component
 
   def define_permissions
-    if user
-      allow_course_users_show_coursemates
-    end
+    allow_course_users_show_coursemates if user
 
     super
   end

@@ -119,9 +119,7 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
   #   any reports.
   def build_test_case_records(question, auto_grading, test_reports)
     test_reports.values.each do |test_report|
-      if test_report.present?
-        build_test_case_records_from_report(question, auto_grading, test_report)
-      end
+      build_test_case_records_from_report(question, auto_grading, test_report) if test_report.present?
     end
 
     # Build failed test case records for test cases which were not found in any reports.

@@ -22,6 +22,7 @@ class Course::Assessment::Question::ProgrammingImportService
         import_from_package(package)
       ensure
         next unless package
+
         temporary_file.close
         package.close
       end
@@ -52,6 +53,7 @@ class Course::Assessment::Question::ProgrammingImportService
     evaluation_result = evaluate_package(package)
 
     raise evaluation_result if evaluation_result.error?
+
     save!(template_files, evaluation_result)
   end
 

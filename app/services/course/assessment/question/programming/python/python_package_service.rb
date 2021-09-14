@@ -45,6 +45,7 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
         @old_meta = meta.present? ? JSON.parse(meta) : nil
       ensure
         next unless package
+
         temporary_file.close
       end
     end
@@ -71,6 +72,7 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
         next if data_files_to_delete.try(:include?, (file['filename']))
         # new files overrides old ones
         next if new_data_filenames.include?(file['filename'])
+
         data_files_to_keep.append(File.new(File.join(@tmp_dir, file['filename'])))
       end
     end
@@ -87,6 +89,7 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
         return extract_from_package(package, new_filenames, @test_params[:data_files_to_delete])
       ensure
         next unless package
+
         temporary_file.close
       end
     end
@@ -142,6 +145,7 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
     Zip::File.open(tmp.path) do |zip|
       @test_params[:data_files]&.each do |file|
         next if file.nil?
+
         zip.add(file.original_filename, file.tempfile.path)
       end
 
@@ -157,7 +161,7 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
   #
   # @param [String] filename The filename of the file to get the path of
   def get_file_path(filename)
-    File.join(File.expand_path(File.dirname(__FILE__)), filename).freeze
+    File.join(__dir__, filename).freeze
   end
 
   def zip_test_files(test_type, zip) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength

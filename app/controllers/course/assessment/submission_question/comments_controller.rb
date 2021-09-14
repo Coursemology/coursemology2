@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class Course::Assessment::SubmissionQuestion::CommentsController < Course::Assessment::SubmissionQuestion::Controller
-
   include Course::Discussion::PostsConcern
 
   def create
@@ -40,6 +39,7 @@ class Course::Assessment::SubmissionQuestion::CommentsController < Course::Asses
 
   def send_created_notification(post)
     return unless current_course_user
+
     topic_actable = post.topic.actable
     topic_actable.notify(post) if topic_actable.respond_to?(:notify)
   end
