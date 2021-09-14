@@ -2,9 +2,7 @@ inherit_from:
   - .rubocop.unhound.yml
 
 AllCops:
-  Include:
-    - '**/Gemfile'
-    - '**/Rakefile'
+  NewCops: enable
   Exclude:
    - 'bin/*'
    - 'db/seeds.rb'
@@ -12,10 +10,7 @@ AllCops:
    - 'db/migrate/*'
    - 'vendor/bundle/**/*'
    - 'client/**/*'
-  TargetRubyVersion: 2.4
-
-Metrics/LineLength:
-  Max: 120
+  TargetRubyVersion: 2.5
 
 Metrics/AbcSize:
   Max: 20
@@ -58,6 +53,9 @@ Style/EmptyMethod:
 
 Style/SignalException:
   EnforcedStyle: only_raise
+
+Layout/LineLength:
+  Max: 120
 
 Layout/EmptyLineAfterMagicComment:
   Enabled: false
