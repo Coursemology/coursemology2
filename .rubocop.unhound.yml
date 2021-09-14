@@ -6,34 +6,21 @@ Style/CollectionMethods:
     find:
     detect: 'find'
 
-Naming/FileName:
+Lint/AssignmentInCondition:
   Enabled: true
 
-Style/GuardClause:
+Lint/EachWithObjectArgument:
   Enabled: true
 
-Style/IfUnlessModifier:
+Lint/LiteralAsCondition:
+  Description: Checks of literals used in conditions.
   Enabled: true
 
-Style/PercentLiteralDelimiters:
+Lint/LiteralInInterpolation:
+  Description: Checks for literals used in interpolation.
   Enabled: true
 
-Style/SignalException:
-  Enabled: true
-
-Style/SingleLineBlockParams:
-  Enabled: true
-
-Style/SingleLineMethods:
-  Enabled: true
-
-Style/TrailingCommaInArguments:
-  Enabled: true
-
-Style/TrailingCommaInArrayLiteral:
-  Enabled: true
-
-Style/TrailingCommaInHashLiteral:
+Lint/SuppressedException:
   Enabled: true
 
 Metrics/AbcSize:
@@ -42,13 +29,13 @@ Metrics/AbcSize:
 Metrics/ClassLength:
   Enabled: true
 
-Metrics/ModuleLength:
-  Enabled: true
-
 Metrics/CyclomaticComplexity:
   Enabled: true
 
 Metrics/MethodLength:
+  Enabled: true
+
+Metrics/ModuleLength:
   Enabled: true
 
 Metrics/ParameterLists:
@@ -57,10 +44,10 @@ Metrics/ParameterLists:
 Metrics/PerceivedComplexity:
   Enabled: true
 
-Lint/AssignmentInCondition:
+Naming/AccessorMethodName:
   Enabled: true
 
-Naming/AccessorMethodName:
+Naming/FileName:
   Enabled: true
 
 Style/Alias:
@@ -79,34 +66,47 @@ Style/EachWithObject:
 Style/EmptyLiteral:
   Enabled: true
 
+Style/GuardClause:
+  Enabled: true
+
+Style/IfUnlessModifier:
+  Enabled: true
+
 Style/ModuleFunction:
   Enabled: true
 
 Style/OneLineConditional:
   Enabled: true
 
+Style/PercentLiteralDelimiters:
+  Enabled: true
+
 Style/PerlBackrefs:
   Enabled: true
 
+Style/SignalException:
+  Enabled: true
+
+Style/SingleLineBlockParams:
+  Enabled: true
+
+Style/SingleLineMethods:
+  Enabled: true
+
 Style/SpecialGlobalVars:
+  Enabled: true
+
+Style/TrailingCommaInArguments:
+  Enabled: true
+
+Style/TrailingCommaInArrayLiteral:
+  Enabled: true
+
+Style/TrailingCommaInHashLiteral:
   Enabled: true
 
 Style/VariableInterpolation:
   Enabled: true
 
 Style/WhenThen:
-  Enabled: true
-
-Lint/EachWithObjectArgument:
-  Enabled: true
-
-Lint/SuppressedException:
-  Enabled: true
-
-Lint/LiteralAsCondition:
-  Description: Checks of literals used in conditions.
-  Enabled: true
-
-Lint/LiteralInInterpolation:
-  Description: Checks for literals used in interpolation.
   Enabled: true
