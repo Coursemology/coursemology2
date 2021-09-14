@@ -48,6 +48,30 @@ class AchievementsSelector extends Component {
     });
   };
 
+  renderBody() {
+    const { achievements } = this.props;
+
+    if (achievements.length < 1) {
+      return (
+        <Subheader>
+          <FormattedMessage {...translations.noItems} />
+        </Subheader>
+      );
+    }
+
+    return (
+      <>
+        {achievements.length > 1 ? (
+          <BulkSelectors
+            callback={this.setAllAchievementsSelection}
+            styles={{ selectLink: { marginLeft: 0 } }}
+          />
+        ) : null}
+        {achievements.map((achievement) => this.renderRow(achievement))}
+      </>
+    );
+  }
+
   renderRow(achievement) {
     const { dispatch, selectedItems } = this.props;
     const checked =
@@ -79,30 +103,6 @@ class AchievementsSelector extends Component {
           )
         }
       />
-    );
-  }
-
-  renderBody() {
-    const { achievements } = this.props;
-
-    if (achievements.length < 1) {
-      return (
-        <Subheader>
-          <FormattedMessage {...translations.noItems} />
-        </Subheader>
-      );
-    }
-
-    return (
-      <>
-        {achievements.length > 1 ? (
-          <BulkSelectors
-            callback={this.setAllAchievementsSelection}
-            styles={{ selectLink: { marginLeft: 0 } }}
-          />
-        ) : null}
-        {achievements.map((achievement) => this.renderRow(achievement))}
-      </>
     );
   }
 

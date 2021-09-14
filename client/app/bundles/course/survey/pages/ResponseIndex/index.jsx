@@ -119,6 +119,21 @@ class ResponseIndex extends Component {
     return { responses: responsesWithStatuses, summary };
   }
 
+  static renderPhantomTable(responses, survey) {
+    if (responses.length < 1) {
+      return null;
+    }
+
+    return (
+      <div>
+        <h1>
+          <FormattedMessage {...translations.phantoms} />
+        </h1>
+        {ResponseIndex.renderTable(responses, survey)}
+      </div>
+    );
+  }
+
   static renderReponseStatus(response, survey) {
     const status = <FormattedMessage {...translations[response.status]} />;
     if (response.status === responseStatus.NOT_STARTED) {
@@ -136,17 +151,6 @@ class ResponseIndex extends Component {
       return <div style={styles.red}>{submittedAt}</div>;
     }
     return submittedAt;
-  }
-
-  static renderUpdatedAt(response, survey) {
-    if (!response.submitted_at) {
-      return null;
-    }
-    const updatedAt = formatLongDateTime(response.updated_at);
-    if (survey.end_at && moment(response.updated_at).isAfter(survey.end_at)) {
-      return <div style={styles.red}>{updatedAt}</div>;
-    }
-    return updatedAt;
   }
 
   static renderTable(responses, survey) {
@@ -199,19 +203,15 @@ class ResponseIndex extends Component {
     );
   }
 
-  static renderPhantomTable(responses, survey) {
-    if (responses.length < 1) {
+  static renderUpdatedAt(response, survey) {
+    if (!response.submitted_at) {
       return null;
     }
-
-    return (
-      <div>
-        <h1>
-          <FormattedMessage {...translations.phantoms} />
-        </h1>
-        {ResponseIndex.renderTable(responses, survey)}
-      </div>
-    );
+    const updatedAt = formatLongDateTime(response.updated_at);
+    if (survey.end_at && moment(response.updated_at).isAfter(survey.end_at)) {
+      return <div style={styles.red}>{updatedAt}</div>;
+    }
+    return updatedAt;
   }
 
   constructor(props) {
@@ -224,6 +224,41 @@ class ResponseIndex extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch(fetchResponses());
+  }
+
+  renderBody() {
+    const { survey, responses, isLoading } = this.props;
+    if (isLoading) {
+      return <LoadingIndicator />;
+    }
+
+    const { realResponses, phantomResponses } = responses.reduce(
+      (categories, response) => {
+        const cateogry = response.course_user.phantom
+          ? 'phantomResponses'
+          : 'realResponses';
+        categories[cateogry].push(response);
+        return categories;
+      },
+      { realResponses: [], phantomResponses: [] },
+    );
+
+    const {
+      responses: realResponsesWithStatuses,
+      summary: realResponsesStatuses,
+    } = ResponseIndex.computeStatuses(realResponses);
+    const {
+      responses: phantomResponsesWithStatuses,
+      summary: phantomResponsesStatuses,
+    } = ResponseIndex.computeStatuses(phantomResponses);
+
+    return (
+      <div>
+        {this.renderStats(realResponsesStatuses, phantomResponsesStatuses)}
+        {ResponseIndex.renderTable(realResponsesWithStatuses, survey)}
+        {ResponseIndex.renderPhantomTable(phantomResponsesWithStatuses, survey)}
+      </div>
+    );
   }
 
   renderHeader() {
@@ -300,41 +335,6 @@ class ResponseIndex extends Component {
           />
         </CardText>
       </Card>
-    );
-  }
-
-  renderBody() {
-    const { survey, responses, isLoading } = this.props;
-    if (isLoading) {
-      return <LoadingIndicator />;
-    }
-
-    const { realResponses, phantomResponses } = responses.reduce(
-      (categories, response) => {
-        const cateogry = response.course_user.phantom
-          ? 'phantomResponses'
-          : 'realResponses';
-        categories[cateogry].push(response);
-        return categories;
-      },
-      { realResponses: [], phantomResponses: [] },
-    );
-
-    const {
-      responses: realResponsesWithStatuses,
-      summary: realResponsesStatuses,
-    } = ResponseIndex.computeStatuses(realResponses);
-    const {
-      responses: phantomResponsesWithStatuses,
-      summary: phantomResponsesStatuses,
-    } = ResponseIndex.computeStatuses(phantomResponses);
-
-    return (
-      <div>
-        {this.renderStats(realResponsesStatuses, phantomResponsesStatuses)}
-        {ResponseIndex.renderTable(realResponsesWithStatuses, survey)}
-        {ResponseIndex.renderPhantomTable(phantomResponsesWithStatuses, survey)}
-      </div>
     );
   }
 

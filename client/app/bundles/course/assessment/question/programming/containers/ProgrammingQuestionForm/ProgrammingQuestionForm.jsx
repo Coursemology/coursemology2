@@ -109,16 +109,16 @@ function validation(data, pathOfKeysToData, intl) {
 }
 
 class ProgrammingQuestionForm extends Component {
-  static getInputName(field) {
-    return `question_programming[${field}]`;
+  static convertNull(value) {
+    return value === null ? '' : value;
   }
 
   static getInputId(field) {
     return `question_programming_${field}`;
   }
 
-  static convertNull(value) {
-    return value === null ? '' : value;
+  static getInputName(field) {
+    return `question_programming[${field}]`;
   }
 
   componentDidMount() {
@@ -131,13 +131,6 @@ class ProgrammingQuestionForm extends Component {
     this.summernoteEditors.attr(
       'contenteditable',
       !nextProps.data.get('is_loading'),
-    );
-  }
-
-  handleChange(field, value) {
-    this.props.actions.updateProgrammingQuestion(
-      field,
-      value === '' ? null : value,
     );
   }
 
@@ -201,26 +194,11 @@ class ProgrammingQuestionForm extends Component {
     this.props.actions.submitForm(url, method, formData, failureMessage);
   };
 
-  validationCheck() {
-    const { data, intl } = this.props;
-    const question = data.get('question');
-    let errors = validation(question, ['question'], intl);
-
-    // Check online editor
-    if (question.get('edit_online')) {
-      errors = errors.concat(
-        editorValidation(this.props.data, ['test_ui'], intl),
-      );
-    }
-
-    this.props.actions.setValidationErrors(errors);
-
-    return errors.length === 0;
-  }
-
-  summernoteHandler(field) {
-    return (e) =>
-      this.props.actions.updateProgrammingQuestion(field, e === '' ? null : e);
+  handleChange(field, value) {
+    this.props.actions.updateProgrammingQuestion(
+      field,
+      value === '' ? null : value,
+    );
   }
 
   languageHandler(field) {
@@ -252,103 +230,36 @@ class ProgrammingQuestionForm extends Component {
     return this.props.intl.formatMessage(translations.submitButton);
   }
 
-  renderImportAlertView() {
-    const alertData = this.props.data.get('import_result').get('alert');
+  summernoteHandler(field) {
+    return (e) =>
+      this.props.actions.updateProgrammingQuestion(field, e === '' ? null : e);
+  }
 
-    if (alertData) {
-      return (
-        <div className={alertData.get('class')}>{alertData.get('message')}</div>
+  validationCheck() {
+    const { data, intl } = this.props;
+    const question = data.get('question');
+    let errors = validation(question, ['question'], intl);
+
+    // Check online editor
+    if (question.get('edit_online')) {
+      errors = errors.concat(
+        editorValidation(this.props.data, ['test_ui'], intl),
       );
     }
 
+    this.props.actions.setValidationErrors(errors);
+
+    return errors.length === 0;
+  }
+
+  renderBuildLogView() {
+    const data = this.props.data.getIn(['import_result', 'build_log']);
+
+    if (data) {
+      return <BuildLog {...{ data }} />;
+    }
+
     return null;
-  }
-
-  renderInputField(
-    label,
-    field,
-    required,
-    type,
-    value,
-    error = null,
-    placeholder = null,
-  ) {
-    return (
-      <div title={placeholder}>
-        <TextField
-          type={type}
-          name={ProgrammingQuestionForm.getInputName(field)}
-          id={ProgrammingQuestionForm.getInputId(field)}
-          onChange={(e, newValue) => {
-            this.handleChange(field, newValue);
-          }}
-          onWheel={type === 'number' && ((event) => event.currentTarget.blur())}
-          errorText={error}
-          floatingLabelText={(required ? '* ' : '') + label}
-          floatingLabelFixed
-          disabled={this.props.data.get('is_loading')}
-          value={value}
-          fullWidth
-        />
-      </div>
-    );
-  }
-
-  renderSummernoteField(label, field, required, value) {
-    return (
-      <MaterialSummernote
-        field={field}
-        label={label}
-        required={required}
-        value={value}
-        disabled={this.props.data.get('is_loading')}
-        name={ProgrammingQuestionForm.getInputName(field)}
-        inputId={ProgrammingQuestionForm.getInputId(field)}
-        onChange={this.summernoteHandler(field)}
-      />
-    );
-  }
-
-  renderMultiSelectSkillsField(label, field, value, options, error) {
-    return (
-      <div key={field}>
-        <ChipInput
-          id={ProgrammingQuestionForm.getInputId(field)}
-          value={value}
-          dataSource={options}
-          dataSourceConfig={{ value: 'id', text: 'title' }}
-          onRequestAdd={(chip) => {
-            this.onSelectSkills(chip.id);
-          }}
-          onRequestDelete={this.onSelectSkills}
-          floatingLabelText={label}
-          floatingLabelFixed
-          openOnFocus
-          fullWidth
-          disabled={this.props.data.get('is_loading')}
-          errorText={error}
-          menuStyle={{ maxHeight: '80vh', overflowY: 'scroll' }}
-        />
-        <select
-          name={`${ProgrammingQuestionForm.getInputName(
-            'question_assessment',
-          )}[${field}][]`}
-          multiple
-          value={value.map((opt) => opt.id)}
-          style={{ display: 'none' }}
-          disabled={this.props.data.get('is_loading')}
-          onChange={(e) => {
-            this.onSelectSkills(parseInt(e.target.value, 10) || e.target.value);
-          }}
-        >
-          {options.map((opt) => (
-            <option value={opt.id} key={opt.id}>
-              {opt.title}
-            </option>
-          ))}
-        </select>
-      </div>
-    );
   }
 
   renderDropdownSelectField(
@@ -399,37 +310,87 @@ class ProgrammingQuestionForm extends Component {
     );
   }
 
-  renderSwitcher(showEditOnline, canSwitch) {
-    if (!canSwitch) {
-      return null;
+  renderImportAlertView() {
+    const alertData = this.props.data.get('import_result').get('alert');
+
+    if (alertData) {
+      return (
+        <div className={alertData.get('class')}>{alertData.get('message')}</div>
+      );
     }
 
-    const onTestTypeChange = (editOnline) => {
-      if (this.props.data.get('is_loading')) return;
-      this.props.actions.updateProgrammingQuestion('edit_online', editOnline);
-    };
+    return null;
+  }
 
+  renderInputField(
+    label,
+    field,
+    required,
+    type,
+    value,
+    error = null,
+    placeholder = null,
+  ) {
     return (
-      <Tabs
-        value={showEditOnline}
-        onChange={onTestTypeChange}
-        style={{ margin: '1em 0' }}
-      >
-        <Tab
-          id="test-case-editor-tab"
-          label={this.props.intl.formatMessage(
-            translations.editTestsOnlineButton,
-          )}
-          value
+      <div title={placeholder}>
+        <TextField
+          type={type}
+          name={ProgrammingQuestionForm.getInputName(field)}
+          id={ProgrammingQuestionForm.getInputId(field)}
+          onChange={(e, newValue) => {
+            this.handleChange(field, newValue);
+          }}
+          onWheel={type === 'number' && ((event) => event.currentTarget.blur())}
+          errorText={error}
+          floatingLabelText={(required ? '* ' : '') + label}
+          floatingLabelFixed
+          disabled={this.props.data.get('is_loading')}
+          value={value}
+          fullWidth
         />
-        <Tab
-          id="upload-package-tab"
-          label={this.props.intl.formatMessage(
-            translations.uploadPackageButton,
-          )}
-          value={false}
+      </div>
+    );
+  }
+
+  renderMultiSelectSkillsField(label, field, value, options, error) {
+    return (
+      <div key={field}>
+        <ChipInput
+          id={ProgrammingQuestionForm.getInputId(field)}
+          value={value}
+          dataSource={options}
+          dataSourceConfig={{ value: 'id', text: 'title' }}
+          onRequestAdd={(chip) => {
+            this.onSelectSkills(chip.id);
+          }}
+          onRequestDelete={this.onSelectSkills}
+          floatingLabelText={label}
+          floatingLabelFixed
+          openOnFocus
+          fullWidth
+          disabled={this.props.data.get('is_loading')}
+          errorText={error}
+          menuStyle={{ maxHeight: '80vh', overflowY: 'scroll' }}
         />
-      </Tabs>
+        <select
+          name={`${ProgrammingQuestionForm.getInputName(
+            'question_assessment',
+          )}[${field}][]`}
+          multiple
+          value={value.map((opt) => opt.id)}
+          style={{ display: 'none' }}
+          disabled={this.props.data.get('is_loading')}
+          onChange={(e) => {
+            this.onSelectSkills(parseInt(e.target.value, 10) || e.target.value);
+          }}
+        >
+          {options.map((opt) => (
+            <option value={opt.id} key={opt.id}>
+              {opt.title}
+            </option>
+          ))}
+        </select>
+      </div>
     );
   }
 
@@ -508,6 +469,55 @@ class ProgrammingQuestionForm extends Component {
     );
   }
 
+  renderSummernoteField(label, field, required, value) {
+    return (
+      <MaterialSummernote
+        field={field}
+        label={label}
+        required={required}
+        value={value}
+        disabled={this.props.data.get('is_loading')}
+        name={ProgrammingQuestionForm.getInputName(field)}
+        inputId={ProgrammingQuestionForm.getInputId(field)}
+        onChange={this.summernoteHandler(field)}
+      />
+    );
+  }
+
+  renderSwitcher(showEditOnline, canSwitch) {
+    if (!canSwitch) {
+      return null;
+    }
+
+    const onTestTypeChange = (editOnline) => {
+      if (this.props.data.get('is_loading')) return;
+      this.props.actions.updateProgrammingQuestion('edit_online', editOnline);
+    };
+
+    return (
+      <Tabs
+        value={showEditOnline}
+        onChange={onTestTypeChange}
+        style={{ margin: '1em 0' }}
+      >
+        <Tab
+          id="test-case-editor-tab"
+          label={this.props.intl.formatMessage(
+            translations.editTestsOnlineButton,
+          )}
+          value
+        />
+        <Tab
+          id="upload-package-tab"
+          label={this.props.intl.formatMessage(
+            translations.uploadPackageButton,
+          )}
+          value={false}
+        />
+      </Tabs>
+    );
+  }
+
   renderTestView(showEditOnline) {
     if (showEditOnline) {
       return (
@@ -531,16 +541,6 @@ class ProgrammingQuestionForm extends Component {
     }
 
     return <UploadedPackageView {...{ data: this.props.data }} />;
-  }
-
-  renderBuildLogView() {
-    const data = this.props.data.getIn(['import_result', 'build_log']);
-
-    if (data) {
-      return <BuildLog {...{ data }} />;
-    }
-
-    return null;
   }
 
   render() {

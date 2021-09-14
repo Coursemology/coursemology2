@@ -62,6 +62,125 @@ class OnlineEditorPythonView extends Component {
     };
   }
 
+  renderAutogradedFields() {
+    const { intl, data } = this.props;
+    const testCases = data.get('test_cases');
+    const testCaseError = data.getIn(['test_cases', 'error']);
+    const errorTextElement = testCaseError && (
+      <div
+        style={{
+          fontSize: 12,
+          lineHeight: '12px',
+          color: this.context.muiTheme.textField.errorColor,
+          transition: transitions.easeOut(),
+          marginBottom: '1em',
+        }}
+      >
+        {testCaseError}
+      </div>
+    );
+
+    return (
+      <>
+        <div style={{ marginBottom: '1em' }}>
+          {this.renderEditorCard(
+            intl.formatMessage(translations.solutionTitle),
+            intl.formatMessage(translations.solutionSubtitle),
+            'solution',
+          )}
+          {this.renderEditorCard(
+            intl.formatMessage(translations.prependTitle),
+            intl.formatMessage(translations.prependSubtitle),
+            'prepend',
+          )}
+          {this.renderEditorCard(
+            intl.formatMessage(translations.appendTitle),
+            intl.formatMessage(translations.appendSubtitle),
+            'append',
+          )}
+        </div>
+        <h3>{intl.formatMessage(translations.dataFilesHeader)}</h3>
+        {this.renderExistingPackageFiles(
+          'data_files',
+          this.props.intl.formatMessage(translations.currentDataFilesHeader),
+        )}
+        {this.renderNewPackageFiles(
+          'data_files',
+          this.props.intl.formatMessage(translations.newDataFilesHeader),
+          intl.formatMessage(translations.addDataFileButton),
+        )}
+        <h3>{intl.formatMessage(translations.testCasesHeader)}</h3>
+        <div style={{ marginBottom: '0.5em' }}>
+          <FormattedMessage
+            id="course.assessment.question.programming.OnlineEditorViewitorPythonView.testCasesDescription"
+            defaultMessage={
+              '{note}: The expression in the {expression} column will be compared with the ' +
+              'expression in the {expected} column using the equality operator. The return value ' +
+              'of {print} is {none} and the printed output should not be confused with the ' +
+              'return value.'
+            }
+            values={{
+              note: (
+                <b>
+                  {intl.formatMessage(translations.testCaseDescriptionNote)}
+                </b>
+              ),
+              expression: (
+                <b>{intl.formatMessage(translations.expressionHeader)}</b>
+              ),
+              expected: (
+                <b>{intl.formatMessage(translations.expectedHeader)}</b>
+              ),
+              print: (
+                <code>
+                  {intl.formatMessage(translations.testCaseDescriptionPrint)}
+                </code>
+              ),
+              none: (
+                <code>
+                  {intl.formatMessage(translations.testCaseDescriptionNone)}
+                </code>
+              ),
+            }}
+          />
+        </div>
+        {errorTextElement}
+        {this.renderTestCases(
+          intl.formatMessage(translations.publicTestCases),
+          testCases,
+          'public',
+        )}
+        {this.renderTestCases(
+          intl.formatMessage(translations.privateTestCases),
+          testCases,
+          'private',
+        )}
+        {this.renderTestCases(
+          intl.formatMessage(translations.evaluationTestCases),
+          testCases,
+          'evaluation',
+        )}
+      </>
+    );
+  }
+
+  renderEditorCard(header, subtitle, field) {
+    const value = this.props.data.get(field) || '';
+    return (
+      <EditorCard
+        {...{
+          updateCodeBlock: this.props.actions.updateCodeBlock,
+          mode: 'python',
+          field,
+          value,
+          header,
+          subtitle,
+          isLoading: this.props.isLoading,
+        }}
+      />
+    );
+  }
+
   renderExistingPackageFiles(fileType, header) {
     const numFiles = this.props.data.get(fileType).size;
     if (numFiles === 0) {
@@ -236,125 +355,6 @@ class OnlineEditorPythonView extends Component {
           </Table>
         </CardText>
       </Card>
-    );
-  }
-
-  renderEditorCard(header, subtitle, field) {
-    const value = this.props.data.get(field) || '';
-    return (
-      <EditorCard
-        {...{
-          updateCodeBlock: this.props.actions.updateCodeBlock,
-          mode: 'python',
-          field,
-          value,
-          header,
-          subtitle,
-          isLoading: this.props.isLoading,
-        }}
-      />
-    );
-  }
-
-  renderAutogradedFields() {
-    const { intl, data } = this.props;
-    const testCases = data.get('test_cases');
-    const testCaseError = data.getIn(['test_cases', 'error']);
-    const errorTextElement = testCaseError && (
-      <div
-        style={{
-          fontSize: 12,
-          lineHeight: '12px',
-          color: this.context.muiTheme.textField.errorColor,
-          transition: transitions.easeOut(),
-          marginBottom: '1em',
-        }}
-      >
-        {testCaseError}
-      </div>
-    );
-
-    return (
-      <>
-        <div style={{ marginBottom: '1em' }}>
-          {this.renderEditorCard(
-            intl.formatMessage(translations.solutionTitle),
-            intl.formatMessage(translations.solutionSubtitle),
-            'solution',
-          )}
-          {this.renderEditorCard(
-            intl.formatMessage(translations.prependTitle),
-            intl.formatMessage(translations.prependSubtitle),
-            'prepend',
-          )}
-          {this.renderEditorCard(
-            intl.formatMessage(translations.appendTitle),
-            intl.formatMessage(translations.appendSubtitle),
-            'append',
-          )}
-        </div>
-        <h3>{intl.formatMessage(translations.dataFilesHeader)}</h3>
-        {this.renderExistingPackageFiles(
-          'data_files',
-          this.props.intl.formatMessage(translations.currentDataFilesHeader),
-        )}
-        {this.renderNewPackageFiles(
-          'data_files',
-          this.props.intl.formatMessage(translations.newDataFilesHeader),
-          intl.formatMessage(translations.addDataFileButton),
-        )}
-        <h3>{intl.formatMessage(translations.testCasesHeader)}</h3>
-        <div style={{ marginBottom: '0.5em' }}>
-          <FormattedMessage
-            id="course.assessment.question.programming.OnlineEditorViewitorPythonView.testCasesDescription"
-            defaultMessage={
-              '{note}: The expression in the {expression} column will be compared with the ' +
-              'expression in the {expected} column using the equality operator. The return value ' +
-              'of {print} is {none} and the printed output should not be confused with the ' +
-              'return value.'
-            }
-            values={{
-              note: (
-                <b>
-                  {intl.formatMessage(translations.testCaseDescriptionNote)}
-                </b>
-              ),
-              expression: (
-                <b>{intl.formatMessage(translations.expressionHeader)}</b>
-              ),
-              expected: (
-                <b>{intl.formatMessage(translations.expectedHeader)}</b>
-              ),
-              print: (
-                <code>
-                  {intl.formatMessage(translations.testCaseDescriptionPrint)}
-                </code>
-              ),
-              none: (
-                <code>
-                  {intl.formatMessage(translations.testCaseDescriptionNone)}
-                </code>
-              ),
-            }}
-          />
-        </div>
-        {errorTextElement}
-        {this.renderTestCases(
-          intl.formatMessage(translations.publicTestCases),
-          testCases,
-          'public',
-        )}
-        {this.renderTestCases(
-          intl.formatMessage(translations.privateTestCases),
-          testCases,
-          'private',
-        )}
-        {this.renderTestCases(
-          intl.formatMessage(translations.evaluationTestCases),
-          testCases,
-          'evaluation',
-        )}
-      </>
     );
   }
 

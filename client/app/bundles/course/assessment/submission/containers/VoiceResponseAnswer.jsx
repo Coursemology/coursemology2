@@ -100,17 +100,6 @@ class VoiceResponseAnswer extends Component {
     return `voice_response_${question.id}`;
   };
 
-  renderSingleFileInputChildren = (props) => (
-    <div style={styles.singleFileInputChildrenWrapper}>
-      <div style={styles.singleFileInputChildren}>
-        <div>
-          <FormattedMessage {...translations.chooseVoiceFileExplain} />
-        </div>
-        {props.file && props.file.name}
-      </div>
-    </div>
-  );
-
   renderAudio = (field) => {
     const {
       input: { value },
@@ -191,6 +180,17 @@ class VoiceResponseAnswer extends Component {
       </div>
     );
   };
+
+  renderSingleFileInputChildren = (props) => (
+    <div style={styles.singleFileInputChildrenWrapper}>
+      <div style={styles.singleFileInputChildren}>
+        <div>
+          <FormattedMessage {...translations.chooseVoiceFileExplain} />
+        </div>
+        {props.file && props.file.name}
+      </div>
+    </div>
+  );
 
   render() {
     const { question, recording, recordingComponentId, readOnly, answerId } =

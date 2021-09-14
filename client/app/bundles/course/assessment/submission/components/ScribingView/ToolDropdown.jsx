@@ -46,20 +46,6 @@ const style = {
 };
 
 export default class ToolDropdown extends Component {
-  renderIcon() {
-    const { disabled, iconClassname, currentTool, toolType, iconComponent } =
-      this.props;
-    const iconStyle = disabled
-      ? style.disabled
-      : { color: currentTool === toolType ? blue500 : 'rgba(0, 0, 0, 0.4)' };
-
-    return iconComponent ? (
-      iconComponent()
-    ) : (
-      <FontIcon className={iconClassname} style={iconStyle} />
-    );
-  }
-
   renderColorBar() {
     const { activeObject, disabled, colorBarBorder, colorBarBackground } =
       this.props;
@@ -99,6 +85,20 @@ export default class ToolDropdown extends Component {
         };
 
     return <div style={colorBarStyle} />;
+  }
+
+  renderIcon() {
+    const { disabled, iconClassname, currentTool, toolType, iconComponent } =
+      this.props;
+    const iconStyle = disabled
+      ? style.disabled
+      : { color: currentTool === toolType ? blue500 : 'rgba(0, 0, 0, 0.4)' };
+
+    return iconComponent ? (
+      iconComponent()
+    ) : (
+      <FontIcon className={iconClassname} style={iconStyle} />
+    );
   }
 
   render() {

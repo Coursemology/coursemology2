@@ -89,20 +89,17 @@ const defaultProps = {
 };
 
 class HeatMap extends Component {
-  mouseOptions = {
-    onClick: (_, elements) => {
-      if (elements.length < 1) {
-        return;
-      }
-      this.props.onBarClick(elements[0]._index); // Index is the video time
-    },
-    hover: {
-      onHover: (event, elements) => {
-        const style = event.target.style;
-        style.cursor = elements.length > 0 ? 'pointer' : 'default';
-      },
-    },
-  };
+  static renderUnscaledChart(data, options) {
+    return (
+      <div style={{ width: '100%' }}>
+        <Bar
+          data={data}
+          options={options}
+          height={(window.innerHeight - heightOffset) * heightScale}
+        />
+      </div>
+    );
+  }
 
   constructor(props) {
     super(props);
@@ -132,6 +129,21 @@ class HeatMap extends Component {
     };
   }
 
+  mouseOptions = {
+    onClick: (_, elements) => {
+      if (elements.length < 1) {
+        return;
+      }
+      this.props.onBarClick(elements[0]._index); // Index is the video time
+    },
+    hover: {
+      onHover: (event, elements) => {
+        const style = event.target.style;
+        style.cursor = elements.length > 0 ? 'pointer' : 'default';
+      },
+    },
+  };
+
   renderScaledChart(data, options) {
     const [width, resolution] = calculateWidthAndResolution(
       this.props.videoDuration,
@@ -151,18 +163,6 @@ class HeatMap extends Component {
             height={(window.innerHeight - heightOffset) * heightScale}
           />
         </div>
-      </div>
-    );
-  }
-
-  static renderUnscaledChart(data, options) {
-    return (
-      <div style={{ width: '100%' }}>
-        <Bar
-          data={data}
-          options={options}
-          height={(window.innerHeight - heightOffset) * heightScale}
-        />
       </div>
     );
   }

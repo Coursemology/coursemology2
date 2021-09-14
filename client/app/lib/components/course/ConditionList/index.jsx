@@ -25,32 +25,28 @@ const styles = {
 };
 
 class ConditionList extends Component {
-  renderTopHeader() {
-    return (
-      <TableRow>
-        <TableHeaderColumn colSpan="4">
-          <h3>
-            <FormattedMessage {...translations.title} />
-          </h3>
-        </TableHeaderColumn>
-        <TableHeaderColumn colSpan="2" style={styles.alignRight}>
-          <IconMenu
-            iconButtonElement={
-              <IconButton>
-                <NewIcon />
-              </IconButton>
-            }
-            anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
-            targetOrigin={{ horizontal: 'right', vertical: 'top' }}
-            className="add-condition-btn"
+  renderConditionRows() {
+    return this.props.conditions.map((condition) => (
+      <TableRow key={condition.edit_url}>
+        <TableRowColumn colSpan="1">{condition.type}</TableRowColumn>
+        <TableRowColumn colSpan="3">{condition.description}</TableRowColumn>
+        <TableRowColumn colSpan="2" style={styles.alignRight}>
+          <IconButton href={condition.edit_url}>
+            <EditIcon />
+          </IconButton>
+
+          <IconButton
+            href={condition.delete_url}
+            data-method="delete"
+            data-confirm={this.props.intl.formatMessage(
+              translations.deleteConfirm,
+            )}
           >
-            {this.props.newConditionUrls.map((url) => (
-              <MenuItem key={url.name} primaryText={url.name} href={url.url} />
-            ))}
-          </IconMenu>
-        </TableHeaderColumn>
+            <DeleteIcon />
+          </IconButton>
+        </TableRowColumn>
       </TableRow>
-    );
+    ));
   }
 
   renderHeaderRows() {
@@ -77,28 +73,32 @@ class ConditionList extends Component {
     );
   }
 
-  renderConditionRows() {
-    return this.props.conditions.map((condition) => (
-      <TableRow key={condition.edit_url}>
-        <TableRowColumn colSpan="1">{condition.type}</TableRowColumn>
-        <TableRowColumn colSpan="3">{condition.description}</TableRowColumn>
-        <TableRowColumn colSpan="2" style={styles.alignRight}>
-          <IconButton href={condition.edit_url}>
-            <EditIcon />
-          </IconButton>
-
-          <IconButton
-            href={condition.delete_url}
-            data-method="delete"
-            data-confirm={this.props.intl.formatMessage(
-              translations.deleteConfirm,
-            )}
+  renderTopHeader() {
+    return (
+      <TableRow>
+        <TableHeaderColumn colSpan="4">
+          <h3>
+            <FormattedMessage {...translations.title} />
+          </h3>
+        </TableHeaderColumn>
+        <TableHeaderColumn colSpan="2" style={styles.alignRight}>
+          <IconMenu
+            iconButtonElement={
+              <IconButton>
+                <NewIcon />
+              </IconButton>
+            }
+            anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+            targetOrigin={{ horizontal: 'right', vertical: 'top' }}
+            className="add-condition-btn"
           >
-            <DeleteIcon />
-          </IconButton>
-        </TableRowColumn>
+            {this.props.newConditionUrls.map((url) => (
+              <MenuItem key={url.name} primaryText={url.name} href={url.url} />
+            ))}
+          </IconMenu>
+        </TableHeaderColumn>
       </TableRow>
-    ));
+    );
   }
 
   render() {

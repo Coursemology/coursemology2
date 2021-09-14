@@ -73,6 +73,42 @@ class VisibleSubmissionsIndex extends Component {
     return submissions.some((s) => s.workflowState === workflowStates.Graded);
   }
 
+  renderHeader() {
+    const {
+      assessment: { title },
+      isPublishing,
+    } = this.props;
+    const { includePhantoms } = this.state;
+    return (
+      <Card style={{ marginBottom: 20 }}>
+        <CardHeader title={<h3>{title}</h3>} subtitle="Submissions" />
+        <CardText>{this.renderHistogram()}</CardText>
+        <CardActions>
+          <Toggle
+            label={
+              <FormattedMessage {...submissionsTranslations.includePhantoms} />
+            }
+            labelPosition="right"
+            toggled={includePhantoms}
+            onToggle={() =>
+              this.setState({ includePhantoms: !includePhantoms })
+            }
+          />
+          <FlatButton
+            disabled={isPublishing || !this.canPublish()}
+            secondary
+            label={
+              <FormattedMessage {...submissionsTranslations.publishGrades} />
+            }
+            labelPosition="before"
+            icon={isPublishing ? <CircularProgress size={24} /> : null}
+            onClick={() => this.setState({ publishConfirmation: true })}
+          />
+        </CardActions>
+      </Card>
+    );
+  }
+
   renderHistogram() {
     const { submissions } = this.props;
     const { includePhantoms } = this.state;
@@ -117,39 +153,19 @@ class VisibleSubmissionsIndex extends Component {
     );
   }
 
-  renderHeader() {
-    const {
-      assessment: { title },
-      isPublishing,
-    } = this.props;
-    const { includePhantoms } = this.state;
+  renderPublishConfirmation() {
+    const { dispatch } = this.props;
+    const { publishConfirmation } = this.state;
     return (
-      <Card style={{ marginBottom: 20 }}>
-        <CardHeader title={<h3>{title}</h3>} subtitle="Submissions" />
-        <CardText>{this.renderHistogram()}</CardText>
-        <CardActions>
-          <Toggle
-            label={
-              <FormattedMessage {...submissionsTranslations.includePhantoms} />
-            }
-            labelPosition="right"
-            toggled={includePhantoms}
-            onToggle={() =>
-              this.setState({ includePhantoms: !includePhantoms })
-            }
-          />
-          <FlatButton
-            disabled={isPublishing || !this.canPublish()}
-            secondary
-            label={
-              <FormattedMessage {...submissionsTranslations.publishGrades} />
-            }
-            labelPosition="before"
-            icon={isPublishing ? <CircularProgress size={24} /> : null}
-            onClick={() => this.setState({ publishConfirmation: true })}
-          />
-        </CardActions>
-      </Card>
+      <ConfirmationDialog
+        open={publishConfirmation}
+        onCancel={() => this.setState({ publishConfirmation: false })}
+        onConfirm={() => {
+          dispatch(publishSubmissions());
+          this.setState({ publishConfirmation: false });
+        }}
+        message={<FormattedMessage {...translations.publishConfirmation} />}
+      />
     );
   }
 
@@ -229,22 +245,6 @@ class VisibleSubmissionsIndex extends Component {
           />
         </Tab>
       </Tabs>
-    );
-  }
-
-  renderPublishConfirmation() {
-    const { dispatch } = this.props;
-    const { publishConfirmation } = this.state;
-    return (
-      <ConfirmationDialog
-        open={publishConfirmation}
-        onCancel={() => this.setState({ publishConfirmation: false })}
-        onConfirm={() => {
-          dispatch(publishSubmissions());
-          this.setState({ publishConfirmation: false });
-        }}
-        message={<FormattedMessage {...translations.publishConfirmation} />}
-      />
     );
   }
 

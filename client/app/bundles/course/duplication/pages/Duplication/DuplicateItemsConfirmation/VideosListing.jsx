@@ -31,6 +31,15 @@ class VideoListing extends Component {
     );
   }
 
+  static renderTab(tab) {
+    return (
+      <div key={tab.id}>
+        {VideoListing.renderTabRow(tab)}
+        {tab.videos.map(VideoListing.renderVideoRow)}
+      </div>
+    );
+  }
+
   static renderTabRow(tab) {
     return (
       <IndentedCheckbox
@@ -43,15 +52,6 @@ class VideoListing extends Component {
           </span>
         }
       />
-    );
-  }
-
-  static renderTab(tab) {
-    return (
-      <div key={tab.id}>
-        {VideoListing.renderTabRow(tab)}
-        {tab.videos.map(VideoListing.renderVideoRow)}
-      </div>
     );
   }
 

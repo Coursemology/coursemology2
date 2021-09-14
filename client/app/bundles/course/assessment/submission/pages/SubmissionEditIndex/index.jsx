@@ -74,6 +74,18 @@ class VisibleSubmissionEditIndex extends Component {
     dispatch(fetchSubmission(params.submissionId));
   }
 
+  allConsideredCorrect() {
+    const { explanations, questions } = this.props;
+    if (Object.keys(explanations).length !== Object.keys(questions).length) {
+      return false;
+    }
+
+    const numIncorrect = Object.keys(explanations).filter(
+      (qid) => !explanations[qid] || !explanations[qid].correct,
+    ).length;
+    return numIncorrect === 0;
+  }
+
   handleAutogradeSubmission() {
     const {
       dispatch,
@@ -240,34 +252,6 @@ class VisibleSubmissionEditIndex extends Component {
     return Promise.resolve();
   };
 
-  allConsideredCorrect() {
-    const { explanations, questions } = this.props;
-    if (Object.keys(explanations).length !== Object.keys(questions).length) {
-      return false;
-    }
-
-    const numIncorrect = Object.keys(explanations).filter(
-      (qid) => !explanations[qid] || !explanations[qid].correct,
-    ).length;
-    return numIncorrect === 0;
-  }
-
-  renderStudentViewToggle() {
-    return (
-      <Toggle
-        label={<FormattedMessage {...translations.studentView} />}
-        labelPosition="right"
-        onToggle={(_, enabled) => {
-          if (enabled) {
-            this.props.dispatch(enterStudentView());
-          } else {
-            this.props.dispatch(exitStudentView());
-          }
-        }}
-      />
-    );
-  }
-
   renderAssessment() {
     const { assessment, submission } = this.props;
 
@@ -299,14 +283,6 @@ class VisibleSubmissionEditIndex extends Component {
         </CardActions>
       </Card>
     );
-  }
-
-  renderProgress() {
-    const { submission } = this.props;
-    if (submission.graderView) {
-      return <ProgressPanel submission={submission} />;
-    }
-    return null;
   }
 
   renderContent() {
@@ -427,6 +403,30 @@ class VisibleSubmissionEditIndex extends Component {
         delayedGradePublication={delayedGradePublication}
         isAutograding={isAutograding}
         isSaving={isSaving}
+      />
+    );
+  }
+
+  renderProgress() {
+    const { submission } = this.props;
+    if (submission.graderView) {
+      return <ProgressPanel submission={submission} />;
+    }
+    return null;
+  }
+
+  renderStudentViewToggle() {
+    return (
+      <Toggle
+        label={<FormattedMessage {...translations.studentView} />}
+        labelPosition="right"
+        onToggle={(_, enabled) => {
+          if (enabled) {
+            this.props.dispatch(enterStudentView());
+          } else {
+            this.props.dispatch(exitStudentView());
+          }
+        }}
       />
     );
   }

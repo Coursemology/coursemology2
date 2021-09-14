@@ -30,16 +30,6 @@ const translations = defineMessages({
 });
 
 class EditSectionButton extends Component {
-  updateSectionHandler = (data) => {
-    const { dispatch, section } = this.props;
-    const payload = { section: data };
-    const successMessage = <FormattedMessage {...translations.success} />;
-    const failureMessage = <FormattedMessage {...translations.failure} />;
-    return dispatch(
-      updateSurveySection(section.id, payload, successMessage, failureMessage),
-    );
-  };
-
   showEditSectionForm = () => {
     const {
       dispatch,
@@ -52,6 +42,16 @@ class EditSectionButton extends Component {
         formTitle: intl.formatMessage(translations.editSection),
         initialValues: { title, description },
       }),
+    );
+  };
+
+  updateSectionHandler = (data) => {
+    const { dispatch, section } = this.props;
+    const payload = { section: data };
+    const successMessage = <FormattedMessage {...translations.success} />;
+    const failureMessage = <FormattedMessage {...translations.failure} />;
+    return dispatch(
+      updateSurveySection(section.id, payload, successMessage, failureMessage),
     );
   };
 

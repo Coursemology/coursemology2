@@ -42,6 +42,53 @@ class AssessmentsListing extends Component {
     );
   }
 
+  static renderCategoryCard(category, orphanTabs, orphanAssessments) {
+    const hasOrphanAssessments =
+      orphanAssessments && orphanAssessments.length > 0;
+    const hasOrphanTabs = orphanTabs && orphanTabs.length > 0;
+    const categoryRow = category
+      ? AssessmentsListing.renderCategoryRow(category)
+      : AssessmentsListing.renderDefaultCategoryRow();
+    const tabsTrees = (tabs) =>
+      tabs &&
+      tabs.map((tab) => AssessmentsListing.renderTabTree(tab, tab.assessments));
+
+    return (
+      <Card key={category ? category.id : 'default'}>
+        <CardText>
+          {categoryRow}
+          {hasOrphanAssessments &&
+            AssessmentsListing.renderTabTree(null, orphanAssessments)}
+          {hasOrphanTabs && tabsTrees(orphanTabs)}
+          {category && tabsTrees(category.tabs)}
+        </CardText>
+      </Card>
+    );
+  }
+
+  static renderCategoryRow(category) {
+    return (
+      <IndentedCheckbox
+        checked
+        label={
+          <span>
+            <TypeBadge itemType={CATEGORY} />
+            {category.title}
+          </span>
+        }
+      />
+    );
+  }
+
+  static renderDefaultCategoryRow() {
+    return (
+      <IndentedCheckbox
+        disabled
+        label={<FormattedMessage {...translations.defaultCategory} />}
+      />
+    );
+  }
+
   static renderDefaultTabRow() {
     return (
       <IndentedCheckbox
@@ -77,53 +124,6 @@ class AssessmentsListing extends Component {
           children.length > 0 &&
           children.map(AssessmentsListing.renderAssessmentRow)}
       </div>
-    );
-  }
-
-  static renderDefaultCategoryRow() {
-    return (
-      <IndentedCheckbox
-        disabled
-        label={<FormattedMessage {...translations.defaultCategory} />}
-      />
-    );
-  }
-
-  static renderCategoryRow(category) {
-    return (
-      <IndentedCheckbox
-        checked
-        label={
-          <span>
-            <TypeBadge itemType={CATEGORY} />
-            {category.title}
-          </span>
-        }
-      />
-    );
-  }
-
-  static renderCategoryCard(category, orphanTabs, orphanAssessments) {
-    const hasOrphanAssessments =
-      orphanAssessments && orphanAssessments.length > 0;
-    const hasOrphanTabs = orphanTabs && orphanTabs.length > 0;
-    const categoryRow = category
-      ? AssessmentsListing.renderCategoryRow(category)
-      : AssessmentsListing.renderDefaultCategoryRow();
-    const tabsTrees = (tabs) =>
-      tabs &&
-      tabs.map((tab) => AssessmentsListing.renderTabTree(tab, tab.assessments));
-
-    return (
-      <Card key={category ? category.id : 'default'}>
-        <CardText>
-          {categoryRow}
-          {hasOrphanAssessments &&
-            AssessmentsListing.renderTabTree(null, orphanAssessments)}
-          {hasOrphanTabs && tabsTrees(orphanTabs)}
-          {category && tabsTrees(category.tabs)}
-        </CardText>
-      </Card>
     );
   }
 

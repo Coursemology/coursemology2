@@ -50,35 +50,6 @@ class PastAnswers extends Component {
     }
   }
 
-  renderReadOnlyPastAnswer = (answerId) => {
-    const { answers, intl, question } = this.props;
-    const answer = answers[answerId];
-    const date = formatDateTime(answer.createdAt);
-
-    return (
-      <div key={answer.id}>
-        <h4>
-          {intl.formatMessage(translations.submittedAt)}: {date}
-        </h4>
-        {this.getAnswersHistory(question, answer)}
-        <hr style={styles.horizontalRule} />
-      </div>
-    );
-  };
-
-  renderSelectedPastAnswers(selectedAnswerIds) {
-    if (selectedAnswerIds.length > 0) {
-      return selectedAnswerIds.map(this.renderReadOnlyPastAnswer);
-    }
-    return (
-      <Card style={{ backgroundColor: yellow100 }}>
-        <CardText>
-          <FormattedMessage {...translations.noAnswerSelected} />
-        </CardText>
-      </Card>
-    );
-  }
-
   renderPastAnswerSelect() {
     const {
       answers,
@@ -114,6 +85,35 @@ class PastAnswers extends Component {
       >
         {answerIds.map(renderOption)}
       </SelectField>
+    );
+  }
+
+  renderReadOnlyPastAnswer = (answerId) => {
+    const { answers, intl, question } = this.props;
+    const answer = answers[answerId];
+    const date = formatDateTime(answer.createdAt);
+
+    return (
+      <div key={answer.id}>
+        <h4>
+          {intl.formatMessage(translations.submittedAt)}: {date}
+        </h4>
+        {this.getAnswersHistory(question, answer)}
+        <hr style={styles.horizontalRule} />
+      </div>
+    );
+  };
+
+  renderSelectedPastAnswers(selectedAnswerIds) {
+    if (selectedAnswerIds.length > 0) {
+      return selectedAnswerIds.map(this.renderReadOnlyPastAnswer);
+    }
+    return (
+      <Card style={{ backgroundColor: yellow100 }}>
+        <CardText>
+          <FormattedMessage {...translations.noAnswerSelected} />
+        </CardText>
+      </Card>
     );
   }
 

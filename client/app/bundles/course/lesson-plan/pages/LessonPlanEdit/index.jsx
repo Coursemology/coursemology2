@@ -17,28 +17,6 @@ const styles = {
 };
 
 class LessonPlanEdit extends Component {
-  renderHeader() {
-    const { columnsVisible } = this.props;
-
-    const headerFor = (field) => (
-      <th>
-        <FormattedMessage {...translations[field]} />
-      </th>
-    );
-    return (
-      <thead>
-        <tr>
-          {columnsVisible[ITEM_TYPE] ? headerFor(ITEM_TYPE) : null}
-          {headerFor(TITLE)}
-          {columnsVisible[START_AT] ? headerFor(START_AT) : null}
-          {columnsVisible[BONUS_END_AT] ? headerFor(BONUS_END_AT) : null}
-          {columnsVisible[END_AT] ? headerFor(END_AT) : null}
-          {columnsVisible[PUBLISHED] ? headerFor(PUBLISHED) : null}
-        </tr>
-      </thead>
-    );
-  }
-
   renderGroup = (group) => {
     const { id, milestone, items } = group;
 
@@ -72,6 +50,28 @@ class LessonPlanEdit extends Component {
 
     return rows;
   };
+
+  renderHeader() {
+    const { columnsVisible } = this.props;
+
+    const headerFor = (field) => (
+      <th>
+        <FormattedMessage {...translations[field]} />
+      </th>
+    );
+    return (
+      <thead>
+        <tr>
+          {columnsVisible[ITEM_TYPE] ? headerFor(ITEM_TYPE) : null}
+          {headerFor(TITLE)}
+          {columnsVisible[START_AT] ? headerFor(START_AT) : null}
+          {columnsVisible[BONUS_END_AT] ? headerFor(BONUS_END_AT) : null}
+          {columnsVisible[END_AT] ? headerFor(END_AT) : null}
+          {columnsVisible[PUBLISHED] ? headerFor(PUBLISHED) : null}
+        </tr>
+      </thead>
+    );
+  }
 
   render() {
     const { groups } = this.props;

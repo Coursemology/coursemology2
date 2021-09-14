@@ -111,14 +111,6 @@ class Level extends Component {
     this.props.dispatch(fetchLevels());
   }
 
-  handleUpdateExpThreshold = (levelNumber, newValue) => {
-    this.props.dispatch(updateExpThreshold(levelNumber, newValue));
-  };
-
-  handleLevelTextBlur = () => {
-    this.props.dispatch(sortLevels());
-  };
-
   handleCreateLevel = () => (e) => {
     e.preventDefault();
     this.props.dispatch(addLevel());
@@ -127,6 +119,10 @@ class Level extends Component {
   handleDeleteLevel = (levelNumber) => (e) => {
     e.preventDefault();
     this.props.dispatch(deleteLevel(levelNumber));
+  };
+
+  handleLevelTextBlur = () => {
+    this.props.dispatch(sortLevels());
   };
 
   handleSaveLevels = () => {
@@ -145,10 +141,42 @@ class Level extends Component {
     };
   };
 
+  handleUpdateExpThreshold = (levelNumber, newValue) => {
+    this.props.dispatch(updateExpThreshold(levelNumber, newValue));
+  };
+
   // Only the first element of the levels prop should be 0 as it is the default threshold.
   // User input should not contain any zeroes for threshold.
   levelsHaveError() {
     return this.props.levels.slice(1).some((element) => element === 0);
+  }
+
+  renderBody() {
+    const { canManage, levels, isSaving } = this.props;
+    const rows = levels.slice(1).map((experiencePointsThreshold, index) => {
+      const key = `level-row-${index}`;
+      return (
+        <LevelRow
+          deleteLevel={this.handleDeleteLevel}
+          disabled={isSaving}
+          levelNumber={index + 1}
+          sortLevels={this.handleLevelTextBlur}
+          updateExpThreshold={this.handleUpdateExpThreshold}
+          key={key}
+          {...{ canManage, experiencePointsThreshold }}
+        />
+      );
+    });
+
+    return (
+      <div style={styles.body}>
+        <Table className="table levels-list" fixedHeader={false}>
+          {Level.renderTableHeader()}
+          <TableBody>{rows}</TableBody>
+          {canManage && this.renderTableFooter()}
+        </Table>
+      </div>
+    );
   }
 
   renderTableFooter() {
@@ -185,34 +213,6 @@ class Level extends Component {
           <TableRowColumn />
         </TableRow>
       </TableFooter>
-    );
-  }
-
-  renderBody() {
-    const { canManage, levels, isSaving } = this.props;
-    const rows = levels.slice(1).map((experiencePointsThreshold, index) => {
-      const key = `level-row-${index}`;
-      return (
-        <LevelRow
-          deleteLevel={this.handleDeleteLevel}
-          disabled={isSaving}
-          levelNumber={index + 1}
-          sortLevels={this.handleLevelTextBlur}
-          updateExpThreshold={this.handleUpdateExpThreshold}
-          key={key}
-          {...{ canManage, experiencePointsThreshold }}
-        />
-      );
-    });
-
-    return (
-      <div style={styles.body}>
-        <Table className="table levels-list" fixedHeader={false}>
-          {Level.renderTableHeader()}
-          <TableBody>{rows}</TableBody>
-          {canManage && this.renderTableFooter()}
-        </Table>
-      </div>
     );
   }
 

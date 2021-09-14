@@ -30,6 +30,30 @@ class SurveysSelector extends Component {
     });
   };
 
+  renderBody() {
+    const { surveys } = this.props;
+
+    if (surveys.length < 1) {
+      return (
+        <Subheader>
+          <FormattedMessage {...translations.noItems} />
+        </Subheader>
+      );
+    }
+
+    return (
+      <>
+        {surveys.length > 1 ? (
+          <BulkSelectors
+            callback={this.setAllSurveysSelection}
+            styles={{ selectLink: { marginLeft: 0 } }}
+          />
+        ) : null}
+        {surveys.map((survey) => this.renderRow(survey))}
+      </>
+    );
+  }
+
   renderRow(survey) {
     const { dispatch, selectedItems } = this.props;
     const checked = !!selectedItems[duplicableItemTypes.SURVEY][survey.id];
@@ -55,30 +79,6 @@ class SurveysSelector extends Component {
           )
         }
       />
-    );
-  }
-
-  renderBody() {
-    const { surveys } = this.props;
-
-    if (surveys.length < 1) {
-      return (
-        <Subheader>
-          <FormattedMessage {...translations.noItems} />
-        </Subheader>
-      );
-    }
-
-    return (
-      <>
-        {surveys.length > 1 ? (
-          <BulkSelectors
-            callback={this.setAllSurveysSelection}
-            styles={{ selectLink: { marginLeft: 0 } }}
-          />
-        ) : null}
-        {surveys.map((survey) => this.renderRow(survey))}
-      </>
     );
   }
 

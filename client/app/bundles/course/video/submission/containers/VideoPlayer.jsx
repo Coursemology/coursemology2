@@ -125,6 +125,12 @@ class VideoPlayer extends Component {
     this.player = player;
   };
 
+  readyCallback = () => {
+    if (this.props.initialSeekTime) {
+      this.props.directSeek(this.props.initialSeekTime);
+    }
+  };
+
   /**
    * Loads or unloads the captions module for Youtube according to whether provided
    * options sets captions to on or off.
@@ -155,12 +161,6 @@ class VideoPlayer extends Component {
       internalPlayer.loadModule('captions');
     } else if (captionsState === captionsStates.OFF) {
       internalPlayer.unloadModule('captions');
-    }
-  };
-
-  readyCallback = () => {
-    if (this.props.initialSeekTime) {
-      this.props.directSeek(this.props.initialSeekTime);
     }
   };
 

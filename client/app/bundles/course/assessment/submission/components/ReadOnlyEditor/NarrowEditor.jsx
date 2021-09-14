@@ -57,13 +57,13 @@ export default class NarrowEditor extends Component {
     };
   }
 
-  toggleComment(lineNumber) {
-    this.props.toggleLine(lineNumber);
+  expandComment(lineNumber) {
+    this.props.expandLine(lineNumber);
     this.setState({ activeComment: lineNumber });
   }
 
-  expandComment(lineNumber) {
-    this.props.expandLine(lineNumber);
+  toggleComment(lineNumber) {
+    this.props.toggleLine(lineNumber);
     this.setState({ activeComment: lineNumber });
   }
 

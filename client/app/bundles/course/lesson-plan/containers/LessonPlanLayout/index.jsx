@@ -57,32 +57,6 @@ class LessonPlanLayout extends Component {
     dispatch(fetchLessonPlan());
   }
 
-  renderHeader() {
-    if (!this.props.canManageLessonPlan) {
-      return null;
-    }
-
-    return (
-      <Card>
-        <CardText>
-          <Route exact path={lessonPlanPath} component={EnterEditModeButton} />
-          <Route
-            exact
-            path={`${lessonPlanPath}/edit`}
-            component={ExitEditModeButton}
-          />
-          <NewMilestoneButton />
-          <Route path={lessonPlanPath} component={NewEventButton} />
-          <Route
-            exact
-            path={`${lessonPlanPath}/edit`}
-            component={ColumnVisibilityDropdown}
-          />
-        </CardText>
-      </Card>
-    );
-  }
-
   renderBody() {
     const { isLoading, groups } = this.props;
 
@@ -107,6 +81,32 @@ class LessonPlanLayout extends Component {
           component={LessonPlanEdit}
         />
       </Switch>
+    );
+  }
+
+  renderHeader() {
+    if (!this.props.canManageLessonPlan) {
+      return null;
+    }
+
+    return (
+      <Card>
+        <CardText>
+          <Route exact path={lessonPlanPath} component={EnterEditModeButton} />
+          <Route
+            exact
+            path={`${lessonPlanPath}/edit`}
+            component={ExitEditModeButton}
+          />
+          <NewMilestoneButton />
+          <Route path={lessonPlanPath} component={NewEventButton} />
+          <Route
+            exact
+            path={`${lessonPlanPath}/edit`}
+            component={ColumnVisibilityDropdown}
+          />
+        </CardText>
+      </Card>
     );
   }
 

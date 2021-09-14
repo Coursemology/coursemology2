@@ -47,45 +47,6 @@ const translations = defineMessages({
 });
 
 class Question extends Component {
-  updateQuestionHandler = (data) => {
-    const { dispatch, intl } = this.props;
-    const { updateSurveyQuestion } = questionActions;
-
-    const payload = formatQuestionFormData(data);
-    const successMessage = intl.formatMessage(translations.updateSuccess);
-    const failureMessage = intl.formatMessage(translations.updateFailure);
-    return dispatch(
-      updateSurveyQuestion(data.id, payload, successMessage, failureMessage),
-    );
-  };
-
-  showEditQuestionForm = () => {
-    const { dispatch, intl, question } = this.props;
-    const { showQuestionForm } = questionActions;
-
-    return dispatch(
-      showQuestionForm({
-        onSubmit: this.updateQuestionHandler,
-        formTitle: intl.formatMessage(translations.editQuestion),
-        initialValues: {
-          ...question,
-          question_type: question.question_type.toString(),
-        },
-      }),
-    );
-  };
-
-  deleteQuestionHandler = () => {
-    const { dispatch, question, intl } = this.props;
-    const { deleteSurveyQuestion } = questionActions;
-
-    const successMessage = intl.formatMessage(translations.deleteSuccess);
-    const failureMessage = intl.formatMessage(translations.deleteFailure);
-    const handleDelete = () =>
-      dispatch(deleteSurveyQuestion(question, successMessage, failureMessage));
-    return dispatch(showDeleteConfirmation(handleDelete));
-  };
-
   adminFunctions() {
     const { intl, question } = this.props;
     const functions = [];
@@ -106,6 +67,45 @@ class Question extends Component {
 
     return functions;
   }
+
+  deleteQuestionHandler = () => {
+    const { dispatch, question, intl } = this.props;
+    const { deleteSurveyQuestion } = questionActions;
+
+    const successMessage = intl.formatMessage(translations.deleteSuccess);
+    const failureMessage = intl.formatMessage(translations.deleteFailure);
+    const handleDelete = () =>
+      dispatch(deleteSurveyQuestion(question, successMessage, failureMessage));
+    return dispatch(showDeleteConfirmation(handleDelete));
+  };
+
+  showEditQuestionForm = () => {
+    const { dispatch, intl, question } = this.props;
+    const { showQuestionForm } = questionActions;
+
+    return dispatch(
+      showQuestionForm({
+        onSubmit: this.updateQuestionHandler,
+        formTitle: intl.formatMessage(translations.editQuestion),
+        initialValues: {
+          ...question,
+          question_type: question.question_type.toString(),
+        },
+      }),
+    );
+  };
+
+  updateQuestionHandler = (data) => {
+    const { dispatch, intl } = this.props;
+    const { updateSurveyQuestion } = questionActions;
+
+    const payload = formatQuestionFormData(data);
+    const successMessage = intl.formatMessage(translations.updateSuccess);
+    const failureMessage = intl.formatMessage(translations.updateFailure);
+    return dispatch(
+      updateSurveyQuestion(data.id, payload, successMessage, failureMessage),
+    );
+  };
 
   render() {
     const {

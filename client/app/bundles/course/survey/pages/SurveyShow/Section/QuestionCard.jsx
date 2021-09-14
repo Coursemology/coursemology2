@@ -52,21 +52,18 @@ const styles = {
 };
 
 class QuestionCard extends Component {
-  static renderOptionsList(question, Widget) {
-    return (
-      <>
-        {question.options.map((option) => {
-          const { option: optionText, image_url: imageUrl } = option;
-          const widget = <Widget disabled style={styles.optionWidget} />;
-          return (
-            <OptionsListItem
-              key={option.id}
-              {...{ optionText, imageUrl, widget }}
-            />
-          );
-        })}
-      </>
-    );
+  static renderOptionsFields(question) {
+    const { MULTIPLE_CHOICE, MULTIPLE_RESPONSE } = questionTypes;
+    const widget = {
+      [MULTIPLE_CHOICE]: RadioButton,
+      [MULTIPLE_RESPONSE]: Checkbox,
+    }[question.question_type];
+    if (!widget) {
+      return null;
+    }
+    return question.grid_view
+      ? QuestionCard.renderOptionsGrid(question, widget)
+      : QuestionCard.renderOptionsList(question, widget);
   }
 
   static renderOptionsGrid(question, Widget) {
@@ -93,18 +90,29 @@ class QuestionCard extends Component {
     );
   }
 
-  static renderOptionsFields(question) {
-    const { MULTIPLE_CHOICE, MULTIPLE_RESPONSE } = questionTypes;
-    const widget = {
-      [MULTIPLE_CHOICE]: RadioButton,
-      [MULTIPLE_RESPONSE]: Checkbox,
-    }[question.question_type];
-    if (!widget) {
-      return null;
+  static renderOptionsList(question, Widget) {
+    return (
+      <>
+        {question.options.map((option) => {
+          const { option: optionText, image_url: imageUrl } = option;
+          const widget = <Widget disabled style={styles.optionWidget} />;
+          return (
+            <OptionsListItem
+              key={option.id}
+              {...{ optionText, imageUrl, widget }}
+            />
+          );
+        })}
+      </>
+    );
+  }
+
+  static renderSpecificFields(question) {
+    const { TEXT } = questionTypes;
+    if (question.question_type === TEXT) {
+      return QuestionCard.renderTextField();
     }
-    return question.grid_view
-      ? QuestionCard.renderOptionsGrid(question, widget)
-      : QuestionCard.renderOptionsList(question, widget);
+    return QuestionCard.renderOptionsFields(question);
   }
 
   static renderTextField() {
@@ -115,14 +123,6 @@ class QuestionCard extends Component {
         hintText={<FormattedMessage {...translations.textResponse} />}
       />
     );
-  }
-
-  static renderSpecificFields(question) {
-    const { TEXT } = questionTypes;
-    if (question.question_type === TEXT) {
-      return QuestionCard.renderTextField();
-    }
-    return QuestionCard.renderOptionsFields(question);
   }
 
   constructor(props) {

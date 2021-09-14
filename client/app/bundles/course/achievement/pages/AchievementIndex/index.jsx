@@ -40,15 +40,15 @@ class PopupDialog extends Component {
     );
   };
 
-  handleOpen = () => {
-    this.props.dispatch({ type: actionTypes.ACHIEVEMENT_FORM_SHOW });
-  };
-
   handleClose = () => {
     this.props.dispatch({
       type: actionTypes.ACHIEVEMENT_FORM_CANCEL,
       payload: { pristine: this.props.pristine },
     });
+  };
+
+  handleOpen = () => {
+    this.props.dispatch({ type: actionTypes.ACHIEVEMENT_FORM_SHOW });
   };
 
   render() {

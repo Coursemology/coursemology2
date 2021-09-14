@@ -35,6 +35,30 @@ class VideosSelector extends Component {
     tabs.forEach((tab) => this.setAllInTab(tab)(value));
   };
 
+  renderBody() {
+    const { tabs } = this.props;
+
+    if (tabs.length < 1) {
+      return (
+        <Subheader>
+          <FormattedMessage {...translations.noItems} />
+        </Subheader>
+      );
+    }
+
+    return (
+      <>
+        {tabs.length > 1 ? (
+          <BulkSelectors
+            callback={this.setEverything}
+            styles={{ selectLink: { marginLeft: 0 } }}
+          />
+        ) : null}
+        {tabs.map((tab) => this.renderTabTree(tab))}
+      </>
+    );
+  }
+
   renderTabTree(tab) {
     const { dispatch, selectedItems } = this.props;
     const { id, title, videos } = tab;
@@ -82,30 +106,6 @@ class VideosSelector extends Component {
           dispatch(setItemSelectedBoolean(VIDEO, video.id, value))
         }
       />
-    );
-  }
-
-  renderBody() {
-    const { tabs } = this.props;
-
-    if (tabs.length < 1) {
-      return (
-        <Subheader>
-          <FormattedMessage {...translations.noItems} />
-        </Subheader>
-      );
-    }
-
-    return (
-      <>
-        {tabs.length > 1 ? (
-          <BulkSelectors
-            callback={this.setEverything}
-            styles={{ selectLink: { marginLeft: 0 } }}
-          />
-        ) : null}
-        {tabs.map((tab) => this.renderTabTree(tab))}
-      </>
     );
   }
 

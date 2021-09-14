@@ -133,42 +133,6 @@ const translations = defineMessages({
 });
 
 class OptionsQuestionResults extends Component {
-  static renderPercentageBar(percentage) {
-    return (
-      <div style={styles.barContainer}>
-        <div style={{ ...styles.bar, width: `${percentage}%` }}>
-          {percentage >= styles.percentageBarThreshold
-            ? `${percentage.toFixed(1)}%`
-            : null}
-        </div>
-        {percentage < styles.percentageBarThreshold ? (
-          <span style={styles.percentage}>{`${percentage.toFixed(1)}%`}</span>
-        ) : null}
-      </div>
-    );
-  }
-
-  static renderStudentList(students) {
-    return (
-      <div style={styles.optionStudentNames}>
-        {students.map((student) => (
-          <Chip key={student.id} style={styles.nameChip}>
-            <Link to={student.response_path}>
-              {student.phantom ? (
-                <FormattedMessage
-                  {...translations.phantomStudentName}
-                  values={{ name: student.name }}
-                />
-              ) : (
-                student.name
-              )}
-            </Link>
-          </Chip>
-        ))}
-      </div>
-    );
-  }
-
   static renderOptionRow(breakdown, hasImage, option, index, anonymous) {
     const percentage = (100 * breakdown[option.id].count) / breakdown.length;
     const {
@@ -204,6 +168,42 @@ class OptionsQuestionResults extends Component {
             : OptionsQuestionResults.renderStudentList(breakdown[id].students)}
         </TableRowColumn>
       </TableRow>
+    );
+  }
+
+  static renderPercentageBar(percentage) {
+    return (
+      <div style={styles.barContainer}>
+        <div style={{ ...styles.bar, width: `${percentage}%` }}>
+          {percentage >= styles.percentageBarThreshold
+            ? `${percentage.toFixed(1)}%`
+            : null}
+        </div>
+        {percentage < styles.percentageBarThreshold ? (
+          <span style={styles.percentage}>{`${percentage.toFixed(1)}%`}</span>
+        ) : null}
+      </div>
+    );
+  }
+
+  static renderStudentList(students) {
+    return (
+      <div style={styles.optionStudentNames}>
+        {students.map((student) => (
+          <Chip key={student.id} style={styles.nameChip}>
+            <Link to={student.response_path}>
+              {student.phantom ? (
+                <FormattedMessage
+                  {...translations.phantomStudentName}
+                  values={{ name: student.name }}
+                />
+              ) : (
+                student.name
+              )}
+            </Link>
+          </Chip>
+        ))}
+      </div>
     );
   }
 

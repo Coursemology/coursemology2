@@ -103,18 +103,6 @@ class DateTimePicker extends PureComponent {
     this.setState(DateTimePicker.displayState(dateTime));
   }
 
-  updateDateTime = (newDateTime) => {
-    const { onBlur, onChange } = this.props;
-    this.setState(DateTimePicker.displayState(newDateTime));
-    // Marks redux-form field as 'touched' so that validation errors are shown, if any.
-    if (onBlur) {
-      onBlur();
-    }
-    if (onChange) {
-      onChange(null, newDateTime);
-    }
-  };
-
   updateDate = (newDate) => {
     if (newDate === null) {
       this.updateDateTime(null);
@@ -125,6 +113,18 @@ class DateTimePicker extends PureComponent {
       ? moment(this.props.value).set({ date, months, years })
       : moment({ date, months, years });
     this.updateDateTime(newDateTime.toDate());
+  };
+
+  updateDateTime = (newDateTime) => {
+    const { onBlur, onChange } = this.props;
+    this.setState(DateTimePicker.displayState(newDateTime));
+    // Marks redux-form field as 'touched' so that validation errors are shown, if any.
+    if (onBlur) {
+      onBlur();
+    }
+    if (onChange) {
+      onChange(null, newDateTime);
+    }
   };
 
   updateTime = (newTime) => {

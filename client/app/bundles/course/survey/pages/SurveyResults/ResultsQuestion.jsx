@@ -18,15 +18,6 @@ const styles = {
 };
 
 class ResultsQuestion extends Component {
-  renderTextResults() {
-    const {
-      includePhantoms,
-      question: { answers },
-      anonymous,
-    } = this.props;
-    return <TextResponseResults {...{ includePhantoms, answers, anonymous }} />;
-  }
-
   renderOptionsResults() {
     const {
       question: { options, answers, question_type: questionType },
@@ -53,6 +44,15 @@ class ResultsQuestion extends Component {
       return null;
     }
     return renderer.call(this);
+  }
+
+  renderTextResults() {
+    const {
+      includePhantoms,
+      question: { answers },
+      anonymous,
+    } = this.props;
+    return <TextResponseResults {...{ includePhantoms, answers, anonymous }} />;
   }
 
   render() {

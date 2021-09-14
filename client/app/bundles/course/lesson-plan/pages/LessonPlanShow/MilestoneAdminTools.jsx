@@ -49,16 +49,17 @@ const styles = {
 };
 
 class MilestoneAdminTools extends PureComponent {
-  updateMilestoneHandler = (data) => {
+  deleteMilestoneHandler = () => {
     const {
       dispatch,
       intl,
       milestone: { id },
     } = this.props;
-
-    const successMessage = intl.formatMessage(translations.updateSuccess);
-    const failureMessage = intl.formatMessage(translations.updateFailure);
-    return dispatch(updateMilestone(id, data, successMessage, failureMessage));
+    const successMessage = intl.formatMessage(translations.deleteSuccess);
+    const failureMessage = intl.formatMessage(translations.deleteFailure);
+    const handleDelete = () =>
+      dispatch(deleteMilestone(id, successMessage, failureMessage));
+    return dispatch(showDeleteConfirmation(handleDelete));
   };
 
   showEditMilestoneDialog = () => {
@@ -77,17 +78,16 @@ class MilestoneAdminTools extends PureComponent {
     );
   };
 
-  deleteMilestoneHandler = () => {
+  updateMilestoneHandler = (data) => {
     const {
       dispatch,
       intl,
       milestone: { id },
     } = this.props;
-    const successMessage = intl.formatMessage(translations.deleteSuccess);
-    const failureMessage = intl.formatMessage(translations.deleteFailure);
-    const handleDelete = () =>
-      dispatch(deleteMilestone(id, successMessage, failureMessage));
-    return dispatch(showDeleteConfirmation(handleDelete));
+
+    const successMessage = intl.formatMessage(translations.updateSuccess);
+    const failureMessage = intl.formatMessage(translations.updateFailure);
+    return dispatch(updateMilestone(id, data, successMessage, failureMessage));
   };
 
   render() {

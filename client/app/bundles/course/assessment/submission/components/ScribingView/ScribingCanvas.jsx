@@ -169,42 +169,97 @@ export default class ScribingCanvas extends Component {
     return !this.props.scribing.isCanvasLoaded;
   }
 
-  disableObjectSelection() {
-    this.canvas.forEachObject((object) => {
-      object.selectable = false; // eslint-disable-line no-param-reassign
-      object.hoverCursor = this.currentCursor; // eslint-disable-line no-param-reassign
-    });
-  }
+  onKeyDown = (event) => {
+    if (!this.canvas) return;
 
-  // This method clears the selection-disabled scribbles
-  // and reloads them to enable selection again
-  enableObjectSelection() {
-    const canvasState =
-      this.props.scribing.canvasStates[this.props.scribing.currentStateIndex];
-    const userScribbles = this.getFabricObjectsFromJson(canvasState);
-    this.canvas.clear();
-    this.canvas.setBackground();
-    this.props.scribing.layers.forEach((layer) =>
-      this.canvas.add(layer.scribbleGroup),
-    );
-    userScribbles.forEach((scribble) => {
-      if (scribble.type === 'i-text') {
-        scribble.setControlsVisibility({
-          bl: false,
-          br: false,
-          mb: false,
-          ml: false,
-          mr: false,
-          mt: false,
-          tl: false,
-          tr: false,
-        });
+    const activeObject = this.canvas.getActiveObject();
+    const activeObjects = this.canvas.getActiveObjects();
+
+    switch (event.keyCode) {
+      case 8: // Backspace key
+      case 46: {
+        // Delete key
+        this.canvas.discardActiveObject();
+        activeObjects.forEach((object) => this.canvas.remove(object));
+        break;
       }
-      this.canvas.add(scribble);
-    });
-    this.canvas.renderAll();
-    this.isScribblesLoaded = true;
-  }
+      case 67: {
+        // Ctrl+C
+        if (event.ctrlKey || event.metaKey) {
+          event.preventDefault();
+
+          this.copiedObjects = [];
+          activeObjects.forEach((obj) => this.copiedObjects.push(obj));
+          this.copyLeft = activeObject.left;
+          this.copyTop = activeObject.top;
+        }
+        break;
+      }
+      case 86: {
+        // Ctrl+V
+        if (event.ctrlKey || event.metaKey) {
+          event.preventDefault();
+
+          this.canvas.discardActiveObject();
+
+          const newObjects = [];
+          let newObj = {};
+
+          // Don't wrap single object in group,
+          // in case it's i-text and we want it to be editable at first tap
+          if (this.copiedObjects.length === 1) {
+            const obj = this.copiedObjects[0];
+            if (obj.type === 'i-text') {
+              newObj = this.cloneText(obj);
+            } else {
+              obj.clone((c) => {
+                newObj = c;
+              });
+            }
+
+            this.setCopiedCanvasObjectPosition(newObj);
+            this.canvas.add(newObj);
+            this.canvas.setActiveObject(newObj);
+            this.canvas.renderAll();
+          } else {
+            // Cloning a group of objects
+            this.copiedObjects.forEach((obj) => {
+              if (obj.type === 'i-text') {
+                newObj = this.cloneText(obj);
+              } else {
+                obj.clone((c) => {
+                  newObj = c;
+                });
+              }
+              newObj.setCoords();
+              this.canvas.add(newObj);
+              newObjects.push(newObj);
+            });
+            const selection = new fabric.ActiveSelection(newObjects, {
+              canvas: this.canvas,
+            });
+
+            this.setCopiedCanvasObjectPosition(selection);
+            this.canvas.setActiveObject(selection);
+            this.canvas.renderAll();
+          }
+        }
+        break;
+      }
+      case 90: {
+        // Ctrl-Z
+        if (event.ctrlKey || event.metaKey) {
+          if (event.shiftKey) {
+            this.redo();
+          } else {
+            this.undo();
+          }
+        }
+        break;
+      }
+      default:
+    }
+  };
 
   // Canvas Event Handlers
 
@@ -472,6 +527,16 @@ export default class ScribingCanvas extends Component {
     }
   };
 
+  onMouseOut = () => {
+    this.isOverText = false;
+  };
+
+  onMouseOver = (options) => {
+    if (options.target && options.target.type === 'i-text') {
+      this.isOverText = true;
+    }
+  };
+
   onMouseUpCanvas = () => {
     this.mouseDownFlag = false;
 
@@ -511,16 +576,6 @@ export default class ScribingCanvas extends Component {
       }
       default:
     }
-  };
-
-  onMouseOver = (options) => {
-    if (options.target && options.target.type === 'i-text') {
-      this.isOverText = true;
-    }
-  };
-
-  onMouseOut = () => {
-    this.isOverText = false;
   };
 
   // Limit moving of objects to within the canvas
@@ -563,97 +618,193 @@ export default class ScribingCanvas extends Component {
     }
   };
 
-  // Helpers
-
-  // Legacy code needed to support migrated v1 scribing questions.
-  // This code scales/unscales the scribbles by a standard number.
-  normaliseScribble(scribble, isDenormalise) {
-    const STANDARD = 1000;
-    let factor;
-
-    if (isDenormalise) {
-      factor = this.canvas.getWidth() / STANDARD;
-    } else {
-      factor = STANDARD / this.canvas.getWidth();
+  onObjectSelected = (options) => {
+    if (options.target) {
+      this.props.setActiveObject(this.props.answerId, options.target);
     }
+  };
 
-    scribble.set({
-      scaleX: scribble.scaleX * factor,
-      scaleY: scribble.scaleY * factor,
-      left: scribble.left * factor,
-      top: scribble.top * factor,
-    });
+  onSelectionCleared = () => {
+    this.props.setActiveObject(this.props.answerId, undefined);
+  };
+
+  onTextChanged = (options) => {
+    if (options.target.text.trim() === '') {
+      this.canvas.remove(options.target);
+    }
+    this.textCreated = false;
+    this.saveScribbles();
+    this.props.setToolSelected(this.props.answerId, scribingTools.SELECT);
+    this.props.setCanvasCursor(this.props.answerId, 'default');
+  };
+
+  getCanvasPoint(event) {
+    if (!event) return undefined;
+    const pointer = this.canvas.getPointer(event);
+    return {
+      x: pointer.x,
+      y: pointer.y,
+    };
   }
+
+  /*
+   * @param {string} json: JSON string with 'objects' key containing array of scribbles
+   * @return {array} array of Fabric objects
+   */
+  getFabricObjectsFromJson = (json) => {
+    const objects = JSON.parse(json).objects;
+    const userScribbles = [];
+
+    // Parse JSON to Fabric.js objects
+    for (let i = 0; i < objects.length; i++) {
+      if (objects[i].type !== 'group') {
+        const klass = fabric.util.getKlass(objects[i].type);
+        klass.fromObject(objects[i], (obj) => {
+          this.denormaliseScribble(obj);
+          userScribbles.push(obj);
+        });
+      }
+    }
+    return userScribbles;
+  };
+
+  getMousePoint = (event) => ({
+    x: event.clientX,
+    y: event.clientY,
+  });
+
+  getScribbleJSON() {
+    // Remove non-user scribings in canvas
+    this.props.scribing.layers.forEach((layer) => {
+      if (layer.creator_id !== this.props.scribing.answer.user_id) {
+        layer.showLayer(false);
+      }
+    });
+
+    // Only save rescaled user scribings
+    const objects = this.canvas._objects;
+    objects.forEach((obj) => {
+      this.normaliseScribble(obj);
+    });
+    const json = JSON.stringify(objects);
+
+    // Scale back user scribings
+    objects.forEach((obj) => {
+      this.denormaliseScribble(obj);
+    });
+
+    // Add back non-user scribings according canvas state
+    this.props.scribing.layers.forEach((layer) =>
+      layer.showLayer(layer.isDisplayed),
+    );
+    return `{"objects": ${json}}`;
+  }
+
+  setCopiedCanvasObjectPosition(obj) {
+    // Shift copied object to the left if there's space
+    this.copyLeft =
+      this.copyLeft + obj.width > this.canvas.width
+        ? this.copyLeft
+        : this.copyLeft + 10;
+    obj.left = this.copyLeft; // eslint-disable-line no-param-reassign
+    // Shift copied object down if there's space
+    this.copyTop =
+      this.copyTop + obj.height > this.canvas.height
+        ? this.copyTop
+        : this.copyTop + 10;
+    obj.top = this.copyTop; // eslint-disable-line no-param-reassign
+
+    obj.setCoords();
+  }
+
+  setCurrentCanvasState = (stateIndex) => {
+    const userScribbles = this.getFabricObjectsFromJson(
+      this.props.scribing.canvasStates[stateIndex],
+    );
+
+    this.canvas.clear();
+    this.canvas.setBackground();
+    this.props.scribing.layers.forEach((layer) =>
+      this.canvas.add(layer.scribbleGroup),
+    );
+    userScribbles.forEach((scribble) => this.canvas.add(scribble));
+    this.canvas.renderAll();
+    this.isScribblesLoaded = true;
+
+    this.props.setCurrentStateIndex(this.props.answerId, stateIndex);
+  };
+
+  // Utility Helpers
+  cloneText = (obj) => {
+    const newObj = new fabric.IText(obj.text, {
+      left: obj.left,
+      top: obj.top,
+      fontFamily: obj.fontFamily,
+      fontSize: obj.fontSize,
+      fill: obj.fill,
+      padding: 5,
+    });
+    newObj.setControlsVisibility({
+      bl: false,
+      br: false,
+      mb: false,
+      ml: false,
+      mr: false,
+      mt: false,
+      tl: false,
+      tr: false,
+    });
+    return newObj;
+  };
 
   denormaliseScribble(scribble) {
     return this.normaliseScribble(scribble, true);
   }
 
-  initializeScribblesAndBackground = () => {
-    const { scribbles } = this.props.scribing.answer;
-    const { layers } = this.props.scribing;
-    const userId = this.props.scribing.answer.user_id;
+  disableObjectSelection() {
+    this.canvas.forEachObject((object) => {
+      object.selectable = false; // eslint-disable-line no-param-reassign
+      object.hoverCursor = this.currentCursor; // eslint-disable-line no-param-reassign
+    });
+  }
 
-    this.isScribblesLoaded = false;
-    let userScribble = [];
-
-    layers.forEach((layer) => this.canvas.add(layer.scribbleGroup));
-
-    if (scribbles) {
-      scribbles.forEach((scribble) => {
-        const fabricObjs = this.getFabricObjectsFromJson(scribble.content);
-
-        // Create layer for each user's scribble
-        // Scribbles in layers have selection disabled
-        if (scribble.creator_id !== userId) {
-          // eslint-disable-next-line no-undef
-          const scribbleGroup = new fabric.Group(fabricObjs);
-          scribbleGroup.selectable = false;
-
-          const showLayer = (isShown) => {
-            // eslint-disable-next-line no-param-reassign
-            scribbleGroup._objects.forEach((obj) => obj.setVisible(isShown));
-            this.canvas.renderAll();
-          };
-          // Populate layers list
-          const newScribble = {
-            ...scribble,
-            isDisplayed: true,
-            showLayer,
-            scribbleGroup,
-          };
-          this.props.addLayer(this.props.answerId, newScribble);
-          this.canvas.add(scribbleGroup);
-        } else if (scribble.creator_id === userId) {
-          // Add other user's layers first to avoid blocking of user's layer
-          userScribble = fabricObjs;
-        }
-      });
-
-      // Layer for current user's scribble
-      // Enables scribble selection
-      userScribble.forEach((obj) => {
-        // Don't allow scaling of text object
-        if (obj.type === 'i-text') {
-          obj.setControlsVisibility({
-            bl: false,
-            br: false,
-            mb: false,
-            ml: false,
-            mr: false,
-            mt: false,
-            tl: false,
-            tr: false,
-          });
-        }
-        this.canvas.add(obj);
-      });
-    }
+  // This method clears the selection-disabled scribbles
+  // and reloads them to enable selection again
+  enableObjectSelection() {
+    const canvasState =
+      this.props.scribing.canvasStates[this.props.scribing.currentStateIndex];
+    const userScribbles = this.getFabricObjectsFromJson(canvasState);
+    this.canvas.clear();
     this.canvas.setBackground();
+    this.props.scribing.layers.forEach((layer) =>
+      this.canvas.add(layer.scribbleGroup),
+    );
+    userScribbles.forEach((scribble) => {
+      if (scribble.type === 'i-text') {
+        scribble.setControlsVisibility({
+          bl: false,
+          br: false,
+          mb: false,
+          ml: false,
+          mr: false,
+          mt: false,
+          tl: false,
+          tr: false,
+        });
+      }
+      this.canvas.add(scribble);
+    });
     this.canvas.renderAll();
     this.isScribblesLoaded = true;
-    this.saveScribbles(); // Add initial state as index 0 is states history
-  };
+  }
+
+  // Generates the left, top, width and height of the drag
+  generateMouseDragProperties = (point1, point2) => ({
+    left: point1.x < point2.x ? point1.x : point2.x,
+    top: point1.y < point2.y ? point1.y : point2.y,
+    width: Math.abs(point1.x - point2.x),
+    height: Math.abs(point1.y - point2.y),
+  });
 
   initializeCanvas(answerId, imageUrl) {
     this.image = new Image(); // eslint-disable-line no-undef
@@ -736,20 +887,93 @@ export default class ScribingCanvas extends Component {
     };
   }
 
-  // Adjusting canvas height after canvas initialization
-  // helps to scale/move scribbles accordingly
-  scaleCanvas() {
-    this.canvas.setWidth(this.width);
-    this.canvas.setHeight(this.height);
-    this.canvas.renderAll();
-  }
+  initializeScribblesAndBackground = () => {
+    const { scribbles } = this.props.scribing.answer;
+    const { layers } = this.props.scribing;
+    const userId = this.props.scribing.answer.user_id;
 
-  // Scribble Helpers
-  undo = () => {
-    if (this.props.scribing.currentStateIndex > 0) {
-      this.setCurrentCanvasState(this.props.scribing.currentStateIndex - 1);
+    this.isScribblesLoaded = false;
+    let userScribble = [];
+
+    layers.forEach((layer) => this.canvas.add(layer.scribbleGroup));
+
+    if (scribbles) {
+      scribbles.forEach((scribble) => {
+        const fabricObjs = this.getFabricObjectsFromJson(scribble.content);
+
+        // Create layer for each user's scribble
+        // Scribbles in layers have selection disabled
+        if (scribble.creator_id !== userId) {
+          // eslint-disable-next-line no-undef
+          const scribbleGroup = new fabric.Group(fabricObjs);
+          scribbleGroup.selectable = false;
+
+          const showLayer = (isShown) => {
+            // eslint-disable-next-line no-param-reassign
+            scribbleGroup._objects.forEach((obj) => obj.setVisible(isShown));
+            this.canvas.renderAll();
+          };
+          // Populate layers list
+          const newScribble = {
+            ...scribble,
+            isDisplayed: true,
+            showLayer,
+            scribbleGroup,
+          };
+          this.props.addLayer(this.props.answerId, newScribble);
+          this.canvas.add(scribbleGroup);
+        } else if (scribble.creator_id === userId) {
+          // Add other user's layers first to avoid blocking of user's layer
+          userScribble = fabricObjs;
+        }
+      });
+
+      // Layer for current user's scribble
+      // Enables scribble selection
+      userScribble.forEach((obj) => {
+        // Don't allow scaling of text object
+        if (obj.type === 'i-text') {
+          obj.setControlsVisibility({
+            bl: false,
+            br: false,
+            mb: false,
+            ml: false,
+            mr: false,
+            mt: false,
+            tl: false,
+            tr: false,
+          });
+        }
+        this.canvas.add(obj);
+      });
     }
+    this.canvas.setBackground();
+    this.canvas.renderAll();
+    this.isScribblesLoaded = true;
+    this.saveScribbles(); // Add initial state as index 0 is states history
   };
+
+  // Helpers
+
+  // Legacy code needed to support migrated v1 scribing questions.
+  // This code scales/unscales the scribbles by a standard number.
+  normaliseScribble(scribble, isDenormalise) {
+    const STANDARD = 1000;
+    let factor;
+
+    if (isDenormalise) {
+      factor = this.canvas.getWidth() / STANDARD;
+    } else {
+      factor = STANDARD / this.canvas.getWidth();
+    }
+
+    scribble.set({
+      scaleX: scribble.scaleX * factor,
+      scaleY: scribble.scaleY * factor,
+      left: scribble.left * factor,
+      top: scribble.top * factor,
+    });
+  }
 
   redo = () => {
     if (
@@ -759,44 +983,6 @@ export default class ScribingCanvas extends Component {
     ) {
       this.setCurrentCanvasState(this.props.scribing.currentStateIndex + 1);
     }
-  };
-
-  /*
-   * @param {string} json: JSON string with 'objects' key containing array of scribbles
-   * @return {array} array of Fabric objects
-   */
-  getFabricObjectsFromJson = (json) => {
-    const objects = JSON.parse(json).objects;
-    const userScribbles = [];
-
-    // Parse JSON to Fabric.js objects
-    for (let i = 0; i < objects.length; i++) {
-      if (objects[i].type !== 'group') {
-        const klass = fabric.util.getKlass(objects[i].type);
-        klass.fromObject(objects[i], (obj) => {
-          this.denormaliseScribble(obj);
-          userScribbles.push(obj);
-        });
-      }
-    }
-    return userScribbles;
-  };
-
-  setCurrentCanvasState = (stateIndex) => {
-    const userScribbles = this.getFabricObjectsFromJson(
-      this.props.scribing.canvasStates[stateIndex],
-    );
-
-    this.canvas.clear();
-    this.canvas.setBackground();
-    this.props.scribing.layers.forEach((layer) =>
-      this.canvas.add(layer.scribbleGroup),
-    );
-    userScribbles.forEach((scribble) => this.canvas.add(scribble));
-    this.canvas.renderAll();
-    this.isScribblesLoaded = true;
-
-    this.props.setCurrentStateIndex(this.props.answerId, stateIndex);
   };
 
   saveScribbles = () =>
@@ -826,206 +1012,20 @@ export default class ScribingCanvas extends Component {
       resolve();
     });
 
-  getScribbleJSON() {
-    // Remove non-user scribings in canvas
-    this.props.scribing.layers.forEach((layer) => {
-      if (layer.creator_id !== this.props.scribing.answer.user_id) {
-        layer.showLayer(false);
-      }
-    });
-
-    // Only save rescaled user scribings
-    const objects = this.canvas._objects;
-    objects.forEach((obj) => {
-      this.normaliseScribble(obj);
-    });
-    const json = JSON.stringify(objects);
-
-    // Scale back user scribings
-    objects.forEach((obj) => {
-      this.denormaliseScribble(obj);
-    });
-
-    // Add back non-user scribings according canvas state
-    this.props.scribing.layers.forEach((layer) =>
-      layer.showLayer(layer.isDisplayed),
-    );
-    return `{"objects": ${json}}`;
+  // Adjusting canvas height after canvas initialization
+  // helps to scale/move scribbles accordingly
+  scaleCanvas() {
+    this.canvas.setWidth(this.width);
+    this.canvas.setHeight(this.height);
+    this.canvas.renderAll();
   }
 
-  onTextChanged = (options) => {
-    if (options.target.text.trim() === '') {
-      this.canvas.remove(options.target);
-    }
-    this.textCreated = false;
-    this.saveScribbles();
-    this.props.setToolSelected(this.props.answerId, scribingTools.SELECT);
-    this.props.setCanvasCursor(this.props.answerId, 'default');
-  };
-
-  onObjectSelected = (options) => {
-    if (options.target) {
-      this.props.setActiveObject(this.props.answerId, options.target);
+  // Scribble Helpers
+  undo = () => {
+    if (this.props.scribing.currentStateIndex > 0) {
+      this.setCurrentCanvasState(this.props.scribing.currentStateIndex - 1);
     }
   };
-
-  onSelectionCleared = () => {
-    this.props.setActiveObject(this.props.answerId, undefined);
-  };
-
-  onKeyDown = (event) => {
-    if (!this.canvas) return;
-
-    const activeObject = this.canvas.getActiveObject();
-    const activeObjects = this.canvas.getActiveObjects();
-
-    switch (event.keyCode) {
-      case 8: // Backspace key
-      case 46: {
-        // Delete key
-        this.canvas.discardActiveObject();
-        activeObjects.forEach((object) => this.canvas.remove(object));
-        break;
-      }
-      case 67: {
-        // Ctrl+C
-        if (event.ctrlKey || event.metaKey) {
-          event.preventDefault();
-
-          this.copiedObjects = [];
-          activeObjects.forEach((obj) => this.copiedObjects.push(obj));
-          this.copyLeft = activeObject.left;
-          this.copyTop = activeObject.top;
-        }
-        break;
-      }
-      case 86: {
-        // Ctrl+V
-        if (event.ctrlKey || event.metaKey) {
-          event.preventDefault();
-
-          this.canvas.discardActiveObject();
-
-          const newObjects = [];
-          let newObj = {};
-
-          // Don't wrap single object in group,
-          // in case it's i-text and we want it to be editable at first tap
-          if (this.copiedObjects.length === 1) {
-            const obj = this.copiedObjects[0];
-            if (obj.type === 'i-text') {
-              newObj = this.cloneText(obj);
-            } else {
-              obj.clone((c) => {
-                newObj = c;
-              });
-            }
-
-            this.setCopiedCanvasObjectPosition(newObj);
-            this.canvas.add(newObj);
-            this.canvas.setActiveObject(newObj);
-            this.canvas.renderAll();
-          } else {
-            // Cloning a group of objects
-            this.copiedObjects.forEach((obj) => {
-              if (obj.type === 'i-text') {
-                newObj = this.cloneText(obj);
-              } else {
-                obj.clone((c) => {
-                  newObj = c;
-                });
-              }
-              newObj.setCoords();
-              this.canvas.add(newObj);
-              newObjects.push(newObj);
-            });
-            const selection = new fabric.ActiveSelection(newObjects, {
-              canvas: this.canvas,
-            });
-
-            this.setCopiedCanvasObjectPosition(selection);
-            this.canvas.setActiveObject(selection);
-            this.canvas.renderAll();
-          }
-        }
-        break;
-      }
-      case 90: {
-        // Ctrl-Z
-        if (event.ctrlKey || event.metaKey) {
-          if (event.shiftKey) {
-            this.redo();
-          } else {
-            this.undo();
-          }
-        }
-        break;
-      }
-      default:
-    }
-  };
-
-  // Utility Helpers
-  cloneText = (obj) => {
-    const newObj = new fabric.IText(obj.text, {
-      left: obj.left,
-      top: obj.top,
-      fontFamily: obj.fontFamily,
-      fontSize: obj.fontSize,
-      fill: obj.fill,
-      padding: 5,
-    });
-    newObj.setControlsVisibility({
-      bl: false,
-      br: false,
-      mb: false,
-      ml: false,
-      mr: false,
-      mt: false,
-      tl: false,
-      tr: false,
-    });
-    return newObj;
-  };
-
-  setCopiedCanvasObjectPosition(obj) {
-    // Shift copied object to the left if there's space
-    this.copyLeft =
-      this.copyLeft + obj.width > this.canvas.width
-        ? this.copyLeft
-        : this.copyLeft + 10;
-    obj.left = this.copyLeft; // eslint-disable-line no-param-reassign
-    // Shift copied object down if there's space
-    this.copyTop =
-      this.copyTop + obj.height > this.canvas.height
-        ? this.copyTop
-        : this.copyTop + 10;
-    obj.top = this.copyTop; // eslint-disable-line no-param-reassign
-
-    obj.setCoords();
-  }
-
-  getMousePoint = (event) => ({
-    x: event.clientX,
-    y: event.clientY,
-  });
-
-  // Generates the left, top, width and height of the drag
-  generateMouseDragProperties = (point1, point2) => ({
-    left: point1.x < point2.x ? point1.x : point2.x,
-    top: point1.y < point2.y ? point1.y : point2.y,
-    width: Math.abs(point1.x - point2.x),
-    height: Math.abs(point1.y - point2.y),
-  });
-
-  getCanvasPoint(event) {
-    if (!event) return undefined;
-    const pointer = this.canvas.getPointer(event);
-    return {
-      x: pointer.x,
-      y: pointer.y,
-    };
-  }
 
   render() {
     const answerId = this.props.answerId;

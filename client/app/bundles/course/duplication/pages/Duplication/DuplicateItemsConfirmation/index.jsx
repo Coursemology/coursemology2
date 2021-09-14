@@ -42,6 +42,26 @@ const translations = defineMessages({
 });
 
 class DuplicateItemsConfirmation extends Component {
+  renderListing() {
+    return (
+      <>
+        <p>
+          <FormattedMessage {...translations.confirmationQuestion} />
+        </p>
+        {this.renderdestinationCourseCard()}
+        <AssessmentsListing />
+        <SurveyListing />
+        <AchievementsListing />
+        <MaterialsListing />
+        <VideosListing />
+
+        <ReactTooltip id="itemUnpublished">
+          <FormattedMessage {...translations.itemUnpublished} />
+        </ReactTooltip>
+      </>
+    );
+  }
+
   renderdestinationCourseCard() {
     const { destinationCourses, destinationCourseId } = this.props;
     const destinationCourse = destinationCourses.find(
@@ -63,26 +83,6 @@ class DuplicateItemsConfirmation extends Component {
             </h4>
           </CardText>
         </Card>
-      </>
-    );
-  }
-
-  renderListing() {
-    return (
-      <>
-        <p>
-          <FormattedMessage {...translations.confirmationQuestion} />
-        </p>
-        {this.renderdestinationCourseCard()}
-        <AssessmentsListing />
-        <SurveyListing />
-        <AchievementsListing />
-        <MaterialsListing />
-        <VideosListing />
-
-        <ReactTooltip id="itemUnpublished">
-          <FormattedMessage {...translations.itemUnpublished} />
-        </ReactTooltip>
       </>
     );
   }

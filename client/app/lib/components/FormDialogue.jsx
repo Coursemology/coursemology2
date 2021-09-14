@@ -27,6 +27,15 @@ class FormDialogue extends Component {
     };
   }
 
+  handleDiscard = () => {
+    this.setState({ discardConfirmationOpen: false });
+    this.props.hideForm();
+  };
+
+  handleDiscardCancel = () => {
+    this.setState({ discardConfirmationOpen: false });
+  };
+
   handleFormClose = () => {
     const { hideForm, disabled, skipConfirmation } = this.props;
     if (disabled) {
@@ -38,15 +47,6 @@ class FormDialogue extends Component {
     } else {
       this.setState({ discardConfirmationOpen: true });
     }
-  };
-
-  handleDiscardCancel = () => {
-    this.setState({ discardConfirmationOpen: false });
-  };
-
-  handleDiscard = () => {
-    this.setState({ discardConfirmationOpen: false });
-    this.props.hideForm();
   };
 
   render() {

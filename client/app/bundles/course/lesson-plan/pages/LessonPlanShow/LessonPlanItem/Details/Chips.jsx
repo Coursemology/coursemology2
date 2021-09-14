@@ -58,28 +58,6 @@ export const formatDateRange = (startAt, endAt) => {
 };
 
 class Chips extends Component {
-  renderNotPublishedChip() {
-    if (this.props.published) {
-      return null;
-    }
-    return (
-      <Chip style={styles.chip}>
-        <Avatar icon={<Block />} backgroundColor={red700} />
-        <FormattedMessage {...translations.notPublished} />
-      </Chip>
-    );
-  }
-
-  renderTypeTagChip() {
-    const { itemType } = this.props;
-    return (
-      <Chip style={styles.chip}>
-        <Avatar icon={<InfoOutline />} />
-        {itemType}
-      </Chip>
-    );
-  }
-
   renderDateTimeRangeChip() {
     const { startAt, endAt } = this.props;
     return (
@@ -99,6 +77,28 @@ class Chips extends Component {
       <Chip style={styles.chip}>
         <Avatar icon={<Room />} />
         {location}
+      </Chip>
+    );
+  }
+
+  renderNotPublishedChip() {
+    if (this.props.published) {
+      return null;
+    }
+    return (
+      <Chip style={styles.chip}>
+        <Avatar icon={<Block />} backgroundColor={red700} />
+        <FormattedMessage {...translations.notPublished} />
+      </Chip>
+    );
+  }
+
+  renderTypeTagChip() {
+    const { itemType } = this.props;
+    return (
+      <Chip style={styles.chip}>
+        <Avatar icon={<InfoOutline />} />
+        {itemType}
       </Chip>
     );
   }

@@ -50,13 +50,13 @@ class SingleFileInput extends Component {
     this.updateStore(undefined);
   }
 
-  onDrop = (files) => {
-    this.setState({ file: files[0] }, this.updateStore(files[0]));
-  };
-
   onCancel = (e) => {
     this.setState({ file: null }, this.updateStore(''));
     e.stopPropagation();
+  };
+
+  onDrop = (files) => {
+    this.setState({ file: files[0] }, this.updateStore(files[0]));
   };
 
   updateStore = (file) => {

@@ -34,6 +34,15 @@ class ReadOnlyEditor extends Component {
     this.setState({ expanded });
   }
 
+  setAllCommentStateCollapsed() {
+    const { expanded } = this.state;
+    const newExpanded = expanded.slice(0);
+    newExpanded.forEach((_, index) => {
+      newExpanded[index] = false;
+    });
+    this.setState({ expanded: newExpanded });
+  }
+
   setAllCommentStateExpanded() {
     const { expanded } = this.state;
     const { annotations } = this.props;
@@ -49,12 +58,10 @@ class ReadOnlyEditor extends Component {
     this.setState({ expanded: newExpanded });
   }
 
-  setAllCommentStateCollapsed() {
+  setCollapsedLine(lineNumber) {
     const { expanded } = this.state;
     const newExpanded = expanded.slice(0);
-    newExpanded.forEach((_, index) => {
-      newExpanded[index] = false;
-    });
+    newExpanded[lineNumber - 1] = false;
     this.setState({ expanded: newExpanded });
   }
 
@@ -65,20 +72,6 @@ class ReadOnlyEditor extends Component {
     const { expanded } = this.state;
     const newExpanded = expanded.slice(0);
     newExpanded[lineNumber - 1] = true;
-    this.setState({ expanded: newExpanded });
-  }
-
-  setCollapsedLine(lineNumber) {
-    const { expanded } = this.state;
-    const newExpanded = expanded.slice(0);
-    newExpanded[lineNumber - 1] = false;
-    this.setState({ expanded: newExpanded });
-  }
-
-  toggleCommentLine(lineNumber) {
-    const { expanded } = this.state;
-    const newExpanded = expanded.slice(0);
-    newExpanded[lineNumber - 1] = !newExpanded[lineNumber - 1];
     this.setState({ expanded: newExpanded });
   }
 
@@ -122,6 +115,23 @@ class ReadOnlyEditor extends Component {
     }
   };
 
+  toggleCommentLine(lineNumber) {
+    const { expanded } = this.state;
+    const newExpanded = expanded.slice(0);
+    newExpanded[lineNumber - 1] = !newExpanded[lineNumber - 1];
+    this.setState({ expanded: newExpanded });
+  }
+
+  renderEditor(editorProps) {
+    const { editorMode } = this.state;
+
+    return editorMode === EDITOR_MODE_NARROW ? (
+      <NarrowEditor {...editorProps} />
+    ) : (
+      <WideEditor {...editorProps} />
+    );
+  }
+
   renderExpandAllToggle() {
     const { intl } = this.props;
     return (
@@ -159,16 +169,6 @@ class ReadOnlyEditor extends Component {
           this.showCommentsPanel();
         }}
       />
-    );
-  }
-
-  renderEditor(editorProps) {
-    const { editorMode } = this.state;
-
-    return editorMode === EDITOR_MODE_NARROW ? (
-      <NarrowEditor {...editorProps} />
-    ) : (
-      <WideEditor {...editorProps} />
     );
   }
 

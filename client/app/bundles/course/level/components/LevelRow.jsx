@@ -33,6 +33,22 @@ const styles = {
 };
 
 class LevelRow extends Component {
+  renderDeleteButton() {
+    const { deleteLevel, disabled, levelNumber } = this.props;
+
+    return (
+      <RaisedButton
+        id={`delete_${levelNumber}`}
+        name={`delete_${levelNumber}`}
+        backgroundColor={grey300}
+        icon={<DeleteIcon />}
+        onClick={deleteLevel(levelNumber)}
+        disabled={disabled}
+        style={{ minWidth: '40px', width: '40px' }}
+      />
+    );
+  }
+
   renderInput() {
     const {
       disabled,
@@ -60,22 +76,6 @@ class LevelRow extends Component {
           sortLevels();
         }}
         value={experiencePointsThreshold}
-      />
-    );
-  }
-
-  renderDeleteButton() {
-    const { deleteLevel, disabled, levelNumber } = this.props;
-
-    return (
-      <RaisedButton
-        id={`delete_${levelNumber}`}
-        name={`delete_${levelNumber}`}
-        backgroundColor={grey300}
-        icon={<DeleteIcon />}
-        onClick={deleteLevel(levelNumber)}
-        disabled={disabled}
-        style={{ minWidth: '40px', width: '40px' }}
       />
     );
   }

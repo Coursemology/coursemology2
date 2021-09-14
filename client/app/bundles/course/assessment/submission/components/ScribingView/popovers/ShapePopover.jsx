@@ -63,21 +63,6 @@ const popoverStyles = {
 };
 
 class ShapePopover extends Component {
-  renderShapeComponent() {
-    const { currentShape, setSelectedShape, intl } = this.props;
-
-    return (
-      <>
-        <h4>{intl.formatMessage(translations.shape)}</h4>
-        <ShapeField
-          currentShape={currentShape}
-          setSelectedShape={setSelectedShape}
-        />
-        <Divider />
-      </>
-    );
-  }
-
   renderBorderComponent() {
     const {
       intl,
@@ -148,6 +133,21 @@ class ShapePopover extends Component {
           noFillValue={noFillValue}
           noFillOnCheck={noFillOnCheck}
         />
+      </>
+    );
+  }
+
+  renderShapeComponent() {
+    const { currentShape, setSelectedShape, intl } = this.props;
+
+    return (
+      <>
+        <h4>{intl.formatMessage(translations.shape)}</h4>
+        <ShapeField
+          currentShape={currentShape}
+          setSelectedShape={setSelectedShape}
+        />
+        <Divider />
       </>
     );
   }

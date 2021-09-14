@@ -31,27 +31,6 @@ class MaterialsSelector extends Component {
     });
   };
 
-  renderMaterial(material, indentLevel) {
-    const { dispatch, selectedItems } = this.props;
-    const checked = !!selectedItems[MATERIAL][material.id];
-
-    return (
-      <IndentedCheckbox
-        key={material.id}
-        label={
-          <span>
-            <TypeBadge itemType={MATERIAL} />
-            {material.name}
-          </span>
-        }
-        onCheck={(e, value) =>
-          dispatch(setItemSelectedBoolean(MATERIAL, material.id, value))
-        }
-        {...{ checked, indentLevel }}
-      />
-    );
-  }
-
   renderFolder(folder, indentLevel) {
     const { dispatch, selectedItems } = this.props;
     const { id, name, materials, subfolders } = folder;
@@ -83,6 +62,27 @@ class MaterialsSelector extends Component {
           this.renderFolder(subfolder, indentLevel + 1),
         )}
       </div>
+    );
+  }
+
+  renderMaterial(material, indentLevel) {
+    const { dispatch, selectedItems } = this.props;
+    const checked = !!selectedItems[MATERIAL][material.id];
+
+    return (
+      <IndentedCheckbox
+        key={material.id}
+        label={
+          <span>
+            <TypeBadge itemType={MATERIAL} />
+            {material.name}
+          </span>
+        }
+        onCheck={(e, value) =>
+          dispatch(setItemSelectedBoolean(MATERIAL, material.id, value))
+        }
+        {...{ checked, indentLevel }}
+      />
     );
   }
 

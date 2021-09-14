@@ -140,23 +140,34 @@ const validate = (values) => {
 };
 
 class QuestionForm extends Component {
-  renderTiledViewToggle() {
-    const { intl, disabled } = this.props;
+  renderMultipleChoiceFields() {
     return (
-      <>
-        <Field
-          name="grid_view"
-          labelPosition="right"
-          label={intl.formatMessage(questionFormTranslations.gridView)}
-          component={Toggle}
-          parse={Boolean}
-          style={styles.toggle}
-          {...{ disabled }}
-        />
-        <p style={styles.hint}>
-          {intl.formatMessage(questionFormTranslations.gridViewHint)}
-        </p>
-      </>
+      <div>
+        {this.renderTiledViewToggle()}
+        {this.renderValidOptionCount()}
+        {this.renderOptionFields({ multipleChoice: true })}
+      </div>
+    );
+  }
+
+  renderMultipleResponseFields() {
+    const { intl } = this.props;
+    return (
+      <div>
+        {this.renderTiledViewToggle()}
+        <div style={styles.numberOfResponsesDiv}>
+          {this.renderValidOptionCount()}
+          {this.renderNumberOfResponsesField(
+            'min_options',
+            intl.formatMessage(translations.minOptions),
+          )}
+          {this.renderNumberOfResponsesField(
+            'max_options',
+            intl.formatMessage(translations.maxOptions),
+          )}
+        </div>
+        {this.renderOptionFields({ multipleResponse: true })}
+      </div>
     );
   }
 
@@ -173,23 +184,19 @@ class QuestionForm extends Component {
     );
   }
 
-  renderValidOptionCount() {
-    const { intl, formValues } = this.props;
-    const numberOfFilledOptions = formValues
-      ? // eslint-disable-next-line react/prop-types
-        countFilledOptions(formValues.options)
-      : 0;
+  renderOptionFields(props) {
+    const { disabled, addToOptionsToDelete } = this.props;
 
     return (
-      <DisplayTextField
-        disabled
-        name="filled_options"
-        value={numberOfFilledOptions}
-        {...styles.numberOfResponsesField}
-        floatingLabelText={intl.formatMessage(
-          questionFormTranslations.optionCount,
-        )}
-      />
+      <div>
+        {this.renderOptionsToDelete(props)}
+        <FieldArray
+          name="options"
+          component={QuestionFormOptions}
+          {...{ disabled, addToOptionsToDelete }}
+          {...props}
+        />
+      </div>
     );
   }
 
@@ -222,53 +229,6 @@ class QuestionForm extends Component {
     return null;
   }
 
-  renderOptionFields(props) {
-    const { disabled, addToOptionsToDelete } = this.props;
-
-    return (
-      <div>
-        {this.renderOptionsToDelete(props)}
-        <FieldArray
-          name="options"
-          component={QuestionFormOptions}
-          {...{ disabled, addToOptionsToDelete }}
-          {...props}
-        />
-      </div>
-    );
-  }
-
-  renderMultipleChoiceFields() {
-    return (
-      <div>
-        {this.renderTiledViewToggle()}
-        {this.renderValidOptionCount()}
-        {this.renderOptionFields({ multipleChoice: true })}
-      </div>
-    );
-  }
-
-  renderMultipleResponseFields() {
-    const { intl } = this.props;
-    return (
-      <div>
-        {this.renderTiledViewToggle()}
-        <div style={styles.numberOfResponsesDiv}>
-          {this.renderValidOptionCount()}
-          {this.renderNumberOfResponsesField(
-            'min_options',
-            intl.formatMessage(translations.minOptions),
-          )}
-          {this.renderNumberOfResponsesField(
-            'max_options',
-            intl.formatMessage(translations.maxOptions),
-          )}
-        </div>
-        {this.renderOptionFields({ multipleResponse: true })}
-      </div>
-    );
-  }
-
   renderSpecificFields(questionType) {
     const { MULTIPLE_CHOICE, MULTIPLE_RESPONSE } = questionTypes;
     const renderer = {
@@ -277,6 +237,46 @@ class QuestionForm extends Component {
     }[questionType];
 
     return renderer ? renderer.call(this) : null;
+  }
+
+  renderTiledViewToggle() {
+    const { intl, disabled } = this.props;
+    return (
+      <>
+        <Field
+          name="grid_view"
+          labelPosition="right"
+          label={intl.formatMessage(questionFormTranslations.gridView)}
+          component={Toggle}
+          parse={Boolean}
+          style={styles.toggle}
+          {...{ disabled }}
+        />
+        <p style={styles.hint}>
+          {intl.formatMessage(questionFormTranslations.gridViewHint)}
+        </p>
+      </>
+    );
+  }
+
+  renderValidOptionCount() {
+    const { intl, formValues } = this.props;
+    const numberOfFilledOptions = formValues
+      ? // eslint-disable-next-line react/prop-types
+        countFilledOptions(formValues.options)
+      : 0;
+
+    return (
+      <DisplayTextField
+        disabled
+        name="filled_options"
+        value={numberOfFilledOptions}
+        {...styles.numberOfResponsesField}
+        floatingLabelText={intl.formatMessage(
+          questionFormTranslations.optionCount,
+        )}
+      />
+    );
   }
 
   render() {

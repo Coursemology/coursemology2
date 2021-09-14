@@ -14,16 +14,6 @@ class TestCase extends Component {
     return `question_programming[test_cases][${type}][][${field}]`;
   }
 
-  testCaseDeleteHandler(type, index) {
-    return (e) => {
-      e.preventDefault();
-
-      if (!this.props.isLoading) {
-        this.props.deleteTestCase(this.props.type, index);
-      }
-    };
-  }
-
   inlineCodeEditorHandler(type, index, newValue) {
     return (e) => {
       e.preventDefault();
@@ -33,22 +23,14 @@ class TestCase extends Component {
     };
   }
 
-  renderInput(test, field, placeholder, index) {
-    return (
-      <TextField
-        type="text"
-        name={TestCase.getTestInputName(this.props.type, field)}
-        onChange={(e, newValue) => {
-          this.props.updateTestCase(this.props.type, index, field, newValue);
-        }}
-        hintText={placeholder}
-        errorText={test.getIn(['error', field])}
-        disabled={this.props.isLoading}
-        value={test.get(field)}
-        fullWidth
-        multiLine
-      />
-    );
+  testCaseDeleteHandler(type, index) {
+    return (e) => {
+      e.preventDefault();
+
+      if (!this.props.isLoading) {
+        this.props.deleteTestCase(this.props.type, index);
+      }
+    };
   }
 
   renderCodeEditorButton(type, index, showCodeEditor) {
@@ -82,6 +64,24 @@ class TestCase extends Component {
           />
         )}
       </TableRowColumn>
+    );
+  }
+
+  renderInput(test, field, placeholder, index) {
+    return (
+      <TextField
+        type="text"
+        name={TestCase.getTestInputName(this.props.type, field)}
+        onChange={(e, newValue) => {
+          this.props.updateTestCase(this.props.type, index, field, newValue);
+        }}
+        hintText={placeholder}
+        errorText={test.getIn(['error', field])}
+        disabled={this.props.isLoading}
+        value={test.get(field)}
+        fullWidth
+        multiLine
+      />
     );
   }
 

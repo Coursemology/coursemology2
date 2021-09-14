@@ -52,15 +52,17 @@ const styles = {
 };
 
 class AdminTools extends PureComponent {
-  updateEventHandler = (data) => {
+  deleteEventHandler = () => {
     const {
       dispatch,
       intl,
-      item: { eventId },
+      item: { id, eventId },
     } = this.props;
-    const successMessage = intl.formatMessage(translations.updateSuccess);
-    const failureMessage = intl.formatMessage(translations.updateFailure);
-    return dispatch(updateEvent(eventId, data, successMessage, failureMessage));
+    const successMessage = intl.formatMessage(translations.deleteSuccess);
+    const failureMessage = intl.formatMessage(translations.deleteFailure);
+    const handleDelete = () =>
+      dispatch(deleteEvent(id, eventId, successMessage, failureMessage));
+    return dispatch(showDeleteConfirmation(handleDelete));
   };
 
   showEditEventDialog = () => {
@@ -92,17 +94,15 @@ class AdminTools extends PureComponent {
     );
   };
 
-  deleteEventHandler = () => {
+  updateEventHandler = (data) => {
     const {
       dispatch,
       intl,
-      item: { id, eventId },
+      item: { eventId },
     } = this.props;
-    const successMessage = intl.formatMessage(translations.deleteSuccess);
-    const failureMessage = intl.formatMessage(translations.deleteFailure);
-    const handleDelete = () =>
-      dispatch(deleteEvent(id, eventId, successMessage, failureMessage));
-    return dispatch(showDeleteConfirmation(handleDelete));
+    const successMessage = intl.formatMessage(translations.updateSuccess);
+    const failureMessage = intl.formatMessage(translations.updateFailure);
+    return dispatch(updateEvent(eventId, data, successMessage, failureMessage));
   };
 
   render() {

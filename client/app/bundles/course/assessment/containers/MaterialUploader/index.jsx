@@ -20,6 +20,32 @@ class MaterialUploader extends Component {
     };
   }
 
+  onFileInputChange = (e) => {
+    e.preventDefault();
+    const fileInput = e.target;
+    const { folderId } = this.props;
+    const files = fileInput.files;
+
+    const materials = [];
+    for (let i = 0; i < files.length; i += 1) {
+      materials.push({ name: files[i].name });
+    }
+    this.setState((state) => ({
+      uploadingMaterials: state.uploadingMaterials.concat(materials),
+    }));
+
+    CourseAPI.materialFolders
+      .upload(folderId, files)
+      .then((response) => {
+        this.updateMaterials(materials, response);
+      })
+      .catch((error) => {
+        this.removeUploads(materials, error.response);
+        // Set the value to null so that the files can be selected again.
+        fileInput.value = null;
+      });
+  };
+
   onMaterialDelete = (id, name) => {
     this.setState((state) => {
       // Update UI to show the loader.
@@ -68,31 +94,18 @@ class MaterialUploader extends Component {
       });
   };
 
-  onFileInputChange = (e) => {
-    e.preventDefault();
-    const fileInput = e.target;
-    const { folderId } = this.props;
-    const files = fileInput.files;
-
-    const materials = [];
-    for (let i = 0; i < files.length; i += 1) {
-      materials.push({ name: files[i].name });
-    }
+  // Remove given materials from uploading list and display error message.
+  removeUploads(materials, response) {
+    const messageFromServer =
+      response && response.data && response.data.message;
+    const failureMessage = <FormattedMessage {...translations.uploadFail} />;
     this.setState((state) => ({
-      uploadingMaterials: state.uploadingMaterials.concat(materials),
+      uploadingMaterials: state.uploadingMaterials.filter(
+        (m) => materials.indexOf(m) === -1,
+      ),
+      notification: { message: messageFromServer || failureMessage },
     }));
-
-    CourseAPI.materialFolders
-      .upload(folderId, files)
-      .then((response) => {
-        this.updateMaterials(materials, response);
-      })
-      .catch((error) => {
-        this.removeUploads(materials, error.response);
-        // Set the value to null so that the files can be selected again.
-        fileInput.value = null;
-      });
-  };
+  }
 
   // Remove materials from uploading list and add new materials from server reponse to existing
   // materials list.
@@ -109,19 +122,6 @@ class MaterialUploader extends Component {
       newState.materials = this.state.materials.concat(newMaterials);
     }
     this.setState(newState);
-  }
-
-  // Remove given materials from uploading list and display error message.
-  removeUploads(materials, response) {
-    const messageFromServer =
-      response && response.data && response.data.message;
-    const failureMessage = <FormattedMessage {...translations.uploadFail} />;
-    this.setState((state) => ({
-      uploadingMaterials: state.uploadingMaterials.filter(
-        (m) => materials.indexOf(m) === -1,
-      ),
-      notification: { message: messageFromServer || failureMessage },
-    }));
   }
 
   render() {
