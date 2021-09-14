@@ -17,20 +17,6 @@ const translations = defineMessages({
 });
 
 export default class CommentField extends Component {
-  static propTypes = {
-    inputId: PropTypes.string,
-    isSubmitting: PropTypes.bool,
-    value: PropTypes.string,
-    airMode: PropTypes.bool,
-
-    createComment: PropTypes.func,
-    handleChange: PropTypes.func,
-  };
-
-  static defaultProps = {
-    airMode: true,
-  };
-
   onChange(nextValue) {
     const { handleChange } = this.props;
     handleChange(nextValue);
@@ -52,9 +38,13 @@ export default class CommentField extends Component {
           airMode={airMode}
           disabled={isSubmitting}
           inputId={inputId}
-          label={<h4><FormattedMessage {...translations.prompt} /></h4>}
-          onChange={nextValue => this.onChange(nextValue)}
-          onKeyDown={e => this.onKeyDown(e)}
+          label={
+            <h4>
+              <FormattedMessage {...translations.prompt} />
+            </h4>
+          }
+          onChange={(nextValue) => this.onChange(nextValue)}
+          onKeyDown={(e) => this.onKeyDown(e)}
           value={value}
         />
         <RaisedButton
@@ -68,3 +58,17 @@ export default class CommentField extends Component {
     );
   }
 }
+
+CommentField.propTypes = {
+  inputId: PropTypes.string,
+  isSubmitting: PropTypes.bool,
+  value: PropTypes.string,
+  airMode: PropTypes.bool,
+
+  createComment: PropTypes.func,
+  handleChange: PropTypes.func,
+};
+
+CommentField.defaultProps = {
+  airMode: true,
+};

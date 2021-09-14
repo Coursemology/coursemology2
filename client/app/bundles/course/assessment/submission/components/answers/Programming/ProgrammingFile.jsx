@@ -50,8 +50,13 @@ class ProgrammingFile extends React.Component {
     const { file, answerId } = this.props;
     const { courseId, assessmentId, submissionId } = this.props.match.params;
 
-    const downloadLink = getProgrammingFileURL(courseId, assessmentId, submissionId,
-      answerId, file.id);
+    const downloadLink = getProgrammingFileURL(
+      courseId,
+      assessmentId,
+      submissionId,
+      answerId,
+      file.id,
+    );
 
     if (file.highlighted_content === null) {
       return (
@@ -59,8 +64,10 @@ class ProgrammingFile extends React.Component {
           <WarningIcon style={styles.warningIcon} />
           <span>
             <FormattedMessage {...translations.sizeTooBig} />
-&nbsp;
-            <a href={downloadLink}><FormattedMessage {...translations.downloadFile} /></a>
+            &nbsp;
+            <a href={downloadLink}>
+              <FormattedMessage {...translations.downloadFile} />
+            </a>
           </span>
         </Paper>
       );
@@ -68,11 +75,7 @@ class ProgrammingFile extends React.Component {
 
     const content = file.highlighted_content.split('\n');
     return (
-      <ReadOnlyEditor
-        answerId={answerId}
-        fileId={file.id}
-        content={content}
-      />
+      <ReadOnlyEditor answerId={answerId} fileId={file.id} content={content} />
     );
   }
 

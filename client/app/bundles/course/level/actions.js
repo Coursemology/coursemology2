@@ -5,7 +5,8 @@ import { setNotification } from 'lib/actions';
 export function fetchLevels() {
   return (dispatch) => {
     dispatch({ type: actionTypes.LOAD_LEVELS_REQUEST });
-    return CourseAPI.level.fetch()
+    return CourseAPI.level
+      .fetch()
       .then((response) => {
         dispatch({
           type: actionTypes.LOAD_LEVELS_SUCCESS,
@@ -20,7 +21,10 @@ export function fetchLevels() {
 
 export function updateExpThreshold(levelNumber, newValue) {
   return (dispatch) => {
-    dispatch({ type: actionTypes.UPDATE_EXP_THRESHOLD, payload: { levelNumber, newValue } });
+    dispatch({
+      type: actionTypes.UPDATE_EXP_THRESHOLD,
+      payload: { levelNumber, newValue },
+    });
   };
 }
 
@@ -45,7 +49,8 @@ export function deleteLevel(levelNumber) {
 export function saveLevels(levels, successMessage, failureMessage) {
   return (dispatch) => {
     dispatch({ type: actionTypes.SAVE_LEVELS });
-    return CourseAPI.level.save(levels)
+    return CourseAPI.level
+      .save(levels)
       .then(() => {
         setNotification(successMessage)(dispatch);
         dispatch({ type: actionTypes.SAVE_LEVELS_SUCCESS });

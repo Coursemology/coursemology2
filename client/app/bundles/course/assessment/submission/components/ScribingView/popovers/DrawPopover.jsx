@@ -47,10 +47,17 @@ const popoverStyles = {
 
 const DrawPopover = (props) => {
   const {
-    intl, open, anchorEl, onRequestClose,
-    toolThicknessValue, onChangeSliderThickness,
-    colorPickerColor, onClickColorPicker, colorPickerPopoverOpen,
-    colorPickerPopoverAnchorEl, onRequestCloseColorPickerPopover,
+    intl,
+    open,
+    anchorEl,
+    onRequestClose,
+    toolThicknessValue,
+    onChangeSliderThickness,
+    colorPickerColor,
+    onClickColorPicker,
+    colorPickerPopoverOpen,
+    colorPickerPopoverAnchorEl,
+    onRequestCloseColorPickerPopover,
     onChangeCompleteColorPicker,
   } = props;
 
@@ -65,10 +72,7 @@ const DrawPopover = (props) => {
       animation={PopoverAnimationVertical}
     >
       <Menu style={styles.menu}>
-        <h4>
-          {intl.formatMessage(translations.pencil)}
-          {' '}
-        </h4>
+        <h4>{intl.formatMessage(translations.pencil)} </h4>
         <LineThicknessField
           toolThicknessValue={toolThicknessValue}
           onChangeSliderThickness={onChangeSliderThickness}

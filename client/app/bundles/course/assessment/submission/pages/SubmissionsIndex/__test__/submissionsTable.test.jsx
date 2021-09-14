@@ -42,7 +42,7 @@ const setupTest = (propsOverrides) => {
   const submissionsTable = mount(
     <ProviderWrapper>
       <SubmissionsTable {...props} />
-    </ProviderWrapper>
+    </ProviderWrapper>,
   );
 
   return {

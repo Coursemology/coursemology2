@@ -48,7 +48,6 @@ class QuestionFormDeletedOptions extends React.Component {
   render() {
     const { fields, disabled, addToOptions } = this.props;
 
-
     // eslint-disable-next-line react/prop-types
     if (!fields || fields.length < 1) {
       return null;
@@ -66,17 +65,15 @@ class QuestionFormDeletedOptions extends React.Component {
           return (
             <div style={styles.option} key={option.id}>
               {this.renderWidget()}
-              {
-                option.image_url
-                  ? (
-                    <Thumbnail
-                      src={option.image_url}
-                      style={styles.image}
-                      containerStyle={styles.imageContainer}
-                    />
-                  )
-                  : <div style={styles.imageSpacer} />
-              }
+              {option.image_url ? (
+                <Thumbnail
+                  src={option.image_url}
+                  style={styles.image}
+                  containerStyle={styles.imageContainer}
+                />
+              ) : (
+                <div style={styles.imageSpacer} />
+              )}
               <span style={styles.optionBody}>{option.option}</span>
               <IconButton onClick={handleRestore} {...{ disabled }}>
                 <CloseIcon color={grey600} />

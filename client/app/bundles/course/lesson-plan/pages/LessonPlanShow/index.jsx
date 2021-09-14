@@ -18,19 +18,16 @@ class LessonPlanShow extends React.Component {
   static currentGroupId(groups) {
     let currentGroupId = null;
     groups.some((group) => {
-      if (!group.milestone || moment(group.milestone.start_at).isSameOrBefore()) {
+      if (
+        !group.milestone ||
+        moment(group.milestone.start_at).isSameOrBefore()
+      ) {
         currentGroupId = group.id;
         return false;
       }
       return true;
     });
     return currentGroupId;
-  }
-
-  static propTypes = {
-    groups: lessonPlanTypesGroups.isRequired,
-    visibility: PropTypes.shape({}).isRequired,
-    milestonesExpanded: PropTypes.string,
   }
 
   constructor(props) {
@@ -56,9 +53,9 @@ class LessonPlanShow extends React.Component {
     const { currentGroupId } = this.state;
     const { id, items } = group;
 
-    const visibleItems = items.filter(item => visibility[item.itemTypeKey]);
+    const visibleItems = items.filter((item) => visibility[item.itemTypeKey]);
     const initiallyExpanded = {
-      current: currentGroupId ? (id === currentGroupId) : false,
+      current: currentGroupId ? id === currentGroupId : false,
       all: true,
       none: false,
     }[milestonesExpanded];
@@ -66,23 +63,27 @@ class LessonPlanShow extends React.Component {
     return (
       <LessonPlanGroup
         key={id}
-        initiallyExpanded={initiallyExpanded === undefined ? true : initiallyExpanded}
+        initiallyExpanded={
+          initiallyExpanded === undefined ? true : initiallyExpanded
+        }
         group={{ ...group, items: visibleItems }}
       />
     );
   }
 
   render() {
-    return (
-      <>
-        { this.props.groups.map(group => this.renderGroup(group)) }
-      </>
-    );
+    return <>{this.props.groups.map((group) => this.renderGroup(group))}</>;
   }
 }
 
+LessonPlanShow.propTypes = {
+  groups: lessonPlanTypesGroups.isRequired,
+  visibility: PropTypes.shape({}).isRequired,
+  milestonesExpanded: PropTypes.string,
+};
+
 export const UnconnectedLessonPlanShow = LessonPlanShow;
-export default connect(state => ({
+export default connect((state) => ({
   groups: state.lessonPlan.groups,
   visibility: state.lessonPlan.visibilityByType,
   milestonesExpanded: state.flags.milestonesExpanded,

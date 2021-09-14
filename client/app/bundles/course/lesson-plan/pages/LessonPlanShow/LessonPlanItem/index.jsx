@@ -16,7 +16,12 @@ const styles = {
 const LessonPlanItem = (props) => {
   const { item } = props;
   const {
-    id, title, published, location, description, materials,
+    id,
+    title,
+    published,
+    location,
+    description,
+    materials,
     itemTypeKey: itemType,
     start_at: startAt,
     end_at: endAt,
@@ -27,18 +32,26 @@ const LessonPlanItem = (props) => {
     <div id={`item-${id}`} style={styles.item}>
       <Divider />
       <Details
-        {...{ title, description, itemPath, published, itemType, startAt, endAt, location }}
+        {...{
+          title,
+          description,
+          itemPath,
+          published,
+          itemType,
+          startAt,
+          endAt,
+          location,
+        }}
       />
       <CardText>
-        {
-          materials && materials.map(material => (
+        {materials &&
+          materials.map((material) => (
             <Material
               key={material.id}
               name={material.name}
               url={material.url}
             />
-          ))
-        }
+          ))}
       </CardText>
       <AdminTools {...{ item }} />
     </div>

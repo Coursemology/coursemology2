@@ -17,11 +17,13 @@ const emailSettings = [
 describe('<NotificationSettings />', () => {
   it('allow emails notification settings to be set', () => {
     const spy = jest.spyOn(CourseAPI.admin.notifications, 'update');
-    const store = storeCreator({ admin: { notificationSettings: emailSettings } });
+    const store = storeCreator({
+      admin: { notificationSettings: emailSettings },
+    });
 
     const notificationSettings = mount(
       <NotificationSettings />,
-      buildContextOptions(store)
+      buildContextOptions(store),
     );
 
     const toggles = notificationSettings.find('Toggle');

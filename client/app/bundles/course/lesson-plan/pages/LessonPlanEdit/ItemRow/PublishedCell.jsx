@@ -9,11 +9,6 @@ const styles = {
 };
 
 class PublishedCell extends React.PureComponent {
-  static propTypes = {
-    published: PropTypes.bool.isRequired,
-    onToggle: PropTypes.func.isRequired,
-  }
-
   render() {
     const { published, onToggle } = this.props;
     return (
@@ -28,5 +23,9 @@ class PublishedCell extends React.PureComponent {
   }
 }
 
+PublishedCell.propTypes = {
+  published: PropTypes.bool.isRequired,
+  onToggle: PropTypes.func.isRequired,
+};
 
 export default PublishedCell;

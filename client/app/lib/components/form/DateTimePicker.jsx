@@ -67,10 +67,7 @@ const datetimepickerTheme = createMuiTheme({
 
 const propTypes = {
   name: PropTypes.string.isRequired,
-  floatingLabelText: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object,
-  ]),
+  floatingLabelText: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   value: PropTypes.oneOfType([
     PropTypes.instanceOf(Date),
     PropTypes.instanceOf(moment),
@@ -110,9 +107,13 @@ class DateTimePicker extends React.PureComponent {
     const { onBlur, onChange } = this.props;
     this.setState(DateTimePicker.displayState(newDateTime));
     // Marks redux-form field as 'touched' so that validation errors are shown, if any.
-    if (onBlur) { onBlur(); }
-    if (onChange) { onChange(null, newDateTime); }
-  }
+    if (onBlur) {
+      onBlur();
+    }
+    if (onChange) {
+      onChange(null, newDateTime);
+    }
+  };
 
   updateDate = (newDate) => {
     if (newDate === null) {
@@ -124,7 +125,7 @@ class DateTimePicker extends React.PureComponent {
       ? moment(this.props.value).set({ date, months, years })
       : moment({ date, months, years });
     this.updateDateTime(newDateTime.toDate());
-  }
+  };
 
   updateTime = (newTime) => {
     if (newTime === null) {
@@ -136,20 +137,28 @@ class DateTimePicker extends React.PureComponent {
       ? moment(this.props.value).set({ hours, minutes })
       : moment({ hours, minutes });
     this.updateDateTime(newDateTime.toDate());
-  }
+  };
 
   render() {
-    const { intl, floatingLabelText, errorText, name, disabled, style, clearable } = this.props;
+    const {
+      intl,
+      floatingLabelText,
+      errorText,
+      name,
+      disabled,
+      style,
+      clearable,
+    } = this.props;
     let value = this.props.value;
     // Convert string value to Date, which is expected by Date/TimePicker
-    if (value && typeof (value) === 'string') {
+    if (value && typeof value === 'string') {
       value = new Date(value);
     }
 
     return (
       <MuiPickersUtilsProvider utils={MomentUtils}>
         <MuiThemeProvider theme={datetimepickerTheme}>
-          <div style={Object.assign({}, styles.dateTimePicker, style)}>
+          <div style={{ ...styles.dateTimePicker, ...style }}>
             <DatePicker
               {...{ name, disabled }}
               style={styles.dateTextField}

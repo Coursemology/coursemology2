@@ -10,22 +10,6 @@ const buttonStyle = {
 };
 
 class ConfirmationDialog extends React.Component {
-  static propTypes = {
-    open: PropTypes.bool.isRequired,
-    onCancel: PropTypes.func.isRequired,
-    onConfirm: PropTypes.func.isRequired,
-    message: PropTypes.node,
-    cancelButtonText: PropTypes.node,
-    confirmButtonText: PropTypes.node,
-    confirmDiscard: PropTypes.bool,
-    confirmDelete: PropTypes.bool,
-    confirmSubmit: PropTypes.bool,
-    disableCancelButton: PropTypes.bool,
-    disableConfirmButton: PropTypes.bool,
-
-    intl: intlShape.isRequired,
-  }
-
   render() {
     const {
       intl,
@@ -69,7 +53,10 @@ class ConfirmationDialog extends React.Component {
         onClick={onCancel}
         style={buttonStyle}
         label={cancelButtonText || intl.formatMessage(formTranslations.cancel)}
-        ref={(button) => { this.cancelButton = button; }}
+        ref={(button) => {
+          this.cancelButton = button;
+        }}
+        key="confirmation-dialog-cancel-button"
       />,
       <FlatButton
         primary
@@ -78,7 +65,10 @@ class ConfirmationDialog extends React.Component {
         onClick={onConfirm}
         style={buttonStyle}
         label={confirmationButtonText}
-        ref={(button) => { this.confirmButton = button; }}
+        ref={(button) => {
+          this.confirmButton = button;
+        }}
+        key="confirmation-dialog-confirm-button"
       />,
     ];
 
@@ -91,11 +81,27 @@ class ConfirmationDialog extends React.Component {
           style={{ zIndex: 9999 }}
           autoScrollBodyContent
         >
-          { confirmationMessage }
+          {confirmationMessage}
         </Dialog>
       </div>
     );
   }
 }
+
+ConfirmationDialog.propTypes = {
+  open: PropTypes.bool.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onConfirm: PropTypes.func.isRequired,
+  message: PropTypes.node,
+  cancelButtonText: PropTypes.node,
+  confirmButtonText: PropTypes.node,
+  confirmDiscard: PropTypes.bool,
+  confirmDelete: PropTypes.bool,
+  confirmSubmit: PropTypes.bool,
+  disableCancelButton: PropTypes.bool,
+  disableConfirmButton: PropTypes.bool,
+
+  intl: intlShape.isRequired,
+};
 
 export default injectIntl(ConfirmationDialog);

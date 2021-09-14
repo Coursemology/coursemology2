@@ -3,7 +3,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
+import {
+  Table,
+  TableBody,
+  TableHeader,
+  TableHeaderColumn,
+  TableRow,
+  TableRowColumn,
+} from 'material-ui/Table';
 import Toggle from 'material-ui/Toggle';
 import RaisedButton from 'material-ui/RaisedButton';
 import history from 'lib/history';
@@ -31,16 +38,6 @@ const styles = {
 };
 
 class SurveysTable extends React.Component {
-  static propTypes = {
-    courseId: PropTypes.string.isRequired,
-
-    surveys: PropTypes.arrayOf(surveyShape),
-    surveysFlags: PropTypes.shape({
-      canCreate: PropTypes.bool.isRequired,
-    }).isRequired,
-    dispatch: PropTypes.func.isRequired,
-  };
-
   renderPublishToggle(survey) {
     const { dispatch } = this.props;
     if (!survey.canUpdate) {
@@ -51,25 +48,35 @@ class SurveysTable extends React.Component {
       <Toggle
         labelPosition="right"
         toggled={survey.published}
-        onToggle={(event, value) => dispatch(updateSurvey(
-          survey.id,
-          { survey: { published: value } },
-          <FormattedMessage {...translations.updateSuccess} values={survey} />,
-          <FormattedMessage {...translations.updateFailure} values={survey} />
-        ))
+        onToggle={(event, value) =>
+          dispatch(
+            updateSurvey(
+              survey.id,
+              { survey: { published: value } },
+              <FormattedMessage
+                {...translations.updateSuccess}
+                values={survey}
+              />,
+              <FormattedMessage
+                {...translations.updateFailure}
+                values={survey}
+              />,
+            ),
+          )
         }
       />
     );
   }
 
   render() {
-    const { surveys, courseId, surveysFlags: { canCreate } } = this.props;
+    const {
+      surveys,
+      courseId,
+      surveysFlags: { canCreate },
+    } = this.props;
     return (
       <Table bodyStyle={styles.tableBody}>
-        <TableHeader
-          displaySelectAll={false}
-          adjustForCheckbox={false}
-        >
+        <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
           <TableRow>
             <TableHeaderColumn colSpan={6}>
               <FormattedMessage {...translations.title} />
@@ -86,99 +93,92 @@ class SurveysTable extends React.Component {
             <TableHeaderColumn colSpan={5}>
               <FormattedMessage {...translations.expiresAt} />
             </TableHeaderColumn>
-            {
-              canCreate
-                ? (
-                  <TableHeaderColumn colSpan={2}>
-                    <FormattedMessage {...translations.published} />
-                  </TableHeaderColumn>
-                )
-                : null
-            }
+            {canCreate ? (
+              <TableHeaderColumn colSpan={2}>
+                <FormattedMessage {...translations.published} />
+              </TableHeaderColumn>
+            ) : null}
             <TableHeaderColumn colSpan={canCreate ? 14 : 4} />
           </TableRow>
         </TableHeader>
-        <TableBody
-          displayRowCheckbox={false}
-          showRowHover
-        >
-          {
-            surveys.map(survey => (
-              <TableRow key={survey.id}>
-                <TableRowColumn colSpan={6} style={styles.wrap}>
-                  <Link to={`/courses/${courseId}/surveys/${survey.id}`}>
-                    { survey.title }
-                  </Link>
-                </TableRowColumn>
-                <TableRowColumn colSpan={3}>
-                  { survey.base_exp }
-                </TableRowColumn>
-                <TableRowColumn colSpan={3}>
-                  { survey.allow_response_after_end ? survey.time_bonus_exp : '-' }
-                </TableRowColumn>
-                <TableRowColumn colSpan={5} style={styles.wrap}>
-                  { formatShortDateTime(survey.start_at) }
-                </TableRowColumn>
-                <TableRowColumn colSpan={5} style={styles.wrap}>
-                  { formatShortDateTime(survey.end_at) }
-                </TableRowColumn>
-                {
-                  canCreate
-                    ? (
-                      <TableHeaderColumn colSpan={2}>
-                        { this.renderPublishToggle(survey) }
-                      </TableHeaderColumn>
-                    )
-                    : null
-                }
-                <TableHeaderColumn colSpan={canCreate ? 14 : 4}>
-                  <div style={styles.buttonsColumn}>
-                    {
-                      survey.canViewResults
-                        ? (
-                          <RaisedButton
-                            style={styles.button}
-                            label={<FormattedMessage {...translations.results} />}
-                            onClick={() => history.push(
-                              `/courses/${courseId}/surveys/${survey.id}/results`
-                            )}
-                          />
-                        )
-                        : null
-                    }
-                    {
-                      survey.canViewResults
-                        ? (
-                          <RaisedButton
-                            style={styles.button}
-                            label={<FormattedMessage {...translations.responses} />}
-                            onClick={() => history.push(
-                              `/courses/${courseId}/surveys/${survey.id}/responses`
-                            )}
-                          />
-                        )
-                        : null
-                    }
-                    <RespondButton
-                      courseId={courseId}
-                      surveyId={survey.id}
-                      responseId={survey.response && survey.response.id}
-                      canRespond={survey.canRespond}
-                      canModify={!!survey.response && survey.response.canModify}
-                      canSubmit={!!survey.response && survey.response.canSubmit}
-                      startAt={survey.start_at}
-                      endAt={survey.end_at}
-                      submittedAt={survey.response && survey.response.submitted_at}
-                    />
-                  </div>
+        <TableBody displayRowCheckbox={false} showRowHover>
+          {surveys.map((survey) => (
+            <TableRow key={survey.id}>
+              <TableRowColumn colSpan={6} style={styles.wrap}>
+                <Link to={`/courses/${courseId}/surveys/${survey.id}`}>
+                  {survey.title}
+                </Link>
+              </TableRowColumn>
+              <TableRowColumn colSpan={3}>{survey.base_exp}</TableRowColumn>
+              <TableRowColumn colSpan={3}>
+                {survey.allow_response_after_end ? survey.time_bonus_exp : '-'}
+              </TableRowColumn>
+              <TableRowColumn colSpan={5} style={styles.wrap}>
+                {formatShortDateTime(survey.start_at)}
+              </TableRowColumn>
+              <TableRowColumn colSpan={5} style={styles.wrap}>
+                {formatShortDateTime(survey.end_at)}
+              </TableRowColumn>
+              {canCreate ? (
+                <TableHeaderColumn colSpan={2}>
+                  {this.renderPublishToggle(survey)}
                 </TableHeaderColumn>
-              </TableRow>
-            ))
-          }
+              ) : null}
+              <TableHeaderColumn colSpan={canCreate ? 14 : 4}>
+                <div style={styles.buttonsColumn}>
+                  {survey.canViewResults ? (
+                    <RaisedButton
+                      style={styles.button}
+                      label={<FormattedMessage {...translations.results} />}
+                      onClick={() =>
+                        history.push(
+                          `/courses/${courseId}/surveys/${survey.id}/results`,
+                        )
+                      }
+                    />
+                  ) : null}
+                  {survey.canViewResults ? (
+                    <RaisedButton
+                      style={styles.button}
+                      label={<FormattedMessage {...translations.responses} />}
+                      onClick={() =>
+                        history.push(
+                          `/courses/${courseId}/surveys/${survey.id}/responses`,
+                        )
+                      }
+                    />
+                  ) : null}
+                  <RespondButton
+                    courseId={courseId}
+                    surveyId={survey.id}
+                    responseId={survey.response && survey.response.id}
+                    canRespond={survey.canRespond}
+                    canModify={!!survey.response && survey.response.canModify}
+                    canSubmit={!!survey.response && survey.response.canSubmit}
+                    startAt={survey.start_at}
+                    endAt={survey.end_at}
+                    submittedAt={
+                      survey.response && survey.response.submitted_at
+                    }
+                  />
+                </div>
+              </TableHeaderColumn>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     );
   }
 }
 
-export default connect(state => state)(SurveysTable);
+SurveysTable.propTypes = {
+  courseId: PropTypes.string.isRequired,
+
+  surveys: PropTypes.arrayOf(surveyShape),
+  surveysFlags: PropTypes.shape({
+    canCreate: PropTypes.bool.isRequired,
+  }).isRequired,
+  dispatch: PropTypes.func.isRequired,
+};
+
+export default connect((state) => state)(SurveysTable);

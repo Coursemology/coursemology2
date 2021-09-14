@@ -17,17 +17,27 @@ describe('<NewSectionButton />', () => {
     // Click 'new section' button
     newSectionButton.find('button').simulate('click');
     sectionFormDialogue.update();
-    expect(sectionFormDialogue.find('SectionFormDialogue').first().props().visible).toBe(true);
+    expect(
+      sectionFormDialogue.find('SectionFormDialogue').first().props().visible,
+    ).toBe(true);
 
     // Fill section form with title
     const section = { title: 'Funky section title' };
-    const dialogInline = sectionFormDialogue.find('RenderToLayer').first().instance();
-    const sectionForm = mount(dialogInline.props.render(), contextOptions).find('form');
+    const dialogInline = sectionFormDialogue
+      .find('RenderToLayer')
+      .first()
+      .instance();
+    const sectionForm = mount(dialogInline.props.render(), contextOptions).find(
+      'form',
+    );
     const titleInput = sectionForm.find('input[name="title"]');
     titleInput.simulate('change', { target: { value: section.title } });
 
     // Submit section form
-    const submitButton = sectionFormDialogue.find('FormDialogue').first().instance().submitButton;
+    const submitButton = sectionFormDialogue
+      .find('FormDialogue')
+      .first()
+      .instance().submitButton;
     ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton));
     expect(spyCreate).toHaveBeenCalledWith({ section });
   });

@@ -14,7 +14,6 @@ import {
   showDeleteConfirmation,
 } from 'course/lesson-plan/actions';
 
-
 const translations = defineMessages({
   editMilestone: {
     id: 'course.lessonPlan.MilestoneAdminTools.editMilestone',
@@ -50,53 +49,52 @@ const styles = {
 };
 
 class MilestoneAdminTools extends React.PureComponent {
-  static propTypes = {
-    milestone: PropTypes.shape({
-      id: PropTypes.number,
-      description: PropTypes.string,
-      start_at: PropTypes.string,
-      title: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.node, // Allow node containing translation
-      ]),
-    }),
-    canManageLessonPlan: PropTypes.bool,
-
-    dispatch: PropTypes.func.isRequired,
-    intl: intlShape.isRequired,
-  }
-
   updateMilestoneHandler = (data) => {
-    const { dispatch, intl, milestone: { id } } = this.props;
+    const {
+      dispatch,
+      intl,
+      milestone: { id },
+    } = this.props;
 
     const successMessage = intl.formatMessage(translations.updateSuccess);
     const failureMessage = intl.formatMessage(translations.updateFailure);
     return dispatch(updateMilestone(id, data, successMessage, failureMessage));
-  }
+  };
 
   showEditMilestoneDialog = () => {
-    const { dispatch, intl, milestone: { title, description, start_at } } = this.props;
+    const {
+      dispatch,
+      intl,
+      milestone: { title, description, start_at },
+    } = this.props;
 
-    return dispatch(showMilestoneForm({
-      onSubmit: this.updateMilestoneHandler,
-      formTitle: intl.formatMessage(translations.editMilestone),
-      initialValues: { title, description, start_at },
-    }));
-  }
+    return dispatch(
+      showMilestoneForm({
+        onSubmit: this.updateMilestoneHandler,
+        formTitle: intl.formatMessage(translations.editMilestone),
+        initialValues: { title, description, start_at },
+      }),
+    );
+  };
 
   deleteMilestoneHandler = () => {
-    const { dispatch, intl, milestone: { id } } = this.props;
+    const {
+      dispatch,
+      intl,
+      milestone: { id },
+    } = this.props;
     const successMessage = intl.formatMessage(translations.deleteSuccess);
     const failureMessage = intl.formatMessage(translations.deleteFailure);
-    const handleDelete = () => (
-      dispatch(deleteMilestone(id, successMessage, failureMessage))
-    );
+    const handleDelete = () =>
+      dispatch(deleteMilestone(id, successMessage, failureMessage));
     return dispatch(showDeleteConfirmation(handleDelete));
-  }
+  };
 
   render() {
     const { milestone, canManageLessonPlan } = this.props;
-    if (!milestone.id || !canManageLessonPlan) { return null; }
+    if (!milestone.id || !canManageLessonPlan) {
+      return null;
+    }
 
     return (
       <span>
@@ -117,6 +115,22 @@ class MilestoneAdminTools extends React.PureComponent {
   }
 }
 
-export default connect(state => ({
+MilestoneAdminTools.propTypes = {
+  milestone: PropTypes.shape({
+    id: PropTypes.number,
+    description: PropTypes.string,
+    start_at: PropTypes.string,
+    title: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.node, // Allow node containing translation
+    ]),
+  }),
+  canManageLessonPlan: PropTypes.bool,
+
+  dispatch: PropTypes.func.isRequired,
+  intl: intlShape.isRequired,
+};
+
+export default connect((state) => ({
   canManageLessonPlan: state.flags.canManageLessonPlan,
 }))(injectIntl(MilestoneAdminTools));

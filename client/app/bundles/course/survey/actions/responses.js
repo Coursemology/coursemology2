@@ -7,17 +7,20 @@ import { setNotification } from './index';
 
 export function createResponse(surveyId) {
   const courseId = getCourseId();
-  const goToResponse = responseId => history.push(
-    `/courses/${courseId}/surveys/${surveyId}/responses/${responseId}`
-  );
-  const goToResponseEdit = responseId => history.push(
-    `/courses/${courseId}/surveys/${surveyId}/responses/${responseId}/edit`
-  );
+  const goToResponse = (responseId) =>
+    history.push(
+      `/courses/${courseId}/surveys/${surveyId}/responses/${responseId}`,
+    );
+  const goToResponseEdit = (responseId) =>
+    history.push(
+      `/courses/${courseId}/surveys/${surveyId}/responses/${responseId}/edit`,
+    );
 
   return (dispatch) => {
     dispatch({ type: actionTypes.CREATE_RESPONSE_REQUEST });
 
-    return CourseAPI.survey.responses.create(surveyId)
+    return CourseAPI.survey.responses
+      .create(surveyId)
       .then((response) => {
         goToResponseEdit(response.data.response.id);
         dispatch({
@@ -28,10 +31,14 @@ export function createResponse(surveyId) {
       })
       .catch((error) => {
         dispatch({ type: actionTypes.CREATE_RESPONSE_FAILURE });
-        if (!error.response || !error.response.data) { return; }
+        if (!error.response || !error.response.data) {
+          return;
+        }
         const data = error.response.data;
         if (error.response.status === 303) {
-          (data.canModify || data.canSubmit ? goToResponseEdit : goToResponse)(data.responseId);
+          (data.canModify || data.canSubmit ? goToResponseEdit : goToResponse)(
+            data.responseId,
+          );
         } else if (data.error) {
           setNotification(error.response.data.error)(dispatch);
         }
@@ -43,8 +50,9 @@ export function fetchResponse(responseId) {
   return (dispatch) => {
     dispatch({ type: actionTypes.LOAD_RESPONSE_REQUEST });
 
-    return CourseAPI.survey.responses.fetch(responseId)
-      .then(response => response.data)
+    return CourseAPI.survey.responses
+      .fetch(responseId)
+      .then((response) => response.data)
       .then((data) => {
         dispatch({
           type: actionTypes.LOAD_RESPONSE_SUCCESS,
@@ -63,8 +71,9 @@ export function fetchEditableResponse(responseId) {
   return (dispatch) => {
     dispatch({ type: actionTypes.LOAD_RESPONSE_EDIT_REQUEST });
 
-    return CourseAPI.survey.responses.edit(responseId)
-      .then(response => response.data)
+    return CourseAPI.survey.responses
+      .edit(responseId)
+      .then((response) => response.data)
       .then((data) => {
         dispatch({
           type: actionTypes.LOAD_RESPONSE_EDIT_SUCCESS,
@@ -83,13 +92,14 @@ export function updateResponse(
   responseId,
   payload,
   successMessage,
-  failureMessage
+  failureMessage,
 ) {
   return (dispatch) => {
     dispatch({ type: actionTypes.UPDATE_RESPONSE_REQUEST });
 
-    return CourseAPI.survey.responses.update(responseId, payload)
-      .then(response => response.data)
+    return CourseAPI.survey.responses
+      .update(responseId, payload)
+      .then((response) => response.data)
       .then((data) => {
         dispatch({
           type: actionTypes.UPDATE_RESPONSE_SUCCESS,
@@ -116,16 +126,13 @@ export function updateResponse(
   };
 }
 
-export function unsubmitResponse(
-  responseId,
-  successMessage,
-  failureMessage
-) {
+export function unsubmitResponse(responseId, successMessage, failureMessage) {
   return (dispatch) => {
     dispatch({ type: actionTypes.UNSUBMIT_RESPONSE_REQUEST });
 
-    return CourseAPI.survey.responses.unsubmit(responseId)
-      .then(response => response.data)
+    return CourseAPI.survey.responses
+      .unsubmit(responseId)
+      .then((response) => response.data)
       .then((data) => {
         dispatch({
           type: actionTypes.UNSUBMIT_RESPONSE_SUCCESS,
@@ -146,7 +153,8 @@ export function fetchResponses() {
   return (dispatch) => {
     dispatch({ type: actionTypes.LOAD_RESPONSES_REQUEST });
 
-    return CourseAPI.survey.responses.index()
+    return CourseAPI.survey.responses
+      .index()
       .then((response) => {
         dispatch({
           type: actionTypes.LOAD_RESPONSES_SUCCESS,

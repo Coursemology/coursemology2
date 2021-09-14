@@ -5,8 +5,19 @@ import { injectIntl, intlShape } from 'react-intl';
 import Hotkeys from 'react-hot-keys';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import Paper from 'material-ui/Paper';
-import { white, red100, red200, red900, green200, green300, green500, green700,
-  green900, lightBlue400, blue800 } from 'material-ui/styles/colors';
+import {
+  white,
+  red100,
+  red200,
+  red900,
+  green200,
+  green300,
+  green500,
+  green700,
+  green900,
+  lightBlue400,
+  blue800,
+} from 'material-ui/styles/colors';
 import { Stepper, Step, StepButton, StepLabel } from 'material-ui/Stepper';
 import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -15,7 +26,13 @@ import MaterialTooltip from 'material-ui/internal/Tooltip';
 
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import { explanationShape, questionShape, historyQuestionShape, questionFlagsShape, topicShape } from '../../propTypes';
+import {
+  explanationShape,
+  questionShape,
+  historyQuestionShape,
+  questionFlagsShape,
+  topicShape,
+} from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
 import QuestionGrade from '../../containers/QuestionGrade';
 import GradingPanel from '../../containers/GradingPanel';
@@ -67,41 +84,6 @@ class SubmissionEditStepForm extends Component {
     };
   }
 
-  onMouseEnter(toolType) {
-    this.setState({
-      hoveredToolTip: toolType,
-    });
-  }
-
-  onMouseLeave = () => {
-    this.setState({
-      hoveredToolTip: '',
-    });
-  }
-
-  shouldRenderContinueButton() {
-    const { stepIndex } = this.state;
-    const { questionIds } = this.props;
-    return !SubmissionEditStepForm.isLastQuestion(questionIds, stepIndex);
-  }
-
-  shouldDisableContinueButton() {
-    const { stepIndex } = this.state;
-    const { explanations, questionIds, isSaving, showMcqAnswer } = this.props;
-    const questionId = questionIds[stepIndex];
-
-
-    if (isSaving) {
-      return true;
-    }
-
-    if (explanations[questionId] && explanations[questionId].correct) {
-      return false;
-    }
-
-    return showMcqAnswer;
-  }
-
   handleNext() {
     const { maxStep, stepIndex } = this.state;
     this.setState({
@@ -119,6 +101,40 @@ class SubmissionEditStepForm extends Component {
         stepIndex: index,
       });
     }
+  }
+
+  onMouseEnter(toolType) {
+    this.setState({
+      hoveredToolTip: toolType,
+    });
+  }
+
+  onMouseLeave = () => {
+    this.setState({
+      hoveredToolTip: '',
+    });
+  };
+
+  shouldRenderContinueButton() {
+    const { stepIndex } = this.state;
+    const { questionIds } = this.props;
+    return !SubmissionEditStepForm.isLastQuestion(questionIds, stepIndex);
+  }
+
+  shouldDisableContinueButton() {
+    const { stepIndex } = this.state;
+    const { explanations, questionIds, isSaving, showMcqAnswer } = this.props;
+    const questionId = questionIds[stepIndex];
+
+    if (isSaving) {
+      return true;
+    }
+
+    if (explanations[questionId] && explanations[questionId].correct) {
+      return false;
+    }
+
+    return showMcqAnswer;
   }
 
   renderQuestionGrading(id) {
@@ -140,7 +156,6 @@ class SubmissionEditStepForm extends Component {
   renderExplanationPanel(question) {
     const { intl, explanations } = this.props;
     const explanation = explanations[question.id];
-
 
     if (explanation && explanation.correct !== null) {
       if (question.type === questionTypes.Programming && explanation.correct) {
@@ -173,14 +188,15 @@ class SubmissionEditStepForm extends Component {
             title={title}
             titleColor={explanation.correct ? green900 : red900}
           />
-          { explanation.explanations.every(exp => exp.trim().length === 0) ? null
-            : (
-              <CardText>
-                {explanation.explanations.map((exp, idx) => (
-                  <div key={idx} dangerouslySetInnerHTML={{ __html: exp }} />
-                ))}
-              </CardText>
-            ) }
+          {explanation.explanations.every(
+            (exp) => exp.trim().length === 0,
+          ) ? null : (
+            <CardText>
+              {explanation.explanations.map((exp, idx) => (
+                <div key={idx} dangerouslySetInnerHTML={{ __html: exp }} />
+              ))}
+            </CardText>
+          )}
         </Card>
       );
       /* eslint-enable react/no-array-index-key */
@@ -195,7 +211,9 @@ class SubmissionEditStepForm extends Component {
 
     if (type === questionTypes.Programming && jobError) {
       return (
-        <Paper style={{ padding: 10, backgroundColor: red100, marginBottom: 20 }}>
+        <Paper
+          style={{ padding: 10, backgroundColor: red100, marginBottom: 20 }}
+        >
           {intl.formatMessage(translations.autogradeFailure)}
         </Paper>
       );
@@ -206,7 +224,8 @@ class SubmissionEditStepForm extends Component {
 
   renderResetButton() {
     const { stepIndex } = this.state;
-    const { intl, questionIds, questions, questionsFlags, isSaving } = this.props;
+    const { intl, questionIds, questions, questionsFlags, isSaving } =
+      this.props;
     const id = questionIds[stepIndex];
     const question = questions[id];
     const { answerId } = question;
@@ -218,7 +237,9 @@ class SubmissionEditStepForm extends Component {
           style={styles.formButton}
           backgroundColor={white}
           label={intl.formatMessage(translations.reset)}
-          onClick={() => this.setState({ resetConfirmation: true, resetAnswerId: answerId })}
+          onClick={() =>
+            this.setState({ resetConfirmation: true, resetAnswerId: answerId })
+          }
           disabled={isAutograding || isResetting || isSaving}
         />
       );
@@ -228,13 +249,26 @@ class SubmissionEditStepForm extends Component {
 
   renderSubmitButton() {
     const { stepIndex } = this.state;
-    const { intl, questionIds, questions, questionsFlags, handleSubmitAnswer, isSaving, showMcqAnswer } = this.props;
+    const {
+      intl,
+      questionIds,
+      questions,
+      questionsFlags,
+      handleSubmitAnswer,
+      isSaving,
+      showMcqAnswer,
+    } = this.props;
     const id = questionIds[stepIndex];
     const question = questions[id];
     const { answerId } = question;
     const { isAutograding, isResetting } = questionsFlags[id] || {};
-    if ([questionTypes.MultipleChoice, questionTypes.MultipleResponse].includes(question.type)
-        && question.autogradable && !showMcqAnswer) {
+    if (
+      [questionTypes.MultipleChoice, questionTypes.MultipleResponse].includes(
+        question.type,
+      ) &&
+      question.autogradable &&
+      !showMcqAnswer
+    ) {
       return null;
     }
     return (
@@ -294,7 +328,8 @@ class SubmissionEditStepForm extends Component {
   }
 
   renderSaveDraftButton() {
-    const { intl, pristine, attempting, handleSaveDraft, isSaving } = this.props;
+    const { intl, pristine, attempting, handleSaveDraft, isSaving } =
+      this.props;
     if (attempting) {
       return (
         <RaisedButton
@@ -325,7 +360,13 @@ class SubmissionEditStepForm extends Component {
   }
 
   renderFinaliseButton() {
-    const { intl, attempting, allConsideredCorrect, isSaving, allowPartialSubmission } = this.props;
+    const {
+      intl,
+      attempting,
+      allConsideredCorrect,
+      isSaving,
+      allowPartialSubmission,
+    } = this.props;
     if (attempting && (allowPartialSubmission || allConsideredCorrect)) {
       return (
         <RaisedButton
@@ -359,8 +400,15 @@ class SubmissionEditStepForm extends Component {
   renderStepQuestion() {
     const { stepIndex } = this.state;
     const {
-      attempting, questionIds, questions, historyQuestions, topics,
-      graderView, showMcqMrqSolution, handleToggleViewHistoryMode, questionsFlags,
+      attempting,
+      questionIds,
+      questions,
+      historyQuestions,
+      topics,
+      graderView,
+      showMcqMrqSolution,
+      handleToggleViewHistoryMode,
+      questionsFlags,
     } = this.props;
     const id = questionIds[stepIndex];
     const question = questions[id];
@@ -384,16 +432,14 @@ class SubmissionEditStepForm extends Component {
         {this.renderExplanationPanel(question)}
         {this.renderQuestionGrading(id)}
         {this.renderGradingPanel()}
-        {attempting
-          ? (
-            <div>
-              {this.renderResetButton()}
-              {this.renderSubmitButton()}
-              {this.renderContinueButton()}
-              {this.renderAnswerLoadingIndicator()}
-            </div>
-          )
-          : null}
+        {attempting ? (
+          <div>
+            {this.renderResetButton()}
+            {this.renderSubmitButton()}
+            {this.renderContinueButton()}
+            {this.renderAnswerLoadingIndicator()}
+          </div>
+        ) : null}
         <div>
           {this.renderSaveGradeButton()}
           {this.renderSaveDraftButton()}
@@ -408,7 +454,13 @@ class SubmissionEditStepForm extends Component {
 
   renderStepper() {
     const { maxStep, stepIndex } = this.state;
-    const { published, skippable, graderView, questionIds = [], explanations } = this.props;
+    const {
+      published,
+      skippable,
+      graderView,
+      questionIds = [],
+      explanations,
+    } = this.props;
 
     if (questionIds.length <= 1) {
       return null;
@@ -434,14 +486,20 @@ class SubmissionEditStepForm extends Component {
               <Step key={questionId} active={index <= maxStep}>
                 <StepButton
                   iconContainerStyle={{ padding: 0 }}
-                  icon={(
+                  icon={
                     <SvgIcon color={stepButtonColor}>
                       <circle cx="12" cy="12" r="12" />
-                      <text x="12" y="16" textAnchor="middle" fontSize="12" fill="#fff">
+                      <text
+                        x="12"
+                        y="16"
+                        textAnchor="middle"
+                        fontSize="12"
+                        fill="#fff"
+                      >
                         {index + 1}
                       </text>
                     </SvgIcon>
-)}
+                  }
                   onClick={() => this.handleStepClick(index)}
                 />
               </Step>
@@ -495,7 +553,9 @@ class SubmissionEditStepForm extends Component {
     return (
       <ConfirmationDialog
         open={resetConfirmation}
-        onCancel={() => this.setState({ resetConfirmation: false, resetAnswerId: null })}
+        onCancel={() =>
+          this.setState({ resetConfirmation: false, resetAnswerId: null })
+        }
         onConfirm={() => {
           this.setState({ resetConfirmation: false, resetAnswerId: null });
           handleReset(resetAnswerId);

@@ -19,11 +19,15 @@ export function validation(data, pathOfKeysToData, intl) {
         let hasError = false;
 
         if (testCase.get('expression').trim() === '') {
-          testCaseError.expression = intl.formatMessage(translations.cannotBeBlankValidationError);
+          testCaseError.expression = intl.formatMessage(
+            translations.cannotBeBlankValidationError,
+          );
           hasError = true;
         }
         if (testCase.get('expected').trim() === '') {
-          testCaseError.expected = intl.formatMessage(translations.cannotBeBlankValidationError);
+          testCaseError.expected = intl.formatMessage(
+            translations.cannotBeBlankValidationError,
+          );
           hasError = true;
         }
 
@@ -47,9 +51,4 @@ export function validation(data, pathOfKeysToData, intl) {
   return errors;
 }
 
-export {
-  ExistingPackageFile,
-  NewPackageFile,
-  TestCase,
-  EditorCard,
-};
+export { ExistingPackageFile, NewPackageFile, TestCase, EditorCard };

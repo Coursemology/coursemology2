@@ -11,14 +11,16 @@ function renderSubmission(state, node) {
     <ProviderWrapper {...storeCreator(state)}>
       <Submission />
     </ProviderWrapper>,
-    node
+    node,
   );
 }
 
 $(document).ready(() => {
   const mountNode = document.getElementById('video-component');
 
-  if (!mountNode) { return; }
+  if (!mountNode) {
+    return;
+  }
 
   const submissionData = mountNode.getAttribute('data');
   const initialState = JSON.parse(submissionData);
@@ -28,10 +30,11 @@ $(document).ready(() => {
       <ProviderWrapper>
         <LoadingIndicator />
       </ProviderWrapper>,
-      mountNode
+      mountNode,
     );
 
-    CourseAPI.video.sessions.create()
+    CourseAPI.video.sessions
+      .create()
       .then(({ data }) => {
         initialState.video.sessionId = data.id;
         renderSubmission(initialState, mountNode);

@@ -24,11 +24,7 @@ function Reply(props) {
     </div>
   ) : (
     <div className={styles.replyContainer}>
-      <FlatButton
-        label="Reply"
-        primary
-        onClick={props.onTriggerReply}
-      />
+      <FlatButton label="Reply" primary onClick={props.onTriggerReply} />
     </div>
   );
 }
@@ -44,7 +40,7 @@ function mapStateToProps(state, ownProps) {
   const pendingReply = state.discussion.pendingReplyPosts.get(ownProps.topicId);
   return {
     topicId: ownProps.topicId,
-    editorVisible: (pendingReply !== undefined) && pendingReply.editorVisible,
+    editorVisible: pendingReply !== undefined && pendingReply.editorVisible,
   };
 }
 

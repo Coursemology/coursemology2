@@ -18,7 +18,9 @@ describe('<NewEventButton />', () => {
 
     // Click 'new event' button
     newEventButton.find('button').simulate('click');
-    expect(eventFormDialog.update().find('EventFormDialog').first().props().visible).toBe(true);
+    expect(
+      eventFormDialog.update().find('EventFormDialog').first().props().visible,
+    ).toBe(true);
 
     // Fill event form
     const eventData = {
@@ -27,19 +29,29 @@ describe('<NewEventButton />', () => {
       start_at: new Date('2016-12-31T16:00:00.000Z'),
     };
     const startAt = '01-01-2017';
-    const dialogInline = eventFormDialog.find('RenderToLayer').first().instance();
-    const eventForm = mount(dialogInline.props.render(), contextOptions).find('form');
+    const dialogInline = eventFormDialog
+      .find('RenderToLayer')
+      .first()
+      .instance();
+    const eventForm = mount(dialogInline.props.render(), contextOptions).find(
+      'form',
+    );
     const titleInput = eventForm.find('input[name="title"]');
     titleInput.simulate('change', { target: { value: eventData.title } });
     const eventTypeInput = eventForm.find('input[name="event_type"]');
-    eventTypeInput.simulate('change', { target: { value: eventData.event_type } });
+    eventTypeInput.simulate('change', {
+      target: { value: eventData.event_type },
+    });
     eventTypeInput.simulate('blur');
     const startAtDateInput = eventForm.find('input[name="start_at"]').first();
     startAtDateInput.simulate('change', { target: { value: startAt } });
     startAtDateInput.simulate('blur');
 
     // Submit event form
-    const submitButton = eventFormDialog.find('FormDialogue').first().instance().submitButton;
+    const submitButton = eventFormDialog
+      .find('FormDialogue')
+      .first()
+      .instance().submitButton;
     ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton));
     expect(spyCreate).toHaveBeenCalledWith({ lesson_plan_event: eventData });
   });

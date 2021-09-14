@@ -10,10 +10,8 @@ describe('<AchievementIndex />', () => {
 
     const indexPage = mount(
       <ProviderWrapper store={store}>
-        <AchievementIndex
-          badge={{ url: 'some-url.com' }}
-        />
-      </ProviderWrapper>
+        <AchievementIndex badge={{ url: 'some-url.com' }} />
+      </ProviderWrapper>,
     );
 
     const newBtn = indexPage.find('button');

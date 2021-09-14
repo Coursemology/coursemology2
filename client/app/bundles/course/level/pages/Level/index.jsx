@@ -6,13 +6,26 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import TitleBar from 'lib/components/TitleBar';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 
-import { fetchLevels, updateExpThreshold, sortLevels, addLevel, deleteLevel, saveLevels } from 'course/level/actions';
+import {
+  fetchLevels,
+  updateExpThreshold,
+  sortLevels,
+  addLevel,
+  deleteLevel,
+  saveLevels,
+} from 'course/level/actions';
 import { defaultComponentTitles } from 'course/translations.intl';
 
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import {
-  Table, TableBody, TableFooter, TableHeader, TableHeaderColumn, TableRow, TableRowColumn,
+  Table,
+  TableBody,
+  TableFooter,
+  TableHeader,
+  TableHeaderColumn,
+  TableRow,
+  TableRowColumn,
 } from 'material-ui/Table';
 
 import LevelRow from 'course/level/components/LevelRow';
@@ -78,15 +91,6 @@ const styles = {
 };
 
 class Level extends React.Component {
-  static propTypes = {
-    canManage: PropTypes.bool.isRequired,
-    isLoading: PropTypes.bool.isRequired,
-    isSaving: PropTypes.bool.isRequired,
-    levels: PropTypes.arrayOf(PropTypes.number).isRequired,
-
-    dispatch: PropTypes.func.isRequired,
-  }
-
   static renderTableHeader() {
     return (
       <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
@@ -139,22 +143,26 @@ class Level extends React.Component {
     };
   }
 
-  // Only the first element of the levels prop should be 0 as it is the default threshold.
-  // User input should not contain any zeroes for threshold.
-  levelsHaveError() {
-    return this.props.levels.slice(1).some(element => element === 0);
-  }
-
   handleSaveLevels() {
     const { dispatch, levels } = this.props;
     return (e) => {
       e.preventDefault();
       if (this.levelsHaveError() === false) {
-        const successMessage = <FormattedMessage {...translations.saveSuccess} />;
-        const failureMessage = <FormattedMessage {...translations.saveFailure} />;
+        const successMessage = (
+          <FormattedMessage {...translations.saveSuccess} />
+        );
+        const failureMessage = (
+          <FormattedMessage {...translations.saveFailure} />
+        );
         dispatch(saveLevels(levels, successMessage, failureMessage));
       }
     };
+  }
+
+  // Only the first element of the levels prop should be 0 as it is the default threshold.
+  // User input should not contain any zeroes for threshold.
+  levelsHaveError() {
+    return this.props.levels.slice(1).some((element) => element === 0);
   }
 
   renderTableFooter() {
@@ -197,7 +205,7 @@ class Level extends React.Component {
   renderBody() {
     const { canManage, levels, isSaving } = this.props;
     const rows = levels.slice(1).map((experiencePointsThreshold, index) => {
-      const key = `${index}`;
+      const key = `level-row-${index}`;
       return (
         <LevelRow
           deleteLevel={this.handleDeleteLevel}
@@ -205,7 +213,8 @@ class Level extends React.Component {
           levelNumber={index + 1}
           sortLevels={this.handleLevelTextBlur}
           updateExpThreshold={this.handleUpdateExpThreshold}
-          {...{ canManage, experiencePointsThreshold, key }}
+          key={key}
+          {...{ canManage, experiencePointsThreshold }}
         />
       );
     });
@@ -214,9 +223,7 @@ class Level extends React.Component {
       <div style={styles.body}>
         <Table className="table levels-list" fixedHeader={false}>
           {Level.renderTableHeader()}
-          <TableBody>
-            {rows}
-          </TableBody>
+          <TableBody>{rows}</TableBody>
           {canManage && this.renderTableFooter()}
         </Table>
       </div>
@@ -227,13 +234,26 @@ class Level extends React.Component {
     return (
       <div>
         <TitleBar
-          title={<FormattedMessage {...defaultComponentTitles.course_levels_component} />}
+          title={
+            <FormattedMessage
+              {...defaultComponentTitles.course_levels_component}
+            />
+          }
         />
-        { this.props.isLoading ? <LoadingIndicator /> : this.renderBody() }
+        {this.props.isLoading ? <LoadingIndicator /> : this.renderBody()}
       </div>
     );
   }
 }
+
+Level.propTypes = {
+  canManage: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  isSaving: PropTypes.bool.isRequired,
+  levels: PropTypes.arrayOf(PropTypes.number).isRequired,
+
+  dispatch: PropTypes.func.isRequired,
+};
 
 export default connect(({ levelEdit }) => ({
   canManage: levelEdit.canManage,

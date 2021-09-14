@@ -26,7 +26,10 @@ function Topic(props) {
   }
 
   return (
-    <div id={`discussion-topic-${props.topicId}`} className={styles.topicComponent}>
+    <div
+      id={`discussion-topic-${props.topicId}`}
+      className={styles.topicComponent}
+    >
       <div className={styles.topicTimestamp}>
         <span className="glyphicon glyphicon-chevron-down" />
         &nbsp;
@@ -41,7 +44,9 @@ function Topic(props) {
       </div>
       <Divider style={{ marginBottom: '1em' }} />
       <>
-        {props.postIds.map(id => <PostContainer key={id.toString()} postId={id} isRoot />)}
+        {props.postIds.map((id) => (
+          <PostContainer key={id.toString()} postId={id} isRoot />
+        ))}
       </>
       <Reply topicId={props.topicId} />
       <Divider />
@@ -59,7 +64,9 @@ const containerPropTypes = {
 function mapStateToProps(state, ownProps) {
   const topic = state.discussion.topics.get(ownProps.topicId);
   const postsStore = state.discussion.posts;
-  const postIds = topic.topLevelPostIds.filter(postId => postsStore.has(postId));
+  const postIds = topic.topLevelPostIds.filter((postId) =>
+    postsStore.has(postId),
+  );
   return {
     topicId: ownProps.topicId,
     timestamp: topic.timestamp,
@@ -69,7 +76,7 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onTimeStampClick: timestamp => (() => dispatch(seekToDirectly(timestamp))),
+    onTimeStampClick: (timestamp) => () => dispatch(seekToDirectly(timestamp)),
   };
 }
 
@@ -81,7 +88,11 @@ function mergeProps(stateProps, dispatchProps) {
   };
 }
 
-const TopicContainer = connect(mapStateToProps, mapDispatchToProps, mergeProps)(Topic);
+const TopicContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+  mergeProps,
+)(Topic);
 
 TopicContainer.propTypes = containerPropTypes;
 

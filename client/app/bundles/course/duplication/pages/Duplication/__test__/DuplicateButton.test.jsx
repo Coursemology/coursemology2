@@ -12,12 +12,14 @@ const data = {
     duplication: {
       sourceCourse: { id: 37 },
       destinationCourseId: 9,
-      destinationCourses: [{
-        id: 9,
-        title: 'destination',
-        host: 'example.org',
-        path: '/courses/9',
-      }],
+      destinationCourses: [
+        {
+          id: 9,
+          title: 'destination',
+          host: 'example.org',
+          path: '/courses/9',
+        },
+      ],
       selectedItems: {
         [duplicableItemTypes.TAB]: { 3: true, 4: true, 5: false },
         [duplicableItemTypes.CATEGORY]: { 6: false },
@@ -32,10 +34,12 @@ const data = {
             {
               id: 3,
               title: 'Tab 3',
-              assessments: [{
-                title: 'Assessment 7',
-                id: 7,
-              }],
+              assessments: [
+                {
+                  title: 'Assessment 7',
+                  id: 7,
+                },
+              ],
             },
             {
               id: 4,
@@ -58,10 +62,16 @@ const data = {
 describe('<DuplicateButton />', () => {
   it('allows duplication to be triggered with the correct parameters', () => {
     const spy = jest.spyOn(CourseAPI.duplication, 'duplicateItems');
-    const duplicateButton = mount(<DuplicateButton />, buildContextOptions(storeCreator(data)));
+    const duplicateButton = mount(
+      <DuplicateButton />,
+      buildContextOptions(storeCreator(data)),
+    );
     duplicateButton.find('button').first().simulate('click');
 
-    const confirmButton = duplicateButton.find('ConfirmationDialog').first().instance().confirmButton;
+    const confirmButton = duplicateButton
+      .find('ConfirmationDialog')
+      .first()
+      .instance().confirmButton;
     ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(confirmButton));
 
     const expectedPayload = {
@@ -73,6 +83,9 @@ describe('<DuplicateButton />', () => {
         destination_course_id: 9,
       },
     };
-    expect(spy).toHaveBeenCalledWith(data.duplication.duplication.sourceCourse.id, expectedPayload);
+    expect(spy).toHaveBeenCalledWith(
+      data.duplication.duplication.sourceCourse.id,
+      expectedPayload,
+    );
   });
 });

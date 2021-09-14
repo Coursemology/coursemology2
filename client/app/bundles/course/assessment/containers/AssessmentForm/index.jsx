@@ -38,11 +38,13 @@ const styles = {
   },
 };
 
-const isFieldBlank = str => str === undefined || str === '' || str === null;
+const isFieldBlank = (str) => str === undefined || str === '' || str === null;
 
-const isEndDatePassedStartDate = (startAt, endAt) => startAt && endAt && new Date(startAt) >= new Date(endAt);
+const isEndDatePassedStartDate = (startAt, endAt) =>
+  startAt && endAt && new Date(startAt) >= new Date(endAt);
 
-const isTestCaseChosen = (usePublic, usePrivate, useEvaluation) => !(usePublic || usePrivate || useEvaluation);
+const isTestCaseChosen = (usePublic, usePrivate, useEvaluation) =>
+  !(usePublic || usePrivate || useEvaluation);
 
 const validate = (values) => {
   const errors = {};
@@ -59,7 +61,10 @@ const validate = (values) => {
   });
 
   if (values.password_protected) {
-    if (isFieldBlank(values.view_password) && isFieldBlank(values.session_password)) {
+    if (
+      isFieldBlank(values.view_password) &&
+      isFieldBlank(values.session_password)
+    ) {
       errors.password_protected = translations.passwordRequired;
     }
   }
@@ -68,7 +73,13 @@ const validate = (values) => {
     errors.end_at = translations.startEndValidationError;
   }
 
-  if (isTestCaseChosen(values.use_public, values.use_private, values.use_evaluation)) {
+  if (
+    isTestCaseChosen(
+      values.use_public,
+      values.use_private,
+      values.use_evaluation,
+    )
+  ) {
     errors.use_evaluation = translations.noTestCaseChosenError;
   }
 
@@ -76,87 +87,54 @@ const validate = (values) => {
 };
 
 class AssessmentForm extends React.Component {
-  static propTypes = {
-    dispatch: PropTypes.func.isRequired,
-    handleSubmit: PropTypes.func.isRequired,
-    start_at: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.instanceOf(Date),
-    ]),
-    end_at: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.instanceOf(Date),
-    ]),
-    bonus_end_at: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.instanceOf(Date),
-    ]),
-    autograded: PropTypes.bool,
-    password_protected: PropTypes.bool,
-    showPersonalizedTimelineFeatures: PropTypes.bool,
-    submitting: PropTypes.bool,
-    tabs: PropTypes.arrayOf(PropTypes.shape({
-      tab_id: PropTypes.number,
-      title: PropTypes.string,
-    })),
-    // If randomization is enabled for the assessment
-    randomization: PropTypes.bool,
-    error: errorProps,
-    // Above are props from redux-form.
-
-    onSubmit: PropTypes.func.isRequired,
-    // If the Form is in editing mode, `published` button will be displayed.
-    editing: PropTypes.bool,
-    // if the EXP fields should be displayed
-    gamified: PropTypes.bool,
-    // If the personalized timeline fields should be displayed
-    show_personalized_timeline_features: PropTypes.bool,
-    // If randomization is allowed for assessments in the current course
-    randomizationAllowed: PropTypes.bool,
-    // If allow to switch between autoraded and manually graded mode.
-    modeSwitching: PropTypes.bool,
-    folderAttributes: PropTypes.shape({
-      folder_id: PropTypes.number,
-      // See MaterialFormContainer for detailed PropTypes.
-      materials: typeMaterial,
-    }),
-    // Condtions will be displayed if the attributes are present.
-    conditionAttributes: achievementTypesConditionAttributes,
-  };
-
-  static defaultProps = {
-    gamified: true,
-  }
-
   componentDidMount() {
     const { dispatch, editing } = this.props;
     // TODO: Shift the fetchTabs only when the selection menu is clicked on. This would
     //  prevent unnecessary loading of the tabs every time the assessment form is loaded.
     if (editing) {
-      const failureMessage = <FormattedMessage {...translations.fetchTabFailure} />;
+      const failureMessage = (
+        <FormattedMessage {...translations.fetchTabFailure} />
+      );
       dispatch(fetchTabs(failureMessage));
     }
   }
 
   onStartAtChange = (_, newStartAt) => {
-    const { start_at: startAt, end_at: endAt, bonus_end_at: bonusEndAt, dispatch } = this.props;
+    const {
+      start_at: startAt,
+      end_at: endAt,
+      bonus_end_at: bonusEndAt,
+      dispatch,
+    } = this.props;
     const newStartTime = newStartAt && newStartAt.getTime();
     const oldStartTime = startAt && new Date(startAt).getTime();
     const oldEndTime = endAt && new Date(endAt).getTime();
     const oldBonusTime = bonusEndAt && new Date(bonusEndAt).getTime();
 
     // Shift end_at time
-    if (newStartTime && oldStartTime && oldEndTime && oldStartTime <= oldEndTime) {
+    if (
+      newStartTime &&
+      oldStartTime &&
+      oldEndTime &&
+      oldStartTime <= oldEndTime
+    ) {
       const newEndAt = new Date(oldEndTime + (newStartTime - oldStartTime));
       dispatch(change(formNames.ASSESSMENT, 'end_at', newEndAt));
     }
 
     // Shift bonus_end_at time
-    if (newStartTime && oldStartTime && oldBonusTime && oldStartTime <= oldBonusTime) {
-      const newBonusTime = new Date(oldBonusTime + (newStartTime - oldStartTime));
+    if (
+      newStartTime &&
+      oldStartTime &&
+      oldBonusTime &&
+      oldStartTime <= oldBonusTime
+    ) {
+      const newBonusTime = new Date(
+        oldBonusTime + (newStartTime - oldStartTime),
+      );
       dispatch(change(formNames.ASSESSMENT, 'bonus_end_at', newBonusTime));
     }
-  }
+  };
 
   renderTabs() {
     const { tabs, editing, submitting } = this.props;
@@ -170,13 +148,14 @@ class AssessmentForm extends React.Component {
         floatingLabelFixed
         disabled={editing && submitting}
       >
-        {tabs && tabs.map(tab => (
-          <MenuItem
-            key={tab.tab_id}
-            value={tab.tab_id}
-            primaryText={tab.title}
-          />
-        ))}
+        {tabs &&
+          tabs.map((tab) => (
+            <MenuItem
+              key={tab.tab_id}
+              value={tab.tab_id}
+              primaryText={tab.title}
+            />
+          ))}
       </Field>
     );
   }
@@ -252,7 +231,9 @@ class AssessmentForm extends React.Component {
             name="allow_partial_submission"
             component={Toggle}
             parse={Boolean}
-            label={<FormattedMessage {...translations.allowPartialSubmission} />}
+            label={
+              <FormattedMessage {...translations.allowPartialSubmission} />
+            }
             labelPosition="right"
             style={styles.toggle}
             disabled={submitting}
@@ -321,8 +302,19 @@ class AssessmentForm extends React.Component {
   }
 
   render() {
-    const { handleSubmit, onSubmit, gamified, showPersonalizedTimelineFeatures, modeSwitching, submitting, editing,
-      folderAttributes, conditionAttributes, randomizationAllowed, error } = this.props;
+    const {
+      handleSubmit,
+      onSubmit,
+      gamified,
+      showPersonalizedTimelineFeatures,
+      modeSwitching,
+      submitting,
+      editing,
+      folderAttributes,
+      conditionAttributes,
+      randomizationAllowed,
+      error,
+    } = this.props;
 
     return (
       <Form onSubmit={handleSubmit(onSubmit)}>
@@ -361,49 +353,45 @@ class AssessmentForm extends React.Component {
             style={styles.flexChild}
             disabled={submitting}
           />
-          {
-            gamified
-            && (
+          {gamified && (
             <Field
               name="bonus_end_at"
               component={DateTimePicker}
               clearable
-              floatingLabelText={<FormattedMessage {...translations.bonusEndAt} />}
+              floatingLabelText={
+                <FormattedMessage {...translations.bonusEndAt} />
+              }
               style={styles.flexChild}
               disabled={submitting}
             />
-            )
-          }
+          )}
         </div>
-        {
-          gamified
-          && (
+        {gamified && (
           <div style={styles.flexGroup}>
             <Field
               name="base_exp"
               component={TextField}
               floatingLabelText={<FormattedMessage {...translations.baseExp} />}
               type="number"
-              onWheel={event => event.currentTarget.blur()}
+              onWheel={(event) => event.currentTarget.blur()}
               style={styles.flexChild}
               disabled={submitting}
             />
             <Field
               name="time_bonus_exp"
               component={TextField}
-              floatingLabelText={<FormattedMessage {...translations.timeBonusExp} />}
+              floatingLabelText={
+                <FormattedMessage {...translations.timeBonusExp} />
+              }
               type="number"
-              onWheel={event => event.currentTarget.blur()}
+              onWheel={(event) => event.currentTarget.blur()}
               style={styles.flexChild}
               disabled={submitting}
             />
           </div>
-          )
-        }
+        )}
 
-        {
-          editing
-          && (
+        {editing && (
           <Field
             name="published"
             component={Toggle}
@@ -413,36 +401,39 @@ class AssessmentForm extends React.Component {
             style={styles.toggle}
             disabled={submitting}
           />
-          )
-        }
+        )}
 
         <Field
           name="autograded"
           component={Toggle}
           parse={Boolean}
           label={
-            modeSwitching ? <FormattedMessage {...translations.autograded} />
-              : <FormattedMessage {...translations.modeSwitchingDisabled} />
+            modeSwitching ? (
+              <FormattedMessage {...translations.autograded} />
+            ) : (
+              <FormattedMessage {...translations.modeSwitchingDisabled} />
+            )
           }
           labelPosition="right"
           style={styles.toggle}
           disabled={!modeSwitching || submitting}
         />
 
-        {
-          modeSwitching
-          && (
+        {modeSwitching && (
           <div style={styles.hint}>
             <FormattedMessage {...translations.autogradedHint} />
           </div>
-          )
-        }
+        )}
 
         <Field
           name="block_student_viewing_after_submitted"
           component={Toggle}
           parse={Boolean}
-          label={<FormattedMessage {...translations.blockStudentViewingAfterSubmitted} />}
+          label={
+            <FormattedMessage
+              {...translations.blockStudentViewingAfterSubmitted}
+            />
+          }
           labelPosition="right"
           style={styles.toggle}
           disabled={submitting}
@@ -524,9 +515,7 @@ class AssessmentForm extends React.Component {
 
         {randomizationAllowed && this.renderEnableRandomizationField()}
 
-        {
-          showPersonalizedTimelineFeatures
-          && (
+        {showPersonalizedTimelineFeatures && (
           <>
             <Field
               name="has_personal_times"
@@ -544,7 +533,9 @@ class AssessmentForm extends React.Component {
               name="affects_personal_times"
               component={Toggle}
               parse={Boolean}
-              label={<FormattedMessage {...translations.affectsPersonalTimes} />}
+              label={
+                <FormattedMessage {...translations.affectsPersonalTimes} />
+              }
               labelPosition="right"
               style={styles.toggle}
               disabled={submitting}
@@ -553,12 +544,9 @@ class AssessmentForm extends React.Component {
               <FormattedMessage {...translations.affectsPersonalTimesHint} />
             </div>
           </>
-          )
-        }
+        )}
 
-        {
-          folderAttributes
-          && (
+        {folderAttributes && (
           <>
             <br />
             <MaterialUploader
@@ -566,23 +554,67 @@ class AssessmentForm extends React.Component {
               materials={folderAttributes.materials}
             />
           </>
-          )
-        }
-        {
-          editing && conditionAttributes
-          && (
+        )}
+        {editing && conditionAttributes && (
           <div style={styles.conditions}>
             <ConditionList
               newConditionUrls={conditionAttributes.new_condition_urls}
               conditions={conditionAttributes.conditions}
             />
           </div>
-          )
-        }
+        )}
       </Form>
     );
   }
 }
+
+AssessmentForm.defaultProps = {
+  gamified: true,
+};
+
+AssessmentForm.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  start_at: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
+  end_at: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
+  bonus_end_at: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.instanceOf(Date),
+  ]),
+  autograded: PropTypes.bool,
+  password_protected: PropTypes.bool,
+  showPersonalizedTimelineFeatures: PropTypes.bool,
+  submitting: PropTypes.bool,
+  tabs: PropTypes.arrayOf(
+    PropTypes.shape({
+      tab_id: PropTypes.number,
+      title: PropTypes.string,
+    }),
+  ),
+  // If randomization is enabled for the assessment
+  randomization: PropTypes.bool,
+  error: errorProps,
+  // Above are props from redux-form.
+
+  onSubmit: PropTypes.func.isRequired,
+  // If the Form is in editing mode, `published` button will be displayed.
+  editing: PropTypes.bool,
+  // if the EXP fields should be displayed
+  gamified: PropTypes.bool,
+  // If the personalized timeline fields should be displayed
+  show_personalized_timeline_features: PropTypes.bool,
+  // If randomization is allowed for assessments in the current course
+  randomizationAllowed: PropTypes.bool,
+  // If allow to switch between autoraded and manually graded mode.
+  modeSwitching: PropTypes.bool,
+  folderAttributes: PropTypes.shape({
+    folder_id: PropTypes.number,
+    // See MaterialFormContainer for detailed PropTypes.
+    materials: typeMaterial,
+  }),
+  // Condtions will be displayed if the attributes are present.
+  conditionAttributes: achievementTypesConditionAttributes,
+};
 
 const formSelector = formValueSelector(formNames.ASSESSMENT);
 
@@ -590,7 +622,14 @@ function mapStateToProps(state) {
   return {
     // Load all tabs if data is loaded, otherwise fall back to current assessment tab.
     tabs: state.editPage.tabs || formSelector(state, 'tabs'),
-    ...formSelector(state, 'start_at', 'end_at', 'bonus_end_at', 'autograded', 'password_protected'),
+    ...formSelector(
+      state,
+      'start_at',
+      'end_at',
+      'bonus_end_at',
+      'autograded',
+      'password_protected',
+    ),
   };
 }
 
@@ -598,5 +637,5 @@ export default connect(mapStateToProps)(
   reduxForm({
     form: formNames.ASSESSMENT,
     validate,
-  })(AssessmentForm)
+  })(AssessmentForm),
 );

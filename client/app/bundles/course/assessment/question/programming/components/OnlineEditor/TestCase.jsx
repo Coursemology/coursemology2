@@ -10,21 +10,6 @@ import styles from './OnlineEditorView.scss';
 import translations from './OnlineEditorView.intl';
 
 class TestCase extends React.Component {
-  static propTypes = {
-    updateTestCase: PropTypes.func.isRequired,
-    deleteTestCase: PropTypes.func.isRequired,
-    isLoading: PropTypes.bool.isRequired,
-    type: PropTypes.string.isRequired,
-    index: PropTypes.number.isRequired,
-    test: PropTypes.instanceOf(Immutable.Map).isRequired,
-    expression: PropTypes.string.isRequired,
-    expected: PropTypes.string.isRequired,
-    hint: PropTypes.string.isRequired,
-    enableInlineCodeEditor: PropTypes.bool.isRequired,
-    showCodeEditor: PropTypes.bool.isRequired,
-    intl: intlShape.isRequired,
-  }
-
   static getTestInputName(type, field) {
     return `question_programming[test_cases][${type}][][${field}]`;
   }
@@ -69,41 +54,50 @@ class TestCase extends React.Component {
   renderCodeEditorButton(type, index, showCodeEditor) {
     return (
       <TableRowColumn style={{ paddingLeft: 10, paddingRight: 10 }}>
-        {
-          showCodeEditor
-            ? (
-              <RaisedButton
-                className={styles.codeEditorButtonCell}
-                label={this.props.intl.formatMessage(translations.hideTestCaseCodeEditorButton)}
-                labelPosition="before"
-                containerElement="label"
-                primary
-                disabled={this.props.isLoading}
-                onClick={this.inlineCodeEditorHandler(type, index, !showCodeEditor)}
-                style={{ marginRight: 0, width: 30 }}
-              />
-            )
-            : (
-              <RaisedButton
-                className={styles.codeEditorButtonCell}
-                label={this.props.intl.formatMessage(translations.showTestCaseCodeEditorButton)}
-                labelPosition="before"
-                containerElement="label"
-                primary
-                disabled={this.props.isLoading}
-                onClick={this.inlineCodeEditorHandler(type, index, !showCodeEditor)}
-                style={{ marginRight: 0, width: 30 }}
-              />
-            )
-        }
+        {showCodeEditor ? (
+          <RaisedButton
+            className={styles.codeEditorButtonCell}
+            label={this.props.intl.formatMessage(
+              translations.hideTestCaseCodeEditorButton,
+            )}
+            labelPosition="before"
+            containerElement="label"
+            primary
+            disabled={this.props.isLoading}
+            onClick={this.inlineCodeEditorHandler(type, index, !showCodeEditor)}
+            style={{ marginRight: 0, width: 30 }}
+          />
+        ) : (
+          <RaisedButton
+            className={styles.codeEditorButtonCell}
+            label={this.props.intl.formatMessage(
+              translations.showTestCaseCodeEditorButton,
+            )}
+            labelPosition="before"
+            containerElement="label"
+            primary
+            disabled={this.props.isLoading}
+            onClick={this.inlineCodeEditorHandler(type, index, !showCodeEditor)}
+            style={{ marginRight: 0, width: 30 }}
+          />
+        )}
       </TableRowColumn>
     );
   }
 
   render() {
-    const displayedIndex = (`0${this.props.index + 1}`).slice(-2);
-    const { type, index, isLoading, test, expression, expected, hint,
-      enableInlineCodeEditor, showCodeEditor } = this.props;
+    const displayedIndex = `0${this.props.index + 1}`.slice(-2);
+    const {
+      type,
+      index,
+      isLoading,
+      test,
+      expression,
+      expected,
+      hint,
+      enableInlineCodeEditor,
+      showCodeEditor,
+    } = this.props;
     return (
       <TableRow>
         <TableHeaderColumn className={styles.deleteButtonCell}>
@@ -118,23 +112,38 @@ class TestCase extends React.Component {
         </TableHeaderColumn>
         <TableRowColumn className={styles.testCell}>
           test_
-          {type}
-          _
-          {displayedIndex}
+          {type}_{displayedIndex}
         </TableRowColumn>
         <TableRowColumn className={styles.testCell}>
-          { this.renderInput(test, 'expression', expression, index) }
+          {this.renderInput(test, 'expression', expression, index)}
         </TableRowColumn>
         <TableRowColumn className={styles.testCell}>
-          { this.renderInput(test, 'expected', expected, index) }
+          {this.renderInput(test, 'expected', expected, index)}
         </TableRowColumn>
         <TableRowColumn className={styles.testCell}>
-          { this.renderInput(test, 'hint', hint, index) }
+          {this.renderInput(test, 'hint', hint, index)}
         </TableRowColumn>
-        { enableInlineCodeEditor ? this.renderCodeEditorButton(type, index, showCodeEditor) : null }
+        {enableInlineCodeEditor
+          ? this.renderCodeEditorButton(type, index, showCodeEditor)
+          : null}
       </TableRow>
     );
   }
 }
+
+TestCase.propTypes = {
+  updateTestCase: PropTypes.func.isRequired,
+  deleteTestCase: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  type: PropTypes.string.isRequired,
+  index: PropTypes.number.isRequired,
+  test: PropTypes.instanceOf(Immutable.Map).isRequired,
+  expression: PropTypes.string.isRequired,
+  expected: PropTypes.string.isRequired,
+  hint: PropTypes.string.isRequired,
+  enableInlineCodeEditor: PropTypes.bool.isRequired,
+  showCodeEditor: PropTypes.bool.isRequired,
+  intl: intlShape.isRequired,
+};
 
 export default injectIntl(TestCase);

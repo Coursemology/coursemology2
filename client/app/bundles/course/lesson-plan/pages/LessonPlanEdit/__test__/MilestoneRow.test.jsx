@@ -20,10 +20,13 @@ const milestoneData = {
 
 describe('<MilestoneRow />', () => {
   it('allows milestone start_at to be updated', () => {
-    mock.onPatch(`/courses/${courseId}/lesson_plan/milestones/${milestoneData.id}`).reply(200);
+    mock
+      .onPatch(
+        `/courses/${courseId}/lesson_plan/milestones/${milestoneData.id}`,
+      )
+      .reply(200);
     const spy = jest.spyOn(CourseAPI.lessonPlan, 'updateMilestone');
     const store = storeCreator({ lessonPlan: { milestones: [milestoneData] } });
-
 
     const table = mount(
       <table>
@@ -36,7 +39,7 @@ describe('<MilestoneRow />', () => {
           />
         </tbody>
       </table>,
-      buildContextOptions(store)
+      buildContextOptions(store),
     );
 
     const startAtDateInput = table.find('input[name="start_at"]').first();
@@ -44,9 +47,8 @@ describe('<MilestoneRow />', () => {
     startAtDateInput.simulate('change', { target: { value: newStartAt } });
     startAtDateInput.simulate('blur');
 
-    expect(spy).toHaveBeenCalledWith(
-      milestoneData.id,
-      { lesson_plan_milestone: { start_at: new Date('2017-02-28T18:03:00.000Z') } }
-    );
+    expect(spy).toHaveBeenCalledWith(milestoneData.id, {
+      lesson_plan_milestone: { start_at: new Date('2017-02-28T18:03:00.000Z') },
+    });
   });
 });

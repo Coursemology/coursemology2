@@ -1,6 +1,10 @@
 import CourseAPI from 'api/course';
 import { submit, SubmissionError } from 'redux-form';
-import { setNotification, resetDeleteConfirmation, showDeleteConfirmation } from 'lib/actions';
+import {
+  setNotification,
+  resetDeleteConfirmation,
+  showDeleteConfirmation,
+} from 'lib/actions';
 import actionTypes, { formNames } from 'course/lesson-plan/constants';
 
 export { setNotification, resetDeleteConfirmation, showDeleteConfirmation };
@@ -24,7 +28,8 @@ export function setColumnVisibility(field, isVisible) {
 export function fetchLessonPlan() {
   return (dispatch) => {
     dispatch({ type: actionTypes.LOAD_LESSON_PLAN_REQUEST });
-    return CourseAPI.lessonPlan.fetch()
+    return CourseAPI.lessonPlan
+      .fetch()
       .then((response) => {
         dispatch({
           type: actionTypes.LOAD_LESSON_PLAN_SUCCESS,
@@ -71,7 +76,8 @@ export function submitEventForm() {
 export function createMilestone(values, successMessage, failureMessage) {
   return (dispatch) => {
     dispatch({ type: actionTypes.MILESTONE_CREATE_REQUEST });
-    return CourseAPI.lessonPlan.createMilestone({ lesson_plan_milestone: values })
+    return CourseAPI.lessonPlan
+      .createMilestone({ lesson_plan_milestone: values })
       .then((response) => {
         dispatch({
           type: actionTypes.MILESTONE_CREATE_SUCCESS,
@@ -94,7 +100,8 @@ export function createMilestone(values, successMessage, failureMessage) {
 export function updateMilestone(id, values, successMessage, failureMessage) {
   return (dispatch) => {
     dispatch({ type: actionTypes.MILESTONE_UPDATE_REQUEST });
-    return CourseAPI.lessonPlan.updateMilestone(id, { lesson_plan_milestone: values })
+    return CourseAPI.lessonPlan
+      .updateMilestone(id, { lesson_plan_milestone: values })
       .then((response) => {
         dispatch({
           type: actionTypes.MILESTONE_UPDATE_SUCCESS,
@@ -118,7 +125,8 @@ export function updateMilestone(id, values, successMessage, failureMessage) {
 export function deleteMilestone(id, successMessage, failureMessage) {
   return (dispatch) => {
     dispatch({ type: actionTypes.MILESTONE_DELETE_REQUEST });
-    return CourseAPI.lessonPlan.deleteMilestone(id)
+    return CourseAPI.lessonPlan
+      .deleteMilestone(id)
       .then(() => {
         dispatch({
           type: actionTypes.MILESTONE_DELETE_SUCCESS,
@@ -136,7 +144,8 @@ export function deleteMilestone(id, successMessage, failureMessage) {
 export function updateItem(id, values, successMessage, failureMessage) {
   return (dispatch) => {
     dispatch({ type: actionTypes.ITEM_UPDATE_REQUEST });
-    return CourseAPI.lessonPlan.updateItem(id, { item: values })
+    return CourseAPI.lessonPlan
+      .updateItem(id, { item: values })
       .then(() => {
         dispatch({
           type: actionTypes.ITEM_UPDATE_SUCCESS,
@@ -154,7 +163,8 @@ export function updateItem(id, values, successMessage, failureMessage) {
 export function createEvent(values, successMessage, failureMessage) {
   return (dispatch) => {
     dispatch({ type: actionTypes.EVENT_CREATE_REQUEST });
-    return CourseAPI.lessonPlan.createEvent({ lesson_plan_event: values })
+    return CourseAPI.lessonPlan
+      .createEvent({ lesson_plan_event: values })
       .then((response) => {
         dispatch({
           type: actionTypes.EVENT_CREATE_SUCCESS,
@@ -177,7 +187,8 @@ export function createEvent(values, successMessage, failureMessage) {
 export function updateEvent(eventId, values, successMessage, failureMessage) {
   return (dispatch) => {
     dispatch({ type: actionTypes.EVENT_UPDATE_REQUEST });
-    return CourseAPI.lessonPlan.updateEvent(eventId, { lesson_plan_event: values })
+    return CourseAPI.lessonPlan
+      .updateEvent(eventId, { lesson_plan_event: values })
       .then((response) => {
         dispatch({
           type: actionTypes.EVENT_UPDATE_SUCCESS,
@@ -201,7 +212,8 @@ export function updateEvent(eventId, values, successMessage, failureMessage) {
 export function deleteEvent(itemId, eventId, successMessage, failureMessage) {
   return (dispatch) => {
     dispatch({ type: actionTypes.EVENT_DELETE_REQUEST });
-    return CourseAPI.lessonPlan.deleteEvent(eventId)
+    return CourseAPI.lessonPlan
+      .deleteEvent(eventId)
       .then(() => {
         dispatch({
           type: actionTypes.EVENT_DELETE_SUCCESS,

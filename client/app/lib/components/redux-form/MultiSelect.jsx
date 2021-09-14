@@ -27,7 +27,7 @@ const styles = {
 const MultiSelect = (props) => {
   const { label, value, options, error, isLoading, onChange } = props;
 
-  const seletedOptions = (value).map(v => options.find(o => o.id === v));
+  const seletedOptions = value.map((v) => options.find((o) => o.id === v));
 
   return (
     <ChipInput
@@ -45,7 +45,7 @@ const MultiSelect = (props) => {
         onChange([...value, addedChip.id]);
       }}
       onRequestDelete={(deletedChipId) => {
-        const values = value.filter(v => v !== deletedChipId);
+        const values = value.filter((v) => v !== deletedChipId);
         onChange(values);
       }}
       floatingLabelText={label}

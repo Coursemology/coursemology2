@@ -6,11 +6,15 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
   }
 
   downloadAll(students) {
-    return this.getClient().get(`${this._getUrlPrefix()}/download_all`, { params: { students } });
+    return this.getClient().get(`${this._getUrlPrefix()}/download_all`, {
+      params: { students },
+    });
   }
 
   downloadStatistics(students) {
-    return this.getClient().get(`${this._getUrlPrefix()}/download_statistics`, { params: { students } });
+    return this.getClient().get(`${this._getUrlPrefix()}/download_statistics`, {
+      params: { students },
+    });
   }
 
   publishAll() {
@@ -32,11 +36,18 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
     const formData = new FormData();
     SubmissionsAPI.appendFormData(formData, submissionFields);
 
-    return this.getClient().patch(`${this._getUrlPrefix()}/${submissionId}`, formData, config);
+    return this.getClient().patch(
+      `${this._getUrlPrefix()}/${submissionId}`,
+      formData,
+      config,
+    );
   }
 
   reloadAnswer(submissionId, params) {
-    return this.getClient().post(`${this._getUrlPrefix()}/${submissionId}/reload_answer`, params);
+    return this.getClient().post(
+      `${this._getUrlPrefix()}/${submissionId}/reload_answer`,
+      params,
+    );
   }
 
   submitAnswer(submissionId, answerFields) {
@@ -50,11 +61,17 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
     const formData = new FormData();
     SubmissionsAPI.appendFormData(formData, answerFields);
 
-    return this.getClient().patch(`${this._getUrlPrefix()}/${submissionId}/submit_answer`, formData, config);
+    return this.getClient().patch(
+      `${this._getUrlPrefix()}/${submissionId}/submit_answer`,
+      formData,
+      config,
+    );
   }
 
   autoGrade(submissionId) {
-    return this.getClient().post(`${this._getUrlPrefix()}/${submissionId}/auto_grade`);
+    return this.getClient().post(
+      `${this._getUrlPrefix()}/${submissionId}/auto_grade`,
+    );
   }
 
   createProgrammingAnnotation(submissionId, answerId, fileId, params) {

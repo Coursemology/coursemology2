@@ -28,27 +28,34 @@ const tooltipArrowStyle = {
 const placementStyles = {
   left: {
     tooltip: { marginLeft: -3, padding: '0 5px' },
-    arrow: { right: 0, marginTop: -5, borderWidth: '5px 0 5px 5px', borderLeftColor: '#FFF' },
+    arrow: {
+      right: 0,
+      marginTop: -5,
+      borderWidth: '5px 0 5px 5px',
+      borderLeftColor: '#FFF',
+    },
   },
   right: {
     tooltip: { marginRight: 3, padding: '0 5px' },
-    arrow: { left: 0, marginTop: -5, borderWidth: '5px 5px 5px 0', borderRightColor: '#FFF' },
+    arrow: {
+      left: 0,
+      marginTop: -5,
+      borderWidth: '5px 5px 5px 0',
+      borderRightColor: '#FFF',
+    },
   },
   bottom: {
     tooltip: { marginBottom: 3, padding: '5px 0' },
-    arrow: { top: 0, marginLeft: -5, borderWidth: '0 5px 5px', borderBottomColor: '#FFF' },
+    arrow: {
+      top: 0,
+      marginLeft: -5,
+      borderWidth: '0 5px 5px',
+      borderBottomColor: '#FFF',
+    },
   },
 };
 
 export default class OverlayTooltip extends Component {
-  static propTypes = {
-    style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-    placement: PropTypes.oneOf(['left', 'right', 'bottom']).isRequired,
-    arrowOffsetLeft: PropTypes.string,
-    arrowOffsetTop: PropTypes.string,
-    children: PropTypes.node,
-  };
-
   render() {
     const {
       style,
@@ -59,12 +66,31 @@ export default class OverlayTooltip extends Component {
     } = this.props;
 
     return (
-      <div style={{ ...tooltipStyle, ...placementStyles[placement].tooltip, ...style }}>
-        <div style={{ ...tooltipArrowStyle, ...placementStyles[placement].arrow, left, top }} />
-        <div style={tooltipInnerStyle}>
-          {children}
-        </div>
+      <div
+        style={{
+          ...tooltipStyle,
+          ...placementStyles[placement].tooltip,
+          ...style,
+        }}
+      >
+        <div
+          style={{
+            ...tooltipArrowStyle,
+            ...placementStyles[placement].arrow,
+            left,
+            top,
+          }}
+        />
+        <div style={tooltipInnerStyle}>{children}</div>
       </div>
     );
   }
 }
+
+OverlayTooltip.propTypes = {
+  style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  placement: PropTypes.oneOf(['left', 'right', 'bottom']).isRequired,
+  arrowOffsetLeft: PropTypes.string,
+  arrowOffsetTop: PropTypes.string,
+  children: PropTypes.node,
+};

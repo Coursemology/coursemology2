@@ -24,7 +24,11 @@ export default function (state = {}, action) {
     case actions.UNMARK_SUCCESS:
     case actions.PUBLISH_SUCCESS:
       const { canGrade, ...submission } = action.payload.submission;
-      return { ...submission, isGrader: canGrade, graderView: calculateGraderView(state, canGrade) };
+      return {
+        ...submission,
+        isGrader: canGrade,
+        graderView: calculateGraderView(state, canGrade),
+      };
     case actions.ENTER_STUDENT_VIEW:
       return { ...state, graderView: false };
     case actions.EXIT_STUDENT_VIEW:

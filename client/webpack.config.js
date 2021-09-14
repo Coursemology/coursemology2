@@ -46,7 +46,10 @@ const config = {
     new webpack.HashedModuleIdsPlugin(),
     new ManifestPlugin({ publicPath: '/webpack/', writeToFileEmit: true }),
     // Do not require all locales in moment
-    new webpack.ContextReplacementPlugin(/moment\/locale$/, /^\.\/(en-.*|zh-.*)$/),
+    new webpack.ContextReplacementPlugin(
+      /moment\/locale$/,
+      /^\.\/(en-.*|zh-.*)$/,
+    ),
   ],
 
   module: {
@@ -58,21 +61,17 @@ const config = {
       },
       {
         test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader',
-        ],
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.scss$/,
-        use: [
-          'style-loader',
-          'css-loader',
-          'sass-loader',
-        ],
+        use: ['style-loader', 'css-loader', 'sass-loader'],
         include: [
           path.resolve(__dirname, 'app/lib/styles/MaterialSummernote.scss'),
-          path.resolve(__dirname, 'app/lib/styles/MaterialSummernoteModal.scss'),
+          path.resolve(
+            __dirname,
+            'app/lib/styles/MaterialSummernoteModal.scss',
+          ),
         ],
       },
       {
@@ -92,25 +91,33 @@ const config = {
         exclude: [
           /node_modules/,
           path.resolve(__dirname, 'app/lib/styles/MaterialSummernote.scss'),
-          path.resolve(__dirname, 'app/lib/styles/MaterialSummernoteModal.scss'),
+          path.resolve(
+            __dirname,
+            'app/lib/styles/MaterialSummernoteModal.scss',
+          ),
         ],
       },
       {
         test: require.resolve('jquery'),
-        use: [{
-          loader: 'expose-loader',
-          options: 'jQuery',
-        }, {
-          loader: 'expose-loader',
-          options: '$',
-        }],
+        use: [
+          {
+            loader: 'expose-loader',
+            options: 'jQuery',
+          },
+          {
+            loader: 'expose-loader',
+            options: '$',
+          },
+        ],
       },
       {
         test: require.resolve('./app/lib/moment-timezone'),
-        use: [{
-          loader: 'expose-loader',
-          options: 'moment',
-        }],
+        use: [
+          {
+            loader: 'expose-loader',
+            options: 'moment',
+          },
+        ],
       },
     ],
   },
@@ -130,9 +137,11 @@ if (development) {
 
 // Only enable HardSourceWebpackPlugin in Travis
 if (travis) {
-  config.plugins.push(new HardSourceWebpackPlugin({
-    cacheDirectory: path.join(__dirname, 'hard-source-cache/[confighash]'),
-  }));
+  config.plugins.push(
+    new HardSourceWebpackPlugin({
+      cacheDirectory: path.join(__dirname, 'hard-source-cache/[confighash]'),
+    }),
+  );
 }
 
 module.exports = config;

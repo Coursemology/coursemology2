@@ -11,11 +11,11 @@ function renderBadge(imageSrc) {
   } else {
     avatarProps.icon = <InsertDriveFileIcon />;
   }
-  return (
-    <Avatar {...avatarProps} />
-  );
+  return <Avatar {...avatarProps} />;
 }
 
-const BadgePreview = props => <ImagePreview render={renderBadge} {...props} />;
+const BadgePreview = (props) => (
+  <ImagePreview render={renderBadge} {...props} />
+);
 
 export default BadgePreview;

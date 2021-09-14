@@ -17,22 +17,29 @@ class VisibleComments extends Component {
 
   render() {
     const {
-      commentForms, posts, topic,
-      handleCreateChange, handleUpdateChange,
-      createComment, updateComment, deleteComment,
+      commentForms,
+      posts,
+      topic,
+      handleCreateChange,
+      handleUpdateChange,
+      createComment,
+      updateComment,
+      deleteComment,
     } = this.props;
 
     return (
       <div>
-        <h4 style={{ color: grey600 }}><FormattedMessage {...translations.comments} /></h4>
-        {posts.map(post => (
+        <h4 style={{ color: grey600 }}>
+          <FormattedMessage {...translations.comments} />
+        </h4>
+        {posts.map((post) => (
           <CommentCard
             key={post.id}
             post={post}
             editValue={commentForms.posts[post.id]}
-            updateComment={value => updateComment(post.id, value)}
+            updateComment={(value) => updateComment(post.id, value)}
             deleteComment={() => deleteComment(post.id)}
-            handleChange={value => handleUpdateChange(post.id, value)}
+            handleChange={(value) => handleUpdateChange(post.id, value)}
           />
         ))}
         <CommentField
@@ -67,7 +74,7 @@ function mapStateToProps(state, ownProps) {
   const { topic } = ownProps;
   return {
     commentForms: state.commentForms,
-    posts: state.topics[topic.id].postIds.map(postId => state.posts[postId]),
+    posts: state.topics[topic.id].postIds.map((postId) => state.posts[postId]),
   };
 }
 
@@ -75,16 +82,18 @@ function mapDispatchToProps(dispatch, ownProps) {
   const { topic } = ownProps;
 
   return {
-    handleCreateChange: comment => dispatch(commentActions.onCreateChange(topic.id, comment)),
-    handleUpdateChange: (postId, comment) => dispatch(commentActions.onUpdateChange(postId, comment)),
-    createComment: comment => dispatch(commentActions.create(topic.submissionQuestionId, comment)),
-    updateComment: (postId, comment) => dispatch(commentActions.update(topic.id, postId, comment)),
-    deleteComment: postId => dispatch(commentActions.destroy(topic.id, postId)),
+    handleCreateChange: (comment) =>
+      dispatch(commentActions.onCreateChange(topic.id, comment)),
+    handleUpdateChange: (postId, comment) =>
+      dispatch(commentActions.onUpdateChange(postId, comment)),
+    createComment: (comment) =>
+      dispatch(commentActions.create(topic.submissionQuestionId, comment)),
+    updateComment: (postId, comment) =>
+      dispatch(commentActions.update(topic.id, postId, comment)),
+    deleteComment: (postId) =>
+      dispatch(commentActions.destroy(topic.id, postId)),
   };
 }
 
-const Comments = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(VisibleComments);
+const Comments = connect(mapStateToProps, mapDispatchToProps)(VisibleComments);
 export default Comments;

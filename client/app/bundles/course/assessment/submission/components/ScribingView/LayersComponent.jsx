@@ -42,10 +42,7 @@ const popoverStyles = {
 
 class LayersComponent extends Component {
   renderLayersPopover() {
-    const {
-      layers, open, anchorEl,
-      onRequestClose, onClickLayer,
-    } = this.props;
+    const { layers, open, anchorEl, onRequestClose, onClickLayer } = this.props;
 
     return layers && layers.length !== 0 ? (
       <Popover
@@ -56,11 +53,11 @@ class LayersComponent extends Component {
         onRequestClose={onRequestClose}
       >
         <Menu>
-          { layers.map(layer => (
+          {layers.map((layer) => (
             <MenuItem
               key={layer.creator_id}
               primaryText={layer.creator_name}
-              onClick={() => (onClickLayer(layer))}
+              onClick={() => onClickLayer(layer)}
               rightIcon={layer.isDisplayed ? <Done /> : null}
             />
           ))}
@@ -74,13 +71,15 @@ class LayersComponent extends Component {
 
     return !disabled ? (
       <>
-        <label style={popoverStyles.layersLabel}>{intl.formatMessage(translations.layersLabelText)}</label>
+        <label style={popoverStyles.layersLabel}>
+          {intl.formatMessage(translations.layersLabelText)}
+        </label>
         <RaisedButton
           onClick={onClick}
-          label={layers && (`${layers[0].creator_name.substring(0, 6)}...`)}
+          label={layers && `${layers[0].creator_name.substring(0, 6)}...`}
           disabled={disabled}
         />
-        { this.renderLayersPopover() }
+        {this.renderLayersPopover()}
       </>
     ) : null;
   }

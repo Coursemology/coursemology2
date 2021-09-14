@@ -18,7 +18,7 @@ $(document).ready(() => {
           <LessonPlanLayout />
         </Router>
       </ProviderWrapper>,
-      mountNode
+      mountNode,
     );
   }
 });

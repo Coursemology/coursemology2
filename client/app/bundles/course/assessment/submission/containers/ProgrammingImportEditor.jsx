@@ -88,12 +88,20 @@ class VisibleProgrammingImportEditor extends Component {
 
   render() {
     const {
-      dispatch, submissionId, questionId, answerId,
-      readOnly, question, intl, answers, isSaving, viewHistory,
+      dispatch,
+      submissionId,
+      questionId,
+      answerId,
+      readOnly,
+      question,
+      intl,
+      answers,
+      isSaving,
+      viewHistory,
     } = this.props;
     const { displayFileIndex } = this.state;
     const files = answers[answerId].files_attributes;
-    const stagedFiles = files.filter(file => file.staged).length > 0;
+    const stagedFiles = files.filter((file) => file.staged).length > 0;
     const disableImport = !stagedFiles || isSaving;
     return (
       <>
@@ -103,46 +111,50 @@ class VisibleProgrammingImportEditor extends Component {
             questionId={questionId}
             displayFileIndex={displayFileIndex}
             handleDeleteFile={this.handleDeleteFile}
-            handleFileTabbing={index => this.setState({ displayFileIndex: index })}
+            handleFileTabbing={(index) =>
+              this.setState({ displayFileIndex: index })
+            }
             files={files}
             viewHistory={viewHistory}
           />
         )}
-        {viewHistory
-          ? this.renderProgrammingHistoryEditor(answers[answerId])
-          : (
-            <FieldArray
-              name={`${answerId}[files_attributes]`}
-              component={VisibleProgrammingImportEditor.renderSelectProgrammingFileEditor}
-              {...{
-                readOnly,
-                question,
-                displayFileIndex,
-                viewHistory,
-                language: parseLanguages(question.language),
-              }}
+        {viewHistory ? (
+          this.renderProgrammingHistoryEditor(answers[answerId])
+        ) : (
+          <FieldArray
+            name={`${answerId}[files_attributes]`}
+            component={
+              VisibleProgrammingImportEditor.renderSelectProgrammingFileEditor
+            }
+            {...{
+              readOnly,
+              question,
+              displayFileIndex,
+              viewHistory,
+              language: parseLanguages(question.language),
+            }}
+          />
+        )}
+        {readOnly || viewHistory ? null : (
+          <>
+            <FileInput
+              name={`${answerId}[import_files]`}
+              disabled={isSaving}
+              callback={(filesToImport) =>
+                dispatch(stageFiles(submissionId, answerId, filesToImport))
+              }
             />
-          )
-        }
-        {readOnly || viewHistory
-          ? null
-          : (
-            <>
-              <FileInput
-                name={`${answerId}[import_files]`}
-                disabled={isSaving}
-                callback={filesToImport => dispatch(stageFiles(submissionId, answerId, filesToImport))}
-              />
-              <RaisedButton
-                style={styles.formButton}
-                backgroundColor={white}
-                label={intl.formatMessage(translations.uploadFiles)}
-                onClick={() => dispatch(importFiles(answerId, answers, question.language))}
-                disabled={disableImport}
-              />
-            </>
-          )
-        }
+            <RaisedButton
+              style={styles.formButton}
+              backgroundColor={white}
+              label={intl.formatMessage(translations.uploadFiles)}
+              onClick={() =>
+                dispatch(importFiles(answerId, answers, question.language))
+              }
+              disabled={disableImport}
+            />
+          </>
+        )}
       </>
     );
   }
@@ -190,7 +202,7 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-const ProgrammingImportEditor = connect(
-  mapStateToProps
-)(injectIntl(VisibleProgrammingImportEditor));
+const ProgrammingImportEditor = connect(mapStateToProps)(
+  injectIntl(VisibleProgrammingImportEditor),
+);
 export default ProgrammingImportEditor;

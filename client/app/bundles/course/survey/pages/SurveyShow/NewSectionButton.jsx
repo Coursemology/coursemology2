@@ -1,9 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { injectIntl, defineMessages, intlShape, FormattedMessage } from 'react-intl';
+import {
+  injectIntl,
+  defineMessages,
+  intlShape,
+  FormattedMessage,
+} from 'react-intl';
 import RaisedButton from 'material-ui/RaisedButton';
-import { showSectionForm, createSurveySection } from 'course/survey/actions/sections';
+import {
+  showSectionForm,
+  createSurveySection,
+} from 'course/survey/actions/sections';
 
 const translations = defineMessages({
   newSection: {
@@ -27,32 +35,25 @@ const styles = {
 };
 
 class NewSectionButton extends React.Component {
-  static propTypes = {
-    disabled: PropTypes.bool,
-
-    dispatch: PropTypes.func.isRequired,
-    intl: intlShape.isRequired,
-  }
-
-  static defaultProps = {
-    disabled: false,
-  }
-
   createSectionHandler = (data) => {
     const { dispatch } = this.props;
     const payload = { section: data };
     const successMessage = <FormattedMessage {...translations.success} />;
     const failureMessage = <FormattedMessage {...translations.failure} />;
-    return dispatch(createSurveySection(payload, successMessage, failureMessage));
-  }
+    return dispatch(
+      createSurveySection(payload, successMessage, failureMessage),
+    );
+  };
 
   showNewSectionForm = () => {
     const { dispatch, intl } = this.props;
-    return dispatch(showSectionForm({
-      onSubmit: this.createSectionHandler,
-      formTitle: intl.formatMessage(translations.newSection),
-    }));
-  }
+    return dispatch(
+      showSectionForm({
+        onSubmit: this.createSectionHandler,
+        formTitle: intl.formatMessage(translations.newSection),
+      }),
+    );
+  };
 
   render() {
     return (
@@ -66,5 +67,16 @@ class NewSectionButton extends React.Component {
     );
   }
 }
+
+NewSectionButton.propTypes = {
+  disabled: PropTypes.bool,
+
+  dispatch: PropTypes.func.isRequired,
+  intl: intlShape.isRequired,
+};
+
+NewSectionButton.defaultProps = {
+  disabled: false,
+};
 
 export default connect()(injectIntl(NewSectionButton));

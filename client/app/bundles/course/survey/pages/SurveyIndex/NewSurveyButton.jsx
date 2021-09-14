@@ -46,17 +46,23 @@ class NewSurveyButton extends React.Component {
     const successMessage = intl.formatMessage(translations.success, data);
     const failureMessage = intl.formatMessage(translations.failure);
     return dispatch(createSurvey(payload, successMessage, failureMessage));
-  }
+  };
 
   showNewSurveyForm = () => {
     const { dispatch, intl } = this.props;
 
-    return dispatch(showSurveyForm({
-      onSubmit: this.createSurveyHandler,
-      formTitle: intl.formatMessage(translations.newSurvey),
-      initialValues: Object.assign({ base_exp: 0, allow_response_after_end: true }, aWeekStartingTomorrow()),
-    }));
-  }
+    return dispatch(
+      showSurveyForm({
+        onSubmit: this.createSurveyHandler,
+        formTitle: intl.formatMessage(translations.newSurvey),
+        initialValues: {
+          base_exp: 0,
+          allow_response_after_end: true,
+          ...aWeekStartingTomorrow(),
+        },
+      }),
+    );
+  };
 
   render() {
     const { canCreate } = this.props;
@@ -66,4 +72,6 @@ class NewSurveyButton extends React.Component {
 
 NewSurveyButton.propTypes = propTypes;
 
-export default connect(state => state.surveysFlags)(injectIntl(NewSurveyButton));
+export default connect((state) => state.surveysFlags)(
+  injectIntl(NewSurveyButton),
+);
