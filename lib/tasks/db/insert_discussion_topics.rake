@@ -58,7 +58,7 @@ namespace :db do
         pending_staff_reply = [false] * SLICE_SIZE
         combined_arr = sq_ids.zip(actable_type_strings, course_ids, pending_staff_reply, created_at,
                                   updated_at)
-        discussion_topic_values = combined_arr.map { |x| '(' + x.join(',') + ')' }.join(',')
+        discussion_topic_values = combined_arr.map { |x| "(#{x.join(',')})" }.join(',')
 
         puts "Start INSERT of #{combined_arr.count} rows: Slice #{slice_index} of #{total_slices}"
         start_time = Time.now

@@ -109,7 +109,7 @@ RSpec.describe Attachment do
 
   describe '#path' do
     it 'returns a path based on the split form of the name' do
-      attachment = create(:attachment, name: 'abcdef' + SecureRandom.hex(32))
+      attachment = create(:attachment, name: "abcdef#{SecureRandom.hex(32)}")
       expect(attachment.path).
         to start_with(File.join(Rails.public_path, '/uploads/attachments/ab/cd/ef'))
     end

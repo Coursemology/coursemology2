@@ -23,7 +23,7 @@ module ApplicationWidgetsHelper
   #   This would create a button with the given body.
   def new_button(name, options = nil, html_options = nil, &block)
     name, options, html_options = [nil, name, options] unless html_options
-    options = [:new] + [*options] unless options.is_a?(String)
+    options = [:new] + Array(options) unless options.is_a?(String)
     block ||= proc { fa_icon 'file' }
     resource_button(:new, 'btn-primary', name || block, options, html_options&.dup)
   end
@@ -51,7 +51,7 @@ module ApplicationWidgetsHelper
   #   This would create a button with the given body.
   def edit_button(name, options = nil, html_options = nil, &block)
     name, options, html_options = [nil, name, options] unless html_options
-    options = [:edit] + [*options] unless options.is_a?(String)
+    options = [:edit] + Array(options) unless options.is_a?(String)
     block ||= proc { fa_icon 'edit' }
     resource_button(:edit, 'btn-default', name || block, options, html_options&.dup)
   end

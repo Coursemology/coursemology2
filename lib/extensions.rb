@@ -7,7 +7,7 @@ module Extensions
     #
     # @return [void]
     def load_all
-      Dir[EXTENSIONS_PATH + '/*.rb'].each do |ext|
+      Dir["#{EXTENSIONS_PATH}/*.rb"].sort.each do |ext|
         require ext
         load(const_get(module_name(File.basename(ext, '.*'))))
       end

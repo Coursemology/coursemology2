@@ -130,7 +130,7 @@ RSpec.describe User do
     describe '.search' do
       let(:keyword) { 'KeyWord' }
       let!(:user_with_keyword_in_name) do
-        user = create(:user, name: 'Awesome' + keyword + 'User')
+        user = create(:user, name: "Awesome#{keyword}User")
         # We should not return multiple instances of same user if it has multiple emails
         create(:user_email, user: user, primary: false)
         user

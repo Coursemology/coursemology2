@@ -97,7 +97,7 @@ class Course::Assessment::Question::ProgrammingImportService
   def build_combined_test_case_records(test_reports)
     test_cases = []
 
-    test_reports.values.each do |test_report|
+    test_reports.each_value do |test_report|
       test_cases += build_test_case_records(test_report)
     end
 

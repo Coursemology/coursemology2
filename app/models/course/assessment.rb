@@ -135,12 +135,13 @@ class Course::Assessment < ApplicationRecord
     target_mode = params[:autograded]
     return if target_mode == autograded || !allow_mode_switching?
 
-    if target_mode == true
+    case target_mode
+    when true
       self.autograded = true
       self.session_password = nil
       self.view_password = nil
       self.delayed_grade_publication = false
-    elsif target_mode == false # Ignore the case when the params is empty.
+    when false # Ignore the case when the params is empty.
       self.autograded = false
       self.skippable = false
     end

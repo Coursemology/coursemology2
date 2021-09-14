@@ -98,7 +98,7 @@ class Course::VirtualClassroom::BraincertApiService
   end
 
   def call_braincert_api(action, params)
-    action = '/' + action unless action[0] == '/'
+    action = "/#{action}" unless action[0] == '/'
     api_key = @settings.braincert_whiteboard_api_key
     post "#{BRAINCERT_API_BASE_URL}#{action}", params.merge(apikey: api_key)
   end

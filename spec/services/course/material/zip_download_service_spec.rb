@@ -29,12 +29,12 @@ RSpec.describe Course::Material::ZipDownloadService do
       before { subject }
       context 'when all of the materials are given' do
         it 'downloads the materials' do
-          folder_b_path = dir + '/' + folder_b.name
-          folder_c_path = dir + '/' + folder_c.name
-          folder_d_path = folder_c_path + '/' + folder_d.name
-          material_a_path = dir + '/' + material_a.name
-          material_b_path = folder_b_path + '/' + material_b.name
-          material_d_path = folder_d_path + '/' + material_d.name
+          folder_b_path = "#{dir}/#{folder_b.name}"
+          folder_c_path = "#{dir}/#{folder_c.name}"
+          folder_d_path = "#{folder_c_path}/#{folder_d.name}"
+          material_a_path = "#{dir}/#{material_a.name}"
+          material_b_path = "#{folder_b_path}/#{material_b.name}"
+          material_d_path = "#{folder_d_path}/#{material_d.name}"
 
           expect(
             FileUtils.compare_file(
@@ -59,9 +59,9 @@ RSpec.describe Course::Material::ZipDownloadService do
         end
 
         it 'keeps the folder hierarchy' do
-          folder_b_path = dir + '/' + folder_b.name
-          folder_c_path = dir + '/' + folder_c.name
-          folder_d_path = folder_c_path + '/' + folder_d.name
+          folder_b_path = "#{dir}/#{folder_b.name}"
+          folder_c_path = "#{dir}/#{folder_c.name}"
+          folder_d_path = "#{folder_c_path}/#{folder_d.name}"
           expect(File.exist?(folder_b_path)).to be_truthy
           expect(File.exist?(folder_c_path)).to be_truthy
           expect(File.exist?(folder_d_path)).to be_truthy
@@ -75,13 +75,13 @@ RSpec.describe Course::Material::ZipDownloadService do
 
         it 'only downloads the selected materials' do
           # Only selected files and their parent folders should be downloaded
-          folder_b_path = dir + '/' + folder_b.name
-          folder_c_path = dir + '/' + folder_c.name
+          folder_b_path = "#{dir}/#{folder_b.name}"
+          folder_c_path = "#{dir}/#{folder_c.name}"
           expect(File.exist?(folder_b_path)).to be_truthy
           expect(File.exist?(folder_c_path)).to be_falsey
 
-          material_a_path = dir + '/' + material_a.name
-          material_b_path = folder_b_path + '/' + material_b.name
+          material_a_path = "#{dir}/#{material_a.name}"
+          material_b_path = "#{folder_b_path}/#{material_b.name}"
           expect(File.exist?(material_a_path)).to be_truthy
           expect(File.exist?(material_b_path)).to be_truthy
         end
@@ -100,12 +100,12 @@ RSpec.describe Course::Material::ZipDownloadService do
 
         file_names = Zip::File.open(subject) { |f| f.map(&:name) }
         expect(file_names).to contain_exactly(
-          folder_b.name + '/',
-          folder_c.name + '/',
+          "#{folder_b.name}/",
+          "#{folder_c.name}/",
           material_a.name,
-          folder_b.name + '/' + material_b.name,
-          folder_c.name + '/' + folder_d.name + '/',
-          folder_c.name + '/' + folder_d.name + '/' + material_d.name
+          "#{folder_b.name}/#{material_b.name}",
+          "#{folder_c.name}/#{folder_d.name}/",
+          "#{folder_c.name}/#{folder_d.name}/#{material_d.name}"
         )
       end
     end

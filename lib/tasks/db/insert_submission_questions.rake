@@ -32,7 +32,7 @@ namespace :db do
         question_ids = sq_tuples.map { |x| x['question_id'] }
         now_strings = ['NOW()'] * SLICE_SIZE
         combined_arr = submission_ids.zip(question_ids, now_strings, now_strings)
-        sub_qn_values = combined_arr.map { |x| '(' + x.join(',') + ')' }.join(',')
+        sub_qn_values = combined_arr.map { |x| "(#{x.join(',')})" }.join(',')
 
         connection.exec_query(<<-SQL)
           INSERT INTO course_assessment_submission_questions

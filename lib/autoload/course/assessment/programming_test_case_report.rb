@@ -88,7 +88,7 @@ class Course::Assessment::ProgrammingTestCaseReport
     #
     # @return [String]
     def identifier
-      class_name = self.class_name ? self.class_name + '/' : ''
+      class_name = self.class_name ? "#{self.class_name}/" : ''
       "#{@test_suite.identifier}/#{class_name}#{name.underscore}"
     end
 

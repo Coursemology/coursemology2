@@ -261,7 +261,7 @@ RSpec.describe Course::Survey::ResponsesController do
       let!(:response_answer) do
         create(:course_survey_answer, question: survey_question, response: survey_response)
       end
-      let(:new_response_text) { response_answer.text_response + 'New Stuff' }
+      let(:new_response_text) { "#{response_answer.text_response}New Stuff" }
       let(:response_params) do
         { answer_attributes: { id: response_answer.id, text_response: new_response_text } }
       end
