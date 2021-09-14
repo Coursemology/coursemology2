@@ -15,7 +15,7 @@ class Notifier::Base
     end
   end
 
-  def initialize #:nodoc:
+  def initialize # :nodoc:
     super
     @pending_emails = []
   end

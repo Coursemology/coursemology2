@@ -214,7 +214,11 @@ class Course::Assessment::Submission < ApplicationRecord
 
   # Loads the answer ids of the past answers of each question
   def answer_history
-    answers.unscope(:order).order(created_at: :desc).pluck(:question_id, :id, :current_answer).group_by(&:first).map do |pair|
+    answers.unscope(:order).
+      order(created_at: :desc).
+      pluck(:question_id, :id, :current_answer).
+      group_by(&:first).
+      map do |pair|
       {
         question_id: pair[0],
         answer_ids: pair[1].reject(&:last).map(&:second).first(10)

@@ -160,7 +160,7 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
     File.join(__dir__, filename).freeze
   end
 
-  def zip_test_files(test_type, zip) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def zip_test_files(test_type, zip) # rubocop:disable Metrics/AbcSize
     # Print test class preamble
     test_class_name = "#{test_type}_tests_grader".camelize
     class_definition = <<~PYTHON
@@ -180,7 +180,7 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
       hint = test[:hint].blank? ? String(nil) : "self.meta['hint'] = #{test[:hint].inspect}"
 
       test_fn = <<-PYTHON
-    def test_#{test_type}_#{format('%02i', index)}(self):
+    def test_#{test_type}_#{format('%<index>02i', index: index)}(self):
         self.meta['expression'] = #{test[:expression].inspect}
         self.meta['expected'] = #{expected}
         #{hint}

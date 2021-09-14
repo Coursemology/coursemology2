@@ -3,6 +3,7 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
   Course::Assessment::Question::Programming::LanguagePackageService
   def initialize(params)
     @test_params = test_params params if params.present?
+    super
   end
 
   def submission_templates
@@ -230,7 +231,7 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
     end
   end
 
-  def zip_test_files(test_type, zip) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def zip_test_files(test_type, zip) # rubocop:disable Metrics/AbcSize
     tests = @test_params[:test_cases]
     tests[test_type]&.each&.with_index(1) do |test, index|
       # String types should be displayed with quotes, other types will be converted to string
@@ -238,9 +239,9 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
       expected = string?(test[:expected]) ? test[:expected].inspect : (test[:expected]).to_s
       hint = test[:hint].blank? ? String(nil) : "result.setAttribute(\"hint\", #{test[:hint].inspect});"
 
-      test_fn = <<-Java
+      test_fn = <<-JAVA
         @Test(groups = { "#{test_type}" })
-        public void test_#{test_type}_#{format('%02i', index)}() {
+        public void test_#{test_type}_#{format('%<index>02i', index: index)}() {
           ITestResult result = Reporter.getCurrentTestResult();
           result.setAttribute("expression", #{test[:expression].inspect});
           #{test[:inline_code]}
@@ -249,7 +250,7 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
           #{hint}
           expectEquals(#{test[:expression]}, #{test[:expected]});
         }
-      Java
+      JAVA
 
       zip.print test_fn
     end

@@ -8,6 +8,7 @@ class Course::Settings::PanComponent < SimpleDelegator
 
   def initialize(components)
     @components = components
+    super
   end
 
   # Calls the given function from the component settings which respond to the function.

@@ -84,7 +84,7 @@ RSpec.describe Course::Assessment::Question::MultipleResponse do
         it 'returns a shuffled order of its options' do
           expected_ordered_options = subject.options.shuffle(random: Random.new(seed))
 
-          expect(subject.ordered_options(seed, course_mrq_randomized).map(&:option)).to(
+          expect(subject.ordered_options(course_mrq_randomized, seed).map(&:option)).to(
             eq expected_ordered_options.map(&:option)
           )
         end
@@ -99,7 +99,7 @@ RSpec.describe Course::Assessment::Question::MultipleResponse do
           non_randomized_options = subject.options.select(&:ignore_randomization)
           expected_ordered_options = randomized_options + non_randomized_options
 
-          expect(subject.ordered_options(seed, course_mrq_randomized).map(&:option)).to(
+          expect(subject.ordered_options(course_mrq_randomized, seed).map(&:option)).to(
             eq expected_ordered_options.map(&:option)
           )
         end

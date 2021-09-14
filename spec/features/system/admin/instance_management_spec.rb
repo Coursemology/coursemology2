@@ -16,7 +16,7 @@ RSpec.feature 'System: Administration: Instances' do
 
         expect do
           click_button I18n.t('helpers.submit.instance.create')
-        end.not_to change { Instance.count }
+        end.not_to(change { Instance.count })
 
         fill_in 'instance_name', with: 'Lorem ipsum'
         fill_in 'instance_host', with: generate(:host)

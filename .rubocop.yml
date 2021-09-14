@@ -35,6 +35,10 @@ Metrics/BlockLength:
 
 Metrics/MethodLength:
   Max: 15
+  CountAsOne: ['array', 'hash', 'heredoc']
+
+Style/AsciiComments:
+  AllowedChars: ['©', '├', '─', '└']
 
 Style/ClassAndModuleChildren:
   EnforcedStyle: compact
@@ -69,6 +73,9 @@ Style/StringLiterals:
 
 Style/SymbolArray:
   Enabled: false
+
+Style/TernaryParentheses:
+  EnforcedStyle: require_parentheses_when_complex
 
 Style/WordArray:
   Enabled: false

@@ -28,6 +28,7 @@ class ActiveJob::QueueAdapters::BackgroundThreadAdapter < ActiveJob::QueueAdapte
     @finish_jobs_condition = ConditionVariable.new
     @thread_pool = []
     @thread_pool_mutex = Mutex.new
+    super
   end
 
   def enqueue(job) #:nodoc:

@@ -40,7 +40,7 @@ RSpec.describe 'Course: Assessment: Submissions: Logs' do
 
         expect do
           visit edit_course_assessment_submission_path(course, protected_assessment, submission)
-        end.not_to change { submission.logs.count }
+        end.not_to(change { submission.logs.count })
 
         # Logout and login again and visit the same submission
         logout
@@ -73,7 +73,7 @@ RSpec.describe 'Course: Assessment: Submissions: Logs' do
 
         expect do
           visit edit_course_assessment_submission_path(course, assessment, submission)
-        end.not_to change { submission.logs.count }
+        end.not_to(change { submission.logs.count })
       end
     end
 

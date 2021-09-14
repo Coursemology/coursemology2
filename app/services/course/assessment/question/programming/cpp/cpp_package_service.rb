@@ -174,13 +174,13 @@ class Course::Assessment::Question::Programming::Cpp::CppPackageService < \
       expected = string?(test[:expected]) ? test[:expected].inspect : (test[:expected]).to_s
       hint = test[:hint].blank? ? String(nil) : "RecordProperty(\"hint\", #{test[:hint].inspect})"
 
-      test_fn = <<-CPlusPlus
-        TEST(Autograder, test_#{test_type}_#{format('%02i', index)}) {
+      test_fn = <<-CPP
+        TEST(Autograder, test_#{test_type}_#{format('%<index>02i', index: index)}) {
           RecordProperty("expression", #{test[:expression].inspect});
           custom_evaluation(#{test[:expected]}, #{test[:expression]});
           #{hint};
         }
-      CPlusPlus
+      CPP
 
       zip.print test_fn
     end
