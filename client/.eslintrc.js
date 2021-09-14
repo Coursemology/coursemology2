@@ -12,8 +12,7 @@ module.exports = {
       webpack: {},
     },
     react: {
-      // TODO: Update this to 'detect' once React is upgraded >=16.9
-      version: '16.8.6',
+      version: 'detect',
     },
   },
   rules: {
