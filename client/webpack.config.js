@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
-const ManifestPlugin = require('webpack-manifest-plugin');
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
 const env = process.env.NODE_ENV || 'development';
@@ -32,6 +32,7 @@ const config = {
       lib: path.resolve('./app/lib'),
       api: path.resolve('./app/api'),
       course: path.resolve('./app/bundles/course'),
+      testUtils: path.resolve('./app/__test__/utils'),
     },
   },
 
@@ -39,12 +40,15 @@ const config = {
     splitChunks: {
       chunks: 'all',
     },
+    moduleIds: 'deterministic',
   },
 
   plugins: [
     new webpack.IgnorePlugin(/__test__/),
-    new webpack.HashedModuleIdsPlugin(),
-    new ManifestPlugin({ publicPath: '/webpack/', writeToFileEmit: true }),
+    new WebpackManifestPlugin({
+      publicPath: '/webpack/',
+      writeToFileEmit: true,
+    }),
     // Do not require all locales in moment
     new webpack.ContextReplacementPlugin(
       /moment\/locale$/,
@@ -82,8 +86,9 @@ const config = {
             loader: 'css-loader',
             options: {
               importLoaders: 1,
-              modules: true,
-              localIdentName: '[path]___[name]__[local]___[hash:base64:5]',
+              modules: {
+                localIdentName: '[path]___[name]__[local]___[hash:base64:5]',
+              },
             },
           },
           'sass-loader',
@@ -99,25 +104,17 @@ const config = {
       },
       {
         test: require.resolve('jquery'),
-        use: [
-          {
-            loader: 'expose-loader',
-            options: 'jQuery',
-          },
-          {
-            loader: 'expose-loader',
-            options: '$',
-          },
-        ],
+        loader: 'expose-loader',
+        options: {
+          exposes: ['jQuery', '$'],
+        },
       },
       {
         test: require.resolve('./app/lib/moment-timezone'),
-        use: [
-          {
-            loader: 'expose-loader',
-            options: 'moment',
-          },
-        ],
+        loader: 'expose-loader',
+        options: {
+          exposes: 'moment',
+        },
       },
     ],
   },
@@ -130,7 +127,7 @@ if (development) {
     headers: { 'Access-Control-Allow-Origin': '*' },
   };
   config.output.publicPath = `//localhost:${devServerPort}/webpack/`;
-  config.devtool = 'cheap-module-eval-source-map';
+  config.devtool = 'eval-cheap-module-source-map';
 } else {
   console.log(`\nWebpack ${env} build for Rails...`); // eslint-disable-line no-console
 }
