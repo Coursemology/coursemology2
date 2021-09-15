@@ -9,4 +9,3 @@ en:
       models:
         course/assessment/category:
           deletion: 'the last category cannot be deleted'
-

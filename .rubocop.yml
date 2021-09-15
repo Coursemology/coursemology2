@@ -4,12 +4,12 @@ inherit_from:
 AllCops:
   NewCops: enable
   Exclude:
-   - 'bin/*'
-   - 'db/seeds.rb'
-   - 'db/schema.rb'
-   - 'db/migrate/*'
-   - 'vendor/bundle/**/*'
-   - 'client/**/*'
+    - 'bin/*'
+    - 'db/seeds.rb'
+    - 'db/schema.rb'
+    - 'db/migrate/*'
+    - 'vendor/bundle/**/*'
+    - 'client/**/*'
   TargetRubyVersion: 2.5
 
 Bundler/OrderedGems:

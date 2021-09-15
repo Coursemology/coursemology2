@@ -42,7 +42,7 @@ en:
       updated: 'Your account has been updated successfully.'
       new:
         sign_up: 'Sign up'
-        password_hint: "#{length} characters minimum"
+        password_hint: '#{length} characters minimum'
     sessions:
       signed_in: 'Signed in successfully.'
       signed_out: 'Signed out successfully.'
