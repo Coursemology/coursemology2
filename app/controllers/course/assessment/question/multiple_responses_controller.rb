@@ -14,6 +14,15 @@ class Course::Assessment::Question::MultipleResponsesController < Course::Assess
   end
 
   def create
+    if params.key?(:multiple_choice)
+      if params[:multiple_choice] == 'true'
+        @multiple_response_question.grading_scheme = :any_correct
+      else
+        @multiple_response_question.grading_scheme = :all_correct
+      end
+      return render 'new'
+    end
+
     if @multiple_response_question.save
       redirect_to course_assessment_path(current_course, @assessment),
                   success: t('.success')
