@@ -212,7 +212,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
         expect(page).to have_text(
           I18n.t('course.assessment.question.multiple_responses.switch_question_type_button.switch_to_mcq')
         )
-        
+
         # Switch MRQ to MCQ
         click_button I18n.t('course.assessment.question.multiple_responses.switch_question_type_button.switch_to_mcq')
         expect(page).to have_text(
