@@ -38,20 +38,20 @@ en:
           failure: 'Failed to unsubscribe from topic.'
         locked:
           tag: 'Lock'
-          success: "The topic was successfully locked."
-          failure: "The topic could not be locked."
+          success: 'The topic was successfully locked.'
+          failure: 'The topic could not be locked.'
         unlocked:
           tag: 'Unlock'
-          success: "The topic was successfully unlocked."
-          failure: "The topic could not be unlocked."
+          success: 'The topic was successfully unlocked.'
+          failure: 'The topic could not be unlocked.'
         hidden:
           tag: 'Hide'
-          success: "The topic was successfully hidden."
-          failure: "The topic could not be hidden."
+          success: 'The topic was successfully hidden.'
+          failure: 'The topic could not be hidden.'
         unhidden:
           tag: 'Unhide'
-          success: "The topic was successfully unhidden."
-          failure: "The topic could not be unhidden."
+          success: 'The topic was successfully unhidden.'
+          failure: 'The topic could not be unhidden.'
         resolved:
           message: 'This question topic has been resolved.'
         unresolved:
