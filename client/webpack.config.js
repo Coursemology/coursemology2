@@ -39,6 +39,12 @@ const config = {
   optimization: {
     splitChunks: {
       chunks: 'all',
+      name: (_module, chunks, cacheGroupKey) => {
+        const allChunksNames = chunks.map((chunk) => chunk.name).join('~');
+        const prefix =
+          cacheGroupKey === 'defaultVendors' ? 'vendors' : cacheGroupKey;
+        return `${prefix}~${allChunksNames}`;
+      },
     },
     moduleIds: 'deterministic',
   },

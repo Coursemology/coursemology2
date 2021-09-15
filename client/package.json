@@ -9,8 +9,8 @@
   "scripts": {
     "test": "TZ=Asia/Singapore yarn run jest --coverage",
     "testci": "TZ=Asia/Singapore yarn run jest --maxWorkers=4 --coverage",
-    "build:test": "export NODE_ENV=test && yarn run build:translations && webpack -w --mode=production",
-    "build:production": "export NODE_ENV=production && yarn run build:translations && webpack --mode=production",
+    "build:test": "export NODE_ENV=test && yarn run build:translations && webpack -w --node-env=production",
+    "build:production": "export NODE_ENV=production && yarn run build:translations && webpack --node-env=production",
     "build:development": "yarn run build:translations && webpack serve",
     "build:translations": "babel-node scripts/aggregate-translations.js",
     "extract-translations": "yarn run build:production && babel-node scripts/extract-translations.js",
