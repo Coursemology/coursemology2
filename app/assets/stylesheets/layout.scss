@@ -44,8 +44,8 @@ table.codehilite {
         font-size: ($font-size-base - 1);
         width: 1%; // Force the line numbers to occupy as little space as possible.
 
+        // Inspired by GitHub to ensure copying the content does not copy line numbers
         &::before {
-          // Inspired by GitHub to ensure copying the content does not copy line numbers
           content: attr(data-line-number);
           padding-right: $line-height-computed;
         }
