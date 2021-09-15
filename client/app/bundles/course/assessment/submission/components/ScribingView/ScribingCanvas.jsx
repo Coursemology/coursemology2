@@ -107,7 +107,7 @@ export default class ScribingCanvas extends Component {
         },
         nextProps.scribing.canvasZoom,
       );
-      this.canvas.trigger('mouse:move', { isForced: true });
+      this.canvas.fire('mouse:move', { isForced: true });
 
       if (nextProps.scribing.isEnableObjectSelection) {
         // Objects are selectable in Type tool, dont have to enableObjectSelection again
