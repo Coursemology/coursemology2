@@ -1,6 +1,5 @@
 - multiple_choice = @multiple_response_question.multiple_choice?
 - button_text = @multiple_response_question.multiple_choice? ? t('.switch_to_mrq') : t('.switch_to_mcq')
 - warning_text = @multiple_response_question.multiple_choice? ? t('.confirm_switch_to_mrq') : t('.confirm_switch_to_mcq')
-- if f.object.persisted?
-  = f.button :button, button_text, type: 'submit', name: 'multiple_choice', value: !multiple_choice,
-    data: (@question_assessment.assessment.submissions.length > 0 ? { confirm: warning_text, style: "color: purple" } : nil)
+= f.button :button, button_text, type: 'submit', formnovalidate: true, name: 'multiple_choice', value: !multiple_choice,
+  data: (f.object.persisted? && @question_assessment.assessment.submissions&.length > 0 ? { confirm: warning_text } : nil)

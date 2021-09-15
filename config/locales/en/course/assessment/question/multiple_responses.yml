@@ -32,12 +32,12 @@ en:
             switch_to_mrq: 'Change to Multiple Response Question (MRQ)'
             confirm_switch_to_mcq: > 
               Are you sure you want to switch the question's type to MCQ?
-              ALL EXISTING SUBMISSIONS WILL BE UNSUBMITTED, ANY EXISTING ANSWERS WILL BE DISCARDED,
-              AND STUDENTS ARE REQUIRED TO RE-SUBMIT.
+              ALL EXISTING SUBMISSIONS WILL BE UNSUBMITTED AND ALL ANSWERS TO THIS QUESTION WILL BE CLEARED.
+              STUDENTS WILL BE REQUIRED TO RE-ATTEMPT THIS QUESTION AND RE-SUBMIT THEIR SUBMISSIONS.
             confirm_switch_to_mrq: >
               Are you sure you want to switch the question's type to MRQ? 
-              ALL EXISTING SUBMISSIONS WILL BE UNSUBMITTED, ANY EXISTING ANSWERS WILL BE DISCARDED,
-              AND STUDENTS ARE REQUIRED TO RE-SUBMIT.
+              ALL EXISTING SUBMISSIONS WILL BE UNSUBMITTED AND ALL ANSWERS TO THIS QUESTION WILL BE CLEARED.
+              STUDENTS WILL BE REQUIRED TO RE-ATTEMPT THIS QUESTION AND RE-SUBMIT THEIR SUBMISSIONS.
           question_type:
             multiple_response: Multiple Response
             multiple_choice: Multiple Choice
