@@ -5,4 +5,4 @@ en:
         course/assessment/question/text_response_comprehension_group:
           attributes:
             maximum_group_grade:
-              invalid_group_grade: "must be no more than the maximum grade of the question"
+              invalid_group_grade: 'must be no more than the maximum grade of the question'

@@ -4,34 +4,34 @@ en:
       videos:
         sidebar_title: :'course.video.videos.index.header'
         index:
-          header: "Videos"
-          title: "Title"
-          start_at: "Start At"
-          percent_watched: "Average % Watched"
-          submissions_count: "Watch Count"
+          header: 'Videos'
+          title: 'Title'
+          start_at: 'Start At'
+          percent_watched: 'Average % Watched'
+          submissions_count: 'Watch Count'
         video:
-          progress: "%{progress} %"
-          submissions_count: "%{submissions_count} / %{students_count}"
+          progress: '%{progress} %'
+          submissions_count: '%{submissions_count} / %{students_count}'
         new:
-          header: "New Video"
+          header: 'New Video'
         create:
-          success: "%{title} was created."
+          success: '%{title} was created.'
         show:
-          description: "Description"
+          description: 'Description'
           start_at: :'course.video.videos.index.start_at'
-          statistics: "Statistics"
+          statistics: 'Statistics'
         edit:
-          header: "Edit Video"
+          header: 'Edit Video'
         update:
-          success: "Video %{title} was updated."
+          success: 'Video %{title} was updated.'
         destroy:
-          success: "%{title} was deleted."
-          failure: "Could not delete video: %{error}"
+          success: '%{title} was deleted.'
+          failure: 'Could not delete video: %{error}'
         todo_video_button:
-          watch: "Watch"
+          watch: 'Watch'
         video_attempt_button:
-          watch: "Watch"
-          rewatch: "Re-Watch"
+          watch: 'Watch'
+          rewatch: 'Re-Watch'
         form:
           url_placeholder: >
             Please provide a valid youtube URL,

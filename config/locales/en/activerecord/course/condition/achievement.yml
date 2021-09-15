@@ -7,6 +7,6 @@ en:
         course/condition/achievement:
           attributes:
             achievement:
-              unique_dependency: "cannot have duplicate conditions"
-              references_self: "cannot have itself as a condition"
-              cyclic_dependency: "cannot have cyclic dependency"
+              unique_dependency: 'cannot have duplicate conditions'
+              references_self: 'cannot have itself as a condition'
+              cyclic_dependency: 'cannot have cyclic dependency'

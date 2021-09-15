@@ -2,36 +2,36 @@ en:
   course:
     user_invitations:
       errors:
-        duplicate_user: "%{user} appears more than once in the submission."
-        invalid_email: "%{email} is invalid: %{message}."
+        duplicate_user: '%{user} appears more than once in the submission.'
+        invalid_email: '%{email} is invalid: %{message}.'
       index:
-        header: "Invitations"
-        progress: "%{accepted} accepted / %{total} invited"
+        header: 'Invitations'
+        progress: '%{accepted} accepted / %{total} invited'
         manual_acceptance: >
           The following table lists all invitations which have been sent out to date.
 
 
           Users can key in their associated invitation code into the course registration page to
           register into this course.
-        invited_header: "Pending Invitations"
-        accepted_header: "Accepted Invitations"
-        resend_button: "Resend All Invitations"
+        invited_header: 'Pending Invitations'
+        accepted_header: 'Accepted Invitations'
+        resend_button: 'Resend All Invitations'
       destroy:
-        success: "Invitation to %{name} was deleted."
+        success: 'Invitation to %{name} was deleted.'
       course_user_invitations:
-        invitation_code: "Invitation Code"
-        status: "Status"
-        sent_at: "Invitation Sent At"
-        confirmed_at: "Invitation Accepted At"
+        invitation_code: 'Invitation Code'
+        status: 'Status'
+        sent_at: 'Invitation Sent At'
+        confirmed_at: 'Invitation Accepted At'
       course_user_invitation:
-        delete_tooltip: "Delete Invitation"
-        resend_tooltip: "Resend Invitation"
+        delete_tooltip: 'Delete Invitation'
+        resend_tooltip: 'Resend Invitation'
       new:
-        header: "Invite Users"
+        header: 'Invite Users'
         tabs:
-          file: "Upload file"
-          individual: "Individually add users"
-          registration_code: "Registration code"
+          file: 'Upload file'
+          individual: 'Individually add users'
+          registration_code: 'Registration code'
         file:
           format_html: >
             Files uploaded must be in the following format below:<br />
@@ -44,7 +44,7 @@ en:
             non-phantom if omitted.</li>
             </ul>
         individual:
-          add_user: "Add User"
+          add_user: 'Add User'
         registration_code:
           explanation: >
             If users are having difficulty registering for a course by following the email
@@ -52,33 +52,33 @@ en:
           explanation_warning: >
             Users who have been invited and use this invitation code to register for the
             course would not have the proper status reflected in the Invitations page.
-          disable: "Disable"
-          disabled: "Registration via registration codes are currently disabled."
-          enable: "Enable"
+          disable: 'Disable'
+          disabled: 'Registration via registration codes are currently disabled.'
+          enable: 'Enable'
       create:
         success: >
           Successfully invited users from the uploaded file:
           %{new_invitations}, %{already_invited}, %{new_course_users}, %{already_enrolled}.
         summary:
           new_invitations:
-            one: "1 new invitation sent"
-            other: "%{count} new invitations sent"
+            one: '1 new invitation sent'
+            other: '%{count} new invitations sent'
           new_course_users:
-            one: "1 user just enrolled"
-            other: "%{count} users just enrolled"
-          already_enrolled: "%{count} already enrolled"
-          already_invited: "%{count} already invited"
-          duplicate_emails: "%{count} duplicate emails ignored."
+            one: '1 user just enrolled'
+            other: '%{count} users just enrolled'
+          already_enrolled: '%{count} already enrolled'
+          already_invited: '%{count} already invited'
+          duplicate_emails: '%{count} duplicate emails ignored.'
       invitation_fields:
-        remove: "Remove"
+        remove: 'Remove'
       resend_invitation:
         success: >
           The request to resend the email invitation to %{email}
           is received, please wait while the email is sent out.
-        failure: "The request to resend the email invitation failed."
+        failure: 'The request to resend the email invitation failed.'
       resend_invitations:
-        success: "Email invitations were successfully resent."
-        failure: "The resending of email invitations failed."
+        success: 'Email invitations were successfully resent.'
+        failure: 'The resending of email invitations failed.'
       toggle_registration:
-        success: "The update was successful."
-        failure: "The update was unsuccessful."
+        success: 'The update was successful.'
+        failure: 'The update was unsuccessful.'

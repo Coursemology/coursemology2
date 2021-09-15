@@ -3,7 +3,7 @@ en:
     assessment:
       submission_question:
         comments_footer:
-          comment: "Comment"
+          comment: 'Comment'
       submission_questions:
         discussion_topic_submission_question:
-          by_html: "By: %{user}"
+          by_html: 'By: %{user}'

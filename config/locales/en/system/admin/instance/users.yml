@@ -4,20 +4,20 @@ en:
       instance:
         users:
           role:
-            administrator: "Administrator"
-            instructor: "Instructor"
-            normal: "Normal"
+            administrator: 'Administrator'
+            instructor: 'Instructor'
+            normal: 'Normal'
           status:
-            accepted: "Accepted"
-            invited: "Invited"
+            accepted: 'Accepted'
+            invited: 'Invited'
           tabs:
             users: :'system.admin.instance.users.index.header'
             invite: :'system.admin.instance.user_invitations.new.header'
             invitations: :'system.admin.instance.user_invitations.index.header'
           index:
-            header: "Users"
-            related_courses: "Related Courses"
-            search_placeholder: "Search user name or emails"
+            header: 'Users'
+            related_courses: 'Related Courses'
+            search_placeholder: 'Search user name or emails'
             total_users_html: >
               <strong>Total Users</strong>: <strong>%{all_count}</strong>
               (%{admin_count} Administrators, %{instructor_count} Instructors, %{normal_count} Normal)
@@ -26,6 +26,6 @@ en:
               (%{admin_count} Administrators, %{instructor_count} Instructors, %{normal_count} Normal)<br>
               (active in the past 7 days)
           update:
-            success: "%{user} was updated."
+            success: '%{user} was updated.'
           destroy:
-            success: "%{user} was deleted."
+            success: '%{user} was deleted.'

@@ -2,7 +2,7 @@ en:
   course:
     mailer:
       assessment_closing_summary_email:
-        subject: "%{course}: Reminder about %{assessment}"
+        subject: '%{course}: Reminder about %{assessment}'
         message: >
           Emails were sent to the following students to remind them that %{assessment} is due on %{time}:
 

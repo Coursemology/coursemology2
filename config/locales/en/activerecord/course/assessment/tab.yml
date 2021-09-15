@@ -2,10 +2,10 @@ en:
   activerecord:
     attributes:
       course/assessment/tab/title:
-        default: "Default"
+        default: 'Default'
       course/assessment/tab:
-        weight: "Order"
+        weight: 'Order'
     errors:
       models:
         course/assessment/tab:
-          deletion: "the last tab cannot be deleted"
+          deletion: 'the last tab cannot be deleted'

@@ -4,16 +4,16 @@ en:
       answer:
         text_response_comprehension_auto_grading:
           explanations:
-            point_html: "<u>Part (%{index})</u>"
-            correct_point: "You have answered this part correctly."
-            lifted_word_singular: "You did not get any marks for this part because you lifted the following word: %{word_string}."
-            lifted_word_plural: "You did not get any marks for this part because you lifted the following words: %{words_string}."
-            missing_keyword_singular: "You did not paraphrase the following keyword: %{word_string}."
-            missing_keyword_plural: "You did not paraphrase the following keywords: %{words_string}."
-            empty_information: "<i>(word was not entered by staff)</i>"
+            point_html: '<u>Part (%{index})</u>'
+            correct_point: 'You have answered this part correctly.'
+            lifted_word_singular: 'You did not get any marks for this part because you lifted the following word: %{word_string}.'
+            lifted_word_plural: 'You did not get any marks for this part because you lifted the following words: %{words_string}.'
+            missing_keyword_singular: 'You did not paraphrase the following keyword: %{word_string}.'
+            missing_keyword_plural: 'You did not paraphrase the following keywords: %{words_string}.'
+            empty_information: '<i>(word was not entered by staff)</i>'
             correct_keyword: 'You have correctly used "%{answer}" to paraphrase the keyword "%{keyword}".'
-            concatenate: ", "
-            concatenate_last: " and "
-            line_break_html: "<br>"
-            horizontal_break_html: "<hr>"
-            grade: "Grade: %{grade} / %{maximum_grade}"
+            concatenate: ', '
+            concatenate_last: ' and '
+            line_break_html: '<br>'
+            horizontal_break_html: '<hr>'
+            grade: 'Grade: %{grade} / %{maximum_grade}'

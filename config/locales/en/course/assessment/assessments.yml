@@ -2,86 +2,86 @@ en:
   helpers:
     buttons:
       assessment:
-        new: "New Assessment"
+        new: 'New Assessment'
   course:
     assessment:
       assessments:
         sidebar_title: :'course.assessment.assessments.index.header'
         index:
-          header: "Assessments"
-          title: "Title"
-          start_at: "Start At"
-          bonus_cut_off: "Bonus Cut Off"
-          end_at: "End At"
-          requirement_for: "Requirement For"
+          header: 'Assessments'
+          title: 'Title'
+          start_at: 'Start At'
+          bonus_cut_off: 'Bonus Cut Off'
+          end_at: 'End At'
+          requirement_for: 'Requirement For'
         assessment:
-          attempt: "Attempt"
-          condition_not_satisfied: "You do not fulfill the requirements of the assessment"
-          view_password_set: "Students need a password to view the assessment"
+          attempt: 'Attempt'
+          condition_not_satisfied: 'You do not fulfill the requirements of the assessment'
+          view_password_set: 'Students need a password to view the assessment'
         show:
-          type: "Assessment Type"
-          autograded: "Autograded Assessment"
-          manually_graded: "Manually Graded Assessment"
-          description: "Description"
+          type: 'Assessment Type'
+          autograded: 'Autograded Assessment'
+          manually_graded: 'Manually Graded Assessment'
+          description: 'Description'
           start_at: :'course.assessment.assessments.index.start_at'
           bonus_cut_off: :'course.assessment.assessments.index.bonus_cut_off'
           end_at: :'course.assessment.assessments.index.end_at'
-          base_exp: "Base Experience Points"
-          bonus_exp: "Bonus Experience Points"
-          skippable: "Skip Steps"
-          allow_partial_submission: "Allow Submission With Incorrect Answers"
-          allow: "Allowed"
-          disallow: "Disallowed"
-          show_mcq_mrq_solution: "Show MCQ/MRQ Solution(s)"
-          graded_test_case_types: "Graded Test Case Types"
-          show_mcq_answer: "Show MCQ Submit Result"
-          show: "Shown"
-          not_show: "Not Shown"
-          public_test: "Public"
-          private_test: "Private"
-          evaluation_test: "Evaluation"
-          requirements: "Requirements"
+          base_exp: 'Base Experience Points'
+          bonus_exp: 'Bonus Experience Points'
+          skippable: 'Skip Steps'
+          allow_partial_submission: 'Allow Submission With Incorrect Answers'
+          allow: 'Allowed'
+          disallow: 'Disallowed'
+          show_mcq_mrq_solution: 'Show MCQ/MRQ Solution(s)'
+          graded_test_case_types: 'Graded Test Case Types'
+          show_mcq_answer: 'Show MCQ Submit Result'
+          show: 'Shown'
+          not_show: 'Not Shown'
+          public_test: 'Public'
+          private_test: 'Private'
+          evaluation_test: 'Evaluation'
+          requirements: 'Requirements'
           condition_not_satisfied: >
             You must fulfill the following requirements before you can attempt this assessment:
-          finish_to_unlock: "Finish to Unlock"
-          files: "Files"
-          questions: "Questions"
+          finish_to_unlock: 'Finish to Unlock'
+          files: 'Files'
+          questions: 'Questions'
           new_question:
-            multiple_choice: "Multiple Choice"
-            multiple_response: "Multiple Response"
-            text_response: "Text Response"
-            voice_response: "Audio Response"
-            file_upload: "File Upload"
-            programming: "Programming"
-            scribing: "Scribing"
+            multiple_choice: 'Multiple Choice'
+            multiple_response: 'Multiple Response'
+            text_response: 'Text Response'
+            voice_response: 'Audio Response'
+            file_upload: 'File Upload'
+            programming: 'Programming'
+            scribing: 'Scribing'
             # TODO: Uncomment the line below when TextResponseComprehension is ready
             # comprehension: 'Comprehension'
           non_auto_gradable_questions: >
             Some of the questions in this assessment are not auto-gradable.
             The autograder will always award the maximum grade for these questions.
         new:
-          header: "New Assessment"
+          header: 'New Assessment'
         edit:
-          header: "Edit Assessment"
+          header: 'Edit Assessment'
         destroy:
-          success: "Assessment %{assessment} was deleted."
-          failure: "Could not delete assessment: %{error}"
+          success: 'Assessment %{assessment} was deleted.'
+          failure: 'Could not delete assessment: %{error}'
         authenticate:
-          header: "Input Password"
-          message: "The assessment is locked, please input the password."
-          placeholder: "Password"
-          continue: "Continue"
+          header: 'Input Password'
+          message: 'The assessment is locked, please input the password.'
+          placeholder: 'Password'
+          continue: 'Continue'
         assessment_management_buttons:
-          attempt: "Attempt"
-          resume: "Resume"
-          view: "View"
-          submissions: "Submissions"
-          enter_password: "Enter Password"
+          attempt: 'Attempt'
+          resume: 'Resume'
+          view: 'View'
+          submissions: 'Submissions'
+          enter_password: 'Enter Password'
         assessment_question_bundle_buttons:
-          question_groups: "Groups"
-          question_bundles: "Bundles"
-          question_bundle_questions: "Bundle Questions"
-          question_bundle_assignments: "Bundle Assignments"
+          question_groups: 'Groups'
+          question_bundles: 'Bundles'
+          question_bundle_questions: 'Bundle Questions'
+          question_bundle_assignments: 'Bundle Assignments'
         todo_assessment_button:
           attempt: :'course.assessment.assessments.assessment_management_buttons.attempt'
           resume: :'course.assessment.assessments.assessment_management_buttons.resume'

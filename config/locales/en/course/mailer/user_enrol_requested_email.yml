@@ -2,8 +2,8 @@ en:
   course:
     mailer:
       user_enrol_requested_email:
-        subject: "Enrol Request for %{course}"
-        recipients: "Course Managers"
+        subject: 'Enrol Request for %{course}'
+        recipients: 'Course Managers'
         message: >
           %{user} has requested to enrol in %{course}
 

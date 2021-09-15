@@ -3,11 +3,11 @@ en:
     assessment:
       skill_branches:
         new:
-          header: "New Skill Branch"
+          header: 'New Skill Branch'
         create:
-          success: "Skill Branch %{title} was created."
+          success: 'Skill Branch %{title} was created.'
         update:
-          success: "Skill Branch %{title} was updated."
+          success: 'Skill Branch %{title} was updated.'
         destroy:
-          success: "Skill Branch %{skill_branch} was deleted."
-          failure: "Could not delete skill branch: %{error}"
+          success: 'Skill Branch %{skill_branch} was deleted.'
+          failure: 'Could not delete skill branch: %{error}'

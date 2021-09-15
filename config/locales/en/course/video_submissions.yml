@@ -2,12 +2,12 @@ en:
   course:
     video_submissions:
       index:
-        header: "Video Watch History for %{name}"
-        video_name: "Video Name"
-        status: "Status"
-        start_at: "Start At"
-        percent_watched: "Percent Watched"
+        header: 'Video Watch History for %{name}'
+        video_name: 'Video Name'
+        status: 'Status'
+        start_at: 'Start At'
+        percent_watched: 'Percent Watched'
       video_submission:
-        progress: "%{progress} %"
-        not_watched: "Has Not Started"
-        watched: "Watched"
+        progress: '%{progress} %'
+        not_watched: 'Has Not Started'
+        watched: 'Watched'

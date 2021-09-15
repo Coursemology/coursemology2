@@ -2,7 +2,7 @@ en:
   user:
     omniauth_callbacks:
       facebook:
-        kind: "Facebook"
-        success: "Your account has been successfully linked to Facebook."
-        failed: "The Facebook account has been linked with another user."
-        sign_in_failure: "Failed to sign in with Facebook: %{error}"
+        kind: 'Facebook'
+        success: 'Your account has been successfully linked to Facebook.'
+        failed: 'The Facebook account has been linked with another user.'
+        sign_in_failure: 'Failed to sign in with Facebook: %{error}'

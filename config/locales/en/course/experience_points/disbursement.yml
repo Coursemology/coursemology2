@@ -2,21 +2,21 @@ en:
   course:
     experience_points:
       disbursement:
-        sidebar_title: "Disburse Points"
+        sidebar_title: 'Disburse Points'
         tabs:
-          forum_disbursement: "Forum Participation"
-          general_disbursement: "General Disbursement"
+          forum_disbursement: 'Forum Participation'
+          general_disbursement: 'General Disbursement'
         new:
-          header: "Disburse Experience Points"
-          awardees: "Recipients"
-          reason: "Reason for Disbursement"
-          submit: "Disburse Points"
-          filter_selected: "Showing students from %{group}"
-          filter_not_selected: "Filter by group"
-          show_all: "Show all students"
-          copy_value: "Copy value for all students"
+          header: 'Disburse Experience Points'
+          awardees: 'Recipients'
+          reason: 'Reason for Disbursement'
+          submit: 'Disburse Points'
+          filter_selected: 'Showing students from %{group}'
+          filter_not_selected: 'Filter by group'
+          show_all: 'Show all students'
+          copy_value: 'Copy value for all students'
         create:
           success:
-            zero: "No experience points were disbursed."
-            one: "Experience points disbursed to one recipient."
-            other: "Experience points disbursed to %{count} recipients."
+            zero: 'No experience points were disbursed.'
+            one: 'Experience points disbursed to one recipient.'
+            other: 'Experience points disbursed to %{count} recipients.'

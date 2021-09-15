@@ -2,18 +2,18 @@ en:
   course:
     condition:
       assessment:
-        title: "Assessment"
+        title: 'Assessment'
       assessments:
         new:
-          header: "New Assessment Condition"
+          header: 'New Assessment Condition'
         create:
-          success: "Assessment condition was created."
+          success: 'Assessment condition was created.'
         edit:
-          header: "Edit Assessment Condition"
+          header: 'Edit Assessment Condition'
         update:
-          success: "Assessment condition was updated."
+          success: 'Assessment condition was updated.'
         destroy:
-          success: "Assessment condition was deleted."
-          error: "Failed to delete assessment condition."
+          success: 'Assessment condition was deleted.'
+          error: 'Failed to delete assessment condition.'
         form:
-          minimum_grade_placeholder: "Leave blank if condition is to be satisfied on submission of assessment."
+          minimum_grade_placeholder: 'Leave blank if condition is to be satisfied on submission of assessment.'

@@ -5,4 +5,4 @@ en:
         course/video/session:
           attributes:
             session_start:
-              cannot_be_after_session_end: "Session cannot start after ending"
+              cannot_be_after_session_end: 'Session cannot start after ending'

@@ -2,24 +2,24 @@ en:
   activerecord:
     attributes:
       course/assessment/submission:
-        grade: "Total Grade"
-        status: "Status"
+        grade: 'Total Grade'
+        status: 'Status'
         submitted_at: :'activerecord.attributes.course/assessment/answer.submitted_at'
         grader: :'activerecord.attributes.course/assessment/answer.grader'
         graded_at: :'activerecord.attributes.course/assessment/answer.graded_at'
-        attempting: "Attempting"
-        submitted: "Submitted"
-        graded: "Graded but not published"
-        published: "Graded"
+        attempting: 'Attempting'
+        submitted: 'Submitted'
+        graded: 'Graded but not published'
+        published: 'Graded'
     errors:
       models:
         course/assessment/submission:
           experience_points_record:
-            inconsistent_user: "creator must be the same as the course user record"
+            inconsistent_user: 'creator must be the same as the course user record'
             absent_award_attributes: >
               there is no award attributes for your submission, please try again
               or contact the Coursemology team
-          submission_already_exists: "Looks like you have already created a submission. Try again?"
-          no_bundles_assigned: "There are no question bundles assigned for you. Contact your instructor for assistance."
+          submission_already_exists: 'Looks like you have already created a submission. Try again?'
+          no_bundles_assigned: 'There are no question bundles assigned for you. Contact your instructor for assistance.'
         course/assessment/category:
-          deletion: "the last category cannot be deleted"
+          deletion: 'the last category cannot be deleted'

@@ -1,5 +1,5 @@
 var EVENT_HELPERS = (function ($) {
-  "use strict";
+  'use strict';
 
   /*
    * callback should take in an element

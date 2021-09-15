@@ -76,40 +76,40 @@ search:
 
 ## Do not consider these keys missing:
 ignore_missing:
-  - "application_helper.page_header.header"
-  - "errors.messages.*"
-  - "activerecord.errors.messages.*"
+  - 'application_helper.page_header.header'
+  - 'errors.messages.*'
+  - 'activerecord.errors.messages.*'
 
   # I18n-tasks gives the wrong results for normal (non action) methods in the controller, ignore them here.
-  - "course.user_invitations.create_success_message.*"
-  - "course.user_invitations.create_warning_message.*"
-  - "system.admin.instance.user_invitations.create_success_message.*"
-  - "system.admin.instance.user_invitations.create_warning_message.*"
+  - 'course.user_invitations.create_success_message.*'
+  - 'course.user_invitations.create_warning_message.*'
+  - 'system.admin.instance.user_invitations.create_success_message.*'
+  - 'system.admin.instance.user_invitations.create_warning_message.*'
 
 ## Consider these keys used:
 ignore_unused:
-  - "activerecord.attributes.*"
-  - "activerecord.models.*"
-  - "breadcrumbs.*"
-  - "errors.messages.*"
-  - "helpers.buttons.*"
-  - "{devise,kaminari,will_paginate}.*"
-  - "simple_form.{yes,no}"
-  - "simple_form.{placeholders,hints,labels}.*"
-  - "simple_form.{error_notification,required}.:"
-  - "helpers.submit.*.create"
-  - "helpers.submit.*.update"
+  - 'activerecord.attributes.*'
+  - 'activerecord.models.*'
+  - 'breadcrumbs.*'
+  - 'errors.messages.*'
+  - 'helpers.buttons.*'
+  - '{devise,kaminari,will_paginate}.*'
+  - 'simple_form.{yes,no}'
+  - 'simple_form.{placeholders,hints,labels}.*'
+  - 'simple_form.{error_notification,required}.:'
+  - 'helpers.submit.*.create'
+  - 'helpers.submit.*.update'
   # Dynamically resolved using symbol overload of #t
-  - "activerecord.errors.*"
-  - "activemodel.errors.*"
+  - 'activerecord.errors.*'
+  - 'activemodel.errors.*'
   # Used dynamically by the page_header helper
-  - "*.*.header"
+  - '*.*.header'
   # Dynamically constructed using t_scoped
-  - "course.assessment.question_bundle_assignments.validations.*"
+  - 'course.assessment.question_bundle_assignments.validations.*'
 
   # I18n-tasks gives the wrong results for normal (non action) methods in the controller, ignore them here.
-  - "course.user_invitations.create.*"
-  - "system.admin.instance.user_invitations.create.*"
+  - 'course.user_invitations.create.*'
+  - 'system.admin.instance.user_invitations.create.*'
 ## Exclude these keys from the `i18n-tasks eq-base' report:
 # ignore_eq_base:
 #   all:

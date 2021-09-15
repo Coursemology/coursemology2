@@ -3,8 +3,8 @@ en:
     admin:
       video_settings:
         edit:
-          title_placeholder: "Leave blank to use default title"
-          tabs_title: "Tabs"
-          tab_column_title: "Title"
+          title_placeholder: 'Leave blank to use default title'
+          tabs_title: 'Tabs'
+          tab_column_title: 'Title'
         update:
-          success: "Video settings updated."
+          success: 'Video settings updated.'

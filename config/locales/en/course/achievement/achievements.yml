@@ -4,23 +4,23 @@ en:
       achievements:
         sidebar_title: :'course.achievement.achievements.index.header'
         index:
-          header: "Achievements"
-          reorder_tooltip: "Click to enable/disable reordering of achievements"
-          reorder_button: "Reorder Achievements"
+          header: 'Achievements'
+          reorder_tooltip: 'Click to enable/disable reordering of achievements'
+          reorder_button: 'Reorder Achievements'
         show:
-          users_with_achievement: "Students with this Achievement"
+          users_with_achievement: 'Students with this Achievement'
         edit:
-          header: "Edit Achievement"
+          header: 'Edit Achievement'
         update:
-          success: "Achievement successfully updated"
+          success: 'Achievement successfully updated'
         destroy:
-          success: "Achievement %{title} was deleted."
-          failure: "Failed to delete achievement: %{error}"
+          success: 'Achievement %{title} was deleted.'
+          failure: 'Failed to delete achievement: %{error}'
         achievements:
-          badge: "Badge"
-          title: "Title"
-          description: "Description"
-          requirements: "Requirements"
+          badge: 'Badge'
+          title: 'Title'
+          description: 'Description'
+          requirements: 'Requirements'
         achievement_management_buttons:
           award: :'course.achievement.course_users.course_users_form.header'
           disabled_award: >

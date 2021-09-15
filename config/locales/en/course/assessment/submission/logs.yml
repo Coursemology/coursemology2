@@ -4,12 +4,12 @@ en:
       submission:
         logs:
           index:
-            assessment_title: "Assessment Title"
-            header: "Access Logs"
-            ip_address: "IP Address"
-            student_name: "Student Name"
-            submission_session_id: "Submission Session Token"
-            status: "Submission Status"
-            timestamp: "Timestamp"
-            user_agent: "User Agent"
-            user_session_id: "User Session Token"
+            assessment_title: 'Assessment Title'
+            header: 'Access Logs'
+            ip_address: 'IP Address'
+            student_name: 'Student Name'
+            submission_session_id: 'Submission Session Token'
+            status: 'Submission Status'
+            timestamp: 'Timestamp'
+            user_agent: 'User Agent'
+            user_session_id: 'User Session Token'

@@ -2,12 +2,12 @@
 //= require helpers/discussion/post_helpers
 
 (function ($, FORM_HELPERS, DISCUSSION_POST_HELPERS) {
-  "use strict";
-  var DOCUMENT_SELECTOR = ".course-discussion-topics ";
+  'use strict';
+  var DOCUMENT_SELECTOR = '.course-discussion-topics ';
 
   // The comment boxes are hidden by default, show the boxes if the browser supports javascript.
   function showCommentBoxes() {
-    var $forms = $(".post-form").filter(DOCUMENT_SELECTOR + "*");
+    var $forms = $('.post-form').filter(DOCUMENT_SELECTOR + '*');
     $forms.show();
   }
 
@@ -33,5 +33,5 @@
     showCommentBoxes();
     DISCUSSION_POST_HELPERS.initializeToolbar(document, DOCUMENT_SELECTOR);
   });
-  $(document).on("submit", DOCUMENT_SELECTOR + ".post-form", onPostFormSubmit);
+  $(document).on('submit', DOCUMENT_SELECTOR + '.post-form', onPostFormSubmit);
 })(jQuery, FORM_HELPERS, DISCUSSION_POST_HELPERS);

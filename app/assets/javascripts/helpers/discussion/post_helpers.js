@@ -9,7 +9,7 @@ var DISCUSSION_POST_HELPERS = (function (
   DELETE_DISCUSSION_POST
 ) {
   /* global JST, Routes */
-  "use strict";
+  'use strict';
 
   /**
    * Shows the comments toolbar for the discussion post.
@@ -17,11 +17,11 @@ var DISCUSSION_POST_HELPERS = (function (
    * @param element
    */
   function showCommentToolbar(element, selector) {
-    var $comments = $(".discussion_post", element)
-      .addBack(".discussion_post")
-      .filter(selector + "*");
+    var $comments = $('.discussion_post', element)
+      .addBack('.discussion_post')
+      .filter(selector + '*');
 
-    $comments.find(".toolbar").show();
+    $comments.find('.toolbar').show();
   }
 
   /**

@@ -9,7 +9,7 @@ en:
     lesson_plan:
       name: :'course.lesson_plan.items.index.header'
     assessments:
-      name: "Assessments"
+      name: 'Assessments'
     forums:
       name: :'course.forum.forums.index.header'
     groups:
@@ -22,18 +22,18 @@ en:
       name: :'course.material.sidebar_title'
     discussion:
       topics:
-        name: "Comments Center"
+        name: 'Comments Center'
     statistics:
-      name: "Statistics"
+      name: 'Statistics'
     experience_points:
-      name: "Experience Points"
+      name: 'Experience Points'
     duplication:
-      name: "Duplication"
+      name: 'Duplication'
     video:
       name: :'course.video.videos.index.header'
     settings:
-      name: "Settings"
+      name: 'Settings'
     users:
-      name: "Users"
+      name: 'Users'
     surveys:
       name: :'breadcrumbs.course.survey.controller.index'

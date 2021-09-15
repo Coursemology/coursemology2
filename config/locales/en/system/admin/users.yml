@@ -3,9 +3,9 @@ en:
     admin:
       users:
         index:
-          header: "Users"
-          related_instances: "Instances"
-          search_placeholder: "Search user name or emails"
+          header: 'Users'
+          related_instances: 'Instances'
+          search_placeholder: 'Search user name or emails'
           total_users_html: >
             <strong>Total Users</strong>: <strong>%{all_count}</strong>
             (%{admin_count} Administrators, %{normal_count} Normal)
@@ -14,9 +14,9 @@ en:
             (%{admin_count} Administrators, %{normal_count} Normal)<br>
             (active in the past 7 days)
         update:
-          success: "%{user} was updated."
+          success: '%{user} was updated.'
         destroy:
-          success: "%{user} was destroyed."
+          success: '%{user} was destroyed.'
         user:
-          masquerade: "Masquerade"
-          not_confirmed: "Account not confirmed"
+          masquerade: 'Masquerade'
+          not_confirmed: 'Account not confirmed'

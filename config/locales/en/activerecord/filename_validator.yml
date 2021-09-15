@@ -3,6 +3,6 @@ en:
     errors:
       messages:
         filename_validator:
-          invalid_characters: "%{characters} are not allowed."
-          tailing_dots: "tailing dots are not allowed."
-          whitespaces: "leading or tailing whitespaces are not allowed."
+          invalid_characters: '%{characters} are not allowed.'
+          tailing_dots: 'tailing dots are not allowed.'
+          whitespaces: 'leading or tailing whitespaces are not allowed.'

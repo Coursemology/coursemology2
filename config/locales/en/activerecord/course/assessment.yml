@@ -2,7 +2,7 @@ en:
   activerecord:
     attributes:
       course/assessment/assessment:
-        title: "Title"
+        title: 'Title'
     errors:
       models:
         course/assessment:

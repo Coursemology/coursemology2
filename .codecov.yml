@@ -14,7 +14,7 @@ flags:
 coverage:
   precision: 2
   round: up
-  range: "70...100"
+  range: '70...100'
   status:
     project:
       default: off

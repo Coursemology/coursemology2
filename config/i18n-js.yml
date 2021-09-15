@@ -13,5 +13,5 @@
 #
 translations:
   - only:
-      - "*.common.*"
-      - "*.javascript.*"
+      - '*.common.*'
+      - '*.javascript.*'
