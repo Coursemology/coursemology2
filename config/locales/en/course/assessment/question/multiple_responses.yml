@@ -10,6 +10,8 @@ en:
             success: 'The multiple response question was created.'
           update:
             success: 'The multiple response question was updated.'
+            switch_mcq_success: 'The MCQ question has been switched to MRQ'
+            switch_mrq_success: 'The MRQ question has been switched to MCQ'
           destroy:
             success: 'The multiple response question was deleted.'
             failure: 'Could not delete multiple response question: %{error}'

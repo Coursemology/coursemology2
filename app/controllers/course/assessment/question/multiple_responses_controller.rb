@@ -36,11 +36,17 @@ class Course::Assessment::Question::MultipleResponsesController < Course::Assess
   end
 
   def update
-    @question_assessment.skill_ids = multiple_response_question_params[:question_assessment][:skill_ids]
     if params.key?(:multiple_choice)
       switch_mcq_mrq_type(params[:multiple_choice])
-      return render 'edit'
+      if params.key?(:redirect_to_assessment_show) && params[:redirect_to_assessment_show] == 'true'
+        return redirect_to course_assessment_path(current_course, @assessment),
+                           success: params[:multiple_choice] ? t('.switch_mrq_success') : t('.switch_mcq_success')
+      else
+        return render 'edit'
+      end
     end
+
+    @question_assessment.skill_ids = multiple_response_question_params[:question_assessment][:skill_ids]
 
     if @multiple_response_question.update(multiple_response_question_params.
                                           except(:question_assessment, :multiple_choice))
