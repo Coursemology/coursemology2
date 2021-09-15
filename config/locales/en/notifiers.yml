@@ -1,39 +1,39 @@
 en:
   notifiers:
     course:
-      phantom: "(Phantom)"
+      phantom: '(Phantom)'
       achievement_notifier:
         gained:
           course_notifications:
             feed:
-              gained_achievement_html: "%{user} gained achievement %{achievement}"
+              gained_achievement_html: '%{user} gained achievement %{achievement}'
       assessment_notifier:
         attempted:
           course_notifications:
             feed:
-              attempted_assessment_html: "%{user} attempted %{assessment}"
+              attempted_assessment_html: '%{user} attempted %{assessment}'
       level_notifier:
         reached:
           course_notifications:
             feed:
-              reached_level_html: "%{user} reached level %{level_number}"
+              reached_level_html: '%{user} reached level %{level_number}'
       forum:
         topic_notifier:
           created:
             course_notifications:
               feed:
-                created_topic_html: "%{user} created topic %{topic}"
+                created_topic_html: '%{user} created topic %{topic}'
         post_notifier:
           replied:
             course_notifications:
               feed:
-                replied_to_topic_html: "%{user} replied to %{topic}"
+                replied_to_topic_html: '%{user} replied to %{topic}'
           voted:
             course_notifications:
               feed:
-                voted_on_topic_html: "%{user} voted on %{topic}"
+                voted_on_topic_html: '%{user} voted on %{topic}'
       video_notifier:
         attempted:
           course_notifications:
             feed:
-              attempted_video_html: "%{user} watched %{video}"
+              attempted_video_html: '%{user} watched %{video}'

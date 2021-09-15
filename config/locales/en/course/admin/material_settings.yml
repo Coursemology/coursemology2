@@ -3,6 +3,6 @@ en:
     admin:
       material_settings:
         edit:
-          title_placeholder: "Leave blank to use default title"
+          title_placeholder: 'Leave blank to use default title'
         update:
-          success: "Materials settings updated."
+          success: 'Materials settings updated.'

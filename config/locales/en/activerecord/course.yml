@@ -2,10 +2,10 @@ en:
   activerecord:
     attributes:
       course:
-        reference_timelines: "Reference timelines"
+        reference_timelines: 'Reference timelines'
     errors:
       models:
         course:
           attributes:
             reference_timelines:
-              must_have_at_most_one_default: "must have at most one default"
+              must_have_at_most_one_default: 'must have at most one default'

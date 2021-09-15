@@ -3,57 +3,57 @@ en:
     forum:
       topics:
         topic:
-          locked: "This topic is locked."
+          locked: 'This topic is locked.'
           question:
-            resolved: "Question"
-            unresolved: "Question (unresolved)"
-          sticky: "Sticky"
-          announcement: "Announcement"
-          started_by_html: "Started by %{user}"
+            resolved: 'Question'
+            unresolved: 'Question (unresolved)'
+          sticky: 'Sticky'
+          announcement: 'Announcement'
+          started_by_html: 'Started by %{user}'
         new_topic:
-          header: "New Topic"
+          header: 'New Topic'
         edit_topic:
-          header: "Edit Topic"
+          header: 'Edit Topic'
         show:
-          post_reply: "Add a post"
-          locked_topic: "You are unable to reply as this topic is locked by the teaching staff."
+          post_reply: 'Add a post'
+          locked_topic: 'You are unable to reply as this topic is locked by the teaching staff.'
         new:
-          header: "New Topic"
+          header: 'New Topic'
         create:
-          success: "Topic %{title} was created."
+          success: 'Topic %{title} was created.'
         edit:
-          header: "Edit Topic"
+          header: 'Edit Topic'
         update:
-          success: "Topic %{title} was updated."
+          success: 'Topic %{title} was updated.'
         destroy:
-          success: "Topic %{title} was deleted."
-          failure: "Failed to delete topic: %{error}"
+          success: 'Topic %{title} was deleted.'
+          failure: 'Failed to delete topic: %{error}'
         subscribe:
-          tag: "Subscribe to email notification for this topic"
-          success: "You have subscribed to topic."
-          failure: "Failed to subscribe to topic."
+          tag: 'Subscribe to email notification for this topic'
+          success: 'You have subscribed to topic.'
+          failure: 'Failed to subscribe to topic.'
         unsubscribe:
-          tag: "Unsubscribe from email notification for this topic"
-          success: "You have unsubscribed from topic."
-          failure: "Failed to unsubscribe from topic."
+          tag: 'Unsubscribe from email notification for this topic'
+          success: 'You have unsubscribed from topic.'
+          failure: 'Failed to unsubscribe from topic.'
         locked:
-          tag: "Lock"
-          success: "The topic was successfully locked."
-          failure: "The topic could not be locked."
+          tag: 'Lock'
+          success: 'The topic was successfully locked.'
+          failure: 'The topic could not be locked.'
         unlocked:
-          tag: "Unlock"
-          success: "The topic was successfully unlocked."
-          failure: "The topic could not be unlocked."
+          tag: 'Unlock'
+          success: 'The topic was successfully unlocked.'
+          failure: 'The topic could not be unlocked.'
         hidden:
-          tag: "Hide"
-          success: "The topic was successfully hidden."
-          failure: "The topic could not be hidden."
+          tag: 'Hide'
+          success: 'The topic was successfully hidden.'
+          failure: 'The topic could not be hidden.'
         unhidden:
-          tag: "Unhide"
-          success: "The topic was successfully unhidden."
-          failure: "The topic could not be unhidden."
+          tag: 'Unhide'
+          success: 'The topic was successfully unhidden.'
+          failure: 'The topic could not be unhidden.'
         resolved:
-          message: "This question topic has been resolved."
+          message: 'This question topic has been resolved.'
         unresolved:
-          message: "This question topic is unresolved."
-          tag: "Mark helpful post(s) as answer(s) to resolve this question."
+          message: 'This question topic is unresolved.'
+          tag: 'Mark helpful post(s) as answer(s) to resolve this question.'

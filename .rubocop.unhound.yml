@@ -2,9 +2,9 @@ Style/CollectionMethods:
   Enabled: true
   PreferredMethods:
     reduce:
-    inject: "reduce"
+    inject: 'reduce'
     find:
-    detect: "find"
+    detect: 'find'
 
 Lint/AssignmentInCondition:
   Enabled: true

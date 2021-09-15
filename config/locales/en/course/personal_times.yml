@@ -2,23 +2,23 @@ en:
   course:
     personal_times:
       index:
-        header: "Personalized Timelines"
-        assessment: "Assessment"
-        reference_timeline: "Reference Timeline"
-        personalized_timeline: "Personalized Timeline"
+        header: 'Personalized Timelines'
+        assessment: 'Assessment'
+        reference_timeline: 'Reference Timeline'
+        personalized_timeline: 'Personalized Timeline'
         start_at: :'course.assessment.assessments.index.start_at'
         bonus_end_at: :'course.assessment.assessments.index.bonus_cut_off'
         end_at: :'course.assessment.assessments.index.end_at'
         fixed_desc: >
           A fixed personal time means that the personal time will no longer be automatically modified. If a personal
           time is left unfixed, it may be dynamically updated by the algorithm on the user's next submission.
-        create_new_personal_time: "Create new personal time"
-        course_user: "Course User"
-        recompute: "Recompute"
-        algorithm: "Algorithm: %{algorithm}"
+        create_new_personal_time: 'Create new personal time'
+        course_user: 'Course User'
+        recompute: 'Recompute'
+        algorithm: 'Algorithm: %{algorithm}'
       create:
-        success: "Personal time successfully updated!"
+        success: 'Personal time successfully updated!'
       destroy:
-        success: "Personal time successfully destroyed!"
+        success: 'Personal time successfully destroyed!'
       recompute:
-        success: "Personal timeline for %{name} has been recomputed!"
+        success: 'Personal timeline for %{name} has been recomputed!'

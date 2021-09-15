@@ -5,4 +5,4 @@ en:
         course/assessment/answer/programming_file:
           attributes:
             content:
-              exceed_size_limit: "The file should be smaller than 50KB or 1000 lines"
+              exceed_size_limit: 'The file should be smaller than 50KB or 1000 lines'

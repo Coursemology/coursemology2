@@ -2,4 +2,4 @@ en:
   course:
     survey:
       responses:
-        no_course_user: "You must be a member of this course to start the survey."
+        no_course_user: 'You must be a member of this course to start the survey.'

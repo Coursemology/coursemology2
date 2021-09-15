@@ -3,28 +3,28 @@ en:
     groups:
       sidebar_title: :'course.groups.index.header'
       index:
-        header: "Groups"
-        name: "Name"
-        members: "Members"
-        phantom: "Phantom"
-        total: "Total"
-        managers: "Managers"
+        header: 'Groups'
+        name: 'Name'
+        members: 'Members'
+        phantom: 'Phantom'
+        total: 'Total'
+        managers: 'Managers'
       show:
         managers: :'course.groups.index.managers'
-        members: "Members"
+        members: 'Members'
       new:
-        header: "New Group"
+        header: 'New Group'
       create:
-        success: "Group %{name} was created."
+        success: 'Group %{name} was created.'
       edit:
-        header: "Edit Group"
-        add_user: "Add User"
-        name: "Name"
-        role: "Role"
+        header: 'Edit Group'
+        add_user: 'Add User'
+        name: 'Name'
+        role: 'Role'
       update:
-        success: "Group %{name} was updated."
+        success: 'Group %{name} was updated.'
       destroy:
-        success: "Group %{name} was deleted."
+        success: 'Group %{name} was deleted.'
       group_user_fields:
-        remove: "Remove"
-        phantom_user_label: "%{name} (Phantom User)"
+        remove: 'Remove'
+        phantom_user_label: '%{name} (Phantom User)'

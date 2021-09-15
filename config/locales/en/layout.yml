@@ -1,24 +1,24 @@
 en:
   layout:
-    coursemology: "Coursemology"
+    coursemology: 'Coursemology'
     navbar:
-      toggle_navigation: "Toggle Navigation"
-      courses: "Courses"
-      all_courses: "All Courses"
-      help: "Help"
-      register: "Register"
-      sign_in: "Sign In"
-      sign_out: "Sign Out"
-      admin_panel: "Administration Panel"
-      instance_admin_panel: "Instance Administration Panel"
-      stop_masquerading: "(Stop Masquerading)"
+      toggle_navigation: 'Toggle Navigation'
+      courses: 'Courses'
+      all_courses: 'All Courses'
+      help: 'Help'
+      register: 'Register'
+      sign_in: 'Sign In'
+      sign_out: 'Sign Out'
+      admin_panel: 'Administration Panel'
+      instance_admin_panel: 'Instance Administration Panel'
+      stop_masquerading: '(Stop Masquerading)'
   layouts:
     course:
       administration: :'system.admin.admin.index.header'
     course_admin:
-      title: "Course Settings"
+      title: 'Course Settings'
       course_settings:
-        title: "General"
+        title: 'General'
       announcement_settings:
         title: :'course.announcements.index.header'
       virtual_classroom_settings:
@@ -26,30 +26,30 @@ en:
       component_settings:
         title: :'course.admin.component_settings.index.header'
       sidebar_settings:
-        title: "Sidebar"
+        title: 'Sidebar'
       notifications:
-        title: "Email"
+        title: 'Email'
       lesson_plan:
-        title: "Lesson Plan"
+        title: 'Lesson Plan'
     course_users:
-      title: "Manage Users"
+      title: 'Manage Users'
     duplication:
-      title: "Duplicate Data"
+      title: 'Duplicate Data'
     attachment_uploader:
-      uploaded_files: "Uploaded Files:"
-      uploaded_file: "Uploaded File:"
-      new_files: "Upload New Files"
+      uploaded_files: 'Uploaded Files:'
+      uploaded_file: 'Uploaded File:'
+      new_files: 'Upload New Files'
     materials_uploader:
-      uploaded_by: "Uploaded By: %{name}"
+      uploaded_by: 'Uploaded By: %{name}'
     mailer:
-      greeting: "Hello, %{user}:"
+      greeting: 'Hello, %{user}:'
     search_form:
       search_button: :'common.search'
     course_user_badge:
-      achievements: "+ %{difference} More"
-      level: "Level %{level}"
-      experience_points: "%{exp} EXP"
-      next_level: "%{difference} EXP to Next Level"
-      max_level: "Congrats - Highest Level Attained!"
+      achievements: '+ %{difference} More'
+      level: 'Level %{level}'
+      experience_points: '%{exp} EXP'
+      next_level: '%{difference} EXP to Next Level'
+      max_level: 'Congrats - Highest Level Attained!'
     code_formatter:
-      size_too_big: "The file is too big and cannot be displayed."
+      size_too_big: 'The file is too big and cannot be displayed.'

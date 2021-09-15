@@ -3,11 +3,11 @@
 // Proposed solution is modified from http://stackoverflow.com/a/22318440
 
 (function ($) {
-  "use strict";
+  'use strict';
 
   function initializeDropdownEventListener() {
-    $("[data-toggle=dropdown]").each(function () {
-      this.addEventListener("click", function () {}, false);
+    $('[data-toggle=dropdown]').each(function () {
+      this.addEventListener('click', function () {}, false);
     });
   }
 

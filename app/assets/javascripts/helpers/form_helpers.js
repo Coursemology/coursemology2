@@ -1,5 +1,5 @@
 var FORM_HELPERS = (function ($) {
-  "use strict";
+  'use strict';
 
   /**
    * Returns a method that renders templates from a given default path.
@@ -17,7 +17,7 @@ var FORM_HELPERS = (function ($) {
      * @return {String} The rendered template.
      */
     function render(template, locals) {
-      if (template[0] !== "/" && template[0] !== ".") {
+      if (template[0] !== '/' && template[0] !== '.') {
         template = defaultPath + template;
       }
 
@@ -36,7 +36,7 @@ var FORM_HELPERS = (function ($) {
    * @returns {jQuery} The set of fields matching the filter.
    */
   function findFormFields($form, selector) {
-    var $result = $form.find("textarea, input");
+    var $result = $form.find('textarea, input');
     if (selector) {
       $result = $result.filter(selector);
     }
@@ -51,11 +51,11 @@ var FORM_HELPERS = (function ($) {
    * @returns {Array} The form data to be submitted.
    */
   function buildFormData($form) {
-    var data = $form.find(":input").serializeArray();
+    var data = $form.find(':input').serializeArray();
     var token = {
       authenticity_token: $(document)
         .find('meta[name="csrf-token"]')
-        .attr("content"),
+        .attr('content'),
     };
     data.push(token);
     return data;
@@ -81,13 +81,13 @@ var FORM_HELPERS = (function ($) {
    * @param {formSubmitFailureCallback} failureHandler
    */
   function submitAndDisableForm($form, successHandler, failureHandler) {
-    if ($form.is("form")) {
-      var action = $form.attr("action");
-      var method = $form.attr("method");
+    if ($form.is('form')) {
+      var action = $form.attr('action');
+      var method = $form.attr('method');
       var data = $form.serialize();
     } else {
-      var action = $form.data("action");
-      var method = $form.data("method");
+      var action = $form.data('action');
+      var method = $form.data('method');
       var data = buildFormData($form);
     }
 
@@ -99,7 +99,7 @@ var FORM_HELPERS = (function ($) {
         failureHandler(data, $form[0]);
       });
 
-    findFormFields($form).prop("disabled", true);
+    findFormFields($form).prop('disabled', true);
   }
 
   /**
@@ -108,7 +108,7 @@ var FORM_HELPERS = (function ($) {
    * @param {jQuery} $form The form being enabled
    */
   function enableForm($form) {
-    findFormFields($form).prop("disabled", false);
+    findFormFields($form).prop('disabled', false);
   }
 
   /**
@@ -117,7 +117,7 @@ var FORM_HELPERS = (function ($) {
    * @param {jQuery} $element The form's child element
    */
   function parentFormForElement($element) {
-    return $element.parents("[data-action]:first");
+    return $element.parents('[data-action]:first');
   }
 
   /**

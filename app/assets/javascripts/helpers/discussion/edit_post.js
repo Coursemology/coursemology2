@@ -4,9 +4,9 @@
 
 var EDIT_DISCUSSION_POST = (function ($, FORM_HELPERS, COURSE_HELPERS) {
   /* global JST, Routes */
-  "use strict";
+  'use strict';
 
-  var render = FORM_HELPERS.renderFromPath("templates/course/discussion/");
+  var render = FORM_HELPERS.renderFromPath('templates/course/discussion/');
 
   /**
    * Handles the discussion post edit button click event.
@@ -15,15 +15,15 @@ var EDIT_DISCUSSION_POST = (function ($, FORM_HELPERS, COURSE_HELPERS) {
    */
   function onPostEdit(e) {
     var $element = $(e.target);
-    var $post = $element.parents(".discussion_post:first");
-    var $topic = $element.parents(".discussion_topic:first");
+    var $post = $element.parents('.discussion_post:first');
+    var $topic = $element.parents('.discussion_topic:first');
 
     var courseId = COURSE_HELPERS.courseIdForElement($element);
-    var topicId = $topic.data("topicId");
-    var postId = $post.data("postId");
-    var postContent = $post.find(".content").html().trim();
-    postContent = $("<div/>").text(postContent).html();
-    var postCommenter = $post.find(".user").html();
+    var topicId = $topic.data('topicId');
+    var postId = $post.data('postId');
+    var postContent = $post.find('.content').html().trim();
+    postContent = $('<div/>').text(postContent).html();
+    var postCommenter = $post.find('.user').html();
 
     $post.children().hide();
     var $form = findOrCreatePostForm(
@@ -91,7 +91,7 @@ var EDIT_DISCUSSION_POST = (function ($, FORM_HELPERS, COURSE_HELPERS) {
     postCommenter
   ) {
     $element.append(
-      render("post", {
+      render('post', {
         courseId: courseId,
         topicId: topicId,
         postId: postId,
@@ -110,7 +110,7 @@ var EDIT_DISCUSSION_POST = (function ($, FORM_HELPERS, COURSE_HELPERS) {
    * @return {jQuery} The discussion post form which was found.
    */
   function findPostForm($element) {
-    return $element.find("> div.edit-discussion-post-form");
+    return $element.find('> div.edit-discussion-post-form');
   }
 
   /**
@@ -136,7 +136,7 @@ var EDIT_DISCUSSION_POST = (function ($, FORM_HELPERS, COURSE_HELPERS) {
    */
   function onPostFormReset(e) {
     var $button = $(e.target);
-    var $post = $button.parents(".discussion_post:first");
+    var $post = $button.parents('.discussion_post:first');
 
     FORM_HELPERS.removeParentForm($button);
     $post.children().show();
@@ -161,18 +161,18 @@ var EDIT_DISCUSSION_POST = (function ($, FORM_HELPERS, COURSE_HELPERS) {
   // TODO
   function initializeToolbarElement(element, selector) {
     $(element).on(
-      "click",
+      'click',
       selector + '.edit-discussion-post-form input[type="reset"]',
       onPostFormReset
     );
     $(element).on(
-      "click",
+      'click',
       selector + '.edit-discussion-post-form input[type="submit"]',
       onPostFormSubmitted
     );
     $(element).on(
-      "click",
-      selector + ".discussion_post .toolbar .edit",
+      'click',
+      selector + '.discussion_post .toolbar .edit',
       onPostEdit
     );
   }

@@ -57,24 +57,24 @@ var ROUTES = (function () {
 
   DeprecatedGlobbingBehavior = false;
 
-  SpecialOptionsKey = "_options";
+  SpecialOptionsKey = '_options';
 
   UriEncoderSegmentRegex = /[^a-zA-Z0-9\-\._~!\$&'\(\)\*\+,;=:@]/g;
 
   ReservedOptions = [
-    "anchor",
-    "trailing_slash",
-    "subdomain",
-    "host",
-    "port",
-    "protocol",
+    'anchor',
+    'trailing_slash',
+    'subdomain',
+    'host',
+    'port',
+    'protocol',
   ];
 
   Utils = {
     configuration: {
-      prefix: "",
+      prefix: '',
       default_url_options: {},
-      special_options_key: "_options",
+      special_options_key: '_options',
       serializer: null,
     },
     default_serializer: function (object, prefix) {
@@ -83,29 +83,29 @@ var ROUTES = (function () {
         prefix = null;
       }
       if (object == null) {
-        return "";
+        return '';
       }
-      if (!prefix && !(this.get_object_type(object) === "object")) {
-        throw new Error("Url parameters should be a javascript hash");
+      if (!prefix && !(this.get_object_type(object) === 'object')) {
+        throw new Error('Url parameters should be a javascript hash');
       }
       s = [];
       switch (this.get_object_type(object)) {
-        case "array":
+        case 'array':
           for (i = j = 0, len = object.length; j < len; i = ++j) {
             element = object[i];
-            s.push(this.default_serializer(element, prefix + "[]"));
+            s.push(this.default_serializer(element, prefix + '[]'));
           }
           break;
-        case "object":
+        case 'object':
           for (key in object) {
             if (!hasProp.call(object, key)) continue;
             prop = object[key];
             if (prop == null && prefix != null) {
-              prop = "";
+              prop = '';
             }
             if (prop != null) {
               if (prefix != null) {
-                key = prefix + "[" + key + "]";
+                key = prefix + '[' + key + ']';
               }
               s.push(this.default_serializer(prop, key));
             }
@@ -115,22 +115,22 @@ var ROUTES = (function () {
           if (object != null) {
             s.push(
               encodeURIComponent(prefix.toString()) +
-                "=" +
+                '=' +
                 encodeURIComponent(object.toString())
             );
           }
       }
       if (!s.length) {
-        return "";
+        return '';
       }
-      return s.join("&");
+      return s.join('&');
     },
     serialize: function (object) {
       var custom_serializer;
       custom_serializer = this.configuration.serializer;
       if (
         custom_serializer != null &&
-        this.get_object_type(custom_serializer) === "function"
+        this.get_object_type(custom_serializer) === 'function'
       ) {
         return custom_serializer(object);
       } else {
@@ -139,10 +139,10 @@ var ROUTES = (function () {
     },
     clean_path: function (path) {
       var last_index;
-      path = path.split("://");
+      path = path.split('://');
       last_index = path.length - 1;
-      path[last_index] = path[last_index].replace(/\/+/g, "/");
-      return path.join("://");
+      path[last_index] = path[last_index].replace(/\/+/g, '/');
+      return path.join('://');
     },
     extract_options: function (number_of_params, args) {
       var last_el, options;
@@ -150,7 +150,7 @@ var ROUTES = (function () {
       if (
         (args.length > number_of_params && last_el === void 0) ||
         (last_el != null &&
-          "object" === this.get_object_type(last_el) &&
+          'object' === this.get_object_type(last_el) &&
           !this.looks_like_serialized_model(last_el))
       ) {
         options = args.pop() || {};
@@ -163,33 +163,33 @@ var ROUTES = (function () {
     looks_like_serialized_model: function (object) {
       return (
         !object[this.configuration.special_options_key] &&
-        ("id" in object || "to_param" in object)
+        ('id' in object || 'to_param' in object)
       );
     },
     path_identifier: function (object) {
       var property;
       if (object === 0) {
-        return "0";
+        return '0';
       }
       if (!object) {
-        return "";
+        return '';
       }
       property = object;
-      if (this.get_object_type(object) === "object") {
-        if ("to_param" in object) {
+      if (this.get_object_type(object) === 'object') {
+        if ('to_param' in object) {
           if (object.to_param == null) {
-            throw new ParameterMissing("Route parameter missing: to_param");
+            throw new ParameterMissing('Route parameter missing: to_param');
           }
           property = object.to_param;
-        } else if ("id" in object) {
+        } else if ('id' in object) {
           if (object.id == null) {
-            throw new ParameterMissing("Route parameter missing: id");
+            throw new ParameterMissing('Route parameter missing: id');
           }
           property = object.id;
         } else {
           property = object;
         }
-        if (this.get_object_type(property) === "function") {
+        if (this.get_object_type(property) === 'function') {
           property = property.call(object);
         }
       }
@@ -197,7 +197,7 @@ var ROUTES = (function () {
     },
     clone: function (obj) {
       var attr, copy, key;
-      if (obj == null || "object" !== this.get_object_type(obj)) {
+      if (obj == null || 'object' !== this.get_object_type(obj)) {
         return obj;
       }
       copy = obj.constructor();
@@ -257,7 +257,7 @@ var ROUTES = (function () {
         value;
       options = this.extract_options(parts.length, actual_parameters);
       if (actual_parameters.length > parts.length) {
-        throw new Error("Too many parameters provided for path");
+        throw new Error('Too many parameters provided for path');
       }
       use_all_parts = actual_parameters.length > required_parts.length;
       parts_options = {};
@@ -275,7 +275,7 @@ var ROUTES = (function () {
       );
       result = {};
       url_parameters = {};
-      result["url_parameters"] = url_parameters;
+      result['url_parameters'] = url_parameters;
       for (key in options) {
         if (!hasProp.call(options, key)) continue;
         value = options[key];
@@ -314,16 +314,16 @@ var ROUTES = (function () {
         default_options,
         args
       );
-      parameters = options["url_parameters"];
-      result = "" + this.get_prefix() + this.visit(route, parameters);
+      parameters = options['url_parameters'];
+      result = '' + this.get_prefix() + this.visit(route, parameters);
       url = Utils.clean_path(result);
-      if (options["trailing_slash"] === true) {
-        url = url.replace(/(.*?)[\/]?$/, "$1/");
+      if (options['trailing_slash'] === true) {
+        url = url.replace(/(.*?)[\/]?$/, '$1/');
       }
       if ((url_params = this.serialize(parameters)).length) {
-        url += "?" + url_params;
+        url += '?' + url_params;
       }
-      url += options.anchor ? "#" + options.anchor : "";
+      url += options.anchor ? '#' + options.anchor : '';
       if (full_url) {
         url = this.route_url(options) + url;
       }
@@ -352,9 +352,9 @@ var ROUTES = (function () {
             ((this.is_optional_node(left[0]) && !left_part) ||
               (this.is_optional_node(right[0]) && !right_part))
           ) {
-            return "";
+            return '';
           }
-          return "" + left_part + right_part;
+          return '' + left_part + right_part;
         case NodeTypes.SYMBOL:
           value = parameters[left];
           delete parameters[left];
@@ -362,13 +362,13 @@ var ROUTES = (function () {
             return this.encode_segment(this.path_identifier(value));
           }
           if (optional) {
-            return "";
+            return '';
           } else {
-            throw new ParameterMissing("Route parameter missing: " + left);
+            throw new ParameterMissing('Route parameter missing: ' + left);
           }
           break;
         default:
-          throw new Error("Unknown Rails node type");
+          throw new Error('Unknown Rails node type');
       }
     },
     encode_segment: function (segment) {
@@ -390,16 +390,16 @@ var ROUTES = (function () {
       (type = route[0]), (left = route[1]), (right = route[2]);
       switch (type) {
         case NodeTypes.GROUP:
-          return "(" + this.build_path_spec(left) + ")";
+          return '(' + this.build_path_spec(left) + ')';
         case NodeTypes.CAT:
-          return "" + this.build_path_spec(left) + this.build_path_spec(right);
+          return '' + this.build_path_spec(left) + this.build_path_spec(right);
         case NodeTypes.STAR:
           return this.build_path_spec(left, true);
         case NodeTypes.SYMBOL:
           if (wildcard === true) {
-            return "" + (left[0] === "*" ? "" : "*") + left;
+            return '' + (left[0] === '*' ? '' : '*') + left;
           } else {
-            return ":" + left;
+            return ':' + left;
           }
           break;
         case NodeTypes.SLASH:
@@ -407,7 +407,7 @@ var ROUTES = (function () {
         case NodeTypes.LITERAL:
           return left;
         default:
-          throw new Error("Unknown Rails node type");
+          throw new Error('Unknown Rails node type');
       }
     },
     visit_globbing: function (route, parameters, optional) {
@@ -420,8 +420,8 @@ var ROUTES = (function () {
       }
       value = function () {
         switch (this.get_object_type(value)) {
-          case "array":
-            return value.join("/");
+          case 'array':
+            return value.join('/');
           default:
             return value;
         }
@@ -435,8 +435,8 @@ var ROUTES = (function () {
     get_prefix: function () {
       var prefix;
       prefix = this.configuration.prefix;
-      if (prefix !== "") {
-        prefix = prefix.match("/$") ? prefix : prefix + "/";
+      if (prefix !== '') {
+        prefix = prefix.match('/$') ? prefix : prefix + '/';
       }
       return prefix;
     },
@@ -469,26 +469,26 @@ var ROUTES = (function () {
     },
     route_url: function (route_defaults) {
       var hostname, port, protocol, subdomain;
-      if (typeof route_defaults === "string") {
+      if (typeof route_defaults === 'string') {
         return route_defaults;
       }
       hostname = route_defaults.host || Utils.current_host();
       if (!hostname) {
-        return "";
+        return '';
       }
       subdomain = route_defaults.subdomain
-        ? route_defaults.subdomain + "."
-        : "";
+        ? route_defaults.subdomain + '.'
+        : '';
       protocol = route_defaults.protocol || Utils.current_protocol();
       port =
         route_defaults.port ||
         (!route_defaults.host ? Utils.current_port() : void 0);
-      port = port ? ":" + port : "";
-      return protocol + "://" + subdomain + hostname + port;
+      port = port ? ':' + port : '';
+      return protocol + '://' + subdomain + hostname + port;
     },
     has_location: function () {
       return (
-        (typeof window !== "undefined" && window !== null
+        (typeof window !== 'undefined' && window !== null
           ? window.location
           : void 0) != null
       );
@@ -501,17 +501,17 @@ var ROUTES = (function () {
       }
     },
     current_protocol: function () {
-      if (this.has_location() && window.location.protocol !== "") {
-        return window.location.protocol.replace(/:$/, "");
+      if (this.has_location() && window.location.protocol !== '') {
+        return window.location.protocol.replace(/:$/, '');
       } else {
-        return "http";
+        return 'http';
       }
     },
     current_port: function () {
-      if (this.has_location() && window.location.port !== "") {
+      if (this.has_location() && window.location.port !== '') {
         return window.location.port;
       } else {
-        return "";
+        return '';
       }
     },
     _classToTypeCache: null,
@@ -522,12 +522,12 @@ var ROUTES = (function () {
       }
       this._classToTypeCache = {};
       ref =
-        "Boolean Number String Function Array Date RegExp Object Error".split(
-          " "
+        'Boolean Number String Function Array Date RegExp Object Error'.split(
+          ' '
         );
       for (j = 0, len = ref.length; j < len; j++) {
         name = ref[j];
-        this._classToTypeCache["[object " + name + "]"] = name.toLowerCase();
+        this._classToTypeCache['[object ' + name + ']'] = name.toLowerCase();
       }
       return this._classToTypeCache;
     },
@@ -536,11 +536,11 @@ var ROUTES = (function () {
         return this.jQuery.type(obj);
       }
       if (obj == null) {
-        return "" + obj;
+        return '' + obj;
       }
-      if (typeof obj === "object" || typeof obj === "function") {
+      if (typeof obj === 'object' || typeof obj === 'function') {
         return (
-          this._classToType()[Object.prototype.toString.call(obj)] || "object"
+          this._classToType()[Object.prototype.toString.call(obj)] || 'object'
         );
       } else {
         return typeof obj;
@@ -566,7 +566,7 @@ var ROUTES = (function () {
     },
     namespace: function (root, namespace, routes) {
       var index, j, len, part, parts;
-      parts = namespace ? namespace.split(".") : [];
+      parts = namespace ? namespace.split('.') : [];
       if (parts.length === 0) {
         return routes;
       }
@@ -592,44 +592,44 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         access_link_course_virtual_classroom_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "virtual_classrooms", false],
+                      [6, 'virtual_classrooms', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "access_link", false],
+                              [6, 'access_link', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -645,42 +645,42 @@ var ROUTES = (function () {
         ),
         // admin => /admin(.:format)
         // function(options)
-        admin_path: Utils.route([["format", false]], {}, [
+        admin_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "admin", false],
-            [1, [2, [8, ".", false], [3, "format", false]], false],
+            [6, 'admin', false],
+            [1, [2, [8, '.', false], [3, 'format', false]], false],
           ],
         ]),
         // admin_announcement => /admin/announcements/:id(.:format)
         // function(id, options)
         admin_announcement_path: Utils.route(
           [
-            ["id", true],
-            ["format", false],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "admin", false],
+              [6, 'admin', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "announcements", false],
+                  [6, 'announcements', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [3, "id", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [3, 'id', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -692,38 +692,38 @@ var ROUTES = (function () {
         // function(options)
         admin_announcements_path: Utils.route(
           [
-            ["page", false],
-            ["format", false],
+            ['page', false],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "admin", false],
+              [6, 'admin', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "announcements", false],
+                  [6, 'announcements', false],
                   [
                     2,
                     [
                       1,
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "page", false],
-                          [2, [7, "/", false], [3, "page", false]],
+                          [6, 'page', false],
+                          [2, [7, '/', false], [3, 'page', false]],
                         ],
                       ],
                       false,
                     ],
-                    [1, [2, [8, ".", false], [3, "format", false]], false],
+                    [1, [2, [8, '.', false], [3, 'format', false]], false],
                   ],
                 ],
               ],
@@ -734,29 +734,29 @@ var ROUTES = (function () {
         // function(id, options)
         admin_course_path: Utils.route(
           [
-            ["id", true],
-            ["format", false],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "admin", false],
+              [6, 'admin', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "courses", false],
+                  [6, 'courses', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [3, "id", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [3, 'id', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -768,38 +768,38 @@ var ROUTES = (function () {
         // function(options)
         admin_courses_path: Utils.route(
           [
-            ["page", false],
-            ["format", false],
+            ['page', false],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "admin", false],
+              [6, 'admin', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "courses", false],
+                  [6, 'courses', false],
                   [
                     2,
                     [
                       1,
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "page", false],
-                          [2, [7, "/", false], [3, "page", false]],
+                          [6, 'page', false],
+                          [2, [7, '/', false], [3, 'page', false]],
                         ],
                       ],
                       false,
                     ],
-                    [1, [2, [8, ".", false], [3, "format", false]], false],
+                    [1, [2, [8, '.', false], [3, 'format', false]], false],
                   ],
                 ],
               ],
@@ -810,29 +810,29 @@ var ROUTES = (function () {
         // function(id, options)
         admin_instance_path: Utils.route(
           [
-            ["id", true],
-            ["format", false],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "admin", false],
+              [6, 'admin', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "instances", false],
+                  [6, 'instances', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [3, "id", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [3, 'id', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -842,19 +842,19 @@ var ROUTES = (function () {
         ),
         // admin_instance_admin => /admin/instance(.:format)
         // function(options)
-        admin_instance_admin_path: Utils.route([["format", false]], {}, [
+        admin_instance_admin_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "admin", false],
+            [6, 'admin', false],
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "instance", false],
-                [1, [2, [8, ".", false], [3, "format", false]], false],
+                [6, 'instance', false],
+                [1, [2, [8, '.', false], [3, 'format', false]], false],
               ],
             ],
           ],
@@ -863,37 +863,37 @@ var ROUTES = (function () {
         // function(id, options)
         admin_instance_announcement_path: Utils.route(
           [
-            ["id", true],
-            ["format", false],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "admin", false],
+              [6, 'admin', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "instance", false],
+                  [6, 'instance', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "announcements", false],
+                      [6, 'announcements', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -909,44 +909,44 @@ var ROUTES = (function () {
         // function(options)
         admin_instance_announcements_path: Utils.route(
           [
-            ["page", false],
-            ["format", false],
+            ['page', false],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "admin", false],
+              [6, 'admin', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "instance", false],
+                  [6, 'instance', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "announcements", false],
+                      [6, 'announcements', false],
                       [
                         2,
                         [
                           1,
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "page", false],
-                              [2, [7, "/", false], [3, "page", false]],
+                              [6, 'page', false],
+                              [2, [7, '/', false], [3, 'page', false]],
                             ],
                           ],
                           false,
                         ],
-                        [1, [2, [8, ".", false], [3, "format", false]], false],
+                        [1, [2, [8, '.', false], [3, 'format', false]], false],
                       ],
                     ],
                   ],
@@ -957,25 +957,25 @@ var ROUTES = (function () {
         ),
         // admin_instance_components => /admin/instance/components(.:format)
         // function(options)
-        admin_instance_components_path: Utils.route([["format", false]], {}, [
+        admin_instance_components_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "admin", false],
+            [6, 'admin', false],
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "instance", false],
+                [6, 'instance', false],
                 [
                   2,
-                  [7, "/", false],
+                  [7, '/', false],
                   [
                     2,
-                    [6, "components", false],
-                    [1, [2, [8, ".", false], [3, "format", false]], false],
+                    [6, 'components', false],
+                    [1, [2, [8, '.', false], [3, 'format', false]], false],
                   ],
                 ],
               ],
@@ -986,37 +986,37 @@ var ROUTES = (function () {
         // function(id, options)
         admin_instance_course_path: Utils.route(
           [
-            ["id", true],
-            ["format", false],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "admin", false],
+              [6, 'admin', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "instance", false],
+                  [6, 'instance', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "courses", false],
+                      [6, 'courses', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -1032,44 +1032,44 @@ var ROUTES = (function () {
         // function(options)
         admin_instance_courses_path: Utils.route(
           [
-            ["page", false],
-            ["format", false],
+            ['page', false],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "admin", false],
+              [6, 'admin', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "instance", false],
+                  [6, 'instance', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "courses", false],
+                      [6, 'courses', false],
                       [
                         2,
                         [
                           1,
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "page", false],
-                              [2, [7, "/", false], [3, "page", false]],
+                              [6, 'page', false],
+                              [2, [7, '/', false], [3, 'page', false]],
                             ],
                           ],
                           false,
                         ],
-                        [1, [2, [8, ".", false], [3, "format", false]], false],
+                        [1, [2, [8, '.', false], [3, 'format', false]], false],
                       ],
                     ],
                   ],
@@ -1082,37 +1082,37 @@ var ROUTES = (function () {
         // function(id, options)
         admin_instance_user_path: Utils.route(
           [
-            ["id", true],
-            ["format", false],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "admin", false],
+              [6, 'admin', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "instance", false],
+                  [6, 'instance', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "users", false],
+                      [6, 'users', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -1128,37 +1128,37 @@ var ROUTES = (function () {
         // function(id, options)
         admin_instance_user_invitation_path: Utils.route(
           [
-            ["id", true],
-            ["format", false],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "admin", false],
+              [6, 'admin', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "instance", false],
+                  [6, 'instance', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "user_invitations", false],
+                      [6, 'user_invitations', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -1174,43 +1174,43 @@ var ROUTES = (function () {
         // function(user_invitation_id, options)
         admin_instance_user_invitation_resend_invitation_path: Utils.route(
           [
-            ["user_invitation_id", true],
-            ["format", false],
+            ['user_invitation_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "admin", false],
+              [6, 'admin', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "instance", false],
+                  [6, 'instance', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "user_invitations", false],
+                      [6, 'user_invitations', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "user_invitation_id", false],
+                          [3, 'user_invitation_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "resend_invitation", false],
+                              [6, 'resend_invitation', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -1227,27 +1227,27 @@ var ROUTES = (function () {
         // admin_instance_user_invitations => /admin/instance/user_invitations(.:format)
         // function(options)
         admin_instance_user_invitations_path: Utils.route(
-          [["format", false]],
+          [['format', false]],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "admin", false],
+              [6, 'admin', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "instance", false],
+                  [6, 'instance', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "user_invitations", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [6, 'user_invitations', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -1259,44 +1259,44 @@ var ROUTES = (function () {
         // function(options)
         admin_instance_users_path: Utils.route(
           [
-            ["page", false],
-            ["format", false],
+            ['page', false],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "admin", false],
+              [6, 'admin', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "instance", false],
+                  [6, 'instance', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "users", false],
+                      [6, 'users', false],
                       [
                         2,
                         [
                           1,
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "page", false],
-                              [2, [7, "/", false], [3, "page", false]],
+                              [6, 'page', false],
+                              [2, [7, '/', false], [3, 'page', false]],
                             ],
                           ],
                           false,
                         ],
-                        [1, [2, [8, ".", false], [3, "format", false]], false],
+                        [1, [2, [8, '.', false], [3, 'format', false]], false],
                       ],
                     ],
                   ],
@@ -1307,19 +1307,19 @@ var ROUTES = (function () {
         ),
         // admin_instances => /admin/instances(.:format)
         // function(options)
-        admin_instances_path: Utils.route([["format", false]], {}, [
+        admin_instances_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "admin", false],
+            [6, 'admin', false],
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "instances", false],
-                [1, [2, [8, ".", false], [3, "format", false]], false],
+                [6, 'instances', false],
+                [1, [2, [8, '.', false], [3, 'format', false]], false],
               ],
             ],
           ],
@@ -1328,29 +1328,29 @@ var ROUTES = (function () {
         // function(id, options)
         admin_user_path: Utils.route(
           [
-            ["id", true],
-            ["format", false],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "admin", false],
+              [6, 'admin', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "users", false],
+                  [6, 'users', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [3, "id", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [3, 'id', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -1362,38 +1362,38 @@ var ROUTES = (function () {
         // function(options)
         admin_users_path: Utils.route(
           [
-            ["page", false],
-            ["format", false],
+            ['page', false],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "admin", false],
+              [6, 'admin', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "users", false],
+                  [6, 'users', false],
                   [
                     2,
                     [
                       1,
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "page", false],
-                          [2, [7, "/", false], [3, "page", false]],
+                          [6, 'page', false],
+                          [2, [7, '/', false], [3, 'page', false]],
                         ],
                       ],
                       false,
                     ],
-                    [1, [2, [8, ".", false], [3, "format", false]], false],
+                    [1, [2, [8, '.', false], [3, 'format', false]], false],
                   ],
                 ],
               ],
@@ -1404,29 +1404,29 @@ var ROUTES = (function () {
         // function(announcement_id, options)
         announcement_mark_as_read_path: Utils.route(
           [
-            ["announcement_id", true],
-            ["format", false],
+            ['announcement_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "announcements", false],
+              [6, 'announcements', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "announcement_id", false],
+                  [3, 'announcement_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "mark_as_read", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [6, 'mark_as_read', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -1436,57 +1436,57 @@ var ROUTES = (function () {
         ),
         // announcements => /announcements(.:format)
         // function(options)
-        announcements_path: Utils.route([["format", false]], {}, [
+        announcements_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "announcements", false],
-            [1, [2, [8, ".", false], [3, "format", false]], false],
+            [6, 'announcements', false],
+            [1, [2, [8, '.', false], [3, 'format', false]], false],
           ],
         ]),
         // approve_course_enrol_request => /courses/:course_id/enrol_requests/:id/approve(.:format)
         // function(course_id, id, options)
         approve_course_enrol_request_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "enrol_requests", false],
+                      [6, 'enrol_requests', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "approve", false],
+                              [6, 'approve', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -1504,29 +1504,29 @@ var ROUTES = (function () {
         // function(id, options)
         approve_instance_user_role_request_path: Utils.route(
           [
-            ["id", true],
-            ["format", false],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "role_requests", false],
+              [6, 'role_requests', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "id", false],
+                  [3, 'id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "approve", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [6, 'approve', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -1538,23 +1538,23 @@ var ROUTES = (function () {
         // function(id, options)
         attachment_reference_path: Utils.route(
           [
-            ["id", true],
-            ["format", false],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "attachments", false],
+              [6, 'attachments', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "id", false],
-                  [1, [2, [8, ".", false], [3, "format", false]], false],
+                  [3, 'id', false],
+                  [1, [2, [8, '.', false], [3, 'format', false]], false],
                 ],
               ],
             ],
@@ -1562,57 +1562,57 @@ var ROUTES = (function () {
         ),
         // attachment_references => /attachments(.:format)
         // function(options)
-        attachment_references_path: Utils.route([["format", false]], {}, [
+        attachment_references_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "attachments", false],
-            [1, [2, [8, ".", false], [3, "format", false]], false],
+            [6, 'attachments', false],
+            [1, [2, [8, '.', false], [3, 'format', false]], false],
           ],
         ]),
         // authenticate_course_assessment => /courses/:course_id/assessments/:id/authenticate(.:format)
         // function(course_id, id, options)
         authenticate_course_assessment_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "authenticate", false],
+                              [6, 'authenticate', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -1630,60 +1630,60 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, id, options)
         auto_grade_course_assessment_submission_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "submissions", false],
+                              [6, 'submissions', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "auto_grade", false],
+                                      [6, 'auto_grade', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -1704,25 +1704,25 @@ var ROUTES = (function () {
         ),
         // back_user_masquerade_index => /users/masquerade/back(.:format)
         // function(options)
-        back_user_masquerade_index_path: Utils.route([["format", false]], {}, [
+        back_user_masquerade_index_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "users", false],
+            [6, 'users', false],
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "masquerade", false],
+                [6, 'masquerade', false],
                 [
                   2,
-                  [7, "/", false],
+                  [7, '/', false],
                   [
                     2,
-                    [6, "back", false],
-                    [1, [2, [8, ".", false], [3, "format", false]], false],
+                    [6, 'back', false],
+                    [1, [2, [8, '.', false], [3, 'format', false]], false],
                   ],
                 ],
               ],
@@ -1731,19 +1731,19 @@ var ROUTES = (function () {
         ]),
         // cancel_user_registration => /users/cancel(.:format)
         // function(options)
-        cancel_user_registration_path: Utils.route([["format", false]], {}, [
+        cancel_user_registration_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "users", false],
+            [6, 'users', false],
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "cancel", false],
-                [1, [2, [8, ".", false], [3, "format", false]], false],
+                [6, 'cancel', false],
+                [1, [2, [8, '.', false], [3, 'format', false]], false],
               ],
             ],
           ],
@@ -1752,23 +1752,23 @@ var ROUTES = (function () {
         // function(id, options)
         course_path: Utils.route(
           [
-            ["id", true],
-            ["format", false],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "id", false],
-                  [1, [2, [8, ".", false], [3, "format", false]], false],
+                  [3, 'id', false],
+                  [1, [2, [8, '.', false], [3, 'format', false]], false],
                 ],
               ],
             ],
@@ -1778,38 +1778,38 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         course_achievement_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "achievements", false],
+                      [6, 'achievements', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -1825,60 +1825,60 @@ var ROUTES = (function () {
         // function(course_id, achievement_id, id, options)
         course_achievement_condition_achievement_path: Utils.route(
           [
-            ["course_id", true],
-            ["achievement_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['achievement_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "achievements", false],
+                      [6, 'achievements', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "achievement_id", false],
+                          [3, 'achievement_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "condition", false],
+                              [6, 'condition', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "achievements", false],
+                                  [6, 'achievements', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [3, "id", false],
+                                      [3, 'id', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -1901,50 +1901,50 @@ var ROUTES = (function () {
         // function(course_id, achievement_id, options)
         course_achievement_condition_achievements_path: Utils.route(
           [
-            ["course_id", true],
-            ["achievement_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['achievement_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "achievements", false],
+                      [6, 'achievements', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "achievement_id", false],
+                          [3, 'achievement_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "condition", false],
+                              [6, 'condition', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "achievements", false],
+                                  [6, 'achievements', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -1964,60 +1964,60 @@ var ROUTES = (function () {
         // function(course_id, achievement_id, id, options)
         course_achievement_condition_assessment_path: Utils.route(
           [
-            ["course_id", true],
-            ["achievement_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['achievement_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "achievements", false],
+                      [6, 'achievements', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "achievement_id", false],
+                          [3, 'achievement_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "condition", false],
+                              [6, 'condition', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "assessments", false],
+                                  [6, 'assessments', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [3, "id", false],
+                                      [3, 'id', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -2040,50 +2040,50 @@ var ROUTES = (function () {
         // function(course_id, achievement_id, options)
         course_achievement_condition_assessments_path: Utils.route(
           [
-            ["course_id", true],
-            ["achievement_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['achievement_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "achievements", false],
+                      [6, 'achievements', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "achievement_id", false],
+                          [3, 'achievement_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "condition", false],
+                              [6, 'condition', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "assessments", false],
+                                  [6, 'assessments', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -2103,60 +2103,60 @@ var ROUTES = (function () {
         // function(course_id, achievement_id, id, options)
         course_achievement_condition_level_path: Utils.route(
           [
-            ["course_id", true],
-            ["achievement_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['achievement_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "achievements", false],
+                      [6, 'achievements', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "achievement_id", false],
+                          [3, 'achievement_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "condition", false],
+                              [6, 'condition', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "levels", false],
+                                  [6, 'levels', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [3, "id", false],
+                                      [3, 'id', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -2179,50 +2179,50 @@ var ROUTES = (function () {
         // function(course_id, achievement_id, options)
         course_achievement_condition_levels_path: Utils.route(
           [
-            ["course_id", true],
-            ["achievement_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['achievement_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "achievements", false],
+                      [6, 'achievements', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "achievement_id", false],
+                          [3, 'achievement_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "condition", false],
+                              [6, 'condition', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "levels", false],
+                                  [6, 'levels', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -2242,44 +2242,44 @@ var ROUTES = (function () {
         // function(course_id, achievement_id, options)
         course_achievement_course_users_path: Utils.route(
           [
-            ["course_id", true],
-            ["achievement_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['achievement_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "achievements", false],
+                      [6, 'achievements', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "achievement_id", false],
+                          [3, 'achievement_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "course_users", false],
+                              [6, 'course_users', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -2297,29 +2297,29 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_achievements_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "achievements", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [6, 'achievements', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -2331,29 +2331,29 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_admin_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "admin", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [6, 'admin', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -2365,37 +2365,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_admin_announcements_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "admin", false],
+                      [6, 'admin', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "announcements", false],
+                          [6, 'announcements', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -2411,37 +2411,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_admin_assessments_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "admin", false],
+                      [6, 'admin', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "assessments", false],
+                          [6, 'assessments', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -2457,43 +2457,43 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_admin_assessments_categories_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "admin", false],
+                      [6, 'admin', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "assessments", false],
+                          [6, 'assessments', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "categories", false],
+                              [6, 'categories', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -2511,50 +2511,50 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         course_admin_assessments_category_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "admin", false],
+                      [6, 'admin', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "assessments", false],
+                          [6, 'assessments', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "categories", false],
+                              [6, 'categories', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -2574,66 +2574,66 @@ var ROUTES = (function () {
         // function(course_id, category_id, id, options)
         course_admin_assessments_category_tab_path: Utils.route(
           [
-            ["course_id", true],
-            ["category_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['category_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "admin", false],
+                      [6, 'admin', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "assessments", false],
+                          [6, 'assessments', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "categories", false],
+                              [6, 'categories', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "category_id", false],
+                                  [3, 'category_id', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "tabs", false],
+                                      [6, 'tabs', false],
                                       [
                                         2,
-                                        [7, "/", false],
+                                        [7, '/', false],
                                         [
                                           2,
-                                          [3, "id", false],
+                                          [3, 'id', false],
                                           [
                                             1,
                                             [
                                               2,
-                                              [8, ".", false],
-                                              [3, "format", false],
+                                              [8, '.', false],
+                                              [3, 'format', false],
                                             ],
                                             false,
                                           ],
@@ -2658,59 +2658,59 @@ var ROUTES = (function () {
         // function(course_id, category_id, options)
         course_admin_assessments_category_tabs_path: Utils.route(
           [
-            ["course_id", true],
-            ["category_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['category_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "admin", false],
+                      [6, 'admin', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "assessments", false],
+                          [6, 'assessments', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "categories", false],
+                              [6, 'categories', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "category_id", false],
+                                  [3, 'category_id', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "tabs", false],
+                                      [6, 'tabs', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -2733,37 +2733,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_admin_comments_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "admin", false],
+                      [6, 'admin', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "comments", false],
+                          [6, 'comments', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -2779,37 +2779,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_admin_components_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "admin", false],
+                      [6, 'admin', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "components", false],
+                          [6, 'components', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -2825,37 +2825,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_admin_forums_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "admin", false],
+                      [6, 'admin', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "forums", false],
+                          [6, 'forums', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -2871,37 +2871,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_admin_leaderboard_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "admin", false],
+                      [6, 'admin', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "leaderboard", false],
+                          [6, 'leaderboard', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -2917,37 +2917,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_admin_lesson_plan_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "admin", false],
+                      [6, 'admin', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "lesson_plan", false],
+                          [6, 'lesson_plan', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -2963,37 +2963,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_admin_materials_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "admin", false],
+                      [6, 'admin', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "materials", false],
+                          [6, 'materials', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -3009,37 +3009,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_admin_notifications_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "admin", false],
+                      [6, 'admin', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "notifications", false],
+                          [6, 'notifications', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -3055,37 +3055,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_admin_sidebar_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "admin", false],
+                      [6, 'admin', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "sidebar", false],
+                          [6, 'sidebar', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -3101,37 +3101,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_admin_topics_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "admin", false],
+                      [6, 'admin', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "comments", false],
+                          [6, 'comments', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -3147,37 +3147,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_admin_videos_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "admin", false],
+                      [6, 'admin', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "videos", false],
+                          [6, 'videos', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -3193,50 +3193,50 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         course_admin_videos_tab_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "admin", false],
+                      [6, 'admin', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "videos", false],
+                          [6, 'videos', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "tabs", false],
+                              [6, 'tabs', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -3256,43 +3256,43 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_admin_videos_tabs_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "admin", false],
+                      [6, 'admin', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "videos", false],
+                          [6, 'videos', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "tabs", false],
+                              [6, 'tabs', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -3310,37 +3310,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_admin_virtual_classrooms_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "admin", false],
+                      [6, 'admin', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "virtual_classrooms", false],
+                          [6, 'virtual_classrooms', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -3356,38 +3356,38 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         course_announcement_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "announcements", false],
+                      [6, 'announcements', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -3403,45 +3403,45 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_announcements_path: Utils.route(
           [
-            ["course_id", true],
-            ["page", false],
-            ["format", false],
+            ['course_id', true],
+            ['page', false],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "announcements", false],
+                      [6, 'announcements', false],
                       [
                         2,
                         [
                           1,
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "page", false],
-                              [2, [7, "/", false], [3, "page", false]],
+                              [6, 'page', false],
+                              [2, [7, '/', false], [3, 'page', false]],
                             ],
                           ],
                           false,
                         ],
-                        [1, [2, [8, ".", false], [3, "format", false]], false],
+                        [1, [2, [8, '.', false], [3, 'format', false]], false],
                       ],
                     ],
                   ],
@@ -3454,38 +3454,38 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         course_assessment_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -3501,60 +3501,60 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, id, options)
         course_assessment_condition_achievement_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "condition", false],
+                              [6, 'condition', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "achievements", false],
+                                  [6, 'achievements', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [3, "id", false],
+                                      [3, 'id', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -3577,50 +3577,50 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, options)
         course_assessment_condition_achievements_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "condition", false],
+                              [6, 'condition', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "achievements", false],
+                                  [6, 'achievements', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -3640,60 +3640,60 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, id, options)
         course_assessment_condition_assessment_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "condition", false],
+                              [6, 'condition', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "assessments", false],
+                                  [6, 'assessments', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [3, "id", false],
+                                      [3, 'id', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -3716,50 +3716,50 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, options)
         course_assessment_condition_assessments_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "condition", false],
+                              [6, 'condition', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "assessments", false],
+                                  [6, 'assessments', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -3779,60 +3779,60 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, id, options)
         course_assessment_condition_level_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "condition", false],
+                              [6, 'condition', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "levels", false],
+                                  [6, 'levels', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [3, "id", false],
+                                      [3, 'id', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -3855,50 +3855,50 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, options)
         course_assessment_condition_levels_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "condition", false],
+                              [6, 'condition', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "levels", false],
+                                  [6, 'levels', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -3918,51 +3918,51 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, id, options)
         course_assessment_question_bundle_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question_bundles", false],
+                              [6, 'question_bundles', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -3982,51 +3982,51 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, id, options)
         course_assessment_question_bundle_assignment_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question_bundle_assignments", false],
+                              [6, 'question_bundle_assignments', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -4046,44 +4046,44 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, options)
         course_assessment_question_bundle_assignments_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question_bundle_assignments", false],
+                              [6, 'question_bundle_assignments', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -4101,51 +4101,51 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, id, options)
         course_assessment_question_bundle_question_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question_bundle_questions", false],
+                              [6, 'question_bundle_questions', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -4165,44 +4165,44 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, options)
         course_assessment_question_bundle_questions_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question_bundle_questions", false],
+                              [6, 'question_bundle_questions', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -4220,44 +4220,44 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, options)
         course_assessment_question_bundles_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question_bundles", false],
+                              [6, 'question_bundles', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -4275,51 +4275,51 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, id, options)
         course_assessment_question_group_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question_groups", false],
+                              [6, 'question_groups', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -4339,44 +4339,44 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, options)
         course_assessment_question_groups_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question_groups", false],
+                              [6, 'question_groups', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -4394,60 +4394,60 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, id, options)
         course_assessment_question_multiple_response_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question", false],
+                              [6, 'question', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "multiple_responses", false],
+                                  [6, 'multiple_responses', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [3, "id", false],
+                                      [3, 'id', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -4470,50 +4470,50 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, options)
         course_assessment_question_multiple_responses_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question", false],
+                              [6, 'question', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "multiple_responses", false],
+                                  [6, 'multiple_responses', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -4533,60 +4533,60 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, id, options)
         course_assessment_question_programming_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question", false],
+                              [6, 'question', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "programming", false],
+                                  [6, 'programming', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [3, "id", false],
+                                      [3, 'id', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -4609,50 +4609,50 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, options)
         course_assessment_question_programming_index_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question", false],
+                              [6, 'question', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "programming", false],
+                                  [6, 'programming', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -4672,60 +4672,60 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, id, options)
         course_assessment_question_scribing_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question", false],
+                              [6, 'question', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "scribing", false],
+                                  [6, 'scribing', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [3, "id", false],
+                                      [3, 'id', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -4748,50 +4748,50 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, options)
         course_assessment_question_scribing_index_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question", false],
+                              [6, 'question', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "scribing", false],
+                                  [6, 'scribing', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -4811,60 +4811,60 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, id, options)
         course_assessment_question_text_response_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question", false],
+                              [6, 'question', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "text_responses", false],
+                                  [6, 'text_responses', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [3, "id", false],
+                                      [3, 'id', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -4887,50 +4887,50 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, options)
         course_assessment_question_text_responses_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question", false],
+                              [6, 'question', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "text_responses", false],
+                                  [6, 'text_responses', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -4950,60 +4950,60 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, id, options)
         course_assessment_question_voice_response_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question", false],
+                              [6, 'question', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "voice_responses", false],
+                                  [6, 'voice_responses', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [3, "id", false],
+                                      [3, 'id', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -5026,50 +5026,50 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, options)
         course_assessment_question_voice_responses_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question", false],
+                              [6, 'question', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "voice_responses", false],
+                                  [6, 'voice_responses', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -5089,44 +5089,44 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, options)
         course_assessment_sessions_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "sessions", false],
+                              [6, 'sessions', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -5144,51 +5144,51 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, id, options)
         course_assessment_submission_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "submissions", false],
+                              [6, 'submissions', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -5208,67 +5208,67 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, submission_id, id, options)
         course_assessment_submission_answer_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["submission_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['submission_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "submissions", false],
+                              [6, 'submissions', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "submission_id", false],
+                                  [3, 'submission_id', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "answers", false],
+                                      [6, 'answers', false],
                                       [
                                         2,
-                                        [7, "/", false],
+                                        [7, '/', false],
                                         [
                                           2,
-                                          [3, "id", false],
+                                          [3, 'id', false],
                                           [
                                             1,
                                             [
                                               2,
-                                              [8, ".", false],
-                                              [3, "format", false],
+                                              [8, '.', false],
+                                              [3, 'format', false],
                                             ],
                                             false,
                                           ],
@@ -5294,83 +5294,83 @@ var ROUTES = (function () {
         course_assessment_submission_answer_programming_create_programming_files_path:
           Utils.route(
             [
-              ["course_id", true],
-              ["assessment_id", true],
-              ["submission_id", true],
-              ["answer_id", true],
-              ["format", false],
+              ['course_id', true],
+              ['assessment_id', true],
+              ['submission_id', true],
+              ['answer_id', true],
+              ['format', false],
             ],
             {},
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "courses", false],
+                [6, 'courses', false],
                 [
                   2,
-                  [7, "/", false],
+                  [7, '/', false],
                   [
                     2,
-                    [3, "course_id", false],
+                    [3, 'course_id', false],
                     [
                       2,
-                      [7, "/", false],
+                      [7, '/', false],
                       [
                         2,
-                        [6, "assessments", false],
+                        [6, 'assessments', false],
                         [
                           2,
-                          [7, "/", false],
+                          [7, '/', false],
                           [
                             2,
-                            [3, "assessment_id", false],
+                            [3, 'assessment_id', false],
                             [
                               2,
-                              [7, "/", false],
+                              [7, '/', false],
                               [
                                 2,
-                                [6, "submissions", false],
+                                [6, 'submissions', false],
                                 [
                                   2,
-                                  [7, "/", false],
+                                  [7, '/', false],
                                   [
                                     2,
-                                    [3, "submission_id", false],
+                                    [3, 'submission_id', false],
                                     [
                                       2,
-                                      [7, "/", false],
+                                      [7, '/', false],
                                       [
                                         2,
-                                        [6, "answers", false],
+                                        [6, 'answers', false],
                                         [
                                           2,
-                                          [7, "/", false],
+                                          [7, '/', false],
                                           [
                                             2,
-                                            [3, "answer_id", false],
+                                            [3, 'answer_id', false],
                                             [
                                               2,
-                                              [7, "/", false],
+                                              [7, '/', false],
                                               [
                                                 2,
-                                                [6, "programming", false],
+                                                [6, 'programming', false],
                                                 [
                                                   2,
-                                                  [7, "/", false],
+                                                  [7, '/', false],
                                                   [
                                                     2,
                                                     [
                                                       6,
-                                                      "create_programming_files",
+                                                      'create_programming_files',
                                                       false,
                                                     ],
                                                     [
                                                       1,
                                                       [
                                                         2,
-                                                        [8, ".", false],
-                                                        [3, "format", false],
+                                                        [8, '.', false],
+                                                        [3, 'format', false],
                                                       ],
                                                       false,
                                                     ],
@@ -5400,83 +5400,83 @@ var ROUTES = (function () {
         course_assessment_submission_answer_programming_destroy_programming_file_path:
           Utils.route(
             [
-              ["course_id", true],
-              ["assessment_id", true],
-              ["submission_id", true],
-              ["answer_id", true],
-              ["format", false],
+              ['course_id', true],
+              ['assessment_id', true],
+              ['submission_id', true],
+              ['answer_id', true],
+              ['format', false],
             ],
             {},
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "courses", false],
+                [6, 'courses', false],
                 [
                   2,
-                  [7, "/", false],
+                  [7, '/', false],
                   [
                     2,
-                    [3, "course_id", false],
+                    [3, 'course_id', false],
                     [
                       2,
-                      [7, "/", false],
+                      [7, '/', false],
                       [
                         2,
-                        [6, "assessments", false],
+                        [6, 'assessments', false],
                         [
                           2,
-                          [7, "/", false],
+                          [7, '/', false],
                           [
                             2,
-                            [3, "assessment_id", false],
+                            [3, 'assessment_id', false],
                             [
                               2,
-                              [7, "/", false],
+                              [7, '/', false],
                               [
                                 2,
-                                [6, "submissions", false],
+                                [6, 'submissions', false],
                                 [
                                   2,
-                                  [7, "/", false],
+                                  [7, '/', false],
                                   [
                                     2,
-                                    [3, "submission_id", false],
+                                    [3, 'submission_id', false],
                                     [
                                       2,
-                                      [7, "/", false],
+                                      [7, '/', false],
                                       [
                                         2,
-                                        [6, "answers", false],
+                                        [6, 'answers', false],
                                         [
                                           2,
-                                          [7, "/", false],
+                                          [7, '/', false],
                                           [
                                             2,
-                                            [3, "answer_id", false],
+                                            [3, 'answer_id', false],
                                             [
                                               2,
-                                              [7, "/", false],
+                                              [7, '/', false],
                                               [
                                                 2,
-                                                [6, "programming", false],
+                                                [6, 'programming', false],
                                                 [
                                                   2,
-                                                  [7, "/", false],
+                                                  [7, '/', false],
                                                   [
                                                     2,
                                                     [
                                                       6,
-                                                      "destroy_programming_file",
+                                                      'destroy_programming_file',
                                                       false,
                                                     ],
                                                     [
                                                       1,
                                                       [
                                                         2,
-                                                        [8, ".", false],
-                                                        [3, "format", false],
+                                                        [8, '.', false],
+                                                        [3, 'format', false],
                                                       ],
                                                       false,
                                                     ],
@@ -5506,98 +5506,98 @@ var ROUTES = (function () {
         course_assessment_submission_answer_programming_file_annotations_path:
           Utils.route(
             [
-              ["course_id", true],
-              ["assessment_id", true],
-              ["submission_id", true],
-              ["answer_id", true],
-              ["file_id", true],
-              ["format", false],
+              ['course_id', true],
+              ['assessment_id', true],
+              ['submission_id', true],
+              ['answer_id', true],
+              ['file_id', true],
+              ['format', false],
             ],
             {},
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "courses", false],
+                [6, 'courses', false],
                 [
                   2,
-                  [7, "/", false],
+                  [7, '/', false],
                   [
                     2,
-                    [3, "course_id", false],
+                    [3, 'course_id', false],
                     [
                       2,
-                      [7, "/", false],
+                      [7, '/', false],
                       [
                         2,
-                        [6, "assessments", false],
+                        [6, 'assessments', false],
                         [
                           2,
-                          [7, "/", false],
+                          [7, '/', false],
                           [
                             2,
-                            [3, "assessment_id", false],
+                            [3, 'assessment_id', false],
                             [
                               2,
-                              [7, "/", false],
+                              [7, '/', false],
                               [
                                 2,
-                                [6, "submissions", false],
+                                [6, 'submissions', false],
                                 [
                                   2,
-                                  [7, "/", false],
+                                  [7, '/', false],
                                   [
                                     2,
-                                    [3, "submission_id", false],
+                                    [3, 'submission_id', false],
                                     [
                                       2,
-                                      [7, "/", false],
+                                      [7, '/', false],
                                       [
                                         2,
-                                        [6, "answers", false],
+                                        [6, 'answers', false],
                                         [
                                           2,
-                                          [7, "/", false],
+                                          [7, '/', false],
                                           [
                                             2,
-                                            [3, "answer_id", false],
+                                            [3, 'answer_id', false],
                                             [
                                               2,
-                                              [7, "/", false],
+                                              [7, '/', false],
                                               [
                                                 2,
-                                                [6, "programming", false],
+                                                [6, 'programming', false],
                                                 [
                                                   2,
-                                                  [7, "/", false],
+                                                  [7, '/', false],
                                                   [
                                                     2,
-                                                    [6, "files", false],
+                                                    [6, 'files', false],
                                                     [
                                                       2,
-                                                      [7, "/", false],
+                                                      [7, '/', false],
                                                       [
                                                         2,
-                                                        [3, "file_id", false],
+                                                        [3, 'file_id', false],
                                                         [
                                                           2,
-                                                          [7, "/", false],
+                                                          [7, '/', false],
                                                           [
                                                             2,
                                                             [
                                                               6,
-                                                              "annotations",
+                                                              'annotations',
                                                               false,
                                                             ],
                                                             [
                                                               1,
                                                               [
                                                                 2,
-                                                                [8, ".", false],
+                                                                [8, '.', false],
                                                                 [
                                                                   3,
-                                                                  "format",
+                                                                  'format',
                                                                   false,
                                                                 ],
                                                               ],
@@ -5633,79 +5633,79 @@ var ROUTES = (function () {
         course_assessment_submission_answer_scribing_scribbles_path:
           Utils.route(
             [
-              ["course_id", true],
-              ["assessment_id", true],
-              ["submission_id", true],
-              ["answer_id", true],
-              ["format", false],
+              ['course_id', true],
+              ['assessment_id', true],
+              ['submission_id', true],
+              ['answer_id', true],
+              ['format', false],
             ],
             {},
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "courses", false],
+                [6, 'courses', false],
                 [
                   2,
-                  [7, "/", false],
+                  [7, '/', false],
                   [
                     2,
-                    [3, "course_id", false],
+                    [3, 'course_id', false],
                     [
                       2,
-                      [7, "/", false],
+                      [7, '/', false],
                       [
                         2,
-                        [6, "assessments", false],
+                        [6, 'assessments', false],
                         [
                           2,
-                          [7, "/", false],
+                          [7, '/', false],
                           [
                             2,
-                            [3, "assessment_id", false],
+                            [3, 'assessment_id', false],
                             [
                               2,
-                              [7, "/", false],
+                              [7, '/', false],
                               [
                                 2,
-                                [6, "submissions", false],
+                                [6, 'submissions', false],
                                 [
                                   2,
-                                  [7, "/", false],
+                                  [7, '/', false],
                                   [
                                     2,
-                                    [3, "submission_id", false],
+                                    [3, 'submission_id', false],
                                     [
                                       2,
-                                      [7, "/", false],
+                                      [7, '/', false],
                                       [
                                         2,
-                                        [6, "answers", false],
+                                        [6, 'answers', false],
                                         [
                                           2,
-                                          [7, "/", false],
+                                          [7, '/', false],
                                           [
                                             2,
-                                            [3, "answer_id", false],
+                                            [3, 'answer_id', false],
                                             [
                                               2,
-                                              [7, "/", false],
+                                              [7, '/', false],
                                               [
                                                 2,
-                                                [6, "scribing", false],
+                                                [6, 'scribing', false],
                                                 [
                                                   2,
-                                                  [7, "/", false],
+                                                  [7, '/', false],
                                                   [
                                                     2,
-                                                    [6, "scribbles", false],
+                                                    [6, 'scribbles', false],
                                                     [
                                                       1,
                                                       [
                                                         2,
-                                                        [8, ".", false],
-                                                        [3, "format", false],
+                                                        [8, '.', false],
+                                                        [3, 'format', false],
                                                       ],
                                                       false,
                                                     ],
@@ -5734,60 +5734,60 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, submission_id, options)
         course_assessment_submission_logs_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["submission_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['submission_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "submissions", false],
+                              [6, 'submissions', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "submission_id", false],
+                                  [3, 'submission_id', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "logs", false],
+                                      [6, 'logs', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -5810,60 +5810,60 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, submission_question_id, options)
         course_assessment_submission_question_comments_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["submission_question_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['submission_question_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "submission_questions", false],
+                              [6, 'submission_questions', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "submission_question_id", false],
+                                  [3, 'submission_question_id', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "comments", false],
+                                      [6, 'comments', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -5886,44 +5886,44 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, options)
         course_assessment_submissions_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "submissions", false],
+                              [6, 'submissions', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -5941,29 +5941,29 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_assessments_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [6, 'assessments', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -5975,44 +5975,44 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         course_assessments_skill_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "skills", false],
+                          [6, 'skills', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [3, "id", false],
+                              [3, 'id', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -6030,44 +6030,44 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         course_assessments_skill_branch_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "skill_branches", false],
+                          [6, 'skill_branches', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [3, "id", false],
+                              [3, 'id', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -6085,37 +6085,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_assessments_skill_branches_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "skill_branches", false],
+                          [6, 'skill_branches', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -6131,37 +6131,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_assessments_skills_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "skills", false],
+                          [6, 'skills', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -6177,29 +6177,29 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_categories_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "categories", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [6, 'categories', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -6211,29 +6211,29 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_duplication_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "duplication", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [6, 'duplication', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -6245,38 +6245,38 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         course_enrol_request_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "enrol_requests", false],
+                      [6, 'enrol_requests', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -6292,29 +6292,29 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_enrol_requests_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "enrol_requests", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [6, 'enrol_requests', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -6326,38 +6326,38 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         course_forum_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "forums", false],
+                      [6, 'forums', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -6373,51 +6373,51 @@ var ROUTES = (function () {
         // function(course_id, forum_id, id, options)
         course_forum_topic_path: Utils.route(
           [
-            ["course_id", true],
-            ["forum_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['forum_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "forums", false],
+                      [6, 'forums', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "forum_id", false],
+                          [3, 'forum_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "topics", false],
+                              [6, 'topics', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -6437,67 +6437,67 @@ var ROUTES = (function () {
         // function(course_id, forum_id, topic_id, id, options)
         course_forum_topic_post_path: Utils.route(
           [
-            ["course_id", true],
-            ["forum_id", true],
-            ["topic_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['forum_id', true],
+            ['topic_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "forums", false],
+                      [6, 'forums', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "forum_id", false],
+                          [3, 'forum_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "topics", false],
+                              [6, 'topics', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "topic_id", false],
+                                  [3, 'topic_id', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "posts", false],
+                                      [6, 'posts', false],
                                       [
                                         2,
-                                        [7, "/", false],
+                                        [7, '/', false],
                                         [
                                           2,
-                                          [3, "id", false],
+                                          [3, 'id', false],
                                           [
                                             1,
                                             [
                                               2,
-                                              [8, ".", false],
-                                              [3, "format", false],
+                                              [8, '.', false],
+                                              [3, 'format', false],
                                             ],
                                             false,
                                           ],
@@ -6522,60 +6522,60 @@ var ROUTES = (function () {
         // function(course_id, forum_id, topic_id, options)
         course_forum_topic_posts_path: Utils.route(
           [
-            ["course_id", true],
-            ["forum_id", true],
-            ["topic_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['forum_id', true],
+            ['topic_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "forums", false],
+                      [6, 'forums', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "forum_id", false],
+                          [3, 'forum_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "topics", false],
+                              [6, 'topics', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "topic_id", false],
+                                  [3, 'topic_id', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "posts", false],
+                                      [6, 'posts', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -6598,44 +6598,44 @@ var ROUTES = (function () {
         // function(course_id, forum_id, options)
         course_forum_topics_path: Utils.route(
           [
-            ["course_id", true],
-            ["forum_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['forum_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "forums", false],
+                      [6, 'forums', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "forum_id", false],
+                          [3, 'forum_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "topics", false],
+                              [6, 'topics', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -6653,29 +6653,29 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_forums_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "forums", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [6, 'forums', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -6687,38 +6687,38 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         course_group_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "groups", false],
+                      [6, 'groups', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -6734,29 +6734,29 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_groups_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "groups", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [6, 'groups', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -6768,29 +6768,29 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_leaderboard_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "leaderboard", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [6, 'leaderboard', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -6802,29 +6802,29 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_lesson_plan_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "lesson_plan", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [6, 'lesson_plan', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -6836,37 +6836,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_lesson_plan_edit_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "lesson_plan", false],
+                      [6, 'lesson_plan', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "edit", false],
+                          [6, 'edit', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -6882,44 +6882,44 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         course_lesson_plan_event_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "lesson_plan", false],
+                      [6, 'lesson_plan', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "events", false],
+                          [6, 'events', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [3, "id", false],
+                              [3, 'id', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -6937,37 +6937,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_lesson_plan_events_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "lesson_plan", false],
+                      [6, 'lesson_plan', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "events", false],
+                          [6, 'events', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -6983,44 +6983,44 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         course_lesson_plan_item_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "lesson_plan", false],
+                      [6, 'lesson_plan', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "items", false],
+                          [6, 'items', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [3, "id", false],
+                              [3, 'id', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -7038,44 +7038,44 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         course_lesson_plan_milestone_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "lesson_plan", false],
+                      [6, 'lesson_plan', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "milestones", false],
+                          [6, 'milestones', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [3, "id", false],
+                              [3, 'id', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -7093,37 +7093,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_lesson_plan_milestones_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "lesson_plan", false],
+                      [6, 'lesson_plan', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "milestones", false],
+                          [6, 'milestones', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -7139,29 +7139,29 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_levels_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "levels", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [6, 'levels', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -7173,44 +7173,44 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         course_material_folder_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "materials", false],
+                      [6, 'materials', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "folders", false],
+                          [6, 'folders', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [3, "id", false],
+                              [3, 'id', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -7228,60 +7228,60 @@ var ROUTES = (function () {
         // function(course_id, folder_id, id, options)
         course_material_folder_material_path: Utils.route(
           [
-            ["course_id", true],
-            ["folder_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['folder_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "materials", false],
+                      [6, 'materials', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "folders", false],
+                          [6, 'folders', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [3, "folder_id", false],
+                              [3, 'folder_id', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "files", false],
+                                  [6, 'files', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [3, "id", false],
+                                      [3, 'id', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -7304,50 +7304,50 @@ var ROUTES = (function () {
         // function(course_id, folder_id, options)
         course_material_folder_materials_path: Utils.route(
           [
-            ["course_id", true],
-            ["folder_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['folder_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "materials", false],
+                      [6, 'materials', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "folders", false],
+                          [6, 'folders', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [3, "folder_id", false],
+                              [3, 'folder_id', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "files", false],
+                                  [6, 'files', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -7367,29 +7367,29 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_object_duplication_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "object_duplication", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [6, 'object_duplication', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -7401,29 +7401,29 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_register_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "register", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [6, 'register', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -7435,37 +7435,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_statistics_staff_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "statistics", false],
+                      [6, 'statistics', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "staff", false],
+                          [6, 'staff', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -7481,37 +7481,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_statistics_student_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "statistics", false],
+                      [6, 'statistics', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "student", false],
+                          [6, 'student', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -7527,53 +7527,53 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_submissions_path: Utils.route(
           [
-            ["course_id", true],
-            ["page", false],
-            ["format", false],
+            ['course_id', true],
+            ['page', false],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "submissions", false],
+                          [6, 'submissions', false],
                           [
                             2,
                             [
                               1,
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "page", false],
-                                  [2, [7, "/", false], [3, "page", false]],
+                                  [6, 'page', false],
+                                  [2, [7, '/', false], [3, 'page', false]],
                                 ],
                               ],
                               false,
                             ],
                             [
                               1,
-                              [2, [8, ".", false], [3, "format", false]],
+                              [2, [8, '.', false], [3, 'format', false]],
                               false,
                             ],
                           ],
@@ -7590,38 +7590,38 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         course_survey_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "surveys", false],
+                      [6, 'surveys', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -7637,51 +7637,51 @@ var ROUTES = (function () {
         // function(course_id, survey_id, id, options)
         course_survey_question_path: Utils.route(
           [
-            ["course_id", true],
-            ["survey_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['survey_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "surveys", false],
+                      [6, 'surveys', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "survey_id", false],
+                          [3, 'survey_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "questions", false],
+                              [6, 'questions', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -7701,44 +7701,44 @@ var ROUTES = (function () {
         // function(course_id, survey_id, options)
         course_survey_questions_path: Utils.route(
           [
-            ["course_id", true],
-            ["survey_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['survey_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "surveys", false],
+                      [6, 'surveys', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "survey_id", false],
+                          [3, 'survey_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "questions", false],
+                              [6, 'questions', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -7756,51 +7756,51 @@ var ROUTES = (function () {
         // function(course_id, survey_id, id, options)
         course_survey_response_path: Utils.route(
           [
-            ["course_id", true],
-            ["survey_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['survey_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "surveys", false],
+                      [6, 'surveys', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "survey_id", false],
+                          [3, 'survey_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "responses", false],
+                              [6, 'responses', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -7820,44 +7820,44 @@ var ROUTES = (function () {
         // function(course_id, survey_id, options)
         course_survey_responses_path: Utils.route(
           [
-            ["course_id", true],
-            ["survey_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['survey_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "surveys", false],
+                      [6, 'surveys', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "survey_id", false],
+                          [3, 'survey_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "responses", false],
+                              [6, 'responses', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -7875,51 +7875,51 @@ var ROUTES = (function () {
         // function(course_id, survey_id, id, options)
         course_survey_section_path: Utils.route(
           [
-            ["course_id", true],
-            ["survey_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['survey_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "surveys", false],
+                      [6, 'surveys', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "survey_id", false],
+                          [3, 'survey_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "sections", false],
+                              [6, 'sections', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -7939,44 +7939,44 @@ var ROUTES = (function () {
         // function(course_id, survey_id, options)
         course_survey_sections_path: Utils.route(
           [
-            ["course_id", true],
-            ["survey_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['survey_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "surveys", false],
+                      [6, 'surveys', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "survey_id", false],
+                          [3, 'survey_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "sections", false],
+                              [6, 'sections', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -7994,29 +7994,29 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_surveys_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "surveys", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [6, 'surveys', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -8028,51 +8028,51 @@ var ROUTES = (function () {
         // function(course_id, topic_id, id, options)
         course_topic_post_path: Utils.route(
           [
-            ["course_id", true],
-            ["topic_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['topic_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "comments", false],
+                      [6, 'comments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "topic_id", false],
+                          [3, 'topic_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "posts", false],
+                              [6, 'posts', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -8092,44 +8092,44 @@ var ROUTES = (function () {
         // function(course_id, topic_id, options)
         course_topic_posts_path: Utils.route(
           [
-            ["course_id", true],
-            ["topic_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['topic_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "comments", false],
+                      [6, 'comments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "topic_id", false],
+                          [3, 'topic_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "posts", false],
+                              [6, 'posts', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -8147,29 +8147,29 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_topics_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "comments", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [6, 'comments', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -8181,38 +8181,38 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         course_user_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "users", false],
+                      [6, 'users', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -8228,51 +8228,51 @@ var ROUTES = (function () {
         // function(course_id, user_id, id, options)
         course_user_experience_points_record_path: Utils.route(
           [
-            ["course_id", true],
-            ["user_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['user_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "users", false],
+                      [6, 'users', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "user_id", false],
+                          [3, 'user_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "experience_points_records", false],
+                              [6, 'experience_points_records', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -8292,44 +8292,44 @@ var ROUTES = (function () {
         // function(course_id, user_id, options)
         course_user_experience_points_records_path: Utils.route(
           [
-            ["course_id", true],
-            ["user_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['user_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "users", false],
+                      [6, 'users', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "user_id", false],
+                          [3, 'user_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "experience_points_records", false],
+                              [6, 'experience_points_records', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -8347,38 +8347,38 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         course_user_invitation_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "user_invitations", false],
+                      [6, 'user_invitations', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -8394,44 +8394,44 @@ var ROUTES = (function () {
         // function(course_id, user_invitation_id, options)
         course_user_invitation_resend_invitation_path: Utils.route(
           [
-            ["course_id", true],
-            ["user_invitation_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['user_invitation_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "user_invitations", false],
+                      [6, 'user_invitations', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "user_invitation_id", false],
+                          [3, 'user_invitation_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "resend_invitation", false],
+                              [6, 'resend_invitation', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -8449,29 +8449,29 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_user_invitations_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "user_invitations", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [6, 'user_invitations', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -8483,38 +8483,38 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         course_user_notification_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "user_notifications", false],
+                      [6, 'user_notifications', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -8530,29 +8530,29 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_user_notifications_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "user_notifications", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [6, 'user_notifications', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -8564,51 +8564,51 @@ var ROUTES = (function () {
         // function(course_id, user_id, id, options)
         course_user_personal_time_path: Utils.route(
           [
-            ["course_id", true],
-            ["user_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['user_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "users", false],
+                      [6, 'users', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "user_id", false],
+                          [3, 'user_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "personal_times", false],
+                              [6, 'personal_times', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -8628,44 +8628,44 @@ var ROUTES = (function () {
         // function(course_id, user_id, options)
         course_user_personal_times_path: Utils.route(
           [
-            ["course_id", true],
-            ["user_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['user_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "users", false],
+                      [6, 'users', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "user_id", false],
+                          [3, 'user_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "personal_times", false],
+                              [6, 'personal_times', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -8683,50 +8683,50 @@ var ROUTES = (function () {
         // function(course_id, user_id, options)
         course_user_personal_times_recompute_path: Utils.route(
           [
-            ["course_id", true],
-            ["user_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['user_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "users", false],
+                      [6, 'users', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "user_id", false],
+                          [3, 'user_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "personal_times", false],
+                              [6, 'personal_times', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "recompute", false],
+                                  [6, 'recompute', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -8746,44 +8746,44 @@ var ROUTES = (function () {
         // function(course_id, user_id, options)
         course_user_video_submissions_path: Utils.route(
           [
-            ["course_id", true],
-            ["user_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['user_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "users", false],
+                      [6, 'users', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "user_id", false],
+                          [3, 'user_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "video_submissions", false],
+                              [6, 'video_submissions', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -8801,29 +8801,29 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_users_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "users", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [6, 'users', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -8835,29 +8835,29 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_users_staff_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "staff", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [6, 'staff', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -8869,29 +8869,29 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_users_students_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "students", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [6, 'students', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -8903,29 +8903,29 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_users_upgrade_to_staff_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "upgrade_to_staff", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [6, 'upgrade_to_staff', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -8937,38 +8937,38 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         course_video_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "videos", false],
+                      [6, 'videos', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -8984,51 +8984,51 @@ var ROUTES = (function () {
         // function(course_id, video_id, id, options)
         course_video_submission_path: Utils.route(
           [
-            ["course_id", true],
-            ["video_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['video_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "videos", false],
+                      [6, 'videos', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "video_id", false],
+                          [3, 'video_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "submissions", false],
+                              [6, 'submissions', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -9048,67 +9048,67 @@ var ROUTES = (function () {
         // function(course_id, video_id, submission_id, id, options)
         course_video_submission_session_path: Utils.route(
           [
-            ["course_id", true],
-            ["video_id", true],
-            ["submission_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['video_id', true],
+            ['submission_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "videos", false],
+                      [6, 'videos', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "video_id", false],
+                          [3, 'video_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "submissions", false],
+                              [6, 'submissions', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "submission_id", false],
+                                  [3, 'submission_id', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "sessions", false],
+                                      [6, 'sessions', false],
                                       [
                                         2,
-                                        [7, "/", false],
+                                        [7, '/', false],
                                         [
                                           2,
-                                          [3, "id", false],
+                                          [3, 'id', false],
                                           [
                                             1,
                                             [
                                               2,
-                                              [8, ".", false],
-                                              [3, "format", false],
+                                              [8, '.', false],
+                                              [3, 'format', false],
                                             ],
                                             false,
                                           ],
@@ -9133,60 +9133,60 @@ var ROUTES = (function () {
         // function(course_id, video_id, submission_id, options)
         course_video_submission_sessions_path: Utils.route(
           [
-            ["course_id", true],
-            ["video_id", true],
-            ["submission_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['video_id', true],
+            ['submission_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "videos", false],
+                      [6, 'videos', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "video_id", false],
+                          [3, 'video_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "submissions", false],
+                              [6, 'submissions', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "submission_id", false],
+                                  [3, 'submission_id', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "sessions", false],
+                                      [6, 'sessions', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -9209,44 +9209,44 @@ var ROUTES = (function () {
         // function(course_id, video_id, options)
         course_video_submissions_path: Utils.route(
           [
-            ["course_id", true],
-            ["video_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['video_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "videos", false],
+                      [6, 'videos', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "video_id", false],
+                          [3, 'video_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "submissions", false],
+                              [6, 'submissions', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -9264,51 +9264,51 @@ var ROUTES = (function () {
         // function(course_id, video_id, id, options)
         course_video_topic_path: Utils.route(
           [
-            ["course_id", true],
-            ["video_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['video_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "videos", false],
+                      [6, 'videos', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "video_id", false],
+                          [3, 'video_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "topics", false],
+                              [6, 'topics', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -9328,44 +9328,44 @@ var ROUTES = (function () {
         // function(course_id, video_id, options)
         course_video_topics_path: Utils.route(
           [
-            ["course_id", true],
-            ["video_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['video_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "videos", false],
+                      [6, 'videos', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "video_id", false],
+                          [3, 'video_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "topics", false],
+                              [6, 'topics', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -9383,29 +9383,29 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_videos_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "videos", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [6, 'videos', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -9417,38 +9417,38 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         course_virtual_classroom_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "virtual_classrooms", false],
+                      [6, 'virtual_classrooms', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -9464,45 +9464,45 @@ var ROUTES = (function () {
         // function(course_id, options)
         course_virtual_classrooms_path: Utils.route(
           [
-            ["course_id", true],
-            ["page", false],
-            ["format", false],
+            ['course_id', true],
+            ['page', false],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "virtual_classrooms", false],
+                      [6, 'virtual_classrooms', false],
                       [
                         2,
                         [
                           1,
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "page", false],
-                              [2, [7, "/", false], [3, "page", false]],
+                              [6, 'page', false],
+                              [2, [7, '/', false], [3, 'page', false]],
                             ],
                           ],
                           false,
                         ],
-                        [1, [2, [8, ".", false], [3, "format", false]], false],
+                        [1, [2, [8, '.', false], [3, 'format', false]], false],
                       ],
                     ],
                   ],
@@ -9513,72 +9513,72 @@ var ROUTES = (function () {
         ),
         // courses => /courses(.:format)
         // function(options)
-        courses_path: Utils.route([["format", false]], {}, [
+        courses_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "courses", false],
-            [1, [2, [8, ".", false], [3, "format", false]], false],
+            [6, 'courses', false],
+            [1, [2, [8, '.', false], [3, 'format', false]], false],
           ],
         ]),
         // create_subfolder_course_material_folder => /courses/:course_id/materials/folders/:id/create/subfolder(.:format)
         // function(course_id, id, options)
         create_subfolder_course_material_folder_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "materials", false],
+                      [6, 'materials', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "folders", false],
+                          [6, 'folders', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [3, "id", false],
+                              [3, 'id', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "create", false],
+                                  [6, 'create', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "subfolder", false],
+                                      [6, 'subfolder', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -9601,37 +9601,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         data_course_object_duplication_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "object_duplication", false],
+                      [6, 'object_duplication', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "data", false],
+                          [6, 'data', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -9645,19 +9645,19 @@ var ROUTES = (function () {
         ),
         // destroy_user_session => /users/sign_out(.:format)
         // function(options)
-        destroy_user_session_path: Utils.route([["format", false]], {}, [
+        destroy_user_session_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "users", false],
+            [6, 'users', false],
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "sign_out", false],
-                [1, [2, [8, ".", false], [3, "format", false]], false],
+                [6, 'sign_out', false],
+                [1, [2, [8, '.', false], [3, 'format', false]], false],
               ],
             ],
           ],
@@ -9666,37 +9666,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         disburse_experience_points_course_users_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "users", false],
+                      [6, 'users', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "disburse_experience_points", false],
+                          [6, 'disburse_experience_points', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -9712,50 +9712,50 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, options)
         download_all_course_assessment_submissions_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "submissions", false],
+                              [6, 'submissions', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "download_all", false],
+                                  [6, 'download_all', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -9776,98 +9776,98 @@ var ROUTES = (function () {
         download_course_assessment_submission_answer_programming_file_path:
           Utils.route(
             [
-              ["course_id", true],
-              ["assessment_id", true],
-              ["submission_id", true],
-              ["answer_id", true],
-              ["id", true],
-              ["format", false],
+              ['course_id', true],
+              ['assessment_id', true],
+              ['submission_id', true],
+              ['answer_id', true],
+              ['id', true],
+              ['format', false],
             ],
             {},
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "courses", false],
+                [6, 'courses', false],
                 [
                   2,
-                  [7, "/", false],
+                  [7, '/', false],
                   [
                     2,
-                    [3, "course_id", false],
+                    [3, 'course_id', false],
                     [
                       2,
-                      [7, "/", false],
+                      [7, '/', false],
                       [
                         2,
-                        [6, "assessments", false],
+                        [6, 'assessments', false],
                         [
                           2,
-                          [7, "/", false],
+                          [7, '/', false],
                           [
                             2,
-                            [3, "assessment_id", false],
+                            [3, 'assessment_id', false],
                             [
                               2,
-                              [7, "/", false],
+                              [7, '/', false],
                               [
                                 2,
-                                [6, "submissions", false],
+                                [6, 'submissions', false],
                                 [
                                   2,
-                                  [7, "/", false],
+                                  [7, '/', false],
                                   [
                                     2,
-                                    [3, "submission_id", false],
+                                    [3, 'submission_id', false],
                                     [
                                       2,
-                                      [7, "/", false],
+                                      [7, '/', false],
                                       [
                                         2,
-                                        [6, "answers", false],
+                                        [6, 'answers', false],
                                         [
                                           2,
-                                          [7, "/", false],
+                                          [7, '/', false],
                                           [
                                             2,
-                                            [3, "answer_id", false],
+                                            [3, 'answer_id', false],
                                             [
                                               2,
-                                              [7, "/", false],
+                                              [7, '/', false],
                                               [
                                                 2,
-                                                [6, "programming", false],
+                                                [6, 'programming', false],
                                                 [
                                                   2,
-                                                  [7, "/", false],
+                                                  [7, '/', false],
                                                   [
                                                     2,
-                                                    [6, "files", false],
+                                                    [6, 'files', false],
                                                     [
                                                       2,
-                                                      [7, "/", false],
+                                                      [7, '/', false],
                                                       [
                                                         2,
-                                                        [3, "id", false],
+                                                        [3, 'id', false],
                                                         [
                                                           2,
-                                                          [7, "/", false],
+                                                          [7, '/', false],
                                                           [
                                                             2,
                                                             [
                                                               6,
-                                                              "download",
+                                                              'download',
                                                               false,
                                                             ],
                                                             [
                                                               1,
                                                               [
                                                                 2,
-                                                                [8, ".", false],
+                                                                [8, '.', false],
                                                                 [
                                                                   3,
-                                                                  "format",
+                                                                  'format',
                                                                   false,
                                                                 ],
                                                               ],
@@ -9902,50 +9902,50 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         download_course_material_folder_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "materials", false],
+                      [6, 'materials', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "folders", false],
+                          [6, 'folders', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [3, "id", false],
+                              [3, 'id', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "download", false],
+                                  [6, 'download', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -9965,44 +9965,44 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         download_course_survey_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "surveys", false],
+                      [6, 'surveys', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "download", false],
+                              [6, 'download', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -10020,50 +10020,50 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, options)
         download_statistics_course_assessment_submissions_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "submissions", false],
+                              [6, 'submissions', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "download_statistics", false],
+                                  [6, 'download_statistics', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -10083,71 +10083,71 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, id, destination_assessment_id, options)
         duplicate_course_assessment_question_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["id", true],
-            ["destination_assessment_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['id', true],
+            ['destination_assessment_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "questions", false],
+                              [6, 'questions', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "duplicate", false],
+                                      [6, 'duplicate', false],
                                       [
                                         2,
-                                        [7, "/", false],
+                                        [7, '/', false],
                                         [
                                           2,
                                           [
                                             3,
-                                            "destination_assessment_id",
+                                            'destination_assessment_id',
                                             false,
                                           ],
                                           [
                                             1,
                                             [
                                               2,
-                                              [8, ".", false],
-                                              [3, "format", false],
+                                              [8, '.', false],
+                                              [3, 'format', false],
                                             ],
                                             false,
                                           ],
@@ -10172,37 +10172,37 @@ var ROUTES = (function () {
         // function(id, options)
         edit_admin_announcement_path: Utils.route(
           [
-            ["id", true],
-            ["format", false],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "admin", false],
+              [6, 'admin', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "announcements", false],
+                  [6, 'announcements', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [3, "id", false],
+                      [3, 'id', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "edit", false],
+                          [6, 'edit', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -10218,37 +10218,37 @@ var ROUTES = (function () {
         // function(id, options)
         edit_admin_instance_path: Utils.route(
           [
-            ["id", true],
-            ["format", false],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "admin", false],
+              [6, 'admin', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "instances", false],
+                  [6, 'instances', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [3, "id", false],
+                      [3, 'id', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "edit", false],
+                          [6, 'edit', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -10264,43 +10264,43 @@ var ROUTES = (function () {
         // function(id, options)
         edit_admin_instance_announcement_path: Utils.route(
           [
-            ["id", true],
-            ["format", false],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "admin", false],
+              [6, 'admin', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "instance", false],
+                  [6, 'instance', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "announcements", false],
+                      [6, 'announcements', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "edit", false],
+                              [6, 'edit', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -10318,43 +10318,43 @@ var ROUTES = (function () {
         // function(id, options)
         edit_admin_instance_user_path: Utils.route(
           [
-            ["id", true],
-            ["format", false],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "admin", false],
+              [6, 'admin', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "instance", false],
+                  [6, 'instance', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "users", false],
+                      [6, 'users', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "edit", false],
+                              [6, 'edit', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -10372,44 +10372,44 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         edit_course_achievement_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "achievements", false],
+                      [6, 'achievements', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "edit", false],
+                              [6, 'edit', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -10427,66 +10427,66 @@ var ROUTES = (function () {
         // function(course_id, achievement_id, id, options)
         edit_course_achievement_condition_achievement_path: Utils.route(
           [
-            ["course_id", true],
-            ["achievement_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['achievement_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "achievements", false],
+                      [6, 'achievements', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "achievement_id", false],
+                          [3, 'achievement_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "condition", false],
+                              [6, 'condition', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "achievements", false],
+                                  [6, 'achievements', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [3, "id", false],
+                                      [3, 'id', false],
                                       [
                                         2,
-                                        [7, "/", false],
+                                        [7, '/', false],
                                         [
                                           2,
-                                          [6, "edit", false],
+                                          [6, 'edit', false],
                                           [
                                             1,
                                             [
                                               2,
-                                              [8, ".", false],
-                                              [3, "format", false],
+                                              [8, '.', false],
+                                              [3, 'format', false],
                                             ],
                                             false,
                                           ],
@@ -10511,66 +10511,66 @@ var ROUTES = (function () {
         // function(course_id, achievement_id, id, options)
         edit_course_achievement_condition_assessment_path: Utils.route(
           [
-            ["course_id", true],
-            ["achievement_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['achievement_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "achievements", false],
+                      [6, 'achievements', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "achievement_id", false],
+                          [3, 'achievement_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "condition", false],
+                              [6, 'condition', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "assessments", false],
+                                  [6, 'assessments', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [3, "id", false],
+                                      [3, 'id', false],
                                       [
                                         2,
-                                        [7, "/", false],
+                                        [7, '/', false],
                                         [
                                           2,
-                                          [6, "edit", false],
+                                          [6, 'edit', false],
                                           [
                                             1,
                                             [
                                               2,
-                                              [8, ".", false],
-                                              [3, "format", false],
+                                              [8, '.', false],
+                                              [3, 'format', false],
                                             ],
                                             false,
                                           ],
@@ -10595,66 +10595,66 @@ var ROUTES = (function () {
         // function(course_id, achievement_id, id, options)
         edit_course_achievement_condition_level_path: Utils.route(
           [
-            ["course_id", true],
-            ["achievement_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['achievement_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "achievements", false],
+                      [6, 'achievements', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "achievement_id", false],
+                          [3, 'achievement_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "condition", false],
+                              [6, 'condition', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "levels", false],
+                                  [6, 'levels', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [3, "id", false],
+                                      [3, 'id', false],
                                       [
                                         2,
-                                        [7, "/", false],
+                                        [7, '/', false],
                                         [
                                           2,
-                                          [6, "edit", false],
+                                          [6, 'edit', false],
                                           [
                                             1,
                                             [
                                               2,
-                                              [8, ".", false],
-                                              [3, "format", false],
+                                              [8, '.', false],
+                                              [3, 'format', false],
                                             ],
                                             false,
                                           ],
@@ -10679,44 +10679,44 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         edit_course_announcement_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "announcements", false],
+                      [6, 'announcements', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "edit", false],
+                              [6, 'edit', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -10734,44 +10734,44 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         edit_course_assessment_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "edit", false],
+                              [6, 'edit', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -10789,66 +10789,66 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, id, options)
         edit_course_assessment_condition_achievement_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "condition", false],
+                              [6, 'condition', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "achievements", false],
+                                  [6, 'achievements', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [3, "id", false],
+                                      [3, 'id', false],
                                       [
                                         2,
-                                        [7, "/", false],
+                                        [7, '/', false],
                                         [
                                           2,
-                                          [6, "edit", false],
+                                          [6, 'edit', false],
                                           [
                                             1,
                                             [
                                               2,
-                                              [8, ".", false],
-                                              [3, "format", false],
+                                              [8, '.', false],
+                                              [3, 'format', false],
                                             ],
                                             false,
                                           ],
@@ -10873,66 +10873,66 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, id, options)
         edit_course_assessment_condition_assessment_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "condition", false],
+                              [6, 'condition', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "assessments", false],
+                                  [6, 'assessments', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [3, "id", false],
+                                      [3, 'id', false],
                                       [
                                         2,
-                                        [7, "/", false],
+                                        [7, '/', false],
                                         [
                                           2,
-                                          [6, "edit", false],
+                                          [6, 'edit', false],
                                           [
                                             1,
                                             [
                                               2,
-                                              [8, ".", false],
-                                              [3, "format", false],
+                                              [8, '.', false],
+                                              [3, 'format', false],
                                             ],
                                             false,
                                           ],
@@ -10957,66 +10957,66 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, id, options)
         edit_course_assessment_condition_level_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "condition", false],
+                              [6, 'condition', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "levels", false],
+                                  [6, 'levels', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [3, "id", false],
+                                      [3, 'id', false],
                                       [
                                         2,
-                                        [7, "/", false],
+                                        [7, '/', false],
                                         [
                                           2,
-                                          [6, "edit", false],
+                                          [6, 'edit', false],
                                           [
                                             1,
                                             [
                                               2,
-                                              [8, ".", false],
-                                              [3, "format", false],
+                                              [8, '.', false],
+                                              [3, 'format', false],
                                             ],
                                             false,
                                           ],
@@ -11041,60 +11041,60 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, id, options)
         edit_course_assessment_question_bundle_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question_bundles", false],
+                              [6, 'question_bundles', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "edit", false],
+                                      [6, 'edit', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -11117,60 +11117,60 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, id, options)
         edit_course_assessment_question_bundle_assignment_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question_bundle_assignments", false],
+                              [6, 'question_bundle_assignments', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "edit", false],
+                                      [6, 'edit', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -11193,60 +11193,60 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, id, options)
         edit_course_assessment_question_bundle_question_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question_bundle_questions", false],
+                              [6, 'question_bundle_questions', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "edit", false],
+                                      [6, 'edit', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -11269,60 +11269,60 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, id, options)
         edit_course_assessment_question_group_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question_groups", false],
+                              [6, 'question_groups', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "edit", false],
+                                      [6, 'edit', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -11345,66 +11345,66 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, id, options)
         edit_course_assessment_question_multiple_response_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question", false],
+                              [6, 'question', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "multiple_responses", false],
+                                  [6, 'multiple_responses', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [3, "id", false],
+                                      [3, 'id', false],
                                       [
                                         2,
-                                        [7, "/", false],
+                                        [7, '/', false],
                                         [
                                           2,
-                                          [6, "edit", false],
+                                          [6, 'edit', false],
                                           [
                                             1,
                                             [
                                               2,
-                                              [8, ".", false],
-                                              [3, "format", false],
+                                              [8, '.', false],
+                                              [3, 'format', false],
                                             ],
                                             false,
                                           ],
@@ -11429,66 +11429,66 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, id, options)
         edit_course_assessment_question_programming_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question", false],
+                              [6, 'question', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "programming", false],
+                                  [6, 'programming', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [3, "id", false],
+                                      [3, 'id', false],
                                       [
                                         2,
-                                        [7, "/", false],
+                                        [7, '/', false],
                                         [
                                           2,
-                                          [6, "edit", false],
+                                          [6, 'edit', false],
                                           [
                                             1,
                                             [
                                               2,
-                                              [8, ".", false],
-                                              [3, "format", false],
+                                              [8, '.', false],
+                                              [3, 'format', false],
                                             ],
                                             false,
                                           ],
@@ -11513,66 +11513,66 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, id, options)
         edit_course_assessment_question_scribing_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question", false],
+                              [6, 'question', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "scribing", false],
+                                  [6, 'scribing', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [3, "id", false],
+                                      [3, 'id', false],
                                       [
                                         2,
-                                        [7, "/", false],
+                                        [7, '/', false],
                                         [
                                           2,
-                                          [6, "edit", false],
+                                          [6, 'edit', false],
                                           [
                                             1,
                                             [
                                               2,
-                                              [8, ".", false],
-                                              [3, "format", false],
+                                              [8, '.', false],
+                                              [3, 'format', false],
                                             ],
                                             false,
                                           ],
@@ -11597,66 +11597,66 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, id, options)
         edit_course_assessment_question_text_response_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question", false],
+                              [6, 'question', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "text_responses", false],
+                                  [6, 'text_responses', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [3, "id", false],
+                                      [3, 'id', false],
                                       [
                                         2,
-                                        [7, "/", false],
+                                        [7, '/', false],
                                         [
                                           2,
-                                          [6, "edit", false],
+                                          [6, 'edit', false],
                                           [
                                             1,
                                             [
                                               2,
-                                              [8, ".", false],
-                                              [3, "format", false],
+                                              [8, '.', false],
+                                              [3, 'format', false],
                                             ],
                                             false,
                                           ],
@@ -11681,66 +11681,66 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, id, options)
         edit_course_assessment_question_voice_response_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question", false],
+                              [6, 'question', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "voice_responses", false],
+                                  [6, 'voice_responses', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [3, "id", false],
+                                      [3, 'id', false],
                                       [
                                         2,
-                                        [7, "/", false],
+                                        [7, '/', false],
                                         [
                                           2,
-                                          [6, "edit", false],
+                                          [6, 'edit', false],
                                           [
                                             1,
                                             [
                                               2,
-                                              [8, ".", false],
-                                              [3, "format", false],
+                                              [8, '.', false],
+                                              [3, 'format', false],
                                             ],
                                             false,
                                           ],
@@ -11765,60 +11765,60 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, id, options)
         edit_course_assessment_submission_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "submissions", false],
+                              [6, 'submissions', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "edit", false],
+                                      [6, 'edit', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -11841,50 +11841,50 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         edit_course_assessments_skill_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "skills", false],
+                          [6, 'skills', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [3, "id", false],
+                              [3, 'id', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "edit", false],
+                                  [6, 'edit', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -11904,50 +11904,50 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         edit_course_assessments_skill_branch_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "skill_branches", false],
+                          [6, 'skill_branches', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [3, "id", false],
+                              [3, 'id', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "edit", false],
+                                  [6, 'edit', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -11967,44 +11967,44 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         edit_course_forum_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "forums", false],
+                      [6, 'forums', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "edit", false],
+                              [6, 'edit', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -12022,60 +12022,60 @@ var ROUTES = (function () {
         // function(course_id, forum_id, id, options)
         edit_course_forum_topic_path: Utils.route(
           [
-            ["course_id", true],
-            ["forum_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['forum_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "forums", false],
+                      [6, 'forums', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "forum_id", false],
+                          [3, 'forum_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "topics", false],
+                              [6, 'topics', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "edit", false],
+                                      [6, 'edit', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -12098,73 +12098,73 @@ var ROUTES = (function () {
         // function(course_id, forum_id, topic_id, id, options)
         edit_course_forum_topic_post_path: Utils.route(
           [
-            ["course_id", true],
-            ["forum_id", true],
-            ["topic_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['forum_id', true],
+            ['topic_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "forums", false],
+                      [6, 'forums', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "forum_id", false],
+                          [3, 'forum_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "topics", false],
+                              [6, 'topics', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "topic_id", false],
+                                  [3, 'topic_id', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "posts", false],
+                                      [6, 'posts', false],
                                       [
                                         2,
-                                        [7, "/", false],
+                                        [7, '/', false],
                                         [
                                           2,
-                                          [3, "id", false],
+                                          [3, 'id', false],
                                           [
                                             2,
-                                            [7, "/", false],
+                                            [7, '/', false],
                                             [
                                               2,
-                                              [6, "edit", false],
+                                              [6, 'edit', false],
                                               [
                                                 1,
                                                 [
                                                   2,
-                                                  [8, ".", false],
-                                                  [3, "format", false],
+                                                  [8, '.', false],
+                                                  [3, 'format', false],
                                                 ],
                                                 false,
                                               ],
@@ -12191,44 +12191,44 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         edit_course_group_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "groups", false],
+                      [6, 'groups', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "edit", false],
+                              [6, 'edit', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -12246,50 +12246,50 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         edit_course_material_folder_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "materials", false],
+                      [6, 'materials', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "folders", false],
+                          [6, 'folders', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [3, "id", false],
+                              [3, 'id', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "edit", false],
+                                  [6, 'edit', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -12309,66 +12309,66 @@ var ROUTES = (function () {
         // function(course_id, folder_id, id, options)
         edit_course_material_folder_material_path: Utils.route(
           [
-            ["course_id", true],
-            ["folder_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['folder_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "materials", false],
+                      [6, 'materials', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "folders", false],
+                          [6, 'folders', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [3, "folder_id", false],
+                              [3, 'folder_id', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "files", false],
+                                  [6, 'files', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [3, "id", false],
+                                      [3, 'id', false],
                                       [
                                         2,
-                                        [7, "/", false],
+                                        [7, '/', false],
                                         [
                                           2,
-                                          [6, "edit", false],
+                                          [6, 'edit', false],
                                           [
                                             1,
                                             [
                                               2,
-                                              [8, ".", false],
-                                              [3, "format", false],
+                                              [8, '.', false],
+                                              [3, 'format', false],
                                             ],
                                             false,
                                           ],
@@ -12393,60 +12393,60 @@ var ROUTES = (function () {
         // function(course_id, survey_id, id, options)
         edit_course_survey_response_path: Utils.route(
           [
-            ["course_id", true],
-            ["survey_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['survey_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "surveys", false],
+                      [6, 'surveys', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "survey_id", false],
+                          [3, 'survey_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "responses", false],
+                              [6, 'responses', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "edit", false],
+                                      [6, 'edit', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -12469,44 +12469,44 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         edit_course_user_notification_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "user_notifications", false],
+                      [6, 'user_notifications', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "edit", false],
+                              [6, 'edit', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -12524,44 +12524,44 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         edit_course_video_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "videos", false],
+                      [6, 'videos', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "edit", false],
+                              [6, 'edit', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -12579,60 +12579,60 @@ var ROUTES = (function () {
         // function(course_id, video_id, id, options)
         edit_course_video_submission_path: Utils.route(
           [
-            ["course_id", true],
-            ["video_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['video_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "videos", false],
+                      [6, 'videos', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "video_id", false],
+                          [3, 'video_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "submissions", false],
+                              [6, 'submissions', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "edit", false],
+                                      [6, 'edit', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -12655,44 +12655,44 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         edit_course_virtual_classroom_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "virtual_classrooms", false],
+                      [6, 'virtual_classrooms', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "edit", false],
+                              [6, 'edit', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -12710,29 +12710,29 @@ var ROUTES = (function () {
         // function(id, options)
         edit_instance_user_role_request_path: Utils.route(
           [
-            ["id", true],
-            ["format", false],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "role_requests", false],
+              [6, 'role_requests', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "id", false],
+                  [3, 'id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "edit", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [6, 'edit', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -12744,49 +12744,49 @@ var ROUTES = (function () {
         // function(id, options)
         edit_rails_conductor_inbound_email_path: Utils.route(
           [
-            ["id", true],
-            ["format", false],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "rails", false],
+              [6, 'rails', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "conductor", false],
+                  [6, 'conductor', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "action_mailbox", false],
+                      [6, 'action_mailbox', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "inbound_emails", false],
+                          [6, 'inbound_emails', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [3, "id", false],
+                              [3, 'id', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "edit", false],
+                                  [6, 'edit', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -12804,25 +12804,25 @@ var ROUTES = (function () {
         ),
         // edit_user_password => /users/password/edit(.:format)
         // function(options)
-        edit_user_password_path: Utils.route([["format", false]], {}, [
+        edit_user_password_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "users", false],
+            [6, 'users', false],
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "password", false],
+                [6, 'password', false],
                 [
                   2,
-                  [7, "/", false],
+                  [7, '/', false],
                   [
                     2,
-                    [6, "edit", false],
-                    [1, [2, [8, ".", false], [3, "format", false]], false],
+                    [6, 'edit', false],
+                    [1, [2, [8, '.', false], [3, 'format', false]], false],
                   ],
                 ],
               ],
@@ -12831,25 +12831,25 @@ var ROUTES = (function () {
         ]),
         // edit_user_profile => /user/profile/edit(.:format)
         // function(options)
-        edit_user_profile_path: Utils.route([["format", false]], {}, [
+        edit_user_profile_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "user", false],
+            [6, 'user', false],
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "profile", false],
+                [6, 'profile', false],
                 [
                   2,
-                  [7, "/", false],
+                  [7, '/', false],
                   [
                     2,
-                    [6, "edit", false],
-                    [1, [2, [8, ".", false], [3, "format", false]], false],
+                    [6, 'edit', false],
+                    [1, [2, [8, '.', false], [3, 'format', false]], false],
                   ],
                 ],
               ],
@@ -12858,19 +12858,19 @@ var ROUTES = (function () {
         ]),
         // edit_user_registration => /users/edit(.:format)
         // function(options)
-        edit_user_registration_path: Utils.route([["format", false]], {}, [
+        edit_user_registration_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "users", false],
+            [6, 'users', false],
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "edit", false],
-                [1, [2, [8, ".", false], [3, "format", false]], false],
+                [6, 'edit', false],
+                [1, [2, [8, '.', false], [3, 'format', false]], false],
               ],
             ],
           ],
@@ -12879,37 +12879,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         fetch_course_user_notifications_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "user_notifications", false],
+                      [6, 'user_notifications', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "fetch", false],
+                          [6, 'fetch', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -12925,37 +12925,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         forum_disbursement_course_users_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "users", false],
+                      [6, 'users', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "forum_disbursement", false],
+                          [6, 'forum_disbursement', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -12971,37 +12971,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         group_course_leaderboard_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "leaderboard", false],
+                      [6, 'leaderboard', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "groups", false],
+                          [6, 'groups', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -13017,60 +13017,60 @@ var ROUTES = (function () {
         // function(course_id, forum_id, id, options)
         hidden_course_forum_topic_path: Utils.route(
           [
-            ["course_id", true],
-            ["forum_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['forum_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "forums", false],
+                      [6, 'forums', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "forum_id", false],
+                          [3, 'forum_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "topics", false],
+                              [6, 'topics', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "hidden", false],
+                                      [6, 'hidden', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -13091,63 +13091,63 @@ var ROUTES = (function () {
         ),
         // home => /home(.:format)
         // function(options)
-        home_path: Utils.route([["format", false]], {}, [
+        home_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "home", false],
-            [1, [2, [8, ".", false], [3, "format", false]], false],
+            [6, 'home', false],
+            [1, [2, [8, '.', false], [3, 'format', false]], false],
           ],
         ]),
         // ignore_course_lesson_plan_todo => /courses/:course_id/lesson_plan/todos/:id/ignore(.:format)
         // function(course_id, id, options)
         ignore_course_lesson_plan_todo_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "lesson_plan", false],
+                      [6, 'lesson_plan', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "todos", false],
+                          [6, 'todos', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [3, "id", false],
+                              [3, 'id', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "ignore", false],
+                                  [6, 'ignore', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -13167,23 +13167,23 @@ var ROUTES = (function () {
         // function(id, options)
         instance_user_role_request_path: Utils.route(
           [
-            ["id", true],
-            ["format", false],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "role_requests", false],
+              [6, 'role_requests', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "id", false],
-                  [1, [2, [8, ".", false], [3, "format", false]], false],
+                  [3, 'id', false],
+                  [1, [2, [8, '.', false], [3, 'format', false]], false],
                 ],
               ],
             ],
@@ -13191,42 +13191,42 @@ var ROUTES = (function () {
         ),
         // instance_user_role_requests => /role_requests(.:format)
         // function(options)
-        instance_user_role_requests_path: Utils.route([["format", false]], {}, [
+        instance_user_role_requests_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "role_requests", false],
-            [1, [2, [8, ".", false], [3, "format", false]], false],
+            [6, 'role_requests', false],
+            [1, [2, [8, '.', false], [3, 'format', false]], false],
           ],
         ]),
         // invite_admin_instance_users => /admin/instance/users/invite(.:format)
         // function(options)
-        invite_admin_instance_users_path: Utils.route([["format", false]], {}, [
+        invite_admin_instance_users_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "admin", false],
+            [6, 'admin', false],
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "instance", false],
+                [6, 'instance', false],
                 [
                   2,
-                  [7, "/", false],
+                  [7, '/', false],
                   [
                     2,
-                    [6, "users", false],
+                    [6, 'users', false],
                     [
                       2,
-                      [7, "/", false],
+                      [7, '/', false],
                       [
                         2,
-                        [6, "invite", false],
-                        [1, [2, [8, ".", false], [3, "format", false]], false],
+                        [6, 'invite', false],
+                        [1, [2, [8, '.', false], [3, 'format', false]], false],
                       ],
                     ],
                   ],
@@ -13239,37 +13239,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         invite_course_users_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "users", false],
+                      [6, 'users', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "invite", false],
+                          [6, 'invite', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -13285,23 +13285,23 @@ var ROUTES = (function () {
         // function(id, options)
         job_path: Utils.route(
           [
-            ["id", true],
-            ["format", false],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "jobs", false],
+              [6, 'jobs', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "id", false],
-                  [1, [2, [8, ".", false], [3, "format", false]], false],
+                  [3, 'id', false],
+                  [1, [2, [8, '.', false], [3, 'format', false]], false],
                 ],
               ],
             ],
@@ -13311,60 +13311,60 @@ var ROUTES = (function () {
         // function(course_id, forum_id, id, options)
         locked_course_forum_topic_path: Utils.route(
           [
-            ["course_id", true],
-            ["forum_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['forum_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "forums", false],
+                      [6, 'forums', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "forum_id", false],
+                          [3, 'forum_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "topics", false],
+                              [6, 'topics', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "locked", false],
+                                      [6, 'locked', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -13387,37 +13387,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         mark_all_as_read_course_forums_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "forums", false],
+                      [6, 'forums', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "mark_all_as_read", false],
+                          [6, 'mark_all_as_read', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -13433,44 +13433,44 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         mark_as_read_course_forum_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "forums", false],
+                      [6, 'forums', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "mark_as_read", false],
+                              [6, 'mark_as_read', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -13488,44 +13488,44 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         mark_as_read_course_topic_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "comments", false],
+                      [6, 'comments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "mark_as_read", false],
+                              [6, 'mark_as_read', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -13543,44 +13543,44 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         mark_as_read_course_user_notification_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "user_notifications", false],
+                      [6, 'user_notifications', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "mark_as_read", false],
+                              [6, 'mark_as_read', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -13598,37 +13598,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         my_students_course_topics_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "comments", false],
+                      [6, 'comments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "my_students", false],
+                          [6, 'my_students', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -13644,37 +13644,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         my_students_pending_course_topics_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "comments", false],
+                      [6, 'comments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "my_students_pending", false],
+                          [6, 'my_students_pending', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -13688,25 +13688,25 @@ var ROUTES = (function () {
         ),
         // new_admin_announcement => /admin/announcements/new(.:format)
         // function(options)
-        new_admin_announcement_path: Utils.route([["format", false]], {}, [
+        new_admin_announcement_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "admin", false],
+            [6, 'admin', false],
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "announcements", false],
+                [6, 'announcements', false],
                 [
                   2,
-                  [7, "/", false],
+                  [7, '/', false],
                   [
                     2,
-                    [6, "new", false],
-                    [1, [2, [8, ".", false], [3, "format", false]], false],
+                    [6, 'new', false],
+                    [1, [2, [8, '.', false], [3, 'format', false]], false],
                   ],
                 ],
               ],
@@ -13715,25 +13715,25 @@ var ROUTES = (function () {
         ]),
         // new_admin_instance => /admin/instances/new(.:format)
         // function(options)
-        new_admin_instance_path: Utils.route([["format", false]], {}, [
+        new_admin_instance_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "admin", false],
+            [6, 'admin', false],
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "instances", false],
+                [6, 'instances', false],
                 [
                   2,
-                  [7, "/", false],
+                  [7, '/', false],
                   [
                     2,
-                    [6, "new", false],
-                    [1, [2, [8, ".", false], [3, "format", false]], false],
+                    [6, 'new', false],
+                    [1, [2, [8, '.', false], [3, 'format', false]], false],
                   ],
                 ],
               ],
@@ -13743,35 +13743,35 @@ var ROUTES = (function () {
         // new_admin_instance_announcement => /admin/instance/announcements/new(.:format)
         // function(options)
         new_admin_instance_announcement_path: Utils.route(
-          [["format", false]],
+          [['format', false]],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "admin", false],
+              [6, 'admin', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "instance", false],
+                  [6, 'instance', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "announcements", false],
+                      [6, 'announcements', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "new", false],
+                          [6, 'new', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -13785,31 +13785,31 @@ var ROUTES = (function () {
         ),
         // new_admin_instance_user => /admin/instance/users/new(.:format)
         // function(options)
-        new_admin_instance_user_path: Utils.route([["format", false]], {}, [
+        new_admin_instance_user_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "admin", false],
+            [6, 'admin', false],
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "instance", false],
+                [6, 'instance', false],
                 [
                   2,
-                  [7, "/", false],
+                  [7, '/', false],
                   [
                     2,
-                    [6, "users", false],
+                    [6, 'users', false],
                     [
                       2,
-                      [7, "/", false],
+                      [7, '/', false],
                       [
                         2,
-                        [6, "new", false],
-                        [1, [2, [8, ".", false], [3, "format", false]], false],
+                        [6, 'new', false],
+                        [1, [2, [8, '.', false], [3, 'format', false]], false],
                       ],
                     ],
                   ],
@@ -13820,19 +13820,19 @@ var ROUTES = (function () {
         ]),
         // new_course => /courses/new(.:format)
         // function(options)
-        new_course_path: Utils.route([["format", false]], {}, [
+        new_course_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "courses", false],
+            [6, 'courses', false],
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "new", false],
-                [1, [2, [8, ".", false], [3, "format", false]], false],
+                [6, 'new', false],
+                [1, [2, [8, '.', false], [3, 'format', false]], false],
               ],
             ],
           ],
@@ -13841,59 +13841,59 @@ var ROUTES = (function () {
         // function(course_id, achievement_id, options)
         new_course_achievement_condition_achievement_path: Utils.route(
           [
-            ["course_id", true],
-            ["achievement_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['achievement_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "achievements", false],
+                      [6, 'achievements', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "achievement_id", false],
+                          [3, 'achievement_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "condition", false],
+                              [6, 'condition', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "achievements", false],
+                                  [6, 'achievements', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "new", false],
+                                      [6, 'new', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -13916,59 +13916,59 @@ var ROUTES = (function () {
         // function(course_id, achievement_id, options)
         new_course_achievement_condition_assessment_path: Utils.route(
           [
-            ["course_id", true],
-            ["achievement_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['achievement_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "achievements", false],
+                      [6, 'achievements', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "achievement_id", false],
+                          [3, 'achievement_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "condition", false],
+                              [6, 'condition', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "assessments", false],
+                                  [6, 'assessments', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "new", false],
+                                      [6, 'new', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -13991,59 +13991,59 @@ var ROUTES = (function () {
         // function(course_id, achievement_id, options)
         new_course_achievement_condition_level_path: Utils.route(
           [
-            ["course_id", true],
-            ["achievement_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['achievement_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "achievements", false],
+                      [6, 'achievements', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "achievement_id", false],
+                          [3, 'achievement_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "condition", false],
+                              [6, 'condition', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "levels", false],
+                                  [6, 'levels', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "new", false],
+                                      [6, 'new', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -14066,49 +14066,49 @@ var ROUTES = (function () {
         // function(course_id, options)
         new_course_admin_assessments_category_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "admin", false],
+                      [6, 'admin', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "assessments", false],
+                          [6, 'assessments', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "categories", false],
+                              [6, 'categories', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "new", false],
+                                  [6, 'new', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -14128,65 +14128,65 @@ var ROUTES = (function () {
         // function(course_id, category_id, options)
         new_course_admin_assessments_category_tab_path: Utils.route(
           [
-            ["course_id", true],
-            ["category_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['category_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "admin", false],
+                      [6, 'admin', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "assessments", false],
+                          [6, 'assessments', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "categories", false],
+                              [6, 'categories', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "category_id", false],
+                                  [3, 'category_id', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "tabs", false],
+                                      [6, 'tabs', false],
                                       [
                                         2,
-                                        [7, "/", false],
+                                        [7, '/', false],
                                         [
                                           2,
-                                          [6, "new", false],
+                                          [6, 'new', false],
                                           [
                                             1,
                                             [
                                               2,
-                                              [8, ".", false],
-                                              [3, "format", false],
+                                              [8, '.', false],
+                                              [3, 'format', false],
                                             ],
                                             false,
                                           ],
@@ -14211,49 +14211,49 @@ var ROUTES = (function () {
         // function(course_id, options)
         new_course_admin_videos_tab_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "admin", false],
+                      [6, 'admin', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "videos", false],
+                          [6, 'videos', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "tabs", false],
+                              [6, 'tabs', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "new", false],
+                                  [6, 'new', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -14273,37 +14273,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         new_course_announcement_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "announcements", false],
+                      [6, 'announcements', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "new", false],
+                          [6, 'new', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -14319,37 +14319,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         new_course_assessment_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "new", false],
+                          [6, 'new', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -14365,59 +14365,59 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, options)
         new_course_assessment_condition_achievement_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "condition", false],
+                              [6, 'condition', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "achievements", false],
+                                  [6, 'achievements', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "new", false],
+                                      [6, 'new', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -14440,59 +14440,59 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, options)
         new_course_assessment_condition_assessment_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "condition", false],
+                              [6, 'condition', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "assessments", false],
+                                  [6, 'assessments', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "new", false],
+                                      [6, 'new', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -14515,59 +14515,59 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, options)
         new_course_assessment_condition_level_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "condition", false],
+                              [6, 'condition', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "levels", false],
+                                  [6, 'levels', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "new", false],
+                                      [6, 'new', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -14590,50 +14590,50 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, options)
         new_course_assessment_question_bundle_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question_bundles", false],
+                              [6, 'question_bundles', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "new", false],
+                                  [6, 'new', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -14653,50 +14653,50 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, options)
         new_course_assessment_question_bundle_question_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question_bundle_questions", false],
+                              [6, 'question_bundle_questions', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "new", false],
+                                  [6, 'new', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -14716,50 +14716,50 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, options)
         new_course_assessment_question_group_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question_groups", false],
+                              [6, 'question_groups', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "new", false],
+                                  [6, 'new', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -14779,59 +14779,59 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, options)
         new_course_assessment_question_multiple_response_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question", false],
+                              [6, 'question', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "multiple_responses", false],
+                                  [6, 'multiple_responses', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "new", false],
+                                      [6, 'new', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -14854,59 +14854,59 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, options)
         new_course_assessment_question_programming_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question", false],
+                              [6, 'question', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "programming", false],
+                                  [6, 'programming', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "new", false],
+                                      [6, 'new', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -14929,59 +14929,59 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, options)
         new_course_assessment_question_scribing_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question", false],
+                              [6, 'question', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "scribing", false],
+                                  [6, 'scribing', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "new", false],
+                                      [6, 'new', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -15004,59 +15004,59 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, options)
         new_course_assessment_question_text_response_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question", false],
+                              [6, 'question', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "text_responses", false],
+                                  [6, 'text_responses', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "new", false],
+                                      [6, 'new', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -15079,59 +15079,59 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, options)
         new_course_assessment_question_voice_response_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "question", false],
+                              [6, 'question', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "voice_responses", false],
+                                  [6, 'voice_responses', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "new", false],
+                                      [6, 'new', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -15154,50 +15154,50 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, options)
         new_course_assessment_session_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "sessions", false],
+                              [6, 'sessions', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "new", false],
+                                  [6, 'new', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -15217,43 +15217,43 @@ var ROUTES = (function () {
         // function(course_id, options)
         new_course_assessments_skill_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "skills", false],
+                          [6, 'skills', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "new", false],
+                              [6, 'new', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -15271,43 +15271,43 @@ var ROUTES = (function () {
         // function(course_id, options)
         new_course_assessments_skill_branch_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "skill_branches", false],
+                          [6, 'skill_branches', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "new", false],
+                              [6, 'new', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -15325,37 +15325,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         new_course_forum_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "forums", false],
+                      [6, 'forums', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "new", false],
+                          [6, 'new', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -15371,50 +15371,50 @@ var ROUTES = (function () {
         // function(course_id, forum_id, options)
         new_course_forum_topic_path: Utils.route(
           [
-            ["course_id", true],
-            ["forum_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['forum_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "forums", false],
+                      [6, 'forums', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "forum_id", false],
+                          [3, 'forum_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "topics", false],
+                              [6, 'topics', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "new", false],
+                                  [6, 'new', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -15434,37 +15434,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         new_course_group_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "groups", false],
+                      [6, 'groups', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "new", false],
+                          [6, 'new', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -15480,59 +15480,59 @@ var ROUTES = (function () {
         // function(course_id, folder_id, options)
         new_course_material_folder_material_path: Utils.route(
           [
-            ["course_id", true],
-            ["folder_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['folder_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "materials", false],
+                      [6, 'materials', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "folders", false],
+                          [6, 'folders', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [3, "folder_id", false],
+                              [3, 'folder_id', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "files", false],
+                                  [6, 'files', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "new", false],
+                                      [6, 'new', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -15555,37 +15555,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         new_course_object_duplication_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "object_duplication", false],
+                      [6, 'object_duplication', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "new", false],
+                          [6, 'new', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -15601,37 +15601,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         new_course_user_invitation_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "user_invitations", false],
+                      [6, 'user_invitations', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "new", false],
+                          [6, 'new', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -15647,37 +15647,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         new_course_user_notification_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "user_notifications", false],
+                      [6, 'user_notifications', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "new", false],
+                          [6, 'new', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -15693,37 +15693,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         new_course_video_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "videos", false],
+                      [6, 'videos', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "new", false],
+                          [6, 'new', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -15739,37 +15739,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         new_course_virtual_classroom_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "virtual_classrooms", false],
+                      [6, 'virtual_classrooms', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "new", false],
+                          [6, 'new', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -15784,21 +15784,21 @@ var ROUTES = (function () {
         // new_instance_user_role_request => /role_requests/new(.:format)
         // function(options)
         new_instance_user_role_request_path: Utils.route(
-          [["format", false]],
+          [['format', false]],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "role_requests", false],
+              [6, 'role_requests', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "new", false],
-                  [1, [2, [8, ".", false], [3, "format", false]], false],
+                  [6, 'new', false],
+                  [1, [2, [8, '.', false], [3, 'format', false]], false],
                 ],
               ],
             ],
@@ -15808,59 +15808,59 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         new_materials_course_material_folder_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "materials", false],
+                      [6, 'materials', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "folders", false],
+                          [6, 'folders', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [3, "id", false],
+                              [3, 'id', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "new", false],
+                                  [6, 'new', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "files", false],
+                                      [6, 'files', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -15882,41 +15882,41 @@ var ROUTES = (function () {
         // new_rails_conductor_inbound_email => /rails/conductor/action_mailbox/inbound_emails/new(.:format)
         // function(options)
         new_rails_conductor_inbound_email_path: Utils.route(
-          [["format", false]],
+          [['format', false]],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "rails", false],
+              [6, 'rails', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "conductor", false],
+                  [6, 'conductor', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "action_mailbox", false],
+                      [6, 'action_mailbox', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "inbound_emails", false],
+                          [6, 'inbound_emails', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "new", false],
+                              [6, 'new', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -15934,59 +15934,59 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         new_subfolder_course_material_folder_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "materials", false],
+                      [6, 'materials', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "folders", false],
+                          [6, 'folders', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [3, "id", false],
+                              [3, 'id', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "new", false],
+                                  [6, 'new', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "subfolder", false],
+                                      [6, 'subfolder', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -16007,25 +16007,25 @@ var ROUTES = (function () {
         ),
         // new_user_confirmation => /users/confirmation/new(.:format)
         // function(options)
-        new_user_confirmation_path: Utils.route([["format", false]], {}, [
+        new_user_confirmation_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "users", false],
+            [6, 'users', false],
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "confirmation", false],
+                [6, 'confirmation', false],
                 [
                   2,
-                  [7, "/", false],
+                  [7, '/', false],
                   [
                     2,
-                    [6, "new", false],
-                    [1, [2, [8, ".", false], [3, "format", false]], false],
+                    [6, 'new', false],
+                    [1, [2, [8, '.', false], [3, 'format', false]], false],
                   ],
                 ],
               ],
@@ -16034,25 +16034,25 @@ var ROUTES = (function () {
         ]),
         // new_user_password => /users/password/new(.:format)
         // function(options)
-        new_user_password_path: Utils.route([["format", false]], {}, [
+        new_user_password_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "users", false],
+            [6, 'users', false],
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "password", false],
+                [6, 'password', false],
                 [
                   2,
-                  [7, "/", false],
+                  [7, '/', false],
                   [
                     2,
-                    [6, "new", false],
-                    [1, [2, [8, ".", false], [3, "format", false]], false],
+                    [6, 'new', false],
+                    [1, [2, [8, '.', false], [3, 'format', false]], false],
                   ],
                 ],
               ],
@@ -16061,38 +16061,38 @@ var ROUTES = (function () {
         ]),
         // new_user_registration => /users/sign_up(.:format)
         // function(options)
-        new_user_registration_path: Utils.route([["format", false]], {}, [
+        new_user_registration_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "users", false],
+            [6, 'users', false],
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "sign_up", false],
-                [1, [2, [8, ".", false], [3, "format", false]], false],
+                [6, 'sign_up', false],
+                [1, [2, [8, '.', false], [3, 'format', false]], false],
               ],
             ],
           ],
         ]),
         // new_user_session => /users/sign_in(.:format)
         // function(options)
-        new_user_session_path: Utils.route([["format", false]], {}, [
+        new_user_session_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "users", false],
+            [6, 'users', false],
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "sign_in", false],
-                [1, [2, [8, ".", false], [3, "format", false]], false],
+                [6, 'sign_in', false],
+                [1, [2, [8, '.', false], [3, 'format', false]], false],
               ],
             ],
           ],
@@ -16101,37 +16101,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         next_unread_course_forums_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "forums", false],
+                      [6, 'forums', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "next_unread", false],
+                          [6, 'next_unread', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -16145,73 +16145,73 @@ var ROUTES = (function () {
         ),
         // page => /pages/*id
         // function(id, options)
-        page_path: Utils.route([["id", true]], {}, [
+        page_path: Utils.route([['id', true]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "pages", false],
-            [2, [7, "/", false], [5, [3, "id", false], false]],
+            [6, 'pages', false],
+            [2, [7, '/', false], [5, [3, 'id', false], false]],
           ],
         ]),
         // past_answers_course_assessment_submission_question => /courses/:course_id/assessments/:assessment_id/submission_questions/:id/past_answers(.:format)
         // function(course_id, assessment_id, id, options)
         past_answers_course_assessment_submission_question_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "submission_questions", false],
+                              [6, 'submission_questions', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "past_answers", false],
+                                      [6, 'past_answers', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -16234,43 +16234,43 @@ var ROUTES = (function () {
         // function(course_id, options)
         pending_course_submissions_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "submissions", false],
+                          [6, 'submissions', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "pending", false],
+                              [6, 'pending', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -16288,37 +16288,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         pending_course_topics_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "comments", false],
+                      [6, 'comments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "pending", false],
+                          [6, 'pending', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -16334,37 +16334,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         personal_times_course_users_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "users", false],
+                      [6, 'users', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "personal_times", false],
+                          [6, 'personal_times', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -16380,50 +16380,50 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, options)
         publish_all_course_assessment_submissions_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "submissions", false],
+                              [6, 'submissions', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "publish_all", false],
+                                  [6, 'publish_all', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -16443,51 +16443,51 @@ var ROUTES = (function () {
         // function(signed_blob_id, variation_key, filename, options)
         rails_blob_representation_path: Utils.route(
           [
-            ["signed_blob_id", true],
-            ["variation_key", true],
-            ["filename", true],
-            ["format", false],
+            ['signed_blob_id', true],
+            ['variation_key', true],
+            ['filename', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "rails", false],
+              [6, 'rails', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "active_storage", false],
+                  [6, 'active_storage', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "representations", false],
+                      [6, 'representations', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "signed_blob_id", false],
+                          [3, 'signed_blob_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [3, "variation_key", false],
+                              [3, 'variation_key', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [5, [3, "filename", false], false],
+                                  [5, [3, 'filename', false], false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -16507,43 +16507,43 @@ var ROUTES = (function () {
         // function(id, options)
         rails_conductor_inbound_email_path: Utils.route(
           [
-            ["id", true],
-            ["format", false],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "rails", false],
+              [6, 'rails', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "conductor", false],
+                  [6, 'conductor', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "action_mailbox", false],
+                      [6, 'action_mailbox', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "inbound_emails", false],
+                          [6, 'inbound_emails', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [3, "id", false],
+                              [3, 'id', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -16561,43 +16561,43 @@ var ROUTES = (function () {
         // function(inbound_email_id, options)
         rails_conductor_inbound_email_reroute_path: Utils.route(
           [
-            ["inbound_email_id", true],
-            ["format", false],
+            ['inbound_email_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "rails", false],
+              [6, 'rails', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "conductor", false],
+                  [6, 'conductor', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "action_mailbox", false],
+                      [6, 'action_mailbox', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "inbound_email_id", false],
+                          [3, 'inbound_email_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "reroute", false],
+                              [6, 'reroute', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -16614,35 +16614,35 @@ var ROUTES = (function () {
         // rails_conductor_inbound_emails => /rails/conductor/action_mailbox/inbound_emails(.:format)
         // function(options)
         rails_conductor_inbound_emails_path: Utils.route(
-          [["format", false]],
+          [['format', false]],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "rails", false],
+              [6, 'rails', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "conductor", false],
+                  [6, 'conductor', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "action_mailbox", false],
+                      [6, 'action_mailbox', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "inbound_emails", false],
+                          [6, 'inbound_emails', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -16656,25 +16656,25 @@ var ROUTES = (function () {
         ),
         // rails_direct_uploads => /rails/active_storage/direct_uploads(.:format)
         // function(options)
-        rails_direct_uploads_path: Utils.route([["format", false]], {}, [
+        rails_direct_uploads_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "rails", false],
+            [6, 'rails', false],
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "active_storage", false],
+                [6, 'active_storage', false],
                 [
                   2,
-                  [7, "/", false],
+                  [7, '/', false],
                   [
                     2,
-                    [6, "direct_uploads", false],
-                    [1, [2, [8, ".", false], [3, "format", false]], false],
+                    [6, 'direct_uploads', false],
+                    [1, [2, [8, '.', false], [3, 'format', false]], false],
                   ],
                 ],
               ],
@@ -16685,44 +16685,44 @@ var ROUTES = (function () {
         // function(encoded_key, filename, options)
         rails_disk_service_path: Utils.route(
           [
-            ["encoded_key", true],
-            ["filename", true],
-            ["format", false],
+            ['encoded_key', true],
+            ['filename', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "rails", false],
+              [6, 'rails', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "active_storage", false],
+                  [6, 'active_storage', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "disk", false],
+                      [6, 'disk', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "encoded_key", false],
+                          [3, 'encoded_key', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [5, [3, "filename", false], false],
+                              [5, [3, 'filename', false], false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -16738,44 +16738,44 @@ var ROUTES = (function () {
         ),
         // rails_info => /rails/info(.:format)
         // function(options)
-        rails_info_path: Utils.route([["format", false]], {}, [
+        rails_info_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "rails", false],
+            [6, 'rails', false],
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "info", false],
-                [1, [2, [8, ".", false], [3, "format", false]], false],
+                [6, 'info', false],
+                [1, [2, [8, '.', false], [3, 'format', false]], false],
               ],
             ],
           ],
         ]),
         // rails_info_properties => /rails/info/properties(.:format)
         // function(options)
-        rails_info_properties_path: Utils.route([["format", false]], {}, [
+        rails_info_properties_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "rails", false],
+            [6, 'rails', false],
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "info", false],
+                [6, 'info', false],
                 [
                   2,
-                  [7, "/", false],
+                  [7, '/', false],
                   [
                     2,
-                    [6, "properties", false],
-                    [1, [2, [8, ".", false], [3, "format", false]], false],
+                    [6, 'properties', false],
+                    [1, [2, [8, '.', false], [3, 'format', false]], false],
                   ],
                 ],
               ],
@@ -16784,25 +16784,25 @@ var ROUTES = (function () {
         ]),
         // rails_info_routes => /rails/info/routes(.:format)
         // function(options)
-        rails_info_routes_path: Utils.route([["format", false]], {}, [
+        rails_info_routes_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "rails", false],
+            [6, 'rails', false],
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "info", false],
+                [6, 'info', false],
                 [
                   2,
-                  [7, "/", false],
+                  [7, '/', false],
                   [
                     2,
-                    [6, "routes", false],
-                    [1, [2, [8, ".", false], [3, "format", false]], false],
+                    [6, 'routes', false],
+                    [1, [2, [8, '.', false], [3, 'format', false]], false],
                   ],
                 ],
               ],
@@ -16811,19 +16811,19 @@ var ROUTES = (function () {
         ]),
         // rails_mailers => /rails/mailers(.:format)
         // function(options)
-        rails_mailers_path: Utils.route([["format", false]], {}, [
+        rails_mailers_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "rails", false],
+            [6, 'rails', false],
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "mailers", false],
-                [1, [2, [8, ".", false], [3, "format", false]], false],
+                [6, 'mailers', false],
+                [1, [2, [8, '.', false], [3, 'format', false]], false],
               ],
             ],
           ],
@@ -16831,41 +16831,41 @@ var ROUTES = (function () {
         // rails_mailgun_inbound_emails => /rails/action_mailbox/mailgun/inbound_emails/mime(.:format)
         // function(options)
         rails_mailgun_inbound_emails_path: Utils.route(
-          [["format", false]],
+          [['format', false]],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "rails", false],
+              [6, 'rails', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "action_mailbox", false],
+                  [6, 'action_mailbox', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "mailgun", false],
+                      [6, 'mailgun', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "inbound_emails", false],
+                          [6, 'inbound_emails', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "mime", false],
+                              [6, 'mime', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -16882,35 +16882,35 @@ var ROUTES = (function () {
         // rails_mandrill_inbound_emails => /rails/action_mailbox/mandrill/inbound_emails(.:format)
         // function(options)
         rails_mandrill_inbound_emails_path: Utils.route(
-          [["format", false]],
+          [['format', false]],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "rails", false],
+              [6, 'rails', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "action_mailbox", false],
+                  [6, 'action_mailbox', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "mandrill", false],
+                      [6, 'mandrill', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "inbound_emails", false],
+                          [6, 'inbound_emails', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -16925,35 +16925,35 @@ var ROUTES = (function () {
         // rails_mandrill_inbound_health_check => /rails/action_mailbox/mandrill/inbound_emails(.:format)
         // function(options)
         rails_mandrill_inbound_health_check_path: Utils.route(
-          [["format", false]],
+          [['format', false]],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "rails", false],
+              [6, 'rails', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "action_mailbox", false],
+                  [6, 'action_mailbox', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "mandrill", false],
+                      [6, 'mandrill', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "inbound_emails", false],
+                          [6, 'inbound_emails', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -16968,35 +16968,35 @@ var ROUTES = (function () {
         // rails_postmark_inbound_emails => /rails/action_mailbox/postmark/inbound_emails(.:format)
         // function(options)
         rails_postmark_inbound_emails_path: Utils.route(
-          [["format", false]],
+          [['format', false]],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "rails", false],
+              [6, 'rails', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "action_mailbox", false],
+                  [6, 'action_mailbox', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "postmark", false],
+                      [6, 'postmark', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "inbound_emails", false],
+                          [6, 'inbound_emails', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -17010,31 +17010,31 @@ var ROUTES = (function () {
         ),
         // rails_relay_inbound_emails => /rails/action_mailbox/relay/inbound_emails(.:format)
         // function(options)
-        rails_relay_inbound_emails_path: Utils.route([["format", false]], {}, [
+        rails_relay_inbound_emails_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "rails", false],
+            [6, 'rails', false],
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "action_mailbox", false],
+                [6, 'action_mailbox', false],
                 [
                   2,
-                  [7, "/", false],
+                  [7, '/', false],
                   [
                     2,
-                    [6, "relay", false],
+                    [6, 'relay', false],
                     [
                       2,
-                      [7, "/", false],
+                      [7, '/', false],
                       [
                         2,
-                        [6, "inbound_emails", false],
-                        [1, [2, [8, ".", false], [3, "format", false]], false],
+                        [6, 'inbound_emails', false],
+                        [1, [2, [8, '.', false], [3, 'format', false]], false],
                       ],
                     ],
                   ],
@@ -17046,35 +17046,35 @@ var ROUTES = (function () {
         // rails_sendgrid_inbound_emails => /rails/action_mailbox/sendgrid/inbound_emails(.:format)
         // function(options)
         rails_sendgrid_inbound_emails_path: Utils.route(
-          [["format", false]],
+          [['format', false]],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "rails", false],
+              [6, 'rails', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "action_mailbox", false],
+                  [6, 'action_mailbox', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "sendgrid", false],
+                      [6, 'sendgrid', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "inbound_emails", false],
+                          [6, 'inbound_emails', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -17090,44 +17090,44 @@ var ROUTES = (function () {
         // function(signed_id, filename, options)
         rails_service_blob_path: Utils.route(
           [
-            ["signed_id", true],
-            ["filename", true],
-            ["format", false],
+            ['signed_id', true],
+            ['filename', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "rails", false],
+              [6, 'rails', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "active_storage", false],
+                  [6, 'active_storage', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "blobs", false],
+                      [6, 'blobs', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "signed_id", false],
+                          [3, 'signed_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [5, [3, "filename", false], false],
+                              [5, [3, 'filename', false], false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -17146,53 +17146,53 @@ var ROUTES = (function () {
         recompute_course_assessment_question_bundle_assignments_path:
           Utils.route(
             [
-              ["course_id", true],
-              ["assessment_id", true],
-              ["format", false],
+              ['course_id', true],
+              ['assessment_id', true],
+              ['format', false],
             ],
             {},
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "courses", false],
+                [6, 'courses', false],
                 [
                   2,
-                  [7, "/", false],
+                  [7, '/', false],
                   [
                     2,
-                    [3, "course_id", false],
+                    [3, 'course_id', false],
                     [
                       2,
-                      [7, "/", false],
+                      [7, '/', false],
                       [
                         2,
-                        [6, "assessments", false],
+                        [6, 'assessments', false],
                         [
                           2,
-                          [7, "/", false],
+                          [7, '/', false],
                           [
                             2,
-                            [3, "assessment_id", false],
+                            [3, 'assessment_id', false],
                             [
                               2,
-                              [7, "/", false],
+                              [7, '/', false],
                               [
                                 2,
-                                [6, "question_bundle_assignments", false],
+                                [6, 'question_bundle_assignments', false],
                                 [
                                   2,
-                                  [7, "/", false],
+                                  [7, '/', false],
                                   [
                                     2,
-                                    [6, "recompute", false],
+                                    [6, 'recompute', false],
                                     [
                                       1,
                                       [
                                         2,
-                                        [8, ".", false],
-                                        [3, "format", false],
+                                        [8, '.', false],
+                                        [3, 'format', false],
                                       ],
                                       false,
                                     ],
@@ -17213,44 +17213,44 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         recorded_videos_course_virtual_classroom_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "virtual_classrooms", false],
+                      [6, 'virtual_classrooms', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "recorded_videos", false],
+                              [6, 'recorded_videos', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -17268,60 +17268,60 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, id, options)
         reload_answer_course_assessment_submission_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "submissions", false],
+                              [6, 'submissions', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "reload_answer", false],
+                                      [6, 'reload_answer', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -17344,44 +17344,44 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         remind_course_survey_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "surveys", false],
+                      [6, 'surveys', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "remind", false],
+                              [6, 'remind', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -17399,37 +17399,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         reorder_course_achievements_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "achievements", false],
+                      [6, 'achievements', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "reorder", false],
+                          [6, 'reorder', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -17445,44 +17445,44 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         reorder_course_assessment_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "reorder", false],
+                              [6, 'reorder', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -17500,44 +17500,44 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         reorder_questions_course_survey_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "surveys", false],
+                      [6, 'surveys', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "reorder_questions", false],
+                              [6, 'reorder_questions', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -17555,44 +17555,44 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         reorder_sections_course_survey_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "surveys", false],
+                      [6, 'surveys', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "reorder_sections", false],
+                              [6, 'reorder_sections', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -17610,73 +17610,73 @@ var ROUTES = (function () {
         // function(course_id, forum_id, topic_id, id, options)
         reply_course_forum_topic_post_path: Utils.route(
           [
-            ["course_id", true],
-            ["forum_id", true],
-            ["topic_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['forum_id', true],
+            ['topic_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "forums", false],
+                      [6, 'forums', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "forum_id", false],
+                          [3, 'forum_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "topics", false],
+                              [6, 'topics', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "topic_id", false],
+                                  [3, 'topic_id', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "posts", false],
+                                      [6, 'posts', false],
                                       [
                                         2,
-                                        [7, "/", false],
+                                        [7, '/', false],
                                         [
                                           2,
-                                          [3, "id", false],
+                                          [3, 'id', false],
                                           [
                                             2,
-                                            [7, "/", false],
+                                            [7, '/', false],
                                             [
                                               2,
-                                              [6, "reply", false],
+                                              [6, 'reply', false],
                                               [
                                                 1,
                                                 [
                                                   2,
-                                                  [8, ".", false],
-                                                  [3, "format", false],
+                                                  [8, '.', false],
+                                                  [3, 'format', false],
                                                 ],
                                                 false,
                                               ],
@@ -17702,35 +17702,35 @@ var ROUTES = (function () {
         // resend_invitations_admin_instance_users => /admin/instance/users/resend_invitations(.:format)
         // function(options)
         resend_invitations_admin_instance_users_path: Utils.route(
-          [["format", false]],
+          [['format', false]],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "admin", false],
+              [6, 'admin', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "instance", false],
+                  [6, 'instance', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "users", false],
+                      [6, 'users', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "resend_invitations", false],
+                          [6, 'resend_invitations', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -17746,37 +17746,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         resend_invitations_course_users_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "users", false],
+                      [6, 'users', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "resend_invitations", false],
+                          [6, 'resend_invitations', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -17792,44 +17792,44 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         results_course_survey_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "surveys", false],
+                      [6, 'surveys', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "results", false],
+                              [6, 'results', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -17845,42 +17845,42 @@ var ROUTES = (function () {
         ),
         // root => /
         // function(options)
-        root_path: Utils.route([], {}, [7, "/", false]),
+        root_path: Utils.route([], {}, [7, '/', false]),
         // search_course_forums => /courses/:course_id/forums/search(.:format)
         // function(course_id, options)
         search_course_forums_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "forums", false],
+                      [6, 'forums', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "search", false],
+                          [6, 'search', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -17896,37 +17896,37 @@ var ROUTES = (function () {
         // function(id, options)
         send_confirmation_user_email_path: Utils.route(
           [
-            ["id", true],
-            ["format", false],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "user", false],
+              [6, 'user', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "emails", false],
+                  [6, 'emails', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [3, "id", false],
+                      [3, 'id', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "send_confirmation", false],
+                          [6, 'send_confirmation', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -17942,37 +17942,37 @@ var ROUTES = (function () {
         // function(id, options)
         set_primary_user_email_path: Utils.route(
           [
-            ["id", true],
-            ["format", false],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "user", false],
+              [6, 'user', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "emails", false],
+                  [6, 'emails', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [3, "id", false],
+                      [3, 'id', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "set_primary", false],
+                          [6, 'set_primary', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -17988,60 +17988,60 @@ var ROUTES = (function () {
         // function(course_id, assessment_id, id, options)
         submit_answer_course_assessment_submission_path: Utils.route(
           [
-            ["course_id", true],
-            ["assessment_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['assessment_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "assessments", false],
+                      [6, 'assessments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "assessment_id", false],
+                          [3, 'assessment_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "submissions", false],
+                              [6, 'submissions', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "submit_answer", false],
+                                      [6, 'submit_answer', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -18064,44 +18064,44 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         subscribe_course_forum_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "forums", false],
+                      [6, 'forums', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "subscribe", false],
+                              [6, 'subscribe', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -18119,60 +18119,60 @@ var ROUTES = (function () {
         // function(course_id, forum_id, id, options)
         subscribe_course_forum_topic_path: Utils.route(
           [
-            ["course_id", true],
-            ["forum_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['forum_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "forums", false],
+                      [6, 'forums', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "forum_id", false],
+                          [3, 'forum_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "topics", false],
+                              [6, 'topics', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "subscribe", false],
+                                      [6, 'subscribe', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -18195,73 +18195,73 @@ var ROUTES = (function () {
         // function(course_id, forum_id, topic_id, id, options)
         toggle_answer_course_forum_topic_post_path: Utils.route(
           [
-            ["course_id", true],
-            ["forum_id", true],
-            ["topic_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['forum_id', true],
+            ['topic_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "forums", false],
+                      [6, 'forums', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "forum_id", false],
+                          [3, 'forum_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "topics", false],
+                              [6, 'topics', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "topic_id", false],
+                                  [3, 'topic_id', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "posts", false],
+                                      [6, 'posts', false],
                                       [
                                         2,
-                                        [7, "/", false],
+                                        [7, '/', false],
                                         [
                                           2,
-                                          [3, "id", false],
+                                          [3, 'id', false],
                                           [
                                             2,
-                                            [7, "/", false],
+                                            [7, '/', false],
                                             [
                                               2,
-                                              [6, "toggle_answer", false],
+                                              [6, 'toggle_answer', false],
                                               [
                                                 1,
                                                 [
                                                   2,
-                                                  [8, ".", false],
-                                                  [3, "format", false],
+                                                  [8, '.', false],
+                                                  [3, 'format', false],
                                                 ],
                                                 false,
                                               ],
@@ -18288,44 +18288,44 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         toggle_pending_course_topic_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "comments", false],
+                      [6, 'comments', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "toggle_pending", false],
+                              [6, 'toggle_pending', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -18343,37 +18343,37 @@ var ROUTES = (function () {
         // function(course_id, options)
         toggle_registration_course_users_path: Utils.route(
           [
-            ["course_id", true],
-            ["format", false],
+            ['course_id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "users", false],
+                      [6, 'users', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "toggle_registration", false],
+                          [6, 'toggle_registration', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -18389,60 +18389,60 @@ var ROUTES = (function () {
         // function(course_id, survey_id, id, options)
         unsubmit_course_survey_response_path: Utils.route(
           [
-            ["course_id", true],
-            ["survey_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['survey_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "surveys", false],
+                      [6, 'surveys', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "survey_id", false],
+                          [3, 'survey_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "responses", false],
+                              [6, 'responses', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "id", false],
+                                  [3, 'id', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "unsubmit", false],
+                                      [6, 'unsubmit', false],
                                       [
                                         1,
                                         [
                                           2,
-                                          [8, ".", false],
-                                          [3, "format", false],
+                                          [8, '.', false],
+                                          [3, 'format', false],
                                         ],
                                         false,
                                       ],
@@ -18465,44 +18465,44 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         unsubscribe_course_forum_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "forums", false],
+                      [6, 'forums', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "id", false],
+                          [3, 'id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "unsubscribe", false],
+                              [6, 'unsubscribe', false],
                               [
                                 1,
-                                [2, [8, ".", false], [3, "format", false]],
+                                [2, [8, '.', false], [3, 'format', false]],
                                 false,
                               ],
                             ],
@@ -18520,37 +18520,37 @@ var ROUTES = (function () {
         // function(encoded_token, options)
         update_rails_disk_service_path: Utils.route(
           [
-            ["encoded_token", true],
-            ["format", false],
+            ['encoded_token', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "rails", false],
+              [6, 'rails', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "active_storage", false],
+                  [6, 'active_storage', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "disk", false],
+                      [6, 'disk', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "encoded_token", false],
+                          [3, 'encoded_token', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -18566,50 +18566,50 @@ var ROUTES = (function () {
         // function(course_id, id, options)
         upload_materials_course_material_folder_path: Utils.route(
           [
-            ["course_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "materials", false],
+                      [6, 'materials', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "folders", false],
+                          [6, 'folders', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [3, "id", false],
+                              [3, 'id', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [6, "upload_materials", false],
+                                  [6, 'upload_materials', false],
                                   [
                                     1,
-                                    [2, [8, ".", false], [3, "format", false]],
+                                    [2, [8, '.', false], [3, 'format', false]],
                                     false,
                                   ],
                                 ],
@@ -18629,23 +18629,23 @@ var ROUTES = (function () {
         // function(id, options)
         user_path: Utils.route(
           [
-            ["id", true],
-            ["format", false],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "users", false],
+              [6, 'users', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "id", false],
-                  [1, [2, [8, ".", false], [3, "format", false]], false],
+                  [3, 'id', false],
+                  [1, [2, [8, '.', false], [3, 'format', false]], false],
                 ],
               ],
             ],
@@ -18653,19 +18653,19 @@ var ROUTES = (function () {
         ),
         // user_confirmation => /users/confirmation(.:format)
         // function(options)
-        user_confirmation_path: Utils.route([["format", false]], {}, [
+        user_confirmation_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "users", false],
+            [6, 'users', false],
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "confirmation", false],
-                [1, [2, [8, ".", false], [3, "format", false]], false],
+                [6, 'confirmation', false],
+                [1, [2, [8, '.', false], [3, 'format', false]], false],
               ],
             ],
           ],
@@ -18674,29 +18674,29 @@ var ROUTES = (function () {
         // function(id, options)
         user_email_path: Utils.route(
           [
-            ["id", true],
-            ["format", false],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "user", false],
+              [6, 'user', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "emails", false],
+                  [6, 'emails', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [3, "id", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [3, 'id', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -18706,19 +18706,19 @@ var ROUTES = (function () {
         ),
         // user_emails => /user/emails(.:format)
         // function(options)
-        user_emails_path: Utils.route([["format", false]], {}, [
+        user_emails_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "user", false],
+            [6, 'user', false],
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "emails", false],
-                [1, [2, [8, ".", false], [3, "format", false]], false],
+                [6, 'emails', false],
+                [1, [2, [8, '.', false], [3, 'format', false]], false],
               ],
             ],
           ],
@@ -18726,27 +18726,27 @@ var ROUTES = (function () {
         // user_facebook_omniauth_authorize => /users/auth/facebook(.:format)
         // function(options)
         user_facebook_omniauth_authorize_path: Utils.route(
-          [["format", false]],
+          [['format', false]],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "users", false],
+              [6, 'users', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "auth", false],
+                  [6, 'auth', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "facebook", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [6, 'facebook', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -18757,35 +18757,35 @@ var ROUTES = (function () {
         // user_facebook_omniauth_callback => /users/auth/facebook/callback(.:format)
         // function(options)
         user_facebook_omniauth_callback_path: Utils.route(
-          [["format", false]],
+          [['format', false]],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "users", false],
+              [6, 'users', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "auth", false],
+                  [6, 'auth', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "facebook", false],
+                      [6, 'facebook', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [6, "callback", false],
+                          [6, 'callback', false],
                           [
                             1,
-                            [2, [8, ".", false], [3, "format", false]],
+                            [2, [8, '.', false], [3, 'format', false]],
                             false,
                           ],
                         ],
@@ -18801,29 +18801,29 @@ var ROUTES = (function () {
         // function(id, options)
         user_masquerade_path: Utils.route(
           [
-            ["id", true],
-            ["format", false],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "users", false],
+              [6, 'users', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [6, "masquerade", false],
+                  [6, 'masquerade', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [3, "id", false],
-                      [1, [2, [8, ".", false], [3, "format", false]], false],
+                      [3, 'id', false],
+                      [1, [2, [8, '.', false], [3, 'format', false]], false],
                     ],
                   ],
                 ],
@@ -18833,68 +18833,68 @@ var ROUTES = (function () {
         ),
         // user_password => /users/password(.:format)
         // function(options)
-        user_password_path: Utils.route([["format", false]], {}, [
+        user_password_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "users", false],
+            [6, 'users', false],
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "password", false],
-                [1, [2, [8, ".", false], [3, "format", false]], false],
+                [6, 'password', false],
+                [1, [2, [8, '.', false], [3, 'format', false]], false],
               ],
             ],
           ],
         ]),
         // user_profile => /user/profile(.:format)
         // function(options)
-        user_profile_path: Utils.route([["format", false]], {}, [
+        user_profile_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "user", false],
+            [6, 'user', false],
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "profile", false],
-                [1, [2, [8, ".", false], [3, "format", false]], false],
+                [6, 'profile', false],
+                [1, [2, [8, '.', false], [3, 'format', false]], false],
               ],
             ],
           ],
         ]),
         // user_registration => /users(.:format)
         // function(options)
-        user_registration_path: Utils.route([["format", false]], {}, [
+        user_registration_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "users", false],
-            [1, [2, [8, ".", false], [3, "format", false]], false],
+            [6, 'users', false],
+            [1, [2, [8, '.', false], [3, 'format', false]], false],
           ],
         ]),
         // user_session => /users/sign_in(.:format)
         // function(options)
-        user_session_path: Utils.route([["format", false]], {}, [
+        user_session_path: Utils.route([['format', false]], {}, [
           2,
-          [7, "/", false],
+          [7, '/', false],
           [
             2,
-            [6, "users", false],
+            [6, 'users', false],
             [
               2,
-              [7, "/", false],
+              [7, '/', false],
               [
                 2,
-                [6, "sign_in", false],
-                [1, [2, [8, ".", false], [3, "format", false]], false],
+                [6, 'sign_in', false],
+                [1, [2, [8, '.', false], [3, 'format', false]], false],
               ],
             ],
           ],
@@ -18903,73 +18903,73 @@ var ROUTES = (function () {
         // function(course_id, forum_id, topic_id, id, options)
         vote_course_forum_topic_post_path: Utils.route(
           [
-            ["course_id", true],
-            ["forum_id", true],
-            ["topic_id", true],
-            ["id", true],
-            ["format", false],
+            ['course_id', true],
+            ['forum_id', true],
+            ['topic_id', true],
+            ['id', true],
+            ['format', false],
           ],
           {},
           [
             2,
-            [7, "/", false],
+            [7, '/', false],
             [
               2,
-              [6, "courses", false],
+              [6, 'courses', false],
               [
                 2,
-                [7, "/", false],
+                [7, '/', false],
                 [
                   2,
-                  [3, "course_id", false],
+                  [3, 'course_id', false],
                   [
                     2,
-                    [7, "/", false],
+                    [7, '/', false],
                     [
                       2,
-                      [6, "forums", false],
+                      [6, 'forums', false],
                       [
                         2,
-                        [7, "/", false],
+                        [7, '/', false],
                         [
                           2,
-                          [3, "forum_id", false],
+                          [3, 'forum_id', false],
                           [
                             2,
-                            [7, "/", false],
+                            [7, '/', false],
                             [
                               2,
-                              [6, "topics", false],
+                              [6, 'topics', false],
                               [
                                 2,
-                                [7, "/", false],
+                                [7, '/', false],
                                 [
                                   2,
-                                  [3, "topic_id", false],
+                                  [3, 'topic_id', false],
                                   [
                                     2,
-                                    [7, "/", false],
+                                    [7, '/', false],
                                     [
                                       2,
-                                      [6, "posts", false],
+                                      [6, 'posts', false],
                                       [
                                         2,
-                                        [7, "/", false],
+                                        [7, '/', false],
                                         [
                                           2,
-                                          [3, "id", false],
+                                          [3, 'id', false],
                                           [
                                             2,
-                                            [7, "/", false],
+                                            [7, '/', false],
                                             [
                                               2,
-                                              [6, "vote", false],
+                                              [6, 'vote', false],
                                               [
                                                 1,
                                                 [
                                                   2,
-                                                  [8, ".", false],
-                                                  [3, "format", false],
+                                                  [8, '.', false],
+                                                  [3, 'format', false],
                                                 ],
                                                 false,
                                               ],
@@ -19013,11 +19013,11 @@ var ROUTES = (function () {
 
   result = Utils.make();
 
-  if (typeof define === "function" && define.amd) {
+  if (typeof define === 'function' && define.amd) {
     define([], function () {
       return result;
     });
-  } else if (typeof module !== "undefined" && module !== null) {
+  } else if (typeof module !== 'undefined' && module !== null) {
     module.exports = result;
   } else {
     Utils.namespace(this, null, result);

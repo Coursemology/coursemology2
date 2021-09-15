@@ -3,7 +3,7 @@
 
 var DELETE_DISCUSSION_POST = (function ($, COURSE_HELPERS, ROUTES) {
   /* global JST, Routes */
-  "use strict";
+  'use strict';
 
   /**
    * Handles the discussion post delete button click event.
@@ -12,16 +12,16 @@ var DELETE_DISCUSSION_POST = (function ($, COURSE_HELPERS, ROUTES) {
    */
   function onPostDelete(e) {
     var $element = $(e.target);
-    var $post = $element.parents(".discussion_post:first");
-    var $topic = $element.parents(".discussion_topic:first");
+    var $post = $element.parents('.discussion_post:first');
+    var $topic = $element.parents('.discussion_topic:first');
 
     var courseId = COURSE_HELPERS.courseIdForElement($element);
-    var topicId = $topic.data("topicId");
-    var postId = $post.data("postId");
+    var topicId = $topic.data('topicId');
+    var postId = $post.data('postId');
 
     $.ajax({
       url: ROUTES.course_topic_post_path(courseId, topicId, postId),
-      method: "delete",
+      method: 'delete',
     })
       .done(function (data) {
         onPostDeleteSuccess(data, $element);
@@ -52,8 +52,8 @@ var DELETE_DISCUSSION_POST = (function ($, COURSE_HELPERS, ROUTES) {
    */
   function initializeToolbarElement(element, selector) {
     $(element).on(
-      "click",
-      selector + ".discussion_post .toolbar .delete",
+      'click',
+      selector + '.discussion_post .toolbar .delete',
       onPostDelete
     );
   }

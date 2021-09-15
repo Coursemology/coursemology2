@@ -4,25 +4,25 @@ en:
       submission:
         submissions:
           index:
-            submissions: "Submissions"
+            submissions: 'Submissions'
           create:
-            failure: "Could not create submission: %{error}"
+            failure: 'Could not create submission: %{error}'
           edit:
             attempt: :'course.assessment.assessments.assessment.attempt'
           blocked:
-            message: "Submissions for this assessment cannot be viewed once finalised."
+            message: 'Submissions for this assessment cannot be viewed once finalised.'
           download_statistics:
-            no_submission_statistics: "No submission fulfilled your requirements for downloading"
+            no_submission_statistics: 'No submission fulfilled your requirements for downloading'
           statistics_download_service:
-            name: "Name"
-            status: "Status"
-            grade: "Grade"
-            max_grade: "Maximum Grade"
-            exp_points: "Experience Points"
-            start_date_time: "Start Date/Time"
-            submitted_date_time: "Submitted Date/Time"
-            time_taken: "Time Taken"
-            graded_date_time: "Graded Date/Time"
-            grading_time: "Grading Time"
-            grader: "Grader"
-            csv_empty: "-"
+            name: 'Name'
+            status: 'Status'
+            grade: 'Grade'
+            max_grade: 'Maximum Grade'
+            exp_points: 'Experience Points'
+            start_date_time: 'Start Date/Time'
+            submitted_date_time: 'Submitted Date/Time'
+            time_taken: 'Time Taken'
+            graded_date_time: 'Graded Date/Time'
+            grading_time: 'Grading Time'
+            grader: 'Grader'
+            csv_empty: '-'

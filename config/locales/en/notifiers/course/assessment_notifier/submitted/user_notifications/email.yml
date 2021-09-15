@@ -5,7 +5,7 @@ en:
         submitted:
           user_notifications:
             email:
-              subject: "%{course} New Submission on : %{assessment}"
+              subject: '%{course} New Submission on : %{assessment}'
               message: >
                 There is a new submission by %{user}
 

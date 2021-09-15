@@ -3,6 +3,6 @@ en:
     admin:
       forum_settings:
         edit:
-          title_placeholder: "Leave blank to use default title"
+          title_placeholder: 'Leave blank to use default title'
         update:
-          success: "Forums settings updated."
+          success: 'Forums settings updated.'

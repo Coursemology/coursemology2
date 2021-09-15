@@ -3,4 +3,4 @@ en:
     errors:
       models:
         course/user_invitation:
-          existing_invitation: "an open invitation exists for this email address"
+          existing_invitation: 'an open invitation exists for this email address'

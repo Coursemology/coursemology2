@@ -2,17 +2,17 @@ en:
   course:
     assessment:
       skills:
-        sidebar_title: "Skills"
+        sidebar_title: 'Skills'
         index:
-          header: "Skills"
+          header: 'Skills'
         new:
-          header: "New Skill"
+          header: 'New Skill'
         create:
-          success: "Skill %{title} was created."
+          success: 'Skill %{title} was created.'
         update:
-          success: "Skill %{title} was updated."
+          success: 'Skill %{title} was updated.'
         destroy:
-          success: "Skill %{skill} was deleted."
-          failure: "Could not delete skill: %{error}"
+          success: 'Skill %{skill} was deleted.'
+          failure: 'Could not delete skill: %{error}'
         skill_branch:
-          uncategorised: "Uncategorised Skills"
+          uncategorised: 'Uncategorised Skills'

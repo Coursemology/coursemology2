@@ -2,6 +2,6 @@ en:
   course:
     mailer:
       submission_graded_email:
-        subject: "%{course}: Your submission for %{assessment} has been graded"
+        subject: '%{course}: Your submission for %{assessment} has been graded'
         message: >
           Click %{submission} to view your grade.

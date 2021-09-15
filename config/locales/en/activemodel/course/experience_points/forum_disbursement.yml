@@ -5,4 +5,4 @@ en:
         course/experience_points/forum_disbursement:
           attributes:
             end_time:
-              invalid_period: "End time should not preceed start time."
+              invalid_period: 'End time should not preceed start time.'

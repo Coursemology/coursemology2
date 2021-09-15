@@ -5,6 +5,6 @@ en:
         course/assessment/question/text_response_comprehension_point:
           attributes:
             point_grade:
-              invalid_point_grade: "must be no more than the maximum grade of the group"
+              invalid_point_grade: 'must be no more than the maximum grade of the group'
             solutions:
-              more_than_one_compre_lifted_word_solution: "all lifted words for a same point are to be placed together in one row"
+              more_than_one_compre_lifted_word_solution: 'all lifted words for a same point are to be placed together in one row'

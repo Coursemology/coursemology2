@@ -4,18 +4,18 @@ en:
       sidebar_title: :'course.leaderboards.index.header'
       title: :'course.leaderboards.index.header'
       index:
-        header: "Leaderboard"
+        header: 'Leaderboard'
       show:
-        header: "Leaderboard"
-        level_header: "By Level"
-        level: "Level %{level_number}"
+        header: 'Leaderboard'
+        level_header: 'By Level'
+        level: 'Level %{level_number}'
         achievement_count_header: :'course.leaderboards.common.achievement_count_header'
       groups:
-        header: "Group Leaderboard"
-        experience_points_header: "By Experience Points"
+        header: 'Group Leaderboard'
+        experience_points_header: 'By Experience Points'
         achievement_count_header: :'course.leaderboards.common.achievement_count_header'
       common:
-        achievement_count_header: "By Achievement Count"
+        achievement_count_header: 'By Achievement Count'
       tabs:
         individual_leaderboard: :'course.leaderboards.show.header'
         group_leaderboard: :'course.leaderboards.groups.header'
