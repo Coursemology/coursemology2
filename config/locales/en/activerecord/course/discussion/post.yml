@@ -2,10 +2,10 @@ en:
   activerecord:
     attributes:
       course/discussion/post:
-        title_reply_template: 'Re: %{title}'
+        title_reply_template: "Re: %{title}"
     errors:
       models:
         course/discussion/post:
           attributes:
             post:
-              topic_inconsistent: 'The post and its parent post reference a different topic.'
+              topic_inconsistent: "The post and its parent post reference a different topic."

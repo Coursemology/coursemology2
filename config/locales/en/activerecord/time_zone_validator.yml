@@ -3,4 +3,4 @@ en:
     errors:
       messages:
         time_zone_validator:
-          invalid_time_zone: 'The time zone is invalid.'
+          invalid_time_zone: "The time zone is invalid."

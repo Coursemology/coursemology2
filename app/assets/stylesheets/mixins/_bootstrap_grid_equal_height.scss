@@ -7,7 +7,7 @@
   display: flex;
   flex-wrap: wrap;
 
-  > [class*='col-'] {
+  > [class*="col-"] {
     display: flex;
     flex-direction: column;
   }

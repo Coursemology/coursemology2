@@ -31,11 +31,11 @@
     .table-badge {
       @extend .text-center;
 
-      @media (min-width: $screen-xs-max){
+      @media (min-width: $screen-xs-max) {
         width: $course-achievement-form-badge * 1.5;
       }
 
-      @media (max-width: $screen-sm-max){
+      @media (max-width: $screen-sm-max) {
         width: 20%;
 
         .image > img {
@@ -64,7 +64,7 @@
     }
 
     .table-requirement {
-      @media (max-width: $screen-sm-max){
+      @media (max-width: $screen-sm-max) {
         ul {
           padding-left: 10%;
         }

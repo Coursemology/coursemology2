@@ -4,27 +4,27 @@ en:
       question:
         multiple_responses:
           new:
-            multiple_response_header: 'New Multiple Response Question'
-            multiple_choice_header: 'New Multiple Choice Question'
+            multiple_response_header: "New Multiple Response Question"
+            multiple_choice_header: "New Multiple Choice Question"
           create:
-            success: 'The multiple response question was created.'
+            success: "The multiple response question was created."
           update:
-            success: 'The multiple response question was updated.'
+            success: "The multiple response question was updated."
           destroy:
-            success: 'The multiple response question was deleted.'
-            failure: 'Could not delete multiple response question: %{error}'
+            success: "The multiple response question was deleted."
+            failure: "Could not delete multiple response question: %{error}"
           form:
-            correct: 'Correct'
-            option: 'Option'
-            explanation: 'Explanation'
-            randomize_options: 'Randomize option order (options that ignore this will be shifted to the bottom)'
-            ignore_randomization: 'Ignore Randomization'
-            add_option: 'Add Option'
-            multiple_choice_button: 'Multiple Choice Question'
-            multiple_response_button: 'Multiple Response Question'
+            correct: "Correct"
+            option: "Option"
+            explanation: "Explanation"
+            randomize_options: "Randomize option order (options that ignore this will be shifted to the bottom)"
+            ignore_randomization: "Ignore Randomization"
+            add_option: "Add Option"
+            multiple_choice_button: "Multiple Choice Question"
+            multiple_response_button: "Multiple Response Question"
           option_fields:
-            explanation_hint: 'The explanation to show after the student submits his answer.'
-            remove: 'Remove'
+            explanation_hint: "The explanation to show after the student submits his answer."
+            remove: "Remove"
           question_type:
             multiple_response: Multiple Response
             multiple_choice: Multiple Choice

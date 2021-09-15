@@ -3,5 +3,5 @@ en:
     video:
       topics:
         discussion_topic_topic:
-          by_html: 'By: %{user}'
-          comment_title: '%{title}: %{timestamp}'
+          by_html: "By: %{user}"
+          comment_title: "%{title}: %{timestamp}"

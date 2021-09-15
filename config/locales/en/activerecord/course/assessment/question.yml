@@ -5,4 +5,4 @@ en:
       question_with_title: "%{question_number}: %{title}"
     attributes:
       course/assessment/question:
-        weight: 'Order'
+        weight: "Order"

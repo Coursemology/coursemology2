@@ -4,57 +4,57 @@ en:
       question:
         text_responses:
           new:
-            text_response: 'New Text Response Question'
-            file_upload: 'New File Upload Question'
-            comprehension: 'New Comprehension Question'
+            text_response: "New Text Response Question"
+            file_upload: "New File Upload Question"
+            comprehension: "New Comprehension Question"
           create:
-            success: 'The %{name} was created.'
+            success: "The %{name} was created."
           update:
-            success: 'The %{name} was updated.'
+            success: "The %{name} was updated."
           destroy:
-            success: 'The %{name} was deleted.'
-            failure: 'Could not delete %{name}: %{error}'
+            success: "The %{name} was deleted."
+            failure: "Could not delete %{name}: %{error}"
           form:
-            allow_upload_file: 'Allow file upload in the answer'
+            allow_upload_file: "Allow file upload in the answer"
             multiline_explanation_html: >
               Adding solutions allows the question to be autograded. Students can only input plaintext.
               <br/>
               If exact_match is selected, solutions with multiple lines must match student answers exactly for the
               answer to be graded as correct.
-            solution_type: 'Type'
-            solution: 'Solution'
-            grade: 'Grade'
-            explanation: 'Explanation'
-            add_solution: 'Add Solution'
-            file_upload: 'File Upload Question'
-            text_response: 'Text Response Question'
-            text_response_autograde: 'Note: If no solutions are provided, the autograder will always award the maximum grade.'
-            file_upload_autograde: 'Note: File upload question is not auto-gradable. The autograder will always award the maximum grade.'
+            solution_type: "Type"
+            solution: "Solution"
+            grade: "Grade"
+            explanation: "Explanation"
+            add_solution: "Add Solution"
+            file_upload: "File Upload Question"
+            text_response: "Text Response Question"
+            text_response_autograde: "Note: If no solutions are provided, the autograder will always award the maximum grade."
+            file_upload_autograde: "Note: File upload question is not auto-gradable. The autograder will always award the maximum grade."
           solution_fields:
-            explanation_hint: 'The explanation to show after the student submits his answer.'
-            remove: 'Remove'
+            explanation_hint: "The explanation to show after the student submits his answer."
+            remove: "Remove"
           form_comprehension:
             multiline_explanation_comprehension_html: >
               Adding solutions allows the question to be autograded. Students can only input plaintext.
-            add_group: 'Add Group'
-            comprehension: 'Comprehension Question'
-            text_response_autograde: 'Note: If no solutions are provided, the autograder will always award the maximum grade.'
+            add_group: "Add Group"
+            comprehension: "Comprehension Question"
+            text_response_autograde: "Note: If no solutions are provided, the autograder will always award the maximum grade."
           comprehension_group_fields:
-            group: 'Group'
-            remove_group: 'Remove Group'
-            maximum_group_grade: 'Maximum Grade for this Group'
-            add_point: 'Add Point'
+            group: "Group"
+            remove_group: "Remove Group"
+            maximum_group_grade: "Maximum Grade for this Group"
+            add_point: "Add Point"
           comprehension_point_fields:
-            point: 'Point'
-            remove_point: 'Remove Point'
-            point_grade: 'Grade for this Point'
-            add_solution: 'Add Solution'
-            solution_type: 'Type'
-            solution: 'Solution'
-            information: 'Word from Text Passage'
+            point: "Point"
+            remove_point: "Remove Point"
+            point_grade: "Grade for this Point"
+            add_solution: "Add Solution"
+            solution_type: "Type"
+            solution: "Solution"
+            information: "Word from Text Passage"
           comprehension_solution_fields:
-            information_hint: 'The exact word from the text passage.'
-            add_solution_word: 'Add Solution Word'
-            remove: 'Remove'
-            compre_keyword: 'Keyword'
-            compre_lifted_word: 'Lifted Word'
+            information_hint: "The exact word from the text passage."
+            add_solution_word: "Add Solution Word"
+            remove: "Remove"
+            compre_keyword: "Keyword"
+            compre_lifted_word: "Lifted Word"

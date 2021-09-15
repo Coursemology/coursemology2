@@ -3,22 +3,22 @@ en:
     admin:
       instances:
         index:
-          header: 'Instances'
-          serial_number: 'S/N'
-          name: 'Name'
-          host_name: 'Host Name'
-          users: 'Active / Total Users'
-          users_hint: 'Number of active users in the past 7 days'
-          courses: 'Active / Total Courses'
-          courses_hint: 'Number of active courses in the past 7 days'
+          header: "Instances"
+          serial_number: "S/N"
+          name: "Name"
+          host_name: "Host Name"
+          users: "Active / Total Users"
+          users_hint: "Number of active users in the past 7 days"
+          courses: "Active / Total Courses"
+          courses_hint: "Number of active courses in the past 7 days"
         new:
-          header: 'New Instance'
+          header: "New Instance"
         create:
-          success: 'Instance has been successfully created.'
+          success: "Instance has been successfully created."
         edit:
-          header: 'Edit Instance'
+          header: "Edit Instance"
         update:
-          success: 'Instance has been successfully updated.'
+          success: "Instance has been successfully updated."
         destroy:
-          success: '%{instance} was destroyed.'
-          failure: 'Failed to delete instance: %{error}'
+          success: "%{instance} was destroyed."
+          failure: "Failed to delete instance: %{error}"

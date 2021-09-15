@@ -3,12 +3,12 @@ en:
     discussion:
       posts:
         create:
-          success: 'Post was created'
-          failure: 'Fail to create post: %{error}'
+          success: "Post was created"
+          failure: "Fail to create post: %{error}"
         update:
-          success: 'Post was updated'
+          success: "Post was updated"
         destroy:
-          success: 'Post was deleted'
-          failure: 'Fail to delete post: %{error}'
+          success: "Post was deleted"
+          failure: "Fail to delete post: %{error}"
         form:
-          comment: 'Comment'
+          comment: "Comment"

@@ -1,8 +1,8 @@
 en:
   course:
     condition:
-      header: 'Conditions'
+      header: "Conditions"
       type:
-        header: 'Type'
+        header: "Type"
       description:
-        header: 'Description'
+        header: "Description"

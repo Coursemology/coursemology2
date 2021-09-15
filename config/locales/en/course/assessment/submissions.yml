@@ -4,17 +4,17 @@ en:
       submissions:
         sidebar_title: :'course.assessment.submissions.index.header'
         index:
-          header: 'Submissions'
+          header: "Submissions"
         pending:
-          header: 'Pending Submissions'
+          header: "Pending Submissions"
         submission:
-          grade: 'Grade'
-          view: 'View'
+          grade: "Grade"
+          view: "View"
           graded_not_published_warning: >
             These grades can't be seen by the student until they are published.
         tabs:
-          my_students_pending: 'My Students'
-          all_pending: 'All Pending Submissions'
+          my_students_pending: "My Students"
+          all_pending: "All Pending Submissions"
         filter:
-          student: 'Student'
-          filter: 'Submissions Filter'
+          student: "Student"
+          filter: "Submissions Filter"

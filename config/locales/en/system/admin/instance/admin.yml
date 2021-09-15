@@ -4,4 +4,4 @@ en:
       instance:
         admin:
           index:
-            header: 'Instance Administration'
+            header: "Instance Administration"

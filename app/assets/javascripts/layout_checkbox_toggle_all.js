@@ -1,5 +1,5 @@
-(function($) {
-  'use strict';
+(function ($) {
+  "use strict";
 
   /**
    * We link a checkbox with a "select all" toggle checkbox. Their states are linked. The
@@ -21,11 +21,13 @@
    *   parent. Otherwise, returns an empty set.
    */
   function findAssociatedCheckboxes($checkbox) {
-    var forSelectAll = $checkbox.data('forSelectAll');
+    var forSelectAll = $checkbox.data("forSelectAll");
     if (forSelectAll) {
-      return $('#' + forSelectAll);
+      return $("#" + forSelectAll);
     } else {
-      return $('input[type="checkbox"]').filter('[data-for-select-all="' + $checkbox[0].id + '"]');
+      return $('input[type="checkbox"]').filter(
+        '[data-for-select-all="' + $checkbox[0].id + '"]'
+      );
     }
   }
 
@@ -36,7 +38,7 @@
    */
   function handleCheckboxClick(e) {
     var $target = $(e.target);
-    if ($target.data('forSelectAll')) {
+    if ($target.data("forSelectAll")) {
       handleChildCheckboxClick($target);
     } else {
       handleSelectAllCheckboxClick($target);
@@ -57,7 +59,11 @@
     }
 
     var $otherChildren = findAssociatedCheckboxes($parentCheckbox);
-    var checkStates = $otherChildren.map(function() { return this.checked; }).get();
+    var checkStates = $otherChildren
+      .map(function () {
+        return this.checked;
+      })
+      .get();
 
     var checkedCount = 0;
     var uncheckedCount = 0;
@@ -70,14 +76,14 @@
     }
 
     if (checkedCount === 0) {
-      $parentCheckbox.prop('indeterminate', '');
-      $parentCheckbox.prop('checked', '');
+      $parentCheckbox.prop("indeterminate", "");
+      $parentCheckbox.prop("checked", "");
     } else if (uncheckedCount === 0) {
-      $parentCheckbox.prop('indeterminate', '');
-      $parentCheckbox.prop('checked', 'checked');
+      $parentCheckbox.prop("indeterminate", "");
+      $parentCheckbox.prop("checked", "checked");
     } else {
-      $parentCheckbox.prop('indeterminate', 'indeterminate');
-      $parentCheckbox.prop('checked', '');
+      $parentCheckbox.prop("indeterminate", "indeterminate");
+      $parentCheckbox.prop("checked", "");
     }
   }
 
@@ -89,12 +95,15 @@
    * @param {jQuery} $parentCheckbox The parent checkbox being clicked.
    */
   function handleSelectAllCheckboxClick($parentCheckbox) {
-    findAssociatedCheckboxes($parentCheckbox).prop('checked', $parentCheckbox.prop('checked'));
+    findAssociatedCheckboxes($parentCheckbox).prop(
+      "checked",
+      $parentCheckbox.prop("checked")
+    );
   }
 
-  $(document).on('click', 'input[type="checkbox"]', handleCheckboxClick);
+  $(document).on("click", 'input[type="checkbox"]', handleCheckboxClick);
 
-  $.fn.checkboxToggleAll = function(options) {
+  $.fn.checkboxToggleAll = function (options) {
     if (options === undefined) {
       this.each(initializeComponent);
     }

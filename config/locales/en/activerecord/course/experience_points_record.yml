@@ -2,4 +2,4 @@ en:
   activerecord:
     attributes:
       course/experience_points_record:
-        points_awarded: 'Experience Points Awarded'
+        points_awarded: "Experience Points Awarded"

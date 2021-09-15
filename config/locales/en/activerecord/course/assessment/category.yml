@@ -4,9 +4,8 @@ en:
       course/assessment/category/title:
         default: :'course.assessment.assessments.index.header'
       course/assessment/category:
-        weight: 'Order'
+        weight: "Order"
     errors:
       models:
         course/assessment/category:
-          deletion: 'the last category cannot be deleted'
-
+          deletion: "the last category cannot be deleted"

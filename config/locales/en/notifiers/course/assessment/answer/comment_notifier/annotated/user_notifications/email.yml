@@ -7,7 +7,7 @@ en:
             annotated:
               user_notifications:
                 email:
-                  subject: '%{course}: New annotation on %{topic}'
+                  subject: "%{course}: New annotation on %{topic}"
                   message: >
                     <p>%{post_author} added an annotation, %{post}</p>
 

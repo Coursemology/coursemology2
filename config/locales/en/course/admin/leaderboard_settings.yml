@@ -3,8 +3,8 @@ en:
     admin:
       leaderboard_settings:
         edit:
-          title_placeholder: 'Leave blank to use default title'
-          enable_group_leaderboard: 'Enable Group Leaderboard'
-          group_leaderboard_title_placeholder: 'Leave blank to use default title'
+          title_placeholder: "Leave blank to use default title"
+          enable_group_leaderboard: "Enable Group Leaderboard"
+          group_leaderboard_title_placeholder: "Leave blank to use default title"
         update:
-          success: 'Leaderboard settings updated.'
+          success: "Leaderboard settings updated."

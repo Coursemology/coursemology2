@@ -5,12 +5,12 @@ en:
         opening:
           course_notifications:
             email:
-              subject: '%{course} New Video Available'
+              subject: "%{course} New Video Available"
               message: >
                 New Video Available : %{video}
         closing:
           user_notifications:
             email:
-              subject: '%{course} Reminder for %{video}'
+              subject: "%{course} Reminder for %{video}"
               message: >
                 Please be reminded that %{video} is due on %{time}

@@ -2,14 +2,14 @@ en:
   activerecord:
     attributes:
       course/course_user:
-        name: 'Name'
+        name: "Name"
       course_user:
-        level_number: 'Level'
-        created_at: 'Enrolled At'
-        reference_timeline: 'Reference timeline'
+        level_number: "Level"
+        created_at: "Enrolled At"
+        reference_timeline: "Reference timeline"
     errors:
       models:
         course_user:
           attributes:
             reference_timeline:
-              belongs_to_course: 'must belong to course'
+              belongs_to_course: "must belong to course"

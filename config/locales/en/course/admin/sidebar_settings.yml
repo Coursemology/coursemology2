@@ -3,9 +3,9 @@ en:
     admin:
       sidebar_settings:
         edit:
-          header: 'Sidebar Ordering'
-          name: 'Name'
-          weight: 'Weight'
-          button: 'Update Sidebar Ordering'
+          header: "Sidebar Ordering"
+          name: "Name"
+          weight: "Weight"
+          button: "Update Sidebar Ordering"
         update:
-          success: 'Settings updated successfully'
+          success: "Settings updated successfully"

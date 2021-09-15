@@ -4,13 +4,13 @@ en:
       course/condition/assessment: Assessment Condition
     attributes:
       course/condition/assessment/title:
-        minimum_score: 'Score at least %{minimum_grade_percentage} for %{assessment_title}'
-        complete: 'Complete %{assessment_title}'
+        minimum_score: "Score at least %{minimum_grade_percentage} for %{assessment_title}"
+        complete: "Complete %{assessment_title}"
     errors:
       models:
         course/condition/assessment:
           attributes:
             assessment:
-              unique_dependency: 'cannot have duplicate conditions'
-              references_self: 'cannot have itself as condition'
-              cyclic_dependency: 'cannot have cyclic dependency'
+              unique_dependency: "cannot have duplicate conditions"
+              references_self: "cannot have itself as condition"
+              cyclic_dependency: "cannot have cyclic dependency"

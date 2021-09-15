@@ -1,5 +1,6 @@
 @mixin discussion-post {
-  .discussion_post { // scss-lint:disable SelectorFormat
+  .discussion_post {
+    // scss-lint:disable SelectorFormat
     border: $course-discussion-post-border;
     border-radius: $course-discussion-post-border-radius;
     margin-bottom: 1em;

@@ -5,8 +5,8 @@ en:
         course/lesson_plan/item:
           attributes:
             bonus_end_at:
-              required: 'cannot be blank if time bonus exp is set'
+              required: "cannot be blank if time bonus exp is set"
     attributes:
       course/lesson_plan/item:
-        base_exp: 'Experience Points'
-        time_bonus_exp: 'Bonus Experience Points'
+        base_exp: "Experience Points"
+        time_bonus_exp: "Bonus Experience Points"

@@ -12,6 +12,6 @@
 # refer to the README
 #
 translations:
- - only:
-   - '*.common.*'
-   - '*.javascript.*'
+  - only:
+      - "*.common.*"
+      - "*.javascript.*"

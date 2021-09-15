@@ -1,6 +1,6 @@
 en:
   jobs:
     completed:
-      completed: 'The job has completed.'
+      completed: "The job has completed."
     errored:
-      errored: 'The job has encountered an error.'
+      errored: "The job has encountered an error."

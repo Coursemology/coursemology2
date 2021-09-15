@@ -4,10 +4,10 @@ en:
       course/condition/survey: Survey Condition
     attributes:
       course/condition/survey/title:
-        complete: 'Complete %{survey_title}'
+        complete: "Complete %{survey_title}"
     errors:
       models:
         course/condition/survey:
           attributes:
             survey:
-              unique_dependency: 'cannot have duplicate conditions'
+              unique_dependency: "cannot have duplicate conditions"

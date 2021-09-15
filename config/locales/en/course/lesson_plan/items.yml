@@ -4,8 +4,8 @@ en:
       items:
         sidebar_title: :'course.lesson_plan.items.index.header'
         index:
-          header: 'Lesson Plan'
-        ref: 'Ref: '
+          header: "Lesson Plan"
+        ref: "Ref: "
         fixed_desc: >
           The personalized timeline for this item has been fixed. It will no longer be automatically modified.
         personal_time_boolean_icons:
@@ -17,10 +17,10 @@ en:
   activerecord:
     attributes:
       course/lesson_plan/item:
-        reference_times: 'Reference times'
+        reference_times: "Reference times"
     errors:
       models:
         course/lesson_plan/item:
           attributes:
             reference_times:
-              must_have_at_most_one_default: 'must have at most one default'
+              must_have_at_most_one_default: "must have at most one default"

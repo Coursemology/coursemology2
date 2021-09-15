@@ -4,11 +4,11 @@ en:
       videos:
         tabs:
           index:
-            header: 'Video Tabs'
+            header: "Video Tabs"
           create:
-            success: 'Tab %{title} was created.'
+            success: "Tab %{title} was created."
           destroy:
-            success: 'Tab %{title} was deleted.'
-            failure: 'Could not delete tab: %{error}'
+            success: "Tab %{title} was deleted."
+            failure: "Could not delete tab: %{error}"
           new:
-            header: 'New Video Tab'
+            header: "New Video Tab"

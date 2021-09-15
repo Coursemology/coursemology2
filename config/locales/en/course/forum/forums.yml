@@ -4,70 +4,70 @@ en:
       forums:
         sidebar_title: :'course.forum.forums.index.header'
         new_forum:
-          header: 'New Forum'
+          header: "New Forum"
         edit_forum:
-          header: 'Edit Forum'
+          header: "Edit Forum"
         index:
-          header: 'Forums'
-          forum: 'Forum'
-          topics: 'Topics'
-          posts: 'Posts'
-          views: 'Views'
-          no_forum: 'No Forum'
-          new_forum: 'New Forum'
-          mark_all_as_read: 'Mark all as read'
-          mark_all_description: 'Mark all forum topics as read'
+          header: "Forums"
+          forum: "Forum"
+          topics: "Topics"
+          posts: "Posts"
+          views: "Views"
+          no_forum: "No Forum"
+          new_forum: "New Forum"
+          mark_all_as_read: "Mark all as read"
+          mark_all_description: "Mark all forum topics as read"
         show:
-          topics: 'Topics'
-          votes: 'Votes'
-          posts: 'Posts'
-          views: 'Views'
-          latest_post: 'Last Posted By'
-          no_topic: 'No Topic'
+          topics: "Topics"
+          votes: "Votes"
+          posts: "Posts"
+          views: "Views"
+          latest_post: "Last Posted By"
+          no_topic: "No Topic"
         new:
-          header: 'New Forum'
+          header: "New Forum"
         create:
-          success: 'Forum %{name} was created.'
+          success: "Forum %{name} was created."
         edit:
-          header: 'Edit Forum'
+          header: "Edit Forum"
         update:
-          success: 'Forum %{name} was updated.'
+          success: "Forum %{name} was updated."
         destroy:
-          success: 'Forum %{name} was deleted.'
-          failure: 'Failed to delete forum: %{error}'
+          success: "Forum %{name} was deleted."
+          failure: "Failed to delete forum: %{error}"
         subscribe:
-          tag: 'Subscribe to email notifications'
-          success: 'You are subscribed to %{name}.'
-          failure: 'Failed to subscribe to: %{error}'
+          tag: "Subscribe to email notifications"
+          success: "You are subscribed to %{name}."
+          failure: "Failed to subscribe to: %{error}"
         unsubscribe:
-          tag: 'Unsubscribe from email notifications'
-          success: 'You have been unsubscribed from %{name}.'
+          tag: "Unsubscribe from email notifications"
+          success: "You have been unsubscribed from %{name}."
           failure: >
             You are not subscribed to this forum, hence the unsubscription was unsuccessful.
         subscribe_button:
-          subscribe: 'Subscribe'
-          subscribed: 'Subscribed'
+          subscribe: "Subscribe"
+          subscribed: "Subscribed"
         search:
-          header: 'Search Forums'
-          search_panel_title: 'Forum Search'
-          search: 'Find Posts'
-          posts_by: 'Posts by %{name}'
-          post_count: 'Post Count: %{count}'
-          total_vote_tally: 'Total Vote Tally: %{tally}'
-          post_content: 'Post Content'
-          vote_tally: 'Vote Tally'
-          date_posted: 'Date Posted'
+          header: "Search Forums"
+          search_panel_title: "Forum Search"
+          search: "Find Posts"
+          posts_by: "Posts by %{name}"
+          post_count: "Post Count: %{count}"
+          total_vote_tally: "Total Vote Tally: %{tally}"
+          post_content: "Post Content"
+          vote_tally: "Vote Tally"
+          date_posted: "Date Posted"
         next_unread:
-          title: 'Next unread'
-          description: 'Jump to next unread topic'
-          notice: 'Hooray! All topics have been read'
+          title: "Next unread"
+          description: "Jump to next unread topic"
+          notice: "Hooray! All topics have been read"
         mark_all_as_read:
-          success: 'All topics have been marked as read'
+          success: "All topics have been marked as read"
         mark_as_read:
-          success: 'All topics in the forum have been marked as read'
+          success: "All topics in the forum have been marked as read"
         controls:
-          new_topic: 'New topic'
-          mark_as_read: 'Mark as read'
-          mark_forum_description: 'Mark all topics in current forum as read'
+          new_topic: "New topic"
+          mark_as_read: "Mark as read"
+          mark_forum_description: "Mark all topics in current forum as read"
         forum:
-          has_question: 'Has unresolved question(s)'
+          has_question: "Has unresolved question(s)"

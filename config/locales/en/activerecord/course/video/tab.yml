@@ -2,10 +2,10 @@ en:
   activerecord:
     attributes:
       course/video/tab/title:
-        default: 'Default'
+        default: "Default"
       course/video/tab:
-        weight: 'Order'
+        weight: "Order"
     errors:
       models:
         course/video/tab:
-          deletion: 'The last tab cannot be deleted'
+          deletion: "The last tab cannot be deleted"

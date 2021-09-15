@@ -2,28 +2,28 @@ en:
   course:
     courses:
       index:
-        header: 'Courses'
-        new_role_request: 'Request to be an instructor'
-        edit_role_request: 'Edit my role request'
+        header: "Courses"
+        new_role_request: "Request to be an instructor"
+        edit_role_request: "Edit my role request"
       create:
-        success: 'Course %{title} was created.'
+        success: "Course %{title} was created."
       new:
-        header: 'New Course'
+        header: "New Course"
       form:
-        title_label: 'Give it an awesome name'
-        title_placeholder: 'e.g. Maths Universe, Geovengers'
-        description_label: 'Give it an awesome backstory'
+        title_label: "Give it an awesome name"
+        title_placeholder: "e.g. Maths Universe, Geovengers"
+        description_label: "Give it an awesome backstory"
         description_placeholder: >
           e.g. Darth Vader is taking over the universe. We need you to save the day!
-        logo: 'Upload Course Logo'
+        logo: "Upload Course Logo"
       show:
-        description: 'Description'
-        instructors: 'Instructors'
-        announcements: 'Announcements'
-        activities: 'Latest Activity'
+        description: "Description"
+        instructors: "Instructors"
+        announcements: "Announcements"
+        activities: "Latest Activity"
       latest_todos:
-        pending_task_type: 'Pending %{task_type}'
-        pending_tasks_title: 'Title'
-        pending_tasks_start_at: 'Start At'
-        pending_tasks_end_at: 'End At'
-        more_tasks: 'See all (%{unlisted_count} more pending)'
+        pending_task_type: "Pending %{task_type}"
+        pending_tasks_title: "Title"
+        pending_tasks_start_at: "Start At"
+        pending_tasks_end_at: "End At"
+        more_tasks: "See all (%{unlisted_count} more pending)"

@@ -1,15 +1,28 @@
 <% formActionPath = ROUTES.course_topic_post_path(courseId, topicId, postId) %>
-<div class="edit-discussion-post-form" data-action="<%= formActionPath %>" data-method="patch">
+<div
+  class="edit-discussion-post-form"
+  data-action="<%= formActionPath %>"
+  data-method="patch"
+>
   <%= postCommenter %>
   <div class="form-group text">
-    <textarea name="discussion_post[text]"
-              class="form-control text airmode"
-              aria-label="<%= I18n.t('javascript.course.discussion.post.text.label') %>"
-      ><%= postContent %></textarea>
+    <textarea
+      name="discussion_post[text]"
+      class="form-control text airmode"
+      aria-label="<%= I18n.t('javascript.course.discussion.post.text.label') %>"
+    >
+<%= postContent %></textarea
+    >
   </div>
 
-  <input type="reset" class="btn btn-default"
-         value="<%= I18n.t('javascript.course.discussion.post.reset') %>" />
-  <input type="submit" class="btn btn-primary"
-         value="<%= I18n.t('javascript.course.discussion.post.submit') %>" />
+  <input
+    type="reset"
+    class="btn btn-default"
+    value="<%= I18n.t('javascript.course.discussion.post.reset') %>"
+  />
+  <input
+    type="submit"
+    class="btn btn-primary"
+    value="<%= I18n.t('javascript.course.discussion.post.submit') %>"
+  />
 </div>

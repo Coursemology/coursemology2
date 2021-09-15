@@ -1,8 +1,8 @@
 en:
   announcements:
     index:
-      header: 'All Announcements'
+      header: "All Announcements"
     announcement:
-      sticky: 'Sticky'
+      sticky: "Sticky"
     global_announcement:
-      close: 'Close'
+      close: "Close"

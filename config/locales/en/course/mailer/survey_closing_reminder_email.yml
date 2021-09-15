@@ -2,6 +2,6 @@ en:
   course:
     mailer:
       survey_closing_reminder_email:
-        subject: '%{course}: Reminder about %{survey}'
+        subject: "%{course}: Reminder about %{survey}"
         message: >
           Please be reminded that %{survey} will expire on %{time}.

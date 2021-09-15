@@ -4,12 +4,12 @@ inherit_from:
 AllCops:
   NewCops: enable
   Exclude:
-   - 'bin/*'
-   - 'db/seeds.rb'
-   - 'db/schema.rb'
-   - 'db/migrate/*'
-   - 'vendor/bundle/**/*'
-   - 'client/**/*'
+    - "bin/*"
+    - "db/seeds.rb"
+    - "db/schema.rb"
+    - "db/migrate/*"
+    - "vendor/bundle/**/*"
+    - "client/**/*"
   TargetRubyVersion: 2.5
 
 Bundler/OrderedGems:
@@ -35,10 +35,10 @@ Metrics/BlockLength:
 
 Metrics/MethodLength:
   Max: 15
-  CountAsOne: ['array', 'hash', 'heredoc']
+  CountAsOne: ["array", "hash", "heredoc"]
 
 Style/AsciiComments:
-  AllowedChars: ['©', '├', '─', '└']
+  AllowedChars: ["©", "├", "─", "└"]
 
 Style/ClassAndModuleChildren:
   EnforcedStyle: compact
@@ -54,7 +54,7 @@ Style/HashAsLastArrayItem:
 
 Style/LambdaCall:
   Exclude:
-    - '**/*.json.jbuilder'
+    - "**/*.json.jbuilder"
 
 Style/NumericPredicate:
   EnforcedStyle: comparison
