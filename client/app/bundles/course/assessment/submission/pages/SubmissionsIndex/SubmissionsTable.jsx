@@ -89,6 +89,11 @@ export default class SubmissionsTable extends Component {
     return `${gradeString} / ${maximumGradeString}`;
   }
 
+  canDownloadStatistics = () => {
+    const { submissions } = this.props;
+    return submissions.length > 0;
+  };
+
   canDownload() {
     const { assessment, submissions } = this.props;
     return (
@@ -100,11 +105,6 @@ export default class SubmissionsTable extends Component {
       )
     );
   }
-
-  canDownloadStatistics = () => {
-    const { submissions } = this.props;
-    return submissions.length > 0;
-  };
 
   renderDownloadDropdown() {
     const {

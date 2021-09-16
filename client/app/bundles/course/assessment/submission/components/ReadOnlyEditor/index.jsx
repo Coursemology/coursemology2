@@ -75,6 +75,15 @@ class ReadOnlyEditor extends Component {
     this.setState({ expanded: newExpanded });
   }
 
+  showCommentsPanel = () => {
+    this.setAllCommentStateCollapsed();
+    if (this.state.editorMode === EDITOR_MODE_NARROW) {
+      this.setState({ editorMode: EDITOR_MODE_WIDE });
+    } else {
+      this.setState({ editorMode: EDITOR_MODE_NARROW });
+    }
+  };
+
   isAllExpanded() {
     const { expanded } = this.state;
     const { annotations } = this.props;
@@ -105,15 +114,6 @@ class ReadOnlyEditor extends Component {
     }
     return false;
   }
-
-  showCommentsPanel = () => {
-    this.setAllCommentStateCollapsed();
-    if (this.state.editorMode === EDITOR_MODE_NARROW) {
-      this.setState({ editorMode: EDITOR_MODE_WIDE });
-    } else {
-      this.setState({ editorMode: EDITOR_MODE_NARROW });
-    }
-  };
 
   toggleCommentLine(lineNumber) {
     const { expanded } = this.state;
