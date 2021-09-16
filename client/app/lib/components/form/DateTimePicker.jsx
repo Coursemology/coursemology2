@@ -2,13 +2,15 @@ import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import moment from 'lib/moment';
-import DatePicker from 'material-ui-pickers/DatePicker';
-import TimePicker from 'material-ui-pickers/TimePicker';
+import {
+  KeyboardDatePicker,
+  KeyboardTimePicker,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
 import DateRange from 'material-ui/svg-icons/action/date-range';
 import KeyboardArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
 import KeyboardArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
 import Schedule from 'material-ui/svg-icons/action/schedule';
-import MuiPickersUtilsProvider from 'material-ui-pickers/MuiPickersUtilsProvider';
 import MomentUtils from '@date-io/moment';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
 
@@ -159,12 +161,11 @@ class DateTimePicker extends PureComponent {
       <MuiPickersUtilsProvider utils={MomentUtils}>
         <MuiThemeProvider theme={datetimepickerTheme}>
           <div style={{ ...styles.dateTimePicker, ...style }}>
-            <DatePicker
+            <KeyboardDatePicker
               {...{ name, disabled }}
               style={styles.dateTextField}
               onChange={this.updateDate}
               clearable={clearable}
-              keyboard
               keyboardIcon={<DateRange style={styles.pickerIcon} />}
               leftArrowIcon={<KeyboardArrowLeft />}
               rightArrowIcon={<KeyboardArrowRight />}
@@ -175,7 +176,7 @@ class DateTimePicker extends PureComponent {
               helperText={errorText || this.state.dateError}
               value={value || null}
             />
-            <TimePicker
+            <KeyboardTimePicker
               {...{ name, disabled }}
               style={styles.timeTextField}
               onChange={this.updateTime}

@@ -3,8 +3,8 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
-import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import Subheader from 'material-ui/Subheader';
 import surveyTranslations from 'course/survey/translations';
 import { surveyShape } from 'course/survey/propTypes';
@@ -60,10 +60,10 @@ class SurveyShow extends Component {
   render() {
     const { survey, disabled, courseId } = this.props;
     return (
-      <>
+      <DndProvider backend={HTML5Backend}>
         <SurveyDetails {...{ survey, courseId, disabled }} />
         {this.renderBody(survey)}
-      </>
+      </DndProvider>
     );
   }
 }
@@ -85,4 +85,4 @@ const mapStateToProps = (state) => ({
 export const ConnectedSurveyShow = connect(mapStateToProps)(
   injectIntl(SurveyShow),
 );
-export default DragDropContext(HTML5Backend)(ConnectedSurveyShow);
+export default ConnectedSurveyShow;

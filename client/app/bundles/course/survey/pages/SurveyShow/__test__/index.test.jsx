@@ -4,8 +4,8 @@ import { mount } from 'enzyme';
 import { connect } from 'react-redux';
 import CourseAPI from 'api/course';
 import MockAdapter from 'axios-mock-adapter';
-import TestBackend from 'react-dnd-test-backend';
-import { DragDropContext } from 'react-dnd';
+import { TestBackend } from 'react-dnd-test-backend';
+import { DndProvider } from 'react-dnd';
 import storeCreator from 'course/survey/store';
 import { ConnectedSurveyShow } from '../index';
 
@@ -71,13 +71,15 @@ const surveyData = {
 function wrapInTestContext(DecoratedComponent) {
   class TestContextContainer extends Component {
     render() {
-      return <DecoratedComponent {...this.props} />;
+      return (
+        <DndProvider backend={TestBackend}>
+          <DecoratedComponent {...this.props} />
+        </DndProvider>
+      );
     }
   }
   const mapStateToProps = (state) => ({ survey: state.surveys[0] || {} });
-  return connect(mapStateToProps)(
-    DragDropContext(TestBackend)(TestContextContainer),
-  );
+  return connect(mapStateToProps)(TestContextContainer);
 }
 
 beforeEach(() => {
