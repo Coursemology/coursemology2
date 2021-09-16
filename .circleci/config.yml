@@ -7,7 +7,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/ruby:2.5.3-node-browsers
+      - image: circleci/ruby:2.5.3-node:12-browsers
         environment:
           BUNDLE_APP_CONFIG: ~/repo/.bundle
 
@@ -54,7 +54,7 @@ jobs:
   test:
     docker:
       # specify the version you desire here
-      - image: circleci/ruby:2.5.3-node-browsers
+      - image: circleci/ruby:2.5.3-node:12-browsers
         environment:
           PG_HOST: localhost
           PG_USER: ubuntu
@@ -100,7 +100,7 @@ jobs:
           command: |
             bundle exec rake db:setup
           environment:
-            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+            DATABASE_URL: 'postgres://ubuntu@localhost:5432/coursemology_test'
 
       # run tests!
       - run:
@@ -118,7 +118,7 @@ jobs:
               --format progress \
               $TEST_FILES
           environment:
-            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+            DATABASE_URL: 'postgres://ubuntu@localhost:5432/coursemology_test'
 
       # collect reports
       - store_test_results:
@@ -130,7 +130,7 @@ jobs:
   lint:
     docker:
       # specify the version you desire here
-      - image: circleci/ruby:2.5.3-node-browsers
+      - image: circleci/ruby:2.5.3-node:12-browsers
         environment:
           RAILS_ENV: test
 
@@ -155,7 +155,7 @@ jobs:
   jstest:
     docker:
       # specify the version you desire here
-      - image: circleci/ruby:2.5.3-node-browsers
+      - image: circleci/ruby:2.5.3-node:12-browsers
         environment:
           RAILS_ENV: test
 
@@ -181,7 +181,7 @@ jobs:
   i18n:
     docker:
       # specify the version you desire here
-      - image: circleci/ruby:2.5.3-node-browsers
+      - image: circleci/ruby:2.5.3-node:12-browsers
         environment:
           PG_HOST: localhost
           PG_USER: ubuntu
@@ -216,7 +216,7 @@ jobs:
           command: |
             bundle exec rake db:setup
           environment:
-            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+            DATABASE_URL: 'postgres://ubuntu@localhost:5432/coursemology_test'
 
       # run i18n checks!
       - run:
@@ -226,7 +226,7 @@ jobs:
             bundle exec i18n-tasks missing
             bundle exec rake factory_bot:lint
           environment:
-            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+            DATABASE_URL: 'postgres://ubuntu@localhost:5432/coursemology_test'
 workflows:
   version: 2
   build_and_test_and_lint:
