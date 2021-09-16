@@ -68,8 +68,8 @@ class Course::Assessment::Submission::SubmissionsController < \
 
   def edit
     return if @submission.attempting?
-
-    render 'blocked' if @submission.assessment.block_student_viewing_after_submitted? && current_user.normal?
+    current_course_user = @course.course_users.for_user(current_user).first
+    render 'blocked' if @submission.assessment.block_student_viewing_after_submitted? && current_course_user.student?
 
     respond_to do |format|
       format.html {}
