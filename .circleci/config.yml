@@ -7,7 +7,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/ruby:2.5.3-node:12-browsers
+      - image: circleci/ruby:2.5.3-node-browsers
         environment:
           BUNDLE_APP_CONFIG: ~/repo/.bundle
 
@@ -18,6 +18,17 @@ jobs:
 
       # Checkout submodules
       - run: git submodule update --init --recursive
+
+      # Update Node.js to version 14 LTS
+      - run:
+          name: 'Update Node.js and npm'
+          command: |
+            curl -sSL "https://nodejs.org/dist/v14.17.6/node-v14.17.6-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v14.17.6-linux-x64/bin/node
+            curl https://www.npmjs.com/install.sh | sudo bash
+
+      - run:
+          name: Check current version of node
+          command: node -v
 
       # Download and cache dependencies
       - restore_cache:
@@ -54,7 +65,7 @@ jobs:
   test:
     docker:
       # specify the version you desire here
-      - image: circleci/ruby:2.5.3-node:12-browsers
+      - image: circleci/ruby:2.5.3-node-browsers
         environment:
           PG_HOST: localhost
           PG_USER: ubuntu
@@ -78,6 +89,17 @@ jobs:
 
       # Checkout submodules
       - run: git submodule update --init --recursive
+
+      # Update Node.js to version 14 LTS
+      - run:
+          name: 'Update Node.js and npm'
+          command: |
+            curl -sSL "https://nodejs.org/dist/v14.17.6/node-v14.17.6-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v14.17.6-linux-x64/bin/node
+            curl https://www.npmjs.com/install.sh | sudo bash
+
+      - run:
+          name: Check current version of node
+          command: node -v
 
       - restore_cache:
           keys:
@@ -130,7 +152,7 @@ jobs:
   lint:
     docker:
       # specify the version you desire here
-      - image: circleci/ruby:2.5.3-node:12-browsers
+      - image: circleci/ruby:2.5.3-node-browsers
         environment:
           RAILS_ENV: test
 
@@ -141,6 +163,17 @@ jobs:
 
       # Checkout submodules
       - run: git submodule update --init --recursive
+
+      # Update Node.js to version 14 LTS
+      - run:
+          name: 'Update Node.js and npm'
+          command: |
+            curl -sSL "https://nodejs.org/dist/v14.17.6/node-v14.17.6-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v14.17.6-linux-x64/bin/node
+            curl https://www.npmjs.com/install.sh | sudo bash
+
+      - run:
+          name: Check current version of node
+          command: node -v
 
       - restore_cache:
           keys:
@@ -155,7 +188,7 @@ jobs:
   jstest:
     docker:
       # specify the version you desire here
-      - image: circleci/ruby:2.5.3-node:12-browsers
+      - image: circleci/ruby:2.5.3-node-browsers
         environment:
           RAILS_ENV: test
 
@@ -166,6 +199,17 @@ jobs:
 
       # Checkout submodules
       - run: git submodule update --init --recursive
+
+      # Update Node.js to version 14 LTS
+      - run:
+          name: 'Update Node.js and npm'
+          command: |
+            curl -sSL "https://nodejs.org/dist/v14.17.6/node-v14.17.6-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v14.17.6-linux-x64/bin/node
+            curl https://www.npmjs.com/install.sh | sudo bash
+
+      - run:
+          name: Check current version of node
+          command: node -v
 
       - restore_cache:
           keys:
@@ -181,7 +225,7 @@ jobs:
   i18n:
     docker:
       # specify the version you desire here
-      - image: circleci/ruby:2.5.3-node:12-browsers
+      - image: circleci/ruby:2.5.3-node-browsers
         environment:
           PG_HOST: localhost
           PG_USER: ubuntu
@@ -203,6 +247,17 @@ jobs:
 
       # Checkout submodules
       - run: git submodule update --init --recursive
+
+      # Update Node.js to version 14 LTS
+      - run:
+          name: 'Update Node.js and npm'
+          command: |
+            curl -sSL "https://nodejs.org/dist/v14.17.6/node-v14.17.6-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v14.17.6-linux-x64/bin/node
+            curl https://www.npmjs.com/install.sh | sudo bash
+
+      - run:
+          name: Check current version of node
+          command: node -v
 
       - restore_cache:
           keys:
