@@ -125,7 +125,7 @@ LessonPlanGroup.propTypes = {
   group: PropTypes.shape({
     id: PropTypes.string,
     milestone: PropTypes.object,
-    items: PropTypes.arrayOf({}),
+    items: PropTypes.arrayOf(PropTypes.object),
   }).isRequired,
   initiallyExpanded: PropTypes.bool,
 };

@@ -50,8 +50,6 @@ global.sleep = sleep;
 
 // summernote does not work well with jsdom in tests, stub it to normal text field.
 jest.mock('lib/components/redux-form/RichTextField', () => {
-  const TextField = require.requireActual(
-    'lib/components/redux-form/TextField',
-  );
+  const TextField = jest.requireActual('lib/components/redux-form/TextField');
   return TextField;
 });

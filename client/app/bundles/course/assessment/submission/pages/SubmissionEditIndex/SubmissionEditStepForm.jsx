@@ -591,12 +591,11 @@ SubmissionEditStepForm.propTypes = {
   attempting: PropTypes.bool.isRequired,
   published: PropTypes.bool.isRequired,
 
-  showMcqMrqSolution: PropTypes.bool.isRequired,
-
   explanations: PropTypes.objectOf(explanationShape),
   allConsideredCorrect: PropTypes.bool.isRequired,
   allowPartialSubmission: PropTypes.bool.isRequired,
   showMcqAnswer: PropTypes.bool.isRequired,
+  showMcqMrqSolution: PropTypes.bool.isRequired,
   questionIds: PropTypes.arrayOf(PropTypes.number),
   questions: PropTypes.objectOf(questionShape),
   historyQuestions: PropTypes.objectOf(historyQuestionShape),
