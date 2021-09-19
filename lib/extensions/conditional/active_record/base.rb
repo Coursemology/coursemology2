@@ -51,7 +51,7 @@ module Extensions::Conditional::ActiveRecord::Base
     def conditions_satisfied_by?(course_user)
       return true if conditions.empty?
 
-      if self.satisfiability_type == :at_least_one_condition
+      if satisfiability_type == :at_least_one_condition
         conditions.any? { |condition| condition.satisfied_by?(course_user) }
       else
         conditions.all? { |condition| condition.satisfied_by?(course_user) }
