@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import CourseAPI from 'api/course';
-import typeMaterial from 'lib/types';
+import { typeMaterial } from 'lib/types';
 import MaterialList from './MaterialList';
 import translations from './translations.intl';
 
