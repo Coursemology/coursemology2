@@ -9,10 +9,8 @@ module Course::Assessment::Question::MultipleResponsesConcern
       @multiple_response_question.grading_scheme = :all_correct
     end
     @multiple_response_question.save!
-    unless unsubmit == 'false'
-      unsubmit_submissions
-      @multiple_response_question.question.answers.destroy_all
-    end
+    unsubmit_submissions unless unsubmit == 'false'
+    @multiple_response_question.question.answers.destroy_all unless unsubmit == 'false'
   end
 
   def unsubmit_submissions
