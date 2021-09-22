@@ -16,9 +16,11 @@ class ConfirmationDialog extends React.Component {
       open,
       onCancel,
       onConfirm,
+      onConfirmCustom,
       message,
       cancelButtonText,
       confirmButtonText,
+      confirmButtonCustomText,
       confirmDiscard,
       confirmDelete,
       confirmSubmit,
@@ -35,6 +37,11 @@ class ConfirmationDialog extends React.Component {
       confirmationButtonText = intl.formatMessage(formTranslations.discard);
     } else if (confirmSubmit) {
       confirmationButtonText = intl.formatMessage(formTranslations.submit);
+    }
+
+    let confirmationButtonCustomText = intl.formatMessage(formTranslations.continue);
+    if (confirmButtonCustomText) {
+      confirmationButtonCustomText = confirmButtonCustomText;
     }
 
     let confirmationMessage = intl.formatMessage(formTranslations.areYouSure);
@@ -72,6 +79,21 @@ class ConfirmationDialog extends React.Component {
       />,
     ];
 
+    if (onConfirmCustom) {
+      const confirmButtonCustom = [
+        <FlatButton
+          primary
+          className="confirm-btn"
+          disabled={disableConfirmButton}
+          onClick={onConfirmCustom}
+          style={buttonStyle}
+          label={confirmationButtonCustomText}
+          ref={(button) => { this.confirmButtonCustom = button; }}
+        />,
+      ];
+      actions.push(...confirmButtonCustom);
+    }
+
     return (
       <div>
         <Dialog
@@ -92,9 +114,11 @@ ConfirmationDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   onCancel: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,
+  onConfirmCustom: PropTypes.func,
   message: PropTypes.node,
   cancelButtonText: PropTypes.node,
   confirmButtonText: PropTypes.node,
+  confirmButtonCustomText: PropTypes.node,
   confirmDiscard: PropTypes.bool,
   confirmDelete: PropTypes.bool,
   confirmSubmit: PropTypes.bool,

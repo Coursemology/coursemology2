@@ -25,6 +25,25 @@ function loadDialogue(element, successCallback) {
   );
 }
 
+// Loads the Custom Dialog component which contains an additional customized button.
+function loadCustomDialogue(element, successCallback) {
+  const mountNode = getOrCreateNode(DIALOG_ID);
+  // Remove existing hidden dialog, if any.
+  unmountComponentAtNode(mountNode);
+  render(
+    <ProviderWrapper>
+      <RailsConfirmationDialog
+        onConfirmCallback={() => successCallback(element)}
+        onConfirmCustomCallback={() => successCallback(element, true)}
+        message={element.attr('data-confirm')}
+        confirmButtonText={element.attr('data-confirm_text')}
+        confirmButtonCustomText={element.attr('data-confirm_custom_text')}
+      />
+    </ProviderWrapper>,
+    mountNode
+  );
+}
+
 // Create a form based on the link and submit.
 function submitLink(link) {
   const form = $('<form>', {
@@ -49,7 +68,7 @@ function submitLink(link) {
 
 function overrideConfirmDialog() {
   // Success callback if dialog is confirmed.
-  function onConfirm(element) {
+  function onConfirm(element, custom) {
     element.removeAttr('data-confirm');
 
     if (
@@ -67,6 +86,10 @@ function overrideConfirmDialog() {
       }
     } else {
       // Element is a remote link, button, etc.
+      // Additional params appended to the href link
+      if (custom) {
+        element.parent().attr('href', `${element.parent().attr('href')}&${element.attr('data-confirm_custom')}`);
+      }
       element.trigger('click');
       if ($.rails.isRemote(element)) {
         $(document).ajaxComplete(() =>
@@ -79,10 +102,11 @@ function overrideConfirmDialog() {
   // Handler for elements with data-confirm attribute.
   // This intercepts Rail's popup implementation and renders a dialog instead.
   $.rails.allowAction = (element) => {
-    if (!element.attr('data-confirm')) {
-      return true;
-    }
-    loadDialogue(element, onConfirm);
+    if (!element.attr('data-confirm')) { return true; }
+    if (element.attr('data-confirm_custom')) {
+      loadCustomDialogue(element, onConfirm);
+    } else { loadDialogue(element, onConfirm); }
+
     // Always stops the action since code runs asynchronously
     return false;
   };

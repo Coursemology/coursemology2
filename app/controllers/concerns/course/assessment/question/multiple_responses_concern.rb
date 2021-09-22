@@ -2,15 +2,17 @@
 module Course::Assessment::Question::MultipleResponsesConcern
   extend ActiveSupport::Concern
 
-  def switch_mcq_mrq_type(multiple_choice)
+  def switch_mcq_mrq_type(multiple_choice, unsubmit)
     if multiple_choice == 'true'
       @multiple_response_question.grading_scheme = :any_correct
     elsif multiple_choice == 'false'
       @multiple_response_question.grading_scheme = :all_correct
     end
     @multiple_response_question.save!
-    unsubmit_submissions
-    @multiple_response_question.question.answers.destroy_all
+    unless unsubmit == 'false'
+      unsubmit_submissions
+      @multiple_response_question.question.answers.destroy_all
+    end
   end
 
   def unsubmit_submissions

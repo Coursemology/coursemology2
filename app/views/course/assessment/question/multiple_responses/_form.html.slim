@@ -40,5 +40,10 @@
     - button_text = t('helpers.buttons.create', model: type)
   = f.button :submit, button_text
 
-  div.pull-right
-    = render partial: 'switch_question_type_button', locals: { f: f }
+div.pull-right.question-switch-type-button
+  = render partial: 'switch_question_type_button',
+            locals: { current_course: current_course,
+                      assessment: @question_assessment.assessment,
+                      multiple_response_question: @multiple_response_question,
+                      redirect_to_assessment_show: 'false',
+                      new_question: new_question, }

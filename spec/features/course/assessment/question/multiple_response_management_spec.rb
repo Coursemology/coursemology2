@@ -34,8 +34,9 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
         )
       end
 
-      scenario 'I can switch MRQ to MCQ, and back to MRQ, type for a new question' do
+      scenario 'I can switch MRQ to MCQ, and back to MRQ, type for a new question', js: true do
         visit course_assessment_path(course, assessment)
+        click_on I18n.t('common.new')
         click_link I18n.t('course.assessment.assessments.show.new_question.multiple_response')
 
         expect(page).to have_text(
@@ -197,12 +198,14 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
         # Switch MRQ to MCQ
         visit edit_path
         click_button I18n.t('course.assessment.question.multiple_responses.switch_question_type_button.switch_to_mcq')
+        click_button 'Continue'
         expect(page).to have_text(
           I18n.t('course.assessment.question.multiple_responses.form.multiple_choice_option')
         )
 
         # Switch MCQ to MRQ
         click_button I18n.t('course.assessment.question.multiple_responses.switch_question_type_button.switch_to_mrq')
+        click_button 'Continue'
         expect(page).to have_text(
           I18n.t('course.assessment.question.multiple_responses.form.multiple_response_option')
         )
@@ -215,6 +218,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
 
         # Switch MRQ to MCQ
         click_button I18n.t('course.assessment.question.multiple_responses.switch_question_type_button.switch_to_mcq')
+        click_button 'Continue'
         expect(page).to have_text(
           I18n.t('course.assessment.question.multiple_responses.question_type.multiple_choice')
         )
@@ -222,7 +226,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
           I18n.t('course.assessment.question.multiple_responses.switch_question_type_button.switch_to_mrq')
         )
 
-        # Delete all MRQ options
+        # Delete all MCQ options
         visit edit_path
         all('tr.question_multiple_response_option').each do |element|
           within element do
