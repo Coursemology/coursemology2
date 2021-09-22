@@ -14,15 +14,6 @@ class Course::Assessment::Question::MultipleResponsesController < Course::Assess
   end
 
   def create
-    if params.key?(:multiple_choice)
-      @multiple_response_question.grading_scheme = if params[:multiple_choice] == 'true'
-                                                     :any_correct
-                                                   else
-                                                     :all_correct
-                                                   end
-      return render 'new'
-    end
-
     if @multiple_response_question.save
       redirect_to course_assessment_path(current_course, @assessment),
                   success: t('.success')
@@ -37,7 +28,7 @@ class Course::Assessment::Question::MultipleResponsesController < Course::Assess
 
   def update
     if params.key?(:multiple_choice)
-      switch_mcq_mrq_type(params[:multiple_choice])
+      switch_mcq_mrq_type(params[:multiple_choice], params[:unsubmit])
       return render 'edit' unless params.key?(:redirect_to_assessment_show) &&
                                   params[:redirect_to_assessment_show] == 'true'
       return redirect_to course_assessment_path(current_course, @assessment),

@@ -39,48 +39,6 @@ RSpec.describe Course::Assessment::Question::MultipleResponsesController do
           is_expected.to render_template('new')
         end
       end
-
-      context 'when changing MRQ to MCQ question type' do
-        let!(:multiple_response) do
-          create(:course_assessment_question_multiple_response, assessment: assessment)
-        end
-        subject do
-          question_multiple_response_attributes =
-            attributes_for(:course_assessment_question_multiple_response).
-            slice(:description, :maximum_grade)
-          post :create, params: {
-            course_id: course, assessment_id: assessment,
-            question_multiple_response: question_multiple_response_attributes,
-            multiple_choice: 'true'
-          }
-        end
-
-        it do
-          is_expected.to render_template('new')
-          expect(multiple_response.grading_scheme).to eq('any_correct')
-        end
-      end
-
-      context 'when changing MCQ to MRQ question type' do
-        let!(:multiple_response) do
-          create(:course_assessment_question_multiple_response, assessment: assessment)
-        end
-        subject do
-          question_multiple_response_attributes =
-            attributes_for(:course_assessment_question_multiple_response).
-            slice(:description, :maximum_grade)
-          post :create, params: {
-            course_id: course, assessment_id: assessment,
-            question_multiple_response: question_multiple_response_attributes,
-            multiple_choice: 'false'
-          }
-        end
-
-        it do
-          is_expected.to render_template('new')
-          expect(multiple_response.grading_scheme).to eq('all_correct')
-        end
-      end
     end
 
     describe '#edit' do

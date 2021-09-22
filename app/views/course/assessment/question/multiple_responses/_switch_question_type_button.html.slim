@@ -1,5 +1,21 @@
-- multiple_choice = @multiple_response_question.multiple_choice?
-- button_text = @multiple_response_question.multiple_choice? ? t('.switch_to_mrq') : t('.switch_to_mcq')
-- warning_text = @multiple_response_question.multiple_choice? ? t('.confirm_switch_to_mrq') : t('.confirm_switch_to_mcq')
-= f.button :button, button_text, type: 'submit', formnovalidate: true, name: 'multiple_choice', value: !multiple_choice,
-  data: (f.object.persisted? && @question_assessment.assessment.submissions&.length > 0 ? { confirm: warning_text } : nil)
+- multiple_choice = multiple_response_question.multiple_choice?
+- button_text = multiple_response_question.multiple_choice? ? t('.switch_to_mrq') : t('.switch_to_mcq')
+- if new_question
+  = link_to new_course_assessment_question_multiple_response_path(current_course, assessment, { multiple_choice: !multiple_choice }) do
+    button.btn.btn-default type='button'
+        => button_text
+- else
+  - warning_text = multiple_response_question.multiple_choice? ? t('.confirm_switch_to_mrq') : t('.confirm_switch_to_mcq')
+  - warning_text = multiple_response_question.answers&.length > 0 ? warning_text : t('.no_answer')
+  - data = (multiple_response_question.answers&.length > 0 ? \
+             { confirm: warning_text,
+               confirm_text: 'Unsubmit Submissions and Switch',
+               confirm_custom: 'unsubmit=false',
+               confirm_custom_text: 'Retain Submissions and Switch' } : \
+              { confirm: t('.no_answer') })
+  = link_to url_for([current_course, assessment, multiple_response_question,
+                                'multiple_choice' => !multiple_choice,
+                                'redirect_to_assessment_show' => redirect_to_assessment_show]),
+    remote: false, method: :put do
+      button.btn.btn-default type='button' data=data
+        => button_text

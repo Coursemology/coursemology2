@@ -41,18 +41,12 @@
         p = format_html(question.description)
       - if question.actable.is_a? Course::Assessment::Question::MultipleResponse
           div.pull-right
-            - button_text = question.specific.multiple_choice?\
-                          ? t('course.assessment.question.multiple_responses.switch_question_type_button.switch_to_mrq')\
-                          : t('course.assessment.question.multiple_responses.switch_question_type_button.switch_to_mcq')
-            - warning_text = question.specific.multiple_choice?\
-                          ? t('course.assessment.question.multiple_responses.switch_question_type_button.confirm_switch_to_mrq')\
-                          : t('course.assessment.question.multiple_responses.switch_question_type_button.confirm_switch_to_mcq')
-            = link_to url_for([current_course, assessment, question.specific,
-                               'multiple_choice' => !question.specific.multiple_choice?,
-                               'redirect_to_assessment_show' => 'true']),
-              remote: false, method: :put do
-                button.btn.btn-default type='button' data=(assessment.submissions&.length > 0 ? { confirm: warning_text } : nil)
-                  => button_text 
+            = render partial: 'course/assessment/question/multiple_responses/switch_question_type_button',
+                     locals: { current_course: current_course,
+                               assessment: assessment,
+                               multiple_response_question: question.specific,
+                               redirect_to_assessment_show: 'true',
+                               new_question: false }
           button.btn.btn-default type="button" data-toggle="collapse" data-target="##{question.id}" aria-expanded="false" aria-controls="panel"
             => t('.show_options')
             span.caret
