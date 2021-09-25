@@ -178,9 +178,9 @@ GEM
     codecov (0.2.12)
       json
       simplecov
-    concurrent-ruby (1.1.7)
+    concurrent-ruby (1.1.9)
     consistency_fail (0.3.7)
-    coursemology-polyglot (0.3)
+    coursemology-polyglot (0.3.1)
       activesupport (>= 4.2, < 6)
     crass (1.0.6)
     devise (4.7.1)
@@ -238,7 +238,7 @@ GEM
       rouge (>= 2.0.0, < 4)
     htmlentities (4.3.4)
     http_accept_language (2.1.1)
-    i18n (1.8.5)
+    i18n (1.8.10)
       concurrent-ruby (~> 1.0)
     i18n-js (3.4.0)
       i18n (>= 0.6.6)
@@ -316,7 +316,7 @@ GEM
     mini_magick (4.9.5)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
-    minitest (5.14.1)
+    minitest (5.14.4)
     momentjs-rails (2.20.1)
       railties (>= 3.1)
     multi_json (1.13.1)
@@ -500,7 +500,7 @@ GEM
       actionpack (>= 3.1)
       jquery-rails
       railties (>= 3.1)
-    tzinfo (1.2.7)
+    tzinfo (1.2.9)
       thread_safe (~> 0.1)
     uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
