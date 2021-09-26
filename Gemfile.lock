@@ -198,7 +198,7 @@ GEM
       simplecov
     concurrent-ruby (1.1.9)
     consistency_fail (0.3.7)
-    coursemology-polyglot (0.3.1)
+    coursemology-polyglot (0.3.2)
       activesupport (>= 4.2, < 6)
     crass (1.0.6)
     devise (4.7.3)
