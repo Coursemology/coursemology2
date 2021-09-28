@@ -3,7 +3,6 @@ FactoryBot.define do
   factory :course_video_topic, class: Course::Video::Topic.name,
                                parent: :course_discussion_topic,
                                aliases: [:video_topic] do
-
     course { create(:course) }
     video { build(:video, course: course) }
     creator { build(:course_student, course: course).user }

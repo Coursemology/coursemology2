@@ -26,7 +26,7 @@ function loadCurrentModule() {
 
 function loadModules() {
   // Initializers
-  require('lib/initializers/ace-editor.js');
+  require('lib/initializers/ace-editor');
   require('lib/initializers/confirm-dialog');
   require('lib/initializers/popup-notifier');
   loadCurrentModule();
@@ -39,11 +39,13 @@ if (!global.Intl) {
     import(/* webpackChunkName: "intl" */ 'intl'),
     import(/* webpackChunkName: "intl" */ 'intl/locale-data/jsonp/en'),
     import(/* webpackChunkName: "intl" */ 'intl/locale-data/jsonp/zh'),
-  ]).then(() => {
-    loadModules();
-  }).catch((e) => {
-    throw e;
-  });
+  ])
+    .then(() => {
+      loadModules();
+    })
+    .catch((e) => {
+      throw e;
+    });
 } else {
   loadModules();
 }

@@ -23,14 +23,11 @@ export function submitSurveyForm() {
   };
 }
 
-export function createSurvey(
-  surveyFields,
-  successMessage,
-  failureMessage
-) {
+export function createSurvey(surveyFields, successMessage, failureMessage) {
   return (dispatch) => {
     dispatch({ type: actionTypes.CREATE_SURVEY_REQUEST });
-    return CourseAPI.survey.surveys.create(surveyFields)
+    return CourseAPI.survey.surveys
+      .create(surveyFields)
       .then((response) => {
         dispatch({
           type: actionTypes.CREATE_SURVEY_SUCCESS,
@@ -55,7 +52,8 @@ export function createSurvey(
 export function fetchSurvey(surveyId) {
   return (dispatch) => {
     dispatch({ type: actionTypes.LOAD_SURVEY_REQUEST, surveyId });
-    return CourseAPI.survey.surveys.fetch(surveyId)
+    return CourseAPI.survey.surveys
+      .fetch(surveyId)
       .then((response) => {
         dispatch({
           type: actionTypes.LOAD_SURVEY_SUCCESS,
@@ -72,7 +70,8 @@ export function fetchSurveys() {
   return (dispatch) => {
     dispatch({ type: actionTypes.LOAD_SURVEYS_REQUEST });
 
-    return CourseAPI.survey.surveys.index()
+    return CourseAPI.survey.surveys
+      .index()
       .then((response) => {
         dispatch({
           type: actionTypes.LOAD_SURVEYS_SUCCESS,
@@ -90,11 +89,12 @@ export function updateSurvey(
   surveyId,
   surveyFields,
   successMessage,
-  failureMessage
+  failureMessage,
 ) {
   return (dispatch) => {
     dispatch({ type: actionTypes.UPDATE_SURVEY_REQUEST, surveyId });
-    return CourseAPI.survey.surveys.update(surveyId, surveyFields)
+    return CourseAPI.survey.surveys
+      .update(surveyId, surveyFields)
       .then((response) => {
         dispatch({
           type: actionTypes.UPDATE_SURVEY_SUCCESS,
@@ -117,7 +117,8 @@ export function updateSurvey(
 export function deleteSurvey(surveyId, successMessage, failureMessage) {
   return (dispatch) => {
     dispatch({ type: actionTypes.DELETE_SURVEY_REQUEST, surveyId });
-    return CourseAPI.survey.surveys.delete(surveyId)
+    return CourseAPI.survey.surveys
+      .delete(surveyId)
       .then(() => {
         history.push(`/courses/${getCourseId()}/surveys/`);
         dispatch({
@@ -136,7 +137,8 @@ export function deleteSurvey(surveyId, successMessage, failureMessage) {
 export function fetchResults(surveyId) {
   return (dispatch) => {
     dispatch({ type: actionTypes.LOAD_SURVEY_RESULTS_REQUEST, surveyId });
-    return CourseAPI.survey.surveys.results(surveyId)
+    return CourseAPI.survey.surveys
+      .results(surveyId)
       .then((response) => {
         dispatch({
           type: actionTypes.LOAD_SURVEY_RESULTS_SUCCESS,
@@ -153,7 +155,8 @@ export function fetchResults(surveyId) {
 export function sendReminderEmail(successMessage, failureMessage) {
   return (dispatch) => {
     dispatch({ type: actionTypes.SEND_REMINDER_REQUEST });
-    return CourseAPI.survey.surveys.remind()
+    return CourseAPI.survey.surveys
+      .remind()
       .then(() => {
         dispatch({ type: actionTypes.SEND_REMINDER_SUCCESS });
         setNotification(successMessage)(dispatch);
@@ -179,10 +182,16 @@ export function downloadSurvey() {
       dispatch(setNotification(translations.requestFailure));
     };
 
-    return CourseAPI.survey.surveys.download()
-      .then(response => response.data)
+    return CourseAPI.survey.surveys
+      .download()
+      .then((response) => response.data)
       .then((data) => {
-        pollJob(data.redirect_url, DOWNLOAD_JOB_POLL_INTERVAL, handleSuccess, handleFailure);
+        pollJob(
+          data.redirect_url,
+          DOWNLOAD_JOB_POLL_INTERVAL,
+          handleSuccess,
+          handleFailure,
+        );
       })
       .catch(handleFailure);
   };

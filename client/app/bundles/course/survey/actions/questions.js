@@ -13,15 +13,17 @@ export function hideQuestionForm() {
 }
 
 export function submitQuestionForm() {
-  return dispatch => dispatch(submit(formNames.SURVEY_QUESTION));
+  return (dispatch) => dispatch(submit(formNames.SURVEY_QUESTION));
 }
 
 export function addToOptions(option) {
-  return dispatch => dispatch(arrayPush(formNames.SURVEY_QUESTION, 'options', option));
+  return (dispatch) =>
+    dispatch(arrayPush(formNames.SURVEY_QUESTION, 'options', option));
 }
 
 export function addToOptionsToDelete(option) {
-  return dispatch => dispatch(arrayPush(formNames.SURVEY_QUESTION, 'optionsToDelete', option));
+  return (dispatch) =>
+    dispatch(arrayPush(formNames.SURVEY_QUESTION, 'optionsToDelete', option));
 }
 
 /**
@@ -62,7 +64,7 @@ export function changeSection(
   prepend,
   sourceIndex,
   sourceSectionIndex,
-  targetSectionIndex
+  targetSectionIndex,
 ) {
   return {
     type: actionTypes.CHANGE_QUESTION_SECTION,
@@ -85,11 +87,7 @@ export function changeSection(
  *   The new index of the question
  * @return {Object} The action
  */
-export function reorder(
-  sectionIndex,
-  sourceIndex,
-  targetIndex
-) {
+export function reorder(sectionIndex, sourceIndex, targetIndex) {
   return {
     type: actionTypes.REORDER_QUESTION,
     surveyId: getSurveyId(),
@@ -107,17 +105,24 @@ export function reorder(
  */
 export function finalizeOrder(successMessage, failureMessage) {
   return (dispatch, getState) => {
-    const { surveysFlags: { isQuestionMoved }, surveys } = getState();
-    if (!isQuestionMoved) { return; }
+    const {
+      surveysFlags: { isQuestionMoved },
+      surveys,
+    } = getState();
+    if (!isQuestionMoved) {
+      return;
+    }
 
     const surveyId = getSurveyId();
-    const survey = surveys.find(item => String(item.id) === surveyId);
-    const ordering = survey.sections.map(section => (
-      [section.id, section.questions.map(question => question.id)]
-    ));
+    const survey = surveys.find((item) => String(item.id) === surveyId);
+    const ordering = survey.sections.map((section) => [
+      section.id,
+      section.questions.map((question) => question.id),
+    ]);
 
     dispatch({ type: actionTypes.UPDATE_QUESTION_ORDER_REQUEST });
-    CourseAPI.survey.surveys.reorderQuestions({ ordering })
+    CourseAPI.survey.surveys
+      .reorderQuestions({ ordering })
       .then((response) => {
         dispatch({
           type: actionTypes.UPDATE_QUESTION_ORDER_SUCCESS,
@@ -132,14 +137,11 @@ export function finalizeOrder(successMessage, failureMessage) {
   };
 }
 
-export function createSurveyQuestion(
-  fields,
-  successMessage,
-  failureMessage
-) {
+export function createSurveyQuestion(fields, successMessage, failureMessage) {
   return (dispatch) => {
     dispatch({ type: actionTypes.CREATE_SURVEY_QUESTION_REQUEST });
-    return CourseAPI.survey.questions.create(fields)
+    return CourseAPI.survey.questions
+      .create(fields)
       .then((response) => {
         dispatch({
           surveyId: getSurveyId(),
@@ -165,11 +167,12 @@ export function updateSurveyQuestion(
   questionId,
   data,
   successMessage,
-  failureMessage
+  failureMessage,
 ) {
   return (dispatch) => {
     dispatch({ type: actionTypes.UPDATE_SURVEY_QUESTION_REQUEST });
-    return CourseAPI.survey.questions.update(questionId, data)
+    return CourseAPI.survey.questions
+      .update(questionId, data)
       .then((response) => {
         dispatch({
           surveyId: getSurveyId(),
@@ -191,14 +194,11 @@ export function updateSurveyQuestion(
   };
 }
 
-export function deleteSurveyQuestion(
-  question,
-  successMessage,
-  failureMessage
-) {
+export function deleteSurveyQuestion(question, successMessage, failureMessage) {
   return (dispatch) => {
     dispatch({ type: actionTypes.DELETE_SURVEY_QUESTION_REQUEST });
-    return CourseAPI.survey.questions.delete(question.id)
+    return CourseAPI.survey.questions
+      .delete(question.id)
       .then(() => {
         dispatch({
           surveyId: getSurveyId(),

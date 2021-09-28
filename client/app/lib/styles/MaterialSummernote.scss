@@ -405,12 +405,14 @@
     border-radius: 0;
   }
 
+  // prettier-ignore
   .btn-group-vertical > .btn-group:first-child:not(:last-child) > .btn:last-child,
   .btn-group-vertical > .btn-group:first-child:not(:last-child) > .dropdown-toggle {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
   }
 
+  // prettier-ignore
   .btn-group-vertical > .btn-group:last-child:not(:first-child) > .btn:first-child {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
@@ -631,7 +633,7 @@
 
     .modal-sm {
       width: 300px;
-    };
+    }
   }
 
   .tooltip.top-left .tooltip-arrow,
@@ -645,7 +647,7 @@
   @media (min-width: 992px) {
     .modal-lg {
       width: 900px;
-    };
+    }
   }
 
   .tooltip {
@@ -959,7 +961,7 @@
     transition-duration: 0.3s;
   }
 
-  .dropdown-menu[class*=bgm-] > li > a {
+  .dropdown-menu[class*='bgm-'] > li > a {
     color: #ffffff;
   }
 
@@ -984,7 +986,7 @@
     text-transform: uppercase;
   }
 
-  .btn[class*=bgm-]:not(.bgm-white) {
+  .btn[class*='bgm-']:not(.bgm-white) {
     color: #ffffff;
   }
 
@@ -1085,7 +1087,7 @@
     .modal .modal-dialog {
       margin: 10px auto;
       text-align: left;
-    };
+    }
   }
 
   .modal .modal-content {

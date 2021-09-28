@@ -41,18 +41,6 @@ const translations = defineMessages({
 });
 
 class AdminMenu extends React.Component {
-  static propTypes = {
-    survey: surveyShape,
-    surveyId: PropTypes.string.isRequired,
-
-    intl: intlShape,
-    dispatch: PropTypes.func.isRequired,
-  };
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired,
-  }
-
   updateSurveyHandler = (data) => {
     const { dispatch, intl, surveyId } = this.props;
     const { updateSurvey } = surveyActions;
@@ -60,15 +48,25 @@ class AdminMenu extends React.Component {
     const payload = formatSurveyFormData(data);
     const successMessage = intl.formatMessage(translations.updateSuccess, data);
     const failureMessage = intl.formatMessage(translations.updateFailure);
-    return dispatch(updateSurvey(surveyId, payload, successMessage, failureMessage));
-  }
+    return dispatch(
+      updateSurvey(surveyId, payload, successMessage, failureMessage),
+    );
+  };
 
   showEditSurveyForm = () => {
     const { survey, dispatch, intl } = this.props;
     const { showSurveyForm } = surveyActions;
     const {
-      title, description, base_exp, time_bonus_exp, start_at, end_at, hasStudentResponse,
-      allow_response_after_end, allow_modify_after_submit, anonymous,
+      title,
+      description,
+      base_exp,
+      time_bonus_exp,
+      start_at,
+      end_at,
+      hasStudentResponse,
+      allow_response_after_end,
+      allow_modify_after_submit,
+      anonymous,
     } = survey;
 
     const initialValues = {
@@ -81,61 +79,77 @@ class AdminMenu extends React.Component {
       anonymous,
     };
 
-    return dispatch(showSurveyForm({
-      onSubmit: this.updateSurveyHandler,
-      formTitle: intl.formatMessage(translations.editSurvey),
-      hasStudentResponse,
-      initialValues: {
-        ...initialValues,
-        start_at: new Date(start_at),
-        end_at: end_at && new Date(end_at),
-      },
-    }));
-  }
+    return dispatch(
+      showSurveyForm({
+        onSubmit: this.updateSurveyHandler,
+        formTitle: intl.formatMessage(translations.editSurvey),
+        hasStudentResponse,
+        initialValues: {
+          ...initialValues,
+          start_at: new Date(start_at),
+          end_at: end_at && new Date(end_at),
+        },
+      }),
+    );
+  };
 
   deleteSurveyHandler = () => {
     const { survey, dispatch, intl, surveyId } = this.props;
     const { deleteSurvey } = surveyActions;
 
-    const successMessage = intl.formatMessage(translations.deleteSuccess, survey);
-    const failureMessage = intl.formatMessage(translations.deleteFailure);
-    const handleDelete = () => (
-      dispatch(deleteSurvey(surveyId, successMessage, failureMessage))
+    const successMessage = intl.formatMessage(
+      translations.deleteSuccess,
+      survey,
     );
+    const failureMessage = intl.formatMessage(translations.deleteFailure);
+    const handleDelete = () =>
+      dispatch(deleteSurvey(surveyId, successMessage, failureMessage));
     return dispatch(showDeleteConfirmation(handleDelete));
-  }
+  };
 
   render() {
     const { intl, survey } = this.props;
-    if (!survey.canUpdate && !survey.canDelete) { return null; }
+    if (!survey.canUpdate && !survey.canDelete) {
+      return null;
+    }
     const styles = getStyles(this.props, this.context);
 
     return (
       <IconMenu
         iconStyle={styles.iconButtonIconStyle}
-        iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+        iconButtonElement={
+          <IconButton>
+            <MoreVertIcon />
+          </IconButton>
+        }
       >
-        {
-          survey.canUpdate
-            ? (
-              <MenuItem
-                primaryText={intl.formatMessage(translations.editSurvey)}
-                onClick={this.showEditSurveyForm}
-              />
-            ) : null
-        }
-        {
-          survey.canDelete
-            ? (
-              <MenuItem
-                primaryText={intl.formatMessage(translations.deleteSurvey)}
-                onClick={this.deleteSurveyHandler}
-              />
-            ) : null
-        }
+        {survey.canUpdate ? (
+          <MenuItem
+            primaryText={intl.formatMessage(translations.editSurvey)}
+            onClick={this.showEditSurveyForm}
+          />
+        ) : null}
+        {survey.canDelete ? (
+          <MenuItem
+            primaryText={intl.formatMessage(translations.deleteSurvey)}
+            onClick={this.deleteSurveyHandler}
+          />
+        ) : null}
       </IconMenu>
     );
   }
 }
+
+AdminMenu.propTypes = {
+  survey: surveyShape,
+  surveyId: PropTypes.string.isRequired,
+
+  intl: intlShape,
+  dispatch: PropTypes.func.isRequired,
+};
+
+AdminMenu.contextTypes = {
+  muiTheme: PropTypes.object.isRequired,
+};
 
 export default connect()(injectIntl(AdminMenu));

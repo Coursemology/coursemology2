@@ -12,18 +12,20 @@ const bufferedColour = '#afe9ff';
 const playedColour = '#00bcd4';
 
 function generateRailStyle(buffered, total) {
-  const bufferedFrac = (total === 0 || buffered > total) ? 1 : buffered / total;
+  const bufferedFrac = total === 0 || buffered > total ? 1 : buffered / total;
   const unbufferedFrac = 1 - bufferedFrac;
 
   if (bufferedFrac < 0.5) {
     return {
-      backgroundImage: `linear-gradient(270deg, ${unbufferedColour} ${unbufferedFrac * 100}%,`
-      + ` ${bufferedColour} ${bufferedFrac * 100}%)`,
+      backgroundImage: `linear-gradient(270deg, ${unbufferedColour} ${
+        unbufferedFrac * 100
+      }%, ${bufferedColour} ${bufferedFrac * 100}%)`,
     };
   }
   return {
-    backgroundImage: `linear-gradient(90deg, ${bufferedColour} ${bufferedFrac * 100}%,`
-    + ` ${unbufferedColour} ${unbufferedFrac * 100}%)`,
+    backgroundImage: `linear-gradient(90deg, ${bufferedColour} ${
+      bufferedFrac * 100
+    }%, ${unbufferedColour} ${unbufferedFrac * 100}%)`,
   };
 }
 
@@ -63,7 +65,10 @@ class VideoPlayerSlider extends React.Component {
           value={this.props.playerProgress}
           handleStyle={[{ borderColor: playedColour }]}
           trackStyle={{ backgroundColor: playedColour }}
-          railStyle={generateRailStyle(this.props.bufferProgress, this.props.duration)}
+          railStyle={generateRailStyle(
+            this.props.bufferProgress,
+            this.props.duration,
+          )}
           tipFormatter={formatTimestamp}
           onChange={this.props.onDragged}
           onBeforeChange={this.props.onDragBegin}
@@ -88,7 +93,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     onDragBegin: () => dispatch(seekStart()),
-    onDragged: newValue => dispatch(updatePlayerProgress(newValue, true)),
+    onDragged: (newValue) => dispatch(updatePlayerProgress(newValue, true)),
     onDragStop: () => dispatch(seekEnd()),
   };
 }

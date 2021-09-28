@@ -74,7 +74,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
         created_submission = assessment_with_condition.submissions.last
         expect(current_path).to eq(edit_course_assessment_submission_path(
                                      course, assessment_with_condition, created_submission
-        ))
+                                   ))
       end
 
       scenario 'I can attempt non-empty assessments' do
@@ -104,7 +104,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
 
       pending 'I can view tabbed assessments and tabs for assessments with more than 1 question,'\
                'and view tabs directly through a URL',
-               js: true do
+              js: true do
         assessment_tabbed_single_question
         visit course_assessments_path(course)
 
@@ -194,7 +194,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
         created_submission = assessment_with_condition.submissions.last
         expect(current_path).to eq(edit_course_assessment_submission_path(
                                      course, assessment_with_condition, created_submission
-        ))
+                                   ))
       end
 
       scenario 'I can attempt assessments that have not started' do

@@ -27,6 +27,7 @@ class CourseAssessmentAnswerMultipleResponseInput < SimpleForm::Inputs::Collecti
   # @return [String] When the answer is correct.
   def correct_class(option)
     return nil unless options[:display_solution]
+
     option.correct? ? 'correct' : nil
   end
 

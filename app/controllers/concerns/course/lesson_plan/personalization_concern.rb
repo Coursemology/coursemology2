@@ -84,12 +84,14 @@ module Course::LessonPlan::PersonalizationConcern
         # Update personal time
         reference_time = item.reference_time_for(course_user)
         personal_time = item.find_or_create_personal_time_for(course_user)
-        personal_time.start_at =
-          round_to_date(
-            personal_point + (reference_time.start_at - reference_point) * learning_rate_ema,
-            course_tz,
-            FOMO_DATE_ROUNDING_THRESHOLD
-          ) if personal_time.start_at > Time.zone.now
+        if personal_time.start_at > Time.zone.now
+          personal_time.start_at =
+            round_to_date(
+              personal_point + (reference_time.start_at - reference_point) * learning_rate_ema,
+              course_tz,
+              FOMO_DATE_ROUNDING_THRESHOLD
+            )
+        end
         # Hard limits to make sure we don't fail bounds checks
         personal_time.start_at = [personal_time.start_at, reference_time.start_at, reference_time.end_at].compact.min
         if personal_time.bonus_end_at && personal_time.bonus_end_at > Time.zone.now

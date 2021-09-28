@@ -19,7 +19,8 @@ const translations = defineMessages({
   },
   leaderboardMessage: {
     id: 'course.userNotification.LevelReachedPopup.leaderboardMessage',
-    defaultMessage: 'You are currently at position {position} on the leaderboard. Good work!',
+    defaultMessage:
+      'You are currently at position {position} on the leaderboard. Good work!',
   },
 });
 
@@ -44,7 +45,9 @@ const LevelReachedPopup = ({ notification, onDismiss, intl }) => {
 
   return (
     <Popup
-      title={intl.formatMessage(translations.reached, { levelNumber: notification.levelNumber })}
+      title={intl.formatMessage(translations.reached, {
+        levelNumber: notification.levelNumber,
+      })}
       actionButtons={[leaderboardButton]}
       onDismiss={onDismiss}
     >
@@ -54,14 +57,13 @@ const LevelReachedPopup = ({ notification, onDismiss, intl }) => {
         backgroundColor={deepOrange400}
         icon={<StarIcon />}
       />
-      {
-        notification.leaderboardEnabled && notification.leaderboardPosition
-          ? (
-            <p style={styles.leaderboardMessage}>
-              { intl.formatMessage(translations.leaderboardMessage, { position: notification.leaderboardPosition }) }
-            </p>
-          ) : null
-      }
+      {notification.leaderboardEnabled && notification.leaderboardPosition ? (
+        <p style={styles.leaderboardMessage}>
+          {intl.formatMessage(translations.leaderboardMessage, {
+            position: notification.leaderboardPosition,
+          })}
+        </p>
+      ) : null}
     </Popup>
   );
 };

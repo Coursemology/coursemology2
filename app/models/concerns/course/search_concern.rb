@@ -11,8 +11,13 @@ module Course::SearchConcern
       return all if keyword.blank?
 
       condition = "%#{keyword}%"
-      joining { users.outer }.
-        where.has { (title =~ condition) | (description =~ condition) | (users.name =~ condition) }.
+      # joining { users.outer }.
+      #   where.has { (title =~ condition) | (description =~ condition) | (users.name =~ condition) }.
+      #   group('courses.id')
+      left_outer_joins(:users).
+        where(Course.arel_table[:title].matches(condition).
+          or(Course.arel_table[:description].matches(condition)).
+          or(User.arel_table[:name].matches(condition))).
         group('courses.id')
     end
   end

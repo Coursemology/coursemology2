@@ -6,8 +6,10 @@ import SubmissionsIndex from '../pages/SubmissionsIndex';
 
 export default class SubmissionsLayout extends Component {
   render() {
-    const submissionsIndex = '/courses/:courseId/assessments/:assessmentId/submissions';
-    const submissionEdit = '/courses/:courseId/assessments/:assessmentId/submissions/:submissionId/edit';
+    const submissionsIndex =
+      '/courses/:courseId/assessments/:assessmentId/submissions';
+    const submissionEdit =
+      '/courses/:courseId/assessments/:assessmentId/submissions/:submissionId/edit';
 
     return (
       <Switch>

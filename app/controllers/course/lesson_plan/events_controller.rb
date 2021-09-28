@@ -16,7 +16,7 @@ class Course::LessonPlan::EventsController < Course::LessonPlan::Controller
   end
 
   def update #:nodoc:
-    if @event.update_attributes(event_params)
+    if @event.update(event_params)
       render partial: 'event_lesson_plan_item', locals: { item: @event }
     else
       render json: { errors: @event.errors }, status: :bad_request

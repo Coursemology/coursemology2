@@ -20,17 +20,12 @@ const styles = {
 };
 
 class AchievementsListing extends React.Component {
-  static propTypes = {
-    achievements: PropTypes.arrayOf(achievementShape),
-    selectedItems: PropTypes.shape({}),
-  }
-
   static renderRow(achievement) {
     return (
       <Checkbox
         checked
         key={achievement.id}
-        label={(
+        label={
           <span>
             <TypeBadge itemType={duplicableItemTypes.ACHIEVEMENT} />
             <UnpublishedIcon tooltipId="itemUnpublished" />
@@ -39,38 +34,50 @@ class AchievementsListing extends React.Component {
               alt={achievement.url}
               style={styles.badge}
             />
-            { achievement.title }
+            {achievement.title}
           </span>
-)}
+        }
       />
     );
   }
 
   selectedAchievements() {
     const { achievements, selectedItems } = this.props;
-    return achievements ? achievements.filter(
-      achievement => selectedItems[duplicableItemTypes.ACHIEVEMENT][achievement.id]
-    ) : [];
+    return achievements
+      ? achievements.filter(
+          (achievement) =>
+            selectedItems[duplicableItemTypes.ACHIEVEMENT][achievement.id],
+        )
+      : [];
   }
 
   render() {
     const selectedAchievements = this.selectedAchievements();
-    if (selectedAchievements.length < 1) { return null; }
+    if (selectedAchievements.length < 1) {
+      return null;
+    }
 
     return (
       <>
         <Subheader>
-          <FormattedMessage {...defaultComponentTitles.course_achievements_component} />
+          <FormattedMessage
+            {...defaultComponentTitles.course_achievements_component}
+          />
         </Subheader>
         <Card>
           <CardText>
-            { selectedAchievements.map(AchievementsListing.renderRow) }
+            {selectedAchievements.map(AchievementsListing.renderRow)}
           </CardText>
         </Card>
       </>
     );
   }
 }
+
+AchievementsListing.propTypes = {
+  achievements: PropTypes.arrayOf(achievementShape),
+  selectedItems: PropTypes.shape({}),
+};
 
 export default connect(({ duplication }) => ({
   achievements: duplication.achievementsComponent,

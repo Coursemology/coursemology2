@@ -5,7 +5,8 @@ import actionTypes from './constants';
 export function fetchNotification() {
   return (dispatch) => {
     dispatch({ type: actionTypes.FETCH_NOTIFICATION_REQUEST });
-    return courseAPI.userNotifications.fetch()
+    return courseAPI.userNotifications
+      .fetch()
       .then((response) => {
         dispatch({
           type: actionTypes.FETCH_NOTIFICATION_SUCCESS,
@@ -21,7 +22,8 @@ export function fetchNotification() {
 export function markAsRead(userNotificationId) {
   return (dispatch) => {
     dispatch({ type: actionTypes.MARK_AS_READ_REQUEST });
-    return courseAPI.userNotifications.markAsRead(userNotificationId)
+    return courseAPI.userNotifications
+      .markAsRead(userNotificationId)
       .then((response) => {
         dispatch({
           type: actionTypes.MARK_AS_READ_SUCCESS,

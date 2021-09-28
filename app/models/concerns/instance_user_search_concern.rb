@@ -12,8 +12,13 @@ module InstanceUserSearchConcern
       return all if keyword.blank?
 
       condition = "%#{keyword}%"
-      joining { user.emails.outer }.
-        where.has { (sql('users.name') =~ condition) | (sql('user_emails.email') =~ condition) }.
+      # joining { user.emails.outer }.
+      #   where.has { (sql('users.name') =~ condition) | (sql('user_emails.email') =~ condition) }.
+      #   group('instance_users.id')
+
+      left_outer_joins(user: :emails).
+        where(User.arel_table[:name].matches(condition).
+          or(User::Email.arel_table[:email].matches(condition))).
         group('instance_users.id')
     end
   end

@@ -41,7 +41,7 @@ namespace :coursemology do
       User.stamper = course_owner
       course1 = FactoryBot.create(:course, title: 'Unpublished Course')
       FactoryBot.create(:course_manager, user: admin, course: course1,
-                                          name: 'Administrator')
+                                         name: 'Administrator')
 
       # Other courses are owned by admin user
       User.stamper = admin
@@ -56,11 +56,11 @@ namespace :coursemology do
 
         # Add assessments
         FactoryBot.create(:assessment, :published_with_all_question_types,
-                           course: course, title: 'Published, All Question Types')
+                          course: course, title: 'Published, All Question Types')
         FactoryBot.create(:assessment, :published_with_mcq_question, :autograded,
-                           course: course, title: 'Published, Autograded with MCQ Question')
+                          course: course, title: 'Published, Autograded with MCQ Question')
         FactoryBot.create(:assessment, :with_all_question_types,
-                           course: course, title: 'Unpublished, All Question Types')
+                          course: course, title: 'Unpublished, All Question Types')
 
         # Create assessment with programming Question
         template_file = FactoryBot.build(

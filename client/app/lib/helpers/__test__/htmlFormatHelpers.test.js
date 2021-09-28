@@ -1,4 +1,4 @@
-import { stripHtmlTags } from '../htmlFormatHelpers';
+import stripHtmlTags from '../htmlFormatHelpers';
 
 describe('stripHtmlTags', () => {
   it('strips the html tags accurately', () => {

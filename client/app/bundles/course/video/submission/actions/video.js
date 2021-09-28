@@ -1,4 +1,7 @@
-import { sessionActionTypes, videoActionTypes } from 'lib/constants/videoConstants';
+import {
+  sessionActionTypes,
+  videoActionTypes,
+} from 'lib/constants/videoConstants';
 import CourseAPI from '../../../../../api/course/index';
 
 /**
@@ -101,7 +104,11 @@ function updateBufferProgress(bufferProgress) {
  * @param forceSeek If the forceSeek flag should be set to force a player progress seek
  * @returns {function(dispatch)} The thunk to update player progress and buffer progress
  */
-export function updateProgressAndBuffer(playerProgress, bufferProgress, forceSeek = false) {
+export function updateProgressAndBuffer(
+  playerProgress,
+  bufferProgress,
+  forceSeek = false,
+) {
   return (dispatch) => {
     if (playerProgress !== undefined) {
       dispatch(updatePlayerProgress(playerProgress, forceSeek));
@@ -178,7 +185,11 @@ export function seekToDirectly(playerProgress) {
  * @return {{type: videoActionTypes, sequenceNums: Set<number>}}
  */
 function removeEvents(sequenceNums, sessionClosed = false) {
-  return { type: sessionActionTypes.REMOVE_EVENTS, sequenceNums, sessionClosed };
+  return {
+    type: sessionActionTypes.REMOVE_EVENTS,
+    sequenceNums,
+    sessionClosed,
+  };
 }
 
 /**
@@ -204,7 +215,8 @@ function removeOldSessions(sessionIds) {
 function sendCurrentEvents(dispatch, videoState, closeSession = false) {
   const sessionId = videoState.sessionId;
   const events = videoState.sessionEvents;
-  const duration = (events === undefined || events.length === 0) ? 0 : videoState.duration;
+  const duration =
+    events === undefined || events.length === 0 ? 0 : videoState.duration;
 
   if (sessionId === null || (!closeSession && events.isEmpty())) {
     return;
@@ -212,10 +224,20 @@ function sendCurrentEvents(dispatch, videoState, closeSession = false) {
 
   const videoTime = Math.round(videoState.playerProgress);
   CourseAPI.video.sessions
-    .update(sessionId, videoTime, events.toArray(), duration, false, closeSession)
+    .update(
+      sessionId,
+      videoTime,
+      events.toArray(),
+      duration,
+      false,
+      closeSession,
+    )
     .then(() => {
       if (!events.isEmpty()) {
-        dispatch(removeEvents(events.map(event => event.sequence_num).toSet()), closeSession);
+        dispatch(
+          removeEvents(events.map((event) => event.sequence_num).toSet()),
+          closeSession,
+        );
       }
     });
 }
@@ -243,11 +265,13 @@ function sendOldSessions(dispatch, oldSessions) {
       return CourseAPI.video.sessions
         .update(sessionId, videoTime, events.toArray(), 0, true, true)
         .then(() => sessionId)
-        .catch(error => (error.response.status === 404 ? sessionId : null));
+        .catch((error) => (error.response.status === 404 ? sessionId : null));
     })
     .values();
 
-  Promise.all(promises).then(sessionIds => dispatch(removeOldSessions(sessionIds.filter(id => id !== null))));
+  Promise.all(promises).then((sessionIds) =>
+    dispatch(removeOldSessions(sessionIds.filter((id) => id !== null))),
+  );
 }
 
 /**

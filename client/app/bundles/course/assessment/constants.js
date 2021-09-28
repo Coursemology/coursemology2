@@ -1,8 +1,6 @@
 import mirrorCreator from 'mirror-creator';
 
-export const formNames = mirrorCreator([
-  'ASSESSMENT',
-]);
+export const formNames = mirrorCreator(['ASSESSMENT']);
 
 const actionTypes = mirrorCreator([
   'ASSESSMENT_FORM_SHOW',

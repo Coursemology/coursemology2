@@ -75,7 +75,8 @@ class Course::Video < ApplicationRecord
   # Used by the with_actable_types scope in Course::LessonPlan::Item.
   # Edit this to remove items for display.
   scope :ids_showable_in_lesson_plan, (lambda do |_|
-    joining { lesson_plan_item }.selecting { lesson_plan_item.id }
+    # joining { lesson_plan_item }.selecting { lesson_plan_item.id }
+    unscoped.joins(:lesson_plan_item).select(Course::LessonPlan::Item.arel_table[:id])
   end)
 
   scope :video_after, (lambda do |video|
@@ -87,7 +88,7 @@ class Course::Video < ApplicationRecord
                        start_at: video.start_at,
                        title: video.title)
     # Workaround to avoid joining to same table twice
-    candidates = Course::Video.where(id: candidates.to_a)
+    candidates = where(id: candidates.to_a)
     candidates.ordered_by_date_and_title.limit(1)
   end)
 

@@ -76,7 +76,7 @@ RSpec.describe 'Extension: Materials' do
     class self::AssessmentView < ActionView::Base; end
     class self::FormBuilder < ActionView::Helpers::FormBuilder; end
 
-    let(:template) { self.class::AssessmentView.new(Rails.root.join('app', 'views')) }
+    let(:template) { self.class::AssessmentView.new(ActionView::LookupContext.new(Rails.root.join('app', 'views'))) }
     let(:resource) do
       assessment = self.class::Assessment.new
       assessment.build_folder

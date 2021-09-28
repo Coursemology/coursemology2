@@ -63,7 +63,7 @@ RSpec.feature 'Courses: Staff Management' do
         visit course_users_staff_path(course)
 
         within find(content_tag_selector(staff_to_change)) do
-          fill_in 'course_user_name', with: new_name
+          fill_in 'course_user_name', with: new_name, fill_options: { clear: :backspace }
           select 'owner'
           click_button 'update'
         end

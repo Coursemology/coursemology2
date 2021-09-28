@@ -9,10 +9,10 @@ class Course::Video::Submission::SessionsController < Course::Video::Submission:
   def update
     # We received a message from client, so time is updated regardless of how event records turn out
     if params[:is_old_session]
-      @session.update_attributes!(last_video_time: update_params[:last_video_time])
+      @session.update!(last_video_time: update_params[:last_video_time])
     else
-      @session.update_attributes!(session_end: Time.zone.now,
-                                  last_video_time: update_params[:last_video_time])
+      @session.update!(session_end: Time.zone.now,
+                       last_video_time: update_params[:last_video_time])
     end
     @session.merge_in_events!(update_params[:events])
 
@@ -28,9 +28,9 @@ class Course::Video::Submission::SessionsController < Course::Video::Submission:
     @video.statistic.update(cached: false) if @video.statistic&.cached
 
     head :no_content
-  rescue ArgumentError => _
+  rescue ArgumentError => _e
     head :bad_request
-  rescue ActiveRecord::RecordInvalid => _
+  rescue ActiveRecord::RecordInvalid => _e
     head :bad_request
   end
 

@@ -69,7 +69,7 @@ RSpec.describe Course::Achievement::Condition::AchievementsController, type: :co
       let(:achievement_condition) do
         create(:course_condition_achievement, achievement: other_achievement, course: course,
                                               conditional: achievement).tap do |stub|
-          allow(stub).to receive(:update_attributes).and_return(false)
+          allow(stub).to receive(:update).and_return(false)
         end
       end
       let(:achievement) { create(:course_achievement, course: course) }

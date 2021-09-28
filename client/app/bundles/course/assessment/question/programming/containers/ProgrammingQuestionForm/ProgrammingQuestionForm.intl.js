@@ -7,11 +7,13 @@ export default defineMessages({
   },
   autogradedAssessment: {
     id: 'course.assessment.question.programming.onlineEditorView.autogradedAssessment',
-    defaultMessage: 'Answers to non-autograded programming questions will always receive the maximum grade',
+    defaultMessage:
+      'Answers to non-autograded programming questions will always receive the maximum grade',
   },
   autogradedToggleDisabled: {
     id: 'course.assessment.question.programming.onlineEditorView.autogradedToggleDisabled',
-    defaultMessage: 'This question cannot be switched to non-autograded as some answers have already been submitted',
+    defaultMessage:
+      'This question cannot be switched to non-autograded as some answers have already been submitted',
   },
   titleFieldLabel: {
     id: 'course.assessment.question.programming.programmingQuestionForm.titleFieldLabel',
@@ -65,7 +67,8 @@ export default defineMessages({
   },
   attemptLimitPlaceholderMessage: {
     id: 'course.assessment.question.programming.programmingQuestionForm.attemptLimitPlaceholderMessage',
-    defaultMessage: 'The maximum times that the students can test their answers (does not apply to staff)',
+    defaultMessage:
+      'The maximum times that the students can test their answers (does not apply to staff)',
     description: 'Placeholder message for attempt limit input field.',
   },
   uploadedPackageLabel: {
@@ -81,7 +84,8 @@ export default defineMessages({
   packageUpdatedBy: {
     id: 'course.assessment.question.programming.programmingQuestionForm.packageUpdatedBy',
     defaultMessage: 'Updated by: {name}',
-    description: 'Shows the author who last modified the package through the online editor.',
+    description:
+      'Shows the author who last modified the package through the online editor.',
   },
   packageUploadedBy: {
     id: 'course.assessment.question.programming.programmingQuestionForm.packageUploadedBy',
@@ -96,7 +100,8 @@ export default defineMessages({
   noFileChosenMessage: {
     id: 'course.assessment.question.programming.programmingQuestionForm.noFileChosenMessage',
     defaultMessage: 'No file chosen',
-    description: 'Message to be displayed when no file is chosen for a file input.',
+    description:
+      'Message to be displayed when no file is chosen for a file input.',
   },
   editTestsOnlineButton: {
     id: 'course.assessment.question.programming.programmingQuestionForm.editTestsOnlineButton',
@@ -120,12 +125,14 @@ export default defineMessages({
   evaluatingMessage: {
     id: 'course.assessment.question.programming.programmingQuestionForm.evaluatingMessage',
     defaultMessage: 'Evaluating',
-    description: 'Text to be displayed when evaluating the programming question.',
+    description:
+      'Text to be displayed when evaluating the programming question.',
   },
   loadingMessage: {
     id: 'course.assessment.question.programming.programmingQuestionForm.loadingMessage',
     defaultMessage: 'Loading',
-    description: 'Text to be displayed when waiting for server response after form submission.',
+    description:
+      'Text to be displayed when waiting for server response after form submission.',
   },
   resolveErrorsMessage: {
     id: 'course.assessment.question.programming.programmingQuestionForm.resolveErrorsMessage',

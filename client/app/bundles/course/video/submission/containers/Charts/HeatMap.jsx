@@ -10,32 +10,36 @@ import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { seekToDirectly } from '../../actions/video';
 import translations from '../../translations';
 
-const graphGlobalOptions = intl => ({
+const graphGlobalOptions = (intl) => ({
   maintainAspectRatio: false,
   legend: {
     display: false,
   },
   scales: {
-    xAxes: [{
-      scaleLabel: {
-        display: true,
-        labelString: intl.formatMessage(translations.eventVideoTimeLabel),
-        fontSize: 15,
+    xAxes: [
+      {
+        scaleLabel: {
+          display: true,
+          labelString: intl.formatMessage(translations.eventVideoTimeLabel),
+          fontSize: 15,
+        },
+        ticks: {
+          suggestedMin: 0,
+        },
       },
-      ticks: {
-        suggestedMin: 0,
+    ],
+    yAxes: [
+      {
+        scaleLabel: {
+          display: true,
+          labelString: 'Watch Frequency',
+          fontSize: 15,
+        },
+        ticks: {
+          suggestedMin: 0,
+        },
       },
-    }],
-    yAxes: [{
-      scaleLabel: {
-        display: true,
-        labelString: 'Watch Frequency',
-        fontSize: 15,
-      },
-      ticks: {
-        suggestedMin: 0,
-      },
-    }],
+    ],
   },
 });
 
@@ -54,7 +58,8 @@ const heightOffset = 100;
 const heightScale = 0.9;
 
 function calculateWidthAndResolution(duration) {
-  const widthCandidate = (duration * preferredExpandedBarWidth) + expandedChartOffset;
+  const widthCandidate =
+    duration * preferredExpandedBarWidth + expandedChartOffset;
 
   if (widthCandidate > maxWidth) {
     return [maxWidth, minResolution];
@@ -111,12 +116,16 @@ class HeatMap extends React.Component {
         callbacks: {
           title: (tooltipItem) => {
             const videoTime = tooltipItem[0].xLabel;
-            return this.props.intl.formatMessage(translations.eventVideoTime, { videoTime });
+            return this.props.intl.formatMessage(translations.eventVideoTime, {
+              videoTime,
+            });
           },
           label: (tooltipItem, graphData) => {
             const { datasetIndex, index } = tooltipItem;
             const watchFrequency = graphData.datasets[datasetIndex].data[index];
-            return this.props.intl.formatMessage(translations.watchFrequency, { watchFrequency });
+            return this.props.intl.formatMessage(translations.watchFrequency, {
+              watchFrequency,
+            });
           },
         },
       },
@@ -124,7 +133,9 @@ class HeatMap extends React.Component {
   }
 
   renderScaledChart(data, options) {
-    const [width, resolution] = calculateWidthAndResolution(this.props.videoDuration);
+    const [width, resolution] = calculateWidthAndResolution(
+      this.props.videoDuration,
+    );
 
     const optionsWithResolution = {
       ...options,
@@ -134,7 +145,11 @@ class HeatMap extends React.Component {
     return (
       <div style={{ overflowX: 'scroll' }}>
         <div style={{ width }}>
-          <Bar data={data} options={optionsWithResolution} height={(window.innerHeight - heightOffset) * heightScale} />
+          <Bar
+            data={data}
+            options={optionsWithResolution}
+            height={(window.innerHeight - heightOffset) * heightScale}
+          />
         </div>
       </div>
     );
@@ -143,7 +158,11 @@ class HeatMap extends React.Component {
   static renderUnscaledChart(data, options) {
     return (
       <div style={{ width: '100%' }}>
-        <Bar data={data} options={options} height={(window.innerHeight - heightOffset) * heightScale} />
+        <Bar
+          data={data}
+          options={options}
+          height={(window.innerHeight - heightOffset) * heightScale}
+        />
       </div>
     );
   }
@@ -154,7 +173,9 @@ class HeatMap extends React.Component {
     }
 
     const data = {
-      labels: Array(this.props.videoDuration).fill(null).map((_, id) => formatTimestamp(id)),
+      labels: Array(this.props.videoDuration)
+        .fill(null)
+        .map((_, id) => formatTimestamp(id)),
       datasets: [
         {
           ...barDataOptions,
@@ -170,11 +191,14 @@ class HeatMap extends React.Component {
     };
 
     const chartElem = this.state.scaledMode
-      ? this.renderScaledChart(data, options) : HeatMap.renderUnscaledChart(data, options);
+      ? this.renderScaledChart(data, options)
+      : HeatMap.renderUnscaledChart(data, options);
     return (
       <div>
         <Toggle
-          label={this.props.intl.formatMessage(translations.barGraphScalingLabel)}
+          label={this.props.intl.formatMessage(
+            translations.barGraphScalingLabel,
+          )}
           labelPosition="right"
           onToggle={(_, toggled) => {
             this.setState({ scaledMode: toggled });
@@ -200,8 +224,11 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onBarClick: duration => dispatch(seekToDirectly(duration)),
+    onBarClick: (duration) => dispatch(seekToDirectly(duration)),
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(HeatMap));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(injectIntl(HeatMap));

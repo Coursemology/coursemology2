@@ -12,10 +12,10 @@ class Course::Assessment::Question::TextResponsesController < Course::Assessment
       @text_response_question.hide_text = true
       @text_response_question.allow_attachment = true
     end
-    if params[:comprehension] == 'true'
-      @text_response_question.is_comprehension = true
-      @text_response_question.build_at_least_one_group_one_point
-    end
+    return unless params[:comprehension] == 'true'
+
+    @text_response_question.is_comprehension = true
+    @text_response_question.build_at_least_one_group_one_point
   end
 
   def create
@@ -71,13 +71,13 @@ class Course::Assessment::Question::TextResponsesController < Course::Assessment
           [
             :_destroy, :id, :maximum_group_grade,
             points_attributes:
+           [
+             :_destroy, :id, :point_grade,
+             solutions_attributes:
             [
-              :_destroy, :id, :point_grade,
-              solutions_attributes:
-              [
-                :_destroy, :id, :solution_type, :information, solution: []
-              ]
+              :_destroy, :id, :solution_type, :information, solution: []
             ]
+           ]
           ]
         ]
       )

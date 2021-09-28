@@ -4,22 +4,31 @@ import actions, { formNames } from '../constants';
 
 // Extract redux-form values from JSON response
 function buildInitialValues(answers) {
-  return answers.reduce((obj, answer) => ({
-    ...obj,
-    [answer.fields.id]: answer.fields,
-  }), {});
+  return answers.reduce(
+    (obj, answer) => ({
+      ...obj,
+      [answer.fields.id]: answer.fields,
+    }),
+    {},
+  );
 }
 
 // Return a new state slice with the new answer replacing its
 // previous answer of the same question
 function updateAnswerInState(state, answer) {
-  const { questionId, fields: { id } } = answer;
-  return Object.keys(state).reduce((obj, key) => {
-    if (state[key].questionId !== questionId) {
-      return { ...obj, [key]: state[key] };
-    }
-    return obj;
-  }, { [id]: answer.fields });
+  const {
+    questionId,
+    fields: { id },
+  } = answer;
+  return Object.keys(state).reduce(
+    (obj, key) => {
+      if (state[key].questionId !== questionId) {
+        return { ...obj, [key]: state[key] };
+      }
+      return obj;
+    },
+    { [id]: answer.fields },
+  );
 }
 
 function removeProgrammingFileFromState(state, questionId, fileId) {
@@ -73,11 +82,22 @@ export default formReducer.plugin({
         };
       }
       case actions.DELETE_FILE_SUCCESS: {
-        const { questionId, answer: { fileId } } = action.payload;
+        const {
+          questionId,
+          answer: { fileId },
+        } = action.payload;
         return {
           ...state,
-          initial: removeProgrammingFileFromState(state.initial, questionId, fileId),
-          values: removeProgrammingFileFromState(state.values, questionId, fileId),
+          initial: removeProgrammingFileFromState(
+            state.initial,
+            questionId,
+            fileId,
+          ),
+          values: removeProgrammingFileFromState(
+            state.values,
+            questionId,
+            fileId,
+          ),
         };
       }
       case actions.STAGE_FILES: {
@@ -93,7 +113,9 @@ export default formReducer.plugin({
         }, []);
 
         // Removes previously staged files
-        const filteredFiles = state.values[answerId].files_attributes.filter(file => !file.staged);
+        const filteredFiles = state.values[answerId].files_attributes.filter(
+          (file) => !file.staged,
+        );
 
         return {
           ...state,

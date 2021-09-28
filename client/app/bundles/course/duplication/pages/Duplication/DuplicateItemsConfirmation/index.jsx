@@ -6,7 +6,10 @@ import ReactTooltip from 'react-tooltip';
 import Subheader from 'material-ui/Subheader';
 import { Card, CardText } from 'material-ui/Card';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import { hideDuplicateItemsConfirmation, duplicateItems } from 'course/duplication/actions';
+import {
+  hideDuplicateItemsConfirmation,
+  duplicateItems,
+} from 'course/duplication/actions';
 import { courseShape } from 'course/duplication/propTypes';
 import AssessmentsListing from './AssessmentsListing';
 import SurveyListing from './SurveyListing';
@@ -33,29 +36,24 @@ const translations = defineMessages({
   },
   itemUnpublished: {
     id: 'course.duplication.DuplicateItemsConfirmation.itemUnpublished',
-    defaultMessage: 'Items are duplicated as unpublished when duplicating to an existing course.',
+    defaultMessage:
+      'Items are duplicated as unpublished when duplicating to an existing course.',
   },
 });
 
 class DuplicateItemsConfirmation extends React.Component {
-  static propTypes = {
-    open: PropTypes.bool,
-    isDuplicating: PropTypes.bool,
-    destinationCourseId: PropTypes.number,
-    destinationCourses: PropTypes.arrayOf(courseShape),
-    selectedItems: PropTypes.shape({}),
-
-    dispatch: PropTypes.func.isRequired,
-  }
-
   renderdestinationCourseCard() {
     const { destinationCourses, destinationCourseId } = this.props;
-    const destinationCourse = destinationCourses.find(course => course.id === destinationCourseId);
+    const destinationCourse = destinationCourses.find(
+      (course) => course.id === destinationCourseId,
+    );
     const url = `${window.location.protocol}//${destinationCourse.host}${destinationCourse.path}`;
 
     return (
       <>
-        <Subheader><FormattedMessage {...translations.destinationCourse} /></Subheader>
+        <Subheader>
+          <FormattedMessage {...translations.destinationCourse} />
+        </Subheader>
         <Card>
           <CardText>
             <h4>
@@ -72,8 +70,10 @@ class DuplicateItemsConfirmation extends React.Component {
   renderListing() {
     return (
       <>
-        <p><FormattedMessage {...translations.confirmationQuestion} /></p>
-        { this.renderdestinationCourseCard() }
+        <p>
+          <FormattedMessage {...translations.confirmationQuestion} />
+        </p>
+        {this.renderdestinationCourseCard()}
         <AssessmentsListing />
         <SurveyListing />
         <AchievementsListing />
@@ -88,15 +88,29 @@ class DuplicateItemsConfirmation extends React.Component {
   }
 
   render() {
-    const { dispatch, open, destinationCourseId, selectedItems, isDuplicating } = this.props;
-    if (!open) { return null; }
-    const failureMessage = <FormattedMessage {...translations.failureMessage} />;
+    const {
+      dispatch,
+      open,
+      destinationCourseId,
+      selectedItems,
+      isDuplicating,
+    } = this.props;
+    if (!open) {
+      return null;
+    }
+    const failureMessage = (
+      <FormattedMessage {...translations.failureMessage} />
+    );
 
     return (
       <ConfirmationDialog
         open={open}
         onCancel={() => dispatch(hideDuplicateItemsConfirmation())}
-        onConfirm={() => dispatch(duplicateItems(destinationCourseId, selectedItems, failureMessage))}
+        onConfirm={() =>
+          dispatch(
+            duplicateItems(destinationCourseId, selectedItems, failureMessage),
+          )
+        }
         confirmButtonText={<FormattedMessage {...translations.duplicate} />}
         message={this.renderListing()}
         disableCancelButton={isDuplicating}
@@ -105,6 +119,16 @@ class DuplicateItemsConfirmation extends React.Component {
     );
   }
 }
+
+DuplicateItemsConfirmation.propTypes = {
+  open: PropTypes.bool,
+  isDuplicating: PropTypes.bool,
+  destinationCourseId: PropTypes.number,
+  destinationCourses: PropTypes.arrayOf(courseShape),
+  selectedItems: PropTypes.shape({}),
+
+  dispatch: PropTypes.func.isRequired,
+};
 
 export default connect(({ duplication }) => ({
   open: duplication.confirmationOpen,

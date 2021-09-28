@@ -80,11 +80,7 @@ class Course::Assessment::Submission::StatisticsDownloadService
   end
 
   def csv_exp_points(submission)
-    if submission.current_points_awarded
-      submission.current_points_awarded
-    else
-      csv_empty
-    end
+    submission.current_points_awarded || csv_empty
   end
 
   def csv_created_at(submission)

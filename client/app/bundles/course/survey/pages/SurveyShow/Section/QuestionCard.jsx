@@ -52,22 +52,18 @@ const styles = {
 };
 
 class QuestionCard extends React.Component {
-  static propTypes = {
-    question: questionShape,
-    adminFunctions: PropTypes.arrayOf(PropTypes.shape({
-      label: PropTypes.string,
-      handler: PropTypes.func,
-    })),
-    expanded: PropTypes.bool.isRequired,
-  };
-
   static renderOptionsList(question, Widget) {
     return (
       <>
         {question.options.map((option) => {
           const { option: optionText, image_url: imageUrl } = option;
           const widget = <Widget disabled style={styles.optionWidget} />;
-          return <OptionsListItem key={option.id} {...{ optionText, imageUrl, widget }} />;
+          return (
+            <OptionsListItem
+              key={option.id}
+              {...{ optionText, imageUrl, widget }}
+            />
+          );
         })}
       </>
     );
@@ -76,7 +72,7 @@ class QuestionCard extends React.Component {
   static renderOptionsGrid(question, Widget) {
     return (
       <div style={styles.grid}>
-        { question.options.map((option) => {
+        {question.options.map((option) => {
           const { option: optionText, image_url: imageUrl } = option;
           const widget = (
             <Widget
@@ -85,7 +81,13 @@ class QuestionCard extends React.Component {
               iconStyle={styles.gridOptionWidgetIcon}
             />
           );
-          return <OptionsListItem grid key={option.id} {...{ optionText, imageUrl, widget }} />;
+          return (
+            <OptionsListItem
+              grid
+              key={option.id}
+              {...{ optionText, imageUrl, widget }}
+            />
+          );
         })}
       </div>
     );
@@ -97,7 +99,9 @@ class QuestionCard extends React.Component {
       [MULTIPLE_CHOICE]: RadioButton,
       [MULTIPLE_RESPONSE]: Checkbox,
     }[question.question_type];
-    if (!widget) { return null; }
+    if (!widget) {
+      return null;
+    }
     return question.grid_view
       ? QuestionCard.renderOptionsGrid(question, widget)
       : QuestionCard.renderOptionsList(question, widget);
@@ -135,7 +139,11 @@ class QuestionCard extends React.Component {
 
     return (
       <IconMenu
-        iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+        iconButtonElement={
+          <IconButton>
+            <MoreVertIcon />
+          </IconButton>
+        }
         style={styles.adminMenu}
       >
         {adminFunctions.map(({ label, handler }) => (
@@ -156,17 +164,31 @@ class QuestionCard extends React.Component {
         {...{ expanded }}
       >
         <CardText style={styles.cardText}>
-          { this.renderAdminMenu() }
+          {this.renderAdminMenu()}
           <p dangerouslySetInnerHTML={{ __html: question.description }} />
-          { question.required
-            ? <p style={styles.required}><FormattedMessage {...formTranslations.starRequired} /></p> : null }
+          {question.required ? (
+            <p style={styles.required}>
+              <FormattedMessage {...formTranslations.starRequired} />
+            </p>
+          ) : null}
         </CardText>
         <CardText expandable style={styles.fields}>
-          { QuestionCard.renderSpecificFields(question) }
+          {QuestionCard.renderSpecificFields(question)}
         </CardText>
       </Card>
     );
   }
 }
+
+QuestionCard.propTypes = {
+  question: questionShape,
+  adminFunctions: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      handler: PropTypes.func,
+    }),
+  ),
+  expanded: PropTypes.bool.isRequired,
+};
 
 export default QuestionCard;

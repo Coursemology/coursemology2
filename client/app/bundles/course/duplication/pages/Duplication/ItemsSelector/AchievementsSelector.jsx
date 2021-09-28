@@ -34,42 +34,49 @@ const styles = {
 };
 
 class AchievementsSelector extends React.Component {
-  static propTypes = {
-    achievements: PropTypes.arrayOf(achievementShape),
-    selectedItems: PropTypes.shape({}),
-
-    dispatch: PropTypes.func.isRequired,
-  }
-
   setAllAchievementsSelection = (value) => {
     const { dispatch, achievements } = this.props;
 
     achievements.forEach((achievement) => {
-      dispatch(setItemSelectedBoolean(duplicableItemTypes.ACHIEVEMENT, achievement.id, value));
+      dispatch(
+        setItemSelectedBoolean(
+          duplicableItemTypes.ACHIEVEMENT,
+          achievement.id,
+          value,
+        ),
+      );
     });
-  }
+  };
 
   renderRow(achievement) {
     const { dispatch, selectedItems } = this.props;
-    const checked = !!selectedItems[duplicableItemTypes.ACHIEVEMENT][achievement.id];
+    const checked =
+      !!selectedItems[duplicableItemTypes.ACHIEVEMENT][achievement.id];
 
     return (
       <Checkbox
         key={achievement.id}
-        label={(
+        label={
           <span>
             <TypeBadge itemType={duplicableItemTypes.ACHIEVEMENT} />
-            { achievement.published || <UnpublishedIcon /> }
+            {achievement.published || <UnpublishedIcon />}
             <Thumbnail
               src={achievement.url}
               style={styles.badge}
               rootStyle={styles.badgeContainer}
             />
-            { achievement.title }
+            {achievement.title}
           </span>
-)}
+        }
         checked={checked}
-        onCheck={(e, value) => dispatch(setItemSelectedBoolean(duplicableItemTypes.ACHIEVEMENT, achievement.id, value))
+        onCheck={(e, value) =>
+          dispatch(
+            setItemSelectedBoolean(
+              duplicableItemTypes.ACHIEVEMENT,
+              achievement.id,
+              value,
+            ),
+          )
         }
       />
     );
@@ -88,32 +95,42 @@ class AchievementsSelector extends React.Component {
 
     return (
       <>
-        {
-          achievements.length > 1 ? (
-            <BulkSelectors
-              callback={this.setAllAchievementsSelection}
-              styles={{ selectLink: { marginLeft: 0 } }}
-            />
-          ) : null
-        }
-        { achievements.map(achievement => this.renderRow(achievement)) }
+        {achievements.length > 1 ? (
+          <BulkSelectors
+            callback={this.setAllAchievementsSelection}
+            styles={{ selectLink: { marginLeft: 0 } }}
+          />
+        ) : null}
+        {achievements.map((achievement) => this.renderRow(achievement))}
       </>
     );
   }
 
-
   render() {
     const { achievements } = this.props;
-    if (!achievements) { return null; }
+    if (!achievements) {
+      return null;
+    }
 
     return (
       <>
-        <h2><FormattedMessage {...defaultComponentTitles.course_achievements_component} /></h2>
-        { this.renderBody() }
+        <h2>
+          <FormattedMessage
+            {...defaultComponentTitles.course_achievements_component}
+          />
+        </h2>
+        {this.renderBody()}
       </>
     );
   }
 }
+
+AchievementsSelector.propTypes = {
+  achievements: PropTypes.arrayOf(achievementShape),
+  selectedItems: PropTypes.shape({}),
+
+  dispatch: PropTypes.func.isRequired,
+};
 
 export default connect(({ duplication }) => ({
   achievements: duplication.achievementsComponent,

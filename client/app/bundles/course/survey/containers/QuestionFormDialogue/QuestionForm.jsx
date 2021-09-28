@@ -51,7 +51,8 @@ const questionFormTranslations = defineMessages({
   },
   gridViewHint: {
     id: 'course.surveys.QuestionForm.gridViewHint',
-    defaultMessage: 'When selected, question options will be display as grid instead of a list. \
+    defaultMessage:
+      'When selected, question options will be display as grid instead of a list. \
       This option is meant for questions with images as options.',
   },
   lessThanFilledOptions: {
@@ -92,9 +93,10 @@ const questionFormTranslations = defineMessages({
   },
 });
 
-const countFilledOptions = options => (
-  options.filter(option => option && (option.option || option.file || option.image_url)).length
-);
+const countFilledOptions = (options) =>
+  options.filter(
+    (option) => option && (option.option || option.file || option.image_url),
+  ).length;
 
 const validate = (values) => {
   const { MULTIPLE_CHOICE, MULTIPLE_RESPONSE } = questionTypes;
@@ -108,8 +110,11 @@ const validate = (values) => {
   });
 
   const filledOptions = countFilledOptions(values.options);
-  if ((values.question_type === MULTIPLE_CHOICE || values.question_type === MULTIPLE_RESPONSE)
-      && filledOptions < 1) {
+  if (
+    (values.question_type === MULTIPLE_CHOICE ||
+      values.question_type === MULTIPLE_RESPONSE) &&
+    filledOptions < 1
+  ) {
     errors.options = [{ option: formTranslations.required }];
   }
 
@@ -148,7 +153,9 @@ class QuestionForm extends React.Component {
           style={styles.toggle}
           {...{ disabled }}
         />
-        <p style={styles.hint}>{ intl.formatMessage(questionFormTranslations.gridViewHint) }</p>
+        <p style={styles.hint}>
+          {intl.formatMessage(questionFormTranslations.gridViewHint)}
+        </p>
       </>
     );
   }
@@ -168,7 +175,10 @@ class QuestionForm extends React.Component {
 
   renderValidOptionCount() {
     const { intl, formValues } = this.props;
-    const numberOfFilledOptions = formValues ? countFilledOptions(formValues.options) : 0;
+    const numberOfFilledOptions = formValues
+      ? // eslint-disable-next-line react/prop-types
+        countFilledOptions(formValues.options)
+      : 0;
 
     return (
       <DisplayTextField
@@ -176,14 +186,22 @@ class QuestionForm extends React.Component {
         name="filled_options"
         value={numberOfFilledOptions}
         {...styles.numberOfResponsesField}
-        floatingLabelText={intl.formatMessage(questionFormTranslations.optionCount)}
+        floatingLabelText={intl.formatMessage(
+          questionFormTranslations.optionCount,
+        )}
       />
     );
   }
 
   renderOptionsToDelete(props) {
     const { intl, disabled, formValues, addToOptions } = this.props;
-    if (formValues && formValues.optionsToDelete && formValues.optionsToDelete.length > 0) {
+    if (
+      formValues &&
+      // eslint-disable-next-line react/prop-types
+      formValues.optionsToDelete &&
+      // eslint-disable-next-line react/prop-types
+      formValues.optionsToDelete.length > 0
+    ) {
       return (
         <div>
           <Subheader>
@@ -239,11 +257,11 @@ class QuestionForm extends React.Component {
           {this.renderValidOptionCount()}
           {this.renderNumberOfResponsesField(
             'min_options',
-            intl.formatMessage(translations.minOptions)
+            intl.formatMessage(translations.minOptions),
           )}
           {this.renderNumberOfResponsesField(
             'max_options',
-            intl.formatMessage(translations.maxOptions)
+            intl.formatMessage(translations.maxOptions),
           )}
         </div>
         {this.renderOptionFields({ multipleResponse: true })}
@@ -307,9 +325,9 @@ class QuestionForm extends React.Component {
           {...{ disabled }}
         />
         <p style={styles.hint}>
-          { intl.formatMessage(questionFormTranslations.requiredHint) }
+          {intl.formatMessage(questionFormTranslations.requiredHint)}
         </p>
-        { this.renderSpecificFields(questionType) }
+        {this.renderSpecificFields(questionType)}
       </Form>
     );
   }
@@ -317,7 +335,7 @@ class QuestionForm extends React.Component {
 
 QuestionForm.propTypes = {
   formValues: PropTypes.shape({
-    quesion_type: PropTypes.string,
+    question_type: PropTypes.string,
   }),
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,

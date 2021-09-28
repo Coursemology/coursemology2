@@ -2,9 +2,16 @@
 
 require 'selenium/webdriver'
 
+# How to make the screen bigger,  window-size=2500,2500
+# Capybara.register_driver :selenium_chrome_headless do |app|
+#   capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
+#     chromeOptions: { args: %w(headless disable-gpu) }
+#   )
+#   Capybara::Selenium::Driver.new app, browser: :chrome, desired_capabilities: capabilities
+# end
+
 Capybara.javascript_driver = :selenium_chrome_headless
 
-# Adds extra matchers for Capybara
 module Capybara::TestGroupHelpers
   module FeatureHelpers
     # Finds the given form with the given selector and target.
@@ -13,12 +20,12 @@ module Capybara::TestGroupHelpers
     def find_form(selector, action: nil)
       attribute_selector =
         if action
-          format('[action="%s"]', action)
+          format('[action="%<action>s"]', action: action)
         else
           ''
         end
 
-      result = find('form' + attribute_selector)
+      result = find("form#{attribute_selector}")
       selector ? result.find(selector) : result
     end
 

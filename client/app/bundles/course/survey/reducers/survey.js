@@ -21,7 +21,9 @@ export default function (survey = initialState, action) {
     case actionTypes.DELETE_SURVEY_QUESTION_SUCCESS:
     case actionTypes.UPDATE_SURVEY_QUESTION_SUCCESS:
     case actionTypes.CREATE_SURVEY_QUESTION_SUCCESS: {
-      const sections = survey.sections.map(section => sectionReducer(section, action));
+      const sections = survey.sections.map((section) =>
+        sectionReducer(section, action),
+      );
       return { ...survey, sections };
     }
     case actionTypes.UPDATE_SURVEY_SECTION_SUCCESS:
@@ -71,11 +73,18 @@ export default function (survey = initialState, action) {
         section_id: targetSection.id,
       };
       const targetSectionQuestions = action.prepend
-        ? [sourceQuestion, ...targetSection.questions] : [...targetSection.questions, sourceQuestion];
+        ? [sourceQuestion, ...targetSection.questions]
+        : [...targetSection.questions, sourceQuestion];
 
       const sections = [...survey.sections];
-      sections[action.sourceSectionIndex] = { ...sourceSection, questions: sourceSectionQuestions };
-      sections[action.targetSectionIndex] = { ...targetSection, questions: targetSectionQuestions };
+      sections[action.sourceSectionIndex] = {
+        ...sourceSection,
+        questions: sourceSectionQuestions,
+      };
+      sections[action.targetSectionIndex] = {
+        ...targetSection,
+        questions: targetSectionQuestions,
+      };
 
       return {
         ...survey,

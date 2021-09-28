@@ -22,11 +22,8 @@ describe('<AchievementEdit />', () => {
   it('renders the edit page', async () => {
     const editPage = mount(
       <ProviderWrapper store={store}>
-        <AchievementEdit
-          id={id}
-          initialValues={intitialValues}
-        />
-      </ProviderWrapper>
+        <AchievementEdit id={id} initialValues={intitialValues} />
+      </ProviderWrapper>,
     );
 
     const publishedInput = editPage.find('input[name="published"]');

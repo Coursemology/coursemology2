@@ -19,6 +19,6 @@ module System::Admin::InstanceAnnouncementsAbilityComponent
   end
 
   def allow_instance_admin_manage_announcements
-    can :manage, Instance::Announcement, instance_instance_user_hash(:administrator)
+    can :manage, Instance::Announcement, instance_instance_user_hash(InstanceUser.roles[:administrator])
   end
 end

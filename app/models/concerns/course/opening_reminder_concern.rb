@@ -51,6 +51,7 @@ module Course::OpeningReminderConcern
   def should_send_opening_reminder
     time_now = Time.zone.now
     return false if start_at && start_at_was && start_at < time_now && start_at_was < time_now
+
     true
   end
 end

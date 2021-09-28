@@ -1,10 +1,7 @@
 # frozen_string_literal: true
 class Ability
   include CanCan::Ability
-  attr_reader :user
-  attr_reader :course
-  attr_reader :course_user
-  attr_reader :session
+  attr_reader :user, :course, :course_user, :session
 
   # Load all components which declare abilities.
   AbilityHost.components.each { |component| prepend(component) }

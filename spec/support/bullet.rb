@@ -3,6 +3,7 @@
 module Bullet::TestGroupHelpers
   def self.extended(group)
     return if [:feature].include?(group.metadata[:type])
+
     group.around(:each) do |example|
       Bullet.profile(&example)
     end

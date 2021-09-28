@@ -19,10 +19,6 @@ const styles = {
 };
 
 export default class DeleteButton extends React.Component {
-  static propTypes = {
-    handleCancel: PropTypes.func,
-  };
-
   renderIcon() {
     return (
       <IconButton
@@ -44,3 +40,7 @@ export default class DeleteButton extends React.Component {
     );
   }
 }
+
+DeleteButton.propTypes = {
+  handleCancel: PropTypes.func,
+};

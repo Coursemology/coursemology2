@@ -42,7 +42,9 @@ const styles = {
  */
 export const formatDateRange = (startAt, endAt) => {
   const start = moment(startAt);
-  if (!start.isValid()) { return ''; }
+  if (!start.isValid()) {
+    return '';
+  }
 
   const end = moment(endAt);
   if (!end.isValid()) {
@@ -56,16 +58,10 @@ export const formatDateRange = (startAt, endAt) => {
 };
 
 class Chips extends React.Component {
-  static propTypes = {
-    published: PropTypes.bool,
-    itemType: PropTypes.string.isRequired,
-    startAt: PropTypes.string.isRequired,
-    endAt: PropTypes.string,
-    location: PropTypes.string,
-  }
-
   renderNotPublishedChip() {
-    if (this.props.published) { return null; }
+    if (this.props.published) {
+      return null;
+    }
     return (
       <Chip style={styles.chip}>
         <Avatar icon={<Block />} backgroundColor={red700} />
@@ -79,7 +75,7 @@ class Chips extends React.Component {
     return (
       <Chip style={styles.chip}>
         <Avatar icon={<InfoOutline />} />
-        { itemType }
+        {itemType}
       </Chip>
     );
   }
@@ -89,18 +85,20 @@ class Chips extends React.Component {
     return (
       <Chip style={styles.chip}>
         <Avatar icon={<DateRange />} />
-        { formatDateRange(startAt, endAt) }
+        {formatDateRange(startAt, endAt)}
       </Chip>
     );
   }
 
   renderLocationChip() {
     const { location } = this.props;
-    if (!location) { return null; }
+    if (!location) {
+      return null;
+    }
     return (
       <Chip style={styles.chip}>
         <Avatar icon={<Room />} />
-        { location }
+        {location}
       </Chip>
     );
   }
@@ -108,13 +106,21 @@ class Chips extends React.Component {
   render() {
     return (
       <div style={styles.chipsWrapper}>
-        { this.renderNotPublishedChip() }
-        { this.renderTypeTagChip() }
-        { this.renderDateTimeRangeChip() }
-        { this.renderLocationChip() }
+        {this.renderNotPublishedChip()}
+        {this.renderTypeTagChip()}
+        {this.renderDateTimeRangeChip()}
+        {this.renderLocationChip()}
       </div>
     );
   }
 }
+
+Chips.propTypes = {
+  published: PropTypes.bool,
+  itemType: PropTypes.string.isRequired,
+  startAt: PropTypes.string.isRequired,
+  endAt: PropTypes.string,
+  location: PropTypes.string,
+};
 
 export default Chips;

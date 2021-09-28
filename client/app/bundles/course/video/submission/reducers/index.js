@@ -1,8 +1,19 @@
 import { combineReducers } from 'redux';
-import video, { initialState as videoState, persistTransform as videoTransform } from './video';
-import discussion, { initialState as discussionState, organiseDiscussionEntities } from './discussion';
-import notification, { initialState as notificationState } from './notification';
-import oldSessions, { initialState as oldSessionsState, persistTransform as oldSessionsTransform } from './oldSessions';
+import video, {
+  initialState as videoState,
+  persistTransform as videoTransform,
+} from './video';
+import discussion, {
+  initialState as discussionState,
+  organiseDiscussionEntities,
+} from './discussion';
+import notification, {
+  initialState as notificationState,
+} from './notification';
+import oldSessions, {
+  initialState as oldSessionsState,
+  persistTransform as oldSessionsTransform,
+} from './oldSessions';
 
 /**
  * Creates the initial state from the props parsed in from JSON.
@@ -18,9 +29,12 @@ import oldSessions, { initialState as oldSessionsState, persistTransform as oldS
  */
 export function createInitialState(props) {
   return {
-    video: { ...videoState, ...(props.video) },
-    discussion: { ...discussionState, ...(organiseDiscussionEntities(props.discussion)) },
-    notification: { ...notificationState, ...(props.notification) },
+    video: { ...videoState, ...props.video },
+    discussion: {
+      ...discussionState,
+      ...organiseDiscussionEntities(props.discussion),
+    },
+    notification: { ...notificationState, ...props.notification },
     oldSessions: oldSessionsState.merge(props.oldSessions),
   };
 }

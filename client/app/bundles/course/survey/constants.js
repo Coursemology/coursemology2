@@ -6,9 +6,7 @@ export const questionTypes = {
   MULTIPLE_RESPONSE: 'multiple_response',
 };
 
-export const draggableTypes = mirrorCreator([
-  'QUESTION',
-]);
+export const draggableTypes = mirrorCreator(['QUESTION']);
 
 export const formNames = mirrorCreator([
   'SURVEY',

@@ -13,15 +13,10 @@ $(document).ready(() => {
     const store = storeCreator({ achievements: {} });
     const Page = () => (
       <ProviderWrapper store={store}>
-        <AchievementIndexPage
-          badge={{ ...attributes.badge }}
-        />
+        <AchievementIndexPage badge={{ ...attributes.badge }} />
       </ProviderWrapper>
     );
 
-    render(
-      <Page />,
-      mountNode
-    );
+    render(<Page />, mountNode);
   }
 });

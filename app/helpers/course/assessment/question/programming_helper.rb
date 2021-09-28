@@ -69,6 +69,7 @@ module Course::Assessment::Question::ProgrammingHelper
 
   def can_edit_online?
     return true if params[:action] == 'new'
+
     @meta.present?
   end
 

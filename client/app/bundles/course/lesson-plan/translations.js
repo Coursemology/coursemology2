@@ -2,8 +2,15 @@ import { defineMessages } from 'react-intl';
 import { fields } from 'course/lesson-plan/constants';
 
 const {
-  ITEM_TYPE, TITLE, START_AT, BONUS_END_AT, END_AT, PUBLISHED, LOCATION,
-  DESCRIPTION, EVENT_TYPE,
+  ITEM_TYPE,
+  TITLE,
+  START_AT,
+  BONUS_END_AT,
+  END_AT,
+  PUBLISHED,
+  LOCATION,
+  DESCRIPTION,
+  EVENT_TYPE,
 } = fields;
 
 const translations = defineMessages({

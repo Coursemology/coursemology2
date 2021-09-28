@@ -10,6 +10,7 @@ class Course::Survey::ReminderService
   def closing_reminder(survey, token)
     return unless survey.closing_reminder_token == token && survey.published?
     return unless email_enabled?(survey, :survey_closing)
+
     send_closing_reminder(survey)
   end
 

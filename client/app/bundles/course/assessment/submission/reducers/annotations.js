@@ -13,20 +13,25 @@ export default function (state = {}, action) {
     case actions.PUBLISH_SUCCESS: {
       return {
         ...state,
-        ...action.payload.annotations.reduce((obj, annotation) => ({
-          ...obj,
-          [annotation.fileId]: {
-            fileId: annotation.fileId,
-            topics: arrayToObjectById(annotation.topics),
-          },
-        }),
-        {}),
+        ...action.payload.annotations.reduce(
+          (obj, annotation) => ({
+            ...obj,
+            [annotation.fileId]: {
+              fileId: annotation.fileId,
+              topics: arrayToObjectById(annotation.topics),
+            },
+          }),
+          {},
+        ),
       };
     }
     case actions.CREATE_ANNOTATION_SUCCESS: {
       const { topicId, id: postId, fileId, line } = action.payload;
-      const topic = state[fileId].topics[topicId]
-        || { id: topicId, line, postIds: [] };
+      const topic = state[fileId].topics[topicId] || {
+        id: topicId,
+        line,
+        postIds: [],
+      };
 
       return {
         ...state,
@@ -44,18 +49,22 @@ export default function (state = {}, action) {
     }
     case actions.DELETE_ANNOTATION_SUCCESS: {
       const { fileId, topicId, postId } = action.payload;
-      const postIds = state[fileId].topics[topicId].postIds.filter(id => id !== postId);
+      const postIds = state[fileId].topics[topicId].postIds.filter(
+        (id) => id !== postId,
+      );
       const topics = Object.keys(state[fileId].topics).reduce((obj, key) => {
         if (key !== topicId.toString()) {
           return { ...obj, [key]: state[fileId].topics[key] };
         }
-        return postIds.length === 0 ? obj : {
-          ...obj,
-          [key]: {
-            ...state[fileId].topics[key],
-            postIds,
-          },
-        };
+        return postIds.length === 0
+          ? obj
+          : {
+              ...obj,
+              [key]: {
+                ...state[fileId].topics[key],
+                postIds,
+              },
+            };
       }, {});
 
       return {
@@ -71,14 +80,16 @@ export default function (state = {}, action) {
       if (latestAnswer) {
         return {
           ...state,
-          ...latestAnswer.annotations.reduce((obj, annotation) => ({
-            ...obj,
-            [annotation.fileId]: {
-              fileId: annotation.fileId,
-              topics: arrayToObjectById(annotation.topics),
-            },
-          }),
-          {}),
+          ...latestAnswer.annotations.reduce(
+            (obj, annotation) => ({
+              ...obj,
+              [annotation.fileId]: {
+                fileId: annotation.fileId,
+                topics: arrayToObjectById(annotation.topics),
+              },
+            }),
+            {},
+          ),
         };
       }
       return state;

@@ -55,7 +55,7 @@ const translations = defineMessages({
 
 const TypeBadge = ({ text, itemType }) => (
   <span style={styles.badge}>
-    { text || <FormattedMessage {...translations[itemType]} /> }
+    {text || <FormattedMessage {...translations[itemType]} />}
   </span>
 );
 

@@ -24,12 +24,13 @@ function findFormFields($form, selector) {
 function buildFormData($form) {
   const data = $form.find(':input').serializeArray();
   const token = {
-    authenticity_token: $(document).find('meta[name="csrf-token"]').attr('content'),
+    authenticity_token: $(document)
+      .find('meta[name="csrf-token"]')
+      .attr('content'),
   };
   data.push(token);
   return data;
 }
-
 
 /**
  * @callback formSubmitSuccessCallback
@@ -65,8 +66,12 @@ function submitAndDisableForm($form, successHandler, failureHandler) {
   }
 
   $.ajax({ url: action, method, data: formData })
-    .done((data) => { successHandler(data, $form[0]); })
-    .fail((data) => { failureHandler(data, $form[0]); });
+    .done((data) => {
+      successHandler(data, $form[0]);
+    })
+    .fail((data) => {
+      failureHandler(data, $form[0]);
+    });
 
   findFormFields($form).prop('disabled', true);
 }

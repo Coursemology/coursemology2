@@ -38,27 +38,32 @@ const translations = defineMessages({
 });
 
 class MilestoneGroupSettings extends React.Component {
-  static propTypes = {
-    milestonesExpanded: PropTypes.string,
-    dispatch: PropTypes.func.isRequired,
-  }
-
   handleUpdate = (_, milestonesExpanded) => {
     const { dispatch } = this.props;
-    const payload = { lesson_plan_component_settings: { milestones_expanded: milestonesExpanded } };
+    const payload = {
+      lesson_plan_component_settings: {
+        milestones_expanded: milestonesExpanded,
+      },
+    };
     const successMessage = <FormattedMessage {...translations.updateSuccess} />;
     const failureMessage = <FormattedMessage {...translations.updateFailure} />;
     dispatch(updateLessonPlanSettings(payload, successMessage, failureMessage));
-  }
+  };
 
   render() {
     return (
       <>
-        <h2><FormattedMessage {...translations.header} /></h2>
-        <p><FormattedMessage {...translations.explanation} /></p>
+        <h2>
+          <FormattedMessage {...translations.header} />
+        </h2>
+        <p>
+          <FormattedMessage {...translations.explanation} />
+        </p>
         <RadioButtonGroup
           name="milestonesExpanded"
-          valueSelected={this.props.milestonesExpanded || defaultSettings.milestonesExpanded}
+          valueSelected={
+            this.props.milestonesExpanded || defaultSettings.milestonesExpanded
+          }
           onChange={this.handleUpdate}
         >
           <RadioButton
@@ -79,6 +84,12 @@ class MilestoneGroupSettings extends React.Component {
   }
 }
 
-export default connect(state => ({
-  milestonesExpanded: state.lessonPlanSettings.component_settings.milestones_expanded,
+MilestoneGroupSettings.propTypes = {
+  milestonesExpanded: PropTypes.string,
+  dispatch: PropTypes.func.isRequired,
+};
+
+export default connect((state) => ({
+  milestonesExpanded:
+    state.lessonPlanSettings.component_settings.milestones_expanded,
 }))(MilestoneGroupSettings);

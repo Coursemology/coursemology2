@@ -26,23 +26,23 @@ const styles = {
 };
 
 class SurveyDetails extends React.Component {
-  static propTypes = {
-    survey: surveyShape,
-    courseId: PropTypes.string.isRequired,
-    disabled: PropTypes.bool.isRequired,
-
-    dispatch: PropTypes.func.isRequired,
-  };
-
   handlePublishToggle = (event, value) => {
     const { dispatch, survey } = this.props;
-    dispatch(updateSurvey(
-      survey.id,
-      { survey: { published: value } },
-      <FormattedMessage {...surveyTranslations.updateSuccess} values={survey} />,
-      <FormattedMessage {...surveyTranslations.updateFailure} values={survey} />
-    ));
-  }
+    dispatch(
+      updateSurvey(
+        survey.id,
+        { survey: { published: value } },
+        <FormattedMessage
+          {...surveyTranslations.updateSuccess}
+          values={survey}
+        />,
+        <FormattedMessage
+          {...surveyTranslations.updateFailure}
+          values={survey}
+        />,
+      ),
+    );
+  };
 
   renderDescription() {
     const { survey } = this.props;
@@ -56,7 +56,10 @@ class SurveyDetails extends React.Component {
         <h4>
           <FormattedMessage {...surveyTranslations.description} />
         </h4>
-        <p style={{ whiteSpace: 'pre-line' }} dangerouslySetInnerHTML={{ __html: survey.description }} />
+        <p
+          style={{ whiteSpace: 'pre-line' }}
+          dangerouslySetInnerHTML={{ __html: survey.description }}
+        />
       </CardText>
     );
   }
@@ -81,7 +84,9 @@ class SurveyDetails extends React.Component {
 
   render() {
     const { survey, courseId, disabled } = this.props;
-    if (!survey) { return null; }
+    if (!survey) {
+      return null;
+    }
     return (
       <Card>
         <div>
@@ -92,7 +97,7 @@ class SurveyDetails extends React.Component {
                   <FormattedMessage {...surveyTranslations.opensAt} />
                 </TableRowColumn>
                 <TableRowColumn>
-                  { formatLongDateTime(survey.start_at) }
+                  {formatLongDateTime(survey.start_at)}
                 </TableRowColumn>
               </TableRow>
               <TableRow>
@@ -100,23 +105,23 @@ class SurveyDetails extends React.Component {
                   <FormattedMessage {...surveyTranslations.expiresAt} />
                 </TableRowColumn>
                 <TableRowColumn>
-                  { formatLongDateTime(survey.end_at) }
+                  {formatLongDateTime(survey.end_at)}
                 </TableRowColumn>
               </TableRow>
               <TableRow>
                 <TableRowColumn>
                   <FormattedMessage {...surveyTranslations.basePoints} />
                 </TableRowColumn>
-                <TableRowColumn>
-                  {survey.base_exp}
-                </TableRowColumn>
+                <TableRowColumn>{survey.base_exp}</TableRowColumn>
               </TableRow>
               <TableRow>
                 <TableRowColumn>
                   <FormattedMessage {...surveyTranslations.bonusPoints} />
                 </TableRowColumn>
                 <TableRowColumn>
-                  {survey.allow_response_after_end ? survey.time_bonus_exp : '-'}
+                  {survey.allow_response_after_end
+                    ? survey.time_bonus_exp
+                    : '-'}
                 </TableRowColumn>
               </TableRow>
               <TableRow>
@@ -124,26 +129,36 @@ class SurveyDetails extends React.Component {
                   <FormattedMessage {...surveyTranslations.anonymous} />
                 </TableRowColumn>
                 <TableRowColumn>
-                  <FormattedMessage {...libTranslations[survey.anonymous ? 'yes' : 'no']} />
-                </TableRowColumn>
-              </TableRow>
-              <TableRow>
-                <TableRowColumn>
-                  <FormattedMessage {...surveyTranslations.allowResponseAfterEnd} />
-                </TableRowColumn>
-                <TableRowColumn>
                   <FormattedMessage
-                    {...libTranslations[survey.allow_response_after_end ? 'yes' : 'no']}
+                    {...libTranslations[survey.anonymous ? 'yes' : 'no']}
                   />
                 </TableRowColumn>
               </TableRow>
               <TableRow>
                 <TableRowColumn>
-                  <FormattedMessage {...surveyTranslations.allowModifyAfterSubmit} />
+                  <FormattedMessage
+                    {...surveyTranslations.allowResponseAfterEnd}
+                  />
                 </TableRowColumn>
                 <TableRowColumn>
                   <FormattedMessage
-                    {...libTranslations[survey.allow_modify_after_submit ? 'yes' : 'no']}
+                    {...libTranslations[
+                      survey.allow_response_after_end ? 'yes' : 'no'
+                    ]}
+                  />
+                </TableRowColumn>
+              </TableRow>
+              <TableRow>
+                <TableRowColumn>
+                  <FormattedMessage
+                    {...surveyTranslations.allowModifyAfterSubmit}
+                  />
+                </TableRowColumn>
+                <TableRowColumn>
+                  <FormattedMessage
+                    {...libTranslations[
+                      survey.allow_modify_after_submit ? 'yes' : 'no'
+                    ]}
                   />
                 </TableRowColumn>
               </TableRow>
@@ -153,31 +168,31 @@ class SurveyDetails extends React.Component {
         {this.renderPublishToggle()}
         {this.renderDescription()}
         <CardText>
-          { survey.canCreateSection ? <NewSectionButton {...{ disabled }} /> : null }
-          {
-            survey.canViewResults
-              ? (
-                <RaisedButton
-                  style={styles.button}
-                  label={<FormattedMessage {...surveyTranslations.results} />}
-                  onClick={() => history.push(
-                    `/courses/${courseId}/surveys/${survey.id}/results`
-                  )}
-                />
-              ) : null
-          }
-          {
-            survey.canViewResults
-              ? (
-                <RaisedButton
-                  style={styles.button}
-                  label={<FormattedMessage {...surveyTranslations.responses} />}
-                  onClick={() => history.push(
-                    `/courses/${courseId}/surveys/${survey.id}/responses`
-                  )}
-                />
-              ) : null
-          }
+          {survey.canCreateSection ? (
+            <NewSectionButton {...{ disabled }} />
+          ) : null}
+          {survey.canViewResults ? (
+            <RaisedButton
+              style={styles.button}
+              label={<FormattedMessage {...surveyTranslations.results} />}
+              onClick={() =>
+                history.push(
+                  `/courses/${courseId}/surveys/${survey.id}/results`,
+                )
+              }
+            />
+          ) : null}
+          {survey.canViewResults ? (
+            <RaisedButton
+              style={styles.button}
+              label={<FormattedMessage {...surveyTranslations.responses} />}
+              onClick={() =>
+                history.push(
+                  `/courses/${courseId}/surveys/${survey.id}/responses`,
+                )
+              }
+            />
+          ) : null}
           <DownloadResponsesButton />
           <RespondButton
             courseId={courseId}
@@ -195,5 +210,13 @@ class SurveyDetails extends React.Component {
     );
   }
 }
+
+SurveyDetails.propTypes = {
+  survey: surveyShape,
+  courseId: PropTypes.string.isRequired,
+  disabled: PropTypes.bool.isRequired,
+
+  dispatch: PropTypes.func.isRequired,
+};
 
 export default connect()(SurveyDetails);

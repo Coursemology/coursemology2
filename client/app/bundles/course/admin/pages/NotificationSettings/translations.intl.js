@@ -54,27 +54,32 @@ export const settingDescriptions = defineMessages({
   },
   new_submission: {
     id: 'course.admin.NotificationSettings.settingDescriptions.new_submission',
-    defaultMessage: "Notify student's group managers when the student makes a submission. Select whether to\
+    defaultMessage:
+      "Notify student's group managers when the student makes a submission. Select whether to\
       send this notification for phantom students via the 'New Phantom Submission' setting.",
   },
   new_phantom_submission: {
     id: 'course.admin.NotificationSettings.settingDescriptions.new_phantom_submission',
-    defaultMessage: "Sends 'New Submission' email for phantom students also. If the 'New\
+    defaultMessage:
+      "Sends 'New Submission' email for phantom students also. If the 'New\
      Submission' email notification is disabled, no emails will be sent even though this setting\
       is enabled.",
   },
   grades_released: {
     id: 'course.admin.NotificationSettings.settingDescriptions.grades_released',
-    defaultMessage: 'Notify a student when grades for a submission have been released.',
+    defaultMessage:
+      'Notify a student when grades for a submission have been released.',
   },
   new_comment: {
     id: 'course.admin.NotificationSettings.settingDescriptions.new_comment',
-    defaultMessage: 'Notify users when comments or programming question annotations are made by\
+    defaultMessage:
+      'Notify users when comments or programming question annotations are made by\
       non-phantom student or staff.',
   },
   new_phantom_comment: {
     id: 'course.admin.NotificationSettings.settingDescriptions.new_phantom_comment',
-    defaultMessage: "Notify users when comments or programming question annotations are made by\
+    defaultMessage:
+      "Notify users when comments or programming question annotations are made by\
       phantom student or staff. If the 'New Comment' email notification is disabled, no emails\
       will be sent even though this setting is enabled.",
   },
@@ -84,18 +89,21 @@ export const settingDescriptions = defineMessages({
   },
   post_replied: {
     id: 'course.admin.NotificationSettings.settingDescriptions.post_replied',
-    defaultMessage: 'Notify users who are subscribed to a forum topic when a reply by a\
+    defaultMessage:
+      'Notify users who are subscribed to a forum topic when a reply by a\
       non-phantom user is made to that topic.',
   },
   post_phantom_replied: {
     id: 'course.admin.NotificationSettings.settingDescriptions.post_phantom_replied',
-    defaultMessage: "Notify users who are subscribed to a forum topic when a reply by a\
+    defaultMessage:
+      "Notify users who are subscribed to a forum topic when a reply by a\
       phantom user is made to that topic. If the 'Post Replied' email notification is disabled,\
       no emails will be sent even though this setting is enabled.",
   },
   topic_created: {
     id: 'course.admin.NotificationSettings.settingDescriptions.topic_created',
-    defaultMessage: 'Notify users who are subscribed to a forum when a topic is created for that forum.',
+    defaultMessage:
+      'Notify users who are subscribed to a forum when a topic is created for that forum.',
   },
   video_opening: {
     id: 'course.admin.NotificationSettings.settingDescriptions.video_opening',
@@ -103,7 +111,8 @@ export const settingDescriptions = defineMessages({
   },
   video_closing: {
     id: 'course.admin.NotificationSettings.settingDescriptions.video_closing',
-    defaultMessage: 'Notify students when a video submission is about to be due.',
+    defaultMessage:
+      'Notify students when a video submission is about to be due.',
   },
 });
 

@@ -6,7 +6,14 @@ import { CardText } from 'material-ui/Card';
 import Chip from 'material-ui/Chip';
 import Toggle from 'material-ui/Toggle';
 import RaisedButton from 'material-ui/RaisedButton';
-import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
+import {
+  Table,
+  TableBody,
+  TableHeader,
+  TableHeaderColumn,
+  TableRow,
+  TableRowColumn,
+} from 'material-ui/Table';
 import { cyan500, grey50, grey300 } from 'material-ui/styles/colors';
 import Thumbnail from 'lib/components/Thumbnail';
 import { sorts } from 'course/survey/utils';
@@ -126,34 +133,17 @@ const translations = defineMessages({
 });
 
 class OptionsQuestionResults extends React.Component {
-  static propTypes = {
-    options: PropTypes.arrayOf(optionShape),
-    includePhantoms: PropTypes.bool,
-    anonymous: PropTypes.bool,
-    questionType: PropTypes.string,
-    answers: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number,
-      course_user_id: PropTypes.number,
-      course_user_name: PropTypes.string,
-      phantom: PropTypes.bool,
-      question_option_ids: PropTypes.arrayOf(PropTypes.number),
-    })),
-  }
-
   static renderPercentageBar(percentage) {
     return (
       <div style={styles.barContainer}>
         <div style={{ ...styles.bar, width: `${percentage}%` }}>
-          {
-            percentage >= styles.percentageBarThreshold
-              ? `${percentage.toFixed(1)}%` : null
-          }
+          {percentage >= styles.percentageBarThreshold
+            ? `${percentage.toFixed(1)}%`
+            : null}
         </div>
-        {
-          percentage < styles.percentageBarThreshold
-            ? <span style={styles.percentage}>{`${percentage.toFixed(1)}%`}</span>
-            : null
-        }
+        {percentage < styles.percentageBarThreshold ? (
+          <span style={styles.percentage}>{`${percentage.toFixed(1)}%`}</span>
+        ) : null}
       </div>
     );
   }
@@ -161,55 +151,57 @@ class OptionsQuestionResults extends React.Component {
   static renderStudentList(students) {
     return (
       <div style={styles.optionStudentNames}>
-        {
-          students.map(student => (
-            <Chip key={student.id} style={styles.nameChip}>
-              <Link to={student.response_path}>
-                {
-                  student.phantom
-                    ? <FormattedMessage {...translations.phantomStudentName} values={{ name: student.name }} />
-                    : student.name
-                }
-              </Link>
-            </Chip>
-          ))
-        }
+        {students.map((student) => (
+          <Chip key={student.id} style={styles.nameChip}>
+            <Link to={student.response_path}>
+              {student.phantom ? (
+                <FormattedMessage
+                  {...translations.phantomStudentName}
+                  values={{ name: student.name }}
+                />
+              ) : (
+                student.name
+              )}
+            </Link>
+          </Chip>
+        ))}
       </div>
     );
   }
 
   static renderOptionRow(breakdown, hasImage, option, index, anonymous) {
     const percentage = (100 * breakdown[option.id].count) / breakdown.length;
-    const { id, option: optionText, image_url: imageUrl, image_name: imageName } = option;
+    const {
+      id,
+      option: optionText,
+      image_url: imageUrl,
+      image_name: imageName,
+    } = option;
 
     return (
       <TableRow key={id}>
         <TableRowColumn>{index + 1}</TableRowColumn>
-        {
-          hasImage
-            ? (
-              <TableRowColumn>
-                { imageUrl
-                  ? (
-                    <Thumbnail
-                      src={imageUrl}
-                      style={styles.image}
-                      containerStyle={styles.imageContainer}
-                    />
-                  ) : [] }
-              </TableRowColumn>
-            ) : null
-        }
+        {hasImage ? (
+          <TableRowColumn>
+            {imageUrl ? (
+              <Thumbnail
+                src={imageUrl}
+                style={styles.image}
+                containerStyle={styles.imageContainer}
+              />
+            ) : (
+              []
+            )}
+          </TableRowColumn>
+        ) : null}
         <TableRowColumn colSpan={hasImage ? 3 : 6} style={styles.wrapText}>
-          { optionText || imageName || null }
+          {optionText || imageName || null}
         </TableRowColumn>
         <TableRowColumn>{breakdown[id].count}</TableRowColumn>
         <TableRowColumn colSpan={6}>
-          {
-            anonymous
-              ? OptionsQuestionResults.renderPercentageBar(percentage)
-              : OptionsQuestionResults.renderStudentList(breakdown[id].students)
-          }
+          {anonymous
+            ? OptionsQuestionResults.renderPercentageBar(percentage)
+            : OptionsQuestionResults.renderStudentList(breakdown[id].students)}
         </TableRowColumn>
       </TableRow>
     );
@@ -237,7 +229,9 @@ class OptionsQuestionResults extends React.Component {
     });
     answers.forEach((answer) => {
       answer.question_option_ids.forEach((selectedOption) => {
-        if (!includePhantoms && answer.phantom) { return; }
+        if (!includePhantoms && answer.phantom) {
+          return;
+        }
         breakdown[selectedOption].count += 1;
         breakdown[selectedOption].students.push({
           id: answer.course_user_id,
@@ -251,16 +245,27 @@ class OptionsQuestionResults extends React.Component {
   }
 
   renderExpandToggle() {
-    if (!this.state.expandable) { return null; }
+    if (!this.state.expandable) {
+      return null;
+    }
 
-    const labelTranslation = this.state.expanded ? 'hideOptions' : 'showOptions';
+    const labelTranslation = this.state.expanded
+      ? 'hideOptions'
+      : 'showOptions';
     const quantity = this.props.options.length;
 
     return (
       <CardText style={styles.expandToggleStyle}>
         <RaisedButton
-          label={<FormattedMessage {...translations[labelTranslation]} values={{ quantity }} />}
-          onClick={() => this.setState(state => ({ expanded: !state.expanded }))}
+          label={
+            <FormattedMessage
+              {...translations[labelTranslation]}
+              values={{ quantity }}
+            />
+          }
+          onClick={() =>
+            this.setState((state) => ({ expanded: !state.expanded }))
+          }
         />
       </CardText>
     );
@@ -275,7 +280,7 @@ class OptionsQuestionResults extends React.Component {
       [MULTIPLE_CHOICE]: translations.multipleChoiceOption,
       [MULTIPLE_RESPONSE]: translations.multipleResponseOption,
     }[questionType];
-    const hasImage = options.some(option => option.image_url);
+    const hasImage = options.some((option) => option.image_url);
     const sortByCount = (a, b) => breakdown[b.id].count - breakdown[a.id].count;
     const sortMethod = this.state.sortByPercentage ? sortByCount : byWeight;
 
@@ -294,19 +299,37 @@ class OptionsQuestionResults extends React.Component {
             </TableHeaderColumn>
             <TableHeaderColumn colSpan={6}>
               <div style={styles.percentageHeader}>
-                <FormattedMessage {...translations[anonymous ? 'percentage' : 'respondents']} />
+                <FormattedMessage
+                  {...translations[anonymous ? 'percentage' : 'respondents']}
+                />
                 <div style={styles.sortByPercentage}>
-                  <FormattedMessage {...translations[anonymous ? 'sortByPercentage' : 'sortByCount']} />
-                  <Toggle onToggle={(_, value) => this.setState({ sortByPercentage: value })} />
+                  <FormattedMessage
+                    {...translations[
+                      anonymous ? 'sortByPercentage' : 'sortByCount'
+                    ]}
+                  />
+                  <Toggle
+                    onToggle={(_, value) =>
+                      this.setState({ sortByPercentage: value })
+                    }
+                  />
                 </div>
               </div>
             </TableHeaderColumn>
           </TableRow>
         </TableHeader>
         <TableBody displayRowCheckbox={false}>
-          {options.sort(sortMethod).map(
-            (option, index) => OptionsQuestionResults.renderOptionRow(breakdown, hasImage, option, index, anonymous)
-          )}
+          {options
+            .sort(sortMethod)
+            .map((option, index) =>
+              OptionsQuestionResults.renderOptionRow(
+                breakdown,
+                hasImage,
+                option,
+                index,
+                anonymous,
+              ),
+            )}
         </TableBody>
       </Table>
     );
@@ -316,12 +339,28 @@ class OptionsQuestionResults extends React.Component {
     const toggle = this.renderExpandToggle();
     return (
       <>
-        { toggle }
-        { this.state.expanded && this.renderOptionsResultsTable() }
-        { this.state.expanded && toggle }
+        {toggle}
+        {this.state.expanded && this.renderOptionsResultsTable()}
+        {this.state.expanded && toggle}
       </>
     );
   }
 }
+
+OptionsQuestionResults.propTypes = {
+  options: PropTypes.arrayOf(optionShape),
+  includePhantoms: PropTypes.bool,
+  anonymous: PropTypes.bool,
+  questionType: PropTypes.string,
+  answers: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      course_user_id: PropTypes.number,
+      course_user_name: PropTypes.string,
+      phantom: PropTypes.bool,
+      question_option_ids: PropTypes.arrayOf(PropTypes.number),
+    }),
+  ),
+};
 
 export default OptionsQuestionResults;

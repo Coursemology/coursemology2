@@ -18,10 +18,7 @@ const translations = defineMessages({
 
 const propTypes = {
   field: PropTypes.string,
-  label: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object,
-  ]),
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   disabled: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
   onKeyDown: PropTypes.func,
@@ -62,34 +59,38 @@ class MaterialSummernote extends React.Component {
         }
       });
     }
-  }
+  };
 
   uploadImage = (image, onImageUploaded) => {
     const formData = new FormData();
     formData.append('file', image);
     formData.append('name', image.name);
 
-    axios.post('/attachments', formData)
-      .then(response => response.data)
+    axios
+      .post('/attachments', formData)
+      .then((response) => response.data)
       .then((data) => {
         if (data.success) {
           onImageUploaded(data.id);
         }
       });
-  }
+  };
 
   /* eslint class-methods-use-this: "off" */
   inlineCodeButton() {
     const ui = $.summernote.ui;
 
     const button = ui.button({
-      contents: '<i class="fa fa-code"'
-                   + 'style="color: #c7254e;'
-                   + 'font-weight: bold;'
-                   + 'background-color: #f9f2f4"/>',
+      contents:
+        '<i class="fa fa-code"' +
+        'style="color: #c7254e;' +
+        'font-weight: bold;' +
+        'background-color: #f9f2f4"/>',
       tooltip: this.props.intl.formatMessage(translations.inlineCode),
       click: () => {
-        const node = $(window.getSelection().getRangeAt(0).commonAncestorContainer);
+        const node = $(
+          window.getSelection().getRangeAt(0).commonAncestorContainer,
+        );
         const smrNote = this.reactSummernote.editor;
         if (node.parent().is('code')) {
           node.unwrap();
@@ -119,7 +120,9 @@ class MaterialSummernote extends React.Component {
       },
     } = this.context.muiTheme;
 
-    const testFieldLabelColor = this.state.isFocused ? focusColor : floatingLabelColor;
+    const testFieldLabelColor = this.state.isFocused
+      ? focusColor
+      : floatingLabelColor;
 
     return (
       <div
@@ -139,7 +142,9 @@ class MaterialSummernote extends React.Component {
           muiTheme={this.context.muiTheme}
           style={{
             pointerEvents: 'none',
-            color: this.props.disabled ? disabledTextColor : testFieldLabelColor,
+            color: this.props.disabled
+              ? disabledTextColor
+              : testFieldLabelColor,
           }}
           htmlFor={this.props.field}
           shrink
@@ -166,9 +171,18 @@ class MaterialSummernote extends React.Component {
               dialogsInBody: true,
               disabled: this.props.disabled,
               fontNames: [
-                'Arial', 'Arial Black', 'Comic Sans MS', 'Courier New',
-                'Helvetica Neue', 'Helvetica', 'Impact', 'Lucida Grande',
-                'Roboto', 'Tahoma', 'Times New Roman', 'Verdana',
+                'Arial',
+                'Arial Black',
+                'Comic Sans MS',
+                'Courier New',
+                'Helvetica Neue',
+                'Helvetica',
+                'Impact',
+                'Lucida Grande',
+                'Roboto',
+                'Tahoma',
+                'Times New Roman',
+                'Verdana',
               ],
               fontNamesIgnoreCheck: ['Roboto'],
               toolbar: [

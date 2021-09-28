@@ -15,6 +15,7 @@ class Course::Video::TopicsController < Course::Video::Controller
     result = @topic.class.transaction do
       raise ActiveRecord::Rollback unless @post.save && create_topic_subscription && update_topic_pending_status
       raise ActiveRecord::Rollback unless @topic.save
+
       true
     end
 

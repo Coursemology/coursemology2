@@ -29,11 +29,6 @@ const styles = {
 };
 
 class ColumnVisibilityDropdown extends React.Component {
-  static propTypes = {
-    columnsVisible: PropTypes.shape({}).isRequired,
-    dispatch: PropTypes.func.isRequired,
-  }
-
   constructor(props) {
     super(props);
 
@@ -50,13 +45,13 @@ class ColumnVisibilityDropdown extends React.Component {
       open: true,
       anchorEl: event.currentTarget,
     });
-  }
+  };
 
   handleRequestClose = () => {
     this.setState({
       open: false,
     });
-  }
+  };
 
   render() {
     const { dispatch, columnsVisible } = this.props;
@@ -78,19 +73,23 @@ class ColumnVisibilityDropdown extends React.Component {
           onRequestClose={this.handleRequestClose}
         >
           <Menu>
-            {
-              [ITEM_TYPE, START_AT, BONUS_END_AT, END_AT, PUBLISHED].map((field) => {
+            {[ITEM_TYPE, START_AT, BONUS_END_AT, END_AT, PUBLISHED].map(
+              (field) => {
                 const isVisible = columnsVisible[field];
                 return (
                   <MenuItem
                     key={field}
-                    primaryText={<FormattedMessage {...fieldTranslations[field]} />}
+                    primaryText={
+                      <FormattedMessage {...fieldTranslations[field]} />
+                    }
                     rightIcon={isVisible ? <Done /> : <span />}
-                    onClick={() => dispatch(setColumnVisibility(field, !isVisible))}
+                    onClick={() =>
+                      dispatch(setColumnVisibility(field, !isVisible))
+                    }
                   />
                 );
-              })
-            }
+              },
+            )}
           </Menu>
         </Popover>
       </div>
@@ -98,6 +97,11 @@ class ColumnVisibilityDropdown extends React.Component {
   }
 }
 
-export default connect(state => ({
+ColumnVisibilityDropdown.propTypes = {
+  columnsVisible: PropTypes.shape({}).isRequired,
+  dispatch: PropTypes.func.isRequired,
+};
+
+export default connect((state) => ({
   columnsVisible: state.flags.editPageColumnsVisible,
 }))(ColumnVisibilityDropdown);

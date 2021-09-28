@@ -40,18 +40,22 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
     duplicated_course = Course.transaction do
       new_course = duplicator.duplicate(source_course)
       raise ActiveRecord::Rollback unless new_course.save
+
       duplicator.set_option(:destination_course, new_course)
 
       # Delete the auto-generated default reference timeline in favor of duplicating existing one
       raise ActiveRecord::Rollback unless new_course.default_reference_timeline.destroy
+
       new_course.reload
 
       source_course.duplication_manifest.each do |item|
         raise ActiveRecord::Rollback unless duplicator.duplicate(item).save
+
         new_course.reload
       end
       raise ActiveRecord::Rollback unless update_course_settings(duplicator, new_course, source_course)
       raise ActiveRecord::Rollback unless update_sidebar_settings(duplicator, new_course, source_course)
+
       new_course
     end
     notify_duplication_complete(duplicated_course) unless duplicated_course.nil?
@@ -84,6 +88,7 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
     component_key = Course::AssessmentsComponent.key
     old_category_settings = old_course.settings.public_send(component_key)
     return true if old_category_settings.nil?
+
     new_category_settings = {}
     old_course.assessment_categories.each do |old_category|
       new_category = duplicator.duplicate(old_category)
@@ -101,6 +106,7 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
       new_category = duplicator.duplicate(old_category)
       weight = old_course.settings(:sidebar, "assessments_#{old_category.id}").weight
       next unless weight
+
       new_course.settings(:sidebar).settings("assessments_#{new_category.id}").weight = weight
       new_course.settings(:sidebar).public_send("assessments_#{old_category.id}=", nil)
     end

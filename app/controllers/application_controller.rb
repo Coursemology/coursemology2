@@ -61,12 +61,13 @@ class ApplicationController < ActionController::Base
   # lograge
   def append_info_to_payload(payload)
     super
-    if payload[:status] == 200
-      payload[:level] = 'INFO'
-    elsif payload[:status] == 302
-      payload[:level] = 'WARN'
-    else
-      payload[:level] = 'ERROR'
-    end
+    payload[:level] = case payload[:status]
+                      when 200
+                        'INFO'
+                      when 302
+                        'WARN'
+                      else
+                        'ERROR'
+                      end
   end
 end

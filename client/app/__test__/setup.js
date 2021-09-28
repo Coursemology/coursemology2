@@ -11,12 +11,12 @@ require('@babel/polyfill');
 // Our jquery is from CDN and loaded at runtime, so this is required in test.
 const jQuery = require('jquery');
 
-const timeZone = "Asia/Singapore";
+const timeZone = 'Asia/Singapore';
 const intlProvider = new IntlProvider({ locale: 'en', timeZone }, {});
-const courseId = "1";
+const courseId = '1';
 
 const muiTheme = getMuiTheme();
-const buildContextOptions = store => ({
+const buildContextOptions = (store) => ({
   context: { intl, store, muiTheme },
   childContextTypes: {
     muiTheme: PropTypes.object,
@@ -36,8 +36,7 @@ global.jQuery = jQuery;
 global.buildContextOptions = buildContextOptions;
 
 // Global mocks
-document.head.innerHTML =
-  `<meta name="server-context" data-i18n-locale="en" data-time-zone="${timeZone}">`;
+document.head.innerHTML = `<meta name="server-context" data-i18n-locale="en" data-time-zone="${timeZone}">`;
 
 window.history.pushState({}, '', `/courses/${courseId}`);
 
@@ -45,12 +44,14 @@ window.history.pushState({}, '', `/courses/${courseId}`);
 
 // Sleep for a given period in ms.
 function sleep(time) {
-  return new Promise(resolve => setTimeout(resolve, time));
+  return new Promise((resolve) => setTimeout(resolve, time));
 }
 global.sleep = sleep;
 
 // summernote does not work well with jsdom in tests, stub it to normal text field.
 jest.mock('lib/components/redux-form/RichTextField', () => {
-  const TextField = require.requireActual('lib/components/redux-form/TextField');
+  const TextField = require.requireActual(
+    'lib/components/redux-form/TextField',
+  );
   return TextField;
 });

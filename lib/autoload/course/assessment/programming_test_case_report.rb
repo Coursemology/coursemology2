@@ -88,7 +88,7 @@ class Course::Assessment::ProgrammingTestCaseReport
     #
     # @return [String]
     def identifier
-      class_name = self.class_name ? self.class_name + '/' : ''
+      class_name = self.class_name ? "#{self.class_name}/" : ''
       "#{@test_suite.identifier}/#{class_name}#{name.underscore}"
     end
 
@@ -126,6 +126,7 @@ class Course::Assessment::ProgrammingTestCaseReport
     # @return [String|nil] A combined string with the error type and error message, nil if no error.
     def error_message
       return nil unless errored?
+
       error_body = @test_case.search('error')[0]['message']
       "#{error_type}: #{error_body}"
     end
@@ -136,6 +137,7 @@ class Course::Assessment::ProgrammingTestCaseReport
     # @return [String|nil] Full traceback of error, or nil if there's no error.
     def error_contents
       return nil unless errored?
+
       @test_case.search('error')[0].children.to_s
     end
 
@@ -144,6 +146,7 @@ class Course::Assessment::ProgrammingTestCaseReport
     # @return [String|nil] The type attribute, nil if no error.
     def error_type
       return nil unless errored?
+
       @test_case.search('error')[0]['type']
     end
 
@@ -153,6 +156,7 @@ class Course::Assessment::ProgrammingTestCaseReport
     # nil if no failure.
     def failure_message
       return nil unless failed?
+
       failure_body = @test_case.search('failure')[0]['message']
       "#{failure_type}: #{failure_body}"
     end
@@ -163,6 +167,7 @@ class Course::Assessment::ProgrammingTestCaseReport
     # @return [String|nil] Full traceback of failure, nil if there's no failure.
     def failure_contents
       return nil unless failed?
+
       @test_case.search('failure')[0].children.to_s
     end
 
@@ -171,6 +176,7 @@ class Course::Assessment::ProgrammingTestCaseReport
     # @return [String|nil] The type attribute, nil if there's no failure.
     def failure_type
       return nil unless failed?
+
       @test_case.search('failure')[0]['type']
     end
 

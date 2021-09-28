@@ -20,9 +20,6 @@ $(document).ready(() => {
       </ProviderWrapper>
     );
 
-    render(
-      <Page />,
-      mountNode
-    );
+    render(<Page />, mountNode);
   }
 });

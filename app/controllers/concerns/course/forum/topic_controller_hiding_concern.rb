@@ -3,7 +3,7 @@ module Course::Forum::TopicControllerHidingConcern
   extend ActiveSupport::Concern
 
   def set_hidden
-    if @topic.update_attributes(hidden_params)
+    if @topic.update(hidden_params)
       redirect_to course_forum_topic_path(current_course, @forum, @topic),
                   success: hidden_state_text(true)
     else

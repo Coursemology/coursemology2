@@ -49,20 +49,6 @@ const styles = {
 };
 
 export default class CommentCard extends Component {
-  static propTypes = {
-    post: postShape.isRequired,
-    editValue: PropTypes.string,
-    airMode: PropTypes.bool,
-
-    handleChange: PropTypes.func,
-    updateComment: PropTypes.func,
-    deleteComment: PropTypes.func,
-  }
-
-  static defaultProps = {
-    airMode: true,
-  };
-
   static formatDateTime(dateTime) {
     return dateTime ? moment(dateTime).format('MMM DD, YYYY h:mma') : null;
   }
@@ -75,9 +61,12 @@ export default class CommentCard extends Component {
     return `post_${field}`;
   }
 
-  state = {
-    editMode: false,
-    deleteConfirmation: false,
+  constructor(props) {
+    super(props);
+    this.state = {
+      editMode: false,
+      deleteConfirmation: false,
+    };
   }
 
   onChange(nextValue) {
@@ -103,14 +92,21 @@ export default class CommentCard extends Component {
 
   toggleEditMode() {
     const { editMode } = this.state;
-    const { handleChange, post: { text } } = this.props;
+    const {
+      handleChange,
+      post: { text },
+    } = this.props;
     this.setState({ editMode: !editMode });
     handleChange(text);
   }
 
   renderCommentContent() {
     const { editMode } = this.state;
-    const { editValue, airMode, post: { formattedText, id } } = this.props;
+    const {
+      editValue,
+      airMode,
+      post: { formattedText, id },
+    } = this.props;
 
     if (editMode) {
       return (
@@ -119,7 +115,7 @@ export default class CommentCard extends Component {
             airMode={airMode}
             id={id.toString()}
             inputId={CommentCard.editPostIdentifier(id)}
-            onChange={nextValue => this.onChange(nextValue)}
+            onChange={(nextValue) => this.onChange(nextValue)}
             value={editValue}
           />
           <div style={styles.buttonContainer}>
@@ -145,12 +141,15 @@ export default class CommentCard extends Component {
   }
 
   render() {
-    const { creator: { name, avatar }, createdAt, canUpdate, canDestroy, id } = this.props.post;
+    const {
+      creator: { name, avatar },
+      createdAt,
+      canUpdate,
+      canDestroy,
+      id,
+    } = this.props.post;
     return (
-      <Card
-        id={CommentCard.postIdentifier(id)}
-        style={styles.card}
-      >
+      <Card id={CommentCard.postIdentifier(id)} style={styles.card}>
         <div style={styles.header}>
           <CardHeader
             style={styles.cardHeader}
@@ -161,7 +160,7 @@ export default class CommentCard extends Component {
             avatar={<Avatar src={avatar} size={25} />}
           />
           <div style={styles.buttonContainer}>
-            { canUpdate ? (
+            {canUpdate ? (
               <FlatButton
                 className="edit-comment"
                 style={styles.headerButton}
@@ -169,8 +168,8 @@ export default class CommentCard extends Component {
                 icon={<EditIcon />}
                 onClick={() => this.toggleEditMode()}
               />
-            ) : null }
-            { canDestroy ? (
+            ) : null}
+            {canDestroy ? (
               <FlatButton
                 className="delete-comment"
                 style={styles.headerButton}
@@ -178,7 +177,7 @@ export default class CommentCard extends Component {
                 icon={<DeleteIcon color={red500} />}
                 onClick={() => this.onDelete()}
               />
-            ) : null }
+            ) : null}
           </div>
         </div>
         <CardText style={styles.commentContent}>
@@ -194,3 +193,17 @@ export default class CommentCard extends Component {
     );
   }
 }
+
+CommentCard.propTypes = {
+  post: postShape.isRequired,
+  editValue: PropTypes.string,
+  airMode: PropTypes.bool,
+
+  handleChange: PropTypes.func,
+  updateComment: PropTypes.func,
+  deleteComment: PropTypes.func,
+};
+
+CommentCard.defaultProps = {
+  airMode: true,
+};

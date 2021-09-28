@@ -5,7 +5,7 @@ en:
         header: :'layout.navbar.register'
         already_registered_html: >
           Already registered? If you have an existing Coursemology account, you can %{sign_in}.
-        password_hint: "#{length} characters minimum"
+        password_hint: '#{length} characters minimum'
         sign_up: :'user.registrations.new.header'
         used: >
           The provided invitation code has been claimed by another account, please use that account to log in instead.

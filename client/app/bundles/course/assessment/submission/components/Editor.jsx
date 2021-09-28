@@ -4,17 +4,6 @@ import { Field } from 'redux-form';
 import AceEditor from 'lib/components/redux-form/AceEditor';
 
 export default class Editor extends Component {
-  static propTypes = {
-    readOnly: PropTypes.bool,
-    name: PropTypes.string,
-    filename: PropTypes.string,
-    language: PropTypes.string.isRequired,
-  }
-
-  static defaultProps = {
-    readOnly: false,
-  };
-
   render() {
     const { readOnly, filename, name, language } = this.props;
     return (
@@ -35,3 +24,14 @@ export default class Editor extends Component {
     );
   }
 }
+
+Editor.propTypes = {
+  readOnly: PropTypes.bool,
+  name: PropTypes.string,
+  filename: PropTypes.string,
+  language: PropTypes.string.isRequired,
+};
+
+Editor.defaultProps = {
+  readOnly: false,
+};

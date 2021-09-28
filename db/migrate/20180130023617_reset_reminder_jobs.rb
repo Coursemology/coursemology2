@@ -27,8 +27,8 @@ class ResetReminderJobs < ActiveRecord::Migration[5.1]
   def reset_closing_reminders
     ActsAsTenant.without_tenant do
       Course::LessonPlan::Item.where("end_at > ? AND actable_type != 'Course::LessonPlan::Event'",
-                                      Time.zone.now - 1.day).
-                                find_each do |item|
+                                     Time.zone.now - 1.day).
+        find_each do |item|
         closing_reminder_token = Time.zone.now.to_f.round(5)
         item.closing_reminder_token = closing_reminder_token
         item.save!

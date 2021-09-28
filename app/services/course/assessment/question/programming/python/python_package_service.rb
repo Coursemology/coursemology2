@@ -39,14 +39,13 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
 
   def extract_autograded_meta(attachment)
     attachment.open(binmode: true) do |temporary_file|
-      begin
-        package = Course::Assessment::ProgrammingPackage.new(temporary_file)
-        meta = package.meta_file
-        @old_meta = meta.present? ? JSON.parse(meta) : nil
-      ensure
-        next unless package
-        temporary_file.close
-      end
+      package = Course::Assessment::ProgrammingPackage.new(temporary_file)
+      meta = package.meta_file
+      @old_meta = meta.present? ? JSON.parse(meta) : nil
+    ensure
+      next unless package
+
+      temporary_file.close
     end
   end
 
@@ -71,6 +70,7 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
         next if data_files_to_delete.try(:include?, (file['filename']))
         # new files overrides old ones
         next if new_data_filenames.include?(file['filename'])
+
         data_files_to_keep.append(File.new(File.join(@tmp_dir, file['filename'])))
       end
     end
@@ -82,13 +82,12 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
     new_filenames = (@test_params[:data_files] || []).reject(&:nil?).map(&:original_filename)
 
     attachment.open(binmode: true) do |temporary_file|
-      begin
-        package = Course::Assessment::ProgrammingPackage.new(temporary_file)
-        return extract_from_package(package, new_filenames, @test_params[:data_files_to_delete])
-      ensure
-        next unless package
-        temporary_file.close
-      end
+      package = Course::Assessment::ProgrammingPackage.new(temporary_file)
+      return extract_from_package(package, new_filenames, @test_params[:data_files_to_delete])
+    ensure
+      next unless package
+
+      temporary_file.close
     end
   end
 
@@ -142,6 +141,7 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
     Zip::File.open(tmp.path) do |zip|
       @test_params[:data_files]&.each do |file|
         next if file.nil?
+
         zip.add(file.original_filename, file.tempfile.path)
       end
 
@@ -157,10 +157,10 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
   #
   # @param [String] filename The filename of the file to get the path of
   def get_file_path(filename)
-    File.join(File.expand_path(File.dirname(__FILE__)), filename).freeze
+    File.join(__dir__, filename).freeze
   end
 
-  def zip_test_files(test_type, zip) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def zip_test_files(test_type, zip) # rubocop:disable Metrics/AbcSize
     # Print test class preamble
     test_class_name = "#{test_type}_tests_grader".camelize
     class_definition = <<~PYTHON
@@ -180,7 +180,7 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
       hint = test[:hint].blank? ? String(nil) : "self.meta['hint'] = #{test[:hint].inspect}"
 
       test_fn = <<-PYTHON
-    def test_#{test_type}_#{format('%02i', index)}(self):
+    def test_#{test_type}_#{format('%<index>02i', index: index)}(self):
         self.meta['expression'] = #{test[:expression].inspect}
         self.meta['expected'] = #{expected}
         #{hint}

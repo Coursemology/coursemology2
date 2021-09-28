@@ -118,10 +118,8 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
   # @return [Array<Course::Assessment::Question::ProgrammingTestCase>] Only the test cases not in
   #   any reports.
   def build_test_case_records(question, auto_grading, test_reports)
-    test_reports.values.each do |test_report|
-      if test_report.present?
-        build_test_case_records_from_report(question, auto_grading, test_report)
-      end
+    test_reports.each_value do |test_report|
+      build_test_case_records_from_report(question, auto_grading, test_report) if test_report.present?
     end
 
     # Build failed test case records for test cases which were not found in any reports.

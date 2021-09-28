@@ -29,18 +29,18 @@ class Course::Settings::Sidebar
   #
   # @param [Array<Hash>] attributes the attributes which indicates the new order.
   def sidebar_items_attributes=(attributes)
-    attributes.values.each do |attribute|
+    attributes.each_value do |attribute|
       key = attribute[:id]
       new_weight = attribute[:weight].to_i
       @settings.settings(key).weight = new_weight
     end
   end
 
-  def persisted? #:nodoc
+  def persisted? # :nodoc:
     true
   end
 
-  def valid? #:nodoc
+  def valid? # :nodoc:
     sidebar_items.all?(&:valid?)
   end
 end

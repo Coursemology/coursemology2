@@ -10,10 +10,9 @@ class Course::Discussion::PostsController < Course::ComponentController
     result = @post.transaction do
       # Set parent as the topologically last pre-existing post, if it exists.
       # @post is in @topic.posts, so we filter out @post, which has no id yet.
-      if @topic.posts.length > 1
-        @post.parent = @topic.posts.ordered_topologically.flatten.select(&:id).last
-      end
+      @post.parent = @topic.posts.ordered_topologically.flatten.select(&:id).last if @topic.posts.length > 1
       raise ActiveRecord::Rollback unless @post.save && create_topic_subscription && update_topic_pending_status
+
       true
     end
 
@@ -29,7 +28,7 @@ class Course::Discussion::PostsController < Course::ComponentController
   end
 
   def update
-    if @post.update_attributes(post_params)
+    if @post.update(post_params)
       respond_to do |format|
         format.js
         format.json { render @post }
@@ -73,6 +72,7 @@ class Course::Discussion::PostsController < Course::ComponentController
 
   def send_created_notification(post)
     return unless current_course_user
+
     topic_actable = post.topic.actable
     topic_actable.notify(post) if topic_actable.respond_to?(:notify)
   end

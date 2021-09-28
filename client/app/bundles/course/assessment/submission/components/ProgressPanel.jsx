@@ -3,7 +3,13 @@ import { injectIntl, intlShape } from 'react-intl';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import Paper from 'material-ui/Paper';
 import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
-import { red100, yellow100, grey100, green100, blue100 } from 'material-ui/styles/colors';
+import {
+  red100,
+  yellow100,
+  grey100,
+  green100,
+  blue100,
+} from 'material-ui/styles/colors';
 import WarningIcon from 'material-ui/svg-icons/alert/warning';
 
 import { formatDateTime } from '../utils';
@@ -42,7 +48,9 @@ class ProgressPanel extends Component {
       <CardText>
         <Paper style={{ backgroundColor: red100, padding: 10 }}>
           <WarningIcon style={styles.warningIcon} />
-          <span id="late-submission">{intl.formatMessage(translations.lateSubmission)}</span>
+          <span id="late-submission">
+            {intl.formatMessage(translations.lateSubmission)}
+          </span>
         </Paper>
       </CardText>
     );
@@ -63,16 +71,22 @@ class ProgressPanel extends Component {
       <Table selectable={false} style={styles.table}>
         <TableBody displayRowCheckbox={false}>
           <TableRow>
-            <TableRowColumn>{intl.formatMessage(translations[displayedTime])}</TableRowColumn>
-            <TableRowColumn>{formatDateTime(submission[displayedTime])}</TableRowColumn>
+            <TableRowColumn>
+              {intl.formatMessage(translations[displayedTime])}
+            </TableRowColumn>
+            <TableRowColumn>
+              {formatDateTime(submission[displayedTime])}
+            </TableRowColumn>
           </TableRow>
-          { workflowState === workflowStates.Graded || workflowState === workflowStates.Published
-            ? (
-              <TableRow>
-                <TableRowColumn>{intl.formatMessage(translations.totalGrade)}</TableRowColumn>
-                <TableRowColumn>{`${submission.grade} / ${submission.maximumGrade}`}</TableRowColumn>
-              </TableRow>
-            ) : null }
+          {workflowState === workflowStates.Graded ||
+          workflowState === workflowStates.Published ? (
+            <TableRow>
+              <TableRowColumn>
+                {intl.formatMessage(translations.totalGrade)}
+              </TableRowColumn>
+              <TableRowColumn>{`${submission.grade} / ${submission.maximumGrade}`}</TableRowColumn>
+            </TableRow>
+          ) : null}
         </TableBody>
       </Table>
     );
@@ -90,7 +104,9 @@ class ProgressPanel extends Component {
           subtitle={title}
           style={styles.header[workflowState]}
         />
-        {late && workflowState === workflowStates.Submitted ? this.renderLateWarning() : null}
+        {late && workflowState === workflowStates.Submitted
+          ? this.renderLateWarning()
+          : null}
         {this.renderSummary()}
       </Card>
     );

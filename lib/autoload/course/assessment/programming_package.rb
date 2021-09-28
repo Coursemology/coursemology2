@@ -107,7 +107,7 @@ class Course::Assessment::ProgrammingPackage
   # @return [String] Contents of the .meta file.
   def meta_file
     get_file(META_PATH)
-  rescue
+  rescue StandardError
     nil
   end
 
@@ -130,6 +130,7 @@ class Course::Assessment::ProgrammingPackage
     files.each do |path, file|
       path = Pathname.new(path) unless path.is_a?(Pathname)
       raise ArgumentError, 'Paths must be relative' unless path.relative?
+
       @file.get_output_stream(SUBMISSION_PATH.join(path)) do |stream|
         stream.write(file)
       end
@@ -183,6 +184,7 @@ class Course::Assessment::ProgrammingPackage
   # @raise [IllegalStateError] when the zip file is not open and it cannot be opened.
   def ensure_file_open!
     return if @file
+
     if @path
       @file = Zip::File.open(@path.to_s)
     elsif @stream

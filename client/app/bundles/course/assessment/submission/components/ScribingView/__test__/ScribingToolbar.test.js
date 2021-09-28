@@ -10,8 +10,13 @@ import store from 'course/assessment/submission/store';
 import ScribingView from 'course/assessment/submission/containers/ScribingView';
 import ScribingToolbar from 'course/assessment/submission/components/ScribingView/ScribingToolbar';
 import { setColoringToolColor } from '../../../actions/scribing';
-import actionTypes, { scribingTools, scribingToolColor, scribingToolThickness,
-  scribingToolLineStyle, scribingPopoverTypes } from '../../../constants';
+import actionTypes, {
+  scribingTools,
+  scribingToolColor,
+  scribingToolThickness,
+  scribingToolLineStyle,
+  scribingPopoverTypes,
+} from '../../../constants';
 
 const client = CourseAPI.assessment.answer.scribing.getClient();
 const mock = new MockAdapter(client);
@@ -39,23 +44,25 @@ const mockSubmission = {
   posts: [],
   questions: [],
   topics: [],
-  answers: [{
-    fields: {
-      id: answerId,
+  answers: [
+    {
+      fields: {
+        id: answerId,
+        questionId: 1,
+      },
+      grading: {
+        grade: null,
+        id: answerId,
+      },
       questionId: 1,
+      scribing_answer: {
+        answer_id: 23,
+        image_path: '/attachments/image1',
+        scribbles: [],
+        user_id: 10,
+      },
     },
-    grading: {
-      grade: null,
-      id: answerId,
-    },
-    questionId: 1,
-    scribing_answer: {
-      answer_id: 23,
-      image_path: '/attachments/image1',
-      scribbles: [],
-      user_id: 10,
-    },
-  }],
+  ],
 };
 
 const mockAnchor = {
@@ -136,7 +143,10 @@ const props = {
 };
 
 // stub import function
-jest.mock('course/assessment/submission/loaders/ScribingViewLoader', () => (() => Promise.resolve()));
+jest.mock(
+  'course/assessment/submission/loaders/ScribingViewLoader',
+  () => () => Promise.resolve(),
+);
 
 beforeEach(() => {
   mock.reset();
@@ -157,7 +167,7 @@ describe('ScribingToolbar', () => {
           muiTheme: PropTypes.object,
         },
       },
-      'ScribingToolbar'
+      'ScribingToolbar',
     );
 
     scribingToolbar.setState({
@@ -166,7 +176,9 @@ describe('ScribingToolbar', () => {
       },
     });
     scribingToolbar.update();
-    expect(scribingToolbar.find('InjectIntl(TypePopover)').prop('open')).toEqual(true);
+    expect(
+      scribingToolbar.find('InjectIntl(TypePopover)').prop('open'),
+    ).toEqual(true);
   });
 
   it('renders color pickers', async () => {
@@ -179,7 +191,7 @@ describe('ScribingToolbar', () => {
           muiTheme: PropTypes.object,
         },
       },
-      'ScribingToolbar'
+      'ScribingToolbar',
     );
 
     scribingToolbar.setState({
@@ -188,7 +200,11 @@ describe('ScribingToolbar', () => {
       },
     });
     scribingToolbar.update();
-    expect(scribingToolbar.find('InjectIntl(TypePopover)').prop('colorPickerPopoverOpen')).toEqual(true);
+    expect(
+      scribingToolbar
+        .find('InjectIntl(TypePopover)')
+        .prop('colorPickerPopoverOpen'),
+    ).toEqual(true);
 
     scribingToolbar.setState({
       colorDropdowns: {
@@ -196,25 +212,35 @@ describe('ScribingToolbar', () => {
       },
     });
     scribingToolbar.update();
-    expect(scribingToolbar.find('InjectIntl(TypePopover)').prop('colorPickerPopoverOpen')).toEqual(false);
+    expect(
+      scribingToolbar
+        .find('InjectIntl(TypePopover)')
+        .prop('colorPickerPopoverOpen'),
+    ).toEqual(false);
   });
 
   it('sets the color from the color picker', async () => {
     const editPage = mount(
       <ProviderWrapper store={store}>
         <MemoryRouter
-          initialEntries={[`/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`]}
+          initialEntries={[
+            `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`,
+          ]}
         >
           <ScribingView answerId={answerId} />
         </MemoryRouter>
-      </ProviderWrapper>
+      </ProviderWrapper>,
     );
 
     const coloringTool = scribingToolColor.TYPE;
     const color = 'rgba(231,12,12,1)';
     store.dispatch(setColoringToolColor(answerId, coloringTool, color));
     editPage.update();
-    expect(editPage.find('TypePopover').prop('colorPickerColor')).toEqual(color);
-    expect(editPage.find('ToolDropdown').first().prop('colorBarBackground')).toEqual(color);
+    expect(editPage.find('TypePopover').prop('colorPickerColor')).toEqual(
+      color,
+    );
+    expect(
+      editPage.find('ToolDropdown').first().prop('colorBarBackground'),
+    ).toEqual(color);
   });
 });

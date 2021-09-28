@@ -7,8 +7,21 @@ import ReactTooltip from 'react-tooltip';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import WrongIcon from 'material-ui/svg-icons/navigation/close';
 import CorrectIcon from 'material-ui/svg-icons/action/done';
-import { red50, yellow100, green50, red100, green100 } from 'material-ui/styles/colors';
-import { Table, TableHeader, TableHeaderColumn, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
+import {
+  red50,
+  yellow100,
+  green50,
+  red100,
+  green100,
+} from 'material-ui/styles/colors';
+import {
+  Table,
+  TableHeader,
+  TableHeaderColumn,
+  TableBody,
+  TableRow,
+  TableRowColumn,
+} from 'material-ui/Table';
 import Paper from 'material-ui/Paper';
 
 import ExpandableText from 'lib/components/ExpandableText';
@@ -71,12 +84,14 @@ const translations = defineMessages({
   },
   staffOnlyTestCases: {
     id: 'course.assessment.submission.TestCaseView.staffOnlyTestCases',
-    defaultMessage: 'You are able to view these test cases because you are staff. \
+    defaultMessage:
+      'You are able to view these test cases because you are staff. \
                     Students will not be able to see them.',
   },
   staffOnlyOutputStream: {
     id: 'course.assessment.submission.TestCaseView.staffOnlyOutputStream',
-    defaultMessage: 'You can view the output streams because you are staff. \
+    defaultMessage:
+      'You can view the output streams because you are staff. \
                     Students will not be able to see them.',
   },
   standardOutput: {
@@ -89,7 +104,8 @@ const translations = defineMessages({
   },
   autogradeProgress: {
     id: 'course.assessment.submission.TestCaseView.autogradeProgress',
-    defaultMessage: 'The answer is currently being evaluated, come back after a while \
+    defaultMessage:
+      'The answer is currently being evaluated, come back after a while \
                     to see the latest results.',
   },
 });
@@ -98,7 +114,11 @@ export class VisibleTestCaseView extends Component {
   static renderStaffOnlyTestCasesWarning() {
     return (
       <span style={{ display: 'inline-block', marginLeft: 5 }}>
-        <a data-tip data-for="staff-only-test-cases" data-offset="{'left' : -8}">
+        <a
+          data-tip
+          data-for="staff-only-test-cases"
+          data-offset="{'left' : -8}"
+        >
           <i className="fa fa-exclamation-triangle" />
         </a>
         <ReactTooltip id="staff-only-test-cases" effect="solid">
@@ -111,7 +131,11 @@ export class VisibleTestCaseView extends Component {
   static renderStaffOnlyOutputStreamWarning() {
     return (
       <span style={{ display: 'inline-block', marginLeft: 5 }}>
-        <a data-tip data-for="staff-only-output-stream" data-offset="{'left' : -8}">
+        <a
+          data-tip
+          data-for="staff-only-output-stream"
+          data-offset="{'left' : -8}"
+        >
           <i className="fa fa-exclamation-triangle" />
         </a>
         <ReactTooltip id="staff-only-output-stream" effect="solid">
@@ -126,14 +150,17 @@ export class VisibleTestCaseView extends Component {
       <Card id={outputStreamType}>
         <CardHeader
           showExpandableButton
-          title={(
+          title={
             <>
               <FormattedMessage {...translations[outputStreamType]} />
-              {showStaffOnlyWarning && VisibleTestCaseView.renderStaffOnlyOutputStreamWarning()}
+              {showStaffOnlyWarning &&
+                VisibleTestCaseView.renderStaffOnlyOutputStreamWarning()}
             </>
-)}
+          }
         />
-        <CardText expandable><pre>{output}</pre></CardText>
+        <CardText expandable>
+          <pre>{output}</pre>
+        </CardText>
       </Card>
     );
   }
@@ -148,7 +175,10 @@ export class VisibleTestCaseView extends Component {
   }
 
   renderTestCases(testCases, testCaseType, warn) {
-    const { collapsible, testCases: { canReadTests } } = this.props;
+    const {
+      collapsible,
+      testCases: { canReadTests },
+    } = this.props;
     const { showPublicTestCasesOutput } = this.props;
 
     if (!testCases || testCases.length === 0) {
@@ -166,7 +196,7 @@ export class VisibleTestCaseView extends Component {
       headerStyle = { backgroundColor: passedTestCases ? green100 : red100 };
     }
 
-    const tableHeaderColumnFor = field => (
+    const tableHeaderColumnFor = (field) => (
       <TableHeaderColumn style={styles.testCaseCell}>
         <FormattedMessage {...translations[field]} />
       </TableHeaderColumn>
@@ -176,16 +206,22 @@ export class VisibleTestCaseView extends Component {
 
     return (
       <Card id={testCaseType}>
-        <CardHeader title={title} actAsExpander={collapsible} showExpandableButton={collapsible} style={headerStyle} />
+        <CardHeader
+          title={title}
+          actAsExpander={collapsible}
+          showExpandableButton={collapsible}
+          style={headerStyle}
+        />
         <CardText expandable={collapsible}>
           <Table selectable={false} style={{}}>
             <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
               <TableRow>
-                { canReadTests && tableHeaderColumnFor('identifier') }
-                { tableHeaderColumnFor('expression') }
-                { tableHeaderColumnFor('expected') }
-                { (canReadTests || showPublicTestCasesOutput) && tableHeaderColumnFor('output') }
-                { tableHeaderColumnFor('passed') }
+                {canReadTests && tableHeaderColumnFor('identifier')}
+                {tableHeaderColumnFor('expression')}
+                {tableHeaderColumnFor('expected')}
+                {(canReadTests || showPublicTestCasesOutput) &&
+                  tableHeaderColumnFor('output')}
+                {tableHeaderColumnFor('passed')}
               </TableRow>
             </TableHeader>
             <TableBody displayRowCheckbox={false}>
@@ -198,7 +234,9 @@ export class VisibleTestCaseView extends Component {
   }
 
   renderTestCaseRow(testCase) {
-    const { testCases: { canReadTests } } = this.props;
+    const {
+      testCases: { canReadTests },
+    } = this.props;
     const { showPublicTestCasesOutput } = this.props;
 
     let testCaseResult = 'unattempted';
@@ -208,19 +246,36 @@ export class VisibleTestCaseView extends Component {
       testCaseIcon = testCase.passed ? <CorrectIcon /> : <WrongIcon />;
     }
 
-    const tableRowColumnFor = field => (
+    const tableRowColumnFor = (field) => (
       <TableRowColumn style={styles.testCaseCell}>{field}</TableRowColumn>
     );
 
     const outputStyle = { whiteSpace: 'pre-wrap', fontFamily: 'monospace' };
 
     return (
-      <TableRow key={testCase.identifier} style={styles.testCaseRow[testCaseResult]}>
-        { canReadTests && tableRowColumnFor(testCase.identifier) }
+      <TableRow
+        key={testCase.identifier}
+        style={styles.testCaseRow[testCaseResult]}
+      >
+        {canReadTests && tableRowColumnFor(testCase.identifier)}
         {tableRowColumnFor(testCase.expression)}
-        {tableRowColumnFor(<ExpandableText style={outputStyle} text={testCase.expected || ''} /> || '')}
-        { (canReadTests || showPublicTestCasesOutput)
-          && tableRowColumnFor(<ExpandableText style={outputStyle} text={testCase.output || ''} /> || '') }
+        {tableRowColumnFor(
+          (
+            <ExpandableText
+              style={outputStyle}
+              text={testCase.expected || ''}
+            />
+          ) || '',
+        )}
+        {(canReadTests || showPublicTestCasesOutput) &&
+          tableRowColumnFor(
+            (
+              <ExpandableText
+                style={outputStyle}
+                text={testCase.output || ''}
+              />
+            ) || '',
+          )}
         {tableRowColumnFor(testCaseIcon)}
       </TableRow>
     );
@@ -228,46 +283,72 @@ export class VisibleTestCaseView extends Component {
 
   render() {
     const {
-      submissionState, showPrivate, showEvaluation, graderView,
-      isAutograding, testCases, collapsible, showStdoutAndStderr,
+      submissionState,
+      showPrivate,
+      showEvaluation,
+      graderView,
+      isAutograding,
+      testCases,
+      collapsible,
+      showStdoutAndStderr,
     } = this.props;
     if (!testCases) {
       return null;
     }
 
-    const attempting = (submissionState === workflowStates.Attempting);
-    const published = (submissionState === workflowStates.Published);
-    const showOutputStreams = (graderView || showStdoutAndStderr);
+    const attempting = submissionState === workflowStates.Attempting;
+    const published = submissionState === workflowStates.Published;
+    const showOutputStreams = graderView || showStdoutAndStderr;
     const showPrivateTestToStudents = published && showPrivate;
     const showEvaluationTestToStudents = published && showEvaluation;
-    const showPrivateTest = (graderView && testCases.canReadTests) || showPrivateTestToStudents;
-    const showEvaluationTest = (graderView && testCases.canReadTests) || showEvaluationTestToStudents;
+    const showPrivateTest =
+      (graderView && testCases.canReadTests) || showPrivateTestToStudents;
+    const showEvaluationTest =
+      (graderView && testCases.canReadTests) || showEvaluationTestToStudents;
 
     return (
       <div style={styles.testCasesContainer}>
-        { !attempting && isAutograding
-          && (
-          <Paper style={{ padding: 10, backgroundColor: yellow100, marginBottom: 20 }}>
+        {!attempting && isAutograding && (
+          <Paper
+            style={{
+              padding: 10,
+              backgroundColor: yellow100,
+              marginBottom: 20,
+            }}
+          >
             <FormattedMessage {...translations.autogradeProgress} />
           </Paper>
-          )
-        }
-        <h3><FormattedMessage {...translations.testCases} /></h3>
-        {this.renderTestCases(
-          testCases.public_test, 'publicTestCases', false
         )}
-        {showPrivateTest && this.renderTestCases(
-          testCases.private_test, 'privateTestCases', !showPrivateTestToStudents
-        )}
-        {showEvaluationTest && this.renderTestCases(
-          testCases.evaluation_test, 'evaluationTestCases', !showEvaluationTestToStudents
-        )}
-        {(showOutputStreams && !collapsible) && VisibleTestCaseView.renderOutputStream(
-          'standardOutput', testCases.stdout, !showStdoutAndStderr
-        )}
-        {(showOutputStreams && !collapsible) && VisibleTestCaseView.renderOutputStream(
-          'standardError', testCases.stderr, !showStdoutAndStderr
-        )}
+        <h3>
+          <FormattedMessage {...translations.testCases} />
+        </h3>
+        {this.renderTestCases(testCases.public_test, 'publicTestCases', false)}
+        {showPrivateTest &&
+          this.renderTestCases(
+            testCases.private_test,
+            'privateTestCases',
+            !showPrivateTestToStudents,
+          )}
+        {showEvaluationTest &&
+          this.renderTestCases(
+            testCases.evaluation_test,
+            'evaluationTestCases',
+            !showEvaluationTestToStudents,
+          )}
+        {showOutputStreams &&
+          !collapsible &&
+          VisibleTestCaseView.renderOutputStream(
+            'standardOutput',
+            testCases.stdout,
+            !showStdoutAndStderr,
+          )}
+        {showOutputStreams &&
+          !collapsible &&
+          VisibleTestCaseView.renderOutputStream(
+            'standardError',
+            testCases.stderr,
+            !showStdoutAndStderr,
+          )}
       </div>
     );
   }
@@ -320,7 +401,5 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-const TestCaseView = connect(
-  mapStateToProps
-)(VisibleTestCaseView);
+const TestCaseView = connect(mapStateToProps)(VisibleTestCaseView);
 export default TestCaseView;

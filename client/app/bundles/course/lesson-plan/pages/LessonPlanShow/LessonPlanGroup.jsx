@@ -41,15 +41,6 @@ const styles = {
 };
 
 class LessonPlanGroup extends React.Component {
-  static propTypes = {
-    group: PropTypes.shape({
-      id: PropTypes.string,
-      milestone: PropTypes.object,
-      items: PropTypes.array,
-    }).isRequired,
-    initiallyExpanded: PropTypes.bool,
-  }
-
   static renderMilestoneCardTitle(milestone) {
     const { title, description, start_at } = milestone;
 
@@ -57,19 +48,19 @@ class LessonPlanGroup extends React.Component {
       <CardTitle
         actAsExpander
         showExpandableButton
-        title={(
+        title={
           <div style={styles.milestoneTitle}>
-            { title }
+            {title}
             <MilestoneAdminTools milestone={milestone} />
           </div>
-)}
-        subtitle={(
+        }
+        subtitle={
           <span>
-            { moment(start_at).format(longDate) }
+            {moment(start_at).format(longDate)}
             <br />
             <span dangerouslySetInnerHTML={{ __html: description }} />
           </span>
-)}
+        }
         style={{ backgroundColor: grey50 }}
       />
     );
@@ -79,13 +70,17 @@ class LessonPlanGroup extends React.Component {
     return (
       <>
         <Divider style={styles.divider} />
-        <CardText><FormattedMessage {...translations.noItems} /></CardText>
+        <CardText>
+          <FormattedMessage {...translations.noItems} />
+        </CardText>
       </>
     );
   }
 
   renderDefaultMilestone() {
-    const { group: { items } } = this.props;
+    const {
+      group: { items },
+    } = this.props;
     return LessonPlanGroup.renderMilestoneCardTitle({
       id: null,
       title: <FormattedMessage {...translations.ungroupedItems} />,
@@ -95,8 +90,13 @@ class LessonPlanGroup extends React.Component {
   }
 
   render() {
-    const { initiallyExpanded, group: { id, milestone, items } } = this.props;
-    if (!milestone && items.length < 1) { return null; }
+    const {
+      initiallyExpanded,
+      group: { id, milestone, items },
+    } = this.props;
+    if (!milestone && items.length < 1) {
+      return null;
+    }
 
     return (
       <Element name={id}>
@@ -105,22 +105,29 @@ class LessonPlanGroup extends React.Component {
           style={styles.card}
           containerStyle={styles.cardContainer}
         >
-          {
-            milestone
-              ? LessonPlanGroup.renderMilestoneCardTitle(milestone)
-              : this.renderDefaultMilestone()
-          }
+          {milestone
+            ? LessonPlanGroup.renderMilestoneCardTitle(milestone)
+            : this.renderDefaultMilestone()}
           <CardText expandable style={styles.items}>
-            {
-              items.length > 0
-                ? items.map(item => <LessonPlanItem key={item.id} {...{ item }} />)
-                : LessonPlanGroup.renderNoItemsMessage()
-            }
+            {items.length > 0
+              ? items.map((item) => (
+                  <LessonPlanItem key={item.id} {...{ item }} />
+                ))
+              : LessonPlanGroup.renderNoItemsMessage()}
           </CardText>
         </Card>
       </Element>
     );
   }
 }
+
+LessonPlanGroup.propTypes = {
+  group: PropTypes.shape({
+    id: PropTypes.string,
+    milestone: PropTypes.object,
+    items: PropTypes.arrayOf({}),
+  }).isRequired,
+  initiallyExpanded: PropTypes.bool,
+};
 
 export default LessonPlanGroup;

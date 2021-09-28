@@ -47,17 +47,6 @@ const translations = defineMessages({
 });
 
 class Question extends React.Component {
-  static propTypes = {
-    question: questionShape,
-    expanded: PropTypes.bool.isRequired,
-
-    dispatch: PropTypes.func.isRequired,
-    intl: intlShape.isRequired,
-    connectDropTarget: PropTypes.func.isRequired,
-    connectDragSource: PropTypes.func.isRequired,
-    isDragging: PropTypes.bool.isRequired,
-  };
-
   updateQuestionHandler = (data) => {
     const { dispatch, intl } = this.props;
     const { updateSurveyQuestion } = questionActions;
@@ -66,23 +55,25 @@ class Question extends React.Component {
     const successMessage = intl.formatMessage(translations.updateSuccess);
     const failureMessage = intl.formatMessage(translations.updateFailure);
     return dispatch(
-      updateSurveyQuestion(data.id, payload, successMessage, failureMessage)
+      updateSurveyQuestion(data.id, payload, successMessage, failureMessage),
     );
-  }
+  };
 
   showEditQuestionForm = () => {
     const { dispatch, intl, question } = this.props;
     const { showQuestionForm } = questionActions;
 
-    return dispatch(showQuestionForm({
-      onSubmit: this.updateQuestionHandler,
-      formTitle: intl.formatMessage(translations.editQuestion),
-      initialValues: {
-        ...question,
-        question_type: question.question_type.toString(),
-      },
-    }));
-  }
+    return dispatch(
+      showQuestionForm({
+        onSubmit: this.updateQuestionHandler,
+        formTitle: intl.formatMessage(translations.editQuestion),
+        initialValues: {
+          ...question,
+          question_type: question.question_type.toString(),
+        },
+      }),
+    );
+  };
 
   deleteQuestionHandler = () => {
     const { dispatch, question, intl } = this.props;
@@ -90,11 +81,10 @@ class Question extends React.Component {
 
     const successMessage = intl.formatMessage(translations.deleteSuccess);
     const failureMessage = intl.formatMessage(translations.deleteFailure);
-    const handleDelete = () => dispatch(
-      deleteSurveyQuestion(question, successMessage, failureMessage)
-    );
+    const handleDelete = () =>
+      dispatch(deleteSurveyQuestion(question, successMessage, failureMessage));
     return dispatch(showDeleteConfirmation(handleDelete));
-  }
+  };
 
   adminFunctions() {
     const { intl, question } = this.props;
@@ -118,16 +108,29 @@ class Question extends React.Component {
   }
 
   render() {
-    const { question, expanded, isDragging, connectDragSource, connectDropTarget } = this.props;
+    const {
+      question,
+      expanded,
+      isDragging,
+      connectDragSource,
+      connectDropTarget,
+    } = this.props;
     const opacity = isDragging ? 0.2 : 1;
-    return connectDropTarget(connectDragSource(
-      <div style={{ opacity }} ref={(node) => { this.DOMNode = node; }}>
-        <QuestionCard
-          {...{ question, expanded }}
-          adminFunctions={this.adminFunctions()}
-        />
-      </div>
-    ));
+    return connectDropTarget(
+      connectDragSource(
+        <div
+          style={{ opacity }}
+          ref={(node) => {
+            this.DOMNode = node;
+          }}
+        >
+          <QuestionCard
+            {...{ question, expanded }}
+            adminFunctions={this.adminFunctions()}
+          />
+        </div>,
+      ),
+    );
   }
 }
 
@@ -137,19 +140,27 @@ const questionSource = {
   },
 
   beginDrag(props) {
-    props.dispatch(questionActions.setDraggedQuestion(
-      props.index,
-      props.sectionIndex,
-      props.question.section_id
-    ));
+    props.dispatch(
+      questionActions.setDraggedQuestion(
+        props.index,
+        props.sectionIndex,
+        props.question.section_id,
+      ),
+    );
 
     return { id: props.question.id };
   },
 
   endDrag(props) {
-    const successMessage = props.intl.formatMessage(translations.reorderSuccess);
-    const failureMessage = props.intl.formatMessage(translations.reorderFailure);
-    props.dispatch(questionActions.finalizeOrder(successMessage, failureMessage));
+    const successMessage = props.intl.formatMessage(
+      translations.reorderSuccess,
+    );
+    const failureMessage = props.intl.formatMessage(
+      translations.reorderFailure,
+    );
+    props.dispatch(
+      questionActions.finalizeOrder(successMessage, failureMessage),
+    );
   },
 };
 
@@ -169,25 +180,42 @@ const questionTarget = {
     const hoverSectionId = props.question.section_id;
 
     // Do not replace question cards with themselves
-    if (sourceId === hoverId) { return; }
+    if (sourceId === hoverId) {
+      return;
+    }
 
     // Do not handle questions cards from other sections
-    if (sourceSectionId !== hoverSectionId) { return; }
+    if (sourceSectionId !== hoverSectionId) {
+      return;
+    }
 
     // Only perform the move when source question has been dragged past half of the target question
-    const hoverBoundingRect = component.getDecoratedComponentInstance().DOMNode.getBoundingClientRect();
+    const hoverBoundingRect = component
+      .getDecoratedComponentInstance()
+      .DOMNode.getBoundingClientRect();
     const hoverMiddleY = (hoverBoundingRect.bottom + hoverBoundingRect.top) / 2;
     const pointerY = monitor.getClientOffset().y;
-    const draggedUpwardPastMidLine = sourceIndex > hoverIndex && pointerY < hoverMiddleY;
-    const draggedDownwardPastMidLine = sourceIndex < hoverIndex && pointerY > hoverMiddleY;
+    const draggedUpwardPastMidLine =
+      sourceIndex > hoverIndex && pointerY < hoverMiddleY;
+    const draggedDownwardPastMidLine =
+      sourceIndex < hoverIndex && pointerY > hoverMiddleY;
     if (draggedUpwardPastMidLine || draggedDownwardPastMidLine) {
-      props.dispatch(questionActions.reorder(
-        sourceSectionIndex,
-        sourceIndex,
-        hoverIndex
-      ));
+      props.dispatch(
+        questionActions.reorder(sourceSectionIndex, sourceIndex, hoverIndex),
+      );
     }
   },
+};
+
+Question.propTypes = {
+  question: questionShape,
+  expanded: PropTypes.bool.isRequired,
+
+  dispatch: PropTypes.func.isRequired,
+  intl: intlShape.isRequired,
+  connectDropTarget: PropTypes.func.isRequired,
+  connectDragSource: PropTypes.func.isRequired,
+  isDragging: PropTypes.bool.isRequired,
 };
 
 function targetCollect(connector) {
@@ -207,10 +235,16 @@ function sourceCollect(connector, monitor) {
 // backend. However, any overlapping elements also appears in the screenshot. To fix this.
 export default connect()(
   injectIntl(
-    DropTarget(draggableTypes.QUESTION, questionTarget, targetCollect)(
-      DragSource(draggableTypes.QUESTION, questionSource, sourceCollect)(
-        Question
-      )
-    )
-  )
+    DropTarget(
+      draggableTypes.QUESTION,
+      questionTarget,
+      targetCollect,
+    )(
+      DragSource(
+        draggableTypes.QUESTION,
+        questionSource,
+        sourceCollect,
+      )(Question),
+    ),
+  ),
 );
