@@ -39,7 +39,9 @@ class ConfirmationDialog extends React.Component {
       confirmationButtonText = intl.formatMessage(formTranslations.submit);
     }
 
-    let confirmationButtonCustomText = intl.formatMessage(formTranslations.continue);
+    let confirmationButtonCustomText = intl.formatMessage(
+      formTranslations.continue,
+    );
     if (confirmButtonCustomText) {
       confirmationButtonCustomText = confirmButtonCustomText;
     }
@@ -88,7 +90,10 @@ class ConfirmationDialog extends React.Component {
           onClick={onConfirmCustom}
           style={buttonStyle}
           label={confirmationButtonCustomText}
-          ref={(button) => { this.confirmButtonCustom = button; }}
+          ref={(button) => {
+            this.confirmButtonCustom = button;
+          }}
+          key="confirmation-dialog-confirm-custom-button"
         />,
       ];
       actions.push(...confirmButtonCustom);

@@ -1,11 +1,11 @@
 - multiple_choice = multiple_response_question.multiple_choice?
-- button_text = multiple_response_question.multiple_choice? ? t('.switch_to_mrq') : t('.switch_to_mcq')
+- button_text = multiple_choice ? t('.switch_to_mrq') : t('.switch_to_mcq')
 - if new_question
   = link_to new_course_assessment_question_multiple_response_path(current_course, assessment, { multiple_choice: !multiple_choice }) do
     button.btn.btn-default type='button'
         => button_text
 - else
-  - warning_text = multiple_response_question.multiple_choice? ? t('.confirm_switch_to_mrq') : t('.confirm_switch_to_mcq')
+  - warning_text = multiple_choice ? t('.confirm_switch_to_mrq') : t('.confirm_switch_to_mcq')
   - warning_text = multiple_response_question.answers&.length > 0 ? warning_text : t('.no_answer')
   - data = (multiple_response_question.answers&.length > 0 ? \
              { confirm: warning_text,
