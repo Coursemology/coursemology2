@@ -53,4 +53,8 @@ div.users
               td
                 = f.button :submit, id: 'update' do
                   = fa_icon 'save'.freeze
-                = delete_button([current_course, f.object])
+                = delete_button([current_course, f.object],
+                        { data: { confirm: t('course.users.destroy.confirm',
+                                                role: t("course.users.role.#{user.role}"),
+                                                name: f.object.user.name,
+                                                email: f.object.user.email) } })
