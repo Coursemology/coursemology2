@@ -119,9 +119,10 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions', js: true do
 
         find('#students-tab').click
         find('#submission-dropdown-icon').click
+        sleep(2.second)
         expect(page).to have_css('.unsubmit-submissions-enabled')
 
-        find('.unsubmit-submissions-enabled', wait: 4).click
+        find('.unsubmit-submissions-enabled').click
         accept_confirm_dialog
         expect(page).not_to have_text('Graded but not published')
 
@@ -134,9 +135,10 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions', js: true do
 
         find('#students-tab').click
         find('#submission-dropdown-icon').click
+        sleep(2.second)
         expect(page).to have_css('.delete-submissions-enabled')
 
-        find('.delete-submissions-enabled', wait: 4).click
+        find('.delete-submissions-enabled').click
         accept_confirm_dialog
         expect(page).to have_text('Not Started')
         expect(page).not_to have_text('Attempting')
