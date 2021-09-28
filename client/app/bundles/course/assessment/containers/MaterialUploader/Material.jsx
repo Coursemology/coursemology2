@@ -75,7 +75,11 @@ class Material extends React.Component {
         style={styles.iconButton}
         disabled={disabled}
       >
-        <DeleteIcon data-tip data-for="delete-file-button" data-tip-disable={!disabled} />
+        <DeleteIcon
+          data-tip
+          data-for="delete-file-button"
+          data-tip-disable={!disabled}
+        />
         <ReactTooltip id="delete-file-button">
           <FormattedMessage {...translations.disableDelete} />
         </ReactTooltip>

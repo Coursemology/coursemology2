@@ -611,7 +611,7 @@ AssessmentForm.propTypes = {
   folderAttributes: PropTypes.shape({
     folder_id: PropTypes.number,
     // If any action (upload, delete and download) of the materials
-    enableMaterialsAction: PropTypes.bool,
+    enable_materials_action: PropTypes.bool,
     // See MaterialFormContainer for detailed PropTypes.
     materials: typeMaterial,
   }),

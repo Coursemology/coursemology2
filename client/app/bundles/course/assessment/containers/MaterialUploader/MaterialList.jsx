@@ -6,7 +6,9 @@ import Subheader from 'material-ui/Subheader';
 import FlatButton from 'material-ui/FlatButton';
 import Divider from 'material-ui/Divider';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import NotificationBar, { notificationShape } from 'lib/components/NotificationBar';
+import NotificationBar, {
+  notificationShape,
+} from 'lib/components/NotificationBar';
 import ReactTooltip from 'react-tooltip';
 import Material from './Material';
 
@@ -62,7 +64,13 @@ const styles = {
 };
 
 const MaterialList = (props) => {
-  const { materials, uploadingMaterials, onMaterialDelete, onFileInputChange, enableMaterialsAction } = props;
+  const {
+    materials,
+    uploadingMaterials,
+    onMaterialDelete,
+    onFileInputChange,
+    enableMaterialsAction,
+  } = props;
   const header = (
     <FormattedMessage
       id="course.assessment.MaterialList.uploadedFiles"
@@ -82,7 +90,7 @@ const MaterialList = (props) => {
     />
   ));
 
-  const uploadingMaterialNodes = uploadingMaterials.map(material => (
+  const uploadingMaterialNodes = uploadingMaterials.map((material) => (
     <Material
       key={material.name}
       name={material.name}
@@ -93,7 +101,11 @@ const MaterialList = (props) => {
 
   const newFileButton = (
     <>
-      <div data-tip data-for="add-files-button" data-tip-disable={enableMaterialsAction}>
+      <div
+        data-tip
+        data-for="add-files-button"
+        data-tip-disable={enableMaterialsAction}
+      >
         <FlatButton
           fullWidth
           label="Add Files"
