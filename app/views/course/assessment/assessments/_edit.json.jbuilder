@@ -22,7 +22,7 @@ json.randomization_allowed current_course.allow_randomization
 
 json.folder_attributes do
   json.folder_id @assessment.folder.id
-  json.enable_materials_action @assessment.course.settings(:components, :course_materials_component).enabled
+  json.enable_materials_action !current_component_host[:course_materials_component].nil?
   json.materials @assessment.materials.order(:name) do |material|
     json.partial! '/course/material/material.json', material: material, folder: @assessment.folder
   end

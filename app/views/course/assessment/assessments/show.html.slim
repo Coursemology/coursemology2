@@ -77,7 +77,7 @@
     = render partial: @assessment.assessment_conditions.includes(:conditional), suffix: 'condition'
 
   - if can?(:attempt, @assessment) && @assessment.folder.materials.present?
-    - enable_link = @course.settings(:components, :course_materials_component).enabled
+    - enable_link = !current_component_host[:course_materials_component].nil?
     h3 = t('.files') if enable_link || can?(:manage, @assessment)
     = render partial: 'layouts/materials',
       locals: { folder: @assessment.folder,
