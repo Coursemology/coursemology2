@@ -144,6 +144,7 @@ class Course::ExperiencePoints::ForumDisbursement < Course::ExperiencePoints::Di
   # @return [Array<Course::Discussion::Post>]
   def discussion_posts
     return [] if end_time_preceeds_start_time?
+
     @discussion_posts ||= begin
       user_ids = forum_participants.map(&:user_id)
       Course::Discussion::Post.forum_posts.from_course(course).calculated(:upvotes, :downvotes).

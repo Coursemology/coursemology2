@@ -85,6 +85,7 @@ class Duplicator
   # @return duplicated_object A reference to the duplicated object.
   def duplicate_object(source_object)
     return nil unless source_object
+
     @duplicated_objects.fetch(source_object) do |key|
       if !@exclusion_set.include?(key)
         source_object.dup.tap do |duplicate|

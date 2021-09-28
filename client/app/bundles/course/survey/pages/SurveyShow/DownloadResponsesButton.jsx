@@ -19,10 +19,6 @@ const styles = {
 };
 
 class DownloadResponsesButton extends React.Component {
-  static propTypes = {
-    dispatch: PropTypes.func.isRequired,
-  }
-
   render() {
     return (
       <>
@@ -35,5 +31,9 @@ class DownloadResponsesButton extends React.Component {
     );
   }
 }
+
+DownloadResponsesButton.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+};
 
 export default connect()(DownloadResponsesButton);

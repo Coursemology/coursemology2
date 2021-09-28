@@ -11,12 +11,12 @@ question_assessments = Course::QuestionAssessment.where(question: submission.que
 json.questions question_assessments.each_with_index.to_a do |(question_assessment, index)|
   question = question_assessment.question
   answer = answer_ids_hash[question.id]
-  answerId = answer&.id
-  submissionQuestion = question.submission_questions.from_submission(submission.id)
+  answer_id = answer&.id
+  submission_question = question.submission_questions.from_submission(submission.id)
   json.partial! 'question', question: question, can_grade: can_grade, answer: answer
-  json.displayTitle question_assessment.display_title(index+1)
+  json.displayTitle question_assessment.display_title(index + 1)
 
-  json.answerId answerId
+  json.answerId answer_id
   json.topicId topic_ids_hash[question.id]
-  json.submissionQuestionId submissionQuestion.id
+  json.submissionQuestionId submission_question.id
 end

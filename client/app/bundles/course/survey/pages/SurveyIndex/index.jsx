@@ -19,28 +19,28 @@ const translations = defineMessages({
 });
 
 class SurveyIndex extends React.Component {
-  static propTypes = {
-    surveys: PropTypes.arrayOf(surveyShape),
-    isLoading: PropTypes.bool.isRequired,
-
-    dispatch: PropTypes.func.isRequired,
-    match: PropTypes.shape({
-      params: PropTypes.shape({
-        courseId: PropTypes.string.isRequired,
-      }),
-    }),
-  };
-
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch(fetchSurveys());
   }
 
   renderBody() {
-    const { surveys, isLoading, match: { params: { courseId } } } = this.props;
-    if (isLoading) { return <LoadingIndicator />; }
+    const {
+      surveys,
+      isLoading,
+      match: {
+        params: { courseId },
+      },
+    } = this.props;
+    if (isLoading) {
+      return <LoadingIndicator />;
+    }
     if (surveys.length < 1) {
-      return <Subheader><FormattedMessage {...translations.noSurveys} /></Subheader>;
+      return (
+        <Subheader>
+          <FormattedMessage {...translations.noSurveys} />
+        </Subheader>
+      );
     }
     return <SurveysTable {...{ courseId }} />;
   }
@@ -51,14 +51,26 @@ class SurveyIndex extends React.Component {
         <TitleBar
           title={<FormattedMessage {...surveyTranslations.surveys} />}
         />
-        { this.renderBody() }
+        {this.renderBody()}
         <NewSurveyButton />
       </>
     );
   }
 }
 
-const mapStateToProps = state => ({
+SurveyIndex.propTypes = {
+  surveys: PropTypes.arrayOf(surveyShape),
+  isLoading: PropTypes.bool.isRequired,
+
+  dispatch: PropTypes.func.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      courseId: PropTypes.string.isRequired,
+    }),
+  }),
+};
+
+const mapStateToProps = (state) => ({
   surveys: state.surveys,
   isLoading: state.surveysFlags.isLoadingSurveys,
 });

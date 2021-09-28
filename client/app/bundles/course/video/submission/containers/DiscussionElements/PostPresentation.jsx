@@ -25,7 +25,9 @@ const defaultProps = {
 
 function PostPresentation(props) {
   let childrenElements = null;
-  const childrenNodes = props.childrenIds.map(childId => <PostContainer key={childId} postId={childId} />);
+  const childrenNodes = props.childrenIds.map((childId) => (
+    <PostContainer key={childId} postId={childId} />
+  ));
   if (childrenNodes.length > 0) {
     childrenElements = (
       <div className={props.isRoot ? styles.replyIndent : undefined}>
@@ -37,7 +39,10 @@ function PostPresentation(props) {
   return (
     <>
       {props.editMode || <PostMenu postId={props.postId} />}
-      <span className={styles.userPic} dangerouslySetInnerHTML={{ __html: props.userPicElement }} />
+      <span
+        className={styles.userPic}
+        dangerouslySetInnerHTML={{ __html: props.userPicElement }}
+      />
       <div className={styles.contentContainer}>
         <span dangerouslySetInnerHTML={{ __html: props.userLink }} />
         &nbsp;

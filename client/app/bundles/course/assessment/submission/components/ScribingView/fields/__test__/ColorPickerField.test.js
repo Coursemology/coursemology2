@@ -25,16 +25,13 @@ props.colorPickerPopoverAnchorEl.getBoundingClientRect.mockReturnValue({
 
 describe('ColorPickerField', () => {
   it('checks no fill checkbox when noFillValue is true', async () => {
-    const colorPickerField = mount(
-      <ColorPickerField {...props} />,
-      {
-        context: { intl, muiTheme }, // eslint-disable-line no-undef
-        childContextTypes: {
-          intl: intlShape,
-          muiTheme: PropTypes.object,
-        },
-      }
-    );
+    const colorPickerField = mount(<ColorPickerField {...props} />, {
+      context: { intl, muiTheme }, // eslint-disable-line no-undef
+      childContextTypes: {
+        intl: intlShape,
+        muiTheme: PropTypes.object,
+      },
+    });
 
     expect(colorPickerField.find('Checkbox').prop('checked')).toEqual(true);
   });

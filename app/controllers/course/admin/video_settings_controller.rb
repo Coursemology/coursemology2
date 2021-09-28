@@ -6,7 +6,7 @@ class Course::Admin::VideoSettingsController < Course::Admin::Controller
 
   def update
     if @settings.update(video_settings_params) &&
-       current_course.update_attributes(video_tabs_params) &&
+       current_course.update(video_tabs_params) &&
        current_course.save
 
       redirect_to course_admin_videos_path(current_course), success: t('.success')

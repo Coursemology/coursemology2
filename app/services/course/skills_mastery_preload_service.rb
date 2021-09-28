@@ -31,6 +31,7 @@ class Course::SkillsMasteryPreloadService
   def percentage_mastery(skill)
     skill_total_grade = skill.total_grade
     return 0 unless skill_total_grade > 0
+
     (grade(skill) / skill_total_grade.to_f * 100).round
   end
 

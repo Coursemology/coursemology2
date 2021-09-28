@@ -36,7 +36,7 @@ RSpec.describe 'Course: Skills' do
           click_link(nil, href: edit_course_assessments_skill_path(course, skill))
         end
 
-        new_skill_title = skill.title + ' there!'
+        new_skill_title = "#{skill.title} there!"
         fill_in 'title', with: new_skill_title
         select skill_branch.title
 

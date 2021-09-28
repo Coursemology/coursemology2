@@ -38,7 +38,7 @@ class Course::Assessment::Question::Programming::LanguagePackageService
   #
   # @param [AttachmentReference] Previous package, may contain files that the new package uses.
   # @return [Tempfile]
-  def generate_package(old_attachment) # rubocop:disable UnusedMethodArgument
+  def generate_package(old_attachment) # rubocop:disable Lint/UnusedMethodArgument
     raise NotImplementedError, 'You must implement this'
   end
 
@@ -64,7 +64,7 @@ class Course::Assessment::Question::Programming::LanguagePackageService
   # @param [Array<Course::Assessment::Question::ProgrammingTemplateFile>] An Array of template
   #   files used to generate meta for non-autograded questions.
   # @return [Hash]
-  def extract_meta(attachment, template_files) # rubocop:disable UnusedMethodArgument
+  def extract_meta(attachment, template_files) # rubocop:disable Lint/UnusedMethodArgument
     raise NotImplementedError, 'You must implement this'
   end
 

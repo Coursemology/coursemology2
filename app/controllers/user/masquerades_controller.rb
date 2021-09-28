@@ -12,4 +12,8 @@ class User::MasqueradesController < Devise::MasqueradesController
     @user = User.find(id_param)
     authorize!(:masquerade, @user)
   end
+
+  def find_resource
+    masqueraded_resource_class.find(id_param)
+  end
 end

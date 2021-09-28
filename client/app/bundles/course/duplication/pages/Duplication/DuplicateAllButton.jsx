@@ -14,7 +14,8 @@ const translations = defineMessages({
   },
   info: {
     id: 'course.duplication.DuplicateAllButton.info',
-    defaultMessage: 'Duplication usually takes some time to complete. \
+    defaultMessage:
+      'Duplication usually takes some time to complete. \
     You may close the window while duplication is in progress.\
     You will receive an email with a link to the new course when it becomes available.',
   },
@@ -25,13 +26,6 @@ const translations = defineMessages({
 });
 
 class DuplicateAllButton extends React.Component {
-  static propTypes = {
-    duplicationMode: PropTypes.string.isRequired,
-    disabled: PropTypes.bool.isRequired,
-
-    dispatch: PropTypes.func.isRequired,
-  }
-
   constructor(props) {
     super(props);
     this.state = { confirmationOpen: false };
@@ -40,7 +34,9 @@ class DuplicateAllButton extends React.Component {
   render() {
     const { dispatch, duplicationMode, disabled } = this.props;
 
-    if (duplicationMode !== duplicationModes.COURSE) { return null; }
+    if (duplicationMode !== duplicationModes.COURSE) {
+      return null;
+    }
 
     return (
       <>
@@ -52,14 +48,14 @@ class DuplicateAllButton extends React.Component {
         />
         <ConfirmationDialog
           open={this.state.confirmationOpen}
-          message={(
+          message={
             <>
               <FormattedMessage {...translations.info} />
               <br />
               <br />
               <FormattedMessage {...translations.confirmationMessage} />
             </>
-)}
+          }
           onCancel={() => this.setState({ confirmationOpen: false })}
           onConfirm={() => {
             dispatch(submit(formNames.NEW_COURSE));
@@ -71,9 +67,17 @@ class DuplicateAllButton extends React.Component {
   }
 }
 
+DuplicateAllButton.propTypes = {
+  duplicationMode: PropTypes.string.isRequired,
+  disabled: PropTypes.bool.isRequired,
+
+  dispatch: PropTypes.func.isRequired,
+};
+
 export default connect(({ duplication, ...state }) => ({
   duplicationMode: duplication.duplicationMode,
-  disabled: !isValid(formNames.NEW_COURSE)(state)
-            || duplication.isDuplicating
-            || duplication.isChangingCourse,
+  disabled:
+    !isValid(formNames.NEW_COURSE)(state) ||
+    duplication.isDuplicating ||
+    duplication.isChangingCourse,
 }))(DuplicateAllButton);

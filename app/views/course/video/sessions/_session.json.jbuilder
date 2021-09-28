@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 json.sessionStart session.session_start
 json.sessionEnd session.session_end
 json.lastVideoTime session.last_video_time

@@ -44,27 +44,6 @@ const styles = {
  */
 // TODO: Use the input element as a controller component - https://reactjs.org/docs/forms.html
 class SingleFileInput extends React.Component {
-  static propTypes = {
-    meta: PropTypes.shape(fieldMetaPropTypes),
-    value: PropTypes.shape({
-      file: PropTypes.object,
-      url: PropTypes.string,
-      name: PropTypes.string,
-    }),
-    input: PropTypes.shape({
-      onChange: PropTypes.func.isRequired,
-    }),
-    errorMessage: PropTypes.string,
-    required: PropTypes.bool,
-    intl: intlShape.isRequired,
-    accept: PropTypes.string,
-    previewComponent: PropTypes.func,
-  };
-
-  static defaultProps = {
-    previewComponent: FilePreview,
-  };
-
   constructor(props) {
     super(props);
     this.state = { file: null };
@@ -73,32 +52,38 @@ class SingleFileInput extends React.Component {
 
   onDrop = (files) => {
     this.setState({ file: files[0] }, this.updateStore(files[0]));
-  }
+  };
 
   onCancel = (e) => {
     this.setState({ file: null }, this.updateStore(''));
     e.stopPropagation();
-  }
+  };
 
-  updateStore = (file) => { // eslint-disable-line react/sort-comp
-    const { input: { onChange }, value: { url, name } } = this.props;
+  updateStore = (file) => {
+    // eslint-disable-line react/sort-comp
+    const {
+      input: { onChange },
+      value: { url, name },
+    } = this.props;
     onChange({ file, url, name });
-  }
+  };
 
   renderErrorMessage = () => {
-    const { meta: { touched, error } } = this.props;
-    return (touched && error
-      ? (
-        <div className="error-message" style={styles.fileLabelError}>
-          <FormattedMessage {...error} />
-        </div>
-      )
-      : null);
-  }
+    const {
+      meta: { touched, error },
+    } = this.props;
+    return touched && error ? (
+      <div className="error-message" style={styles.fileLabelError}>
+        <FormattedMessage {...error} />
+      </div>
+    ) : null;
+  };
 
   render() {
     const { accept, previewComponent: PreviewComponent } = this.props;
-    const { value: { name, url } } = this.props;
+    const {
+      value: { name, url },
+    } = this.props;
 
     return (
       <Dropzone
@@ -115,11 +100,32 @@ class SingleFileInput extends React.Component {
             handleCancel={this.onCancel}
           />
         </div>
-        { this.renderErrorMessage() }
+        {this.renderErrorMessage()}
       </Dropzone>
     );
   }
 }
+
+SingleFileInput.propTypes = {
+  meta: PropTypes.shape(fieldMetaPropTypes),
+  value: PropTypes.shape({
+    file: PropTypes.object,
+    url: PropTypes.string,
+    name: PropTypes.string,
+  }),
+  input: PropTypes.shape({
+    onChange: PropTypes.func.isRequired,
+  }),
+  errorMessage: PropTypes.string,
+  required: PropTypes.bool,
+  intl: intlShape.isRequired,
+  accept: PropTypes.string,
+  previewComponent: PropTypes.func,
+};
+
+SingleFileInput.defaultProps = {
+  previewComponent: FilePreview,
+};
 
 const mapProps = ({ ...props }) => ({
   ...props,

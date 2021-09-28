@@ -11,7 +11,7 @@ RSpec.describe Course::Discussion::PostsController do
     end
     let(:immutable_post) do
       create(:course_discussion_post, topic: topic, creator: user, updater: user).tap do |stub|
-        allow(stub).to receive(:update_attributes).and_return(false)
+        allow(stub).to receive(:update).and_return(false)
       end
     end
 

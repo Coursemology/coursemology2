@@ -2,20 +2,20 @@ import BaseAssessmentAPI from '../../Base';
 
 export default class ProgrammingAPI extends BaseAssessmentAPI {
   /**
-  * Creates a programming file and updates all existing files for a programming answer
-  *
-  * @param {number} answerId
-  * @param {object} submissionFields - in the format of:
-  *   {
-  *     answer: {
-  *       id: number,
-  *       files_attributes: [:id, :filename, :content]
-  *     }
-  *   }
-  * @return {Promise}
-  * success response: {}
-  * error response: { errors: [] } - An array of errors will be returned upon validation error.
-  */
+   * Creates a programming file and updates all existing files for a programming answer
+   *
+   * @param {number} answerId
+   * @param {object} submissionFields - in the format of:
+   *   {
+   *     answer: {
+   *       id: number,
+   *       files_attributes: [:id, :filename, :content]
+   *     }
+   *   }
+   * @return {Promise}
+   * success response: {}
+   * error response: { errors: [] } - An array of errors will be returned upon validation error.
+   */
   createProgrammingFiles(answerId, submissionFields) {
     const config = {
       headers: {
@@ -32,19 +32,22 @@ export default class ProgrammingAPI extends BaseAssessmentAPI {
   }
 
   /**
-  * Deletes a programming file from a programming answer
-  *
-  * @param {number} answerId
-  * @param {object} payload - in the format of:
-  *   {
-  *     answer: { id: number, file_id: number }
-  *   }
-  * @return {Promise}
-  * success response: { answerId: number, fileId: number }
-  * error response: { errors: [] } - An array of errors will be returned upon validation error.
-  */
+   * Deletes a programming file from a programming answer
+   *
+   * @param {number} answerId
+   * @param {object} payload - in the format of:
+   *   {
+   *     answer: { id: number, file_id: number }
+   *   }
+   * @return {Promise}
+   * success response: { answerId: number, fileId: number }
+   * error response: { errors: [] } - An array of errors will be returned upon validation error.
+   */
   deleteProgrammingFile(answerId, payload) {
-    return this.getClient().post(`${this._getUrlPrefix()}/${answerId}/programming/destroy_programming_file`, payload);
+    return this.getClient().post(
+      `${this._getUrlPrefix()}/${answerId}/programming/destroy_programming_file`,
+      payload,
+    );
   }
 
   _getUrlPrefix() {

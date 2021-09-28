@@ -15,7 +15,7 @@ class Course::Assessment::Question::MultipleResponseOption < ApplicationRecord
 
   # @!method self.correct
   #   Gets the options which are marked as correct.
-  scope :correct, ->() { where(correct: true) }
+  scope :correct, -> { where(correct: true) }
 
   def initialize_duplicate(duplicator, other)
     self.question = duplicator.duplicate(other.question)

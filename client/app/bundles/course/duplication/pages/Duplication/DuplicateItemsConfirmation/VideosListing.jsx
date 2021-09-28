@@ -21,11 +21,6 @@ const translations = defineMessages({
 });
 
 class VideoListing extends React.Component {
-  static propTypes = {
-    tabs: PropTypes.arrayOf(videoTabShape),
-    selectedItems: PropTypes.shape({}),
-  };
-
   static renderDefaultTabRow() {
     return (
       <IndentedCheckbox
@@ -41,12 +36,12 @@ class VideoListing extends React.Component {
       <IndentedCheckbox
         checked
         indentLevel={0}
-        label={(
+        label={
           <span>
             <TypeBadge itemType={VIDEO_TAB} />
             {tab.title}
           </span>
-)}
+        }
       />
     );
   }
@@ -66,13 +61,13 @@ class VideoListing extends React.Component {
         checked
         key={video.id}
         indentLevel={1}
-        label={(
+        label={
           <span>
             <TypeBadge itemType={VIDEO} />
             <UnpublishedIcon tooltipId="itemUnpublished" />
             {video.title}
           </span>
-)}
+        }
       />
     );
   }
@@ -84,7 +79,7 @@ class VideoListing extends React.Component {
 
     tabs.forEach((tab) => {
       const selectedVideos = tab.videos.filter(
-        video => selectedItems[VIDEO][video.id]
+        (video) => selectedItems[VIDEO][video.id],
       );
 
       if (selectedItems[VIDEO_TAB][tab.id]) {
@@ -99,12 +94,16 @@ class VideoListing extends React.Component {
 
   render() {
     const [tabTrees, orphanedVideos] = this.selectedSubtrees();
-    if (tabTrees.length + orphanedVideos.length < 1) { return null; }
+    if (tabTrees.length + orphanedVideos.length < 1) {
+      return null;
+    }
 
     return (
       <>
         <Subheader>
-          <FormattedMessage {...defaultComponentTitles.course_videos_component} />
+          <FormattedMessage
+            {...defaultComponentTitles.course_videos_component}
+          />
         </Subheader>
         <Card>
           <CardText>
@@ -119,6 +118,11 @@ class VideoListing extends React.Component {
     );
   }
 }
+
+VideoListing.propTypes = {
+  tabs: PropTypes.arrayOf(videoTabShape),
+  selectedItems: PropTypes.shape({}),
+};
 
 export default connect(({ duplication }) => ({
   tabs: duplication.videosComponent,

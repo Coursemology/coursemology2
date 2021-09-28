@@ -23,7 +23,9 @@ export default function createComponent(MaterialUIComponent, mapProps) {
     render() {
       return createElement(MaterialUIComponent, {
         ...mapProps(this.props),
-        ref: (component) => { this.component = component; },
+        ref: (component) => {
+          this.component = component;
+        },
       });
     }
   }

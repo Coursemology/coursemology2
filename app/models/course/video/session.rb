@@ -32,6 +32,7 @@ class Course::Video::Session < ApplicationRecord
 
   def validate_start_before_end
     return unless session_start > session_end
+
     errors.add(:session_start, :cannot_be_after_session_end)
   end
 

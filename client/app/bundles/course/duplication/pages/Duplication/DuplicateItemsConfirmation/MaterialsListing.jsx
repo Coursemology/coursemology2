@@ -13,7 +13,7 @@ import IndentedCheckbox from 'course/duplication/components/IndentedCheckbox';
 const { FOLDER, MATERIAL } = duplicableItemTypes;
 const ROOT_CHILDREN_LEVEL = 1;
 
-const flatten = arr => arr.reduce((a, b) => a.concat(b), []);
+const flatten = (arr) => arr.reduce((a, b) => a.concat(b), []);
 
 const translations = defineMessages({
   root: {
@@ -22,20 +22,12 @@ const translations = defineMessages({
   },
   nameConflictWarning: {
     id: 'course.duplication.MaterialsListing.nameConflictWarning',
-    defaultMessage: "Warning: Naming conflict exists. A serial number will be appended to the duplicated item's name.",
+    defaultMessage:
+      "Warning: Naming conflict exists. A serial number will be appended to the duplicated item's name.",
   },
 });
 
 class MaterialsListing extends React.Component {
-  static propTypes = {
-    folders: PropTypes.arrayOf(folderShape),
-    selectedItems: PropTypes.shape(),
-    targetRootFolder: PropTypes.shape({
-      subfolders: PropTypes.arrayOf(PropTypes.string),
-      materials: PropTypes.arrayOf(PropTypes.string),
-    }),
-  }
-
   static renderRootRow() {
     return (
       <IndentedCheckbox
@@ -50,16 +42,20 @@ class MaterialsListing extends React.Component {
       <IndentedCheckbox
         checked
         key={item.id}
-        label={(
+        label={
           <span>
             <TypeBadge itemType={itemType} />
             {item.name}
-            {
-              nameConflict
-              && <div><FormattedMessage {...translations.nameConflictWarning} tagName="small" /></div>
-            }
+            {nameConflict && (
+              <div>
+                <FormattedMessage
+                  {...translations.nameConflictWarning}
+                  tagName="small"
+                />
+              </div>
+            )}
           </span>
-)}
+        }
         indentLevel={indentLevel}
       />
     );
@@ -70,39 +66,59 @@ class MaterialsListing extends React.Component {
     const checked = !!selectedItems[FOLDER][folder.id];
     // Children will be duplicated under the target course root folder if current folder is not checked
     const childrenIndentLevel = checked ? indentLevel + 1 : ROOT_CHILDREN_LEVEL;
-    const exisitingNames = targetRootFolder.subfolders.concat(targetRootFolder.materials)
-      .map(name => name.toLowerCase());
-    const nameConflict = indentLevel === ROOT_CHILDREN_LEVEL
-      && exisitingNames.includes(folder.name.toLowerCase());
+    const exisitingNames = targetRootFolder.subfolders
+      .concat(targetRootFolder.materials)
+      .map((name) => name.toLowerCase());
+    const nameConflict =
+      indentLevel === ROOT_CHILDREN_LEVEL &&
+      exisitingNames.includes(folder.name.toLowerCase());
 
-    const folderNode = checked ? MaterialsListing.renderRow(folder, FOLDER, indentLevel, nameConflict) : [];
+    const folderNode = checked
+      ? MaterialsListing.renderRow(folder, FOLDER, indentLevel, nameConflict)
+      : [];
     const materialNodes = folder.materials
-      .filter(material => !!selectedItems[MATERIAL][material.id])
+      .filter((material) => !!selectedItems[MATERIAL][material.id])
       .map((material) => {
-        const materialNameConflict = childrenIndentLevel === ROOT_CHILDREN_LEVEL
-          && exisitingNames.includes(material.name.toLowerCase());
-        return MaterialsListing.renderRow(material, MATERIAL, childrenIndentLevel, materialNameConflict);
+        const materialNameConflict =
+          childrenIndentLevel === ROOT_CHILDREN_LEVEL &&
+          exisitingNames.includes(material.name.toLowerCase());
+        return MaterialsListing.renderRow(
+          material,
+          MATERIAL,
+          childrenIndentLevel,
+          materialNameConflict,
+        );
       });
-    const subfolderNodes = flatten(folder.subfolders.map(subfolder => (
-      this.renderFolderTree(subfolder, childrenIndentLevel)
-    )));
+    const subfolderNodes = flatten(
+      folder.subfolders.map((subfolder) =>
+        this.renderFolderTree(subfolder, childrenIndentLevel),
+      ),
+    );
     return flatten([folderNode, materialNodes, subfolderNodes]);
   }
 
   render() {
     const { folders } = this.props;
-    const folderTrees = flatten(folders.map(folder => this.renderFolderTree(folder, ROOT_CHILDREN_LEVEL)));
-    if (folderTrees.length < 1) { return null; }
+    const folderTrees = flatten(
+      folders.map((folder) =>
+        this.renderFolderTree(folder, ROOT_CHILDREN_LEVEL),
+      ),
+    );
+    if (folderTrees.length < 1) {
+      return null;
+    }
 
     return (
       <div>
         <Subheader>
-          <FormattedMessage {...defaultComponentTitles.course_materials_component} />
+          <FormattedMessage
+            {...defaultComponentTitles.course_materials_component}
+          />
         </Subheader>
         <Card>
           <CardText>
-            { MaterialsListing.renderRootRow() }
-            { folderTrees }
+            {MaterialsListing.renderRootRow()}
+            {folderTrees}
           </CardText>
         </Card>
       </div>
@@ -110,9 +126,19 @@ class MaterialsListing extends React.Component {
   }
 }
 
+MaterialsListing.propTypes = {
+  folders: PropTypes.arrayOf(folderShape),
+  selectedItems: PropTypes.shape(),
+  targetRootFolder: PropTypes.shape({
+    subfolders: PropTypes.arrayOf(PropTypes.string),
+    materials: PropTypes.arrayOf(PropTypes.string),
+  }),
+};
+
 export default connect(({ duplication }) => ({
   folders: duplication.materialsComponent,
   selectedItems: duplication.selectedItems,
-  targetRootFolder: duplication.destinationCourses
-    .find(course => course.id === duplication.destinationCourseId).rootFolder,
+  targetRootFolder: duplication.destinationCourses.find(
+    (course) => course.id === duplication.destinationCourseId,
+  ).rootFolder,
 }))(MaterialsListing);

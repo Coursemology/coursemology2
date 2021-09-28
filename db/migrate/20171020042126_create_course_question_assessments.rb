@@ -8,9 +8,9 @@ class CreateCourseQuestionAssessments < ActiveRecord::Migration[5.0]
 
     Course::Assessment::Question.find_each do |question|
       Course::QuestionAssessment.new(
-          question_id: question.id,
-          assessment_id: question.assessment_id,
-          weight: question.weight
+        question_id: question.id,
+        assessment_id: question.assessment_id,
+        weight: question.weight
       ).save!(validate: false)
     end
 

@@ -68,6 +68,7 @@ module Course::UserInvitationService::ParseInvitationConcern
   # @return [Array<Hash>] users
   def restrict_invitee_role(users)
     return users unless @current_course_user.role == 'teaching_assistant'
+
     users.each { |invitee| invitee[:role] = :student }
   end
 
@@ -108,8 +109,8 @@ module Course::UserInvitationService::ParseInvitationConcern
         invites << invite if invite
       end
     end
-  rescue StandardError => error
-    raise CSV::MalformedCSVError.new(error), error.message
+  rescue StandardError => e
+    raise CSV::MalformedCSVError.new(e), e.message
   end
 
   # Returns a boolean to determine whether the row is a header row.
@@ -135,6 +136,7 @@ module Course::UserInvitationService::ParseInvitationConcern
   # @return [Hash] The parsed invitation attributes given the row.
   def parse_file_row(row)
     return nil if row[1].blank?
+
     row[0] = row[1] if row[0].blank?
 
     role = parse_file_role(row[2])

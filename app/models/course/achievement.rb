@@ -48,6 +48,7 @@ class Course::Achievement < ApplicationRecord
   # @override ConditionalInstanceMethods#permitted_for!
   def permitted_for!(course_user)
     return if conditions.empty?
+
     course_users << course_user unless course_users.exists?(course_user.id)
   end
 

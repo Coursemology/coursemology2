@@ -52,7 +52,6 @@ const MilestoneForm = ({ handleSubmit, onSubmit, disabled }) => (
   </Form>
 );
 
-
 MilestoneForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,

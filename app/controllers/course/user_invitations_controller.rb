@@ -94,9 +94,7 @@ class Course::UserInvitationsController < Course::ComponentController
   # @return [String|nil] Returns invitation.id. If none were found, nil is returned.
   def resend_invitation_params
     @resend_invitation_params ||=
-      unless params[:user_invitation_id].blank?
-        params.permit(:user_invitation_id)[:user_invitation_id]
-      end
+      (params.permit(:user_invitation_id)[:user_invitation_id] unless params[:user_invitation_id].blank?)
   end
 
   # Loads existing invitations for the resending of invitations. Method handles the following cases:
@@ -222,6 +220,7 @@ class Course::UserInvitationsController < Course::ComponentController
   def enable_registration_code(enable)
     if enable
       return true if current_course.registration_key
+
       current_course.generate_registration_key
     else
       current_course.registration_key = nil

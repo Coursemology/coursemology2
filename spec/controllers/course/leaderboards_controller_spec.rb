@@ -26,7 +26,7 @@ RSpec.describe Course::LeaderboardsController, type: :controller do
     describe '#groups' do
       subject { get :groups, params: { course_id: course } }
 
-      context' when the group leaderboard is disabled' do
+      context 'when the group leaderboard is disabled' do
         it 'raises a standard error' do
           expect { subject }.to raise_error(ComponentNotFoundError)
         end

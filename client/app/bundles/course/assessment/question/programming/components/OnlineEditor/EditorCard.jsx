@@ -5,22 +5,12 @@ import { Card, CardHeader, CardText } from 'material-ui/Card';
 import AceEditor from 'react-ace';
 
 class EditorCard extends React.Component {
-  static propTypes = {
-    updateCodeBlock: PropTypes.func.isRequired,
-    mode: PropTypes.string.isRequired,
-    field: PropTypes.string,
-    value: PropTypes.string.isRequired,
-    header: PropTypes.string.isRequired,
-    subtitle: PropTypes.string,
-    isLoading: PropTypes.bool.isRequired,
-  }
-
   static getInputName(field) {
     return `question_programming[${field}]`;
   }
 
   codeChangeHandler(field) {
-    return e => this.props.updateCodeBlock(field, e);
+    return (e) => this.props.updateCodeBlock(field, e);
   }
 
   render() {
@@ -58,5 +48,15 @@ class EditorCard extends React.Component {
     );
   }
 }
+
+EditorCard.propTypes = {
+  updateCodeBlock: PropTypes.func.isRequired,
+  mode: PropTypes.string.isRequired,
+  field: PropTypes.string,
+  value: PropTypes.string.isRequired,
+  header: PropTypes.string.isRequired,
+  subtitle: PropTypes.string,
+  isLoading: PropTypes.bool.isRequired,
+};
 
 export default injectIntl(EditorCard);

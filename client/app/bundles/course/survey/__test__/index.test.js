@@ -17,9 +17,9 @@ beforeEach(() => {
 
 describe('Surveys', () => {
   it('renders the index page and survey form', async () => {
-    mock.onGet(`/courses/${courseId}/surveys`)
-      .reply(200, {
-        surveys: [{
+    mock.onGet(`/courses/${courseId}/surveys`).reply(200, {
+      surveys: [
+        {
           id: 1,
           base_exp: 20,
           canViewResults: true,
@@ -28,9 +28,10 @@ describe('Surveys', () => {
           start_at: '2017-02-27T00:00:00.000+08:00',
           end_at: '2017-03-12T23:59:00.000+08:00',
           response: null,
-        }],
-        canCreate: true,
-      });
+        },
+      ],
+      canCreate: true,
+    });
 
     const spyIndex = jest.spyOn(CourseAPI.survey.surveys, 'index');
     const store = storeCreator({ surveys: {} });
@@ -40,7 +41,7 @@ describe('Surveys', () => {
         <MemoryRouter initialEntries={[`/courses/${courseId}/surveys`]}>
           <SurveysLayout />
         </MemoryRouter>
-      </ProviderWrapper>
+      </ProviderWrapper>,
     );
 
     // Wait for api call

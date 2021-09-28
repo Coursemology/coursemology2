@@ -17,7 +17,7 @@ RSpec.describe Course::UserRegistrationsController, type: :controller do
           context 'when the user is a student of the course' do
             let!(:course_student) { create(:course_student, course: course, user: user) }
 
-            it { expect { subject }.not_to change { course.course_users.count } }
+            it { expect { subject }.not_to(change { course.course_users.count }) }
             it { is_expected.to redirect_to(course_path(course)) }
             it 'sets the proper flash message' do
               subject
@@ -28,7 +28,7 @@ RSpec.describe Course::UserRegistrationsController, type: :controller do
           context 'when the user is a manager of the course' do
             let!(:course_manager) { create(:course_manager, course: course, user: user) }
 
-            it { expect { subject }.not_to change { course.course_users.reload.count } }
+            it { expect { subject }.not_to(change { course.course_users.reload.count }) }
             it { is_expected.to redirect_to(course_path(course)) }
             it 'sets the proper flash message' do
               subject
@@ -57,7 +57,7 @@ RSpec.describe Course::UserRegistrationsController, type: :controller do
             end
 
             context 'when the course does not allow enrolment requests' do
-              before { course.update_attributes!(enrollable: false) }
+              before { course.update!(enrollable: false) }
               it 'rejects the request' do
                 expect { subject }.to change { course.course_users.count }.by(1)
               end
@@ -70,7 +70,7 @@ RSpec.describe Course::UserRegistrationsController, type: :controller do
             let(:invitation) { create(:course_user_invitation, email: user.email) }
             let(:registration_code) { invitation.invitation_key }
 
-            it { expect { subject }.not_to change { course.course_users.reload.count } }
+            it { expect { subject }.not_to(change { course.course_users.reload.count }) }
             it { is_expected.to redirect_to(course_path(course)) }
             it 'sets the proper flash message' do
               subject
@@ -99,7 +99,7 @@ RSpec.describe Course::UserRegistrationsController, type: :controller do
             end
 
             context 'when the course does not allow enrolment requests' do
-              before { course.update_attributes!(enrollable: false) }
+              before { course.update!(enrollable: false) }
               it 'rejects the request' do
                 expect { subject }.to change { course.course_users.count }.by(1)
               end
@@ -109,7 +109,7 @@ RSpec.describe Course::UserRegistrationsController, type: :controller do
           context 'when the user is already registered' do
             before { create(:course_student, course: course, user: user) }
 
-            it { expect { subject }.not_to change { course.course_users.count } }
+            it { expect { subject }.not_to(change { course.course_users.count }) }
             it { is_expected.to redirect_to(course_path(course)) }
             it 'sets the proper flash message' do
               subject

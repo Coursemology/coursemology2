@@ -33,9 +33,10 @@ RSpec.feature 'Course: Topics: Management' do
           to have_selector('div', text: code_annotation.file.answer.submission.assessment.title)
         expect(page).
           to have_link(I18n.t(
-                                'course.video.topics.discussion_topic_topic.comment_title',
-                                title: video_comment.video.title,
-                                timestamp: Time.at(video_comment.timestamp).utc.strftime('%H:%M:%S')))
+                         'course.video.topics.discussion_topic_topic.comment_title',
+                         title: video_comment.video.title,
+                         timestamp: Time.at(video_comment.timestamp).utc.strftime('%H:%M:%S')
+                       ))
       end
 
       scenario 'I can reply to a comment topic', js: true do
@@ -233,9 +234,10 @@ RSpec.feature 'Course: Topics: Management' do
         expect(page).to have_selector('div', text: comment.submission.assessment.title)
         expect(page).
           to have_link(I18n.t(
-                                'course.video.topics.discussion_topic_topic.comment_title',
-                                title: video_comment.video.title,
-                                timestamp: Time.at(video_comment.timestamp).utc.strftime('%H:%M:%S')))
+                         'course.video.topics.discussion_topic_topic.comment_title',
+                         title: video_comment.video.title,
+                         timestamp: Time.at(video_comment.timestamp).utc.strftime('%H:%M:%S')
+                       ))
       end
     end
   end

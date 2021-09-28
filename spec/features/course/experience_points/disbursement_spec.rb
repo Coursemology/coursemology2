@@ -15,19 +15,19 @@ RSpec.feature 'Course: Experience Points: Disbursement' do
       let(:user) { course_teaching_assistant.user }
 
       scenario 'I can filter students by group' do
-        group_1, group_2 = create_list(:course_group, 2, course: course)
-        group_1_student, group_2_student, ungrouped_student = course_students
-        create(:course_group_user, group: group_1, course_user: group_1_student)
-        create(:course_group_user, group: group_2, course_user: group_2_student)
+        group1, group2 = create_list(:course_group, 2, course: course)
+        group1_student, group2_student, ungrouped_student = course_students
+        create(:course_group_user, group: group1, course_user: group1_student)
+        create(:course_group_user, group: group2, course_user: group2_student)
 
         visit disburse_experience_points_course_users_path(course)
         course_students.each do |student|
           expect(page).to have_content_tag_for(student)
         end
 
-        click_link group_1.name
-        expect(page).to have_content_tag_for(group_1_student)
-        expect(page).to have_no_content_tag_for(group_2_student)
+        click_link group1.name
+        expect(page).to have_content_tag_for(group1_student)
+        expect(page).to have_no_content_tag_for(group2_student)
         expect(page).to have_no_content_tag_for(ungrouped_student)
       end
 

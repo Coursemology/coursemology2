@@ -38,7 +38,7 @@ RSpec.describe Course::Material, type: :model do
       let(:material) { build(:material, folder: parent_folder, name: common_name) }
 
       let(:other_material) { build(:material, folder: parent_folder, name: common_name.downcase) }
-      let(:sibling_folder) { build(:folder, parent: parent_folder, name: common_name + ' (0)') }
+      let(:sibling_folder) { build(:folder, parent: parent_folder, name: "#{common_name} (0)") }
 
       it 'returns a unique name' do
         # When there are no name conflicts
@@ -46,11 +46,11 @@ RSpec.describe Course::Material, type: :model do
 
         # When there is a name conflict with another material
         other_material.save
-        expect(material.send(:next_valid_name)).to eq(common_name + ' (0)')
+        expect(material.send(:next_valid_name)).to eq("#{common_name} (0)")
 
         # When there is another name conflict with a sibling folder
-        sibling_folder.save
-        expect(material.send(:next_valid_name)).to eq(common_name + ' (1)')
+        sibling_folder.save!
+        expect(material.send(:next_valid_name)).to eq("#{common_name} (1)")
       end
     end
   end

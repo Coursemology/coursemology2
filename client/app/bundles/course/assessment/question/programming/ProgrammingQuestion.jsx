@@ -8,7 +8,6 @@ import ProgrammingQuestionForm from './containers/ProgrammingQuestionForm/Progra
 import * as onlineEditorActionCreators from './actions/onlineEditorActionCreators';
 import * as programmingQuestionActionCreators from './actions/programmingQuestionActionCreators';
 
-
 function mapStateToProps(state) {
   return state.toObject();
 }
@@ -20,8 +19,14 @@ const propTypes = {
 
 const ProgrammingQuestion = (props) => {
   const { dispatch, programmingQuestion } = props;
-  const actions = bindActionCreators(programmingQuestionActionCreators, dispatch);
-  const onlineEditorActions = bindActionCreators(onlineEditorActionCreators, dispatch);
+  const actions = bindActionCreators(
+    programmingQuestionActionCreators,
+    dispatch,
+  );
+  const onlineEditorActions = bindActionCreators(
+    onlineEditorActionCreators,
+    dispatch,
+  );
 
   return (
     <ProgrammingQuestionForm

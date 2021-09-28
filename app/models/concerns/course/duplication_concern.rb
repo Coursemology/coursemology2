@@ -13,7 +13,7 @@ module Course::DuplicationConcern
   end
 
   # List of top-level items that need to be duplicated for the whole course to be considered duplicated.
-  def duplication_manifest # rubocop:disable Metrics/MethodLength
+  def duplication_manifest
     [
       *reference_timelines,
       *material_folders.concrete,

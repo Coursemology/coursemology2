@@ -13,8 +13,8 @@ class Course::Material::FoldersController < Course::Material::Controller
   end
 
   def update
-    if @folder.update_attributes(folder_params)
-      redirect_folder = @folder.parent ? @folder.parent : @folder
+    if @folder.update(folder_params)
+      redirect_folder = @folder.parent || @folder
       redirect_to course_material_folder_path(current_course, redirect_folder),
                   success: t('.success', name: @folder.name)
     else

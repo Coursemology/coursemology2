@@ -44,7 +44,7 @@ RSpec.describe ApplicationController, type: :controller do
         end
 
         context 'when the host has a www subdomain' do
-          let(:instance_host) { 'www.' + instance.host.upcase }
+          let(:instance_host) { "www.#{instance.host.upcase}" }
           it 'finds the host without the www subdomain' do
             get :index
 
@@ -53,7 +53,7 @@ RSpec.describe ApplicationController, type: :controller do
         end
 
         context 'when the host has a subdomain other than www' do
-          let(:instance_host) { 'random.' + instance.host.upcase }
+          let(:instance_host) { "random.#{instance.host.upcase}" }
           it 'finds the actual host' do
             get :index
 
@@ -160,7 +160,7 @@ RSpec.describe ApplicationController, type: :controller do
 
       it 'renders the component not found page to /public/404' do
         get :index
-        expect(response).to render_template(file: '404.html')
+        expect(response).to render_template(file: Rails.root.join('public', '404.html').to_s)
       end
 
       it 'returns HTTP status 404' do
@@ -202,7 +202,7 @@ RSpec.describe ApplicationController, type: :controller do
 
       it 'renders the correct template' do
         get :index
-        expect(response).to render_template(file: Rails.root.join('public', '422.json').to_s)
+        expect(response.body).to eq(File.read(Rails.root.join('public', '422.json').to_s))
       end
     end
   end
@@ -231,7 +231,7 @@ RSpec.describe ApplicationController, type: :controller do
 
       it 'renders the correct template' do
         get :index
-        expect(response).to render_template(file: Rails.root.join('public', '403.json').to_s)
+        expect(response.body).to eq(File.read(Rails.root.join('public', '403.json').to_s))
       end
     end
   end

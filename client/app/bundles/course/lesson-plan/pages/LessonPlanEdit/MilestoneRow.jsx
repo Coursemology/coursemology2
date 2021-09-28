@@ -19,30 +19,29 @@ const translations = defineMessages({
   },
 });
 
-const sameDate = (a, b) => (!a && !b) || (a && b && moment(a).isSame(b, 'minute'));
+const sameDate = (a, b) =>
+  (!a && !b) || (a && b && moment(a).isSame(b, 'minute'));
 
 class MilestoneRow extends React.Component {
-  static propTypes = {
-    id: PropTypes.number.isRequired,
-    groupId: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    startAt: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.instanceOf(Date),
-    ]).isRequired,
-    columnsVisible: PropTypes.shape({}).isRequired,
-
-    dispatch: PropTypes.func.isRequired,
-  }
-
   updateMilestoneStartAt = (_, newDate) => {
     const { id, title, startAt, dispatch } = this.props;
-    if (sameDate(startAt, newDate)) { return; }
+    if (sameDate(startAt, newDate)) {
+      return;
+    }
 
-    const successMessage = <FormattedMessage {...translations.updateSuccess} values={{ title }} />;
+    const successMessage = (
+      <FormattedMessage {...translations.updateSuccess} values={{ title }} />
+    );
     const failureMessage = <FormattedMessage {...translations.updateFailed} />;
-    dispatch(updateMilestone(id, { start_at: newDate }, successMessage, failureMessage));
-  }
+    dispatch(
+      updateMilestone(
+        id,
+        { start_at: newDate },
+        successMessage,
+        failureMessage,
+      ),
+    );
+  };
 
   render() {
     const { title, startAt, groupId, columnsVisible } = this.props;
@@ -50,28 +49,38 @@ class MilestoneRow extends React.Component {
     return (
       <tr>
         <td colSpan={columnsVisible[fields.ITEM_TYPE] ? 2 : 1}>
-          <h3><Element name={groupId}>{ title }</Element></h3>
+          <h3>
+            <Element name={groupId}>{title}</Element>
+          </h3>
         </td>
-        {
-          columnsVisible[fields.START_AT]
-            ? (
-              <td>
-                <DateTimePicker
-                  name="start_at"
-                  value={startAt}
-                  onChange={this.updateMilestoneStartAt}
-                />
-              </td>
-            ) : null
-        }
-        { columnsVisible[fields.BONUS_END_AT] ? <td /> : null }
-        { columnsVisible[fields.END_AT] ? <td /> : null }
-        { columnsVisible[fields.PUBLISHED] ? <td /> : null }
+        {columnsVisible[fields.START_AT] ? (
+          <td>
+            <DateTimePicker
+              name="start_at"
+              value={startAt}
+              onChange={this.updateMilestoneStartAt}
+            />
+          </td>
+        ) : null}
+        {columnsVisible[fields.BONUS_END_AT] ? <td /> : null}
+        {columnsVisible[fields.END_AT] ? <td /> : null}
+        {columnsVisible[fields.PUBLISHED] ? <td /> : null}
       </tr>
     );
   }
 }
 
-export default connect(state => ({
+MilestoneRow.propTypes = {
+  id: PropTypes.number.isRequired,
+  groupId: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  startAt: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)])
+    .isRequired,
+  columnsVisible: PropTypes.shape({}).isRequired,
+
+  dispatch: PropTypes.func.isRequired,
+};
+
+export default connect((state) => ({
   columnsVisible: state.flags.editPageColumnsVisible,
 }))(MilestoneRow);

@@ -1,4 +1,4 @@
-(function($) {
+(function ($) {
   'use strict';
 
   /**
@@ -25,7 +25,9 @@
     if (forSelectAll) {
       return $('#' + forSelectAll);
     } else {
-      return $('input[type="checkbox"]').filter('[data-for-select-all="' + $checkbox[0].id + '"]');
+      return $('input[type="checkbox"]').filter(
+        '[data-for-select-all="' + $checkbox[0].id + '"]'
+      );
     }
   }
 
@@ -57,7 +59,11 @@
     }
 
     var $otherChildren = findAssociatedCheckboxes($parentCheckbox);
-    var checkStates = $otherChildren.map(function() { return this.checked; }).get();
+    var checkStates = $otherChildren
+      .map(function () {
+        return this.checked;
+      })
+      .get();
 
     var checkedCount = 0;
     var uncheckedCount = 0;
@@ -89,12 +95,15 @@
    * @param {jQuery} $parentCheckbox The parent checkbox being clicked.
    */
   function handleSelectAllCheckboxClick($parentCheckbox) {
-    findAssociatedCheckboxes($parentCheckbox).prop('checked', $parentCheckbox.prop('checked'));
+    findAssociatedCheckboxes($parentCheckbox).prop(
+      'checked',
+      $parentCheckbox.prop('checked')
+    );
   }
 
   $(document).on('click', 'input[type="checkbox"]', handleCheckboxClick);
 
-  $.fn.checkboxToggleAll = function(options) {
+  $.fn.checkboxToggleAll = function (options) {
     if (options === undefined) {
       this.each(initializeComponent);
     }

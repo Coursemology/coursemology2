@@ -5,6 +5,7 @@ module Course::Assessment::AssessmentsHelper
 
   def display_assessment_tabs
     return nil if @category.tabs.count == 1
+
     # Set the first tab as active if there's no tab parameter in the URL.
     active_tab = params[:tab] || @category.tabs.first
     tabs do
@@ -29,6 +30,7 @@ module Course::Assessment::AssessmentsHelper
   def show_bonus_attributes?
     @show_bonus_end_at ||= begin
       return false unless current_course.gamified?
+
       @assessments.any? do |assessment|
         assessment.bonus_end_at.present? && assessment.time_bonus_exp > 0
       end

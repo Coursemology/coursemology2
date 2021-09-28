@@ -58,7 +58,7 @@ FactoryBot.define do
 
     after(:create) do |question|
       question.instance_eval do
-        def skip_process_package?
+        def skip_process_package? # rubocop:disable Lint/UselessMethodDefinition
           super
         end
       end

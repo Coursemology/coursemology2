@@ -13,6 +13,7 @@ module SettingsOnRails::TestHelpers
       stub_hashes!(result)
       result.each_pair do |key, value|
         next unless value.is_a?(Hash)
+
         result[key] = create_mock_hash(value)
       end
 

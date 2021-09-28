@@ -6,7 +6,7 @@ namespace :db do
     #
     # Pending staff reply flag will NOT be set correctly after this.
     ActsAsTenant.without_tenant do
-      SLICE_SIZE = 50
+      slice_size = 50
       connection = ActiveRecord::Base.connection
 
       # Get tuples of course_id, submission_question_id, submission_id, question_id, and the
@@ -41,9 +41,9 @@ namespace :db do
       SQL
 
       slice_index = 1
-      total_slices = (course_sq_tuples.count / SLICE_SIZE.to_f).ceil
+      total_slices = (course_sq_tuples.count / slice_size.to_f).ceil
 
-      course_sq_tuples.each_slice(SLICE_SIZE) do |csq_tuples|
+      course_sq_tuples.each_slice(slice_size) do |csq_tuples|
         course_ids = csq_tuples.map { |x| x['course_id'] }
         sq_ids = csq_tuples.map { |x| x['sq_id'] }
 
@@ -54,11 +54,11 @@ namespace :db do
         created_at = created_at.map { |x| x ? "'#{x}'" : 'NOW()' }
         updated_at = updated_at.map { |x| x ? "'#{x}'" : 'NOW()' }
 
-        actable_type_strings = ["'Course::Assessment::SubmissionQuestion'"] * SLICE_SIZE
-        pending_staff_reply = [false] * SLICE_SIZE
+        actable_type_strings = ["'Course::Assessment::SubmissionQuestion'"] * slice_size
+        pending_staff_reply = [false] * slice_size
         combined_arr = sq_ids.zip(actable_type_strings, course_ids, pending_staff_reply, created_at,
                                   updated_at)
-        discussion_topic_values = combined_arr.map { |x| '(' + x.join(',') + ')'}.join(',')
+        discussion_topic_values = combined_arr.map { |x| "(#{x.join(',')})" }.join(',')
 
         puts "Start INSERT of #{combined_arr.count} rows: Slice #{slice_index} of #{total_slices}"
         start_time = Time.now
@@ -91,7 +91,7 @@ namespace :db do
       SQL
       end_time = Time.now
       puts "Finished removing duplicates: #{(end_time - start_time) * 1000} milliseconds"
-      
+
       puts 'Restoring unique index'
       # Add back unique index
       connection.exec_query(<<-SQL)
@@ -101,4 +101,3 @@ namespace :db do
     end
   end
 end
-

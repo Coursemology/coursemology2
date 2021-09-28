@@ -24,18 +24,18 @@ class Course::GroupsController < Course::ComponentController
     end
   end
 
-  def edit #:nodoc:
+  def edit # :nodoc:
   end
 
-  def update #:nodoc:
-    if @group.update_attributes(group_params)
+  def update # :nodoc:
+    if @group.update(group_params)
       redirect_to course_groups_path(current_course), success: t('.success', name: @group.name)
     else
       render 'edit'
     end
   end
 
-  def destroy #:nodoc
+  def destroy # :nodoc:
     if @group.destroy
       redirect_to course_groups_path(current_course),
                   success: t('.success', name: @group.name)
@@ -46,7 +46,7 @@ class Course::GroupsController < Course::ComponentController
 
   private
 
-  def group_params #:nodoc:
+  def group_params # :nodoc:
     params.require(:group).
       permit(:name, course_user_ids: [],
                     group_users_attributes: [:id, :course_user_id, :role, :_destroy])

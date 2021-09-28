@@ -10,9 +10,11 @@
 const formatMessage = (errorOrWarning, intl) => {
   if (!errorOrWarning || typeof errorOrWarning === 'string') {
     return errorOrWarning;
-  } if (Array.isArray(errorOrWarning)) {
+  }
+  if (Array.isArray(errorOrWarning)) {
     return errorOrWarning.length > 0 && errorOrWarning[0];
-  } if (intl && typeof errorOrWarning === 'object') {
+  }
+  if (intl && typeof errorOrWarning === 'object') {
     return intl.formatMessage(errorOrWarning);
   }
   return errorOrWarning;
@@ -25,11 +27,15 @@ const mapError = (
     intl,
     ...props
   },
-  errorProp = 'errorText'
+  errorProp = 'errorText',
 ) => {
   const errorOrWarning = error || warning;
   return touched && errorOrWarning
-    ? { ...inputProps, ...props, [errorProp]: formatMessage(errorOrWarning, intl) }
+    ? {
+        ...inputProps,
+        ...props,
+        [errorProp]: formatMessage(errorOrWarning, intl),
+      }
     : { ...inputProps, ...props };
 };
 

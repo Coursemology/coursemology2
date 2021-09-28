@@ -55,6 +55,7 @@ module Extensions::Attachable::ActiveRecord::Base
       include HasManyAttachments
 
       return unless options[:on]
+
       self.attachable_columns = Array(options[:on])
       before_save :update_attachment_references
 
@@ -129,6 +130,7 @@ module Extensions::Attachable::ActiveRecord::Base
         #   ii) current set of attachment_reference_ids
         define_method(changed_method_name) do
           return [] unless send("#{column}_changed?")
+
           attachment_ids_was = parse_attachment_reference_uuids_from_content(send("#{column}_was"))
           attachment_ids = parse_and_validate_attachment_reference_uuids_from_content(send(column))
 
@@ -143,7 +145,7 @@ module Extensions::Attachable::ActiveRecord::Base
       end
     end
 
-    private
+    private # rubocop:disable Lint/UselessAccessModifier
 
     # Update attachment_references which are added or removed in this update. This also
     # associates all attachment_references that have no attachable yet.
@@ -196,6 +198,7 @@ module Extensions::Attachable::ActiveRecord::Base
         valid_id = get_valid_attachment_reference(id) if id
 
         next unless valid_id
+
         image['src'] = "#{ATTACHMENT_URL_PREFIX}#{valid_id}" unless valid_id == id
         ids << valid_id
       end
@@ -219,7 +222,7 @@ module Extensions::Attachable::ActiveRecord::Base
     end
 
     # Regex for filtering Attachment IDs from URLs.
-    ATTACHMENT_ID_REGEX = /\/attachments\/([0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12})$/
+    ATTACHMENT_ID_REGEX = /\/attachments\/([0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12})$/.freeze
 
     # Parse attachment_reference uuid from the given url.
     #
@@ -308,6 +311,7 @@ module Extensions::Attachable::ActiveRecord::Base
         build_attachment_reference(file: file)
       else
         return nil if attachment_reference.nil?
+
         mark_attachment_as_changed(attachment_reference)
         attachment_references.clear
       end
@@ -336,6 +340,7 @@ module Extensions::Attachable::ActiveRecord::Base
     # Restore the attachmenet_reference to its previous value.
     def restore_attachment_reference_change
       return unless attachment_reference_changed?
+
       self.attachment_reference = @original_attachment
       clear_attachment_change
     end

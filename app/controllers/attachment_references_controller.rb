@@ -4,10 +4,9 @@ class AttachmentReferencesController < ApplicationController
 
   def create
     attachment = Attachment.find_or_create_by(file: file_params[:file]) if file_params[:file]
-    if attachment
-      @attachment_reference =
-        AttachmentReference.create(attachment: attachment, name: file_params[:name])
-    end
+    return unless attachment
+
+    @attachment_reference = AttachmentReference.create(attachment: attachment, name: file_params[:name])
   end
 
   def show

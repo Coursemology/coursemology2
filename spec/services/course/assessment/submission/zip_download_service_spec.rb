@@ -127,10 +127,10 @@ RSpec.describe Course::Assessment::Submission::ZipDownloadService do
 
           file_names = Zip::File.open(subject) { |f| f.map(&:name) }
           expect(file_names).to contain_exactly(
-            student1.name + '/',
-            student1.name + '/' + assessment_title + '/',
-            student1.name + '/' + assessment_title + '/' + 'answer.txt',
-            student1.name + '/' + assessment_title + '/' + 'answer (0).txt'
+            "#{student1.name}/",
+            "#{student1.name}/#{assessment_title}/",
+            "#{student1.name}/#{assessment_title}/answer.txt",
+            "#{student1.name}/#{assessment_title}/answer (0).txt"
           )
         end
       end
@@ -148,14 +148,14 @@ RSpec.describe Course::Assessment::Submission::ZipDownloadService do
 
           file_names = Zip::File.open(subject) { |f| f.map(&:name) }
           expect(file_names).to contain_exactly(
-            student1.name + '/',
-            student1.name + '/' + assessment_title + '/',
-            student1.name + '/' + assessment_title + '/' + 'answer.txt',
-            student1.name + '/' + assessment_title + '/' + 'answer (0).txt',
-            student2_name + '/',
-            student2_name + '/' + assessment_title + '/',
-            student2_name + '/' + assessment_title + '/' + 'answer.txt',
-            student2_name + '/' + assessment_title + '/' + 'answer (0).txt'
+            "#{student1.name}/",
+            "#{student1.name}/#{assessment_title}/",
+            "#{student1.name}/#{assessment_title}/answer.txt",
+            "#{student1.name}/#{assessment_title}/answer (0).txt",
+            "#{student2_name}/",
+            "#{student2_name}/#{assessment_title}/",
+            "#{student2_name}/#{assessment_title}/answer.txt",
+            "#{student2_name}/#{assessment_title}/answer (0).txt"
           )
         end
       end

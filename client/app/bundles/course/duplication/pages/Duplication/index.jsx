@@ -1,7 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { defineMessages, FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import {
+  defineMessages,
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 
 import Paper from 'material-ui/Paper';
 import Subheader from 'material-ui/Subheader';
@@ -10,9 +15,16 @@ import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import TitleBar from 'lib/components/TitleBar';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import DateTimePicker from 'lib/components/form/DateTimePicker';
-import { fetchObjectsList, setDuplicationMode, changeSourceCourse } from 'course/duplication/actions';
+import {
+  fetchObjectsList,
+  setDuplicationMode,
+  changeSourceCourse,
+} from 'course/duplication/actions';
 import { duplicationModes } from 'course/duplication/constants';
-import { sourceCourseShape, courseListingShape } from 'course/duplication/propTypes';
+import {
+  sourceCourseShape,
+  courseListingShape,
+} from 'course/duplication/propTypes';
 import CourseDropdownMenu from 'course/duplication/components/CourseDropdownMenu';
 
 import ItemsSelector from './ItemsSelector';
@@ -55,7 +67,8 @@ const translations = defineMessages({
   },
   noComponentsEnabled: {
     id: 'course.duplication.Duplication.noComponentsEnabled',
-    defaultMessage: 'All components with duplicable items are disabled. \
+    defaultMessage:
+      'All components with duplicable items are disabled. \
       You may enable them under course settings.',
   },
   selectSourceCourse: {
@@ -89,29 +102,19 @@ const styles = {
 };
 
 class Duplication extends React.Component {
-  static propTypes = {
-    isLoading: PropTypes.bool.isRequired,
-    isCourseSelected: PropTypes.bool.isRequired,
-    isChangingCourse: PropTypes.bool.isRequired,
-    duplicationMode: PropTypes.string.isRequired,
-    modesAllowed: PropTypes.arrayOf(PropTypes.string),
-    enabledComponents: PropTypes.arrayOf(PropTypes.string),
-    currentHost: PropTypes.string.isRequired,
-    currentCourseId: PropTypes.number,
-    sourceCourse: sourceCourseShape.isRequired,
-    sourceCourses: courseListingShape,
-
-    dispatch: PropTypes.func.isRequired,
-    intl: intlShape,
-  }
-
   componentDidMount() {
     this.props.dispatch(fetchObjectsList());
   }
 
   renderFromCourseMain() {
     const {
-      currentHost, currentCourseId, sourceCourse, sourceCourses, isChangingCourse, intl, dispatch,
+      currentHost,
+      currentCourseId,
+      sourceCourse,
+      sourceCourses,
+      isChangingCourse,
+      intl,
+      dispatch,
     } = this.props;
 
     return (
@@ -139,9 +142,16 @@ class Duplication extends React.Component {
 
   renderToCourseSidebar() {
     const { dispatch, modesAllowed } = this.props;
-    const header = <h3><FormattedMessage {...translations.toCourse} /></h3>;
+    const header = (
+      <h3>
+        <FormattedMessage {...translations.toCourse} />
+      </h3>
+    );
 
-    const isSingleValidMode = modesAllowed && modesAllowed.length === 1 && duplicationModes[modesAllowed[0]];
+    const isSingleValidMode =
+      modesAllowed &&
+      modesAllowed.length === 1 &&
+      duplicationModes[modesAllowed[0]];
     if (isSingleValidMode) {
       dispatch(setDuplicationMode(modesAllowed[0]));
       return header;
@@ -149,8 +159,8 @@ class Duplication extends React.Component {
 
     return (
       <>
-        { header }
-        { this.renderToCourseModeSelector() }
+        {header}
+        {this.renderToCourseModeSelector()}
       </>
     );
   }
@@ -180,7 +190,11 @@ class Duplication extends React.Component {
     const { duplicationMode, isCourseSelected } = this.props;
 
     if (duplicationMode === duplicationModes.COURSE) {
-      return <div style={styles.sidebar}><DuplicateAllButton /></div>;
+      return (
+        <div style={styles.sidebar}>
+          <DuplicateAllButton />
+        </div>
+      );
     }
     if (isCourseSelected) {
       return (
@@ -196,41 +210,54 @@ class Duplication extends React.Component {
   }
 
   renderBody() {
-    const { isLoading, isCourseSelected, duplicationMode, modesAllowed, enabledComponents } = this.props;
-    if (isLoading) { return <LoadingIndicator />; }
+    const {
+      isLoading,
+      isCourseSelected,
+      duplicationMode,
+      modesAllowed,
+      enabledComponents,
+    } = this.props;
+    if (isLoading) {
+      return <LoadingIndicator />;
+    }
 
     if (!modesAllowed || modesAllowed.length < 1) {
-      return <Subheader><FormattedMessage {...translations.duplicationDisabled} /></Subheader>;
+      return (
+        <Subheader>
+          <FormattedMessage {...translations.duplicationDisabled} />
+        </Subheader>
+      );
     }
     if (!enabledComponents || enabledComponents.length < 1) {
-      return <Subheader><FormattedMessage {...translations.noComponentsEnabled} /></Subheader>;
+      return (
+        <Subheader>
+          <FormattedMessage {...translations.noComponentsEnabled} />
+        </Subheader>
+      );
     }
 
     return (
       <div style={styles.bodyGrid}>
         <div style={styles.sidebar}>
-          <h3><FormattedMessage {...translations.fromCourse} /></h3>
+          <h3>
+            <FormattedMessage {...translations.fromCourse} />
+          </h3>
         </div>
-        <Paper style={styles.mainPanel}>
-          { this.renderFromCourseMain() }
-        </Paper>
+        <Paper style={styles.mainPanel}>{this.renderFromCourseMain()}</Paper>
 
-        <div style={styles.sidebar}>
-          { this.renderToCourseSidebar() }
-        </div>
+        <div style={styles.sidebar}>{this.renderToCourseSidebar()}</div>
         <Paper style={styles.mainPanel}>
           <DestinationCourseSelector />
         </Paper>
 
-        { this.renderItemsSelectorSidebar() }
-        {
-          duplicationMode === duplicationModes.OBJECT && isCourseSelected
-            ? (
-              <Paper style={styles.mainPanel}>
-                <ItemsSelector />
-              </Paper>
-            ) : <div />
-        }
+        {this.renderItemsSelectorSidebar()}
+        {duplicationMode === duplicationModes.OBJECT && isCourseSelected ? (
+          <Paper style={styles.mainPanel}>
+            <ItemsSelector />
+          </Paper>
+        ) : (
+          <div />
+        )}
       </div>
     );
   }
@@ -238,12 +265,30 @@ class Duplication extends React.Component {
   render() {
     return (
       <div>
-        <TitleBar title={<FormattedMessage {...translations.duplicateData} />} />
-        { this.renderBody() }
+        <TitleBar
+          title={<FormattedMessage {...translations.duplicateData} />}
+        />
+        {this.renderBody()}
       </div>
     );
   }
 }
+
+Duplication.propTypes = {
+  isLoading: PropTypes.bool.isRequired,
+  isCourseSelected: PropTypes.bool.isRequired,
+  isChangingCourse: PropTypes.bool.isRequired,
+  duplicationMode: PropTypes.string.isRequired,
+  modesAllowed: PropTypes.arrayOf(PropTypes.string),
+  enabledComponents: PropTypes.arrayOf(PropTypes.string),
+  currentHost: PropTypes.string.isRequired,
+  currentCourseId: PropTypes.number,
+  sourceCourse: sourceCourseShape.isRequired,
+  sourceCourses: courseListingShape,
+
+  dispatch: PropTypes.func.isRequired,
+  intl: intlShape,
+};
 
 export default connect(({ duplication }) => ({
   isLoading: duplication.isLoading,

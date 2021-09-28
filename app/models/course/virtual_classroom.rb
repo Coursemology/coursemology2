@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::VirtualClassroom < ApplicationRecord
   attr_writer :duration
+
   before_validation :convert_duration_to_end_at
   acts_as_readable on: :updated_at
 
@@ -19,6 +20,7 @@ class Course::VirtualClassroom < ApplicationRecord
 
   def duration
     return nil unless start_at && end_at
+
     @duration ||= ((end_at - start_at) / 60).to_i
   end
 

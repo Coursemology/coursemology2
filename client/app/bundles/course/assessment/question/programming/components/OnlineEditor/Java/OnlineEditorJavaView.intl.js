@@ -3,12 +3,14 @@ import { defineMessages } from 'react-intl';
 export default defineMessages({
   prependSubtitle: {
     id: 'course.assessment.question.programming.onlineEditorJavaView.prependSubtitle',
-    defaultMessage: 'For any library imports (optional, hidden, inserted before student\'s code)',
+    defaultMessage:
+      "For any library imports (optional, hidden, inserted before student's code)",
     description: 'Subtitle for prepend code block.',
   },
   appendSubtitle: {
     id: 'course.assessment.question.programming.onlineEditorJavaView.appendSubtitle',
-    defaultMessage: 'Within the scope for the test class: Declare any methods or instance variables here',
+    defaultMessage:
+      'Within the scope for the test class: Declare any methods or instance variables here',
     description: 'Subtitle for append code block.',
   },
   submitAsFileToggle: {
@@ -17,7 +19,8 @@ export default defineMessages({
   },
   submitAsFileToggleDisabled: {
     id: 'course.assessment.question.programming.onlineEditorJavaView.submitAsFileToggleDisabled',
-    defaultMessage: 'File Submission (This option cannot be switched as some answers have already been submitted)',
+    defaultMessage:
+      'File Submission (This option cannot be switched as some answers have already been submitted)',
   },
   addSubmissionFileButton: {
     id: 'course.assessment.question.programming.onlineEditorJavaView.addSubmissionFileButton',
@@ -60,12 +63,14 @@ export default defineMessages({
   testCaseDescriptionCode: {
     id: 'course.assessment.question.programming.onlineEditorJavaView.testCaseDescriptionCode',
     defaultMessage: 'CODE',
-    description: 'Value of the code key that is passed into the test case description.',
+    description:
+      'Value of the code key that is passed into the test case description.',
   },
   testCaseDescriptionEditor: {
     id: 'course.assessment.question.programming.onlineEditorJavaView.testCaseDescriptionEditor',
     defaultMessage: 'CODE EDITOR',
-    description: 'Value of the code key that is passed into the test case description.',
+    description:
+      'Value of the code key that is passed into the test case description.',
   },
   expectEquals: {
     id: 'course.assessment.question.programming.onlineEditorJavaView.expectEquals',
@@ -75,6 +80,7 @@ export default defineMessages({
   fileSubmissionDescriptionNote: {
     id: 'course.assessment.question.programming.onlineEditorJavaView.fileSubmissionDescriptionNote',
     defaultMessage: 'File Submission',
-    description: 'Value of the key that is passed into the description of the file submission toggle.',
+    description:
+      'Value of the key that is passed into the description of the file submission toggle.',
   },
 });

@@ -50,9 +50,20 @@ const popoverStyles = {
 
 const TypePopover = (props) => {
   const {
-    intl, open, anchorEl, onRequestClose, fontFamilyValue, onChangeFontFamily, fontSizeValue,
-    onChangeFontSize, onClickColorPicker, colorPickerPopoverOpen, colorPickerPopoverAnchorEl,
-    onRequestCloseColorPickerPopover, colorPickerColor, onChangeCompleteColorPicker,
+    intl,
+    open,
+    anchorEl,
+    onRequestClose,
+    fontFamilyValue,
+    onChangeFontFamily,
+    fontSizeValue,
+    onChangeFontSize,
+    onClickColorPicker,
+    colorPickerPopoverOpen,
+    colorPickerPopoverAnchorEl,
+    onRequestCloseColorPickerPopover,
+    colorPickerColor,
+    onChangeCompleteColorPicker,
   } = props;
 
   return (

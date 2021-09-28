@@ -24,7 +24,7 @@ export default function (state = {}, action) {
         ...state,
         [topicId]: {
           ...state[topicId],
-          postIds: state[topicId].postIds.filter(id => id !== postId),
+          postIds: state[topicId].postIds.filter((id) => id !== postId),
         },
       };
     }

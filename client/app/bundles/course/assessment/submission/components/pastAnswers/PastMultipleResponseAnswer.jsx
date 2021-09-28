@@ -8,21 +8,21 @@ function MultipleResponse({ question, answer }) {
   const selectedOptions = answer.option_ids;
   return (
     <>
-      {question.options.map(option => (
+      {question.options.map((option) => (
         <RadioButton
           key={option.id}
           value={option.id}
           checked={selectedOptions.indexOf(option.id) !== -1}
-          label={(
+          label={
             <div
               style={
-                (option.correct && selectedOptions.indexOf(option.id) !== -1)
+                option.correct && selectedOptions.indexOf(option.id) !== -1
                   ? { backgroundColor: green50 }
                   : null
               }
               dangerouslySetInnerHTML={{ __html: option.option.trim() }}
             />
-          )}
+          }
           disabled
         />
       ))}

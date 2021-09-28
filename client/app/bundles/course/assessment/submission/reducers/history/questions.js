@@ -6,14 +6,17 @@ export default function (state = {}, action) {
       if (action.payload.history) {
         return {
           ...state,
-          ...action.payload.history.questions.reduce((obj, question) => ({
-            ...obj,
-            [question.id]: {
-              pastAnswersLoaded: false,
-              isLoading: false,
-              answerIds: question.answerIds,
-            },
-          }), {}),
+          ...action.payload.history.questions.reduce(
+            (obj, question) => ({
+              ...obj,
+              [question.id]: {
+                pastAnswersLoaded: false,
+                isLoading: false,
+                answerIds: question.answerIds,
+              },
+            }),
+            {},
+          ),
         };
       }
       return state;
@@ -40,7 +43,7 @@ export default function (state = {}, action) {
     }
     case actions.GET_PAST_ANSWERS_SUCCESS: {
       const { questionId, answers } = action.payload;
-      const answerIds = answers.map(answer => answer.id);
+      const answerIds = answers.map((answer) => answer.id);
       const selected = answerIds.slice(0, defaultPastAnswersDisplayed);
       return {
         ...state,

@@ -1,9 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { injectIntl, defineMessages, intlShape, FormattedMessage } from 'react-intl';
+import {
+  injectIntl,
+  defineMessages,
+  intlShape,
+  FormattedMessage,
+} from 'react-intl';
 import FlatButton from 'material-ui/FlatButton';
-import { showQuestionForm, createSurveyQuestion } from 'course/survey/actions/questions';
+import {
+  showQuestionForm,
+  createSurveyQuestion,
+} from 'course/survey/actions/questions';
 import { questionTypes } from 'course/survey/constants';
 import { formatQuestionFormData } from 'course/survey/utils';
 
@@ -27,18 +35,6 @@ const translations = defineMessages({
 });
 
 class NewQuestionButton extends React.Component {
-  static propTypes = {
-    sectionId: PropTypes.number.isRequired,
-    disabled: PropTypes.bool,
-
-    dispatch: PropTypes.func.isRequired,
-    intl: intlShape.isRequired,
-  };
-
-  static defaultProps = {
-    disabled: false,
-  }
-
   createQuestionHandler = (data) => {
     const { dispatch } = this.props;
 
@@ -46,27 +42,29 @@ class NewQuestionButton extends React.Component {
     const successMessage = <FormattedMessage {...translations.success} />;
     const failureMessage = <FormattedMessage {...translations.failure} />;
     return dispatch(
-      createSurveyQuestion(payload, successMessage, failureMessage)
+      createSurveyQuestion(payload, successMessage, failureMessage),
     );
-  }
+  };
 
   showNewQuestionForm = () => {
     const { dispatch, intl, sectionId } = this.props;
 
-    return dispatch(showQuestionForm({
-      onSubmit: this.createQuestionHandler,
-      formTitle: intl.formatMessage(translations.newQuestion),
-      initialValues: {
-        section_id: sectionId,
-        question_type: questionTypes.MULTIPLE_RESPONSE,
-        required: false,
-        description: '',
-        min_options: null,
-        max_options: null,
-        options: [{}, {}, {}, {}],
-      },
-    }));
-  }
+    return dispatch(
+      showQuestionForm({
+        onSubmit: this.createQuestionHandler,
+        formTitle: intl.formatMessage(translations.newQuestion),
+        initialValues: {
+          section_id: sectionId,
+          question_type: questionTypes.MULTIPLE_RESPONSE,
+          required: false,
+          description: '',
+          min_options: null,
+          max_options: null,
+          options: [{}, {}, {}, {}],
+        },
+      }),
+    );
+  };
 
   render() {
     return (
@@ -79,5 +77,17 @@ class NewQuestionButton extends React.Component {
     );
   }
 }
+
+NewQuestionButton.propTypes = {
+  sectionId: PropTypes.number.isRequired,
+  disabled: PropTypes.bool,
+
+  dispatch: PropTypes.func.isRequired,
+  intl: intlShape.isRequired,
+};
+
+NewQuestionButton.defaultProps = {
+  disabled: false,
+};
 
 export default connect()(injectIntl(NewQuestionButton));

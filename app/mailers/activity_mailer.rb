@@ -24,6 +24,7 @@ class ActivityMailer < ApplicationMailer
       @object = notification.activity.object
       @layout = layout_path
       return unless @object # Object could be deleted already
+
       mail(to: recipient.email, template: view_path)
     end
   end

@@ -1,11 +1,12 @@
+# frozen_string_literal: true
 json.sourceCourse do
   json.(current_course, :id, :title, :start_at)
-  json.duplicationModesAllowed ([].tap do |modes|
+  json.duplicationModesAllowed([].tap do |modes|
     modes << 'COURSE' if current_course.course_duplicable?
     modes << 'OBJECT' if current_course.objects_duplicable?
   end)
   json.enabledComponents map_components_to_frontend_tokens(current_course.enabled_components)
-  json.unduplicableObjectTypes (current_course.disabled_cherrypickable_types.map do |klass|
+  json.unduplicableObjectTypes(current_course.disabled_cherrypickable_types.map do |klass|
     cherrypickable_items_hash[klass]
   end)
 end

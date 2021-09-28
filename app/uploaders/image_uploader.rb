@@ -49,7 +49,7 @@ class ImageUploader < CarrierWave::Uploader::Base
     when 'CarrierWave::Storage::Fog', 'CarrierWave::Storage::AWS'
       begin
         download!(other_uploader.url)
-      rescue StandardError => e
+      rescue StandardError => _e
         download!(other_uploader.medium.url)
       end
     end

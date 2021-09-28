@@ -2,44 +2,43 @@ inherit_from:
   - .rubocop.unhound.yml
 
 AllCops:
-  Include:
-    - '**/Gemfile'
-    - '**/Rakefile'
+  NewCops: enable
   Exclude:
-   - 'bin/*'
-   - 'db/seeds.rb'
-   - 'db/schema.rb'
-   - 'db/migrate/*'
-   - 'vendor/bundle/**/*'
-   - 'client/**/*'
-  TargetRubyVersion: 2.4
+    - 'bin/*'
+    - 'db/seeds.rb'
+    - 'db/schema.rb'
+    - 'db/migrate/*'
+    - 'vendor/bundle/**/*'
+    - 'client/**/*'
+  TargetRubyVersion: 2.5
 
-Metrics/LineLength:
+Bundler/OrderedGems:
+  Enabled: false
+
+Layout/DotPosition:
+  EnforcedStyle: trailing
+
+Layout/EmptyLineAfterMagicComment:
+  Enabled: false
+
+Layout/FirstHashElementIndentation:
+  EnforcedStyle: consistent
+
+Layout/LineLength:
   Max: 120
 
 Metrics/AbcSize:
   Max: 20
 
-Metrics/MethodLength:
-  Max: 15
-
 Metrics/BlockLength:
   Enabled: false
 
-Rails:
-  Enabled: true
+Metrics/MethodLength:
+  Max: 15
+  CountAsOne: ['array', 'hash', 'heredoc']
 
-Rails/HasAndBelongsToMany:
-  Enabled: false
-
-Rails/SkipsModelValidations:
-  Enabled: false
-
-Rails/ApplicationRecord:
-  Enabled: false
-
-Bundler/OrderedGems:
-  Enabled: false
+Style/AsciiComments:
+  AllowedChars: ['©', '├', '─', '└']
 
 Style/ClassAndModuleChildren:
   EnforcedStyle: compact
@@ -47,35 +46,36 @@ Style/ClassAndModuleChildren:
 Style/Documentation:
   Enabled: false
 
+Style/EmptyMethod:
+  Enabled: false
+
+Style/HashAsLastArrayItem:
+  EnforcedStyle: no_braces
+
+Style/LambdaCall:
+  Exclude:
+    - '**/*.json.jbuilder'
+
+Style/NumericPredicate:
+  EnforcedStyle: comparison
+
 Style/ParallelAssignment:
-  Enabled: false
-
-Style/StringLiterals:
-  EnforcedStyle: single_quotes
-
-Style/WordArray:
-  Enabled: false
-
-Style/SymbolArray:
   Enabled: false
 
 Style/RegexpLiteral:
   AllowInnerSlashes: true
 
-Style/NumericPredicate:
-  EnforcedStyle: comparison
-
-Style/EmptyMethod:
-  Enabled: false
-
 Style/SignalException:
   EnforcedStyle: only_raise
 
-Layout/EmptyLineAfterMagicComment:
+Style/StringLiterals:
+  EnforcedStyle: single_quotes
+
+Style/SymbolArray:
   Enabled: false
 
-Layout/IndentHash:
-  EnforcedStyle: consistent
+Style/TernaryParentheses:
+  EnforcedStyle: require_parentheses_when_complex
 
-Layout/DotPosition:
-  EnforcedStyle: trailing
+Style/WordArray:
+  Enabled: false

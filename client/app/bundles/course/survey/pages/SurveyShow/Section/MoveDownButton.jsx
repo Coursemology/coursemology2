@@ -21,23 +21,19 @@ const translations = defineMessages({
 });
 
 class MoveDownButton extends React.Component {
-  static propTypes = {
-    sectionIndex: PropTypes.number.isRequired,
-    disabled: PropTypes.bool,
-
-    dispatch: PropTypes.func.isRequired,
-  };
-
-  static defaultProps = {
-    disabled: false,
-  }
-
   moveSectionDown = () => {
     const { dispatch, sectionIndex } = this.props;
     const successMessage = <FormattedMessage {...translations.success} />;
     const failureMessage = <FormattedMessage {...translations.failure} />;
-    return dispatch(changeSectionOrder(sectionIndex, sectionIndex + 1, successMessage, failureMessage));
-  }
+    return dispatch(
+      changeSectionOrder(
+        sectionIndex,
+        sectionIndex + 1,
+        successMessage,
+        failureMessage,
+      ),
+    );
+  };
 
   render() {
     return (
@@ -49,5 +45,16 @@ class MoveDownButton extends React.Component {
     );
   }
 }
+
+MoveDownButton.propTypes = {
+  sectionIndex: PropTypes.number.isRequired,
+  disabled: PropTypes.bool,
+
+  dispatch: PropTypes.func.isRequired,
+};
+
+MoveDownButton.defaultProps = {
+  disabled: false,
+};
 
 export default connect()(MoveDownButton);

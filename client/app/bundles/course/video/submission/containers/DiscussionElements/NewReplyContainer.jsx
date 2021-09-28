@@ -19,20 +19,24 @@ const propTypes = {
 };
 
 function mapStateToProps(state, ownProps) {
-  const pendingReplyPost = state.discussion.pendingReplyPosts.get(ownProps.topicId);
+  const pendingReplyPost = state.discussion.pendingReplyPosts.get(
+    ownProps.topicId,
+  );
 
   return {
     content: pendingReplyPost.content,
     disabled: pendingReplyPost.status === postRequestingStatuses.LOADING,
-    submitButtonText: (<FormattedMessage {...translations.reply} />),
+    submitButtonText: <FormattedMessage {...translations.reply} />,
   };
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
   return {
     onSubmit: () => dispatch(submitNewReplyToServer(ownProps.topicId)),
-    onCancel: () => dispatch(updateReply(ownProps.topicId, { editorVisible: false })),
-    onContentUpdate: content => dispatch(updateReply(ownProps.topicId, { content })),
+    onCancel: () =>
+      dispatch(updateReply(ownProps.topicId, { editorVisible: false })),
+    onContentUpdate: (content) =>
+      dispatch(updateReply(ownProps.topicId, { content })),
   };
 }
 

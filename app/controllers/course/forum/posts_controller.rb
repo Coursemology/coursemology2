@@ -12,6 +12,7 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
     result = @post.class.transaction do
       raise ActiveRecord::Rollback unless @post.save && create_topic_subscription && update_topic_pending_status
       raise ActiveRecord::Rollback unless @topic.update_column(:latest_post_at, @post.created_at)
+
       true
     end
 
@@ -33,7 +34,7 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
   end
 
   def update
-    if @post.update_attributes(post_params)
+    if @post.update(post_params)
       redirect_to course_forum_topic_path(current_course, @forum, @topic),
                   success: t('course.discussion.posts.update.success')
     else
@@ -80,6 +81,7 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
     # Show up to reply-post + 2 parent posts
     2.times do
       break if node.parent.nil?
+
       @post_chain << node.parent
       node = node.parent
     end
@@ -121,6 +123,7 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
 
   def send_created_notification(post)
     return unless current_user
+
     Course::Forum::PostNotifier.post_replied(current_user, current_course_user, post)
   end
 

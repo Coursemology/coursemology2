@@ -1,6 +1,11 @@
 import { deleteIfFound, updateOrAppend } from 'lib/helpers/reducer-helpers';
 import actionTypes from '../constants';
-import { groupItemsUnderMilestones, initializeVisibility, generateTypeKey, generateVisibilitySettings } from './utils';
+import {
+  groupItemsUnderMilestones,
+  initializeVisibility,
+  generateTypeKey,
+  generateVisibilitySettings,
+} from './utils';
 
 const initialState = {
   items: [],
@@ -27,7 +32,9 @@ export default function (state = initialState, action) {
     }
     case actionTypes.LOAD_LESSON_PLAN_SUCCESS: {
       const items = action.items.map(generateTypeKey);
-      const visibilitySettings = generateVisibilitySettings(action.visibilitySettings);
+      const visibilitySettings = generateVisibilitySettings(
+        action.visibilitySettings,
+      );
       return {
         ...state,
         items,
@@ -38,7 +45,9 @@ export default function (state = initialState, action) {
       };
     }
     case actionTypes.ITEM_UPDATE_SUCCESS: {
-      const item = action.item.lesson_plan_item_type ? generateTypeKey(action.item) : action.item;
+      const item = action.item.lesson_plan_item_type
+        ? generateTypeKey(action.item)
+        : action.item;
       const items = updateOrAppend(state.items, item);
       return {
         ...state,

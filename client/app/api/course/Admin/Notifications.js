@@ -11,6 +11,9 @@ export default class NotificationsAPI extends BaseAdminAPI {
    * error response: {}
    */
   update(params) {
-    return this.getClient().patch(`${this._getUrlPrefix()}/notifications`, params);
+    return this.getClient().patch(
+      `${this._getUrlPrefix()}/notifications`,
+      params,
+    );
   }
 }

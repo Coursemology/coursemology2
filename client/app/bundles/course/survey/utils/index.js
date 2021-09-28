@@ -16,19 +16,24 @@ export const sorts = {
 export const sortAttributeArray = (
   item,
   attribute,
-  mapMethod = attr => attr,
-  sortMethod = sorts.byWeight
+  mapMethod = (attr) => attr,
+  sortMethod = sorts.byWeight,
 ) => {
   const attributeArray = item[attribute];
-  if (!attributeArray) { return item; }
-  return { ...item, [attribute]: attributeArray.map(mapMethod).sort(sortMethod) };
+  if (!attributeArray) {
+    return item;
+  }
+  return {
+    ...item,
+    [attribute]: attributeArray.map(mapMethod).sort(sortMethod),
+  };
 };
 
-const sortQuestionElements = question => sortAttributeArray(question, 'options');
+const sortQuestionElements = (question) =>
+  sortAttributeArray(question, 'options');
 
-export const sortSectionElements = section => (
-  sortAttributeArray(section, 'questions', sortQuestionElements)
-);
+export const sortSectionElements = (section) =>
+  sortAttributeArray(section, 'questions', sortQuestionElements);
 
 /**
  * Returns the given survey with it's descendent elements sorted appropriately.
@@ -36,13 +41,18 @@ export const sortSectionElements = section => (
  * @param {Object} survey
  * @return {Object} The updated survey
  */
-export const sortSurveyElements = survey => (
-  sortAttributeArray(survey, 'sections', sortSectionElements)
-);
+export const sortSurveyElements = (survey) =>
+  sortAttributeArray(survey, 'sections', sortSectionElements);
 
 const sortResultsQuestionElements = (question) => {
-  const sortAnswersByStudentName = (a, b) => a.course_user_name.localeCompare(b.course_user_name);
-  return sortAttributeArray(question, 'answers', attr => attr, sortAnswersByStudentName);
+  const sortAnswersByStudentName = (a, b) =>
+    a.course_user_name.localeCompare(b.course_user_name);
+  return sortAttributeArray(
+    question,
+    'answers',
+    (attr) => attr,
+    sortAnswersByStudentName,
+  );
 };
 
 /**
@@ -53,26 +63,32 @@ const sortResultsQuestionElements = (question) => {
  * @param {Object} section
  * @return {Object} The updated section
  */
-export const sortResultsSectionElements = anonymous => section => (
-  anonymous ? sortAttributeArray(section, 'questions')
-    : sortAttributeArray(section, 'questions', sortResultsQuestionElements)
-);
+export const sortResultsSectionElements = (anonymous) => (section) =>
+  anonymous
+    ? sortAttributeArray(section, 'questions')
+    : sortAttributeArray(section, 'questions', sortResultsQuestionElements);
 
-export const sortSurveysByDate = surveys => surveys.sort((a, b) => {
-  const dateOrder = new Date(a.start_at) - new Date(b.start_at);
-  return dateOrder === 0 ? a.title.localeCompare(b.title) : dateOrder;
-});
+export const sortSurveysByDate = (surveys) =>
+  surveys.sort((a, b) => {
+    const dateOrder = new Date(a.start_at) - new Date(b.start_at);
+    return dateOrder === 0 ? a.title.localeCompare(b.title) : dateOrder;
+  });
 
 export const formatQuestionFormData = (data) => {
   const payload = new FormData();
   const filledOptions = data.options.filter(
-    option => option && (option.option || option.file || option.image_url)
+    (option) => option && (option.option || option.file || option.image_url),
   );
   const filledOptionsCount = filledOptions.length;
 
   [
-    'question_type', 'description', 'max_options', 'min_options', 'required',
-    'grid_view', 'section_id',
+    'question_type',
+    'description',
+    'max_options',
+    'min_options',
+    'required',
+    'grid_view',
+    'section_id',
   ].forEach((field) => {
     if (data[field] !== undefined && data[field] !== null) {
       payload.append(`question[${field}]`, data[field]);
@@ -82,7 +98,10 @@ export const formatQuestionFormData = (data) => {
   filledOptions.forEach((option, index) => {
     ['id', 'option', 'file'].forEach((field) => {
       if (option[field] !== undefined && option[field] !== null) {
-        payload.append(`question[options_attributes][${index}][${field}]`, option[field]);
+        payload.append(
+          `question[options_attributes][${index}][${field}]`,
+          option[field],
+        );
       }
     });
     payload.append(`question[options_attributes][${index}][weight]`, index + 1);
@@ -91,8 +110,14 @@ export const formatQuestionFormData = (data) => {
   if (data.optionsToDelete) {
     data.optionsToDelete.forEach((option, index) => {
       const arrayIndex = filledOptionsCount + index;
-      payload.append(`question[options_attributes][${arrayIndex}][id]`, option.id);
-      payload.append(`question[options_attributes][${arrayIndex}][_destroy]`, true);
+      payload.append(
+        `question[options_attributes][${arrayIndex}][id]`,
+        option.id,
+      );
+      payload.append(
+        `question[options_attributes][${arrayIndex}][_destroy]`,
+        true,
+      );
     });
   }
 
@@ -108,7 +133,5 @@ export const formatSurveyFormData = (data) => {
     payload.time_bonus_exp = 0;
   }
 
-  return (
-    { survey: payload }
-  );
+  return { survey: payload };
 };

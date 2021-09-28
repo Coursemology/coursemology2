@@ -17,17 +17,6 @@ const styles = {
 };
 
 class Popup extends React.Component {
-  static propTypes = {
-    title: PropTypes.string,
-    onDismiss: PropTypes.func,
-    children: PropTypes.node,
-    actionButtons: PropTypes.arrayOf(PropTypes.node),
-  }
-
-  static defaultProps = {
-    actionButtons: [],
-  }
-
   render() {
     const { title, children, actionButtons, onDismiss } = this.props;
     const dismissButton = (
@@ -48,10 +37,21 @@ class Popup extends React.Component {
         bodyStyle={styles.centralise}
         onRequestClose={this.props.onDismiss}
       >
-        { children }
+        {children}
       </Dialog>
     );
   }
 }
+
+Popup.propTypes = {
+  title: PropTypes.string,
+  onDismiss: PropTypes.func,
+  children: PropTypes.node,
+  actionButtons: PropTypes.arrayOf(PropTypes.node),
+};
+
+Popup.defaultProps = {
+  actionButtons: [],
+};
 
 export default Popup;

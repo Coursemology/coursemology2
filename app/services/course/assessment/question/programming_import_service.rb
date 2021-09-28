@@ -17,14 +17,13 @@ class Course::Assessment::Question::ProgrammingImportService
   # Imports the templates and tests found in the package.
   def import
     @attachment.open(binmode: true) do |temporary_file|
-      begin
-        package = Course::Assessment::ProgrammingPackage.new(temporary_file)
-        import_from_package(package)
-      ensure
-        next unless package
-        temporary_file.close
-        package.close
-      end
+      package = Course::Assessment::ProgrammingPackage.new(temporary_file)
+      import_from_package(package)
+    ensure
+      next unless package
+
+      temporary_file.close
+      package.close
     end
   end
 
@@ -52,6 +51,7 @@ class Course::Assessment::Question::ProgrammingImportService
     evaluation_result = evaluate_package(package)
 
     raise evaluation_result if evaluation_result.error?
+
     save!(template_files, evaluation_result)
   end
 
@@ -97,7 +97,7 @@ class Course::Assessment::Question::ProgrammingImportService
   def build_combined_test_case_records(test_reports)
     test_cases = []
 
-    test_reports.values.each do |test_report|
+    test_reports.each_value do |test_report|
       test_cases += build_test_case_records(test_report)
     end
 

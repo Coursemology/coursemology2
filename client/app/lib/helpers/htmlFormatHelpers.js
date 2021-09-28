@@ -5,11 +5,11 @@
  * @returns {String} The string with HTML tags removed.
  */
 function stripHtmlTags(str) {
-  if ((str === null) || (str === '')) { return ''; }
+  if (str === null || str === '') {
+    return '';
+  }
 
   return str.replace(/<[^>]*>/g, '');
 }
 
-export {
-  stripHtmlTags,
-};
+export default stripHtmlTags;

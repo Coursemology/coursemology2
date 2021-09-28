@@ -7,7 +7,6 @@ class AddAwardedAtAndDraftExpToCourseExperiencePointsRecords < ActiveRecord::Mig
 
     Course::Assessment::Submission.joins(:experience_points_record).
       where(workflow_state: ['attempting', 'submitted', 'graded']).find_each do |submission|
-
       # Shift exp to draft exp
       points_awarded = submission.points_awarded
       submission.experience_points_record.update_columns(
@@ -17,7 +16,6 @@ class AddAwardedAtAndDraftExpToCourseExperiencePointsRecords < ActiveRecord::Mig
 
     Course::Assessment::Submission.joins(:experience_points_record).
       where(workflow_state: 'published').find_each do |submission|
-
       # Update awarded_at and awarder_id
       awarded_at = submission.experience_points_record.updated_at
       awarder_id = submission.experience_points_record.updater_id

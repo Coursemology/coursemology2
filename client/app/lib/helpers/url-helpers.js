@@ -1,13 +1,13 @@
 /* eslint-disable max-len */
 
 /* Get the given parameter from the URL.
-* e.g. With this URL -> http://dummy.com/?technology=jquery&blog=jquerybyexample
-*
-* var tech = getUrlParameter('technology');
-* var blog = getUrlParameter('blog');
-*
-* Taken from http://stackoverflow.com/questions/19491336/get-url-parameter-jquery-or-how-to-get-query-string-values-in-js
-*/
+ * e.g. With this URL -> http://dummy.com/?technology=jquery&blog=jquerybyexample
+ *
+ * var tech = getUrlParameter('technology');
+ * var blog = getUrlParameter('blog');
+ *
+ * Taken from http://stackoverflow.com/questions/19491336/get-url-parameter-jquery-or-how-to-get-query-string-values-in-js
+ */
 function getUrlParameter(sParam) {
   const sPageURL = decodeURIComponent(window.location.search.substring(1));
   const sURLVariables = sPageURL.split('&');
@@ -39,7 +39,9 @@ function getCourseId() {
  * return {number}
  */
 function getSurveyId() {
-  const match = window.location.pathname.match(/^\/courses\/\d+\/surveys\/(\d+)/);
+  const match = window.location.pathname.match(
+    /^\/courses\/\d+\/surveys\/(\d+)/,
+  );
   return match && match[1];
 }
 
@@ -49,7 +51,9 @@ function getSurveyId() {
  * return {number}
  */
 function getAssessmentId() {
-  const match = window.location.pathname.match(/^\/courses\/\d+\/assessments\/(\d+)/);
+  const match = window.location.pathname.match(
+    /^\/courses\/\d+\/assessments\/(\d+)/,
+  );
   return match && match[1];
 }
 
@@ -59,7 +63,9 @@ function getAssessmentId() {
  * return {number}
  */
 function getSubmissionId() {
-  const match = window.location.pathname.match(/^\/courses\/\d+\/assessments\/\d+\/submissions\/(\d+)/);
+  const match = window.location.pathname.match(
+    /^\/courses\/\d+\/assessments\/\d+\/submissions\/(\d+)/,
+  );
   return match && match[1];
 }
 
@@ -69,7 +75,9 @@ function getSubmissionId() {
  * return {number}
  */
 function getScribingId() {
-  const match = window.location.pathname.match(/^\/courses\/\d+\/assessments\/\d+\/question\/scribing\/(\d+)/);
+  const match = window.location.pathname.match(
+    /^\/courses\/\d+\/assessments\/\d+\/question\/scribing\/(\d+)/,
+  );
   return match && match[1];
 }
 
@@ -79,7 +87,9 @@ function getScribingId() {
  * @returns {number}
  */
 function getVideoId() {
-  const match = window.location.pathname.match(/^\/courses\/\d+\/videos\/(\d+)/);
+  const match = window.location.pathname.match(
+    /^\/courses\/\d+\/videos\/(\d+)/,
+  );
   return match && match[1];
 }
 
@@ -89,7 +99,9 @@ function getVideoId() {
  * return {number}
  */
 function getVideoSubmissionId() {
-  const match = window.location.pathname.match(/^\/courses\/\d+\/videos\/\d+\/submissions\/(\d+)/);
+  const match = window.location.pathname.match(
+    /^\/courses\/\d+\/videos\/\d+\/submissions\/(\d+)/,
+  );
   return match && match[1];
 }
 

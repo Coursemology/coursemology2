@@ -20,6 +20,7 @@ class Course::UserNotificationsController < Course::Controller
   # @return [nil] if there are no unread notifications, or no +current_course_user+.
   def next_popup_notification
     return unless current_course_user
+
     notification = UserNotification.next_unread_popup_for(current_course_user)
     notification && render_to_string("#{helpers.notification_view_path(notification)}.json",
                                      locals: { notification: notification })

@@ -16,7 +16,12 @@ class Programming extends React.Component {
       <>
         {fields.map((fieldName, index) => {
           const file = fields.get(index);
-          return <ProgrammingFile key={file.id} {...{ file, fieldName, readOnly, answerId, language }} />;
+          return (
+            <ProgrammingFile
+              key={file.id}
+              {...{ file, fieldName, readOnly, answerId, language }}
+            />
+          );
         })}
       </>
     );
@@ -27,27 +32,23 @@ class Programming extends React.Component {
     const fileSubmission = question.fileSubmission;
     return (
       <div>
-        {
-          fileSubmission
-            ? (
-              <ProgrammingImportEditor
-                questionId={question.id}
-                answerId={answerId}
-                {...{ readOnly, question }}
-              />
-            )
-            : (
-              <FieldArray
-                name={`${answerId}[files_attributes]`}
-                component={Programming.renderProgrammingFiles}
-                {...{
-                  readOnly,
-                  answerId,
-                  language: parseLanguages(question.language),
-                }}
-              />
-            )
-        }
+        {fileSubmission ? (
+          <ProgrammingImportEditor
+            questionId={question.id}
+            answerId={answerId}
+            {...{ readOnly, question }}
+          />
+        ) : (
+          <FieldArray
+            name={`${answerId}[files_attributes]`}
+            component={Programming.renderProgrammingFiles}
+            {...{
+              readOnly,
+              answerId,
+              language: parseLanguages(question.language),
+            }}
+          />
+        )}
         <TestCaseView questionId={question.id} />
       </div>
     );

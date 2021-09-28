@@ -24,8 +24,8 @@ module Course::Assessment::Submission::TodoConcern
     elsif submitted? || graded? || published?
       todo.update_attribute(:workflow_state, 'completed') unless todo.completed?
     end
-  rescue ActiveRecord::ActiveRecordError => error
-    raise ActiveRecord::Rollback, error.message
+  rescue ActiveRecord::ActiveRecordError => e
+    raise ActiveRecord::Rollback, e.message
   end
 
   # Skip callback if assessment is deleted as todo will be deleted.
@@ -33,7 +33,7 @@ module Course::Assessment::Submission::TodoConcern
     return if assessment.destroying? || todo.nil?
 
     todo.update_attribute(:workflow_state, 'not_started') unless todo.not_started?
-  rescue ActiveRecord::ActiveRecordError => error
-    raise ActiveRecord::Rollback, error.message
+  rescue ActiveRecord::ActiveRecordError => e
+    raise ActiveRecord::Rollback, e.message
   end
 end

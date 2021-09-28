@@ -87,6 +87,7 @@ class Course::Assessment::Question::TextResponse < ApplicationRecord
 
   def validate_grade
     return unless !comprehension_question? && solutions.any? { |s| s.grade > maximum_grade }
+
     errors.add(:maximum_grade, :invalid_grade)
   end
 end

@@ -22,7 +22,9 @@ const styles = {
 };
 
 function renderImage(imageSrc, fileName) {
-  return imageSrc ? <img src={imageSrc} style={styles.image} alt={fileName} /> : (
+  return imageSrc ? (
+    <img src={imageSrc} style={styles.image} alt={fileName} />
+  ) : (
     <div>
       <InsertDriveFileIcon
         style={{
@@ -35,18 +37,6 @@ function renderImage(imageSrc, fileName) {
 }
 
 export default class ImagePreview extends React.Component {
-  static propTypes = {
-    file: PropTypes.object,
-    originalName: PropTypes.string,
-    originalUrl: PropTypes.string,
-    handleCancel: PropTypes.func,
-    render: PropTypes.func,
-  };
-
-  static defaultProps = {
-    render: renderImage,
-  };
-
   getImage() {
     const { originalUrl, file } = this.props;
     const isImage = file.type.includes('image/');
@@ -62,7 +52,8 @@ export default class ImagePreview extends React.Component {
   }
 
   render() {
-    const { file, originalName, originalUrl, handleCancel, render } = this.props;
+    const { file, originalName, originalUrl, handleCancel, render } =
+      this.props;
     const fileName = file ? file.name : originalName;
     const imageSrc = file ? this.getImage() : originalUrl;
 
@@ -73,8 +64,22 @@ export default class ImagePreview extends React.Component {
           {render(imageSrc, fileName)}
         </div>
         <div className="file-name">{fileName}</div>
-        <div><FormattedMessage {...translations.dropzone} /></div>
+        <div>
+          <FormattedMessage {...translations.dropzone} />
+        </div>
       </>
     );
   }
 }
+
+ImagePreview.propTypes = {
+  file: PropTypes.object,
+  originalName: PropTypes.string,
+  originalUrl: PropTypes.string,
+  handleCancel: PropTypes.func,
+  render: PropTypes.func,
+};
+
+ImagePreview.defaultProps = {
+  render: renderImage,
+};

@@ -4,6 +4,4 @@ json.partial! 'package_ui'
 json.partial! 'test_ui'
 json.partial! 'import_result'
 
-if @response
-  json.partial! 'response', locals: { response: @response }
-end
+json.partial! 'response', locals: { response: @response } if @response

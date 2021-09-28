@@ -4,14 +4,19 @@ export default function (state = {}, action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_SUCCESS:
     case actions.FINALISE_SUCCESS:
-      return action.payload.answers.reduce((obj, answer) => ({
-        ...obj,
-        [answer.questionId]: {
-          isResetting: false,
-          isAutograding: !!answer.autograding && answer.autograding.status === 'submitted',
-          jobError: !!answer.autograding && answer.autograding.status === 'errored',
-        },
-      }), {});
+      return action.payload.answers.reduce(
+        (obj, answer) => ({
+          ...obj,
+          [answer.questionId]: {
+            isResetting: false,
+            isAutograding:
+              !!answer.autograding && answer.autograding.status === 'submitted',
+            jobError:
+              !!answer.autograding && answer.autograding.status === 'errored',
+          },
+        }),
+        {},
+      );
     case actions.AUTOGRADE_REQUEST: {
       const { questionId } = action;
       return {

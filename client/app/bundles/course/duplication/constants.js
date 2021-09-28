@@ -1,9 +1,6 @@
 import mirrorCreator from 'mirror-creator';
 
-export const duplicationModes = mirrorCreator([
-  'OBJECT',
-  'COURSE',
-]);
+export const duplicationModes = mirrorCreator(['OBJECT', 'COURSE']);
 
 // These are mirrored in app/helpers/course/object_duplications_helper.rb
 export const duplicableItemTypes = mirrorCreator([
@@ -27,9 +24,7 @@ export const itemSelectorPanels = mirrorCreator([
   'VIDEOS',
 ]);
 
-export const formNames = mirrorCreator([
-  'NEW_COURSE',
-]);
+export const formNames = mirrorCreator(['NEW_COURSE']);
 
 const actionTypes = mirrorCreator([
   'LOAD_OBJECTS_LIST_REQUEST',

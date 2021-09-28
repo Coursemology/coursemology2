@@ -1,31 +1,31 @@
-var FORM_HELPERS = (function ($){
+var FORM_HELPERS = (function ($) {
   'use strict';
 
-   /**
-    * Returns a method that renders templates from a given default path.
-    *
-    * @param {String} defaultPath The absolute path to where the templates reside.
-    * @return {renderFromPath~inner} The renderer.
-    */
-   function renderFromPath(defaultPath) {
-     /**
-      * Renders a specified template.
-      *
-      * @param {String} template The relative path to the template. Absolute paths or paths
-      *   beginning with a period are not expanded.
-      * @param {Object} locals The local variables to be given to the template.
-      * @return {String} The rendered template.
-      */
-     function render(template, locals) {
-       if (template[0] !== '/' && template[0] !== '.') {
-         template = defaultPath + template;
-       }
+  /**
+   * Returns a method that renders templates from a given default path.
+   *
+   * @param {String} defaultPath The absolute path to where the templates reside.
+   * @return {renderFromPath~inner} The renderer.
+   */
+  function renderFromPath(defaultPath) {
+    /**
+     * Renders a specified template.
+     *
+     * @param {String} template The relative path to the template. Absolute paths or paths
+     *   beginning with a period are not expanded.
+     * @param {Object} locals The local variables to be given to the template.
+     * @return {String} The rendered template.
+     */
+    function render(template, locals) {
+      if (template[0] !== '/' && template[0] !== '.') {
+        template = defaultPath + template;
+      }
 
-       return JST[template](locals);
-     }
+      return JST[template](locals);
+    }
 
-     return render;
-   }
+    return render;
+  }
 
   /**
    * Finds the form fields in the given form.
@@ -42,7 +42,7 @@ var FORM_HELPERS = (function ($){
     }
 
     return $result;
-  };
+  }
 
   /**
    * Builds the form data from the given form.
@@ -50,15 +50,16 @@ var FORM_HELPERS = (function ($){
    * @param {jQuery} $form The form being submitted.
    * @returns {Array} The form data to be submitted.
    */
-  function buildFormData ($form) {
-    var data = $form.find(":input").serializeArray();
+  function buildFormData($form) {
+    var data = $form.find(':input').serializeArray();
     var token = {
-      authenticity_token: $(document).find('meta[name="csrf-token"]').attr('content')
+      authenticity_token: $(document)
+        .find('meta[name="csrf-token"]')
+        .attr('content'),
     };
     data.push(token);
     return data;
-  };
-
+  }
 
   /**
    * @callback formSubmitSuccessCallback
@@ -66,11 +67,11 @@ var FORM_HELPERS = (function ($){
    * @param {HTMLElement} form The submitted form
    */
 
-   /**
-    * @callback formSubmitFailureCallback
-    * @param {data} data The server response
-    * @param {HTMLElement} form The submitted form
-    */
+  /**
+   * @callback formSubmitFailureCallback
+   * @param {data} data The server response
+   * @param {HTMLElement} form The submitted form
+   */
 
   /**
    * Submits a form and disable form input.
@@ -79,7 +80,7 @@ var FORM_HELPERS = (function ($){
    * @param {formSubmitSuccessCallback} successHandler
    * @param {formSubmitFailureCallback} failureHandler
    */
-  function submitAndDisableForm ($form, successHandler, failureHandler) {
+  function submitAndDisableForm($form, successHandler, failureHandler) {
     if ($form.is('form')) {
       var action = $form.attr('action');
       var method = $form.attr('method');
@@ -90,9 +91,13 @@ var FORM_HELPERS = (function ($){
       var data = buildFormData($form);
     }
 
-    $.ajax({ url: action, method: method, data: data }).
-      done(function(data) { successHandler(data, $form[0]); }).
-      fail(function(data) { failureHandler(data, $form[0]); });
+    $.ajax({ url: action, method: method, data: data })
+      .done(function (data) {
+        successHandler(data, $form[0]);
+      })
+      .fail(function (data) {
+        failureHandler(data, $form[0]);
+      });
 
     findFormFields($form).prop('disabled', true);
   }
@@ -129,6 +134,6 @@ var FORM_HELPERS = (function ($){
     submitAndDisableForm: submitAndDisableForm,
     enableForm: enableForm,
     parentFormForElement: parentFormForElement,
-    removeParentForm: removeParentForm
+    removeParentForm: removeParentForm,
   };
-}(jQuery));
+})(jQuery);

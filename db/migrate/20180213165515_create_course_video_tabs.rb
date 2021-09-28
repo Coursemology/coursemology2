@@ -3,8 +3,8 @@ class CreateCourseVideoTabs < ActiveRecord::Migration[5.1]
   def change
     create_table :course_video_tabs do |t|
       t.references :course, null: false,
-                   type: :integer,
-                   foreign_key: { to_table: :courses }
+                            type: :integer,
+                            foreign_key: { to_table: :courses }
       t.string :title, null: false, limit: 255
       t.integer :weight, null: false
 

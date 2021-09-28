@@ -20,8 +20,8 @@ class Course::Survey::ResponsesController < Course::Survey::Controller
     else
       render json: { error: t('course.survey.responses.no_course_user') }, status: :bad_request
     end
-  rescue ActiveRecord::RecordInvalid => error
-    handle_create_error(error)
+  rescue ActiveRecord::RecordInvalid => e
+    handle_create_error(e)
   end
 
   def show

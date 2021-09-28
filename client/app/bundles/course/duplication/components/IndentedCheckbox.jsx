@@ -14,16 +14,14 @@ const styles = {
 
 const IndentedCheckbox = ({ indentLevel, children, ...props }) => {
   const checkboxStyle = { marginLeft: indentLevel * styles.tabSize };
-  if (children) { checkboxStyle.width = 'auto'; }
+  if (children) {
+    checkboxStyle.width = 'auto';
+  }
 
   return (
     <div style={styles.row}>
-      <Checkbox
-        labelStyle={styles.label}
-        style={checkboxStyle}
-        {...props}
-      />
-      { children }
+      <Checkbox labelStyle={styles.label} style={checkboxStyle} {...props} />
+      {children}
     </div>
   );
 };

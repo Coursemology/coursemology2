@@ -40,7 +40,8 @@ RSpec.describe Course::Assessment::Submission::AutoGradingService do
         end
         let!(:answer) do
           create(:course_assessment_answer_programming, :submitted, current_answer: true,
-                 question: non_autograded_question.acting_as, submission: submission).answer
+                                                                    question: non_autograded_question.acting_as,
+                                                                    submission: submission).answer
         end
         it 'evaluates the answer' do
           expect(subject.grade(submission)).to eq(true)

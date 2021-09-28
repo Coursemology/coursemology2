@@ -59,10 +59,10 @@ RSpec.describe TrackableJob do
 
       context 'when the job was already completed' do
         it 'does not notify listeners' do
-          subject.update_attributes(id: SecureRandom.uuid, status: :completed)
+          subject.update(id: SecureRandom.uuid, status: :completed)
 
           expect(subject).not_to receive(:signal)
-          subject.update_attributes(redirect_to: '')
+          subject.update(redirect_to: '')
         end
       end
     end
