@@ -7,7 +7,9 @@ class RailsConfirmationDialog extends React.Component {
     super(props);
     this.state = { open: true, disableButtons: false };
     this.onConfirm = this.onConfirm.bind(this);
-    this.onConfirmCustom = this.props.onConfirmCustomCallback ? this.onConfirmCustom.bind(this) : null;
+    this.onConfirmCustom = this.props.onConfirmCustomCallback
+      ? this.onConfirmCustom.bind(this)
+      : null;
   }
 
   // Disable buttons once the confirm button is clicked, then do confirm callback.

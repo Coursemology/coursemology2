@@ -3,9 +3,10 @@ module Course::Assessment::Question::MultipleResponsesConcern
   extend ActiveSupport::Concern
 
   def switch_mcq_mrq_type(multiple_choice, unsubmit)
-    if multiple_choice == 'true'
+    case multiple_choice
+    when 'true'
       @multiple_response_question.grading_scheme = :any_correct
-    elsif multiple_choice == 'false'
+    when 'false'
       @multiple_response_question.grading_scheme = :all_correct
     end
     @multiple_response_question.save!

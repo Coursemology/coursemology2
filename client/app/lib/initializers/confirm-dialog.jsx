@@ -40,7 +40,7 @@ function loadCustomDialogue(element, successCallback) {
         confirmButtonCustomText={element.attr('data-confirm_custom_text')}
       />
     </ProviderWrapper>,
-    mountNode
+    mountNode,
   );
 }
 
@@ -88,7 +88,14 @@ function overrideConfirmDialog() {
       // Element is a remote link, button, etc.
       // Additional params appended to the href link
       if (custom) {
-        element.parent().attr('href', `${element.parent().attr('href')}&${element.attr('data-confirm_custom')}`);
+        element
+          .parent()
+          .attr(
+            'href',
+            `${element.parent().attr('href')}&${element.attr(
+              'data-confirm_custom',
+            )}`,
+          );
       }
       element.trigger('click');
       if ($.rails.isRemote(element)) {
@@ -102,10 +109,14 @@ function overrideConfirmDialog() {
   // Handler for elements with data-confirm attribute.
   // This intercepts Rail's popup implementation and renders a dialog instead.
   $.rails.allowAction = (element) => {
-    if (!element.attr('data-confirm')) { return true; }
+    if (!element.attr('data-confirm')) {
+      return true;
+    }
     if (element.attr('data-confirm_custom')) {
       loadCustomDialogue(element, onConfirm);
-    } else { loadDialogue(element, onConfirm); }
+    } else {
+      loadDialogue(element, onConfirm);
+    }
 
     // Always stops the action since code runs asynchronously
     return false;

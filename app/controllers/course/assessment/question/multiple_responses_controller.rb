@@ -31,6 +31,7 @@ class Course::Assessment::Question::MultipleResponsesController < Course::Assess
       switch_mcq_mrq_type(params[:multiple_choice], params[:unsubmit])
       return render 'edit' unless params.key?(:redirect_to_assessment_show) &&
                                   params[:redirect_to_assessment_show] == 'true'
+
       return redirect_to course_assessment_path(current_course, @assessment),
                          success: params[:multiple_choice] ? t('.switch_mrq_success') : t('.switch_mcq_success')
     end
