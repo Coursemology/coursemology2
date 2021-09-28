@@ -70,7 +70,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions', js: true do
         expect(page).to have_text(staff_submission.current_points_awarded)
 
         # Course staff unsubmits own submission
-        unsubmit_btn = "unsubmit-button-#{staff_submission.id.to_s}"
+        unsubmit_btn = "unsubmit-button-#{staff_submission.id}"
         expect(find_button(unsubmit_btn)).to be_present
         find_button(unsubmit_btn).click
         accept_confirm_dialog
@@ -79,7 +79,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions', js: true do
         expect(page).to_not have_button(unsubmit_btn)
 
         # Course staff deletes own attempt
-        delete_btn = "delete-button-#{staff_submission.id.to_s}"
+        delete_btn = "delete-button-#{staff_submission.id}"
         expect(find_button(delete_btn)).to be_present
         find_button(delete_btn).click
         accept_confirm_dialog
