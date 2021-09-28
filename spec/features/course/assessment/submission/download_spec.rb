@@ -24,19 +24,23 @@ RSpec.describe 'Course: Assessment: Submissions: Download', js: true do
         visit course_assessment_submissions_path(course, assessment)
 
         find('#students-tab').click
-        find('#download-dropdown-icon').click
+        find('#submission-dropdown-icon').click
         expect(page).to have_css('.download-submissions-enabled')
       end
 
-      context 'when there are phantom students' do
-        let(:student) { create(:course_student, :phantom, course: course).user }
+      context 'when there are staff' do
+        let(:course_staff) { create(:course_teaching_assistant, course: course) }
+        let!(:staff_submission) do
+          create(:submission, :graded, assessment: assessment, course: course,
+                                       creator: course_staff.user)
+        end
 
         scenario 'I can download all submissions by phantom students' do
           submission
           visit course_assessment_submissions_path(course, assessment)
 
-          find('#others-tab').click
-          find('#download-dropdown-icon').click
+          find('#staff-tab').click
+          find('#submission-dropdown-icon').click
           expect(page).to have_css('.download-submissions-enabled')
         end
       end
@@ -56,7 +60,7 @@ RSpec.describe 'Course: Assessment: Submissions: Download', js: true do
           visit course_assessment_submissions_path(course, assessment)
 
           find('#my-students-tab').click
-          find('#download-dropdown-icon').click
+          find('#submission-dropdown-icon').click
           expect(page).to have_css('.download-submissions-enabled')
         end
       end

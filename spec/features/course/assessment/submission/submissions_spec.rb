@@ -30,6 +30,10 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions', js: true do
 
     context 'As a Course Staff' do
       let(:course_staff) { create(:course_teaching_assistant, course: course) }
+      let!(:staff_submission) do
+        create(:submission, :graded, assessment: assessment, course: course,
+                                     creator: course_staff.user)
+      end
       let(:user) { course_staff.user }
       let(:group_student) do
         # Create a group and add staff and student to group
@@ -45,7 +49,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions', js: true do
 
         expect(page).to have_text(/My Students/i)
         expect(page).to have_text(/Students/i)
-        expect(page).to have_text(/Others/i)
+        expect(page).to have_text(/Staff/i)
 
         find('#students-tab').click
 
@@ -56,9 +60,32 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions', js: true do
         end
 
         # Phantom student did not attempt submissions
-        find('#others-tab').click
+        find('div.toggle-phantom').click
         expect(page).to have_text(phantom_student.name)
         expect(page).to have_text('Not Started')
+
+        # Course staff attempted a submission
+        find('#staff-tab').click
+        expect(page).to have_text(staff_submission.course_user.name)
+        expect(page).to have_text(staff_submission.current_points_awarded)
+
+        # Course staff unsubmits own submission
+        unsubmit_btn = "unsubmit-button-#{staff_submission.id.to_s}"
+        expect(find_button(unsubmit_btn)).to be_present
+        find_button(unsubmit_btn).click
+        accept_confirm_dialog
+
+        expect(page).to have_text('Attempting')
+        expect(page).to_not have_button(unsubmit_btn)
+
+        # Course staff deletes own attempt
+        delete_btn = "delete-button-#{staff_submission.id.to_s}"
+        expect(find_button(delete_btn)).to be_present
+        find_button(delete_btn).click
+        accept_confirm_dialog
+
+        expect(page).not_to have_text('Attempting')
+        expect(page).to_not have_button(delete_btn)
       end
     end
 
@@ -85,6 +112,38 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions', js: true do
         expect(graded_submission.awarded_at).to be_present
         expect(graded_submission.draft_points_awarded).to be_nil
         expect(graded_submission.points_awarded).not_to be_nil
+      end
+
+      scenario 'I can unsubmit all submissions' do
+        visit course_assessment_submissions_path(course, assessment)
+
+        find('#students-tab').click
+        find('#submission-dropdown-icon').click
+        expect(page).to have_css('.unsubmit-submissions-enabled')
+
+        find('.unsubmit-submissions-enabled', wait: 4).click
+        accept_confirm_dialog
+        expect(page).not_to have_text('Graded but not published')
+
+        find('#submission-dropdown-icon').click
+        expect(page).not_to have_css('.unsubmit-submissions-enabled')
+      end
+
+      scenario 'I can delete all submissions' do
+        visit course_assessment_submissions_path(course, assessment)
+
+        find('#students-tab').click
+        find('#submission-dropdown-icon').click
+        expect(page).to have_css('.delete-submissions-enabled')
+
+        find('.delete-submissions-enabled', wait: 4).click
+        accept_confirm_dialog
+        expect(page).to have_text('Not Started')
+        expect(page).not_to have_text('Attempting')
+
+        find('#submission-dropdown-icon').click
+        expect(page).not_to have_css('.delete-submissions-enabled')
+        expect(page).not_to have_css('.unsubmit-submissions-enabled')
       end
     end
   end

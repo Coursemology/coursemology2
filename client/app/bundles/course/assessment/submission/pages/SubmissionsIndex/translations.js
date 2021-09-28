@@ -7,8 +7,8 @@ const translations = defineMessages({
       'The grade and experience points are not visible to the student. \
                     Publish all grades by clicking the button at the top of this page.',
   },
-  studentName: {
-    id: 'course.assessment.submission.submissions.studentName',
+  userName: {
+    id: 'course.assessment.submission.submissions.userName',
     defaultMessage: 'Name',
   },
   submissionStatus: {
@@ -55,9 +55,9 @@ const translations = defineMessages({
     id: 'course.assessment.submission.submissions.students',
     defaultMessage: 'Students',
   },
-  others: {
-    id: 'course.assessment.submission.submissions.others',
-    defaultMessage: 'Others',
+  staff: {
+    id: 'course.assessment.submission.submissions.staff',
+    defaultMessage: 'Staff',
   },
   publishGrades: {
     id: 'course.assessment.submission.submissions.publishGrades',
@@ -65,7 +65,41 @@ const translations = defineMessages({
   },
   includePhantoms: {
     id: 'course.assessment.submission.submissions.includePhantoms',
-    defaultMessage: 'Include phantom students',
+    defaultMessage: 'Include phantom users',
+  },
+  phantom: {
+    id: 'course.assessment.submission.submissions.phantom',
+    defaultMessage: 'Phantom',
+  },
+  unsubmitAllSubmissions: {
+    id: 'course.assessment.submission.unsubmitAllSubmissions',
+    defaultMessage: 'Unsubmit all submission',
+  },
+  unsubmitSubmission: {
+    id: 'course.assessment.submission.unsubmitSubmission',
+    defaultMessage: 'Unsubmit submission',
+  },
+  unsubmitConfirmation: {
+    id: 'course.assessment.submission.unsubmitConfirmation',
+    defaultMessage:
+      'Are you sure you want to UNSUBMIT the submission for {name}? \
+                    This will reset the submission time and permit the user to change \
+                    their submission. NOTE THAT THIS ACTION IS IRREVERSIBLE!',
+  },
+  deleteAllSubmissions: {
+    id: 'course.assessment.submission.deleteAllSubmissions',
+    defaultMessage: 'Delete all submission',
+  },
+  deleteSubmission: {
+    id: 'course.assessment.submission.deleteSubmission',
+    defaultMessage: 'Delete submission',
+  },
+  deleteConfirmation: {
+    id: 'course.assessment.submission.deleteConfirmation',
+    defaultMessage:
+      'Are you sure you want to DELETE the submission for {name}? \
+                    This will delete all attempts, past answers and submissions and the user \
+                    will need to re-attempt all questions. NOTE THAT THIS ACTION IS IRREVERSIBLE!',
   },
 });
 

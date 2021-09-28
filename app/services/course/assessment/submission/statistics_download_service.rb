@@ -41,6 +41,7 @@ class Course::Assessment::Submission::StatisticsDownloadService
 
   def download_statistics_header(csv)
     csv << [I18n.t('course.assessment.submission.submissions.statistics_download_service.name'),
+            I18n.t('course.assessment.submission.submissions.statistics_download_service.phantom'),
             I18n.t('course.assessment.submission.submissions.statistics_download_service.status'),
             I18n.t('course.assessment.submission.submissions.statistics_download_service.grade'),
             I18n.t('course.assessment.submission.submissions.statistics_download_service.max_grade'),
@@ -55,6 +56,7 @@ class Course::Assessment::Submission::StatisticsDownloadService
 
   def download_statistics(csv, submission)
     csv << [submission.course_user.name,
+            submission.course_user.phantom,
             submission.workflow_state,
             submission.grade,
             submission.assessment.maximum_grade,

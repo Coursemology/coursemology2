@@ -51,6 +51,11 @@ class AbilityHost
     end
 
     # @return [Hash] Hash is relative to a component with a +belongs_to+ association with a Course.
+    def course_teaching_assistants_hash
+      course_course_user_hash(:teaching_assistant)
+    end
+
+    # @return [Hash] Hash is relative to a component with a +belongs_to+ association with a Course.
     def course_managers_hash
       course_course_user_hash(*CourseUser::MANAGER_ROLES.to_a)
     end

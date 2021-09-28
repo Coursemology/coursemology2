@@ -19,7 +19,12 @@ class Course::Assessment::Submission::SubmissionsController < \
   delegate_to_service(:load_or_create_answers)
   delegate_to_service(:load_or_create_submission_questions)
 
-  STUDENTS = { my: 'my', phantom: 'phantom' }.freeze
+  COURSE_USERS = { my_students: 'my_students',
+                   my_students_w_phantom: 'my_students_w_phantom',
+                   students: 'students',
+                   students_w_phantom: 'students_w_phantom',
+                   staff: 'staff',
+                   staff_w_phantom: 'staff_w_phantom' }.freeze
 
   def index
     authorize!(:view_all_submissions, @assessment)
@@ -30,7 +35,7 @@ class Course::Assessment::Submission::SubmissionsController < \
         @assessment = @assessment.calculated(:maximum_grade)
         @submissions = @submissions.calculated(:log_count, :graded_at).includes(:answers)
         @my_students = current_course_user&.my_students || []
-        @course_students = current_course.course_users.students.order_alphabetically
+        @course_users = current_course.course_users.order_phantom_user.order_alphabetically
       end
     end
   end
@@ -129,7 +134,7 @@ class Course::Assessment::Submission::SubmissionsController < \
       head :bad_request
     else
       job = Course::Assessment::Submission::ZipDownloadJob.
-            perform_later(current_course_user, @assessment, params[:students]).job
+            perform_later(current_course_user, @assessment, params[:course_users]).job
       respond_to do |format|
         format.html { redirect_to(job_path(job)) }
         format.json { render json: { redirect_url: job_path(job) } }
@@ -139,7 +144,7 @@ class Course::Assessment::Submission::SubmissionsController < \
 
   def download_statistics
     authorize!(:manage, @assessment)
-    submission_ids = @assessment.submissions.by_users(student_ids).pluck(:id)
+    submission_ids = @assessment.submissions.by_users(course_user_ids).pluck(:id)
     if submission_ids.empty?
       render json: { error:
              I18n.t('course.assessment.submission.submissions.download_statistics.no_submission_statistics') },
@@ -151,6 +156,60 @@ class Course::Assessment::Submission::SubmissionsController < \
         format.html { redirect_to(job_path(job)) }
         format.json { render json: { redirect_url: job_path(job) } }
       end
+    end
+  end
+
+  def unsubmit
+    authorize!(:update, @assessment)
+    submission = @assessment.submissions.find(params[:submission_id])
+    if submission.update('unsubmit' => 'true')
+      head :ok
+    else
+      logger.error("failed to unsubmit submission: #{submission.errors.inspect}")
+      render json: { errors: submission.errors }, status: :bad_request
+    end
+  end
+
+  def unsubmit_all
+    authorize!(:update, @assessment)
+    submission_ids = @assessment.submissions.by_users(course_user_ids).pluck(:id)
+    if !submission_ids.empty?
+      job = Course::Assessment::Submission::UnsubmittingJob.
+            perform_later(current_user, submission_ids, @assessment).job
+      respond_to do |format|
+        format.html { redirect_to(job_path(job)) }
+        format.json { render json: { redirect_url: job_path(job) } }
+      end
+    else
+      head :ok
+    end
+  end
+
+  def delete
+    submission = @assessment.submissions.find(params[:submission_id])
+    authorize!(:delete_submission, submission)
+    if submission
+      submission.update('unsubmit' => 'true') unless submission.attempting?
+      submission.destroy!
+      head :ok
+    else
+      logger.error("failed to unsubmit submission: #{submission.errors.inspect}")
+      render json: { errors: submission.errors }, status: :bad_request
+    end
+  end
+
+  def delete_all
+    authorize!(:delete_all_submissions, @assessment)
+    submission_ids = @assessment.submissions.by_users(course_user_ids).pluck(:id)
+    if !submission_ids.empty?
+      job = Course::Assessment::Submission::DeletingJob.
+            perform_later(current_user, submission_ids, @assessment).job
+      respond_to do |format|
+        format.html { redirect_to(job_path(job)) }
+        format.json { render json: { redirect_url: job_path(job) } }
+      end
+    else
+      head :ok
     end
   end
 
@@ -229,12 +288,18 @@ class Course::Assessment::Submission::SubmissionsController < \
     end
   end
 
-  def student_ids
-    case params[:students]
-    when STUDENTS[:my]
+  def course_user_ids
+    case params[:course_users]
+    when COURSE_USERS[:my_students]
+      current_course_user.my_students.without_phantom_users
+    when COURSE_USERS[:my_students_w_phantom]
       current_course_user.my_students
-    when STUDENTS[:phantom]
-      @assessment.course.course_users.students.phantom
+    when COURSE_USERS[:students_w_phantom]
+      @assessment.course.course_users.students
+    when COURSE_USERS[:staff]
+      @assessment.course.course_users.staff.without_phantom_users
+    when COURSE_USERS[:staff_w_phantom]
+      @assessment.course.course_users.staff
     else
       @assessment.course.course_users.students.without_phantom_users
     end.select(:user_id)
