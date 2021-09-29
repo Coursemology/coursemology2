@@ -25,10 +25,10 @@ const SectionFormDialogue = ({
   initialValues,
   onSubmit,
 }) => {
-  const {
-    hideSectionForm,
-    submitSectionForm,
-  } = bindActionCreators(actionCreators, dispatch);
+  const { hideSectionForm, submitSectionForm } = bindActionCreators(
+    actionCreators,
+    dispatch,
+  );
 
   return (
     <FormDialogue

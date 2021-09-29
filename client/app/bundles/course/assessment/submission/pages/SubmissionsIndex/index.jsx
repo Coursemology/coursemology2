@@ -11,13 +11,26 @@ import { Tabs, Tab } from 'material-ui/Tabs';
 import GroupIcon from 'material-ui/svg-icons/social/group';
 import PersonIcon from 'material-ui/svg-icons/social/person';
 import PersonOutlineIcon from 'material-ui/svg-icons/social/person-outline';
-import { red100, yellow100, grey100, green100, blue100, blue500 } from 'material-ui/styles/colors';
+import {
+  red100,
+  yellow100,
+  grey100,
+  green100,
+  blue100,
+  blue500,
+} from 'material-ui/styles/colors';
 
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
-import NotificationBar, { notificationShape } from 'lib/components/NotificationBar';
-import { fetchSubmissions, publishSubmissions,
-  downloadSubmissions, downloadStatistics } from '../../actions/submissions';
+import NotificationBar, {
+  notificationShape,
+} from 'lib/components/NotificationBar';
+import {
+  fetchSubmissions,
+  publishSubmissions,
+  downloadSubmissions,
+  downloadStatistics,
+} from '../../actions/submissions';
 import SubmissionsTable from './SubmissionsTable';
 import { assessmentShape } from '../../propTypes';
 import { workflowStates } from '../../constants';
@@ -42,10 +55,13 @@ const styles = {
 };
 
 class VisibleSubmissionsIndex extends React.Component {
-  state = {
-    publishConfirmation: false,
-    includePhantoms: false,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      publishConfirmation: false,
+      includePhantoms: false,
+    };
+  }
 
   componentDidMount() {
     const { dispatch } = this.props;
@@ -54,7 +70,7 @@ class VisibleSubmissionsIndex extends React.Component {
 
   canPublish() {
     const { submissions } = this.props;
-    return submissions.some(s => s.workflowState === workflowStates.Graded);
+    return submissions.some((s) => s.workflowState === workflowStates.Graded);
   }
 
   renderHistogram() {
@@ -62,7 +78,10 @@ class VisibleSubmissionsIndex extends React.Component {
     const { includePhantoms } = this.state;
     const workflowStatesArray = Object.values(workflowStates);
 
-    const initialCounts = workflowStatesArray.reduce((counts, w) => ({ ...counts, [w]: 0 }), {});
+    const initialCounts = workflowStatesArray.reduce(
+      (counts, w) => ({ ...counts, [w]: 0 }),
+      {},
+    );
 
     const submissionStateCounts = submissions.reduce((counts, submission) => {
       if (includePhantoms || !submission.courseStudent.phantom) {
@@ -99,7 +118,10 @@ class VisibleSubmissionsIndex extends React.Component {
   }
 
   renderHeader() {
-    const { assessment: { title }, isPublishing } = this.props;
+    const {
+      assessment: { title },
+      isPublishing,
+    } = this.props;
     const { includePhantoms } = this.state;
     return (
       <Card style={{ marginBottom: 20 }}>
@@ -107,15 +129,21 @@ class VisibleSubmissionsIndex extends React.Component {
         <CardText>{this.renderHistogram()}</CardText>
         <CardActions>
           <Toggle
-            label={<FormattedMessage {...submissionsTranslations.includePhantoms} />}
+            label={
+              <FormattedMessage {...submissionsTranslations.includePhantoms} />
+            }
             labelPosition="right"
             toggled={includePhantoms}
-            onToggle={() => this.setState({ includePhantoms: !includePhantoms })}
+            onToggle={() =>
+              this.setState({ includePhantoms: !includePhantoms })
+            }
           />
           <FlatButton
             disabled={isPublishing || !this.canPublish()}
             secondary
-            label={<FormattedMessage {...submissionsTranslations.publishGrades} />}
+            label={
+              <FormattedMessage {...submissionsTranslations.publishGrades} />
+            }
             labelPosition="before"
             icon={isPublishing ? <CircularProgress size={24} /> : null}
             onClick={() => this.setState({ publishConfirmation: true })}
@@ -127,35 +155,51 @@ class VisibleSubmissionsIndex extends React.Component {
 
   renderTabs() {
     const { courseId, assessmentId } = this.props.match.params;
-    const { dispatch, submissions, assessment, isDownloading, isStatisticsDownloading } = this.props;
-    const myStudentSubmissions = submissions.filter(s => s.courseStudent.myStudent);
-    const studentSubmissions = submissions.filter(s => !s.courseStudent.phantom);
-    const otherSubmissions = submissions.filter(s => s.courseStudent.phantom);
+    const {
+      dispatch,
+      submissions,
+      assessment,
+      isDownloading,
+      isStatisticsDownloading,
+    } = this.props;
+    const myStudentSubmissions = submissions.filter(
+      (s) => s.courseStudent.myStudent,
+    );
+    const studentSubmissions = submissions.filter(
+      (s) => !s.courseStudent.phantom,
+    );
+    const otherSubmissions = submissions.filter((s) => s.courseStudent.phantom);
 
-    const props = { courseId, assessmentId, assessment, isDownloading, isStatisticsDownloading };
+    const props = {
+      courseId,
+      assessmentId,
+      assessment,
+      isDownloading,
+      isStatisticsDownloading,
+    };
 
     return (
       <Tabs
         inkBarStyle={{ backgroundColor: blue500, height: 5, marginTop: -5 }}
         tabItemContainerStyle={{ backgroundColor: grey100 }}
       >
-        {myStudentSubmissions.length > 0
-          ? (
-            <Tab
-              id="my-students-tab"
-              buttonStyle={{ color: blue500 }}
-              icon={<GroupIcon style={{ color: blue500 }} />}
-              label={<FormattedMessage {...submissionsTranslations.myStudents} />}
-            >
-              <SubmissionsTable
-                submissions={myStudentSubmissions}
-                handleDownload={() => dispatch(downloadSubmissions('my'))}
-                handleDownloadStatistics={() => dispatch(downloadStatistics('my'))}
-                {...props}
-              />
-            </Tab>
-          )
-          : null}
+        {myStudentSubmissions.length > 0 ? (
+          <Tab
+            id="my-students-tab"
+            buttonStyle={{ color: blue500 }}
+            icon={<GroupIcon style={{ color: blue500 }} />}
+            label={<FormattedMessage {...submissionsTranslations.myStudents} />}
+          >
+            <SubmissionsTable
+              submissions={myStudentSubmissions}
+              handleDownload={() => dispatch(downloadSubmissions('my'))}
+              handleDownloadStatistics={() =>
+                dispatch(downloadStatistics('my'))
+              }
+              {...props}
+            />
+          </Tab>
+        ) : null}
         <Tab
           id="students-tab"
           buttonStyle={{ color: blue500 }}
@@ -178,7 +222,9 @@ class VisibleSubmissionsIndex extends React.Component {
           <SubmissionsTable
             submissions={otherSubmissions}
             handleDownload={() => dispatch(downloadSubmissions('phantom'))}
-            handleDownloadStatistics={() => dispatch(downloadStatistics('phantom'))}
+            handleDownloadStatistics={() =>
+              dispatch(downloadStatistics('phantom'))
+            }
             {...props}
           />
         </Tab>
@@ -236,7 +282,7 @@ VisibleSubmissionsIndex.propTypes = {
       grade: PropTypes.number,
       pointsAwarded: PropTypes.number,
       workflowState: PropTypes.string,
-    })
+    }),
   ),
   notification: notificationShape,
   isLoading: PropTypes.bool.isRequired,

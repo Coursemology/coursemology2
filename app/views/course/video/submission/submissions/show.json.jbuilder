@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 json.partial! @video, hide_next: true
 
 json.statistics do

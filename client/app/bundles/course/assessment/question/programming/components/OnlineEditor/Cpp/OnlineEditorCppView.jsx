@@ -6,7 +6,13 @@ import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import {
-  Table, TableBody, TableFooter, TableHeader, TableHeaderColumn, TableRow, TableRowColumn,
+  Table,
+  TableBody,
+  TableFooter,
+  TableHeader,
+  TableHeaderColumn,
+  TableRow,
+  TableRowColumn,
 } from 'material-ui/Table';
 import transitions from 'material-ui/styles/transitions';
 
@@ -16,7 +22,12 @@ import 'brace/theme/monokai';
 import styles from '../OnlineEditorView.scss';
 import translations from '../OnlineEditorView.intl';
 import cppTranslations from './OnlineEditorCppView.intl';
-import { ExistingPackageFile, NewPackageFile, TestCase, EditorCard } from '../OnlineEditorBase';
+import {
+  ExistingPackageFile,
+  NewPackageFile,
+  TestCase,
+  EditorCard,
+} from '../OnlineEditorBase';
 
 const MAX_TEST_CASES = 99;
 
@@ -70,7 +81,8 @@ class OnlineEditorCppView extends React.Component {
             fileType,
             filesize: fileData.get('size'),
             toDelete: this.props.dataFiles.get('to_delete').has(filename),
-            deleteExistingPackageFile: this.props.actions.deleteExistingPackageFile,
+            deleteExistingPackageFile:
+              this.props.actions.deleteExistingPackageFile,
             isLoading: this.props.isLoading,
             isLast: numFiles === index + 1,
           }}
@@ -127,7 +139,9 @@ class OnlineEditorCppView extends React.Component {
         />
       );
     };
-    const newPackageFilesRows = this.props.dataFiles.get('new').map(renderNewFile);
+    const newPackageFilesRows = this.props.dataFiles
+      .get('new')
+      .map(renderNewFile);
 
     return (
       <Card initiallyExpanded>
@@ -140,7 +154,7 @@ class OnlineEditorCppView extends React.Component {
         <CardText expandable style={{ padding: 0 }}>
           <Table selectable={false}>
             <TableBody displayRowCheckbox={false}>
-              { newPackageFilesRows }
+              {newPackageFilesRows}
             </TableBody>
           </Table>
         </CardText>
@@ -150,11 +164,17 @@ class OnlineEditorCppView extends React.Component {
 
   renderTestCases(header, testCases, type) {
     const allTestCases = this.props.data.get('test_cases');
-    const numAllTestCases = allTestCases.get('public').size + allTestCases.get('private').size
-      + allTestCases.get('evaluation').size;
+    const numAllTestCases =
+      allTestCases.get('public').size +
+      allTestCases.get('private').size +
+      allTestCases.get('evaluation').size;
 
-    const identifier = this.props.intl.formatMessage(translations.identifierHeader);
-    const expression = this.props.intl.formatMessage(translations.expressionHeader);
+    const identifier = this.props.intl.formatMessage(
+      translations.identifierHeader,
+    );
+    const expression = this.props.intl.formatMessage(
+      translations.expressionHeader,
+    );
     const expected = this.props.intl.formatMessage(translations.expectedHeader);
     const hint = this.props.intl.formatMessage(translations.hintHeader);
 
@@ -197,16 +217,18 @@ class OnlineEditorCppView extends React.Component {
                 <TableHeaderColumn>{hint}</TableHeaderColumn>
               </TableRow>
             </TableHeader>
-            <TableBody displayRowCheckbox={false}>
-              {rows}
-            </TableBody>
+            <TableBody displayRowCheckbox={false}>{rows}</TableBody>
             <TableFooter adjustForCheckbox={false}>
               <TableRow>
                 <TableRowColumn colSpan="5" style={{ textAlign: 'center' }}>
                   <FlatButton
-                    label={this.props.intl.formatMessage(translations.addNewTestButton)}
+                    label={this.props.intl.formatMessage(
+                      translations.addNewTestButton,
+                    )}
                     icon={<i className="fa fa-plus" />}
-                    disabled={this.props.isLoading || numAllTestCases >= MAX_TEST_CASES}
+                    disabled={
+                      this.props.isLoading || numAllTestCases >= MAX_TEST_CASES
+                    }
                     onClick={this.testCaseCreateHandler(type)}
                   />
                 </TableRowColumn>
@@ -240,98 +262,103 @@ class OnlineEditorCppView extends React.Component {
     const testCases = data.get('test_cases');
     const testCaseError = data.getIn(['test_cases', 'error']);
     const errorTextElement = testCaseError && (
-    <div
-      style={{
-        fontSize: 12,
-        lineHeight: '12px',
-        color: this.context.muiTheme.textField.errorColor,
-        transition: transitions.easeOut(),
-        marginBottom: '1em',
-      }}
-    >
-      {testCaseError}
-    </div>
+      <div
+        style={{
+          fontSize: 12,
+          lineHeight: '12px',
+          color: this.context.muiTheme.textField.errorColor,
+          transition: transitions.easeOut(),
+          marginBottom: '1em',
+        }}
+      >
+        {testCaseError}
+      </div>
     );
 
     return (
       <>
         <div style={{ marginBottom: '1em' }}>
-          {
-            this.renderEditorCard(
-              intl.formatMessage(translations.solutionTitle),
-              intl.formatMessage(translations.solutionSubtitle),
-              'solution'
-            )
-          }
-          {
-            this.renderEditorCard(
-              intl.formatMessage(translations.prependTitle),
-              intl.formatMessage(translations.prependSubtitle),
-              'prepend'
-            )
-          }
-          {
-            this.renderEditorCard(
-              intl.formatMessage(translations.appendTitle),
-              intl.formatMessage(cppTranslations.appendSubtitle),
-              'append'
-            )
-          }
+          {this.renderEditorCard(
+            intl.formatMessage(translations.solutionTitle),
+            intl.formatMessage(translations.solutionSubtitle),
+            'solution',
+          )}
+          {this.renderEditorCard(
+            intl.formatMessage(translations.prependTitle),
+            intl.formatMessage(translations.prependSubtitle),
+            'prepend',
+          )}
+          {this.renderEditorCard(
+            intl.formatMessage(translations.appendTitle),
+            intl.formatMessage(cppTranslations.appendSubtitle),
+            'append',
+          )}
         </div>
-        <h3>{ intl.formatMessage(translations.dataFilesHeader) }</h3>
-        {
-          this.renderExistingPackageFiles(
-            'data_files',
-            this.props.intl.formatMessage(translations.currentDataFilesHeader)
-          )
-        }
-        {
-          this.renderNewPackageFiles(
-            'data_files',
-            this.props.intl.formatMessage(translations.newDataFilesHeader),
-            intl.formatMessage(translations.addDataFileButton)
-          )
-        }
-        <h3>{ intl.formatMessage(translations.testCasesHeader) }</h3>
+        <h3>{intl.formatMessage(translations.dataFilesHeader)}</h3>
+        {this.renderExistingPackageFiles(
+          'data_files',
+          this.props.intl.formatMessage(translations.currentDataFilesHeader),
+        )}
+        {this.renderNewPackageFiles(
+          'data_files',
+          this.props.intl.formatMessage(translations.newDataFilesHeader),
+          intl.formatMessage(translations.addDataFileButton),
+        )}
+        <h3>{intl.formatMessage(translations.testCasesHeader)}</h3>
         <div style={{ marginBottom: '0.5em' }}>
           <FormattedMessage
             id="course.assessment.question.programming.onlineEditorCppView.testCasesDescription"
             defaultMessage={
-              '{note}: The expression in the {expression} column will be compared with the '
-              + 'expression in the {expected} column using {expect_star} assertions from the '
-              + '{googletest}. Floating point numbers are formatted with {tostring}.'
+              '{note}: The expression in the {expression} column will be compared with the ' +
+              'expression in the {expected} column using {expect_star} assertions from the ' +
+              '{googletest}. Floating point numbers are formatted with {tostring}.'
             }
             values={{
-              note: <b>{intl.formatMessage(translations.testCaseDescriptionNote)}</b>,
-              expression: <b>{intl.formatMessage(translations.expressionHeader)}</b>,
-              expected: <b>{intl.formatMessage(translations.expectedHeader)}</b>,
+              note: (
+                <b>
+                  {intl.formatMessage(translations.testCaseDescriptionNote)}
+                </b>
+              ),
+              expression: (
+                <b>{intl.formatMessage(translations.expressionHeader)}</b>
+              ),
+              expected: (
+                <b>{intl.formatMessage(translations.expectedHeader)}</b>
+              ),
               expect_star: <code>EXPECT_*</code>,
               googletest: (
                 <a href="https://github.com/google/googletest">
-                  {intl.formatMessage(translations.testCaseDescriptionGoogleTest)}
+                  {intl.formatMessage(
+                    translations.testCaseDescriptionGoogleTest,
+                  )}
                 </a>
               ),
               tostring: (
                 <code>
-                  <a href="http://en.cppreference.com/w/cpp/string/basic_string/to_string">std::to_string</a>
+                  <a href="http://en.cppreference.com/w/cpp/string/basic_string/to_string">
+                    std::to_string
+                  </a>
                 </code>
               ),
             }}
           />
         </div>
-        { errorTextElement }
-        {
-          this.renderTestCases(intl.formatMessage(translations.publicTestCases),
-            testCases, 'public')
-        }
-        {
-          this.renderTestCases(intl.formatMessage(translations.privateTestCases),
-            testCases, 'private')
-        }
-        {
-          this.renderTestCases(intl.formatMessage(translations.evaluationTestCases),
-            testCases, 'evaluation')
-        }
+        {errorTextElement}
+        {this.renderTestCases(
+          intl.formatMessage(translations.publicTestCases),
+          testCases,
+          'public',
+        )}
+        {this.renderTestCases(
+          intl.formatMessage(translations.privateTestCases),
+          testCases,
+          'private',
+        )}
+        {this.renderTestCases(
+          intl.formatMessage(translations.evaluationTestCases),
+          testCases,
+          'evaluation',
+        )}
       </>
     );
   }
@@ -341,14 +368,12 @@ class OnlineEditorCppView extends React.Component {
 
     return (
       <div id="cpp-online-editor">
-        {
-          this.renderEditorCard(
-            intl.formatMessage(translations.submissionTitle),
-            null,
-            'submission'
-          )
-        }
-        { autograded ? this.renderAutogradedFields() : null }
+        {this.renderEditorCard(
+          intl.formatMessage(translations.submissionTitle),
+          null,
+          'submission',
+        )}
+        {autograded ? this.renderAutogradedFields() : null}
       </div>
     );
   }

@@ -42,6 +42,7 @@ class Course::Assessment::Tab < ApplicationRecord
 
   def validate_before_destroy
     return true if category.destroying? || other_tabs_remaining?
+
     errors.add(:base, :deletion)
     throw(:abort)
   end

@@ -5,9 +5,8 @@
  * @param {String|Number} id
  * @return {Number}
  */
-export const findById = (array, id) => (
-  array.findIndex(item => String(item.id) === String(id))
-);
+export const findById = (array, id) =>
+  array.findIndex((item) => String(item.id) === String(id));
 
 /**
  * Returns a copy of the given array with a given item updated if the item exists in the array.

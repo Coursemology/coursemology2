@@ -24,7 +24,7 @@ module Course::Discussion::TopicsHelper
   # @return [Integer] Returns the count of topics pending staff reply.
   def all_staff_unread_count
     @staff_unread ||= current_course.discussion_topics.
-                globally_displayed.pending_staff_reply.distinct.count
+                      globally_displayed.pending_staff_reply.distinct.count
   end
 
   def my_students_unread_count
@@ -82,6 +82,7 @@ module Course::Discussion::TopicsHelper
 
   def link_to_mark_as_read(topic)
     return unless topic.unread?(current_user)
+
     link_to t('course.discussion.topics.mark_as_read'),
             mark_as_read_course_topic_path(current_course, topic), method: :patch
   end

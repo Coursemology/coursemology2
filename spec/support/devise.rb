@@ -4,7 +4,7 @@ module DeviseControllerMacros
   #
   # @param [nil] as if there should not be a user to be logged in.
   # @param [Symbol] as if there is a user that should be created by the factory with this name.
-  def requires_login(as: nil)
+  def requires_login(as: nil) # rubocop:disable Naming/MethodParameterName
     before do
       @request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in FactoryBot.create(as) if as

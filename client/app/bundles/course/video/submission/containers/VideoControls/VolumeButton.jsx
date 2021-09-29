@@ -21,7 +21,10 @@ function VolumeButton(props) {
   }
 
   return (
-    <span className={styles.volumeButton} onClick={() => props.onClick(props.volume)}>
+    <span
+      className={styles.volumeButton}
+      onClick={() => props.onClick(props.volume)}
+    >
       <i className={className} />
     </span>
   );
@@ -36,7 +39,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     onClick: (currentVolume) => {
-      const newVolume = (currentVolume === 0 ? videoDefaults.volume : 0);
+      const newVolume = currentVolume === 0 ? videoDefaults.volume : 0;
       dispatch(changePlayerVolume(newVolume));
     },
   };

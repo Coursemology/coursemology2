@@ -16,7 +16,7 @@ class Course::Assessment < ApplicationRecord
   before_validation :propagate_course, if: :new_record?
   before_validation :assign_folder_attributes
   after_commit :grade_with_new_test_cases, on: :update
-  before_save :save_tab, on: :create
+  before_save :save_tab
 
   enum randomization: { prepared: 0 }
 
@@ -111,9 +111,13 @@ class Course::Assessment < ApplicationRecord
   #
   # Here, actable_data contains the list of tab IDs to be removed.
   scope :ids_showable_in_lesson_plan, (lambda do |actable_data|
-    joining { lesson_plan_item }.
+    # joining { lesson_plan_item }.
+    #   where.not(tab_id: actable_data).
+    #   selecting { lesson_plan_item.id }
+    unscoped.
+      joins(:lesson_plan_item).
       where.not(tab_id: actable_data).
-      selecting { lesson_plan_item.id }
+      select(Course::LessonPlan::Item.arel_table[:id])
   end)
 
   def self.use_relative_model_naming?
@@ -131,12 +135,13 @@ class Course::Assessment < ApplicationRecord
     target_mode = params[:autograded]
     return if target_mode == autograded || !allow_mode_switching?
 
-    if target_mode == true
+    case target_mode
+    when true
       self.autograded = true
       self.session_password = nil
       self.view_password = nil
       self.delayed_grade_publication = false
-    elsif target_mode == false # Ignore the case when the params is empty.
+    when false # Ignore the case when the params is empty.
       self.autograded = false
       self.skippable = false
     end
@@ -238,6 +243,7 @@ class Course::Assessment < ApplicationRecord
   def assign_folder_attributes
     # Folder attributes are handled during duplication by folder duplication code
     return if duplicating?
+
     folder.assign_attributes(name: title, course: course, parent: tab.category.folder,
                              start_at: start_at)
   end
@@ -249,6 +255,7 @@ class Course::Assessment < ApplicationRecord
 
   def tab_in_same_course
     return unless tab_id_changed?
+
     errors.add(:tab, :not_in_same_course) unless tab.category.course == course
   end
 
@@ -265,6 +272,7 @@ class Course::Assessment < ApplicationRecord
   # test case booleans has been committed
   def grade_with_new_test_cases
     return unless regrade_programming_answers?
+
     # Regrade all published submissions' programming answers and update exp points awarded
     submissions.select(&:published?).each do |submission|
       submission.resubmit_programming!

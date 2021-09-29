@@ -5,7 +5,8 @@ import { setNotification } from 'lib/actions';
 export function fetchObjectsList() {
   return (dispatch) => {
     dispatch({ type: actionTypes.LOAD_OBJECTS_LIST_REQUEST });
-    return CourseAPI.duplication.fetch()
+    return CourseAPI.duplication
+      .fetch()
       .then((response) => {
         dispatch({
           type: actionTypes.LOAD_OBJECTS_LIST_SUCCESS,
@@ -21,10 +22,13 @@ export function fetchObjectsList() {
 export function changeSourceCourse(courseId) {
   return (dispatch, getState) => {
     const currentSourceCourseId = getState().duplication.sourceCourse.id;
-    if (courseId === currentSourceCourseId) { return null; }
+    if (courseId === currentSourceCourseId) {
+      return null;
+    }
 
     dispatch({ type: actionTypes.CHANGE_SOURCE_COURSE_REQUEST });
-    return CourseAPI.duplication.data(courseId)
+    return CourseAPI.duplication
+      .data(courseId)
       .then((response) => {
         dispatch({
           type: actionTypes.CHANGE_SOURCE_COURSE_SUCCESS,
@@ -67,26 +71,35 @@ export function setItemSelectorPanel(panel) {
 }
 
 /**
-* Prepares the payload containing ids and types of items selected for duplication.
-*
-* @param {object} selectedItemsHash Maps types to hashes that indicate which items have been selected, e.g.
-*    { TAB: { 3: true, 4: false }, SURVEY: { 9: true }, CATEGORY: { 10: false } }
-* @return {object} Maps types to arrays with ids of items that have been selected, e.g.
-*    { TAB: [3], SURVEY: [9] }
-*/
+ * Prepares the payload containing ids and types of items selected for duplication.
+ *
+ * @param {object} selectedItemsHash Maps types to hashes that indicate which items have been selected, e.g.
+ *    { TAB: { 3: true, 4: false }, SURVEY: { 9: true }, CATEGORY: { 10: false } }
+ * @return {object} Maps types to arrays with ids of items that have been selected, e.g.
+ *    { TAB: [3], SURVEY: [9] }
+ */
 function itemsPayload(selectedItemsHash) {
   return Object.keys(selectedItemsHash).reduce((hash, key) => {
     const idsHash = selectedItemsHash[key];
     const idsArray = Object.keys(idsHash).reduce((selectedIds, id) => {
-      if (idsHash[id]) { selectedIds.push(id); }
+      if (idsHash[id]) {
+        selectedIds.push(id);
+      }
       return selectedIds;
     }, []);
-    if (idsArray.length > 0) { hash[key] = idsArray; } // eslint-disable-line no-param-reassign
+    if (idsArray.length > 0) {
+      // eslint-disable-next-line no-param-reassign
+      hash[key] = idsArray;
+    }
     return hash;
   }, {});
 }
 
-export function duplicateItems(destinationCourseId, selectedItems, failureMessage) {
+export function duplicateItems(
+  destinationCourseId,
+  selectedItems,
+  failureMessage,
+) {
   const payload = {
     object_duplication: {
       destination_course_id: destinationCourseId,
@@ -98,7 +111,8 @@ export function duplicateItems(destinationCourseId, selectedItems, failureMessag
     const sourceCourseId = getState().duplication.sourceCourse.id;
 
     dispatch({ type: actionTypes.DUPLICATE_ITEMS_REQUEST });
-    return CourseAPI.duplication.duplicateItems(sourceCourseId, payload)
+    return CourseAPI.duplication
+      .duplicateItems(sourceCourseId, payload)
       .then((response) => {
         dispatch({ type: actionTypes.DUPLICATE_ITEMS_SUCCESS });
         window.location = response.data.redirect_url;
@@ -118,7 +132,8 @@ export function duplicateCourse(fields, failureMessage) {
     const sourceCourseId = getState().duplication.sourceCourse.id;
 
     dispatch({ type: actionTypes.DUPLICATE_COURSE_REQUEST });
-    return CourseAPI.duplication.duplicateCourse(sourceCourseId, payload)
+    return CourseAPI.duplication
+      .duplicateCourse(sourceCourseId, payload)
       .then((response) => {
         window.location = response.data.redirect_url;
         dispatch({ type: actionTypes.DUPLICATE_COURSE_SUCCESS });

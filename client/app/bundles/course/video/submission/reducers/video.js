@@ -30,9 +30,15 @@ export const initialState = {
 };
 
 export const persistTransform = createTransform(
-  inboundState => ({ ...inboundState, sessionEvents: inboundState.sessionEvents.toJS() }),
-  outboundState => ({ ...outboundState, sessionEvents: makeImmutableList(outboundState.sessionEvents) }),
-  { whitelist: ['video'] }
+  (inboundState) => ({
+    ...inboundState,
+    sessionEvents: inboundState.sessionEvents.toJS(),
+  }),
+  (outboundState) => ({
+    ...outboundState,
+    sessionEvents: makeImmutableList(outboundState.sessionEvents),
+  }),
+  { whitelist: ['video'] },
 );
 
 /**
@@ -52,15 +58,22 @@ function computeTimeAdjustChange(state, suggestedTime, forceSeek = false) {
     forceSeek,
     playerState: state.playerState,
   };
-  if (timeIsPastRestricted(state.restrictContentAfter, stateChange.playerProgress)) {
+  if (
+    timeIsPastRestricted(state.restrictContentAfter, stateChange.playerProgress)
+  ) {
     stateChange.playerProgress = state.restrictContentAfter;
     stateChange.forceSeek = true;
     stateChange.playerState = playerStates.PAUSED;
   }
 
-  stateChange.playerProgress = Math.max(0, Math.min(state.duration, stateChange.playerProgress));
+  stateChange.playerProgress = Math.max(
+    0,
+    Math.min(state.duration, stateChange.playerProgress),
+  );
   // No point seeking if the progress is not changed
-  stateChange.forceSeek = stateChange.forceSeek && stateChange.playerProgress !== state.playerProgress;
+  stateChange.forceSeek =
+    stateChange.forceSeek &&
+    stateChange.playerProgress !== state.playerProgress;
   return stateChange;
 }
 
@@ -79,11 +92,19 @@ function computeTimeAdjustChange(state, suggestedTime, forceSeek = false) {
  * @returns {playerStates} The new playerState to set into Redux
  */
 function computePlayerState(state, newPlayerState) {
-  if (timeIsPastRestricted(state.restrictContentAfter, state.playerProgress) && isPlayingState(newPlayerState)) {
-    return isPlayingState(state.playerState) ? playerStates.PAUSED : state.playerState;
+  if (
+    timeIsPastRestricted(state.restrictContentAfter, state.playerProgress) &&
+    isPlayingState(newPlayerState)
+  ) {
+    return isPlayingState(state.playerState)
+      ? playerStates.PAUSED
+      : state.playerState;
   }
 
-  if (newPlayerState === playerStates.BUFFERING && !isPlayingState(state.playerState)) {
+  if (
+    newPlayerState === playerStates.BUFFERING &&
+    !isPlayingState(state.playerState)
+  ) {
     return state.playerState;
   }
 
@@ -100,7 +121,7 @@ function computePlayerState(state, newPlayerState) {
  * @returns {function(Object): Object} A function that produces the next state object when changes are provided
  */
 function generateStateTransformer(state) {
-  return changes => ({ ...state, forceSeek: false, ...changes });
+  return (changes) => ({ ...state, forceSeek: false, ...changes });
 }
 
 /**
@@ -117,7 +138,9 @@ function videoStateReducer(state = initialState, action) {
 
   switch (action.type) {
     case videoActionTypes.CHANGE_PLAYER_STATE:
-      return transformState({ playerState: computePlayerState(state, action.playerState) });
+      return transformState({
+        playerState: computePlayerState(state, action.playerState),
+      });
     case videoActionTypes.CHANGE_PLAYER_VOLUME:
       return transformState({ playerVolume: action.playerVolume });
     case videoActionTypes.CHANGE_CAPTIONS_STATE:
@@ -125,13 +148,22 @@ function videoStateReducer(state = initialState, action) {
     case videoActionTypes.CHANGE_PLAYBACK_RATE:
       return transformState({ playbackRate: action.playbackRate });
     case videoActionTypes.UPDATE_PLAYER_PROGRESS:
-      return transformState(computeTimeAdjustChange(state, action.playerProgress, action.forceSeek));
+      return transformState(
+        computeTimeAdjustChange(state, action.playerProgress, action.forceSeek),
+      );
     case videoActionTypes.UPDATE_BUFFER_PROGRESS:
-      return transformState({ bufferProgress: Math.max(0, Math.min(state.duration, action.bufferProgress)) });
+      return transformState({
+        bufferProgress: Math.max(
+          0,
+          Math.min(state.duration, action.bufferProgress),
+        ),
+      });
     case videoActionTypes.UPDATE_PLAYER_DURATION:
       return transformState({ duration: action.duration });
     case videoActionTypes.UPDATE_RESTRICTED_TIME:
-      return transformState({ restrictContentAfter: action.restrictContentAfter });
+      return transformState({
+        restrictContentAfter: action.restrictContentAfter,
+      });
     default:
       return state;
   }
@@ -172,11 +204,15 @@ function handleSessionChangeState(state, action) {
   let stateChange = null;
   if (state.playerState === action.playerState) {
     return state;
-  } if (action.playerState === playerStates.PLAYING) {
+  }
+  if (action.playerState === playerStates.PLAYING) {
     stateChange = 'play';
   } else if (action.playerState === playerStates.PAUSED) {
     stateChange = 'pause';
-  } else if (action.playerState === playerStates.BUFFERING && isPlayingState(state.playerState)) {
+  } else if (
+    action.playerState === playerStates.BUFFERING &&
+    isPlayingState(state.playerState)
+  ) {
     stateChange = 'buffer';
   } else if (action.playerState === playerStates.ENDED) {
     stateChange = 'end';
@@ -210,7 +246,11 @@ function videoSessionReducer(state = initialState, action) {
       return {
         ...state,
         sessionSequenceNum: state.sessionSequenceNum + 1,
-        sessionEvents: events.push(generateEvent(state, 'speed_change', { playback_rate: action.playbackRate })),
+        sessionEvents: events.push(
+          generateEvent(state, 'speed_change', {
+            playback_rate: action.playbackRate,
+          }),
+        ),
       };
     case videoActionTypes.CHANGE_PLAYER_STATE:
       return handleSessionChangeState(state, action);
@@ -229,7 +269,9 @@ function videoSessionReducer(state = initialState, action) {
     case sessionActionTypes.REMOVE_EVENTS:
       return {
         ...state,
-        sessionEvents: events.filterNot(event => action.sequenceNums.has(event.sequence_num)),
+        sessionEvents: events.filterNot((event) =>
+          action.sequenceNums.has(event.sequence_num),
+        ),
         sessionClosed: action.sessionClosed,
       };
     default:

@@ -1,6 +1,10 @@
 import actions, {
-  canvasActionTypes, scribingTools, scribingShapes,
-  scribingToolColor, scribingToolThickness, scribingToolLineStyle,
+  canvasActionTypes,
+  scribingTools,
+  scribingShapes,
+  scribingToolColor,
+  scribingToolThickness,
+  scribingToolLineStyle,
 } from '../constants';
 
 function initializeToolColor() {
@@ -32,43 +36,45 @@ export default function (state = {}, action) {
     case actions.FETCH_SUBMISSION_SUCCESS: {
       return {
         ...state,
-        ...action.payload.answers.reduce((obj, answer) => ({
-          ...obj,
-          [answer.fields.id]: {
-            answer: { ...answer.scribing_answer },
-            layers: [],
-            selectedTool: scribingTools.SELECT,
-            selectedShape: scribingShapes.RECT,
-            imageWidth: 0,
-            imageHeight: 0,
-            fontFamily: 'Arial',
-            fontSize: 23,
-            colors: initializeToolColor(),
-            lineStyles: initializeLineStyles(),
-            thickness: initializeToolThickness(),
-            hasNoFill: false,
-            activeObject: undefined,
-            isCanvasLoaded: false,
-            isCanvasDirty: false,
-            isDrawingMode: false,
-            isChangeTool: false,
-            isDelete: false,
-            isUndo: false,
-            isRedo: false,
-            cursor: 'pointer',
-            currentStateIndex: -1,
-            canvasStates: [],
-            canvasZoom: 1,
-            canvasWidth: 100,
-            canvasHeight: 100,
-            canvasMaxWidth: 100,
-            isLoading: false,
-            isSaving: false,
-            isSaved: false,
-            hasError: false,
-          },
-        }),
-        {}),
+        ...action.payload.answers.reduce(
+          (obj, answer) => ({
+            ...obj,
+            [answer.fields.id]: {
+              answer: { ...answer.scribing_answer },
+              layers: [],
+              selectedTool: scribingTools.SELECT,
+              selectedShape: scribingShapes.RECT,
+              imageWidth: 0,
+              imageHeight: 0,
+              fontFamily: 'Arial',
+              fontSize: 23,
+              colors: initializeToolColor(),
+              lineStyles: initializeLineStyles(),
+              thickness: initializeToolThickness(),
+              hasNoFill: false,
+              activeObject: undefined,
+              isCanvasLoaded: false,
+              isCanvasDirty: false,
+              isDrawingMode: false,
+              isChangeTool: false,
+              isDelete: false,
+              isUndo: false,
+              isRedo: false,
+              cursor: 'pointer',
+              currentStateIndex: -1,
+              canvasStates: [],
+              canvasZoom: 1,
+              canvasWidth: 100,
+              canvasHeight: 100,
+              canvasMaxWidth: 100,
+              isLoading: false,
+              isSaving: false,
+              isSaved: false,
+              hasError: false,
+            },
+          }),
+          {},
+        ),
       };
     }
     case actions.SET_CANVAS_LOADED: {
@@ -129,8 +135,10 @@ export default function (state = {}, action) {
         state[answerId].answer.scribbles.forEach((scribble) => {
           scribbles.push({
             ...scribble,
-            content: scribble.creator_id === state[answerId].answer.user_id
-              ? action.payload.scribble : scribble.content,
+            content:
+              scribble.creator_id === state[answerId].answer.user_id
+                ? action.payload.scribble
+                : scribble.content,
           });
         });
       } else {
@@ -263,7 +271,8 @@ export default function (state = {}, action) {
       };
     }
     case canvasActionTypes.SET_CANVAS_PROPERTIES: {
-      const { answerId, canvasWidth, canvasHeight, canvasMaxWidth } = action.payload;
+      const { answerId, canvasWidth, canvasHeight, canvasMaxWidth } =
+        action.payload;
       return {
         ...state,
         [answerId]: {

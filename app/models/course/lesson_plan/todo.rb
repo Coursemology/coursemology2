@@ -57,6 +57,7 @@ class Course::LessonPlan::Todo < ApplicationRecord
     # @return [Array<String>] Array of string of ids of successfully created todos.
     def create_for!(items, course_users)
       return unless items && course_users
+
       items = [items] if items.is_a?(Course::LessonPlan::Item)
       course_users = [course_users] if course_users.is_a?(CourseUser)
       result = Course::LessonPlan::Todo.
@@ -73,6 +74,7 @@ class Course::LessonPlan::Todo < ApplicationRecord
     #   params
     def delete_for(item, course_users = nil)
       return unless item
+
       user_ids = course_users ? course_users.select(:user_id) : item.todos.select(:user_id)
       item.todos.where.has { user_id.in(user_ids) }.destroy_all
     end

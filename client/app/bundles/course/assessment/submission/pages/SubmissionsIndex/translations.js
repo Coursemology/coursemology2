@@ -3,7 +3,8 @@ import { defineMessages } from 'react-intl';
 const translations = defineMessages({
   publishNotice: {
     id: 'course.assessment.submission.submissions.publishNotice',
-    defaultMessage: 'The grade and experience points are not visible to the student. \
+    defaultMessage:
+      'The grade and experience points are not visible to the student. \
                     Publish all grades by clicking the button at the top of this page.',
   },
   studentName: {

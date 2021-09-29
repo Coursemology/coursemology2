@@ -19,7 +19,7 @@ class Course::Condition::AssessmentsController < Course::ConditionsController
   end
 
   def update
-    if @assessment_condition.update_attributes(assessment_condition_params)
+    if @assessment_condition.update(assessment_condition_params)
       redirect_to return_to_path, success: t('course.condition.assessments.update.success')
     else
       render 'edit'

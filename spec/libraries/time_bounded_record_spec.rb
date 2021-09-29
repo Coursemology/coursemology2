@@ -30,8 +30,8 @@ RSpec.describe 'Extension: Time Bounded Record', type: :model do
 
       matching_entries.each do |record|
         expect(record).to be_currently_active
-        expect(record.start_at).to satisfy { |v| v.nil? || v <= Time.zone.now }
-        expect(record.end_at).to satisfy { |v| v.nil? || v >= Time.zone.now }
+        expect(record.start_at).to(satisfy { |v| v.nil? || v <= Time.zone.now })
+        expect(record.end_at).to(satisfy { |v| v.nil? || v >= Time.zone.now })
       end
     end
 

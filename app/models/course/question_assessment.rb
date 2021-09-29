@@ -23,6 +23,7 @@ class Course::QuestionAssessment < ApplicationRecord
                              index: idx)
 
     return question_number if question.title.blank?
+
     I18n.t('activerecord.course/assessment/question.question_with_title',
            question_number: question_number, title: question.title)
   end

@@ -17,7 +17,11 @@ const styles = {
   },
 };
 
-const EnterEditModeButton = ({ match: { params: { courseId } } }) => (
+const EnterEditModeButton = ({
+  match: {
+    params: { courseId },
+  },
+}) => (
   <RaisedButton
     label={<FormattedMessage {...translations.enterEditMode} />}
     onClick={() => history.push(`/courses/${courseId}/lesson_plan/edit/`)}

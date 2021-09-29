@@ -12,50 +12,56 @@ import TypeBadge from 'course/duplication/components/TypeBadge';
 import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
 
 class SurveyListing extends React.Component {
-  static propTypes = {
-    surveys: PropTypes.arrayOf(surveyShape),
-    selectedItems: PropTypes.shape({}),
-  }
-
   static renderRow(survey) {
     return (
       <Checkbox
         checked
         key={survey.id}
-        label={(
+        label={
           <span>
             <TypeBadge itemType={duplicableItemTypes.SURVEY} />
             <UnpublishedIcon tooltipId="itemUnpublished" />
-            { survey.title }
+            {survey.title}
           </span>
-)}
+        }
       />
     );
   }
 
   selectedSurveys() {
     const { surveys, selectedItems } = this.props;
-    return surveys ? surveys.filter(survey => selectedItems[duplicableItemTypes.SURVEY][survey.id]) : [];
+    return surveys
+      ? surveys.filter(
+          (survey) => selectedItems[duplicableItemTypes.SURVEY][survey.id],
+        )
+      : [];
   }
 
   render() {
     const selectedSurveys = this.selectedSurveys();
-    if (selectedSurveys.length < 1) { return null; }
+    if (selectedSurveys.length < 1) {
+      return null;
+    }
 
     return (
       <>
         <Subheader>
-          <FormattedMessage {...defaultComponentTitles.course_survey_component} />
+          <FormattedMessage
+            {...defaultComponentTitles.course_survey_component}
+          />
         </Subheader>
         <Card>
-          <CardText>
-            { selectedSurveys.map(SurveyListing.renderRow) }
-          </CardText>
+          <CardText>{selectedSurveys.map(SurveyListing.renderRow)}</CardText>
         </Card>
       </>
     );
   }
 }
+
+SurveyListing.propTypes = {
+  surveys: PropTypes.arrayOf(surveyShape),
+  selectedItems: PropTypes.shape({}),
+};
 
 export default connect(({ duplication }) => ({
   surveys: duplication.surveyComponent,

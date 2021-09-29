@@ -51,7 +51,7 @@ class QuestionFormOptions extends React.Component {
     for (let i = 0; i < files.length; i += 1) {
       fields.push({ file: files[i] });
     }
-  }
+  };
 
   render() {
     const { intl, fields, disabled, ...props } = this.props;

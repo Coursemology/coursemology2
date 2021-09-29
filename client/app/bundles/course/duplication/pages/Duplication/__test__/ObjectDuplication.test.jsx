@@ -38,13 +38,15 @@ describe('<ObjectDuplication />', () => {
       <MemoryRouter>
         <ObjectDuplication />
       </MemoryRouter>,
-      buildContextOptions(store)
+      buildContextOptions(store),
     );
     await sleep(1);
     expect(spy).toHaveBeenCalled();
 
     const sortedData = store.getState().duplication;
-    const courseTitles = sortedData.destinationCourses.map(course => course.title);
+    const courseTitles = sortedData.destinationCourses.map(
+      (course) => course.title,
+    );
     const rootFolder = sortedData.materialsComponent[0];
     expect(courseTitles).toEqual(['Course A', 'Course B', 'Course C']);
     expect(sortedData.materialsComponent.length).toBe(1);

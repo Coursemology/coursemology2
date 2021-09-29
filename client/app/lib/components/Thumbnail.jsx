@@ -50,7 +50,16 @@ class Thumbnail extends React.PureComponent {
 
   render() {
     // eslint-disable-next-line no-unused-vars
-    const { src, alt, file, onClick, style, containerStyle, rootStyle, ...props } = this.props;
+    const {
+      src,
+      alt,
+      file,
+      onClick,
+      style,
+      containerStyle,
+      rootStyle,
+      ...props
+    } = this.props;
     const source = src || this.state.src;
     const altText = alt || this.state.alt || src;
 
@@ -68,18 +77,20 @@ class Thumbnail extends React.PureComponent {
       objectFit: 'contain',
     };
 
-    const onThumbnailClick = onClick && typeof (onClick) === 'function'
-      ? (event) => {
-        onClick(event);
-        this.setState({ open: true });
-      }
-      : () => this.setState({ open: true });
+    const onThumbnailClick =
+      onClick && typeof onClick === 'function'
+        ? (event) => {
+            onClick(event);
+            this.setState({ open: true });
+          }
+        : () => this.setState({ open: true });
 
     const actions = [
       <FlatButton
         label={<FormattedMessage {...formTranslations.close} />}
         primary
         onClick={() => this.setState({ open: false })}
+        key="thumbnail-close-button"
       />,
     ];
 
@@ -87,12 +98,7 @@ class Thumbnail extends React.PureComponent {
       <div style={rootStyle}>
         <div style={containerStyle}>
           <a onClick={onThumbnailClick}>
-            <img
-              src={source}
-              alt={altText}
-              style={thumbnailStyle}
-              {...props}
-            />
+            <img src={source} alt={altText} style={thumbnailStyle} {...props} />
           </a>
         </div>
         <Dialog

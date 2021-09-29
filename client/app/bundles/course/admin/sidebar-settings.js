@@ -13,7 +13,7 @@ $(document).ready(() => {
       return ui;
     },
     stop() {
-      $('.weight input').val(index => index + 1);
+      $('.weight input').val((index) => index + 1);
     },
   });
 });

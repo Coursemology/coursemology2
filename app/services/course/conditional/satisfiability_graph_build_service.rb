@@ -4,7 +4,7 @@ class Course::Conditional::SatisfiabilityGraphBuildService
     # Build and cache the satisfiability graph for the given course.
     #
     # @param [Course] course The course to build the satsifiability graph
-    def build(course) # rubocop:disable Delegate
+    def build(course)
       # TODO: Cache the satisfiability graph
       new.build(course)
     end

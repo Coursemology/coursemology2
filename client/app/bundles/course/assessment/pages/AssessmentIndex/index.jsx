@@ -6,7 +6,9 @@ import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
 import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
-import NotificationBar, { notificationShape } from 'lib/components/NotificationBar';
+import NotificationBar, {
+  notificationShape,
+} from 'lib/components/NotificationBar';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import formTranslations from 'lib/translations/form';
 import modalFormStyles from 'lib/styles/ModalForm.scss';
@@ -14,7 +16,6 @@ import AssessmentForm from '../../containers/AssessmentForm';
 import * as actions from '../../actions';
 import translations from './translations.intl';
 import actionTypes, { formNames } from '../../constants';
-
 
 const styles = {
   newButton: {
@@ -27,22 +28,6 @@ const styles = {
 };
 
 class PopupDialog extends React.Component {
-  static propTypes = {
-    dispatch: PropTypes.func.isRequired,
-    intl: intlShape,
-    // If the gamification feature is enabled in the course.
-    gamified: PropTypes.bool,
-    // If randomization is allowed for assessments in the current course
-    randomizationAllowed: PropTypes.bool,
-    categoryId: PropTypes.number.isRequired,
-    tabId: PropTypes.number.isRequired,
-    pristine: PropTypes.bool,
-    disabled: PropTypes.bool,
-    visible: PropTypes.bool.isRequired,
-    confirmationDialogOpen: PropTypes.bool.isRequired,
-    notification: notificationShape,
-  };
-
   onFormSubmit = (data) => {
     const { categoryId, tabId, intl } = this.props;
 
@@ -52,8 +37,8 @@ class PopupDialog extends React.Component {
         tabId,
         { assessment: data },
         intl.formatMessage(translations.creationSuccess),
-        intl.formatMessage(translations.creationFailure)
-      )
+        intl.formatMessage(translations.creationFailure),
+      ),
     );
   };
 
@@ -77,6 +62,7 @@ class PopupDialog extends React.Component {
         primary
         disabled={this.props.disabled}
         onClick={this.handleClose}
+        key="assessment-popup-dialog-cancel-button"
       />,
       <FlatButton
         label={<FormattedMessage {...formTranslations.submit} />}
@@ -84,6 +70,7 @@ class PopupDialog extends React.Component {
         primary
         onClick={() => dispatch(submit(formNames.ASSESSMENT))}
         disabled={this.props.disabled}
+        key="assessment-popup-dialog-submit-button"
       />,
     ];
 
@@ -133,8 +120,12 @@ class PopupDialog extends React.Component {
         <ConfirmationDialog
           confirmDiscard
           open={this.props.confirmationDialogOpen}
-          onCancel={() => dispatch({ type: actionTypes.ASSESSMENT_FORM_CONFIRM_CANCEL })}
-          onConfirm={() => dispatch({ type: actionTypes.ASSESSMENT_FORM_CONFIRM_DISCARD })}
+          onCancel={() =>
+            dispatch({ type: actionTypes.ASSESSMENT_FORM_CONFIRM_CANCEL })
+          }
+          onConfirm={() =>
+            dispatch({ type: actionTypes.ASSESSMENT_FORM_CONFIRM_DISCARD })
+          }
         />
         <NotificationBar notification={this.props.notification} />
       </>
@@ -142,6 +133,23 @@ class PopupDialog extends React.Component {
   }
 }
 
-export default connect(
-  state => ({ ...state.formDialog, pristine: isPristine(formNames.ASSESSMENT)(state) })
-)(injectIntl(PopupDialog));
+PopupDialog.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  intl: intlShape,
+  // If the gamification feature is enabled in the course.
+  gamified: PropTypes.bool,
+  // If randomization is allowed for assessments in the current course
+  randomizationAllowed: PropTypes.bool,
+  categoryId: PropTypes.number.isRequired,
+  tabId: PropTypes.number.isRequired,
+  pristine: PropTypes.bool,
+  disabled: PropTypes.bool,
+  visible: PropTypes.bool.isRequired,
+  confirmationDialogOpen: PropTypes.bool.isRequired,
+  notification: notificationShape,
+};
+
+export default connect((state) => ({
+  ...state.formDialog,
+  pristine: isPristine(formNames.ASSESSMENT)(state),
+}))(injectIntl(PopupDialog));

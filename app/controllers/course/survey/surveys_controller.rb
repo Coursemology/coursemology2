@@ -30,7 +30,7 @@ class Course::Survey::SurveysController < Course::Survey::Controller
   end
 
   def update
-    if @survey.update_attributes(survey_params)
+    if @survey.update(survey_params)
       render_survey_with_questions_json
     else
       render json: { errors: @survey.errors }, status: :bad_request

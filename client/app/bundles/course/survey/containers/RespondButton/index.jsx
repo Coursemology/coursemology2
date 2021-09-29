@@ -31,9 +31,16 @@ const translations = defineMessages({
 });
 
 const RespondButton = ({
-  courseId, surveyId, responseId,
-  canRespond, canModify, canSubmit,
-  startAt, endAt, submittedAt, dispatch,
+  courseId,
+  surveyId,
+  responseId,
+  canRespond,
+  canModify,
+  canSubmit,
+  startAt,
+  endAt,
+  submittedAt,
+  dispatch,
 }) => {
   const isStarted = !!responseId;
   const responsePath = `/courses/${courseId}/surveys/${surveyId}/responses/${responseId}`;
@@ -78,7 +85,8 @@ const RespondButton = ({
 };
 
 RespondButton.propTypes = {
-  courseId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  courseId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    .isRequired,
   surveyId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   responseId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   canRespond: PropTypes.bool,
@@ -86,7 +94,10 @@ RespondButton.propTypes = {
   canSubmit: PropTypes.bool,
   startAt: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
   endAt: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
-  submittedAt: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
+  submittedAt: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.instanceOf(Date),
+  ]),
 
   dispatch: PropTypes.func.isRequired,
 };

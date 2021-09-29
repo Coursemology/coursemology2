@@ -23,13 +23,6 @@ const styles = {
 };
 
 class LessonPlanNav extends React.Component {
-  static propTypes = {
-    groups: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.string,
-      milestone: PropTypes.object,
-    })).isRequired,
-  }
-
   constructor(props) {
     super(props);
 
@@ -46,18 +39,20 @@ class LessonPlanNav extends React.Component {
       open: true,
       anchorEl: event.currentTarget,
     });
-  }
+  };
 
   handleRequestClose = () => {
     this.setState({
       open: false,
     });
-  }
+  };
 
   render() {
     const { groups } = this.props;
 
-    if (groups.length < 2) { return null; }
+    if (groups.length < 2) {
+      return null;
+    }
 
     return (
       <>
@@ -77,21 +72,21 @@ class LessonPlanNav extends React.Component {
           onRequestClose={this.handleRequestClose}
         >
           <Menu maxHeight={450}>
-            {
-              groups.map((group) => {
-                if (!group.milestone) { return null; }
-                return (
-                  <MenuItem
-                    key={group.id}
-                    primaryText={group.milestone.title}
-                    onClick={() => {
-                      scroller.scrollTo(group.id, { offset: -50 });
-                      this.setState({ open: false });
-                    }}
-                  />
-                );
-              })
-            }
+            {groups.map((group) => {
+              if (!group.milestone) {
+                return null;
+              }
+              return (
+                <MenuItem
+                  key={group.id}
+                  primaryText={group.milestone.title}
+                  onClick={() => {
+                    scroller.scrollTo(group.id, { offset: -50 });
+                    this.setState({ open: false });
+                  }}
+                />
+              );
+            })}
           </Menu>
         </Popover>
       </>
@@ -99,6 +94,15 @@ class LessonPlanNav extends React.Component {
   }
 }
 
-export default connect(state => ({
+LessonPlanNav.propTypes = {
+  groups: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      milestone: PropTypes.object,
+    }),
+  ).isRequired,
+};
+
+export default connect((state) => ({
   groups: state.lessonPlan.groups,
 }))(LessonPlanNav);

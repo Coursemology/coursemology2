@@ -54,6 +54,7 @@ class Course::Settings::Notifications
   def update(attributes)
     settings_interface = settings_interfaces_hash[attributes['component']]
     return false unless settings_interface
+
     settings_interface.update_email_setting(attributes)
   end
 

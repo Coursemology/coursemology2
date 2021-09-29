@@ -18,7 +18,7 @@ $(document).ready(() => {
           <Level />
         </div>
       </ProviderWrapper>,
-      mountNode
+      mountNode,
     );
   }
 });

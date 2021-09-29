@@ -23,6 +23,7 @@ class User < ApplicationRecord
     def system
       @system ||= find(User::SYSTEM_USER_ID)
       raise 'No system user. Did you run rake db:seed?' unless @system
+
       @system
     end
 
@@ -34,6 +35,7 @@ class User < ApplicationRecord
     def deleted
       @deleted ||= find(User::DELETED_USER_ID)
       raise 'No deleted user. Did you run rake db:seed?' unless @deleted
+
       @deleted
     end
   end
@@ -93,7 +95,7 @@ class User < ApplicationRecord
   def set_next_email_as_primary
     return false unless default_email_record
 
-    default_email_record.update_attributes(primary: true)
+    default_email_record.update(primary: true)
   end
 
   # Update the user using the info from invitation.
@@ -103,14 +105,15 @@ class User < ApplicationRecord
     self.name = invitation.name
     self.email = invitation.email
     skip_confirmation!
-    if invitation.invitation_key.first == Course::UserInvitation::INVITATION_KEY_IDENTIFIER
+    case invitation.invitation_key.first
+    when Course::UserInvitation::INVITATION_KEY_IDENTIFIER
       course_users.build(course: invitation.course,
                          name: invitation.name,
                          role: invitation.role,
                          phantom: invitation.phantom,
                          creator: self,
                          updater: self)
-    elsif invitation.invitation_key.first == Instance::UserInvitation::INVITATION_KEY_IDENTIFIER
+    when Instance::UserInvitation::INVITATION_KEY_IDENTIFIER
       @instance_invitation = invitation
     end
   end

@@ -75,7 +75,8 @@ const translations = defineMessages({
   },
   runCodeWithLimit: {
     id: 'course.assessment.submission.runCodeWithLimit',
-    defaultMessage: 'Run Code ({attemptsLeft, plural, one {# attempt} other {# attempts}} left)',
+    defaultMessage:
+      'Run Code ({attemptsLeft, plural, one {# attempt} other {# attempts}} left)',
   },
   reset: {
     id: 'course.assessment.submission.reset',
@@ -159,35 +160,42 @@ const translations = defineMessages({
   },
   submitConfirmation: {
     id: 'course.assessment.submission.submitConfirmation',
-    defaultMessage: 'THIS ACTION IS IRREVERSIBLE Are you sure you want to submit? \
+    defaultMessage:
+      'THIS ACTION IS IRREVERSIBLE Are you sure you want to submit? \
                     You will no longer be able to amend your submission!',
   },
   unsubmitConfirmation: {
     id: 'course.assessment.submission.unsubmitConfirmation',
-    defaultMessage: 'This will reset the submission time and permit the student to change \
+    defaultMessage:
+      'This will reset the submission time and permit the student to change \
                     their submission. NOTE THAT YOU CANNOT UNDO THIS!! Are you sure you want to proceed?',
   },
   submitError: {
     id: 'course.assessment.submission.submitError',
-    defaultMessage: 'Failure to submit answer. Please check the errors for your answers',
+    defaultMessage:
+      'Failure to submit answer. Please check the errors for your answers',
   },
   resetConfirmation: {
     id: 'course.assessment.submission.resetConfirmation',
-    defaultMessage: 'Are you sure you want to reset your answer? This action is irreversible \
+    defaultMessage:
+      'Are you sure you want to reset your answer? This action is irreversible \
                     and you will lose all your current work for this question.',
   },
   publishConfirmation: {
     id: 'course.assessment.submission.publishConfirmation',
-    defaultMessage: 'THIS ACTION IS IRREVERSIBLE All graded submissions will be published and \
+    defaultMessage:
+      'THIS ACTION IS IRREVERSIBLE All graded submissions will be published and \
                      students will see their own grades. Are you sure you want to publish?',
   },
   lateSubmission: {
     id: 'course.assessment.submission.lateSubmission',
-    defaultMessage: 'This submission is LATE! You may want to penalize the student for late submission.',
+    defaultMessage:
+      'This submission is LATE! You may want to penalize the student for late submission.',
   },
   unpublishedGrades: {
     id: 'course.assessment.submission.unpublishedGrades',
-    defaultMessage: 'These grades will not be visible to the student until they are published. \
+    defaultMessage:
+      'These grades will not be visible to the student until they are published. \
                     This can be done at the submissions page of this assessment.',
   },
   updateSuccess: {
@@ -232,7 +240,8 @@ const translations = defineMessages({
   },
   autogradeFailure: {
     id: 'course.assessment.submission.autogradeFailure',
-    defaultMessage: '(T_T) Sorry, the autograder is having mood swings and quit on us. \
+    defaultMessage:
+      '(T_T) Sorry, the autograder is having mood swings and quit on us. \
                     Try submitting your code again in a couple of minutes.',
   },
   autogradeSubmissionSuccess: {
@@ -253,7 +262,8 @@ const translations = defineMessages({
   },
   examDialogMessage: {
     id: 'course.assessment.submission.examDialogMessage',
-    defaultMessage: 'Please do not sign out or close the browser, otherwise \
+    defaultMessage:
+      'Please do not sign out or close the browser, otherwise \
                     you may have trouble continuing the exam.',
   },
   emptyAssessment: {
@@ -294,7 +304,8 @@ const translations = defineMessages({
   },
   rendererNotImplemented: {
     id: 'course.assessment.submission.rendererNotImplemented',
-    defaultMessage: 'The display for this question type has not been implemented yet.',
+    defaultMessage:
+      'The display for this question type has not been implemented yet.',
   },
   solutions: {
     id: 'course.assessment.submission.solutions',
@@ -302,7 +313,8 @@ const translations = defineMessages({
   },
   solutionsWithMaximumGrade: {
     id: 'course.assessment.submission.solutionsWithMaximumGrade',
-    defaultMessage: 'Solutions (Maximum Grade for this Question: {maximumGrade})',
+    defaultMessage:
+      'Solutions (Maximum Grade for this Question: {maximumGrade})',
   },
   type: {
     id: 'course.assessment.submission.type',

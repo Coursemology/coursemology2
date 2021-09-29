@@ -12,18 +12,23 @@ export default function (state = {}, action) {
     case actions.PUBLISH_SUCCESS:
       return {
         ...state,
-        ...action.payload.answers.reduce((obj, answer) => ({ ...obj, [answer.questionId]: answer.testCases }),
-          {}),
+        ...action.payload.answers.reduce(
+          (obj, answer) => ({ ...obj, [answer.questionId]: answer.testCases }),
+          {},
+        ),
       };
     case actions.AUTOGRADE_SUCCESS:
     case actions.RESET_SUCCESS: {
       const { questionId } = action.payload;
-      return Object.keys(state).reduce((obj, key) => {
-        if (key !== questionId.toString()) {
-          return { ...obj, [key]: state[key] };
-        }
-        return obj;
-      }, { [questionId]: action.payload.testCases });
+      return Object.keys(state).reduce(
+        (obj, key) => {
+          if (key !== questionId.toString()) {
+            return { ...obj, [key]: state[key] };
+          }
+          return obj;
+        },
+        { [questionId]: action.payload.testCases },
+      );
     }
     case actions.AUTOGRADE_FAILURE: {
       // Clear the previous test results in the test case results display.
@@ -34,11 +39,13 @@ export default function (state = {}, action) {
       // and passed values.
       Object.keys(state[questionId]).forEach((testType) => {
         if (testType !== 'stdout' && testType !== 'stderr') {
-          questionState[testType] = state[questionId][testType].map(testCase => ({
-            identifier: testCase.identifier,
-            expression: testCase.expression,
-            expected: testCase.expected,
-          }));
+          questionState[testType] = state[questionId][testType].map(
+            (testCase) => ({
+              identifier: testCase.identifier,
+              expression: testCase.expression,
+              expected: testCase.expected,
+            }),
+          );
         }
       });
 

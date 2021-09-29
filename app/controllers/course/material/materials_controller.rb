@@ -11,7 +11,7 @@ class Course::Material::MaterialsController < Course::Material::Controller
   end
 
   def update
-    if @material.update_attributes(material_params)
+    if @material.update(material_params)
       redirect_to course_material_folder_path(current_course, @folder),
                   success: t('.success', name: @material.name)
     else

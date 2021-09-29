@@ -15,7 +15,7 @@ RSpec.describe Course::Admin::AssessmentSettingsController, type: :controller do
 
     describe '#update' do
       before do
-        allow(course).to receive(:update_attributes).and_return(false)
+        allow(course).to receive(:update).and_return(false)
         allow(controller).to receive(:current_course).and_return(course)
         allow(controller).to receive(:category_params).and_return(nil)
       end

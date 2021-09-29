@@ -10,7 +10,7 @@ class Course::Assessment::Question::VoiceResponse < ApplicationRecord
     answer.acting_as
   end
 
-  def initialize_duplicate(duplicator, other)
+  def initialize_duplicate(_duplicator, other)
     copy_attributes(other)
   end
 

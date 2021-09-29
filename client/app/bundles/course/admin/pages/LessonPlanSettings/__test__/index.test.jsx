@@ -28,7 +28,7 @@ describe('<LessonPlanSettings />', () => {
 
     const lessonPlanSettings = mount(
       <LessonPlanSettings />,
-      buildContextOptions(store)
+      buildContextOptions(store),
     );
 
     const toggles = lessonPlanSettings.find('Toggle');

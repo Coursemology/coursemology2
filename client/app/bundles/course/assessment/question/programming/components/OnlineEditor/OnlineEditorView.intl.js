@@ -8,7 +8,7 @@ export default defineMessages({
   },
   prependSubtitle: {
     id: 'course.assessment.question.programming.onlineEditorView.prependSubtitle',
-    defaultMessage: '(optional, hidden, inserted before student\'s code)',
+    defaultMessage: "(optional, hidden, inserted before student's code)",
     description: 'Subtitle for prepend code block.',
   },
   appendTitle: {
@@ -18,7 +18,7 @@ export default defineMessages({
   },
   appendSubtitle: {
     id: 'course.assessment.question.programming.onlineEditorView.appendSubtitle',
-    defaultMessage: '(optional, hidden, appended after student\'s code)',
+    defaultMessage: "(optional, hidden, appended after student's code)",
     description: 'Subtitle for append code block.',
   },
   solutionTitle: {
@@ -74,17 +74,20 @@ export default defineMessages({
   testCaseDescriptionNote: {
     id: 'course.assessment.question.programming.onlineEditorView.testCaseDescriptionNote',
     defaultMessage: 'NOTE',
-    description: 'Value of the note key that is passed into the test case description.',
+    description:
+      'Value of the note key that is passed into the test case description.',
   },
   testCaseDescriptionPrint: {
     id: 'course.assessment.question.programming.onlineEditorView.testCaseDescriptionPrint',
     defaultMessage: 'print()',
-    description: 'Value of the print key that is passed into the test case description.',
+    description:
+      'Value of the print key that is passed into the test case description.',
   },
   testCaseDescriptionNone: {
     id: 'course.assessment.question.programming.onlineEditorView.testCaseDescriptionNone',
     defaultMessage: 'None',
-    description: 'Value of the none key that is passed into the test case description.',
+    description:
+      'Value of the none key that is passed into the test case description.',
   },
   testCaseDescriptionGoogleTest: {
     id: 'course.assessment.question.programming.onlineEditorView.testCaseDescriptionGoogleTest',
@@ -143,7 +146,8 @@ export default defineMessages({
   },
   noTestCaseErrorAlert: {
     id: 'course.assessment.question.programming.onlineEditorView.noTestCaseErrorAlert',
-    defaultMessage: 'At least 1 test case is required for autograded programming question.',
+    defaultMessage:
+      'At least 1 test case is required for autograded programming question.',
   },
   cannotBeBlankValidationError: {
     id: 'course.assessment.question.programming.onlineEditorView.cannotBeBlankValidationError',

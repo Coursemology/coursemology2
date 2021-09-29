@@ -13,16 +13,23 @@ $(document).ready(() => {
     addFields.each((index) => {
       addFields[index].setAttribute(
         'data-association-insertion-node',
-        replaceBracketWithUnderscore(addFields[index].getAttribute('data-association-insertion-node'))
+        replaceBracketWithUnderscore(
+          addFields[index].getAttribute('data-association-insertion-node'),
+        ),
       );
     });
 
     var tbody = $('.table-comprehension tbody');
     var tdSolution = $('.table-comprehension td.td-solution');
     var aSolutionButton = $('.table-comprehension a.solution-button');
-    var tableElements = jQuery.merge(jQuery.merge(tbody, tdSolution), aSolutionButton);
+    var tableElements = jQuery.merge(
+      jQuery.merge(tbody, tdSolution),
+      aSolutionButton,
+    );
     tableElements.each((index) => {
-      tableElements[index].className = replaceBracketWithUnderscore(tableElements[index].className);
+      tableElements[index].className = replaceBracketWithUnderscore(
+        tableElements[index].className,
+      );
     });
   }
 
@@ -36,15 +43,19 @@ $(document).ready(() => {
     var thisClassNameLast = thisClassNameArr[thisClassNameArr.length - 1];
     var tdToFind = 'td.' + thisClassNameLast;
     $lastSolutionField = $(tdToFind + ' input:last-of-type').clone();
-    $lastSolutionField.val("");
-    $(tdToFind + ' div.form-group input:last-of-type').after($lastSolutionField);
-  };
+    $lastSolutionField.val('');
+    $(tdToFind + ' div.form-group input:last-of-type').after(
+      $lastSolutionField,
+    );
+  }
 
   replaceBracketFromComprehensionAttributes();
   $('a.solution-button').on('click', addSolutionField);
 
   $('.table-comprehension').on('cocoon:after-insert', (e, node) => {
     replaceBracketFromComprehensionAttributes();
-    node.find('td.td-solution-button a.solution-button').on('click', addSolutionField);
+    node
+      .find('td.td-solution-button a.solution-button')
+      .on('click', addSolutionField);
   });
 });

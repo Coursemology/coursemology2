@@ -80,10 +80,12 @@ class VideoPlayer extends React.Component {
   componentWillMount() {
     if (VideoPlayer.ReactPlayer !== undefined) return; // Already loaded
 
-    import(/* webpackChunkName: "video" */ 'react-player').then((ReactPlayer) => {
-      VideoPlayer.ReactPlayer = ReactPlayer.default;
-      this.forceUpdate();
-    });
+    import(/* webpackChunkName: "video" */ 'react-player').then(
+      (ReactPlayer) => {
+        VideoPlayer.ReactPlayer = ReactPlayer.default;
+        this.forceUpdate();
+      },
+    );
   }
 
   componentDidMount() {
@@ -136,10 +138,12 @@ class VideoPlayer extends React.Component {
   toggleCaptions = (captionsState) => {
     const internalPlayer = this.player.getInternalPlayer();
 
-    if (!internalPlayer
-          || internalPlayer.loadModule === undefined
-          || internalPlayer.unloadModule === undefined
-          || internalPlayer.getOptions === undefined) {
+    if (
+      !internalPlayer ||
+      internalPlayer.loadModule === undefined ||
+      internalPlayer.unloadModule === undefined ||
+      internalPlayer.getOptions === undefined
+    ) {
       return;
     }
 
@@ -173,7 +177,9 @@ class VideoPlayer extends React.Component {
           playing={isPlayingState(this.props.playerState)}
           volume={this.props.playerVolume}
           playbackRate={this.props.playbackRate}
-          onStart={() => { this.toggleCaptions(this.props.captionsState); }}
+          onStart={() => {
+            this.toggleCaptions(this.props.captionsState);
+          }}
           onDuration={this.props.onDurationReceived}
           onProgress={({ playedSeconds, loadedSeconds }) => {
             this.props.onPlayerProgress(playedSeconds, loadedSeconds);
@@ -181,7 +187,9 @@ class VideoPlayer extends React.Component {
           onReady={this.readyCallback}
           onPlay={() => this.props.onPlayerStateChanged(playerStates.PLAYING)}
           onPause={() => this.props.onPlayerStateChanged(playerStates.PAUSED)}
-          onBuffer={() => this.props.onPlayerStateChanged(playerStates.BUFFERING)}
+          onBuffer={() =>
+            this.props.onPlayerStateChanged(playerStates.BUFFERING)
+          }
           onEnded={() => this.props.onPlayerStateChanged(playerStates.ENDED)}
           playsinline
           progressInterval={videoDefaults.progressUpdateFrequencyMs}
@@ -202,7 +210,10 @@ class VideoPlayer extends React.Component {
           <PlayButton />
           <VolumeButton />
           <VolumeSlider />
-          <VideoTimestamp progress={this.props.playerProgress} duration={this.props.duration} />
+          <VideoTimestamp
+            progress={this.props.playerProgress}
+            duration={this.props.duration}
+          />
           <CaptionsButton />
           <PlayBackRateSelector />
           <NextVideoButton />
@@ -224,9 +235,10 @@ VideoPlayer.defaultProps = defaultProps;
 
 function mapDispatchToProps(dispatch) {
   return {
-    onPlayerProgress: (progress, buffered) => dispatch(updateProgressAndBuffer(progress, buffered)),
-    onDurationReceived: duration => dispatch(updatePlayerDuration(duration)),
-    onPlayerStateChanged: newState => dispatch(changePlayerState(newState)),
+    onPlayerProgress: (progress, buffered) =>
+      dispatch(updateProgressAndBuffer(progress, buffered)),
+    onDurationReceived: (duration) => dispatch(updatePlayerDuration(duration)),
+    onPlayerStateChanged: (newState) => dispatch(changePlayerState(newState)),
     onTick: () => dispatch(sendEvents()),
     onUnmount: () => dispatch(endSession()),
     directSeek: (playerProgress) => {
@@ -245,4 +257,8 @@ function mergeProps(stateProps, dispatchProps) {
   return { ...stateProps, ...dispatchProps };
 }
 
-export default connect(state => state.video, mapDispatchToProps, mergeProps)(VideoPlayer);
+export default connect(
+  (state) => state.video,
+  mapDispatchToProps,
+  mergeProps,
+)(VideoPlayer);

@@ -3,7 +3,7 @@ class RekeySidebarSettings < ActiveRecord::Migration[4.2]
     ActsAsTenant.without_tenant do
       Course.all.each do |course|
         weight = course.settings(:sidebar, :assessments).weight
-        next if !weight
+        next unless weight
 
         course.assessment_categories.each do |c|
           course.settings(:sidebar).settings("assessments_#{c.id}").weight = weight
@@ -23,6 +23,7 @@ class RekeySidebarSettings < ActiveRecord::Migration[4.2]
           weight
         end
         next if weights.empty?
+
         weight = weights.first
         course.settings(:sidebar, :assessments).weight = weight
         course.save!

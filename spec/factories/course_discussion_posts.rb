@@ -13,11 +13,11 @@ FactoryBot.define do
     text { 'This is a test post' }
 
     after(:create) do |post, evaluator|
-      [*evaluator.upvoted_by].each do |user|
+      Array(evaluator.upvoted_by).each do |user|
         post.cast_vote!(user, 1)
       end
 
-      [*evaluator.downvoted_by].each do |user|
+      Array(evaluator.downvoted_by).each do |user|
         post.cast_vote!(user, -1)
       end
     end

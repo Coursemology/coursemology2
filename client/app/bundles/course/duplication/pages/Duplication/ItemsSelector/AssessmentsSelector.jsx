@@ -23,28 +23,23 @@ const translations = defineMessages({
 });
 
 class AssessmentsSelector extends React.Component {
-  static propTypes = {
-    categories: PropTypes.arrayOf(categoryShape),
-    selectedItems: PropTypes.shape({}),
-    tabDisabled: PropTypes.bool,
-    categoryDisabled: PropTypes.bool,
-
-    dispatch: PropTypes.func.isRequired,
-  }
-
-  tabSetAll = tab => (value) => {
+  tabSetAll = (tab) => (value) => {
     const { dispatch, tabDisabled } = this.props;
-    if (!tabDisabled) { dispatch(setItemSelectedBoolean(TAB, tab.id, value)); }
+    if (!tabDisabled) {
+      dispatch(setItemSelectedBoolean(TAB, tab.id, value));
+    }
     tab.assessments.forEach((assessment) => {
       dispatch(setItemSelectedBoolean(ASSESSMENT, assessment.id, value));
     });
-  }
+  };
 
-  categorySetAll = category => (value) => {
+  categorySetAll = (category) => (value) => {
     const { dispatch, categoryDisabled } = this.props;
-    if (!categoryDisabled) { dispatch(setItemSelectedBoolean(CATEGORY, category.id, value)); }
-    category.tabs.forEach(tab => this.tabSetAll(tab)(value));
-  }
+    if (!categoryDisabled) {
+      dispatch(setItemSelectedBoolean(CATEGORY, category.id, value));
+    }
+    category.tabs.forEach((tab) => this.tabSetAll(tab)(value));
+  };
 
   renderAssessmentTree(assessment) {
     const { dispatch, selectedItems } = this.props;
@@ -53,8 +48,8 @@ class AssessmentsSelector extends React.Component {
     const label = (
       <span>
         <TypeBadge itemType={ASSESSMENT} />
-        { published || <UnpublishedIcon /> }
-        { title }
+        {published || <UnpublishedIcon />}
+        {title}
       </span>
     );
 
@@ -64,7 +59,8 @@ class AssessmentsSelector extends React.Component {
         label={label}
         checked={checked}
         indentLevel={2}
-        onCheck={(e, value) => dispatch(setItemSelectedBoolean(ASSESSMENT, id, value))
+        onCheck={(e, value) =>
+          dispatch(setItemSelectedBoolean(ASSESSMENT, id, value))
         }
       />
     );
@@ -81,18 +77,19 @@ class AssessmentsSelector extends React.Component {
           checked={checked}
           disabled={tabDisabled}
           indentLevel={1}
-          label={(
+          label={
             <span>
               <TypeBadge itemType={TAB} />
-              { title }
+              {title}
             </span>
-)}
-          onCheck={(e, value) => dispatch(setItemSelectedBoolean(TAB, id, value))
+          }
+          onCheck={(e, value) =>
+            dispatch(setItemSelectedBoolean(TAB, id, value))
           }
         >
           <BulkSelectors callback={this.tabSetAll(tab)} />
         </IndentedCheckbox>
-        { assessments.map(assessment => this.renderAssessmentTree(assessment)) }
+        {assessments.map((assessment) => this.renderAssessmentTree(assessment))}
       </div>
     );
   }
@@ -107,42 +104,56 @@ class AssessmentsSelector extends React.Component {
         <IndentedCheckbox
           checked={checked}
           disabled={categoryDisabled}
-          label={(
+          label={
             <span>
               <TypeBadge itemType={CATEGORY} />
-              { title }
+              {title}
             </span>
-)}
-          onCheck={(e, value) => dispatch(setItemSelectedBoolean(CATEGORY, id, value))
+          }
+          onCheck={(e, value) =>
+            dispatch(setItemSelectedBoolean(CATEGORY, id, value))
           }
         >
           <BulkSelectors callback={this.categorySetAll(category)} />
         </IndentedCheckbox>
-        { tabs.map(tab => this.renderTabTree(tab)) }
+        {tabs.map((tab) => this.renderTabTree(tab))}
       </div>
     );
   }
 
   render() {
     const { categories } = this.props;
-    if (!categories) { return null; }
+    if (!categories) {
+      return null;
+    }
 
     return (
       <>
-        <h2><FormattedMessage {...defaultComponentTitles.course_assessments_component} /></h2>
-        {
-          categories.length > 0
-            ? categories.map(category => this.renderCategoryTree(category))
-            : (
-              <Subheader>
-                <FormattedMessage {...translations.noItems} />
-              </Subheader>
-            )
-        }
+        <h2>
+          <FormattedMessage
+            {...defaultComponentTitles.course_assessments_component}
+          />
+        </h2>
+        {categories.length > 0 ? (
+          categories.map((category) => this.renderCategoryTree(category))
+        ) : (
+          <Subheader>
+            <FormattedMessage {...translations.noItems} />
+          </Subheader>
+        )}
       </>
     );
   }
 }
+
+AssessmentsSelector.propTypes = {
+  categories: PropTypes.arrayOf(categoryShape),
+  selectedItems: PropTypes.shape({}),
+  tabDisabled: PropTypes.bool,
+  categoryDisabled: PropTypes.bool,
+
+  dispatch: PropTypes.func.isRequired,
+};
 
 const mapStateToProps = (state) => {
   const destinationCourse = destinationCourseSelector(state);
@@ -152,11 +163,11 @@ const mapStateToProps = (state) => {
     categories: duplication.assessmentsComponent,
     selectedItems: duplication.selectedItems,
     tabDisabled:
-      duplication.sourceCourse.unduplicableObjectTypes.includes(TAB)
-      || destinationCourse.unduplicableObjectTypes.includes(TAB),
+      duplication.sourceCourse.unduplicableObjectTypes.includes(TAB) ||
+      destinationCourse.unduplicableObjectTypes.includes(TAB),
     categoryDisabled:
-      duplication.sourceCourse.unduplicableObjectTypes.includes(CATEGORY)
-      || destinationCourse.unduplicableObjectTypes.includes(CATEGORY),
+      duplication.sourceCourse.unduplicableObjectTypes.includes(CATEGORY) ||
+      destinationCourse.unduplicableObjectTypes.includes(CATEGORY),
   };
 };
 

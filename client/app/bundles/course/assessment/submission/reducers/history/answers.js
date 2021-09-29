@@ -5,13 +5,16 @@ export default function (state = {}, action) {
     case actions.GET_PAST_ANSWERS_SUCCESS: {
       return {
         ...state,
-        ...action.payload.answers.reduce((obj, answer) => ({
-          ...obj,
-          [answer.id]: {
-            ...answer.fields,
-            createdAt: answer.createdAt,
-          },
-        }), {}),
+        ...action.payload.answers.reduce(
+          (obj, answer) => ({
+            ...obj,
+            [answer.id]: {
+              ...answer.fields,
+              createdAt: answer.createdAt,
+            },
+          }),
+          {},
+        ),
       };
     }
     case actions.AUTOGRADE_SUCCESS: {

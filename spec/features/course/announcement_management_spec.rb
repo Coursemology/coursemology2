@@ -19,15 +19,15 @@ RSpec.feature 'Course: Announcements' do
 
       scenario 'I can create new announcements' do
         visit new_course_announcement_path(course)
-        click_button I18n.t('helpers.submit.announcement.create')
-        expect(page).to have_button(I18n.t('helpers.submit.announcement.create'))
+        click_button I18n.t('helpers.submit.course/announcement.create')
+        expect(page).to have_button(I18n.t('helpers.submit.course/announcement.create'))
         expect(page).to have_css('div.has-error')
 
         announcement = build_stubbed(:course_announcement, course: course)
         fill_in 'announcement_title',    with: announcement.title
         fill_in 'announcement_content',  with: announcement.content
         expect do
-          click_button I18n.t('helpers.submit.announcement.create')
+          click_button I18n.t('helpers.submit.course/announcement.create')
         end.to change(course.announcements, :count).by(1)
 
         expect(page).to have_selector('div.alert.alert-success',
@@ -48,15 +48,15 @@ RSpec.feature 'Course: Announcements' do
                                    with: announcement.end_at.in_time_zone(time_zone))
 
         fill_in 'announcement_title', with: ''
-        click_button I18n.t('helpers.submit.announcement.update')
-        expect(page).to have_button('helpers.submit.announcement.update')
+        click_button I18n.t('helpers.submit.course/announcement.update')
+        expect(page).to have_button('helpers.submit.course/announcement.update')
         expect(page).to have_css('div.has-error')
 
         new_title = 'New Title'
         new_content = 'New content'
         fill_in 'announcement_title',        with: new_title
         fill_in 'announcement_content',      with: new_content
-        click_button I18n.t('helpers.submit.announcement.update')
+        click_button I18n.t('helpers.submit.course/announcement.update')
 
         expect(current_path).to eq course_announcements_path(course)
         expect(page).to have_selector('div.alert.alert-success',

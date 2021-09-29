@@ -65,7 +65,7 @@ RSpec.describe 'Extension: Manual Eager Load', type: :model do
             referenced.association(:source_item).loaded?
           end).to be(true)
           expect(eager_load_items.map(&:source_item).all? do |source_item|
-            source.object_id == source_item.object_id
+            source.equal?(source_item)
           end).to be(true)
         end
       end

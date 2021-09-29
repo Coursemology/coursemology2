@@ -6,7 +6,7 @@ if check_import_job?
     json.redirect_edit do
       json.url edit_course_assessment_question_programming_path(current_course, @assessment, @programming_question)
       json.page_header @question_assessment.display_title
-      json.page_title @question_assessment.display_title + ' - ' + page_title
+      json.page_title "#{@question_assessment.display_title} - #{page_title}"
     end
   end
 end

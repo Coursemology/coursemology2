@@ -31,20 +31,13 @@ const translations = defineMessages({
   },
   confirm: {
     id: 'course.surveys.UnsubmitButton.confirm',
-    defaultMessage: 'Once unsubmitted, you will not be able to submit on behalf of a student. \
+    defaultMessage:
+      'Once unsubmitted, you will not be able to submit on behalf of a student. \
       Are you sure that you want to unsubmit?',
   },
 });
 
-
 class UnsubmitButton extends React.Component {
-  static propTypes = {
-    responseId: PropTypes.number.isRequired,
-
-    isUnsubmitting: PropTypes.bool.isRequired,
-    dispatch: PropTypes.func.isRequired,
-  }
-
   constructor(props) {
     super(props);
     this.state = { open: false };
@@ -53,14 +46,14 @@ class UnsubmitButton extends React.Component {
   handleUnsubmitResponse = () => {
     const { dispatch, responseId } = this.props;
     const { unsubmitSuccess, unsubmitFailure } = translations;
-    const successMessage = <FormattedMessage {...(unsubmitSuccess)} />;
-    const failureMessage = <FormattedMessage {...(unsubmitFailure)} />;
+    const successMessage = <FormattedMessage {...unsubmitSuccess} />;
+    const failureMessage = <FormattedMessage {...unsubmitFailure} />;
 
     this.setState({ open: false });
     return dispatch(
-      unsubmitResponse(responseId, successMessage, failureMessage)
+      unsubmitResponse(responseId, successMessage, failureMessage),
     );
-  }
+  };
 
   render() {
     const { isUnsubmitting } = this.props;
@@ -85,6 +78,13 @@ class UnsubmitButton extends React.Component {
   }
 }
 
-export default connect(
-  state => ({ isUnsubmitting: state.surveysFlags.isUnsubmittingResponse })
-)(UnsubmitButton);
+UnsubmitButton.propTypes = {
+  responseId: PropTypes.number.isRequired,
+
+  isUnsubmitting: PropTypes.bool.isRequired,
+  dispatch: PropTypes.func.isRequired,
+};
+
+export default connect((state) => ({
+  isUnsubmitting: state.surveysFlags.isUnsubmittingResponse,
+}))(UnsubmitButton);

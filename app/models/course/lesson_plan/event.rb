@@ -13,6 +13,7 @@ class Course::LessonPlan::Event < ApplicationRecord
   # Used by the with_actable_types scope in Course::LessonPlan::Item.
   # Edit this to remove items for display.
   scope :ids_showable_in_lesson_plan, (lambda do |_|
-    joining { lesson_plan_item }.selecting { lesson_plan_item.id }
+    # joining { lesson_plan_item }.selecting { lesson_plan_item.id }
+    unscoped.joins(:lesson_plan_item).select(Course::LessonPlan::Item.arel_table[:id])
   end)
 end

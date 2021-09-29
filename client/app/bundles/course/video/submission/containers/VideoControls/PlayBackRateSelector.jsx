@@ -19,7 +19,7 @@ const defaultProps = {
 };
 
 function PlayBackRateSelector(props) {
-  const rateElements = props.availableRates.map(rate => (
+  const rateElements = props.availableRates.map((rate) => (
     <MenuItem key={rate} value={rate} primaryText={`${rate}X`} />
   ));
 
@@ -49,8 +49,11 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    rateChanged: newRate => dispatch(changePlaybackRate(newRate)),
+    rateChanged: (newRate) => dispatch(changePlaybackRate(newRate)),
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PlayBackRateSelector);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(PlayBackRateSelector);

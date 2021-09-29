@@ -4,7 +4,7 @@ class ActiveRecord::Associations::Preloader
   # https://mrbrdo.wordpress.com/2013/09/25/manually-preloading-associations-in-rails
   class ManualPreloader < ActiveRecord::Associations::Preloader
     # Preloads the given owners by specifying the children for the given association.
-    def preload(owners, associations, children)
+    def preload(owners, associations, children) # rubocop:disable Lint/UselessMethodDefinition
       super
     end
 

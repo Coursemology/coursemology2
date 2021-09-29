@@ -153,11 +153,11 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
           solution_array.delete_if { |solution| solution.equal? first_solution }
         end
 
-        unless lifted_word_status.include?(first_solution_point)
-          # keyword (Solution) does NOT belong to a "lifted" Point
-          keyword_status[index] = first_solution
-          break
-        end
+        next if lifted_word_status.include?(first_solution_point)
+
+        # keyword (Solution) does NOT belong to a "lifted" Point
+        keyword_status[index] = first_solution
+        break
       end
 
       keyword_status
@@ -183,13 +183,17 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
     correct_points = []
 
     question_grade = question.groups.reduce(0) do |question_sum, group|
-      group_grade = group.points.
-                    reject { |point| lifted_word_points.include?(point) }.
-                    select { |point| point.solutions.select(&:compre_keyword?).all? { |s| keyword_solutions.include?(s) } }.
-                    reduce(0) do |group_sum, point|
-                      correct_points.push(point)
-                      group_sum + point.point_grade
-                    end
+      group_points = group.points.
+                     reject { |point| lifted_word_points.include?(point) }.
+                     select do |point|
+                       point.solutions.select(&:compre_keyword?).all? do |s|
+                         keyword_solutions.include?(s)
+                       end
+                     end
+      group_grade = group_points.reduce(0) do |group_sum, point|
+        correct_points.push(point)
+        group_sum + point.point_grade
+      end
       question_sum + [group_grade, group.maximum_group_grade].min
     end
 
@@ -307,6 +311,7 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
     end
 
     return if explanations.empty?
+
     explanations.push(
       I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.horizontal_break_html'),
       I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.line_break_html')
@@ -419,6 +424,7 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
     explanations = explanations_for_correct_paraphrase_by_points(hash_keywords, hash_point_serial)
 
     return if explanations.empty?
+
     explanations.push(
       I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.horizontal_break_html'),
       I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.line_break_html')

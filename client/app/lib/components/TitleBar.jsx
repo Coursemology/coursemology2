@@ -13,7 +13,7 @@ const styles = {
 // Hide menu icon by default. To revert once sidebar has been ported to MaterialUI.
 const TitleBar = ({ style, iconElementLeft, ...props }) => (
   <AppBar
-    style={Object.assign({}, styles.bar, style)}
+    style={{ ...styles.bar, ...style }}
     {...props}
     {...{ iconElementLeft }}
     showMenuIconButton={!!iconElementLeft}

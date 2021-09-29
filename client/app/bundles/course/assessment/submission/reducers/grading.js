@@ -6,12 +6,20 @@ const initialState = {
 };
 
 function sum(array) {
-  return array.filter(i => i).reduce((acc, i) => acc + i, 0);
+  return array.filter((i) => i).reduce((acc, i) => acc + i, 0);
 }
 
-function computeExp(questions, maximumGrade, basePoints, expMultiplier, bonusAwarded = 0) {
-  const totalGrade = sum(Object.values(questions).map(q => q.grade));
-  return Math.round((totalGrade / maximumGrade) * basePoints * expMultiplier + bonusAwarded);
+function computeExp(
+  questions,
+  maximumGrade,
+  basePoints,
+  expMultiplier,
+  bonusAwarded = 0,
+) {
+  const totalGrade = sum(Object.values(questions).map((q) => q.grade));
+  return Math.round(
+    (totalGrade / maximumGrade) * basePoints * expMultiplier + bonusAwarded,
+  );
 }
 
 export default function (state = initialState, action) {
@@ -27,12 +35,16 @@ export default function (state = initialState, action) {
       return {
         ...state,
         questions: {
-          ...action.payload.answers.reduce((obj, answer) => ({ ...obj, [answer.questionId]: answer.grading }),
-            {}),
+          ...action.payload.answers.reduce(
+            (obj, answer) => ({ ...obj, [answer.questionId]: answer.grading }),
+            {},
+          ),
         },
         exp: action.payload.submission.pointsAwarded,
         basePoints: action.payload.submission.basePoints,
-        maximumGrade: sum(Object.values(action.payload.questions).map(q => q.maximumGrade)),
+        maximumGrade: sum(
+          Object.values(action.payload.questions).map((q) => q.maximumGrade),
+        ),
       };
     }
     case actions.UPDATE_GRADING: {
@@ -46,7 +58,13 @@ export default function (state = initialState, action) {
       return {
         ...state,
         questions,
-        exp: computeExp(questions, maximumGrade, basePoints, expMultiplier, bonusAwarded),
+        exp: computeExp(
+          questions,
+          maximumGrade,
+          basePoints,
+          expMultiplier,
+          bonusAwarded,
+        ),
       };
     }
     case actions.UPDATE_EXP: {
@@ -60,7 +78,13 @@ export default function (state = initialState, action) {
       const bonusAwarded = action.bonusAwarded;
       return {
         ...state,
-        exp: computeExp(questions, maximumGrade, basePoints, action.multiplier, bonusAwarded),
+        exp: computeExp(
+          questions,
+          maximumGrade,
+          basePoints,
+          action.multiplier,
+          bonusAwarded,
+        ),
         expMultiplier: action.multiplier,
       };
     }

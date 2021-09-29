@@ -13,10 +13,16 @@ describe('<RemindButton />', () => {
     const store = storeCreator({ surveys: {} });
     const remindButton = mount(<RemindButton />, buildContextOptions(store));
     remindButton.find('button').simulate('click');
-    const cancelButton = remindButton.find('ConfirmationDialog').first().instance().cancelButton;
+    const cancelButton = remindButton
+      .find('ConfirmationDialog')
+      .first()
+      .instance().cancelButton;
     ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(cancelButton));
     remindButton.find('button').simulate('click');
-    const confirmButton = remindButton.find('ConfirmationDialog').first().instance().confirmButton;
+    const confirmButton = remindButton
+      .find('ConfirmationDialog')
+      .first()
+      .instance().confirmButton;
     ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(confirmButton));
     expect(spyRemind).toHaveBeenCalled();
   });

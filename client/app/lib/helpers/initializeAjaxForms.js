@@ -1,4 +1,8 @@
-import { enableForm, parentFormForElement, submitAndDisableForm } from './form-helpers';
+import {
+  enableForm,
+  parentFormForElement,
+  submitAndDisableForm,
+} from './form-helpers';
 
 /**
  * Handles the successful submit button click event.

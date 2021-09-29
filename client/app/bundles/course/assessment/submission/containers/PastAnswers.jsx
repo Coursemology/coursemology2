@@ -7,7 +7,7 @@ import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { Card, CardText } from 'material-ui/Card';
 import { yellow100 } from 'material-ui/styles/colors';
 
-import { selectPastAnswers } from '../actions/history';
+import selectPastAnswers from '../actions/history';
 import translations from '../translations';
 import { answerShape, questionShape } from '../propTypes';
 import { formatDateTime } from '../utils';
@@ -15,7 +15,6 @@ import PastProgrammingAnswer from '../components/pastAnswers/PastProgrammingAnsw
 import PastMultipleResponseAnswer from '../components/pastAnswers/PastMultipleResponseAnswer';
 import TextResponseSolutions from '../components/TextResponseSolutions';
 import { questionTypes } from '../constants';
-
 
 const styles = {
   horizontalRule: {
@@ -38,7 +37,9 @@ class PastAnswers extends Component {
         return <PastProgrammingAnswer question={question} answer={answer} />;
       case questionTypes.MultipleChoice:
       case questionTypes.MultipleResponse:
-        return <PastMultipleResponseAnswer question={question} answer={answer} />;
+        return (
+          <PastMultipleResponseAnswer question={question} answer={answer} />
+        );
       case questionTypes.Comprehension:
       case questionTypes.TextResponse:
         return <div dangerouslySetInnerHTML={{ __html: answer.answer_text }} />;
@@ -46,7 +47,9 @@ class PastAnswers extends Component {
         return (
           <Card style={{ backgroundColor: yellow100 }}>
             <CardText>
-              <span>{intl.formatMessage(translations.rendererNotImplemented)}</span>
+              <span>
+                {intl.formatMessage(translations.rendererNotImplemented)}
+              </span>
             </CardText>
           </Card>
         );
@@ -61,10 +64,7 @@ class PastAnswers extends Component {
     return (
       <div key={answer.id}>
         <h4>
-          {intl.formatMessage(translations.submittedAt)}
-          :
-          {' '}
-          {date}
+          {intl.formatMessage(translations.submittedAt)}: {date}
         </h4>
         {this.getAnswersHistory(question, answer)}
         <hr style={styles.horizontalRule} />
@@ -86,8 +86,16 @@ class PastAnswers extends Component {
   }
 
   renderPastAnswerSelect() {
-    const { answers, answerIds, selectedAnswerIds, handleSelectPastAnswers, intl } = this.props;
-    const selectedAnswers = selectedAnswerIds.map(answerId => answers[answerId]);
+    const {
+      answers,
+      answerIds,
+      selectedAnswerIds,
+      handleSelectPastAnswers,
+      intl,
+    } = this.props;
+    const selectedAnswers = selectedAnswerIds.map(
+      (answerId) => answers[answerId],
+    );
 
     const renderOption = (answerId, index) => {
       const answer = answers[answerId];
@@ -125,8 +133,8 @@ class PastAnswers extends Component {
           {this.renderPastAnswerSelect()}
         </div>
         {this.renderSelectedPastAnswers(selectedAnswerIds)}
-        {[TextResponse, Comprehension].includes(question.type) && graderView
-          && <TextResponseSolutions question={question} />}
+        {[TextResponse, Comprehension].includes(question.type) &&
+          graderView && <TextResponseSolutions question={question} />}
       </div>
     );
   }
@@ -161,11 +169,12 @@ function mapStateToProps(state, ownProps) {
 function mapDispatchToProps(dispatch, ownProps) {
   const { question } = ownProps;
   return {
-    handleSelectPastAnswers: (event, index, answers) => dispatch(selectPastAnswers(question.id, answers)),
+    handleSelectPastAnswers: (event, index, answers) =>
+      dispatch(selectPastAnswers(question.id, answers)),
   };
 }
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(injectIntl(PastAnswers));

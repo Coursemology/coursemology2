@@ -22,14 +22,7 @@ const translations = defineMessages({
 });
 
 class VideosSelector extends React.Component {
-  static propTypes = {
-    tabs: PropTypes.arrayOf(videoTabShape),
-    selectedItems: PropTypes.shape({}),
-
-    dispatch: PropTypes.func.isRequired,
-  };
-
-  setAllInTab = tab => (value) => {
+  setAllInTab = (tab) => (value) => {
     const { dispatch } = this.props;
     dispatch(setItemSelectedBoolean(VIDEO_TAB, tab.id, value));
     tab.videos.forEach((video) => {
@@ -39,7 +32,7 @@ class VideosSelector extends React.Component {
 
   setEverything = (value) => {
     const { tabs } = this.props;
-    tabs.forEach(tab => this.setAllInTab(tab)(value));
+    tabs.forEach((tab) => this.setAllInTab(tab)(value));
   };
 
   renderTabTree(tab) {
@@ -51,19 +44,20 @@ class VideosSelector extends React.Component {
       <div key={id}>
         <IndentedCheckbox
           checked={checked}
-          label={(
+          label={
             <span>
               <TypeBadge itemType={VIDEO_TAB} />
-              { title }
+              {title}
             </span>
-)}
+          }
           indentLevel={0}
-          onCheck={(e, value) => dispatch(setItemSelectedBoolean(VIDEO_TAB, id, value))
+          onCheck={(e, value) =>
+            dispatch(setItemSelectedBoolean(VIDEO_TAB, id, value))
           }
         >
           <BulkSelectors callback={this.setAllInTab(tab)} />
         </IndentedCheckbox>
-        { videos.map(video => this.renderVideo(video)) }
+        {videos.map((video) => this.renderVideo(video))}
       </div>
     );
   }
@@ -75,16 +69,17 @@ class VideosSelector extends React.Component {
     return (
       <IndentedCheckbox
         key={video.id}
-        label={(
+        label={
           <span>
             <TypeBadge itemType={VIDEO} />
-            { video.published || <UnpublishedIcon /> }
-            { video.title }
+            {video.published || <UnpublishedIcon />}
+            {video.title}
           </span>
-)}
+        }
         checked={checked}
         indentLevel={1}
-        onCheck={(e, value) => dispatch(setItemSelectedBoolean(VIDEO, video.id, value))
+        onCheck={(e, value) =>
+          dispatch(setItemSelectedBoolean(VIDEO, video.id, value))
         }
       />
     );
@@ -103,31 +98,42 @@ class VideosSelector extends React.Component {
 
     return (
       <>
-        {
-          tabs.length > 1 ? (
-            <BulkSelectors
-              callback={this.setEverything}
-              styles={{ selectLink: { marginLeft: 0 } }}
-            />
-          ) : null
-        }
-        { tabs.map(tab => this.renderTabTree(tab)) }
+        {tabs.length > 1 ? (
+          <BulkSelectors
+            callback={this.setEverything}
+            styles={{ selectLink: { marginLeft: 0 } }}
+          />
+        ) : null}
+        {tabs.map((tab) => this.renderTabTree(tab))}
       </>
     );
   }
 
   render() {
     const { tabs } = this.props;
-    if (!tabs) { return null; }
+    if (!tabs) {
+      return null;
+    }
 
     return (
       <>
-        <h2><FormattedMessage {...defaultComponentTitles.course_videos_component} /></h2>
-        { this.renderBody() }
+        <h2>
+          <FormattedMessage
+            {...defaultComponentTitles.course_videos_component}
+          />
+        </h2>
+        {this.renderBody()}
       </>
     );
   }
 }
+
+VideosSelector.propTypes = {
+  tabs: PropTypes.arrayOf(videoTabShape),
+  selectedItems: PropTypes.shape({}),
+
+  dispatch: PropTypes.func.isRequired,
+};
 
 export default connect(({ duplication }) => ({
   tabs: duplication.videosComponent,

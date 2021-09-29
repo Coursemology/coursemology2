@@ -85,8 +85,8 @@ RSpec.describe Course::LessonPlan::ItemsController, type: :controller do
                 # 2 lesson plan events and the assessment item
                 expect(json_response['items'].length).to eq(3)
 
-                assessment_item_data = json_response['items'].last
-                expect(assessment_item_data['title']).to eq(assessment.title)
+                titles = json_response['items'].map { |v| v['title'] }
+                expect(titles).to include(assessment.title)
               end
             end
 

@@ -15,10 +15,14 @@ class Course::Video::Topic < ApplicationRecord
   # Specific implementation of Course::Discussion::Topic#from_user, this is not supposed to be
   # called directly.
   scope :from_user, (lambda do |user_id|
+    # unscoped.
+    #   joining { discussion_topic.posts }.
+    #   where.has { discussion_topic.posts.creator_id.in(user_id) }.
+    #   selecting { discussion_topic.id }
     unscoped.
-      joining { discussion_topic.posts }.
-      where.has { discussion_topic.posts.creator_id.in(user_id) }.
-      selecting { discussion_topic.id }
+      joins(discussion_topic: :posts).
+      where(Course::Discussion::Post.arel_table[:creator_id].in(user_id)).
+      select(Course::Discussion::Topic.arel_table[:id])
   end)
 
   private

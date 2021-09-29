@@ -25,7 +25,7 @@ class Course::Condition::AchievementsController < Course::ConditionsController
   end
 
   def update
-    if @achievement_condition.update_attributes(achievement_condition_params)
+    if @achievement_condition.update(achievement_condition_params)
       redirect_to return_to_path, success: t('course.condition.achievements.update.success')
     else
       render :edit

@@ -18,7 +18,9 @@ export default function (state = [], action) {
     case actionTypes.UPDATE_SECTION_ORDER_SUCCESS:
     case actionTypes.UPDATE_SURVEY_SUCCESS:
     case actionTypes.LOAD_SURVEY_SUCCESS: {
-      return sortSurveysByDate(updateOrAppend(state, sortSurveyElements(action.survey)));
+      return sortSurveysByDate(
+        updateOrAppend(state, sortSurveyElements(action.survey)),
+      );
     }
     case actionTypes.LOAD_SURVEYS_SUCCESS: {
       return sortSurveysByDate(action.surveys);
@@ -36,7 +38,7 @@ export default function (state = [], action) {
     case actionTypes.UPDATE_SURVEY_QUESTION_SUCCESS:
     case actionTypes.DELETE_SURVEY_QUESTION_SUCCESS:
     case actionTypes.CREATE_SURVEY_QUESTION_SUCCESS: {
-      return state.map(survey => surveyReducer(survey, action));
+      return state.map((survey) => surveyReducer(survey, action));
     }
     default:
       return state;

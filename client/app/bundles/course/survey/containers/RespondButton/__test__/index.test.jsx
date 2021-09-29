@@ -27,7 +27,7 @@ describe('<RespondButton />', () => {
         canSubmit
         {...{ courseId, surveyId }}
       />,
-      buildContextOptions(storeCreator({}))
+      buildContextOptions(storeCreator({})),
     );
 
     respondButton.find('button').simulate('click');

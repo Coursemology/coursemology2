@@ -10,9 +10,17 @@ RSpec.describe Instance do
       let(:user) { create(:administrator) }
 
       it { is_expected.to be_able_to(:show, instance) }
+      it { is_expected.to be_able_to(:manage, instance) }
       it { is_expected.not_to be_able_to(:edit, instance) }
       it { is_expected.not_to be_able_to(:update, instance) }
       it { is_expected.not_to be_able_to(:destroy, instance) }
+    end
+
+    context 'when user is an instance admin' do
+      let(:user) { create(:instance_administrator).user }
+
+      it { is_expected.to be_able_to(:show, instance) }
+      it { is_expected.to be_able_to(:manage, instance) }
     end
   end
 end

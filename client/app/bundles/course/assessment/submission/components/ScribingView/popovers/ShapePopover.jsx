@@ -69,7 +69,10 @@ class ShapePopover extends Component {
     return (
       <>
         <h4>{intl.formatMessage(translations.shape)}</h4>
-        <ShapeField currentShape={currentShape} setSelectedShape={setSelectedShape} />
+        <ShapeField
+          currentShape={currentShape}
+          setSelectedShape={setSelectedShape}
+        />
         <Divider />
       </>
     );
@@ -77,10 +80,17 @@ class ShapePopover extends Component {
 
   renderBorderComponent() {
     const {
-      intl, lineToolType, selectedLineStyle, onClickLineStyleChip,
-      toolThicknessValue, onChangeSliderThickness, onClickBorderColorPicker,
-      borderColorPickerPopoverOpen, borderColorPickerPopoverAnchorEl,
-      onRequestCloseBorderColorPickerPopover, borderColorPickerColor,
+      intl,
+      lineToolType,
+      selectedLineStyle,
+      onClickLineStyleChip,
+      toolThicknessValue,
+      onChangeSliderThickness,
+      onClickBorderColorPicker,
+      borderColorPickerPopoverOpen,
+      borderColorPickerPopoverAnchorEl,
+      onRequestCloseBorderColorPickerPopover,
+      borderColorPickerColor,
       onChangeCompleteBorderColorPicker,
     } = this.props;
 
@@ -100,7 +110,9 @@ class ShapePopover extends Component {
           onClickColorPicker={onClickBorderColorPicker}
           colorPickerPopoverOpen={borderColorPickerPopoverOpen}
           colorPickerPopoverAnchorEl={borderColorPickerPopoverAnchorEl}
-          onRequestCloseColorPickerPopover={onRequestCloseBorderColorPickerPopover}
+          onRequestCloseColorPickerPopover={
+            onRequestCloseBorderColorPickerPopover
+          }
           colorPickerColor={borderColorPickerColor}
           onChangeCompleteColorPicker={onChangeCompleteBorderColorPicker}
         />
@@ -110,10 +122,15 @@ class ShapePopover extends Component {
 
   renderFillComponent() {
     const {
-      intl, onClickFillColorPicker, fillColorPickerPopoverOpen,
-      fillColorPickerPopoverAnchorEl, onRequestCloseFillColorPickerPopover,
-      fillColorPickerColor, onChangeCompleteFillColorPicker,
-      noFillValue, noFillOnCheck,
+      intl,
+      onClickFillColorPicker,
+      fillColorPickerPopoverOpen,
+      fillColorPickerPopoverAnchorEl,
+      onRequestCloseFillColorPickerPopover,
+      fillColorPickerColor,
+      onChangeCompleteFillColorPicker,
+      noFillValue,
+      noFillOnCheck,
     } = this.props;
 
     return (
@@ -123,7 +140,9 @@ class ShapePopover extends Component {
           onClickColorPicker={onClickFillColorPicker}
           colorPickerPopoverOpen={fillColorPickerPopoverOpen}
           colorPickerPopoverAnchorEl={fillColorPickerPopoverAnchorEl}
-          onRequestCloseColorPickerPopover={onRequestCloseFillColorPickerPopover}
+          onRequestCloseColorPickerPopover={
+            onRequestCloseFillColorPickerPopover
+          }
           colorPickerColor={fillColorPickerColor}
           onChangeCompleteColorPicker={onChangeCompleteFillColorPicker}
           noFillValue={noFillValue}
@@ -147,10 +166,10 @@ class ShapePopover extends Component {
         animation={PopoverAnimationVertical}
       >
         <Menu style={styles.menu}>
-          { displayShapeField ? this.renderShapeComponent() : undefined }
-          { this.renderBorderComponent() }
+          {displayShapeField ? this.renderShapeComponent() : undefined}
+          {this.renderBorderComponent()}
           <Divider />
-          { this.renderFillComponent() }
+          {this.renderFillComponent()}
         </Menu>
       </Popover>
     );

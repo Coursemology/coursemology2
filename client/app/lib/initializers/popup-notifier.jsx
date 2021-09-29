@@ -18,7 +18,7 @@ $(document).ready(() => {
           <PopupNotifier />
         </Router>
       </ProviderWrapper>,
-      mountNode
+      mountNode,
     );
   }
 });

@@ -62,6 +62,7 @@ class Course::Assessment::Submission::AutoGradingService
   # @return [Course::Assessment::Answer::AutoGradingJob] The job created to grade.
   def grade_answer(answer)
     raise ArgumentError if answer.changed?
+
     answer.auto_grade!(reduce_priority: true)
     # Catch errors if answer is in attempting state, caused by a race condition where
     # a new attempting answer is created while the submission is finalised, but before the
@@ -112,9 +113,8 @@ class Course::Assessment::Submission::AutoGradingService
     bonus_end_at = assessment.bonus_end_at
     total_exp = assessment.base_exp
     return 0 if end_at && submission.submitted_at > end_at
-    if bonus_end_at && submission.submitted_at <= bonus_end_at
-      total_exp += assessment.time_bonus_exp
-    end
+
+    total_exp += assessment.time_bonus_exp if bonus_end_at && submission.submitted_at <= bonus_end_at
 
     maximum_grade = submission.questions.sum(:maximum_grade).to_f
     maximum_grade == 0 ? total_exp : submission.grade.to_f / maximum_grade * total_exp

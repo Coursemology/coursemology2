@@ -44,35 +44,26 @@ const styles = {
 };
 
 class OptionsListItem extends React.PureComponent {
-  static propTypes = {
-    optionText: PropTypes.string,
-    imageUrl: PropTypes.string,
-    widget: PropTypes.element,
-    grid: PropTypes.bool,
-  };
-
   renderGridCard() {
     const { optionText, imageUrl, widget } = this.props;
     return (
-      <Card
-        style={styles.gridCard}
-        containerStyle={styles.gridOption}
-      >
-        { imageUrl
-          ? (
-            <Thumbnail
-              src={imageUrl}
-              style={styles.tiledImage}
-              containerStyle={styles.tiledImageContainer}
-            />
-          ) : [] }
+      <Card style={styles.gridCard} containerStyle={styles.gridOption}>
+        {imageUrl ? (
+          <Thumbnail
+            src={imageUrl}
+            style={styles.tiledImage}
+            containerStyle={styles.tiledImageContainer}
+          />
+        ) : (
+          []
+        )}
         <div style={styles.gridOptionBody}>
-          {
-            optionText
-              ? <CardText><p dangerouslySetInnerHTML={{ __html: optionText }} /></CardText>
-              : null
-          }
-          { widget }
+          {optionText ? (
+            <CardText>
+              <p dangerouslySetInnerHTML={{ __html: optionText }} />
+            </CardText>
+          ) : null}
+          {widget}
         </div>
       </Card>
     );
@@ -82,16 +73,17 @@ class OptionsListItem extends React.PureComponent {
     const { optionText, imageUrl, widget } = this.props;
     return (
       <div style={styles.option}>
-        { widget }
+        {widget}
         <>
-          { imageUrl
-            ? (
-              <Thumbnail
-                src={imageUrl}
-                style={styles.image}
-                containerStyle={styles.imageContainer}
-              />
-            ) : [] }
+          {imageUrl ? (
+            <Thumbnail
+              src={imageUrl}
+              style={styles.image}
+              containerStyle={styles.imageContainer}
+            />
+          ) : (
+            []
+          )}
           <p dangerouslySetInnerHTML={{ __html: optionText || null }} />
         </>
       </div>
@@ -99,9 +91,18 @@ class OptionsListItem extends React.PureComponent {
   }
 
   render() {
-    if (this.props.grid) { return this.renderGridCard(); }
+    if (this.props.grid) {
+      return this.renderGridCard();
+    }
     return this.renderListItem();
   }
 }
+
+OptionsListItem.propTypes = {
+  optionText: PropTypes.string,
+  imageUrl: PropTypes.string,
+  widget: PropTypes.element,
+  grid: PropTypes.bool,
+};
 
 export default OptionsListItem;

@@ -25,6 +25,7 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
 
   def filter_params
     return {} if params[:filter].blank?
+
     params[:filter].permit(:assessment_id, :group_id, :user_id, :category_id)
   end
 

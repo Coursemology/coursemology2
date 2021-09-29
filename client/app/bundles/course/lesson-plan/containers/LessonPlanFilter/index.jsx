@@ -18,11 +18,6 @@ const translations = defineMessages({
 });
 
 class LessonPlanFilter extends React.Component {
-  static propTypes = {
-    visibility: PropTypes.shape({}).isRequired,
-    dispatch: PropTypes.func.isRequired,
-  }
-
   constructor(props) {
     super(props);
 
@@ -39,19 +34,21 @@ class LessonPlanFilter extends React.Component {
       open: true,
       anchorEl: event.currentTarget,
     });
-  }
+  };
 
   handleRequestClose = () => {
     this.setState({
       open: false,
     });
-  }
+  };
 
   render() {
     const { dispatch, visibility } = this.props;
     const itemTypes = Object.keys(visibility);
 
-    if (itemTypes.length < 1) { return null; }
+    if (itemTypes.length < 1) {
+      return null;
+    }
 
     return (
       <>
@@ -70,19 +67,19 @@ class LessonPlanFilter extends React.Component {
           onRequestClose={this.handleRequestClose}
         >
           <Menu>
-            {
-              itemTypes.map((itemType) => {
-                const isVisible = visibility[itemType];
-                return (
-                  <MenuItem
-                    key={itemType}
-                    primaryText={itemType}
-                    rightIcon={isVisible ? <Done /> : <span />}
-                    onClick={() => dispatch(setItemTypeVisibility(itemType, !isVisible))}
-                  />
-                );
-              })
-            }
+            {itemTypes.map((itemType) => {
+              const isVisible = visibility[itemType];
+              return (
+                <MenuItem
+                  key={itemType}
+                  primaryText={itemType}
+                  rightIcon={isVisible ? <Done /> : <span />}
+                  onClick={() =>
+                    dispatch(setItemTypeVisibility(itemType, !isVisible))
+                  }
+                />
+              );
+            })}
           </Menu>
         </Popover>
       </>
@@ -90,6 +87,11 @@ class LessonPlanFilter extends React.Component {
   }
 }
 
-export default connect(state => ({
+LessonPlanFilter.propTypes = {
+  visibility: PropTypes.shape({}).isRequired,
+  dispatch: PropTypes.func.isRequired,
+};
+
+export default connect((state) => ({
   visibility: state.lessonPlan.visibilityByType,
 }))(LessonPlanFilter);

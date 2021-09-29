@@ -18,7 +18,7 @@ class Course::ExperiencePointsRecordsController < Course::ComponentController
   end
 
   def update
-    if @experience_points_record.update_attributes(experience_points_record_params)
+    if @experience_points_record.update(experience_points_record_params)
       flash.now[:success] = t('.success')
     else
       flash.now[:danger] = @experience_points_record.errors.full_messages.to_sentence

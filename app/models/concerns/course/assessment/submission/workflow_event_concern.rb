@@ -50,6 +50,7 @@ module Course::Assessment::Submission::WorkflowEventConcern
     self.awarded_at = Time.zone.now
 
     return unless persisted? && !assessment.autograded? && submission_graded_email_enabled?
+
     execute_after_commit { Course::Mailer.submission_graded_email(self).deliver_later }
   end
 

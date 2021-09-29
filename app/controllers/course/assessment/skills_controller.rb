@@ -28,7 +28,7 @@ class Course::Assessment::SkillsController < Course::ComponentController
   end
 
   def update
-    if @skill.update_attributes(skill_params)
+    if @skill.update(skill_params)
       redirect_to course_assessments_skills_path(current_course),
                   success: t('.success', title: @skill.title)
     else

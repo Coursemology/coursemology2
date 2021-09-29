@@ -8,14 +8,28 @@ import { Card, CardHeader, CardText } from 'material-ui/Card';
 import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
-import { red100, red200, red900, yellow900, grey100, blue500, white } from 'material-ui/styles/colors';
+import {
+  red100,
+  red200,
+  red900,
+  yellow900,
+  grey100,
+  blue500,
+  white,
+} from 'material-ui/styles/colors';
 
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import { explanationShape, questionShape, historyQuestionShape, questionFlagsShape,
-  questionGradeShape, topicShape } from '../../propTypes';
+import {
+  explanationShape,
+  questionShape,
+  historyQuestionShape,
+  questionFlagsShape,
+  questionGradeShape,
+  topicShape,
+} from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
 import QuestionGrade from '../../containers/QuestionGrade';
 import GradingPanel from '../../containers/GradingPanel';
@@ -61,7 +75,10 @@ class SubmissionEditForm extends Component {
 
     if (initialStep !== null && !tabbedView) {
       initialStep = initialStep < 0 ? 0 : initialStep;
-      initialStep = initialStep >= questionIds.length - 1 ? questionIds.length - 1 : initialStep;
+      initialStep =
+        initialStep >= questionIds.length - 1
+          ? questionIds.length - 1
+          : initialStep;
       scroller.scrollTo(`step${initialStep}`, { offset: -60 });
     }
   }
@@ -75,8 +92,15 @@ class SubmissionEditForm extends Component {
   }
 
   renderProgrammingQuestionActions(id) {
-    const { intl, attempting, graderView, questions, questionsFlags,
-      handleSubmitAnswer, isSaving } = this.props;
+    const {
+      intl,
+      attempting,
+      graderView,
+      questions,
+      questionsFlags,
+      handleSubmitAnswer,
+      isSaving,
+    } = this.props;
     const question = questions[id];
     const { answerId, attemptsLeft, attemptLimit, autogradable } = question;
     const { jobError, isAutograding, isResetting } = questionsFlags[id] || {};
@@ -92,18 +116,23 @@ class SubmissionEditForm extends Component {
 
       return (
         <>
-          {jobError
-            ? (
-              <Paper style={{ padding: 10, backgroundColor: red100, marginBottom: 20 }}>
-                {intl.formatMessage(translations.autogradeFailure)}
-              </Paper>
-            )
-            : null}
+          {jobError ? (
+            <Paper
+              style={{ padding: 10, backgroundColor: red100, marginBottom: 20 }}
+            >
+              {intl.formatMessage(translations.autogradeFailure)}
+            </Paper>
+          ) : null}
           <RaisedButton
             style={styles.formButton}
             backgroundColor={white}
             label={intl.formatMessage(translations.reset)}
-            onClick={() => this.setState({ resetConfirmation: true, resetAnswerId: answerId })}
+            onClick={() =>
+              this.setState({
+                resetConfirmation: true,
+                resetAnswerId: answerId,
+              })
+            }
             disabled={isAutograding || isResetting || isSaving}
           />
           {autogradable ? (
@@ -114,10 +143,17 @@ class SubmissionEditForm extends Component {
               secondary
               label={runCodeLabel}
               onClick={() => handleSubmitAnswer(answerId)}
-              disabled={isAutograding || isResetting || isSaving || (!graderView && attemptsLeft === 0)}
+              disabled={
+                isAutograding ||
+                isResetting ||
+                isSaving ||
+                (!graderView && attemptsLeft === 0)
+              }
             />
           ) : null}
-          {isAutograding || isResetting ? <CircularProgress size={36} style={{ position: 'absolute' }} /> : null}
+          {isAutograding || isResetting ? (
+            <CircularProgress size={36} style={{ position: 'absolute' }} />
+          ) : null}
         </>
       );
     }
@@ -148,12 +184,18 @@ class SubmissionEditForm extends Component {
             title={title}
             titleColor={red900}
           />
-          { explanation.explanations.every(exp => exp.trim().length === 0) ? null
-            : (
-              <CardText>
-                {explanation.explanations.map(exp => <div dangerouslySetInnerHTML={{ __html: exp }} />)}
-              </CardText>
-            ) }
+          {explanation.explanations.every(
+            (exp) => exp.trim().length === 0,
+          ) ? null : (
+            <CardText>
+              {explanation.explanations.map((exp, index) => {
+                const key = `question-${questionId}-explanation-${index}`;
+                return (
+                  <div key={key} dangerouslySetInnerHTML={{ __html: exp }} />
+                );
+              })}
+            </CardText>
+          )}
         </Card>
       );
     }
@@ -162,13 +204,23 @@ class SubmissionEditForm extends Component {
 
   renderTabbedQuestions() {
     const {
-      intl, attempting, questionIds, questions, questionsFlags,
-      historyQuestions, topics, step, handleToggleViewHistoryMode,
+      intl,
+      attempting,
+      questionIds,
+      questions,
+      questionsFlags,
+      historyQuestions,
+      topics,
+      step,
+      handleToggleViewHistoryMode,
     } = this.props;
 
     let initialStep = step || 0;
     initialStep = initialStep < 0 ? 0 : initialStep;
-    initialStep = initialStep >= questionIds.length - 1 ? questionIds.length - 1 : initialStep;
+    initialStep =
+      initialStep >= questionIds.length - 1
+        ? questionIds.length - 1
+        : initialStep;
 
     return (
       <Tabs
@@ -184,7 +236,9 @@ class SubmissionEditForm extends Component {
             <Tab
               buttonStyle={{ color: blue500 }}
               key={id}
-              label={intl.formatMessage(translations.questionNumber, { number: index + 1 })}
+              label={intl.formatMessage(translations.questionNumber, {
+                number: index + 1,
+              })}
             >
               <SubmissionAnswer
                 {...{
@@ -196,7 +250,9 @@ class SubmissionEditForm extends Component {
                   handleToggleViewHistoryMode,
                 }}
               />
-              {(question.type === questionTypes.Programming && !viewHistory) ? this.renderExplanationPanel(id) : null}
+              {question.type === questionTypes.Programming && !viewHistory
+                ? this.renderExplanationPanel(id)
+                : null}
               {viewHistory ? null : this.renderQuestionGrading(id)}
               {viewHistory ? null : this.renderProgrammingQuestionActions(id)}
               <Comments topic={topic} />
@@ -210,8 +266,15 @@ class SubmissionEditForm extends Component {
 
   renderQuestions() {
     const {
-      attempting, questionIds, questions, historyQuestions, topics,
-      graderView, showMcqMrqSolution, handleToggleViewHistoryMode, questionsFlags,
+      attempting,
+      questionIds,
+      questions,
+      historyQuestions,
+      topics,
+      graderView,
+      showMcqMrqSolution,
+      handleToggleViewHistoryMode,
+      questionsFlags,
     } = this.props;
     return (
       <>
@@ -220,7 +283,11 @@ class SubmissionEditForm extends Component {
           const { answerId, topicId, viewHistory } = question;
           const topic = topics[topicId];
           return (
-            <Element name={`step${index}`} key={id} style={styles.questionContainer}>
+            <Element
+              name={`step${index}`}
+              key={id}
+              style={styles.questionContainer}
+            >
               <SubmissionAnswer
                 {...{
                   readOnly: !attempting,
@@ -233,7 +300,9 @@ class SubmissionEditForm extends Component {
                   handleToggleViewHistoryMode,
                 }}
               />
-              {(question.type === questionTypes.Programming && !viewHistory) ? this.renderExplanationPanel(id) : null}
+              {question.type === questionTypes.Programming && !viewHistory
+                ? this.renderExplanationPanel(id)
+                : null}
               {viewHistory ? null : this.renderQuestionGrading(id)}
               {viewHistory ? null : this.renderProgrammingQuestionActions(id)}
               <Comments topic={topic} />
@@ -254,7 +323,8 @@ class SubmissionEditForm extends Component {
   }
 
   renderSaveDraftButton() {
-    const { intl, pristine, attempting, handleSaveDraft, isSaving } = this.props;
+    const { intl, pristine, attempting, handleSaveDraft, isSaving } =
+      this.props;
     if (attempting) {
       return (
         <RaisedButton
@@ -270,7 +340,8 @@ class SubmissionEditForm extends Component {
   }
 
   renderSaveGradeButton() {
-    const { intl, graderView, attempting, handleSaveGrade, isSaving } = this.props;
+    const { intl, graderView, attempting, handleSaveGrade, isSaving } =
+      this.props;
     if (graderView && !attempting) {
       return (
         <RaisedButton
@@ -286,8 +357,14 @@ class SubmissionEditForm extends Component {
   }
 
   renderAutogradeSubmissionButton() {
-    const { intl, graderView, submitted, handleAutogradeSubmission,
-      isAutograding, isSaving } = this.props;
+    const {
+      intl,
+      graderView,
+      submitted,
+      handleAutogradeSubmission,
+      isAutograding,
+      isSaving,
+    } = this.props;
     if (graderView && submitted) {
       const progressIcon = <CircularProgress size={24} />;
 
@@ -339,11 +416,18 @@ class SubmissionEditForm extends Component {
   }
 
   renderMarkButton() {
-    const { intl, delayedGradePublication, grading,
-      graderView, submitted, handleMark, isSaving } = this.props;
+    const {
+      intl,
+      delayedGradePublication,
+      grading,
+      graderView,
+      submitted,
+      handleMark,
+      isSaving,
+    } = this.props;
     if (delayedGradePublication && graderView && submitted) {
       const anyUngraded = Object.values(grading).some(
-        q => q.grade === undefined || q.grade === null
+        (q) => q.grade === undefined || q.grade === null,
       );
       return (
         <RaisedButton
@@ -377,11 +461,18 @@ class SubmissionEditForm extends Component {
   }
 
   renderPublishButton() {
-    const { intl, delayedGradePublication, graderView, grading,
-      submitted, handlePublish, isSaving } = this.props;
+    const {
+      intl,
+      delayedGradePublication,
+      graderView,
+      grading,
+      submitted,
+      handlePublish,
+      isSaving,
+    } = this.props;
     if (!delayedGradePublication && graderView && submitted) {
       const anyUngraded = Object.values(grading).some(
-        q => q.grade === undefined || q.grade === null
+        (q) => q.grade === undefined || q.grade === null,
       );
 
       return (
@@ -436,7 +527,9 @@ class SubmissionEditForm extends Component {
     return (
       <ConfirmationDialog
         open={resetConfirmation}
-        onCancel={() => this.setState({ resetConfirmation: false, resetAnswerId: null })}
+        onCancel={() =>
+          this.setState({ resetConfirmation: false, resetAnswerId: null })
+        }
         onConfirm={() => {
           this.setState({ resetConfirmation: false, resetAnswerId: null });
           handleReset(resetAnswerId);
@@ -452,13 +545,13 @@ class SubmissionEditForm extends Component {
     return (
       <Dialog
         title={intl.formatMessage(translations.examDialogTitle)}
-        actions={(
+        actions={
           <FlatButton
             primary
             label="OK"
             onClick={() => this.setState({ examNotice: false })}
           />
-)}
+        }
         modal
         open={this.state.examNotice}
       >
@@ -471,7 +564,9 @@ class SubmissionEditForm extends Component {
     const { tabbedView } = this.props;
     return (
       <Card style={styles.questionCardContainer}>
-        <form>{tabbedView ? this.renderTabbedQuestions() : this.renderQuestions()}</form>
+        <form>
+          {tabbedView ? this.renderTabbedQuestions() : this.renderQuestions()}
+        </form>
         {this.renderGradingPanel()}
 
         {this.renderSaveDraftButton()}

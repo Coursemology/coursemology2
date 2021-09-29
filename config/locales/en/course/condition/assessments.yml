@@ -16,5 +16,4 @@ en:
           success: 'Assessment condition was deleted.'
           error: 'Failed to delete assessment condition.'
         form:
-          minimum_grade_placeholder: 'Leave blank if condition is to be satisfied on submission of
-          assessment.'
+          minimum_grade_placeholder: 'Leave blank if condition is to be satisfied on submission of assessment.'

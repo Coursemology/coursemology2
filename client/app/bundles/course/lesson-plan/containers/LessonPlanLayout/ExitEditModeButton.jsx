@@ -17,7 +17,11 @@ const styles = {
   },
 };
 
-const ExitEditModeButton = ({ match: { params: { courseId } } }) => (
+const ExitEditModeButton = ({
+  match: {
+    params: { courseId },
+  },
+}) => (
   <RaisedButton
     label={<FormattedMessage {...translations.exitEditMode} />}
     onClick={() => history.push(`/courses/${courseId}/lesson_plan/`)}

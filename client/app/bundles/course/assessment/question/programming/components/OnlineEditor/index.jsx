@@ -17,7 +17,8 @@ const translations = defineMessages({
   notYetImplementedAlert: {
     id: 'course.assessment.question.programming.onlineEditor.notYetImplementedAlert',
     defaultMessage: 'Not yet implemented :(',
-    description: 'Alert message to be displayed when selected language does not have an online editor.',
+    description:
+      'Alert message to be displayed when selected language does not have an online editor.',
   },
 });
 
@@ -40,7 +41,7 @@ export function validation(data, pathOfKeysToData, intl) {
     case 'c_cpp':
     case 'java':
       return errors.concat(
-        editorValidation(data, pathOfKeysToData.concat([mode]), intl)
+        editorValidation(data, pathOfKeysToData.concat([mode]), intl),
       );
     default:
       return errors;
@@ -48,7 +49,15 @@ export function validation(data, pathOfKeysToData, intl) {
 }
 
 const OnlineEditor = (props) => {
-  const { data, actions, intl, isLoading, autograded, autogradedAssessment, hasSubmissions } = props;
+  const {
+    data,
+    actions,
+    intl,
+    isLoading,
+    autograded,
+    autogradedAssessment,
+    hasSubmissions,
+  } = props;
   const mode = data.get('mode');
   switch (mode) {
     case 'python':

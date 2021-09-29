@@ -23,7 +23,7 @@ function mapStateToProps(state, ownProps) {
   return {
     content: postObject.editedContent || postObject.rawContent,
     disabled: postObject.status === postRequestingStatuses.LOADING,
-    submitButtonText: (<FormattedMessage {...translations.edit} />),
+    submitButtonText: <FormattedMessage {...translations.edit} />,
   };
 }
 
@@ -31,7 +31,8 @@ function mapDispatchToProps(dispatch, ownProps) {
   return {
     onSubmit: () => dispatch(updatePostOnServer(ownProps.postId)),
     onCancel: () => dispatch(updatePost(ownProps.postId, { editMode: false })),
-    onContentUpdate: editedContent => dispatch(updatePost(ownProps.postId, { editedContent })),
+    onContentUpdate: (editedContent) =>
+      dispatch(updatePost(ownProps.postId, { editedContent })),
   };
 }
 

@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::Programming::Java::JavaPackageService < \
   Course::Assessment::Question::Programming::LanguagePackageService
-
   def initialize(params)
     @test_params = test_params params if params.present?
+    super
   end
 
   def submission_templates
@@ -25,6 +25,7 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
 
   def generate_package(old_attachment)
     return nil if @test_params.blank?
+
     @tmp_dir = Dir.mktmpdir
     @old_meta = old_attachment.present? ? extract_meta(old_attachment, nil) : nil
     data_files_to_keep = old_attachment.present? ? find_files_to_keep('data_files', old_attachment) : []
@@ -53,14 +54,13 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
 
   def extract_autograded_meta(attachment)
     attachment.open(binmode: true) do |temporary_file|
-      begin
-        package = Course::Assessment::ProgrammingPackage.new(temporary_file)
-        meta = package.meta_file
-        @old_meta = meta.present? ? JSON.parse(meta) : nil
-      ensure
-        next unless package
-        temporary_file.close
-      end
+      package = Course::Assessment::ProgrammingPackage.new(temporary_file)
+      meta = package.meta_file
+      @old_meta = meta.present? ? JSON.parse(meta) : nil
+    ensure
+      next unless package
+
+      temporary_file.close
     end
   end
 
@@ -84,6 +84,7 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
         next if files_to_delete.try(:include?, (file['filename']))
         # new files overrides old ones
         next if new_filenames.include?(file['filename'])
+
         files_to_keep.append(File.new(File.join(resolve_folder_path(@tmp_dir, file_type), file['filename'])))
       end
     end
@@ -92,10 +93,11 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
   end
 
   def resolve_folder_path(tmp_dir, file_type)
-    if file_type == 'submission_files'
-      tmp_dir + '/submission'
-    elsif file_type == 'solution_files'
-      tmp_dir + '/solution'
+    case file_type
+    when 'submission_files'
+      "#{tmp_dir}/submission"
+    when 'solution_files'
+      "#{tmp_dir}/solution"
     # Data files do not need resolution
     else
       tmp_dir
@@ -106,14 +108,13 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
     new_filenames = (@test_params[file_type] || []).reject(&:nil?).map(&:original_filename)
 
     attachment.open(binmode: true) do |temporary_file|
-      begin
-        package = Course::Assessment::ProgrammingPackage.new(temporary_file)
-        files_to_delete = file_type + '_to_delete'
-        return extract_from_package(package, file_type, new_filenames, @test_params[files_to_delete])
-      ensure
-        next unless package
-        temporary_file.close
-      end
+      package = Course::Assessment::ProgrammingPackage.new(temporary_file)
+      files_to_delete = "#{file_type}_to_delete"
+      return extract_from_package(package, file_type, new_filenames, @test_params[files_to_delete])
+    ensure
+      next unless package
+
+      temporary_file.close
     end
   end
 
@@ -177,6 +178,7 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
 
       @test_params[:data_files].try(:each) do |file|
         next if file.nil?
+
         zip.add(file.original_filename, file.tempfile.path)
       end
 
@@ -209,35 +211,37 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
     zip.mkdir('submission')
     @test_params[:submission_files].try(:each) do |file|
       next if file.nil?
-      zip.add('submission/' + file.original_filename, file.tempfile.path)
+
+      zip.add("submission/#{file.original_filename}", file.tempfile.path)
     end
 
     submission_files_to_keep.each do |file|
-      zip.add('submission/' + File.basename(file.path), file.path)
+      zip.add("submission/#{File.basename(file.path)}", file.path)
     end
 
     zip.mkdir('solution')
     @test_params[:solution_files].try(:each) do |file|
       next if file.nil?
-      zip.add('solution/' + file.original_filename, file.tempfile.path)
+
+      zip.add("solution/#{file.original_filename}", file.tempfile.path)
     end
 
     solution_files_to_keep.each do |file|
-      zip.add('solution/' + File.basename(file.path), file.path)
+      zip.add("solution/#{File.basename(file.path)}", file.path)
     end
   end
 
-  def zip_test_files(test_type, zip) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def zip_test_files(test_type, zip) # rubocop:disable Metrics/AbcSize
     tests = @test_params[:test_cases]
     tests[test_type]&.each&.with_index(1) do |test, index|
       # String types should be displayed with quotes, other types will be converted to string
       # with the str method.
-      expected = string?(test[:expected]) ? test[:expected].inspect : "#{test[:expected]}"
+      expected = string?(test[:expected]) ? test[:expected].inspect : (test[:expected]).to_s
       hint = test[:hint].blank? ? String(nil) : "result.setAttribute(\"hint\", #{test[:hint].inspect});"
 
-      test_fn = <<-Java
+      test_fn = <<-JAVA
         @Test(groups = { "#{test_type}" })
-        public void test_#{test_type}_#{format('%02i', index)}() {
+        public void test_#{test_type}_#{format('%<index>02i', index: index)}() {
           ITestResult result = Reporter.getCurrentTestResult();
           result.setAttribute("expression", #{test[:expression].inspect});
           #{test[:inline_code]}
@@ -246,7 +250,7 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
           #{hint}
           expectEquals(#{test[:expression]}, #{test[:expected]});
         }
-      Java
+      JAVA
 
       zip.print test_fn
     end

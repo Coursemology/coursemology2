@@ -27,7 +27,7 @@ module Course::Assessment::QuestionBundleAssignmentConcern
     attr_accessor :assignments, :group_bundles
 
     def initialize(students, group_bundles)
-      @assignments = students.map { |x| [x, { nil => [] }] }.to_h
+      @assignments = students.map { |x| [x, nil => []] }.to_h
       @group_bundles = group_bundles
       @group_bundles_lookup = group_bundles.flat_map do |group, bundles|
         bundles.map { |bundle| [bundle, group] }
@@ -144,7 +144,7 @@ module Course::Assessment::QuestionBundleAssignmentConcern
       student_ids = Set.new
       offending_cells = {}
       assignment_set.assignments.each do |student_id, assignment|
-        assignment_set.group_bundles.keys.each do |group_bundle|
+        assignment_set.group_bundles.each_key do |group_bundle|
           if assignment[group_bundle].nil?
             student_ids << student_id
             offending_cells[[student_id, group_bundle]] = t_scoped('.one_bundle_assigned.missing_bundle')
@@ -177,7 +177,7 @@ module Course::Assessment::QuestionBundleAssignmentConcern
       student_ids = Set.new
       offending_cells = {}
       assignment_set.assignments.each do |student_id, assignment|
-        assignment_set.group_bundles.keys.each do |group_bundle|
+        assignment_set.group_bundles.each_key do |group_bundle|
           if assignment[group_bundle].present? && assignment[group_bundle].in?(attempted_questions[student_id] || [])
             student_ids << student_id
             offending_cells[[student_id, group_bundle]] = t_scoped('.no_repeat_bundles.repeat_bundle')

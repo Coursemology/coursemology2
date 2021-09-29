@@ -36,8 +36,8 @@ const propTypes = {
 const defaultProps = {
   disabled: false,
   showCancel: true,
-  cancelButtonText: (<FormattedMessage {...translations.cancel} />),
-  submitButtonText: (<FormattedMessage {...translations.comment} />),
+  cancelButtonText: <FormattedMessage {...translations.cancel} />,
+  submitButtonText: <FormattedMessage {...translations.comment} />,
 };
 
 function Editor(props) {
@@ -47,12 +47,10 @@ function Editor(props) {
         airMode
         disabled={props.disabled}
         label={<FormattedMessage {...translations.prompt} />}
-        onChange={nextValue => props.onContentUpdate(nextValue)}
+        onChange={(nextValue) => props.onContentUpdate(nextValue)}
         value={props.content}
       />
-      <div className={style.editorExtraElement}>
-        {props.children}
-      </div>
+      <div className={style.editorExtraElement}>{props.children}</div>
       <div className={style.editorButtons}>
         {props.showCancel && (
           <RaisedButton

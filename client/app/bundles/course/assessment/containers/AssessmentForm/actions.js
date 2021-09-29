@@ -17,7 +17,8 @@ import { mapCategoriesData } from '../../utils';
 export function fetchTabs(failureMessage) {
   return (dispatch) => {
     dispatch({ type: actionTypes.FETCH_TABS_REQUEST });
-    return CourseAPI.assessment.categories.fetchCategories()
+    return CourseAPI.assessment.categories
+      .fetchCategories()
       .then((response) => {
         dispatch({
           type: actionTypes.FETCH_TABS_SUCCESS,

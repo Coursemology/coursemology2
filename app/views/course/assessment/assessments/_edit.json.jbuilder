@@ -12,7 +12,7 @@ end
 json.tab_attributes do
   json.tab_title @tab.title
   json.category_title @category.title
-  json.only_tab @category.tabs.count == 1 ? true : false
+  json.only_tab @category.tabs.count == 1
 end
 
 json.mode_switching @assessment.allow_mode_switching?

@@ -18,7 +18,7 @@ class Course::LessonPlan::ItemsController < Course::LessonPlan::Controller
   end
 
   def update
-    if @item.actable.update_attributes(item_params)
+    if @item.actable.update(item_params)
       head :ok
     else
       head :bad_request

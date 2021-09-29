@@ -8,6 +8,7 @@ class Course::DuplicationComponent < SimpleDelegator
 
   def sidebar_items
     return [] unless can?(:duplicate_from, current_course)
+
     [
       {
         key: :duplication,

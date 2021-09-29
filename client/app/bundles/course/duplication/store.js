@@ -4,10 +4,13 @@ import rootReducer from './reducers';
 
 export default ({ duplication }) => {
   const initialStates = duplication;
-  const storeCreator = (process.env.NODE_ENV === 'development')
-    // eslint-disable-next-line global-require
-    ? compose(applyMiddleware(thunkMiddleware, require('redux-logger').logger))(createStore)
-    : compose(applyMiddleware(thunkMiddleware))(createStore);
+  const storeCreator =
+    process.env.NODE_ENV === 'development'
+      ? compose(
+          // eslint-disable-next-line global-require
+          applyMiddleware(thunkMiddleware, require('redux-logger').logger),
+        )(createStore)
+      : compose(applyMiddleware(thunkMiddleware))(createStore);
 
   return storeCreator(rootReducer, initialStates);
 };

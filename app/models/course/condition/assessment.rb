@@ -65,9 +65,10 @@ class Course::Condition::Assessment < ApplicationRecord
     self.conditional_type = other.conditional_type
     self.conditional = duplicator.duplicate(other.conditional)
 
-    if duplicator.mode == :course
+    case duplicator.mode
+    when :course
       self.course = duplicator.duplicate(other.course)
-    elsif duplicator.mode == :object
+    when :object
       self.course = duplicator.options[:destination_course]
     end
 
@@ -95,16 +96,19 @@ class Course::Condition::Assessment < ApplicationRecord
 
   def validate_references_self
     return unless assessment == conditional
+
     errors.add(:assessment, :references_self)
   end
 
   def validate_unique_dependency
     return unless required_assessments_for(conditional).include?(assessment)
+
     errors.add(:assessment, :unique_dependency)
   end
 
   def validate_acyclic_dependency
     return unless cyclic?
+
     errors.add(:assessment, :cyclic_dependency)
   end
 

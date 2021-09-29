@@ -48,7 +48,10 @@ const SurveyFormDialogue = ({
   initialValues,
   onSubmit,
 }) => {
-  const { hideSurveyForm, submitSurveyForm } = bindActionCreators(actionCreators, dispatch);
+  const { hideSurveyForm, submitSurveyForm } = bindActionCreators(
+    actionCreators,
+    dispatch,
+  );
   const { shiftEndDate } = bindActionCreators(libActionCreators, dispatch);
 
   const surveyFormProps = {
@@ -57,7 +60,9 @@ const SurveyFormDialogue = ({
     initialValues,
     onSubmit,
     disabled,
-    disableAnonymousToggle: initialValues && initialValues.anonymous && hasStudentResponse,
+    disableAnonymousToggle:
+      // eslint-disable-next-line react/prop-types
+      initialValues && initialValues.anonymous && hasStudentResponse,
   };
 
   return (

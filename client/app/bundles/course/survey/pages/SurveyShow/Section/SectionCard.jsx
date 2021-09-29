@@ -30,15 +30,6 @@ const translations = defineMessages({
 });
 
 class SectionCard extends React.Component {
-  static propTypes = {
-    survey: surveyShape,
-    section: sectionShape,
-    index: PropTypes.number.isRequired,
-    first: PropTypes.bool.isRequired,
-    last: PropTypes.bool.isRequired,
-    disabled: PropTypes.bool.isRequired,
-  }
-
   constructor(props) {
     super(props);
     this.state = { expanded: true };
@@ -48,49 +39,73 @@ class SectionCard extends React.Component {
     const { section, first, last, disabled, index: sectionIndex } = this.props;
     return (
       <CardActions>
-        { section.canCreateQuestion ? <NewQuestionButton sectionId={section.id} {...{ disabled }} /> : null }
-        { section.canUpdate ? <EditSectionButton {...{ section, disabled }} /> : null }
-        { section.canDelete ? <DeleteSectionButton sectionId={section.id} {...{ disabled }} /> : null }
-        { section.canUpdate && !first ? <MoveUpButton {...{ sectionIndex, disabled }} /> : null }
-        { section.canUpdate && !last ? <MoveDownButton {...{ sectionIndex, disabled }} /> : null }
+        {section.canCreateQuestion ? (
+          <NewQuestionButton sectionId={section.id} {...{ disabled }} />
+        ) : null}
+        {section.canUpdate ? (
+          <EditSectionButton {...{ section, disabled }} />
+        ) : null}
+        {section.canDelete ? (
+          <DeleteSectionButton sectionId={section.id} {...{ disabled }} />
+        ) : null}
+        {section.canUpdate && !first ? (
+          <MoveUpButton {...{ sectionIndex, disabled }} />
+        ) : null}
+        {section.canUpdate && !last ? (
+          <MoveDownButton {...{ sectionIndex, disabled }} />
+        ) : null}
       </CardActions>
     );
   }
 
   render() {
-    const { section, index: sectionIndex, survey: { draggedQuestion } } = this.props;
+    const {
+      section,
+      index: sectionIndex,
+      survey: { draggedQuestion },
+    } = this.props;
     return (
       <Card
         style={styles.card}
         expanded={this.state.expanded}
-        onExpandChange={value => this.setState({ expanded: value })}
+        onExpandChange={(value) => this.setState({ expanded: value })}
       >
         <CardTitle
           title={section.title}
-          subtitle={<div dangerouslySetInnerHTML={{ __html: section.description }} />}
+          subtitle={
+            <div dangerouslySetInnerHTML={{ __html: section.description }} />
+          }
           subtitleStyle={styles.subtitle}
           showExpandableButton={section.questions.length > 0}
         />
-        { section.questions.length > 1 ? this.renderActions() : null }
+        {section.questions.length > 1 ? this.renderActions() : null}
         <CardText>
-          {
-            section.questions.length < 1
-              ? <Subheader><FormattedMessage {...translations.noQuestions} /></Subheader> : null
-          }
-          {
-            section.questions.map((question, index) => (
-              <Question
-                key={question.id}
-                expanded={this.state.expanded}
-                {...{ question, index, sectionIndex, draggedQuestion }}
-              />
-            ))
-          }
+          {section.questions.length < 1 ? (
+            <Subheader>
+              <FormattedMessage {...translations.noQuestions} />
+            </Subheader>
+          ) : null}
+          {section.questions.map((question, index) => (
+            <Question
+              key={question.id}
+              expanded={this.state.expanded}
+              {...{ question, index, sectionIndex, draggedQuestion }}
+            />
+          ))}
         </CardText>
-        { this.renderActions() }
+        {this.renderActions()}
       </Card>
     );
   }
 }
+
+SectionCard.propTypes = {
+  survey: surveyShape,
+  section: sectionShape,
+  index: PropTypes.number.isRequired,
+  first: PropTypes.bool.isRequired,
+  last: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool.isRequired,
+};
 
 export default SectionCard;

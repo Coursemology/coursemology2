@@ -14,8 +14,9 @@ export function fetchSubmissions() {
   return (dispatch) => {
     dispatch({ type: actionTypes.FETCH_SUBMISSIONS_REQUEST });
 
-    return CourseAPI.assessment.submissions.index()
-      .then(response => response.data)
+    return CourseAPI.assessment.submissions
+      .index()
+      .then((response) => response.data)
       .then((data) => {
         dispatch({
           type: actionTypes.FETCH_SUBMISSIONS_SUCCESS,
@@ -41,11 +42,17 @@ export function publishSubmissions() {
       dispatch(setNotification(translations.requestFailure));
     };
 
-    return CourseAPI.assessment.submissions.publishAll()
-      .then(response => response.data)
+    return CourseAPI.assessment.submissions
+      .publishAll()
+      .then((response) => response.data)
       .then((data) => {
         if (data.redirect_url) {
-          pollJob(data.redirect_url, PUBLISH_JOB_POLL_INTERVAL, handleSuccess, handleFailure);
+          pollJob(
+            data.redirect_url,
+            PUBLISH_JOB_POLL_INTERVAL,
+            handleSuccess,
+            handleFailure,
+          );
         } else {
           handleSuccess();
         }
@@ -68,10 +75,16 @@ export function downloadSubmissions(type) {
       dispatch(setNotification(translations.requestFailure));
     };
 
-    return CourseAPI.assessment.submissions.downloadAll(type)
-      .then(response => response.data)
+    return CourseAPI.assessment.submissions
+      .downloadAll(type)
+      .then((response) => response.data)
       .then((data) => {
-        pollJob(data.redirect_url, DOWNLOAD_JOB_POLL_INTERVAL, handleSuccess, handleFailure);
+        pollJob(
+          data.redirect_url,
+          DOWNLOAD_JOB_POLL_INTERVAL,
+          handleSuccess,
+          handleFailure,
+        );
       })
       .catch(handleFailure);
   };
@@ -87,16 +100,26 @@ export function downloadStatistics(type) {
     };
 
     const handleFailure = (data) => {
-      const message = (data && data.response && data.response.data && data.response.data.error)
-        || translations.requestFailure;
+      const message =
+        (data &&
+          data.response &&
+          data.response.data &&
+          data.response.data.error) ||
+        translations.requestFailure;
       dispatch({ type: actionTypes.DOWNLOAD_STATISTICS_FAILURE });
       dispatch(setNotification(message));
     };
 
-    return CourseAPI.assessment.submissions.downloadStatistics(type)
-      .then(response => response.data)
+    return CourseAPI.assessment.submissions
+      .downloadStatistics(type)
+      .then((response) => response.data)
       .then((data) => {
-        pollJob(data.redirect_url, DOWNLOAD_STATISTICS_JOB_POLL_INTERNAL, handleSuccess, handleFailure);
+        pollJob(
+          data.redirect_url,
+          DOWNLOAD_STATISTICS_JOB_POLL_INTERNAL,
+          handleSuccess,
+          handleFailure,
+        );
       })
       .catch(handleFailure);
   };
