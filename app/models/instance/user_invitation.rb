@@ -13,7 +13,6 @@ class Instance::UserInvitation < ApplicationRecord
 
   enum role: InstanceUser.roles
 
-  belongs_to :instance, inverse_of: :invitations
   belongs_to :confirmer, class_name: User.name, inverse_of: nil, optional: true
 
   # Invitations that haven't been confirmed, i.e. pending the user's acceptance.
