@@ -26,7 +26,6 @@ class Course < ApplicationRecord
   validates :updater, presence: true
   validates :instance, presence: true
 
-  belongs_to :instance, inverse_of: :courses
   has_many :enrol_requests, inverse_of: :course, dependent: :destroy
   has_many :course_users, inverse_of: :course, dependent: :destroy
   has_many :users, through: :course_users
