@@ -9,10 +9,9 @@ GIT
 
 GIT
   remote: https://github.com/Coursemology/polyglot.git
-  revision: d504a7b772db373b4645140d64bd3e37962ace59
-  branch: xtang/rails_6
+  revision: 291a9e5ebfc3232da58f1eba8fb6c76ec85aa407
   specs:
-    coursemology-polyglot (0.3)
+    coursemology-polyglot (0.3.3)
       activesupport (>= 4.2)
 
 GIT
