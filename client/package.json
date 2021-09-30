@@ -102,7 +102,7 @@
     "react-chartjs-2": "^2.7.6",
     "react-color": "^2.17.3",
     "react-dnd": "^5.0.0",
-    "react-dnd-html5-backend": "^5.0.1",
+    "react-dnd-html5-backend": "^14.0.2",
     "react-dom": "^16.8.6",
     "react-dropzone": "^5.0.1",
     "react-hot-keys": "^2.6.2",
