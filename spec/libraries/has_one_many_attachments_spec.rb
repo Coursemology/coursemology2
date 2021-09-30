@@ -283,7 +283,7 @@ RSpec.describe 'Extension: Acts as Attachable' do
     class self::SampleFormBuilder < ActionView::Helpers::FormBuilder; end
 
     let(:attachment) { create(:attachment_reference) }
-    let(:template) { self.class::SampleView.new(Rails.root.join('app', 'views')) }
+    let(:template) { self.class::SampleView.new(ActionView::LookupContext.new(Rails.root.join('app', 'views'))) }
     let(:resource) do
       stub = self.class::SampleModelMultiple.new
       allow(stub).to receive(:attachments).and_return([attachment])

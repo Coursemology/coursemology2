@@ -7,7 +7,7 @@ class Course::Admin::AssessmentSettingsController < Course::Admin::Controller
   end
 
   def update
-    if current_course.update_attributes(category_params)
+    if current_course.update(category_params)
       redirect_to course_admin_assessments_path, success: t('.success')
     else
       render 'edit'
@@ -20,7 +20,9 @@ class Course::Admin::AssessmentSettingsController < Course::Admin::Controller
     params.require(:course).permit(:show_public_test_cases_output, :show_stdout_and_stderr,
                                    :allow_randomization, :allow_mrq_options_randomization,
                                    assessment_categories_attributes: [:id, :title, :weight,
-                                      { tabs_attributes: [:id, :title, :weight, :category_id] }])
+                                                                      tabs_attributes: [:id, :title,
+                                                                                        :weight,
+                                                                                        :category_id]])
   end
 
   # @return [Course::AssessmentsComponent]

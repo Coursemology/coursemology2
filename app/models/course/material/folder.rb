@@ -41,14 +41,14 @@ class Course::Material::Folder < ApplicationRecord
   # @!attribute [r] children_count
   #   Returns the number of subfolders in current folder.
   calculated :children_count, (lambda do
-    select("count('*')").
+    Course::Material::Folder.default_scoped.select("count('*')").
       from('course_material_folders children').
       where('children.parent_id = course_material_folders.id')
   end)
 
-  scope :with_content_statistics, ->() { all.calculated(:material_count, :children_count) }
-  scope :concrete, ->() { where(owner_id: nil) }
-  scope :root, ->() { where(parent_id: nil) }
+  scope :with_content_statistics, -> { all.calculated(:material_count, :children_count) }
+  scope :concrete, -> { where(owner_id: nil) }
+  scope :root, -> { where(parent_id: nil) }
 
   # Filter out the empty linked folders (i.e. Folder with an owner).
   def self.without_empty_linked_folder
@@ -189,7 +189,8 @@ class Course::Material::Folder < ApplicationRecord
   def validate_name_is_unique_among_materials
     return if parent.nil?
 
-    conflicts = parent.materials.where.has { |parent| name =~ parent.name }
+    # conflicts = parent.materials.where.has { |parent| name =~ parent.name }
+    conflicts = parent.materials.where(Course::Material.arel_table[:name].matches(name))
     errors.add(:name, :taken) unless conflicts.empty?
   end
 
@@ -199,8 +200,8 @@ class Course::Material::Folder < ApplicationRecord
   # @param [Object] excluded_item Item whose name to exclude from the list
   # @return [Array<String>] List of names of contents of folder
   def contents_names(excluded_item = nil)
-    excluded_material = excluded_item.class == Course::Material ? excluded_item : nil
-    excluded_folder = excluded_item.class == Course::Material::Folder ? excluded_item : nil
+    excluded_material = excluded_item.instance_of?(Course::Material) ? excluded_item : nil
+    excluded_folder = excluded_item.instance_of?(Course::Material::Folder) ? excluded_item : nil
     materials_names = materials.where.not(id: excluded_material).pluck(:name)
     subfolders_names = children.where.not(id: excluded_folder).pluck(:name)
     materials_names + subfolders_names

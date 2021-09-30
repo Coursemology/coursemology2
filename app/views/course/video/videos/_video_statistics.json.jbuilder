@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 json.video do
   json.videoUrl @video.url
 end

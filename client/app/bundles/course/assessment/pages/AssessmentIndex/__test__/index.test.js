@@ -11,7 +11,7 @@ describe('<AssessmentIndex />', () => {
     const indexPage = mount(
       <ProviderWrapper store={store}>
         <AssessmentIndex categoryId={1} tabId={1} />
-      </ProviderWrapper>
+      </ProviderWrapper>,
     );
 
     const newBtn = indexPage.find('button');

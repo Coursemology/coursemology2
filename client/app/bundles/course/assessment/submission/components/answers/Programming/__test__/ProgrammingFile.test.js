@@ -43,6 +43,7 @@ describe('<ProgrammingFile />', () => {
         id: 1,
         filename: 'template.py',
         content: null,
+        highlighted_content: null,
       },
       fieldName: 'programming_answer',
       readOnly: true,
@@ -52,11 +53,13 @@ describe('<ProgrammingFile />', () => {
 
     const programmingFile = mount(
       <MemoryRouter
-        initialEntries={[`/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`]}
+        initialEntries={[
+          `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`,
+        ]}
       >
         <ProgrammingFile {...programmingFileProps} />
       </MemoryRouter>,
-      buildContextOptions(store)
+      buildContextOptions(store),
     );
 
     expect(programmingFile.find('a').length).toBe(1);
@@ -73,6 +76,7 @@ describe('<ProgrammingFile />', () => {
         id: 1,
         filename: 'template.py',
         content: '',
+        highlighted_content: '',
       },
       fieldName: 'programming_answer',
       readOnly: true,
@@ -82,11 +86,13 @@ describe('<ProgrammingFile />', () => {
 
     const programmingFile = mount(
       <MemoryRouter
-        initialEntries={[`/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`]}
+        initialEntries={[
+          `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`,
+        ]}
       >
         <ProgrammingFile {...programmingFileProps} />
       </MemoryRouter>,
-      buildContextOptions(store)
+      buildContextOptions(store),
     );
 
     expect(programmingFile.find('a').length).toBe(0);

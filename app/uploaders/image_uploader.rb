@@ -47,7 +47,11 @@ class ImageUploader < CarrierWave::Uploader::Base
     when 'CarrierWave::Storage::File'
       cache!(File.new(other_uploader.file.path))
     when 'CarrierWave::Storage::Fog', 'CarrierWave::Storage::AWS'
-      download!(other_uploader.url)
+      begin
+        download!(other_uploader.url)
+      rescue StandardError => _e
+        download!(other_uploader.medium.url)
+      end
     end
   end
 

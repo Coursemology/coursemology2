@@ -32,42 +32,35 @@ const translations = defineMessages({
 });
 
 class CourseDropdownMenu extends React.PureComponent {
-  static propTypes = {
-    prompt: PropTypes.string.isRequired,
-    currentHost: PropTypes.string.isRequired,
-    selectedCourseId: PropTypes.number,
-    currentCourseId: PropTypes.number,
-    courses: courseListingShape.isRequired,
-    onChange: PropTypes.func.isRequired,
-    onHome: PropTypes.func.isRequired,
-    disabled: PropTypes.bool,
-    dropDownMenuProps: PropTypes.object,
-  }
-
-  static defaultProps = {
-    disabled: false,
-  }
-
   renderCourseMenuItem = (course) => {
     const { currentHost } = this.props;
-    const title = currentHost === course.host ? course.title : (
-      <span>
-        <TypeBadge text={course.host} />
-        {course.title}
-      </span>
-    );
+    const title =
+      currentHost === course.host ? (
+        course.title
+      ) : (
+        <span>
+          <TypeBadge text={course.host} />
+          {course.title}
+        </span>
+      );
 
     return <MenuItem key={course.id} value={course.id} primaryText={title} />;
-  }
+  };
 
   render() {
     const {
-      prompt, courses, onChange, onHome, disabled,
-      currentCourseId, selectedCourseId, dropDownMenuProps,
+      prompt,
+      courses,
+      onChange,
+      onHome,
+      disabled,
+      currentCourseId,
+      selectedCourseId,
+      dropDownMenuProps,
     } = this.props;
     return (
       <>
-        <p style={styles.prompt}>{ prompt }</p>
+        <p style={styles.prompt}>{prompt}</p>
         <div style={styles.dropdownRow}>
           <DropDownMenu
             autoWidth={false}
@@ -77,18 +70,36 @@ class CourseDropdownMenu extends React.PureComponent {
             disabled={disabled}
             {...dropDownMenuProps}
           >
-            { courses.map(this.renderCourseMenuItem) }
+            {courses.map(this.renderCourseMenuItem)}
           </DropDownMenu>
           <IconButton
             tooltip={<FormattedMessage {...translations.currentCourse} />}
             onClick={onHome}
           >
-            <MyLocation color={currentCourseId === selectedCourseId ? blue500 : null} />
+            <MyLocation
+              color={currentCourseId === selectedCourseId ? blue500 : null}
+            />
           </IconButton>
         </div>
       </>
     );
   }
 }
+
+CourseDropdownMenu.propTypes = {
+  prompt: PropTypes.string.isRequired,
+  currentHost: PropTypes.string.isRequired,
+  selectedCourseId: PropTypes.number,
+  currentCourseId: PropTypes.number,
+  courses: courseListingShape.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onHome: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
+  dropDownMenuProps: PropTypes.object,
+};
+
+CourseDropdownMenu.defaultProps = {
+  disabled: false,
+};
 
 export default CourseDropdownMenu;

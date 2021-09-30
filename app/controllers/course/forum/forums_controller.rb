@@ -28,7 +28,7 @@ class Course::Forum::ForumsController < Course::Forum::Controller
   end
 
   def update
-    if @forum.update_attributes(forum_params)
+    if @forum.update(forum_params)
       redirect_to course_forum_path(current_course, @forum),
                   success: t('.success', name: @forum.name)
     else

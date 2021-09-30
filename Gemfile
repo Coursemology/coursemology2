@@ -5,7 +5,8 @@ source 'https://rubygems.org'
 gem 'tzinfo-data', platforms: [:mswin, :mswin64]
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '= 5.2.0'
+gem 'rails', '>= 6.0'
+# gem 'rails-i18n', '~> 6.0.0'
 
 # Use PostgreSQL for the backend
 gem 'pg'
@@ -20,16 +21,16 @@ gem 'validates_hostname'
 gem 'workflow'
 gem 'workflow-activerecord', '>= 4.1', '< 6.0'
 # Add creator_id and updater_id attributes to models
-gem 'activerecord-userstamp', git: 'https://github.com/lowjoel/activerecord-userstamp'
+gem 'activerecord-userstamp', git: 'https://github.com/raymondtangsc/activerecord-userstamp'
 # Allow actions to be deferred until after a record is committed.
 gem 'after_commit_action'
 # Allow declaring the calculated attributes of a record
 gem 'calculated_attributes'
 # Baby Squeel as an SQL-like DSL
-gem 'baby_squeel'
+# gem 'baby_squeel', '>= 1.2'
 # For multiple table inheritance
-#   TODO: Figure out breaking changes in v2 as polymorphism is not working correctly.
-gem 'active_record-acts_as', git: 'https://github.com/Coursemology/active_record-acts_as', branch: 'rails5-2'
+#   TODO: Figure out breaking changes in v2 as polymorpshism is not working correctly.
+gem 'active_record-acts_as', git: 'https://github.com/Coursemology/active_record-acts_as', branch: 'rails5.2.3'
 # Organise ActiveRecord model into a tree structure
 gem 'edge'
 # Upsert action for Postgres
@@ -81,7 +82,7 @@ group :development do
   # Spring speeds up development by keeping your application running in the background.
   # Read more: https://github.com/rails/spring
   gem 'spring', platforms: [:ruby]
-  gem 'listen', '~> 3.2.0'
+  gem 'listen'
 
   # Gems to make development mode faster and less painful
 
@@ -142,9 +143,10 @@ end
 
 group :ci do
   # Code Coverage reporters
-  gem 'codecov', :require => false
+  gem 'codecov', require: false
   gem 'rspec-retry'
   gem 'rspec_junit_formatter'
+  gem 'rubocop-rails'
 end
 
 # This is used only when producing Production assets. Deals with things like minifying JavaScript
@@ -156,7 +158,24 @@ end
 
 group :production, :test do
   # Puma will be our app server
-  gem 'puma', '4.3.6'
+  gem 'puma'
+end
+
+group :production do
+  # Use fog-aws as CarrierWave's storage provider
+  gem 'fog-aws'
+  gem 'rack-mini-profiler'
+  gem 'flamegraph'
+  gem 'stackprof'
+  gem 'sidekiq'
+  gem 'sidekiq-cron'
+  gem 'sinatra', require: nil
+  gem 'redis-rails'
+  gem 'rollbar', '>= 1.5.3'
+
+  # better log format
+  gem 'lograge'
+  gem 'lograge-sql'
 end
 
 # Multitenancy
@@ -175,20 +194,21 @@ gem 'omniauth-facebook'
 
 # Use cancancan for authorization
 gem 'cancancan'
-gem 'cancancan-baby_squeel'
+# gem 'cancancan-baby_squeel', git: 'https://github.com/Coursemology/cancancan-baby_squeel.git', branch: 'rails5.2.3'
+# gem 'ransack', require: false
 
 # Some helpers for structuring CSS/JavaScript
 # Official version https://github.com/winston/rails_utils/pull/30 is no longer maintained.
 # We also want stricter sanitization.
-gem 'rails_utils', git: 'https://github.com/Coursemology/rails_utils', branch: 'full-sanitize-flash'
+gem 'rails_utils', git: 'https://github.com/raymondtangsc/rails_utils.git', branch: 'full-sanitize-flash'
 
 # Themes for instances
-gem 'themes_on_rails', '>= 0.3.1', git: 'https://github.com/Coursemology/themes_on_rails',
-                                   branch: 'cache-theme-templates'
+gem 'themes_on_rails', '>= 0.3.1', git: 'https://github.com/raymondtangsc/themes_on_rails',
+                                   branch: 'xtang/rails_6'
 
 # Forms made easy for Rails
 gem 'simple_form'
-gem 'simple_form-bootstrap', git: 'https://github.com/Coursemology/simple_form-bootstrap'
+gem 'simple_form-bootstrap', git: 'https://github.com/raymondtangsc/simple_form-bootstrap'
 # Dynamic nested forms
 gem 'cocoon'
 gem 'bootstrap3-datetimepicker-rails'
@@ -209,7 +229,7 @@ gem 'rubyzip', require: 'zip'
 gem 'nokogiri', '>= 1.8.1'
 
 # Polyglot support
-gem 'coursemology-polyglot'
+gem 'coursemology-polyglot', git: 'https://github.com/Coursemology/polyglot.git'
 
 # To assist with bulk inserts into database
 gem 'activerecord-import', '>= 0.2.0'
@@ -224,3 +244,7 @@ gem 'rails-controller-testing'
 gem 'rwordnet', git: 'https://github.com/makqien/rwordnet'
 gem 'loofah', '>= 2.2.1'
 gem 'rails-html-sanitizer', '>= 1.0.4'
+
+gem 'sprockets', '< 4.0.0'
+gem 'mimemagic', '>= 0.3.7'
+gem 'ffi', '>= 1.14.2'

@@ -19,9 +19,14 @@ class Course::Assessment::SubmissionQuestion < ApplicationRecord
   # Specific implementation of Course::Discussion::Topic#from_user, this is not supposed to be
   # called directly.
   scope :from_user, (lambda do |user_id|
-    joining { submission }.
-      where.has { submission.creator_id.in(user_id) }.
-      joining { discussion_topic }.selecting { discussion_topic.id }
+    # joining { submission }.
+    #   where.has { submission.creator_id.in(user_id) }.
+    #   joining { discussion_topic }.selecting { discussion_topic.id }
+    unscoped.
+      joins(:submission).
+      where(Course::Assessment::Submission.arel_table[:creator_id].in(user_id)).
+      joins(:discussion_topic).
+      select(Course::Discussion::Topic.arel_table[:id])
   end)
 
   # Gets the SubmissionQuestion of a specific submission
@@ -35,7 +40,7 @@ class Course::Assessment::SubmissionQuestion < ApplicationRecord
 
   def answers
     Course::Assessment::Answer.where('submission_id = ? AND question_id = ?',
-                                     self.submission_id, self.question_id)
+                                     submission_id, question_id)
   end
 
   # Loads the past answers of a specific question

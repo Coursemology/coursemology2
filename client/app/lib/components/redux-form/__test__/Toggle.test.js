@@ -16,7 +16,7 @@ describe('<Toggle />', () => {
         context: { intl },
         childContextTypes: { intl: intlShape },
       },
-      'Toggle'
+      'Toggle',
     );
 
     expect(ToggleInput).toMatchSnapshot();
@@ -39,7 +39,7 @@ describe('<Toggle />', () => {
         context: { intl },
         childContextTypes: { intl: intlShape },
       },
-      'Toggle'
+      'Toggle',
     );
 
     expect(ToggleInput).toMatchSnapshot();

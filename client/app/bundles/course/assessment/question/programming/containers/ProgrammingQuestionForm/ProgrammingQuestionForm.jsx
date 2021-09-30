@@ -16,7 +16,9 @@ import MaterialSummernote from 'lib/components/MaterialSummernote';
 import ChipInput from 'material-ui-chip-input';
 
 import BuildLog from '../../components/BuildLog';
-import OnlineEditor, { validation as editorValidation } from '../../components/OnlineEditor';
+import OnlineEditor, {
+  validation as editorValidation,
+} from '../../components/OnlineEditor';
 import UploadedPackageView from '../../components/UploadedPackageView';
 import styles from './ProgrammingQuestionForm.scss';
 import translations from './ProgrammingQuestionForm.intl';
@@ -47,23 +49,31 @@ function validation(data, pathOfKeysToData, intl) {
   // Check maximum grade
   const maximumGrade = data.get('maximum_grade');
   if (!maximumGrade) {
-    questionErrors.maximum_grade = intl.formatMessage(translations.cannotBeBlankValidationError);
+    questionErrors.maximum_grade = intl.formatMessage(
+      translations.cannotBeBlankValidationError,
+    );
     hasError = true;
   } else if (maximumGrade < 0) {
-    questionErrors.maximum_grade = intl.formatMessage(translations.positiveNumberValidationError);
+    questionErrors.maximum_grade = intl.formatMessage(
+      translations.positiveNumberValidationError,
+    );
     hasError = true;
   }
 
   // Check language
   if (!data.get('language_id')) {
-    questionErrors.language_id = intl.formatMessage(translations.cannotBeBlankValidationError);
+    questionErrors.language_id = intl.formatMessage(
+      translations.cannotBeBlankValidationError,
+    );
     hasError = true;
   }
 
   // Check time limit
   const timeLimit = data.get('time_limit');
   if (timeLimit && (timeLimit > HARD_TIME_LIMIT || timeLimit <= 0)) {
-    questionErrors.time_limit = intl.formatMessage(translations.timeLimitRangeValidationError);
+    questionErrors.time_limit = intl.formatMessage(
+      translations.timeLimitRangeValidationError,
+    );
     hasError = true;
   }
 
@@ -71,7 +81,9 @@ function validation(data, pathOfKeysToData, intl) {
     const value = data.get(numberField);
 
     if (value && value <= 0) {
-      questionErrors[numberField] = intl.formatMessage(translations.lessThanEqualZeroValidationError);
+      questionErrors[numberField] = intl.formatMessage(
+        translations.lessThanEqualZeroValidationError,
+      );
       hasError = true;
     }
   });
@@ -79,7 +91,9 @@ function validation(data, pathOfKeysToData, intl) {
   // Check file uploaded when no previous package exists
   if (!data.get('edit_online')) {
     if (data.get('package') === null && data.get('package_filename') === null) {
-      questionErrors.package_filename = intl.formatMessage(translations.noPackageValidationError);
+      questionErrors.package_filename = intl.formatMessage(
+        translations.noPackageValidationError,
+      );
       hasError = true;
     }
   }
@@ -108,21 +122,43 @@ class ProgrammingQuestionForm extends React.Component {
   }
 
   componentDidMount() {
-    this.summernoteEditors = $('#programming-question-form .note-editor .note-editable');
+    this.summernoteEditors = $(
+      '#programming-question-form .note-editor .note-editable',
+    );
   }
 
   componentWillReceiveProps(nextProps) {
-    this.summernoteEditors.attr('contenteditable', !nextProps.data.get('is_loading'));
+    this.summernoteEditors.attr(
+      'contenteditable',
+      !nextProps.data.get('is_loading'),
+    );
   }
+
+  handleChange(field, value) {
+    this.props.actions.updateProgrammingQuestion(
+      field,
+      value === '' ? null : value,
+    );
+  }
+
+  onPackageUploadFileChange = (e) => {
+    const files = e.target.files;
+    const filename = files.length === 0 ? null : files[0].name;
+    this.handleChange('package_filename', filename);
+  };
 
   onSelectSkills = (id) => {
     const currentSkills = this.props.data.getIn(['question', 'skill_ids']);
-    const currentSkillsWithoutId = currentSkills.filter(v => v.get('id') !== id);
+    const currentSkillsWithoutId = currentSkills.filter(
+      (v) => v.get('id') !== id,
+    );
 
     if (currentSkills.size === currentSkillsWithoutId.size) {
       // id is for a new skill to be added
-      const newSkill = this.props.data.getIn(['question', 'skills'])
-        .filter(v => v.get('id') === id).first();
+      const newSkill = this.props.data
+        .getIn(['question', 'skills'])
+        .filter((v) => v.get('id') === id)
+        .first();
 
       if (newSkill) {
         this.props.actions.updateSkills(currentSkills.push(newSkill));
@@ -131,13 +167,7 @@ class ProgrammingQuestionForm extends React.Component {
       // id is for a selected skill to be removed
       this.props.actions.updateSkills(currentSkillsWithoutId);
     }
-  }
-
-  onPackageUploadFileChange = (e) => {
-    const files = e.target.files;
-    const filename = files.length === 0 ? null : files[0].name;
-    this.handleChange('package_filename', filename);
-  }
+  };
 
   onSubmit = (e) => {
     e.preventDefault();
@@ -148,7 +178,9 @@ class ProgrammingQuestionForm extends React.Component {
 
     // Fix for FormData bug on Safari 11.1, Coursemology/coursemology2#2962
     // Disable empty file inputs so that the constructed FormData does not contain any empty files
-    const fileInputs = this.form.querySelectorAll('input[type="file"]:not([disabled])');
+    const fileInputs = this.form.querySelectorAll(
+      'input[type="file"]:not([disabled])',
+    );
     fileInputs.forEach((input) => {
       if (input.files.length === 0) {
         input.setAttribute('disabled', '');
@@ -162,10 +194,12 @@ class ProgrammingQuestionForm extends React.Component {
       input.removeAttribute('disabled');
     });
 
-    const failureMessage = this.props.intl.formatMessage(translations.submitFailureMessage);
+    const failureMessage = this.props.intl.formatMessage(
+      translations.submitFailureMessage,
+    );
 
     this.props.actions.submitForm(url, method, formData, failureMessage);
-  }
+  };
 
   validationCheck() {
     const { data, intl } = this.props;
@@ -175,7 +209,7 @@ class ProgrammingQuestionForm extends React.Component {
     // Check online editor
     if (question.get('edit_online')) {
       errors = errors.concat(
-        editorValidation(this.props.data, ['test_ui'], intl)
+        editorValidation(this.props.data, ['test_ui'], intl),
       );
     }
 
@@ -184,12 +218,9 @@ class ProgrammingQuestionForm extends React.Component {
     return errors.length === 0;
   }
 
-  handleChange(field, value) {
-    this.props.actions.updateProgrammingQuestion(field, value === '' ? null : value);
-  }
-
   summernoteHandler(field) {
-    return e => this.props.actions.updateProgrammingQuestion(field, e === '' ? null : e);
+    return (e) =>
+      this.props.actions.updateProgrammingQuestion(field, e === '' ? null : e);
   }
 
   languageHandler(field) {
@@ -225,21 +256,33 @@ class ProgrammingQuestionForm extends React.Component {
     const alertData = this.props.data.get('import_result').get('alert');
 
     if (alertData) {
-      return <div className={alertData.get('class')}>{alertData.get('message')}</div>;
+      return (
+        <div className={alertData.get('class')}>{alertData.get('message')}</div>
+      );
     }
 
     return null;
   }
 
-  renderInputField(label, field, required, type, value, error = null, placeholder = null) {
+  renderInputField(
+    label,
+    field,
+    required,
+    type,
+    value,
+    error = null,
+    placeholder = null,
+  ) {
     return (
       <div title={placeholder}>
         <TextField
           type={type}
           name={ProgrammingQuestionForm.getInputName(field)}
           id={ProgrammingQuestionForm.getInputId(field)}
-          onChange={(e, newValue) => { this.handleChange(field, newValue); }}
-          onWheel={type === 'number' && (event => event.currentTarget.blur())}
+          onChange={(e, newValue) => {
+            this.handleChange(field, newValue);
+          }}
+          onWheel={type === 'number' && ((event) => event.currentTarget.blur())}
           errorText={error}
           floatingLabelText={(required ? '* ' : '') + label}
           floatingLabelFixed
@@ -274,7 +317,9 @@ class ProgrammingQuestionForm extends React.Component {
           value={value}
           dataSource={options}
           dataSourceConfig={{ value: 'id', text: 'title' }}
-          onRequestAdd={(chip) => { this.onSelectSkills(chip.id); }}
+          onRequestAdd={(chip) => {
+            this.onSelectSkills(chip.id);
+          }}
           onRequestDelete={this.onSelectSkills}
           floatingLabelText={label}
           floatingLabelFixed
@@ -285,26 +330,44 @@ class ProgrammingQuestionForm extends React.Component {
           menuStyle={{ maxHeight: '80vh', overflowY: 'scroll' }}
         />
         <select
-          name={`${ProgrammingQuestionForm.getInputName('question_assessment')}[${field}][]`}
+          name={`${ProgrammingQuestionForm.getInputName(
+            'question_assessment',
+          )}[${field}][]`}
           multiple
-          value={value.map(opt => opt.id)}
+          value={value.map((opt) => opt.id)}
           style={{ display: 'none' }}
           disabled={this.props.data.get('is_loading')}
-          onChange={(e) => { this.onSelectSkills(parseInt(e.target.value, 10) || e.target.value); }}
+          onChange={(e) => {
+            this.onSelectSkills(parseInt(e.target.value, 10) || e.target.value);
+          }}
         >
-          { options.map(opt => <option value={opt.id} key={opt.id}>{opt.title}</option>) }
+          {options.map((opt) => (
+            <option value={opt.id} key={opt.id}>
+              {opt.title}
+            </option>
+          ))}
         </select>
       </div>
     );
   }
 
-  renderDropdownSelectField(label, field, required, value, options, error, onChange) {
-    const selectOptions = options.map(
-      opt => <option value={opt.id || ''} key={opt.id}>{opt.name}</option>
-    );
-    const selectFieldOptions = options.map(
-      opt => <MenuItem value={opt.id} key={opt.id} primaryText={opt.name} />
-    );
+  renderDropdownSelectField(
+    label,
+    field,
+    required,
+    value,
+    options,
+    error,
+    onChange,
+  ) {
+    const selectOptions = options.map((opt) => (
+      <option value={opt.id || ''} key={opt.id}>
+        {opt.name}
+      </option>
+    ));
+    const selectFieldOptions = options.map((opt) => (
+      <MenuItem value={opt.id} key={opt.id} primaryText={opt.name} />
+    ));
 
     return (
       <div key={field}>
@@ -312,7 +375,9 @@ class ProgrammingQuestionForm extends React.Component {
           floatingLabelText={(required ? '* ' : '') + label}
           floatingLabelFixed
           value={value}
-          onChange={(e, key, id) => { onChange(id); }}
+          onChange={(e, key, id) => {
+            onChange(id);
+          }}
           disabled={this.props.data.get('is_loading')}
           errorText={error}
           fullWidth
@@ -324,7 +389,9 @@ class ProgrammingQuestionForm extends React.Component {
           value={value || ''}
           style={{ display: 'none' }}
           disabled={this.props.data.get('is_loading')}
-          onChange={(e) => { onChange(parseInt(e.target.value, 10) || null); }}
+          onChange={(e) => {
+            onChange(parseInt(e.target.value, 10) || null);
+          }}
         >
           {selectOptions}
         </select>
@@ -350,12 +417,16 @@ class ProgrammingQuestionForm extends React.Component {
       >
         <Tab
           id="test-case-editor-tab"
-          label={this.props.intl.formatMessage(translations.editTestsOnlineButton)}
+          label={this.props.intl.formatMessage(
+            translations.editTestsOnlineButton,
+          )}
           value
         />
         <Tab
           id="upload-package-tab"
-          label={this.props.intl.formatMessage(translations.uploadPackageButton)}
+          label={this.props.intl.formatMessage(
+            translations.uploadPackageButton,
+          )}
           value={false}
         />
       </Tabs>
@@ -372,19 +443,16 @@ class ProgrammingQuestionForm extends React.Component {
       const name = pkg.get('updater_name');
       const author = showEditOnline
         ? this.props.intl.formatMessage(translations.packageUpdatedBy, { name })
-        : this.props.intl.formatMessage(translations.packageUploadedBy, { name });
+        : this.props.intl.formatMessage(translations.packageUploadedBy, {
+            name,
+          });
       downloadNode = (
         <div className={styles.downloadPackageContainer}>
           <div>
             <span className={styles.uploadedPackageLabel}>
-              {uploadedPackageLabel}
-:
+              {uploadedPackageLabel}:
             </span>
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href={pkg.get('path')}
-            >
+            <a target="_blank" rel="noopener noreferrer" href={pkg.get('path')}>
               {pkg.get('name')}
             </a>
           </div>
@@ -397,14 +465,22 @@ class ProgrammingQuestionForm extends React.Component {
       return downloadNode;
     }
 
-    const packageError = this.props.data.getIn(['question', 'error', 'package_filename']);
-    const newPackageButton = this.props.intl.formatMessage(translations.newPackageButton);
-    const noFileMessage = this.props.intl.formatMessage(translations.noFileChosenMessage);
+    const packageError = this.props.data.getIn([
+      'question',
+      'error',
+      'package_filename',
+    ]);
+    const newPackageButton = this.props.intl.formatMessage(
+      translations.newPackageButton,
+    );
+    const noFileMessage = this.props.intl.formatMessage(
+      translations.noFileChosenMessage,
+    );
 
     return (
       <>
         <h3>{label}</h3>
-        { downloadNode }
+        {downloadNode}
         <RaisedButton
           className={styles.fileInputButton}
           label={newPackageButton}
@@ -422,8 +498,12 @@ class ProgrammingQuestionForm extends React.Component {
             onChange={this.onPackageUploadFileChange}
           />
         </RaisedButton>
-        <div style={{ display: 'inline-block' }}>{newFilename || noFileMessage}</div>
-        <div style={{ color: red500, whiteSpace: 'pre-wrap' }}>{packageError}</div>
+        <div style={{ display: 'inline-block' }}>
+          {newFilename || noFileMessage}
+        </div>
+        <div style={{ color: red500, whiteSpace: 'pre-wrap' }}>
+          {packageError}
+        </div>
       </>
     );
   }
@@ -437,8 +517,14 @@ class ProgrammingQuestionForm extends React.Component {
             data: this.props.data.get('test_ui'),
             isLoading: this.props.data.get('is_loading'),
             autograded: this.props.data.getIn(['question', 'autograded']),
-            autogradedAssessment: this.props.data.getIn(['question', 'autograded_assessment']),
-            hasSubmissions: this.props.data.getIn(['question', 'has_submissions']),
+            autogradedAssessment: this.props.data.getIn([
+              'question',
+              'autograded_assessment',
+            ]),
+            hasSubmissions: this.props.data.getIn([
+              'question',
+              'has_submissions',
+            ]),
           }}
         />
       );
@@ -462,7 +548,10 @@ class ProgrammingQuestionForm extends React.Component {
     const formData = this.props.data.get('form_data');
     const languages = question.get('languages');
     const pkg = question.get('package');
-    const showAttemptLimit = !this.props.data.getIn(['question', 'autograded_assessment']);
+    const showAttemptLimit = !this.props.data.getIn([
+      'question',
+      'autograded_assessment',
+    ]);
 
     const skillsOptions = question.get('skills').toJS();
     const skillsValues = question.get('skill_ids').toJS();
@@ -473,178 +562,222 @@ class ProgrammingQuestionForm extends React.Component {
     const autogradedAssessment = question.get('autograded_assessment');
     const autograded = question.get('autograded');
     const hasAutoGradings = question.get('has_auto_gradings');
-    let autogradedLabel = this.props.intl.formatMessage(translations.autograded);
+    let autogradedLabel = this.props.intl.formatMessage(
+      translations.autograded,
+    );
     if (autogradedAssessment && !autograded) {
-      autogradedLabel += ` (${this.props.intl.formatMessage(translations.autogradedAssessment)})`;
+      autogradedLabel += ` (${this.props.intl.formatMessage(
+        translations.autogradedAssessment,
+      )})`;
     } else if (hasAutoGradings) {
-      autogradedLabel += ` (${this.props.intl.formatMessage(translations.autogradedToggleDisabled)})`;
+      autogradedLabel += ` (${this.props.intl.formatMessage(
+        translations.autogradedToggleDisabled,
+      )})`;
     }
 
     const showEditOnline = question.get('edit_online');
 
     return (
       <div>
-        { this.renderImportAlertView() }
-        {
-          this.props.data.get('save_errors')
-            ? (
-              <div className="alert alert-danger">
-                {
-                this.props.data.get('save_errors').map((errorMessage, index) => <div key={index}>{errorMessage}</div>)
-              }
-              </div>
-            )
-            : null
-        }
+        {this.renderImportAlertView()}
+        {this.props.data.get('save_errors') ? (
+          <div className="alert alert-danger">
+            {this.props.data.get('save_errors').map((errorMessage, index) => (
+              <div key={index}>{errorMessage}</div>
+            ))}
+          </div>
+        ) : null}
         <form
           id="programming-question-form"
           action={formData.get('path')}
           method="post"
           encType="multipart/form-data"
           onSubmit={this.onSubmit}
-          ref={(form) => { this.form = form; }}
+          ref={(form) => {
+            this.form = form;
+          }}
         >
-          <input type="hidden" name="authenticity_token" value={formData.get('auth_token')} />
+          <input
+            type="hidden"
+            name="authenticity_token"
+            value={formData.get('auth_token')}
+          />
 
           <div className={styles.inputContainer}>
             <div className={styles.titleInput}>
-              {
-                this.renderInputField(
-                  this.props.intl.formatMessage(translations.titleFieldLabel),
-                  'title', false, 'text', question.get('title') || '',
-                  this.props.data.getIn(['question', 'error', 'title'])
-                )
-              }
+              {this.renderInputField(
+                this.props.intl.formatMessage(translations.titleFieldLabel),
+                'title',
+                false,
+                'text',
+                question.get('title') || '',
+                this.props.data.getIn(['question', 'error', 'title']),
+              )}
             </div>
             <div className={styles.descriptionInput}>
-              {
-                this.renderSummernoteField(
-                  this.props.intl.formatMessage(translations.descriptionFieldLabel),
-                  'description', false, question.get('description') || ''
-                )
-              }
+              {this.renderSummernoteField(
+                this.props.intl.formatMessage(
+                  translations.descriptionFieldLabel,
+                ),
+                'description',
+                false,
+                question.get('description') || '',
+              )}
             </div>
             <div className={styles.staffCommentsInput}>
-              {
-                this.renderSummernoteField(
-                  this.props.intl.formatMessage(translations.staffOnlyCommentsFieldLabel),
-                  'staff_only_comments', false, question.get('staff_only_comments') || ''
-                )
-             }
+              {this.renderSummernoteField(
+                this.props.intl.formatMessage(
+                  translations.staffOnlyCommentsFieldLabel,
+                ),
+                'staff_only_comments',
+                false,
+                question.get('staff_only_comments') || '',
+              )}
             </div>
             <div className={styles.skillsInput}>
-              {
-                this.renderMultiSelectSkillsField(
-                  this.props.intl.formatMessage(translations.skillsFieldLabel),
-                  'skill_ids', skillsValues, skillsOptions,
-                  this.props.data.getIn(['question', 'error', 'skill_ids'])
-                )
-              }
+              {this.renderMultiSelectSkillsField(
+                this.props.intl.formatMessage(translations.skillsFieldLabel),
+                'skill_ids',
+                skillsValues,
+                skillsOptions,
+                this.props.data.getIn(['question', 'error', 'skill_ids']),
+              )}
             </div>
             <div className={styles.maximumGradeInput}>
-              {
-                this.renderInputField(
-                  this.props.intl.formatMessage(translations.maximumGradeFieldLabel),
-                  'maximum_grade', true, 'number',
-                  ProgrammingQuestionForm.convertNull(question.get('maximum_grade')),
-                  this.props.data.getIn(['question', 'error', 'maximum_grade'])
-                )
-              }
+              {this.renderInputField(
+                this.props.intl.formatMessage(
+                  translations.maximumGradeFieldLabel,
+                ),
+                'maximum_grade',
+                true,
+                'number',
+                ProgrammingQuestionForm.convertNull(
+                  question.get('maximum_grade'),
+                ),
+                this.props.data.getIn(['question', 'error', 'maximum_grade']),
+              )}
             </div>
             <div className={styles.languageInput}>
-              {
-                this.renderDropdownSelectField(
-                  this.props.intl.formatMessage(translations.languageFieldLabel),
-                  'language_id', true, question.get('language_id') || undefined, languageOptions,
-                  this.props.data.getIn(['question', 'error', 'language_id']),
-                  this.languageHandler('language_id')
-                )
-              }
+              {this.renderDropdownSelectField(
+                this.props.intl.formatMessage(translations.languageFieldLabel),
+                'language_id',
+                true,
+                question.get('language_id') || undefined,
+                languageOptions,
+                this.props.data.getIn(['question', 'error', 'language_id']),
+                this.languageHandler('language_id'),
+              )}
             </div>
             <div className={styles.autogradeToggle}>
-              {
-                this.props.data.getIn(['question', 'display_autograded_toggle'])
-                  ? (
-                    <Toggle
-                      label={autogradedLabel}
-                      labelPosition="right"
-                      toggled={autograded}
-                      onToggle={(e) => {
-                        if (hasAutoGradings) return;
-                        this.handleChange('autograded', e.target.checked);
-                      }}
-                      readOnly={hasAutoGradings}
-                      disabled={this.props.data.get('is_loading')}
-                      style={{ margin: '1em 0' }}
-                      name="question_programming[autograded]"
-                    />
-                  ) : null
-              }
+              {this.props.data.getIn([
+                'question',
+                'display_autograded_toggle',
+              ]) ? (
+                <Toggle
+                  label={autogradedLabel}
+                  labelPosition="right"
+                  toggled={autograded}
+                  onToggle={(e) => {
+                    if (hasAutoGradings) return;
+                    this.handleChange('autograded', e.target.checked);
+                  }}
+                  readOnly={hasAutoGradings}
+                  disabled={this.props.data.get('is_loading')}
+                  style={{ margin: '1em 0' }}
+                  name="question_programming[autograded]"
+                />
+              ) : null}
             </div>
             <div className={styles.memoryLimitInput}>
-              {
-                autograded
-                  ? this.renderInputField(
-                    this.props.intl.formatMessage(translations.memoryLimitFieldLabel),
-                    'memory_limit', false, 'number',
-                    ProgrammingQuestionForm.convertNull(question.get('memory_limit')),
-                    this.props.data.getIn(['question', 'error', 'memory_limit'])
-                  ) : null
-              }
+              {autograded
+                ? this.renderInputField(
+                    this.props.intl.formatMessage(
+                      translations.memoryLimitFieldLabel,
+                    ),
+                    'memory_limit',
+                    false,
+                    'number',
+                    ProgrammingQuestionForm.convertNull(
+                      question.get('memory_limit'),
+                    ),
+                    this.props.data.getIn([
+                      'question',
+                      'error',
+                      'memory_limit',
+                    ]),
+                  )
+                : null}
             </div>
             <div className={styles.timeLimitInput}>
-              {
-                autograded
-                  ? this.renderInputField(
-                    this.props.intl.formatMessage(translations.timeLimitFieldLabel),
-                    'time_limit', false, 'number',
-                    question.get('time_limit') === null ? DEFAULT_TIME_LIMIT : question.get('time_limit'),
-                    this.props.data.getIn(['question', 'error', 'time_limit'])
-                  ) : null
-              }
+              {autograded
+                ? this.renderInputField(
+                    this.props.intl.formatMessage(
+                      translations.timeLimitFieldLabel,
+                    ),
+                    'time_limit',
+                    false,
+                    'number',
+                    question.get('time_limit') === null
+                      ? DEFAULT_TIME_LIMIT
+                      : question.get('time_limit'),
+                    this.props.data.getIn(['question', 'error', 'time_limit']),
+                  )
+                : null}
             </div>
-            {
-              autograded && showAttemptLimit
-                ? (
-                  <div className={styles.attemptLimitInput}>
-                    {
-                    this.renderInputField(
-                      this.props.intl.formatMessage(translations.attemptLimitFieldLabel),
-                      'attempt_limit', false, 'number',
-                      ProgrammingQuestionForm.convertNull(question.get('attempt_limit')),
-                      this.props.data.getIn(['question', 'error', 'attempt_limit']),
-                      this.props.intl.formatMessage(translations.attemptLimitPlaceholderMessage)
-                    )
-                  }
-                  </div>
-                ) : null
-            }
+            {autograded && showAttemptLimit ? (
+              <div className={styles.attemptLimitInput}>
+                {this.renderInputField(
+                  this.props.intl.formatMessage(
+                    translations.attemptLimitFieldLabel,
+                  ),
+                  'attempt_limit',
+                  false,
+                  'number',
+                  ProgrammingQuestionForm.convertNull(
+                    question.get('attempt_limit'),
+                  ),
+                  this.props.data.getIn(['question', 'error', 'attempt_limit']),
+                  this.props.intl.formatMessage(
+                    translations.attemptLimitPlaceholderMessage,
+                  ),
+                )}
+              </div>
+            ) : null}
           </div>
 
-          {
-            this.renderSwitcher(showEditOnline,
-              question.get('can_switch_package_type') && autograded)
-          }
-          {
-            this.renderPackageField(
-              this.props.intl.formatMessage(translations.templatePackageFieldLabel),
-              'file', pkg, this.props.data.getIn(['question', 'package_filename']), showEditOnline
-            )
-          }
-          { this.renderTestView(showEditOnline) }
-          { this.renderBuildLogView() }
+          {this.renderSwitcher(
+            showEditOnline,
+            question.get('can_switch_package_type') && autograded,
+          )}
+          {this.renderPackageField(
+            this.props.intl.formatMessage(
+              translations.templatePackageFieldLabel,
+            ),
+            'file',
+            pkg,
+            this.props.data.getIn(['question', 'package_filename']),
+            showEditOnline,
+          )}
+          {this.renderTestView(showEditOnline)}
+          {this.renderBuildLogView()}
 
           <Snackbar
             open={this.props.data.get('has_errors')}
-            message={this.props.intl.formatMessage(translations.resolveErrorsMessage)}
+            message={this.props.intl.formatMessage(
+              translations.resolveErrorsMessage,
+            )}
             autoHideDuration={5000}
-            onRequestClose={() => { this.props.actions.clearHasError(); }}
+            onRequestClose={() => {
+              this.props.actions.clearHasError();
+            }}
           />
           <Snackbar
             open={this.props.data.get('show_submission_message')}
             message={this.props.data.get('submission_message')}
             autoHideDuration={2000}
-            onRequestClose={() => { this.props.actions.clearSubmissionMessage(); }}
+            onRequestClose={() => {
+              this.props.actions.clearSubmissionMessage();
+            }}
           />
           <RaisedButton
             className={styles.submitButton}
@@ -654,7 +787,11 @@ class ProgrammingQuestionForm extends React.Component {
             id="programming-question-form-submit"
             type="submit"
             disabled={this.props.data.get('is_loading')}
-            icon={this.props.data.get('is_loading') ? <i className="fa fa-spinner fa-lg fa-spin" /> : null}
+            icon={
+              this.props.data.get('is_loading') ? (
+                <i className="fa fa-spinner fa-lg fa-spin" />
+              ) : null
+            }
           />
         </form>
       </div>

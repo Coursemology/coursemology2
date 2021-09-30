@@ -40,7 +40,7 @@ RSpec.describe InstanceUser, type: :model do
     describe '.search' do
       let(:keyword) { 'KeyWord' }
       let!(:instance_user_with_keyword_in_username) do
-        create(:user, emails_count: 2, name: 'Awesome' + keyword + 'User').instance_users.last
+        create(:user, emails_count: 2, name: "Awesome#{keyword}User").instance_users.last
       end
       let!(:instance_user_with_keyword_in_emails) do
         create(:user_email, email: keyword + generate(:email)).user.instance_users.last

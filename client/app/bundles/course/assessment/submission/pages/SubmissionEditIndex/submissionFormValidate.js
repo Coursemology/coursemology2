@@ -19,7 +19,7 @@ const validateVoiceResponse = (values) => {
   return { file: translations.pleaseRecordYourVoice };
 };
 
-const validateQuestion = question => (values) => {
+const validateQuestion = (question) => (values) => {
   const { VoiceResponse } = questionTypes;
   switch (question.type) {
     case VoiceResponse:

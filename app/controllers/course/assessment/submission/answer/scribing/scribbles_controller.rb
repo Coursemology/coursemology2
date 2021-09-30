@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 class Course::Assessment::Submission::Answer::Scribing::ScribblesController < \
   Course::Assessment::Submission::Answer::Scribing::Controller
-
   before_action :load_scribble, only: [:create]
 
   def create
     if @scribble
-      @scribble.update_attributes(scribble_params)
+      @scribble.update(scribble_params)
     else
       @scribble = Course::Assessment::Answer::ScribingScribble.new(scribble_params)
       @scribble.save

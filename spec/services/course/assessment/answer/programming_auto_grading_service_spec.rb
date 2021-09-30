@@ -46,7 +46,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
 
         describe '#grade' do
           subject { super().grade(answer) }
-          let(:answer_contents) { 'test code ' + SecureRandom.hex }
+          let(:answer_contents) { "test code #{SecureRandom.hex}" }
           let(:answer_traits) { [{ file_contents: [answer_contents] }] }
           before { allow(answer.submission.assessment).to receive(:autograded?).and_return(true) }
 

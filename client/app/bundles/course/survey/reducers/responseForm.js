@@ -30,7 +30,12 @@ export default function (state = initialState, action) {
       return {
         ...state,
         response: action.response,
-        flags: { ...state.flags, ...action.flags, isLoading: false, isSubmitting: false },
+        flags: {
+          ...state.flags,
+          ...action.flags,
+          isLoading: false,
+          isSubmitting: false,
+        },
       };
     }
     case actionTypes.CREATE_RESPONSE_FAILURE:

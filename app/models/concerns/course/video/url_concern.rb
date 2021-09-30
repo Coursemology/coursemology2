@@ -8,10 +8,10 @@ module Course::Video::UrlConcern
 
   # Current format captures youtube's video_id for various urls.
   YOUTUBE_FORMAT = [
-    %r{(?:https?://)?youtu\.be/(.+)},
-    %r{(?:https?://)?(?:www\.)?youtube\.com/watch\?v=(.*?)(&|#|$)},
-    %r{(?:https?://)?(?:www\.)?youtube\.com/embed/(.*?)(\?|$)},
-    %r{(?:https?://)?(?:www\.)?youtube\.com/v/(.*?)(#|\?|$)}
+    /(?:https?:\/\/)?youtu\.be\/(.+)/,
+    /(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?v=(.*?)(&|#|$)/,
+    /(?:https?:\/\/)?(?:www\.)?youtube\.com\/embed\/(.*?)(\?|$)/,
+    /(?:https?:\/\/)?(?:www\.)?youtube\.com\/v\/(.*?)(#|\?|$)/
   ].freeze
 
   private

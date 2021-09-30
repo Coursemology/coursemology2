@@ -18,6 +18,9 @@ export default class LessonPlanAPI extends BaseAdminAPI {
    * error response: {}
    */
   update(params) {
-    return this.getClient().patch(`${this._getUrlPrefix()}/lesson_plan`, params);
+    return this.getClient().patch(
+      `${this._getUrlPrefix()}/lesson_plan`,
+      params,
+    );
   }
 }

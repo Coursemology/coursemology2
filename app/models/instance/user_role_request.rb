@@ -21,6 +21,7 @@ class Instance::UserRoleRequest < ApplicationRecord
     instance_user.role = role
     success = self.class.transaction do
       raise ActiveRecord::Rollback unless instance_user.save && destroy
+
       true
     end
 

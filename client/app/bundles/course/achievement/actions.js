@@ -31,7 +31,8 @@ export function createAchievement(data, successMessage, failureMessage) {
   return (dispatch) => {
     dispatch({ type: actionTypes.CREATE_ACHIEVEMENT_REQUEST });
 
-    return CourseAPI.achievements.create(attributes)
+    return CourseAPI.achievements
+      .create(attributes)
       .then((response) => {
         dispatch({
           type: actionTypes.CREATE_ACHIEVEMENT_SUCCESS,
@@ -40,7 +41,9 @@ export function createAchievement(data, successMessage, failureMessage) {
         // TODO: Remove redirection when achievement index is implemented using React.
         setTimeout(() => {
           if (response.data && response.data.id) {
-            window.location = `/courses/${getCourseId()}/achievements/${response.data.id}`;
+            window.location = `/courses/${getCourseId()}/achievements/${
+              response.data.id
+            }`;
           }
         }, 200);
       })
@@ -57,12 +60,18 @@ export function createAchievement(data, successMessage, failureMessage) {
   };
 }
 
-export function updateAchievement(achievementId, data, successMessage, failureMessage) {
+export function updateAchievement(
+  achievementId,
+  data,
+  successMessage,
+  failureMessage,
+) {
   const attributes = formatAttributes(data.achievement);
   return (dispatch) => {
     dispatch({ type: actionTypes.UPDATE_ACHIEVEMENT_REQUEST });
 
-    return CourseAPI.achievements.update(achievementId, attributes)
+    return CourseAPI.achievements
+      .update(achievementId, attributes)
       .then(() => {
         dispatch({
           type: actionTypes.UPDATE_ACHIEVEMENT_SUCCESS,

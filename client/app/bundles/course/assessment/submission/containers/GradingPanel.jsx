@@ -3,7 +3,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
 import { Card, CardText } from 'material-ui/Card';
-import { Table, TableHeader, TableBody, TableRow, TableHeaderColumn, TableRowColumn } from 'material-ui/Table';
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHeaderColumn,
+  TableRowColumn,
+} from 'material-ui/Table';
 import ReactTooltip from 'react-tooltip';
 
 import { getCourseId } from 'lib/helpers/url-helpers';
@@ -32,7 +39,7 @@ const styles = {
 class VisibleGradingPanel extends Component {
   static calculateTotalGrade(grades) {
     return Object.values(grades)
-      .filter(grade => grade !== null)
+      .filter((grade) => grade !== null)
       .reduce((acc, b) => acc + b.grade, 0);
   }
 
@@ -61,18 +68,32 @@ class VisibleGradingPanel extends Component {
   }
 
   renderTotalGrade() {
-    const { grading: { questions }, submission: { maximumGrade } } = this.props;
-    return <div>{`${VisibleGradingPanel.calculateTotalGrade(questions)} / ${maximumGrade}`}</div>;
+    const {
+      grading: { questions },
+      submission: { maximumGrade },
+    } = this.props;
+    return (
+      <div>{`${VisibleGradingPanel.calculateTotalGrade(
+        questions,
+      )} / ${maximumGrade}`}</div>
+    );
   }
 
   renderSubmissionStatus() {
-    const { intl, submission: { workflowState } } = this.props;
+    const {
+      intl,
+      submission: { workflowState },
+    } = this.props;
     return (
       <div>
         {intl.formatMessage(translations[workflowState])}
         {workflowState === workflowStates.Graded ? (
           <span style={{ display: 'inline-block', marginLeft: 5 }}>
-            <a data-tip data-for="unpublished-grades" data-offset="{'left' : -8}">
+            <a
+              data-tip
+              data-for="unpublished-grades"
+              data-offset="{'left' : -8}"
+            >
               <i className="fa fa-exclamation-triangle" />
             </a>
             <ReactTooltip id="unpublished-grades" effect="solid">
@@ -105,16 +126,15 @@ class VisibleGradingPanel extends Component {
             min={0}
             step={1}
             value={exp !== null ? exp : ''}
-            onChange={e => this.handleExpField(e.target.value)}
+            onChange={(e) => this.handleExpField(e.target.value)}
             ref={(ref) => {
               this.expInputRef = ref;
             }}
             onWheel={() => this.expInputRef.blur()}
           />
-          {(bonusAwarded > 0)
+          {bonusAwarded > 0
             ? ` / (${basePoints} + ${bonusAwarded})`
-            : ` / ${basePoints}`
-          }
+            : ` / ${basePoints}`}
         </div>
         <div style={{ marginLeft: 20 }}>
           <FormattedMessage {...translations.multiplier} />
@@ -124,7 +144,7 @@ class VisibleGradingPanel extends Component {
             min={0}
             max={1}
             value={expMultiplier}
-            onChange={e => this.handleMultiplierField(e.target.value)}
+            onChange={(e) => this.handleMultiplierField(e.target.value)}
             ref={(ref) => {
               this.multiplierInputRef = ref;
             }}
@@ -138,10 +158,18 @@ class VisibleGradingPanel extends Component {
   renderSubmissionTable() {
     const {
       submission: {
-        submitter, workflowState, bonusEndAt, dueAt, attemptedAt,
-        submittedAt, grader, gradedAt, graderView,
+        submitter,
+        workflowState,
+        bonusEndAt,
+        dueAt,
+        attemptedAt,
+        submittedAt,
+        grader,
+        gradedAt,
+        graderView,
       },
-      gamified, intl,
+      gamified,
+      intl,
     } = this.props;
 
     const published = workflowState === workflowStates.Published;
@@ -163,14 +191,22 @@ class VisibleGradingPanel extends Component {
           <TableBody displayRowCheckbox={false}>
             {tableRow('student', submitter)}
             {tableRow('status', this.renderSubmissionStatus())}
-            {shouldRenderGrading ? tableRow('totalGrade', this.renderTotalGrade()) : null}
-            {shouldRenderGrading && gamified ? tableRow('expAwarded', this.renderExperiencePoints()) : null}
-            {bonusEndAt ? tableRow('bonusEndAt', formatDateTime(bonusEndAt)) : null}
+            {shouldRenderGrading
+              ? tableRow('totalGrade', this.renderTotalGrade())
+              : null}
+            {shouldRenderGrading && gamified
+              ? tableRow('expAwarded', this.renderExperiencePoints())
+              : null}
+            {bonusEndAt
+              ? tableRow('bonusEndAt', formatDateTime(bonusEndAt))
+              : null}
             {dueAt ? tableRow('dueAt', formatDateTime(dueAt)) : null}
             {tableRow('attemptedAt', formatDateTime(attemptedAt))}
             {tableRow('submittedAt', formatDateTime(submittedAt))}
             {shouldRenderGrading ? tableRow('grader', grader) : null}
-            {shouldRenderGrading ? tableRow('gradedAt', formatDateTime(gradedAt)) : null}
+            {shouldRenderGrading
+              ? tableRow('gradedAt', formatDateTime(gradedAt))
+              : null}
           </TableBody>
         </Table>
       </div>
@@ -179,7 +215,10 @@ class VisibleGradingPanel extends Component {
 
   renderGradeRow(question, showGrader) {
     const questionGrading = this.props.grading.questions[question.id];
-    const questionGrade = questionGrading && questionGrading.grade !== null ? questionGrading.grade : '';
+    const questionGrade =
+      questionGrading && questionGrading.grade !== null
+        ? questionGrading.grade
+        : '';
     const grader = questionGrading && questionGrading.grader;
 
     const courseId = getCourseId();
@@ -187,7 +226,9 @@ class VisibleGradingPanel extends Component {
     let graderInfo = null;
     if (showGrader) {
       if (grader && grader.id) {
-        graderInfo = <a href={getCourseUserURL(courseId, grader.id)}>{grader.name}</a>;
+        graderInfo = (
+          <a href={getCourseUserURL(courseId, grader.id)}>{grader.name}</a>
+        );
       } else if (grader) {
         graderInfo = grader.name;
       } else {
@@ -199,20 +240,23 @@ class VisibleGradingPanel extends Component {
         <TableHeaderColumn style={styles.headerColumn} colSpan={2}>
           {question.displayTitle}
         </TableHeaderColumn>
-        {showGrader
-          ? (
-            <TableHeaderColumn style={styles.headerColumn}>
-              {graderInfo}
-            </TableHeaderColumn>
-          )
-          : null}
+        {showGrader ? (
+          <TableHeaderColumn style={styles.headerColumn}>
+            {graderInfo}
+          </TableHeaderColumn>
+        ) : null}
         <TableRowColumn>{`${questionGrade} / ${question.maximumGrade}`}</TableRowColumn>
       </TableRow>
     );
   }
 
   renderGradeTable() {
-    const { intl, questions, questionIds, submission: { graderView, workflowState } } = this.props;
+    const {
+      intl,
+      questions,
+      questionIds,
+      submission: { graderView, workflowState },
+    } = this.props;
 
     if (!graderView && workflowState !== workflowStates.Published) {
       return null;
@@ -222,34 +266,38 @@ class VisibleGradingPanel extends Component {
       return null;
     }
 
-    const showGrader = graderView && (
-      workflowState === workflowStates.Graded || workflowState === workflowStates.Published);
+    const showGrader =
+      graderView &&
+      (workflowState === workflowStates.Graded ||
+        workflowState === workflowStates.Published);
 
     return (
       <div>
         <h4>{intl.formatMessage(translations.gradeSummary)}</h4>
         <Table selectable={false} style={styles.table}>
-          <TableHeader adjustForCheckbox={false} displaySelectAll={false} enableSelectAll={false}>
+          <TableHeader
+            adjustForCheckbox={false}
+            displaySelectAll={false}
+            enableSelectAll={false}
+          >
             <TableRow>
               <TableHeaderColumn style={styles.headerColumn} colSpan={2}>
                 {intl.formatMessage(translations.question)}
               </TableHeaderColumn>
-              { showGrader
-                ? (
-                  <TableHeaderColumn style={styles.headerColumn}>
-                    {intl.formatMessage(translations.grader)}
-                  </TableHeaderColumn>
-                )
-                : null }
+              {showGrader ? (
+                <TableHeaderColumn style={styles.headerColumn}>
+                  {intl.formatMessage(translations.grader)}
+                </TableHeaderColumn>
+              ) : null}
               <TableHeaderColumn style={styles.headerColumn}>
                 {intl.formatMessage(translations.totalGrade)}
               </TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody displayRowCheckbox={false}>
-            {
-              questionIds.map(questionId => this.renderGradeRow(questions[questionId], showGrader))
-            }
+            {questionIds.map((questionId) =>
+              this.renderGradeRow(questions[questionId], showGrader),
+            )}
           </TableBody>
         </Table>
       </div>
@@ -282,7 +330,8 @@ VisibleGradingPanel.propTypes = {
 
 function mapStateToProps(state) {
   const { submittedAt, bonusEndAt, bonusPoints } = state.submission;
-  const bonusAwarded = (new Date(submittedAt) < new Date(bonusEndAt)) ? bonusPoints : 0;
+  const bonusAwarded =
+    new Date(submittedAt) < new Date(bonusEndAt) ? bonusPoints : 0;
   return {
     gamified: state.assessment.gamified,
     grading: state.grading,
@@ -295,17 +344,18 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    updateExp: exp => dispatch({ type: actionTypes.UPDATE_EXP, exp }),
-    updateMultiplier: (multiplier, bonusAwarded) => dispatch({
-      type: actionTypes.UPDATE_MULTIPLIER,
-      multiplier,
-      bonusAwarded,
-    }),
+    updateExp: (exp) => dispatch({ type: actionTypes.UPDATE_EXP, exp }),
+    updateMultiplier: (multiplier, bonusAwarded) =>
+      dispatch({
+        type: actionTypes.UPDATE_MULTIPLIER,
+        multiplier,
+        bonusAwarded,
+      }),
   };
 }
 
 const GradingPanel = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(injectIntl(VisibleGradingPanel));
 export default GradingPanel;

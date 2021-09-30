@@ -22,26 +22,32 @@ const ShapeField = (props) => {
       <FlatButton
         label={intl.formatMessage(translations.rectangle)}
         primary={currentShape === scribingShapes.RECT}
-        onClick={() => (setSelectedShape(scribingShapes.RECT))}
-        icon={(
+        onClick={() => setSelectedShape(scribingShapes.RECT)}
+        icon={
           <FontIcon
-            color={currentShape === scribingShapes.RECT
-              ? blue500 : 'rgba(0, 0, 0, 0.4)'}
+            color={
+              currentShape === scribingShapes.RECT
+                ? blue500
+                : 'rgba(0, 0, 0, 0.4)'
+            }
             className="fa fa-square-o"
           />
-)}
+        }
       />
       <FlatButton
         label={intl.formatMessage(translations.ellipse)}
         primary={currentShape === scribingShapes.ELLIPSE}
-        onClick={() => (setSelectedShape(scribingShapes.ELLIPSE))}
-        icon={(
+        onClick={() => setSelectedShape(scribingShapes.ELLIPSE)}
+        icon={
           <FontIcon
-            color={currentShape === scribingShapes.ELLIPSE
-              ? blue500 : 'rgba(0, 0, 0, 0.4)'}
+            color={
+              currentShape === scribingShapes.ELLIPSE
+                ? blue500
+                : 'rgba(0, 0, 0, 0.4)'
+            }
             className="fa fa-circle-o"
           />
-)}
+        }
       />
     </>
   );

@@ -12,18 +12,6 @@ const EDITOR_MODE_NARROW = 'narrow';
 const EDITOR_MODE_WIDE = 'wide';
 
 class ReadOnlyEditor extends Component {
-  static propTypes = {
-    annotations: PropTypes.arrayOf(annotationShape),
-    answerId: PropTypes.number.isRequired,
-    content: PropTypes.arrayOf(PropTypes.string),
-    fileId: PropTypes.number.isRequired,
-    intl: intlShape.isRequired,
-  }
-
-  static defaultProps = {
-    content: [],
-  };
-
   constructor(props) {
     super(props);
 
@@ -32,7 +20,8 @@ class ReadOnlyEditor extends Component {
       expanded.push(false);
     }
 
-    const initialEditorMode = props.annotations.length > 0 ? EDITOR_MODE_WIDE : EDITOR_MODE_NARROW;
+    const initialEditorMode =
+      props.annotations.length > 0 ? EDITOR_MODE_WIDE : EDITOR_MODE_NARROW;
     this.state = { expanded, editorMode: initialEditorMode };
 
     this.showCommentsPanel = this.showCommentsPanel.bind(this);
@@ -54,7 +43,7 @@ class ReadOnlyEditor extends Component {
     const newExpanded = expanded.slice(0);
     newExpanded.forEach((state, index) => {
       const lineNumber = index + 1;
-      const annotation = annotations.find(a => a.line === lineNumber);
+      const annotation = annotations.find((a) => a.line === lineNumber);
       if (!state && annotation) {
         newExpanded[index] = true;
       }
@@ -65,7 +54,9 @@ class ReadOnlyEditor extends Component {
   setAllCommentStateCollapsed() {
     const { expanded } = this.state;
     const newExpanded = expanded.slice(0);
-    newExpanded.forEach((_, index) => { newExpanded[index] = false; });
+    newExpanded.forEach((_, index) => {
+      newExpanded[index] = false;
+    });
     this.setState({ expanded: newExpanded });
   }
 
@@ -97,7 +88,7 @@ class ReadOnlyEditor extends Component {
     const { expanded } = this.state;
     const { annotations } = this.props;
     for (let i = 0; i < expanded.length; i++) {
-      if (!expanded[i] && annotations.find(a => a.line === i + 1)) {
+      if (!expanded[i] && annotations.find((a) => a.line === i + 1)) {
         return false;
       }
     }
@@ -113,7 +104,7 @@ class ReadOnlyEditor extends Component {
     for (let i = 0; i < expanded.length; i++) {
       if (expanded[i]) {
         hasExpanded = true;
-      } else if (annotations.find(a => a.line === i + 1)) {
+      } else if (annotations.find((a) => a.line === i + 1)) {
         hasCollapsed = true;
       }
 
@@ -136,8 +127,7 @@ class ReadOnlyEditor extends Component {
   renderExpandAllToggle() {
     const { intl } = this.props;
     return (
-      this.props.annotations.length > 0
-      && (
+      this.props.annotations.length > 0 && (
         <Toggle
           style={{ width: 'auto', marginLeft: 'auto' }}
           labelStyle={{ width: 'auto' }}
@@ -177,10 +167,10 @@ class ReadOnlyEditor extends Component {
   renderEditor(editorProps) {
     const { editorMode } = this.state;
 
-    return (
-      editorMode === EDITOR_MODE_NARROW
-        ? <NarrowEditor {...editorProps} />
-        : <WideEditor {...editorProps} />
+    return editorMode === EDITOR_MODE_NARROW ? (
+      <NarrowEditor {...editorProps} />
+    ) : (
+      <WideEditor {...editorProps} />
     );
   }
 
@@ -193,9 +183,9 @@ class ReadOnlyEditor extends Component {
       fileId,
       annotations,
       content,
-      expandLine: lineNumber => this.setExpandedLine(lineNumber),
-      collapseLine: lineNumber => this.setCollapsedLine(lineNumber),
-      toggleLine: lineNumber => this.toggleCommentLine(lineNumber),
+      expandLine: (lineNumber) => this.setExpandedLine(lineNumber),
+      collapseLine: (lineNumber) => this.setCollapsedLine(lineNumber),
+      toggleLine: (lineNumber) => this.toggleCommentLine(lineNumber),
     };
     return (
       <>
@@ -206,5 +196,17 @@ class ReadOnlyEditor extends Component {
     );
   }
 }
+
+ReadOnlyEditor.propTypes = {
+  annotations: PropTypes.arrayOf(annotationShape),
+  answerId: PropTypes.number.isRequired,
+  content: PropTypes.arrayOf(PropTypes.string),
+  fileId: PropTypes.number.isRequired,
+  intl: intlShape.isRequired,
+};
+
+ReadOnlyEditor.defaultProps = {
+  content: [],
+};
 
 export default injectIntl(ReadOnlyEditor);

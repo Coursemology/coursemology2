@@ -21,7 +21,7 @@ class Course::Achievement::AchievementsController < Course::Achievement::Control
   end
 
   def update #:nodoc:
-    if @achievement.update_attributes(achievement_params)
+    if @achievement.update(achievement_params)
       respond_to do |format|
         format.html do
           redirect_to course_achievement_path(current_course, @achievement.id),
@@ -48,9 +48,7 @@ class Course::Achievement::AchievementsController < Course::Achievement::Control
   end
 
   def reorder
-    unless valid_ordering?(achievement_order_params)
-      raise ArgumentError, 'Invalid ordering for achievements'
-    end
+    raise ArgumentError, 'Invalid ordering for achievements' unless valid_ordering?(achievement_order_params)
 
     Course::Achievement.transaction do
       achievement_order_params.each_with_index do |id, index|

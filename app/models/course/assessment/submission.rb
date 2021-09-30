@@ -148,9 +148,7 @@ class Course::Assessment::Submission < ApplicationRecord
     if filter_params[:category_id].present?
       result = result.from_category(Course::Assessment::Category.find(filter_params[:category_id]))
     end
-    if filter_params[:assessment_id].present?
-      result = result.where(assessment_id: filter_params[:assessment_id])
-    end
+    result = result.where(assessment_id: filter_params[:assessment_id]) if filter_params[:assessment_id].present?
     result = result.from_group(filter_params[:group_id]) if filter_params[:group_id].present?
     result = result.by_user(filter_params[:user_id]) if filter_params[:user_id].present?
     result
@@ -189,7 +187,7 @@ class Course::Assessment::Submission < ApplicationRecord
   # The assigned questions for this submission, ordered by question_group and question_bundle_question
   def assigned_questions
     Course::Assessment::Question.
-      joins(question_bundles: [:question_group, { question_bundle_assignments: :submission }]).
+      joins(question_bundles: [:question_group, question_bundle_assignments: :submission]).
       merge(Course::Assessment::Submission.where(id: self)).
       merge(Course::Assessment::QuestionGroup.order(:weight)).
       merge(Course::Assessment::QuestionBundleQuestion.order(:weight)).
@@ -216,7 +214,11 @@ class Course::Assessment::Submission < ApplicationRecord
 
   # Loads the answer ids of the past answers of each question
   def answer_history
-    answers.unscope(:order).order(created_at: :desc).pluck(:question_id, :id, :current_answer).group_by(&:first).map do |pair|
+    answers.unscope(:order).
+      order(created_at: :desc).
+      pluck(:question_id, :id, :current_answer).
+      group_by(&:first).
+      map do |pair|
       {
         question_id: pair[0],
         answer_ids: pair[1].reject(&:last).map(&:second).first(10)
@@ -253,6 +255,7 @@ class Course::Assessment::Submission < ApplicationRecord
   # experience_points_record.
   def validate_consistent_user
     return if course_user && course_user.user == creator
+
     errors.add(:experience_points_record, :inconsistent_user)
   end
 
@@ -261,6 +264,7 @@ class Course::Assessment::Submission < ApplicationRecord
     existing = Course::Assessment::Submission.find_by(assessment_id: assessment.id,
                                                       creator_id: creator.id)
     return unless existing
+
     errors.clear
     errors[:base] << I18n.t('activerecord.errors.models.course/assessment/'\
                             'submission.submission_already_exists')
@@ -269,6 +273,7 @@ class Course::Assessment::Submission < ApplicationRecord
   # Validate that the awarder and awarded_at is present for published submissions
   def validate_awarded_attributes
     return if awarded_at && awarder
+
     errors.add(:experience_points_record, :absent_award_attributes)
   end
 end

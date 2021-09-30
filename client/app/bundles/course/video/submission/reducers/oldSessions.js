@@ -14,12 +14,13 @@ import { sessionActionTypes } from 'lib/constants/videoConstants';
 export const initialState = makeImmutableMap();
 
 export const persistTransform = createTransform(
-  inboundState => inboundState.toJS(),
-  outboundState => makeImmutableMap(outboundState).map(videoState => ({
-    ...videoState,
-    sessionEvents: makeImmutableList(videoState.sessionEvents),
-  })),
-  { whitelist: ['oldSessions'] }
+  (inboundState) => inboundState.toJS(),
+  (outboundState) =>
+    makeImmutableMap(outboundState).map((videoState) => ({
+      ...videoState,
+      sessionEvents: makeImmutableList(videoState.sessionEvents),
+    })),
+  { whitelist: ['oldSessions'] },
 );
 
 function removeSessionIds(oldSessionsMap, sessionIdsArray) {

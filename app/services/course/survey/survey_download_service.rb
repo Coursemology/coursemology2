@@ -43,7 +43,8 @@ class Course::Survey::SurveyDownloadService
 
     def generate_header(questions)
       [
-        I18n.t('course.surveys.survey_download_service.timestamp'),
+        I18n.t('course.surveys.survey_download_service.created_at'),
+        I18n.t('course.surveys.survey_download_service.updated_at'),
         I18n.t('course.surveys.survey_download_service.course_user_id'),
         I18n.t('course.surveys.survey_download_service.name'),
         I18n.t('course.surveys.survey_download_service.role')
@@ -58,6 +59,7 @@ class Course::Survey::SurveyDownloadService
       end
       [
         response.submitted_at,
+        response.submitted_at ? response.updated_at : response.submitted_at,
         response.course_user.id,
         response.course_user.name,
         response.course_user.role,

@@ -16,8 +16,8 @@ module Extensions::RenderCollectionWithPrefixSuffix::ActionView::PartialRenderer
       return result unless @options.key?(:prefix) || @options.key?(:suffix)
 
       dirname, basename = File.split(result)
-      basename = basename.prepend("#{@options[:prefix]}_") if @options.key?(:prefix)
-      basename = basename.concat("_#{@options[:suffix]}") if @options.key?(:suffix)
+      basename.prepend("#{@options[:prefix]}_") if @options.key?(:prefix)
+      basename.concat("_#{@options[:suffix]}") if @options.key?(:suffix)
       File.join(dirname, basename)
     end
   end

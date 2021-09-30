@@ -56,6 +56,7 @@ class Course::Level < ApplicationRecord
   # @return [nil] If current level is the highest in the course.
   def next
     return @next if defined? @next
+
     @next = course.levels.offset(level_number + 1).first
   end
 

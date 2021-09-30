@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import moment, { shortDateTime } from 'lib/moment';
-import { setDestinationCourseId, duplicateCourse } from 'course/duplication/actions';
+import {
+  setDestinationCourseId,
+  duplicateCourse,
+} from 'course/duplication/actions';
 import { duplicationModes } from 'course/duplication/constants';
 import CourseDropdownMenu from 'course/duplication/components/CourseDropdownMenu';
 import { courseShape, sourceCourseShape } from 'course/duplication/propTypes';
@@ -25,21 +28,15 @@ const translations = defineMessages({
 });
 
 class DestinationCourseSelector extends React.Component {
-  static propTypes = {
-    currentHost: PropTypes.string,
-    destinationCourseId: PropTypes.number,
-    currentCourseId: PropTypes.number.isRequired,
-    courses: PropTypes.arrayOf(courseShape),
-    sourceCourse: sourceCourseShape,
-    duplicationMode: PropTypes.string.isRequired,
-    isDuplicating: PropTypes.bool.isRequired,
-
-    dispatch: PropTypes.func.isRequired,
-    intl: intlShape,
-  }
-
   renderExistingCourseForm = () => {
-    const { currentHost, currentCourseId, courses, destinationCourseId, dispatch, intl } = this.props;
+    const {
+      currentHost,
+      currentCourseId,
+      courses,
+      destinationCourseId,
+      dispatch,
+      intl,
+    } = this.props;
 
     return (
       <CourseDropdownMenu
@@ -53,7 +50,7 @@ class DestinationCourseSelector extends React.Component {
         onHome={() => dispatch(setDestinationCourseId(currentCourseId))}
       />
     );
-  }
+  };
 
   renderNewCourseForm = () => {
     const { intl, dispatch, sourceCourse, isDuplicating } = this.props;
@@ -75,12 +72,12 @@ class DestinationCourseSelector extends React.Component {
 
     return (
       <NewCourseForm
-        onSubmit={values => dispatch(duplicateCourse(values, failureMessage))}
+        onSubmit={(values) => dispatch(duplicateCourse(values, failureMessage))}
         disabled={isDuplicating}
         initialValues={initialValues}
       />
     );
-  }
+  };
 
   render() {
     const { duplicationMode } = this.props;
@@ -90,6 +87,19 @@ class DestinationCourseSelector extends React.Component {
       : this.renderExistingCourseForm();
   }
 }
+
+DestinationCourseSelector.propTypes = {
+  currentHost: PropTypes.string,
+  destinationCourseId: PropTypes.number,
+  currentCourseId: PropTypes.number.isRequired,
+  courses: PropTypes.arrayOf(courseShape),
+  sourceCourse: sourceCourseShape,
+  duplicationMode: PropTypes.string.isRequired,
+  isDuplicating: PropTypes.bool.isRequired,
+
+  dispatch: PropTypes.func.isRequired,
+  intl: intlShape,
+};
 
 export default connect(({ duplication }) => ({
   courses: duplication.destinationCourses,

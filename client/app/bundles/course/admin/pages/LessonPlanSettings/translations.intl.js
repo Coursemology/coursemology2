@@ -43,7 +43,8 @@ const translations = defineMessages({
   },
   noLessonPlanItems: {
     id: 'course.admin.LessonPlanItemSettings.noLessonPlanItems',
-    defaultMessage: 'There are no lesson plan items to configure for lesson plan display.',
+    defaultMessage:
+      'There are no lesson plan items to configure for lesson plan display.',
   },
 });
 

@@ -26,26 +26,50 @@ const oldSessionsFixtures = makeImmutableMap({
     sessionId: '25',
     sessionSequenceNum: 2,
     sessionEvents: makeImmutableList([
-      { sequence_num: 0, event_type: 'play', video_time: 0, playback_rate: 1, event_time: Date.now() },
-      { sequence_num: 1, event_type: 'pause', video_time: 5, playback_rate: 1, event_time: Date.now() },
+      {
+        sequence_num: 0,
+        event_type: 'play',
+        video_time: 0,
+        playback_rate: 1,
+        event_time: Date.now(),
+      },
+      {
+        sequence_num: 1,
+        event_type: 'pause',
+        video_time: 5,
+        playback_rate: 1,
+        event_time: Date.now(),
+      },
     ]),
     sessionClosed: false,
   },
 });
 
 beforeAll(() => {
-  window.history.pushState({}, '', `/courses/${courseId}/videos/${videoId}/submissions/1/edit`);
+  window.history.pushState(
+    {},
+    '',
+    `/courses/${courseId}/videos/${videoId}/submissions/1/edit`,
+  );
 });
 
 beforeEach(() => {
   mock.reset();
-  mock.onPatch(`/courses/${courseId}/videos/${videoId}/submissions/1/sessions/32`).reply(200);
-  mock.onPatch(`/courses/${courseId}/videos/${videoId}/submissions/1/sessions/25`).reply(200);
+  mock
+    .onPatch(`/courses/${courseId}/videos/${videoId}/submissions/1/sessions/32`)
+    .reply(200);
+  mock
+    .onPatch(`/courses/${courseId}/videos/${videoId}/submissions/1/sessions/25`)
+    .reply(200);
 });
 
 function createStore(oldSessions = {}) {
   return store({
-    video: { videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', sessionId: 32, videoId },
+    video: {
+      videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+      sessionId: 32,
+      videoId,
+    },
     oldSessions,
     courseUserId: 100,
   });
@@ -57,7 +81,14 @@ describe('sendEvents', () => {
     const spyUpdate = jest.spyOn(CourseAPI.video.sessions, 'update');
     createdStore.dispatch(sendEvents());
 
-    expect(spyUpdate).toHaveBeenCalledWith('25', 5, oldSessionsFixtures.get('25').sessionEvents.toArray(), 0, true, true);
+    expect(spyUpdate).toHaveBeenCalledWith(
+      '25',
+      5,
+      oldSessionsFixtures.get('25').sessionEvents.toArray(),
+      0,
+      true,
+      true,
+    );
     await sleep(1);
     expect(createdStore.getState().oldSessions.count()).toBe(0);
   });

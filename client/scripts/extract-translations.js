@@ -10,8 +10,8 @@ const OUTPUT_DIR = './build/locales/';
 // there are messages in different components that use the same `id`. The result
 // is a flat collection of `id: message` pairs for the app's default locale.
 const defaultMessages = globSync(FILE_PATTERN)
-  .map(filename => fs.readFileSync(filename, 'utf8'))
-  .map(file => JSON.parse(file))
+  .map((filename) => fs.readFileSync(filename, 'utf8'))
+  .map((file) => JSON.parse(file))
   .reduce((collection, descriptors) => {
     const messages = {};
     descriptors.forEach(({ id, defaultMessage }) => {
@@ -21,7 +21,7 @@ const defaultMessages = globSync(FILE_PATTERN)
       messages[id] = defaultMessage;
     });
 
-    return Object.assign({}, collection, messages);
+    return { ...collection, ...messages };
   }, {});
 
 // Create a new directory that we want to write the aggregate messages to

@@ -82,7 +82,7 @@ RSpec.describe User do
         let(:persisted_time_zone) { nil }
 
         it 'defaults to application default' do
-          expect(subject.time_zone).to eq(Application.config.x.default_user_time_zone)
+          expect(subject.time_zone).to eq(Application::Application.config.x.default_user_time_zone)
         end
       end
 
@@ -98,12 +98,13 @@ RSpec.describe User do
         let(:persisted_time_zone) { 'Foo' }
 
         it 'returns the application default' do
-          expect(subject.time_zone).to eq(Application.config.x.default_user_time_zone)
+          expect(subject.time_zone).to eq(Application::Application.config.x.default_user_time_zone)
         end
       end
     end
 
-    describe '.new_with_session' do
+    # Note: Facebook login feature is currently disabled.
+    xdescribe '.new_with_session' do
       context 'when facebook data is provided' do
         let(:params) { {} }
         let(:facebook_data) { build(:omniauth_facebook) }
@@ -130,7 +131,7 @@ RSpec.describe User do
     describe '.search' do
       let(:keyword) { 'KeyWord' }
       let!(:user_with_keyword_in_name) do
-        user = create(:user, name: 'Awesome' + keyword + 'User')
+        user = create(:user, name: "Awesome#{keyword}User")
         # We should not return multiple instances of same user if it has multiple emails
         create(:user_email, user: user, primary: false)
         user

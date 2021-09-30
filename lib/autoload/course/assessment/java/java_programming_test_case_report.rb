@@ -12,6 +12,7 @@ class Course::Assessment::Java::JavaProgrammingTestCaseReport <
     # @param [Nokogiri::XML::Element] suite
     def initialize(suite)
       @suite = suite
+      super
     end
 
     # The name of the test suite.
@@ -89,7 +90,7 @@ class Course::Assessment::Java::JavaProgrammingTestCaseReport <
     #
     # @return [String]
     def identifier
-      class_name = self.class_name ? self.class_name + '/' : ''
+      class_name = self.class_name ? "#{self.class_name}/" : ''
       "#{@test_suite.identifier}/#{class_name}#{name.underscore}"
     end
 
@@ -129,10 +130,14 @@ class Course::Assessment::Java::JavaProgrammingTestCaseReport <
     # nil if no failure.
     def failure_message
       return nil unless failed?
+
       # Checks if it is an assertion failure
       if @test_case.search('exception/message').any?
-        failure_body = @test_case.search('exception/message').children[1].nil? ?
-          '' : @test_case.search('exception/message').children[1].text
+        failure_body = if @test_case.search('exception/message').children[1].nil?
+                         ''
+                       else
+                         @test_case.search('exception/message').children[1].text
+                       end
         "#{failure_type}: #{failure_body}"
       else
         failure_type
@@ -145,8 +150,12 @@ class Course::Assessment::Java::JavaProgrammingTestCaseReport <
     # @return [String|nil] Full traceback of failure, nil if there's no failure.
     def failure_contents
       return nil unless failed?
-      @test_case.search('exception/full-stacktrace').children[1].nil? ?
-        '' : @test_case.search('exception/full-stacktrace').children[1].text
+
+      if @test_case.search('exception/full-stacktrace').children[1].nil?
+        ''
+      else
+        @test_case.search('exception/full-stacktrace').children[1].text
+      end
     end
 
     # If there's a failure, return the failure type attribute.
@@ -154,6 +163,7 @@ class Course::Assessment::Java::JavaProgrammingTestCaseReport <
     # @return [String|nil] The type attribute, nil if there's no failure.
     def failure_type
       return nil unless failed?
+
       @test_case.search('exception')[0]['class']
     end
 

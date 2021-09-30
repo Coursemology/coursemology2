@@ -80,12 +80,14 @@ class QuestionFormOption extends React.Component {
             input.onChange(image);
             input.onBlur(image);
           }}
-          ref={(field) => { this.fileInput = field; }}
+          ref={(field) => {
+            this.fileInput = field;
+          }}
           {...{ disabled }}
         />
       </div>
     );
-  }
+  };
 
   renderOptionBody() {
     const { intl, member, index, fields, disabled } = this.props;
@@ -94,7 +96,9 @@ class QuestionFormOption extends React.Component {
 
     const fileOrSrc = {};
     let imageFileName = '';
-    let placeholder = intl.formatMessage(optionTranslations.noCaption, { index: index + 1 });
+    let placeholder = intl.formatMessage(optionTranslations.noCaption, {
+      index: index + 1,
+    });
 
     if (imageFile) {
       fileOrSrc.file = imageFile;
@@ -103,21 +107,20 @@ class QuestionFormOption extends React.Component {
       fileOrSrc.src = fieldValue.image_url;
       imageFileName = fieldValue.image_name;
     } else {
-      placeholder = intl.formatMessage(optionTranslations.optionPlaceholder, { index: index + 1 });
+      placeholder = intl.formatMessage(optionTranslations.optionPlaceholder, {
+        index: index + 1,
+      });
     }
 
     return (
       <div style={styles.optionBody}>
-        {
-          fileOrSrc.file || fileOrSrc.src
-            ? (
-              <Thumbnail
-                {...fileOrSrc}
-                style={styles.image}
-                containerStyle={styles.imageContainer}
-              />
-            ) : null
-        }
+        {fileOrSrc.file || fileOrSrc.src ? (
+          <Thumbnail
+            {...fileOrSrc}
+            style={styles.image}
+            containerStyle={styles.imageContainer}
+          />
+        ) : null}
         <small>{imageFileName}</small>
         <Field
           fullWidth
@@ -142,22 +145,25 @@ class QuestionFormOption extends React.Component {
   }
 
   render() {
-    const { member, index, fields, disabled, addToOptionsToDelete } = this.props;
+    const { member, index, fields, disabled, addToOptionsToDelete } =
+      this.props;
     const fieldValue = fields.get(index);
     const handleRemove = () => {
       fields.remove(index);
       if (fieldValue.id) {
         addToOptionsToDelete(fieldValue);
       }
+      // eslint-disable-next-line react/prop-types
       if (fields.length <= 1) {
+        // eslint-disable-next-line react/prop-types
         fields.push({});
       }
     };
 
     return (
       <div key={index} style={styles.option}>
-        { this.renderWidget() }
-        { this.renderOptionBody() }
+        {this.renderWidget()}
+        {this.renderOptionBody()}
         <Field
           name={`${member}.file`}
           component={this.renderImageField}

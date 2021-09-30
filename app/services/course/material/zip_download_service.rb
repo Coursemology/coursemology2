@@ -36,10 +36,10 @@ class Course::Material::ZipDownloadService
   #
   # @return [String] The path to the zip file.
   def zip_base_dir
-    output_file = @base_dir + '.zip'
+    output_file = "#{@base_dir}.zip"
     Zip::File.open(output_file, Zip::File::CREATE) do |zip_file|
       Dir["#{@base_dir}/**/**"].each do |file|
-        zip_file.add(file.sub(File.join(@base_dir + '/'), ''), file)
+        zip_file.add(file.sub(File.join("#{@base_dir}/"), ''), file)
       end
     end
 

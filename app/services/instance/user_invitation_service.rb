@@ -35,6 +35,7 @@ class Instance::UserInvitationService
       new_instance_users, existing_instance_users, duplicate_users = invite_users(users)
       raise ActiveRecord::Rollback unless new_invitations.all?(&:save)
       raise ActiveRecord::Rollback unless new_instance_users.all?(&:save)
+
       true
     end
 

@@ -54,7 +54,7 @@ class Material extends React.Component {
     e.preventDefault();
     const { id, name, onMaterialDelete } = this.props;
     if (onMaterialDelete) onMaterialDelete(id, name);
-  }
+  };
 
   renderIcon() {
     if (this.props.deleting || this.props.uploading) {
@@ -62,10 +62,7 @@ class Material extends React.Component {
     }
 
     return (
-      <IconButton
-        onClick={this.onDelete}
-        style={styles.iconButton}
-      >
+      <IconButton onClick={this.onDelete} style={styles.iconButton}>
         <DeleteIcon />
       </IconButton>
     );
@@ -77,9 +74,7 @@ class Material extends React.Component {
     }
     const { updatedAt } = this.props;
     return (
-      <div style={styles.secondaryText}>
-        { formatLongDateTime(updatedAt) }
-      </div>
+      <div style={styles.secondaryText}>{formatLongDateTime(updatedAt)}</div>
     );
   }
 
@@ -91,7 +86,9 @@ class Material extends React.Component {
         disableKeyboardFocus
         primaryText={name}
         rightAvatar={this.renderIcon()}
-        leftAvatar={<Avatar size={32} style={styles.avatar} icon={<ActionAssignment />} />}
+        leftAvatar={
+          <Avatar size={32} style={styles.avatar} icon={<ActionAssignment />} />
+        }
         secondaryText={this.renderSecondaryText()}
         style={styles.root}
         innerDivStyle={styles.innerDiv}

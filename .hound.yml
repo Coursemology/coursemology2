@@ -1,5 +1,8 @@
-ruby:
+fail_on_violations: true
+
+rubocop:
   config_file: .rubocop.yml
+  version: 0.91.0
 
 jshint:
   config_file: .jshintrc

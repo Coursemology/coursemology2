@@ -2,7 +2,7 @@ class CreateCourseAssessmentSkillsQuestionAssessments < ActiveRecord::Migration[
   def up
     create_table :course_assessment_skills_question_assessments do |t|
       t.integer :question_assessment_id, references: :course_question_assessments, null: false,
-                index: {name: 'index_course_assessment_skills_question_assessments_on_qa_id'}
+                                         index: { name: 'index_course_assessment_skills_question_assessments_on_qa_id' }
       t.integer :skill_id, references: :course_assessment_skills, null: false, index: true
     end
 

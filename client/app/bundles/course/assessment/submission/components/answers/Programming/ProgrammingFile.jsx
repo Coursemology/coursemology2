@@ -50,29 +50,32 @@ class ProgrammingFile extends React.Component {
     const { file, answerId } = this.props;
     const { courseId, assessmentId, submissionId } = this.props.match.params;
 
-    const downloadLink = getProgrammingFileURL(courseId, assessmentId, submissionId,
-      answerId, file.id);
+    const downloadLink = getProgrammingFileURL(
+      courseId,
+      assessmentId,
+      submissionId,
+      answerId,
+      file.id,
+    );
 
-    if (file.content === null) {
+    if (file.highlighted_content === null) {
       return (
         <Paper style={{ backgroundColor: yellow100, padding: 10 }}>
           <WarningIcon style={styles.warningIcon} />
           <span>
             <FormattedMessage {...translations.sizeTooBig} />
-&nbsp;
-            <a href={downloadLink}><FormattedMessage {...translations.downloadFile} /></a>
+            &nbsp;
+            <a href={downloadLink}>
+              <FormattedMessage {...translations.downloadFile} />
+            </a>
           </span>
         </Paper>
       );
     }
 
-    const content = file.content.split('\n');
+    const content = file.highlighted_content.split('\n');
     return (
-      <ReadOnlyEditor
-        answerId={answerId}
-        fileId={file.id}
-        content={content}
-      />
+      <ReadOnlyEditor answerId={answerId} fileId={file.id} content={content} />
     );
   }
 

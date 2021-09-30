@@ -71,8 +71,10 @@ class Course::Forum::TopicsController < Course::Forum::ComponentController
   end
 
   def add_topic_breadcrumb
+    return unless @topic&.persisted?
+
     add_breadcrumb @topic.title, course_forum_topic_path(current_course, @forum,
-                                                         @topic) if @topic&.persisted?
+                                                         @topic)
   end
 
   def mark_posts_read
@@ -90,6 +92,7 @@ class Course::Forum::TopicsController < Course::Forum::ComponentController
 
   def send_created_notification(topic)
     return unless current_course_user
+
     Course::Forum::TopicNotifier.topic_created(current_user, current_course_user, topic)
   end
 end

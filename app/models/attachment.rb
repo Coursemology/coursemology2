@@ -7,6 +7,10 @@ class Attachment < ApplicationRecord
   validates :name, length: { maximum: 255 }, presence: true, uniqueness: { if: :name_changed? }
   validates :file_upload, presence: true
 
+  validates_integrity_of :file_upload
+  validates_processing_of :file_upload
+  validates_download_of :file_upload
+
   has_many :attachment_references, inverse_of: :attachment, dependent: :destroy
 
   # @!attribute [r] url
@@ -96,7 +100,7 @@ class Attachment < ApplicationRecord
     file.write(contents)
     file.seek(0)
     file
-  rescue
+  rescue StandardError
     file&.close!
     raise
   end

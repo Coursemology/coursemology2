@@ -334,7 +334,7 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
       end
 
       context 'when course has achievements' do
-        # Create 2 achievements. The first depends on the second achievement and a level.
+        # Create 2 achievements. The first depends on the second achievement, a level and a survey.
         let!(:achievements) { create_list(:course_achievement, 2, course: course) }
         let!(:achievement_with_badge) { create(:course_achievement, :with_badge, course: course) }
         let!(:achievement_condition) do
@@ -349,6 +349,10 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
         let!(:assessment_condition) do
           create(:course_condition_assessment, course: course, assessment: assessment,
                                                conditional: achievements[0])
+        end
+        let!(:survey_condition) do
+          create(:course_condition_survey, course: course, survey: survey,
+                                           conditional: achievements[0])
         end
 
         it 'duplicates achievements' do

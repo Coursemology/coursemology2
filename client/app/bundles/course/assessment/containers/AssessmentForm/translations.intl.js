@@ -33,6 +33,10 @@ const translations = defineMessages({
     id: 'course.assessment.form.autograded',
     defaultMessage: 'Autograded',
   },
+  blockStudentViewingAfterSubmitted: {
+    id: 'course.assessment.form.blockStudentViewingAfterSubmitted',
+    defaultMessage: 'Block Students from Viewing Finalized Submissions',
+  },
   autogradeTestCasesHint: {
     id: 'course.assessment.form.autogradeTestCasesHint',
     defaultMessage: 'Select test case types for grade and exp calculation:',
@@ -59,7 +63,8 @@ const translations = defineMessages({
   },
   showMcqAnswerHint: {
     id: 'course.assessment.form.showMcqAnswerHint',
-    defaultMessage: 'Students can try to submit answer to MCQ and get feedback until they get the right answer',
+    defaultMessage:
+      'Students can try to submit answer to MCQ and get feedback until they get the right answer',
   },
   showPrivate: {
     id: 'course.assessment.form.showPrivate',
@@ -94,8 +99,9 @@ const translations = defineMessages({
   },
   affectsPersonalTimesHint: {
     id: 'course.assessment.form.affectsPersonalTimesHint',
-    defaultMessage: 'Student\'s submission time for this item will be taken into account \
-      when updating personal times for other items',
+    defaultMessage:
+      "Student's submission time for this item will be taken into account \
+      when updating personal times for other items",
   },
   published: {
     id: 'course.assessment.form.published',
@@ -103,12 +109,14 @@ const translations = defineMessages({
   },
   autogradedHint: {
     id: 'course.assessment.form.autogradedHint',
-    defaultMessage: 'Automatically assign grade and experience points after assessment is \
+    defaultMessage:
+      'Automatically assign grade and experience points after assessment is \
       submitted. Answers that are not auto-gradable will always receive the maximum grade.',
   },
   modeSwitchingDisabled: {
     id: 'course.assessment.form.modeSwitchingHint',
-    defaultMessage: 'Autograded ( Switch to autograded mode is not allowed as there are submissions \
+    defaultMessage:
+      'Autograded ( Switch to autograded mode is not allowed as there are submissions \
       for the assessment. )',
   },
   skippable: {
@@ -133,9 +141,19 @@ const translations = defineMessages({
   },
   delayedGradePublicationHint: {
     id: 'course.assessment.form.delayedGradePublicationHint',
-    defaultMessage: "When delayed grade publication is enabled, gradings done by course staff will \
+    defaultMessage:
+      "When delayed grade publication is enabled, gradings done by course staff will \
       not be immediately shown to the student. To publish all gradings for this assessment, click \
       on the 'Publish Grades' button on the top right of the submissions listing for this assessment.",
+  },
+  showMcqMrqSolution: {
+    id: 'course.assessment.form.showMcqMrqSolution',
+    defaultMessage: 'Show MCQ/MRQ Solution(s)',
+  },
+  showMcqMrqSolutionHint: {
+    id: 'course.assessment.form.showMcqMrqSolutionHint',
+    defaultMessage:
+      'Show MCQ/MRQ Solution(s) when grades of submissions have been published.',
   },
   passwordRequired: {
     id: 'course.assessment.form.passwordRequired',
@@ -147,7 +165,8 @@ const translations = defineMessages({
   },
   viewPasswordHint: {
     id: 'course.assessment.form.viewPasswordHint',
-    defaultMessage: 'When assessment password is enabled, students are required to input the password in order to \
+    defaultMessage:
+      'When assessment password is enabled, students are required to input the password in order to \
       view/attempt the assessment.',
   },
   viewPassword: {
@@ -156,7 +175,8 @@ const translations = defineMessages({
   },
   sessionPasswordHint: {
     id: 'course.assessment.form.sessionPasswordHint',
-    defaultMessage: "When submission password is enabled, students are allowed to access their \
+    defaultMessage:
+      "When submission password is enabled, students are allowed to access their \
       submission once. Further attempts at editing the submission using a different session are \
       not allowed unless the password is provided by the staff. This can be used to prevent \
       students from accessing each other's submissions in exams. You should NOT give the submission password \
@@ -176,7 +196,8 @@ const translations = defineMessages({
   },
   fetchTabFailure: {
     id: 'course.assessment.form.fetchCategoryFailure',
-    defaultMessage: 'Loading of Tabs failed. Please refresh the page, or try again.',
+    defaultMessage:
+      'Loading of Tabs failed. Please refresh the page, or try again.',
   },
   tab: {
     id: 'course.assessment.form.tab',
@@ -188,7 +209,8 @@ const translations = defineMessages({
   },
   enableRandomizationHint: {
     id: 'course.assessment.form.enable_randomization_hint',
-    defaultMessage: 'Enables randomized assignment of question bundles to students (per question group)',
+    defaultMessage:
+      'Enables randomized assignment of question bundles to students (per question group)',
   },
 });
 

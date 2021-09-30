@@ -17,7 +17,7 @@
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 require 'coverage_helper'
 require 'rspec/retry' if ENV['CI']
-require File.expand_path('../../config/environment', __FILE__)
+require File.expand_path('../config/environment', __dir__)
 
 # Prevent database truncation if the environment is production
 abort('The Rails environment is running in production mode!') if Rails.env.production?
@@ -113,5 +113,5 @@ RSpec.configure do |config|
   end
 end
 
-Capybara.server = :puma, { Silent: true }
+Capybara.server = :puma, { Silent: true } # rubocop:disable Style/HashAsLastArrayItem
 Capybara.default_max_wait_time = 5

@@ -4,7 +4,10 @@ import { connect } from 'react-redux';
 import { submit } from 'redux-form';
 import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
 import RaisedButton from 'material-ui/RaisedButton';
-import NotificationBar, { notificationShape } from 'lib/components/NotificationBar';
+import NotificationBar, {
+  notificationShape,
+} from 'lib/components/NotificationBar';
+import { achievementTypesConditionAttributes } from 'lib/types';
 import AchievementForm from '../../containers/AchievementForm';
 import * as actions from '../../actions';
 import translations from './translations.intl';
@@ -18,28 +21,6 @@ const styles = {
 };
 
 class EditPage extends React.Component {
-  static propTypes = {
-    dispatch: PropTypes.func.isRequired,
-    intl: intlShape,
-    disabled: PropTypes.bool,
-    conditionAttributes: PropTypes.shape({
-      new_condition_urls: PropTypes.array,
-      conditions: PropTypes.array,
-    }),
-    // A set of achievement attributes: {:id , :title, etc}.
-    initialValues: PropTypes.shape({
-      title: PropTypes.string,
-      description: PropTypes.string,
-      published: PropTypes.bool,
-      // Badge types to preview existing images
-      badge: PropTypes.shape({
-        name: PropTypes.string,
-        url: PropTypes.string,
-      }),
-    }),
-    notification: notificationShape,
-  };
-
   onFormSubmit = (data) => {
     const attributes = { ...data };
     const { intl } = this.props;
@@ -49,8 +30,8 @@ class EditPage extends React.Component {
         data.id,
         { achievement: attributes },
         intl.formatMessage(translations.updateSuccess),
-        intl.formatMessage(translations.updateFailure)
-      )
+        intl.formatMessage(translations.updateFailure),
+      ),
     );
   };
 
@@ -80,6 +61,23 @@ class EditPage extends React.Component {
   }
 }
 
-export default connect(
-  state => state.editPage
-)(injectIntl(EditPage));
+EditPage.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  intl: intlShape,
+  disabled: PropTypes.bool,
+  conditionAttributes: achievementTypesConditionAttributes,
+  // A set of achievement attributes: {:id , :title, etc}.
+  initialValues: PropTypes.shape({
+    title: PropTypes.string,
+    description: PropTypes.string,
+    published: PropTypes.bool,
+    // Badge types to preview existing images
+    badge: PropTypes.shape({
+      name: PropTypes.string,
+      url: PropTypes.string,
+    }),
+  }),
+  notification: notificationShape,
+};
+
+export default connect((state) => state.editPage)(injectIntl(EditPage));

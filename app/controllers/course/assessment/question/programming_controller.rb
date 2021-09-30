@@ -42,6 +42,7 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
       process_package
 
       raise ActiveRecord::Rollback unless @programming_question.save
+
       true
     end
 
@@ -89,6 +90,7 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
 
   def process_package
     return unless @programming_question.edit_online?
+
     programming_package_service(params).generate_package
     @meta = programming_package_service(params).extract_meta
     @programming_question.multiple_file_submission = @meta[:data]['submit_as_file'] || false

@@ -32,7 +32,11 @@ const stateReconciler = (inboundState, _, reducedState) => {
   const inboundOldSessions = inboundState.oldSessions || makeImmutableMap();
   let oldSessions = inboundOldSessions.merge(reducedState.oldSessions);
 
-  if (inboundState.video && inboundState.video.sessionId && !inboundState.video.sessionClosed) {
+  if (
+    inboundState.video &&
+    inboundState.video.sessionId &&
+    !inboundState.video.sessionClosed
+  ) {
     const inboundVideoState = inboundState.video;
     const inboundSessionId = inboundVideoState.sessionId;
     oldSessions = oldSessions.set(inboundSessionId, inboundVideoState);
@@ -54,13 +58,19 @@ function persistConfig(courseUserId) {
 
 export default (props) => {
   const initialState = createInitialState(props);
-  const storeCreator = (process.env.NODE_ENV === 'development')
-    // eslint-disable-next-line global-require
-    ? compose(applyMiddleware(thunkMiddleware, require('redux-logger').logger))(createStore)
-    : compose(applyMiddleware(thunkMiddleware))(createStore);
+  const storeCreator =
+    process.env.NODE_ENV === 'development'
+      ? compose(
+          // eslint-disable-next-line global-require
+          applyMiddleware(thunkMiddleware, require('redux-logger').logger),
+        )(createStore)
+      : compose(applyMiddleware(thunkMiddleware))(createStore);
 
   if (props.courseUserId && props.video.sessionId) {
-    const store = storeCreator(persistReducer(persistConfig(props.courseUserId), rootReducer), initialState);
+    const store = storeCreator(
+      persistReducer(persistConfig(props.courseUserId), rootReducer),
+      initialState,
+    );
     const persistor = persistStore(store);
     return { store, persistor };
   }

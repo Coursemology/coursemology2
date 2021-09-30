@@ -44,13 +44,18 @@ beforeEach(() => {
 
 describe('Scribing question', () => {
   it('renders new question form', async () => {
-    window.history.pushState({}, '', `/courses/${courseId}/assessments/${assessmentId}/question/scribing/new`);
+    window.history.pushState(
+      {},
+      '',
+      `/courses/${courseId}/assessments/${assessmentId}/question/scribing/new`,
+    );
 
     // Mock assessment axios
     const assessmentsClient = CourseAPI.assessment.assessments.getClient();
     const assessmentsMock = new MockAdapter(assessmentsClient);
 
-    assessmentsMock.onGet(`/courses/${courseId}/assessments/skills`)
+    assessmentsMock
+      .onGet(`/courses/${courseId}/assessments/skills`)
       .reply(200, {
         skills: [
           {
@@ -64,14 +69,21 @@ describe('Scribing question', () => {
         ],
       });
 
-    const spyFetchSkills = jest.spyOn(CourseAPI.assessment.assessments, 'fetchSkills');
+    const spyFetchSkills = jest.spyOn(
+      CourseAPI.assessment.assessments,
+      'fetchSkills',
+    );
 
     const newPage = mount(
       <ProviderWrapper store={store}>
-        <MemoryRouter initialEntries={[`/courses/${courseId}/assessments/${assessmentId}/question/scribing/new`]}>
+        <MemoryRouter
+          initialEntries={[
+            `/courses/${courseId}/assessments/${assessmentId}/question/scribing/new`,
+          ]}
+        >
           <ScribingQuestion />
         </MemoryRouter>
-      </ProviderWrapper>
+      </ProviderWrapper>,
     );
 
     // Wait for api call
@@ -82,14 +94,19 @@ describe('Scribing question', () => {
     expect(newPage.find('MultiSelectSkillsField').length).toBe(1);
     expect(newPage.find('SummernoteField').length).toBe(2);
     expect(newPage.find('FileUploadField').length).toBe(1);
-    expect(newPage.find('[htmlFor="question_scribing_attachment"]').length).toBe(0);
+    expect(
+      newPage.find('[htmlFor="question_scribing_attachment"]').length,
+    ).toBe(0);
   });
 
   it('renders edit question form', async () => {
     const editUrl = `/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}/edit`;
     window.history.pushState({}, '', editUrl);
 
-    mock.onGet(`/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}`)
+    mock
+      .onGet(
+        `/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}`,
+      )
       .reply(200, {
         question: {
           id: 59,
@@ -118,17 +135,22 @@ describe('Scribing question', () => {
         },
       });
 
-    const spyFetch = jest.spyOn(CourseAPI.assessment.question.scribing, 'fetch');
+    const spyFetch = jest.spyOn(
+      CourseAPI.assessment.question.scribing,
+      'fetch',
+    );
 
     const fetchPage = mount(
       <ProviderWrapper store={store}>
         <MemoryRouter
-          initialEntries={[`/courses/${courseId}/assessments/${assessmentId}/question
-                            /scribing/${scribingId}/edit`]}
+          initialEntries={[
+            `/courses/${courseId}/assessments/${assessmentId}/question
+                            /scribing/${scribingId}/edit`,
+          ]}
         >
           <ScribingQuestion />
         </MemoryRouter>
-      </ProviderWrapper>
+      </ProviderWrapper>,
     );
 
     // Wait for api call
@@ -139,29 +161,39 @@ describe('Scribing question', () => {
     expect(fetchPage.find('MultiSelectSkillsField').length).toBe(1);
     expect(fetchPage.find('SummernoteField').length).toBe(2);
     expect(fetchPage.find('FileUploadField').length).toBe(0);
-    expect(fetchPage.find('[htmlFor="question_scribing_attachment"]').length).toBe(1);
+    expect(
+      fetchPage.find('[htmlFor="question_scribing_attachment"]').length,
+    ).toBe(1);
   });
 
   it('renders error message when submit fails from server', async () => {
     const editUrl = `/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}/edit`;
     window.history.pushState({}, '', editUrl);
 
-    mock.onPatch(`/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}`)
+    mock
+      .onPatch(
+        `/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}`,
+      )
       .reply(400, {
-        errors: ['Maximum grade can\'t be blank'],
+        errors: ["Maximum grade can't be blank"],
       });
 
-    const spyUpdate = jest.spyOn(CourseAPI.assessment.question.scribing, 'update');
+    const spyUpdate = jest.spyOn(
+      CourseAPI.assessment.question.scribing,
+      'update',
+    );
 
     const fetchPage = mount(
       <ProviderWrapper store={store}>
         <MemoryRouter
-          initialEntries={[`/courses/${courseId}/assessments/${assessmentId}/question
-                            /scribing/${scribingId}/edit`]}
+          initialEntries={[
+            `/courses/${courseId}/assessments/${assessmentId}/question
+                            /scribing/${scribingId}/edit`,
+          ]}
         >
           <ScribingQuestion />
         </MemoryRouter>
-      </ProviderWrapper>
+      </ProviderWrapper>,
     );
 
     store.dispatch(updateScribingQuestion(scribingId, mockFields));
@@ -173,19 +205,30 @@ describe('Scribing question', () => {
   });
 
   it('allows question to be created', async () => {
-    window.history.pushState({}, '', `/courses/${courseId}/assessments/${assessmentId}/question/scribing/new`);
+    window.history.pushState(
+      {},
+      '',
+      `/courses/${courseId}/assessments/${assessmentId}/question/scribing/new`,
+    );
 
-    const spyCreate = jest.spyOn(CourseAPI.assessment.question.scribing, 'create');
+    const spyCreate = jest.spyOn(
+      CourseAPI.assessment.question.scribing,
+      'create',
+    );
 
     const postUrl = `/courses/${courseId}/assessments/${assessmentId}/question/scribing/`;
     mock.onPost(postUrl).reply(200, {});
 
     const newPage = mount(
       <ProviderWrapper store={store}>
-        <MemoryRouter initialEntries={[`/courses/${courseId}/assessments/${assessmentId}/question/scribing/new`]}>
+        <MemoryRouter
+          initialEntries={[
+            `/courses/${courseId}/assessments/${assessmentId}/question/scribing/new`,
+          ]}
+        >
           <ScribingQuestion />
         </MemoryRouter>
-      </ProviderWrapper>
+      </ProviderWrapper>,
     );
 
     await sleep(1);
@@ -197,9 +240,16 @@ describe('Scribing question', () => {
   });
 
   it('allows question to be updated', async () => {
-    window.history.pushState({}, '', `/courses/${courseId}/assessments/${assessmentId}/question/scribing/edit`);
+    window.history.pushState(
+      {},
+      '',
+      `/courses/${courseId}/assessments/${assessmentId}/question/scribing/edit`,
+    );
 
-    const spyUpdate = jest.spyOn(CourseAPI.assessment.question.scribing, 'update');
+    const spyUpdate = jest.spyOn(
+      CourseAPI.assessment.question.scribing,
+      'update',
+    );
 
     const patchUrl = `/courses/${courseId}/assessments/${assessmentId}/question/scribing/${scribingId}`;
     mock.onPatch(patchUrl).reply(200, {});
@@ -207,12 +257,14 @@ describe('Scribing question', () => {
     const fetchPage = mount(
       <ProviderWrapper store={store}>
         <MemoryRouter
-          initialEntries={[`/courses/${courseId}/assessments/${assessmentId}
-                            /question/scribing/${scribingId}/edit`]}
+          initialEntries={[
+            `/courses/${courseId}/assessments/${assessmentId}
+                            /question/scribing/${scribingId}/edit`,
+          ]}
         >
           <ScribingQuestion />
         </MemoryRouter>
-      </ProviderWrapper>
+      </ProviderWrapper>,
     );
 
     await sleep(1);

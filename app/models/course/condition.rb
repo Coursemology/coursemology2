@@ -21,7 +21,8 @@ class Course::Condition < ApplicationRecord
   ALL_CONDITIONS = [
     Course::Condition::Achievement.name,
     Course::Condition::Assessment.name,
-    Course::Condition::Level.name
+    Course::Condition::Level.name,
+    Course::Condition::Survey.name
   ].freeze
 
   class << self
@@ -36,7 +37,7 @@ class Course::Condition < ApplicationRecord
         )
 
         conditional_name.constantize.where(course_id: course)
-      end.flatten
+      end.flatten.compact
     end
 
     # Finds all conditionals that depend on the given object.

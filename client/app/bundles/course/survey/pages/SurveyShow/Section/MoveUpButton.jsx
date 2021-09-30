@@ -21,23 +21,19 @@ const translations = defineMessages({
 });
 
 class MoveUpButton extends React.Component {
-  static propTypes = {
-    sectionIndex: PropTypes.number.isRequired,
-    disabled: PropTypes.bool,
-
-    dispatch: PropTypes.func.isRequired,
-  };
-
-  static defaultProps = {
-    disabled: false,
-  }
-
   moveSectionUp = () => {
     const { dispatch, sectionIndex } = this.props;
     const successMessage = <FormattedMessage {...translations.success} />;
     const failureMessage = <FormattedMessage {...translations.failure} />;
-    return dispatch(changeSectionOrder(sectionIndex, sectionIndex - 1, successMessage, failureMessage));
-  }
+    return dispatch(
+      changeSectionOrder(
+        sectionIndex,
+        sectionIndex - 1,
+        successMessage,
+        failureMessage,
+      ),
+    );
+  };
 
   render() {
     return (
@@ -49,5 +45,16 @@ class MoveUpButton extends React.Component {
     );
   }
 }
+
+MoveUpButton.propTypes = {
+  sectionIndex: PropTypes.number.isRequired,
+  disabled: PropTypes.bool,
+
+  dispatch: PropTypes.func.isRequired,
+};
+
+MoveUpButton.defaultProps = {
+  disabled: false,
+};
 
 export default connect()(MoveUpButton);

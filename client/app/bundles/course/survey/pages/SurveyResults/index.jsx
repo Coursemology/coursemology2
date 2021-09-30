@@ -31,14 +31,6 @@ const translations = defineMessages({
 });
 
 class SurveyResults extends React.Component {
-  static propTypes = {
-    survey: surveyShape,
-    surveyId: PropTypes.string.isRequired,
-    dispatch: PropTypes.func.isRequired,
-    isLoading: PropTypes.bool.isRequired,
-    sections: PropTypes.arrayOf(sectionShape),
-  }
-
   constructor(props) {
     super(props);
     this.state = { includePhantoms: true };
@@ -52,28 +44,43 @@ class SurveyResults extends React.Component {
   getRespondentsCount() {
     const { sections } = this.props;
     if (
-      (sections && sections.length) < 1
-      || (sections[0].questions && sections[0].questions.length < 1)
-      || (sections[0].questions[0].answers && sections[0].questions[0].answers.length < 1)
+      (sections && sections.length) < 1 ||
+      (sections[0].questions && sections[0].questions.length < 1) ||
+      (sections[0].questions[0].answers &&
+        sections[0].questions[0].answers.length < 1)
     ) {
       return { totalStudents: 0, realStudents: 0 };
     }
 
     const totalStudents = sections[0].questions[0].answers.length;
-    const realStudents = sections[0].questions[0].answers.filter(answer => !answer.phantom).length;
+    const realStudents = sections[0].questions[0].answers.filter(
+      (answer) => !answer.phantom,
+    ).length;
     return { totalStudents, realStudents };
   }
 
   render() {
-    const { sections, isLoading, survey: { anonymous } } = this.props;
+    const {
+      sections,
+      isLoading,
+      survey: { anonymous },
+    } = this.props;
     const noSections = sections && sections.length < 1;
-    if (isLoading) { return <LoadingIndicator />; }
+    if (isLoading) {
+      return <LoadingIndicator />;
+    }
     if (noSections) {
-      return <Subheader><FormattedMessage {...translations.noSections} /></Subheader>;
+      return (
+        <Subheader>
+          <FormattedMessage {...translations.noSections} />
+        </Subheader>
+      );
     }
 
     const { totalStudents, realStudents } = this.getRespondentsCount();
-    const responsesCount = this.state.includePhantoms ? totalStudents : realStudents;
+    const responsesCount = this.state.includePhantoms
+      ? totalStudents
+      : realStudents;
     return (
       <>
         <Card>
@@ -84,34 +91,44 @@ class SurveyResults extends React.Component {
                 values={{ count: responsesCount.toString() }}
               />
             </h4>
-            {
-              totalStudents === realStudents
-                ? <p><FormattedMessage {...translations.noPhantoms} /></p>
-                : (
-                  <Toggle
-                    label={<FormattedMessage {...translations.includePhantoms} />}
-                    labelPosition="right"
-                    toggled={this.state.includePhantoms}
-                    onToggle={(_, value) => this.setState({ includePhantoms: value })}
-                  />
-                )
-            }
+            {totalStudents === realStudents ? (
+              <p>
+                <FormattedMessage {...translations.noPhantoms} />
+              </p>
+            ) : (
+              <Toggle
+                label={<FormattedMessage {...translations.includePhantoms} />}
+                labelPosition="right"
+                toggled={this.state.includePhantoms}
+                onToggle={(_, value) =>
+                  this.setState({ includePhantoms: value })
+                }
+              />
+            )}
           </CardText>
         </Card>
-        <Subheader><FormattedMessage {...surveyTranslations.questions} /></Subheader>
-        {
-          this.props.sections.map((section, index) => (
-            <ResultsSection
-              key={section.id}
-              includePhantoms={this.state.includePhantoms}
-              {...{ section, index, anonymous }}
-            />
-          ))
-        }
+        <Subheader>
+          <FormattedMessage {...surveyTranslations.questions} />
+        </Subheader>
+        {this.props.sections.map((section, index) => (
+          <ResultsSection
+            key={section.id}
+            includePhantoms={this.state.includePhantoms}
+            {...{ section, index, anonymous }}
+          />
+        ))}
       </>
     );
   }
 }
 
-const mapStateToProps = state => state.results;
+SurveyResults.propTypes = {
+  survey: surveyShape,
+  surveyId: PropTypes.string.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  sections: PropTypes.arrayOf(sectionShape),
+};
+
+const mapStateToProps = (state) => state.results;
 export default connect(mapStateToProps)(SurveyResults);

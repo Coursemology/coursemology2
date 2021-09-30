@@ -46,8 +46,7 @@ RSpec.describe Duplicator, type: :model do
 
     # ComplexObject has children
     class ComplexObject
-      attr_reader :id
-      attr_reader :children
+      attr_reader :id, :children
 
       def initialize(id, children)
         @id = id
@@ -157,10 +156,10 @@ RSpec.describe Duplicator, type: :model do
       it 'is duplicated once' do
         @duplicator = Duplicator.new
         duplicate_of_a = @duplicator.duplicate(@obj_a)
-        duplicate_of_a_2 = @duplicator.duplicate(@obj_a)
+        duplicate_of_a2 = @duplicator.duplicate(@obj_a)
 
         expect(duplicate_of_a).to_not be_nil
-        expect(duplicate_of_a).to be(duplicate_of_a_2)
+        expect(duplicate_of_a).to be(duplicate_of_a2)
       end
     end
 
@@ -455,32 +454,32 @@ RSpec.describe Duplicator, type: :model do
     with_temporary_table(:simple_active_records) do
       context 'when SimpleActiveRecord objects are duplicated' do
         before(:each) do
-          @sar_1 = SimpleActiveRecord.create(data: 1)
+          @sar1 = SimpleActiveRecord.create(data: 1)
         end
 
         it 'is duplicated by default' do
           duplicator = Duplicator.new
 
           expect do
-            @dup_sar_1 = duplicator.duplicate(@sar_1)
-            @dup_sar_1.save
+            @dup_sar1 = duplicator.duplicate(@sar1)
+            @dup_sar1.save
           end.to change { SimpleActiveRecord.count }.by(1)
 
-          expect(@sar_1.data).to eq(@dup_sar_1.data)
-          expect(@sar_1.id).to_not eq(@dup_sar_1.id)
+          expect(@sar1.data).to eq(@dup_sar1.data)
+          expect(@sar1.id).to_not eq(@dup_sar1.id)
         end
 
         it 'is not duplicated if excluded' do
-          duplicator = Duplicator.new([@sar_1])
-          dup_sar_1 = duplicator.duplicate(@sar_1)
+          duplicator = Duplicator.new([@sar1])
+          dup_sar1 = duplicator.duplicate(@sar1)
 
-          expect(dup_sar_1).to be_nil
+          expect(dup_sar1).to be_nil
         end
 
         it 'is duplicated once' do
           duplicator = Duplicator.new
-          dup1 = duplicator.duplicate(@sar_1).save
-          dup2 = duplicator.duplicate(@sar_1).save
+          dup1 = duplicator.duplicate(@sar1).save
+          dup2 = duplicator.duplicate(@sar1).save
 
           expect(dup1).to be(dup2)
         end

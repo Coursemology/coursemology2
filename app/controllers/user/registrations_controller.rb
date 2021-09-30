@@ -18,9 +18,7 @@ class User::RegistrationsController < Devise::RegistrationsController
   def create
     User.transaction do
       super
-      if @invitation && !@invitation.confirmed? && resource.persisted?
-        @invitation.confirm!(confirmer: resource)
-      end
+      @invitation.confirm!(confirmer: resource) if @invitation && !@invitation.confirmed? && resource.persisted?
     end
   end
 
@@ -91,9 +89,10 @@ class User::RegistrationsController < Devise::RegistrationsController
   def load_invitation
     return if invitation_param.blank?
 
-    if invitation_param.first == Course::UserInvitation::INVITATION_KEY_IDENTIFIER
+    case invitation_param.first
+    when Course::UserInvitation::INVITATION_KEY_IDENTIFIER
       @invitation = Course::UserInvitation.find_by(invitation_key: invitation_param)
-    elsif invitation_param.first == Instance::UserInvitation::INVITATION_KEY_IDENTIFIER
+    when Instance::UserInvitation::INVITATION_KEY_IDENTIFIER
       @invitation = Instance::UserInvitation.find_by(invitation_key: invitation_param)
     end
   end

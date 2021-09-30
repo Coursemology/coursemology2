@@ -2,9 +2,7 @@
 import moment from 'lib/moment';
 
 export function arrayToObjectById(array) {
-  return array.reduce((obj, item) => (
-    { ...obj, [item.id]: item }
-  ), {});
+  return array.reduce((obj, item) => ({ ...obj, [item.id]: item }), {});
 }
 
 export function formatDateTime(dateTime) {
@@ -24,6 +22,7 @@ export function parseLanguages(language) {
       return 'c_cpp';
     case 'Java':
       return 'java';
+    case 'Python 3.9':
     case 'Python 3.7':
     case 'Python 3.6':
     case 'Python 3.5':

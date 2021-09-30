@@ -74,7 +74,7 @@ class Course::Material < ApplicationRecord
   def validate_name_is_unique_among_folders
     return if folder.nil?
 
-    conflicts = folder.children.where.has { |parent| name =~ parent.name }
+    conflicts = folder.children.where('name ILIKE ?', name)
     errors.add(:name, :taken) unless conflicts.empty?
   end
 end

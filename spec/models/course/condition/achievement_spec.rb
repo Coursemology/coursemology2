@@ -38,8 +38,6 @@ RSpec.describe Course::Condition::Achievement, type: :model do
         end
       end
 
-      # TODO: remove this test when Course::Condition::Achievement#required_achievements_for uses
-      # squeel.
       context 'when an achievement is required by another conditional with the same id' do
         subject do
           id = Time.now.to_i
@@ -107,7 +105,7 @@ RSpec.describe Course::Condition::Achievement, type: :model do
             user_achievement = create(:course_user_achievement, course_user: course_user)
             expect(Course::Condition::Achievement).
               to receive(:evaluate_conditional_for).with(course_user)
-            user_achievement.achievement.update_attributes(course_user_ids: [])
+            user_achievement.achievement.update(course_user_ids: [])
           end
         end
       end

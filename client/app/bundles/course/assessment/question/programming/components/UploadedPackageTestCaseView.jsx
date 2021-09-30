@@ -2,8 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import { Card, CardHeader } from 'material-ui/Card';
-import { Table, TableBody, TableHeader, TableHeaderColumn,
-  TableRow, TableRowColumn } from 'material-ui/Table';
+import {
+  Table,
+  TableBody,
+  TableHeader,
+  TableHeaderColumn,
+  TableRow,
+  TableRowColumn,
+} from 'material-ui/Table';
 import ExpandableText from 'lib/components/ExpandableText';
 
 import styles from './UploadedPackageTestCaseView.scss';
@@ -59,23 +65,23 @@ const translations = defineMessages({
 class UploadedPackageTestCaseView extends React.Component {
   renderTable(tests) {
     if (tests.size > 0) {
-      const rows = tests.map(test => (
+      const rows = tests.map((test) => (
         <TableRow
           className="question_programming_test_case"
           id={`question_programming_test_case_${test.get('id')}`}
           key={test.get('id')}
         >
           <TableHeaderColumn className={styles.testCaseCell}>
-            { test.get('identifier') }
+            {test.get('identifier')}
           </TableHeaderColumn>
           <TableRowColumn className={styles.testCaseCell}>
-            { test.get('expression') }
+            {test.get('expression')}
           </TableRowColumn>
           <TableRowColumn className={styles.testCaseCell}>
             <ExpandableText text={test.get('expected')} />
           </TableRowColumn>
           <TableRowColumn className={styles.testCaseCell}>
-            { test.get('hint') }
+            {test.get('hint')}
           </TableRowColumn>
         </TableRow>
       ));
@@ -85,29 +91,27 @@ class UploadedPackageTestCaseView extends React.Component {
           <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
             <TableRow>
               <TableHeaderColumn>
-                { this.props.intl.formatMessage(translations.identifierHeader) }
+                {this.props.intl.formatMessage(translations.identifierHeader)}
               </TableHeaderColumn>
               <TableHeaderColumn>
-                { this.props.intl.formatMessage(translations.expressionHeader) }
+                {this.props.intl.formatMessage(translations.expressionHeader)}
               </TableHeaderColumn>
               <TableHeaderColumn>
-                { this.props.intl.formatMessage(translations.expectedHeader) }
+                {this.props.intl.formatMessage(translations.expectedHeader)}
               </TableHeaderColumn>
               <TableHeaderColumn>
-                { this.props.intl.formatMessage(translations.hintHeader) }
+                {this.props.intl.formatMessage(translations.hintHeader)}
               </TableHeaderColumn>
             </TableRow>
           </TableHeader>
-          <TableBody displayRowCheckbox={false}>
-            {rows}
-          </TableBody>
+          <TableBody displayRowCheckbox={false}>{rows}</TableBody>
         </Table>
       );
     }
 
     return (
       <div style={{ textAlign: 'center', padding: '1em' }}>
-        { this.props.intl.formatMessage(translations.noTestsMessage) }
+        {this.props.intl.formatMessage(translations.noTestsMessage)}
       </div>
     );
   }
@@ -125,21 +129,21 @@ class UploadedPackageTestCaseView extends React.Component {
             className={styles.testCaseTypeHeader}
             title={intl.formatMessage(translations.publicTestCases)}
           />
-          { this.renderTable(publicTests) }
+          {this.renderTable(publicTests)}
         </Card>
         <Card>
           <CardHeader
             className={styles.testCaseTypeHeader}
             title={intl.formatMessage(translations.privateTestCases)}
           />
-          { this.renderTable(privateTests) }
+          {this.renderTable(privateTests)}
         </Card>
         <Card>
           <CardHeader
             className={styles.testCaseTypeHeader}
             title={intl.formatMessage(translations.evaluationTestCases)}
           />
-          { this.renderTable(evaluationTests) }
+          {this.renderTable(evaluationTests)}
         </Card>
       </>
     );

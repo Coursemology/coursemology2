@@ -28,6 +28,7 @@ class ActiveJob::QueueAdapters::BackgroundThreadAdapter < ActiveJob::QueueAdapte
     @finish_jobs_condition = ConditionVariable.new
     @thread_pool = []
     @thread_pool_mutex = Mutex.new
+    super
   end
 
   def enqueue(job) #:nodoc:
@@ -58,6 +59,7 @@ class ActiveJob::QueueAdapters::BackgroundThreadAdapter < ActiveJob::QueueAdapte
   def wait_for_jobs
     with_thread_pool do
       return if @pending_jobs.empty? && @running_jobs == 0
+
       @finish_jobs_condition.wait(@thread_pool_mutex)
     end
   end

@@ -4,7 +4,8 @@ en:
       todo_survey_button:
         respond: 'Respond'
       survey_download_service:
-        timestamp: 'Timestamp'
+        created_at: 'Create Timestamp'
+        updated_at: 'Last Update Timestamp'
         course_user_id: 'Course User ID'
         name: 'Name'
         role: 'Role'

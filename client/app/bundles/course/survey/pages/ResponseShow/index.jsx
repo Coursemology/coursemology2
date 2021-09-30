@@ -5,12 +5,20 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { formatLongDateTime } from 'lib/moment';
 import { Card, CardText } from 'material-ui/Card';
 import Subheader from 'material-ui/Subheader';
-import { Table, TableBody, TableRow, TableHeaderColumn, TableRowColumn } from 'material-ui/Table';
+import {
+  Table,
+  TableBody,
+  TableRow,
+  TableHeaderColumn,
+  TableRowColumn,
+} from 'material-ui/Table';
 import surveyTranslations from 'course/survey/translations';
 import { surveyShape, responseShape } from 'course/survey/propTypes';
 import { fetchResponse } from 'course/survey/actions/responses';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
-import ResponseForm, { buildInitialValues } from 'course/survey/containers/ResponseForm';
+import ResponseForm, {
+  buildInitialValues,
+} from 'course/survey/containers/ResponseForm';
 import RespondButton from 'course/survey/containers/RespondButton';
 import UnsubmitButton from 'course/survey/containers/UnsubmitButton';
 
@@ -29,25 +37,13 @@ const styles = {
 };
 
 class ResponseShow extends React.Component {
-  static propTypes = {
-    survey: surveyShape,
-    courseId: PropTypes.string.isRequired,
-    response: responseShape,
-    flags: PropTypes.shape({
-      isLoading: PropTypes.bool.isRequired,
-      canModify: PropTypes.bool,
-      canSubmit: PropTypes.bool,
-    }),
-    match: PropTypes.shape({
-      params: PropTypes.shape({
-        responseId: PropTypes.string.isRequired,
-      }).isRequired,
-    }).isRequired,
-    dispatch: PropTypes.func.isRequired,
-  };
-
   componentDidMount() {
-    const { dispatch, match: { params: { responseId } } } = this.props;
+    const {
+      dispatch,
+      match: {
+        params: { responseId },
+      },
+    } = this.props;
     dispatch(fetchResponse(responseId));
   }
 
@@ -63,10 +59,21 @@ class ResponseShow extends React.Component {
           <TableRow selectable={false}>
             <TableHeaderColumn>Submitted At</TableHeaderColumn>
             <TableRowColumn>
-              {response.submitted_at
-                ? formatLongDateTime(response.submitted_at)
-                : <FormattedMessage {...translations.notSubmitted} />
-              }
+              {response.submitted_at ? (
+                formatLongDateTime(response.submitted_at)
+              ) : (
+                <FormattedMessage {...translations.notSubmitted} />
+              )}
+            </TableRowColumn>
+          </TableRow>
+          <TableRow selectable={false}>
+            <TableHeaderColumn>Last Updated At</TableHeaderColumn>
+            <TableRowColumn>
+              {response.submitted_at ? (
+                formatLongDateTime(response.updated_at)
+              ) : (
+                <FormattedMessage {...translations.notSubmitted} />
+              )}
             </TableRowColumn>
           </TableRow>
         </TableBody>
@@ -76,24 +83,32 @@ class ResponseShow extends React.Component {
 
   renderBody() {
     const { survey, response, flags } = this.props;
-    if (flags.isLoading) { return <LoadingIndicator />; }
+    if (flags.isLoading) {
+      return <LoadingIndicator />;
+    }
     const initialValues = buildInitialValues(survey, response);
 
     return (
       <>
-        { this.renderSubmissionInfo() }
-        <Subheader><FormattedMessage {...surveyTranslations.questions} /></Subheader>
-        <ResponseForm
-          readOnly
-          {...{ response, flags, initialValues }}
-        />
+        {this.renderSubmissionInfo()}
+        <Subheader>
+          <FormattedMessage {...surveyTranslations.questions} />
+        </Subheader>
+        <ResponseForm readOnly {...{ response, flags, initialValues }} />
       </>
     );
   }
 
   renderRespondButton() {
-    const { survey, response, courseId, flags: { canModify, canSubmit, isLoading } } = this.props;
-    if (!(canModify || canSubmit) || isLoading) { return null; }
+    const {
+      survey,
+      response,
+      courseId,
+      flags: { canModify, canSubmit, isLoading },
+    } = this.props;
+    if (!(canModify || canSubmit) || isLoading) {
+      return null;
+    }
 
     return (
       <RespondButton
@@ -110,8 +125,13 @@ class ResponseShow extends React.Component {
   }
 
   renderUnsubmitButton() {
-    const { response, flags: { canUnsubmit, isLoading } } = this.props;
-    if (!canUnsubmit || isLoading || !response.submitted_at) { return null; }
+    const {
+      response,
+      flags: { canUnsubmit, isLoading },
+    } = this.props;
+    if (!canUnsubmit || isLoading || !response.submitted_at) {
+      return null;
+    }
     return <UnsubmitButton responseId={response.id} />;
   }
 
@@ -120,18 +140,38 @@ class ResponseShow extends React.Component {
 
     return (
       <>
-        {
-          survey.description
-            ? <Card><CardText dangerouslySetInnerHTML={{ __html: survey.description }} /></Card>
-            : null
-        }
-        { this.renderBody() }
-        { this.renderRespondButton() }
-        { this.renderUnsubmitButton() }
+        {survey.description ? (
+          <Card>
+            <CardText
+              dangerouslySetInnerHTML={{ __html: survey.description }}
+            />
+          </Card>
+        ) : null}
+        {this.renderBody()}
+        {this.renderRespondButton()}
+        {this.renderUnsubmitButton()}
       </>
     );
   }
 }
 
+ResponseShow.propTypes = {
+  survey: surveyShape,
+  courseId: PropTypes.string.isRequired,
+  response: responseShape,
+  flags: PropTypes.shape({
+    canUnsubmit: PropTypes.bool,
+    isLoading: PropTypes.bool.isRequired,
+    canModify: PropTypes.bool,
+    canSubmit: PropTypes.bool,
+  }),
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      responseId: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
+  dispatch: PropTypes.func.isRequired,
+};
+
 export const UnconnectedResponseShow = ResponseShow;
-export default connect(state => state.responseForm)(ResponseShow);
+export default connect((state) => state.responseForm)(ResponseShow);

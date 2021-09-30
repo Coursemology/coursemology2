@@ -24,7 +24,7 @@ class System::Admin::Instance::AnnouncementsController < System::Admin::Instance
   end
 
   def update
-    if @announcement.update_attributes(announcement_params)
+    if @announcement.update(announcement_params)
       redirect_to admin_instance_announcements_path,
                   success: t('.success', title: @announcement.title)
     else

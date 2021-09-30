@@ -19,10 +19,9 @@ export function create(submissionId, answerId, fileId, line, text) {
   return (dispatch) => {
     dispatch({ type: actionTypes.CREATE_ANNOTATION_REQUEST });
 
-    return CourseAPI.assessment.submissions.createProgrammingAnnotation(
-      submissionId, answerId, fileId, payload
-    )
-      .then(response => response.data)
+    return CourseAPI.assessment.submissions
+      .createProgrammingAnnotation(submissionId, answerId, fileId, payload)
+      .then((response) => response.data)
       .then((data) => {
         dispatch({
           type: actionTypes.CREATE_ANNOTATION_SUCCESS,
@@ -47,8 +46,9 @@ export function update(topicId, postId, text) {
   return (dispatch) => {
     dispatch({ type: actionTypes.UPDATE_ANNOTATION_REQUEST });
 
-    return CourseAPI.comments.update(topicId, postId, payload)
-      .then(response => response.data)
+    return CourseAPI.comments
+      .update(topicId, postId, payload)
+      .then((response) => response.data)
       .then((data) => {
         dispatch({
           type: actionTypes.UPDATE_ANNOTATION_SUCCESS,
@@ -63,8 +63,9 @@ export function destroy(fileId, topicId, postId) {
   return (dispatch) => {
     dispatch({ type: actionTypes.DELETE_ANNOTATION_REQUEST });
 
-    return CourseAPI.comments.delete(topicId, postId)
-      .then(response => response.data)
+    return CourseAPI.comments
+      .delete(topicId, postId)
+      .then((response) => response.data)
       .then(() => {
         dispatch({
           type: actionTypes.DELETE_ANNOTATION_SUCCESS,

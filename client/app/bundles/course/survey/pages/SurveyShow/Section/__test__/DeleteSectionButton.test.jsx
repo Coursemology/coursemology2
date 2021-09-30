@@ -13,14 +13,24 @@ describe('<DeleteSectionButton />', () => {
     const sectionId = 7;
     const spyDelete = jest.spyOn(CourseAPI.survey.sections, 'delete');
 
-    window.history.pushState({}, '', `/courses/${courseId}/surveys/${surveyId}`);
+    window.history.pushState(
+      {},
+      '',
+      `/courses/${courseId}/surveys/${surveyId}`,
+    );
     const contextOptions = buildContextOptions(storeCreator({}));
     const deleteConfirmation = mount(<DeleteConfirmation />, contextOptions);
-    const deleteSectionButton = mount(<DeleteSectionButton sectionId={sectionId} />, contextOptions);
+    const deleteSectionButton = mount(
+      <DeleteSectionButton sectionId={sectionId} />,
+      contextOptions,
+    );
 
     deleteSectionButton.find('button').simulate('click');
 
-    const confirmDeleteButton = deleteConfirmation.find('ConfirmationDialog').first().instance().confirmButton;
+    const confirmDeleteButton = deleteConfirmation
+      .find('ConfirmationDialog')
+      .first()
+      .instance().confirmButton;
     ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(confirmDeleteButton));
 
     expect(spyDelete).toHaveBeenCalledWith(sectionId);

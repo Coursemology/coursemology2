@@ -10,18 +10,19 @@ import * as scribingQuestionActionCreators from './actions/scribingQuestionActio
 import { formNames } from './constants';
 import { questionShape } from './propTypes';
 
-
 function buildInitialValues(scribingQuestion) {
-  return scribingQuestion.question ? {
-    question_scribing: {
-      title: scribingQuestion.question.title,
-      description: scribingQuestion.question.description,
-      staff_only_comments: scribingQuestion.question.staff_only_comments,
-      maximum_grade: scribingQuestion.question.maximum_grade || undefined,
-      skill_ids: scribingQuestion.question.skill_ids,
-      attachment: scribingQuestion.question.attachment || {},
-    },
-  } : {};
+  return scribingQuestion.question
+    ? {
+        question_scribing: {
+          title: scribingQuestion.question.title,
+          description: scribingQuestion.question.description,
+          staff_only_comments: scribingQuestion.question.staff_only_comments,
+          maximum_grade: scribingQuestion.question.maximum_grade || undefined,
+          skill_ids: scribingQuestion.question.skill_ids,
+          attachment: scribingQuestion.question.attachment || {},
+        },
+      }
+    : {};
 }
 
 function mapStateToProps({ scribingQuestion, ...state }) {
@@ -47,9 +48,9 @@ const propTypes = {
   scribingId: PropTypes.string,
 };
 
-
 const ScribingQuestion = (props) => {
-  const { dispatch, scribingQuestion, formValues, initialValues, scribingId } = props;
+  const { dispatch, scribingQuestion, formValues, initialValues, scribingId } =
+    props;
   const actions = bindActionCreators(scribingQuestionActionCreators, dispatch);
 
   return (

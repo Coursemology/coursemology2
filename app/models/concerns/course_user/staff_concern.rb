@@ -77,7 +77,7 @@ module CourseUser::StaffConcern
 
   def sample_variance(array)
     m = mean(array)
-    sum = array.reduce(0) { |a, e| a + (e - m)**2 }
+    sum = array.reduce(0) { |acc, elem| acc + (elem - m)**2 }
     sum / array.length.to_f
   end
 end

@@ -13,6 +13,7 @@ module Course::LevelsConcern
   # @return [Course::Level] A Course::Level instance.
   def level_for(experience_points)
     return first if experience_points < 0
+
     if loaded?
       reverse.find { |level| level.experience_points_threshold <= experience_points }
     else

@@ -6,9 +6,7 @@ import ScribingViewComponent from '../components/ScribingView';
 
 class ScribingViewContainer extends Component {
   render() {
-    return (
-      <ScribingViewComponent {...this.props} />
-    );
+    return <ScribingViewComponent {...this.props} />;
   }
 }
 
@@ -20,7 +18,5 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-const ScribingView = connect(
-  mapStateToProps, actions
-)(ScribingViewContainer);
+const ScribingView = connect(mapStateToProps, actions)(ScribingViewContainer);
 export default ScribingView;

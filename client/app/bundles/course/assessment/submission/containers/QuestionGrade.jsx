@@ -14,15 +14,6 @@ const styles = {
 };
 
 class VisibleQuestionGrade extends Component {
-  static propTypes = {
-    editable: PropTypes.bool.isRequired,
-    grading: questionGradeShape,
-    id: PropTypes.number.isRequired,
-    question: questionShape,
-    updateGrade: PropTypes.func.isRequired,
-    bonusAwarded: PropTypes.number,
-  };
-
   handleGradingField(value) {
     const { id, question, updateGrade, bonusAwarded } = this.props;
     const maxGrade = question.maximumGrade;
@@ -61,7 +52,7 @@ class VisibleQuestionGrade extends Component {
           max={maxGrade}
           step={1}
           value={initialGrade === null ? '' : initialGrade}
-          onChange={e => this.handleGradingField(e.target.value)}
+          onChange={(e) => this.handleGradingField(e.target.value)}
           ref={(ref) => {
             this.inputRef = ref;
           }}
@@ -81,19 +72,37 @@ class VisibleQuestionGrade extends Component {
 
     return (
       <Paper style={styles.container}>
-        <div style={{ backgroundColor: grey100, display: 'inline-block', padding: 20 }}>
+        <div
+          style={{
+            backgroundColor: grey100,
+            display: 'inline-block',
+            padding: 20,
+          }}
+        >
           Grading
         </div>
-        {editable ? this.renderQuestionGradeField() : this.renderQuestionGrade()}
+        {editable
+          ? this.renderQuestionGradeField()
+          : this.renderQuestionGrade()}
       </Paper>
     );
   }
 }
 
+VisibleQuestionGrade.propTypes = {
+  editable: PropTypes.bool.isRequired,
+  grading: questionGradeShape,
+  id: PropTypes.number.isRequired,
+  question: questionShape,
+  updateGrade: PropTypes.func.isRequired,
+  bonusAwarded: PropTypes.number,
+};
+
 function mapStateToProps(state, ownProps) {
   const { id } = ownProps;
   const { submittedAt, bonusEndAt, bonusPoints } = state.submission;
-  const bonusAwarded = (new Date(submittedAt) < new Date(bonusEndAt)) ? bonusPoints : 0;
+  const bonusAwarded =
+    new Date(submittedAt) < new Date(bonusEndAt) ? bonusPoints : 0;
   return {
     question: state.questions[id],
     grading: state.grading.questions[id],
@@ -103,14 +112,18 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    updateGrade: (id, grade, bonusAwarded) => dispatch({
-      type: actionTypes.UPDATE_GRADING, id, grade, bonusAwarded,
-    }),
+    updateGrade: (id, grade, bonusAwarded) =>
+      dispatch({
+        type: actionTypes.UPDATE_GRADING,
+        id,
+        grade,
+        bonusAwarded,
+      }),
   };
 }
 
 const QuestionGrade = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(VisibleQuestionGrade);
 export default QuestionGrade;

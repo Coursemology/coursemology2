@@ -1,6 +1,7 @@
 //= require helpers/course_helpers
+//= require routes
 
-var DELETE_DISCUSSION_POST = (function($, COURSE_HELPERS) {
+var DELETE_DISCUSSION_POST = (function ($, COURSE_HELPERS, ROUTES) {
   /* global JST, Routes */
   'use strict';
 
@@ -18,18 +19,23 @@ var DELETE_DISCUSSION_POST = (function($, COURSE_HELPERS) {
     var topicId = $topic.data('topicId');
     var postId = $post.data('postId');
 
-    $.ajax({ url: Routes.course_topic_post_path(courseId, topicId, postId),
-             method: 'delete' }).
-      done(function(data) { onPostDeleteSuccess(data, $element); }).
-      fail(function(data) { onPostDeleteFailure(data, $element); });
+    $.ajax({
+      url: ROUTES.course_topic_post_path(courseId, topicId, postId),
+      method: 'delete',
+    })
+      .done(function (data) {
+        onPostDeleteSuccess(data, $element);
+      })
+      .fail(function (data) {
+        onPostDeleteFailure(data, $element);
+      });
     e.preventDefault();
   }
 
   /**
    * Handles the successful discussion post delete event.
    */
-  function onPostDeleteSuccess() {
-  }
+  function onPostDeleteSuccess() {}
 
   /**
    * Handles the errored discussion post delete event.
@@ -45,10 +51,14 @@ var DELETE_DISCUSSION_POST = (function($, COURSE_HELPERS) {
    * @param {String} selector The selector for the specific discussion posts.
    */
   function initializeToolbarElement(element, selector) {
-    $(element).on('click', selector + '.discussion_post .toolbar .delete', onPostDelete);
+    $(element).on(
+      'click',
+      selector + '.discussion_post .toolbar .delete',
+      onPostDelete
+    );
   }
 
   return {
-    initializeToolbarElement: initializeToolbarElement
+    initializeToolbarElement: initializeToolbarElement,
   };
-}(jQuery, COURSE_HELPERS));
+})(jQuery, COURSE_HELPERS, ROUTES);

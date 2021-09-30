@@ -14,17 +14,17 @@ const ResultsSection = ({ section, includePhantoms, anonymous }) => (
   <Card style={styles.card}>
     <CardTitle
       title={section.title}
-      subtitle={<div dangerouslySetInnerHTML={{ __html: section.description }} />}
+      subtitle={
+        <div dangerouslySetInnerHTML={{ __html: section.description }} />
+      }
     />
     <CardText>
-      {
-          section.questions.map((question, index) => (
-            <ResultsQuestion
-              key={question.id}
-              {...{ question, index, includePhantoms, anonymous }}
-            />
-          ))
-        }
+      {section.questions.map((question, index) => (
+        <ResultsQuestion
+          key={question.id}
+          {...{ question, index, includePhantoms, anonymous }}
+        />
+      ))}
     </CardText>
   </Card>
 );

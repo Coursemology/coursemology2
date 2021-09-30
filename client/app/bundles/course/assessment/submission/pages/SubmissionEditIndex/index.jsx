@@ -9,7 +9,9 @@ import { touch } from 'redux-form';
 import FileIcon from 'material-ui/svg-icons/editor/insert-drive-file';
 
 import LoadingIndicator from 'lib/components/LoadingIndicator';
-import NotificationBar, { notificationShape } from 'lib/components/NotificationBar';
+import NotificationBar, {
+  notificationShape,
+} from 'lib/components/NotificationBar';
 import { setNotification } from 'lib/actions';
 import { getUrlParameter } from 'lib/helpers/url-helpers';
 import ProgressPanel from '../../components/ProgressPanel';
@@ -17,13 +19,33 @@ import SubmissionEditForm from './SubmissionEditForm';
 import SubmissionEditStepForm from './SubmissionEditStepForm';
 import SubmissionEmptyForm from './SubmissionEmptyForm';
 import {
-  fetchSubmission, autogradeSubmission, saveDraft, finalise,
-  unsubmit, submitAnswer, resetAnswer, saveGrade, mark, unmark, publish,
-  enterStudentView, exitStudentView, toggleViewHistoryMode,
+  fetchSubmission,
+  autogradeSubmission,
+  saveDraft,
+  finalise,
+  unsubmit,
+  submitAnswer,
+  resetAnswer,
+  saveGrade,
+  mark,
+  unmark,
+  publish,
+  enterStudentView,
+  exitStudentView,
+  toggleViewHistoryMode,
 } from '../../actions';
 import {
-  assessmentShape, explanationShape, gradingShape, postShape, answerShape,
-  questionFlagsShape, questionShape, historyQuestionShape, reduxFormShape, submissionShape, topicShape,
+  assessmentShape,
+  explanationShape,
+  gradingShape,
+  postShape,
+  answerShape,
+  questionFlagsShape,
+  questionShape,
+  historyQuestionShape,
+  reduxFormShape,
+  submissionShape,
+  topicShape,
 } from '../../propTypes';
 import { formNames, workflowStates } from '../../constants';
 import translations from '../../translations';
@@ -32,17 +54,143 @@ class VisibleSubmissionEditIndex extends Component {
   constructor(props) {
     super(props);
 
-    const newSubmission = !!getUrlParameter('new_submission') && getUrlParameter('new_submission') === 'true';
+    const newSubmission =
+      !!getUrlParameter('new_submission') &&
+      getUrlParameter('new_submission') === 'true';
     const stepString = getUrlParameter('step');
-    const step = Number.isNaN(stepString) || stepString === '' ? null : parseInt(stepString, 10) - 1;
+    const step =
+      Number.isNaN(stepString) || stepString === ''
+        ? null
+        : parseInt(stepString, 10) - 1;
 
     this.state = { newSubmission, step };
-    this.handleToggleViewHistoryMode = this.handleToggleViewHistoryMode.bind(this);
+    this.handleToggleViewHistoryMode =
+      this.handleToggleViewHistoryMode.bind(this);
   }
 
   componentDidMount() {
-    const { dispatch, match: { params } } = this.props;
+    const {
+      dispatch,
+      match: { params },
+    } = this.props;
     dispatch(fetchSubmission(params.submissionId));
+  }
+
+  handleAutogradeSubmission() {
+    const {
+      dispatch,
+      match: { params },
+    } = this.props;
+    dispatch(autogradeSubmission(params.submissionId));
+  }
+
+  handleMark() {
+    const {
+      dispatch,
+      match: { params },
+      grading,
+      exp,
+    } = this.props;
+    dispatch(mark(params.submissionId, Object.values(grading), exp));
+  }
+
+  handlePublish() {
+    const {
+      dispatch,
+      match: { params },
+      grading,
+      exp,
+    } = this.props;
+    dispatch(publish(params.submissionId, Object.values(grading), exp));
+  }
+
+  handleReset(answerId) {
+    const {
+      dispatch,
+      form,
+      match: { params },
+    } = this.props;
+    const questionId = form.values[answerId].questionId;
+    dispatch(resetAnswer(params.submissionId, answerId, questionId));
+  }
+
+  handleSaveDraft() {
+    const {
+      dispatch,
+      form,
+      match: { params },
+    } = this.props;
+    const answers = Object.values(form.values);
+    dispatch(saveDraft(params.submissionId, answers));
+  }
+
+  handleSaveGrade() {
+    const {
+      dispatch,
+      match: { params },
+      grading,
+      exp,
+      submission: { workflowState },
+    } = this.props;
+    const published = workflowState === workflowStates.Published;
+    dispatch(
+      saveGrade(params.submissionId, Object.values(grading), exp, published),
+    );
+  }
+
+  handleSubmit() {
+    const {
+      dispatch,
+      form,
+      match: { params },
+    } = this.props;
+    const answers = Object.values(form.values);
+    return this.validateSubmit().then(
+      () => dispatch(finalise(params.submissionId, answers)),
+      () => setNotification(translations.submitError)(dispatch),
+    );
+  }
+
+  handleSubmitAnswer(answerId) {
+    const {
+      dispatch,
+      form,
+      match: { params },
+    } = this.props;
+    const answer = form.values[answerId] || {};
+    return this.validateSubmitAnswer(answerId).then(
+      () => dispatch(submitAnswer(params.submissionId, answer)),
+      () => setNotification(translations.submitError)(dispatch),
+    );
+  }
+
+  handleToggleViewHistoryMode(viewHistory, submissionQuestionId, questionId) {
+    const { dispatch, historyQuestions } = this.props;
+    const answersLoaded = historyQuestions[questionId].pastAnswersLoaded;
+    dispatch(
+      toggleViewHistoryMode(
+        viewHistory,
+        submissionQuestionId,
+        questionId,
+        answersLoaded,
+      ),
+    );
+  }
+
+  handleUnmark() {
+    const {
+      dispatch,
+      match: { params },
+    } = this.props;
+    dispatch(unmark(params.submissionId));
+  }
+
+  handleUnsubmit() {
+    const {
+      dispatch,
+      match: { params },
+    } = this.props;
+    dispatch(unsubmit(params.submissionId));
   }
 
   validateSubmit = () => {
@@ -61,14 +209,15 @@ class VisibleSubmissionEditIndex extends Component {
       });
     });
 
-    const hasError = Object.values(form.syncErrors || {})
-      .some(answerError => Object.keys(answerError).length !== 0);
+    const hasError = Object.values(form.syncErrors || {}).some(
+      (answerError) => Object.keys(answerError).length !== 0,
+    );
 
     if (hasError) {
       return Promise.reject();
     }
     return Promise.resolve();
-  }
+  };
 
   validateSubmitAnswer = (answerId) => {
     const { dispatch, form } = this.props;
@@ -87,12 +236,7 @@ class VisibleSubmissionEditIndex extends Component {
       return Promise.reject();
     }
     return Promise.resolve();
-  }
-
-  handleAutogradeSubmission() {
-    const { dispatch, match: { params } } = this.props;
-    dispatch(autogradeSubmission(params.submissionId));
-  }
+  };
 
   allConsideredCorrect() {
     const { explanations, questions } = this.props;
@@ -101,70 +245,9 @@ class VisibleSubmissionEditIndex extends Component {
     }
 
     const numIncorrect = Object.keys(explanations).filter(
-      qid => !explanations[qid] || !explanations[qid].correct
+      (qid) => !explanations[qid] || !explanations[qid].correct,
     ).length;
     return numIncorrect === 0;
-  }
-
-  handleSubmit() {
-    const { dispatch, form, match: { params } } = this.props;
-    const answers = Object.values(form.values);
-    return this.validateSubmit()
-      .then(() => dispatch(finalise(params.submissionId, answers)),
-        () => setNotification(translations.submitError)(dispatch));
-  }
-
-  handleUnsubmit() {
-    const { dispatch, match: { params } } = this.props;
-    dispatch(unsubmit(params.submissionId));
-  }
-
-  handleSaveDraft() {
-    const { dispatch, form, match: { params } } = this.props;
-    const answers = Object.values(form.values);
-    dispatch(saveDraft(params.submissionId, answers));
-  }
-
-  handleSaveGrade() {
-    const { dispatch, match: { params }, grading, exp,
-      submission: { workflowState } } = this.props;
-    const published = workflowState === workflowStates.Published;
-    dispatch(saveGrade(params.submissionId, Object.values(grading), exp, published));
-  }
-
-  handleReset(answerId) {
-    const { dispatch, form, match: { params } } = this.props;
-    const questionId = form.values[answerId].questionId;
-    dispatch(resetAnswer(params.submissionId, answerId, questionId));
-  }
-
-  handleSubmitAnswer(answerId) {
-    const { dispatch, form, match: { params } } = this.props;
-    const answer = form.values[answerId] || {};
-    return this.validateSubmitAnswer(answerId)
-      .then(() => dispatch(submitAnswer(params.submissionId, answer)),
-        () => setNotification(translations.submitError)(dispatch));
-  }
-
-  handleMark() {
-    const { dispatch, match: { params }, grading, exp } = this.props;
-    dispatch(mark(params.submissionId, Object.values(grading), exp));
-  }
-
-  handleUnmark() {
-    const { dispatch, match: { params } } = this.props;
-    dispatch(unmark(params.submissionId));
-  }
-
-  handlePublish() {
-    const { dispatch, match: { params }, grading, exp } = this.props;
-    dispatch(publish(params.submissionId, Object.values(grading), exp));
-  }
-
-  handleToggleViewHistoryMode(viewHistory, submissionQuestionId, questionId) {
-    const { dispatch, historyQuestions } = this.props;
-    const answersLoaded = historyQuestions[questionId].pastAnswersLoaded;
-    dispatch(toggleViewHistoryMode(viewHistory, submissionQuestionId, questionId, answersLoaded));
   }
 
   renderStudentViewToggle() {
@@ -189,7 +272,9 @@ class VisibleSubmissionEditIndex extends Component {
     const renderFile = (file, index) => (
       <div key={index}>
         <FileIcon style={{ verticalAlign: 'middle' }} />
-        <a href={file.url}><span>{file.name}</span></a>
+        <a href={file.url}>
+          <span>{file.name}</span>
+        </a>
       </div>
     );
 
@@ -225,9 +310,19 @@ class VisibleSubmissionEditIndex extends Component {
   renderContent() {
     const { newSubmission, step } = this.state;
     const {
-      assessment: { autograded, delayedGradePublication, tabbedView,
-        skippable, questionIds, passwordProtected, categoryId, tabId,
-        allowPartialSubmission, showMcqAnswer },
+      assessment: {
+        autograded,
+        delayedGradePublication,
+        tabbedView,
+        skippable,
+        questionIds,
+        passwordProtected,
+        categoryId,
+        tabId,
+        allowPartialSubmission,
+        showMcqAnswer,
+        showMcqMrqSolution,
+      },
       submission: { graderView, canUpdate, maxStep, workflowState },
       explanations,
       grading,
@@ -238,7 +333,9 @@ class VisibleSubmissionEditIndex extends Component {
       topics,
       isAutograding,
       isSaving,
-      match: { params: { courseId } },
+      match: {
+        params: { courseId },
+      },
     } = this.props;
 
     if (Object.values(questions).length === 0) {
@@ -267,14 +364,15 @@ class VisibleSubmissionEditIndex extends Component {
           handleSaveGrade={() => this.handleSaveGrade()}
           handleSubmit={() => this.handleSubmit()}
           handleUnsubmit={() => this.handleUnsubmit()}
-          handleSubmitAnswer={answerId => this.handleSubmitAnswer(answerId)}
-          handleReset={answerId => this.handleReset(answerId)}
+          handleSubmitAnswer={(answerId) => this.handleSubmitAnswer(answerId)}
+          handleReset={(answerId) => this.handleReset(answerId)}
           handleAutogradeSubmission={() => this.handleAutogradeSubmission()}
           handleToggleViewHistoryMode={this.handleToggleViewHistoryMode}
           explanations={explanations}
           allConsideredCorrect={this.allConsideredCorrect()}
           allowPartialSubmission={allowPartialSubmission}
           showMcqAnswer={showMcqAnswer}
+          showMcqMrqSolution={showMcqMrqSolution}
           graderView={graderView}
           attempting={workflowState === workflowStates.Attempting}
           submitted={workflowState === workflowStates.Submitted}
@@ -298,8 +396,8 @@ class VisibleSubmissionEditIndex extends Component {
         handleSubmit={() => this.handleSubmit()}
         handleUnsubmit={() => this.handleUnsubmit()}
         handleSaveGrade={() => this.handleSaveGrade()}
-        handleSubmitAnswer={answerId => this.handleSubmitAnswer(answerId)}
-        handleReset={answerId => this.handleReset(answerId)}
+        handleSubmitAnswer={(answerId) => this.handleSubmitAnswer(answerId)}
+        handleReset={(answerId) => this.handleReset(answerId)}
         handleAutogradeSubmission={() => this.handleAutogradeSubmission()}
         handleMark={() => this.handleMark()}
         handleUnmark={() => this.handleUnmark()}
@@ -307,6 +405,7 @@ class VisibleSubmissionEditIndex extends Component {
         handleToggleViewHistoryMode={this.handleToggleViewHistoryMode}
         explanations={explanations}
         grading={grading}
+        showMcqMrqSolution={showMcqMrqSolution}
         graderView={graderView}
         canUpdate={canUpdate}
         attempting={workflowState === workflowStates.Attempting}
@@ -395,5 +494,7 @@ function mapStateToProps(state) {
   };
 }
 
-const SubmissionEditIndex = connect(mapStateToProps)(VisibleSubmissionEditIndex);
+const SubmissionEditIndex = connect(mapStateToProps)(
+  VisibleSubmissionEditIndex,
+);
 export default SubmissionEditIndex;

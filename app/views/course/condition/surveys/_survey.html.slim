@@ -1,0 +1,9 @@
+- survey_condition = survey
+= content_tag_for(:tr, survey_condition, class: 'condition')
+  td = t('course.condition.survey.title')
+  td.survey-condition-content = format_inline_text(survey_condition.title)
+
+  td
+    = edit_button([course, conditional, survey_condition])
+    = delete_button([course, conditional, survey_condition])
+

@@ -63,7 +63,7 @@ RSpec.feature 'System: Administration: Users' do
         expect(user_to_change.name).to eq(new_name)
       end
 
-      let!(:user_to_delete) { create(:user, name: '!' + users.first.name) }
+      let!(:user_to_delete) { create(:user, name: "!#{users.first.name}") }
       scenario 'I can delete a user' do
         visit admin_users_path
 

@@ -1,11 +1,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape, defineMessages, FormattedMessage } from 'react-intl';
+import {
+  injectIntl,
+  intlShape,
+  defineMessages,
+  FormattedMessage,
+} from 'react-intl';
 import { Card, CardText } from 'material-ui/Card';
 import CircularProgress from 'material-ui/CircularProgress';
 import Toggle from 'material-ui/Toggle';
 import { yellow100 } from 'material-ui/styles/colors';
-import { questionShape, historyQuestionShape, questionFlagsShape } from '../propTypes';
+import {
+  questionShape,
+  historyQuestionShape,
+  questionFlagsShape,
+} from '../propTypes';
 import { questionTypes } from '../constants';
 import Answers from './Answers';
 import PastAnswers from '../containers/PastAnswers';
@@ -13,12 +22,14 @@ import PastAnswers from '../containers/PastAnswers';
 const translations = defineMessages({
   missingAnswer: {
     id: 'course.assessment.submission.missingAnswer',
-    defaultMessage: 'There is no answer submitted for this question - this might be caused by \
+    defaultMessage:
+      'There is no answer submitted for this question - this might be caused by \
                     the addition of this question after the submission is submitted.',
   },
   rendererNotImplemented: {
     id: 'course.assessment.submission.rendererNotImplemented',
-    defaultMessage: 'The display for this question type has not been implemented yet.',
+    defaultMessage:
+      'The display for this question type has not been implemented yet.',
   },
   noPastAnswers: {
     id: 'course.assessment.submission.noPastAnswers',
@@ -51,25 +62,16 @@ const styles = {
 };
 
 class SubmissionAnswer extends Component {
-  static propTypes = {
-    intl: intlShape.isRequired,
-    handleToggleViewHistoryMode: PropTypes.func.isRequired,
-    historyQuestions: PropTypes.objectOf(historyQuestionShape),
-    questionsFlags: PropTypes.objectOf(questionFlagsShape),
-    readOnly: PropTypes.bool,
-    question: questionShape,
-    answerId: PropTypes.number,
-    graderView: PropTypes.bool,
-  };
-
-  static defaultProps = {
-    readOnly: false,
-  };
-
   getRenderer(question) {
     const {
-      MultipleChoice, MultipleResponse, TextResponse, Comprehension, FileUpload,
-      Programming, VoiceResponse, Scribing,
+      MultipleChoice,
+      MultipleResponse,
+      TextResponse,
+      Comprehension,
+      FileUpload,
+      Programming,
+      VoiceResponse,
+      Scribing,
     } = questionTypes;
     const { viewHistory } = question;
 
@@ -121,31 +123,52 @@ class SubmissionAnswer extends Component {
   }
 
   renderHistoryToggle(question) {
-    const { handleToggleViewHistoryMode, historyQuestions, questionsFlags, intl } = this.props;
+    const {
+      handleToggleViewHistoryMode,
+      historyQuestions,
+      questionsFlags,
+      intl,
+    } = this.props;
     const { id, viewHistory, canViewHistory, submissionQuestionId } = question;
     const historyQuestion = historyQuestions[id];
-    const noPastAnswers = historyQuestion ? historyQuestion.answerIds.length === 0 : true;
-    const answersLoaded = historyQuestion ? historyQuestion.pastAnswersLoaded : false;
+    const noPastAnswers = historyQuestion
+      ? historyQuestion.answerIds.length === 0
+      : true;
+    const answersLoaded = historyQuestion
+      ? historyQuestion.pastAnswersLoaded
+      : false;
     const isLoading = historyQuestion ? historyQuestion.isLoading : false;
-    const isAutograding = questionsFlags[id] ? questionsFlags[id].isAutograding : false;
+    const isAutograding = questionsFlags[id]
+      ? questionsFlags[id].isAutograding
+      : false;
     const disabled = noPastAnswers || isLoading || isAutograding;
 
     if (canViewHistory) {
       return (
         <div style={styles.containerStyle}>
-          {isLoading ? <CircularProgress size={30} style={styles.progressStyle} /> : null}
+          {isLoading ? (
+            <CircularProgress size={30} style={styles.progressStyle} />
+          ) : null}
           <Toggle
             className="toggle-history"
             label={intl.formatMessage(translations.viewPastAnswers)}
             style={styles.toggleStyle}
             toggled={viewHistory}
             disabled={disabled}
-            onToggle={() => handleToggleViewHistoryMode(!viewHistory, submissionQuestionId, id, answersLoaded)}
+            onToggle={() =>
+              handleToggleViewHistoryMode(
+                !viewHistory,
+                submissionQuestionId,
+                id,
+                answersLoaded,
+              )
+            }
           />
-          {noPastAnswers
-            ? <div style={{ float: 'right' }}><FormattedMessage {...translations.noPastAnswers} /></div>
-            : null
-          }
+          {noPastAnswers ? (
+            <div style={{ float: 'right' }}>
+              <FormattedMessage {...translations.noPastAnswers} />
+            </div>
+          ) : null}
         </div>
       );
     }
@@ -153,22 +176,44 @@ class SubmissionAnswer extends Component {
   }
 
   render() {
-    const { readOnly, question, answerId, graderView } = this.props;
-
+    const { readOnly, showMcqMrqSolution, question, answerId, graderView } =
+      this.props;
     const renderer = this.getRenderer(question);
 
     return (
       <>
-        <h3 style={{ display: 'inline-block' }}>
-          {question.displayTitle}
-        </h3>
+        <h3 style={{ display: 'inline-block' }}>{question.displayTitle}</h3>
         {this.renderHistoryToggle(question)}
         <div dangerouslySetInnerHTML={{ __html: question.description }} />
         <hr />
-        { answerId ? renderer(question, readOnly, answerId, graderView) : this.renderMissingAnswerPanel() }
+        {answerId
+          ? renderer({
+              question,
+              readOnly,
+              answerId,
+              graderView,
+              showMcqMrqSolution,
+            })
+          : this.renderMissingAnswerPanel()}
       </>
     );
   }
 }
+
+SubmissionAnswer.propTypes = {
+  intl: intlShape.isRequired,
+  handleToggleViewHistoryMode: PropTypes.func.isRequired,
+  historyQuestions: PropTypes.objectOf(historyQuestionShape),
+  questionsFlags: PropTypes.objectOf(questionFlagsShape),
+  readOnly: PropTypes.bool,
+  graderView: PropTypes.bool,
+  showMcqMrqSolution: PropTypes.bool,
+  question: questionShape,
+  answerId: PropTypes.number,
+};
+
+SubmissionAnswer.defaultProps = {
+  readOnly: false,
+};
 
 export default injectIntl(SubmissionAnswer);

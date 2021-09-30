@@ -30,12 +30,20 @@ function PostMenu(props) {
   return (
     <div style={{ float: 'right' }}>
       <IconMenu
-        iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+        iconButtonElement={
+          <IconButton>
+            <MoreVertIcon />
+          </IconButton>
+        }
         anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
         targetOrigin={{ horizontal: 'right', vertical: 'top' }}
       >
-        {props.canUpdate && <MenuItem primaryText="Edit" onClick={props.onEdit} />}
-        {props.canDelete && <MenuItem primaryText="Delete" onClick={props.onDelete} />}
+        {props.canUpdate && (
+          <MenuItem primaryText="Edit" onClick={props.onEdit} />
+        )}
+        {props.canDelete && (
+          <MenuItem primaryText="Delete" onClick={props.onDelete} />
+        )}
       </IconMenu>
     </div>
   );
@@ -60,7 +68,10 @@ function mapDispatchToProps(dispatch, ownProps) {
   };
 }
 
-const PostMenuContainer = connect(mapStateToProps, mapDispatchToProps)(PostMenu);
+const PostMenuContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(PostMenu);
 
 PostMenuContainer.propTypes = containerPropTypes;
 

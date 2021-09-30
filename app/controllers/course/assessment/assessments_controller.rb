@@ -50,9 +50,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
 
   # Reorder questions for an assessment
   def reorder
-    unless valid_ordering?(question_order_ids)
-      raise ArgumentError, 'Invalid ordering for assessment questions'
-    end
+    raise ArgumentError, 'Invalid ordering for assessment questions' unless valid_ordering?(question_order_ids)
 
     Course::QuestionAssessment.transaction do
       question_order_ids.each_with_index do |id, index|
@@ -88,14 +86,14 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
 
   def assessment_params
     base_params = [:title, :description, :base_exp, :time_bonus_exp, :start_at, :end_at, :tab_id,
-                   :bonus_end_at, :published, :autograded, :show_private, :show_evaluation,
-                   :use_public, :use_private, :use_evaluation, :has_personal_times,
-                   :affects_personal_times]
-    if autograded?
-      base_params += [:skippable, :allow_partial_submission, :show_mcq_answer]
-    else
-      base_params += [:view_password, :session_password, :tabbed_view, :delayed_grade_publication]
-    end
+                   :bonus_end_at, :published, :autograded, :show_mcq_mrq_solution, :show_private,
+                   :show_evaluation, :use_public, :use_private, :use_evaluation, :has_personal_times,
+                   :affects_personal_times, :block_student_viewing_after_submitted]
+    base_params += if autograded?
+                     [:skippable, :allow_partial_submission, :show_mcq_answer]
+                   else
+                     [:view_password, :session_password, :tabbed_view, :delayed_grade_publication]
+                   end
     params.require(:assessment).permit(*base_params, folder_params)
   end
 

@@ -3,8 +3,7 @@ class Course::Forum::Search
   include ActiveModel::Model
   include ActiveModel::Validations
 
-  attr_reader :course_user_id, :course_user
-  attr_reader :start_time, :end_time
+  attr_reader :course_user_id, :course_user, :start_time, :end_time
 
   validates :course_user_id, presence: true
   validates :start_time, presence: true

@@ -9,7 +9,9 @@ import VideoPlayer from './submission/containers/VideoPlayer';
 $(document).ready(() => {
   const mountNode = document.getElementById('video-overall-stats');
 
-  if (!mountNode) { return; }
+  if (!mountNode) {
+    return;
+  }
 
   const data = mountNode.getAttribute('data');
   const { statistics, video } = JSON.parse(data);
@@ -24,6 +26,6 @@ $(document).ready(() => {
       <hr />
       <HeatMap {...statistics} />
     </ProviderWrapper>,
-    mountNode
+    mountNode,
   );
 });

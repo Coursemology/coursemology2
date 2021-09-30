@@ -28,7 +28,7 @@ class Course::AnnouncementsController < Course::ComponentController
   end
 
   def update #:nodoc:
-    if @announcement.update_attributes(announcement_params)
+    if @announcement.update(announcement_params)
       redirect_to course_announcements_path(current_course),
                   success: t('.success', title: @announcement.title)
     else

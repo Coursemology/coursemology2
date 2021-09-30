@@ -20,6 +20,6 @@ DeleteConfirmation.propTypes = {
   }).isRequired,
 };
 
-export default connect(state => ({
+export default connect((state) => ({
   deleteConfirmation: state.deleteConfirmation,
 }))(DeleteConfirmation);
