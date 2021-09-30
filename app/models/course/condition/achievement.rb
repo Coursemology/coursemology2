@@ -76,7 +76,6 @@ class Course::Condition::Achievement < ApplicationRecord
 
     # Workaround, pending the squeel bugfix (activerecord-hackery/squeel#390) that will allow
     # allow the above query to work without #reload
-    # TODO: use squeel
     Course::Achievement.joins(<<-SQL)
       INNER JOIN
         (SELECT cca.achievement_id
