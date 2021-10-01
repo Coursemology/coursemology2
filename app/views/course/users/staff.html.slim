@@ -55,6 +55,6 @@ div.users
                   = fa_icon 'save'.freeze
                 = delete_button([current_course, f.object],
                         { data: { confirm: t('course.users.destroy.confirm',
-                                                role: t("course.users.role.#{user.role}"),
+                                                role: t("course.users.role.#{user.role}").downcase,
                                                 name: f.object.user.name,
                                                 email: f.object.user.email) } })
