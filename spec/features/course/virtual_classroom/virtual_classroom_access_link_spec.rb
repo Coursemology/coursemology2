@@ -36,7 +36,7 @@ RSpec.feature 'Course: VirtualClassrooms', js: true do
         expect(page).not_to have_selector(virtual_classroom_eid(not_started_virtual_classroom))
         expect(page).to have_selector(valid_virtual_classroom_eid)
         page.find(valid_virtual_classroom_eid).click
-        wait_for_ajax
+        wait_for_axios
         expect(page).to have_selector("#lec-link-#{valid_virtual_classroom.id}")
         valid_virtual_classroom.reload
         expect(valid_virtual_classroom.instructor_classroom_link).to be_truthy
@@ -45,7 +45,7 @@ RSpec.feature 'Course: VirtualClassrooms', js: true do
       scenario 'I can fetch recorded videos if they exist' do
         visit course_virtual_classrooms_path(course)
         page.find("#lec-#{course.id}-#{ended_virtual_classroom.id}-list").click
-        wait_for_ajax
+        wait_for_axios
         expect(page).to have_selector('.recorded-video-link')
       end
     end
@@ -62,7 +62,7 @@ RSpec.feature 'Course: VirtualClassrooms', js: true do
         # learner should be able to generate link now
         visit course_virtual_classrooms_path(course)
         page.find(valid_virtual_classroom_eid).click
-        wait_for_ajax
+        wait_for_axios
         expect(page).to have_selector("#lec-link-#{valid_virtual_classroom.id}")
         valid_virtual_classroom.reload
         # Make sure link remains as instructor link
