@@ -17,6 +17,7 @@ en:
         accepted_header: 'Accepted Invitations'
         resend_button: 'Resend All Invitations'
       destroy:
+        confirm: 'Delete invitation to %{role}: %{name} (%{email})?'
         success: 'Invitation to %{name} was deleted.'
       course_user_invitations:
         invitation_code: 'Invitation Code'

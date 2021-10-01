@@ -14,7 +14,11 @@
                   title: t('.resend_tooltip') do
           = fa_icon 'envelope'.freeze
         = delete_button([current_course, invitation],
-          class: 'btn-sm', title: t('.delete_tooltip')) do
+                { class: 'btn-sm',
+                  title: t('.delete_tooltip'),
+                  data: { confirm: t('course.user_invitations.destroy.confirm',
+                                        role: t("course.users.role.#{invitation.role}").downcase,
+                                        name: invitation.name, email: invitation.email) } }) do
           = fa_icon 'close'.freeze
   - else
     td = t('course.users.status.accepted')

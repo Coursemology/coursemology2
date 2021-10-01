@@ -27,6 +27,7 @@ en:
       update:
         success: 'Record for %{name} has been updated.'
       destroy:
+        confirm: 'Delete %{role}: %{name} (%{email})?'
         success: 'Deleted %{role} registration from %{email}.'
       students:
         header: 'Students'
