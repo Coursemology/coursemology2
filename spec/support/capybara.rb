@@ -35,6 +35,12 @@ module Capybara::TestGroupHelpers
       end
     end
 
+    def wait_for_axios
+      Timeout.timeout(Capybara.default_max_wait_time) do
+        sleep 0.1 until page.evaluate_script('window.pendingRequestCount').zero?
+      end
+    end
+
     def accept_confirm_dialog
       expect(page).to have_selector('button.confirm-btn')
       find('button.confirm-btn').click
