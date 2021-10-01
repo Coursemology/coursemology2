@@ -155,7 +155,7 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments', j
     context 'As a Course Staff' do
       let(:user) { create(:course_teaching_assistant, course: course).user }
 
-      pending "I can grade the student's work" do
+      scenario "I can grade the student's work" do
         mrq_questions.each { |q| q.attempt(submission).save! }
         submission.finalise!
         submission.save!
