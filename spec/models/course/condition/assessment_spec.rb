@@ -43,8 +43,6 @@ RSpec.describe Course::Condition::Assessment, type: :model do
         end
       end
 
-      # TODO: remove this test when Course::Condition::Assessment#required_assessments_for uses
-      # squeel.
       context 'when an assessment is required by another conditional with the same id' do
         subject do
           id = Time.now.to_i

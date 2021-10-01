@@ -88,7 +88,6 @@ class Course::Condition::Survey < ApplicationRecord
 
     # Workaround, pending the squeel bugfix (activerecord-hackery/squeel#390) that will allow
     # allow the above query to work without #reload
-    # TODO: use squeel
     Course::Survey.joins(<<-SQL)
       INNER JOIN
         (SELECT cca.survey_id

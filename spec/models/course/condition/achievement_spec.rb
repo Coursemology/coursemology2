@@ -38,8 +38,6 @@ RSpec.describe Course::Condition::Achievement, type: :model do
         end
       end
 
-      # TODO: remove this test when Course::Condition::Achievement#required_achievements_for uses
-      # squeel.
       context 'when an achievement is required by another conditional with the same id' do
         subject do
           id = Time.now.to_i
