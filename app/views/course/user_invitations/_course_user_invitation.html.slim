@@ -17,7 +17,7 @@
                 { class: 'btn-sm',
                   title: t('.delete_tooltip'),
                   data: { confirm: t('course.user_invitations.destroy.confirm',
-                                        role: t("course.users.role.#{invitation.role}"),
+                                        role: t("course.users.role.#{invitation.role}").downcase,
                                         name: invitation.name, email: invitation.email) } }) do
           = fa_icon 'close'.freeze
   - else
