@@ -1,0 +1,13 @@
+= page_header t('.resend')
+
+= simple_form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f|
+  = f.error_notification
+  = f.full_error :confirmation_token
+
+  div.form-inputs
+    = f.input :email, required: true, autofocus: true, value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email), input_html: { autocomplete: "email" }
+
+  div.form-actions
+    = f.button :submit, t('.resend')
+
+= render 'devise/shared/links'
