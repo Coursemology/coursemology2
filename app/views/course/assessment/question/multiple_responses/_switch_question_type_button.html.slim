@@ -5,14 +5,15 @@
     button.btn.btn-default type='button'
         => button_text
 - else
-  - warning_text = multiple_choice ? t('.confirm_switch_to_mrq') : t('.confirm_switch_to_mcq')
-  - warning_text = multiple_response_question.answers&.length > 0 ? warning_text : t('.no_answer')
+  - question_number = multiple_response_question.question_number
+  - warning_text = multiple_choice ? t('.confirm_switch_to_mrq', number: question_number) : t('.confirm_switch_to_mcq', number: question_number)
+  - warning_text = multiple_response_question.answers&.length > 0 ? warning_text : t('.no_answer', number: question_number)
   - data = (multiple_response_question.answers&.length > 0 ? \
              { confirm: warning_text,
                confirm_text: 'Unsubmit Submissions and Switch',
                confirm_custom: 'unsubmit=false',
                confirm_custom_text: 'Retain Submissions and Switch' } : \
-              { confirm: t('.no_answer') })
+              { confirm: warning_text })
   = link_to url_for([current_course, assessment, multiple_response_question,
                                 'multiple_choice' => !multiple_choice,
                                 'redirect_to_assessment_show' => redirect_to_assessment_show]),
