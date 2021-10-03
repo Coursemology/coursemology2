@@ -8,6 +8,7 @@ import CircularProgress from 'material-ui/CircularProgress';
 import Avatar from 'material-ui/Avatar';
 import ActionAssignment from 'material-ui/svg-icons/action/assignment';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
+import ReactTooltip from 'react-tooltip';
 
 const styles = {
   root: {
@@ -38,6 +39,11 @@ const translations = defineMessages({
     id: 'course.material.uploading',
     defaultMessage: 'Uploading',
   },
+  disableDelete: {
+    id: 'course.material.disableDelete',
+    defaultMessage:
+      'This action is unavailable as the Materials Component is disabled in the Admin Settings',
+  },
 });
 
 const propTypes = {
@@ -47,6 +53,7 @@ const propTypes = {
   onMaterialDelete: PropTypes.func,
   deleting: PropTypes.bool,
   uploading: PropTypes.bool,
+  disabled: PropTypes.bool,
 };
 
 class Material extends React.Component {
@@ -57,13 +64,25 @@ class Material extends React.Component {
   };
 
   renderIcon() {
+    const { disabled } = this.props;
     if (this.props.deleting || this.props.uploading) {
       return <CircularProgress size={24} style={styles.iconButton} />;
     }
 
     return (
-      <IconButton onClick={this.onDelete} style={styles.iconButton}>
-        <DeleteIcon />
+      <IconButton
+        onClick={this.onDelete}
+        style={styles.iconButton}
+        disabled={disabled}
+      >
+        <DeleteIcon
+          data-tip
+          data-for="delete-file-button"
+          data-tip-disable={!disabled}
+        />
+        <ReactTooltip id="delete-file-button">
+          <FormattedMessage {...translations.disableDelete} />
+        </ReactTooltip>
       </IconButton>
     );
   }

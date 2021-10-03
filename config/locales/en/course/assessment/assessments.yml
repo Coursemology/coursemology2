@@ -44,6 +44,8 @@ en:
           condition_not_satisfied: >
             You must fulfill the following requirements before you can attempt this assessment:
           finish_to_unlock: 'Finish to Unlock'
+          materials_disabled: 'Enable material component in the components tab of course setting
+            to gain access to this file.'
           files: 'Files'
           questions: 'Questions'
           new_question:
