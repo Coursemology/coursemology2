@@ -19,6 +19,17 @@ jobs:
       # Checkout submodules
       - run: git submodule update --init --recursive
 
+      # Update Node.js to version 14 LTS
+      - run:
+          name: 'Update Node.js and npm'
+          command: |
+            curl -sSL "https://nodejs.org/dist/v14.17.6/node-v14.17.6-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v14.17.6-linux-x64/bin/node
+            curl https://www.npmjs.com/install.sh | sudo bash
+
+      - run:
+          name: Check current version of node
+          command: node -v
+
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -79,6 +90,17 @@ jobs:
       # Checkout submodules
       - run: git submodule update --init --recursive
 
+      # Update Node.js to version 14 LTS
+      - run:
+          name: 'Update Node.js and npm'
+          command: |
+            curl -sSL "https://nodejs.org/dist/v14.17.6/node-v14.17.6-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v14.17.6-linux-x64/bin/node
+            curl https://www.npmjs.com/install.sh | sudo bash
+
+      - run:
+          name: Check current version of node
+          command: node -v
+
       - restore_cache:
           keys:
             - v2-dependencies-{{ checksum "Gemfile.lock" }}
@@ -100,7 +122,7 @@ jobs:
           command: |
             bundle exec rake db:setup
           environment:
-            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+            DATABASE_URL: 'postgres://ubuntu@localhost:5432/coursemology_test'
 
       # run tests!
       - run:
@@ -118,7 +140,7 @@ jobs:
               --format progress \
               $TEST_FILES
           environment:
-            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+            DATABASE_URL: 'postgres://ubuntu@localhost:5432/coursemology_test'
 
       # collect reports
       - store_test_results:
@@ -141,6 +163,17 @@ jobs:
 
       # Checkout submodules
       - run: git submodule update --init --recursive
+
+      # Update Node.js to version 14 LTS
+      - run:
+          name: 'Update Node.js and npm'
+          command: |
+            curl -sSL "https://nodejs.org/dist/v14.17.6/node-v14.17.6-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v14.17.6-linux-x64/bin/node
+            curl https://www.npmjs.com/install.sh | sudo bash
+
+      - run:
+          name: Check current version of node
+          command: node -v
 
       - restore_cache:
           keys:
@@ -166,6 +199,17 @@ jobs:
 
       # Checkout submodules
       - run: git submodule update --init --recursive
+
+      # Update Node.js to version 14 LTS
+      - run:
+          name: 'Update Node.js and npm'
+          command: |
+            curl -sSL "https://nodejs.org/dist/v14.17.6/node-v14.17.6-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v14.17.6-linux-x64/bin/node
+            curl https://www.npmjs.com/install.sh | sudo bash
+
+      - run:
+          name: Check current version of node
+          command: node -v
 
       - restore_cache:
           keys:
@@ -204,6 +248,17 @@ jobs:
       # Checkout submodules
       - run: git submodule update --init --recursive
 
+      # Update Node.js to version 14 LTS
+      - run:
+          name: 'Update Node.js and npm'
+          command: |
+            curl -sSL "https://nodejs.org/dist/v14.17.6/node-v14.17.6-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v14.17.6-linux-x64/bin/node
+            curl https://www.npmjs.com/install.sh | sudo bash
+
+      - run:
+          name: Check current version of node
+          command: node -v
+
       - restore_cache:
           keys:
             - v2-dependencies-{{ checksum "Gemfile.lock" }}
@@ -216,7 +271,7 @@ jobs:
           command: |
             bundle exec rake db:setup
           environment:
-            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+            DATABASE_URL: 'postgres://ubuntu@localhost:5432/coursemology_test'
 
       # run i18n checks!
       - run:
@@ -226,7 +281,7 @@ jobs:
             bundle exec i18n-tasks missing
             bundle exec rake factory_bot:lint
           environment:
-            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+            DATABASE_URL: 'postgres://ubuntu@localhost:5432/coursemology_test'
 workflows:
   version: 2
   build_and_test_and_lint:
