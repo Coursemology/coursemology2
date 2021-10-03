@@ -47,27 +47,6 @@ const translations = defineMessages({
 });
 
 class Question extends Component {
-  adminFunctions() {
-    const { intl, question } = this.props;
-    const functions = [];
-
-    if (question.canUpdate) {
-      functions.push({
-        label: intl.formatMessage(translations.editQuestion),
-        handler: this.showEditQuestionForm,
-      });
-    }
-
-    if (question.canDelete) {
-      functions.push({
-        label: intl.formatMessage(translations.deleteQuestion),
-        handler: this.deleteQuestionHandler,
-      });
-    }
-
-    return functions;
-  }
-
   deleteQuestionHandler = () => {
     const { dispatch, question, intl } = this.props;
     const { deleteSurveyQuestion } = questionActions;
@@ -106,6 +85,27 @@ class Question extends Component {
       updateSurveyQuestion(data.id, payload, successMessage, failureMessage),
     );
   };
+
+  adminFunctions() {
+    const { intl, question } = this.props;
+    const functions = [];
+
+    if (question.canUpdate) {
+      functions.push({
+        label: intl.formatMessage(translations.editQuestion),
+        handler: this.showEditQuestionForm,
+      });
+    }
+
+    if (question.canDelete) {
+      functions.push({
+        label: intl.formatMessage(translations.deleteQuestion),
+        handler: this.deleteQuestionHandler,
+      });
+    }
+
+    return functions;
+  }
 
   render() {
     const {

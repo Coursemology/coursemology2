@@ -84,18 +84,6 @@ class SubmissionEditStepForm extends Component {
     };
   }
 
-  onMouseEnter(toolType) {
-    this.setState({
-      hoveredToolTip: toolType,
-    });
-  }
-
-  onMouseLeave = () => {
-    this.setState({
-      hoveredToolTip: '',
-    });
-  };
-
   handleNext() {
     const { maxStep, stepIndex } = this.state;
     this.setState({
@@ -114,6 +102,18 @@ class SubmissionEditStepForm extends Component {
       });
     }
   }
+
+  onMouseEnter(toolType) {
+    this.setState({
+      hoveredToolTip: toolType,
+    });
+  }
+
+  onMouseLeave = () => {
+    this.setState({
+      hoveredToolTip: '',
+    });
+  };
 
   shouldDisableContinueButton() {
     const { stepIndex } = this.state;

@@ -134,6 +134,13 @@ class ProgrammingQuestionForm extends Component {
     );
   }
 
+  handleChange(field, value) {
+    this.props.actions.updateProgrammingQuestion(
+      field,
+      value === '' ? null : value,
+    );
+  }
+
   onPackageUploadFileChange = (e) => {
     const files = e.target.files;
     const filename = files.length === 0 ? null : files[0].name;
@@ -193,13 +200,6 @@ class ProgrammingQuestionForm extends Component {
 
     this.props.actions.submitForm(url, method, formData, failureMessage);
   };
-
-  handleChange(field, value) {
-    this.props.actions.updateProgrammingQuestion(
-      field,
-      value === '' ? null : value,
-    );
-  }
 
   languageHandler(field) {
     return (id) => {
