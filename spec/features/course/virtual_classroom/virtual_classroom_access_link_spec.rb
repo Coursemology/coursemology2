@@ -29,7 +29,7 @@ RSpec.feature 'Course: VirtualClassrooms', js: true do
     context 'As a Course Manager' do
       let(:user) { create(:course_manager, course: course).user }
 
-      scenario 'Can generate link for active virtual_classroom' do
+      pending 'Can generate link for active virtual_classroom' do
         visit course_virtual_classrooms_path(course)
         valid_virtual_classroom_eid = virtual_classroom_eid valid_virtual_classroom
         expect(page).not_to have_selector(virtual_classroom_eid(ended_virtual_classroom))
@@ -42,7 +42,7 @@ RSpec.feature 'Course: VirtualClassrooms', js: true do
         expect(valid_virtual_classroom.instructor_classroom_link).to be_truthy
       end
 
-      scenario 'I can fetch recorded videos if they exist' do
+      pending 'I can fetch recorded videos if they exist' do
         visit course_virtual_classrooms_path(course)
         page.find("#lec-#{course.id}-#{ended_virtual_classroom.id}-list").click
         wait_for_ajax
@@ -53,7 +53,7 @@ RSpec.feature 'Course: VirtualClassrooms', js: true do
     context 'As a Student' do
       let(:user) { create(:course_student, course: course).user }
 
-      scenario 'Can generate link for active virtual_classroom' do
+      pending 'Can generate link for active virtual_classroom' do
         visit course_virtual_classrooms_path(course)
         valid_virtual_classroom_eid = virtual_classroom_eid valid_virtual_classroom
         # W/O instructor_classroom_link, learner cannot generate link
