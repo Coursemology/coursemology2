@@ -132,7 +132,7 @@ ActiveRecord::Schema.define(version: 2021_09_14_114834) do
     t.index ["answer_id"], name: "fk__course_assessment_answer_programming_files_answer_id"
   end
 
-  create_table "course_assessment_answer_programming_test_results", id: :integer, force: :cascade do |t|
+  create_table "course_assessment_answer_programming_test_results", id: :serial, force: :cascade do |t|
     t.integer "auto_grading_id", null: false
     t.integer "test_case_id"
     t.boolean "passed", null: false

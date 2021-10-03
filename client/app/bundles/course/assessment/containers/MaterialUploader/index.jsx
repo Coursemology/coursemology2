@@ -9,6 +9,7 @@ import translations from './translations.intl';
 const propTypes = {
   folderId: PropTypes.number.isRequired,
   materials: typeMaterial,
+  enableMaterialsAction: PropTypes.bool.isRequired,
 };
 
 class MaterialUploader extends Component {
@@ -132,6 +133,7 @@ class MaterialUploader extends Component {
         notification={this.state.notification}
         onMaterialDelete={this.onMaterialDelete}
         onFileInputChange={this.onFileInputChange}
+        enableMaterialsAction={this.props.enableMaterialsAction}
       />
     );
   }

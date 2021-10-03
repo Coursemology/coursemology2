@@ -229,7 +229,7 @@ gem 'rubyzip', require: 'zip'
 gem 'nokogiri', '>= 1.8.1'
 
 # Polyglot support
-gem 'coursemology-polyglot', git: 'https://github.com/Coursemology/polyglot.git', branch: 'xtang/rails_6'
+gem 'coursemology-polyglot', git: 'https://github.com/Coursemology/polyglot.git'
 
 # To assist with bulk inserts into database
 gem 'activerecord-import', '>= 0.2.0'

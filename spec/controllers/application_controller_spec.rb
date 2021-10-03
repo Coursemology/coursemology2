@@ -222,7 +222,9 @@ RSpec.describe ApplicationController, type: :controller do
     end
 
     it 'returns HTTP status 403' do
-      expect { get :index }.to_not raise_error ActionController::InvalidAuthenticityToken
+      # Replaced specific error check due to potential false positives
+      # expect { get :index }.to_not raise_error ActionController::InvalidAuthenticityToken
+      expect { get :index }.to_not raise_error
       expect(response.status).to eq(403)
     end
 

@@ -52,7 +52,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions', js: true do
         [submitted_submission, attempting_submission, published_submission, graded_submission].
           each do |submission|
           expect(page).to have_text(submission.course_user.name)
-          expect(page).to have_text(submission.current_points_awarded)
+          expect(page).to have_text(submission.current_points_awarded) if submission.current_points_awarded
         end
 
         # Phantom student did not attempt submissions

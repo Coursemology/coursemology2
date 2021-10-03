@@ -42,7 +42,7 @@ RSpec.feature 'Course: Administration: Administration' do
         click_button I18n.t('helpers.submit.course.update')
 
         expect(page).to have_selector('div.alert.alert-success')
-        expect(page).to have_content(course.logo.medium.url)
+        expect(page).to have_content(course.logo.medium.url) # TODO: This test is checking for nil right now.
         expect(course.reload.title).to eq(new_title)
         expect(course.reload.description).to eq(new_description)
       end

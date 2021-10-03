@@ -1,6 +1,11 @@
 - unless folder.materials.empty?
   - folder.materials.includes(:attachment_references).each do |material|
     div
-      = link_to [current_course, folder, material] do
+      - if enable_link
+        = link_to [current_course, folder, material] do
+          => fa_icon 'file-o'.freeze
+          = format_inline_text(material.name)
+      - elsif can?(:manage, @assessment)
         => fa_icon 'file-o'.freeze
-        = format_inline_text(material.name)
+        span title = tooltip_title data-toggle = 'tooltip' data-placement = 'right'
+          = material.name

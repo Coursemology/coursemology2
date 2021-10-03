@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, defineMessages } from 'react-intl';
 import { List } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import FlatButton from 'material-ui/FlatButton';
@@ -8,7 +8,16 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import NotificationBar, {
   notificationShape,
 } from 'lib/components/NotificationBar';
+import ReactTooltip from 'react-tooltip';
 import Material from './Material';
+
+const translations = defineMessages({
+  disableNewFile: {
+    id: 'course.material.disableNewFile',
+    defaultMessage:
+      'This action is unavailable as the Materials Component is disabled in the Admin Settings',
+  },
+});
 
 const propTypes = {
   materials: PropTypes.arrayOf(
@@ -30,6 +39,7 @@ const propTypes = {
     }),
   ),
   onFileInputChange: PropTypes.func,
+  enableMaterialsAction: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -53,8 +63,13 @@ const styles = {
 };
 
 const MaterialList = (props) => {
-  const { materials, uploadingMaterials, onMaterialDelete, onFileInputChange } =
-    props;
+  const {
+    materials,
+    uploadingMaterials,
+    onMaterialDelete,
+    onFileInputChange,
+    enableMaterialsAction,
+  } = props;
   const header = (
     <FormattedMessage
       id="course.assessment.MaterialList.uploadedFiles"
@@ -70,28 +85,47 @@ const MaterialList = (props) => {
       updatedAt={material.updated_at}
       deleting={material.deleting}
       onMaterialDelete={onMaterialDelete}
+      disabled={!enableMaterialsAction}
     />
   ));
 
   const uploadingMaterialNodes = uploadingMaterials.map((material) => (
-    <Material key={material.name} name={material.name} uploading />
+    <Material
+      key={material.name}
+      name={material.name}
+      uploading
+      disabled={!enableMaterialsAction}
+    />
   ));
 
   const newFileButton = (
-    <FlatButton
-      fullWidth
-      label="Add Files"
-      icon={<ContentAdd />}
-      containerElement="label"
-      style={styles.newFileButton}
-    >
-      <input
-        type="file"
-        multiple
-        style={styles.uploadInput}
-        onChange={onFileInputChange}
-      />
-    </FlatButton>
+    <>
+      <div
+        data-tip
+        data-for="add-files-button"
+        data-tip-disable={enableMaterialsAction}
+      >
+        <FlatButton
+          fullWidth
+          label="Add Files"
+          icon={<ContentAdd />}
+          containerElement="label"
+          style={styles.newFileButton}
+          disabled={!enableMaterialsAction}
+        >
+          <input
+            type="file"
+            multiple
+            style={styles.uploadInput}
+            onChange={onFileInputChange}
+            disabled={!enableMaterialsAction}
+          />
+        </FlatButton>
+      </div>
+      <ReactTooltip id="add-files-button">
+        <FormattedMessage {...translations.disableNewFile} />
+      </ReactTooltip>
+    </>
   );
 
   return (
@@ -106,7 +140,10 @@ const MaterialList = (props) => {
         {newFileButton}
       </List>
       <Divider />
-      <NotificationBar notification={props.notification} />
+      <NotificationBar
+        notification={props.notification}
+        autoHideDuration={5000}
+      />
     </>
   );
 };

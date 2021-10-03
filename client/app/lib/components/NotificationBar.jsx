@@ -24,7 +24,7 @@ export default class NotificationBar extends Component {
   }
 
   render() {
-    const { notification, ...options } = this.props;
+    const { notification, autoHideDuration = 2000, ...options } = this.props;
     const message = notification && notification.message;
     const errors = notification && notification.errors;
 
@@ -40,7 +40,7 @@ export default class NotificationBar extends Component {
       <Snackbar
         open={!!message}
         message={notificationNode}
-        autoHideDuration={2000}
+        autoHideDuration={autoHideDuration}
         {...options}
       />
     );
@@ -52,4 +52,5 @@ NotificationBar.propTypes = {
   // reference compare `===` is used and strings with same value will have the same reference.
   notification: notificationShape,
   // Other options are passed to the original implementation of the SnackBar.
+  autoHideDuration: PropTypes.number,
 };
