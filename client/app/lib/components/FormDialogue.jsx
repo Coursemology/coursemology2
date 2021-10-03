@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import Dialog from 'material-ui/Dialog';
@@ -18,7 +18,7 @@ const propTypes = {
   children: PropTypes.node,
 };
 
-class FormDialogue extends React.Component {
+class FormDialogue extends Component {
   constructor(props) {
     super(props);
 
@@ -26,6 +26,15 @@ class FormDialogue extends React.Component {
       discardConfirmationOpen: false,
     };
   }
+
+  handleDiscard = () => {
+    this.setState({ discardConfirmationOpen: false });
+    this.props.hideForm();
+  };
+
+  handleDiscardCancel = () => {
+    this.setState({ discardConfirmationOpen: false });
+  };
 
   handleFormClose = () => {
     const { hideForm, disabled, skipConfirmation } = this.props;
@@ -38,15 +47,6 @@ class FormDialogue extends React.Component {
     } else {
       this.setState({ discardConfirmationOpen: true });
     }
-  };
-
-  handleDiscardCancel = () => {
-    this.setState({ discardConfirmationOpen: false });
-  };
-
-  handleDiscard = () => {
-    this.setState({ discardConfirmationOpen: false });
-    this.props.hideForm();
   };
 
   render() {

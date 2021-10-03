@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Avatar from 'material-ui/Avatar';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
@@ -49,12 +49,12 @@ const styles = {
 };
 
 export default class CommentCard extends Component {
-  static formatDateTime(dateTime) {
-    return dateTime ? moment(dateTime).format('MMM DD, YYYY h:mma') : null;
-  }
-
   static editPostIdentifier(field) {
     return `edit_post_${field}`;
+  }
+
+  static formatDateTime(dateTime) {
+    return dateTime ? moment(dateTime).format('MMM DD, YYYY h:mma') : null;
   }
 
   static postIdentifier(field) {
@@ -74,20 +74,20 @@ export default class CommentCard extends Component {
     handleChange(nextValue);
   }
 
-  onSave() {
-    const { editValue } = this.props;
-    this.props.updateComment(editValue);
-    this.setState({ editMode: false });
+  onConfirmDelete() {
+    const { deleteComment } = this.props;
+    deleteComment();
+    this.setState({ deleteConfirmation: false });
   }
 
   onDelete() {
     this.setState({ deleteConfirmation: true });
   }
 
-  onConfirmDelete() {
-    const { deleteComment } = this.props;
-    deleteComment();
-    this.setState({ deleteConfirmation: false });
+  onSave() {
+    const { editValue } = this.props;
+    this.props.updateComment(editValue);
+    this.setState({ editMode: false });
   }
 
   toggleEditMode() {

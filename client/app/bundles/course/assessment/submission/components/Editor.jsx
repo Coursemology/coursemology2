@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import AceEditor from 'lib/components/redux-form/AceEditor';

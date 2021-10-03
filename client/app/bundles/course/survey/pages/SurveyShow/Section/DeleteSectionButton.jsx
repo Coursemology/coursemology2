@@ -1,4 +1,4 @@
-import React from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -21,7 +21,7 @@ const translations = defineMessages({
   },
 });
 
-class DeleteSectionButton extends React.PureComponent {
+class DeleteSectionButton extends PureComponent {
   deleteSectionHandler = () => {
     const { dispatch, sectionId } = this.props;
 

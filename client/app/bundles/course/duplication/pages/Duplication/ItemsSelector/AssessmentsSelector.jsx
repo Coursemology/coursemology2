@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -22,7 +22,15 @@ const translations = defineMessages({
   },
 });
 
-class AssessmentsSelector extends React.Component {
+class AssessmentsSelector extends Component {
+  categorySetAll = (category) => (value) => {
+    const { dispatch, categoryDisabled } = this.props;
+    if (!categoryDisabled) {
+      dispatch(setItemSelectedBoolean(CATEGORY, category.id, value));
+    }
+    category.tabs.forEach((tab) => this.tabSetAll(tab)(value));
+  };
+
   tabSetAll = (tab) => (value) => {
     const { dispatch, tabDisabled } = this.props;
     if (!tabDisabled) {
@@ -31,14 +39,6 @@ class AssessmentsSelector extends React.Component {
     tab.assessments.forEach((assessment) => {
       dispatch(setItemSelectedBoolean(ASSESSMENT, assessment.id, value));
     });
-  };
-
-  categorySetAll = (category) => (value) => {
-    const { dispatch, categoryDisabled } = this.props;
-    if (!categoryDisabled) {
-      dispatch(setItemSelectedBoolean(CATEGORY, category.id, value));
-    }
-    category.tabs.forEach((tab) => this.tabSetAll(tab)(value));
   };
 
   renderAssessmentTree(assessment) {
@@ -66,6 +66,33 @@ class AssessmentsSelector extends React.Component {
     );
   }
 
+  renderCategoryTree(category) {
+    const { dispatch, selectedItems, categoryDisabled } = this.props;
+    const { id, title, tabs } = category;
+    const checked = !!selectedItems[CATEGORY][id];
+
+    return (
+      <div key={id}>
+        <IndentedCheckbox
+          checked={checked}
+          disabled={categoryDisabled}
+          label={
+            <span>
+              <TypeBadge itemType={CATEGORY} />
+              {title}
+            </span>
+          }
+          onCheck={(e, value) =>
+            dispatch(setItemSelectedBoolean(CATEGORY, id, value))
+          }
+        >
+          <BulkSelectors callback={this.categorySetAll(category)} />
+        </IndentedCheckbox>
+        {tabs.map((tab) => this.renderTabTree(tab))}
+      </div>
+    );
+  }
+
   renderTabTree(tab) {
     const { dispatch, selectedItems, tabDisabled } = this.props;
     const { id, title, assessments } = tab;
@@ -90,33 +117,6 @@ class AssessmentsSelector extends React.Component {
           <BulkSelectors callback={this.tabSetAll(tab)} />
         </IndentedCheckbox>
         {assessments.map((assessment) => this.renderAssessmentTree(assessment))}
-      </div>
-    );
-  }
-
-  renderCategoryTree(category) {
-    const { dispatch, selectedItems, categoryDisabled } = this.props;
-    const { id, title, tabs } = category;
-    const checked = !!selectedItems[CATEGORY][id];
-
-    return (
-      <div key={id}>
-        <IndentedCheckbox
-          checked={checked}
-          disabled={categoryDisabled}
-          label={
-            <span>
-              <TypeBadge itemType={CATEGORY} />
-              {title}
-            </span>
-          }
-          onCheck={(e, value) =>
-            dispatch(setItemSelectedBoolean(CATEGORY, id, value))
-          }
-        >
-          <BulkSelectors callback={this.categorySetAll(category)} />
-        </IndentedCheckbox>
-        {tabs.map((tab) => this.renderTabTree(tab))}
       </div>
     );
   }

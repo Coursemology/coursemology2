@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
@@ -29,7 +29,7 @@ const styles = {
   },
 };
 
-class NotificationSettings extends React.Component {
+class NotificationSettings extends Component {
   handleComponentNotificationSettingUpdate = (setting, settingTitle) => {
     const { dispatch } = this.props;
     const { component, key, options } = setting;
@@ -52,6 +52,42 @@ class NotificationSettings extends React.Component {
       );
     };
   };
+
+  renderEmailSettingsTable() {
+    const { emailSettings } = this.props;
+
+    if (emailSettings.length < 1) {
+      return (
+        <Subheader>
+          <FormattedMessage {...translations.noEmailSettings} />
+        </Subheader>
+      );
+    }
+
+    return (
+      <Table>
+        <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+          <TableRow>
+            <TableHeaderColumn colSpan={2}>
+              <FormattedMessage {...adminTranslations.component} />
+            </TableHeaderColumn>
+            <TableHeaderColumn colSpan={3}>
+              <FormattedMessage {...translations.setting} />
+            </TableHeaderColumn>
+            <TableHeaderColumn colSpan={7}>
+              <FormattedMessage {...translations.description} />
+            </TableHeaderColumn>
+            <TableHeaderColumn>
+              <FormattedMessage {...translations.enabled} />
+            </TableHeaderColumn>
+          </TableRow>
+        </TableHeader>
+        <TableBody displayRowCheckbox={false}>
+          {emailSettings.map((item) => this.renderRow(item))}
+        </TableBody>
+      </Table>
+    );
+  }
 
   renderRow(setting) {
     const componentTitle =
@@ -88,42 +124,6 @@ class NotificationSettings extends React.Component {
           />
         </TableRowColumn>
       </TableRow>
-    );
-  }
-
-  renderEmailSettingsTable() {
-    const { emailSettings } = this.props;
-
-    if (emailSettings.length < 1) {
-      return (
-        <Subheader>
-          <FormattedMessage {...translations.noEmailSettings} />
-        </Subheader>
-      );
-    }
-
-    return (
-      <Table>
-        <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
-          <TableRow>
-            <TableHeaderColumn colSpan={2}>
-              <FormattedMessage {...adminTranslations.component} />
-            </TableHeaderColumn>
-            <TableHeaderColumn colSpan={3}>
-              <FormattedMessage {...translations.setting} />
-            </TableHeaderColumn>
-            <TableHeaderColumn colSpan={7}>
-              <FormattedMessage {...translations.description} />
-            </TableHeaderColumn>
-            <TableHeaderColumn>
-              <FormattedMessage {...translations.enabled} />
-            </TableHeaderColumn>
-          </TableRow>
-        </TableHeader>
-        <TableBody displayRowCheckbox={false}>
-          {emailSettings.map((item) => this.renderRow(item))}
-        </TableBody>
-      </Table>
     );
   }
 

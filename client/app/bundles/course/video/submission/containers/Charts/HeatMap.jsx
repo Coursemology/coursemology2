@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Bar } from 'react-chartjs-2';
@@ -88,7 +88,19 @@ const defaultProps = {
   onBarClick: () => {},
 };
 
-class HeatMap extends React.Component {
+class HeatMap extends Component {
+  static renderUnscaledChart(data, options) {
+    return (
+      <div style={{ width: '100%' }}>
+        <Bar
+          data={data}
+          options={options}
+          height={(window.innerHeight - heightOffset) * heightScale}
+        />
+      </div>
+    );
+  }
+
   mouseOptions = {
     onClick: (_, elements) => {
       if (elements.length < 1) {
@@ -151,18 +163,6 @@ class HeatMap extends React.Component {
             height={(window.innerHeight - heightOffset) * heightScale}
           />
         </div>
-      </div>
-    );
-  }
-
-  static renderUnscaledChart(data, options) {
-    return (
-      <div style={{ width: '100%' }}>
-        <Bar
-          data={data}
-          options={options}
-          height={(window.innerHeight - heightOffset) * heightScale}
-        />
       </div>
     );
   }

@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -30,7 +30,7 @@ const translations = defineMessages({
   },
 });
 
-class SurveyResults extends React.Component {
+class SurveyResults extends Component {
   constructor(props) {
     super(props);
     this.state = { includePhantoms: true };

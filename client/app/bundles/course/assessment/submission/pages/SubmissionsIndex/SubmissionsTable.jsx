@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/extensions, import/no-extraneous-dependencies, import/no-unresolved
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import ReactTooltip from 'react-tooltip';
@@ -47,9 +47,13 @@ const styles = {
   },
 };
 
-export default class SubmissionsTable extends React.Component {
+export default class SubmissionsTable extends Component {
   static formatDate(date) {
     return date ? moment(date).format('DD MMM HH:mm') : null;
+  }
+
+  static formatGrade(grade) {
+    return grade !== null ? grade.toFixed(1) : null;
   }
 
   static renderUnpublishedWarning(submission) {
@@ -65,10 +69,6 @@ export default class SubmissionsTable extends React.Component {
         </ReactTooltip>
       </span>
     );
-  }
-
-  static formatGrade(grade) {
-    return grade !== null ? grade.toFixed(1) : null;
   }
 
   getGradeString(submission) {
@@ -104,96 +104,6 @@ export default class SubmissionsTable extends React.Component {
           s.workflowState !== workflowStates.Attempting,
       )
     );
-  }
-
-  renderSubmissionWorkflowState(submission) {
-    const { courseId, assessmentId } = this.props;
-
-    if (submission.workflowState === workflowStates.Unstarted) {
-      return (
-        <div style={styles.unstartedText}>
-          <FormattedMessage {...translations[submission.workflowState]} />
-        </div>
-      );
-    }
-
-    return (
-      <>
-        {SubmissionsTable.renderUnpublishedWarning(submission)}
-        <a href={getEditSubmissionURL(courseId, assessmentId, submission.id)}>
-          <FormattedMessage {...translations[submission.workflowState]} />
-        </a>
-      </>
-    );
-  }
-
-  renderSubmissionLogsLink(submission) {
-    const { assessment, courseId, assessmentId } = this.props;
-
-    if (
-      !assessment.passwordProtected ||
-      !assessment.canViewLogs ||
-      !submission.id
-    )
-      return null;
-
-    return (
-      <div
-        className="submission-access-logs"
-        data-for={`access-logs-${submission.id}`}
-        data-tip
-      >
-        <a href={getSubmissionLogsURL(courseId, assessmentId, submission.id)}>
-          <HistoryIcon
-            style={{ color: submission.logCount > 1 ? red600 : blue600 }}
-          />
-          <ReactTooltip id={`access-logs-${submission.id}`} effect="solid">
-            <FormattedMessage {...submissionsTranslations.accessLogs} />
-          </ReactTooltip>
-        </a>
-      </div>
-    );
-  }
-
-  renderStudents() {
-    const { courseId, assessment, submissions } = this.props;
-
-    const tableCenterCellStyle = {
-      ...styles.tableCell,
-      ...styles.tableCenterCell,
-    };
-
-    return submissions.map((submission) => (
-      <TableRow className="submission-row" key={submission.courseStudent.id}>
-        <TableRowColumn style={styles.tableCell}>
-          <a href={getCourseUserURL(courseId, submission.courseStudent.id)}>
-            {submission.courseStudent.name}
-          </a>
-        </TableRowColumn>
-        <TableRowColumn style={tableCenterCellStyle}>
-          {this.renderSubmissionWorkflowState(submission)}
-        </TableRowColumn>
-        <TableRowColumn style={tableCenterCellStyle}>
-          {this.getGradeString(submission)}
-        </TableRowColumn>
-        {assessment.gamified ? (
-          <TableRowColumn style={tableCenterCellStyle}>
-            {submission.pointsAwarded !== undefined
-              ? submission.pointsAwarded
-              : null}
-          </TableRowColumn>
-        ) : null}
-        <TableRowColumn style={tableCenterCellStyle}>
-          {SubmissionsTable.formatDate(submission.dateSubmitted)}
-        </TableRowColumn>
-        <TableRowColumn style={tableCenterCellStyle}>
-          {SubmissionsTable.formatDate(submission.dateGraded)}
-        </TableRowColumn>
-        <TableRowColumn style={{ width: 48, padding: 12 }}>
-          {this.renderSubmissionLogsLink(submission)}
-        </TableRowColumn>
-      </TableRow>
-    ));
   }
 
   renderDownloadDropdown() {
@@ -249,6 +159,96 @@ export default class SubmissionsTable extends React.Component {
           onClick={downloadStatisticsDisabled ? null : handleDownloadStatistics}
         />
       </IconMenu>
+    );
+  }
+
+  renderStudents() {
+    const { courseId, assessment, submissions } = this.props;
+
+    const tableCenterCellStyle = {
+      ...styles.tableCell,
+      ...styles.tableCenterCell,
+    };
+
+    return submissions.map((submission) => (
+      <TableRow className="submission-row" key={submission.courseStudent.id}>
+        <TableRowColumn style={styles.tableCell}>
+          <a href={getCourseUserURL(courseId, submission.courseStudent.id)}>
+            {submission.courseStudent.name}
+          </a>
+        </TableRowColumn>
+        <TableRowColumn style={tableCenterCellStyle}>
+          {this.renderSubmissionWorkflowState(submission)}
+        </TableRowColumn>
+        <TableRowColumn style={tableCenterCellStyle}>
+          {this.getGradeString(submission)}
+        </TableRowColumn>
+        {assessment.gamified ? (
+          <TableRowColumn style={tableCenterCellStyle}>
+            {submission.pointsAwarded !== undefined
+              ? submission.pointsAwarded
+              : null}
+          </TableRowColumn>
+        ) : null}
+        <TableRowColumn style={tableCenterCellStyle}>
+          {SubmissionsTable.formatDate(submission.dateSubmitted)}
+        </TableRowColumn>
+        <TableRowColumn style={tableCenterCellStyle}>
+          {SubmissionsTable.formatDate(submission.dateGraded)}
+        </TableRowColumn>
+        <TableRowColumn style={{ width: 48, padding: 12 }}>
+          {this.renderSubmissionLogsLink(submission)}
+        </TableRowColumn>
+      </TableRow>
+    ));
+  }
+
+  renderSubmissionLogsLink(submission) {
+    const { assessment, courseId, assessmentId } = this.props;
+
+    if (
+      !assessment.passwordProtected ||
+      !assessment.canViewLogs ||
+      !submission.id
+    )
+      return null;
+
+    return (
+      <div
+        className="submission-access-logs"
+        data-for={`access-logs-${submission.id}`}
+        data-tip
+      >
+        <a href={getSubmissionLogsURL(courseId, assessmentId, submission.id)}>
+          <HistoryIcon
+            style={{ color: submission.logCount > 1 ? red600 : blue600 }}
+          />
+          <ReactTooltip id={`access-logs-${submission.id}`} effect="solid">
+            <FormattedMessage {...submissionsTranslations.accessLogs} />
+          </ReactTooltip>
+        </a>
+      </div>
+    );
+  }
+
+  renderSubmissionWorkflowState(submission) {
+    const { courseId, assessmentId } = this.props;
+
+    if (submission.workflowState === workflowStates.Unstarted) {
+      return (
+        <div style={styles.unstartedText}>
+          <FormattedMessage {...translations[submission.workflowState]} />
+        </div>
+      );
+    }
+
+    return (
+      <>
+        {SubmissionsTable.renderUnpublishedWarning(submission)}
+        <a href={getEditSubmissionURL(courseId, assessmentId, submission.id)}>
+          <FormattedMessage {...translations[submission.workflowState]} />
+        </a>
+      </>
     );
   }
 

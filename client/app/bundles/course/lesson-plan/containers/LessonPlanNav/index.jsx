@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -22,7 +22,7 @@ const styles = {
   },
 };
 
-class LessonPlanNav extends React.Component {
+class LessonPlanNav extends Component {
   constructor(props) {
     super(props);
 

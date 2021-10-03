@@ -1,5 +1,5 @@
 /* eslint-disable new-cap */
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import { connect } from 'react-redux';
@@ -46,17 +46,16 @@ const translations = defineMessages({
   },
 });
 
-class Question extends React.Component {
-  updateQuestionHandler = (data) => {
-    const { dispatch, intl } = this.props;
-    const { updateSurveyQuestion } = questionActions;
+class Question extends Component {
+  deleteQuestionHandler = () => {
+    const { dispatch, question, intl } = this.props;
+    const { deleteSurveyQuestion } = questionActions;
 
-    const payload = formatQuestionFormData(data);
-    const successMessage = intl.formatMessage(translations.updateSuccess);
-    const failureMessage = intl.formatMessage(translations.updateFailure);
-    return dispatch(
-      updateSurveyQuestion(data.id, payload, successMessage, failureMessage),
-    );
+    const successMessage = intl.formatMessage(translations.deleteSuccess);
+    const failureMessage = intl.formatMessage(translations.deleteFailure);
+    const handleDelete = () =>
+      dispatch(deleteSurveyQuestion(question, successMessage, failureMessage));
+    return dispatch(showDeleteConfirmation(handleDelete));
   };
 
   showEditQuestionForm = () => {
@@ -75,15 +74,16 @@ class Question extends React.Component {
     );
   };
 
-  deleteQuestionHandler = () => {
-    const { dispatch, question, intl } = this.props;
-    const { deleteSurveyQuestion } = questionActions;
+  updateQuestionHandler = (data) => {
+    const { dispatch, intl } = this.props;
+    const { updateSurveyQuestion } = questionActions;
 
-    const successMessage = intl.formatMessage(translations.deleteSuccess);
-    const failureMessage = intl.formatMessage(translations.deleteFailure);
-    const handleDelete = () =>
-      dispatch(deleteSurveyQuestion(question, successMessage, failureMessage));
-    return dispatch(showDeleteConfirmation(handleDelete));
+    const payload = formatQuestionFormData(data);
+    const successMessage = intl.formatMessage(translations.updateSuccess);
+    const failureMessage = intl.formatMessage(translations.updateFailure);
+    return dispatch(
+      updateSurveyQuestion(data.id, payload, successMessage, failureMessage),
+    );
   };
 
   adminFunctions() {

@@ -1,4 +1,4 @@
-import React from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import Dialog from 'material-ui/Dialog';
@@ -16,7 +16,7 @@ const styles = {
   },
 };
 
-class Thumbnail extends React.PureComponent {
+class Thumbnail extends PureComponent {
   constructor(props) {
     super(props);
     const { src, file } = props;
@@ -33,7 +33,7 @@ class Thumbnail extends React.PureComponent {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { src, file } = nextProps;
     const isFromFile = !src && file;
 

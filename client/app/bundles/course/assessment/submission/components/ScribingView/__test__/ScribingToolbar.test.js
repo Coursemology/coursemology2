@@ -1,8 +1,7 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { MemoryRouter } from 'react-router-dom';
 import { mount } from 'enzyme';
-import shallowUntil from 'utils/shallowUntil';
+import shallowUntil from 'testUtils/shallowUntil';
 import MockAdapter from 'axios-mock-adapter';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 import CourseAPI from 'api/course';

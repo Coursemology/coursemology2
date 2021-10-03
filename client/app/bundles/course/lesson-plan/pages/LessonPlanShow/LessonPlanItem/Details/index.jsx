@@ -1,22 +1,22 @@
-import React from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { CardText, CardTitle } from 'material-ui/Card';
 import Chips from './Chips';
 
-class Details extends React.PureComponent {
-  renderTitle() {
-    const { title, itemPath } = this.props;
-    return (
-      <CardTitle title={itemPath ? <a href={itemPath}>{title}</a> : title} />
-    );
-  }
-
+class Details extends PureComponent {
   renderDescription() {
     const { description } = this.props;
     if (!description) {
       return null;
     }
     return <CardText dangerouslySetInnerHTML={{ __html: description }} />;
+  }
+
+  renderTitle() {
+    const { title, itemPath } = this.props;
+    return (
+      <CardTitle title={itemPath ? <a href={itemPath}>{title}</a> : title} />
+    );
   }
 
   render() {

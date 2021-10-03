@@ -1,4 +1,3 @@
-import React from 'react';
 import 'brace';
 import { mount } from 'enzyme';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
@@ -31,6 +30,8 @@ const errorSubmission = {
     graderView: true,
     autograded: true,
     allowPartialSubmission: false,
+    showMcqAnswer: false,
+    showMcqMrqSolution: false,
     files: [],
     questionIds: [1],
     skippable: true,
@@ -100,6 +101,8 @@ const successSubmission = {
     graderView: true,
     autograded: true,
     allowPartialSubmission: false,
+    showMcqAnswer: false,
+    showMcqMrqSolution: false,
     files: [],
     questionIds: [1],
     skippable: true,

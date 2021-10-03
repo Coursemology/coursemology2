@@ -1,4 +1,3 @@
-import React from 'react';
 import { mount } from 'enzyme';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 import { VisibleTestCaseView } from 'course/assessment/submission/containers/TestCaseView';

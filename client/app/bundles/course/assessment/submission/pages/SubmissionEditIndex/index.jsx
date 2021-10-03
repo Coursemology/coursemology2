@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
@@ -64,8 +64,6 @@ class VisibleSubmissionEditIndex extends Component {
         : parseInt(stepString, 10) - 1;
 
     this.state = { newSubmission, step };
-    this.handleToggleViewHistoryMode =
-      this.handleToggleViewHistoryMode.bind(this);
   }
 
   componentDidMount() {
@@ -164,7 +162,11 @@ class VisibleSubmissionEditIndex extends Component {
     );
   }
 
-  handleToggleViewHistoryMode(viewHistory, submissionQuestionId, questionId) {
+  handleToggleViewHistoryMode = (
+    viewHistory,
+    submissionQuestionId,
+    questionId,
+  ) => {
     const { dispatch, historyQuestions } = this.props;
     const answersLoaded = historyQuestions[questionId].pastAnswersLoaded;
     dispatch(
@@ -175,7 +177,7 @@ class VisibleSubmissionEditIndex extends Component {
         answersLoaded,
       ),
     );
-  }
+  };
 
   handleUnmark() {
     const {
@@ -250,22 +252,6 @@ class VisibleSubmissionEditIndex extends Component {
     return numIncorrect === 0;
   }
 
-  renderStudentViewToggle() {
-    return (
-      <Toggle
-        label={<FormattedMessage {...translations.studentView} />}
-        labelPosition="right"
-        onToggle={(_, enabled) => {
-          if (enabled) {
-            this.props.dispatch(enterStudentView());
-          } else {
-            this.props.dispatch(exitStudentView());
-          }
-        }}
-      />
-    );
-  }
-
   renderAssessment() {
     const { assessment, submission } = this.props;
 
@@ -297,14 +283,6 @@ class VisibleSubmissionEditIndex extends Component {
         </CardActions>
       </Card>
     );
-  }
-
-  renderProgress() {
-    const { submission } = this.props;
-    if (submission.graderView) {
-      return <ProgressPanel submission={submission} />;
-    }
-    return null;
   }
 
   renderContent() {
@@ -425,6 +403,30 @@ class VisibleSubmissionEditIndex extends Component {
         delayedGradePublication={delayedGradePublication}
         isAutograding={isAutograding}
         isSaving={isSaving}
+      />
+    );
+  }
+
+  renderProgress() {
+    const { submission } = this.props;
+    if (submission.graderView) {
+      return <ProgressPanel submission={submission} />;
+    }
+    return null;
+  }
+
+  renderStudentViewToggle() {
+    return (
+      <Toggle
+        label={<FormattedMessage {...translations.studentView} />}
+        labelPosition="right"
+        onToggle={(_, enabled) => {
+          if (enabled) {
+            this.props.dispatch(enterStudentView());
+          } else {
+            this.props.dispatch(exitStudentView());
+          }
+        }}
       />
     );
   }

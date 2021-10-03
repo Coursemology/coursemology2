@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -6,7 +6,7 @@ import { injectIntl } from 'react-intl';
 import { grey300 } from 'material-ui/styles/colors';
 import styles from './OnlineEditorView.scss';
 
-class NewPackageFile extends React.Component {
+class NewPackageFile extends Component {
   static getPackageFileName(fileType) {
     return `question_programming[${fileType}][]`;
   }

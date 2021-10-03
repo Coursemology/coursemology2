@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -28,7 +28,7 @@ const styles = {
   },
 };
 
-class ItemsSelector extends React.Component {
+class ItemsSelector extends Component {
   static panelComponentMap = {
     [itemSelectorPanels.ASSESSMENTS]: AssessmentsSelector,
     [itemSelectorPanels.SURVEYS]: SurveysSelector,

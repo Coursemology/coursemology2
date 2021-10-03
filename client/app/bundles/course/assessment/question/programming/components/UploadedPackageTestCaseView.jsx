@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import { Card, CardHeader } from 'material-ui/Card';
@@ -62,7 +62,7 @@ const translations = defineMessages({
   },
 });
 
-class UploadedPackageTestCaseView extends React.Component {
+class UploadedPackageTestCaseView extends Component {
   renderTable(tests) {
     if (tests.size > 0) {
       const rows = tests.map((test) => (

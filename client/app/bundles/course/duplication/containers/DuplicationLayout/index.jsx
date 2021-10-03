@@ -1,4 +1,3 @@
-import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import NotificationPopup from 'lib/containers/NotificationPopup';
 import Duplication from 'course/duplication/pages/Duplication';

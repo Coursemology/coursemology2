@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import Popover, { PopoverAnimationVertical } from 'material-ui/Popover';
@@ -63,21 +63,6 @@ const popoverStyles = {
 };
 
 class ShapePopover extends Component {
-  renderShapeComponent() {
-    const { currentShape, setSelectedShape, intl } = this.props;
-
-    return (
-      <>
-        <h4>{intl.formatMessage(translations.shape)}</h4>
-        <ShapeField
-          currentShape={currentShape}
-          setSelectedShape={setSelectedShape}
-        />
-        <Divider />
-      </>
-    );
-  }
-
   renderBorderComponent() {
     const {
       intl,
@@ -148,6 +133,21 @@ class ShapePopover extends Component {
           noFillValue={noFillValue}
           noFillOnCheck={noFillOnCheck}
         />
+      </>
+    );
+  }
+
+  renderShapeComponent() {
+    const { currentShape, setSelectedShape, intl } = this.props;
+
+    return (
+      <>
+        <h4>{intl.formatMessage(translations.shape)}</h4>
+        <ShapeField
+          currentShape={currentShape}
+          setSelectedShape={setSelectedShape}
+        />
+        <Divider />
       </>
     );
   }

@@ -1,4 +1,3 @@
-import React from 'react';
 import { mount } from 'enzyme';
 import storeCreator from 'course/lesson-plan/store';
 import LessonPlanEdit from '../index';

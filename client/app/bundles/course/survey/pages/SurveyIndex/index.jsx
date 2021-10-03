@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -18,7 +18,7 @@ const translations = defineMessages({
   },
 });
 
-class SurveyIndex extends React.Component {
+class SurveyIndex extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch(fetchSurveys());

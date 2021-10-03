@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -21,7 +21,7 @@ const translations = defineMessages({
   },
 });
 
-class VideosSelector extends React.Component {
+class VideosSelector extends Component {
   setAllInTab = (tab) => (value) => {
     const { dispatch } = this.props;
     dispatch(setItemSelectedBoolean(VIDEO_TAB, tab.id, value));
@@ -34,6 +34,30 @@ class VideosSelector extends React.Component {
     const { tabs } = this.props;
     tabs.forEach((tab) => this.setAllInTab(tab)(value));
   };
+
+  renderBody() {
+    const { tabs } = this.props;
+
+    if (tabs.length < 1) {
+      return (
+        <Subheader>
+          <FormattedMessage {...translations.noItems} />
+        </Subheader>
+      );
+    }
+
+    return (
+      <>
+        {tabs.length > 1 ? (
+          <BulkSelectors
+            callback={this.setEverything}
+            styles={{ selectLink: { marginLeft: 0 } }}
+          />
+        ) : null}
+        {tabs.map((tab) => this.renderTabTree(tab))}
+      </>
+    );
+  }
 
   renderTabTree(tab) {
     const { dispatch, selectedItems } = this.props;
@@ -82,30 +106,6 @@ class VideosSelector extends React.Component {
           dispatch(setItemSelectedBoolean(VIDEO, video.id, value))
         }
       />
-    );
-  }
-
-  renderBody() {
-    const { tabs } = this.props;
-
-    if (tabs.length < 1) {
-      return (
-        <Subheader>
-          <FormattedMessage {...translations.noItems} />
-        </Subheader>
-      );
-    }
-
-    return (
-      <>
-        {tabs.length > 1 ? (
-          <BulkSelectors
-            callback={this.setEverything}
-            styles={{ selectLink: { marginLeft: 0 } }}
-          />
-        ) : null}
-        {tabs.map((tab) => this.renderTabTree(tab))}
-      </>
     );
   }
 

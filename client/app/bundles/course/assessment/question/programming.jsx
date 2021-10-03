@@ -1,4 +1,3 @@
-import React from 'react';
 import { render } from 'react-dom';
 import Immutable from 'immutable';
 import ProviderWrapper from 'lib/components/ProviderWrapper';

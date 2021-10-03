@@ -1,5 +1,5 @@
 /* eslint-disable new-cap */
-import React from 'react';
+import { Component } from 'react';
 import { mount } from 'enzyme';
 import { connect } from 'react-redux';
 import CourseAPI from 'api/course';
@@ -69,7 +69,7 @@ const surveyData = {
  * Wraps a component into a DragDropContext that uses the TestBackend.
  */
 function wrapInTestContext(DecoratedComponent) {
-  class TestContextContainer extends React.Component {
+  class TestContextContainer extends Component {
     render() {
       return <DecoratedComponent {...this.props} />;
     }

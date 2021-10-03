@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
@@ -19,7 +19,7 @@ const styles = {
   },
 };
 
-class AchievementsListing extends React.Component {
+class AchievementsListing extends Component {
   static renderRow(achievement) {
     return (
       <Checkbox

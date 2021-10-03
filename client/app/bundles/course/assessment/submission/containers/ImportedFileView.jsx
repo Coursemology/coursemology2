@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
@@ -45,6 +45,24 @@ class VisibleImportedFileView extends Component {
     };
   }
 
+  renderDeleteDialog() {
+    const { deleteFileId, deleteConfirmation } = this.state;
+    const { intl, handleDeleteFile } = this.props;
+    return (
+      <ConfirmationDialog
+        open={deleteConfirmation}
+        onCancel={() =>
+          this.setState({ deleteConfirmation: false, deleteFileId: null })
+        }
+        onConfirm={() => {
+          handleDeleteFile(deleteFileId);
+          this.setState({ deleteConfirmation: false, deleteFileId: null });
+        }}
+        message={intl.formatMessage(translations.deleteConfirmation)}
+      />
+    );
+  }
+
   renderFile(file, index) {
     const { canDestroyFiles, displayFileIndex, handleFileTabbing } = this.props;
 
@@ -69,24 +87,6 @@ class VisibleImportedFileView extends Component {
       >
         {file.filename}
       </Chip>
-    );
-  }
-
-  renderDeleteDialog() {
-    const { deleteFileId, deleteConfirmation } = this.state;
-    const { intl, handleDeleteFile } = this.props;
-    return (
-      <ConfirmationDialog
-        open={deleteConfirmation}
-        onCancel={() =>
-          this.setState({ deleteConfirmation: false, deleteFileId: null })
-        }
-        onConfirm={() => {
-          handleDeleteFile(deleteFileId);
-          this.setState({ deleteConfirmation: false, deleteFileId: null });
-        }}
-        message={intl.formatMessage(translations.deleteConfirmation)}
-      />
     );
   }
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import MaterialToggle from 'material-ui/Toggle';
 import { red500 } from 'material-ui/styles/colors';
@@ -10,7 +10,7 @@ const errorStyle = {
 };
 
 // Toggle implementation with an error displayed at the bottom.
-class Toggle extends React.Component {
+class Toggle extends Component {
   render() {
     const { errorText, ...props } = this.props;
     return (

@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Card, CardText, CardTitle, CardActions } from 'material-ui/Card';
@@ -29,7 +29,7 @@ const translations = defineMessages({
   },
 });
 
-class SectionCard extends React.Component {
+class SectionCard extends Component {
   constructor(props) {
     super(props);
     this.state = { expanded: true };

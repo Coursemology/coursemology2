@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 
@@ -20,7 +20,7 @@ const propTypes = {
   style: PropTypes.object,
 };
 
-class ExpandableText extends React.Component {
+class ExpandableText extends Component {
   constructor(props) {
     super(props);
 

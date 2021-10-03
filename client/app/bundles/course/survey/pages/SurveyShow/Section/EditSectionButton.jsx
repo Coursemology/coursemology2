@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
@@ -29,17 +29,7 @@ const translations = defineMessages({
   },
 });
 
-class EditSectionButton extends React.Component {
-  updateSectionHandler = (data) => {
-    const { dispatch, section } = this.props;
-    const payload = { section: data };
-    const successMessage = <FormattedMessage {...translations.success} />;
-    const failureMessage = <FormattedMessage {...translations.failure} />;
-    return dispatch(
-      updateSurveySection(section.id, payload, successMessage, failureMessage),
-    );
-  };
-
+class EditSectionButton extends Component {
   showEditSectionForm = () => {
     const {
       dispatch,
@@ -52,6 +42,16 @@ class EditSectionButton extends React.Component {
         formTitle: intl.formatMessage(translations.editSection),
         initialValues: { title, description },
       }),
+    );
+  };
+
+  updateSectionHandler = (data) => {
+    const { dispatch, section } = this.props;
+    const payload = { section: data };
+    const successMessage = <FormattedMessage {...translations.success} />;
+    const failureMessage = <FormattedMessage {...translations.failure} />;
+    return dispatch(
+      updateSurveySection(section.id, payload, successMessage, failureMessage),
     );
   };
 

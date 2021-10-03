@@ -1,4 +1,4 @@
-import React from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import moment from 'lib/moment';
@@ -82,7 +82,7 @@ const propTypes = {
   style: PropTypes.object,
 };
 
-class DateTimePicker extends React.PureComponent {
+class DateTimePicker extends PureComponent {
   static displayState(dateTime) {
     return {
       displayedDate: dateTime ? moment(dateTime).format('DD-MM-YYYY') : '',
@@ -98,22 +98,10 @@ class DateTimePicker extends React.PureComponent {
     this.state = DateTimePicker.displayState(props.value);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const dateTime = nextProps.value;
     this.setState(DateTimePicker.displayState(dateTime));
   }
-
-  updateDateTime = (newDateTime) => {
-    const { onBlur, onChange } = this.props;
-    this.setState(DateTimePicker.displayState(newDateTime));
-    // Marks redux-form field as 'touched' so that validation errors are shown, if any.
-    if (onBlur) {
-      onBlur();
-    }
-    if (onChange) {
-      onChange(null, newDateTime);
-    }
-  };
 
   updateDate = (newDate) => {
     if (newDate === null) {
@@ -125,6 +113,18 @@ class DateTimePicker extends React.PureComponent {
       ? moment(this.props.value).set({ date, months, years })
       : moment({ date, months, years });
     this.updateDateTime(newDateTime.toDate());
+  };
+
+  updateDateTime = (newDateTime) => {
+    const { onBlur, onChange } = this.props;
+    this.setState(DateTimePicker.displayState(newDateTime));
+    // Marks redux-form field as 'touched' so that validation errors are shown, if any.
+    if (onBlur) {
+      onBlur();
+    }
+    if (onChange) {
+      onChange(null, newDateTime);
+    }
   };
 
   updateTime = (newTime) => {

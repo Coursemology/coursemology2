@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { red500 } from 'material-ui/styles/colors';
@@ -37,7 +37,7 @@ const translations = defineMessages({
   },
 });
 
-class UnsubmitButton extends React.Component {
+class UnsubmitButton extends Component {
   constructor(props) {
     super(props);
     this.state = { open: false };

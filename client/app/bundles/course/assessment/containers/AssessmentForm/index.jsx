@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field, Form, formValueSelector, change } from 'redux-form';
@@ -86,7 +86,7 @@ const validate = (values) => {
   return errors;
 };
 
-class AssessmentForm extends React.Component {
+class AssessmentForm extends Component {
   componentDidMount() {
     const { dispatch, editing } = this.props;
     // TODO: Shift the fetchTabs only when the selection menu is clicked on. This would
@@ -135,62 +135,6 @@ class AssessmentForm extends React.Component {
       dispatch(change(formNames.ASSESSMENT, 'bonus_end_at', newBonusTime));
     }
   };
-
-  renderTabs() {
-    const { tabs, editing, submitting } = this.props;
-
-    return (
-      <Field
-        name="tab_id"
-        component={SelectField}
-        style={styles.flexChild}
-        floatingLabelText={<FormattedMessage {...translations.tab} />}
-        floatingLabelFixed
-        disabled={editing && submitting}
-      >
-        {tabs &&
-          tabs.map((tab) => (
-            <MenuItem
-              key={tab.tab_id}
-              value={tab.tab_id}
-              primaryText={tab.title}
-            />
-          ))}
-      </Field>
-    );
-  }
-
-  renderPasswordFields() {
-    const { submitting } = this.props;
-
-    return (
-      <div>
-        <Field
-          name="view_password"
-          component={TextField}
-          hintText={<FormattedMessage {...translations.viewPassword} />}
-          fullWidth
-          autoComplete="off"
-          disabled={submitting}
-        />
-        <div style={styles.hint}>
-          <FormattedMessage {...translations.viewPasswordHint} />
-        </div>
-
-        <Field
-          name="session_password"
-          component={TextField}
-          hintText={<FormattedMessage {...translations.sessionPassword} />}
-          fullWidth
-          autoComplete="off"
-          disabled={submitting}
-        />
-        <div style={styles.hint}>
-          <FormattedMessage {...translations.sessionPasswordHint} />
-        </div>
-      </div>
-    );
-  }
 
   renderEnableRandomizationField() {
     const { submitting } = this.props;
@@ -298,6 +242,62 @@ class AssessmentForm extends React.Component {
 
         {this.props.password_protected && this.renderPasswordFields()}
       </>
+    );
+  }
+
+  renderPasswordFields() {
+    const { submitting } = this.props;
+
+    return (
+      <div>
+        <Field
+          name="view_password"
+          component={TextField}
+          hintText={<FormattedMessage {...translations.viewPassword} />}
+          fullWidth
+          autoComplete="off"
+          disabled={submitting}
+        />
+        <div style={styles.hint}>
+          <FormattedMessage {...translations.viewPasswordHint} />
+        </div>
+
+        <Field
+          name="session_password"
+          component={TextField}
+          hintText={<FormattedMessage {...translations.sessionPassword} />}
+          fullWidth
+          autoComplete="off"
+          disabled={submitting}
+        />
+        <div style={styles.hint}>
+          <FormattedMessage {...translations.sessionPasswordHint} />
+        </div>
+      </div>
+    );
+  }
+
+  renderTabs() {
+    const { tabs, editing, submitting } = this.props;
+
+    return (
+      <Field
+        name="tab_id"
+        component={SelectField}
+        style={styles.flexChild}
+        floatingLabelText={<FormattedMessage {...translations.tab} />}
+        floatingLabelFixed
+        disabled={editing && submitting}
+      >
+        {tabs &&
+          tabs.map((tab) => (
+            <MenuItem
+              key={tab.tab_id}
+              value={tab.tab_id}
+              primaryText={tab.title}
+            />
+          ))}
+      </Field>
     );
   }
 

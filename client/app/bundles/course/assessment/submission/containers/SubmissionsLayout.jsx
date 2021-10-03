@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 
 import SubmissionEditIndex from '../pages/SubmissionEditIndex';

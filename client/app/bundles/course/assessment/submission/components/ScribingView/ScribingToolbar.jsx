@@ -1,5 +1,5 @@
 /* eslint react/sort-comp: "off" */
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 
@@ -124,6 +124,10 @@ class ScribingToolbar extends Component {
   onChangeFontSize = (event, index, value) =>
     this.props.setFontSize(this.props.answerId, value);
 
+  onChangeSliderThickness = (event, toolType, value) => {
+    this.props.setToolThickness(this.props.answerId, toolType, value);
+  };
+
   onClickColorPicker = (event, toolType) => {
     this.setState(({ colorDropdowns }) => ({
       colorDropdowns: {
@@ -134,13 +138,34 @@ class ScribingToolbar extends Component {
     }));
   };
 
-  onRequestCloseColorPicker = (toolType) => {
-    this.setState(({ colorDropdowns }) => ({
-      colorDropdowns: {
-        ...colorDropdowns,
-        [toolType]: false,
-      },
-    }));
+  onClickDelete = () => {
+    this.props.deleteCanvasObject(this.props.answerId);
+  };
+
+  onClickDrawingMode = () => {
+    this.props.setToolSelected(this.props.answerId, scribingTools.DRAW);
+    // isDrawingMode automatically disables selection mode in fabric.js
+    this.props.setDrawingMode(this.props.answerId, true);
+  };
+
+  onClickLineMode = () => {
+    this.props.setToolSelected(this.props.answerId, scribingTools.LINE);
+    this.props.setDrawingMode(this.props.answerId, false);
+    this.props.setCanvasCursor(this.props.answerId, 'crosshair');
+    this.props.setDisableObjectSelection(this.props.answerId);
+  };
+
+  onClickLineStyleChip = (event, toolType, style) => {
+    // This prevents ghost click.
+    event.preventDefault();
+    this.props.setLineStyleChip(this.props.answerId, toolType, style);
+  };
+
+  onClickMoveMode = () => {
+    this.props.setToolSelected(this.props.answerId, scribingTools.MOVE);
+    this.props.setDrawingMode(this.props.answerId, false);
+    this.props.setCanvasCursor(this.props.answerId, 'move');
+    this.props.setDisableObjectSelection(this.props.answerId);
   };
 
   onClickPopover = (event, popoverType) => {
@@ -157,58 +182,8 @@ class ScribingToolbar extends Component {
     }));
   };
 
-  onRequestClosePopover = (popoverType) => {
-    this.setState(({ popovers }) => ({
-      popovers: {
-        ...popovers,
-        [popoverType]: false,
-      },
-    }));
-  };
-
-  onClickLineStyleChip = (event, toolType, style) => {
-    // This prevents ghost click.
-    event.preventDefault();
-    this.props.setLineStyleChip(this.props.answerId, toolType, style);
-  };
-
-  onChangeSliderThickness = (event, toolType, value) => {
-    this.props.setToolThickness(this.props.answerId, toolType, value);
-  };
-
-  onClickTypingMode = () => {
-    this.props.setToolSelected(this.props.answerId, scribingTools.TYPE);
-    this.props.setDrawingMode(this.props.answerId, false);
-    this.props.setCanvasCursor(this.props.answerId, 'text');
-  };
-
-  onClickTypingIcon = () => {
-    this.onClickTypingMode();
-  };
-
-  onClickTypingChevron = (event) => {
-    this.onClickTypingMode();
-    this.onClickPopover(event, scribingPopoverTypes.TYPE);
-  };
-
-  onClickDrawingMode = () => {
-    this.props.setToolSelected(this.props.answerId, scribingTools.DRAW);
-    // isDrawingMode automatically disables selection mode in fabric.js
-    this.props.setDrawingMode(this.props.answerId, true);
-  };
-
-  onClickLineMode = () => {
-    this.props.setToolSelected(this.props.answerId, scribingTools.LINE);
-    this.props.setDrawingMode(this.props.answerId, false);
-    this.props.setCanvasCursor(this.props.answerId, 'crosshair');
-    this.props.setDisableObjectSelection(this.props.answerId);
-  };
-
-  onClickShapeMode = () => {
-    this.props.setToolSelected(this.props.answerId, scribingTools.SHAPE);
-    this.props.setDrawingMode(this.props.answerId, false);
-    this.props.setCanvasCursor(this.props.answerId, 'crosshair');
-    this.props.setDisableObjectSelection(this.props.answerId);
+  onClickRedo = () => {
+    this.props.setRedo(this.props.answerId);
   };
 
   onClickSelectionMode = () => {
@@ -218,11 +193,30 @@ class ScribingToolbar extends Component {
     this.props.setEnableObjectSelection(this.props.answerId);
   };
 
-  onClickMoveMode = () => {
-    this.props.setToolSelected(this.props.answerId, scribingTools.MOVE);
+  onClickShapeMode = () => {
+    this.props.setToolSelected(this.props.answerId, scribingTools.SHAPE);
     this.props.setDrawingMode(this.props.answerId, false);
-    this.props.setCanvasCursor(this.props.answerId, 'move');
+    this.props.setCanvasCursor(this.props.answerId, 'crosshair');
     this.props.setDisableObjectSelection(this.props.answerId);
+  };
+
+  onClickTypingChevron = (event) => {
+    this.onClickTypingMode();
+    this.onClickPopover(event, scribingPopoverTypes.TYPE);
+  };
+
+  onClickTypingIcon = () => {
+    this.onClickTypingMode();
+  };
+
+  onClickTypingMode = () => {
+    this.props.setToolSelected(this.props.answerId, scribingTools.TYPE);
+    this.props.setDrawingMode(this.props.answerId, false);
+    this.props.setCanvasCursor(this.props.answerId, 'text');
+  };
+
+  onClickUndo = () => {
+    this.props.setUndo(this.props.answerId);
   };
 
   onClickZoomIn = () => {
@@ -233,18 +227,6 @@ class ScribingToolbar extends Component {
   onClickZoomOut = () => {
     const newZoom = Math.max(this.props.scribing.canvasZoom - 0.1, 1);
     this.props.setCanvasZoom(this.props.answerId, newZoom);
-  };
-
-  onClickDelete = () => {
-    this.props.deleteCanvasObject(this.props.answerId);
-  };
-
-  onClickUndo = () => {
-    this.props.setUndo(this.props.answerId);
-  };
-
-  onClickRedo = () => {
-    this.props.setRedo(this.props.answerId);
   };
 
   onMouseEnter(toolType) {
@@ -259,17 +241,22 @@ class ScribingToolbar extends Component {
     });
   };
 
-  // Helpers
-
-  setSelectedShape = (shape) => {
-    this.props.setSelectedShape(this.props.answerId, shape);
+  onRequestCloseColorPicker = (toolType) => {
+    this.setState(({ colorDropdowns }) => ({
+      colorDropdowns: {
+        ...colorDropdowns,
+        [toolType]: false,
+      },
+    }));
   };
 
-  setToSelectTool = () => {
-    this.props.setToolSelected(this.props.answerId, scribingTools.SELECT);
-    this.props.setCanvasCursor(this.props.answerId, 'default');
-    this.props.setEnableObjectSelection(this.props.answerId);
-    this.props.setDrawingMode(this.props.answerId, false);
+  onRequestClosePopover = (popoverType) => {
+    this.setState(({ popovers }) => ({
+      popovers: {
+        ...popovers,
+        [popoverType]: false,
+      },
+    }));
   };
 
   getActiveObjectSelectedLineStyle = () => {
@@ -289,6 +276,19 @@ class ScribingToolbar extends Component {
       lineStyle = 'solid';
     }
     return lineStyle;
+  };
+
+  // Helpers
+
+  setSelectedShape = (shape) => {
+    this.props.setSelectedShape(this.props.answerId, shape);
+  };
+
+  setToSelectTool = () => {
+    this.props.setToolSelected(this.props.answerId, scribingTools.SELECT);
+    this.props.setCanvasCursor(this.props.answerId, 'default');
+    this.props.setEnableObjectSelection(this.props.answerId);
+    this.props.setDrawingMode(this.props.answerId, false);
   };
 
   render() {

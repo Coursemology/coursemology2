@@ -1,6 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies, import/extensions, import/no-unresolved */
 
-import React from 'react';
 import { render } from 'react-dom';
 import { Router } from 'react-router';
 import history from 'lib/history';

@@ -1,5 +1,5 @@
 /* eslint-disable new-cap */
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { DropTarget } from 'react-dnd';
@@ -7,7 +7,7 @@ import { draggableTypes } from 'course/survey/constants';
 import { changeSection } from 'course/survey/actions/questions';
 import SectionCard from './SectionCard';
 
-class Section extends React.Component {
+class Section extends Component {
   render() {
     return this.props.connectDropTarget(
       <div

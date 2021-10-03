@@ -4,6 +4,7 @@ module.exports = {
     'airbnb',
     'eslint:recommended',
     'plugin:react/recommended',
+    'plugin:react/jsx-runtime',
     'prettier',
   ],
   settings: {
@@ -12,8 +13,7 @@ module.exports = {
       webpack: {},
     },
     react: {
-      // TODO: Update this to 'detect' once React is upgraded >=16.9
-      version: '16.8.6',
+      version: 'detect',
     },
   },
   rules: {
@@ -34,7 +34,7 @@ module.exports = {
     'jsx-a11y/mouse-events-have-key-events': 'off',
     'jsx-a11y/no-static-element-interactions': 'off',
     'max-len': ['warn', 120],
-    camelcase: ['warn', { properties: 'never' }],
+    camelcase: ['warn', { properties: 'never', allow: ['^UNSAFE_'] }],
     'comma-dangle': ['error', 'always-multiline'],
     'func-names': 'off',
     'no-multi-str': 'off',

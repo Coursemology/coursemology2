@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
@@ -67,44 +67,6 @@ class VisibleGradingPanel extends Component {
     }
   }
 
-  renderTotalGrade() {
-    const {
-      grading: { questions },
-      submission: { maximumGrade },
-    } = this.props;
-    return (
-      <div>{`${VisibleGradingPanel.calculateTotalGrade(
-        questions,
-      )} / ${maximumGrade}`}</div>
-    );
-  }
-
-  renderSubmissionStatus() {
-    const {
-      intl,
-      submission: { workflowState },
-    } = this.props;
-    return (
-      <div>
-        {intl.formatMessage(translations[workflowState])}
-        {workflowState === workflowStates.Graded ? (
-          <span style={{ display: 'inline-block', marginLeft: 5 }}>
-            <a
-              data-tip
-              data-for="unpublished-grades"
-              data-offset="{'left' : -8}"
-            >
-              <i className="fa fa-exclamation-triangle" />
-            </a>
-            <ReactTooltip id="unpublished-grades" effect="solid">
-              <FormattedMessage {...translations.unpublishedGrades} />
-            </ReactTooltip>
-          </span>
-        ) : null}
-      </div>
-    );
-  }
-
   renderExperiencePoints() {
     const {
       grading: { exp, expMultiplier },
@@ -151,64 +113,6 @@ class VisibleGradingPanel extends Component {
             onWheel={() => this.multiplierInputRef.blur()}
           />
         </div>
-      </div>
-    );
-  }
-
-  renderSubmissionTable() {
-    const {
-      submission: {
-        submitter,
-        workflowState,
-        bonusEndAt,
-        dueAt,
-        attemptedAt,
-        submittedAt,
-        grader,
-        gradedAt,
-        graderView,
-      },
-      gamified,
-      intl,
-    } = this.props;
-
-    const published = workflowState === workflowStates.Published;
-    const shouldRenderGrading = published || graderView;
-
-    const tableRow = (field, value) => (
-      <TableRow>
-        <TableHeaderColumn style={styles.headerColumn} columnNumber={0}>
-          <FormattedMessage {...translations[field]} />
-        </TableHeaderColumn>
-        <TableRowColumn>{value}</TableRowColumn>
-      </TableRow>
-    );
-
-    return (
-      <div>
-        <h4>{intl.formatMessage(translations.statistics)}</h4>
-        <Table selectable={false} style={styles.table}>
-          <TableBody displayRowCheckbox={false}>
-            {tableRow('student', submitter)}
-            {tableRow('status', this.renderSubmissionStatus())}
-            {shouldRenderGrading
-              ? tableRow('totalGrade', this.renderTotalGrade())
-              : null}
-            {shouldRenderGrading && gamified
-              ? tableRow('expAwarded', this.renderExperiencePoints())
-              : null}
-            {bonusEndAt
-              ? tableRow('bonusEndAt', formatDateTime(bonusEndAt))
-              : null}
-            {dueAt ? tableRow('dueAt', formatDateTime(dueAt)) : null}
-            {tableRow('attemptedAt', formatDateTime(attemptedAt))}
-            {tableRow('submittedAt', formatDateTime(submittedAt))}
-            {shouldRenderGrading ? tableRow('grader', grader) : null}
-            {shouldRenderGrading
-              ? tableRow('gradedAt', formatDateTime(gradedAt))
-              : null}
-          </TableBody>
-        </Table>
       </div>
     );
   }
@@ -301,6 +205,102 @@ class VisibleGradingPanel extends Component {
           </TableBody>
         </Table>
       </div>
+    );
+  }
+
+  renderSubmissionStatus() {
+    const {
+      intl,
+      submission: { workflowState },
+    } = this.props;
+    return (
+      <div>
+        {intl.formatMessage(translations[workflowState])}
+        {workflowState === workflowStates.Graded ? (
+          <span style={{ display: 'inline-block', marginLeft: 5 }}>
+            <a
+              data-tip
+              data-for="unpublished-grades"
+              data-offset="{'left' : -8}"
+            >
+              <i className="fa fa-exclamation-triangle" />
+            </a>
+            <ReactTooltip id="unpublished-grades" effect="solid">
+              <FormattedMessage {...translations.unpublishedGrades} />
+            </ReactTooltip>
+          </span>
+        ) : null}
+      </div>
+    );
+  }
+
+  renderSubmissionTable() {
+    const {
+      submission: {
+        submitter,
+        workflowState,
+        bonusEndAt,
+        dueAt,
+        attemptedAt,
+        submittedAt,
+        grader,
+        gradedAt,
+        graderView,
+      },
+      gamified,
+      intl,
+    } = this.props;
+
+    const published = workflowState === workflowStates.Published;
+    const shouldRenderGrading = published || graderView;
+
+    const tableRow = (field, value) => (
+      <TableRow>
+        <TableHeaderColumn style={styles.headerColumn} columnNumber={0}>
+          <FormattedMessage {...translations[field]} />
+        </TableHeaderColumn>
+        <TableRowColumn>{value}</TableRowColumn>
+      </TableRow>
+    );
+
+    return (
+      <div>
+        <h4>{intl.formatMessage(translations.statistics)}</h4>
+        <Table selectable={false} style={styles.table}>
+          <TableBody displayRowCheckbox={false}>
+            {tableRow('student', submitter)}
+            {tableRow('status', this.renderSubmissionStatus())}
+            {shouldRenderGrading
+              ? tableRow('totalGrade', this.renderTotalGrade())
+              : null}
+            {shouldRenderGrading && gamified
+              ? tableRow('expAwarded', this.renderExperiencePoints())
+              : null}
+            {bonusEndAt
+              ? tableRow('bonusEndAt', formatDateTime(bonusEndAt))
+              : null}
+            {dueAt ? tableRow('dueAt', formatDateTime(dueAt)) : null}
+            {tableRow('attemptedAt', formatDateTime(attemptedAt))}
+            {tableRow('submittedAt', formatDateTime(submittedAt))}
+            {shouldRenderGrading ? tableRow('grader', grader) : null}
+            {shouldRenderGrading
+              ? tableRow('gradedAt', formatDateTime(gradedAt))
+              : null}
+          </TableBody>
+        </Table>
+      </div>
+    );
+  }
+
+  renderTotalGrade() {
+    const {
+      grading: { questions },
+      submission: { maximumGrade },
+    } = this.props;
+    return (
+      <div>{`${VisibleGradingPanel.calculateTotalGrade(
+        questions,
+      )} / ${maximumGrade}`}</div>
     );
   }
 

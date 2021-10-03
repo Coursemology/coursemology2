@@ -11,7 +11,9 @@ import actionTypes from '../constants';
 // Helper function to redirect to assessment main page
 function redirectToAssessment() {
   history.push(`/courses/${getCourseId()}/assessments/${getAssessmentId()}`);
-  window.location.href = `/courses/${getCourseId()}/assessments/${getAssessmentId()}`;
+  window.location.assign(
+    `/courses/${getCourseId()}/assessments/${getAssessmentId()}`,
+  );
 }
 
 export function fetchSkills() {

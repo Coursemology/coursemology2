@@ -1,4 +1,3 @@
-import React from 'react';
 import { mount } from 'enzyme';
 import MockAdapter from 'axios-mock-adapter';
 import CourseAPI from 'api/course';

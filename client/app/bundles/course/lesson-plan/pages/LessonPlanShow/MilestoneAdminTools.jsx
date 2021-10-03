@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import React from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
@@ -48,17 +48,18 @@ const styles = {
   },
 };
 
-class MilestoneAdminTools extends React.PureComponent {
-  updateMilestoneHandler = (data) => {
+class MilestoneAdminTools extends PureComponent {
+  deleteMilestoneHandler = () => {
     const {
       dispatch,
       intl,
       milestone: { id },
     } = this.props;
-
-    const successMessage = intl.formatMessage(translations.updateSuccess);
-    const failureMessage = intl.formatMessage(translations.updateFailure);
-    return dispatch(updateMilestone(id, data, successMessage, failureMessage));
+    const successMessage = intl.formatMessage(translations.deleteSuccess);
+    const failureMessage = intl.formatMessage(translations.deleteFailure);
+    const handleDelete = () =>
+      dispatch(deleteMilestone(id, successMessage, failureMessage));
+    return dispatch(showDeleteConfirmation(handleDelete));
   };
 
   showEditMilestoneDialog = () => {
@@ -77,17 +78,16 @@ class MilestoneAdminTools extends React.PureComponent {
     );
   };
 
-  deleteMilestoneHandler = () => {
+  updateMilestoneHandler = (data) => {
     const {
       dispatch,
       intl,
       milestone: { id },
     } = this.props;
-    const successMessage = intl.formatMessage(translations.deleteSuccess);
-    const failureMessage = intl.formatMessage(translations.deleteFailure);
-    const handleDelete = () =>
-      dispatch(deleteMilestone(id, successMessage, failureMessage));
-    return dispatch(showDeleteConfirmation(handleDelete));
+
+    const successMessage = intl.formatMessage(translations.updateSuccess);
+    const failureMessage = intl.formatMessage(translations.updateFailure);
+    return dispatch(updateMilestone(id, data, successMessage, failureMessage));
   };
 
   render() {

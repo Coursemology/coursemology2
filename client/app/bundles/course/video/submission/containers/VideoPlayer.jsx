@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Paper from 'material-ui/Paper';
 import { connect } from 'react-redux';
@@ -70,14 +70,14 @@ const defaultProps = {
   forceSeek: false,
 };
 
-class VideoPlayer extends React.Component {
+class VideoPlayer extends Component {
   constructor(props) {
     super(props);
 
     this.player = null;
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     if (VideoPlayer.ReactPlayer !== undefined) return; // Already loaded
 
     import(/* webpackChunkName: "video" */ 'react-player').then(
@@ -96,7 +96,7 @@ class VideoPlayer extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.forceSeek) {
       this.player.seekTo(nextProps.playerProgress);
     }
@@ -123,6 +123,12 @@ class VideoPlayer extends React.Component {
    */
   setRef = (player) => {
     this.player = player;
+  };
+
+  readyCallback = () => {
+    if (this.props.initialSeekTime) {
+      this.props.directSeek(this.props.initialSeekTime);
+    }
   };
 
   /**
@@ -155,12 +161,6 @@ class VideoPlayer extends React.Component {
       internalPlayer.loadModule('captions');
     } else if (captionsState === captionsStates.OFF) {
       internalPlayer.unloadModule('captions');
-    }
-  };
-
-  readyCallback = () => {
-    if (this.props.initialSeekTime) {
-      this.props.directSeek(this.props.initialSeekTime);
     }
   };
 

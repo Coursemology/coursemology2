@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -111,40 +111,6 @@ const translations = defineMessages({
 });
 
 export class VisibleTestCaseView extends Component {
-  static renderStaffOnlyTestCasesWarning() {
-    return (
-      <span style={{ display: 'inline-block', marginLeft: 5 }}>
-        <a
-          data-tip
-          data-for="staff-only-test-cases"
-          data-offset="{'left' : -8}"
-        >
-          <i className="fa fa-exclamation-triangle" />
-        </a>
-        <ReactTooltip id="staff-only-test-cases" effect="solid">
-          <FormattedMessage {...translations.staffOnlyTestCases} />
-        </ReactTooltip>
-      </span>
-    );
-  }
-
-  static renderStaffOnlyOutputStreamWarning() {
-    return (
-      <span style={{ display: 'inline-block', marginLeft: 5 }}>
-        <a
-          data-tip
-          data-for="staff-only-output-stream"
-          data-offset="{'left' : -8}"
-        >
-          <i className="fa fa-exclamation-triangle" />
-        </a>
-        <ReactTooltip id="staff-only-output-stream" effect="solid">
-          <FormattedMessage {...translations.staffOnlyOutputStream} />
-        </ReactTooltip>
-      </span>
-    );
-  }
-
   static renderOutputStream(outputStreamType, output, showStaffOnlyWarning) {
     return (
       <Card id={outputStreamType}>
@@ -165,12 +131,94 @@ export class VisibleTestCaseView extends Component {
     );
   }
 
+  static renderStaffOnlyOutputStreamWarning() {
+    return (
+      <span style={{ display: 'inline-block', marginLeft: 5 }}>
+        <a
+          data-tip
+          data-for="staff-only-output-stream"
+          data-offset="{'left' : -8}"
+        >
+          <i className="fa fa-exclamation-triangle" />
+        </a>
+        <ReactTooltip id="staff-only-output-stream" effect="solid">
+          <FormattedMessage {...translations.staffOnlyOutputStream} />
+        </ReactTooltip>
+      </span>
+    );
+  }
+
+  static renderStaffOnlyTestCasesWarning() {
+    return (
+      <span style={{ display: 'inline-block', marginLeft: 5 }}>
+        <a
+          data-tip
+          data-for="staff-only-test-cases"
+          data-offset="{'left' : -8}"
+        >
+          <i className="fa fa-exclamation-triangle" />
+        </a>
+        <ReactTooltip id="staff-only-test-cases" effect="solid">
+          <FormattedMessage {...translations.staffOnlyTestCases} />
+        </ReactTooltip>
+      </span>
+    );
+  }
+
   static renderTitle(testCaseType, warn) {
     return (
       <>
         <FormattedMessage {...translations[testCaseType]} />
         {warn && VisibleTestCaseView.renderStaffOnlyTestCasesWarning()}
       </>
+    );
+  }
+
+  renderTestCaseRow(testCase) {
+    const {
+      testCases: { canReadTests },
+    } = this.props;
+    const { showPublicTestCasesOutput } = this.props;
+
+    let testCaseResult = 'unattempted';
+    let testCaseIcon;
+    if (testCase.passed !== undefined) {
+      testCaseResult = testCase.passed ? 'correct' : 'wrong';
+      testCaseIcon = testCase.passed ? <CorrectIcon /> : <WrongIcon />;
+    }
+
+    const tableRowColumnFor = (field) => (
+      <TableRowColumn style={styles.testCaseCell}>{field}</TableRowColumn>
+    );
+
+    const outputStyle = { whiteSpace: 'pre-wrap', fontFamily: 'monospace' };
+
+    return (
+      <TableRow
+        key={testCase.identifier}
+        style={styles.testCaseRow[testCaseResult]}
+      >
+        {canReadTests && tableRowColumnFor(testCase.identifier)}
+        {tableRowColumnFor(testCase.expression)}
+        {tableRowColumnFor(
+          (
+            <ExpandableText
+              style={outputStyle}
+              text={testCase.expected || ''}
+            />
+          ) || '',
+        )}
+        {(canReadTests || showPublicTestCasesOutput) &&
+          tableRowColumnFor(
+            (
+              <ExpandableText
+                style={outputStyle}
+                text={testCase.output || ''}
+              />
+            ) || '',
+          )}
+        {tableRowColumnFor(testCaseIcon)}
+      </TableRow>
     );
   }
 
@@ -230,54 +278,6 @@ export class VisibleTestCaseView extends Component {
           </Table>
         </CardText>
       </Card>
-    );
-  }
-
-  renderTestCaseRow(testCase) {
-    const {
-      testCases: { canReadTests },
-    } = this.props;
-    const { showPublicTestCasesOutput } = this.props;
-
-    let testCaseResult = 'unattempted';
-    let testCaseIcon;
-    if (testCase.passed !== undefined) {
-      testCaseResult = testCase.passed ? 'correct' : 'wrong';
-      testCaseIcon = testCase.passed ? <CorrectIcon /> : <WrongIcon />;
-    }
-
-    const tableRowColumnFor = (field) => (
-      <TableRowColumn style={styles.testCaseCell}>{field}</TableRowColumn>
-    );
-
-    const outputStyle = { whiteSpace: 'pre-wrap', fontFamily: 'monospace' };
-
-    return (
-      <TableRow
-        key={testCase.identifier}
-        style={styles.testCaseRow[testCaseResult]}
-      >
-        {canReadTests && tableRowColumnFor(testCase.identifier)}
-        {tableRowColumnFor(testCase.expression)}
-        {tableRowColumnFor(
-          (
-            <ExpandableText
-              style={outputStyle}
-              text={testCase.expected || ''}
-            />
-          ) || '',
-        )}
-        {(canReadTests || showPublicTestCasesOutput) &&
-          tableRowColumnFor(
-            (
-              <ExpandableText
-                style={outputStyle}
-                text={testCase.output || ''}
-              />
-            ) || '',
-          )}
-        {tableRowColumnFor(testCaseIcon)}
-      </TableRow>
     );
   }
 

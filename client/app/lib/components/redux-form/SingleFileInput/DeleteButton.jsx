@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Badge from 'material-ui/Badge';
 import IconButton from 'material-ui/IconButton';
@@ -18,7 +18,7 @@ const styles = {
   },
 };
 
-export default class DeleteButton extends React.Component {
+export default class DeleteButton extends Component {
   renderIcon() {
     return (
       <IconButton

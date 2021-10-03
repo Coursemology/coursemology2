@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Tab, Tabs } from 'material-ui/Tabs';
 import ProgressGraph from './Charts/ProgressGraph';
@@ -24,7 +24,7 @@ const propTypes = {
   watchFrequency: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
 
-class Statistics extends React.Component {
+class Statistics extends Component {
   render() {
     return (
       <Tabs className={styles.statisticsGraphView}>

@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { submit, isPristine } from 'redux-form';
@@ -27,7 +27,7 @@ const styles = {
   },
 };
 
-class PopupDialog extends React.Component {
+class PopupDialog extends Component {
   onFormSubmit = (data) => {
     const { categoryId, tabId, intl } = this.props;
 
@@ -42,15 +42,15 @@ class PopupDialog extends React.Component {
     );
   };
 
-  handleOpen = () => {
-    this.props.dispatch({ type: actionTypes.ASSESSMENT_FORM_SHOW });
-  };
-
   handleClose = () => {
     this.props.dispatch({
       type: actionTypes.ASSESSMENT_FORM_CANCEL,
       payload: { pristine: this.props.pristine },
     });
+  };
+
+  handleOpen = () => {
+    this.props.dispatch({ type: actionTypes.ASSESSMENT_FORM_SHOW });
   };
 
   render() {

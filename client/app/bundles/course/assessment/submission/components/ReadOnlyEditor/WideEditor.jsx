@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { grey200, grey400 } from 'material-ui/styles/colors';
 
@@ -65,39 +65,14 @@ export default class WideEditor extends Component {
     };
   }
 
-  toggleComment(lineNumber) {
-    this.props.toggleLine(lineNumber);
-    this.setState({ activeComment: lineNumber });
-  }
-
   expandComment(lineNumber) {
     this.props.expandLine(lineNumber);
     this.setState({ activeComment: lineNumber });
   }
 
-  renderLineNumberColumn(lineNumber) {
-    const { lineHovered } = this.state;
-    const { annotations } = this.props;
-    const annotation = annotations.find((a) => a.line === lineNumber);
-
-    return (
-      <div
-        style={
-          annotation
-            ? styles.editorLineNumberWithComments
-            : styles.editorLineNumber
-        }
-        onClick={() => this.toggleComment(lineNumber)}
-        onMouseOver={() => this.setState({ lineHovered: lineNumber })}
-        onMouseOut={() => this.setState({ lineHovered: -1 })}
-      >
-        {lineNumber}
-        <AddCommentIcon
-          onClick={() => this.expandComment(lineNumber)}
-          hovered={lineHovered === lineNumber}
-        />
-      </div>
-    );
+  toggleComment(lineNumber) {
+    this.props.toggleLine(lineNumber);
+    this.setState({ activeComment: lineNumber });
   }
 
   renderComments() {
@@ -153,6 +128,31 @@ export default class WideEditor extends Component {
       </div>
     );
     /* eslint-enable react/no-array-index-key */
+  }
+
+  renderLineNumberColumn(lineNumber) {
+    const { lineHovered } = this.state;
+    const { annotations } = this.props;
+    const annotation = annotations.find((a) => a.line === lineNumber);
+
+    return (
+      <div
+        style={
+          annotation
+            ? styles.editorLineNumberWithComments
+            : styles.editorLineNumber
+        }
+        onClick={() => this.toggleComment(lineNumber)}
+        onMouseOver={() => this.setState({ lineHovered: lineNumber })}
+        onMouseOut={() => this.setState({ lineHovered: -1 })}
+      >
+        {lineNumber}
+        <AddCommentIcon
+          onClick={() => this.expandComment(lineNumber)}
+          hovered={lineHovered === lineNumber}
+        />
+      </div>
+    );
   }
 
   render() {

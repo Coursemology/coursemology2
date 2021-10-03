@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { defineMessages, injectIntl, intlShape } from 'react-intl';
@@ -42,7 +42,47 @@ const responseFormTranslations = defineMessages({
   },
 });
 
-class ResponseAnswer extends React.Component {
+class ResponseAnswer extends Component {
+  static renderMultipleChoiceOptions(props) {
+    const {
+      disabled,
+      input: { onChange, value },
+      meta: { touched, dirty, error },
+      question: { grid_view: grid, options },
+    } = props;
+    const selectedOption = value && value.length > 0 && value[0];
+
+    return (
+      <>
+        {(dirty || touched) && error ? (
+          <p style={styles.errorText}>{error}</p>
+        ) : null}
+        <div style={grid ? styles.grid : {}}>
+          {options.map((option) => {
+            const { option: optionText, image_url: imageUrl } = option;
+            const id = option.id;
+            const widget = (
+              <RadioButton
+                value={id}
+                style={grid ? styles.gridOptionWidget : styles.listOptionWidget}
+                iconStyle={grid ? styles.gridOptionWidgetIcon : {}}
+                onCheck={(event, buttonValue) => onChange([buttonValue])}
+                checked={id === selectedOption}
+                disabled={disabled}
+              />
+            );
+            return (
+              <OptionsListItem
+                key={option.id}
+                {...{ optionText, imageUrl, widget, grid }}
+              />
+            );
+          })}
+        </div>
+      </>
+    );
+  }
+
   static renderMultipleResponseOptions(props) {
     const {
       disabled,
@@ -88,55 +128,14 @@ class ResponseAnswer extends React.Component {
     );
   }
 
-  static renderMultipleChoiceOptions(props) {
-    const {
-      disabled,
-      input: { onChange, value },
-      meta: { touched, dirty, error },
-      question: { grid_view: grid, options },
-    } = props;
-    const selectedOption = value && value.length > 0 && value[0];
+  checkMultipleChoiceRequired = (value) => {
+    const { question, intl } = this.props;
+    return question.required && (!value || value.length < 1)
+      ? intl.formatMessage(responseFormTranslations.selectAtLeast, { count: 1 })
+      : undefined;
+  };
 
-    return (
-      <>
-        {(dirty || touched) && error ? (
-          <p style={styles.errorText}>{error}</p>
-        ) : null}
-        <div style={grid ? styles.grid : {}}>
-          {options.map((option) => {
-            const { option: optionText, image_url: imageUrl } = option;
-            const id = option.id;
-            const widget = (
-              <RadioButton
-                value={id}
-                style={grid ? styles.gridOptionWidget : styles.listOptionWidget}
-                iconStyle={grid ? styles.gridOptionWidgetIcon : {}}
-                onCheck={(event, buttonValue) => onChange([buttonValue])}
-                checked={id === selectedOption}
-                disabled={disabled}
-              />
-            );
-            return (
-              <OptionsListItem
-                key={option.id}
-                {...{ optionText, imageUrl, widget, grid }}
-              />
-            );
-          })}
-        </div>
-      </>
-    );
-  }
-
-  constructor(props) {
-    super(props);
-    this.checkQuantitySelected = this.checkQuantitySelected.bind(this);
-    this.checkMultipleChoiceRequired =
-      this.checkMultipleChoiceRequired.bind(this);
-    this.checkTextResponseRequired = this.checkTextResponseRequired.bind(this);
-  }
-
-  checkQuantitySelected(options) {
+  checkQuantitySelected = (options) => {
     const { question, intl } = this.props;
     const {
       required,
@@ -162,18 +161,24 @@ class ResponseAnswer extends React.Component {
     }
 
     return undefined;
-  }
+  };
 
-  checkMultipleChoiceRequired(value) {
-    const { question, intl } = this.props;
-    return question.required && (!value || value.length < 1)
-      ? intl.formatMessage(responseFormTranslations.selectAtLeast, { count: 1 })
-      : undefined;
-  }
-
-  checkTextResponseRequired(value) {
+  checkTextResponseRequired = (value) => {
     const { question } = this.props;
     return question.required && !value ? formTranslations.required : undefined;
+  };
+
+  renderMultipleChoiceField() {
+    const { member, question, disabled } = this.props;
+
+    return (
+      <Field
+        name={`${member}.answer.question_option_ids`}
+        component={ResponseAnswer.renderMultipleChoiceOptions}
+        validate={this.checkMultipleChoiceRequired}
+        {...{ question, disabled }}
+      />
+    );
   }
 
   renderMultipleResponseField() {
@@ -184,19 +189,6 @@ class ResponseAnswer extends React.Component {
         name={`${member}.answer.question_option_ids`}
         component={ResponseAnswer.renderMultipleResponseOptions}
         validate={this.checkQuantitySelected}
-        {...{ question, disabled }}
-      />
-    );
-  }
-
-  renderMultipleChoiceField() {
-    const { member, question, disabled } = this.props;
-
-    return (
-      <Field
-        name={`${member}.answer.question_option_ids`}
-        component={ResponseAnswer.renderMultipleChoiceOptions}
-        validate={this.checkMultipleChoiceRequired}
         {...{ question, disabled }}
       />
     );

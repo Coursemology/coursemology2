@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import Dialog from 'material-ui/Dialog';
@@ -16,7 +16,7 @@ const styles = {
   },
 };
 
-class Popup extends React.Component {
+class Popup extends Component {
   render() {
     const { title, children, actionButtons, onDismiss } = this.props;
     const dismissButton = (

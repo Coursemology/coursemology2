@@ -1,4 +1,3 @@
-import React from 'react';
 import { render } from 'react-dom';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 import NotificationPopup from 'lib/containers/NotificationPopup';

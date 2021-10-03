@@ -1,7 +1,7 @@
 import 'brace/mode/python';
 import 'brace/theme/github';
 
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FieldArray } from 'redux-form';
 import ProgrammingFile from './ProgrammingFile';
@@ -10,7 +10,7 @@ import TestCaseView from '../../../containers/TestCaseView';
 import { parseLanguages } from '../../../utils';
 import { questionShape } from '../../../propTypes';
 
-class Programming extends React.Component {
+class Programming extends Component {
   static renderProgrammingFiles({ fields, readOnly, answerId, language }) {
     return (
       <>

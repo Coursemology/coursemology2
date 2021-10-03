@@ -1,4 +1,4 @@
-import React from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Toggle from 'material-ui/Toggle';
 
@@ -8,7 +8,7 @@ const styles = {
   },
 };
 
-class PublishedCell extends React.PureComponent {
+class PublishedCell extends PureComponent {
   render() {
     const { published, onToggle } = this.props;
     return (

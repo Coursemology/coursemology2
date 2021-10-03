@@ -1,5 +1,5 @@
 import Immutable from 'immutable';
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
@@ -9,19 +9,9 @@ import { grey300 } from 'material-ui/styles/colors';
 import styles from './OnlineEditorView.scss';
 import translations from './OnlineEditorView.intl';
 
-class TestCase extends React.Component {
+class TestCase extends Component {
   static getTestInputName(type, field) {
     return `question_programming[test_cases][${type}][][${field}]`;
-  }
-
-  testCaseDeleteHandler(type, index) {
-    return (e) => {
-      e.preventDefault();
-
-      if (!this.props.isLoading) {
-        this.props.deleteTestCase(this.props.type, index);
-      }
-    };
   }
 
   inlineCodeEditorHandler(type, index, newValue) {
@@ -33,22 +23,14 @@ class TestCase extends React.Component {
     };
   }
 
-  renderInput(test, field, placeholder, index) {
-    return (
-      <TextField
-        type="text"
-        name={TestCase.getTestInputName(this.props.type, field)}
-        onChange={(e, newValue) => {
-          this.props.updateTestCase(this.props.type, index, field, newValue);
-        }}
-        hintText={placeholder}
-        errorText={test.getIn(['error', field])}
-        disabled={this.props.isLoading}
-        value={test.get(field)}
-        fullWidth
-        multiLine
-      />
-    );
+  testCaseDeleteHandler(type, index) {
+    return (e) => {
+      e.preventDefault();
+
+      if (!this.props.isLoading) {
+        this.props.deleteTestCase(this.props.type, index);
+      }
+    };
   }
 
   renderCodeEditorButton(type, index, showCodeEditor) {
@@ -82,6 +64,24 @@ class TestCase extends React.Component {
           />
         )}
       </TableRowColumn>
+    );
+  }
+
+  renderInput(test, field, placeholder, index) {
+    return (
+      <TextField
+        type="text"
+        name={TestCase.getTestInputName(this.props.type, field)}
+        onChange={(e, newValue) => {
+          this.props.updateTestCase(this.props.type, index, field, newValue);
+        }}
+        hintText={placeholder}
+        errorText={test.getIn(['error', field])}
+        disabled={this.props.isLoading}
+        value={test.get(field)}
+        fullWidth
+        multiLine
+      />
     );
   }
 

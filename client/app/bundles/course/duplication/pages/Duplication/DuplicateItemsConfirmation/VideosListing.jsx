@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -20,7 +20,7 @@ const translations = defineMessages({
   },
 });
 
-class VideoListing extends React.Component {
+class VideoListing extends Component {
   static renderDefaultTabRow() {
     return (
       <IndentedCheckbox
@@ -28,6 +28,15 @@ class VideoListing extends React.Component {
         indentLevel={0}
         label={<FormattedMessage {...translations.defaultTab} />}
       />
+    );
+  }
+
+  static renderTab(tab) {
+    return (
+      <div key={tab.id}>
+        {VideoListing.renderTabRow(tab)}
+        {tab.videos.map(VideoListing.renderVideoRow)}
+      </div>
     );
   }
 
@@ -43,15 +52,6 @@ class VideoListing extends React.Component {
           </span>
         }
       />
-    );
-  }
-
-  static renderTab(tab) {
-    return (
-      <div key={tab.id}>
-        {VideoListing.renderTabRow(tab)}
-        {tab.videos.map(VideoListing.renderVideoRow)}
-      </div>
     );
   }
 

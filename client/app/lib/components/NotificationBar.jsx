@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import Snackbar from 'material-ui/Snackbar';
@@ -18,7 +18,7 @@ export const notificationShape = PropTypes.shape({
  * This is a simplified SnackBar, which will send notification and auto hide the notification after
  * certain period (default is 2000ms).
  */
-export default class NotificationBar extends React.Component {
+export default class NotificationBar extends Component {
   shouldComponentUpdate(nextProps) {
     return nextProps.notification !== this.props.notification;
   }

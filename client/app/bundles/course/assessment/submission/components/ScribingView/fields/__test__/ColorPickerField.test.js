@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { mount } from 'enzyme';
 import ColorPickerField from 'course/assessment/submission/components/ScribingView/fields/ColorPickerField';

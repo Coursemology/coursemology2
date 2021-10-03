@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import { Overlay } from 'react-overlays';
@@ -57,13 +57,13 @@ export default class NarrowEditor extends Component {
     };
   }
 
-  toggleComment(lineNumber) {
-    this.props.toggleLine(lineNumber);
+  expandComment(lineNumber) {
+    this.props.expandLine(lineNumber);
     this.setState({ activeComment: lineNumber });
   }
 
-  expandComment(lineNumber) {
-    this.props.expandLine(lineNumber);
+  toggleComment(lineNumber) {
+    this.props.toggleLine(lineNumber);
     this.setState({ activeComment: lineNumber });
   }
 
