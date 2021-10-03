@@ -47,6 +47,8 @@
 
 # Ignore installed node libraries and log
 npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 node_modules
 
 # Ignore generated js bundles
