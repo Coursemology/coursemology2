@@ -37,7 +37,7 @@ RSpec.feature 'Course: VirtualClassrooms', js: true do
         expect(page).to have_selector(valid_virtual_classroom_eid)
         page.find(valid_virtual_classroom_eid).click
         wait_for_ajax
-        expect(page).to have_selector("#lec-link-#{valid_virtual_classroom.id}", wait: 10)
+        expect(page).to have_selector("#lec-link-#{valid_virtual_classroom.id}")
         valid_virtual_classroom.reload
         expect(valid_virtual_classroom.instructor_classroom_link).to be_truthy
       end
@@ -46,7 +46,7 @@ RSpec.feature 'Course: VirtualClassrooms', js: true do
         visit course_virtual_classrooms_path(course)
         page.find("#lec-#{course.id}-#{ended_virtual_classroom.id}-list").click
         wait_for_ajax
-        expect(page).to have_selector('.recorded-video-link', wait: 10)
+        expect(page).to have_selector('.recorded-video-link')
       end
     end
 
@@ -63,7 +63,7 @@ RSpec.feature 'Course: VirtualClassrooms', js: true do
         visit course_virtual_classrooms_path(course)
         page.find(valid_virtual_classroom_eid).click
         wait_for_ajax
-        expect(page).to have_selector("#lec-link-#{valid_virtual_classroom.id}", wait: 10)
+        expect(page).to have_selector("#lec-link-#{valid_virtual_classroom.id}")
         valid_virtual_classroom.reload
         # Make sure link remains as instructor link
         expect(valid_virtual_classroom.instructor_classroom_link).to eq(instructor_link)
