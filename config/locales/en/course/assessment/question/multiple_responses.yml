@@ -10,8 +10,9 @@ en:
             success: 'The multiple response question was created.'
           update:
             success: 'The multiple response question was updated.'
-            switch_mcq_success: 'The MCQ question has been switched to MRQ'
-            switch_mrq_success: 'The MRQ question has been switched to MCQ'
+            failure: 'Failed to update the multiple response question'
+            switch_mcq_success: 'Question %{number} has been successfully switched to MRQ'
+            switch_mrq_success: 'Question %{number} has been successfully switched to MCQ'
           destroy:
             success: 'The multiple response question was deleted.'
             failure: 'Could not delete multiple response question: %{error}'
@@ -33,15 +34,16 @@ en:
             switch_to_mcq: 'Change to Multiple Choice Question (MCQ)'
             switch_to_mrq: 'Change to Multiple Response Question (MRQ)'
             no_answer: >
-              There are no existing answers and/or submissions and this question-type can be safely switched.
+              There are no existing answers and/or submissions for Question %{number}
+              and this question-type can be safely switched.
               Are you sure you want to proceed?
             confirm_switch_to_mcq: > 
-              Are you sure you want to switch the question's type to MCQ?
+              Are you sure you want to switch Question %{number} to MCQ?
               THERE ARE EXISTING ANSWERS AND/OR SUBMISSIONS! Changing the question-type may cause
               inconsistencies in the student's responses. To prevent this, you can unsubmit all submissions
               and remove all existing answers for this question. Otherwise, you can retain the answers and proceed.
             confirm_switch_to_mrq: >
-              Are you sure you want to switch the question's type to MRQ?
+              Are you sure you want to switch Question %{number} to MRQ?
               THERE ARE EXISTING ANSWERS AND/OR SUBMISSIONS! Changing the question-type may cause
               inconsistencies in the student's responses. To prevent this, you can unsubmit all submissions
               and remove all existing answers for this question. Otherwise, you can retain the answers and proceed.

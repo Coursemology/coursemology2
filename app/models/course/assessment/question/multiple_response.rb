@@ -73,6 +73,10 @@ class Course::Assessment::Question::MultipleResponse < ApplicationRecord
     randomized_options.shuffle(random: Random.new(seed)) + non_randomized_options
   end
 
+  def question_number
+    question_assessments.first.question_number
+  end
+
   private
 
   def validate_multiple_choice_has_solution
