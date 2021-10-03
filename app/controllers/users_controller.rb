@@ -4,7 +4,7 @@ class UsersController < ApplicationController
 
   def show
     if @user.built_in?
-      render file: 'public/404', layout: false, status: :not_found
+      render 'public/404', layout: false, status: :not_found
     else
       course_users =
         @user.course_users.with_course_statistics.from_instance(current_tenant).includes(:course)
