@@ -1,12 +1,12 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::ForumResponse < ApplicationRecord
+class Course::Assessment::Question::ForumPostResponse < ApplicationRecord
   acts_as :question, class_name: Course::Assessment::Question.name
 
   validates :max_posts, presence: true, numericality: { only_integer: true }
   validate :allowable_max_post_count
 
   def question_type
-    I18n.t('course.assessment.question.forum_responses.question_type')
+    I18n.t('course.assessment.question.forum_post_responses.question_type')
   end
 
   def max_posts_allowed

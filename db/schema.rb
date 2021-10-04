@@ -97,6 +97,10 @@ ActiveRecord::Schema.define(version: 2021_10_03_230453) do
     t.index ["job_id"], name: "index_course_assessment_answer_auto_gradings_on_job_id", unique: true
   end
 
+  create_table "course_assessment_answer_forum_post_responses", force: :cascade do |t|
+    t.string "answer_text"
+  end
+
   create_table "course_assessment_answer_forum_posts", force: :cascade do |t|
     t.bigint "answer_id", null: false
     t.bigint "forum_topic_id", null: false
@@ -112,10 +116,6 @@ ActiveRecord::Schema.define(version: 2021_10_03_230453) do
     t.index ["forum_topic_id"], name: "index_course_assessment_answer_forum_posts_on_forum_topic_id"
     t.index ["parent_post_id"], name: "index_course_assessment_answer_forum_posts_on_parent_post_id"
     t.index ["post_id"], name: "index_course_assessment_answer_forum_posts_on_post_id"
-  end
-
-  create_table "course_assessment_answer_forum_responses", force: :cascade do |t|
-    t.string "answer_text"
   end
 
   create_table "course_assessment_answer_multiple_response_options", id: :serial, force: :cascade do |t|
@@ -241,7 +241,7 @@ ActiveRecord::Schema.define(version: 2021_10_03_230453) do
     t.index ["group_id"], name: "index_course_assessment_question_bundles_on_group_id"
   end
 
-  create_table "course_assessment_question_forum_responses", force: :cascade do |t|
+  create_table "course_assessment_question_forum_post_responses", force: :cascade do |t|
     t.boolean "has_text_response", null: false
     t.integer "max_posts", limit: 2, null: false
   end
@@ -1240,7 +1240,7 @@ ActiveRecord::Schema.define(version: 2021_10_03_230453) do
   add_foreign_key "course_announcements", "users", column: "updater_id", name: "fk_course_announcements_updater_id"
   add_foreign_key "course_assessment_answer_auto_gradings", "course_assessment_answers", column: "answer_id", name: "fk_course_assessment_answer_auto_gradings_answer_id"
   add_foreign_key "course_assessment_answer_auto_gradings", "jobs", name: "fk_course_assessment_answer_auto_gradings_job_id", on_delete: :nullify
-  add_foreign_key "course_assessment_answer_forum_posts", "course_assessment_answer_forum_responses", column: "answer_id"
+  add_foreign_key "course_assessment_answer_forum_posts", "course_assessment_answer_forum_post_responses", column: "answer_id"
   add_foreign_key "course_assessment_answer_forum_posts", "course_discussion_posts", column: "parent_post_id"
   add_foreign_key "course_assessment_answer_forum_posts", "course_discussion_posts", column: "post_id"
   add_foreign_key "course_assessment_answer_forum_posts", "course_forum_topics", column: "forum_topic_id"

@@ -58,7 +58,7 @@ en:
             scribing: 'Scribing'
             # TODO: Uncomment the line below when TextResponseComprehension is ready
             # comprehension: 'Comprehension'
-            forum_response: 'Forum Response'
+            forum_post_response: 'Forum Post Response'
           non_auto_gradable_questions: >
             Some of the questions in this assessment are not auto-gradable.
             The autograder will always award the maximum grade for these questions.

@@ -1,12 +1,12 @@
 # frozen_string_literal: true
-class CreateCourseAssessmentQuestionForumResponses < ActiveRecord::Migration[6.0]
+class CreateCourseAssessmentQuestionForumPostResponses < ActiveRecord::Migration[6.0]
   def change
-    create_table :course_assessment_question_forum_responses do |t|
+    create_table :course_assessment_question_forum_post_responses do |t|
       t.boolean :has_text_response, null: false
       t.integer :max_posts, limit: 2, null: false
     end
 
-    create_table:course_assessment_answer_forum_responses do |t|
+    create_table:course_assessment_answer_forum_post_responses do |t|
       t.string :answer_text, null: true
     end
 
@@ -14,7 +14,7 @@ class CreateCourseAssessmentQuestionForumResponses < ActiveRecord::Migration[6.0
       t.references :answer,
                    null: false,
                    foreign_key: {
-                     to_table: :course_assessment_answer_forum_responses
+                     to_table: :course_assessment_answer_forum_post_responses
                    }
       t.references :forum_topic,
                    null: false,
