@@ -9,6 +9,20 @@ class Course::Assessment::Question::ForumPostResponse < ApplicationRecord
     I18n.t('course.assessment.question.forum_post_responses.question_type')
   end
 
+  def attempt(submission, last_attempt = nil)
+    answer =
+      Course::Assessment::Answer::ForumPostResponse.new(submission: submission, question: question)
+    last_attempt&.answer_options&.each do |answer_option|
+      answer.answer_options.build(option_id: answer_option.option_id)
+    end
+
+    answer.acting_as
+  end
+
+  def initialize_duplicate(_duplicator, other)
+    copy_attributes(other)
+  end
+
   def max_posts_allowed
     10
   end
