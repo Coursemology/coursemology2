@@ -7,7 +7,6 @@ class Course::Assessment::Question::ForumResponsesController < Course::Assessmen
                               through: :assessment, parent: false, except: [:new, :create]
   before_action :load_question_assessment, only: [:edit, :update]
 
-  # TODO: check why question_type cannot be used as a standalone. currently using @forum_response_question.question_type
   def new
   end
 
@@ -35,7 +34,6 @@ class Course::Assessment::Question::ForumResponsesController < Course::Assessmen
   end
 
   def destroy
-    title = @forum_response_question.question_type
     if @forum_response_question.destroy
       redirect_to course_assessment_path(current_course, @assessment),
                   success: t('.success')
