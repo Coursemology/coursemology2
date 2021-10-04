@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_14_114834) do
+ActiveRecord::Schema.define(version: 2021_10_03_230453) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -95,6 +95,27 @@ ActiveRecord::Schema.define(version: 2021_09_14_114834) do
     t.index ["actable_id", "actable_type"], name: "index_course_assessment_answer_auto_gradings_on_actable", unique: true
     t.index ["answer_id"], name: "index_course_assessment_answer_auto_gradings_on_answer_id", unique: true
     t.index ["job_id"], name: "index_course_assessment_answer_auto_gradings_on_job_id", unique: true
+  end
+
+  create_table "course_assessment_answer_forum_posts", force: :cascade do |t|
+    t.bigint "answer_id", null: false
+    t.bigint "forum_topic_id", null: false
+    t.bigint "post_id", null: false
+    t.string "post_text", null: false
+    t.boolean "is_post_updated", null: false
+    t.boolean "is_post_deleted", null: false
+    t.bigint "parent_post_id", null: false
+    t.string "parent_post_text", null: false
+    t.boolean "is_parent_post_updated", null: false
+    t.boolean "is_parent_post_deleted", null: false
+    t.index ["answer_id"], name: "index_course_assessment_answer_forum_posts_on_answer_id"
+    t.index ["forum_topic_id"], name: "index_course_assessment_answer_forum_posts_on_forum_topic_id"
+    t.index ["parent_post_id"], name: "index_course_assessment_answer_forum_posts_on_parent_post_id"
+    t.index ["post_id"], name: "index_course_assessment_answer_forum_posts_on_post_id"
+  end
+
+  create_table "course_assessment_answer_forum_responses", force: :cascade do |t|
+    t.string "answer_text"
   end
 
   create_table "course_assessment_answer_multiple_response_options", id: :serial, force: :cascade do |t|
@@ -218,6 +239,11 @@ ActiveRecord::Schema.define(version: 2021_09_14_114834) do
     t.string "title", null: false
     t.bigint "group_id", null: false
     t.index ["group_id"], name: "index_course_assessment_question_bundles_on_group_id"
+  end
+
+  create_table "course_assessment_question_forum_responses", force: :cascade do |t|
+    t.boolean "has_text_response", null: false
+    t.integer "max_posts", limit: 2, null: false
   end
 
   create_table "course_assessment_question_groups", force: :cascade do |t|
@@ -1214,6 +1240,10 @@ ActiveRecord::Schema.define(version: 2021_09_14_114834) do
   add_foreign_key "course_announcements", "users", column: "updater_id", name: "fk_course_announcements_updater_id"
   add_foreign_key "course_assessment_answer_auto_gradings", "course_assessment_answers", column: "answer_id", name: "fk_course_assessment_answer_auto_gradings_answer_id"
   add_foreign_key "course_assessment_answer_auto_gradings", "jobs", name: "fk_course_assessment_answer_auto_gradings_job_id", on_delete: :nullify
+  add_foreign_key "course_assessment_answer_forum_posts", "course_assessment_answer_forum_responses", column: "answer_id"
+  add_foreign_key "course_assessment_answer_forum_posts", "course_discussion_posts", column: "parent_post_id"
+  add_foreign_key "course_assessment_answer_forum_posts", "course_discussion_posts", column: "post_id"
+  add_foreign_key "course_assessment_answer_forum_posts", "course_forum_topics", column: "forum_topic_id"
   add_foreign_key "course_assessment_answer_multiple_response_options", "course_assessment_answer_multiple_responses", column: "answer_id", name: "fk_course_assessment_answer_multiple_response_options_answer_id"
   add_foreign_key "course_assessment_answer_multiple_response_options", "course_assessment_question_multiple_response_options", column: "option_id", name: "fk_course_assessment_answer_multiple_response_options_option_id"
   add_foreign_key "course_assessment_answer_programming_file_annotations", "course_assessment_answer_programming_files", column: "file_id", name: "fk_course_assessment_answer_ed21459e7a2a5034dcf43a14812cb17d"

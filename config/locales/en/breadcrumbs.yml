@@ -105,6 +105,8 @@ en:
             new: :'course.assessment.question.programming.new.header'
           scribing:
             new: :'course.assessment.question.scribing.new.header'
+          forum_responses:
+            new: :'course.assessment.question.forum_responses.new.header'
         skills:
           new: :'course.assessment.skills.new.header'
           index: :'course.assessment.skills.index.header'

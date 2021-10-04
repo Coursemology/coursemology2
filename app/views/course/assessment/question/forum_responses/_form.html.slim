@@ -1,0 +1,13 @@
+= simple_form_for [current_course, @assessment, @forum_response_question] do |f|
+  = f.error_notification
+  = render partial: 'course/assessment/questions/form', locals: { f: f, question_assessment: @question_assessment }
+
+  = f.input :max_posts, collection: (1..@forum_response_question.max_posts_allowed).to_a, label: t('.max_posts')
+  = f.input :has_text_response, label: t('.has_text_response')
+
+  - name = t('.forum_response_button')
+  - if f.object.persisted?
+    - button_text = t('helpers.buttons.update', model: name)
+  - else
+    - button_text = t('helpers.buttons.create', model: name)
+  = f.button :submit, button_text
