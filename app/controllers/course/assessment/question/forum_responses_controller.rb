@@ -54,4 +54,5 @@ class Course::Assessment::Question::ForumResponsesController < Course::Assessmen
   def load_question_assessment
     @question_assessment = load_question_assessment_for(@forum_response_question)
   end
+
 end

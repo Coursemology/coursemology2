@@ -14,8 +14,7 @@ class Course::Assessment::Question::ForumResponse < ApplicationRecord
   end
 
   def allowable_max_post_count
-    unless (1..max_posts_allowed).include?(max_posts)
-      errors.add(:max_posts, "has to be between 1 and #{max_posts_allowed}")
-    end
+    return if (1..max_posts_allowed).include?(max_posts)
+    errors.add(:max_posts, "has to be between 1 and #{max_posts_allowed}")
   end
 end
