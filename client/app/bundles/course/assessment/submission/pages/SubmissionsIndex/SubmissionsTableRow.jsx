@@ -5,14 +5,7 @@ import ReactTooltip from 'react-tooltip';
 import moment from 'lib/moment';
 import { TableRowColumn } from 'material-ui/Table';
 import FontIcon from 'material-ui/FontIcon';
-import {
-  red600,
-  red900,
-  blue600,
-  pink600,
-  grey500,
-  grey700,
-} from 'material-ui/styles/colors';
+import { red600, red900, blue600, pink600 } from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
 import HistoryIcon from 'material-ui/svg-icons/action/history';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
@@ -38,7 +31,7 @@ const styles = {
     backgroundColor: blue600,
   },
   nameWrapper: {
-    display: 'flex',
+    display: 'inline-block',
     flexWrap: 'nowrap',
     alignItems: 'center',
   },
@@ -101,9 +94,7 @@ export default class SubmissionsTableRow extends React.Component {
           <FontIcon
             data-tip
             data-for="test"
-            className="fa fa-user fa-xs"
-            color={grey500}
-            hoverColor={grey700}
+            className="fa fa-user-secret fa-xs"
             style={styles.phantomIcon}
           />
           <ReactTooltip id="test" effect="solid">
@@ -305,14 +296,16 @@ export default class SubmissionsTableRow extends React.Component {
     return (
       <>
         <TableRowColumn style={styles.tableCell}>
-          <a
-            style={styles.nameWrapper}
-            href={getCourseUserURL(courseId, submission.courseUser.id)}
-          >
+          <span>
             {SubmissionsTableRow.renderPhantomUserIcon(submission)}
             &nbsp;
-            {submission.courseUser.name}
-          </a>
+            <a
+              style={styles.nameWrapper}
+              href={getCourseUserURL(courseId, submission.courseUser.id)}
+            >
+              {submission.courseUser.name}
+            </a>
+          </span>
         </TableRowColumn>
         <TableRowColumn style={tableCenterCellStyle}>
           {this.renderSubmissionWorkflowState(submission)}
