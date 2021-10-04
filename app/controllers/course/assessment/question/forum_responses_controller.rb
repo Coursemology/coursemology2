@@ -7,9 +7,6 @@ class Course::Assessment::Question::ForumResponsesController < Course::Assessmen
                               through: :assessment, parent: false, except: [:new, :create]
   before_action :load_question_assessment, only: [:edit, :update]
 
-  def new
-  end
-
   def create
     if @forum_response_question.save
       redirect_to course_assessment_path(current_course, @assessment),
