@@ -4,8 +4,15 @@ import { FormattedMessage } from 'react-intl';
 import ReactTooltip from 'react-tooltip';
 import moment from 'lib/moment';
 import { TableRowColumn } from 'material-ui/Table';
-import Chip from 'material-ui/Chip';
-import { red600, red900, blue600, pink600 } from 'material-ui/styles/colors';
+import FontIcon from 'material-ui/FontIcon';
+import {
+  red600,
+  red900,
+  blue600,
+  pink600,
+  grey500,
+  grey700,
+} from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
 import HistoryIcon from 'material-ui/svg-icons/action/history';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
@@ -30,10 +37,13 @@ const styles = {
     margin: 4,
     backgroundColor: blue600,
   },
-  chipsWrapper: {
+  nameWrapper: {
     display: 'flex',
     flexWrap: 'nowrap',
     alignItems: 'center',
+  },
+  phantomIcon: {
+    fontSize: '16px',
   },
   unstartedText: {
     color: red600,
@@ -84,16 +94,22 @@ export default class SubmissionsTableRow extends React.Component {
     };
   }
 
-  static renderPhantomUserChip(submission) {
+  static renderPhantomUserIcon(submission) {
     if (submission.courseUser.phantom) {
       return (
-        <Chip
-          style={styles.chip}
-          labelColor="white"
-          key={submission.courseUser.id}
-        >
-          <FormattedMessage {...submissionsTranslations.phantom} />
-        </Chip>
+        <>
+          <FontIcon
+            data-tip
+            data-for="test"
+            className="fa fa-user fa-xs"
+            color={grey500}
+            hoverColor={grey700}
+            style={styles.phantomIcon}
+          />
+          <ReactTooltip id="test" effect="solid">
+            <FormattedMessage {...submissionsTranslations.phantom} />
+          </ReactTooltip>
+        </>
       );
     }
     return null;
@@ -290,11 +306,12 @@ export default class SubmissionsTableRow extends React.Component {
       <>
         <TableRowColumn style={styles.tableCell}>
           <a
-            style={styles.chipsWrapper}
+            style={styles.nameWrapper}
             href={getCourseUserURL(courseId, submission.courseUser.id)}
           >
+            {SubmissionsTableRow.renderPhantomUserIcon(submission)}
+            &nbsp;
             {submission.courseUser.name}
-            {SubmissionsTableRow.renderPhantomUserChip(submission)}
           </a>
         </TableRowColumn>
         <TableRowColumn style={tableCenterCellStyle}>

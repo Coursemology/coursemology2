@@ -69,7 +69,7 @@ const translations = defineMessages({
   },
   phantom: {
     id: 'course.assessment.submission.submissions.phantom',
-    defaultMessage: 'Phantom',
+    defaultMessage: 'Phantom User',
   },
   unsubmitAllSubmissions: {
     id: 'course.assessment.submission.unsubmitAllSubmissions',
