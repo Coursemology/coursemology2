@@ -22,7 +22,8 @@ RSpec.describe 'Course: Assessment: Submissions: Download', js: true do
       scenario 'I can download all submissions by non-phantom students' do
         submission
         visit course_assessment_submissions_path(course, assessment)
-
+        puts page.body
+        sleep 1
         find('#students-tab').click
         find('#submission-dropdown-icon').click
         expect(page).to have_css('.download-submissions-enabled')
@@ -39,6 +40,7 @@ RSpec.describe 'Course: Assessment: Submissions: Download', js: true do
           submission
           visit course_assessment_submissions_path(course, assessment)
 
+          sleep 1
           find('#staff-tab').click
           find('#submission-dropdown-icon').click
           expect(page).to have_css('.download-submissions-enabled')
@@ -59,6 +61,7 @@ RSpec.describe 'Course: Assessment: Submissions: Download', js: true do
           submission
           visit course_assessment_submissions_path(course, assessment)
 
+          sleep 1
           find('#my-students-tab').click
           find('#submission-dropdown-icon').click
           expect(page).to have_css('.download-submissions-enabled')
