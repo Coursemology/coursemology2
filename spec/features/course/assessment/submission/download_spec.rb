@@ -23,7 +23,7 @@ RSpec.describe 'Course: Assessment: Submissions: Download' do
         submission
         visit course_assessment_submissions_path(course, assessment)
 
-        # find('#students-tab').click
+        find('#students-tab').click
         find('#submission-dropdown-icon').click
         expect(page).to have_css('.download-submissions-enabled')
       end
@@ -59,7 +59,7 @@ RSpec.describe 'Course: Assessment: Submissions: Download' do
           submission
           visit course_assessment_submissions_path(course, assessment)
 
-          # find('#my-students-tab').click
+          find('#my-students-tab').click
           find('#submission-dropdown-icon').click
           expect(page).to have_css('.download-submissions-enabled')
         end

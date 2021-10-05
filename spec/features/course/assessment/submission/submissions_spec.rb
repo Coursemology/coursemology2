@@ -97,7 +97,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
 
       scenario 'I can publish all graded exams', js: true do
         visit course_assessment_submissions_path(course, assessment)
-        # find('#students-tab').click
+        find('#students-tab').click
 
         expect(page).to have_text('Graded but not published')
         click_button('Publish Grades')
@@ -116,7 +116,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
       scenario 'I can unsubmit all submissions', js: true do
         visit course_assessment_submissions_path(course, assessment)
 
-        # find('#students-tab').click
+        find('#students-tab').click
         find('#submission-dropdown-icon').click
         sleep 2
         expect(page).to have_css('.unsubmit-submissions-enabled')
@@ -132,7 +132,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
       scenario 'I can delete all submissions', js: true do
         visit course_assessment_submissions_path(course, assessment)
 
-        # find('#students-tab').click
+        find('#students-tab').click
         find('#submission-dropdown-icon').click
         sleep 2
         expect(page).to have_css('.delete-submissions-enabled')
