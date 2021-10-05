@@ -1,17 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field } from 'redux-form';
-import TextResponseAnswer from './TextResponse';
+import {Field} from 'redux-form';
 import RichTextField from 'lib/components/redux-form/RichTextField';
 
-import { questionShape } from '../../propTypes';
+import {questionShape} from '../../propTypes';
 
-function ForumPostResponse({ question, readOnly, answerId, graderView }) {
+function renderForumPostSelector() {
+    // TODO
+}
+
+function renderTextAnswer({readOnly, answerId}) {
     const readOnlyAnswer = (
         <Field
             name={`${answerId}[answer_text]`}
             component={(props) => (
-                <div dangerouslySetInnerHTML={{ __html: props.input.value }} />
+                <div dangerouslySetInnerHTML={{__html: props.input.value}}/>
             )}
         />
     );
@@ -26,8 +29,16 @@ function ForumPostResponse({ question, readOnly, answerId, graderView }) {
 
     return (
         <div>
-            <p>{answerId}</p>
+            {readOnly ? readOnlyAnswer : richtextAnswer}
+        </div>
+    );
+}
 
+function ForumPostResponse({question, readOnly, answerId}) {
+    return (
+        <div>
+            {renderForumPostSelector()}
+            {question.has_text_response && renderTextAnswer({readOnly, answerId})}
         </div>
     );
 }
@@ -36,7 +47,6 @@ ForumPostResponse.propTypes = {
     question: questionShape,
     readOnly: PropTypes.bool,
     answerId: PropTypes.number,
-    graderView: PropTypes.bool,
     input: PropTypes.shape({
         value: PropTypes.string,
     }),

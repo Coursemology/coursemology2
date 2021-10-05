@@ -4,5 +4,6 @@ class Course::Assessment::Answer::ForumPostResponse < ApplicationRecord
 
   def assign_params(params)
     acting_as.assign_params(params)
+    self.answer_text = params[:answer_text] if params[:answer_text]
   end
 end
