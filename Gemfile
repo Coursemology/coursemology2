@@ -6,7 +6,6 @@ gem 'tzinfo-data', platforms: [:mswin, :mswin64]
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '>= 6.0'
-# gem 'rails-i18n', '~> 6.0.0'
 
 # Use PostgreSQL for the backend
 gem 'pg'
@@ -26,10 +25,8 @@ gem 'activerecord-userstamp', git: 'https://github.com/raymondtangsc/activerecor
 gem 'after_commit_action'
 # Allow declaring the calculated attributes of a record
 gem 'calculated_attributes'
-# Baby Squeel as an SQL-like DSL
-# gem 'baby_squeel', '>= 1.2'
 # For multiple table inheritance
-#   TODO: Figure out breaking changes in v2 as polymorpshism is not working correctly.
+# TODO: Figure out breaking changes in v2 as polymorphism is not working correctly.
 gem 'active_record-acts_as', git: 'https://github.com/Coursemology/active_record-acts_as', branch: 'rails5.2.3'
 # Organise ActiveRecord model into a tree structure
 gem 'edge'
@@ -194,8 +191,6 @@ gem 'omniauth-facebook'
 
 # Use cancancan for authorization
 gem 'cancancan'
-# gem 'cancancan-baby_squeel', git: 'https://github.com/Coursemology/cancancan-baby_squeel.git', branch: 'rails5.2.3'
-# gem 'ransack', require: false
 
 # Some helpers for structuring CSS/JavaScript
 # Official version https://github.com/winston/rails_utils/pull/30 is no longer maintained.
@@ -233,9 +228,6 @@ gem 'coursemology-polyglot', git: 'https://github.com/Coursemology/polyglot.git'
 
 # To assist with bulk inserts into database
 gem 'activerecord-import', '>= 0.2.0'
-
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
 
 gem 'record_tag_helper'
 gem 'rails-controller-testing'
