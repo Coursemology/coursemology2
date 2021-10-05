@@ -12,7 +12,7 @@ nav.navbar.navbar-inverse.navbar-fixed-top role="navigation"
     div.collapse.navbar-collapse#site-navigation-navbar
       ul.nav.navbar-nav.pull-right
         li
-          - my_courses = user_signed_in? && Course.containing_user(current_user).ordered_by_end_at
+          - my_courses = user_signed_in? && Course.containing_user(current_user).ordered_by_start_at
           - if my_courses.present?
             a.dropdown-toggle data-toggle="dropdown"
               => t('layout.navbar.courses')
