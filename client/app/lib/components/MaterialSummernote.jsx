@@ -217,7 +217,7 @@ class MaterialSummernote extends React.Component {
               lang: i18nLocale,
               followingToolbar: false,
             }}
-            value={this.props.value}
+            children={<div dangerouslySetInnerHTML={{ __html: this.props.value }}></div>}
             onChange={this.props.onChange}
             onFocus={() => {
               this.setState({ isFocused: true });
