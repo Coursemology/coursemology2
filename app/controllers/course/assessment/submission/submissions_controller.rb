@@ -161,7 +161,7 @@ class Course::Assessment::Submission::SubmissionsController < \
 
   def unsubmit
     authorize!(:update, @assessment)
-    submission = @assessment.submissions.find(params[:submission_id]) 
+    submission = @assessment.submissions.find(params[:submission_id])
     if submission
       submission.update('unmark' => 'true') if submission.graded?
       submission.update('unsubmit' => 'true')
