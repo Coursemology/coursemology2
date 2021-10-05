@@ -161,8 +161,10 @@ class Course::Assessment::Submission::SubmissionsController < \
 
   def unsubmit
     authorize!(:update, @assessment)
-    submission = @assessment.submissions.find(params[:submission_id])
-    if submission.update('unsubmit' => 'true')
+    submission = @assessment.submissions.find(params[:submission_id]) 
+    if submission
+      submission.update('unmark' => 'true') if submission.graded?
+      submission.update('unsubmit' => 'true')
       head :ok
     else
       logger.error("failed to unsubmit submission: #{submission.errors.inspect}")
@@ -189,6 +191,7 @@ class Course::Assessment::Submission::SubmissionsController < \
     submission = @assessment.submissions.find(params[:submission_id])
     authorize!(:delete_submission, submission)
     if submission
+      submission.update('unmark' => 'true') if submission.graded?
       submission.update('unsubmit' => 'true') unless submission.attempting?
       submission.destroy!
       head :ok

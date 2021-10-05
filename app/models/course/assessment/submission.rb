@@ -22,7 +22,6 @@ class Course::Assessment::Submission < ApplicationRecord
       event :publish, transitions_to: :published
     end
     state :graded do
-      event :unsubmit, transitions_to: :attempting
       # Revert to submitted state but keep the grading info.
       event :unmark, transitions_to: :submitted
       event :publish, transitions_to: :published
