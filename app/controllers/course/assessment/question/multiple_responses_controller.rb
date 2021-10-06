@@ -28,10 +28,14 @@ class Course::Assessment::Question::MultipleResponsesController < Course::Assess
 
   def update
     if params.key?(:multiple_choice)
-      @message_success_switch = if params[:multiple_choice] == 'true'
+      @message_success_switch = if params[:multiple_choice] == 'true' && params[:unsubmit] == 'false'
                                   t('.switch_mrq_success', number: @question_number)
-                                else
+                                elsif params[:multiple_choice] == 'true'
+                                  t('.switch_mrq_unsubmit_success', number: @question_number)
+                                elsif params[:multiple_choice] == 'false' && params[:unsubmit] == 'false'
                                   t('.switch_mcq_success', number: @question_number)
+                                else
+                                  t('.switch_mcq_unsubmit_success', number: @question_number)
                                 end
       @message_failure_switch = t('.failure')
       switch_mcq_mrq_type(params[:multiple_choice], params[:unsubmit])

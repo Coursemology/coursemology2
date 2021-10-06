@@ -34,10 +34,10 @@ function loadCustomDialogue(element, successCallback) {
     <ProviderWrapper>
       <RailsConfirmationDialog
         onConfirmCallback={() => successCallback(element)}
-        onConfirmCustomCallback={() => successCallback(element, true)}
+        onConfirmSecondaryCallback={() => successCallback(element, true)}
         message={element.attr('data-confirm')}
         confirmButtonText={element.attr('data-confirm_text')}
-        confirmButtonCustomText={element.attr('data-confirm_custom_text')}
+        confirmButtonSecondaryText={element.attr('data-confirm_secondary_text')}
       />
     </ProviderWrapper>,
     mountNode,
@@ -68,7 +68,7 @@ function submitLink(link) {
 
 function overrideConfirmDialog() {
   // Success callback if dialog is confirmed.
-  function onConfirm(element, custom) {
+  function onConfirm(element, secondary) {
     element.removeAttr('data-confirm');
 
     if (
@@ -87,13 +87,13 @@ function overrideConfirmDialog() {
     } else {
       // Element is a remote link, button, etc.
       // Additional params appended to the href link
-      if (custom) {
+      if (secondary) {
         element
           .parent()
           .attr(
             'href',
             `${element.parent().attr('href')}&${element.attr(
-              'data-confirm_custom',
+              'data-confirm_secondary',
             )}`,
           );
       }
@@ -112,7 +112,7 @@ function overrideConfirmDialog() {
     if (!element.attr('data-confirm')) {
       return true;
     }
-    if (element.attr('data-confirm_custom')) {
+    if (element.attr('data-confirm_secondary')) {
       loadCustomDialogue(element, onConfirm);
     } else {
       loadDialogue(element, onConfirm);

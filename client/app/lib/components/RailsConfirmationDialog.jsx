@@ -7,8 +7,8 @@ class RailsConfirmationDialog extends React.Component {
     super(props);
     this.state = { open: true, disableButtons: false };
     this.onConfirm = this.onConfirm.bind(this);
-    this.onConfirmCustom = this.props.onConfirmCustomCallback
-      ? this.onConfirmCustom.bind(this)
+    this.onConfirmSecondary = this.props.onConfirmSecondaryCallback
+      ? this.onConfirmSecondary.bind(this)
       : null;
   }
 
@@ -18,10 +18,10 @@ class RailsConfirmationDialog extends React.Component {
     this.props.onConfirmCallback();
   }
 
-  // Disable buttons once the confirm button is clicked, then do confirm callback.
-  onConfirmCustom() {
+  // Disable buttons once the secondary confirm button is clicked, then do confirm callback.
+  onConfirmSecondary() {
     this.setState({ disableButtons: true });
-    this.props.onConfirmCustomCallback();
+    this.props.onConfirmSecondaryCallback();
   }
 
   render() {
@@ -32,10 +32,10 @@ class RailsConfirmationDialog extends React.Component {
         disableConfirmButton={this.state.disableButtons}
         onCancel={() => this.setState({ open: false })}
         onConfirm={this.onConfirm}
-        onConfirmCustom={this.onConfirmCustom}
+        onConfirmSecondary={this.onConfirmSecondary}
         message={this.props.message}
         confirmButtonText={this.props.confirmButtonText}
-        confirmButtonCustomText={this.props.confirmButtonCustomText}
+        confirmButtonSecondaryText={this.props.confirmButtonSecondaryText}
       />
     );
   }
@@ -43,10 +43,10 @@ class RailsConfirmationDialog extends React.Component {
 
 RailsConfirmationDialog.propTypes = {
   onConfirmCallback: PropTypes.func,
-  onConfirmCustomCallback: PropTypes.func,
+  onConfirmSecondaryCallback: PropTypes.func,
   message: PropTypes.string,
   confirmButtonText: PropTypes.string,
-  confirmButtonCustomText: PropTypes.string,
+  confirmButtonSecondaryText: PropTypes.string,
 };
 
 export default RailsConfirmationDialog;

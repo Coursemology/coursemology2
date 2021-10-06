@@ -22,6 +22,7 @@ module Course::Assessment::Question::MultipleResponsesConcern
 
   def unsubmit_submissions
     @question_assessment.assessment.submissions.each do |submission|
+      submission.update('unmark' => 'true') if submission.graded?
       submission.update('unsubmit' => 'true') unless submission.attempting?
     end
   end
