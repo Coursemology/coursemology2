@@ -16,11 +16,11 @@ class ConfirmationDialog extends React.Component {
       open,
       onCancel,
       onConfirm,
-      onConfirmCustom,
+      onConfirmSecondary,
       message,
       cancelButtonText,
       confirmButtonText,
-      confirmButtonCustomText,
+      confirmButtonSecondaryText,
       confirmDiscard,
       confirmDelete,
       confirmSubmit,
@@ -39,11 +39,11 @@ class ConfirmationDialog extends React.Component {
       confirmationButtonText = intl.formatMessage(formTranslations.submit);
     }
 
-    let confirmationButtonCustomText = intl.formatMessage(
+    let confirmationButtonSecondaryText = intl.formatMessage(
       formTranslations.continue,
     );
-    if (confirmButtonCustomText) {
-      confirmationButtonCustomText = confirmButtonCustomText;
+    if (confirmButtonSecondaryText) {
+      confirmationButtonSecondaryText = confirmButtonSecondaryText;
     }
 
     let confirmationMessage = intl.formatMessage(formTranslations.areYouSure);
@@ -81,22 +81,22 @@ class ConfirmationDialog extends React.Component {
       />,
     ];
 
-    if (onConfirmCustom) {
-      const confirmButtonCustom = [
+    if (onConfirmSecondary) {
+      const confirmButtonSecondary = [
         <FlatButton
           primary
           className="confirm-btn"
           disabled={disableConfirmButton}
-          onClick={onConfirmCustom}
+          onClick={onConfirmSecondary}
           style={buttonStyle}
-          label={confirmationButtonCustomText}
+          label={confirmationButtonSecondaryText}
           ref={(button) => {
-            this.confirmButtonCustom = button;
+            this.confirmButtonSecondary = button;
           }}
-          key="confirmation-dialog-confirm-custom-button"
+          key="confirmation-dialog-confirm-secondary-button"
         />,
       ];
-      actions.push(...confirmButtonCustom);
+      actions.push(...confirmButtonSecondary);
     }
 
     return (
@@ -119,11 +119,11 @@ ConfirmationDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   onCancel: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,
-  onConfirmCustom: PropTypes.func,
+  onConfirmSecondary: PropTypes.func,
   message: PropTypes.node,
   cancelButtonText: PropTypes.node,
   confirmButtonText: PropTypes.node,
-  confirmButtonCustomText: PropTypes.node,
+  confirmButtonSecondaryText: PropTypes.node,
   confirmDiscard: PropTypes.bool,
   confirmDelete: PropTypes.bool,
   confirmSubmit: PropTypes.bool,
