@@ -14,9 +14,5 @@ module Course::Discussion::Post::RetrievalConcern
     def with_parent
       includes(:parent)
     end
-
-    # def include_parent_post
-    #   includes(topic: )
-    # end
   end
 end
