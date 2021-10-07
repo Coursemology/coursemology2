@@ -10,6 +10,17 @@ en:
             success: 'The multiple response question was created.'
           update:
             success: 'The multiple response question was updated.'
+            failure: 'Failed to update the multiple response question'
+            switch_mcq_success: 'Question %{number} has been successfully switched to MRQ'
+            switch_mrq_success: 'Question %{number} has been successfully switched to MCQ'
+            switch_mcq_unsubmit_success: >
+              Question %{number} has been successfully switched to MRQ.
+              All submissions to this assessment have been unsubmitted and all answers to this
+              question have been removed.
+            switch_mrq_unsubmit_success: >
+              Question %{number} has been successfully switched to MCQ.
+              All submissions to this assessment have been unsubmitted and all answers to this
+              question have been removed.
           destroy:
             success: 'The multiple response question was deleted.'
             failure: 'Could not delete multiple response question: %{error}'
@@ -20,11 +31,30 @@ en:
             randomize_options: 'Randomize option order (options that ignore this will be shifted to the bottom)'
             ignore_randomization: 'Ignore Randomization'
             add_option: 'Add Option'
-            multiple_choice_button: 'Multiple Choice Question'
-            multiple_response_button: 'Multiple Response Question'
+            multiple_choice_button: 'Multiple Choice Question (MCQ)'
+            multiple_response_button: 'Multiple Response Question (MRQ)'
+            multiple_choice_option: 'Multiple Choice Question (MCQ) Options'
+            multiple_response_option: 'Multiple Response Question (MRQ) Options'
           option_fields:
             explanation_hint: 'The explanation to show after the student submits his answer.'
             remove: 'Remove'
+          switch_question_type_button:
+            switch_to_mcq: 'Change to Multiple Choice Question (MCQ)'
+            switch_to_mrq: 'Change to Multiple Response Question (MRQ)'
+            no_answer: >
+              There are no existing answers and/or submissions for Question %{number}
+              and this question-type can be safely switched.
+              Are you sure you want to proceed?
+            confirm_switch_to_mcq: > 
+              Are you sure you want to switch Question %{number} to MCQ?
+              THERE ARE EXISTING ANSWERS AND/OR SUBMISSIONS! Changing the question-type may cause
+              inconsistencies in the student's responses. To prevent this, you can unsubmit all submissions
+              and remove all existing answers for this question. Otherwise, you can retain the answers and proceed.
+            confirm_switch_to_mrq: >
+              Are you sure you want to switch Question %{number} to MRQ?
+              THERE ARE EXISTING ANSWERS AND/OR SUBMISSIONS! Changing the question-type may cause
+              inconsistencies in the student's responses. To prevent this, you can unsubmit all submissions
+              and remove all existing answers for this question. Otherwise, you can retain the answers and proceed.
           question_type:
             multiple_response: Multiple Response
             multiple_choice: Multiple Choice

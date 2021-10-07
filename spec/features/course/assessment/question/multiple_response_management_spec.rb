@@ -12,6 +12,50 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
     context 'As a Course Manager' do
       let(:user) { create(:course_manager, course: course).user }
 
+      scenario 'I can switch MCQ to MRQ, and back to MCQ, for a new question', js: true do
+        visit course_assessment_path(course, assessment)
+        click_on I18n.t('common.new')
+        click_link I18n.t('course.assessment.assessments.show.new_question.multiple_choice')
+
+        expect(page).to have_text(
+          I18n.t('course.assessment.question.multiple_responses.new.multiple_choice_header')
+        )
+
+        # Switch MCQ to MRQ
+        click_button I18n.t('course.assessment.question.multiple_responses.switch_question_type_button.switch_to_mrq')
+        expect(page).to have_text(
+          I18n.t('course.assessment.question.multiple_responses.new.multiple_response_header')
+        )
+
+        # Switch MRQ to MCQ
+        click_button I18n.t('course.assessment.question.multiple_responses.switch_question_type_button.switch_to_mcq')
+        expect(page).to have_text(
+          I18n.t('course.assessment.question.multiple_responses.new.multiple_choice_header')
+        )
+      end
+
+      scenario 'I can switch MRQ to MCQ, and back to MRQ, type for a new question', js: true do
+        visit course_assessment_path(course, assessment)
+        click_on I18n.t('common.new')
+        click_link I18n.t('course.assessment.assessments.show.new_question.multiple_response')
+
+        expect(page).to have_text(
+          I18n.t('course.assessment.question.multiple_responses.new.multiple_response_header')
+        )
+
+        # Switch MRQ to MCQ
+        click_button I18n.t('course.assessment.question.multiple_responses.switch_question_type_button.switch_to_mcq')
+        expect(page).to have_text(
+          I18n.t('course.assessment.question.multiple_responses.new.multiple_choice_header')
+        )
+
+        # Switch MCQ to MRQ
+        click_button I18n.t('course.assessment.question.multiple_responses.switch_question_type_button.switch_to_mrq')
+        expect(page).to have_text(
+          I18n.t('course.assessment.question.multiple_responses.new.multiple_response_header')
+        )
+      end
+
       scenario 'I can create a new multiple response question' do
         skill = create(:course_assessment_skill, course: course)
         visit course_assessment_path(course, assessment)
@@ -106,7 +150,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
         expect(question_created.options).to be_present
       end
 
-      scenario 'I can edit a question and delete an option', js: true do
+      scenario 'I can edit a question, change MRQ to MCQ and back to MRQ, and delete an option', js: true do
         mrq = create(:course_assessment_question_multiple_response, assessment: assessment,
                                                                     options: [])
         options = [
@@ -150,7 +194,39 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
         expect(current_path).to eq(course_assessment_path(course, assessment))
         expect(mrq.reload.options.count).to eq(options.count)
 
-        # Delete all MRQ options
+        # Switching in edit page
+        # Switch MRQ to MCQ
+        visit edit_path
+        click_button I18n.t('course.assessment.question.multiple_responses.switch_question_type_button.switch_to_mcq')
+        click_button 'Continue'
+        expect(page).to have_text(
+          I18n.t('course.assessment.question.multiple_responses.form.multiple_choice_option')
+        )
+
+        # Switch MCQ to MRQ
+        click_button I18n.t('course.assessment.question.multiple_responses.switch_question_type_button.switch_to_mrq')
+        click_button 'Continue'
+        expect(page).to have_text(
+          I18n.t('course.assessment.question.multiple_responses.form.multiple_response_option')
+        )
+
+        # Switching in assessment show page
+        visit course_assessment_path(course, assessment)
+        expect(page).to have_text(
+          I18n.t('course.assessment.question.multiple_responses.switch_question_type_button.switch_to_mcq')
+        )
+
+        # Switch MRQ to MCQ
+        click_button I18n.t('course.assessment.question.multiple_responses.switch_question_type_button.switch_to_mcq')
+        click_button 'Continue'
+        expect(page).to have_text(
+          I18n.t('course.assessment.question.multiple_responses.question_type.multiple_choice')
+        )
+        expect(page).to have_text(
+          I18n.t('course.assessment.question.multiple_responses.switch_question_type_button.switch_to_mrq')
+        )
+
+        # Delete all MCQ options
         visit edit_path
         all('tr.question_multiple_response_option').each do |element|
           within element do

@@ -40,6 +40,13 @@
           = format_inline_text(question_assessment.question.question_type)
         p = format_html(question.description)
       - if question.actable.is_a? Course::Assessment::Question::MultipleResponse
+          div.pull-right
+            = render partial: 'course/assessment/question/multiple_responses/switch_question_type_button',
+                     locals: { current_course: current_course,
+                               assessment: assessment,
+                               multiple_response_question: question.specific,
+                               redirect_to_assessment_show: 'true',
+                               new_question: false }
           button.btn.btn-default type="button" data-toggle="collapse" data-target="##{question.id}" aria-expanded="false" aria-controls="panel"
             => t('.show_options')
             span.caret

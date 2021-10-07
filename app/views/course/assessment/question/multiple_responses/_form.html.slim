@@ -1,5 +1,6 @@
 = simple_form_for [current_course, @assessment, @multiple_response_question] do |f|
   = f.error_notification
+
   = render partial: 'course/assessment/questions/form', locals: { f: f, question_assessment: @question_assessment }
 
   - if current_course.allow_mrq_options_randomization
@@ -10,6 +11,10 @@
   / workaround for plataformatec/simple_form#1284
   div.has-error
     = f.full_error :options
+
+  - type = @multiple_response_question.multiple_choice? ? t('.multiple_choice_option') : t('.multiple_response_option')
+  - if f.object.persisted?
+    h3 = type
 
   table.table.table-striped.table-hover.multiple-response-options
     thead
@@ -34,3 +39,11 @@
   - else
     - button_text = t('helpers.buttons.create', model: type)
   = f.button :submit, button_text
+
+div.pull-right.question-switch-type-button
+  = render partial: 'switch_question_type_button',
+            locals: { current_course: current_course,
+                      assessment: @question_assessment.assessment,
+                      multiple_response_question: @multiple_response_question,
+                      redirect_to_assessment_show: 'false',
+                      new_question: new_question, }

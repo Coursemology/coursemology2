@@ -25,6 +25,25 @@ function loadDialogue(element, successCallback) {
   );
 }
 
+// Loads the Custom Dialog component which contains an additional customized button.
+function loadCustomDialogue(element, successCallback) {
+  const mountNode = getOrCreateNode(DIALOG_ID);
+  // Remove existing hidden dialog, if any.
+  unmountComponentAtNode(mountNode);
+  render(
+    <ProviderWrapper>
+      <RailsConfirmationDialog
+        onConfirmCallback={() => successCallback(element)}
+        onConfirmSecondaryCallback={() => successCallback(element, true)}
+        message={element.attr('data-confirm')}
+        confirmButtonText={element.attr('data-confirm_text')}
+        confirmButtonSecondaryText={element.attr('data-confirm_secondary_text')}
+      />
+    </ProviderWrapper>,
+    mountNode,
+  );
+}
+
 // Create a form based on the link and submit.
 function submitLink(link) {
   const form = $('<form>', {
@@ -49,7 +68,7 @@ function submitLink(link) {
 
 function overrideConfirmDialog() {
   // Success callback if dialog is confirmed.
-  function onConfirm(element) {
+  function onConfirm(element, secondary) {
     element.removeAttr('data-confirm');
 
     if (
@@ -67,6 +86,17 @@ function overrideConfirmDialog() {
       }
     } else {
       // Element is a remote link, button, etc.
+      // Additional params appended to the href link
+      if (secondary) {
+        element
+          .parent()
+          .attr(
+            'href',
+            `${element.parent().attr('href')}&${element.attr(
+              'data-confirm_secondary',
+            )}`,
+          );
+      }
       element.trigger('click');
       if ($.rails.isRemote(element)) {
         $(document).ajaxComplete(() =>
@@ -82,7 +112,12 @@ function overrideConfirmDialog() {
     if (!element.attr('data-confirm')) {
       return true;
     }
-    loadDialogue(element, onConfirm);
+    if (element.attr('data-confirm_secondary')) {
+      loadCustomDialogue(element, onConfirm);
+    } else {
+      loadDialogue(element, onConfirm);
+    }
+
     // Always stops the action since code runs asynchronously
     return false;
   };
