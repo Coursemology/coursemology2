@@ -217,6 +217,7 @@ class MaterialSummernote extends React.Component {
               lang: i18nLocale,
               followingToolbar: false,
             }}
+            value={this.props.value}
             onChange={this.props.onChange}
             onFocus={() => {
               this.setState({ isFocused: true });
@@ -226,9 +227,7 @@ class MaterialSummernote extends React.Component {
               this.setState({ isFocused: false });
             }}
             onImageUpload={this.onImageUpload}
-          >
-            <div dangerouslySetInnerHTML={{ __html: this.props.value }} />
-          </ReactSummernote>
+          />
         </div>
       </div>
     );
