@@ -302,6 +302,7 @@ Rails.application.routes.draw do
           post 'subscribe', on: :member
           delete 'unsubscribe', on: :member
 
+          get 'all_posts', on: :collection
           get 'search', on: :collection
           get 'next_unread', on: :collection
           patch 'mark_all_as_read', on: :collection

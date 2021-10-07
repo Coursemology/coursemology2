@@ -69,6 +69,15 @@ class Course::Forum::ForumsController < Course::Forum::Controller
     end
   end
 
+  def all_posts
+    @topic_posts = Course::Discussion::Post.
+                   forum_posts.
+                   from_course(current_course).
+                   posted_by(current_user).
+                   with_topic.
+                   group_by{ |post| post.topic.specific }
+  end
+
   def search
     @search = Course::Forum::Search.new(search_params)
   end
@@ -117,6 +126,6 @@ class Course::Forum::ForumsController < Course::Forum::Controller
   end
 
   def skip_load_forum?
-    [:index, :new, :create, :search, :next_unread, :mark_all_as_read].include?(action_name.to_sym)
+    [:index, :new, :create, :all_posts, :search, :next_unread, :mark_all_as_read].include?(action_name.to_sym)
   end
 end
