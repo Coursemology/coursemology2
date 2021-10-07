@@ -75,6 +75,7 @@ class Course::Forum::ForumsController < Course::Forum::Controller
                    from_course(current_course).
                    posted_by(current_user).
                    with_topic.
+                   with_parent.
                    group_by{ |post| post.topic.specific }
   end
 

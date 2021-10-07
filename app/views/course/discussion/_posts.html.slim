@@ -1,10 +1,19 @@
 - post_locals ||= {}
+= 'all posts here'
+= posts
+= 'all ends here'
+
 - posts.each do |post|
   = render partial: post_partial, object: post.first, locals: post_locals
   - nest_replies = max_depth > 1
   - replies_class = nest_replies ? 'nested' : nil
   - replies_max_depth = nest_replies ? max_depth - 1 : max_depth
   div.replies class=replies_class
+    = 'where replies are'
+    = post
+    = post.first
+    = post.second
+    = 'tada'
     = render partial: 'course/discussion/posts', locals: { posts: post.second,
                                                            post_partial: post_partial,
                                                            post_locals: post_locals,

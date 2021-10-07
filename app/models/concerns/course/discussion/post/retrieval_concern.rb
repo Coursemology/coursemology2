@@ -11,6 +11,10 @@ module Course::Discussion::Post::RetrievalConcern
       includes(:topic)
     end
 
+    def with_parent
+      includes(:parent)
+    end
+
     # def include_parent_post
     #   includes(topic: )
     # end
