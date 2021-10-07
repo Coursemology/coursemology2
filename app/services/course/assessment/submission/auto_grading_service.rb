@@ -24,7 +24,10 @@ class Course::Assessment::Submission::AutoGradingService
   def grade(submission, only_ungraded: false)
     grade_answers(submission, only_ungraded: only_ungraded)
     submission.reload
-    assign_exp_and_publish_grade(submission) if submission.assessment.autograded?
+
+    # To address race condition where a submission is unsubmitted when answers are being graded
+    unsubmit_answers(submission) if submission.assessment.autograded? && submission.attempting?
+    assign_exp_and_publish_grade(submission) if submission.assessment.autograded? && submission.submitted?
     submission.save!
   end
 
@@ -90,6 +93,13 @@ class Course::Assessment::Submission::AutoGradingService
 
     error_messages = failed_jobs.map { |job| job.error['message'] }
     raise SubJobError, error_messages.to_sentence
+  end
+
+  def unsubmit_answers(submission)
+    answers_to_unsubmit = submission.current_answers
+    answers_to_unsubmit.each do |answer|
+      answer.unsubmit! unless answer.attempting?
+    end
   end
 
   def assign_exp_and_publish_grade(submission)
