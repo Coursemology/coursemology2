@@ -7,6 +7,9 @@ import { questionShape } from '../../propTypes';
 import UploadedFileView from '../../containers/UploadedFileView';
 import TextResponseSolutions from '../TextResponseSolutions';
 import FileInput from '../FileInput';
+import {fetchAllPosts} from "../../../../forum/actions/all-posts";
+
+fetchAllPosts()
 
 function TextResponse({ question, readOnly, answerId, graderView }) {
   const allowUpload = question.allowAttachment;
