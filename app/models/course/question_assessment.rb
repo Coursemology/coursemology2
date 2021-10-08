@@ -18,14 +18,14 @@ class Course::QuestionAssessment < ApplicationRecord
   #
   # @return [string]
   def display_title(num = nil)
-    idx = num.present? ? num : assessment.question_assessments.index(self) + 1
-    question_number = I18n.t('activerecord.course/assessment/question.question_number',
-                             index: idx)
+    idx = num.present? ? num : question_number
+    question_num = I18n.t('activerecord.course/assessment/question.question_number',
+                          index: idx)
 
-    return question_number if question.title.blank?
+    return question_num if question.title.blank?
 
     I18n.t('activerecord.course/assessment/question.question_with_title',
-           question_number: question_number, title: question.title)
+           question_number: question_num, title: question.title)
   end
 
   def initialize_duplicate(duplicator, other)
@@ -33,6 +33,10 @@ class Course::QuestionAssessment < ApplicationRecord
     self.question = duplicator.duplicate(other.question.actable).acting_as
     skills << other.skills.select { |skill| duplicator.duplicated?(skill) }.
               map { |skill| duplicator.duplicate(skill) }
+  end
+
+  def question_number
+    assessment.question_assessments.index(self) + 1
   end
 
   private
