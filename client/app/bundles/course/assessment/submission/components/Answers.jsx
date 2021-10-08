@@ -9,6 +9,7 @@ import MultipleResponseAnswer from './answers/MultipleResponse';
 import TextResponseAnswer from './answers/TextResponse';
 import FileUploadAnswer from './answers/FileUpload';
 import ProgrammingAnswer from './answers/Programming';
+import ForumPostResponseAnswer from './answers/ForumPostResponse';
 
 export default class Answers extends Component {
   static renderMultipleChoice({
@@ -71,5 +72,15 @@ export default class Answers extends Component {
 
   static renderProgramming({ question, readOnly, answerId }) {
     return <ProgrammingAnswer {...{ question, readOnly, answerId }} />;
+  }
+
+  static renderForumPostResponse({ question, readOnly, answerId }) {
+    return (
+      <ForumPostResponseAnswer
+        question={question}
+        readOnly={readOnly}
+        answerId={answerId}
+      />
+    );
   }
 }

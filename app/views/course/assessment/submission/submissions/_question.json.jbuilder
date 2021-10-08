@@ -32,6 +32,8 @@ json.type case question.actable_type
             'VoiceResponse'
           when Course::Assessment::Question::Scribing.name
             'Scribing'
+          when Course::Assessment::Question::ForumPostResponse.name
+            'ForumPostResponse'
           end
 
 json.partial! question, question: question.specific, can_grade: can_grade, answer: answer

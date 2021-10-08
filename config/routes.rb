@@ -204,6 +204,7 @@ Rails.application.routes.draw do
             resources :programming, only: [:new, :create, :edit, :update, :destroy]
             resources :voice_responses, only: [:new, :create, :edit, :update, :destroy]
             resources :scribing, only: [:show, :new, :create, :edit, :update, :destroy]
+            resources :forum_post_responses, only: [:new, :create, :edit, :update, :destroy]
           end
           scope module: :submission do
             resources :submissions, only: [:index, :create, :edit, :update] do

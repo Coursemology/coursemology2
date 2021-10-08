@@ -55,6 +55,9 @@ class Course::Assessment < ApplicationRecord
   has_many :voice_response_questions,
            through: :questions, inverse_through: :question, source: :actable,
            source_type: Course::Assessment::Question::VoiceResponse.name
+  has_many :forum_post_response_questions,
+           through: :questions, inverse_through: :question, source: :actable,
+           source_type: Course::Assessment::Question::ForumPostResponse.name
   has_many :assessment_conditions, class_name: Course::Condition::Assessment.name,
                                    inverse_of: :assessment, dependent: :destroy
   has_many :question_groups, class_name: Course::Assessment::QuestionGroup.name,
