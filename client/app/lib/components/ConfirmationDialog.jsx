@@ -20,7 +20,7 @@ class ConfirmationDialog extends React.Component {
       message,
       cancelButtonText,
       confirmButtonText,
-      confirmButtonSecondaryText,
+      confirmSecondaryButtonText,
       confirmDiscard,
       confirmDelete,
       confirmSubmit,
@@ -39,11 +39,11 @@ class ConfirmationDialog extends React.Component {
       confirmationButtonText = intl.formatMessage(formTranslations.submit);
     }
 
-    let confirmationButtonSecondaryText = intl.formatMessage(
+    let confirmationSecondaryButtonText = intl.formatMessage(
       formTranslations.continue,
     );
-    if (confirmButtonSecondaryText) {
-      confirmationButtonSecondaryText = confirmButtonSecondaryText;
+    if (confirmSecondaryButtonText) {
+      confirmationSecondaryButtonText = confirmSecondaryButtonText;
     }
 
     let confirmationMessage = intl.formatMessage(formTranslations.areYouSure);
@@ -89,7 +89,7 @@ class ConfirmationDialog extends React.Component {
           disabled={disableConfirmButton}
           onClick={onConfirmSecondary}
           style={buttonStyle}
-          label={confirmationButtonSecondaryText}
+          label={confirmationSecondaryButtonText}
           ref={(button) => {
             this.confirmButtonSecondary = button;
           }}
@@ -123,7 +123,7 @@ ConfirmationDialog.propTypes = {
   message: PropTypes.node,
   cancelButtonText: PropTypes.node,
   confirmButtonText: PropTypes.node,
-  confirmButtonSecondaryText: PropTypes.node,
+  confirmSecondaryButtonText: PropTypes.node,
   confirmDiscard: PropTypes.bool,
   confirmDelete: PropTypes.bool,
   confirmSubmit: PropTypes.bool,

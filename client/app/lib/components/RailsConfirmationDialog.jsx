@@ -35,7 +35,7 @@ class RailsConfirmationDialog extends React.Component {
         onConfirmSecondary={this.onConfirmSecondary}
         message={this.props.message}
         confirmButtonText={this.props.confirmButtonText}
-        confirmButtonSecondaryText={this.props.confirmButtonSecondaryText}
+        confirmSecondaryButtonText={this.props.confirmSecondaryButtonText}
       />
     );
   }
@@ -46,7 +46,7 @@ RailsConfirmationDialog.propTypes = {
   onConfirmSecondaryCallback: PropTypes.func,
   message: PropTypes.string,
   confirmButtonText: PropTypes.string,
-  confirmButtonSecondaryText: PropTypes.string,
+  confirmSecondaryButtonText: PropTypes.string,
 };
 
 export default RailsConfirmationDialog;
