@@ -134,7 +134,7 @@
     "axios-mock-adapter": "^1.16.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
-    "babel-jest": "^24.8.0",
+    "babel-jest": "^27.2.5",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.13.2",
     "enzyme-to-json": "^3.3.5",
