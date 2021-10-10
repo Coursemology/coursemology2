@@ -88,7 +88,7 @@ class Course::Video < ApplicationRecord
                        start_at: video.start_at,
                        title: video.title)
     # Workaround to avoid joining to same table twice
-    candidates = Course::Video.where(id: candidates.to_a)
+    candidates = where(id: candidates.to_a)
     candidates.ordered_by_date_and_title.limit(1)
   end)
 

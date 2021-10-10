@@ -34,7 +34,7 @@ class Course::Material::Folder < ApplicationRecord
   # @!attribute [r] material_count
   #   Returns the number of files in current folder.
   calculated :material_count, (lambda do
-    Course::Material.select("count('*')").
+    Course::Material.default_scoped.select("count('*')").
       where('course_materials.folder_id = course_material_folders.id')
   end)
 
