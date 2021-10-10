@@ -5,7 +5,7 @@ source 'https://rubygems.org'
 gem 'tzinfo-data', platforms: [:mswin, :mswin64]
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '= 5.2.0'
+gem 'rails', '= 5.2.3'
 
 # Use PostgreSQL for the backend
 gem 'pg'
@@ -26,10 +26,10 @@ gem 'after_commit_action'
 # Allow declaring the calculated attributes of a record
 gem 'calculated_attributes'
 # Baby Squeel as an SQL-like DSL
-gem 'baby_squeel'
+# gem 'baby_squeel', '>= 1.2'
 # For multiple table inheritance
 #   TODO: Figure out breaking changes in v2 as polymorpshism is not working correctly.
-gem 'active_record-acts_as', git: 'https://github.com/Coursemology/active_record-acts_as', branch: 'rails5-2'
+gem 'active_record-acts_as', git: 'https://github.com/Coursemology/active_record-acts_as', branch: 'rails5.2.3'
 # Organise ActiveRecord model into a tree structure
 gem 'edge'
 # Upsert action for Postgres
@@ -175,12 +175,13 @@ gem 'omniauth-facebook'
 
 # Use cancancan for authorization
 gem 'cancancan'
-gem 'cancancan-baby_squeel'
+# gem 'cancancan-baby_squeel', git: 'https://github.com/Coursemology/cancancan-baby_squeel.git', branch: 'rails5.2.3'
+# gem 'ransack', require: false
 
 # Some helpers for structuring CSS/JavaScript
 # Official version https://github.com/winston/rails_utils/pull/30 is no longer maintained.
 # We also want stricter sanitization.
-gem 'rails_utils', git: 'https://github.com/Coursemology/rails_utils', branch: 'full-sanitize-flash'
+gem 'rails_utils', git: 'https://github.com/raymondtangsc/rails_utils.git', branch: 'full-sanitize-flash'
 
 # Themes for instances
 gem 'themes_on_rails', '>= 0.3.1', git: 'https://github.com/Coursemology/themes_on_rails',

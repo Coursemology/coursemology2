@@ -12,8 +12,13 @@ module UserSearchConcern
       return all if keyword.blank?
 
       condition = "%#{keyword}%"
-      joining { emails.outer }.
-        where.has { (name =~ condition) | (emails.email =~ condition) }.
+      # joining { emails.outer }.
+      #   where.has { (name =~ condition) | (emails.email =~ condition) }.
+      #   group('users.id')
+
+      left_outer_joins(:emails).
+        where(User.arel_table[:name].matches(condition).
+          or(User::Email.arel_table[:email].matches(condition))).
         group('users.id')
     end
   end

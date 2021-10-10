@@ -8,11 +8,13 @@ module Extensions::TimeBoundedRecord::ActiveRecord::Base
     private
 
     def started
-      where.has { (start_at == nil) | (start_at <= Time.zone.now) } # rubocop:disable Style/NilComparison
+      # where.has { (start_at == nil) | (start_at <= Time.zone.now) } # rubocop:disable Style/NilComparison
+      where(start_at: nil).or(where('start_at <= ?', Time.zone.now))
     end
 
     def ended
-      where.has { (end_at == nil) | (end_at >= Time.zone.now) } # rubocop:disable Style/NilComparison
+      # where.has { (end_at == nil) | (end_at >= Time.zone.now) } # rubocop:disable Style/NilComparison
+      where(end_at: nil).or(where('end_at >= ?', Time.zone.now))
     end
   end
 

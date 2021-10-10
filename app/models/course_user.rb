@@ -11,16 +11,16 @@ class CourseUser < ApplicationRecord
   enum timeline_algorithm: { fixed: 0, fomo: 1, stragglers: 2, otot: 3 }
 
   # A set of roles which comprise the staff of a course, including the observer.
-  STAFF_ROLES = Set[:teaching_assistant, :manager, :owner, :observer].freeze
+  STAFF_ROLES = Set[:teaching_assistant, :manager, :owner, :observer].map { |v| roles[v] }.freeze
 
   # A set of roles which comprise of the teaching staff of a course.
-  TEACHING_STAFF_ROLES = Set[:teaching_assistant, :manager, :owner].freeze
+  TEACHING_STAFF_ROLES = Set[:teaching_assistant, :manager, :owner].map { |v| roles[v] }.freeze
 
   # A set of roles which comprise the teaching assistants and managers of a course.
-  TA_AND_MANAGER_ROLES = Set[:teaching_assistant, :manager].freeze
+  TA_AND_MANAGER_ROLES = Set[:teaching_assistant, :manager].map { |v| roles[v] }.freeze
 
   # A set of roles which comprise the managers of a course.
-  MANAGER_ROLES = Set[:manager, :owner].freeze
+  MANAGER_ROLES = Set[:manager, :owner].map { |v| roles[v] }.freeze
 
   validates :role, presence: true
   validates :name, length: { maximum: 255 }, presence: true
@@ -52,7 +52,9 @@ class CourseUser < ApplicationRecord
   #   Sums the total experience points for the course user.
   #   Default value is 0 when CourseUser does not have Course::ExperiencePointsRecord
   calculated :experience_points, (lambda do
-    Course::ExperiencePointsRecord.selecting { coalesce(sum(points_awarded), 0) }.
+    # Course::ExperiencePointsRecord.selecting { coalesce(sum(points_awarded), 0) }.
+    #   where('course_experience_points_records.course_user_id = course_users.id')
+    Course::ExperiencePointsRecord.select('COALESCE(SUM(points_awarded), 0)').
       where('course_experience_points_records.course_user_id = course_users.id')
   end)
 
@@ -134,7 +136,8 @@ class CourseUser < ApplicationRecord
   end)
 
   scope :for_user, (lambda do |user|
-    where.has { user_id == user.id }
+    # where.has { user_id == user.id }
+    where(user_id: user.id)
   end)
 
   # Test whether the current scope includes the current user.
@@ -149,21 +152,21 @@ class CourseUser < ApplicationRecord
   #
   # @return [Boolean] True if course_user is a staff
   def manager_or_owner?
-    MANAGER_ROLES.include?(role.to_sym)
+    MANAGER_ROLES.include?(CourseUser.roles[role.to_sym])
   end
 
   # Test whether this course_user is a staff (i.e. teaching_assistant, manager, owner or observer)
   #
   # @return [Boolean] True if course_user is a staff
   def staff?
-    STAFF_ROLES.include?(role.to_sym)
+    STAFF_ROLES.include?(CourseUser.roles[role.to_sym])
   end
 
   # Test whether this course_user is a teaching staff (i.e. teaching_assistant, manager or owner)
   #
   # @return [Boolean] True if course_user is a staff
   def teaching_staff?
-    TEACHING_STAFF_ROLES.include?(role.to_sym)
+    TEACHING_STAFF_ROLES.include?( CourseUser.roles[role.to_sym] )
   end
 
   # Test whether this course_user is a real student (i.e. not phantom and not staff)
@@ -179,9 +182,10 @@ class CourseUser < ApplicationRecord
   #
   # @return[Array<CourseUser>]
   def my_students
-    my_groups = group_users.manager.select(:group_id)
-    CourseUser.joining { group_users.group }.merge(Course::GroupUser.normal).
-      where.has { group_users.group.id.in(my_groups) }
+    # CourseUser.joining { group_users.group }.merge(Course::GroupUser.normal).
+    #   where.has { group_users.group.id.in(my_groups) }
+    CourseUser.joins(:group_users => :group).merge(Course::GroupUser.normal).
+      where(Course::Group.arel_table[:id].in(group_users.manager.pluck(:group_id)))
   end
 
   # Returns the managers of the groups I belong to in the course.
@@ -189,8 +193,10 @@ class CourseUser < ApplicationRecord
   # @return[Array<CourseUser>]
   def my_managers
     my_groups = group_users.select(:group_id)
-    CourseUser.joining { group_users.group }.merge(Course::GroupUser.manager).
-      where.has { group_users.group.id.in(my_groups) }
+    # CourseUser.joining { group_users.group }.merge(Course::GroupUser.manager).
+    #   where.has { group_users.group.id.in(my_groups) }
+    CourseUser.joins(:group_users => :group).merge(Course::GroupUser.manager).
+      where(Course::Group.arel_table[:id].in(my_groups))
   end
 
   private
