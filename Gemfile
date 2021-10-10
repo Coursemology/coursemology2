@@ -28,7 +28,7 @@ gem 'calculated_attributes'
 # Baby Squeel as an SQL-like DSL
 gem 'baby_squeel'
 # For multiple table inheritance
-#   TODO: Figure out breaking changes in v2 as polymorphism is not working correctly.
+#   TODO: Figure out breaking changes in v2 as polymorpshism is not working correctly.
 gem 'active_record-acts_as', git: 'https://github.com/Coursemology/active_record-acts_as', branch: 'rails5-2'
 # Organise ActiveRecord model into a tree structure
 gem 'edge'
@@ -224,5 +224,6 @@ gem 'rails-controller-testing'
 gem 'rwordnet', git: 'https://github.com/makqien/rwordnet'
 gem 'loofah', '>= 2.2.1'
 gem 'rails-html-sanitizer', '>= 1.0.4'
-gem 'mimemagic', '>= 0.3.7'
-gem 'ffi', '>= 1.14.2'
+
+gem 'sprockets', '< 4.0.0'
+
