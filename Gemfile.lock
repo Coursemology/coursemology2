@@ -133,11 +133,7 @@ GEM
     after_commit_action (1.1.0)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
-<<<<<<< HEAD
-    arel (9.0.0)
-=======
     anbt-sql-formatter (0.1.0)
->>>>>>> 058436f48... rails 6
     ast (2.4.1)
     autoprefixer-rails (10.1.0.0)
       execjs
