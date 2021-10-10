@@ -4,15 +4,15 @@ en:
       instance:
         courses:
           index:
-            header: 'Courses'
-            total_courses_html: 'Total Courses: <strong>%{count}</strong>'
-            active_courses_html: 'Active Courses (in the past 7 days): <strong>%{count}</strong>'
-            serial_number: 'S/N'
-            title: 'Title'
-            created_at: 'Created At'
-            users: 'Active / Total Users'
-            owners: 'Owners'
-            search_placeholder: 'Search course title, description or related users'
+            header: "Courses"
+            total_courses_html: "Total Courses: <strong>%{count}</strong>"
+            active_courses_html: "Active Courses (in the past 7 days): <strong>%{count}</strong>"
+            serial_number: "S/N"
+            title: "Title"
+            created_at: "Created At"
+            users: "Active / Total Users"
+            owners: "Owners"
+            search_placeholder: "Search course title, description or related users"
           destroy:
-            success: '%{course} was destroyed'
-            failure: 'Failed to delete course: %{error}'
+            success: "%{course} was destroyed"
+            failure: "Failed to delete course: %{error}"

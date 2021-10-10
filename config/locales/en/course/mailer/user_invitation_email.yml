@@ -2,8 +2,8 @@ en:
   course:
     mailer:
       user_invitation_email:
-        subject: 'Invitation to Register for %{course}'
-        click_here: 'Click here'
+        subject: "Invitation to Register for %{course}"
+        click_here: "Click here"
         message: >
           You are invited to register for %{course} on %{coursemology}.
 

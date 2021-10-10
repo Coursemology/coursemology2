@@ -6,11 +6,11 @@ en:
           created:
             user_notifications:
               email:
-                subject: '%{course} New topic created in forum: %{forum}'
+                subject: "%{course} New topic created in forum: %{forum}"
                 message: >
                   <p>%{topic_author} has created a new topic in the forum: %{topic}</p>
                   %{post}
 
                 unsubscribe:
-                  tag: 'Unsubscribe'
-                  message: '%{unsubscribe_link} from email notification for this forum'
+                  tag: "Unsubscribe"
+                  message: "%{unsubscribe_link} from email notification for this forum"

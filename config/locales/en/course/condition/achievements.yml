@@ -2,16 +2,16 @@ en:
   course:
     condition:
       achievement:
-        title: 'Achievement'
+        title: "Achievement"
       achievements:
         new:
-          header: 'New Achievement Condition'
+          header: "New Achievement Condition"
         create:
-          success: 'Achievement condition was created.'
+          success: "Achievement condition was created."
         edit:
-          header: 'Edit Achievement Condition'
+          header: "Edit Achievement Condition"
         update:
-          success: 'Achievement condition was updated.'
+          success: "Achievement condition was updated."
         destroy:
-          success: 'Achievement condition was deleted.'
-          error: 'Failed to delete achievement condition.'
+          success: "Achievement condition was deleted."
+          error: "Failed to delete achievement condition."

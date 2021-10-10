@@ -2,7 +2,7 @@ en:
   course:
     mailer:
       user_added_email:
-        subject: 'Added to Course %{course}'
+        subject: "Added to Course %{course}"
         message: >
           You have been added to the course %{course} on %{coursemology}.
 

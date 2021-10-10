@@ -4,6 +4,6 @@ en:
       discussion:
         post:
           text:
-            label: 'Discussion post body'
-          reset: 'Cancel' # TODO: Reference :'common.cancel', see fnando/i18n-js#392
-          submit: 'Save'
+            label: "Discussion post body"
+          reset: "Cancel" # TODO: Reference :'common.cancel', see fnando/i18n-js#392
+          submit: "Save"

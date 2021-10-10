@@ -6,13 +6,13 @@ en:
           index:
             header: :'course.announcements.index.header'
           new:
-            header: 'Create Announcement'
+            header: "Create Announcement"
           create:
-            success: 'Announcement %{title} was created.'
+            success: "Announcement %{title} was created."
           edit:
-            header: 'Edit Announcement'
+            header: "Edit Announcement"
           update:
-            success: 'Announcement %{title} was updated.'
+            success: "Announcement %{title} was updated."
           destroy:
-            success: 'Announcement %{title} was deleted.'
-            failure: 'Failed to delete announcement: %{error}'
+            success: "Announcement %{title} was deleted."
+            failure: "Failed to delete announcement: %{error}"

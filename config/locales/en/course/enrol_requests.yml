@@ -2,10 +2,10 @@ en:
   course:
     enrol_requests:
       index:
-        header: 'User Requests'
+        header: "User Requests"
       create:
-        success: 'Your request was sent, please wait for the course owner to approve.'
+        success: "Your request was sent, please wait for the course owner to approve."
       destroy:
-        success: 'The registration request was deleted.'
+        success: "The registration request was deleted."
       approve:
-        success: '%{name} is enrolled as a %{role}.'
+        success: "%{name} is enrolled as a %{role}."

@@ -2,18 +2,18 @@ en:
   activerecord:
     attributes:
       course/assessment/answer:
-        submitted_at: 'Submitted At'
-        grade: 'Grade'
-        grader: 'Grader'
-        graded_at: 'Graded At'
+        submitted_at: "Submitted At"
+        grade: "Grade"
+        grader: "Grader"
+        graded_at: "Graded At"
     errors:
       models:
         course/assessment/answer:
           attributes:
             question:
-              consistent_assessment: 'must belong to the same assessment'
+              consistent_assessment: "must belong to the same assessment"
             submission:
-              attemptable_state: 'must be in the attempting state'
+              attemptable_state: "must be in the attempting state"
             grade:
-              consistent_grade: 'must be less than question maximum grade'
-              non_negative_grade: 'cannot be negative'
+              consistent_grade: "must be less than question maximum grade"
+              non_negative_grade: "cannot be negative"

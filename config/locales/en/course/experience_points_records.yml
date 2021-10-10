@@ -2,8 +2,8 @@ en:
   course:
     experience_points_records:
       index:
-        header: 'Experience Points History for %{name}'
+        header: "Experience Points History for %{name}"
       update:
-        success: 'Experience points record updated.'
+        success: "Experience points record updated."
       destroy:
-        success: 'Experience points record deleted.'
+        success: "Experience points record deleted."

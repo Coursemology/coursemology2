@@ -4,6 +4,6 @@ en:
       discussion:
         topic_settings:
           edit:
-            title_placeholder: 'Leave blank to use default title'
+            title_placeholder: "Leave blank to use default title"
           update:
-            success: 'Comments center settings updated.'
+            success: "Comments center settings updated."

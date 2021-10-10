@@ -3,33 +3,33 @@ en:
     material:
       folders:
         show:
-          modified: 'Last Modified'
-          name: 'Name'
-          start_at: 'Start At'
+          modified: "Last Modified"
+          name: "Name"
+          start_at: "Start At"
         new_subfolder:
-          header: 'New Subfolder'
+          header: "New Subfolder"
         create_subfolder:
-          success: 'Folder %{name} was created.'
+          success: "Folder %{name} was created."
         edit:
-          header: 'Edit Folder'
+          header: "Edit Folder"
           start_at:
             one: "Start at (Students can access materials 1 day ahead of the start at time)"
             other: "Start at (Students can access materials %{count} days ahead of the start at time)"
         update:
-          success: 'Folder %{name} was updated.'
+          success: "Folder %{name} was updated."
         destroy:
-          success: 'Folder %{name} was deleted.'
-          failure: 'Failed to delete folder: %{error}'
+          success: "Folder %{name} was deleted."
+          failure: "Failed to delete folder: %{error}"
         folder_controls:
-          new: 'New Subfolder'
-          upload: 'Upload'
-          download: 'Download Entire Folder'
+          new: "New Subfolder"
+          upload: "Upload"
+          download: "Download Entire Folder"
         new_materials:
-          header: 'Upload Files'
-          submit: 'Upload'
+          header: "Upload Files"
+          submit: "Upload"
         upload_materials:
-          success: 'Files were uploaded.'
-          failure: 'Failed to upload files: %{error}'
+          success: "Files were uploaded."
+          failure: "Failed to upload files: %{error}"
         folder:
           unseen_by_students: "Hidden from students as folder's start time has not been reached."
-          visible_because_sdl: 'Visible to students before the start time because of Self-Directed Learning.'
+          visible_because_sdl: "Visible to students before the start time because of Self-Directed Learning."

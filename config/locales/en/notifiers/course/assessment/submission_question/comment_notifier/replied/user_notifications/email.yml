@@ -7,7 +7,7 @@ en:
             replied:
               user_notifications:
                 email:
-                  subject: '%{course}: New comment on %{topic}'
+                  subject: "%{course}: New comment on %{topic}"
                   message: >
                     <p>%{post_author} commented, %{post}</p>
 

@@ -3,15 +3,15 @@ en:
     admin:
       announcements:
         index:
-          header: 'System Announcements'
+          header: "System Announcements"
         new:
-          header: 'New System Announcement'
+          header: "New System Announcement"
         create:
-          success: 'System Announcement %{title} was created.'
+          success: "System Announcement %{title} was created."
         edit:
-          header: 'Edit System Announcement'
+          header: "Edit System Announcement"
         update:
-          success: 'System Announcement %{title} was updated.'
+          success: "System Announcement %{title} was updated."
         destroy:
-          success: 'System Announcement %{title} was deleted.'
-          failure: 'Failed to delete announcement: %{error}'
+          success: "System Announcement %{title} was deleted."
+          failure: "Failed to delete announcement: %{error}"

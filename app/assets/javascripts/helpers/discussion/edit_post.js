@@ -2,12 +2,11 @@
 //= require helpers/course_helpers
 //= require templates/course/discussion/post
 
-var EDIT_DISCUSSION_POST = (function($, FORM_HELPERS,
-                                        COURSE_HELPERS) {
+var EDIT_DISCUSSION_POST = (function ($, FORM_HELPERS, COURSE_HELPERS) {
   /* global JST, Routes */
-  'use strict';
+  "use strict";
 
-  var render = FORM_HELPERS.renderFromPath('templates/course/discussion/');
+  var render = FORM_HELPERS.renderFromPath("templates/course/discussion/");
 
   /**
    * Handles the discussion post edit button click event.
@@ -16,18 +15,25 @@ var EDIT_DISCUSSION_POST = (function($, FORM_HELPERS,
    */
   function onPostEdit(e) {
     var $element = $(e.target);
-    var $post = $element.parents('.discussion_post:first');
-    var $topic = $element.parents('.discussion_topic:first');
+    var $post = $element.parents(".discussion_post:first");
+    var $topic = $element.parents(".discussion_topic:first");
 
     var courseId = COURSE_HELPERS.courseIdForElement($element);
-    var topicId = $topic.data('topicId');
-    var postId = $post.data('postId');
-    var postContent = $post.find('.content').html().trim();
-    postContent = $('<div/>').text(postContent).html();
-    var postCommenter = $post.find('.user').html();
+    var topicId = $topic.data("topicId");
+    var postId = $post.data("postId");
+    var postContent = $post.find(".content").html().trim();
+    postContent = $("<div/>").text(postContent).html();
+    var postCommenter = $post.find(".user").html();
 
     $post.children().hide();
-    var $form = findOrCreatePostForm($post, courseId, topicId, postId, postContent, postCommenter);
+    var $form = findOrCreatePostForm(
+      $post,
+      courseId,
+      topicId,
+      postId,
+      postContent,
+      postCommenter
+    );
     e.preventDefault();
   }
 
@@ -42,13 +48,27 @@ var EDIT_DISCUSSION_POST = (function($, FORM_HELPERS,
    * @param {HTMLElement} postCommenter The commenter's name with a link to his profile.
    * @return {jQuery} The annotation editing form which was found or created.
    */
-  function findOrCreatePostForm($element, courseId, topicId, postId, postContent, postCommenter) {
+  function findOrCreatePostForm(
+    $element,
+    courseId,
+    topicId,
+    postId,
+    postContent,
+    postCommenter
+  ) {
     var $postForm = findPostForm($element);
     if ($postForm.length > 0) {
       return $postForm;
     }
 
-    return createPostForm($element, courseId, topicId, postId, postContent, postCommenter);
+    return createPostForm(
+      $element,
+      courseId,
+      topicId,
+      postId,
+      postContent,
+      postCommenter
+    );
   }
 
   /**
@@ -62,14 +82,23 @@ var EDIT_DISCUSSION_POST = (function($, FORM_HELPERS,
    * @param {HTMLElement} postCommenter The commenter's name with a link to his profile.
    * @return {jQuery} The form for the annotation post.
    */
-  function createPostForm($element, courseId, topicId, postId, postContent, postCommenter) {
-    $element.append(render('post', {
-      courseId: courseId,
-      topicId: topicId,
-      postId: postId,
-      postContent: postContent,
-      postCommenter: postCommenter
-    }));
+  function createPostForm(
+    $element,
+    courseId,
+    topicId,
+    postId,
+    postContent,
+    postCommenter
+  ) {
+    $element.append(
+      render("post", {
+        courseId: courseId,
+        topicId: topicId,
+        postId: postId,
+        postContent: postContent,
+        postCommenter: postCommenter,
+      })
+    );
 
     return findPostForm($element);
   }
@@ -81,7 +110,7 @@ var EDIT_DISCUSSION_POST = (function($, FORM_HELPERS,
    * @return {jQuery} The discussion post form which was found.
    */
   function findPostForm($element) {
-    return $element.find('> div.edit-discussion-post-form');
+    return $element.find("> div.edit-discussion-post-form");
   }
 
   /**
@@ -92,8 +121,11 @@ var EDIT_DISCUSSION_POST = (function($, FORM_HELPERS,
   function onPostFormSubmitted(e) {
     var $button = $(e.target);
     var $form = FORM_HELPERS.parentFormForElement($button);
-    FORM_HELPERS.submitAndDisableForm($form, onPostFormSubmitSuccess,
-                                             onPostFormSubmitFailure);
+    FORM_HELPERS.submitAndDisableForm(
+      $form,
+      onPostFormSubmitSuccess,
+      onPostFormSubmitFailure
+    );
     e.preventDefault();
   }
 
@@ -104,7 +136,7 @@ var EDIT_DISCUSSION_POST = (function($, FORM_HELPERS,
    */
   function onPostFormReset(e) {
     var $button = $(e.target);
-    var $post = $button.parents('.discussion_post:first');
+    var $post = $button.parents(".discussion_post:first");
 
     FORM_HELPERS.removeParentForm($button);
     $post.children().show();
@@ -113,8 +145,7 @@ var EDIT_DISCUSSION_POST = (function($, FORM_HELPERS,
   /**
    * Handles the successful discussion post save event.
    */
-  function onPostFormSubmitSuccess() {
-  }
+  function onPostFormSubmitSuccess() {}
 
   /**
    * Handles the errored discussion post save event.
@@ -129,16 +160,24 @@ var EDIT_DISCUSSION_POST = (function($, FORM_HELPERS,
 
   // TODO
   function initializeToolbarElement(element, selector) {
-    $(element).on('click', selector + '.edit-discussion-post-form input[type="reset"]',
-      onPostFormReset);
-    $(element).on('click', selector + '.edit-discussion-post-form input[type="submit"]',
-      onPostFormSubmitted);
-    $(element).on('click', selector + '.discussion_post .toolbar .edit',
-      onPostEdit);
+    $(element).on(
+      "click",
+      selector + '.edit-discussion-post-form input[type="reset"]',
+      onPostFormReset
+    );
+    $(element).on(
+      "click",
+      selector + '.edit-discussion-post-form input[type="submit"]',
+      onPostFormSubmitted
+    );
+    $(element).on(
+      "click",
+      selector + ".discussion_post .toolbar .edit",
+      onPostEdit
+    );
   }
 
   return {
-    initializeToolbarElement: initializeToolbarElement
+    initializeToolbarElement: initializeToolbarElement,
   };
-}(jQuery, FORM_HELPERS,
-          COURSE_HELPERS));
+})(jQuery, FORM_HELPERS, COURSE_HELPERS);

@@ -5,4 +5,4 @@ en:
         generic_announcement:
           attributes:
             start_at:
-              cannot_be_after_end_at: 'cannot be after end at'
+              cannot_be_after_end_at: "cannot be after end at"

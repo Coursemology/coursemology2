@@ -2,16 +2,16 @@ en:
   course:
     condition:
       survey:
-        title: 'Survey'
+        title: "Survey"
       surveys:
         new:
-          header: 'New Survey Condition'
+          header: "New Survey Condition"
         create:
-          success: 'Survey condition was created.'
+          success: "Survey condition was created."
         edit:
-          header: 'Edit Survey Condition'
+          header: "Edit Survey Condition"
         update:
-          success: 'Survey condition was updated.'
+          success: "Survey condition was updated."
         destroy:
-          success: 'Survey condition was deleted.'
-          error: 'Failed to delete survey condition.'
+          success: "Survey condition was deleted."
+          error: "Failed to delete survey condition."

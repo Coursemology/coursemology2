@@ -2,21 +2,21 @@ en:
   user:
     emails:
       index:
-        header: 'Emails'
-        add: 'Add'
-        email: 'Email'
-        add_email: 'Add email address'
+        header: "Emails"
+        add: "Add"
+        email: "Email"
+        add_email: "Add email address"
       create:
-        success: 'Email was added successfully'
+        success: "Email was added successfully"
       destroy:
-        success: 'Email was deleted successfully'
+        success: "Email was deleted successfully"
       set_primary:
-        success: 'Primary email was updated successfully'
+        success: "Primary email was updated successfully"
       send_confirmation:
-        already_confirmed: '%{email} was already confirmed.'
-        success: 'A message with a confirmation link has been sent to %{email}. Please follow the link to confirm the email_address.'
+        already_confirmed: "%{email} was already confirmed."
+        success: "A message with a confirmation link has been sent to %{email}. Please follow the link to confirm the email_address."
       email:
-        set_primary: 'Set Primary'
-        unconfirmed: 'Unconfirmed'
-        primary: 'Primary'
-        resend_confirmation: 'Resend confirmation email'
+        set_primary: "Set Primary"
+        unconfirmed: "Unconfirmed"
+        primary: "Primary"
+        resend_confirmation: "Resend confirmation email"

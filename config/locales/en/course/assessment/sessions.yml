@@ -3,7 +3,7 @@ en:
     assessment:
       sessions:
         new:
-          header: 'Input Password'
-          message: 'The assessment is locked, please approach any course staff for assistance.'
-          placeholder: 'Password'
-          continue: 'Continue'
+          header: "Input Password"
+          message: "The assessment is locked, please approach any course staff for assistance."
+          placeholder: "Password"
+          continue: "Continue"

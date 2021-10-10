@@ -3,11 +3,11 @@ en:
     admin:
       component_settings:
         index:
-          header: 'Components'
+          header: "Components"
         edit:
-          header: 'Enable/Disable Components'
-          name: 'Name'
-          enabled: 'Enabled?'
-          button: 'Update Component Settings'
+          header: "Enable/Disable Components"
+          name: "Name"
+          enabled: "Enabled?"
+          button: "Update Component Settings"
         update:
-          success: 'Settings updated successfully.'
+          success: "Settings updated successfully."

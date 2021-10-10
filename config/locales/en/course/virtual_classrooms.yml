@@ -3,19 +3,19 @@ en:
     virtual_classrooms:
       sidebar_title: :'course.virtual_classrooms.index.header'
       index:
-        header: 'Virtual Classrooms'
-        duration_minutes: '%{duration} minutes'
+        header: "Virtual Classrooms"
+        duration_minutes: "%{duration} minutes"
       new:
-        header: 'New Virtual Classroom'
+        header: "New Virtual Classroom"
       create:
-        success: 'Virtual classroom %{title} was created.'
+        success: "Virtual classroom %{title} was created."
       edit:
-        header: 'Edit Virtual Classroom'
+        header: "Edit Virtual Classroom"
       update:
-        success: 'Virtual classroom %{title} was updated.'
+        success: "Virtual classroom %{title} was updated."
       destroy:
-        success: 'Virtual classroom %{title} was deleted.'
-        failure: 'Failed to delete virtual classroom: %{error}'
+        success: "Virtual classroom %{title} was deleted."
+        failure: "Failed to delete virtual classroom: %{error}"
       lesson_already_conducted: "The lesson has already ended"
       lesson_live_in: "The lesson will go live in %{desc}, please refresh the page when it is live"
       error_generating_link: "Error generating access link: %{error}"

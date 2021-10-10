@@ -3,16 +3,16 @@ en:
     experience_points:
       forum_disbursement:
         new:
-          compute_points: 'Compute Forum Participation Points'
-          search: 'Search'
-          forum_participation_reason: 'Forum Participation'
+          compute_points: "Compute Forum Participation Points"
+          search: "Search"
+          forum_participation_reason: "Forum Participation"
           header: :'course.experience_points.disbursement.new.header'
           awardees: :'course.experience_points.disbursement.new.awardees'
           reason: :'course.experience_points.disbursement.new.reason'
           submit: :'course.experience_points.disbursement.new.submit'
-          level: 'Level'
-          experience_points: 'Experience Points'
-          post_count: 'Post Count'
-          vote_tally: 'Vote Tally'
+          level: "Level"
+          experience_points: "Experience Points"
+          post_count: "Post Count"
+          vote_tally: "Vote Tally"
         create:
           success: :'course.experience_points.disbursement.create.success'

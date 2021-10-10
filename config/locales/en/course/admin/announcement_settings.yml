@@ -3,6 +3,6 @@ en:
     admin:
       announcement_settings:
         edit:
-          title_placeholder: 'Leave blank to use default title'
+          title_placeholder: "Leave blank to use default title"
         update:
-          success: 'Announcement settings updated.'
+          success: "Announcement settings updated."

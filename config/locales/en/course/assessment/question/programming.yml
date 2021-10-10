@@ -4,25 +4,25 @@ en:
       question:
         programming:
           new:
-            header: 'New Programming Question'
+            header: "New Programming Question"
           create:
-            success: 'The programming question was created.'
-            failure: 'Could not create programming question.'
+            success: "The programming question was created."
+            failure: "Could not create programming question."
           update:
-            success: 'The programming question was updated.'
-            failure: 'Could not update programming question.'
+            success: "The programming question was updated."
+            failure: "Could not update programming question."
           destroy:
-            success: 'The programming question was deleted.'
-            failure: 'Could not delete programming question: %{error}'
+            success: "The programming question was deleted."
+            failure: "Could not delete programming question: %{error}"
           form:
             import_result:
-              success: 'The package was successfully imported.'
-              error: 'The package could not be imported: %{error}'
+              success: "The package was successfully imported."
+              error: "The package could not be imported: %{error}"
               errors:
-                invalid_package: 'the package uploaded does not have a valid structure.'
+                invalid_package: "the package uploaded does not have a valid structure."
                 time_limit_exceeded: >-
                   the package exceeded the maximum time allowed by the question.
                 evaluation_timeout: >-
                   no response was received from an evaluator within the required time.
-                evaluation_error: 'an error occurred during evaluation, see logs.'
+                evaluation_error: "an error occurred during evaluation, see logs."
           question_type: Programming

@@ -2,9 +2,9 @@ en:
   user:
     profiles:
       edit:
-        header: 'Profile'
-        submit: 'Update Profile'
-        profile_photo: 'Profile Photo'
-        link_to_facebook: 'Link to Facebook'
+        header: "Profile"
+        submit: "Update Profile"
+        profile_photo: "Profile Photo"
+        link_to_facebook: "Link to Facebook"
       update:
-        success: 'Your profile was updated successfully'
+        success: "Your profile was updated successfully"

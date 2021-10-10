@@ -5,4 +5,4 @@ en:
         course/assessment/question/text_response_solution:
           attributes:
             grade:
-              invalid_grade: 'must be no more than the maximum grade of the question'
+              invalid_grade: "must be no more than the maximum grade of the question"

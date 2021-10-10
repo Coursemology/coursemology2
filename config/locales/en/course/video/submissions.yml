@@ -4,26 +4,26 @@ en:
       submission:
         submissions:
           index:
-            submissions: 'Submissions'
-            my_student_header: 'My Student'
-            student_header: 'Students'
-            other_header: 'Others'
+            submissions: "Submissions"
+            my_student_header: "My Student"
+            student_header: "Students"
+            other_header: "Others"
           create:
-            failure: 'Could not create submission: %{error}'
+            failure: "Could not create submission: %{error}"
           show:
-            header: 'Statistics: %{title} for %{student}'
-            watched_at: 'Watched at'
-            sessions_header: 'Sessions Statistics'
-            no_sessions: 'No watch statistics available for this submission'
+            header: "Statistics: %{title} for %{student}"
+            watched_at: "Watched at"
+            sessions_header: "Sessions Statistics"
+            no_sessions: "No watch statistics available for this submission"
           edit:
-            description: 'Description'
-            header: 'Viewing %{title}'
+            description: "Description"
+            header: "Viewing %{title}"
           submission:
-            watched: 'Watched'
-            not_watched: 'Has Not Started'
-            progress: '%{progress} %'
+            watched: "Watched"
+            not_watched: "Has Not Started"
+            progress: "%{progress} %"
           submissions:
-            student_name: 'Name'
-            status: 'Status'
-            start_at: 'Watched At'
-            percent_watched: '% Watched'
+            student_name: "Name"
+            status: "Status"
+            start_at: "Watched At"
+            percent_watched: "% Watched"

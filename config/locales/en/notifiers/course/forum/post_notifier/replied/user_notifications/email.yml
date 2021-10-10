@@ -6,11 +6,11 @@ en:
           replied:
             user_notifications:
               email:
-                subject: '%{course} New reply for forum topic: %{topic}'
+                subject: "%{course} New reply for forum topic: %{topic}"
                 message: >
                   <p>%{post_author} replied,</p>
                   %{post}
                   <p>You can respond here: %{topic}</p>
                 unsubscribe:
-                  tag: 'Unsubscribe'
-                  message: '%{unsubscribe_link} from email notifications for this topic'
+                  tag: "Unsubscribe"
+                  message: "%{unsubscribe_link} from email notifications for this topic"

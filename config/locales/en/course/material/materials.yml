@@ -3,10 +3,10 @@ en:
     material:
       materials:
         edit:
-          header: 'Edit Material'
+          header: "Edit Material"
         update:
-          success: 'Material %{name} was updated.'
+          success: "Material %{name} was updated."
         destroy:
-          success: 'Material %{name} was deleted.'
-          failure: 'Failed to delete material: %{error}'
-      sidebar_title: 'Materials'
+          success: "Material %{name} was deleted."
+          failure: "Failed to delete material: %{error}"
+      sidebar_title: "Materials"

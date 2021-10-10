@@ -3,11 +3,11 @@ en:
     admin:
       admin:
         index:
-          header: 'Settings'
-          publish_label: 'Publish Course'
+          header: "Settings"
+          publish_label: "Publish Course"
           publish_hint: >
             Published courses will show up in the list of courses publicly viewable by all users.
-          enrollable_label: 'Allow users to send an enrolment request'
+          enrollable_label: "Allow users to send an enrolment request"
           gamified_label: >
             If enabled, the course would show levels and experience points to all students.
             Course staff would be able to configure and award experience points to students.
@@ -21,19 +21,19 @@ en:
           time_zone_label: >
             Sets the time zone for the course. Consolidated email reminders will be sent out
             just after midnight for the time zone indicated here.
-          self_directed_learning: 'Advanced Preview'
+          self_directed_learning: "Advanced Preview"
           self_directed_learning_label: >
             Allow students to attempt the assessments that start at a future time provided they
             have fulfilled the prerequisites.
           self_directed_learning_time_html: >
             Allow students to access course items %{input} days in advance of the item's start time.
           delete:
-            header: 'Delete Course'
-            button: 'Delete My Course'
+            header: "Delete Course"
+            button: "Delete My Course"
             description_placeholder: >
               Once you delete this course, you will not be able to access it any more.
         update:
-          success: 'Course %{title} was updated.'
+          success: "Course %{title} was updated."
         destroy:
-          success: 'Course %{title} was deleted.'
-          failure: 'Failed to delete course: %{error}.'
+          success: "Course %{title} was deleted."
+          failure: "Failed to delete course: %{error}."

@@ -4,19 +4,19 @@ en:
       topics:
         sidebar_title: :'course.discussion.topics.index.header'
         tabs:
-          my_students_pending: 'My Students Pending'
-          pending: 'Pending'
-          unread: 'Unread'
-          my_students: 'My Students'
-          all: 'All'
+          my_students_pending: "My Students Pending"
+          pending: "Pending"
+          unread: "Unread"
+          my_students: "My Students"
+          all: "All"
         index:
-          header: 'Comments'
+          header: "Comments"
         pending:
           header: :'course.discussion.topics.index.header'
         my_students:
           header: :'course.discussion.topics.index.header'
         my_students_pending:
           header: :'course.discussion.topics.index.header'
-        mark_as_pending: 'Mark as pending'
-        unmark_as_pending: 'Unmark as pending'
-        mark_as_read: 'Mark as read'
+        mark_as_pending: "Mark as pending"
+        unmark_as_pending: "Unmark as pending"
+        mark_as_read: "Mark as read"

@@ -1,4 +1,4 @@
 en:
   pages:
-    '403':
-      header: 'Access Denied'
+    "403":
+      header: "Access Denied"

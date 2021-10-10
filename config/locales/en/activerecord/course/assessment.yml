@@ -2,7 +2,7 @@ en:
   activerecord:
     attributes:
       course/assessment/assessment:
-        title: 'Title'
+        title: "Title"
     errors:
       models:
         course/assessment:
@@ -11,4 +11,4 @@ en:
               not_in_same_course: >
                 The tab that you have selected is not in the same course as the assessment
             no_test_type_chosen: >
-                At least one type of test case must be selected for grade and exp calculation
+              At least one type of test case must be selected for grade and exp calculation

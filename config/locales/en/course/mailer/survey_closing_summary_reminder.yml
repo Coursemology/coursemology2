@@ -2,7 +2,7 @@ en:
   course:
     mailer:
       survey_closing_summary_email:
-        subject: '%{course}: Reminder about %{survey}'
+        subject: "%{course}: Reminder about %{survey}"
         message: >
           Emails were sent to the following students to remind them that %{survey} will expire on %{time}:
 

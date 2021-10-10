@@ -3,6 +3,6 @@ en:
     lesson_plan:
       todos:
         todo:
-          ignore: 'Ignore'
+          ignore: "Ignore"
         ignore:
-          success: 'The task has been successfully ignored.'
+          success: "The task has been successfully ignored."

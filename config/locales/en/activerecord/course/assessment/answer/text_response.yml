@@ -5,4 +5,4 @@ en:
         course/assessment/answer/text_response:
           attributes:
             attachments:
-              unique: 'File names must be unique'
+              unique: "File names must be unique"

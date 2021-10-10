@@ -3,31 +3,31 @@ en:
     assessment:
       question_bundle_assignments:
         index:
-          header: 'Question Bundle Assignments'
-          prepared_bundle_assignments: 'Prepared bundle assignments'
-          past_bundle_assignments: 'Past bundle assignments'
-          validations: 'Validations'
-          rerandomize_all: 'Re-randomize all'
-          rerandomize_unassigned: 'Re-randomize unassigned students'
-          user: 'User'
-          submission_id: 'Submission ID'
-          unbundled: 'Unbundled'
+          header: "Question Bundle Assignments"
+          prepared_bundle_assignments: "Prepared bundle assignments"
+          past_bundle_assignments: "Past bundle assignments"
+          validations: "Validations"
+          rerandomize_all: "Re-randomize all"
+          rerandomize_unassigned: "Re-randomize unassigned students"
+          user: "User"
+          submission_id: "Submission ID"
+          unbundled: "Unbundled"
           unbundled_tooltip: >
             These are likely erroneously assigned bundles that don't fit into any existing question groups.
 
         validations:
           no_overlapping_questions:
-            desc: 'Question bundles do not have overlapping questions'
-            fail: 'Questions belonging to multiple bundles: %{questions}'
+            desc: "Question bundles do not have overlapping questions"
+            fail: "Questions belonging to multiple bundles: %{questions}"
           no_empty_groups:
-            desc: 'Question groups should contain at least one bundle'
-            fail: 'Groups with no bundle: %{groups}'
+            desc: "Question groups should contain at least one bundle"
+            fail: "Groups with no bundle: %{groups}"
           one_bundle_assigned:
-            desc: 'All students have exactly one bundle assigned per question group'
-            fail: 'Misassigned students: %{students}'
-            missing_bundle: 'Missing bundle'
-            unbundled: 'Unbundled'
+            desc: "All students have exactly one bundle assigned per question group"
+            fail: "Misassigned students: %{students}"
+            missing_bundle: "Missing bundle"
+            unbundled: "Unbundled"
           no_repeat_bundles:
-            desc: 'Students must not be assigned a bundle that was previously attempted'
-            fail: 'Students with repeat bundles: %{students}'
-            repeat_bundle: 'Student has attempted this bundle previously'
+            desc: "Students must not be assigned a bundle that was previously attempted"
+            fail: "Students with repeat bundles: %{students}"
+            repeat_bundle: "Student has attempted this bundle previously"

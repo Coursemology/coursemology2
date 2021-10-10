@@ -3,18 +3,18 @@ en:
     users:
       sidebar_title: :'course.users.index.header'
       role:
-        student: 'Student'
-        teaching_assistant: 'Teaching Assistant'
-        observer: 'Observer'
-        manager: 'Manager'
-        owner: 'Owner'
-        phantom: 'Phantom'
+        student: "Student"
+        teaching_assistant: "Teaching Assistant"
+        observer: "Observer"
+        manager: "Manager"
+        owner: "Owner"
+        phantom: "Phantom"
       status:
-        accepted: 'Accepted'
-        invited: 'Invited'
+        accepted: "Accepted"
+        invited: "Invited"
       algorithm:
-        fixed: 'Fixed'
-        naive: 'Naive'
+        fixed: "Fixed"
+        naive: "Naive"
       tabs:
         students: :'course.users.students.header'
         staff: :'course.users.staff.header'
@@ -23,29 +23,28 @@ en:
         invitations: :'course.user_invitations.index.header'
         personal_times: :'course.personal_times.index.header'
       new:
-        already_registered: 'You are already registered as a %{role}.'
+        already_registered: "You are already registered as a %{role}."
       update:
-        success: 'Record for %{name} has been updated.'
+        success: "Record for %{name} has been updated."
       destroy:
-        confirm: 'Delete %{role}: %{name} (%{email})?'
-        success: 'Deleted %{role} registration from %{email}.'
+        success: "Deleted %{role} registration from %{email}."
       students:
-        header: 'Students'
+        header: "Students"
       staff:
-        header: 'Staff'
-        upgrade_to_staff: 'Upgrade to Staff'
+        header: "Staff"
+        upgrade_to_staff: "Upgrade to Staff"
       upgrade_to_staff:
-        success: '%{name} is now a %{role}.'
+        success: "%{name} is now a %{role}."
       show:
-        header: 'Profile'
-        role: 'Role: %{role}'
-        experience_points_earned_html: 'Experience points earned: %{points}'
-        achievements_header: 'Achievements'
+        header: "Profile"
+        role: "Role: %{role}"
+        experience_points_earned_html: "Experience points earned: %{points}"
+        achievements_header: "Achievements"
         achievement_count:
-          zero: 'No achievements'
-          one: 'One achievement'
-          other: '%{count} achievements'
-        topic_mastery: 'Topic Mastery'
-        grade_for_skill: '%{grade}/%{total_grade} points'
+          zero: "No achievements"
+          one: "One achievement"
+          other: "%{count} achievements"
+        topic_mastery: "Topic Mastery"
+        grade_for_skill: "%{grade}/%{total_grade} points"
       index:
-        header: 'Students'
+        header: "Students"
