@@ -51,7 +51,7 @@ RSpec.describe Instance do
   describe '.default' do
     it 'returns the default instance' do
       default_instance = Instance.default
-      expect(default_instance.host).to eq(Application.config.x.default_host)
+      expect(default_instance.host).to eq(Application::Application.config.x.default_host)
       expect(default_instance.default?).to be_truthy
     end
   end

@@ -129,7 +129,7 @@ class Instance < ApplicationRecord
 
   # Replace the hostname of the default instance.
   def host
-    return Application.config.x.default_host if default?
+    return Application::Application.config.x.default_host if default?
     super
   end
 

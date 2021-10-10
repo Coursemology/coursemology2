@@ -16,7 +16,7 @@ class Course::Assessment < ApplicationRecord
   before_validation :propagate_course, if: :new_record?
   before_validation :assign_folder_attributes
   after_commit :grade_with_new_test_cases, on: :update
-  before_save :save_tab, on: :create
+  before_create :save_tab
 
   enum randomization: { prepared: 0 }
 
