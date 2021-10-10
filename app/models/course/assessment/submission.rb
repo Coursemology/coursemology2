@@ -187,7 +187,7 @@ class Course::Assessment::Submission < ApplicationRecord
   # The assigned questions for this submission, ordered by question_group and question_bundle_question
   def assigned_questions
     Course::Assessment::Question.
-      joins(question_bundles: [:question_group, { question_bundle_assignments: :submission }]).
+      joins(question_bundles: [:question_group, question_bundle_assignments: :submission]).
       merge(Course::Assessment::Submission.where(id: self)).
       merge(Course::Assessment::QuestionGroup.order(:weight)).
       merge(Course::Assessment::QuestionBundleQuestion.order(:weight)).

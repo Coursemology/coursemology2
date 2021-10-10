@@ -26,7 +26,7 @@ class Course::Assessment::QuestionBundleAssignmentsController < Course::Assessme
   end
 
   def create
-    assignment_set_params = params.require(:assignment_set).permit([:user_id, { bundles: {} }])
+    assignment_set_params = params.require(:assignment_set).permit([:user_id, bundles: {}])
     user = User.find(assignment_set_params[:user_id])
     bundles = Course::Assessment::QuestionBundle.where(id: assignment_set_params[:bundles].values).
               joins(:question_group).merge(Course::Assessment::QuestionGroup.where(assessment: @assessment))

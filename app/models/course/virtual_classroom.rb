@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::VirtualClassroom < ApplicationRecord
   attr_writer :duration
+
   before_validation :convert_duration_to_end_at
   acts_as_readable on: :updated_at
 

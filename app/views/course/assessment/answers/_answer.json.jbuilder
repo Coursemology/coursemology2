@@ -20,7 +20,5 @@ json.grading do
     end
   end
 
-  if can_grade || answer.submission.published?
-    json.grade answer&.grade&.to_f
-  end
+  json.grade answer&.grade&.to_f if can_grade || answer.submission.published?
 end

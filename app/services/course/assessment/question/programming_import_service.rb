@@ -17,15 +17,13 @@ class Course::Assessment::Question::ProgrammingImportService
   # Imports the templates and tests found in the package.
   def import
     @attachment.open(binmode: true) do |temporary_file|
-      begin
-        package = Course::Assessment::ProgrammingPackage.new(temporary_file)
-        import_from_package(package)
-      ensure
-        next unless package
+      package = Course::Assessment::ProgrammingPackage.new(temporary_file)
+      import_from_package(package)
+    ensure
+      next unless package
 
-        temporary_file.close
-        package.close
-      end
+      temporary_file.close
+      package.close
     end
   end
 

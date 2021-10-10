@@ -48,7 +48,6 @@ if attempt.submitted? && !attempt.auto_grading
   end
 end
 
-
 can_read_tests = can?(:read_tests, submission)
 show_private = can_read_tests || submission.published? && assessment.show_private?
 show_evaluation = can_read_tests || submission.published? && assessment.show_evaluation?
@@ -57,7 +56,7 @@ test_cases_by_type = question.test_cases_by_type
 test_cases_and_results = get_test_cases_and_results(test_cases_by_type, auto_grading)
 
 show_stdout_and_stderr = (can_read_tests || current_course.show_stdout_and_stderr) &&
-  auto_grading && auto_grading&.exit_code != 0
+                         auto_grading && auto_grading&.exit_code != 0
 
 displayed_test_case_types = ['public_test']
 displayed_test_case_types << 'private_test' if show_private
@@ -83,9 +82,7 @@ json.testCases do
     end
   end
 
-  if show_stdout_and_stderr
-    json.(auto_grading, :stdout, :stderr)
-  end
+  json.(auto_grading, :stdout, :stderr) if show_stdout_and_stderr
 end
 
 failed_test_cases_by_type = get_failed_test_cases_by_type(test_cases_and_results)
@@ -107,7 +104,7 @@ json.explanation do
       json.failureType 'private_test'
     end
 
-    json.correct attempt&.auto_grading && attempt.correct
+    json.correct attempt&.auto_grading && attempt&.correct
     json.explanations explanations
   end
 end

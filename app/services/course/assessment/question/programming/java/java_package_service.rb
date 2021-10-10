@@ -53,15 +53,13 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
 
   def extract_autograded_meta(attachment)
     attachment.open(binmode: true) do |temporary_file|
-      begin
-        package = Course::Assessment::ProgrammingPackage.new(temporary_file)
-        meta = package.meta_file
-        @old_meta = meta.present? ? JSON.parse(meta) : nil
-      ensure
-        next unless package
+      package = Course::Assessment::ProgrammingPackage.new(temporary_file)
+      meta = package.meta_file
+      @old_meta = meta.present? ? JSON.parse(meta) : nil
+    ensure
+      next unless package
 
-        temporary_file.close
-      end
+      temporary_file.close
     end
   end
 
@@ -108,15 +106,13 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
     new_filenames = (@test_params[file_type] || []).reject(&:nil?).map(&:original_filename)
 
     attachment.open(binmode: true) do |temporary_file|
-      begin
-        package = Course::Assessment::ProgrammingPackage.new(temporary_file)
-        files_to_delete = file_type + '_to_delete'
-        return extract_from_package(package, file_type, new_filenames, @test_params[files_to_delete])
-      ensure
-        next unless package
+      package = Course::Assessment::ProgrammingPackage.new(temporary_file)
+      files_to_delete = file_type + '_to_delete'
+      return extract_from_package(package, file_type, new_filenames, @test_params[files_to_delete])
+    ensure
+      next unless package
 
-        temporary_file.close
-      end
+      temporary_file.close
     end
   end
 

@@ -60,12 +60,11 @@ RSpec.describe Course::UserInvitationService, type: :service do
     let(:user_attributes) { existing_user_attributes + new_user_attributes + invalid_user_attributes }
     let(:user_form_attributes) do
       user_attributes.map do |hash|
-        [generate(:nested_attribute_new_id), {
-          name: hash[:name],
-          email: hash[:email],
-          role: hash[:role],
-          phantom: hash[:phantom]
-        }]
+        [generate(:nested_attribute_new_id),
+         name: hash[:name],
+         email: hash[:email],
+         role: hash[:role],
+         phantom: hash[:phantom]]
       end.to_h
     end
 

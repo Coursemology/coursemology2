@@ -48,6 +48,10 @@ Style/EmptyMethod:
 Style/HashAsLastArrayItem:
   EnforcedStyle: no_braces
 
+Style/LambdaCall:
+  Exclude:
+    - '**/*.json.jbuilder'
+
 Style/NumericPredicate:
   EnforcedStyle: comparison
 
