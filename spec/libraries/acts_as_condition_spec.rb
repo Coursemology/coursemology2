@@ -10,6 +10,7 @@ RSpec.describe 'Extension: Acts as Condition', type: :model do
     def self.load_schema!; end
 
     acts_as_condition
+
   end
 
   describe 'objects which act as conditions' do
