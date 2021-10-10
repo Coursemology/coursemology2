@@ -10,6 +10,7 @@ RSpec.describe 'Extension: Acts as Conditional', type: :model do
     def self.load_schema!; end
 
     attr_accessor :satisfiability_type
+
     acts_as_conditional
   end
 
