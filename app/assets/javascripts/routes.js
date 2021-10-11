@@ -1017,6 +1017,12 @@ var ROUTES = (function() {
 // data_course_object_duplication => /courses/:course_id/object_duplication/data(.:format)
   // function(course_id, options)
   data_course_object_duplication_path: Utils.route([["course_id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"object_duplication",false],[2,[7,"/",false],[2,[6,"data",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]),
+// delete_all_course_assessment_submissions => /courses/:course_id/assessments/:assessment_id/submissions/delete_all(.:format)
+  // function(course_id, assessment_id, options)
+  delete_all_course_assessment_submissions_path: Utils.route([["course_id",true],["assessment_id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"assessments",false],[2,[7,"/",false],[2,[3,"assessment_id",false],[2,[7,"/",false],[2,[6,"submissions",false],[2,[7,"/",false],[2,[6,"delete_all",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]]]]]),
+// delete_course_assessment_submissions => /courses/:course_id/assessments/:assessment_id/submissions/delete(.:format)
+  // function(course_id, assessment_id, options)
+  delete_course_assessment_submissions_path: Utils.route([["course_id",true],["assessment_id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"assessments",false],[2,[7,"/",false],[2,[3,"assessment_id",false],[2,[7,"/",false],[2,[6,"submissions",false],[2,[7,"/",false],[2,[6,"delete",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]]]]]),
 // destroy_user_session => /users/sign_out(.:format)
   // function(options)
   destroy_user_session_path: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"users",false],[2,[7,"/",false],[2,[6,"sign_out",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]),
@@ -1500,6 +1506,12 @@ var ROUTES = (function() {
 // toggle_registration_course_users => /courses/:course_id/users/toggle_registration(.:format)
   // function(course_id, options)
   toggle_registration_course_users_path: Utils.route([["course_id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"users",false],[2,[7,"/",false],[2,[6,"toggle_registration",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]),
+// unsubmit_all_course_assessment_submissions => /courses/:course_id/assessments/:assessment_id/submissions/unsubmit_all(.:format)
+  // function(course_id, assessment_id, options)
+  unsubmit_all_course_assessment_submissions_path: Utils.route([["course_id",true],["assessment_id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"assessments",false],[2,[7,"/",false],[2,[3,"assessment_id",false],[2,[7,"/",false],[2,[6,"submissions",false],[2,[7,"/",false],[2,[6,"unsubmit_all",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]]]]]),
+// unsubmit_course_assessment_submissions => /courses/:course_id/assessments/:assessment_id/submissions/unsubmit(.:format)
+  // function(course_id, assessment_id, options)
+  unsubmit_course_assessment_submissions_path: Utils.route([["course_id",true],["assessment_id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"assessments",false],[2,[7,"/",false],[2,[3,"assessment_id",false],[2,[7,"/",false],[2,[6,"submissions",false],[2,[7,"/",false],[2,[6,"unsubmit",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]]]]]),
 // unsubmit_course_survey_response => /courses/:course_id/surveys/:survey_id/responses/:id/unsubmit(.:format)
   // function(course_id, survey_id, id, options)
   unsubmit_course_survey_response_path: Utils.route([["course_id",true],["survey_id",true],["id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"surveys",false],[2,[7,"/",false],[2,[3,"survey_id",false],[2,[7,"/",false],[2,[6,"responses",false],[2,[7,"/",false],[2,[3,"id",false],[2,[7,"/",false],[2,[6,"unsubmit",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]]]]]]]),
