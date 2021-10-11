@@ -36,7 +36,8 @@ const styles = {
     alignItems: 'center',
   },
   phantomIcon: {
-    fontSize: '16px',
+    fontSize: '14px',
+    marginRight: '2px',
   },
   unstartedText: {
     color: red600,
@@ -299,16 +300,13 @@ export default class SubmissionsTableRow extends React.Component {
     return (
       <>
         <TableRowColumn style={styles.tableCell}>
-          <span>
-            {SubmissionsTableRow.renderPhantomUserIcon(submission)}
-            &nbsp;
-            <a
-              style={styles.nameWrapper}
-              href={getCourseUserURL(courseId, submission.courseUser.id)}
-            >
-              {submission.courseUser.name}
-            </a>
-          </span>
+          {SubmissionsTableRow.renderPhantomUserIcon(submission)}
+          <a
+            style={styles.nameWrapper}
+            href={getCourseUserURL(courseId, submission.courseUser.id)}
+          >
+            {submission.courseUser.name}
+          </a>
         </TableRowColumn>
         <TableRowColumn style={tableCenterCellStyle}>
           {this.renderSubmissionWorkflowState(submission)}
