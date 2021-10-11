@@ -31,12 +31,13 @@ const styles = {
     backgroundColor: blue600,
   },
   nameWrapper: {
-    display: 'inline-block',
+    display: 'inline',
     flexWrap: 'nowrap',
     alignItems: 'center',
   },
   phantomIcon: {
-    fontSize: '16px',
+    fontSize: '14px',
+    marginRight: '2px',
   },
   unstartedText: {
     color: red600,
@@ -93,11 +94,14 @@ export default class SubmissionsTableRow extends React.Component {
         <>
           <FontIcon
             data-tip
-            data-for="test"
+            data-for={`phantom-user-${submission.courseUser.id}`}
             className="fa fa-user-secret fa-xs"
             style={styles.phantomIcon}
           />
-          <ReactTooltip id="test" effect="solid">
+          <ReactTooltip
+            id={`phantom-user-${submission.courseUser.id}`}
+            effect="solid"
+          >
             <FormattedMessage {...submissionsTranslations.phantom} />
           </ReactTooltip>
         </>
@@ -296,16 +300,13 @@ export default class SubmissionsTableRow extends React.Component {
     return (
       <>
         <TableRowColumn style={styles.tableCell}>
-          <span>
-            {SubmissionsTableRow.renderPhantomUserIcon(submission)}
-            &nbsp;
-            <a
-              style={styles.nameWrapper}
-              href={getCourseUserURL(courseId, submission.courseUser.id)}
-            >
-              {submission.courseUser.name}
-            </a>
-          </span>
+          {SubmissionsTableRow.renderPhantomUserIcon(submission)}
+          <a
+            style={styles.nameWrapper}
+            href={getCourseUserURL(courseId, submission.courseUser.id)}
+          >
+            {submission.courseUser.name}
+          </a>
         </TableRowColumn>
         <TableRowColumn style={tableCenterCellStyle}>
           {this.renderSubmissionWorkflowState(submission)}

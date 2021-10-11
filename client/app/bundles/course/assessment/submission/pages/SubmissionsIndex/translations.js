@@ -73,7 +73,7 @@ const translations = defineMessages({
   },
   unsubmitAllSubmissions: {
     id: 'course.assessment.submission.unsubmitAllSubmissions',
-    defaultMessage: 'Unsubmit all submission',
+    defaultMessage: 'Unsubmit All Submissions',
   },
   unsubmitSubmission: {
     id: 'course.assessment.submission.unsubmitSubmission',
@@ -88,7 +88,7 @@ const translations = defineMessages({
   },
   deleteAllSubmissions: {
     id: 'course.assessment.submission.deleteAllSubmissions',
-    defaultMessage: 'Delete all submission',
+    defaultMessage: 'Delete All Submissions',
   },
   deleteSubmission: {
     id: 'course.assessment.submission.deleteSubmission',
