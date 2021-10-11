@@ -27,11 +27,13 @@ export default class ForumPost extends React.Component {
     renderStyle() {
         if (this.props.asmSubStatus) {
             return styles.selectedForAsmSub
-        } else if (this.props.replyPost) {
-            return styles.replyPost
-        } else {
-            return styles.defaultCard
         }
+
+        if (this.props.replyPost) {
+            return styles.replyPost
+        }
+
+        return styles.defaultCard
     }
 
     render() {
@@ -39,13 +41,13 @@ export default class ForumPost extends React.Component {
             <div>
                 <Card style={this.renderStyle()}>
                     <CardHeader
-                        title={this.props.userName}
-                        subtitle={this.props.createdAt}
-                        avatar={this.props.avatar}
+                        title={this.props.post.userName}
+                        subtitle={this.props.post.updatedAt}
+                        avatar={this.props.post.avatar}
                     />
                     <Divider/>
                     <CardText>
-                        <div dangerouslySetInnerHTML={{__html: this.props.text}}/>
+                        <div dangerouslySetInnerHTML={{__html: this.props.post.text}}/>
                     </CardText>
                 </Card>
             </div>
@@ -55,9 +57,11 @@ export default class ForumPost extends React.Component {
 
 ForumPost.propTypes = {
     asmSubStatus: PropTypes.bool,
+    post: PropTypes.shape({
+        text: PropTypes.string,
+        userName: PropTypes.string,
+        avatar: PropTypes.string,
+        updatedAt: PropTypes.string,
+    }),
     replyPost: PropTypes.bool,
-    text: PropTypes.string,
-    userName: PropTypes.string,
-    avatar: PropTypes.string,
-    createdAt: PropTypes.string,
 };

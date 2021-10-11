@@ -59,7 +59,6 @@ export default class Option extends React.Component {
     };
 
     render() {
-        const post = this.props.post.post
         return (
             <div style={styles.row}>
                 <div style={styles.cellCheckbox}>
@@ -69,10 +68,7 @@ export default class Option extends React.Component {
                     />
                 </div>
                 <div style={styles.cellPost}>
-                    <ForumPost text={post.text}
-                               userName={post.userName}
-                               avatar={post.avatar}
-                               createdAt={post.createdAt}
+                    <ForumPost post={this.props.post.post}
                                asmSubStatus={this.state.selected}/>
                     {this.props.post.parent && <ParentPost parent={this.props.post.parent}/>}
                     <br/>

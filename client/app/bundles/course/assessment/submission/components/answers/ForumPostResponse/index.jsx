@@ -21,13 +21,37 @@ const styles = {
     },
 }
 
+const dummyPost = {
+    id: 28,
+    text: "dummy post text",
+    userName: "user's name",
+    avatar: "/assets/user_silhouette-a7e86382ad47fd32dc81903c3ff95235e8ae920c72fdee2b89afff7804e50328.svg",
+    updatedAt: 'September 21, 2021 05:19',
+}
+
+const postA = {
+    topic: {
+        id: 1,
+    },
+    post: dummyPost,
+    parent: dummyPost,
+}
+
+const postB = {
+    topic: {
+        id: 1,
+    },
+    post: dummyPost,
+    parent: dummyPost,
+}
+
 export default class ForumPostResponse extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             qtyPostsSelected: 0,
             maxPosts: this.props.question.max_posts,
-            selectedPosts: [],
+            selectedPosts: [postA],
         };
     }
 
@@ -88,12 +112,12 @@ export default class ForumPostResponse extends React.Component {
                 <br />
                 {
                     posts.map((post) => (
-                        <ForumPost text={post.text}
-                                   userName={post.userName}
-                                   avatar={post.avatar}
-                                   createdAt={post.createdAt}
-                                   key={post.id}
-                        />
+                        <>
+                            <ForumPost post={post.post}
+                                       key={post.id}
+                            />
+                            post.parent && <ParentPost parent={post.parent}/>
+                        </>
                     ))
                 }
                 <br />

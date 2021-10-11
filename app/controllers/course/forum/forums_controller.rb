@@ -70,13 +70,17 @@ class Course::Forum::ForumsController < Course::Forum::Controller
   end
 
   def all_posts
-    @topic_posts = Course::Discussion::Post.
-                   forum_posts.
-                   from_course(current_course).
-                   posted_by(current_user).
-                   with_topic.
-                   with_parent.
-                   group_by { |post| post.topic.specific }
+    @course_id = current_course.id
+    @forum_topic_posts = Course::Discussion::Post.
+                         forum_posts.
+                         from_course(current_course).
+                         posted_by(current_user).
+                         with_topic.
+                         with_parent.
+                         with_creator.
+                         group_by { |post| post.topic.specific.forum }.transform_values do |forum|
+                           forum.group_by { |post| post.topic.specific }
+                         end
   end
 
   def search
