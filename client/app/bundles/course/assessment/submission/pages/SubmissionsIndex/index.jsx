@@ -61,17 +61,26 @@ class VisibleSubmissionsIndex extends React.Component {
     this.state = {
       publishConfirmation: false,
       includePhantoms: false,
-      tab: props.submissions.some(
-        (s) => s.courseUser.isStudent && s.courseUser.myStudent,
-      )
-        ? 'my-students-tab'
-        : 'students-tab',
+      tab: 'my-students-tab',
     };
   }
 
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch(fetchSubmissions());
+  }
+
+  componentDidUpdate(_prevProps, prevState) {
+    if (
+      prevState.tab === 'my-students-tab' &&
+      this.props.submissions.every((s) => !s.courseUser.myStudent)
+    ) {
+      // This is safe since there will not be infinite re-renderings caused.
+      // Follows the guidelines as recommended on React's website.
+      // https://reactjs.org/docs/react-component.html#componentdidupdate
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ tab: 'students-tab' });
+    }
   }
 
   canPublish() {
