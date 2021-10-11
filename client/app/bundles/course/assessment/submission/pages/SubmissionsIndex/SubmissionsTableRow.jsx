@@ -93,11 +93,14 @@ export default class SubmissionsTableRow extends React.Component {
         <>
           <FontIcon
             data-tip
-            data-for="test"
+            data-for={`phantom-user-${submission.courseUser.id}`}
             className="fa fa-user-secret fa-xs"
             style={styles.phantomIcon}
           />
-          <ReactTooltip id="test" effect="solid">
+          <ReactTooltip
+            id={`phantom-user-${submission.courseUser.id}`}
+            effect="solid"
+          >
             <FormattedMessage {...submissionsTranslations.phantom} />
           </ReactTooltip>
         </>
