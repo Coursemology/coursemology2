@@ -31,7 +31,7 @@ const styles = {
     backgroundColor: blue600,
   },
   nameWrapper: {
-    display: 'inline-block',
+    display: 'inline',
     flexWrap: 'nowrap',
     alignItems: 'center',
   },
