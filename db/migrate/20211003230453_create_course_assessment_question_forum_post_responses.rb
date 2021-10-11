@@ -27,16 +27,24 @@ class CreateCourseAssessmentQuestionForumPostResponses < ActiveRecord::Migration
                      to_table: :course_discussion_posts
                    }
       t.string :post_text, null: false
-      t.boolean :is_post_updated, null: false
-      t.boolean :is_post_deleted, null: false
-      t.references :parent_post,
+      t.references :post_creator,
                    null: false,
+                   foreign_key: {
+                     to_table: :users
+                   }
+      t.datetime :post_updated_at, null: false
+      t.references :parent,
+                   null: true,
                    foreign_key: {
                      to_table: :course_discussion_posts
                    }
-      t.string :parent_post_text, null: false
-      t.boolean :is_parent_post_updated, null: false
-      t.boolean :is_parent_post_deleted, null: false
+      t.string :parent_text, null: true
+      t.references :parent_creator,
+                   null: false,
+                   foreign_key: {
+                     to_table: :users
+                   }
+      t.datetime :parent_updated_at, null: false
     end
   end
 end
