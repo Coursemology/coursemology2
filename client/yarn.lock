@@ -8056,7 +8056,7 @@ react-test-renderer@^16.0.0-0, react-test-renderer@^16.8.6:
 
 react-text-mask@^5.4.3:
   version "5.4.3"
-  resolved "https://registry.yarnpkg.com/react-text-mask/-/react-text-mask-5.4.3.tgz#991efb4299e30c2e6c2c46d13f617169463e0d2d"
+  resolved "https://registry.yarnpkg.com/reacttext-mask/-/react-text-mask-5.4.3.tgz#991efb4299e30c2e6c2c46d13f617169463e0d2d"
   integrity sha1-mR77QpnjDC5sLEbRP2FxaUY+DS0=
   dependencies:
     prop-types "^15.5.6"

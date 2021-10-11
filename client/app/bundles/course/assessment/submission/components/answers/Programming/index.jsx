@@ -8,7 +8,7 @@ import ProgrammingFile from './ProgrammingFile';
 import ProgrammingImportEditor from '../../../containers/ProgrammingImportEditor';
 import TestCaseView from '../../../containers/TestCaseView';
 import { parseLanguages } from '../../../utils';
-import { questionShape } from '../../../propTypes';
+import { questionShape } from '../../../propTypes'; 
 
 class Programming extends React.Component {
   static renderProgrammingFiles({ fields, readOnly, answerId, language }) {
