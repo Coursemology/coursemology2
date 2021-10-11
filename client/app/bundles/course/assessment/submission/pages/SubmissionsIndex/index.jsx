@@ -61,7 +61,11 @@ class VisibleSubmissionsIndex extends React.Component {
     this.state = {
       publishConfirmation: false,
       includePhantoms: false,
-      tab: 'my-students-tab',
+      tab: props.submissions.some(
+        (s) => s.courseUser.isStudent && s.courseUser.myStudent,
+      )
+        ? 'my-students-tab'
+        : 'students-tab',
     };
   }
 
@@ -86,15 +90,17 @@ class VisibleSubmissionsIndex extends React.Component {
       (s) => s.courseUser.isStudent,
     );
     const staffSubmissions = submissions.filter((s) => !s.courseUser.isStudent);
-    let submissionHistogram = studentSubmissions;
-    if (tab === '-tab') {
-      submissionHistogram = staffSubmissions;
-    } else if (tab === 'my-students-tab' && myStudentSubmissions.length > 0) {
-      // Additional length check is needed as the default state.tab is my-students-tab upon page opening
-      // However, if this is empty, it is defaulted to students-tab
-      submissionHistogram = myStudentSubmissions;
-    } else {
-      submissionHistogram = studentSubmissions;
+    let submissionHistogram;
+    switch (tab) {
+      case 'staff-tab':
+        submissionHistogram = staffSubmissions;
+        break;
+      case 'my-students-tab':
+        submissionHistogram = myStudentSubmissions;
+        break;
+      case 'students-tab':
+      default:
+        submissionHistogram = studentSubmissions;
     }
     const initialCounts = workflowStatesArray.reduce(
       (counts, w) => ({ ...counts, [w]: 0 }),
