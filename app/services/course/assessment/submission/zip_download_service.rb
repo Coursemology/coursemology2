@@ -5,11 +5,12 @@ class Course::Assessment::Submission::ZipDownloadService
     #
     # @param [CourseUser] course_user The course user downloading the submissions.
     # @param [Course::Assessment] assessment The assessments to download submissions from.
-    # @param [String|nil] students The subset of students whose submissions to download.
-    # Accepted values: 'my_students', 'students', 'others'
+    # @param [String|nil] course_users The subset of course users whose submissions to download.
+    # Accepted values: 'my_students', 'my_students_w_phantom', 'students', 'students_w_phantom'
+    #   'staff', 'staff_w_phantom'
     # @return [String] The path to the zip file.
-    def download_and_zip(course_user, assessment, students)
-      service = new(course_user, assessment, students)
+    def download_and_zip(course_user, assessment, course_users)
+      service = new(course_user, assessment, course_users)
       service.download_and_zip
     end
   end
@@ -21,21 +22,26 @@ class Course::Assessment::Submission::ZipDownloadService
     zip_base_dir
   end
 
-  STUDENTS = { my: 'my', phantom: 'phantom' }.freeze
+  COURSE_USERS = { my_students: 'my_students',
+                   my_students_w_phantom: 'my_students_w_phantom',
+                   students: 'students',
+                   students_w_phantom: 'students_w_phantom',
+                   staff: 'staff',
+                   staff_w_phantom: 'staff_w_phantom' }.freeze
 
   private
 
-  def initialize(course_user, assessment, students)
+  def initialize(course_user, assessment, course_users)
     @course_user = course_user
     @assessment = assessment
     @questions = assessment.questions.map { |q| [q.id, q] }.to_h
-    @students = students
+    @course_users = course_users
     @base_dir = Dir.mktmpdir('coursemology-download-')
   end
 
   # Downloads each submission to its own folder in the base directory.
   def download_to_base_dir
-    submissions = @assessment.submissions.by_users(student_ids).
+    submissions = @assessment.submissions.by_users(course_user_ids).
                   includes(:answers, experience_points_record: :course_user)
     submissions.find_each do |submission|
       submission_dir = create_folder(@base_dir, submission.course_user.name)
@@ -78,13 +84,19 @@ class Course::Assessment::Submission::ZipDownloadService
     output_file
   end
 
-  def student_ids
-    @student_ids ||=
-      case @students
-      when STUDENTS[:my]
+  def course_user_ids
+    @course_user_ids ||=
+      case @course_users
+      when COURSE_USERS[:my_students]
+        @course_user.my_students.without_phantom_users
+      when COURSE_USERS[:my_students_w_phantom]
         @course_user.my_students
-      when STUDENTS[:phantom]
-        @assessment.course.course_users.students.phantom
+      when COURSE_USERS[:students_w_phantom]
+        @assessment.course.course_users.students
+      when COURSE_USERS[:staff]
+        @assessment.course.course_users.staff.without_phantom_users
+      when COURSE_USERS[:staff_w_phantom]
+        @assessment.course.course_users.staff
       else
         @assessment.course.course_users.students.without_phantom_users
       end.select(:user_id)
