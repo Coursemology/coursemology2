@@ -24,6 +24,8 @@ class Course::Forum::TopicsController < Course::Forum::ComponentController
 
     if @topic.save
       send_created_notification(@topic)
+      @topic.ensure_subscribed_by(current_user)
+
       redirect_to course_forum_topic_path(current_course, @forum, @topic),
                   success: t('.success', title: @topic.title)
     else
