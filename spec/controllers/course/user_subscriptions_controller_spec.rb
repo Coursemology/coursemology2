@@ -7,21 +7,25 @@ RSpec.describe Course::UserSubscriptionsController, type: :controller do
   with_tenant(:instance) do
     let(:user) { create(:user) }
     let(:course) { create(:course, creator: user) }
+    let!(:staff) { create(:course_teaching_assistant, course: course) }
+    let!(:student) { create(:course_student, course: course) }
     let(:json_response) { JSON.parse(response.body) }
 
-    before { sign_in(user) }
-
     describe '#edit html' do
-      subject { get :edit, params: { course_id: course, user_id: course.course_users.first } }
+      before { sign_in(staff.user) }
+      subject { get :edit, params: { course_id: course, user_id: staff } }
       it { is_expected.to render_template(:edit) }
     end
 
     describe '#edit json' do
+      before { sign_in(student.user) }
       subject do
         get :edit, format: :json, params: {
           course_id: course,
-          user_id: course.course_users.first,
-          fetch_all: true
+          user_id: student,
+          component: 'videos',
+          setting: 'closing_reminder',
+          unsubscribe: true
         }
       end
 
@@ -29,6 +33,7 @@ RSpec.describe Course::UserSubscriptionsController, type: :controller do
     end
 
     describe '#update' do
+      before { sign_in(user) }
       subject do
         patch :update, format: :json,
                        params: { course_id: course,

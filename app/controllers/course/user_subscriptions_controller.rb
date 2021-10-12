@@ -52,6 +52,13 @@ class Course::UserSubscriptionsController < Course::ComponentController
 
   def load_subscription_settings
     @show_all_settings = true
+    load_email_settings
+    filter_subscription_settings if email_setting_filter_params['setting']
+    unsubscribe if email_setting_filter_params['unsubscribe']
+    @unsubscribed_course_settings_email_id = @course_user.email_unsubscriptions.pluck(:course_settings_email_id)
+  end
+
+  def load_email_settings
     @email_settings = if @course_user.student?
                         current_course.email_settings_with_enabled_components.student_setting
                       elsif @course_user.manager_or_owner?
@@ -60,9 +67,6 @@ class Course::UserSubscriptionsController < Course::ComponentController
                         current_course.email_settings_with_enabled_components.teaching_staff_setting
                       end
     @email_settings = @email_settings.sorted_for_page_setting
-    filter_subscription_settings if email_setting_filter_params['setting']
-    unsubscribe if email_setting_filter_params['unsubscribe']
-    @unsubscribed_course_settings_email_id = @course_user.email_unsubscriptions.pluck(:course_settings_email_id)
   end
 
   def filter_subscription_settings
@@ -71,6 +75,8 @@ class Course::UserSubscriptionsController < Course::ComponentController
                                               course_assessment_category_id: params['category_id'],
                                               setting: params['setting'])
                       else
+                        # For consolidated emails, there are 3 different components (assessment, video and survey)
+                        # As a result, we only pass opening_reminder through the params setting
                         @email_settings.where(setting: params['setting'])
                       end
     @show_all_settings = false
