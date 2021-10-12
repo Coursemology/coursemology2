@@ -67,14 +67,12 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::AnnotationsC
 
           context 'when "New Comment" email notification is disabled' do
             before do
-              context =
-                OpenStruct.new(key: Course::AssessmentsComponent.key, current_course: course)
-              setting = {
-                'key' => 'new_comment', 'enabled' => false,
-                'options' => { 'category_id' => assessment.tab.category.id }
-              }
-              Course::Settings::AssessmentsComponent.new(context).update_email_setting(setting)
-              course.save!
+              email_setting = course.
+                              setting_emails.
+                              where(component: :assessments,
+                                    course_assessment_category_id: assessment.tab.category.id,
+                                    setting: :new_comment).first
+              email_setting.update!(regular: false, phantom: false)
             end
 
             it 'does not send email notifications' do
