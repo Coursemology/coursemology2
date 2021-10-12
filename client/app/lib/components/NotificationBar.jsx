@@ -16,7 +16,7 @@ export const notificationShape = PropTypes.shape({
 
 /*
  * This is a simplified SnackBar, which will send notification and auto hide the notification after
- * certain period (default is 2000ms).
+ * certain period (default is 5000).
  */
 export default class NotificationBar extends React.Component {
   shouldComponentUpdate(nextProps) {
@@ -24,7 +24,7 @@ export default class NotificationBar extends React.Component {
   }
 
   render() {
-    const { notification, autoHideDuration = 2000, ...options } = this.props;
+    const { notification, autoHideDuration = 5000, ...options } = this.props;
     const message = notification && notification.message;
     const errors = notification && notification.errors;
 
@@ -41,6 +41,7 @@ export default class NotificationBar extends React.Component {
         open={!!message}
         message={notificationNode}
         autoHideDuration={autoHideDuration}
+        bodyStyle={{ maxWidth: 'none' }}
         {...options}
       />
     );

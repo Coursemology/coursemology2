@@ -1,0 +1,12 @@
+import mirrorCreator from 'mirror-creator';
+
+const actionTypes = mirrorCreator([
+  'LOAD_USER_SUBSCRIPTION_REQUEST',
+  'LOAD_USER_SUBSCRIPTION_SUCCESS',
+  'LOAD_USER_SUBSCRIPTION_FAILURE',
+  'USER_SUBSCRIPTION_UPDATE_REQUEST',
+  'USER_SUBSCRIPTION_UPDATE_SUCCESS',
+  'USER_SUBSCRIPTION_UPDATE_FAILURE',
+]);
+
+export default actionTypes;

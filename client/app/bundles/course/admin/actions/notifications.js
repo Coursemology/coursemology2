@@ -4,11 +4,10 @@ import actionTypes from '../constants';
 import { setNotification } from './index';
 
 export function updateNotificationSetting(
-  value,
+  payload,
   successMessage,
   failureMessage,
 ) {
-  const payload = { notification_settings: value };
   return (dispatch) => {
     dispatch({ type: actionTypes.NOTIFICATION_SETTING_UPDATE_REQUEST });
     return CourseAPI.admin.notifications

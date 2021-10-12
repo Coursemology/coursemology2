@@ -11,6 +11,7 @@ import VideoAPI from './Video';
 import AdminAPI from './Admin';
 import LevelAPI from './Level';
 import UserNotificationsAPI from './UserNotifications';
+import UserSubscriptionsAPI from './UserSubscriptions';
 
 const CourseAPI = {
   achievements: new AchievementsAPI(),
@@ -26,6 +27,7 @@ const CourseAPI = {
   admin: AdminAPI,
   level: new LevelAPI(),
   userNotifications: new UserNotificationsAPI(),
+  userSubscriptions: new UserSubscriptionsAPI(),
 };
 
 Object.freeze(CourseAPI);

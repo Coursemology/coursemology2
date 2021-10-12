@@ -13,12 +13,15 @@ import {
   TableRowColumn,
 } from 'material-ui/Table';
 import NotificationPopup from 'lib/containers/NotificationPopup';
-import { updateNotificationSetting } from 'course/admin/actions/notifications';
-import adminTranslations from 'course/translations.intl';
+import {
+  fetchUserSubscriptions,
+  updateUserSubscriptions,
+} from 'course/actions/user-subscriptions';
+import { setNotification } from 'lib/actions';
 import translations, {
-  settingComponents,
-  settingTitles,
-  settingDescriptions,
+  subscriptionComponents,
+  subscriptionTitles,
+  subscriptionDescriptions,
 } from './translations.intl';
 
 const styles = {
@@ -28,36 +31,32 @@ const styles = {
   },
 };
 
-class NotificationSettings extends React.Component {
-  handleComponentNotificationSettingUpdate = (setting, type) => {
+class UserSubscriptions extends React.Component {
+  handleFetchAllUserSubscriptions = () => {
     const { dispatch } = this.props;
+    dispatch(fetchUserSubscriptions());
+  };
+
+  handleUserSubscriptionsUpdate = (setting) => {
+    const { userSubscriptionsPageFilter, dispatch } = this.props;
     const componentTitle =
       setting.component_title ||
-      (settingComponents[setting.component] &&
-        settingComponents[setting.component].defaultMessage) ||
+      (subscriptionComponents[setting.component] &&
+        subscriptionComponents[setting.component].defaultMessage) ||
       setting.component;
     const settingTitle =
-      (settingTitles[setting.setting] &&
-        settingTitles[setting.setting].defaultMessage) ||
+      (subscriptionTitles[setting.setting] &&
+        subscriptionTitles[setting.setting].defaultMessage) ||
       setting.setting;
-
     return (_, enabled) => {
-      const payload = {
-        email_settings: {
-          component: setting.component,
-          course_assessment_category_id: setting.course_assessment_category_id,
-          setting: setting.setting,
-        },
-      };
-      payload.email_settings[type] = enabled;
-      const userText = type === 'phantom' ? 'phantom' : 'regular';
+      const payloadSetting = { ...setting, enabled };
+      const payloadPageFilter = { ...userSubscriptionsPageFilter };
       const enabledText = enabled ? 'enabled' : 'disabled';
       const successMessage = (
         <FormattedMessage
           {...translations.updateSuccess}
           values={{
-            setting: `${componentTitle} (${settingTitle})`,
-            user: userText,
+            topic: `${componentTitle} (${settingTitle})`,
             action: enabledText,
           }}
         />
@@ -66,38 +65,53 @@ class NotificationSettings extends React.Component {
         <FormattedMessage
           {...translations.updateFailure}
           values={{
-            setting: `${componentTitle} (${settingTitle})`,
-            user: userText,
+            topic: `${componentTitle} (${settingTitle})`,
             action: enabledText,
           }}
         />
       );
       dispatch(
-        updateNotificationSetting(payload, successMessage, failureMessage),
+        updateUserSubscriptions(
+          payloadSetting,
+          payloadPageFilter,
+          successMessage,
+          failureMessage,
+        ),
       );
     };
   };
 
+  unsubscribeViaEmailSuccessful() {
+    const { userSubscriptionsPageFilter, dispatch } = this.props;
+    const successMessage = (
+      <FormattedMessage {...translations.unsubscribeSuccess} />
+    );
+    if (userSubscriptionsPageFilter.unsubscribe_successful) {
+      setNotification(successMessage)(dispatch);
+    }
+  }
+
   renderRow(setting) {
     const componentTitle =
-      setting.title ||
-      (settingComponents[setting.component] && (
-        <FormattedMessage {...settingComponents[setting.component]} />
+      setting.component_title ||
+      (subscriptionComponents[setting.component] && (
+        <FormattedMessage {...subscriptionComponents[setting.component]} />
       )) ||
       setting.component;
     const settingTitle =
-      (settingTitles[setting.setting] && (
-        <FormattedMessage {...settingTitles[setting.setting]} />
+      (subscriptionTitles[setting.setting] && (
+        <FormattedMessage {...subscriptionTitles[setting.setting]} />
       )) ||
       setting.setting;
     const settingDescription =
-      (settingDescriptions[`${setting.component}_${setting.setting}`] && (
+      (subscriptionDescriptions[`${setting.component}_${setting.setting}`] && (
         <FormattedMessage
-          {...settingDescriptions[`${setting.component}_${setting.setting}`]}
+          {...subscriptionDescriptions[
+            `${setting.component}_${setting.setting}`
+          ]}
         />
       )) ||
       '';
-
     return (
       <TableRow
         key={
@@ -113,20 +127,8 @@ class NotificationSettings extends React.Component {
         </TableRowColumn>
         <TableRowColumn>
           <Toggle
-            toggled={setting.phantom}
-            onToggle={this.handleComponentNotificationSettingUpdate(
-              setting,
-              'phantom',
-            )}
-          />
-        </TableRowColumn>
-        <TableRowColumn>
-          <Toggle
-            toggled={setting.regular}
-            onToggle={this.handleComponentNotificationSettingUpdate(
-              setting,
-              'regular',
-            )}
+            toggled={setting.enabled}
+            onToggle={this.handleUserSubscriptionsUpdate(setting)}
           />
         </TableRowColumn>
       </TableRow>
@@ -134,12 +136,12 @@ class NotificationSettings extends React.Component {
   }
 
   renderEmailSettingsTable() {
-    const { emailSettings } = this.props;
+    const { userSubscriptions } = this.props;
 
-    if (emailSettings.length < 1) {
+    if (userSubscriptions.length === 0) {
       return (
         <Subheader>
-          <FormattedMessage {...translations.noEmailSettings} />
+          <FormattedMessage {...translations.noEmailSubscriptionSettings} />
         </Subheader>
       );
     }
@@ -149,7 +151,7 @@ class NotificationSettings extends React.Component {
         <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
           <TableRow>
             <TableHeaderColumn colSpan={2}>
-              <FormattedMessage {...adminTranslations.component} />
+              <FormattedMessage {...translations.component} />
             </TableHeaderColumn>
             <TableHeaderColumn colSpan={3}>
               <FormattedMessage {...translations.setting} />
@@ -158,47 +160,53 @@ class NotificationSettings extends React.Component {
               <FormattedMessage {...translations.description} />
             </TableHeaderColumn>
             <TableHeaderColumn>
-              <FormattedMessage {...translations.phantom} />
-            </TableHeaderColumn>
-            <TableHeaderColumn>
-              <FormattedMessage {...translations.regular} />
+              <FormattedMessage {...translations.enabled} />
             </TableHeaderColumn>
           </TableRow>
         </TableHeader>
         <TableBody displayRowCheckbox={false}>
-          {emailSettings.map((item) => this.renderRow(item))}
+          {userSubscriptions.map((item) => this.renderRow(item))}
         </TableBody>
       </Table>
     );
   }
 
   render() {
+    this.unsubscribeViaEmailSuccessful();
     return (
       <>
         <h2>
-          <FormattedMessage {...translations.emailSettings} />
+          <FormattedMessage {...translations.emailSubscriptions} />
         </h2>
         {this.renderEmailSettingsTable()}
-
+        {!this.props.userSubscriptionsPageFilter.show_all_settings && (
+          <a onClick={this.handleFetchAllUserSubscriptions}>
+            <FormattedMessage
+              {...translations.viewAllEmailSubscriptionSettings}
+            />
+          </a>
+        )}
         <NotificationPopup />
       </>
     );
   }
 }
 
-NotificationSettings.propTypes = {
-  emailSettings: PropTypes.arrayOf(
+UserSubscriptions.propTypes = {
+  userSubscriptions: PropTypes.arrayOf(
     PropTypes.shape({
       component: PropTypes.string,
+      component_title: PropTypes.string,
       course_assessment_category_id: PropTypes.number,
       setting: PropTypes.string,
-      phantom: PropTypes.bool,
-      regular: PropTypes.bool,
+      enabled: PropTypes.bool,
     }),
   ),
+  userSubscriptionsPageFilter: PropTypes.object,
   dispatch: PropTypes.func.isRequired,
 };
 
 export default connect((state) => ({
-  emailSettings: state.notificationSettings,
-}))(NotificationSettings);
+  userSubscriptions: state.userSubscriptions.settings,
+  userSubscriptionsPageFilter: state.userSubscriptions.pageFilter,
+}))(UserSubscriptions);
