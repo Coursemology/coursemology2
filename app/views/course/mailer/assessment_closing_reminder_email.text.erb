@@ -1,6 +1,7 @@
 <% host = @course.instance.host %>
 <% time = Time.use_zone(@recipient.time_zone) { @assessment.end_at.to_formatted_s(:long) } %>
+<% category_id = @assessment.tab.category.id %>
 <%= t('.message', assessment: plain_link_to(@assessment.title, course_assessment_url(@course, @assessment, host: host)),
                   time: time) %>
 <%= render partial: 'layouts/manage_email_subscription',
-             locals: { course: @course, recipient: @recipient } %>
+           locals: { course: @course, recipient: @recipient, component: 'assessments' , category_id: category_id, setting: 'closing_reminder' } %>

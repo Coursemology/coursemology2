@@ -3,4 +3,4 @@
 <%= t('.message', survey: plain_link_to(@survey.title, course_survey_url(@course, @survey, host: host)),
                   time: time) %>
 <%= render partial: 'layouts/manage_email_subscription',
-             locals: { course: @course, recipient: @recipient } %>
+           locals: { course: @course, recipient: @recipient, component: 'surveys' , category_id: nil, setting: 'closing_reminder' } %>
