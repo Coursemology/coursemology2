@@ -17,8 +17,15 @@ RSpec.describe Course::UserSubscriptionsController, type: :controller do
     end
 
     describe '#edit json' do
-      subject { get :edit, format: :json, params: { course_id: course, user_id: course.course_users.first, fetch_all: true } }
-      it { is_expected.to render_template(:partial => '_subscription_setting') }
+      subject do
+        get :edit, format: :json, params: {
+          course_id: course,
+          user_id: course.course_users.first,
+          fetch_all: true
+        }
+      end
+
+      it { is_expected.to render_template(partial: '_subscription_setting') }
     end
 
     describe '#update' do
@@ -59,7 +66,7 @@ RSpec.describe Course::UserSubscriptionsController, type: :controller do
         before do
           setting_email = course.setting_emails.where(component: 'users', setting: 'new_enrol_request').first
           course.course_users.first.email_unsubscriptions.create!(course_setting_email: setting_email)
-          subject 
+          subject
         end
 
         it 'responds with the necessary fields' do

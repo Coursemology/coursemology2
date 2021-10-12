@@ -19,26 +19,10 @@ class Course::UserSubscriptionsController < Course::ComponentController
     authorize!(:manage, Course::UserEmailUnsubscription.new(course_user: @course_user))
     update_subscription_setting
     load_subscription_settings
-    flash.now[:success] = t('.success')
     render partial: 'course/user_subscriptions/subscription_setting'
   end
 
   private
-
-  def load_subscription_settings
-    @show_all_settings = true
-    @email_settings = if @course_user.student?
-                        current_course.email_settings_with_enabled_components.student_setting
-                      elsif @course_user.manager_or_owner?
-                        current_course.email_settings_with_enabled_components.manager_setting
-                      else
-                        current_course.email_settings_with_enabled_components.teaching_staff_setting
-                      end
-    @email_settings = @email_settings.sorted_for_page_setting
-    filter_subscription_settings if email_setting_filter_params['setting']
-    unsubscribe if email_setting_filter_params['unsubscribe']
-    @unsubscribed_course_settings_email_id = @course_user.email_unsubscriptions.pluck(:course_settings_email_id)
-  end
 
   def add_breadcrumbs # :nodoc:
     add_breadcrumb @course_user.name, course_user_path(current_course, @course_user)
@@ -64,6 +48,21 @@ class Course::UserSubscriptionsController < Course::ComponentController
     else
       @course_user.email_unsubscriptions.create!(course_setting_email: email_setting)
     end
+  end
+
+  def load_subscription_settings
+    @show_all_settings = true
+    @email_settings = if @course_user.student?
+                        current_course.email_settings_with_enabled_components.student_setting
+                      elsif @course_user.manager_or_owner?
+                        current_course.email_settings_with_enabled_components.manager_setting
+                      else
+                        current_course.email_settings_with_enabled_components.teaching_staff_setting
+                      end
+    @email_settings = @email_settings.sorted_for_page_setting
+    filter_subscription_settings if email_setting_filter_params['setting']
+    unsubscribe if email_setting_filter_params['unsubscribe']
+    @unsubscribed_course_settings_email_id = @course_user.email_unsubscriptions.pluck(:course_settings_email_id)
   end
 
   def filter_subscription_settings
