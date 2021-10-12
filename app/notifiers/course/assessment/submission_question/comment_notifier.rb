@@ -4,30 +4,26 @@ class Course::Assessment::SubmissionQuestion::CommentNotifier < Notifier::Base
   #
   # @param[Course::Discussion::Post] post The post that was created.
   def post_replied(post)
-    return unless email_notification_enabled?(post)
+    category = post.topic.actable.submission.assessment.tab.category
+    email_enabled = category.course.email_enabled(:assessments, :new_comment, category.id)
+    return unless email_enabled.regular || email_enabled.phantom
 
     user = post.creator
     activity = create_activity(actor: user, object: post, event: :replied)
+
     post.topic.subscriptions.includes(:user).each do |subscription|
-      activity.notify(subscription.user, :email) unless subscription.user == user
+      course_user = category.course.course_users.find_by(user: subscription.user)
+      exclude_user = subscription.user == user ||
+                     (course_user.phantom? && !email_enabled.phantom) ||
+                     (!course_user.phantom? && !email_enabled.regular) ||
+                     course_user.email_unsubscriptions.where(course_settings_email_id: email_enabled.id).exists?
+
+      activity.notify(subscription.user, :email) unless exclude_user
     end
     activity.save!
   end
 
   private
-
-  def email_notification_enabled?(post)
-    course_user = CourseUser.find_by(user: post.creator, course: post.topic.course)
-    category = post.topic.actable.submission.assessment.tab.category
-
-    response = settings_with_key(category, :new_comment)
-    response &&= settings_with_key(category, :new_phantom_comment) if course_user&.phantom?
-    response
-  end
-
-  def settings_with_key(category, key)
-    Course::Settings::AssessmentsComponent.email_enabled?(category, key)
-  end
 
   # Create an email for a user based on a given user notification record.
   # Overrides email_user in Notifier::Base to pass a custom layout for this notifier.

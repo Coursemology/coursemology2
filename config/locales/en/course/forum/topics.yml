@@ -29,13 +29,13 @@ en:
           success: 'Topic %{title} was deleted.'
           failure: 'Failed to delete topic: %{error}'
         subscribe:
-          tag: 'Subscribe to email notification for this topic'
-          success: 'You have subscribed to topic.'
-          failure: 'Failed to subscribe to topic.'
+          tag: 'Subscribe to email notification for this forum topic'
+          success: 'You have subscribed to this forum topic.'
+          failure: 'Failed to subscribe to this forum topic.'
         unsubscribe:
-          tag: 'Unsubscribe from email notification for this topic'
-          success: 'You have unsubscribed from topic.'
-          failure: 'Failed to unsubscribe from topic.'
+          tag: 'Unsubscribe from email notification for this forum topic'
+          success: 'You have unsubscribed from this forum topic.'
+          failure: 'Failed to unsubscribe from this forum topic.'
         locked:
           tag: 'Lock'
           success: 'The topic was successfully locked.'

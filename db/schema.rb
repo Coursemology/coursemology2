@@ -813,6 +813,18 @@ ActiveRecord::Schema.define(version: 2021_10_21_153003) do
     t.index ["reference_timeline_id"], name: "index_course_reference_times_on_reference_timeline_id"
   end
 
+  create_table "course_settings_emails", force: :cascade do |t|
+    t.bigint "course_id", null: false
+    t.integer "component", null: false
+    t.bigint "course_assessment_category_id"
+    t.integer "setting", null: false
+    t.boolean "phantom", default: true, null: false
+    t.boolean "regular", default: true, null: false
+    t.index ["course_assessment_category_id"], name: "index_course_settings_emails_on_course_assessment_category_id"
+    t.index ["course_id", "component", "course_assessment_category_id", "setting"], name: "index_course_settings_emails_composite", unique: true
+    t.index ["course_id"], name: "index_course_settings_emails_on_course_id"
+  end
+
   create_table "course_survey_answer_options", id: :serial, force: :cascade do |t|
     t.integer "answer_id", null: false
     t.integer "question_option_id", null: false
@@ -902,6 +914,14 @@ ActiveRecord::Schema.define(version: 2021_10_21_153003) do
     t.index ["achievement_id"], name: "fk__course_user_achievements_achievement_id"
     t.index ["course_user_id", "achievement_id"], name: "index_user_achievements_on_course_user_id_and_achievement_id", unique: true
     t.index ["course_user_id"], name: "fk__course_user_achievements_course_user_id"
+  end
+
+  create_table "course_user_email_unsubscriptions", force: :cascade do |t|
+    t.bigint "course_user_id", null: false
+    t.bigint "course_settings_email_id", null: false
+    t.index ["course_settings_email_id"], name: "index_email_unsubscriptions_on_course_settings_email_id"
+    t.index ["course_user_id", "course_settings_email_id"], name: "index_course_user_email_unsubscriptions_composite", unique: true
+    t.index ["course_user_id"], name: "index_email_unsubscriptions_on_course_user_id"
   end
 
   create_table "course_user_invitations", id: :serial, force: :cascade do |t|
@@ -1360,6 +1380,8 @@ ActiveRecord::Schema.define(version: 2021_10_21_153003) do
   add_foreign_key "course_reference_timelines", "courses"
   add_foreign_key "course_reference_times", "course_lesson_plan_items", column: "lesson_plan_item_id"
   add_foreign_key "course_reference_times", "course_reference_timelines", column: "reference_timeline_id"
+  add_foreign_key "course_settings_emails", "course_assessment_categories"
+  add_foreign_key "course_settings_emails", "courses"
   add_foreign_key "course_survey_answer_options", "course_survey_answers", column: "answer_id", name: "fk_course_survey_answer_options_answer_id"
   add_foreign_key "course_survey_answer_options", "course_survey_question_options", column: "question_option_id", name: "fk_course_survey_answer_options_question_option_id"
   add_foreign_key "course_survey_answers", "course_survey_questions", column: "question_id", name: "fk_course_survey_answers_question_id"
@@ -1378,6 +1400,8 @@ ActiveRecord::Schema.define(version: 2021_10_21_153003) do
   add_foreign_key "course_surveys", "users", column: "updater_id", name: "fk_course_surveys_updater_id"
   add_foreign_key "course_user_achievements", "course_achievements", column: "achievement_id", name: "fk_course_user_achievements_achievement_id"
   add_foreign_key "course_user_achievements", "course_users", name: "fk_course_user_achievements_course_user_id"
+  add_foreign_key "course_user_email_unsubscriptions", "course_settings_emails"
+  add_foreign_key "course_user_email_unsubscriptions", "course_users"
   add_foreign_key "course_user_invitations", "courses", name: "fk_course_user_invitations_course_id"
   add_foreign_key "course_user_invitations", "users", column: "confirmer_id", name: "fk_course_user_invitations_confirmer_id"
   add_foreign_key "course_user_invitations", "users", column: "creator_id", name: "fk_course_user_invitations_creator_id"

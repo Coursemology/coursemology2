@@ -49,7 +49,9 @@ module Course::Assessment::Submission::WorkflowEventConcern
     self.awarder = User.stamper || User.system
     self.awarded_at = Time.zone.now
 
-    return unless persisted? && !assessment.autograded? && submission_graded_email_enabled?
+    return unless persisted? && !assessment.autograded? &&
+                  submission_graded_email_enabled? &&
+                  submission_graded_email_subscribed?
 
     execute_after_commit { Course::Mailer.submission_graded_email(self).deliver_later }
   end
@@ -92,7 +94,16 @@ module Course::Assessment::Submission::WorkflowEventConcern
   private
 
   def submission_graded_email_enabled?
-    Course::Settings::AssessmentsComponent.email_enabled?(assessment.tab.category, :grades_released)
+    return true if course_user.phantom? && email_enabled.phantom
+    return true if !course_user.phantom? && email_enabled.regular
+  end
+
+  def submission_graded_email_subscribed?
+    !course_user.email_unsubscriptions.where(course_settings_email_id: email_enabled.id).exists?
+  end
+
+  def email_enabled
+    assessment.course.email_enabled(:assessments, :grades_released, assessment.tab.category.id)
   end
 
   # finalise event (from attempting) - Assign 0 points as there are no questions.

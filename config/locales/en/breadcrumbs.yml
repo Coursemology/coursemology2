@@ -144,6 +144,8 @@ en:
         index: :'course.leaderboards.title'
       experience_points_records:
         index: 'Experience Points History'
+      user_subscriptions:
+        index: 'Manage E-mail subscription'
       video_submissions:
         index: 'Video Watch History'
       experience_points:

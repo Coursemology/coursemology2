@@ -2,3 +2,5 @@
 <% time = Time.use_zone(@recipient.time_zone) { @assessment.end_at.to_formatted_s(:long) } %>
 <%= t('.message', assessment: plain_link_to(@assessment.title, course_assessment_url(@course, @assessment, host: host)),
                   time: time, students: @students) %>
+<%= render partial: 'layouts/manage_email_subscription',
+             locals: { course: @course, recipient: @recipient } %>

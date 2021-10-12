@@ -1,0 +1,4 @@
+<% host = course.instance.host %>
+<% course_user_recipient = course.course_users.find_by(user: recipient) %>
+<% manage_subscription_url = course_user_manage_email_subscription_url(course, course_user_recipient, host: host) %>
+<%= simple_format(t('.message', manage_subscription_link: link_to(t('.tag'), manage_subscription_url))) %>

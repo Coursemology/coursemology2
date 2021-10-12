@@ -53,3 +53,6 @@ en:
       max_level: 'Congrats - Highest Level Attained!'
     code_formatter:
       size_too_big: 'The file is too big and cannot be displayed.'
+    manage_email_subscription:
+      tag: 'Click here'
+      message: '%{manage_subscription_link} to manage your subscription for this email topic.'

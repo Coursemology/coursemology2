@@ -1,27 +1,27 @@
 # frozen_string_literal: true
 class Course::Admin::NotificationSettingsController < Course::Admin::Controller
-  before_action :load_settings
   add_breadcrumb :edit, :course_admin_notifications_path
 
   def edit
-    @page_data = @settings.email_settings.to_json
+    @page_data = current_course.email_settings_with_enabled_components.
+                 sorted_for_page_setting.to_json
   end
 
   def update
-    if @settings.update(notification_settings_params) && current_course.save
-      render json: @settings.email_settings
-    else
-      head :bad_request
-    end
+    email_setting = current_course.email_settings_with_enabled_components.
+                    where(notification_settings_params).first
+    email_setting.update!(notification_enabled_params)
+    page_data = current_course.email_settings_with_enabled_components.sorted_for_page_setting
+    render json: page_data
   end
 
   private
 
   def notification_settings_params
-    params.require(:notification_settings)
+    params.require(:email_settings).permit(:component, :course_assessment_category_id, :setting)
   end
 
-  def load_settings
-    @settings = Course::Settings::Notifications.new(current_component_host.components)
+  def notification_enabled_params
+    params.require(:email_settings).permit(:phantom, :regular)
   end
 end

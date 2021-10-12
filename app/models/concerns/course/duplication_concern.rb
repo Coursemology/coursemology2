@@ -30,7 +30,8 @@ module Course::DuplicationConcern
       *videos,
       *lesson_plan_events,
       *lesson_plan_milestones,
-      *forums
+      *forums,
+      *setting_emails
     ]
   end
 

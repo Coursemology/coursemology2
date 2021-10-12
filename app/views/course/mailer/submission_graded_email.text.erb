@@ -4,3 +4,5 @@
                                                                                   @assessment,
                                                                                   @submission,
                                                                                   host: host))) %>
+<%= render partial: 'layouts/manage_email_subscription',
+             locals: { course: @course, recipient: @recipient } %>
