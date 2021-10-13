@@ -4,9 +4,13 @@ module Course::Forum::TopicControllerSubscriptionConcern
 
   def subscribe
     authorize!(:read, @topic)
-
     if set_subscription_state
-      flash.now[:success] = subscription_state_text(true)
+      if request.get?
+        return redirect_to course_forum_topic_path(current_course, @forum, @topic),
+                           success: subscription_state_text(true)
+      else
+        flash.now[:success] = subscription_state_text(true)
+      end
     else
       flash.now[:danger] = subscription_state_text(false)
     end

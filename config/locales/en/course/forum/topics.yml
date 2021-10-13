@@ -31,10 +31,16 @@ en:
           failure: 'Failed to delete topic: %{error}'
         subscribe:
           tag: 'Subscribe to receive email notifications when someone replies in this forum topic'
+          admin_disabled: 'Subscription of forum topics is disabled by the course admin.'
+          user_unsubscribed: >
+            You have unsubscribed from "New Post and Reply" for forums in this course. Please go to "manage my subscription" to enable it.
           success: 'You have subscribed to the forum topic "%{topic}".'
           failure: 'Failed to subscribe to the forum topic "%{topic}".'
         unsubscribe:
           tag: 'Unsubscribe to stop receiving email notifications when someone replies in this forum topic'
+          admin_disabled: 'Subscription of forum topics is disabled by the course admin.'
+          user_unsubscribed: >
+            You have unsubscribed from "New Post and Reply" for forums in this course. Please go to "manage my subscription" to enable it.
           success: 'You have unsubscribed from the forum topic "%{topic}".'
           failure: 'Failed to unsubscribe from the forum topic "%{topic}".'
         locked:
