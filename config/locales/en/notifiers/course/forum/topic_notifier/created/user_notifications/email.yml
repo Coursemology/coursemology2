@@ -10,7 +10,6 @@ en:
                 message: >
                   <p>%{topic_author} has created a new topic in the forum: %{topic}</p><br>
                   %{post}
-
                 unsubscribe:
                   tag: 'Unsubscribe'
                   message: '%{unsubscribe_link} from email notification for this forum.'

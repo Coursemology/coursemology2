@@ -36,11 +36,11 @@ en:
           success: 'Forum %{name} was deleted.'
           failure: 'Failed to delete forum: %{error}'
         subscribe:
-          tag: 'Subscribe to email notifications'
+          tag: 'Subscribe to receive an email notification when a new topic is created'
           success: 'You are subscribed to %{name}.'
           failure: 'Failed to subscribe to: %{error}'
         unsubscribe:
-          tag: 'Unsubscribe from email notifications'
+          tag: 'Unsubscribe to stop receiving from an email notification when a new topic is created'
           success: 'You have been unsubscribed from %{name}.'
           failure: >
             You are not subscribed to this forum, hence the unsubscription was unsuccessful.

@@ -21,3 +21,4 @@
       = link_to_user(last_post.creator)
       | ,
       =< format_datetime(last_post.created_at, :short)
+  td = render partial: 'course/forum/topics/subscribe_button', locals: { user: current_user, forum: @forum, topic: topic }

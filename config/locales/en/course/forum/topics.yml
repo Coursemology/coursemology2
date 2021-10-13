@@ -29,13 +29,13 @@ en:
           success: 'Topic %{title} was deleted.'
           failure: 'Failed to delete topic: %{error}'
         subscribe:
-          tag: 'Subscribe to email notification for this forum topic'
-          success: 'You have subscribed to this forum topic.'
-          failure: 'Failed to subscribe to this forum topic.'
+          tag: 'Subscribe to receive email notifications when someone replies in this forum topic'
+          success: 'You have subscribed to the forum topic "%{topic}".'
+          failure: 'Failed to subscribe to the forum topic "%{topic}".'
         unsubscribe:
-          tag: 'Unsubscribe from email notification for this forum topic'
-          success: 'You have unsubscribed from this forum topic.'
-          failure: 'Failed to unsubscribe from this forum topic.'
+          tag: 'Unsubscribe to stop receiving email notifications when someone replies in this forum topic'
+          success: 'You have unsubscribed from the forum topic "%{topic}".'
+          failure: 'Failed to unsubscribe from the forum topic "%{topic}".'
         locked:
           tag: 'Lock'
           success: 'The topic was successfully locked.'
@@ -57,3 +57,6 @@ en:
         unresolved:
           message: 'This question topic is unresolved.'
           tag: 'Mark helpful post(s) as answer(s) to resolve this question.'
+        subscribe_button:
+          subscribe: 'Subscribe'
+          subscribed: 'Subscribed'

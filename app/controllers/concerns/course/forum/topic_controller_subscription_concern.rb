@@ -6,11 +6,11 @@ module Course::Forum::TopicControllerSubscriptionConcern
     authorize!(:read, @topic)
 
     if set_subscription_state
-      redirect_to course_forum_topic_path(current_course, @forum, @topic),
-                  success: subscription_state_text(true)
+      flash.now[:success] = subscription_state_text(true)
+      render 'course/forum/topics/update_subscribe_button'
     else
-      redirect_to course_forum_topic_path(current_course, @forum, @topic),
-                  danger: subscription_state_text(false)
+      flash.now[:danger] = subscription_state_text(false)
+      render 'course/forum/topics/update_subscribe_button'
     end
   end
 
@@ -19,13 +19,13 @@ module Course::Forum::TopicControllerSubscriptionConcern
   def subscription_state_text(successful)
     case [subscribe?, successful]
     when [true, true]
-      t('course.forum.topics.subscribe.success')
+      t('course.forum.topics.subscribe.success', topic: @topic.title)
     when [true, false]
-      t('course.forum.topics.subscribe.failure')
+      t('course.forum.topics.subscribe.failure', topic: @topic.title)
     when [false, true]
-      t('course.forum.topics.unsubscribe.success')
+      t('course.forum.topics.unsubscribe.success', topic: @topic.title)
     when [false, false]
-      t('course.forum.topics.unsubscribe.failure')
+      t('course.forum.topics.unsubscribe.failure', topic: @topic.title)
     end
   end
 

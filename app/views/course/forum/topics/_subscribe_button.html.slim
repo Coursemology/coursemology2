@@ -1,0 +1,15 @@
+- if topic.subscribed_by?(user)
+  = link_to subscribe_course_forum_topic_path(current_course, forum, topic, subscribe: false),
+            title: t('course.forum.topics.unsubscribe.tag'), class: ['btn', 'btn-info', 'btn-subscribe'],
+            method: :delete,
+            remote: true do
+    = fa_icon 'envelope-open'.freeze, class: ['fa-fw']
+    span = t('course.forum.topics.subscribe_button.subscribed')
+- else
+  = link_to subscribe_course_forum_topic_path(current_course, forum, topic, subscribe: true),
+            title: t('course.forum.topics.subscribe.tag'), class: ['btn', 'btn-default', 'btn-subscribe'],
+            method: :post,
+            role: 'button',
+            remote: true do
+    = fa_icon 'envelope-open-o'.freeze, class: ['fa-fw']
+    span = t('course.forum.topics.subscribe_button.subscribe')
