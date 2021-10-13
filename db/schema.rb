@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_27_070704) do
+ActiveRecord::Schema.define(version: 2021_10_13_033820) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -627,6 +627,7 @@ ActiveRecord::Schema.define(version: 2021_10_27_070704) do
     t.integer "updater_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "forum_topics_auto_subscribe", default: true, null: false
     t.index ["course_id", "slug"], name: "index_course_forums_on_course_id_and_slug", unique: true
     t.index ["course_id"], name: "fk__course_forums_course_id"
     t.index ["creator_id"], name: "fk__course_forums_creator_id"

@@ -3,6 +3,8 @@
 = content_tag_for(:tr, topic, class: topic_class) do
   td = fa_icon 'envelope' if topic.unread?(current_user)
   th
+    - if @forum.forum_topics_auto_subscribe?
+      span => fa_icon 'bell'.freeze, title: t('.auto_subscribe'), class: 'text-warning'
     - if topic.locked?
       span => fa_icon 'lock'.freeze, title: t('.locked')
     span => topic_type_icon(topic)

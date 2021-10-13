@@ -7,11 +7,10 @@ module Course::Forum::TopicControllerSubscriptionConcern
 
     if set_subscription_state
       flash.now[:success] = subscription_state_text(true)
-      render 'course/forum/topics/update_subscribe_button'
     else
       flash.now[:danger] = subscription_state_text(false)
-      render 'course/forum/topics/update_subscribe_button'
     end
+    render 'course/forum/topics/update_subscribe_button'
   end
 
   private

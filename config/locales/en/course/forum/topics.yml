@@ -3,6 +3,7 @@ en:
     forum:
       topics:
         topic:
+          auto_subscribe: 'You will be automatically subscribed to this topic when you create a post.'
           locked: 'This topic is locked.'
           question:
             resolved: 'Question'

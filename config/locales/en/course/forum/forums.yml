@@ -71,3 +71,5 @@ en:
           mark_forum_description: 'Mark all topics in current forum as read'
         forum:
           has_question: 'Has unresolved question(s)'
+        form:
+          auto_subscribe: 'Enable auto-subscription to a forum topic when a user creates the topic, new posts or replies'
