@@ -12,7 +12,6 @@ module Course::Assessment::Question::MultipleResponsesConcern
 
     if @multiple_response_question.update(grading_scheme: grading_scheme)
       unsubmit_submissions unless unsubmit == 'false'
-      @multiple_response_question.question.answers.destroy_all unless unsubmit == 'false'
       flash.now[:success] = @message_success_switch
     else
       @multiple_response_question.reload
@@ -21,9 +20,11 @@ module Course::Assessment::Question::MultipleResponsesConcern
   end
 
   def unsubmit_submissions
-    @question_assessment.assessment.submissions.each do |submission|
-      submission.update('unmark' => 'true') if submission.graded?
-      submission.update('unsubmit' => 'true') unless submission.attempting?
-    end
+    submission_ids = @question_assessment.assessment.submissions.pluck(:id)
+    Course::Assessment::Submission::UnsubmittingJob.
+      perform_later(current_user,
+                    submission_ids,
+                    @assessment,
+                    @multiple_response_question.question).job
   end
 end

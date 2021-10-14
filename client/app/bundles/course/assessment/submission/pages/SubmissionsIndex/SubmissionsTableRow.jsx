@@ -220,13 +220,20 @@ export default class SubmissionsTableRow extends React.Component {
   renderUnsubmitDialog(submission) {
     const { unsubmitConfirmation } = this.state;
     const { dispatch } = this.props;
+    const values = { name: submission.courseUser.name };
+    const successMessage = (
+      <FormattedMessage
+        {...translations.unsubmitSubmissionSuccess}
+        values={values}
+      />
+    );
 
     return (
       <ConfirmationDialog
         open={unsubmitConfirmation}
         onCancel={() => this.setState({ unsubmitConfirmation: false })}
         onConfirm={() => {
-          dispatch(unsubmitSubmission(submission.id));
+          dispatch(unsubmitSubmission(submission.id, successMessage));
           this.setState({ unsubmitConfirmation: false });
         }}
         message={
@@ -275,13 +282,19 @@ export default class SubmissionsTableRow extends React.Component {
   renderDeleteDialog(submission) {
     const { deleteConfirmation } = this.state;
     const { dispatch } = this.props;
-
+    const values = { name: submission.courseUser.name };
+    const successMessage = (
+      <FormattedMessage
+        {...translations.deleteSubmissionSuccess}
+        values={values}
+      />
+    );
     return (
       <ConfirmationDialog
         open={deleteConfirmation}
         onCancel={() => this.setState({ deleteConfirmation: false })}
         onConfirm={() => {
-          dispatch(deleteSubmission(submission.id));
+          dispatch(deleteSubmission(submission.id, successMessage));
           this.setState({ deleteConfirmation: false });
         }}
         message={

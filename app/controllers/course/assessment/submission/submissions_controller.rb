@@ -177,8 +177,9 @@ class Course::Assessment::Submission::SubmissionsController < \
     authorize!(:update, @assessment)
     submission_ids = @assessment.submissions.by_users(course_user_ids).pluck(:id)
     if !submission_ids.empty?
+      redirect_to_path = course_assessment_submissions_path(@assessment.course, @assessment)
       job = Course::Assessment::Submission::UnsubmittingJob.
-            perform_later(current_user, submission_ids, @assessment).job
+            perform_later(current_user, submission_ids, @assessment, nil, redirect_to_path).job
       respond_to do |format|
         format.html { redirect_to(job_path(job)) }
         format.json { render json: { redirect_url: job_path(job) } }

@@ -127,7 +127,7 @@ export function downloadStatistics(type) {
   };
 }
 
-export function unsubmitSubmission(submissionId) {
+export function unsubmitSubmission(submissionId, successMessage) {
   return (dispatch) => {
     dispatch({ type: actionTypes.UNSUBMIT_SUBMISSION_REQUEST });
 
@@ -138,7 +138,7 @@ export function unsubmitSubmission(submissionId) {
           type: actionTypes.UNSUBMIT_SUBMISSION_SUCCESS,
         });
         fetchSubmissions()(dispatch);
-        dispatch(setNotification(translations.unsubmitSubmissionSuccess));
+        dispatch(setNotification(successMessage));
       })
       .catch(() => {
         dispatch({
@@ -183,7 +183,7 @@ export function unsubmitAllSubmissions(type) {
   };
 }
 
-export function deleteSubmission(submissionId) {
+export function deleteSubmission(submissionId, successMessage) {
   return (dispatch) => {
     dispatch({ type: actionTypes.DELETE_SUBMISSION_REQUEST });
 
@@ -193,7 +193,7 @@ export function deleteSubmission(submissionId) {
         dispatch({
           type: actionTypes.DELETE_SUBMISSION_SUCCESS,
         });
-        dispatch(setNotification(translations.deleteSubmissionSuccess));
+        dispatch(setNotification(successMessage));
         fetchSubmissions()(dispatch);
       })
       .catch(() => {
