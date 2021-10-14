@@ -231,7 +231,9 @@ export default class SubmissionsTable extends React.Component {
               />
             }
             disabled={unsubmitAllDisabled}
-            leftIcon={<RemoveCircle color={pink600} />}
+            leftIcon={
+              isUnsubmitting ? <CircularProgress size={30} /> : <RemoveCircle color={pink600} />
+            }
             onClick={() => this.setState({ unsubmitAllConfirmation: true })}
           />
         ) : null}
@@ -248,7 +250,9 @@ export default class SubmissionsTable extends React.Component {
               />
             }
             disabled={deleteAllDisabled}
-            leftIcon={<DeleteIcon color={red900} />}
+            leftIcon={
+              isDeleting ? <CircularProgress size={30} /> : <DeleteIcon color={red900} />
+            }
             onClick={() => this.setState({ deleteAllConfirmation: true })}
           />
         ) : null}
