@@ -106,7 +106,7 @@ export const assessmentShape = PropTypes.shape({
   questionIds: PropTypes.arrayOf(PropTypes.number),
   canViewLogs: PropTypes.bool,
   canUnsubmitSubmissions: PropTypes.bool,
-  canDeleteSubmission: PropTypes.bool,
+  canDeleteAllSubmissions: PropTypes.bool,
 });
 
 export const submissionShape = PropTypes.shape({

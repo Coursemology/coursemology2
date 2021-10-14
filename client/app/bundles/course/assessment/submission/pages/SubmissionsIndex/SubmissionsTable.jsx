@@ -232,12 +232,16 @@ export default class SubmissionsTable extends React.Component {
             }
             disabled={unsubmitAllDisabled}
             leftIcon={
-              isUnsubmitting ? <CircularProgress size={30} /> : <RemoveCircle color={pink600} />
+              isUnsubmitting ? (
+                <CircularProgress size={30} />
+              ) : (
+                <RemoveCircle color={pink600} />
+              )
             }
             onClick={() => this.setState({ unsubmitAllConfirmation: true })}
           />
         ) : null}
-        {assessment.canDeleteSubmission ? (
+        {assessment.canDeleteAllSubmissions ? (
           <MenuItem
             className={
               deleteAllDisabled
@@ -251,7 +255,11 @@ export default class SubmissionsTable extends React.Component {
             }
             disabled={deleteAllDisabled}
             leftIcon={
-              isDeleting ? <CircularProgress size={30} /> : <DeleteIcon color={red900} />
+              isDeleting ? (
+                <CircularProgress size={30} />
+              ) : (
+                <DeleteIcon color={red900} />
+              )
             }
             onClick={() => this.setState({ deleteAllConfirmation: true })}
           />

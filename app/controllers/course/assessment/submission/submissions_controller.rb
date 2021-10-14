@@ -35,7 +35,7 @@ class Course::Assessment::Submission::SubmissionsController < \
         @assessment = @assessment.calculated(:maximum_grade)
         @submissions = @submissions.calculated(:log_count, :graded_at).includes(:answers)
         @my_students = current_course_user&.my_students || []
-        @course_users = current_course.course_users.order_phantom_user.order_alphabetically
+        @course_users = current_course.course_users.order_phantom_user.order_alphabetically.includes(:user)
       end
     end
   end
@@ -73,6 +73,7 @@ class Course::Assessment::Submission::SubmissionsController < \
 
   def edit
     return if @submission.attempting?
+
     render 'blocked' if @submission.assessment.block_student_viewing_after_submitted? && current_course_user.student?
 
     respond_to do |format|

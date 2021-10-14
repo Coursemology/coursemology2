@@ -246,7 +246,10 @@ export default class SubmissionsTableRow extends React.Component {
       this.disableButtons() ||
       submission.workflowState === workflowStates.Unstarted;
 
-    if (!assessment.canDeleteSubmission && !submission.courseUser.isCurrentUser)
+    if (
+      !assessment.canDeleteAllSubmissions &&
+      !submission.courseUser.isCurrentUser
+    )
       return null;
 
     return (

@@ -9,7 +9,7 @@ json.assessment do
   json.passwordProtected @assessment.session_password_protected?
   json.canViewLogs can? :manage, @assessment
   json.canUnsubmitSubmission can? :update, @assessment
-  json.canDeleteSubmission can? :delete_submission, @assessment
+  json.canDeleteAllSubmissions can? :delete_all_submissions, @assessment
 end
 
 my_students_set = Set.new(@my_students.map(&:id))
