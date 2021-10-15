@@ -111,9 +111,11 @@ export default class SubmissionsTable extends React.Component {
     };
 
     return submissions.map((submission) => (
-      <TableRow className="submission-row" key={submission.courseUser.id}>
-        <SubmissionsTableRow submission={submission} {...props} />
-      </TableRow>
+      <SubmissionsTableRow
+        key={submission.courseUser.id}
+        submission={submission}
+        {...props}
+      />
     ));
   }
 
