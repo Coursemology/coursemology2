@@ -228,6 +228,10 @@ Rails.application.routes.draw do
                   namespace :scribing do
                     resources :scribbles, only: [:create]
                   end
+                  namespace :forum_post_response do
+                    # get :selected_posts
+                    get 'selected_postpacks' => 'posts#selected'
+                  end
                 end
               end
             end

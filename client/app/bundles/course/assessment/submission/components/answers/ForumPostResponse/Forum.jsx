@@ -6,6 +6,7 @@ import FlatButton from "material-ui/FlatButton";
 import FontIcon from "material-ui/FontIcon";
 import Divider from 'material-ui/Divider';
 
+import {forumTopicPostPackShape} from "course/assessment/submission/propTypes";
 import Topic from './Topic';
 import Chip from './Chip';
 
@@ -25,7 +26,7 @@ const styles = {
         paddingBottom: 3,
     },
     topic_title_text: {
-        fontSize: 17,
+        fontSize: 15,
         margin: 0,
     },
 }
@@ -34,7 +35,7 @@ export default class Forum extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            expanded: false,
+            expanded: this.props.isExpanded,
         };
     }
 
@@ -42,16 +43,27 @@ export default class Forum extends React.Component {
         this.setState({expanded: expend});
     };
 
-    renderTitle(){
+    isExpanded(topicPostpack) {
+        let matched = false;
+        topicPostpack.postpacks.forEach(postpack => {
+            if (this.props.selectedPostIds.includes(postpack.corePost.id)) {
+                matched = true;
+            }
+        })
+        return matched;
+    }
+
+    renderTitle() {
         return (
             <div>
                 <Chip text="Forum"/>
-                {this.props.topicPosts.forum.name}
+                {this.props.forumTopicPostpack.forum.name}
             </div>
         );
     }
 
-    render(){
+    render() {
+        const forumTopicPostpack = this.props.forumTopicPostpack;
         return (
             <div>
                 <Card expanded={this.state.expanded} onExpandChange={this.handleExpandChange} style={styles.card}>
@@ -64,7 +76,7 @@ export default class Forum extends React.Component {
                     <Divider/>
                     <CardActions expandable>
                         <FlatButton label="View all topics in forum"
-                                    href={`/courses/${this.props.course.id}/forums/${this.props.topicPosts.forum.id}`}
+                                    href={`/courses/${forumTopicPostpack.course.id}/forums/${forumTopicPostpack.forum.id}`}
                                     target="_blank"
                                     backgroundColor="#FFF8E1"
                                     labelPosition="before"
@@ -76,17 +88,19 @@ export default class Forum extends React.Component {
                     <CardText expandable>
                         <div style={styles.container}>
                             {
-                                this.props.topicPosts.topicPosts && this.props.topicPosts.topicPosts.map((topicPost) => (
+                                forumTopicPostpack.topicPostpacks &&
+                                forumTopicPostpack.topicPostpacks.map(topicPostpack => (
                                     <Topic
-                                        topicPost={topicPost}
-                                        course={this.props.course}
-                                        forum={this.props.topicPosts.forum}
-                                        onToggleTopicOption={(selected, postID) =>
-                                            this.props.onToggleTopicOption(selected, postID)
+                                        topicPostpack={topicPostpack}
+                                        selectedPostIds={this.props.selectedPostIds}
+                                        courseId={this.props.forumTopicPostpack.course.id}
+                                        forumId={this.props.forumTopicPostpack.forum.id}
+                                        onSelectPostpack={
+                                            (postpackSelected, isSelected) =>
+                                                this.props.onSelectPostpack(postpackSelected, isSelected)
                                         }
-                                        qtyPostsSelected={this.props.qtyPostsSelected}
-                                        maxPosts={this.props.maxPosts}
-                                        key={topicPost.topic.id}
+                                        isExpanded={this.isExpanded(topicPostpack)}
+                                        key={topicPostpack.topic.id}
                                     />
                                 ))
                             }
@@ -99,5 +113,8 @@ export default class Forum extends React.Component {
 }
 
 Forum.propTypes = {
-    topicPosts: PropTypes.object,
+    forumTopicPostpack: forumTopicPostPackShape,
+    selectedPostIds: PropTypes.arrayOf(PropTypes.number),
+    onSelectPostpack: PropTypes.func,
+    isExpanded: PropTypes.bool,
 };

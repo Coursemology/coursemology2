@@ -16,35 +16,15 @@ class CreateCourseAssessmentQuestionForumPostResponses < ActiveRecord::Migration
                    foreign_key: {
                      to_table: :course_assessment_answer_forum_post_responses
                    }
-      t.references :forum_topic,
-                   null: false,
-                   foreign_key: {
-                     to_table: :course_forum_topics
-                   }
-      t.references :post,
-                   null: false,
-                   foreign_key: {
-                     to_table: :course_discussion_posts
-                   }
+      t.integer :forum_topic_id, null: false
+      t.integer :post_id, null: false
       t.string :post_text, null: false
-      t.references :post_creator,
-                   null: false,
-                   foreign_key: {
-                     to_table: :users
-                   }
+      t.integer :post_creator_id, null: false
       t.datetime :post_updated_at, null: false
-      t.references :parent,
-                   null: true,
-                   foreign_key: {
-                     to_table: :course_discussion_posts
-                   }
+      t.integer :parent_id, null: true
       t.string :parent_text, null: true
-      t.references :parent_creator,
-                   null: false,
-                   foreign_key: {
-                     to_table: :users
-                   }
-      t.datetime :parent_updated_at, null: false
+      t.integer :parent_creator_id, null: true
+      t.datetime :parent_updated_at, null: true
     end
   end
 end

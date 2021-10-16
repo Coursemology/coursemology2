@@ -1,7 +1,7 @@
 import React from "react";
-import PropTypes from "prop-types";
 import ForumPost from "../../../../../forum/components/ForumPost";
 import Labels from "./Labels";
+import {forumPostShape} from "course/assessment/submission/propTypes";
 
 const styles = {
     replyPost: {
@@ -13,24 +13,20 @@ const styles = {
     },
 }
 
-function ParentPost({parent}) {
+function ParentPost({post}) {
     return (
         <div style={styles.replyPost}>
             <p style={styles.subtext}>
                 <i>post made in response to:</i>
             </p>
-            {parent.status && <Labels status={parent.status}/>}
-            <ForumPost text={parent.text}
-                       userName={parent.userName}
-                       avatar={parent.avatar}
-                       createdAt={parent.createdAt}
-                       replyPost/>
+            <Labels post={post}/>
+            <ForumPost post={post} replyPost isExpandable/>
         </div>
     )
 }
 
 ParentPost.propTypes = {
-    parent: PropTypes.object,
+    post: forumPostShape,
 };
 
 export default ParentPost;

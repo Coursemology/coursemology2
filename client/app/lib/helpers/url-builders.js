@@ -16,3 +16,9 @@ export const getProgrammingFileURL = (
 ) =>
   `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}` +
   `/answers/${answerId}/programming/files/${fileId}/download`;
+
+export const getForumURL = (courseId, forumID) =>
+    `/courses/${courseId}/forums/${forumID}/topics`;
+
+export const getForumTopicURL = (courseId, forumID, topicId) =>
+    `/courses/${courseId}/forums/${forumID}/topics/${topicId}`;

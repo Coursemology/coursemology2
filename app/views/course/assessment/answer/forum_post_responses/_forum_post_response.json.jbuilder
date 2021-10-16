@@ -3,6 +3,8 @@ json.fields do
   json.questionId answer.question_id
   json.id answer.acting_as.id
   json.answer_text answer.answer_text
+  json.partial! 'course/assessment/submission/answer/forum_post_response/posts/postpacks',
+                selected_posts: answer.postpacks
 end
 
 last_attempt = last_attempt(answer)

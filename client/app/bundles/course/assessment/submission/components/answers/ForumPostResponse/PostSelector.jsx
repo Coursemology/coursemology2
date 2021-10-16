@@ -5,6 +5,8 @@ import RaisedButton from "material-ui/RaisedButton";
 import Dialog from "material-ui/Dialog";
 import FlatButton from "material-ui/FlatButton";
 
+import {forumTopicPostPackShape} from "course/assessment/submission/propTypes";
+import Error from "./Error";
 import Forum from "./Forum";
 
 const styles = {
@@ -26,30 +28,8 @@ export default class PostSelector extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            qtyPostsSelected: 0,
-            maxPosts: this.props.question.max_posts,
             openSelector: false,
-            selectedPosts: [],
         };
-    }
-
-    handleOptionTopicToggle = (selected, postID) => {
-        if (selected) {
-            this.setState((oldState) => ({
-                qtyPostsSelected: oldState.qtyPostsSelected + 1,
-                selectedPosts: [...oldState.selectedPosts, postID],
-            }));
-        } else {
-            const selectedPosts = this.removePost(postID);
-            this.setState((oldState) => ({
-                qtyPostsSelected: oldState.qtyPostsSelected - 1,
-                selectedPosts,
-            }));
-        }
-    }
-
-    handlePostSelection = () => {
-        this.handleCloseSelector();
     }
 
     handleOpenSelector = () => {
@@ -60,26 +40,29 @@ export default class PostSelector extends React.Component {
         this.setState({openSelector: false});
     };
 
-    removePost(postID){
-        const selectedPosts = [...this.state.selectedPosts];
-        const index = selectedPosts.indexOf(postID);
-        if (index !== -1) {
-            selectedPosts.splice(index, 1);
-        }
-        return selectedPosts;
+    isExpanded(forumTopicPostpack){
+        let matched = false;
+        forumTopicPostpack.topicPostpacks.forEach(topicPostpack => {
+            topicPostpack.postpacks.forEach(postpack => {
+                if (this.props.selectedPostIds.includes(postpack.corePost.id)) {
+                    matched = true;
+                }
+            })
+        })
+        return matched;
     }
 
     renderDialogTitle() {
+        const maxPosts = this.props.maxPosts;
+        const qtySelected = this.props.selectedPostIds.length;
         return (
             <div style={styles.dialogTitle}>
                 <div style={{fontSize: 23, marginBottom: 15}}>
                     SELECT FORUM POST
                 </div>
                 <div style={{fontSize: 15}}>
-                    Select {this.props.question.max_posts > 1 && 'up to '}
-                    <b>{this.props.question.max_posts} forum {this.props.question.max_posts > 1 ? 'posts' : 'post'}</b>.
-                    You have selected&nbsp;
-                    {this.state.qtyPostsSelected} {this.state.qtyPostsSelected > 1 ? 'posts' : 'post'}.
+                    Select {maxPosts > 1 && 'up to'} <b>{maxPosts} forum {maxPosts > 1 ? 'posts' : 'post'}</b>.
+                    You have selected {qtySelected} {qtySelected > 1 ? 'posts' : 'post'}.
                 </div>
                 <div style={{fontSize: 15, color: '#ccc'}}>
                     Click on the forum name, then the topic title to view the post(s) made by you.
@@ -89,55 +72,51 @@ export default class PostSelector extends React.Component {
     }
 
     renderPostMenu() {
-        const {forumTopicPosts} = this.props;
+        const {forumTopicPostpacks} = this.props;
         return (
             <div>
-                <br />
+                <br/>
                 {
-                    forumTopicPosts && forumTopicPosts.map((topicPosts) => (
-                        <Forum topicPosts={topicPosts}
-                               course={topicPosts.course}
-                               onToggleTopicOption={this.handleOptionTopicToggle}
-                               qtyPostsSelected={this.state.qtyPostsSelected}
-                               maxPosts={this.state.maxPosts}
-                               key={topicPosts.forum.id}
+                    forumTopicPostpacks && forumTopicPostpacks.map((forumTopicPostpack) => (
+                        <Forum forumTopicPostpack={forumTopicPostpack}
+                               selectedPostIds={this.props.selectedPostIds}
+                               onSelectPostpack={
+                                   (postpackSelected, isSelected) =>
+                                       this.props.onSelectPostpack(postpackSelected, isSelected)
+                               }
+                               isExpanded={this.isExpanded(forumTopicPostpack)}
+                               key={forumTopicPostpack.forum.id}
                         />
                     ))
                 }
-                <br />
+                <br/>
             </div>
         );
     }
 
     render() {
+        const qtySelected = this.props.selectedPostIds.length;
         const actions = [
+            // eslint-disable-next-line react/jsx-key
             <FlatButton
-                label="Cancel"
-                secondary
-                onClick={this.handleCloseSelector}
-                key={0}
-            />,
-            <RaisedButton
-                label={
-                    this.state.qtyPostsSelected > 0 ?
-                        `Select ${this.state.qtyPostsSelected} ${this.state.qtyPostsSelected > 1 ? 'posts' : 'post'}` :
-                        'Select'
-                }
+                label={qtySelected > 0 ? `Select ${qtySelected} ${qtySelected > 1 ? 'posts' : 'post'}` : 'Cancel'}
                 primary
-                onClick={this.handlePostSelection}
-                disabled={this.state.qtyPostsSelected < 1}
-                key={1}
+                onClick={this.handleCloseSelector}
             />,
         ];
 
         return (
             <>
                 <RaisedButton label="Select Forum Post"
-                              labelPosition="before"
-                              icon={<i className="fa fa-paperclip" aria-hidden="true" />}
+                              icon={<i className="fa fa-paperclip" aria-hidden="true"/>}
                               primary
                               onClick={this.handleOpenSelector}
+                              disabled={this.props.hasError}
                 />
+                {
+                    this.props.hasError &&
+                    <Error message="Oops! Unable to retrieve your forum posts. Please try refreshing this page."/>
+                }
                 <Dialog
                     title={this.renderDialogTitle()}
                     actions={actions}
@@ -157,8 +136,9 @@ export default class PostSelector extends React.Component {
 }
 
 PostSelector.propTypes = {
-    forumTopicPosts: PropTypes.object,
-    question: PropTypes.shape({
-        max_posts: PropTypes.number,
-    }),
+    forumTopicPostpacks: PropTypes.arrayOf(forumTopicPostPackShape),
+    selectedPostIds: PropTypes.arrayOf(PropTypes.number),
+    maxPosts: PropTypes.number,
+    onSelectPostpack: PropTypes.func,
+    hasError: PropTypes.bool,
 };

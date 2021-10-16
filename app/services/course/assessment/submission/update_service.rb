@@ -112,6 +112,8 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     array_params = {}.tap do |result|
       result[:option_ids] = [] # MRQ answer
       result[:files_attributes] = [:id, :_destroy, :filename, :content] # Programming answer
+      forum_post_attributes = [:id, :text, :creatorId, :updatedAt]
+      result[:selectedPostpacks] = [corePost: forum_post_attributes, parentPost: forum_post_attributes, topic: [:id]] # Forum Post Response answer
     end
     scalar_params.push(array_params)
   end

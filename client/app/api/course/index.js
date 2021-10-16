@@ -10,7 +10,6 @@ import SurveyAPI from './Survey';
 import VideoAPI from './Video';
 import AdminAPI from './Admin';
 import LevelAPI from './Level';
-import ForumsAPI from './Forums';
 import UserNotificationsAPI from './UserNotifications';
 
 const CourseAPI = {
@@ -26,7 +25,6 @@ const CourseAPI = {
   video: VideoAPI,
   admin: AdminAPI,
   level: new LevelAPI(),
-  forums: new ForumsAPI(),
   userNotifications: new UserNotificationsAPI(),
 };
 

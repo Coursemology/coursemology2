@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Checkbox from "material-ui/Checkbox";
-import Snackbar from 'material-ui/Snackbar';
 import ForumPost from "../../../../../forum/components/ForumPost";
 import ParentPost from "./ParentPost";
+import {postPackShape} from "course/assessment/submission/propTypes";
 
 const styles = {
     row: {
@@ -31,65 +31,37 @@ export default class Option extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            selected: false,
-            showErrorMsg: false,
+            isSelected: this.props.isSelected,
         };
     }
 
-    handleCheckboxToggle = (e) => {
-        const selected = e.target.checked;
-        if (!selected || (selected && this.props.qtyPostsSelected < this.props.maxPosts)) {
-            this.setState((oldState) => {
-                return {
-                    selected: !oldState.selected,
-                }
-            });
-            this.props.onToggleOption(selected, this.props.post.post.id);
-        } else {
-            this.setState({
-                showErrorMsg: true,
-            });
-        }
-    }
-
-    handleRequestClose = () => {
-        this.setState({
-            showErrorMsg: false,
-        });
-    };
-
     render() {
+        const postpack = this.props.postpack;
         return (
             <div style={styles.row}>
                 <div style={styles.cellCheckbox}>
                     <Checkbox style={styles.checkbox}
-                              checked={this.state.selected}
-                              onClick={this.handleCheckboxToggle}
+                              checked={this.props.isSelected}
+                              onClick={() => {
+                                  this.props.onSelectPostpack(postpack, this.props.isSelected)
+                              }}
                     />
                 </div>
                 <div style={styles.cellPost}>
-                    <ForumPost post={this.props.post.post}
-                               asmSubStatus={this.state.selected}/>
-                    {this.props.post.parent && <ParentPost parent={this.props.post.parent}/>}
+                    <ForumPost post={postpack.corePost}
+                               asmSubStatus={this.state.isSelected}
+                               isExpandable
+                    />
+                    {postpack.parentPost && <ParentPost post={postpack.parentPost}/>}
                     <br/>
                 </div>
-                <Snackbar
-                    open={this.state.showErrorMsg}
-                    message="Unable to select post, as you have selected the max no. of posts allowed."
-                    autoHideDuration={4000}
-                    onRequestClose={this.handleRequestClose}
-                />
             </div>
         );
     }
 }
 
-
 Option.propTypes = {
-    onToggleOption: PropTypes.func,
-    qtyPostsSelected: PropTypes.number,
-    maxPosts: PropTypes.number,
-    postID: PropTypes.number,
-    post: PropTypes.object,
-    parent: PropTypes.object,
+    postpack: postPackShape,
+    isSelected: PropTypes.bool,
+    onSelectPostpack: PropTypes.func,
 };

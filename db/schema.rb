@@ -103,21 +103,16 @@ ActiveRecord::Schema.define(version: 2021_10_03_230453) do
 
   create_table "course_assessment_answer_forum_posts", force: :cascade do |t|
     t.bigint "answer_id", null: false
-    t.bigint "forum_topic_id", null: false
-    t.bigint "post_id", null: false
+    t.integer "forum_topic_id", null: false
+    t.integer "post_id", null: false
     t.string "post_text", null: false
-    t.bigint "post_creator_id", null: false
+    t.integer "post_creator_id", null: false
     t.datetime "post_updated_at", null: false
-    t.bigint "parent_id"
+    t.integer "parent_id"
     t.string "parent_text"
-    t.bigint "parent_creator_id", null: false
-    t.datetime "parent_updated_at", null: false
+    t.integer "parent_creator_id"
+    t.datetime "parent_updated_at"
     t.index ["answer_id"], name: "index_course_assessment_answer_forum_posts_on_answer_id"
-    t.index ["forum_topic_id"], name: "index_course_assessment_answer_forum_posts_on_forum_topic_id"
-    t.index ["parent_creator_id"], name: "index_course_assessment_answer_forum_posts_on_parent_creator_id"
-    t.index ["parent_id"], name: "index_course_assessment_answer_forum_posts_on_parent_id"
-    t.index ["post_creator_id"], name: "index_course_assessment_answer_forum_posts_on_post_creator_id"
-    t.index ["post_id"], name: "index_course_assessment_answer_forum_posts_on_post_id"
   end
 
   create_table "course_assessment_answer_multiple_response_options", id: :serial, force: :cascade do |t|
@@ -1243,11 +1238,6 @@ ActiveRecord::Schema.define(version: 2021_10_03_230453) do
   add_foreign_key "course_assessment_answer_auto_gradings", "course_assessment_answers", column: "answer_id", name: "fk_course_assessment_answer_auto_gradings_answer_id"
   add_foreign_key "course_assessment_answer_auto_gradings", "jobs", name: "fk_course_assessment_answer_auto_gradings_job_id", on_delete: :nullify
   add_foreign_key "course_assessment_answer_forum_posts", "course_assessment_answer_forum_post_responses", column: "answer_id"
-  add_foreign_key "course_assessment_answer_forum_posts", "course_discussion_posts", column: "parent_id"
-  add_foreign_key "course_assessment_answer_forum_posts", "course_discussion_posts", column: "post_id"
-  add_foreign_key "course_assessment_answer_forum_posts", "course_forum_topics", column: "forum_topic_id"
-  add_foreign_key "course_assessment_answer_forum_posts", "users", column: "parent_creator_id"
-  add_foreign_key "course_assessment_answer_forum_posts", "users", column: "post_creator_id"
   add_foreign_key "course_assessment_answer_multiple_response_options", "course_assessment_answer_multiple_responses", column: "answer_id", name: "fk_course_assessment_answer_multiple_response_options_answer_id"
   add_foreign_key "course_assessment_answer_multiple_response_options", "course_assessment_question_multiple_response_options", column: "option_id", name: "fk_course_assessment_answer_multiple_response_options_option_id"
   add_foreign_key "course_assessment_answer_programming_file_annotations", "course_assessment_answer_programming_files", column: "file_id", name: "fk_course_assessment_answer_ed21459e7a2a5034dcf43a14812cb17d"
