@@ -5,7 +5,7 @@ RSpec.describe Course::Assessment::Submission::ZipDownloadService do
   let(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:course_staff) { create(:course_teaching_assistant, course: course) }
+    let(:course_staff1) { create(:course_teaching_assistant, course: course) }
     let(:assessment) { create(:assessment, :published_with_text_response_question, course: course) }
     let(:student1) { create(:course_user, course: course, name: 'Student') }
     let(:student2) { create(:course_user, course: course, name: 'Student') }
@@ -33,7 +33,7 @@ RSpec.describe Course::Assessment::Submission::ZipDownloadService do
     end
 
     let(:service) do
-      Course::Assessment::Submission::ZipDownloadService.send(:new, course_staff, assessment, nil)
+      Course::Assessment::Submission::ZipDownloadService.send(:new, course_staff1, assessment, nil)
     end
 
     describe '#download_to_base_dir' do
@@ -43,36 +43,66 @@ RSpec.describe Course::Assessment::Submission::ZipDownloadService do
       let(:student2) { create(:course_user, course: course, name: 'Student 2') }
       let(:student3) { create(:course_user, :phantom, course: course, name: 'Student 3') }
 
+      let(:course_staff2) { create(:course_teaching_assistant, course: course, name: 'Staff 2') }
+      let(:course_staff3) { create(:course_teaching_assistant, :phantom, course: course, name: 'Staff 3') }
+
       let(:submission3) do
         create(:submission, :submitted, assessment: assessment,
                                         course: course, creator: student3.user)
       end
+      let(:submission4) do
+        create(:submission, :submitted, assessment: assessment,
+                                        course: course, creator: course_staff2.user)
+      end
+      let(:submission5) do
+        create(:submission, :submitted, assessment: assessment,
+                                        course: course, creator: course_staff3.user)
+      end
 
-      # Add student 2 to a group
+      # Add student 2 and 3 to a group
       let!(:group) do
         group = create(:course_group, course: course)
-        create(:course_group_manager, course: course, group: group, course_user: course_staff)
+        create(:course_group_manager, course: course, group: group, course_user: course_staff1)
         create(:course_group_student, course: course, group: group, course_user: student2)
+        create(:course_group_student, course: course, group: group, course_user: student3)
         group
       end
 
-      types = Course::Assessment::Submission::ZipDownloadService::STUDENTS
+      types = Course::Assessment::Submission::ZipDownloadService::COURSE_USERS
 
       before do
         submission1
         submission2
         submission3
+        submission4
+        submission5
       end
 
       context 'when downloading submissions by my students' do
         it 'downloads the correct submissions' do
-          service.instance_variable_set(:@students, types[:my])
+          service.instance_variable_set(:@course_users, types[:my_students])
           subject
 
           file_names = Dir.entries(dir)
           expect(file_names).not_to include(student1.name)
           expect(file_names).to include(student2.name)
           expect(file_names).not_to include(student3.name)
+          expect(file_names).not_to include(course_staff2.name)
+          expect(file_names).not_to include(course_staff3.name)
+        end
+      end
+
+      context 'when downloading submissions by my students (incl phantom)' do
+        it 'downloads the correct submissions' do
+          service.instance_variable_set(:@course_users, types[:my_students_w_phantom])
+          subject
+
+          file_names = Dir.entries(dir)
+          expect(file_names).not_to include(student1.name)
+          expect(file_names).to include(student2.name)
+          expect(file_names).to include(student3.name)
+          expect(file_names).not_to include(course_staff2.name)
+          expect(file_names).not_to include(course_staff3.name)
         end
       end
 
@@ -84,18 +114,50 @@ RSpec.describe Course::Assessment::Submission::ZipDownloadService do
           expect(file_names).to include(student1.name)
           expect(file_names).to include(student2.name)
           expect(file_names).not_to include(student3.name)
+          expect(file_names).not_to include(course_staff2.name)
+          expect(file_names).not_to include(course_staff3.name)
         end
       end
 
-      context 'when downloading submissions by phantom students' do
+      context 'when downloading submissions including phantom students' do
         it 'downloads the correct submissions' do
-          service.instance_variable_set(:@students, types[:phantom])
+          service.instance_variable_set(:@course_users, types[:students_w_phantom])
+          subject
+
+          file_names = Dir.entries(dir)
+          expect(file_names).to include(student1.name)
+          expect(file_names).to include(student2.name)
+          expect(file_names).to include(student3.name)
+          expect(file_names).not_to include(course_staff2.name)
+          expect(file_names).not_to include(course_staff3.name)
+        end
+      end
+
+      context 'when downloading submissions by staff' do
+        it 'downloads the correct submissions' do
+          service.instance_variable_set(:@course_users, types[:staff])
           subject
 
           file_names = Dir.entries(dir)
           expect(file_names).not_to include(student1.name)
           expect(file_names).not_to include(student2.name)
-          expect(file_names).to include(student3.name)
+          expect(file_names).not_to include(student3.name)
+          expect(file_names).to include(course_staff2.name)
+          expect(file_names).not_to include(course_staff3.name)
+        end
+      end
+
+      context 'when downloading submissions by staff' do
+        it 'downloads the correct submissions' do
+          service.instance_variable_set(:@course_users, types[:staff_w_phantom])
+          subject
+
+          file_names = Dir.entries(dir)
+          expect(file_names).not_to include(student1.name)
+          expect(file_names).not_to include(student2.name)
+          expect(file_names).not_to include(student3.name)
+          expect(file_names).to include(course_staff2.name)
+          expect(file_names).to include(course_staff3.name)
         end
       end
     end
@@ -164,7 +226,7 @@ RSpec.describe Course::Assessment::Submission::ZipDownloadService do
     describe '.download_and_zip' do
       subject do
         Course::Assessment::Submission::ZipDownloadService.
-          download_and_zip(course_staff, assessment, nil)
+          download_and_zip(course_staff1, assessment, nil)
       end
 
       it 'downloads and zips the folder' do

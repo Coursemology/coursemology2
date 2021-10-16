@@ -19,7 +19,6 @@ import {
   blue100,
   blue500,
 } from 'material-ui/styles/colors';
-
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import NotificationBar, {
@@ -30,6 +29,8 @@ import {
   publishSubmissions,
   downloadSubmissions,
   downloadStatistics,
+  unsubmitAllSubmissions,
+  deleteAllSubmissions,
 } from '../../actions/submissions';
 import SubmissionsTable from './SubmissionsTable';
 import { assessmentShape } from '../../propTypes';
@@ -60,12 +61,26 @@ class VisibleSubmissionsIndex extends React.Component {
     this.state = {
       publishConfirmation: false,
       includePhantoms: false,
+      tab: 'my-students-tab',
     };
   }
 
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch(fetchSubmissions());
+  }
+
+  componentDidUpdate(_prevProps, prevState) {
+    if (
+      prevState.tab === 'my-students-tab' &&
+      this.props.submissions.every((s) => !s.courseUser.myStudent)
+    ) {
+      // This is safe since there will not be infinite re-renderings caused.
+      // Follows the guidelines as recommended on React's website.
+      // https://reactjs.org/docs/react-component.html#componentdidupdate
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ tab: 'students-tab' });
+    }
   }
 
   canPublish() {
@@ -75,23 +90,43 @@ class VisibleSubmissionsIndex extends React.Component {
 
   renderHistogram() {
     const { submissions } = this.props;
-    const { includePhantoms } = this.state;
+    const { includePhantoms, tab } = this.state;
     const workflowStatesArray = Object.values(workflowStates);
-
+    const myStudentSubmissions = submissions.filter(
+      (s) => s.courseUser.isStudent && s.courseUser.myStudent,
+    );
+    const studentSubmissions = submissions.filter(
+      (s) => s.courseUser.isStudent,
+    );
+    const staffSubmissions = submissions.filter((s) => !s.courseUser.isStudent);
+    let submissionHistogram;
+    switch (tab) {
+      case 'staff-tab':
+        submissionHistogram = staffSubmissions;
+        break;
+      case 'my-students-tab':
+        submissionHistogram = myStudentSubmissions;
+        break;
+      case 'students-tab':
+      default:
+        submissionHistogram = studentSubmissions;
+    }
     const initialCounts = workflowStatesArray.reduce(
       (counts, w) => ({ ...counts, [w]: 0 }),
       {},
     );
-
-    const submissionStateCounts = submissions.reduce((counts, submission) => {
-      if (includePhantoms || !submission.courseStudent.phantom) {
-        return {
-          ...counts,
-          [submission.workflowState]: counts[submission.workflowState] + 1,
-        };
-      }
-      return counts;
-    }, initialCounts);
+    const submissionStateCounts = submissionHistogram.reduce(
+      (counts, submission) => {
+        if (includePhantoms || !submission.courseUser.phantom) {
+          return {
+            ...counts,
+            [submission.workflowState]: counts[submission.workflowState] + 1,
+          };
+        }
+        return counts;
+      },
+      initialCounts,
+    );
 
     return (
       <div style={styles.histogram}>
@@ -126,9 +161,10 @@ class VisibleSubmissionsIndex extends React.Component {
     return (
       <Card style={{ marginBottom: 20 }}>
         <CardHeader title={<h3>{title}</h3>} subtitle="Submissions" />
-        <CardText>{this.renderHistogram()}</CardText>
+        <CardText style={{ paddingTop: 0 }}>{this.renderHistogram()}</CardText>
         <CardActions>
           <Toggle
+            className="toggle-phantom"
             label={
               <FormattedMessage {...submissionsTranslations.includePhantoms} />
             }
@@ -161,23 +197,49 @@ class VisibleSubmissionsIndex extends React.Component {
       assessment,
       isDownloading,
       isStatisticsDownloading,
+      isUnsubmitting,
+      isDeleting,
     } = this.props;
-    const myStudentSubmissions = submissions.filter(
-      (s) => s.courseStudent.myStudent,
-    );
-    const studentSubmissions = submissions.filter(
-      (s) => !s.courseStudent.phantom,
-    );
-    const otherSubmissions = submissions.filter((s) => s.courseStudent.phantom);
+    const { includePhantoms } = this.state;
+    const myStudentSubmissions = includePhantoms
+      ? submissions.filter(
+          (s) => s.courseUser.isStudent && s.courseUser.myStudent,
+        )
+      : submissions.filter(
+          (s) =>
+            s.courseUser.isStudent &&
+            s.courseUser.myStudent &&
+            !s.courseUser.phantom,
+        );
+    const studentSubmissions = includePhantoms
+      ? submissions.filter((s) => s.courseUser.isStudent)
+      : submissions.filter(
+          (s) => s.courseUser.isStudent && !s.courseUser.phantom,
+        );
+    const staffSubmissions = includePhantoms
+      ? submissions.filter((s) => !s.courseUser.isStudent)
+      : submissions.filter(
+          (s) => !s.courseUser.isStudent && !s.courseUser.phantom,
+        );
+
+    const handleMyStudentsParams = includePhantoms
+      ? 'my_students_w_phantom'
+      : 'my_students';
+    const handleStudentsParams = includePhantoms
+      ? 'students_w_phantom'
+      : 'students';
+    const handleStaffsParams = includePhantoms ? 'staff_w_phantom' : 'staff';
 
     const props = {
+      dispatch,
       courseId,
       assessmentId,
       assessment,
       isDownloading,
       isStatisticsDownloading,
+      isUnsubmitting,
+      isDeleting,
     };
-
     return (
       <Tabs
         inkBarStyle={{ backgroundColor: blue500, height: 5, marginTop: -5 }}
@@ -189,13 +251,23 @@ class VisibleSubmissionsIndex extends React.Component {
             buttonStyle={{ color: blue500 }}
             icon={<GroupIcon style={{ color: blue500 }} />}
             label={<FormattedMessage {...submissionsTranslations.myStudents} />}
+            onActive={() => this.setState({ tab: 'my-students-tab' })}
           >
             <SubmissionsTable
               submissions={myStudentSubmissions}
-              handleDownload={() => dispatch(downloadSubmissions('my'))}
-              handleDownloadStatistics={() =>
-                dispatch(downloadStatistics('my'))
+              handleDownload={() =>
+                dispatch(downloadSubmissions(handleMyStudentsParams))
               }
+              handleDownloadStatistics={() =>
+                dispatch(downloadStatistics(handleMyStudentsParams))
+              }
+              handleUnsubmitAll={() =>
+                dispatch(unsubmitAllSubmissions(handleMyStudentsParams))
+              }
+              handleDeleteAll={() =>
+                dispatch(deleteAllSubmissions(handleMyStudentsParams))
+              }
+              confirmDialogValue="your students"
               {...props}
             />
           </Tab>
@@ -205,26 +277,48 @@ class VisibleSubmissionsIndex extends React.Component {
           buttonStyle={{ color: blue500 }}
           icon={<PersonIcon style={{ color: blue500 }} />}
           label={<FormattedMessage {...submissionsTranslations.students} />}
+          onActive={() => this.setState({ tab: 'students-tab' })}
         >
           <SubmissionsTable
             submissions={studentSubmissions}
-            handleDownload={() => dispatch(downloadSubmissions())}
-            handleDownloadStatistics={() => dispatch(downloadStatistics())}
+            handleDownload={() =>
+              dispatch(downloadSubmissions(handleStudentsParams))
+            }
+            handleDownloadStatistics={() =>
+              dispatch(downloadStatistics(handleStudentsParams))
+            }
+            handleUnsubmitAll={() =>
+              dispatch(unsubmitAllSubmissions(handleStudentsParams))
+            }
+            handleDeleteAll={() =>
+              dispatch(deleteAllSubmissions(handleStudentsParams))
+            }
+            confirmDialogValue="students"
             {...props}
           />
         </Tab>
         <Tab
-          id="others-tab"
+          id="staff-tab"
           buttonStyle={{ color: blue500 }}
           icon={<PersonOutlineIcon style={{ color: blue500 }} />}
-          label={<FormattedMessage {...submissionsTranslations.others} />}
+          label={<FormattedMessage {...submissionsTranslations.staff} />}
+          onActive={() => this.setState({ tab: 'staff-tab' })}
         >
           <SubmissionsTable
-            submissions={otherSubmissions}
-            handleDownload={() => dispatch(downloadSubmissions('phantom'))}
-            handleDownloadStatistics={() =>
-              dispatch(downloadStatistics('phantom'))
+            submissions={staffSubmissions}
+            handleDownload={() =>
+              dispatch(downloadSubmissions(handleStaffsParams))
             }
+            handleDownloadStatistics={() =>
+              dispatch(downloadStatistics(handleStaffsParams))
+            }
+            handleUnsubmitAll={() =>
+              dispatch(unsubmitAllSubmissions(handleStaffsParams))
+            }
+            handleDeleteAll={() =>
+              dispatch(deleteAllSubmissions(handleStaffsParams))
+            }
+            confirmDialogValue="staff"
             {...props}
           />
         </Tab>
@@ -250,11 +344,9 @@ class VisibleSubmissionsIndex extends React.Component {
 
   render() {
     const { isLoading, notification } = this.props;
-
     if (isLoading) {
       return <LoadingIndicator />;
     }
-
     return (
       <>
         {this.renderHeader()}
@@ -289,6 +381,8 @@ VisibleSubmissionsIndex.propTypes = {
   isDownloading: PropTypes.bool.isRequired,
   isStatisticsDownloading: PropTypes.bool.isRequired,
   isPublishing: PropTypes.bool.isRequired,
+  isUnsubmitting: PropTypes.bool.isRequired,
+  isDeleting: PropTypes.bool.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -300,6 +394,8 @@ function mapStateToProps(state) {
     isDownloading: state.submissionFlags.isDownloading,
     isStatisticsDownloading: state.submissionFlags.isStatisticsDownloading,
     isPublishing: state.submissionFlags.isPublishing,
+    isUnsubmitting: state.submissionFlags.isUnsubmitting,
+    isDeleting: state.submissionFlags.isDeleting,
   };
 }
 

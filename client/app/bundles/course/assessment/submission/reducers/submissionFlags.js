@@ -7,6 +7,8 @@ const initialState = {
   isPublishing: false,
   isDownloading: false,
   isStatisticsDownloading: false,
+  isUnsubmitting: false,
+  isDeleting: false,
 };
 
 export default function (state = initialState, action) {
@@ -80,6 +82,20 @@ export default function (state = initialState, action) {
       return { ...state, isPublishing: true };
     case actions.PUBLISH_SUBMISSIONS_FAILURE:
       return { ...state, isPublishing: false };
+
+    case actions.UNSUBMIT_ALL_SUBMISSIONS_REQUEST:
+      return { ...state, isUnsubmitting: true };
+    case actions.UNSUBMIT_ALL_SUBMISSIONS_SUCCESS:
+      return { ...state, isUnsubmitting: false };
+    case actions.UNSUBMIT_ALL_SUBMISSIONS_FAILURE:
+      return { ...state, isUnsubmitting: false };
+
+    case actions.DELETE_ALL_SUBMISSIONS_REQUEST:
+      return { ...state, isDeleting: true };
+    case actions.DELETE_ALL_SUBMISSIONS_SUCCESS:
+      return { ...state, isDeleting: false };
+    case actions.DELETE_ALL_SUBMISSIONS_FAILURE:
+      return { ...state, isDeleting: false };
     default:
       return state;
   }

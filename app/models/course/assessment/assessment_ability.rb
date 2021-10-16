@@ -124,6 +124,7 @@ module Course::Assessment::AssessmentAbility
     allow_teaching_staff_manage_assessment_annotations
     allow_managers_manage_tab_and_categories
     allow_manager_publish_assessment_submission_grades
+    allow_manager_delete_assessment_submission
   end
 
   def allow_staff_read_observe_access_and_attempt_assessment
@@ -190,5 +191,16 @@ module Course::Assessment::AssessmentAbility
   def allow_manager_publish_assessment_submission_grades
     cannot :publish_grades, Course::Assessment, assessment_course_staff_hash
     can :publish_grades, Course::Assessment, course_managers_hash
+  end
+
+  # Only managers and above are allowed to delete assessment submissions
+  # Teaching assistants can only delete his/her own submission
+  def allow_manager_delete_assessment_submission
+    cannot :delete_all_submissions, Course::Assessment, assessment_course_staff_hash
+    can :delete_all_submissions, Course::Assessment, course_managers_hash
+
+    can :delete_submission, Course::Assessment::Submission, assessment: course_managers_hash
+    can :delete_submission, Course::Assessment::Submission,
+        { assessment: course_teaching_assistants_hash }.reverse_merge(creator: user)
   end
 end

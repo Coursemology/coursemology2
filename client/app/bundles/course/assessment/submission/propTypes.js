@@ -105,6 +105,8 @@ export const assessmentShape = PropTypes.shape({
   showEvaluation: PropTypes.bool,
   questionIds: PropTypes.arrayOf(PropTypes.number),
   canViewLogs: PropTypes.bool,
+  canUnsubmitSubmissions: PropTypes.bool,
+  canDeleteSubmission: PropTypes.bool,
 });
 
 export const submissionShape = PropTypes.shape({

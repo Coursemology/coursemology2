@@ -15,6 +15,7 @@ en:
             no_submission_statistics: 'No submission fulfilled your requirements for downloading'
           statistics_download_service:
             name: 'Name'
+            phantom: 'Phantom User'
             status: 'Status'
             grade: 'Grade'
             max_grade: 'Maximum Grade'

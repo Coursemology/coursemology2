@@ -155,6 +155,9 @@ RSpec.describe Course::Assessment do
       it { is_expected.to be_able_to(:read, coursemate_attempting_submission) }
       it { is_expected.to be_able_to(:read_tests, coursemate_attempting_submission) }
       it { is_expected.not_to be_able_to(:grade, coursemate_attempting_submission) }
+      it { is_expected.not_to be_able_to(:delete_all_submissions, published_started_assessment) }
+      it { is_expected.not_to be_able_to(:delete_submission, attempting_submission) }
+      it { is_expected.not_to be_able_to(:delete_submission, coursemate_attempting_submission) }
       it { is_expected.to be_able_to(:destroy_attachment, own_attachment) }
       it { is_expected.not_to be_able_to(:destroy_attachment, other_attachment) }
     end
@@ -184,6 +187,9 @@ RSpec.describe Course::Assessment do
       it { is_expected.to be_able_to(:read, attempting_submission) }
       it { is_expected.to be_able_to(:grade, attempting_submission) }
       it { is_expected.to be_able_to(:grade, submitted_submission) }
+      it { is_expected.not_to be_able_to(:delete_all_submissions, published_started_assessment) }
+      it { is_expected.to be_able_to(:delete_submission, attempting_submission) }
+      it { is_expected.not_to be_able_to(:delete_submission, coursemate_attempting_submission) }
       it { is_expected.to be_able_to(:destroy_attachment, own_attachment) }
       it { is_expected.not_to be_able_to(:destroy_attachment, other_attachment) }
 
@@ -214,6 +220,9 @@ RSpec.describe Course::Assessment do
       # Course Assessment Submissions
       it { is_expected.to be_able_to(:destroy_attachment, own_attachment) }
       it { is_expected.not_to be_able_to(:destroy_attachment, other_attachment) }
+      it { is_expected.to be_able_to(:delete_all_submissions, published_started_assessment) }
+      it { is_expected.to be_able_to(:delete_submission, attempting_submission) }
+      it { is_expected.to be_able_to(:delete_submission, coursemate_attempting_submission) }
     end
   end
 end
