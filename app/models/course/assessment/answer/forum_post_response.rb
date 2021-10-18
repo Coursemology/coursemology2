@@ -40,19 +40,12 @@ class Course::Assessment::Answer::ForumPostResponse < ApplicationRecord
       selected_post.is_topic_deleted = topic.nil?
       if topic
         selected_post.topic_title = topic.title
-        forum = topic.forum
-        selected_post.is_forum_deleted = forum.nil?
 
-        if forum
-          selected_post.forum_id = forum.id
-          selected_post.forum_name = forum.name
-        else
-          selected_post.forum_id = nil
-          selected_post.forum_name = nil
-        end
+        forum = topic.forum
+        selected_post.forum_id = forum.id
+        selected_post.forum_name = forum.name
       else
         selected_post.topic_title = nil
-        selected_post.is_forum_deleted = nil
         selected_post.forum_id = nil
         selected_post.forum_name = nil
       end
