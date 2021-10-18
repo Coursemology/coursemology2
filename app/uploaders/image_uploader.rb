@@ -45,7 +45,11 @@ class ImageUploader < CarrierWave::Uploader::Base
   def duplicate_from(other_uploader)
     case other_uploader.send(:storage).class.name
     when 'CarrierWave::Storage::File'
-      cache!(File.new(other_uploader.file.path))
+      begin
+        cache!(File.new(other_uploader.file.path))
+      rescue Errno::ENOENT
+        # do nothing
+      end
     when 'CarrierWave::Storage::Fog', 'CarrierWave::Storage::AWS'
       begin
         download!(other_uploader.url)
