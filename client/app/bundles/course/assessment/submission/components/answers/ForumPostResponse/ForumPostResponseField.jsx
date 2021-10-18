@@ -3,14 +3,9 @@ import PropTypes from 'prop-types';
 
 import CourseAPI from 'api/course';
 import Snackbar from 'material-ui/Snackbar';
-import IconButton from "material-ui/IconButton";
-import {getCourseId} from 'lib/helpers/url-helpers';
-import {getForumURL, getForumTopicURL} from 'lib/helpers/url-builders';
+import SelectedPost from "course/assessment/submission/components/answers/ForumPostResponse/SelectedPost";
 import {questionShape} from '../../../propTypes';
 
-import ForumPost from "../../../../../forum/components/ForumPost";
-import ParentPost from "./ParentPost";
-import Labels from "./Labels";
 import PostSelector from "./PostSelector";
 import Error from "./Error";
 
@@ -32,7 +27,7 @@ const styles = {
         background: '#CFD8DC',
     },
     trashIcon: {
-        fontSize: 18,
+        // fontSize: 18,
         color: '#C2185B',
     },
 }
@@ -113,51 +108,13 @@ export default class ForumPostResponseField extends React.Component {
     }
 
     renderSelectedPostpacks(postpacks) {
-        const courseId = getCourseId();
-
         return (
-            postpacks && postpacks.map((postpack, index) => (
+            postpacks && postpacks.map((postpack) => (
                 <div key={postpack.corePost.id}>
-                    <div>
-                        <span style={styles.postCounter}>Post #{index + 1}</span>
-                        {
-                            !this.props.readOnly &&
-                            <IconButton iconClassName="fa fa-trash"
-                                        iconStyle={styles.trashIcon}
-                                        onClick={() => this.handleRemovePostpack(postpack)}
-                            />
-                        }
-                    </div>
-                    {
-                        postpack.topic.isDeleted
-                            ?
-                            <>
-                                <div style={{...styles.label, ...styles.labelSelected}}>
-                                    Post made under a topic which was subsequently deleted.
-                                </div>
-                            </>
-                            :
-                            <>
-                                <div style={{...styles.label, ...styles.labelSelected}}>
-                                    Post made under&nbsp;
-                                    <a href={getForumTopicURL(courseId, postpack.forum.id, postpack.topic.id)}
-                                       target="_blank"
-                                       rel="noreferrer">
-                                        {postpack.topic.title} <i className="fa fa-external-link"/>
-                                    </a>&nbsp;
-                                    in&nbsp;
-                                    <a href={getForumURL(courseId, postpack.forum.id)}
-                                       target="_blank"
-                                       rel="noreferrer">
-                                        {postpack.forum.name} <i className="fa fa-external-link"/>
-                                    </a>
-                                </div>
-                                <Labels post={postpack.corePost}/>
-                            </>
-                    }
-                    <ForumPost post={postpack.corePost}/>
-                    {postpack.parentPost && <ParentPost post={postpack.parentPost}/>}
-                    <br/>
+                    <SelectedPost postpack={postpack}
+                                  readOnly={this.props.readOnly}
+                                  onRemovePostpack={() => this.handleRemovePostpack(postpack)}
+                    />
                 </div>
             ))
         );

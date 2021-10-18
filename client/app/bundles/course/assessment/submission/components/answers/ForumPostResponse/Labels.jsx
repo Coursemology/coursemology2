@@ -15,6 +15,9 @@ const styles = {
         border: '1px solid #B0BEC5',
         backgroundColor: '#F48FB1',
     },
+    labelWidth: {
+        width: 20,
+    },
 }
 
 function Labels({post}) {
@@ -23,15 +26,15 @@ function Labels({post}) {
             {
                 'isUpdated' in post && post.isUpdated &&
                 <div style={{...styles.label, ...styles.labelEdited}}>
-                    <i className="fa fa-refresh" aria-hidden="true"/> &nbsp; Post has been edited in the forum.
-                    Showing post last saved.
+                    <i className="fa fa-refresh" aria-hidden="true" style={styles.labelWidth}/>
+                    Post has been edited in the forum. Showing post last saved.
                 </div>
             }
             {
                 'isDeleted' in post && post.isDeleted &&
                 <div style={{...styles.label, ...styles.labelDeleted}}>
-                    <i className="fa fa-trash" aria-hidden="true"/> &nbsp; Post has been deleted from forum topic.
-                    Showing post last saved.
+                    <i className="fa fa-trash" aria-hidden="true" style={styles.labelWidth}/>
+                    Post has been deleted from forum topic. Showing post last saved.
                 </div>
             }
         </div>

@@ -64,6 +64,7 @@ class Course::Assessment::Answer::ForumPostResponse < ApplicationRecord
       selected_post.post_creator = User.find_by(id: selected_post.post_creator_id)
 
       next unless selected_post.parent_id
+
       parent = Course::Discussion::Post.find_by(id: selected_post.parent_id)
       selected_post.is_parent_deleted = parent.nil?
       # a deleted parent will have is_parent_updated = nil
