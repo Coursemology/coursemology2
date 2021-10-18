@@ -28,13 +28,6 @@ const styles = {
 }
 
 export default class Option extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isSelected: this.props.isSelected,
-        };
-    }
-
     render() {
         const postpack = this.props.postpack;
         return (
@@ -49,7 +42,7 @@ export default class Option extends React.Component {
                 </div>
                 <div style={styles.cellPost}>
                     <ForumPost post={postpack.corePost}
-                               asmSubStatus={this.state.isSelected}
+                               asmSubStatus={this.props.isSelected}
                                isExpandable
                     />
                     {postpack.parentPost && <ParentPost post={postpack.parentPost}/>}

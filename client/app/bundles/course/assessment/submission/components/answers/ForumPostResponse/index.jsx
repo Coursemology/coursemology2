@@ -30,7 +30,7 @@ function ForumPostResponse({question, readOnly, answerId}) {
     return (
         <>
             <Field
-                name={`${answerId}[selectedPostpacks]`}
+                name={`${answerId}[selected_postpacks]`}
                 component={ForumPostResponseField}
                 {...{question, readOnly, answerId}}
             />

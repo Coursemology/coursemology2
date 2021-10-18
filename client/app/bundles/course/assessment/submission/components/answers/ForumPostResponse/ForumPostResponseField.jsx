@@ -60,7 +60,7 @@ export default class ForumPostResponseField extends React.Component {
         CourseAPI.assessment.answer.forumPostResponse.fetchSelectedPostpacks(this.props.answerId)
             .then((response) => response.data)
             .then((data) => {
-                this.props.input.onChange(data.selectedPostpacks);
+                this.props.input.onChange(data.selected_postpacks);
             })
             .catch(() => {
                 this.setState({hasErrorFetchingSelectedPostpacks: true});
@@ -75,7 +75,6 @@ export default class ForumPostResponseField extends React.Component {
         const postpacks = this.props.input.value
         if (!this.props.readOnly) {
             if (!isSelected) {
-                // Add `postpack` to `this.state.selectedPostpacks`
                 if (postpacks.length >= this.props.question.max_posts) {
                     // Error if max posts have already been selected
                     this.setState({showSnackbar: true});
@@ -83,7 +82,6 @@ export default class ForumPostResponseField extends React.Component {
                     this.props.input.onChange([...postpacks, postpack]);
                 }
             } else {
-                // Remove `postpack` from `this.state.selectedPostpacks`
                 this.handleRemovePostpack(postpack);
             }
         }

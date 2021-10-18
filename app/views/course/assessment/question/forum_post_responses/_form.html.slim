@@ -4,7 +4,7 @@
 
   = f.input :max_posts, collection: (1..@forum_post_response_question.max_posts_allowed).to_a,
           label: t('.max_posts'),
-          selected: 1
+          selected: @forum_post_response_question.max_posts || 1
   = f.input :has_text_response, label: t('.has_text_response')
 
   - name = t('.forum_post_response_button')

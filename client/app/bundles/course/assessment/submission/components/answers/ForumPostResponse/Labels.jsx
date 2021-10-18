@@ -24,14 +24,14 @@ function Labels({post}) {
                 'isUpdated' in post && post.isUpdated &&
                 <div style={{...styles.label, ...styles.labelEdited}}>
                     <i className="fa fa-refresh" aria-hidden="true"/> &nbsp; Post has been edited in the forum.
-                    Showing post as at submission.
+                    Showing post last saved.
                 </div>
             }
             {
                 'isDeleted' in post && post.isDeleted &&
                 <div style={{...styles.label, ...styles.labelDeleted}}>
                     <i className="fa fa-trash" aria-hidden="true"/> &nbsp; Post has been deleted from forum topic.
-                    Showing post as at submission.
+                    Showing post last saved.
                 </div>
             }
         </div>

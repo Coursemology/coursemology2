@@ -10,15 +10,11 @@ class Course::Assessment::Answer::ForumPost < ApplicationRecord
 
   attr_accessor :forum_id
   attr_accessor :forum_name
-  attr_accessor :is_forum_deleted
-
   attr_accessor :topic_title
   attr_accessor :is_topic_deleted
-
   attr_accessor :post_creator
   attr_accessor :is_post_updated
   attr_accessor :is_post_deleted
-
   attr_accessor :parent_creator
   attr_accessor :is_parent_updated
   attr_accessor :is_parent_deleted
