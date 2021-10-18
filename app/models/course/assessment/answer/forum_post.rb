@@ -8,14 +8,6 @@ class Course::Assessment::Answer::ForumPost < ApplicationRecord
 
   belongs_to :answer, class_name: Course::Assessment::Answer::ForumPostResponse.name
 
-  attr_accessor :forum_id
-  attr_accessor :forum_name
-  attr_accessor :topic_title
-  attr_accessor :is_topic_deleted
-  attr_accessor :post_creator
-  attr_accessor :is_post_updated
-  attr_accessor :is_post_deleted
-  attr_accessor :parent_creator
-  attr_accessor :is_parent_updated
-  attr_accessor :is_parent_deleted
+  attr_accessor :forum_id, :forum_name, :topic_title, :is_topic_deleted, :post_creator, :is_post_updated,
+                :is_post_deleted, :parent_creator, :is_parent_updated, :is_parent_deleted
 end
