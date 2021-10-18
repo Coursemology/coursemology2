@@ -53,16 +53,15 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         post :create, params: { course_id: course, assessment_id: assessment }
       end
 
-      context 'when create fails' do
+      context 'when an there is already an existing submission' do
         before do
           controller.instance_variable_set(:@submission, immutable_submission)
           subject
         end
 
-        it { is_expected.to redirect_to(course_assessments_path(course)) }
-        it 'sets the proper flash message' do
-          expect(flash[:danger]).to eq(I18n.t('course.assessment.submission.submissions.create.'\
-                                              'failure', error: ''))
+        it do
+          is_expected.
+            to redirect_to(edit_course_assessment_submission_path(course, assessment, immutable_submission))
         end
       end
     end
