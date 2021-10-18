@@ -63,7 +63,9 @@ class Course::Achievement < ApplicationRecord
   end
 
   def initialize_duplicate(duplicator, other)
-    badge.duplicate_from(self, other.badge) if other.badge_url
+    if other.badge_url
+      self.badge = nil unless badge.duplicate_from(other.badge)
+    end
     self.course = duplicator.options[:destination_course]
     self.published = false if duplicator.options[:unpublish_all]
     duplicate_conditions(duplicator, other)

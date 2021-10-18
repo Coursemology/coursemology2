@@ -42,15 +42,17 @@ class ImageUploader < CarrierWave::Uploader::Base
     %w[jpg jpeg gif png]
   end
 
-  def duplicate_from(duplicated_achievement, other_uploader)
+  # Duplicate the image from the other uploader. Handles
+  # both file storage and URL storage.
+  #
+  # @return [Boolean] Boolean on whether the duplication is successful.
+  def duplicate_from(other_uploader)
     case other_uploader.send(:storage).class.name
     when 'CarrierWave::Storage::File'
       begin
         cache!(File.new(other_uploader.file.path))
       rescue Errno::ENOENT
-        # Remove badge url for duplicated achievement when original url
-        # is not working
-        duplicated_achievement.badge = nil
+        return false
       end
     when 'CarrierWave::Storage::Fog', 'CarrierWave::Storage::AWS'
       begin
@@ -59,6 +61,7 @@ class ImageUploader < CarrierWave::Uploader::Base
         download!(other_uploader.medium.url)
       end
     end
+    true
   end
 
   # Override the filename of the uploaded files:
