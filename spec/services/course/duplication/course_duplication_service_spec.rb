@@ -337,6 +337,10 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
         # Create 2 achievements. The first depends on the second achievement, a level and a survey.
         let!(:achievements) { create_list(:course_achievement, 2, course: course) }
         let!(:achievement_with_badge) { create(:course_achievement, :with_badge, course: course) }
+        let!(:achievement_with_missing_badge) do
+          create(:course_achievement, :with_missing_badge, course: course,
+                                                           title: 'Missing badge!')
+        end
         let!(:achievement_condition) do
           create(:course_condition_achievement, course: course, achievement: achievements[1],
                                                 conditional: achievements[0])
@@ -380,6 +384,11 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
           badge_file = badge_folder.join('minion.png')
           expect(File.directory?(badge_folder)).to be true
           expect(File.exist?(badge_file)).to be true
+        end
+
+        it 'clears badge when duplicating achievement with missing badge' do
+          new_achievement_with_missing_badge = new_course.achievements.find { |a| a.title == 'Missing badge!' }
+          expect(new_achievement_with_missing_badge.badge_url).to be_nil
         end
 
         it 'duplicates achievement conditions' do
