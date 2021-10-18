@@ -63,14 +63,16 @@ class Course::Achievement < ApplicationRecord
   end
 
   def initialize_duplicate(duplicator, other)
-    if other.badge_url
-      self.badge = nil unless badge.duplicate_from(other.badge)
-    end
+    duplicate_badge(other)
     self.course = duplicator.options[:destination_course]
     self.published = false if duplicator.options[:unpublish_all]
     duplicate_conditions(duplicator, other)
     achievement_conditions << other.achievement_conditions.
                               select { |condition| duplicator.duplicated?(condition.conditional) }.
                               map { |condition| duplicator.duplicate(condition) }
+  end
+
+  def duplicate_badge(other)
+    self.badge = nil if other.badge_url && !badge.duplicate_from(other.badge)
   end
 end
