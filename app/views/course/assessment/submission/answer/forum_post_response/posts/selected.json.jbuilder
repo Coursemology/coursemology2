@@ -1,2 +1,2 @@
 # frozen_string_literal: true
-json.partial! 'postpacks', selected_posts: @answer.get_postpacks
+json.partial! 'post_packs', selected_posts: @answer.compute_post_packs

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-json.forumTopicPostpacks @forum_topic_posts do |forum, topic_posts|
+json.forumTopicPostPacks @forum_topic_posts do |forum, topic_posts|
   json.course do
     json.id @course_id
   end
@@ -9,13 +9,13 @@ json.forumTopicPostpacks @forum_topic_posts do |forum, topic_posts|
     json.name forum.name
   end
 
-  json.topicPostpacks topic_posts do |topic, posts|
+  json.topicPostPacks topic_posts do |topic, posts|
     json.topic do
       json.id topic.id
       json.title topic.title
     end
 
-    json.postpacks posts do |post|
+    json.postPacks posts do |post|
       json.corePost do
         json.id post.id
         json.text post.text

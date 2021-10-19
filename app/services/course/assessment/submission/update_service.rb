@@ -114,7 +114,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
       result[:files_attributes] = [:id, :_destroy, :filename, :content] # Programming answer
       # Forum Post Response answer
       forum_post_attributes = [:id, :text, :creatorId, :updatedAt]
-      result[:selected_postpacks] = [corePost: forum_post_attributes, parentPost: forum_post_attributes, topic: [:id]]
+      result[:selected_post_packs] = [corePost: forum_post_attributes, parentPost: forum_post_attributes, topic: [:id]]
     end
     scalar_params.push(array_params)
   end
