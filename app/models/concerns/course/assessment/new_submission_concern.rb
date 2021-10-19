@@ -2,7 +2,7 @@
 module Course::Assessment::NewSubmissionConcern
   extend ActiveSupport::Concern
 
-  def create_new_submission(new_submission)
+  def create_new_submission(new_submission, current_user)
     success = false
     if randomization == 'prepared'
       Course::Assessment::Submission.transaction do

@@ -48,7 +48,7 @@ class Course::Assessment::Submission::SubmissionsController < \
     end
 
     @submission.session_id = authentication_service.generate_authentication_token
-    success = @assessment.create_new_submission(@submission)
+    success = @assessment.create_new_submission(@submission, current_user)
 
     if success
       authentication_service.save_token_to_session(@submission.session_id)

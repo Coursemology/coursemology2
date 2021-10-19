@@ -48,10 +48,12 @@ class Course::Material::MaterialsController < Course::Material::Controller
     unless existing_submission
       @submission = @assessment.submissions.new(course_user: current_course_user)
       @submission.session_id = authentication_service.generate_authentication_token
-      @assessment.create_new_submission(@submission)
+      success = @assessment.create_new_submission(@submission, current_user)
 
-      authentication_service.save_token_to_session(@submission.session_id)
-      log_service.log_submission_access(request) if @assessment.session_password_protected?
+      if success
+        authentication_service.save_token_to_session(@submission.session_id)
+        log_service.log_submission_access(request) if @assessment.session_password_protected?
+      end
     end
     success
   end

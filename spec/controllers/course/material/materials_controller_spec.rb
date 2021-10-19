@@ -24,7 +24,7 @@ RSpec.describe Course::Material::MaterialsController, type: :controller do
       it { is_expected.to redirect_to(material.attachment.url) }
 
       context 'when a material is uploaded for an assessment' do
-        let!(:assessment) { create(:assessment, :with_attachments, course: course) }
+        let!(:assessment) { create(:assessment, :with_attachments, course: course, session_password: 'super_secret') }
         let!(:folder_assessment) { assessment.folder }
         let!(:material_assessment) { folder_assessment.materials.first }
 
