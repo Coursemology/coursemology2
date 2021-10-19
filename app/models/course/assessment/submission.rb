@@ -4,6 +4,7 @@ class Course::Assessment::Submission < ApplicationRecord
   include Course::Assessment::Submission::WorkflowEventConcern
   include Course::Assessment::Submission::TodoConcern
   include Course::Assessment::Submission::NotificationConcern
+  include Course::Assessment::Submission::AnswersConcern
 
   acts_as_experience_points_record
 
