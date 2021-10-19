@@ -229,6 +229,6 @@ export const forumTopicPostPackShape = PropTypes.shape({
   forum: forumOverviewShape,
   topicPostPacks: PropTypes.shape({
     topic: topicOverviewShape,
-    postpacks: postPackShape,
+    postPacks: postPackShape,
   }),
-})
+});

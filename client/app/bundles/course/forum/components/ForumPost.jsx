@@ -1,127 +1,109 @@
 import React from 'react';
-import {
-    blueGrey50,
-} from 'material-ui/styles/colors';
-import {Card, CardHeader, CardText} from 'material-ui/Card';
+import { blueGrey50 } from 'material-ui/styles/colors';
+import { Card, CardHeader, CardText } from 'material-ui/Card';
 import Divider from 'material-ui/Divider';
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
 const styles = {
-    selectedForAsmSub: {
-        boxShadow: 0,
-        backgroundColor: blueGrey50,
-        border: '1px solid #B0BEC5',
-    },
-    replyPost: {
-        boxShadow: 0,
-        border: '1px dashed #ddd',
-    },
-    defaultCard: {
-        boxShadow: 0,
-        border: '1px solid #B0BEC5',
-    },
-}
+  forSubmission: {
+    boxShadow: 0,
+    backgroundColor: blueGrey50,
+    border: '1px solid #B0BEC5',
+  },
+  replyToAnotherPost: {
+    boxShadow: 0,
+    border: '1px dashed #ddd',
+  },
+  default: {
+    boxShadow: 0,
+    border: '1px solid #B0BEC5',
+  },
+  expandButton: { color: '#03A9F4' },
+};
 
 const maxHeight = 160;
 
 export default class ForumPost extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isLengthy: false,
-            textHeight: 'auto',
-            overflowState: 'hidden',
-            isClipped: false,
-        };
+  constructor(props) {
+    super(props);
+    this.state = {
+      isExpandable: false,
+      isExpanded: true,
+    };
+  }
+
+  componentDidMount() {
+    const renderedTextHeight = this.divElement.clientHeight;
+    this.setState({
+      isExpandable: this.props.isExpandable && renderedTextHeight > maxHeight,
+      isExpanded: !this.props.isExpandable,
+    });
+  }
+
+  renderStyle() {
+    if (this.props.isSelectedForSubmission) {
+      return styles.forSubmission;
     }
 
-    componentDidMount() {
-        const renderedTextHeight = this.divElement.clientHeight;
-        if (this.props.isExpandable && renderedTextHeight > maxHeight) {
-            this.setState({
-                isLengthy: true,
-                textHeight: maxHeight,
-                isClipped: true,
-            });
-        }
+    if (this.props.isReplyToParentPost) {
+      return styles.replyToAnotherPost;
     }
 
-    handleToggleVisibility() {
-        const clippedState = {
-            textHeight: maxHeight,
-            isClipped: true,
-        }
-        const expandedState = {
-            textHeight: 'auto',
-            isClipped: false,
-        }
+    return styles.default;
+  }
 
-        if (this.state.isClipped) {
-            this.setState(expandedState);
-        } else {
-            this.setState(clippedState);
-        }
-    }
-
-    renderStyle() {
-        if (this.props.asmSubStatus) {
-            return styles.selectedForAsmSub
-        }
-
-        if (this.props.replyPost) {
-            return styles.replyPost
-        }
-
-        return styles.defaultCard
-    }
-
-    render() {
-        return (
-            <div>
-                <Card style={this.renderStyle()}>
-                    <CardHeader
-                        title={this.props.post.userName}
-                        subtitle={this.props.post.updatedAt}
-                        avatar={this.props.post.avatar}
-                    />
-                    <Divider/>
-                    <CardText>
-                        <div dangerouslySetInnerHTML={{__html: this.props.post.text}}
-                             ref={(divElement) => {
-                                 this.divElement = divElement
-                             }}
-                             style={{
-                                 height: this.state.textHeight,
-                                 overflow: this.state.overflowState,
-                             }}
-                        />
-                        {
-                            this.state.isLengthy &&
-                            <div style={{paddingTop: 8}}>
-                                {this.state.isClipped && <div style={{height: 10}}/>}
-                                <font onClick={() => this.handleToggleVisibility()} style={{
-                                    cursor: 'pointer',
-                                    color: '#03A9F4',
-                                }}>
-                                    {this.state.isClipped ? "SHOW MORE" : "SHOW LESS"}
-                                </font>
-                            </div>
-                        }
-                    </CardText>
-                </Card>
-            </div>
-        );
-    }
+  render() {
+    return (
+      <div>
+        <Card style={this.renderStyle()}>
+          <CardHeader
+            title={this.props.post.userName}
+            subtitle={this.props.post.updatedAt}
+            avatar={this.props.post.avatar}
+          />
+          <Divider />
+          <CardText>
+            <div
+              dangerouslySetInnerHTML={{ __html: this.props.post.text }}
+              ref={(divElement) => {
+                this.divElement = divElement;
+              }}
+              style={{
+                height: this.state.isExpanded ? 'auto' : maxHeight,
+                overflow: 'hidden',
+              }}
+            />
+            {this.state.isExpandable && (
+              <div style={{ paddingTop: 8 }}>
+                {!this.state.isExpanded && <div style={{ height: 10 }} />}
+                <button
+                  type="button"
+                  onClick={() =>
+                    this.setState((oldState) => ({
+                      isExpanded: !oldState.isExpanded,
+                    }))
+                  }
+                  style={styles.expandButton}
+                >
+                  {this.state.isExpanded ? 'SHOW LESS' : 'SHOW MORE'}
+                </button>
+              </div>
+            )}
+          </CardText>
+        </Card>
+      </div>
+    );
+  }
 }
 
 ForumPost.propTypes = {
-    asmSubStatus: PropTypes.bool,
-    post: PropTypes.shape({
-        text: PropTypes.string,
-        userName: PropTypes.string,
-        avatar: PropTypes.string,
-        updatedAt: PropTypes.string,
-    }),
-    replyPost: PropTypes.bool,
-    isExpandable: PropTypes.bool,
+  isSelectedForSubmission: PropTypes.bool,
+  post: PropTypes.shape({
+    text: PropTypes.string,
+    userName: PropTypes.string,
+    avatar: PropTypes.string,
+    updatedAt: PropTypes.string,
+  }),
+  isReplyToParentPost: PropTypes.bool,
+  isExpandable: PropTypes.bool,
 };
