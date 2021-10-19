@@ -69,10 +69,10 @@ export default class ForumPostResponseField extends React.Component {
     }
 
     const postPacks = this.props.input.value;
-    const selectedPostpacks = postPacks.filter(
+    const selectedPostPacks = postPacks.filter(
       (p) => p.corePost.id !== postPack.corePost.id,
     );
-    this.props.input.onChange(selectedPostpacks);
+    this.props.input.onChange(selectedPostPacks);
   }
 
   renderSelectedPostPacks(postPacks) {
@@ -122,7 +122,7 @@ export default class ForumPostResponseField extends React.Component {
         {this.state.hasErrorFetchingSelectedPostPacks ? (
           <Error message="Oops! Unable to retrieve your selected posts. Please try refreshing this page." />
         ) : (
-          this.renderSelectedPostpacks(postPacks)
+          this.renderSelectedPostPacks(postPacks)
         )}
         <br />
 
