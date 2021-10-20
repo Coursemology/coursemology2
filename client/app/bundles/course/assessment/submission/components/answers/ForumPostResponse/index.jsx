@@ -13,10 +13,9 @@ function renderTextField(readOnly, answerId) {
   return readOnly ? (
     <Field
       name={`${answerId}[answer_text]`}
-      component={(props) => {
-        console.log(props.input.value);
-        return <div dangerouslySetInnerHTML={{ __html: props.input.value }} />;
-      }}
+      component={(props) => (
+        <div dangerouslySetInnerHTML={{ __html: props.input.value }} />
+      )}
     />
   ) : (
     <Field
