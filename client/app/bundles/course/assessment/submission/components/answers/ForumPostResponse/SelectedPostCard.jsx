@@ -92,10 +92,6 @@ export default class SelectedPostCard extends React.Component {
     const { forum, topic } = postPack;
     const courseId = getCourseId();
 
-    if (topic.isDeleted) {
-      return <>Post made under a topic which was subsequently deleted.</>;
-    }
-
     return (
       <div style={styles.labelLeft}>
         <i
@@ -104,14 +100,18 @@ export default class SelectedPostCard extends React.Component {
           }
           style={{ width: 20 }}
         />
-        <span>
-          Post made under{' '}
-          {this.renderLink(
-            getForumTopicURL(courseId, forum.id, topic.id),
-            topic.title,
-          )}{' '}
-          in {this.renderLink(getForumURL(courseId, forum.id), forum.name)}
-        </span>
+        {topic.isDeleted ? (
+          <span>Post made under a topic which was subsequently deleted.</span>
+        ) : (
+          <span>
+            Post made under{' '}
+            {this.renderLink(
+              getForumTopicURL(courseId, forum.id, topic.id),
+              topic.title,
+            )}{' '}
+            in {this.renderLink(getForumURL(courseId, forum.id), forum.name)}
+          </span>
+        )}
       </div>
     );
   }
