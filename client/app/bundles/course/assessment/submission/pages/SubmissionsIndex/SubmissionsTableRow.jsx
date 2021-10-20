@@ -321,6 +321,7 @@ export default class SubmissionsTableRow extends React.Component {
 
   renderUser(submission) {
     const { courseId, assessment } = this.props;
+    const { unsubmitConfirmation, deleteConfirmation } = this.state;
     const tableCenterCellStyle = {
       ...styles.tableCell,
       ...styles.tableCenterCell,
@@ -359,8 +360,8 @@ export default class SubmissionsTableRow extends React.Component {
           {this.renderSubmissionLogsLink(submission)}
           {this.renderUnsubmitButton(submission)}
           {this.renderDeleteButton(submission)}
-          {this.renderUnsubmitDialog(submission)}
-          {this.renderDeleteDialog(submission)}
+          {unsubmitConfirmation && this.renderUnsubmitDialog(submission)}
+          {deleteConfirmation && this.renderDeleteDialog(submission)}
         </TableRowColumn>
       </TableRow>
     );
