@@ -90,20 +90,33 @@ export default class ForumPostSelect extends React.Component {
     ));
   }
 
+  renderInstruction(postPacks, maxPosts) {
+    if (this.props.readOnly) {
+      return (
+        <div style={styles.instruction}>
+          {postPacks.length} posts were submitted.
+        </div>
+      );
+    }
+    return (
+      <div style={styles.instruction}>
+        Select {maxPosts > 1 && 'up to '}
+        <strong>
+          {maxPosts} forum post{maxPosts !== 1 ? 's' : ''}
+        </strong>
+        . You have selected {postPacks.length} post
+        {postPacks.length !== 1 ? 's' : ''}.
+      </div>
+    );
+  }
+
   render() {
     const postPacks = this.props.input.value ?? [];
     const maxPosts = this.props.question.maxPosts;
 
     return (
       <div style={styles.root}>
-        <div style={styles.instruction}>
-          Select {maxPosts > 1 && 'up to '}
-          <strong>
-            {maxPosts} forum post{maxPosts !== 1 ? 's' : ''}
-          </strong>
-          . You have selected {postPacks.length} post
-          {postPacks.length !== 1 ? 's' : ''}.
-        </div>
+        {this.renderInstruction(postPacks, maxPosts)}
         {!this.props.readOnly && (
           <>
             <RaisedButton

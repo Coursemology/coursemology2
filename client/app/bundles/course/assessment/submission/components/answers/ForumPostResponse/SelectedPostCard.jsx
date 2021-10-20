@@ -35,6 +35,9 @@ const styles = {
     padding: 0,
     fontSize: 16,
   },
+  parentPost: {
+    margin: '0px 16px 16px 16px',
+  },
 };
 
 export default class SelectedPostCard extends React.Component {
@@ -126,7 +129,12 @@ export default class SelectedPostCard extends React.Component {
           <>
             <Labels post={postPack.corePost} />
             <ForumPost post={postPack.corePost} style={{ border: 0 }} />
-            {postPack.parentPost && <ParentPost post={postPack.parentPost} />}
+            {postPack.parentPost && (
+              <ParentPost
+                post={postPack.parentPost}
+                style={styles.parentPost}
+              />
+            )}
           </>
         )}
       </div>

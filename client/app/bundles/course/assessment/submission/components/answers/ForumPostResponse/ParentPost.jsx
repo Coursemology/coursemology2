@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import ForumPost from 'course/forum/components/ForumPost';
 import { forumPostShape } from 'course/assessment/submission/propTypes';
@@ -19,9 +20,9 @@ const styles = {
   },
 };
 
-function ParentPost({ post }) {
+function ParentPost({ post, style = {} }) {
   return (
-    <div style={styles.parentPost}>
+    <div style={{ ...styles.parentPost, ...style }}>
       <p style={styles.subtext}>Post made in response to:</p>
       <Labels post={post} />
       <ForumPost post={post} isExpandable style={styles.post} />
@@ -31,6 +32,7 @@ function ParentPost({ post }) {
 
 ParentPost.propTypes = {
   post: forumPostShape,
+  style: PropTypes.object,
 };
 
 export default ParentPost;
