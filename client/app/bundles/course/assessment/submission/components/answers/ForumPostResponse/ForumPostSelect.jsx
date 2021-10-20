@@ -4,10 +4,10 @@ import { RaisedButton } from 'material-ui';
 import { grey700 } from 'material-ui/styles/colors';
 
 import CourseAPI from 'api/course';
-import SelectedPost from 'course/assessment/submission/components/answers/ForumPostResponse/SelectedPost';
 import { questionShape } from 'course/assessment/submission/propTypes';
 
 import ForumPostSelectDialog from './ForumPostSelectDialog';
+import SelectedPostCard from './SelectedPostCard';
 
 const styles = {
   root: {
@@ -79,9 +79,9 @@ export default class ForumPostSelect extends React.Component {
   }
 
   renderSelectedPostPacks(postPacks) {
-    return postPacks?.map((postPack) => (
+    return postPacks.map((postPack) => (
       <div key={`selected-post-pack-${postPack.corePost.id}`}>
-        <SelectedPost
+        <SelectedPostCard
           postPack={postPack}
           readOnly={this.props.readOnly}
           onRemovePostPack={() => this.handleRemovePostPack(postPack)}
@@ -118,6 +118,7 @@ export default class ForumPostSelect extends React.Component {
               primary
               onClick={() => this.setState({ isDialogVisible: true })}
               disabled={this.state.hasErrorFetchingPosts}
+              style={{ marginBottom: 16 }}
             />
             <ForumPostSelectDialog
               forumTopicPostPacks={this.state.forumTopicPostPacks}

@@ -55,6 +55,17 @@ export default class ForumPostSelectDialog extends React.Component {
     };
   }
 
+  // This helps to handle deletions via SelectedPostCard, i.e. not via this dialog.
+  componentDidUpdate(prevProps) {
+    if (
+      prevProps.selectedPostPacks.length !== this.props.selectedPostPacks.length
+    ) {
+      // Safe and suggested by React documentation
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ selectedPostPacks: this.props.selectedPostPacks });
+    }
+  }
+
   onSelectPostPack(postPack, isSelected) {
     const postPacks = this.state.selectedPostPacks;
     if (!isSelected) {
@@ -100,16 +111,13 @@ export default class ForumPostSelectDialog extends React.Component {
     return (
       <div style={styles.dialogTitle}>
         <h2 style={styles.dialogTitleText}>
-          Select {maxPosts > 1 && 'up to'}{' '}
-          <b>
-            {maxPosts} forum {maxPosts === 1 ? 'post' : 'posts'}
-          </b>
-          . You have selected {numPostsSelected}{' '}
-          {numPostsSelected === 1 ? 'post' : 'posts'}.
+          <strong>
+            You have selected {numPostsSelected}/{maxPosts}{' '}
+            {maxPosts === 1 ? 'post' : 'posts'}.
+          </strong>
         </h2>
         <p style={styles.dialogSubtitleText}>
-          Click on the forum name, then the topic title to view the post(s) made
-          by you.
+          Click on the post to include it for submission.
         </p>
       </div>
     );
@@ -151,6 +159,7 @@ export default class ForumPostSelectDialog extends React.Component {
   }
 
   render() {
+    console.log(this.props);
     const numPostsSelected = this.state.selectedPostPacks.length;
     const hasNoChanges =
       JSON.stringify(

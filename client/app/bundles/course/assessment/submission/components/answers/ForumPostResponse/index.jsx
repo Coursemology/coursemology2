@@ -13,9 +13,10 @@ function renderTextField(readOnly, answerId) {
   return readOnly ? (
     <Field
       name={`${answerId}[answer_text]`}
-      component={(props) => (
-        <div dangerouslySetInnerHTML={{ __html: props.input.value }} />
-      )}
+      component={(props) => {
+        console.log(props.input.value);
+        return <div dangerouslySetInnerHTML={{ __html: props.input.value }} />;
+      }}
     />
   ) : (
     <Field
@@ -40,7 +41,7 @@ class ForumPostResponse extends Component {
     return (
       <>
         <Field
-          name={`${answerId}[selectedPostPacks]`}
+          name={`${answerId}[selected_post_packs]`}
           component={ForumPostSelect}
           question={question}
           readOnly={readOnly}

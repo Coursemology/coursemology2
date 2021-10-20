@@ -34,6 +34,16 @@ const styles = {
  * that provides "selectable" functionalities.
  */
 export default class ForumPostOption extends React.Component {
+  handleClick(event, postPack) {
+    if (
+      event.target.innerText === 'SHOW MORE' ||
+      event.target.innerText === 'SHOW LESS'
+    ) {
+      return;
+    }
+    this.props.onSelectPostPack(postPack, this.props.isSelected);
+  }
+
   render() {
     const { postPack } = this.props;
     const postStyles = {
@@ -44,8 +54,9 @@ export default class ForumPostOption extends React.Component {
     return (
       <div style={this.props.style}>
         <div
-          onClick={() => {
-            this.props.onSelectPostPack(postPack, this.props.isSelected);
+          onClick={(event) => {
+            event.persist();
+            this.handleClick(event, postPack);
           }}
         >
           <ForumPost post={postPack.corePost} isExpandable style={postStyles} />

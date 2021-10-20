@@ -1,6 +1,8 @@
 import React from 'react';
+
 import ForumPost from 'course/forum/components/ForumPost';
 import { forumPostShape } from 'course/assessment/submission/propTypes';
+
 import Labels from './Labels';
 
 const styles = {

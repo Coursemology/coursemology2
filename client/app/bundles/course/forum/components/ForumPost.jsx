@@ -1,5 +1,5 @@
 import React from 'react';
-import { Divider, Card, CardHeader, CardText } from 'material-ui';
+import { Divider, Card, CardHeader, CardText, FlatButton } from 'material-ui';
 import PropTypes from 'prop-types';
 
 const styles = {
@@ -7,10 +7,10 @@ const styles = {
     boxShadow: 'none',
     border: '1px solid #B0BEC5',
   },
-  expandButton: { color: '#03A9F4' },
+  expandButton: { marginTop: 8 },
 };
 
-const maxHeight = 160;
+const maxHeight = 60;
 
 export default class ForumPost extends React.Component {
   constructor(props) {
@@ -53,20 +53,18 @@ export default class ForumPost extends React.Component {
             }}
           />
           {this.state.isExpandable && (
-            <div style={{ paddingTop: 8 }}>
-              {!this.state.isExpanded && <div style={{ height: 10 }} />}
-              <button
-                type="button"
-                onClick={() =>
-                  this.setState((oldState) => ({
-                    isExpanded: !oldState.isExpanded,
-                  }))
-                }
-                style={styles.expandButton}
-              >
-                {this.state.isExpanded ? 'SHOW LESS' : 'SHOW MORE'}
-              </button>
-            </div>
+            <FlatButton
+              label={this.state.isExpanded ? 'SHOW LESS' : 'SHOW MORE'}
+              onClick={(event) => {
+                event.persist();
+                this.setState((oldState) => ({
+                  isExpanded: !oldState.isExpanded,
+                }));
+              }}
+              style={styles.expandButton}
+              primary
+              className="forum-post-expand-button"
+            />
           )}
         </CardText>
       </Card>

@@ -9,12 +9,12 @@ class Course::Assessment::Answer::ForumPostResponse < ApplicationRecord
     acting_as.assign_params(params)
     self.answer_text = params[:answer_text] if params[:answer_text]
 
-    return unless params[:selected_post_packs]
+    return unless params[:post_packs]
 
     destroy_previous_selection
 
-    params[:selected_post_packs].each do |selected_post_pack|
-      create_post_pack selected_post_pack
+    params[:post_packs].each do |post_pack|
+      create_post_pack post_pack
     end
   end
 
@@ -33,21 +33,21 @@ class Course::Assessment::Answer::ForumPostResponse < ApplicationRecord
     post_packs.destroy_all
   end
 
-  def create_post_pack(selected_post_pack)
+  def create_post_pack(post_pack_info)
     post_pack = post_packs.new
 
-    post_pack.forum_topic_id = selected_post_pack[:topic][:id]
+    post_pack.forum_topic_id = post_pack_info[:topic][:id]
 
-    post_pack.post_id = selected_post_pack[:corePost][:id]
-    post_pack.post_text = selected_post_pack[:corePost][:text]
-    post_pack.post_creator_id = selected_post_pack[:corePost][:creatorId]
-    post_pack.post_updated_at = selected_post_pack[:corePost][:updatedAt]
+    post_pack.post_id = post_pack_info[:corePost][:id]
+    post_pack.post_text = post_pack_info[:corePost][:text]
+    post_pack.post_creator_id = post_pack_info[:corePost][:creatorId]
+    post_pack.post_updated_at = post_pack_info[:corePost][:updatedAt]
 
-    if selected_post_pack[:parentPost]
-      post_pack.parent_id = selected_post_pack[:parentPost][:id]
-      post_pack.parent_text = selected_post_pack[:parentPost][:text]
-      post_pack.parent_creator_id = selected_post_pack[:parentPost][:creatorId]
-      post_pack.parent_updated_at = selected_post_pack[:parentPost][:updatedAt]
+    if post_pack_info[:parentPost]
+      post_pack.parent_id = post_pack_info[:parentPost][:id]
+      post_pack.parent_text = post_pack_info[:parentPost][:text]
+      post_pack.parent_creator_id = post_pack_info[:parentPost][:creatorId]
+      post_pack.parent_updated_at = post_pack_info[:parentPost][:updatedAt]
     end
 
     post_pack.save!

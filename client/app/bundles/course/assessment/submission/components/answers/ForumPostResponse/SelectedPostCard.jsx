@@ -1,27 +1,43 @@
 import React from 'react';
-
-import { getForumTopicURL, getForumURL } from 'lib/helpers/url-builders';
-import Labels from 'course/assessment/submission/components/answers/ForumPostResponse/Labels';
-import ForumPost from 'course/forum/components/ForumPost';
-import ParentPost from 'course/assessment/submission/components/answers/ForumPostResponse/ParentPost';
-import { getCourseId } from 'lib/helpers/url-helpers';
-import { postPackShape } from 'course/assessment/submission/propTypes';
 import PropTypes from 'prop-types';
 
+import { getForumTopicURL, getForumURL } from 'lib/helpers/url-builders';
+import ForumPost from 'course/forum/components/ForumPost';
+import { getCourseId } from 'lib/helpers/url-helpers';
+import { postPackShape } from 'course/assessment/submission/propTypes';
+
+import { green50, red700 } from 'material-ui/styles/colors';
+import ParentPost from './ParentPost';
+import Labels from './Labels';
+
 const styles = {
-  label: {
-    border: '1px solid #B0BEC5',
-    padding: '5px 16px',
-    backgroundColor: '#F9FBE7',
-    cursor: 'pointer',
+  card: {
+    marginBottom: 12,
+    boxShadow: 'rgb(0 0 0 / 12%) 0px 1px 6px, rgb(0 0 0 / 12%) 0px 1px 4px',
+    borderRadius: 2,
+    overflow: 'hidden',
   },
-  trashIcon: {
-    color: '#C2185B',
+  label: {
+    padding: '12px 16px',
+    backgroundColor: green50,
     cursor: 'pointer',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  labelLeft: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  trashButton: {
+    color: red700,
+    border: 0,
+    padding: 0,
+    fontSize: 16,
   },
 };
 
-export default class SelectedPost extends React.Component {
+export default class SelectedPostCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -36,18 +52,26 @@ export default class SelectedPost extends React.Component {
   }
 
   renderTrashIcon() {
-    return !this.props.readOnly ? (
-      <div className="pull-right">
-        <i
-          className="fa fa-trash"
-          style={styles.trashIcon}
-          onClick={() => this.props.onRemovePostPack()}
-        />
-      </div>
-    ) : null;
+    if (this.props.readOnly) {
+      return null;
+    }
+    return (
+      <button
+        className="pull-right"
+        style={styles.trashButton}
+        onClick={() => this.props.onRemovePostPack()}
+        type="button"
+      >
+        <i className="fa fa-trash" />
+      </button>
+    );
   }
 
   renderLink(url, name) {
+    let renderedName = name;
+    if (renderedName.length > 30) {
+      renderedName = `${renderedName.slice(0, 30)}...`;
+    }
     return (
       <a
         href={url}
@@ -55,7 +79,7 @@ export default class SelectedPost extends React.Component {
         rel="noreferrer"
         onClick={() => this.handleTogglePostView()}
       >
-        {name} <i className="fa fa-external-link" />
+        {renderedName} <i className="fa fa-external-link" />
       </a>
     );
   }
@@ -70,7 +94,7 @@ export default class SelectedPost extends React.Component {
     }
 
     return (
-      <>
+      <div style={styles.labelLeft}>
         <i
           className={
             this.state.isExpanded ? 'fa fa-angle-down' : 'fa fa-angle-right'
@@ -85,7 +109,7 @@ export default class SelectedPost extends React.Component {
           )}{' '}
           in {this.renderLink(getForumURL(courseId, forum.id), forum.name)}
         </span>
-      </>
+      </div>
     );
   }
 
@@ -93,7 +117,7 @@ export default class SelectedPost extends React.Component {
     const { postPack } = this.props;
 
     return (
-      <>
+      <div style={styles.card}>
         <div style={styles.label} onClick={() => this.handleTogglePostView()}>
           {this.renderLabel()}
           {this.renderTrashIcon()}
@@ -101,17 +125,16 @@ export default class SelectedPost extends React.Component {
         {this.state.isExpanded && (
           <>
             <Labels post={postPack.corePost} />
-            <ForumPost post={postPack.corePost} />
+            <ForumPost post={postPack.corePost} style={{ border: 0 }} />
             {postPack.parentPost && <ParentPost post={postPack.parentPost} />}
           </>
         )}
-        <br />
-      </>
+      </div>
     );
   }
 }
 
-SelectedPost.propTypes = {
+SelectedPostCard.propTypes = {
   postPack: postPackShape,
   readOnly: PropTypes.bool,
   onRemovePostPack: PropTypes.func,

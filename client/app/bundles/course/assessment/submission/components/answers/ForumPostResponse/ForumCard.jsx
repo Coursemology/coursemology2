@@ -9,7 +9,7 @@ import {
   CardHeader,
   Divider,
 } from 'material-ui';
-import { cyan100 } from 'material-ui/styles/colors';
+import { cyan50 } from 'material-ui/styles/colors';
 
 import {
   forumTopicPostPackShape,
@@ -23,7 +23,7 @@ import CardTitle from './CardTitle';
 const styles = {
   card: {},
   cardHeader: {
-    backgroundColor: cyan100,
+    backgroundColor: cyan50,
     padding: '8px 16px',
   },
   cardActions: {
