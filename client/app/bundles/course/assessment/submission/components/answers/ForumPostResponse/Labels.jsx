@@ -1,21 +1,21 @@
 import React from 'react';
+import { red100, orange100 } from 'material-ui/styles/colors';
 import PropTypes from 'prop-types';
 
 const styles = {
   label: {
-    border: '1px solid #B0BEC5',
     borderBottom: 0,
-    padding: '5px 16px',
+    padding: '8px 16px',
+    display: 'flex',
+    alignItems: 'center',
   },
   labelEdited: {
-    border: '1px solid #B0BEC5',
-    backgroundColor: '#FFCC80',
+    backgroundColor: orange100,
   },
   labelDeleted: {
-    border: '1px solid #B0BEC5',
-    backgroundColor: '#F48FB1',
+    backgroundColor: red100,
   },
-  labelWidth: {
+  iconWidth: {
     width: 20,
   },
 };
@@ -30,9 +30,12 @@ function Labels({ post }) {
           <i
             className="fa fa-refresh"
             aria-hidden="true"
-            style={styles.labelWidth}
+            style={styles.iconWidth}
           />
-          Post has been edited in the forum. Showing post last saved.
+          <div>
+            Post has been edited in the forum. Showing post saved at point of
+            submission.
+          </div>
         </div>
       )}
       {isPostDeleted && (
@@ -40,9 +43,12 @@ function Labels({ post }) {
           <i
             className="fa fa-trash"
             aria-hidden="true"
-            style={styles.labelWidth}
+            style={styles.iconWidth}
           />
-          Post has been deleted from forum topic. Showing post last saved.
+          <div>
+            Post has been deleted from forum topic. Showing post saved at point
+            of submission.
+          </div>
         </div>
       )}
     </>
