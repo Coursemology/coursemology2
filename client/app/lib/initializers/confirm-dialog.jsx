@@ -37,7 +37,7 @@ function loadCustomDialogue(element, successCallback) {
         onConfirmSecondaryCallback={() => successCallback(element, true)}
         message={element.attr('data-confirm')}
         confirmButtonText={element.attr('data-confirm_text')}
-        confirmButtonSecondaryText={element.attr('data-confirm_secondary_text')}
+        confirmSecondaryButtonText={element.attr('data-confirm_secondary_text')}
       />
     </ProviderWrapper>,
     mountNode,
