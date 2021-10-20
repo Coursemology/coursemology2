@@ -50,7 +50,7 @@ function Labels({ post }) {
 }
 
 Labels.propTypes = {
-  post: PropTypes.object,
+  post: PropTypes.object.isRequired,
 };
 
 export default Labels;

@@ -143,7 +143,7 @@ export default class SelectedPostCard extends React.Component {
 }
 
 SelectedPostCard.propTypes = {
-  postPack: postPackShape,
-  readOnly: PropTypes.bool,
-  onRemovePostPack: PropTypes.func,
+  postPack: postPackShape.isRequired,
+  readOnly: PropTypes.bool.isRequired,
+  onRemovePostPack: PropTypes.func.isRequired, // Even for read-only, which will simply do nothing
 };

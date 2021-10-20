@@ -21,7 +21,6 @@ import CardTitle from './CardTitle';
 import TopicCard from './TopicCard';
 
 const styles = {
-  card: {},
   cardHeader: {
     backgroundColor: cyan50,
     padding: '8px 16px',
@@ -71,7 +70,7 @@ export default class ForumCard extends React.Component {
       <Card
         expanded={this.state.isExpanded}
         onExpandChange={this.handleIsExpandedChange}
-        style={{ ...styles.card, ...this.props.style }}
+        style={this.props.style}
       >
         <CardHeader
           title={

@@ -159,7 +159,6 @@ export default class ForumPostSelectDialog extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     const numPostsSelected = this.state.selectedPostPacks.length;
     const hasNoChanges =
       JSON.stringify(

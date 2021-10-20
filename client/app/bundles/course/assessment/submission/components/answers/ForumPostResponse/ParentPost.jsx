@@ -31,7 +31,7 @@ function ParentPost({ post, style = {} }) {
 }
 
 ParentPost.propTypes = {
-  post: forumPostShape,
+  post: forumPostShape.isRequired,
   style: PropTypes.object,
 };
 

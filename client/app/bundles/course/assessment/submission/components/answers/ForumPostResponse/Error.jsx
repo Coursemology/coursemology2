@@ -26,5 +26,5 @@ export default function Error({ message }) {
 }
 
 Error.propTypes = {
-  message: PropTypes.string,
+  message: PropTypes.string.isRequired,
 };
