@@ -1,13 +1,13 @@
-import { Field } from 'redux-form';
 import React, { Component } from 'react';
+import { Field } from 'redux-form';
 import PropTypes from 'prop-types';
 
-import RichTextField from 'lib/components/redux-form/RichTextField';
 import { questionShape } from 'course/assessment/submission/propTypes';
 import NotificationBar from 'lib/components/NotificationBar';
+import RichTextField from 'lib/components/redux-form/RichTextField';
 
-import ForumPostSelect from './ForumPostSelect';
 import Error from './Error';
+import ForumPostSelect from './ForumPostSelect';
 
 function renderTextField(readOnly, answerId) {
   return readOnly ? (

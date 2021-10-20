@@ -1,14 +1,14 @@
 import React from 'react';
+import { green50, red700 } from 'material-ui/styles/colors';
 import PropTypes from 'prop-types';
 
-import { getForumTopicURL, getForumURL } from 'lib/helpers/url-builders';
-import ForumPost from 'course/forum/components/ForumPost';
-import { getCourseId } from 'lib/helpers/url-helpers';
 import { postPackShape } from 'course/assessment/submission/propTypes';
+import ForumPost from 'course/forum/components/ForumPost';
+import { getForumTopicURL, getForumURL } from 'lib/helpers/url-builders';
+import { getCourseId } from 'lib/helpers/url-helpers';
 
-import { green50, red700 } from 'material-ui/styles/colors';
-import ParentPost from './ParentPost';
 import Labels from './Labels';
+import ParentPost from './ParentPost';
 
 const styles = {
   card: {

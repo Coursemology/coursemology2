@@ -1,7 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { RaisedButton } from 'material-ui';
 import { grey700 } from 'material-ui/styles/colors';
+import PropTypes from 'prop-types';
 
 import CourseAPI from 'api/course';
 import { questionShape } from 'course/assessment/submission/propTypes';

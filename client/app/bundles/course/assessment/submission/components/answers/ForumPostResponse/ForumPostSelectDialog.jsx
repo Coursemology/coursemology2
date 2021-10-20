@@ -1,7 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Dialog, FlatButton } from 'material-ui';
 import { cyan500 } from 'material-ui/styles/colors';
+import PropTypes from 'prop-types';
 
 import {
   forumTopicPostPackShape,

@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import ForumPost from 'course/forum/components/ForumPost';
 import { forumPostShape } from 'course/assessment/submission/propTypes';
+import ForumPost from 'course/forum/components/ForumPost';
 
 import Labels from './Labels';
 

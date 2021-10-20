@@ -1,11 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {
   white,
   blueGrey200,
   green50,
   green300,
 } from 'material-ui/styles/colors';
+import PropTypes from 'prop-types';
 
 import { postPackShape } from 'course/assessment/submission/propTypes';
 import ForumPost from 'course/forum/components/ForumPost';

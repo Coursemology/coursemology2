@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {
   RaisedButton,
   FontIcon,
@@ -10,6 +9,7 @@ import {
   Divider,
 } from 'material-ui';
 import { cyan50 } from 'material-ui/styles/colors';
+import PropTypes from 'prop-types';
 
 import {
   forumTopicPostPackShape,
@@ -17,8 +17,8 @@ import {
 } from 'course/assessment/submission/propTypes';
 import { getForumURL } from 'lib/helpers/url-builders';
 
-import TopicCard from './TopicCard';
 import CardTitle from './CardTitle';
+import TopicCard from './TopicCard';
 
 const styles = {
   card: {},

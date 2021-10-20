@@ -1,5 +1,5 @@
-import { grey600 } from 'material-ui/styles/colors';
 import React from 'react';
+import { grey600 } from 'material-ui/styles/colors';
 import PropTypes from 'prop-types';
 
 const styles = {

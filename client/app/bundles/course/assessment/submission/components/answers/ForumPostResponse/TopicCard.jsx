@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {
   CardHeader,
   RaisedButton,
@@ -10,6 +9,7 @@ import {
   FontIcon,
 } from 'material-ui';
 import { indigo50 } from 'material-ui/styles/colors';
+import PropTypes from 'prop-types';
 
 import {
   topicOverviewShape,
@@ -17,8 +17,8 @@ import {
 } from 'course/assessment/submission/propTypes';
 import { getForumTopicURL } from 'lib/helpers/url-builders';
 
-import ForumPostOption from './ForumPostOption';
 import CardTitle from './CardTitle';
+import ForumPostOption from './ForumPostOption';
 
 const styles = {
   card: {},

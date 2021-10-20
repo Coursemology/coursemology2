@@ -1,7 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Card, CardHeader, CardText } from 'material-ui';
 import { red200, red900 } from 'material-ui/styles/colors';
+import PropTypes from 'prop-types';
 
 const styles = {
   card: {
