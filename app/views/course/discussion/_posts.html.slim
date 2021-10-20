@@ -1,5 +1,4 @@
 - post_locals ||= {}
-
 - posts.each do |post|
   = render partial: post_partial, object: post.first, locals: post_locals
   - nest_replies = max_depth > 1

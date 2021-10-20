@@ -234,7 +234,7 @@ Rails.application.routes.draw do
                   end
                   namespace :forum_post_response do
                     # get :selected_posts
-                    get 'selected_postpacks' => 'posts#selected'
+                    get 'selected_post_packs' => 'posts#selected'
                   end
                 end
               end

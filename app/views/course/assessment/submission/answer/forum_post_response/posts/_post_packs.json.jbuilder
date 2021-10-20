@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-json.selected_postpacks selected_posts do |selected_post|
+json.selected_post_packs selected_posts do |selected_post|
   json.forum do
     json.id selected_post.forum_id
     json.name selected_post.forum_name

@@ -2,7 +2,7 @@
 class CreateCourseAssessmentQuestionForumPostResponses < ActiveRecord::Migration[6.0]
   def change
     create_table :course_assessment_question_forum_post_responses do |t|
-      t.boolean :has_text_response, null: false
+      t.boolean :has_text_response, default: false
       t.integer :max_posts, limit: 2, null: false
     end
 

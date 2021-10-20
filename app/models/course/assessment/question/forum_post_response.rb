@@ -15,7 +15,7 @@ class Course::Assessment::Question::ForumPostResponse < ApplicationRecord
 
     if last_attempt
       answer.answer_text = last_attempt.answer_text
-      answer.selected_postpacks = Course::Assessment::Answer::ForumPost.where(answer_id: answer.specific.id)
+      answer.post_packs = Course::Assessment::Answer::ForumPost.where(answer_id: answer.specific.id)
     end
 
     answer.acting_as

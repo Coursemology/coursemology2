@@ -1,48 +1,78 @@
-import {Field} from "redux-form";
-import React from "react";
-import PropTypes from "prop-types";
-import RichTextField from 'lib/components/redux-form/RichTextField';
-import ForumPostResponseField from "./ForumPostResponseField";
-import {questionShape} from "../../../propTypes";
+import React, { Component } from 'react';
+import { Field } from 'redux-form';
+import PropTypes from 'prop-types';
 
+import { questionShape } from 'course/assessment/submission/propTypes';
+import NotificationBar from 'lib/components/NotificationBar';
+import RichTextField from 'lib/components/redux-form/RichTextField';
+
+import Error from './Error';
+import ForumPostSelect from './ForumPostSelect';
 
 function renderTextField(readOnly, answerId) {
-    return (
-        <>
-            {
-                readOnly ?
-                    <Field
-                        name={`${answerId}[answer_text]`}
-                        component={(props) => (
-                            <div dangerouslySetInnerHTML={{__html: props.input.value}}/>
-                        )}
-                    /> : <Field
-                        name={`${answerId}[answer_text]`}
-                        component={RichTextField}
-                        multiLine
-                    />
-            }
-        </>
-    );
+  return readOnly ? (
+    <Field
+      name={`${answerId}[answer_text]`}
+      component={(props) => (
+        <div dangerouslySetInnerHTML={{ __html: props.input.value }} />
+      )}
+    />
+  ) : (
+    <Field
+      name={`${answerId}[answer_text]`}
+      component={RichTextField}
+      multiLine
+    />
+  );
 }
 
-function ForumPostResponse({question, readOnly, answerId}) {
+class ForumPostResponse extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      errorMessage: '',
+      notificationMessage: '',
+    };
+  }
+
+  render() {
+    const { question, readOnly, answerId } = this.props;
     return (
-        <>
-            <Field
-                name={`${answerId}[selected_postpacks]`}
-                component={ForumPostResponseField}
-                {...{question, readOnly, answerId}}
-            />
-            {question.has_text_response && renderTextField(readOnly, answerId)}
-        </>
+      <>
+        <Field
+          name={`${answerId}[selected_post_packs]`}
+          component={ForumPostSelect}
+          question={question}
+          readOnly={readOnly}
+          answerId={answerId}
+          onErrorMessage={(message) =>
+            this.setState({
+              errorMessage: message,
+            })
+          }
+          handleNotificationMessage={(message) =>
+            this.setState({
+              notificationMessage: message,
+            })
+          }
+        />
+        {question.hasTextResponse && renderTextField(readOnly, answerId)}
+        {this.state.errorMessage && <Error message={this.state.errorMessage} />}
+        <NotificationBar
+          open={this.state.notificationMessage !== ''}
+          notification={{ message: this.state.notificationMessage }}
+          autoHideDuration={4000}
+          onRequestClose={() => this.setState({ notificationMessage: '' })}
+        />
+      </>
     );
+  }
 }
 
 ForumPostResponse.propTypes = {
-    question: questionShape,
-    readOnly: PropTypes.bool,
-    answerId: PropTypes.number,
+  question: questionShape.isRequired,
+  readOnly: PropTypes.bool.isRequired,
+  answerId: PropTypes.number.isRequired,
 };
 
 export default ForumPostResponse;

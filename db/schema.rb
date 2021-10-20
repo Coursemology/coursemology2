@@ -239,7 +239,7 @@ ActiveRecord::Schema.define(version: 2021_10_03_230453) do
   end
 
   create_table "course_assessment_question_forum_post_responses", force: :cascade do |t|
-    t.boolean "has_text_response", null: false
+    t.boolean "has_text_response", default: false
     t.integer "max_posts", limit: 2, null: false
   end
 
