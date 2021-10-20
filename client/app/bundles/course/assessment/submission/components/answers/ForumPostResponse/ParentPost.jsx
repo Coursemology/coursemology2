@@ -4,21 +4,25 @@ import { forumPostShape } from 'course/assessment/submission/propTypes';
 import Labels from './Labels';
 
 const styles = {
-  replyPost: {
+  parentPost: {
     marginLeft: 42,
     marginTop: 12,
   },
   subtext: {
     color: '#aaa',
   },
+  post: {
+    border: '1px dashed #ddd',
+    opacity: 0.8,
+  },
 };
 
 function ParentPost({ post }) {
   return (
-    <div style={styles.replyPost}>
+    <div style={styles.parentPost}>
       <p style={styles.subtext}>Post made in response to:</p>
       <Labels post={post} />
-      <ForumPost post={post} replyPost isExpandable />
+      <ForumPost post={post} isExpandable style={styles.post} />
     </div>
   );
 }

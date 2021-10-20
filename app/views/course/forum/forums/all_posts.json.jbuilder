@@ -26,6 +26,7 @@ json.forumTopicPostPacks @forum_topic_posts do |forum, topic_posts|
         else
           json.avatar image_path(post.creator.profile_photo.medium.url)
         end
+        json.updatedAt format_datetime(post.updated_at)
       end
       if post.parent_id
         json.parentPost do

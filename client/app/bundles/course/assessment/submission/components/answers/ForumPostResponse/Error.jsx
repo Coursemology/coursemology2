@@ -1,25 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Card, CardHeader, CardText } from 'material-ui';
+import { red200, red900 } from 'material-ui/styles/colors';
 
 const styles = {
-  errorBox: {
-    border: '1px solid #B71C1C',
-    borderLeft: '10px solid #B71C1C',
-    borderRadius: 12,
-    padding: '5px 18px',
-    marginTop: 10,
-    marginBottom: 10,
-    color: '#B71C1C',
+  card: {
+    marginTop: 30,
+    marginBottom: 30,
+    borderRadius: 5,
+  },
+  header: {
+    borderRadius: '5px 5px 0 0',
+    padding: 12,
+    backgroundColor: red200,
   },
 };
 
 export default function Error({ message }) {
   return (
-    <div style={styles.errorBox}>
-      <i className="fa fa-exclamation-triangle" aria-hidden="true" />
-      &nbsp;
-      {message}
-    </div>
+    <Card style={styles.card}>
+      <CardHeader style={styles.header} title="Error" titleColor={red900} />
+      <CardText>{message}</CardText>
+    </Card>
   );
 }
 
