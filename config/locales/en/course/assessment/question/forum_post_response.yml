@@ -1,0 +1,19 @@
+en:
+  course:
+    assessment:
+      question:
+        forum_post_responses:
+          new:
+            header: 'New Forum Post Response Question'
+          create:
+            success: 'The forum post response question was created.'
+          update:
+            success: 'The forum post response question was updated.'
+          destroy:
+            success: 'The forum post response question was deleted.'
+            failure: 'Could not delete forum post response question: %{error}'
+          form:
+            max_posts: 'Max number of forum posts a student could select'
+            has_text_response: 'Include a text field for students to provide further inputs'
+            forum_post_response_button: 'Forum Post Response Question'
+          question_type: Forum Post Response

@@ -204,6 +204,7 @@ Rails.application.routes.draw do
             resources :programming, only: [:new, :create, :edit, :update, :destroy]
             resources :voice_responses, only: [:new, :create, :edit, :update, :destroy]
             resources :scribing, only: [:show, :new, :create, :edit, :update, :destroy]
+            resources :forum_post_responses, only: [:new, :create, :edit, :update, :destroy]
           end
           scope module: :submission do
             resources :submissions, only: [:index, :create, :edit, :update] do
@@ -230,6 +231,10 @@ Rails.application.routes.draw do
                   end
                   namespace :scribing do
                     resources :scribbles, only: [:create]
+                  end
+                  namespace :forum_post_response do
+                    # get :selected_posts
+                    get 'selected_post_packs' => 'posts#selected'
                   end
                 end
               end
@@ -306,6 +311,7 @@ Rails.application.routes.draw do
           post 'subscribe', on: :member
           delete 'unsubscribe', on: :member
 
+          get 'all_posts', on: :collection
           get 'search', on: :collection
           get 'next_unread', on: :collection
           patch 'mark_all_as_read', on: :collection

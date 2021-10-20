@@ -129,6 +129,10 @@
             /             new_course_assessment_question_text_response_path(current_course, @assessment,
             /                                                               { comprehension: true }),
             /             role: 'menuitem')
+            li role='presentation'
+              = link_to(t('.new_question.forum_post_response'),
+                      new_course_assessment_question_forum_post_response_path(current_course, @assessment),
+                      role: 'menuitem')
 
     h3 = t('.questions')
     br

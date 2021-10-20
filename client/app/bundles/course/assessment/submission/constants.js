@@ -11,6 +11,7 @@ export const questionTypes = mirrorCreator([
   'FileUpload',
   'Scribing',
   'VoiceResponse',
+  'ForumPostResponse',
 ]);
 
 export const workflowStates = {
