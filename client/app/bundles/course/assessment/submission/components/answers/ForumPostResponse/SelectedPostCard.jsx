@@ -70,18 +70,13 @@ export default class SelectedPostCard extends React.Component {
     );
   }
 
-  renderLink(url, name) {
+  static renderLink(url, name) {
     let renderedName = name;
     if (renderedName.length > 30) {
       renderedName = `${renderedName.slice(0, 30)}...`;
     }
     return (
-      <a
-        href={url}
-        target="_blank"
-        rel="noreferrer"
-        onClick={() => this.handleTogglePostView()}
-      >
+      <a href={url} target="_blank" rel="noreferrer">
         {renderedName} <i className="fa fa-external-link" />
       </a>
     );
@@ -105,11 +100,15 @@ export default class SelectedPostCard extends React.Component {
         ) : (
           <span>
             Post made under{' '}
-            {this.renderLink(
+            {SelectedPostCard.renderLink(
               getForumTopicURL(courseId, forum.id, topic.id),
               topic.title,
             )}{' '}
-            in {this.renderLink(getForumURL(courseId, forum.id), forum.name)}
+            in{' '}
+            {SelectedPostCard.renderLink(
+              getForumURL(courseId, forum.id),
+              forum.name,
+            )}
           </span>
         )}
       </div>

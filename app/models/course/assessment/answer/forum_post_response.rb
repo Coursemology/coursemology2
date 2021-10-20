@@ -2,6 +2,14 @@
 class Course::Assessment::Answer::ForumPostResponse < ApplicationRecord
   acts_as :answer, class_name: Course::Assessment::Answer.name
 
+  # A post pack is a group of 4 objects:
+  #  - The core forum post
+  #  - The parent post that the core post is replying to, if it exists
+  #  - The forum that the post is under
+  #  - The topic that the post is under
+  #
+  # This is mainly to facilitate the passing of related information around, especially
+  # for rendering on the client side.
   has_many :post_packs, class_name: Course::Assessment::Answer::ForumPost.name,
                         dependent: :destroy, foreign_key: :answer_id, inverse_of: :answer
 

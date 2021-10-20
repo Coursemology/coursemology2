@@ -25,6 +25,8 @@ function Labels({ post }) {
   const isPostDeleted = post.isDeleted === true;
   return (
     <>
+      {/* Actually, a post that has been deleted will have its isUpdated as null,
+          but we are checking here just to be sure.  */}
       {isPostUpdated && !isPostDeleted && (
         <div style={{ ...styles.label, ...styles.labelEdited }}>
           <i

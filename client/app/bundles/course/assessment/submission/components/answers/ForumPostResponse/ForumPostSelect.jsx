@@ -111,7 +111,7 @@ export default class ForumPostSelect extends React.Component {
   }
 
   render() {
-    const postPacks = this.props.input.value ?? [];
+    const postPacks = this.props.input.value;
     const maxPosts = this.props.question.maxPosts;
 
     return (

@@ -87,7 +87,7 @@ export default class TopicCard extends React.Component {
         </CardActions>
         <Divider />
         <CardText expandable>
-          {topicPostPack.postPacks?.map((postPack, index) => (
+          {topicPostPack.postPacks.map((postPack, index) => (
             <ForumPostOption
               postPack={postPack}
               isSelected={selectedPostIds.has(postPack.corePost.id)}
@@ -96,7 +96,7 @@ export default class TopicCard extends React.Component {
               }
               key={`post-pack-${postPack.corePost.id}`}
               style={
-                index < topicPostPack.postPacks?.length - 1
+                index < topicPostPack.postPacks.length - 1
                   ? styles.nonLastPostOption
                   : {}
               }
