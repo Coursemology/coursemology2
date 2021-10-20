@@ -15,12 +15,12 @@ en:
             switch_mrq_success: 'Question %{number} has been successfully switched to MCQ'
             switch_mcq_unsubmit_success: >
               Question %{number} has been successfully switched to MRQ.
-              All submissions to this assessment have been unsubmitted and all answers to this
-              question have been removed.
+              All submissions to this assessment are being unsubmitted and all answers to this
+              question are being removed.
             switch_mrq_unsubmit_success: >
               Question %{number} has been successfully switched to MCQ.
-              All submissions to this assessment have been unsubmitted and all answers to this
-              question have been removed.
+              All submissions to this assessment are being unsubmitted and all answers to this
+              question are being removed.
           destroy:
             success: 'The multiple response question was deleted.'
             failure: 'Could not delete multiple response question: %{error}'

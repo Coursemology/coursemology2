@@ -272,7 +272,7 @@ const translations = defineMessages({
   },
   unsubmitSubmissionSuccess: {
     id: 'course.assessment.submission.unsubmitSubmissionSuccess',
-    defaultMessage: 'Submission has been successfully unsubmitted.',
+    defaultMessage: "{name}'s submission has been successfully unsubmitted.",
   },
   unsubmitAllSubmissionsSuccess: {
     id: 'course.assessment.submission.unsubmitAllSubmissionsSuccess',
@@ -280,7 +280,7 @@ const translations = defineMessages({
   },
   deleteSubmissionSuccess: {
     id: 'course.assessment.submission.deleteSubmissionSuccess',
-    defaultMessage: 'Submission has been successfully deleted.',
+    defaultMessage: "{name}'s submission has been successfully deleted.",
   },
   deleteAllSubmissionsSuccess: {
     id: 'course.assessment.submission.deleteAllSubmissionsSuccess',

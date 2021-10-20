@@ -35,7 +35,7 @@ class Course::Assessment::Submission::SubmissionsController < \
         @assessment = @assessment.calculated(:maximum_grade)
         @submissions = @submissions.calculated(:log_count, :graded_at).includes(:answers)
         @my_students = current_course_user&.my_students || []
-        @course_users = current_course.course_users.order_phantom_user.order_alphabetically
+        @course_users = current_course.course_users.order_phantom_user.order_alphabetically.includes(:user)
       end
     end
   end
@@ -73,6 +73,7 @@ class Course::Assessment::Submission::SubmissionsController < \
 
   def edit
     return if @submission.attempting?
+
     render 'blocked' if @submission.assessment.block_student_viewing_after_submitted? && current_course_user.student?
 
     respond_to do |format|
@@ -176,8 +177,9 @@ class Course::Assessment::Submission::SubmissionsController < \
     authorize!(:update, @assessment)
     submission_ids = @assessment.submissions.by_users(course_user_ids).pluck(:id)
     if !submission_ids.empty?
+      redirect_to_path = course_assessment_submissions_path(@assessment.course, @assessment)
       job = Course::Assessment::Submission::UnsubmittingJob.
-            perform_later(current_user, submission_ids, @assessment).job
+            perform_later(current_user, submission_ids, @assessment, nil, redirect_to_path).job
       respond_to do |format|
         format.html { redirect_to(job_path(job)) }
         format.json { render json: { redirect_url: job_path(job) } }

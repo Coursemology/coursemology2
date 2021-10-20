@@ -6,7 +6,7 @@ import SubmissionsTable from '../SubmissionsTable';
 const defaultAssessmentProps = {
   canViewLogs: true,
   canUnsubmitSubmission: true,
-  canDeleteSubmission: true,
+  canDeleteAllSubmissions: true,
   downloadable: true,
   gamified: true,
   maximumGrade: 10,
@@ -61,13 +61,13 @@ const setupTest = (propsOverrides) => {
 };
 
 describe('<SubmissionsTable />', () => {
-  describe('when canViewLogs, canUnsubmitSubmission and canDeleteSubmission are set to true ', () => {
+  describe('when canViewLogs, canUnsubmitSubmission and canDeleteAllSubmissions are set to true ', () => {
     it('renders the submissions table with access log links', () => {
       const assessmentProps = {
         ...defaultAssessmentProps,
         canViewLogs: true,
         canUnsubmitSubmission: true,
-        canDeleteSubmission: true,
+        canDeleteAllSubmissions: true,
       };
       const { rowCount, logCount, unsubmitCount, deleteCount } = setupTest({
         assessment: assessmentProps,
@@ -80,13 +80,13 @@ describe('<SubmissionsTable />', () => {
     });
   });
 
-  describe('when canViewLogs, canUnsubmitSubmission and canDeleteSubmission are set to false', () => {
+  describe('when canViewLogs, canUnsubmitSubmission and canDeleteAllSubmissions are set to false', () => {
     it('renders the submissions table without access log links', () => {
       const assessmentProps = {
         ...defaultAssessmentProps,
         canViewLogs: false,
         canUnsubmitSubmission: false,
-        canDeleteSubmission: false,
+        canDeleteAllSubmissions: false,
       };
       const { rowCount, logCount, unsubmitCount, deleteCount } = setupTest({
         assessment: assessmentProps,

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import ReactTooltip from 'react-tooltip';
 import moment from 'lib/moment';
-import { TableRowColumn } from 'material-ui/Table';
+import { TableRow, TableRowColumn } from 'material-ui/Table';
 import FontIcon from 'material-ui/FontIcon';
 import { red600, red900, blue600, pink600 } from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
@@ -86,6 +86,20 @@ export default class SubmissionsTableRow extends React.Component {
       unsubmitConfirmation: false,
       deleteConfirmation: false,
     };
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return (
+      this.props.submission.workflowState !==
+        nextProps.submission.workflowState ||
+      this.props.isDownloading !== nextProps.isDownloading ||
+      this.props.isStatisticsDownloading !==
+        nextProps.isStatisticsDownloading ||
+      this.props.isUnsubmitting !== nextProps.isUnsubmitting ||
+      this.props.isDeleting !== nextProps.isDeleting ||
+      this.state.unsubmitConfirmation !== nextState.unsubmitConfirmation ||
+      this.state.deleteConfirmation !== nextState.deleteConfirmation
+    );
   }
 
   static renderPhantomUserIcon(submission) {
@@ -220,13 +234,20 @@ export default class SubmissionsTableRow extends React.Component {
   renderUnsubmitDialog(submission) {
     const { unsubmitConfirmation } = this.state;
     const { dispatch } = this.props;
+    const values = { name: submission.courseUser.name };
+    const successMessage = (
+      <FormattedMessage
+        {...translations.unsubmitSubmissionSuccess}
+        values={values}
+      />
+    );
 
     return (
       <ConfirmationDialog
         open={unsubmitConfirmation}
         onCancel={() => this.setState({ unsubmitConfirmation: false })}
         onConfirm={() => {
-          dispatch(unsubmitSubmission(submission.id));
+          dispatch(unsubmitSubmission(submission.id, successMessage));
           this.setState({ unsubmitConfirmation: false });
         }}
         message={
@@ -241,12 +262,13 @@ export default class SubmissionsTableRow extends React.Component {
 
   renderDeleteButton(submission) {
     const { assessment } = this.props;
-
     const disabled =
       this.disableButtons() ||
       submission.workflowState === workflowStates.Unstarted;
-
-    if (!assessment.canDeleteSubmission && !submission.courseUser.isCurrentUser)
+    if (
+      !assessment.canDeleteAllSubmissions &&
+      !submission.courseUser.isCurrentUser
+    )
       return null;
 
     return (
@@ -272,13 +294,19 @@ export default class SubmissionsTableRow extends React.Component {
   renderDeleteDialog(submission) {
     const { deleteConfirmation } = this.state;
     const { dispatch } = this.props;
-
+    const values = { name: submission.courseUser.name };
+    const successMessage = (
+      <FormattedMessage
+        {...translations.deleteSubmissionSuccess}
+        values={values}
+      />
+    );
     return (
       <ConfirmationDialog
         open={deleteConfirmation}
         onCancel={() => this.setState({ deleteConfirmation: false })}
         onConfirm={() => {
-          dispatch(deleteSubmission(submission.id));
+          dispatch(deleteSubmission(submission.id, successMessage));
           this.setState({ deleteConfirmation: false });
         }}
         message={
@@ -293,12 +321,13 @@ export default class SubmissionsTableRow extends React.Component {
 
   renderUser(submission) {
     const { courseId, assessment } = this.props;
+    const { unsubmitConfirmation, deleteConfirmation } = this.state;
     const tableCenterCellStyle = {
       ...styles.tableCell,
       ...styles.tableCenterCell,
     };
     return (
-      <>
+      <TableRow className="submission-row" key={submission.courseUser.id}>
         <TableRowColumn style={styles.tableCell}>
           {SubmissionsTableRow.renderPhantomUserIcon(submission)}
           <a
@@ -331,10 +360,10 @@ export default class SubmissionsTableRow extends React.Component {
           {this.renderSubmissionLogsLink(submission)}
           {this.renderUnsubmitButton(submission)}
           {this.renderDeleteButton(submission)}
-          {this.renderUnsubmitDialog(submission)}
-          {this.renderDeleteDialog(submission)}
+          {unsubmitConfirmation && this.renderUnsubmitDialog(submission)}
+          {deleteConfirmation && this.renderDeleteDialog(submission)}
         </TableRowColumn>
-      </>
+      </TableRow>
     );
   }
 
