@@ -24,7 +24,10 @@ RSpec.describe Course::Material::MaterialsController, type: :controller do
       it { is_expected.to redirect_to(material.attachment.url) }
 
       context 'when a material is uploaded for an assessment' do
-        let!(:assessment) { create(:assessment, :with_attachments, course: course, session_password: 'super_secret') }
+        let!(:assessment) do
+          create(:assessment, :published, :with_all_question_types, :with_attachments, course: course,
+                                                                                       session_password: 'super_secret')
+        end
         let!(:folder_assessment) { assessment.folder }
         let!(:material_assessment) { folder_assessment.materials.first }
 
@@ -33,6 +36,7 @@ RSpec.describe Course::Material::MaterialsController, type: :controller do
         it 'creates a new submission' do
           subject
           expect(assessment.submissions.length).to eq(1)
+          expect(assessment.submissions.first.answers.length).to eq(assessment.questions.length)
           is_expected.to redirect_to(material_assessment.attachment.url)
         end
       end
