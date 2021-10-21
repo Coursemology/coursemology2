@@ -75,7 +75,7 @@ class UploadedPackageTestCaseView extends React.Component {
             {test.get('identifier')}
           </TableHeaderColumn>
           <TableRowColumn className={styles.testCaseCell}>
-            {test.get('expression')}
+            <ExpandableText text={test.get('expression')} />
           </TableRowColumn>
           <TableRowColumn className={styles.testCaseCell}>
             <ExpandableText text={test.get('expected')} />
