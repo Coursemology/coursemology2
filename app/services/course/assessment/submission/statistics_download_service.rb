@@ -56,7 +56,7 @@ class Course::Assessment::Submission::StatisticsDownloadService
 
   def download_statistics(csv, submission)
     csv << [submission.course_user.name,
-            submission.course_user.phantom,
+            submission.course_user.phantom?,
             submission.workflow_state,
             submission.grade,
             submission.assessment.maximum_grade,
