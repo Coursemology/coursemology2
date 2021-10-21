@@ -9,7 +9,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
     let(:assessment) { create(:assessment, :with_all_question_types, course: course) }
     before { login_as(user, scope: :user) }
 
-    let(:students) { create_list(:course_student, 4, course: course) }
+    let(:students) { create_list(:course_student, 5, course: course) }
     let(:phantom_student) { create(:course_student, :phantom, course: course) }
     let!(:submitted_submission) do
       create(:submission, :submitted,
@@ -111,6 +111,26 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         expect(graded_submission.awarded_at).to be_present
         expect(graded_submission.draft_points_awarded).to be_nil
         expect(graded_submission.points_awarded).not_to be_nil
+      end
+
+      scenario 'I can force submit all unsubmitted exams', js: true do
+        visit course_assessment_submissions_path(course, assessment)
+        find('#students-tab').click
+
+        expect(page).to have_text('Attempting')
+        expect(page).to have_text('Not Started')
+
+        click_button('Force Submit Remaining')
+        accept_confirm_dialog
+        expect(page).not_to have_text('Attempting')
+        expect(page).not_to have_text('Not Started')
+
+        expect(assessment.submissions.length).to eq(5)
+        expect(attempting_submission.reload).to be_graded
+        expect(attempting_submission.grade).to eq(0)
+        expect(attempting_submission.graded_at).to be_present
+        expect(attempting_submission.draft_points_awarded).not_to be_nil
+        expect(attempting_submission.points_awarded).to be_nil
       end
 
       scenario 'I can unsubmit all submissions', js: true do

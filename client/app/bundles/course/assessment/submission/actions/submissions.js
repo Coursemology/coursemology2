@@ -8,6 +8,7 @@ import actionTypes from '../constants';
 
 const DOWNLOAD_JOB_POLL_INTERVAL = 2000;
 const PUBLISH_JOB_POLL_INTERVAL = 500;
+const FORCE_SUBMIT_JOB_POLL_INTERVAL = 500;
 const UNSUBMIT_ALL_SUBMISSIONS_JOB_POLL_INTERVAL = 500;
 const DELETE_ALL_SUBMISSIONS_JOB_POLL_INTERVAL = 500;
 const DOWNLOAD_STATISTICS_JOB_POLL_INTERVAL = 2000;
@@ -29,7 +30,7 @@ export function fetchSubmissions() {
   };
 }
 
-export function publishSubmissions() {
+export function publishSubmissions(type) {
   return (dispatch) => {
     dispatch({ type: actionTypes.PUBLISH_SUBMISSIONS_REQUEST });
 
@@ -45,13 +46,47 @@ export function publishSubmissions() {
     };
 
     return CourseAPI.assessment.submissions
-      .publishAll()
+      .publishAll(type)
       .then((response) => response.data)
       .then((data) => {
         if (data.redirect_url) {
           pollJob(
             data.redirect_url,
             PUBLISH_JOB_POLL_INTERVAL,
+            handleSuccess,
+            handleFailure,
+          );
+        } else {
+          handleSuccess();
+        }
+      })
+      .catch(handleFailure);
+  };
+}
+
+export function forceSubmitSubmissions(type) {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.FORCE_SUBMIT_SUBMISSIONS_REQUEST });
+
+    const handleSuccess = () => {
+      dispatch({ type: actionTypes.FORCE_SUBMIT_SUBMISSIONS_SUCCESS });
+      dispatch(setNotification(translations.forceSubmitSuccess));
+      fetchSubmissions()(dispatch);
+    };
+
+    const handleFailure = () => {
+      dispatch({ type: actionTypes.FORCE_SUBMIT_SUBMISSIONS_FAILURE });
+      dispatch(setNotification(translations.requestFailure));
+    };
+
+    return CourseAPI.assessment.submissions
+      .forceSubmitAll(type)
+      .then((response) => response.data)
+      .then((data) => {
+        if (data.redirect_url) {
+          pollJob(
+            data.redirect_url,
+            FORCE_SUBMIT_JOB_POLL_INTERVAL,
             handleSuccess,
             handleFailure,
           );

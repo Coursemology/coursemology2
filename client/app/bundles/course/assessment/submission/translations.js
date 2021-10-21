@@ -184,8 +184,18 @@ const translations = defineMessages({
   publishConfirmation: {
     id: 'course.assessment.submission.publishConfirmation',
     defaultMessage:
-      'Are you sure you want to publish? THIS ACTION IS IRREVERSIBLE! \
-                    All graded submissions will be published and students will see their own grades.',
+      'Are you sure you want to publish all {graded} graded submissions ({selectedUsers})? \
+                    THIS ACTION IS IRREVERSIBLE! \
+                    All graded submissions will be published and users will be able to see their own grades.',
+  },
+  forceSubmitConfirmation: {
+    id: 'course.assessment.submission.forceSubmitConfirmation',
+    defaultMessage:
+      'There are currently {unattempted} users(s) who have not attempted, \
+      and {attempting} user(s) who are attempting this assessment. \
+      Are you sure you want to force submit all submissions ({selectedUsers})? \
+      Doing so will cause all questions to be awarded zero marks for non-autograded assessments. \
+      NOTE THAT THIS ACTION IS IRREVERSIBLE!',
   },
   unsubmitAllConfirmation: {
     id: 'course.assessment.submission.unsubmitAllConfirmation',
@@ -268,7 +278,11 @@ const translations = defineMessages({
   },
   publishSuccess: {
     id: 'course.assessment.submission.publishSuccess',
-    defaultMessage: 'All graded submissions have been published.',
+    defaultMessage: 'All graded submissions above have been published.',
+  },
+  forceSubmitSuccess: {
+    id: 'course.assessment.submission.forceSubmitSuccess',
+    defaultMessage: 'All unsubmitted submissions above have been submitted.',
   },
   unsubmitSubmissionSuccess: {
     id: 'course.assessment.submission.unsubmitSubmissionSuccess',
@@ -276,7 +290,7 @@ const translations = defineMessages({
   },
   unsubmitAllSubmissionsSuccess: {
     id: 'course.assessment.submission.unsubmitAllSubmissionsSuccess',
-    defaultMessage: 'All submissions have been successfully unsubmitted.',
+    defaultMessage: 'All submissions above have been successfully unsubmitted.',
   },
   deleteSubmissionSuccess: {
     id: 'course.assessment.submission.deleteSubmissionSuccess',
@@ -284,7 +298,7 @@ const translations = defineMessages({
   },
   deleteAllSubmissionsSuccess: {
     id: 'course.assessment.submission.deleteAllSubmissionsSuccess',
-    defaultMessage: 'All submissions have been successfully deleted.',
+    defaultMessage: 'All submissions above have been successfully deleted.',
   },
   examDialogTitle: {
     id: 'course.assessment.submission.examDialogTitle',

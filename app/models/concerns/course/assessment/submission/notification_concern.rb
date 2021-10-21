@@ -17,6 +17,10 @@ module Course::Assessment::Submission::NotificationConcern
 
   def send_submit_notification
     return unless workflow_state_before_last_save == 'attempting'
+    # When changing attempting to submitted state by a course staff,
+    # the creator (student) will be different with the updater (course staff).
+    # As such, there is no need to send a submit notification.
+    return unless creator == updater
     return if assessment.autograded?
     return unless course_user.real_student?
 

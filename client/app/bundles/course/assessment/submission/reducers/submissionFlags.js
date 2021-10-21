@@ -5,6 +5,7 @@ const initialState = {
   isSaving: false,
   isAutograding: false,
   isPublishing: false,
+  isForceSubmitting: false,
   isDownloading: false,
   isStatisticsDownloading: false,
   isUnsubmitting: false,
@@ -18,7 +19,12 @@ export default function (state = initialState, action) {
       return { ...state, isLoading: false };
     case actions.FETCH_SUBMISSIONS_SUCCESS:
     case actions.FETCH_SUBMISSIONS_FAILURE:
-      return { ...state, isLoading: false, isPublishing: false };
+      return {
+        ...state,
+        isLoading: false,
+        isPublishing: false,
+        isForceSubmitting: false,
+      };
 
     case actions.SAVE_DRAFT_REQUEST:
     case actions.SAVE_GRADE_REQUEST:
@@ -82,6 +88,11 @@ export default function (state = initialState, action) {
       return { ...state, isPublishing: true };
     case actions.PUBLISH_SUBMISSIONS_FAILURE:
       return { ...state, isPublishing: false };
+
+    case actions.FORCE_SUBMIT_SUBMISSIONS_REQUEST:
+      return { ...state, isForceSubmitting: true };
+    case actions.FORCE_SUBMIT_SUBMISSIONS_FAILURE:
+      return { ...state, isForceSubmitting: false };
 
     case actions.UNSUBMIT_ALL_SUBMISSIONS_REQUEST:
       return { ...state, isUnsubmitting: true };

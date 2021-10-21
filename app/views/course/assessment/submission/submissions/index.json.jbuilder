@@ -8,6 +8,8 @@ json.assessment do
   json.downloadable @assessment.downloadable?
   json.passwordProtected @assessment.session_password_protected?
   json.canViewLogs can? :manage, @assessment
+  json.canPublishGrades can? :publish_grades, @assessment
+  json.canForceSubmit can? :force_submit_assessment_submission, @assessment
   json.canUnsubmitSubmission can? :update, @assessment
   json.canDeleteAllSubmissions can? :delete_all_submissions, @assessment
 end

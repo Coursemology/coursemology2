@@ -681,6 +681,7 @@ RSpec.describe Course::Assessment::Submission do
     describe '#send_submit_notification' do
       subject do
         submission1.save
+        submission1.updater = user1
         submission1.send(:send_submit_notification)
       end
 
