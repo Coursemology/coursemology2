@@ -4,9 +4,12 @@ module Extensions::Conditional::ActiveRecord::Base
     # Functions from conditional-and-condition framework.
     # Declare this function in the conditional model that requires conditions.
     def acts_as_conditional
+      enum satisfiability_type: [:all_conditions, :at_least_one_condition]
+
       has_many :conditions, -> { includes :actable },
                class_name: Course::Condition.name, as: :conditional, dependent: :destroy,
                inverse_of: :conditional
+      validates :satisfiability_type, presence: true
 
       include ConditionalInstanceMethods
     end
@@ -21,16 +24,38 @@ module Extensions::Conditional::ActiveRecord::Base
   end
 
   module ConditionalInstanceMethods
+    extend ActiveSupport::Concern
+
+    included do
+      after_initialize :set_default_satisfiability_type, if: :new_record?
+    end
+
     def specific_conditions
       conditions.map(&:actable)
     end
 
-    # Check if all conditions are satisfied by the user.
+    # Sets the satisfiability type to all conditions.
+    def set_all_conditions_satisfiability_type!
+      self.satisfiability_type = :all_conditions
+    end
+
+    # Sets the satisfiability type to at least one condition.
+    def set_at_least_one_condition_satisfiability_type!
+      self.satisfiability_type = :at_least_one_condition
+    end
+
+    # Check if the necessary conditions are satisfied by the user.
     #
     # @param [CourseUser] course_user The user that conditions are being checked on
-    # @return [Boolean] true if all conditions are met and false otherwise
+    # @return [Boolean] true if the necessary conditions are met
     def conditions_satisfied_by?(course_user)
-      conditions.all? { |condition| condition.satisfied_by?(course_user) }
+      return true if conditions.empty?
+
+      if self.satisfiability_type == :at_least_one_condition
+        conditions.any? { |condition| condition.satisfied_by?(course_user) }
+      else
+        conditions.all? { |condition| condition.satisfied_by?(course_user) }
+      end
     end
 
     # Permit the conditional for the given course user.
@@ -61,6 +86,14 @@ module Extensions::Conditional::ActiveRecord::Base
         duplicator.mode == :course ? (dependent_object.nil? || duplicated) : duplicated
       end.map(&:actable)
       conditions << duplicator.duplicate(conditions_to_duplicate).map(&:acting_as)
+    end
+
+    private
+
+    # Sets the conditional's satisfiability type to the default
+    # (all conditions) if it does not exist.
+    def set_default_satisfiability_type
+      self.satisfiability_type ||= :all_conditions
     end
   end
 
