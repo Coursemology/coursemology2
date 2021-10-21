@@ -53,3 +53,5 @@ en:
       max_level: 'Congrats - Highest Level Attained!'
     code_formatter:
       size_too_big: 'The file is too big and cannot be displayed.'
+    learning_map:
+      title: 'Learning Map'

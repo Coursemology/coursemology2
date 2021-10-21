@@ -403,6 +403,8 @@ Rails.application.routes.draw do
         get 'fetch', on: :collection
         post 'mark_as_read', on: :member
       end
+
+      get 'learning_map' => 'learning_map#index'
     end
   end
 

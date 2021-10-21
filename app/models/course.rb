@@ -70,6 +70,8 @@ class Course < ApplicationRecord
   validates :default_reference_timeline, presence: true
   validate :validate_only_one_default_reference_timeline
 
+  has_one :learning_map, dependent: :destroy
+
   accepts_nested_attributes_for :invitations, :assessment_categories, :video_tabs
 
   calculated :user_count, (lambda do

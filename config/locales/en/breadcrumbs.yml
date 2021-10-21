@@ -164,6 +164,8 @@ en:
       survey:
         controller:
           index: 'Surveys'
+      learning_map:
+        index: 'Learning Map'
     system:
       admin:
         controller:

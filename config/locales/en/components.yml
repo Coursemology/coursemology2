@@ -37,3 +37,5 @@ en:
       name: 'Users'
     surveys:
       name: :'breadcrumbs.course.survey.controller.index'
+    learning_map:
+      name: 'Learning Map'
