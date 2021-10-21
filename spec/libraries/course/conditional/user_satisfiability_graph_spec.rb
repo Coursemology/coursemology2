@@ -5,7 +5,7 @@ RSpec.describe Course::Conditional::UserSatisfiabilityGraph do
   class DummyConditionalCondition < ApplicationRecord
     acts_as_conditional
     acts_as_condition
-    attr_accessor :conditions, :satisfied, :id
+    attr_accessor :satisfiability_type, :conditions, :satisfied, :id
 
     def specific_conditions
       @conditions

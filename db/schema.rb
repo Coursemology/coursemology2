@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_03_230453) do
+ActiveRecord::Schema.define(version: 2021_10_21_153003) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,6 +62,7 @@ ActiveRecord::Schema.define(version: 2021_10_03_230453) do
     t.integer "updater_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "satisfiability_type", default: 0
     t.index ["course_id"], name: "fk__course_achievements_course_id"
     t.index ["creator_id"], name: "fk__course_achievements_creator_id"
     t.index ["updater_id"], name: "fk__course_achievements_updater_id"
@@ -460,6 +461,7 @@ ActiveRecord::Schema.define(version: 2021_10_03_230453) do
     t.boolean "show_mcq_answer", default: true
     t.boolean "show_mcq_mrq_solution", default: true
     t.boolean "block_student_viewing_after_submitted", default: false
+    t.integer "satisfiability_type", default: 0
     t.index ["creator_id"], name: "fk__course_assessments_creator_id"
     t.index ["tab_id"], name: "fk__course_assessments_tab_id"
     t.index ["updater_id"], name: "fk__course_assessments_updater_id"
