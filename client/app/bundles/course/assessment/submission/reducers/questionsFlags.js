@@ -3,6 +3,7 @@ import actions from '../constants';
 export default function (state = {}, action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_SUCCESS:
+    case actions.UNSUBMIT_SUCCESS:
     case actions.FINALISE_SUCCESS:
       return action.payload.answers.reduce(
         (obj, answer) => ({
