@@ -282,7 +282,8 @@ const translations = defineMessages({
   },
   publishJobPending: {
     id: 'course.assessment.submission.publishJobPending',
-    defaultMessage: 'Please wait as the submissions are currently being published.',
+    defaultMessage:
+      'Please wait as the submissions are currently being published.',
   },
   publishSuccess: {
     id: 'course.assessment.submission.publishSuccess',
@@ -290,19 +291,23 @@ const translations = defineMessages({
   },
   forceSubmitJobPending: {
     id: 'course.assessment.submission.forceSubmitJobPending',
-    defaultMessage: 'Please wait as the submissions are currently being created and/or submitted.',
+    defaultMessage:
+      'Please wait as the submissions are currently being created and/or submitted.',
   },
   forceSubmitSuccess: {
     id: 'course.assessment.submission.forceSubmitSuccess',
-    defaultMessage: 'All unsubmitted submissions above have been successfully submitted and graded.',
+    defaultMessage:
+      'All unsubmitted submissions above have been successfully submitted and graded.',
   },
   downloadSubmissionsJobPending: {
     id: 'course.assessment.submission.downloadSubmissionsJobPending',
-    defaultMessage: 'Please wait as your request to download submission answers is being processed.',
+    defaultMessage:
+      'Please wait as your request to download submission answers is being processed.',
   },
   downloadStatisticsJobPending: {
     id: 'course.assessment.submission.downloadStatisticsJobPending',
-    defaultMessage: 'Please wait as your request to download submission statistics is being processed.',
+    defaultMessage:
+      'Please wait as your request to download submission statistics is being processed.',
   },
   unsubmitSubmissionSuccess: {
     id: 'course.assessment.submission.unsubmitSubmissionSuccess',
@@ -310,7 +315,8 @@ const translations = defineMessages({
   },
   unsubmitAllSubmissionsJobPending: {
     id: 'course.assessment.submission.unsubmitAllSubmissionsJobPending',
-    defaultMessage: 'Please wait as the submissions are currently being unsubmitted.',
+    defaultMessage:
+      'Please wait as the submissions are currently being unsubmitted.',
   },
   unsubmitAllSubmissionsSuccess: {
     id: 'course.assessment.submission.unsubmitAllSubmissionsSuccess',
@@ -322,7 +328,8 @@ const translations = defineMessages({
   },
   deleteAllSubmissionsJobPending: {
     id: 'course.assessment.submission.deleteAllSubmissionsJobPending',
-    defaultMessage: 'Please wait as the submissions are currently being deleted.',
+    defaultMessage:
+      'Please wait as the submissions are currently being deleted.',
   },
   deleteAllSubmissionsSuccess: {
     id: 'course.assessment.submission.deleteAllSubmissionsSuccess',

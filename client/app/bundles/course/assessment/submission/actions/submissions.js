@@ -209,7 +209,9 @@ export function unsubmitAllSubmissions(type) {
       .unsubmitAll(type)
       .then((response) => response.data)
       .then((data) => {
-        dispatch(setNotification(translations.unsubmitAllSubmissionsJobPending));
+        dispatch(
+          setNotification(translations.unsubmitAllSubmissionsJobPending),
+        );
         if (data.redirect_url) {
           pollJob(
             data.redirect_url,
