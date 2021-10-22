@@ -49,7 +49,7 @@ module Course::Assessment::Submission::WorkflowEventConcern
     self.awarder = User.stamper || User.system
     self.awarded_at = Time.zone.now
 
-    return unless persisted? && !assessment.autograded? && send_email
+    return unless send_email && persisted? && !assessment.autograded? &&
                   submission_graded_email_enabled? &&
                   submission_graded_email_subscribed?
 
