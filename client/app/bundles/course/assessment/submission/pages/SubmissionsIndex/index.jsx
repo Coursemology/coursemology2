@@ -354,7 +354,7 @@ class VisibleSubmissionsIndex extends React.Component {
   }
 
   renderForceSubmitConfirmation(shownSubmissions, handleForceSubmitParams) {
-    const { dispatch } = this.props;
+    const { dispatch, assessment } = this.props;
     const { forceSubmitConfirmation } = this.state;
     const values = {
       unattempted: shownSubmissions.filter(
@@ -365,6 +365,9 @@ class VisibleSubmissionsIndex extends React.Component {
       ).length,
       selectedUsers: selectedUserType[handleForceSubmitParams],
     };
+    const message = assessment.autograded
+      ? translations.forceSubmitConfirmationAutograded
+      : translations.forceSubmitConfirmation;
 
     return (
       <ConfirmationDialog
@@ -374,12 +377,7 @@ class VisibleSubmissionsIndex extends React.Component {
           dispatch(forceSubmitSubmissions(handleForceSubmitParams));
           this.setState({ forceSubmitConfirmation: false });
         }}
-        message={
-          <FormattedMessage
-            {...translations.forceSubmitConfirmation}
-            values={values}
-          />
-        }
+        message={<FormattedMessage {...message} values={values} />}
       />
     );
   }

@@ -197,6 +197,15 @@ const translations = defineMessages({
       Doing so will cause all questions to be awarded ZERO marks for non-autograded assessments. \
       NOTE THAT THIS ACTION IS IRREVERSIBLE!',
   },
+  forceSubmitConfirmationAutograded: {
+    id: 'course.assessment.submission.forceSubmitConfirmationAutograded',
+    defaultMessage:
+      'There are currently {unattempted} users(s) who have not attempted, \
+      and {attempting} user(s) who are attempting this assessment. \
+      Are you sure you want to force submit all submissions ({selectedUsers})? \
+      Submissions to this assessment will be auto-graded. \
+      NOTE THAT THIS ACTION IS IRREVERSIBLE!',
+  },
   unsubmitAllConfirmation: {
     id: 'course.assessment.submission.unsubmitAllConfirmation',
     defaultMessage:

@@ -4,6 +4,7 @@ submissions_hash ||= @submissions.map { |s| [s.course_user_id, s] }.to_h
 json.assessment do
   json.title @assessment.title
   json.maximumGrade @assessment.maximum_grade.to_f
+  json.autograded @assessment.autograded
   json.gamified current_course.gamified?
   json.downloadable @assessment.downloadable?
   json.passwordProtected @assessment.session_password_protected?
