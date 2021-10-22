@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_21_153003) do
+ActiveRecord::Schema.define(version: 2021_10_21_163441) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -662,6 +662,13 @@ ActiveRecord::Schema.define(version: 2021_10_21_153003) do
     t.index ["updater_id"], name: "fk__course_groups_updater_id"
   end
 
+  create_table "course_learning_maps", force: :cascade do |t|
+    t.bigint "course_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["course_id"], name: "fk__course_learning_maps_course_id"
+  end
+
   create_table "course_lesson_plan_event_materials", id: :serial, force: :cascade do |t|
     t.integer "lesson_plan_event_id", null: false
     t.integer "material_id", null: false
@@ -814,13 +821,10 @@ ActiveRecord::Schema.define(version: 2021_10_21_153003) do
   end
 
   create_table "course_settings_learning_map_components", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "course_learning_maps", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.bigint "course_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["course_id"], name: "fk__course_settings_learning_map_components_course_id"
   end
 
   create_table "course_survey_answer_options", id: :serial, force: :cascade do |t|
@@ -1344,6 +1348,7 @@ ActiveRecord::Schema.define(version: 2021_10_21_153003) do
   add_foreign_key "course_groups", "courses", name: "fk_course_groups_course_id"
   add_foreign_key "course_groups", "users", column: "creator_id", name: "fk_course_groups_creator_id"
   add_foreign_key "course_groups", "users", column: "updater_id", name: "fk_course_groups_updater_id"
+  add_foreign_key "course_learning_maps", "courses", name: "fk_course_learning_maps_course_id"
   add_foreign_key "course_lesson_plan_event_materials", "course_lesson_plan_events", column: "lesson_plan_event_id", name: "fk_course_lesson_plan_event_materials_lesson_plan_event_id"
   add_foreign_key "course_lesson_plan_event_materials", "course_materials", column: "material_id", name: "fk_course_lesson_plan_event_materials_material_id"
   add_foreign_key "course_lesson_plan_items", "courses", name: "fk_course_lesson_plan_items_course_id"
@@ -1370,6 +1375,7 @@ ActiveRecord::Schema.define(version: 2021_10_21_153003) do
   add_foreign_key "course_reference_timelines", "courses"
   add_foreign_key "course_reference_times", "course_lesson_plan_items", column: "lesson_plan_item_id"
   add_foreign_key "course_reference_times", "course_reference_timelines", column: "reference_timeline_id"
+  add_foreign_key "course_settings_learning_map_components", "courses", name: "fk_course_settings_learning_map_components_course_id"
   add_foreign_key "course_survey_answer_options", "course_survey_answers", column: "answer_id", name: "fk_course_survey_answer_options_answer_id"
   add_foreign_key "course_survey_answer_options", "course_survey_question_options", column: "question_option_id", name: "fk_course_survey_answer_options_question_option_id"
   add_foreign_key "course_survey_answers", "course_survey_questions", column: "question_id", name: "fk_course_survey_answers_question_id"
