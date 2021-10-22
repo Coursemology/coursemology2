@@ -194,7 +194,7 @@ const translations = defineMessages({
       'There are currently {unattempted} users(s) who have not attempted, \
       and {attempting} user(s) who are attempting this assessment. \
       Are you sure you want to force submit all submissions ({selectedUsers})? \
-      Doing so will cause all questions to be awarded zero marks for non-autograded assessments. \
+      Doing so will cause all questions to be awarded ZERO marks for non-autograded assessments. \
       NOTE THAT THIS ACTION IS IRREVERSIBLE!',
   },
   unsubmitAllConfirmation: {
@@ -229,6 +229,10 @@ const translations = defineMessages({
   updateFailure: {
     id: 'course.assessment.submission.updateFailure',
     defaultMessage: 'Submission update failed: {errors}',
+  },
+  downloadRequestSuccess: {
+    id: 'course.assessment.submission.downloadRequestSuccess',
+    defaultMessage: 'Your download request is successful.',
   },
   requestFailure: {
     id: 'course.assessment.submission.requestFailure',
@@ -276,17 +280,37 @@ const translations = defineMessages({
     id: 'course.assessment.submission.autogradeSubmissionFailure',
     defaultMessage: 'An error occurred while evaluating the answers.',
   },
+  publishJobPending: {
+    id: 'course.assessment.submission.publishJobPending',
+    defaultMessage: 'Please wait as the submissions are currently being published.',
+  },
   publishSuccess: {
     id: 'course.assessment.submission.publishSuccess',
     defaultMessage: 'All graded submissions above have been published.',
   },
+  forceSubmitJobPending: {
+    id: 'course.assessment.submission.forceSubmitJobPending',
+    defaultMessage: 'Please wait as the submissions are currently being created and/or submitted.',
+  },
   forceSubmitSuccess: {
     id: 'course.assessment.submission.forceSubmitSuccess',
-    defaultMessage: 'All unsubmitted submissions above have been submitted.',
+    defaultMessage: 'All unsubmitted submissions above have been successfully submitted and graded.',
+  },
+  downloadSubmissionsJobPending: {
+    id: 'course.assessment.submission.downloadSubmissionsJobPending',
+    defaultMessage: 'Please wait as your request to download submission answers is being processed.',
+  },
+  downloadStatisticsJobPending: {
+    id: 'course.assessment.submission.downloadStatisticsJobPending',
+    defaultMessage: 'Please wait as your request to download submission statistics is being processed.',
   },
   unsubmitSubmissionSuccess: {
     id: 'course.assessment.submission.unsubmitSubmissionSuccess',
     defaultMessage: "{name}'s submission has been successfully unsubmitted.",
+  },
+  unsubmitAllSubmissionsJobPending: {
+    id: 'course.assessment.submission.unsubmitAllSubmissionsJobPending',
+    defaultMessage: 'Please wait as the submissions are currently being unsubmitted.',
   },
   unsubmitAllSubmissionsSuccess: {
     id: 'course.assessment.submission.unsubmitAllSubmissionsSuccess',
@@ -295,6 +319,10 @@ const translations = defineMessages({
   deleteSubmissionSuccess: {
     id: 'course.assessment.submission.deleteSubmissionSuccess',
     defaultMessage: "{name}'s submission has been successfully deleted.",
+  },
+  deleteAllSubmissionsJobPending: {
+    id: 'course.assessment.submission.deleteAllSubmissionsJobPending',
+    defaultMessage: 'Please wait as the submissions are currently being deleted.',
   },
   deleteAllSubmissionsSuccess: {
     id: 'course.assessment.submission.deleteAllSubmissionsSuccess',

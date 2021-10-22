@@ -7,10 +7,10 @@ import translations from '../translations';
 import actionTypes from '../constants';
 
 const DOWNLOAD_JOB_POLL_INTERVAL = 2000;
-const PUBLISH_JOB_POLL_INTERVAL = 500;
-const FORCE_SUBMIT_JOB_POLL_INTERVAL = 500;
-const UNSUBMIT_ALL_SUBMISSIONS_JOB_POLL_INTERVAL = 500;
-const DELETE_ALL_SUBMISSIONS_JOB_POLL_INTERVAL = 500;
+const PUBLISH_JOB_POLL_INTERVAL = 1000;
+const FORCE_SUBMIT_JOB_POLL_INTERVAL = 1000;
+const UNSUBMIT_ALL_SUBMISSIONS_JOB_POLL_INTERVAL = 1000;
+const DELETE_ALL_SUBMISSIONS_JOB_POLL_INTERVAL = 1000;
 const DOWNLOAD_STATISTICS_JOB_POLL_INTERVAL = 2000;
 
 export function fetchSubmissions() {
@@ -50,6 +50,7 @@ export function publishSubmissions(type) {
       .then((response) => response.data)
       .then((data) => {
         if (data.redirect_url) {
+          dispatch(setNotification(translations.publishJobPending));
           pollJob(
             data.redirect_url,
             PUBLISH_JOB_POLL_INTERVAL,
@@ -83,6 +84,7 @@ export function forceSubmitSubmissions(type) {
       .forceSubmitAll(type)
       .then((response) => response.data)
       .then((data) => {
+        dispatch(setNotification(translations.forceSubmitJobPending));
         if (data.redirect_url) {
           pollJob(
             data.redirect_url,
@@ -105,6 +107,7 @@ export function downloadSubmissions(type) {
     const handleSuccess = (successData) => {
       window.location.href = successData.redirect_url;
       dispatch({ type: actionTypes.DOWNLOAD_SUBMISSIONS_SUCCESS });
+      dispatch(setNotification(translations.downloadRequestSuccess));
     };
 
     const handleFailure = () => {
@@ -116,6 +119,7 @@ export function downloadSubmissions(type) {
       .downloadAll(type)
       .then((response) => response.data)
       .then((data) => {
+        dispatch(setNotification(translations.downloadSubmissionsJobPending));
         pollJob(
           data.redirect_url,
           DOWNLOAD_JOB_POLL_INTERVAL,
@@ -134,6 +138,7 @@ export function downloadStatistics(type) {
     const handleSuccess = (successData) => {
       window.location.href = successData.redirect_url;
       dispatch({ type: actionTypes.DOWNLOAD_STATISTICS_SUCCESS });
+      dispatch(setNotification(translations.downloadRequestSuccess));
     };
 
     const handleFailure = (data) => {
@@ -151,6 +156,7 @@ export function downloadStatistics(type) {
       .downloadStatistics(type)
       .then((response) => response.data)
       .then((data) => {
+        dispatch(setNotification(translations.downloadStatisticsJobPending));
         pollJob(
           data.redirect_url,
           DOWNLOAD_STATISTICS_JOB_POLL_INTERVAL,
@@ -203,6 +209,7 @@ export function unsubmitAllSubmissions(type) {
       .unsubmitAll(type)
       .then((response) => response.data)
       .then((data) => {
+        dispatch(setNotification(translations.unsubmitAllSubmissionsJobPending));
         if (data.redirect_url) {
           pollJob(
             data.redirect_url,
@@ -259,6 +266,7 @@ export function deleteAllSubmissions(type) {
       .deleteAll(type)
       .then((response) => response.data)
       .then((data) => {
+        dispatch(setNotification(translations.deleteAllSubmissionsJobPending));
         if (data.redirect_url) {
           pollJob(
             data.redirect_url,
