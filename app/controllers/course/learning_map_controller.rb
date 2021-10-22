@@ -5,6 +5,8 @@ class Course::LearningMapController < Course::ComponentController
   def index
   end
 
+  private
+
   # @return [Course::LearningMapComponent]
   # @return [nil] If component is disabled.
   def component
