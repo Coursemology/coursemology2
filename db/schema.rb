@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_21_163441) do
+ActiveRecord::Schema.define(version: 2021_10_21_163430) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -820,13 +820,6 @@ ActiveRecord::Schema.define(version: 2021_10_21_163441) do
     t.index ["reference_timeline_id"], name: "index_course_reference_times_on_reference_timeline_id"
   end
 
-  create_table "course_settings_learning_map_components", force: :cascade do |t|
-    t.bigint "course_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["course_id"], name: "fk__course_settings_learning_map_components_course_id"
-  end
-
   create_table "course_survey_answer_options", id: :serial, force: :cascade do |t|
     t.integer "answer_id", null: false
     t.integer "question_option_id", null: false
@@ -1375,7 +1368,6 @@ ActiveRecord::Schema.define(version: 2021_10_21_163441) do
   add_foreign_key "course_reference_timelines", "courses"
   add_foreign_key "course_reference_times", "course_lesson_plan_items", column: "lesson_plan_item_id"
   add_foreign_key "course_reference_times", "course_reference_timelines", column: "reference_timeline_id"
-  add_foreign_key "course_settings_learning_map_components", "courses", name: "fk_course_settings_learning_map_components_course_id"
   add_foreign_key "course_survey_answer_options", "course_survey_answers", column: "answer_id", name: "fk_course_survey_answer_options_answer_id"
   add_foreign_key "course_survey_answer_options", "course_survey_question_options", column: "question_option_id", name: "fk_course_survey_answer_options_question_option_id"
   add_foreign_key "course_survey_answers", "course_survey_questions", column: "question_id", name: "fk_course_survey_answers_question_id"
