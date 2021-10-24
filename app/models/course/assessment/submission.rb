@@ -34,6 +34,10 @@ class Course::Assessment::Submission < ApplicationRecord
     end
   end
 
+  Course::Assessment::Answer.after_save do |answer|
+    Course::Assessment::Submission.on_dependent_status_change(answer)
+  end
+
   validate :validate_consistent_user, :validate_unique_submission, on: :create
   validate :validate_awarded_attributes, if: :published?
   validates :submitted_at, presence: true, unless: :attempting?
@@ -41,6 +45,7 @@ class Course::Assessment::Submission < ApplicationRecord
   validates :creator, presence: true
   validates :updater, presence: true
   validates :assessment, presence: true
+  validates :last_graded_time, presence: true
 
   belongs_to :assessment, inverse_of: :submissions
 
@@ -278,5 +283,11 @@ class Course::Assessment::Submission < ApplicationRecord
     return if awarded_at && awarder
 
     errors.add(:experience_points_record, :absent_award_attributes)
+  end
+
+  def self.on_dependent_status_change(answer)
+    return unless answer.saved_changes.key?(:grade)
+
+    answer.submission.last_graded_time = Time.now
   end
 end
