@@ -675,6 +675,29 @@ RSpec.describe Course::Assessment::Submission do
       end
     end
 
+    describe '#on_dependent_status_change' do
+      subject { submission1 }
+      let(:answer) {
+        create(:course_assessment_answer_multiple_response, :submitted,
+               assessment: assessment, question: assessment.questions.first,
+               submission: subject, creator: user1).acting_as
+      }
+
+      context 'when an answer\'s grade changes' do
+        before do
+          subject.publish!
+          subject.save!
+        end
+
+        it 'updates the last_graded_time' do
+          answer.grade = 0
+          expect(subject.saved_changes).to include(:last_graded_time)
+          answer.save!
+          subject.save!
+        end
+      end
+    end
+
     describe 'callbacks from Course::Assessment::Submission::TodoConcern' do
       let(:assessment_traits) { [:published_with_mcq_question] }
       subject do

@@ -257,7 +257,7 @@ RSpec.describe Course::Condition::Assessment, type: :model do
       end
     end
 
-    describe '.on_dependent_status_change' do
+    describe '#on_dependent_status_change' do
       let(:course) { create(:course) }
       let(:student_user) { create(:course_student, course: course).user }
       let(:assessment) { create(:assessment, :published_with_mcq_question, course: course) }
