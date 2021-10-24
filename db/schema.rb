@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_21_153003) do
+ActiveRecord::Schema.define(version: 2021_10_23_070257) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1077,6 +1077,7 @@ ActiveRecord::Schema.define(version: 2021_10_21_153003) do
     t.boolean "enrollable", default: false, null: false
     t.string "time_zone", limit: 255
     t.boolean "show_personalized_timeline_features", default: false, null: false
+    t.datetime "conditional_satisfiability_evaluation_time", default: "2021-10-24 10:31:32"
     t.index ["creator_id"], name: "fk__courses_creator_id"
     t.index ["instance_id"], name: "fk__courses_instance_id"
     t.index ["registration_key"], name: "index_courses_on_registration_key", unique: true
