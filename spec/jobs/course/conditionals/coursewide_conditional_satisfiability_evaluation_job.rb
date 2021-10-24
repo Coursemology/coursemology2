@@ -49,7 +49,7 @@ RSpec.describe Course::Conditional::CoursewideConditionalSatisfiabilityEvaluatio
       evaluation_job = subject.perform_later(course, job_time)
 
       expect(Course::Conditional::ConditionalSatisfiabilityEvaluationService).
-          not_to receive(:evaluate)
+        not_to receive(:evaluate)
 
       evaluation_job.perform_now
     end

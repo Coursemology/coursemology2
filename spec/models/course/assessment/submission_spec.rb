@@ -676,12 +676,16 @@ RSpec.describe Course::Assessment::Submission do
     end
 
     describe '#on_dependent_status_change' do
-      subject { submission1 }
-      let(:answer) {
+      subject do
+        create(:submission, :graded,
+               assessment: assessment, creator: user1, course_user: course_student1)
+      end
+
+      let(:answer) do
         create(:course_assessment_answer_multiple_response, :submitted,
                assessment: assessment, question: assessment.questions.first,
                submission: subject, creator: user1).acting_as
-      }
+      end
 
       context 'when an answer\'s grade changes' do
         before do

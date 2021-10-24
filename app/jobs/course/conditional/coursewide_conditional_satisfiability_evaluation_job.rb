@@ -17,11 +17,11 @@ class Course::Conditional::CoursewideConditionalSatisfiabilityEvaluationJob < Ap
     if (latest_update_time.to_f - course.conditional_satisfiability_evaluation_time.to_f).abs <= DELTA
       instance = Course.unscoped { course.instance }
 
-      course.course_users.each { |course_user|
+      course.course_users.each do |course_user|
         ActsAsTenant.with_tenant(instance) do
           Course::Conditional::ConditionalSatisfiabilityEvaluationService.evaluate(course_user)
         end
-      }
+      end
     end
 
     redirect_to redirect_to_path

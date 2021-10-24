@@ -245,6 +245,12 @@ class Course::Assessment::Submission < ApplicationRecord
     published? ? points_awarded : draft_points_awarded
   end
 
+  def self.on_dependent_status_change(answer)
+    return unless answer.saved_changes.key?(:grade)
+
+    answer.submission.last_graded_time = Time.now
+  end
+
   private
 
   # Queues the submission for auto grading, after the submission has changed to the submitted state.
@@ -283,11 +289,5 @@ class Course::Assessment::Submission < ApplicationRecord
     return if awarded_at && awarder
 
     errors.add(:experience_points_record, :absent_award_attributes)
-  end
-
-  def self.on_dependent_status_change(answer)
-    return unless answer.saved_changes.key?(:grade)
-
-    answer.submission.last_graded_time = Time.now
   end
 end
