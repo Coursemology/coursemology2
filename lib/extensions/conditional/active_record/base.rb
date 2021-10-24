@@ -109,7 +109,7 @@ module Extensions::Conditional::ActiveRecord::Base
       Course::Conditional::CoursewideConditionalSatisfiabilityEvaluationJob.set(
         wait: DEFAULT_COURSEWIDE_CONDITIONAL_SATISFIABILIY_EVALUATION_DELAY
       ).perform_later(
-        Course.find(course_id), conditional_satisfiability_evaluation_time
+        current_course, conditional_satisfiability_evaluation_time
       )
     end
   end
