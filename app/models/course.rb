@@ -25,6 +25,7 @@ class Course < ApplicationRecord
   validates :creator, presence: true
   validates :updater, presence: true
   validates :instance, presence: true
+  validates :conditional_satisfiability_evaluation_time, presence: true
 
   has_many :enrol_requests, inverse_of: :course, dependent: :destroy
   has_many :course_users, inverse_of: :course, dependent: :destroy
