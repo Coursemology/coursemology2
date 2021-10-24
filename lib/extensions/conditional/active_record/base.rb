@@ -10,6 +10,7 @@ module Extensions::Conditional::ActiveRecord::Base
                class_name: Course::Condition.name, as: :conditional, dependent: :destroy,
                inverse_of: :conditional
       validates :satisfiability_type, presence: true
+      after_save :evaluate_conditions_for_all_course_users
 
       include ConditionalInstanceMethods
     end
@@ -94,6 +95,12 @@ module Extensions::Conditional::ActiveRecord::Base
     # (all conditions) if it does not exist.
     def set_default_satisfiability_type
       self.satisfiability_type ||= :all_conditions
+    end
+
+    def evaluate_conditions_for_all_course_users
+      Course.find(course_id).course_users.each { |course_user|
+        Course::Conditional::ConditionalSatisfiabilityEvaluationJob.perform_later(course_user)
+      }
     end
   end
 
