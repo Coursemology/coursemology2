@@ -28,12 +28,30 @@ class ReadOnlyEditor extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const expanded = [];
-    for (let i = 0; i < nextProps.content.length; i += 1) {
-      expanded.push(false);
-    }
+    const { expanded } = this.state;
 
-    this.setState({ expanded });
+    // We only want to minimize the annotation/comment popup line that is added/deleted which can be
+    // computed by getting the differences of lines before and after the operation.
+    const annotationLinesPrev = this.props.annotations.map(
+      (annotation) => annotation.line,
+    );
+    const annotationLinesNext = nextProps.annotations.map(
+      (annotation) => annotation.line,
+    );
+    // If an annotation is deleted
+    const updatedLineLeft = annotationLinesPrev.filter(
+      (x) => !annotationLinesNext.includes(x),
+    );
+    // If an annotation is added
+    const updatedLineRight = annotationLinesNext.filter(
+      (x) => !annotationLinesPrev.includes(x),
+    );
+    const updatedLine = [...updatedLineLeft, ...updatedLineRight][0];
+
+    const newExpanded = expanded.slice(0);
+    newExpanded[updatedLine - 1] = false;
+
+    this.setState({ expanded: newExpanded });
   }
 
   setAllCommentStateExpanded() {
@@ -148,7 +166,7 @@ class ReadOnlyEditor extends Component {
   }
 
   renderShowCommentsPanel() {
-    const { intl } = this.props;
+    const { intl, annotations } = this.props;
     const { editorMode } = this.state;
     return (
       <Toggle
@@ -156,6 +174,7 @@ class ReadOnlyEditor extends Component {
         labelStyle={{ width: 'auto' }}
         label={intl.formatMessage(translations.showCommentsPanel)}
         labelPosition="left"
+        disabled={annotations.length === 0}
         toggled={editorMode === EDITOR_MODE_WIDE}
         onToggle={() => {
           this.showCommentsPanel();
