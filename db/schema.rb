@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_21_163430) do
+ActiveRecord::Schema.define(version: 2021_10_24_140630) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -818,16 +818,6 @@ ActiveRecord::Schema.define(version: 2021_10_21_163430) do
     t.datetime "updated_at", null: false
     t.index ["lesson_plan_item_id"], name: "index_course_reference_times_on_lesson_plan_item_id"
     t.index ["reference_timeline_id"], name: "index_course_reference_times_on_reference_timeline_id"
-  end
-
-  create_table "course_settings_learning_map_components", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "course_learning_maps", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "course_survey_answer_options", id: :serial, force: :cascade do |t|
