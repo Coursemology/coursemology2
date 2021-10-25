@@ -27,15 +27,15 @@ class ReadOnlyEditor extends Component {
     this.showCommentsPanel = this.showCommentsPanel.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps) {
     const { expanded } = this.state;
 
     // We only want to minimize the annotation/comment popup line that is added/deleted which can be
     // computed by getting the differences of lines before and after the operation.
-    const annotationLinesPrev = this.props.annotations.map(
+    const annotationLinesPrev = prevProps.annotations.map(
       (annotation) => annotation.line,
     );
-    const annotationLinesNext = nextProps.annotations.map(
+    const annotationLinesNext = this.props.annotations.map(
       (annotation) => annotation.line,
     );
     // If an annotation is deleted
@@ -46,12 +46,15 @@ class ReadOnlyEditor extends Component {
     const updatedLineRight = annotationLinesNext.filter(
       (x) => !annotationLinesPrev.includes(x),
     );
-    const updatedLine = [...updatedLineLeft, ...updatedLineRight][0];
+    const updatedLine = [...updatedLineLeft, ...updatedLineRight];
 
     const newExpanded = expanded.slice(0);
-    newExpanded[updatedLine - 1] = false;
+    newExpanded[updatedLine[0] - 1] = false;
 
-    this.setState({ expanded: newExpanded });
+    if (updatedLine.length > 0) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ expanded: newExpanded });
+    }
   }
 
   setAllCommentStateExpanded() {
@@ -166,7 +169,7 @@ class ReadOnlyEditor extends Component {
   }
 
   renderShowCommentsPanel() {
-    const { intl, annotations } = this.props;
+    const { intl } = this.props;
     const { editorMode } = this.state;
     return (
       <Toggle
@@ -174,7 +177,6 @@ class ReadOnlyEditor extends Component {
         labelStyle={{ width: 'auto' }}
         label={intl.formatMessage(translations.showCommentsPanel)}
         labelPosition="left"
-        disabled={annotations.length === 0}
         toggled={editorMode === EDITOR_MODE_WIDE}
         onToggle={() => {
           this.showCommentsPanel();
