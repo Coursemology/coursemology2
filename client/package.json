@@ -78,7 +78,7 @@
     "chart.js": "^2.8.0",
     "css-loader": "^1.0.0",
     "expose-loader": "^0.7.5",
-    "fabric": "2.5.0",
+    "fabric": "4.6.0",
     "glob": "^7.1.4",
     "hard-source-webpack-plugin": "^0.13.1",
     "history": "^4.9.0",
