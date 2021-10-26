@@ -1,11 +1,11 @@
-const ace = require('brace');
+const ace = require('ace-builds');
 
 // Load ACE dependencies required for ACE syntax highlighting and theming
-require('brace/mode/c_cpp');
-require('brace/mode/java');
-require('brace/mode/javascript');
-require('brace/mode/python');
-require('brace/theme/github');
+require('ace-builds/src-noconflict/mode-c_cpp');
+require('ace-builds/src-noconflict/mode-java');
+require('ace-builds/src-noconflict/mode-javascript');
+require('ace-builds/src-noconflict/mode-python');
+require('ace-builds/src-noconflict/theme-github');
 
 /**
  * Builds a new Ace editor container, with the given ID as a suffix.

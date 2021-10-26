@@ -1,5 +1,5 @@
-import 'brace/mode/python';
-import 'brace/theme/github';
+import 'ace-builds/src-noconflict/mode-python';
+import 'ace-builds/src-noconflict/theme-github';
 
 import React from 'react';
 import PropTypes from 'prop-types';
