@@ -39,19 +39,18 @@ class ReadOnlyEditor extends Component {
       (annotation) => annotation.line,
     );
     // If an annotation is deleted
-    const updatedLineLeft = annotationLinesPrev.filter(
+    const deletedAnnotationLine = annotationLinesPrev.filter(
       (x) => !annotationLinesNext.includes(x),
     );
     // If an annotation is added
-    const updatedLineRight = annotationLinesNext.filter(
+    const addedAnnotationLine = annotationLinesNext.filter(
       (x) => !annotationLinesPrev.includes(x),
     );
-    const updatedLine = [...updatedLineLeft, ...updatedLineRight];
-
-    const newExpanded = expanded.slice(0);
-    newExpanded[updatedLine[0] - 1] = false;
+    const updatedLine = [...deletedAnnotationLine, ...addedAnnotationLine];
 
     if (updatedLine.length > 0) {
+      const newExpanded = expanded.slice(0);
+      newExpanded[updatedLine[0] - 1] = false;
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ expanded: newExpanded });
     }
