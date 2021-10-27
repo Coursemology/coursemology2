@@ -702,6 +702,7 @@ DEPENDENCIES
   loofah (>= 2.2.1)
   mimemagic (>= 0.3.7)
   mini_magick
+  momentjs-rails
   nokogiri (>= 1.8.1)
   omniauth
   omniauth-facebook

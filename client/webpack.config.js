@@ -21,7 +21,7 @@ const config = {
   },
 
   output: {
-    filename: production ? '[name]-[chunkhash].js' : '[name].js',
+    filename: '[name].js',
     path: path.join(__dirname, '..', 'public', 'webpack'),
     publicPath: '/webpack/',
   },
@@ -50,7 +50,7 @@ const config = {
   },
 
   plugins: [
-    new webpack.IgnorePlugin(/__test__/),
+    new webpack.IgnorePlugin({ resourceRegExp: /__test__/ }),
     new WebpackManifestPlugin({
       publicPath: '/webpack/',
       writeToFileEmit: true,

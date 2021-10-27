@@ -12,7 +12,7 @@ import KeyboardArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-lef
 import KeyboardArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
 import Schedule from 'material-ui/svg-icons/action/schedule';
 import MomentUtils from '@date-io/moment';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
+import { MuiThemeProvider, createTheme } from '@material-ui/core';
 
 const translations = defineMessages({
   datePlaceholder: {
@@ -51,7 +51,7 @@ const styles = {
   },
 };
 
-const datetimepickerTheme = createMuiTheme({
+const datetimepickerTheme = createTheme({
   // https://material-ui.com/customization/themes/#typography---html-font-size
   // https://material-ui.com/style/typography/#migration-to-typography-v2
   typography: {
