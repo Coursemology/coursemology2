@@ -1,4 +1,3 @@
-import React from 'react';
 import { red100, orange100 } from 'material-ui/styles/colors';
 import PropTypes from 'prop-types';
 

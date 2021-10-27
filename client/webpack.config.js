@@ -4,7 +4,6 @@ const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
 const env = process.env.NODE_ENV || 'development';
-const production = env === 'production';
 const development = env === 'development';
 const travis = process.env.TRAVIS === 'true';
 
