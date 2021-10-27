@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { submit, isValid } from 'redux-form';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import { formNames, duplicationModes } from 'course/duplication/constants';
@@ -32,8 +33,7 @@ class DuplicateAllButton extends React.Component {
   }
 
   render() {
-    const { dispatch, duplicationMode, disabled } = this.props;
-
+    const { dispatch, duplicationMode, disabled, isDuplicating } = this.props;
     if (duplicationMode !== duplicationModes.COURSE) {
       return null;
     }
@@ -46,6 +46,9 @@ class DuplicateAllButton extends React.Component {
           label={<FormattedMessage {...translations.duplicateCourse} />}
           onClick={() => this.setState({ confirmationOpen: true })}
         />
+        {isDuplicating && (
+          <CircularProgress size={36} style={{ position: 'absolute' }} />
+        )}
         <ConfirmationDialog
           open={this.state.confirmationOpen}
           message={
@@ -69,6 +72,7 @@ class DuplicateAllButton extends React.Component {
 
 DuplicateAllButton.propTypes = {
   duplicationMode: PropTypes.string.isRequired,
+  isDuplicating: PropTypes.bool.isRequired,
   disabled: PropTypes.bool.isRequired,
 
   dispatch: PropTypes.func.isRequired,
@@ -76,6 +80,7 @@ DuplicateAllButton.propTypes = {
 
 export default connect(({ duplication, ...state }) => ({
   duplicationMode: duplication.duplicationMode,
+  isDuplicating: duplication.isDuplicating,
   disabled:
     !isValid(formNames.NEW_COURSE)(state) ||
     duplication.isDuplicating ||

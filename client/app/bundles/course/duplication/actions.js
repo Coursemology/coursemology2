@@ -1,6 +1,9 @@
 import CourseAPI from 'api/course';
+import pollJob from 'lib/helpers/job-helpers';
 import actionTypes from 'course/duplication/constants';
 import { setNotification } from 'lib/actions';
+
+const DUPLICATE_JOB_POLL_INTERVAL = 2000;
 
 export function fetchObjectsList() {
   return (dispatch) => {
@@ -125,22 +128,47 @@ export function duplicateItems(
   };
 }
 
-export function duplicateCourse(fields, failureMessage) {
+export function duplicateCourse(
+  fields,
+  successMessage,
+  pendingMessage,
+  failureMessage,
+) {
   const payload = { duplication: fields };
 
   return (dispatch, getState) => {
     const sourceCourseId = getState().duplication.sourceCourse.id;
 
+    const handleSuccess = (successData) => {
+      dispatch(setNotification(successMessage));
+      window.location.href = successData.redirect_url;
+      dispatch({ type: actionTypes.DUPLICATE_COURSE_SUCCESS });
+    };
+
+    const handleFailure = (data) => {
+      const message =
+        (data &&
+          data.response &&
+          data.response.data &&
+          data.response.data.error) ||
+        failureMessage;
+      dispatch({ type: actionTypes.DUPLICATE_COURSE_FAILURE });
+      dispatch(setNotification(message));
+    };
+
     dispatch({ type: actionTypes.DUPLICATE_COURSE_REQUEST });
     return CourseAPI.duplication
       .duplicateCourse(sourceCourseId, payload)
-      .then((response) => {
-        window.location = response.data.redirect_url;
-        dispatch({ type: actionTypes.DUPLICATE_COURSE_SUCCESS });
+      .then((response) => response.data)
+      .then((data) => {
+        dispatch(setNotification(pendingMessage));
+        pollJob(
+          data.redirect_url,
+          DUPLICATE_JOB_POLL_INTERVAL,
+          handleSuccess,
+          handleFailure,
+        );
       })
-      .catch(() => {
-        dispatch({ type: actionTypes.DUPLICATE_COURSE_FAILURE });
-        setNotification(failureMessage)(dispatch);
-      });
+      .catch(handleFailure);
   };
 }

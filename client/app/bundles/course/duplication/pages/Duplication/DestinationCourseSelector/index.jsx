@@ -21,6 +21,17 @@ const translations = defineMessages({
     id: 'course.duplication.DestinationCourseSelector.defaultTitle',
     defaultMessage: '{title} (Copied at {timestamp})',
   },
+  success: {
+    id: 'course.duplication.DestinationCourseSelector.success',
+    defaultMessage: 'Duplication is successful. Redirecting to the new course.',
+  },
+  pending: {
+    id: 'course.duplication.DestinationCourseSelector.pending',
+    defaultMessage:
+      'Please wait as your request to duplicate the course is being processed.\n\
+    You may close the window while duplication is in progress and \
+    you will also receive an email with a link to the new course when it becomes available.',
+  },
   failure: {
     id: 'course.duplication.DestinationCourseSelector.failure',
     defaultMessage: 'Duplication failed.',
@@ -55,6 +66,8 @@ class DestinationCourseSelector extends React.Component {
   renderNewCourseForm = () => {
     const { intl, dispatch, sourceCourse, isDuplicating } = this.props;
 
+    const successMessage = intl.formatMessage(translations.success);
+    const pendingMessage = intl.formatMessage(translations.pending);
     const failureMessage = intl.formatMessage(translations.failure);
     const tomorrow = moment().add(1, 'day');
     const defaultNewCourseStartAt = moment(sourceCourse.start_at).set({
@@ -72,7 +85,16 @@ class DestinationCourseSelector extends React.Component {
 
     return (
       <NewCourseForm
-        onSubmit={(values) => dispatch(duplicateCourse(values, failureMessage))}
+        onSubmit={(values) =>
+          dispatch(
+            duplicateCourse(
+              values,
+              successMessage,
+              pendingMessage,
+              failureMessage,
+            ),
+          )
+        }
         disabled={isDuplicating}
         initialValues={initialValues}
       />

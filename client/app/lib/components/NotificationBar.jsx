@@ -24,7 +24,7 @@ export default class NotificationBar extends React.Component {
   }
 
   render() {
-    const { notification, autoHideDuration = 2000, ...options } = this.props;
+    const { notification, autoHideDuration = 5000, ...options } = this.props;
     const message = notification && notification.message;
     const errors = notification && notification.errors;
 
@@ -38,6 +38,12 @@ export default class NotificationBar extends React.Component {
     }
     return (
       <Snackbar
+        bodyStyle={{
+          height: 'auto',
+          lineHeight: 'auto',
+          padding: '20px',
+          whiteSpace: 'pre-line',
+        }}
         open={!!message}
         message={notificationNode}
         autoHideDuration={autoHideDuration}
