@@ -26,7 +26,7 @@ json.forumTopicPostPacks @forum_topic_posts do |forum, topic_posts|
         else
           json.avatar image_path(post.creator.profile_photo.medium.url)
         end
-        json.updatedAt format_datetime(post.updated_at)
+        json.updatedAt post.updated_at
       end
       if post.parent_id
         json.parentPost do
@@ -39,7 +39,7 @@ json.forumTopicPostPacks @forum_topic_posts do |forum, topic_posts|
           else
             json.avatar image_path(post.parent.creator.profile_photo.medium.url)
           end
-          json.updatedAt format_datetime(post.parent.updated_at)
+          json.updatedAt post.parent.updated_at
         end
       end
 
