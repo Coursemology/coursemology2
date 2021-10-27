@@ -365,6 +365,14 @@ RSpec.describe Course::UserInvitationService, type: :service do
           end
         end
 
+        context 'when a user has requested to enrol to the course' do
+          let!(:enrol_request) { create(:course_enrol_request, course: course, user: existing_users.first) }
+          it 'removes the enrolment request' do
+            subject.send(:invite_users, temp_csv_from_attributes(existing_users, existing_roles))
+            expect(course.enrol_requests.length).to eq(0)
+          end
+        end
+
         context 'when provided emails are capitalised' do
           let(:modified_existing_users) do
             existing_users.each { |user| user.email = user.email.upcase }
