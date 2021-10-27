@@ -8,19 +8,23 @@ json.assessment do
   json.downloadable @assessment.downloadable?
   json.passwordProtected @assessment.session_password_protected?
   json.canViewLogs can? :manage, @assessment
+  json.canUnsubmitSubmission can? :update, @assessment
+  json.canDeleteAllSubmissions can? :delete_all_submissions, @assessment
 end
 
 my_students_set = Set.new(@my_students.map(&:id))
 
-json.submissions @course_students do |course_student|
-  json.courseStudent do
-    json.(course_student, :id, :name)
-    json.path course_user_path(current_course, course_student)
-    json.phantom course_student.phantom?
-    json.myStudent my_students_set.include?(course_student.id)
+json.submissions @course_users do |course_user|
+  json.courseUser do
+    json.(course_user, :id, :name)
+    json.path course_user_path(current_course, course_user)
+    json.phantom course_user.phantom?
+    json.myStudent my_students_set.include?(course_user.id) if course_user.student?
+    json.isStudent course_user.student?
+    json.isCurrentUser course_user.user == current_user
   end
 
-  submission = submissions_hash[course_student.id]
+  submission = submissions_hash[course_user.id]
   if submission
     json.id submission.id
     json.workflowState submission.workflow_state

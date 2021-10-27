@@ -1,35 +1,28 @@
-// eslint-disable-next-line import/extensions, import/no-extraneous-dependencies, import/no-unresolved
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import ReactTooltip from 'react-tooltip';
-import moment from 'lib/moment';
 import {
   Table,
   TableBody,
   TableHeader,
   TableHeaderColumn,
   TableRow,
-  TableRowColumn,
 } from 'material-ui/Table';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import { red600, blue600 } from 'material-ui/styles/colors';
+import { red600, red900, pink600 } from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
 import CircularProgress from 'material-ui/CircularProgress';
 import DownloadIcon from 'material-ui/svg-icons/file/file-download';
-import HistoryIcon from 'material-ui/svg-icons/action/history';
-
-import {
-  getCourseUserURL,
-  getEditSubmissionURL,
-  getSubmissionLogsURL,
-} from 'lib/helpers/url-builders';
+import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import DeleteIcon from 'material-ui/svg-icons/action/delete';
+import RemoveCircle from 'material-ui/svg-icons/content/remove-circle';
 import { assessmentShape } from '../../propTypes';
 import { workflowStates } from '../../constants';
 import translations from '../../translations';
 import submissionsTranslations from './translations';
+import SubmissionsTableRow from './SubmissionsTableRow';
 
 const styles = {
   unstartedText: {
@@ -41,6 +34,7 @@ const styles = {
     textOverflow: 'initial',
     whiteSpace: 'normal',
     wordBreak: 'break-word',
+    alignItems: 'center',
   },
   tableCenterCell: {
     textAlign: 'center',
@@ -48,53 +42,23 @@ const styles = {
 };
 
 export default class SubmissionsTable extends Component {
-  static formatDate(date) {
-    return date ? moment(date).format('DD MMM HH:mm') : null;
-  }
-
-  static formatGrade(grade) {
-    return grade !== null ? grade.toFixed(1) : null;
-  }
-
-  static renderUnpublishedWarning(submission) {
-    if (submission.workflowState !== workflowStates.Graded) return null;
-
-    return (
-      <span style={{ display: 'inline-block', marginRight: 5 }}>
-        <a data-tip data-for="unpublished-grades" data-offset="{'left' : -8}">
-          <i className="fa fa-exclamation-triangle" />
-        </a>
-        <ReactTooltip id="unpublished-grades" effect="solid">
-          <FormattedMessage {...submissionsTranslations.publishNotice} />
-        </ReactTooltip>
-      </span>
-    );
-  }
-
-  getGradeString(submission) {
-    if (submission.workflowState === workflowStates.Unstarted) return null;
-
-    const { assessment } = this.props;
-
-    const gradeString =
-      submission.workflowState === workflowStates.Attempting ||
-      submission.workflowState === workflowStates.Submitted
-        ? '--'
-        : SubmissionsTable.formatGrade(submission.grade);
-
-    const maximumGradeString = SubmissionsTable.formatGrade(
-      assessment.maximumGrade,
-    );
-
-    return `${gradeString} / ${maximumGradeString}`;
+  constructor(props) {
+    super(props);
+    this.state = {
+      unsubmitAllConfirmation: false,
+      deleteAllConfirmation: false,
+    };
   }
 
   canDownloadStatistics = () => {
     const { submissions } = this.props;
-    return submissions.length > 0;
+    return (
+      submissions.length > 0 &&
+      submissions.some((s) => s.workflowState !== workflowStates.Unstarted)
+    );
   };
 
-  canDownload() {
+  canDownloadAnswers() {
     const { assessment, submissions } = this.props;
     return (
       assessment.downloadable &&
@@ -106,20 +70,118 @@ export default class SubmissionsTable extends Component {
     );
   }
 
+  canUnsubmitAll() {
+    const { submissions } = this.props;
+    return submissions.some(
+      (s) =>
+        s.workflowState !== workflowStates.Unstarted &&
+        s.workflowState !== workflowStates.Attempting,
+    );
+  }
+
+  canDeleteAll() {
+    const { submissions } = this.props;
+    return submissions.some(
+      (s) => s.workflowState !== workflowStates.Unstarted,
+    );
+  }
+
+  renderUsers() {
+    const {
+      dispatch,
+      courseId,
+      assessmentId,
+      submissions,
+      assessment,
+      isDownloading,
+      isStatisticsDownloading,
+      isUnsubmitting,
+      isDeleting,
+    } = this.props;
+
+    const props = {
+      dispatch,
+      courseId,
+      assessmentId,
+      assessment,
+      isDownloading,
+      isStatisticsDownloading,
+      isUnsubmitting,
+      isDeleting,
+    };
+
+    return submissions.map((submission) => (
+      <SubmissionsTableRow
+        key={submission.courseUser.id}
+        submission={submission}
+        {...props}
+      />
+    ));
+  }
+
+  renderUnsubmitAllConfirmation() {
+    const { handleUnsubmitAll, confirmDialogValue } = this.props;
+    const { unsubmitAllConfirmation } = this.state;
+    return (
+      <ConfirmationDialog
+        open={unsubmitAllConfirmation}
+        onCancel={() => this.setState({ unsubmitAllConfirmation: false })}
+        onConfirm={() => {
+          this.setState({ unsubmitAllConfirmation: false });
+          handleUnsubmitAll();
+        }}
+        message={
+          <FormattedMessage
+            {...translations.unsubmitAllConfirmation}
+            values={{ users: confirmDialogValue }}
+          />
+        }
+      />
+    );
+  }
+
+  renderDeleteAllConfirmation() {
+    const { handleDeleteAll, confirmDialogValue } = this.props;
+    const { deleteAllConfirmation } = this.state;
+    return (
+      <ConfirmationDialog
+        open={deleteAllConfirmation}
+        onCancel={() => this.setState({ deleteAllConfirmation: false })}
+        onConfirm={() => {
+          this.setState({ deleteAllConfirmation: false });
+          handleDeleteAll();
+        }}
+        message={
+          <FormattedMessage
+            {...translations.deleteAllConfirmation}
+            values={{ users: confirmDialogValue }}
+          />
+        }
+      />
+    );
+  }
+
   renderDownloadDropdown() {
     const {
+      assessment,
       handleDownload,
       handleDownloadStatistics,
       isDownloading,
       isStatisticsDownloading,
+      isUnsubmitting,
+      isDeleting,
     } = this.props;
-    const downloadAnswerDisabled = isDownloading || !this.canDownload();
+    const disabled =
+      isDownloading || isStatisticsDownloading || isUnsubmitting || isDeleting;
+    const downloadAnswerDisabled = disabled || !this.canDownloadAnswers();
     const downloadStatisticsDisabled =
-      isStatisticsDownloading || !this.canDownloadStatistics();
+      disabled || !this.canDownloadStatistics();
+    const unsubmitAllDisabled = disabled || !this.canUnsubmitAll();
+    const deleteAllDisabled = disabled || !this.canDeleteAll();
     return (
       <IconMenu
         iconButtonElement={
-          <IconButton id="download-dropdown-icon">
+          <IconButton id="submission-dropdown-icon">
             <MoreVertIcon />
           </IconButton>
         }
@@ -158,97 +220,53 @@ export default class SubmissionsTable extends Component {
           }
           onClick={downloadStatisticsDisabled ? null : handleDownloadStatistics}
         />
-      </IconMenu>
-    );
-  }
-
-  renderStudents() {
-    const { courseId, assessment, submissions } = this.props;
-
-    const tableCenterCellStyle = {
-      ...styles.tableCell,
-      ...styles.tableCenterCell,
-    };
-
-    return submissions.map((submission) => (
-      <TableRow className="submission-row" key={submission.courseStudent.id}>
-        <TableRowColumn style={styles.tableCell}>
-          <a href={getCourseUserURL(courseId, submission.courseStudent.id)}>
-            {submission.courseStudent.name}
-          </a>
-        </TableRowColumn>
-        <TableRowColumn style={tableCenterCellStyle}>
-          {this.renderSubmissionWorkflowState(submission)}
-        </TableRowColumn>
-        <TableRowColumn style={tableCenterCellStyle}>
-          {this.getGradeString(submission)}
-        </TableRowColumn>
-        {assessment.gamified ? (
-          <TableRowColumn style={tableCenterCellStyle}>
-            {submission.pointsAwarded !== undefined
-              ? submission.pointsAwarded
-              : null}
-          </TableRowColumn>
-        ) : null}
-        <TableRowColumn style={tableCenterCellStyle}>
-          {SubmissionsTable.formatDate(submission.dateSubmitted)}
-        </TableRowColumn>
-        <TableRowColumn style={tableCenterCellStyle}>
-          {SubmissionsTable.formatDate(submission.dateGraded)}
-        </TableRowColumn>
-        <TableRowColumn style={{ width: 48, padding: 12 }}>
-          {this.renderSubmissionLogsLink(submission)}
-        </TableRowColumn>
-      </TableRow>
-    ));
-  }
-
-  renderSubmissionLogsLink(submission) {
-    const { assessment, courseId, assessmentId } = this.props;
-
-    if (
-      !assessment.passwordProtected ||
-      !assessment.canViewLogs ||
-      !submission.id
-    )
-      return null;
-
-    return (
-      <div
-        className="submission-access-logs"
-        data-for={`access-logs-${submission.id}`}
-        data-tip
-      >
-        <a href={getSubmissionLogsURL(courseId, assessmentId, submission.id)}>
-          <HistoryIcon
-            style={{ color: submission.logCount > 1 ? red600 : blue600 }}
+        {assessment.canUnsubmitSubmission ? (
+          <MenuItem
+            className={
+              unsubmitAllDisabled
+                ? 'unsubmit-submissions-disabled'
+                : 'unsubmit-submissions-enabled'
+            }
+            primaryText={
+              <FormattedMessage
+                {...submissionsTranslations.unsubmitAllSubmissions}
+              />
+            }
+            disabled={unsubmitAllDisabled}
+            leftIcon={
+              isUnsubmitting ? (
+                <CircularProgress size={30} />
+              ) : (
+                <RemoveCircle color={pink600} />
+              )
+            }
+            onClick={() => this.setState({ unsubmitAllConfirmation: true })}
           />
-          <ReactTooltip id={`access-logs-${submission.id}`} effect="solid">
-            <FormattedMessage {...submissionsTranslations.accessLogs} />
-          </ReactTooltip>
-        </a>
-      </div>
-    );
-  }
-
-  renderSubmissionWorkflowState(submission) {
-    const { courseId, assessmentId } = this.props;
-
-    if (submission.workflowState === workflowStates.Unstarted) {
-      return (
-        <div style={styles.unstartedText}>
-          <FormattedMessage {...translations[submission.workflowState]} />
-        </div>
-      );
-    }
-
-    return (
-      <>
-        {SubmissionsTable.renderUnpublishedWarning(submission)}
-        <a href={getEditSubmissionURL(courseId, assessmentId, submission.id)}>
-          <FormattedMessage {...translations[submission.workflowState]} />
-        </a>
-      </>
+        ) : null}
+        {assessment.canDeleteAllSubmissions ? (
+          <MenuItem
+            className={
+              deleteAllDisabled
+                ? 'delete-submissions-disabled'
+                : 'delete-submissions-enabled'
+            }
+            primaryText={
+              <FormattedMessage
+                {...submissionsTranslations.deleteAllSubmissions}
+              />
+            }
+            disabled={deleteAllDisabled}
+            leftIcon={
+              isDeleting ? (
+                <CircularProgress size={30} />
+              ) : (
+                <DeleteIcon color={red900} />
+              )
+            }
+            onClick={() => this.setState({ deleteAllConfirmation: true })}
+          />
+        ) : null}
+      </IconMenu>
     );
   }
 
@@ -273,7 +291,7 @@ export default class SubmissionsTable extends Component {
       <Table selectable={false}>
         <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
           <TableRow>
-            {tableHeaderColumnFor('studentName')}
+            {tableHeaderColumnFor('userName')}
             {tableHeaderCenterColumnFor('submissionStatus')}
             {tableHeaderCenterColumnFor('grade')}
             {assessment.gamified
@@ -281,13 +299,17 @@ export default class SubmissionsTable extends Component {
               : null}
             {tableHeaderCenterColumnFor('dateSubmitted')}
             {tableHeaderCenterColumnFor('dateGraded')}
-            <TableHeaderColumn style={{ width: 48, padding: 0 }}>
+            <TableHeaderColumn
+              style={{ ...styles.tableCell, ...styles.tableCenterCell }}
+            >
               {this.renderDownloadDropdown()}
+              {this.renderUnsubmitAllConfirmation()}
+              {this.renderDeleteAllConfirmation()}
             </TableHeaderColumn>
           </TableRow>
         </TableHeader>
         <TableBody displayRowCheckbox={false}>
-          {this.renderStudents(submissions)}
+          {this.renderUsers(submissions)}
         </TableBody>
       </Table>
     );
@@ -295,6 +317,7 @@ export default class SubmissionsTable extends Component {
 }
 
 SubmissionsTable.propTypes = {
+  dispatch: PropTypes.func.isRequired,
   submissions: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,
@@ -310,6 +333,11 @@ SubmissionsTable.propTypes = {
   assessmentId: PropTypes.string.isRequired,
   isDownloading: PropTypes.bool.isRequired,
   isStatisticsDownloading: PropTypes.bool.isRequired,
+  isUnsubmitting: PropTypes.bool.isRequired,
+  isDeleting: PropTypes.bool.isRequired,
   handleDownload: PropTypes.func,
   handleDownloadStatistics: PropTypes.func,
+  handleUnsubmitAll: PropTypes.func,
+  handleDeleteAll: PropTypes.func,
+  confirmDialogValue: PropTypes.string,
 };

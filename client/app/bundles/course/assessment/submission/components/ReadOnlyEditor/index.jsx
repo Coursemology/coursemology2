@@ -25,13 +25,33 @@ class ReadOnlyEditor extends Component {
     this.state = { expanded, editorMode: initialEditorMode };
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    const expanded = [];
-    for (let i = 0; i < nextProps.content.length; i += 1) {
-      expanded.push(false);
-    }
+  componentDidUpdate(prevProps) {
+    const { expanded } = this.state;
 
-    this.setState({ expanded });
+    // We only want to minimize the annotation/comment popup line that is added/deleted which can be
+    // computed by getting the differences of lines before and after the operation.
+    const annotationLinesPrev = prevProps.annotations.map(
+      (annotation) => annotation.line,
+    );
+    const annotationLinesNext = this.props.annotations.map(
+      (annotation) => annotation.line,
+    );
+    // If an annotation is deleted
+    const deletedAnnotationLine = annotationLinesPrev.filter(
+      (x) => !annotationLinesNext.includes(x),
+    );
+    // If an annotation is added
+    const addedAnnotationLine = annotationLinesNext.filter(
+      (x) => !annotationLinesPrev.includes(x),
+    );
+    const updatedLine = [...deletedAnnotationLine, ...addedAnnotationLine];
+
+    if (updatedLine.length > 0) {
+      const newExpanded = expanded.slice(0);
+      newExpanded[updatedLine[0] - 1] = false;
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ expanded: newExpanded });
+    }
   }
 
   setAllCommentStateCollapsed() {

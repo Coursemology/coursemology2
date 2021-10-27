@@ -1,5 +1,5 @@
-import 'brace/mode/python';
-import 'brace/theme/github';
+import 'ace-builds/src-noconflict/mode-python';
+import 'ace-builds/src-noconflict/theme-github';
 
 import { Component } from 'react';
 import ScribingView from '../containers/ScribingView';
@@ -9,6 +9,7 @@ import MultipleResponseAnswer from './answers/MultipleResponse';
 import TextResponseAnswer from './answers/TextResponse';
 import FileUploadAnswer from './answers/FileUpload';
 import ProgrammingAnswer from './answers/Programming';
+import ForumPostResponseAnswer from './answers/ForumPostResponse';
 
 export default class Answers extends Component {
   static renderFileUpload({ question, readOnly, answerId }) {
@@ -66,6 +67,16 @@ export default class Answers extends Component {
   static renderVoiceResponse({ question, readOnly, answerId }) {
     return (
       <VoiceResponseAnswer
+        question={question}
+        readOnly={readOnly}
+        answerId={answerId}
+      />
+    );
+  }
+
+  static renderForumPostResponse({ question, readOnly, answerId }) {
+    return (
+      <ForumPostResponseAnswer
         question={question}
         readOnly={readOnly}
         answerId={answerId}

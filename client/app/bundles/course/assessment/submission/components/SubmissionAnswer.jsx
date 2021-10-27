@@ -72,6 +72,7 @@ class SubmissionAnswer extends Component {
       Programming,
       VoiceResponse,
       Scribing,
+      ForumPostResponse,
     } = questionTypes;
     const { viewHistory } = question;
 
@@ -95,6 +96,8 @@ class SubmissionAnswer extends Component {
         return Answers.renderScribing;
       case VoiceResponse:
         return Answers.renderVoiceResponse;
+      case ForumPostResponse:
+        return Answers.renderForumPostResponse;
       default:
         return this.renderMissingRenderer.bind(this);
     }

@@ -6,6 +6,7 @@ import FlatButton from 'material-ui/FlatButton';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import { red500, grey100 } from 'material-ui/styles/colors';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import MaterialSummernote from 'lib/components/MaterialSummernote';
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
@@ -13,6 +14,13 @@ import moment from 'lib/moment';
 /* eslint-enable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 
 import { postShape } from '../propTypes';
+
+const translations = defineMessages({
+  deleteConfirmation: {
+    id: 'course.assessment.submission.CommentCard.deleteConfirmation',
+    defaultMessage: 'Are you sure you want to delete this comment?',
+  },
+});
 
 const styles = {
   card: {
@@ -186,6 +194,7 @@ export default class CommentCard extends Component {
         <ConfirmationDialog
           confirmDelete
           open={this.state.deleteConfirmation}
+          message={<FormattedMessage {...translations.deleteConfirmation} />}
           onCancel={() => this.setState({ deleteConfirmation: false })}
           onConfirm={() => this.onConfirmDelete()}
         />

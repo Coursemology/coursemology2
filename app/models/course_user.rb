@@ -129,6 +129,7 @@ class CourseUser < ApplicationRecord
   end)
 
   scope :order_alphabetically, ->(direction = :asc) { order(name: direction) }
+  scope :order_phantom_user, ->(direction = :desc) { order(phantom: direction) }
   scope :active_in_past_7_days, -> { where('last_active_at > ?', 7.days.ago) }
 
   scope :from_instance, (lambda do |instance|

@@ -42,10 +42,18 @@ class ImageUploader < CarrierWave::Uploader::Base
     %w[jpg jpeg gif png]
   end
 
+  # Duplicate the image from the other uploader. Handles
+  # both file storage and URL storage.
+  #
+  # @return [Boolean] Boolean on whether the duplication is successful.
   def duplicate_from(other_uploader)
     case other_uploader.send(:storage).class.name
     when 'CarrierWave::Storage::File'
-      cache!(File.new(other_uploader.file.path))
+      begin
+        cache!(File.new(other_uploader.file.path))
+      rescue Errno::ENOENT
+        return false
+      end
     when 'CarrierWave::Storage::Fog', 'CarrierWave::Storage::AWS'
       begin
         download!(other_uploader.url)
@@ -53,6 +61,7 @@ class ImageUploader < CarrierWave::Uploader::Base
         download!(other_uploader.medium.url)
       end
     end
+    true
   end
 
   # Override the filename of the uploaded files:

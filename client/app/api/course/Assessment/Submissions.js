@@ -5,20 +5,56 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
     return this.getClient().get(this._getUrlPrefix());
   }
 
-  downloadAll(students) {
+  downloadAll(courseUsers) {
     return this.getClient().get(`${this._getUrlPrefix()}/download_all`, {
-      params: { students },
+      params: { course_users: courseUsers },
     });
   }
 
-  downloadStatistics(students) {
+  downloadStatistics(courseUsers) {
     return this.getClient().get(`${this._getUrlPrefix()}/download_statistics`, {
-      params: { students },
+      params: { course_users: courseUsers },
     });
   }
 
   publishAll() {
     return this.getClient().patch(`${this._getUrlPrefix()}/publish_all`);
+  }
+
+  unsubmit(submissionId) {
+    return this.getClient().patch(
+      `${this._getUrlPrefix()}/${submissionId}/unsubmit`,
+    );
+  }
+
+  unsubmitSubmission(submissionId) {
+    return this.getClient().patch(`${this._getUrlPrefix()}/unsubmit`, {
+      submission_id: submissionId,
+    });
+  }
+
+  unsubmitAll(courseUsers) {
+    return this.getClient().patch(`${this._getUrlPrefix()}/unsubmit_all`, {
+      course_users: courseUsers,
+    });
+  }
+
+  delete(submissionId) {
+    return this.getClient().patch(
+      `${this._getUrlPrefix()}/${submissionId}/delete`,
+    );
+  }
+
+  deleteSubmission(submissionId) {
+    return this.getClient().patch(`${this._getUrlPrefix()}/delete`, {
+      submission_id: submissionId,
+    });
+  }
+
+  deleteAll(courseUsers) {
+    return this.getClient().patch(`${this._getUrlPrefix()}/delete_all`, {
+      course_users: courseUsers,
+    });
   }
 
   edit(submissionId) {

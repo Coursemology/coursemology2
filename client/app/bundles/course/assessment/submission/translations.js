@@ -184,8 +184,22 @@ const translations = defineMessages({
   publishConfirmation: {
     id: 'course.assessment.submission.publishConfirmation',
     defaultMessage:
-      'THIS ACTION IS IRREVERSIBLE All graded submissions will be published and \
-                     students will see their own grades. Are you sure you want to publish?',
+      'Are you sure you want to publish? THIS ACTION IS IRREVERSIBLE! \
+                    All graded submissions will be published and students will see their own grades.',
+  },
+  unsubmitAllConfirmation: {
+    id: 'course.assessment.submission.unsubmitAllConfirmation',
+    defaultMessage:
+      'Are you sure you want to UNSUBMIT the submissions for all {users}? \
+                    All submissions will be unsubmitted and this will reset the submission time \
+                    and permit the users to change their submissions. NOTE THAT THIS ACTION IS IRREVERSIBLE',
+  },
+  deleteAllConfirmation: {
+    id: 'course.assessment.submission.deleteAllConfirmation',
+    defaultMessage:
+      'Are you sure you want to DELETE the submissions for all {users}? \
+                    All answers, past attempts, and submissions will be deleted \
+                    and users will need to re-attempt all questions. NOTE THAT THIS ACTION IS IRREVERSIBLE',
   },
   lateSubmission: {
     id: 'course.assessment.submission.lateSubmission',
@@ -255,6 +269,22 @@ const translations = defineMessages({
   publishSuccess: {
     id: 'course.assessment.submission.publishSuccess',
     defaultMessage: 'All graded submissions have been published.',
+  },
+  unsubmitSubmissionSuccess: {
+    id: 'course.assessment.submission.unsubmitSubmissionSuccess',
+    defaultMessage: "{name}'s submission has been successfully unsubmitted.",
+  },
+  unsubmitAllSubmissionsSuccess: {
+    id: 'course.assessment.submission.unsubmitAllSubmissionsSuccess',
+    defaultMessage: 'All submissions have been successfully unsubmitted.',
+  },
+  deleteSubmissionSuccess: {
+    id: 'course.assessment.submission.deleteSubmissionSuccess',
+    defaultMessage: "{name}'s submission has been successfully deleted.",
+  },
+  deleteAllSubmissionsSuccess: {
+    id: 'course.assessment.submission.deleteAllSubmissionsSuccess',
+    defaultMessage: 'All submissions have been successfully deleted.',
   },
   examDialogTitle: {
     id: 'course.assessment.submission.examDialogTitle',

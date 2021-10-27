@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Discussion::Post < ApplicationRecord
   extend Course::Discussion::Post::OrderingConcern
+  include Course::Discussion::Post::RetrievalConcern
   include Course::ForumParticipationConcern
 
   acts_as_forest order: :created_at, optional: true

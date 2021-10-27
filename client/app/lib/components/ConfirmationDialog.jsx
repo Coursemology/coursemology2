@@ -16,9 +16,11 @@ class ConfirmationDialog extends Component {
       open,
       onCancel,
       onConfirm,
+      onConfirmSecondary,
       message,
       cancelButtonText,
       confirmButtonText,
+      confirmSecondaryButtonText,
       confirmDiscard,
       confirmDelete,
       confirmSubmit,
@@ -35,6 +37,13 @@ class ConfirmationDialog extends Component {
       confirmationButtonText = intl.formatMessage(formTranslations.discard);
     } else if (confirmSubmit) {
       confirmationButtonText = intl.formatMessage(formTranslations.submit);
+    }
+
+    let confirmationSecondaryButtonText = intl.formatMessage(
+      formTranslations.continue,
+    );
+    if (confirmSecondaryButtonText) {
+      confirmationSecondaryButtonText = confirmSecondaryButtonText;
     }
 
     let confirmationMessage = intl.formatMessage(formTranslations.areYouSure);
@@ -72,6 +81,24 @@ class ConfirmationDialog extends Component {
       />,
     ];
 
+    if (onConfirmSecondary) {
+      const confirmButtonSecondary = [
+        <FlatButton
+          primary
+          className="confirm-btn"
+          disabled={disableConfirmButton}
+          onClick={onConfirmSecondary}
+          style={buttonStyle}
+          label={confirmationSecondaryButtonText}
+          ref={(button) => {
+            this.confirmButtonSecondary = button;
+          }}
+          key="confirmation-dialog-confirm-secondary-button"
+        />,
+      ];
+      actions.push(...confirmButtonSecondary);
+    }
+
     return (
       <div>
         <Dialog
@@ -92,9 +119,11 @@ ConfirmationDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   onCancel: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,
+  onConfirmSecondary: PropTypes.func,
   message: PropTypes.node,
   cancelButtonText: PropTypes.node,
   confirmButtonText: PropTypes.node,
+  confirmSecondaryButtonText: PropTypes.node,
   confirmDiscard: PropTypes.bool,
   confirmDelete: PropTypes.bool,
   confirmSubmit: PropTypes.bool,

@@ -67,6 +67,9 @@ class Course::Assessment::Submission < ApplicationRecord
   has_many :scribing_answers,
            through: :answers, inverse_through: :answer, source: :actable,
            source_type: Course::Assessment::Answer::Scribing.name
+  has_many :forum_post_response_answers,
+           through: :answers, inverse_through: :answer, source: :actable,
+           source_type: Course::Assessment::Answer::ForumPostResponse.name
   has_many :question_bundle_assignments, class_name: Course::Assessment::QuestionBundleAssignment.name,
                                          inverse_of: :submission, dependent: :destroy
 

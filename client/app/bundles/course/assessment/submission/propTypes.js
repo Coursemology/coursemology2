@@ -105,6 +105,8 @@ export const assessmentShape = PropTypes.shape({
   showEvaluation: PropTypes.bool,
   questionIds: PropTypes.arrayOf(PropTypes.number),
   canViewLogs: PropTypes.bool,
+  canUnsubmitSubmissions: PropTypes.bool,
+  canDeleteAllSubmissions: PropTypes.bool,
 });
 
 export const submissionShape = PropTypes.shape({
@@ -190,4 +192,45 @@ export const scribingShape = PropTypes.shape({
   isSaving: PropTypes.bool,
   isSaved: PropTypes.bool,
   hasError: PropTypes.bool,
+});
+
+export const forumPostShape = PropTypes.shape({
+  id: PropTypes.number,
+  text: PropTypes.string,
+  updatedAt: PropTypes.string,
+  isUpdated: PropTypes.bool,
+  isDeleted: PropTypes.bool,
+  userName: PropTypes.string,
+  avatar: PropTypes.string,
+});
+
+export const forumOverviewShape = PropTypes.shape({
+  id: PropTypes.number,
+  name: PropTypes.string,
+});
+
+export const topicOverviewShape = PropTypes.shape({
+  id: PropTypes.number,
+  title: PropTypes.string,
+  isDeleted: PropTypes.bool,
+});
+
+export const postPackShape = PropTypes.shape({
+  corePost: forumPostShape,
+  parentPost: forumPostShape,
+  forum: forumOverviewShape,
+  topic: topicOverviewShape,
+});
+
+export const forumTopicPostPackShape = PropTypes.shape({
+  course: PropTypes.shape({
+    id: PropTypes.number,
+  }),
+  forum: forumOverviewShape,
+  topicPostPacks: PropTypes.arrayOf(
+    PropTypes.shape({
+      topic: topicOverviewShape,
+      postPacks: PropTypes.arrayOf(postPackShape),
+    }),
+  ),
 });
