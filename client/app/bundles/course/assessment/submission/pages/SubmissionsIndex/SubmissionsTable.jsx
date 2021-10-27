@@ -58,6 +58,13 @@ export default class SubmissionsTable extends Component {
     );
   };
 
+  canDeleteAll() {
+    const { submissions } = this.props;
+    return submissions.some(
+      (s) => s.workflowState !== workflowStates.Unstarted,
+    );
+  }
+
   canDownloadAnswers() {
     const { assessment, submissions } = this.props;
     return (
@@ -76,67 +83,6 @@ export default class SubmissionsTable extends Component {
       (s) =>
         s.workflowState !== workflowStates.Unstarted &&
         s.workflowState !== workflowStates.Attempting,
-    );
-  }
-
-  canDeleteAll() {
-    const { submissions } = this.props;
-    return submissions.some(
-      (s) => s.workflowState !== workflowStates.Unstarted,
-    );
-  }
-
-  renderUsers() {
-    const {
-      dispatch,
-      courseId,
-      assessmentId,
-      submissions,
-      assessment,
-      isDownloading,
-      isStatisticsDownloading,
-      isUnsubmitting,
-      isDeleting,
-    } = this.props;
-
-    const props = {
-      dispatch,
-      courseId,
-      assessmentId,
-      assessment,
-      isDownloading,
-      isStatisticsDownloading,
-      isUnsubmitting,
-      isDeleting,
-    };
-
-    return submissions.map((submission) => (
-      <SubmissionsTableRow
-        key={submission.courseUser.id}
-        submission={submission}
-        {...props}
-      />
-    ));
-  }
-
-  renderUnsubmitAllConfirmation() {
-    const { handleUnsubmitAll, confirmDialogValue } = this.props;
-    const { unsubmitAllConfirmation } = this.state;
-    return (
-      <ConfirmationDialog
-        open={unsubmitAllConfirmation}
-        onCancel={() => this.setState({ unsubmitAllConfirmation: false })}
-        onConfirm={() => {
-          this.setState({ unsubmitAllConfirmation: false });
-          handleUnsubmitAll();
-        }}
-        message={
-          <FormattedMessage
-            {...translations.unsubmitAllConfirmation}
-            values={{ users: confirmDialogValue }}
-          />
-        }
-      />
     );
   }
 
@@ -268,6 +214,60 @@ export default class SubmissionsTable extends Component {
         ) : null}
       </IconMenu>
     );
+  }
+
+  renderUnsubmitAllConfirmation() {
+    const { handleUnsubmitAll, confirmDialogValue } = this.props;
+    const { unsubmitAllConfirmation } = this.state;
+    return (
+      <ConfirmationDialog
+        open={unsubmitAllConfirmation}
+        onCancel={() => this.setState({ unsubmitAllConfirmation: false })}
+        onConfirm={() => {
+          this.setState({ unsubmitAllConfirmation: false });
+          handleUnsubmitAll();
+        }}
+        message={
+          <FormattedMessage
+            {...translations.unsubmitAllConfirmation}
+            values={{ users: confirmDialogValue }}
+          />
+        }
+      />
+    );
+  }
+
+  renderUsers() {
+    const {
+      dispatch,
+      courseId,
+      assessmentId,
+      submissions,
+      assessment,
+      isDownloading,
+      isStatisticsDownloading,
+      isUnsubmitting,
+      isDeleting,
+    } = this.props;
+
+    const props = {
+      dispatch,
+      courseId,
+      assessmentId,
+      assessment,
+      isDownloading,
+      isStatisticsDownloading,
+      isUnsubmitting,
+      isDeleting,
+    };
+
+    return submissions.map((submission) => (
+      <SubmissionsTableRow
+        key={submission.courseUser.id}
+        submission={submission}
+        {...props}
+      />
+    ));
   }
 
   render() {

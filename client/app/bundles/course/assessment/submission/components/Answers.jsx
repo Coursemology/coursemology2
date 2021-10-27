@@ -16,6 +16,16 @@ export default class Answers extends Component {
     return <FileUploadAnswer {...{ question, readOnly, answerId }} />;
   }
 
+  static renderForumPostResponse({ question, readOnly, answerId }) {
+    return (
+      <ForumPostResponseAnswer
+        question={question}
+        readOnly={readOnly}
+        answerId={answerId}
+      />
+    );
+  }
+
   static renderMultipleChoice({
     question,
     readOnly,
@@ -67,16 +77,6 @@ export default class Answers extends Component {
   static renderVoiceResponse({ question, readOnly, answerId }) {
     return (
       <VoiceResponseAnswer
-        question={question}
-        readOnly={readOnly}
-        answerId={answerId}
-      />
-    );
-  }
-
-  static renderForumPostResponse({ question, readOnly, answerId }) {
-    return (
-      <ForumPostResponseAnswer
         question={question}
         readOnly={readOnly}
         answerId={answerId}

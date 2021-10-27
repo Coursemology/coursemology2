@@ -41,6 +41,18 @@ const styles = {
 };
 
 export default class SelectedPostCard extends React.Component {
+  static renderLink(url, name) {
+    let renderedName = name;
+    if (renderedName.length > 30) {
+      renderedName = `${renderedName.slice(0, 30)}...`;
+    }
+    return (
+      <a href={url} target="_blank" rel="noreferrer">
+        {renderedName} <i className="fa fa-external-link" />
+      </a>
+    );
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -52,34 +64,6 @@ export default class SelectedPostCard extends React.Component {
     this.setState((oldState) => ({
       isExpanded: !oldState.isExpanded,
     }));
-  }
-
-  renderTrashIcon() {
-    if (this.props.readOnly) {
-      return null;
-    }
-    return (
-      <button
-        className="pull-right"
-        style={styles.trashButton}
-        onClick={() => this.props.onRemovePostPack()}
-        type="button"
-      >
-        <i className="fa fa-trash" />
-      </button>
-    );
-  }
-
-  static renderLink(url, name) {
-    let renderedName = name;
-    if (renderedName.length > 30) {
-      renderedName = `${renderedName.slice(0, 30)}...`;
-    }
-    return (
-      <a href={url} target="_blank" rel="noreferrer">
-        {renderedName} <i className="fa fa-external-link" />
-      </a>
-    );
   }
 
   renderLabel() {
@@ -112,6 +96,22 @@ export default class SelectedPostCard extends React.Component {
           </span>
         )}
       </div>
+    );
+  }
+
+  renderTrashIcon() {
+    if (this.props.readOnly) {
+      return null;
+    }
+    return (
+      <button
+        className="pull-right"
+        style={styles.trashButton}
+        onClick={() => this.props.onRemovePostPack()}
+        type="button"
+      >
+        <i className="fa fa-trash" />
+      </button>
     );
   }
 

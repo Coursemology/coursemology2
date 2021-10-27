@@ -78,18 +78,6 @@ export default class ForumPostSelect extends React.Component {
     this.props.input.onChange(postPacks);
   }
 
-  renderSelectedPostPacks(postPacks) {
-    return postPacks.map((postPack) => (
-      <div key={`selected-post-pack-${postPack.corePost.id}`}>
-        <SelectedPostCard
-          postPack={postPack}
-          readOnly={this.props.readOnly}
-          onRemovePostPack={() => this.handleRemovePostPack(postPack)}
-        />
-      </div>
-    ));
-  }
-
   renderInstruction(postPacks, maxPosts) {
     if (this.props.readOnly) {
       return (
@@ -109,6 +97,18 @@ export default class ForumPostSelect extends React.Component {
         {postPacks.length !== 1 ? 's' : ''}.
       </div>
     );
+  }
+
+  renderSelectedPostPacks(postPacks) {
+    return postPacks.map((postPack) => (
+      <div key={`selected-post-pack-${postPack.corePost.id}`}>
+        <SelectedPostCard
+          postPack={postPack}
+          readOnly={this.props.readOnly}
+          onRemovePostPack={() => this.handleRemovePostPack(postPack)}
+        />
+      </div>
+    ));
   }
 
   render() {

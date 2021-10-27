@@ -174,6 +174,56 @@ export class VisibleTestCaseView extends Component {
     );
   }
 
+  renderTestCaseRow(testCase) {
+    const {
+      testCases: { canReadTests },
+    } = this.props;
+    const { showPublicTestCasesOutput } = this.props;
+
+    let testCaseResult = 'unattempted';
+    let testCaseIcon;
+    if (testCase.passed !== undefined) {
+      testCaseResult = testCase.passed ? 'correct' : 'wrong';
+      testCaseIcon = testCase.passed ? <CorrectIcon /> : <WrongIcon />;
+    }
+
+    const tableRowColumnFor = (field) => (
+      <TableRowColumn style={styles.testCaseCell}>{field}</TableRowColumn>
+    );
+
+    const outputStyle = { whiteSpace: 'pre-wrap', fontFamily: 'monospace' };
+
+    return (
+      <TableRow
+        key={testCase.identifier}
+        style={styles.testCaseRow[testCaseResult]}
+      >
+        {canReadTests && tableRowColumnFor(testCase.identifier)}
+        {tableRowColumnFor(
+          <ExpandableText style={outputStyle} text={testCase.expression} />,
+        )}
+        {tableRowColumnFor(
+          (
+            <ExpandableText
+              style={outputStyle}
+              text={testCase.expected || ''}
+            />
+          ) || '',
+        )}
+        {(canReadTests || showPublicTestCasesOutput) &&
+          tableRowColumnFor(
+            (
+              <ExpandableText
+                style={outputStyle}
+                text={testCase.output || ''}
+              />
+            ) || '',
+          )}
+        {tableRowColumnFor(testCaseIcon)}
+      </TableRow>
+    );
+  }
+
   renderTestCases(testCases, testCaseType, warn) {
     const {
       collapsible,
@@ -230,56 +280,6 @@ export class VisibleTestCaseView extends Component {
           </Table>
         </CardText>
       </Card>
-    );
-  }
-
-  renderTestCaseRow(testCase) {
-    const {
-      testCases: { canReadTests },
-    } = this.props;
-    const { showPublicTestCasesOutput } = this.props;
-
-    let testCaseResult = 'unattempted';
-    let testCaseIcon;
-    if (testCase.passed !== undefined) {
-      testCaseResult = testCase.passed ? 'correct' : 'wrong';
-      testCaseIcon = testCase.passed ? <CorrectIcon /> : <WrongIcon />;
-    }
-
-    const tableRowColumnFor = (field) => (
-      <TableRowColumn style={styles.testCaseCell}>{field}</TableRowColumn>
-    );
-
-    const outputStyle = { whiteSpace: 'pre-wrap', fontFamily: 'monospace' };
-
-    return (
-      <TableRow
-        key={testCase.identifier}
-        style={styles.testCaseRow[testCaseResult]}
-      >
-        {canReadTests && tableRowColumnFor(testCase.identifier)}
-        {tableRowColumnFor(
-          <ExpandableText style={outputStyle} text={testCase.expression} />,
-        )}
-        {tableRowColumnFor(
-          (
-            <ExpandableText
-              style={outputStyle}
-              text={testCase.expected || ''}
-            />
-          ) || '',
-        )}
-        {(canReadTests || showPublicTestCasesOutput) &&
-          tableRowColumnFor(
-            (
-              <ExpandableText
-                style={outputStyle}
-                text={testCase.output || ''}
-              />
-            ) || '',
-          )}
-        {tableRowColumnFor(testCaseIcon)}
-      </TableRow>
     );
   }
 
