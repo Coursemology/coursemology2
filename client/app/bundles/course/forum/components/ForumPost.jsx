@@ -1,6 +1,7 @@
 import React from 'react';
 import { Divider, Card, CardHeader, CardText, FlatButton } from 'material-ui';
 import PropTypes from 'prop-types';
+import moment from 'lib/moment';
 
 const styles = {
   default: {
@@ -34,7 +35,7 @@ export default class ForumPost extends React.Component {
       <Card style={{ ...styles.default, ...this.props.style }}>
         <CardHeader
           title={this.props.post.userName}
-          subtitle={this.props.post.updatedAt}
+          subtitle={moment(this.props.post.updatedAt).format('MMM DD, YYYY h:mma')}
           avatar={this.props.post.avatar}
         />
         <Divider />

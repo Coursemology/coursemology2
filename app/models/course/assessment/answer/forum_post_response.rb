@@ -79,7 +79,7 @@ class Course::Assessment::Answer::ForumPostResponse < ApplicationRecord
     post = Course::Discussion::Post.find_by(id: selected_post.post_id)
     selected_post.is_post_deleted = post.nil?
     # a deleted post will have is_post_updated = nil
-    selected_post.is_post_updated = post ? post.text != selected_post.post_text : nil
+    selected_post.is_post_updated = post ? is_later(post.updated_at, selected_post.post_updated_at) : nil
   end
 
   def compute_creator(selected_post)
@@ -92,7 +92,13 @@ class Course::Assessment::Answer::ForumPostResponse < ApplicationRecord
     parent = Course::Discussion::Post.find_by(id: selected_post.parent_id)
     selected_post.is_parent_deleted = parent.nil?
     # a post with a deleted parent will have is_parent_updated = nil
-    selected_post.is_parent_updated = parent ? parent.text != selected_post.parent_text : nil
+    selected_post.is_parent_updated = parent ? is_later(parent.updated_at, selected_post.parent_updated_at) : nil
     selected_post.parent_creator = User.find_by(id: selected_post.parent_creator_id)
+  end
+
+  # returns true if target_time is later than ref_time by > 0.01s
+  # allowing a delta of 0.01s to account for possible truncations in datetime data
+  def is_later(target_time, ref_time)
+    target_time.to_f - ref_time.to_f > 0.01
   end
 end
