@@ -92,7 +92,7 @@ class Course::Assessment::Answer::ForumPostResponse < ApplicationRecord
     parent = Course::Discussion::Post.find_by(id: selected_post.parent_id)
     selected_post.is_parent_deleted = parent.nil?
     # a post with a deleted parent will have is_parent_updated = nil
-    selected_post.is_parent_updated = parent ? isLater(parent.updated_at, selected_post.parent_updated_at) : nil
+    selected_post.is_parent_updated = parent ? is_later(parent.updated_at, selected_post.parent_updated_at) : nil
     selected_post.parent_creator = User.find_by(id: selected_post.parent_creator_id)
   end
 
@@ -100,7 +100,7 @@ class Course::Assessment::Answer::ForumPostResponse < ApplicationRecord
 
   # returns true if target_time is later than ref_time by > 0.01s
   # allowing a delta of 0.01s to account for possible truncations in datetime data
-  def isLater(target_time, ref_time)
+  def is_later(target_time, ref_time)
     target_time.to_f - ref_time.to_f > 0.01
   end
 end
