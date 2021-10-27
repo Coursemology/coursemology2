@@ -4,7 +4,7 @@ import storeCreator from './store';
 import AssessmentEditPage from './pages/AssessmentEdit';
 import { categoryAndTabTitle } from './utils';
 
-$(document).ready(() => {
+$(() => {
   const mountNode = document.getElementById('assessment-edit');
   if (mountNode) {
     const dataAttr = mountNode.getAttribute('data');

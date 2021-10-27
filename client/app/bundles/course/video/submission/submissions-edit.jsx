@@ -14,7 +14,7 @@ function renderSubmission(state, node) {
   );
 }
 
-$(document).ready(() => {
+$(() => {
   const mountNode = document.getElementById('video-component');
 
   if (!mountNode) {

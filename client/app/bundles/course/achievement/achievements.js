@@ -78,6 +78,6 @@ function initializeReorderingButton() {
   });
 }
 
-$(document).ready(() => {
+$(() => {
   initializeReorderingButton();
 });

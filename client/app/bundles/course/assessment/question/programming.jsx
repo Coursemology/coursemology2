@@ -4,7 +4,7 @@ import ProviderWrapper from 'lib/components/ProviderWrapper';
 import storeCreator from './programming/store';
 import ProgrammingQuestion from './programming/ProgrammingQuestion';
 
-$(document).ready(() => {
+$(() => {
   const mountNode = document.getElementById('programming-question');
   if (mountNode) {
     const data = mountNode.getAttribute('data');

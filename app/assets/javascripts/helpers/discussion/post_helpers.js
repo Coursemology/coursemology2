@@ -31,7 +31,7 @@ var DISCUSSION_POST_HELPERS = (function (
    * @param {String} selector The selector for the specific discussion posts.
    */
   function initializeToolbar(element, selector) {
-    $(document).ready(function () {
+    $(function () {
       showCommentToolbar(element, selector);
     });
     EVENT_HELPERS.onNodesInserted($(element), function (insertedElement) {

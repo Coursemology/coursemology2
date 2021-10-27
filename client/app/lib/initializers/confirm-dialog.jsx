@@ -122,6 +122,6 @@ function overrideConfirmDialog() {
   };
 }
 
-$(document).ready(() => {
+$(() => {
   overrideConfirmDialog();
 });

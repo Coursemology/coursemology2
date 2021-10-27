@@ -5,7 +5,7 @@ import ProviderWrapper from 'lib/components/ProviderWrapper';
 import SurveysLayout from 'course/survey/containers/SurveysLayout';
 import storeCreator from './store';
 
-$(document).ready(() => {
+$(() => {
   const mountNode = document.getElementById('course-survey-component');
 
   if (mountNode) {

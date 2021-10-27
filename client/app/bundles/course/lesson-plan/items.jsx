@@ -5,7 +5,7 @@ import ProviderWrapper from 'lib/components/ProviderWrapper';
 import LessonPlanLayout from 'course/lesson-plan/containers/LessonPlanLayout';
 import storeCreator from './store';
 
-$(document).ready(() => {
+$(() => {
   const mountNode = document.getElementById('lesson-plan-items');
 
   if (mountNode) {

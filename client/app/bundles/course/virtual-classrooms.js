@@ -12,7 +12,7 @@ function appendInfo($node, selector, text) {
   );
 }
 
-$(document).ready(() => {
+$(() => {
   $(document).on('click', '.gen-access-link', function () {
     const $this = $(this);
     const splits = $this.attr('id').split('-');

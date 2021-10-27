@@ -8,7 +8,7 @@ import ProviderWrapper from 'lib/components/ProviderWrapper';
 import store from './store';
 import SubmissionsLayout from './containers/SubmissionsLayout';
 
-$(document).ready(() => {
+$(() => {
   const mountNode = document.getElementById('course-assessment-submission');
 
   if (mountNode) {

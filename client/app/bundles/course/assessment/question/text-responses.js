@@ -4,7 +4,7 @@
 // TextResponseComprehensionSolution model,
 // for the purpose of MVP testing and will be replaced with a
 // more intuitive input method (e.g. the tokens for Skills) soon.
-$(document).ready(() => {
+$(() => {
   function replaceBracketFromComprehensionAttributes() {
     if (document.getElementsByClassName('table-comprehension').length == 0)
       return; // do nothing if not comprehension question

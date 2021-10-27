@@ -160,7 +160,7 @@
   //
   // This prevents missing definitions for things like Ace themes, which are loaded after the
   // application script.
-  $(document).ready(function () {
+  $(function () {
     initializeComponents(document);
 
     EVENT_HELPERS.onNodesInserted($(document), initializeComponents);

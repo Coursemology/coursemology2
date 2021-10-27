@@ -5,7 +5,7 @@ import VideoPlayer from './containers/VideoPlayer';
 import storeCreator from './store';
 import styles from './containers/Statistics.scss';
 
-$(document).ready(() => {
+$(() => {
   const mountNode = document.getElementById('video-stats');
 
   if (!mountNode) {

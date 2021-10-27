@@ -1,4 +1,4 @@
-$(document).ready(() => {
+$(() => {
   $('input.self-directed-learning-checkbox:checkbox').change(function () {
     if ($(this).is(':checked')) {
       $('div.advance-start-at-time').show();
