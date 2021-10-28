@@ -48,7 +48,7 @@ describe('<ObjectDuplication />', () => {
     );
     const rootFolder = sortedData.materialsComponent[0];
     expect(courseTitles).toEqual(['Course A', 'Course B', 'Course C']);
-    expect(sortedData.materialsComponent.length).toBe(1);
+    expect(sortedData.materialsComponent).toHaveLength(1);
     expect(rootFolder.name).toBe('Root');
     expect(rootFolder.subfolders[0].name).toBe('L1');
     expect(rootFolder.subfolders[0].subfolders[0].name).toBe('L2');

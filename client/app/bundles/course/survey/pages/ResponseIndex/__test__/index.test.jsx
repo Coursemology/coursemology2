@@ -99,8 +99,8 @@ describe('<ResponseIndex />', () => {
     // Include phantom students in statistics
     const statsCard = responseIndex.find('Card').last();
     const submittedChip = statsCard.find('Chip').last();
-    expect(submittedChip.text()).toEqual('0 Submitted');
+    expect(submittedChip.text()).toBe('0 Submitted');
     statsCard.find('Toggle').first().props().onToggle(null, true);
-    expect(submittedChip.text()).toEqual('2 Submitted');
+    expect(submittedChip.text()).toBe('2 Submitted');
   });
 });

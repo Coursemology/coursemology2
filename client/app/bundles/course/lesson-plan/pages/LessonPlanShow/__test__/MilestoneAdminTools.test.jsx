@@ -21,22 +21,22 @@ describe('<MilestoneAdminTools />', () => {
   it('hides admin tools for dummy milestone', () => {
     const milestone = { id: undefined, title: 'Ungrouped Items' };
     expect(
-      buildShallowWrapper(true, milestone).find('RaisedButton').length,
-    ).toBe(0);
+      buildShallowWrapper(true, milestone).find('RaisedButton'),
+    ).toHaveLength(0);
   });
 
   it('hides admin tools when user does not have permissions', () => {
     const milestone = { id: 4, title: 'User-defined Milestone' };
     expect(
-      buildShallowWrapper(false, milestone).find('RaisedButton').length,
-    ).toBe(0);
+      buildShallowWrapper(false, milestone).find('RaisedButton'),
+    ).toHaveLength(0);
   });
 
   it('shows admin tools when user has permissions', () => {
     const milestone = { id: 4, title: 'User-defined Milestone' };
     expect(
-      buildShallowWrapper(true, milestone).find('RaisedButton').length,
-    ).toBe(2);
+      buildShallowWrapper(true, milestone).find('RaisedButton'),
+    ).toHaveLength(2);
   });
 
   it('allows milestone to be deleted', () => {

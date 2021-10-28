@@ -26,7 +26,7 @@ describe('<NotificationSettings />', () => {
     );
 
     const toggles = notificationSettings.find('Toggle');
-    expect(toggles.length).toBe(1);
+    expect(toggles).toHaveLength(1);
 
     const toggle = toggles.first();
     toggle.props().onToggle(null, true);

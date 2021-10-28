@@ -88,7 +88,7 @@ describe('SavingIndicator', () => {
       payload: { answerId },
     });
     editPage.update();
-    expect(editPage.find('SavingIndicator').prop('isSaving')).toEqual(true);
+    expect(editPage.find('SavingIndicator').prop('isSaving')).toBe(true);
 
     const editUrl = `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`;
     window.history.pushState({}, '', editUrl);
@@ -106,7 +106,7 @@ describe('SavingIndicator', () => {
     await sleep(1);
     expect(spyUpdate).toHaveBeenCalled();
     editPage.update();
-    expect(editPage.find('SavingIndicator').prop('isSaved')).toEqual(true);
+    expect(editPage.find('SavingIndicator').prop('isSaved')).toBe(true);
   });
 
   it('sets saving error', async () => {
@@ -138,6 +138,6 @@ describe('SavingIndicator', () => {
     await sleep(1);
     expect(spyUpdate).toHaveBeenCalled();
     editPage.update();
-    expect(editPage.find('SavingIndicator').prop('hasError')).toEqual(true);
+    expect(editPage.find('SavingIndicator').prop('hasError')).toBe(true);
   });
 });

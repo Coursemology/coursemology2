@@ -67,7 +67,7 @@ describe('LessonPlan', () => {
     expect(spy).toHaveBeenCalled();
     lessonPlan.update();
     // A milestone should be automatically generated since the event starts before the milestone
-    expect(lessonPlan.find('LessonPlanGroup').length).toBe(2);
-    expect(lessonPlan.find('LessonPlanItem').length).toBe(1);
+    expect(lessonPlan.find('LessonPlanGroup')).toHaveLength(2);
+    expect(lessonPlan.find('LessonPlanItem')).toHaveLength(1);
   });
 });

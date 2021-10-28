@@ -16,7 +16,7 @@ const mock = new MockAdapter(client);
 
 beforeEach(() => {
   mock.reset();
-  history.push = jest.fn();
+  jest.spyOn(history, 'push').mockImplementation();
   delete window.location;
   window.location = {
     ...originalLocation,
@@ -70,7 +70,7 @@ describe('createScribingQuestion', () => {
     await sleep(1);
     expect(spyCreate).toHaveBeenCalledWith(processedMockFields);
     expect(history.push).toHaveBeenCalledWith(redirectUrl);
-    expect(window.location.assign).toBeCalledWith(redirectUrl);
+    expect(window.location.assign).toHaveBeenCalledWith(redirectUrl);
   });
 });
 
@@ -92,6 +92,6 @@ describe('updateScribingQuestion', () => {
     await sleep(1);
     expect(spyUpdate).toHaveBeenCalledWith(scribingId, processedMockFields);
     expect(history.push).toHaveBeenCalledWith(redirectUrl);
-    expect(window.location.assign).toBeCalledWith(redirectUrl);
+    expect(window.location.assign).toHaveBeenCalledWith(redirectUrl);
   });
 });

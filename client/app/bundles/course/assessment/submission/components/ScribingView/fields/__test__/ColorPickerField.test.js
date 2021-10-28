@@ -32,6 +32,6 @@ describe('ColorPickerField', () => {
       },
     });
 
-    expect(colorPickerField.find('Checkbox').prop('checked')).toEqual(true);
+    expect(colorPickerField.find('Checkbox').prop('checked')).toBe(true);
   });
 });

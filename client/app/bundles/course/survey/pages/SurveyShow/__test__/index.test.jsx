@@ -125,7 +125,9 @@ describe('<SurveyShow />', () => {
       .instance()
       .getDecoratedComponentInstance()
       .getDecoratedComponentInstance().DOMNode;
-    targetQuestionDOMNode.getBoundingClientRect = jest.fn();
+    jest
+      .spyOn(targetQuestionDOMNode, 'getBoundingClientRect')
+      .mockImplementation();
     targetQuestionDOMNode.getBoundingClientRect.mockReturnValue({
       bottom: 200,
       height: 100,
@@ -175,7 +177,9 @@ describe('<SurveyShow />', () => {
     const targetSectionDOMNode = tragetSection
       .instance()
       .getDecoratedComponentInstance().DOMNode;
-    targetSectionDOMNode.getBoundingClientRect = jest.fn();
+    jest
+      .spyOn(targetSectionDOMNode, 'getBoundingClientRect')
+      .mockImplementation();
     targetSectionDOMNode.getBoundingClientRect.mockReturnValue({
       bottom: 400,
       height: 100,
@@ -187,13 +191,13 @@ describe('<SurveyShow />', () => {
 
     // Continue dragging question down into the next section
     const targetSectionHandlerId = tragetSection.instance().getHandlerId();
-    expect(sections.first().props().section.questions.length).toBe(2);
-    expect(sections.last().props().section.questions.length).toBe(0);
+    expect(sections.first().props().section.questions).toHaveLength(2);
+    expect(sections.last().props().section.questions).toHaveLength(0);
     dragDropBackend.simulateHover([], { clientOffset: { x: 0, y: 350 } });
     dragDropBackend.simulateHover([targetSectionHandlerId]);
     updateSections();
-    expect(sections.first().props().section.questions.length).toBe(1);
-    expect(sections.last().props().section.questions.length).toBe(1);
+    expect(sections.first().props().section.questions).toHaveLength(1);
+    expect(sections.last().props().section.questions).toHaveLength(1);
 
     // Ordering should be saved on end drag
     dragDropBackend.simulateEndDrag();

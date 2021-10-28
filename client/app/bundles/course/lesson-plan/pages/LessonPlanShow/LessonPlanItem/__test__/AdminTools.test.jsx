@@ -17,12 +17,12 @@ const buildShallowWrapper = (item) => {
 describe('<AdminTools />', () => {
   it('does not show admin menu for lesson plan events', () => {
     const wrapper = buildShallowWrapper({ title: 'Event', eventId: 7 });
-    expect(wrapper.find('RaisedButton').length).toBe(2);
+    expect(wrapper.find('RaisedButton')).toHaveLength(2);
   });
 
   it('does not show admin menu for non-event lesson plan items', () => {
     const wrapper = buildShallowWrapper({ title: 'eventId absent' });
-    expect(wrapper.find('RaisedButton').length).toBe(0);
+    expect(wrapper.find('RaisedButton')).toHaveLength(0);
   });
 
   it('allows event to be deleted', () => {

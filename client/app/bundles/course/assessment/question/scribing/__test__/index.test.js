@@ -89,13 +89,13 @@ describe('Scribing question', () => {
     await sleep(1);
     expect(spyFetchSkills).toHaveBeenCalled();
     newPage.update();
-    expect(newPage.find('InputField').length).toBe(2);
-    expect(newPage.find('MultiSelectSkillsField').length).toBe(1);
-    expect(newPage.find('SummernoteField').length).toBe(2);
-    expect(newPage.find('FileUploadField').length).toBe(1);
+    expect(newPage.find('InputField')).toHaveLength(2);
+    expect(newPage.find('MultiSelectSkillsField')).toHaveLength(1);
+    expect(newPage.find('SummernoteField')).toHaveLength(2);
+    expect(newPage.find('FileUploadField')).toHaveLength(1);
     expect(
-      newPage.find('[htmlFor="question_scribing_attachment"]').length,
-    ).toBe(0);
+      newPage.find('[htmlFor="question_scribing_attachment"]'),
+    ).toHaveLength(0);
   });
 
   it('renders edit question form', async () => {
@@ -156,13 +156,13 @@ describe('Scribing question', () => {
     await sleep(1);
     expect(spyFetch).toHaveBeenCalled();
     fetchPage.update();
-    expect(fetchPage.find('InputField').length).toBe(2);
-    expect(fetchPage.find('MultiSelectSkillsField').length).toBe(1);
-    expect(fetchPage.find('SummernoteField').length).toBe(2);
-    expect(fetchPage.find('FileUploadField').length).toBe(0);
+    expect(fetchPage.find('InputField')).toHaveLength(2);
+    expect(fetchPage.find('MultiSelectSkillsField')).toHaveLength(1);
+    expect(fetchPage.find('SummernoteField')).toHaveLength(2);
+    expect(fetchPage.find('FileUploadField')).toHaveLength(0);
     expect(
-      fetchPage.find('[htmlFor="question_scribing_attachment"]').length,
-    ).toBe(1);
+      fetchPage.find('[htmlFor="question_scribing_attachment"]'),
+    ).toHaveLength(1);
   });
 
   it('renders error message when submit fails from server', async () => {
@@ -200,7 +200,7 @@ describe('Scribing question', () => {
     await sleep(1);
     expect(spyUpdate).toHaveBeenCalled();
     fetchPage.update();
-    expect(fetchPage.find('div.alert').length).toBe(1);
+    expect(fetchPage.find('div.alert')).toHaveLength(1);
   });
 
   it('allows question to be created', async () => {

@@ -32,7 +32,7 @@ describe('<LessonPlanSettings />', () => {
 
     const toggles = lessonPlanSettings.find('Toggle');
     // Enabled? and Visible? toggles.
-    expect(toggles.length).toBe(2);
+    expect(toggles).toHaveLength(2);
 
     const toggle = toggles.first();
     toggle.props().onToggle(null, true);

@@ -77,6 +77,6 @@ describe('ScribingView', () => {
         </MemoryRouter>
       </ProviderWrapper>,
     );
-    expect(editPage.find('canvas').length).toBe(1);
+    expect(editPage.find('canvas')).toHaveLength(1);
   });
 });

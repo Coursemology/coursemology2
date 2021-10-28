@@ -19,10 +19,8 @@ describe('<SingleFileInput />', () => {
     );
 
     const img = imagePreview.find('img').first();
-    expect(imagePreview.find('.file-name').text().includes('bar')).toEqual(
-      true,
-    );
-    expect(img.prop('src')).toEqual('foo');
+    expect(imagePreview.find('.file-name').text()).toContain('bar');
+    expect(img.prop('src')).toBe('foo');
     expect(img.prop('icon')).toBeUndefined();
   });
 
@@ -36,9 +34,9 @@ describe('<SingleFileInput />', () => {
     });
 
     // SvgIcon is the element of the placeholder 'InsertDriveFileIcon'
-    expect(imagePreview.find('SvgIcon').length).toBe(1);
+    expect(imagePreview.find('SvgIcon')).toHaveLength(1);
     // No img element is rendered
-    expect(imagePreview.find('img').length).toBe(0);
+    expect(imagePreview.find('img')).toHaveLength(0);
   });
 
   it('renders a fallback preview when a non-image file is uploaded', () => {
@@ -58,10 +56,8 @@ describe('<SingleFileInput />', () => {
     );
 
     const img = imagePreview.find('img').first();
-    expect(
-      imagePreview.find('.file-name').text().includes('non-image file'),
-    ).toEqual(true);
-    expect(img.prop('src')).toEqual('foo');
+    expect(imagePreview.find('.file-name').text()).toContain('non-image file');
+    expect(img.prop('src')).toBe('foo');
   });
 
   it('does not render the delete button when no image is selected', () => {
@@ -73,7 +69,7 @@ describe('<SingleFileInput />', () => {
       },
     });
 
-    expect(imagePreview.find('Badge').exists()).toEqual(false);
+    expect(imagePreview.find('Badge').exists()).toBe(false);
   });
 
   it('calls the cancel function when delete button is clicked', () => {
@@ -88,7 +84,7 @@ describe('<SingleFileInput />', () => {
       },
     );
 
-    expect(imagePreview.find('Badge').exists()).toEqual(true);
+    expect(imagePreview.find('Badge').exists()).toBe(true);
     imagePreview.find('IconButton').simulate('click');
     expect(onCancel).toHaveBeenCalled();
   });

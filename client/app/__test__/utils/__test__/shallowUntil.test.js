@@ -43,7 +43,8 @@ describe('#shallowUntil', () => {
     ).toBeTruthy();
   });
 
-  describe('with context', () => {
+  // eslint-disable-next-line jest/no-disabled-tests
+  describe.skip('with context', () => {
     const Foo = () => <Div />;
     Foo.contextTypes = { open: PropTypes.bool.isRequired };
 
@@ -55,21 +56,21 @@ describe('#shallowUntil', () => {
 
     Bar.childContextTypes = { open: PropTypes.bool };
 
-    xit('passes down context from the root component', () => {
+    it('passes down context from the root component', () => {
       const EnhancedFoo = hoc(Foo);
       const wrapper = shallowUntil(
         <EnhancedFoo />,
         { context: { open: true } },
         'Foo',
       );
-      expect(wrapper.context('open')).toEqual(true);
+      expect(wrapper.context('open')).toBe(true);
       expect(wrapper.contains(<Div />)).toBeTruthy();
     });
 
-    xit('passes down context from an intermediary component', () => {
+    it('passes down context from an intermediary component', () => {
       const EnhancedBar = hoc(Bar);
       const wrapper = shallowUntil(<EnhancedBar />, 'Foo');
-      expect(wrapper.context('open')).toEqual(true);
+      expect(wrapper.context('open')).toBe(true);
       expect(wrapper.contains(<Div />)).toBeTruthy();
     });
   });

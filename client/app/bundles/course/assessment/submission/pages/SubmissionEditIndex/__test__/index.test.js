@@ -1,4 +1,3 @@
-import React from 'react';
 import 'ace-builds';
 import { mount } from 'enzyme';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
@@ -180,9 +179,9 @@ describe('SubmissionEditIndex', () => {
     );
 
     const syncErrors = store.getState().form[formNames.SUBMISSION].syncErrors;
-    expect(
-      Object.keys((syncErrors || {})[answerId] || {}).length !== 0,
-    ).toEqual(true);
+    expect(Object.keys((syncErrors || {})[answerId] || {}).length !== 0).toBe(
+      true,
+    );
   });
 
   it('render submission without errors', async () => {
@@ -206,7 +205,7 @@ describe('SubmissionEditIndex', () => {
     );
 
     const syncErrors = store.getState().form[formNames.SUBMISSION].syncErrors;
-    expect(Object.keys((syncErrors || {}).answerId || {}).length === 0).toEqual(
+    expect(Object.keys((syncErrors || {}).answerId || {}).length === 0).toBe(
       true,
     );
   });

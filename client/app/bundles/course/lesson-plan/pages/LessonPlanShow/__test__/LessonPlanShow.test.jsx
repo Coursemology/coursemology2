@@ -46,7 +46,7 @@ describe('<LessonPlanShow />', () => {
     );
 
     it('shows all visible items', () => {
-      expect(wrapper.find('LessonPlanItem').length).toBe(2);
+      expect(wrapper.find('LessonPlanItem')).toHaveLength(2);
     });
   });
 
@@ -57,7 +57,7 @@ describe('<LessonPlanShow />', () => {
     );
 
     it('shows no items', () => {
-      expect(wrapper.find('LessonPlanItem').length).toBe(0);
+      expect(wrapper.find('LessonPlanItem')).toHaveLength(0);
     });
   });
 
@@ -68,7 +68,7 @@ describe('<LessonPlanShow />', () => {
     );
 
     it('shows items for current group', () => {
-      expect(wrapper.find('LessonPlanItem').length).toBe(1);
+      expect(wrapper.find('LessonPlanItem')).toHaveLength(1);
     });
   });
 });

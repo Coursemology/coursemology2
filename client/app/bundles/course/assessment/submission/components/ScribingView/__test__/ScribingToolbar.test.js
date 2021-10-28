@@ -175,9 +175,9 @@ describe('ScribingToolbar', () => {
       },
     });
     scribingToolbar.update();
-    expect(
-      scribingToolbar.find('InjectIntl(TypePopover)').prop('open'),
-    ).toEqual(true);
+    expect(scribingToolbar.find('InjectIntl(TypePopover)').prop('open')).toBe(
+      true,
+    );
   });
 
   it('renders color pickers', async () => {
@@ -203,7 +203,7 @@ describe('ScribingToolbar', () => {
       scribingToolbar
         .find('InjectIntl(TypePopover)')
         .prop('colorPickerPopoverOpen'),
-    ).toEqual(true);
+    ).toBe(true);
 
     scribingToolbar.setState({
       colorDropdowns: {
@@ -215,7 +215,7 @@ describe('ScribingToolbar', () => {
       scribingToolbar
         .find('InjectIntl(TypePopover)')
         .prop('colorPickerPopoverOpen'),
-    ).toEqual(false);
+    ).toBe(false);
   });
 
   it('sets the color from the color picker', async () => {

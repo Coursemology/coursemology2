@@ -16,10 +16,8 @@ describe('<SingleFileInput />', () => {
     );
 
     const avatar = badgePreview.find('Avatar').first();
-    expect(badgePreview.find('.file-name').text().includes('bar')).toEqual(
-      true,
-    );
-    expect(avatar.prop('src')).toEqual('foo');
+    expect(badgePreview.find('.file-name').text()).toContain('bar');
+    expect(avatar.prop('src')).toBe('foo');
     expect(avatar.prop('icon')).toBeUndefined();
   });
 
@@ -34,8 +32,8 @@ describe('<SingleFileInput />', () => {
 
     const avatar = badgePreview.find('Avatar').first();
     // SvgIcon is the element of the placeholder 'InsertDriveFileIcon'
-    expect(avatar.find('SvgIcon').length).toBe(1);
+    expect(avatar.find('SvgIcon')).toHaveLength(1);
     // No img element is rendered
-    expect(avatar.find('img').length).toBe(0);
+    expect(avatar.find('img')).toHaveLength(0);
   });
 });

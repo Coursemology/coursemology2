@@ -38,7 +38,7 @@ describe('<SingleFileInput />', () => {
       },
     );
 
-    expect(singleFileInput.find('.file-name').exists()).toEqual(true);
+    expect(singleFileInput.find('.file-name').exists()).toBe(true);
   });
 
   it('renders the provided previewComponent', () => {
@@ -60,7 +60,7 @@ describe('<SingleFileInput />', () => {
       },
     );
 
-    expect(singleFileInput.find('span').exists()).toEqual(true);
+    expect(singleFileInput.find('span').exists()).toBe(true);
   });
 
   it('renders required error message', () => {
@@ -90,6 +90,6 @@ describe('<SingleFileInput />', () => {
       },
     );
 
-    expect(singleFileInput.find('.error-message').length).toBe(1);
+    expect(singleFileInput.find('.error-message')).toHaveLength(1);
   });
 });

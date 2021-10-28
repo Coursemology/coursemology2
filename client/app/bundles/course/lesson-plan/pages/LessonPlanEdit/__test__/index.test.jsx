@@ -36,7 +36,7 @@ describe('<LessonPlanEdit />', () => {
       buildContextOptions(store),
     );
 
-    expect(lessonPlanEdit.find('ItemRow').length).toBe(1);
-    expect(lessonPlanEdit.find('MilestoneRow').length).toBe(1);
+    expect(lessonPlanEdit.find('ItemRow')).toHaveLength(1);
+    expect(lessonPlanEdit.find('MilestoneRow')).toHaveLength(1);
   });
 });
