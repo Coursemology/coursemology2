@@ -58,12 +58,8 @@ const datetimepickerTheme = createTheme({
     htmlFontSize: 10,
     useNextVariants: true,
   },
-  overrides: {
-    MuiModal: {
-      root: {
-        zIndex: 1800,
-      },
-    },
+  zIndex: {
+    modal: 1800,
   },
 });
 
@@ -187,6 +183,7 @@ class DateTimePicker extends PureComponent {
               error={!!this.state.timeError}
               helperText={this.state.timeError}
               value={value || null}
+              format="HH:mm AA"
             />
           </div>
         </MuiThemeProvider>
