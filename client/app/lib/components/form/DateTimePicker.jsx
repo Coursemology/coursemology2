@@ -177,7 +177,7 @@ class DateTimePicker extends PureComponent {
               style={styles.timeTextField}
               onChange={this.updateTime}
               clearable={clearable}
-              keyboard
+              keyboard="true"
               keyboardIcon={<Schedule style={styles.pickerIcon} />}
               emptyLabel={intl.formatMessage(translations.timePlaceholder)}
               error={!!this.state.timeError}
