@@ -35,7 +35,9 @@ export default class ForumPost extends React.Component {
       <Card style={{ ...styles.default, ...this.props.style }}>
         <CardHeader
           title={this.props.post.userName}
-          subtitle={moment(this.props.post.updatedAt).format('MMM DD, YYYY h:mma')}
+          subtitle={moment(this.props.post.updatedAt).format(
+            'MMM DD, YYYY h:mma',
+          )}
           avatar={this.props.post.avatar}
         />
         <Divider />
