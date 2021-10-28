@@ -13,8 +13,8 @@ import FlatButton from 'material-ui/FlatButton';
 import MicIcon from 'material-ui/svg-icons/av/mic';
 import StopIcon from 'material-ui/svg-icons/av/stop';
 import SingleFileInput from 'lib/components/redux-form/SingleFileInput';
+import sharedConstants from 'lib/constants/sharedConstants';
 import recorderHelper from '../../utils/recorderHelper';
-import sharedConstants from '../../../../../lib/constants/sharedConstants';
 import {
   setRecording,
   setNotRecording,

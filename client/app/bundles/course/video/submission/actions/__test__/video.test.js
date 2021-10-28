@@ -1,9 +1,9 @@
 import CourseAPI from 'api/course';
 import MockAdapter from 'axios-mock-adapter';
 import { List as makeImmutableList, Map as makeImmutableMap } from 'immutable';
+import { playerStates } from 'lib/constants/videoConstants';
 import store from '../../store';
 import { changePlayerState, endSession, sendEvents } from '../video';
-import { playerStates } from '../../../../../../lib/constants/videoConstants';
 
 const videoId = '1';
 

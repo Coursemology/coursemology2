@@ -2,7 +2,7 @@ import {
   sessionActionTypes,
   videoActionTypes,
 } from 'lib/constants/videoConstants';
-import CourseAPI from '../../../../../api/course/index';
+import CourseAPI from 'api/course';
 
 /**
  * Creates action to change the playing state of the video player.
