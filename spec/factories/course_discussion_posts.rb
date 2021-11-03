@@ -11,6 +11,7 @@ FactoryBot.define do
     parent { nil }
     association :topic, factory: :course_discussion_topic
     text { 'This is a test post' }
+    delayed { false }
 
     after(:create) do |post, evaluator|
       Array(evaluator.upvoted_by).each do |user|
@@ -20,6 +21,10 @@ FactoryBot.define do
       Array(evaluator.downvoted_by).each do |user|
         post.cast_vote!(user, -1)
       end
+    end
+
+    trait :delayed do
+      delayed { true }
     end
   end
 end

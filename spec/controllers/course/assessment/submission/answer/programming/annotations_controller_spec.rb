@@ -20,6 +20,7 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::AnnotationsC
 
     describe '#create' do
       let(:post_text) { 'test post text' }
+      let(:delayed) { false }
       subject do
         post :create, as: :js, params: {
           course_id: course, assessment_id: assessment,
@@ -29,7 +30,8 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::AnnotationsC
             answer_id: answer.id
           },
           discussion_post: {
-            text: post_text
+            text: post_text,
+            delayed: delayed
           }
         }
       end
@@ -63,6 +65,13 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::AnnotationsC
 
           it 'sends email notifications' do
             expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
+          end
+
+          context 'when the new comment is posted as delayed post' do
+            let!(:delayed) { true }
+            it 'does not send email notifications' do
+              expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
+            end
           end
 
           context 'when "New Comment" email notification is disabled' do

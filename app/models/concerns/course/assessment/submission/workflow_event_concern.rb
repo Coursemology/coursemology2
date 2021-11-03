@@ -49,6 +49,8 @@ module Course::Assessment::Submission::WorkflowEventConcern
     self.awarder = User.stamper || User.system
     self.awarded_at = Time.zone.now
 
+    publish_delayed_posts unless assessment.autograded?
+
     return unless send_email && persisted? && !assessment.autograded? &&
                   submission_graded_email_enabled? &&
                   submission_graded_email_subscribed?
@@ -138,5 +140,37 @@ module Course::Assessment::Submission::WorkflowEventConcern
     answers_to_unsubmit.each do |answer|
       answer.unsubmit! unless answer.attempting?
     end
+  end
+
+  def publish_delayed_posts
+    # Publish delayed comments for each question of a submission
+    submission_questions.each do |submission_question|
+      update_topic_and_posts(submission_question)
+    end
+
+    # Publish delayed annotations for each programming question of a submission
+    programming_answers = answers.where('actable_type = ?', Course::Assessment::Answer::Programming)
+
+    programming_answers.each do |programming_answer|
+      programming_files = programming_answer.specific.files
+      programming_files.each do |programming_file|
+        annotations = programming_file.annotations
+        annotations.each do |annotation|
+          update_topic_and_posts(annotation)
+        end
+      end
+    end
+  end
+
+  # Update read mark for topic and delayed for posts
+  def update_topic_and_posts(topic_actable)
+    topic = topic_actable.discussion_topic
+    delayed_posts = topic.posts.only_delayed_posts
+    unless delayed_posts.empty?
+      # Remove 'mark as read' (if any)
+      topic.read_marks.where('reader_id = ?', creator.id)&.destroy_all
+      delayed_posts.update_all(delayed: false)
+    end
+    true
   end
 end
