@@ -68,6 +68,7 @@ export const postShape = PropTypes.shape({
   createdAt: PropTypes.string.isRequired,
   canUpdate: PropTypes.bool.isRequired,
   canDestroy: PropTypes.bool.isRequired,
+  delayed: PropTypes.bool.isRequired,
 });
 
 export const answerShape = PropTypes.shape({

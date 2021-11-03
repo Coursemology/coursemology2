@@ -11,10 +11,12 @@ export function onCreateChange(topicId, text) {
   };
 }
 
-export function create(submissionQuestionId, text) {
-  const payload = { discussion_post: { text } };
+export function create(submissionQuestionId, text, delayedComment) {
+  const payload = {
+    discussion_post: { text, delayed: delayedComment },
+  };
   return (dispatch) => {
-    dispatch({ type: actionTypes.CREATE_COMMENT_REQUEST });
+    dispatch({ type: actionTypes.CREATE_COMMENT_REQUEST, delayedComment });
 
     return CourseAPI.assessment.submissionQuestions
       .createComment(submissionQuestionId, payload)

@@ -1,8 +1,9 @@
 import actions from '../constants';
 
 const initialState = {
-  isSubmitting: false,
-  annotations: {},
+  isSubmittingNormalComment: false,
+  isSubmittingDelayedComment: false,
+  annotationsDelayedComment: {},
   topics: {},
   posts: {},
 };
@@ -35,7 +36,8 @@ export default function (state = initialState, action) {
       const { fileId, line } = action.payload;
       return {
         ...state,
-        isSubmitting: false,
+        isSubmittingNormalComment: false,
+        isSubmittingDelayedComment: false,
         annotations: {
           ...state.annotations,
           [fileId]: {
@@ -59,7 +61,8 @@ export default function (state = initialState, action) {
       const { topicId } = action.payload;
       return {
         ...state,
-        isSubmitting: false,
+        isSubmittingNormalComment: false,
+        isSubmittingDelayedComment: false,
         topics: {
           ...state.topics,
           [topicId]: '',
@@ -82,7 +85,7 @@ export default function (state = initialState, action) {
       const { id } = action.payload;
       return {
         ...state,
-        isSubmitting: false,
+        isUpdatingComment: false,
         posts: {
           ...state.posts,
           [id]: action.payload.text,
@@ -103,19 +106,29 @@ export default function (state = initialState, action) {
     }
     case actions.CREATE_ANNOTATION_REQUEST:
     case actions.CREATE_COMMENT_REQUEST:
+      return {
+        ...state,
+        isSubmittingNormalComment: !action.delayedComment,
+        isSubmittingDelayedComment: action.delayedComment,
+      };
     case actions.UPDATE_ANNOTATION_REQUEST:
     case actions.UPDATE_COMMENT_REQUEST:
       return {
         ...state,
-        isSubmitting: true,
+        isUpdatingComment: true,
       };
     case actions.CREATE_ANNOTATION_FAILURE:
     case actions.CREATE_COMMENT_FAILURE:
+      return {
+        ...state,
+        isSubmittingNormalComment: false,
+        isSubmittingDelayedComment: false,
+      };
     case actions.UPDATE_ANNOTATION_FAILURE:
     case actions.UPDATE_COMMENT_FAILURE:
       return {
         ...state,
-        isSubmitting: false,
+        isUpdatingComment: false,
       };
     case actions.AUTOGRADE_SUCCESS: {
       const { latestAnswer } = action.payload;

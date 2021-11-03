@@ -155,6 +155,7 @@ export default class CommentCard extends Component {
       canUpdate,
       canDestroy,
       id,
+      delayed,
     } = this.props.post;
     return (
       <Card id={CommentCard.postIdentifier(id)} style={styles.card}>
@@ -162,7 +163,9 @@ export default class CommentCard extends Component {
           <CardHeader
             style={styles.cardHeader}
             title={name}
-            subtitle={CommentCard.formatDateTime(createdAt)}
+            subtitle={`${CommentCard.formatDateTime(createdAt)}${
+              delayed ? ' (delayed comment)' : ''
+            }`}
             titleStyle={{ display: 'inline-block', marginRight: 20 }}
             subtitleStyle={{ display: 'inline-block' }}
             avatar={<Avatar src={avatar} size={25} />}
