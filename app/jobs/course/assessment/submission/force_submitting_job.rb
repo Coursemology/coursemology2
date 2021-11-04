@@ -88,7 +88,7 @@ class Course::Assessment::Submission::ForceSubmittingJob < ApplicationJob
     submission.current_answers.each do |answer|
       answer.evaluate!
       answer.grade = 0
-      answer.grader = User.system
+      answer.grader = User.stamper
       answer.graded_at = Time.zone.now
       answer.save!
     end

@@ -119,8 +119,7 @@ class Course::Assessment::Submission::SubmissionsController < \
   # Force submit all submissions.
   def force_submit_all
     authorize!(:force_submit_assessment_submission, @assessment)
-    attempting_submissions = @assessment.submissions.with_attempting_state
-
+    attempting_submissions = @assessment.submissions.by_users(course_user_ids).with_attempting_state
     if !attempting_submissions.empty? || !user_ids_without_submission.empty?
       job = Course::Assessment::Submission::ForceSubmittingJob.
             perform_later(@assessment, user_ids_without_submission, current_user).job
@@ -152,16 +151,15 @@ class Course::Assessment::Submission::SubmissionsController < \
     authorize!(:manage, @assessment)
     submission_ids = @assessment.submissions.by_users(course_user_ids).pluck(:id)
     if submission_ids.empty?
-      render json: { error:
-             I18n.t('course.assessment.submission.submissions.download_statistics.no_submission_statistics') },
-             status: :bad_request
-    else
-      job = Course::Assessment::Submission::StatisticsDownloadJob.
-            perform_later(current_user, submission_ids).job
-      respond_to do |format|
-        format.html { redirect_to(job_path(job)) }
-        format.json { render json: { redirect_url: job_path(job) } }
-      end
+      return render json: { error:
+                    I18n.t('course.assessment.submission.submissions.download_statistics.no_submission_statistics') },
+                    status: :bad_request
+    end
+    job = Course::Assessment::Submission::StatisticsDownloadJob.
+          perform_later(current_user, submission_ids).job
+    respond_to do |format|
+      format.html { redirect_to(job_path(job)) }
+      format.json { render json: { redirect_url: job_path(job) } }
     end
   end
 
@@ -181,16 +179,14 @@ class Course::Assessment::Submission::SubmissionsController < \
   def unsubmit_all
     authorize!(:update, @assessment)
     submission_ids = @assessment.submissions.by_users(course_user_ids).pluck(:id)
-    if submission_ids.empty?
-      head :ok
-    else
-      redirect_to_path = course_assessment_submissions_path(@assessment.course, @assessment)
-      job = Course::Assessment::Submission::UnsubmittingJob.
-            perform_later(current_user, submission_ids, @assessment, nil, redirect_to_path).job
-      respond_to do |format|
-        format.html { redirect_to(job_path(job)) }
-        format.json { render json: { redirect_url: job_path(job) } }
-      end
+    return head :ok if submission_ids.empty?
+
+    redirect_to_path = course_assessment_submissions_path(@assessment.course, @assessment)
+    job = Course::Assessment::Submission::UnsubmittingJob.
+          perform_later(current_user, submission_ids, @assessment, nil, redirect_to_path).job
+    respond_to do |format|
+      format.html { redirect_to(job_path(job)) }
+      format.json { render json: { redirect_url: job_path(job) } }
     end
   end
 
@@ -211,15 +207,13 @@ class Course::Assessment::Submission::SubmissionsController < \
   def delete_all
     authorize!(:delete_all_submissions, @assessment)
     submission_ids = @assessment.submissions.by_users(course_user_ids).pluck(:id)
-    if submission_ids.empty?
-      head :ok
-    else
-      job = Course::Assessment::Submission::DeletingJob.
-            perform_later(current_user, submission_ids, @assessment).job
-      respond_to do |format|
-        format.html { redirect_to(job_path(job)) }
-        format.json { render json: { redirect_url: job_path(job) } }
-      end
+    return head :ok if submission_ids.empty?
+
+    job = Course::Assessment::Submission::DeletingJob.
+          perform_later(current_user, submission_ids, @assessment).job
+    respond_to do |format|
+      format.html { redirect_to(job_path(job)) }
+      format.json { render json: { redirect_url: job_path(job) } }
     end
   end
 
