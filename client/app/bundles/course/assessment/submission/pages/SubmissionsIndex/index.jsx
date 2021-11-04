@@ -35,7 +35,11 @@ import {
 } from '../../actions/submissions';
 import SubmissionsTable from './SubmissionsTable';
 import { assessmentShape } from '../../propTypes';
-import { workflowStates, selectedUserType } from '../../constants';
+import {
+  workflowStates,
+  selectedUserType,
+  selectedUserTypeDisplay,
+} from '../../constants';
 import translations from '../../translations';
 import submissionsTranslations from './translations';
 
@@ -332,7 +336,7 @@ class VisibleSubmissionsIndex extends React.Component {
       graded: shownSubmissions.filter(
         (s) => s.workflowState === workflowStates.Graded,
       ).length,
-      selectedUsers: selectedUserType[handlePublishParams],
+      selectedUsers: selectedUserTypeDisplay[handlePublishParams],
     };
 
     return (
@@ -363,7 +367,7 @@ class VisibleSubmissionsIndex extends React.Component {
       attempting: shownSubmissions.filter(
         (s) => s.workflowState === workflowStates.Attempting,
       ).length,
-      selectedUsers: selectedUserType[handleForceSubmitParams],
+      selectedUsers: selectedUserTypeDisplay[handleForceSubmitParams],
     };
     const message = assessment.autograded
       ? translations.forceSubmitConfirmationAutograded
@@ -421,12 +425,14 @@ class VisibleSubmissionsIndex extends React.Component {
     };
 
     const handleMyStudentsParams = includePhantoms
-      ? 'my_students_w_phantom'
-      : 'my_students';
+      ? selectedUserType.my_students_w_phantom
+      : selectedUserType.my_students;
     const handleStudentsParams = includePhantoms
-      ? 'students_w_phantom'
-      : 'students';
-    const handleStaffParams = includePhantoms ? 'staff_w_phantom' : 'staff';
+      ? selectedUserType.students_w_phantom
+      : selectedUserType.students;
+    const handleStaffParams = includePhantoms
+      ? selectedUserType.staff_w_phantom
+      : selectedUserType.staff;
     const handleParams = {
       handleMyStudentsParams,
       handleStudentsParams,
