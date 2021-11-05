@@ -1,16 +1,33 @@
+- course_user = current_course.course_users.find_by(user_id: user.id)
+- email_enabled = current_course.email_enabled(:forums, :new_topic)
+- admin_enable_email = (course_user.phantom? && email_enabled.phantom) || (!course_user.phantom? && email_enabled.regular)
+- user_unsubscribed = course_user.email_unsubscriptions.where(course_settings_email_id: email_enabled.id).exists?
+
+- if !admin_enable_email
+  - subscribe_tooltip = t('course.forum.forums.subscribe.admin_disabled')
+  - unsubscribe_tooltip = t('course.forum.forums.unsubscribe.admin_disabled')
+- elsif user_unsubscribed
+  - subscribe_tooltip = t('course.forum.forums.subscribe.user_unsubscribed')
+  - unsubscribe_tooltip = t('course.forum.forums.unsubscribe.user_unsubscribed')
+- else
+  - subscribe_tooltip = t('course.forum.forums.subscribe.tag')
+  - unsubscribe_tooltip = t('course.forum.forums.unsubscribe.tag')
+
 - if forum.subscribed_by?(user)
   = link_to unsubscribe_course_forum_path(forum.course, forum),
-            title: t('course.forum.forums.unsubscribe.tag'),
+            title: unsubscribe_tooltip,
             class: ['btn', 'btn-info', 'btn-subscribe'],
             method: :delete,
+            disabled: !admin_enable_email || user_unsubscribed,
             remote: true do
     = fa_icon 'envelope-open'.freeze, class: ['fa-fw']
     span = t('.subscribed')
 - else
   = link_to subscribe_course_forum_path(forum.course, forum),
-            title: t('course.forum.forums.subscribe.tag'),
+            title: subscribe_tooltip,
             class: ['btn', 'btn-default', 'btn-subscribe'],
             method: :post,
+            disabled: !admin_enable_email || user_unsubscribed,
             remote: true do
     = fa_icon 'envelope-open-o'.freeze, class: ['fa-fw']
     span = t('.subscribe')

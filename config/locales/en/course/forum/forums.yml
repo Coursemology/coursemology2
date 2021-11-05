@@ -36,11 +36,17 @@ en:
           success: 'Forum %{name} was deleted.'
           failure: 'Failed to delete forum: %{error}'
         subscribe:
-          tag: 'Subscribe to email notifications'
+          tag: 'Subscribe to receive an email notification when a new topic is created'
+          admin_disabled: 'Subscription of new forum topic is disabled by the course admin.'
+          user_unsubscribed: >
+            You have unsubscribed from "New Topic" for forums in this course. Please go to "manage my subscription" to enable it.
           success: 'You are subscribed to %{name}.'
           failure: 'Failed to subscribe to: %{error}'
         unsubscribe:
-          tag: 'Unsubscribe from email notifications'
+          tag: 'Unsubscribe to stop receiving from an email notification when a new topic is created'
+          admin_disabled: 'Subscription of new forum topic is disabled by the course admin.'
+          user_unsubscribed: >
+            You have unsubscribed from "New Topic" for forums in this course. Please go to "manage my subscription" to enable it.
           success: 'You have been unsubscribed from %{name}.'
           failure: >
             You are not subscribed to this forum, hence the unsubscription was unsuccessful.
@@ -71,3 +77,5 @@ en:
           mark_forum_description: 'Mark all topics in current forum as read'
         forum:
           has_question: 'Has unresolved question(s)'
+        form:
+          auto_subscribe: 'Enable auto-subscription to a forum topic when a user creates the topic, new posts or replies'
