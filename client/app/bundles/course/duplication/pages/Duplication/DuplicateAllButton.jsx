@@ -26,6 +26,13 @@ const translations = defineMessages({
   },
 });
 
+const styles = {
+  spinner: {
+    position: 'absolute',
+    marginLeft: 8,
+  },
+};
+
 class DuplicateAllButton extends React.Component {
   constructor(props) {
     super(props);
@@ -40,15 +47,17 @@ class DuplicateAllButton extends React.Component {
 
     return (
       <>
-        <RaisedButton
-          secondary
-          disabled={disabled}
-          label={<FormattedMessage {...translations.duplicateCourse} />}
-          onClick={() => this.setState({ confirmationOpen: true })}
-        />
-        {isDuplicating && (
-          <CircularProgress size={36} style={{ position: 'absolute' }} />
-        )}
+        <div style={styles.buttonContainer}>
+          <RaisedButton
+            secondary
+            disabled={disabled}
+            label={<FormattedMessage {...translations.duplicateCourse} />}
+            onClick={() => this.setState({ confirmationOpen: true })}
+          />
+          {isDuplicating && (
+            <CircularProgress size={36} style={styles.spinner} />
+          )}
+        </div>
         <ConfirmationDialog
           open={this.state.confirmationOpen}
           message={
