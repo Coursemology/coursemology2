@@ -1,6 +1,6 @@
 import BaseCourseAPI from './Base';
 
-export default class UserSubscriptionsAPI extends BaseCourseAPI {
+export default class UserEmailSubscriptionsAPI extends BaseCourseAPI {
   /**
    * Fetches all email subscription settings for a course user.
    *
