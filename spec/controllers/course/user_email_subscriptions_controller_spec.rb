@@ -19,17 +19,46 @@ RSpec.describe Course::UserEmailSubscriptionsController, type: :controller do
 
     describe '#edit json' do
       before { sign_in(student.user) }
-      subject do
-        get :edit, format: :json, params: {
-          course_id: course,
-          user_id: student,
-          component: 'videos',
-          setting: 'closing_reminder',
-          unsubscribe: true
-        }
+      context 'when an unsubscription link for surveys closing reminder is clicked' do
+        subject do
+          get :edit, format: :json, params: {
+            course_id: course,
+            user_id: student,
+            component: 'surveys',
+            setting: 'closing_reminder',
+            unsubscribe: true
+          }
+        end
+        before { subject }
+
+        it 'unsubscribes from the related setting' do
+          expect(student.email_unsubscriptions.length).to eq(1)
+          expect(student.email_unsubscriptions.first.course_setting_email.component).to eq('surveys')
+          expect(student.email_unsubscriptions.first.course_setting_email.setting).to eq('closing_reminder')
+          is_expected.to render_template(partial: '_subscription_setting')
+        end
       end
 
-      it { is_expected.to render_template(partial: '_subscription_setting') }
+      context 'when an unsubscription link is clicked for opening reminder' do
+        subject do
+          get :edit, format: :json, params: {
+            course_id: course,
+            user_id: student,
+            setting: 'opening_reminder',
+            unsubscribe: true
+          }
+        end
+        before { subject }
+
+        it 'unsubscribes from the related settings' do
+          expect(student.email_unsubscriptions.length).to eq(2)
+          expect(student.email_unsubscriptions.first.course_setting_email.component).to eq('assessments')
+          expect(student.email_unsubscriptions.first.course_setting_email.setting).to eq('opening_reminder')
+          expect(student.email_unsubscriptions.last.course_setting_email.component).to eq('surveys')
+          expect(student.email_unsubscriptions.last.course_setting_email.setting).to eq('opening_reminder')
+          is_expected.to render_template(partial: '_subscription_setting')
+        end
+      end
     end
 
     describe '#update' do
