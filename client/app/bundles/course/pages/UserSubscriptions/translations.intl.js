@@ -116,15 +116,15 @@ export const subscriptionTitles = defineMessages({
 export const subscriptionDescriptions = defineMessages({
   announcements_new_announcement: {
     id: 'course.UserSubscriptions.subscriptionDescriptions.announcements_new_announcement',
-    defaultMessage: 'Stay informed whenever a new announcement is made.',
+    defaultMessage: 'Stay notified whenever a new announcement is made.',
   },
   assessments_opening_reminder: {
     id: 'course.UserSubscriptions.subscriptionDescriptions.assessments_opening_reminder',
-    defaultMessage: 'Be informed when a new assignment is available.',
+    defaultMessage: 'Be notified when a new assignment is available.',
   },
   assessments_closing_reminder: {
     id: 'course.UserSubscriptions.subscriptionDescriptions.assessments_closing_reminder',
-    defaultMessage: 'Be informed when an assignment about to be due.',
+    defaultMessage: 'Be notified when an assignment about to be due.',
   },
   assessments_closing_reminder_summary: {
     id: 'course.UserSubscriptions.subscriptionDescriptions.assessments',
@@ -133,34 +133,34 @@ export const subscriptionDescriptions = defineMessages({
   },
   assessments_grades_released: {
     id: 'course.UserSubscriptions.subscriptionDescriptions.assessments_grades_released',
-    defaultMessage: 'Be informed when your submission has been graded.',
+    defaultMessage: 'Be notified when your submission has been graded.',
   },
   assessments_new_comment: {
     id: 'course.UserSubscriptions.subscriptionDescriptions.assessments_new_comment',
     defaultMessage:
-      'Be informed when you receive comments and replies for an assignment.',
+      'Be notified when you receive comments and replies for an assignment.',
   },
   assessments_new_submission: {
     id: 'course.UserSubscriptions.subscriptionDescriptions.assessments_new_submission',
-    defaultMessage: 'Be informed when your student creates a new submission.',
+    defaultMessage: 'Be notified when your student creates a new submission.',
   },
   forums_new_topic: {
     id: 'course.UserSubscriptions.subscriptionDescriptions.forums_new_topic',
     defaultMessage:
-      'Be informed when there are new topics created for forums that you are subscribed to.',
+      'Be notified when there are new topics created for forums that you are subscribed to.',
   },
   forums_post_replied: {
     id: 'course.UserSubscriptions.subscriptionDescriptions.forums_post_replied',
     defaultMessage:
-      'Be informed when there are posts and replies for forum topics you are subscribed to.',
+      'Be notified when there are posts and replies for forum topics you are subscribed to.',
   },
   surveys_opening_reminder: {
     id: 'course.UserSubscriptions.subscriptionDescriptions.surveys_opening_reminder',
-    defaultMessage: 'Be informed when a new survey is available.',
+    defaultMessage: 'Be notified when a new survey is available.',
   },
   surveys_closing_reminder: {
     id: 'course.UserSubscriptions.subscriptionDescriptions.surveys_closing_reminder',
-    defaultMessage: 'Be informed when a survey is about to expire.',
+    defaultMessage: 'Be notified when a survey is about to expire.',
   },
   surveys_closing_reminder_summary: {
     id: 'course.UserSubscriptions.subscriptionDescriptions.surveys_closing_reminder_summary',
@@ -169,15 +169,15 @@ export const subscriptionDescriptions = defineMessages({
   },
   videos_opening_reminder: {
     id: 'course.UserSubscriptions.subscriptionDescriptions.videos_opening_reminder.',
-    defaultMessage: 'Be informed when a new video is available.',
+    defaultMessage: 'Be notified when a new video is available.',
   },
   videos_closing_reminder: {
     id: 'course.UserSubscriptions.subscriptionDescriptions.videos_closing_reminder',
-    defaultMessage: 'Be informed when a video is about to expire.',
+    defaultMessage: 'Be notified when a video is about to expire.',
   },
   users_new_enrol_request: {
     id: 'course.UserSubscriptions.subscriptionDescriptions.users_new_enrol_request',
-    defaultMessage: 'Be informed when a new course enrolment request is made.',
+    defaultMessage: 'Be notified when a new course enrolment request is made.',
   },
 });
 

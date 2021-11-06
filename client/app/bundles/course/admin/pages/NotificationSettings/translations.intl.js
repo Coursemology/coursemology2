@@ -24,7 +24,7 @@ const translations = defineMessages({
   updateSuccess: {
     id: 'course.admin.NotificationSettings.updateSuccess',
     defaultMessage:
-      'The email setting "{setting}" for {user} user has been {action}.',
+      'The email setting "{setting}" for {user} users has been {action}.',
   },
   updateFailure: {
     id: 'course.admin.NotificationSettings.updateFailure',

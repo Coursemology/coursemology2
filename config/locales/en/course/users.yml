@@ -47,6 +47,6 @@ en:
           other: '%{count} achievements'
         topic_mastery: 'Topic Mastery'
         grade_for_skill: '%{grade}/%{total_grade} points'
-        manage_email_subscription: 'Manage email subscription'
+        manage_email_subscription: 'Manage email subscriptions'
       index:
         header: 'Students'
