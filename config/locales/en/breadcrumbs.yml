@@ -145,7 +145,7 @@ en:
       experience_points_records:
         index: 'Experience Points History'
       user_email_subscriptions:
-        index: 'Manage Email subscriptions'
+        index: 'Manage Email Subscriptions'
       video_submissions:
         index: 'Video Watch History'
       experience_points:
