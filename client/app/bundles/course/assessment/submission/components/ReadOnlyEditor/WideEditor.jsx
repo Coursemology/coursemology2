@@ -30,6 +30,8 @@ const styles = {
   },
   editorLine: {
     height: 20,
+    alignItems: 'center',
+    display: 'flex',
     paddingLeft: 5,
     whiteSpace: 'nowrap',
   },
@@ -126,14 +128,27 @@ export default class WideEditor extends Component {
         <table className="codehilite" style={styles.editor}>
           <tbody>
             <tr>
-              <td style={{ width: 50, userSelect: 'none', paddingBottom: 20 }}>
+              <td
+                style={{
+                  width: 50,
+                  userSelect: 'none',
+                  paddingBottom: 20,
+                  verticalAlign: 'top',
+                }}
+              >
                 {content.map((line, index) => (
                   <div key={`${index}-${line}`}>
                     {this.renderLineNumberColumn(index + 1)}
                   </div>
                 ))}
               </td>
-              <td style={{ display: 'block', overflowX: 'scroll' }}>
+              <td
+                style={{
+                  display: 'block',
+                  overflowX: 'scroll',
+                  verticalAlign: 'top',
+                }}
+              >
                 <div style={{ display: 'inline-block' }}>
                   {content.map((line, index) => (
                     <div key={`${index}-${line}`} style={styles.editorLine}>
