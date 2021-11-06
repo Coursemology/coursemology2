@@ -3,6 +3,7 @@ en:
     forum:
       topics:
         topic:
+          auto_subscribe: 'You will be automatically subscribed to this topic when you create a post.'
           locked: 'This topic is locked.'
           question:
             resolved: 'Question'
@@ -29,13 +30,19 @@ en:
           success: 'Topic %{title} was deleted.'
           failure: 'Failed to delete topic: %{error}'
         subscribe:
-          tag: 'Subscribe to email notification for this topic'
-          success: 'You have subscribed to topic.'
-          failure: 'Failed to subscribe to topic.'
+          tag: 'Subscribe to receive email notifications when someone replies in this forum topic'
+          admin_disabled: 'Subscription of forum topics is disabled by the course admin.'
+          user_unsubscribed: >
+            You have unsubscribed from "New Post and Reply" for forums in this course. Please go to "manage my subscription" to enable it.
+          success: 'You have subscribed to the forum topic "%{topic}".'
+          failure: 'Failed to subscribe to the forum topic "%{topic}".'
         unsubscribe:
-          tag: 'Unsubscribe from email notification for this topic'
-          success: 'You have unsubscribed from topic.'
-          failure: 'Failed to unsubscribe from topic.'
+          tag: 'Unsubscribe to stop receiving email notifications when someone replies in this forum topic'
+          admin_disabled: 'Subscription of forum topics is disabled by the course admin.'
+          user_unsubscribed: >
+            You have unsubscribed from "New Post and Reply" for forums in this course. Please go to "manage my subscription" to enable it.
+          success: 'You have unsubscribed from the forum topic "%{topic}".'
+          failure: 'Failed to unsubscribe from the forum topic "%{topic}".'
         locked:
           tag: 'Lock'
           success: 'The topic was successfully locked.'
@@ -57,3 +64,6 @@ en:
         unresolved:
           message: 'This question topic is unresolved.'
           tag: 'Mark helpful post(s) as answer(s) to resolve this question.'
+        subscribe_button:
+          subscribe: 'Subscribe'
+          subscribed: 'Subscribed'

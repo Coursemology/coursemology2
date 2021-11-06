@@ -84,7 +84,7 @@ RSpec.describe Course::Assessment::Submission do
             expect(subject.errors.messages[:experience_points_record]).
               to include(I18n.
                 t('activerecord.errors.models.course/assessment/submission.'\
-                'attributes.experience_points_record.absent_award_attributes'))
+                  'attributes.experience_points_record.absent_award_attributes'))
           end
         end
 
@@ -95,7 +95,7 @@ RSpec.describe Course::Assessment::Submission do
             expect(subject.errors.messages[:experience_points_record]).
               to include(I18n.
                 t('activerecord.errors.models.course/assessment/submission.'\
-                'attributes.experience_points_record.absent_award_attributes'))
+                  'attributes.experience_points_record.absent_award_attributes'))
           end
         end
       end
@@ -400,6 +400,16 @@ RSpec.describe Course::Assessment::Submission do
       let(:assessment_traits) { [:with_all_question_types] }
       let!(:submission) { submission1 }
       let(:submission1_traits) { :submitted }
+      let(:category_id) { assessment.tab.category.id }
+
+      def set_assessment_email_setting(course, category_id, setting, regular, phantom)
+        email_setting = course.
+                        setting_emails.
+                        where(component: :assessments,
+                              course_assessment_category_id: category_id,
+                              setting: setting).first
+        email_setting.update!(regular: regular, phantom: phantom)
+      end
 
       it 'propagates the graded state to its answers' do
         expect(submission.answers.all?(&:submitted?)).to be(true)
@@ -423,18 +433,42 @@ RSpec.describe Course::Assessment::Submission do
         expect { submission.publish! }.to change { ActionMailer::Base.deliveries.count }.by(1)
       end
 
-      context 'when "submission graded" emails are disabled' do
+      context 'when a user unsubscribes' do
         before do
-          context = OpenStruct.new(key: Course::AssessmentsComponent.key, current_course: course)
-          setting = {
-            'key' => 'grades_released', 'enabled' => false,
-            'options' => { 'category_id' => assessment.tab.category.id }
-          }
-          Course::Settings::AssessmentsComponent.new(context).update_email_setting(setting)
-          course.save!
+          setting_email = course.
+                          setting_emails.
+                          where(component: :assessments,
+                                course_assessment_category_id: category_id,
+                                setting: :grades_released).first
+          course_student1.email_unsubscriptions.create!(course_setting_email: setting_email)
         end
 
-        it 'does not send email notifications' do
+        it 'does not send an email notification to the user' do
+          expect { course_student1 }.to change { ActionMailer::Base.deliveries.count }.by(0)
+        end
+      end
+
+      context 'when "submission graded" email setting is disabled for regular students' do
+        before { set_assessment_email_setting(course, category_id, :grades_released, false, true) }
+
+        it 'does not send email notifications to the regular students' do
+          expect { submission.publish! }.to change { ActionMailer::Base.deliveries.count }.by(0)
+        end
+      end
+
+      context 'when "submission graded" email setting is disabled for phantom students' do
+        before { set_assessment_email_setting(course, category_id, :grades_released, true, false) }
+
+        it 'does not send email notifications to phantom students' do
+          course_student1.update(phantom: true)
+          expect { submission.publish! }.to change { ActionMailer::Base.deliveries.count }.by(0)
+        end
+      end
+
+      context 'when "submission graded" setting is disabled for everyone' do
+        before { set_assessment_email_setting(course, category_id, :grades_released, false, false) }
+
+        it 'does not send email notifications to the users' do
           expect { submission.publish! }.to change { ActionMailer::Base.deliveries.count }.by(0)
         end
       end
@@ -652,26 +686,6 @@ RSpec.describe Course::Assessment::Submission do
 
       it 'sends the email notification' do
         expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
-      end
-
-      context 'when the student is a phantom' do
-        let(:course_student1_traits) { [:phantom] }
-
-        context 'when submission email notifications for phantoms is disabled' do
-          before do
-            context = OpenStruct.new(key: Course::AssessmentsComponent.key, current_course: course)
-            setting = {
-              'key' => 'new_phantom_submission', 'enabled' => false,
-              'options' => { 'category_id' => assessment.tab.category.id }
-            }
-            Course::Settings::AssessmentsComponent.new(context).update_email_setting(setting)
-            course.save!
-          end
-
-          it 'does not send the email notification' do
-            expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
-          end
-        end
       end
     end
 

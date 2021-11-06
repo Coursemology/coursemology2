@@ -15,29 +15,24 @@ RSpec.describe Course::Admin::NotificationSettingsController, type: :controller 
     end
 
     describe '#update' do
-      subject { patch :update, params: { course_id: course, notification_settings: payload } }
+      subject { patch :update, params: { course_id: course, email_settings: payload_email } }
 
       context 'when valid parameters are received' do
         render_views
-        let(:payload) do
+        let(:payload_email) do
           {
-            'component' => 'course_announcements_component',
-            'key' => 'new_announcement',
-            'enabled' => false
+            'component' => 'announcements',
+            'setting' => 'new_announcement',
+            'regular' => 'false'
           }
         end
         before { subject }
 
         it 'responds with the necessary fields' do
           new_announcement_setting =
-            json_response.find { |setting| setting['key'] == 'new_announcement' }
-          expect(new_announcement_setting['enabled']).to eq(false)
+            json_response.find { |setting| setting['setting'] == 'new_announcement' }
+          expect(new_announcement_setting['regular']).to eq(false)
         end
-      end
-
-      context 'when invalid parameters are received' do
-        let(:payload) { { 'component' => 'invalid_component' } }
-        it { is_expected.to have_http_status(:bad_request) }
       end
     end
   end
