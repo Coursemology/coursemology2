@@ -40,8 +40,7 @@ export default class NotificationBar extends React.Component {
       <Snackbar
         bodyStyle={{
           height: 'auto',
-          lineHeight: 'auto',
-          padding: '20px',
+          maxWidth: '100%',
           whiteSpace: 'pre-line',
         }}
         open={!!message}

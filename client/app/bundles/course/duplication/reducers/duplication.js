@@ -113,8 +113,7 @@ export default function (state = initialState, action) {
     }
 
     case actionTypes.DUPLICATE_COURSE_REQUEST:
-    case actionTypes.DUPLICATE_ITEMS_REQUEST:
-    case actionTypes.DUPLICATE_COURSE_SUCCESS: {
+    case actionTypes.DUPLICATE_ITEMS_REQUEST: {
       return { ...state, isDuplicating: true };
     }
     case actionTypes.DUPLICATE_COURSE_FAILURE:
@@ -122,7 +121,9 @@ export default function (state = initialState, action) {
     case actionTypes.DUPLICATE_ITEMS_SUCCESS: {
       return { ...state, isDuplicating: false };
     }
-
+    case actionTypes.DUPLICATE_COURSE_SUCCESS: {
+      return { ...state, isDuplicating: false, isDuplicationSuccess: true };
+    }
     default:
       return state;
   }

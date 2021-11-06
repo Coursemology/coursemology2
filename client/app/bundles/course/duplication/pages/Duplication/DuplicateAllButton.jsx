@@ -40,7 +40,13 @@ class DuplicateAllButton extends React.Component {
   }
 
   render() {
-    const { dispatch, duplicationMode, disabled, isDuplicating } = this.props;
+    const {
+      dispatch,
+      duplicationMode,
+      disabled,
+      isDuplicating,
+      isDuplicationSuccess,
+    } = this.props;
     if (duplicationMode !== duplicationModes.COURSE) {
       return null;
     }
@@ -54,7 +60,7 @@ class DuplicateAllButton extends React.Component {
             label={<FormattedMessage {...translations.duplicateCourse} />}
             onClick={() => this.setState({ confirmationOpen: true })}
           />
-          {isDuplicating && (
+          {(isDuplicating || isDuplicationSuccess) && (
             <CircularProgress size={36} style={styles.spinner} />
           )}
         </div>
@@ -82,6 +88,7 @@ class DuplicateAllButton extends React.Component {
 DuplicateAllButton.propTypes = {
   duplicationMode: PropTypes.string.isRequired,
   isDuplicating: PropTypes.bool.isRequired,
+  isDuplicationSuccess: PropTypes.bool.isRequired,
   disabled: PropTypes.bool.isRequired,
 
   dispatch: PropTypes.func.isRequired,
@@ -90,8 +97,10 @@ DuplicateAllButton.propTypes = {
 export default connect(({ duplication, ...state }) => ({
   duplicationMode: duplication.duplicationMode,
   isDuplicating: duplication.isDuplicating,
+  isDuplicationSuccess: duplication.isDuplicationSuccess,
   disabled:
     !isValid(formNames.NEW_COURSE)(state) ||
     duplication.isDuplicating ||
-    duplication.isChangingCourse,
+    duplication.isChangingCourse ||
+    duplication.isDuplicationSuccess,
 }))(DuplicateAllButton);

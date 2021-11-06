@@ -29,7 +29,7 @@ const translations = defineMessages({
     id: 'course.duplication.DestinationCourseSelector.pending',
     defaultMessage:
       'Please wait as your request to duplicate the course is being processed.\n\
-    You may close the window while duplication is in progress and \
+    You may close the window while duplication is in progress and\n\
     you will also receive an email with a link to the new course when it becomes available.',
   },
   failure: {
