@@ -28,8 +28,9 @@ class Course::AssessmentNotifier < Notifier::Base
 
     activity = create_activity(actor: user, object: submission, event: :submitted)
     managers.each do |manager|
-      next if manager.phantom? && !email_enabled.phantom
-      next if !manager.phantom? && !email_enabled.regular
+      is_disabled_as_phantom = manager.phantom? && !email_enabled.phantom
+      is_disabled_as_regular = !manager.phantom? && !email_enabled.regular
+      next if is_disabled_as_phantom || is_disabled_as_regular
 
       activity.notify(manager.user, :email)
     end

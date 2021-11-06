@@ -94,8 +94,9 @@ module Course::Assessment::Submission::WorkflowEventConcern
   private
 
   def submission_graded_email_enabled?
-    return true if course_user.phantom? && email_enabled.phantom
-    return true if !course_user.phantom? && email_enabled.regular
+    is_enabled_as_phantom = course_user.phantom? && email_enabled.phantom
+    is_enabled_as_regular = !course_user.phantom? && email_enabled.regular
+    is_enabled_as_phantom || is_enabled_as_regular
   end
 
   def submission_graded_email_subscribed?

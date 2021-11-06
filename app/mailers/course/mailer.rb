@@ -35,7 +35,7 @@ class Course::Mailer < ApplicationMailer
     end
     email_enabled = @course.email_enabled(:users, :new_enrol_request)
 
-    return if !email_enabled.regular && !email_enabled.phantom
+    return unless email_enabled.regular || email_enabled.phantom
 
     @enrol_request = enrol_request
     @recipient = OpenStruct.new(name: t('course.mailer.user_enrol_requested_email.recipients'))

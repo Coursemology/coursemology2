@@ -41,8 +41,9 @@ class Course::Survey::ReminderService
     student_list = name_list(students)
     email_enabled = survey.course.email_enabled(:surveys, :closing_reminder_summary)
     course_instructors.each do |instructor|
-      next if instructor.phantom? && !email_enabled.phantom
-      next if !instructor.phantom? && !email_enabled.regular
+      is_disabled_as_phantom = instructor.phantom? && !email_enabled.phantom
+      is_disabled_as_regular = !instructor.phantom? && !email_enabled.regular
+      next if is_disabled_as_phantom || is_disabled_as_regular
       next if instructor.email_unsubscriptions.where(course_settings_email_id: email_enabled.id).exists?
 
       Course::Mailer.survey_closing_summary_email(instructor.user, survey, student_list).deliver_later

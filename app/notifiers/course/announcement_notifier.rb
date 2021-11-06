@@ -20,8 +20,10 @@ class Course::AnnouncementNotifier < Notifier::Base
     email_enabled = notification.course.email_enabled(:announcements, :new_announcement)
     notification.course.course_users.each do |course_user|
       next if course_user.email_unsubscriptions.where(course_settings_email_id: email_enabled.id).exists?
-      next if course_user.phantom? && !email_enabled.phantom
-      next if !course_user.phantom? && !email_enabled.regular
+
+      is_disabled_as_phantom = course_user.phantom? && !email_enabled.phantom
+      is_disabled_as_regular = !course_user.phantom? && !email_enabled.regular
+      next if is_disabled_as_phantom || is_disabled_as_regular
 
       @pending_emails << ActivityMailer.email(recipient: course_user.user,
                                               notification: notification,
