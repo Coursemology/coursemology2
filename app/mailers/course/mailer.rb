@@ -76,6 +76,19 @@ class Course::Mailer < ApplicationMailer
     mail(to: @recipient.email, subject: t('.subject', new_course: @new_course.title))
   end
 
+  # Send a notification email to a user informing the failure of his course duplication.
+  #
+  # @param [Course] original_course The original course that was duplicated.
+  # @param [User] user The user who performed the duplication.
+  def course_duplicate_failed_email(original_course, user)
+    # Based on DuplicationService, user might default to User.system which has no email.
+    return unless user.email
+
+    @original_course = original_course
+    @recipient = user
+    mail(to: @recipient.email, subject: t('.subject', original_course: @original_course.title))
+  end
+
   # Send a reminder of the assessment closing to a single user
   #
   # @param [Course::Assessment] assessment The assessment that is closing.

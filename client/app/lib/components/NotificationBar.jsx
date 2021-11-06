@@ -38,6 +38,11 @@ export default class NotificationBar extends React.Component {
     }
     return (
       <Snackbar
+        bodyStyle={{
+          height: 'auto',
+          maxWidth: '100%',
+          whiteSpace: 'pre-line',
+        }}
         open={!!message}
         message={notificationNode}
         autoHideDuration={autoHideDuration}

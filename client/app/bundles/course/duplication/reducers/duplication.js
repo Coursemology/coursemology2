@@ -37,6 +37,7 @@ const initialState = {
   isLoading: false,
   isChangingCourse: false,
   isDuplicating: false,
+  isDuplicationSuccess: false,
 };
 
 export default function (state = initialState, action) {
@@ -115,13 +116,14 @@ export default function (state = initialState, action) {
     case actionTypes.DUPLICATE_ITEMS_REQUEST: {
       return { ...state, isDuplicating: true };
     }
-    case actionTypes.DUPLICATE_COURSE_SUCCESS:
     case actionTypes.DUPLICATE_COURSE_FAILURE:
     case actionTypes.DUPLICATE_ITEMS_FAILURE:
     case actionTypes.DUPLICATE_ITEMS_SUCCESS: {
       return { ...state, isDuplicating: false };
     }
-
+    case actionTypes.DUPLICATE_COURSE_SUCCESS: {
+      return { ...state, isDuplicating: false, isDuplicationSuccess: true };
+    }
     default:
       return state;
   }
