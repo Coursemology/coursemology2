@@ -27,7 +27,7 @@ const CourseAPI = {
   admin: AdminAPI,
   level: new LevelAPI(),
   userNotifications: new UserNotificationsAPI(),
-  userSubscriptions: new UserEmailSubscriptionsAPI(),
+  userEmailSubscriptions: new UserEmailSubscriptionsAPI(),
 };
 
 Object.freeze(CourseAPI);

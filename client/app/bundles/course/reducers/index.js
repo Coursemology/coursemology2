@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
 import notificationPopup from 'lib/reducers/notificationPopup';
-import userSubscriptions from './userSubscriptions';
+import userEmailSubscriptions from './userEmailSubscriptions';
 
 export default combineReducers({
   notificationPopup,
-  userSubscriptions,
+  userEmailSubscriptions,
 });

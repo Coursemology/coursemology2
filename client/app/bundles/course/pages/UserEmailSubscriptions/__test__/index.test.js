@@ -2,14 +2,14 @@ import React from 'react';
 import { mount } from 'enzyme';
 import CourseAPI from 'api/course';
 import storeCreator from 'course/store';
-import UserSubscriptions from '../index';
+import UserEmailSubscriptions from '../index';
 
-describe('<UserSubscriptions />', () => {
+describe('<UserEmailSubscriptions />', () => {
   it('allow emails subscription settings to be set', () => {
-    const spy = jest.spyOn(CourseAPI.userSubscriptions, 'update');
+    const spy = jest.spyOn(CourseAPI.userEmailSubscriptions, 'update');
     const store = storeCreator({
       course: {
-        userSubscriptions: {
+        userEmailSubscriptions: {
           settings: [
             {
               component: 'sample_component',
@@ -27,12 +27,12 @@ describe('<UserSubscriptions />', () => {
         },
       },
     });
-    const userSubscriptions = mount(
-      <UserSubscriptions />,
+    const userEmailSubscriptions = mount(
+      <UserEmailSubscriptions />,
       buildContextOptions(store),
     );
 
-    const toggles = userSubscriptions.find('Toggle');
+    const toggles = userEmailSubscriptions.find('Toggle');
     expect(toggles.length).toBe(1);
 
     const toggle = toggles.last();
@@ -42,7 +42,7 @@ describe('<UserSubscriptions />', () => {
       component: null,
       category_id: null,
       setting: null,
-      user_subscriptions: {
+      user_email_subscriptions: {
         component: 'sample_component',
         course_assessment_category_id: null,
         setting: 'email_for_some_event',

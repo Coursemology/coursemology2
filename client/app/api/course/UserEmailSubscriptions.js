@@ -17,7 +17,7 @@ export default class UserEmailSubscriptionsAPI extends BaseCourseAPI {
    *
    * @param {object} params
    *   - params in the format of
-   *     { user_subscriptions: { :component, :course_assessment_category_id, :setting, :enabled  }
+   *     { user_email_subscriptions: { :component, :course_assessment_category_id, :setting, :enabled  }
    * @return {Promise}
    * success response: {}
    * error response: {}

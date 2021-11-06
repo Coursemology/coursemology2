@@ -1,18 +1,18 @@
 import React from 'react';
 import { render } from 'react-dom';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
-import UserSubscriptions from 'course/pages/UserSubscriptions';
+import UserEmailSubscriptions from 'course/pages/UserEmailSubscriptions';
 import storeCreator from './store';
 
 $(document).ready(() => {
-  const mountNode = document.getElementById('user-subscriptions');
+  const mountNode = document.getElementById('user-email-subscriptions');
 
   if (mountNode) {
     const data = mountNode.getAttribute('data');
     const attributes = JSON.parse(data);
     const initialData = {
       course: {
-        userSubscriptions: {
+        userEmailSubscriptions: {
           settings: attributes.settings,
           pageFilter: attributes.subscription_page_filter,
         },
@@ -21,7 +21,7 @@ $(document).ready(() => {
     const store = storeCreator(initialData);
     const Page = () => (
       <ProviderWrapper store={store}>
-        <UserSubscriptions />
+        <UserEmailSubscriptions />
       </ProviderWrapper>
     );
 

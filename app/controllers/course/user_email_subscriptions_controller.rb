@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::UserSubscriptionsController < Course::ComponentController
+class Course::UserEmailSubscriptionsController < Course::ComponentController
   include Course::UsersBreadcrumbConcern
 
   load_resource :course_user, through: :course, id_param: :user_id
@@ -11,7 +11,7 @@ class Course::UserSubscriptionsController < Course::ComponentController
     load_subscription_settings
     respond_to do |format|
       format.html { render 'edit' }
-      format.json { render partial: 'course/user_subscriptions/subscription_setting' }
+      format.json { render partial: 'course/user_email_subscriptions/subscription_setting' }
     end
   end
 
@@ -19,7 +19,7 @@ class Course::UserSubscriptionsController < Course::ComponentController
     authorize!(:manage, Course::UserEmailUnsubscription.new(course_user: @course_user))
     update_subscription_setting
     load_subscription_settings
-    render partial: 'course/user_subscriptions/subscription_setting'
+    render partial: 'course/user_email_subscriptions/subscription_setting'
   end
 
   private
@@ -30,11 +30,11 @@ class Course::UserSubscriptionsController < Course::ComponentController
   end
 
   def email_setting_params
-    params.require(:user_subscriptions).permit(:component, :course_assessment_category_id, :setting)
+    params.require(:user_email_subscriptions).permit(:component, :course_assessment_category_id, :setting)
   end
 
   def subscription_params
-    params.require(:user_subscriptions).permit(:enabled)
+    params.require(:user_email_subscriptions).permit(:enabled)
   end
 
   def email_setting_filter_params

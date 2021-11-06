@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe Course::UserSubscriptionsController, type: :controller do
+RSpec.describe Course::UserEmailSubscriptionsController, type: :controller do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -38,7 +38,7 @@ RSpec.describe Course::UserSubscriptionsController, type: :controller do
         patch :update, format: :json,
                        params: { course_id: course,
                                  user_id: course.course_users.first,
-                                 user_subscriptions: payload_email }
+                                 user_email_subscriptions: payload_email }
       end
 
       context 'when a user unsubscribes' do

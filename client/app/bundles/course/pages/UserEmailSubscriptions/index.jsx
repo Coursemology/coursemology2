@@ -14,9 +14,9 @@ import {
 } from 'material-ui/Table';
 import NotificationPopup from 'lib/containers/NotificationPopup';
 import {
-  fetchUserSubscriptions,
-  updateUserSubscriptions,
-} from 'course/actions/user-subscriptions';
+  fetchUserEmailSubscriptions,
+  updateUserEmailSubscriptions,
+} from 'course/actions/user-email-subscriptions';
 import { setNotification } from 'lib/actions';
 import translations, {
   subscriptionComponents,
@@ -31,14 +31,14 @@ const styles = {
   },
 };
 
-class UserSubscriptions extends React.Component {
-  handleFetchAllUserSubscriptions = () => {
+class UserEmailSubscriptions extends React.Component {
+  handleFetchAllUserEmailSubscriptions = () => {
     const { dispatch } = this.props;
-    dispatch(fetchUserSubscriptions());
+    dispatch(fetchUserEmailSubscriptions());
   };
 
-  handleUserSubscriptionsUpdate = (setting) => {
-    const { userSubscriptionsPageFilter, dispatch } = this.props;
+  handleUserEmailSubscriptionsUpdate = (setting) => {
+    const { userEmailSubscriptionsPageFilter, dispatch } = this.props;
     const componentTitle =
       setting.component_title ||
       (subscriptionComponents[setting.component] &&
@@ -50,7 +50,7 @@ class UserSubscriptions extends React.Component {
       setting.setting;
     return (_, enabled) => {
       const payloadSetting = { ...setting, enabled };
-      const payloadPageFilter = { ...userSubscriptionsPageFilter };
+      const payloadPageFilter = { ...userEmailSubscriptionsPageFilter };
       const enabledText = enabled ? 'enabled' : 'disabled';
       const successMessage = (
         <FormattedMessage
@@ -71,7 +71,7 @@ class UserSubscriptions extends React.Component {
         />
       );
       dispatch(
-        updateUserSubscriptions(
+        updateUserEmailSubscriptions(
           payloadSetting,
           payloadPageFilter,
           successMessage,
@@ -82,11 +82,11 @@ class UserSubscriptions extends React.Component {
   };
 
   unsubscribeViaEmailSuccessful() {
-    const { userSubscriptionsPageFilter, dispatch } = this.props;
+    const { userEmailSubscriptionsPageFilter, dispatch } = this.props;
     const successMessage = (
       <FormattedMessage {...translations.unsubscribeSuccess} />
     );
-    if (userSubscriptionsPageFilter.unsubscribe_successful) {
+    if (userEmailSubscriptionsPageFilter.unsubscribe_successful) {
       setNotification(successMessage)(dispatch);
     }
   }
@@ -128,7 +128,7 @@ class UserSubscriptions extends React.Component {
         <TableRowColumn>
           <Toggle
             toggled={setting.enabled}
-            onToggle={this.handleUserSubscriptionsUpdate(setting)}
+            onToggle={this.handleUserEmailSubscriptionsUpdate(setting)}
           />
         </TableRowColumn>
       </TableRow>
@@ -136,9 +136,9 @@ class UserSubscriptions extends React.Component {
   }
 
   renderEmailSettingsTable() {
-    const { userSubscriptions } = this.props;
+    const { userEmailSubscriptions } = this.props;
 
-    if (userSubscriptions.length === 0) {
+    if (userEmailSubscriptions.length === 0) {
       return (
         <Subheader>
           <FormattedMessage {...translations.noEmailSubscriptionSettings} />
@@ -165,7 +165,7 @@ class UserSubscriptions extends React.Component {
           </TableRow>
         </TableHeader>
         <TableBody displayRowCheckbox={false}>
-          {userSubscriptions.map((item) => this.renderRow(item))}
+          {userEmailSubscriptions.map((item) => this.renderRow(item))}
         </TableBody>
       </Table>
     );
@@ -179,8 +179,8 @@ class UserSubscriptions extends React.Component {
           <FormattedMessage {...translations.emailSubscriptions} />
         </h2>
         {this.renderEmailSettingsTable()}
-        {!this.props.userSubscriptionsPageFilter.show_all_settings && (
-          <a onClick={this.handleFetchAllUserSubscriptions}>
+        {!this.props.userEmailSubscriptionsPageFilter.show_all_settings && (
+          <a onClick={this.handleFetchAllUserEmailSubscriptions}>
             <FormattedMessage
               {...translations.viewAllEmailSubscriptionSettings}
             />
@@ -192,8 +192,8 @@ class UserSubscriptions extends React.Component {
   }
 }
 
-UserSubscriptions.propTypes = {
-  userSubscriptions: PropTypes.arrayOf(
+UserEmailSubscriptions.propTypes = {
+  userEmailSubscriptions: PropTypes.arrayOf(
     PropTypes.shape({
       component: PropTypes.string,
       component_title: PropTypes.string,
@@ -202,11 +202,11 @@ UserSubscriptions.propTypes = {
       enabled: PropTypes.bool,
     }),
   ),
-  userSubscriptionsPageFilter: PropTypes.object,
+  userEmailSubscriptionsPageFilter: PropTypes.object,
   dispatch: PropTypes.func.isRequired,
 };
 
 export default connect((state) => ({
-  userSubscriptions: state.userSubscriptions.settings,
-  userSubscriptionsPageFilter: state.userSubscriptions.pageFilter,
-}))(UserSubscriptions);
+  userEmailSubscriptions: state.userEmailSubscriptions.settings,
+  userEmailSubscriptionsPageFilter: state.userEmailSubscriptions.pageFilter,
+}))(UserEmailSubscriptions);

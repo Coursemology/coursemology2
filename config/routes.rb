@@ -336,8 +336,8 @@ Rails.application.routes.draw do
         get 'forum_disbursement' => 'experience_points/forum_disbursement#new', on: :collection
         post 'forum_disbursement' => 'experience_points/forum_disbursement#create',
              on: :collection
-        get 'manage_email_subscription' => 'user_subscriptions#edit'
-        patch 'manage_email_subscription' => 'user_subscriptions#update'
+        get 'manage_email_subscription' => 'user_email_subscriptions#edit'
+        patch 'manage_email_subscription' => 'user_email_subscriptions#update'
       end
       post 'register' => 'user_registrations#create'
       get 'students' => 'users#students', as: :users_students
