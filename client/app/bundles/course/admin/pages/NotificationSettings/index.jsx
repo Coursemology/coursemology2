@@ -32,14 +32,13 @@ class NotificationSettings extends React.Component {
   handleComponentNotificationSettingUpdate = (setting, type) => {
     const { dispatch } = this.props;
     const componentTitle =
-      setting.component_title ||
-      (settingComponents[setting.component] &&
-        settingComponents[setting.component].defaultMessage) ||
-      setting.component;
-    const settingTitle =
-      (settingTitles[setting.setting] &&
-        settingTitles[setting.setting].defaultMessage) ||
-      setting.setting;
+      setting.component_title ??
+      (settingComponents[setting.component]
+        ? settingComponents[setting.component].defaultMessage
+        : setting.component);
+    const settingTitle = settingTitles[setting.setting]
+      ? settingTitles[setting.setting].defaultMessage
+      : setting.setting;
 
     return (_, enabled) => {
       const payload = {
@@ -80,23 +79,26 @@ class NotificationSettings extends React.Component {
 
   renderRow(setting) {
     const componentTitle =
-      setting.title ||
-      (settingComponents[setting.component] && (
+      setting.title ??
+      (settingComponents[setting.component] ? (
         <FormattedMessage {...settingComponents[setting.component]} />
-      )) ||
-      setting.component;
-    const settingTitle =
-      (settingTitles[setting.setting] && (
-        <FormattedMessage {...settingTitles[setting.setting]} />
-      )) ||
-      setting.setting;
-    const settingDescription =
-      (settingDescriptions[`${setting.component}_${setting.setting}`] && (
-        <FormattedMessage
-          {...settingDescriptions[`${setting.component}_${setting.setting}`]}
-        />
-      )) ||
-      '';
+      ) : (
+        setting.component
+      ));
+    const settingTitle = settingTitles[setting.setting] ? (
+      <FormattedMessage {...settingTitles[setting.setting]} />
+    ) : (
+      setting.setting
+    );
+    const settingDescription = settingDescriptions[
+      `${setting.component}_${setting.setting}`
+    ] ? (
+      <FormattedMessage
+        {...settingDescriptions[`${setting.component}_${setting.setting}`]}
+      />
+    ) : (
+      ''
+    );
 
     return (
       <TableRow

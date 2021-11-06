@@ -40,14 +40,13 @@ class UserEmailSubscriptions extends React.Component {
   handleUserEmailSubscriptionsUpdate = (setting) => {
     const { userEmailSubscriptionsPageFilter, dispatch } = this.props;
     const componentTitle =
-      setting.component_title ||
-      (subscriptionComponents[setting.component] &&
-        subscriptionComponents[setting.component].defaultMessage) ||
-      setting.component;
-    const settingTitle =
-      (subscriptionTitles[setting.setting] &&
-        subscriptionTitles[setting.setting].defaultMessage) ||
-      setting.setting;
+      setting.component_title ??
+      (subscriptionComponents[setting.component]
+        ? subscriptionComponents[setting.component].defaultMessage
+        : setting.component);
+    const settingTitle = subscriptionTitles[setting.setting]
+      ? subscriptionTitles[setting.setting].defaultMessage
+      : setting.setting;
     return (_, enabled) => {
       const payloadSetting = { ...setting, enabled };
       const payloadPageFilter = { ...userEmailSubscriptionsPageFilter };
@@ -93,25 +92,26 @@ class UserEmailSubscriptions extends React.Component {
 
   renderRow(setting) {
     const componentTitle =
-      setting.component_title ||
-      (subscriptionComponents[setting.component] && (
+      setting.component_title ??
+      (subscriptionComponents[setting.component] ? (
         <FormattedMessage {...subscriptionComponents[setting.component]} />
-      )) ||
-      setting.component;
-    const settingTitle =
-      (subscriptionTitles[setting.setting] && (
-        <FormattedMessage {...subscriptionTitles[setting.setting]} />
-      )) ||
-      setting.setting;
-    const settingDescription =
-      (subscriptionDescriptions[`${setting.component}_${setting.setting}`] && (
-        <FormattedMessage
-          {...subscriptionDescriptions[
-            `${setting.component}_${setting.setting}`
-          ]}
-        />
-      )) ||
-      '';
+      ) : (
+        setting.component
+      ));
+    const settingTitle = subscriptionTitles[setting.setting] ? (
+      <FormattedMessage {...subscriptionTitles[setting.setting]} />
+    ) : (
+      setting.setting
+    );
+    const settingDescription = subscriptionDescriptions[
+      `${setting.component}_${setting.setting}`
+    ] ? (
+      <FormattedMessage
+        {...subscriptionDescriptions[`${setting.component}_${setting.setting}`]}
+      />
+    ) : (
+      ''
+    );
     return (
       <TableRow
         key={
