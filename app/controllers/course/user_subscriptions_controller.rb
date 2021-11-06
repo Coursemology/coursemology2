@@ -6,7 +6,7 @@ class Course::UserSubscriptionsController < Course::ComponentController
 
   before_action :add_breadcrumbs
 
-  def edit # :nodoc:
+  def edit
     authorize!(:manage, Course::UserEmailUnsubscription.new(course_user: @course_user))
     load_subscription_settings
     respond_to do |format|
@@ -24,7 +24,7 @@ class Course::UserSubscriptionsController < Course::ComponentController
 
   private
 
-  def add_breadcrumbs # :nodoc:
+  def add_breadcrumbs
     add_breadcrumb @course_user.name, course_user_path(current_course, @course_user)
     add_breadcrumb :index
   end
