@@ -457,11 +457,11 @@ RSpec.describe Course::Assessment::Submission do
         end
       end
 
-      it 'sends an email notification' do
+      it 'sends an email notification', type: :mailer do
         expect { submission.publish! }.to change { ActionMailer::Base.deliveries.count }.by(1)
       end
 
-      context 'when a user unsubscribes' do
+      context 'when a user unsubscribes', type: :mailer do
         before do
           setting_email = course.
                           setting_emails.
@@ -472,11 +472,11 @@ RSpec.describe Course::Assessment::Submission do
         end
 
         it 'does not send an email notification to the user' do
-          expect { course_student1 }.to change { ActionMailer::Base.deliveries.count }.by(0)
+          expect { submission.publish! }.to change { ActionMailer::Base.deliveries.count }.by(0)
         end
       end
 
-      context 'when "submission graded" email setting is disabled for regular students' do
+      context 'when "submission graded" email setting is disabled for regular students', type: :mailer do
         before { set_assessment_email_setting(course, category_id, :grades_released, false, true) }
 
         it 'does not send email notifications to the regular students' do
@@ -484,7 +484,7 @@ RSpec.describe Course::Assessment::Submission do
         end
       end
 
-      context 'when "submission graded" email setting is disabled for phantom students' do
+      context 'when "submission graded" email setting is disabled for phantom students', type: :mailer do
         before { set_assessment_email_setting(course, category_id, :grades_released, true, false) }
 
         it 'does not send email notifications to phantom students' do
@@ -493,7 +493,7 @@ RSpec.describe Course::Assessment::Submission do
         end
       end
 
-      context 'when "submission graded" setting is disabled for everyone' do
+      context 'when "submission graded" setting is disabled for everyone', type: :mailer do
         before { set_assessment_email_setting(course, category_id, :grades_released, false, false) }
 
         it 'does not send email notifications to the users' do
