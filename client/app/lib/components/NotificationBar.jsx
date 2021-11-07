@@ -46,7 +46,6 @@ export default class NotificationBar extends React.Component {
         open={!!message}
         message={notificationNode}
         autoHideDuration={autoHideDuration}
-        bodyStyle={{ maxWidth: 'none' }}
         {...options}
       />
     );
