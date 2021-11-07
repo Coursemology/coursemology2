@@ -227,6 +227,9 @@ class MaterialSummernote extends React.Component {
               this.setState({ isFocused: false });
             }}
             onImageUpload={this.onImageUpload}
+            onBlurCodeview={() => {
+              this.reactSummernote.editor.summernote('codeview.deactivate');
+            }}
           />
         </div>
       </div>

@@ -7,10 +7,10 @@ import NotificationSettings from '../index';
 const emailSettings = [
   {
     component: 'sample_component',
-    component_title: 'Component Name',
-    key: 'email_for_some_event',
-    enabled: false,
-    options: { subcomponentId: 9 },
+    course_assessment_category_id: 2,
+    setting: 'email_for_some_event',
+    phantom: false,
+    regular: true,
   },
 ];
 
@@ -27,16 +27,16 @@ describe('<NotificationSettings />', () => {
     );
 
     const toggles = notificationSettings.find('Toggle');
-    expect(toggles.length).toBe(1);
+    expect(toggles.length).toBe(2);
 
     const toggle = toggles.first();
     toggle.props().onToggle(null, true);
     const expectedPayload = {
-      notification_settings: {
+      email_settings: {
         component: 'sample_component',
-        key: 'email_for_some_event',
-        enabled: true,
-        options: { subcomponentId: 9 },
+        course_assessment_category_id: 2,
+        setting: 'email_for_some_event',
+        phantom: true,
       },
     };
     expect(spy).toHaveBeenCalledWith(expectedPayload);

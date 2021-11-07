@@ -26,7 +26,7 @@ json.selected_post_packs selected_posts do |selected_post|
       json.userName 'Deleted User'
       json.avatar image_path('user_silhouette.svg')
     end
-    json.updatedAt format_datetime(selected_post.post_updated_at)
+    json.updatedAt selected_post.post_updated_at
     json.isUpdated selected_post.is_post_updated
     json.isDeleted selected_post.is_post_deleted
   end
@@ -47,7 +47,7 @@ json.selected_post_packs selected_posts do |selected_post|
         json.userName 'Deleted User'
         json.avatar image_path('user_silhouette.svg')
       end
-      json.updatedAt format_datetime(selected_post.parent_updated_at)
+      json.updatedAt selected_post.parent_updated_at
       json.isUpdated selected_post.is_parent_updated
       json.isDeleted selected_post.is_parent_deleted
     end

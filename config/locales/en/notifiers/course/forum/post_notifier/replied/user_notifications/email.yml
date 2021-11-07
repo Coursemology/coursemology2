@@ -10,7 +10,7 @@ en:
                 message: >
                   <p>%{post_author} replied,</p>
                   %{post}
-                  <p>You can respond here: %{topic}</p>
+                  <p>You can respond here: %{topic}</p><br>
                 unsubscribe:
                   tag: 'Unsubscribe'
-                  message: '%{unsubscribe_link} from email notifications for this topic'
+                  message: '%{unsubscribe_link} from email notifications for this forum topic.'

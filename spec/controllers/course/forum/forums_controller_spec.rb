@@ -46,7 +46,8 @@ RSpec.describe Course::Forum::ForumsController, type: :controller do
         post :create,
              params: {
                course_id: course,
-               forum: { name: 'test', description: '' }
+               forum: { name: 'test', description: '' },
+               forum_topics_auto_subscribe: true
              }
       end
 
@@ -65,7 +66,7 @@ RSpec.describe Course::Forum::ForumsController, type: :controller do
         patch :update, params: {
           course_id: course,
           id: forum_stub,
-          forum: { name: 'new name', descripiton: 'new description' }
+          forum: { name: 'new name', description: 'new description', forum_topics_auto_subscribe: true }
         }
       end
 

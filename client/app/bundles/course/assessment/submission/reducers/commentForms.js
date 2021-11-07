@@ -27,7 +27,7 @@ export default function (state = initialState, action) {
         ...state,
         annotations: {
           ...state.annotations,
-          [fileId]: { [line]: text },
+          [fileId]: { ...state.annotations[fileId], [line]: text },
         },
       };
     }

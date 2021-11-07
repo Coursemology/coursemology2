@@ -15,6 +15,10 @@ class Course::Assessment::Category < ApplicationRecord
                   inverse_of: :category,
                   dependent: :destroy
   has_many :assessments, through: :tabs
+  has_many :setting_emails, class_name: Course::Settings::Email.name,
+                            foreign_key: :course_assessment_category_id,
+                            inverse_of: :assessment_category,
+                            dependent: :destroy
 
   accepts_nested_attributes_for :tabs
 
@@ -48,6 +52,9 @@ class Course::Assessment::Category < ApplicationRecord
         duplicate_tab.assessments.each { |assessment| assessment.folder.parent = folder }
       end
     end
+    setting_emails << other.setting_emails.
+                      select { |setting_email| duplicator.duplicated?(setting_email) }.
+                      map { |setting_email| duplicator.duplicate(setting_email) }
   end
 
   # @return [Boolean] true if post-duplication processing is successful.

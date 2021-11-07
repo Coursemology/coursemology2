@@ -21,6 +21,7 @@ class ConsolidatedOpeningReminderMailer < ActivityMailer
       @course = notification.activity.object
       @layout = layout_path
       course_user = @course.course_users.find_by(user: @recipient)
+
       @items_hash = Course::LessonPlan::Item.upcoming_items_from_course_by_type_for_course_user(course_user)
       # Lesson plan item start at times could have been changed between the time the mailer job
       # was enqueued and the time this function is called to render the email.

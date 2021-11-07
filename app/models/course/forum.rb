@@ -5,6 +5,7 @@ class Course::Forum < ApplicationRecord
 
   validates :name, length: { maximum: 255 }, presence: true
   validates :slug, length: { maximum: 255 }, allow_nil: true
+  validates :forum_topics_auto_subscribe, inclusion: { in: [true, false] }
   validates :creator, presence: true
   validates :updater, presence: true
   validates :course, presence: true

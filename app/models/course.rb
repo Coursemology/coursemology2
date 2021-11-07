@@ -71,6 +71,8 @@ class Course < ApplicationRecord
   validates :default_reference_timeline, presence: true
   validate :validate_only_one_default_reference_timeline
 
+  has_many :setting_emails, class_name: Course::Settings::Email.name, inverse_of: :course, dependent: :destroy
+
   accepts_nested_attributes_for :invitations, :assessment_categories, :video_tabs
 
   calculated :user_count, (lambda do
@@ -211,11 +213,36 @@ class Course < ApplicationRecord
 
   def upcoming_lesson_plan_items_exist?
     opening_items = lesson_plan_items.published.eager_load(:personal_times, :reference_times).preload(:actable)
-    opening_items.select { |item| item.actable.include_in_consolidated_email?(:opening) }.any? do |item|
+    opening_items.select { |item| item.actable.include_in_consolidated_email?(:opening_reminder) }.any? do |item|
       course_users.any? do |course_user|
         item.time_for(course_user).start_at.in?((Time.zone.now)..(1.day.from_now))
       end
     end
+  end
+
+  # Returns admin email id and settings for both phantom and regular users.
+  #
+  # @return [Course::Settings::Email]
+  def email_enabled(component, setting, course_assessment_category_id = nil)
+    setting_emails.
+      where(component: component,
+            course_assessment_category_id: course_assessment_category_id,
+            setting: setting).
+      select(:id, :phantom, :regular).first
+  end
+
+  def email_settings_with_enabled_components
+    components_enum = { 'Course::AnnouncementsComponent' => 'announcements',
+                        'Course::AssessmentsComponent' => 'assessments',
+                        'Course::ForumsComponent' => 'forums',
+                        'Course::SurveyComponent' => 'surveys',
+                        'Course::UsersComponent' => 'users',
+                        'Course::VideosComponent' => 'videos' }
+
+    email_settings_enabled_components = enabled_components.
+                                        select { |component| components_enum.key?(component.to_s) }.
+                                        map { |component| components_enum[component.to_s] }
+    setting_emails.where(component: email_settings_enabled_components)
   end
 
   private

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import scribingViewLoader from 'course/assessment/submission/loaders/ScribingViewLoader';
 import ScribingToolbar from './ScribingToolbar';
 import ScribingCanvas from './ScribingCanvas';
-import style from './ScribingView.scss'; // eslint-disable-line no-unused-vars
 import { submissionShape } from '../../propTypes';
 
 const propTypes = {
@@ -29,8 +28,13 @@ export default class ScribingViewComponent extends React.Component {
     const { answerId, submission } = this.props;
     return answerId ? (
       <div style={styles.canvasDiv}>
-        {submission.canUpdate ? <ScribingToolbar {...this.props} /> : null}
-        <ScribingCanvas {...this.props} />
+        {submission.canUpdate ? (
+          <ScribingToolbar
+            key={`ScribingToolbar-${answerId}`}
+            {...this.props}
+          />
+        ) : null}
+        <ScribingCanvas key={`ScribingCanvas-${answerId}`} {...this.props} />
       </div>
     ) : null;
   }

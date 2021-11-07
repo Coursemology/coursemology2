@@ -16,8 +16,8 @@ import {
 } from 'material-ui/Table';
 import transitions from 'material-ui/styles/transitions';
 
-import 'brace/mode/python';
-import 'brace/theme/monokai';
+import 'ace-builds/src-noconflict/mode-python';
+import 'ace-builds/src-noconflict/theme-monokai';
 
 import styles from '../OnlineEditorView.scss';
 import translations from '../OnlineEditorView.intl';

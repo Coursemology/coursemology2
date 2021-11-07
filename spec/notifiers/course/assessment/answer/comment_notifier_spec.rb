@@ -5,19 +5,19 @@ RSpec.describe Course::Assessment::Answer::CommentNotifier, type: :notifier do
   let!(:instance) { Instance.default }
 
   with_tenant(:instance) do
-    let(:settings_context) do
-      OpenStruct.new(key: Course::AssessmentsComponent.key, current_course: course)
-    end
-
-    def set_assessment_notification_key(course, category_id, key, value)
-      setting = { 'key' => key, 'enabled' => value, 'options' => { 'category_id' => category_id } }
-      Course::Settings::AssessmentsComponent.new(settings_context).update_email_setting(setting)
-      course.save!
+    def set_assessment_email_setting(course, category_id, setting, regular, phantom)
+      email_setting = course.
+                      setting_emails.
+                      where(component: :assessments,
+                            course_assessment_category_id: category_id,
+                            setting: setting).first
+      email_setting.update!(regular: regular, phantom: phantom)
     end
 
     describe '#annotation_replied' do
       let(:user) { create(:user) }
       let(:course) { create(:course) }
+      let(:course_creator) { course.course_users.first }
       let(:course_user) { create(:course_user, course: course, user: user) }
       let(:other_user) { create(:course_user, course: course).user }
       let(:assessment) { create(:assessment, :published_with_programming_question, course: course) }
@@ -36,40 +36,58 @@ RSpec.describe Course::Assessment::Answer::CommentNotifier, type: :notifier do
         create(:course_discussion_post, topic: code_annotation.acting_as, creator: other_user)
       end
 
-      before { code_annotation.acting_as.ensure_subscribed_by(user) }
+      before do
+        code_annotation.acting_as.ensure_subscribed_by(user)
+        code_annotation.acting_as.ensure_subscribed_by(course_creator.user)
+      end
       subject { Course::Assessment::Answer::CommentNotifier.annotation_replied(post) }
 
       it 'sends email notifications' do
-        expect { subject }.to change(ActionMailer::Base.deliveries, :count).by(1)
+        expect { subject }.to change(ActionMailer::Base.deliveries, :count).by(2)
       end
 
-      context 'when "new phantom comment" is disabled and a phantom user posts a comment' do
-        let(:other_user) { create(:course_user, :phantom, course: course).user }
+      context 'when a user unsubscribes' do
         before do
-          set_assessment_notification_key(course, category_id, 'new_phantom_comment', false)
+          setting_email = course.
+                          setting_emails.
+                          where(component: :assessments,
+                                course_assessment_category_id: category_id,
+                                setting: :new_comment).first
+          course_creator.email_unsubscriptions.create!(course_setting_email: setting_email)
         end
 
-        it 'does not send email notifications' do
-          expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
+        it 'does not send an email notification to the user' do
+          expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
         end
       end
 
-      context 'when "new comment" is disabled' do
-        before { set_assessment_notification_key(course, category_id, 'new_comment', false) }
+      context 'when "new comment" email setting is disabled for regular users' do
+        before { set_assessment_email_setting(course, category_id, 'new_comment', false, true) }
 
-        it 'does not send email notifications' do
+        it 'does not send email notifications to the regular users' do
           expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
         end
 
-        context 'when "new phantom comment" is enabled and a phantom user posts a comment' do
-          let(:other_user) { create(:course_user, :phantom, course: course).user }
-          before do
-            set_assessment_notification_key(course, category_id, 'new_phantom_comment', true)
-          end
+        it 'sends email notifications to phantom users' do
+          course_user.update!(phantom: true)
+          expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
+        end
+      end
 
-          it 'does not send email notifications' do
-            expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
-          end
+      context 'when "new comment" email setting is disabled for phantom users' do
+        before { set_assessment_email_setting(course, category_id, 'new_comment', true, false) }
+
+        it 'does not send email notifications to the phantom users but sends email notifications to regular users' do
+          course_user.update!(phantom: true)
+          expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
+        end
+      end
+
+      context 'when "new comment" email setting is disabled' do
+        before { set_assessment_email_setting(course, category_id, 'new_comment', false, false) }
+
+        it 'does not send email notifications to everyone' do
+          expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
         end
       end
     end
