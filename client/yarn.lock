@@ -8034,14 +8034,13 @@ react-scroll@^1.7.11:
     lodash.throttle "^4.1.1"
     prop-types "^15.7.2"
 
-react-summernote@2.0.0:
+"react-summernote@github:ekowidianto/react-summernote":
   version "2.0.0"
-  resolved "https://registry.yarnpkg.com/react-summernote/-/react-summernote-2.0.0.tgz#075bf882fcc6b77b9ab9d50099addbcbb229ab7a"
-  integrity sha512-C296vESKTd451OXVC6jUuOoRFfcUaN70CrlwkbSuOwLDN9So7eGUSsj/+7zwCxur3ZWtrsepXqy714JhrFB78w==
+  resolved "https://codeload.github.com/ekowidianto/react-summernote/tar.gz/a280f9d5ccc23e7ac604b0fb33e175735b3fa23e"
   dependencies:
     codemirror "^5.26.0"
     prop-types "^15.5.10"
-    summernote "^0.8.3"
+    summernote "^0.8.15"
 
 react-test-renderer@^16.0.0-0, react-test-renderer@^16.8.6:
   version "16.14.0"
@@ -9281,10 +9280,10 @@ style-loader@^0.23.1:
     loader-utils "^1.1.0"
     schema-utils "^1.0.0"
 
-summernote@^0.8.3:
-  version "0.8.18"
-  resolved "https://registry.yarnpkg.com/summernote/-/summernote-0.8.18.tgz#be5c368b1c92de8a05039a9976157bdea7aae386"
-  integrity sha512-VlwBaNm9vSYMYXvO2f3UCUmY0Gm8jxLcBn+D08aX3pKs4x2vAoyQ4DcDQ6D+PchQiLrf86AGQVfVu56F4aP3ug==
+summernote@^0.8.15:
+  version "0.8.20"
+  resolved "https://registry.yarnpkg.com/summernote/-/summernote-0.8.20.tgz#395905f2cec0aceebc712edc019d91b8ef88f7cf"
+  integrity sha512-W9RhjQjsn+b1s9xiJQgJbCiYGJaDAc9CdEqXo+D13WuStG8lCdtKaO5AiNiSSMJsQJN2EfGSwbBQt+SFE2B8Kw==
 
 supports-color@^2.0.0:
   version "2.0.0"
