@@ -419,6 +419,7 @@ ActiveRecord::Schema.define(version: 2021_10_27_083820) do
     t.datetime "published_at"
     t.string "session_id", limit: 255
     t.datetime "submitted_at"
+    t.datetime "last_graded_time", default: "2021-10-24 14:11:56"
     t.index ["assessment_id", "creator_id"], name: "unique_assessment_id_and_creator_id", unique: true
     t.index ["assessment_id"], name: "fk__course_assessment_submissions_assessment_id"
     t.index ["creator_id"], name: "fk__course_assessment_submissions_creator_id"
@@ -1098,6 +1099,7 @@ ActiveRecord::Schema.define(version: 2021_10_27_083820) do
     t.boolean "enrollable", default: false, null: false
     t.string "time_zone", limit: 255
     t.boolean "show_personalized_timeline_features", default: false, null: false
+    t.datetime "conditional_satisfiability_evaluation_time", default: "2021-10-24 10:31:32"
     t.index ["creator_id"], name: "fk__courses_creator_id"
     t.index ["instance_id"], name: "fk__courses_instance_id"
     t.index ["registration_key"], name: "index_courses_on_registration_key", unique: true

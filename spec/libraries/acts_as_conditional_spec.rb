@@ -52,6 +52,11 @@ RSpec.describe 'Extension: Acts as Conditional', type: :model do
       expect { subject.precluded_for!(double) }.to raise_error(NotImplementedError)
     end
 
+    it 'evaluates coursewide conditional satisfiabilities after being saved' do
+      expect(subject).to receive(:evaluate_coursewide_conditional_satisfiabilities)
+      subject.run_callbacks(:save)
+    end
+
     describe '#specific_conditions' do
       it 'is of the specific condition type' do
         condition = instance_double(Course::Condition)
