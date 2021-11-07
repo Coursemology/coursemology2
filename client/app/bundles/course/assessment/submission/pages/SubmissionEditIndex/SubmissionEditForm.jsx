@@ -212,6 +212,8 @@ class SubmissionEditForm extends Component {
       historyQuestions,
       topics,
       step,
+      graderView,
+      showMcqMrqSolution,
       handleToggleViewHistoryMode,
     } = this.props;
 
@@ -247,6 +249,8 @@ class SubmissionEditForm extends Component {
                   question,
                   questionsFlags,
                   historyQuestions,
+                  graderView,
+                  showMcqMrqSolution,
                   handleToggleViewHistoryMode,
                 }}
               />
