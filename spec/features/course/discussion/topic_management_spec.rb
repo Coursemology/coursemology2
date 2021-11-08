@@ -19,7 +19,7 @@ RSpec.feature 'Course: Topics: Management' do
     before { login_as(user, scope: :user) }
 
     context 'As a Course Teaching Assistant' do
-      let(:user) { create(:course_teaching_assistant, course: course).user }
+      let!(:user) { create(:course_teaching_assistant, course: course).user }
 
       scenario 'I can see all the comments' do
         comment

@@ -37,11 +37,14 @@ RSpec.describe Course::UserRegistrationService, type: :service do
 
       context 'when the given registration has a course registration code' do
         registration_with_registration_code
+        let!(:enrol_request) { create(:course_enrol_request, course: course, user: user) }
 
         it 'succeeds' do
           expect do
             expect(subject.register(registration)).to be_truthy
           end.to change { course.course_users.reload.count }.by(1)
+
+          expect(course.enrol_requests.length).to eq(0)
         end
       end
 

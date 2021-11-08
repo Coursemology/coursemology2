@@ -94,7 +94,8 @@ export default class ForumPostSelect extends React.Component {
     if (this.props.readOnly) {
       return (
         <div style={styles.instruction}>
-          {postPacks.length} posts were submitted.
+          {postPacks.length} post{postPacks.length === 1 ? ' was ' : 's were '}
+          submitted.
         </div>
       );
     }

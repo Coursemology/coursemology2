@@ -93,7 +93,7 @@ RSpec.feature 'Course: Duplication' do
           wait_for_job
           duplicated_course = Course.find_by(title: new_course_title)
           expect(duplicated_course).to be_present
-          expect(duplicated_course.assessments.where(title: assessment_title).count).to be(1)
+          expect(duplicated_course.assessments.where(title: assessment_title).count).to eq(1)
         end
       end
     end

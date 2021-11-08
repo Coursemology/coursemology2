@@ -1,5 +1,5 @@
 import React from 'react';
-import 'brace';
+import 'ace-builds';
 import { mount } from 'enzyme';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 import store from 'course/assessment/submission/store';

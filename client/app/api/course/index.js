@@ -12,6 +12,7 @@ import AdminAPI from './Admin';
 import LevelAPI from './Level';
 import UserNotificationsAPI from './UserNotifications';
 import LearningMapAPI from './LearningMap';
+import UserEmailSubscriptionsAPI from './UserEmailSubscriptions';
 
 const CourseAPI = {
   achievements: new AchievementsAPI(),
@@ -28,6 +29,7 @@ const CourseAPI = {
   level: new LevelAPI(),
   userNotifications: new UserNotificationsAPI(),
   learningMap: new LearningMapAPI(),
+  userEmailSubscriptions: new UserEmailSubscriptionsAPI(),
 };
 
 Object.freeze(CourseAPI);

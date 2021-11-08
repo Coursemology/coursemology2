@@ -15,9 +15,10 @@ class Course::ConsolidatedOpeningReminderNotifier < Notifier::Base
   #
   # @param [CourseNotification] notification The notification which is used to generate emails
   def email_course(notification)
-    notification.course.users.each do |user|
+    course_users = notification.course.course_users.includes(:user)
+    course_users.each do |course_user|
       @pending_emails <<
-        ConsolidatedOpeningReminderMailer.email(recipient: user,
+        ConsolidatedOpeningReminderMailer.email(recipient: course_user.user,
                                                 notification: notification,
                                                 view_path: notification_view_path(notification),
                                                 layout_path: 'no_greeting_mailer')

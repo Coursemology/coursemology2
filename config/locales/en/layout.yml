@@ -55,3 +55,6 @@ en:
       size_too_big: 'The file is too big and cannot be displayed.'
     learning_map:
       title: 'Learning Map'
+    manage_email_subscription:
+      tag: 'Click here'
+      message: '%{manage_email_subscription_link} to unsubscribe from this email topic.'

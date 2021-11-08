@@ -123,6 +123,9 @@
                 uploadImage(files[i], onImageUploaded);
               }
             },
+            onBlurCodeview: function () {
+              $(this).summernote('codeview.deactivate');
+            },
           },
           buttons: {
             inlineCode: inlineCodeButton,

@@ -111,7 +111,8 @@ class Course::Video < ApplicationRecord
   end
 
   def include_in_consolidated_email?(event)
-    Course::Settings::VideosComponent.email_enabled?(course, "video_#{event}".to_sym)
+    email_enabled = course.email_enabled(:videos, event)
+    email_enabled.regular || email_enabled.phantom
   end
 
   def children_exist?

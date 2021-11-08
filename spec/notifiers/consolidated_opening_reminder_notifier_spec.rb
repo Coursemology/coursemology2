@@ -6,9 +6,28 @@ RSpec.describe Course::ConsolidatedOpeningReminderNotifier, type: :notifier do
 
   with_tenant(:instance) do
     describe '#opening_reminder' do
+      def set_consolidated_opening_reminder_setting(component, category_id, setting, regular, phantom)
+        email_setting = course.
+                        setting_emails.
+                        where(component: component,
+                              course_assessment_category_id: category_id,
+                              setting: setting).first
+        email_setting.update!(regular: regular, phantom: phantom)
+      end
+
+      def unsubscribes(component, category_id, setting)
+        setting_email = course.
+                        setting_emails.
+                        where(component: component,
+                              course_assessment_category_id: category_id,
+                              setting: setting).first
+        course_user.email_unsubscriptions.create!(course_setting_email: setting_email)
+      end
+
       context 'when user does not have a personal time' do
         let(:course) { create(:course) }
-        let!(:user) { create(:course_user, course: course).user }
+        let(:course_user) { create(:course_user, course: course) }
+        let!(:user) { course_user.user }
         let!(:video) do
           create(:course_video, course: course, start_at: 1.hour.from_now, published: true)
         end
@@ -19,23 +38,46 @@ RSpec.describe Course::ConsolidatedOpeningReminderNotifier, type: :notifier do
           expect { subject }.to change(course.notifications, :count).by(1)
         end
 
-        it 'sends an email notification' do
+        it 'sends email notifications to everyone' do
           expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(2)
         end
 
-        context 'when email notification for video opening is disabled' do
+        context 'when a user unsubscribes' do
           before do
-            context = OpenStruct.new(key: Course::VideosComponent.key, current_course: course)
-            Course::Settings::VideosComponent.new(context).
-              update_email_setting('key' => 'video_opening', 'enabled' => false)
-            course.save!
+            unsubscribes(:videos, nil, :opening_reminder)
           end
 
-          it 'does not send a course notification' do
-            expect { subject }.to change(course.notifications, :count).by(0)
+          it 'does not send an email notification to the user' do
+            expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
+          end
+        end
+
+        context 'when email notification for video opening is disabled for regular students' do
+          before { set_consolidated_opening_reminder_setting(:videos, nil, :opening_reminder, false, true) }
+
+          it 'does not send email notifications to the regular students' do
+            expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
           end
 
-          it 'does not send an email notification' do
+          it 'sends email notifications to phantom students' do
+            course_user.update!(phantom: true)
+            expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
+          end
+        end
+
+        context 'when email notification for video opening is disabled for phantom students' do
+          before { set_consolidated_opening_reminder_setting(:videos, nil, :opening_reminder, true, false) }
+
+          it 'does not send an email notification to the phantom students' do
+            course_user.update!(phantom: true)
+            expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
+          end
+        end
+
+        context 'when email notification for video opening is disabled' do
+          before { set_consolidated_opening_reminder_setting(:videos, nil, :opening_reminder, false, false) }
+
+          it 'does not send an email notification to everyone' do
             expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
           end
         end
@@ -68,12 +110,7 @@ RSpec.describe Course::ConsolidatedOpeningReminderNotifier, type: :notifier do
         end
 
         context 'when email notification for video opening is disabled' do
-          before do
-            context = OpenStruct.new(key: Course::VideosComponent.key, current_course: course)
-            Course::Settings::VideosComponent.new(context).
-              update_email_setting('key' => 'video_opening', 'enabled' => false)
-            course.save!
-          end
+          before { set_consolidated_opening_reminder_setting(:videos, nil, :opening_reminder, false, false) }
 
           it 'does not send a course notification' do
             expect { subject }.to change(course.notifications, :count).by(0)
@@ -112,12 +149,7 @@ RSpec.describe Course::ConsolidatedOpeningReminderNotifier, type: :notifier do
         end
 
         context 'when email notification for video opening is disabled' do
-          before do
-            context = OpenStruct.new(key: Course::VideosComponent.key, current_course: course)
-            Course::Settings::VideosComponent.new(context).
-              update_email_setting('key' => 'video_opening', 'enabled' => false)
-            course.save!
-          end
+          before { set_consolidated_opening_reminder_setting(:videos, nil, :opening_reminder, false, false) }
 
           it 'does not send a course notification' do
             expect { subject }.to change(course.notifications, :count).by(0)
