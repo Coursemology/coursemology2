@@ -1,9 +1,14 @@
 - assessment = @object
 - course = assessment.course
 - host = course.instance.host
+- category_id = assessment.tab.category.id
 
 - message.subject = t('.subject', course: course.title, assessment: assessment.title)
 
 = simple_format(t('.message',
                 assessment: link_to(assessment.title,
                                     course_assessment_url(course, assessment, host: host))))
+
+br
+= render partial: 'layouts/manage_email_subscription',
+         locals: { course: course, recipient: @recipient, component: 'assessments' , category_id: category_id, setting: 'opening_reminder' }

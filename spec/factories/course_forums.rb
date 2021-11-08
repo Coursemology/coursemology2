@@ -4,5 +4,6 @@ FactoryBot.define do
     course
     sequence(:name) { |n| "forum #{n}" }
     description { 'This is the test forum' }
+    forum_topics_auto_subscribe { true }
   end
 end

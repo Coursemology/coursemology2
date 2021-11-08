@@ -33,13 +33,31 @@ class Course::Mailer < ApplicationMailer
     ActsAsTenant.without_tenant do
       @course = enrol_request.course
     end
+    email_enabled = @course.email_enabled(:users, :new_enrol_request)
 
-    return unless Course::Settings::UsersComponent.email_enabled?(@course, :new_enrol_request)
+    return unless email_enabled.regular || email_enabled.phantom
 
     @enrol_request = enrol_request
     @recipient = OpenStruct.new(name: t('course.mailer.user_enrol_requested_email.recipients'))
 
-    mail(to: @course.managers.map(&:user).map(&:email),
+    if email_enabled.regular && email_enabled.phantom
+      managers = @course.managers.includes(:user)
+    elsif email_enabled.regular
+      managers = @course.managers.without_phantom_users.includes(:user)
+    elsif email_enabled.phantom
+      managers = @course.managers.phantom.includes(:user)
+    end
+
+    email_managers = []
+    managers.find_each do |manager|
+      next if manager.email_unsubscriptions.where(course_settings_email_id: email_enabled.id).exists?
+
+      email_managers.append(manager.user.email)
+    end
+
+    return if email_managers.empty?
+
+    mail(to: email_managers,
          subject: t('.subject', course: @course.title))
   end
 
@@ -56,6 +74,19 @@ class Course::Mailer < ApplicationMailer
     @new_course = new_course
     @recipient = user
     mail(to: @recipient.email, subject: t('.subject', new_course: @new_course.title))
+  end
+
+  # Send a notification email to a user informing the failure of his course duplication.
+  #
+  # @param [Course] original_course The original course that was duplicated.
+  # @param [User] user The user who performed the duplication.
+  def course_duplicate_failed_email(original_course, user)
+    # Based on DuplicationService, user might default to User.system which has no email.
+    return unless user.email
+
+    @original_course = original_course
+    @recipient = user
+    mail(to: @recipient.email, subject: t('.subject', original_course: @original_course.title))
   end
 
   # Send a reminder of the assessment closing to a single user

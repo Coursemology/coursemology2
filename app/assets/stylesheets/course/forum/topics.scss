@@ -1,6 +1,15 @@
 @import 'post';
 
 .course-forum-topics {
+  .btn-subscribe {
+    span {
+      @extend .hidden-xs;
+      @extend .hidden-sm;
+
+      margin-left: 5px;
+    }
+  }
+
   &.show {
     .post {
       @include course-forum-post;

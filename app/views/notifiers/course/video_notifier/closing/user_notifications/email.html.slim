@@ -8,3 +8,7 @@
 = simple_format(t('.message', time: time,
                 video: link_to(video.title,
                                course_video_url(video.course, video))))
+
+br
+= render partial: 'layouts/manage_email_subscription',
+         locals: { course: course, recipient: @recipient, component: 'videos' , category_id: nil, setting: 'closing_reminder' }

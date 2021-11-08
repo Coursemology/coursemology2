@@ -14,10 +14,9 @@ import {
 } from 'material-ui/Table';
 import NotificationPopup from 'lib/containers/NotificationPopup';
 import { updateNotificationSetting } from 'course/admin/actions/notifications';
-import adminTranslations, {
-  defaultComponentTitles,
-} from 'course/translations.intl';
+import adminTranslations from 'course/translations.intl';
 import translations, {
+  settingComponents,
   settingTitles,
   settingDescriptions,
 } from './translations.intl';
@@ -30,21 +29,46 @@ const styles = {
 };
 
 class NotificationSettings extends React.Component {
-  handleComponentNotificationSettingUpdate = (setting, settingTitle) => {
+  handleComponentNotificationSettingUpdate = (setting, type) => {
     const { dispatch } = this.props;
-    const { component, key, options } = setting;
+    const componentTitle =
+      setting.component_title ??
+      (settingComponents[setting.component]
+        ? settingComponents[setting.component].defaultMessage
+        : setting.component);
+    const settingTitle = settingTitles[setting.setting]
+      ? settingTitles[setting.setting].defaultMessage
+      : setting.setting;
+
     return (_, enabled) => {
-      const payload = { component, key, enabled, options };
+      const payload = {
+        email_settings: {
+          component: setting.component,
+          course_assessment_category_id: setting.course_assessment_category_id,
+          setting: setting.setting,
+        },
+      };
+      payload.email_settings[type] = enabled;
+      const userText = type === 'phantom' ? 'phantom' : 'regular';
+      const enabledText = enabled ? 'enabled' : 'disabled';
       const successMessage = (
         <FormattedMessage
           {...translations.updateSuccess}
-          values={{ setting: settingTitle }}
+          values={{
+            setting: `${componentTitle} (${settingTitle})`,
+            user: userText,
+            action: enabledText,
+          }}
         />
       );
       const failureMessage = (
         <FormattedMessage
           {...translations.updateFailure}
-          values={{ setting: settingTitle }}
+          values={{
+            setting: `${componentTitle} (${settingTitle})`,
+            user: userText,
+            action: enabledText,
+          }}
         />
       );
       dispatch(
@@ -55,24 +79,35 @@ class NotificationSettings extends React.Component {
 
   renderRow(setting) {
     const componentTitle =
-      setting.component_title ||
-      (defaultComponentTitles[setting.component] && (
-        <FormattedMessage {...defaultComponentTitles[setting.component]} />
-      )) ||
-      setting.component;
-    const settingTitle =
-      (settingTitles[setting.key] && (
-        <FormattedMessage {...settingTitles[setting.key]} />
-      )) ||
-      setting.key;
-    const settingDescription =
-      (settingDescriptions[setting.key] && (
-        <FormattedMessage {...settingDescriptions[setting.key]} />
-      )) ||
-      '';
+      setting.title ??
+      (settingComponents[setting.component] ? (
+        <FormattedMessage {...settingComponents[setting.component]} />
+      ) : (
+        setting.component
+      ));
+    const settingTitle = settingTitles[setting.setting] ? (
+      <FormattedMessage {...settingTitles[setting.setting]} />
+    ) : (
+      setting.setting
+    );
+    const settingDescription = settingDescriptions[
+      `${setting.component}_${setting.setting}`
+    ] ? (
+      <FormattedMessage
+        {...settingDescriptions[`${setting.component}_${setting.setting}`]}
+      />
+    ) : (
+      ''
+    );
 
     return (
-      <TableRow key={setting.component + setting.component_title + setting.key}>
+      <TableRow
+        key={
+          setting.component +
+          setting.course_assessment_category_id +
+          setting.setting
+        }
+      >
         <TableRowColumn colSpan={2}>{componentTitle}</TableRowColumn>
         <TableRowColumn colSpan={3}>{settingTitle}</TableRowColumn>
         <TableRowColumn colSpan={7} style={styles.wrapText}>
@@ -80,10 +115,19 @@ class NotificationSettings extends React.Component {
         </TableRowColumn>
         <TableRowColumn>
           <Toggle
-            toggled={setting.enabled}
+            toggled={setting.phantom}
             onToggle={this.handleComponentNotificationSettingUpdate(
               setting,
-              settingTitle,
+              'phantom',
+            )}
+          />
+        </TableRowColumn>
+        <TableRowColumn>
+          <Toggle
+            toggled={setting.regular}
+            onToggle={this.handleComponentNotificationSettingUpdate(
+              setting,
+              'regular',
             )}
           />
         </TableRowColumn>
@@ -116,7 +160,10 @@ class NotificationSettings extends React.Component {
               <FormattedMessage {...translations.description} />
             </TableHeaderColumn>
             <TableHeaderColumn>
-              <FormattedMessage {...translations.enabled} />
+              <FormattedMessage {...translations.phantom} />
+            </TableHeaderColumn>
+            <TableHeaderColumn>
+              <FormattedMessage {...translations.regular} />
             </TableHeaderColumn>
           </TableRow>
         </TableHeader>
@@ -145,10 +192,10 @@ NotificationSettings.propTypes = {
   emailSettings: PropTypes.arrayOf(
     PropTypes.shape({
       component: PropTypes.string,
-      component_title: PropTypes.string,
-      key: PropTypes.string,
-      enabled: PropTypes.bool,
-      options: PropTypes.shape({}),
+      course_assessment_category_id: PropTypes.number,
+      setting: PropTypes.string,
+      phantom: PropTypes.bool,
+      regular: PropTypes.bool,
     }),
   ),
   dispatch: PropTypes.func.isRequired,

@@ -14,6 +14,7 @@ RSpec.describe CourseUser, type: :model do
   it { is_expected.to have_many(:achievements).through(:course_user_achievements) }
   it { is_expected.to have_many(:group_users).dependent(:destroy) }
   it { is_expected.to have_many(:groups).through(:group_users).source(:group) }
+  it { is_expected.to have_many(:email_unsubscriptions).dependent(:destroy) }
 
   let!(:instance) { create :instance }
   with_tenant(:instance) do
@@ -204,14 +205,14 @@ RSpec.describe CourseUser, type: :model do
 
     describe '#current_level' do
       context 'when student has enough EXP to be level 1' do
-        let!(:level_1) { create(:course_level, course: course, experience_points_threshold: 100) }
+        let!(:level1) { create(:course_level, course: course, experience_points_threshold: 100) }
         before do
           create(:course_experience_points_record, points_awarded: 150, course_user: student)
           course.reload
         end
 
         it 'returns the level 1 object' do
-          expect(student.current_level).to eq(level_1)
+          expect(student.current_level).to eq(level1)
         end
       end
     end
@@ -276,14 +277,14 @@ RSpec.describe CourseUser, type: :model do
       end
 
       context 'when there are one or more experience points records' do
-        let!(:exp_record_1) { create(:course_experience_points_record) }
-        let!(:exp_record_2) do
-          create(:course_experience_points_record, course_user: exp_record_1.course_user)
+        let!(:exp_record1) { create(:course_experience_points_record) }
+        let!(:exp_record2) do
+          create(:course_experience_points_record, course_user: exp_record1.course_user)
         end
-        subject { exp_record_1.course_user }
+        subject { exp_record1.course_user }
 
         it 'sums all associated experience points records' do
-          points_awarded = exp_record_1.points_awarded + exp_record_2.points_awarded
+          points_awarded = exp_record1.points_awarded + exp_record2.points_awarded
           expect(subject.experience_points).to eq(points_awarded)
         end
       end

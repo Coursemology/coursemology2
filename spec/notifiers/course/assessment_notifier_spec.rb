@@ -5,10 +5,6 @@ RSpec.describe Course::AssessmentNotifier, type: :notifier do
   let!(:instance) { Instance.default }
 
   with_tenant(:instance) do
-    let(:settings_context) do
-      OpenStruct.new(key: Course::AssessmentsComponent.key, current_course: course)
-    end
-
     describe '#assessment_attempted' do
       let!(:course) { create(:course) }
       let!(:assessment) { create(:assessment, course: course) }
@@ -23,23 +19,59 @@ RSpec.describe Course::AssessmentNotifier, type: :notifier do
 
     describe '#assessment_submitted' do
       let(:course) { create(:course) }
+      let!(:course_creator) { course.course_users.first }
       let!(:course_user) { create(:course_user, course: course) }
       let(:user) { course_user.user }
       let!(:submission) { create(:submission, course: course, creator: user) }
 
       subject { Course::AssessmentNotifier.assessment_submitted(user, course_user, submission) }
 
-      context 'when "new submission" emails are disabled' do
+      it 'does not send email notifications' do
+        expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
+      end
+
+      context 'when a user unsubscribes' do
         before do
-          setting = {
-            'key' => 'new_submission', 'enabled' => false,
-            'options' => { 'category_id' => submission.assessment.tab.category.id }
-          }
-          Course::Settings::AssessmentsComponent.new(settings_context).update_email_setting(setting)
-          course.save!
+          setting_email = course.
+                          setting_emails.
+                          where(component: :assessments,
+                                course_assessment_category_id: submission.assessment.tab.category.id,
+                                setting: :new_submission).first
+          course_creator.email_unsubscriptions.create!(course_setting_email: setting_email)
         end
 
-        it 'does not send email notifications' do
+        it 'does not send an email notification to the user' do
+          expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
+        end
+      end
+
+      context 'when "new submission" email setting is disabled for regular staff' do
+        before do
+          email_setting = course.
+                          setting_emails.
+                          where(component: :assessments,
+                                course_assessment_category_id: submission.assessment.tab.category.id,
+                                setting: :new_submission).first
+          email_setting.update!(regular: false, phantom: true)
+        end
+
+        it 'does not send email notifications to the regular staff' do
+          expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
+        end
+      end
+
+      context 'when "new submission" email setting is disabled for phantom staff' do
+        before do
+          course_creator.update!(phantom: true)
+          email_setting = course.
+                          setting_emails.
+                          where(component: :assessments,
+                                course_assessment_category_id: submission.assessment.tab.category.id,
+                                setting: :new_submission).first
+          email_setting.update!(regular: true, phantom: false)
+        end
+
+        it 'does not send email notifications to the phantom staff' do
           expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
         end
       end

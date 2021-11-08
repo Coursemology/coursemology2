@@ -8,27 +8,23 @@ class Course::Forum::PostNotifier < Notifier::Base
   # @param[Course::Discussion::Post] post The post that was created.
   def post_replied(user, course_user, post)
     course = post.topic.course
+    email_enabled = course.email_enabled(:forums, :post_replied)
+    return unless email_enabled.regular || email_enabled.phantom
+
     activity = create_activity(actor: user, object: post, event: :replied)
     activity.notify(course, :feed) if course_user && !course_user.phantom?
 
-    if email_notification_enabled?(course_user, course)
-      post.topic.subscriptions.includes(:user).each do |subscription|
-        activity.notify(subscription.user, :email) unless subscription.user == user
-      end
+    post.topic.subscriptions.includes(:user).each do |subscription|
+      course_user = course.course_users.find_by(user: subscription.user)
+      is_disabled_as_phantom = course_user.phantom? && !email_enabled.phantom
+      is_disabled_as_regular = !course_user.phantom? && !email_enabled.regular
+      exclude_user = subscription.user == user ||
+                     is_disabled_as_phantom ||
+                     is_disabled_as_regular ||
+                     course_user.email_unsubscriptions.where(course_settings_email_id: email_enabled.id).exists?
+
+      activity.notify(subscription.user, :email) unless exclude_user
     end
-
     activity.save!
-  end
-
-  private
-
-  def email_notification_enabled?(course_user, course)
-    response = settings_with_key(course, :post_replied)
-    response &&= settings_with_key(course, :post_phantom_replied) if course_user&.phantom?
-    response
-  end
-
-  def settings_with_key(course, key)
-    Course::Settings::ForumsComponent.email_enabled?(course, key)
   end
 end

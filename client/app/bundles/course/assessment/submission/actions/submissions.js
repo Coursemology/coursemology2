@@ -10,7 +10,7 @@ const DOWNLOAD_JOB_POLL_INTERVAL = 2000;
 const PUBLISH_JOB_POLL_INTERVAL = 500;
 const UNSUBMIT_ALL_SUBMISSIONS_JOB_POLL_INTERVAL = 500;
 const DELETE_ALL_SUBMISSIONS_JOB_POLL_INTERVAL = 500;
-const DOWNLOAD_STATISTICS_JOB_POLL_INTERNAL = 2000;
+const DOWNLOAD_STATISTICS_JOB_POLL_INTERVAL = 2000;
 
 export function fetchSubmissions() {
   return (dispatch) => {
@@ -118,7 +118,7 @@ export function downloadStatistics(type) {
       .then((data) => {
         pollJob(
           data.redirect_url,
-          DOWNLOAD_STATISTICS_JOB_POLL_INTERNAL,
+          DOWNLOAD_STATISTICS_JOB_POLL_INTERVAL,
           handleSuccess,
           handleFailure,
         );

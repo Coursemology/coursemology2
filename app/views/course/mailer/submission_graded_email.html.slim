@@ -1,7 +1,12 @@
 - host = @course.instance.host
+- category_id = @assessment.tab.category.id
 
 = simple_format(t('.message', submission: link_to(@assessment.title,
                                                   edit_course_assessment_submission_url(@course,
                                                                                         @assessment,
                                                                                         @submission,
                                                                                         host: host))))
+
+br
+= render partial: 'layouts/manage_email_subscription',
+         locals: { course: @course, recipient: @recipient, component: 'assessments' , category_id: category_id, setting: 'new_submission' }
