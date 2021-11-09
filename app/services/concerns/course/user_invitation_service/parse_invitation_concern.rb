@@ -98,8 +98,10 @@ module Course::UserInvitationService::ParseInvitationConcern
   # @return [Array<Hash>] The array of records read from the file.
   # @raise [CSV::MalformedCSVError] When the file provided is invalid, eg. UTF-16 encoding.
   def parse_from_file(file)
+    row_num = 0
     [].tap do |invites|
       CSV.foreach(file).with_index(1) do |row, row_number|
+        row_num = row_number
         row[0] = remove_utf8_byte_order_mark(row[0]) if row_number == 1
         row = strip_row(row)
         # Ignore first row if it's a header row.
@@ -110,7 +112,7 @@ module Course::UserInvitationService::ParseInvitationConcern
       end
     end
   rescue StandardError => e
-    raise CSV::MalformedCSVError.new(e), e.message
+    raise CSV::MalformedCSVError.new(e, row_num), e.message
   end
 
   # Returns a boolean to determine whether the row is a header row.
