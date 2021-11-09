@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe Course::ConsolidatedOpeningReminderNotifier, type: :notifier do
+RSpec.describe Course::ConsolidatedOpeningReminderNotifier, type: :mailer do
   let!(:instance) { Instance.default }
 
   with_tenant(:instance) do
