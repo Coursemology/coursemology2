@@ -58,7 +58,11 @@ class ImageUploader < CarrierWave::Uploader::Base
       begin
         download!(other_uploader.url)
       rescue StandardError => _e
-        download!(other_uploader.medium.url)
+        begin
+          download!(other_uploader.medium.url)
+        rescue StandardError => _e
+          return false
+        end
       end
     end
     true
