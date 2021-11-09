@@ -6,7 +6,7 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
 
   def index #:nodoc:
     @submissions = @submissions.from_category(category).confirmed
-    @submissions = @submissions.filter(filter_params) unless filter_params.blank?
+    @submissions = @submissions.filter_by_params(filter_params) unless filter_params.blank?
   end
 
   def pending

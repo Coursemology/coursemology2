@@ -151,7 +151,7 @@ class Course::Assessment::Submission < ApplicationRecord
   end)
 
   # Filter submissions by category_id, assessment_id, group_id and/or user_id (creator)
-  scope :filter, (lambda do |filter_params|
+  scope :filter_by_params, (lambda do |filter_params|
     result = all
     if filter_params[:category_id].present?
       result = result.from_category(Course::Assessment::Category.find(filter_params[:category_id]))
