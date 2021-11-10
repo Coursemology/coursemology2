@@ -100,7 +100,7 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
-    active_record_upsert (0.10.0)
+    active_record_upsert (0.10.1)
       activerecord (>= 5.0, < 6.2)
       pg (>= 0.18, < 2.0)
     activejob (6.0.3.4)
@@ -276,7 +276,7 @@ GEM
       rouge (>= 2.0.0, < 4)
     htmlentities (4.3.4)
     http_accept_language (2.1.1)
-    i18n (1.8.10)
+    i18n (1.8.11)
       concurrent-ruby (~> 1.0)
     i18n-js (3.8.0)
       i18n (>= 0.6.6)
@@ -639,7 +639,7 @@ GEM
     xpath (3.2.0)
       nokogiri (~> 1.8)
     yard (0.9.25)
-    zeitwerk (2.4.2)
+    zeitwerk (2.5.1)
 
 PLATFORMS
   ruby
