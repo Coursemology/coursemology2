@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class Course::Settings::AssessmentsComponent < Course::Settings::Component
   class << self
-
     # Do not add this to a destroy callback in the Tab model as it will get invoked when
     # the course is being destroyed and saving of the course here to save the settings
     # will cause the course deletion to fail.
