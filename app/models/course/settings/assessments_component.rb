@@ -45,8 +45,7 @@ class Course::Settings::AssessmentsComponent < Course::Settings::Component
         settings.settings(:lesson_plan_items, tab).enabled
       end
     end
-
-    disabled_tab_keys.map { |tab_key| tab_key[4..-1] }
+    disabled_tab_keys.map { |tab_key| tab_key[4..] }
   end
 
   private
