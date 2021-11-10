@@ -52,7 +52,7 @@ ActionMailer::MessageDelivery.prepend(ActionMailer::MessageDelivery::TestDeliver
 module TrackableJob::SpecHelpers
   def wait_for_job
     if defined?(current_path) && current_path.start_with?(job_path(''))
-      job_guid = current_path[(current_path.rindex('/') + 1)..-1]
+      job_guid = current_path[(current_path.rindex('/') + 1)..]
       job = TrackableJob::Job.find(job_guid)
       job.wait(while_callback: -> { job.reload.submitted? })
       visit current_path

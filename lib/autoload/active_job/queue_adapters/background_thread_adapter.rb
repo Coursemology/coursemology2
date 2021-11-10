@@ -189,7 +189,7 @@ class ActiveJob::QueueAdapters::BackgroundThreadAdapter < ActiveJob::QueueAdapte
   class LogSubscriber < ActiveSupport::LogSubscriber
     def enqueue(event)
       message = "[Background Thread] Enqueued job: #{event.payload[:job]}, "\
-                "call stack:\n#{event.payload[:caller][20..-1].join("\n")}"
+                "call stack:\n#{event.payload[:caller][20..].join("\n")}"
       debug(message)
     end
 

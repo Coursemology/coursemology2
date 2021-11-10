@@ -54,7 +54,7 @@ module Extensions
 
       current_module_dir_length = current_module_dir.length + 1
       extensions = Dir["#{current_module_dir}/**/*.rb"].map do |e|
-        e[current_module_dir_length..-1]
+        e[current_module_dir_length..]
       end
 
       extensions.sort!

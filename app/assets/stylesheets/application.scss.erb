@@ -16,7 +16,7 @@ imports.reject! do |path|
 end
 imports.map! do |path|
   file_path = File.file?(path)
-  path = path[(__dir__.length + 1)..-1]
+  path = path[(__dir__.length + 1)..]
   file_path ? path : "#{path}/**/*"
 end
 
