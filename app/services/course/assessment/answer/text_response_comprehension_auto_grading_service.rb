@@ -378,8 +378,7 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
   # @param [TextResponseComprehensionPoint] point The incorrect Point to generate explanation for.
   # @return [String] The missing keywords explanations for the incorrect Point.
   def explanations_for_incorrect_point_missing_keywords(answer_text_lemma_status, point)
-    empty_information = I18n.t('course.assessment.answer.
-      text_response_comprehension_auto_grading.explanations.empty_information')
+    empty_information = I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.empty_information')
     missing_keywords = point.
                        solutions.
                        select(&:compre_keyword?).
@@ -444,8 +443,7 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
   # @return [Array<String>] The explanations for the correct keywords.
   def explanations_for_correct_paraphrase_by_points(hash_keywords, hash_point_serial)
     explanations = []
-    empty_information = I18n.t('course.assessment.answer.
-      text_response_comprehension_auto_grading.explanations.empty_information')
+    empty_information = I18n.t('course.assessment.answer.text_response_comprehension_auto_grading.explanations.empty_information')
     hash_keywords.keys.sort.each do |key| # point_id
       value = hash_keywords[key]
       point_serial_number = hash_point_serial[key]
