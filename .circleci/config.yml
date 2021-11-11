@@ -3,6 +3,8 @@
 # Check https://circleci.com/docs/2.0/language-ruby/ for more details
 #
 version: 2
+orbs:
+  browser-tools: circleci/browser-tools@1.2.3
 jobs:
   build:
     docker:
@@ -79,6 +81,8 @@ jobs:
     working_directory: ~/repo
 
     steps:
+      - browser-tools/install-browser-tools
+
       - checkout
 
       # Checkout submodules
