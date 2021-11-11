@@ -19,9 +19,9 @@ jobs:
       # Checkout submodules
       - run: git submodule update --init --recursive
 
-      # Force install bundler version
+      # Install bundler version
       - run:
-          name: Force Bundler Version
+          name: install bundler version
           command: gem install bundler:1.17.3
 
       # Download and cache dependencies
@@ -93,6 +93,13 @@ jobs:
       - restore_cache:
           keys:
             - v1-yarn-{{ checksum "client/yarn.lock" }}
+
+      # Install bundler version
+      - run:
+          name: install bundler version
+          command: |
+            gem install bundler:1.17.3
+            bundle install
 
       # Install ghostscript so `identify` in ImageMagick works with PDF files.
       - run: sudo apt update && sudo apt install ghostscript
@@ -214,6 +221,13 @@ jobs:
             - v3-dependencies-{{ checksum "Gemfile.lock" }}
             # fallback to using the latest cache if no exact match is found
             - v3-dependencies-
+
+      # Install bundler version
+      - run:
+          name: install bundler version
+          command: |
+            gem install bundler:1.17.3
+            bundle install
 
       # Database setup
       - run:
