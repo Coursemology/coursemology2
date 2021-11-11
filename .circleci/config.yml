@@ -1,8 +1,8 @@
-# Ruby CircleCI 2.0 configuration file
+# Ruby CircleCI 2.1 configuration file
 #
 # Check https://circleci.com/docs/2.0/language-ruby/ for more details
 #
-version: 2
+version: 2.1
 orbs:
   browser-tools: circleci/browser-tools@1.2.3
 jobs:
@@ -81,7 +81,8 @@ jobs:
     working_directory: ~/repo
 
     steps:
-      - browser-tools/install-browser-tools
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
 
       - checkout
 
@@ -106,7 +107,7 @@ jobs:
             bundle install
 
       # Install ghostscript so `identify` in ImageMagick works with PDF files.
-      - run: sudo apt update && sudo apt install ghostscript
+      - run: sudo apt update && sudo apt install imagemagick && sudo apt install ghostscript
 
       - setup_remote_docker
 
