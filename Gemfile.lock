@@ -213,7 +213,7 @@ GEM
     docker-api (2.0.0)
       excon (>= 0.47.0)
       multi_json
-    edge (0.6.0)
+    edge (0.6.1)
       activerecord (>= 5.0.0)
     ejs (1.1.1)
     email_spec (2.2.0)
