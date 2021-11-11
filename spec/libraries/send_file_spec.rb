@@ -13,11 +13,11 @@ RSpec.describe SendFile do
     subject { SendFile.send_file(file) }
 
     it 'preserves the original file name' do
-      expect(File.basename(URI.decode(subject))).to eq(File.basename(file))
+      expect(File.basename(URI.decode_www_form_component(subject))).to eq(File.basename(file))
     end
 
     it 'copies the file' do
-      public_file = File.join(Rails.public_path, URI.decode(subject))
+      public_file = File.join(Rails.public_path, URI.decode_www_form_component(subject))
       expect(FileUtils.compare_file(public_file, file)).to be_truthy
     end
 
@@ -26,7 +26,7 @@ RSpec.describe SendFile do
       subject { SendFile.send_file(file, file_name) }
 
       it 'uses the custom name' do
-        expect(File.basename(URI.decode(subject))).to eq(file_name)
+        expect(File.basename(URI.decode_www_form_component(subject))).to eq(file_name)
       end
     end
   end
