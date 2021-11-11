@@ -9,7 +9,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: cimg/ruby:2.6.8-browsers
+      - image: cimg/ruby:2.7.0-browsers
         environment:
           BUNDLE_APP_CONFIG: ~/repo/.bundle
 
@@ -61,7 +61,7 @@ jobs:
   test:
     docker:
       # specify the version you desire here
-      - image: cimg/ruby:2.6.8-browsers
+      - image: cimg/ruby:2.7.0-browsers
         environment:
           PG_HOST: localhost
           PG_USER: ubuntu
@@ -147,7 +147,7 @@ jobs:
   lint:
     docker:
       # specify the version you desire here
-      - image: cimg/ruby:2.6.8-browsers
+      - image: cimg/ruby:2.7.0-browsers
         environment:
           RAILS_ENV: test
 
@@ -172,7 +172,7 @@ jobs:
   jstest:
     docker:
       # specify the version you desire here
-      - image: cimg/ruby:2.6.8-browsers
+      - image: cimg/ruby:2.7.0-browsers
         environment:
           RAILS_ENV: test
 
@@ -198,7 +198,7 @@ jobs:
   i18n:
     docker:
       # specify the version you desire here
-      - image: cimg/ruby:2.6.8-browsers
+      - image: cimg/ruby:2.7.0-browsers
         environment:
           PG_HOST: localhost
           PG_USER: ubuntu
