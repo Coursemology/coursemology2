@@ -27,9 +27,9 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v3-dependencies-{{ checksum "Gemfile.lock" }}
+            - v3.1-dependencies-{{ checksum "Gemfile.lock" }}
             # fallback to using the latest cache if no exact match is found
-            - v3-dependencies-
+            - v3.1-dependencies-
 
       - run:
           name: install dependencies
@@ -40,7 +40,7 @@ jobs:
           paths:
             - ./vendor/bundle
             - ./.bundle
-          key: v3-dependencies-{{ checksum "Gemfile.lock" }}
+          key: v3.1-dependencies-{{ checksum "Gemfile.lock" }}
 
       - restore_cache:
           keys:
@@ -86,9 +86,9 @@ jobs:
 
       - restore_cache:
           keys:
-            - v3-dependencies-{{ checksum "Gemfile.lock" }}
+            - v3.1-dependencies-{{ checksum "Gemfile.lock" }}
             # fallback to using the latest cache if no exact match is found
-            - v3-dependencies-
+            - v3.1-dependencies-
 
       - restore_cache:
           keys:
@@ -218,9 +218,9 @@ jobs:
 
       - restore_cache:
           keys:
-            - v3-dependencies-{{ checksum "Gemfile.lock" }}
+            - v3.1-dependencies-{{ checksum "Gemfile.lock" }}
             # fallback to using the latest cache if no exact match is found
-            - v3-dependencies-
+            - v3.1-dependencies-
 
       # Install bundler version
       - run:
