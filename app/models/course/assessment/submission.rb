@@ -177,7 +177,7 @@ class Course::Assessment::Submission < ApplicationRecord
   #
   # @return [Course::Assessment::Submission::AutoGradingJob] The job instance.
   def auto_grade!(only_ungraded: false)
-    AutoGradingJob.perform_later(self, only_ungraded: only_ungraded)
+    AutoGradingJob.perform_later(self, only_ungraded)
   end
 
   def auto_grade_now!(only_ungraded: false)

@@ -20,14 +20,14 @@ gem 'validates_hostname'
 gem 'workflow'
 gem 'workflow-activerecord', '>= 4.1', '< 6.0'
 # Add creator_id and updater_id attributes to models
-gem 'activerecord-userstamp', git: 'https://github.com/raymondtangsc/activerecord-userstamp'
+gem 'activerecord-userstamp', git: 'https://github.com/ekowidianto/activerecord-userstamp.git'
 # Allow actions to be deferred until after a record is committed.
 gem 'after_commit_action'
 # Allow declaring the calculated attributes of a record
 gem 'calculated_attributes'
 # For multiple table inheritance
 # TODO: Figure out breaking changes in v2 as polymorphism is not working correctly.
-gem 'active_record-acts_as', git: 'https://github.com/Coursemology/active_record-acts_as', branch: 'rails5.2.3'
+gem 'active_record-acts_as', git: 'https://github.com/ekowidianto/active_record-acts_as.git', branch: 'rails5.2.3'
 # Organise ActiveRecord model into a tree structure
 gem 'edge'
 # Upsert action for Postgres
