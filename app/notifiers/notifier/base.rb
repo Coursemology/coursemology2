@@ -10,12 +10,12 @@ class Notifier::Base
     # notifiers
     #
     # @api private
-    def method_missing(symbol, *args, &block)
-      new.public_send(symbol, *args, &block)
+    def method_missing(symbol, *args, **kwargs, &block)
+      new.public_send(symbol, *args, **kwargs, &block)
     end
   end
 
-  def initialize # :nodoc:
+  def initialize
     super
     @pending_emails = []
   end

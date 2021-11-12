@@ -1,13 +1,4 @@
 GIT
-  remote: https://github.com/Coursemology/active_record-acts_as
-  revision: 6792c5dc16f05a51a2c465c157878e3f4e1ca1a8
-  branch: rails5.2.3
-  specs:
-    active_record-acts_as (3.0.1)
-      activerecord (>= 4.2)
-      activesupport (>= 4.2)
-
-GIT
   remote: https://github.com/Coursemology/polyglot.git
   revision: 291a9e5ebfc3232da58f1eba8fb6c76ec85aa407
   specs:
@@ -22,17 +13,26 @@ GIT
       rails (>= 3.1.0)
 
 GIT
+  remote: https://github.com/ekowidianto/active_record-acts_as.git
+  revision: 1ba69ea24c28e7afba7ce452d237d69cf1040069
+  branch: rails5.2.3
+  specs:
+    active_record-acts_as (3.0.1)
+      activerecord (>= 4.2)
+      activesupport (>= 4.2)
+
+GIT
+  remote: https://github.com/ekowidianto/activerecord-userstamp.git
+  revision: 9ee6f761b83d9bd335edbdf3591451ce79ffaec2
+  specs:
+    activerecord-userstamp (3.0.5)
+      rails (>= 6)
+
+GIT
   remote: https://github.com/makqien/rwordnet
   revision: 54a85eed974002cb2cfb858cbcaed8e1069b5cb8
   specs:
     rwordnet (2.0.0)
-
-GIT
-  remote: https://github.com/raymondtangsc/activerecord-userstamp
-  revision: 9a182307c3fd254966f5bd94e1b9340ca909a6e5
-  specs:
-    activerecord-userstamp (3.0.5)
-      rails (>= 6)
 
 GIT
   remote: https://github.com/raymondtangsc/rails_utils.git

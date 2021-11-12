@@ -83,7 +83,7 @@ class Attachment < ApplicationRecord
   # @param opt [Hash] The options for opening the stream with.
   # @param block [Proc] The block to receive the stream with.
   def open_with_block(opt, block)
-    Tempfile.create(TEMPORARY_FILE_PREFIX, opt) do |temporary_file|
+    Tempfile.create(TEMPORARY_FILE_PREFIX, **opt) do |temporary_file|
       temporary_file.write(contents)
       temporary_file.seek(0)
 
@@ -96,7 +96,7 @@ class Attachment < ApplicationRecord
   # @param opt [Hash] The options for opening the stream with.
   # @return [Tempfile] The temporary file opened.
   def open_without_block(opt)
-    file = Tempfile.new(TEMPORARY_FILE_PREFIX, Dir.tmpdir, opt)
+    file = Tempfile.new(TEMPORARY_FILE_PREFIX, Dir.tmpdir, **opt)
     file.write(contents)
     file.seek(0)
     file
