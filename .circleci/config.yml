@@ -9,7 +9,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: cimg/ruby:2.7.0-browsers
+      - image: cimg/ruby:2.7.4-browsers
         environment:
           BUNDLE_APP_CONFIG: ~/repo/.bundle
 
@@ -29,9 +29,9 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v3.1-dependencies-{{ checksum "Gemfile.lock" }}
+            - v3.2-dependencies-{{ checksum "Gemfile.lock" }}
             # fallback to using the latest cache if no exact match is found
-            - v3.1-dependencies-
+            - v3.2-dependencies-
 
       - run:
           name: install dependencies
@@ -42,7 +42,7 @@ jobs:
           paths:
             - ./vendor/bundle
             - ./.bundle
-          key: v3.1-dependencies-{{ checksum "Gemfile.lock" }}
+          key: v3.2-dependencies-{{ checksum "Gemfile.lock" }}
 
       - restore_cache:
           keys:
@@ -61,7 +61,7 @@ jobs:
   test:
     docker:
       # specify the version you desire here
-      - image: cimg/ruby:2.7.0-browsers
+      - image: cimg/ruby:2.7.4-browsers
         environment:
           PG_HOST: localhost
           PG_USER: ubuntu
@@ -91,9 +91,9 @@ jobs:
 
       - restore_cache:
           keys:
-            - v3.1-dependencies-{{ checksum "Gemfile.lock" }}
+            - v3.2-dependencies-{{ checksum "Gemfile.lock" }}
             # fallback to using the latest cache if no exact match is found
-            - v3.1-dependencies-
+            - v3.2-dependencies-
 
       - restore_cache:
           keys:
@@ -147,7 +147,7 @@ jobs:
   lint:
     docker:
       # specify the version you desire here
-      - image: cimg/ruby:2.7.0-browsers
+      - image: cimg/ruby:2.7.4-browsers
         environment:
           RAILS_ENV: test
 
@@ -172,7 +172,7 @@ jobs:
   jstest:
     docker:
       # specify the version you desire here
-      - image: cimg/ruby:2.7.0-browsers
+      - image: cimg/ruby:2.7.4-browsers
         environment:
           RAILS_ENV: test
 
@@ -198,7 +198,7 @@ jobs:
   i18n:
     docker:
       # specify the version you desire here
-      - image: cimg/ruby:2.7.0-browsers
+      - image: cimg/ruby:2.7.4-browsers
         environment:
           PG_HOST: localhost
           PG_USER: ubuntu
@@ -223,9 +223,9 @@ jobs:
 
       - restore_cache:
           keys:
-            - v3.1-dependencies-{{ checksum "Gemfile.lock" }}
+            - v3.2-dependencies-{{ checksum "Gemfile.lock" }}
             # fallback to using the latest cache if no exact match is found
-            - v3.1-dependencies-
+            - v3.2-dependencies-
 
       # Install bundler version
       - run:
