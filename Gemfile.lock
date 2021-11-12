@@ -14,7 +14,7 @@ GIT
 
 GIT
   remote: https://github.com/ekowidianto/active_record-acts_as.git
-  revision: 1ba69ea24c28e7afba7ce452d237d69cf1040069
+  revision: 9e01feb01438ba6736f2d4a8140d9be18464afdc
   branch: rails5.2.3
   specs:
     active_record-acts_as (3.0.1)
@@ -23,7 +23,7 @@ GIT
 
 GIT
   remote: https://github.com/ekowidianto/activerecord-userstamp.git
-  revision: 9ee6f761b83d9bd335edbdf3591451ce79ffaec2
+  revision: 1170233e314466630e3a545ae3fdee16a0bb4a19
   specs:
     activerecord-userstamp (3.0.5)
       rails (>= 6)
