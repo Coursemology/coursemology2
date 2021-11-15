@@ -29,6 +29,15 @@ GIT
       rails (>= 6)
 
 GIT
+  remote: https://github.com/ekowidianto/html-pipeline-rouge_filter.git
+  revision: 4d43afb07930cbf78a8c6a6f9debd5c426ad490c
+  specs:
+    html-pipeline-rouge_filter (1.0.7)
+      activesupport
+      html-pipeline (>= 1.11)
+      rouge (>= 2.0.0, < 4)
+
+GIT
   remote: https://github.com/makqien/rwordnet
   revision: 54a85eed974002cb2cfb858cbcaed8e1069b5cb8
   specs:
@@ -270,10 +279,6 @@ GEM
     html-pipeline (2.14.0)
       activesupport (>= 2)
       nokogiri (>= 1.4)
-    html-pipeline-rouge_filter (1.0.7)
-      activesupport
-      html-pipeline (>= 1.11)
-      rouge (>= 2.0.0, < 4)
     htmlentities (4.3.4)
     http_accept_language (2.1.1)
     i18n (1.8.11)
@@ -485,7 +490,7 @@ GEM
     rexml (3.2.5)
     rinku (2.0.6)
     rollbar (3.1.1)
-    rouge (3.26.0)
+    rouge (3.26.1)
     rspec (3.10.0)
       rspec-core (~> 3.10.0)
       rspec-expectations (~> 3.10.0)
@@ -688,7 +693,7 @@ DEPENDENCIES
   friendly_id
   high_voltage
   html-pipeline
-  html-pipeline-rouge_filter
+  html-pipeline-rouge_filter!
   http_accept_language
   i18n-js (>= 3.0.0.rc1)
   i18n-tasks
@@ -719,6 +724,7 @@ DEPENDENCIES
   recaptcha
   record_tag_helper
   redis-rails
+  rexml
   rinku
   rollbar (>= 1.5.3)
   rspec-html-matchers
