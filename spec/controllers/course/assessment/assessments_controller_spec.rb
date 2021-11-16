@@ -205,5 +205,19 @@ RSpec.describe Course::Assessment::AssessmentsController do
         end
       end
     end
+
+    describe '#remind' do
+      subject do
+        post :remind, as: :json, params:
+          { course_id: course.id, id: immutable_assessment, course_users: 'students' }
+      end
+
+      it 'sends reminder to students' do
+        allow(Course::Assessment::ReminderService).to receive(:send_closing_reminder)
+        subject
+        expect(Course::Assessment::ReminderService).to have_received(:send_closing_reminder)
+        expect(response).to have_http_status(:ok)
+      end
+    end
   end
 end
