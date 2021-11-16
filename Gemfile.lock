@@ -315,7 +315,7 @@ GEM
       thor (>= 0.14, < 2.0)
     js-routes (1.4.13)
       railties (>= 4)
-    json (2.5.1)
+    json (2.6.1)
     jwt (2.2.2)
     kaminari (1.2.1)
       activesupport (>= 4.1.0)
