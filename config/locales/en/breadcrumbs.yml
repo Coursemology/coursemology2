@@ -92,6 +92,8 @@ en:
             new: :'course.assessment.assessments.new.header'
             edit: :'course.assessment.assessments.edit.header'
             index: :'course.assessment.assessments.index.header'
+          surveys:
+            index: :'course.assessment.assessments.index.header'
         controller:
           index: :'course.assessment.assessments.index.header'
         question:
