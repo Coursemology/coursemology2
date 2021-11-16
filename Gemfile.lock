@@ -181,7 +181,7 @@ GEM
     capybara-selenium (0.0.6)
       capybara
       selenium-webdriver
-    carrierwave (2.1.1)
+    carrierwave (2.2.0)
       activemodel (>= 5.0.0)
       activesupport (>= 5.0.0)
       addressable (~> 2.6)
