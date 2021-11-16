@@ -15,8 +15,8 @@ class Course::Survey::ReminderService
     send_closing_reminder(survey)
   end
 
-  def send_closing_reminder(survey)
-    students = uncompleted_subscribed_students(survey)
+  def send_closing_reminder(survey, include_unsubscribed: false)
+    students = uncompleted_subscribed_students(survey, include_unsubscribed)
     closing_reminder_students(survey, students)
     closing_reminder_staff(survey, students)
     survey.update_attribute(:closing_reminded_at, Time.zone.now)
@@ -53,8 +53,9 @@ class Course::Survey::ReminderService
   # Returns a Set of students who have not completed the given survey and subscribe to the survey email.
   #
   # @param [Course::Survey] survey The survey to query.
+  # @param [Boolean] include_unsubscribed to include unsubscribed students in the reminder (forced reminder)
   # @return [Set<CourseUser>] Set of CourseUsers who have not finished the survey.
-  def uncompleted_subscribed_students(survey)
+  def uncompleted_subscribed_students(survey, include_unsubscribed)
     course_users = survey.course.course_users
     email_enabled = survey.course.email_enabled(:surveys, :closing_reminder)
     # Eager load :user as it's needed for the recipient email.
@@ -68,6 +69,8 @@ class Course::Survey::ReminderService
     submitted =
       survey.responses.submitted.includes(experience_points_record: { course_user: :user }).
       map(&:course_user)
+    return Set.new(students) - Set.new(submitted) if include_unsubscribed
+
     unsubscribed = students.joins(:email_unsubscriptions).
                    where('course_user_email_unsubscriptions.course_settings_email_id = ?', email_enabled.id)
     Set.new(students) - Set.new(unsubscribed) - Set.new(submitted)
