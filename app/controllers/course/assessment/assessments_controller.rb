@@ -2,6 +2,11 @@
 class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   before_action :load_question_duplication_data, only: [:show, :reorder]
 
+  COURSE_USERS = { my_students: 'my_students',
+                   my_students_w_phantom: 'my_students_w_phantom',
+                   students: 'students',
+                   students_w_phantom: 'students_w_phantom' }.freeze
+
   def index
     @assessments = @assessments.ordered_by_date_and_title.with_submissions_by(current_user)
     @conditional_service = Course::Assessment::AchievementPreloadService.new(@assessments)
@@ -65,6 +70,13 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
     else
       render json: { success: false }
     end
+  end
+
+  def remind
+    authorize!(:manage, @assessment)
+    Course::Assessment::ReminderService.
+      send_closing_reminder(@assessment, course_user_ids, include_unsubscribed: true)
+    head :ok
   end
 
   protected
@@ -207,6 +219,19 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
              }
            end
     tabs.sort_by { |tab_hash| tab_hash[:title] }
+  end
+
+  def course_user_ids
+    case params[:course_users]
+    when COURSE_USERS[:my_students]
+      current_course_user.my_students.without_phantom_users
+    when COURSE_USERS[:my_students_w_phantom]
+      current_course_user.my_students
+    when COURSE_USERS[:students_w_phantom]
+      @assessment.course.course_users.students
+    else
+      @assessment.course.course_users.students.without_phantom_users
+    end.pluck(:id)
   end
 
   def can_access_assessment?
