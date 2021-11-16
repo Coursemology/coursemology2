@@ -107,7 +107,15 @@ jobs:
             bundle install
 
       # Install ghostscript so `identify` in ImageMagick works with PDF files.
-      - run: sudo apt update && sudo apt install imagemagick && sudo apt install ghostscript
+      # Remove pdf security policy for imagemagick (ubuntu 20.04)
+      # https://stackoverflow.com/questions/52998331/imagemagick-security-policy-pdf-blocking-conversion
+      - run:
+          name: install ghostscript and imagemagick
+          command: |
+            sudo apt update
+            sudo apt install imagemagick
+            sudo apt install ghostscript
+            sudo sed -i '/disable ghostscript format types/,+6d' /etc/ImageMagick-6/policy.xml
 
       - setup_remote_docker
 
