@@ -32,6 +32,7 @@ import {
   downloadStatistics,
   unsubmitAllSubmissions,
   deleteAllSubmissions,
+  sendAssessmentReminderEmail,
 } from '../../actions/submissions';
 import SubmissionsTable from './SubmissionsTable';
 import { assessmentShape } from '../../propTypes';
@@ -67,7 +68,7 @@ class VisibleSubmissionsIndex extends React.Component {
     );
   }
 
-  static canForceSubmit(shownSubmissions) {
+  static canForceSubmitOrRemind(shownSubmissions) {
     return shownSubmissions.some(
       (s) =>
         s.workflowState === workflowStates.Unstarted ||
@@ -81,6 +82,7 @@ class VisibleSubmissionsIndex extends React.Component {
       publishConfirmation: false,
       forceSubmitConfirmation: false,
       includePhantoms: false,
+      remindConfirmation: false,
       tab: 'my-students-tab',
     };
   }
@@ -153,8 +155,18 @@ class VisibleSubmissionsIndex extends React.Component {
       assessment: { title, canPublishGrades, canForceSubmit },
       isPublishing,
       isForceSubmitting,
+      isDeleting,
+      isUnsubmitting,
+      isReminding,
     } = this.props;
-    const { includePhantoms } = this.state;
+    const { includePhantoms, tab } = this.state;
+    const disableButtons =
+      isPublishing ||
+      isForceSubmitting ||
+      isDeleting ||
+      isUnsubmitting ||
+      isReminding;
+    const showRemindButton = tab !== 'staff-tab';
 
     return (
       <Card style={{ marginBottom: 20 }}>
@@ -177,8 +189,7 @@ class VisibleSubmissionsIndex extends React.Component {
           {canPublishGrades && (
             <FlatButton
               disabled={
-                isPublishing ||
-                isForceSubmitting ||
+                disableButtons ||
                 !VisibleSubmissionsIndex.canPublish(shownSubmissions)
               }
               secondary
@@ -193,9 +204,10 @@ class VisibleSubmissionsIndex extends React.Component {
           {canForceSubmit && (
             <FlatButton
               disabled={
-                isForceSubmitting ||
-                isPublishing ||
-                !VisibleSubmissionsIndex.canForceSubmit(shownSubmissions)
+                disableButtons ||
+                !VisibleSubmissionsIndex.canForceSubmitOrRemind(
+                  shownSubmissions,
+                )
               }
               secondary
               label={
@@ -204,6 +216,21 @@ class VisibleSubmissionsIndex extends React.Component {
               labelPosition="before"
               icon={isForceSubmitting ? <CircularProgress size={24} /> : null}
               onClick={() => this.setState({ forceSubmitConfirmation: true })}
+            />
+          )}
+          {showRemindButton && (
+            <FlatButton
+              disabled={
+                disableButtons ||
+                !VisibleSubmissionsIndex.canForceSubmitOrRemind(
+                  shownSubmissions,
+                )
+              }
+              secondary
+              label={<FormattedMessage {...submissionsTranslations.remind} />}
+              labelPosition="before"
+              icon={isReminding ? <CircularProgress size={24} /> : null}
+              onClick={() => this.setState({ remindConfirmation: true })}
             />
           )}
         </CardActions>
@@ -386,6 +413,40 @@ class VisibleSubmissionsIndex extends React.Component {
     );
   }
 
+  renderReminderConfirmation(shownSubmissions, handleRemindParams) {
+    const { dispatch } = this.props;
+    const { assessmentId } = this.props.match.params;
+    const { remindConfirmation } = this.state;
+    const values = {
+      unattempted: shownSubmissions.filter(
+        (s) => s.workflowState === workflowStates.Unstarted,
+      ).length,
+      attempting: shownSubmissions.filter(
+        (s) => s.workflowState === workflowStates.Attempting,
+      ).length,
+      selectedUsers: selectedUserTypeDisplay[handleRemindParams],
+    };
+
+    return (
+      <ConfirmationDialog
+        open={remindConfirmation}
+        onCancel={() => this.setState({ remindConfirmation: false })}
+        onConfirm={() => {
+          dispatch(
+            sendAssessmentReminderEmail(assessmentId, handleRemindParams),
+          );
+          this.setState({ remindConfirmation: false });
+        }}
+        message={
+          <FormattedMessage
+            {...translations.sendReminderEmailConfirmation}
+            values={values}
+          />
+        }
+      />
+    );
+  }
+
   render() {
     const { isLoading, notification, submissions } = this.props;
     const {
@@ -393,6 +454,7 @@ class VisibleSubmissionsIndex extends React.Component {
       tab,
       publishConfirmation,
       forceSubmitConfirmation,
+      remindConfirmation,
     } = this.state;
     if (isLoading) {
       return <LoadingIndicator />;
@@ -439,20 +501,20 @@ class VisibleSubmissionsIndex extends React.Component {
     };
 
     let shownSubmissions; // shownSubmissions are submissions currently shown on the active tab on the page
-    let handlePublishOrSubmitParams;
+    let handleActionParams;
     switch (tab) {
       case 'staff-tab':
         shownSubmissions = staffSubmissions;
-        handlePublishOrSubmitParams = handleStaffParams;
+        handleActionParams = handleStaffParams;
         break;
       case 'my-students-tab':
         shownSubmissions = myStudentSubmissions;
-        handlePublishOrSubmitParams = handleMyStudentsParams;
+        handleActionParams = handleMyStudentsParams;
         break;
       case 'students-tab':
       default:
         shownSubmissions = studentSubmissions;
-        handlePublishOrSubmitParams = handleStudentsParams;
+        handleActionParams = handleStudentsParams;
     }
 
     return (
@@ -460,15 +522,14 @@ class VisibleSubmissionsIndex extends React.Component {
         {this.renderHeader(shownSubmissions)}
         {this.renderTabs(filteredSubmissions, handleParams)}
         {publishConfirmation &&
-          this.renderPublishConfirmation(
-            shownSubmissions,
-            handlePublishOrSubmitParams,
-          )}
+          this.renderPublishConfirmation(shownSubmissions, handleActionParams)}
         {forceSubmitConfirmation &&
           this.renderForceSubmitConfirmation(
             shownSubmissions,
-            handlePublishOrSubmitParams,
+            handleActionParams,
           )}
+        {remindConfirmation &&
+          this.renderReminderConfirmation(shownSubmissions, handleActionParams)}
         <NotificationBar notification={notification} />
       </>
     );
@@ -501,6 +562,7 @@ VisibleSubmissionsIndex.propTypes = {
   isForceSubmitting: PropTypes.bool.isRequired,
   isUnsubmitting: PropTypes.bool.isRequired,
   isDeleting: PropTypes.bool.isRequired,
+  isReminding: PropTypes.bool.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -515,6 +577,7 @@ function mapStateToProps(state) {
     isForceSubmitting: state.submissionFlags.isForceSubmitting,
     isUnsubmitting: state.submissionFlags.isUnsubmitting,
     isDeleting: state.submissionFlags.isDeleting,
+    isReminding: state.submissionFlags.isReminding,
   };
 }
 
