@@ -55,10 +55,21 @@ module TrackableJob::SpecHelpers
       job_guid = current_path[(current_path.rindex('/') + 1)..]
       job = TrackableJob::Job.find(job_guid)
       job.wait(while_callback: -> { job.reload.submitted? })
-      visit current_path
+      visit_current_path
     elsif ActiveJob::Base.queue_adapter.is_a?(ActiveJob::QueueAdapters::BackgroundThreadAdapter)
       ActiveJob::Base.queue_adapter.wait_for_jobs
     end
+  end
+
+  def visit_current_path
+    tries ||= 5
+    visit current_path
+  rescue Selenium::WebDriver::Error::UnknownError => e
+    tries -= 1
+    raise e if tries < 1
+
+    sleep 0.1
+    retry
   end
 
   def perform_enqueued_jobs
