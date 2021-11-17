@@ -2,6 +2,7 @@
 class Course::Video < ApplicationRecord
   after_save :init_statistic
 
+  acts_as_conditional
   acts_as_lesson_plan_item has_todo: true
 
   include Course::ClosingReminderConcern
@@ -126,6 +127,19 @@ class Course::Video < ApplicationRecord
     else
       (submission_statistics.map(&:percent_watched).sum / submission_statistics.size).round
     end
+  end
+
+  # @override ConditionalInstanceMethods#permitted_for!
+  def permitted_for!(course_user)
+  end
+
+  # @override ConditionalInstanceMethods#precluded_for!
+  def precluded_for!(course_user)
+  end
+
+  # @override ConditionalInstanceMethods#satisfiable?
+  def satisfiable?
+    published?
   end
 
   private
