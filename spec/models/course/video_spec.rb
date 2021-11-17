@@ -270,5 +270,20 @@ RSpec.describe Course::Video, type: :model do
         end
       end
     end
+
+    describe '#satisfiable?' do
+      context 'when video is published' do
+        it 'is satisfiable' do
+          video1.published = true
+          expect(video1.satisfiable?).to be_truthy
+        end
+      end
+
+      context 'when video is not published' do
+        it 'is not satisfiable' do
+          expect(video1.satisfiable?).to be_falsy
+        end
+      end
+    end
   end
 end
