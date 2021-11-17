@@ -35,5 +35,23 @@ RSpec.describe Course::Survey, type: :model do
         it { is_expected.to be false }
       end
     end
+
+    describe '#satisfiable?' do
+      context 'when survey is published' do
+        let(:survey_traits) { :published }
+
+        it 'is satisfiable' do
+          expect(survey.satisfiable?).to be_truthy
+        end
+      end
+
+      context 'when survey is not published' do
+        let(:survey_traits) { nil }
+
+        it 'is satisfiable' do
+          expect(survey.satisfiable?).to be_falsy
+        end
+      end
+    end
   end
 end
