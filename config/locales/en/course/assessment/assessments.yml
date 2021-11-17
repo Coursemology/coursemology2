@@ -47,6 +47,7 @@ en:
           materials_disabled: 'Enable material component in the components tab of course setting
             to gain access to this file.'
           files: 'Files'
+          files_note: 'Note: Downloading the file(s) below will start a new attempt for this assessment.'
           questions: 'Questions'
           new_question:
             multiple_choice: 'Multiple Choice'

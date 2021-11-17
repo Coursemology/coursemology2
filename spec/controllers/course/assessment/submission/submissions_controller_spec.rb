@@ -49,13 +49,28 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
     end
 
     describe '#create' do
-      subject do
-        post :create, params: { course_id: course, assessment_id: assessment }
+      context 'when an there is already an existing submission for an assessment' do
+        subject do
+          post :create, params: { course_id: course, assessment_id: assessment }
+        end
+
+        before do
+          controller.instance_variable_set(:@submission, submission)
+          subject
+        end
+
+        it do
+          is_expected.
+            to redirect_to(edit_course_assessment_submission_path(course, assessment, submission))
+        end
       end
 
-      context 'when create fails' do
+      context 'when a submission of a randomized assesment creation fails' do
+        subject do
+          post :create, params: { course_id: course, assessment_id: randomized_assessment }
+        end
+
         before do
-          controller.instance_variable_set(:@submission, immutable_submission)
           subject
         end
 

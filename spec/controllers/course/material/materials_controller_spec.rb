@@ -6,6 +6,7 @@ RSpec.describe Course::Material::MaterialsController, type: :controller do
 
   with_tenant(:instance) do
     let(:user) { create(:administrator) }
+    let!(:course_user) { create(:course_user, course: course, user: user) }
     let(:material_stub) do
       stub = create(:material)
       allow(stub).to receive(:destroy).and_return(false)
@@ -21,6 +22,24 @@ RSpec.describe Course::Material::MaterialsController, type: :controller do
       subject { get :show, params: { course_id: course, folder_id: folder, id: material } }
 
       it { is_expected.to redirect_to(material.attachment.url) }
+
+      context 'when a material is uploaded for an assessment' do
+        let!(:assessment) do
+          create(:assessment, :published, :with_all_question_types, :with_attachments, course: course,
+                                                                                       session_password: 'super_secret')
+        end
+        let!(:folder_assessment) { assessment.folder }
+        let!(:material_assessment) { folder_assessment.materials.first }
+
+        subject { get :show, params: { course_id: course, folder_id: folder_assessment, id: material_assessment } }
+
+        it 'creates a new submission' do
+          subject
+          expect(assessment.submissions.length).to eq(1)
+          expect(assessment.submissions.first.answers.length).to eq(assessment.questions.length)
+          is_expected.to redirect_to(material_assessment.attachment.url)
+        end
+      end
     end
 
     describe '#update' do

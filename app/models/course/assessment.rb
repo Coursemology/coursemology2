@@ -11,6 +11,7 @@ class Course::Assessment < ApplicationRecord
   include Course::Assessment::TodoConcern
   include Course::ClosingReminderConcern
   include DuplicationStateTrackingConcern
+  include Course::Assessment::NewSubmissionConcern
 
   after_initialize :set_defaults, if: :new_record?
   before_validation :propagate_course, if: :new_record?
