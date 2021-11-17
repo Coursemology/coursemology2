@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class Course::Survey < ApplicationRecord
+  acts_as_conditional
   acts_as_lesson_plan_item has_todo: true
 
   include Course::ClosingReminderConcern
@@ -55,5 +56,18 @@ class Course::Survey < ApplicationRecord
   def include_in_consolidated_email?(event)
     email_enabled = course.email_enabled(:surveys, event)
     email_enabled.regular || email_enabled.phantom
+  end
+
+  # @override ConditionalInstanceMethods#permitted_for!
+  def permitted_for!(course_user)
+  end
+
+  # @override ConditionalInstanceMethods#precluded_for!
+  def precluded_for!(course_user)
+  end
+
+  # @override ConditionalInstanceMethods#satisfiable?
+  def satisfiable?
+    published?
   end
 end
