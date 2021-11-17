@@ -419,6 +419,7 @@ ActiveRecord::Schema.define(version: 2021_11_17_023347) do
     t.datetime "published_at"
     t.string "session_id", limit: 255
     t.datetime "submitted_at"
+    t.datetime "last_graded_time", default: "2021-10-24 14:11:56"
     t.index ["assessment_id", "creator_id"], name: "unique_assessment_id_and_creator_id", unique: true
     t.index ["assessment_id"], name: "fk__course_assessment_submissions_assessment_id"
     t.index ["creator_id"], name: "fk__course_assessment_submissions_creator_id"
@@ -661,13 +662,6 @@ ActiveRecord::Schema.define(version: 2021_11_17_023347) do
     t.index ["course_id"], name: "fk__course_groups_course_id"
     t.index ["creator_id"], name: "fk__course_groups_creator_id"
     t.index ["updater_id"], name: "fk__course_groups_updater_id"
-  end
-
-  create_table "course_learning_maps", force: :cascade do |t|
-    t.bigint "course_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["course_id"], name: "fk__course_learning_maps_course_id"
   end
 
   create_table "course_lesson_plan_event_materials", id: :serial, force: :cascade do |t|
@@ -1106,7 +1100,7 @@ ActiveRecord::Schema.define(version: 2021_11_17_023347) do
     t.boolean "enrollable", default: false, null: false
     t.string "time_zone", limit: 255
     t.boolean "show_personalized_timeline_features", default: false, null: false
-    t.datetime "conditional_satisfiability_evaluation_time", default: "2021-11-08 01:42:42"
+    t.datetime "conditional_satisfiability_evaluation_time", default: "2021-10-24 10:31:32"
     t.index ["creator_id"], name: "fk__courses_creator_id"
     t.index ["instance_id"], name: "fk__courses_instance_id"
     t.index ["registration_key"], name: "index_courses_on_registration_key", unique: true
@@ -1364,7 +1358,6 @@ ActiveRecord::Schema.define(version: 2021_11_17_023347) do
   add_foreign_key "course_groups", "courses", name: "fk_course_groups_course_id"
   add_foreign_key "course_groups", "users", column: "creator_id", name: "fk_course_groups_creator_id"
   add_foreign_key "course_groups", "users", column: "updater_id", name: "fk_course_groups_updater_id"
-  add_foreign_key "course_learning_maps", "courses", name: "fk_course_learning_maps_course_id"
   add_foreign_key "course_lesson_plan_event_materials", "course_lesson_plan_events", column: "lesson_plan_event_id", name: "fk_course_lesson_plan_event_materials_lesson_plan_event_id"
   add_foreign_key "course_lesson_plan_event_materials", "course_materials", column: "material_id", name: "fk_course_lesson_plan_event_materials_material_id"
   add_foreign_key "course_lesson_plan_items", "courses", name: "fk_course_lesson_plan_items_course_id"
