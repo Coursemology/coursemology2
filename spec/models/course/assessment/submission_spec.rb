@@ -431,32 +431,6 @@ RSpec.describe Course::Assessment::Submission do
         expect(submission.awarded_at).not_to be_nil
       end
 
-      context 'when there are delayed annotation and comment' do
-        let!(:assessment_traits) { [:with_programming_question] }
-        let!(:submission1_traits) { :submitted }
-        let!(:submission) { submission1 }
-        let!(:answer) { submission.answers.first }
-        let!(:file) { answer.actable.files.first }
-        let!(:annotation) do
-          create(:course_assessment_answer_programming_file_annotation, file: file, line: 1)
-        end
-        let!(:annotation_post) do
-          create(:course_discussion_post, :delayed, topic: annotation.discussion_topic, creator: user)
-        end
-        let!(:submission_question) do
-          create(:course_assessment_submission_question,
-                 submission: submission, question: assessment.questions.first, course: course)
-        end
-        let!(:submission_question_post) do
-          create(:course_discussion_post, :delayed, topic: submission_question.discussion_topic, creator: user)
-        end
-        it 'is set as not delayed after publication' do
-          submission.publish!
-          expect(annotation_post.reload.is_delayed).to be(false)
-          expect(submission_question_post.reload.is_delayed).to be(false)
-        end
-      end
-
       it 'sends an email notification', type: :mailer do
         expect { submission.publish! }.to change { ActionMailer::Base.deliveries.count }.by(1)
       end
@@ -546,6 +520,32 @@ RSpec.describe Course::Assessment::Submission do
               expect(subject.points_awarded).to eq(points_awarded)
             end
           end
+        end
+      end
+
+      context 'when there are delayed annotation and comment' do
+        let!(:assessment_traits) { [:with_programming_question] }
+        let!(:submission1_traits) { :submitted }
+        let!(:submission) { submission1 }
+        let!(:answer) { submission.answers.first }
+        let!(:file) { answer.actable.files.first }
+        let!(:annotation) do
+          create(:course_assessment_answer_programming_file_annotation, file: file, line: 1)
+        end
+        let!(:annotation_post) do
+          create(:course_discussion_post, :delayed, topic: annotation.discussion_topic, creator: user)
+        end
+        let!(:submission_question) do
+          create(:course_assessment_submission_question,
+                 submission: submission, question: assessment.questions.first, course: course)
+        end
+        let!(:submission_question_post) do
+          create(:course_discussion_post, :delayed, topic: submission_question.discussion_topic, creator: user)
+        end
+        it 'is set as not delayed after publication' do
+          submission.publish!
+          expect(annotation_post.reload.is_delayed).to be(false)
+          expect(submission_question_post.reload.is_delayed).to be(false)
         end
       end
     end
