@@ -12,7 +12,6 @@ class Course::Assessment::Java::JavaProgrammingTestCaseReport <
     # @param [Nokogiri::XML::Element] suite
     def initialize(suite)
       @suite = suite
-      super
     end
 
     # The name of the test suite.
