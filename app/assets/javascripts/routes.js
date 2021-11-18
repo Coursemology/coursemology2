@@ -1197,6 +1197,9 @@ var ROUTES = (function() {
 // fetch_course_user_notifications => /courses/:course_id/user_notifications/fetch(.:format)
   // function(course_id, options)
   fetch_course_user_notifications_path: Utils.route([["course_id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"user_notifications",false],[2,[7,"/",false],[2,[6,"fetch",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]),
+// force_submit_all_course_assessment_submissions => /courses/:course_id/assessments/:assessment_id/submissions/force_submit_all(.:format)
+  // function(course_id, assessment_id, options)
+  force_submit_all_course_assessment_submissions_path: Utils.route([["course_id",true],["assessment_id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"assessments",false],[2,[7,"/",false],[2,[3,"assessment_id",false],[2,[7,"/",false],[2,[6,"submissions",false],[2,[7,"/",false],[2,[6,"force_submit_all",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]]]]]),
 // forum_disbursement_course_users => /courses/:course_id/users/forum_disbursement(.:format)
   // function(course_id, options)
   forum_disbursement_course_users_path: Utils.route([["course_id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"users",false],[2,[7,"/",false],[2,[6,"forum_disbursement",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]),
@@ -1470,6 +1473,9 @@ var ROUTES = (function() {
 // reload_answer_course_assessment_submission => /courses/:course_id/assessments/:assessment_id/submissions/:id/reload_answer(.:format)
   // function(course_id, assessment_id, id, options)
   reload_answer_course_assessment_submission_path: Utils.route([["course_id",true],["assessment_id",true],["id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"assessments",false],[2,[7,"/",false],[2,[3,"assessment_id",false],[2,[7,"/",false],[2,[6,"submissions",false],[2,[7,"/",false],[2,[3,"id",false],[2,[7,"/",false],[2,[6,"reload_answer",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]]]]]]]),
+// remind_course_assessment => /courses/:course_id/assessments/:id/remind(.:format)
+  // function(course_id, id, options)
+  remind_course_assessment_path: Utils.route([["course_id",true],["id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"assessments",false],[2,[7,"/",false],[2,[3,"id",false],[2,[7,"/",false],[2,[6,"remind",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]]]),
 // remind_course_survey => /courses/:course_id/surveys/:id/remind(.:format)
   // function(course_id, id, options)
   remind_course_survey_path: Utils.route([["course_id",true],["id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"surveys",false],[2,[7,"/",false],[2,[3,"id",false],[2,[7,"/",false],[2,[6,"remind",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]]]),
