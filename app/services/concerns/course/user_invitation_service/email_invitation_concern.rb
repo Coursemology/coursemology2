@@ -2,6 +2,7 @@
 
 # This concern deals with the sending of user invitation emails.
 class Course::UserInvitationService; end
+
 module Course::UserInvitationService::EmailInvitationConcern
   extend ActiveSupport::Autoload
 

@@ -18,7 +18,7 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
   #   assigned to the grading.
   def evaluate_answer(answer)
     question = answer.question.actable
-    answer_text_array = answer.normalized_answer_text.downcase.gsub(/([^a-z ])/, ' ').split(' ')
+    answer_text_array = answer.normalized_answer_text.downcase.gsub(/([^a-z ])/, ' ').split
     answer_text_lemma_array = []
     answer_text_array.each { |a| answer_text_lemma_array.push(WordNet::Synset.morphy_all(a).first || a) }
 

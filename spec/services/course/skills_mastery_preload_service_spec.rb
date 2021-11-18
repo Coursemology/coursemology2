@@ -7,8 +7,8 @@ RSpec.describe Course::SkillsMasteryPreloadService, type: :service do
     let!(:course) { create(:course) }
     let!(:course_user) { create(:course_student, course: course) }
     let!(:skill_branch) { create(:course_assessment_skill_branch, course: course) }
-    let!(:skill_1) { create(:course_assessment_skill, skill_branch: skill_branch, course: course) }
-    let!(:skill_2) { create(:course_assessment_skill, skill_branch: skill_branch, course: course) }
+    let!(:skill1) { create(:course_assessment_skill, skill_branch: skill_branch, course: course) }
+    let!(:skill2) { create(:course_assessment_skill, skill_branch: skill_branch, course: course) }
     let!(:assessment) { create(:assessment, :with_all_question_types, course: course) }
     let!(:published_submission) do
       create(:submission, :published, assessment: assessment, course: course, creator: course_user.user)
@@ -16,7 +16,7 @@ RSpec.describe Course::SkillsMasteryPreloadService, type: :service do
 
     before do
       assessment.question_assessments.each do |question_assessment|
-        question_assessment.skills << skill_1
+        question_assessment.skills << skill1
       end
     end
     subject { Course::SkillsMasteryPreloadService.new(course, course_user) }
@@ -29,8 +29,8 @@ RSpec.describe Course::SkillsMasteryPreloadService, type: :service do
 
     describe '#grade' do
       it "returns the sum of student's grades for questions tagged with a skill" do
-        expect(subject.grade(skill_1)).to eq(published_submission.answers.map(&:grade).sum)
-        expect(subject.grade(skill_2)).to eq(0)
+        expect(subject.grade(skill1)).to eq(published_submission.answers.map(&:grade).sum)
+        expect(subject.grade(skill2)).to eq(0)
       end
     end
 

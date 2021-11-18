@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 # This concern includes methods required to parse the invitations data from a form.
 class Instance::UserInvitationService; end
+
 module Instance::UserInvitationService::ParseInvitationConcern
   extend ActiveSupport::Autoload
 
