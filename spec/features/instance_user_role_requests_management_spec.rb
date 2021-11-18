@@ -10,7 +10,7 @@ RSpec.feature 'Instance::UserRoleRequests' do
     before { login_as(user, scope: :user) }
 
     context 'As a normal instance user' do
-      scenario 'I can create a new role request' do
+      scenario 'I can create a new role request', type: :mailer do
         visit courses_path
         click_link I18n.t('course.courses.index.new_role_request')
 

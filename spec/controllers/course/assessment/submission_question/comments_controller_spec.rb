@@ -48,7 +48,7 @@ RSpec.describe Course::Assessment::SubmissionQuestion::CommentsController do
           expect { subject }.to change(Course::Discussion::Post, :count).by(1)
         end
 
-        context 'when other users are subscribed to notifications' do
+        context 'when other users are subscribed to notifications', type: :mailer do
           let!(:subscriber) do
             user = create(:course_manager, course: course).user
             submission_question.acting_as.subscriptions.create!(user: user)
