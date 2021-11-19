@@ -106,7 +106,9 @@ RSpec.configure do |config|
     # show exception that triggers a retry if verbose_retry is set to true
     config.display_try_failure_messages = true
 
-    # run retry only on js feature tests
+    config.default_retry_count = 3
+
+    # run retry on failing tests
     config.around :each, :js do |example|
       example.run_with_retry retry: 3
     end
