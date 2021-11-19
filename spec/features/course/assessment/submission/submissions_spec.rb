@@ -42,8 +42,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         create(:course_group_student, course: course, group: group, course_user: students.sample)
       end
 
-      # NOTE: Works locally but fails in CircleCI
-      pending 'I can view all submissions of an assessment', js: true do
+      scenario 'I can view all submissions of an assessment', js: true do
         phantom_student
         group_student
         visit course_assessment_submissions_path(course, assessment)
@@ -96,8 +95,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
       end
       let(:user) { create(:course_manager, course: course).user }
 
-      # NOTE: Works locally but fails in CircleCI
-      pending 'I can publish all graded exams', js: true do
+      scenario 'I can publish all graded exams', js: true do
         visit course_assessment_submissions_path(course, assessment)
         find('#students-tab').click
 
@@ -115,8 +113,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         expect(graded_submission.points_awarded).not_to be_nil
       end
 
-      # NOTE: Works locally but fails in CircleCI
-      pending 'I can unsubmit all submissions', js: true do
+      scenario 'I can unsubmit all submissions', js: true do
         visit course_assessment_submissions_path(course, assessment)
 
         find('#students-tab').click
@@ -132,8 +129,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         expect(page).not_to have_css('.unsubmit-submissions-enabled')
       end
 
-      # NOTE: Works locally but fails in CircleCI
-      pending 'I can delete all submissions', js: true do
+      scenario 'I can delete all submissions', js: true do
         visit course_assessment_submissions_path(course, assessment)
 
         find('#students-tab').click
