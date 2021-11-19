@@ -38,7 +38,7 @@ FactoryBot.define do
       submitted
       after(:build) do |submission, evaluator|
         submission.answers.each do |answer|
-          answer.grade = Random::DEFAULT.rand(answer.question.maximum_grade)
+          answer.grade = Random.new.rand(answer.question.maximum_grade)
           answer.grader = evaluator.grader
         end
 

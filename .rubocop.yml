@@ -27,6 +27,9 @@ Layout/FirstHashElementIndentation:
 Layout/LineLength:
   Max: 120
 
+Lint/ConstantDefinitionInBlock:
+  Enabled: false
+
 Metrics/AbcSize:
   Max: 20
 

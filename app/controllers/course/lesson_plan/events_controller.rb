@@ -7,7 +7,7 @@ class Course::LessonPlan::EventsController < Course::LessonPlan::Controller
   load_and_authorize_resource :event, class: Course::LessonPlan::Event.name, through: :course,
                                       through_association: :lesson_plan_events, except: [:new, :create]
 
-  def create #:nodoc:
+  def create # :nodoc:
     if @event.save
       render partial: 'event_lesson_plan_item', locals: { item: @event }
     else
@@ -15,7 +15,7 @@ class Course::LessonPlan::EventsController < Course::LessonPlan::Controller
     end
   end
 
-  def update #:nodoc:
+  def update # :nodoc:
     if @event.update(event_params)
       render partial: 'event_lesson_plan_item', locals: { item: @event }
     else
@@ -23,7 +23,7 @@ class Course::LessonPlan::EventsController < Course::LessonPlan::Controller
     end
   end
 
-  def destroy #:nodoc:
+  def destroy # :nodoc:
     if @event.destroy
       head :ok
     else
@@ -33,7 +33,7 @@ class Course::LessonPlan::EventsController < Course::LessonPlan::Controller
 
   private
 
-  def event_params #:nodoc:
+  def event_params # :nodoc:
     params.require(:lesson_plan_event).
       permit(:event_type, :title, :description, :location, :start_at, :end_at, :published)
   end

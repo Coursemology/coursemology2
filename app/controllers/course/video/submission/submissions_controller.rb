@@ -34,7 +34,7 @@ class Course::Video::Submission::SubmissionsController < Course::Video::Submissi
 
     @topics = @video.topics.includes(posts: :children).order(:timestamp)
     @topics = @topics.reject { |topic| topic.posts.empty? }
-    @posts = @topics.map(&:posts).inject(Course::Discussion::Post.none, :+)
+    @posts = @topics.map(&:posts).reduce(Course::Discussion::Post.none, :+)
     set_seek_and_scroll
     set_monitoring
   rescue CanCan::AccessDenied
