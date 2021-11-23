@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactTooltip from 'react-tooltip';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import {
@@ -50,6 +51,10 @@ export default class SubmissionsTable extends React.Component {
     };
   }
 
+  componentDidUpdate() {
+    ReactTooltip.rebuild();
+  }
+
   canDownloadStatistics = () => {
     const { submissions } = this.props;
     return (
@@ -86,7 +91,7 @@ export default class SubmissionsTable extends React.Component {
     );
   }
 
-  renderUsers() {
+  renderRowUsers() {
     const {
       dispatch,
       courseId,
@@ -118,6 +123,28 @@ export default class SubmissionsTable extends React.Component {
       />
     ));
   }
+
+  renderRowTooltips = () => {
+    const tooltipIds = [
+      'phantom-user',
+      'unpublished-grades',
+      'access-logs',
+      'unsubmit-button',
+      'delete-button',
+    ];
+    const formattedMessages = [
+      submissionsTranslations.phantom,
+      submissionsTranslations.publishNotice,
+      submissionsTranslations.accessLogs,
+      submissionsTranslations.unsubmitSubmission,
+      submissionsTranslations.deleteSubmission,
+    ];
+    return tooltipIds.map((tooltipId, index) => (
+      <ReactTooltip key={tooltipId} id={tooltipId} effect="solid">
+        <FormattedMessage {...formattedMessages[index]} />
+      </ReactTooltip>
+    ));
+  };
 
   renderUnsubmitAllConfirmation() {
     const { handleUnsubmitAll, confirmDialogValue } = this.props;
@@ -271,7 +298,7 @@ export default class SubmissionsTable extends React.Component {
   }
 
   render() {
-    const { submissions, assessment } = this.props;
+    const { assessment } = this.props;
 
     const tableHeaderColumnFor = (field) => (
       <TableHeaderColumn style={styles.tableCell}>
@@ -288,30 +315,33 @@ export default class SubmissionsTable extends React.Component {
     );
 
     return (
-      <Table selectable={false}>
-        <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
-          <TableRow>
-            {tableHeaderColumnFor('userName')}
-            {tableHeaderCenterColumnFor('submissionStatus')}
-            {tableHeaderCenterColumnFor('grade')}
-            {assessment.gamified
-              ? tableHeaderCenterColumnFor('experiencePoints')
-              : null}
-            {tableHeaderCenterColumnFor('dateSubmitted')}
-            {tableHeaderCenterColumnFor('dateGraded')}
-            <TableHeaderColumn
-              style={{ ...styles.tableCell, ...styles.tableCenterCell }}
-            >
-              {this.renderDownloadDropdown()}
-              {this.renderUnsubmitAllConfirmation()}
-              {this.renderDeleteAllConfirmation()}
-            </TableHeaderColumn>
-          </TableRow>
-        </TableHeader>
-        <TableBody displayRowCheckbox={false}>
-          {this.renderUsers(submissions)}
-        </TableBody>
-      </Table>
+      <>
+        <Table selectable={false}>
+          <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+            <TableRow>
+              {tableHeaderColumnFor('userName')}
+              {tableHeaderCenterColumnFor('submissionStatus')}
+              {tableHeaderCenterColumnFor('grade')}
+              {assessment.gamified
+                ? tableHeaderCenterColumnFor('experiencePoints')
+                : null}
+              {tableHeaderCenterColumnFor('dateSubmitted')}
+              {tableHeaderCenterColumnFor('dateGraded')}
+              <TableHeaderColumn
+                style={{ ...styles.tableCell, ...styles.tableCenterCell }}
+              >
+                {this.renderDownloadDropdown()}
+                {this.renderUnsubmitAllConfirmation()}
+                {this.renderDeleteAllConfirmation()}
+              </TableHeaderColumn>
+            </TableRow>
+          </TableHeader>
+          <TableBody displayRowCheckbox={false}>
+            {this.renderRowUsers()}
+          </TableBody>
+        </Table>
+        {this.renderRowTooltips()}
+      </>
     );
   }
 }
