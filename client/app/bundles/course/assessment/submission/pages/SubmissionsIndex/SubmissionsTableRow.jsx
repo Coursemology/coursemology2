@@ -214,17 +214,17 @@ export default class SubmissionsTableRow extends React.Component {
     return (
       <span
         className="unsubmit-button"
-        data-for={`unsubmit-button-${submission.id}`}
+        data-for={`unsubmit-button-${submission.courseUser.id}`}
         data-tip
       >
         <IconButton
-          id={`unsubmit-button-${submission.id}`}
+          id={`unsubmit-button-${submission.courseUser.id}`}
           onClick={() => this.setState({ unsubmitConfirmation: true })}
           disabled={disabled}
         >
           <RemoveCircle color={pink600} />
         </IconButton>
-        <ReactTooltip id={`unsubmit-button-${submission.id}`} effect="solid">
+        <ReactTooltip id={`unsubmit-button-${submission.courseUser.id}`} effect="solid">
           <FormattedMessage {...submissionsTranslations.unsubmitSubmission} />
         </ReactTooltip>
       </span>
@@ -274,17 +274,17 @@ export default class SubmissionsTableRow extends React.Component {
     return (
       <span
         className="delete-button"
-        data-for={`delete-button-${submission.id}`}
+        data-for={`delete-button-${submission.courseUser.id}`}
         data-tip
       >
         <IconButton
-          id={`delete-button-${submission.id}`}
+          id={`delete-button-${submission.courseUser.id}`}
           onClick={() => this.setState({ deleteConfirmation: true })}
           disabled={disabled}
         >
           <DeleteIcon color={red900} />
         </IconButton>
-        <ReactTooltip id={`delete-button-${submission.id}`} effect="solid">
+        <ReactTooltip id={`delete-button-${submission.courseUser.id}`} effect="solid">
           <FormattedMessage {...submissionsTranslations.deleteSubmission} />
         </ReactTooltip>
       </span>
