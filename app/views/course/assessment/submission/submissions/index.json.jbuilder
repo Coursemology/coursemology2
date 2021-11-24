@@ -34,8 +34,8 @@ json.submissions @course_users do |course_user|
     json.workflowState submission.workflow_state
     json.grade submission.grade.to_f
     json.pointsAwarded submission.current_points_awarded
-    json.dateSubmitted submission.submitted_at
-    json.dateGraded submission.graded_at
+    json.dateSubmitted submission.submitted_at&.iso8601
+    json.dateGraded submission.graded_at&.iso8601
     json.logCount submission.log_count
   else
     json.workflowState 'unstarted'

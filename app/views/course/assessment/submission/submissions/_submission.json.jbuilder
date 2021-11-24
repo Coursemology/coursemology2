@@ -24,14 +24,14 @@ json.submission do
   submitter_course_user = submission.creator.course_users.find_by(course: submission.assessment.course)
   end_at = assessment.time_for(submitter_course_user).end_at
   bonus_end_at = assessment.time_for(submitter_course_user).bonus_end_at
-  json.bonusEndAt bonus_end_at
-  json.dueAt end_at
-  json.attemptedAt submission.created_at
-  json.submittedAt submission.submitted_at
+  json.bonusEndAt bonus_end_at&.iso8601
+  json.dueAt end_at&.iso8601
+  json.attemptedAt submission.created_at&.iso8601
+  json.submittedAt submission.submitted_at&.iso8601
   if ['graded', 'published'].include? apparent_workflow_state
     # Display the published time first, else show the graded time if available.
     # For showing timestamps from delayed grade publication.
-    json.gradedAt submission.published_at || submission.graded_at
+    json.gradedAt submission.published_at&.iso8601 || submission.graded_at&.iso8601
     json.grader display_user(submission.publisher) if apparent_workflow_state == 'published'
     json.grade submission.grade.to_f
   end
@@ -41,7 +41,7 @@ json.submission do
   json.showStdoutAndStderr current_course.show_stdout_and_stderr
 
   json.late end_at && submission.submitted_at &&
-            submission.submitted_at > end_at
+            submission.submitted_at.iso8601 > end_at
 
   json.basePoints assessment.base_exp
   json.bonusPoints assessment.time_bonus_exp
