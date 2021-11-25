@@ -35,6 +35,17 @@ class Course::Assessment::Answer::ForumPostResponse < ApplicationRecord
     end
   end
 
+  def compare_answer(other_answer)
+    same_text = answer_text == other_answer.answer_text
+    same_post_packs_length = post_packs.length == other_answer.post_packs.length
+
+    post_packs = self.post_packs.map { |elem| elem.attributes.except('id', 'answer_id').values.join('_') }
+    other_post_packs = other_answer.post_packs.map { |elem| elem.attributes.except('id', 'answer_id').values.join('_') }
+
+    same_post_packs = Set.new(post_packs) == Set.new(other_post_packs)
+    same_text && same_post_packs_length && same_post_packs
+  end
+
   private
 
   def destroy_previous_selection

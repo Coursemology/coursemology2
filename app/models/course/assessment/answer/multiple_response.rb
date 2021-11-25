@@ -26,4 +26,8 @@ class Course::Assessment::Answer::MultipleResponse < ApplicationRecord
 
     self.random_seed
   end
+
+  def compare_answer(other_answer)
+    Set.new(option_ids) == Set.new(other_answer.option_ids)
+  end
 end

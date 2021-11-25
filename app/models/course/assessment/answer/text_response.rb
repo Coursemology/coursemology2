@@ -49,6 +49,16 @@ class Course::Assessment::Answer::TextResponse < ApplicationRecord
     self.files = params[:files] if params[:files]
   end
 
+  def compare_answer(other_answer)
+    same_text = answer_text == other_answer.answer_text
+    same_attachment_length = attachments.length == other_answer.attachments.length
+    answer_filename_attachment = attachments.pluck(:name, :attachment_id).map { |elem| elem.join('#') }
+    other_answer_filename_content = other_answer.attachments.pluck(:name, :attachment_id).map { |elem| elem.join('#') }
+
+    same_attachment = Set.new(answer_filename_attachment) == Set.new(other_answer_filename_content)
+    same_text && same_attachment_length && same_attachment
+  end
+
   private
 
   def set_default
