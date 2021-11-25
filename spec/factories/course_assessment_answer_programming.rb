@@ -7,6 +7,7 @@ FactoryBot.define do
       question_traits { nil }
       file_count { nil }
       file_contents { nil }
+      file_name_contents { nil }
       creator { create(:user) }
     end
 
@@ -26,6 +27,11 @@ FactoryBot.define do
       elsif file_contents
         file_contents.map do |content|
           build(:course_assessment_answer_programming_file, answer: nil, content: content)
+        end
+      elsif file_name_contents
+        file_name_contents.map do |name_content|
+          build(:course_assessment_answer_programming_file, answer: nil, filename: name_content[0],
+                                                            content: name_content[1])
         end
       else
         []
