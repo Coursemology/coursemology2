@@ -54,7 +54,7 @@ RSpec.describe Course::Assessment::Answer::Programming do
     describe 'attempting_times_left' do
       subject { answer.attempting_times_left }
 
-      context 'with one exiting attempts' do
+      context 'with one existing attempts' do
         let!(:graded_answer) do
           create(:course_assessment_answer_programming, :graded,
                  submission: submission, question: question.question)
@@ -73,6 +73,53 @@ RSpec.describe Course::Assessment::Answer::Programming do
 
         it 'returns the max attempt limits' do
           expect(subject).to eq(answer.class::MAX_ATTEMPTING_TIMES)
+        end
+      end
+
+      describe '#compare_answer' do
+        let(:answer1) do
+          create(:course_assessment_answer_programming,
+                 question: question,
+                 file_name_contents: [['name1', '123'],
+                                      ['name3', '456']])
+        end
+        let(:answer2) do
+          create(:course_assessment_answer_programming,
+                 question: question,
+                 file_name_contents: [['name1', '456']])
+        end
+        let(:answer3) do
+          create(:course_assessment_answer_programming,
+                 question: question,
+                 file_name_contents: [['name1', '123'],
+                                      ['name2', '456']])
+        end
+        let(:answer4) do
+          create(:course_assessment_answer_programming,
+                 question: question,
+                 file_name_contents: [['name1', '123'],
+                                      ['name2', '123'],
+                                      ['name3', '456']])
+        end
+        let(:answer5) do
+          create(:course_assessment_answer_programming,
+                 question: question,
+                 file_name_contents: [['name3', '456'],
+                                      ['name1', '123']])
+        end
+
+        it 'compares if the answers are the same or not' do
+          expect(answer1.compare_answer(answer1)).to be_truthy
+          expect(answer1.compare_answer(answer2)).to be_falsey
+          expect(answer1.compare_answer(answer3)).to be_falsey
+          expect(answer1.compare_answer(answer4)).to be_falsey
+          expect(answer1.compare_answer(answer5)).to be_truthy
+          expect(answer2.compare_answer(answer3)).to be_falsey
+          expect(answer2.compare_answer(answer4)).to be_falsey
+          expect(answer2.compare_answer(answer5)).to be_falsey
+          expect(answer3.compare_answer(answer4)).to be_falsey
+          expect(answer3.compare_answer(answer5)).to be_falsey
+          expect(answer4.compare_answer(answer5)).to be_falsey
         end
       end
     end

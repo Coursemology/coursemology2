@@ -27,5 +27,27 @@ RSpec.describe Course::Assessment::Answer::MultipleResponse do
         expect(subject).to be_a(Course::Assessment::Answer)
       end
     end
+
+    describe '#compare_answer' do
+      let(:assessment) { create(:assessment, :published_with_mrq_question) }
+      let(:question) { assessment.questions.first }
+      let(:answer1) do
+        create(:course_assessment_answer_multiple_response, :with_all_correct_options,
+               assessment: assessment, question: question)
+      end
+      let(:answer2) do
+        create(:course_assessment_answer_multiple_response, :with_all_wrong_options,
+               assessment: assessment, question: question)
+      end
+      let(:answer3) do
+        create(:course_assessment_answer_multiple_response, :with_all_correct_options,
+               assessment: assessment, question: question)
+      end
+
+      it 'compares if answers are the same or not' do
+        expect(answer1.compare_answer(answer2)).to be_falsey
+        expect(answer1.compare_answer(answer3)).to be_truthy
+      end
+    end
   end
 end
