@@ -13,9 +13,11 @@ class Course::Assessment::Question::Scribing < ApplicationRecord
     self.attachment = duplicator.duplicate(other.attachment)
   end
 
-  # Scribing is not autogradable, don't need last attempt
-  def attempt(submission, _last_attempt = nil)
+  def attempt(submission, last_attempt = nil)
     answer = Course::Assessment::Answer::Scribing.new(submission: submission, question: question)
+    last_attempt&.scribbles&.each do |scribble|
+      answer.scribbles.build(content: scribble.content)
+    end
     answer.acting_as
   end
 
