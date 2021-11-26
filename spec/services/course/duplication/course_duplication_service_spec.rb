@@ -5,7 +5,7 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
     let(:admin) { create(:administrator) }
-    let(:course) { create(:course) }
+    let(:course) { create(:course, :with_logo) }
     let(:time_shift) { 3.days }
     let(:new_course) do
       options = {
@@ -20,6 +20,10 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
     let!(:survey) { create(:survey, course: course) }
 
     describe '#duplicate_course' do
+      it 'duplicates the logo' do
+        expect(File.exist?(File.join(Rails.root, 'public', new_course.logo.url))).to be true
+      end
+
       context 'when saving fails' do
         let!(:invalid_event) do
           create(:course_lesson_plan_event, course: course).tap do |event|

@@ -44,5 +44,9 @@ FactoryBot.define do
         course.allow_mrq_options_randomization = true
       end
     end
+
+    trait :with_logo do
+      logo { Rack::Test::UploadedFile.new(File.join(Rails.root, 'spec', 'support', 'minion.png')) }
+    end
   end
 end
