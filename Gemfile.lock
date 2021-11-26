@@ -306,7 +306,7 @@ GEM
     image_size (2.1.0)
     in_threads (1.5.4)
     ipaddress (0.8.3)
-    jbuilder (2.10.1)
+    jbuilder (2.11.3)
       activesupport (>= 5.0.0)
     jmespath (1.4.0)
     jquery-rails (4.4.0)
