@@ -36,6 +36,16 @@ RSpec.describe Course::Survey, type: :model do
       end
     end
 
+    it 'implements #permitted_for!' do
+      expect(subject).to respond_to(:permitted_for!)
+      expect { subject.permitted_for!(user) }.to_not raise_error
+    end
+
+    it 'implements #precluded_for!' do
+      expect(subject).to respond_to(:precluded_for!)
+      expect { subject.precluded_for!(user) }.to_not raise_error
+    end
+
     describe '#satisfiable?' do
       context 'when survey is published' do
         let(:survey_traits) { :published }
