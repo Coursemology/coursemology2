@@ -237,7 +237,7 @@ class VisibleSubmissionsIndex extends React.Component {
         inkBarStyle={{ backgroundColor: blue500, height: 5, marginTop: -5 }}
         tabItemContainerStyle={{ backgroundColor: grey100 }}
       >
-        {filteredSubmissions.myStudentSubmissions.length > 0 ? (
+        {filteredSubmissions.myStudentAllSubmissions.length > 0 ? (
           <Tab
             id="my-students-tab"
             buttonStyle={{ color: blue500 }}
@@ -397,17 +397,15 @@ class VisibleSubmissionsIndex extends React.Component {
     if (isLoading) {
       return <LoadingIndicator />;
     }
-
+    const myStudentAllSubmissions = submissions.filter(
+      (s) => s.courseUser.isStudent && s.courseUser.myStudent,
+    );
+    const myStudentNormalSubmissions = myStudentAllSubmissions.filter(
+      (s) => !s.courseUser.phantom,
+    );
     const myStudentSubmissions = includePhantoms
-      ? submissions.filter(
-          (s) => s.courseUser.isStudent && s.courseUser.myStudent,
-        )
-      : submissions.filter(
-          (s) =>
-            s.courseUser.isStudent &&
-            s.courseUser.myStudent &&
-            !s.courseUser.phantom,
-        );
+      ? myStudentAllSubmissions
+      : myStudentNormalSubmissions;
     const studentSubmissions = includePhantoms
       ? submissions.filter((s) => s.courseUser.isStudent)
       : submissions.filter(
@@ -419,6 +417,7 @@ class VisibleSubmissionsIndex extends React.Component {
           (s) => !s.courseUser.isStudent && !s.courseUser.phantom,
         );
     const filteredSubmissions = {
+      myStudentAllSubmissions,
       myStudentSubmissions,
       studentSubmissions,
       staffSubmissions,
