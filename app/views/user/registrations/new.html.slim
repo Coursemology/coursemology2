@@ -17,6 +17,9 @@
               hint: (t('.password_hint', length: @minimum_password_length) if @validatable)
     = f.input :password_confirmation, required: true
 
+  = recaptcha_tags
+  br
+
   .form-actions
     = f.button :submit, t('.sign_up')
 
