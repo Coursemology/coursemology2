@@ -97,6 +97,9 @@ group :development do
 
   # Gem to generate favicon
   gem 'rails_real_favicon'
+
+  # Page profiler
+  gem 'rack-mini-profiler'
 end
 
 group :test do
