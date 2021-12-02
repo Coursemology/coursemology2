@@ -91,7 +91,7 @@ class Course::Assessment::Submission < ApplicationRecord
   accepts_nested_attributes_for :answers
 
   # @!attribute [r] graded_at
-  #   Gets the time the submission was graded.
+  #   Returns the time the submission was graded.
   #   @return [Time]
   calculated :graded_at, (lambda do
     Course::Assessment::Answer.unscope(:order).
@@ -104,6 +104,15 @@ class Course::Assessment::Submission < ApplicationRecord
   calculated :log_count, (lambda do
     Course::Assessment::Submission::Log.select("count('*')").
       where('course_assessment_submission_logs.submission_id = course_assessment_submissions.id')
+  end)
+
+  # @!attribute [r] grade
+  #   Returns the total grade of the submissions.
+  calculated :grade, (lambda do
+    Course::Assessment::Answer.unscope(:order).
+      where('course_assessment_answers.submission_id = course_assessment_submissions.id
+             AND course_assessment_answers.current_answer = true').
+      select('sum(course_assessment_answers.grade)')
   end)
 
   # @!method self.by_user(user)
@@ -186,11 +195,6 @@ class Course::Assessment::Submission < ApplicationRecord
 
   def unsubmitting?
     !!@unsubmitting
-  end
-
-  # The total grade of the submission
-  def grade
-    current_answers.map { |a| a.grade || 0 }.sum
   end
 
   def questions

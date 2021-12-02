@@ -20,8 +20,8 @@ class Course::Assessment::Submission::StatisticsDownloadService
   def generate_csv_report
     submissions = Course::Assessment::Submission.
                   where(id: @submission_ids).
-                  calculated(:log_count, :graded_at).
-                  includes(:course_user, :answers, :publisher)
+                  calculated(:log_count, :graded_at, :grade).
+                  includes(:course_user, :publisher)
     assessment = submissions&.first&.assessment&.calculated(:maximum_grade)
     statistics_file_path = File.join(@base_dir, 'statistics.csv')
     CSV.open(statistics_file_path, 'w') do |csv|
@@ -60,7 +60,7 @@ class Course::Assessment::Submission::StatisticsDownloadService
     csv << [submission.course_user.name,
             submission.course_user.phantom?,
             submission.workflow_state,
-            submission.grade,
+            submission.grade.to_f,
             assessment.maximum_grade,
             csv_exp_points(submission),
             csv_created_at(submission),
