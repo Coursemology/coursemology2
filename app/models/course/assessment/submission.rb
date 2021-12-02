@@ -208,16 +208,21 @@ class Course::Assessment::Submission < ApplicationRecord
   end
 
   # The answers with current_answer flag set to true, filtering out orphaned answers to questions which are no longer
-  # assigned to the submission.
+  # assigned to the submission for randomized assessment.
   #
   # If there are multiple current_answers for a particular question, return the first one.
   # This guards against a race condition creating multiple current_answers for a given
   # question in load_or_create_answers.
   def current_answers
-    # Can't do filtering in AR because `answer` may not be persisted, and AR is dumb.
-    question_ids = questions.pluck(:id)
-    answers.select { |answer| answer.question_id.in? question_ids }.
-      select(&:current_answer?).group_by(&:question_id).map { |pair| pair[1].first }
+    if assessment.randomization.nil?
+      # Filtering by question ids is not needed for non-randomized assessment as it adds more query time.
+      filtered_answers = answers
+    else
+      # Can't do filtering in AR because `answer` may not be persisted, and AR is dumb.
+      question_ids = questions.pluck(:id)
+      filtered_answers = answers.select { |answer| answer.question_id.in? question_ids }
+    end
+    filtered_answers.select(&:current_answer?).group_by(&:question_id).map { |pair| pair[1].first }
   end
 
   # @return [Array<Course::Assessment::Answer>] Current answers to programming questions

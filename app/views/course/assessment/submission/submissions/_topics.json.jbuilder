@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-json.topics submission.submission_questions.where(question: submission.questions) do |submission_question|
+json.topics submission_questions do |submission_question|
   topic = submission_question.discussion_topic
   json.id topic.id
   json.submissionQuestionId submission_question.id
@@ -7,7 +7,9 @@ json.topics submission.submission_questions.where(question: submission.questions
   json.postIds topic.post_ids
 end
 
-programming_answers = submission.answers.where(question: submission.questions).select do |answer|
+programming_answers = submission.answers.where(question: submission.questions).
+                      includes(actable: { files: { annotations: { discussion_topic: :posts } } }).
+                      select do |answer|
   answer.actable_type == Course::Assessment::Answer::Programming.name
 end.map(&:specific)
 
@@ -21,7 +23,7 @@ json.annotations programming_answers.flat_map(&:files) do |file|
   end
 end
 
-posts = submission.submission_questions.where(question: submission.questions).map(&:discussion_topic).flat_map(&:posts)
+posts = submission_questions.map(&:discussion_topic).flat_map(&:posts)
 posts += programming_answers.flat_map(&:files).flat_map(&:annotations).map(&:discussion_topic).flat_map(&:posts)
 
 json.posts posts do |post|
