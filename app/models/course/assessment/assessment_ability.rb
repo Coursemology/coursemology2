@@ -124,6 +124,7 @@ module Course::Assessment::AssessmentAbility
     allow_teaching_staff_manage_assessment_annotations
     allow_managers_manage_tab_and_categories
     allow_manager_publish_assessment_submission_grades
+    allow_manager_force_submit_assessment_submissions
     allow_manager_delete_assessment_submission
   end
 
@@ -191,6 +192,13 @@ module Course::Assessment::AssessmentAbility
   def allow_manager_publish_assessment_submission_grades
     cannot :publish_grades, Course::Assessment, assessment_course_staff_hash
     can :publish_grades, Course::Assessment, course_managers_hash
+  end
+
+  # Only managers are allowed to force submit assessment submissions
+  # Teaching assistants have all assessment abilities except :force_submit_submission
+  def allow_manager_force_submit_assessment_submissions
+    cannot :force_submit_assessment_submission, Course::Assessment, assessment_course_staff_hash
+    can :force_submit_assessment_submission, Course::Assessment, course_managers_hash
   end
 
   # Only managers and above are allowed to delete assessment submissions

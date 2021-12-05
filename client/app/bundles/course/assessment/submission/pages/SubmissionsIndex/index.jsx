@@ -27,6 +27,7 @@ import NotificationBar, {
 import {
   fetchSubmissions,
   publishSubmissions,
+  forceSubmitSubmissions,
   downloadSubmissions,
   downloadStatistics,
   unsubmitAllSubmissions,
@@ -34,7 +35,11 @@ import {
 } from '../../actions/submissions';
 import SubmissionsTable from './SubmissionsTable';
 import { assessmentShape } from '../../propTypes';
-import { workflowStates } from '../../constants';
+import {
+  workflowStates,
+  selectedUserType,
+  selectedUserTypeDisplay,
+} from '../../constants';
 import translations from '../../translations';
 import submissionsTranslations from './translations';
 
@@ -56,10 +61,25 @@ const styles = {
 };
 
 class VisibleSubmissionsIndex extends React.Component {
+  static canPublish(shownSubmissions) {
+    return shownSubmissions.some(
+      (s) => s.workflowState === workflowStates.Graded,
+    );
+  }
+
+  static canForceSubmit(shownSubmissions) {
+    return shownSubmissions.some(
+      (s) =>
+        s.workflowState === workflowStates.Unstarted ||
+        s.workflowState === workflowStates.Attempting,
+    );
+  }
+
   constructor(props) {
     super(props);
     this.state = {
       publishConfirmation: false,
+      forceSubmitConfirmation: false,
       includePhantoms: false,
       tab: 'my-students-tab',
     };
@@ -83,34 +103,10 @@ class VisibleSubmissionsIndex extends React.Component {
     }
   }
 
-  canPublish() {
-    const { submissions } = this.props;
-    return submissions.some((s) => s.workflowState === workflowStates.Graded);
-  }
-
-  renderHistogram() {
-    const { submissions } = this.props;
-    const { includePhantoms, tab } = this.state;
+  renderHistogram(submissionHistogram) {
+    const { includePhantoms } = this.state;
     const workflowStatesArray = Object.values(workflowStates);
-    const myStudentSubmissions = submissions.filter(
-      (s) => s.courseUser.isStudent && s.courseUser.myStudent,
-    );
-    const studentSubmissions = submissions.filter(
-      (s) => s.courseUser.isStudent,
-    );
-    const staffSubmissions = submissions.filter((s) => !s.courseUser.isStudent);
-    let submissionHistogram;
-    switch (tab) {
-      case 'staff-tab':
-        submissionHistogram = staffSubmissions;
-        break;
-      case 'my-students-tab':
-        submissionHistogram = myStudentSubmissions;
-        break;
-      case 'students-tab':
-      default:
-        submissionHistogram = studentSubmissions;
-    }
+
     const initialCounts = workflowStatesArray.reduce(
       (counts, w) => ({ ...counts, [w]: 0 }),
       {},
@@ -152,16 +148,20 @@ class VisibleSubmissionsIndex extends React.Component {
     );
   }
 
-  renderHeader() {
+  renderHeader(shownSubmissions) {
     const {
-      assessment: { title },
+      assessment: { title, canPublishGrades, canForceSubmit },
       isPublishing,
+      isForceSubmitting,
     } = this.props;
     const { includePhantoms } = this.state;
+
     return (
       <Card style={{ marginBottom: 20 }}>
         <CardHeader title={<h3>{title}</h3>} subtitle="Submissions" />
-        <CardText style={{ paddingTop: 0 }}>{this.renderHistogram()}</CardText>
+        <CardText style={{ paddingTop: 0 }}>
+          {this.renderHistogram(shownSubmissions)}
+        </CardText>
         <CardActions>
           <Toggle
             className="toggle-phantom"
@@ -174,61 +174,53 @@ class VisibleSubmissionsIndex extends React.Component {
               this.setState({ includePhantoms: !includePhantoms })
             }
           />
-          <FlatButton
-            disabled={isPublishing || !this.canPublish()}
-            secondary
-            label={
-              <FormattedMessage {...submissionsTranslations.publishGrades} />
-            }
-            labelPosition="before"
-            icon={isPublishing ? <CircularProgress size={24} /> : null}
-            onClick={() => this.setState({ publishConfirmation: true })}
-          />
+          {canPublishGrades && (
+            <FlatButton
+              disabled={
+                isPublishing ||
+                isForceSubmitting ||
+                !VisibleSubmissionsIndex.canPublish(shownSubmissions)
+              }
+              secondary
+              label={
+                <FormattedMessage {...submissionsTranslations.publishGrades} />
+              }
+              labelPosition="before"
+              icon={isPublishing ? <CircularProgress size={24} /> : null}
+              onClick={() => this.setState({ publishConfirmation: true })}
+            />
+          )}
+          {canForceSubmit && (
+            <FlatButton
+              disabled={
+                isForceSubmitting ||
+                isPublishing ||
+                !VisibleSubmissionsIndex.canForceSubmit(shownSubmissions)
+              }
+              secondary
+              label={
+                <FormattedMessage {...submissionsTranslations.forceSubmit} />
+              }
+              labelPosition="before"
+              icon={isForceSubmitting ? <CircularProgress size={24} /> : null}
+              onClick={() => this.setState({ forceSubmitConfirmation: true })}
+            />
+          )}
         </CardActions>
       </Card>
     );
   }
 
-  renderTabs() {
+  renderTabs(filteredSubmissions, handleParams) {
     const { courseId, assessmentId } = this.props.match.params;
     const {
       dispatch,
-      submissions,
       assessment,
       isDownloading,
       isStatisticsDownloading,
       isUnsubmitting,
       isDeleting,
     } = this.props;
-    const { includePhantoms } = this.state;
-    const myStudentSubmissions = includePhantoms
-      ? submissions.filter(
-          (s) => s.courseUser.isStudent && s.courseUser.myStudent,
-        )
-      : submissions.filter(
-          (s) =>
-            s.courseUser.isStudent &&
-            s.courseUser.myStudent &&
-            !s.courseUser.phantom,
-        );
-    const studentSubmissions = includePhantoms
-      ? submissions.filter((s) => s.courseUser.isStudent)
-      : submissions.filter(
-          (s) => s.courseUser.isStudent && !s.courseUser.phantom,
-        );
-    const staffSubmissions = includePhantoms
-      ? submissions.filter((s) => !s.courseUser.isStudent)
-      : submissions.filter(
-          (s) => !s.courseUser.isStudent && !s.courseUser.phantom,
-        );
-
-    const handleMyStudentsParams = includePhantoms
-      ? 'my_students_w_phantom'
-      : 'my_students';
-    const handleStudentsParams = includePhantoms
-      ? 'students_w_phantom'
-      : 'students';
-    const handleStaffsParams = includePhantoms ? 'staff_w_phantom' : 'staff';
 
     const props = {
       dispatch,
@@ -245,7 +237,7 @@ class VisibleSubmissionsIndex extends React.Component {
         inkBarStyle={{ backgroundColor: blue500, height: 5, marginTop: -5 }}
         tabItemContainerStyle={{ backgroundColor: grey100 }}
       >
-        {myStudentSubmissions.length > 0 ? (
+        {filteredSubmissions.myStudentAllSubmissions.length > 0 ? (
           <Tab
             id="my-students-tab"
             buttonStyle={{ color: blue500 }}
@@ -254,18 +246,26 @@ class VisibleSubmissionsIndex extends React.Component {
             onActive={() => this.setState({ tab: 'my-students-tab' })}
           >
             <SubmissionsTable
-              submissions={myStudentSubmissions}
+              submissions={filteredSubmissions.myStudentSubmissions}
               handleDownload={() =>
-                dispatch(downloadSubmissions(handleMyStudentsParams))
+                dispatch(
+                  downloadSubmissions(handleParams.handleMyStudentsParams),
+                )
               }
               handleDownloadStatistics={() =>
-                dispatch(downloadStatistics(handleMyStudentsParams))
+                dispatch(
+                  downloadStatistics(handleParams.handleMyStudentsParams),
+                )
               }
               handleUnsubmitAll={() =>
-                dispatch(unsubmitAllSubmissions(handleMyStudentsParams))
+                dispatch(
+                  unsubmitAllSubmissions(handleParams.handleMyStudentsParams),
+                )
               }
               handleDeleteAll={() =>
-                dispatch(deleteAllSubmissions(handleMyStudentsParams))
+                dispatch(
+                  deleteAllSubmissions(handleParams.handleMyStudentsParams),
+                )
               }
               confirmDialogValue="your students"
               {...props}
@@ -280,18 +280,20 @@ class VisibleSubmissionsIndex extends React.Component {
           onActive={() => this.setState({ tab: 'students-tab' })}
         >
           <SubmissionsTable
-            submissions={studentSubmissions}
+            submissions={filteredSubmissions.studentSubmissions}
             handleDownload={() =>
-              dispatch(downloadSubmissions(handleStudentsParams))
+              dispatch(downloadSubmissions(handleParams.handleStudentsParams))
             }
             handleDownloadStatistics={() =>
-              dispatch(downloadStatistics(handleStudentsParams))
+              dispatch(downloadStatistics(handleParams.handleStudentsParams))
             }
             handleUnsubmitAll={() =>
-              dispatch(unsubmitAllSubmissions(handleStudentsParams))
+              dispatch(
+                unsubmitAllSubmissions(handleParams.handleStudentsParams),
+              )
             }
             handleDeleteAll={() =>
-              dispatch(deleteAllSubmissions(handleStudentsParams))
+              dispatch(deleteAllSubmissions(handleParams.handleStudentsParams))
             }
             confirmDialogValue="students"
             {...props}
@@ -305,18 +307,18 @@ class VisibleSubmissionsIndex extends React.Component {
           onActive={() => this.setState({ tab: 'staff-tab' })}
         >
           <SubmissionsTable
-            submissions={staffSubmissions}
+            submissions={filteredSubmissions.staffSubmissions}
             handleDownload={() =>
-              dispatch(downloadSubmissions(handleStaffsParams))
+              dispatch(downloadSubmissions(handleParams.handleStaffParams))
             }
             handleDownloadStatistics={() =>
-              dispatch(downloadStatistics(handleStaffsParams))
+              dispatch(downloadStatistics(handleParams.handleStaffParams))
             }
             handleUnsubmitAll={() =>
-              dispatch(unsubmitAllSubmissions(handleStaffsParams))
+              dispatch(unsubmitAllSubmissions(handleParams.handleStaffParams))
             }
             handleDeleteAll={() =>
-              dispatch(deleteAllSubmissions(handleStaffsParams))
+              dispatch(deleteAllSubmissions(handleParams.handleStaffParams))
             }
             confirmDialogValue="staff"
             {...props}
@@ -326,32 +328,147 @@ class VisibleSubmissionsIndex extends React.Component {
     );
   }
 
-  renderPublishConfirmation() {
+  renderPublishConfirmation(shownSubmissions, handlePublishParams) {
     const { dispatch } = this.props;
     const { publishConfirmation } = this.state;
+
+    const values = {
+      graded: shownSubmissions.filter(
+        (s) => s.workflowState === workflowStates.Graded,
+      ).length,
+      selectedUsers: selectedUserTypeDisplay[handlePublishParams],
+    };
+
     return (
       <ConfirmationDialog
         open={publishConfirmation}
         onCancel={() => this.setState({ publishConfirmation: false })}
         onConfirm={() => {
-          dispatch(publishSubmissions());
+          dispatch(publishSubmissions(handlePublishParams));
           this.setState({ publishConfirmation: false });
         }}
-        message={<FormattedMessage {...translations.publishConfirmation} />}
+        message={
+          <FormattedMessage
+            {...translations.publishConfirmation}
+            values={values}
+          />
+        }
+      />
+    );
+  }
+
+  renderForceSubmitConfirmation(shownSubmissions, handleForceSubmitParams) {
+    const { dispatch, assessment } = this.props;
+    const { forceSubmitConfirmation } = this.state;
+    const values = {
+      unattempted: shownSubmissions.filter(
+        (s) => s.workflowState === workflowStates.Unstarted,
+      ).length,
+      attempting: shownSubmissions.filter(
+        (s) => s.workflowState === workflowStates.Attempting,
+      ).length,
+      selectedUsers: selectedUserTypeDisplay[handleForceSubmitParams],
+    };
+    const message = assessment.autograded
+      ? translations.forceSubmitConfirmationAutograded
+      : translations.forceSubmitConfirmation;
+
+    return (
+      <ConfirmationDialog
+        open={forceSubmitConfirmation}
+        onCancel={() => this.setState({ forceSubmitConfirmation: false })}
+        onConfirm={() => {
+          dispatch(forceSubmitSubmissions(handleForceSubmitParams));
+          this.setState({ forceSubmitConfirmation: false });
+        }}
+        message={<FormattedMessage {...message} values={values} />}
       />
     );
   }
 
   render() {
-    const { isLoading, notification } = this.props;
+    const { isLoading, notification, submissions } = this.props;
+    const {
+      includePhantoms,
+      tab,
+      publishConfirmation,
+      forceSubmitConfirmation,
+    } = this.state;
     if (isLoading) {
       return <LoadingIndicator />;
     }
+    const myStudentAllSubmissions = submissions.filter(
+      (s) => s.courseUser.isStudent && s.courseUser.myStudent,
+    );
+    const myStudentNormalSubmissions = myStudentAllSubmissions.filter(
+      (s) => !s.courseUser.phantom,
+    );
+    const myStudentSubmissions = includePhantoms
+      ? myStudentAllSubmissions
+      : myStudentNormalSubmissions;
+    const studentSubmissions = includePhantoms
+      ? submissions.filter((s) => s.courseUser.isStudent)
+      : submissions.filter(
+          (s) => s.courseUser.isStudent && !s.courseUser.phantom,
+        );
+    const staffSubmissions = includePhantoms
+      ? submissions.filter((s) => !s.courseUser.isStudent)
+      : submissions.filter(
+          (s) => !s.courseUser.isStudent && !s.courseUser.phantom,
+        );
+    const filteredSubmissions = {
+      myStudentAllSubmissions,
+      myStudentSubmissions,
+      studentSubmissions,
+      staffSubmissions,
+    };
+
+    const handleMyStudentsParams = includePhantoms
+      ? selectedUserType.my_students_w_phantom
+      : selectedUserType.my_students;
+    const handleStudentsParams = includePhantoms
+      ? selectedUserType.students_w_phantom
+      : selectedUserType.students;
+    const handleStaffParams = includePhantoms
+      ? selectedUserType.staff_w_phantom
+      : selectedUserType.staff;
+    const handleParams = {
+      handleMyStudentsParams,
+      handleStudentsParams,
+      handleStaffParams,
+    };
+
+    let shownSubmissions; // shownSubmissions are submissions currently shown on the active tab on the page
+    let handlePublishOrSubmitParams;
+    switch (tab) {
+      case 'staff-tab':
+        shownSubmissions = staffSubmissions;
+        handlePublishOrSubmitParams = handleStaffParams;
+        break;
+      case 'my-students-tab':
+        shownSubmissions = myStudentSubmissions;
+        handlePublishOrSubmitParams = handleMyStudentsParams;
+        break;
+      case 'students-tab':
+      default:
+        shownSubmissions = studentSubmissions;
+        handlePublishOrSubmitParams = handleStudentsParams;
+    }
+
     return (
       <>
-        {this.renderHeader()}
-        {this.renderTabs()}
-        {this.renderPublishConfirmation()}
+        {this.renderHeader(shownSubmissions)}
+        {this.renderTabs(filteredSubmissions, handleParams)}
+        {publishConfirmation &&
+          this.renderPublishConfirmation(
+            shownSubmissions,
+            handlePublishOrSubmitParams,
+          )}
+        {forceSubmitConfirmation &&
+          this.renderForceSubmitConfirmation(
+            shownSubmissions,
+            handlePublishOrSubmitParams,
+          )}
         <NotificationBar notification={notification} />
       </>
     );
@@ -381,6 +498,7 @@ VisibleSubmissionsIndex.propTypes = {
   isDownloading: PropTypes.bool.isRequired,
   isStatisticsDownloading: PropTypes.bool.isRequired,
   isPublishing: PropTypes.bool.isRequired,
+  isForceSubmitting: PropTypes.bool.isRequired,
   isUnsubmitting: PropTypes.bool.isRequired,
   isDeleting: PropTypes.bool.isRequired,
 };
@@ -394,6 +512,7 @@ function mapStateToProps(state) {
     isDownloading: state.submissionFlags.isDownloading,
     isStatisticsDownloading: state.submissionFlags.isStatisticsDownloading,
     isPublishing: state.submissionFlags.isPublishing,
+    isForceSubmitting: state.submissionFlags.isForceSubmitting,
     isUnsubmitting: state.submissionFlags.isUnsubmitting,
     isDeleting: state.submissionFlags.isDeleting,
   };

@@ -180,6 +180,10 @@ class Course::Assessment::Submission < ApplicationRecord
     AutoGradingJob.perform_later(self, only_ungraded: only_ungraded)
   end
 
+  def auto_grade_now!(only_ungraded: false)
+    AutoGradingJob.perform_now(self, only_ungraded: only_ungraded)
+  end
+
   def unsubmitting?
     !!@unsubmitting
   end

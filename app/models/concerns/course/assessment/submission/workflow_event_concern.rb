@@ -41,7 +41,7 @@ module Course::Assessment::Submission::WorkflowEventConcern
   # Handles the publishing of a submission.
   #
   # This grades all the answers as well.
-  def publish(_ = nil)
+  def publish(_ = nil, send_email: true)
     publish_answers
 
     self.publisher = User.stamper || User.system
@@ -49,7 +49,7 @@ module Course::Assessment::Submission::WorkflowEventConcern
     self.awarder = User.stamper || User.system
     self.awarded_at = Time.zone.now
 
-    return unless persisted? && !assessment.autograded? &&
+    return unless send_email && persisted? && !assessment.autograded? &&
                   submission_graded_email_enabled? &&
                   submission_graded_email_subscribed?
 

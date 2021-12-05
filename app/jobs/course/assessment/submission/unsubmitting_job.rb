@@ -10,6 +10,7 @@ class Course::Assessment::Submission::UnsubmittingJob < ApplicationJob
 
   # Creates a job to unsubmit all submitted submissions for a given assessment
   # and to optionally delete answers to a question.
+  #
   # @param [User] unsubmitter User who creates the unsubmission job.
   # @param [Array<Integer>] submission_ids Submission ids of the submissions that are to be unsubmitted.
   # @param [Course::Assessment] assessment Assessment of the submissions.
