@@ -13,8 +13,7 @@ module SendFile
     temporary_dir = File.basename(Dir.mktmpdir(nil, public_dir))
     public_file = File.join(public_dir, temporary_dir, public_name)
     FileUtils.cp(file, public_file)
-
-    URI.encode(File.join('/', downloads_dir, temporary_dir, public_name))
+    Addressable::URI.encode(File.join('/', downloads_dir, temporary_dir, public_name))
   end
 
   # Obtains the local path for the given publicly accessible file path.
@@ -22,6 +21,6 @@ module SendFile
   # @param [String] path The URL to the publicly accessible file.
   # @return [String] The absolute file path to the publicly accessible file.
   def self.local_path(path)
-    File.join(Rails.public_path, URI.decode(path))
+    File.join(Rails.public_path, URI.decode_www_form_component(path))
   end
 end
