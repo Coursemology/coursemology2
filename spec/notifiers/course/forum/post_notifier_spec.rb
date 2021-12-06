@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe Course::Forum::PostNotifier, type: :notifier do
+RSpec.describe Course::Forum::PostNotifier, type: :mailer do
   let!(:instance) { Instance.default }
 
   with_tenant(:instance) do

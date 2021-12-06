@@ -1,13 +1,15 @@
-# Ruby CircleCI 2.0 configuration file
+# Ruby CircleCI 2.1 configuration file
 #
 # Check https://circleci.com/docs/2.0/language-ruby/ for more details
 #
-version: 2
+version: 2.1
+orbs:
+  browser-tools: circleci/browser-tools@1.2.3
 jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/ruby:2.5.3-node-browsers
+      - image: cimg/ruby:2.6.8-browsers
         environment:
           BUNDLE_APP_CONFIG: ~/repo/.bundle
 
@@ -19,12 +21,17 @@ jobs:
       # Checkout submodules
       - run: git submodule update --init --recursive
 
+      # Install bundler version
+      - run:
+          name: install bundler version
+          command: gem install bundler:1.17.3
+
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v2-dependencies-{{ checksum "Gemfile.lock" }}
+            - v3.1-dependencies-{{ checksum "Gemfile.lock" }}
             # fallback to using the latest cache if no exact match is found
-            - v2-dependencies-
+            - v3.1-dependencies-
 
       - run:
           name: install dependencies
@@ -35,7 +42,7 @@ jobs:
           paths:
             - ./vendor/bundle
             - ./.bundle
-          key: v2-dependencies-{{ checksum "Gemfile.lock" }}
+          key: v3.1-dependencies-{{ checksum "Gemfile.lock" }}
 
       - restore_cache:
           keys:
@@ -54,7 +61,7 @@ jobs:
   test:
     docker:
       # specify the version you desire here
-      - image: circleci/ruby:2.5.3-node-browsers
+      - image: cimg/ruby:2.6.8-browsers
         environment:
           PG_HOST: localhost
           PG_USER: ubuntu
@@ -74,6 +81,9 @@ jobs:
     working_directory: ~/repo
 
     steps:
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
+
       - checkout
 
       # Checkout submodules
@@ -81,16 +91,23 @@ jobs:
 
       - restore_cache:
           keys:
-            - v2-dependencies-{{ checksum "Gemfile.lock" }}
+            - v3.1-dependencies-{{ checksum "Gemfile.lock" }}
             # fallback to using the latest cache if no exact match is found
-            - v2-dependencies-
+            - v3.1-dependencies-
 
       - restore_cache:
           keys:
             - v1-yarn-{{ checksum "client/yarn.lock" }}
 
+      # Install bundler version
+      - run:
+          name: install bundler version
+          command: |
+            gem install bundler:1.17.3
+            bundle install
+
       # Install ghostscript so `identify` in ImageMagick works with PDF files.
-      - run: sudo apt update && sudo apt install ghostscript
+      - run: sudo apt update && sudo apt install imagemagick && sudo apt install ghostscript
 
       - setup_remote_docker
 
@@ -130,7 +147,7 @@ jobs:
   lint:
     docker:
       # specify the version you desire here
-      - image: circleci/ruby:2.5.3-node-browsers
+      - image: cimg/ruby:2.6.8-browsers
         environment:
           RAILS_ENV: test
 
@@ -155,7 +172,7 @@ jobs:
   jstest:
     docker:
       # specify the version you desire here
-      - image: circleci/ruby:2.5.3-node-browsers
+      - image: cimg/ruby:2.6.8-browsers
         environment:
           RAILS_ENV: test
 
@@ -181,7 +198,7 @@ jobs:
   i18n:
     docker:
       # specify the version you desire here
-      - image: circleci/ruby:2.5.3-node-browsers
+      - image: cimg/ruby:2.6.8-browsers
         environment:
           PG_HOST: localhost
           PG_USER: ubuntu
@@ -206,9 +223,14 @@ jobs:
 
       - restore_cache:
           keys:
-            - v2-dependencies-{{ checksum "Gemfile.lock" }}
+            - v3.1-dependencies-{{ checksum "Gemfile.lock" }}
             # fallback to using the latest cache if no exact match is found
-            - v2-dependencies-
+            - v3.1-dependencies-
+
+      # Install bundler version
+      - run:
+          name: install bundler version
+          command: gem install bundler:1.17.3
 
       # Database setup
       - run:

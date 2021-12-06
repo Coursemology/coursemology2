@@ -227,7 +227,7 @@ RSpec.describe Course::Assessment::Submission do
       end
     end
 
-    describe '.filter' do
+    describe '.filter_by_params' do
       let(:group) do
         group = create(:course_group, course: course)
         create(:course_group_user, group: group, course: course, course_user: course_student1)
@@ -245,7 +245,7 @@ RSpec.describe Course::Assessment::Submission do
 
       it 'filters submissions' do
         group
-        expect(assessment.submissions.filter(params)).to contain_exactly(submission1)
+        expect(assessment.submissions.filter_by_params(params)).to contain_exactly(submission1)
       end
 
       context 'when group id is given' do
@@ -253,7 +253,7 @@ RSpec.describe Course::Assessment::Submission do
 
         it 'filters submissions by the group' do
           group
-          expect(assessment.submissions.filter(params)).to contain_exactly(submission1)
+          expect(assessment.submissions.filter_by_params(params)).to contain_exactly(submission1)
         end
       end
 
@@ -261,7 +261,7 @@ RSpec.describe Course::Assessment::Submission do
         let(:params) { { user_id: user2.id } }
 
         it 'filters submissions by the user' do
-          expect(assessment.submissions.filter(params)).to contain_exactly(submission2)
+          expect(assessment.submissions.filter_by_params(params)).to contain_exactly(submission2)
         end
       end
 
@@ -269,7 +269,7 @@ RSpec.describe Course::Assessment::Submission do
         let(:params) { { assessment_id: assessment.id } }
 
         it 'filters submissions by assessment' do
-          expect(assessment.submissions.filter(params)).
+          expect(assessment.submissions.filter_by_params(params)).
             to contain_exactly(submission1, submission2, submission3)
         end
       end
@@ -283,7 +283,7 @@ RSpec.describe Course::Assessment::Submission do
 
         it 'filters submissions by category' do
           new_submission
-          expect(Course::Assessment::Submission.filter(params)).to contain_exactly(new_submission)
+          expect(Course::Assessment::Submission.filter_by_params(params)).to contain_exactly(new_submission)
         end
       end
     end
