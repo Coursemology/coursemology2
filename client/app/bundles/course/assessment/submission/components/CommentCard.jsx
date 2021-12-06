@@ -5,7 +5,7 @@ import { Card, CardHeader, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
-import { red500, grey100 } from 'material-ui/styles/colors';
+import { red500, lightBlue100, orange100 } from 'material-ui/styles/colors';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import MaterialSummernote from 'lib/components/MaterialSummernote';
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
@@ -30,7 +30,13 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: grey100,
+    backgroundColor: lightBlue100,
+  },
+  delayedHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: orange100,
   },
   cardHeader: {
     padding: 6,
@@ -159,7 +165,7 @@ export default class CommentCard extends Component {
     } = this.props.post;
     return (
       <Card id={CommentCard.postIdentifier(id)} style={styles.card}>
-        <div style={styles.header}>
+        <div style={delayed ? styles.delayedHeader : styles.header}>
           <CardHeader
             style={styles.cardHeader}
             title={name}
