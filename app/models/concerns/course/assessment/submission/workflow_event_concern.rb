@@ -41,7 +41,7 @@ module Course::Assessment::Submission::WorkflowEventConcern
   # Handles the publishing of a submission.
   #
   # This grades all the answers as well.
-  def publish(_ = nil, send_email: true)
+  def publish(_ = nil, send_email = true) # rubocop:disable Style/OptionalBooleanParameter
     publish_answers
 
     self.publisher = User.stamper || User.system
