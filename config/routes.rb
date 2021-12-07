@@ -214,6 +214,7 @@ Rails.application.routes.draw do
               get :download_all, on: :collection
               get :download_statistics, on: :collection
               patch :publish_all, on: :collection
+              patch :force_submit_all, on: :collection
               patch :unsubmit, on: :collection
               patch :unsubmit_all, on: :collection
               patch :delete, on: :collection

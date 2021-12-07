@@ -86,10 +86,10 @@ end
 
 module Capybara::CustomFinders
   # Supplements find to try for alternative elements.
-  def find(*args)
+  def find(*args, **kwargs)
     super
   rescue Capybara::ElementNotFound
-    result = try_find_ace(*args) || try_find_textarea(*args)
+    result = try_find_ace(*args, **kwargs) || try_find_textarea(*args, **kwargs)
     raise unless result
 
     result
@@ -100,14 +100,14 @@ module Capybara::CustomFinders
   # Tries to find a textarea converted to an Ace editor.
   #
   # We find the hidden node first, then we find the corresponding editor node.
-  def try_find_ace(*args)
+  def try_find_ace(*args, **kwargs)
     options = args.extract_options!.dup
     return nil if options[:visible] == false
 
     options[:visible] = false
     args.push(options)
 
-    textarea = find(*args)
+    textarea = find(*args, **kwargs)
     textarea.find(:xpath, 'following-sibling::*').find(:css, '.ace_text-input', visible: false)
   rescue Capybara::ElementNotFound
     nil
@@ -116,14 +116,14 @@ module Capybara::CustomFinders
   # Tries to find a textarea used by Summernote.
   #
   # We find the hidden node first, then we find the corresponding editor node.
-  def try_find_textarea(*args)
+  def try_find_textarea(*args, **kwargs)
     options = args.extract_options!.dup
     return nil if options[:visible] == false
 
     options[:visible] = false
     args.push(options)
 
-    textarea = find(*args)
+    textarea = find(*args, **kwargs)
     textarea.find(:xpath, 'following-sibling::*').find(:css, '.note-editable')
   rescue Capybara::ElementNotFound
     nil

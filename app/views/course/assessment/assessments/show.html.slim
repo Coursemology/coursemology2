@@ -79,6 +79,8 @@
   - if can?(:attempt, @assessment) && @assessment.folder.materials.present?
     - enable_link = !current_component_host[:course_materials_component].nil?
     h3 = t('.files') if enable_link || can?(:manage, @assessment)
+    - if @assessment.submissions.where(creator: current_user).length == 0
+      div = t('.files_note')
     = render partial: 'layouts/materials',
       locals: { folder: @assessment.folder,
                 enable_link: enable_link,

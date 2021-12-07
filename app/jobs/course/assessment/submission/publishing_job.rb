@@ -5,10 +5,11 @@ class Course::Assessment::Submission::PublishingJob < ApplicationJob
 
   protected
 
-  def perform_tracked(assessment, publisher)
+  def perform_tracked(graded_submission_ids, assessment, publisher)
     instance = Course.unscoped { assessment.course.instance }
     ActsAsTenant.with_tenant(instance) do
-      publish_submissions(assessment, publisher)
+      submissions = assessment.submissions.find(graded_submission_ids)
+      publish_submissions(submissions, publisher)
     end
 
     redirect_to course_assessment_submissions_path(assessment.course, assessment)
@@ -21,10 +22,10 @@ class Course::Assessment::Submission::PublishingJob < ApplicationJob
   # @param [Course::Assessment] assessment The assessment for which the submissions' grades are
   # to be published for.
   # @param [User] publisher The user object who would be publishing the submission.
-  def publish_submissions(assessment, publisher)
+  def publish_submissions(submissions, publisher)
     User.with_stamper(publisher) do
       Course::Assessment::Submission.transaction do
-        assessment.submissions.with_graded_state.each do |submission|
+        submissions.each do |submission|
           submission.publish!
           submission.save!
         end
