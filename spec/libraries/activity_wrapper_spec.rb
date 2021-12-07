@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe Notifier::Base::ActivityWrapper, type: :notifier do
+RSpec.describe Notifier::Base::ActivityWrapper, type: :mailer do
   let!(:instance) { Instance.default }
   with_tenant(:instance) do
     describe '#notify' do

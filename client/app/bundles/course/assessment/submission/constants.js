@@ -28,6 +28,24 @@ export const TestCaseTypes = {
   Evaluation: 'evaluation_test',
 };
 
+export const selectedUserType = mirrorCreator([
+  'my_students',
+  'my_students_w_phantom',
+  'students',
+  'students_w_phantom',
+  'staff',
+  'staff_w_phantom',
+]);
+
+export const selectedUserTypeDisplay = {
+  my_students: 'MY STUDENTS',
+  my_students_w_phantom: 'MY STUDENTS INCL. PHANTOM',
+  students: 'STUDENTS',
+  students_w_phantom: 'STUDENTS INCL. PHANTOM',
+  staff: 'STAFF',
+  staff_w_phantom: 'STAFF INCL. PHANTOM',
+};
+
 export const scribingPopoverTypes = mirrorCreator([
   'TYPE',
   'DRAW',
@@ -187,6 +205,9 @@ const actionTypes = mirrorCreator([
   'PUBLISH_SUBMISSIONS_REQUEST',
   'PUBLISH_SUBMISSIONS_SUCCESS',
   'PUBLISH_SUBMISSIONS_FAILURE',
+  'FORCE_SUBMIT_SUBMISSIONS_REQUEST',
+  'FORCE_SUBMIT_SUBMISSIONS_SUCCESS',
+  'FORCE_SUBMIT_SUBMISSIONS_FAILURE',
   'DOWNLOAD_SUBMISSIONS_REQUEST',
   'DOWNLOAD_SUBMISSIONS_SUCCESS',
   'DOWNLOAD_SUBMISSIONS_FAILURE',

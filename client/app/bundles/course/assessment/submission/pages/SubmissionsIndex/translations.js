@@ -63,6 +63,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.submissions.publishGrades',
     defaultMessage: 'Publish Grades',
   },
+  forceSubmit: {
+    id: 'course.assessment.submission.submissions.forceSubmit',
+    defaultMessage: 'Force Submit Remaining',
+  },
   includePhantoms: {
     id: 'course.assessment.submission.submissions.includePhantoms',
     defaultMessage: 'Include phantom users',

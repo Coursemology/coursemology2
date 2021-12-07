@@ -34,7 +34,7 @@ module ApplicationMultitenancyConcern
   # @return [String] The host, with www removed.
   def deduce_tenant_host
     if request.host.downcase.start_with?('www.')
-      request.host[4..-1]
+      request.host[4..]
     else
       request.host
     end

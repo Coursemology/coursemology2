@@ -53,50 +53,52 @@ RSpec.describe 'Course: Assessment: Submissions: Exam' do
         expect(page).to have_selector('div#course-assessment-submission')
       end
 
-      pending 'I can edit and save my submission', js: true do
+      scenario 'I can edit and save my submission', js: true do
         submission
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         fill_in 'session_password', with: assessment.session_password
         click_button I18n.t('course.assessment.sessions.new.continue')
-        expect(page).to have_selector('h1', text: assessment.title)
 
-        option = assessment.questions.first.actable.options.first.option
-        check option
-        click_button I18n.t('course.assessment.submission.submissions.buttons.save')
+        option = assessment.questions.first.actable.options.first
+        expect(page).to have_selector('div', text: assessment.description)
+
+        first(:checkbox, visible: false).set(true)
+        click_button('Save Draft')
 
         expect(current_path).to eq(
           edit_course_assessment_submission_path(course, assessment, submission)
         )
-        expect(page).to have_checked_field(option)
+        expect(page).to have_selector('span', text: 'Submission updated successfully.')
+        expect(submission.current_answers.first.specific.reload.options).to include(option)
       end
     end
 
     context 'As a Course Staff' do
       let(:user) { create(:course_teaching_assistant, course: course).user }
 
-      pending 'I can submit the grading for publishing' do
+      scenario 'I can submit the grading for publishing', js: true do
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+
         mrq_questions.each { |q| q.attempt(submission).save! }
         submission.finalise!
         submission.save!
 
-        visit edit_course_assessment_submission_path(course, assessment, submission)
+        visit current_path
 
         # Grade the submission with empty answer grade
-        click_button I18n.t('course.assessment.submission.submissions.buttons.mark')
-        expect(page).to have_selector('div.alert-danger')
-        expect(page).to have_button(I18n.t('course.assessment.submission.submissions.buttons.mark'))
+        expect(page).to have_button('Submit for Publishing', disabled: true)
+        find_field(class: 'grade').set(0)
+        find_field(class: 'exp').set(50)
 
-        fill_in find('input.form-control.grade')[:name], with: 0
-        fill_in 'submission[draft_points_awarded]', with: 50
-
-        click_button I18n.t('course.assessment.submission.submissions.buttons.mark')
-        expect(page).to have_button(I18n.t('course.assessment.submission.submissions.buttons.save'))
+        click_button('Save')
+        expect(page).to have_button('Submit for Publishing', disabled: false)
+        click_button('Submit for Publishing')
 
         expect(current_path).
           to eq(edit_course_assessment_submission_path(course, assessment, submission))
-        expect(submission.reload.graded?).to be_truthy
-        expect(submission.points_awarded).to be_nil
+        sleep(0.1)
+        expect(submission.reload.points_awarded).to be_nil
         expect(submission.draft_points_awarded).to eq(50)
       end
     end

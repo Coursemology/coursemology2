@@ -6,11 +6,21 @@ RSpec.feature 'Course: Topics: Management' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
+    let(:course_teaching_assistant) { create(:course_teaching_assistant, course: course) }
+    let(:course_student1) { create(:course_student, course: course) }
+    let(:course_student2) { create(:course_student, course: course) }
+    let(:assessment) { create(:assessment, :with_programming_question, course: course) }
+    let(:submission1) { create(:submission, :submitted, assessment: assessment, creator: course_student1.user) }
+    let(:submission2) { create(:submission, :submitted, assessment: assessment, creator: course_student2.user) }
+    let(:answer1) { submission1.answers.first }
+    let(:answer2) { submission2.answers.first }
+    let(:file1) { answer1.actable.files.first }
+    let(:file2) { answer2.actable.files.first }
     let(:comment) do
       create(:course_assessment_submission_question, :with_post, course: course)
     end
     let(:code_annotation) do
-      create(:course_assessment_answer_programming_file_annotation, :with_post, course: course)
+      create(:course_assessment_answer_programming_file_annotation, :with_post, file: file1, course: course)
     end
     let(:video_comment) do
       create(:course_video_topic, :with_post, :with_submission, course: course, timestamp: 3723)
@@ -19,7 +29,7 @@ RSpec.feature 'Course: Topics: Management' do
     before { login_as(user, scope: :user) }
 
     context 'As a Course Teaching Assistant' do
-      let!(:user) { create(:course_teaching_assistant, course: course).user }
+      let(:user) { course_teaching_assistant.user }
 
       scenario 'I can see all the comments' do
         comment
@@ -76,10 +86,7 @@ RSpec.feature 'Course: Topics: Management' do
     end
 
     context 'As a Course Student' do
-      let(:user) { create(:course_student, course: course).user }
-      let(:student_answer) do
-        create(:course_assessment_answer, course: course, creator: user)
-      end
+      let(:user) { course_student2.user }
       let(:student_comment) do
         create(:course_assessment_submission_question,
                course: course,
@@ -88,6 +95,7 @@ RSpec.feature 'Course: Topics: Management' do
       end
       let(:student_annotation) do
         create(:course_assessment_answer_programming_file_annotation,
+               file: file2,
                course: course,
                creator: user,
                posts: [build(:course_discussion_post, creator: user)])

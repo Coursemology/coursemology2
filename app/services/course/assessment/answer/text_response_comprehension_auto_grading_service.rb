@@ -285,7 +285,8 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
   # @param [Hash{Integer=>String}] hash_point_serial The mapping from Point ID to serial 'number' (letter)
   #   for that Point.
   # @return [Array<String>] The explanations for the Points.
-  def explanations_for_points_summary_incorrect(question, answer_text_array, answer_text_lemma_status, correct_points, hash_point_serial)
+  def explanations_for_points_summary_incorrect(question, answer_text_array,
+                                                answer_text_lemma_status, correct_points, hash_point_serial)
     explanations = []
 
     question.groups.flat_map(&:points).each do |point|
@@ -435,8 +436,8 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
   #
   # @param [Array<String>] answer_text_array The normalized, downcased, letters-only answer text
   #   in array form.
-  # @param [Hash{Integer=>Array< Array<String, String> >}] hash_keywords The mapping from Point ID to serial 'number' (letter)
-  #   for that Point, to an array of nested arrays of [word in answer_text, information].
+  # @param [Hash{Integer=>Array< Array<String, String> >}] hash_keywords The mapping from Point ID to serial
+  #    'number' (letter) for that Point, to an array of nested arrays of [word in answer_text, information].
   # @param [Hash{Integer=>Integer}] hash_point_serial The mapping from Point ID to serial 'number' (letter)
   #   for that Point.
   # @return [Array<String>] The explanations for the correct keywords.
