@@ -23,7 +23,7 @@ class CoursemologyDockerContainer < Docker::Container
   # Maximum amount of memory the docker container can use.
   # Enforced by Docker.
   # https://docs.docker.com/engine/admin/resource_constraints/
-  CONTAINER_MEMORY_LIMIT = 128.megabytes
+  CONTAINER_MEMORY_LIMIT = 1024.megabytes
 
   # Docker logs capture stdout, which can take up a lot of disk space on the host if student code
   # has print statements in infinite loops.
@@ -40,7 +40,11 @@ class CoursemologyDockerContainer < Docker::Container
                                               image: image) do |payload|
         options = { 'Image' => image }
         options['Cmd'] = argv if argv.present?
-        options['HostConfig'] = { 'memory': CONTAINER_MEMORY_LIMIT, 'LogConfig': LOG_CONFIG }
+        options['HostConfig'] = {
+          'memory': CONTAINER_MEMORY_LIMIT,
+          'memory-swap': CONTAINER_MEMORY_LIMIT,
+          'LogConfig': LOG_CONFIG
+        }
         options['NetworkDisabled'] = true
 
         payload[:container] = super(options)

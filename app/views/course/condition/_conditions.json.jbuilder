@@ -9,6 +9,7 @@ json.condition_attributes do
   end
 
   json.conditions conditional.specific_conditions do |actable|
-    json.partial! "#{actable.to_partial_path}.json", course: current_course, condition: actable, conditional: conditional
+    json.partial! "#{actable.to_partial_path}.json", course: current_course,
+                                                     condition: actable, conditional: conditional
   end
 end

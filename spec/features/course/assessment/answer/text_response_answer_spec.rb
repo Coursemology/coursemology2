@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe 'Course: Assessments: Submissions: Text Response Answers' do
+RSpec.describe 'Course: Assessments: Submissions: Text Response Answers', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -16,63 +16,50 @@ RSpec.describe 'Course: Assessments: Submissions: Text Response Answers' do
 
     context 'As a Course Student' do
       let(:user) { create(:course_student, course: course).user }
-
-      pending 'I cannot update my submission after finalising' do
-        visit edit_course_assessment_submission_path(course, assessment, submission)
-
-        click_button I18n.t('course.assessment.submission.submissions.buttons.finalise')
-
-        within find(content_tag_selector(submission.answers.first)) do
-          # We cannot use :fillable_field because the textarea has no labels.
-          expect(all('textarea')).not_to be_empty
-          all('textarea:not(.comment)').each do |input|
-            expect(input.native.attr(:readonly)).to be_truthy
-          end
-        end
+      let(:file_path) do
+        File.join(Rails.root, '/spec/fixtures/files/text.txt')
       end
 
-      pending 'I upload an attachment to the answer' do
+      scenario 'I cannot update my submission after finalising' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
+        answer_id = submission.answers.first.id
+        find_field(name: "#{answer_id}[answer_text]").set('Test')
+        click_button('Finalise Submission')
+        accept_confirm_dialog do
+          wait_for_job
+        end
+        expect(page).not_to have_field(name: "#{answer_id}[answer_text]")
+      end
+
+      scenario 'I upload an attachment to the answer' do
+        visit edit_course_assessment_submission_path(course, assessment, submission)
         answer = submission.answers.last
-        attach_file "submission_answers_attributes_#{answer.id}_actable_attributes_files",
-                    File.join(Rails.root, '/spec/fixtures/files/text.txt')
+        file_view = find('strong', text: 'Uploaded Files:').find(:xpath, '..')
+        dropzone = find('.dropzone-input')
+        file_input = dropzone.find('input', visible: false)
 
-        click_button I18n.t('course.assessment.submission.submissions.buttons.save')
+        file_input.set(file_path)
 
+        # The file should show in the dropzone
+        expect(dropzone).to have_css('span', text: 'text.txt')
+
+        click_button('Save Draft')
+
+        expect(dropzone).to have_no_css('span', text: 'text.txt')
+        expect(file_view).to have_css('span', text: 'text.txt')
+        expect(file_view).to have_css('span', count: 2)
         expect(answer.specific.attachments).not_to be_empty
       end
 
-      pending 'I cannot see the text box for a file upload question' do
+      scenario 'I cannot see the text box for a file upload question' do
         assessment = create(:assessment, :published_with_file_upload_question, course: course)
         submission = create(:submission, assessment: assessment, creator: user)
 
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         file_upload_answer = submission.answers.first
-        within find(content_tag_selector(file_upload_answer)) do
-          expect(page).not_to have_selector('textarea:not(.comment)')
-        end
-      end
-    end
-
-    context 'As Course Staff' do
-      let(:user) { create(:course_teaching_assistant, course: course).user }
-      let(:submission_traits) { :submitted }
-
-      pending 'I can view the grading scheme' do
-        visit edit_course_assessment_submission_path(course, assessment, submission)
-        click_link I18n.t('course.assessment.submission.submissions.buttons.evaluate_answers')
-        wait_for_job
-
-        expect(page).
-          to have_selector('div', text: I18n.t('course.assessment.answer.explanation.wrong'))
-
-        within find(content_tag_selector(submission.answers.first)) do
-          assessment.questions.first.actable.solutions.each do |solution|
-            expect(page).to have_content_tag_for(solution)
-          end
-        end
+        expect(page).not_to have_field(name: "#{file_upload_answer.id}[answer_text]")
       end
     end
   end

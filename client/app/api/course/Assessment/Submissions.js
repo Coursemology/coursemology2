@@ -17,8 +17,16 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
     });
   }
 
-  publishAll() {
-    return this.getClient().patch(`${this._getUrlPrefix()}/publish_all`);
+  publishAll(courseUsers) {
+    return this.getClient().patch(`${this._getUrlPrefix()}/publish_all`, {
+      course_users: courseUsers,
+    });
+  }
+
+  forceSubmitAll(courseUsers) {
+    return this.getClient().patch(`${this._getUrlPrefix()}/force_submit_all`, {
+      course_users: courseUsers,
+    });
   }
 
   unsubmit(submissionId) {

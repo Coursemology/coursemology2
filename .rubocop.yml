@@ -10,7 +10,7 @@ AllCops:
     - 'db/migrate/*'
     - 'vendor/bundle/**/*'
     - 'client/**/*'
-  TargetRubyVersion: 2.5
+  TargetRubyVersion: 2.7
 
 Bundler/OrderedGems:
   Enabled: false
