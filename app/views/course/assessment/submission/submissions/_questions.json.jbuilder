@@ -7,7 +7,8 @@ topic_ids_hash = submission.submission_questions.where(question: submission.ques
   [sq.question_id, sq.discussion_topic.id]
 end.to_h
 
-question_assessments = Course::QuestionAssessment.where(question: submission.questions, assessment: submission.assessment)
+question_assessments = Course::QuestionAssessment.
+                       where(question: submission.questions, assessment: submission.assessment)
 json.questions question_assessments.each_with_index.to_a do |(question_assessment, index)|
   question = question_assessment.question
   answer = answer_ids_hash[question.id]

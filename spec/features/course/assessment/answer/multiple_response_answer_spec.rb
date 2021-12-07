@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers' do
+RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -22,44 +22,51 @@ RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers' do
       context 'when the question is a multiple choice question' do
         let(:assessment) { create(:assessment, :published_with_mcq_question, course: course) }
 
-        pending 'I can save my submission' do
+        scenario 'I can save my submission' do
           visit edit_course_assessment_submission_path(course, assessment, submission)
 
-          choose correct_option
+          option = assessment.questions.first.actable.options.first
+          # Click correct answer
+          page.
+            find(:xpath, '//*[@id="course-assessment-submission"]/div[2]/div/form/div/div[3]/input', visible: false).
+            click
 
-          click_button I18n.t('course.assessment.submission.submissions.buttons.save')
+          click_button('Save Draft')
           expect(current_path).to eq(
             edit_course_assessment_submission_path(course, assessment, submission)
           )
-
-          expect(page).to have_checked_field(correct_option)
+          sleep 0.1
+          expect(page).to have_selector('span', text: 'Submission updated successfully.')
+          expect(submission.current_answers.first.specific.reload.options).to include(option)
         end
       end
 
       context 'when the question is not a multiple choice question' do
-        pending 'I can save my submission' do
+        scenario 'I can save my submission' do
           visit edit_course_assessment_submission_path(course, assessment, submission)
 
-          check correct_option
+          option = assessment.questions.first.actable.options.first
+          expect(page).to have_selector('div', text: assessment.description)
 
-          click_button I18n.t('course.assessment.submission.submissions.buttons.save')
+          first(:checkbox, visible: false).set(true)
+          click_button('Save Draft')
+
           expect(current_path).to eq(
             edit_course_assessment_submission_path(course, assessment, submission)
           )
-
-          expect(page).to have_checked_field(correct_option)
+          expect(page).to have_selector('span', text: 'Submission updated successfully.')
+          expect(submission.current_answers.first.specific.reload.options).to include(option)
         end
       end
 
-      pending 'I cannot update my submission after finalising' do
+      scenario 'I cannot update my submission after finalising' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
-        click_button I18n.t('course.assessment.submission.submissions.buttons.finalise')
-
-        within find(content_tag_selector(submission.answers.first)) do
-          expect(all(:field, disabled: true)).not_to be_empty
-          all(:field, disabled: true).each { |input| expect(input.disabled?).to be_truthy }
+        click_button('Finalise Submission')
+        accept_confirm_dialog do
+          wait_for_job
         end
+        expect(page).to have_field(type: 'checkbox', visible: false, disabled: true)
       end
     end
 
@@ -67,12 +74,13 @@ RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers' do
       let(:user) { create(:course_teaching_assistant, course: course).user }
       let(:submission_traits) { :submitted }
 
-      pending 'I can view the correct answer' do
+      scenario 'I can view the correct answer' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
-        within find(content_tag_selector(submission.answers.first)) do
-          expect(all('.correct').length).to eq(options.to_a.count(&:correct?))
-        end
+        element = page.
+                  find('#course-assessment-submission > div:nth-child(3)
+                  > div > form > div > div:nth-child(5) > div > label > div')
+        expect(element.style('background-color')['background-color']).to eq('rgba(232, 245, 233, 1)')
       end
     end
   end

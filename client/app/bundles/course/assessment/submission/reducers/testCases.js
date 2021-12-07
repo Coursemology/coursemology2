@@ -38,7 +38,11 @@ export default function (state = {}, action) {
       // For each test case in each test type, add back the data without the output
       // and passed values.
       Object.keys(state[questionId]).forEach((testType) => {
-        if (testType !== 'stdout' && testType !== 'stderr') {
+        if (
+          testType !== 'stdout' &&
+          testType !== 'stderr' &&
+          testType !== 'canReadTests'
+        ) {
           questionState[testType] = state[questionId][testType].map(
             (testCase) => ({
               identifier: testCase.identifier,

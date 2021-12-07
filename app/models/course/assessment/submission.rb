@@ -4,6 +4,7 @@ class Course::Assessment::Submission < ApplicationRecord
   include Course::Assessment::Submission::WorkflowEventConcern
   include Course::Assessment::Submission::TodoConcern
   include Course::Assessment::Submission::NotificationConcern
+  include Course::Assessment::Submission::AnswersConcern
 
   acts_as_experience_points_record
 
@@ -151,7 +152,7 @@ class Course::Assessment::Submission < ApplicationRecord
   end)
 
   # Filter submissions by category_id, assessment_id, group_id and/or user_id (creator)
-  scope :filter, (lambda do |filter_params|
+  scope :filter_by_params, (lambda do |filter_params|
     result = all
     if filter_params[:category_id].present?
       result = result.from_category(Course::Assessment::Category.find(filter_params[:category_id]))
@@ -176,7 +177,11 @@ class Course::Assessment::Submission < ApplicationRecord
   #
   # @return [Course::Assessment::Submission::AutoGradingJob] The job instance.
   def auto_grade!(only_ungraded: false)
-    AutoGradingJob.perform_later(self, only_ungraded: only_ungraded)
+    AutoGradingJob.perform_later(self, only_ungraded)
+  end
+
+  def auto_grade_now!(only_ungraded: false)
+    AutoGradingJob.perform_now(self, only_ungraded: only_ungraded)
   end
 
   def unsubmitting?

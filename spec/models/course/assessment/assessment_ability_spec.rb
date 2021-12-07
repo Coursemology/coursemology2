@@ -150,6 +150,7 @@ RSpec.describe Course::Assessment do
         end
       end
       it { is_expected.not_to be_able_to(:publish_grades, published_started_assessment) }
+      it { is_expected.not_to be_able_to(:force_submit_assessment_submission, published_started_assessment) }
 
       # Course Assessment Submissions
       it { is_expected.to be_able_to(:read, coursemate_attempting_submission) }
@@ -182,6 +183,7 @@ RSpec.describe Course::Assessment do
         end
       end
       it { is_expected.not_to be_able_to(:publish_grades, published_started_assessment) }
+      it { is_expected.not_to be_able_to(:force_submit_assessment_submission, published_started_assessment) }
 
       # Course Assessment Submissions
       it { is_expected.to be_able_to(:read, attempting_submission) }
@@ -216,6 +218,7 @@ RSpec.describe Course::Assessment do
 
       # Course Assessments
       it { is_expected.to be_able_to(:publish_grades, published_started_assessment) }
+      it { is_expected.to be_able_to(:force_submit_assessment_submission, published_started_assessment) }
 
       # Course Assessment Submissions
       it { is_expected.to be_able_to(:destroy_attachment, own_attachment) }

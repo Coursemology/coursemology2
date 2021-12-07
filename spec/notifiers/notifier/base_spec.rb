@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe Notifier::Base, type: :notifier do
+RSpec.describe Notifier::Base, type: :mailer do
   let!(:instance) { Instance.default }
   with_tenant(:instance) do
     class self::DummyNotifier < Notifier::Base
