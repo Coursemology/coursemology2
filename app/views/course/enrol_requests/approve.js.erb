@@ -3,7 +3,8 @@ $('.course-layout').parents('.container-fluid:first').prepend('<%= j(flash_messa
 // Show users the flash messages
 window.scrollTo(0, 0);
 
-<%- if @enrol_request.destroyed? %>
+<%- if @enrol_request.approved?  %>
   $('#<%= dom_id(@enrol_request) %>').remove();
   $('.nav-tabs .badge').remove();
+  $("#approved_requests").load(location.href + " #approved_requests")
 <% end %>

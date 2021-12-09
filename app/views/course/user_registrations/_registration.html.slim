@@ -13,7 +13,7 @@
           span.input-group-btn
             = f.button :submit, value: t('.register'), class: 'register'
 
-- if enrol_request = Course::EnrolRequest.find_by(course: current_course, user: current_user)
+- if enrol_request = Course::EnrolRequest.find_by(course: current_course, user: current_user, workflow_state: 'pending')
   .col-lg-4.col-md-5.col-md-offset-7.col-lg-offset-8
     .enrol-request.text-right
       = link_to t('.deregister'), [current_course, enrol_request], method: :delete
