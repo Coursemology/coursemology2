@@ -69,7 +69,7 @@ module Course::UserInvitationService::ProcessInvitationConcern
                                              role: user[:role], phantom: user[:phantom],
                                              timeline_algorithm: @current_course.default_timeline_algorithm,
                                              creator: @current_user, updater: @current_user)
-        @current_course.enrol_requests.find_by(user: user[:user].id)&.destroy!
+        @current_course.enrol_requests.pending.find_by(user: user[:user].id)&.destroy!
       end
     end
 
