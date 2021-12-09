@@ -82,6 +82,7 @@ Rails.application.routes.draw do
 
   resources :instance_user_role_requests, path: 'role_requests' do
     patch 'approve', on: :member
+    patch 'reject', on: :member
   end
 
   resources :users, only: [:show]
@@ -279,7 +280,8 @@ Rails.application.routes.draw do
       end
 
       resources :enrol_requests, only: [:index, :create, :destroy] do
-        post 'approve', on: :member
+        patch 'approve', on: :member
+        patch 'reject', on: :member
       end
 
       namespace :lesson_plan do
