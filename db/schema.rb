@@ -565,8 +565,16 @@ ActiveRecord::Schema.define(version: 2022_05_19_055836) do
     t.integer "user_id", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.index ["course_id", "user_id"], name: "index_course_enrol_requests_on_course_id_and_user_id", unique: true
+    t.bigint "creator_id", null: false
+    t.bigint "updater_id", null: false
+    t.string "workflow_state", null: false
+    t.datetime "confirmed_at"
+    t.bigint "confirmer_id"
+    t.index ["confirmer_id"], name: "index_course_enrol_requests_on_confirmer_id"
+    t.index ["course_id", "user_id"], name: "index_course_enrol_requests_on_course_id_and_user_id"
     t.index ["course_id"], name: "fk__course_enrol_requests_course_id"
+    t.index ["creator_id"], name: "index_course_enrol_requests_on_creator_id"
+    t.index ["updater_id"], name: "index_course_enrol_requests_on_updater_id"
     t.index ["user_id"], name: "fk__course_enrol_requests_user_id"
   end
 
@@ -1215,7 +1223,16 @@ ActiveRecord::Schema.define(version: 2022_05_19_055836) do
     t.text "reason"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "creator_id", null: false
+    t.bigint "updater_id", null: false
+    t.string "workflow_state", null: false
+    t.datetime "confirmed_at"
+    t.bigint "confirmer_id"
+    t.text "rejection_message"
+    t.index ["confirmer_id"], name: "index_instance_user_role_requests_on_confirmer_id"
+    t.index ["creator_id"], name: "index_instance_user_role_requests_on_creator_id"
     t.index ["instance_id"], name: "fk__instance_user_role_requests_instance_id"
+    t.index ["updater_id"], name: "index_instance_user_role_requests_on_updater_id"
     t.index ["user_id"], name: "fk__instance_user_role_requests_user_id"
   end
 
@@ -1401,6 +1418,9 @@ ActiveRecord::Schema.define(version: 2022_05_19_055836) do
   add_foreign_key "course_discussion_topic_subscriptions", "users", name: "fk_course_discussion_topic_subscriptions_user_id"
   add_foreign_key "course_discussion_topics", "courses", name: "fk_course_discussion_topics_course_id"
   add_foreign_key "course_enrol_requests", "courses", name: "fk_course_enrol_requests_course_id"
+  add_foreign_key "course_enrol_requests", "users", column: "confirmer_id"
+  add_foreign_key "course_enrol_requests", "users", column: "creator_id"
+  add_foreign_key "course_enrol_requests", "users", column: "updater_id"
   add_foreign_key "course_enrol_requests", "users", name: "fk_course_enrol_requests_user_id"
   add_foreign_key "course_experience_points_records", "course_users", name: "fk_course_experience_points_records_course_user_id"
   add_foreign_key "course_experience_points_records", "users", column: "awarder_id", name: "fk_course_experience_points_records_awarder_id"
@@ -1518,6 +1538,9 @@ ActiveRecord::Schema.define(version: 2022_05_19_055836) do
   add_foreign_key "generic_announcements", "users", column: "creator_id", name: "fk_generic_announcements_creator_id"
   add_foreign_key "generic_announcements", "users", column: "updater_id", name: "fk_generic_announcements_updater_id"
   add_foreign_key "instance_user_role_requests", "instances", name: "fk_instance_user_role_requests_instance_id"
+  add_foreign_key "instance_user_role_requests", "users", column: "confirmer_id"
+  add_foreign_key "instance_user_role_requests", "users", column: "creator_id"
+  add_foreign_key "instance_user_role_requests", "users", column: "updater_id"
   add_foreign_key "instance_user_role_requests", "users", name: "fk_instance_user_role_requests_user_id"
   add_foreign_key "instance_users", "instances", name: "fk_instance_users_instance_id"
   add_foreign_key "instance_users", "users", name: "fk_instance_users_user_id"
