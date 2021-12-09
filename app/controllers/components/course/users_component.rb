@@ -49,7 +49,7 @@ class Course::UsersComponent < SimpleDelegator
           else
             personal_times_course_users_path(current_course)
           end,
-        unread: can_manage_users ? current_course.enrol_requests.count : 0
+        unread: can_manage_users ? current_course.enrol_requests.pending.count : 0
       }
     ]
   end
