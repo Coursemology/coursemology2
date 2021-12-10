@@ -1,0 +1,8 @@
+= simple_form_for @user_role_request, url: reject_instance_user_role_request_path(@user_role_request), method: :patch do |f|
+  = f.input :role, as: :select, label: t('.role_label'), collection: Instance::UserRoleRequest.roles.keys.map { |k| [t(".#{k}"), k]}, disabled: true
+  = f.input :organization, disabled: true
+  = f.input :designation, disabled: true
+  = f.input :reason, as: :string, disabled: true
+  = f.input :rejection_message, as: :text, input_html: { class: ['no-summernote'] }
+  = f.submit t('.reject_with_message'), class: ['btn', 'btn-danger']
+  = link_to t('.cancel'), instance_user_role_requests_path, class: ['btn', 'btn-default']
