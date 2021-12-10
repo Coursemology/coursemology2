@@ -42,6 +42,19 @@ RSpec.describe Course::Mailer, type: :mailer do
       end
     end
 
+    describe '#user_rejected_email' do
+      let(:user) { create(:user) }
+      let(:mail) { Course::Mailer.user_rejected_email(course, user) }
+
+      it 'sends to the correct person' do
+        expect(subject.to).to contain_exactly(user.email)
+      end
+
+      it 'sets the correct subject' do
+        expect(subject.subject).to eq(I18n.t('course.mailer.user_rejected_email.subject'))
+      end
+    end
+
     describe '#user_enrol_requested_email' do
       let(:enrol_request) { create(:course_enrol_request, course: course) }
       let(:mail) { Course::Mailer.user_enrol_requested_email(enrol_request) }
