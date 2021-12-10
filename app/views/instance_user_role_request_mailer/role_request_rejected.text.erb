@@ -1,0 +1,5 @@
+<% if @message %>
+  <%= t('.message', role: @instance_user.role, message: @message) %>
+<% else %>
+  <%= t('.message_empty', role: @instance_user.role) %>
+<% end %>
