@@ -60,13 +60,13 @@ RSpec.feature 'Instance::UserRoleRequests' do
         expect(sample_request.user.instance_users.first.reload.role).to eq(sample_request.role)
       end
 
-      scenario 'I can delete requests' do
+      scenario 'I can reject a request' do
         visit instance_user_role_requests_path
 
         sample_request = requests.sample
-        find_link(nil, href: instance_user_role_request_path(sample_request)).click
+        find_link(nil, href: reject_instance_user_role_request_path(sample_request)).click
 
-        expect(page).to have_selector('div.alert', text: I18n.t('instance_user_role_requests.destroy.success'))
+        expect(page).to have_selector('div.alert', text: I18n.t('instance_user_role_requests.reject.success'))
       end
     end
   end

@@ -7,5 +7,17 @@ FactoryBot.define do
     organization { 'NUS' }
     designation { 'Lecturer' }
     reason { 'I like coursemology' }
+
+    trait :pending do
+      workflow_state { :pending }
+    end
+
+    trait :approved do
+      workflow_state { :approved }
+    end
+
+    trait :rejected do
+      workflow_state { :rejected }
+    end
   end
 end
