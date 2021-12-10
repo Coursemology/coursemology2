@@ -71,6 +71,7 @@ class Course < ApplicationRecord
   validates :default_reference_timeline, presence: true
   validate :validate_only_one_default_reference_timeline
 
+  has_one :learning_map, dependent: :destroy
   has_many :setting_emails, class_name: Course::Settings::Email.name, inverse_of: :course, dependent: :destroy
 
   accepts_nested_attributes_for :invitations, :assessment_categories, :video_tabs
