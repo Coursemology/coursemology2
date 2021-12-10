@@ -234,7 +234,6 @@ Rails.application.routes.draw do
                     resources :scribbles, only: [:create]
                   end
                   namespace :forum_post_response do
-                    # get :selected_posts
                     get 'selected_post_packs' => 'posts#selected'
                   end
                 end
