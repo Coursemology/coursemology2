@@ -1,6 +1,10 @@
 = page_header
+- pending_requests = @user_role_requests.where(workflow_state: 'pending')
+- approved_requests = @user_role_requests.where(workflow_state: 'approved')
+- rejected_requests = @user_role_requests.where(workflow_state: 'rejected')
 
-- if !@user_role_requests.empty?
+- unless pending_requests.blank?
+  h4 = t('.pending_header')
   table.table.table-middle-align.table-hover
     thead
       tr
@@ -12,7 +16,41 @@
         th = t('common.role')
         th
     tbody
-      = render partial: 'user_role_request', collection:  @user_role_requests
+      = render partial: 'user_role_request', collection: pending_requests
 - else
-    div.alert.alert-info
-      = t('.empty')
+  div.alert.alert-info
+    = t('.empty')
+
+div id='approved_requests'
+  - unless approved_requests.blank?
+    h4 = t('.approved_header')
+    table.table.table-middle-align.table-hover
+      thead
+        tr
+          th = t('common.name')
+          th = t('common.email')
+          th = t('.organization')
+          th = t('.designation')
+          th = t('.reason')
+          th = t('common.role')
+          th = t('.approver')
+          th = t('.approved_at')
+      tbody
+        = render partial: 'user_role_request', collection: approved_requests
+
+- unless rejected_requests.blank?
+  h4 = t('.rejected_header')
+  table.table.table-middle-align.table-hover
+    thead
+      tr
+        th = t('common.name')
+        th = t('common.email')
+        th = t('.organization')
+        th = t('.designation')
+        th = t('.reason')
+        th = t('common.role')
+        th = t('.rejector')
+        th = t('.rejected_at')
+        th = t('.rejection_message')
+    tbody
+      = render partial: 'user_role_request', collection: rejected_requests

@@ -1,7 +1,8 @@
 $('.instance-user-role-requests').parents('.container-fluid:first').prepend('<%= j(flash_messages) %>');
 
-<% if @success %>
-$('tr#user_role_request_<%= @user_role_request.id %>').fadeOut();
+<% if @user_role_request.approved? %>
+$('tr#user_role_request_<%= @user_role_request.id %>').remove();
+$("#approved_requests").load(location.href + " #approved_requests")
 <% end %>
 
 // Show users the flash messages
