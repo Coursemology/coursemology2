@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_27_083820) do
+ActiveRecord::Schema.define(version: 2021_12_10_015400) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -99,7 +99,7 @@ ActiveRecord::Schema.define(version: 2021_10_27_083820) do
   end
 
   create_table "course_assessment_answer_forum_post_responses", force: :cascade do |t|
-    t.string "answer_text"
+    t.text "answer_text"
   end
 
   create_table "course_assessment_answer_forum_posts", force: :cascade do |t|
