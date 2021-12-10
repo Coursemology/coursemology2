@@ -18,7 +18,7 @@ RSpec.describe Course::Assessment::Question::ForumPostResponsesController do
     before do
       sign_in(user)
     end
-  
+
     describe '#create' do
       subject do
         question_forum_post_response_attributes =
@@ -35,7 +35,7 @@ RSpec.describe Course::Assessment::Question::ForumPostResponsesController do
 
         expect(controller.instance_variable_get(:@forum_post_response_question)).to be_present
       end
-  
+
       context 'when saving fails' do
         before do
           controller.instance_variable_set(:@forum_post_response_question, forum_post_response)
@@ -50,7 +50,7 @@ RSpec.describe Course::Assessment::Question::ForumPostResponsesController do
 
     describe '#edit' do
       let!(:forum_post_response) do
-        forum_post_response = create(:course_assessment_question_forum_post_response, assessment: assessment);
+        forum_post_response = create(:course_assessment_question_forum_post_response, assessment: assessment)
         forum_post_response.question.update_column(:description, "<script>alert('boo');</script>")
         forum_post_response
       end
@@ -89,7 +89,7 @@ RSpec.describe Course::Assessment::Question::ForumPostResponsesController do
         before do
           controller.instance_variable_set(:@forum_post_response_question, forum_post_response)
         end
-  
+
         it { is_expected.to render_template('edit') }
       end
     end
