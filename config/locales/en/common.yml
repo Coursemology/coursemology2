@@ -18,6 +18,10 @@ en:
     truthy: 'Yes'
     falsey: 'No'
     percentage: '%{percentage}%'
+    approver: 'Approver'
+    approved_at: 'Approved At'
+    rejector: 'Rejector'
+    rejected_at: 'Rejected At'
   helpers:
     submit:
       condition_level:

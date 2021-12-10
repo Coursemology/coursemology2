@@ -36,8 +36,8 @@ div.users
             th = t('common.created_at')
             th = t('common.role')
             th = t('course.users.role.phantom')
-            th = t('.approver')
-            th = t('.approved_at')
+            th = t('common.approver')
+            th = t('common.approved_at')
         tbody
           = render partial: 'enrol_request', collection: approved_requests
 
@@ -50,8 +50,8 @@ div.users
             th = t('common.name')
             th = t('common.email')
             th = t('common.created_at')
-            th = t('.rejector')
-            th = t('.rejected_at')
+            th = t('common.rejector')
+            th = t('common.rejected_at')
         tbody
           = render partial: 'enrol_request', collection: rejected_requests
 
