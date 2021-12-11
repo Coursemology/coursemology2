@@ -130,7 +130,7 @@ RSpec.describe Course::Forum::ForumsController, type: :controller do
     end
 
     # Helper method to check that post pack content is expected
-    def check_post_pack(received_post_pack, expected_forum, expected_topic, expected_post, expected_parent = nil) # rubocop:disable Metrics/MethodLength
+    def check_post_pack(received_post_pack, expected_forum, expected_topic, expected_post, expected_parent = nil) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       expect(received_post_pack['corePost']['id']).to eq(expected_post.id)
       expect(received_post_pack['corePost']['text']).to eq(expected_post.text)
       expect(received_post_pack['corePost']['creatorId']).to eq(expected_post.creator.id)
