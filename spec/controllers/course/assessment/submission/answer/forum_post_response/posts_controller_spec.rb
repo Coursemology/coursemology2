@@ -10,10 +10,10 @@ RSpec.describe Course::Assessment::Submission::Answer::ForumPostResponse::PostsC
     let(:submission) { create(:submission, :submitted, assessment: assessment, creator: user) }
     let(:answer) { submission.answers.first }
     let(:topic) { create(:forum_topic, course: course) }
-    let(:parent_post) { create(:course_discussion_post, topic: topic) }
-    let(:forum_post) { create(:course_discussion_post, topic: topic, parent: parent_post) }
+    let(:parent_post) { create(:course_discussion_post, topic: topic.acting_as) }
+    let(:forum_post) { create(:course_discussion_post, topic: topic.acting_as, parent: parent_post) }
     let!(:post_pack) do
-      create(:course_assessment_answer_forum_post, parent: parent_post, topic: topic,
+      create(:course_assessment_answer_forum_post, parent: parent_post, topic: topic.acting_as,
                                                    post: forum_post, answer: answer.actable)
     end
 
