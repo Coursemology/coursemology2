@@ -5,7 +5,7 @@ FactoryBot.define do
       course { build(:course) }
       creator { create(:course_student, course: course) }
       parent { nil }
-      topic { parent&.topic || create(:forum_topic, course: course) }
+      topic { parent&.topic&.acting_as || create(:forum_topic, course: course).acting_as }
       post { create(:course_discussion_post, parent: parent, topic: topic, creator: creator.user) }
     end
 
