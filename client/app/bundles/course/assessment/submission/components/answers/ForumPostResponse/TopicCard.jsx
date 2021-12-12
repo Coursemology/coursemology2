@@ -84,10 +84,10 @@ export default class TopicCard extends React.Component {
               type={
                 numSelectedInTopic > 0 ? (
                   <FormattedMessage
-                    {...translations.topicCardTitleTypeSelected}
                     values={{
                       numSelected: numSelectedInTopic,
                     }}
+                    {...translations.topicCardTitleTypeSelected}
                   />
                 ) : (
                   <FormattedMessage

@@ -116,7 +116,6 @@ export default class SelectedPostCard extends React.Component {
         ) : (
           <span>
             <FormattedMessage
-              {...translations.postMadeUnder}
               values={{
                 topicUrl: SelectedPostCard.renderLink(
                   getForumTopicURL(courseId, forum.id, topic.id),
@@ -127,6 +126,7 @@ export default class SelectedPostCard extends React.Component {
                   forum.name,
                 ),
               }}
+              {...translations.postMadeUnder}
             />
           </span>
         )}

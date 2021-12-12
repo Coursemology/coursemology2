@@ -212,8 +212,8 @@ export default class ForumPostSelectDialog extends React.Component {
       <FlatButton
         label={
           <FormattedMessage
-            {...translations.selectButton}
             values={{ numPosts: numPostsSelected }}
+            {...translations.selectButton}
           />
         }
         primary
