@@ -118,7 +118,7 @@ RSpec.describe 'Course: Assessments: Submissions: Forum Post Response Answers', 
 
       scenario 'I cannot update my post packs after finalising' do
         topic = create(:forum_topic, course: course)
-        forum_post = create(:course_discussion_post, topic: topic.acting_as, creator: user)
+        create(:course_discussion_post, topic: topic.acting_as, creator: user)
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         click_button('Select Forum Post')
