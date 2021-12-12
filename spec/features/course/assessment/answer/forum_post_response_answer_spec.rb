@@ -82,15 +82,13 @@ RSpec.describe 'Course: Assessments: Submissions: Forum Post Response Answers', 
         visit edit_course_assessment_submission_path(course, assessment, submission)
         click_button('Select Forum Post')
         expect(page).to have_text(topic.forum.name)
-        find('div', text: topic.forum.name, class: 'forum-card').click
+        find('div.forum-card').click
         expect(page).to have_text(topic.title)
-        find('div', text: topic.title, class: 'topic-card').click
+        find('div.topic-card').click
         expect(page).to have_text(forum_post.text)
-        find('div', text: forum_post.text, class: 'forum-post-option').click
+        find('div.forum-post-option').click
         sleep 1 # Wait for color to transition
-        expect(find('div', text: forum_post.text, class: 'forum-post').
-          style('background-color')['background-color']).
-          to eq('rgba(232, 245, 233, 1)')
+        expect(find('div.forum-post').style('background-color')['background-color']).to eq('rgba(232, 245, 233, 1)')
         expect(page).to have_text('You have selected 1/1 post.')
         expect(page).to have_text('Forum (1 selected)')
         expect(page).to have_text('Topic (1 selected)')
@@ -104,9 +102,9 @@ RSpec.describe 'Course: Assessments: Submissions: Forum Post Response Answers', 
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         click_button('Select Forum Post')
-        find('div', text: topic.forum.name, class: 'forum-card').click
-        find('div', text: topic.title, class: 'topic-card').click
-        find('div', text: forum_post.text, class: 'forum-post-option').click
+        find('div.forum-card').click
+        find('div.topic-card').click
+        find('div.forum-post-option').click
         find('button.select-posts-button').click
         click_button('Save Draft')
         expect(current_path).to eq(
@@ -124,9 +122,9 @@ RSpec.describe 'Course: Assessments: Submissions: Forum Post Response Answers', 
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         click_button('Select Forum Post')
-        find('div', text: topic.forum.name, class: 'forum-card').click
-        find('div', text: topic.title, class: 'topic-card').click
-        find('div', text: forum_post.text, class: 'forum-post-option').click
+        find('div.forum-card').click
+        find('div.topic-card').click
+        find('div.forum-post-option').click
         find('button.select-posts-button').click
         click_button('Finalise Submission')
         accept_confirm_dialog do
