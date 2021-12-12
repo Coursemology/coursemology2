@@ -1,4 +1,5 @@
 import React from 'react';
+import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import {
   RaisedButton,
   FontIcon,
@@ -20,6 +21,21 @@ import { getForumURL } from 'lib/helpers/url-builders';
 import CardTitle from './CardTitle';
 import TopicCard from './TopicCard';
 
+const translations = defineMessages({
+  cardTitleTypeNoneSelected: {
+    id: 'course.assessment.submission.answer.forumPostResponse.cardTitleTypeNoneSelected',
+    defaultMessage: 'Forum',
+  },
+  cardTitleTypeSelected: {
+    id: 'course.assessment.submission.answer.forumPostResponse.cardTitleTypeSelected',
+    defaultMessage: 'Forum ({numSelected} selected)',
+  },
+  viewForumInNewTab: {
+    id: 'course.assessment.submission.answer.forumPostResponse.viewForumInNewTab',
+    defaultMessage: 'View forum',
+  },
+});
+
 const styles = {
   cardHeader: {
     backgroundColor: cyan50,
@@ -36,7 +52,7 @@ const styles = {
   },
 };
 
-export default class ForumCard extends React.Component {
+class ForumCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -58,7 +74,7 @@ export default class ForumCard extends React.Component {
   }
 
   render() {
-    const { forumTopicPostPack } = this.props;
+    const { forumTopicPostPack, intl } = this.props;
     const postPackIds = new Set(
       this.props.selectedPostPacks.map((pack) => pack.corePost.id),
     );
@@ -77,11 +93,13 @@ export default class ForumCard extends React.Component {
           title={
             <CardTitle
               title={this.props.forumTopicPostPack.forum.name}
-              type={`Forum${
+              type={
                 numPostsSelectedInForum > 0
-                  ? ` (${numPostsSelectedInForum} selected)`
-                  : ''
-              }`}
+                  ? intl.formatMessage(translations.cardTitleTypeSelected, {
+                      numSelected: numPostsSelectedInForum,
+                    })
+                  : intl.formatMessage(translations.cardTitleTypeNoneSelected)
+              }
             />
           }
           actAsExpander
@@ -91,7 +109,7 @@ export default class ForumCard extends React.Component {
         <Divider />
         <CardActions expandable style={styles.cardActions}>
           <RaisedButton
-            label="View forum"
+            label={intl.formatMessage(translations.viewForumInNewTab)}
             href={getForumURL(
               forumTopicPostPack.course.id,
               forumTopicPostPack.forum.id,
@@ -133,4 +151,7 @@ ForumCard.propTypes = {
   onSelectPostPack: PropTypes.func.isRequired,
   isExpandedOnLoad: PropTypes.bool.isRequired,
   style: PropTypes.object,
+  intl: intlShape.isRequired,
 };
+
+export default injectIntl(ForumCard);
