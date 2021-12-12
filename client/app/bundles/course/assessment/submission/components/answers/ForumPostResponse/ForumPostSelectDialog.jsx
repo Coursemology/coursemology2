@@ -183,6 +183,7 @@ export default class ForumPostSelectDialog extends React.Component {
         onClick={() => this.saveChanges()}
         key="forum-post-dialog-select-button"
         disabled={hasNoChanges}
+        className="select-posts-button"
       />,
     ];
 

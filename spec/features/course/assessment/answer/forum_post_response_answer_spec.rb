@@ -22,7 +22,11 @@ RSpec.describe 'Course: Assessments: Submissions: Forum Post Response Answers', 
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         answer_id = submission.answers.first.id
-        fill_in_react_summernote("textarea[name=\"#{answer_id}[answer_text]\"]", 'Testing Save Draft')
+        summernote_selector = "textarea[name=\"#{answer_id}[answer_text]\"]"
+        expect(page).to have_selector(summernote_selector, visible: false)
+        fill_in_react_summernote summernote_selector, ''
+        fill_in_react_summernote summernote_selector, 'Testing Save Draft'
+        expect(page).to have_text('Testing Save Draft')
         click_button('Save Draft')
         expect(current_path).to eq(
           edit_course_assessment_submission_path(course, assessment, submission)
@@ -37,8 +41,10 @@ RSpec.describe 'Course: Assessments: Submissions: Forum Post Response Answers', 
 
         answer_id = submission.answers.first.id
         summernote_selector = "textarea[name=\"#{answer_id}[answer_text]\"]"
-        fill_in_react_summernote(summernote_selector, '')
-        fill_in_react_summernote(summernote_selector, 'Testing Finalising')
+        expect(page).to have_selector(summernote_selector, visible: false)
+        fill_in_react_summernote summernote_selector, ''
+        fill_in_react_summernote summernote_selector, 'Testing Finalising'
+        expect(page).to have_text('Testing Finalising')
         click_button('Finalise Submission')
         accept_confirm_dialog do
           wait_for_job
@@ -88,7 +94,7 @@ RSpec.describe 'Course: Assessments: Submissions: Forum Post Response Answers', 
         expect(page).to have_text('You have selected 1/1 post.')
         expect(page).to have_text('Forum (1 selected)')
         expect(page).to have_text('Topic (1 selected)')
-        click_button('Select 1 Post')
+        find('button.select-posts-button').click
         expect(page).to have_selector('div.selected-forum-post-card', count: 1)
       end
 
@@ -101,7 +107,7 @@ RSpec.describe 'Course: Assessments: Submissions: Forum Post Response Answers', 
         find('div', text: topic.forum.name, class: 'forum-card').click
         find('div', text: topic.title, class: 'topic-card').click
         find('div', text: forum_post.text, class: 'forum-post-option').click
-        click_button('Select 1 Post')
+        find('button.select-posts-button').click
         click_button('Save Draft')
         expect(current_path).to eq(
           edit_course_assessment_submission_path(course, assessment, submission)
@@ -121,7 +127,7 @@ RSpec.describe 'Course: Assessments: Submissions: Forum Post Response Answers', 
         find('div', text: topic.forum.name, class: 'forum-card').click
         find('div', text: topic.title, class: 'topic-card').click
         find('div', text: forum_post.text, class: 'forum-post-option').click
-        click_button('Select 1 Post')
+        find('button.select-posts-button').click
         click_button('Finalise Submission')
         accept_confirm_dialog do
           wait_for_job
