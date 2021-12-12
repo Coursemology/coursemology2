@@ -35,7 +35,8 @@ RSpec.describe 'Course: Assessments: Questions: Forum Post Response Management' 
         click_button I18n.t('helpers.buttons.create')
 
         question_created = assessment.questions.first.specific
-        expect(page).to have_selector('div', text: I18n.t('course.assessment.question.forum_post_responses.create.success'))
+        expect(page).to have_selector('div',
+                                      text: I18n.t('course.assessment.question.forum_post_responses.create.success'))
         expect(question_created.question_assessments.first.skills).to contain_exactly(skill)
         expect(question_created.title).to eq(question_attributes[:title])
         expect(question_created.description).to eq(question_attributes[:description])
