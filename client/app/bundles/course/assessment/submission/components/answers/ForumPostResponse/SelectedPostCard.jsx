@@ -119,7 +119,7 @@ export default class SelectedPostCard extends React.Component {
     const { postPack } = this.props;
 
     return (
-      <div style={styles.card}>
+      <div style={styles.card} className="selected-forum-post-card">
         <div style={styles.label} onClick={() => this.handleTogglePostView()}>
           {this.renderLabel()}
           {this.renderTrashIcon()}

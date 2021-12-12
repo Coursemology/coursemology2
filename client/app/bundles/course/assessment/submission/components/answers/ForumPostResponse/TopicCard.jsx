@@ -59,6 +59,7 @@ export default class TopicCard extends React.Component {
         expanded={this.state.isExpanded}
         onExpandChange={this.handleIsExpandedChange}
         style={this.props.style}
+        className="topic-card"
       >
         <CardHeader
           title={

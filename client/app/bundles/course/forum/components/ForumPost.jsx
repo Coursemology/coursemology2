@@ -32,7 +32,10 @@ export default class ForumPost extends React.Component {
 
   render() {
     return (
-      <Card style={{ ...styles.default, ...this.props.style }}>
+      <Card
+        style={{ ...styles.default, ...this.props.style }}
+        className="forum-post"
+      >
         <CardHeader
           title={this.props.post.userName}
           subtitle={moment(this.props.post.updatedAt).format(

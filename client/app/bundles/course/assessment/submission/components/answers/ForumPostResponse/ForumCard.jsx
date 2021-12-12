@@ -71,6 +71,7 @@ export default class ForumCard extends React.Component {
         expanded={this.state.isExpanded}
         onExpandChange={this.handleIsExpandedChange}
         style={this.props.style}
+        className="forum-card"
       >
         <CardHeader
           title={

@@ -177,7 +177,7 @@ export default class ForumPostSelectDialog extends React.Component {
       />,
       <FlatButton
         label={`Select ${numPostsSelected} ${
-          numPostsSelected === 1 ? 'post' : 'posts'
+          numPostsSelected === 1 ? 'Post' : 'Posts'
         }`}
         primary
         onClick={() => this.saveChanges()}

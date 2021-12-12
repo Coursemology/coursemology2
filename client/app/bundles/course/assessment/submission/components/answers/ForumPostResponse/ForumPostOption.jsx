@@ -58,6 +58,7 @@ export default class ForumPostOption extends React.Component {
             event.persist();
             this.handleClick(event, postPack);
           }}
+          className="forum-post-option"
         >
           <ForumPost post={postPack.corePost} isExpandable style={postStyles} />
         </div>
