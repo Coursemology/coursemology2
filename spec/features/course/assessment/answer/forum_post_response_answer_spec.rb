@@ -22,7 +22,7 @@ RSpec.describe 'Course: Assessments: Submissions: Forum Post Response Answers', 
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         answer_id = submission.answers.first.id
-        fill_in_react_summernote("textarea[name=\"#{answer_id}[answer_text]\"]", "Testing Save Draft")
+        fill_in_react_summernote("textarea[name=\"#{answer_id}[answer_text]\"]", 'Testing Save Draft')
         click_button('Save Draft')
         expect(current_path).to eq(
           edit_course_assessment_submission_path(course, assessment, submission)
@@ -82,7 +82,9 @@ RSpec.describe 'Course: Assessments: Submissions: Forum Post Response Answers', 
         expect(page).to have_text(forum_post.text)
         find('div', text: forum_post.text, class: 'forum-post-option').click
         sleep 1 # Wait for color to transition
-        expect(find('div', text: forum_post.text, class: 'forum-post').style('background-color')['background-color']).to eq('rgba(232, 245, 233, 1)')
+        expect(find('div', text: forum_post.text, class: 'forum-post').
+          style('background-color')['background-color']).
+          to eq('rgba(232, 245, 233, 1)')
         expect(page).to have_text('You have selected 1/1 post.')
         expect(page).to have_text('Forum (1 selected)')
         expect(page).to have_text('Topic (1 selected)')
