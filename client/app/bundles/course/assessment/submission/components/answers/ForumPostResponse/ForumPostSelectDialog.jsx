@@ -2,6 +2,7 @@ import React from 'react';
 import { Dialog, FlatButton } from 'material-ui';
 import { cyan500 } from 'material-ui/styles/colors';
 import PropTypes from 'prop-types';
+import { defineMessages, FormattedMessage } from 'react-intl';
 
 import {
   forumTopicPostPackShape,
@@ -9,6 +10,37 @@ import {
 } from 'course/assessment/submission/propTypes';
 
 import ForumCard from './ForumCard';
+
+const translations = defineMessages({
+  maxPostsSelected: {
+    id: 'course.assessment.submission.answer.forumPostResponse.maxPostsSelected',
+    defaultMessage:
+      'You have already selected the max number of posts allowed.',
+  },
+  dialogTitle: {
+    id: 'course.assessment.submission.answer.forumPostResponse.dialogTitle',
+    defaultMessage:
+      'You have selected {numPosts}/{maxPosts} {maxPosts, plural, one {post} other {posts}}.',
+  },
+  dialogSubtitle: {
+    id: 'course.assessment.submission.answer.forumPostResponse.dialogSubtitle',
+    defaultMessage: 'Click on the post to include it for submission.',
+  },
+  noPosts: {
+    id: 'course.assessment.submission.answer.forumPostResponse.noPosts',
+    defaultMessage:
+      'You currently do not have any posts. Create one on the forums now!',
+  },
+  cancelButton: {
+    id: 'course.assessment.submission.answer.forumPostResponse.cancelButton',
+    defaultMessage: 'Cancel',
+  },
+  selectButton: {
+    id: 'course.assessment.submission.answer.forumPostResponse.selectButton',
+    defaultMessage:
+      'Select {numPosts} {numPosts, plural, one {Post} other {Posts}}',
+  },
+});
 
 const styles = {
   dialogTitle: {
@@ -72,7 +104,7 @@ export default class ForumPostSelectDialog extends React.Component {
       if (postPacks.length >= this.props.maxPosts) {
         // Error if max posts have already been selected
         this.props.handleNotificationMessage(
-          'You have already selected the max number of posts allowed.',
+          <FormattedMessage {...translations.maxPostsSelected} />,
         );
       } else {
         this.setState((oldState) => ({
@@ -112,12 +144,14 @@ export default class ForumPostSelectDialog extends React.Component {
       <div style={styles.dialogTitle}>
         <h2 style={styles.dialogTitleText}>
           <strong>
-            You have selected {numPostsSelected}/{maxPosts}{' '}
-            {maxPosts === 1 ? 'post' : 'posts'}.
+            <FormattedMessage
+              values={{ maxPosts, numPosts: numPostsSelected }}
+              {...translations.dialogTitle}
+            />
           </strong>
         </h2>
         <p style={styles.dialogSubtitleText}>
-          Click on the post to include it for submission.
+          <FormattedMessage {...translations.dialogSubtitle} />
         </p>
       </div>
     );
@@ -129,7 +163,7 @@ export default class ForumPostSelectDialog extends React.Component {
     if (forumTopicPostPacks == null || forumTopicPostPacks.length === 0) {
       return (
         <p style={styles.noPostsText}>
-          You currently do not have any posts. Create one on the forum now!
+          <FormattedMessage {...translations.noPosts} />
         </p>
       );
     }
@@ -170,15 +204,18 @@ export default class ForumPostSelectDialog extends React.Component {
 
     const actions = [
       <FlatButton
-        label="Cancel"
+        label={<FormattedMessage {...translations.cancelButton} />}
         secondary
         onClick={() => this.props.setIsVisible(false)}
         key="forum-post-dialog-cancel-button"
       />,
       <FlatButton
-        label={`Select ${numPostsSelected} ${
-          numPostsSelected === 1 ? 'Post' : 'Posts'
-        }`}
+        label={
+          <FormattedMessage
+            {...translations.selectButton}
+            values={{ numPosts: numPostsSelected }}
+          />
+        }
         primary
         onClick={() => this.saveChanges()}
         key="forum-post-dialog-select-button"

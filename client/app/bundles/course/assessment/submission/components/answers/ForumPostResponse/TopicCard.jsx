@@ -10,6 +10,7 @@ import {
 } from 'material-ui';
 import { indigo50 } from 'material-ui/styles/colors';
 import PropTypes from 'prop-types';
+import { defineMessages, FormattedMessage } from 'react-intl';
 
 import {
   topicOverviewShape,
@@ -19,6 +20,21 @@ import { getForumTopicURL } from 'lib/helpers/url-builders';
 
 import CardTitle from './CardTitle';
 import ForumPostOption from './ForumPostOption';
+
+const translations = defineMessages({
+  topicCardTitleTypeNoneSelected: {
+    id: 'course.assessment.submission.answer.forumPostResponse.topicCardTitleTypeNoneSelected',
+    defaultMessage: 'Topic',
+  },
+  topicCardTitleTypeSelected: {
+    id: 'course.assessment.submission.answer.forumPostResponse.topicCardTitleTypeSelected',
+    defaultMessage: 'Topic ({numSelected} selected)',
+  },
+  viewTopicInNewTab: {
+    id: 'course.assessment.submission.answer.forumPostResponse.viewTopicInNewTab',
+    defaultMessage: 'View Topic',
+  },
+});
 
 const styles = {
   cardHeader: {
@@ -65,11 +81,20 @@ export default class TopicCard extends React.Component {
           title={
             <CardTitle
               title={this.props.topicPostPack.topic.title}
-              type={`Topic${
-                numSelectedInTopic > 0
-                  ? ` (${numSelectedInTopic} selected)`
-                  : ''
-              }`}
+              type={
+                numSelectedInTopic > 0 ? (
+                  <FormattedMessage
+                    {...translations.topicCardTitleTypeSelected}
+                    values={{
+                      numSelected: numSelectedInTopic,
+                    }}
+                  />
+                ) : (
+                  <FormattedMessage
+                    {...translations.topicCardTitleTypeNoneSelected}
+                  />
+                )
+              }
             />
           }
           actAsExpander
@@ -79,7 +104,7 @@ export default class TopicCard extends React.Component {
         <Divider />
         <CardActions expandable style={styles.cardActions}>
           <RaisedButton
-            label="View topic"
+            label={<FormattedMessage {...translations.viewTopicInNewTab} />}
             href={getForumTopicURL(courseId, forumId, topicPostPack.topic.ic)}
             target="_blank"
             labelPosition="before"

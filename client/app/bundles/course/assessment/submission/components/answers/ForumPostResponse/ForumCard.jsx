@@ -1,5 +1,5 @@
 import React from 'react';
-import { defineMessages, injectIntl, intlShape } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import {
   RaisedButton,
   FontIcon,
@@ -22,17 +22,17 @@ import CardTitle from './CardTitle';
 import TopicCard from './TopicCard';
 
 const translations = defineMessages({
-  cardTitleTypeNoneSelected: {
-    id: 'course.assessment.submission.answer.forumPostResponse.cardTitleTypeNoneSelected',
+  forumCardTitleTypeNoneSelected: {
+    id: 'course.assessment.submission.answer.forumPostResponse.forumCardTitleTypeNoneSelected',
     defaultMessage: 'Forum',
   },
-  cardTitleTypeSelected: {
-    id: 'course.assessment.submission.answer.forumPostResponse.cardTitleTypeSelected',
+  forumCardTitleTypeSelected: {
+    id: 'course.assessment.submission.answer.forumPostResponse.forumCardTitleTypeSelected',
     defaultMessage: 'Forum ({numSelected} selected)',
   },
   viewForumInNewTab: {
     id: 'course.assessment.submission.answer.forumPostResponse.viewForumInNewTab',
-    defaultMessage: 'View forum',
+    defaultMessage: 'View Forum',
   },
 });
 
@@ -52,7 +52,7 @@ const styles = {
   },
 };
 
-class ForumCard extends React.Component {
+export default class ForumCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -74,7 +74,7 @@ class ForumCard extends React.Component {
   }
 
   render() {
-    const { forumTopicPostPack, intl } = this.props;
+    const { forumTopicPostPack } = this.props;
     const postPackIds = new Set(
       this.props.selectedPostPacks.map((pack) => pack.corePost.id),
     );
@@ -94,11 +94,18 @@ class ForumCard extends React.Component {
             <CardTitle
               title={this.props.forumTopicPostPack.forum.name}
               type={
-                numPostsSelectedInForum > 0
-                  ? intl.formatMessage(translations.cardTitleTypeSelected, {
+                numPostsSelectedInForum > 0 ? (
+                  <FormattedMessage
+                    {...translations.forumCardTitleTypeSelected}
+                    values={{
                       numSelected: numPostsSelectedInForum,
-                    })
-                  : intl.formatMessage(translations.cardTitleTypeNoneSelected)
+                    }}
+                  />
+                ) : (
+                  <FormattedMessage
+                    {...translations.forumCardTitleTypeNoneSelected}
+                  />
+                )
               }
             />
           }
@@ -109,7 +116,7 @@ class ForumCard extends React.Component {
         <Divider />
         <CardActions expandable style={styles.cardActions}>
           <RaisedButton
-            label={intl.formatMessage(translations.viewForumInNewTab)}
+            label={<FormattedMessage {...translations.viewForumInNewTab} />}
             href={getForumURL(
               forumTopicPostPack.course.id,
               forumTopicPostPack.forum.id,
@@ -151,7 +158,4 @@ ForumCard.propTypes = {
   onSelectPostPack: PropTypes.func.isRequired,
   isExpandedOnLoad: PropTypes.bool.isRequired,
   style: PropTypes.object,
-  intl: intlShape.isRequired,
 };
-
-export default injectIntl(ForumCard);

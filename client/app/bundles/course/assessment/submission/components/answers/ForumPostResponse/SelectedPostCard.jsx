@@ -1,6 +1,7 @@
 import React from 'react';
 import { green50, red700 } from 'material-ui/styles/colors';
 import PropTypes from 'prop-types';
+import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { postPackShape } from 'course/assessment/submission/propTypes';
 import ForumPost from 'course/forum/components/ForumPost';
@@ -9,6 +10,19 @@ import { getCourseId } from 'lib/helpers/url-helpers';
 
 import Labels from './Labels';
 import ParentPost from './ParentPost';
+
+const MAX_NAME_LENGTH = 30;
+
+const translations = defineMessages({
+  topicDeleted: {
+    id: 'course.assessment.submission.answer.forumPostResponse.topicDeleted',
+    defaultMessage: 'Post made under a topic that was subsequently deleted.',
+  },
+  postMadeUnder: {
+    id: 'course.assessment.submission.answer.forumPostResponse.postMadeUnder',
+    defaultMessage: 'Post made under {topicUrl} in {forumUrl}',
+  },
+});
 
 const styles = {
   card: {
@@ -72,8 +86,8 @@ export default class SelectedPostCard extends React.Component {
 
   static renderLink(url, name) {
     let renderedName = name;
-    if (renderedName.length > 30) {
-      renderedName = `${renderedName.slice(0, 30)}...`;
+    if (renderedName.length > MAX_NAME_LENGTH) {
+      renderedName = `${renderedName.slice(0, MAX_NAME_LENGTH)}...`;
     }
     return (
       <a href={url} target="_blank" rel="noreferrer">
@@ -96,19 +110,24 @@ export default class SelectedPostCard extends React.Component {
           style={{ width: 20 }}
         />
         {topic.isDeleted ? (
-          <span>Post made under a topic which was subsequently deleted.</span>
+          <span>
+            <FormattedMessage {...translations.topicDeleted} />
+          </span>
         ) : (
           <span>
-            Post made under{' '}
-            {SelectedPostCard.renderLink(
-              getForumTopicURL(courseId, forum.id, topic.id),
-              topic.title,
-            )}{' '}
-            in{' '}
-            {SelectedPostCard.renderLink(
-              getForumURL(courseId, forum.id),
-              forum.name,
-            )}
+            <FormattedMessage
+              {...translations.postMadeUnder}
+              values={{
+                topicUrl: SelectedPostCard.renderLink(
+                  getForumTopicURL(courseId, forum.id, topic.id),
+                  topic.title,
+                ),
+                forumUrl: SelectedPostCard.renderLink(
+                  getForumURL(courseId, forum.id),
+                  forum.name,
+                ),
+              }}
+            />
           </span>
         )}
       </div>

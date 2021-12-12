@@ -2,6 +2,20 @@ import React from 'react';
 import { Divider, Card, CardHeader, CardText, FlatButton } from 'material-ui';
 import PropTypes from 'prop-types';
 import moment from 'lib/moment';
+import { defineMessages, FormattedMessage } from 'react-intl';
+
+const MAX_POST_HEIGHT = 60;
+
+export const translations = defineMessages({
+  showMore: {
+    id: 'course.forum.forumPost.showMore',
+    defaultMessage: 'SHOW MORE',
+  },
+  showLess: {
+    id: 'course.forum.forumPost.showLess',
+    defaultMessage: 'SHOW LESS',
+  },
+});
 
 const styles = {
   default: {
@@ -10,8 +24,6 @@ const styles = {
   },
   expandButton: { marginTop: 8 },
 };
-
-const maxHeight = 60;
 
 export default class ForumPost extends React.Component {
   constructor(props) {
@@ -25,7 +37,8 @@ export default class ForumPost extends React.Component {
   componentDidMount() {
     const renderedTextHeight = this.divElement.clientHeight;
     this.setState({
-      isExpandable: this.props.isExpandable && renderedTextHeight > maxHeight,
+      isExpandable:
+        this.props.isExpandable && renderedTextHeight > MAX_POST_HEIGHT,
       isExpanded: !this.props.isExpandable,
     });
   }
@@ -54,13 +67,19 @@ export default class ForumPost extends React.Component {
               height:
                 this.state.isExpanded || !this.state.isExpandable
                   ? 'auto'
-                  : maxHeight,
+                  : MAX_POST_HEIGHT,
               overflow: 'hidden',
             }}
           />
           {this.state.isExpandable && (
             <FlatButton
-              label={this.state.isExpanded ? 'SHOW LESS' : 'SHOW MORE'}
+              label={
+                this.state.isExpanded ? (
+                  <FormattedMessage {...translations.showLess} />
+                ) : (
+                  <FormattedMessage {...translations.showMore} />
+                )
+              }
               onClick={(event) => {
                 event.persist();
                 this.setState((oldState) => ({

@@ -1,6 +1,20 @@
 import React from 'react';
 import { red100, orange100 } from 'material-ui/styles/colors';
 import PropTypes from 'prop-types';
+import { defineMessages, FormattedMessage } from 'react-intl';
+
+const translations = defineMessages({
+  postEdited: {
+    id: 'course.assessment.submission.answer.forumPostResponse.postEdited',
+    defaultMessage:
+      'Post has been edited in the forums. Showing post saved at point of submission.',
+  },
+  postDeleted: {
+    id: 'course.assessment.submission.answer.forumPostResponse.postDeleted',
+    defaultMessage:
+      'Post has been deleted from the forum topic. Showing post saved at point of submission.',
+  },
+});
 
 const styles = {
   label: {
@@ -35,8 +49,7 @@ function Labels({ post }) {
             style={styles.iconWidth}
           />
           <div>
-            Post has been edited in the forum. Showing post saved at point of
-            submission.
+            <FormattedMessage {...translations.postEdited} />
           </div>
         </div>
       )}
@@ -48,8 +61,7 @@ function Labels({ post }) {
             style={styles.iconWidth}
           />
           <div>
-            Post has been deleted from forum topic. Showing post saved at point
-            of submission.
+            <FormattedMessage {...translations.postDeleted} />
           </div>
         </div>
       )}
