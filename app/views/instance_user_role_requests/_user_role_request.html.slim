@@ -10,8 +10,8 @@
       td
         = f.button :submit, id: 'update', title: t('.approve') do
           = fa_icon 'check'.freeze
-        = link_to edit_instance_user_role_request_path(user_role_request), class: ['btn', 'btn-default'], title: t('.reject_with_message') do
-          = fa_icon 'eject'.freeze
+        = link_to edit_instance_user_role_request_path(user_role_request), class: ['btn', 'btn-warning'], title: t('.reject_with_message') do
+          = fa_icon 'envelope'.freeze
         = link_to reject_instance_user_role_request_path(user_role_request), class: ['btn', 'btn-danger'], title: t('.reject'), method: :patch do
           = fa_icon 'trash'.freeze
     - else
