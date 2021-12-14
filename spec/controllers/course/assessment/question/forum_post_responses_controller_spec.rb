@@ -104,6 +104,19 @@ RSpec.describe Course::Assessment::Question::ForumPostResponsesController do
         subject
         expect(flash[:success]).not_to be_empty
       end
+
+      context 'when destroy fails' do
+        before do
+          controller.instance_variable_set(:@forum_post_response_question, forum_post_response)
+        end
+
+        it { is_expected.to redirect_to(course_assessment_path(course, assessment)) }
+
+        it 'sets the correct flash message' do
+          subject
+          expect(flash[:danger]).not_to be_empty
+        end
+      end
     end
   end
 end

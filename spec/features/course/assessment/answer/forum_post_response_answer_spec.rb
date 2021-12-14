@@ -73,7 +73,7 @@ RSpec.describe 'Course: Assessments: Submissions: Forum Post Response Answers', 
       scenario 'I am informed of the lack of forum posts to select' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
         click_button('Select Forum Post')
-        expect(page).to have_text('You currently do not have any posts. Create one on the forum now!')
+        expect(page).to have_text('You currently do not have any posts. Create one on the forums now!')
       end
 
       # TODO: The following 3 tests cannot pass on CI as the forum card is not
