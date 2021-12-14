@@ -16,7 +16,7 @@ json.assessment do
   json.allowPartialSubmission @assessment.allow_partial_submission
   json.showMcqAnswer @assessment.show_mcq_answer
   json.showEvaluation @assessment.show_evaluation
-  json.questionIds @submission.questions.map(&:id)
+  json.questionIds @submission.questions.pluck(:id)
   json.passwordProtected @assessment.session_password_protected?
   json.gamified @assessment.course.gamified?
   json.files @assessment.folder.materials do |material|
@@ -25,12 +25,13 @@ json.assessment do
   end
 end
 
-answers = @submission.current_answers
+current_answer_ids = @submission.current_answers.pluck(:id)
+answers = @submission.answers.where(id: current_answer_ids).includes(:actable, { question: :actable })
 submission_questions = @submission.submission_questions.
                        where(question: @submission.questions).includes({ discussion_topic: :posts })
 
 json.partial! 'questions', assessment: @assessment, submission: @submission, can_grade: can_grade,
-                           answers: answers
+                           submission_questions: submission_questions, answers: answers
 json.partial! 'answers', submission: @submission, answers: answers
 json.partial! 'topics', submission: @submission, submission_questions: submission_questions, can_grade: can_grade
 json.partial! 'history', submission: @submission
