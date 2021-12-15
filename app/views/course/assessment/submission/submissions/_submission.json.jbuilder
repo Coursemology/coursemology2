@@ -3,7 +3,7 @@ json.submission do
   json.id submission.id
   json.canGrade can_grade
   json.canUpdate can_update
-  json.isCreator current_user == submission.creator
+  json.isCreator current_user.id == submission.creator_id
 
   if assessment.autograded? && !assessment.skippable?
     question = submission.questions.next_unanswered(submission)

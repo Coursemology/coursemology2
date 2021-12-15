@@ -307,7 +307,7 @@ RSpec.describe Course::Assessment::Submission do
 
       it 'sums the grade of all answers' do
         grade = submission.answers.map(&:grade).compact.sum - earlier_answer.grade
-        expect(submission.grade).to eq(grade)
+        expect(submission.grade.to_f).to eq(grade)
       end
     end
 

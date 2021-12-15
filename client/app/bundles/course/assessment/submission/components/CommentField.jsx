@@ -31,11 +31,19 @@ export default class CommentField extends Component {
   }
 
   render() {
-    const { createComment, inputId, isSubmitting, value, airMode } = this.props;
+    const {
+      createComment,
+      inputId,
+      isSubmitting,
+      value,
+      airMode,
+      airModeColor,
+    } = this.props;
     return (
       <>
         <MaterialSummernote
           airMode={airMode}
+          airModeColor={airModeColor}
           disabled={isSubmitting}
           inputId={inputId}
           label={
@@ -64,6 +72,7 @@ CommentField.propTypes = {
   isSubmitting: PropTypes.bool,
   value: PropTypes.string,
   airMode: PropTypes.bool,
+  airModeColor: PropTypes.bool,
 
   createComment: PropTypes.func,
   handleChange: PropTypes.func,
