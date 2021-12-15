@@ -48,6 +48,7 @@ class VisibleComments extends Component {
           inputId={VisibleComments.newCommentIdentifier(topic.id)}
           isSubmitting={commentForms.isSubmitting}
           value={commentForms.topics[topic.id]}
+          airModeColor={false}
         />
       </div>
     );

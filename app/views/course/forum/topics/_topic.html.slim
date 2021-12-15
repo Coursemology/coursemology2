@@ -2,10 +2,10 @@
 - topic_class.concat(unread_class(topic))
 - course_user = current_course.course_users.find_by(user_id: current_user.id)
 - email_enabled = current_course.email_enabled(:forums, :post_replied)
-- is_enabled_as_phantom = course_user.phantom? && email_enabled.phantom
-- is_enabled_as_regular = !course_user.phantom? && email_enabled.regular
+- is_enabled_as_phantom = course_user&.phantom? && email_enabled.phantom
+- is_enabled_as_regular = !course_user&.phantom? && email_enabled.regular
 - admin_enable_email = is_enabled_as_phantom || is_enabled_as_regular
-- user_unsubscribed = course_user.email_unsubscriptions.where(course_settings_email_id: email_enabled.id).exists?
+- user_unsubscribed = course_user&.email_unsubscriptions&.where(course_settings_email_id: email_enabled.id)&.exists?
 
 = content_tag_for(:tr, topic, class: topic_class) do
   td = fa_icon 'envelope' if topic.unread?(current_user)

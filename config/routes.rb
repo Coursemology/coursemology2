@@ -234,7 +234,6 @@ Rails.application.routes.draw do
                     resources :scribbles, only: [:create]
                   end
                   namespace :forum_post_response do
-                    # get :selected_posts
                     get 'selected_post_packs' => 'posts#selected'
                   end
                 end
@@ -406,6 +405,8 @@ Rails.application.routes.draw do
         get 'fetch', on: :collection
         post 'mark_as_read', on: :member
       end
+
+      get 'learning_map' => 'learning_map#index'
     end
   end
 

@@ -16,6 +16,12 @@ class User::RegistrationsController < Devise::RegistrationsController
 
   # POST /resource
   def create
+    unless verify_recaptcha
+      build_resource(sign_up_params)
+      flash.now[:alert] = t('user.registrations.create.verify_recaptcha_alert')
+      flash.delete :recaptcha_error
+      return render :new
+    end
     User.transaction do
       super
       @invitation.confirm!(confirmer: resource) if @invitation && !@invitation.confirmed? && resource.persisted?

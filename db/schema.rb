@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_17_035133) do
+ActiveRecord::Schema.define(version: 2021_12_10_015400) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -99,7 +99,7 @@ ActiveRecord::Schema.define(version: 2021_11_17_035133) do
   end
 
   create_table "course_assessment_answer_forum_post_responses", force: :cascade do |t|
-    t.string "answer_text"
+    t.text "answer_text"
   end
 
   create_table "course_assessment_answer_forum_posts", force: :cascade do |t|
@@ -662,6 +662,13 @@ ActiveRecord::Schema.define(version: 2021_11_17_035133) do
     t.index ["course_id"], name: "fk__course_groups_course_id"
     t.index ["creator_id"], name: "fk__course_groups_creator_id"
     t.index ["updater_id"], name: "fk__course_groups_updater_id"
+  end
+
+  create_table "course_learning_maps", force: :cascade do |t|
+    t.bigint "course_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["course_id"], name: "fk__course_learning_maps_course_id"
   end
 
   create_table "course_lesson_plan_event_materials", id: :serial, force: :cascade do |t|
@@ -1358,6 +1365,7 @@ ActiveRecord::Schema.define(version: 2021_11_17_035133) do
   add_foreign_key "course_groups", "courses", name: "fk_course_groups_course_id"
   add_foreign_key "course_groups", "users", column: "creator_id", name: "fk_course_groups_creator_id"
   add_foreign_key "course_groups", "users", column: "updater_id", name: "fk_course_groups_updater_id"
+  add_foreign_key "course_learning_maps", "courses", name: "fk_course_learning_maps_course_id"
   add_foreign_key "course_lesson_plan_event_materials", "course_lesson_plan_events", column: "lesson_plan_event_id", name: "fk_course_lesson_plan_event_materials_lesson_plan_event_id"
   add_foreign_key "course_lesson_plan_event_materials", "course_materials", column: "material_id", name: "fk_course_lesson_plan_event_materials_material_id"
   add_foreign_key "course_lesson_plan_items", "courses", name: "fk_course_lesson_plan_items_course_id"

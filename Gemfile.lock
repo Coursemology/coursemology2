@@ -455,6 +455,8 @@ GEM
     rb-fsevent (0.11.0)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+    recaptcha (5.8.1)
+      json
     record_tag_helper (1.0.1)
       actionview (>= 5)
     redis (4.2.5)
@@ -714,6 +716,7 @@ DEPENDENCIES
   rails-html-sanitizer (>= 1.0.4)
   rails_real_favicon
   rails_utils!
+  recaptcha
   record_tag_helper
   redis-rails
   rinku

@@ -6,9 +6,10 @@ import {
   green300,
 } from 'material-ui/styles/colors';
 import PropTypes from 'prop-types';
+import { injectIntl, intlShape } from 'react-intl';
 
 import { postPackShape } from 'course/assessment/submission/propTypes';
-import ForumPost from 'course/forum/components/ForumPost';
+import ForumPost, { translations } from 'course/forum/components/ForumPost';
 
 import ParentPost from './ParentPost';
 
@@ -33,11 +34,12 @@ const styles = {
  * This is a wrapper around the general ForumPost component,
  * that provides "selectable" functionalities.
  */
-export default class ForumPostOption extends React.Component {
+class ForumPostOption extends React.Component {
   handleClick(event, postPack) {
+    const { intl } = this.props;
     if (
-      event.target.innerText === 'SHOW MORE' ||
-      event.target.innerText === 'SHOW LESS'
+      event.target.innerText === intl.formatMessage(translations.showMore) ||
+      event.target.innerText === intl.formatMessage(translations.showLess)
     ) {
       return;
     }
@@ -58,6 +60,7 @@ export default class ForumPostOption extends React.Component {
             event.persist();
             this.handleClick(event, postPack);
           }}
+          className="forum-post-option"
         >
           <ForumPost post={postPack.corePost} isExpandable style={postStyles} />
         </div>
@@ -72,4 +75,7 @@ ForumPostOption.propTypes = {
   isSelected: PropTypes.bool.isRequired,
   onSelectPostPack: PropTypes.func.isRequired,
   style: PropTypes.object,
+  intl: intlShape,
 };
+
+export default injectIntl(ForumPostOption);

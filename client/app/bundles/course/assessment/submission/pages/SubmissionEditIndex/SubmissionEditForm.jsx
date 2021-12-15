@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { injectIntl, intlShape } from 'react-intl';
@@ -33,10 +33,13 @@ import {
 import SubmissionAnswer from '../../components/SubmissionAnswer';
 import QuestionGrade from '../../containers/QuestionGrade';
 import GradingPanel from '../../containers/GradingPanel';
-import Comments from '../../containers/Comments';
 import { formNames, questionTypes } from '../../constants';
 import translations from '../../translations';
 import submissionFormValidate from './submissionFormValidate';
+
+const Comments = React.lazy(() =>
+  import(/* webpackChunkName: "comment" */ '../../containers/Comments'),
+);
 
 const styles = {
   questionCardContainer: {
@@ -259,7 +262,16 @@ class SubmissionEditForm extends Component {
                 : null}
               {viewHistory ? null : this.renderQuestionGrading(id)}
               {viewHistory ? null : this.renderProgrammingQuestionActions(id)}
-              <Comments topic={topic} />
+              <Suspense
+                fallback={
+                  <>
+                    <br />
+                    <div>{intl.formatMessage(translations.loadingComment)}</div>
+                  </>
+                }
+              >
+                <Comments topic={topic} />
+              </Suspense>
               <hr />
             </Tab>
           );
@@ -270,6 +282,7 @@ class SubmissionEditForm extends Component {
 
   renderQuestions() {
     const {
+      intl,
       attempting,
       questionIds,
       questions,
@@ -309,7 +322,16 @@ class SubmissionEditForm extends Component {
                 : null}
               {viewHistory ? null : this.renderQuestionGrading(id)}
               {viewHistory ? null : this.renderProgrammingQuestionActions(id)}
-              <Comments topic={topic} />
+              <Suspense
+                fallback={
+                  <>
+                    <br />
+                    <div>{intl.formatMessage(translations.loadingComment)}</div>
+                  </>
+                }
+              >
+                <Comments topic={topic} />
+              </Suspense>
               <hr />
             </Element>
           );
@@ -582,9 +604,9 @@ class SubmissionEditForm extends Component {
         {this.renderUnmarkButton()}
         {this.renderPublishButton()}
 
-        {this.renderSubmitDialog()}
-        {this.renderUnsubmitDialog()}
-        {this.renderResetDialog()}
+        {this.state.submitConfirmation && this.renderSubmitDialog()}
+        {this.state.unsubmitConfirmation && this.renderUnsubmitDialog()}
+        {this.state.resetConfirmation && this.renderResetDialog()}
         {this.renderExamDialog()}
       </Card>
     );

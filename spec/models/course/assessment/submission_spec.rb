@@ -7,6 +7,7 @@ RSpec.describe Course::Assessment::Submission do
   it { is_expected.to have_many(:multiple_response_answers).through(:answers) }
   it { is_expected.to have_many(:text_response_answers).through(:answers) }
   it { is_expected.to have_many(:programming_answers).through(:answers) }
+  it { is_expected.to have_many(:forum_post_response_answers).through(:answers) }
   it { is_expected.to accept_nested_attributes_for(:answers) }
 
   let(:instance) { Instance.default }
@@ -306,7 +307,7 @@ RSpec.describe Course::Assessment::Submission do
 
       it 'sums the grade of all answers' do
         grade = submission.answers.map(&:grade).compact.sum - earlier_answer.grade
-        expect(submission.grade).to eq(grade)
+        expect(submission.grade.to_f).to eq(grade)
       end
     end
 
