@@ -601,13 +601,13 @@ RSpec.describe Course::Assessment::Submission do
         end
 
         it 'duplicates all submitted current answers in the submission to attempting' do
-          # In this state, there are 5 current answers and 1 non-current answer
-          expect(subject.answers.length).to eq(6)
+          # In this state, there are 6 current answers and 1 non-current answer
+          expect(subject.answers.length).to eq(7)
 
           unsubmit_and_save_subject
 
-          # In this state, there are 5 current answers and 6 non-current answer
-          expect(subject.answers.length).to eq(11)
+          # In this state, there are 6 current answers and 7 non-current answer
+          expect(subject.answers.length).to eq(13)
           expect(subject.current_answers.all?(&:attempting?)).to be(true)
           expect(earlier_answer.reload).to be_graded
 
@@ -631,8 +631,8 @@ RSpec.describe Course::Assessment::Submission do
           subject.finalise!
           current_answer_ids_after = subject.current_answers.pluck(:id)
 
-          expect(subject.answers.length).to eq(6)
-          expect(subject.current_answers.length).to eq(5)
+          expect(subject.answers.length).to eq(7)
+          expect(subject.current_answers.length).to eq(6)
 
           expect(current_answer_ids_before == current_answer_ids_after).to be_truthy
           expect(current_answer_ids_before == current_answer_ids_intermediate).to be_falsey
@@ -648,7 +648,7 @@ RSpec.describe Course::Assessment::Submission do
           unsubmit_and_save_subject
           current_answer_ids_intermediate = subject.current_answers.pluck(:id)
 
-          # Update the answers of all current_answers
+          # Update/change the answers of all current_answers
           subject.current_answers.each do |current_answer|
             answer = current_answer.specific
             case answer.class.name
@@ -662,14 +662,16 @@ RSpec.describe Course::Assessment::Submission do
               end
             when 'Course::Assessment::Answer::TextResponse'
               answer.update(answer_text: 'updated')
+            when 'Course::Assessment::Answer::ForumPostResponse'
+              answer.update(answer_text: '<div>yyy</div>')
             end
           end
 
           subject.finalise!
           current_answer_ids_after = subject.current_answers.pluck(:id)
 
-          expect(subject.answers.length).to eq(11)
-          expect(subject.current_answers.length).to eq(5)
+          expect(subject.answers.length).to eq(13)
+          expect(subject.current_answers.length).to eq(6)
 
           expect(current_answer_ids_before == current_answer_ids_after).to be_falsey
           expect(current_answer_ids_before == current_answer_ids_intermediate).to be_falsey
