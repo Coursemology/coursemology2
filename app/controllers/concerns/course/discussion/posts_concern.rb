@@ -48,7 +48,7 @@ module Course::Discussion::PostsConcern
   private
 
   def post_params
-    params.require(:discussion_post).permit(:title, :text, :parent_id)
+    params.require(:discussion_post).permit(:title, :text, :parent_id, :is_delayed)
   end
 
   def set_topic

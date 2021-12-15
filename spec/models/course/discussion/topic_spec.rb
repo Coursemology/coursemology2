@@ -101,6 +101,21 @@ RSpec.describe Course::Discussion::Topic, type: :model do
       end
     end
 
+    describe '.without_delayed_posts' do
+      let(:course) { create(:course) }
+      let!(:annotation) do
+        create(:course_assessment_answer_programming_file_annotation, :with_delayed_post, course: course).
+          acting_as
+      end
+      let!(:comment) do
+        create(:course_assessment_submission_question, :with_both_normal_and_delayed_post, course: course).acting_as
+      end
+
+      it 'only returns comments and annotations with non-delayed posts' do
+        expect(course.discussion_topics.without_delayed_posts).to contain_exactly(comment)
+      end
+    end
+
     describe '.ordered_by_updated_at' do
       let!(:topics) do
         create(:course_assessment_submission_question)
@@ -206,7 +221,7 @@ RSpec.describe Course::Discussion::Topic, type: :model do
           expect(topic.reload.destroy).to be_truthy
           all_posts = [post, *children_posts]
           all_post_ids = all_posts.map(&:id)
-          all_vote_ids = all_posts.map(&:votes).inject(:+).map(&:id)
+          all_vote_ids = all_posts.map(&:votes).reduce(:+).map(&:id)
 
           expect(Course::Discussion::Post.where(id: all_post_ids).exists?).to be_falsey
           expect(Course::Discussion::Post::Vote.where(id: all_vote_ids).exists?).to be_falsey

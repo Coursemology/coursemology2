@@ -15,9 +15,11 @@ class Course::Assessment::Answer::CommentNotifier < Notifier::Base
       course_user = category.course.course_users.find_by(user: subscription.user)
       is_disabled_as_phantom = course_user.phantom? && !email_enabled.phantom
       is_disabled_as_regular = !course_user.phantom? && !email_enabled.regular
+      is_disabled_delayed = course_user.student? && post.is_delayed
       exclude_user = subscription.user == user ||
                      is_disabled_as_phantom ||
                      is_disabled_as_regular ||
+                     is_disabled_delayed ||
                      course_user.email_unsubscriptions.where(course_settings_email_id: email_enabled.id).exists?
 
       activity.notify(subscription.user, :email) unless exclude_user

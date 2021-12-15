@@ -11,12 +11,14 @@ RSpec.describe Course::Assessment::SubmissionQuestion::CommentsController do
     before { sign_in(user) }
 
     describe '#create' do
+      let(:is_delayed) { false }
       subject do
         post :create, as: :js, params: {
           course_id: course, assessment_id: assessment,
           submission_question_id: submission_question,
           discussion_post: {
-            text: comment
+            text: comment,
+            is_delayed: is_delayed
           }
         }
       end
@@ -55,6 +57,13 @@ RSpec.describe Course::Assessment::SubmissionQuestion::CommentsController do
 
           it 'sends email notifications' do
             expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
+          end
+
+          context 'when the new comment is posted as delayed post' do
+            let!(:is_delayed) { true }
+            it 'does not send email notifications' do
+              expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
+            end
           end
 
           context 'when "New Comment" email notification is disabled' do
