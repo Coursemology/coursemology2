@@ -158,6 +158,7 @@ module Course::Assessment::AssessmentAbility
       { question_assessments: { assessment: { tab: { category: { course: course } } } } }
 
     [
+      Course::Assessment::Question::ForumPostResponse,
       Course::Assessment::Question::MultipleResponse,
       Course::Assessment::Question::TextResponse,
       Course::Assessment::Question::Programming,

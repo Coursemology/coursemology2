@@ -22,7 +22,7 @@ FactoryBot.define do
     end
 
     after(:build) do |forum_topic, evaluator|
-      forum_topic.course = evaluator.course
+      forum_topic.course = forum_topic.forum.course || evaluator.course
       forum_topic.posts.each { |p| p.text = 'I am a post' }
     end
   end

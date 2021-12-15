@@ -31,5 +31,5 @@ export default class CardTitle extends React.Component {
 
 CardTitle.propTypes = {
   title: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
+  type: PropTypes.object.isRequired,
 };

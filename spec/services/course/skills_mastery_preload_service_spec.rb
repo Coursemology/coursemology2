@@ -37,8 +37,8 @@ RSpec.describe Course::SkillsMasteryPreloadService, type: :service do
     describe '#percentage_mastery' do
       it "returns student's grade as a percentage of total maximum grade for a skill" do
         expect(subject.percentage_mastery(skill_1)).to \
-          eq(100 * published_submission.answers.map(&:grade).sum / \
-            assessment.questions.map(&:maximum_grade).sum)
+          eq((100 * published_submission.answers.map(&:grade).sum / \
+            assessment.questions.map(&:maximum_grade).sum).to_f.round)
         expect(subject.percentage_mastery(skill_2)).to eq(0)
       end
     end

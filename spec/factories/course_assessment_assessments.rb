@@ -89,12 +89,22 @@ FactoryBot.define do
       end
     end
 
+    trait :with_forum_post_response_question do
+      after(:build) do |assessment, evaluator|
+        evaluator.question_count.downto(1).each do |i|
+          question = build(:course_assessment_question_forum_post_response)
+          assessment.question_assessments.build(question: question.acting_as, weight: i)
+        end
+      end
+    end
+
     trait :with_all_question_types do
       with_mcq_question
       with_mrq_question
       with_programming_question
       with_text_response_question
       with_file_upload_question
+      with_forum_post_response_question
       # TODO: To add scribing question once it is completed
     end
 
@@ -126,6 +136,11 @@ FactoryBot.define do
 
     trait :published_with_file_upload_question do
       with_file_upload_question
+      published
+    end
+
+    trait :published_with_forum_post_response_question do
+      with_forum_post_response_question
       published
     end
 
