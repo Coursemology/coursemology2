@@ -53,7 +53,7 @@ class VisibleAnnotations extends Component {
         <CardText style={{ textAlign: 'left' }}>
           {posts.map(
             (post) =>
-              (graderView || !post.delayed) && (
+              (graderView || !post.isDelayed) && (
                 <CommentCard
                   key={post.id}
                   post={post}
@@ -169,7 +169,7 @@ function mapDispatchToProps(dispatch, ownProps) {
         dispatch(annotationActions.onCreateChange(fileId, lineNumber, comment)),
       handleUpdateChange: (postId, comment) =>
         dispatch(annotationActions.onUpdateChange(postId, comment)),
-      createComment: (comment, delayedComment = false) =>
+      createComment: (comment, isDelayedComment = false) =>
         dispatch(
           annotationActions.create(
             submissionId,
@@ -177,7 +177,7 @@ function mapDispatchToProps(dispatch, ownProps) {
             fileId,
             lineNumber,
             comment,
-            delayedComment,
+            isDelayedComment,
           ),
         ),
       updateComment: () => {},
@@ -189,7 +189,7 @@ function mapDispatchToProps(dispatch, ownProps) {
       dispatch(annotationActions.onCreateChange(fileId, lineNumber, comment)),
     handleUpdateChange: (postId, comment) =>
       dispatch(annotationActions.onUpdateChange(postId, comment)),
-    createComment: (comment, delayedComment = false) =>
+    createComment: (comment, isDelayedComment = false) =>
       dispatch(
         annotationActions.create(
           submissionId,
@@ -197,7 +197,7 @@ function mapDispatchToProps(dispatch, ownProps) {
           fileId,
           lineNumber,
           comment,
-          delayedComment,
+          isDelayedComment,
         ),
       ),
     updateComment: (postId, comment) =>

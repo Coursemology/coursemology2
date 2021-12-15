@@ -108,8 +108,8 @@ export default function (state = initialState, action) {
     case actions.CREATE_COMMENT_REQUEST:
       return {
         ...state,
-        isSubmittingNormalComment: !action.delayedComment,
-        isSubmittingDelayedComment: action.delayedComment,
+        isSubmittingNormalComment: !action.isDelayedComment,
+        isSubmittingDelayedComment: action.isDelayedComment,
       };
     case actions.UPDATE_ANNOTATION_REQUEST:
     case actions.UPDATE_COMMENT_REQUEST:

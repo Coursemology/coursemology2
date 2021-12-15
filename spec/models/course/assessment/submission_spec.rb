@@ -452,8 +452,8 @@ RSpec.describe Course::Assessment::Submission do
         end
         it 'is set as not delayed after publication' do
           submission.publish!
-          expect(annotation_post.reload.delayed).to be(false)
-          expect(submission_question_post.reload.delayed).to be(false)
+          expect(annotation_post.reload.is_delayed).to be(false)
+          expect(submission_question_post.reload.is_delayed).to be(false)
         end
       end
 

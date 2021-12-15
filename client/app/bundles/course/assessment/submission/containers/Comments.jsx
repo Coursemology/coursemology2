@@ -37,7 +37,7 @@ class VisibleComments extends Component {
         </h4>
         {posts.map(
           (post) =>
-            (graderView || !post.delayed) && (
+            (graderView || !post.isDelayed) && (
               <CommentCard
                 key={post.id}
                 post={post}
@@ -107,12 +107,12 @@ function mapDispatchToProps(dispatch, ownProps) {
       dispatch(commentActions.onCreateChange(topic.id, comment)),
     handleUpdateChange: (postId, comment) =>
       dispatch(commentActions.onUpdateChange(postId, comment)),
-    createComment: (comment, delayedComment = false) =>
+    createComment: (comment, isDelayedComment = false) =>
       dispatch(
         commentActions.create(
           topic.submissionQuestionId,
           comment,
-          delayedComment,
+          isDelayedComment,
         ),
       ),
     updateComment: (postId, comment) =>

@@ -17,14 +17,14 @@ export function create(
   fileId,
   line,
   text,
-  delayedComment,
+  isDelayedComment,
 ) {
   const payload = {
     annotation: { line },
-    discussion_post: { text, delayed: delayedComment },
+    discussion_post: { text, is_delayed: isDelayedComment },
   };
   return (dispatch) => {
-    dispatch({ type: actionTypes.CREATE_ANNOTATION_REQUEST, delayedComment });
+    dispatch({ type: actionTypes.CREATE_ANNOTATION_REQUEST, isDelayedComment });
 
     return CourseAPI.assessment.submissions
       .createProgrammingAnnotation(submissionId, answerId, fileId, payload)

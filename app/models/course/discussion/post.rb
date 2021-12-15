@@ -27,8 +27,8 @@ class Course::Discussion::Post < ApplicationRecord
   default_scope { ordered_by_created_at.with_creator }
   scope :ordered_by_created_at, -> { order(created_at: :asc) }
   scope :with_creator, -> { includes(:creator) }
-  scope :exclude_delayed_posts, -> { where(delayed: false) }
-  scope :only_delayed_posts, -> { where(delayed: true) }
+  scope :exclude_delayed_posts, -> { where(is_delayed: false) }
+  scope :only_delayed_posts, -> { where(is_delayed: true) }
 
   # @!method self.with_user_votes(user)
   #   Preloads the given posts with votes from the given user.

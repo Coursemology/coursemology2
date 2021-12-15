@@ -29,5 +29,5 @@ posts = submission_questions.map(&:discussion_topic).flat_map(&:posts)
 posts += programming_answers.flat_map(&:files).flat_map(&:annotations).map(&:discussion_topic).flat_map(&:posts)
 
 json.posts posts do |post|
-  json.partial! post, post: post if can_grade || !post.delayed
+  json.partial! post, post: post if can_grade || !post.is_delayed
 end

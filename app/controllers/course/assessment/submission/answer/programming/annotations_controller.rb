@@ -23,7 +23,7 @@ class Course::Assessment::Submission::Answer::Programming::AnnotationsController
     end
 
     if result
-      send_created_notification(@post) unless @post.delayed
+      send_created_notification(@post) unless @post.is_delayed
       render_create_response
     else
       head :bad_request

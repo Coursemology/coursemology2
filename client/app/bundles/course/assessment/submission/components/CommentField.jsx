@@ -22,7 +22,7 @@ const translations = defineMessages({
   commentDelayedDescription: {
     id: 'course.assessment.submission.commentField.commentDelayedDescription',
     defaultMessage:
-      'This comment will only be visible to students after this submission is published',
+      'This comment will only be visible to students after this the grades are published',
   },
 });
 

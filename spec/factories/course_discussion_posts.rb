@@ -11,7 +11,7 @@ FactoryBot.define do
     parent { nil }
     association :topic, factory: :course_discussion_topic
     text { 'This is a test post' }
-    delayed { false }
+    is_delayed { false }
 
     after(:create) do |post, evaluator|
       Array(evaluator.upvoted_by).each do |user|
@@ -24,7 +24,7 @@ FactoryBot.define do
     end
 
     trait :delayed do
-      delayed { true }
+      is_delayed { true }
     end
   end
 end
