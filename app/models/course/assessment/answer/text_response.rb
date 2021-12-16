@@ -24,6 +24,10 @@ class Course::Assessment::Answer::TextResponse < ApplicationRecord
     attachments.each { |a| download_attachment(a, dir) }
   end
 
+  def csv_download
+    ActionController::Base.helpers.strip_tags(answer_text)
+  end
+
   def download_answer(dir)
     answer_path = File.join(dir, 'answer.txt')
     File.open(answer_path, 'w') do |file|
