@@ -33,7 +33,6 @@ en:
             role: 'Role'
             user_type: 'User Type'
             status: 'Status'
-            question_number: 'Question Number'
             question_title: 'Question Title'
             question_type: 'Question Type'
             normal: 'Normal'
