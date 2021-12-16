@@ -116,23 +116,35 @@ export function sendAssessmentReminderEmail(assessmentId, type) {
   };
 }
 
-export function downloadSubmissions(type) {
+export function downloadSubmissions(type, downloadFormat) {
+  const actions =
+    downloadFormat === 'zip'
+      ? [
+          actionTypes.DOWNLOAD_SUBMISSIONS_FILES_REQUEST,
+          actionTypes.DOWNLOAD_SUBMISSIONS_FILES_SUCCESS,
+          actionTypes.DOWNLOAD_SUBMISSIONS_FILES_FAILURE,
+        ]
+      : [
+          actionTypes.DOWNLOAD_SUBMISSIONS_CSV_REQUEST,
+          actionTypes.DOWNLOAD_SUBMISSIONS_CSV_SUCCESS,
+          actionTypes.DOWNLOAD_SUBMISSIONS_CSV_FAILURE,
+        ];
   return (dispatch) => {
-    dispatch({ type: actionTypes.DOWNLOAD_SUBMISSIONS_REQUEST });
+    dispatch({ type: actions[0] });
 
     const handleSuccess = (successData) => {
       window.location.href = successData.redirect_url;
-      dispatch({ type: actionTypes.DOWNLOAD_SUBMISSIONS_SUCCESS });
+      dispatch({ type: actions[1] });
       dispatch(setNotification(translations.downloadRequestSuccess));
     };
 
     const handleFailure = () => {
-      dispatch({ type: actionTypes.DOWNLOAD_SUBMISSIONS_FAILURE });
+      dispatch({ type: actions[2] });
       dispatch(setNotification(translations.requestFailure));
     };
 
     return CourseAPI.assessment.submissions
-      .downloadAll(type)
+      .downloadAll(type, downloadFormat)
       .then((response) => response.data)
       .then((data) => {
         dispatch(setNotification(translations.downloadSubmissionsJobPending));
