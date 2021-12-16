@@ -62,7 +62,7 @@ module Course::Discussion::TopicsHelper
     @student_unread ||=
       if current_course_user&.student?
         current_course.discussion_topics.globally_displayed.from_user(current_user.id).
-          unread_by(current_user).distinct.count
+          unread_by(current_user).distinct.without_delayed_posts.count
       else
         0
       end

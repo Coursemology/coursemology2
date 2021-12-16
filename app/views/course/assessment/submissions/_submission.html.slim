@@ -18,7 +18,7 @@
       submission.published? || (submission.graded? && can?(:grade, submission.assessment))
   - if can_see_grades
     td.table-grade
-      = submission.grade.to_s + ' / ' + assessment.maximum_grade.to_s
+      = submission.grade.to_f.to_s + ' / ' + assessment.maximum_grade.to_s
       - if submission.graded?
         span.text-danger title=t('.graded_not_published_warning')
           =< fa_icon 'exclamation-circle'.freeze

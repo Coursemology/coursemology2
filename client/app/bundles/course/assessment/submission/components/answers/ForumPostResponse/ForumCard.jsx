@@ -1,4 +1,5 @@
 import React from 'react';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import {
   RaisedButton,
   FontIcon,
@@ -19,6 +20,21 @@ import { getForumURL } from 'lib/helpers/url-builders';
 
 import CardTitle from './CardTitle';
 import TopicCard from './TopicCard';
+
+const translations = defineMessages({
+  forumCardTitleTypeNoneSelected: {
+    id: 'course.assessment.submission.answer.forumPostResponse.forumCardTitleTypeNoneSelected',
+    defaultMessage: 'Forum',
+  },
+  forumCardTitleTypeSelected: {
+    id: 'course.assessment.submission.answer.forumPostResponse.forumCardTitleTypeSelected',
+    defaultMessage: 'Forum ({numSelected} selected)',
+  },
+  viewForumInNewTab: {
+    id: 'course.assessment.submission.answer.forumPostResponse.viewForumInNewTab',
+    defaultMessage: 'View Forum',
+  },
+});
 
 const styles = {
   cardHeader: {
@@ -71,16 +87,26 @@ export default class ForumCard extends React.Component {
         expanded={this.state.isExpanded}
         onExpandChange={this.handleIsExpandedChange}
         style={this.props.style}
+        className="forum-card"
       >
         <CardHeader
           title={
             <CardTitle
               title={this.props.forumTopicPostPack.forum.name}
-              type={`Forum${
-                numPostsSelectedInForum > 0
-                  ? ` (${numPostsSelectedInForum} selected)`
-                  : ''
-              }`}
+              type={
+                numPostsSelectedInForum > 0 ? (
+                  <FormattedMessage
+                    {...translations.forumCardTitleTypeSelected}
+                    values={{
+                      numSelected: numPostsSelectedInForum,
+                    }}
+                  />
+                ) : (
+                  <FormattedMessage
+                    {...translations.forumCardTitleTypeNoneSelected}
+                  />
+                )
+              }
             />
           }
           actAsExpander
@@ -90,7 +116,7 @@ export default class ForumCard extends React.Component {
         <Divider />
         <CardActions expandable style={styles.cardActions}>
           <RaisedButton
-            label="View forum"
+            label={<FormattedMessage {...translations.viewForumInNewTab} />}
             href={getForumURL(
               forumTopicPostPack.course.id,
               forumTopicPostPack.forum.id,

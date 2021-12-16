@@ -27,6 +27,7 @@ const propTypes = {
   required: PropTypes.bool,
   value: PropTypes.string,
   airMode: PropTypes.bool,
+  airModeColor: PropTypes.bool,
   intl: intlShape,
 };
 
@@ -201,7 +202,7 @@ class MaterialSummernote extends React.Component {
                   ['style', ['style']],
                   ['font', ['bold', 'underline', 'inlineCode', 'clear']],
                   ['script', ['superscript', 'subscript']],
-                  ['color', ['color']],
+                  ...(this.props.airModeColor ? ['color', ['color']] : []),
                   ['para', ['ul', 'ol', 'paragraph']],
                   ['table', ['table']],
                   ['insert', ['link', 'picture']],
@@ -239,5 +240,8 @@ class MaterialSummernote extends React.Component {
 
 MaterialSummernote.propTypes = propTypes;
 MaterialSummernote.contextTypes = contextTypes;
+MaterialSummernote.defaultProps = {
+  airModeColor: true,
+};
 
 export default injectIntl(MaterialSummernote);

@@ -7,6 +7,7 @@ RSpec.describe Course::Assessment::Submission do
   it { is_expected.to have_many(:multiple_response_answers).through(:answers) }
   it { is_expected.to have_many(:text_response_answers).through(:answers) }
   it { is_expected.to have_many(:programming_answers).through(:answers) }
+  it { is_expected.to have_many(:forum_post_response_answers).through(:answers) }
   it { is_expected.to accept_nested_attributes_for(:answers) }
 
   let(:instance) { Instance.default }
@@ -14,6 +15,7 @@ RSpec.describe Course::Assessment::Submission do
     let(:course) { create(:course) }
     let(:assessment) { create(:assessment, *assessment_traits, course: course) }
     let(:assessment_traits) { [:with_mcq_question] }
+    let(:user) { course.course_users.first.user }
 
     let(:course_student1) { create(:course_student, *course_student1_traits, course: course) }
     let(:user1) { course_student1.user }
@@ -306,7 +308,7 @@ RSpec.describe Course::Assessment::Submission do
 
       it 'sums the grade of all answers' do
         grade = submission.answers.map(&:grade).compact.sum - earlier_answer.grade
-        expect(submission.grade).to eq(grade)
+        expect(submission.grade.to_f).to eq(grade)
       end
     end
 
@@ -429,11 +431,37 @@ RSpec.describe Course::Assessment::Submission do
         expect(submission.awarded_at).not_to be_nil
       end
 
-      it 'sends an email notification' do
+      context 'when there are delayed annotation and comment' do
+        let!(:assessment_traits) { [:with_programming_question] }
+        let!(:submission1_traits) { :submitted }
+        let!(:submission) { submission1 }
+        let!(:answer) { submission.answers.first }
+        let!(:file) { answer.actable.files.first }
+        let!(:annotation) do
+          create(:course_assessment_answer_programming_file_annotation, file: file, line: 1)
+        end
+        let!(:annotation_post) do
+          create(:course_discussion_post, :delayed, topic: annotation.discussion_topic, creator: user)
+        end
+        let!(:submission_question) do
+          create(:course_assessment_submission_question,
+                 submission: submission, question: assessment.questions.first, course: course)
+        end
+        let!(:submission_question_post) do
+          create(:course_discussion_post, :delayed, topic: submission_question.discussion_topic, creator: user)
+        end
+        it 'is set as not delayed after publication' do
+          submission.publish!
+          expect(annotation_post.reload.is_delayed).to be(false)
+          expect(submission_question_post.reload.is_delayed).to be(false)
+        end
+      end
+
+      it 'sends an email notification', type: :mailer do
         expect { submission.publish! }.to change { ActionMailer::Base.deliveries.count }.by(1)
       end
 
-      context 'when a user unsubscribes' do
+      context 'when a user unsubscribes', type: :mailer do
         before do
           setting_email = course.
                           setting_emails.
@@ -444,11 +472,11 @@ RSpec.describe Course::Assessment::Submission do
         end
 
         it 'does not send an email notification to the user' do
-          expect { course_student1 }.to change { ActionMailer::Base.deliveries.count }.by(0)
+          expect { submission.publish! }.to change { ActionMailer::Base.deliveries.count }.by(0)
         end
       end
 
-      context 'when "submission graded" email setting is disabled for regular students' do
+      context 'when "submission graded" email setting is disabled for regular students', type: :mailer do
         before { set_assessment_email_setting(course, category_id, :grades_released, false, true) }
 
         it 'does not send email notifications to the regular students' do
@@ -456,7 +484,7 @@ RSpec.describe Course::Assessment::Submission do
         end
       end
 
-      context 'when "submission graded" email setting is disabled for phantom students' do
+      context 'when "submission graded" email setting is disabled for phantom students', type: :mailer do
         before { set_assessment_email_setting(course, category_id, :grades_released, true, false) }
 
         it 'does not send email notifications to phantom students' do
@@ -465,7 +493,7 @@ RSpec.describe Course::Assessment::Submission do
         end
       end
 
-      context 'when "submission graded" setting is disabled for everyone' do
+      context 'when "submission graded" setting is disabled for everyone', type: :mailer do
         before { set_assessment_email_setting(course, category_id, :grades_released, false, false) }
 
         it 'does not send email notifications to the users' do

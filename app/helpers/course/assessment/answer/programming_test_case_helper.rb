@@ -51,7 +51,7 @@ module Course::Assessment::Answer::ProgrammingTestCaseHelper
   # @param [Course::Assessment::Answer::ProgrammingAutoGrading] auto_grading Auto grading object
   # @return [Hash] The hash structure described above
   def get_test_cases_and_results(test_cases_by_type, auto_grading)
-    results_hash = auto_grading ? auto_grading.test_results.group_by(&:test_case) : {}
+    results_hash = auto_grading ? auto_grading.test_results.group_by(&:test_case_id) : {}
     test_cases_by_type.each do |type, test_cases|
       test_cases_by_type[type] =
         test_cases.map { |test_case| [test_case, results_hash[test_case]&.first] }.
