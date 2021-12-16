@@ -46,7 +46,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v1-yarn-{{ checksum "client/yarn.lock" }}
+            - v1.1-yarn-{{ checksum "client/yarn.lock" }}
 
       # Build frontend JS
       - run: cd client && yarn install && yarn build:production && cd -
@@ -54,9 +54,13 @@ jobs:
       - save_cache:
           paths:
             - ./client/node_modules
+          key: v1.1-yarn-{{ checksum "client/yarn.lock" }}
+
+      - save_cache:
+          paths:
             - ./client/build
             - ./public/webpack
-          key: v1-yarn-{{ checksum "client/yarn.lock" }}
+          key: v1.1-yarn-build-{{ .Revision }}
 
   test:
     docker:
@@ -97,7 +101,11 @@ jobs:
 
       - restore_cache:
           keys:
-            - v1-yarn-{{ checksum "client/yarn.lock" }}
+            - v1.1-yarn-{{ checksum "client/yarn.lock" }}
+
+      - restore_cache:
+          keys:
+            - v1.1-yarn-build-{{ .Revision }}
 
       # Install bundler version
       - run:
