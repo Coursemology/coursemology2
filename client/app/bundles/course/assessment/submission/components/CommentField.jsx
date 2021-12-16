@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
 import CircularProgress from 'material-ui/CircularProgress';
 import MaterialSummernote from 'lib/components/MaterialSummernote';
+import ReactTooltip from 'react-tooltip';
 
 const translations = defineMessages({
   prompt: {
@@ -14,6 +15,15 @@ const translations = defineMessages({
     id: 'course.assessment.submission.commentField.comment',
     defaultMessage: 'Comment',
   },
+  commentDelayed: {
+    id: 'course.assessment.submission.commentField.commentDelayed',
+    defaultMessage: 'Delayed Comment',
+  },
+  commentDelayedDescription: {
+    id: 'course.assessment.submission.commentField.commentDelayedDescription',
+    defaultMessage:
+      'This comment will only be visible to students after the grades for this submission are published.',
+  },
 });
 
 export default class CommentField extends Component {
@@ -23,8 +33,8 @@ export default class CommentField extends Component {
   }
 
   onKeyDown(e) {
-    const { createComment, isSubmitting, value } = this.props;
-    if (e.ctrlKey && e.keyCode === 13 && !isSubmitting) {
+    const { createComment, isSubmittingNormalComment, value } = this.props;
+    if (e.ctrlKey && e.keyCode === 13 && !isSubmittingNormalComment) {
       e.preventDefault();
       createComment(value);
     }
@@ -34,17 +44,27 @@ export default class CommentField extends Component {
     const {
       createComment,
       inputId,
-      isSubmitting,
+      isSubmittingNormalComment,
+      isSubmittingDelayedComment,
+      isUpdatingComment,
       value,
       airMode,
       airModeColor,
+      renderDelayedCommentButton,
     } = this.props;
+    const disableCommentButton =
+      value === undefined ||
+      value === '' ||
+      value === '<br>' ||
+      isSubmittingNormalComment ||
+      isSubmittingDelayedComment ||
+      isUpdatingComment;
     return (
       <>
         <MaterialSummernote
           airMode={airMode}
           airModeColor={airModeColor}
-          disabled={isSubmitting}
+          disabled={isSubmittingNormalComment || isSubmittingDelayedComment}
           inputId={inputId}
           label={
             <h4>
@@ -57,11 +77,32 @@ export default class CommentField extends Component {
         />
         <RaisedButton
           primary
+          style={{ marginRight: 10, marginBotton: 10 }}
           label={<FormattedMessage {...translations.comment} />}
           onClick={() => createComment(value)}
-          disabled={value === undefined || value === '' || isSubmitting}
-          icon={isSubmitting ? <CircularProgress size={24} /> : null}
+          disabled={disableCommentButton}
+          icon={
+            isSubmittingNormalComment ? <CircularProgress size={24} /> : null
+          }
         />
+        {renderDelayedCommentButton && (
+          <span data-tip data-for="timeBonusExpTooltip">
+            <RaisedButton
+              primary
+              label={<FormattedMessage {...translations.commentDelayed} />}
+              onClick={() => createComment(value, true)}
+              disabled={disableCommentButton}
+              icon={
+                isSubmittingDelayedComment ? (
+                  <CircularProgress size={24} />
+                ) : null
+              }
+            />
+            <ReactTooltip id="timeBonusExpTooltip">
+              <FormattedMessage {...translations.commentDelayedDescription} />
+            </ReactTooltip>
+          </span>
+        )}
       </>
     );
   }
@@ -69,10 +110,13 @@ export default class CommentField extends Component {
 
 CommentField.propTypes = {
   inputId: PropTypes.string,
-  isSubmitting: PropTypes.bool,
+  isSubmittingNormalComment: PropTypes.bool,
+  isSubmittingDelayedComment: PropTypes.bool,
+  isUpdatingComment: PropTypes.bool,
   value: PropTypes.string,
   airMode: PropTypes.bool,
   airModeColor: PropTypes.bool,
+  renderDelayedCommentButton: PropTypes.bool,
 
   createComment: PropTypes.func,
   handleChange: PropTypes.func,

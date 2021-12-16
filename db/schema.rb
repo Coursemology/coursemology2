@@ -534,6 +534,7 @@ ActiveRecord::Schema.define(version: 2021_12_15_160044) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "answer", default: false
+    t.boolean "is_delayed", default: false, null: false
     t.index ["creator_id"], name: "fk__course_discussion_posts_creator_id"
     t.index ["parent_id"], name: "fk__course_discussion_posts_parent_id"
     t.index ["topic_id"], name: "fk__course_discussion_posts_topic_id"

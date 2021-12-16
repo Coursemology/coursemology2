@@ -10,6 +10,7 @@ import { postShape, annotationShape } from '../propTypes';
 import CommentCard from '../components/CommentCard';
 import CommentField from '../components/CommentField';
 import * as annotationActions from '../actions/annotations';
+import { workflowStates } from '../constants';
 
 const translations = defineMessages({
   comment: {
@@ -43,29 +44,39 @@ class VisibleAnnotations extends Component {
       handleCreateChange,
       handleUpdateChange,
       airMode,
+      graderView,
+      renderDelayedCommentButton,
     } = this.props;
 
     return (
       <Card style={styles.card}>
         <CardText style={{ textAlign: 'left' }}>
-          {posts.map((post) => (
-            <CommentCard
-              key={post.id}
-              post={post}
-              editValue={commentForms.posts[post.id]}
-              updateComment={(value) => updateComment(post.id, value)}
-              deleteComment={() => deleteComment(post.id)}
-              handleChange={(value) => handleUpdateChange(post.id, value)}
-              airMode={airMode}
-            />
-          ))}
+          {posts.map(
+            (post) =>
+              (graderView || !post.isDelayed) && (
+                <CommentCard
+                  key={post.id}
+                  post={post}
+                  editValue={commentForms.posts[post.id]}
+                  updateComment={(value) => updateComment(post.id, value)}
+                  deleteComment={() => deleteComment(post.id)}
+                  handleChange={(value) => handleUpdateChange(post.id, value)}
+                  airMode={airMode}
+                />
+              ),
+          )}
           {posts.length === 0 || fieldVisible ? (
             <CommentField
               value={commentForms.annotations[fileId][lineNumber]}
-              isSubmitting={commentForms.isSubmitting}
+              isSubmittingNormalComment={commentForms.isSubmittingNormalComment}
+              isSubmittingDelayedComment={
+                commentForms.isSubmittingDelayedComment
+              }
+              isUpdatingComment={commentForms.isUpdatingComment}
               createComment={createComment}
               handleChange={handleCreateChange}
               airMode={airMode}
+              renderDelayedCommentButton={renderDelayedCommentButton}
             />
           ) : (
             <RaisedButton
@@ -84,7 +95,9 @@ VisibleAnnotations.propTypes = {
   commentForms: PropTypes.shape({
     topics: PropTypes.objectOf(PropTypes.string),
     posts: PropTypes.objectOf(PropTypes.string),
-    isSubmitting: PropTypes.bool,
+    isSubmittingNormalComment: PropTypes.bool,
+    isSubmittingDelayedComment: PropTypes.bool,
+    isUpdatingComment: PropTypes.bool,
     annotations: {},
   }),
   fileId: PropTypes.number.isRequired,
@@ -101,6 +114,8 @@ VisibleAnnotations.propTypes = {
   }),
   annotation: annotationShape,
   answerId: PropTypes.number.isRequired,
+  graderView: PropTypes.bool.isRequired,
+  renderDelayedCommentButton: PropTypes.bool,
   /* eslint-enable react/no-unused-prop-types */
 
   handleCreateChange: PropTypes.func.isRequired,
@@ -116,16 +131,24 @@ VisibleAnnotations.defaultProps = {
 
 function mapStateToProps(state, ownProps) {
   const { annotation } = ownProps;
-
+  const renderDelayedCommentButton =
+    state.submission.graderView &&
+    !state.assessment.autograded &&
+    (state.submission.workflowState === workflowStates.Submitted ||
+      state.submission.workflowState === workflowStates.Graded);
   if (!annotation) {
     return {
       commentForms: state.commentForms,
       posts: [],
+      graderView: state.submission.graderView,
+      renderDelayedCommentButton,
     };
   }
   return {
     commentForms: state.commentForms,
     posts: annotation.postIds.map((postId) => state.posts[postId]),
+    graderView: state.submission.graderView,
+    renderDelayedCommentButton,
   };
 }
 
@@ -146,7 +169,7 @@ function mapDispatchToProps(dispatch, ownProps) {
         dispatch(annotationActions.onCreateChange(fileId, lineNumber, comment)),
       handleUpdateChange: (postId, comment) =>
         dispatch(annotationActions.onUpdateChange(postId, comment)),
-      createComment: (comment) =>
+      createComment: (comment, isDelayedComment = false) =>
         dispatch(
           annotationActions.create(
             submissionId,
@@ -154,6 +177,7 @@ function mapDispatchToProps(dispatch, ownProps) {
             fileId,
             lineNumber,
             comment,
+            isDelayedComment,
           ),
         ),
       updateComment: () => {},
@@ -165,7 +189,7 @@ function mapDispatchToProps(dispatch, ownProps) {
       dispatch(annotationActions.onCreateChange(fileId, lineNumber, comment)),
     handleUpdateChange: (postId, comment) =>
       dispatch(annotationActions.onUpdateChange(postId, comment)),
-    createComment: (comment) =>
+    createComment: (comment, isDelayedComment = false) =>
       dispatch(
         annotationActions.create(
           submissionId,
@@ -173,6 +197,7 @@ function mapDispatchToProps(dispatch, ownProps) {
           fileId,
           lineNumber,
           comment,
+          isDelayedComment,
         ),
       ),
     updateComment: (postId, comment) =>
