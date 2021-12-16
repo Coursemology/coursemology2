@@ -8,6 +8,7 @@ class Course::Video < ApplicationRecord
   include Course::ClosingReminderConcern
   include Course::Video::UrlConcern
   include Course::Video::WatchStatisticsConcern
+  include DuplicationStateTrackingConcern
 
   before_update :destroy_children, if: :changing_used_url?
   validates :url, length: { maximum: 255 }, presence: true
@@ -26,6 +27,8 @@ class Course::Video < ApplicationRecord
   has_many :events, through: :sessions, class_name: Course::Video::Event.name
   has_one :statistic, class_name: Course::Video::Statistic.name, dependent: :destroy,
                       foreign_key: :video_id, inverse_of: :video, autosave: true
+  has_many :video_conditions, class_name: Course::Condition::Video.name,
+                              inverse_of: :video, dependent: :destroy
 
   # @!attribute [r] student_submission_count
   #   Returns the total number of video submissions by students in this course.
@@ -109,6 +112,8 @@ class Course::Video < ApplicationRecord
     self.course = duplicator.options[:destination_course]
     copy_attributes(other, duplicator)
     initialize_duplicate_tab(duplicator, other)
+    initialize_duplicate_conditions(duplicator, other)
+    set_duplication_flag
   end
 
   def include_in_consolidated_email?(event)
@@ -157,6 +162,14 @@ class Course::Video < ApplicationRecord
                else
                  duplicator.options[:destination_course].video_tabs.first
                end
+  end
+
+  # Set up conditions that depend on this video and conditions that this video depends on.
+  def initialize_duplicate_conditions(duplicator, other)
+    duplicate_conditions(duplicator, other)
+    video_conditions << other.video_conditions.
+                        select { |condition| duplicator.duplicated?(condition.conditional) }.
+                        map { |condition| duplicator.duplicate(condition) }
   end
 
   def changing_used_url?
