@@ -75,12 +75,23 @@ class Course::Assessment::Question < ApplicationRecord
     assessment.questions.last == self
   end
 
-  # Whether the answer has downloadable content.
+  # Whether the answer has downloadable content in files format.
   #
   # @return [Boolean]
-  def downloadable?
-    if actable.self_respond_to?(:downloadable?)
-      actable.downloadable?
+  def files_downloadable?
+    if actable.self_respond_to?(:files_downloadable?)
+      actable.files_downloadable?
+    else
+      false
+    end
+  end
+
+  # Whether the answer has downloadable content in csv format.
+  #
+  # @return [Boolean]
+  def csv_downloadable?
+    if actable.self_respond_to?(:csv_downloadable?)
+      actable.csv_downloadable?
     else
       false
     end
