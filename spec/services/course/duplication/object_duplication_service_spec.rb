@@ -265,7 +265,7 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
         context 'when conditionals are duplicated after their required items' do
           let(:source_objects) do
             [required_achievement, required_assessment, required_survey, required_video, unlockable_achievement,
-              unlockable_assessment]
+             unlockable_assessment]
           end
 
           it 'duplicates all conditions except level conditions' do
