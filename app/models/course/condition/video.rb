@@ -8,7 +8,7 @@ class Course::Condition::Video < ApplicationRecord
   Course::Video::Submission.after_save do |submission|
     Course::Condition::Video.on_dependent_status_change(submission)
   end
-  
+
   validate :validate_video_condition, if: :video_id_changed?
   validates :video, presence: true
   validates :minimum_watch_percentage, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 },

@@ -264,7 +264,8 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
 
         context 'when conditionals are duplicated after their required items' do
           let(:source_objects) do
-            [required_achievement, required_assessment, required_survey, required_video, unlockable_achievement, unlockable_assessment]
+            [required_achievement, required_assessment, required_survey, required_video, unlockable_achievement,
+              unlockable_assessment]
           end
 
           it 'duplicates all conditions except level conditions' do
@@ -272,7 +273,6 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
             duplicate_required_achievement, duplicate_required_assessment, duplicate_required_survey,
               duplicate_required_video, duplicate_unlockable_achievement,
               duplicate_unlockable_assessment = duplicate_objects
-               
 
             expect(duplicate_required_achievement.reload.achievement_conditions.map(&:conditional)).
               to contain_exactly(duplicate_unlockable_achievement, duplicate_unlockable_assessment)

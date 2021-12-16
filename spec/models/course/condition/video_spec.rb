@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe Course::Condition::Video, type: :model do
   it { is_expected.to act_as(Course::Condition) }
 
-  let (:instance) { Instance.default }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:course) { create(:course) }
 
@@ -31,7 +31,7 @@ RSpec.describe Course::Condition::Video, type: :model do
         subject do
           existing_video_condition = create(:video_condition, course: course)
           build(:video_condition, course: course, conditional: existing_video_condition.conditional,
-                video: existing_video_condition.video)
+                                  video: existing_video_condition.video)
         end
 
         it 'is not valid' do
