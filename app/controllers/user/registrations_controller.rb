@@ -117,7 +117,7 @@ class User::RegistrationsController < Devise::RegistrationsController
   end
 
   def load_other_invitations
-    @other_invitations = if @invitation&.instance_of?(Course::UserInvitation)
+    @other_invitations = if @invitation.instance_of?(Course::UserInvitation)
                            Course::UserInvitation.where('email in (?) AND id not in (?)', @invitation.email,
                                                         @invitation.id)
                          else
