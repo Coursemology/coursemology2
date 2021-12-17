@@ -34,8 +34,10 @@ RSpec.describe Course::Assessment::Question::TextResponseComprehensionGroup, typ
 
           expect(subject.valid?).to be(false)
           expect(subject.errors[:maximum_group_grade]).to include(I18n.t('activerecord.errors.models.' \
-              'course/assessment/question/text_response_comprehension_group.attributes.' \
-              'maximum_group_grade.invalid_group_grade'))
+                                                                         'course/assessment/question/' \
+                                                                         'text_response_comprehension_group.' \
+                                                                         'attributes.maximum_group_grade.' \
+                                                                         'invalid_group_grade'))
         end
       end
     end

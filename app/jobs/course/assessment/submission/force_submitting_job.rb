@@ -75,7 +75,7 @@ class Course::Assessment::Submission::ForceSubmittingJob < ApplicationJob
         submission.draft_points_awarded = 0
       else
         submission.points_awarded = 0
-        submission.publish!(_ = nil, send_email: false)
+        submission.publish!(_ = nil, false)
       end
       submission.save!
     end

@@ -3,7 +3,7 @@ class Course::Video::VideosController < Course::Video::Controller
   skip_load_and_authorize_resource :video, only: [:new, :create]
   build_and_authorize_new_lesson_plan_item :video, class: Course::Video, through: :course, only: [:new, :create]
 
-  def index #:nodoc:
+  def index # :nodoc:
     @videos = @videos.
               from_tab(current_tab).
               with_student_submission_count.

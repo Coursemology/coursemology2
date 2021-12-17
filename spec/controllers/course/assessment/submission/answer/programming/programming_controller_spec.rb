@@ -9,9 +9,9 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::ProgrammingC
     let!(:course) { create(:course, creator: user) }
     let(:assessment) { create(:assessment, :published, :with_programming_file_submission_question, course: course) }
     let(:submission) { create(:submission, :attempting, assessment: assessment, creator: user) }
-    let(:submission_2) { create(:submission, :attempting, assessment: assessment, creator: user) }
+    let(:submission2) { create(:submission, :attempting, assessment: assessment, creator: user) }
     let(:answer) { submission.answers.first }
-    let(:answer_2) { submission_2.answers.first }
+    let(:answer2) { submission2.answers.first }
     before { sign_in(user) }
 
     describe '#create_programming_files' do
@@ -44,16 +44,16 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::ProgrammingC
     describe '#delete_programming_file' do
       subject do
         post :destroy_programming_file, as: :json, params: {
-          course_id: course, assessment_id: assessment.id, submission_id: submission_2.id,
-          answer_id: answer_2.id, answer: {
-            id: answer_2.id,
-            file_id: answer_2.specific.files.first.id
+          course_id: course, assessment_id: assessment.id, submission_id: submission2.id,
+          answer_id: answer2.id, answer: {
+            id: answer2.id,
+            file_id: answer2.specific.files.first.id
           }
         }
       end
 
       context 'when deleting existing programming files' do
-        it { expect { subject }.to change { answer_2.specific.files.count }.by(-1) }
+        it { expect { subject }.to change { answer2.specific.files.count }.by(-1) }
       end
     end
   end

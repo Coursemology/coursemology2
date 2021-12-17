@@ -53,7 +53,7 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::AnnotationsC
           expect(response.status).to eq(200)
         end
 
-        context 'when other users are subscribed to notifications' do
+        context 'when other users are subscribed to notifications', type: :mailer do
           let(:annotation) do
             create(:course_assessment_answer_programming_file_annotation, file: file, line: 1)
           end

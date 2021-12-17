@@ -26,7 +26,8 @@ RSpec.describe Course::Condition::Survey, type: :model do
         it 'is not valid' do
           expect(subject).to_not be_valid
           expect(subject.errors[:survey]).to include(I18n.t('activerecord.errors.models.' \
-            'course/condition/survey.attributes.survey.unique_dependency'))
+                                                            'course/condition/survey.' \
+                                                            'attributes.survey.unique_dependency'))
         end
       end
     end

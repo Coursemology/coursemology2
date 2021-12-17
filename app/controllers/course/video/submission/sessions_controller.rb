@@ -28,9 +28,7 @@ class Course::Video::Submission::SessionsController < Course::Video::Submission:
     @video.statistic.update(cached: false) if @video.statistic&.cached
 
     head :no_content
-  rescue ArgumentError => _e
-    head :bad_request
-  rescue ActiveRecord::RecordInvalid => _e
+  rescue ArgumentError, ActiveRecord::RecordInvalid => _e
     head :bad_request
   end
 

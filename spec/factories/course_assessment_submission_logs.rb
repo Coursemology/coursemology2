@@ -9,10 +9,10 @@ FactoryBot.define do
     submission { build(:submission, assessment: assessment, course: course) }
     request do
       {
-        'HTTP_X_FORWARDED_FOR': '192.168.123.45',
-        'HTTP_USER_AGENT': 'Internet Explorer',
-        'USER_SESSION_ID': SecureRandom.hex(8),
-        'SUBMISSION_SESSION_ID': SecureRandom.hex(8)
+        HTTP_X_FORWARDED_FOR: '192.168.123.45',
+        HTTP_USER_AGENT: 'Internet Explorer',
+        USER_SESSION_ID: SecureRandom.hex(8),
+        SUBMISSION_SESSION_ID: SecureRandom.hex(8)
       }.to_json
     end
   end

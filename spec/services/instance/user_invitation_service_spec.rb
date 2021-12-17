@@ -87,7 +87,7 @@ RSpec.describe Instance::UserInvitationService, type: :service do
         end
 
         with_active_job_queue_adapter(:test) do
-          it 'sends an email to everyone' do
+          it 'sends an email to everyone', type: :mailer do
             expect { invite }.to change { ActionMailer::Base.deliveries.count }.
               by(user_form_attributes.length)
           end
@@ -109,7 +109,7 @@ RSpec.describe Instance::UserInvitationService, type: :service do
         end
 
         with_active_job_queue_adapter(:test) do
-          it 'does not send notification to the existing users' do
+          it 'does not send notification to the existing users', type: :mailer do
             expect { invite }.to change { ActionMailer::Base.deliveries.count }.
               by(user_attributes.size - users_invited.size - users_in_instance.size)
           end
@@ -126,7 +126,7 @@ RSpec.describe Instance::UserInvitationService, type: :service do
         end
 
         with_active_job_queue_adapter(:test) do
-          it 'sends only one invitation to duplicate users' do
+          it 'sends only one invitation to duplicate users', type: :mailer do
             expect { invite }.to change { ActionMailer::Base.deliveries.count }.
               by(new_user_attributes.size - 1 + existing_user_attributes.size)
           end
@@ -142,7 +142,7 @@ RSpec.describe Instance::UserInvitationService, type: :service do
           expect(invite).to be_falsey
         end
 
-        it 'does not send any notifications' do
+        it 'does not send any notifications', type: :mailer do
           expect { invite }.to change { ActionMailer::Base.deliveries.count }.by(0)
         end
 
@@ -162,7 +162,7 @@ RSpec.describe Instance::UserInvitationService, type: :service do
       end
 
       with_active_job_queue_adapter(:test) do
-        it 'sends an email to everyone' do
+        it 'sends an email to everyone', type: :mailer do
           expect do
             subject.resend_invitation(pending_invitations)
           end.to change { ActionMailer::Base.deliveries.count }.by(pending_invitations.count)

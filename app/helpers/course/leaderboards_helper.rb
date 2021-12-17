@@ -17,6 +17,6 @@ module Course::LeaderboardsHelper
   def leaderboard_position(course, course_user, display_user_count)
     index = course.course_users.students.without_phantom_users.includes(:user).
             ordered_by_experience_points.take(display_user_count).find_index(course_user)
-    index && index + 1
+    index && (index + 1)
   end
 end

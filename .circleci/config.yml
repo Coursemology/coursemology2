@@ -9,7 +9,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: cimg/ruby:2.7.4-browsers
+      - image: cimg/ruby:3.0.2-browsers
         environment:
           BUNDLE_APP_CONFIG: ~/repo/.bundle
 
@@ -24,14 +24,14 @@ jobs:
       # Install bundler version
       - run:
           name: install bundler version
-          command: gem install bundler:1.17.3
+          command: gem install bundler:2.2.22
 
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v3.2-dependencies-{{ checksum "Gemfile.lock" }}
+            - 3.3-dependencies-{{ checksum "Gemfile.lock" }}
             # fallback to using the latest cache if no exact match is found
-            - v3.2-dependencies-
+            - 3.3-dependencies-
 
       - run:
           name: install dependencies
@@ -42,11 +42,25 @@ jobs:
           paths:
             - ./vendor/bundle
             - ./.bundle
-          key: v3.2-dependencies-{{ checksum "Gemfile.lock" }}
+          key: 3.3-dependencies-{{ checksum "Gemfile.lock" }}
 
       - restore_cache:
           keys:
             - v1.1-yarn-{{ checksum "client/yarn.lock" }}
+
+      - run:
+          name: Swap node versions
+          command: |
+            set +e
+            wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | bash
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+            nvm install v14.16.1
+            nvm alias default 14.16.1
+
+            echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
+            echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
 
       # Build frontend JS
       - run: cd client && yarn install && yarn build:production && cd -
@@ -65,7 +79,7 @@ jobs:
   test:
     docker:
       # specify the version you desire here
-      - image: cimg/ruby:2.7.4-browsers
+      - image: cimg/ruby:3.0.2-browsers
         environment:
           PG_HOST: localhost
           PG_USER: ubuntu
@@ -95,9 +109,9 @@ jobs:
 
       - restore_cache:
           keys:
-            - v3.2-dependencies-{{ checksum "Gemfile.lock" }}
+            - 3.3-dependencies-{{ checksum "Gemfile.lock" }}
             # fallback to using the latest cache if no exact match is found
-            - v3.2-dependencies-
+            - 3.3-dependencies-
 
       - restore_cache:
           keys:
@@ -111,7 +125,7 @@ jobs:
       - run:
           name: install bundler version
           command: |
-            gem install bundler:1.17.3
+            gem install bundler:2.2.22
             bundle install
 
       # Install ghostscript so `identify` in ImageMagick works with PDF files.
@@ -163,7 +177,7 @@ jobs:
   lint:
     docker:
       # specify the version you desire here
-      - image: cimg/ruby:2.7.4-browsers
+      - image: cimg/ruby:3.0.2-browsers
         environment:
           RAILS_ENV: test
 
@@ -188,7 +202,7 @@ jobs:
   jstest:
     docker:
       # specify the version you desire here
-      - image: cimg/ruby:2.7.4-browsers
+      - image: cimg/ruby:3.0.2-browsers
         environment:
           RAILS_ENV: test
 
@@ -204,6 +218,20 @@ jobs:
           keys:
             - v1-yarn-{{ checksum "client/yarn.lock" }}
 
+      - run:
+          name: Swap node versions
+          command: |
+            set +e
+            wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | bash
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+            nvm install v14.16.1
+            nvm alias default 14.16.1
+
+            echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
+            echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+
       # Build frontend JS
       - run:
           name: run yarn checks
@@ -214,7 +242,7 @@ jobs:
   i18n:
     docker:
       # specify the version you desire here
-      - image: cimg/ruby:2.7.4-browsers
+      - image: cimg/ruby:3.0.2-browsers
         environment:
           PG_HOST: localhost
           PG_USER: ubuntu
@@ -239,14 +267,14 @@ jobs:
 
       - restore_cache:
           keys:
-            - v3.2-dependencies-{{ checksum "Gemfile.lock" }}
+            - 3.3-dependencies-{{ checksum "Gemfile.lock" }}
             # fallback to using the latest cache if no exact match is found
-            - v3.2-dependencies-
+            - 3.3-dependencies-
 
       # Install bundler version
       - run:
           name: install bundler version
-          command: gem install bundler:1.17.3
+          command: gem install bundler:2.2.22
 
       # Database setup
       - run:

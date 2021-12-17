@@ -137,7 +137,7 @@ class Instance < ApplicationRecord
 
   private
 
-  def should_validate_host? #:nodoc:
+  def should_validate_host? # :nodoc:
     new_record? || changed_attributes.keys.include?('host')
   end
 end

@@ -15,7 +15,7 @@ class Course::Admin::MaterialSettingsController < Course::Admin::Controller
 
   private
 
-  def material_settings_params #:nodoc:
+  def material_settings_params # :nodoc:
     params.require(:settings_materials_component).permit(:title)
   end
 
