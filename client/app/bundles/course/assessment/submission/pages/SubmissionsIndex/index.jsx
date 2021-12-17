@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import ReactTooltip from 'react-tooltip';
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import Toggle from 'material-ui/Toggle';
-import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
 import CircularProgress from 'material-ui/CircularProgress';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import GroupIcon from 'material-ui/svg-icons/social/group';
@@ -187,12 +187,12 @@ class VisibleSubmissionsIndex extends React.Component {
             }
           />
           {canPublishGrades && (
-            <FlatButton
+            <RaisedButton
               disabled={
                 disableButtons ||
                 !VisibleSubmissionsIndex.canPublish(shownSubmissions)
               }
-              secondary
+              primary
               label={
                 <FormattedMessage {...submissionsTranslations.publishGrades} />
               }
@@ -202,14 +202,14 @@ class VisibleSubmissionsIndex extends React.Component {
             />
           )}
           {canForceSubmit && (
-            <FlatButton
+            <RaisedButton
               disabled={
                 disableButtons ||
                 !VisibleSubmissionsIndex.canForceSubmitOrRemind(
                   shownSubmissions,
                 )
               }
-              secondary
+              primary
               label={
                 <FormattedMessage {...submissionsTranslations.forceSubmit} />
               }
@@ -219,14 +219,14 @@ class VisibleSubmissionsIndex extends React.Component {
             />
           )}
           {showRemindButton && (
-            <FlatButton
+            <RaisedButton
               disabled={
                 disableButtons ||
                 !VisibleSubmissionsIndex.canForceSubmitOrRemind(
                   shownSubmissions,
                 )
               }
-              secondary
+              primary
               label={<FormattedMessage {...submissionsTranslations.remind} />}
               labelPosition="before"
               icon={isReminding ? <CircularProgress size={24} /> : null}
