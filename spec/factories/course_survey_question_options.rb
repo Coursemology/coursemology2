@@ -11,7 +11,10 @@ FactoryBot.define do
     weight { last_weight ? last_weight + 1 : 0 }
 
     trait :with_attachment do
-      attachment_reference
+      after(:build) do |question_option|
+        attachment = create(:attachment_reference)
+        question_option.attachment_reference = attachment
+      end
     end
   end
 end
