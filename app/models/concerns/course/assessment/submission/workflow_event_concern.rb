@@ -145,7 +145,6 @@ module Course::Assessment::Submission::WorkflowEventConcern
     end
   end
 
-  
   # When a submission is unsubmitted, every current_answer is copied as and flagged as attempting.
   # The new copied answer is then marked as current_answer which is the answer that can be modified
   # by users. The old current_answer is unmarked as current_answer and is kept as graded past answer.
