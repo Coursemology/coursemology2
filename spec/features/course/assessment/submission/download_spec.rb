@@ -42,6 +42,7 @@ RSpec.describe 'Course: Assessment: Submissions: Download' do
           find('#staff-tab').click
           find('#submission-dropdown-icon').click
           expect(page).to have_css('.download-zip-submissions-enabled')
+          expect(page).to have_css('.download-csv-submissions-enabled')
         end
       end
 
@@ -62,6 +63,7 @@ RSpec.describe 'Course: Assessment: Submissions: Download' do
           find('#my-students-tab').click
           find('#submission-dropdown-icon').click
           expect(page).to have_css('.download-zip-submissions-enabled')
+          expect(page).to have_css('.download-csv-submissions-enabled')
         end
       end
 
@@ -70,6 +72,7 @@ RSpec.describe 'Course: Assessment: Submissions: Download' do
           visit course_assessment_submissions_path(course, assessment)
 
           expect(page).not_to have_css('.download-zip-submissions-enabled')
+          expect(page).not_to have_css('.download-csv-submissions-enabled')
         end
       end
 
