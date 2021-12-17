@@ -36,13 +36,14 @@ Coursemology uses [Ruby on Rails](http://rubyonrails.org/). In addition, some fr
 2. Download bundler to install dependencies
 
    ```sh
-   $ gem install bundler
+   $ gem install bundler:2.2.22
    ```
 
 3. Install ruby dependencies
 
    ```sh
-   $ bundle install --without ci:production
+   $ bundle config set --local without 'ci:production'
+   $ bundle install
    ```
 
 4. Install javascript dependencies
