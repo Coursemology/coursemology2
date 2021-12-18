@@ -33,32 +33,22 @@ class Course::Assessment::Submission::SubmissionsController < \
       format.html {}
       format.json do
         @assessment = @assessment.calculated(:maximum_grade)
-        @submissions = @submissions.calculated(:log_count, :graded_at).includes(:answers)
+        @submissions = @submissions.calculated(:log_count, :graded_at, :grade)
         @my_students = current_course_user&.my_students || []
-        @course_users = current_course.course_users.order_phantom_user.order_alphabetically.includes(:user)
+        @course_users = current_course.course_users.order_phantom_user.order_alphabetically
       end
     end
   end
 
   def create
-    @submission.session_id = authentication_service.generate_authentication_token
-
-    success = false
-    if @assessment.randomization == 'prepared'
-      Course::Assessment::Submission.transaction do
-        qbas = @assessment.question_bundle_assignments.where(user: current_user).lock!
-        if qbas.empty? # TODO: More thorough validations here
-          @submission.errors.add(:base, :no_bundles_assigned)
-          raise ActiveRecord::Rollback
-        end
-        raise ActiveRecord::Rollback unless @submission.save
-        raise ActiveRecord::Rollback unless qbas.update_all(submission_id: @submission.id)
-
-        success = true
-      end
-    else
-      success = @submission.save
+    existing_submission = @assessment.submissions.find_by(creator: current_user)
+    if existing_submission
+      @submission = existing_submission
+      return redirect_to edit_course_assessment_submission_path(current_course, @assessment, @submission)
     end
+
+    @submission.session_id = authentication_service.generate_authentication_token
+    success = @assessment.create_new_submission(@submission, current_user)
 
     if success
       authentication_service.save_token_to_session(@submission.session_id)
@@ -79,7 +69,7 @@ class Course::Assessment::Submission::SubmissionsController < \
     respond_to do |format|
       format.html {}
       format.json do
-        calculated_fields = [:graded_at]
+        calculated_fields = [:graded_at, :grade]
         @submission = @submission.calculated(*calculated_fields)
       end
     end
@@ -113,10 +103,26 @@ class Course::Assessment::Submission::SubmissionsController < \
   # Publish all the graded submissions.
   def publish_all
     authorize!(:publish_grades, @assessment)
-    graded_submissions = @assessment.submissions.with_graded_state
-    if !graded_submissions.empty?
+    graded_submission_ids = @assessment.submissions.with_graded_state.by_users(course_user_ids).pluck(:id)
+    if graded_submission_ids.empty?
+      head :ok
+    else
       job = Course::Assessment::Submission::PublishingJob.
-            perform_later(@assessment, current_user).job
+            perform_later(graded_submission_ids, @assessment, current_user).job
+      respond_to do |format|
+        format.html { redirect_to(job_path(job)) }
+        format.json { render json: { redirect_url: job_path(job) } }
+      end
+    end
+  end
+
+  # Force submit all submissions.
+  def force_submit_all
+    authorize!(:force_submit_assessment_submission, @assessment)
+    attempting_submissions = @assessment.submissions.by_users(course_user_ids).with_attempting_state
+    if !attempting_submissions.empty? || !user_ids_without_submission.empty?
+      job = Course::Assessment::Submission::ForceSubmittingJob.
+            perform_later(@assessment, user_ids_without_submission, current_user).job
       respond_to do |format|
         format.html { redirect_to(job_path(job)) }
         format.json { render json: { redirect_url: job_path(job) } }
@@ -129,9 +135,7 @@ class Course::Assessment::Submission::SubmissionsController < \
   # Download either all of or a subset of submissions for an assessment.
   def download_all
     authorize!(:manage, @assessment)
-    if !@assessment.downloadable?
-      head :bad_request
-    elsif @assessment.submissions.confirmed.empty?
+    if !@assessment.downloadable? || @assessment.submissions.confirmed.empty?
       head :bad_request
     else
       job = Course::Assessment::Submission::ZipDownloadJob.
@@ -147,16 +151,15 @@ class Course::Assessment::Submission::SubmissionsController < \
     authorize!(:manage, @assessment)
     submission_ids = @assessment.submissions.by_users(course_user_ids).pluck(:id)
     if submission_ids.empty?
-      render json: { error:
-             I18n.t('course.assessment.submission.submissions.download_statistics.no_submission_statistics') },
-             status: :bad_request
-    else
-      job = Course::Assessment::Submission::StatisticsDownloadJob.
-            perform_later(current_user, submission_ids).job
-      respond_to do |format|
-        format.html { redirect_to(job_path(job)) }
-        format.json { render json: { redirect_url: job_path(job) } }
-      end
+      return render json: { error:
+                    I18n.t('course.assessment.submission.submissions.download_statistics.no_submission_statistics') },
+                    status: :bad_request
+    end
+    job = Course::Assessment::Submission::StatisticsDownloadJob.
+          perform_later(current_user, submission_ids).job
+    respond_to do |format|
+      format.html { redirect_to(job_path(job)) }
+      format.json { render json: { redirect_url: job_path(job) } }
     end
   end
 
@@ -176,16 +179,14 @@ class Course::Assessment::Submission::SubmissionsController < \
   def unsubmit_all
     authorize!(:update, @assessment)
     submission_ids = @assessment.submissions.by_users(course_user_ids).pluck(:id)
-    if !submission_ids.empty?
-      redirect_to_path = course_assessment_submissions_path(@assessment.course, @assessment)
-      job = Course::Assessment::Submission::UnsubmittingJob.
-            perform_later(current_user, submission_ids, @assessment, nil, redirect_to_path).job
-      respond_to do |format|
-        format.html { redirect_to(job_path(job)) }
-        format.json { render json: { redirect_url: job_path(job) } }
-      end
-    else
-      head :ok
+    return head :ok if submission_ids.empty?
+
+    redirect_to_path = course_assessment_submissions_path(@assessment.course, @assessment)
+    job = Course::Assessment::Submission::UnsubmittingJob.
+          perform_later(current_user, submission_ids, @assessment, nil, redirect_to_path).job
+    respond_to do |format|
+      format.html { redirect_to(job_path(job)) }
+      format.json { render json: { redirect_url: job_path(job) } }
     end
   end
 
@@ -206,15 +207,13 @@ class Course::Assessment::Submission::SubmissionsController < \
   def delete_all
     authorize!(:delete_all_submissions, @assessment)
     submission_ids = @assessment.submissions.by_users(course_user_ids).pluck(:id)
-    if !submission_ids.empty?
-      job = Course::Assessment::Submission::DeletingJob.
-            perform_later(current_user, submission_ids, @assessment).job
-      respond_to do |format|
-        format.html { redirect_to(job_path(job)) }
-        format.json { render json: { redirect_url: job_path(job) } }
-      end
-    else
-      head :ok
+    return head :ok if submission_ids.empty?
+
+    job = Course::Assessment::Submission::DeletingJob.
+          perform_later(current_user, submission_ids, @assessment).job
+    respond_to do |format|
+      format.html { redirect_to(job_path(job)) }
+      format.json { render json: { redirect_url: job_path(job) } }
     end
   end
 
@@ -260,7 +259,7 @@ class Course::Assessment::Submission::SubmissionsController < \
   end
 
   def authentication_service
-    @auth_service ||=
+    @authentication_service ||=
       Course::Assessment::SessionAuthenticationService.new(@assessment, session, @submission)
   end
 
@@ -308,5 +307,11 @@ class Course::Assessment::Submission::SubmissionsController < \
     else
       @assessment.course.course_users.students.without_phantom_users
     end.select(:user_id)
+  end
+
+  def user_ids_without_submission
+    existing_submissions = @assessment.submissions.by_users(course_user_ids.pluck(:user_id))
+    user_ids_with_submission = existing_submissions.pluck(:creator_id)
+    course_user_ids.pluck(:user_id) - user_ids_with_submission
   end
 end

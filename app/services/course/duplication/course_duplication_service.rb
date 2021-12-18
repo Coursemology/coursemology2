@@ -56,9 +56,15 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
       raise ActiveRecord::Rollback unless update_course_settings(duplicator, new_course, source_course)
       raise ActiveRecord::Rollback unless update_sidebar_settings(duplicator, new_course, source_course)
 
+      # As per carrierwave v2.1.0, carrierwave image mounter that retains uploaded file as a cache
+      # is reset upon reload (in our case it is new_course.reload).
+      # As a result, logo duplication needs to be done after course reload.
+      # https://github.com/carrierwaveuploader/carrierwave/issues/2482#issuecomment-762966926
+      new_course.logo.duplicate_from(source_course.logo) if source_course.logo_url
+
       new_course
     end
-    notify_duplication_complete(duplicated_course) unless duplicated_course.nil?
+    notify_duplication_complete(duplicated_course)
     duplicated_course
   end
 
@@ -73,13 +79,19 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
     Duplicator.new(options[:excluded_objects], options.except(:excluded_objects))
   end
 
-  # Sends an email to current_user to notify that the duplication is complete.
+  # Sends an email to current_user to notify that the duplication is complete/failed.
   #
   # @param [Course] new_course The duplicated course
   def notify_duplication_complete(new_course)
-    Course::Mailer.
-      course_duplicated_email(@options[:source_course], new_course, @options[:current_user]).
-      deliver_now
+    if new_course
+      Course::Mailer.
+        course_duplicated_email(@options[:source_course], new_course, @options[:current_user]).
+        deliver_now
+    else
+      Course::Mailer.
+        course_duplicate_failed_email(@options[:source_course], @options[:current_user]).
+        deliver_now
+    end
   end
 
   # Updates category_ids in the duplicated course settings. This is to be run after the course has

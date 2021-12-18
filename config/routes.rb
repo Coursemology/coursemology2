@@ -214,6 +214,7 @@ Rails.application.routes.draw do
               get :download_all, on: :collection
               get :download_statistics, on: :collection
               patch :publish_all, on: :collection
+              patch :force_submit_all, on: :collection
               patch :unsubmit, on: :collection
               patch :unsubmit_all, on: :collection
               patch :delete, on: :collection
@@ -233,7 +234,6 @@ Rails.application.routes.draw do
                     resources :scribbles, only: [:create]
                   end
                   namespace :forum_post_response do
-                    # get :selected_posts
                     get 'selected_post_packs' => 'posts#selected'
                   end
                 end
@@ -336,6 +336,8 @@ Rails.application.routes.draw do
         get 'forum_disbursement' => 'experience_points/forum_disbursement#new', on: :collection
         post 'forum_disbursement' => 'experience_points/forum_disbursement#create',
              on: :collection
+        get 'manage_email_subscription' => 'user_email_subscriptions#edit'
+        patch 'manage_email_subscription' => 'user_email_subscriptions#update'
       end
       post 'register' => 'user_registrations#create'
       get 'students' => 'users#students', as: :users_students
@@ -403,6 +405,8 @@ Rails.application.routes.draw do
         get 'fetch', on: :collection
         post 'mark_as_read', on: :member
       end
+
+      get 'learning_map' => 'learning_map#index'
     end
   end
 

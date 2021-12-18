@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import ReactTooltip from 'react-tooltip';
 import moment from 'lib/moment';
 import { TableRow, TableRowColumn } from 'material-ui/Table';
 import FontIcon from 'material-ui/FontIcon';
@@ -95,9 +94,6 @@ export default class SubmissionsTableRow extends React.Component {
         <a data-tip data-for="unpublished-grades" data-offset="{'left' : -8}">
           <i className="fa fa-exclamation-triangle" />
         </a>
-        <ReactTooltip id="unpublished-grades" effect="solid">
-          <FormattedMessage {...submissionsTranslations.publishNotice} />
-        </ReactTooltip>
       </span>
     );
   }
@@ -139,6 +135,22 @@ export default class SubmissionsTableRow extends React.Component {
 
     return `${gradeString} / ${maximumGradeString}`;
   }
+
+  renderPhantomUserIcon = (submission) => {
+    if (submission.courseUser.phantom) {
+      return (
+        <>
+          <FontIcon
+            data-tip
+            data-for="phantom-user"
+            className="fa fa-user-secret fa-xs"
+            style={styles.phantomIcon}
+          />
+        </>
+      );
+    }
+    return null;
+  };
 
   disableButtons() {
     const {
@@ -222,18 +234,11 @@ export default class SubmissionsTableRow extends React.Component {
       return null;
 
     return (
-      <span
-        className="submission-access-logs"
-        data-for={`access-logs-${submission.id}`}
-        data-tip
-      >
+      <span className="submission-access-logs" data-for="access-logs" data-tip>
         <a href={getSubmissionLogsURL(courseId, assessmentId, submission.id)}>
           <IconButton>
             <HistoryIcon color={submission.logCount > 1 ? red600 : blue600} />
           </IconButton>
-          <ReactTooltip id={`access-logs-${submission.id}`} effect="solid">
-            <FormattedMessage {...submissionsTranslations.accessLogs} />
-          </ReactTooltip>
         </a>
       </span>
     );
@@ -271,21 +276,14 @@ export default class SubmissionsTableRow extends React.Component {
     if (!assessment.canUnsubmitSubmission) return null;
 
     return (
-      <span
-        className="unsubmit-button"
-        data-for={`unsubmit-button-${submission.id}`}
-        data-tip
-      >
+      <span className="unsubmit-button" data-for="unsubmit-button" data-tip>
         <IconButton
-          id={`unsubmit-button-${submission.id}`}
+          id={`unsubmit-button-${submission.courseUser.id}`}
           onClick={() => this.setState({ unsubmitConfirmation: true })}
           disabled={disabled}
         >
           <RemoveCircle color={pink600} />
         </IconButton>
-        <ReactTooltip id={`unsubmit-button-${submission.id}`} effect="solid">
-          <FormattedMessage {...submissionsTranslations.unsubmitSubmission} />
-        </ReactTooltip>
       </span>
     );
   }
@@ -319,6 +317,58 @@ export default class SubmissionsTableRow extends React.Component {
     );
   }
 
+  renderDeleteButton(submission) {
+    const { assessment } = this.props;
+    const disabled =
+      this.disableButtons() ||
+      submission.workflowState === workflowStates.Unstarted;
+    if (
+      !assessment.canDeleteAllSubmissions &&
+      !submission.courseUser.isCurrentUser
+    )
+      return null;
+
+    return (
+      <span className="delete-button" data-for="delete-button" data-tip>
+        <IconButton
+          id={`delete-button-${submission.courseUser.id}`}
+          onClick={() => this.setState({ deleteConfirmation: true })}
+          disabled={disabled}
+        >
+          <DeleteIcon color={red900} />
+        </IconButton>
+      </span>
+    );
+  }
+
+  renderDeleteDialog(submission) {
+    const { deleteConfirmation } = this.state;
+    const { dispatch } = this.props;
+    const values = { name: submission.courseUser.name };
+    const successMessage = (
+      <FormattedMessage
+        {...translations.deleteSubmissionSuccess}
+        values={values}
+      />
+    );
+    return (
+      <ConfirmationDialog
+        open={deleteConfirmation}
+        onCancel={() => this.setState({ deleteConfirmation: false })}
+        onConfirm={() => {
+          dispatch(deleteSubmission(submission.id, successMessage));
+          this.setState({ deleteConfirmation: false });
+        }}
+        message={
+          <FormattedMessage
+            {...submissionsTranslations.deleteConfirmation}
+            values={{ name: submission.courseUser.name }}
+          />
+        }
+      />
+    );
+  }
+
   renderUser(submission) {
     const { courseId, assessment } = this.props;
     const { unsubmitConfirmation, deleteConfirmation } = this.state;
@@ -329,7 +379,7 @@ export default class SubmissionsTableRow extends React.Component {
     return (
       <TableRow className="submission-row" key={submission.courseUser.id}>
         <TableRowColumn style={styles.tableCell}>
-          {SubmissionsTableRow.renderPhantomUserIcon(submission)}
+          {this.renderPhantomUserIcon(submission)}
           <a
             style={styles.nameWrapper}
             href={getCourseUserURL(courseId, submission.courseUser.id)}

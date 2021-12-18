@@ -68,6 +68,7 @@ export const postShape = PropTypes.shape({
   createdAt: PropTypes.string.isRequired,
   canUpdate: PropTypes.bool.isRequired,
   canDestroy: PropTypes.bool.isRequired,
+  isDelayed: PropTypes.bool.isRequired,
 });
 
 export const answerShape = PropTypes.shape({
@@ -105,6 +106,8 @@ export const assessmentShape = PropTypes.shape({
   showEvaluation: PropTypes.bool,
   questionIds: PropTypes.arrayOf(PropTypes.number),
   canViewLogs: PropTypes.bool,
+  canPublishGrades: PropTypes.bool,
+  canForceSubmit: PropTypes.bool,
   canUnsubmitSubmissions: PropTypes.bool,
   canDeleteAllSubmissions: PropTypes.bool,
 });

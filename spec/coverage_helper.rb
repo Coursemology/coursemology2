@@ -17,5 +17,8 @@ if ENV['CI']
 
     # Rake task to seed dev database with course and assessment data.
     add_filter '/lib/tasks/coursemology/seed.rake'
+
+    # take tasks is excluded for coverage
+    add_filter '/lib/tasks/'
   end
 end

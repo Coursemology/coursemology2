@@ -94,6 +94,16 @@ function getVideoId() {
 }
 
 /**
+ * Get the course user id from URL.
+ *
+ * return {number}
+ */
+function getCourseUserId() {
+  const match = window.location.pathname.match(/^\/courses\/\d+\/users\/(\d+)/);
+  return match && match[1];
+}
+
+/**
  * Get the video submission id from URL.
  *
  * return {number}
@@ -115,4 +125,5 @@ export {
   getScribingId,
   getVideoId,
   getVideoSubmissionId,
+  getCourseUserId,
 };

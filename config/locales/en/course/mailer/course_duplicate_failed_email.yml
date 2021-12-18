@@ -1,0 +1,8 @@
+en:
+  course:
+    mailer:
+      course_duplicate_failed_email:
+        subject: 'Course Duplication Failed: %{original_course}'
+        message: >
+          Duplication of %{original_course} has failed.
+          Please try again later or contact support if the problem persists.

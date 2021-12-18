@@ -39,7 +39,7 @@ class Course::Group < ApplicationRecord
       left_outer_joins(course_user: :experience_points_records).
       where(CourseUser.arel_table[:role].eq(CourseUser.roles[:student])).
       select(Arel.sql('coalesce(sum(course_experience_points_records.points_awarded), 0.0)::float /'\
-            ' GREATEST(count(distinct(course_group_users.course_user_id)), 1.0)'))
+                      ' GREATEST(count(distinct(course_group_users.course_user_id)), 1.0)'))
   end)
 
   # @!attribute [r] average_achievement_count
@@ -50,7 +50,7 @@ class Course::Group < ApplicationRecord
       left_outer_joins(course_user: :course_user_achievements).
       where(CourseUser.arel_table[:role].eq(CourseUser.roles[:student])).
       select(Arel.sql('count(course_user_achievements.id)::float /'\
-            ' GREATEST(count(distinct(course_group_users.course_user_id)), 1.0)'))
+                      ' GREATEST(count(distinct(course_group_users.course_user_id)), 1.0)'))
   end)
 
   # @!attribute [r] last_obtained_achievement

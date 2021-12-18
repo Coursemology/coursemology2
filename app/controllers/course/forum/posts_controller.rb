@@ -92,7 +92,11 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
   protected
 
   def create_topic_subscription
-    @topic.ensure_subscribed_by(current_user)
+    if @forum.forum_topics_auto_subscribe
+      @topic.ensure_subscribed_by(current_user)
+    else
+      true
+    end
   end
 
   def discussion_topic

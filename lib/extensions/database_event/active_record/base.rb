@@ -94,7 +94,7 @@ module Extensions::DatabaseEvent::ActiveRecord::Base
   #
   # @return [String]
   def notify_identifier
-    to_global_id.to_s[18..-1]. # Remove gid://application/
+    to_global_id.to_s[18..]. # Remove gid://application/
       tr('/:', '_'). # Remove / and :
       underscore
   end

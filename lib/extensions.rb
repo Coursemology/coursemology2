@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 module Extensions
-  EXTENSIONS_PATH = "#{__dir__}/extensions"
+  EXTENSIONS_PATH = "#{__dir__}/extensions".freeze
 
   class << self
     # Loads all extensions defined in this directory.
     #
     # @return [void]
     def load_all
-      Dir["#{EXTENSIONS_PATH}/*.rb"].sort.each do |ext|
+      Dir["#{EXTENSIONS_PATH}/*.rb"].each do |ext|
         require ext
         load(const_get(module_name(File.basename(ext, '.*'))))
       end
@@ -54,7 +54,7 @@ module Extensions
 
       current_module_dir_length = current_module_dir.length + 1
       extensions = Dir["#{current_module_dir}/**/*.rb"].map do |e|
-        e[current_module_dir_length..-1]
+        e[current_module_dir_length..]
       end
 
       extensions.sort!
@@ -81,7 +81,7 @@ module Extensions
       class_to_extend = expected_module_name.constantize
       if expected_module_name != class_to_extend.name
         warn "Class does not match: expected #{module_name(path)}, got #{class_to_extend}. Maybe "\
-          "#{module_name(path)} has not been defined?"
+             "#{module_name(path)} has not been defined?"
       end
 
       module_to_include = "#{module_.name}::#{class_to_extend}".constantize

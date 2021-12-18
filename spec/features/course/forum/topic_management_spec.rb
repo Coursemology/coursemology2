@@ -102,30 +102,32 @@ RSpec.feature 'Course: Forum: Topic: Management' do
         expect(page).to have_no_content_tag_for(topic)
       end
 
-      scenario 'I can subscribe to a topic' do
+      scenario 'I can subscribe to a topic', js: true do
         topic = create(:forum_topic, forum: forum)
         visit course_forum_topic_path(course, forum, topic)
-        find_link(I18n.t('course.forum.topics.subscribe.tag'),
+        find_link(nil,
                   href: subscribe_course_forum_topic_path(course, forum, topic,
                                                           subscribe: true)).click
 
+        wait_for_ajax
         expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
-        expect(page).to have_link(I18n.t('course.forum.topics.unsubscribe.tag'),
+        expect(page).to have_link(nil,
                                   href: subscribe_course_forum_topic_path(course, forum, topic,
                                                                           subscribe: false))
         expect(topic.subscriptions.where(user: user).count).to eq(1)
       end
 
-      scenario 'I can unsubscribe from a topic' do
+      scenario 'I can unsubscribe from a topic', js: true do
         topic = create(:forum_topic, forum: forum)
         topic.subscriptions.create(user: user)
         visit course_forum_topic_path(course, forum, topic)
-        find_link(I18n.t('course.forum.topics.unsubscribe.tag'),
+        find_link(nil,
                   href: subscribe_course_forum_topic_path(course, forum, topic,
                                                           subscribe: false)).click
 
+        wait_for_ajax
         expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
-        expect(page).to have_link(I18n.t('course.forum.topics.subscribe.tag'),
+        expect(page).to have_link(nil,
                                   href: subscribe_course_forum_topic_path(course, forum, topic,
                                                                           subscribe: true))
         expect(topic.subscriptions.where(user: user).empty?).to eq(true)
@@ -276,33 +278,45 @@ RSpec.feature 'Course: Forum: Topic: Management' do
                                                                               other_topic))
       end
 
-      scenario 'I can subscribe to a topic' do
+      scenario 'I can subscribe to a topic', js: true do
         topic = create(:forum_topic, forum: forum)
         visit course_forum_topic_path(course, forum, topic)
-        find_link(I18n.t('course.forum.topics.subscribe.tag'),
+        find_link(nil,
                   href: subscribe_course_forum_topic_path(course, forum, topic,
                                                           subscribe: true)).click
 
+        wait_for_ajax
         expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
-        expect(page).to have_link(I18n.t('course.forum.topics.unsubscribe.tag'),
+        expect(page).to have_link(nil,
                                   href: subscribe_course_forum_topic_path(course, forum, topic,
                                                                           subscribe: false))
         expect(topic.subscriptions.where(user: user).count).to eq(1)
       end
 
-      scenario 'I can unsubscribe from a topic' do
+      scenario 'I can unsubscribe from a topic', js: true do
         topic = create(:forum_topic, forum: forum)
         topic.subscriptions.create(user: user)
         visit course_forum_topic_path(course, forum, topic)
-        find_link(I18n.t('course.forum.topics.unsubscribe.tag'),
+        find_link(nil,
                   href: subscribe_course_forum_topic_path(course, forum, topic,
                                                           subscribe: false)).click
+        wait_for_ajax
 
         expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
-        expect(page).to have_link(I18n.t('course.forum.topics.subscribe.tag'),
+        expect(page).to have_link(nil,
                                   href: subscribe_course_forum_topic_path(course, forum, topic,
                                                                           subscribe: true))
         expect(topic.subscriptions.where(user: user).empty?).to eq(true)
+      end
+
+      scenario 'I can click unsubscribe forum topic link from an email' do
+        topic = create(:forum_topic, forum: forum)
+        topic.subscriptions.create(user: user)
+        visit subscribe_course_forum_topic_path(course, forum, topic, subscribe: false)
+        expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
+        expect(page).to have_selector('div.alert.alert-success')
+        expect(page).to have_text(I18n.t('course.forum.topics.unsubscribe.success'))
+        expect(Course::Discussion::Topic::Subscription.where(user: user, topic: topic).empty?).to eq(true)
       end
     end
   end

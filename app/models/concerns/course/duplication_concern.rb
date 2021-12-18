@@ -8,7 +8,6 @@ module Course::DuplicationConcern
     self.title = duplicator.options[:new_title]
     self.creator = duplicator.options[:current_user]
     self.registration_key = nil
-    logo.duplicate_from(other.logo) if other.logo_url
     material_folders << duplicator.duplicate(other.root_folder)
   end
 
@@ -30,7 +29,8 @@ module Course::DuplicationConcern
       *videos,
       *lesson_plan_events,
       *lesson_plan_milestones,
-      *forums
+      *forums,
+      *setting_emails
     ]
   end
 

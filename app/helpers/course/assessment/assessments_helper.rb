@@ -38,9 +38,7 @@ module Course::Assessment::AssessmentsHelper
   end
 
   def show_end_at?
-    @show_end_at ||= begin
-      @assessments.any? { |assessment| assessment.end_at.present? }
-    end
+    @show_end_at ||= @assessments.any? { |assessment| assessment.end_at.present? }
   end
 
   def display_graded_test_types(assessment)

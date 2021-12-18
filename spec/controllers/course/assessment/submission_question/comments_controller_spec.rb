@@ -11,12 +11,14 @@ RSpec.describe Course::Assessment::SubmissionQuestion::CommentsController do
     before { sign_in(user) }
 
     describe '#create' do
+      let(:is_delayed) { false }
       subject do
         post :create, as: :js, params: {
           course_id: course, assessment_id: assessment,
           submission_question_id: submission_question,
           discussion_post: {
-            text: comment
+            text: comment,
+            is_delayed: is_delayed
           }
         }
       end
@@ -46,7 +48,7 @@ RSpec.describe Course::Assessment::SubmissionQuestion::CommentsController do
           expect { subject }.to change(Course::Discussion::Post, :count).by(1)
         end
 
-        context 'when other users are subscribed to notifications' do
+        context 'when other users are subscribed to notifications', type: :mailer do
           let!(:subscriber) do
             user = create(:course_manager, course: course).user
             submission_question.acting_as.subscriptions.create!(user: user)
@@ -57,16 +59,22 @@ RSpec.describe Course::Assessment::SubmissionQuestion::CommentsController do
             expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
           end
 
+          context 'when the new comment is posted as delayed post' do
+            let!(:is_delayed) { true }
+            it 'does not send email notifications' do
+              expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
+            end
+          end
+
           context 'when "New Comment" email notification is disabled' do
             before do
-              context =
-                OpenStruct.new(key: Course::AssessmentsComponent.key, current_course: course)
-              setting = {
-                'key' => 'new_comment', 'enabled' => false,
-                'options' => { 'category_id' => assessment.tab.category.id }
-              }
-              Course::Settings::AssessmentsComponent.new(context).update_email_setting(setting)
-              course.save!
+              category_id = assessment.tab.category.id
+              email_setting = course.
+                              setting_emails.
+                              where(component: :assessments,
+                                    course_assessment_category_id: category_id,
+                                    setting: :new_comment).first
+              email_setting.update!(regular: false, phantom: false)
             end
 
             it 'does not send email notifications' do

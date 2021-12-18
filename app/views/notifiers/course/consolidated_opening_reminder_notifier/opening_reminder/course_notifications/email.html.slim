@@ -4,3 +4,7 @@ p = t('.message')
 - @items_hash.sort.each do |actable_type, items|
   = render partial: actable_type_partial_path(@notification, actable_type),
     locals: { items: items, course: @course }
+
+br
+= render partial: 'layouts/manage_email_subscription',
+         locals: { course: @course, recipient: @recipient, component: nil , category_id: nil, setting: 'opening_reminder' }

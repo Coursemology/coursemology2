@@ -31,7 +31,7 @@ class ActiveJob::QueueAdapters::BackgroundThreadAdapter < ActiveJob::QueueAdapte
     super
   end
 
-  def enqueue(job) #:nodoc:
+  def enqueue(job) # :nodoc:
     ActiveSupport::Notifications.instrument(ENQUEUE_EVENT, job: job, caller: caller) do |payload|
       with_thread_pool { @pending_jobs << job.serialize }
       ensure_threads
@@ -40,7 +40,7 @@ class ActiveJob::QueueAdapters::BackgroundThreadAdapter < ActiveJob::QueueAdapte
     end
   end
 
-  def enqueue_at(job, timestamp) #:nodoc:
+  def enqueue_at(job, timestamp) # :nodoc:
     @future_jobs << { job: job, at: timestamp }
   end
 
@@ -189,7 +189,7 @@ class ActiveJob::QueueAdapters::BackgroundThreadAdapter < ActiveJob::QueueAdapte
   class LogSubscriber < ActiveSupport::LogSubscriber
     def enqueue(event)
       message = "[Background Thread] Enqueued job: #{event.payload[:job]}, "\
-                "call stack:\n#{event.payload[:caller][20..-1].join("\n")}"
+                "call stack:\n#{event.payload[:caller][20..].join("\n")}"
       debug(message)
     end
 
@@ -213,8 +213,8 @@ class ActiveJob::QueueAdapters::BackgroundThreadAdapter < ActiveJob::QueueAdapte
 
     def pool_statistics(event)
       "pool size: #{event.payload[:pool_size]}, "\
-      "running jobs: #{event.payload[:running_jobs]}, "\
-      "pending jobs: #{event.payload[:pending_jobs]}"
+        "running jobs: #{event.payload[:running_jobs]}, "\
+        "pending jobs: #{event.payload[:pending_jobs]}"
     end
   end
 

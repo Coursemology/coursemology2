@@ -4,6 +4,7 @@ class Course::Assessment::Submission < ApplicationRecord
   include Course::Assessment::Submission::WorkflowEventConcern
   include Course::Assessment::Submission::TodoConcern
   include Course::Assessment::Submission::NotificationConcern
+  include Course::Assessment::Submission::AnswersConcern
 
   acts_as_experience_points_record
 
@@ -34,6 +35,10 @@ class Course::Assessment::Submission < ApplicationRecord
     end
   end
 
+  Course::Assessment::Answer.after_save do |answer|
+    Course::Assessment::Submission.on_dependent_status_change(answer)
+  end
+
   validate :validate_consistent_user, :validate_unique_submission, on: :create
   validate :validate_awarded_attributes, if: :published?
   validates :submitted_at, presence: true, unless: :attempting?
@@ -41,6 +46,7 @@ class Course::Assessment::Submission < ApplicationRecord
   validates :creator, presence: true
   validates :updater, presence: true
   validates :assessment, presence: true
+  validates :last_graded_time, presence: true
 
   belongs_to :assessment, inverse_of: :submissions
 
@@ -85,7 +91,7 @@ class Course::Assessment::Submission < ApplicationRecord
   accepts_nested_attributes_for :answers
 
   # @!attribute [r] graded_at
-  #   Gets the time the submission was graded.
+  #   Returns the time the submission was graded.
   #   @return [Time]
   calculated :graded_at, (lambda do
     Course::Assessment::Answer.unscope(:order).
@@ -98,6 +104,15 @@ class Course::Assessment::Submission < ApplicationRecord
   calculated :log_count, (lambda do
     Course::Assessment::Submission::Log.select("count('*')").
       where('course_assessment_submission_logs.submission_id = course_assessment_submissions.id')
+  end)
+
+  # @!attribute [r] grade
+  #   Returns the total grade of the submissions.
+  calculated :grade, (lambda do
+    Course::Assessment::Answer.unscope(:order).
+      where('course_assessment_answers.submission_id = course_assessment_submissions.id
+             AND course_assessment_answers.current_answer = true').
+      select('sum(course_assessment_answers.grade)')
   end)
 
   # @!method self.by_user(user)
@@ -146,7 +161,7 @@ class Course::Assessment::Submission < ApplicationRecord
   end)
 
   # Filter submissions by category_id, assessment_id, group_id and/or user_id (creator)
-  scope :filter, (lambda do |filter_params|
+  scope :filter_by_params, (lambda do |filter_params|
     result = all
     if filter_params[:category_id].present?
       result = result.from_category(Course::Assessment::Category.find(filter_params[:category_id]))
@@ -171,16 +186,15 @@ class Course::Assessment::Submission < ApplicationRecord
   #
   # @return [Course::Assessment::Submission::AutoGradingJob] The job instance.
   def auto_grade!(only_ungraded: false)
-    AutoGradingJob.perform_later(self, only_ungraded: only_ungraded)
+    AutoGradingJob.perform_later(self, only_ungraded)
+  end
+
+  def auto_grade_now!(only_ungraded: false)
+    AutoGradingJob.perform_now(self, only_ungraded: only_ungraded)
   end
 
   def unsubmitting?
     !!@unsubmitting
-  end
-
-  # The total grade of the submission
-  def grade
-    current_answers.map { |a| a.grade || 0 }.sum
   end
 
   def questions
@@ -198,16 +212,21 @@ class Course::Assessment::Submission < ApplicationRecord
   end
 
   # The answers with current_answer flag set to true, filtering out orphaned answers to questions which are no longer
-  # assigned to the submission.
+  # assigned to the submission for randomized assessment.
   #
   # If there are multiple current_answers for a particular question, return the first one.
   # This guards against a race condition creating multiple current_answers for a given
   # question in load_or_create_answers.
   def current_answers
-    # Can't do filtering in AR because `answer` may not be persisted, and AR is dumb.
-    question_ids = questions.pluck(:id)
-    answers.select { |answer| answer.question_id.in? question_ids }.
-      select(&:current_answer?).group_by(&:question_id).map { |pair| pair[1].first }
+    if assessment.randomization.nil?
+      # Filtering by question ids is not needed for non-randomized assessment as it adds more query time.
+      filtered_answers = answers
+    else
+      # Can't do filtering in AR because `answer` may not be persisted, and AR is dumb.
+      question_ids = questions.pluck(:id)
+      filtered_answers = answers.select { |answer| answer.question_id.in? question_ids }
+    end
+    filtered_answers.select(&:current_answer?).group_by(&:question_id).map { |pair| pair[1].first }
   end
 
   # @return [Array<Course::Assessment::Answer>] Current answers to programming questions
@@ -238,6 +257,12 @@ class Course::Assessment::Submission < ApplicationRecord
   # If submission is 'graded', return the draft value, otherwise, the return the points awarded.
   def current_points_awarded
     published? ? points_awarded : draft_points_awarded
+  end
+
+  def self.on_dependent_status_change(answer)
+    return unless answer.saved_changes.key?(:grade)
+
+    answer.submission.last_graded_time = Time.now
   end
 
   private

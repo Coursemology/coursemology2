@@ -2,17 +2,7 @@
   = link_to_next_unread
 .btn-group
   - if can?(:subscribe, @topic)
-    - if @topic.subscribed_by?(current_user)
-      = link_to subscribe_course_forum_topic_path(current_course, @forum, @topic, subscribe: false),
-                title: t('course.forum.topics.unsubscribe.tag'), class: ['btn', 'btn-danger'],
-                method: :delete do
-        = fa_icon 'heart-o'.freeze
-    - else
-      = link_to subscribe_course_forum_topic_path(current_course, @forum, @topic, subscribe: true),
-                title: t('course.forum.topics.subscribe.tag'), class: ['btn', 'btn-success'],
-                method: :post, role: 'button' do
-        = fa_icon 'heart'.freeze
-
+    = render partial: 'course/forum/topics/subscribe_button', locals: { user: current_user, forum: @forum, topic: @topic }
   - if can?(:set_hidden, @topic)
     - if @topic.hidden
       = link_to hidden_course_forum_topic_path(current_course, @forum, @topic, hidden: false),

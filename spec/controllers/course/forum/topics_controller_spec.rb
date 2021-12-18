@@ -59,10 +59,10 @@ RSpec.describe Course::Forum::TopicsController, type: :controller do
 
       context 'when subscribe fails' do
         subject do
-          post :subscribe, params: { course_id: course, forum_id: forum, id: topic_stub, subscribe: 'true' }
+          post :subscribe,
+               params: { course_id: course, forum_id: forum, id: topic_stub, subscribe: 'true', format: 'js' }
         end
 
-        it { is_expected.to redirect_to(course_forum_topic_path(course, forum, topic_stub)) }
         it 'sets an error flash message' do
           expect(flash[:danger]).to eq(I18n.t('course.forum.topics.subscribe.failure'))
         end
@@ -70,10 +70,10 @@ RSpec.describe Course::Forum::TopicsController, type: :controller do
 
       context 'when unsubscribe fails' do
         subject do
-          post :subscribe, params: { course_id: course, forum_id: forum, id: topic_stub, subscribe: 'false' }
+          post :subscribe,
+               params: { course_id: course, forum_id: forum, id: topic_stub, subscribe: 'false', format: 'js' }
         end
 
-        it { is_expected.to redirect_to(course_forum_topic_path(course, forum, topic_stub)) }
         it 'sets an error flash message' do
           expect(flash[:danger]).to eq(I18n.t('course.forum.topics.unsubscribe.failure'))
         end

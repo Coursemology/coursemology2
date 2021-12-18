@@ -280,6 +280,7 @@ RSpec.describe 'Extension: Acts as Attachable' do
       include ApplicationFormattersHelper
       include Rails.application.routes.url_helpers
     end
+
     class self::SampleFormBuilder < ActionView::Helpers::FormBuilder; end
 
     let(:attachment) { create(:attachment_reference) }

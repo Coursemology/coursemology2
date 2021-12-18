@@ -39,12 +39,12 @@ class Course::ExperiencePointsRecordsController < Course::ComponentController
     params.require(:experience_points_record).permit(:points_awarded, :reason)
   end
 
-  def destroy_success #:nodoc:
+  def destroy_success # :nodoc:
     redirect_to course_user_experience_points_records_path(current_course, @course_user),
                 success: t('course.experience_points_records.destroy.success')
   end
 
-  def destroy_failure #:nodoc:
+  def destroy_failure # :nodoc:
     redirect_to course_user_experience_points_records_path(current_course, @course_user),
                 danger: @experience_points_record.errors.full_messages.to_sentence
   end

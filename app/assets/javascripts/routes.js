@@ -960,6 +960,9 @@ var ROUTES = (function() {
 // course_user_invitations => /courses/:course_id/user_invitations(.:format)
   // function(course_id, options)
   course_user_invitations_path: Utils.route([["course_id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"user_invitations",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]),
+// course_user_manage_email_subscription => /courses/:course_id/users/:user_id/manage_email_subscription(.:format)
+  // function(course_id, user_id, options)
+  course_user_manage_email_subscription_path: Utils.route([["course_id",true],["user_id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"users",false],[2,[7,"/",false],[2,[3,"user_id",false],[2,[7,"/",false],[2,[6,"manage_email_subscription",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]]]),
 // course_user_notification => /courses/:course_id/user_notifications/:id(.:format)
   // function(course_id, id, options)
   course_user_notification_path: Utils.route([["course_id",true],["id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"user_notifications",false],[2,[7,"/",false],[2,[3,"id",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]),

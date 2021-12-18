@@ -2,9 +2,8 @@
 class Course::AnnouncementNotifier < Notifier::Base
   # To be called when an announcement is made.
   def new_announcement(user, announcement)
-    email_enabled = Course::Settings::AnnouncementsComponent.
-                    email_enabled?(announcement.course, :new_announcement)
-    return unless email_enabled
+    email_enabled = announcement.course.email_enabled(:announcements, :new_announcement)
+    return unless email_enabled.regular || email_enabled.phantom
 
     create_activity(actor: user, object: announcement, event: :new).
       notify(announcement.course, :email).
@@ -18,8 +17,15 @@ class Course::AnnouncementNotifier < Notifier::Base
   #
   # @param [CourseNotification] notification The notification which is used to generate emails
   def email_course(notification)
-    notification.course.users.each do |user|
-      @pending_emails << ActivityMailer.email(recipient: user,
+    email_enabled = notification.course.email_enabled(:announcements, :new_announcement)
+    notification.course.course_users.each do |course_user|
+      next if course_user.email_unsubscriptions.where(course_settings_email_id: email_enabled.id).exists?
+
+      is_disabled_as_phantom = course_user.phantom? && !email_enabled.phantom
+      is_disabled_as_regular = !course_user.phantom? && !email_enabled.regular
+      next if is_disabled_as_phantom || is_disabled_as_regular
+
+      @pending_emails << ActivityMailer.email(recipient: course_user.user,
                                               notification: notification,
                                               view_path: notification_view_path(notification),
                                               layout_path: 'no_greeting_mailer')

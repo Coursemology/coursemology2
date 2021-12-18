@@ -1,13 +1,15 @@
-# Ruby CircleCI 2.0 configuration file
+# Ruby CircleCI 2.1 configuration file
 #
 # Check https://circleci.com/docs/2.0/language-ruby/ for more details
 #
-version: 2
+version: 2.1
+orbs:
+  browser-tools: circleci/browser-tools@1.2.3
 jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/ruby:2.5.3-node-browsers
+      - image: cimg/ruby:3.0.2-browsers
         environment:
           BUNDLE_APP_CONFIG: ~/repo/.bundle
 
@@ -19,23 +21,21 @@ jobs:
       # Checkout submodules
       - run: git submodule update --init --recursive
 
-      # Update Node.js to version 14 LTS
-      - run:
-          name: 'Update Node.js and npm'
-          command: |
-            curl -sSL "https://nodejs.org/dist/v14.17.6/node-v14.17.6-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v14.17.6-linux-x64/bin/node
-            curl https://www.npmjs.com/install.sh | sudo bash
-
       - run:
           name: Check current version of node
           command: node -v
 
+      # Install bundler version
+      - run:
+          name: install bundler version
+          command: gem install bundler:2.2.22
+
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v2-dependencies-{{ checksum "Gemfile.lock" }}
+            - 3.3-dependencies-{{ checksum "Gemfile.lock" }}
             # fallback to using the latest cache if no exact match is found
-            - v2-dependencies-
+            - 3.3-dependencies-
 
       - run:
           name: install dependencies
@@ -46,11 +46,25 @@ jobs:
           paths:
             - ./vendor/bundle
             - ./.bundle
-          key: v2-dependencies-{{ checksum "Gemfile.lock" }}
+          key: 3.3-dependencies-{{ checksum "Gemfile.lock" }}
 
       - restore_cache:
           keys:
-            - v1-yarn-{{ checksum "client/yarn.lock" }}
+            - v1.1-yarn-{{ checksum "client/yarn.lock" }}
+
+      - run:
+          name: Swap node versions
+          command: |
+            set +e
+            wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | bash
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+            nvm install v14.16.1
+            nvm alias default 14.16.1
+
+            echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
+            echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
 
       # Build frontend JS
       - run: cd client && yarn install && yarn build:production && cd -
@@ -58,14 +72,18 @@ jobs:
       - save_cache:
           paths:
             - ./client/node_modules
+          key: v1.1-yarn-{{ checksum "client/yarn.lock" }}
+
+      - save_cache:
+          paths:
             - ./client/build
             - ./public/webpack
-          key: v1-yarn-{{ checksum "client/yarn.lock" }}
+          key: v1.1-yarn-build-{{ .Revision }}
 
   test:
     docker:
       # specify the version you desire here
-      - image: circleci/ruby:2.5.3-node-browsers
+      - image: cimg/ruby:3.0.2-browsers
         environment:
           PG_HOST: localhost
           PG_USER: ubuntu
@@ -80,22 +98,18 @@ jobs:
           POSTGRES_USER: ubuntu
           POSTGRES_DB: coursemology_test
 
-    parallelism: 4
+    parallelism: 25
 
     working_directory: ~/repo
 
     steps:
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
+
       - checkout
 
       # Checkout submodules
       - run: git submodule update --init --recursive
-
-      # Update Node.js to version 14 LTS
-      - run:
-          name: 'Update Node.js and npm'
-          command: |
-            curl -sSL "https://nodejs.org/dist/v14.17.6/node-v14.17.6-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v14.17.6-linux-x64/bin/node
-            curl https://www.npmjs.com/install.sh | sudo bash
 
       - run:
           name: Check current version of node
@@ -103,16 +117,35 @@ jobs:
 
       - restore_cache:
           keys:
-            - v2-dependencies-{{ checksum "Gemfile.lock" }}
+            - 3.3-dependencies-{{ checksum "Gemfile.lock" }}
             # fallback to using the latest cache if no exact match is found
-            - v2-dependencies-
+            - 3.3-dependencies-
 
       - restore_cache:
           keys:
-            - v1-yarn-{{ checksum "client/yarn.lock" }}
+            - v1.1-yarn-{{ checksum "client/yarn.lock" }}
+
+      - restore_cache:
+          keys:
+            - v1.1-yarn-build-{{ .Revision }}
+
+      # Install bundler version
+      - run:
+          name: install bundler version
+          command: |
+            gem install bundler:2.2.22
+            bundle install
 
       # Install ghostscript so `identify` in ImageMagick works with PDF files.
-      - run: sudo apt update && sudo apt install ghostscript
+      # Remove pdf security policy for imagemagick (ubuntu 20.04)
+      # https://stackoverflow.com/questions/52998331/imagemagick-security-policy-pdf-blocking-conversion
+      - run:
+          name: install ghostscript and imagemagick
+          command: |
+            sudo apt update
+            sudo apt install imagemagick
+            sudo apt install ghostscript
+            sudo sed -i '/disable ghostscript format types/,+6d' /etc/ImageMagick-6/policy.xml
 
       - setup_remote_docker
 
@@ -122,7 +155,7 @@ jobs:
           command: |
             bundle exec rake db:setup
           environment:
-            DATABASE_URL: 'postgres://ubuntu@localhost:5432/coursemology_test'
+            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
 
       # run tests!
       - run:
@@ -140,7 +173,7 @@ jobs:
               --format progress \
               $TEST_FILES
           environment:
-            DATABASE_URL: 'postgres://ubuntu@localhost:5432/coursemology_test'
+            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
 
       # collect reports
       - store_test_results:
@@ -152,7 +185,7 @@ jobs:
   lint:
     docker:
       # specify the version you desire here
-      - image: circleci/ruby:2.5.3-node-browsers
+      - image: cimg/ruby:3.0.2-browsers
         environment:
           RAILS_ENV: test
 
@@ -163,13 +196,6 @@ jobs:
 
       # Checkout submodules
       - run: git submodule update --init --recursive
-
-      # Update Node.js to version 14 LTS
-      - run:
-          name: 'Update Node.js and npm'
-          command: |
-            curl -sSL "https://nodejs.org/dist/v14.17.6/node-v14.17.6-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v14.17.6-linux-x64/bin/node
-            curl https://www.npmjs.com/install.sh | sudo bash
 
       - run:
           name: Check current version of node
@@ -188,7 +214,7 @@ jobs:
   jstest:
     docker:
       # specify the version you desire here
-      - image: circleci/ruby:2.5.3-node-browsers
+      - image: cimg/ruby:3.0.2-browsers
         environment:
           RAILS_ENV: test
 
@@ -200,13 +226,6 @@ jobs:
       # Checkout submodules
       - run: git submodule update --init --recursive
 
-      # Update Node.js to version 14 LTS
-      - run:
-          name: 'Update Node.js and npm'
-          command: |
-            curl -sSL "https://nodejs.org/dist/v14.17.6/node-v14.17.6-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v14.17.6-linux-x64/bin/node
-            curl https://www.npmjs.com/install.sh | sudo bash
-
       - run:
           name: Check current version of node
           command: node -v
@@ -214,6 +233,20 @@ jobs:
       - restore_cache:
           keys:
             - v1-yarn-{{ checksum "client/yarn.lock" }}
+
+      - run:
+          name: Swap node versions
+          command: |
+            set +e
+            wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | bash
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+            nvm install v14.16.1
+            nvm alias default 14.16.1
+
+            echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
+            echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
 
       # Build frontend JS
       - run:
@@ -225,7 +258,7 @@ jobs:
   i18n:
     docker:
       # specify the version you desire here
-      - image: circleci/ruby:2.5.3-node-browsers
+      - image: cimg/ruby:3.0.2-browsers
         environment:
           PG_HOST: localhost
           PG_USER: ubuntu
@@ -248,22 +281,20 @@ jobs:
       # Checkout submodules
       - run: git submodule update --init --recursive
 
-      # Update Node.js to version 14 LTS
-      - run:
-          name: 'Update Node.js and npm'
-          command: |
-            curl -sSL "https://nodejs.org/dist/v14.17.6/node-v14.17.6-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v14.17.6-linux-x64/bin/node
-            curl https://www.npmjs.com/install.sh | sudo bash
-
       - run:
           name: Check current version of node
           command: node -v
 
       - restore_cache:
           keys:
-            - v2-dependencies-{{ checksum "Gemfile.lock" }}
+            - 3.3-dependencies-{{ checksum "Gemfile.lock" }}
             # fallback to using the latest cache if no exact match is found
-            - v2-dependencies-
+            - 3.3-dependencies-
+
+      # Install bundler version
+      - run:
+          name: install bundler version
+          command: gem install bundler:2.2.22
 
       # Database setup
       - run:
@@ -271,7 +302,7 @@ jobs:
           command: |
             bundle exec rake db:setup
           environment:
-            DATABASE_URL: 'postgres://ubuntu@localhost:5432/coursemology_test'
+            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
 
       # run i18n checks!
       - run:
@@ -281,7 +312,7 @@ jobs:
             bundle exec i18n-tasks missing
             bundle exec rake factory_bot:lint
           environment:
-            DATABASE_URL: 'postgres://ubuntu@localhost:5432/coursemology_test'
+            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
 workflows:
   version: 2
   build_and_test_and_lint:

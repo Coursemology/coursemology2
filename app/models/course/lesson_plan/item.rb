@@ -175,8 +175,34 @@ class Course::LessonPlan::Item < ApplicationRecord
     opening_items_hash = Hash.new { |hash, actable_type| hash[actable_type] = [] }
     opening_items.
       select { |item| item.time_for(course_user).start_at.in?((Time.zone.now)..(1.day.from_now)) }.
-      select { |item| item.actable.include_in_consolidated_email?(:opening) }.
+      select { |item| item.actable.include_in_consolidated_email?(:opening_reminder) }.
       each { |item| opening_items_hash[item.actable_type].push(item.actable) }
+
+    # Asssessment
+    opening_items_hash['Course::Assessment'].delete_if do |assessment|
+      email_enabled_assessment = course.email_enabled(:assessments, :opening_reminder, assessment.tab.category.id)
+      exclude_assessment = (course_user.phantom? && !email_enabled_assessment.phantom) ||
+                           (!course_user.phantom? && !email_enabled_assessment.regular) ||
+                           course_user.
+                           email_unsubscriptions.where(course_settings_email_id: email_enabled_assessment.id).exists?
+      true if exclude_assessment
+    end
+    opening_items_hash.except!('Course::Assessment') if opening_items_hash['Course::Assessment'].empty?
+
+    # Survey
+    email_enabled_survey = course.email_enabled(:surveys, :opening_reminder)
+    exclude_survey = (course_user.phantom? && !email_enabled_survey.phantom) ||
+                     (!course_user.phantom? && !email_enabled_survey.regular) ||
+                     course_user.email_unsubscriptions.where(course_settings_email_id: email_enabled_survey.id).exists?
+    opening_items_hash.except!('Course::Survey') if exclude_survey
+
+    # Videos
+    email_enabled_video = course.email_enabled(:videos, :opening_reminder)
+    exclude_video = (course_user.phantom? && !email_enabled_video.phantom) ||
+                    (!course_user.phantom? && !email_enabled_video.regular) ||
+                    course_user.email_unsubscriptions.where(course_settings_email_id: email_enabled_video.id).exists?
+    opening_items_hash.except!('Course::Video') if exclude_video
+
     # Sort the items for each actable type by start_at time, followed by title.
     opening_items_hash.each_value do |items|
       items.sort_by! { |item| [item.time_for(course_user).start_at, item.title] }

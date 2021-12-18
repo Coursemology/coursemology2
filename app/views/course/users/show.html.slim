@@ -20,6 +20,9 @@ div.row
       - if can_read_progress
         p = link_to t('.experience_points_earned_html', points: @course_user.experience_points),
                     course_user_experience_points_records_path(current_course, @course_user)
+    - if can?(:manage, Course::UserEmailUnsubscription.new(course_user: @course_user))
+      p = link_to t('.manage_email_subscription'),
+                  course_user_manage_email_subscription_path(current_course, @course_user)
 
 - unless current_component_host[:course_achievements_component].nil?
   - if @course_user.student? && @course_user.achievements.present?

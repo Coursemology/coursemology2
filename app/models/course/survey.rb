@@ -53,6 +53,7 @@ class Course::Survey < ApplicationRecord
   end
 
   def include_in_consolidated_email?(event)
-    Course::Settings::SurveyComponent.email_enabled?(course, "survey_#{event}".to_sym)
+    email_enabled = course.email_enabled(:surveys, event)
+    email_enabled.regular || email_enabled.phantom
   end
 end

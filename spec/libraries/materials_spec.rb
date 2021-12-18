@@ -74,6 +74,7 @@ RSpec.describe 'Extension: Materials' do
 
   describe 'form_builder helper' do
     class self::AssessmentView < ActionView::Base; end
+
     class self::FormBuilder < ActionView::Helpers::FormBuilder; end
 
     let(:template) { self.class::AssessmentView.new(ActionView::LookupContext.new(Rails.root.join('app', 'views'))) }

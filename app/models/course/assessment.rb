@@ -11,6 +11,7 @@ class Course::Assessment < ApplicationRecord
   include Course::Assessment::TodoConcern
   include Course::ClosingReminderConcern
   include DuplicationStateTrackingConcern
+  include Course::Assessment::NewSubmissionConcern
 
   after_initialize :set_defaults, if: :new_record?
   before_validation :propagate_course, if: :new_record?
@@ -203,8 +204,8 @@ class Course::Assessment < ApplicationRecord
   end
 
   def include_in_consolidated_email?(event)
-    Course::Settings::AssessmentsComponent.email_enabled?(tab.category,
-                                                          "assessment_#{event}".to_sym)
+    email_enabled = course.email_enabled(:assessments, event, tab.category.id)
+    email_enabled.regular || email_enabled.phantom
   end
 
   def graded_test_case_types

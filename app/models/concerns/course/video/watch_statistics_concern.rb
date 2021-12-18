@@ -114,8 +114,8 @@ module Course::Video::WatchStatisticsConcern
     if (EVENT_TYPES[:start].include? event.event_type) && event.video_time == video_duration
       0
     elsif (EVENT_TYPES[:end].include? event.event_type) && event.video_time < last_start.video_time
-      [(last_start.video_time + last_start.playback_rate *
-        (event.event_time - last_start.event_time)).to_i, video_duration].min
+      [(last_start.video_time + (last_start.playback_rate *
+        (event.event_time - last_start.event_time))).to_i, video_duration].min
     else
       event.video_time
     end

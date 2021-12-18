@@ -6,6 +6,7 @@ class Course::UserRegistrationService
   # @return [Boolean] True if the registration succeeded. False if the registration failed.
   def register(registration)
     course_user = create_or_update_registration(registration)
+    course_user.course.enrol_requests.find_by(user: course_user.user)&.destroy! if course_user
     course_user.nil? ? false : course_user.persisted?
   end
 

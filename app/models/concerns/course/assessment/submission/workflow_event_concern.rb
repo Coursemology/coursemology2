@@ -41,7 +41,7 @@ module Course::Assessment::Submission::WorkflowEventConcern
   # Handles the publishing of a submission.
   #
   # This grades all the answers as well.
-  def publish(_ = nil)
+  def publish(_ = nil, send_email = true) # rubocop:disable Style/OptionalBooleanParameter
     publish_answers
 
     self.publisher = User.stamper || User.system
@@ -49,7 +49,11 @@ module Course::Assessment::Submission::WorkflowEventConcern
     self.awarder = User.stamper || User.system
     self.awarded_at = Time.zone.now
 
-    return unless persisted? && !assessment.autograded? && submission_graded_email_enabled?
+    publish_delayed_posts unless assessment.autograded?
+
+    return unless send_email && persisted? && !assessment.autograded? &&
+                  submission_graded_email_enabled? &&
+                  submission_graded_email_subscribed?
 
     execute_after_commit { Course::Mailer.submission_graded_email(self).deliver_later }
   end
@@ -92,7 +96,17 @@ module Course::Assessment::Submission::WorkflowEventConcern
   private
 
   def submission_graded_email_enabled?
-    Course::Settings::AssessmentsComponent.email_enabled?(assessment.tab.category, :grades_released)
+    is_enabled_as_phantom = course_user.phantom? && email_enabled.phantom
+    is_enabled_as_regular = !course_user.phantom? && email_enabled.regular
+    is_enabled_as_phantom || is_enabled_as_regular
+  end
+
+  def submission_graded_email_subscribed?
+    !course_user.email_unsubscriptions.where(course_settings_email_id: email_enabled.id).exists?
+  end
+
+  def email_enabled
+    assessment.course.email_enabled(:assessments, :grades_released, assessment.tab.category.id)
   end
 
   # finalise event (from attempting) - Assign 0 points as there are no questions.
@@ -126,5 +140,37 @@ module Course::Assessment::Submission::WorkflowEventConcern
     answers_to_unsubmit.each do |answer|
       answer.unsubmit! unless answer.attempting?
     end
+  end
+
+  def publish_delayed_posts
+    # Publish delayed comments for each question of a submission
+    submission_questions.each do |submission_question|
+      update_topic_and_posts(submission_question)
+    end
+
+    # Publish delayed annotations for each programming question of a submission
+    programming_answers = answers.where('actable_type = ?', Course::Assessment::Answer::Programming)
+
+    programming_answers.each do |programming_answer|
+      programming_files = programming_answer.specific.files
+      programming_files.each do |programming_file|
+        annotations = programming_file.annotations
+        annotations.each do |annotation|
+          update_topic_and_posts(annotation)
+        end
+      end
+    end
+  end
+
+  # Update read mark for topic and delayed for posts
+  def update_topic_and_posts(topic_actable)
+    topic = topic_actable.discussion_topic
+    delayed_posts = topic.posts.only_delayed_posts
+    unless delayed_posts.empty?
+      # Remove 'mark as read' (if any)
+      topic.read_marks.where('reader_id = ?', creator.id)&.destroy_all
+      delayed_posts.update_all(is_delayed: false)
+    end
+    true
   end
 end

@@ -2,9 +2,9 @@
 class Course::Admin::VirtualClassroomSettingsController < Course::Admin::Controller
   add_breadcrumb :edit, :course_admin_virtual_classrooms_path
 
-  def edit; end #:nodoc:
+  def edit; end # :nodoc:
 
-  def update #:nodoc:
+  def update # :nodoc:
     if @settings.update(virtual_classroom_settings_params) && current_course.save
       redirect_to course_admin_virtual_classrooms_path(current_course), success: t('.success')
     else
@@ -14,7 +14,7 @@ class Course::Admin::VirtualClassroomSettingsController < Course::Admin::Control
 
   private
 
-  def virtual_classroom_settings_params #:nodoc:
+  def virtual_classroom_settings_params # :nodoc:
     params.require(:settings_virtual_classrooms_component).permit(
       :title, :pagination, :braincert_whiteboard_api_key, :max_duration, :braincert_server_region,
       :braincert_whiteboard_timezone

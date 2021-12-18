@@ -41,6 +41,8 @@ class CourseUser < ApplicationRecord
                           class_name: Course::Achievement.name do
     include CourseUser::AchievementsConcern
   end
+  has_many :email_unsubscriptions, class_name: Course::UserEmailUnsubscription.name,
+                                   inverse_of: :course_user, dependent: :destroy
   has_many :group_users, class_name: Course::GroupUser.name,
                          inverse_of: :course_user, dependent: :destroy
   has_many :groups, through: :group_users, class_name: Course::Group.name, source: :group

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe Notifier::Base, type: :notifier do
+RSpec.describe Notifier::Base, type: :mailer do
   let!(:instance) { Instance.default }
   with_tenant(:instance) do
     class self::DummyNotifier < Notifier::Base
@@ -48,7 +48,7 @@ RSpec.describe Notifier::Base, type: :notifier do
             to change { user.notifications.where(notification_type: 'email').count }.by(1)
         end
 
-        it 'sends an email notification' do
+        it 'sends an email notification', type: :mailer do
           expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
         end
       end
@@ -74,7 +74,7 @@ RSpec.describe Notifier::Base, type: :notifier do
             to change { course.notifications.where(notification_type: 'email').count }.by(1)
         end
 
-        it 'sends an email notification' do
+        it 'sends an email notification', type: :mailer do
           expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(2)
         end
       end

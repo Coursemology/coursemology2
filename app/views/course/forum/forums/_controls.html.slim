@@ -5,8 +5,6 @@ span.pull-right
                                   title: t('.mark_forum_description'),
                                   class: ['btn', 'btn-default'], method: :patch
   .btn-group
-    - if can?(:subscribe, @forum)
-      = render partial: 'subscribe_button', locals: { user: current_user, forum: @forum }
     - if can?(:create, Course::Forum::Topic.new(forum: @forum))
       = new_button([current_course, @forum, :topic], title: '') do
         => fa_icon 'file'

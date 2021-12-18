@@ -5,6 +5,7 @@ RSpec.describe Course::Assessment::Category do
   it { is_expected.to belong_to(:course).without_validating_presence }
   it { is_expected.to have_many(:tabs) }
   it { is_expected.to have_many(:assessments).through(:tabs) }
+  it { is_expected.to have_many(:setting_emails).dependent(:destroy) }
 
   let!(:instance) { Instance.default }
   with_tenant(:instance) do

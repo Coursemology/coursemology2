@@ -2,12 +2,45 @@ import React from 'react';
 import { RaisedButton } from 'material-ui';
 import { grey700 } from 'material-ui/styles/colors';
 import PropTypes from 'prop-types';
+import { defineMessages, FormattedMessage } from 'react-intl';
 
 import CourseAPI from 'api/course';
 import { questionShape } from 'course/assessment/submission/propTypes';
 
 import ForumPostSelectDialog from './ForumPostSelectDialog';
 import SelectedPostCard from './SelectedPostCard';
+
+const translations = defineMessages({
+  cannotRetrieveForumPosts: {
+    id: 'course.assessment.submission.answer.forumPostResponse.cannotRetrieveForumPosts',
+    defaultMessage:
+      'Oops! Unable to retrieve your forum posts. Please try refreshing this page.',
+  },
+  cannotRetrieveSelectedPostPacks: {
+    id: 'course.assessment.submission.answer.forumPostResponse.cannotRetrieveSelectedPostPacks',
+    defaultMessage:
+      'Oops! Unable to retrieve your selected posts. Please try refreshing this page.',
+  },
+  submittedInstructions: {
+    id: 'course.assessment.submission.answer.forumPostResponse.submittedInstructions',
+    defaultMessage:
+      '{numPosts, plural, =0 {No posts were} one {# post was} other {# posts were}} submitted.',
+  },
+  selectInstructions: {
+    id: 'course.assessment.submission.answer.forumPostResponse.selectInstructions',
+    defaultMessage:
+      'Select {maxPosts} forum {maxPosts, plural, one {post} other {posts}}.',
+  },
+  selectedPostsInstructions: {
+    id: 'course.assessment.submission.answer.forumPostResponse.selectedPostsInstructions',
+    defaultMessage:
+      'You have selected {numPosts} {numPosts, plural, one {post} other {posts}}.',
+  },
+  selectPostsButton: {
+    id: 'course.assessment.submission.answer.forumPostResponse.selectPostsButton',
+    defaultMessage: 'Select Forum {maxPosts, plural, one {Post} other {Posts}}',
+  },
+});
 
 const styles = {
   root: {
@@ -44,7 +77,7 @@ export default class ForumPostSelect extends React.Component {
       .catch(() => {
         this.setState({ hasErrorFetchingPosts: true });
         this.props.onErrorMessage(
-          'Oops! Unable to retrieve your forum posts. Please try refreshing this page.',
+          <FormattedMessage {...translations.cannotRetrieveForumPosts} />,
         );
       });
 
@@ -55,7 +88,9 @@ export default class ForumPostSelect extends React.Component {
       })
       .catch(() => {
         this.props.onErrorMessage(
-          'Oops! Unable to retrieve your selected posts. Please try refreshing this page.',
+          <FormattedMessage
+            {...translations.cannotRetrieveSelectedPostPacks}
+          />,
         );
       });
   }
@@ -82,19 +117,27 @@ export default class ForumPostSelect extends React.Component {
     if (this.props.readOnly) {
       return (
         <div style={styles.instruction}>
-          {postPacks.length} post{postPacks.length === 1 ? ' was ' : 's were '}
-          submitted.
+          <FormattedMessage
+            values={{ numPosts: postPacks.length }}
+            {...translations.submittedInstructions}
+          />
         </div>
       );
     }
     return (
       <div style={styles.instruction}>
-        Select {maxPosts > 1 && 'up to '}
+        {/* TODO: Refactor the below into a single FormattedMessage once react-intl is upgraded:
+            https://formatjs.io/docs/react-intl/components/#rich-text-formatting */}
         <strong>
-          {maxPosts} forum post{maxPosts !== 1 ? 's' : ''}
-        </strong>
-        . You have selected {postPacks.length} post
-        {postPacks.length !== 1 ? 's' : ''}.
+          <FormattedMessage
+            values={{ maxPosts }}
+            {...translations.selectInstructions}
+          />
+        </strong>{' '}
+        <FormattedMessage
+          values={{ numPosts: postPacks.length }}
+          {...translations.selectedPostsInstructions}
+        />
       </div>
     );
   }
@@ -121,7 +164,12 @@ export default class ForumPostSelect extends React.Component {
         {!this.props.readOnly && (
           <>
             <RaisedButton
-              label={`Select Forum Post${maxPosts > 1 ? 's' : ''}`}
+              label={
+                <FormattedMessage
+                  values={{ maxPosts }}
+                  {...translations.selectPostsButton}
+                />
+              }
               icon={
                 <i
                   className="fa fa-paperclip"
@@ -131,7 +179,7 @@ export default class ForumPostSelect extends React.Component {
               }
               primary
               onClick={() => this.setState({ isDialogVisible: true })}
-              disabled={this.state.hasErrorFetchingPosts}
+              disabled={this.state.hasErrorFetchingPosts || maxPosts === 0}
               style={{ marginBottom: 16 }}
             />
             <ForumPostSelectDialog

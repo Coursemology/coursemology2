@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe User::OmniauthCallbacksController, type: :controller do
   let!(:instance) { Instance.default }
-  # Note: Facebook login feature is currently disabled.
+  # NOTE: Facebook login feature is currently disabled.
   before { skip }
 
   with_tenant(:instance) do

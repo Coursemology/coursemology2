@@ -6,6 +6,7 @@
 - course = assessment.course
 - host = course.instance.host
 - question_assessment = assessment.question_assessments.find_by!(question: question)
+- category_id = assessment.tab.category.id
 
 - message.subject = t('.subject', course: course.title, topic: "#{assessment.title}: #{question_assessment.display_title}")
 - message.subject += ' ' + t('notifiers.course.phantom') if course_user.phantom?
@@ -18,3 +19,7 @@
                                                                      step: step, host: host)),
                                post: post.text_to_email,
                                post_author: post.author_name))
+
+br
+= render partial: 'layouts/manage_email_subscription',
+         locals: { course: course, recipient: @recipient, component: 'assessments' , category_id: category_id, setting: 'new_comment' }

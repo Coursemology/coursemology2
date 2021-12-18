@@ -9,7 +9,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
     let(:assessment) { create(:assessment, :with_all_question_types, course: course) }
     before { login_as(user, scope: :user) }
 
-    let(:students) { create_list(:course_student, 4, course: course) }
+    let(:students) { create_list(:course_student, 5, course: course) }
     let(:phantom_student) { create(:course_student, :phantom, course: course) }
     let!(:submitted_submission) do
       create(:submission, :submitted,
@@ -42,8 +42,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         create(:course_group_student, course: course, group: group, course_user: students.sample)
       end
 
-      # NOTE: Works locally but fails in CircleCI
-      pending 'I can view all submissions of an assessment', js: true do
+      scenario 'I can view all submissions of an assessment', js: true do
         phantom_student
         group_student
         visit course_assessment_submissions_path(course, assessment)
@@ -71,7 +70,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         expect(page).to have_text(staff_submission.current_points_awarded)
 
         # Course staff unsubmits own submission
-        unsubmit_btn = "unsubmit-button-#{staff_submission.id}"
+        unsubmit_btn = "unsubmit-button-#{staff_submission.course_user.id}"
         expect(find_button(unsubmit_btn)).to be_present
         find_button(unsubmit_btn).click
         accept_confirm_dialog
@@ -80,7 +79,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         expect(page).to_not have_button(unsubmit_btn)
 
         # Course staff deletes own attempt
-        delete_btn = "delete-button-#{staff_submission.id}"
+        delete_btn = "delete-button-#{staff_submission.course_user.id}"
         expect(find_button(delete_btn)).to be_present
         find_button(delete_btn).click
         accept_confirm_dialog
@@ -96,8 +95,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
       end
       let(:user) { create(:course_manager, course: course).user }
 
-      # NOTE: Works locally but fails in CircleCI
-      pending 'I can publish all graded exams', js: true do
+      scenario 'I can publish all graded exams', js: true do
         visit course_assessment_submissions_path(course, assessment)
         find('#students-tab').click
 
@@ -115,8 +113,27 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         expect(graded_submission.points_awarded).not_to be_nil
       end
 
-      # NOTE: Works locally but fails in CircleCI
-      pending 'I can unsubmit all submissions', js: true do
+      scenario 'I can force submit all unsubmitted exams', js: true do
+        visit course_assessment_submissions_path(course, assessment)
+        find('#students-tab').click
+
+        expect(page).to have_text('Attempting')
+        expect(page).to have_text('Not Started')
+
+        click_button('Force Submit Remaining')
+        accept_confirm_dialog
+        expect(page).not_to have_text('Attempting')
+        expect(page).not_to have_text('Not Started')
+
+        expect(assessment.submissions.length).to eq(5)
+        expect(attempting_submission.reload).to be_graded
+        expect(attempting_submission.grade).to eq(0)
+        expect(attempting_submission.graded_at).to be_present
+        expect(attempting_submission.draft_points_awarded).not_to be_nil
+        expect(attempting_submission.points_awarded).to be_nil
+      end
+
+      scenario 'I can unsubmit all submissions', js: true do
         visit course_assessment_submissions_path(course, assessment)
 
         find('#students-tab').click
@@ -132,8 +149,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         expect(page).not_to have_css('.unsubmit-submissions-enabled')
       end
 
-      # NOTE: Works locally but fails in CircleCI
-      pending 'I can delete all submissions', js: true do
+      scenario 'I can delete all submissions', js: true do
         visit course_assessment_submissions_path(course, assessment)
 
         find('#students-tab').click

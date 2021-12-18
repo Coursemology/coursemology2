@@ -1,6 +1,7 @@
 import React from 'react';
 import { green50, red700 } from 'material-ui/styles/colors';
 import PropTypes from 'prop-types';
+import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { postPackShape } from 'course/assessment/submission/propTypes';
 import ForumPost from 'course/forum/components/ForumPost';
@@ -9,6 +10,19 @@ import { getCourseId } from 'lib/helpers/url-helpers';
 
 import Labels from './Labels';
 import ParentPost from './ParentPost';
+
+const MAX_NAME_LENGTH = 30;
+
+const translations = defineMessages({
+  topicDeleted: {
+    id: 'course.assessment.submission.answer.forumPostResponse.topicDeleted',
+    defaultMessage: 'Post made under a topic that was subsequently deleted.',
+  },
+  postMadeUnder: {
+    id: 'course.assessment.submission.answer.forumPostResponse.postMadeUnder',
+    defaultMessage: 'Post made under {topicUrl} in {forumUrl}',
+  },
+});
 
 const styles = {
   card: {
@@ -66,6 +80,34 @@ export default class SelectedPostCard extends React.Component {
     }));
   }
 
+  renderTrashIcon() {
+    if (this.props.readOnly) {
+      return null;
+    }
+    return (
+      <button
+        className="pull-right"
+        style={styles.trashButton}
+        onClick={() => this.props.onRemovePostPack()}
+        type="button"
+      >
+        <i className="fa fa-trash" />
+      </button>
+    );
+  }
+
+  static renderLink(url, name) {
+    let renderedName = name;
+    if (renderedName.length > MAX_NAME_LENGTH) {
+      renderedName = `${renderedName.slice(0, MAX_NAME_LENGTH)}...`;
+    }
+    return (
+      <a href={url} target="_blank" rel="noreferrer">
+        {renderedName} <i className="fa fa-external-link" />
+      </a>
+    );
+  }
+
   renderLabel() {
     const { postPack } = this.props;
     const { forum, topic } = postPack;
@@ -80,19 +122,24 @@ export default class SelectedPostCard extends React.Component {
           style={{ width: 20 }}
         />
         {topic.isDeleted ? (
-          <span>Post made under a topic which was subsequently deleted.</span>
+          <span>
+            <FormattedMessage {...translations.topicDeleted} />
+          </span>
         ) : (
           <span>
-            Post made under{' '}
-            {SelectedPostCard.renderLink(
-              getForumTopicURL(courseId, forum.id, topic.id),
-              topic.title,
-            )}{' '}
-            in{' '}
-            {SelectedPostCard.renderLink(
-              getForumURL(courseId, forum.id),
-              forum.name,
-            )}
+            <FormattedMessage
+              values={{
+                topicUrl: SelectedPostCard.renderLink(
+                  getForumTopicURL(courseId, forum.id, topic.id),
+                  topic.title,
+                ),
+                forumUrl: SelectedPostCard.renderLink(
+                  getForumURL(courseId, forum.id),
+                  forum.name,
+                ),
+              }}
+              {...translations.postMadeUnder}
+            />
           </span>
         )}
       </div>
@@ -119,7 +166,7 @@ export default class SelectedPostCard extends React.Component {
     const { postPack } = this.props;
 
     return (
-      <div style={styles.card}>
+      <div style={styles.card} className="selected-forum-post-card">
         <div style={styles.label} onClick={() => this.handleTogglePostView()}>
           {this.renderLabel()}
           {this.renderTrashIcon()}

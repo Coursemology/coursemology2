@@ -3,3 +3,7 @@
 
 = simple_format(t('.message', survey: link_to(@survey.title, course_survey_url(@course, @survey, host: host)),
                               time: time, student_list: @student_list))
+
+br
+= render partial: 'layouts/manage_email_subscription',
+         locals: { course: @course, recipient: @recipient, component: 'surveys' , category_id: nil, setting: 'closing_reminder_summary' }

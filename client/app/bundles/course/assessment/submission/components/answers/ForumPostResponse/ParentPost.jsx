@@ -1,9 +1,17 @@
 import PropTypes from 'prop-types';
+import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { forumPostShape } from 'course/assessment/submission/propTypes';
 import ForumPost from 'course/forum/components/ForumPost';
 
 import Labels from './Labels';
+
+const translations = defineMessages({
+  postMadeInResponseTo: {
+    id: 'course.assessment.submission.answer.forumPostResponse.postMadeInResponseTo',
+    defaultMessage: 'Post made in response to:',
+  },
+});
 
 const styles = {
   parentPost: {
@@ -22,7 +30,9 @@ const styles = {
 function ParentPost({ post, style = {} }) {
   return (
     <div style={{ ...styles.parentPost, ...style }}>
-      <p style={styles.subtext}>Post made in response to:</p>
+      <p style={styles.subtext}>
+        <FormattedMessage {...translations.postMadeInResponseTo} />
+      </p>
       <Labels post={post} />
       <ForumPost post={post} isExpandable style={styles.post} />
     </div>

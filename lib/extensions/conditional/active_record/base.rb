@@ -10,6 +10,7 @@ module Extensions::Conditional::ActiveRecord::Base
                class_name: Course::Condition.name, as: :conditional, dependent: :destroy,
                inverse_of: :conditional
       validates :satisfiability_type, presence: true
+      after_save :evaluate_coursewide_conditional_satisfiabilities
 
       include ConditionalInstanceMethods
     end
@@ -25,6 +26,8 @@ module Extensions::Conditional::ActiveRecord::Base
 
   module ConditionalInstanceMethods
     extend ActiveSupport::Concern
+
+    DEFAULT_COURSEWIDE_CONDITIONAL_SATISFIABILIY_EVALUATION_DELAY = 5.minutes
 
     included do
       after_initialize :set_default_satisfiability_type, if: :new_record?
@@ -94,6 +97,20 @@ module Extensions::Conditional::ActiveRecord::Base
     # (all conditions) if it does not exist.
     def set_default_satisfiability_type
       self.satisfiability_type ||= :all_conditions
+    end
+
+    # Evaluates conditional satisfiabilities for the entire course
+    def evaluate_coursewide_conditional_satisfiabilities
+      conditional_satisfiability_evaluation_time = Time.now
+      current_course = Course.find(course_id)
+      current_course.conditional_satisfiability_evaluation_time = conditional_satisfiability_evaluation_time
+      current_course.save!
+
+      Course::Conditional::CoursewideConditionalSatisfiabilityEvaluationJob.set(
+        wait: DEFAULT_COURSEWIDE_CONDITIONAL_SATISFIABILIY_EVALUATION_DELAY
+      ).perform_later(
+        current_course, conditional_satisfiability_evaluation_time
+      )
     end
   end
 

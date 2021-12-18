@@ -27,6 +27,7 @@ const propTypes = {
   required: PropTypes.bool,
   value: PropTypes.string,
   airMode: PropTypes.bool,
+  airModeColor: PropTypes.bool,
   intl: intlShape,
 };
 
@@ -199,7 +200,7 @@ class MaterialSummernote extends Component {
                   ['style', ['style']],
                   ['font', ['bold', 'underline', 'inlineCode', 'clear']],
                   ['script', ['superscript', 'subscript']],
-                  ['color', ['color']],
+                  ...(this.props.airModeColor ? ['color', ['color']] : []),
                   ['para', ['ul', 'ol', 'paragraph']],
                   ['table', ['table']],
                   ['insert', ['link', 'picture']],
@@ -225,6 +226,9 @@ class MaterialSummernote extends Component {
               this.setState({ isFocused: false });
             }}
             onImageUpload={this.onImageUpload}
+            onBlurCodeview={() => {
+              this.reactSummernote.editor.summernote('codeview.deactivate');
+            }}
           />
         </div>
       </div>
@@ -234,5 +238,8 @@ class MaterialSummernote extends Component {
 
 MaterialSummernote.propTypes = propTypes;
 MaterialSummernote.contextTypes = contextTypes;
+MaterialSummernote.defaultProps = {
+  airModeColor: true,
+};
 
 export default injectIntl(MaterialSummernote);

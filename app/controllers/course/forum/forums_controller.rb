@@ -123,7 +123,7 @@ class Course::Forum::ForumsController < Course::Forum::Controller
   end
 
   def forum_params
-    params.require(:forum).permit(:name, :description, :course_id)
+    params.require(:forum).permit(:name, :description, :forum_topics_auto_subscribe, :course_id)
   end
 
   def add_forum_item_breadcrumb

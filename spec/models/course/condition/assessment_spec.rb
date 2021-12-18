@@ -24,7 +24,8 @@ RSpec.describe Course::Condition::Assessment, type: :model do
         it 'is not valid' do
           expect(subject).to_not be_valid
           expect(subject.errors[:assessment]).to include(I18n.t('activerecord.errors.models.' \
-            'course/condition/assessment.attributes.assessment.references_self'))
+                                                                'course/condition/assessment.' \
+                                                                'attributes.assessment.references_self'))
         end
       end
 
@@ -39,7 +40,8 @@ RSpec.describe Course::Condition::Assessment, type: :model do
         it 'is not valid' do
           expect(subject).to_not be_valid
           expect(subject.errors[:assessment]).to include(I18n.t('activerecord.errors.models.' \
-            'course/condition/assessment.attributes.assessment.unique_dependency'))
+                                                                'course/condition/assessment'\
+                                                                '.attributes.assessment.unique_dependency'))
         end
       end
 
@@ -70,7 +72,8 @@ RSpec.describe Course::Condition::Assessment, type: :model do
         it 'is not valid' do
           expect(subject).to_not be_valid
           expect(subject.errors[:assessment]).to include(I18n.t('activerecord.errors.models.' \
-            'course/condition/assessment.attributes.assessment.cyclic_dependency'))
+                                                                'course/condition/assessment.'\
+                                                                'attributes.assessment.cyclic_dependency'))
         end
       end
     end
@@ -112,11 +115,11 @@ RSpec.describe Course::Condition::Assessment, type: :model do
           end
         end
 
-        context 'when the submission is already published' do
+        context 'when the submission is published' do
           let(:submission_traits) { [:published] }
-          it 'does not evaluate_conditional_for the affected course_user' do
+          it 'evaluate_conditional_for the affected course_user' do
             expect(Course::Condition::Assessment).
-              to_not receive(:evaluate_conditional_for).with(submission.course_user)
+              to receive(:evaluate_conditional_for).with(submission.course_user)
             submission.save!
           end
         end
@@ -218,6 +221,7 @@ RSpec.describe Course::Condition::Assessment, type: :model do
 
           context 'when the published submission is below the minimum grade percentage' do
             it 'returns false' do
+              allow(submission).to receive(:last_graded_time).and_return(Time.now)
               answers = submission.answers
               answers.each do |answer|
                 answer.grade = 5
@@ -230,6 +234,7 @@ RSpec.describe Course::Condition::Assessment, type: :model do
 
           context 'when the submission is at least the minimum grade percentage' do
             it 'returns true' do
+              allow(submission).to receive(:last_graded_time).and_return(Time.now)
               answers = submission.answers
               answers.each do |answer|
                 answer.grade = 6
@@ -252,6 +257,31 @@ RSpec.describe Course::Condition::Assessment, type: :model do
     describe '.dependent_class' do
       it 'returns Course::Assessment' do
         expect(Course::Condition::Assessment.dependent_class).to eq(Course::Assessment.name)
+      end
+    end
+
+    describe '#on_dependent_status_change' do
+      let(:course) { create(:course) }
+      let(:student_user) { create(:course_student, course: course).user }
+      let(:assessment) { create(:assessment, :published_with_mcq_question, course: course) }
+      let(:submission) { create(:submission, :published, assessment: assessment, creator: student_user) }
+
+      context 'when the submission\'s workflow_state changes' do
+        it 'evaluate_conditional_for the affected course_user' do
+          submission.workflow_state = :submitted
+          expect(Course::Condition::Assessment).
+            to receive(:evaluate_conditional_for).with(submission.course_user)
+          submission.save!
+        end
+      end
+
+      context 'when the submission\'s last_graded_time changes' do
+        it 'evaluate_conditional_for the affected course_user' do
+          submission.last_graded_time = Time.now
+          expect(Course::Condition::Assessment).
+            to receive(:evaluate_conditional_for).with(submission.course_user)
+          submission.save!
+        end
       end
     end
   end

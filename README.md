@@ -16,7 +16,7 @@ Coursemology is an open source gamified learning platform that enables educators
 
 ### System Requirements
 
-1. Ruby (>= 2.5.3)
+1. Ruby (>= 3.0)
 1. Ruby on Rails
 1. PostgreSQL (>= 9.5)
 1. ImageMagick or GraphicsMagick (For [MiniMagick](https://github.com/minimagick/minimagick) - if PDF processing doesn't work for the import of scribing questions, download Ghostscript)
@@ -36,13 +36,14 @@ Coursemology uses [Ruby on Rails](http://rubyonrails.org/). In addition, some fr
 2. Download bundler to install dependencies
 
    ```sh
-   $ gem install bundler
+   $ gem install bundler:2.2.22
    ```
 
 3. Install ruby dependencies
 
    ```sh
-   $ bundle install --without ci:production
+   $ bundle config set --local without 'ci:production'
+   $ bundle install
    ```
 
 4. Install javascript dependencies

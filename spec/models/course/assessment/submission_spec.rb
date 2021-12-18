@@ -7,6 +7,7 @@ RSpec.describe Course::Assessment::Submission do
   it { is_expected.to have_many(:multiple_response_answers).through(:answers) }
   it { is_expected.to have_many(:text_response_answers).through(:answers) }
   it { is_expected.to have_many(:programming_answers).through(:answers) }
+  it { is_expected.to have_many(:forum_post_response_answers).through(:answers) }
   it { is_expected.to accept_nested_attributes_for(:answers) }
 
   let(:instance) { Instance.default }
@@ -14,6 +15,7 @@ RSpec.describe Course::Assessment::Submission do
     let(:course) { create(:course) }
     let(:assessment) { create(:assessment, *assessment_traits, course: course) }
     let(:assessment_traits) { [:with_mcq_question] }
+    let(:user) { course.course_users.first.user }
 
     let(:course_student1) { create(:course_student, *course_student1_traits, course: course) }
     let(:user1) { course_student1.user }
@@ -84,7 +86,7 @@ RSpec.describe Course::Assessment::Submission do
             expect(subject.errors.messages[:experience_points_record]).
               to include(I18n.
                 t('activerecord.errors.models.course/assessment/submission.'\
-                'attributes.experience_points_record.absent_award_attributes'))
+                  'attributes.experience_points_record.absent_award_attributes'))
           end
         end
 
@@ -95,7 +97,7 @@ RSpec.describe Course::Assessment::Submission do
             expect(subject.errors.messages[:experience_points_record]).
               to include(I18n.
                 t('activerecord.errors.models.course/assessment/submission.'\
-                'attributes.experience_points_record.absent_award_attributes'))
+                  'attributes.experience_points_record.absent_award_attributes'))
           end
         end
       end
@@ -227,7 +229,7 @@ RSpec.describe Course::Assessment::Submission do
       end
     end
 
-    describe '.filter' do
+    describe '.filter_by_params' do
       let(:group) do
         group = create(:course_group, course: course)
         create(:course_group_user, group: group, course: course, course_user: course_student1)
@@ -245,7 +247,7 @@ RSpec.describe Course::Assessment::Submission do
 
       it 'filters submissions' do
         group
-        expect(assessment.submissions.filter(params)).to contain_exactly(submission1)
+        expect(assessment.submissions.filter_by_params(params)).to contain_exactly(submission1)
       end
 
       context 'when group id is given' do
@@ -253,7 +255,7 @@ RSpec.describe Course::Assessment::Submission do
 
         it 'filters submissions by the group' do
           group
-          expect(assessment.submissions.filter(params)).to contain_exactly(submission1)
+          expect(assessment.submissions.filter_by_params(params)).to contain_exactly(submission1)
         end
       end
 
@@ -261,7 +263,7 @@ RSpec.describe Course::Assessment::Submission do
         let(:params) { { user_id: user2.id } }
 
         it 'filters submissions by the user' do
-          expect(assessment.submissions.filter(params)).to contain_exactly(submission2)
+          expect(assessment.submissions.filter_by_params(params)).to contain_exactly(submission2)
         end
       end
 
@@ -269,7 +271,7 @@ RSpec.describe Course::Assessment::Submission do
         let(:params) { { assessment_id: assessment.id } }
 
         it 'filters submissions by assessment' do
-          expect(assessment.submissions.filter(params)).
+          expect(assessment.submissions.filter_by_params(params)).
             to contain_exactly(submission1, submission2, submission3)
         end
       end
@@ -283,7 +285,7 @@ RSpec.describe Course::Assessment::Submission do
 
         it 'filters submissions by category' do
           new_submission
-          expect(Course::Assessment::Submission.filter(params)).to contain_exactly(new_submission)
+          expect(Course::Assessment::Submission.filter_by_params(params)).to contain_exactly(new_submission)
         end
       end
     end
@@ -306,7 +308,7 @@ RSpec.describe Course::Assessment::Submission do
 
       it 'sums the grade of all answers' do
         grade = submission.answers.map(&:grade).compact.sum - earlier_answer.grade
-        expect(submission.grade).to eq(grade)
+        expect(submission.grade.to_f).to eq(grade)
       end
     end
 
@@ -400,6 +402,16 @@ RSpec.describe Course::Assessment::Submission do
       let(:assessment_traits) { [:with_all_question_types] }
       let!(:submission) { submission1 }
       let(:submission1_traits) { :submitted }
+      let(:category_id) { assessment.tab.category.id }
+
+      def set_assessment_email_setting(course, category_id, setting, regular, phantom)
+        email_setting = course.
+                        setting_emails.
+                        where(component: :assessments,
+                              course_assessment_category_id: category_id,
+                              setting: setting).first
+        email_setting.update!(regular: regular, phantom: phantom)
+      end
 
       it 'propagates the graded state to its answers' do
         expect(submission.answers.all?(&:submitted?)).to be(true)
@@ -419,22 +431,72 @@ RSpec.describe Course::Assessment::Submission do
         expect(submission.awarded_at).not_to be_nil
       end
 
-      it 'sends an email notification' do
+      context 'when there are delayed annotation and comment' do
+        let!(:assessment_traits) { [:with_programming_question] }
+        let!(:submission1_traits) { :submitted }
+        let!(:submission) { submission1 }
+        let!(:answer) { submission.answers.first }
+        let!(:file) { answer.actable.files.first }
+        let!(:annotation) do
+          create(:course_assessment_answer_programming_file_annotation, file: file, line: 1)
+        end
+        let!(:annotation_post) do
+          create(:course_discussion_post, :delayed, topic: annotation.discussion_topic, creator: user)
+        end
+        let!(:submission_question) do
+          create(:course_assessment_submission_question,
+                 submission: submission, question: assessment.questions.first, course: course)
+        end
+        let!(:submission_question_post) do
+          create(:course_discussion_post, :delayed, topic: submission_question.discussion_topic, creator: user)
+        end
+        it 'is set as not delayed after publication' do
+          submission.publish!
+          expect(annotation_post.reload.is_delayed).to be(false)
+          expect(submission_question_post.reload.is_delayed).to be(false)
+        end
+      end
+
+      it 'sends an email notification', type: :mailer do
         expect { submission.publish! }.to change { ActionMailer::Base.deliveries.count }.by(1)
       end
 
-      context 'when "submission graded" emails are disabled' do
+      context 'when a user unsubscribes', type: :mailer do
         before do
-          context = OpenStruct.new(key: Course::AssessmentsComponent.key, current_course: course)
-          setting = {
-            'key' => 'grades_released', 'enabled' => false,
-            'options' => { 'category_id' => assessment.tab.category.id }
-          }
-          Course::Settings::AssessmentsComponent.new(context).update_email_setting(setting)
-          course.save!
+          setting_email = course.
+                          setting_emails.
+                          where(component: :assessments,
+                                course_assessment_category_id: category_id,
+                                setting: :grades_released).first
+          course_student1.email_unsubscriptions.create!(course_setting_email: setting_email)
         end
 
-        it 'does not send email notifications' do
+        it 'does not send an email notification to the user' do
+          expect { submission.publish! }.to change { ActionMailer::Base.deliveries.count }.by(0)
+        end
+      end
+
+      context 'when "submission graded" email setting is disabled for regular students', type: :mailer do
+        before { set_assessment_email_setting(course, category_id, :grades_released, false, true) }
+
+        it 'does not send email notifications to the regular students' do
+          expect { submission.publish! }.to change { ActionMailer::Base.deliveries.count }.by(0)
+        end
+      end
+
+      context 'when "submission graded" email setting is disabled for phantom students', type: :mailer do
+        before { set_assessment_email_setting(course, category_id, :grades_released, true, false) }
+
+        it 'does not send email notifications to phantom students' do
+          course_student1.update(phantom: true)
+          expect { submission.publish! }.to change { ActionMailer::Base.deliveries.count }.by(0)
+        end
+      end
+
+      context 'when "submission graded" setting is disabled for everyone', type: :mailer do
+        before { set_assessment_email_setting(course, category_id, :grades_released, false, false) }
+
+        it 'does not send email notifications to the users' do
           expect { submission.publish! }.to change { ActionMailer::Base.deliveries.count }.by(0)
         end
       end
@@ -647,30 +709,38 @@ RSpec.describe Course::Assessment::Submission do
     describe '#send_submit_notification' do
       subject do
         submission1.save
+        submission1.updater = user1
         submission1.send(:send_submit_notification)
       end
 
       it 'sends the email notification' do
         expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
       end
+    end
 
-      context 'when the student is a phantom' do
-        let(:course_student1_traits) { [:phantom] }
+    describe '#on_dependent_status_change' do
+      subject do
+        create(:submission, :graded,
+               assessment: assessment, creator: user1, course_user: course_student1)
+      end
 
-        context 'when submission email notifications for phantoms is disabled' do
-          before do
-            context = OpenStruct.new(key: Course::AssessmentsComponent.key, current_course: course)
-            setting = {
-              'key' => 'new_phantom_submission', 'enabled' => false,
-              'options' => { 'category_id' => assessment.tab.category.id }
-            }
-            Course::Settings::AssessmentsComponent.new(context).update_email_setting(setting)
-            course.save!
-          end
+      let(:answer) do
+        create(:course_assessment_answer_multiple_response, :submitted,
+               assessment: assessment, question: assessment.questions.first,
+               submission: subject, creator: user1).acting_as
+      end
 
-          it 'does not send the email notification' do
-            expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
-          end
+      context 'when an answer\'s grade changes' do
+        before do
+          subject.publish!
+          subject.save!
+        end
+
+        it 'updates the last_graded_time' do
+          answer.grade = 0
+          expect(subject.saved_changes).to include(:last_graded_time)
+          answer.save!
+          subject.save!
         end
       end
     end

@@ -92,6 +92,8 @@ en:
             new: :'course.assessment.assessments.new.header'
             edit: :'course.assessment.assessments.edit.header'
             index: :'course.assessment.assessments.index.header'
+          surveys:
+            index: :'course.assessment.assessments.index.header'
         controller:
           index: :'course.assessment.assessments.index.header'
         question:
@@ -144,6 +146,8 @@ en:
         index: :'course.leaderboards.title'
       experience_points_records:
         index: 'Experience Points History'
+      user_email_subscriptions:
+        index: 'Manage Email Subscriptions'
       video_submissions:
         index: 'Video Watch History'
       experience_points:
@@ -164,6 +168,8 @@ en:
       survey:
         controller:
           index: 'Surveys'
+      learning_map:
+        index: 'Learning Map'
     system:
       admin:
         controller:

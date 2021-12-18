@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { Component, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { injectIntl, intlShape } from 'react-intl';
@@ -33,10 +33,13 @@ import {
 import SubmissionAnswer from '../../components/SubmissionAnswer';
 import QuestionGrade from '../../containers/QuestionGrade';
 import GradingPanel from '../../containers/GradingPanel';
-import Comments from '../../containers/Comments';
 import { formNames, questionTypes } from '../../constants';
 import translations from '../../translations';
 import submissionFormValidate from './submissionFormValidate';
+
+const Comments = React.lazy(() =>
+  import(/* webpackChunkName: "comment" */ '../../containers/Comments'),
+);
 
 const styles = {
   questionCardContainer: {
@@ -83,129 +86,12 @@ class SubmissionEditForm extends Component {
     }
   }
 
-  renderAutogradeSubmissionButton() {
-    const {
-      intl,
-      graderView,
-      submitted,
-      handleAutogradeSubmission,
-      isAutograding,
-      isSaving,
-    } = this.props;
-    if (graderView && submitted) {
-      const progressIcon = <CircularProgress size={24} />;
+  renderQuestionGrading(id) {
+    const { attempting, published, graderView } = this.props;
+    const editable = !attempting && graderView;
+    const visible = editable || published;
 
-      return (
-        <RaisedButton
-          style={styles.formButton}
-          primary
-          label={intl.formatMessage(translations.autograde)}
-          icon={isAutograding ? progressIcon : null}
-          onClick={handleAutogradeSubmission}
-          disabled={isSaving || isAutograding}
-        />
-      );
-    }
-    return null;
-  }
-
-  renderExamDialog() {
-    const { intl } = this.props;
-
-    return (
-      <Dialog
-        title={intl.formatMessage(translations.examDialogTitle)}
-        actions={
-          <FlatButton
-            primary
-            label="OK"
-            onClick={() => this.setState({ examNotice: false })}
-          />
-        }
-        modal
-        open={this.state.examNotice}
-      >
-        {intl.formatMessage(translations.examDialogMessage)}
-      </Dialog>
-    );
-  }
-
-  renderExplanationPanel(questionId) {
-    const { intl, explanations, attempting } = this.props;
-    const explanation = explanations[questionId];
-
-    if (explanation && explanation.correct === false && attempting) {
-      let title = '';
-      if (explanation.failureType === 'public_test') {
-        title = intl.formatMessage(translations.publicTestCaseFailure);
-      } else if (explanation.failureType === 'private_test') {
-        title = intl.formatMessage(translations.privateTestCaseFailure);
-      } else {
-        return null;
-      }
-
-      return (
-        <Card style={styles.explanationContainer}>
-          <CardHeader
-            style={{
-              ...styles.explanationHeader,
-              backgroundColor: red200,
-            }}
-            title={title}
-            titleColor={red900}
-          />
-          {explanation.explanations.every(
-            (exp) => exp.trim().length === 0,
-          ) ? null : (
-            <CardText>
-              {explanation.explanations.map((exp, index) => {
-                const key = `question-${questionId}-explanation-${index}`;
-                return (
-                  <div key={key} dangerouslySetInnerHTML={{ __html: exp }} />
-                );
-              })}
-            </CardText>
-          )}
-        </Card>
-      );
-    }
-    return null;
-  }
-
-  renderGradingPanel() {
-    const { attempting } = this.props;
-    if (!attempting) {
-      return <GradingPanel />;
-    }
-    return null;
-  }
-
-  renderMarkButton() {
-    const {
-      intl,
-      delayedGradePublication,
-      grading,
-      graderView,
-      submitted,
-      handleMark,
-      isSaving,
-    } = this.props;
-    if (delayedGradePublication && graderView && submitted) {
-      const anyUngraded = Object.values(grading).some(
-        (q) => q.grade === undefined || q.grade === null,
-      );
-      return (
-        <RaisedButton
-          style={styles.formButton}
-          backgroundColor={yellow900}
-          labelColor={white}
-          label={intl.formatMessage(translations.mark)}
-          onClick={handleMark}
-          disabled={isSaving || anyUngraded}
-        />
-      );
-    }
-    return null;
+    return visible ? <QuestionGrade id={id} editable={editable} /> : null;
   }
 
   renderProgrammingQuestionActions(id) {
@@ -277,45 +163,126 @@ class SubmissionEditForm extends Component {
     return null;
   }
 
-  renderPublishButton() {
-    const {
-      intl,
-      delayedGradePublication,
-      graderView,
-      grading,
-      submitted,
-      handlePublish,
-      isSaving,
-    } = this.props;
-    if (!delayedGradePublication && graderView && submitted) {
-      const anyUngraded = Object.values(grading).some(
-        (q) => q.grade === undefined || q.grade === null,
-      );
+  renderExplanationPanel(questionId) {
+    const { intl, explanations, attempting } = this.props;
+    const explanation = explanations[questionId];
+
+    if (explanation && explanation.correct === false && attempting) {
+      let title = '';
+      if (explanation.failureType === 'public_test') {
+        title = intl.formatMessage(translations.publicTestCaseFailure);
+      } else if (explanation.failureType === 'private_test') {
+        title = intl.formatMessage(translations.privateTestCaseFailure);
+      } else {
+        return null;
+      }
 
       return (
-        <RaisedButton
-          style={styles.formButton}
-          backgroundColor={red900}
-          secondary
-          label={intl.formatMessage(translations.publish)}
-          onClick={handlePublish}
-          disabled={isSaving || anyUngraded}
-        />
+        <Card style={styles.explanationContainer}>
+          <CardHeader
+            style={{
+              ...styles.explanationHeader,
+              backgroundColor: red200,
+            }}
+            title={title}
+            titleColor={red900}
+          />
+          {explanation.explanations.every(
+            (exp) => exp.trim().length === 0,
+          ) ? null : (
+            <CardText>
+              {explanation.explanations.map((exp, index) => {
+                const key = `question-${questionId}-explanation-${index}`;
+                return (
+                  <div key={key} dangerouslySetInnerHTML={{ __html: exp }} />
+                );
+              })}
+            </CardText>
+          )}
+        </Card>
       );
     }
     return null;
   }
 
-  renderQuestionGrading(id) {
-    const { attempting, published, graderView } = this.props;
-    const editable = !attempting && graderView;
-    const visible = editable || published;
+  renderTabbedQuestions() {
+    const {
+      intl,
+      attempting,
+      questionIds,
+      questions,
+      questionsFlags,
+      historyQuestions,
+      topics,
+      step,
+      graderView,
+      showMcqMrqSolution,
+      handleToggleViewHistoryMode,
+    } = this.props;
 
-    return visible ? <QuestionGrade id={id} editable={editable} /> : null;
+    let initialStep = step || 0;
+    initialStep = initialStep < 0 ? 0 : initialStep;
+    initialStep =
+      initialStep >= questionIds.length - 1
+        ? questionIds.length - 1
+        : initialStep;
+
+    return (
+      <Tabs
+        inkBarStyle={{ backgroundColor: blue500, height: 5, marginTop: -5 }}
+        tabItemContainerStyle={{ backgroundColor: grey100 }}
+        initialSelectedIndex={initialStep}
+      >
+        {questionIds.map((id, index) => {
+          const question = questions[id];
+          const { answerId, topicId, viewHistory } = question;
+          const topic = topics[topicId];
+          return (
+            <Tab
+              buttonStyle={{ color: blue500 }}
+              key={id}
+              label={intl.formatMessage(translations.questionNumber, {
+                number: index + 1,
+              })}
+            >
+              <SubmissionAnswer
+                {...{
+                  readOnly: !attempting,
+                  answerId,
+                  question,
+                  questionsFlags,
+                  historyQuestions,
+                  graderView,
+                  showMcqMrqSolution,
+                  handleToggleViewHistoryMode,
+                }}
+              />
+              {question.type === questionTypes.Programming && !viewHistory
+                ? this.renderExplanationPanel(id)
+                : null}
+              {viewHistory ? null : this.renderQuestionGrading(id)}
+              {viewHistory ? null : this.renderProgrammingQuestionActions(id)}
+              <Suspense
+                fallback={
+                  <>
+                    <br />
+                    <div>{intl.formatMessage(translations.loadingComment)}</div>
+                  </>
+                }
+              >
+                <Comments topic={topic} />
+              </Suspense>
+              <hr />
+            </Tab>
+          );
+        })}
+      </Tabs>
+    );
   }
 
   renderQuestions() {
     const {
+      intl,
       attempting,
       questionIds,
       questions,
@@ -355,7 +322,16 @@ class SubmissionEditForm extends Component {
                 : null}
               {viewHistory ? null : this.renderQuestionGrading(id)}
               {viewHistory ? null : this.renderProgrammingQuestionActions(id)}
-              <Comments topic={topic} />
+              <Suspense
+                fallback={
+                  <>
+                    <br />
+                    <div>{intl.formatMessage(translations.loadingComment)}</div>
+                  </>
+                }
+              >
+                <Comments topic={topic} />
+              </Suspense>
               <hr />
             </Element>
           );
@@ -364,22 +340,12 @@ class SubmissionEditForm extends Component {
     );
   }
 
-  renderResetDialog() {
-    const { resetConfirmation, resetAnswerId } = this.state;
-    const { intl, handleReset } = this.props;
-    return (
-      <ConfirmationDialog
-        open={resetConfirmation}
-        onCancel={() =>
-          this.setState({ resetConfirmation: false, resetAnswerId: null })
-        }
-        onConfirm={() => {
-          this.setState({ resetConfirmation: false, resetAnswerId: null });
-          handleReset(resetAnswerId);
-        }}
-        message={intl.formatMessage(translations.resetConfirmation)}
-      />
-    );
+  renderGradingPanel() {
+    const { attempting } = this.props;
+    if (!attempting) {
+      return <GradingPanel />;
+    }
+    return null;
   }
 
   renderSaveDraftButton() {
@@ -416,6 +382,32 @@ class SubmissionEditForm extends Component {
     return null;
   }
 
+  renderAutogradeSubmissionButton() {
+    const {
+      intl,
+      graderView,
+      submitted,
+      handleAutogradeSubmission,
+      isAutograding,
+      isSaving,
+    } = this.props;
+    if (graderView && submitted) {
+      const progressIcon = <CircularProgress size={24} />;
+
+      return (
+        <RaisedButton
+          style={styles.formButton}
+          primary
+          label={intl.formatMessage(translations.autograde)}
+          icon={isAutograding ? progressIcon : null}
+          onClick={handleAutogradeSubmission}
+          disabled={isSaving || isAutograding}
+        />
+      );
+    }
+    return null;
+  }
+
   renderSubmitButton() {
     const { intl, canUpdate, attempting, isSaving } = this.props;
     if (attempting && canUpdate) {
@@ -425,101 +417,6 @@ class SubmissionEditForm extends Component {
           secondary
           label={intl.formatMessage(translations.finalise)}
           onClick={() => this.setState({ submitConfirmation: true })}
-          disabled={isSaving}
-        />
-      );
-    }
-    return null;
-  }
-
-  renderSubmitDialog() {
-    const { submitConfirmation } = this.state;
-    const { intl, handleSubmit } = this.props;
-    return (
-      <ConfirmationDialog
-        open={submitConfirmation}
-        onCancel={() => this.setState({ submitConfirmation: false })}
-        onConfirm={() => {
-          this.setState({ submitConfirmation: false });
-          handleSubmit();
-        }}
-        message={intl.formatMessage(translations.submitConfirmation)}
-      />
-    );
-  }
-
-  renderTabbedQuestions() {
-    const {
-      intl,
-      attempting,
-      questionIds,
-      questions,
-      questionsFlags,
-      historyQuestions,
-      topics,
-      step,
-      handleToggleViewHistoryMode,
-    } = this.props;
-
-    let initialStep = step || 0;
-    initialStep = initialStep < 0 ? 0 : initialStep;
-    initialStep =
-      initialStep >= questionIds.length - 1
-        ? questionIds.length - 1
-        : initialStep;
-
-    return (
-      <Tabs
-        inkBarStyle={{ backgroundColor: blue500, height: 5, marginTop: -5 }}
-        tabItemContainerStyle={{ backgroundColor: grey100 }}
-        initialSelectedIndex={initialStep}
-      >
-        {questionIds.map((id, index) => {
-          const question = questions[id];
-          const { answerId, topicId, viewHistory } = question;
-          const topic = topics[topicId];
-          return (
-            <Tab
-              buttonStyle={{ color: blue500 }}
-              key={id}
-              label={intl.formatMessage(translations.questionNumber, {
-                number: index + 1,
-              })}
-            >
-              <SubmissionAnswer
-                {...{
-                  readOnly: !attempting,
-                  answerId,
-                  question,
-                  questionsFlags,
-                  historyQuestions,
-                  handleToggleViewHistoryMode,
-                }}
-              />
-              {question.type === questionTypes.Programming && !viewHistory
-                ? this.renderExplanationPanel(id)
-                : null}
-              {viewHistory ? null : this.renderQuestionGrading(id)}
-              {viewHistory ? null : this.renderProgrammingQuestionActions(id)}
-              <Comments topic={topic} />
-              <hr />
-            </Tab>
-          );
-        })}
-      </Tabs>
-    );
-  }
-
-  renderUnmarkButton() {
-    const { intl, graderView, graded, handleUnmark, isSaving } = this.props;
-    if (graderView && graded) {
-      return (
-        <RaisedButton
-          style={styles.formButton}
-          backgroundColor={yellow900}
-          labelColor={white}
-          label={intl.formatMessage(translations.unmark)}
-          onClick={handleUnmark}
           disabled={isSaving}
         />
       );
@@ -544,6 +441,96 @@ class SubmissionEditForm extends Component {
     return null;
   }
 
+  renderMarkButton() {
+    const {
+      intl,
+      delayedGradePublication,
+      grading,
+      graderView,
+      submitted,
+      handleMark,
+      isSaving,
+    } = this.props;
+    if (delayedGradePublication && graderView && submitted) {
+      const anyUngraded = Object.values(grading).some(
+        (q) => q.grade === undefined || q.grade === null,
+      );
+      return (
+        <RaisedButton
+          style={styles.formButton}
+          backgroundColor={yellow900}
+          labelColor={white}
+          label={intl.formatMessage(translations.mark)}
+          onClick={handleMark}
+          disabled={isSaving || anyUngraded}
+        />
+      );
+    }
+    return null;
+  }
+
+  renderUnmarkButton() {
+    const { intl, graderView, graded, handleUnmark, isSaving } = this.props;
+    if (graderView && graded) {
+      return (
+        <RaisedButton
+          style={styles.formButton}
+          backgroundColor={yellow900}
+          labelColor={white}
+          label={intl.formatMessage(translations.unmark)}
+          onClick={handleUnmark}
+          disabled={isSaving}
+        />
+      );
+    }
+    return null;
+  }
+
+  renderPublishButton() {
+    const {
+      intl,
+      delayedGradePublication,
+      graderView,
+      grading,
+      submitted,
+      handlePublish,
+      isSaving,
+    } = this.props;
+    if (!delayedGradePublication && graderView && submitted) {
+      const anyUngraded = Object.values(grading).some(
+        (q) => q.grade === undefined || q.grade === null,
+      );
+
+      return (
+        <RaisedButton
+          style={styles.formButton}
+          backgroundColor={red900}
+          secondary
+          label={intl.formatMessage(translations.publish)}
+          onClick={handlePublish}
+          disabled={isSaving || anyUngraded}
+        />
+      );
+    }
+    return null;
+  }
+
+  renderSubmitDialog() {
+    const { submitConfirmation } = this.state;
+    const { intl, handleSubmit } = this.props;
+    return (
+      <ConfirmationDialog
+        open={submitConfirmation}
+        onCancel={() => this.setState({ submitConfirmation: false })}
+        onConfirm={() => {
+          this.setState({ submitConfirmation: false });
+          handleSubmit();
+        }}
+        message={intl.formatMessage(translations.submitConfirmation)}
+      />
+    );
+  }
+
   renderUnsubmitDialog() {
     const { unsubmitConfirmation } = this.state;
     const { intl, handleUnsubmit } = this.props;
@@ -557,6 +544,45 @@ class SubmissionEditForm extends Component {
         }}
         message={intl.formatMessage(translations.unsubmitConfirmation)}
       />
+    );
+  }
+
+  renderResetDialog() {
+    const { resetConfirmation, resetAnswerId } = this.state;
+    const { intl, handleReset } = this.props;
+    return (
+      <ConfirmationDialog
+        open={resetConfirmation}
+        onCancel={() =>
+          this.setState({ resetConfirmation: false, resetAnswerId: null })
+        }
+        onConfirm={() => {
+          this.setState({ resetConfirmation: false, resetAnswerId: null });
+          handleReset(resetAnswerId);
+        }}
+        message={intl.formatMessage(translations.resetConfirmation)}
+      />
+    );
+  }
+
+  renderExamDialog() {
+    const { intl } = this.props;
+
+    return (
+      <Dialog
+        title={intl.formatMessage(translations.examDialogTitle)}
+        actions={
+          <FlatButton
+            primary
+            label="OK"
+            onClick={() => this.setState({ examNotice: false })}
+          />
+        }
+        modal
+        open={this.state.examNotice}
+      >
+        {intl.formatMessage(translations.examDialogMessage)}
+      </Dialog>
     );
   }
 
@@ -578,9 +604,9 @@ class SubmissionEditForm extends Component {
         {this.renderUnmarkButton()}
         {this.renderPublishButton()}
 
-        {this.renderSubmitDialog()}
-        {this.renderUnsubmitDialog()}
-        {this.renderResetDialog()}
+        {this.state.submitConfirmation && this.renderSubmitDialog()}
+        {this.state.unsubmitConfirmation && this.renderUnsubmitDialog()}
+        {this.state.resetConfirmation && this.renderResetDialog()}
         {this.renderExamDialog()}
       </Card>
     );

@@ -16,3 +16,6 @@
 
 = simple_format(t('.unsubscribe.message',
                 unsubscribe_link: link_to(t('.unsubscribe.tag'), unsubscribe_url)))
+
+= render partial: 'layouts/manage_email_subscription',
+         locals: { course: course, recipient: @recipient, component: 'forums' , category_id: nil, setting: 'new_topic' }

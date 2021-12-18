@@ -84,7 +84,7 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management' do
           link = I18n.t('course.assessment.question.text_responses.form.add_solution')
           find('a.add_fields', text: link).click
           within all('.edit_question_text_response '\
-            'tr.question_text_response_solution')[i] do
+                     'tr.question_text_response_solution')[i] do
             # A custom css selector, :last is added here because +fill_in_rails_summernote+ doesn't
             # acknowledge the scope defined by capabara.
             # This works only if +click_link+ is executed before each option.

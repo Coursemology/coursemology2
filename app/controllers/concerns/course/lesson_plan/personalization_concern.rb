@@ -87,7 +87,7 @@ module Course::LessonPlan::PersonalizationConcern
         if personal_time.start_at > Time.zone.now
           personal_time.start_at =
             round_to_date(
-              personal_point + (reference_time.start_at - reference_point) * learning_rate_ema,
+              personal_point + ((reference_time.start_at - reference_point) * learning_rate_ema),
               course_tz,
               FOMO_DATE_ROUNDING_THRESHOLD
             )
@@ -148,7 +148,7 @@ module Course::LessonPlan::PersonalizationConcern
         end
         if reference_time.end_at.present? && personal_time.end_at > Time.zone.now
           personal_time.end_at = round_to_date(
-            personal_point + (reference_time.end_at - reference_point) * learning_rate_ema,
+            personal_point + ((reference_time.end_at - reference_point) * learning_rate_ema),
             course_tz,
             STRAGGLERS_DATE_ROUNDING_THRESHOLD
           )
@@ -210,10 +210,10 @@ module Course::LessonPlan::PersonalizationConcern
     reference_remaining_time = items.last.start_at - last_submitted_item.reference_time_for(course_user).start_at
     min_personal_remaining_time =
       course_start +
-      min_overall_learning_rate * (course_end - course_start) - last_submitted_item.time_for(course_user).start_at
+      (min_overall_learning_rate * (course_end - course_start)) - last_submitted_item.time_for(course_user).start_at
     max_personal_remaining_time =
       course_start +
-      max_overall_learning_rate * (course_end - course_start) - last_submitted_item.time_for(course_user).start_at
+      (max_overall_learning_rate * (course_end - course_start)) - last_submitted_item.time_for(course_user).start_at
 
     [min_personal_remaining_time / reference_remaining_time, max_personal_remaining_time / reference_remaining_time]
   end
@@ -233,7 +233,7 @@ module Course::LessonPlan::PersonalizationConcern
 
       learning_rate = (submitted_lesson_plan_item_ids[assessment.id] - times.start_at) / (times.end_at - times.start_at)
       learning_rate = [learning_rate, 0].max
-      learning_rate_ema = alpha * learning_rate + (1 - alpha) * learning_rate_ema
+      learning_rate_ema = (alpha * learning_rate) + ((1 - alpha) * learning_rate_ema)
     end
     learning_rate_ema
   end

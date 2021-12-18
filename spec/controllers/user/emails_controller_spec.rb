@@ -46,7 +46,7 @@ RSpec.describe User::EmailsController, type: :controller do
       end
     end
 
-    describe '#send_confirmation' do
+    describe '#send_confirmation', type: :mailer do
       let!(:email) { create(:user_email, email_traits, user: user, primary: false) }
       subject { post :send_confirmation, params: { id: email } }
 
