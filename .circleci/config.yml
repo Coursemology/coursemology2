@@ -21,10 +21,6 @@ jobs:
       # Checkout submodules
       - run: git submodule update --init --recursive
 
-      - run:
-          name: Check current version of node
-          command: node -v
-
       # Install bundler version
       - run:
           name: install bundler version
@@ -60,8 +56,8 @@ jobs:
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-            nvm install v14.16.1
-            nvm alias default 14.16.1
+            nvm install v14.18.2
+            nvm alias default 14.18.2
 
             echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
             echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
@@ -203,7 +199,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v1-yarn-{{ checksum "client/yarn.lock" }}
+            - v1.1-yarn-{{ checksum "client/yarn.lock" }}
 
       - run:
           name: run yarn checks
@@ -232,7 +228,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v1-yarn-{{ checksum "client/yarn.lock" }}
+            - v1.1-yarn-{{ checksum "client/yarn.lock" }}
 
       - run:
           name: Swap node versions
@@ -242,8 +238,8 @@ jobs:
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-            nvm install v14.16.1
-            nvm alias default 14.16.1
+            nvm install v14.18.2
+            nvm alias default 14.18.2
 
             echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
             echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
