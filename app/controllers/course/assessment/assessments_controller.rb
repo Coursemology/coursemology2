@@ -74,8 +74,10 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
 
   def remind
     authorize!(:manage, @assessment)
+    return head :bad_request unless course_user_ids
+
     Course::Assessment::ReminderService.
-      send_closing_reminder(@assessment, course_user_ids, include_unsubscribed: true)
+      send_closing_reminder(@assessment, course_user_ids.pluck(:id), include_unsubscribed: true)
     head :ok
   end
 
@@ -229,9 +231,11 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
       current_course_user.my_students
     when COURSE_USERS[:students_w_phantom]
       @assessment.course.course_users.students
-    else
+    when COURSE_USERS[:students]
       @assessment.course.course_users.students.without_phantom_users
-    end.pluck(:id)
+    else
+      false
+    end
   end
 
   def can_access_assessment?

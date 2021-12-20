@@ -207,16 +207,35 @@ RSpec.describe Course::Assessment::AssessmentsController do
     end
 
     describe '#remind' do
+      course_users_array = ['my_students', 'my_students_w_phantom', 'students', 'students_w_phantom']
+      let!(:course_users) { '' }
       subject do
         post :remind, as: :json, params:
-          { course_id: course.id, id: immutable_assessment, course_users: 'students' }
+          { course_id: course.id, id: immutable_assessment, course_users: course_users }
       end
 
-      it 'sends reminder to students' do
-        allow(Course::Assessment::ReminderService).to receive(:send_closing_reminder)
-        subject
-        expect(Course::Assessment::ReminderService).to have_received(:send_closing_reminder)
-        expect(response).to have_http_status(:ok)
+      course_users_array.each do |course_user|
+        context 'when the reminder is intended for course users with valid paras' do
+          let!(:course_users) { course_user }
+
+          it 'sends reminder to the recipients' do
+            allow(Course::Assessment::ReminderService).to receive(:send_closing_reminder)
+            subject
+            expect(Course::Assessment::ReminderService).to have_received(:send_closing_reminder)
+            expect(response).to have_http_status(:ok)
+          end
+        end
+      end
+
+      context 'when the reminder recipient param contains a garbage value' do
+        let!(:course_users) { 'sheesh' }
+
+        it 'sends reminder to students' do
+          allow(Course::Assessment::ReminderService).to receive(:send_closing_reminder)
+          subject
+          expect(Course::Assessment::ReminderService).not_to have_received(:send_closing_reminder)
+          expect(response).to have_http_status(:bad_request)
+        end
       end
     end
   end
