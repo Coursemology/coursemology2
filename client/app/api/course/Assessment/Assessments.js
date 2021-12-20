@@ -43,6 +43,22 @@ export default class AssessmentsAPI extends BaseCourseAPI {
     return this.getClient().get(`${this._getUrlPrefix()}/skills`);
   }
 
+  /**
+   * Sends emails to remind students to complete the assessment.
+   *
+   * @return {Promise}
+   * success response: {}
+   * error response: {}
+   */
+  remind(assessmentId, courseUsers) {
+    return this.getClient().post(
+      `${this._getUrlPrefix()}/${assessmentId}/remind`,
+      {
+        course_users: courseUsers,
+      },
+    );
+  }
+
   _getUrlPrefix() {
     return `/courses/${this.getCourseId()}/assessments`;
   }

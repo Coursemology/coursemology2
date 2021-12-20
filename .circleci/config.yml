@@ -191,7 +191,11 @@ jobs:
 
       - restore_cache:
           keys:
-            - v1-yarn-{{ checksum "client/yarn.lock" }}
+            - v1.1-yarn-{{ checksum "client/yarn.lock" }}
+
+      - restore_cache:
+          keys:
+            - v1.1-yarn-build-{{ .Revision }}
 
       - run:
           name: run yarn checks
@@ -216,7 +220,11 @@ jobs:
 
       - restore_cache:
           keys:
-            - v1-yarn-{{ checksum "client/yarn.lock" }}
+            - v1.1-yarn-{{ checksum "client/yarn.lock" }}
+
+      - restore_cache:
+          keys:
+            - v1.1-yarn-build-{{ .Revision }}
 
       - run:
           name: Swap node versions
