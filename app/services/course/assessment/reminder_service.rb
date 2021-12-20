@@ -58,9 +58,9 @@ class Course::Assessment::ReminderService
   # Returns a Set of students who have not completed the given assessment.
   #
   # @param [Course::Assessment] assessment The assessment to query.
-  # @param [Array<Integer>] course_user_ids course user ids of intended recipient (if specified).
+  # @param [Array<Integer>] course_user_ids Course user ids of intended recipients (if specified).
   #   If empty, all students will be selected.
-  # @param [Boolean] include_unsubscribed to include unsubscribed students in the reminder (forced reminder)
+  # @param [Boolean] include_unsubscribed Whether to include unsubscribed students in the reminder (forced reminder).
   # @return [Set<CourseUser>] Set of CourseUsers who have not finished the assessment.
   def uncompleted_subscribed_students(assessment, course_user_ids, include_unsubscribed)
     course_users = assessment.course.course_users

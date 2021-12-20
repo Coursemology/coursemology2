@@ -53,7 +53,7 @@ class Course::Survey::ReminderService
   # Returns a Set of students who have not completed the given survey and subscribe to the survey email.
   #
   # @param [Course::Survey] survey The survey to query.
-  # @param [Boolean] include_unsubscribed to include unsubscribed students in the reminder (forced reminder)
+  # @param [Boolean] include_unsubscribed Whether to include unsubscribed students in the reminder (forced reminder).
   # @return [Set<CourseUser>] Set of CourseUsers who have not finished the survey.
   def uncompleted_subscribed_students(survey, include_unsubscribed)
     course_users = survey.course.course_users
