@@ -64,5 +64,81 @@ RSpec.feature 'Users: Sign Up' do
         end
       end
     end
+
+    context 'As a user invited by course staffs to multiple courses' do
+      let(:course1) { create(:course) }
+      let(:course2) { create(:course) }
+      let(:course3) { create(:course) }
+      let!(:invitation1) { create(:course_user_invitation, :phantom, name: 'course1_user', course: course1) }
+      let!(:invitation2) do
+        create(:course_user_invitation, name: 'course2_user', email: invitation1.email, course: course2)
+      end
+      let(:invitation3) { create(:course_user_invitation, :confirmed, email: invitation1.email, course: course3) }
+      let(:invited_email) { invitation1.email }
+
+      scenario 'I can register for an account via the registration links' do
+        invitation3
+        visit new_user_registration_path(invitation: invitation1.invitation_key)
+
+        invited_user = attributes_for(:user)
+        fill_in 'user_password', with: invited_user[:password]
+        fill_in 'user_password_confirmation', with: invited_user[:password]
+
+        expect do
+          click_button I18n.t('user.registrations.new.sign_up')
+        end.to change(course1.users, :count).by(1).
+          and change(course2.users, :count).by(1).
+          and change(course3.users, :count).by(0)
+
+        email = User::Email.find_by(email: invited_email)
+        user = email.user
+        first_course_user = CourseUser.where(user: user, course: course1).first
+        second_course_user = CourseUser.where(user: user, course: course2).first
+
+        expect(email).to be_primary
+        expect(email).to be_confirmed
+        expect(invitation1.reload).to be_confirmed
+        expect(invitation1.confirmer).to eq(email.user)
+        expect(first_course_user.name).to eq(invitation1.name)
+        expect(first_course_user).to be_phantom
+
+        expect(invitation2.reload).to be_confirmed
+        expect(invitation2.confirmer).to eq(email.user)
+        expect(second_course_user.name).to eq(invitation2.name)
+        expect(second_course_user).not_to be_phantom
+      end
+
+      scenario 'I can register for an account without using the registration link' do
+        visit new_user_registration_path
+
+        valid_user = attributes_for(:user).reverse_merge(email: invitation1.email)
+        fill_in 'user_name', with: valid_user[:name]
+        fill_in 'user_email', with: valid_user[:email]
+        fill_in 'user_password', with: valid_user[:password]
+        fill_in 'user_password_confirmation', with: valid_user[:password]
+
+        expect do
+          click_button I18n.t('user.registrations.new.sign_up')
+        end.to change(course1.users, :count).by(1).
+          and change(course2.users, :count).by(1)
+
+        email = User::Email.find_by(email: invited_email)
+        user = email.user
+        first_course_user = CourseUser.where(user: user, course: course1).first
+        second_course_user = CourseUser.where(user: user, course: course2).first
+
+        expect(email).to be_primary
+        expect(email).to be_confirmed
+        expect(invitation1.reload).to be_confirmed
+        expect(invitation1.confirmer).to eq(email.user)
+        expect(first_course_user.name).to eq(invitation1.name)
+        expect(first_course_user).to be_phantom
+
+        expect(invitation2.reload).to be_confirmed
+        expect(invitation2.confirmer).to eq(email.user)
+        expect(second_course_user.name).to eq(invitation2.name)
+        expect(second_course_user).not_to be_phantom
+      end
+    end
   end
 end
