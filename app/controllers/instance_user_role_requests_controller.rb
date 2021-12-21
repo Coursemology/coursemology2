@@ -34,10 +34,10 @@ class InstanceUserRoleRequestsController < ApplicationController
   end
 
   def approve
-    @user_role_request.update!(user_role_request_params)
+    @user_role_request.assign_attributes(user_role_request_params)
 
     @success, instance_user = @user_role_request.approve!
-    if @success && @user_role_request.save!
+    if @success && @user_role_request.save
       InstanceUserRoleRequestMailer.role_request_approved(instance_user).deliver_later
       flash.now[:success] = t('.success', user: instance_user.user.name, role: instance_user.role)
     else
