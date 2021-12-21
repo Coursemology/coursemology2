@@ -159,6 +159,12 @@ module Course::Assessment::Submission::WorkflowEventConcern
     end
   end
 
+  # When a submission is finalised, we will compare the current answer and the latest non-current answers.
+  # If they are the same, remove the current answer and mark the latest non-current answer as the current answer
+  # to avoid re-grading.
+  # Otherwise, regenerate the current answer to ensure chronological order of all answers and grade it.
+  # For more details, please refer to the PDF page 2 and below here:
+  # https://github.com/Coursemology/coursemology2/files/7606393/Submission.Past.Answers.Issues.pdf
   def finalise_current_answers
     questions.each do |question|
       all_answers = answers.where(question: question)
