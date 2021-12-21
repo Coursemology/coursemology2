@@ -7,6 +7,11 @@ RSpec.describe InstanceUserRoleRequestsController, type: :controller do
 
   with_tenant(:instance) do
     let(:user) { create(:user) }
+    let(:immutable_request) do
+      create(:instance_user_role_request, :pending, instance: instance, user: user).tap do |stub|
+        allow(stub).to receive(:update).and_return(false)
+      end
+    end
 
     before { sign_in(user) }
 
@@ -76,7 +81,7 @@ RSpec.describe InstanceUserRoleRequestsController, type: :controller do
 
     describe '#approve' do
       before { sign_in(admin) }
-      let!(:request) { create(:role_request, :pending, instance: instance, user: user) }
+      let!(:request) { create(:instance_user_role_request, :pending, instance: instance, user: user) }
 
       subject do
         patch :approve, params: { id: request.id,
@@ -108,7 +113,7 @@ RSpec.describe InstanceUserRoleRequestsController, type: :controller do
 
     describe '#reject (without message)' do
       before { sign_in(admin) }
-      let!(:request) { create(:role_request, :pending, instance: instance, user: user) }
+      let!(:request) { create(:instance_user_role_request, :pending, instance: instance, user: user) }
 
       subject do
         patch :reject, params: { id: request.id }
@@ -143,7 +148,7 @@ RSpec.describe InstanceUserRoleRequestsController, type: :controller do
 
     describe '#reject (with message)' do
       before { sign_in(admin) }
-      let!(:request) { create(:role_request, :pending, instance: instance, user: user) }
+      let!(:request) { create(:instance_user_role_request, :pending, instance: instance, user: user) }
       let(:message) { 'Please provide reason for role request' }
 
       subject do
@@ -174,6 +179,21 @@ RSpec.describe InstanceUserRoleRequestsController, type: :controller do
           expect(emails).to include(user.email)
           expect(email_subjects).to include('instance_user_role_request_mailer.role_request_rejected.subject')
           expect(email_body).to include('instance_user_role_request_mailer.role_request_rejected.message')
+        end
+      end
+
+      context 'when a valid request is failed to be rejected' do
+        before do
+          controller.instance_variable_set(:@user_role_request, request)
+        end
+
+        let(:request) { immutable_request }
+
+        it 'fails to reject the request' do
+          subject
+
+          expect(flash[:danger]).to eq(I18n.t('instance_user_role_requests.reject.failure'))
+          is_expected.to redirect_to(instance_user_role_requests_path)
         end
       end
     end

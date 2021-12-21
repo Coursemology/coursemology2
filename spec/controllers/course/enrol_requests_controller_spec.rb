@@ -7,6 +7,11 @@ RSpec.describe Course::EnrolRequestsController, type: :controller do
     let(:user) { create(:user) }
     let(:course) { create(:course, :enrollable) }
     let(:admin) { course.course_users.first.user }
+    let(:immutable_request) do
+      create(:course_enrol_request, :pending, course: course, user: user).tap do |stub|
+        allow(stub).to receive(:update).and_return(false)
+      end
+    end
 
     before { sign_in(user) }
 
@@ -135,6 +140,7 @@ RSpec.describe Course::EnrolRequestsController, type: :controller do
         it 'does not add the user to the course' do
           subject
           expect(flash[:success]).to eq(I18n.t('course.enrol_requests.reject.success'))
+          is_expected.to redirect_to(course_enrol_requests_path)
 
           request.reload
           expect(request.workflow_state).to eq('rejected')
@@ -150,6 +156,21 @@ RSpec.describe Course::EnrolRequestsController, type: :controller do
           expect(ActionMailer::Base.deliveries.count).to eq(1)
           expect(emails).to include(user.email)
           expect(email_subjects).to include('course.mailer.user_rejected_email.subject')
+        end
+      end
+
+      context 'when a valid request is failed to be rejected' do
+        before do
+          controller.instance_variable_set(:@enrol_request, request)
+        end
+
+        let(:request) { immutable_request }
+
+        it 'fails to reject the request' do
+          subject
+
+          expect(flash[:danger]).to eq('')
+          is_expected.to redirect_to(course_enrol_requests_path)
         end
       end
     end
