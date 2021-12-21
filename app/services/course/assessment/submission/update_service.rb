@@ -158,8 +158,11 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
           end
         end
       end
-
-      @submission.update(update_submission_params)
+      unless @submission.update(update_submission_params)
+        logger.error("Failed to update submission #{@submission.errors.inspect}")
+        raise ActiveRecord::Rollback
+      end
+      true
     end
   end
 
