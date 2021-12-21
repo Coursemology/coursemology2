@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 class Course::Assessment::Submission::CalculateExpService
   class << self
-    # Updates the exp for a submission
-    #
+    # Updates the exp for an autograded submission that will be awarded by the system
+    # and the awarding time is the current time.
     # @param [Course::Assessment::Submission] submission The answer to be graded.
     def update_exp(submission)
       submission.points_awarded = calculate_exp(submission).to_i
