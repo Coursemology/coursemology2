@@ -272,10 +272,8 @@ class Course::Assessment::Submission < ApplicationRecord
     return unless saved_change_to_workflow_state?
 
     execute_after_commit do
-      # Grade only ungraded answers when submission state changes from published to submitted.
-      # Otherwise, grade all answers regardless of workflow state.
-      # only_ungraded is true when resubmit_programming event is called.
-      auto_grade!(only_ungraded: changes['workflow_state'] == ['published', 'submitted'])
+      # Grade only ungraded answers regardless of state as we dont want to regrade graded/evaluated answers.
+      auto_grade!(only_ungraded: true)
     end
   end
 

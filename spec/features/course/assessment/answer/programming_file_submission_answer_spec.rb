@@ -8,7 +8,7 @@ RSpec.describe 'Course: Assessments: Submissions: Programming File Submission An
     let(:course) { create(:course) }
     let(:assessment) { create(:assessment, :published, :with_programming_file_submission_question, course: course) }
     let(:submission) { create(:submission, :attempting, assessment: assessment, creator: user) }
-    let(:submission_2) { create(:submission, :attempting, assessment: assessment, creator: user) }
+    let(:submission2) { create(:submission, :attempting, assessment: assessment, creator: user) }
 
     before { login_as(user, scope: :user) }
 
@@ -17,7 +17,7 @@ RSpec.describe 'Course: Assessments: Submissions: Programming File Submission An
       let(:file_path) do
         File.join(Rails.root, 'spec/fixtures/files/template_file')
       end
-      let(:file_path_2) do
+      let(:file_path2) do
         File.join(Rails.root, 'spec/fixtures/files/template_file_2')
       end
 
@@ -46,7 +46,7 @@ RSpec.describe 'Course: Assessments: Submissions: Programming File Submission An
 
         # Stage the same file again and attempt to upload
         # (Need to set to another file first before setting again to the first file)
-        file_input.set(file_path_2)
+        file_input.set(file_path2)
         file_input.set(file_path)
         click_button('Upload Files')
 
@@ -57,7 +57,7 @@ RSpec.describe 'Course: Assessments: Submissions: Programming File Submission An
       end
 
       scenario 'I can delete existing programming files', js: true do
-        visit edit_course_assessment_submission_path(course, assessment, submission_2)
+        visit edit_course_assessment_submission_path(course, assessment, submission2)
 
         file_view = find('strong', text: 'Uploaded Files:').find(:xpath, '..')
 

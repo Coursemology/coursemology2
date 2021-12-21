@@ -74,7 +74,7 @@ RSpec.describe Course::UsersController, type: :controller do
           expect(flash[:success]).to eq(I18n.t('course.users.update.success'))
         end
 
-        it 'does not send a notification email to the user' do
+        it 'does not send a notification email to the user', type: :mailer do
           expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
         end
 

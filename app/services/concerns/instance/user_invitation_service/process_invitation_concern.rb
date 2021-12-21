@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 # This concern deals with the creation of user invitations.
 class Instance::UserInvitationService; end
+
 module Instance::UserInvitationService::ProcessInvitationConcern
   extend ActiveSupport::Autoload
 

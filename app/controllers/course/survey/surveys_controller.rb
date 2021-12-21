@@ -54,7 +54,7 @@ class Course::Survey::SurveysController < Course::Survey::Controller
 
   def remind
     authorize!(:manage, @survey)
-    Course::Survey::ReminderService.send_closing_reminder(@survey)
+    Course::Survey::ReminderService.send_closing_reminder(@survey, include_unsubscribed: true)
     head :ok
   end
 

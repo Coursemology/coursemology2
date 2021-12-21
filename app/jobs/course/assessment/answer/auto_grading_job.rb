@@ -21,8 +21,18 @@ class Course::Assessment::Answer::AutoGradingJob < ApplicationJob
   def perform_tracked(answer, redirect_to_path = nil)
     ActsAsTenant.without_tenant do
       Course::Assessment::Answer::AutoGradingService.grade(answer)
+      if update_exp?(answer.submission)
+        Course::Assessment::Submission::CalculateExpService.update_exp(answer.submission)
+      end
     end
 
     redirect_to redirect_to_path
+  end
+
+  private
+
+  def update_exp?(submission)
+    submission.assessment.autograded? && !submission.attempting? &&
+      !submission.awarded_at.nil? && submission.awarder == User.system
   end
 end

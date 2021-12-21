@@ -56,8 +56,8 @@ RSpec.feature 'System: Administration: Instances' do
 
         instances.each do |instance|
           # Get the page number each instance is on.
-          page_number = Instance.order_for_display.map(&:id).index(instance.id) /
-                        Instance.page.default_per_page + 1
+          page_number = (Instance.order_for_display.map(&:id).index(instance.id) /
+                        Instance.page.default_per_page) + 1
           visit admin_instances_path(page: page_number)
           expect(page).to have_content_tag_for(instance)
           expect(page).
@@ -67,8 +67,8 @@ RSpec.feature 'System: Administration: Instances' do
 
       scenario 'I can destroy an instance' do
         instance = create(:instance)
-        page_number = Instance.order_for_display.map(&:id).index(instance.id) /
-                      Instance.page.default_per_page + 1
+        page_number = (Instance.order_for_display.map(&:id).index(instance.id) /
+                      Instance.page.default_per_page) + 1
         visit admin_instances_path(page: page_number)
 
         within find(content_tag_selector(instance)) do

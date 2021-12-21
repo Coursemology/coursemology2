@@ -4,7 +4,9 @@ json.survey do
 end
 
 json.response do
-  json.(response, :id, :submitted_at, :updated_at)
+  json.id response.id
+  json.submitted_at response.submitted_at&.iso8601
+  json.updated_at response.updated_at&.iso8601
   json.creator_name response.creator.name
 
   json.answers answers do |answer|

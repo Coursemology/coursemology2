@@ -5,7 +5,7 @@ class Course::VirtualClassroomsController < Course::ComponentController
                               class: Course::VirtualClassroom.name
   before_action :add_virtual_classroom_breadcrumb
 
-  def access_link #:nodoc:
+  def access_link # :nodoc:
     @braincert_api_service = Course::VirtualClassroom::BraincertApiService.new(
       @virtual_classroom, @settings
     )
@@ -16,7 +16,7 @@ class Course::VirtualClassroomsController < Course::ComponentController
     end
   end
 
-  def recorded_videos #:nodoc:
+  def recorded_videos # :nodoc:
     authorize! :manage, @virtual_classroom
     @braincert_api_service = Course::VirtualClassroom::BraincertApiService.new(
       @virtual_classroom, @settings
@@ -28,7 +28,7 @@ class Course::VirtualClassroomsController < Course::ComponentController
     end
   end
 
-  def recorded_video_link #:nodoc:
+  def recorded_video_link # :nodoc:
     authorize! :access_recorded_videos, current_course
     @braincert_api_service = Course::VirtualClassroom::BraincertApiService.new(
       nil, @settings
@@ -40,15 +40,15 @@ class Course::VirtualClassroomsController < Course::ComponentController
     end
   end
 
-  def index #:nodoc:
+  def index # :nodoc:
     @virtual_classrooms = @virtual_classrooms.includes(:creator).sorted_by_date.page(page_param)
   end
 
-  def show; end #:nodoc:
+  def show; end # :nodoc:
 
-  def new; end #:nodoc:
+  def new; end # :nodoc:
 
-  def create #:nodoc:
+  def create # :nodoc:
     if @virtual_classroom.save
       redirect_to course_virtual_classrooms_path(current_course),
                   success: t('.success', title: @virtual_classroom.title)
@@ -57,9 +57,9 @@ class Course::VirtualClassroomsController < Course::ComponentController
     end
   end
 
-  def edit; end #:nodoc:
+  def edit; end # :nodoc:
 
-  def update #:nodoc:
+  def update # :nodoc:
     if @virtual_classroom.update(virtual_classroom_params)
       redirect_to course_virtual_classrooms_path(current_course),
                   success: t('.success', title: @virtual_classroom.title)
@@ -68,7 +68,7 @@ class Course::VirtualClassroomsController < Course::ComponentController
     end
   end
 
-  def destroy #:nodoc:
+  def destroy # :nodoc:
     if @virtual_classroom.destroy
       redirect_to course_virtual_classrooms_path(current_course),
                   success: t('.success', title: @virtual_classroom.title)
@@ -99,7 +99,7 @@ class Course::VirtualClassroomsController < Course::ComponentController
     end
   end
 
-  def virtual_classroom_params #:nodoc:
+  def virtual_classroom_params # :nodoc:
     params.require(:virtual_classroom).permit(:title, :content, :start_at, :duration)
   end
 

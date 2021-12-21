@@ -30,8 +30,8 @@ RSpec.describe Course::UserAchievement, type: :model do
         it 'is not valid' do
           expect(subject).not_to be_valid
           expect(subject.errors[:course_user]).
-            to include(I18n.t('activerecord.errors.models.course/user_achievement.'\
-              'attributes.course_user.not_in_course'))
+            to include(I18n.t('activerecord.errors.models.course/user_achievement.' \
+                              'attributes.course_user.not_in_course'))
         end
       end
     end

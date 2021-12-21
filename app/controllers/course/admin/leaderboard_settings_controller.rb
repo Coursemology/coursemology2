@@ -2,10 +2,10 @@
 class Course::Admin::LeaderboardSettingsController < Course::Admin::Controller
   add_breadcrumb :edit, :course_admin_leaderboard_path
 
-  def edit #:nodoc:
+  def edit # :nodoc:
   end
 
-  def update #:nodoc:
+  def update # :nodoc:
     if @settings.update(leaderboard_settings_params) && current_course.save
       redirect_to course_admin_leaderboard_path(current_course), success: t('.success')
     else
@@ -15,7 +15,7 @@ class Course::Admin::LeaderboardSettingsController < Course::Admin::Controller
 
   private
 
-  def leaderboard_settings_params #:nodoc:
+  def leaderboard_settings_params # :nodoc:
     params.require(:settings_leaderboard_component).
       permit(:title, :display_user_count, :enable_group_leaderboard, :group_leaderboard_title)
   end

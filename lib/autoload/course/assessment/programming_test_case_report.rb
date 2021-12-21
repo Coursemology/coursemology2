@@ -215,12 +215,12 @@ class Course::Assessment::ProgrammingTestCaseReport
       # prune empty and nil values
       # error_contents and failure_contents are only being stored and not displayed on the interface
       @messages ||= {
-        'error': error_message,
-        'error_contents': error_contents,
-        'hint': hint,
-        'failure': failure_message,
-        'failure_contents': failure_contents,
-        'output': output
+        error: error_message,
+        error_contents: error_contents,
+        hint: hint,
+        failure: failure_message,
+        failure_contents: failure_contents,
+        output: output
       }.reject! { |_, v| v.blank? }
     end
 

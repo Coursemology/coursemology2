@@ -1,6 +1,6 @@
 # frozen_string_literal: true
-json.sessionStart session.session_start
-json.sessionEnd session.session_end
+json.sessionStart session.session_start&.iso8601
+json.sessionEnd session.session_end&.iso8601
 json.lastVideoTime session.last_video_time
 
 json.events do

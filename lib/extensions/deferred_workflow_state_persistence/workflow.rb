@@ -2,7 +2,9 @@
 require 'workflow-activerecord'
 
 module Extensions::DeferredWorkflowStatePersistence::Workflow; end
+
 module Extensions::DeferredWorkflowStatePersistence::Workflow::Adapter; end
+
 module Extensions::DeferredWorkflowStatePersistence::Workflow::Adapter::DeferredActiveRecord
   extend ActiveSupport::Concern
   included do

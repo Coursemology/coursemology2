@@ -18,7 +18,7 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
   #   assigned to the grading.
   def evaluate_answer(answer)
     question = answer.question.actable
-    answer_text_array = answer.normalized_answer_text.downcase.gsub(/([^a-z ])/, ' ').split(' ')
+    answer_text_array = answer.normalized_answer_text.downcase.gsub(/([^a-z ])/, ' ').split
     answer_text_lemma_array = []
     answer_text_array.each { |a| answer_text_lemma_array.push(WordNet::Synset.morphy_all(a).first || a) }
 
@@ -29,8 +29,8 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
     keyword_status = find_compre_keyword_in_answer(answer_text_lemma_array, lifted_word_status, hash_keyword_solutions)
 
     answer_text_lemma_status = {
-      'compre_lifted_word': lifted_word_status,
-      'compre_keyword': keyword_status
+      compre_lifted_word: lifted_word_status,
+      compre_keyword: keyword_status
     }
 
     answer_grade, correct_points = grade_for(question, answer_text_lemma_status)
@@ -258,7 +258,7 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
   # @param [Integer] number The positive index number.
   # @return [String] The index in letter format.
   def convert_number_to_letter(number)
-    hash_number_to_letter = Hash[(0..25).zip('a'..'z')]
+    hash_number_to_letter = (0..25).zip('a'..'z').to_h
     output = ''
     while number > 0
       remainder = number % 26

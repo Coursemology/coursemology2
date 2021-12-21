@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 json.sourceCourse do
-  json.(current_course, :id, :title, :start_at)
+  json.(current_course, :id, :title)
+  json.start_at current_course.start_at&.iso8601
   json.duplicationModesAllowed([].tap do |modes|
     modes << 'COURSE' if current_course.course_duplicable?
     modes << 'OBJECT' if current_course.objects_duplicable?

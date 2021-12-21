@@ -23,7 +23,7 @@ FactoryBot.define do
     imported_attachment do
       if template_package
         file = File.new(File.join(Rails.root, 'spec/fixtures/course/'\
-                          'programming_question_template.zip'), 'rb')
+                                              'programming_question_template.zip'), 'rb')
         AttachmentReference.new(file: file)
       end
     end

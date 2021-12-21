@@ -173,7 +173,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
         options.each_with_index do |option, i|
           click_link I18n.t('course.assessment.question.multiple_responses.form.add_option')
           within all('.edit_question_multiple_response '\
-            'tr.question_multiple_response_option')[i] do
+                     'tr.question_multiple_response_option')[i] do
             # A custom css selector, :last is added here because +fill_in_rails_summernote+ doesn't
             # acknowledge the scope defined by capabara.
             # This works only if +click_link+ is executed before each option.

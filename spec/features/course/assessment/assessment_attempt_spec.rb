@@ -103,7 +103,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
       end
 
       pending 'I can view tabbed assessments and tabs for assessments with more than 1 question,'\
-               'and view tabs directly through a URL',
+              'and view tabs directly through a URL',
               js: true do
         assessment_tabbed_single_question
         visit course_assessments_path(course)

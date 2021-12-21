@@ -103,7 +103,7 @@ RSpec.describe User do
       end
     end
 
-    # Note: Facebook login feature is currently disabled.
+    # NOTE: Facebook login feature is currently disabled.
     xdescribe '.new_with_session' do
       context 'when facebook data is provided' do
         let(:params) { {} }

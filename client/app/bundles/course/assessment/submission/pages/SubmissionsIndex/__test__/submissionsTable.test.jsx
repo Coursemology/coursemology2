@@ -22,6 +22,7 @@ const defaultProps = {
   isStatisticsDownloading: false,
   isUnsubmitting: false,
   isDeleting: false,
+  isReminding: false,
   dispatch: () => {},
   submissions: [
     {

@@ -77,7 +77,7 @@ RSpec.describe Course::ControllerComponentHost, type: :controller do
     describe 'Components' do
       subject do
         component_host.components.find do |component|
-          component.class == self.class::DummyCourseModule
+          component.instance_of?(self.class::DummyCourseModule)
         end
       end
 
@@ -95,7 +95,7 @@ RSpec.describe Course::ControllerComponentHost, type: :controller do
         context 'when the settings interface class is not defined' do
           subject do
             component_host.components.find do |component|
-              component.class == self.class::DummyGamifiedCourseModule
+              component.instance_of?(self.class::DummyGamifiedCourseModule)
             end
           end
 
@@ -115,7 +115,7 @@ RSpec.describe Course::ControllerComponentHost, type: :controller do
         context 'when the settings interface class is not defined' do
           subject do
             component_host.components.find do |component|
-              component.class == self.class::DummyGamifiedCourseModule
+              component.instance_of?(self.class::DummyGamifiedCourseModule)
             end
           end
 

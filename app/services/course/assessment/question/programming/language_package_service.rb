@@ -98,7 +98,7 @@ class Course::Assessment::Question::Programming::LanguagePackageService
   # @param [String]
   # @return [Boolean]
   def string?(text)
-    text.first == '\'' && text.last == '\'' ||
-      text.first == '"' && text.last == '"'
+    (text.first == '\'' && text.last == '\'') ||
+      (text.first == '"' && text.last == '"')
   end
 end

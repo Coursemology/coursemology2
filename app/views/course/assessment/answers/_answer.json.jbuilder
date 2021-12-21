@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 json.id answer.id
 json.questionId answer.question_id
-json.createdAt answer.created_at
+json.createdAt answer.created_at&.iso8601
 
 specific_answer = answer.specific
 can_grade = can?(:grade, answer.submission)
