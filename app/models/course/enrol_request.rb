@@ -40,6 +40,13 @@ class Course::EnrolRequest < ApplicationRecord
     errors.add(:base, :existing_pending_request) if existing_request
   end
 
+  def validate_before_destroy
+    return true if workflow_state == 'pending'
+
+    errors.add(:base, :deletion)
+    throw(:abort)
+  end
+
   def approve(_ = nil)
     self.confirmed_at = Time.zone.now
     self.confirmer = User.stamper
@@ -48,12 +55,5 @@ class Course::EnrolRequest < ApplicationRecord
   def reject(_ = nil)
     self.confirmed_at = Time.zone.now
     self.confirmer = User.stamper
-  end
-
-  def validate_before_destroy
-    return true if workflow_state == 'pending'
-
-    errors.add(:base, :deletion)
-    throw(:abort)
   end
 end
