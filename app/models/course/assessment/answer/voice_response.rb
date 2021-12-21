@@ -9,6 +9,8 @@ class Course::Assessment::Answer::VoiceResponse < ApplicationRecord
   end
 
   def compare_answer(other_answer)
+    return false unless other_answer.is_a?(Course::Assessment::Answer::VoiceResponse)
+
     (attachment&.name == other_answer.attachment&.name) &&
       (attachment&.attachment_id == other_answer.attachment&.attachment_id)
   end

@@ -36,6 +36,8 @@ class Course::Assessment::Answer::ForumPostResponse < ApplicationRecord
   end
 
   def compare_answer(other_answer)
+    return false unless other_answer.is_a?(Course::Assessment::Answer::ForumPostResponse)
+
     same_text = answer_text == other_answer.answer_text
     same_post_packs_length = post_packs.length == other_answer.post_packs.length
 

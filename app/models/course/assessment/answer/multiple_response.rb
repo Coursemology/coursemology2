@@ -28,6 +28,8 @@ class Course::Assessment::Answer::MultipleResponse < ApplicationRecord
   end
 
   def compare_answer(other_answer)
+    return false unless other_answer.is_a?(Course::Assessment::Answer::MultipleResponse)
+
     Set.new(option_ids) == Set.new(other_answer.option_ids)
   end
 end

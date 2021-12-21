@@ -50,6 +50,8 @@ class Course::Assessment::Answer::TextResponse < ApplicationRecord
   end
 
   def compare_answer(other_answer)
+    return false unless other_answer.is_a?(Course::Assessment::Answer::TextResponse)
+
     same_text = answer_text == other_answer.answer_text
     same_attachment_length = attachments.length == other_answer.attachments.length
     answer_filename_attachment = attachments.pluck(:name, :attachment_id).map { |elem| elem.join('#') }

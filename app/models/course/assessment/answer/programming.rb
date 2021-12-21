@@ -81,6 +81,8 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
   end
 
   def compare_answer(other_answer)
+    return false unless other_answer.is_a?(Course::Assessment::Answer::Programming)
+
     same_file_length = files.length == other_answer.files.length
     answer_filename_content = files.pluck(:filename, :content).map { |elem| elem.join('_') }
     other_answer_filename_content = other_answer.files.pluck(:filename, :content).map { |elem| elem.join('_') }
