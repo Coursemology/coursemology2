@@ -4,7 +4,7 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
   before_action :add_submissions_breadcrumb
   before_action :load_group_managers, only: [:pending]
 
-  def index #:nodoc:
+  def index # :nodoc:
     @submissions = @submissions.from_category(category).confirmed
     @submissions = @submissions.filter_by_params(filter_params) unless filter_params.blank?
   end

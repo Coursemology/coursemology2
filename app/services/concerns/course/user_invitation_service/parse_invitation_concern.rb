@@ -4,6 +4,7 @@ require 'csv'
 # This concern includes methods required to parse the invitations data.
 # This can either be from a form, or a CSV file.
 class Course::UserInvitationService; end
+
 module Course::UserInvitationService::ParseInvitationConcern
   extend ActiveSupport::Autoload
 

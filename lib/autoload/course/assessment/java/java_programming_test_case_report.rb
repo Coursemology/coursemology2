@@ -202,12 +202,12 @@ class Course::Assessment::Java::JavaProgrammingTestCaseReport <
       # prune empty and nil values
       # error_contents and failure_contents are only being stored and not displayed on the interface
       @messages ||= {
-        'error': nil,
-        'error_contents': nil,
-        'hint': hint,
-        'failure': failure_message,
-        'failure_contents': failure_contents,
-        'output': output
+        error: nil,
+        error_contents: nil,
+        hint: hint,
+        failure: failure_message,
+        failure_contents: failure_contents,
+        output: output
       }.reject! { |_, v| v.blank? }
     end
 
@@ -232,9 +232,11 @@ class Course::Assessment::Java::JavaProgrammingTestCaseReport <
   # Parses a test case report.
   #
   # @param [String] report The report XML to parse.
+  # rubocop: disable Lint/MissingSuper
   def initialize(report)
     @report = Nokogiri::XML::Document.parse(report)
   end
+  # rubocop: enable Lint/MissingSuper
 
   # Gets the set of test suites found in this report.
   #

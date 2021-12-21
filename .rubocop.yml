@@ -10,7 +10,7 @@ AllCops:
     - 'db/migrate/*'
     - 'vendor/bundle/**/*'
     - 'client/**/*'
-  TargetRubyVersion: 2.7
+  TargetRubyVersion: 3.0
 
 Bundler/OrderedGems:
   Enabled: false
@@ -26,6 +26,9 @@ Layout/FirstHashElementIndentation:
 
 Layout/LineLength:
   Max: 120
+
+Lint/ConstantDefinitionInBlock:
+  Enabled: false
 
 Metrics/AbcSize:
   Max: 20

@@ -33,6 +33,8 @@ function initializeLineStyles() {
 
 export default function (state = {}, action) {
   switch (action.type) {
+    case actions.FINALIZE_SUCCESS:
+    case actions.UNSUBMIT_SUCCESS:
     case actions.FETCH_SUBMISSION_SUCCESS: {
       return {
         ...state,

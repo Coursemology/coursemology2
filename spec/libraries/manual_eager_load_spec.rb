@@ -6,9 +6,11 @@ RSpec.describe 'Extension: Manual Eager Load', type: :model do
     has_many :referenced_items, inverse_of: :source_item
     has_one :singular_item, inverse_of: :source_item
   end
+
   class self::ReferencedItem < ApplicationRecord
     belongs_to :source_item, inverse_of: :referenced_items
   end
+
   class self::SingularItem < ApplicationRecord
     self.table_name = 'referenced_items'
     belongs_to :source_item, inverse_of: :referenced_items

@@ -17,3 +17,5 @@ en:
         new_password_confirmation: 'Confirm your new password'
         new_password_hint: "Leave blank if you don't want to change it"
         current_password_required_hint: 'We need your current password to confirm your changes'
+      create:
+        verify_recaptcha_alert: There was an error with the reCAPTCHA below, please try again.

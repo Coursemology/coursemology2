@@ -87,13 +87,13 @@ class Duplicator
     return nil unless source_object
 
     @duplicated_objects.fetch(source_object) do |key|
-      if !@exclusion_set.include?(key)
+      if @exclusion_set.include?(key)
+        @duplicated_objects[source_object] = nil
+      else
         source_object.dup.tap do |duplicate|
           @duplicated_objects[key] = duplicate
           duplicate.initialize_duplicate(self, key)
         end
-      else
-        @duplicated_objects[source_object] = nil
       end
     end
   end

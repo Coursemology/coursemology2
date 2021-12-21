@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 require 'rails_helper'
-include DeviseMasquerade::Controllers::UrlHelpers
 
 RSpec.feature 'System: Administration: Masquerade' do
+  include DeviseMasquerade::Controllers::UrlHelpers
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do

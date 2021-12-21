@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class PreformattedTextLineSplitFilter < HTML::Pipeline::Filter
   # The regex for splitting input by newlines.
-  NEWLINE_REGEX = /\r\n|\r|\n/.freeze
+  NEWLINE_REGEX = /\r\n|\r|\n/
 
   # Adds a line number before the code block.
   # Takes a :line_start option which specifies the start line number, default is 1.

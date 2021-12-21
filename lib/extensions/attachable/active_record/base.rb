@@ -222,7 +222,7 @@ module Extensions::Attachable::ActiveRecord::Base
     end
 
     # Regex for filtering Attachment IDs from URLs.
-    ATTACHMENT_ID_REGEX = /\/attachments\/([0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12})$/.freeze
+    ATTACHMENT_ID_REGEX = /\/attachments\/([0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12})$/
 
     # Parse attachment_reference uuid from the given url.
     #

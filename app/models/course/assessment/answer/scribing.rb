@@ -18,4 +18,12 @@ class Course::Assessment::Answer::Scribing < ApplicationRecord
     end
     acting_as
   end
+
+  def compare_answer(other_answer)
+    return false unless other_answer.is_a?(Course::Assessment::Answer::Scribing)
+
+    same_scribbles_length = scribbles.length == other_answer.scribbles.length
+    same_scribbles_content = Set.new(scribbles.pluck(:content)) == Set.new(other_answer.scribbles.pluck(:content))
+    same_scribbles_length && same_scribbles_content
+  end
 end

@@ -2,14 +2,14 @@
 class Course::Achievement::AchievementsController < Course::Achievement::Controller
   before_action :authorize_achievement!, only: [:update]
 
-  def index #:nodoc:
+  def index # :nodoc:
     @achievements = @achievements.includes(:conditions)
   end
 
-  def show #:nodoc:
+  def show # :nodoc:
   end
 
-  def create #:nodoc:
+  def create # :nodoc:
     if @achievement.save
       render json: { id: @achievement.id }, status: :ok
     else
@@ -17,10 +17,10 @@ class Course::Achievement::AchievementsController < Course::Achievement::Control
     end
   end
 
-  def edit #:nodoc:
+  def edit # :nodoc:
   end
 
-  def update #:nodoc:
+  def update # :nodoc:
     if @achievement.update(achievement_params)
       respond_to do |format|
         format.html do
@@ -37,7 +37,7 @@ class Course::Achievement::AchievementsController < Course::Achievement::Control
     end
   end
 
-  def destroy #:nodoc:
+  def destroy # :nodoc:
     if @achievement.destroy
       redirect_to course_achievements_path(current_course),
                   success: t('.success', title: @achievement.title)
@@ -61,7 +61,7 @@ class Course::Achievement::AchievementsController < Course::Achievement::Control
 
   private
 
-  def achievement_params #:nodoc:
+  def achievement_params # :nodoc:
     @achievement_params ||= begin
       result = params.require(:achievement).
                permit(:title, :description, :weight, :published, :badge, course_user_ids: [])

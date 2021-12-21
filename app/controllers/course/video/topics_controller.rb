@@ -8,7 +8,7 @@ class Course::Video::TopicsController < Course::Video::Controller
   def index
     @topics = @video.topics.includes(posts: :children).order(:timestamp)
     @topics = @topics.reject { |topic| topic.posts.empty? }
-    @posts = @topics.map(&:posts).inject(Course::Discussion::Post.none, :+)
+    @posts = @topics.map(&:posts).reduce(Course::Discussion::Post.none, :+)
   end
 
   def create

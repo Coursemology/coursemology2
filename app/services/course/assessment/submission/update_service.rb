@@ -133,7 +133,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   # @raise [ActiveRecord::RecordInvalid] If the new submission_questions cannot be saved.
   # @return[Boolean] If new submission_questions were created.
   def create_missing_submission_questions
-    questions_with_submission_questions = @submission.submission_questions.map(&:question)
+    questions_with_submission_questions = @submission.submission_questions.includes(:question).map(&:question)
     questions_without_submission_questions = questions_to_attempt - questions_with_submission_questions
     new_submission_questions = []
     questions_without_submission_questions.each do |question|

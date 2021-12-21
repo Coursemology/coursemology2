@@ -6,8 +6,8 @@ json.package_ui do
   end
 
   json.test_cases do
-    json.public @programming_question.test_cases.select(&:public_test?)
-    json.private @programming_question.test_cases.select(&:private_test?)
-    json.evaluation @programming_question.test_cases.select(&:evaluation_test?)
+    json.public @programming_question.test_cases.select(&:public_test?).as_json
+    json.private @programming_question.test_cases.select(&:private_test?).as_json
+    json.evaluation @programming_question.test_cases.select(&:evaluation_test?).as_json
   end
 end

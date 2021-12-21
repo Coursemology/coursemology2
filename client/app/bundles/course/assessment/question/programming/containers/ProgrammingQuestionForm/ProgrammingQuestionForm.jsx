@@ -14,6 +14,7 @@ import { Tabs, Tab } from 'material-ui/Tabs';
 import { red500 } from 'material-ui/styles/colors';
 import MaterialSummernote from 'lib/components/MaterialSummernote';
 import ChipInput from 'material-ui-chip-input';
+import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 
 import BuildLog from '../../components/BuildLog';
 import OnlineEditor, {
@@ -121,6 +122,11 @@ class ProgrammingQuestionForm extends React.Component {
     return value === null ? '' : value;
   }
 
+  constructor(props) {
+    super(props);
+    this.state = { confirmationOpen: false };
+  }
+
   componentDidMount() {
     this.summernoteEditors = $(
       '#programming-question-form .note-editor .note-editable',
@@ -173,6 +179,22 @@ class ProgrammingQuestionForm extends React.Component {
     e.preventDefault();
     if (!this.validationCheck()) return;
 
+    const autograded = this.props.data.getIn(['question', 'autograded']);
+    const hasSubmissions = this.props.data.getIn([
+      'question',
+      'has_submissions',
+    ]);
+
+    if (autograded && hasSubmissions) {
+      this.setState((prevState) => ({
+        confirmationOpen: !prevState.confirmationOpen,
+      }));
+    } else {
+      this.handleSubmit();
+    }
+  };
+
+  handleSubmit = () => {
     const url = this.props.data.getIn(['form_data', 'path']);
     const method = this.props.data.getIn(['form_data', 'method']);
 
@@ -793,6 +815,19 @@ class ProgrammingQuestionForm extends React.Component {
               ) : null
             }
           />
+          {this.state.confirmationOpen && (
+            <ConfirmationDialog
+              message={this.props.intl.formatMessage(
+                translations.submitConfirmation,
+              )}
+              open={this.state.confirmationOpen}
+              onCancel={() => this.setState({ confirmationOpen: false })}
+              onConfirm={() => {
+                this.handleSubmit();
+                this.setState({ confirmationOpen: false });
+              }}
+            />
+          )}
         </form>
       </div>
     );

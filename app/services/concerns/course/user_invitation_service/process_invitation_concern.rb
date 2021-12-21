@@ -2,6 +2,7 @@
 
 # This concern deals with the creation of user invitations.
 class Course::UserInvitationService; end
+
 module Course::UserInvitationService::ProcessInvitationConcern
   extend ActiveSupport::Autoload
 

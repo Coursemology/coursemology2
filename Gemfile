@@ -61,7 +61,7 @@ gem 'font-awesome-rails'
 gem 'html-pipeline'
 gem 'sanitize', '>= 4.6.3'
 gem 'rinku'
-gem 'html-pipeline-rouge_filter'
+gem 'html-pipeline-rouge_filter', git: 'https://github.com/ekowidianto/html-pipeline-rouge_filter.git'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder'
 # Slim as the templating language
@@ -74,6 +74,9 @@ gem 'high_voltage'
 gem 'kaminari'
 # Work with Docker
 gem 'docker-api'
+
+gem 'recaptcha'
+gem 'rexml'
 
 group :development do
   # Spring speeds up development by keeping your application running in the background.

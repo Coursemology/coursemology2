@@ -33,9 +33,9 @@ class Course::Assessment::Submission::SubmissionsController < \
       format.html {}
       format.json do
         @assessment = @assessment.calculated(:maximum_grade)
-        @submissions = @submissions.calculated(:log_count, :graded_at).includes(:answers)
+        @submissions = @submissions.calculated(:log_count, :graded_at, :grade)
         @my_students = current_course_user&.my_students || []
-        @course_users = current_course.course_users.order_phantom_user.order_alphabetically.includes(:user)
+        @course_users = current_course.course_users.order_phantom_user.order_alphabetically
       end
     end
   end
@@ -69,7 +69,7 @@ class Course::Assessment::Submission::SubmissionsController < \
     respond_to do |format|
       format.html {}
       format.json do
-        calculated_fields = [:graded_at]
+        calculated_fields = [:graded_at, :grade]
         @submission = @submission.calculated(*calculated_fields)
       end
     end

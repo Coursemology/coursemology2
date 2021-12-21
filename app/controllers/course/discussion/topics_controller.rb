@@ -15,13 +15,11 @@ class Course::Discussion::TopicsController < Course::ComponentController
 
   # Loads topics pending staff reply for course_staff, and unread topics for students.
   def pending
-    @topics = begin
-      if current_course_user&.student?
-        unread_topics_for_student
-      else
-        all_topics.pending_staff_reply
-      end
-    end
+    @topics = if current_course_user&.student?
+                unread_topics_for_student
+              else
+                all_topics.pending_staff_reply
+              end
   end
 
   def my_students

@@ -7,24 +7,24 @@ FactoryBot.define do
 
     trait :failed do
       passed { false }
-      messages { { 'failure': 'simulated failure message' } }
+      messages { { failure: 'simulated failure message' } }
     end
 
     trait :errored do
       passed { false }
-      messages { { 'error': 'simulated error message' } }
+      messages { { error: 'simulated error message' } }
     end
 
     trait :output do
-      messages { { 'output': 'simulated test function output' } }
+      messages { { output: 'simulated test function output' } }
     end
 
     trait :failed_with_output do
       passed { false }
       messages do
         {
-          'failure': 'simulated failure message',
-          'output': 'simulated failed output'
+          failure: 'simulated failure message',
+          output: 'simulated failed output'
         }
       end
     end

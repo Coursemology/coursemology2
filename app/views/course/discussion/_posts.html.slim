@@ -1,6 +1,7 @@
 - post_locals ||= {}
 - posts.each do |post|
-  = render partial: post_partial, object: post.first, locals: post_locals
+  - unless post.first.is_delayed
+    = render partial: post_partial, object: post.first, locals: post_locals
   - nest_replies = max_depth > 1
   - replies_class = nest_replies ? 'nested' : nil
   - replies_max_depth = nest_replies ? max_depth - 1 : max_depth

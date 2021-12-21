@@ -21,7 +21,7 @@ class Notifier::Base::ActivityWrapper < SimpleDelegator
     super.tap { |_| send_pending_email }
   end
 
-  def initialize(notifier, activity) #:nodoc:
+  def initialize(notifier, activity) # :nodoc:
     super(activity)
     @notifier = notifier
   end

@@ -14,6 +14,19 @@ FactoryBot.define do
       end
     end
 
+    trait :with_delayed_post do
+      after(:build) do |topic|
+        topic.posts = [build(:course_discussion_post, :delayed, topic: topic)]
+      end
+    end
+
+    trait :with_both_normal_and_delayed_post do
+      after(:build) do |topic|
+        topic.posts = [build(:course_discussion_post, :delayed, topic: topic),
+                       build(:course_discussion_post, topic: topic)]
+      end
+    end
+
     trait :pending do
       pending_staff_reply { true }
     end

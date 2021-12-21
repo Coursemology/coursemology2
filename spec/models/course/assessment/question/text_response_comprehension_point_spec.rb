@@ -34,8 +34,9 @@ RSpec.describe Course::Assessment::Question::TextResponseComprehensionPoint, typ
 
           expect(subject.valid?).to be(false)
           expect(subject.errors[:point_grade]).to include(I18n.t('activerecord.errors.models.' \
-              'course/assessment/question/text_response_comprehension_point.attributes.' \
-              'point_grade.invalid_point_grade'))
+                                                                 'course/assessment/question/' \
+                                                                 'text_response_comprehension_point.attributes.' \
+                                                                 'point_grade.invalid_point_grade'))
         end
       end
 
@@ -47,8 +48,10 @@ RSpec.describe Course::Assessment::Question::TextResponseComprehensionPoint, typ
         it 'validates at most one compre_lifted_word solution' do
           expect(subject.valid?).to be(false)
           expect(subject.errors[:solutions]).to include(I18n.t('activerecord.errors.models.' \
-              'course/assessment/question/text_response_comprehension_point.attributes.' \
-              'solutions.more_than_one_compre_lifted_word_solution'))
+                                                               'course/assessment/question/' \
+                                                               'text_response_comprehension_point.' \
+                                                               'attributes.solutions.' \
+                                                               'more_than_one_compre_lifted_word_solution'))
         end
       end
     end

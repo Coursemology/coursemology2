@@ -194,6 +194,7 @@ Rails.application.routes.draw do
         resources :assessments do
           post 'reorder', on: :member
           post 'authenticate', on: :member
+          post 'remind', on: :member
 
           resources :questions, only: [] do
             post 'duplicate/:destination_assessment_id', on: :member, action: 'duplicate', as: :duplicate
@@ -234,7 +235,6 @@ Rails.application.routes.draw do
                     resources :scribbles, only: [:create]
                   end
                   namespace :forum_post_response do
-                    # get :selected_posts
                     get 'selected_post_packs' => 'posts#selected'
                   end
                 end
@@ -406,6 +406,8 @@ Rails.application.routes.draw do
         get 'fetch', on: :collection
         post 'mark_as_read', on: :member
       end
+
+      get 'learning_map' => 'learning_map#index'
     end
   end
 

@@ -102,6 +102,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         expect(page).to have_text('Graded but not published')
         click_button('Publish Grades')
         accept_confirm_dialog
+        wait_for_job
         expect(page).not_to have_text('Graded but not published')
 
         expect(graded_submission.reload).to be_published
@@ -113,8 +114,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         expect(graded_submission.points_awarded).not_to be_nil
       end
 
-      # Works locally but fails in CirlceCI
-      pending 'I can force submit all unsubmitted exams', js: true do
+      scenario 'I can force submit all unsubmitted exams', js: true do
         visit course_assessment_submissions_path(course, assessment)
         find('#students-tab').click
 
@@ -144,6 +144,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
 
         find('.unsubmit-submissions-enabled').click
         accept_confirm_dialog
+        wait_for_job
         expect(page).not_to have_text('Graded but not published')
 
         find('#submission-dropdown-icon').click
@@ -160,6 +161,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
 
         find('.delete-submissions-enabled').click
         accept_confirm_dialog
+        wait_for_job
         expect(page).to have_text('Not Started')
         expect(page).not_to have_text('Attempting')
 

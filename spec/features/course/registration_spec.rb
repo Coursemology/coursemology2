@@ -30,7 +30,7 @@ RSpec.feature 'Courses: Registration' do
     context 'when the course allows enrol requests' do
       let(:course) { create(:course, :enrollable) }
 
-      scenario 'Users can create and cancel enrol requests' do
+      scenario 'Users can create and cancel enrol requests', type: :mailer do
         visit course_path(course)
 
         expect(page).to have_text(course.description)

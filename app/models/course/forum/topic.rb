@@ -102,10 +102,10 @@ class Course::Forum::Topic < ApplicationRecord
   # Update the `resolve` boolean status based on correct answer counts.
   def update_resolve_status
     status = posts.where(answer: true).count > 0
-    if resolved != status
-      update_attribute(:resolved, status)
-    else
+    if resolved == status
       true
+    else
+      update_attribute(:resolved, status)
     end
   end
 

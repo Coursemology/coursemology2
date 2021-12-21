@@ -11,13 +11,20 @@ export function onCreateChange(fileId, line, text) {
   };
 }
 
-export function create(submissionId, answerId, fileId, line, text) {
+export function create(
+  submissionId,
+  answerId,
+  fileId,
+  line,
+  text,
+  isDelayedComment,
+) {
   const payload = {
     annotation: { line },
-    discussion_post: { text },
+    discussion_post: { text, is_delayed: isDelayedComment },
   };
   return (dispatch) => {
-    dispatch({ type: actionTypes.CREATE_ANNOTATION_REQUEST });
+    dispatch({ type: actionTypes.CREATE_ANNOTATION_REQUEST, isDelayedComment });
 
     return CourseAPI.assessment.submissions
       .createProgrammingAnnotation(submissionId, answerId, fileId, payload)
