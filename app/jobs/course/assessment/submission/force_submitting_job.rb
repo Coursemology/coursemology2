@@ -38,7 +38,7 @@ class Course::Assessment::Submission::ForceSubmittingJob < ApplicationJob
         end
 
         assessment.submissions.with_attempting_state.each do |submission|
-          submission.update('finalise' => 'true')
+          submission.update!('finalise' => 'true')
           grade_submission(assessment, submission)
         end
       end

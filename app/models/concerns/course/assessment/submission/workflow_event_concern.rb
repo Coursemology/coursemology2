@@ -179,14 +179,14 @@ module Course::Assessment::Submission::WorkflowEventConcern
         # It is mentioned that there could be a race condition creating multiple current_answers
         # for a given question in load_or_create_answers. Since we always take the first current_answer,
         # destroy the rest upon submission finalisation.
-        all_answers.current_answers.select(&:attempting?).each(&:destroy)
+        all_answers.current_answers.select(&:attempting?).each(&:destroy!)
       else
         last_non_current_answer = all_answers.reject(&:current_answer?).reject(&:attempting?).last
 
         if current_answer.specific.compare_answer(last_non_current_answer.specific)
           # If the latest non-current answer and the current answer are the same, keep the latest non-current answer
           # and remove current answer
-          all_answers.current_answers.select(&:attempting?).each(&:destroy)
+          all_answers.current_answers.select(&:attempting?).each(&:destroy!)
           last_non_current_answer.update!(current_answer: true)
         else
           # Otherwise, we duplicate the current answer to a new one, and finalise it.
@@ -195,7 +195,7 @@ module Course::Assessment::Submission::WorkflowEventConcern
           new_answer.finalise!
           new_answer.save!
 
-          all_answers.current_answers.select(&:attempting?).each(&:destroy)
+          all_answers.current_answers.select(&:attempting?).each(&:destroy!)
           new_answer.update!(current_answer: true)
         end
       end
