@@ -30,7 +30,7 @@ class Course::Assessment::Submission::SubmissionsController < \
     authorize!(:view_all_submissions, @assessment)
 
     respond_to do |format|
-      format.html {}
+      format.html {} # rubocop:disable Lint/EmptyBlock
       format.json do
         @assessment = @assessment.calculated(:maximum_grade)
         @submissions = @submissions.calculated(:log_count, :graded_at, :grade)
@@ -40,7 +40,7 @@ class Course::Assessment::Submission::SubmissionsController < \
     end
   end
 
-  def create
+  def create # rubocop:disable Metrics/AbcSize
     existing_submission = @assessment.submissions.find_by(creator: current_user)
     if existing_submission
       @submission = existing_submission
@@ -67,7 +67,7 @@ class Course::Assessment::Submission::SubmissionsController < \
     render 'blocked' if @submission.assessment.block_student_viewing_after_submitted? && current_course_user.student?
 
     respond_to do |format|
-      format.html {}
+      format.html {} # rubocop:disable Lint/EmptyBlock
       format.json do
         calculated_fields = [:graded_at, :grade]
         @submission = @submission.calculated(*calculated_fields)
@@ -117,7 +117,7 @@ class Course::Assessment::Submission::SubmissionsController < \
   end
 
   # Force submit all submissions.
-  def force_submit_all
+  def force_submit_all # rubocop:disable Metrics/AbcSize
     authorize!(:force_submit_assessment_submission, @assessment)
     attempting_submissions = @assessment.submissions.by_users(course_user_ids).with_attempting_state
     if !attempting_submissions.empty? || !user_ids_without_submission.empty?
@@ -166,9 +166,13 @@ class Course::Assessment::Submission::SubmissionsController < \
   def unsubmit
     authorize!(:update, @assessment)
     submission = @assessment.submissions.find(params[:submission_id])
-    if submission
-      submission.update('unmark' => 'true') if submission.graded?
-      submission.update('unsubmit' => 'true')
+    success = submission.transaction do
+      submission.update!('unmark' => 'true') if submission.graded?
+      submission.update!('unsubmit' => 'true')
+
+      true
+    end
+    if success
       head :ok
     else
       logger.error("failed to unsubmit submission: #{submission.errors.inspect}")
@@ -193,10 +197,14 @@ class Course::Assessment::Submission::SubmissionsController < \
   def delete
     submission = @assessment.submissions.find(params[:submission_id])
     authorize!(:delete_submission, submission)
-    if submission
-      submission.update('unmark' => 'true') if submission.graded?
-      submission.update('unsubmit' => 'true') unless submission.attempting?
+    success = submission.transaction do
+      submission.update!('unmark' => 'true') if submission.graded?
+      submission.update!('unsubmit' => 'true') unless submission.attempting?
       submission.destroy!
+
+      true
+    end
+    if success
       head :ok
     else
       logger.error("failed to unsubmit submission: #{submission.errors.inspect}")
@@ -270,7 +278,7 @@ class Course::Assessment::Submission::SubmissionsController < \
 
   # Check for zombie jobs, create new grading jobs if there's any zombie jobs.
   # TODO: Remove this method after found the cause of the dead jobs.
-  def check_zombie_jobs # rubocop:disable Metrics/AbcSize
+  def check_zombie_jobs # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
     return unless @submission.attempting?
 
     submitted_answers = @submission.answers.latest_answers.select(&:submitted?)
@@ -292,7 +300,7 @@ class Course::Assessment::Submission::SubmissionsController < \
     end
   end
 
-  def course_user_ids
+  def course_user_ids # rubocop:disable Metrics/AbcSize
     case params[:course_users]
     when COURSE_USERS[:my_students]
       current_course_user.my_students.without_phantom_users
