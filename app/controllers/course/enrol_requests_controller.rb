@@ -45,7 +45,7 @@ class Course::EnrolRequestsController < Course::ComponentController
       Course::Mailer.user_rejected_email(current_course, @enrol_request.user).deliver_later
       redirect_to course_enrol_requests_path(current_course), success: t('.success', user: @enrol_request.user.name)
     else
-      redirect_to course_enrol_requests_path(current_course), success: @enrol_request.errors.full_messages.to_sentence
+      redirect_to course_enrol_requests_path(current_course), danger: @enrol_request.errors.full_messages.to_sentence
     end
   end
 
