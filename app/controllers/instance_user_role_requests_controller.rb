@@ -70,7 +70,7 @@ class InstanceUserRoleRequestsController < ApplicationController
   end
 
   def reject_role_request
-    @user_role_request.update!(user_role_request_rejection_params) && @user_role_request.update!(reject: true)
+    @user_role_request.update(user_role_request_rejection_params.reverse_merge(reject: true))
   end
 
   def send_rejection_email

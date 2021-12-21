@@ -41,10 +41,12 @@ class Course::EnrolRequestsController < Course::ComponentController
   end
 
   def reject
-    return unless @enrol_request.update!(reject: true)
-
-    Course::Mailer.user_rejected_email(current_course, @enrol_request.user).deliver_later
-    redirect_to course_enrol_requests_path(current_course), success: t('.success', user: @enrol_request.user.name)
+    if @enrol_request.update(reject: true)
+      Course::Mailer.user_rejected_email(current_course, @enrol_request.user).deliver_later
+      redirect_to course_enrol_requests_path(current_course), success: t('.success', user: @enrol_request.user.name)
+    else
+      redirect_to course_enrol_requests_path(current_course), success: @enrol_request.errors.full_messages.to_sentence
+    end
   end
 
   private
@@ -55,7 +57,7 @@ class Course::EnrolRequestsController < Course::ComponentController
                     timeline_algorithm: current_course.default_timeline_algorithm))
 
     CourseUser.transaction do
-      raise ActiveRecord::Rollback unless course_user.save && @enrol_request.update!(approve: true)
+      raise ActiveRecord::Rollback unless course_user.save && @enrol_request.update(approve: true)
     end
 
     course_user
