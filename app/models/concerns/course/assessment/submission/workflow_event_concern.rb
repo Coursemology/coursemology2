@@ -16,7 +16,8 @@ module Course::Assessment::Submission::WorkflowEventConcern
     self.submitted_at = Time.zone.now
     save!
 
-    current_answers.select(&:attempting?).each(&:finalise!)
+    finalise_current_answers
+    answers.reload
 
     assign_zero_experience_points if assessment.questions.empty?
 
@@ -63,7 +64,9 @@ module Course::Assessment::Submission::WorkflowEventConcern
     # Skip the state validation in answers.
     @unsubmitting = true
 
-    unsubmit_current_answers
+    recreate_current_answers
+    answers.reload
+
     self.points_awarded = nil
     self.draft_points_awarded = nil
     self.awarded_at = nil
@@ -139,6 +142,63 @@ module Course::Assessment::Submission::WorkflowEventConcern
     answers_to_unsubmit = only_programming ? current_programming_answers : current_answers
     answers_to_unsubmit.each do |answer|
       answer.unsubmit! unless answer.attempting?
+    end
+  end
+
+  # When a submission is unsubmitted, every current_answer is copied as and flagged as attempting.
+  # The new copied answer is then marked as current_answer which is the answer that can be modified
+  # by users. The old current_answer is unmarked as current_answer and is kept as graded past answer.
+  def recreate_current_answers
+    current_answers.reject(&:attempting?).each do |current_answer|
+      new_answer = current_answer.question.attempt(current_answer.submission, current_answer)
+
+      current_answer.current_answer = false
+      new_answer.current_answer = true
+      current_answer.save!
+      new_answer.save!
+    end
+  end
+
+  # When a submission is finalised, we will compare the current answer and the latest non-current answers.
+  # If they are the same, remove the current answer and mark the latest non-current answer as the current answer
+  # to avoid re-grading.
+  # Otherwise, regenerate the current answer to ensure chronological order of all answers and grade it.
+  # For more details, please refer to the PDF page 2 and below here:
+  # https://github.com/Coursemology/coursemology2/files/7606393/Submission.Past.Answers.Issues.pdf
+  def finalise_current_answers
+    questions.each do |question|
+      all_answers = answers.where(question: question)
+      current_answer = all_answers.current_answers.select(&:attempting?).first
+      next if current_answer.nil?
+
+      # For the case when there is no past answer (only 1 attempt per question),
+      # current answer is finalized.
+      if all_answers.non_current_answers.reject(&:attempting?).empty?
+        current_answer.finalise!
+        current_answer.save!
+        # It is mentioned that there could be a race condition creating multiple current_answers
+        # for a given question in load_or_create_answers. Since we always take the first current_answer,
+        # destroy the rest upon submission finalisation.
+        all_answers.current_answers.select(&:attempting?).each(&:destroy)
+      else
+        last_non_current_answer = all_answers.reject(&:current_answer?).reject(&:attempting?).last
+
+        if current_answer.specific.compare_answer(last_non_current_answer.specific)
+          # If the latest non-current answer and the current answer are the same, keep the latest non-current answer
+          # and remove current answer
+          all_answers.current_answers.select(&:attempting?).each(&:destroy)
+          last_non_current_answer.update!(current_answer: true)
+        else
+          # Otherwise, we duplicate the current answer to a new one, and finalise it.
+          # We then remove the previous current answer and mark the copied answer as the current answer.
+          new_answer = question.attempt(current_answer.submission, current_answer)
+          new_answer.finalise!
+          new_answer.save!
+
+          all_answers.current_answers.select(&:attempting?).each(&:destroy)
+          new_answer.update!(current_answer: true)
+        end
+      end
     end
   end
 

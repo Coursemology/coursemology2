@@ -121,5 +121,55 @@ RSpec.describe Course::Assessment::Answer::ForumPostResponse do
         expect(post_packs[0].is_parent_deleted).to eq(true)
       end
     end
+
+    describe '#compare_answer' do
+      let(:forum) { create(:forum) }
+      let(:topic) { create(:forum_topic, forum: forum) }
+      let(:parent_post1) { create(:course_discussion_post, topic: topic.acting_as) }
+      let(:child_post1) { create(:course_discussion_post, topic: topic.acting_as, parent: parent_post1) }
+      let(:parent_post2) { create(:course_discussion_post, topic: topic.acting_as) }
+      let(:child_post2) { create(:course_discussion_post, topic: topic.acting_as, parent: parent_post2) }
+      let(:answer1) { create(:course_assessment_answer_forum_post_response) }
+      let(:answer1_different_text) do
+        create(:course_assessment_answer_forum_post_response, answer_text: '<div>yyy</div>')
+      end
+      let(:answer1_no_post_pack) { create(:course_assessment_answer_forum_post_response) }
+      let(:answer_with_parent1) { create(:course_assessment_answer_forum_post_response) }
+      let(:answer2) { create(:course_assessment_answer_forum_post_response) }
+      let(:answer_with_parent2) { create(:course_assessment_answer_forum_post_response) }
+      let!(:post_pack1) do
+        create(:course_assessment_answer_forum_post, topic: topic.acting_as, post: parent_post1,
+                                                     answer: answer1.actable)
+      end
+      let!(:post_pack1_different_text) do
+        create(:course_assessment_answer_forum_post, topic: topic.acting_as, post: parent_post1,
+                                                     answer: answer1_different_text.actable)
+      end
+      let!(:post_pack_with_parent1) do
+        create(:course_assessment_answer_forum_post, parent: parent_post1, topic: topic.acting_as, post: child_post1,
+                                                     answer: answer_with_parent1.actable)
+      end
+      let!(:post_pack2) do
+        create(:course_assessment_answer_forum_post, topic: topic.acting_as, post: parent_post2,
+                                                     answer: answer2.actable)
+      end
+      let!(:post_pack_with_parent2) do
+        create(:course_assessment_answer_forum_post, parent: parent_post2, topic: topic.acting_as, post: child_post2,
+                                                     answer: answer_with_parent2.actable)
+      end
+
+      it 'compares if the answers are the same or not' do
+        expect(answer1.compare_answer(answer1)).to be_truthy
+        expect(answer1.compare_answer(answer1_different_text)).to be_falsey
+        expect(answer1.compare_answer(answer1_no_post_pack)).to be_falsey
+        expect(answer1.compare_answer(answer_with_parent1)).to be_falsey
+        expect(answer1.compare_answer(answer2)).to be_falsey
+        expect(answer1.compare_answer(answer_with_parent2)).to be_falsey
+        expect(answer2.compare_answer(answer2)).to be_truthy
+        expect(answer2.compare_answer(answer1)).to be_falsey
+        expect(answer2.compare_answer(answer_with_parent1)).to be_falsey
+        expect(answer2.compare_answer(answer_with_parent2)).to be_falsey
+      end
+    end
   end
 end
