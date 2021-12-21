@@ -158,4 +158,13 @@ export default defineMessages({
     id: 'course.assessment.question.programming.programmingQuestionForm.timeLimitRangeValidationError',
     defaultMessage: 'Time limit must be within 1 to 30.',
   },
+  submitConfirmation: {
+    id: 'course.assessment.question.programming.programmingQuestionForm.submitConfirmation',
+    defaultMessage:
+      'There are existing submissions for this autograded question.\
+      Updating this question will re-grade all submitted answers to this question and\
+      only system-issued EXP for the submissions will be re-calculated.\
+      Note that manually-issued EXP will not be updated.\
+      Are you sure you wish to continue?',
+  },
 });
