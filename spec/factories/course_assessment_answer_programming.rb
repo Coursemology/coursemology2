@@ -7,7 +7,7 @@ FactoryBot.define do
       question_traits { nil }
       file_count { nil }
       file_contents { nil }
-      file_name_contents { nil }
+      file_name_contents { nil } # [Array<[filename<String>, content<String>]>]
       creator { create(:user) }
     end
 
