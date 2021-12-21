@@ -14,6 +14,7 @@ import { Tabs, Tab } from 'material-ui/Tabs';
 import { red500 } from 'material-ui/styles/colors';
 import MaterialSummernote from 'lib/components/MaterialSummernote';
 import ChipInput from 'material-ui-chip-input';
+import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 
 import BuildLog from '../../components/BuildLog';
 import OnlineEditor, {
@@ -22,7 +23,6 @@ import OnlineEditor, {
 import UploadedPackageView from '../../components/UploadedPackageView';
 import styles from './ProgrammingQuestionForm.scss';
 import translations from './ProgrammingQuestionForm.intl';
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 
 const propTypes = {
   data: PropTypes.instanceOf(Immutable.Map).isRequired,
