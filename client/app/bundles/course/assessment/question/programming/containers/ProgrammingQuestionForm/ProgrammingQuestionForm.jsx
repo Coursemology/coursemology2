@@ -22,7 +22,7 @@ import OnlineEditor, {
 import UploadedPackageView from '../../components/UploadedPackageView';
 import styles from './ProgrammingQuestionForm.scss';
 import translations from './ProgrammingQuestionForm.intl';
-import ConfirmationDialog from '../../../../../../../lib/components/ConfirmationDialog';
+import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 
 const propTypes = {
   data: PropTypes.instanceOf(Immutable.Map).isRequired,
