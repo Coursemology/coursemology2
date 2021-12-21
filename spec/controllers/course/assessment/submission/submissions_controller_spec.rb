@@ -447,7 +447,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         end
 
         context 'when there are submissions' do
-          it 'publishes the submission' do
+          it 'downloads the submission' do
             subject
             wait_for_job
 
@@ -473,7 +473,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         end
 
         context 'when there are submissions' do
-          it 'publishes the submission' do
+          it 'downloads the statistics' do
             subject
             wait_for_job
 
