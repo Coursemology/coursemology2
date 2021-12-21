@@ -54,7 +54,7 @@ RSpec.describe Course::Assessment::Answer::Programming do
     describe 'attempting_times_left' do
       subject { answer.attempting_times_left }
 
-      context 'with one existing attempts' do
+      context 'with one existing attempt' do
         let!(:graded_answer) do
           create(:course_assessment_answer_programming, :graded,
                  submission: submission, question: question.question)

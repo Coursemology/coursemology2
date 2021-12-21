@@ -523,7 +523,7 @@ RSpec.describe Course::Assessment::Submission do
         end
       end
 
-      context 'when there are delayed annotation and comment' do
+      context 'when there are delayed annotations and comments' do
         let!(:assessment_traits) { [:with_programming_question] }
         let!(:submission1_traits) { :submitted }
         let!(:submission) { submission1 }
