@@ -3,53 +3,52 @@
 # Check https://circleci.com/docs/2.0/language-ruby/ for more details
 #
 version: 2.1
+
 orbs:
   browser-tools: circleci/browser-tools@1.2.3
-jobs:
-  build:
-    docker:
-      # specify the version you desire here
-      - image: cimg/ruby:3.0.2-browsers
-        environment:
-          BUNDLE_APP_CONFIG: ~/repo/.bundle
 
-    working_directory: ~/repo
-
+commands:
+  checkout_with_submodules:
     steps:
       - checkout
 
       # Checkout submodules
-      - run: git submodule update --init --recursive
+      - run:
+          name: Checkout submodules
+          command: git submodule update --init --recursive
 
+  restore_ruby_cache:
+    steps:
       # Install bundler version
       - run:
-          name: install bundler version
+          name: Install bundler version 2.2.22
           command: gem install bundler:2.2.22
 
-      # Download and cache dependencies
+      # Restore cached Ruby dependencies
       - restore_cache:
           keys:
-            - 3.3-dependencies-{{ checksum "Gemfile.lock" }}
-            # fallback to using the latest cache if no exact match is found
-            - 3.3-dependencies-
+            - v3.0.2-ruby-{{ checksum "Gemfile.lock" }}
+            # Fallback to using the latest cache if no exact match is found
+            - v3.0.2-ruby-
 
+      # Update Ruby dependencies
       - run:
-          name: install dependencies
+          name: Install dependencies
           command: |
             bundle install --jobs=4 --retry=3 --path vendor/bundle --without development:production --deployment
 
+      # Recache the updated Ruby dependencies
       - save_cache:
           paths:
             - ./vendor/bundle
             - ./.bundle
-          key: 3.3-dependencies-{{ checksum "Gemfile.lock" }}
+          key: v3.0.2-ruby-{{ checksum "Gemfile.lock" }}
 
-      - restore_cache:
-          keys:
-            - v1.1-yarn-{{ checksum "client/yarn.lock" }}
-
+  restore_node_cache:
+    steps:
+      # Use the desired Node version
       - run:
-          name: Swap node versions
+          name: Swap Node versions
           command: |
             set +e
             wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | bash
@@ -62,20 +61,29 @@ jobs:
             echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
             echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
 
-      # Build frontend JS
-      - run: cd client && yarn install && yarn build:production && cd -
+      # Restore cached Node dependencies
+      - restore_cache:
+          keys:
+            - v14.16.1-node-{{ checksum "client/yarn.lock" }}
+            # Fallback to using the latest cache if no exact match is found
+            - v14.16.1-node-
 
+      # Update Node dependencies
+      - run: cd client && yarn install && cd -
+
+      # Recache the updated Node dependencies
       - save_cache:
           paths:
             - ./client/node_modules
-          key: v1.1-yarn-{{ checksum "client/yarn.lock" }}
+          key: v14.16.1-node-{{ checksum "client/yarn.lock" }}
 
-      - save_cache:
-          paths:
-            - ./client/build
-            - ./public/webpack
-          key: v1.1-yarn-build-{{ .Revision }}
+  build_client:
+    steps:
+      - run:
+          name: Build client
+          command: cd client && yarn build:production && cd -
 
+jobs:
   test:
     docker:
       # specify the version you desire here
@@ -102,31 +110,12 @@ jobs:
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
 
-      - checkout
+      - checkout_with_submodules
 
-      # Checkout submodules
-      - run: git submodule update --init --recursive
+      - restore_ruby_cache
+      - restore_node_cache
 
-      - restore_cache:
-          keys:
-            - 3.3-dependencies-{{ checksum "Gemfile.lock" }}
-            # fallback to using the latest cache if no exact match is found
-            - 3.3-dependencies-
-
-      - restore_cache:
-          keys:
-            - v1.1-yarn-{{ checksum "client/yarn.lock" }}
-
-      - restore_cache:
-          keys:
-            - v1.1-yarn-build-{{ .Revision }}
-
-      # Install bundler version
-      - run:
-          name: install bundler version
-          command: |
-            gem install bundler:2.2.22
-            bundle install
+      - build_client
 
       # Install ghostscript so `identify` in ImageMagick works with PDF files.
       # Remove pdf security policy for imagemagick (ubuntu 20.04)
@@ -149,7 +138,7 @@ jobs:
           environment:
             DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
 
-      # run tests!
+      # Run tests!
       - run:
           name: run
           no_output_timeout: 30m
@@ -167,7 +156,7 @@ jobs:
           environment:
             DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
 
-      # collect reports
+      # Collect reports
       - store_test_results:
           path: /tmp/test-results
       - store_artifacts:
@@ -184,21 +173,14 @@ jobs:
     working_directory: ~/repo
 
     steps:
-      - checkout
+      - checkout_with_submodules
 
-      # Checkout submodules
-      - run: git submodule update --init --recursive
+      - restore_node_cache
 
-      - restore_cache:
-          keys:
-            - v1.1-yarn-{{ checksum "client/yarn.lock" }}
-
-      - restore_cache:
-          keys:
-            - v1.1-yarn-build-{{ .Revision }}
+      - build_client
 
       - run:
-          name: run yarn checks
+          name: Run yarn checks
           command: |
             cd client
             yarn lint
@@ -213,36 +195,15 @@ jobs:
     working_directory: ~/repo
 
     steps:
-      - checkout
+      - checkout_with_submodules
 
-      # Checkout submodules
-      - run: git submodule update --init --recursive
+      - restore_node_cache
 
-      - restore_cache:
-          keys:
-            - v1.1-yarn-{{ checksum "client/yarn.lock" }}
-
-      - restore_cache:
-          keys:
-            - v1.1-yarn-build-{{ .Revision }}
-
-      - run:
-          name: Swap node versions
-          command: |
-            set +e
-            wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | bash
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-            nvm install v14.16.1
-            nvm alias default 14.16.1
-
-            echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
-            echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+      - build_client
 
       # Build frontend JS
       - run:
-          name: run yarn checks
+          name: Run yarn checks
           command: |
             cd client && yarn
             yarn testci
@@ -268,21 +229,9 @@ jobs:
     working_directory: ~/repo
 
     steps:
-      - checkout
+      - checkout_with_submodules
 
-      # Checkout submodules
-      - run: git submodule update --init --recursive
-
-      - restore_cache:
-          keys:
-            - 3.3-dependencies-{{ checksum "Gemfile.lock" }}
-            # fallback to using the latest cache if no exact match is found
-            - 3.3-dependencies-
-
-      # Install bundler version
-      - run:
-          name: install bundler version
-          command: gem install bundler:2.2.22
+      - restore_ruby_cache
 
       # Database setup
       - run:
@@ -292,29 +241,23 @@ jobs:
           environment:
             DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
 
-      # run i18n checks!
+      # Run i18n checks!
       - run:
-          name: run i18n checks
+          name: Run i18n checks
           command: |
             bundle exec i18n-tasks unused
             bundle exec i18n-tasks missing
             bundle exec rake factory_bot:lint
           environment:
             DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+
 workflows:
   version: 2
   build_and_test_and_lint:
     jobs:
-      - build
-      - lint:
-          requires:
-            - build
-      - jstest:
-          requires:
-            - build
-      - i18n:
-          requires:
-            - build
+      - lint
+      - jstest
+      - i18n
       - test:
           requires:
             - lint
