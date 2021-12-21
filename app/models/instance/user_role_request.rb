@@ -10,10 +10,8 @@ class Instance::UserRoleRequest < ApplicationRecord
       event :approve, transitions_to: :approved
       event :reject, transitions_to: :rejected
     end
-    state :approved do
-    end
-    state :rejected do
-    end
+    state :approved
+    state :rejected
   end
 
   validates :role, presence: true
