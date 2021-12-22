@@ -16,7 +16,9 @@ const intlProvider = new IntlProvider({ locale: 'en', timeZone }, {});
 const courseId = '1';
 
 const muiTheme = getMuiTheme();
+const intl = intlProvider.getChildContext().intl;
 const buildContextOptions = (store) => ({
+  // eslint-disable-next-line no-undef
   context: { intl, store, muiTheme },
   childContextTypes: {
     muiTheme: PropTypes.object,
@@ -28,7 +30,7 @@ const buildContextOptions = (store) => ({
 // Global variables
 global.courseId = courseId;
 global.window = window;
-global.intl = intlProvider.getChildContext().intl;
+global.intl = intl;
 global.intlShape = intlShape;
 global.muiTheme = muiTheme;
 global.$ = jQuery;

@@ -75,7 +75,15 @@ module.exports = {
         '**/*.spec.jsx',
       ],
       env: {
-        'jest/globals': true,
+        jest: true,
+      },
+      globals: {
+        courseId: true,
+        intl: true,
+        intlShape: true,
+        sleep: true,
+        buildContextOptions: true,
+        localStorage: true,
       },
       rules: {
         'jest/no-disabled-tests': 'error',
@@ -93,6 +101,16 @@ module.exports = {
         'jest/prefer-spy-on': 'error',
         'jest/valid-expect': 'error',
         'jest/no-deprecated-functions': 'error',
+        'react/no-find-dom-node': 'off',
+        'react/jsx-filename-extension': 'off',
+        'import/no-extraneous-dependencies': 'off',
+        'import/extensions': 'off',
+        'import/no-unresolved': [
+          'error',
+          {
+            ignore: ['utils/'],
+          },
+        ],
       },
     },
   ],
