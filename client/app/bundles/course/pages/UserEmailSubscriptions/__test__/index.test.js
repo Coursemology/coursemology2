@@ -1,4 +1,3 @@
-import React from 'react';
 import { mount } from 'enzyme';
 import CourseAPI from 'api/course';
 import storeCreator from 'course/store';
@@ -33,7 +32,7 @@ describe('<UserEmailSubscriptions />', () => {
     );
 
     const toggles = userEmailSubscriptions.find('Toggle');
-    expect(toggles.length).toBe(1);
+    expect(toggles).toHaveLength(1);
 
     const toggle = toggles.last();
     toggle.props().onToggle(null, true);
