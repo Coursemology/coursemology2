@@ -37,8 +37,8 @@ class Course::Assessment::Submission::UnsubmittingJob < ApplicationJob
     User.with_stamper(unsubmitter) do
       Course::Assessment::Submission.transaction do
         submissions.each do |submission|
-          submission.update('unmark' => 'true') if submission.graded?
-          submission.update('unsubmit' => 'true') unless submission.attempting?
+          submission.update!('unmark' => 'true') if submission.graded?
+          submission.update!('unsubmit' => 'true') unless submission.attempting?
         end
         question&.answers&.destroy_all
       end

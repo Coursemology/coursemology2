@@ -100,6 +100,22 @@ export function forceSubmitSubmissions(type) {
   };
 }
 
+export function sendAssessmentReminderEmail(assessmentId, type) {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.SEND_ASSESSMENT_REMINDER_REQUEST });
+    return CourseAPI.assessment.assessments
+      .remind(assessmentId, type)
+      .then(() => {
+        dispatch({ type: actionTypes.SEND_ASSESSMENT_REMINDER_SUCCESS });
+        dispatch(setNotification(translations.sendReminderEmailSuccess));
+      })
+      .catch(() => {
+        dispatch({ type: actionTypes.SEND_ASSESSMENT_REMINDER_FAILURE });
+        dispatch(setNotification(translations.requestFailure));
+      });
+  };
+}
+
 export function downloadSubmissions(type) {
   return (dispatch) => {
     dispatch({ type: actionTypes.DOWNLOAD_SUBMISSIONS_REQUEST });

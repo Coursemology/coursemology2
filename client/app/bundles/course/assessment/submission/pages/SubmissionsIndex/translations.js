@@ -67,6 +67,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.submissions.forceSubmit',
     defaultMessage: 'Force Submit Remaining',
   },
+  remind: {
+    id: 'course.assessment.submission.submissions.remind',
+    defaultMessage: 'Send Reminder Emails',
+  },
   includePhantoms: {
     id: 'course.assessment.submission.submissions.includePhantoms',
     defaultMessage: 'Include phantom users',

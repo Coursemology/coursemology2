@@ -169,5 +169,60 @@ RSpec.describe Course::Survey::ReminderService, type: :mailer do
         end
       end
     end
+
+    describe '#send_closing_reminder' do
+      subject do
+        Course::Survey::ReminderService.send_closing_reminder(survey, include_unsubscribed: true)
+      end
+
+      def set_survey_email_setting(setting, regular, phantom)
+        email_setting = course.
+                        setting_emails.
+                        where(component: :surveys,
+                              course_assessment_category_id: nil,
+                              setting: setting).first
+        email_setting.update!(regular: regular, phantom: phantom)
+      end
+
+      it 'notifies students who have not completed the survey and sends a summary to staff' do
+        subject
+        emails = ActionMailer::Base.deliveries.map(&:to).map(&:first)
+        expect(emails).to include(course_creator_email)
+        expect(emails).to include(unresponded_student_email)
+        expect(emails).to include(unresponded_student_phantom_email)
+
+        expect(emails).not_to include(responded_student_email)
+
+        find_email_body = lambda do |email|
+          ActionMailer::Base.deliveries.find { |mail| mail.to.last == email }.body.parts.first.body
+        end
+        student_email_body = find_email_body.call(unresponded_student_email)
+        staff_email_body = find_email_body.call(course_creator_email)
+
+        expect(student_email_body).to include('course.mailer.survey_closing_reminder_email.message')
+        expect(staff_email_body).to include('course.mailer.survey_closing_summary_email.message')
+      end
+
+      context 'when a user unsubscribes from the closing reminder but reminder is forced sent' do
+        before do
+          setting_email = course.
+                          setting_emails.
+                          where(component: :surveys,
+                                course_assessment_category_id: nil,
+                                setting: :closing_reminder).first
+          unresponded_student.email_unsubscriptions.create!(course_setting_email: setting_email)
+        end
+
+        it 'sends an email notification to the user' do
+          subject
+          emails = ActionMailer::Base.deliveries.map(&:to).map(&:first)
+          expect(emails).to include(course_creator_email)
+          expect(emails).to include(unresponded_student_phantom_email)
+
+          expect(emails).to include(unresponded_student_email)
+          expect(emails).not_to include(responded_student_email)
+        end
+      end
+    end
   end
 end

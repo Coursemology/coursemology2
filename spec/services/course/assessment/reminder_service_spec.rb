@@ -146,5 +146,54 @@ RSpec.describe Course::Assessment::ReminderService, type: :mailer do
         end
       end
     end
+
+    describe '#send_closing_reminder' do
+      let(:assessment) do
+        create(:assessment, :published, :with_text_response_question, course: course, end_at: 2.days.from_now)
+      end
+
+      def set_assessment_email_setting(setting, regular, phantom)
+        email_setting = course.
+                        setting_emails.
+                        where(component: :assessments,
+                              course_assessment_category_id: assessment.tab.category.id,
+                              setting: setting).first
+        email_setting.update!(regular: regular, phantom: phantom)
+      end
+
+      subject do
+        Course::Assessment::ReminderService.
+          send_closing_reminder(assessment, [student_regular.id], include_unsubscribed: true)
+      end
+
+      context 'when "assessment closing" emails are enabled and the reminder is forced sent to regular student' do
+        it 'sends email notifications to regular users and summary emails to staff' do
+          subject
+          emails = ActionMailer::Base.deliveries.map(&:to).map(&:first)
+          expect(emails).to include(course_creator_email)
+          expect(emails).to include(student_regular_email)
+          expect(emails).not_to include(student_phantom_email)
+        end
+      end
+
+      context 'when a regular user unsubscribes from the closing reminder but the reminder is forced sent' do
+        before do
+          setting_email = course.
+                          setting_emails.
+                          where(component: :assessments,
+                                course_assessment_category_id: assessment.tab.category.id,
+                                setting: :closing_reminder).first
+          student_regular.email_unsubscriptions.create!(course_setting_email: setting_email)
+        end
+
+        it 'sends an email notification to the user' do
+          subject
+          emails = ActionMailer::Base.deliveries.map(&:to).map(&:first)
+          expect(emails).to include(course_creator_email)
+          expect(emails).to include(student_regular_email)
+          expect(emails).not_to include(student_phantom_email)
+        end
+      end
+    end
   end
 end

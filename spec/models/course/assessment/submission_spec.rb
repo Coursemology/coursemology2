@@ -431,32 +431,6 @@ RSpec.describe Course::Assessment::Submission do
         expect(submission.awarded_at).not_to be_nil
       end
 
-      context 'when there are delayed annotation and comment' do
-        let!(:assessment_traits) { [:with_programming_question] }
-        let!(:submission1_traits) { :submitted }
-        let!(:submission) { submission1 }
-        let!(:answer) { submission.answers.first }
-        let!(:file) { answer.actable.files.first }
-        let!(:annotation) do
-          create(:course_assessment_answer_programming_file_annotation, file: file, line: 1)
-        end
-        let!(:annotation_post) do
-          create(:course_discussion_post, :delayed, topic: annotation.discussion_topic, creator: user)
-        end
-        let!(:submission_question) do
-          create(:course_assessment_submission_question,
-                 submission: submission, question: assessment.questions.first, course: course)
-        end
-        let!(:submission_question_post) do
-          create(:course_discussion_post, :delayed, topic: submission_question.discussion_topic, creator: user)
-        end
-        it 'is set as not delayed after publication' do
-          submission.publish!
-          expect(annotation_post.reload.is_delayed).to be(false)
-          expect(submission_question_post.reload.is_delayed).to be(false)
-        end
-      end
-
       it 'sends an email notification', type: :mailer do
         expect { submission.publish! }.to change { ActionMailer::Base.deliveries.count }.by(1)
       end
@@ -548,6 +522,32 @@ RSpec.describe Course::Assessment::Submission do
           end
         end
       end
+
+      context 'when there are delayed annotations and comments' do
+        let!(:assessment_traits) { [:with_programming_question] }
+        let!(:submission1_traits) { :submitted }
+        let!(:submission) { submission1 }
+        let!(:answer) { submission.answers.first }
+        let!(:file) { answer.actable.files.first }
+        let!(:annotation) do
+          create(:course_assessment_answer_programming_file_annotation, file: file, line: 1)
+        end
+        let!(:annotation_post) do
+          create(:course_discussion_post, :delayed, topic: annotation.discussion_topic, creator: user)
+        end
+        let!(:submission_question) do
+          create(:course_assessment_submission_question,
+                 submission: submission, question: assessment.questions.first, course: course)
+        end
+        let!(:submission_question_post) do
+          create(:course_discussion_post, :delayed, topic: submission_question.discussion_topic, creator: user)
+        end
+        it 'is set as not delayed after publication' do
+          submission.publish!
+          expect(annotation_post.reload.is_delayed).to be(false)
+          expect(submission_question_post.reload.is_delayed).to be(false)
+        end
+      end
     end
 
     describe '#auto_grade!' do
@@ -590,7 +590,7 @@ RSpec.describe Course::Assessment::Submission do
 
       subject { submission1 }
 
-      context 'when the submission is submitted' do
+      context 'when the submission is in submitted state' do
         let(:submission1_traits) { :submitted }
 
         it 'resets the experience points awarded and submitted_at time' do
@@ -600,10 +600,82 @@ RSpec.describe Course::Assessment::Submission do
           expect(subject.submitted_at).to be_nil
         end
 
-        it 'sets all current answers in the submission to attempting' do
+        it 'duplicates all submitted current answers in the submission to attempting' do
+          # In this state, there are 6 current answers and 1 non-current answer
+          expect(subject.answers.length).to eq(7)
+
           unsubmit_and_save_subject
+
+          # In this state, there are 6 current answers and 7 non-current answer
+          expect(subject.answers.length).to eq(13)
           expect(subject.current_answers.all?(&:attempting?)).to be(true)
           expect(earlier_answer.reload).to be_graded
+
+          subject.questions.each do |question|
+            all_answers = subject.answers.where(question: question)
+            current_answer = all_answers.current_answers.select(&:attempting?).first
+            last_non_current_answer = all_answers.reject(&:current_answer?).reject(&:attempting?).last
+            expect(last_non_current_answer).not_to eq('attempting')
+            expect(current_answer.specific.compare_answer(last_non_current_answer.specific)).to be_truthy
+          end
+        end
+      end
+
+      context 'when the submission gets unsubmitted and submitted again without change in answers' do
+        let(:submission1_traits) { :submitted }
+
+        it 'duplicates all submitted current answers in the submission to attempting' do
+          current_answer_ids_before = subject.current_answers.pluck(:id)
+          unsubmit_and_save_subject
+          current_answer_ids_intermediate = subject.current_answers.pluck(:id)
+          subject.finalise!
+          current_answer_ids_after = subject.current_answers.pluck(:id)
+
+          expect(subject.answers.length).to eq(7)
+          expect(subject.current_answers.length).to eq(6)
+
+          expect(current_answer_ids_before == current_answer_ids_after).to be_truthy
+          expect(current_answer_ids_before == current_answer_ids_intermediate).to be_falsey
+          expect(current_answer_ids_after == current_answer_ids_intermediate).to be_falsey
+        end
+      end
+
+      context 'when the submission gets unsubmitted and submitted again with change in answers' do
+        let(:submission1_traits) { :submitted }
+
+        it 'duplicates all submitted current answers in the submission to attempting' do
+          current_answer_ids_before = subject.current_answers.pluck(:id)
+          unsubmit_and_save_subject
+          current_answer_ids_intermediate = subject.current_answers.pluck(:id)
+
+          # Update/change the answers of all current_answers
+          subject.current_answers.each do |current_answer|
+            answer = current_answer.specific
+            case answer.class.name
+            when 'Course::Assessment::Answer::MultipleResponse'
+              question = answer.question.actable
+              correct_options = question.options.select(&:correct)
+              correct_options.each { |option| answer.options << option }
+            when 'Course::Assessment::Answer::Programming'
+              answer.files.each do |file|
+                file.update(content: 'updated')
+              end
+            when 'Course::Assessment::Answer::TextResponse'
+              answer.update(answer_text: 'updated')
+            when 'Course::Assessment::Answer::ForumPostResponse'
+              answer.update(answer_text: '<div>yyy</div>')
+            end
+          end
+
+          subject.finalise!
+          current_answer_ids_after = subject.current_answers.pluck(:id)
+
+          expect(subject.answers.length).to eq(13)
+          expect(subject.current_answers.length).to eq(6)
+
+          expect(current_answer_ids_before == current_answer_ids_after).to be_falsey
+          expect(current_answer_ids_before == current_answer_ids_intermediate).to be_falsey
+          expect(current_answer_ids_after == current_answer_ids_intermediate).to be_falsey
         end
       end
 
