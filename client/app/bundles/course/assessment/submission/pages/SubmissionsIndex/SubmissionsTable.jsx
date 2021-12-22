@@ -91,13 +91,6 @@ export default class SubmissionsTable extends Component {
     );
   }
 
-  canDeleteAll() {
-    const { submissions } = this.props;
-    return submissions.some(
-      (s) => s.workflowState !== workflowStates.Unstarted,
-    );
-  }
-
   renderRowUsers() {
     const {
       dispatch,
@@ -301,27 +294,6 @@ export default class SubmissionsTable extends Component {
           />
         ) : null}
       </IconMenu>
-    );
-  }
-
-  renderUnsubmitAllConfirmation() {
-    const { handleUnsubmitAll, confirmDialogValue } = this.props;
-    const { unsubmitAllConfirmation } = this.state;
-    return (
-      <ConfirmationDialog
-        open={unsubmitAllConfirmation}
-        onCancel={() => this.setState({ unsubmitAllConfirmation: false })}
-        onConfirm={() => {
-          this.setState({ unsubmitAllConfirmation: false });
-          handleUnsubmitAll();
-        }}
-        message={
-          <FormattedMessage
-            {...translations.unsubmitAllConfirmation}
-            values={{ users: confirmDialogValue }}
-          />
-        }
-      />
     );
   }
 

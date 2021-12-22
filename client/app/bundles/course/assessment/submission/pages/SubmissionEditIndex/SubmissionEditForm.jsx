@@ -1,4 +1,4 @@
-import { Component, Suspense } from 'react';
+import { Component, Suspense, lazy } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { injectIntl, intlShape } from 'react-intl';
@@ -37,7 +37,7 @@ import { formNames, questionTypes } from '../../constants';
 import translations from '../../translations';
 import submissionFormValidate from './submissionFormValidate';
 
-const Comments = React.lazy(() =>
+const Comments = lazy(() =>
   import(/* webpackChunkName: "comment" */ '../../containers/Comments'),
 );
 

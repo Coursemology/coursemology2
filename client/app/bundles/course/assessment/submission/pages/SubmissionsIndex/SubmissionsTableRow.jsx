@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactTooltip from 'react-tooltip';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import moment from 'lib/moment';
@@ -161,65 +162,6 @@ export default class SubmissionsTableRow extends React.Component {
     } = this.props;
     return (
       isStatisticsDownloading || isDownloading || isDeleting || isUnsubmitting
-    );
-  }
-
-  renderDeleteButton(submission) {
-    const { assessment } = this.props;
-    const disabled =
-      this.disableButtons() ||
-      submission.workflowState === workflowStates.Unstarted;
-    if (
-      !assessment.canDeleteAllSubmissions &&
-      !submission.courseUser.isCurrentUser
-    )
-      return null;
-
-    return (
-      <span
-        className="delete-button"
-        data-for={`delete-button-${submission.id}`}
-        data-tip
-      >
-        <IconButton
-          id={`delete-button-${submission.id}`}
-          onClick={() => this.setState({ deleteConfirmation: true })}
-          disabled={disabled}
-        >
-          <DeleteIcon color={red900} />
-        </IconButton>
-        <ReactTooltip id={`delete-button-${submission.id}`} effect="solid">
-          <FormattedMessage {...submissionsTranslations.deleteSubmission} />
-        </ReactTooltip>
-      </span>
-    );
-  }
-
-  renderDeleteDialog(submission) {
-    const { deleteConfirmation } = this.state;
-    const { dispatch } = this.props;
-    const values = { name: submission.courseUser.name };
-    const successMessage = (
-      <FormattedMessage
-        {...translations.deleteSubmissionSuccess}
-        values={values}
-      />
-    );
-    return (
-      <ConfirmationDialog
-        open={deleteConfirmation}
-        onCancel={() => this.setState({ deleteConfirmation: false })}
-        onConfirm={() => {
-          dispatch(deleteSubmission(submission.id, successMessage));
-          this.setState({ deleteConfirmation: false });
-        }}
-        message={
-          <FormattedMessage
-            {...submissionsTranslations.deleteConfirmation}
-            values={{ name: submission.courseUser.name }}
-          />
-        }
-      />
     );
   }
 
