@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_15_055726) do
+ActiveRecord::Schema.define(version: 2021_12_21_163337) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -911,6 +911,7 @@ ActiveRecord::Schema.define(version: 2021_12_15_055726) do
     t.boolean "allow_modify_after_submit", default: false, null: false
     t.datetime "closing_reminded_at"
     t.boolean "allow_response_after_end", default: false, null: false
+    t.integer "satisfiability_type", default: 0
     t.index ["creator_id"], name: "fk__course_surveys_creator_id"
     t.index ["updater_id"], name: "fk__course_surveys_updater_id"
   end
