@@ -11,7 +11,7 @@ div.dropdown.pull-right
       - if component_enabled?(condition)
         - condition_name = condition.constantize.model_name
         li = link_to condition_name.human,
-                     [:new, current_course, conditional, condition_name.singular_route_key]
+                     [:new, current_course, conditional, condition_name.singular_route_key.to_sym]
 
 table.table.table-hover
   thead
