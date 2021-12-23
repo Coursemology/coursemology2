@@ -23,6 +23,14 @@ const translations = defineMessages({
     id: 'lib.components.form.DateTimePicker.timePlaceholder',
     defaultMessage: 'hh:mm',
   },
+  invalidDate: {
+    id: 'lib.components.form.DateTimePicker.invalidDate',
+    defaultMessage: 'Invalid date',
+  },
+  invalidTime: {
+    id: 'lib.components.form.DateTimePicker.invalidTime',
+    defaultMessage: 'Invalid time',
+  },
 });
 
 const styleConstants = {
@@ -103,13 +111,36 @@ class DateTimePicker extends PureComponent {
 
   updateDate = (newDate) => {
     if (newDate === null) {
+      this.setState({ dateError: '' });
       this.updateDateTime(null);
       return;
     }
     const { date, months, years } = moment(newDate).toObject();
+    const toCheck = [date, months, years];
+
+    // We will only continue processing if date, months and years are ALL specified.
+    // The reasons for this are:
+    // - If the user is manually entering the date via keyboard, then until the user
+    //   finishes typing the entire date, some of the fields above will be NaN.
+    // - If we allow the above situation to proceed, this.props.value will be "corrupted"
+    //   and become an invalid date.
+    // - On the other hand, if we return early until all fields are specified, we will
+    //   naturally obtain a valid date once all fields are here.
+    // - Note that picking the date via the datepicker isn't affected, since all 3 fields
+    //   will be specified for such a situation.
+    if (!toCheck.every((num) => num != null && !Number.isNaN(num))) {
+      // We will not clear the current datetime for now, since that will be very jarring
+      // when the user deletes one character and the entire field resets to dd-mm-yyyy.
+      this.setState({
+        dateError: this.props.intl.formatMessage(translations.invalidDate),
+      });
+      return;
+    }
+
     const newDateTime = this.props.value
-      ? moment(this.props.value).set({ date, months, years })
+      ? moment({ date, months, years })
       : moment({ date, months, years });
+    this.setState({ dateError: '' });
     this.updateDateTime(newDateTime.toDate());
   };
 
@@ -127,10 +158,33 @@ class DateTimePicker extends PureComponent {
 
   updateTime = (newTime) => {
     if (newTime === null) {
-      this.updateDateTime(null);
+      // If there is already a date object, we don't want to just clear it, which
+      // will be very disruptive if the user is also using the Date field, since
+      // their date value will also just disappear.
+      //
+      // Instead, we will set it to 00:00.
+      if (!this.props.value) {
+        this.updateDateTime(null);
+        return;
+      }
+      const resetDateTime = moment(this.props.value).set({
+        hours: 0,
+        minutes: 0,
+      });
+      this.updateDateTime(resetDateTime.toDate());
       return;
     }
     const { hours, minutes } = moment(newTime).toObject();
+    const toCheck = [hours, minutes];
+
+    // See comment under updateDate on rationale for early termination here.
+    if (!toCheck.every((num) => num != null && !Number.isNaN(num))) {
+      this.setState({
+        timeError: this.props.intl.formatMessage(translations.invalidTime),
+      });
+      return;
+    }
+
     const newDateTime = this.props.value
       ? moment(this.props.value).set({ hours, minutes })
       : moment({ hours, minutes });
@@ -167,9 +221,10 @@ class DateTimePicker extends PureComponent {
               rightArrowIcon={<KeyboardArrowRight />}
               format="DD-MM-YYYY"
               label={floatingLabelText}
-              emptyLabel={intl.formatMessage(translations.datePlaceholder)}
+              placeholder={intl.formatMessage(translations.datePlaceholder)}
               error={!!errorText || !!this.state.dateError}
-              helperText={errorText || this.state.dateError}
+              // We want this component's error message to take priority over the parent's
+              helperText={this.state.dateError || errorText}
               value={value || null}
             />
             <KeyboardTimePicker
@@ -179,11 +234,12 @@ class DateTimePicker extends PureComponent {
               clearable={clearable}
               keyboard="true"
               keyboardIcon={<Schedule style={styles.pickerIcon} />}
-              emptyLabel={intl.formatMessage(translations.timePlaceholder)}
+              placeholder={intl.formatMessage(translations.timePlaceholder)}
+              label="24-hr clock"
               error={!!this.state.timeError}
               helperText={this.state.timeError}
               value={value || null}
-              format="HH:mm AA"
+              format="HH:mm"
             />
           </div>
         </MuiThemeProvider>
