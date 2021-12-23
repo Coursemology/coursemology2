@@ -69,7 +69,7 @@ const surveyData = {
  * Wraps a component into a DndProvider that uses the TestBackend.
  */
 function getSurveyShowWithTestBackend() {
-  const manager = createDragDropManager(TestBackend, {}, {});
+  const manager = createDragDropManager(TestBackend);
   class SurveyShowWithTestBackend extends Component {
     render() {
       return <ConnectedSurveyShow manager={manager} {...this.props} />;

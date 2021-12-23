@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { createDragDropManager } from 'dnd-core';
 import Subheader from 'material-ui/Subheader';
 import surveyTranslations from 'course/survey/translations';
 import { surveyShape } from 'course/survey/propTypes';
@@ -59,11 +60,9 @@ class SurveyShow extends Component {
 
   render() {
     const { survey, disabled, courseId, manager } = this.props;
+    const managerToUse = manager ?? createDragDropManager(HTML5Backend);
     return (
-      <DndProvider
-        backend={manager ? undefined : HTML5Backend}
-        manager={manager}
-      >
+      <DndProvider manager={managerToUse}>
         <SurveyDetails {...{ survey, courseId, disabled }} />
         {this.renderBody(survey)}
       </DndProvider>
