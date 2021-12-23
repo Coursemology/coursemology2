@@ -58,9 +58,12 @@ class SurveyShow extends Component {
   }
 
   render() {
-    const { survey, disabled, courseId } = this.props;
+    const { survey, disabled, courseId, manager } = this.props;
     return (
-      <DndProvider backend={HTML5Backend}>
+      <DndProvider
+        backend={manager ? undefined : HTML5Backend}
+        manager={manager}
+      >
         <SurveyDetails {...{ survey, courseId, disabled }} />
         {this.renderBody(survey)}
       </DndProvider>
@@ -76,6 +79,9 @@ SurveyShow.propTypes = {
   disabled: PropTypes.bool.isRequired,
   courseId: PropTypes.string.isRequired,
   surveyId: PropTypes.string.isRequired,
+
+  // Used for injecting dependencies for testing DnD
+  manager: PropTypes.object,
 };
 
 const mapStateToProps = (state) => ({

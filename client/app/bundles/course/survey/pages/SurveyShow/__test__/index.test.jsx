@@ -1,11 +1,11 @@
-/* eslint-disable new-cap */
 import { Component } from 'react';
 import { mount } from 'enzyme';
 import { connect } from 'react-redux';
-import CourseAPI from 'api/course';
-import MockAdapter from 'axios-mock-adapter';
 import { TestBackend } from 'react-dnd-test-backend';
-import { DndProvider } from 'react-dnd';
+import { createDragDropManager } from 'dnd-core';
+import MockAdapter from 'axios-mock-adapter';
+
+import CourseAPI from 'api/course';
 import storeCreator from 'course/survey/store';
 import { ConnectedSurveyShow } from '../index';
 
@@ -66,20 +66,17 @@ const surveyData = {
 };
 
 /**
- * Wraps a component into a DragDropContext that uses the TestBackend.
+ * Wraps a component into a DndProvider that uses the TestBackend.
  */
-function wrapInTestContext(DecoratedComponent) {
-  class TestContextContainer extends Component {
+function getSurveyShowWithTestBackend() {
+  const manager = createDragDropManager(TestBackend, {}, {});
+  class SurveyShowWithTestBackend extends Component {
     render() {
-      return (
-        <DndProvider backend={TestBackend}>
-          <DecoratedComponent {...this.props} />
-        </DndProvider>
-      );
+      return <ConnectedSurveyShow manager={manager} {...this.props} />;
     }
   }
   const mapStateToProps = (state) => ({ survey: state.surveys[0] || {} });
-  return connect(mapStateToProps)(TestContextContainer);
+  return [connect(mapStateToProps)(SurveyShowWithTestBackend), manager];
 }
 
 beforeEach(() => {
@@ -100,9 +97,9 @@ describe('<SurveyShow />', () => {
     // Mount showPage and wait for survey data to load
     window.history.pushState({}, '', surveyUrl);
     const store = storeCreator({ surveys: {} });
-    const WrappedSurveyShow = wrapInTestContext(ConnectedSurveyShow);
+    const [SurveyShowWithTestBackend, manager] = getSurveyShowWithTestBackend();
     const showPage = mount(
-      <WrappedSurveyShow
+      <SurveyShowWithTestBackend
         {...{ courseId, surveyId: surveyData.id.toString() }}
       />,
       buildContextOptions(store),
@@ -138,13 +135,7 @@ describe('<SurveyShow />', () => {
     });
 
     // Simulate dragging first question down past the mid-line of the second question
-    const dragDropContext = showPage
-      .find('DragDropContext(TestContextContainer)')
-      .first();
-    const dragDropBackend = dragDropContext
-      .instance()
-      .getManager()
-      .getBackend();
+    const dragDropBackend = manager.getBackend();
     const sourceQuestionHandlerId = sourceQuestion
       .instance()
       .getDecoratedComponentInstance()
