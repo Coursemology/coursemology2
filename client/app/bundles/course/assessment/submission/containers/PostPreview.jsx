@@ -29,7 +29,7 @@ class VisiblePostPreview extends Component {
 }
 
 VisiblePostPreview.propTypes = {
-  style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  style: PropTypes.object,
   annotation: annotationShape.isRequired, // eslint-disable-line react/no-unused-prop-types
   creator: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,

@@ -5,15 +5,15 @@ export default createComponent(
   Checkbox,
   ({
     input: { onChange, value, ...inputProps },
-    meta, // eslint-disable-line no-unused-vars
-    intl, // eslint-disable-line no-unused-vars
+    meta: _meta,
+    intl: _intl,
     onCheck: onCheckFunc,
     ...props
   }) => ({
     ...inputProps,
     ...props,
     checked: !!value,
-    onCheck: (event, isInputChecked) => {
+    onCheck: (_event, isInputChecked) => {
       onChange(isInputChecked);
       if (onCheckFunc && typeof onCheckFunc === 'function') {
         onCheckFunc(isInputChecked);

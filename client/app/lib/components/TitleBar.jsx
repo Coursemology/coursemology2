@@ -21,7 +21,7 @@ const TitleBar = ({ style, iconElementLeft, ...props }) => (
 
 TitleBar.propTypes = {
   onClick: PropTypes.func,
-  style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  style: PropTypes.object,
   iconElementLeft: PropTypes.node,
 };
 

@@ -6,7 +6,6 @@ class RailsConfirmationDialog extends Component {
   constructor(props) {
     super(props);
     this.state = { open: true, disableButtons: false };
-    this.onConfirm = this.onConfirm.bind(this);
     this.onConfirmSecondary = this.props.onConfirmSecondaryCallback
       ? this.onConfirmSecondary.bind(this)
       : null;

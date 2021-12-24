@@ -60,7 +60,6 @@ class SingleFileInput extends Component {
   };
 
   updateStore = (file) => {
-    // eslint-disable-line react/sort-comp
     const {
       input: { onChange },
       value: { url, name },

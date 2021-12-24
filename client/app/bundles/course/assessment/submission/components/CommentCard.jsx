@@ -8,10 +8,8 @@ import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import { red500, grey100, orange100 } from 'material-ui/styles/colors';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import MaterialSummernote from 'lib/components/MaterialSummernote';
-/* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import moment from 'lib/moment';
-/* eslint-enable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 
 import { postShape } from '../propTypes';
 

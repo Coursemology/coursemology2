@@ -1,11 +1,11 @@
-import * as React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import shallowUntil from '../shallowUntil';
 
 describe('#shallowUntil', () => {
   const Div = () => <div />;
-  const hoc = (Component) => {
-    const component = () => <Component />;
+  const hoc = (Comp) => {
+    const component = () => <Comp />;
     return component;
   };
 
@@ -48,7 +48,7 @@ describe('#shallowUntil', () => {
     const Foo = () => <Div />;
     Foo.contextTypes = { open: PropTypes.bool.isRequired };
 
-    class Bar extends React.Component {
+    class Bar extends Component {
       getChildContext = () => ({ open: true });
 
       render = () => <Foo />;

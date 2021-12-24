@@ -190,7 +190,7 @@ const questionTarget = {
     }
 
     // Only perform the move when source question has been dragged past half of the target question
-    const hoverBoundingRect = component.DOMNode.getBoundingClientRect(); // .getDecoratedComponentInstance()
+    const hoverBoundingRect = component.DOMNode.getBoundingClientRect();
     const hoverMiddleY = (hoverBoundingRect.bottom + hoverBoundingRect.top) / 2;
     const pointerY = monitor.getClientOffset().y;
     const draggedUpwardPastMidLine =

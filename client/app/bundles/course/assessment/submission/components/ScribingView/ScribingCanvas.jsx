@@ -807,7 +807,7 @@ export default class ScribingCanvas extends Component {
   });
 
   initializeCanvas(answerId, imageUrl) {
-    this.image = new Image(); // eslint-disable-line no-undef
+    this.image = new Image();
     this.image.src = imageUrl;
 
     this.image.onload = () => {
@@ -904,12 +904,10 @@ export default class ScribingCanvas extends Component {
         // Create layer for each user's scribble
         // Scribbles in layers have selection disabled
         if (scribble.creator_id !== userId) {
-          // eslint-disable-next-line no-undef
           const scribbleGroup = new fabric.Group(fabricObjs);
           scribbleGroup.selectable = false;
 
           const showLayer = (isShown) => {
-            // eslint-disable-next-line no-param-reassign
             scribbleGroup._objects.forEach((obj) => obj.setVisible(isShown));
             this.canvas.renderAll();
           };

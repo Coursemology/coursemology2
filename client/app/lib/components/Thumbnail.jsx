@@ -49,7 +49,6 @@ class Thumbnail extends PureComponent {
   }
 
   render() {
-    // eslint-disable-next-line no-unused-vars
     const {
       src,
       alt,

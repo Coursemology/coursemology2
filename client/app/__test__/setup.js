@@ -18,7 +18,6 @@ const courseId = '1';
 const muiTheme = getMuiTheme();
 const intl = intlProvider.getChildContext().intl;
 const buildContextOptions = (store) => ({
-  // eslint-disable-next-line no-undef
   context: { intl, store, muiTheme },
   childContextTypes: {
     muiTheme: PropTypes.object,

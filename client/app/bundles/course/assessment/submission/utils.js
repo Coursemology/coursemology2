@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/extensions, import/no-extraneous-dependencies, import/no-unresolved
 import moment from 'lib/moment';
 
 export function arrayToObjectById(array) {

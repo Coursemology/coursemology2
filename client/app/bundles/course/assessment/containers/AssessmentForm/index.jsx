@@ -214,7 +214,8 @@ class AssessmentForm extends Component {
             primaryText={<FormattedMessage {...translations.singlePage} />}
           />
           <MenuItem
-            value={true} // eslint-disable-line
+            // eslint-disable-next-line react/jsx-boolean-value
+            value={true}
             primaryText={<FormattedMessage {...translations.tabbedView} />}
           />
         </Field>
