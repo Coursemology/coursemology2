@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import { mount } from 'enzyme';
 import { connect } from 'react-redux';
 import { TestBackend } from 'react-dnd-test-backend';
@@ -70,11 +69,11 @@ const surveyData = {
  */
 function getSurveyShowWithTestBackend() {
   const manager = createDragDropManager(TestBackend);
-  class SurveyShowWithTestBackend extends Component {
-    render() {
-      return <ConnectedSurveyShow manager={manager} {...this.props} />;
-    }
-  }
+
+  const SurveyShowWithTestBackend = (props) => (
+    <ConnectedSurveyShow manager={manager} {...props} />
+  );
+
   const mapStateToProps = (state) => ({ survey: state.surveys[0] || {} });
   return [connect(mapStateToProps)(SurveyShowWithTestBackend), manager];
 }

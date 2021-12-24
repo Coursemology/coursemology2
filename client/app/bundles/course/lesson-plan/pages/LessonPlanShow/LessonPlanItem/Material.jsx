@@ -1,4 +1,3 @@
-import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Description from 'material-ui/svg-icons/action/description';
 import { grey700 } from 'material-ui/styles/colors';
@@ -20,17 +19,15 @@ const styles = {
   },
 };
 
-class Material extends PureComponent {
-  render() {
-    const { name, url } = this.props;
-    return (
-      <div style={styles.material}>
-        <Description style={styles.icon} color={grey700} />
-        <a href={url}>{name}</a>
-      </div>
-    );
-  }
-}
+const Material = (props) => {
+  const { name, url } = props;
+  return (
+    <div style={styles.material}>
+      <Description style={styles.icon} color={grey700} />
+      <a href={url}>{name}</a>
+    </div>
+  );
+};
 
 Material.propTypes = {
   name: PropTypes.string.isRequired,

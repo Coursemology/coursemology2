@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import Dialog from 'material-ui/Dialog';
@@ -16,32 +15,30 @@ const styles = {
   },
 };
 
-class Popup extends Component {
-  render() {
-    const { title, children, actionButtons, onDismiss } = this.props;
-    const dismissButton = (
-      <FlatButton
-        primary
-        label={<FormattedMessage {...translations.dismiss} />}
-        onClick={onDismiss}
-      />
-    );
+const Popup = (props) => {
+  const { title, children, actionButtons, onDismiss } = props;
+  const dismissButton = (
+    <FlatButton
+      primary
+      label={<FormattedMessage {...translations.dismiss} />}
+      onClick={onDismiss}
+    />
+  );
 
-    return (
-      <Dialog
-        open
-        title={title}
-        actions={[...actionButtons, dismissButton]}
-        contentStyle={styles.dialog}
-        titleStyle={styles.centralise}
-        bodyStyle={styles.centralise}
-        onRequestClose={this.props.onDismiss}
-      >
-        {children}
-      </Dialog>
-    );
-  }
-}
+  return (
+    <Dialog
+      open
+      title={title}
+      actions={[...actionButtons, dismissButton]}
+      contentStyle={styles.dialog}
+      titleStyle={styles.centralise}
+      bodyStyle={styles.centralise}
+      onRequestClose={props.onDismiss}
+    >
+      {children}
+    </Dialog>
+  );
+};
 
 Popup.propTypes = {
   title: PropTypes.string,

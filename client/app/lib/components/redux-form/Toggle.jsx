@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
 import MaterialToggle from 'material-ui/Toggle';
 import { red500 } from 'material-ui/styles/colors';
@@ -9,18 +8,15 @@ const errorStyle = {
   color: red500,
 };
 
-// Toggle implementation with an error displayed at the bottom.
-class Toggle extends Component {
-  render() {
-    const { errorText, ...props } = this.props;
-    return (
-      <div>
-        <MaterialToggle {...props} />
-        {errorText && <div style={errorStyle}>{errorText}</div>}
-      </div>
-    );
-  }
-}
+const Toggle = (props) => {
+  const { errorText, ...childProps } = props;
+  return (
+    <div>
+      <MaterialToggle {...childProps} />
+      {errorText && <div style={errorStyle}>{errorText}</div>}
+    </div>
+  );
+};
 
 Toggle.propTypes = {
   errorText: PropTypes.string,

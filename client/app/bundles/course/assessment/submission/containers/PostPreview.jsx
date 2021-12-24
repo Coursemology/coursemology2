@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import stripHtmlTags from 'lib/helpers/htmlFormatHelpers';
@@ -16,17 +15,15 @@ const styles = {
   },
 };
 
-class VisiblePostPreview extends Component {
-  render() {
-    const { style, creator, text } = this.props;
-    return (
-      <div style={{ ...styles.postPreview, ...style }}>
-        <span className="fa fa-chevron-down" style={styles.chevron} />
-        {`${creator}: ${stripHtmlTags(text)}`}
-      </div>
-    );
-  }
-}
+const VisiblePostPreview = (props) => {
+  const { style, creator, text } = props;
+  return (
+    <div style={{ ...styles.postPreview, ...style }}>
+      <span className="fa fa-chevron-down" style={styles.chevron} />
+      {`${creator}: ${stripHtmlTags(text)}`}
+    </div>
+  );
+};
 
 VisiblePostPreview.propTypes = {
   style: PropTypes.object,

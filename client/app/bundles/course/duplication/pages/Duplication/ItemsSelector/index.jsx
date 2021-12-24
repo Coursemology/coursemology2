@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -28,38 +27,36 @@ const styles = {
   },
 };
 
-class ItemsSelector extends Component {
-  static panelComponentMap = {
-    [itemSelectorPanels.ASSESSMENTS]: AssessmentsSelector,
-    [itemSelectorPanels.SURVEYS]: SurveysSelector,
-    [itemSelectorPanels.ACHIEVEMENTS]: AchievementsSelector,
-    [itemSelectorPanels.MATERIALS]: MaterialsSelector,
-    [itemSelectorPanels.VIDEOS]: VideosSelector,
-  };
+const ItemsSelector = (props) => {
+  const { currentPanel, destinationCourse } = props;
 
-  render() {
-    const { currentPanel, destinationCourse } = this.props;
-
-    if (!currentPanel) {
-      return (
-        <div style={styles.message}>
-          <FormattedMessage {...translations.pleaseSelectItems} />
-        </div>
-      );
-    }
-
-    if (!destinationCourse.enabledComponents.includes(currentPanel)) {
-      return (
-        <div style={styles.message}>
-          <FormattedMessage {...translations.componentDisabled} />
-        </div>
-      );
-    }
-
-    const CurrentPanel = ItemsSelector.panelComponentMap[currentPanel];
-    return <CurrentPanel />;
+  if (!currentPanel) {
+    return (
+      <div style={styles.message}>
+        <FormattedMessage {...translations.pleaseSelectItems} />
+      </div>
+    );
   }
-}
+
+  if (!destinationCourse.enabledComponents.includes(currentPanel)) {
+    return (
+      <div style={styles.message}>
+        <FormattedMessage {...translations.componentDisabled} />
+      </div>
+    );
+  }
+
+  const CurrentPanel = ItemsSelector.panelComponentMap[currentPanel];
+  return <CurrentPanel />;
+};
+
+ItemsSelector.panelComponentMap = {
+  [itemSelectorPanels.ASSESSMENTS]: AssessmentsSelector,
+  [itemSelectorPanels.SURVEYS]: SurveysSelector,
+  [itemSelectorPanels.ACHIEVEMENTS]: AchievementsSelector,
+  [itemSelectorPanels.MATERIALS]: MaterialsSelector,
+  [itemSelectorPanels.VIDEOS]: VideosSelector,
+};
 
 ItemsSelector.propTypes = {
   currentPanel: PropTypes.string,

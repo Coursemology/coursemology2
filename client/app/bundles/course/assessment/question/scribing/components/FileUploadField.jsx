@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 
@@ -12,23 +11,21 @@ import { questionNamePrefix, questionIdPrefix } from '../constants';
 
 const mapProps = (props) => ({ ...mapError(props) });
 
-class FileUploadField extends Component {
-  render() {
-    const { field, label, isLoading, validate } = this.props;
-    return (
-      <Field
-        name={questionNamePrefix + field}
-        id={questionIdPrefix + field}
-        component={SingleFileInput}
-        previewComponent={ImagePreview}
-        label={label}
-        disabled={isLoading}
-        accept="image/gif, image/png, image/jpeg, image/pjpeg, application/pdf"
-        validate={validate}
-      />
-    );
-  }
-}
+const FileUploadField = (props) => {
+  const { field, label, isLoading, validate } = props;
+  return (
+    <Field
+      name={questionNamePrefix + field}
+      id={questionIdPrefix + field}
+      component={SingleFileInput}
+      previewComponent={ImagePreview}
+      label={label}
+      disabled={isLoading}
+      accept="image/gif, image/png, image/jpeg, image/pjpeg, application/pdf"
+      validate={validate}
+    />
+  );
+};
 
 FileUploadField.propTypes = {
   field: PropTypes.string.isRequired,

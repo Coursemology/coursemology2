@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
 
 const tooltipStyle = {
@@ -55,37 +54,37 @@ const placementStyles = {
   },
 };
 
-export default class OverlayTooltip extends Component {
-  render() {
-    const {
-      style,
-      placement,
-      arrowOffsetLeft: left = placementStyles[placement].arrow.left,
-      arrowOffsetTop: top = placementStyles[placement].arrow.top,
-      children,
-    } = this.props;
+const OverlayTooltip = (props) => {
+  const {
+    style,
+    placement,
+    arrowOffsetLeft: left = placementStyles[placement].arrow.left,
+    arrowOffsetTop: top = placementStyles[placement].arrow.top,
+    children,
+  } = props;
 
-    return (
+  return (
+    <div
+      style={{
+        ...tooltipStyle,
+        ...placementStyles[placement].tooltip,
+        ...style,
+      }}
+    >
       <div
         style={{
-          ...tooltipStyle,
-          ...placementStyles[placement].tooltip,
-          ...style,
+          ...tooltipArrowStyle,
+          ...placementStyles[placement].arrow,
+          left,
+          top,
         }}
-      >
-        <div
-          style={{
-            ...tooltipArrowStyle,
-            ...placementStyles[placement].arrow,
-            left,
-            top,
-          }}
-        />
-        <div style={tooltipInnerStyle}>{children}</div>
-      </div>
-    );
-  }
-}
+      />
+      <div style={tooltipInnerStyle}>{children}</div>
+    </div>
+  );
+};
+
+export default OverlayTooltip;
 
 OverlayTooltip.propTypes = {
   style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
