@@ -80,22 +80,6 @@ export default class SelectedPostCard extends React.Component {
     }));
   }
 
-  renderTrashIcon() {
-    if (this.props.readOnly) {
-      return null;
-    }
-    return (
-      <button
-        className="pull-right"
-        style={styles.trashButton}
-        onClick={() => this.props.onRemovePostPack()}
-        type="button"
-      >
-        <i className="fa fa-trash" />
-      </button>
-    );
-  }
-
   renderLabel() {
     const { postPack } = this.props;
     const { forum, topic } = postPack;
@@ -131,6 +115,22 @@ export default class SelectedPostCard extends React.Component {
           </span>
         )}
       </div>
+    );
+  }
+
+  renderTrashIcon() {
+    if (this.props.readOnly) {
+      return null;
+    }
+    return (
+      <button
+        className="pull-right"
+        style={styles.trashButton}
+        onClick={() => this.props.onRemovePostPack()}
+        type="button"
+      >
+        <i className="fa fa-trash" />
+      </button>
     );
   }
 

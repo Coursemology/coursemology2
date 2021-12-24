@@ -137,6 +137,70 @@ export default class SubmissionsTableRow extends React.Component {
     return `${gradeString} / ${maximumGradeString}`;
   }
 
+  disableButtons() {
+    const {
+      isDownloading,
+      isStatisticsDownloading,
+      isDeleting,
+      isUnsubmitting,
+    } = this.props;
+    return (
+      isStatisticsDownloading || isDownloading || isDeleting || isUnsubmitting
+    );
+  }
+
+  renderDeleteButton(submission) {
+    const { assessment } = this.props;
+    const disabled =
+      this.disableButtons() ||
+      submission.workflowState === workflowStates.Unstarted;
+    if (
+      !assessment.canDeleteAllSubmissions &&
+      !submission.courseUser.isCurrentUser
+    )
+      return null;
+
+    return (
+      <span className="delete-button" data-for="delete-button" data-tip>
+        <IconButton
+          id={`delete-button-${submission.courseUser.id}`}
+          onClick={() => this.setState({ deleteConfirmation: true })}
+          disabled={disabled}
+        >
+          <DeleteIcon color={red900} />
+        </IconButton>
+      </span>
+    );
+  }
+
+  renderDeleteDialog(submission) {
+    const { deleteConfirmation } = this.state;
+    const { dispatch } = this.props;
+    const values = { name: submission.courseUser.name };
+    const successMessage = (
+      <FormattedMessage
+        {...translations.deleteSubmissionSuccess}
+        values={values}
+      />
+    );
+    return (
+      <ConfirmationDialog
+        open={deleteConfirmation}
+        onCancel={() => this.setState({ deleteConfirmation: false })}
+        onConfirm={() => {
+          dispatch(deleteSubmission(submission.id, successMessage));
+          this.setState({ deleteConfirmation: false });
+        }}
+        message={
+          <FormattedMessage
+            {...submissionsTranslations.deleteConfirmation}
+            values={{ name: submission.courseUser.name }}
+          />
+        }
+      />
+    );
+  }
+
   renderPhantomUserIcon = (submission) => {
     if (submission.courseUser.phantom) {
       return (
@@ -152,18 +216,6 @@ export default class SubmissionsTableRow extends React.Component {
     }
     return null;
   };
-
-  disableButtons() {
-    const {
-      isDownloading,
-      isStatisticsDownloading,
-      isDeleting,
-      isUnsubmitting,
-    } = this.props;
-    return (
-      isStatisticsDownloading || isDownloading || isDeleting || isUnsubmitting
-    );
-  }
 
   renderSubmissionLogsLink(submission) {
     const { assessment, courseId, assessmentId } = this.props;
@@ -252,58 +304,6 @@ export default class SubmissionsTableRow extends React.Component {
         message={
           <FormattedMessage
             {...submissionsTranslations.unsubmitConfirmation}
-            values={{ name: submission.courseUser.name }}
-          />
-        }
-      />
-    );
-  }
-
-  renderDeleteButton(submission) {
-    const { assessment } = this.props;
-    const disabled =
-      this.disableButtons() ||
-      submission.workflowState === workflowStates.Unstarted;
-    if (
-      !assessment.canDeleteAllSubmissions &&
-      !submission.courseUser.isCurrentUser
-    )
-      return null;
-
-    return (
-      <span className="delete-button" data-for="delete-button" data-tip>
-        <IconButton
-          id={`delete-button-${submission.courseUser.id}`}
-          onClick={() => this.setState({ deleteConfirmation: true })}
-          disabled={disabled}
-        >
-          <DeleteIcon color={red900} />
-        </IconButton>
-      </span>
-    );
-  }
-
-  renderDeleteDialog(submission) {
-    const { deleteConfirmation } = this.state;
-    const { dispatch } = this.props;
-    const values = { name: submission.courseUser.name };
-    const successMessage = (
-      <FormattedMessage
-        {...translations.deleteSubmissionSuccess}
-        values={values}
-      />
-    );
-    return (
-      <ConfirmationDialog
-        open={deleteConfirmation}
-        onCancel={() => this.setState({ deleteConfirmation: false })}
-        onConfirm={() => {
-          dispatch(deleteSubmission(submission.id, successMessage));
-          this.setState({ deleteConfirmation: false });
-        }}
-        message={
-          <FormattedMessage
-            {...submissionsTranslations.deleteConfirmation}
             values={{ name: submission.courseUser.name }}
           />
         }

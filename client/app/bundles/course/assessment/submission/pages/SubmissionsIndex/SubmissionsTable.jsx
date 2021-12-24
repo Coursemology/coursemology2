@@ -91,82 +91,6 @@ export default class SubmissionsTable extends Component {
     );
   }
 
-  renderRowUsers() {
-    const {
-      dispatch,
-      courseId,
-      assessmentId,
-      submissions,
-      assessment,
-      isDownloading,
-      isStatisticsDownloading,
-      isUnsubmitting,
-      isDeleting,
-    } = this.props;
-
-    const props = {
-      dispatch,
-      courseId,
-      assessmentId,
-      assessment,
-      isDownloading,
-      isStatisticsDownloading,
-      isUnsubmitting,
-      isDeleting,
-    };
-
-    return submissions.map((submission) => (
-      <SubmissionsTableRow
-        key={submission.courseUser.id}
-        submission={submission}
-        {...props}
-      />
-    ));
-  }
-
-  renderRowTooltips = () => {
-    const tooltipIds = [
-      'phantom-user',
-      'unpublished-grades',
-      'access-logs',
-      'unsubmit-button',
-      'delete-button',
-    ];
-    const formattedMessages = [
-      submissionsTranslations.phantom,
-      submissionsTranslations.publishNotice,
-      submissionsTranslations.accessLogs,
-      submissionsTranslations.unsubmitSubmission,
-      submissionsTranslations.deleteSubmission,
-    ];
-    return tooltipIds.map((tooltipId, index) => (
-      <ReactTooltip key={tooltipId} id={tooltipId} effect="solid">
-        <FormattedMessage {...formattedMessages[index]} />
-      </ReactTooltip>
-    ));
-  };
-
-  renderUnsubmitAllConfirmation() {
-    const { handleUnsubmitAll, confirmDialogValue } = this.props;
-    const { unsubmitAllConfirmation } = this.state;
-    return (
-      <ConfirmationDialog
-        open={unsubmitAllConfirmation}
-        onCancel={() => this.setState({ unsubmitAllConfirmation: false })}
-        onConfirm={() => {
-          this.setState({ unsubmitAllConfirmation: false });
-          handleUnsubmitAll();
-        }}
-        message={
-          <FormattedMessage
-            {...translations.unsubmitAllConfirmation}
-            values={{ users: confirmDialogValue }}
-          />
-        }
-      />
-    );
-  }
-
   renderDeleteAllConfirmation() {
     const { handleDeleteAll, confirmDialogValue } = this.props;
     const { deleteAllConfirmation } = this.state;
@@ -294,6 +218,82 @@ export default class SubmissionsTable extends Component {
           />
         ) : null}
       </IconMenu>
+    );
+  }
+
+  renderRowTooltips = () => {
+    const tooltipIds = [
+      'phantom-user',
+      'unpublished-grades',
+      'access-logs',
+      'unsubmit-button',
+      'delete-button',
+    ];
+    const formattedMessages = [
+      submissionsTranslations.phantom,
+      submissionsTranslations.publishNotice,
+      submissionsTranslations.accessLogs,
+      submissionsTranslations.unsubmitSubmission,
+      submissionsTranslations.deleteSubmission,
+    ];
+    return tooltipIds.map((tooltipId, index) => (
+      <ReactTooltip key={tooltipId} id={tooltipId} effect="solid">
+        <FormattedMessage {...formattedMessages[index]} />
+      </ReactTooltip>
+    ));
+  };
+
+  renderRowUsers() {
+    const {
+      dispatch,
+      courseId,
+      assessmentId,
+      submissions,
+      assessment,
+      isDownloading,
+      isStatisticsDownloading,
+      isUnsubmitting,
+      isDeleting,
+    } = this.props;
+
+    const props = {
+      dispatch,
+      courseId,
+      assessmentId,
+      assessment,
+      isDownloading,
+      isStatisticsDownloading,
+      isUnsubmitting,
+      isDeleting,
+    };
+
+    return submissions.map((submission) => (
+      <SubmissionsTableRow
+        key={submission.courseUser.id}
+        submission={submission}
+        {...props}
+      />
+    ));
+  }
+
+  renderUnsubmitAllConfirmation() {
+    const { handleUnsubmitAll, confirmDialogValue } = this.props;
+    const { unsubmitAllConfirmation } = this.state;
+    return (
+      <ConfirmationDialog
+        open={unsubmitAllConfirmation}
+        onCancel={() => this.setState({ unsubmitAllConfirmation: false })}
+        onConfirm={() => {
+          this.setState({ unsubmitAllConfirmation: false });
+          handleUnsubmitAll();
+        }}
+        message={
+          <FormattedMessage
+            {...translations.unsubmitAllConfirmation}
+            values={{ users: confirmDialogValue }}
+          />
+        }
+      />
     );
   }
 
