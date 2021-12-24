@@ -16,15 +16,50 @@ import MenuItem from 'material-ui/MenuItem';
 import NewIcon from 'material-ui/svg-icons/content/add';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
+import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import translations from './translations.intl';
 
 const styles = {
   alignRight: {
     textAlign: 'right',
   },
+  alignMiddle: {
+    verticalAlign: 'middle',
+  },
 };
 
 class ConditionList extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      deletionUrl: '',
+      isDeleting: false,
+    };
+  }
+
+  onConfirmDelete() {
+    // TODO: Refactor the below into a ConditionAPI
+    const form = $('<form>', {
+      method: 'POST',
+      action: this.state.deletionUrl,
+    });
+
+    const token = $('<input>', {
+      type: 'hidden',
+      name: 'authenticity_token',
+      value: $.rails.csrfToken(),
+    });
+
+    const method = $('<input>', {
+      name: '_method',
+      type: 'hidden',
+      value: 'DELETE',
+    });
+
+    // This will refresh the page
+    form.append(token, method).appendTo(document.body).submit();
+  }
+
   renderConditionRows() {
     return this.props.conditions.map((condition) => (
       <TableRow key={condition.edit_url}>
@@ -36,11 +71,14 @@ class ConditionList extends Component {
           </IconButton>
 
           <IconButton
-            href={condition.delete_url}
-            data-method="delete"
-            data-confirm={this.props.intl.formatMessage(
-              translations.deleteConfirm,
-            )}
+            onClick={() =>
+              this.setState({
+                isDeleting: true,
+                deletionUrl: condition.delete_url,
+              })
+            }
+            style={styles.alignMiddle}
+            id={condition.delete_url}
           >
             <DeleteIcon />
           </IconButton>
@@ -115,6 +153,13 @@ class ConditionList extends Component {
             <FormattedMessage {...translations.empty} />
           </Subheader>
         )}
+        <ConfirmationDialog
+          confirmDelete
+          open={this.state.isDeleting}
+          message={this.props.intl.formatMessage(translations.deleteConfirm)}
+          onCancel={() => this.setState({ isDeleting: false })}
+          onConfirm={() => this.onConfirmDelete()}
+        />
       </div>
     );
   }

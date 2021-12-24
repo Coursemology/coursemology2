@@ -30,7 +30,6 @@ function loadModules() {
   }
   // Initializers
   require('lib/initializers/ace-editor');
-  require('lib/initializers/confirm-dialog');
   require('lib/initializers/popup-notifier');
   loadCurrentModule();
   // Require web font last so that it doesn't block the load of current module.
