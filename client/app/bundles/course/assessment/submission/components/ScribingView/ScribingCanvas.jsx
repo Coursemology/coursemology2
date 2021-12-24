@@ -1,4 +1,3 @@
-/* eslint no-mixed-operators: "off" */
 /* eslint react/sort-comp: "off" */
 /* eslint no-undef: "off" */ // For usage of fabric
 import { Component } from 'react';
