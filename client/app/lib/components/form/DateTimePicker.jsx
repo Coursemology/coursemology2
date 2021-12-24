@@ -138,7 +138,7 @@ class DateTimePicker extends PureComponent {
     }
 
     const newDateTime = this.props.value
-      ? moment({ date, months, years })
+      ? moment(this.props.value).set({ date, months, years })
       : moment({ date, months, years });
     this.setState({ dateError: '' });
     this.updateDateTime(newDateTime.toDate());

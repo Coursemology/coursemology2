@@ -35,7 +35,7 @@ describe('<NewSurveyButton />', () => {
     };
 
     const startAt = '01-01-2017';
-    const startTime = '12:00 AM';
+    const startTime = '00:00';
     const dialogInline = surveyFormDialogue
       .find('RenderToLayer')
       .first()
