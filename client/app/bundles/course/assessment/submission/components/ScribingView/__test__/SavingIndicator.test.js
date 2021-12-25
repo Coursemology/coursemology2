@@ -1,10 +1,12 @@
 import { MemoryRouter } from 'react-router-dom';
-import { mount } from 'enzyme';
 import MockAdapter from 'axios-mock-adapter';
-import ProviderWrapper from 'lib/components/ProviderWrapper';
+import { mount } from 'enzyme';
+
 import CourseAPI from 'api/course';
-import store from 'course/assessment/submission/store';
 import ScribingView from 'course/assessment/submission/containers/ScribingView';
+import store from 'course/assessment/submission/store';
+import ProviderWrapper from 'lib/components/ProviderWrapper';
+
 import { updateScribingAnswer } from '../../../actions/scribing';
 import actionTypes from '../../../constants';
 

@@ -1,13 +1,15 @@
 /* eslint-disable camelcase */
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { reduxForm, FieldArray, Form, getFormValues } from 'redux-form';
+import { connect } from 'react-redux';
 import RaisedButton from 'material-ui/RaisedButton';
-import formTranslations from 'lib/translations/form';
+import PropTypes from 'prop-types';
+import { FieldArray, Form, getFormValues, reduxForm } from 'redux-form';
+
 import { formNames } from 'course/survey/constants';
 import { responseShape } from 'course/survey/propTypes';
+import formTranslations from 'lib/translations/form';
+
 import ResponseSection from './ResponseSection';
 
 const styles = {
@@ -106,12 +108,12 @@ class ResponseForm extends Component {
 
     return (
       <RaisedButton
-        style={styles.formButton}
-        type="submit"
-        primary
+        disabled={isSubmitting || pristine}
         label={<FormattedMessage {...formTranslations.save} />}
         onClick={() => onSubmit({ ...formValues, submit: false })}
-        disabled={isSubmitting || pristine}
+        primary={true}
+        style={styles.formButton}
+        type="submit"
       />
     );
   }
@@ -137,12 +139,12 @@ class ResponseForm extends Component {
 
     return (
       <RaisedButton
-        style={styles.formButton}
-        type="submit"
-        primary
+        disabled={isSubmitting || !!response.submitted_at}
         label={<FormattedMessage {...submitButtonTranslation} />}
         onClick={handleSubmit((data) => onSubmit({ ...data, submit: true }))}
-        disabled={isSubmitting || !!response.submitted_at}
+        primary={true}
+        style={styles.formButton}
+        type="submit"
       />
     );
   }
@@ -158,9 +160,9 @@ class ResponseForm extends Component {
     return (
       <Form onSubmit={handleSubmit(onSubmit)}>
         <FieldArray
-          name="sections"
           component={ResponseForm.renderSections}
           disabled={isSubmitting || readOnly || !(canModify || canSubmit)}
+          name="sections"
         />
         <br />
         {!readOnly && this.renderSaveButton()}

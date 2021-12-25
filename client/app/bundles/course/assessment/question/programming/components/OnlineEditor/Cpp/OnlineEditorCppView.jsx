@@ -1,10 +1,9 @@
-import Immutable from 'immutable';
-
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import Immutable from 'immutable';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
+import transitions from 'material-ui/styles/transitions';
 import {
   Table,
   TableBody,
@@ -14,20 +13,21 @@ import {
   TableRow,
   TableRowColumn,
 } from 'material-ui/Table';
-import transitions from 'material-ui/styles/transitions';
+import PropTypes from 'prop-types';
 
 import 'ace-builds/src-noconflict/mode-c_cpp';
 import 'ace-builds/src-noconflict/theme-monokai';
 
-import styles from '../OnlineEditorView.scss';
-import translations from '../OnlineEditorView.intl';
-import cppTranslations from './OnlineEditorCppView.intl';
 import {
+  EditorCard,
   ExistingPackageFile,
   NewPackageFile,
   TestCase,
-  EditorCard,
 } from '../OnlineEditorBase';
+import translations from '../OnlineEditorView.intl';
+
+import cppTranslations from './OnlineEditorCppView.intl';
+import styles from '../OnlineEditorView.scss';
 
 const MAX_TEST_CASES = 99;
 
@@ -113,12 +113,12 @@ class OnlineEditorCppView extends Component {
         <h3>{intl.formatMessage(translations.testCasesHeader)}</h3>
         <div style={{ marginBottom: '0.5em' }}>
           <FormattedMessage
-            id="course.assessment.question.programming.onlineEditorCppView.testCasesDescription"
             defaultMessage={
               '{note}: The expression in the {expression} column will be compared with the ' +
               'expression in the {expected} column using {expect_star} assertions from the ' +
               '{googletest}. Floating point numbers are formatted with {tostring}.'
             }
+            id="course.assessment.question.programming.onlineEditorCppView.testCasesDescription"
             values={{
               note: (
                 <b>
@@ -214,14 +214,14 @@ class OnlineEditorCppView extends Component {
     };
 
     return (
-      <Card initiallyExpanded>
+      <Card initiallyExpanded={true}>
         <CardHeader
-          title={header}
+          actAsExpander={true}
+          showExpandableButton={true}
           textStyle={{ fontWeight: 'bold' }}
-          actAsExpander
-          showExpandableButton
+          title={header}
         />
-        <CardText expandable style={{ padding: 0 }}>
+        <CardText expandable={true} style={{ padding: 0 }}>
           <Table selectable={false}>
             <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
               <TableRow>
@@ -267,14 +267,14 @@ class OnlineEditorCppView extends Component {
       .map(renderNewFile);
 
     return (
-      <Card initiallyExpanded>
+      <Card initiallyExpanded={true}>
         <CardHeader
-          title={header}
+          actAsExpander={true}
+          showExpandableButton={true}
           textStyle={{ fontWeight: 'bold' }}
-          actAsExpander
-          showExpandableButton
+          title={header}
         />
-        <CardText expandable style={{ padding: 0 }}>
+        <CardText expandable={true} style={{ padding: 0 }}>
           <Table selectable={false}>
             <TableBody displayRowCheckbox={false}>
               {newPackageFilesRows}
@@ -322,14 +322,14 @@ class OnlineEditorCppView extends Component {
     ));
 
     return (
-      <Card initiallyExpanded>
+      <Card initiallyExpanded={true}>
         <CardHeader
-          title={header}
+          actAsExpander={true}
+          showExpandableButton={true}
           textStyle={{ fontWeight: 'bold' }}
-          actAsExpander
-          showExpandableButton
+          title={header}
         />
-        <CardText expandable style={{ padding: 0 }}>
+        <CardText expandable={true} style={{ padding: 0 }}>
           <Table selectable={false}>
             <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
               <TableRow>
@@ -345,13 +345,13 @@ class OnlineEditorCppView extends Component {
               <TableRow>
                 <TableRowColumn colSpan="5" style={{ textAlign: 'center' }}>
                   <FlatButton
-                    label={this.props.intl.formatMessage(
-                      translations.addNewTestButton,
-                    )}
-                    icon={<i className="fa fa-plus" />}
                     disabled={
                       this.props.isLoading || numAllTestCases >= MAX_TEST_CASES
                     }
+                    icon={<i className="fa fa-plus" />}
+                    label={this.props.intl.formatMessage(
+                      translations.addNewTestButton,
+                    )}
                     onClick={this.testCaseCreateHandler(type)}
                   />
                 </TableRowColumn>

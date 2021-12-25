@@ -1,8 +1,9 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import PropTypes from 'prop-types';
+
 import formTranslations from 'lib/translations/form';
 
 const buttonStyle = {
@@ -55,48 +56,48 @@ class ConfirmationDialog extends Component {
 
     const actions = [
       <FlatButton
-        primary
-        keyboardFocused
-        className="cancel-btn"
-        disabled={disableCancelButton}
-        onClick={onCancel}
-        style={buttonStyle}
-        label={cancelButtonText || intl.formatMessage(formTranslations.cancel)}
+        key="confirmation-dialog-cancel-button"
         ref={(button) => {
           // eslint-disable-next-line react/no-unused-class-component-methods
           this.cancelButton = button;
         }}
-        key="confirmation-dialog-cancel-button"
+        className="cancel-btn"
+        disabled={disableCancelButton}
+        keyboardFocused={true}
+        label={cancelButtonText || intl.formatMessage(formTranslations.cancel)}
+        onClick={onCancel}
+        primary={true}
+        style={buttonStyle}
       />,
       <FlatButton
-        primary
-        className="confirm-btn"
-        disabled={disableConfirmButton}
-        onClick={onConfirm}
-        style={buttonStyle}
-        label={confirmationButtonText}
+        key="confirmation-dialog-confirm-button"
         ref={(button) => {
           // eslint-disable-next-line react/no-unused-class-component-methods
           this.confirmButton = button;
         }}
-        key="confirmation-dialog-confirm-button"
+        className="confirm-btn"
+        disabled={disableConfirmButton}
+        label={confirmationButtonText}
+        onClick={onConfirm}
+        primary={true}
+        style={buttonStyle}
       />,
     ];
 
     if (onConfirmSecondary) {
       const confirmButtonSecondary = [
         <FlatButton
-          primary
-          className="confirm-btn"
-          disabled={disableConfirmButton}
-          onClick={onConfirmSecondary}
-          style={buttonStyle}
-          label={confirmationSecondaryButtonText}
+          key="confirmation-dialog-confirm-secondary-button"
           ref={(button) => {
             // eslint-disable-next-line react/no-unused-class-component-methods
             this.confirmButtonSecondary = button;
           }}
-          key="confirmation-dialog-confirm-secondary-button"
+          className="confirm-btn"
+          disabled={disableConfirmButton}
+          label={confirmationSecondaryButtonText}
+          onClick={onConfirmSecondary}
+          primary={true}
+          style={buttonStyle}
         />,
       ];
       actions.push(...confirmButtonSecondary);
@@ -106,10 +107,10 @@ class ConfirmationDialog extends Component {
       <div>
         <Dialog
           {...{ open, actions }}
+          autoScrollBodyContent={true}
           modal={false}
           onRequestClose={onCancel}
           style={{ zIndex: 9999 }}
-          autoScrollBodyContent
         >
           {confirmationMessage}
         </Dialog>

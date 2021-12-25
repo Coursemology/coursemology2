@@ -1,6 +1,6 @@
 import { Component } from 'react';
-import { Field } from 'redux-form';
 import PropTypes from 'prop-types';
+import { Field } from 'redux-form';
 
 import { questionShape } from 'course/assessment/submission/propTypes';
 import NotificationBar from 'lib/components/NotificationBar';
@@ -12,16 +12,16 @@ import ForumPostSelect from './ForumPostSelect';
 function renderTextField(readOnly, answerId) {
   return readOnly ? (
     <Field
-      name={`${answerId}[answer_text]`}
       component={(props) => (
         <div dangerouslySetInnerHTML={{ __html: props.input.value }} />
       )}
+      name={`${answerId}[answer_text]`}
     />
   ) : (
     <Field
-      name={`${answerId}[answer_text]`}
       component={RichTextField}
-      multiLine
+      multiLine={true}
+      name={`${answerId}[answer_text]`}
     />
   );
 }
@@ -40,29 +40,29 @@ class ForumPostResponse extends Component {
     return (
       <>
         <Field
-          name={`${answerId}[selected_post_packs]`}
-          component={ForumPostSelect}
-          question={question}
-          readOnly={readOnly}
           answerId={answerId}
-          onErrorMessage={(message) =>
-            this.setState({
-              errorMessage: message,
-            })
-          }
+          component={ForumPostSelect}
           handleNotificationMessage={(message) =>
             this.setState({
               notificationMessage: message,
             })
           }
+          name={`${answerId}[selected_post_packs]`}
+          onErrorMessage={(message) =>
+            this.setState({
+              errorMessage: message,
+            })
+          }
+          question={question}
+          readOnly={readOnly}
         />
         {question.hasTextResponse && renderTextField(readOnly, answerId)}
         {this.state.errorMessage && <Error message={this.state.errorMessage} />}
         <NotificationBar
-          open={this.state.notificationMessage !== ''}
-          notification={{ message: this.state.notificationMessage }}
           autoHideDuration={4000}
+          notification={{ message: this.state.notificationMessage }}
           onRequestClose={() => this.setState({ notificationMessage: '' })}
+          open={this.state.notificationMessage !== ''}
         />
       </>
     );

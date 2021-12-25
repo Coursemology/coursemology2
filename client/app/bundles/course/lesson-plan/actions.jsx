@@ -1,13 +1,14 @@
+import { SubmissionError, submit } from 'redux-form';
+
 import CourseAPI from 'api/course';
-import { submit, SubmissionError } from 'redux-form';
+import actionTypes, { formNames } from 'course/lesson-plan/constants';
 import {
-  setNotification,
   resetDeleteConfirmation,
+  setNotification,
   showDeleteConfirmation,
 } from 'lib/actions';
-import actionTypes, { formNames } from 'course/lesson-plan/constants';
 
-export { setNotification, resetDeleteConfirmation, showDeleteConfirmation };
+export { resetDeleteConfirmation, setNotification, showDeleteConfirmation };
 
 export function setItemTypeVisibility(itemType, isVisible) {
   return {

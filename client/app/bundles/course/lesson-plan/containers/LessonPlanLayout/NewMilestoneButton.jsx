@@ -1,14 +1,15 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import {
-  injectIntl,
   defineMessages,
-  intlShape,
   FormattedMessage,
+  injectIntl,
+  intlShape,
 } from 'react-intl';
+import { connect } from 'react-redux';
 import RaisedButton from 'material-ui/RaisedButton';
-import { showMilestoneForm, createMilestone } from 'course/lesson-plan/actions';
+import PropTypes from 'prop-types';
+
+import { createMilestone, showMilestoneForm } from 'course/lesson-plan/actions';
 
 const translations = defineMessages({
   newMilestone: {
@@ -57,9 +58,9 @@ class NewMilestoneButton extends Component {
 
     return (
       <RaisedButton
-        primary
         label={<FormattedMessage {...translations.newMilestone} />}
         onClick={this.showForm}
+        primary={true}
         style={styles.button}
       />
     );

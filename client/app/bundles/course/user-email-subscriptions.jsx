@@ -1,6 +1,8 @@
 import { render } from 'react-dom';
-import ProviderWrapper from 'lib/components/ProviderWrapper';
+
 import UserEmailSubscriptions from 'course/pages/UserEmailSubscriptions';
+import ProviderWrapper from 'lib/components/ProviderWrapper';
+
 import storeCreator from './store';
 
 $(document).ready(() => {

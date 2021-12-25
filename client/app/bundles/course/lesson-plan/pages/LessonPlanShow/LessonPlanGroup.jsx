@@ -1,12 +1,14 @@
 /* eslint-disable camelcase */
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Element } from 'react-scroll';
-import Divider from 'material-ui/Divider';
 import { Card, CardText, CardTitle } from 'material-ui/Card';
+import Divider from 'material-ui/Divider';
 import { grey50 } from 'material-ui/styles/colors';
+import PropTypes from 'prop-types';
+
 import moment, { longDate } from 'lib/moment';
+
 import LessonPlanItem from './LessonPlanItem';
 import MilestoneAdminTools from './MilestoneAdminTools';
 
@@ -46,14 +48,9 @@ class LessonPlanGroup extends Component {
 
     return (
       <CardTitle
-        actAsExpander
-        showExpandableButton
-        title={
-          <div style={styles.milestoneTitle}>
-            {title}
-            <MilestoneAdminTools milestone={milestone} />
-          </div>
-        }
+        actAsExpander={true}
+        showExpandableButton={true}
+        style={{ backgroundColor: grey50 }}
         subtitle={
           <span>
             {moment(start_at).format(longDate)}
@@ -61,7 +58,12 @@ class LessonPlanGroup extends Component {
             <span dangerouslySetInnerHTML={{ __html: description }} />
           </span>
         }
-        style={{ backgroundColor: grey50 }}
+        title={
+          <div style={styles.milestoneTitle}>
+            {title}
+            <MilestoneAdminTools milestone={milestone} />
+          </div>
+        }
       />
     );
   }
@@ -101,14 +103,14 @@ class LessonPlanGroup extends Component {
     return (
       <Element name={id}>
         <Card
+          containerStyle={styles.cardContainer}
           initiallyExpanded={initiallyExpanded}
           style={styles.card}
-          containerStyle={styles.cardContainer}
         >
           {milestone
             ? LessonPlanGroup.renderMilestoneCardTitle(milestone)
             : this.renderDefaultMilestone()}
-          <CardText expandable style={styles.items}>
+          <CardText expandable={true} style={styles.items}>
             {items.length > 0
               ? items.map((item) => (
                   <LessonPlanItem key={item.id} {...{ item }} />

@@ -1,17 +1,19 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import Avatar from 'material-ui/Avatar';
 import { List, ListItem } from 'material-ui/List';
 import { cyan500 } from 'material-ui/styles/colors';
+import PropTypes from 'prop-types';
+
+import { setItemSelectorPanel } from 'course/duplication/actions';
 import {
   duplicableItemTypes,
   itemSelectorPanels as panels,
 } from 'course/duplication/constants';
-import { setItemSelectorPanel } from 'course/duplication/actions';
-import { defaultComponentTitles } from 'course/translations.intl';
 import { courseShape } from 'course/duplication/propTypes';
+import { defaultComponentTitles } from 'course/translations.intl';
+
 import DuplicateButton from '../DuplicateButton';
 
 const {
@@ -50,9 +52,9 @@ class ItemsSelectorMenu extends Component {
       <ListItem
         leftAvatar={
           <Avatar
-            style={styles.countAvatar}
-            size={30}
             backgroundColor={count > 0 ? cyan500 : null}
+            size={30}
+            style={styles.countAvatar}
           >
             {count}
           </Avatar>
@@ -121,7 +123,7 @@ class ItemsSelectorMenu extends Component {
               'course_videos_component',
               videosComponentCount,
             )}
-        <ListItem disabled style={styles.duplicateButton}>
+        <ListItem disabled={true} style={styles.duplicateButton}>
           <DuplicateButton />
         </ListItem>
       </List>

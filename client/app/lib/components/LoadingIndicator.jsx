@@ -14,7 +14,7 @@ const styles = {
 const LoadingIndicator = () => (
   <div style={styles.loading}>
     <div style={styles.loadingInnerDiv}>
-      <RefreshIndicator top={50} left={0} size={60} status="loading" />
+      <RefreshIndicator left={0} size={60} status="loading" top={50} />
     </div>
   </div>
 );

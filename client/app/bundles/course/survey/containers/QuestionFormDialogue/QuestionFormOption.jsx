@@ -1,13 +1,14 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { defineMessages, injectIntl, intlShape } from 'react-intl';
-import { Field } from 'redux-form';
-import IconButton from 'material-ui/IconButton';
 import Checkbox from 'material-ui/Checkbox';
+import IconButton from 'material-ui/IconButton';
 import RadioButton from 'material-ui/RadioButton';
-import CloseIcon from 'material-ui/svg-icons/navigation/close';
+import { grey600, grey700 } from 'material-ui/styles/colors';
 import PhotoIcon from 'material-ui/svg-icons/image/photo';
-import { grey700, grey600 } from 'material-ui/styles/colors';
+import CloseIcon from 'material-ui/svg-icons/navigation/close';
+import PropTypes from 'prop-types';
+import { Field } from 'redux-form';
+
 import TextField from 'lib/components/redux-form/TextField';
 import Thumbnail from 'lib/components/Thumbnail';
 
@@ -72,17 +73,17 @@ class QuestionFormOption extends Component {
           </IconButton>
         </label>
         <input
+          ref={(field) => {
+            this.fileInput = field;
+          }}
           id={fieldId}
-          type="file"
-          style={styles.imageUploader}
           onChange={(event) => {
             const image = event.target.files[0];
             input.onChange(image);
             input.onBlur(image);
           }}
-          ref={(field) => {
-            this.fileInput = field;
-          }}
+          style={styles.imageUploader}
+          type="file"
           {...{ disabled }}
         />
       </div>
@@ -117,16 +118,16 @@ class QuestionFormOption extends Component {
         {fileOrSrc.file || fileOrSrc.src ? (
           <Thumbnail
             {...fileOrSrc}
-            style={styles.image}
             containerStyle={styles.imageContainer}
+            style={styles.image}
           />
         ) : null}
         <small>{imageFileName}</small>
         <Field
-          fullWidth
-          multiLine
-          name={`${member}.option`}
           component={TextField}
+          fullWidth={true}
+          multiLine={true}
+          name={`${member}.option`}
           {...{ placeholder, disabled }}
         />
       </div>
@@ -137,9 +138,9 @@ class QuestionFormOption extends Component {
     const { multipleResponse, multipleChoice } = this.props;
     let widget = null;
     if (multipleChoice) {
-      widget = <RadioButton disabled style={styles.widget} />;
+      widget = <RadioButton disabled={true} style={styles.widget} />;
     } else if (multipleResponse) {
-      widget = <Checkbox disabled style={styles.widget} />;
+      widget = <Checkbox disabled={true} style={styles.widget} />;
     }
     return widget;
   }
@@ -165,8 +166,8 @@ class QuestionFormOption extends Component {
         {this.renderWidget()}
         {this.renderOptionBody()}
         <Field
-          name={`${member}.file`}
           component={this.renderImageField}
+          name={`${member}.file`}
           {...{ index, disabled }}
         />
         <IconButton onClick={handleRemove} {...{ disabled }}>

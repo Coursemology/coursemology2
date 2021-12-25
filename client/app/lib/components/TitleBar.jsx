@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
 import AppBar from 'material-ui/AppBar';
+import PropTypes from 'prop-types';
 
 const styles = {
   bar: {

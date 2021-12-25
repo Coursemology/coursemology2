@@ -1,4 +1,5 @@
 import Checkbox from 'material-ui/Checkbox';
+
 import createComponent from './createComponent';
 
 export default createComponent(

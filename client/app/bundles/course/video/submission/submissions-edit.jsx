@@ -1,7 +1,9 @@
 import { render } from 'react-dom';
-import ProviderWrapper from 'lib/components/ProviderWrapper';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
+
 import CourseAPI from 'api/course';
+import LoadingIndicator from 'lib/components/LoadingIndicator';
+import ProviderWrapper from 'lib/components/ProviderWrapper';
+
 import Submission from './containers/Submission';
 import storeCreator from './store';
 

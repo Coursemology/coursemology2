@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
-import Description from 'material-ui/svg-icons/action/description';
 import { grey700 } from 'material-ui/styles/colors';
+import Description from 'material-ui/svg-icons/action/description';
+import PropTypes from 'prop-types';
 
 const styles = {
   material: {
@@ -23,7 +23,7 @@ const Material = (props) => {
   const { name, url } = props;
   return (
     <div style={styles.material}>
-      <Description style={styles.icon} color={grey700} />
+      <Description color={grey700} style={styles.icon} />
       <a href={url}>{name}</a>
     </div>
   );

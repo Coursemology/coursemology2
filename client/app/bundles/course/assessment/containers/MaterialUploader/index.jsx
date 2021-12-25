@@ -1,8 +1,10 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
+
 import CourseAPI from 'api/course';
 import { typeMaterial } from 'lib/types';
+
 import MaterialList from './MaterialList';
 import translations from './translations.intl';
 
@@ -128,12 +130,12 @@ class MaterialUploader extends Component {
   render() {
     return (
       <MaterialList
-        materials={this.state.materials}
-        uploadingMaterials={this.state.uploadingMaterials}
-        notification={this.state.notification}
-        onMaterialDelete={this.onMaterialDelete}
-        onFileInputChange={this.onFileInputChange}
         enableMaterialsAction={this.props.enableMaterialsAction}
+        materials={this.state.materials}
+        notification={this.state.notification}
+        onFileInputChange={this.onFileInputChange}
+        onMaterialDelete={this.onMaterialDelete}
+        uploadingMaterials={this.state.uploadingMaterials}
       />
     );
   }

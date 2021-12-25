@@ -1,22 +1,23 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
+import { Card, CardText } from 'material-ui/Card';
 import Checkbox from 'material-ui/Checkbox';
 import Subheader from 'material-ui/Subheader';
-import { Card, CardText } from 'material-ui/Card';
-import { defaultComponentTitles } from 'course/translations.intl';
-import { duplicableItemTypes } from 'course/duplication/constants';
-import { surveyShape } from 'course/duplication/propTypes';
+import PropTypes from 'prop-types';
+
 import TypeBadge from 'course/duplication/components/TypeBadge';
 import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
+import { duplicableItemTypes } from 'course/duplication/constants';
+import { surveyShape } from 'course/duplication/propTypes';
+import { defaultComponentTitles } from 'course/translations.intl';
 
 class SurveyListing extends Component {
   static renderRow(survey) {
     return (
       <Checkbox
-        checked
         key={survey.id}
+        checked={true}
         label={
           <span>
             <TypeBadge itemType={duplicableItemTypes.SURVEY} />

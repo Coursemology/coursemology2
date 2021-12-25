@@ -1,9 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import Subheader from 'material-ui/Subheader';
-import Toggle from 'material-ui/Toggle';
 import {
   Table,
   TableBody,
@@ -12,16 +10,20 @@ import {
   TableRow,
   TableRowColumn,
 } from 'material-ui/Table';
-import NotificationPopup from 'lib/containers/NotificationPopup';
+import Toggle from 'material-ui/Toggle';
+import PropTypes from 'prop-types';
+
 import {
   fetchUserEmailSubscriptions,
   updateUserEmailSubscriptions,
 } from 'course/actions/user-email-subscriptions';
 import { setNotification } from 'lib/actions';
+import NotificationPopup from 'lib/containers/NotificationPopup';
+
 import translations, {
   subscriptionComponents,
-  subscriptionTitles,
   subscriptionDescriptions,
+  subscriptionTitles,
 } from './translations.intl';
 
 const styles = {
@@ -163,8 +165,8 @@ class UserEmailSubscriptions extends React.Component {
         </TableRowColumn>
         <TableRowColumn>
           <Toggle
-            toggled={setting.enabled}
             onToggle={this.handleUserEmailSubscriptionsUpdate(setting)}
+            toggled={setting.enabled}
           />
         </TableRowColumn>
       </TableRow>

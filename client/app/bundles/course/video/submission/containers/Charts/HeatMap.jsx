@@ -1,12 +1,14 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Bar } from 'react-chartjs-2';
-import Toggle from 'material-ui/Toggle';
 import { injectIntl, intlShape } from 'react-intl';
-import { formatTimestamp } from 'lib/helpers/videoHelpers';
-import { videoDefaults } from 'lib/constants/videoConstants';
+import { connect } from 'react-redux';
+import Toggle from 'material-ui/Toggle';
+import PropTypes from 'prop-types';
+
 import LoadingIndicator from 'lib/components/LoadingIndicator';
+import { videoDefaults } from 'lib/constants/videoConstants';
+import { formatTimestamp } from 'lib/helpers/videoHelpers';
+
 import { seekToDirectly } from '../../actions/video';
 import translations from '../../translations';
 
@@ -94,8 +96,8 @@ class HeatMap extends Component {
       <div style={{ width: '100%' }}>
         <Bar
           data={data}
-          options={options}
           height={(window.innerHeight - heightOffset) * heightScale}
+          options={options}
         />
       </div>
     );
@@ -159,8 +161,8 @@ class HeatMap extends Component {
         <div style={{ width }}>
           <Bar
             data={data}
-            options={optionsWithResolution}
             height={(window.innerHeight - heightOffset) * heightScale}
+            options={optionsWithResolution}
           />
         </div>
       </div>

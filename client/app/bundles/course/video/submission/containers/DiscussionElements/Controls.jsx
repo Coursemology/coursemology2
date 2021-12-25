@@ -1,13 +1,13 @@
-import PropTypes from 'prop-types';
+import { injectIntl, intlShape } from 'react-intl';
 import { connect } from 'react-redux';
 import IconButton from 'material-ui/IconButton';
-import OnDemandVideo from 'material-ui/svg-icons/notification/ondemand-video';
-import Refresh from 'material-ui/svg-icons/navigation/refresh';
-import { intlShape, injectIntl } from 'react-intl';
 import {
   cyan500 as activeColor,
   grey700 as inactiveColor,
 } from 'material-ui/styles/colors';
+import Refresh from 'material-ui/svg-icons/navigation/refresh';
+import OnDemandVideo from 'material-ui/svg-icons/notification/ondemand-video';
+import PropTypes from 'prop-types';
 
 import { changeAutoScroll, refreshDiscussion } from '../../actions/discussion';
 import translations from '../../translations';
@@ -30,8 +30,8 @@ const Controls = (props) => (
       <Refresh />
     </IconButton>
     <IconButton
-      tooltip={props.intl.formatMessage(translations.toggleLive)}
       onClick={() => props.onAutoScrollToggle(!props.autoScroll)}
+      tooltip={props.intl.formatMessage(translations.toggleLive)}
     >
       <OnDemandVideo color={props.autoScroll ? activeColor : inactiveColor} />
     </IconButton>

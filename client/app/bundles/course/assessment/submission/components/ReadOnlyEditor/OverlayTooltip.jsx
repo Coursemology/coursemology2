@@ -87,7 +87,7 @@ const OverlayTooltip = (props) => {
 export default OverlayTooltip;
 
 OverlayTooltip.propTypes = {
-  style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  style: PropTypes.object,
   placement: PropTypes.oneOf(['left', 'right', 'bottom']).isRequired,
   arrowOffsetLeft: PropTypes.string,
   arrowOffsetTop: PropTypes.string,

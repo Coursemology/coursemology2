@@ -1,17 +1,18 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import Subheader from 'material-ui/Subheader';
+import { connect } from 'react-redux';
 import Checkbox from 'material-ui/Checkbox';
-import Thumbnail from 'lib/components/Thumbnail';
-import { defaultComponentTitles } from 'course/translations.intl';
-import { duplicableItemTypes } from 'course/duplication/constants';
+import Subheader from 'material-ui/Subheader';
+import PropTypes from 'prop-types';
+
 import { setItemSelectedBoolean } from 'course/duplication/actions';
-import { achievementShape } from 'course/duplication/propTypes';
+import BulkSelectors from 'course/duplication/components/BulkSelectors';
 import TypeBadge from 'course/duplication/components/TypeBadge';
 import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
-import BulkSelectors from 'course/duplication/components/BulkSelectors';
+import { duplicableItemTypes } from 'course/duplication/constants';
+import { achievementShape } from 'course/duplication/propTypes';
+import { defaultComponentTitles } from 'course/translations.intl';
+import Thumbnail from 'lib/components/Thumbnail';
 
 const translations = defineMessages({
   noItems: {
@@ -80,19 +81,19 @@ class AchievementsSelector extends Component {
     return (
       <Checkbox
         key={achievement.id}
+        checked={checked}
         label={
           <span>
             <TypeBadge itemType={duplicableItemTypes.ACHIEVEMENT} />
             {achievement.published || <UnpublishedIcon />}
             <Thumbnail
+              rootStyle={styles.badgeContainer}
               src={achievement.url}
               style={styles.badge}
-              rootStyle={styles.badgeContainer}
             />
             {achievement.title}
           </span>
         }
-        checked={checked}
         onCheck={(e, value) =>
           dispatch(
             setItemSelectedBoolean(

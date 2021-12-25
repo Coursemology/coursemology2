@@ -1,7 +1,6 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { Link } from 'react-router-dom';
 import { CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import {
@@ -12,6 +11,7 @@ import {
   TableRow,
   TableRowColumn,
 } from 'material-ui/Table';
+import PropTypes from 'prop-types';
 
 const styles = {
   expandableThreshold: 10,
@@ -73,7 +73,7 @@ class TextResponseResults extends Component {
   static renderTextResultsTable(answers, anonymous) {
     return (
       <Table>
-        <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+        <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
           <TableRow>
             <TableHeaderColumn colSpan={2}>
               <FormattedMessage {...translations.serial} />

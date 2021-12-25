@@ -1,5 +1,7 @@
 import { mount } from 'enzyme';
+
 import storeCreator from 'course/user-notification/store';
+
 import LevelReachedPopup from '../LevelReachedPopup';
 
 const contextOptions = buildContextOptions(storeCreator({}));

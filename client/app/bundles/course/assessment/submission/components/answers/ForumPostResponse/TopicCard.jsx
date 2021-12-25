@@ -1,20 +1,20 @@
 import React from 'react';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import {
-  CardHeader,
-  RaisedButton,
   Card,
-  CardText,
   CardActions,
+  CardHeader,
+  CardText,
   Divider,
   FontIcon,
+  RaisedButton,
 } from 'material-ui';
 import { indigo50 } from 'material-ui/styles/colors';
 import PropTypes from 'prop-types';
-import { defineMessages, FormattedMessage } from 'react-intl';
 
 import {
-  topicOverviewShape,
   postPackShape,
+  topicOverviewShape,
 } from 'course/assessment/submission/propTypes';
 import { getForumTopicURL } from 'lib/helpers/url-builders';
 
@@ -72,12 +72,15 @@ export default class TopicCard extends React.Component {
 
     return (
       <Card
+        className="topic-card"
         expanded={this.state.isExpanded}
         onExpandChange={this.handleIsExpandedChange}
         style={this.props.style}
-        className="topic-card"
       >
         <CardHeader
+          actAsExpander={true}
+          showExpandableButton={true}
+          style={styles.cardHeader}
           title={
             <CardTitle
               title={this.props.topicPostPack.topic.title}
@@ -97,30 +100,27 @@ export default class TopicCard extends React.Component {
               }
             />
           }
-          actAsExpander
-          showExpandableButton
-          style={styles.cardHeader}
         />
         <Divider />
-        <CardActions expandable style={styles.cardActions}>
+        <CardActions expandable={true} style={styles.cardActions}>
           <RaisedButton
-            label={<FormattedMessage {...translations.viewTopicInNewTab} />}
             href={getForumTopicURL(courseId, forumId, topicPostPack.topic.ic)}
-            target="_blank"
-            labelPosition="before"
             icon={<FontIcon className="fa fa-external-link" />}
+            label={<FormattedMessage {...translations.viewTopicInNewTab} />}
+            labelPosition="before"
+            target="_blank"
           />
         </CardActions>
         <Divider />
-        <CardText expandable>
+        <CardText expandable={true}>
           {topicPostPack.postPacks.map((postPack, index) => (
             <ForumPostOption
-              postPack={postPack}
+              key={`post-pack-${postPack.corePost.id}`}
               isSelected={selectedPostIds.has(postPack.corePost.id)}
               onSelectPostPack={(postPackSelected, isSelected) =>
                 this.props.onSelectPostPack(postPackSelected, isSelected)
               }
-              key={`post-pack-${postPack.corePost.id}`}
+              postPack={postPack}
               style={
                 index < topicPostPack.postPacks.length - 1
                   ? styles.nonLastPostOption

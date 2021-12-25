@@ -1,6 +1,7 @@
-import { SubmissionError } from 'lib/redux-form';
 import CourseAPI from 'api/course';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import { SubmissionError } from 'lib/redux-form';
+
 import actionTypes from './constants';
 
 export function createAssessment(

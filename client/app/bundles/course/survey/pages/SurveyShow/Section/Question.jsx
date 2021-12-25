@@ -1,14 +1,15 @@
-/* eslint-disable new-cap */
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { injectIntl, defineMessages, intlShape } from 'react-intl';
-import { connect } from 'react-redux';
 import { DragSource, DropTarget } from 'react-dnd';
+import { defineMessages, injectIntl, intlShape } from 'react-intl';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
 import { showDeleteConfirmation } from 'course/survey/actions';
-import { formatQuestionFormData } from 'course/survey/utils';
-import { questionShape } from 'course/survey/propTypes';
-import { draggableTypes } from 'course/survey/constants';
 import * as questionActions from 'course/survey/actions/questions';
+import { draggableTypes } from 'course/survey/constants';
+import { questionShape } from 'course/survey/propTypes';
+import { formatQuestionFormData } from 'course/survey/utils';
+
 import QuestionCard from './QuestionCard';
 
 const translations = defineMessages({
@@ -119,11 +120,11 @@ class Question extends Component {
     return connectDropTarget(
       connectDragSource(
         <div
-          style={{ opacity }}
           ref={(node) => {
             // eslint-disable-next-line react/no-unused-class-component-methods
             this.DOMNode = node;
           }}
+          style={{ opacity }}
         >
           <QuestionCard
             {...{ question, expanded }}

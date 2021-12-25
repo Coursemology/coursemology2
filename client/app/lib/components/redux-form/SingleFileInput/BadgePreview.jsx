@@ -1,5 +1,6 @@
-import InsertDriveFileIcon from 'material-ui/svg-icons/editor/insert-drive-file';
 import Avatar from 'material-ui/Avatar';
+import InsertDriveFileIcon from 'material-ui/svg-icons/editor/insert-drive-file';
+
 import ImagePreview from './ImagePreview';
 
 function renderBadge(imageSrc) {

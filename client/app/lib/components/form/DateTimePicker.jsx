@@ -1,18 +1,19 @@
 import { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { injectIntl, defineMessages, intlShape } from 'react-intl';
-import moment from 'lib/moment';
+import { defineMessages, injectIntl, intlShape } from 'react-intl';
+import MomentUtils from '@date-io/moment';
+import { createTheme, MuiThemeProvider } from '@material-ui/core';
 import {
   KeyboardDatePicker,
   KeyboardTimePicker,
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
 import DateRange from 'material-ui/svg-icons/action/date-range';
+import Schedule from 'material-ui/svg-icons/action/schedule';
 import KeyboardArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
 import KeyboardArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
-import Schedule from 'material-ui/svg-icons/action/schedule';
-import MomentUtils from '@date-io/moment';
-import { MuiThemeProvider, createTheme } from '@material-ui/core';
+import PropTypes from 'prop-types';
+
+import moment from 'lib/moment';
 
 const translations = defineMessages({
   datePlaceholder: {
@@ -213,33 +214,33 @@ class DateTimePicker extends PureComponent {
           <div style={{ ...styles.dateTimePicker, ...style }}>
             <KeyboardDatePicker
               {...{ name, disabled }}
-              style={styles.dateTextField}
-              onChange={this.updateDate}
               clearable={clearable}
-              keyboardIcon={<DateRange style={styles.pickerIcon} />}
-              leftArrowIcon={<KeyboardArrowLeft />}
-              rightArrowIcon={<KeyboardArrowRight />}
-              format="DD-MM-YYYY"
-              label={floatingLabelText}
-              placeholder={intl.formatMessage(translations.datePlaceholder)}
               error={!!errorText || !!this.state.dateError}
-              // We want this component's error message to take priority over the parent's
+              format="DD-MM-YYYY"
               helperText={this.state.dateError || errorText}
+              keyboardIcon={<DateRange style={styles.pickerIcon} />}
+              label={floatingLabelText}
+              leftArrowIcon={<KeyboardArrowLeft />}
+              onChange={this.updateDate}
+              placeholder={intl.formatMessage(translations.datePlaceholder)}
+              rightArrowIcon={<KeyboardArrowRight />}
+              // We want this component's error message to take priority over the parent's
+              style={styles.dateTextField}
               value={value || null}
             />
             <KeyboardTimePicker
               {...{ name, disabled }}
-              style={styles.timeTextField}
-              onChange={this.updateTime}
               clearable={clearable}
+              error={!!this.state.timeError}
+              format="HH:mm"
+              helperText={this.state.timeError}
               keyboard="true"
               keyboardIcon={<Schedule style={styles.pickerIcon} />}
-              placeholder={intl.formatMessage(translations.timePlaceholder)}
               label="24-hr clock"
-              error={!!this.state.timeError}
-              helperText={this.state.timeError}
+              onChange={this.updateTime}
+              placeholder={intl.formatMessage(translations.timePlaceholder)}
+              style={styles.timeTextField}
               value={value || null}
-              format="HH:mm"
             />
           </div>
         </MuiThemeProvider>

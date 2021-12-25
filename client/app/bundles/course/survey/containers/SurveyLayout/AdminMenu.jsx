@@ -1,17 +1,18 @@
 /* eslint-disable camelcase */
 import { Component } from 'react';
-import PropTypes from 'prop-types';
+import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import { connect } from 'react-redux';
-import { injectIntl, defineMessages, intlShape } from 'react-intl';
+import { getStyles } from 'material-ui/AppBar/AppBar';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import { getStyles } from 'material-ui/AppBar/AppBar';
-import * as surveyActions from 'course/survey/actions/surveys';
+import PropTypes from 'prop-types';
+
 import { showDeleteConfirmation } from 'course/survey/actions';
-import { formatSurveyFormData } from 'course/survey/utils';
+import * as surveyActions from 'course/survey/actions/surveys';
 import { surveyShape } from 'course/survey/propTypes';
+import { formatSurveyFormData } from 'course/survey/utils';
 
 const translations = defineMessages({
   editSurvey: {
@@ -116,23 +117,23 @@ class AdminMenu extends Component {
 
     return (
       <IconMenu
-        iconStyle={styles.iconButtonIconStyle}
         iconButtonElement={
           <IconButton>
             <MoreVertIcon />
           </IconButton>
         }
+        iconStyle={styles.iconButtonIconStyle}
       >
         {survey.canUpdate ? (
           <MenuItem
-            primaryText={intl.formatMessage(translations.editSurvey)}
             onClick={this.showEditSurveyForm}
+            primaryText={intl.formatMessage(translations.editSurvey)}
           />
         ) : null}
         {survey.canDelete ? (
           <MenuItem
-            primaryText={intl.formatMessage(translations.deleteSurvey)}
             onClick={this.deleteSurveyHandler}
+            primaryText={intl.formatMessage(translations.deleteSurvey)}
           />
         ) : null}
       </IconMenu>

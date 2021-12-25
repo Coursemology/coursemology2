@@ -1,6 +1,8 @@
 import { mount } from 'enzyme';
-import ProviderWrapper from 'lib/components/ProviderWrapper';
+
 import CourseAPI from 'api/course';
+import ProviderWrapper from 'lib/components/ProviderWrapper';
+
 import storeCreator from '../../../store';
 import AchievementEdit from '../index';
 

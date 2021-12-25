@@ -1,10 +1,11 @@
-import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import moment from 'lib/moment';
-import history from 'lib/history';
 import RaisedButton from 'material-ui/RaisedButton';
+import PropTypes from 'prop-types';
+
 import { createResponse } from 'course/survey/actions/responses';
+import history from 'lib/history';
+import moment from 'lib/moment';
 
 const translations = defineMessages({
   start: {

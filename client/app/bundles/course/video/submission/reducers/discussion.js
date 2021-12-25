@@ -1,9 +1,10 @@
 import { Map as makeImmutableMap } from 'immutable';
+import { combineReducers } from 'redux';
+
 import {
   discussionActionTypes,
   postRequestingStatuses,
 } from 'lib/constants/videoConstants';
-import { combineReducers } from 'redux';
 
 export const initialState = {
   newTopicPost: {

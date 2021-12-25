@@ -1,14 +1,15 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import {
-  injectIntl,
   defineMessages,
-  intlShape,
   FormattedMessage,
+  injectIntl,
+  intlShape,
 } from 'react-intl';
+import { connect } from 'react-redux';
 import RaisedButton from 'material-ui/RaisedButton';
-import { showEventForm, createEvent } from 'course/lesson-plan/actions';
+import PropTypes from 'prop-types';
+
+import { createEvent, showEventForm } from 'course/lesson-plan/actions';
 
 const translations = defineMessages({
   newEvent: {
@@ -51,9 +52,9 @@ class NewEventButton extends Component {
 
     return (
       <RaisedButton
-        primary
         label={<FormattedMessage {...translations.newEvent} />}
         onClick={this.showForm}
+        primary={true}
       />
     );
   }

@@ -1,11 +1,12 @@
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { getFormValues } from 'redux-form';
 
 import { getScribingId } from 'lib/helpers/url-helpers';
-import ScribingQuestionForm from './containers/ScribingQuestionForm';
+
 import * as scribingQuestionActionCreators from './actions/scribingQuestionActionCreators';
+import ScribingQuestionForm from './containers/ScribingQuestionForm';
 import { formNames } from './constants';
 import { questionShape } from './propTypes';
 

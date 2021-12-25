@@ -1,20 +1,20 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { connect } from 'react-redux';
 import { Card, CardText } from 'material-ui/Card';
+import MenuItem from 'material-ui/MenuItem';
+import SelectField from 'material-ui/SelectField';
 import { yellow100 } from 'material-ui/styles/colors';
+import PropTypes from 'prop-types';
 
 import selectPastAnswers from '../actions/history';
-import translations from '../translations';
-import { answerShape, questionShape } from '../propTypes';
-import { formatDateTime } from '../utils';
-import PastProgrammingAnswer from '../components/pastAnswers/PastProgrammingAnswer';
 import PastMultipleResponseAnswer from '../components/pastAnswers/PastMultipleResponseAnswer';
+import PastProgrammingAnswer from '../components/pastAnswers/PastProgrammingAnswer';
 import TextResponseSolutions from '../components/TextResponseSolutions';
 import { questionTypes } from '../constants';
+import { answerShape, questionShape } from '../propTypes';
+import translations from '../translations';
+import { formatDateTime } from '../utils';
 
 const styles = {
   horizontalRule: {
@@ -28,11 +28,11 @@ class PastAnswers extends Component {
     const { intl } = this.props;
     switch (question.type) {
       case questionTypes.Programming:
-        return <PastProgrammingAnswer question={question} answer={answer} />;
+        return <PastProgrammingAnswer answer={answer} question={question} />;
       case questionTypes.MultipleChoice:
       case questionTypes.MultipleResponse:
         return (
-          <PastMultipleResponseAnswer question={question} answer={answer} />
+          <PastMultipleResponseAnswer answer={answer} question={question} />
         );
       case questionTypes.Comprehension:
       case questionTypes.TextResponse:
@@ -67,10 +67,10 @@ class PastAnswers extends Component {
       return (
         <MenuItem
           key={index}
-          insetChildren
           checked={selectedAnswerIds.indexOf(answerId) > -1}
-          value={answer}
+          insetChildren={true}
           primaryText={formatDateTime(answer.createdAt)}
+          value={answer}
         />
       );
     };
@@ -78,10 +78,10 @@ class PastAnswers extends Component {
     return (
       <SelectField
         floatingLabelText={intl.formatMessage(translations.pastAnswers)}
-        multiple
-        value={selectedAnswers}
+        multiple={true}
         onChange={handleSelectPastAnswers}
         style={{ float: 'right' }}
+        value={selectedAnswers}
       >
         {answerIds.map(renderOption)}
       </SelectField>

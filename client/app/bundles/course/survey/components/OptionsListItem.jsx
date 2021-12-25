@@ -1,6 +1,7 @@
 import { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { Card, CardText } from 'material-ui/Card';
+import PropTypes from 'prop-types';
+
 import Thumbnail from 'lib/components/Thumbnail';
 
 const styles = {
@@ -47,12 +48,12 @@ class OptionsListItem extends PureComponent {
   renderGridCard() {
     const { optionText, imageUrl, widget } = this.props;
     return (
-      <Card style={styles.gridCard} containerStyle={styles.gridOption}>
+      <Card containerStyle={styles.gridOption} style={styles.gridCard}>
         {imageUrl ? (
           <Thumbnail
+            containerStyle={styles.tiledImageContainer}
             src={imageUrl}
             style={styles.tiledImage}
-            containerStyle={styles.tiledImageContainer}
           />
         ) : (
           []
@@ -76,9 +77,9 @@ class OptionsListItem extends PureComponent {
         {widget}
         {imageUrl ? (
           <Thumbnail
+            containerStyle={styles.imageContainer}
             src={imageUrl}
             style={styles.image}
-            containerStyle={styles.imageContainer}
           />
         ) : null}
         <p dangerouslySetInnerHTML={{ __html: optionText || null }} />

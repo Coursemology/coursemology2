@@ -1,9 +1,10 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
-import RaisedButton from 'material-ui/RaisedButton';
 import { injectIntl } from 'react-intl';
+import RaisedButton from 'material-ui/RaisedButton';
 import { grey300 } from 'material-ui/styles/colors';
+import { TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
+import PropTypes from 'prop-types';
+
 import styles from './OnlineEditorView.scss';
 
 class NewPackageFile extends Component {
@@ -29,8 +30,8 @@ class NewPackageFile extends Component {
       deleteButton = (
         <RaisedButton
           backgroundColor={grey300}
-          icon={<i className="fa fa-trash" />}
           disabled={isLoading}
+          icon={<i className="fa fa-trash" />}
           onClick={() => {
             this.props.deleteNewPackageFile(this.props.fileType, index);
           }}
@@ -49,19 +50,19 @@ class NewPackageFile extends Component {
         <TableRowColumn>
           <RaisedButton
             className={styles.fileInputButton}
+            containerElement="label"
+            disabled={isLoading}
             label={this.props.buttonLabel}
             labelPosition="before"
-            containerElement="label"
-            primary
-            disabled={isLoading}
+            primary={true}
             style={addFileButtonStyle}
           >
             <input
-              type="file"
-              name={NewPackageFile.getPackageFileName(this.props.fileType)}
               className={styles.uploadInput}
               disabled={isLoading}
+              name={NewPackageFile.getPackageFileName(this.props.fileType)}
               onChange={this.newPackageFileChangeHandler(index)}
+              type="file"
             />
           </RaisedButton>
           <div style={{ display: 'inline-block' }}>{filename}</div>

@@ -1,7 +1,9 @@
 import { render } from 'react-dom';
+
 import ProviderWrapper from 'lib/components/ProviderWrapper';
-import storeCreator from './store';
+
 import AchievementEditPage from './pages/AchievementEdit';
+import storeCreator from './store';
 
 $(() => {
   const mountNode = document.getElementById('achievement-edit');

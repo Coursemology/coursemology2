@@ -1,12 +1,8 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import moment, { formatLongDateTime } from 'lib/moment';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import mirrorCreator from 'mirror-creator';
 import { Card, CardText } from 'material-ui/Card';
-import Toggle from 'material-ui/Toggle';
 import { red500 } from 'material-ui/styles/colors';
 import {
   Table,
@@ -16,12 +12,18 @@ import {
   TableRow,
   TableRowColumn,
 } from 'material-ui/Table';
-import BarChart from 'lib/components/BarChart';
+import Toggle from 'material-ui/Toggle';
+import mirrorCreator from 'mirror-creator';
+import PropTypes from 'prop-types';
+
 import { fetchResponses } from 'course/survey/actions/responses';
-import surveyTranslations from 'course/survey/translations';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
 import UnsubmitButton from 'course/survey/containers/UnsubmitButton';
-import { surveyShape, responseShape } from 'course/survey/propTypes';
+import { responseShape, surveyShape } from 'course/survey/propTypes';
+import surveyTranslations from 'course/survey/translations';
+import BarChart from 'lib/components/BarChart';
+import LoadingIndicator from 'lib/components/LoadingIndicator';
+import moment, { formatLongDateTime } from 'lib/moment';
+
 import RemindButton from './RemindButton';
 
 const styles = {
@@ -156,7 +158,7 @@ class ResponseIndex extends Component {
   static renderTable(responses, survey) {
     return (
       <Table>
-        <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+        <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
           <TableRow>
             <TableHeaderColumn colSpan={2}>
               <FormattedMessage {...translations.name} />
@@ -173,7 +175,7 @@ class ResponseIndex extends Component {
             <TableHeaderColumn />
           </TableRow>
         </TableHeader>
-        <TableBody displayRowCheckbox={false} showRowHover>
+        <TableBody displayRowCheckbox={false} showRowHover={true}>
           {responses.map((response) => (
             <TableRow key={response.course_user.id}>
               <TableRowColumn colSpan={2}>
@@ -326,12 +328,12 @@ class ResponseIndex extends Component {
           </h3>
           <BarChart data={chartData} />
           <Toggle
-            style={styles.toggle}
-            labelPosition="right"
             label={<FormattedMessage {...translations.includePhantoms} />}
+            labelPosition="right"
             onToggle={(_, value) =>
               this.setState({ includePhantomsInStats: value })
             }
+            style={styles.toggle}
           />
         </CardText>
       </Card>

@@ -1,7 +1,8 @@
-import PropTypes from 'prop-types';
 import { Tab, Tabs } from 'material-ui/Tabs';
-import ProgressGraph from './Charts/ProgressGraph';
+import PropTypes from 'prop-types';
+
 import HeatMap from './Charts/HeatMap';
+import ProgressGraph from './Charts/ProgressGraph';
 import styles from './Statistics.scss';
 
 const propTypes = {

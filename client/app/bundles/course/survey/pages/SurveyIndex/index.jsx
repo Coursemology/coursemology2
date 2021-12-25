@@ -1,15 +1,17 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import Subheader from 'material-ui/Subheader';
-import TitleBar from 'lib/components/TitleBar';
+import PropTypes from 'prop-types';
+
 import { fetchSurveys } from 'course/survey/actions/surveys';
-import surveyTranslations from 'course/survey/translations';
 import { surveyShape } from 'course/survey/propTypes';
+import surveyTranslations from 'course/survey/translations';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
-import SurveysTable from './SurveysTable';
+import TitleBar from 'lib/components/TitleBar';
+
 import NewSurveyButton from './NewSurveyButton';
+import SurveysTable from './SurveysTable';
 
 const translations = defineMessages({
   noSurveys: {

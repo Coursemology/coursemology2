@@ -1,6 +1,7 @@
-import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import RaisedButton from 'material-ui/RaisedButton';
+import PropTypes from 'prop-types';
+
 import MaterialSummernote from 'lib/components/MaterialSummernote';
 
 import style from '../Discussion.scss';
@@ -42,7 +43,7 @@ const defaultProps = {
 const Editor = (props) => (
   <>
     <MaterialSummernote
-      airMode
+      airMode={true}
       disabled={props.disabled}
       label={<FormattedMessage {...translations.prompt} />}
       onChange={(nextValue) => props.onContentUpdate(nextValue)}
@@ -52,16 +53,16 @@ const Editor = (props) => (
     <div className={style.editorButtons}>
       {props.showCancel && (
         <RaisedButton
+          disabled={props.disabled}
           label={props.cancelButtonText}
           onClick={props.onCancel}
-          disabled={props.disabled}
         />
       )}
       <RaisedButton
-        label={props.submitButtonText}
-        primary
-        onClick={props.onSubmit}
         disabled={props.disabled}
+        label={props.submitButtonText}
+        onClick={props.onSubmit}
+        primary={true}
       />
     </div>
     <div style={{ clear: 'both' }} />

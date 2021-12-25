@@ -1,12 +1,13 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-
 import Toggle from 'material-ui/Toggle';
-import NarrowEditor from './NarrowEditor';
-import WideEditor from './WideEditor';
+import PropTypes from 'prop-types';
+
 import { annotationShape } from '../../propTypes';
 import translations from '../../translations';
+
+import NarrowEditor from './NarrowEditor';
+import WideEditor from './WideEditor';
 
 const EDITOR_MODE_NARROW = 'narrow';
 const EDITOR_MODE_WIDE = 'wide';
@@ -137,12 +138,10 @@ class ReadOnlyEditor extends Component {
     return (
       this.props.annotations.length > 0 && (
         <Toggle
-          style={{ width: 'auto', marginLeft: 'auto' }}
-          labelStyle={{ width: 'auto' }}
+          disabled={this.props.annotations.length === 0}
           label={intl.formatMessage(translations.expandComments)}
           labelPosition="left"
-          toggled={this.isAllExpanded()}
-          disabled={this.props.annotations.length === 0}
+          labelStyle={{ width: 'auto' }}
           onToggle={(e) => {
             if (e.target.checked) {
               this.setAllCommentStateExpanded();
@@ -150,6 +149,8 @@ class ReadOnlyEditor extends Component {
               this.setAllCommentStateCollapsed();
             }
           }}
+          style={{ width: 'auto', marginLeft: 'auto' }}
+          toggled={this.isAllExpanded()}
         />
       )
     );
@@ -160,14 +161,14 @@ class ReadOnlyEditor extends Component {
     const { editorMode } = this.state;
     return (
       <Toggle
-        style={{ width: 'auto', marginLeft: 'auto' }}
-        labelStyle={{ width: 'auto' }}
         label={intl.formatMessage(translations.showCommentsPanel)}
         labelPosition="left"
-        toggled={editorMode === EDITOR_MODE_WIDE}
+        labelStyle={{ width: 'auto' }}
         onToggle={() => {
           this.showCommentsPanel();
         }}
+        style={{ width: 'auto', marginLeft: 'auto' }}
+        toggled={editorMode === EDITOR_MODE_WIDE}
       />
     );
   }

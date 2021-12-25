@@ -1,11 +1,28 @@
 module.exports = {
+  env: {
+    browser: true,
+  },
   parser: '@babel/eslint-parser',
-  plugins: ['jest'],
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
+    },
+  },
+  plugins: [
+    'jest',
+    'react',
+    'react-hooks',
+    'jsx-a11y',
+    'import',
+    'eslint-comments',
+    'simple-import-sort',
+  ],
   extends: [
     'airbnb',
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:react/jsx-runtime',
+    'plugin:jsx-a11y/strict',
     'plugin:import/recommended',
     'prettier',
   ],
@@ -35,12 +52,38 @@ module.exports = {
         unnamedComponents: 'arrow-function',
       },
     ],
+    'react/jsx-boolean-value': ['error', 'always'],
     'react/jsx-props-no-spreading': 'off',
+    'react/jsx-sort-props': 'error',
     'react/no-array-index-key': 'warn',
     'react/no-danger': 'off',
     'react/no-unused-prop-types': ['warn', { skipShapeProps: true }],
     'react/prefer-stateless-function': 'off',
     'react/require-default-props': 'off',
+    'react-hooks/exhaustive-deps': 'error',
+    'react-hooks/rules-of-hooks': 'error',
+    'eslint-comments/disable-enable-pair': [
+      'error',
+      {
+        allowWholeFile: true,
+      },
+    ],
+    'eslint-comments/no-aggregating-enable': 'error',
+    'eslint-comments/no-duplicate-disable': 'error',
+    'eslint-comments/no-unlimited-disable': 'error',
+    'eslint-comments/no-unused-disable': 'error',
+    'eslint-comments/no-unused-enable': 'error',
+    'eslint-comments/no-use': [
+      'error',
+      {
+        allow: [
+          'eslint-disable',
+          'eslint-disable-line',
+          'eslint-disable-next-line',
+          'eslint-enable',
+        ],
+      },
+    ],
     'import/no-extraneous-dependencies': ['warn', { devDependencies: true }],
     'import/prefer-default-export': 'warn',
     'jsx-a11y/anchor-is-valid': 'off',
@@ -49,6 +92,24 @@ module.exports = {
     'jsx-a11y/label-has-associated-control': 'off',
     'jsx-a11y/mouse-events-have-key-events': 'off',
     'jsx-a11y/no-static-element-interactions': 'off',
+    'simple-import-sort/imports': [
+      'error',
+      {
+        groups: [
+          // Packages. `react` related packages come first.
+          ['^react', '^@?\\w'],
+          // Internal packages.
+          ['^(lib|api|course|testUtils)(/.*|$)'],
+          // Side effect imports.
+          ['^\\u0000'],
+          // Parent imports. Put `..` last.
+          ['^\\.\\.(?!/?$)', '^\\.\\./?$'],
+          // Other relative imports. Put same-folder imports and `.` behind, and style imports last.
+          ['^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$', '^.+\\.s?css$'],
+        ],
+      },
+    ],
+    'simple-import-sort/exports': 'error',
     camelcase: ['warn', { properties: 'never', allow: ['^UNSAFE_'] }],
     'comma-dangle': ['error', 'always-multiline'],
     'default-param-last': 'off',

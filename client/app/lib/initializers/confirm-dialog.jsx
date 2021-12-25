@@ -1,4 +1,5 @@
 import { render, unmountComponentAtNode } from 'react-dom';
+
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 import RailsConfirmationDialog from 'lib/components/RailsConfirmationDialog';
 import { getOrCreateNode } from 'lib/helpers/rails-helpers';
@@ -16,8 +17,8 @@ function loadDialogue(element, successCallback) {
   render(
     <ProviderWrapper>
       <RailsConfirmationDialog
-        onConfirmCallback={() => successCallback(element)}
         message={element.attr('data-confirm')}
+        onConfirmCallback={() => successCallback(element)}
       />
     </ProviderWrapper>,
     mountNode,
@@ -32,11 +33,11 @@ function loadCustomDialogue(element, successCallback) {
   render(
     <ProviderWrapper>
       <RailsConfirmationDialog
-        onConfirmCallback={() => successCallback(element)}
-        onConfirmSecondaryCallback={() => successCallback(element, true)}
-        message={element.attr('data-confirm')}
         confirmButtonText={element.attr('data-confirm_text')}
         confirmSecondaryButtonText={element.attr('data-confirm_secondary_text')}
+        message={element.attr('data-confirm')}
+        onConfirmCallback={() => successCallback(element)}
+        onConfirmSecondaryCallback={() => successCallback(element, true)}
       />
     </ProviderWrapper>,
     mountNode,

@@ -1,12 +1,12 @@
-import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import Popover, { PopoverAnimationVertical } from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
+import Popover, { PopoverAnimationVertical } from 'material-ui/Popover';
+import PropTypes from 'prop-types';
 
+import { scribingTranslations as translations } from '../../../translations';
+import ColorPickerField from '../fields/ColorPickerField';
 import FontFamilyField from '../fields/FontFamilyField';
 import FontSizeField from '../fields/FontSizeField';
-import ColorPickerField from '../fields/ColorPickerField';
-import { scribingTranslations as translations } from '../../../translations';
 
 const propTypes = {
   intl: intlShape.isRequired,
@@ -67,13 +67,13 @@ const TypePopover = (props) => {
 
   return (
     <Popover
-      style={styles.toolDropdowns}
-      open={open}
       anchorEl={anchorEl}
       anchorOrigin={popoverStyles.anchorOrigin}
-      targetOrigin={popoverStyles.targetOrigin}
-      onRequestClose={onRequestClose}
       animation={PopoverAnimationVertical}
+      onRequestClose={onRequestClose}
+      open={open}
+      style={styles.toolDropdowns}
+      targetOrigin={popoverStyles.targetOrigin}
     >
       <Menu style={styles.menu}>
         <h4>{intl.formatMessage(translations.text)}</h4>
@@ -86,12 +86,12 @@ const TypePopover = (props) => {
           onChangeFontSize={onChangeFontSize}
         />
         <ColorPickerField
-          onClickColorPicker={onClickColorPicker}
-          colorPickerPopoverOpen={colorPickerPopoverOpen}
-          colorPickerPopoverAnchorEl={colorPickerPopoverAnchorEl}
-          onRequestCloseColorPickerPopover={onRequestCloseColorPickerPopover}
           colorPickerColor={colorPickerColor}
+          colorPickerPopoverAnchorEl={colorPickerPopoverAnchorEl}
+          colorPickerPopoverOpen={colorPickerPopoverOpen}
           onChangeCompleteColorPicker={onChangeCompleteColorPicker}
+          onClickColorPicker={onClickColorPicker}
+          onRequestCloseColorPickerPopover={onRequestCloseColorPickerPopover}
         />
       </Menu>
     </Popover>

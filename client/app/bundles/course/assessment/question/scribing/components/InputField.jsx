@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
+
 import TextField from 'lib/components/redux-form/TextField';
-import { questionNamePrefix, questionIdPrefix } from '../constants';
+
+import { questionIdPrefix, questionNamePrefix } from '../constants';
 
 const propTypes = {
   placeholder: PropTypes.string,
@@ -20,15 +22,15 @@ const InputField = (props) => {
   return (
     <div title={placeholder}>
       <Field
-        name={questionNamePrefix + field}
-        id={questionIdPrefix + field}
-        validate={validate}
-        floatingLabelText={(required ? '* ' : '') + label}
-        floatingLabelFixed
-        fullWidth
-        type={type}
         component={TextField}
         disabled={isLoading}
+        floatingLabelFixed={true}
+        floatingLabelText={(required ? '* ' : '') + label}
+        fullWidth={true}
+        id={questionIdPrefix + field}
+        name={questionNamePrefix + field}
+        type={type}
+        validate={validate}
       />
     </div>
   );

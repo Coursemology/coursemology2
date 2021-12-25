@@ -1,12 +1,14 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import translations from 'course/lesson-plan/translations';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
 import { fields } from 'course/lesson-plan/constants';
+import translations from 'course/lesson-plan/translations';
 import { lessonPlanTypesGroups } from 'lib/types';
-import MilestoneRow from './MilestoneRow';
+
 import ItemRow from './ItemRow';
+import MilestoneRow from './MilestoneRow';
 
 const { ITEM_TYPE, TITLE, START_AT, BONUS_END_AT, END_AT, PUBLISHED } = fields;
 
@@ -24,14 +26,14 @@ class LessonPlanEdit extends Component {
       ? items.map((item) => (
           <ItemRow
             key={item.id}
-            id={item.id}
-            type={item.itemTypeKey}
-            title={item.title}
-            startAt={item.start_at}
             bonusEndAt={item.bonus_end_at}
             endAt={item.end_at}
-            published={item.published}
+            id={item.id}
             itemPath={item.item_path}
+            published={item.published}
+            startAt={item.start_at}
+            title={item.title}
+            type={item.itemTypeKey}
           />
         ))
       : [];
@@ -42,8 +44,8 @@ class LessonPlanEdit extends Component {
           key={`milestone-${id}`}
           groupId={id}
           id={milestone.id}
-          title={milestone.title}
           startAt={milestone.start_at}
+          title={milestone.title}
         />,
       );
     }

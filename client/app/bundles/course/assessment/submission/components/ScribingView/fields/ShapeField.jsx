@@ -1,11 +1,11 @@
-import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import FontIcon from 'material-ui/FontIcon';
 import FlatButton from 'material-ui/FlatButton';
+import FontIcon from 'material-ui/FontIcon';
 import { blue500 } from 'material-ui/styles/colors';
+import PropTypes from 'prop-types';
 
-import { scribingTranslations as translations } from '../../../translations';
 import { scribingShapes } from '../../../constants';
+import { scribingTranslations as translations } from '../../../translations';
 
 const propTypes = {
   intl: intlShape.isRequired,
@@ -19,34 +19,34 @@ const ShapeField = (props) => {
   return (
     <>
       <FlatButton
-        label={intl.formatMessage(translations.rectangle)}
-        primary={currentShape === scribingShapes.RECT}
-        onClick={() => setSelectedShape(scribingShapes.RECT)}
         icon={
           <FontIcon
+            className="fa fa-square-o"
             color={
               currentShape === scribingShapes.RECT
                 ? blue500
                 : 'rgba(0, 0, 0, 0.4)'
             }
-            className="fa fa-square-o"
           />
         }
+        label={intl.formatMessage(translations.rectangle)}
+        onClick={() => setSelectedShape(scribingShapes.RECT)}
+        primary={currentShape === scribingShapes.RECT}
       />
       <FlatButton
-        label={intl.formatMessage(translations.ellipse)}
-        primary={currentShape === scribingShapes.ELLIPSE}
-        onClick={() => setSelectedShape(scribingShapes.ELLIPSE)}
         icon={
           <FontIcon
+            className="fa fa-circle-o"
             color={
               currentShape === scribingShapes.ELLIPSE
                 ? blue500
                 : 'rgba(0, 0, 0, 0.4)'
             }
-            className="fa fa-circle-o"
           />
         }
+        label={intl.formatMessage(translations.ellipse)}
+        onClick={() => setSelectedShape(scribingShapes.ELLIPSE)}
+        primary={currentShape === scribingShapes.ELLIPSE}
       />
     </>
   );

@@ -1,15 +1,17 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, injectIntl, intlShape } from 'react-intl';
-import moment, { shortDateTime } from 'lib/moment';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
 import {
-  setDestinationCourseId,
   duplicateCourse,
+  setDestinationCourseId,
 } from 'course/duplication/actions';
-import { duplicationModes } from 'course/duplication/constants';
 import CourseDropdownMenu from 'course/duplication/components/CourseDropdownMenu';
+import { duplicationModes } from 'course/duplication/constants';
 import { courseShape, sourceCourseShape } from 'course/duplication/propTypes';
+import moment, { shortDateTime } from 'lib/moment';
+
 import NewCourseForm from './NewCourseForm';
 
 const translations = defineMessages({
@@ -51,14 +53,14 @@ class DestinationCourseSelector extends Component {
 
     return (
       <CourseDropdownMenu
-        dropDownMenuProps={{ className: 'destination-course-dropdown' }}
-        currentHost={currentHost}
         courses={courses}
-        selectedCourseId={destinationCourseId}
         currentCourseId={currentCourseId}
-        prompt={intl.formatMessage(translations.selectDestinationCoursePrompt)}
+        currentHost={currentHost}
+        dropDownMenuProps={{ className: 'destination-course-dropdown' }}
         onChange={(e, index, value) => dispatch(setDestinationCourseId(value))}
         onHome={() => dispatch(setDestinationCourseId(currentCourseId))}
+        prompt={intl.formatMessage(translations.selectDestinationCoursePrompt)}
+        selectedCourseId={destinationCourseId}
       />
     );
   };
@@ -85,6 +87,8 @@ class DestinationCourseSelector extends Component {
 
     return (
       <NewCourseForm
+        disabled={isDuplicating}
+        initialValues={initialValues}
         onSubmit={(values) =>
           dispatch(
             duplicateCourse(
@@ -95,8 +99,6 @@ class DestinationCourseSelector extends Component {
             ),
           )
         }
-        disabled={isDuplicating}
-        initialValues={initialValues}
       />
     );
   };

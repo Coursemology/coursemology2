@@ -1,17 +1,20 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { connect } from 'react-redux';
-import { submit } from 'redux-form';
-import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
 import RaisedButton from 'material-ui/RaisedButton';
+import PropTypes from 'prop-types';
+import { submit } from 'redux-form';
+
 import NotificationBar, {
   notificationShape,
 } from 'lib/components/NotificationBar';
 import { achievementTypesConditionAttributes } from 'lib/types';
-import AssessmentForm from '../../containers/AssessmentForm';
+
 import * as actions from '../../actions';
-import translations from './translations.intl';
 import { formNames } from '../../constants';
+import AssessmentForm from '../../containers/AssessmentForm';
+
+import translations from './translations.intl';
 
 const styles = {
   buttonContainer: {
@@ -60,22 +63,22 @@ class EditPage extends Component {
     return (
       <>
         <AssessmentForm
-          editing
-          gamified={gamified}
-          showPersonalizedTimelineFeatures={showPersonalizedTimelineFeatures}
-          randomizationAllowed={randomizationAllowed}
-          onSubmit={this.onFormSubmit}
-          modeSwitching={modeSwitching}
-          folderAttributes={folderAttributes}
           conditionAttributes={conditionAttributes}
+          editing={true}
+          folderAttributes={folderAttributes}
+          gamified={gamified}
           initialValues={initialValues}
+          modeSwitching={modeSwitching}
+          onSubmit={this.onFormSubmit}
+          randomizationAllowed={randomizationAllowed}
+          showPersonalizedTimelineFeatures={showPersonalizedTimelineFeatures}
         />
         <div style={styles.buttonContainer}>
           <RaisedButton
-            label={<FormattedMessage {...translations.updateAssessment} />}
-            primary
             disabled={this.props.disabled}
+            label={<FormattedMessage {...translations.updateAssessment} />}
             onClick={() => dispatch(submit(formNames.ASSESSMENT))}
+            primary={true}
           />
         </div>
         <NotificationBar notification={this.props.notification} />

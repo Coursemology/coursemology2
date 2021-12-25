@@ -1,4 +1,5 @@
 import { getVideoId, getVideoSubmissionId } from 'lib/helpers/url-helpers';
+
 import BaseVideoAPI from './Base';
 
 export default class SessionsAPI extends BaseVideoAPI {

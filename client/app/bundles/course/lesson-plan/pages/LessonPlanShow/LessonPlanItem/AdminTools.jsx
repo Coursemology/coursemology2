@@ -1,16 +1,17 @@
 /* eslint-disable camelcase */
 import { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import { connect } from 'react-redux';
-import { injectIntl, defineMessages, intlShape } from 'react-intl';
-import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
-import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import RaisedButton from 'material-ui/RaisedButton';
+import DeleteIcon from 'material-ui/svg-icons/action/delete';
+import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
+import PropTypes from 'prop-types';
+
 import {
-  showEventForm,
-  updateEvent,
   deleteEvent,
   showDeleteConfirmation,
+  showEventForm,
+  updateEvent,
 } from 'course/lesson-plan/actions';
 
 const translations = defineMessages({

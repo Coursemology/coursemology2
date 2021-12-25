@@ -1,13 +1,14 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import Popover from 'material-ui/Popover';
-import RaisedButton from 'material-ui/RaisedButton';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
+import Popover from 'material-ui/Popover';
+import RaisedButton from 'material-ui/RaisedButton';
 import Done from 'material-ui/svg-icons/action/done';
-import { scribingTranslations as translations } from '../../translations';
+import PropTypes from 'prop-types';
+
 import { scribbleShape } from '../../propTypes';
+import { scribingTranslations as translations } from '../../translations';
 
 const propTypes = {
   intl: intlShape.isRequired,
@@ -46,18 +47,18 @@ class LayersComponent extends Component {
 
     return layers && layers.length !== 0 ? (
       <Popover
-        open={open}
         anchorEl={anchorEl}
         anchorOrigin={popoverStyles.anchorOrigin}
-        targetOrigin={popoverStyles.targetOrigin}
         onRequestClose={onRequestClose}
+        open={open}
+        targetOrigin={popoverStyles.targetOrigin}
       >
         <Menu>
           {layers.map((layer) => (
             <MenuItem
               key={layer.creator_id}
-              primaryText={layer.creator_name}
               onClick={() => onClickLayer(layer)}
+              primaryText={layer.creator_name}
               rightIcon={layer.isDisplayed ? <Done /> : null}
             />
           ))}
@@ -75,9 +76,9 @@ class LayersComponent extends Component {
           {intl.formatMessage(translations.layersLabelText)}
         </label>
         <RaisedButton
-          onClick={onClick}
-          label={layers && `${layers[0].creator_name.substring(0, 6)}...`}
           disabled={disabled}
+          label={layers && `${layers[0].creator_name.substring(0, 6)}...`}
+          onClick={onClick}
         />
         {this.renderLayersPopover()}
       </>

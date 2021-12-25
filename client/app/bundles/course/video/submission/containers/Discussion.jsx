@@ -1,18 +1,19 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Paper from 'material-ui/Paper';
 import Divider from 'material-ui/Divider';
+import Paper from 'material-ui/Paper';
+import PropTypes from 'prop-types';
 
-import styles from './Discussion.scss';
-import NewPostContainer from './DiscussionElements/NewPostContainer';
-import Topic from './DiscussionElements/Topic';
-import Controls from './DiscussionElements/Controls';
 import { unsetScrollTopic } from '../actions/discussion';
 import {
   inverseCreatedAtOrderedTopicsSelector,
   orderedTopicIdsSelector,
 } from '../selectors/discussion';
+
+import Controls from './DiscussionElements/Controls';
+import NewPostContainer from './DiscussionElements/NewPostContainer';
+import Topic from './DiscussionElements/Topic';
+import styles from './Discussion.scss';
 
 const propTypes = {
   topicIds: PropTypes.arrayOf(PropTypes.string),
@@ -63,7 +64,7 @@ class Discussion extends Component {
 
   render() {
     return (
-      <Paper zDepth={2} className={styles.rootContainer}>
+      <Paper className={styles.rootContainer} zDepth={2}>
         <div className={styles.newCommentEditor}>
           <NewPostContainer>
             <Controls />

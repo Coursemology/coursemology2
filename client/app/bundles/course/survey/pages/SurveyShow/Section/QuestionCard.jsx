@@ -1,19 +1,20 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Card, CardText } from 'material-ui/Card';
-import TextField from 'material-ui/TextField';
 import Checkbox from 'material-ui/Checkbox';
-import RadioButton from 'material-ui/RadioButton';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
+import RadioButton from 'material-ui/RadioButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import formTranslations from 'lib/translations/form';
+import TextField from 'material-ui/TextField';
+import PropTypes from 'prop-types';
+
+import OptionsListItem from 'course/survey/components/OptionsListItem';
 import { questionTypes } from 'course/survey/constants';
 import { questionShape } from 'course/survey/propTypes';
 import translations from 'course/survey/translations';
-import OptionsListItem from 'course/survey/components/OptionsListItem';
+import formTranslations from 'lib/translations/form';
 
 const styles = {
   optionWidget: {
@@ -73,15 +74,15 @@ class QuestionCard extends Component {
           const { option: optionText, image_url: imageUrl } = option;
           const widget = (
             <Widget
-              disabled
-              style={styles.gridOptionWidget}
+              disabled={true}
               iconStyle={styles.gridOptionWidgetIcon}
+              style={styles.gridOptionWidget}
             />
           );
           return (
             <OptionsListItem
-              grid
               key={option.id}
+              grid={true}
               {...{ optionText, imageUrl, widget }}
             />
           );
@@ -95,7 +96,7 @@ class QuestionCard extends Component {
       <>
         {question.options.map((option) => {
           const { option: optionText, image_url: imageUrl } = option;
-          const widget = <Widget disabled style={styles.optionWidget} />;
+          const widget = <Widget disabled={true} style={styles.optionWidget} />;
           return (
             <OptionsListItem
               key={option.id}
@@ -118,8 +119,8 @@ class QuestionCard extends Component {
   static renderTextField() {
     return (
       <TextField
-        fullWidth
-        disabled
+        disabled={true}
+        fullWidth={true}
         hintText={<FormattedMessage {...translations.textResponse} />}
       />
     );
@@ -147,7 +148,7 @@ class QuestionCard extends Component {
         style={styles.adminMenu}
       >
         {adminFunctions.map(({ label, handler }) => (
-          <MenuItem key={label} primaryText={label} onClick={handler} />
+          <MenuItem key={label} onClick={handler} primaryText={label} />
         ))}
       </IconMenu>
     );
@@ -158,9 +159,9 @@ class QuestionCard extends Component {
     const cursorStyle = this.state.hovered ? { cursor: 'move' } : null;
     return (
       <Card
-        style={{ ...styles.card, ...cursorStyle }}
-        onMouseOver={() => this.setState({ hovered: true })}
         onMouseOut={() => this.setState({ hovered: false })}
+        onMouseOver={() => this.setState({ hovered: true })}
+        style={{ ...styles.card, ...cursorStyle }}
         {...{ expanded }}
       >
         <CardText style={styles.cardText}>
@@ -172,7 +173,7 @@ class QuestionCard extends Component {
             </p>
           ) : null}
         </CardText>
-        <CardText expandable style={styles.fields}>
+        <CardText expandable={true} style={styles.fields}>
           {QuestionCard.renderSpecificFields(question)}
         </CardText>
       </Card>

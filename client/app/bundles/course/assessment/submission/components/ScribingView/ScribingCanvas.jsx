@@ -1,17 +1,16 @@
-/* eslint react/sort-comp: "off" */
-/* eslint no-undef: "off" */ // For usage of fabric
+/* eslint-disable no-undef, react/sort-comp */
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import LoadingIndicator from 'lib/components/LoadingIndicator';
+
 import {
-  scribingTools,
   scribingShapes,
   scribingToolColor,
-  scribingToolThickness,
   scribingToolLineStyle,
+  scribingTools,
+  scribingToolThickness,
 } from '../../constants';
-
 import { scribingShape } from '../../propTypes';
 
 const propTypes = {
@@ -1029,9 +1028,9 @@ export default class ScribingCanvas extends Component {
     const answerId = this.props.answerId;
     const isCanvasLoaded = this.props.scribing.isCanvasLoaded;
     return answerId ? (
-      <div style={styles.canvas_div} id={`canvas-container-${answerId}`}>
+      <div id={`canvas-container-${answerId}`} style={styles.canvas_div}>
         {!isCanvasLoaded ? <LoadingIndicator /> : null}
-        <canvas style={styles.canvas} id={`canvas-${answerId}`} />
+        <canvas id={`canvas-${answerId}`} style={styles.canvas} />
       </div>
     ) : null;
   }

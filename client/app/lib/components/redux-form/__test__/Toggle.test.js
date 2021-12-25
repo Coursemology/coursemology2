@@ -1,4 +1,5 @@
 import shallowUntil from 'testUtils/shallowUntil';
+
 import Toggle from '../Toggle';
 
 describe('<Toggle />', () => {

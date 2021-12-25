@@ -3,6 +3,7 @@ import {
   discussionActionTypes,
   postRequestingStatuses,
 } from 'lib/constants/videoConstants';
+
 import setNotification from './notification';
 
 /**

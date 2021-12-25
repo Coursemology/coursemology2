@@ -1,10 +1,11 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import Checkbox from 'material-ui/Checkbox';
-import RadioButton from 'material-ui/RadioButton';
 import IconButton from 'material-ui/IconButton';
-import CloseIcon from 'material-ui/svg-icons/navigation/close';
+import RadioButton from 'material-ui/RadioButton';
 import { grey600 } from 'material-ui/styles/colors';
+import CloseIcon from 'material-ui/svg-icons/navigation/close';
+import PropTypes from 'prop-types';
+
 import Thumbnail from 'lib/components/Thumbnail';
 
 const styles = {
@@ -38,9 +39,9 @@ class QuestionFormDeletedOptions extends Component {
     const { multipleResponse, multipleChoice } = this.props;
     let widget = null;
     if (multipleChoice) {
-      widget = <RadioButton disabled style={styles.widget} />;
+      widget = <RadioButton disabled={true} style={styles.widget} />;
     } else if (multipleResponse) {
-      widget = <Checkbox disabled style={styles.widget} />;
+      widget = <Checkbox disabled={true} style={styles.widget} />;
     }
     return widget;
   }
@@ -63,13 +64,13 @@ class QuestionFormDeletedOptions extends Component {
           };
 
           return (
-            <div style={styles.option} key={option.id}>
+            <div key={option.id} style={styles.option}>
               {this.renderWidget()}
               {option.image_url ? (
                 <Thumbnail
+                  containerStyle={styles.imageContainer}
                   src={option.image_url}
                   style={styles.image}
-                  containerStyle={styles.imageContainer}
                 />
               ) : (
                 <div style={styles.imageSpacer} />

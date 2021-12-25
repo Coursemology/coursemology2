@@ -1,11 +1,11 @@
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import Immutable from 'immutable';
+import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
 
-import ProgrammingQuestionForm from './containers/ProgrammingQuestionForm/ProgrammingQuestionForm';
 import * as onlineEditorActionCreators from './actions/onlineEditorActionCreators';
 import * as programmingQuestionActionCreators from './actions/programmingQuestionActionCreators';
+import ProgrammingQuestionForm from './containers/ProgrammingQuestionForm/ProgrammingQuestionForm';
 
 function mapStateToProps(state) {
   return state.toObject();

@@ -1,10 +1,11 @@
-import PropTypes from 'prop-types';
 import { defineMessages, injectIntl, intlShape } from 'react-intl';
-import { reduxForm, Field, Form } from 'redux-form';
-import TextField from 'lib/components/redux-form/TextField';
-import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
-import formTranslations from 'lib/translations/form';
+import PropTypes from 'prop-types';
+import { Field, Form, reduxForm } from 'redux-form';
+
 import { formNames } from 'course/duplication/constants';
+import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
+import TextField from 'lib/components/redux-form/TextField';
+import formTranslations from 'lib/translations/form';
 
 const translations = defineMessages({
   newTitle: {
@@ -36,16 +37,16 @@ const NewCourseForm = (props) => {
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <Field
-        fullWidth
-        name="new_title"
-        floatingLabelText={intl.formatMessage(translations.newTitle)}
         component={TextField}
+        floatingLabelText={intl.formatMessage(translations.newTitle)}
+        fullWidth={true}
+        name="new_title"
         {...{ disabled }}
       />
       <Field
-        name="new_start_at"
-        floatingLabelText={intl.formatMessage(translations.newStartAt)}
         component={DateTimePicker}
+        floatingLabelText={intl.formatMessage(translations.newStartAt)}
+        name="new_start_at"
         {...{ disabled }}
       />
     </Form>

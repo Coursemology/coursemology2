@@ -1,8 +1,9 @@
 import { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import PropTypes from 'prop-types';
+
 import formTranslations from 'lib/translations/form';
 
 const styles = {
@@ -86,10 +87,10 @@ class Thumbnail extends PureComponent {
 
     const actions = [
       <FlatButton
-        label={<FormattedMessage {...formTranslations.close} />}
-        primary
-        onClick={() => this.setState({ open: false })}
         key="thumbnail-close-button"
+        label={<FormattedMessage {...formTranslations.close} />}
+        onClick={() => this.setState({ open: false })}
+        primary={true}
       />,
     ];
 
@@ -97,20 +98,20 @@ class Thumbnail extends PureComponent {
       <div style={rootStyle}>
         <div style={containerStyle}>
           <a onClick={onThumbnailClick}>
-            <img src={source} alt={altText} style={thumbnailStyle} {...props} />
+            <img alt={altText} src={source} style={thumbnailStyle} {...props} />
           </a>
         </div>
         <Dialog
           actions={actions}
-          modal={false}
-          open={this.state.open}
-          onRequestClose={() => this.setState({ open: false })}
           bodyStyle={styles.dialogBody}
           contentStyle={styles.dialogContent}
+          modal={false}
+          onRequestClose={() => this.setState({ open: false })}
+          open={this.state.open}
         >
           <img
-            src={source}
             alt={altText}
+            src={source}
             style={expandedImageStyle}
             {...props}
           />

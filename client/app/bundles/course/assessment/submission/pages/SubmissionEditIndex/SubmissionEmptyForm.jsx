@@ -1,16 +1,16 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { reduxForm } from 'redux-form';
-import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { Card } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import { red900 } from 'material-ui/styles/colors';
+import PropTypes from 'prop-types';
+import { reduxForm } from 'redux-form';
+
+import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import history from 'lib/history';
 
-/* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import GradingPanel from '../../containers/GradingPanel';
 import { formNames } from '../../constants';
+import GradingPanel from '../../containers/GradingPanel';
 import translations from '../../translations';
 
 const styles = {
@@ -73,11 +73,11 @@ class SubmissionEmptyForm extends Component {
     if (graderView && !attempting) {
       return (
         <RaisedButton
-          style={styles.formButton}
-          primary
+          disabled={isSaving}
           label={intl.formatMessage(translations.saveGrade)}
           onClick={handleSaveGrade}
-          disabled={isSaving}
+          primary={true}
+          style={styles.formButton}
         />
       );
     }
@@ -91,11 +91,11 @@ class SubmissionEmptyForm extends Component {
         <div style={styles.submitContainer}>
           <FormattedMessage {...translations.submitNoQuestionExplain} />
           <RaisedButton
-            style={styles.formButton}
-            secondary
+            disabled={isSaving}
             label={intl.formatMessage(translations.ok)}
             onClick={this.submitAndRedirect}
-            disabled={isSaving}
+            secondary={true}
+            style={styles.formButton}
           />
         </div>
       );
@@ -108,12 +108,12 @@ class SubmissionEmptyForm extends Component {
     if (graderView && (submitted || published)) {
       return (
         <RaisedButton
-          style={styles.formButton}
           backgroundColor={red900}
-          secondary
+          disabled={isSaving}
           label={intl.formatMessage(translations.unsubmit)}
           onClick={() => this.setState({ unsubmitConfirmation: true })}
-          disabled={isSaving}
+          secondary={true}
+          style={styles.formButton}
         />
       );
     }
@@ -125,13 +125,13 @@ class SubmissionEmptyForm extends Component {
     const { intl, handleUnsubmit } = this.props;
     return (
       <ConfirmationDialog
-        open={unsubmitConfirmation}
+        message={intl.formatMessage(translations.unsubmitConfirmation)}
         onCancel={() => this.setState({ unsubmitConfirmation: false })}
         onConfirm={() => {
           this.setState({ unsubmitConfirmation: false });
           handleUnsubmit();
         }}
-        message={intl.formatMessage(translations.unsubmitConfirmation)}
+        open={unsubmitConfirmation}
       />
     );
   }

@@ -2,20 +2,20 @@ import { Component } from 'react';
 import { injectIntl, intlShape } from 'react-intl';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import Paper from 'material-ui/Paper';
-import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
 import {
+  blue100,
+  green100,
+  grey100,
   red100,
   yellow100,
-  grey100,
-  green100,
-  blue100,
 } from 'material-ui/styles/colors';
 import WarningIcon from 'material-ui/svg-icons/alert/warning';
+import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
 
-import { formatDateTime } from '../utils';
+import { workflowStates } from '../constants';
 import { submissionShape } from '../propTypes';
 import translations from '../translations';
-import { workflowStates } from '../constants';
+import { formatDateTime } from '../utils';
 
 const styles = {
   header: {
@@ -100,9 +100,9 @@ class ProgressPanel extends Component {
       <Card>
         <CardHeader
           id="submission-by"
-          title={intl.formatMessage(translations.submissionBy, { submitter })}
-          subtitle={title}
           style={styles.header[workflowState]}
+          subtitle={title}
+          title={intl.formatMessage(translations.submissionBy, { submitter })}
         />
         {late && workflowState === workflowStates.Submitted
           ? this.renderLateWarning()

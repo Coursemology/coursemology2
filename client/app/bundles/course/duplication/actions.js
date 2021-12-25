@@ -1,7 +1,7 @@
 import CourseAPI from 'api/course';
-import pollJob from 'lib/helpers/job-helpers';
 import actionTypes from 'course/duplication/constants';
 import { setNotification } from 'lib/actions';
+import pollJob from 'lib/helpers/job-helpers';
 
 const DUPLICATE_JOB_POLL_INTERVAL = 2000;
 

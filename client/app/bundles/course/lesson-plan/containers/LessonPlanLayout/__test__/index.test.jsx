@@ -1,10 +1,11 @@
 import { MemoryRouter } from 'react-router-dom';
-import { mount } from 'enzyme';
 import MockAdapter from 'axios-mock-adapter';
-import ProviderWrapper from 'lib/components/ProviderWrapper';
+import { mount } from 'enzyme';
+
 import CourseAPI from 'api/course';
-import storeCreator from 'course/lesson-plan/store';
 import LessonPlanLayout from 'course/lesson-plan/containers/LessonPlanLayout';
+import storeCreator from 'course/lesson-plan/store';
+import ProviderWrapper from 'lib/components/ProviderWrapper';
 
 const client = CourseAPI.lessonPlan.getClient();
 const mock = new MockAdapter(client);

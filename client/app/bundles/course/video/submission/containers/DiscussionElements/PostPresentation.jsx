@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 
-import styles from '../Discussion.scss';
-import PostContainer from './PostContainer'; // eslint-disable-line import/no-cycle
 import EditPostContainer from './EditPostContainer';
+import PostContainer from './PostContainer'; // eslint-disable-line import/no-cycle
 import PostMenu from './PostMenu';
+import styles from '../Discussion.scss';
 
 const propTypes = {
   postId: PropTypes.string.isRequired,

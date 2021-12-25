@@ -1,14 +1,14 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
+import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import { connect } from 'react-redux';
-import { intlShape, injectIntl, defineMessages } from 'react-intl';
-
 import Chip from 'material-ui/Chip';
 import { green100 } from 'material-ui/styles/colors';
+import PropTypes from 'prop-types';
 
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import { fileShape } from '../propTypes';
+
 import { workflowStates } from '../constants';
+import { fileShape } from '../propTypes';
 
 const translations = defineMessages({
   uploadedFiles: {
@@ -50,7 +50,7 @@ class VisibleImportedFileView extends Component {
     const { intl, handleDeleteFile } = this.props;
     return (
       <ConfirmationDialog
-        open={deleteConfirmation}
+        message={intl.formatMessage(translations.deleteConfirmation)}
         onCancel={() =>
           this.setState({ deleteConfirmation: false, deleteFileId: null })
         }
@@ -58,7 +58,7 @@ class VisibleImportedFileView extends Component {
           handleDeleteFile(deleteFileId);
           this.setState({ deleteConfirmation: false, deleteFileId: null });
         }}
-        message={intl.formatMessage(translations.deleteConfirmation)}
+        open={deleteConfirmation}
       />
     );
   }
@@ -80,10 +80,10 @@ class VisibleImportedFileView extends Component {
     return staged ? null : (
       <Chip
         key={file.id}
-        style={styles.chip}
-        onRequestDelete={onRequestDelete}
         backgroundColor={chipColor}
         onClick={() => handleFileTabbing(index)}
+        onRequestDelete={onRequestDelete}
+        style={styles.chip}
       >
         {file.filename}
       </Chip>

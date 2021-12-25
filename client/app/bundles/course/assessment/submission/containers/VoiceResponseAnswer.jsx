@@ -1,25 +1,27 @@
 import { Component } from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { Field } from 'redux-form';
-import { red500 } from 'material-ui/styles/colors';
 import {
-  injectIntl,
-  intlShape,
   defineMessages,
   FormattedMessage,
+  injectIntl,
+  intlShape,
 } from 'react-intl';
+import { connect } from 'react-redux';
 import FlatButton from 'material-ui/FlatButton';
+import { red500 } from 'material-ui/styles/colors';
 import MicIcon from 'material-ui/svg-icons/av/mic';
 import StopIcon from 'material-ui/svg-icons/av/stop';
+import PropTypes from 'prop-types';
+import { Field } from 'redux-form';
+
 import SingleFileInput from 'lib/components/redux-form/SingleFileInput';
 import sharedConstants from 'lib/constants/sharedConstants';
+
 import recorderHelper from '../../utils/recorderHelper';
 import {
-  setRecording,
-  setNotRecording,
   recorderComponentMount,
   recorderComponentUnmount,
+  setNotRecording,
+  setRecording,
 } from '../actions/index';
 
 const translations = defineMessages({
@@ -72,7 +74,7 @@ class VoiceResponseAnswer extends Component {
     }
     if (finalUrl) {
       return (
-        <audio controls src={finalUrl}>
+        <audio controls={true} src={finalUrl}>
           <track kind="captions" />
         </audio>
       );
@@ -141,30 +143,30 @@ class VoiceResponseAnswer extends Component {
       <div>
         <div style={styles.fileInputWrapper}>
           <SingleFileInput
-            disabled={readOnly}
             accept={sharedConstants.SUPPORTED_VOICE_FILE_TYPES.join()}
+            disabled={readOnly}
             {...field}
             previewComponent={this.renderSingleFileInputChildren}
           />
         </div>
         <div>
           <FlatButton
-            primary
             disabled={recording}
             icon={<MicIcon />}
             label={intl.formatMessage(translations.startRecording)}
             onClick={this.onStartRecord}
+            primary={true}
           />
           <FlatButton
-            primary
-            secondary
-            icon={<StopIcon />}
-            label={intl.formatMessage(translations.stopRecording)}
             disabled={
               !recording ||
               recordingComponentId !== this.currentRecordingComponentId()
             }
+            icon={<StopIcon />}
+            label={intl.formatMessage(translations.stopRecording)}
             onClick={this.onStopRecord(field)}
+            primary={true}
+            secondary={true}
           />
         </div>
       </div>
@@ -198,13 +200,13 @@ class VoiceResponseAnswer extends Component {
     return (
       <div>
         <Field
-          name={`${answerId}.file`}
-          readOnly={readOnly}
           answerId={answerId}
+          component={this.renderFile}
+          name={`${answerId}.file`}
+          question={question}
+          readOnly={readOnly}
           recording={recording}
           recordingComponentId={recordingComponentId}
-          question={question}
-          component={this.renderFile}
         />
       </div>
     );

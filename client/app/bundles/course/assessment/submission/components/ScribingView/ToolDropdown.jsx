@@ -1,8 +1,8 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import FontIcon from 'material-ui/FontIcon';
 import MaterialTooltip from 'material-ui/internal/Tooltip';
 import { blue500 } from 'material-ui/styles/colors';
+import PropTypes from 'prop-types';
 
 const propTypes = {
   activeObject: PropTypes.object,
@@ -113,18 +113,18 @@ export default class ToolDropdown extends Component {
 
     return (
       <div
-        role="button"
-        tabIndex="0"
-        style={disabled ? { ...style.tool, ...style.disabled } : style.tool}
         onClick={(event) => (disabled ? () => {} : onClick && onClick(event))}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
+        role="button"
+        style={disabled ? { ...style.tool, ...style.disabled } : style.tool}
+        tabIndex="0"
       >
         <div
-          role="button"
-          tabIndex="0"
-          style={style.innerTool}
           onClick={onClickIcon}
+          role="button"
+          style={style.innerTool}
+          tabIndex="0"
         >
           {this.renderIcon()}
           <MaterialTooltip
@@ -138,10 +138,10 @@ export default class ToolDropdown extends Component {
         <div style={style.innerTool}>
           <FontIcon
             className="fa fa-chevron-down"
+            onClick={!disabled ? onClickChevron : undefined}
             style={
               disabled ? { ...style.chevron, ...style.disabled } : style.chevron
             }
-            onClick={!disabled ? onClickChevron : undefined}
           />
         </div>
       </div>

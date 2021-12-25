@@ -1,11 +1,12 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { red500 } from 'material-ui/styles/colors';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import RaisedButton from 'material-ui/RaisedButton';
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import { red500 } from 'material-ui/styles/colors';
+import PropTypes from 'prop-types';
+
 import { unsubmitResponse } from 'course/survey/actions/responses';
+import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 
 const styles = {
   formButton: {
@@ -60,18 +61,18 @@ class UnsubmitButton extends Component {
     return (
       <>
         <RaisedButton
-          primary
-          onClick={() => this.setState({ open: true })}
-          style={styles.formButton}
           buttonStyle={styles.unsubmitButton}
-          label={<FormattedMessage {...translations.unsubmit} />}
           disabled={isUnsubmitting}
+          label={<FormattedMessage {...translations.unsubmit} />}
+          onClick={() => this.setState({ open: true })}
+          primary={true}
+          style={styles.formButton}
         />
         <ConfirmationDialog
           message={<FormattedMessage {...translations.confirm} />}
-          open={this.state.open}
           onCancel={() => this.setState({ open: false })}
           onConfirm={this.handleUnsubmitResponse}
+          open={this.state.open}
         />
       </>
     );

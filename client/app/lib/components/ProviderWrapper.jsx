@@ -1,14 +1,16 @@
-import PropTypes from 'prop-types';
-import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/lib/integration/react';
-import { IntlProvider, addLocaleData } from 'react-intl';
-import { i18nLocale } from 'lib/helpers/server-context';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
+import { addLocaleData, IntlProvider } from 'react-intl';
 import zh from 'react-intl/locale-data/zh';
+import { Provider } from 'react-redux';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import PropTypes from 'prop-types';
+import { PersistGate } from 'redux-persist/lib/integration/react';
+
+import LoadingIndicator from 'lib/components/LoadingIndicator';
+import { i18nLocale } from 'lib/helpers/server-context';
+
+import translations from '../../../build/locales/locales.json';
 
 import ErrorBoundary from './ErrorBoundary';
-import translations from '../../../build/locales/locales.json';
 
 const propTypes = {
   store: PropTypes.shape({

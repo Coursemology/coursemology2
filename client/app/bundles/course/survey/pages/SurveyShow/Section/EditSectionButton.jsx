@@ -1,13 +1,14 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import {
-  injectIntl,
   defineMessages,
-  intlShape,
   FormattedMessage,
+  injectIntl,
+  intlShape,
 } from 'react-intl';
+import { connect } from 'react-redux';
 import FlatButton from 'material-ui/FlatButton';
+import PropTypes from 'prop-types';
+
 import {
   showSectionForm,
   updateSurveySection,
@@ -58,9 +59,9 @@ class EditSectionButton extends Component {
   render() {
     return (
       <FlatButton
+        disabled={this.props.disabled}
         label={<FormattedMessage {...translations.editSection} />}
         onClick={this.showEditSectionForm}
-        disabled={this.props.disabled}
       />
     );
   }

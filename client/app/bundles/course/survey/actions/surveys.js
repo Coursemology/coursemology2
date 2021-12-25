@@ -1,10 +1,13 @@
-import { submit, SubmissionError } from 'redux-form';
+import { SubmissionError, submit } from 'redux-form';
+
 import CourseAPI from 'api/course';
-import history from 'lib/history';
 import pollJob from 'lib/helpers/job-helpers';
 import { getCourseId } from 'lib/helpers/url-helpers';
-import translations from '../translations';
+import history from 'lib/history';
+
 import actionTypes, { formNames } from '../constants';
+import translations from '../translations';
+
 import { setNotification } from './index';
 
 const DOWNLOAD_JOB_POLL_INTERVAL = 2000;

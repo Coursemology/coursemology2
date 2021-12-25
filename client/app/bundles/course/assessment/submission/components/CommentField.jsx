@@ -1,10 +1,11 @@
 import { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import PropTypes from 'prop-types';
-import RaisedButton from 'material-ui/RaisedButton';
-import CircularProgress from 'material-ui/CircularProgress';
-import MaterialSummernote from 'lib/components/MaterialSummernote';
 import ReactTooltip from 'react-tooltip';
+import CircularProgress from 'material-ui/CircularProgress';
+import RaisedButton from 'material-ui/RaisedButton';
+import PropTypes from 'prop-types';
+
+import MaterialSummernote from 'lib/components/MaterialSummernote';
 
 const translations = defineMessages({
   prompt: {
@@ -76,27 +77,27 @@ export default class CommentField extends Component {
           value={value}
         />
         <RaisedButton
-          primary
-          style={{ marginRight: 10, marginBotton: 10 }}
-          label={<FormattedMessage {...translations.comment} />}
-          onClick={() => createComment(value)}
           disabled={disableCommentButton}
           icon={
             isSubmittingNormalComment ? <CircularProgress size={24} /> : null
           }
+          label={<FormattedMessage {...translations.comment} />}
+          onClick={() => createComment(value)}
+          primary={true}
+          style={{ marginRight: 10, marginBotton: 10 }}
         />
         {renderDelayedCommentButton && (
-          <span data-tip data-for="timeBonusExpTooltip">
+          <span data-for="timeBonusExpTooltip" data-tip={true}>
             <RaisedButton
-              primary
-              label={<FormattedMessage {...translations.commentDelayed} />}
-              onClick={() => createComment(value, true)}
               disabled={disableCommentButton}
               icon={
                 isSubmittingDelayedComment ? (
                   <CircularProgress size={24} />
                 ) : null
               }
+              label={<FormattedMessage {...translations.commentDelayed} />}
+              onClick={() => createComment(value, true)}
+              primary={true}
             />
             <ReactTooltip id="timeBonusExpTooltip">
               <FormattedMessage {...translations.commentDelayedDescription} />

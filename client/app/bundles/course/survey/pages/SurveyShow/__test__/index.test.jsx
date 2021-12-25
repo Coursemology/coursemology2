@@ -1,11 +1,12 @@
-import { mount } from 'enzyme';
-import { connect } from 'react-redux';
 import { TestBackend } from 'react-dnd-test-backend';
-import { createDragDropManager } from 'dnd-core';
+import { connect } from 'react-redux';
 import MockAdapter from 'axios-mock-adapter';
+import { createDragDropManager } from 'dnd-core';
+import { mount } from 'enzyme';
 
 import CourseAPI from 'api/course';
 import storeCreator from 'course/survey/store';
+
 import { ConnectedSurveyShow } from '../index';
 
 // Mock axios

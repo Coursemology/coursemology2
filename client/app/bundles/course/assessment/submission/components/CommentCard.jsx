@@ -1,14 +1,15 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import Avatar from 'material-ui/Avatar';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
-import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
+import { grey100, orange100, red500 } from 'material-ui/styles/colors';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
-import { red500, grey100, orange100 } from 'material-ui/styles/colors';
-import { defineMessages, FormattedMessage } from 'react-intl';
-import MaterialSummernote from 'lib/components/MaterialSummernote';
+import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
+import PropTypes from 'prop-types';
+
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import MaterialSummernote from 'lib/components/MaterialSummernote';
 import moment from 'lib/moment';
 
 import { postShape } from '../propTypes';
@@ -132,17 +133,17 @@ export default class CommentCard extends Component {
           />
           <div style={styles.buttonContainer}>
             <FlatButton
-              style={styles.editButton}
-              labelStyle={styles.editButton}
               label="Cancel"
+              labelStyle={styles.editButton}
               onClick={() => this.setState({ editMode: false })}
+              style={styles.editButton}
             />
             <FlatButton
-              style={styles.deleteButton}
-              labelStyle={styles.deleteButton}
               label="Save"
-              primary
+              labelStyle={styles.deleteButton}
               onClick={() => this.onSave()}
+              primary={true}
+              style={styles.deleteButton}
             />
           </div>
         </>
@@ -165,32 +166,32 @@ export default class CommentCard extends Component {
       <Card id={CommentCard.postIdentifier(id)} style={styles.card}>
         <div style={isDelayed ? styles.delayedHeader : styles.header}>
           <CardHeader
+            avatar={<Avatar size={25} src={avatar} />}
             style={styles.cardHeader}
-            title={name}
             subtitle={`${CommentCard.formatDateTime(createdAt)}${
               isDelayed ? ' (delayed comment)' : ''
             }`}
-            titleStyle={{ display: 'inline-block', marginRight: 20 }}
             subtitleStyle={{ display: 'inline-block' }}
-            avatar={<Avatar src={avatar} size={25} />}
+            title={name}
+            titleStyle={{ display: 'inline-block', marginRight: 20 }}
           />
           <div style={styles.buttonContainer}>
             {canUpdate ? (
               <FlatButton
                 className="edit-comment"
-                style={styles.headerButton}
-                labelStyle={styles.headerButton}
                 icon={<EditIcon />}
+                labelStyle={styles.headerButton}
                 onClick={() => this.toggleEditMode()}
+                style={styles.headerButton}
               />
             ) : null}
             {canDestroy ? (
               <FlatButton
                 className="delete-comment"
-                style={styles.headerButton}
-                labelStyle={styles.headerButton}
                 icon={<DeleteIcon color={red500} />}
+                labelStyle={styles.headerButton}
                 onClick={() => this.onDelete()}
+                style={styles.headerButton}
               />
             ) : null}
           </div>
@@ -199,11 +200,11 @@ export default class CommentCard extends Component {
           {this.renderCommentContent()}
         </CardText>
         <ConfirmationDialog
-          confirmDelete
-          open={this.state.deleteConfirmation}
+          confirmDelete={true}
           message={<FormattedMessage {...translations.deleteConfirmation} />}
           onCancel={() => this.setState({ deleteConfirmation: false })}
           onConfirm={() => this.onConfirmDelete()}
+          open={this.state.deleteConfirmation}
         />
       </Card>
     );

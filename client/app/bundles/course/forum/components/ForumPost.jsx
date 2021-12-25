@@ -1,8 +1,9 @@
 import React from 'react';
-import { Divider, Card, CardHeader, CardText, FlatButton } from 'material-ui';
-import PropTypes from 'prop-types';
-import moment from 'lib/moment';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { Card, CardHeader, CardText, Divider, FlatButton } from 'material-ui';
+import PropTypes from 'prop-types';
+
+import moment from 'lib/moment';
 
 const MAX_POST_HEIGHT = 60;
 
@@ -46,23 +47,23 @@ export default class ForumPost extends React.Component {
   render() {
     return (
       <Card
-        style={{ ...styles.default, ...this.props.style }}
         className="forum-post"
+        style={{ ...styles.default, ...this.props.style }}
       >
         <CardHeader
-          title={this.props.post.userName}
+          avatar={this.props.post.avatar}
           subtitle={moment(this.props.post.updatedAt).format(
             'MMM DD, YYYY h:mma',
           )}
-          avatar={this.props.post.avatar}
+          title={this.props.post.userName}
         />
         <Divider />
         <CardText>
           <div
-            dangerouslySetInnerHTML={{ __html: this.props.post.text }}
             ref={(divElement) => {
               this.divElement = divElement;
             }}
+            dangerouslySetInnerHTML={{ __html: this.props.post.text }}
             style={{
               height:
                 this.state.isExpanded || !this.state.isExpandable
@@ -73,6 +74,7 @@ export default class ForumPost extends React.Component {
           />
           {this.state.isExpandable && (
             <FlatButton
+              className="forum-post-expand-button"
               label={
                 this.state.isExpanded ? (
                   <FormattedMessage {...translations.showLess} />
@@ -86,9 +88,8 @@ export default class ForumPost extends React.Component {
                   isExpanded: !oldState.isExpanded,
                 }));
               }}
+              primary={true}
               style={styles.expandButton}
-              primary
-              className="forum-post-expand-button"
             />
           )}
         </CardText>

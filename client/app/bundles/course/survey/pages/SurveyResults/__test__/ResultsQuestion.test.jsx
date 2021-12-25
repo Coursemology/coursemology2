@@ -1,6 +1,8 @@
-import { mount } from 'enzyme';
 import { MemoryRouter } from 'react-router-dom';
+import { mount } from 'enzyme';
+
 import storeCreator from 'course/survey/store';
+
 import ResultsQuestion from '../ResultsQuestion';
 
 const surveyId = '6';
@@ -62,8 +64,8 @@ const testExpandLongQuestion = (question) => {
     <MemoryRouter>
       <ResultsQuestion
         {...{ question }}
-        includePhantoms
         anonymous={false}
+        includePhantoms={true}
         index={1}
       />
     </MemoryRouter>,
@@ -95,8 +97,8 @@ describe('<ResultsQuestion />', () => {
       <MemoryRouter>
         <ResultsQuestion
           {...{ question }}
-          includePhantoms={false}
           anonymous={false}
+          includePhantoms={false}
           index={1}
         />
       </MemoryRouter>,

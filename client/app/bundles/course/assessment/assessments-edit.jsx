@@ -1,7 +1,9 @@
 import { render } from 'react-dom';
+
 import ProviderWrapper from 'lib/components/ProviderWrapper';
-import storeCreator from './store';
+
 import AssessmentEditPage from './pages/AssessmentEdit';
+import storeCreator from './store';
 import { categoryAndTabTitle } from './utils';
 
 $(() => {
@@ -23,14 +25,9 @@ $(() => {
     const Page = () => (
       <ProviderWrapper store={store}>
         <AssessmentEditPage
-          modeSwitching={data.mode_switching}
-          gamified={data.gamified}
-          showPersonalizedTimelineFeatures={
-            data.show_personalized_timeline_features
-          }
-          randomizationAllowed={data.randomization_allowed}
-          folderAttributes={data.folder_attributes}
           conditionAttributes={data.condition_attributes}
+          folderAttributes={data.folder_attributes}
+          gamified={data.gamified}
           initialValues={{
             ...data.attributes,
             tabs: [currentTab],
@@ -38,6 +35,11 @@ $(() => {
               data.attributes.view_password || data.attributes.session_password
             ),
           }}
+          modeSwitching={data.mode_switching}
+          randomizationAllowed={data.randomization_allowed}
+          showPersonalizedTimelineFeatures={
+            data.show_personalized_timeline_features
+          }
         />
       </ProviderWrapper>
     );

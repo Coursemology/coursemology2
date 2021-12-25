@@ -1,11 +1,13 @@
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { isPristine } from 'redux-form';
+
 import * as actionCreators from 'course/survey/actions/sections';
-import FormDialogue from 'lib/components/FormDialogue';
 import { formNames } from 'course/survey/constants';
 import { sectionShape } from 'course/survey/propTypes';
+import FormDialogue from 'lib/components/FormDialogue';
+
 import SectionForm from './SectionForm';
 
 function mapStateToProps({ sectionForm, ...state }) {
@@ -31,12 +33,12 @@ const SectionFormDialogue = ({
 
   return (
     <FormDialogue
-      title={formTitle}
-      submitForm={submitSectionForm}
-      skipConfirmation={pristine}
-      hideForm={hideSectionForm}
       disabled={disabled}
+      hideForm={hideSectionForm}
       open={visible}
+      skipConfirmation={pristine}
+      submitForm={submitSectionForm}
+      title={formTitle}
     >
       <SectionForm {...{ initialValues, onSubmit, disabled }} />
     </FormDialogue>

@@ -1,5 +1,4 @@
-/* eslint no-param-reassign: ["error", { "props": false }] */
-/* eslint-disable import/prefer-default-export */
+/* eslint-disable import/prefer-default-export, no-param-reassign */
 
 export function nestFolders(folders) {
   const rootFolders = [];

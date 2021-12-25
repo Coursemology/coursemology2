@@ -1,15 +1,15 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import { grey600 } from 'material-ui/styles/colors';
+import PropTypes from 'prop-types';
 
-import { postShape, topicShape } from '../propTypes';
+import * as commentActions from '../actions/comments';
 import CommentCard from '../components/CommentCard';
 import CommentField from '../components/CommentField';
-import * as commentActions from '../actions/comments';
-import translations from '../translations';
 import { workflowStates } from '../constants';
+import { postShape, topicShape } from '../propTypes';
+import translations from '../translations';
 
 class VisibleComments extends Component {
   static newCommentIdentifier(field) {
@@ -40,24 +40,24 @@ class VisibleComments extends Component {
             (graderView || !post.isDelayed) && (
               <CommentCard
                 key={post.id}
-                post={post}
-                editValue={commentForms.posts[post.id]}
-                updateComment={(value) => updateComment(post.id, value)}
                 deleteComment={() => deleteComment(post.id)}
+                editValue={commentForms.posts[post.id]}
                 handleChange={(value) => handleUpdateChange(post.id, value)}
+                post={post}
+                updateComment={(value) => updateComment(post.id, value)}
               />
             ),
         )}
         <CommentField
+          airModeColor={false}
           createComment={createComment}
           handleChange={handleCreateChange}
           inputId={VisibleComments.newCommentIdentifier(topic.id)}
-          isSubmittingNormalComment={commentForms.isSubmittingNormalComment}
           isSubmittingDelayedComment={commentForms.isSubmittingDelayedComment}
+          isSubmittingNormalComment={commentForms.isSubmittingNormalComment}
           isUpdatingComment={commentForms.isUpdatingComment}
-          value={commentForms.topics[topic.id]}
-          airModeColor={false}
           renderDelayedCommentButton={renderDelayedCommentButton}
+          value={commentForms.topics[topic.id]}
         />
       </div>
     );

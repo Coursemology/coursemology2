@@ -1,11 +1,12 @@
-import PropTypes from 'prop-types';
+import { injectIntl, intlShape } from 'react-intl';
+import { connect } from 'react-redux';
 import IconButton from 'material-ui/IconButton';
 import SkipNext from 'material-ui/svg-icons/av/skip-next';
-import { connect } from 'react-redux';
-import { intlShape, injectIntl } from 'react-intl';
+import PropTypes from 'prop-types';
+
+import translations from '../../translations';
 
 import styles from '../VideoPlayer.scss';
-import translations from '../../translations';
 
 const propTypes = {
   intl: intlShape.isRequired,
@@ -22,9 +23,9 @@ const NextVideoButton = (props) => {
   if (!props.url) {
     return (
       <IconButton
-        tooltip={props.intl.formatMessage(translations.noNextVideo)}
         className={styles.nextVideo}
-        disabled
+        disabled={true}
+        tooltip={props.intl.formatMessage(translations.noNextVideo)}
       >
         <SkipNext />
       </IconButton>
@@ -33,10 +34,10 @@ const NextVideoButton = (props) => {
 
   return (
     <IconButton
-      tooltip={props.intl.formatMessage(translations.watchNextVideo)}
       className={styles.nextVideo}
-      href={props.url}
       data-method={props.isPostRequest ? 'post' : ''}
+      href={props.url}
+      tooltip={props.intl.formatMessage(translations.watchNextVideo)}
     >
       <SkipNext />
     </IconButton>

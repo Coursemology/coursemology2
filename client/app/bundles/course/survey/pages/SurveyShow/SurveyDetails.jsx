@@ -1,20 +1,22 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { formatLongDateTime } from 'lib/moment';
-import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
+import { connect } from 'react-redux';
 import { Card, CardText } from 'material-ui/Card';
-import Toggle from 'material-ui/Toggle';
 import RaisedButton from 'material-ui/RaisedButton';
-import libTranslations from 'lib/translations';
-import history from 'lib/history';
-import surveyTranslations from 'course/survey/translations';
-import { surveyShape } from 'course/survey/propTypes';
+import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
+import Toggle from 'material-ui/Toggle';
+import PropTypes from 'prop-types';
+
 import { updateSurvey } from 'course/survey/actions/surveys';
 import RespondButton from 'course/survey/containers/RespondButton';
-import NewSectionButton from './NewSectionButton';
+import { surveyShape } from 'course/survey/propTypes';
+import surveyTranslations from 'course/survey/translations';
+import history from 'lib/history';
+import { formatLongDateTime } from 'lib/moment';
+import libTranslations from 'lib/translations';
+
 import DownloadResponsesButton from './DownloadResponsesButton';
+import NewSectionButton from './NewSectionButton';
 
 const styles = {
   table: {
@@ -57,8 +59,8 @@ class SurveyDetails extends Component {
           <FormattedMessage {...surveyTranslations.description} />
         </h4>
         <p
-          style={{ whiteSpace: 'pre-line' }}
           dangerouslySetInnerHTML={{ __html: survey.description }}
+          style={{ whiteSpace: 'pre-line' }}
         />
       </CardText>
     );
@@ -75,8 +77,8 @@ class SurveyDetails extends Component {
         <Toggle
           label={<FormattedMessage {...surveyTranslations.published} />}
           labelPosition="right"
-          toggled={survey.published}
           onToggle={this.handlePublishToggle}
+          toggled={survey.published}
         />
       </CardText>
     );
@@ -173,37 +175,37 @@ class SurveyDetails extends Component {
           ) : null}
           {survey.canViewResults ? (
             <RaisedButton
-              style={styles.button}
               label={<FormattedMessage {...surveyTranslations.results} />}
               onClick={() =>
                 history.push(
                   `/courses/${courseId}/surveys/${survey.id}/results`,
                 )
               }
+              style={styles.button}
             />
           ) : null}
           {survey.canViewResults ? (
             <RaisedButton
-              style={styles.button}
               label={<FormattedMessage {...surveyTranslations.responses} />}
               onClick={() =>
                 history.push(
                   `/courses/${courseId}/surveys/${survey.id}/responses`,
                 )
               }
+              style={styles.button}
             />
           ) : null}
           <DownloadResponsesButton />
           <RespondButton
-            courseId={courseId}
-            surveyId={survey.id}
-            responseId={survey.response && survey.response.id}
-            canRespond={survey.canRespond}
             canModify={!!survey.response && survey.response.canModify}
+            canRespond={survey.canRespond}
             canSubmit={!!survey.response && survey.response.canSubmit}
-            startAt={survey.start_at}
+            courseId={courseId}
             endAt={survey.end_at}
+            responseId={survey.response && survey.response.id}
+            startAt={survey.start_at}
             submittedAt={survey.response && survey.response.submitted_at}
+            surveyId={survey.id}
           />
         </CardText>
       </Card>

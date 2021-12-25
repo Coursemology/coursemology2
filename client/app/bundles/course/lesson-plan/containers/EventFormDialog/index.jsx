@@ -1,11 +1,13 @@
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { getFormValues, isPristine } from 'redux-form';
-import FormDialogue from 'lib/components/FormDialogue';
-import { formNames } from 'course/lesson-plan/constants';
+
 import * as actionCreators from 'course/lesson-plan/actions';
+import { formNames } from 'course/lesson-plan/constants';
 import * as libActionCreators from 'lib/actions';
+import FormDialogue from 'lib/components/FormDialogue';
+
 import EventForm from './EventForm';
 
 const EventFormDialog = ({
@@ -41,17 +43,17 @@ const EventFormDialog = ({
 
   return (
     <FormDialogue
-      title={formTitle}
-      open={visible}
-      submitForm={submitEventForm}
-      skipConfirmation={pristine}
       disabled={disabled}
       hideForm={hideEventForm}
+      open={visible}
+      skipConfirmation={pristine}
+      submitForm={submitEventForm}
+      title={formTitle}
     >
       <EventForm
         {...{ initialValues, onSubmit, disabled, shiftEndDate, formValues }}
-        eventTypes={[...new Set(eventTypes)]}
         eventLocations={[...new Set(eventLocations)]}
+        eventTypes={[...new Set(eventTypes)]}
       />
     </FormDialogue>
   );

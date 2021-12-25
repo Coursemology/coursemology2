@@ -1,10 +1,12 @@
-import { mount, shallow } from 'enzyme';
 import MockAdapter from 'axios-mock-adapter';
-import ProviderWrapper from 'lib/components/ProviderWrapper';
+import { mount, shallow } from 'enzyme';
+
 import CourseAPI from 'api/course';
+import ProviderWrapper from 'lib/components/ProviderWrapper';
+
 import MaterialUploader from '../index';
-import MaterialList from '../MaterialList';
 import Material from '../Material';
+import MaterialList from '../MaterialList';
 
 const folderId = 1;
 const uploadedMaterial = {
@@ -63,7 +65,7 @@ describe('<MaterialUploader />', () => {
 
     const materailUploder = mount(
       <ProviderWrapper>
-        <MaterialUploader materials={materials} folderId={folderId} />
+        <MaterialUploader folderId={folderId} materials={materials} />
       </ProviderWrapper>,
     );
 

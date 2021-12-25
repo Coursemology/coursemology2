@@ -1,5 +1,7 @@
 import { mount } from 'enzyme';
+
 import storeCreator from 'course/lesson-plan/store';
+
 import { UnconnectedLessonPlanShow as LessonPlanShow } from '../index';
 
 const data = {

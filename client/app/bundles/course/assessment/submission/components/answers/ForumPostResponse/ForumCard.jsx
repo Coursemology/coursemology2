@@ -1,13 +1,13 @@
 import React from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import {
-  RaisedButton,
-  FontIcon,
   Card,
-  CardText,
   CardActions,
   CardHeader,
+  CardText,
   Divider,
+  FontIcon,
+  RaisedButton,
 } from 'material-ui';
 import { cyan50 } from 'material-ui/styles/colors';
 import PropTypes from 'prop-types';
@@ -84,12 +84,15 @@ export default class ForumCard extends React.Component {
 
     return (
       <Card
+        className="forum-card"
         expanded={this.state.isExpanded}
         onExpandChange={this.handleIsExpandedChange}
         style={this.props.style}
-        className="forum-card"
       >
         <CardHeader
+          actAsExpander={true}
+          showExpandableButton={true}
+          style={styles.cardHeader}
           title={
             <CardTitle
               title={this.props.forumTopicPostPack.forum.name}
@@ -109,41 +112,38 @@ export default class ForumCard extends React.Component {
               }
             />
           }
-          actAsExpander
-          showExpandableButton
-          style={styles.cardHeader}
         />
         <Divider />
-        <CardActions expandable style={styles.cardActions}>
+        <CardActions expandable={true} style={styles.cardActions}>
           <RaisedButton
-            label={<FormattedMessage {...translations.viewForumInNewTab} />}
             href={getForumURL(
               forumTopicPostPack.course.id,
               forumTopicPostPack.forum.id,
             )}
-            target="_blank"
-            labelPosition="before"
             icon={<FontIcon className="fa fa-external-link" />}
+            label={<FormattedMessage {...translations.viewForumInNewTab} />}
+            labelPosition="before"
+            target="_blank"
           />
         </CardActions>
         <Divider />
-        <CardText expandable style={styles.container}>
+        <CardText expandable={true} style={styles.container}>
           {forumTopicPostPack.topicPostPacks.map((topicPostPack, index) => (
             <TopicCard
-              topicPostPack={topicPostPack}
-              selectedPostPacks={this.props.selectedPostPacks}
+              key={`forum-topic-${topicPostPack.topic.id}`}
               courseId={this.props.forumTopicPostPack.course.id}
               forumId={this.props.forumTopicPostPack.forum.id}
+              isExpandedOnLoad={this.isTopicExpandedOnFirstLoad(topicPostPack)}
               onSelectPostPack={(postPackSelected, isSelected) =>
                 this.props.onSelectPostPack(postPackSelected, isSelected)
               }
-              isExpandedOnLoad={this.isTopicExpandedOnFirstLoad(topicPostPack)}
-              key={`forum-topic-${topicPostPack.topic.id}`}
+              selectedPostPacks={this.props.selectedPostPacks}
               style={
                 index < forumTopicPostPack.topicPostPacks.length - 1
                   ? styles.nonLastTopicCard
                   : {}
               }
+              topicPostPack={topicPostPack}
             />
           ))}
         </CardText>

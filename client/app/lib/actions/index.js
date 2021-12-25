@@ -1,5 +1,6 @@
-import actionTypes from 'lib/constants';
 import { change } from 'redux-form';
+
+import actionTypes from 'lib/constants';
 
 export function setNotification(message) {
   return (dispatch) =>

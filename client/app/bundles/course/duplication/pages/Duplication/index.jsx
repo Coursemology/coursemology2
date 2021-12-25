@@ -1,35 +1,34 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import {
   defineMessages,
   FormattedMessage,
   injectIntl,
   intlShape,
 } from 'react-intl';
-
+import { connect } from 'react-redux';
 import Paper from 'material-ui/Paper';
-import Subheader from 'material-ui/Subheader';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
+import Subheader from 'material-ui/Subheader';
+import PropTypes from 'prop-types';
 
-import TitleBar from 'lib/components/TitleBar';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
-import DateTimePicker from 'lib/components/form/DateTimePicker';
 import {
+  changeSourceCourse,
   fetchObjectsList,
   setDuplicationMode,
-  changeSourceCourse,
 } from 'course/duplication/actions';
+import CourseDropdownMenu from 'course/duplication/components/CourseDropdownMenu';
 import { duplicationModes } from 'course/duplication/constants';
 import {
-  sourceCourseShape,
   courseListingShape,
+  sourceCourseShape,
 } from 'course/duplication/propTypes';
-import CourseDropdownMenu from 'course/duplication/components/CourseDropdownMenu';
+import DateTimePicker from 'lib/components/form/DateTimePicker';
+import LoadingIndicator from 'lib/components/LoadingIndicator';
+import TitleBar from 'lib/components/TitleBar';
 
-import ItemsSelector from './ItemsSelector';
-import DuplicateAllButton from './DuplicateAllButton';
 import DestinationCourseSelector from './DestinationCourseSelector';
+import DuplicateAllButton from './DuplicateAllButton';
+import ItemsSelector from './ItemsSelector';
 import ItemsSelectorMenu from './ItemsSelectorMenu';
 
 const translations = defineMessages({
@@ -173,21 +172,21 @@ class Duplication extends Component {
     return (
       <>
         <CourseDropdownMenu
-          dropDownMenuProps={{ className: 'source-course-dropdown' }}
-          currentHost={currentHost}
           courses={sourceCourses}
-          selectedCourseId={sourceCourse.id}
           currentCourseId={currentCourseId}
-          prompt={intl.formatMessage(translations.selectSourceCourse)}
+          currentHost={currentHost}
+          disabled={isChangingCourse}
+          dropDownMenuProps={{ className: 'source-course-dropdown' }}
           onChange={(e, index, value) => dispatch(changeSourceCourse(value))}
           onHome={() => dispatch(changeSourceCourse(currentCourseId))}
-          disabled={isChangingCourse}
+          prompt={intl.formatMessage(translations.selectSourceCourse)}
+          selectedCourseId={sourceCourse.id}
         />
         <DateTimePicker
-          disabled
+          disabled={true}
+          floatingLabelText={intl.formatMessage(translations.startAt)}
           name="start_at"
           value={sourceCourse.start_at}
-          floatingLabelText={intl.formatMessage(translations.startAt)}
         />
       </>
     );
@@ -221,17 +220,17 @@ class Duplication extends Component {
     return (
       <RadioButtonGroup
         name="duplicationMode"
+        onChange={(_, mode) => dispatch(setDuplicationMode(mode))}
         style={styles.radioButtonGroup}
         valueSelected={duplicationMode}
-        onChange={(_, mode) => dispatch(setDuplicationMode(mode))}
       >
         <RadioButton
-          value={duplicationModes.COURSE}
           label={<FormattedMessage {...translations.newCourse} />}
+          value={duplicationModes.COURSE}
         />
         <RadioButton
-          value={duplicationModes.OBJECT}
           label={<FormattedMessage {...translations.existingCourse} />}
+          value={duplicationModes.OBJECT}
         />
       </RadioButtonGroup>
     );

@@ -1,16 +1,17 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import Subheader from 'material-ui/Subheader';
+import { connect } from 'react-redux';
 import Checkbox from 'material-ui/Checkbox';
-import { defaultComponentTitles } from 'course/translations.intl';
-import { duplicableItemTypes } from 'course/duplication/constants';
+import Subheader from 'material-ui/Subheader';
+import PropTypes from 'prop-types';
+
 import { setItemSelectedBoolean } from 'course/duplication/actions';
-import { surveyShape } from 'course/duplication/propTypes';
+import BulkSelectors from 'course/duplication/components/BulkSelectors';
 import TypeBadge from 'course/duplication/components/TypeBadge';
 import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
-import BulkSelectors from 'course/duplication/components/BulkSelectors';
+import { duplicableItemTypes } from 'course/duplication/constants';
+import { surveyShape } from 'course/duplication/propTypes';
+import { defaultComponentTitles } from 'course/translations.intl';
 
 const translations = defineMessages({
   noItems: {
@@ -61,6 +62,7 @@ class SurveysSelector extends Component {
     return (
       <Checkbox
         key={survey.id}
+        checked={checked}
         label={
           <span>
             <TypeBadge itemType={duplicableItemTypes.SURVEY} />
@@ -68,7 +70,6 @@ class SurveysSelector extends Component {
             {survey.title}
           </span>
         }
-        checked={checked}
         onCheck={(e, value) =>
           dispatch(
             setItemSelectedBoolean(

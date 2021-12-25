@@ -1,5 +1,5 @@
-/* eslint-disable import/prefer-default-export */
 import courseAPI from 'api/course';
+
 import actionTypes from './constants';
 
 export function fetchNotification() {

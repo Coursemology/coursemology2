@@ -1,7 +1,7 @@
+import Checkbox from 'material-ui/Checkbox';
+import { green50 } from 'material-ui/styles/colors';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { green50 } from 'material-ui/styles/colors';
-import Checkbox from 'material-ui/Checkbox';
 
 import { questionShape } from '../../propTypes';
 
@@ -15,10 +15,20 @@ const MultipleResponseOptions = ({
   <>
     {question.options.map((option) => (
       <Checkbox
-        disabled={readOnly}
         key={option.id}
-        value={option.id}
         checked={input.value.indexOf(option.id) !== -1}
+        disabled={readOnly}
+        label={
+          <div
+            dangerouslySetInnerHTML={{ __html: option.option.trim() }}
+            style={
+              option.correct && readOnly && (showMcqMrqSolution || graderView)
+                ? { backgroundColor: green50 }
+                : null
+            }
+          />
+        }
+        labelStyle={{ verticalAlign: 'middle' }}
         onCheck={(_event, isInputChecked) => {
           const newValue = [...input.value];
           if (isInputChecked) {
@@ -28,17 +38,7 @@ const MultipleResponseOptions = ({
           }
           return input.onChange(newValue);
         }}
-        label={
-          <div
-            style={
-              option.correct && readOnly && (showMcqMrqSolution || graderView)
-                ? { backgroundColor: green50 }
-                : null
-            }
-            dangerouslySetInnerHTML={{ __html: option.option.trim() }}
-          />
-        }
-        labelStyle={{ verticalAlign: 'middle' }}
+        value={option.id}
       />
     ))}
   </>
@@ -67,8 +67,8 @@ const MultipleResponse = ({
   answerId,
 }) => (
   <Field
-    name={`${answerId}[option_ids]`}
     component={MultipleResponseOptions}
+    name={`${answerId}[option_ids]`}
     {...{ question, readOnly, showMcqMrqSolution, graderView }}
   />
 );

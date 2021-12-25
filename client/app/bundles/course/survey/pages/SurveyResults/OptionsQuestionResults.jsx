@@ -1,11 +1,10 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { Link } from 'react-router-dom';
 import { CardText } from 'material-ui/Card';
 import Chip from 'material-ui/Chip';
-import Toggle from 'material-ui/Toggle';
 import RaisedButton from 'material-ui/RaisedButton';
+import { cyan500, grey50, grey300 } from 'material-ui/styles/colors';
 import {
   Table,
   TableBody,
@@ -14,11 +13,13 @@ import {
   TableRow,
   TableRowColumn,
 } from 'material-ui/Table';
-import { cyan500, grey50, grey300 } from 'material-ui/styles/colors';
-import Thumbnail from 'lib/components/Thumbnail';
-import { sorts } from 'course/survey/utils';
+import Toggle from 'material-ui/Toggle';
+import PropTypes from 'prop-types';
+
 import { questionTypes } from 'course/survey/constants';
 import { optionShape } from 'course/survey/propTypes';
+import { sorts } from 'course/survey/utils';
+import Thumbnail from 'lib/components/Thumbnail';
 
 const styles = {
   percentageBarThreshold: 10,
@@ -149,9 +150,9 @@ class OptionsQuestionResults extends Component {
           <TableRowColumn>
             {imageUrl ? (
               <Thumbnail
+                containerStyle={styles.imageContainer}
                 src={imageUrl}
                 style={styles.image}
-                containerStyle={styles.imageContainer}
               />
             ) : (
               []
@@ -286,7 +287,7 @@ class OptionsQuestionResults extends Component {
 
     return (
       <Table wrapperStyle={styles.tableWrapper}>
-        <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+        <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
           <TableRow>
             <TableHeaderColumn>
               <FormattedMessage {...translations.serial} />

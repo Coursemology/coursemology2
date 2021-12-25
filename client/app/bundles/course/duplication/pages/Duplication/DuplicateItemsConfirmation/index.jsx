@@ -1,20 +1,22 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
-import Subheader from 'material-ui/Subheader';
 import { Card, CardText } from 'material-ui/Card';
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import Subheader from 'material-ui/Subheader';
+import PropTypes from 'prop-types';
+
 import {
-  hideDuplicateItemsConfirmation,
   duplicateItems,
+  hideDuplicateItemsConfirmation,
 } from 'course/duplication/actions';
 import { courseShape } from 'course/duplication/propTypes';
-import AssessmentsListing from './AssessmentsListing';
-import SurveyListing from './SurveyListing';
+import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+
 import AchievementsListing from './AchievementsListing';
+import AssessmentsListing from './AssessmentsListing';
 import MaterialsListing from './MaterialsListing';
+import SurveyListing from './SurveyListing';
 import VideosListing from './VideosListing';
 
 const translations = defineMessages({
@@ -77,7 +79,7 @@ class DuplicateItemsConfirmation extends Component {
         <Card>
           <CardText>
             <h4>
-              <a href={url} target="_blank" rel="noopener noreferrer">
+              <a href={url} rel="noopener noreferrer" target="_blank">
                 {destinationCourse.title}
               </a>
             </h4>
@@ -104,17 +106,17 @@ class DuplicateItemsConfirmation extends Component {
 
     return (
       <ConfirmationDialog
-        open={open}
+        confirmButtonText={<FormattedMessage {...translations.duplicate} />}
+        disableCancelButton={isDuplicating}
+        disableConfirmButton={isDuplicating}
+        message={this.renderListing()}
         onCancel={() => dispatch(hideDuplicateItemsConfirmation())}
         onConfirm={() =>
           dispatch(
             duplicateItems(destinationCourseId, selectedItems, failureMessage),
           )
         }
-        confirmButtonText={<FormattedMessage {...translations.duplicate} />}
-        message={this.renderListing()}
-        disableCancelButton={isDuplicating}
-        disableConfirmButton={isDuplicating}
+        open={open}
       />
     );
   }

@@ -1,17 +1,17 @@
 import AchievementsAPI from './Achievements';
+import AdminAPI from './Admin';
 import AssessmentAPI from './Assessment';
 import CommentsAPI from './Comments';
-import VirtualClassroomsAPI from './VirtualClassrooms';
-import MaterialsAPI from './Materials';
-import MaterialFoldersAPI from './MaterialFolders';
-import LessonPlanAPI from './LessonPlan';
 import DuplicationAPI from './Duplication';
-import SurveyAPI from './Survey';
-import VideoAPI from './Video';
-import AdminAPI from './Admin';
+import LessonPlanAPI from './LessonPlan';
 import LevelAPI from './Level';
-import UserNotificationsAPI from './UserNotifications';
+import MaterialFoldersAPI from './MaterialFolders';
+import MaterialsAPI from './Materials';
+import SurveyAPI from './Survey';
 import UserEmailSubscriptionsAPI from './UserEmailSubscriptions';
+import UserNotificationsAPI from './UserNotifications';
+import VideoAPI from './Video';
+import VirtualClassroomsAPI from './VirtualClassrooms';
 
 const CourseAPI = {
   achievements: new AchievementsAPI(),

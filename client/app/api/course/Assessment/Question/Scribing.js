@@ -1,8 +1,9 @@
 import {
-  getCourseId,
   getAssessmentId,
+  getCourseId,
   getScribingId,
 } from 'lib/helpers/url-helpers';
+
 import BaseAPI from '../Base';
 import SubmissionsAPI from '../Submissions';
 

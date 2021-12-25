@@ -1,21 +1,6 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-
-import TitleBar from 'lib/components/TitleBar';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
-
-import {
-  fetchLevels,
-  updateExpThreshold,
-  sortLevels,
-  addLevel,
-  deleteLevel,
-  saveLevels,
-} from 'course/level/actions';
-import { defaultComponentTitles } from 'course/translations.intl';
-
+import { connect } from 'react-redux';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import {
@@ -27,8 +12,20 @@ import {
   TableRow,
   TableRowColumn,
 } from 'material-ui/Table';
+import PropTypes from 'prop-types';
 
+import {
+  addLevel,
+  deleteLevel,
+  fetchLevels,
+  saveLevels,
+  sortLevels,
+  updateExpThreshold,
+} from 'course/level/actions';
 import LevelRow from 'course/level/components/LevelRow';
+import { defaultComponentTitles } from 'course/translations.intl';
+import LoadingIndicator from 'lib/components/LoadingIndicator';
+import TitleBar from 'lib/components/TitleBar';
 
 const translations = defineMessages({
   levelHeader: {
@@ -157,12 +154,12 @@ class Level extends Component {
       const key = `level-row-${index}`;
       return (
         <LevelRow
+          key={key}
           deleteLevel={this.handleDeleteLevel}
           disabled={isSaving}
           levelNumber={index + 1}
           sortLevels={this.handleLevelTextBlur}
           updateExpThreshold={this.handleUpdateExpThreshold}
-          key={key}
           {...{ canManage, experiencePointsThreshold }}
         />
       );
@@ -188,10 +185,10 @@ class Level extends Component {
           <TableRowColumn />
           <TableRowColumn colSpan="1" style={styles.addNewLevel}>
             <FlatButton
-              id="add-level"
-              icon={<i className="fa fa-plus" />}
-              label={<FormattedMessage {...translations.addNewLevel} />}
               disabled={isSaving}
+              icon={<i className="fa fa-plus" />}
+              id="add-level"
+              label={<FormattedMessage {...translations.addNewLevel} />}
               onClick={this.handleCreateLevel()}
             />
           </TableRowColumn>
@@ -200,13 +197,13 @@ class Level extends Component {
         <TableRow>
           <TableRowColumn style={styles.saveLevels}>
             <RaisedButton
+              disabled={isSaving}
               id="save-levels"
+              label={<FormattedMessage {...translations.saveLevels} />}
+              onClick={this.handleSaveLevels()}
+              primary={true}
               style={styles.formButton}
               type="submit"
-              label={<FormattedMessage {...translations.saveLevels} />}
-              disabled={isSaving}
-              primary
-              onClick={this.handleSaveLevels()}
             />
           </TableRowColumn>
           <TableRowColumn />

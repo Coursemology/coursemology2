@@ -1,11 +1,12 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { injectIntl, defineMessages, intlShape } from 'react-intl';
+import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import ReactSummernote from 'react-summernote';
 import TextFieldLabel from 'material-ui/TextField/TextFieldLabel';
-import axios from 'lib/axios';
+import PropTypes from 'prop-types';
 
+import axios from 'lib/axios';
 import { i18nLocale } from 'lib/helpers/server-context';
+
 import '../styles/MaterialSummernote.scss';
 import '../styles/MaterialSummernoteModal.scss';
 
@@ -138,33 +139,45 @@ class MaterialSummernote extends Component {
         }}
       >
         <TextFieldLabel
+          disabled={this.props.disabled}
+          htmlFor={this.props.field}
           muiTheme={this.context.muiTheme}
+          shrink={true}
           style={{
             pointerEvents: 'none',
             color: this.props.disabled
               ? disabledTextColor
               : testFieldLabelColor,
           }}
-          htmlFor={this.props.field}
-          shrink
-          disabled={this.props.disabled}
         >
           {this.props.label}
         </TextFieldLabel>
         <textarea
-          name={this.props.name}
-          id={this.props.inputId}
-          required={this.props.required}
-          value={this.props.value}
-          style={{ display: 'none' }}
-          onChange={this.onChange}
           disabled={this.props.disabled}
+          id={this.props.inputId}
+          name={this.props.name}
+          onChange={this.onChange}
+          required={this.props.required}
+          style={{ display: 'none' }}
+          value={this.props.value}
         />
         <div className="material-summernote">
           <ReactSummernote
             ref={(ref) => {
               this.reactSummernote = ref;
             }}
+            onBlur={() => {
+              this.setState({ isFocused: false });
+            }}
+            onBlurCodeview={() => {
+              this.reactSummernote.editor.summernote('codeview.deactivate');
+            }}
+            onChange={this.props.onChange}
+            onFocus={() => {
+              this.setState({ isFocused: true });
+            }}
+            onImageUpload={this.onImageUpload}
+            onKeyDown={this.props.onKeyDown}
             options={{
               airMode: this.props.airMode,
               dialogsInBody: true,
@@ -217,18 +230,6 @@ class MaterialSummernote extends Component {
               followingToolbar: false,
             }}
             value={this.props.value}
-            onChange={this.props.onChange}
-            onFocus={() => {
-              this.setState({ isFocused: true });
-            }}
-            onKeyDown={this.props.onKeyDown}
-            onBlur={() => {
-              this.setState({ isFocused: false });
-            }}
-            onImageUpload={this.onImageUpload}
-            onBlurCodeview={() => {
-              this.reactSummernote.editor.summernote('codeview.deactivate');
-            }}
           />
         </div>
       </div>

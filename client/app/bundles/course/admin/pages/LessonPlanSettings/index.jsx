@@ -1,10 +1,8 @@
 /* eslint-disable camelcase */
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import Subheader from 'material-ui/Subheader';
-import Toggle from 'material-ui/Toggle';
 import {
   Table,
   TableBody,
@@ -13,10 +11,14 @@ import {
   TableRow,
   TableRowColumn,
 } from 'material-ui/Table';
-import NotificationPopup from 'lib/containers/NotificationPopup';
+import Toggle from 'material-ui/Toggle';
+import PropTypes from 'prop-types';
+
 import { updateLessonPlanSettings } from 'course/admin/actions/lesson-plan-items';
-import translations from './translations.intl';
+import NotificationPopup from 'lib/containers/NotificationPopup';
+
 import MilestoneGroupSettings from './MilestoneGroupSettings';
+import translations from './translations.intl';
 
 class LessonPlanSettings extends Component {
   // Ensure both enabled and visible values are sent in the payload.
@@ -87,14 +89,14 @@ class LessonPlanSettings extends Component {
         <TableRowColumn colSpan={3}>{tabTitle}</TableRowColumn>
         <TableRowColumn>
           <Toggle
-            toggled={setting.enabled}
             onToggle={this.handleLessonPlanItemEnabledUpdate(setting)}
+            toggled={setting.enabled}
           />
         </TableRowColumn>
         <TableRowColumn>
           <Toggle
-            toggled={setting.visible}
             onToggle={this.handleLessonPlanItemVisibleUpdate(setting)}
+            toggled={setting.visible}
           />
         </TableRowColumn>
       </TableRow>
@@ -109,14 +111,14 @@ class LessonPlanSettings extends Component {
         <TableRowColumn colSpan={5}>{componentTitle}</TableRowColumn>
         <TableRowColumn>
           <Toggle
-            toggled={setting.enabled}
             onToggle={this.handleLessonPlanItemEnabledUpdate(setting)}
+            toggled={setting.enabled}
           />
         </TableRowColumn>
         <TableRowColumn>
           <Toggle
-            toggled={setting.visible}
             onToggle={this.handleLessonPlanItemVisibleUpdate(setting)}
+            toggled={setting.visible}
           />
         </TableRowColumn>
       </TableRow>

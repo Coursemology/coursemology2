@@ -1,10 +1,12 @@
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { isPristine } from 'redux-form';
-import FormDialogue from 'lib/components/FormDialogue';
-import { formNames } from 'course/lesson-plan/constants';
+
 import * as actionCreators from 'course/lesson-plan/actions';
+import { formNames } from 'course/lesson-plan/constants';
+import FormDialogue from 'lib/components/FormDialogue';
+
 import MilestoneForm from './MilestoneForm';
 
 const MilestoneFormDialog = ({
@@ -23,12 +25,12 @@ const MilestoneFormDialog = ({
 
   return (
     <FormDialogue
-      title={formTitle}
-      open={visible}
-      submitForm={submitMilestoneForm}
-      skipConfirmation={pristine}
       disabled={disabled}
       hideForm={hideMilestoneForm}
+      open={visible}
+      skipConfirmation={pristine}
+      submitForm={submitMilestoneForm}
+      title={formTitle}
     >
       <MilestoneForm {...{ initialValues, onSubmit, disabled }} />
     </FormDialogue>

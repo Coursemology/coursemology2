@@ -1,4 +1,5 @@
 import MaterialSummernote from '../MaterialSummernote';
+
 import createComponent from './createComponent';
 import mapError from './mapError';
 

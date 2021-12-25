@@ -1,8 +1,10 @@
 import { render } from 'react-dom';
 import { Router } from 'react-router-dom';
-import history from 'lib/history';
-import ProviderWrapper from 'lib/components/ProviderWrapper';
+
 import LessonPlanLayout from 'course/lesson-plan/containers/LessonPlanLayout';
+import ProviderWrapper from 'lib/components/ProviderWrapper';
+import history from 'lib/history';
+
 import storeCreator from './store';
 
 $(() => {

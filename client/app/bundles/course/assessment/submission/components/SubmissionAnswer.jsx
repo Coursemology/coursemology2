@@ -1,23 +1,25 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import {
-  injectIntl,
-  intlShape,
   defineMessages,
   FormattedMessage,
+  injectIntl,
+  intlShape,
 } from 'react-intl';
 import { Card, CardText } from 'material-ui/Card';
 import CircularProgress from 'material-ui/CircularProgress';
-import Toggle from 'material-ui/Toggle';
 import { yellow100 } from 'material-ui/styles/colors';
+import Toggle from 'material-ui/Toggle';
+import PropTypes from 'prop-types';
+
+import { questionTypes } from '../constants';
+import PastAnswers from '../containers/PastAnswers';
 import {
-  questionShape,
   historyQuestionShape,
   questionFlagsShape,
+  questionShape,
 } from '../propTypes';
-import { questionTypes } from '../constants';
+
 import Answers from './Answers';
-import PastAnswers from '../containers/PastAnswers';
 
 const translations = defineMessages({
   missingAnswer: {
@@ -134,10 +136,8 @@ class SubmissionAnswer extends Component {
           ) : null}
           <Toggle
             className="toggle-history"
-            label={intl.formatMessage(translations.viewPastAnswers)}
-            style={styles.toggleStyle}
-            toggled={viewHistory}
             disabled={disabled}
+            label={intl.formatMessage(translations.viewPastAnswers)}
             onToggle={() =>
               handleToggleViewHistoryMode(
                 !viewHistory,
@@ -146,6 +146,8 @@ class SubmissionAnswer extends Component {
                 answersLoaded,
               )
             }
+            style={styles.toggleStyle}
+            toggled={viewHistory}
           />
           {noPastAnswers ? (
             <div style={{ float: 'right' }}>

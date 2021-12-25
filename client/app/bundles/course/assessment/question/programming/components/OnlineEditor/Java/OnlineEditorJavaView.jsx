@@ -1,12 +1,10 @@
-import Immutable from 'immutable';
-
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
-import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import Immutable from 'immutable';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
-import Toggle from 'material-ui/Toggle';
+import transitions from 'material-ui/styles/transitions';
 import {
   Table,
   TableBody,
@@ -16,20 +14,22 @@ import {
   TableRow,
   TableRowColumn,
 } from 'material-ui/Table';
-import transitions from 'material-ui/styles/transitions';
+import Toggle from 'material-ui/Toggle';
+import PropTypes from 'prop-types';
 
 import 'ace-builds/src-noconflict/mode-java';
 import 'ace-builds/src-noconflict/theme-monokai';
 
-import styles from '../OnlineEditorView.scss';
-import translations from '../OnlineEditorView.intl';
-import javaTranslations from './OnlineEditorJavaView.intl';
 import {
+  EditorCard,
   ExistingPackageFile,
   NewPackageFile,
   TestCase,
-  EditorCard,
 } from '../OnlineEditorBase';
+import translations from '../OnlineEditorView.intl';
+
+import javaTranslations from './OnlineEditorJavaView.intl';
+import styles from '../OnlineEditorView.scss';
 
 const MAX_TEST_CASES = 99;
 
@@ -145,12 +145,12 @@ class OnlineEditorJavaView extends Component {
         <h3>{intl.formatMessage(translations.testCasesHeader)}</h3>
         <div style={{ marginBottom: '0.5em' }}>
           <FormattedMessage
-            id="course.assessment.question.programming.onlineEditorJavaView.testCasesDescription"
             defaultMessage={
               '{note}: The expression in the {expression} column will be compared with the ' +
               'expression in the {expected} column using the {expectEquals} method as described ' +
               'in the append.'
             }
+            id="course.assessment.question.programming.onlineEditorJavaView.testCasesDescription"
             values={{
               note: (
                 <b>
@@ -171,7 +171,6 @@ class OnlineEditorJavaView extends Component {
         </div>
         <div style={{ marginBottom: '0.5em' }}>
           <FormattedMessage
-            id="course.assessment.question.programming.onlineEditorJavaView.testCasesCodeDescription"
             defaultMessage={
               '{editor}: Clicking {code} will toggle a code editor for you to write code into each ' +
               'test case. This allows you to initialize variables and call functions for each test. ' +
@@ -179,6 +178,7 @@ class OnlineEditorJavaView extends Component {
               '{codeExampleExpression} and {codeExampleExpected} can then be input into {expression} and ' +
               '{expected} respectively.'
             }
+            id="course.assessment.question.programming.onlineEditorJavaView.testCasesCodeDescription"
             values={{
               expression: (
                 <b>{intl.formatMessage(translations.expressionHeader)}</b>
@@ -198,7 +198,7 @@ class OnlineEditorJavaView extends Component {
                   )}
                 </b>
               ),
-              /* eslint-disable react/jsx-indent */
+
               codeExample: (
                 <pre
                   style={{
@@ -225,7 +225,6 @@ class OnlineEditorJavaView extends Component {
                   </p>
                 </pre>
               ),
-              /* eslint-enable react/jsx-indent */
               codeExampleExpected: <code>expected</code>,
               codeExampleExpression: <code>array</code>,
             }}
@@ -298,14 +297,14 @@ class OnlineEditorJavaView extends Component {
     };
 
     return (
-      <Card initiallyExpanded>
+      <Card initiallyExpanded={true}>
         <CardHeader
-          title={header}
+          actAsExpander={true}
+          showExpandableButton={true}
           textStyle={{ fontWeight: 'bold' }}
-          actAsExpander
-          showExpandableButton
+          title={header}
         />
-        <CardText expandable style={{ padding: 0 }}>
+        <CardText expandable={true} style={{ padding: 0 }}>
           <Table selectable={false}>
             <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
               <TableRow>
@@ -352,14 +351,14 @@ class OnlineEditorJavaView extends Component {
       .map(renderNewFile);
 
     return (
-      <Card initiallyExpanded>
+      <Card initiallyExpanded={true}>
         <CardHeader
-          title={header}
+          actAsExpander={true}
+          showExpandableButton={true}
           textStyle={{ fontWeight: 'bold' }}
-          actAsExpander
-          showExpandableButton
+          title={header}
         />
-        <CardText expandable style={{ padding: 0 }}>
+        <CardText expandable={true} style={{ padding: 0 }}>
           <Table selectable={false}>
             <TableBody displayRowCheckbox={false}>
               {newPackageFilesRows}
@@ -414,30 +413,30 @@ class OnlineEditorJavaView extends Component {
         editorStyle = {};
       }
       return (
-        <TableRow id={index} style={editorStyle} key={`java-editor-${index}`}>
+        <TableRow key={`java-editor-${index}`} id={index} style={editorStyle}>
           <TableRowColumn
             colSpan="6"
             style={{ textAlign: 'center', paddingLeft: 0, paddingRight: 0 }}
           >
             <textarea
               name={OnlineEditorJavaView.getTestInputName(type, 'inline_code')}
-              value={test.get('inline_code')}
-              style={{ display: 'none' }}
               readOnly="true"
+              style={{ display: 'none' }}
+              value={test.get('inline_code')}
             />
             <AceEditor
-              mode="java"
-              theme="monokai"
-              width="100%"
-              minLines={4}
+              editorProps={{ $blockScrolling: true }}
               maxLines={Math.max(20, inlineCode.split(/\r\n|\r|\n/).length)}
+              minLines={4}
+              mode="java"
               name={OnlineEditorJavaView.getTestInputName(type, 'inline_code')}
-              value={test.get('inline_code')}
               onChange={(e) =>
                 this.props.actions.updateTestCase(type, index, 'inline_code', e)
               }
-              editorProps={{ $blockScrolling: true }}
               setOptions={{ useSoftTabs: true, readOnly: this.props.isLoading }}
+              theme="monokai"
+              value={test.get('inline_code')}
+              width="100%"
             />
           </TableRowColumn>
         </TableRow>
@@ -452,14 +451,14 @@ class OnlineEditorJavaView extends Component {
     });
 
     return (
-      <Card initiallyExpanded>
+      <Card initiallyExpanded={true}>
         <CardHeader
-          title={header}
+          actAsExpander={true}
+          showExpandableButton={true}
           textStyle={{ fontWeight: 'bold' }}
-          actAsExpander
-          showExpandableButton
+          title={header}
         />
-        <CardText expandable style={{ padding: 0 }}>
+        <CardText expandable={true} style={{ padding: 0 }}>
           <Table selectable={false}>
             <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
               <TableRow>
@@ -476,13 +475,13 @@ class OnlineEditorJavaView extends Component {
               <TableRow>
                 <TableRowColumn colSpan="6" style={{ textAlign: 'center' }}>
                   <FlatButton
-                    label={this.props.intl.formatMessage(
-                      translations.addNewTestButton,
-                    )}
-                    icon={<i className="fa fa-plus" />}
                     disabled={
                       this.props.isLoading || numAllTestCases >= MAX_TEST_CASES
                     }
+                    icon={<i className="fa fa-plus" />}
+                    label={this.props.intl.formatMessage(
+                      translations.addNewTestButton,
+                    )}
                     onClick={this.testCaseCreateHandler(type)}
                   />
                 </TableRowColumn>
@@ -508,24 +507,23 @@ class OnlineEditorJavaView extends Component {
         {autograded && (
           <div className={styles.submitAsFileToggle}>
             <Toggle
+              disabled={isLoading}
               label={toggleLabel}
               labelPosition="right"
-              toggled={submitAsFile}
               onToggle={(e) => {
                 if (hasSubmissions) return;
                 this.props.actions.toggleSubmitAsFile(e.target.checked);
               }}
               readOnly={hasSubmissions}
-              disabled={isLoading}
               style={{ margin: '1em 0', paddingTop: 10 }}
+              toggled={submitAsFile}
             />
             <input
-              hidden
+              hidden={true}
               name="question_programming[submit_as_file]"
               value={submitAsFile}
             />
             <FormattedMessage
-              id="course.assessment.question.programming.onlineEditorJavaView.fileSubmissionDescription"
               defaultMessage={
                 '{file_submission}: Toggling this option on will allow you to upload java class files to be ' +
                 'compiled individually, and allows you to test (individual/multiple) java classes. ' +
@@ -533,6 +531,7 @@ class OnlineEditorJavaView extends Component {
                 'java functions. Note that you will need to upload either a submission or solution ' +
                 'file at the very least for the compiler to compile the files correctly.'
               }
+              id="course.assessment.question.programming.onlineEditorJavaView.fileSubmissionDescription"
               values={{
                 file_submission: (
                   <b>

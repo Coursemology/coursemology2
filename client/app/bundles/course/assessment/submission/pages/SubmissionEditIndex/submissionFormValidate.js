@@ -1,4 +1,5 @@
 import { defineMessages } from 'react-intl';
+
 import { questionTypes } from '../../constants';
 
 const translations = defineMessages({

@@ -1,8 +1,9 @@
-/* eslint class-methods-use-this: "off" */
+/* eslint-disable class-methods-use-this */
 import {
   getCourseId as getCourseIdFromUrl,
   getCourseUserId as getCourseUserIdFromUrl,
 } from 'lib/helpers/url-helpers';
+
 import BaseAPI from '../Base';
 
 /** Course level Api helpers should be defined here */

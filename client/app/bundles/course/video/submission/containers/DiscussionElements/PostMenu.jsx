@@ -1,10 +1,9 @@
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-
+import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
-import IconButton from 'material-ui/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import PropTypes from 'prop-types';
 
 import { deletePostFromServer, updatePost } from '../../actions/discussion';
 
@@ -29,19 +28,19 @@ const PostMenu = (props) => {
   return (
     <div style={{ float: 'right' }}>
       <IconMenu
+        anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
         iconButtonElement={
           <IconButton>
             <MoreVertIcon />
           </IconButton>
         }
-        anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
         targetOrigin={{ horizontal: 'right', vertical: 'top' }}
       >
         {props.canUpdate && (
-          <MenuItem primaryText="Edit" onClick={props.onEdit} />
+          <MenuItem onClick={props.onEdit} primaryText="Edit" />
         )}
         {props.canDelete && (
-          <MenuItem primaryText="Delete" onClick={props.onDelete} />
+          <MenuItem onClick={props.onDelete} primaryText="Delete" />
         )}
       </IconMenu>
     </div>

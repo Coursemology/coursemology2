@@ -1,10 +1,12 @@
 import { deleteIfFound, updateOrAppend } from 'lib/helpers/reducer-helpers';
+
 import actionTypes from '../constants';
+
 import {
-  groupItemsUnderMilestones,
-  initializeVisibility,
   generateTypeKey,
   generateVisibilitySettings,
+  groupItemsUnderMilestones,
+  initializeVisibility,
 } from './utils';
 
 const initialState = {

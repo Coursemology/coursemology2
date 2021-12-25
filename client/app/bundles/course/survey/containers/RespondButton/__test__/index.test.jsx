@@ -1,7 +1,9 @@
-import { mount } from 'enzyme';
-import CourseAPI from 'api/course';
 import MockAdapter from 'axios-mock-adapter';
+import { mount } from 'enzyme';
+
+import CourseAPI from 'api/course';
 import storeCreator from 'course/survey/store';
+
 import RespondButton from '../index';
 
 const client = CourseAPI.survey.responses.getClient();
@@ -21,9 +23,9 @@ describe('<RespondButton />', () => {
 
     const respondButton = mount(
       <RespondButton
-        canRespond
-        canModify
-        canSubmit
+        canModify={true}
+        canRespond={true}
+        canSubmit={true}
         {...{ courseId, surveyId }}
       />,
       buildContextOptions(storeCreator({})),

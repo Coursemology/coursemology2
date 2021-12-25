@@ -1,21 +1,24 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { connect } from 'react-redux';
-import { submit, isPristine } from 'redux-form';
-import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
 import Dialog from 'material-ui/Dialog';
-import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
+import PropTypes from 'prop-types';
+import { isPristine, submit } from 'redux-form';
+
+import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import NotificationBar, {
   notificationShape,
 } from 'lib/components/NotificationBar';
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import formTranslations from 'lib/translations/form';
 import modalFormStyles from 'lib/styles/ModalForm.scss';
-import AssessmentForm from '../../containers/AssessmentForm';
+import formTranslations from 'lib/translations/form';
+
 import * as actions from '../../actions';
-import translations from './translations.intl';
 import actionTypes, { formNames } from '../../constants';
+import AssessmentForm from '../../containers/AssessmentForm';
+
+import translations from './translations.intl';
 
 const styles = {
   newButton: {
@@ -58,19 +61,19 @@ class PopupDialog extends Component {
 
     const formActions = [
       <FlatButton
-        label={<FormattedMessage {...formTranslations.cancel} />}
-        primary
-        disabled={this.props.disabled}
-        onClick={this.handleClose}
         key="assessment-popup-dialog-cancel-button"
+        disabled={this.props.disabled}
+        label={<FormattedMessage {...formTranslations.cancel} />}
+        onClick={this.handleClose}
+        primary={true}
       />,
       <FlatButton
-        label={<FormattedMessage {...formTranslations.submit} />}
-        className="btn-submit"
-        primary
-        onClick={() => dispatch(submit(formNames.ASSESSMENT))}
-        disabled={this.props.disabled}
         key="assessment-popup-dialog-submit-button"
+        className="btn-submit"
+        disabled={this.props.disabled}
+        label={<FormattedMessage {...formTranslations.submit} />}
+        onClick={() => dispatch(submit(formNames.ASSESSMENT))}
+        primary={true}
       />,
     ];
 
@@ -95,37 +98,37 @@ class PopupDialog extends Component {
       <>
         <RaisedButton
           label={intl.formatMessage(translations.new)}
-          primary
           onClick={this.handleOpen}
+          primary={true}
           style={styles.newButton}
         />
         <Dialog
-          title={intl.formatMessage(translations.newAssessment)}
-          modal={false}
-          open={this.props.visible}
           actions={formActions}
-          onRequestClose={this.handleClose}
-          autoScrollBodyContent
-          contentStyle={styles.dialog}
+          autoScrollBodyContent={true}
           bodyClassName={modalFormStyles.modalForm}
+          contentStyle={styles.dialog}
+          modal={false}
+          onRequestClose={this.handleClose}
+          open={this.props.visible}
+          title={intl.formatMessage(translations.newAssessment)}
         >
           <AssessmentForm
             gamified={this.props.gamified}
-            randomizationAllowed={this.props.randomizationAllowed}
-            modeSwitching
-            onSubmit={this.onFormSubmit}
             initialValues={initialValues}
+            modeSwitching={true}
+            onSubmit={this.onFormSubmit}
+            randomizationAllowed={this.props.randomizationAllowed}
           />
         </Dialog>
         <ConfirmationDialog
-          confirmDiscard
-          open={this.props.confirmationDialogOpen}
+          confirmDiscard={true}
           onCancel={() =>
             dispatch({ type: actionTypes.ASSESSMENT_FORM_CONFIRM_CANCEL })
           }
           onConfirm={() =>
             dispatch({ type: actionTypes.ASSESSMENT_FORM_CONFIRM_DISCARD })
           }
+          open={this.props.confirmationDialogOpen}
         />
         <NotificationBar notification={this.props.notification} />
       </>

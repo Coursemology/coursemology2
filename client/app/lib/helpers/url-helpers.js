@@ -115,15 +115,14 @@ function getVideoSubmissionId() {
   return match && match[1];
 }
 
-/* eslint-disable import/prefer-default-export */
 export {
-  getUrlParameter,
-  getCourseId,
-  getSurveyId,
   getAssessmentId,
-  getSubmissionId,
+  getCourseId,
+  getCourseUserId,
   getScribingId,
+  getSubmissionId,
+  getSurveyId,
+  getUrlParameter,
   getVideoId,
   getVideoSubmissionId,
-  getCourseUserId,
 };

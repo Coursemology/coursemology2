@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
+
 import MultiSelect from 'lib/components/redux-form/MultiSelect';
-import { questionNamePrefix, questionIdPrefix } from '../constants';
+
+import { questionIdPrefix, questionNamePrefix } from '../constants';
 import { skillShape } from '../propTypes';
 
 const propTypes = {
@@ -18,14 +20,14 @@ const MultiSelectSkillsField = (props) => {
 
   return (
     <Field
-      name={questionNamePrefix + field}
-      id={questionIdPrefix + field}
       component={MultiSelect}
-      label={label}
-      value={value}
-      options={options}
       error={error}
+      id={questionIdPrefix + field}
       isLoading={isLoading}
+      label={label}
+      name={questionNamePrefix + field}
+      options={options}
+      value={value}
     />
   );
 };

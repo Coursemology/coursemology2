@@ -1,5 +1,5 @@
-import NotificationsAPI from './Notifications';
 import LessonPlanAPI from './LessonPlan';
+import NotificationsAPI from './Notifications';
 
 const AdminAPI = {
   notifications: new NotificationsAPI(),

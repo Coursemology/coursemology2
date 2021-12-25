@@ -1,7 +1,9 @@
-import { mount } from 'enzyme';
 import MockAdapter from 'axios-mock-adapter';
+import { mount } from 'enzyme';
+
 import CourseAPI from 'api/course';
 import storeCreator from 'course/lesson-plan/store';
+
 import MilestoneRow from '../MilestoneRow';
 
 const client = CourseAPI.lessonPlan.getClient();
@@ -33,8 +35,8 @@ describe('<MilestoneRow />', () => {
           <MilestoneRow
             groupId="group-id"
             id={milestoneData.id}
-            title={milestoneData.title}
             startAt={milestoneData.start_at}
+            title={milestoneData.title}
           />
         </tbody>
       </table>,

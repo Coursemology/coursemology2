@@ -1,10 +1,10 @@
+import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import Immutable from 'immutable';
-
 import PropTypes from 'prop-types';
-import { injectIntl, defineMessages, intlShape } from 'react-intl';
-import OnlineEditorPythonView from './Python/OnlineEditorPythonView';
+
 import OnlineEditorCppView from './Cpp/OnlineEditorCppView';
 import OnlineEditorJavaView from './Java/OnlineEditorJavaView';
+import OnlineEditorPythonView from './Python/OnlineEditorPythonView';
 import { validation as editorValidation } from './OnlineEditorBase';
 
 const translations = defineMessages({

@@ -1,54 +1,55 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-
-import { Card, CardHeader, CardText, CardActions } from 'material-ui/Card';
-import Toggle from 'material-ui/Toggle';
-import { touch } from 'redux-form';
+import { connect } from 'react-redux';
+import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import FileIcon from 'material-ui/svg-icons/editor/insert-drive-file';
+import Toggle from 'material-ui/Toggle';
+import PropTypes from 'prop-types';
+import { touch } from 'redux-form';
 
+import { setNotification } from 'lib/actions';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import NotificationBar, {
   notificationShape,
 } from 'lib/components/NotificationBar';
-import { setNotification } from 'lib/actions';
 import { getUrlParameter } from 'lib/helpers/url-helpers';
-import ProgressPanel from '../../components/ProgressPanel';
-import SubmissionEditForm from './SubmissionEditForm';
-import SubmissionEditStepForm from './SubmissionEditStepForm';
-import SubmissionEmptyForm from './SubmissionEmptyForm';
+
 import {
-  fetchSubmission,
   autogradeSubmission,
-  saveDraft,
-  finalise,
-  unsubmit,
-  submitAnswer,
-  resetAnswer,
-  saveGrade,
-  mark,
-  unmark,
-  publish,
   enterStudentView,
   exitStudentView,
+  fetchSubmission,
+  finalise,
+  mark,
+  publish,
+  resetAnswer,
+  saveDraft,
+  saveGrade,
+  submitAnswer,
   toggleViewHistoryMode,
+  unmark,
+  unsubmit,
 } from '../../actions';
+import ProgressPanel from '../../components/ProgressPanel';
+import { formNames, workflowStates } from '../../constants';
 import {
+  answerShape,
   assessmentShape,
   explanationShape,
   gradingShape,
+  historyQuestionShape,
   postShape,
-  answerShape,
   questionFlagsShape,
   questionShape,
-  historyQuestionShape,
   reduxFormShape,
   submissionShape,
   topicShape,
 } from '../../propTypes';
-import { formNames, workflowStates } from '../../constants';
 import translations from '../../translations';
+
+import SubmissionEditForm from './SubmissionEditForm';
+import SubmissionEditStepForm from './SubmissionEditStepForm';
+import SubmissionEmptyForm from './SubmissionEmptyForm';
 
 class VisibleSubmissionEditIndex extends Component {
   constructor(props) {
@@ -319,18 +320,18 @@ class VisibleSubmissionEditIndex extends Component {
     if (Object.values(questions).length === 0) {
       return (
         <SubmissionEmptyForm
-          courseId={courseId}
+          attempting={workflowState === workflowStates.Attempting}
+          canUpdate={canUpdate}
           categoryId={categoryId}
-          tabId={tabId}
+          courseId={courseId}
+          graderView={graderView}
           handleSaveGrade={() => this.handleSaveGrade()}
           handleSubmit={() => this.handleSubmit()}
           handleUnsubmit={() => this.handleUnsubmit()}
-          graderView={graderView}
-          canUpdate={canUpdate}
-          attempting={workflowState === workflowStates.Attempting}
-          submitted={workflowState === workflowStates.Submitted}
-          published={workflowState === workflowStates.Published}
           isSaving={isSaving}
+          published={workflowState === workflowStates.Published}
+          submitted={workflowState === workflowStates.Submitted}
+          tabId={tabId}
         />
       );
     }
@@ -338,71 +339,71 @@ class VisibleSubmissionEditIndex extends Component {
     if (autograded) {
       return (
         <SubmissionEditStepForm
+          allConsideredCorrect={this.allConsideredCorrect()}
+          allowPartialSubmission={allowPartialSubmission}
+          attempting={workflowState === workflowStates.Attempting}
+          explanations={explanations}
+          graderView={graderView}
+          handleAutogradeSubmission={() => this.handleAutogradeSubmission()}
+          handleReset={(answerId) => this.handleReset(answerId)}
           handleSaveDraft={() => this.handleSaveDraft()}
           handleSaveGrade={() => this.handleSaveGrade()}
           handleSubmit={() => this.handleSubmit()}
-          handleUnsubmit={() => this.handleUnsubmit()}
           handleSubmitAnswer={(answerId) => this.handleSubmitAnswer(answerId)}
-          handleReset={(answerId) => this.handleReset(answerId)}
-          handleAutogradeSubmission={() => this.handleAutogradeSubmission()}
           handleToggleViewHistoryMode={this.handleToggleViewHistoryMode}
-          explanations={explanations}
-          allConsideredCorrect={this.allConsideredCorrect()}
-          allowPartialSubmission={allowPartialSubmission}
-          showMcqAnswer={showMcqAnswer}
-          showMcqMrqSolution={showMcqMrqSolution}
-          graderView={graderView}
-          attempting={workflowState === workflowStates.Attempting}
-          submitted={workflowState === workflowStates.Submitted}
-          published={workflowState === workflowStates.Published}
+          handleUnsubmit={() => this.handleUnsubmit()}
+          historyQuestions={historyQuestions}
+          isSaving={isSaving}
           maxStep={maxStep === undefined ? questionIds.length - 1 : maxStep}
-          step={step}
-          skippable={skippable}
           posts={posts}
+          published={workflowState === workflowStates.Published}
           questionIds={questionIds}
           questions={questions}
-          historyQuestions={historyQuestions}
           questionsFlags={questionsFlags}
+          showMcqAnswer={showMcqAnswer}
+          showMcqMrqSolution={showMcqMrqSolution}
+          skippable={skippable}
+          step={step}
+          submitted={workflowState === workflowStates.Submitted}
           topics={topics}
-          isSaving={isSaving}
         />
       );
     }
     return (
       <SubmissionEditForm
-        handleSaveDraft={() => this.handleSaveDraft()}
-        handleSubmit={() => this.handleSubmit()}
-        handleUnsubmit={() => this.handleUnsubmit()}
-        handleSaveGrade={() => this.handleSaveGrade()}
-        handleSubmitAnswer={(answerId) => this.handleSubmitAnswer(answerId)}
-        handleReset={(answerId) => this.handleReset(answerId)}
+        attempting={workflowState === workflowStates.Attempting}
+        canUpdate={canUpdate}
+        delayedGradePublication={delayedGradePublication}
+        explanations={explanations}
+        graded={workflowState === workflowStates.Graded}
+        graderView={graderView}
+        grading={grading}
         handleAutogradeSubmission={() => this.handleAutogradeSubmission()}
         handleMark={() => this.handleMark()}
-        handleUnmark={() => this.handleUnmark()}
         handlePublish={() => this.handlePublish()}
+        handleReset={(answerId) => this.handleReset(answerId)}
+        handleSaveDraft={() => this.handleSaveDraft()}
+        handleSaveGrade={() => this.handleSaveGrade()}
+        handleSubmit={() => this.handleSubmit()}
+        handleSubmitAnswer={(answerId) => this.handleSubmitAnswer(answerId)}
         handleToggleViewHistoryMode={this.handleToggleViewHistoryMode}
-        explanations={explanations}
-        grading={grading}
-        showMcqMrqSolution={showMcqMrqSolution}
-        graderView={graderView}
-        canUpdate={canUpdate}
-        attempting={workflowState === workflowStates.Attempting}
-        submitted={workflowState === workflowStates.Submitted}
-        graded={workflowState === workflowStates.Graded}
-        newSubmission={newSubmission}
-        passwordProtected={passwordProtected}
-        published={workflowState === workflowStates.Published}
-        posts={posts}
-        questionIds={questionIds}
-        questions={questions}
+        handleUnmark={() => this.handleUnmark()}
+        handleUnsubmit={() => this.handleUnsubmit()}
         historyQuestions={historyQuestions}
-        questionsFlags={questionsFlags}
-        step={step}
-        tabbedView={tabbedView}
-        topics={topics}
-        delayedGradePublication={delayedGradePublication}
         isAutograding={isAutograding}
         isSaving={isSaving}
+        newSubmission={newSubmission}
+        passwordProtected={passwordProtected}
+        posts={posts}
+        published={workflowState === workflowStates.Published}
+        questionIds={questionIds}
+        questions={questions}
+        questionsFlags={questionsFlags}
+        showMcqMrqSolution={showMcqMrqSolution}
+        step={step}
+        submitted={workflowState === workflowStates.Submitted}
+        tabbedView={tabbedView}
+        topics={topics}
       />
     );
   }

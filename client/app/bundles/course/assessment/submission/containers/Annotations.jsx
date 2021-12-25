@@ -1,16 +1,16 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Card, CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
 
-import { postShape, annotationShape } from '../propTypes';
+import * as annotationActions from '../actions/annotations';
 import CommentCard from '../components/CommentCard';
 import CommentField from '../components/CommentField';
-import * as annotationActions from '../actions/annotations';
 import { workflowStates } from '../constants';
+import { annotationShape, postShape } from '../propTypes';
 
 const translations = defineMessages({
   comment: {
@@ -56,33 +56,33 @@ class VisibleAnnotations extends Component {
               (graderView || !post.isDelayed) && (
                 <CommentCard
                   key={post.id}
-                  post={post}
-                  editValue={commentForms.posts[post.id]}
-                  updateComment={(value) => updateComment(post.id, value)}
-                  deleteComment={() => deleteComment(post.id)}
-                  handleChange={(value) => handleUpdateChange(post.id, value)}
                   airMode={airMode}
+                  deleteComment={() => deleteComment(post.id)}
+                  editValue={commentForms.posts[post.id]}
+                  handleChange={(value) => handleUpdateChange(post.id, value)}
+                  post={post}
+                  updateComment={(value) => updateComment(post.id, value)}
                 />
               ),
           )}
           {posts.length === 0 || fieldVisible ? (
             <CommentField
-              value={commentForms.annotations[fileId][lineNumber]}
-              isSubmittingNormalComment={commentForms.isSubmittingNormalComment}
+              airMode={airMode}
+              createComment={createComment}
+              handleChange={handleCreateChange}
               isSubmittingDelayedComment={
                 commentForms.isSubmittingDelayedComment
               }
+              isSubmittingNormalComment={commentForms.isSubmittingNormalComment}
               isUpdatingComment={commentForms.isUpdatingComment}
-              createComment={createComment}
-              handleChange={handleCreateChange}
-              airMode={airMode}
               renderDelayedCommentButton={renderDelayedCommentButton}
+              value={commentForms.annotations[fileId][lineNumber]}
             />
           ) : (
             <RaisedButton
-              primary
               label={<FormattedMessage {...translations.comment} />}
               onClick={() => this.setState({ fieldVisible: true })}
+              primary={true}
             />
           )}
         </CardText>
@@ -104,7 +104,6 @@ VisibleAnnotations.propTypes = {
   lineNumber: PropTypes.number.isRequired,
   airMode: PropTypes.bool,
   posts: PropTypes.arrayOf(postShape),
-  /* eslint-disable react/no-unused-prop-types */
   match: PropTypes.shape({
     params: PropTypes.shape({
       courseId: PropTypes.string,
@@ -116,8 +115,6 @@ VisibleAnnotations.propTypes = {
   answerId: PropTypes.number.isRequired,
   graderView: PropTypes.bool.isRequired,
   renderDelayedCommentButton: PropTypes.bool,
-  /* eslint-enable react/no-unused-prop-types */
-
   handleCreateChange: PropTypes.func.isRequired,
   handleUpdateChange: PropTypes.func.isRequired,
   createComment: PropTypes.func.isRequired,

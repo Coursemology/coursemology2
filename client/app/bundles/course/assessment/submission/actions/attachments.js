@@ -1,4 +1,5 @@
 import AttachmentsAPI from 'api/Attachments';
+
 import actionTypes from '../constants';
 
 export default function destroy(questionId, attachmentId) {

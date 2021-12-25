@@ -1,18 +1,20 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { defineMessages, injectIntl, intlShape } from 'react-intl';
-import { reduxForm, Field, FieldArray, Form } from 'redux-form';
-import TextField from 'lib/components/redux-form/TextField';
-import SelectField from 'lib/components/redux-form/SelectField';
 import MenuItem from 'material-ui/MenuItem';
-import Toggle from 'lib/components/redux-form/Toggle';
-import DisplayTextField from 'material-ui/TextField';
 import Subheader from 'material-ui/Subheader';
-import formTranslations from 'lib/translations/form';
+import DisplayTextField from 'material-ui/TextField';
+import PropTypes from 'prop-types';
+import { Field, FieldArray, Form, reduxForm } from 'redux-form';
+
+import { formNames, questionTypes } from 'course/survey/constants';
 import translations from 'course/survey/translations';
-import { questionTypes, formNames } from 'course/survey/constants';
-import QuestionFormOptions from './QuestionFormOptions';
+import SelectField from 'lib/components/redux-form/SelectField';
+import TextField from 'lib/components/redux-form/TextField';
+import Toggle from 'lib/components/redux-form/Toggle';
+import formTranslations from 'lib/translations/form';
+
 import QuestionFormDeletedOptions from './QuestionFormDeletedOptions';
+import QuestionFormOptions from './QuestionFormOptions';
 
 const styles = {
   questionType: {
@@ -191,8 +193,8 @@ class QuestionForm extends Component {
       <div>
         {this.renderOptionsToDelete(props)}
         <FieldArray
-          name="options"
           component={QuestionFormOptions}
+          name="options"
           {...{ disabled, addToOptionsToDelete }}
           {...props}
         />
@@ -215,8 +217,8 @@ class QuestionForm extends Component {
             {intl.formatMessage(questionFormTranslations.optionsToDelete)}
           </Subheader>
           <FieldArray
-            name="optionsToDelete"
             component={QuestionFormDeletedOptions}
+            name="optionsToDelete"
             {...{ disabled, addToOptions }}
             {...props}
           />
@@ -244,10 +246,10 @@ class QuestionForm extends Component {
     return (
       <>
         <Field
-          name="grid_view"
-          labelPosition="right"
-          label={intl.formatMessage(questionFormTranslations.gridView)}
           component={Toggle}
+          label={intl.formatMessage(questionFormTranslations.gridView)}
+          labelPosition="right"
+          name="grid_view"
           parse={Boolean}
           style={styles.toggle}
           {...{ disabled }}
@@ -268,7 +270,7 @@ class QuestionForm extends Component {
 
     return (
       <DisplayTextField
-        disabled
+        disabled={true}
         name="filled_options"
         value={numberOfFilledOptions}
         {...styles.numberOfResponsesField}
@@ -285,41 +287,41 @@ class QuestionForm extends Component {
     const questionType = formValues && formValues.question_type;
 
     return (
-      <Form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
+      <Form encType="multipart/form-data" onSubmit={handleSubmit(onSubmit)}>
         <Field
-          name="question_type"
-          floatingLabelText={intl.formatMessage(translations.questionType)}
           component={SelectField}
+          floatingLabelText={intl.formatMessage(translations.questionType)}
+          name="question_type"
           style={styles.questionType}
           {...{ disabled }}
         >
           <MenuItem
-            value={TEXT}
             primaryText={intl.formatMessage(translations.textResponse)}
+            value={TEXT}
           />
           <MenuItem
-            value={MULTIPLE_CHOICE}
             primaryText={intl.formatMessage(translations.multipleChoice)}
+            value={MULTIPLE_CHOICE}
           />
           <MenuItem
-            value={MULTIPLE_RESPONSE}
             primaryText={intl.formatMessage(translations.multipleResponse)}
+            value={MULTIPLE_RESPONSE}
           />
         </Field>
         <Field
-          fullWidth
-          name="description"
-          floatingLabelText={intl.formatMessage(translations.questionText)}
           component={TextField}
-          multiLine
+          floatingLabelText={intl.formatMessage(translations.questionText)}
+          fullWidth={true}
+          multiLine={true}
+          name="description"
           rows={2}
           {...{ disabled }}
         />
         <Field
-          name="required"
-          labelPosition="right"
-          label={intl.formatMessage(questionFormTranslations.required)}
           component={Toggle}
+          label={intl.formatMessage(questionFormTranslations.required)}
+          labelPosition="right"
+          name="required"
           parse={Boolean}
           style={styles.toggle}
           {...{ disabled }}

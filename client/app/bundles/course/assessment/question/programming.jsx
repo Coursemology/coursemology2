@@ -1,8 +1,10 @@
 import { render } from 'react-dom';
 import Immutable from 'immutable';
+
 import ProviderWrapper from 'lib/components/ProviderWrapper';
-import storeCreator from './programming/store';
+
 import ProgrammingQuestion from './programming/ProgrammingQuestion';
+import storeCreator from './programming/store';
 
 $(() => {
   const mountNode = document.getElementById('programming-question');

@@ -1,7 +1,8 @@
-import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import SelectField from 'material-ui/SelectField';
+import PropTypes from 'prop-types';
+
 import { scribingTranslations as translations } from '../../../translations';
 
 const propTypes = {
@@ -60,7 +61,7 @@ const FontFamilyField = (props) => {
 
   fontFamilies.forEach((font) => {
     menuItems.push(
-      <MenuItem key={font.key} value={font.value} primaryText={font.key} />,
+      <MenuItem key={font.key} primaryText={font.key} value={font.value} />,
     );
   });
 
@@ -68,10 +69,10 @@ const FontFamilyField = (props) => {
     <div>
       <SelectField
         floatingLabelText={intl.formatMessage(translations.fontFamily)}
-        value={fontFamilyValue}
-        onChange={onChangeFontFamily}
         maxHeight={150}
+        onChange={onChangeFontFamily}
         style={styles.select}
+        value={fontFamilyValue}
       >
         {menuItems}
       </SelectField>

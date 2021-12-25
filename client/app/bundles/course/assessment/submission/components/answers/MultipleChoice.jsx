@@ -1,7 +1,7 @@
+import { RadioButton } from 'material-ui/RadioButton';
+import { green50 } from 'material-ui/styles/colors';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { green50 } from 'material-ui/styles/colors';
-import { RadioButton } from 'material-ui/RadioButton';
 
 import { questionShape } from '../../propTypes';
 
@@ -16,20 +16,20 @@ const MultipleChoiceOptions = ({
     {question.options.map((option) => (
       <RadioButton
         key={option.id}
-        value={option.id}
-        onCheck={(_event, buttonValue) => onChange(buttonValue)}
         checked={option.id === value}
+        disabled={readOnly}
         label={
           <div
+            dangerouslySetInnerHTML={{ __html: option.option.trim() }}
             style={
               option.correct && readOnly && (showMcqMrqSolution || graderView)
                 ? { backgroundColor: green50 }
                 : null
             }
-            dangerouslySetInnerHTML={{ __html: option.option.trim() }}
           />
         }
-        disabled={readOnly}
+        onCheck={(_event, buttonValue) => onChange(buttonValue)}
+        value={option.id}
       />
     ))}
   </>
@@ -54,8 +54,8 @@ const MultipleChoice = ({
   answerId,
 }) => (
   <Field
-    name={`${answerId}[option_ids][0]`}
     component={MultipleChoiceOptions}
+    name={`${answerId}[option_ids][0]`}
     {...{ question, readOnly, showMcqMrqSolution, graderView }}
   />
 );

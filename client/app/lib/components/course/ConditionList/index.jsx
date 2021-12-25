@@ -1,6 +1,12 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import IconButton from 'material-ui/IconButton';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import Subheader from 'material-ui/Subheader';
+import DeleteIcon from 'material-ui/svg-icons/action/delete';
+import NewIcon from 'material-ui/svg-icons/content/add';
+import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import {
   Table,
   TableBody,
@@ -9,14 +15,10 @@ import {
   TableRow,
   TableRowColumn,
 } from 'material-ui/Table';
-import Subheader from 'material-ui/Subheader';
-import IconButton from 'material-ui/IconButton';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import NewIcon from 'material-ui/svg-icons/content/add';
-import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
-import DeleteIcon from 'material-ui/svg-icons/action/delete';
+import PropTypes from 'prop-types';
+
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+
 import translations from './translations.intl';
 
 const styles = {
@@ -71,6 +73,7 @@ class ConditionList extends Component {
           </IconButton>
 
           <IconButton
+            id={condition.delete_url}
             onClick={() =>
               this.setState({
                 isDeleting: true,
@@ -78,7 +81,6 @@ class ConditionList extends Component {
               })
             }
             style={styles.alignMiddle}
-            id={condition.delete_url}
           >
             <DeleteIcon />
           </IconButton>
@@ -90,7 +92,7 @@ class ConditionList extends Component {
   renderHeaderRows() {
     if (this.props.conditions.length > 0) {
       return (
-        <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+        <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
           {this.renderTopHeader()}
           <TableRow>
             <TableHeaderColumn colSpan="1">
@@ -105,7 +107,7 @@ class ConditionList extends Component {
       );
     }
     return (
-      <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+      <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
         {this.renderTopHeader()}
       </TableHeader>
     );
@@ -121,17 +123,17 @@ class ConditionList extends Component {
         </TableHeaderColumn>
         <TableHeaderColumn colSpan="2" style={styles.alignRight}>
           <IconMenu
+            anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+            className="add-condition-btn"
             iconButtonElement={
               <IconButton>
                 <NewIcon />
               </IconButton>
             }
-            anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
             targetOrigin={{ horizontal: 'right', vertical: 'top' }}
-            className="add-condition-btn"
           >
             {this.props.newConditionUrls.map((url) => (
-              <MenuItem key={url.name} primaryText={url.name} href={url.url} />
+              <MenuItem key={url.name} href={url.url} primaryText={url.name} />
             ))}
           </IconMenu>
         </TableHeaderColumn>
@@ -154,11 +156,11 @@ class ConditionList extends Component {
           </Subheader>
         )}
         <ConfirmationDialog
-          confirmDelete
-          open={this.state.isDeleting}
+          confirmDelete={true}
           message={this.props.intl.formatMessage(translations.deleteConfirm)}
           onCancel={() => this.setState({ isDeleting: false })}
           onConfirm={() => this.onConfirmDelete()}
+          open={this.state.isDeleting}
         />
       </div>
     );

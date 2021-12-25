@@ -1,14 +1,16 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
+import { Card, CardText } from 'material-ui/Card';
 import Subheader from 'material-ui/Subheader';
 import Toggle from 'material-ui/Toggle';
-import { Card, CardText } from 'material-ui/Card';
-import surveyTranslations from 'course/survey/translations';
+import PropTypes from 'prop-types';
+
 import { fetchResults } from 'course/survey/actions/surveys';
+import { sectionShape, surveyShape } from 'course/survey/propTypes';
+import surveyTranslations from 'course/survey/translations';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
-import { surveyShape, sectionShape } from 'course/survey/propTypes';
+
 import ResultsSection from './ResultsSection';
 
 const translations = defineMessages({
@@ -99,10 +101,10 @@ class SurveyResults extends Component {
               <Toggle
                 label={<FormattedMessage {...translations.includePhantoms} />}
                 labelPosition="right"
-                toggled={this.state.includePhantoms}
                 onToggle={(_, value) =>
                   this.setState({ includePhantoms: value })
                 }
+                toggled={this.state.includePhantoms}
               />
             )}
           </CardText>

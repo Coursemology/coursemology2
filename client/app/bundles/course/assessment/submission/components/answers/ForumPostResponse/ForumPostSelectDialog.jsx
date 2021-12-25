@@ -1,8 +1,8 @@
 import React from 'react';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { Dialog, FlatButton } from 'material-ui';
 import { cyan500 } from 'material-ui/styles/colors';
 import PropTypes from 'prop-types';
-import { defineMessages, FormattedMessage } from 'react-intl';
 
 import {
   forumTopicPostPackShape,
@@ -172,15 +172,15 @@ export default class ForumPostSelectDialog extends React.Component {
       <div style={styles.dialogContent}>
         {forumTopicPostPacks.map((forumTopicPostPack, index) => (
           <ForumCard
+            key={forumTopicPostPack.forum.id}
             forumTopicPostPack={forumTopicPostPack}
-            selectedPostPacks={this.state.selectedPostPacks}
-            onSelectPostPack={(postPack, isSelected) =>
-              this.onSelectPostPack(postPack, isSelected)
-            }
             isExpandedOnLoad={this.isForumExpandedOnFirstLoad(
               forumTopicPostPack,
             )}
-            key={forumTopicPostPack.forum.id}
+            onSelectPostPack={(postPack, isSelected) =>
+              this.onSelectPostPack(postPack, isSelected)
+            }
+            selectedPostPacks={this.state.selectedPostPacks}
             style={
               index < forumTopicPostPacks.length - 1
                 ? styles.nonLastForumCard
@@ -204,36 +204,36 @@ export default class ForumPostSelectDialog extends React.Component {
 
     const actions = [
       <FlatButton
-        label={<FormattedMessage {...translations.cancelButton} />}
-        secondary
-        onClick={() => this.props.setIsVisible(false)}
         key="forum-post-dialog-cancel-button"
+        label={<FormattedMessage {...translations.cancelButton} />}
+        onClick={() => this.props.setIsVisible(false)}
+        secondary={true}
       />,
       <FlatButton
+        key="forum-post-dialog-select-button"
+        className="select-posts-button"
+        disabled={hasNoChanges}
         label={
           <FormattedMessage
             values={{ numPosts: numPostsSelected }}
             {...translations.selectButton}
           />
         }
-        primary
         onClick={() => this.saveChanges()}
-        key="forum-post-dialog-select-button"
-        disabled={hasNoChanges}
-        className="select-posts-button"
+        primary={true}
       />,
     ];
 
     return (
       <Dialog
-        title={this.renderDialogTitle()}
         actions={actions}
-        modal={false}
-        open={this.props.isVisible}
-        onRequestClose={() => this.props.setIsVisible(false)}
-        autoScrollBodyContent
-        autoDetectWindowHeight
+        autoDetectWindowHeight={true}
+        autoScrollBodyContent={true}
         contentStyle={styles.dialog}
+        modal={false}
+        onRequestClose={() => this.props.setIsVisible(false)}
+        open={this.props.isVisible}
+        title={this.renderDialogTitle()}
       >
         {this.renderPostMenu()}
       </Dialog>

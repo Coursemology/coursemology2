@@ -1,10 +1,11 @@
-/* eslint-disable new-cap */
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { DropTarget } from 'react-dnd';
-import { draggableTypes } from 'course/survey/constants';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
 import { changeSection } from 'course/survey/actions/questions';
+import { draggableTypes } from 'course/survey/constants';
+
 import SectionCard from './SectionCard';
 
 class Section extends Component {

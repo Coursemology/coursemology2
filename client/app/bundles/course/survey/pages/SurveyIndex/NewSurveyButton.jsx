@@ -1,11 +1,12 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
+import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import { connect } from 'react-redux';
-import { injectIntl, defineMessages, intlShape } from 'react-intl';
-import moment from 'lib/moment';
-import { showSurveyForm, createSurvey } from 'course/survey/actions/surveys';
-import { formatSurveyFormData } from 'course/survey/utils';
+import PropTypes from 'prop-types';
+
+import { createSurvey, showSurveyForm } from 'course/survey/actions/surveys';
 import AddButton from 'course/survey/components/AddButton';
+import { formatSurveyFormData } from 'course/survey/utils';
+import moment from 'lib/moment';
 
 const translations = defineMessages({
   newSurvey: {

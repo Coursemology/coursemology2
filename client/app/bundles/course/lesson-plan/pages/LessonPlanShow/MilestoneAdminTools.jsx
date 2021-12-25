@@ -1,17 +1,18 @@
 /* eslint-disable camelcase */
 import { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import { connect } from 'react-redux';
-import { injectIntl, defineMessages, intlShape } from 'react-intl';
-import { grey50 } from 'material-ui/styles/colors';
-import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
-import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import RaisedButton from 'material-ui/RaisedButton';
+import { grey50 } from 'material-ui/styles/colors';
+import DeleteIcon from 'material-ui/svg-icons/action/delete';
+import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
+import PropTypes from 'prop-types';
+
 import {
-  showMilestoneForm,
-  updateMilestone,
   deleteMilestone,
   showDeleteConfirmation,
+  showMilestoneForm,
+  updateMilestone,
 } from 'course/lesson-plan/actions';
 
 const translations = defineMessages({

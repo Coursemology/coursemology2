@@ -6,16 +6,16 @@ export default class Checkbox extends Component {
     const { disabled, style, checked, indeterminate, onChange } = this.props;
     return (
       <input
-        type="checkbox"
-        style={style}
         ref={(input) => {
           if (input) {
             input.checked = checked; // eslint-disable-line no-param-reassign
             input.indeterminate = indeterminate; // eslint-disable-line no-param-reassign
           }
         }}
-        onChange={onChange}
         disabled={disabled}
+        onChange={onChange}
+        style={style}
+        type="checkbox"
       />
     );
   }

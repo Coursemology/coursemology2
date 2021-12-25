@@ -1,11 +1,11 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Paper from 'material-ui/Paper';
 import { grey100 } from 'material-ui/styles/colors';
+import PropTypes from 'prop-types';
 
-import { questionGradeShape, questionShape } from '../propTypes';
 import actionTypes from '../constants';
+import { questionGradeShape, questionShape } from '../propTypes';
 
 const styles = {
   container: {
@@ -45,18 +45,18 @@ class VisibleQuestionGrade extends Component {
     return (
       <div style={{ display: 'inline-block', paddingLeft: 10 }}>
         <input
-          style={{ width: 100 }}
-          className="grade"
-          type="number"
-          min={0}
-          max={maxGrade}
-          step={1}
-          value={initialGrade === null ? '' : initialGrade}
-          onChange={(e) => this.handleGradingField(e.target.value)}
           ref={(ref) => {
             this.inputRef = ref;
           }}
+          className="grade"
+          max={maxGrade}
+          min={0}
+          onChange={(e) => this.handleGradingField(e.target.value)}
           onWheel={() => this.inputRef.blur()}
+          step={1}
+          style={{ width: 100 }}
+          type="number"
+          value={initialGrade === null ? '' : initialGrade}
         />
         {` / ${maxGrade}`}
       </div>

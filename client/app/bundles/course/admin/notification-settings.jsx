@@ -1,6 +1,8 @@
 import { render } from 'react-dom';
-import ProviderWrapper from 'lib/components/ProviderWrapper';
+
 import NotificationSettings from 'course/admin/pages/NotificationSettings';
+import ProviderWrapper from 'lib/components/ProviderWrapper';
+
 import storeCreator from './store';
 
 $(() => {

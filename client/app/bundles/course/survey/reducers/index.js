@@ -1,15 +1,17 @@
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
-import notificationPopup from 'lib/reducers/notificationPopup';
+
 import deleteConfirmation from 'lib/reducers/deleteConfirmation';
-import surveys from './surveys';
-import surveyForm from './surveyForm';
+import notificationPopup from 'lib/reducers/notificationPopup';
+
 import questionForm from './questionForm';
 import responseForm from './responseForm';
-import sectionForm from './sectionForm';
-import surveysFlags from './surveysFlags';
-import results from './results';
 import responses from './responses';
+import results from './results';
+import sectionForm from './sectionForm';
+import surveyForm from './surveyForm';
+import surveys from './surveys';
+import surveysFlags from './surveysFlags';
 
 export default combineReducers({
   notificationPopup,

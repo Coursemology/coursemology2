@@ -1,6 +1,6 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import ReadOnlyEditorComponent from '../components/ReadOnlyEditor';
 import { topicShape } from '../propTypes';
@@ -14,10 +14,10 @@ class ReadOnlyEditorContainer extends Component {
     const { answerId, fileId, annotations, content } = this.props;
     return (
       <ReadOnlyEditorComponent
-        answerId={answerId}
-        fileId={fileId}
         annotations={Object.values(annotations)}
+        answerId={answerId}
         content={content}
+        fileId={fileId}
       />
     );
   }

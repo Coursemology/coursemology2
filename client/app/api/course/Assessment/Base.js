@@ -1,8 +1,9 @@
-/* eslint class-methods-use-this: "off" */
+/* eslint-disable class-methods-use-this */
 import {
   getAssessmentId as getAssessmentIdFromUrl,
   getSubmissionId as getSubmissionIdFromUrl,
 } from 'lib/helpers/url-helpers';
+
 import BaseCourseAPI from '../Base';
 
 /** Submission level Api helpers should be defined here */

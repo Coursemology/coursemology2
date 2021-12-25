@@ -1,16 +1,17 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import Subheader from 'material-ui/Subheader';
-import { defaultComponentTitles } from 'course/translations.intl';
-import { duplicableItemTypes } from 'course/duplication/constants';
+import PropTypes from 'prop-types';
+
 import { setItemSelectedBoolean } from 'course/duplication/actions';
-import { videoTabShape } from 'course/duplication/propTypes';
-import TypeBadge from 'course/duplication/components/TypeBadge';
-import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
 import BulkSelectors from 'course/duplication/components/BulkSelectors';
 import IndentedCheckbox from 'course/duplication/components/IndentedCheckbox';
+import TypeBadge from 'course/duplication/components/TypeBadge';
+import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
+import { duplicableItemTypes } from 'course/duplication/constants';
+import { videoTabShape } from 'course/duplication/propTypes';
+import { defaultComponentTitles } from 'course/translations.intl';
 
 const { VIDEO_TAB, VIDEO } = duplicableItemTypes;
 
@@ -68,13 +69,13 @@ class VideosSelector extends Component {
       <div key={id}>
         <IndentedCheckbox
           checked={checked}
+          indentLevel={0}
           label={
             <span>
               <TypeBadge itemType={VIDEO_TAB} />
               {title}
             </span>
           }
-          indentLevel={0}
           onCheck={(e, value) =>
             dispatch(setItemSelectedBoolean(VIDEO_TAB, id, value))
           }
@@ -93,6 +94,8 @@ class VideosSelector extends Component {
     return (
       <IndentedCheckbox
         key={video.id}
+        checked={checked}
+        indentLevel={1}
         label={
           <span>
             <TypeBadge itemType={VIDEO} />
@@ -100,8 +103,6 @@ class VideosSelector extends Component {
             {video.title}
           </span>
         }
-        checked={checked}
-        indentLevel={1}
         onCheck={(e, value) =>
           dispatch(setItemSelectedBoolean(VIDEO, video.id, value))
         }

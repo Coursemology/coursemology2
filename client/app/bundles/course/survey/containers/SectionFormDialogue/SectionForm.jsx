@@ -1,10 +1,11 @@
-import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import { reduxForm, Field, Form } from 'redux-form';
+import PropTypes from 'prop-types';
+import { Field, Form, reduxForm } from 'redux-form';
+
+import { formNames } from 'course/survey/constants';
+import translations from 'course/survey/translations';
 import TextField from 'lib/components/redux-form/TextField';
 import formTranslations from 'lib/translations/form';
-import translations from 'course/survey/translations';
-import { formNames } from 'course/survey/constants';
 
 const validate = (values) => {
   const errors = {};
@@ -22,19 +23,19 @@ const validate = (values) => {
 const SectionForm = ({ handleSubmit, intl, onSubmit, disabled }) => (
   <Form onSubmit={handleSubmit(onSubmit)}>
     <Field
-      fullWidth
-      name="title"
-      floatingLabelText={intl.formatMessage(translations.title)}
       component={TextField}
+      floatingLabelText={intl.formatMessage(translations.title)}
+      fullWidth={true}
+      name="title"
       {...{ disabled }}
     />
     <br />
     <Field
-      fullWidth
-      name="description"
-      floatingLabelText={intl.formatMessage(translations.description)}
       component={TextField}
-      multiLine
+      floatingLabelText={intl.formatMessage(translations.description)}
+      fullWidth={true}
+      multiLine={true}
+      name="description"
       rows={2}
       {...{ disabled }}
     />

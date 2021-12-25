@@ -1,12 +1,14 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Card, CardText } from 'material-ui/Card';
 import { FormattedMessage } from 'react-intl';
-import formTranslations from 'lib/translations/form';
+import { Card, CardText } from 'material-ui/Card';
+import PropTypes from 'prop-types';
+
 import { questionTypes } from 'course/survey/constants';
 import { optionShape } from 'course/survey/propTypes';
-import TextResponseResults from './TextResponseResults';
+import formTranslations from 'lib/translations/form';
+
 import OptionsQuestionResults from './OptionsQuestionResults';
+import TextResponseResults from './TextResponseResults';
 
 const styles = {
   card: {

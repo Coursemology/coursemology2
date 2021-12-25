@@ -1,11 +1,13 @@
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { getFormValues, isPristine } from 'redux-form';
+
 import * as actionCreators from 'course/survey/actions/surveys';
+import { formNames } from 'course/survey/constants';
 import * as libActionCreators from 'lib/actions';
 import FormDialogue from 'lib/components/FormDialogue';
-import { formNames } from 'course/survey/constants';
+
 import SurveyForm from './SurveyForm';
 
 function mapStateToProps({ surveyForm, ...state }) {
@@ -66,12 +68,12 @@ const SurveyFormDialogue = ({
 
   return (
     <FormDialogue
-      title={formTitle}
-      hideForm={hideSurveyForm}
-      submitForm={submitSurveyForm}
-      skipConfirmation={pristine}
       disabled={disabled}
+      hideForm={hideSurveyForm}
       open={visible}
+      skipConfirmation={pristine}
+      submitForm={submitSurveyForm}
+      title={formTitle}
     >
       <SurveyForm {...surveyFormProps} />
     </FormDialogue>

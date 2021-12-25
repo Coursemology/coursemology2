@@ -1,18 +1,19 @@
-/* eslint-disable new-cap */
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { defineMessages, injectIntl, intlShape } from 'react-intl';
+import { connect } from 'react-redux';
 import { createDragDropManager } from 'dnd-core';
 import Subheader from 'material-ui/Subheader';
-import surveyTranslations from 'course/survey/translations';
-import { surveyShape } from 'course/survey/propTypes';
+import PropTypes from 'prop-types';
+
 import * as surveyActions from 'course/survey/actions/surveys';
+import { surveyShape } from 'course/survey/propTypes';
+import surveyTranslations from 'course/survey/translations';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
-import SurveyDetails from './SurveyDetails';
+
 import Section from './Section';
+import SurveyDetails from './SurveyDetails';
 
 const translations = defineMessages({
   empty: {

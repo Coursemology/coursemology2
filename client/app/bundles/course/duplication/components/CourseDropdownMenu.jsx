@@ -1,13 +1,14 @@
 import { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import MenuItem from 'material-ui/MenuItem';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import IconButton from 'material-ui/IconButton';
-import MyLocation from 'material-ui/svg-icons/maps/my-location';
+import MenuItem from 'material-ui/MenuItem';
 import { blue500 } from 'material-ui/styles/colors';
-import { courseListingShape } from 'course/duplication/propTypes';
+import MyLocation from 'material-ui/svg-icons/maps/my-location';
+import PropTypes from 'prop-types';
+
 import TypeBadge from 'course/duplication/components/TypeBadge';
+import { courseListingShape } from 'course/duplication/propTypes';
 
 const styles = {
   prompt: {
@@ -44,7 +45,7 @@ class CourseDropdownMenu extends PureComponent {
         </span>
       );
 
-    return <MenuItem key={course.id} value={course.id} primaryText={title} />;
+    return <MenuItem key={course.id} primaryText={title} value={course.id} />;
   };
 
   render() {
@@ -64,17 +65,17 @@ class CourseDropdownMenu extends PureComponent {
         <div style={styles.dropdownRow}>
           <DropDownMenu
             autoWidth={false}
+            disabled={disabled}
+            onChange={onChange}
             style={styles.dropDown}
             value={selectedCourseId}
-            onChange={onChange}
-            disabled={disabled}
             {...dropDownMenuProps}
           >
             {courses.map(this.renderCourseMenuItem)}
           </DropDownMenu>
           <IconButton
-            tooltip={<FormattedMessage {...translations.currentCourse} />}
             onClick={onHome}
+            tooltip={<FormattedMessage {...translations.currentCourse} />}
           >
             <MyLocation
               color={currentCourseId === selectedCourseId ? blue500 : null}

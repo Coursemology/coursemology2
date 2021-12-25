@@ -1,16 +1,17 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { Scatter } from 'react-chartjs-2';
 import { injectIntl, intlShape } from 'react-intl';
-import { formatTimestamp } from 'lib/helpers/videoHelpers';
-import { videoDefaults } from 'lib/constants/videoConstants';
 import { connect } from 'react-redux';
+import MenuItem from 'material-ui/MenuItem';
+import SelectField from 'material-ui/SelectField';
+import PropTypes from 'prop-types';
 
-import translations from '../../translations';
+import LoadingIndicator from 'lib/components/LoadingIndicator';
+import { videoDefaults } from 'lib/constants/videoConstants';
+import { formatTimestamp } from 'lib/helpers/videoHelpers';
+
 import { seekToDirectly } from '../../actions/video';
+import translations from '../../translations';
 
 const graphGlobalOptions = (intl, videoDuration) => ({
   legend: {
@@ -217,8 +218,8 @@ class ProgressGraph extends Component {
       return (
         <MenuItem
           key={key}
-          value={key}
           primaryText={startTime.toLocaleString()}
+          value={key}
         />
       );
     });
@@ -229,10 +230,10 @@ class ProgressGraph extends Component {
           translations.selectSession,
         )}
         maxHeight={300}
-        value={this.state.selectedSessionId}
         onChange={(_event, _key, selectedSessionId) =>
           this.setState({ selectedSessionId })
         }
+        value={this.state.selectedSessionId}
       >
         {items}
       </SelectField>

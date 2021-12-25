@@ -1,7 +1,9 @@
-import CourseAPI from 'api/course';
 import MockAdapter from 'axios-mock-adapter';
+
+import CourseAPI from 'api/course';
 import storeCreator from 'course/survey/store';
 import history from 'lib/history';
+
 import { createResponse } from '../responses';
 
 const client = CourseAPI.survey.responses.getClient();

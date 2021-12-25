@@ -1,12 +1,14 @@
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Divider from 'material-ui/Divider';
+import PropTypes from 'prop-types';
+
 import { formatTimestamp } from 'lib/helpers/videoHelpers';
 
-import styles from '../Discussion.scss';
+import { seekToDirectly } from '../../actions/video';
+
 import PostContainer from './PostContainer';
 import Reply from './Reply';
-import { seekToDirectly } from '../../actions/video';
+import styles from '../Discussion.scss';
 
 const propTypes = {
   topicId: PropTypes.string.isRequired,
@@ -26,13 +28,13 @@ const Topic = (props) => {
 
   return (
     <div
-      id={`discussion-topic-${props.topicId}`}
       className={styles.topicComponent}
+      id={`discussion-topic-${props.topicId}`}
     >
       <div className={styles.topicTimestamp}>
         <span className="glyphicon glyphicon-chevron-down" />
         &nbsp;
-        <a style={{ cursor: 'pointer' }} onClick={props.onTimeStampClick}>
+        <a onClick={props.onTimeStampClick} style={{ cursor: 'pointer' }}>
           <b>
             Time:
             {formatTimestamp(props.timestamp)}
@@ -43,7 +45,7 @@ const Topic = (props) => {
       </div>
       <Divider style={{ marginBottom: '1em' }} />
       {props.postIds.map((id) => (
-        <PostContainer key={id.toString()} postId={id} isRoot />
+        <PostContainer key={id.toString()} isRoot={true} postId={id} />
       ))}
       <Reply topicId={props.topicId} />
       <Divider />

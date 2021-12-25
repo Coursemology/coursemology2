@@ -1,8 +1,5 @@
 import { combineReducers } from 'redux';
-import video, {
-  initialState as videoState,
-  persistTransform as videoTransform,
-} from './video';
+
 import discussion, {
   initialState as discussionState,
   organiseDiscussionEntities,
@@ -14,6 +11,10 @@ import oldSessions, {
   initialState as oldSessionsState,
   persistTransform as oldSessionsTransform,
 } from './oldSessions';
+import video, {
+  initialState as videoState,
+  persistTransform as videoTransform,
+} from './video';
 
 /**
  * Creates the initial state from the props parsed in from JSON.

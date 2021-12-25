@@ -1,7 +1,10 @@
+import { arrayPush, SubmissionError, submit } from 'redux-form';
+
 import CourseAPI from 'api/course';
-import { submit, arrayPush, SubmissionError } from 'redux-form';
 import { getSurveyId } from 'lib/helpers/url-helpers';
+
 import actionTypes, { formNames } from '../constants';
+
 import { setNotification } from './index';
 
 export function showQuestionForm(formParams) {

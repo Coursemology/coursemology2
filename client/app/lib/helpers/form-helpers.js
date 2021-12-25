@@ -104,8 +104,8 @@ function removeParentForm($element) {
 }
 
 export {
-  submitAndDisableForm,
   enableForm,
   parentFormForElement,
   removeParentForm,
+  submitAndDisableForm,
 };

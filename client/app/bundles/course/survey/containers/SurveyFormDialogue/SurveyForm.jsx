@@ -1,18 +1,19 @@
-import PropTypes from 'prop-types';
 import {
   defineMessages,
+  FormattedMessage,
   injectIntl,
   intlShape,
-  FormattedMessage,
 } from 'react-intl';
-import { reduxForm, Field, Form } from 'redux-form';
 import ReactTooltip from 'react-tooltip';
-import TextField from 'lib/components/redux-form/TextField';
+import PropTypes from 'prop-types';
+import { Field, Form, reduxForm } from 'redux-form';
+
+import { formNames } from 'course/survey/constants';
+import translations from 'course/survey/translations';
 import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
+import TextField from 'lib/components/redux-form/TextField';
 import Toggle from 'lib/components/redux-form/Toggle';
 import formTranslations from 'lib/translations/form';
-import translations from 'course/survey/translations';
-import { formNames } from 'course/survey/constants';
 
 const styles = {
   columns: {
@@ -114,37 +115,37 @@ const SurveyForm = ({
 }) => (
   <Form onSubmit={handleSubmit(onSubmit)}>
     <Field
-      fullWidth
-      name="title"
-      floatingLabelText={intl.formatMessage(translations.title)}
       component={TextField}
+      floatingLabelText={intl.formatMessage(translations.title)}
+      fullWidth={true}
+      name="title"
       {...{ disabled }}
     />
     <br />
     <Field
-      fullWidth
-      name="description"
-      floatingLabelText={intl.formatMessage(translations.description)}
       component={TextField}
-      multiLine
+      floatingLabelText={intl.formatMessage(translations.description)}
+      fullWidth={true}
+      multiLine={true}
+      name="description"
       rows={2}
       {...{ disabled }}
     />
     <div style={styles.columns}>
       <Field
-        name="start_at"
-        floatingLabelText={intl.formatMessage(translations.opensAt)}
-        component={DateTimePicker}
         afterChange={(_, newStartAt) =>
           shiftEndDate(formNames.SURVEY, newStartAt, formValues)
         }
+        component={DateTimePicker}
+        floatingLabelText={intl.formatMessage(translations.opensAt)}
+        name="start_at"
         style={styles.oneColumn}
         {...{ disabled }}
       />
       <Field
-        name="end_at"
-        floatingLabelText={intl.formatMessage(translations.expiresAt)}
         component={DateTimePicker}
+        floatingLabelText={intl.formatMessage(translations.expiresAt)}
+        name="end_at"
         style={styles.oneColumn}
         {...{ disabled }}
       />
@@ -152,27 +153,27 @@ const SurveyForm = ({
     <div style={styles.columns}>
       <div style={styles.oneColumn}>
         <Field
-          name="base_exp"
-          floatingLabelText={intl.formatMessage(translations.basePoints)}
           component={TextField}
-          type="number"
+          floatingLabelText={intl.formatMessage(translations.basePoints)}
+          name="base_exp"
           onWheel={(event) => event.currentTarget.blur()}
+          type="number"
           {...{ disabled }}
         />
       </div>
       <div
-        style={styles.oneColumn}
-        data-tip
         data-for="timeBonusExpTooltip"
+        data-tip={true}
         data-tip-disable={formValues && formValues.allow_response_after_end}
+        style={styles.oneColumn}
       >
         <Field
-          name="time_bonus_exp"
-          floatingLabelText={intl.formatMessage(translations.bonusPoints)}
           component={TextField}
-          type="number"
-          onWheel={(event) => event.currentTarget.blur()}
           disabled={formValues && !formValues.allow_response_after_end}
+          floatingLabelText={intl.formatMessage(translations.bonusPoints)}
+          name="time_bonus_exp"
+          onWheel={(event) => event.currentTarget.blur()}
+          type="number"
         />
         <ReactTooltip id="timeBonusExpTooltip">
           <FormattedMessage {...surveyFormTranslations.timeBonusExpTooltip} />
@@ -180,37 +181,37 @@ const SurveyForm = ({
       </div>
     </div>
     <Field
-      name="allow_response_after_end"
       component={Toggle}
-      parse={Boolean}
+      disabled={disabled}
       label={intl.formatMessage(translations.allowResponseAfterEnd)}
       labelPosition="right"
+      name="allow_response_after_end"
+      parse={Boolean}
       style={styles.toggle}
-      disabled={disabled}
     />
     <div style={styles.hint}>
       {intl.formatMessage(surveyFormTranslations.allowResponseAfterEndHint)}
     </div>
     <Field
-      name="allow_modify_after_submit"
       component={Toggle}
-      parse={Boolean}
+      disabled={disabled}
       label={intl.formatMessage(translations.allowModifyAfterSubmit)}
       labelPosition="right"
+      name="allow_modify_after_submit"
+      parse={Boolean}
       style={styles.toggle}
-      disabled={disabled}
     />
     <div style={styles.hint}>
       {intl.formatMessage(surveyFormTranslations.allowModifyAfterSubmitHint)}
     </div>
     <Field
-      name="anonymous"
       component={Toggle}
-      parse={Boolean}
+      disabled={disableAnonymousToggle || disabled}
       label={intl.formatMessage(translations.anonymous)}
       labelPosition="right"
+      name="anonymous"
+      parse={Boolean}
       style={styles.toggle}
-      disabled={disableAnonymousToggle || disabled}
     />
     <div style={styles.hint}>
       {disableAnonymousToggle

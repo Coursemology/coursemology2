@@ -1,17 +1,19 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import IconButton from 'material-ui/IconButton';
 import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
-import history from 'lib/history';
-import TitleBar from 'lib/components/TitleBar';
-import { surveyShape } from 'course/survey/propTypes';
-import SurveyShow from 'course/survey/pages/SurveyShow';
-import SurveyResults from 'course/survey/pages/SurveyResults';
-import ResponseShow from 'course/survey/pages/ResponseShow';
+import PropTypes from 'prop-types';
+
 import ResponseEdit from 'course/survey/pages/ResponseEdit';
 import ResponseIndex from 'course/survey/pages/ResponseIndex';
+import ResponseShow from 'course/survey/pages/ResponseShow';
+import SurveyResults from 'course/survey/pages/SurveyResults';
+import SurveyShow from 'course/survey/pages/SurveyShow';
+import { surveyShape } from 'course/survey/propTypes';
+import TitleBar from 'lib/components/TitleBar';
+import history from 'lib/history';
+
 import AdminMenu from './AdminMenu';
 
 const backLocations = (courseId, surveyId, Page) => {
@@ -31,16 +33,16 @@ class SurveyLayout extends Component {
   static renderTitleBar(survey, surveyId, showAdminMenu, backLocation) {
     return (
       <TitleBar
-        title={survey.title}
-        iconElementRight={
-          showAdminMenu ? <AdminMenu {...{ survey, surveyId }} /> : null
-        }
         iconElementLeft={
           <IconButton>
             <ArrowBack />
           </IconButton>
         }
+        iconElementRight={
+          showAdminMenu ? <AdminMenu {...{ survey, surveyId }} /> : null
+        }
         onLeftIconButtonClick={() => history.push(backLocation)}
+        title={survey.title}
       />
     );
   }
@@ -76,24 +78,24 @@ class SurveyLayout extends Component {
 
     return (
       <Switch>
-        <Route exact path={url} render={renderWithProps(SurveyShow)} />
+        <Route exact={true} path={url} render={renderWithProps(SurveyShow)} />
         <Route
-          exact
+          exact={true}
           path={`${surveyUrl}results`}
           render={renderWithProps(SurveyResults)}
         />
         <Route
-          exact
+          exact={true}
           path={`${surveyUrl}responses`}
           render={renderWithProps(ResponseIndex)}
         />
         <Route
-          exact
+          exact={true}
           path={`${surveyUrl}responses/:responseId`}
           render={renderWithProps(ResponseShow)}
         />
         <Route
-          exact
+          exact={true}
           path={`${surveyUrl}responses/:responseId/edit`}
           render={renderWithProps(ResponseEdit)}
         />

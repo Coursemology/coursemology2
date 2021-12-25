@@ -1,7 +1,15 @@
 import { Component } from 'react';
-import ReactTooltip from 'react-tooltip';
-import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import ReactTooltip from 'react-tooltip';
+import CircularProgress from 'material-ui/CircularProgress';
+import IconButton from 'material-ui/IconButton';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import { pink600, red600, red900 } from 'material-ui/styles/colors';
+import DeleteIcon from 'material-ui/svg-icons/action/delete';
+import RemoveCircle from 'material-ui/svg-icons/content/remove-circle';
+import DownloadIcon from 'material-ui/svg-icons/file/file-download';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import {
   Table,
   TableBody,
@@ -9,21 +17,16 @@ import {
   TableHeaderColumn,
   TableRow,
 } from 'material-ui/Table';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import { red600, red900, pink600 } from 'material-ui/styles/colors';
-import IconButton from 'material-ui/IconButton';
-import CircularProgress from 'material-ui/CircularProgress';
-import DownloadIcon from 'material-ui/svg-icons/file/file-download';
+import PropTypes from 'prop-types';
+
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import DeleteIcon from 'material-ui/svg-icons/action/delete';
-import RemoveCircle from 'material-ui/svg-icons/content/remove-circle';
-import { assessmentShape } from '../../propTypes';
+
 import { workflowStates } from '../../constants';
+import { assessmentShape } from '../../propTypes';
 import translations from '../../translations';
-import submissionsTranslations from './translations';
+
 import SubmissionsTableRow from './SubmissionsTableRow';
+import submissionsTranslations from './translations';
 
 const styles = {
   unstartedText: {
@@ -59,7 +62,7 @@ export default class SubmissionsTable extends Component {
       submissionsTranslations.deleteSubmission,
     ];
     return tooltipIds.map((tooltipId, index) => (
-      <ReactTooltip key={tooltipId} id={tooltipId} effect="solid">
+      <ReactTooltip key={tooltipId} effect="solid" id={tooltipId}>
         <FormattedMessage {...formattedMessages[index]} />
       </ReactTooltip>
     ));
@@ -118,18 +121,18 @@ export default class SubmissionsTable extends Component {
     const { deleteAllConfirmation } = this.state;
     return (
       <ConfirmationDialog
-        open={deleteAllConfirmation}
-        onCancel={() => this.setState({ deleteAllConfirmation: false })}
-        onConfirm={() => {
-          this.setState({ deleteAllConfirmation: false });
-          handleDeleteAll();
-        }}
         message={
           <FormattedMessage
             {...translations.deleteAllConfirmation}
             values={{ users: confirmDialogValue }}
           />
         }
+        onCancel={() => this.setState({ deleteAllConfirmation: false })}
+        onConfirm={() => {
+          this.setState({ deleteAllConfirmation: false });
+          handleDeleteAll();
+        }}
+        open={deleteAllConfirmation}
       />
     );
   }
@@ -165,23 +168,20 @@ export default class SubmissionsTable extends Component {
               ? 'download-submissions-disabled'
               : 'download-submissions-enabled'
           }
-          primaryText={
-            <FormattedMessage {...submissionsTranslations.downloadAnswers} />
-          }
           disabled={downloadAnswerDisabled}
           leftIcon={
             isDownloading ? <CircularProgress size={30} /> : <DownloadIcon />
           }
           onClick={downloadAnswerDisabled ? null : handleDownload}
+          primaryText={
+            <FormattedMessage {...submissionsTranslations.downloadAnswers} />
+          }
         />
         <MenuItem
           className={
             downloadStatisticsDisabled
               ? 'download-statistics-disabled'
               : 'download-statistics-enabled'
-          }
-          primaryText={
-            <FormattedMessage {...submissionsTranslations.downloadStatistics} />
           }
           disabled={downloadStatisticsDisabled}
           leftIcon={
@@ -192,6 +192,9 @@ export default class SubmissionsTable extends Component {
             )
           }
           onClick={downloadStatisticsDisabled ? null : handleDownloadStatistics}
+          primaryText={
+            <FormattedMessage {...submissionsTranslations.downloadStatistics} />
+          }
         />
         {assessment.canUnsubmitSubmission ? (
           <MenuItem
@@ -199,11 +202,6 @@ export default class SubmissionsTable extends Component {
               unsubmitAllDisabled
                 ? 'unsubmit-submissions-disabled'
                 : 'unsubmit-submissions-enabled'
-            }
-            primaryText={
-              <FormattedMessage
-                {...submissionsTranslations.unsubmitAllSubmissions}
-              />
             }
             disabled={unsubmitAllDisabled}
             leftIcon={
@@ -214,6 +212,11 @@ export default class SubmissionsTable extends Component {
               )
             }
             onClick={() => this.setState({ unsubmitAllConfirmation: true })}
+            primaryText={
+              <FormattedMessage
+                {...submissionsTranslations.unsubmitAllSubmissions}
+              />
+            }
           />
         ) : null}
         {assessment.canDeleteAllSubmissions ? (
@@ -222,11 +225,6 @@ export default class SubmissionsTable extends Component {
               deleteAllDisabled
                 ? 'delete-submissions-disabled'
                 : 'delete-submissions-enabled'
-            }
-            primaryText={
-              <FormattedMessage
-                {...submissionsTranslations.deleteAllSubmissions}
-              />
             }
             disabled={deleteAllDisabled}
             leftIcon={
@@ -237,6 +235,11 @@ export default class SubmissionsTable extends Component {
               )
             }
             onClick={() => this.setState({ deleteAllConfirmation: true })}
+            primaryText={
+              <FormattedMessage
+                {...submissionsTranslations.deleteAllSubmissions}
+              />
+            }
           />
         ) : null}
       </IconMenu>
@@ -281,18 +284,18 @@ export default class SubmissionsTable extends Component {
     const { unsubmitAllConfirmation } = this.state;
     return (
       <ConfirmationDialog
-        open={unsubmitAllConfirmation}
-        onCancel={() => this.setState({ unsubmitAllConfirmation: false })}
-        onConfirm={() => {
-          this.setState({ unsubmitAllConfirmation: false });
-          handleUnsubmitAll();
-        }}
         message={
           <FormattedMessage
             {...translations.unsubmitAllConfirmation}
             values={{ users: confirmDialogValue }}
           />
         }
+        onCancel={() => this.setState({ unsubmitAllConfirmation: false })}
+        onConfirm={() => {
+          this.setState({ unsubmitAllConfirmation: false });
+          handleUnsubmitAll();
+        }}
+        open={unsubmitAllConfirmation}
       />
     );
   }

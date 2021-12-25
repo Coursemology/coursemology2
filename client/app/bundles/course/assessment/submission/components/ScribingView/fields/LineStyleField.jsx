@@ -1,8 +1,9 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import Chip from 'material-ui/Chip';
 import { cyan500, grey50 } from 'material-ui/styles/colors';
+import PropTypes from 'prop-types';
+
 import { scribingTranslations as translations } from '../../../translations';
 
 const propTypes = {
@@ -70,15 +71,15 @@ class LineStyleField extends Component {
     lineStyles.forEach((style) =>
       chips.push(
         <Chip
+          key={lineToolType + style.value}
           backgroundColor={
             selectedLineStyle === style.value ? cyan500 : undefined
           }
           labelColor={selectedLineStyle === style.value ? grey50 : undefined}
-          key={lineToolType + style.value}
-          style={styles.chip}
           onClick={(event) =>
             onClickLineStyleChip(event, lineToolType, style.value)
           }
+          style={styles.chip}
         >
           {style.key}
         </Chip>,

@@ -1,15 +1,17 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Card, CardText, CardTitle, CardActions } from 'material-ui/Card';
+import { Card, CardActions, CardText, CardTitle } from 'material-ui/Card';
 import Subheader from 'material-ui/Subheader';
-import { surveyShape, sectionShape } from 'course/survey/propTypes';
-import Question from './Question';
-import NewQuestionButton from './NewQuestionButton';
-import EditSectionButton from './EditSectionButton';
+import PropTypes from 'prop-types';
+
+import { sectionShape, surveyShape } from 'course/survey/propTypes';
+
 import DeleteSectionButton from './DeleteSectionButton';
-import MoveUpButton from './MoveUpButton';
+import EditSectionButton from './EditSectionButton';
 import MoveDownButton from './MoveDownButton';
+import MoveUpButton from './MoveUpButton';
+import NewQuestionButton from './NewQuestionButton';
+import Question from './Question';
 
 const styles = {
   card: {
@@ -66,17 +68,17 @@ class SectionCard extends Component {
     } = this.props;
     return (
       <Card
-        style={styles.card}
         expanded={this.state.expanded}
         onExpandChange={(value) => this.setState({ expanded: value })}
+        style={styles.card}
       >
         <CardTitle
-          title={section.title}
+          showExpandableButton={section.questions.length > 0}
           subtitle={
             <div dangerouslySetInnerHTML={{ __html: section.description }} />
           }
           subtitleStyle={styles.subtitle}
-          showExpandableButton={section.questions.length > 0}
+          title={section.title}
         />
         {section.questions.length > 1 ? this.renderActions() : null}
         <CardText>

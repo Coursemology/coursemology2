@@ -1,13 +1,14 @@
 import { Component } from 'react';
 import { findDOMNode } from 'react-dom';
-import PropTypes from 'prop-types';
 import { Overlay } from 'react-overlays';
 import { grey200, grey400 } from 'material-ui/styles/colors';
+import PropTypes from 'prop-types';
+
+import Annotations from '../../containers/Annotations';
+import { annotationShape } from '../../propTypes';
 
 import AddCommentIcon from './AddCommentIcon';
 import OverlayTooltip from './OverlayTooltip';
-import Annotations from '../../containers/Annotations';
-import { annotationShape } from '../../propTypes';
 
 const styles = {
   editor: {
@@ -78,10 +79,10 @@ export default class NarrowEditor extends Component {
 
     return (
       <Overlay
-        show={expanded[lineNumber - 1]}
         onHide={() => collapseLine(lineNumber)}
         placement={placement}
-        rootClose
+        rootClose={true}
+        show={expanded[lineNumber - 1]}
         target={() => findDOMNode(this[`comment-${lineNumber}`])} // eslint-disable-line react/no-find-dom-node
       >
         <OverlayTooltip
@@ -90,11 +91,11 @@ export default class NarrowEditor extends Component {
         >
           <div onClick={() => this.setState({ activeComment: lineNumber })}>
             <Annotations
+              airMode={false}
+              annotation={annotation}
               answerId={answerId}
               fileId={fileId}
               lineNumber={lineNumber}
-              annotation={annotation}
-              airMode={false}
             />
           </div>
         </OverlayTooltip>
@@ -109,14 +110,14 @@ export default class NarrowEditor extends Component {
     return (
       <>
         <div
+          onClick={() => this.toggleComment(lineNumber)}
+          onMouseOut={() => this.setState({ lineHovered: 0 })}
+          onMouseOver={() => this.setState({ lineHovered: lineNumber })}
           style={
             annotation
               ? styles.editorLineNumberWithComments
               : styles.editorLineNumber
           }
-          onClick={() => this.toggleComment(lineNumber)}
-          onMouseOver={() => this.setState({ lineHovered: lineNumber })}
-          onMouseOut={() => this.setState({ lineHovered: 0 })}
         >
           <div
             ref={(c) => {
@@ -126,8 +127,8 @@ export default class NarrowEditor extends Component {
             {lineNumber}
           </div>
           <AddCommentIcon
-            onClick={() => this.expandComment(lineNumber)}
             hovered={lineHovered === lineNumber}
+            onClick={() => this.expandComment(lineNumber)}
           />
         </div>
         {this.renderComments(lineNumber)}

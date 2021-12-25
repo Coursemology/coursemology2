@@ -1,5 +1,6 @@
-import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
+
 import { duplicableItemTypes } from 'course/duplication/constants';
 
 const styles = {

@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
 import Checkbox from 'material-ui/Checkbox';
+import PropTypes from 'prop-types';
 
 const styles = {
   tabSize: 15,

@@ -1,5 +1,7 @@
 import { render } from 'react-dom';
+
 import ProviderWrapper from 'lib/components/ProviderWrapper';
+
 import Statistics from './containers/Statistics';
 import VideoPlayer from './containers/VideoPlayer';
 import storeCreator from './store';

@@ -1,6 +1,8 @@
 import { mount } from 'enzyme';
+
 import CourseAPI from 'api/course';
 import storeCreator from 'course/admin/store';
+
 import NotificationSettings from '../index';
 
 const emailSettings = [

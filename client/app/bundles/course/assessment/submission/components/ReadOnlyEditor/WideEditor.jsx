@@ -1,10 +1,11 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { grey200, grey400 } from 'material-ui/styles/colors';
+import PropTypes from 'prop-types';
 
-import WideComments from './WideComments';
-import AddCommentIcon from './AddCommentIcon';
 import { annotationShape } from '../../propTypes';
+
+import AddCommentIcon from './AddCommentIcon';
+import WideComments from './WideComments';
 
 const styles = {
   layout: {
@@ -84,12 +85,12 @@ export default class WideEditor extends Component {
     return (
       <WideComments
         activeComment={activeComment}
-        answerId={answerId}
-        fileId={fileId}
         annotations={annotations}
+        answerId={answerId}
+        collapseLine={(lineNumber) => collapseLine(lineNumber)}
         expanded={expanded}
         expandLine={(lineNumber) => this.expandComment(lineNumber)}
-        collapseLine={(lineNumber) => collapseLine(lineNumber)}
+        fileId={fileId}
         onClick={(lineNumber) => this.setState({ activeComment: lineNumber })}
       />
     );
@@ -152,19 +153,19 @@ export default class WideEditor extends Component {
 
     return (
       <div
+        onClick={() => this.toggleComment(lineNumber)}
+        onMouseOut={() => this.setState({ lineHovered: -1 })}
+        onMouseOver={() => this.setState({ lineHovered: lineNumber })}
         style={
           annotation
             ? styles.editorLineNumberWithComments
             : styles.editorLineNumber
         }
-        onClick={() => this.toggleComment(lineNumber)}
-        onMouseOver={() => this.setState({ lineHovered: lineNumber })}
-        onMouseOut={() => this.setState({ lineHovered: -1 })}
       >
         {lineNumber}
         <AddCommentIcon
-          onClick={() => this.expandComment(lineNumber)}
           hovered={lineHovered === lineNumber}
+          onClick={() => this.expandComment(lineNumber)}
         />
       </div>
     );

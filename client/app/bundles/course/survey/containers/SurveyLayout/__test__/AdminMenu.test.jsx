@@ -1,10 +1,12 @@
 import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import { mount } from 'enzyme';
+
 import CourseAPI from 'api/course';
-import DeleteConfirmation from 'lib/containers/DeleteConfirmation';
-import storeCreator from 'course/survey/store';
 import SurveyFormDialogue from 'course/survey/containers/SurveyFormDialogue';
+import storeCreator from 'course/survey/store';
+import DeleteConfirmation from 'lib/containers/DeleteConfirmation';
+
 import AdminMenu from '../AdminMenu';
 
 describe('<AdminMenu />', () => {

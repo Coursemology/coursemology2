@@ -1,14 +1,15 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import Subheader from 'material-ui/Subheader';
+import { connect } from 'react-redux';
 import { Card, CardText } from 'material-ui/Card';
-import { defaultComponentTitles } from 'course/translations.intl';
+import Subheader from 'material-ui/Subheader';
+import PropTypes from 'prop-types';
+
+import IndentedCheckbox from 'course/duplication/components/IndentedCheckbox';
+import TypeBadge from 'course/duplication/components/TypeBadge';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { folderShape } from 'course/duplication/propTypes';
-import TypeBadge from 'course/duplication/components/TypeBadge';
-import IndentedCheckbox from 'course/duplication/components/IndentedCheckbox';
+import { defaultComponentTitles } from 'course/translations.intl';
 
 const { FOLDER, MATERIAL } = duplicableItemTypes;
 const ROOT_CHILDREN_LEVEL = 1;
@@ -31,7 +32,7 @@ class MaterialsListing extends Component {
   static renderRootRow() {
     return (
       <IndentedCheckbox
-        disabled
+        disabled={true}
         label={<FormattedMessage {...translations.root} />}
       />
     );
@@ -40,8 +41,9 @@ class MaterialsListing extends Component {
   static renderRow(item, itemType, indentLevel, nameConflict) {
     return (
       <IndentedCheckbox
-        checked
         key={item.id}
+        checked={true}
+        indentLevel={indentLevel}
         label={
           <span>
             <TypeBadge itemType={itemType} />
@@ -56,7 +58,6 @@ class MaterialsListing extends Component {
             )}
           </span>
         }
-        indentLevel={indentLevel}
       />
     );
   }

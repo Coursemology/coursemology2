@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
 import { red500 } from 'material-ui/styles/colors';
+import PropTypes from 'prop-types';
 
 /**
  * Standardises the way errors are shown in redux forms.

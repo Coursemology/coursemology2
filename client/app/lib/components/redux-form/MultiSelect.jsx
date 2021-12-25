@@ -1,5 +1,6 @@
-import PropTypes from 'prop-types';
 import ChipInput from 'material-ui-chip-input';
+import PropTypes from 'prop-types';
+
 import createComponent from './createComponent';
 
 export const optionShape = PropTypes.shape({
@@ -30,9 +31,14 @@ const MultiSelect = (props) => {
 
   return (
     <ChipInput
-      value={seletedOptions}
       dataSource={options}
       dataSourceConfig={{ value: 'id', text: 'title' }}
+      disabled={isLoading}
+      errorText={error}
+      floatingLabelFixed={true}
+      floatingLabelText={label}
+      fullWidth={true}
+      menuStyle={styles.menuStyle}
       onBeforeRequestAdd={(chip) => {
         // don't allow adding of arbitrary values by typing
         if (typeof chip === 'string' || chip instanceof String) {
@@ -47,13 +53,8 @@ const MultiSelect = (props) => {
         const values = value.filter((v) => v !== deletedChipId);
         onChange(values);
       }}
-      floatingLabelText={label}
-      floatingLabelFixed
-      openOnFocus
-      fullWidth
-      disabled={isLoading}
-      errorText={error}
-      menuStyle={styles.menuStyle}
+      openOnFocus={true}
+      value={seletedOptions}
     />
   );
 };

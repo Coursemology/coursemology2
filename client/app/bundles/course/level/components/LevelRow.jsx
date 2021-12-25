@@ -1,11 +1,11 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
-import DeleteIcon from 'material-ui/svg-icons/action/delete';
-import TextField from 'material-ui/TextField';
 import { grey300 } from 'material-ui/styles/colors';
+import DeleteIcon from 'material-ui/svg-icons/action/delete';
+import { TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
+import TextField from 'material-ui/TextField';
+import PropTypes from 'prop-types';
 
 const translations = defineMessages({
   zeroThresholdError: {
@@ -38,12 +38,12 @@ class LevelRow extends Component {
 
     return (
       <RaisedButton
+        backgroundColor={grey300}
+        disabled={disabled}
+        icon={<DeleteIcon />}
         id={`delete_${levelNumber}`}
         name={`delete_${levelNumber}`}
-        backgroundColor={grey300}
-        icon={<DeleteIcon />}
         onClick={deleteLevel(levelNumber)}
-        disabled={disabled}
         style={{ minWidth: '40px', width: '40px' }}
       />
     );
@@ -59,11 +59,6 @@ class LevelRow extends Component {
     } = this.props;
     return (
       <TextField
-        type="text"
-        name={`level_${levelNumber}`}
-        onChange={(e, newValue) => {
-          updateExpThreshold(levelNumber, newValue);
-        }}
         disabled={disabled}
         errorText={
           experiencePointsThreshold === 0 ? (
@@ -72,9 +67,14 @@ class LevelRow extends Component {
             ''
           )
         }
+        name={`level_${levelNumber}`}
         onBlur={() => {
           sortLevels();
         }}
+        onChange={(e, newValue) => {
+          updateExpThreshold(levelNumber, newValue);
+        }}
+        type="text"
         value={experiencePointsThreshold}
       />
     );

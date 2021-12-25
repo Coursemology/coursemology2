@@ -1,11 +1,12 @@
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
+
 import RichTextField from 'lib/components/redux-form/RichTextField';
 
-import { questionShape } from '../../propTypes';
 import UploadedFileView from '../../containers/UploadedFileView';
-import TextResponseSolutions from '../TextResponseSolutions';
+import { questionShape } from '../../propTypes';
 import FileInput from '../FileInput';
+import TextResponseSolutions from '../TextResponseSolutions';
 
 const ReadOnlyAnswerComponent = (props) => (
   <div dangerouslySetInnerHTML={{ __html: props.input.value }} />
@@ -22,25 +23,25 @@ const TextResponse = ({ question, readOnly, answerId, graderView }) => {
 
   const readOnlyAnswer = (
     <Field
-      name={`${answerId}[answer_text]`}
       component={ReadOnlyAnswerComponent}
+      name={`${answerId}[answer_text]`}
     />
   );
 
   const richtextAnswer = (
     <Field
-      name={`${answerId}[answer_text]`}
       component={RichTextField}
-      multiLine
+      multiLine={true}
+      name={`${answerId}[answer_text]`}
     />
   );
 
   const plaintextAnswer = (
     <Field
-      name={`${answerId}[answer_text]`}
       component="textarea"
-      style={{ width: '100%' }}
+      name={`${answerId}[answer_text]`}
       rows={5}
+      style={{ width: '100%' }}
     />
   );
 
@@ -54,7 +55,7 @@ const TextResponse = ({ question, readOnly, answerId, graderView }) => {
       {graderView && <TextResponseSolutions question={question} />}
       {allowUpload && <UploadedFileView questionId={question.id} />}
       {allowUpload && !readOnly && (
-        <FileInput name={`${answerId}[files]`} disabled={readOnly} />
+        <FileInput disabled={readOnly} name={`${answerId}[files]`} />
       )}
     </div>
   );

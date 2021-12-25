@@ -1,32 +1,32 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-
+import { connect } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
-import WrongIcon from 'material-ui/svg-icons/navigation/close';
-import CorrectIcon from 'material-ui/svg-icons/action/done';
+import Paper from 'material-ui/Paper';
 import {
-  red50,
-  yellow100,
   green50,
-  red100,
   green100,
+  red50,
+  red100,
+  yellow100,
 } from 'material-ui/styles/colors';
+import CorrectIcon from 'material-ui/svg-icons/action/done';
+import WrongIcon from 'material-ui/svg-icons/navigation/close';
 import {
   Table,
+  TableBody,
   TableHeader,
   TableHeaderColumn,
-  TableBody,
   TableRow,
   TableRowColumn,
 } from 'material-ui/Table';
-import Paper from 'material-ui/Paper';
+import PropTypes from 'prop-types';
 
 import ExpandableText from 'lib/components/ExpandableText';
-import { testCaseShape } from '../../propTypes';
+
 import { workflowStates } from '../../constants';
+import { testCaseShape } from '../../propTypes';
 
 const styles = {
   testCaseRow: {
@@ -115,7 +115,7 @@ export class VisibleTestCaseView extends Component {
     return (
       <Card id={outputStreamType}>
         <CardHeader
-          showExpandableButton
+          showExpandableButton={true}
           title={
             <>
               <FormattedMessage {...translations[outputStreamType]} />
@@ -124,7 +124,7 @@ export class VisibleTestCaseView extends Component {
             </>
           }
         />
-        <CardText expandable>
+        <CardText expandable={true}>
           <pre>{output}</pre>
         </CardText>
       </Card>
@@ -135,13 +135,13 @@ export class VisibleTestCaseView extends Component {
     return (
       <span style={{ display: 'inline-block', marginLeft: 5 }}>
         <a
-          data-tip
           data-for="staff-only-output-stream"
           data-offset="{'left' : -8}"
+          data-tip={true}
         >
           <i className="fa fa-exclamation-triangle" />
         </a>
-        <ReactTooltip id="staff-only-output-stream" effect="solid">
+        <ReactTooltip effect="solid" id="staff-only-output-stream">
           <FormattedMessage {...translations.staffOnlyOutputStream} />
         </ReactTooltip>
       </span>
@@ -152,13 +152,13 @@ export class VisibleTestCaseView extends Component {
     return (
       <span style={{ display: 'inline-block', marginLeft: 5 }}>
         <a
-          data-tip
           data-for="staff-only-test-cases"
           data-offset="{'left' : -8}"
+          data-tip={true}
         >
           <i className="fa fa-exclamation-triangle" />
         </a>
-        <ReactTooltip id="staff-only-test-cases" effect="solid">
+        <ReactTooltip effect="solid" id="staff-only-test-cases">
           <FormattedMessage {...translations.staffOnlyTestCases} />
         </ReactTooltip>
       </span>
@@ -257,10 +257,10 @@ export class VisibleTestCaseView extends Component {
     return (
       <Card id={testCaseType}>
         <CardHeader
-          title={title}
           actAsExpander={collapsible}
           showExpandableButton={collapsible}
           style={headerStyle}
+          title={title}
         />
         <CardText expandable={collapsible}>
           <Table selectable={false} style={{}}>

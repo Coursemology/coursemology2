@@ -1,9 +1,10 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { FieldArray } from 'redux-form';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Card, CardText, CardTitle } from 'material-ui/Card';
 import { red500 } from 'material-ui/styles/colors';
+import PropTypes from 'prop-types';
+import { FieldArray } from 'redux-form';
+
 import ResponseAnswer from './ResponseAnswer';
 
 const styles = {
@@ -68,15 +69,15 @@ class ResponseSection extends Component {
     return (
       <Card style={styles.card}>
         <CardTitle
-          title={section.title}
           subtitle={
             <div dangerouslySetInnerHTML={{ __html: section.description }} />
           }
+          title={section.title}
         />
         <FieldArray
-          name={`${member}.questions`}
           component={ResponseSection.renderQuestions}
           disabled={disabled}
+          name={`${member}.questions`}
         />
       </Card>
     );

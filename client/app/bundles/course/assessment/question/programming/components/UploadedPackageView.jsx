@@ -1,7 +1,7 @@
+import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import Immutable from 'immutable';
-
 import PropTypes from 'prop-types';
-import { injectIntl, defineMessages, intlShape } from 'react-intl';
+
 import UploadedPackageTemplateView from './UploadedPackageTemplateView';
 import UploadedPackageTestCaseView from './UploadedPackageTestCaseView';
 

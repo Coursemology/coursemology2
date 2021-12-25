@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 import { csrfToken } from 'lib/helpers/server-context';
 
 export default class BaseAPI {

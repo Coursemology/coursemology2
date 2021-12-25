@@ -1,28 +1,31 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import moment from 'lib/moment';
-import { TableRow, TableRowColumn } from 'material-ui/Table';
 import FontIcon from 'material-ui/FontIcon';
-import { red600, red900, blue600, pink600 } from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
-import HistoryIcon from 'material-ui/svg-icons/action/history';
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import { blue600, pink600, red600, red900 } from 'material-ui/styles/colors';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
+import HistoryIcon from 'material-ui/svg-icons/action/history';
 import RemoveCircle from 'material-ui/svg-icons/content/remove-circle';
+import { TableRow, TableRowColumn } from 'material-ui/Table';
+import PropTypes from 'prop-types';
+
+import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import {
   getCourseUserURL,
   getEditSubmissionURL,
   getSubmissionLogsURL,
 } from 'lib/helpers/url-builders';
-import { assessmentShape } from '../../propTypes';
-import { workflowStates } from '../../constants';
-import translations from '../../translations';
-import submissionsTranslations from './translations';
+import moment from 'lib/moment';
+
 import {
-  unsubmitSubmission,
   deleteSubmission,
+  unsubmitSubmission,
 } from '../../actions/submissions';
+import { workflowStates } from '../../constants';
+import { assessmentShape } from '../../propTypes';
+import translations from '../../translations';
+
+import submissionsTranslations from './translations';
 
 const styles = {
   chip: {
@@ -69,9 +72,9 @@ export default class SubmissionsTableRow extends React.Component {
     if (submission.courseUser.phantom) {
       return (
         <FontIcon
-          data-tip
-          data-for="phantom-user"
           className="fa fa-user-secret fa-xs"
+          data-for="phantom-user"
+          data-tip={true}
           style={styles.phantomIcon}
         />
       );
@@ -83,7 +86,11 @@ export default class SubmissionsTableRow extends React.Component {
     if (submission.workflowState !== workflowStates.Graded) return null;
     return (
       <span style={{ display: 'inline-block', marginRight: 5 }}>
-        <a data-tip data-for="unpublished-grades" data-offset="{'left' : -8}">
+        <a
+          data-for="unpublished-grades"
+          data-offset="{'left' : -8}"
+          data-tip={true}
+        >
           <i className="fa fa-exclamation-triangle" />
         </a>
       </span>
@@ -152,11 +159,11 @@ export default class SubmissionsTableRow extends React.Component {
       return null;
 
     return (
-      <span className="delete-button" data-for="delete-button" data-tip>
+      <span className="delete-button" data-for="delete-button" data-tip={true}>
         <IconButton
+          disabled={disabled}
           id={`delete-button-${submission.courseUser.id}`}
           onClick={() => this.setState({ deleteConfirmation: true })}
-          disabled={disabled}
         >
           <DeleteIcon color={red900} />
         </IconButton>
@@ -176,18 +183,18 @@ export default class SubmissionsTableRow extends React.Component {
     );
     return (
       <ConfirmationDialog
-        open={deleteConfirmation}
-        onCancel={() => this.setState({ deleteConfirmation: false })}
-        onConfirm={() => {
-          dispatch(deleteSubmission(submission.id, successMessage));
-          this.setState({ deleteConfirmation: false });
-        }}
         message={
           <FormattedMessage
             {...submissionsTranslations.deleteConfirmation}
             values={{ name: submission.courseUser.name }}
           />
         }
+        onCancel={() => this.setState({ deleteConfirmation: false })}
+        onConfirm={() => {
+          dispatch(deleteSubmission(submission.id, successMessage));
+          this.setState({ deleteConfirmation: false });
+        }}
+        open={deleteConfirmation}
       />
     );
   }
@@ -203,7 +210,11 @@ export default class SubmissionsTableRow extends React.Component {
       return null;
 
     return (
-      <span className="submission-access-logs" data-for="access-logs" data-tip>
+      <span
+        className="submission-access-logs"
+        data-for="access-logs"
+        data-tip={true}
+      >
         <a href={getSubmissionLogsURL(courseId, assessmentId, submission.id)}>
           <IconButton>
             <HistoryIcon color={submission.logCount > 1 ? red600 : blue600} />
@@ -245,11 +256,15 @@ export default class SubmissionsTableRow extends React.Component {
     if (!assessment.canUnsubmitSubmission) return null;
 
     return (
-      <span className="unsubmit-button" data-for="unsubmit-button" data-tip>
+      <span
+        className="unsubmit-button"
+        data-for="unsubmit-button"
+        data-tip={true}
+      >
         <IconButton
+          disabled={disabled}
           id={`unsubmit-button-${submission.courseUser.id}`}
           onClick={() => this.setState({ unsubmitConfirmation: true })}
-          disabled={disabled}
         >
           <RemoveCircle color={pink600} />
         </IconButton>
@@ -270,18 +285,18 @@ export default class SubmissionsTableRow extends React.Component {
 
     return (
       <ConfirmationDialog
-        open={unsubmitConfirmation}
-        onCancel={() => this.setState({ unsubmitConfirmation: false })}
-        onConfirm={() => {
-          dispatch(unsubmitSubmission(submission.id, successMessage));
-          this.setState({ unsubmitConfirmation: false });
-        }}
         message={
           <FormattedMessage
             {...submissionsTranslations.unsubmitConfirmation}
             values={{ name: submission.courseUser.name }}
           />
         }
+        onCancel={() => this.setState({ unsubmitConfirmation: false })}
+        onConfirm={() => {
+          dispatch(unsubmitSubmission(submission.id, successMessage));
+          this.setState({ unsubmitConfirmation: false });
+        }}
+        open={unsubmitConfirmation}
       />
     );
   }
@@ -294,12 +309,12 @@ export default class SubmissionsTableRow extends React.Component {
       ...styles.tableCenterCell,
     };
     return (
-      <TableRow className="submission-row" key={submission.courseUser.id}>
+      <TableRow key={submission.courseUser.id} className="submission-row">
         <TableRowColumn style={styles.tableCell}>
           {this.renderPhantomUserIcon(submission)}
           <a
-            style={styles.nameWrapper}
             href={getCourseUserURL(courseId, submission.courseUser.id)}
+            style={styles.nameWrapper}
           >
             {submission.courseUser.name}
           </a>

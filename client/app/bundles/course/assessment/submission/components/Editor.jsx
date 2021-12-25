@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
+
 import AceEditor from 'lib/components/redux-form/AceEditor';
 
 const Editor = (props) => {
@@ -7,17 +8,17 @@ const Editor = (props) => {
   return (
     <Field
       component={AceEditor}
-      name={name}
+      editorProps={{ $blockScrolling: true }}
       filename={filename}
+      maxLines={25}
+      minLines={25}
       mode={language}
+      name={name}
+      readOnly={readOnly}
+      setOptions={{ useSoftTabs: true }}
+      style={{ marginBottom: 10 }}
       theme="github"
       width="100%"
-      minLines={25}
-      maxLines={25}
-      editorProps={{ $blockScrolling: true }}
-      setOptions={{ useSoftTabs: true }}
-      readOnly={readOnly}
-      style={{ marginBottom: 10 }}
     />
   );
 };

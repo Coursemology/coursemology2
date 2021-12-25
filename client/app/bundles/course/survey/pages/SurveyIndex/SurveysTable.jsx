@@ -1,8 +1,8 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import RaisedButton from 'material-ui/RaisedButton';
 import {
   Table,
   TableBody,
@@ -12,13 +12,14 @@ import {
   TableRowColumn,
 } from 'material-ui/Table';
 import Toggle from 'material-ui/Toggle';
-import RaisedButton from 'material-ui/RaisedButton';
-import history from 'lib/history';
-import { formatShortDateTime } from 'lib/moment';
-import translations from 'course/survey/translations';
-import { surveyShape } from 'course/survey/propTypes';
+import PropTypes from 'prop-types';
+
 import { updateSurvey } from 'course/survey/actions/surveys';
 import RespondButton from 'course/survey/containers/RespondButton';
+import { surveyShape } from 'course/survey/propTypes';
+import translations from 'course/survey/translations';
+import history from 'lib/history';
+import { formatShortDateTime } from 'lib/moment';
 
 const styles = {
   tableBody: {
@@ -47,7 +48,6 @@ class SurveysTable extends Component {
     return (
       <Toggle
         labelPosition="right"
-        toggled={survey.published}
         onToggle={(event, value) =>
           dispatch(
             updateSurvey(
@@ -64,6 +64,7 @@ class SurveysTable extends Component {
             ),
           )
         }
+        toggled={survey.published}
       />
     );
   }
@@ -76,7 +77,7 @@ class SurveysTable extends Component {
     } = this.props;
     return (
       <Table bodyStyle={styles.tableBody}>
-        <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+        <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
           <TableRow>
             <TableHeaderColumn colSpan={6}>
               <FormattedMessage {...translations.title} />
@@ -101,7 +102,7 @@ class SurveysTable extends Component {
             <TableHeaderColumn colSpan={canCreate ? 14 : 4} />
           </TableRow>
         </TableHeader>
-        <TableBody displayRowCheckbox={false} showRowHover>
+        <TableBody displayRowCheckbox={false} showRowHover={true}>
           {surveys.map((survey) => (
             <TableRow key={survey.id}>
               <TableRowColumn colSpan={6} style={styles.wrap}>
@@ -128,38 +129,38 @@ class SurveysTable extends Component {
                 <div style={styles.buttonsColumn}>
                   {survey.canViewResults ? (
                     <RaisedButton
-                      style={styles.button}
                       label={<FormattedMessage {...translations.results} />}
                       onClick={() =>
                         history.push(
                           `/courses/${courseId}/surveys/${survey.id}/results`,
                         )
                       }
+                      style={styles.button}
                     />
                   ) : null}
                   {survey.canViewResults ? (
                     <RaisedButton
-                      style={styles.button}
                       label={<FormattedMessage {...translations.responses} />}
                       onClick={() =>
                         history.push(
                           `/courses/${courseId}/surveys/${survey.id}/responses`,
                         )
                       }
+                      style={styles.button}
                     />
                   ) : null}
                   <RespondButton
-                    courseId={courseId}
-                    surveyId={survey.id}
-                    responseId={survey.response && survey.response.id}
-                    canRespond={survey.canRespond}
                     canModify={!!survey.response && survey.response.canModify}
+                    canRespond={survey.canRespond}
                     canSubmit={!!survey.response && survey.response.canSubmit}
-                    startAt={survey.start_at}
+                    courseId={courseId}
                     endAt={survey.end_at}
+                    responseId={survey.response && survey.response.id}
+                    startAt={survey.start_at}
                     submittedAt={
                       survey.response && survey.response.submitted_at
                     }
+                    surveyId={survey.id}
                   />
                 </div>
               </TableHeaderColumn>

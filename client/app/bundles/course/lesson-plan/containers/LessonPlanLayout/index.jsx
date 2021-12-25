@@ -1,27 +1,29 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { withRouter, Route, Switch } from 'react-router-dom';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import Subheader from 'material-ui/Subheader';
+import { connect } from 'react-redux';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import { Card, CardText } from 'material-ui/Card';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
-import NotificationPopup from 'lib/containers/NotificationPopup';
-import DeleteConfirmation from 'lib/containers/DeleteConfirmation';
-import TitleBar from 'lib/components/TitleBar';
-import { lessonPlanTypesGroups } from 'lib/types';
+import Subheader from 'material-ui/Subheader';
+import PropTypes from 'prop-types';
+
 import { fetchLessonPlan } from 'course/lesson-plan/actions';
-import LessonPlanShow from 'course/lesson-plan/pages/LessonPlanShow';
-import LessonPlanEdit from 'course/lesson-plan/pages/LessonPlanEdit';
+import ColumnVisibilityDropdown from 'course/lesson-plan/containers/ColumnVisibilityDropdown';
+import EventFormDialog from 'course/lesson-plan/containers/EventFormDialog';
 import LessonPlanFilter from 'course/lesson-plan/containers/LessonPlanFilter';
 import LessonPlanNav from 'course/lesson-plan/containers/LessonPlanNav';
 import MilestoneFormDialog from 'course/lesson-plan/containers/MilestoneFormDialog';
-import EventFormDialog from 'course/lesson-plan/containers/EventFormDialog';
-import ColumnVisibilityDropdown from 'course/lesson-plan/containers/ColumnVisibilityDropdown';
-import ExitEditModeButton from './ExitEditModeButton';
+import LessonPlanEdit from 'course/lesson-plan/pages/LessonPlanEdit';
+import LessonPlanShow from 'course/lesson-plan/pages/LessonPlanShow';
+import LoadingIndicator from 'lib/components/LoadingIndicator';
+import TitleBar from 'lib/components/TitleBar';
+import DeleteConfirmation from 'lib/containers/DeleteConfirmation';
+import NotificationPopup from 'lib/containers/NotificationPopup';
+import { lessonPlanTypesGroups } from 'lib/types';
+
 import EnterEditModeButton from './EnterEditModeButton';
-import NewMilestoneButton from './NewMilestoneButton';
+import ExitEditModeButton from './ExitEditModeButton';
 import NewEventButton from './NewEventButton';
+import NewMilestoneButton from './NewMilestoneButton';
 
 const translations = defineMessages({
   empty: {
@@ -74,11 +76,11 @@ class LessonPlanLayout extends Component {
 
     return (
       <Switch>
-        <Route exact path={lessonPlanPath} component={LessonPlanShow} />
+        <Route component={LessonPlanShow} exact={true} path={lessonPlanPath} />
         <Route
-          exact
-          path={`${lessonPlanPath}/edit`}
           component={LessonPlanEdit}
+          exact={true}
+          path={`${lessonPlanPath}/edit`}
         />
       </Switch>
     );
@@ -92,18 +94,22 @@ class LessonPlanLayout extends Component {
     return (
       <Card>
         <CardText>
-          <Route exact path={lessonPlanPath} component={EnterEditModeButton} />
           <Route
-            exact
-            path={`${lessonPlanPath}/edit`}
+            component={EnterEditModeButton}
+            exact={true}
+            path={lessonPlanPath}
+          />
+          <Route
             component={ExitEditModeButton}
+            exact={true}
+            path={`${lessonPlanPath}/edit`}
           />
           <NewMilestoneButton />
-          <Route path={lessonPlanPath} component={NewEventButton} />
+          <Route component={NewEventButton} path={lessonPlanPath} />
           <Route
-            exact
-            path={`${lessonPlanPath}/edit`}
             component={ColumnVisibilityDropdown}
+            exact={true}
+            path={`${lessonPlanPath}/edit`}
           />
         </CardText>
       </Card>

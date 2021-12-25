@@ -1,7 +1,8 @@
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import RaisedButton from 'material-ui/RaisedButton';
+import PropTypes from 'prop-types';
+
 import { downloadSurvey } from 'course/survey/actions/surveys';
 
 const translations = defineMessages({

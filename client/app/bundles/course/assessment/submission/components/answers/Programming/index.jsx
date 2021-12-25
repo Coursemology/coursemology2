@@ -1,14 +1,16 @@
-import 'ace-builds/src-noconflict/mode-python';
-import 'ace-builds/src-noconflict/theme-github';
-
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FieldArray } from 'redux-form';
-import ProgrammingFile from './ProgrammingFile';
+
+import 'ace-builds/src-noconflict/mode-python';
+import 'ace-builds/src-noconflict/theme-github';
+
 import ProgrammingImportEditor from '../../../containers/ProgrammingImportEditor';
 import TestCaseView from '../../../containers/TestCaseView';
-import { parseLanguages } from '../../../utils';
 import { questionShape } from '../../../propTypes';
+import { parseLanguages } from '../../../utils';
+
+import ProgrammingFile from './ProgrammingFile';
 
 class Programming extends Component {
   static renderProgrammingFiles({ fields, readOnly, answerId, language }) {
@@ -34,14 +36,14 @@ class Programming extends Component {
       <div>
         {fileSubmission ? (
           <ProgrammingImportEditor
-            questionId={question.id}
             answerId={answerId}
+            questionId={question.id}
             {...{ readOnly, question }}
           />
         ) : (
           <FieldArray
-            name={`${answerId}[files_attributes]`}
             component={Programming.renderProgrammingFiles}
+            name={`${answerId}[files_attributes]`}
             {...{
               readOnly,
               answerId,

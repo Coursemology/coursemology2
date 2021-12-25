@@ -1,5 +1,6 @@
-import PropTypes from 'prop-types';
 import { mount } from 'enzyme';
+import PropTypes from 'prop-types';
+
 import SingleFileInput from '../index';
 
 const reduxFormFieldMetaDefaults = {
@@ -66,8 +67,11 @@ describe('<SingleFileInput />', () => {
   it('renders required error message', () => {
     const singleFileInput = mount(
       <SingleFileInput
-        isNotBadge
-        required
+        input={{
+          value: {},
+          onChange: jest.fn(),
+        }}
+        isNotBadge={true}
         meta={{
           ...reduxFormFieldMetaDefaults,
           touched: true,
@@ -76,10 +80,7 @@ describe('<SingleFileInput />', () => {
             defaultMessage: 'File attachment required.',
           },
         }}
-        input={{
-          value: {},
-          onChange: jest.fn(),
-        }}
+        required={true}
       />,
       {
         context: { intl, muiTheme }, // eslint-disable-line no-undef

@@ -1,5 +1,6 @@
-import PropTypes from 'prop-types';
 import { mount } from 'enzyme';
+import PropTypes from 'prop-types';
+
 import BadgePreview from '../BadgePreview';
 
 describe('<SingleFileInput />', () => {

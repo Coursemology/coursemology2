@@ -47,4 +47,4 @@ function isPlayingState(playerState) {
   );
 }
 
-export { formatTimestamp, timeIsPastRestricted, isPlayingState };
+export { formatTimestamp, isPlayingState, timeIsPastRestricted };

@@ -1,9 +1,8 @@
 import Immutable from 'immutable';
-
-import PropTypes from 'prop-types';
 import { Card } from 'material-ui/Card';
-import { Tabs, Tab } from 'material-ui/Tabs';
 import { cyan500, grey300 } from 'material-ui/styles/colors';
+import { Tab, Tabs } from 'material-ui/Tabs';
+import PropTypes from 'prop-types';
 
 const propTypes = {
   templates: PropTypes.instanceOf(Immutable.List).isRequired,
@@ -16,11 +15,11 @@ const UploadedPackageTemplateView = (props) => {
 
     return (
       <Tab
+        key={id}
         className="template-tab"
         label={name}
-        value={id}
-        key={id}
         style={{ textTransform: 'none', color: 'black' }}
+        value={id}
       >
         <div
           className="template-content"
@@ -34,12 +33,12 @@ const UploadedPackageTemplateView = (props) => {
     <Card>
       <Tabs
         contentContainerStyle={{ padding: '0.5em' }}
+        inkBarStyle={{ backgroundColor: cyan500 }}
         tabItemContainerStyle={{
           backgroundColor: 'white',
           borderBottom: '1px solid',
           borderColor: grey300,
         }}
-        inkBarStyle={{ backgroundColor: cyan500 }}
       >
         {templateTabs}
       </Tabs>

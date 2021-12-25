@@ -1,8 +1,9 @@
-import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
 import { SketchPicker } from 'react-color';
+import { injectIntl, intlShape } from 'react-intl';
 import Checkbox from 'material-ui/Checkbox';
 import Popover, { PopoverAnimationVertical } from 'material-ui/Popover';
+import PropTypes from 'prop-types';
+
 import { scribingTranslations as translations } from '../../../translations';
 
 const propTypes = {
@@ -84,8 +85,8 @@ const ColorPickerField = (props) => {
       <div>
         {noFillOnCheck ? (
           <Checkbox
-            label={intl.formatMessage(translations.noFill)}
             checked={noFillValue}
+            label={intl.formatMessage(translations.noFill)}
             onCheck={(event, checked) => {
               noFillOnCheck(checked);
               if (checked) {
@@ -102,8 +103,9 @@ const ColorPickerField = (props) => {
           {intl.formatMessage(translations.colour)}
         </label>
         <div
+          aria-label="Color Picker"
+          onClick={noFillValue ? undefined : onClickColorPicker}
           role="button"
-          tabIndex="0"
           style={
             noFillValue
               ? {
@@ -114,17 +116,16 @@ const ColorPickerField = (props) => {
                 }
               : { background: colorPickerColor, ...styles.colorPicker }
           }
-          onClick={noFillValue ? undefined : onClickColorPicker}
-          aria-label="Color Picker"
+          tabIndex="0"
         />
         <Popover
-          style={styles.toolDropdowns}
-          open={colorPickerPopoverOpen}
           anchorEl={colorPickerPopoverAnchorEl}
           anchorOrigin={popoverStyles.anchorOrigin}
-          targetOrigin={popoverStyles.targetOrigin}
-          onRequestClose={onRequestCloseColorPickerPopover}
           animation={PopoverAnimationVertical}
+          onRequestClose={onRequestCloseColorPickerPopover}
+          open={colorPickerPopoverOpen}
+          style={styles.toolDropdowns}
+          targetOrigin={popoverStyles.targetOrigin}
         >
           <SketchPicker
             color={colorPickerColor}

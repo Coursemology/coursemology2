@@ -1,12 +1,12 @@
 /* eslint-disable camelcase */
 import Immutable from 'immutable';
 
-import actionTypes from '../constants/programmingQuestionConstants';
 import editorActionTypes from '../constants/onlineEditorConstants';
 import {
-  javaAppend,
   cppAppend,
+  javaAppend,
 } from '../constants/onlineEditorDefaultTemplates';
+import actionTypes from '../constants/programmingQuestionConstants';
 
 export const initialState = Immutable.fromJS({
   // this is the default state that would be used if one were not passed into the store

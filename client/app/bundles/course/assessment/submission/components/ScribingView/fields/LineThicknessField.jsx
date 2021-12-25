@@ -1,6 +1,7 @@
-import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import Slider from 'material-ui/Slider';
+import PropTypes from 'prop-types';
+
 import { scribingTranslations as translations } from '../../../translations';
 
 const propTypes = {
@@ -48,12 +49,12 @@ const LineThicknessField = (props) => {
         {intl.formatMessage(translations.thickness)}
       </label>
       <Slider
-        style={styles.slider}
-        min={0}
         max={5}
-        step={1}
-        value={toolThicknessValue}
+        min={0}
         onChange={onChangeSliderThickness}
+        step={1}
+        style={styles.slider}
+        value={toolThicknessValue}
       />
     </div>
   );

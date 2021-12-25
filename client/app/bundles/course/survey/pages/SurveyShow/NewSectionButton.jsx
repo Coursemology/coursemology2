@@ -1,16 +1,17 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import {
-  injectIntl,
   defineMessages,
-  intlShape,
   FormattedMessage,
+  injectIntl,
+  intlShape,
 } from 'react-intl';
+import { connect } from 'react-redux';
 import RaisedButton from 'material-ui/RaisedButton';
+import PropTypes from 'prop-types';
+
 import {
-  showSectionForm,
   createSurveySection,
+  showSectionForm,
 } from 'course/survey/actions/sections';
 
 const translations = defineMessages({
@@ -58,11 +59,11 @@ class NewSectionButton extends Component {
   render() {
     return (
       <RaisedButton
-        primary
-        style={styles.button}
+        disabled={this.props.disabled}
         label={<FormattedMessage {...translations.newSection} />}
         onClick={this.showNewSectionForm}
-        disabled={this.props.disabled}
+        primary={true}
+        style={styles.button}
       />
     );
   }

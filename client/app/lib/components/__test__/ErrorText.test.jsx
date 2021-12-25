@@ -1,4 +1,5 @@
 import { shallow } from 'enzyme';
+
 import ErrorText from '../ErrorText';
 
 describe('<ErrorText />', () => {

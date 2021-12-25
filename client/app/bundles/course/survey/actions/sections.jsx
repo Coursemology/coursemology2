@@ -1,7 +1,10 @@
-import { submit, SubmissionError } from 'redux-form';
+import { SubmissionError, submit } from 'redux-form';
+
 import CourseAPI from 'api/course';
 import { getSurveyId } from 'lib/helpers/url-helpers';
+
 import actionTypes, { formNames } from '../constants';
+
 import { setNotification } from './index';
 
 export function showSectionForm(formParams) {

@@ -1,13 +1,14 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import Avatar from 'material-ui/Avatar';
 import Chip from 'material-ui/Chip';
-import Block from 'material-ui/svg-icons/content/block';
-import Room from 'material-ui/svg-icons/action/room';
+import { red700 } from 'material-ui/styles/colors';
 import DateRange from 'material-ui/svg-icons/action/date-range';
 import InfoOutline from 'material-ui/svg-icons/action/info-outline';
-import { red700 } from 'material-ui/styles/colors';
+import Room from 'material-ui/svg-icons/action/room';
+import Block from 'material-ui/svg-icons/content/block';
+import PropTypes from 'prop-types';
+
 import moment, { shortDateTime, shortTime } from 'lib/moment';
 
 const translations = defineMessages({
@@ -87,7 +88,7 @@ class Chips extends Component {
     }
     return (
       <Chip style={styles.chip}>
-        <Avatar icon={<Block />} backgroundColor={red700} />
+        <Avatar backgroundColor={red700} icon={<Block />} />
         <FormattedMessage {...translations.notPublished} />
       </Chip>
     );

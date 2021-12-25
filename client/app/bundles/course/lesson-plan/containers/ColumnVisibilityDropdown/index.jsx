@@ -1,13 +1,14 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import RaisedButton from 'material-ui/RaisedButton';
-import Popover from 'material-ui/Popover';
+import { connect } from 'react-redux';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
+import Popover from 'material-ui/Popover';
+import RaisedButton from 'material-ui/RaisedButton';
 import Done from 'material-ui/svg-icons/action/done';
 import KeyboardArrowDown from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
+import PropTypes from 'prop-types';
+
 import { setColumnVisibility } from 'course/lesson-plan/actions';
 import { fields } from 'course/lesson-plan/constants';
 import fieldTranslations from 'course/lesson-plan/translations';
@@ -59,18 +60,18 @@ class ColumnVisibilityDropdown extends Component {
     return (
       <div style={styles.dropdown}>
         <RaisedButton
-          secondary
-          onClick={this.handleClick}
+          icon={<KeyboardArrowDown />}
           label={<FormattedMessage {...translations.label} />}
           labelPosition="before"
-          icon={<KeyboardArrowDown />}
+          onClick={this.handleClick}
+          secondary={true}
         />
         <Popover
-          open={this.state.open}
           anchorEl={this.state.anchorEl}
           anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
-          targetOrigin={{ horizontal: 'left', vertical: 'top' }}
           onRequestClose={this.handleRequestClose}
+          open={this.state.open}
+          targetOrigin={{ horizontal: 'left', vertical: 'top' }}
         >
           <Menu>
             {[ITEM_TYPE, START_AT, BONUS_END_AT, END_AT, PUBLISHED].map(
@@ -79,13 +80,13 @@ class ColumnVisibilityDropdown extends Component {
                 return (
                   <MenuItem
                     key={field}
+                    onClick={() =>
+                      dispatch(setColumnVisibility(field, !isVisible))
+                    }
                     primaryText={
                       <FormattedMessage {...fieldTranslations[field]} />
                     }
                     rightIcon={isVisible ? <Done /> : <span />}
-                    onClick={() =>
-                      dispatch(setColumnVisibility(field, !isVisible))
-                    }
                   />
                 );
               },

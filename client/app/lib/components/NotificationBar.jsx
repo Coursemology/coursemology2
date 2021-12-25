@@ -1,7 +1,7 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import Snackbar from 'material-ui/Snackbar';
+import PropTypes from 'prop-types';
 
 export const notificationShape = PropTypes.shape({
   message: PropTypes.oneOfType([
@@ -38,14 +38,14 @@ export default class NotificationBar extends Component {
     }
     return (
       <Snackbar
+        autoHideDuration={autoHideDuration}
         bodyStyle={{
           height: 'auto',
           maxWidth: '100%',
           whiteSpace: 'pre-line',
         }}
-        open={!!message}
         message={notificationNode}
-        autoHideDuration={autoHideDuration}
+        open={!!message}
         {...options}
       />
     );

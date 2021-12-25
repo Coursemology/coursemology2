@@ -1,10 +1,11 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 import Badge from 'material-ui/Badge';
 import IconButton from 'material-ui/IconButton';
-import CloseIcon from 'material-ui/svg-icons/navigation/close';
 import { grey400 } from 'material-ui/styles/colors';
-import { FormattedMessage } from 'react-intl';
+import CloseIcon from 'material-ui/svg-icons/navigation/close';
+import PropTypes from 'prop-types';
+
 import translations from './translations';
 
 const styles = {
@@ -22,8 +23,8 @@ export default class DeleteButton extends Component {
   renderIcon() {
     return (
       <IconButton
-        tooltip={<FormattedMessage {...translations.removeFile} />}
         onClick={this.props.handleCancel}
+        tooltip={<FormattedMessage {...translations.removeFile} />}
       >
         <CloseIcon />
       </IconButton>

@@ -1,7 +1,9 @@
 import { render } from 'react-dom';
+
 import ProviderWrapper from 'lib/components/ProviderWrapper';
-import storeCreator from './store';
+
 import AssessmentIndexPage from './pages/AssessmentIndex';
+import storeCreator from './store';
 
 $(() => {
   const mountNode = $('.new-btn')[0];
@@ -13,9 +15,9 @@ $(() => {
     const Page = () => (
       <ProviderWrapper store={store}>
         <AssessmentIndexPage
+          categoryId={attributes.category_id}
           gamified={attributes.gamified}
           randomizationAllowed={attributes.randomization_allowed}
-          categoryId={attributes.category_id}
           tabId={attributes.tab_id}
         />
       </ProviderWrapper>

@@ -1,12 +1,11 @@
-/* eslint-disable import/no-extraneous-dependencies, import/extensions, import/no-unresolved */
-
 import { render } from 'react-dom';
 import { Router } from 'react-router';
-import history from 'lib/history';
-import ProviderWrapper from 'lib/components/ProviderWrapper';
 
-import store from './store';
+import ProviderWrapper from 'lib/components/ProviderWrapper';
+import history from 'lib/history';
+
 import SubmissionsLayout from './containers/SubmissionsLayout';
+import store from './store';
 
 $(() => {
   const mountNode = document.getElementById('course-assessment-submission');

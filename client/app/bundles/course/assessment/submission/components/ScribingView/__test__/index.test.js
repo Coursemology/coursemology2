@@ -1,8 +1,10 @@
 import { MemoryRouter } from 'react-router-dom';
 import { mount } from 'enzyme';
-import ProviderWrapper from 'lib/components/ProviderWrapper';
-import store from 'course/assessment/submission/store';
+
 import ScribingView from 'course/assessment/submission/containers/ScribingView';
+import store from 'course/assessment/submission/store';
+import ProviderWrapper from 'lib/components/ProviderWrapper';
+
 import { setCanvasLoaded } from '../../../actions/scribing';
 import actionTypes from '../../../constants';
 

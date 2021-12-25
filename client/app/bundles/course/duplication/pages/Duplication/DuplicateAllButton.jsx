@@ -1,12 +1,13 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { submit, isValid } from 'redux-form';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
+import PropTypes from 'prop-types';
+import { isValid, submit } from 'redux-form';
+
+import { duplicationModes, formNames } from 'course/duplication/constants';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import { formNames, duplicationModes } from 'course/duplication/constants';
 
 const translations = defineMessages({
   duplicateCourse: {
@@ -55,17 +56,16 @@ class DuplicateAllButton extends Component {
       <>
         <div style={styles.buttonContainer}>
           <RaisedButton
-            secondary
             disabled={disabled}
             label={<FormattedMessage {...translations.duplicateCourse} />}
             onClick={() => this.setState({ confirmationOpen: true })}
+            secondary={true}
           />
           {(isDuplicating || isDuplicationSuccess) && (
             <CircularProgress size={36} style={styles.spinner} />
           )}
         </div>
         <ConfirmationDialog
-          open={this.state.confirmationOpen}
           message={
             <>
               <FormattedMessage {...translations.info} />
@@ -79,6 +79,7 @@ class DuplicateAllButton extends Component {
             dispatch(submit(formNames.NEW_COURSE));
             this.setState({ confirmationOpen: false });
           }}
+          open={this.state.confirmationOpen}
         />
       </>
     );

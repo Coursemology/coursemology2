@@ -1,20 +1,21 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
+import { injectIntl, intlShape } from 'react-intl';
 import { connect } from 'react-redux';
-import { intlShape, injectIntl } from 'react-intl';
-import { FieldArray } from 'redux-form';
 import RaisedButton from 'material-ui/RaisedButton';
 import { white } from 'material-ui/styles/colors';
+import PropTypes from 'prop-types';
+import { FieldArray } from 'redux-form';
 
-import ImportedFileView from './ImportedFileView';
+import { deleteFile, importFiles, stageFiles } from '../actions';
 import Editor from '../components/Editor';
 import FileInput from '../components/FileInput';
-import ReadOnlyEditor from './ReadOnlyEditor';
-import { importFiles, deleteFile, stageFiles } from '../actions';
-import translations from '../translations';
-import { questionShape, fileShape } from '../propTypes';
-import { parseLanguages } from '../utils';
 import { formNames } from '../constants';
+import { fileShape, questionShape } from '../propTypes';
+import translations from '../translations';
+import { parseLanguages } from '../utils';
+
+import ImportedFileView from './ImportedFileView';
+import ReadOnlyEditor from './ReadOnlyEditor';
 
 const styles = {
   formButton: {
@@ -36,8 +37,8 @@ class VisibleProgrammingImportEditor extends Component {
               <ReadOnlyEditor
                 key={answerId}
                 answerId={parseInt(answerId.split('[')[0], 10)}
-                fileId={file.id}
                 content={content}
+                fileId={file.id}
               />
             );
           }
@@ -45,9 +46,9 @@ class VisibleProgrammingImportEditor extends Component {
             return (
               <Editor
                 key={answerId}
-                name={`${answerId}[content]`}
                 filename={file.filename}
                 language={language}
+                name={`${answerId}[content]`}
               />
             );
           }
@@ -77,8 +78,8 @@ class VisibleProgrammingImportEditor extends Component {
         <ReadOnlyEditor
           key={answer.id}
           answerId={answer.id}
-          fileId={file.id}
           content={content}
+          fileId={file.id}
         />
       );
     }
@@ -106,14 +107,14 @@ class VisibleProgrammingImportEditor extends Component {
       <>
         {readOnly ? null : (
           <ImportedFileView
-            submissionId={submissionId}
-            questionId={questionId}
             displayFileIndex={displayFileIndex}
+            files={files}
             handleDeleteFile={this.handleDeleteFile}
             handleFileTabbing={(index) =>
               this.setState({ displayFileIndex: index })
             }
-            files={files}
+            questionId={questionId}
+            submissionId={submissionId}
             viewHistory={viewHistory}
           />
         )}
@@ -121,10 +122,10 @@ class VisibleProgrammingImportEditor extends Component {
           this.renderProgrammingHistoryEditor(answers[answerId])
         ) : (
           <FieldArray
-            name={`${answerId}[files_attributes]`}
             component={
               VisibleProgrammingImportEditor.renderSelectProgrammingFileEditor
             }
+            name={`${answerId}[files_attributes]`}
             {...{
               readOnly,
               question,
@@ -137,20 +138,20 @@ class VisibleProgrammingImportEditor extends Component {
         {readOnly || viewHistory ? null : (
           <>
             <FileInput
-              name={`${answerId}[import_files]`}
-              disabled={isSaving}
               callback={(filesToImport) =>
                 dispatch(stageFiles(submissionId, answerId, filesToImport))
               }
+              disabled={isSaving}
+              name={`${answerId}[import_files]`}
             />
             <RaisedButton
-              style={styles.formButton}
               backgroundColor={white}
+              disabled={disableImport}
               label={intl.formatMessage(translations.uploadFiles)}
               onClick={() =>
                 dispatch(importFiles(answerId, answers, question.language))
               }
-              disabled={disableImport}
+              style={styles.formButton}
             />
           </>
         )}

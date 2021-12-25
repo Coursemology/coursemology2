@@ -1,11 +1,11 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
-import { Field } from 'redux-form';
-import Chip from 'material-ui/Chip';
-import { Card, CardText } from 'material-ui/Card';
-import FileUploadIcon from 'material-ui/svg-icons/file/file-upload';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { Card, CardText } from 'material-ui/Card';
+import Chip from 'material-ui/Chip';
+import FileUploadIcon from 'material-ui/svg-icons/file/file-upload';
+import PropTypes from 'prop-types';
+import { Field } from 'redux-form';
 
 const translations = defineMessages({
   uploadDisabled: {
@@ -88,7 +88,7 @@ class FileInput extends Component {
     return (
       <div style={styles.wrapper}>
         {files.map((f) => (
-          <Chip style={styles.chip} key={f.name}>
+          <Chip key={f.name} style={styles.chip}>
             {f.name}
           </Chip>
         ))}
@@ -110,12 +110,12 @@ class FileInput extends Component {
       <div className={className}>
         <Dropzone
           {...inputOptions}
+          className="dropzone-input"
           disableClick={disabled}
+          name={name}
           onDragEnter={() => this.onDragEnter()}
           onDragLeave={() => this.onDragLeave()}
           onDrop={(files) => this.onDrop(files)}
-          className="dropzone-input"
-          name={name}
         >
           <Card style={styles.paper}>
             <CardText>{this.displayFileNames(value)}</CardText>

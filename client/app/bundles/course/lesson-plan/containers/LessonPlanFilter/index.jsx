@@ -1,13 +1,14 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import RaisedButton from 'material-ui/RaisedButton';
-import Popover from 'material-ui/Popover';
+import { connect } from 'react-redux';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
+import Popover from 'material-ui/Popover';
+import RaisedButton from 'material-ui/RaisedButton';
 import Done from 'material-ui/svg-icons/action/done';
 import KeyboardArrowUp from 'material-ui/svg-icons/hardware/keyboard-arrow-up';
+import PropTypes from 'prop-types';
+
 import { setItemTypeVisibility } from 'course/lesson-plan/actions';
 
 const translations = defineMessages({
@@ -53,18 +54,18 @@ class LessonPlanFilter extends Component {
     return (
       <>
         <RaisedButton
-          secondary
-          onClick={this.handleClick}
+          icon={<KeyboardArrowUp />}
           label={<FormattedMessage {...translations.filter} />}
           labelPosition="before"
-          icon={<KeyboardArrowUp />}
+          onClick={this.handleClick}
+          secondary={true}
         />
         <Popover
-          open={this.state.open}
           anchorEl={this.state.anchorEl}
           anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
-          targetOrigin={{ horizontal: 'right', vertical: 'bottom' }}
           onRequestClose={this.handleRequestClose}
+          open={this.state.open}
+          targetOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         >
           <Menu>
             {itemTypes.map((itemType) => {
@@ -72,11 +73,11 @@ class LessonPlanFilter extends Component {
               return (
                 <MenuItem
                   key={itemType}
-                  primaryText={itemType}
-                  rightIcon={isVisible ? <Done /> : <span />}
                   onClick={() =>
                     dispatch(setItemTypeVisibility(itemType, !isVisible))
                   }
+                  primaryText={itemType}
+                  rightIcon={isVisible ? <Done /> : <span />}
                 />
               );
             })}

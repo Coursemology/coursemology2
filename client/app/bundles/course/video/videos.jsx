@@ -1,9 +1,11 @@
 import { render } from 'react-dom';
+
 import ProviderWrapper from 'lib/components/ProviderWrapper';
+
 import HeatMap from './submission/containers/Charts/HeatMap';
+import VideoPlayer from './submission/containers/VideoPlayer';
 import storeCreator from './submission/store';
 import styles from './submission/containers/Statistics.scss';
-import VideoPlayer from './submission/containers/VideoPlayer';
 
 $(() => {
   const mountNode = document.getElementById('video-overall-stats');

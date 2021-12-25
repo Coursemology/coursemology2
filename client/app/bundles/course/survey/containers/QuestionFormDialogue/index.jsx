@@ -1,10 +1,12 @@
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { getFormValues, isPristine } from 'redux-form';
-import { formNames } from 'course/survey/constants';
+
 import * as actionCreators from 'course/survey/actions/questions';
+import { formNames } from 'course/survey/constants';
 import FormDialogue from 'lib/components/FormDialogue';
+
 import QuestionForm from './QuestionForm';
 
 function mapStateToProps({ questionForm, ...state }) {
@@ -52,12 +54,12 @@ const QuestionFormDialogue = ({
 
   return (
     <FormDialogue
-      title={formTitle}
-      hideForm={hideQuestionForm}
-      submitForm={submitQuestionForm}
-      skipConfirmation={pristine}
       disabled={disabled}
+      hideForm={hideQuestionForm}
       open={visible}
+      skipConfirmation={pristine}
+      submitForm={submitQuestionForm}
+      title={formTitle}
     >
       <QuestionForm
         {...{

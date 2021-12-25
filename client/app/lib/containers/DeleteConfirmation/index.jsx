@@ -1,11 +1,12 @@
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import PropTypes from 'prop-types';
+
 import { resetDeleteConfirmation } from 'lib/actions';
+import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 
 const DeleteConfirmation = ({ dispatch, deleteConfirmation }) => (
   <ConfirmationDialog
-    confirmDelete
+    confirmDelete={true}
     {...deleteConfirmation}
     onCancel={() => dispatch(resetDeleteConfirmation())}
   />

@@ -1,11 +1,13 @@
+import { SubmissionError } from 'redux-form';
+
 import CourseAPI from 'api/course';
-import history from 'lib/history';
 import {
-  getCourseId,
   getAssessmentId,
+  getCourseId,
   getScribingId,
 } from 'lib/helpers/url-helpers';
-import { SubmissionError } from 'redux-form';
+import history from 'lib/history';
+
 import actionTypes from '../constants';
 
 // Helper function to redirect to assessment main page

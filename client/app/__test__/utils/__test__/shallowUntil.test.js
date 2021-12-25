@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+
 import shallowUntil from '../shallowUntil';
 
 describe('#shallowUntil', () => {

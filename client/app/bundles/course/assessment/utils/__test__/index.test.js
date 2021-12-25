@@ -1,4 +1,4 @@
-import { mapCategoriesData, categoryAndTabTitle } from '../index';
+import { categoryAndTabTitle, mapCategoriesData } from '../index';
 
 describe('mapCategoriesData', () => {
   it('maps the categories accurately to tabs', () => {

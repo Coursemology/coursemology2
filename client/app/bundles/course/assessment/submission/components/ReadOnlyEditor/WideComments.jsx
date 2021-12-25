@@ -1,7 +1,7 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
+import PropTypes from 'prop-types';
 
 import Annotations from '../../containers/Annotations';
 import PostPreview from '../../containers/PostPreview';
@@ -44,6 +44,7 @@ export default class WideComments extends Component {
       return (
         <div
           key={lineNumber}
+          onClick={() => onClick(lineNumber)}
           style={{
             ...styles.expanded,
             zIndex:
@@ -51,19 +52,18 @@ export default class WideComments extends Component {
                 ? 1000
                 : lineNumber + styles.expanded.zIndex,
           }}
-          onClick={() => onClick(lineNumber)}
         >
           <RaisedButton
-            style={styles.minimiseButton}
             onClick={() => collapseLine(lineNumber)}
+            style={styles.minimiseButton}
           >
             <span className="fa fa-chevron-down" />
           </RaisedButton>
           <Annotations
+            annotation={annotation}
             answerId={answerId}
             fileId={fileId}
             lineNumber={lineNumber}
-            annotation={annotation}
           />
         </div>
       );
@@ -71,11 +71,11 @@ export default class WideComments extends Component {
     return (
       <Paper
         key={lineNumber}
+        onClick={() => expandLine(lineNumber)}
         style={styles.collapsed}
         zDepth={1}
-        onClick={() => expandLine(lineNumber)}
       >
-        <PostPreview style={styles.postPreview} annotation={annotation} />
+        <PostPreview annotation={annotation} style={styles.postPreview} />
       </Paper>
     );
   }
@@ -90,7 +90,7 @@ export default class WideComments extends Component {
       if (filtered.length > 0 || expanded[i - 1]) {
         comments.push(this.renderComments(i, filtered[0]));
       } else {
-        comments.push(<div style={styles.collapsed} key={i} />);
+        comments.push(<div key={i} style={styles.collapsed} />);
       }
     }
     return <div style={{ paddingBottom: 20 }}>{comments}</div>;

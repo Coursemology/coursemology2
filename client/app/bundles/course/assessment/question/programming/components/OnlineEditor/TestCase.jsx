@@ -1,13 +1,14 @@
-import Immutable from 'immutable';
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import { TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
+import Immutable from 'immutable';
 import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
 import { grey300 } from 'material-ui/styles/colors';
-import styles from './OnlineEditorView.scss';
+import { TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
+import TextField from 'material-ui/TextField';
+import PropTypes from 'prop-types';
+
 import translations from './OnlineEditorView.intl';
+import styles from './OnlineEditorView.scss';
 
 class TestCase extends Component {
   static getTestInputName(type, field) {
@@ -39,27 +40,27 @@ class TestCase extends Component {
         {showCodeEditor ? (
           <RaisedButton
             className={styles.codeEditorButtonCell}
+            containerElement="label"
+            disabled={this.props.isLoading}
             label={this.props.intl.formatMessage(
               translations.hideTestCaseCodeEditorButton,
             )}
             labelPosition="before"
-            containerElement="label"
-            primary
-            disabled={this.props.isLoading}
             onClick={this.inlineCodeEditorHandler(type, index, !showCodeEditor)}
+            primary={true}
             style={{ marginRight: 0, width: 30 }}
           />
         ) : (
           <RaisedButton
             className={styles.codeEditorButtonCell}
+            containerElement="label"
+            disabled={this.props.isLoading}
             label={this.props.intl.formatMessage(
               translations.showTestCaseCodeEditorButton,
             )}
             labelPosition="before"
-            containerElement="label"
-            primary
-            disabled={this.props.isLoading}
             onClick={this.inlineCodeEditorHandler(type, index, !showCodeEditor)}
+            primary={true}
             style={{ marginRight: 0, width: 30 }}
           />
         )}
@@ -70,17 +71,17 @@ class TestCase extends Component {
   renderInput(test, field, placeholder, index) {
     return (
       <TextField
-        type="text"
+        disabled={this.props.isLoading}
+        errorText={test.getIn(['error', field])}
+        fullWidth={true}
+        hintText={placeholder}
+        multiLine={true}
         name={TestCase.getTestInputName(this.props.type, field)}
         onChange={(e, newValue) => {
           this.props.updateTestCase(this.props.type, index, field, newValue);
         }}
-        hintText={placeholder}
-        errorText={test.getIn(['error', field])}
-        disabled={this.props.isLoading}
+        type="text"
         value={test.get(field)}
-        fullWidth
-        multiLine
       />
     );
   }
@@ -102,10 +103,10 @@ class TestCase extends Component {
       <TableRow>
         <TableHeaderColumn className={styles.deleteButtonCell}>
           <RaisedButton
-            name={TestCase.getTestInputName(type, 'inlineCode')}
             backgroundColor={grey300}
-            icon={<i className="fa fa-trash" />}
             disabled={isLoading}
+            icon={<i className="fa fa-trash" />}
+            name={TestCase.getTestInputName(type, 'inlineCode')}
             onClick={this.testCaseDeleteHandler(type, index)}
             style={{ minWidth: '40px', width: '40px' }}
           />

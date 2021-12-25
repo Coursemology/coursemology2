@@ -1,14 +1,15 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { FormattedMessage, defineMessages } from 'react-intl';
-import { formatLongDateTime } from 'lib/moment';
+import { defineMessages, FormattedMessage } from 'react-intl';
+import ReactTooltip from 'react-tooltip';
+import Avatar from 'material-ui/Avatar';
+import CircularProgress from 'material-ui/CircularProgress';
 import IconButton from 'material-ui/IconButton';
 import { ListItem } from 'material-ui/List';
-import CircularProgress from 'material-ui/CircularProgress';
-import Avatar from 'material-ui/Avatar';
 import ActionAssignment from 'material-ui/svg-icons/action/assignment';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
-import ReactTooltip from 'react-tooltip';
+import PropTypes from 'prop-types';
+
+import { formatLongDateTime } from 'lib/moment';
 
 const styles = {
   root: {
@@ -71,13 +72,13 @@ class Material extends Component {
 
     return (
       <IconButton
+        disabled={disabled}
         onClick={this.onDelete}
         style={styles.iconButton}
-        disabled={disabled}
       >
         <DeleteIcon
-          data-tip
           data-for="delete-file-button"
+          data-tip={true}
           data-tip-disable={!disabled}
         />
         <ReactTooltip id="delete-file-button">
@@ -102,15 +103,15 @@ class Material extends Component {
 
     return (
       <ListItem
-        disableKeyboardFocus
+        disableKeyboardFocus={true}
+        innerDivStyle={styles.innerDiv}
+        leftAvatar={
+          <Avatar icon={<ActionAssignment />} size={32} style={styles.avatar} />
+        }
         primaryText={name}
         rightAvatar={this.renderIcon()}
-        leftAvatar={
-          <Avatar size={32} style={styles.avatar} icon={<ActionAssignment />} />
-        }
         secondaryText={this.renderSecondaryText()}
         style={styles.root}
-        innerDivStyle={styles.innerDiv}
       />
     );
   }

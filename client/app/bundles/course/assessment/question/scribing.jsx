@@ -1,7 +1,9 @@
 import { render } from 'react-dom';
+
 import ProviderWrapper from 'lib/components/ProviderWrapper';
-import storeCreator from './scribing/store';
+
 import ScribingQuestion from './scribing/ScribingQuestion';
+import storeCreator from './scribing/store';
 
 $(() => {
   const mountNode = document.getElementById('scribing-question');

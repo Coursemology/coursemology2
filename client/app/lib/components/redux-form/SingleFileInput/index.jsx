@@ -1,14 +1,16 @@
 import { Component } from 'react';
+import Dropzone from 'react-dropzone';
+import { FormattedMessage, intlShape } from 'react-intl';
+import { grey300, red500 } from 'material-ui/styles/colors';
 import PropTypes from 'prop-types';
 import { fieldMetaPropTypes } from 'redux-form';
-import { FormattedMessage, intlShape } from 'react-intl';
-import Dropzone from 'react-dropzone';
-import { grey300, red500 } from 'material-ui/styles/colors';
+
 import createComponent from '../createComponent';
 import mapError from '../mapError';
+
+import BadgePreview from './BadgePreview';
 import FilePreview from './FilePreview';
 import ImagePreview from './ImagePreview';
-import BadgePreview from './BadgePreview';
 
 const styles = {
   dropzone: {
@@ -86,17 +88,17 @@ class SingleFileInput extends Component {
 
     return (
       <Dropzone
+        accept={accept}
         multiple={false}
         onDrop={this.onDrop}
         style={styles.dropzone}
-        accept={accept}
       >
         <div>
           <PreviewComponent
             file={this.state.file}
+            handleCancel={this.onCancel}
             originalName={name}
             originalUrl={url}
-            handleCancel={this.onCancel}
           />
         </div>
         {this.renderErrorMessage()}
@@ -133,4 +135,4 @@ const mapProps = ({ ...props }) => ({
 
 export default createComponent(SingleFileInput, mapProps);
 
-export { FilePreview, ImagePreview, BadgePreview };
+export { BadgePreview, FilePreview, ImagePreview };

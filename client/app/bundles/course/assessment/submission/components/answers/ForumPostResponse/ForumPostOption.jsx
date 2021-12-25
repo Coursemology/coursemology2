@@ -1,12 +1,12 @@
 import React from 'react';
+import { injectIntl, intlShape } from 'react-intl';
 import {
-  white,
   blueGrey200,
   green50,
   green300,
+  white,
 } from 'material-ui/styles/colors';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
 
 import { postPackShape } from 'course/assessment/submission/propTypes';
 import ForumPost, { translations } from 'course/forum/components/ForumPost';
@@ -56,13 +56,17 @@ class ForumPostOption extends React.Component {
     return (
       <div style={this.props.style}>
         <div
+          className="forum-post-option"
           onClick={(event) => {
             event.persist();
             this.handleClick(event, postPack);
           }}
-          className="forum-post-option"
         >
-          <ForumPost post={postPack.corePost} isExpandable style={postStyles} />
+          <ForumPost
+            isExpandable={true}
+            post={postPack.corePost}
+            style={postStyles}
+          />
         </div>
         {postPack.parentPost && <ParentPost post={postPack.parentPost} />}
       </div>

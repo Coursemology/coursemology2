@@ -1,15 +1,16 @@
-import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { reduxForm, Field, Form } from 'redux-form';
 import AutoCompleteFilters from 'material-ui/AutoComplete';
-import TextField from 'lib/components/redux-form/TextField';
-import RichTextField from 'lib/components/redux-form/RichTextField';
-import AutoComplete from 'lib/components/redux-form/AutoComplete';
-import Toggle from 'lib/components/redux-form/Toggle';
-import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
-import formTranslations from 'lib/translations/form';
+import PropTypes from 'prop-types';
+import { Field, Form, reduxForm } from 'redux-form';
+
+import { fields, formNames } from 'course/lesson-plan/constants';
 import translations from 'course/lesson-plan/translations';
-import { formNames, fields } from 'course/lesson-plan/constants';
+import AutoComplete from 'lib/components/redux-form/AutoComplete';
+import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
+import RichTextField from 'lib/components/redux-form/RichTextField';
+import TextField from 'lib/components/redux-form/TextField';
+import Toggle from 'lib/components/redux-form/Toggle';
+import formTranslations from 'lib/translations/form';
 
 const {
   TITLE,
@@ -76,74 +77,74 @@ const EventForm = ({
 }) => (
   <Form onSubmit={handleSubmit(onSubmit)}>
     <Field
-      fullWidth
-      name="title"
-      floatingLabelText={<FormattedMessage {...translations[TITLE]} />}
       component={TextField}
+      floatingLabelText={<FormattedMessage {...translations[TITLE]} />}
+      fullWidth={true}
+      name="title"
       {...{ disabled }}
     />
     <div style={styles.columns}>
       <Field
-        fullWidth
-        openOnFocus
-        name="event_type"
-        floatingLabelText={<FormattedMessage {...translations[EVENT_TYPE]} />}
         component={AutoComplete}
         dataSource={eventTypes}
         filter={AutoCompleteFilters.caseInsensitiveFilter}
+        floatingLabelText={<FormattedMessage {...translations[EVENT_TYPE]} />}
+        fullWidth={true}
         menuProps={{ desktop: true }}
+        name="event_type"
+        openOnFocus={true}
         style={styles.eventType}
         {...{ disabled }}
       />
       <Field
-        fullWidth
-        openOnFocus
-        name="location"
-        floatingLabelText={<FormattedMessage {...translations[LOCATION]} />}
         component={AutoComplete}
         dataSource={eventLocations}
         filter={AutoCompleteFilters.caseInsensitiveFilter}
+        floatingLabelText={<FormattedMessage {...translations[LOCATION]} />}
+        fullWidth={true}
         menuProps={{ desktop: true }}
+        name="location"
+        openOnFocus={true}
         style={styles.oneColumn}
         {...{ disabled }}
       />
     </div>
     <Field
-      fullWidth
-      name="description"
-      label={<FormattedMessage {...translations[DESCRIPTION]} />}
       component={RichTextField}
-      multiLine
+      fullWidth={true}
+      label={<FormattedMessage {...translations[DESCRIPTION]} />}
+      multiLine={true}
+      name="description"
       rows={2}
       {...{ disabled }}
     />
     <div style={styles.columns}>
       <Field
-        name="start_at"
-        floatingLabelText={<FormattedMessage {...translations[START_AT]} />}
-        component={DateTimePicker}
         afterChange={(_, newStartAt) =>
           shiftEndDate(formNames.EVENT, newStartAt, formValues)
         }
+        component={DateTimePicker}
+        floatingLabelText={<FormattedMessage {...translations[START_AT]} />}
+        name="start_at"
         style={styles.oneColumn}
         {...{ disabled }}
       />
       <Field
-        name="end_at"
-        floatingLabelText={<FormattedMessage {...translations[END_AT]} />}
         component={DateTimePicker}
+        floatingLabelText={<FormattedMessage {...translations[END_AT]} />}
+        name="end_at"
         style={styles.oneColumn}
         {...{ disabled }}
       />
     </div>
     <Field
-      name="published"
       component={Toggle}
-      parse={Boolean}
+      disabled={disabled}
       label={<FormattedMessage {...translations[PUBLISHED]} />}
       labelPosition="right"
+      name="published"
+      parse={Boolean}
       style={styles.toggle}
-      disabled={disabled}
     />
   </Form>
 );

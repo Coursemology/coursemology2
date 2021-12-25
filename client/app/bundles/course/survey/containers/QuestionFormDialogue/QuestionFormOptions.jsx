@@ -1,8 +1,9 @@
 /* eslint-disable react/no-array-index-key */
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import FlatButton from 'material-ui/FlatButton';
+import PropTypes from 'prop-types';
+
 import QuestionFormOption from './QuestionFormOption';
 
 const styles = {
@@ -66,22 +67,22 @@ class QuestionFormOptions extends Component {
         ))}
         <div style={styles.buttons}>
           <FlatButton
-            primary
             label={intl.formatMessage(optionsTranslations.addOption)}
             onClick={() => fields.push({})}
+            primary={true}
             {...{ disabled }}
           />
           <FlatButton
-            primary
             containerElement="label"
             label={intl.formatMessage(optionsTranslations.bulkUploadImages)}
+            primary={true}
             {...{ disabled }}
           >
             <input
-              type="file"
-              style={styles.imageUploader}
+              multiple={true}
               onChange={this.handleSelectFiles}
-              multiple
+              style={styles.imageUploader}
+              type="file"
               {...{ disabled }}
             />
           </FlatButton>

@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 
 class RailsConfirmationDialog extends Component {
@@ -26,15 +27,15 @@ class RailsConfirmationDialog extends Component {
   render() {
     return (
       <ConfirmationDialog
-        open={this.state.open}
+        confirmButtonText={this.props.confirmButtonText}
+        confirmSecondaryButtonText={this.props.confirmSecondaryButtonText}
         disableCancelButton={this.state.disableButtons}
         disableConfirmButton={this.state.disableButtons}
+        message={this.props.message}
         onCancel={() => this.setState({ open: false })}
         onConfirm={this.onConfirm}
         onConfirmSecondary={this.onConfirmSecondary}
-        message={this.props.message}
-        confirmButtonText={this.props.confirmButtonText}
-        confirmSecondaryButtonText={this.props.confirmSecondaryButtonText}
+        open={this.state.open}
       />
     );
   }

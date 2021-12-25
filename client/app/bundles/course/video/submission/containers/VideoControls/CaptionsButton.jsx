@@ -1,12 +1,14 @@
-import PropTypes from 'prop-types';
-import ClosedCaption from 'material-ui/svg-icons/av/closed-caption';
-import IconButton from 'material-ui/IconButton';
-import { captionsStates } from 'lib/constants/videoConstants';
 import { connect } from 'react-redux';
+import IconButton from 'material-ui/IconButton';
 import { black, grey400 } from 'material-ui/styles/colors';
+import ClosedCaption from 'material-ui/svg-icons/av/closed-caption';
+import PropTypes from 'prop-types';
+
+import { captionsStates } from 'lib/constants/videoConstants';
+
+import { changeCaptionsState } from '../../actions/video';
 
 import styles from '../VideoPlayer.scss';
-import { changeCaptionsState } from '../../actions/video';
 
 const propTypes = {
   captionsState: PropTypes.bool.isRequired,

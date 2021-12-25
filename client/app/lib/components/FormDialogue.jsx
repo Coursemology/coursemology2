@@ -1,10 +1,12 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import formTranslations from 'lib/translations/form';
+import PropTypes from 'prop-types';
+
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import formTranslations from 'lib/translations/form';
+
 import modalFormStyles from '../styles/ModalForm.scss';
 
 const propTypes = {
@@ -53,22 +55,22 @@ class FormDialogue extends Component {
     const { intl, title, disabled, open, submitForm, children } = this.props;
     const formActions = [
       <FlatButton
-        label={intl.formatMessage(formTranslations.cancel)}
-        primary
-        onClick={this.handleFormClose}
         key="form-dialogue-cancel-button"
+        label={intl.formatMessage(formTranslations.cancel)}
+        onClick={this.handleFormClose}
+        primary={true}
         {...{ disabled }}
       />,
       <FlatButton
+        key="form-dialogue-submit-button"
         ref={(button) => {
           // eslint-disable-next-line react/no-unused-class-component-methods
           this.submitButton = button;
         }}
+        keyboardFocused={true}
         label={intl.formatMessage(formTranslations.submit)}
-        primary
-        keyboardFocused
         onClick={submitForm}
-        key="form-dialogue-submit-button"
+        primary={true}
         {...{ disabled }}
       />,
     ];
@@ -78,18 +80,18 @@ class FormDialogue extends Component {
         <Dialog
           {...{ title, open }}
           actions={formActions}
+          autoScrollBodyContent={true}
+          bodyClassName={modalFormStyles.modalForm}
           modal={false}
           onRequestClose={this.handleFormClose}
-          autoScrollBodyContent
-          bodyClassName={modalFormStyles.modalForm}
         >
           {children}
         </Dialog>
         <ConfirmationDialog
-          confirmDiscard
-          open={this.state.discardConfirmationOpen}
+          confirmDiscard={true}
           onCancel={this.handleDiscardCancel}
           onConfirm={this.handleDiscard}
+          open={this.state.discardConfirmationOpen}
         />
       </div>
     );

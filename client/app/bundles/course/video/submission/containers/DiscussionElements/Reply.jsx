@@ -1,10 +1,11 @@
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import FlatButton from 'material-ui/FlatButton';
+import PropTypes from 'prop-types';
 
-import styles from '../Discussion.scss';
-import NewReplyContainer from './NewReplyContainer';
 import { addReply } from '../../actions/discussion';
+
+import NewReplyContainer from './NewReplyContainer';
+import styles from '../Discussion.scss';
 
 const propTypes = {
   topicId: PropTypes.string.isRequired,
@@ -23,7 +24,7 @@ const Reply = (props) =>
     </div>
   ) : (
     <div className={styles.replyContainer}>
-      <FlatButton label="Reply" primary onClick={props.onTriggerReply} />
+      <FlatButton label="Reply" onClick={props.onTriggerReply} primary={true} />
     </div>
   );
 

@@ -1,5 +1,5 @@
-import actionTypes from '../constants';
 import recorderHelper from '../../utils/recorderHelper';
+import actionTypes from '../constants';
 
 const initialState = {
   recording: false,

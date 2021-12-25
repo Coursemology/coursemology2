@@ -1,17 +1,18 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import Subheader from 'material-ui/Subheader';
-import { defaultComponentTitles } from 'course/translations.intl';
-import { duplicableItemTypes } from 'course/duplication/constants';
+import PropTypes from 'prop-types';
+
 import { setItemSelectedBoolean } from 'course/duplication/actions';
-import { categoryShape } from 'course/duplication/propTypes';
+import BulkSelectors from 'course/duplication/components/BulkSelectors';
+import IndentedCheckbox from 'course/duplication/components/IndentedCheckbox';
 import TypeBadge from 'course/duplication/components/TypeBadge';
 import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
-import IndentedCheckbox from 'course/duplication/components/IndentedCheckbox';
-import BulkSelectors from 'course/duplication/components/BulkSelectors';
+import { duplicableItemTypes } from 'course/duplication/constants';
+import { categoryShape } from 'course/duplication/propTypes';
 import destinationCourseSelector from 'course/duplication/selectors/destinationCourse';
+import { defaultComponentTitles } from 'course/translations.intl';
 
 const { TAB, ASSESSMENT, CATEGORY } = duplicableItemTypes;
 
@@ -56,9 +57,9 @@ class AssessmentsSelector extends Component {
     return (
       <IndentedCheckbox
         key={id}
-        label={label}
         checked={checked}
         indentLevel={2}
+        label={label}
         onCheck={(e, value) =>
           dispatch(setItemSelectedBoolean(ASSESSMENT, id, value))
         }

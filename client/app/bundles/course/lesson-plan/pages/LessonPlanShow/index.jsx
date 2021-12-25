@@ -1,9 +1,11 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { scroller } from 'react-scroll';
+import PropTypes from 'prop-types';
+
 import moment from 'lib/moment';
 import { lessonPlanTypesGroups } from 'lib/types';
+
 import LessonPlanGroup from './LessonPlanGroup';
 
 class LessonPlanShow extends Component {
@@ -63,10 +65,10 @@ class LessonPlanShow extends Component {
     return (
       <LessonPlanGroup
         key={id}
+        group={{ ...group, items: visibleItems }}
         initiallyExpanded={
           initiallyExpanded === undefined ? true : initiallyExpanded
         }
-        group={{ ...group, items: visibleItems }}
       />
     );
   }

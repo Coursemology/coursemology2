@@ -1,6 +1,8 @@
 import { SubmissionError } from 'redux-form';
+
 import CourseAPI from 'api/course';
 import { getCourseId } from 'lib/helpers/url-helpers';
+
 import actionTypes from './constants';
 
 /**

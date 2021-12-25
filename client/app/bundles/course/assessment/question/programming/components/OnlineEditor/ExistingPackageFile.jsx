@@ -1,8 +1,9 @@
-import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
-import { TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
 import { grey100, grey300, white } from 'material-ui/styles/colors';
+import { TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
+import PropTypes from 'prop-types';
+
 import styles from './OnlineEditorView.scss';
 
 function formatBytes(bytes, decimals) {
@@ -38,18 +39,18 @@ const ExistingPackageFile = (props) => {
       <TableHeaderColumn className={styles.deleteButtonCell}>
         <RaisedButton
           backgroundColor={buttonColor}
-          icon={<i className={buttonClass} />}
           disabled={isLoading}
+          icon={<i className={buttonClass} />}
           onClick={() => {
             deleteExistingPackageFile(props.fileType, filename, !toDelete);
           }}
           style={{ minWidth: '40px', width: '40px' }}
         />
         <input
-          type="checkbox"
-          hidden
-          name={`question_programming[${`${fileType}_to_delete`}][${filename}]`}
           checked={toDelete}
+          hidden={true}
+          name={`question_programming[${`${fileType}_to_delete`}][${filename}]`}
+          type="checkbox"
         />
       </TableHeaderColumn>
       <TableRowColumn>{filename}</TableRowColumn>

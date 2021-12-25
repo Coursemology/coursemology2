@@ -1,6 +1,7 @@
-import PropTypes from 'prop-types';
-import MaterialToggle from 'material-ui/Toggle';
 import { red500 } from 'material-ui/styles/colors';
+import MaterialToggle from 'material-ui/Toggle';
+import PropTypes from 'prop-types';
+
 import createComponent from './createComponent';
 import mapError from './mapError';
 

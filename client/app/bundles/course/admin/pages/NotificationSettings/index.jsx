@@ -1,9 +1,7 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import Subheader from 'material-ui/Subheader';
-import Toggle from 'material-ui/Toggle';
 import {
   Table,
   TableBody,
@@ -12,13 +10,17 @@ import {
   TableRow,
   TableRowColumn,
 } from 'material-ui/Table';
-import NotificationPopup from 'lib/containers/NotificationPopup';
+import Toggle from 'material-ui/Toggle';
+import PropTypes from 'prop-types';
+
 import { updateNotificationSetting } from 'course/admin/actions/notifications';
 import adminTranslations from 'course/translations.intl';
+import NotificationPopup from 'lib/containers/NotificationPopup';
+
 import translations, {
   settingComponents,
-  settingTitles,
   settingDescriptions,
+  settingTitles,
 } from './translations.intl';
 
 const styles = {
@@ -154,20 +156,20 @@ class NotificationSettings extends Component {
         </TableRowColumn>
         <TableRowColumn>
           <Toggle
-            toggled={setting.phantom}
             onToggle={this.handleComponentNotificationSettingUpdate(
               setting,
               'phantom',
             )}
+            toggled={setting.phantom}
           />
         </TableRowColumn>
         <TableRowColumn>
           <Toggle
-            toggled={setting.regular}
             onToggle={this.handleComponentNotificationSettingUpdate(
               setting,
               'regular',
             )}
+            toggled={setting.regular}
           />
         </TableRowColumn>
       </TableRow>

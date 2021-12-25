@@ -1,24 +1,25 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { connect } from 'react-redux';
-import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
+import ReactTooltip from 'react-tooltip';
 import { Card, CardText } from 'material-ui/Card';
 import {
   Table,
-  TableHeader,
   TableBody,
-  TableRow,
+  TableHeader,
   TableHeaderColumn,
+  TableRow,
   TableRowColumn,
 } from 'material-ui/Table';
-import ReactTooltip from 'react-tooltip';
+import PropTypes from 'prop-types';
 
-import { getCourseId } from 'lib/helpers/url-helpers';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
-import { formatDateTime } from '../utils';
-import { gradingShape, questionShape, submissionShape } from '../propTypes';
+import { getCourseId } from 'lib/helpers/url-helpers';
+
 import actionTypes, { workflowStates } from '../constants';
+import { gradingShape, questionShape, submissionShape } from '../propTypes';
 import translations from '../translations';
+import { formatDateTime } from '../utils';
 
 const styles = {
   panel: {
@@ -82,17 +83,17 @@ class VisibleGradingPanel extends Component {
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <div>
           <input
-            className="exp"
-            style={{ width: 50 }}
-            type="number"
-            min={0}
-            step={1}
-            value={exp !== null ? exp : ''}
-            onChange={(e) => this.handleExpField(e.target.value)}
             ref={(ref) => {
               this.expInputRef = ref;
             }}
+            className="exp"
+            min={0}
+            onChange={(e) => this.handleExpField(e.target.value)}
             onWheel={() => this.expInputRef.blur()}
+            step={1}
+            style={{ width: 50 }}
+            type="number"
+            value={exp !== null ? exp : ''}
           />
           {bonusAwarded > 0
             ? ` / (${basePoints} + ${bonusAwarded})`
@@ -101,16 +102,16 @@ class VisibleGradingPanel extends Component {
         <div style={{ marginLeft: 20 }}>
           <FormattedMessage {...translations.multiplier} />
           <input
-            style={{ marginLeft: 5, width: 70 }}
-            type="number"
-            min={0}
-            max={1}
-            value={expMultiplier}
-            onChange={(e) => this.handleMultiplierField(e.target.value)}
             ref={(ref) => {
               this.multiplierInputRef = ref;
             }}
+            max={1}
+            min={0}
+            onChange={(e) => this.handleMultiplierField(e.target.value)}
             onWheel={() => this.multiplierInputRef.blur()}
+            style={{ marginLeft: 5, width: 70 }}
+            type="number"
+            value={expMultiplier}
           />
         </div>
       </div>
@@ -141,7 +142,7 @@ class VisibleGradingPanel extends Component {
     }
     return (
       <TableRow key={question.id}>
-        <TableHeaderColumn style={styles.headerColumn} colSpan={2}>
+        <TableHeaderColumn colSpan={2} style={styles.headerColumn}>
           {question.displayTitle}
         </TableHeaderColumn>
         {showGrader ? (
@@ -185,7 +186,7 @@ class VisibleGradingPanel extends Component {
             enableSelectAll={false}
           >
             <TableRow>
-              <TableHeaderColumn style={styles.headerColumn} colSpan={2}>
+              <TableHeaderColumn colSpan={2} style={styles.headerColumn}>
                 {intl.formatMessage(translations.question)}
               </TableHeaderColumn>
               {showGrader ? (
@@ -219,13 +220,13 @@ class VisibleGradingPanel extends Component {
         {workflowState === workflowStates.Graded ? (
           <span style={{ display: 'inline-block', marginLeft: 5 }}>
             <a
-              data-tip
               data-for="unpublished-grades"
               data-offset="{'left' : -8}"
+              data-tip={true}
             >
               <i className="fa fa-exclamation-triangle" />
             </a>
-            <ReactTooltip id="unpublished-grades" effect="solid">
+            <ReactTooltip effect="solid" id="unpublished-grades">
               <FormattedMessage {...translations.unpublishedGrades} />
             </ReactTooltip>
           </span>
@@ -256,7 +257,7 @@ class VisibleGradingPanel extends Component {
 
     const tableRow = (field, value) => (
       <TableRow>
-        <TableHeaderColumn style={styles.headerColumn} columnNumber={0}>
+        <TableHeaderColumn columnNumber={0} style={styles.headerColumn}>
           <FormattedMessage {...translations[field]} />
         </TableHeaderColumn>
         <TableRowColumn>{value}</TableRowColumn>

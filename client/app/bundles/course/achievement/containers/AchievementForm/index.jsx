@@ -1,17 +1,20 @@
-import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { reduxForm, Field, Form } from 'redux-form';
+import PropTypes from 'prop-types';
+import { Field, Form, reduxForm } from 'redux-form';
+
 import ConditionList from 'lib/components/course/ConditionList';
-import TextField from 'lib/components/redux-form/TextField';
 import RichTextField from 'lib/components/redux-form/RichTextField';
-import Toggle from 'lib/components/redux-form/Toggle';
 import SingleFileInput, {
   BadgePreview,
 } from 'lib/components/redux-form/SingleFileInput';
+import TextField from 'lib/components/redux-form/TextField';
+import Toggle from 'lib/components/redux-form/Toggle';
 import formTranslations from 'lib/translations/form';
 import { achievementTypesConditionAttributes } from 'lib/types';
-import translations from './translations.intl';
+
 import { formNames } from '../../constants';
+
+import translations from './translations.intl';
 
 const styles = {
   toggle: {
@@ -56,43 +59,43 @@ const AchievementForm = ({
   submitting,
   conditionAttributes,
 }) => (
-  <Form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
+  <Form encType="multipart/form-data" onSubmit={handleSubmit(onSubmit)}>
     <Field
-      fullWidth
-      name="title"
       component={TextField}
-      floatingLabelText={<FormattedMessage {...translations.title} />}
       disabled={submitting}
+      floatingLabelText={<FormattedMessage {...translations.title} />}
+      fullWidth={true}
+      name="title"
     />
     <br />
     <Field
-      name="description"
       component={RichTextField}
-      label={<FormattedMessage {...translations.description} />}
       disabled={submitting}
+      label={<FormattedMessage {...translations.description} />}
+      name="description"
     />
     <Field
-      name="badge"
-      component={SingleFileInput}
       accept="image/*"
-      previewComponent={BadgePreview}
-      label={<FormattedMessage {...translations.description} />}
+      component={SingleFileInput}
       disabled={submitting}
+      label={<FormattedMessage {...translations.description} />}
+      name="badge"
+      previewComponent={BadgePreview}
     />
     <Field
-      name="published"
-      parse={Boolean}
       component={Toggle}
+      disabled={submitting}
       label={<FormattedMessage {...translations.published} />}
       labelPosition="right"
+      name="published"
+      parse={Boolean}
       style={styles.toggle}
-      disabled={submitting}
     />
     {editing && conditionAttributes && (
       <div style={styles.conditions}>
         <ConditionList
-          newConditionUrls={conditionAttributes.new_condition_urls}
           conditions={conditionAttributes.conditions}
+          newConditionUrls={conditionAttributes.new_condition_urls}
         />
       </div>
     )}

@@ -1,10 +1,12 @@
-import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
 import { postRequestingStatuses } from 'lib/constants/videoConstants';
 
-import Editor from './Editor';
 import { updatePost, updatePostOnServer } from '../../actions/discussion';
+
+import Editor from './Editor';
 
 const translations = defineMessages({
   edit: {

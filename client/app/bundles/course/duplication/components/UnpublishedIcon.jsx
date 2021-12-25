@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
 import Block from 'material-ui/svg-icons/content/block';
+import PropTypes from 'prop-types';
 
 const styles = {
   // TODO: lower position of the icon so that it aligns with adjacent text
@@ -20,8 +20,8 @@ const UnpublishedIcon = ({ tooltipId }) => {
   }
   return (
     <Block
-      data-tip
       data-for={tooltipId}
+      data-tip={true}
       style={{ ...styles.unpublishedIcon, ...styles.withTooltip }}
     />
   );

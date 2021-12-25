@@ -1,12 +1,13 @@
-import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { reduxForm, Field, Form } from 'redux-form';
-import TextField from 'lib/components/redux-form/TextField';
-import RichTextField from 'lib/components/redux-form/RichTextField';
-import formTranslations from 'lib/translations/form';
-import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
+import PropTypes from 'prop-types';
+import { Field, Form, reduxForm } from 'redux-form';
+
+import { fields, formNames } from 'course/lesson-plan/constants';
 import translations from 'course/lesson-plan/translations';
-import { formNames, fields } from 'course/lesson-plan/constants';
+import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
+import RichTextField from 'lib/components/redux-form/RichTextField';
+import TextField from 'lib/components/redux-form/TextField';
+import formTranslations from 'lib/translations/form';
 
 const { TITLE, DESCRIPTION, START_AT } = fields;
 
@@ -26,26 +27,26 @@ const validate = (values) => {
 const MilestoneForm = ({ handleSubmit, onSubmit, disabled }) => (
   <Form onSubmit={handleSubmit(onSubmit)}>
     <Field
-      fullWidth
-      name="title"
-      floatingLabelText={<FormattedMessage {...translations[TITLE]} />}
       component={TextField}
+      floatingLabelText={<FormattedMessage {...translations[TITLE]} />}
+      fullWidth={true}
+      name="title"
       {...{ disabled }}
     />
     <br />
     <Field
-      fullWidth
-      name="description"
-      label={<FormattedMessage {...translations[DESCRIPTION]} />}
       component={RichTextField}
-      multiLine
+      fullWidth={true}
+      label={<FormattedMessage {...translations[DESCRIPTION]} />}
+      multiLine={true}
+      name="description"
       rows={2}
       {...{ disabled }}
     />
     <Field
-      name="start_at"
-      floatingLabelText={<FormattedMessage {...translations[START_AT]} />}
       component={DateTimePicker}
+      floatingLabelText={<FormattedMessage {...translations[START_AT]} />}
+      name="start_at"
       {...{ disabled }}
     />
   </Form>

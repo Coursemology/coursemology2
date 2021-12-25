@@ -1,15 +1,16 @@
 import { Component } from 'react';
+import { defineMessages, injectIntl, intlShape } from 'react-intl';
+import Checkbox from 'material-ui/Checkbox';
+import { RadioButton } from 'material-ui/RadioButton';
+import { red500 } from 'material-ui/styles/colors';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { defineMessages, injectIntl, intlShape } from 'react-intl';
-import { RadioButton } from 'material-ui/RadioButton';
-import Checkbox from 'material-ui/Checkbox';
-import { red500 } from 'material-ui/styles/colors';
-import formTranslations from 'lib/translations/form';
-import TextField from 'lib/components/redux-form/TextField';
+
+import OptionsListItem from 'course/survey/components/OptionsListItem';
 import { questionTypes } from 'course/survey/constants';
 import { questionShape } from 'course/survey/propTypes';
-import OptionsListItem from 'course/survey/components/OptionsListItem';
+import TextField from 'lib/components/redux-form/TextField';
+import formTranslations from 'lib/translations/form';
 
 const styles = {
   errorText: {
@@ -63,12 +64,12 @@ class ResponseAnswer extends Component {
             const id = option.id;
             const widget = (
               <RadioButton
-                value={id}
-                style={grid ? styles.gridOptionWidget : styles.listOptionWidget}
-                iconStyle={grid ? styles.gridOptionWidgetIcon : {}}
-                onCheck={(event, buttonValue) => onChange([buttonValue])}
                 checked={id === selectedOption}
                 disabled={disabled}
+                iconStyle={grid ? styles.gridOptionWidgetIcon : {}}
+                onCheck={(event, buttonValue) => onChange([buttonValue])}
+                style={grid ? styles.gridOptionWidget : styles.listOptionWidget}
+                value={id}
               />
             );
             return (
@@ -100,10 +101,9 @@ class ResponseAnswer extends Component {
           {options.map((option) => {
             const widget = (
               <Checkbox
-                style={grid ? styles.gridOptionWidget : styles.listOptionWidget}
-                iconStyle={grid ? styles.gridOptionWidgetIcon : {}}
-                disabled={disabled}
                 checked={value.indexOf(option.id) !== -1}
+                disabled={disabled}
+                iconStyle={grid ? styles.gridOptionWidgetIcon : {}}
                 onCheck={(event, isChecked) => {
                   const newValue = [...value];
                   if (isChecked) {
@@ -113,6 +113,7 @@ class ResponseAnswer extends Component {
                   }
                   return onChange(newValue);
                 }}
+                style={grid ? styles.gridOptionWidget : styles.listOptionWidget}
               />
             );
             const { option: optionText, image_url: imageUrl } = option;
@@ -173,8 +174,8 @@ class ResponseAnswer extends Component {
 
     return (
       <Field
-        name={`${member}.answer.question_option_ids`}
         component={ResponseAnswer.renderMultipleChoiceOptions}
+        name={`${member}.answer.question_option_ids`}
         validate={this.checkMultipleChoiceRequired}
         {...{ question, disabled }}
       />
@@ -186,8 +187,8 @@ class ResponseAnswer extends Component {
 
     return (
       <Field
-        name={`${member}.answer.question_option_ids`}
         component={ResponseAnswer.renderMultipleResponseOptions}
+        name={`${member}.answer.question_option_ids`}
         validate={this.checkQuantitySelected}
         {...{ question, disabled }}
       />
@@ -199,12 +200,12 @@ class ResponseAnswer extends Component {
 
     return (
       <Field
-        fullWidth
-        name={`${member}.answer.text_response`}
         component={TextField}
         disabled={disabled}
+        fullWidth={true}
+        multiLine={true}
+        name={`${member}.answer.text_response`}
         validate={this.checkTextResponseRequired}
-        multiLine
       />
     );
   }

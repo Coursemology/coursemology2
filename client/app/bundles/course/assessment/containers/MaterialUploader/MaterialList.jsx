@@ -1,14 +1,16 @@
-import PropTypes from 'prop-types';
-import { FormattedMessage, defineMessages } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
+import ReactTooltip from 'react-tooltip';
+import Divider from 'material-ui/Divider';
+import FlatButton from 'material-ui/FlatButton';
 import { List } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
-import FlatButton from 'material-ui/FlatButton';
-import Divider from 'material-ui/Divider';
 import ContentAdd from 'material-ui/svg-icons/content/add';
+import PropTypes from 'prop-types';
+
 import NotificationBar, {
   notificationShape,
 } from 'lib/components/NotificationBar';
-import ReactTooltip from 'react-tooltip';
+
 import Material from './Material';
 
 const translations = defineMessages({
@@ -72,53 +74,53 @@ const MaterialList = (props) => {
   } = props;
   const header = (
     <FormattedMessage
-      id="course.assessment.MaterialList.uploadedFiles"
       defaultMessage="Files"
+      id="course.assessment.MaterialList.uploadedFiles"
     />
   );
 
   const materialNodes = materials.map((material) => (
     <Material
       key={material.id}
+      deleting={material.deleting}
+      disabled={!enableMaterialsAction}
       id={material.id}
       name={material.name}
-      updatedAt={material.updated_at}
-      deleting={material.deleting}
       onMaterialDelete={onMaterialDelete}
-      disabled={!enableMaterialsAction}
+      updatedAt={material.updated_at}
     />
   ));
 
   const uploadingMaterialNodes = uploadingMaterials.map((material) => (
     <Material
       key={material.name}
-      name={material.name}
-      uploading
       disabled={!enableMaterialsAction}
+      name={material.name}
+      uploading={true}
     />
   ));
 
   const newFileButton = (
     <>
       <div
-        data-tip
         data-for="add-files-button"
+        data-tip={true}
         data-tip-disable={enableMaterialsAction}
       >
         <FlatButton
-          fullWidth
-          label="Add Files"
-          icon={<ContentAdd />}
           containerElement="label"
-          style={styles.newFileButton}
           disabled={!enableMaterialsAction}
+          fullWidth={true}
+          icon={<ContentAdd />}
+          label="Add Files"
+          style={styles.newFileButton}
         >
           <input
-            type="file"
-            multiple
-            style={styles.uploadInput}
-            onChange={onFileInputChange}
             disabled={!enableMaterialsAction}
+            multiple={true}
+            onChange={onFileInputChange}
+            style={styles.uploadInput}
+            type="file"
           />
         </FlatButton>
       </div>
@@ -141,8 +143,8 @@ const MaterialList = (props) => {
       </List>
       <Divider />
       <NotificationBar
-        notification={props.notification}
         autoHideDuration={5000}
+        notification={props.notification}
       />
     </>
   );

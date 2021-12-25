@@ -1,17 +1,16 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-
-import { yellow100 } from 'material-ui/styles/colors';
-import Paper from 'material-ui/Paper';
-import WarningIcon from 'material-ui/svg-icons/alert/warning';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router';
+import Paper from 'material-ui/Paper';
+import { yellow100 } from 'material-ui/styles/colors';
+import WarningIcon from 'material-ui/svg-icons/alert/warning';
+import PropTypes from 'prop-types';
 
 import { getProgrammingFileURL } from 'lib/helpers/url-builders';
 
-import Editor from '../../Editor';
 import ReadOnlyEditor from '../../../containers/ReadOnlyEditor';
 import { fileShape } from '../../../propTypes';
+import Editor from '../../Editor';
 
 const translations = defineMessages({
   sizeTooBig: {
@@ -38,9 +37,9 @@ class ProgrammingFile extends Component {
       <>
         <h5>{file.filename}</h5>
         <Editor
-          name={`${fieldName}[content]`}
           filename={file.filename}
           language={language}
+          name={`${fieldName}[content]`}
         />
       </>
     );
@@ -75,7 +74,7 @@ class ProgrammingFile extends Component {
 
     const content = file.highlighted_content.split('\n');
     return (
-      <ReadOnlyEditor answerId={answerId} fileId={file.id} content={content} />
+      <ReadOnlyEditor answerId={answerId} content={content} fileId={file.id} />
     );
   }
 

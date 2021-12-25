@@ -1,8 +1,11 @@
 import { SubmissionError } from 'redux-form';
+
 import CourseAPI from 'api/course';
-import history from 'lib/history';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import history from 'lib/history';
+
 import actionTypes from '../constants';
+
 import { setNotification } from './index';
 
 export function createResponse(surveyId) {

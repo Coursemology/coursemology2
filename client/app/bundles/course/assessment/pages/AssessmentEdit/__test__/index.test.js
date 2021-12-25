@@ -1,6 +1,8 @@
 import { mount } from 'enzyme';
-import ProviderWrapper from 'lib/components/ProviderWrapper';
+
 import CourseAPI from 'api/course';
+import ProviderWrapper from 'lib/components/ProviderWrapper';
+
 import storeCreator from '../../../store';
 import AssessmentEdit from '../index';
 
@@ -23,7 +25,11 @@ describe('<AssessmentEdit />', () => {
   it('renders the edit page', async () => {
     const editPage = mount(
       <ProviderWrapper store={store}>
-        <AssessmentEdit id={id} modeSwitching initialValues={initialValues} />
+        <AssessmentEdit
+          id={id}
+          initialValues={initialValues}
+          modeSwitching={true}
+        />
       </ProviderWrapper>,
     );
 
@@ -63,7 +69,11 @@ describe('<AssessmentEdit />', () => {
   it('renders the gamified fields by default', () => {
     const editPage = mount(
       <ProviderWrapper store={store}>
-        <AssessmentEdit id={id} modeSwitching initialValues={initialValues} />
+        <AssessmentEdit
+          id={id}
+          initialValues={initialValues}
+          modeSwitching={true}
+        />
       </ProviderWrapper>,
     );
 
@@ -80,10 +90,10 @@ describe('<AssessmentEdit />', () => {
     const editPage = mount(
       <ProviderWrapper store={store}>
         <AssessmentEdit
-          id={id}
           gamified={false}
-          modeSwitching
+          id={id}
           initialValues={initialValues}
+          modeSwitching={true}
         />
       </ProviderWrapper>,
     );
@@ -98,9 +108,9 @@ describe('<AssessmentEdit />', () => {
       <ProviderWrapper store={store}>
         <AssessmentEdit
           id={id}
-          showPersonalizedTimelineFeatures
-          modeSwitching
           initialValues={initialValues}
+          modeSwitching={true}
+          showPersonalizedTimelineFeatures={true}
         />
       </ProviderWrapper>,
     );
@@ -118,9 +128,9 @@ describe('<AssessmentEdit />', () => {
       <ProviderWrapper store={store}>
         <AssessmentEdit
           id={id}
-          showPersonalizedTimelineFeatures={false}
-          modeSwitching
           initialValues={initialValues}
+          modeSwitching={true}
+          showPersonalizedTimelineFeatures={false}
         />
       </ProviderWrapper>,
     );

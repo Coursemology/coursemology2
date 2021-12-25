@@ -1,9 +1,11 @@
 import { connect } from 'react-redux';
+
 import NotificationBar, {
   notificationShape,
 } from 'lib/components/NotificationBar';
-import VideoPlayer from './VideoPlayer';
+
 import Discussion from './Discussion';
+import VideoPlayer from './VideoPlayer';
 import styles from './Submission.scss';
 
 const propTypes = {
