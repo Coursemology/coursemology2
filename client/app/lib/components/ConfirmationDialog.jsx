@@ -63,6 +63,7 @@ class ConfirmationDialog extends Component {
         style={buttonStyle}
         label={cancelButtonText || intl.formatMessage(formTranslations.cancel)}
         ref={(button) => {
+          // eslint-disable-next-line react/no-unused-class-component-methods
           this.cancelButton = button;
         }}
         key="confirmation-dialog-cancel-button"
@@ -75,6 +76,7 @@ class ConfirmationDialog extends Component {
         style={buttonStyle}
         label={confirmationButtonText}
         ref={(button) => {
+          // eslint-disable-next-line react/no-unused-class-component-methods
           this.confirmButton = button;
         }}
         key="confirmation-dialog-confirm-button"
@@ -91,6 +93,7 @@ class ConfirmationDialog extends Component {
           style={buttonStyle}
           label={confirmationSecondaryButtonText}
           ref={(button) => {
+            // eslint-disable-next-line react/no-unused-class-component-methods
             this.confirmButtonSecondary = button;
           }}
           key="confirmation-dialog-confirm-secondary-button"

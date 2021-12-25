@@ -100,6 +100,29 @@ function initializePopovers() {
   return popovers;
 }
 
+const ToolIconComponent = ({ scribing, lineToolStyle }) => (
+  <div
+    style={
+      scribing.activeObject && scribing.activeObject.type !== 'line'
+        ? { ...lineToolStyle, background: '#c0c0c0' }
+        : lineToolStyle
+    }
+  />
+);
+
+ToolIconComponent.propTypes = {
+  scribing: scribingShape.isRequired,
+  lineToolStyle: PropTypes.shape({
+    background: PropTypes.string,
+    display: PropTypes.string,
+    position: PropTypes.string,
+    width: PropTypes.string,
+    height: PropTypes.string,
+    marginLeft: PropTypes.string,
+    transform: PropTypes.string,
+  }).isRequired,
+};
+
 class ScribingToolbar extends Component {
   constructor(props) {
     super(props);
@@ -524,15 +547,12 @@ class ScribingToolbar extends Component {
             onClickChevron={(event) =>
               this.onClickPopover(event, scribingPopoverTypes.LINE)
             }
-            iconComponent={() => (
-              <div
-                style={
-                  scribing.activeObject && scribing.activeObject.type !== 'line'
-                    ? { ...lineToolStyle, background: '#c0c0c0' }
-                    : lineToolStyle
-                }
+            iconComponent={
+              <ToolIconComponent
+                scribing={scribing}
+                lineToolStyle={lineToolStyle}
               />
-            )}
+            }
             onMouseEnter={() => this.onMouseEnter(scribingTools.LINE)}
             onMouseLeave={this.onMouseLeave}
           />

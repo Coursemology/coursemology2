@@ -40,6 +40,7 @@ const initialState = {
   isDuplicationSuccess: false,
 };
 
+// eslint-disable-next-line react/function-component-definition
 export default function (state = initialState, action) {
   const { type } = action;
 

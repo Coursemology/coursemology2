@@ -321,7 +321,7 @@ function validateFiles(files) {
 
 // Used to ensure that only java files can be uploaded.
 function validateJavaFiles(files) {
-  const regex = new RegExp('\\.java');
+  const regex = /\\.java'/;
   return files.filter((file) => !regex.test(file.filename)).length === 0;
 }
 

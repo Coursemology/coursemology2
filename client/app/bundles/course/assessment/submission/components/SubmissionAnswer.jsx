@@ -62,6 +62,8 @@ const styles = {
 };
 
 class SubmissionAnswer extends Component {
+  static pastAnswerRenderer = (question) => <PastAnswers question={question} />;
+
   getRenderer(question) {
     const {
       MultipleChoice,
@@ -77,7 +79,7 @@ class SubmissionAnswer extends Component {
     const { viewHistory } = question;
 
     if (viewHistory) {
-      return () => <PastAnswers question={question} />;
+      return this.pastAnswerRenderer;
     }
 
     switch (question.type) {

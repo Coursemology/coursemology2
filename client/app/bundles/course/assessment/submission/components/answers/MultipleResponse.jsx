@@ -5,46 +5,44 @@ import Checkbox from 'material-ui/Checkbox';
 
 import { questionShape } from '../../propTypes';
 
-function MultipleResponseOptions({
+const MultipleResponseOptions = ({
   readOnly,
   showMcqMrqSolution,
   graderView,
   question,
   input,
-}) {
-  return (
-    <>
-      {question.options.map((option) => (
-        <Checkbox
-          disabled={readOnly}
-          key={option.id}
-          value={option.id}
-          checked={input.value.indexOf(option.id) !== -1}
-          onCheck={(event, isInputChecked) => {
-            const newValue = [...input.value];
-            if (isInputChecked) {
-              newValue.push(option.id);
-            } else {
-              newValue.splice(newValue.indexOf(option.id), 1);
-            }
-            return input.onChange(newValue);
-          }}
-          label={
-            <div
-              style={
-                option.correct && readOnly && (showMcqMrqSolution || graderView)
-                  ? { backgroundColor: green50 }
-                  : null
-              }
-              dangerouslySetInnerHTML={{ __html: option.option.trim() }}
-            />
+}) => (
+  <>
+    {question.options.map((option) => (
+      <Checkbox
+        disabled={readOnly}
+        key={option.id}
+        value={option.id}
+        checked={input.value.indexOf(option.id) !== -1}
+        onCheck={(_event, isInputChecked) => {
+          const newValue = [...input.value];
+          if (isInputChecked) {
+            newValue.push(option.id);
+          } else {
+            newValue.splice(newValue.indexOf(option.id), 1);
           }
-          labelStyle={{ verticalAlign: 'middle' }}
-        />
-      ))}
-    </>
-  );
-}
+          return input.onChange(newValue);
+        }}
+        label={
+          <div
+            style={
+              option.correct && readOnly && (showMcqMrqSolution || graderView)
+                ? { backgroundColor: green50 }
+                : null
+            }
+            dangerouslySetInnerHTML={{ __html: option.option.trim() }}
+          />
+        }
+        labelStyle={{ verticalAlign: 'middle' }}
+      />
+    ))}
+  </>
+);
 
 MultipleResponseOptions.propTypes = {
   question: questionShape,
@@ -61,21 +59,19 @@ MultipleResponseOptions.defaultProps = {
   readOnly: false,
 };
 
-function MultipleResponse({
+const MultipleResponse = ({
   question,
   readOnly,
   showMcqMrqSolution,
   graderView,
   answerId,
-}) {
-  return (
-    <Field
-      name={`${answerId}[option_ids]`}
-      component={MultipleResponseOptions}
-      {...{ question, readOnly, showMcqMrqSolution, graderView }}
-    />
-  );
-}
+}) => (
+  <Field
+    name={`${answerId}[option_ids]`}
+    component={MultipleResponseOptions}
+    {...{ question, readOnly, showMcqMrqSolution, graderView }}
+  />
+);
 
 MultipleResponse.propTypes = {
   question: questionShape,

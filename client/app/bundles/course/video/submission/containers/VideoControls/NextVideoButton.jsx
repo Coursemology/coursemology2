@@ -18,7 +18,7 @@ const defaultProps = {
   isPostRequest: false,
 };
 
-function NextVideoButton(props) {
+const NextVideoButton = (props) => {
   if (!props.url) {
     return (
       <IconButton
@@ -41,7 +41,7 @@ function NextVideoButton(props) {
       <SkipNext />
     </IconButton>
   );
-}
+};
 
 NextVideoButton.propTypes = propTypes;
 NextVideoButton.defaultProps = defaultProps;

@@ -17,7 +17,7 @@ const propTypes = {
   colorBarBorder: PropTypes.string,
   colorBarBackground: PropTypes.string,
   iconClassname: PropTypes.string,
-  iconComponent: PropTypes.func,
+  iconComponent: PropTypes.element,
   onMouseEnter: PropTypes.func,
   onMouseLeave: PropTypes.func,
 };
@@ -94,10 +94,8 @@ export default class ToolDropdown extends Component {
       ? style.disabled
       : { color: currentTool === toolType ? blue500 : 'rgba(0, 0, 0, 0.4)' };
 
-    return iconComponent ? (
-      iconComponent()
-    ) : (
-      <FontIcon className={iconClassname} style={iconStyle} />
+    return (
+      iconComponent ?? <FontIcon className={iconClassname} style={iconStyle} />
     );
   }
 

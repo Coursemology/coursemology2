@@ -133,15 +133,15 @@
     "webpack-manifest-plugin": "^4.0.2"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.16.5",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.5",
     "axios-mock-adapter": "^1.20.0",
     "babel-core": "^7.0.0-bridge.0",
-    "babel-eslint": "^10.1.0",
     "babel-jest": "^27.2.0",
     "enzyme": "^3.11.0",
     "enzyme-to-json": "^3.6.2",
-    "eslint": "^7.32.0",
-    "eslint-config-airbnb": "^18.2.1",
+    "eslint": "^8.5.0",
+    "eslint-config-airbnb": "^19.0.2",
     "eslint-config-prettier": "^8.3.0",
     "eslint-import-resolver-alias": "^1.1.2",
     "eslint-import-resolver-node": "^0.3.6",

@@ -39,36 +39,34 @@ const defaultProps = {
   submitButtonText: <FormattedMessage {...translations.comment} />,
 };
 
-function Editor(props) {
-  return (
-    <>
-      <MaterialSummernote
-        airMode
-        disabled={props.disabled}
-        label={<FormattedMessage {...translations.prompt} />}
-        onChange={(nextValue) => props.onContentUpdate(nextValue)}
-        value={props.content}
-      />
-      <div className={style.editorExtraElement}>{props.children}</div>
-      <div className={style.editorButtons}>
-        {props.showCancel && (
-          <RaisedButton
-            label={props.cancelButtonText}
-            onClick={props.onCancel}
-            disabled={props.disabled}
-          />
-        )}
+const Editor = (props) => (
+  <>
+    <MaterialSummernote
+      airMode
+      disabled={props.disabled}
+      label={<FormattedMessage {...translations.prompt} />}
+      onChange={(nextValue) => props.onContentUpdate(nextValue)}
+      value={props.content}
+    />
+    <div className={style.editorExtraElement}>{props.children}</div>
+    <div className={style.editorButtons}>
+      {props.showCancel && (
         <RaisedButton
-          label={props.submitButtonText}
-          primary
-          onClick={props.onSubmit}
+          label={props.cancelButtonText}
+          onClick={props.onCancel}
           disabled={props.disabled}
         />
-      </div>
-      <div style={{ clear: 'both' }} />
-    </>
-  );
-}
+      )}
+      <RaisedButton
+        label={props.submitButtonText}
+        primary
+        onClick={props.onSubmit}
+        disabled={props.disabled}
+      />
+    </div>
+    <div style={{ clear: 'both' }} />
+  </>
+);
 
 Editor.propTypes = propTypes;
 Editor.defaultProps = defaultProps;

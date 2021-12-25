@@ -578,7 +578,7 @@ export default class ScribingCanvas extends Component {
   };
 
   // Limit moving of objects to within the canvas
-  onObjectMovingCanvas = (options) => {
+  static onObjectMovingCanvas = (options) => {
     const obj = options.target;
     // if object is too big ignore
     if (
@@ -667,7 +667,7 @@ export default class ScribingCanvas extends Component {
     return userScribbles;
   };
 
-  getMousePoint = (event) => ({
+  static getMousePoint = (event) => ({
     x: event.clientX,
     y: event.clientY,
   });
@@ -734,7 +734,7 @@ export default class ScribingCanvas extends Component {
   };
 
   // Utility Helpers
-  cloneText = (obj) => {
+  static cloneText = (obj) => {
     const newObj = new fabric.IText(obj.text, {
       left: obj.left,
       top: obj.top,
@@ -798,7 +798,7 @@ export default class ScribingCanvas extends Component {
   }
 
   // Generates the left, top, width and height of the drag
-  generateMouseDragProperties = (point1, point2) => ({
+  static generateMouseDragProperties = (point1, point2) => ({
     left: point1.x < point2.x ? point1.x : point2.x,
     top: point1.y < point2.y ? point1.y : point2.y,
     width: Math.abs(point1.x - point2.x),

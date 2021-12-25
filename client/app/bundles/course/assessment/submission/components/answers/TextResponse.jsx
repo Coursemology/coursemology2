@@ -7,15 +7,23 @@ import UploadedFileView from '../../containers/UploadedFileView';
 import TextResponseSolutions from '../TextResponseSolutions';
 import FileInput from '../FileInput';
 
-function TextResponse({ question, readOnly, answerId, graderView }) {
+const ReadOnlyAnswerComponent = (props) => (
+  <div dangerouslySetInnerHTML={{ __html: props.input.value }} />
+);
+
+ReadOnlyAnswerComponent.propTypes = {
+  input: PropTypes.shape({
+    value: PropTypes.string,
+  }),
+};
+
+const TextResponse = ({ question, readOnly, answerId, graderView }) => {
   const allowUpload = question.allowAttachment;
 
   const readOnlyAnswer = (
     <Field
       name={`${answerId}[answer_text]`}
-      component={(props) => (
-        <div dangerouslySetInnerHTML={{ __html: props.input.value }} />
-      )}
+      component={ReadOnlyAnswerComponent}
     />
   );
 
@@ -50,7 +58,7 @@ function TextResponse({ question, readOnly, answerId, graderView }) {
       )}
     </div>
   );
-}
+};
 
 TextResponse.propTypes = {
   question: questionShape,

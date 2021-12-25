@@ -15,22 +15,20 @@ const defaultProps = {
   fineTuningScale: 100,
 };
 
-function VolumeSlider(props) {
-  return (
-    <span className={styles.volumeSlider}>
-      <Slider
-        min={0}
-        max={props.fineTuningScale}
-        step={1}
-        value={props.volume * props.fineTuningScale}
-        sliderStyle={{ margin: 0 }}
-        onChange={(_, newValue) => {
-          props.onVolumeChange(newValue / props.fineTuningScale);
-        }}
-      />
-    </span>
-  );
-}
+const VolumeSlider = (props) => (
+  <span className={styles.volumeSlider}>
+    <Slider
+      min={0}
+      max={props.fineTuningScale}
+      step={1}
+      value={props.volume * props.fineTuningScale}
+      sliderStyle={{ margin: 0 }}
+      onChange={(_, newValue) => {
+        props.onVolumeChange(newValue / props.fineTuningScale);
+      }}
+    />
+  </span>
+);
 
 VolumeSlider.propTypes = propTypes;
 VolumeSlider.defaultProps = defaultProps;

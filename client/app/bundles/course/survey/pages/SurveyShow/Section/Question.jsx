@@ -121,6 +121,7 @@ class Question extends Component {
         <div
           style={{ opacity }}
           ref={(node) => {
+            // eslint-disable-next-line react/no-unused-class-component-methods
             this.DOMNode = node;
           }}
         >

@@ -12,6 +12,7 @@ class Section extends Component {
     return this.props.connectDropTarget(
       <div
         ref={(node) => {
+          // eslint-disable-next-line react/no-unused-class-component-methods
           this.DOMNode = node;
         }}
       >

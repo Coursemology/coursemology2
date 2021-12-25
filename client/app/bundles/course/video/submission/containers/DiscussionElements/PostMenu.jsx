@@ -20,7 +20,7 @@ const defaultProps = {
   canDelete: true,
 };
 
-function PostMenu(props) {
+const PostMenu = (props) => {
   // Do not show if user doesn't even have options
   if (!props.canUpdate && !props.canDelete) {
     return null;
@@ -46,7 +46,7 @@ function PostMenu(props) {
       </IconMenu>
     </div>
   );
-}
+};
 
 PostMenu.propTypes = propTypes;
 PostMenu.defaultProps = defaultProps;

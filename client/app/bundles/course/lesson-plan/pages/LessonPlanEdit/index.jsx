@@ -17,7 +17,7 @@ const styles = {
 };
 
 class LessonPlanEdit extends Component {
-  renderGroup = (group) => {
+  static renderGroup = (group) => {
     const { id, milestone, items } = group;
 
     const rows = items

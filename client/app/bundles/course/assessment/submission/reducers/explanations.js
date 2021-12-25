@@ -1,5 +1,6 @@
 import actions from '../constants';
 
+// eslint-disable-next-line react/function-component-definition
 export default function (state = {}, action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_SUCCESS:

@@ -10,7 +10,7 @@ const propTypes = {
   onClick: PropTypes.func,
 };
 
-function VolumeButton(props) {
+const VolumeButton = (props) => {
   let className = 'fa fa-volume-up';
 
   if (props.volume === 0) {
@@ -27,7 +27,7 @@ function VolumeButton(props) {
       <i className={className} />
     </span>
   );
-}
+};
 
 VolumeButton.propTypes = propTypes;
 

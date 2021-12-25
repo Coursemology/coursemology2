@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactTooltip from 'react-tooltip';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import moment from 'lib/moment';
@@ -66,28 +65,6 @@ export default class SubmissionsTableRow extends React.Component {
     return grade !== null ? grade.toFixed(1) : null;
   }
 
-  static renderPhantomUserIcon(submission) {
-    if (submission.courseUser.phantom) {
-      return (
-        <>
-          <FontIcon
-            data-tip
-            data-for={`phantom-user-${submission.courseUser.id}`}
-            className="fa fa-user-secret fa-xs"
-            style={styles.phantomIcon}
-          />
-          <ReactTooltip
-            id={`phantom-user-${submission.courseUser.id}`}
-            effect="solid"
-          >
-            <FormattedMessage {...submissionsTranslations.phantom} />
-          </ReactTooltip>
-        </>
-      );
-    }
-    return null;
-  }
-
   static renderUnpublishedWarning(submission) {
     if (submission.workflowState !== workflowStates.Graded) return null;
     return (
@@ -98,6 +75,20 @@ export default class SubmissionsTableRow extends React.Component {
       </span>
     );
   }
+
+  static renderPhantomUserIcon = (submission) => {
+    if (submission.courseUser.phantom) {
+      return (
+        <FontIcon
+          data-tip
+          data-for="phantom-user"
+          className="fa fa-user-secret fa-xs"
+          style={styles.phantomIcon}
+        />
+      );
+    }
+    return null;
+  };
 
   constructor(props) {
     super(props);
@@ -200,22 +191,6 @@ export default class SubmissionsTableRow extends React.Component {
       />
     );
   }
-
-  renderPhantomUserIcon = (submission) => {
-    if (submission.courseUser.phantom) {
-      return (
-        <>
-          <FontIcon
-            data-tip
-            data-for="phantom-user"
-            className="fa fa-user-secret fa-xs"
-            style={styles.phantomIcon}
-          />
-        </>
-      );
-    }
-    return null;
-  };
 
   renderSubmissionLogsLink(submission) {
     const { assessment, courseId, assessmentId } = this.props;

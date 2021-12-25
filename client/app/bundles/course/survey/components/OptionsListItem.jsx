@@ -74,18 +74,14 @@ class OptionsListItem extends PureComponent {
     return (
       <div style={styles.option}>
         {widget}
-        <>
-          {imageUrl ? (
-            <Thumbnail
-              src={imageUrl}
-              style={styles.image}
-              containerStyle={styles.imageContainer}
-            />
-          ) : (
-            []
-          )}
-          <p dangerouslySetInnerHTML={{ __html: optionText || null }} />
-        </>
+        {imageUrl ? (
+          <Thumbnail
+            src={imageUrl}
+            style={styles.image}
+            containerStyle={styles.imageContainer}
+          />
+        ) : null}
+        <p dangerouslySetInnerHTML={{ __html: optionText || null }} />
       </div>
     );
   }

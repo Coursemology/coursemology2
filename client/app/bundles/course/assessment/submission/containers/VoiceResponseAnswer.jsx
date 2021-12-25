@@ -100,7 +100,7 @@ class VoiceResponseAnswer extends Component {
     return `voice_response_${question.id}`;
   };
 
-  renderAudio = (field) => {
+  static renderAudio = (field) => {
     const {
       input: { value },
     } = field;
@@ -181,7 +181,7 @@ class VoiceResponseAnswer extends Component {
     );
   };
 
-  renderSingleFileInputChildren = (props) => (
+  static renderSingleFileInputChildren = (props) => (
     <div style={styles.singleFileInputChildrenWrapper}>
       <div style={styles.singleFileInputChildren}>
         <div>

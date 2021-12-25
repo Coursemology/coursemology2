@@ -10,19 +10,17 @@ const propTypes = {
   notification: notificationShape,
 };
 
-function Submission(props) {
-  return (
-    <div className={styles.submissionContainer}>
-      <div className={styles.videoAndAnswers}>
-        <VideoPlayer />
-      </div>
-      <div className={styles.discussion}>
-        <Discussion />
-      </div>
-      <NotificationBar notification={props.notification} />
+const Submission = (props) => (
+  <div className={styles.submissionContainer}>
+    <div className={styles.videoAndAnswers}>
+      <VideoPlayer />
     </div>
-  );
-}
+    <div className={styles.discussion}>
+      <Discussion />
+    </div>
+    <NotificationBar notification={props.notification} />
+  </div>
+);
 
 Submission.propTypes = propTypes;
 

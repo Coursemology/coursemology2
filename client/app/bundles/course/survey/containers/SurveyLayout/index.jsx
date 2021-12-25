@@ -60,6 +60,7 @@ class SurveyLayout extends Component {
         : {};
     const surveyUrl = url.slice(-1) === '/' ? url : `${url}/`;
 
+    // eslint-disable-next-line react/no-unstable-nested-components
     const renderWithProps = (Page) => (props) =>
       (
         <>

@@ -24,21 +24,19 @@ const defaultProps = {
   autoScroll: false,
 };
 
-function Controls(props) {
-  return (
-    <>
-      <IconButton onClick={props.onRefresh}>
-        <Refresh />
-      </IconButton>
-      <IconButton
-        tooltip={props.intl.formatMessage(translations.toggleLive)}
-        onClick={() => props.onAutoScrollToggle(!props.autoScroll)}
-      >
-        <OnDemandVideo color={props.autoScroll ? activeColor : inactiveColor} />
-      </IconButton>
-    </>
-  );
-}
+const Controls = (props) => (
+  <>
+    <IconButton onClick={props.onRefresh}>
+      <Refresh />
+    </IconButton>
+    <IconButton
+      tooltip={props.intl.formatMessage(translations.toggleLive)}
+      onClick={() => props.onAutoScrollToggle(!props.autoScroll)}
+    >
+      <OnDemandVideo color={props.autoScroll ? activeColor : inactiveColor} />
+    </IconButton>
+  </>
+);
 
 Controls.propTypes = propTypes;
 Controls.defaultProps = defaultProps;

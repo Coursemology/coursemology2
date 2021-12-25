@@ -10,7 +10,8 @@ export class SubmissionError extends ReduxFormSubmissionError {
   constructor(params) {
     const { base } = params;
     const errors = base ? { ...params, _error: base } : params;
-    // eslint-disable-next-line constructor-super
+
+    // eslint-disable-next-line no-constructor-return, constructor-super
     return super(errors);
   }
 }

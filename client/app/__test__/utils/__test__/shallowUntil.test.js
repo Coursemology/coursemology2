@@ -49,9 +49,13 @@ describe('#shallowUntil', () => {
     Foo.contextTypes = { open: PropTypes.bool.isRequired };
 
     class Bar extends Component {
-      getChildContext = () => ({ open: true });
+      getChildContext() {
+        return { open: true };
+      }
 
-      render = () => <Foo />;
+      render() {
+        return <Foo />;
+      }
     }
 
     Bar.childContextTypes = { open: PropTypes.bool };

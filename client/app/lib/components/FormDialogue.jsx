@@ -61,6 +61,7 @@ class FormDialogue extends Component {
       />,
       <FlatButton
         ref={(button) => {
+          // eslint-disable-next-line react/no-unused-class-component-methods
           this.submitButton = button;
         }}
         label={intl.formatMessage(formTranslations.submit)}

@@ -15,15 +15,15 @@ const styles = {
   },
 };
 
-export default function Error({ message }) {
-  return (
-    <Card style={styles.card}>
-      <CardHeader style={styles.header} title="Error" titleColor={red900} />
-      <CardText>{message}</CardText>
-    </Card>
-  );
-}
+const Error = ({ message }) => (
+  <Card style={styles.card}>
+    <CardHeader style={styles.header} title="Error" titleColor={red900} />
+    <CardText>{message}</CardText>
+  </Card>
+);
 
 Error.propTypes = {
   message: PropTypes.string.isRequired,
 };
+
+export default Error;

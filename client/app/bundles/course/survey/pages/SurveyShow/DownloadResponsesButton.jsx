@@ -18,13 +18,11 @@ const styles = {
 };
 
 const DownloadResponsesButton = ({ dispatch }) => (
-  <>
-    <RaisedButton
-      label={<FormattedMessage {...translations.download} />}
-      onClick={() => dispatch(downloadSurvey())}
-      style={styles.button}
-    />
-  </>
+  <RaisedButton
+    label={<FormattedMessage {...translations.download} />}
+    onClick={() => dispatch(downloadSurvey())}
+    style={styles.button}
+  />
 );
 
 DownloadResponsesButton.propTypes = {

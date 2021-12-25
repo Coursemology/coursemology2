@@ -16,8 +16,8 @@ const defaultProps = {
   editorVisible: false,
 };
 
-function Reply(props) {
-  return props.editorVisible ? (
+const Reply = (props) =>
+  props.editorVisible ? (
     <div className={styles.replyContainer}>
       <NewReplyContainer topicId={props.topicId} />
     </div>
@@ -26,7 +26,6 @@ function Reply(props) {
       <FlatButton label="Reply" primary onClick={props.onTriggerReply} />
     </div>
   );
-}
 
 Reply.propTypes = propTypes;
 Reply.defaultProps = defaultProps;

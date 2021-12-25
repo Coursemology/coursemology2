@@ -1,5 +1,6 @@
 import { Component, createElement } from 'react';
 import { injectIntl } from 'react-intl';
+
 /**
  * Creates a component class that renders the given Material UI component
  *
@@ -16,6 +17,7 @@ import { injectIntl } from 'react-intl';
  */
 export default function createComponent(MaterialUIComponent, mapProps) {
   class InputComponent extends Component {
+    // eslint-disable-next-line react/no-unused-class-component-methods
     getRenderedComponent() {
       return this.component;
     }

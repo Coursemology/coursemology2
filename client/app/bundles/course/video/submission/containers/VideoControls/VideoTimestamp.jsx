@@ -8,15 +8,13 @@ const propTypes = {
   duration: PropTypes.number.isRequired,
 };
 
-function VideoTimestamp(props) {
-  return (
-    <span className={styles.timestamp}>
-      <span>{formatTimestamp(props.progress)}</span>
-      <span style={{ marginLeft: '0.5em', marginRight: '0.5em' }}>/</span>
-      <span style={{ color: 'grey' }}>{formatTimestamp(props.duration)}</span>
-    </span>
-  );
-}
+const VideoTimestamp = (props) => (
+  <span className={styles.timestamp}>
+    <span>{formatTimestamp(props.progress)}</span>
+    <span style={{ marginLeft: '0.5em', marginRight: '0.5em' }}>/</span>
+    <span style={{ color: 'grey' }}>{formatTimestamp(props.duration)}</span>
+  </span>
+);
 
 VideoTimestamp.propTypes = propTypes;
 

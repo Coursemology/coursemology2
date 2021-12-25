@@ -36,6 +36,21 @@ const contextTypes = {
 };
 
 class MaterialSummernote extends Component {
+  static uploadImage = (image, onImageUploaded) => {
+    const formData = new FormData();
+    formData.append('file', image);
+    formData.append('name', image.name);
+
+    axios
+      .post('/attachments', formData)
+      .then((response) => response.data)
+      .then((data) => {
+        if (data.success) {
+          onImageUploaded(data.id);
+        }
+      });
+  };
+
   constructor(props) {
     super(props);
     this.state = { isFocused: false };
@@ -91,21 +106,6 @@ class MaterialSummernote extends Component {
     });
 
     return button.render();
-  };
-
-  uploadImage = (image, onImageUploaded) => {
-    const formData = new FormData();
-    formData.append('file', image);
-    formData.append('name', image.name);
-
-    axios
-      .post('/attachments', formData)
-      .then((response) => response.data)
-      .then((data) => {
-        if (data.success) {
-          onImageUploaded(data.id);
-        }
-      });
   };
 
   render() {
