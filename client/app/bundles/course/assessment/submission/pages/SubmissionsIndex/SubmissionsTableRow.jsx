@@ -65,17 +65,6 @@ export default class SubmissionsTableRow extends React.Component {
     return grade !== null ? grade.toFixed(1) : null;
   }
 
-  static renderUnpublishedWarning(submission) {
-    if (submission.workflowState !== workflowStates.Graded) return null;
-    return (
-      <span style={{ display: 'inline-block', marginRight: 5 }}>
-        <a data-tip data-for="unpublished-grades" data-offset="{'left' : -8}">
-          <i className="fa fa-exclamation-triangle" />
-        </a>
-      </span>
-    );
-  }
-
   static renderPhantomUserIcon = (submission) => {
     if (submission.courseUser.phantom) {
       return (
@@ -89,6 +78,17 @@ export default class SubmissionsTableRow extends React.Component {
     }
     return null;
   };
+
+  static renderUnpublishedWarning(submission) {
+    if (submission.workflowState !== workflowStates.Graded) return null;
+    return (
+      <span style={{ display: 'inline-block', marginRight: 5 }}>
+        <a data-tip data-for="unpublished-grades" data-offset="{'left' : -8}">
+          <i className="fa fa-exclamation-triangle" />
+        </a>
+      </span>
+    );
+  }
 
   constructor(props) {
     super(props);

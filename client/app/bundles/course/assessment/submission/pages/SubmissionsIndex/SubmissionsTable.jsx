@@ -43,6 +43,28 @@ const styles = {
 };
 
 export default class SubmissionsTable extends Component {
+  static renderRowTooltips = () => {
+    const tooltipIds = [
+      'phantom-user',
+      'unpublished-grades',
+      'access-logs',
+      'unsubmit-button',
+      'delete-button',
+    ];
+    const formattedMessages = [
+      submissionsTranslations.phantom,
+      submissionsTranslations.publishNotice,
+      submissionsTranslations.accessLogs,
+      submissionsTranslations.unsubmitSubmission,
+      submissionsTranslations.deleteSubmission,
+    ];
+    return tooltipIds.map((tooltipId, index) => (
+      <ReactTooltip key={tooltipId} id={tooltipId} effect="solid">
+        <FormattedMessage {...formattedMessages[index]} />
+      </ReactTooltip>
+    ));
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -220,28 +242,6 @@ export default class SubmissionsTable extends Component {
       </IconMenu>
     );
   }
-
-  static renderRowTooltips = () => {
-    const tooltipIds = [
-      'phantom-user',
-      'unpublished-grades',
-      'access-logs',
-      'unsubmit-button',
-      'delete-button',
-    ];
-    const formattedMessages = [
-      submissionsTranslations.phantom,
-      submissionsTranslations.publishNotice,
-      submissionsTranslations.accessLogs,
-      submissionsTranslations.unsubmitSubmission,
-      submissionsTranslations.deleteSubmission,
-    ];
-    return tooltipIds.map((tooltipId, index) => (
-      <ReactTooltip key={tooltipId} id={tooltipId} effect="solid">
-        <FormattedMessage {...formattedMessages[index]} />
-      </ReactTooltip>
-    ));
-  };
 
   renderRowUsers() {
     const {

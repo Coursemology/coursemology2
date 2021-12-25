@@ -59,6 +59,38 @@ const styles = {
 };
 
 class VoiceResponseAnswer extends Component {
+  static renderAudio = (field) => {
+    const {
+      input: { value },
+    } = field;
+    const { file, url } = value;
+    let finalUrl;
+    if (file) {
+      finalUrl = URL.createObjectURL(file);
+    } else if (url) {
+      finalUrl = url;
+    }
+    if (finalUrl) {
+      return (
+        <audio controls src={finalUrl}>
+          <track kind="captions" />
+        </audio>
+      );
+    }
+    return null;
+  };
+
+  static renderSingleFileInputChildren = (props) => (
+    <div style={styles.singleFileInputChildrenWrapper}>
+      <div style={styles.singleFileInputChildren}>
+        <div>
+          <FormattedMessage {...translations.chooseVoiceFileExplain} />
+        </div>
+        {props.file && props.file.name}
+      </div>
+    </div>
+  );
+
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch(recorderComponentMount());
@@ -98,27 +130,6 @@ class VoiceResponseAnswer extends Component {
   currentRecordingComponentId = () => {
     const { question } = this.props;
     return `voice_response_${question.id}`;
-  };
-
-  static renderAudio = (field) => {
-    const {
-      input: { value },
-    } = field;
-    const { file, url } = value;
-    let finalUrl;
-    if (file) {
-      finalUrl = URL.createObjectURL(file);
-    } else if (url) {
-      finalUrl = url;
-    }
-    if (finalUrl) {
-      return (
-        <audio controls src={finalUrl}>
-          <track kind="captions" />
-        </audio>
-      );
-    }
-    return null;
   };
 
   renderAudioInput = (readOnly, recording, recordingComponentId, field) => {
@@ -180,17 +191,6 @@ class VoiceResponseAnswer extends Component {
       </div>
     );
   };
-
-  static renderSingleFileInputChildren = (props) => (
-    <div style={styles.singleFileInputChildrenWrapper}>
-      <div style={styles.singleFileInputChildren}>
-        <div>
-          <FormattedMessage {...translations.chooseVoiceFileExplain} />
-        </div>
-        {props.file && props.file.name}
-      </div>
-    </div>
-  );
 
   render() {
     const { question, recording, recordingComponentId, readOnly, answerId } =

@@ -72,6 +72,81 @@ const styles = {
 };
 
 export default class ScribingCanvas extends Component {
+  static cloneText = (obj) => {
+    const newObj = new fabric.IText(obj.text, {
+      left: obj.left,
+      top: obj.top,
+      fontFamily: obj.fontFamily,
+      fontSize: obj.fontSize,
+      fill: obj.fill,
+      padding: 5,
+    });
+    newObj.setControlsVisibility({
+      bl: false,
+      br: false,
+      mb: false,
+      ml: false,
+      mr: false,
+      mt: false,
+      tl: false,
+      tr: false,
+    });
+    return newObj;
+  };
+
+  // Generates the left, top, width and height of the drag
+  static generateMouseDragProperties = (point1, point2) => ({
+    left: point1.x < point2.x ? point1.x : point2.x,
+    top: point1.y < point2.y ? point1.y : point2.y,
+    width: Math.abs(point1.x - point2.x),
+    height: Math.abs(point1.y - point2.y),
+  });
+
+  static getMousePoint = (event) => ({
+    x: event.clientX,
+    y: event.clientY,
+  });
+
+  // Limit moving of objects to within the canvas
+  static onObjectMovingCanvas = (options) => {
+    const obj = options.target;
+    // if object is too big ignore
+    if (
+      obj.currentHeight > obj.canvas.height ||
+      obj.currentWidth > obj.canvas.width
+    ) {
+      return;
+    }
+    obj.setCoords();
+    // top-left  corner
+    if (obj.getBoundingRect().top < 0 || obj.getBoundingRect().left < 0) {
+      obj.top = Math.max(obj.top, obj.top - obj.getBoundingRect().top);
+      obj.left = Math.max(obj.left, obj.left - obj.getBoundingRect().left);
+    }
+    // bot-right corner
+    if (
+      obj.getBoundingRect().top + obj.getBoundingRect().height >
+        obj.canvas.height ||
+      obj.getBoundingRect().left + obj.getBoundingRect().width >
+        obj.canvas.width
+    ) {
+      obj.top = Math.min(
+        obj.top,
+        obj.canvas.height -
+          obj.getBoundingRect().height +
+          obj.top -
+          obj.getBoundingRect().top,
+      );
+      obj.left = Math.min(
+        obj.left,
+        obj.canvas.width -
+          obj.getBoundingRect().width +
+          obj.left -
+          obj.getBoundingRect().left,
+      );
+    }
+  };
+
   constructor(props) {
     super(props);
 
@@ -577,46 +652,6 @@ export default class ScribingCanvas extends Component {
     }
   };
 
-  // Limit moving of objects to within the canvas
-  static onObjectMovingCanvas = (options) => {
-    const obj = options.target;
-    // if object is too big ignore
-    if (
-      obj.currentHeight > obj.canvas.height ||
-      obj.currentWidth > obj.canvas.width
-    ) {
-      return;
-    }
-    obj.setCoords();
-    // top-left  corner
-    if (obj.getBoundingRect().top < 0 || obj.getBoundingRect().left < 0) {
-      obj.top = Math.max(obj.top, obj.top - obj.getBoundingRect().top);
-      obj.left = Math.max(obj.left, obj.left - obj.getBoundingRect().left);
-    }
-    // bot-right corner
-    if (
-      obj.getBoundingRect().top + obj.getBoundingRect().height >
-        obj.canvas.height ||
-      obj.getBoundingRect().left + obj.getBoundingRect().width >
-        obj.canvas.width
-    ) {
-      obj.top = Math.min(
-        obj.top,
-        obj.canvas.height -
-          obj.getBoundingRect().height +
-          obj.top -
-          obj.getBoundingRect().top,
-      );
-      obj.left = Math.min(
-        obj.left,
-        obj.canvas.width -
-          obj.getBoundingRect().width +
-          obj.left -
-          obj.getBoundingRect().left,
-      );
-    }
-  };
-
   onObjectSelected = (options) => {
     if (options.target) {
       this.props.setActiveObject(this.props.answerId, options.target);
@@ -666,11 +701,6 @@ export default class ScribingCanvas extends Component {
     }
     return userScribbles;
   };
-
-  static getMousePoint = (event) => ({
-    x: event.clientX,
-    y: event.clientY,
-  });
 
   getScribbleJSON() {
     // Remove non-user scribings in canvas
@@ -734,27 +764,6 @@ export default class ScribingCanvas extends Component {
   };
 
   // Utility Helpers
-  static cloneText = (obj) => {
-    const newObj = new fabric.IText(obj.text, {
-      left: obj.left,
-      top: obj.top,
-      fontFamily: obj.fontFamily,
-      fontSize: obj.fontSize,
-      fill: obj.fill,
-      padding: 5,
-    });
-    newObj.setControlsVisibility({
-      bl: false,
-      br: false,
-      mb: false,
-      ml: false,
-      mr: false,
-      mt: false,
-      tl: false,
-      tr: false,
-    });
-    return newObj;
-  };
 
   denormaliseScribble(scribble) {
     return this.normaliseScribble(scribble, true);
@@ -796,14 +805,6 @@ export default class ScribingCanvas extends Component {
     this.canvas.renderAll();
     this.isScribblesLoaded = true;
   }
-
-  // Generates the left, top, width and height of the drag
-  static generateMouseDragProperties = (point1, point2) => ({
-    left: point1.x < point2.x ? point1.x : point2.x,
-    top: point1.y < point2.y ? point1.y : point2.y,
-    width: Math.abs(point1.x - point2.x),
-    height: Math.abs(point1.y - point2.y),
-  });
 
   initializeCanvas(answerId, imageUrl) {
     this.image = new Image();
