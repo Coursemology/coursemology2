@@ -8,8 +8,6 @@ import {
 } from '../scribingQuestionActionCreators';
 import { initialStates } from '../../reducers';
 
-const originalLocation = window.location;
-
 // Mock axios
 const client = CourseAPI.assessment.question.scribing.getClient();
 const mock = new MockAdapter(client);
@@ -17,16 +15,6 @@ const mock = new MockAdapter(client);
 beforeEach(() => {
   mock.reset();
   jest.spyOn(history, 'push').mockImplementation();
-  delete window.location;
-  window.location = {
-    ...originalLocation,
-    assign: jest.fn(),
-  };
-});
-
-afterAll(() => {
-  delete window.location;
-  window.location = originalLocation;
 });
 
 const assessmentId = '2';
@@ -70,7 +58,6 @@ describe('createScribingQuestion', () => {
     await sleep(1);
     expect(spyCreate).toHaveBeenCalledWith(processedMockFields);
     expect(history.push).toHaveBeenCalledWith(redirectUrl);
-    expect(window.location.assign).toHaveBeenCalledWith(redirectUrl);
   });
 });
 
@@ -92,6 +79,5 @@ describe('updateScribingQuestion', () => {
     await sleep(1);
     expect(spyUpdate).toHaveBeenCalledWith(scribingId, processedMockFields);
     expect(history.push).toHaveBeenCalledWith(redirectUrl);
-    expect(window.location.assign).toHaveBeenCalledWith(redirectUrl);
   });
 });
