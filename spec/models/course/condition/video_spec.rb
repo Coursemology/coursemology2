@@ -23,7 +23,7 @@ RSpec.describe Course::Condition::Video, type: :model do
         it 'is not valid' do
           expect(subject).to_not be_valid
           expect(subject.errors[:video]).to include(I18n.t('activerecord.errors.models.' \
-            'course/condition/video.attributes.video.references_self'))
+                                                           'course/condition/video.attributes.video.references_self'))
         end
       end
 
@@ -37,7 +37,7 @@ RSpec.describe Course::Condition::Video, type: :model do
         it 'is not valid' do
           expect(subject).to_not be_valid
           expect(subject.errors[:video]).to include(I18n.t('activerecord.errors.models.' \
-            'course/condition/video.attributes.video.unique_dependency'))
+                                                           'course/condition/video.attributes.video.unique_dependency'))
         end
       end
 
@@ -65,7 +65,7 @@ RSpec.describe Course::Condition::Video, type: :model do
         it 'is not valid' do
           expect(subject).to_not be_valid
           expect(subject.errors[:video]).to include(I18n.t('activerecord.errors.models.' \
-            'course/condition/video.attributes.video.cyclic_dependency'))
+                                                           'course/condition/video.attributes.video.cyclic_dependency'))
         end
       end
     end
