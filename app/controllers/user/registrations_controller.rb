@@ -2,6 +2,7 @@
 class User::RegistrationsController < Devise::RegistrationsController
   before_action :configure_sign_up_params, only: [:create]
   before_action :load_invitation, only: [:new, :create]
+  before_action :load_other_invitations, only: [:create]
   layout :select_layout
 
   # GET /resource/sign_up
@@ -25,6 +26,7 @@ class User::RegistrationsController < Devise::RegistrationsController
     User.transaction do
       super
       @invitation.confirm!(confirmer: resource) if @invitation && !@invitation.confirmed? && resource.persisted?
+      confirm_other_invitations(resource) if @other_invitations && action_name == 'create'
     end
   end
 
@@ -51,6 +53,17 @@ class User::RegistrationsController < Devise::RegistrationsController
   # def cancel
   #   super
   # end
+
+  private
+
+  def confirm_other_invitations(resource)
+    @other_invitations.each do |other_invitation|
+      if other_invitation && !other_invitation.confirmed?
+        resource.build_from_invitation(other_invitation)
+        other_invitation.confirm!(confirmer: resource) if resource.save && resource.persisted?
+      end
+    end
+  end
 
   protected
 
@@ -103,7 +116,20 @@ class User::RegistrationsController < Devise::RegistrationsController
     end
   end
 
+  def load_other_invitations
+    @other_invitations = if @invitation.instance_of?(Course::UserInvitation)
+                           Course::UserInvitation.where('email in (?) AND id not in (?)', @invitation.email,
+                                                        @invitation.id)
+                         else
+                           Course::UserInvitation.where('email in (?)', user_email_param)
+                         end
+  end
+
   def invitation_param
     params.permit(:invitation)[:invitation]
+  end
+
+  def user_email_param
+    params.require(:user).permit(:email)[:email]
   end
 end

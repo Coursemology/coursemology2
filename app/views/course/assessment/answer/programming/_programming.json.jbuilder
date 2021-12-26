@@ -49,8 +49,8 @@ if attempt.submitted? && !attempt.auto_grading
 end
 
 can_read_tests = can?(:read_tests, submission)
-show_private = can_read_tests || submission.published? && assessment.show_private?
-show_evaluation = can_read_tests || submission.published? && assessment.show_evaluation?
+show_private = can_read_tests || (submission.published? && assessment.show_private?)
+show_evaluation = can_read_tests || (submission.published? && assessment.show_evaluation?)
 
 test_cases_by_type = question.test_cases_by_type
 test_cases_and_results = get_test_cases_and_results(test_cases_by_type, auto_grading)

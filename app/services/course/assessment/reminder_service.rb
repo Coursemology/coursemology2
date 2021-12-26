@@ -4,6 +4,7 @@ class Course::Assessment::ReminderService
 
   class << self
     delegate :closing_reminder, to: :new
+    delegate :send_closing_reminder, to: :new
   end
 
   def closing_reminder(assessment, token)
@@ -14,8 +15,8 @@ class Course::Assessment::ReminderService
     send_closing_reminder(assessment)
   end
 
-  def send_closing_reminder(assessment)
-    students = uncompleted_subscribed_students(assessment)
+  def send_closing_reminder(assessment, course_user_ids = [], include_unsubscribed: false)
+    students = uncompleted_subscribed_students(assessment, course_user_ids, include_unsubscribed)
     # Exclude students with personal times
     # TODO(#3240): Send closing reminder emails based on personal times
     students -=
@@ -57,9 +58,13 @@ class Course::Assessment::ReminderService
   # Returns a Set of students who have not completed the given assessment.
   #
   # @param [Course::Assessment] assessment The assessment to query.
+  # @param [Array<Integer>] course_user_ids Course user ids of intended recipients (if specified).
+  #   If empty, all students will be selected.
+  # @param [Boolean] include_unsubscribed Whether to include unsubscribed students in the reminder (forced reminder).
   # @return [Set<CourseUser>] Set of CourseUsers who have not finished the assessment.
-  def uncompleted_subscribed_students(assessment)
+  def uncompleted_subscribed_students(assessment, course_user_ids, include_unsubscribed)
     course_users = assessment.course.course_users
+    course_users = course_users.where(id: course_user_ids) unless course_user_ids.empty?
     email_enabled = assessment.course.email_enabled(:assessments, :closing_reminder, assessment.tab.category.id)
     # Eager load :user as it's needed for the recipient email.
     if email_enabled.regular && email_enabled.phantom
@@ -72,6 +77,8 @@ class Course::Assessment::ReminderService
     submitted =
       assessment.submissions.confirmed.includes(experience_points_record: { course_user: :user }).
       map(&:course_user)
+    return Set.new(students) - Set.new(submitted) if include_unsubscribed
+
     unsubscribed = students.joins(:email_unsubscriptions).
                    where('course_user_email_unsubscriptions.course_settings_email_id = ?', email_enabled.id)
     Set.new(students) - Set.new(unsubscribed) - Set.new(submitted)

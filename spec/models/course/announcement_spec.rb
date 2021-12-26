@@ -17,7 +17,8 @@ RSpec.describe Course::Announcement, type: :model do
         it 'is invalid' do
           expect(subject).to be_invalid
           expect(subject.errors[:start_at]).to include(I18n.t('activerecord.errors.models.' \
-            'course/announcement.attributes.start_at.cannot_be_after_end_at'))
+                                                              'course/announcement.attributes.' \
+                                                              'start_at.cannot_be_after_end_at'))
         end
       end
     end

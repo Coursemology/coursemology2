@@ -29,7 +29,8 @@ RSpec.describe Course::Assessment::Question::TextResponseSolution, type: :model 
 
           expect(subject.valid?).to be(false)
           expect(subject.errors[:grade]).to include(I18n.t('activerecord.errors.models.' \
-            'course/assessment/question/text_response_solution.attributes.grade.invalid_grade'))
+                                                           'course/assessment/question/text_response_solution.' \
+                                                           'attributes.grade.invalid_grade'))
         end
       end
     end

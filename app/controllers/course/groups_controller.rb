@@ -3,19 +3,19 @@ class Course::GroupsController < Course::ComponentController
   load_and_authorize_resource :group, through: :course, class: Course::Group.name
   add_breadcrumb :index, :course_groups_path
 
-  def index #:nodoc:
+  def index # :nodoc:
     @groups = @groups.ordered_by_name.includes(group_users: { course_user: :course })
   end
 
-  def show #:nodoc:
+  def show # :nodoc:
     @group_users = @group.group_users.includes(:course_user)
     @group_managers, @group_users = @group_users.partition(&:manager?)
   end
 
-  def new #:nodoc:
+  def new # :nodoc:
   end
 
-  def create #:nodoc:
+  def create # :nodoc:
     if @group.save
       redirect_to edit_course_group_path(current_course, @group),
                   success: t('.success', name: @group.name)

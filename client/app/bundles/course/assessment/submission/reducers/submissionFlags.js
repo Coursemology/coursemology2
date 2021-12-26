@@ -6,6 +6,7 @@ const initialState = {
   isAutograding: false,
   isPublishing: false,
   isForceSubmitting: false,
+  isReminding: false,
   isDownloading: false,
   isStatisticsDownloading: false,
   isUnsubmitting: false,
@@ -24,6 +25,7 @@ export default function (state = initialState, action) {
         isLoading: false,
         isPublishing: false,
         isForceSubmitting: false,
+        isReminding: false,
       };
 
     case actions.SAVE_DRAFT_REQUEST:
@@ -80,7 +82,6 @@ export default function (state = initialState, action) {
     case actions.DOWNLOAD_STATISTICS_REQUEST:
       return { ...state, isStatisticsDownloading: true };
     case actions.DOWNLOAD_STATISTICS_SUCCESS:
-      return { ...state, isStatisticsDownloading: false };
     case actions.DOWNLOAD_STATISTICS_FAILURE:
       return { ...state, isStatisticsDownloading: false };
 
@@ -94,17 +95,21 @@ export default function (state = initialState, action) {
     case actions.FORCE_SUBMIT_SUBMISSIONS_FAILURE:
       return { ...state, isForceSubmitting: false };
 
+    case actions.SEND_ASSESSMENT_REMINDER_REQUEST:
+      return { ...state, isReminding: true };
+    case actions.SEND_ASSESSMENT_REMINDER_SUCCESS:
+    case actions.SEND_ASSESSMENT_REMINDER_FAILURE:
+      return { ...state, isReminding: false };
+
     case actions.UNSUBMIT_ALL_SUBMISSIONS_REQUEST:
       return { ...state, isUnsubmitting: true };
     case actions.UNSUBMIT_ALL_SUBMISSIONS_SUCCESS:
-      return { ...state, isUnsubmitting: false };
     case actions.UNSUBMIT_ALL_SUBMISSIONS_FAILURE:
       return { ...state, isUnsubmitting: false };
 
     case actions.DELETE_ALL_SUBMISSIONS_REQUEST:
       return { ...state, isDeleting: true };
     case actions.DELETE_ALL_SUBMISSIONS_SUCCESS:
-      return { ...state, isDeleting: false };
     case actions.DELETE_ALL_SUBMISSIONS_FAILURE:
       return { ...state, isDeleting: false };
     default:

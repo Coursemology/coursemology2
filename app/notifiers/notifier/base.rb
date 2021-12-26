@@ -10,7 +10,7 @@ class Notifier::Base
     # notifiers
     #
     # @api private
-    def method_missing(symbol, *args, **kwargs, &block) # rubocop:disable Style/MissingRespondToMissing, Lint/MissingSuper
+    def method_missing(symbol, *args, **kwargs, &block) # rubocop:disable Style/MissingRespondToMissing
       new.public_send(symbol, *args, **kwargs, &block)
     end
   end

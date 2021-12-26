@@ -195,20 +195,27 @@ const translations = defineMessages({
   forceSubmitConfirmation: {
     id: 'course.assessment.submission.forceSubmitConfirmation',
     defaultMessage:
-      'There are currently {unattempted} users(s) who have not attempted, \
-      and {attempting} user(s) who are attempting this assessment. \
-      Are you sure you want to force submit all submissions ({selectedUsers})? \
+      'There are currently {unattempted} unattempted \
+      and {attempting} attempting user(s) ({selectedUsers}) for this assessment. \
+      Are you sure you want to force submit all submissions? \
       Doing so will cause all questions to be awarded ZERO marks for non-autograded assessments. \
       NOTE THAT THIS ACTION IS IRREVERSIBLE!',
   },
   forceSubmitConfirmationAutograded: {
     id: 'course.assessment.submission.forceSubmitConfirmationAutograded',
     defaultMessage:
-      'There are currently {unattempted} users(s) who have not attempted, \
-      and {attempting} user(s) who are attempting this assessment. \
-      Are you sure you want to force submit all submissions ({selectedUsers})? \
+      'There are currently {unattempted} unattempted \
+      and {attempting} attempting user(s) ({selectedUsers}) for this assessment. \
+      Are you sure you want to force submit all submissions? \
       Submissions to this assessment will be auto-graded. \
       NOTE THAT THIS ACTION IS IRREVERSIBLE!',
+  },
+  sendReminderEmailConfirmation: {
+    id: 'course.assessment.submission.sendReminderEmailConfirmation',
+    defaultMessage:
+      'Send reminder emails to {unattempted} unattempted \
+      and {attempting} attempting user(s) ({selectedUsers}) \
+      who have not completed the assessment?',
   },
   unsubmitAllConfirmation: {
     id: 'course.assessment.submission.unsubmitAllConfirmation',
@@ -311,6 +318,11 @@ const translations = defineMessages({
     id: 'course.assessment.submission.forceSubmitSuccess',
     defaultMessage:
       'All unsubmitted submissions above have been successfully submitted and graded.',
+  },
+  sendReminderEmailSuccess: {
+    id: 'course.assessment.assessments.sendReminderEmailSuccess',
+    defaultMessage:
+      'Closing assessment reminder emails have been successfully dispatched.',
   },
   downloadSubmissionsJobPending: {
     id: 'course.assessment.submission.downloadSubmissionsJobPending',

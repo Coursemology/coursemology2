@@ -4,18 +4,18 @@ class Course::AnnouncementsController < Course::ComponentController
   before_action :add_announcement_breadcrumb
   after_action :mark_announcements_as_read, only: :index
 
-  def index #:nodoc:
+  def index # :nodoc:
     @announcements = @announcements.includes(:creator).sorted_by_sticky.sorted_by_date
     @announcements = @announcements.page(page_param).with_read_marks_for(current_user)
   end
 
-  def show #:nodoc:
+  def show # :nodoc:
   end
 
-  def new #:nodoc:
+  def new # :nodoc:
   end
 
-  def create #:nodoc:
+  def create # :nodoc:
     if @announcement.save
       redirect_to course_announcements_path(current_course),
                   success: t('.success', title: @announcement.title)
@@ -24,10 +24,10 @@ class Course::AnnouncementsController < Course::ComponentController
     end
   end
 
-  def edit #:nodoc:
+  def edit # :nodoc:
   end
 
-  def update #:nodoc:
+  def update # :nodoc:
     if @announcement.update(announcement_params)
       redirect_to course_announcements_path(current_course),
                   success: t('.success', title: @announcement.title)
@@ -36,7 +36,7 @@ class Course::AnnouncementsController < Course::ComponentController
     end
   end
 
-  def destroy #:nodoc:
+  def destroy # :nodoc:
     if @announcement.destroy
       redirect_to course_announcements_path(current_course),
                   success: t('.success', title: @announcement.title)
@@ -48,7 +48,7 @@ class Course::AnnouncementsController < Course::ComponentController
 
   private
 
-  def announcement_params #:nodoc:
+  def announcement_params # :nodoc:
     params.require(:announcement).permit(:title, :content, :sticky, :start_at, :end_at)
   end
 

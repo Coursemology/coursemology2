@@ -114,7 +114,7 @@ RSpec.describe Course::Group, type: :model do
         end
 
         it 'returns the average experience points' do
-          average_count = 1.0 * group.course_users.map(&:experience_points).inject(:+) /
+          average_count = 1.0 * group.course_users.map(&:experience_points).reduce(:+) /
                           group.course_users.students.count
           expect(subject).to eq(average_count)
         end

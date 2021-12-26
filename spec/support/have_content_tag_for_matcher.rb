@@ -3,6 +3,7 @@ require 'rspec/expectations'
 require 'action_view/record_identifier'
 
 module ContentTag; end
+
 module ContentTag::TestExampleHelpers; end
 
 module ContentTag::TestExampleHelpers::FeatureHelpers

@@ -8,7 +8,7 @@ class Course::ConditionsController < Course::ComponentController
   # @return [Symbol] Similar to above.
   def return_to_path
     raise NotImplementedError, 'To be implemented by the condition controllers of a specific'\
-      'conditional.'
+                               'conditional.'
   end
 
   # Set the instance variable `@conditional` that possesses the condition. The conditional id should
@@ -20,7 +20,7 @@ class Course::ConditionsController < Course::ComponentController
   #     @conditional = Course::Achievement.find(params[:achievement_id])
   def set_conditional
     raise NotImplementedError, 'To be implemented by the condition controllers of a specific'\
-      'conditional.'
+                               'conditional.'
   end
 
   def authorize_conditional

@@ -19,9 +19,7 @@ module Course::Assessment::Submission::SubmissionsAutogradedHelper
 
   # The step that current user is on.
   def current_step
-    @current_step ||= begin
-      @current_question ? @submission.questions.index(@current_question) + 1 : nil
-    end
+    @current_step ||= @current_question ? @submission.questions.index(@current_question) + 1 : nil
   end
 
   # Highlight current step and grey out un-accessible steps.
