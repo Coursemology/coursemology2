@@ -28,7 +28,15 @@ module Course::LessonPlan::PersonalizationConcern
       where.not(lesson_plan_item_id: submitted_lesson_plan_item_ids.keys).delete_all
   end
 
+  # Some properties for the following algorithms:
+  # - We don't shift personal dates that have already passed. This is to prevent items becoming locked
+  #   when students are switched between different algos. There are thus quite a few checks for
+  #   > Time.zone.now
+  # - We don't shift closing dates forward when the item has already opened for the student. This is to
+  #   prevent students from being shocked that their deadlines have shifted forward suddenly.
+
   def algorithm_otot(course_user)
+    # TODO: Fix repeated work performed here. One way is to cache the result somehow.
     submitted_lesson_plan_item_ids = lesson_plan_items_submission_time_hash(course_user)
     items = course_user.course.lesson_plan_items.published.
             with_reference_times_for(course_user).
@@ -147,13 +155,17 @@ module Course::LessonPlan::PersonalizationConcern
           personal_time.bonus_end_at = reference_time.bonus_end_at
         end
         if reference_time.end_at.present? && personal_time.end_at > Time.zone.now
-          personal_time.end_at = round_to_date(
+          new_end_at = round_to_date(
             personal_point + ((reference_time.end_at - reference_point) * learning_rate_ema),
             course_tz,
             STRAGGLERS_DATE_ROUNDING_THRESHOLD
           )
           # Hard limits to make sure we don't fail bounds checks
-          personal_time.end_at = [personal_time.end_at, reference_time.end_at, reference_time.start_at].compact.max
+          new_end_at = [new_end_at, reference_time.end_at, reference_time.start_at].compact.max
+          # We don't want to shift the end_at forward if the item is already opened
+          if new_end_at > personal_time.end_at || personal_time.start_at > Time.zone.now
+            personal_time.end_at = new_end_at
+          end
         end
         personal_time.save!
       end
