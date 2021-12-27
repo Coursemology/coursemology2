@@ -5,11 +5,11 @@
     button.btn.btn-default type='button'
         => button_text
 - else
-  - question_number = multiple_response_question.question_number
+  - question_number = question_assessment.question_number
   - warning_text = multiple_choice ? t('.confirm_switch_to_mrq', number: question_number) : t('.confirm_switch_to_mcq', number: question_number)
-  - answer_exist = multiple_response_question.answers&.length > 0
+  - answer_exist = multiple_response_question.answers.exists?
   - warning_text = answer_exist ? warning_text : t('.no_answer', number: question_number)
-  - data = (multiple_response_question.answers&.length > 0 ? \
+  - data = (answer_exist ? \
              { confirm: warning_text,
                confirm_text: 'Unsubmit Submissions and Switch',
                confirm_secondary: 'unsubmit=false',

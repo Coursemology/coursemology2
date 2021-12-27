@@ -14,6 +14,8 @@ class Course::QuestionAssessment < ApplicationRecord
 
   default_scope { order(weight: :asc) }
 
+  scope :with_question_actables, -> { includes({ question: { actable: [:options, :test_cases, :solutions] } }) }
+
   # Prefixes a question number in front of the title
   #
   # @return [string]

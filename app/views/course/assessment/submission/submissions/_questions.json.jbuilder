@@ -8,7 +8,8 @@ sq_topic_ids_hash = submission_questions.map do |sq|
 end.to_h
 
 question_assessments = Course::QuestionAssessment.
-                       where(question: submission.questions, assessment: assessment).includes({ question: :actable })
+                       where(question: submission.questions, assessment: assessment).
+                       with_question_actables
 
 json.questions question_assessments.each_with_index.to_a do |(question_assessment, index)|
   question = question_assessment.question
