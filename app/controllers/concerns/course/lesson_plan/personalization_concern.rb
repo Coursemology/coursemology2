@@ -31,7 +31,8 @@ module Course::LessonPlan::PersonalizationConcern
   # Some properties for the following algorithms:
   # - We don't shift personal dates that have already passed. This is to prevent items becoming locked
   #   when students are switched between different algos. There are thus quite a few checks for
-  #   > Time.zone.now
+  #   > Time.zone.now. The only exception is the backwards-shifting of already-past deadlines, which
+  #   allows students to slow down their learning more effectively.
   # - We don't shift closing dates forward when the item has already opened for the student. This is to
   #   prevent students from being shocked that their deadlines have shifted forward suddenly.
 
@@ -154,7 +155,7 @@ module Course::LessonPlan::PersonalizationConcern
         if personal_time.bonus_end_at && personal_time.bonus_end_at > Time.zone.now
           personal_time.bonus_end_at = reference_time.bonus_end_at
         end
-        if reference_time.end_at.present? && personal_time.end_at > Time.zone.now
+        if reference_time.end_at.present?
           new_end_at = round_to_date(
             personal_point + ((reference_time.end_at - reference_point) * learning_rate_ema),
             course_tz,
@@ -162,8 +163,10 @@ module Course::LessonPlan::PersonalizationConcern
           )
           # Hard limits to make sure we don't fail bounds checks
           new_end_at = [new_end_at, reference_time.end_at, reference_time.start_at].compact.max
-          # We don't want to shift the end_at forward if the item is already opened
-          if new_end_at > personal_time.end_at || personal_time.start_at > Time.zone.now
+          # We don't want to shift the end_at forward if the item is already opened or the deadline
+          # has already passed.
+          if new_end_at > personal_time.end_at ||
+             (personal_time.start_at > Time.zone.now && personal_time.end_at > Time.zone.now)
             personal_time.end_at = new_end_at
           end
         end
