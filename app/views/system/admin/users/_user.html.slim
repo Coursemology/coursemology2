@@ -13,7 +13,7 @@
         = fa_icon 'check'.freeze
       = delete_button([:admin, user])
       - if user.can_masquerade?
-        = link_to masquerade_path(user), class: ['btn', 'btn-default'], title: t('.masquerade') do
+        = link_to masquerade_path(user), id: "masquerade_#{user.id}", class: ['btn', 'btn-default'], title: t('.masquerade') do
           = fa_icon 'user-secret'.freeze
       - else
         = link_to '#', class: ['btn', 'btn-default'], title: t('.not_confirmed'), disabled: true do
