@@ -192,8 +192,9 @@ gem 'devise'
 gem 'devise_masquerade'
 gem 'devise-multi_email'
 
-gem 'omniauth'
-gem 'omniauth-facebook'
+# NOTE: Facebook login feature is currently disabled.
+# gem 'omniauth'
+# gem 'omniauth-facebook'
 
 # Use cancancan for authorization
 gem 'cancancan'
