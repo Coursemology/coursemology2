@@ -11,7 +11,7 @@ class Course::Group < ApplicationRecord
   validates :course_id, uniqueness: { scope: [:name], if: -> { name? && course_id_changed? } }
 
   belongs_to :course, inverse_of: :groups
-  has_many :group_users, -> { joins(:course_user).order('course_users.name ASC') },
+  has_many :group_users, -> { order_by_course_user_name },
            inverse_of: :group, dependent: :destroy, class_name: Course::GroupUser.name,
            foreign_key: :group_id
   has_many :course_users, through: :group_users
