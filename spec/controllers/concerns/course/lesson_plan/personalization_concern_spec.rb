@@ -71,8 +71,7 @@ RSpec.describe Course::LessonPlan::PersonalizationConcern do
 
         submit_assessment(assessment)
         dummy_controller.send(:update_personalized_timeline_for, course_user)
-        new_end_at = yet_to_open_assessment.reload.lesson_plan_item.personal_time_for(course_user).end_at
-
+        new_end_at = yet_to_open_assessment.lesson_plan_item.personal_time_for(course_user).end_at
         expect(new_end_at).to be < original_end_at
       end
 
@@ -83,9 +82,17 @@ RSpec.describe Course::LessonPlan::PersonalizationConcern do
 
         submit_assessment(assessment)
         dummy_controller.send(:update_personalized_timeline_for, course_user)
-        new_end_at = already_open_assessment.reload.lesson_plan_item.personal_time_for(course_user).end_at
+        new_end_at = already_open_assessment.lesson_plan_item.personal_time_for(course_user).end_at
 
         expect(new_end_at).to eq(original_end_at)
+      end
+
+      it 'rounds off to 2359' do
+        submit_assessment(overdue_assessment)
+        dummy_controller.send(:update_personalized_timeline_for, course_user)
+        end_at = assessment.lesson_plan_item.personal_time_for(course_user).end_at
+        course_tz = course.time_zone
+        expect(end_at.in_time_zone(course_tz).strftime('%H:%M')).to eq('23:59')
       end
     end
 

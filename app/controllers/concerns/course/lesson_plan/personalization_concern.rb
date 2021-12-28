@@ -144,7 +144,8 @@ module Course::LessonPlan::PersonalizationConcern
           new_end_at = round_to_date(
             personal_point + ((reference_time.end_at - reference_point) * learning_rate_ema),
             course_tz,
-            STRAGGLERS_DATE_ROUNDING_THRESHOLD
+            STRAGGLERS_DATE_ROUNDING_THRESHOLD,
+            to_2359: true
           )
           # Hard limits to make sure we don't fail bounds checks
           new_end_at = [new_end_at, reference_time.end_at, reference_time.start_at].compact.max
@@ -264,11 +265,17 @@ module Course::LessonPlan::PersonalizationConcern
 
   private
 
-  # Round to "nearest" date in course's timezone, NOT user's timezone
-  # `threshold` allows us to control how generously we snap.
-  # E.g. if `threshold` = 0.8, then a datetime with a time of > 0.8 * 1.day will be snapped to the next day
-  def round_to_date(datetime, course_tz, threshold = 0.5)
+  # Round to "nearest" date in course's timezone, NOT user's timezone.
+  #
+  # @param [Time] datetime The datetime object to round.
+  # @param [String] course_tz The timezone of the course.
+  # @param [Float] threshold How generously we round off. E.g. if `threshold` = 0.8, then a datetime with a time of
+  #                          > 0.8 * 1.day will be snapped to the next day.
+  # @param [Boolean] to_2359 Whether to round off to 2359. This will set the datetime to be 2359 of the date before the
+  #                          rounded date.
+  def round_to_date(datetime, course_tz, threshold = 0.5, to_2359: false)
     prev_day = datetime.in_time_zone(course_tz).to_date.in_time_zone(course_tz).in_time_zone
-    (datetime - prev_day) < threshold ? prev_day : prev_day + 1.day
+    date = ((datetime - prev_day) < threshold ? prev_day : prev_day + 1.day)
+    to_2359 ? date - 1.minute : date
   end
 end
