@@ -70,9 +70,14 @@ module Course::LessonPlan::PersonalizationConcern
         next if !item.has_personal_times? || item.id.in?(submitted_lesson_plan_item_ids.keys) ||
                 item.personal_time_for(course_user)&.fixed?
 
-        # Update personal time
         reference_time = item.reference_time_for(course_user)
         personal_time = item.find_or_create_personal_time_for(course_user)
+
+        # If the user was previously on the stragglers algorithm and just switched over, and has already open
+        # items, we want to keep those items as they are
+        next if personal_time.end_at > reference_time.end_at && personal_time.start_at < Time.zone.now
+
+        # Update start_at
         if personal_time.start_at > Time.zone.now
           personal_time.start_at =
             round_to_date(
@@ -83,10 +88,15 @@ module Course::LessonPlan::PersonalizationConcern
         end
         # Hard limits to make sure we don't fail bounds checks
         personal_time.start_at = [personal_time.start_at, reference_time.start_at, reference_time.end_at].compact.min
+
+        # Update bonus_end_at
         if personal_time.bonus_end_at && personal_time.bonus_end_at > Time.zone.now
           personal_time.bonus_end_at = reference_time.bonus_end_at
         end
+
+        # Update end_at
         personal_time.end_at = reference_time.end_at if personal_time.end_at && personal_time.end_at > Time.zone.now
+
         personal_time.save!
       end
     end
@@ -118,13 +128,18 @@ module Course::LessonPlan::PersonalizationConcern
         next if !item.has_personal_times? || item.id.in?(submitted_lesson_plan_item_ids.keys) ||
                 item.personal_time_for(course_user)&.fixed? || reference_point.nil?
 
-        # Update personal time
         reference_time = item.reference_time_for(course_user)
         personal_time = item.find_or_create_personal_time_for(course_user)
+
+        # Update start_at
         personal_time.start_at = reference_time.start_at if personal_time.start_at > Time.zone.now
+
+        # Update bonus_end_at
         if personal_time.bonus_end_at && personal_time.bonus_end_at > Time.zone.now
           personal_time.bonus_end_at = reference_time.bonus_end_at
         end
+
+        # Update end_at
         if reference_time.end_at.present?
           new_end_at = round_to_date(
             personal_point + ((reference_time.end_at - reference_point) * learning_rate_ema),
@@ -133,10 +148,11 @@ module Course::LessonPlan::PersonalizationConcern
           )
           # Hard limits to make sure we don't fail bounds checks
           new_end_at = [new_end_at, reference_time.end_at, reference_time.start_at].compact.max
-          # We don't want to shift the end_at forward if the item is already opened or the deadline
-          # has already passed.
-          if new_end_at > personal_time.end_at ||
-             (personal_time.start_at > Time.zone.now && personal_time.end_at > Time.zone.now)
+
+          # We don't want to shift the end_at forward if the item is already opened or if the deadline
+          # has already passed. Backwards is ok.
+          # Assumption: end_at is >= start_at
+          if new_end_at > personal_time.end_at || personal_time.start_at > Time.zone.now
             personal_time.end_at = new_end_at
           end
         end
