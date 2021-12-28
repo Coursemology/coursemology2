@@ -17,6 +17,7 @@ module Course::LessonPlan::PersonalizationConcern
   # If the algorithm takes too long (e.g. voodoo AI magic), it is responsible for scheduling an async job
   def update_personalized_timeline_for(course_user, timeline_algorithm = nil)
     timeline_algorithm ||= course_user.timeline_algorithm
+    Rails.cache.delete("course/lesson_plan/personalization_concern/#{course_user.id}")
     send("algorithm_#{timeline_algorithm}", course_user)
   end
 
@@ -37,18 +38,7 @@ module Course::LessonPlan::PersonalizationConcern
   #   prevent students from being shocked that their deadlines have shifted forward suddenly.
 
   def algorithm_otot(course_user)
-    # TODO: Fix repeated work performed here. One way is to cache the result somehow.
-    submitted_lesson_plan_item_ids = lesson_plan_items_submission_time_hash(course_user)
-    items = course_user.course.lesson_plan_items.published.
-            with_reference_times_for(course_user).
-            with_personal_times_for(course_user).
-            to_a
-    items = items.sort_by { |x| x.time_for(course_user).start_at }
-    items_affects_personal_times = items.select(&:affects_personal_times?)
-
-    learning_rate_ema = compute_learning_rate_ema(
-      course_user, items_affects_personal_times, submitted_lesson_plan_item_ids
-    )
+    learning_rate_ema = retrieve_or_compute_course_user_data(course_user).last
     return if learning_rate_ema.nil?
 
     # Apply the appropriate algo depending on student's leaning rate
@@ -56,18 +46,7 @@ module Course::LessonPlan::PersonalizationConcern
   end
 
   def algorithm_fomo(course_user)
-    course_tz = course_user.course.time_zone
-    submitted_lesson_plan_item_ids = lesson_plan_items_submission_time_hash(course_user)
-    items = course_user.course.lesson_plan_items.published.
-            with_reference_times_for(course_user).
-            with_personal_times_for(course_user).
-            to_a
-    items = items.sort_by { |x| x.time_for(course_user).start_at }
-    items_affects_personal_times = items.select(&:affects_personal_times?)
-
-    learning_rate_ema = compute_learning_rate_ema(
-      course_user, items_affects_personal_times, submitted_lesson_plan_item_ids
-    )
+    submitted_lesson_plan_item_ids, items, learning_rate_ema = retrieve_or_compute_course_user_data(course_user)
     return if learning_rate_ema.nil?
 
     # Constrain learning rate
@@ -77,6 +56,7 @@ module Course::LessonPlan::PersonalizationConcern
     learning_rate_ema = [FOMO_LEARNING_RATE_HARD_MIN, effective_min, [learning_rate_ema, effective_max].min].max
 
     # Compute personal times for all items
+    course_tz = course_user.course.time_zone
     reference_point = items.first.reference_time_for(course_user).start_at
     personal_point = reference_point
     course_user.transaction do
@@ -113,18 +93,7 @@ module Course::LessonPlan::PersonalizationConcern
   end
 
   def algorithm_stragglers(course_user)
-    course_tz = course_user.course.time_zone
-    submitted_lesson_plan_item_ids = lesson_plan_items_submission_time_hash(course_user)
-    items = course_user.course.lesson_plan_items.published.
-            with_reference_times_for(course_user).
-            with_personal_times_for(course_user).
-            to_a
-    items = items.sort_by { |x| x.time_for(course_user).start_at }
-    items_affects_personal_times = items.select(&:affects_personal_times?)
-
-    learning_rate_ema = compute_learning_rate_ema(
-      course_user, items_affects_personal_times, submitted_lesson_plan_item_ids
-    )
+    submitted_lesson_plan_item_ids, items, learning_rate_ema = retrieve_or_compute_course_user_data(course_user)
     return if learning_rate_ema.nil?
 
     # Constrain learning rate
@@ -134,6 +103,7 @@ module Course::LessonPlan::PersonalizationConcern
     learning_rate_ema = [STRAGGLERS_LEARNING_RATE_HARD_MIN, effective_min, [learning_rate_ema, effective_max].min].max
 
     # Compute personal times for all items
+    course_tz = course_user.course.time_zone
     reference_point = items.first.reference_time_for(course_user).end_at
     personal_point = reference_point
     course_user.transaction do
@@ -178,6 +148,29 @@ module Course::LessonPlan::PersonalizationConcern
     items.select { |item| item.has_personal_times? && !item.id.in?(submitted_lesson_plan_item_ids.keys) }.
       slice(0, STRAGGLERS_FIXES).
       each { |item| item.reload.find_or_create_personal_time_for(course_user).update(fixed: true) }
+  end
+
+  # Returns cached data for the course user, if available, else it does the necessary computations and caches.
+  # Data returned is an array containing:
+  # - The submitted lesson plan item IDs
+  # - The published lesson plan items with reference and personal times, sorted by start_at for user
+  # - Learning rate computed for the user
+  # in the above order.
+  def retrieve_or_compute_course_user_data(course_user)
+    Rails.cache.fetch("course/lesson_plan/personalization_concern/#{course_user.id}", expires_in: 1.hours) do
+      submitted_lesson_plan_item_ids = lesson_plan_items_submission_time_hash(course_user)
+      items = course_user.course.lesson_plan_items.published.
+              with_reference_times_for(course_user).
+              with_personal_times_for(course_user).
+              to_a
+      items = items.sort_by { |x| x.time_for(course_user).start_at }
+      items_affects_personal_times = items.select(&:affects_personal_times?)
+
+      learning_rate_ema = compute_learning_rate_ema(
+        course_user, items_affects_personal_times, submitted_lesson_plan_item_ids
+      )
+      [submitted_lesson_plan_item_ids, items, learning_rate_ema]
+    end
   end
 
   # Returns { lesson_plan_item_id => submitted_time or nil }
