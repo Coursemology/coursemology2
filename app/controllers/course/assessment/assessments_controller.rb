@@ -14,6 +14,10 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
 
   def show
     render 'authenticate' unless can_access_assessment?
+
+    @question_assessments = @assessment.question_assessments.with_question_actables
+    @assessment_conditions = @assessment.assessment_conditions.includes({ conditional: :actable })
+    @questions = @assessment.questions.includes({ actable: :test_cases })
   end
 
   def new

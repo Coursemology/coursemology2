@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 module ActiveRecord::Associations::Preloader::ManualAssociationPreloader
-  def initialize(klass, owners, reflection, records)
-    super(klass, owners, reflection, nil)
+  def initialize(klass, owners, reflection, records, associate_by_default = true) # rubocop:disable Style/OptionalBooleanParameter
+    super(klass, owners, reflection, nil, associate_by_default)
 
     @records_by_owner_id = records.each_with_object({}) do |record, h|
       owner_id = convert_key(record[association_key_name])

@@ -26,7 +26,7 @@ json.assessment do
 end
 
 current_answer_ids = @submission.current_answers.pluck(:id)
-answers = @submission.answers.where(id: current_answer_ids).includes(:actable, { question: :actable })
+answers = @submission.answers.where(id: current_answer_ids).includes(:actable, { question: { actable: :files } })
 submission_questions = @submission.submission_questions.
                        where(question: @submission.questions).includes({ discussion_topic: :posts })
 
