@@ -145,7 +145,7 @@ module Course::LessonPlan::PersonalizationConcern
             personal_point + ((reference_time.end_at - reference_point) * learning_rate_ema),
             course_tz,
             STRAGGLERS_DATE_ROUNDING_THRESHOLD,
-            to_2359: true
+            to_2359: true # rubocop:disable Naming/VariableNumber
           )
           # Hard limits to make sure we don't fail bounds checks
           new_end_at = [new_end_at, reference_time.end_at, reference_time.start_at].compact.max
