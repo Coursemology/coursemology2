@@ -23,16 +23,16 @@ module Course::Discussion::TopicsHelper
   #
   # @return [Integer] Returns the count of topics pending staff reply.
   def all_staff_unread_count
-    @staff_unread ||= current_course.discussion_topics.
-                      globally_displayed.pending_staff_reply.distinct.count
+    @all_staff_unread_count ||= current_course.discussion_topics.
+                                globally_displayed.pending_staff_reply.distinct.count
   end
 
   def my_students_unread_count
-    @my_students_unread ||=
+    @my_students_unread_count ||=
       if current_course_user
         my_student_ids = current_course_user.my_students.pluck(:user_id)
         topics = current_course.discussion_topics.globally_displayed.pending_staff_reply.distinct.
-                 includes(:actable)
+                 includes(actable: [:submission, file: { answer: :submission }])
         topics.select { |topic| from_user(topic, my_student_ids) }.count
       else
         0
@@ -44,14 +44,14 @@ module Course::Discussion::TopicsHelper
   #
   # This replaces what the `from_user` scopes in the specific models were doing when getting
   # my_students_unread_count, for better performance.
-  def from_user(topic, my_student_ids)
+  def from_user(topic, my_student_ids) # rubocop:disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
     case topic.actable_type
     when 'Course::Assessment::SubmissionQuestion'
-      my_student_ids.include?(topic&.actable&.submission&.creator&.id)
+      my_student_ids.include?(topic&.actable&.submission&.creator_id)
     when 'Course::Video::Topic'
-      my_student_ids.include?(topic&.actable&.creator&.id)
+      my_student_ids.include?(topic&.actable&.creator_id)
     when 'Course::Assessment::Answer::ProgrammingFileAnnotation'
-      my_student_ids.include?(topic&.actable&.file&.answer&.submission&.creator&.id)
+      my_student_ids.include?(topic&.actable&.file&.answer&.submission&.creator_id)
     end
   end
 
@@ -59,7 +59,7 @@ module Course::Discussion::TopicsHelper
   #
   # @return [Integer] Returns the count of unread topics
   def all_student_unread_count
-    @student_unread ||=
+    @all_student_unread_count ||=
       if current_course_user&.student?
         current_course.discussion_topics.globally_displayed.from_user(current_user.id).
           unread_by(current_user).distinct.without_delayed_posts.count
