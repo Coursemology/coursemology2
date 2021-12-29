@@ -1,6 +1,6 @@
 = page_header
 
-- graded_staff = @staffs.reject { |staff| staff.published_submissions.empty? }
+- graded_staff = @staff.reject { |staff| staff.published_submissions.empty? }
 - if graded_staff.empty?
   div.alert.alert-info
     = t('.no_statistics')

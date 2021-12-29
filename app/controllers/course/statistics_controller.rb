@@ -12,8 +12,8 @@ class Course::StatisticsController < Course::ComponentController
   end
 
   def staff
-    @staffs = current_course.course_users.teaching_assistant_and_manager.includes(:group_users)
-    @staffs = CourseUser.order_by_average_marking_time(@staffs)
+    @staff = current_course.course_users.teaching_assistant_and_manager.includes(:group_users)
+    @staff = CourseUser.order_by_average_marking_time(@staff)
   end
 
   private
