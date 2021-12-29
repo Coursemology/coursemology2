@@ -39,7 +39,7 @@ en:
       show:
         header: 'Profile'
         role: 'Role: %{role}'
-        experience_points_earned_html: 'Experience points earned: %{points}'
+        level_and_exp: 'Level %{level} - %{exp} EXP'
         achievements_header: 'Achievements'
         achievement_count:
           zero: 'No achievements'

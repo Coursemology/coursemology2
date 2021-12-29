@@ -5,8 +5,9 @@ RSpec.feature 'Courses: CourseUser Profile' do
   let(:instance) { Instance.default }
 
   def exp_text(course_user)
-    I18n.t('course.users.show.experience_points_earned_html',
-           points: course_user.experience_points)
+    I18n.t('course.users.show.level_and_exp',
+           level: course_user.level_number,
+           exp: course_user.experience_points)
   end
 
   with_tenant(:instance) do
