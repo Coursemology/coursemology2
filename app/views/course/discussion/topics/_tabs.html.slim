@@ -1,6 +1,6 @@
 - if current_course_user&.teaching_staff? || can?(:manage, current_course)
   = tabs do
-    - my_students_exist = current_course_user&.my_students.any?
+    - my_students_exist = !current_course_user&.my_students&.empty?
     - if my_students_exist
       = nav_to my_students_pending_course_topics_path(current_course) do
         = t('.my_students_pending')
