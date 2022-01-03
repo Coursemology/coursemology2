@@ -13,4 +13,4 @@ table.table.table-middle-align.submissions-list.table-hover
       th
       th
   tbody
-    = render partial: 'submission', collection: submissions, locals: { pending: pending }
+    = render partial: 'submission', collection: submissions, locals: { pending: pending, assessments_hash: assessments_hash }
