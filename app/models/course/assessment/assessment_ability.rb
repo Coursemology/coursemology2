@@ -137,6 +137,7 @@ module Course::Assessment::AssessmentAbility
 
   def allow_staff_read_assessment_submissions
     can :view_all_submissions, Course::Assessment, assessment_course_staff_hash
+    can :view_all_submissions, Course::Assessment::Submission if course_user&.staff?
     can :read, Course::Assessment::Submission, assessment: assessment_course_staff_hash
   end
 
