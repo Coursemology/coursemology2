@@ -62,17 +62,18 @@ class Course::Assessment::Submission::CsvDownloadService
     csv << [I18n.t('course.assessment.submission.submissions.csv_download_service.note')]
 
     # Question Title
-    csv << ['', '', '',
+    csv << ['', '', '', '',
             I18n.t('course.assessment.submission.submissions.csv_download_service.question_title'),
             *@question_assessments.map(&:display_title)]
 
     # Question Type
-    csv << ['', '', '',
+    csv << ['', '', '', '',
             I18n.t('course.assessment.submission.submissions.csv_download_service.question_type'),
             *@question_assessments.map { |x| x.question.question_type }]
 
     # Column Header
     csv << [I18n.t('course.assessment.submission.submissions.csv_download_service.name'),
+            I18n.t('course.assessment.submission.submissions.csv_download_service.email'),
             I18n.t('course.assessment.submission.submissions.csv_download_service.role'),
             I18n.t('course.assessment.submission.submissions.csv_download_service.user_type'),
             I18n.t('course.assessment.submission.submissions.csv_download_service.status')]
@@ -80,6 +81,7 @@ class Course::Assessment::Submission::CsvDownloadService
 
   def submissions_csv_row(csv, submission, course_user)
     row_array = [course_user.name,
+                 course_user.user.email,
                  course_user.role,
                  if course_user.phantom?
                    I18n.t('course.assessment.submission.submissions.csv_download_service.phantom')
@@ -123,6 +125,6 @@ class Course::Assessment::Submission::CsvDownloadService
         @assessment.course.course_users.staff
       else
         @assessment.course.course_users.students.without_phantom_users
-      end.order_phantom_user.order_alphabetically
+      end.order_phantom_user.order_alphabetically.includes(user: :emails)
   end
 end

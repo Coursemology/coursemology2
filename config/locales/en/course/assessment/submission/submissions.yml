@@ -30,6 +30,7 @@ en:
           csv_download_service:
             note: 'Note: N/A - The answer format cannot be supported into single cell.'
             name: 'Name'
+            email: 'Email'
             role: 'Role'
             user_type: 'User Type'
             status: 'Status'
