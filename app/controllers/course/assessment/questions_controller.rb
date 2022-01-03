@@ -26,17 +26,8 @@ class Course::Assessment::QuestionsController < Course::Assessment::Controller
     @source_assessment = Course::Assessment.find(params[:assessment_id])
   end
 
-  # Duplicates the target question, skills can only be assigned with a question_assessment.
-  # It currently assumes that the destination assessment's course is the current course.
-  #
-  # @return [Course::Assessment::Question] The duplicated question
-  def duplicated_question
-    duplicator = Duplicator.new({}, current_course: current_course)
-    duplicator.duplicate(@question.specific).acting_as
-  end
-
   def duplicate_question_and_skills
-    destination_question_assessment = duplicated_question.question_assessments.
+    destination_question_assessment = @question.question_assessments.
                                       build(assessment: @destination_assessment)
     source_question_assessment = @question.question_assessments.
                                  select { |qa| qa.assessment == @source_assessment }.first

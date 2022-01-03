@@ -32,7 +32,7 @@ class Course::QuestionAssessment < ApplicationRecord
 
   def initialize_duplicate(duplicator, other)
     self.weight = other.weight
-    self.question = duplicator.duplicate(other.question.actable).acting_as
+    self.question = other.question
     skills << other.skills.select { |skill| duplicator.duplicated?(skill) }.
               map { |skill| duplicator.duplicate(skill) }
   end
