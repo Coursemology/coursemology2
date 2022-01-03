@@ -374,7 +374,10 @@ Rails.application.routes.draw do
         end
       end
 
-      get 'statistics/student'
+      get 'statistics/my_students'
+      get 'statistics/my_students_download'
+      get 'statistics/all_students'
+      get 'statistics/all_students_download'
       get 'statistics/staff'
 
       scope module: :video do

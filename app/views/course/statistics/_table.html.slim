@@ -1,44 +1,46 @@
 - course_videos = current_course.videos
 
-table.table.table-hover
-  tr
-    th.text-center
-      = t('.serial_number')
-    th
-      = CourseUser.human_attribute_name(:name)
-    - unless @service.no_group_managers?
+table.table.table-striped.table-hover
+  thead
+    tr
+      th.text-center
+        = t('.serial_number')
       th
-        = t('.tutor')
-    th.text-center
-      = Course::Level.model_name.human
-    - if current_course.gamified?
-      th.text-center
-        = t('.experience_points')
-    - if course_videos.exists? && can?(:analyze_videos, current_course)
-      th.text-center
-        = t('.video_watched', total: course_videos.count)
-      th.text-center
-        = t('.percent_watched')
-
-  - students.each.with_index(1) do |student, index|
-    = content_tag_for(:tr, student)
-      td.text-center
-        = index
-      td
-        = link_to_user(student)
+        = CourseUser.human_attribute_name(:name)
       - unless @service.no_group_managers?
-        td
-          = @service.group_managers_of(student).map(&:name).join(', ')
-      td.text-center
-        = student.level_number
+        th
+          = t('.tutor')
+      th.text-center
+        = Course::Level.model_name.human
       - if current_course.gamified?
-        td.text-center
-          = link_to student.experience_points,
-                    course_user_experience_points_records_path(current_course, student)
+        th.text-center
+          = t('.experience_points')
       - if course_videos.exists? && can?(:analyze_videos, current_course)
+        th.text-center
+          = t('.video_watched', total: course_videos.count)
+        th.text-center
+          = t('.percent_watched')
+
+  tbody
+    - students.each.with_index(1) do |student, index|
+      = content_tag_for(:tr, student)
         td.text-center
-          = link_to student.video_submission_count,
-                    course_user_video_submissions_path(current_course, student)
+          = index
+        td
+          = link_to_user(student)
+        - unless @service.no_group_managers?
+          td
+            = @service.group_managers_of(student).map(&:name).join(', ')
         td.text-center
-          = display_progress_bar(student.video_percent_watched) do
-            = t('.progress', progress: student.video_percent_watched)
+          = student.level_number
+        - if current_course.gamified?
+          td.text-center
+            = link_to student.experience_points,
+                      course_user_experience_points_records_path(current_course, student)
+        - if course_videos.exists? && can?(:analyze_videos, current_course)
+          td.text-center
+            = link_to student.video_submission_count,
+                      course_user_video_submissions_path(current_course, student)
+          td.text-center
+            = display_progress_bar(student.video_percent_watched) do
+              = t('.progress', progress: student.video_percent_watched)

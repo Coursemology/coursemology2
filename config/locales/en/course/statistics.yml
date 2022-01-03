@@ -4,6 +4,13 @@ en:
       serial_number: 'S/N'
       student:
         header: 'Student Statistics'
+      my_students:
+        header: "My Students' Statistics"
+        download_my_students: "Download My Students' Statistics"
+      all_students:
+        header: "All Students' Statistics"
+        download_all_students: "Download All Students' Statistics"
+      tabs:
         my_students_tab: 'My Students'
         all_students_tab: 'All Students'
       course_student_statistics:

@@ -2,13 +2,32 @@
 class Course::StatisticsController < Course::ComponentController
   before_action :authorize_read_statistics!
 
-  def student
+  def all_students
     preload_levels
     course_users = current_course.course_users.includes(:groups)
     staff = course_users.staff
     all_students = course_users.students.ordered_by_experience_points.with_video_statistics
     @phantom_students, @students = all_students.partition(&:phantom?)
     @service = Course::GroupManagerPreloadService.new(staff)
+  end
+
+  def all_students_download
+    # TODO
+  end
+
+  def my_students
+    preload_levels
+    course_users = current_course.course_users.includes(:groups)
+    staff = course_users.staff
+    my_students = current_course_user.my_students.ordered_by_experience_points.with_video_statistics
+    @phantom_students, @students = my_students.partition(&:phantom?)
+    # We still need the service, as some of the user's students may have more than one tutor,
+    # i.e. we will need the preload service to identify all tutors of these students.
+    @service = Course::GroupManagerPreloadService.new(staff)
+  end
+
+  def my_students_download
+    # TODO
   end
 
   def staff
