@@ -24,7 +24,7 @@ class Course::StatisticsDownloadService
     # Converts the student data to string CSV format.
     #
     # @return [String] The student data in CSV format.
-    def generate_csv(course, course_user, can_analyze_videos, only_my_students)
+    def generate_csv(course, course_user, can_analyze_videos, only_my_students) # rubocop:disable Metrics/AbcSize
       course_users = course.course_users.includes(:groups)
       service = Course::GroupManagerPreloadService.new(course_users.staff)
       no_group_managers = service.no_group_managers?
