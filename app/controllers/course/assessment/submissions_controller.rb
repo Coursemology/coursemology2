@@ -45,9 +45,15 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
 
   # Load student submissions.
   def load_submissions
-    student_ids = @course.course_users.students.pluck(:user_id)
+    student_ids = if current_course_user&.student?
+                    current_user.id
+                  else
+                    @course.course_users.students.pluck(:user_id)
+                  end
+
     @submissions = Course::Assessment::Submission.by_users(student_ids).
-                   ordered_by_submitted_date.accessible_by(current_ability).page(page_param).
+                   ordered_by_submitted_date.accessible_by(current_ability, :view_all_submissions).
+                   page(page_param).calculated(:grade).
                    includes(:assessment, :answers,
                             experience_points_record: { course_user: [:course, :groups] })
   end
