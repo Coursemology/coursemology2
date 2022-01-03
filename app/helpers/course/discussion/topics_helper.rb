@@ -39,9 +39,6 @@ module Course::Discussion::TopicsHelper
       end
   end
 
-  # TODO: Consider adding `creator_id` column to the programming file annotation table.
-  # See https://github.com/Coursemology/coursemology2/issues/2880.
-  #
   # This replaces what the `from_user` scopes in the specific models were doing when getting
   # my_students_unread_count, for better performance.
   def from_user(topic, my_student_ids) # rubocop:disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity

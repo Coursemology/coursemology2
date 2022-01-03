@@ -2,8 +2,11 @@
   th = link_to format_inline_text(group.name), course_group_path(current_course, group)
   - normal_user_count = group.group_users.count { |group_user| !group_user.course_user.phantom? }
   - all_user_count = group.group_users.size
+  / normal student count in a group
   td = normal_user_count
+  / phantom student count in a group 
   td = all_user_count - normal_user_count
+  / total student count in a group
   td = all_user_count
   td
     - group.group_users.select(&:manager?).map(&:course_user).each do |manager|
