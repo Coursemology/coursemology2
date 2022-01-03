@@ -19,6 +19,7 @@ class Course::Assessment::QuestionsController < Course::Assessment::Controller
 
   private
 
+  # Note that we allow for destination_assessment to be the same as the source_assessment.
   def load_and_authorize_assessments
     @destination_assessment = Course::Assessment.find(params[:destination_assessment_id])
     authorize! :update, @destination_assessment
@@ -26,6 +27,8 @@ class Course::Assessment::QuestionsController < Course::Assessment::Controller
     @source_assessment = Course::Assessment.find(params[:assessment_id])
   end
 
+  # Assumption: The duplication destination is within the same course, so skills can be reused.
+  # Refer to the comments for `duplicate` above for more info.
   def duplicate_question_and_skills
     destination_question_assessment = @question.question_assessments.
                                       build(assessment: @destination_assessment)

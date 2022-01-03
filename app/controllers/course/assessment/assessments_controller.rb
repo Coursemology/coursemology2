@@ -96,7 +96,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   private
 
   def question_order_ids
-    @order_from_user ||= begin
+    @question_order_ids ||= begin
       integer_type = ActiveModel::Type::Integer.new
       params.require(:question_order).map { |id| integer_type.cast(id) }
     end
