@@ -17,7 +17,7 @@ en:
         phantom_students: 'Phantom Students'
       table:
         serial_number: :'course.statistics.serial_number'
-        tutor: 'Tutor'
+        tutor: 'Tutor(s)'
         experience_points: 'Experience Points'
         video_watched: 'Videos Watched (Total: %{total})'
         percent_watched: 'Average % Watched'
@@ -31,3 +31,8 @@ en:
         average_time: 'Average Time Per Assignment'
         stddev: 'Standard Deviation'
         no_statistics: 'There are no staff statistics as nothing has been graded yet.'
+      csv_download_service:
+        email: 'Email'
+        user_type: 'User Type'
+        phantom: 'Phantom'
+        normal: 'Normal'
