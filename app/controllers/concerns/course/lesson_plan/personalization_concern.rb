@@ -17,6 +17,7 @@ module Course::LessonPlan::PersonalizationConcern
   # If the algorithm takes too long (e.g. voodoo AI magic), it is responsible for scheduling an async job
   def update_personalized_timeline_for(course_user, timeline_algorithm = nil)
     timeline_algorithm ||= course_user.timeline_algorithm
+    Rails.cache.delete("course/lesson_plan/personalization_concern/#{course_user.id}")
     send("algorithm_#{timeline_algorithm}", course_user)
   end
 
@@ -28,18 +29,16 @@ module Course::LessonPlan::PersonalizationConcern
       where.not(lesson_plan_item_id: submitted_lesson_plan_item_ids.keys).delete_all
   end
 
-  def algorithm_otot(course_user)
-    submitted_lesson_plan_item_ids = lesson_plan_items_submission_time_hash(course_user)
-    items = course_user.course.lesson_plan_items.published.
-            with_reference_times_for(course_user).
-            with_personal_times_for(course_user).
-            to_a
-    items = items.sort_by { |x| x.time_for(course_user).start_at }
-    items_affects_personal_times = items.select(&:affects_personal_times?)
+  # Some properties for the following algorithms:
+  # - We don't shift personal dates that have already passed. This is to prevent items becoming locked
+  #   when students are switched between different algos. There are thus quite a few checks for
+  #   > Time.zone.now. The only exception is the backwards-shifting of already-past deadlines, which
+  #   allows students to slow down their learning more effectively.
+  # - We don't shift closing dates forward when the item has already opened for the student. This is to
+  #   prevent students from being shocked that their deadlines have shifted forward suddenly.
 
-    learning_rate_ema = compute_learning_rate_ema(
-      course_user, items_affects_personal_times, submitted_lesson_plan_item_ids
-    )
+  def algorithm_otot(course_user)
+    learning_rate_ema = retrieve_or_compute_course_user_data(course_user).last
     return if learning_rate_ema.nil?
 
     # Apply the appropriate algo depending on student's leaning rate
@@ -47,18 +46,7 @@ module Course::LessonPlan::PersonalizationConcern
   end
 
   def algorithm_fomo(course_user)
-    course_tz = course_user.course.time_zone
-    submitted_lesson_plan_item_ids = lesson_plan_items_submission_time_hash(course_user)
-    items = course_user.course.lesson_plan_items.published.
-            with_reference_times_for(course_user).
-            with_personal_times_for(course_user).
-            to_a
-    items = items.sort_by { |x| x.time_for(course_user).start_at }
-    items_affects_personal_times = items.select(&:affects_personal_times?)
-
-    learning_rate_ema = compute_learning_rate_ema(
-      course_user, items_affects_personal_times, submitted_lesson_plan_item_ids
-    )
+    submitted_lesson_plan_item_ids, items, learning_rate_ema = retrieve_or_compute_course_user_data(course_user)
     return if learning_rate_ema.nil?
 
     # Constrain learning rate
@@ -68,6 +56,7 @@ module Course::LessonPlan::PersonalizationConcern
     learning_rate_ema = [FOMO_LEARNING_RATE_HARD_MIN, effective_min, [learning_rate_ema, effective_max].min].max
 
     # Compute personal times for all items
+    course_tz = course_user.course.time_zone
     reference_point = items.first.reference_time_for(course_user).start_at
     personal_point = reference_point
     course_user.transaction do
@@ -81,9 +70,14 @@ module Course::LessonPlan::PersonalizationConcern
         next if !item.has_personal_times? || item.id.in?(submitted_lesson_plan_item_ids.keys) ||
                 item.personal_time_for(course_user)&.fixed?
 
-        # Update personal time
         reference_time = item.reference_time_for(course_user)
         personal_time = item.find_or_create_personal_time_for(course_user)
+
+        # If the user was previously on the stragglers algorithm and just switched over, and has already open
+        # items, we want to keep those items as they are
+        next if personal_time.end_at > reference_time.end_at && personal_time.start_at < Time.zone.now
+
+        # Update start_at
         if personal_time.start_at > Time.zone.now
           personal_time.start_at =
             round_to_date(
@@ -94,28 +88,22 @@ module Course::LessonPlan::PersonalizationConcern
         end
         # Hard limits to make sure we don't fail bounds checks
         personal_time.start_at = [personal_time.start_at, reference_time.start_at, reference_time.end_at].compact.min
+
+        # Update bonus_end_at
         if personal_time.bonus_end_at && personal_time.bonus_end_at > Time.zone.now
           personal_time.bonus_end_at = reference_time.bonus_end_at
         end
+
+        # Update end_at
         personal_time.end_at = reference_time.end_at if personal_time.end_at && personal_time.end_at > Time.zone.now
+
         personal_time.save!
       end
     end
   end
 
   def algorithm_stragglers(course_user)
-    course_tz = course_user.course.time_zone
-    submitted_lesson_plan_item_ids = lesson_plan_items_submission_time_hash(course_user)
-    items = course_user.course.lesson_plan_items.published.
-            with_reference_times_for(course_user).
-            with_personal_times_for(course_user).
-            to_a
-    items = items.sort_by { |x| x.time_for(course_user).start_at }
-    items_affects_personal_times = items.select(&:affects_personal_times?)
-
-    learning_rate_ema = compute_learning_rate_ema(
-      course_user, items_affects_personal_times, submitted_lesson_plan_item_ids
-    )
+    submitted_lesson_plan_item_ids, items, learning_rate_ema = retrieve_or_compute_course_user_data(course_user)
     return if learning_rate_ema.nil?
 
     # Constrain learning rate
@@ -125,6 +113,7 @@ module Course::LessonPlan::PersonalizationConcern
     learning_rate_ema = [STRAGGLERS_LEARNING_RATE_HARD_MIN, effective_min, [learning_rate_ema, effective_max].min].max
 
     # Compute personal times for all items
+    course_tz = course_user.course.time_zone
     reference_point = items.first.reference_time_for(course_user).end_at
     personal_point = reference_point
     course_user.transaction do
@@ -139,21 +128,34 @@ module Course::LessonPlan::PersonalizationConcern
         next if !item.has_personal_times? || item.id.in?(submitted_lesson_plan_item_ids.keys) ||
                 item.personal_time_for(course_user)&.fixed? || reference_point.nil?
 
-        # Update personal time
         reference_time = item.reference_time_for(course_user)
         personal_time = item.find_or_create_personal_time_for(course_user)
+
+        # Update start_at
         personal_time.start_at = reference_time.start_at if personal_time.start_at > Time.zone.now
+
+        # Update bonus_end_at
         if personal_time.bonus_end_at && personal_time.bonus_end_at > Time.zone.now
           personal_time.bonus_end_at = reference_time.bonus_end_at
         end
-        if reference_time.end_at.present? && personal_time.end_at > Time.zone.now
-          personal_time.end_at = round_to_date(
+
+        # Update end_at
+        if reference_time.end_at.present?
+          new_end_at = round_to_date(
             personal_point + ((reference_time.end_at - reference_point) * learning_rate_ema),
             course_tz,
-            STRAGGLERS_DATE_ROUNDING_THRESHOLD
+            STRAGGLERS_DATE_ROUNDING_THRESHOLD,
+            to_2359: true # rubocop:disable Naming/VariableNumber
           )
           # Hard limits to make sure we don't fail bounds checks
-          personal_time.end_at = [personal_time.end_at, reference_time.end_at, reference_time.start_at].compact.max
+          new_end_at = [new_end_at, reference_time.end_at, reference_time.start_at].compact.max
+
+          # We don't want to shift the end_at forward if the item is already opened or if the deadline
+          # has already passed. Backwards is ok.
+          # Assumption: end_at is >= start_at
+          if new_end_at > personal_time.end_at || personal_time.start_at > Time.zone.now
+            personal_time.end_at = new_end_at
+          end
         end
         personal_time.save!
       end
@@ -163,6 +165,29 @@ module Course::LessonPlan::PersonalizationConcern
     items.select { |item| item.has_personal_times? && !item.id.in?(submitted_lesson_plan_item_ids.keys) }.
       slice(0, STRAGGLERS_FIXES).
       each { |item| item.reload.find_or_create_personal_time_for(course_user).update(fixed: true) }
+  end
+
+  # Returns cached data for the course user, if available, else it does the necessary computations and caches.
+  # Data returned is an array containing:
+  # - The submitted lesson plan item IDs
+  # - The published lesson plan items with reference and personal times, sorted by start_at for user
+  # - Learning rate computed for the user
+  # in the above order.
+  def retrieve_or_compute_course_user_data(course_user)
+    Rails.cache.fetch("course/lesson_plan/personalization_concern/#{course_user.id}", expires_in: 1.hours) do
+      submitted_lesson_plan_item_ids = lesson_plan_items_submission_time_hash(course_user)
+      items = course_user.course.lesson_plan_items.published.
+              with_reference_times_for(course_user).
+              with_personal_times_for(course_user).
+              to_a
+      items = items.sort_by { |x| x.time_for(course_user).start_at }
+      items_affects_personal_times = items.select(&:affects_personal_times?)
+
+      learning_rate_ema = compute_learning_rate_ema(
+        course_user, items_affects_personal_times, submitted_lesson_plan_item_ids
+      )
+      [submitted_lesson_plan_item_ids, items, learning_rate_ema]
+    end
   end
 
   # Returns { lesson_plan_item_id => submitted_time or nil }
@@ -240,11 +265,17 @@ module Course::LessonPlan::PersonalizationConcern
 
   private
 
-  # Round to "nearest" date in course's timezone, NOT user's timezone
-  # `threshold` allows us to control how generously we snap.
-  # E.g. if `threshold` = 0.8, then a datetime with a time of > 0.8 * 1.day will be snapped to the next day
-  def round_to_date(datetime, course_tz, threshold = 0.5)
+  # Round to "nearest" date in course's timezone, NOT user's timezone.
+  #
+  # @param [Time] datetime The datetime object to round.
+  # @param [String] course_tz The timezone of the course.
+  # @param [Float] threshold How generously we round off. E.g. if `threshold` = 0.8, then a datetime with a time of
+  #                          > 0.8 * 1.day will be snapped to the next day.
+  # @param [Boolean] to_2359 Whether to round off to 2359. This will set the datetime to be 2359 of the date before the
+  #                          rounded date.
+  def round_to_date(datetime, course_tz, threshold = 0.5, to_2359: false)
     prev_day = datetime.in_time_zone(course_tz).to_date.in_time_zone(course_tz).in_time_zone
-    (datetime - prev_day) < threshold ? prev_day : prev_day + 1.day
+    date = ((datetime - prev_day) < threshold ? prev_day : prev_day + 1.day)
+    to_2359 ? date - 1.minute : date
   end
 end
