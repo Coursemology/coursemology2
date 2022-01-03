@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_26_161011) do
+ActiveRecord::Schema.define(version: 2022_01_03_041119) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -805,7 +805,6 @@ ActiveRecord::Schema.define(version: 2021_12_26_161011) do
     t.integer "assessment_id", null: false
     t.integer "weight", null: false
     t.index ["assessment_id"], name: "index_course_question_assessments_on_assessment_id"
-    t.index ["question_id", "assessment_id"], name: "index_question_assessments_on_question_id_and_assessment_id", unique: true
     t.index ["question_id"], name: "index_course_question_assessments_on_question_id"
   end
 
@@ -1337,7 +1336,7 @@ ActiveRecord::Schema.define(version: 2021_12_26_161011) do
   add_foreign_key "course_condition_achievements", "course_achievements", column: "achievement_id", name: "fk_course_condition_achievements_achievement_id"
   add_foreign_key "course_condition_assessments", "course_assessments", column: "assessment_id", name: "fk_course_condition_assessments_assessment_id"
   add_foreign_key "course_condition_surveys", "course_surveys", column: "survey_id", name: "fk_course_condition_surveys_survey_id"
-  add_foreign_key "course_condition_videos", "course_videos", column: "video_id", name: "fk_course_condition_videos_video_id"
+  add_foreign_key "course_condition_videos", "course_videos", column: "video_id"
   add_foreign_key "course_conditions", "courses", name: "fk_course_conditions_course_id"
   add_foreign_key "course_conditions", "users", column: "creator_id", name: "fk_course_conditions_creator_id"
   add_foreign_key "course_conditions", "users", column: "updater_id", name: "fk_course_conditions_updater_id"
