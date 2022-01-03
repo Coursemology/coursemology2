@@ -219,8 +219,9 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments', j
         expect(page.all('td', text: '1 / 2').count).to eq(2)
 
         # Check that bonus point is added to suggected exp award
-        exp = (submission.assessment.base_exp / submission.assessment.maximum_grade) +
-              submission.assessment.time_bonus_exp
+        exp = (1 / submission.assessment.maximum_grade) *
+              (submission.assessment.base_exp + submission.assessment.time_bonus_exp)
+
         expect(first('input.exp').value.to_i).to eq(exp)
 
         # Manually modify exp awarded and publish grading
