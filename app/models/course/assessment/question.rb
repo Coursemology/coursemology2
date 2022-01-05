@@ -75,7 +75,7 @@ class Course::Assessment::Question < ApplicationRecord
     assessment.questions.last == self
   end
 
-  # Whether the answer has downloadable content in files format.
+  # Whether the answer has downloadable content as a raw file, to be zipped and downloaded.
   #
   # @return [Boolean]
   def files_downloadable?
