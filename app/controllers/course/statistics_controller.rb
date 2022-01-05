@@ -19,6 +19,10 @@ class Course::StatisticsController < Course::ComponentController
   end
 
   def my_students
+    unless current_course_user&.my_students&.any?
+      redirect_to course_statistics_all_students_path(current_course) and return
+    end
+
     my_students = current_course_user.my_students.ordered_by_experience_points.with_video_statistics
     @phantom_students, @students = my_students.partition(&:phantom?)
     # We still need the service, as some of the user's students may have more than one tutor,
