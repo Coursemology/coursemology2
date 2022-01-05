@@ -18,7 +18,7 @@ function computeExp(
 ) {
   const totalGrade = sum(Object.values(questions).map((q) => q.grade));
   return Math.round(
-    (totalGrade / maximumGrade) * basePoints * expMultiplier + bonusAwarded,
+    (totalGrade / maximumGrade) * (basePoints + bonusAwarded) * expMultiplier,
   );
 }
 

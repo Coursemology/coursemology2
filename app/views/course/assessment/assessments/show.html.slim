@@ -72,14 +72,14 @@
       = content_tag_for(:li, condition) do
         = condition.title
 
-  - if @assessment.assessment_conditions.present?
+  - if @assessment_conditions
     h3 = t('.finish_to_unlock')
-    = render partial: @assessment.assessment_conditions.includes(:conditional), suffix: 'condition'
+    = render partial: @assessment_conditions, suffix: 'condition'
 
-  - if can?(:attempt, @assessment) && @assessment.folder.materials.present?
+  - if can?(:attempt, @assessment) && @assessment.folder.materials.exists?
     - enable_link = !current_component_host[:course_materials_component].nil?
     h3 = t('.files') if enable_link || can?(:manage, @assessment)
-    - if @assessment.submissions.where(creator: current_user).length == 0
+    - unless @assessment.submissions.where(creator: current_user).exists?
       div = t('.files_note')
     = render partial: 'layouts/materials',
       locals: { folder: @assessment.folder,
@@ -139,10 +139,10 @@
     h3 = t('.questions')
     br
     - if @assessment.autograded?
-      - unless @assessment.questions.map(&:specific).all?(&:auto_gradable?)
+      - unless @questions.map(&:specific).all?(&:auto_gradable?)
         div.alert.alert-warning
           => fa_icon 'exclamation-triangle'
           = t('.non_auto_gradable_questions')
 
     div id=('sortable-questions' if can?(:manage, @assessment))
-      = render @assessment.question_assessments
+      = render @question_assessments

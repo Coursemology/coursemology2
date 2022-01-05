@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_15_055726) do
+ActiveRecord::Schema.define(version: 2021_12_26_161011) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -488,6 +488,12 @@ ActiveRecord::Schema.define(version: 2021_12_15_055726) do
     t.index ["survey_id"], name: "fk__course_condition_surveys_survey_id"
   end
 
+  create_table "course_condition_videos", force: :cascade do |t|
+    t.bigint "video_id", null: false
+    t.float "minimum_watch_percentage"
+    t.index ["video_id"], name: "fk__course_condition_videos_video_id"
+  end
+
   create_table "course_conditions", id: :serial, force: :cascade do |t|
     t.integer "actable_id"
     t.string "actable_type", limit: 255
@@ -911,6 +917,7 @@ ActiveRecord::Schema.define(version: 2021_12_15_055726) do
     t.boolean "allow_modify_after_submit", default: false, null: false
     t.datetime "closing_reminded_at"
     t.boolean "allow_response_after_end", default: false, null: false
+    t.integer "satisfiability_type", default: 0
     t.index ["creator_id"], name: "fk__course_surveys_creator_id"
     t.index ["updater_id"], name: "fk__course_surveys_updater_id"
   end
@@ -1064,6 +1071,7 @@ ActiveRecord::Schema.define(version: 2021_12_15_055726) do
     t.datetime "updated_at", null: false
     t.integer "tab_id", null: false
     t.integer "duration", default: 0, null: false
+    t.integer "satisfiability_type", default: 0
     t.index ["creator_id"], name: "fk__course_videos_creator_id"
     t.index ["tab_id"], name: "index_course_videos_on_tab_id"
     t.index ["updater_id"], name: "fk__course_videos_updater_id"
@@ -1329,6 +1337,7 @@ ActiveRecord::Schema.define(version: 2021_12_15_055726) do
   add_foreign_key "course_condition_achievements", "course_achievements", column: "achievement_id", name: "fk_course_condition_achievements_achievement_id"
   add_foreign_key "course_condition_assessments", "course_assessments", column: "assessment_id", name: "fk_course_condition_assessments_assessment_id"
   add_foreign_key "course_condition_surveys", "course_surveys", column: "survey_id", name: "fk_course_condition_surveys_survey_id"
+  add_foreign_key "course_condition_videos", "course_videos", column: "video_id", name: "fk_course_condition_videos_video_id"
   add_foreign_key "course_conditions", "courses", name: "fk_course_conditions_course_id"
   add_foreign_key "course_conditions", "users", column: "creator_id", name: "fk_course_conditions_creator_id"
   add_foreign_key "course_conditions", "users", column: "updater_id", name: "fk_course_conditions_updater_id"

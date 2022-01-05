@@ -5,7 +5,7 @@ source 'https://rubygems.org'
 gem 'tzinfo-data', platforms: [:mswin, :mswin64]
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '>= 6.0'
+gem 'rails', '~> 6.0.4.4'
 
 # Use PostgreSQL for the backend
 gem 'pg'
@@ -192,8 +192,9 @@ gem 'devise'
 gem 'devise_masquerade'
 gem 'devise-multi_email'
 
-gem 'omniauth'
-gem 'omniauth-facebook'
+# NOTE: Facebook login feature is currently disabled.
+# gem 'omniauth'
+# gem 'omniauth-facebook'
 
 # Use cancancan for authorization
 gem 'cancancan'

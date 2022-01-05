@@ -22,7 +22,8 @@ class Course::Condition < ApplicationRecord
     Course::Condition::Achievement.name,
     Course::Condition::Assessment.name,
     Course::Condition::Level.name,
-    Course::Condition::Survey.name
+    Course::Condition::Survey.name,
+    Course::Condition::Video.name
   ].freeze
 
   class << self
