@@ -65,17 +65,25 @@ class Course::StatisticsDownloadService
       [
         student.name,
         student.user.email,
-        if student.phantom?
-          I18n.t('course.statistics.csv_download_service.phantom')
-        else
-          I18n.t('course.statistics.csv_download_service.normal')
-        end,
-        (group_manager_service.group_managers_of(student).map(&:name).join(', ') unless no_group_managers),
+        generate_user_type(student),
+        (generate_tutor_names(student, group_manager_service) unless no_group_managers),
         (student.level_number if is_course_gamified),
         (student.experience_points if is_course_gamified),
         (student.video_submission_count if has_video_data),
         (I18n.t('course.statistics.table.percent_watched', progress: student.video_percent_watched) if has_video_data)
       ].compact
+    end
+
+    def generate_user_type(student)
+      if student.phantom?
+        I18n.t('course.statistics.csv_download_service.phantom')
+      else
+        I18n.t('course.statistics.csv_download_service.normal')
+      end
+    end
+
+    def generate_tutor_names(student, group_manager_service)
+      group_manager_service.group_managers_of(student).map(&:name).join(', ')
     end
   end
 end
