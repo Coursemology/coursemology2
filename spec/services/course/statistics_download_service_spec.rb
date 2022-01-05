@@ -67,7 +67,8 @@ RSpec.describe Course::StatisticsDownloadService do
           end
 
           it 'does not have video-related headers' do
-            expect(subject[0]).not_to include(I18n.t('course.statistics.table.video_watched'))
+            expect(subject[0]).not_to include(I18n.t('course.statistics.table.video_watched',
+                                                     total: course.videos&.count))
             expect(subject[0]).not_to include(I18n.t('course.statistics.table.percent_watched'))
           end
         end
@@ -78,7 +79,7 @@ RSpec.describe Course::StatisticsDownloadService do
           end
 
           it 'has video-related headers' do
-            expect(subject[0]).to include(I18n.t('course.statistics.table.video_watched'))
+            expect(subject[0]).to include(I18n.t('course.statistics.table.video_watched', total: course.videos&.count))
             expect(subject[0]).to include(I18n.t('course.statistics.table.percent_watched'))
           end
         end
@@ -205,7 +206,7 @@ RSpec.describe Course::StatisticsDownloadService do
             create(:video_session, :with_events_continuous, submission: submission_two)
             submission_one.update_statistic
             submission_two.update_statistic
-            expect(subject).to include(I18n.t('course.statistics.table.percent_watched',
+            expect(subject).to include(I18n.t('course.statistics.table.progress',
                                               progress: student.video_percent_watched))
           end
         end

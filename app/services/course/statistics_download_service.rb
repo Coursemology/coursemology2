@@ -34,7 +34,7 @@ class Course::StatisticsDownloadService
 
       is_course_gamified = course.gamified?
 
-      header = generate_header(no_group_managers, is_course_gamified, has_video_data)
+      header = generate_header(no_group_managers, is_course_gamified, has_video_data, course_videos&.count)
 
       students = (only_my_students ? course_user.my_students : course_users.students).
                  ordered_by_experience_points.
@@ -48,7 +48,7 @@ class Course::StatisticsDownloadService
       end
     end
 
-    def generate_header(no_group_managers, is_course_gamified, has_video_data)
+    def generate_header(no_group_managers, is_course_gamified, has_video_data, video_count)
       [
         CourseUser.human_attribute_name(:name),
         I18n.t('course.statistics.csv_download_service.email'),
@@ -56,7 +56,7 @@ class Course::StatisticsDownloadService
         (I18n.t('course.statistics.table.tutor') unless no_group_managers),
         (Course::Level.model_name.human if is_course_gamified),
         (I18n.t('course.statistics.table.experience_points') if is_course_gamified),
-        (I18n.t('course.statistics.table.video_watched') if has_video_data),
+        (I18n.t('course.statistics.table.video_watched', total: video_count) if has_video_data),
         (I18n.t('course.statistics.table.percent_watched') if has_video_data)
       ].compact
     end
@@ -70,7 +70,7 @@ class Course::StatisticsDownloadService
         (student.level_number if is_course_gamified),
         (student.experience_points if is_course_gamified),
         (student.video_submission_count if has_video_data),
-        (I18n.t('course.statistics.table.percent_watched', progress: student.video_percent_watched) if has_video_data)
+        (I18n.t('course.statistics.table.progress', progress: student.video_percent_watched || 0) if has_video_data)
       ].compact
     end
 
