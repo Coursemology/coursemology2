@@ -31,7 +31,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     !mcq.include?(answer.question.question_type) || @submission.assessment.show_mcq_answer
   end
 
-  def load_or_create_answers
+  def load_or_create_answers # rubocop:disable Metrics/CyclomaticComplexity
     return unless @submission.attempting?
 
     new_answers = questions_to_attempt.not_answered(@submission).attempt(@submission)
@@ -140,12 +140,35 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
       new_submission_questions <<
         @submission.submission_questions.build(question: question)
     end
-    new_submission_questions.each(&:save!)
+
+    # Instead of saving each submission question individually, we do a bulk save here
+    bulk_create_submission_questions(new_submission_questions) if new_submission_questions.any?
 
     new_submission_questions.any?
   end
 
-  def update_submission
+  # Insert new submission question records (and its acting_as) in bulk.
+  # @param [Array<Course::Assessment::SubmissionQuestion>] new_submission_questions Array of new submission questions
+  # @raise [ActiveRecord::RecordInvalid] If the new submission_questions cannot be saved.
+  # @return[Boolean] If new submission_questions were created.
+  def bulk_create_submission_questions(new_submission_questions)
+    ActiveRecord::Base.transaction do
+      Course::Assessment::SubmissionQuestion.import! new_submission_questions
+
+      # Since submission_question is an actable of discussion_topic,
+      # we need to separately create the topic records (also in bulk)
+      new_submission_questions_acting_as = []
+      new_submission_questions.each do |new_submission_question|
+        new_submission_question_acting_as = new_submission_question.acting_as
+        new_submission_question_acting_as.actable = new_submission_question
+        new_submission_questions_acting_as << new_submission_question_acting_as
+      end
+
+      Course::Discussion::Topic.import! new_submission_questions_acting_as
+    end
+  end
+
+  def update_submission # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/MethodLength
     @submission.class.transaction do
       unless unsubmit? || unmark?
         update_answers_params[:answers]&.each do |answer_params|
@@ -153,7 +176,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
 
           answer = @submission.answers.includes(:actable).find { |a| a.id == answer_params[:id].to_i }
           if answer && !update_answer(answer, answer_params)
-            logger.error("failed to update answer #{answer.errors.inspect}")
+            logger.error("Failed to update answer #{answer.errors.inspect}")
             raise ActiveRecord::Rollback
           end
         end
