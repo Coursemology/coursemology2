@@ -10,9 +10,9 @@ table.table.table-striped.table-hover
       - unless @service.no_group_managers?
         th
           = t('.tutor')
-      th.text-center
-        = Course::Level.model_name.human
       - if current_course.gamified?
+        th.text-center
+          = Course::Level.model_name.human
         th.text-center
           = t('.experience_points')
       - if course_videos.exists? && can?(:analyze_videos, current_course)
@@ -31,9 +31,9 @@ table.table.table-striped.table-hover
         - unless @service.no_group_managers?
           td
             = @service.group_managers_of(student).map(&:name).join(', ')
-        td.text-center
-          = student.level_number
         - if current_course.gamified?
+          td.text-center
+            = student.level_number
           td.text-center
             = link_to student.experience_points,
                       course_user_experience_points_records_path(current_course, student)

@@ -54,7 +54,7 @@ class Course::StatisticsDownloadService
         I18n.t('course.statistics.csv_download_service.email'),
         I18n.t('course.statistics.csv_download_service.user_type'),
         (I18n.t('course.statistics.table.tutor') unless no_group_managers),
-        Course::Level.model_name.human,
+        (Course::Level.model_name.human if is_course_gamified),
         (I18n.t('course.statistics.table.experience_points') if is_course_gamified),
         (I18n.t('course.statistics.table.video_watched') if has_video_data),
         (I18n.t('course.statistics.table.percent_watched') if has_video_data)
@@ -71,7 +71,7 @@ class Course::StatisticsDownloadService
           I18n.t('course.statistics.csv_download_service.normal')
         end,
         (group_manager_service.group_managers_of(student).map(&:name).join(', ') unless no_group_managers),
-        student.level_number,
+        (student.level_number if is_course_gamified),
         (student.experience_points if is_course_gamified),
         (student.video_submission_count if has_video_data),
         (I18n.t('course.statistics.table.percent_watched', progress: student.video_percent_watched) if has_video_data)
