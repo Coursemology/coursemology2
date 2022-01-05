@@ -116,30 +116,38 @@ export function sendAssessmentReminderEmail(assessmentId, type) {
   };
 }
 
+/**
+ * Download submissions for indicated user types in a given format (zip or csv)
+ *
+ * @param {String} [type] user types to be included in the downloaded submissions. Possible value includes:
+ *  ['my_students'|'my_students_w_phantom'|'students'|'students_w_phantom'|'staff'|'staff_w_phantom']
+ * @param {String} [downloadFormat=zip|csv] submission download format
+ * @returns {function(*)} The thunk to download submissions
+ */
 export function downloadSubmissions(type, downloadFormat) {
   const actions =
     downloadFormat === 'zip'
-      ? [
-          actionTypes.DOWNLOAD_SUBMISSIONS_FILES_REQUEST,
-          actionTypes.DOWNLOAD_SUBMISSIONS_FILES_SUCCESS,
-          actionTypes.DOWNLOAD_SUBMISSIONS_FILES_FAILURE,
-        ]
-      : [
-          actionTypes.DOWNLOAD_SUBMISSIONS_CSV_REQUEST,
-          actionTypes.DOWNLOAD_SUBMISSIONS_CSV_SUCCESS,
-          actionTypes.DOWNLOAD_SUBMISSIONS_CSV_FAILURE,
-        ];
+      ? {
+          request: actionTypes.DOWNLOAD_SUBMISSIONS_FILES_REQUEST,
+          success: actionTypes.DOWNLOAD_SUBMISSIONS_FILES_SUCCESS,
+          failure: actionTypes.DOWNLOAD_SUBMISSIONS_FILES_FAILURE,
+        }
+      : {
+          request: actionTypes.DOWNLOAD_SUBMISSIONS_CSV_REQUEST,
+          success: actionTypes.DOWNLOAD_SUBMISSIONS_CSV_SUCCESS,
+          failure: actionTypes.DOWNLOAD_SUBMISSIONS_CSV_FAILURE,
+        };
   return (dispatch) => {
-    dispatch({ type: actions[0] });
+    dispatch({ type: actions.request });
 
     const handleSuccess = (successData) => {
       window.location.href = successData.redirect_url;
-      dispatch({ type: actions[1] });
+      dispatch({ type: actions.success });
       dispatch(setNotification(translations.downloadRequestSuccess));
     };
 
     const handleFailure = () => {
-      dispatch({ type: actions[2] });
+      dispatch({ type: actions.failure });
       dispatch(setNotification(translations.requestFailure));
     };
 
