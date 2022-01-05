@@ -9,9 +9,13 @@ class Course::StatisticsController < Course::ComponentController
     @service = group_manager_preload_service
   end
 
-  def all_students_download
+  def download
+    # We won't guard against the case where a user has no students but asks for
+    # only_my_students. The job will handle it accordingly, i.e. give a blank CSV.
     job = Course::StatisticsDownloadJob.perform_later(current_course, current_course_user,
-                                                      can?(:analyze_videos, current_course)).job
+                                                      can?(:analyze_videos, current_course),
+                                                      ActiveRecord::Type::Boolean.new.cast(params[:only_my_students])).
+          job
     respond_to do |format|
       format.html { redirect_to(job_path(job)) }
       format.json { render json: { redirect_url: job_path(job) } }
@@ -28,15 +32,6 @@ class Course::StatisticsController < Course::ComponentController
     # We still need the service, as some of the user's students may have more than one tutor,
     # and we will need the preload service to identify all tutors of these students.
     @service = group_manager_preload_service
-  end
-
-  def my_students_download
-    job = Course::StatisticsDownloadJob.perform_later(current_course, current_course_user,
-                                                      can?(:analyze_videos, current_course), only_my_students: true).job
-    respond_to do |format|
-      format.html { redirect_to(job_path(job)) }
-      format.json { render json: { redirect_url: job_path(job) } }
-    end
   end
 
   def staff

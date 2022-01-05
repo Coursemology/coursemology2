@@ -906,15 +906,12 @@ var ROUTES = (function() {
 // course_statistics_all_students => /courses/:course_id/statistics/all_students(.:format)
   // function(course_id, options)
   course_statistics_all_students_path: Utils.route([["course_id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"statistics",false],[2,[7,"/",false],[2,[6,"all_students",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]),
-// course_statistics_all_students_download => /courses/:course_id/statistics/all_students_download(.:format)
+// course_statistics_download => /courses/:course_id/statistics/download(.:format)
   // function(course_id, options)
-  course_statistics_all_students_download_path: Utils.route([["course_id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"statistics",false],[2,[7,"/",false],[2,[6,"all_students_download",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]),
+  course_statistics_download_path: Utils.route([["course_id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"statistics",false],[2,[7,"/",false],[2,[6,"download",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]),
 // course_statistics_my_students => /courses/:course_id/statistics/my_students(.:format)
   // function(course_id, options)
   course_statistics_my_students_path: Utils.route([["course_id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"statistics",false],[2,[7,"/",false],[2,[6,"my_students",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]),
-// course_statistics_my_students_download => /courses/:course_id/statistics/my_students_download(.:format)
-  // function(course_id, options)
-  course_statistics_my_students_download_path: Utils.route([["course_id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"statistics",false],[2,[7,"/",false],[2,[6,"my_students_download",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]),
 // course_statistics_staff => /courses/:course_id/statistics/staff(.:format)
   // function(course_id, options)
   course_statistics_staff_path: Utils.route([["course_id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"statistics",false],[2,[7,"/",false],[2,[6,"staff",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]),

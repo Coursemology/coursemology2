@@ -1,5 +1,5 @@
 = page_header
-  = link_to course_statistics_my_students_download_path,
+  = link_to course_statistics_download_path(only_my_students: true),
             title: t('.download_my_students'), class: ['btn', 'btn-primary'] do
     = fa_icon 'download'.freeze
 
