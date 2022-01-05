@@ -19,11 +19,11 @@ class Course::Condition < ApplicationRecord
   delegate :satisfied_by?, to: :actable
 
   ALL_CONDITIONS = [
-    Course::Condition::Achievement.name,
-    Course::Condition::Assessment.name,
-    Course::Condition::Level.name,
-    Course::Condition::Survey.name,
-    Course::Condition::Video.name
+    {name: Course::Condition::Achievement.name, active: true},
+    {name: Course::Condition::Assessment.name, active: true},
+    {name: Course::Condition::Level.name, active: true},
+    {name: Course::Condition::Survey.name, active: true},
+    {name: Course::Condition::Video.name, active: false},
   ].freeze
 
   class << self
@@ -76,9 +76,9 @@ class Course::Condition < ApplicationRecord
     def dependent_class_to_condition_class_mapping
       mappings = Hash.new { |h, k| h[k] = [] }
 
-      Course::Condition::ALL_CONDITIONS.map do |condition_name|
-        dependent_class = condition_name.constantize.dependent_class
-        mappings[dependent_class] << condition_name unless dependent_class.nil?
+      Course::Condition::ALL_CONDITIONS.map do |condition|
+        dependent_class = condition[:name].constantize.dependent_class
+        mappings[dependent_class] << condition[:name] unless dependent_class.nil?
       end
 
       mappings
