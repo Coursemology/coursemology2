@@ -34,7 +34,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   def load_or_create_answers
     return unless @submission.attempting?
 
-    new_answers = questions_to_attempt.not_answered(@submission).attempt(@submission)
+    new_answers = questions_to_attempt.includes(:actable).not_answered(@submission).attempt(@submission)
     new_answers_created = bulk_save_new_answers(new_answers)
     @submission.answers.reload if new_answers_created && @submission.answers.loaded?
   end
