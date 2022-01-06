@@ -1,4 +1,4 @@
-- assessment = submission.assessment
+- assessment = assessments_hash[submission.assessment_id]
 = content_tag_for(:tr, submission) do
   td = link_to_course_user(submission.course_user)
   td = link_to(format_inline_text(assessment.title),

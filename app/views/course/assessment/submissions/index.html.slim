@@ -5,6 +5,6 @@
 - if current_course_user&.staff? || can?(:manage, current_course)
   = render partial: 'filter', locals: { category: @category }
 
-= render partial: 'submissions', locals: { submissions: @submissions, pending: false }
+= render partial: 'submissions', locals: { submissions: @submissions, pending: false, assessments_hash: @assessments_hash }
 
 = paginate @submissions
