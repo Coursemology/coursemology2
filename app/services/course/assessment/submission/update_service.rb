@@ -31,18 +31,11 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     !mcq.include?(answer.question.question_type) || @submission.assessment.show_mcq_answer
   end
 
-  def load_or_create_answers # rubocop:disable Metrics/CyclomaticComplexity
+  def load_or_create_answers
     return unless @submission.attempting?
 
     new_answers = questions_to_attempt.not_answered(@submission).attempt(@submission)
-    new_answers_created = new_answers.map do |answer|
-      # When there are no existing answers, the first one will be the current_answer.
-      if answer.new_record?
-        answer.current_answer = true
-        answer.save!
-      end
-    end
-    new_answers_created = new_answers_created.reduce(false) { |acc, elem| acc || elem }
+    new_answers_created = bulk_save_new_answers(new_answers)
     @submission.answers.reload if new_answers_created && @submission.answers.loaded?
   end
 
@@ -123,6 +116,33 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     params.require(:answer).permit([:id] + update_answer_type_params)
   end
 
+  # Insert new answer records (and its actables) in bulk.
+  #
+  # @param [Array<Course::Assessment::Answer>] new_answers Array of new submission answers
+  # @raise [ActiveRecord::RecordInvalid] If the new answers cannot be saved.
+  # @return[Boolean] If new answers were created.
+  def bulk_save_new_answers(new_answers)
+    # When there are no existing answers, the first one will be the current_answer.
+    # We first filter new_record from the new_answers and assign the current answer flag
+    # below.
+    new_answers_record = new_answers.select(&:new_record?)
+    return false unless new_answers_record.present?
+
+    new_answers_record.each do |new_answer_record|
+      new_answer_record.current_answer = true
+    end
+
+    new_answers_actables = new_answers_record.map(&:actable)
+    new_answers_group_by_actables = new_answers_actables.group_by { |actable| actable.class.to_s }
+
+    ActiveRecord::Base.transaction do
+      new_answers_group_by_actables.each_key do |key|
+        key.constantize.import! new_answers_group_by_actables[key], recursive: true
+      end
+    end
+    true
+  end
+
   def questions_to_attempt
     @questions_to_attempt ||= @submission.assessment.questions
   end
@@ -138,34 +158,14 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     new_submission_questions = []
     questions_without_submission_questions.each do |question|
       new_submission_questions <<
-        @submission.submission_questions.build(question: question)
+        Course::Assessment::SubmissionQuestion.new(submission: @submission, question: question)
     end
 
-    # Instead of saving each submission question individually, we do a bulk save here
-    bulk_create_submission_questions(new_submission_questions) if new_submission_questions.any?
+    ActiveRecord::Base.transaction do
+      Course::Assessment::SubmissionQuestion.import! new_submission_questions, recursive: true
+    end
 
     new_submission_questions.any?
-  end
-
-  # Insert new submission question records (and its acting_as) in bulk.
-  # @param [Array<Course::Assessment::SubmissionQuestion>] new_submission_questions Array of new submission questions
-  # @raise [ActiveRecord::RecordInvalid] If the new submission_questions cannot be saved.
-  # @return[Boolean] If new submission_questions were created.
-  def bulk_create_submission_questions(new_submission_questions)
-    ActiveRecord::Base.transaction do
-      Course::Assessment::SubmissionQuestion.import! new_submission_questions
-
-      # Since submission_question is an actable of discussion_topic,
-      # we need to separately create the topic records (also in bulk)
-      new_submission_questions_acting_as = []
-      new_submission_questions.each do |new_submission_question|
-        new_submission_question_acting_as = new_submission_question.acting_as
-        new_submission_question_acting_as.actable = new_submission_question
-        new_submission_questions_acting_as << new_submission_question_acting_as
-      end
-
-      Course::Discussion::Topic.import! new_submission_questions_acting_as
-    end
   end
 
   def update_submission # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/MethodLength
