@@ -3,9 +3,9 @@ module Course::GroupsAbilityComponent
   include AbilityHost::Component
 
   def define_permissions
-    if user
-      allow_staff_read_groups
-      allow_teaching_staff_manage_groups
+    if course_user
+      allow_staff_read_groups if course_user.staff?
+      allow_teaching_staff_manage_groups if course_user.teaching_staff?
       allow_group_manager_manage_group
     end
 
@@ -15,11 +15,11 @@ module Course::GroupsAbilityComponent
   private
 
   def allow_staff_read_groups
-    can :read, Course::Group, course_staff_hash
+    can :read, Course::Group, course_id: course.id
   end
 
   def allow_teaching_staff_manage_groups
-    can :manage, Course::Group, course_teaching_staff_hash
+    can :manage, Course::Group, course_id: course.id
   end
 
   def allow_group_manager_manage_group
@@ -27,6 +27,6 @@ module Course::GroupsAbilityComponent
   end
 
   def course_group_manager_hash
-    { group_users: { course_user: { user_id: user.id }, role: Course::GroupUser.roles[:manager] } }
+    { course_id: course.id, group_users: { course_user_id: course_user.id, role: Course::GroupUser.roles[:manager] } }
   end
 end
