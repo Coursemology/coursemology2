@@ -5,11 +5,15 @@ RSpec.describe Course::LessonPlan::Item do
   let!(:instance) { Instance.default }
 
   with_tenant(:instance) do
-    subject { Ability.new(user) }
-    let(:user) { create(:user) }
-    let(:todo) { create(:course_lesson_plan_todo, user: user) }
-    let(:other_user) { create(:user) }
-    let(:other_todo) { create(:course_lesson_plan_todo, user: other_user) }
+    subject { Ability.new(user, course, course_user) }
+    let(:course) { create(:course) }
+    let(:course_user) { create(:course_student, course: course) }
+    let(:user) { course_user.user }
+    let(:todo) { create(:course_lesson_plan_todo, course: course, user: user) }
+
+    let(:other_course_user) { create(:course_student, course: course) }
+    let(:other_user) { other_course_user.user }
+    let(:other_todo) { create(:course_lesson_plan_todo, course: course, user: other_user) }
 
     context 'when the user is the user of the todo' do
       it { is_expected.to be_able_to(:ignore, todo) }
