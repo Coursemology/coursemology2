@@ -5,13 +5,14 @@ RSpec.describe Course::Level do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
-    subject { Ability.new(user) }
+    subject { Ability.new(user, course, course_user) }
     let(:course) { create(:course) }
     let!(:level) { create(:course_level, course: course) }
     let!(:default_level) { course.reload.levels.first }
 
     context 'when the user is a Course Teaching Staff' do
-      let(:user) { create(:course_teaching_assistant, course: course).user }
+      let(:course_user) { create(:course_teaching_assistant, course: course) }
+      let(:user) { course_user.user }
 
       it { is_expected.to be_able_to(:manage, level) }
       it { is_expected.not_to be_able_to(:destroy, default_level) }
@@ -22,7 +23,8 @@ RSpec.describe Course::Level do
     end
 
     context 'when the user is a Course Observer' do
-      let(:user) { create(:course_observer, course: course).user }
+      let(:course_user) { create(:course_observer, course: course) }
+      let(:user) { course_user.user }
 
       it { is_expected.to be_able_to(:read, level) }
       it { is_expected.not_to be_able_to(:manage, level) }
