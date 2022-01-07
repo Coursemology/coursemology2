@@ -22,7 +22,7 @@ class Course::Assessment::Submission::CsvDownloadService
     submissions = @assessment.submissions.by_users(course_users.pluck(:user_id)).
                   includes(:assessment, { answers: { actable: [:options, :files] },
                                           experience_points_record: :course_user })
-    submissions_hash = submissions.map { |submission| [submission.creator_id, submission] }.to_h
+    submissions_hash = submissions.to_h { |submission| [submission.creator_id, submission] }
     csv_file_path = File.join(@base_dir, "#{@assessment.title}.csv")
     CSV.open(csv_file_path, 'w') do |csv|
       submissions_csv_header csv
@@ -52,19 +52,19 @@ class Course::Assessment::Submission::CsvDownloadService
     @sorted_question_ids = @question_assessments.pluck(:question_id)
     @questions = Course::Assessment::Question.where(id: @sorted_question_ids).
                  includes(:actable)
-    @questions_downloadable = @questions.map { |q| [q.id, q.csv_downloadable?] }.to_h
+    @questions_downloadable = @questions.to_h { |q| [q.id, q.csv_downloadable?] }
 
     @base_dir = Dir.mktmpdir('coursemology-download-')
   end
 
   def submissions_csv_header(csv)
-    # Note
-    csv << [I18n.t('course.assessment.submission.submissions.csv_download_service.note')]
-
     # Question Title
-    csv << ['', '', '', '',
-            I18n.t('course.assessment.submission.submissions.csv_download_service.question_title'),
-            *@question_assessments.map(&:display_title)]
+    question_title = [I18n.t('course.assessment.submission.submissions.csv_download_service.note'), '', '', '',
+                      I18n.t('course.assessment.submission.submissions.csv_download_service.question_title'),
+                      *@question_assessments.map(&:display_title)]
+    # Remove note if there is no N/A answer
+    question_title[0] = '' if @questions_downloadable.values.all?
+    csv << question_title
 
     # Question Type
     csv << ['', '', '', '',
@@ -79,7 +79,7 @@ class Course::Assessment::Submission::CsvDownloadService
             I18n.t('course.assessment.submission.submissions.csv_download_service.status')]
   end
 
-  def submissions_csv_row(csv, submission, course_user)
+  def submissions_csv_row(csv, submission, course_user) # rubocop:disable Metrics/AbcSize
     row_array = [course_user.name,
                  course_user.user.email,
                  course_user.role,
@@ -90,7 +90,7 @@ class Course::Assessment::Submission::CsvDownloadService
                  end]
 
     if submission
-      current_answers_hash = submission.current_answers.map { |answer| [answer.question_id, answer] }.to_h
+      current_answers_hash = submission.current_answers.to_h { |answer| [answer.question_id, answer] }
       answer_row = @questions.map do |question|
         answer = current_answers_hash[question.id]
         generate_answer_row(question, answer)

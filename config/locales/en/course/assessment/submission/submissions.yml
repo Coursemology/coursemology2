@@ -28,7 +28,7 @@ en:
             grader: 'Grader'
             csv_empty: '-'
           csv_download_service:
-            note: 'Note: N/A - The answer format cannot fit in a single cell.'
+            note: 'N/A: The answer format cannot fit in a single cell.'
             name: 'Name'
             email: 'Email'
             role: 'Role'
