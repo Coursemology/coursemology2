@@ -20,7 +20,7 @@ module Course::ForumsAbilityComponent
 
   def define_all_forum_permissions
     allow_show_forums
-    allow_show_topics
+    allow_show_topics if course_user.student?
     allow_create_topics
     allow_update_topics
     allow_reply_unlocked_topics

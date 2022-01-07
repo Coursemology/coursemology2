@@ -21,13 +21,15 @@ module Course::MaterialsAbilityComponent
   end
 
   def allow_show_materials
-    valid_materials_hashes.each do |properties|
-      can :read, Course::Material, material_course_hash.deep_merge(properties)
-    end
+    if course_user.student?
+      valid_materials_hashes.each do |properties|
+        can :read, Course::Material, material_course_hash.deep_merge(properties)
+      end
 
-    opened_material_hashes.each do |properties|
-      can [:read, :download],
-          Course::Material::Folder, { course_id: course.id }.reverse_merge(properties)
+      opened_material_hashes.each do |properties|
+        can [:read, :download],
+            Course::Material::Folder, { course_id: course.id }.reverse_merge(properties)
+      end
     end
 
     can :read_owner, Course::Material::Folder do |folder|
