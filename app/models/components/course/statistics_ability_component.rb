@@ -3,7 +3,7 @@ module Course::StatisticsAbilityComponent
   include AbilityHost::Component
 
   def define_permissions
-    allow_staff_read_statistics if user
+    allow_staff_read_statistics if course_user&.staff?
 
     super
   end
@@ -11,6 +11,6 @@ module Course::StatisticsAbilityComponent
   private
 
   def allow_staff_read_statistics
-    can :read_statistics, Course, staff_hash
+    can :read_statistics, Course, id: course.id
   end
 end
