@@ -3,9 +3,10 @@ module Course::VirtualClassroomsAbilityComponent
   include AbilityHost::Component
 
   def define_permissions
-    if user
-      allow_students_show_virtual_classrooms
-      allow_staff_manage_virtual_classrooms
+    if course_user
+      allow_show_virtual_classrooms
+      allow_staff_access_recorded_videos if course_user.staff?
+      allow_teaching_staff_manage_virtual_classrooms if course_user.teaching_staff?
     end
 
     super
@@ -13,12 +14,15 @@ module Course::VirtualClassroomsAbilityComponent
 
   private
 
-  def allow_students_show_virtual_classrooms
-    can [:read, :access_link], Course::VirtualClassroom, course_all_course_users_hash
+  def allow_show_virtual_classrooms
+    can [:read, :access_link], Course::VirtualClassroom, course_id: course.id
   end
 
-  def allow_staff_manage_virtual_classrooms
-    can :manage, Course::VirtualClassroom, course_teaching_staff_hash
-    can :access_recorded_videos, Course, staff_hash
+  def allow_staff_access_recorded_videos
+    can :access_recorded_videos, Course, id: course.id
+  end
+
+  def allow_teaching_staff_manage_virtual_classrooms
+    can :manage, Course::VirtualClassroom, course_id: course.id
   end
 end
