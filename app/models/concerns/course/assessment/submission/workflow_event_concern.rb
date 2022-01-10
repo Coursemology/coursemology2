@@ -154,7 +154,12 @@ module Course::Assessment::Submission::WorkflowEventConcern
 
       current_answer.current_answer = false
       new_answer.current_answer = true
-      current_answer.save!
+      # current_answer.save!
+      # Validations are disabled as we are only updating the current_answer flag and nothing else.
+      # There are other answer validations, one example is validate_grade which will make
+      # check if the grade of the answer exceeds the maximum grade. In case the maximum grade is reduced
+      # but the user keeps the grade unchanged, the validation will fail.
+      current_answer.save(validate: false)
       new_answer.save!
     end
   end
@@ -187,7 +192,10 @@ module Course::Assessment::Submission::WorkflowEventConcern
           # If the latest non-current answer and the current answer are the same, keep the latest non-current answer
           # and remove current answer
           all_answers.current_answers.select(&:attempting?).each(&:destroy!)
-          last_non_current_answer.update!(current_answer: true)
+          last_non_current_answer.current_answer = true
+          # Validations for answer are disabled here in case the answer was previously unsubmitted
+          # (see note in recreate_current_answer)
+          last_non_current_answer.save(validate: false)
         else
           # Otherwise, we duplicate the current answer to a new one, and finalise it.
           # We then remove the previous current answer and mark the copied answer as the current answer.
