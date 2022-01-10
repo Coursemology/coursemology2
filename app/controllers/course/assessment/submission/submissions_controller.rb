@@ -198,8 +198,6 @@ class Course::Assessment::Submission::SubmissionsController < \
     submission = @assessment.submissions.find(params[:submission_id])
     authorize!(:delete_submission, submission)
     success = submission.transaction do
-      submission.update!('unmark' => 'true') if submission.graded?
-      submission.update!('unsubmit' => 'true') unless submission.attempting?
       submission.destroy!
 
       true
@@ -207,7 +205,7 @@ class Course::Assessment::Submission::SubmissionsController < \
     if success
       head :ok
     else
-      logger.error("failed to unsubmit submission: #{submission.errors.inspect}")
+      logger.error("Failed to delete submission: #{submission.errors.inspect}")
       render json: { errors: submission.errors }, status: :bad_request
     end
   end
