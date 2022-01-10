@@ -6,6 +6,7 @@ module Course::Assessment::AssessmentAbility
   def define_permissions
     if course_user
       define_all_assessment_permissions
+      define_student_assessment_permissions if course_user.student?
       define_staff_assessment_permissions if course_user.staff?
       define_teaching_staff_assessment_permissions if course_user.teaching_staff?
       define_manager_assessment_permissions if course_user.manager_or_owner?
@@ -31,19 +32,14 @@ module Course::Assessment::AssessmentAbility
     allow_access_assessment
     allow_attempt_assessment
     allow_read_material
-    allow_read_assessment_submission if course_user.student?
     allow_create_assessment_submission
     allow_update_own_assessment_submission
-    allow_manage_annotations_for_own_assessment_submissions
-    allow_read_own_assessment_answers
-    allow_read_submission_question
     allow_to_destroy_own_attachments_text_response_question
   end
 
   def allow_read_assessments
     can :read_material, Course::Assessment::Category, course_id: course.id
     can :read_material, Course::Assessment::Tab, category: { course_id: course.id }
-    can :read, Course::Assessment, lesson_plan_item: { published: true, course_id: course.id }
     can :authenticate, Course::Assessment, lesson_plan_item: { published: true, course_id: course.id }
   end
 
@@ -72,11 +68,6 @@ module Course::Assessment::AssessmentAbility
     end
   end
 
-  def allow_read_assessment_submission
-    can [:read, :reload_answer, :view_all_submissions], Course::Assessment::Submission,
-        experience_points_record: { course_user: { user_id: user.id } }
-  end
-
   def allow_create_assessment_submission
     can :create, Course::Assessment::Submission,
         experience_points_record: { course_user: { user_id: user.id } }
@@ -87,24 +78,41 @@ module Course::Assessment::AssessmentAbility
     can :update, Course::Assessment::Answer, submission: assessment_submission_attempting_hash(user)
   end
 
-  def allow_manage_annotations_for_own_assessment_submissions
-    can :manage, Course::Assessment::Answer::ProgrammingFileAnnotation,
-        file: { answer: { submission: { creator_id: user.id } } }
+  # Prevent everyone from destroying their own attachment, unless they are attempting the question.
+  def allow_to_destroy_own_attachments_text_response_question
+    cannot :destroy_attachment, Course::Assessment::Answer::TextResponse
+    can :destroy_attachment, Course::Assessment::Answer::TextResponse,
+        submission: assessment_submission_attempting_hash(user)
+  end
+
+  def define_student_assessment_permissions
+    allow_read_published_assessments
+    allow_read_own_assessment_submission
+    allow_read_own_assessment_answers
+    allow_read_own_submission_question
+    allow_manage_annotations_for_own_assessment_submissions
+  end
+
+  def allow_read_published_assessments
+    can :read, Course::Assessment, lesson_plan_item: { published: true, course_id: course.id }
+  end
+
+  def allow_read_own_assessment_submission
+    can [:read, :reload_answer], Course::Assessment::Submission,
+        experience_points_record: { course_user: { user_id: user.id } }
   end
 
   def allow_read_own_assessment_answers
     can :read, Course::Assessment::Answer, submission: { creator_id: user.id }
   end
 
-  def allow_read_submission_question
+  def allow_read_own_submission_question
     can :read, Course::Assessment::SubmissionQuestion, submission: { creator_id: user.id }
   end
 
-  # Prevent everyone from destroying their own attachment, unless they are attempting the question.
-  def allow_to_destroy_own_attachments_text_response_question
-    cannot :destroy_attachment, Course::Assessment::Answer::TextResponse
-    can :destroy_attachment, Course::Assessment::Answer::TextResponse,
-        submission: assessment_submission_attempting_hash(user)
+  def allow_manage_annotations_for_own_assessment_submissions
+    can :manage, Course::Assessment::Answer::ProgrammingFileAnnotation,
+        file: { answer: { submission: { creator_id: user.id } } }
   end
 
   def define_staff_assessment_permissions
@@ -124,7 +132,6 @@ module Course::Assessment::AssessmentAbility
 
   def allow_staff_read_assessment_submissions
     can :view_all_submissions, Course::Assessment, assessment_course_hash
-    can :view_all_submissions, Course::Assessment::Submission
     can :read, Course::Assessment::Submission, assessment: assessment_course_hash
   end
 
