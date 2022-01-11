@@ -5,6 +5,13 @@ class Course::StatisticsDownloadService
   class << self
     # Downloads the student data to its own folder in the base directory.
     #
+    # @param [Course] course The course for which the student data is to be downloaded.
+    # @param [User] course_user The user downloading the statistics.
+    # @param [Boolean] can_analyze_videos Whether the user can analyze videos, accessed via
+    #   can?(:analyze_videos, course).
+    # @param [Boolean] only_my_students Whether only data for the user's students should be downloaded. If false,
+    #   statistics for all students in the course will be downloaded. If true and the user is not in any groups, then an
+    #   empty CSV will be returned.
     # @return [String] The path to the CSV file.
     def download(course, course_user, can_analyze_videos, only_my_students)
       statistics_csv = nil
@@ -23,6 +30,13 @@ class Course::StatisticsDownloadService
 
     # Converts the student data to string CSV format.
     #
+    # @param [Course] course The course for which the student data is to be downloaded.
+    # @param [User] course_user The user downloading the statistics.
+    # @param [Boolean] can_analyze_videos Whether the user can analyze videos, accessed via
+    #   can?(:analyze_videos, course).
+    # @param [Boolean] only_my_students Whether only data for the user's students should be downloaded. If false,
+    #   statistics for all students in the course will be downloaded. If true and the user is not in any groups, then an
+    #   empty CSV will be returned.
     # @return [String] The student data in CSV format.
     def generate_csv(course, course_user, can_analyze_videos, only_my_students) # rubocop:disable Metrics/AbcSize
       # Pre-loads course levels to avoid N+1 queries when course_user.level_numbers are displayed.
@@ -51,6 +65,13 @@ class Course::StatisticsDownloadService
       end
     end
 
+    # Generates the array of headers for the CSV file.
+    #
+    # @param [Boolean] no_group_managers True if the course has no group managers.
+    # @param [Boolean] is_course_gamified Whether the course is gamified. True if it is.
+    # @param [Boolean] has_video_data Whether the course has videos AND the user downloading can analyze video data.
+    # @param [Integer] video_count The number of videos that this course has.
+    # @return [Array<String>] Array of string headers for the CSV file.
     def generate_header(no_group_managers, is_course_gamified, has_video_data, video_count)
       [
         CourseUser.human_attribute_name(:name),
@@ -64,6 +85,15 @@ class Course::StatisticsDownloadService
       ].compact
     end
 
+    # Generates the array of data for a single student for the CSV file.
+    #
+    # @param [CourseUser] student The student to generate data for.
+    # @param [Course::GroupManagerPreloadService] group_manager_service Service to help with querying for group
+    #   managers.
+    # @param [Boolean] no_group_managers True if the course has no group managers.
+    # @param [Boolean] is_course_gamified Whether the course is gamified. True if it is.
+    # @param [Boolean] has_video_data Whether the course has videos AND the user downloading can analyze video data.
+    # @return [Array<String>] Array of string data for this student for the CSV file.
     def generate_row(student, group_manager_service, no_group_managers, is_course_gamified, has_video_data)
       [
         student.name,
@@ -77,6 +107,10 @@ class Course::StatisticsDownloadService
       ].compact
     end
 
+    # Generates the internationalised string describing the user type.
+    #
+    # @param [CourseUser] student The student to generate the user type for.
+    # @return [String] The internationalised user type of the student.
     def generate_user_type(student)
       if student.phantom?
         I18n.t('course.statistics.csv_download_service.phantom')
@@ -85,6 +119,10 @@ class Course::StatisticsDownloadService
       end
     end
 
+    # Generates a comma separated string of the student's tutors' names (can have >1).
+    #
+    # @param [CourseUser] student The student to generate the tutors for.
+    # @return [String] The comma separated string of the student's tutors' names.
     def generate_tutor_names(student, group_manager_service)
       group_manager_service.group_managers_of(student).map(&:name).join(', ')
     end
