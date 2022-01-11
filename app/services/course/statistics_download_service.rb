@@ -12,7 +12,7 @@ class Course::StatisticsDownloadService
         statistics_csv = generate_csv(course, course_user, can_analyze_videos, only_my_students)
       end
       base_dir = Dir.mktmpdir('coursemology-statistics-')
-      dst_path = File.join(base_dir, 'students.csv')
+      dst_path = File.join(base_dir, 'students_statistics.csv')
       File.open(dst_path, 'w') do |dst_file|
         dst_file.write(statistics_csv)
       end
