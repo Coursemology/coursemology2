@@ -334,39 +334,6 @@ export default class SubmissionsTable extends Component {
     );
   }
 
-  renderUsers() {
-    const {
-      dispatch,
-      courseId,
-      assessmentId,
-      submissions,
-      assessment,
-      isDownloading,
-      isStatisticsDownloading,
-      isUnsubmitting,
-      isDeleting,
-    } = this.props;
-
-    const props = {
-      dispatch,
-      courseId,
-      assessmentId,
-      assessment,
-      isDownloading,
-      isStatisticsDownloading,
-      isUnsubmitting,
-      isDeleting,
-    };
-
-    return submissions.map((submission) => (
-      <SubmissionsTableRow
-        key={submission.courseUser.id}
-        submission={submission}
-        {...props}
-      />
-    ));
-  }
-
   render() {
     const { assessment } = this.props;
 

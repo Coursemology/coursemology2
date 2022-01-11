@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactTooltip from 'react-tooltip';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import moment from 'lib/moment';
