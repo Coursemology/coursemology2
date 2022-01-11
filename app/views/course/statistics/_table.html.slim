@@ -1,4 +1,9 @@
 - course_videos = current_course.videos
+- has_course_videos = course_videos.exists?
+- course_video_count = has_course_videos ? course_videos.count : 0
+- can_analyze_videos = can?(:analyze_videos, current_course)
+- is_course_gamified = current_course.gamified?
+- no_group_managers = service.no_group_managers?
 
 table.table.table-striped.table-hover
   thead
@@ -7,17 +12,17 @@ table.table.table-striped.table-hover
         = t('.serial_number')
       th
         = CourseUser.human_attribute_name(:name)
-      - unless @service.no_group_managers?
+      - unless no_group_managers
         th
           = t('.tutor')
-      - if current_course.gamified?
+      - if is_course_gamified
         th.text-center
           = Course::Level.model_name.human
         th.text-center
           = t('.experience_points')
-      - if course_videos.exists? && can?(:analyze_videos, current_course)
+      - if has_course_videos && can_analyze_videos
         th.text-center
-          = t('.video_watched', total: course_videos.count)
+          = t('.video_watched', total: course_video_count)
         th.text-center
           = t('.percent_watched')
 
@@ -28,16 +33,16 @@ table.table.table-striped.table-hover
           = index
         td
           = link_to_user(student)
-        - unless @service.no_group_managers?
+        - unless no_group_managers
           td
-            = @service.group_managers_of(student).map(&:name).join(', ')
-        - if current_course.gamified?
+            = service.group_managers_of(student).map(&:name).join(', ')
+        - if is_course_gamified
           td.text-center
             = student.level_number
           td.text-center
             = link_to student.experience_points,
                       course_user_experience_points_records_path(current_course, student)
-        - if course_videos.exists? && can?(:analyze_videos, current_course)
+        - if has_course_videos && can_analyze_videos
           td.text-center
             = link_to student.video_submission_count,
                       course_user_video_submissions_path(current_course, student)
