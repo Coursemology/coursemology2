@@ -70,10 +70,14 @@ export default class SubmissionsTable extends Component {
     );
   }
 
-  canDownloadAnswers() {
+  canDownloadAnswers(downloadFormat) {
     const { assessment, submissions } = this.props;
+    const downloadable =
+      downloadFormat === 'files'
+        ? assessment.filesDownloadable
+        : assessment.csvDownloadable;
     return (
-      assessment.downloadable &&
+      downloadable &&
       submissions.some(
         (s) =>
           s.workflowState !== workflowStates.Unstarted &&
@@ -117,14 +121,22 @@ export default class SubmissionsTable extends Component {
       assessment,
       handleDownload,
       handleDownloadStatistics,
-      isDownloading,
+      isDownloadingFiles,
+      isDownloadingCsv,
       isStatisticsDownloading,
       isUnsubmitting,
       isDeleting,
     } = this.props;
     const disabled =
-      isDownloading || isStatisticsDownloading || isUnsubmitting || isDeleting;
-    const downloadAnswerDisabled = disabled || !this.canDownloadAnswers();
+      isDownloadingFiles ||
+      isDownloadingCsv ||
+      isStatisticsDownloading ||
+      isUnsubmitting ||
+      isDeleting;
+    const downloadFilesAnswerDisabled =
+      disabled || !this.canDownloadAnswers('files');
+    const downloadCsvAnswerDisabled =
+      disabled || !this.canDownloadAnswers('csv');
     const downloadStatisticsDisabled =
       disabled || !this.canDownloadStatistics();
     const unsubmitAllDisabled = disabled || !this.canUnsubmitAll();
@@ -139,18 +151,41 @@ export default class SubmissionsTable extends Component {
       >
         <MenuItem
           className={
-            downloadAnswerDisabled
-              ? 'download-submissions-disabled'
-              : 'download-submissions-enabled'
+            downloadFilesAnswerDisabled
+              ? 'download-zip-submissions-disabled'
+              : 'download-zip-submissions-enabled'
           }
           primaryText={
-            <FormattedMessage {...submissionsTranslations.downloadAnswers} />
+            <FormattedMessage {...submissionsTranslations.downloadZipAnswers} />
           }
-          disabled={downloadAnswerDisabled}
+          disabled={downloadFilesAnswerDisabled}
           leftIcon={
-            isDownloading ? <CircularProgress size={30} /> : <DownloadIcon />
+            isDownloadingFiles ? (
+              <CircularProgress size={30} />
+            ) : (
+              <DownloadIcon />
+            )
           }
-          onClick={downloadAnswerDisabled ? null : handleDownload}
+          onClick={
+            downloadFilesAnswerDisabled ? null : () => handleDownload('zip')
+          }
+        />
+        <MenuItem
+          className={
+            downloadCsvAnswerDisabled
+              ? 'download-csv-submissions-disabled'
+              : 'download-csv-submissions-enabled'
+          }
+          primaryText={
+            <FormattedMessage {...submissionsTranslations.downloadCsvAnswers} />
+          }
+          disabled={downloadCsvAnswerDisabled}
+          leftIcon={
+            isDownloadingCsv ? <CircularProgress size={30} /> : <DownloadIcon />
+          }
+          onClick={
+            downloadCsvAnswerDisabled ? null : () => handleDownload('csv')
+          }
         />
         <MenuItem
           className={
@@ -250,7 +285,8 @@ export default class SubmissionsTable extends Component {
       assessmentId,
       submissions,
       assessment,
-      isDownloading,
+      isDownloadingFiles,
+      isDownloadingCsv,
       isStatisticsDownloading,
       isUnsubmitting,
       isDeleting,
@@ -261,7 +297,8 @@ export default class SubmissionsTable extends Component {
       courseId,
       assessmentId,
       assessment,
-      isDownloading,
+      isDownloadingFiles,
+      isDownloadingCsv,
       isStatisticsDownloading,
       isUnsubmitting,
       isDeleting,
@@ -394,7 +431,8 @@ SubmissionsTable.propTypes = {
   assessment: assessmentShape.isRequired,
   courseId: PropTypes.string.isRequired,
   assessmentId: PropTypes.string.isRequired,
-  isDownloading: PropTypes.bool.isRequired,
+  isDownloadingFiles: PropTypes.bool.isRequired,
+  isDownloadingCsv: PropTypes.bool.isRequired,
   isStatisticsDownloading: PropTypes.bool.isRequired,
   isUnsubmitting: PropTypes.bool.isRequired,
   isDeleting: PropTypes.bool.isRequired,

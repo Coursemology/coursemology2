@@ -32,7 +32,9 @@ module CourseUser::StaffConcern
       where('course_users.role = ?', CourseUser.roles[:student]).
       where('course_users.phantom = ?', false).
       where('course_assessment_submissions.publisher_id = ?', user_id).
-      where('course_users.course_id = ?', course_id)
+      where('course_users.course_id = ?', course_id).
+      pluck(:published_at, :submitted_at).
+      map { |published_at, submitted_at| { published_at: published_at, submitted_at: submitted_at } }
   end
 
   # Returns the average marking time of the staff.
@@ -43,7 +45,7 @@ module CourseUser::StaffConcern
       if valid_submissions.empty?
         nil
       else
-        valid_submissions.sum { |s| s.published_at - s.submitted_at } / valid_submissions.size
+        valid_submissions.sum { |s| s[:published_at] - s[:submitted_at] } / valid_submissions.size
       end
   end
 
@@ -52,7 +54,7 @@ module CourseUser::StaffConcern
   # @return [Float]
   def marking_time_stddev
     # An array of time in seconds.
-    time_diff = valid_submissions.map { |s| s.published_at - s.submitted_at }
+    time_diff = valid_submissions.map { |s| s[:published_at] - s[:submitted_at] }
     standard_deviation(time_diff)
   end
 
@@ -61,7 +63,7 @@ module CourseUser::StaffConcern
   def valid_submissions
     @valid_submissions ||=
       published_submissions.
-      select { |s| s.submitted_at && s.published_at && s.published_at > s.submitted_at }
+      select { |s| s[:submitted_at] && s[:published_at] && s[:published_at] > s[:submitted_at] }
   end
 
   # Calculate the standard deviation of an array of time.

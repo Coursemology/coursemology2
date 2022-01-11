@@ -7,7 +7,8 @@ const initialState = {
   isPublishing: false,
   isForceSubmitting: false,
   isReminding: false,
-  isDownloading: false,
+  isDownloadingFiles: false,
+  isDownloadingCsv: false,
   isStatisticsDownloading: false,
   isUnsubmitting: false,
   isDeleting: false,
@@ -73,11 +74,17 @@ export default function (state = initialState, action) {
     case actions.AUTOGRADE_SUBMISSION_FAILURE:
       return { ...state, isAutograding: false };
 
-    case actions.DOWNLOAD_SUBMISSIONS_REQUEST:
-      return { ...state, isDownloading: true };
-    case actions.DOWNLOAD_SUBMISSIONS_SUCCESS:
-    case actions.DOWNLOAD_SUBMISSIONS_FAILURE:
-      return { ...state, isDownloading: false };
+    case actions.DOWNLOAD_SUBMISSIONS_FILES_REQUEST:
+      return { ...state, isDownloadingFiles: true };
+    case actions.DOWNLOAD_SUBMISSIONS_FILES_SUCCESS:
+    case actions.DOWNLOAD_SUBMISSIONS_FILES_FAILURE:
+      return { ...state, isDownloadingFiles: false };
+
+    case actions.DOWNLOAD_SUBMISSIONS_CSV_REQUEST:
+      return { ...state, isDownloadingCsv: true };
+    case actions.DOWNLOAD_SUBMISSIONS_CSV_SUCCESS:
+    case actions.DOWNLOAD_SUBMISSIONS_CSV_FAILURE:
+      return { ...state, isDownloadingCsv: false };
 
     case actions.DOWNLOAD_STATISTICS_REQUEST:
       return { ...state, isStatisticsDownloading: true };

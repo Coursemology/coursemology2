@@ -13,7 +13,7 @@ en:
           graded_not_published_warning: >
             These grades can't be seen by the student until they are published.
         tabs:
-          my_students_pending: 'My Students'
+          my_students_pending: 'My Students Pending'
           all_pending: 'All Pending Submissions'
         filter:
           student: 'Student'

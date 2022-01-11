@@ -86,8 +86,8 @@ module Course::Assessment::AssessmentAbility
     can :create, Course::Assessment::Submission,
         experience_points_record: { course_user: { user_id: user.id } }
     can [:update, :submit_answer], Course::Assessment::Submission, assessment_submission_attempting_hash(user)
-    can [:read, :reload_answer], Course::Assessment::Submission,
-        experience_points_record: { course_user: { user_id: user.id } }
+    can [:read, :reload_answer, :view_all_submissions], Course::Assessment::Submission,
+        experience_points_record: { course_user: { user_id: user.id } } if course_user&.student?
   end
 
   def allow_students_update_own_assessment_submission
@@ -137,6 +137,7 @@ module Course::Assessment::AssessmentAbility
 
   def allow_staff_read_assessment_submissions
     can :view_all_submissions, Course::Assessment, assessment_course_staff_hash
+    can :view_all_submissions, Course::Assessment::Submission if course_user&.staff?
     can :read, Course::Assessment::Submission, assessment: assessment_course_staff_hash
   end
 

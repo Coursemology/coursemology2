@@ -72,16 +72,10 @@ export default class SubmissionsTableRow extends React.Component {
         <>
           <FontIcon
             data-tip
-            data-for={`phantom-user-${submission.courseUser.id}`}
+            data-for="phantom-user"
             className="fa fa-user-secret fa-xs"
             style={styles.phantomIcon}
           />
-          <ReactTooltip
-            id={`phantom-user-${submission.courseUser.id}`}
-            effect="solid"
-          >
-            <FormattedMessage {...submissionsTranslations.phantom} />
-          </ReactTooltip>
         </>
       );
     }
@@ -111,7 +105,8 @@ export default class SubmissionsTableRow extends React.Component {
     return (
       this.props.submission.workflowState !==
         nextProps.submission.workflowState ||
-      this.props.isDownloading !== nextProps.isDownloading ||
+      this.props.isDownloadingFiles !== nextProps.isDownloadingFiles ||
+      this.props.isDownloadingCsv !== nextProps.isDownloadingCsv ||
       this.props.isStatisticsDownloading !==
         nextProps.isStatisticsDownloading ||
       this.props.isUnsubmitting !== nextProps.isUnsubmitting ||
@@ -139,13 +134,18 @@ export default class SubmissionsTableRow extends React.Component {
 
   disableButtons() {
     const {
-      isDownloading,
+      isDownloadingFiles,
+      isDownloadingCsv,
       isStatisticsDownloading,
       isDeleting,
       isUnsubmitting,
     } = this.props;
     return (
-      isStatisticsDownloading || isDownloading || isDeleting || isUnsubmitting
+      isStatisticsDownloading ||
+      isDownloadingFiles ||
+      isDownloadingCsv ||
+      isDeleting ||
+      isUnsubmitting
     );
   }
 
@@ -200,22 +200,6 @@ export default class SubmissionsTableRow extends React.Component {
       />
     );
   }
-
-  renderPhantomUserIcon = (submission) => {
-    if (submission.courseUser.phantom) {
-      return (
-        <>
-          <FontIcon
-            data-tip
-            data-for="phantom-user"
-            className="fa fa-user-secret fa-xs"
-            style={styles.phantomIcon}
-          />
-        </>
-      );
-    }
-    return null;
-  };
 
   renderSubmissionLogsLink(submission) {
     const { assessment, courseId, assessmentId } = this.props;
@@ -321,7 +305,7 @@ export default class SubmissionsTableRow extends React.Component {
     return (
       <TableRow className="submission-row" key={submission.courseUser.id}>
         <TableRowColumn style={styles.tableCell}>
-          {this.renderPhantomUserIcon(submission)}
+          {SubmissionsTableRow.renderPhantomUserIcon(submission)}
           <a
             style={styles.nameWrapper}
             href={getCourseUserURL(courseId, submission.courseUser.id)}
@@ -378,7 +362,8 @@ SubmissionsTableRow.propTypes = {
   assessment: assessmentShape.isRequired,
   courseId: PropTypes.string.isRequired,
   assessmentId: PropTypes.string.isRequired,
-  isDownloading: PropTypes.bool.isRequired,
+  isDownloadingFiles: PropTypes.bool.isRequired,
+  isDownloadingCsv: PropTypes.bool.isRequired,
   isStatisticsDownloading: PropTypes.bool.isRequired,
   isUnsubmitting: PropTypes.bool.isRequired,
   isDeleting: PropTypes.bool.isRequired,

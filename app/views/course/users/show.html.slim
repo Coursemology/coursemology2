@@ -18,8 +18,8 @@ div.row
         p = t('.achievement_count', count: @course_user.achievement_count)
 
       - if can_read_progress
-        p = link_to t('.experience_points_earned_html', points: @course_user.experience_points),
-                    course_user_experience_points_records_path(current_course, @course_user)
+        p = link_to course_user_experience_points_records_path(current_course, @course_user) do
+            span.level = t('.level_and_exp', level: @course_user.level_number, exp: @course_user.experience_points)
     - if can?(:manage, Course::UserEmailUnsubscription.new(course_user: @course_user))
       p = link_to t('.manage_email_subscription'),
                   course_user_manage_email_subscription_path(current_course, @course_user)

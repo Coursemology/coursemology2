@@ -5,7 +5,8 @@
   td.text-center
     = staff.published_submissions.size
   td.text-center
-    = staff.my_students.count
+    / number of students in a group for the staff
+    = staff.group_users.count { |group_user| group_user.role == 'normal' }
   td.text-center
     = seconds_to_str(staff.average_marking_time)
   td.text-center

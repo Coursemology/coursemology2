@@ -86,7 +86,7 @@ export default class CommentField extends Component {
           }
         />
         {renderDelayedCommentButton && (
-          <span data-tip data-for="timeBonusExpTooltip">
+          <span data-tip data-for={`delayed-comment-button-${inputId}`}>
             <RaisedButton
               primary
               label={<FormattedMessage {...translations.commentDelayed} />}
@@ -98,7 +98,7 @@ export default class CommentField extends Component {
                 ) : null
               }
             />
-            <ReactTooltip id="timeBonusExpTooltip">
+            <ReactTooltip id={`delayed-comment-button-${inputId}`}>
               <FormattedMessage {...translations.commentDelayedDescription} />
             </ReactTooltip>
           </span>

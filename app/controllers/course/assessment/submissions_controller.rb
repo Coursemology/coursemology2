@@ -7,10 +7,12 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
   def index # :nodoc:
     @submissions = @submissions.from_category(category).confirmed
     @submissions = @submissions.filter_by_params(filter_params) unless filter_params.blank?
+    load_assessments
   end
 
   def pending
     @submissions = pending_submissions.from_course(current_course)
+    load_assessments
   end
 
   private
@@ -45,9 +47,15 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
 
   # Load student submissions.
   def load_submissions
-    student_ids = @course.course_users.students.pluck(:user_id)
+    student_ids = if current_course_user&.student?
+                    current_user.id
+                  else
+                    @course.course_users.students.pluck(:user_id)
+                  end
+
     @submissions = Course::Assessment::Submission.by_users(student_ids).
-                   ordered_by_submitted_date.accessible_by(current_ability).page(page_param).
+                   ordered_by_submitted_date.accessible_by(current_ability, :view_all_submissions).
+                   page(page_param).calculated(:grade).
                    includes(:assessment, :answers,
                             experience_points_record: { course_user: [:course, :groups] })
   end
@@ -66,6 +74,15 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
   def load_group_managers
     course_staff = current_course.course_users.staff.includes(:groups)
     @service = Course::GroupManagerPreloadService.new(course_staff)
+  end
+
+  # Load assessments hash
+  def load_assessments
+    ids = @submissions.map(&:assessment_id)
+    @assessments = Course::Assessment.where(id: ids).calculated(:maximum_grade)
+    @assessments_hash = @assessments.to_h do |assessment|
+      [assessment.id, assessment]
+    end
   end
 
   def add_submissions_breadcrumb
