@@ -1,0 +1,4 @@
+- if current_course_user&.my_students&.any?
+  = tabs do
+    = nav_to(t('.my_students_tab'), course_statistics_my_students_path(current_course))
+    = nav_to(t('.all_students_tab'), course_statistics_all_students_path(current_course))
