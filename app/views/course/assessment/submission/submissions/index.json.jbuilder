@@ -6,7 +6,8 @@ json.assessment do
   json.maximumGrade @assessment.maximum_grade.to_f
   json.autograded @assessment.autograded
   json.gamified current_course.gamified?
-  json.downloadable @assessment.downloadable?
+  json.filesDownloadable @assessment.files_downloadable?
+  json.csvDownloadable @assessment.csv_downloadable?
   json.passwordProtected @assessment.session_password_protected?
   json.canViewLogs can? :manage, @assessment
   json.canPublishGrades can? :publish_grades, @assessment

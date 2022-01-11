@@ -32,4 +32,8 @@ class Course::Assessment::Answer::MultipleResponse < ApplicationRecord
 
     Set.new(option_ids) == Set.new(other_answer.option_ids)
   end
+
+  def csv_download
+    ActionController::Base.helpers.strip_tags(options.map(&:option).join(';'))
+  end
 end

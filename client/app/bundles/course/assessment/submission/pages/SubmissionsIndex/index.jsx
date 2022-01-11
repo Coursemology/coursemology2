@@ -243,7 +243,8 @@ class VisibleSubmissionsIndex extends React.Component {
     const {
       dispatch,
       assessment,
-      isDownloading,
+      isDownloadingFiles,
+      isDownloadingCsv,
       isStatisticsDownloading,
       isUnsubmitting,
       isDeleting,
@@ -254,7 +255,8 @@ class VisibleSubmissionsIndex extends React.Component {
       courseId,
       assessmentId,
       assessment,
-      isDownloading,
+      isDownloadingFiles,
+      isDownloadingCsv,
       isStatisticsDownloading,
       isUnsubmitting,
       isDeleting,
@@ -274,9 +276,12 @@ class VisibleSubmissionsIndex extends React.Component {
           >
             <SubmissionsTable
               submissions={filteredSubmissions.myStudentSubmissions}
-              handleDownload={() =>
+              handleDownload={(downloadFormat) =>
                 dispatch(
-                  downloadSubmissions(handleParams.handleMyStudentsParams),
+                  downloadSubmissions(
+                    handleParams.handleMyStudentsParams,
+                    downloadFormat,
+                  ),
                 )
               }
               handleDownloadStatistics={() =>
@@ -308,8 +313,13 @@ class VisibleSubmissionsIndex extends React.Component {
         >
           <SubmissionsTable
             submissions={filteredSubmissions.studentSubmissions}
-            handleDownload={() =>
-              dispatch(downloadSubmissions(handleParams.handleStudentsParams))
+            handleDownload={(downloadFormat) =>
+              dispatch(
+                downloadSubmissions(
+                  handleParams.handleStudentsParams,
+                  downloadFormat,
+                ),
+              )
             }
             handleDownloadStatistics={() =>
               dispatch(downloadStatistics(handleParams.handleStudentsParams))
@@ -335,8 +345,13 @@ class VisibleSubmissionsIndex extends React.Component {
         >
           <SubmissionsTable
             submissions={filteredSubmissions.staffSubmissions}
-            handleDownload={() =>
-              dispatch(downloadSubmissions(handleParams.handleStaffParams))
+            handleDownload={(downloadFormat) =>
+              dispatch(
+                downloadSubmissions(
+                  handleParams.handleStaffParams,
+                  downloadFormat,
+                ),
+              )
             }
             handleDownloadStatistics={() =>
               dispatch(downloadStatistics(handleParams.handleStaffParams))
@@ -556,7 +571,8 @@ VisibleSubmissionsIndex.propTypes = {
   ),
   notification: notificationShape,
   isLoading: PropTypes.bool.isRequired,
-  isDownloading: PropTypes.bool.isRequired,
+  isDownloadingFiles: PropTypes.bool.isRequired,
+  isDownloadingCsv: PropTypes.bool.isRequired,
   isStatisticsDownloading: PropTypes.bool.isRequired,
   isPublishing: PropTypes.bool.isRequired,
   isForceSubmitting: PropTypes.bool.isRequired,
@@ -571,7 +587,8 @@ function mapStateToProps(state) {
     notification: state.notification,
     submissions: state.submissions,
     isLoading: state.submissionFlags.isLoading,
-    isDownloading: state.submissionFlags.isDownloading,
+    isDownloadingFiles: state.submissionFlags.isDownloadingFiles,
+    isDownloadingCsv: state.submissionFlags.isDownloadingCsv,
     isStatisticsDownloading: state.submissionFlags.isStatisticsDownloading,
     isPublishing: state.submissionFlags.isPublishing,
     isForceSubmitting: state.submissionFlags.isForceSubmitting,

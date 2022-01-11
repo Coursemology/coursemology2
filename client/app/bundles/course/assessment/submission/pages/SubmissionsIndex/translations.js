@@ -35,9 +35,13 @@ const translations = defineMessages({
     id: 'course.assessment.submission.submissions.download',
     defaultMessage: 'Download',
   },
-  downloadAnswers: {
-    id: 'course.assessment.submission.submissions.downloadAnswers',
-    defaultMessage: 'Download Answers',
+  downloadZipAnswers: {
+    id: 'course.assessment.submission.submissions.downloadZipAnswers',
+    defaultMessage: 'Download Answers (Files)',
+  },
+  downloadCsvAnswers: {
+    id: 'course.assessment.submission.submissions.downloadCsvAnswers',
+    defaultMessage: 'Download Answers (CSV)',
   },
   downloadStatistics: {
     id: 'course.assessment.submission.submissions.downloadStatistics',

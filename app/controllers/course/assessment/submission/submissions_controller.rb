@@ -135,11 +135,10 @@ class Course::Assessment::Submission::SubmissionsController < \
   # Download either all of or a subset of submissions for an assessment.
   def download_all
     authorize!(:manage, @assessment)
-    if !@assessment.downloadable? || @assessment.submissions.confirmed.empty?
+    if not_downloadable
       head :bad_request
     else
-      job = Course::Assessment::Submission::ZipDownloadJob.
-            perform_later(current_course_user, @assessment, params[:course_users]).job
+      job = download_job
       respond_to do |format|
         format.html { redirect_to(job_path(job)) }
         format.json { render json: { redirect_url: job_path(job) } }
@@ -272,6 +271,22 @@ class Course::Assessment::Submission::SubmissionsController < \
   def log_service
     @log_service ||=
       Course::Assessment::SessionLogService.new(@assessment, session, @submission)
+  end
+
+  def not_downloadable
+    @assessment.submissions.confirmed.empty? ||
+      (params[:download_format] == 'zip' && !@assessment.files_downloadable?) ||
+      (params[:download_format] == 'csv' && !@assessment.csv_downloadable?)
+  end
+
+  def download_job
+    if params[:download_format] == 'csv'
+      Course::Assessment::Submission::CsvDownloadJob.
+        perform_later(current_course_user, @assessment, params[:course_users]).job
+    else
+      Course::Assessment::Submission::ZipDownloadJob.
+        perform_later(current_course_user, @assessment, params[:course_users]).job
+    end
   end
 
   # Check for zombie jobs, create new grading jobs if there's any zombie jobs.

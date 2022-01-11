@@ -432,10 +432,11 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
       end
 
       describe '#download_all' do
+        let!(:download_format) { 'zip' }
         subject do
           put :download_all, params: {
             course_id: course, assessment_id: assessment.id,
-            course_users: 'students', format: :json
+            course_users: 'students', download_format: download_format, format: :json
           }
         end
 
@@ -446,13 +447,36 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
           it { expect(subject).to have_http_status(:bad_request) }
         end
 
-        context 'when there are submissions' do
-          it 'downloads the submission' do
+        context 'when the download is requested in zip format' do
+          it 'downloads the submissions in zip format' do
             subject
             wait_for_job
 
             json_result = JSON.parse(response.body)
-            expect(json_result['redirect_url']).not_to be(nil)
+            job_guid = json_result['redirect_url'][(json_result['redirect_url'].rindex('/') + 1)..]
+            job = TrackableJob::Job.find(job_guid)
+
+            expect(job_guid).not_to be(nil)
+            expect(response.header['Content-Type']).to include('application/json')
+            expect(response.status).to eq(200)
+            expect(job.redirect_to).to include('.zip')
+          end
+        end
+
+        context 'when the download is requested in csv format' do
+          let!(:download_format) { 'csv' }
+          it 'downloads the submission in csv format' do
+            subject
+            wait_for_job
+
+            json_result = JSON.parse(response.body)
+            job_guid = json_result['redirect_url'][(json_result['redirect_url'].rindex('/') + 1)..]
+            job = TrackableJob::Job.find(job_guid)
+
+            expect(job_guid).not_to be(nil)
+            expect(response.header['Content-Type']).to include('application/json')
+            expect(response.status).to eq(200)
+            expect(job.redirect_to).to include('.csv')
           end
         end
       end

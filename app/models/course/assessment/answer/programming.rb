@@ -53,6 +53,10 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
     end
   end
 
+  def csv_download
+    files.first.content
+  end
+
   def assign_params(params)
     acting_as.assign_params(params)
 

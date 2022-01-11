@@ -52,7 +52,7 @@ class Course::Assessment::Submission::ZipDownloadService
   # Downloads each answer to its own folder in the submission directory.
   def download_answers(submission, submission_dir)
     answers = submission.answers.includes(:question).latest_answers.
-              select { |answer| @questions[answer.question_id]&.downloadable? }
+              select { |answer| @questions[answer.question_id]&.files_downloadable? }
     answers.each do |answer|
       question_assessment = submission.assessment.question_assessments.
                             find_by!(question: @questions[answer.question_id])
@@ -84,7 +84,7 @@ class Course::Assessment::Submission::ZipDownloadService
     output_file
   end
 
-  def course_user_ids
+  def course_user_ids # rubocop:disable Metrics/AbcSize
     @course_user_ids ||=
       case @course_users
       when COURSE_USERS[:my_students]

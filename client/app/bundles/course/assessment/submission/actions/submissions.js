@@ -116,23 +116,43 @@ export function sendAssessmentReminderEmail(assessmentId, type) {
   };
 }
 
-export function downloadSubmissions(type) {
+/**
+ * Download submissions for indicated user types in a given format (zip or csv)
+ *
+ * @param {String} [type] user types to be included in the downloaded submissions. Possible value includes:
+ *  ['my_students'|'my_students_w_phantom'|'students'|'students_w_phantom'|'staff'|'staff_w_phantom']
+ * @param {String} [downloadFormat=zip|csv] submission download format
+ * @returns {function(*)} The thunk to download submissions
+ */
+export function downloadSubmissions(type, downloadFormat) {
+  const actions =
+    downloadFormat === 'zip'
+      ? {
+          request: actionTypes.DOWNLOAD_SUBMISSIONS_FILES_REQUEST,
+          success: actionTypes.DOWNLOAD_SUBMISSIONS_FILES_SUCCESS,
+          failure: actionTypes.DOWNLOAD_SUBMISSIONS_FILES_FAILURE,
+        }
+      : {
+          request: actionTypes.DOWNLOAD_SUBMISSIONS_CSV_REQUEST,
+          success: actionTypes.DOWNLOAD_SUBMISSIONS_CSV_SUCCESS,
+          failure: actionTypes.DOWNLOAD_SUBMISSIONS_CSV_FAILURE,
+        };
   return (dispatch) => {
-    dispatch({ type: actionTypes.DOWNLOAD_SUBMISSIONS_REQUEST });
+    dispatch({ type: actions.request });
 
     const handleSuccess = (successData) => {
       window.location.href = successData.redirect_url;
-      dispatch({ type: actionTypes.DOWNLOAD_SUBMISSIONS_SUCCESS });
+      dispatch({ type: actions.success });
       dispatch(setNotification(translations.downloadRequestSuccess));
     };
 
     const handleFailure = () => {
-      dispatch({ type: actionTypes.DOWNLOAD_SUBMISSIONS_FAILURE });
+      dispatch({ type: actions.failure });
       dispatch(setNotification(translations.requestFailure));
     };
 
     return CourseAPI.assessment.submissions
-      .downloadAll(type)
+      .downloadAll(type, downloadFormat)
       .then((response) => response.data)
       .then((data) => {
         dispatch(setNotification(translations.downloadSubmissionsJobPending));
