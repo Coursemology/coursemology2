@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { RaisedButton } from 'material-ui';
 import { grey700 } from 'material-ui/styles/colors';
 import PropTypes from 'prop-types';
@@ -56,7 +56,7 @@ const styles = {
   },
 };
 
-export default class ForumPostSelect extends React.Component {
+export default class ForumPostSelect extends Component {
   constructor(props) {
     super(props);
     this.state = {

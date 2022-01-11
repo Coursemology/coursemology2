@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
@@ -31,7 +31,7 @@ const styles = {
   },
 };
 
-class UserEmailSubscriptions extends React.Component {
+class UserEmailSubscriptions extends Component {
   handleFetchAllUserEmailSubscriptions = () => {
     const { dispatch } = this.props;
     dispatch(fetchUserEmailSubscriptions());

@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { green50, red700 } from 'material-ui/styles/colors';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -54,7 +54,7 @@ const styles = {
   },
 };
 
-export default class SelectedPostCard extends React.Component {
+export default class SelectedPostCard extends Component {
   static renderLink(url, name) {
     let renderedName = name;
     if (renderedName.length > MAX_NAME_LENGTH) {

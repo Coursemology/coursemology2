@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import moment from 'lib/moment';
@@ -56,7 +56,7 @@ const styles = {
   },
 };
 
-export default class SubmissionsTableRow extends React.Component {
+export default class SubmissionsTableRow extends Component {
   static formatDate(date) {
     return date ? moment(date).format('DD MMM HH:mm') : null;
   }

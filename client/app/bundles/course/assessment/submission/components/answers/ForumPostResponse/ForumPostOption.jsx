@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import {
   white,
   blueGrey200,
@@ -34,7 +34,7 @@ const styles = {
  * This is a wrapper around the general ForumPost component,
  * that provides "selectable" functionalities.
  */
-class ForumPostOption extends React.Component {
+class ForumPostOption extends Component {
   handleClick(event, postPack) {
     const { intl } = this.props;
     if (

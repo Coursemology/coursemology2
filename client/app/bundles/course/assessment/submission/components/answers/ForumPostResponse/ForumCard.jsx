@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import {
   RaisedButton,
@@ -52,7 +52,7 @@ const styles = {
   },
 };
 
-export default class ForumCard extends React.Component {
+export default class ForumCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
