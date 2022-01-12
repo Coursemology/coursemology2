@@ -51,7 +51,7 @@ class Course < ApplicationRecord
   has_many :levels, dependent: :destroy, inverse_of: :course do
     include Course::LevelsConcern
   end
-  has_many :groups, dependent: :destroy, class_name: Course::Group.name
+  has_many :group_categories, dependent: :destroy, class_name: Course::GroupCategory.name
   has_many :lesson_plan_items, class_name: Course::LessonPlan::Item.name, dependent: :destroy
   has_many :lesson_plan_milestones, through: :lesson_plan_items,
                                     source: :actable, source_type: Course::LessonPlan::Milestone.name

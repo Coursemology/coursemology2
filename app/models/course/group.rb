@@ -6,11 +6,11 @@ class Course::Group < ApplicationRecord
   validates :name, length: { maximum: 255 }, presence: true
   validates :creator, presence: true
   validates :updater, presence: true
-  validates :course, presence: true
-  validates :name, uniqueness: { scope: [:course_id], if: -> { course_id? && name_changed? } }
-  validates :course_id, uniqueness: { scope: [:name], if: -> { name? && course_id_changed? } }
+  validates :category, presence: true
+  validates :name, uniqueness: { scope: [:category_id], if: -> { category_id? && name_changed? } }
+  validates :category_id, uniqueness: { scope: [:name], if: -> { name? && category_id_changed? } }
 
-  belongs_to :course, inverse_of: :groups
+  belongs_to :group_category, inverse_of: :groups
   has_many :group_users, -> { order_by_course_user_name },
            inverse_of: :group, dependent: :destroy, class_name: Course::GroupUser.name,
            foreign_key: :group_id
