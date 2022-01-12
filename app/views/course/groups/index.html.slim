@@ -1,15 +1,2 @@
-= page_header do
-  = new_button([current_course, :group]) if can?(:create, Course::Group.new(course: current_course))
+#course-group-component
 
-table.table.table-hover
-  thead
-    tr
-      th = t('.name')
-      th = t('.members')
-      th = t('.phantom')
-      th = t('.total')
-      th = t('.managers')
-      th
-
-  tbody
-    = render @groups
