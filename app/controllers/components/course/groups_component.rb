@@ -24,10 +24,13 @@ class Course::GroupsComponent < SimpleDelegator
   private
 
   def show_group_sidebar_item?
-    can?(:read, Course::Group.new(course: current_course)) || !manageable_groups.empty?
+    category = Course::GroupCategory.new(course: current_course)
+    return true if can?(:read, category)
+
+    can?(:read, Course::Group.new(group_category: category)) || !manageable_groups.empty?
   end
 
   def manageable_groups
-    current_course.groups.accessible_by(current_ability, :manage)
+    current_course.group_categories.groups.accessible_by(current_ability, :manage)
   end
 end

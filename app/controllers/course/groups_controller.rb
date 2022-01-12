@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 class Course::GroupsController < Course::ComponentController
-  load_and_authorize_resource :group, through: :course, class: Course::Group.name
   add_breadcrumb :index, :course_groups_path
 
-  def index # :nodoc:
-    @groups = @groups.ordered_by_name.includes(group_users: { course_user: :course })
+  # TODO: Handle authorization
+  def index
+    @categories = Course::GroupCategory.includes(groups: { group_users: :course_user })
+    @course_users = current_course.course_users.order_alphabetically
   end
 
   def show # :nodoc:

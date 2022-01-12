@@ -16,10 +16,12 @@ module Course::GroupsAbilityComponent
 
   def allow_staff_read_groups
     can :read, Course::Group, course_staff_hash
+    can :read, Course::GroupCategory, course_staff_hash
   end
 
   def allow_teaching_staff_manage_groups
     can :manage, Course::Group, course_teaching_staff_hash
+    can :manage, Course::GroupCategory, course_teaching_staff_hash
   end
 
   def allow_group_manager_manage_group
