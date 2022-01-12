@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 import { questionShape } from 'course/assessment/submission/propTypes';
 import NotificationBar from 'lib/components/NotificationBar';
 import RichTextField from 'lib/components/redux-form/RichTextField';
+import Error from 'lib/components/ErrorCard';
 
-import Error from './Error';
 import ForumPostSelect from './ForumPostSelect';
 
 function renderTextField(readOnly, answerId) {

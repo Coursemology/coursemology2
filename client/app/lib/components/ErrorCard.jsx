@@ -16,15 +16,27 @@ const styles = {
   },
 };
 
-export default function Error({ message }) {
+export default function Error({
+  message,
+  cardStyles,
+  headerStyles,
+  messageStyles,
+}) {
   return (
-    <Card style={styles.card}>
-      <CardHeader style={styles.header} title="Error" titleColor={red900} />
-      <CardText>{message}</CardText>
+    <Card style={{ ...styles.card, ...cardStyles }}>
+      <CardHeader
+        style={{ ...styles.header, ...headerStyles }}
+        title="Error"
+        titleColor={red900}
+      />
+      <CardText style={messageStyles}>{message}</CardText>
     </Card>
   );
 }
 
 Error.propTypes = {
   message: PropTypes.string.isRequired,
+  cardStyles: PropTypes.object,
+  headerStyles: PropTypes.object,
+  messageStyles: PropTypes.object,
 };
