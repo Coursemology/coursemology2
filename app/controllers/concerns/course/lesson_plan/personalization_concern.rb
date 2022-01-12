@@ -75,7 +75,9 @@ module Course::LessonPlan::PersonalizationConcern
 
         # If the user was previously on the stragglers algorithm and just switched over, and has already open
         # items, we want to keep those items as they are
-        next if personal_time.end_at > reference_time.end_at && personal_time.start_at < Time.zone.now
+        if personal_time.end_at && personal_time.end_at > reference_time.end_at && personal_time.start_at < Time.zone.now
+          next
+        end
 
         # Update start_at
         if personal_time.start_at > Time.zone.now
