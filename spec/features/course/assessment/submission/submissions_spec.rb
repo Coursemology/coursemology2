@@ -170,5 +170,71 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         expect(page).not_to have_css('.unsubmit-submissions-enabled')
       end
     end
+
+    context 'When a student\'s submission of randomized assessment is deleted' do
+      let(:user) { create(:course_manager, course: course).user }
+      let(:randomized_assessment) do
+        create(:assessment, :published, :with_all_question_types, randomization: 'prepared', course: course)
+      end
+      let!(:randomized_submission) do
+        create(:submission, :submitted,
+               assessment: randomized_assessment, course: course, creator: students[0].user)
+      end
+      let!(:question_group) do
+        randomized_assessment.question_groups.create!(title: 'Test Group', weight: 1).tap do |group|
+          group.question_bundles.create!(title: 'Test Bundle 1')
+          group.question_bundles.create!(title: 'Test Bundle 2')
+          group.question_bundles.create!(title: 'Test Bundle 3')
+        end
+      end
+      let(:question_bundle_assignment) do
+        assignment_randomizer =
+          Course::Assessment::QuestionBundleAssignmentConcern::AssignmentRandomizer.new(randomized_assessment)
+        assignment_set = assignment_randomizer.randomize
+        assignment_randomizer.save(assignment_set)
+
+        randomized_assessment.question_bundle_assignments.where(user: students[0].user).first
+      end
+
+      scenario 'I can delete the submission and the question bundle assignment is reset', js: true do
+        question_bundle_assignment.update(submission_id: randomized_submission.id)
+
+        visit course_assessment_submissions_path(course, randomized_assessment)
+
+        find('#students-tab').click
+        delete_btn = "delete-button-#{randomized_submission.course_user.id}"
+        expect(find_button(delete_btn)).to be_present
+        find_button(delete_btn).click
+        accept_confirm_dialog
+
+        expect(page).to_not have_button(delete_btn)
+
+        expect(randomized_assessment.submissions).to be_empty
+        expect(question_bundle_assignment.reload.submission_id).to be_nil
+      end
+
+      scenario 'I can delete all submissions and the question bundle assignment is reset', js: true do
+        question_bundle_assignment.update(submission_id: randomized_submission.id)
+
+        visit course_assessment_submissions_path(course, randomized_assessment)
+
+        find('#students-tab').click
+        delete_btn = "delete-button-#{randomized_submission.course_user.id}"
+        expect(find_button(delete_btn)).to be_present
+
+        find('#submission-dropdown-icon').click
+        sleep 2
+        expect(page).to have_css('.delete-submissions-enabled')
+
+        find('.delete-submissions-enabled').click
+        accept_confirm_dialog
+        wait_for_job
+
+        expect(page).to_not have_button(delete_btn)
+
+        expect(randomized_assessment.submissions).to be_empty
+        expect(question_bundle_assignment.reload.submission_id).to be_nil
+      end
+    end
   end
 end
