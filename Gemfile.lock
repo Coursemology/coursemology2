@@ -242,7 +242,7 @@ GEM
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
-    ffi (1.15.4)
+    ffi (1.15.5)
     filename (0.1.2)
     flamegraph (0.9.5)
     fog-aws (3.12.0)
