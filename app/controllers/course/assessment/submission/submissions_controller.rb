@@ -174,7 +174,7 @@ class Course::Assessment::Submission::SubmissionsController < \
     if success
       head :ok
     else
-      logger.error("failed to unsubmit submission: #{submission.errors.inspect}")
+      logger.error("Failed to unsubmit submission: #{submission.errors.inspect}")
       render json: { errors: submission.errors }, status: :bad_request
     end
   end
@@ -196,10 +196,10 @@ class Course::Assessment::Submission::SubmissionsController < \
   def delete
     @submission = @assessment.submissions.find(params[:submission_id])
     authorize!(:delete_submission, @submission)
+
     success = @submission.transaction do
       reset_question_bundle_assignments if @assessment.randomization == 'prepared'
-      @submission.destroy!
-      true
+      @submission.destroy
     end
     if success
       head :ok
