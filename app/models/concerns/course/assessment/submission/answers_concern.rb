@@ -17,9 +17,10 @@ module Course::Assessment::Submission::AnswersConcern
   end
 
   def create_new_answers
-    questions_to_attempt ||= assessment.questions.includes(:actable)
+    # Load questions from submission instead of assessment in case of randomized assessment
+    questions_to_attempt ||= questions.includes(:actable)
     new_answers = questions_to_attempt.not_answered(self).attempt(self)
-    bulk_save_new_answers(new_answers)
+    bulk_save_new_answers(new_answers) if new_answers.present?
   end
 
   private

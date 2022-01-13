@@ -116,7 +116,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   end
 
   def questions_to_attempt
-    @questions_to_attempt ||= @submission.assessment.questions
+    @questions_to_attempt ||= @submission.questions
   end
 
   # Find the questions for this submission without submission_questions.
