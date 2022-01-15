@@ -47,6 +47,7 @@ module Course::LessonPlan::PersonalizationConcern
 
   def algorithm_fomo(course_user)
     submitted_lesson_plan_item_ids, items, learning_rate_ema = retrieve_or_compute_course_user_data(course_user)
+    Rails.cache.delete("course/lesson_plan/personalization_concern/#{course_user.id}")
     return if learning_rate_ema.nil?
 
     # Constrain learning rate
@@ -107,6 +108,7 @@ module Course::LessonPlan::PersonalizationConcern
 
   def algorithm_stragglers(course_user)
     submitted_lesson_plan_item_ids, items, learning_rate_ema = retrieve_or_compute_course_user_data(course_user)
+    Rails.cache.delete("course/lesson_plan/personalization_concern/#{course_user.id}")
     return if learning_rate_ema.nil?
 
     # Constrain learning rate
