@@ -1572,9 +1572,9 @@ var ROUTES = (function() {
 // user_emails => /user/emails(.:format)
   // function(options)
   user_emails_path: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"user",false],[2,[7,"/",false],[2,[6,"emails",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]),
-// user_masquerade_index => /users/masquerade(.:format)
-  // function(options)
-  user_masquerade_index_path: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"users",false],[2,[7,"/",false],[2,[6,"masquerade",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]),
+// user_masquerade => /users/masquerade/:id(.:format)
+  // function(id, options)
+  user_masquerade_path: Utils.route([["id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"users",false],[2,[7,"/",false],[2,[6,"masquerade",false],[2,[7,"/",false],[2,[3,"id",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]),
 // user_password => /users/password(.:format)
   // function(options)
   user_password_path: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"users",false],[2,[7,"/",false],[2,[6,"password",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]),
