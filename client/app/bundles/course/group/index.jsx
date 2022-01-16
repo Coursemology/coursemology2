@@ -17,9 +17,12 @@ $(document).ready(() => {
   }
 
   if (categoryMountNode) {
+    const data = categoryMountNode.getAttribute('data');
+    const attributes = JSON.parse(data);
+
     render(
       <ProviderWrapper store={store}>
-        <GroupIndex />
+        <GroupIndex groupCategoryId={attributes.group_category_id} />
       </ProviderWrapper>,
       categoryMountNode,
     );

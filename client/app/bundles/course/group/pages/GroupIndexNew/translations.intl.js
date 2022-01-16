@@ -2,20 +2,16 @@ import { defineMessages } from 'react-intl';
 
 const translations = defineMessages({
   newGroupCategory: {
-    id: 'course.assessment.newGroupCategory',
+    id: 'course.group.newGroupCategory',
     defaultMessage: 'New Category',
   },
-  name: {
-    id: 'course.assessment.form.name',
-    defaultMessage: 'Name',
+  createCategorySuccess: {
+    id: 'course.group.createCategory.success',
+    defaultMessage: 'Group category was created.',
   },
-  description: {
-    id: 'course.assessment.form.description',
-    defaultMessage: 'Description (Optional)',
-  },
-  nameLength: {
-    id: 'course.group.form.nameLength',
-    defaultMessage: 'The category name is too long!',
+  createCategoryFailure: {
+    id: 'course.group.createCategory.fail',
+    defaultMessage: 'Failed to create group category.',
   },
 });
 

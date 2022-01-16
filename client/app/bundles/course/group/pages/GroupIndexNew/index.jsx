@@ -14,7 +14,8 @@ import modalFormStyles from 'lib/styles/ModalForm.scss';
 
 import actionTypes, { formNames } from '../../constants';
 import translations from './translations.intl';
-import CategoryForm from './CategoryFom';
+import CategoryForm from '../components/CategoryForm';
+import { createCategory } from '../../actions';
 
 const styles = {
   newButton: {
@@ -32,23 +33,31 @@ const PopupDialog = ({
   isConfirmationDialogOpen,
   notification,
   isPristine: pristine,
+  isDisabled,
   intl,
 }) => {
-  const onFormSubmit = useCallback((data) => {
-    // TODO: Dispatch data and look into loading/disabled state
-    console.log(data);
-  }, []);
+  const onFormSubmit = useCallback(
+    (data) =>
+      dispatch(
+        createCategory(
+          data,
+          intl.formatMessage(translations.createCategorySuccess),
+          intl.formatMessage(translations.createCategoryFailure),
+        ),
+      ),
+    [dispatch, createCategory],
+  );
 
   const handleOpen = useCallback(() => {
     dispatch({ type: actionTypes.CATEGORY_FORM_SHOW });
-  }, []);
+  }, [dispatch]);
 
   const handleClose = useCallback(() => {
     dispatch({
       type: actionTypes.CATEGORY_FORM_CANCEL,
       payload: { isPristine: pristine },
     });
-  }, [pristine]);
+  }, [dispatch, pristine]);
 
   const formActions = useMemo(
     () => [
@@ -56,6 +65,7 @@ const PopupDialog = ({
         label={<FormattedMessage {...formTranslations.cancel} />}
         primary
         onClick={handleClose}
+        disabled={isDisabled}
         key="group-category-popup-dialog-cancel-button"
       />,
       <FlatButton
@@ -63,6 +73,7 @@ const PopupDialog = ({
         className="btn-submit"
         primary
         onClick={() => dispatch(submit(formNames.GROUP_CATEGORY))}
+        disabled={isDisabled}
         key="group-category-popup-dialog-submit-button"
       />,
     ],
@@ -109,11 +120,13 @@ PopupDialog.propTypes = {
   isPristine: PropTypes.bool,
   isShown: PropTypes.bool.isRequired,
   isConfirmationDialogOpen: PropTypes.bool.isRequired,
+  isDisabled: PropTypes.bool.isRequired,
   notification: notificationShape,
   intl: intlShape,
 };
 
 export default connect((state) => ({
-  ...state.groupsNew,
+  ...state.groupsDialog,
+  notification: state.notificationPopup,
   isPristine: isPristine(formNames.GROUP_CATEGORY)(state),
 }))(injectIntl(PopupDialog));

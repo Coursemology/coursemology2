@@ -3,14 +3,18 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Card, CardHeader, CardText } from 'material-ui';
 import { orange200, orange900 } from 'material-ui/styles/colors';
+import { FormattedMessage } from 'react-intl';
 
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import ErrorCard from 'lib/components/ErrorCard';
+import NotificationBar, {
+  notificationShape,
+} from 'lib/components/NotificationBar';
 import CategoryHeader from './CategoryHeader';
 import GroupTable from './GroupTable';
+import translations from './translations.intl';
 import { categoryShape, groupShape } from '../../propTypes';
 import { fetchGroupData } from '../../actions';
-import { errorMessages } from '../../constants';
 
 const styles = {
   card: {
@@ -28,7 +32,11 @@ const styles = {
 
 const Note = ({ message }) => (
   <Card style={styles.card}>
-    <CardHeader style={styles.cardHeader} title="Note" titleColor={orange900} />
+    <CardHeader
+      style={styles.cardHeader}
+      title={<FormattedMessage {...translations.noteHeader} />}
+      titleColor={orange900}
+    />
     <CardText>{message}</CardText>
   </Card>
 );
@@ -40,30 +48,35 @@ Note.propTypes = {
 const Category = ({
   dispatch,
   groupCategory,
+  groupCategoryId,
   groups,
   isFetching,
   hasFetchError,
+  notification,
 }) => {
   useEffect(() => {
-    dispatch(fetchGroupData());
-  }, []);
+    dispatch(fetchGroupData(groupCategoryId));
+  }, [groupCategoryId]);
 
   if (isFetching) {
     return <LoadingIndicator />;
   }
   if (hasFetchError) {
-    return <ErrorCard message={errorMessages.fetchFailure} />;
+    return (
+      <ErrorCard
+        message={<FormattedMessage {...translations.fetchFailure} />}
+      />
+    );
   }
   // Handles both null and undefined
   if (groupCategory == null) {
-    return (
-      <Note message="You don't have a group category created! Create one now!" />
-    );
+    return <Note message={<FormattedMessage {...translations.noCategory} />} />;
   }
 
   return (
-    <div>
+    <>
       <CategoryHeader
+        id={groupCategory.id}
         name={groupCategory.name}
         description={groupCategory.description}
         numGroups={groups.length}
@@ -72,28 +85,27 @@ const Category = ({
         <GroupTable key={group.id} group={group} />
       ))}
       {groups.length === 0 ? (
-        <Note
-          message={
-            "You don't have any groups under this category! " +
-            'Start managing this category and its groups now to get started!'
-          }
-        />
+        <Note message={<FormattedMessage {...translations.noGroups} />} />
       ) : null}
-    </div>
+      <NotificationBar notification={notification} />
+    </>
   );
 };
 
 Category.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   hasFetchError: PropTypes.bool.isRequired,
+  groupCategoryId: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
   groupCategory: categoryShape,
   groups: PropTypes.arrayOf(groupShape).isRequired,
   dispatch: PropTypes.func.isRequired,
+  notification: notificationShape,
 };
 
-export default connect(({ groupsFetch }) => ({
+export default connect(({ groupsFetch, notificationPopup }) => ({
   isFetching: groupsFetch.isFetching,
   hasFetchError: groupsFetch.hasFetchError,
   groupCategory: groupsFetch.groupCategory,
   groups: groupsFetch.groups,
+  notification: notificationPopup,
 }))(Category);
