@@ -352,7 +352,8 @@ Rails.application.routes.draw do
           post 'category' => 'groups#create_category'
           post '/' => 'groups#create_groups'
           patch 'category' => 'groups#update_category'
-          patch 'category_groups' => 'groups#update_category_groups'
+          patch 'group_members' => 'groups#update_group_members'
+          patch '/' => 'groups#update_group'
           delete 'category' => 'groups#destroy_category'
           delete '/' => 'groups#destroy_group'
         end
