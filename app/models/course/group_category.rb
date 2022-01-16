@@ -9,4 +9,6 @@ class Course::GroupCategory < ApplicationRecord
 
   belongs_to :course, inverse_of: :group_categories
   has_many :groups, dependent: :destroy, class_name: Course::Group.name, foreign_key: :category_id
+
+  default_scope { order(:name) }
 end

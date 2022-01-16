@@ -4,8 +4,9 @@ class Course::GroupsController < Course::ComponentController
 
   # TODO: Handle authorization
   def index
-    @categories = Course::GroupCategory.includes(groups: { group_users: :course_user })
-    @course_users = current_course.course_users.order_alphabetically
+    @groups = group_category.nil? ? [] : group_category.groups.ordered_by_name.includes(group_users: :course_user)
+    # @categories = Course::GroupCategory.includes(groups: { group_users: :course_user })
+    # @course_users = current_course.course_users.order_alphabetically
   end
 
   def show # :nodoc:
@@ -46,6 +47,22 @@ class Course::GroupsController < Course::ComponentController
   end
 
   private
+
+  # Merges the parameters for group category ID from either the group parameter or the query string.
+  def group_category_params
+    params.permit(:group_category, group: [:group_category]).tap do |group_category_params|
+      group_category_params.merge!(group_category_params.delete(:group)) if group_category_params.key?(:group)
+    end
+  end
+
+  def group_category
+    @group_category ||=
+      if group_category_params[:group_category]
+        current_course.group_categories.find(group_category_params[:group_category])
+      else
+        current_course.group_categories.first!
+      end
+  end
 
   def group_params # :nodoc:
     params.require(:group).

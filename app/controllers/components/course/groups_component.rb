@@ -16,7 +16,7 @@ class Course::GroupsComponent < SimpleDelegator
         title: I18n.t('course.groups.sidebar_title'),
         type: :admin,
         weight: 7,
-        path: course_groups_path(current_course)
+        path: course_groups_path(current_course, group_category: current_course.group_categories.first)
       }
     ]
   end
