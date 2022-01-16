@@ -13,6 +13,7 @@ const styles = {
     borderRadius: '5px 5px 0 0',
     padding: 12,
     backgroundColor: red200,
+    fontWeight: 'bold',
   },
 };
 
