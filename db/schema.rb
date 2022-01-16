@@ -647,13 +647,13 @@ ActiveRecord::Schema.define(version: 2022_01_11_183806) do
     t.string "name", default: "", null: false
     t.text "description"
     t.bigint "creator_id", null: false
-    t.bigint "updator_id", null: false
+    t.bigint "updater_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["course_id", "name"], name: "index_course_group_categories_on_course_id_and_name", unique: true
     t.index ["course_id"], name: "fk__course_group_categories_course_id"
     t.index ["creator_id"], name: "fk__course_group_categories_creator_id"
-    t.index ["updator_id"], name: "fk__course_group_categories_updator_id"
+    t.index ["updater_id"], name: "fk__course_group_categories_updater_id"
   end
 
   create_table "course_group_users", id: :serial, force: :cascade do |t|
@@ -1383,7 +1383,7 @@ ActiveRecord::Schema.define(version: 2022_01_11_183806) do
   add_foreign_key "course_forums", "users", column: "updater_id", name: "fk_course_forums_updater_id"
   add_foreign_key "course_group_categories", "courses"
   add_foreign_key "course_group_categories", "users", column: "creator_id"
-  add_foreign_key "course_group_categories", "users", column: "updator_id"
+  add_foreign_key "course_group_categories", "users", column: "updater_id"
   add_foreign_key "course_group_users", "course_groups", column: "group_id", name: "fk_course_group_users_course_group_id"
   add_foreign_key "course_group_users", "course_users", name: "fk_course_group_users_course_user_id"
   add_foreign_key "course_group_users", "users", column: "creator_id", name: "fk_course_group_users_creator_id"

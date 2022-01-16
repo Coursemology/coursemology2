@@ -11,8 +11,8 @@ class AddCourseGroupCategories < ActiveRecord::Migration[6.0]
       # For some reason, t.userstamps does not work
       t.references :creator, null: false, foreign_key: { to_table: :users },
                              index: { name: 'fk__course_group_categories_creator_id' }
-      t.references :updator, null: false, foreign_key: { to_table: :users },
-                             index: { name: 'fk__course_group_categories_updator_id' }
+      t.references :updater, null: false, foreign_key: { to_table: :users },
+                             index: { name: 'fk__course_group_categories_updater_id' }
       t.timestamps null: false
 
       t.index [:course_id, :name], unique: true
@@ -35,7 +35,7 @@ class AddCourseGroupCategories < ActiveRecord::Migration[6.0]
                      (course_id,
                       name,
                       creator_id,
-                      updator_id,
+                      updater_id,
                       created_at,
                       updated_at)
          VALUES      (#{id},
