@@ -4,67 +4,79 @@ class Course::GroupsController < Course::ComponentController
 
   # TODO: Handle authorization
   def index
-    @groups = group_category.nil? ? [] : group_category.groups.ordered_by_name.includes(group_users: :course_user)
-    # @categories = Course::GroupCategory.includes(groups: { group_users: :course_user })
-    # @course_users = current_course.course_users.order_alphabetically
+    @group_category = group_category_or_first
   end
 
-  def show # :nodoc:
-    @group_users = @group.group_users.includes(:course_user)
-    @group_managers, @group_users = @group_users.partition(&:manager?)
+  def index_category
+    @groups = group_category_or_first.nil? ? [] : group_category_or_first.groups.ordered_by_name.includes(group_users: :course_user)
   end
 
-  def new # :nodoc:
-  end
-
-  def create # :nodoc:
-    if @group.save
-      redirect_to edit_course_group_path(current_course, @group),
-                  success: t('.success', name: @group.name)
+  def create_category
+    @group_category = Course::GroupCategory.new(create_or_update_category_params.reverse_merge(course: current_course))
+    if @group_category.save
+      render json: { id: @group_category.id }, status: :ok
     else
-      render 'new'
+      render json: { errors: @group_category.errors }, status: :bad_request
     end
   end
 
-  def edit # :nodoc:
+  # This method handles both the creation of a single group and multiple groups.
+  def create_groups
+    # TODO: Create groups
   end
 
-  def update # :nodoc:
-    if @group.update(group_params)
-      redirect_to course_groups_path(current_course), success: t('.success', name: @group.name)
+  def update_category
+    if group_category.update(create_or_update_category_params)
+      render json: { id: group_category.id }, status: :ok
     else
-      render 'edit'
+      render json: { errors: group_category.errors }, status: :bad_request
     end
   end
 
-  def destroy # :nodoc:
-    if @group.destroy
-      redirect_to course_groups_path(current_course),
-                  success: t('.success', name: @group.name)
+  def update_category_groups
+    # TODO: Mass update the groups of a category
+  end
+
+  def destroy_category
+    if group_category.destroy
+      render json: { id: group_category.id }, status: :ok
     else
-      redirect_to course_groups_path, danger: @group.errors.full_messages.to_sentence
+      render json: { error: group_category.errors.full_messages.to_sentence }, status: :bad_request
     end
+  end
+
+  def destroy_group
+    # TODO: Destroy group
   end
 
   private
 
   # Merges the parameters for group category ID from either the group parameter or the query string.
-  def group_category_params
-    params.permit(:group_category, group: [:group_category]).tap do |group_category_params|
-      group_category_params.merge!(group_category_params.delete(:group)) if group_category_params.key?(:group)
+  def category_params
+    params.permit(:group_category, group: [:group_category]).tap do |category_params|
+      category_params.merge!(category_params.delete(:group)) if category_params.key?(:group)
     end
   end
 
+  # Throw error if the group_category isn't specified
   def group_category
-    @group_category ||=
-      if group_category_params[:group_category]
-        current_course.group_categories.find(group_category_params[:group_category])
+    @group_category ||= current_course.group_categories.find(category_params[:group_category])
+  end
+
+  def group_category_or_first
+    @group_category ||= # rubocop:disable Naming/MemoizedInstanceVariableName
+      if category_params[:group_category]
+        current_course.group_categories.find(category_params[:group_category])
       else
         current_course.group_categories.first!
       end
   end
 
-  def group_params # :nodoc:
+  def create_or_update_category_params
+    params.permit(:name, :description)
+  end
+
+  def group_params
     params.require(:group).
       permit(:name, course_user_ids: [],
                     group_users_attributes: [:id, :course_user_id, :role, :_destroy])

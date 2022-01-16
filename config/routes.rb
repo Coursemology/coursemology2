@@ -346,7 +346,17 @@ Rails.application.routes.draw do
       get 'staff' => 'users#staff', as: :users_staff
       patch 'upgrade_to_staff' => 'users#upgrade_to_staff', as: :users_upgrade_to_staff
 
-      resources :groups
+      resources :groups, only: [:index] do
+        collection do
+          get 'category' => 'groups#index_category'
+          post 'category' => 'groups#create_category'
+          post '/' => 'groups#create_groups'
+          patch 'category' => 'groups#update_category'
+          patch 'category_groups' => 'groups#update_category_groups'
+          delete 'category' => 'groups#destroy_category'
+          delete '/' => 'groups#destroy_group'
+        end
+      end
 
       namespace :material, path: 'materials' do
         resources :folders, except: [:index, :new, :create] do
