@@ -76,12 +76,12 @@ const CategoryHeader = ({
   );
 
   const handleEdit = useCallback(() => {
-    dispatch({ type: actionTypes.CATEGORY_FORM_SHOW });
+    dispatch({ type: actionTypes.UPDATE_CATEGORY_FORM_SHOW });
   }, [dispatch]);
 
   const handleClose = useCallback(() => {
     dispatch({
-      type: actionTypes.CATEGORY_FORM_CANCEL,
+      type: actionTypes.UPDATE_CATEGORY_FORM_CANCEL,
       payload: { isPristine: pristine },
     });
   }, [dispatch, pristine]);
@@ -109,7 +109,7 @@ const CategoryHeader = ({
         primary
         onClick={handleClose}
         disabled={isDisabled}
-        key="group-category-popup-dialog-cancel-button"
+        key="update-group-category-popup-dialog-cancel-button"
       />,
       <FlatButton
         label={<FormattedMessage {...formTranslations.submit} />}
@@ -117,7 +117,7 @@ const CategoryHeader = ({
         primary
         onClick={() => dispatch(submit(formNames.GROUP_CATEGORY))}
         disabled={isDisabled}
-        key="group-category-popup-dialog-submit-button"
+        key="update-group-category-popup-dialog-submit-button"
       />,
     ],
     [handleClose],
@@ -183,14 +183,14 @@ const CategoryHeader = ({
             setIsConfirmingDelete(false);
             return;
           }
-          dispatch({ type: actionTypes.CATEGORY_FORM_CONFIRM_CANCEL });
+          dispatch({ type: actionTypes.UPDATE_CATEGORY_FORM_CONFIRM_CANCEL });
         }}
         onConfirm={() => {
           if (isConfirmingDelete) {
             handleDelete();
             return;
           }
-          dispatch({ type: actionTypes.CATEGORY_FORM_CONFIRM_DISCARD });
+          dispatch({ type: actionTypes.UPDATE_CATEGORY_FORM_CONFIRM_DISCARD });
         }}
       />
     </>
@@ -211,6 +211,8 @@ CategoryHeader.propTypes = {
 };
 
 export default connect((state) => ({
-  ...state.groupsDialog,
+  isShown: state.groupsDialog.isUpdateDialogShown,
+  isConfirmationDialogOpen: state.groupsDialog.isUpdateConfirmationDialogOpen,
+  isDisabled: state.groupsDialog.isDisabled,
   isPristine: isPristine(formNames.GROUP_CATEGORY)(state),
 }))(injectIntl(CategoryHeader));

@@ -49,12 +49,12 @@ const PopupDialog = ({
   );
 
   const handleOpen = useCallback(() => {
-    dispatch({ type: actionTypes.CATEGORY_FORM_SHOW });
+    dispatch({ type: actionTypes.CREATE_CATEGORY_FORM_SHOW });
   }, [dispatch]);
 
   const handleClose = useCallback(() => {
     dispatch({
-      type: actionTypes.CATEGORY_FORM_CANCEL,
+      type: actionTypes.CREATE_CATEGORY_FORM_CANCEL,
       payload: { isPristine: pristine },
     });
   }, [dispatch, pristine]);
@@ -66,7 +66,7 @@ const PopupDialog = ({
         primary
         onClick={handleClose}
         disabled={isDisabled}
-        key="group-category-popup-dialog-cancel-button"
+        key="create-group-category-popup-dialog-cancel-button"
       />,
       <FlatButton
         label={<FormattedMessage {...formTranslations.submit} />}
@@ -74,7 +74,7 @@ const PopupDialog = ({
         primary
         onClick={() => dispatch(submit(formNames.GROUP_CATEGORY))}
         disabled={isDisabled}
-        key="group-category-popup-dialog-submit-button"
+        key="create-group-category-popup-dialog-submit-button"
       />,
     ],
     [handleClose],
@@ -104,10 +104,10 @@ const PopupDialog = ({
         confirmDiscard
         open={isConfirmationDialogOpen}
         onCancel={() =>
-          dispatch({ type: actionTypes.CATEGORY_FORM_CONFIRM_CANCEL })
+          dispatch({ type: actionTypes.CREATE_CATEGORY_FORM_CONFIRM_CANCEL })
         }
         onConfirm={() =>
-          dispatch({ type: actionTypes.CATEGORY_FORM_CONFIRM_DISCARD })
+          dispatch({ type: actionTypes.CREATE_CATEGORY_FORM_CONFIRM_DISCARD })
         }
       />
       <NotificationBar notification={notification} />
@@ -126,7 +126,9 @@ PopupDialog.propTypes = {
 };
 
 export default connect((state) => ({
-  ...state.groupsDialog,
+  isShown: state.groupsDialog.isCreateDialogShown,
+  isConfirmationDialogOpen: state.groupsDialog.isCreateConfirmationDialogOpen,
+  isDisabled: state.groupsDialog.isDisabled,
   notification: state.notificationPopup,
   isPristine: isPristine(formNames.GROUP_CATEGORY)(state),
 }))(injectIntl(PopupDialog));
