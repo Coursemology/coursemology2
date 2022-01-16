@@ -12,7 +12,7 @@ module Course::GroupsHelper
         # See https://github.com/doabit/bootstrap-sass-extras/blob/6aa549b91a66055a5f5e37400dbe44f4d17f09c3/app/helpers/nav_helper.rb#L32
         html_options = item == active_category ? { active: true } : nil
         concat(nav_to(format_inline_text(item.name),
-                      course_assessments_path(current_course, group_category: item),
+                      course_groups_path(current_course, group_category: item),
                       html_options))
       end
     end
