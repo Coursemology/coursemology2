@@ -6,13 +6,10 @@ import { submit, isPristine } from 'redux-form';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
 
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import NotificationBar, {
-  notificationShape,
-} from 'lib/components/NotificationBar';
 import formTranslations from 'lib/translations/form';
 import modalFormStyles from 'lib/styles/ModalForm.scss';
 
-import actionTypes, { formNames } from '../../constants';
+import actionTypes, { dialogTypes, formNames } from '../../constants';
 import translations from './translations.intl';
 import CategoryForm from '../components/CategoryForm';
 import { createCategory } from '../../actions';
@@ -31,9 +28,9 @@ const PopupDialog = ({
   dispatch,
   isShown,
   isConfirmationDialogOpen,
-  notification,
   isPristine: pristine,
   isDisabled,
+  dialogType,
   intl,
 }) => {
   const onFormSubmit = useCallback(
@@ -54,7 +51,7 @@ const PopupDialog = ({
 
   const handleClose = useCallback(() => {
     dispatch({
-      type: actionTypes.CREATE_CATEGORY_FORM_CANCEL,
+      type: actionTypes.DIALOG_CANCEL,
       payload: { isPristine: pristine },
     });
   }, [dispatch, pristine]);
@@ -91,7 +88,7 @@ const PopupDialog = ({
       <Dialog
         title={intl.formatMessage(translations.newGroupCategory)}
         modal={false}
-        open={isShown}
+        open={isShown && dialogType === dialogTypes.CREATE_CATEGORY}
         actions={formActions}
         onRequestClose={handleClose}
         autoScrollBodyContent
@@ -102,15 +99,12 @@ const PopupDialog = ({
       </Dialog>
       <ConfirmationDialog
         confirmDiscard
-        open={isConfirmationDialogOpen}
-        onCancel={() =>
-          dispatch({ type: actionTypes.CREATE_CATEGORY_FORM_CONFIRM_CANCEL })
+        open={
+          isConfirmationDialogOpen && dialogType === dialogTypes.CREATE_CATEGORY
         }
-        onConfirm={() =>
-          dispatch({ type: actionTypes.CREATE_CATEGORY_FORM_CONFIRM_DISCARD })
-        }
+        onCancel={() => dispatch({ type: actionTypes.DIALOG_CONFIRM_CANCEL })}
+        onConfirm={() => dispatch({ type: actionTypes.DIALOG_CONFIRM_DISCARD })}
       />
-      <NotificationBar notification={notification} />
     </>
   );
 };
@@ -121,14 +115,11 @@ PopupDialog.propTypes = {
   isShown: PropTypes.bool.isRequired,
   isConfirmationDialogOpen: PropTypes.bool.isRequired,
   isDisabled: PropTypes.bool.isRequired,
-  notification: notificationShape,
+  dialogType: PropTypes.string.isRequired,
   intl: intlShape,
 };
 
 export default connect((state) => ({
-  isShown: state.groupsDialog.isCreateDialogShown,
-  isConfirmationDialogOpen: state.groupsDialog.isCreateConfirmationDialogOpen,
-  isDisabled: state.groupsDialog.isDisabled,
-  notification: state.notificationPopup,
+  ...state.groupsDialog,
   isPristine: isPristine(formNames.GROUP_CATEGORY)(state),
 }))(injectIntl(PopupDialog));

@@ -21,7 +21,7 @@ import modalFormStyles from 'lib/styles/ModalForm.scss';
 
 import { red500 } from 'material-ui/styles/colors';
 import translations from './translations.intl';
-import actionTypes, { formNames } from '../../constants';
+import actionTypes, { dialogTypes, formNames } from '../../constants';
 import CategoryForm from '../components/CategoryForm';
 import { deleteCategory, updateCategory } from '../../actions';
 
@@ -54,6 +54,7 @@ const CategoryHeader = ({
   isPristine: pristine,
   isConfirmationDialogOpen,
   isDisabled,
+  dialogType,
   dispatch,
 }) => {
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
@@ -81,7 +82,7 @@ const CategoryHeader = ({
 
   const handleClose = useCallback(() => {
     dispatch({
-      type: actionTypes.UPDATE_CATEGORY_FORM_CANCEL,
+      type: actionTypes.DIALOG_CANCEL,
       payload: { isPristine: pristine },
     });
   }, [dispatch, pristine]);
@@ -162,7 +163,7 @@ const CategoryHeader = ({
       <Dialog
         title={intl.formatMessage(translations.editCategoryHeader)}
         modal={false}
-        open={isShown}
+        open={isShown && dialogType === dialogTypes.UPDATE_CATEGORY}
         actions={formActions}
         onRequestClose={handleClose}
         autoScrollBodyContent
@@ -177,20 +178,24 @@ const CategoryHeader = ({
       <ConfirmationDialog
         confirmDiscard={!isConfirmingDelete}
         confirmDelete={isConfirmingDelete}
-        open={isConfirmationDialogOpen || isConfirmingDelete}
+        open={
+          (isConfirmationDialogOpen &&
+            dialogType === dialogTypes.UPDATE_CATEGORY) ||
+          isConfirmingDelete
+        }
         onCancel={() => {
           if (isConfirmingDelete) {
             setIsConfirmingDelete(false);
             return;
           }
-          dispatch({ type: actionTypes.UPDATE_CATEGORY_FORM_CONFIRM_CANCEL });
+          dispatch({ type: actionTypes.DIALOG_CONFIRM_CANCEL });
         }}
         onConfirm={() => {
           if (isConfirmingDelete) {
             handleDelete();
             return;
           }
-          dispatch({ type: actionTypes.UPDATE_CATEGORY_FORM_CONFIRM_DISCARD });
+          dispatch({ type: actionTypes.DIALOG_CONFIRM_DISCARD });
         }}
       />
     </>
@@ -207,12 +212,11 @@ CategoryHeader.propTypes = {
   isShown: PropTypes.bool.isRequired,
   isConfirmationDialogOpen: PropTypes.bool.isRequired,
   isDisabled: PropTypes.bool.isRequired,
+  dialogType: PropTypes.string.isRequired,
   intl: intlShape,
 };
 
 export default connect((state) => ({
-  isShown: state.groupsDialog.isUpdateDialogShown,
-  isConfirmationDialogOpen: state.groupsDialog.isUpdateConfirmationDialogOpen,
-  isDisabled: state.groupsDialog.isDisabled,
+  ...state.groupsDialog,
   isPristine: isPristine(formNames.GROUP_CATEGORY)(state),
 }))(injectIntl(CategoryHeader));
