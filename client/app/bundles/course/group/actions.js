@@ -10,8 +10,8 @@ export function fetchGroupData() {
       .then((response) => {
         dispatch({
           type: actionTypes.FETCH_GROUPS_SUCCESS,
-          categories: response.data.categories,
-          courseUsers: response.data.courseUsers,
+          groupCategory: response.data.groupCategory,
+          groups: response.data.groups,
         });
       })
       .catch(() => {

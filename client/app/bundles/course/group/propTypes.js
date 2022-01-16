@@ -10,7 +10,7 @@ export const courseUserShape = PropTypes.shape({
     'student',
     'teaching_assistant',
     'observer',
-  ]),
+  ]).isRequired,
   isPhantom: PropTypes.bool.isRequired,
 });
 
@@ -24,21 +24,20 @@ export const memberShape = PropTypes.shape({
     'student',
     'teaching_assistant',
     'observer',
-  ]),
+  ]).isRequired,
   isPhantom: PropTypes.bool.isRequired,
-  groupRole: PropTypes.oneOf(['manager', 'normal']),
+  groupRole: PropTypes.oneOf(['manager', 'normal']).isRequired,
 });
 
 export const groupShape = PropTypes.shape({
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   description: PropTypes.string,
-  members: PropTypes.arrayOf(memberShape),
+  members: PropTypes.arrayOf(memberShape).isRequired,
 });
 
 export const categoryShape = PropTypes.shape({
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   description: PropTypes.string,
-  groups: PropTypes.arrayOf(groupShape),
 });

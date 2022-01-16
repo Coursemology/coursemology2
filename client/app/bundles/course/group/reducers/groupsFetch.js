@@ -3,8 +3,8 @@ import actionTypes from '../constants';
 const initialState = {
   isFetching: false,
   hasFetchError: false,
-  categories: [],
-  courseUsers: [],
+  groupCategory: null,
+  groups: [],
 };
 
 export default function (state = initialState, action) {
@@ -15,31 +15,28 @@ export default function (state = initialState, action) {
       return { ...state, isFetching: true };
     }
     case actionTypes.FETCH_GROUPS_SUCCESS: {
-      const map = new Map();
-      action.categories.forEach((c) =>
-        c.groups.forEach((g) => {
-          g.members.forEach((m) => {
-            if (!map.has(m.courseUserId)) {
-              map.set(m.courseUserId, []);
-            }
-            map.get(m.courseUserId).push({
-              categoryName: c.name,
-              groupId: g.id,
-              groupName: g.name,
-              groupUserId: m.id,
-              groupRole: m.groupRole,
-            });
-          });
-        }),
-      );
+      // const map = new Map();
+      // action.categories.forEach((c) =>
+      //   c.groups.forEach((g) => {
+      //     g.members.forEach((m) => {
+      //       if (!map.has(m.courseUserId)) {
+      //         map.set(m.courseUserId, []);
+      //       }
+      //       map.get(m.courseUserId).push({
+      //         categoryName: c.name,
+      //         groupId: g.id,
+      //         groupName: g.name,
+      //         groupUserId: m.id,
+      //         groupRole: m.groupRole,
+      //       });
+      //     });
+      //   }),
+      // );
 
       return {
         ...state,
-        categories: action.categories,
-        courseUsers: action.courseUsers.map((s) => ({
-          ...s,
-          groups: map.has(s.id) ? map.get(s.id) : [],
-        })),
+        groupCategory: action.groupCategory,
+        groups: action.groups,
         isFetching: false,
       };
     }
