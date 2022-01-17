@@ -13,3 +13,9 @@ en:
 
                     <p>You can reply here:</p>
                     %{topic}
+                  message_staff: >
+                    <p>%{post_author} added an annotation, %{post}</p>
+
+                    <p>You can %{unmark_as_pending} or reply here:</p>
+                    %{topic}
+                  unmark_as_pending: 'unmark this comment as pending'
