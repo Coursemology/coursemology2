@@ -31,7 +31,7 @@ gem 'active_record-acts_as', git: 'https://github.com/ekowidianto/active_record-
 # Organise ActiveRecord model into a tree structure
 gem 'edge'
 # Upsert action for Postgres
-gem 'active_record_upsert'
+gem 'active_record_upsert', '0.10.1'
 # Create pretty URLs and work with human-friendly strings
 gem 'friendly_id'
 
@@ -166,7 +166,7 @@ end
 
 group :production do
   # Use fog-aws as CarrierWave's storage provider
-  gem 'fog-aws'
+  gem 'fog-aws', '3.8.0'
   gem 'rack-mini-profiler'
   gem 'flamegraph'
   gem 'stackprof'
@@ -188,7 +188,7 @@ gem 'acts_as_tenant'
 gem 'http_accept_language'
 
 # User authentication
-gem 'devise'
+gem 'devise', '4.7.3'
 gem 'devise_masquerade'
 gem 'devise-multi_email'
 
@@ -245,5 +245,5 @@ gem 'loofah', '>= 2.2.1'
 gem 'rails-html-sanitizer', '>= 1.0.4'
 
 gem 'sprockets', '< 4.0.0'
-gem 'mimemagic', '>= 0.3.7'
+gem 'mimemagic', '0.3.10'
 gem 'ffi', '>= 1.14.2'
