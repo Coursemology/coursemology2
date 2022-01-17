@@ -264,7 +264,7 @@ GEM
     font-awesome-rails (4.7.0.8)
       railties (>= 3.2, < 8.0)
     formatador (0.2.5)
-    friendly_id (5.4.1)
+    friendly_id (5.4.2)
       activerecord (>= 4.0.0)
     fspath (3.1.2)
     fugit (1.4.2)
@@ -628,7 +628,7 @@ GEM
       nokogiri (~> 1.8)
     yard (0.9.27)
       webrick (~> 1.7.0)
-    zeitwerk (2.5.2)
+    zeitwerk (2.5.3)
 
 PLATFORMS
   ruby
