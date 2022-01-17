@@ -30,6 +30,17 @@ class Course::Discussion::TopicsController < Course::ComponentController
     @topics = my_students_topics.pending_staff_reply
   end
 
+  def unmark_as_pending
+    if @topic.unmark_as_pending
+      flash.now[:success] = t('course.discussion.topics.unmark_as_pending_success')
+    else
+      flash.now[:danger] = @topic.errors.full_messages.to_sentence
+    end
+    @topics = Course::Discussion::Topic.where(id: @topic.id).page(page_param).per(@settings.pagination)
+
+    render 'index'
+  end
+
   def toggle_pending
     success = if mark_as_pending?
                 @topic.mark_as_pending
