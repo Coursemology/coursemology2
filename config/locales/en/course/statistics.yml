@@ -1,7 +1,6 @@
 en:
   course:
     statistics:
-      serial_number: 'S/N'
       student:
         header: 'Student Statistics'
       my_students:
@@ -16,7 +15,6 @@ en:
       course_student_statistics:
         phantom_students: 'Phantom Students'
       table:
-        serial_number: :'course.statistics.serial_number'
         tutor: 'Tutor(s)'
         experience_points: 'Experience Points'
         video_watched: 'Videos Watched (Total: %{total})'
@@ -24,7 +22,6 @@ en:
         progress: '%{progress} %'
       staff:
         header: 'Staff Statistics'
-        serial_number: :'course.statistics.serial_number'
         name: 'Staff Name'
         marked: '#Marked'
         students: '#Students'

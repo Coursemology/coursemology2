@@ -31,6 +31,7 @@ div.panel.panel-primary.forum-participation-search-panel
   table.table.table-hover
     thead
       tr
+        th.text-center = t('common.serial_number')
         th = CourseUser.human_attribute_name(:name)
         th = t('.level')
         th = t('.experience_points')
@@ -41,6 +42,7 @@ div.panel.panel-primary.forum-participation-search-panel
       = f.simple_fields_for :experience_points_records do |record_fields|
         - course_user = record_fields.object.course_user
         = content_tag_for(:tr, course_user)
+          td.text-center = record_fields.options[:child_index] + 1
           td = link_to_course_user(course_user)
           td = course_user.level_number
           td = course_user.experience_points

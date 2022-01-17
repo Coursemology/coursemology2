@@ -1,4 +1,6 @@
+- serial_number = defined?(invitation_counter) ? invitation_counter + 1 : serial_number
 = content_tag_for(:tr, invitation) do
+  td.text-center = serial_number
   th = invitation.name
   td = invitation.email
   td = t("course.users.role.#{invitation.role}")
@@ -9,7 +11,7 @@
     td = format_datetime(invitation.sent_at, :short) if invitation.sent_at
     td
       div.btn-group
-        = link_to course_user_invitation_resend_invitation_path(current_course, invitation),
+        = link_to course_user_invitation_resend_invitation_path(current_course, invitation, serial_number: serial_number),
                   remote: true, class: ['btn', 'btn-info', 'btn-sm'], method: :post,
                   title: t('.resend_tooltip') do
           = fa_icon 'envelope'.freeze

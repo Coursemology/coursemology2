@@ -1,5 +1,6 @@
 en:
   common:
+    serial_number: 'S/N'
     name: 'Name'
     email: 'Email'
     algorithm: 'Timeline algorithm'

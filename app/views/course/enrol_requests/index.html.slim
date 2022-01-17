@@ -8,6 +8,7 @@ div.users
     table.table.table-striped.table-hover
       thead
         tr
+          th.text-center = t('common.serial_number')
           th = t('common.name')
           th = t('common.email')
           th = t('common.created_at')
@@ -16,11 +17,12 @@ div.users
           th
 
       tbody
-        - @enrol_requests.each do |request|
+        - @enrol_requests.each.with_index(1) do |request, index|
           = content_tag_for(:tr, request, 'data-action' => approve_course_enrol_request_path(current_course, request),
                                        'data-method' => 'post',
                                         class: 'course-enrol-request')
             = simple_fields_for CourseUser.new(name: request.user.name), wrapper: :inline_form do |f|
+              td.text-center = index
               th = f.input :name
               td = request.user.email
               td = format_datetime(request.created_at, :short)

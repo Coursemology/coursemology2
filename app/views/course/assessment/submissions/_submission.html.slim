@@ -1,5 +1,6 @@
 - assessment = assessments_hash[submission.assessment_id]
 = content_tag_for(:tr, submission) do
+  td.text-center = (current_page - 1) * per_page + submission_counter + 1
   td = link_to_course_user(submission.course_user)
   td = link_to(format_inline_text(assessment.title),
                course_assessment_path(current_course, assessment))
