@@ -203,7 +203,12 @@ class VisibleSubmissionEditIndex extends Component {
      * Therefore we need to manually touch all the fields
      */
     answers.forEach((answer = {}) => {
-      if (questions[answer.questionId].type !== 'VoiceResponse') return;
+      if (
+        answer.questionId in questions &&
+        questions[answer.questionId].type !== 'VoiceResponse'
+      ) {
+        return;
+      }
       const answerId = answer.id;
       Object.keys(answer).forEach((key) => {
         dispatch(touch(formNames.SUBMISSION, `${answerId}.${key}`));
