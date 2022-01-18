@@ -17,6 +17,8 @@ import GroupFormDialog from '../../forms/GroupFormDialog';
 import GroupCreationForm from '../../forms/GroupCreationForm';
 import { createGroups } from '../../actions';
 import GroupHeader from './GroupHeader';
+import CourseUserTable from './CourseUserTable';
+import { sortByName } from '../../utils/sort';
 
 const styles = {
   card: {
@@ -43,10 +45,23 @@ const styles = {
   },
 };
 
+const combineGroups = (groups, modifiedGroups) => {
+  const combined = [...modifiedGroups];
+  const modifiedIds = new Set(modifiedGroups.map((g) => g.id));
+  groups.forEach((g) => {
+    if (!modifiedIds.has(g.id)) {
+      combined.push(g);
+    }
+  });
+  combined.sort(sortByName);
+  return combined;
+};
+
 const GroupManager = ({
   dispatch,
   category,
   groups,
+  modifiedGroups,
   selectedGroupId,
   intl,
 }) => {
@@ -120,7 +135,10 @@ const GroupManager = ({
     });
   };
 
-  const selectedGroup = groups.find((group) => group.id === selectedGroupId);
+  const combinedGroups = combineGroups(groups, modifiedGroups);
+  const selectedGroup = combinedGroups.find(
+    (group) => group.id === selectedGroupId,
+  );
 
   return (
     <>
@@ -173,6 +191,9 @@ const GroupManager = ({
       {selectedGroup ? (
         <GroupHeader categoryId={category.id} group={selectedGroup} />
       ) : null}
+      {selectedGroup ? (
+        <CourseUserTable group={selectedGroup} groups={combinedGroups} />
+      ) : null}
     </>
   );
 };
@@ -182,9 +203,11 @@ GroupManager.propTypes = {
   category: categoryShape.isRequired,
   groups: PropTypes.arrayOf(groupShape).isRequired,
   selectedGroupId: PropTypes.number.isRequired,
+  modifiedGroups: PropTypes.arrayOf(groupShape).isRequired,
   intl: intlShape,
 };
 
 export default connect((state) => ({
   selectedGroupId: state.groupsManage.selectedGroupId,
+  modifiedGroups: state.groupsManage.modifiedGroups,
 }))(injectIntl(GroupManager));

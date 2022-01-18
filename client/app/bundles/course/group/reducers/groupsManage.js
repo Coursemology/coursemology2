@@ -5,6 +5,7 @@ const initialState = {
   hasFetchUserError: false,
   courseUsers: [],
   selectedGroupId: -1,
+  modifiedGroups: [],
 };
 
 export default function (state = initialState, action) {
@@ -15,7 +16,7 @@ export default function (state = initialState, action) {
       return { ...state, isManagingGroups: true };
     }
     case actionTypes.FETCH_USERS_SUCCESS: {
-      return { ...state, users: action.courseUsers };
+      return { ...state, courseUsers: action.courseUsers };
     }
     case actionTypes.FETCH_USERS_FAILURE: {
       return { ...state, hasFetchUserError: true };
@@ -24,10 +25,25 @@ export default function (state = initialState, action) {
       return { ...state, selectedGroupId: action.selectedGroupId };
     }
     case actionTypes.DELETE_GROUP_SUCCESS: {
+      const newModifiedGroups = state.modifiedGroups.filter(
+        (g) => g.id !== action.id,
+      );
       if (state.selectedGroupId === action.id) {
-        return { ...state, selectedGroupId: -1 };
+        return {
+          ...state,
+          selectedGroupId: -1,
+          modifiedGroups: newModifiedGroups,
+        };
       }
-      return state;
+      return { ...state, modifiedGroups: newModifiedGroups };
+    }
+    case actionTypes.MODIFY_GROUP: {
+      // We won't sort for this
+      const newModifiedGroups = [
+        ...state.modifiedGroups.filter((g) => g.id !== action.group.id),
+        action.group,
+      ];
+      return { ...state, modifiedGroups: newModifiedGroups };
     }
     default:
       return state;

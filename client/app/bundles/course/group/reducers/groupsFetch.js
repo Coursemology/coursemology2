@@ -1,4 +1,5 @@
 import actionTypes from '../constants';
+import { sortByName } from '../utils/sort';
 
 const initialState = {
   isFetching: false,
@@ -40,7 +41,7 @@ export default function (state = initialState, action) {
         (g) => g.id !== action.group.id,
       );
       const newGroups = [...filteredGroups, action.group];
-      newGroups.sort((a, b) => a.name.localeCompare(b.name));
+      newGroups.sort(sortByName);
       return {
         ...state,
         groups: newGroups,
@@ -48,7 +49,7 @@ export default function (state = initialState, action) {
     }
     case actionTypes.CREATE_GROUP_SUCCESS: {
       const newGroups = [...state.groups, ...action.groups];
-      newGroups.sort((a, b) => a.name.localeCompare(b.name));
+      newGroups.sort(sortByName);
       return {
         ...state,
         groups: newGroups,
