@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 class Course::Discussion::TopicsController < Course::ComponentController
+  skip_authorize_resource :course, only: [:unmark_as_pending]
   load_and_authorize_resource :discussion_topic, through: :course, instance_name: :topic,
                                                  class: Course::Discussion::Topic.name,
-                                                 parent: false
-  before_action :add_topics_breadcrumb
+                                                 parent: false, except: [:unmark_as_pending]
+  before_action :add_topics_breadcrumb, except: [:unmark_as_pending]
 
   def index
     @topics = all_topics
@@ -30,6 +31,16 @@ class Course::Discussion::TopicsController < Course::ComponentController
     @topics = my_students_topics.pending_staff_reply
   end
 
+  def unmark_as_pending
+    @topic = Course::Discussion::Topic.find_by(id: params[:id], course_id: params[:course_id])
+    authentication_success = params[:token] && @topic&.create_token_from_record == params[:token]
+    if authentication_success && @topic&.unmark_as_pending
+      redirect_to root_path, success: t('course.discussion.topics.unmark_as_pending_success')
+    else
+      redirect_to root_path, danger: t('course.discussion.topics.unmark_as_pending_failed')
+    end
+  end
+
   def toggle_pending
     success = if mark_as_pending?
                 @topic.mark_as_pending
@@ -43,6 +54,12 @@ class Course::Discussion::TopicsController < Course::ComponentController
   def mark_as_read
     @topic.mark_as_read! for: current_user
     redirect_back fallback_location: course_topics_path(current_course)
+  end
+
+  protected
+
+  def publicly_accessible?
+    params[:action] == 'unmark_as_pending'
   end
 
   private

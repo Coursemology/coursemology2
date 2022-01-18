@@ -19,4 +19,6 @@ en:
           header: :'course.discussion.topics.index.header'
         mark_as_pending: 'Mark as pending'
         unmark_as_pending: 'Unmark as pending'
+        unmark_as_pending_success: 'The comment has been successfully unmarked as pending'
+        unmark_as_pending_failed: 'Failed to unmark comment as pending'
         mark_as_read: 'Mark as read'
