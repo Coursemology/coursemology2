@@ -18,10 +18,10 @@ class AddCourseGroupCategories < ActiveRecord::Migration[6.0]
       t.index [:course_id, :name], unique: true
     end
 
-    # Add category_id column to existing groups table.
+    # Add group_category_id column to existing groups table.
     # This column is nullable for now.
-    add_reference :course_groups, :category, foreign_key: { to_table: :course_group_categories },
-                                             index: { name: 'fk__course_groups_category_id' }
+    add_reference :course_groups, :group_category, foreign_key: { to_table: :course_group_categories },
+                                                   index: { name: 'fk__course_groups_group_category_id' }
 
     # For all existing courses with groups, create a category and put all groups under it
     # All following commands will be in SQL, to avoid coupling/dependency with models
@@ -44,19 +44,20 @@ class AddCourseGroupCategories < ActiveRecord::Migration[6.0]
                       0,
                       '#{Time.zone.now.to_s(:db)}',
                       '#{Time.zone.now.to_s(:db)}')"
-         ).rows.flatten
+      ).rows.flatten
       ActiveRecord::Base.connection.exec_update(
         "UPDATE course_groups
-         SET category_id = #{category[0]}
+         SET group_category_id = #{category[0]}
          WHERE course_id = #{id}"
       )
     end
 
-    # Make category_id column non-nullable
-    change_column_null :course_groups, :category_id, false
+    # Make group_category_id column non-nullable
+    change_column_null :course_groups, :group_category_id, false
 
-    # Add index on [category_id, group_name]
-    add_index :course_groups, [:category_id, :name], unique: true, name: 'index_course_groups_on_category_id_and_name'
+    # Add index on [group_category_id, group_name]
+    add_index :course_groups, [:group_category_id, :name], unique: true,
+                                                           name: 'index_course_groups_on_group_category_id_and_name'
 
     # Remove index on [course_id, group_name], then remove course_id column
     remove_index :course_groups, name: 'index_course_groups_on_course_id_and_name'
@@ -78,7 +79,7 @@ class AddCourseGroupCategories < ActiveRecord::Migration[6.0]
       FROM
         course_groups g LEFT JOIN course_group_categories c
       ON
-        g.category_id = c.id'
+        g.group_category_id = c.id'
     ).rows.to_h
 
     group_id_to_course_id_map.each do |group_id, course_id|
@@ -96,8 +97,9 @@ class AddCourseGroupCategories < ActiveRecord::Migration[6.0]
     add_index :course_groups, [:course_id, :name], unique: true, name: 'index_course_groups_on_course_id_and_name'
 
     # Remove stuff added, i.e. column and table
-    remove_index :course_groups, name: 'index_course_groups_on_category_id_and_name'
-    remove_reference :course_groups, :category, index: { name: 'fk__course_groups_category_id' }, foreign_key: { to_table: :course_group_categories }
+    remove_index :course_groups, name: 'index_course_groups_on_group_category_id_and_name'
+    remove_reference :course_groups, :group_category, index: { name: 'fk__course_groups_group_category_id' },
+                                                      foreign_key: { to_table: :course_group_categories }
     drop_table :course_group_categories
   end
 end

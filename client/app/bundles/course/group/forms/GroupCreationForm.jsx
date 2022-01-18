@@ -1,27 +1,35 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { change, Field, Form, formValueSelector, reduxForm } from 'redux-form';
+import { red500 } from 'material-ui/styles/colors';
+import { connect } from 'react-redux';
+import { Tab, Tabs } from 'material-ui';
+import { FormattedMessage } from 'react-intl';
 
 import ErrorText, { errorProps } from 'lib/components/ErrorText';
 import formTranslations from 'lib/translations/form';
 import TextField from 'lib/components/redux-form/TextField';
 
-import { connect } from 'react-redux';
-import { Tab, Tabs } from 'material-ui';
-import { FormattedMessage } from 'react-intl';
-import { formNames } from '../constants';
+import actionTypes, { formNames } from '../constants';
 import translations from './translations.intl';
+import { groupShape } from '../propTypes';
 
 const styles = {
   flexCol: {
     display: 'flex',
     flexDirection: 'column',
   },
-  flexRow: {
-    display: 'flex',
-  },
   flexChild: {
     width: '100%',
+  },
+  note: {
+    marginTop: '1rem',
+    fontSize: '1.5rem',
+  },
+  warning: {
+    marginTop: '0.25rem',
+    fontSize: '1.5rem',
+    color: red500,
   },
 };
 
@@ -44,15 +52,35 @@ const validate = (values) => {
     errors.name = translations.nameLength;
   }
 
-  if (values.is_single === true && values.num_to_create < MIN_NUM_TO_CREATE) {
-    errors.num_to_create = translations.numToCreateMin;
-  }
+  const isSingle = values.is_single === true || values.is_single === 'true';
 
-  if (values.is_single === true && values.num_to_create > MAX_NUM_TO_CREATE) {
-    errors.num_to_create = translations.numToCreateMax;
+  if (!isSingle) {
+    if (isFieldBlank(values.num_to_create)) {
+      errors.num_to_create = formTranslations.required;
+    } else {
+      const numToCreate = Number.parseInt(values.num_to_create, 10);
+
+      if (numToCreate < MIN_NUM_TO_CREATE) {
+        errors.num_to_create = translations.numToCreateMin;
+      }
+      if (numToCreate > MAX_NUM_TO_CREATE) {
+        errors.num_to_create = translations.numToCreateMax;
+      }
+    }
   }
 
   return errors;
+};
+
+const getConflictingNames = (name, numToCreate, existingGroups) => {
+  if (!name || !numToCreate) return [];
+  const names = new Set();
+  for (let i = 1; i <= Number.parseInt(numToCreate, 10); i += 1) {
+    names.add(`${name} ${i}`);
+  }
+  return (
+    existingGroups?.map((group) => group.name).filter((n) => names.has(n)) ?? []
+  );
 };
 
 const GroupCreationForm = ({
@@ -61,11 +89,27 @@ const GroupCreationForm = ({
   handleSubmit,
   onSubmit,
   isSingle,
+  numToCreate,
+  name,
+  existingGroups,
   error,
 }) => {
   useEffect(() => {
     dispatch(change(formNames.GROUP, 'is_single', true));
   }, []);
+
+  const conflictingNames = useMemo(
+    () => getConflictingNames(name, numToCreate, existingGroups),
+    [name, numToCreate, existingGroups],
+  );
+
+  useEffect(() => {
+    if (!isSingle && numToCreate === conflictingNames.length) {
+      dispatch({ type: actionTypes.SET_IS_DISABLED_TRUE });
+    } else {
+      dispatch({ type: actionTypes.SET_IS_DISABLED_FALSE });
+    }
+  }, [numToCreate, conflictingNames]);
 
   const handleChange = useCallback(
     (value) => {
@@ -107,6 +151,13 @@ const GroupCreationForm = ({
         <Tab label="Multiple" value="is_multiple">
           <div style={styles.flexCol}>
             <Field
+              name="name"
+              component={TextField}
+              floatingLabelText={<FormattedMessage {...translations.prefix} />}
+              disabled={submitting}
+              style={styles.flexChild}
+            />
+            <Field
               name="num_to_create"
               component={TextField}
               floatingLabelText={
@@ -119,13 +170,19 @@ const GroupCreationForm = ({
               min={MIN_NUM_TO_CREATE}
               max={MAX_NUM_TO_CREATE}
             />
-            <Field
-              name="name"
-              component={TextField}
-              floatingLabelText={<FormattedMessage {...translations.prefix} />}
-              disabled={submitting}
-              style={styles.flexChild}
-            />
+            {name &&
+            numToCreate >= MIN_NUM_TO_CREATE &&
+            numToCreate <= MAX_NUM_TO_CREATE ? (
+              <div style={styles.note}>
+                This will create groups {name} 1 to {name} {numToCreate}.
+              </div>
+            ) : null}
+            {conflictingNames.length > 0 ? (
+              <div style={styles.warning}>
+                The following group(s) already exist and will not be created
+                again: {conflictingNames.join(', ')}.
+              </div>
+            ) : null}
           </div>
         </Tab>
       </Tabs>
@@ -139,13 +196,18 @@ GroupCreationForm.propTypes = {
   submitting: PropTypes.bool,
   error: errorProps,
   isSingle: PropTypes.bool,
+  numToCreate: PropTypes.number,
+  name: PropTypes.string,
   onSubmit: PropTypes.func.isRequired,
+  existingGroups: PropTypes.arrayOf(groupShape).isRequired,
 };
 
 const formSelector = formValueSelector(formNames.GROUP);
 
 export default connect((state) => ({
   isSingle: formSelector(state, 'is_single'),
+  numToCreate: Number.parseInt(formSelector(state, 'num_to_create'), 10),
+  name: formSelector(state, 'name'),
 }))(
   reduxForm({
     form: formNames.GROUP,

@@ -53,6 +53,14 @@ export default function (state = initialState, action) {
         groupCategory: action.groupCategory,
       };
     }
+    case actionTypes.CREATE_GROUP_SUCCESS: {
+      const newGroups = [...state.groups, ...action.groups];
+      newGroups.sort((a, b) => a.name.localeCompare(b.name));
+      return {
+        ...state,
+        groups: newGroups,
+      };
+    }
     default:
       return state;
   }

@@ -31,9 +31,17 @@ class Course::Group::GroupCategoriesController < Course::ComponentController
     end
   end
 
-  # This method handles both the creation of a single group and multiple groups.
   def create_groups
-    # TODO: Create groups
+    @created_groups = []
+    @failed_groups = []
+    groups_params[:groups].each do |group|
+      new_group = Course::Group.new(group.reverse_merge(group_category: @group_category))
+      if new_group.save
+        @created_groups << new_group
+      else
+        @failed_groups << new_group
+      end
+    end
   end
 
   def update
@@ -45,7 +53,6 @@ class Course::Group::GroupCategoriesController < Course::ComponentController
   end
 
   def update_group_members
-    # TODO: Mass update the groups of a category
   end
 
   def destroy
@@ -62,10 +69,11 @@ class Course::Group::GroupCategoriesController < Course::ComponentController
     params.permit(:name, :description)
   end
 
-  def group_params
-    params.require(:group).
-      permit(:name, course_user_ids: [],
-                    group_users_attributes: [:id, :course_user_id, :role, :_destroy])
+  def groups_params
+    params.permit(groups: [
+                    :name,
+                    :description
+                  ])
   end
 
   def add_group_breadcrumb

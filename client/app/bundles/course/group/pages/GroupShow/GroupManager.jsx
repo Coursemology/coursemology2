@@ -15,6 +15,7 @@ import translations from './translations.intl';
 import actionTypes, { dialogTypes } from '../../constants';
 import GroupFormDialog from '../../forms/GroupFormDialog';
 import GroupCreationForm from '../../forms/GroupCreationForm';
+import { createGroups } from '../../actions';
 
 const styles = {
   card: {
@@ -43,12 +44,62 @@ const styles = {
 
 const GroupManager = ({ dispatch, category, groups, intl }) => {
   const [selectedGroupId, setSelectedGroupId] = useState(-1);
-  const [currentGroups, setCurrentGroups] = useState(groups);
   const [isEditing, setIsEditing] = useState(false);
 
-  const onCreateFormSubmit = useCallback((data) => {
-    console.log(data);
-  }, []);
+  const getCreateGroupMessage = (created, failed) => {
+    if (created.length === 0) {
+      if (failed.length === 1) {
+        return intl.formatMessage(translations.createSingleGroupFailure, {
+          groupName: failed[0].name,
+        });
+      }
+      return intl.formatMessage(translations.createMultipleGroupsFailure, {
+        numFailed: failed.length,
+      });
+    }
+    if (created.length === 1 && failed.length === 0) {
+      return intl.formatMessage(translations.createSingleGroupSuccess, {
+        groupName: created[0].name,
+      });
+    }
+
+    return (
+      intl.formatMessage(translations.createMultipleGroupsSuccess, {
+        numCreated: created.length,
+      }) +
+      (failed.length > 0
+        ? ` ${intl.formatMessage(
+            translations.createMultipleGroupsPartialFailure,
+            {
+              numFailed: failed.length,
+            },
+          )}`
+        : '')
+    );
+  };
+
+  const onCreateFormSubmit = useCallback(
+    (data) => {
+      const existingNames = new Set(groups.map((g) => g.name));
+      const groupData = [];
+      const isSingle = data.is_single === 'true' || data.is_single === true;
+      if (isSingle) {
+        groupData.push({ name: data.name, description: data.description });
+      } else {
+        const numToCreate = Number.parseInt(data.num_to_create, 10);
+        for (let i = 1; i <= numToCreate; i += 1) {
+          const name = `${data.name} ${i}`;
+          if (!existingNames.has(name)) {
+            groupData.push({ name });
+          }
+        }
+      }
+      dispatch(
+        createGroups(category.id, { groups: groupData }, getCreateGroupMessage),
+      );
+    },
+    [dispatch, groups],
+  );
 
   const handleOpenCreate = useCallback(() => {
     setIsEditing(false);
@@ -101,7 +152,7 @@ const GroupManager = ({ dispatch, category, groups, intl }) => {
       >
         <MenuItem disabled value={-1} primaryText="Select a group to manage" />
         <MenuItem value={0} primaryText="Create new group(s)" />
-        {currentGroups.map((group) => (
+        {groups.map((group) => (
           <MenuItem key={group.id} value={group.id} primaryText={group.name} />
         ))}
       </DropDownMenu>
@@ -117,7 +168,13 @@ const GroupManager = ({ dispatch, category, groups, intl }) => {
         //     : undefined
         // }
       >
-        {isEditing ? null : <GroupCreationForm onSubmit={onCreateFormSubmit} />}
+        {isEditing ? null : (
+          <GroupCreationForm
+            onSubmit={onCreateFormSubmit}
+            initialValues={{ is_single: true }}
+            existingGroups={groups}
+          />
+        )}
       </GroupFormDialog>
     </>
   );

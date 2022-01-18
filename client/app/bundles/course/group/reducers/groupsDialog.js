@@ -53,6 +53,7 @@ export default function (state = initialState, action) {
         isShown: false,
       };
     }
+    case actionTypes.SET_IS_DISABLED_TRUE:
     case actionTypes.CREATE_CATEGORY_REQUEST:
     case actionTypes.UPDATE_CATEGORY_REQUEST:
     case actionTypes.CREATE_GROUP_REQUEST:
@@ -69,6 +70,7 @@ export default function (state = initialState, action) {
         isDisabled: false,
       };
     }
+    case actionTypes.SET_IS_DISABLED_FALSE:
     case actionTypes.CREATE_CATEGORY_FAILURE:
     case actionTypes.UPDATE_CATEGORY_FAILURE:
     case actionTypes.CREATE_GROUP_FAILURE:

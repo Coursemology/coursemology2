@@ -54,7 +54,7 @@ const NameDescriptionDialog = ({
         key="group-popup-dialog-submit-button"
       />,
     ],
-    [handleClose],
+    [handleClose, isDisabled, dispatch],
   );
 
   const isExpectedDialogType = expectedDialogTypes.includes(dialogType);

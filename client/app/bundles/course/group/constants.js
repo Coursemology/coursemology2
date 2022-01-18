@@ -26,6 +26,8 @@ const actionTypes = mirrorCreator([
   'DIALOG_CANCEL',
   'DIALOG_CONFIRM_CANCEL',
   'DIALOG_CONFIRM_DISCARD',
+  'SET_IS_DISABLED_TRUE',
+  'SET_IS_DISABLED_FALSE',
 
   // For creating a new group category or updating an existing category
   'CREATE_CATEGORY_FORM_SHOW',

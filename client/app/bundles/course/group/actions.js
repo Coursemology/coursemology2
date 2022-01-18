@@ -120,3 +120,27 @@ export function deleteCategory(id, successMessage, failureMessage) {
         setNotification(failureMessage)(dispatch);
       });
 }
+
+// Group data is of the form of { name: string, description: string? }[].
+export function createGroups(id, groupData, getCreatedGroupsMessage) {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.CREATE_GROUP_REQUEST });
+    return CourseAPI.groups
+      .createGroups(id, groupData)
+      .then((response) => {
+        dispatch({
+          type: actionTypes.CREATE_GROUP_SUCCESS,
+          groups: response.data.groups,
+        });
+        setNotification(
+          getCreatedGroupsMessage(response.data.groups, response.data.failed),
+        )(dispatch);
+      })
+      .catch(() => {
+        dispatch({ type: actionTypes.CREATE_GROUP_FAILURE });
+        setNotification(getCreatedGroupsMessage(0, groupData.groups.length))(
+          dispatch,
+        );
+      });
+  };
+}

@@ -55,6 +55,28 @@ const translations = defineMessages({
     id: 'course.group.form.newGroup',
     defaultMessage: 'New Group(s)',
   },
+  createSingleGroupSuccess: {
+    id: 'course.group.createSingleGroup.success',
+    defaultMessage: '{groupName} was successfully created.',
+  },
+  createSingleGroupFailure: {
+    id: 'course.group.createSingleGroup.fail',
+    defaultMessage: 'Failed to create {groupName}.',
+  },
+  createMultipleGroupsSuccess: {
+    id: 'course.group.createMultipleGroups.success',
+    defaultMessage:
+      '{numCreated} {numCreated, plural, one {group was} other {groups were}} successfully created.',
+  },
+  createMultipleGroupsPartialFailure: {
+    id: 'course.group.createMultipleGroups.partialFail',
+    defaultMessage:
+      'Failed to create {numFailed} {numFailed, plural, one {group} other {groups}}.',
+  },
+  createMultipleGroupsFailure: {
+    id: 'course.group.createMultipleGroups.fail',
+    defaultMessage: 'Failed to create {numFailed} groups.',
+  },
 });
 
 export default translations;

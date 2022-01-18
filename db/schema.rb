@@ -678,10 +678,10 @@ ActiveRecord::Schema.define(version: 2022_01_11_183806) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "description"
-    t.bigint "category_id", null: false
-    t.index ["category_id", "name"], name: "index_course_groups_on_category_id_and_name", unique: true
-    t.index ["category_id"], name: "fk__course_groups_category_id"
+    t.bigint "group_category_id", null: false
     t.index ["creator_id"], name: "fk__course_groups_creator_id"
+    t.index ["group_category_id", "name"], name: "index_course_groups_on_group_category_id_and_name", unique: true
+    t.index ["group_category_id"], name: "fk__course_groups_group_category_id"
     t.index ["updater_id"], name: "fk__course_groups_updater_id"
   end
 
@@ -1388,7 +1388,7 @@ ActiveRecord::Schema.define(version: 2022_01_11_183806) do
   add_foreign_key "course_group_users", "course_users", name: "fk_course_group_users_course_user_id"
   add_foreign_key "course_group_users", "users", column: "creator_id", name: "fk_course_group_users_creator_id"
   add_foreign_key "course_group_users", "users", column: "updater_id", name: "fk_course_group_users_updater_id"
-  add_foreign_key "course_groups", "course_group_categories", column: "category_id"
+  add_foreign_key "course_groups", "course_group_categories", column: "group_category_id"
   add_foreign_key "course_groups", "users", column: "creator_id", name: "fk_course_groups_creator_id"
   add_foreign_key "course_groups", "users", column: "updater_id", name: "fk_course_groups_updater_id"
   add_foreign_key "course_learning_maps", "courses", name: "fk_course_learning_maps_course_id"

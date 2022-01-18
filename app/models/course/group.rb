@@ -3,9 +3,9 @@ class Course::Group < ApplicationRecord
   validates :name, length: { maximum: 255 }, presence: true
   validates :creator, presence: true
   validates :updater, presence: true
-  validates :category, presence: true
-  validates :name, uniqueness: { scope: [:category_id], if: -> { category_id? && name_changed? } }
-  validates :category_id, uniqueness: { scope: [:name], if: -> { name? && category_id_changed? } }
+  validates :group_category, presence: true
+  validates :name, uniqueness: { scope: [:group_category_id], if: -> { group_category_id? && name_changed? } }
+  validates :group_category_id, uniqueness: { scope: [:name], if: -> { name? && group_category_id_changed? } }
 
   belongs_to :group_category, inverse_of: :groups
   has_many :group_users, -> { order_by_course_user_name },
