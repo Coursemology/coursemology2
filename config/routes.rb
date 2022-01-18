@@ -346,16 +346,19 @@ Rails.application.routes.draw do
       get 'staff' => 'users#staff', as: :users_staff
       patch 'upgrade_to_staff' => 'users#upgrade_to_staff', as: :users_upgrade_to_staff
 
-      resources :groups, only: [:index] do
-        collection do
-          get 'category' => 'groups#index_category'
-          post 'category' => 'groups#create_category'
-          post '/' => 'groups#create_groups'
-          patch 'category' => 'groups#update_category'
-          patch 'group_members' => 'groups#update_group_members'
-          patch '/' => 'groups#update_group'
-          delete 'category' => 'groups#destroy_category'
-          delete '/' => 'groups#destroy_group'
+      scope module: :group do
+        resources :group_categories, path: 'groups', except: [:new, :edit] do
+          member do
+            get 'info' => 'group_categories#show_info'
+            post 'groups' => 'group_categories#create_groups'
+            patch 'group_members' => 'group_categories#update_group_members'
+          end
+
+          collection do
+            get 'users' => 'group_categories#show_users'
+          end
+
+          resources :groups, only: [:update, :destroy]
         end
       end
 

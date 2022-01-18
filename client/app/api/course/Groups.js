@@ -23,7 +23,7 @@ export default class GroupsAPI extends BaseCourseAPI {
    */
   fetch(groupCategoryId) {
     return this.getClient().get(
-      `${this._getUrlPrefix()}/category?group_category=${groupCategoryId}`,
+      `${this._getUrlPrefix()}/${groupCategoryId}/info`,
     );
   }
 
@@ -35,7 +35,7 @@ export default class GroupsAPI extends BaseCourseAPI {
    * - Error response: { errors: string[] }
    */
   createCategory(params) {
-    return this.getClient().post(`${this._getUrlPrefix()}/category`, params);
+    return this.getClient().post(`${this._getUrlPrefix()}`, params);
   }
 
   /**
@@ -48,7 +48,7 @@ export default class GroupsAPI extends BaseCourseAPI {
    */
   createGroups(categoryId, params) {
     return this.getClient().post(
-      `${this._getUrlPrefix()}?group_category=${categoryId}`,
+      `${this._getUrlPrefix()}/${categoryId}/groups`,
       params,
     );
   }
@@ -63,7 +63,7 @@ export default class GroupsAPI extends BaseCourseAPI {
    */
   updateCategory(categoryId, params) {
     return this.getClient().patch(
-      `${this._getUrlPrefix()}/category?group_category=${categoryId}`,
+      `${this._getUrlPrefix()}/${categoryId}`,
       params,
     );
   }
@@ -77,10 +77,10 @@ export default class GroupsAPI extends BaseCourseAPI {
    * - Error response: { errors: string[] }
    */
   updateGroup(groupId, params) {
-    return this.getClient().patch(
-      `${this._getUrlPrefix()}?group=${groupId}`,
-      params,
-    );
+    return this.getClient().patch(`${this._getUrlPrefix()}/group`, {
+      ...params,
+      group_id: groupId,
+    });
   }
 
   /**
@@ -127,9 +127,7 @@ export default class GroupsAPI extends BaseCourseAPI {
    * - Error response: { error: string }
    */
   deleteCategory(categoryId) {
-    return this.getClient().delete(
-      `${this._getUrlPrefix()}/category?group_category=${categoryId}`,
-    );
+    return this.getClient().delete(`${this._getUrlPrefix()}/${categoryId}`);
   }
 
   _getUrlPrefix() {

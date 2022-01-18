@@ -1,9 +1,9 @@
 # frozen_string_literal: true
-module Course::GroupsHelper
+module Course::Group::GroupCategoriesHelper
   def display_groups_tabs
     return nil if current_course.group_categories.count <= 1
 
-    active_category = params[:group_category] || current_course.group_categories.first
+    active_category = params[:id] || current_course.group_categories.first
 
     tabs do
       current_course.group_categories.each do |item|
@@ -12,7 +12,7 @@ module Course::GroupsHelper
         # See https://github.com/doabit/bootstrap-sass-extras/blob/6aa549b91a66055a5f5e37400dbe44f4d17f09c3/app/helpers/nav_helper.rb#L32
         html_options = item == active_category ? { active: true } : nil
         concat(nav_to(format_inline_text(item.name),
-                      course_groups_path(current_course, group_category: item),
+                      course_group_category_path(current_course, item),
                       html_options))
       end
     end

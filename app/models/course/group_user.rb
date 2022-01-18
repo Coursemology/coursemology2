@@ -31,7 +31,7 @@ class Course::GroupUser < ApplicationRecord
 
   # Checks if course_user and course_group belongs to the same course.
   def course_user_and_group_in_same_course
-    return if group.course == course_user.course
+    return if group.group_category.course == course_user.course
 
     errors.add(:course_user, :not_enrolled)
   end

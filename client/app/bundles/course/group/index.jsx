@@ -3,35 +3,43 @@ import { render } from 'react-dom';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 import storeCreator from './store';
 import GroupIndex from './pages/GroupIndex';
-import GroupIndexNew from './pages/GroupIndexNew';
+import GroupShow from './pages/GroupShow';
+import GroupNew from './pages/GroupNew';
 
 $(document).ready(() => {
-  const categoryMountNode = document.getElementById(
+  const categoryShowMountNode = document.getElementById(
+    'course-group-show-component',
+  );
+  const categoryIndexMountNode = document.getElementById(
     'course-group-index-component',
   );
   const newButtonMountNode = $('.new-btn')[0];
 
   let store;
-  if (categoryMountNode || newButtonMountNode) {
+  if (categoryShowMountNode || categoryIndexMountNode || newButtonMountNode) {
     store = storeCreator();
   }
 
-  if (categoryMountNode) {
-    const data = categoryMountNode.getAttribute('data');
+  if (categoryShowMountNode) {
+    const data = categoryShowMountNode.getAttribute('data');
     const attributes = JSON.parse(data);
 
     render(
       <ProviderWrapper store={store}>
-        <GroupIndex groupCategoryId={attributes.group_category_id} />
+        <GroupShow groupCategoryId={attributes.group_category_id} />
       </ProviderWrapper>,
-      categoryMountNode,
+      categoryShowMountNode,
     );
+  }
+
+  if (categoryIndexMountNode) {
+    render(<GroupIndex />, categoryIndexMountNode);
   }
 
   if (newButtonMountNode) {
     render(
       <ProviderWrapper store={store}>
-        <GroupIndexNew />
+        <GroupNew />
       </ProviderWrapper>,
       newButtonMountNode,
     );

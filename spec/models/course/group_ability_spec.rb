@@ -16,7 +16,7 @@ RSpec.describe Course::Group do
       it { is_expected.to be_able_to(:manage, group) }
 
       it 'sees all groups' do
-        expect(course.groups.accessible_by(subject)).to contain_exactly(group)
+        expect(course.group_categories.groups.accessible_by(subject)).to contain_exactly(group)
       end
     end
 
@@ -36,7 +36,7 @@ RSpec.describe Course::Group do
       it { is_expected.to be_able_to(:manage, group.reload) }
 
       it 'sees all groups' do
-        expect(course.groups.accessible_by(subject)).to contain_exactly(group)
+        expect(course.group_categories.groups.accessible_by(subject)).to contain_exactly(group)
       end
     end
   end

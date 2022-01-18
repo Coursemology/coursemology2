@@ -20,7 +20,7 @@ div.submissions-filter
         label: Course::Group.model_name.human,
         selected: lambda { |group| group[1] == group_id },
         include_blank: '',
-        collection: current_course.groups.ordered_by_name.map { |g| [g.name, g.id] }
+        collection: current_course.group_categories.groups.ordered_by_name.map { |g| [g.name, g.id] }
     = f.input :user_id,
         as: :select,
         required: false,

@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe Course::Group, type: :model do
-  it { is_expected.to belong_to(:course).inverse_of(:groups) }
+  it { is_expected.to belong_to(:group_category).inverse_of(:groups) }
   it { is_expected.to have_many(:group_users).inverse_of(:group).dependent(:destroy) }
   it { is_expected.to have_many(:course_users).through(:group_users) }
 
@@ -152,7 +152,7 @@ RSpec.describe Course::Group, type: :model do
       end
 
       it 'returns groups sorted by average experience points' do
-        course.groups.ordered_by_experience_points.each_cons(2) do |group1, group2|
+        course.group_categories.groups.ordered_by_experience_points.each_cons(2) do |group1, group2|
           expect(group1.average_experience_points).to be >= group2.average_experience_points
         end
       end
@@ -165,7 +165,7 @@ RSpec.describe Course::Group, type: :model do
       let!(:later_group) { create(:course_group, course: course) }
 
       it 'returns groups sorted by average achievement count' do
-        course.groups.ordered_by_average_achievement_count.each_cons(2) do |group1, group2|
+        course.group_categories.groups.ordered_by_average_achievement_count.each_cons(2) do |group1, group2|
           expect(group1.average_achievement_count).to be >= group2.average_achievement_count
         end
       end
@@ -183,7 +183,7 @@ RSpec.describe Course::Group, type: :model do
 
         it 'returns the group who obtained the achievement count first' do
           expect(group.average_achievement_count).to eq(later_group.average_achievement_count)
-          course.groups.ordered_by_average_achievement_count.each_cons(2) do |group1, group2|
+          course.group_categories.groups.ordered_by_average_achievement_count.each_cons(2) do |group1, group2|
             expect(group1.last_obtained_achievement).to be <= group2.last_obtained_achievement
           end
         end

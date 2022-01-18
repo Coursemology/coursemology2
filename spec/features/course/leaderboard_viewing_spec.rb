@@ -78,7 +78,7 @@ RSpec.describe 'Course: Leaderboard: View' do
           expect(page).to have_text(I18n.t('course.leaderboards.groups.header'))
 
           within find('.leaderboard-points') do
-            sorted_course_groups = course.groups.ordered_by_experience_points
+            sorted_course_groups = course.group_categories.groups.ordered_by_experience_points
 
             sorted_course_groups.each.with_index(1) do |group, index|
               within find(content_tag_selector(group)) do
@@ -96,7 +96,7 @@ RSpec.describe 'Course: Leaderboard: View' do
           expect(page).to have_text(I18n.t('course.leaderboards.groups.header'))
 
           within find('.leaderboard-achievement') do
-            sorted_course_groups = course.groups.ordered_by_average_achievement_count
+            sorted_course_groups = course.group_categories.groups.ordered_by_average_achievement_count
 
             sorted_course_groups.each.with_index(1) do |group, index|
               within find(content_tag_selector(group)) do

@@ -65,7 +65,7 @@ RSpec.feature 'Courses: Groups' do
 
         expect do
           find_link(nil, class: 'delete', href: group_delete_path).click
-        end.to change { course.groups.count }.by(-1)
+        end.to change { course.group_categories.groups.count }.by(-1)
 
         expect(page).to have_selector('div',
                                       text: I18n.t('course.groups.destroy.success'))
@@ -106,7 +106,7 @@ RSpec.feature 'Courses: Groups' do
 
         expect do
           find_link(nil, class: 'delete', href: delete_path).click
-        end.to change { course.groups.count }.by(-1)
+        end.to change { course.group_categories.groups.count }.by(-1)
 
         expect(page).to have_selector('div', text: I18n.t('course.groups.destroy.success'))
       end

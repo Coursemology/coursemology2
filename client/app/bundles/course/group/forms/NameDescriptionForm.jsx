@@ -1,28 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field, Form } from 'redux-form';
 import { connect } from 'react-redux';
 
 import ErrorText, { errorProps } from 'lib/components/ErrorText';
 import TextField from 'lib/components/redux-form/TextField';
 import formTranslations from 'lib/translations/form';
-import { formNames } from '../../constants';
-
-const translations = defineMessages({
-  name: {
-    id: 'course.group.form.name',
-    defaultMessage: 'Name',
-  },
-  description: {
-    id: 'course.group.form.description',
-    defaultMessage: 'Description (Optional)',
-  },
-  nameLength: {
-    id: 'course.group.form.nameLength',
-    defaultMessage: 'The category name is too long!',
-  },
-});
+import { formNames } from '../constants';
+import translations from './translations.intl';
 
 const styles = {
   flexCol: {
@@ -31,16 +17,6 @@ const styles = {
   },
   flexChild: {
     width: '100%',
-  },
-  toggle: {
-    marginTop: 16,
-  },
-  hint: {
-    fontSize: 14,
-    marginBottom: 12,
-  },
-  conditions: {
-    marginTop: 24,
   },
 };
 
@@ -63,7 +39,7 @@ const validate = (values) => {
   return errors;
 };
 
-const CategoryForm = ({ submitting, handleSubmit, onSubmit, error }) => (
+const NameDescriptionForm = ({ submitting, handleSubmit, onSubmit, error }) => (
   <Form onSubmit={handleSubmit(onSubmit)}>
     <ErrorText errors={error} />
     <div style={styles.flexCol}>
@@ -88,7 +64,7 @@ const CategoryForm = ({ submitting, handleSubmit, onSubmit, error }) => (
   </Form>
 );
 
-CategoryForm.propTypes = {
+NameDescriptionForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   submitting: PropTypes.bool,
   error: errorProps,
@@ -97,7 +73,7 @@ CategoryForm.propTypes = {
 
 export default connect()(
   reduxForm({
-    form: formNames.GROUP_CATEGORY,
+    form: formNames.GROUP,
     validate,
-  })(CategoryForm),
+  })(NameDescriptionForm),
 );

@@ -23,6 +23,20 @@ export default function (state = initialState, action) {
         dialogType: dialogTypes.UPDATE_CATEGORY,
       };
     }
+    case actionTypes.CREATE_GROUP_FORM_SHOW: {
+      return {
+        ...state,
+        isShown: true,
+        dialogType: dialogTypes.CREATE_GROUP,
+      };
+    }
+    case actionTypes.UPDATE_GROUP_FORM_SHOW: {
+      return {
+        ...state,
+        isShown: true,
+        dialogType: dialogTypes.UPDATE_GROUP,
+      };
+    }
     case actionTypes.DIALOG_CANCEL: {
       if (action.payload.isPristine) {
         return { ...state, isShown: false };
@@ -40,11 +54,15 @@ export default function (state = initialState, action) {
       };
     }
     case actionTypes.CREATE_CATEGORY_REQUEST:
-    case actionTypes.UPDATE_CATEGORY_REQUEST: {
+    case actionTypes.UPDATE_CATEGORY_REQUEST:
+    case actionTypes.CREATE_GROUP_REQUEST:
+    case actionTypes.UPDATE_GROUP_REQUEST: {
       return { ...state, isDisabled: true };
     }
     case actionTypes.CREATE_CATEGORY_SUCCESS:
-    case actionTypes.UPDATE_CATEGORY_SUCCESS: {
+    case actionTypes.UPDATE_CATEGORY_SUCCESS:
+    case actionTypes.CREATE_GROUP_SUCCESS:
+    case actionTypes.UPDATE_GROUP_SUCCESS: {
       return {
         ...state,
         isShown: false,
@@ -52,7 +70,9 @@ export default function (state = initialState, action) {
       };
     }
     case actionTypes.CREATE_CATEGORY_FAILURE:
-    case actionTypes.UPDATE_CATEGORY_FAILURE: {
+    case actionTypes.UPDATE_CATEGORY_FAILURE:
+    case actionTypes.CREATE_GROUP_FAILURE:
+    case actionTypes.UPDATE_GROUP_FAILURE: {
       return {
         ...state,
         isDisabled: false,

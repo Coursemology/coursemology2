@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe Course::GroupsController, type: :controller do
+RSpec.describe Course::Group::GroupsController, type: :controller do
   let(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:admin) { create(:administrator) }

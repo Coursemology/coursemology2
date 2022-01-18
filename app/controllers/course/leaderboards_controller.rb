@@ -9,7 +9,7 @@ class Course::LeaderboardsController < Course::ComponentController
   end
 
   def groups # :nodoc:
-    @groups = @course.groups
+    @groups ||= @course.group_categories.groups
   end
 
   private

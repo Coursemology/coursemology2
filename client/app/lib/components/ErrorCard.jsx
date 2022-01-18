@@ -36,7 +36,11 @@ export default function Error({
 }
 
 Error.propTypes = {
-  message: PropTypes.string.isRequired,
+  message: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.node,
+  ]).isRequired,
   cardStyles: PropTypes.object,
   headerStyles: PropTypes.object,
   messageStyles: PropTypes.object,

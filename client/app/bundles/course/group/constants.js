@@ -1,10 +1,12 @@
 import mirrorCreator from 'mirror-creator';
 
-export const formNames = mirrorCreator(['GROUP_CATEGORY']);
+export const formNames = mirrorCreator(['GROUP']);
 
 export const dialogTypes = mirrorCreator([
   'CREATE_CATEGORY',
   'UPDATE_CATEGORY',
+  'CREATE_GROUP',
+  'UPDATE_GROUP',
 ]);
 
 const actionTypes = mirrorCreator([
@@ -31,6 +33,20 @@ const actionTypes = mirrorCreator([
   'UPDATE_CATEGORY_REQUEST',
   'UPDATE_CATEGORY_SUCCESS',
   'UPDATE_CATEGORY_FAILURE',
+
+  // For creating a new group or updating an existing group
+  'CREATE_GROUP_FORM_SHOW',
+  'CREATE_GROUP_REQUEST',
+  'CREATE_GROUP_SUCCESS',
+  'CREATE_GROUP_FAILURE',
+
+  'UPDATE_GROUP_FORM_SHOW',
+  'UPDATE_GROUP_REQUEST',
+  'UPDATE_GROUP_SUCCESS',
+  'UPDATE_GROUP_FAILURE',
+
+  // For managing groups
+  'MANAGE_GROUPS_START',
 ]);
 
 export default actionTypes;
