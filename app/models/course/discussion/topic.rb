@@ -93,4 +93,8 @@ class Course::Discussion::Topic < ApplicationRecord
     self.pending_staff_reply = false
     save
   end
+
+  def create_token_from_record
+    Digest::SHA256.hexdigest(id.to_s + actable_id.to_s + actable_type + course_id.to_s + created_at.utc.to_s)
+  end
 end
