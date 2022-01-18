@@ -16,7 +16,7 @@ $(document).ready(() => {
   const newButtonMountNode = $('.new-btn')[0];
 
   let store;
-  if (categoryShowMountNode || categoryIndexMountNode || newButtonMountNode) {
+  if (categoryShowMountNode || newButtonMountNode) {
     store = storeCreator();
   }
 
@@ -33,7 +33,12 @@ $(document).ready(() => {
   }
 
   if (categoryIndexMountNode) {
-    render(<GroupIndex />, categoryIndexMountNode);
+    render(
+      <ProviderWrapper>
+        <GroupIndex />
+      </ProviderWrapper>,
+      categoryIndexMountNode,
+    );
   }
 
   if (newButtonMountNode) {

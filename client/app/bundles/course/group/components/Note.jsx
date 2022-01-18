@@ -37,7 +37,7 @@ const Note = ({ message }) => (
 );
 
 Note.propTypes = {
-  message: PropTypes.string.isRequired,
+  message: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
 };
 
 export default Note;
