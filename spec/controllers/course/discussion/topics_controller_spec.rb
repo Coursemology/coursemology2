@@ -157,5 +157,33 @@ RSpec.describe Course::Discussion::TopicsController do
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
     end
+
+    describe '#unmark_as_pending' do
+      subject { get :unmark_as_pending, params: { course_id: course, id: pending_topic, token: token } }
+
+      context 'when a user visits the page and the token is valid' do
+        let(:token) { pending_topic.create_token_from_record }
+
+        it { is_expected.to redirect_to(root_path) }
+
+        it 'unmark the comment as pending and shows a success message' do
+          subject
+          expect(pending_topic.reload.pending_staff_reply).to be_falsey
+          expect(flash[:success]).to eq(I18n.t('course.discussion.topics.unmark_as_pending_success'))
+        end
+      end
+
+      context 'when a user visits the page and the token is invalid' do
+        let(:token) { 'woohoo' }
+
+        it { is_expected.to redirect_to(root_path) }
+
+        it 'does not unmark the comment as pending and shows a failed message' do
+          subject
+          expect(pending_topic.reload.pending_staff_reply).to be_truthy
+          expect(flash[:danger]).to eq(I18n.t('course.discussion.topics.unmark_as_pending_failed'))
+        end
+      end
+    end
   end
 end
