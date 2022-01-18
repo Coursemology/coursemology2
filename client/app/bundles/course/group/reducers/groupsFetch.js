@@ -15,24 +15,6 @@ export default function (state = initialState, action) {
       return { ...state, isFetching: true };
     }
     case actionTypes.FETCH_GROUPS_SUCCESS: {
-      // const map = new Map();
-      // action.categories.forEach((c) =>
-      //   c.groups.forEach((g) => {
-      //     g.members.forEach((m) => {
-      //       if (!map.has(m.courseUserId)) {
-      //         map.set(m.courseUserId, []);
-      //       }
-      //       map.get(m.courseUserId).push({
-      //         categoryName: c.name,
-      //         groupId: g.id,
-      //         groupName: g.name,
-      //         groupUserId: m.id,
-      //         groupRole: m.groupRole,
-      //       });
-      //     });
-      //   }),
-      // );
-
       return {
         ...state,
         groupCategory: action.groupCategory,
@@ -53,6 +35,17 @@ export default function (state = initialState, action) {
         groupCategory: action.groupCategory,
       };
     }
+    case actionTypes.UPDATE_GROUP_SUCCESS: {
+      const filteredGroups = state.groups.filter(
+        (g) => g.id !== action.group.id,
+      );
+      const newGroups = [...filteredGroups, action.group];
+      newGroups.sort((a, b) => a.name.localeCompare(b.name));
+      return {
+        ...state,
+        groups: newGroups,
+      };
+    }
     case actionTypes.CREATE_GROUP_SUCCESS: {
       const newGroups = [...state.groups, ...action.groups];
       newGroups.sort((a, b) => a.name.localeCompare(b.name));
@@ -60,6 +53,10 @@ export default function (state = initialState, action) {
         ...state,
         groups: newGroups,
       };
+    }
+    case actionTypes.DELETE_GROUP_SUCCESS: {
+      const newGroups = state.groups.filter((g) => g.id !== action.id);
+      return { ...state, groups: newGroups };
     }
     default:
       return state;

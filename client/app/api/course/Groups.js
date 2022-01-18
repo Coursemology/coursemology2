@@ -89,11 +89,11 @@ export default class GroupsAPI extends BaseCourseAPI {
    * - Success response: { id: number | string }
    * - Error response: { errors: string[] }
    */
-  updateGroup(groupId, params) {
-    return this.getClient().patch(`${this._getUrlPrefix()}/group`, {
-      ...params,
-      group_id: groupId,
-    });
+  updateGroup(categoryId, groupId, params) {
+    return this.getClient().patch(
+      `${this._getUrlPrefix()}/${categoryId}/groups/${groupId}`,
+      params,
+    );
   }
 
   /**
@@ -128,8 +128,10 @@ export default class GroupsAPI extends BaseCourseAPI {
    * - Success response: { id: number | string }
    * - Error response: { error: string }
    */
-  deleteGroup(groupId) {
-    return this.getClient().delete(`${this._getUrlPrefix()}?group=${groupId}`);
+  deleteGroup(categoryId, groupId) {
+    return this.getClient().delete(
+      `${this._getUrlPrefix()}/${categoryId}/groups/${groupId}`,
+    );
   }
 
   /**

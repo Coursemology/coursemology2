@@ -4,6 +4,7 @@ const initialState = {
   isManagingGroups: false,
   hasFetchUserError: false,
   courseUsers: [],
+  selectedGroupId: -1,
 };
 
 export default function (state = initialState, action) {
@@ -18,6 +19,15 @@ export default function (state = initialState, action) {
     }
     case actionTypes.FETCH_USERS_FAILURE: {
       return { ...state, hasFetchUserError: true };
+    }
+    case actionTypes.SET_SELECTED_GROUP_ID: {
+      return { ...state, selectedGroupId: action.selectedGroupId };
+    }
+    case actionTypes.DELETE_GROUP_SUCCESS: {
+      if (state.selectedGroupId === action.id) {
+        return { ...state, selectedGroupId: -1 };
+      }
+      return state;
     }
     default:
       return state;

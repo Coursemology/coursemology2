@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import {
   Card,
@@ -16,6 +16,7 @@ import actionTypes, { dialogTypes } from '../../constants';
 import GroupFormDialog from '../../forms/GroupFormDialog';
 import GroupCreationForm from '../../forms/GroupCreationForm';
 import { createGroups } from '../../actions';
+import GroupHeader from './GroupHeader';
 
 const styles = {
   card: {
@@ -42,10 +43,13 @@ const styles = {
   },
 };
 
-const GroupManager = ({ dispatch, category, groups, intl }) => {
-  const [selectedGroupId, setSelectedGroupId] = useState(-1);
-  const [isEditing, setIsEditing] = useState(false);
-
+const GroupManager = ({
+  dispatch,
+  category,
+  groups,
+  selectedGroupId,
+  intl,
+}) => {
   const getCreateGroupMessage = (created, failed) => {
     if (created.length === 0) {
       if (failed.length === 1) {
@@ -102,21 +106,21 @@ const GroupManager = ({ dispatch, category, groups, intl }) => {
   );
 
   const handleOpenCreate = useCallback(() => {
-    setIsEditing(false);
     dispatch({ type: actionTypes.CREATE_GROUP_FORM_SHOW });
-  }, [dispatch, setIsEditing]);
+  }, [dispatch]);
 
   const handleGroupSelect = (_event, _index, value) => {
     if (value === 0) {
       handleOpenCreate();
       return;
     }
-    setSelectedGroupId(value);
+    dispatch({
+      type: actionTypes.SET_SELECTED_GROUP_ID,
+      selectedGroupId: value,
+    });
   };
 
-  // const selectedGroup = currentGroups.find(
-  //   (group) => group.id === selectedGroupId,
-  // );
+  const selectedGroup = groups.find((group) => group.id === selectedGroupId);
 
   return (
     <>
@@ -158,24 +162,17 @@ const GroupManager = ({ dispatch, category, groups, intl }) => {
       </DropDownMenu>
       <GroupFormDialog
         dialogTitle={intl.formatMessage(translations.newGroup)}
-        expectedDialogTypes={[
-          dialogTypes.CREATE_GROUP,
-          dialogTypes.UPDATE_GROUP,
-        ]}
-        // initialValues={
-        //   isEditing
-        //     ? currentGroups.find((g) => g.id === selectedGroupId)
-        //     : undefined
-        // }
+        expectedDialogTypes={[dialogTypes.CREATE_GROUP]}
       >
-        {isEditing ? null : (
-          <GroupCreationForm
-            onSubmit={onCreateFormSubmit}
-            initialValues={{ is_single: true }}
-            existingGroups={groups}
-          />
-        )}
+        <GroupCreationForm
+          onSubmit={onCreateFormSubmit}
+          initialValues={{ is_single: true }}
+          existingGroups={groups}
+        />
       </GroupFormDialog>
+      {selectedGroup ? (
+        <GroupHeader categoryId={category.id} group={selectedGroup} />
+      ) : null}
     </>
   );
 };
@@ -184,8 +181,10 @@ GroupManager.propTypes = {
   dispatch: PropTypes.func.isRequired,
   category: categoryShape.isRequired,
   groups: PropTypes.arrayOf(groupShape).isRequired,
-
+  selectedGroupId: PropTypes.number.isRequired,
   intl: intlShape,
 };
 
-export default connect()(injectIntl(GroupManager));
+export default connect((state) => ({
+  selectedGroupId: state.groupsManage.selectedGroupId,
+}))(injectIntl(GroupManager));

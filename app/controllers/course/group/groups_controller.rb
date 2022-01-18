@@ -3,11 +3,11 @@ class Course::Group::GroupsController < Course::ComponentController
   load_and_authorize_resource :group, class: Course::Group
 
   def update
-    if @group.update(group_params)
-      render json: @group, status: :ok
-    else
+    unless @group.update(group_params)
       render json: { errors: @group.errors }, status: :bad_request
+      return
     end
+    render 'update'
   end
 
   def destroy
@@ -22,5 +22,11 @@ class Course::Group::GroupsController < Course::ComponentController
 
   def group_params
     params.permit(:name, :description)
+  end
+
+  # @return [Course::GroupsComponent]
+  # @return [nil] If component is disabled.
+  def component
+    current_component_host[:course_groups_component]
   end
 end

@@ -51,8 +51,11 @@ const actionTypes = mirrorCreator([
   'UPDATE_GROUP_SUCCESS',
   'UPDATE_GROUP_FAILURE',
 
+  'DELETE_GROUP_SUCCESS',
+
   // For managing groups
   'MANAGE_GROUPS_START',
+  'SET_SELECTED_GROUP_ID',
 ]);
 
 export default actionTypes;

@@ -144,3 +144,56 @@ export function createGroups(id, groupData, getCreatedGroupsMessage) {
       });
   };
 }
+
+export function updateGroup(
+  categoryId,
+  groupId,
+  { name, description },
+  successMessage,
+  failureMessage,
+) {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.UPDATE_GROUP_REQUEST });
+
+    return CourseAPI.groups
+      .updateGroup(categoryId, groupId, { name, description })
+      .then((response) => {
+        dispatch({
+          type: actionTypes.UPDATE_GROUP_SUCCESS,
+          group: response.data.group,
+        });
+        setNotification(successMessage)(dispatch);
+      })
+      .catch((error) => {
+        dispatch({
+          type: actionTypes.UPDATE_GROUP_FAILURE,
+        });
+        setNotification(failureMessage)(dispatch);
+
+        if (error.response && error.response.data) {
+          throw new SubmissionError(error.response.data.errors);
+        }
+      });
+  };
+}
+
+export function deleteGroup(
+  categoryId,
+  groupId,
+  successMessage,
+  failureMessage,
+) {
+  return (dispatch) =>
+    CourseAPI.groups
+      .deleteGroup(categoryId, groupId)
+      .then((response) => {
+        setNotification(successMessage)(dispatch);
+        dispatch({
+          type: actionTypes.DELETE_GROUP_SUCCESS,
+          id: response.data.id,
+        });
+      })
+      .catch(() => {
+        setNotification(failureMessage)(dispatch);
+      });
+}

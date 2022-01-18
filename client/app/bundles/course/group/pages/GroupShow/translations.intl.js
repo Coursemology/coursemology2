@@ -19,12 +19,21 @@ const translations = defineMessages({
     defaultMessage:
       '{numGroups} {numGroups, plural, one {group} other {groups}}',
   },
+  groupHeaderSubtitle: {
+    id: 'course.group.groupHeaderSubtitle',
+    defaultMessage:
+      '{numMembers} {numMembers, plural, one {member} other {members}}',
+  },
   noDescription: {
     id: 'course.group.noDescription',
     defaultMessage: 'No description available.',
   },
   editCategory: {
     id: 'course.group.editCategory',
+    defaultMessage: 'Edit',
+  },
+  editGroup: {
+    id: 'course.group.editGroup',
     defaultMessage: 'Edit',
   },
   manageGroups: {
@@ -34,6 +43,10 @@ const translations = defineMessages({
   editCategoryHeader: {
     id: 'course.group.form.editCategory',
     defaultMessage: 'Edit Category',
+  },
+  editGroupHeader: {
+    id: 'course.group.form.editGroup',
+    defaultMessage: 'Edit Group',
   },
   deleteCategorySuccess: {
     id: 'course.group.deleteCategory.success',
@@ -50,6 +63,22 @@ const translations = defineMessages({
   updateCategoryFailure: {
     id: 'course.group.updateCategory.fail',
     defaultMessage: 'Failed to update {categoryName}.',
+  },
+  deleteGroupSuccess: {
+    id: 'course.group.deleteGroup.success',
+    defaultMessage: '{groupName} was successfully deleted.',
+  },
+  deleteGroupFailure: {
+    id: 'course.group.deleteGroup.fail',
+    defaultMessage: 'Failed to delete {groupName}.',
+  },
+  updateGroupSuccess: {
+    id: 'course.group.updateGroup.success',
+    defaultMessage: '{groupName} was successfully updated.',
+  },
+  updateGroupFailure: {
+    id: 'course.group.updateGroup.fail',
+    defaultMessage: 'Failed to update {groupName}.',
   },
   newGroup: {
     id: 'course.group.form.newGroup',
