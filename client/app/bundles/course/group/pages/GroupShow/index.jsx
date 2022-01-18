@@ -12,7 +12,7 @@ import CategoryHeader from './CategoryHeader';
 import GroupTable from './GroupTable';
 import translations from './translations.intl';
 import { categoryShape, groupShape } from '../../propTypes';
-import { fetchGroupData } from '../../actions';
+import { fetchCourseUsers, fetchGroupData } from '../../actions';
 import GroupManager from './GroupManager';
 import actionTypes from '../../constants';
 import Note from '../../components/Note';
@@ -32,6 +32,10 @@ const Category = ({
       dispatch(fetchGroupData(groupCategoryId));
     }
   }, [groupCategoryId]);
+
+  useEffect(() => {
+    dispatch(fetchCourseUsers());
+  }, []);
 
   if (isFetching) {
     return <LoadingIndicator />;

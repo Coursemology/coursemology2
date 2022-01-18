@@ -18,6 +18,10 @@ const actionTypes = mirrorCreator([
   'FETCH_GROUPS_SUCCESS',
   'FETCH_GROUPS_FAILURE',
 
+  // For fetching users to show for group management
+  'FETCH_USERS_SUCCESS',
+  'FETCH_USERS_FAILURE',
+
   // For dialog management
   'DIALOG_CANCEL',
   'DIALOG_CONFIRM_CANCEL',

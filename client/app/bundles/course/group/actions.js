@@ -22,6 +22,21 @@ export function fetchGroupData(groupCategoryId) {
   };
 }
 
+export function fetchCourseUsers() {
+  return (dispatch) =>
+    CourseAPI.groups
+      .fetchCourseUsers()
+      .then((response) => {
+        dispatch({
+          type: actionTypes.FETCH_USERS_SUCCESS,
+          courseUsers: response.data.courseUsers,
+        });
+      })
+      .catch(() => {
+        dispatch({ type: actionTypes.FETCH_USERS_FAILURE });
+      });
+}
+
 export function createCategory(
   { name, description },
   successMessage,
@@ -39,7 +54,7 @@ export function createCategory(
         setNotification(successMessage)(dispatch);
         setTimeout(() => {
           if (response.data && response.data.id) {
-            window.location = `/courses/${getCourseId()}/groups?group_category=${
+            window.location = `/courses/${getCourseId()}/groups/${
               response.data.id
             }`;
           }
@@ -72,15 +87,9 @@ export function updateCategory(
       .then((response) => {
         dispatch({
           type: actionTypes.UPDATE_CATEGORY_SUCCESS,
+          groupCategory: response.data,
         });
         setNotification(successMessage)(dispatch);
-        setTimeout(() => {
-          if (response.data && response.data.id) {
-            window.location = `/courses/${getCourseId()}/groups?group_category=${
-              response.data.id
-            }`;
-          }
-        }, 200);
       })
       .catch((error) => {
         dispatch({

@@ -47,6 +47,12 @@ export default function (state = initialState, action) {
         hasFetchError: true,
       };
     }
+    case actionTypes.UPDATE_CATEGORY_SUCCESS: {
+      return {
+        ...state,
+        groupCategory: action.groupCategory,
+      };
+    }
     default:
       return state;
   }

@@ -7,6 +7,7 @@ export default class GroupsAPI extends BaseCourseAPI {
    * @param {number | string} groupCategoryId - Category to fetch.
    * @return {Promise}
    * - Success response: {
+   *   groupCategory: category object
    *   groups: [{
    *     name: string,
    *     groups: [{
@@ -17,7 +18,6 @@ export default class GroupsAPI extends BaseCourseAPI {
    *       }]
    *     }]
    *   }],
-   *   users: [course users]
    * }
    * - Error response: { error: string }
    */
@@ -25,6 +25,19 @@ export default class GroupsAPI extends BaseCourseAPI {
     return this.getClient().get(
       `${this._getUrlPrefix()}/${groupCategoryId}/info`,
     );
+  }
+
+  /**
+   * Fetches an array of users in this course.
+   *
+   * @return {Promise}
+   * - Success response: {
+   *   users: [CourseUser],
+   * }
+   * - Error response: { error: string }
+   */
+  fetchCourseUsers() {
+    return this.getClient().get(`${this._getUrlPrefix()}/users`);
   }
 
   /**

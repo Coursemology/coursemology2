@@ -1,13 +1,5 @@
 # frozen_string_literal: true
-if @group_category.nil?
-  json.groupCategory nil
-else
-  json.groupCategory do
-    json.id @group_category.id
-    json.name @group_category.name
-    json.description @group_category.description
-  end
-end
+json.groupCategory @group_category
 
 json.groups @groups do |group|
   json.id group.id

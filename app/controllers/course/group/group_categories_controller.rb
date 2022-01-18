@@ -19,13 +19,13 @@ class Course::Group::GroupCategoriesController < Course::ComponentController
   end
 
   def show_users
-    # TODO: Show course users
+    @course_users = current_course.course_users.order_alphabetically
   end
 
   def create
     @group_category = Course::GroupCategory.new(group_category_params.reverse_merge(course: current_course))
     if @group_category.save
-      render json: { id: @group_category.id }, status: :ok
+      render json: @group_category, status: :ok
     else
       render json: { errors: @group_category.errors }, status: :bad_request
     end
@@ -38,7 +38,7 @@ class Course::Group::GroupCategoriesController < Course::ComponentController
 
   def update
     if @group_category.update(group_category_params)
-      render json: { id: @group_category.id }, status: :ok
+      render json: @group_category, status: :ok
     else
       render json: { errors: @group_category.errors }, status: :bad_request
     end
