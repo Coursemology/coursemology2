@@ -14,6 +14,14 @@ import {
   TextField,
 } from 'material-ui';
 import Icon from 'material-ui/svg-icons/action/compare-arrows';
+import {
+  grey400,
+  red100,
+  green100,
+  green300,
+  blue100,
+  blue300,
+} from 'material-ui/styles/colors';
 
 import { courseUserShape, groupShape } from '../../propTypes';
 import actionTypes from '../../constants';
@@ -67,10 +75,21 @@ const styles = {
 };
 
 // Actually, the group can also be read from Redux. But for now, we'll get it from the parent.
-const CourseUserTable = ({ dispatch, group, groups, courseUsers }) => {
+const CourseUserTable = ({
+  dispatch,
+  group,
+  groups,
+  originalGroup,
+  courseUsers,
+}) => {
   const [hideInGroup, setHideInGroup] = useState(true);
   const [availableSearch, setAvailableSearch] = useState('');
   const [selectedSearch, setSelectedSearch] = useState('');
+
+  const originalMemberMap = new Map();
+  originalGroup.members.forEach((m) => {
+    originalMemberMap.set(m.id, m);
+  });
 
   let availableUsers;
   if (hideInGroup) {
@@ -171,7 +190,10 @@ const CourseUserTable = ({ dispatch, group, groups, courseUsers }) => {
             />
             <List style={styles.list}>
               {availableStudents.length === 0 && availableStaff.length === 0 ? (
-                <ListItem primaryText="No users found" />
+                <ListItem
+                  style={{ color: 'grey' }}
+                  primaryText="No users found"
+                />
               ) : null}
               {availableStudents.length > 0 && (
                 <>
@@ -180,6 +202,11 @@ const CourseUserTable = ({ dispatch, group, groups, courseUsers }) => {
                     <ListItem
                       primaryText={u.name}
                       key={u.id}
+                      style={
+                        originalMemberMap.has(u.id)
+                          ? { backgroundColor: red100 }
+                          : {}
+                      }
                       leftCheckbox={<Checkbox onCheck={() => onCheck(u)} />}
                     />
                   ))}
@@ -193,6 +220,11 @@ const CourseUserTable = ({ dispatch, group, groups, courseUsers }) => {
                     <ListItem
                       primaryText={u.name}
                       key={u.id}
+                      style={
+                        originalMemberMap.has(u.id)
+                          ? { backgroundColor: red100 }
+                          : {}
+                      }
                       leftCheckbox={<Checkbox onCheck={() => onCheck(u)} />}
                     />
                   ))}
@@ -213,61 +245,118 @@ const CourseUserTable = ({ dispatch, group, groups, courseUsers }) => {
             />
             <List style={styles.list}>
               {selectedStudents.length === 0 && selectedStaff.length === 0 ? (
-                <ListItem primaryText="No users found" />
+                <ListItem
+                  style={{ color: grey400 }}
+                  primaryText="No users found"
+                />
               ) : null}
               {selectedStudents.length > 0 && (
                 <>
                   <Subheader>Students</Subheader>
-                  {selectedStudents.map((u) => (
-                    <ListItem
-                      className="right-list-item"
-                      primaryText={
-                        <div style={styles.listItemWithDropdown}>
-                          <div>{u.name}</div>
-                          <DropDownMenu
-                            style={styles.dropdown}
-                            value={u.groupRole}
-                            onChange={(_, _2, value) => onChangeRole(value, u)}
-                          >
-                            <MenuItem value="normal" primaryText="Normal" />
-                            <MenuItem value="manager" primaryText="Manager" />
-                          </DropDownMenu>
-                        </div>
-                      }
-                      key={u.id}
-                      leftCheckbox={
-                        <Checkbox checked onCheck={() => onUncheck(u)} />
-                      }
-                    />
-                  ))}
+                  {selectedStudents.map((u) => {
+                    const isAdded = !originalMemberMap.has(u.id);
+                    const roleHasChanged =
+                      !isAdded &&
+                      originalMemberMap.get(u.id).groupRole !== u.groupRole;
+                    return (
+                      <ListItem
+                        className="right-list-item"
+                        primaryText={
+                          <div style={styles.listItemWithDropdown}>
+                            <div>{u.name}</div>
+                            <DropDownMenu
+                              style={styles.dropdown}
+                              value={u.groupRole}
+                              onChange={(_, _2, value) =>
+                                onChangeRole(value, u)
+                              }
+                              underlineStyle={
+                                isAdded ? { borderTopColor: green300 } : {}
+                              }
+                              iconStyle={
+                                // eslint-disable-next-line no-nested-ternary
+                                isAdded
+                                  ? { fill: green300 }
+                                  : roleHasChanged
+                                  ? { fill: blue300 }
+                                  : {}
+                              }
+                            >
+                              <MenuItem value="normal" primaryText="Normal" />
+                              <MenuItem value="manager" primaryText="Manager" />
+                            </DropDownMenu>
+                          </div>
+                        }
+                        key={u.id}
+                        leftCheckbox={
+                          <Checkbox checked onCheck={() => onUncheck(u)} />
+                        }
+                        style={
+                          // eslint-disable-next-line no-nested-ternary
+                          isAdded
+                            ? { backgroundColor: green100 }
+                            : roleHasChanged
+                            ? { backgroundColor: blue100 }
+                            : {}
+                        }
+                      />
+                    );
+                  })}
                 </>
               )}
               {selectedStaff.length > 0 && (
                 <>
                   {selectedStudents.length > 0 && <Divider />}
                   <Subheader>Staff</Subheader>
-                  {selectedStaff.map((u) => (
-                    <ListItem
-                      className="right-list-item"
-                      primaryText={
-                        <div style={styles.listItemWithDropdown}>
-                          <div>{u.name}</div>
-                          <DropDownMenu
-                            style={styles.dropdown}
-                            value={u.groupRole}
-                            onChange={(_, _2, value) => onChangeRole(value, u)}
-                          >
-                            <MenuItem value="normal" primaryText="Normal" />
-                            <MenuItem value="manager" primaryText="Manager" />
-                          </DropDownMenu>
-                        </div>
-                      }
-                      key={u.id}
-                      leftCheckbox={
-                        <Checkbox checked onCheck={() => onUncheck(u)} />
-                      }
-                    />
-                  ))}
+                  {selectedStaff.map((u) => {
+                    const isAdded = !originalMemberMap.has(u.id);
+                    const roleHasChanged =
+                      !isAdded &&
+                      originalMemberMap.get(u.id).groupRole !== u.groupRole;
+                    return (
+                      <ListItem
+                        className="right-list-item"
+                        primaryText={
+                          <div style={styles.listItemWithDropdown}>
+                            <div>{u.name}</div>
+                            <DropDownMenu
+                              style={styles.dropdown}
+                              value={u.groupRole}
+                              onChange={(_, _2, value) =>
+                                onChangeRole(value, u)
+                              }
+                              underlineStyle={
+                                isAdded ? { borderTopColor: green300 } : {}
+                              }
+                              iconStyle={
+                                // eslint-disable-next-line no-nested-ternary
+                                isAdded
+                                  ? { fill: green300 }
+                                  : roleHasChanged
+                                  ? { fill: blue300 }
+                                  : {}
+                              }
+                            >
+                              <MenuItem value="normal" primaryText="Normal" />
+                              <MenuItem value="manager" primaryText="Manager" />
+                            </DropDownMenu>
+                          </div>
+                        }
+                        key={u.id}
+                        leftCheckbox={
+                          <Checkbox checked onCheck={() => onUncheck(u)} />
+                        }
+                        style={
+                          // eslint-disable-next-line no-nested-ternary
+                          isAdded
+                            ? { backgroundColor: green100 }
+                            : roleHasChanged
+                            ? { backgroundColor: blue100 }
+                            : {}
+                        }
+                      />
+                    );
+                  })}
                 </>
               )}
             </List>
@@ -288,9 +377,13 @@ CourseUserTable.propTypes = {
   dispatch: PropTypes.func.isRequired,
   group: groupShape.isRequired,
   groups: PropTypes.arrayOf(groupShape).isRequired,
+  originalGroup: groupShape,
   courseUsers: PropTypes.arrayOf(courseUserShape).isRequired,
 };
 
 export default connect((state) => ({
   courseUsers: state.groupsManage.courseUsers,
+  originalGroup: state.groupsFetch.groups.find(
+    (g) => g.id === state.groupsManage.selectedGroupId,
+  ),
 }))(CourseUserTable);
