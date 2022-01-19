@@ -22,6 +22,7 @@ import { createGroups, updateGroupMembers } from '../../actions';
 import GroupHeader from './GroupHeader';
 import CourseUserTable from './CourseUserTable';
 import { combineGroups, getFinalModifiedGroups } from '../../utils/groups';
+import SummaryTable from './SummaryTable';
 
 const styles = {
   card: {
@@ -59,6 +60,7 @@ const GroupManager = ({
   groups,
   modifiedGroups,
   selectedGroupId,
+  isUpdating,
   intl,
 }) => {
   const [isConfirmingCancel, setIsConfirmingCancel] = useState(false);
@@ -189,6 +191,7 @@ const GroupManager = ({
               }
               handleCancel();
             }}
+            disabled={isUpdating}
           />
         </CardActions>
       </Card>
@@ -205,6 +208,7 @@ const GroupManager = ({
             labelStyle={styles.dropdownContent}
             underlineStyle={styles.dropdownUnderline}
             autoWidth={false}
+            disabled={isUpdating}
           >
             <MenuItem
               disabled
@@ -234,7 +238,7 @@ const GroupManager = ({
             display: 'flex',
             justifyContent: 'flex-end',
             marginTop: '2rem',
-            marginBottom: '3rem',
+            marginBottom: '2rem',
           }}
         >
           <RaisedButton
@@ -247,15 +251,18 @@ const GroupManager = ({
               }
               handleCancel();
             }}
+            disabled={isUpdating}
           />
           <RaisedButton
             primary
             label="Save Changes"
-            disabled={modifiedGroups.length === 0}
+            disabled={modifiedGroups.length === 0 || isUpdating}
             onClick={() => setIsConfirmingSave(true)}
           />
         </div>
       ) : null}
+
+      <SummaryTable />
 
       <GroupFormDialog
         dialogTitle={intl.formatMessage(translations.newGroup)}
@@ -299,10 +306,12 @@ GroupManager.propTypes = {
   groups: PropTypes.arrayOf(groupShape).isRequired,
   selectedGroupId: PropTypes.number.isRequired,
   modifiedGroups: PropTypes.arrayOf(groupShape).isRequired,
+  isUpdating: PropTypes.bool.isRequired,
   intl: intlShape,
 };
 
 export default connect((state) => ({
   selectedGroupId: state.groupsManage.selectedGroupId,
   modifiedGroups: state.groupsManage.modifiedGroups,
+  isUpdating: state.groupsManage.isUpdating,
 }))(injectIntl(GroupManager));

@@ -1,4 +1,5 @@
 import actionTypes from '../constants';
+import { sortByName } from '../utils/sort';
 
 const initialState = {
   isManagingGroups: false,
@@ -6,6 +7,7 @@ const initialState = {
   courseUsers: [],
   selectedGroupId: -1,
   modifiedGroups: [],
+  isUpdating: false,
 };
 
 export default function (state = initialState, action) {
@@ -24,7 +26,9 @@ export default function (state = initialState, action) {
       };
     }
     case actionTypes.FETCH_USERS_SUCCESS: {
-      return { ...state, courseUsers: action.courseUsers };
+      const newCourseUsers = [...action.courseUsers];
+      newCourseUsers.sort(sortByName);
+      return { ...state, courseUsers: newCourseUsers };
     }
     case actionTypes.FETCH_USERS_FAILURE: {
       return { ...state, hasFetchUserError: true };
@@ -46,12 +50,19 @@ export default function (state = initialState, action) {
       return { ...state, modifiedGroups: newModifiedGroups };
     }
     case actionTypes.MODIFY_GROUP: {
-      // We won't sort for this
       const newModifiedGroups = [
         ...state.modifiedGroups.filter((g) => g.id !== action.group.id),
         action.group,
       ];
+      newModifiedGroups.sort(sortByName);
       return { ...state, modifiedGroups: newModifiedGroups };
+    }
+    case actionTypes.UPDATE_GROUP_MEMBERS_REQUEST: {
+      return { ...state, isUpdating: true };
+    }
+    case actionTypes.UPDATE_GROUP_MEMBERS_SUCCESS:
+    case actionTypes.UPDATE_GROUP_MEMBERS_FAILURE: {
+      return { ...state, isUpdating: false };
     }
     default:
       return state;

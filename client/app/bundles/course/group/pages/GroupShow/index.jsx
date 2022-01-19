@@ -16,7 +16,6 @@ import { fetchCourseUsers, fetchGroupData } from '../../actions';
 import GroupManager from './GroupManager';
 import actionTypes from '../../constants';
 import Note from '../../components/Note';
-import { sortByName } from '../../utils/sort';
 
 const Category = ({
   dispatch,
@@ -53,8 +52,6 @@ const Category = ({
   if (groupCategory == null) {
     return <Note message={<FormattedMessage {...translations.noCategory} />} />;
   }
-
-  groups.sort(sortByName);
 
   return (
     <>

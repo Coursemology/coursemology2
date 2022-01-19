@@ -16,10 +16,12 @@ export default function (state = initialState, action) {
       return { ...state, isFetching: true };
     }
     case actionTypes.FETCH_GROUPS_SUCCESS: {
+      const newGroups = [...action.groups];
+      newGroups.sort(sortByName);
       return {
         ...state,
         groupCategory: action.groupCategory,
-        groups: action.groups,
+        groups: newGroups,
         isFetching: false,
       };
     }

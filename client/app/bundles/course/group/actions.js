@@ -204,11 +204,14 @@ export function updateGroupMembers(
   successMessage,
   failureMessage,
 ) {
-  return (dispatch) =>
-    CourseAPI.groups
+  return (dispatch) => {
+    dispatch({ type: actionTypes.UPDATE_GROUP_MEMBERS_REQUEST });
+
+    return CourseAPI.groups
       .updateGroupMembers(categoryId, groupData)
       .then((response) => {
         setNotification(successMessage)(dispatch);
+        dispatch({ type: actionTypes.UPDATE_GROUP_MEMBERS_SUCCESS });
         setTimeout(() => {
           if (response.data && response.data.id) {
             window.location = `/courses/${getCourseId()}/groups/${
@@ -218,6 +221,8 @@ export function updateGroupMembers(
         }, 200);
       })
       .catch(() => {
+        dispatch({ type: actionTypes.UPDATE_GROUP_MEMBERS_FAILURE });
         setNotification(failureMessage)(dispatch);
       });
+  };
 }

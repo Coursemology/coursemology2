@@ -25,7 +25,7 @@ import {
 
 import { courseUserShape, groupShape } from '../../propTypes';
 import actionTypes from '../../constants';
-import { sortByName } from '../../utils/sort';
+import { sortByGroupRole, sortByName } from '../../utils/sort';
 
 const styles = {
   card: {
@@ -140,7 +140,7 @@ const CourseUserTable = ({
         },
       ],
     };
-    newGroup.members.sort(sortByName);
+    newGroup.members.sort(sortByName).sort(sortByGroupRole);
     dispatch({
       type: actionTypes.MODIFY_GROUP,
       group: newGroup,
@@ -170,6 +170,7 @@ const CourseUserTable = ({
         },
       ],
     };
+    newGroup.members.sort(sortByName).sort(sortByGroupRole);
     dispatch({
       type: actionTypes.MODIFY_GROUP,
       group: newGroup,
