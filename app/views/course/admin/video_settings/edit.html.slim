@@ -27,6 +27,7 @@
             td
               div.btn-group
                 - if can?(:destroy, tab)
-                  = delete_button(course_admin_videos_tab_path(current_course, tab))
+                  = delete_button(course_admin_videos_tab_path(current_course, tab),
+                                 { data: { confirm: t('.destroy.confirm', title: tab.title) } })
 
   = f.button :submit

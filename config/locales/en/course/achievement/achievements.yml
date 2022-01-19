@@ -25,3 +25,5 @@ en:
           award: :'course.achievement.course_users.course_users_form.header'
           disabled_award: >
             Automatically-awarded achievements cannot be manually awarded to students.
+          destroy:
+            confirm: 'Are you sure you wish to delete this achievement - %{title}?'

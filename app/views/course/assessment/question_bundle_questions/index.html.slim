@@ -20,4 +20,5 @@ table.table.table-hover
         td = question_bundle_question.weight
         td
           = edit_button(edit_course_assessment_question_bundle_question_path(current_course, @assessment, question_bundle_question))
-          = delete_button(course_assessment_question_bundle_question_path(current_course, @assessment, question_bundle_question))
+          = delete_button(course_assessment_question_bundle_question_path(current_course, @assessment, question_bundle_question),
+                          { data: { confirm: t('.destroy.confirm', title: question_bundle_question.question_bundle.title) } })

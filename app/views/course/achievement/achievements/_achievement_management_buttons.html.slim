@@ -7,4 +7,5 @@
                 disabled: true) do
     = fa_icon 'trophy'.freeze
 = edit_button([current_course, achievement]) if can?(:edit, achievement)
-= delete_button([current_course, achievement]) if can?(:delete, achievement)
+= delete_button([current_course, achievement],
+                { data: { confirm: t('.destroy.confirm', title: achievement.title) } }) if can?(:delete, achievement)

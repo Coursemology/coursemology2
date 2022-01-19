@@ -18,4 +18,5 @@
       = link_to t('.set_primary'), set_primary_user_email_path(email) ,
                 method: :post, class: ['btn', 'btn-default']
 
-  td = delete_button(email) if @emails.length > 1
+  td = delete_button(email,
+                     { data: { confirm: t('.destroy.confirm') } }) if @emails.length > 1

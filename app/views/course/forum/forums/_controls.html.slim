@@ -12,4 +12,5 @@ span.pull-right
 
   .btn-group
     = edit_button([current_course, @forum]) if can?(:edit, @forum)
-    = delete_button([current_course, @forum]) if can?(:destroy, @forum)
+    = delete_button([current_course, @forum],
+                    { data: { confirm: t('.destroy.confirm', title: @forum.name, forum_topics: @forum.topics.length) } }) if can?(:destroy, @forum)

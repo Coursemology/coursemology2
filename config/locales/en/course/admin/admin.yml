@@ -31,7 +31,11 @@ en:
             header: 'Delete Course'
             button: 'Delete My Course'
             description_placeholder: >
-              Once you delete this course, you will not be able to access it any more.
+              Once you delete this course, you will not be able to access it anymore.
+          destroy:
+            confirm: >
+                Are you sure you wish to delete this course - %{title}?
+                You will not be able access it anymore.
         update:
           success: 'Course %{title} was updated.'
         destroy:

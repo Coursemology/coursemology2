@@ -64,6 +64,8 @@ en:
           non_auto_gradable_questions: >
             Some of the questions in this assessment are not auto-gradable.
             The autograder will always award the maximum grade for these questions.
+          destroy:
+            confirm: 'Are you sure you wish to delete this assessment - %{title}?'
         new:
           header: 'New Assessment'
         edit:

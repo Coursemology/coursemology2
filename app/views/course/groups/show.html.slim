@@ -3,7 +3,8 @@
   - if can?(:manage, @group)
     div.pull-right.btn-group
       = edit_button(edit_course_group_path(current_course, @group))
-      = delete_button(course_group_path(current_course, @group))
+      = delete_button(course_group_path(current_course, @group),
+                      { data: { confirm: t('.destroy.confirm', name: @group.name) } })
 
 - if @group_managers
   h3 = t('.managers')

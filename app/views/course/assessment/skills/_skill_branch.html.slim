@@ -8,7 +8,8 @@ tbody
           - if can?(:update, skill_branch)
             = edit_button([current_course, :assessments, skill_branch])
           - if can?(:destroy, skill_branch)
-            = delete_button([current_course, :assessments, skill_branch])
+            = delete_button([current_course, :assessments, skill_branch],
+                            { data: { confirm: t('.destroy.confirm', title: skill_branch.title) } })
   - else
     tr
       th colspan=3

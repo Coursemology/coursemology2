@@ -12,6 +12,8 @@ en:
       show:
         managers: :'course.groups.index.managers'
         members: 'Members'
+        destroy:
+          confirm:  Are you sure you wish to delete this group - %{name}?
       new:
         header: 'New Group'
       create:
@@ -28,3 +30,6 @@ en:
       group_user_fields:
         remove: 'Remove'
         phantom_user_label: '%{name} (Phantom User)'
+      group:
+        destroy:
+          confirm: :'course.groups.show.destroy.confirm'

@@ -1,0 +1,7 @@
+en:
+  course:
+    assessment:
+        question_bundle_questions:
+          index:
+            destroy:
+              confirm: 'Are you sure you wish to delete this question bundle question - %{title}?'

@@ -11,7 +11,7 @@
     td
       = f.button :submit, id: 'update' do
         = fa_icon 'check'.freeze
-      = delete_button([:admin, user])
+      = delete_button([:admin, user], { data: { confirm: t('.destroy.confirm') } })
       - if user.can_masquerade?
         = link_to masquerade_path(user), id: "masquerade_#{user.id}", class: ['btn', 'btn-default'], title: t('.masquerade') do
           = fa_icon 'user-secret'.freeze

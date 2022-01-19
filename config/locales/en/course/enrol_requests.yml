@@ -3,6 +3,8 @@ en:
     enrol_requests:
       index:
         header: 'User Requests'
+        destroy:
+          confirm: 'Are you sure you wish to reject the enrolment request from %{name} (%{email})?'
       create:
         success: 'Your request was sent, please wait for the course owner to approve.'
       destroy:

@@ -71,4 +71,5 @@ div = "Learning rate effective limits: #{@learning_rate_limits}" if @learning_ra
               td class=fields_class
                 = f.button :submit, id: 'update' do
                   = fa_icon 'save'.freeze
-                = delete_button(course_user_personal_time_path(id: personal_time.id)) unless personal_time.new_record?
+                = delete_button(course_user_personal_time_path(id: personal_time.id),
+                                { data: { confirm: t('.destroy.confirm') } }) unless personal_time.new_record?

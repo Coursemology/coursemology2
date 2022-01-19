@@ -7,3 +7,8 @@ en:
         success: 'Experience points record updated.'
       destroy:
         success: 'Experience points record deleted.'
+      experience_points_record:
+        destroy:
+          confirm: >
+            Are you sure you wish to delete experience point awarded to %{name} with the reason %{reason}?
+            A total of %{exp_points} experience points will be deducted from the user.

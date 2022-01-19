@@ -29,4 +29,7 @@
         = f.button :submit, id: 'update' do
           = fa_icon 'save'.freeze
       - if experience_points_record.manually_awarded? && can?(:destroy, experience_points_record)
-        = delete_button(points_record_path)
+        = delete_button(points_record_path, { data: { confirm: t('.destroy.confirm',
+                                                                 name: @course_user.name,
+                                                                 reason: experience_points_record.reason,
+                                                                 exp_points: experience_points_record.points_awarded) } })

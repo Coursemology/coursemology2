@@ -34,7 +34,7 @@
               - edit_path = url_for([:edit, current_course, assessment, question.specific])
               - delete_path = url_for([current_course, assessment, question.specific])
               = edit_button(edit_path)
-              = delete_button(delete_path)
+              = delete_button(delete_path, { data: { confirm: t('.destroy.confirm') } })
         h4 = format_inline_text(question_assessment.display_title)
         span.label.label-primary
           = format_inline_text(question_assessment.question.question_type)

@@ -14,7 +14,8 @@
     div.pull-right
       div.btn-group
         = edit_button(edit_button_path) if can?(:edit, announcement)
-        = delete_button(delete_button_path) if can?(:destroy, announcement)
+        = delete_button(delete_button_path, 
+                        { data: { confirm: t('.destroy.confirm') } }) if can?(:destroy, announcement)
 
   i.timestamp
     => format_datetime(announcement.start_at)

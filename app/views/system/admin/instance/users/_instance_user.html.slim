@@ -11,4 +11,4 @@
     td
       = f.button :submit, id: 'update' do
         = fa_icon 'check'.freeze
-      = delete_button([:admin, instance_user])
+      = delete_button([:admin, instance_user], { data: { confirm: t('.destroy.confirm') } })

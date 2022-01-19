@@ -12,4 +12,4 @@
     ul.list-unstyled
       - @owner_preload_service.course_owners_for(course.id)&.each do |course_owner|
         li = link_to_user(course_owner.user)
-  td = delete_button([:admin, :instance, course])
+  td = delete_button([:admin, :instance, course], { data: { confirm: t('.destroy.confirm') } })

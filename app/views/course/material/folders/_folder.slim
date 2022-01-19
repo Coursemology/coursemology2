@@ -19,4 +19,5 @@
       = format_datetime(folder.start_at)
   td
     = edit_button([current_course, folder]) if @folder.concrete? && can?(:edit, folder)
-    = delete_button([current_course, folder]) if @folder.concrete? && can?(:destroy, folder)
+    = delete_button([current_course, folder],
+                    { data: { confirm: t('.destroy.confirm') } }) if @folder.concrete? && can?(:destroy, folder)

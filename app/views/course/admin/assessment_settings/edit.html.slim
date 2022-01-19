@@ -33,7 +33,7 @@ h2
                                                                             category))
               - if can?(:destroy, category)
                 = delete_button(course_admin_assessments_category_path(current_course, category),
-                                {data: {confirm: t('course.admin.assessments.categories.destroy.confirm')}})
+                                { data: { confirm: t('course.admin.assessments.categories.destroy.confirm', title: category.title) } })
 
         - tabs = category.tabs
         = category_form.simple_fields_for :tabs do |tab_form|
@@ -50,7 +50,7 @@ h2
             td
               - if can?(:destroy, tab)
                 = delete_button(course_admin_assessments_category_tab_path(current_course, category, tab),
-                                {data: {confirm: t('course.admin.assessments.tabs.destroy.confirm')}})
+                                { data: { confirm: t('course.admin.assessments.tabs.destroy.confirm', title: tab.title) } })
 
   = f.input :show_public_test_cases_output, as: :boolean, label: t('.show_public_test_cases_output')
   = f.input :show_stdout_and_stderr, as: :boolean, label: t('.show_stdout_and_stderr')

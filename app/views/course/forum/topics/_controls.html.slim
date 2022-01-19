@@ -28,4 +28,5 @@
         = fa_icon 'lock'.freeze
 
   = edit_button(edit_course_forum_topic_path(current_course, @forum, @topic)) if can?(:edit, @topic)
-  = delete_button(course_forum_topic_path(current_course, @forum, @topic)) if can?(:destroy, @topic)
+  = delete_button(course_forum_topic_path(current_course, @forum, @topic),
+                  { data: { confirm: t('.destroy.confirm', title: @topic.title, topic_posts: @topic.posts.length - 1) } }) if can?(:destroy, @topic)

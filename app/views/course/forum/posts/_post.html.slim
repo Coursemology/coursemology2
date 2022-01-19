@@ -33,7 +33,8 @@
             - if can? :edit, post
               = edit_button(edit_course_forum_topic_post_path(current_course, @forum, @topic, post))
             - if can? :destroy, post
-              = delete_button(course_forum_topic_post_path(current_course, @forum, @topic, post))
+              = delete_button(course_forum_topic_post_path(current_course, @forum, @topic, post),
+                              { data: { confirm: t('.destroy.confirm') } })
 
       div.voting
         - user_vote = post.vote_for(current_user)

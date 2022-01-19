@@ -76,6 +76,8 @@ en:
             index: :'course.achievement.achievements.index.header'
           assessments:
             index: :'course.achievement.achievements.index.header'
+          surveys:
+            index: :'course.achievement.achievements.index.header'
         controller:
           index: :'course.achievement.achievements.index.header'
         achievements:

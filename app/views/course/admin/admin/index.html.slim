@@ -40,5 +40,6 @@
     = page_header t('.delete.header')
     div.alert.alert-danger
       = simple_format(t('.delete.description_placeholder'))
-    = delete_button(course_admin_path(current_course)) do
+    = delete_button(course_admin_path(current_course),
+                   { data: { confirm: t('.destroy.confirm', title: current_course.title) } } ) do
       = t('.delete.button')

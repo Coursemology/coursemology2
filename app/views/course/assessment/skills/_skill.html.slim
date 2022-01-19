@@ -4,4 +4,6 @@
   td
     div.btn-group
       = edit_button([current_course, :assessments, skill]) if can?(:update, skill)
-      = delete_button([current_course, :assessments, skill]) if can?(:destroy, skill)
+      = delete_button([current_course, :assessments, skill],
+                      { data: { confirm: t('.destroy.confirm', title: skill.title),
+                                title: skill.title } }) if can?(:destroy, skill)

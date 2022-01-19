@@ -29,4 +29,4 @@ div.users
               td
                 = f.button :submit, class: 'approve' do
                   = fa_icon 'check'.freeze
-                = delete_button([current_course, request])
+                = delete_button([current_course, request], { data: { confirm: t('.destroy.confirm', name: request.user.name, email: request.user.email) } })

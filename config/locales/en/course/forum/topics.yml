@@ -67,3 +67,8 @@ en:
         subscribe_button:
           subscribe: 'Subscribe'
           subscribed: 'Subscribed'
+        controls:
+          destroy:
+            confirm: >
+              Are you sure you wish to delete this forum topic - %{title}?
+              All %{topic_posts} post(s) in this forum topic will also be deleted.

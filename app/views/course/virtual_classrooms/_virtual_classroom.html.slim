@@ -12,7 +12,8 @@
     div.pull-right
       div.btn-group
         = edit_button(edit_button_path) if can?(:edit, virtual_classroom)
-        = delete_button(delete_button_path) if can?(:destroy, virtual_classroom)
+        = delete_button(delete_button_path,
+                        { data: { confirm: t('.destroy.confirm') } }) if can?(:destroy, virtual_classroom)
 
   i.timestamp
     = format_datetime(virtual_classroom.start_at)

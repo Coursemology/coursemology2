@@ -13,7 +13,8 @@
                   title: t('.resend_tooltip') do
           = fa_icon 'envelope'.freeze
       = delete_button([:admin, :instance, invitation],
-        class: 'btn-sm', title: t('.delete_tooltip')) do
+                      { data: { confirm: t('.destroy.confirm') } },
+                      class: 'btn-sm', title: t('.delete_tooltip')) do
         = fa_icon 'close'.freeze
   - else
     td = t('system.admin.instance.users.status.accepted')

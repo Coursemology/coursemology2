@@ -10,6 +10,8 @@ en:
           destroy:
             success: 'Category %{title} was deleted.'
             failure: 'Could not delete category: %{error}'
-            confirm: 'Deleting this category will delete all associated assessments. Are you sure?'
+            confirm: >
+              Are you sure you wish to delete this assessment category - %{title}?
+              Deleting this category will delete all associated tabs and assessments.
           new:
             header: 'New Category'

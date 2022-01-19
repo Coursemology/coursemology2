@@ -39,3 +39,6 @@ en:
           url_change_warning: >
             Warning: Changing url for this video would cause all its submissions and
             sessions data to be destroyed.
+        video_management_buttons:
+          delete:
+            confirm: 'Are you sure you wish to delete this video - %{title}?'
