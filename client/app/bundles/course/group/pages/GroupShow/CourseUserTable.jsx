@@ -29,7 +29,7 @@ import { sortByName } from '../../utils/sort';
 
 const styles = {
   card: {
-    marginTop: '3rem',
+    marginTop: '2rem',
     width: '100%',
   },
   cardContent: {
@@ -271,7 +271,12 @@ const CourseUserTable = ({
                                 onChangeRole(value, u)
                               }
                               underlineStyle={
-                                isAdded ? { borderTopColor: green300 } : {}
+                                // eslint-disable-next-line no-nested-ternary
+                                isAdded
+                                  ? { borderTopColor: green300 }
+                                  : roleHasChanged
+                                  ? { fill: blue300 }
+                                  : {}
                               }
                               iconStyle={
                                 // eslint-disable-next-line no-nested-ternary
@@ -326,7 +331,12 @@ const CourseUserTable = ({
                                 onChangeRole(value, u)
                               }
                               underlineStyle={
-                                isAdded ? { borderTopColor: green300 } : {}
+                                // eslint-disable-next-line no-nested-ternary
+                                isAdded
+                                  ? { borderTopColor: green300 }
+                                  : roleHasChanged
+                                  ? { fill: blue300 }
+                                  : {}
                               }
                               iconStyle={
                                 // eslint-disable-next-line no-nested-ternary

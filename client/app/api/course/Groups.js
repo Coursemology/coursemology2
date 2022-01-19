@@ -115,7 +115,7 @@ export default class GroupsAPI extends BaseCourseAPI {
    */
   updateGroupMembers(categoryId, params) {
     return this.getClient().patch(
-      `${this._getUrlPrefix()}/group_members?group_category=${categoryId}`,
+      `${this._getUrlPrefix()}/${categoryId}/group_members`,
       params,
     );
   }

@@ -23,6 +23,9 @@ import GroupFormDialog from '../../forms/GroupFormDialog';
 import NameDescriptionForm from '../../forms/NameDescriptionForm';
 
 const styles = {
+  card: {
+    marginBottom: '2rem',
+  },
   title: {
     fontWeight: 'bold',
     marginTop: '0.5rem',
@@ -89,7 +92,7 @@ const CategoryHeader = ({
 
   return (
     <>
-      <Card>
+      <Card style={styles.card}>
         <CardHeader
           title={<h3 style={styles.title}>{category.name}</h3>}
           subtitle={

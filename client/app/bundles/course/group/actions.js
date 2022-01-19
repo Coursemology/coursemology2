@@ -197,3 +197,27 @@ export function deleteGroup(
         setNotification(failureMessage)(dispatch);
       });
 }
+
+export function updateGroupMembers(
+  categoryId,
+  groupData, // {groups: []}
+  successMessage,
+  failureMessage,
+) {
+  return (dispatch) =>
+    CourseAPI.groups
+      .updateGroupMembers(categoryId, groupData)
+      .then((response) => {
+        setNotification(successMessage)(dispatch);
+        setTimeout(() => {
+          if (response.data && response.data.id) {
+            window.location = `/courses/${getCourseId()}/groups/${
+              response.data.id
+            }`;
+          }
+        }, 200);
+      })
+      .catch(() => {
+        setNotification(failureMessage)(dispatch);
+      });
+}

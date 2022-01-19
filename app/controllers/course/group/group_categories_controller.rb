@@ -53,6 +53,29 @@ class Course::Group::GroupCategoriesController < Course::ComponentController
   end
 
   def update_group_members
+    update_groups_params[:groups].each do |group|
+      existing_group = Course::Group.find_by_id(group[:id])
+      existing_users = existing_group.group_users.map { |u| [u.course_user.id, u] }.to_h
+      new_users = group[:members].map { |u| [u[:id], u] }.to_h
+      to_add = new_users.reject { |k, _| existing_users.key?(k) }
+      to_delete = existing_users.reject { |k, _| new_users.key?(k) }
+      to_update = new_users.select { |k, v| existing_users.key?(k) && v[:role] != existing_users[k].role }
+
+      to_add.each do |_, member|
+        # course_user = CourseUser.find_by_id(member[:id])
+        new_group_user = Course::GroupUser.new(group: existing_group, course_user_id: member[:id], role: member[:role])
+        new_group_user.save
+      end
+      # This is already a group user
+      to_delete.each do |_, member|
+        member.destroy
+      end
+      to_update.each do |id, member|
+        existing_group_user = existing_users[id]
+        existing_group_user.update(role: member[:role])
+      end
+    end
+    render json: { id: @group_category.id }, status: :ok
   end
 
   def destroy
@@ -73,6 +96,13 @@ class Course::Group::GroupCategoriesController < Course::ComponentController
     params.permit(groups: [
                     :name,
                     :description
+                  ])
+  end
+
+  def update_groups_params
+    params.permit(groups: [
+                    :id,
+                    members: [:id, :role] # id is course user id
                   ])
   end
 

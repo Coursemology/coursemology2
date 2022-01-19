@@ -15,6 +15,14 @@ export default function (state = initialState, action) {
     case actionTypes.MANAGE_GROUPS_START: {
       return { ...state, isManagingGroups: true };
     }
+    case actionTypes.MANAGE_GROUPS_END: {
+      return {
+        ...state,
+        isManagingGroups: false,
+        selectedGroupId: -1,
+        modifiedGroups: [],
+      };
+    }
     case actionTypes.FETCH_USERS_SUCCESS: {
       return { ...state, courseUsers: action.courseUsers };
     }

@@ -55,6 +55,7 @@ const actionTypes = mirrorCreator([
 
   // For managing groups
   'MANAGE_GROUPS_START',
+  'MANAGE_GROUPS_END',
   'SET_SELECTED_GROUP_ID',
   'MODIFY_GROUP',
 ]);
