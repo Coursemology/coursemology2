@@ -32,13 +32,15 @@ module Course::Assessment::AssessmentsHelper
       return false unless current_course.gamified?
 
       @assessments.any? do |assessment|
-        assessment.bonus_end_at.present? && assessment.time_bonus_exp > 0
+        @items_hash[assessment.id].time_for(current_course_user).bonus_end_at.present? && assessment.time_bonus_exp > 0
       end
     end
   end
 
   def show_end_at?
-    @show_end_at ||= @assessments.any? { |assessment| assessment.end_at.present? }
+    @show_end_at ||= @assessments.any? do |assessment|
+      @items_hash[assessment.id].time_for(current_course_user).end_at.present?
+    end
   end
 
   def display_graded_test_types(assessment)
