@@ -3,8 +3,8 @@ class FixedPersonalizationStrategy < BasePersonalizationStrategy
   # Returns a hash containing lesson plan item ids to submission time.
   #
   # @param [CourseUser] course_user The course user to compute data for.
-  # @return [Hash{Integer=>ActiveSupport::TimeWithZone|nil}] A hash of submitted lesson plan items' IDs to their submitted
-  #   time, if relevant/available.
+  # @return [Hash{Integer=>ActiveSupport::TimeWithZone|nil}] A hash of submitted lesson plan items' IDs to their
+  #   submitted time, if relevant/available.
   def precompute_data(course_user)
     lesson_plan_items_submission_time_hash(course_user)
   end
@@ -13,8 +13,8 @@ class FixedPersonalizationStrategy < BasePersonalizationStrategy
   # reference timeline moving forward.
   #
   # @param [CourseUser] course_user The course user to compute data for.
-  # @param [Hash{Integer=>ActiveSupport::TimeWithZone|nil}] precompute_data A hash of submitted lesson plan items' ID to their submitted
-  #   time, if relevant/available.
+  # @param [Hash{Integer=>ActiveSupport::TimeWithZone|nil}] precompute_data A hash of submitted lesson plan items' ID to
+  #   their submitted time, if relevant/available.
   def execute(course_user, precompute_data)
     course_user.personal_times.where(fixed: false).
       where.not(lesson_plan_item_id: precompute_data.keys).delete_all
