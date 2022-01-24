@@ -22,7 +22,7 @@ class StragglersPersonalizationStrategy < BasePersonalizationStrategy
       precomputed_data[:items].each do |item|
         reference_point, personal_point = update_points(course_user, item, precomputed_data[:submitted_items],
                                                         reference_point, personal_point)
-        next if should_skip_item(course_user, item, precomputed_data[:submitted_items], reference_point)
+        next if cannot_shift_item(course_user, item, precomputed_data[:submitted_items], reference_point)
 
         reference_time = item.reference_time_for(course_user)
         personal_time = item.find_or_create_personal_time_for(course_user)
@@ -59,8 +59,8 @@ class StragglersPersonalizationStrategy < BasePersonalizationStrategy
     [reference_point, personal_point]
   end
 
-  # Checks if the lesson plan item should be skipped. If skipped, the timings for this item will not be adjusted.
-  # Currently, it checks for the following conditions, for it to NOT be skipped:
+  # Checks if the lesson plan item cannot be shifted. If cannot, the timings for this item will not be adjusted.
+  # Currently, it checks for the following conditions, for it to be possible to be shifted:
   # - Item has personal times
   # - Item is not submitted
   # - Item's personal time isn't fixed
@@ -71,8 +71,8 @@ class StragglersPersonalizationStrategy < BasePersonalizationStrategy
   # @param [Hash{Integer=>ActiveSupport::TimeWithZone|nil}] submitted_items A hash of submitted lesson plan items' ID
   #   to their submitted time, if relevant/available.
   # @param [Course::ReferenceTime] reference_time Current reference time to be checked.
-  # @return [Boolean] Whether the item should be skipped.
-  def should_skip_item(course_user, item, submitted_items, reference_point)
+  # @return [Boolean] Whether the item cannot be shifted.
+  def cannot_shift_item(course_user, item, submitted_items, reference_point)
     !item.has_personal_times? || item.id.in?(submitted_items.keys) ||
       item.personal_time_for(course_user)&.fixed? || reference_point.nil?
   end

@@ -21,10 +21,12 @@ class FomoPersonalizationStrategy < BasePersonalizationStrategy
       precomputed_data[:items].each do |item|
         reference_point, personal_point = update_points(course_user, item, precomputed_data[:submitted_items],
                                                         reference_point, personal_point)
-        next if should_skip_item(course_user, item, precomputed_data[:submitted_items])
+        next if cannot_shift_item(course_user, item, precomputed_data[:submitted_items])
 
         reference_time = item.reference_time_for(course_user)
         personal_time = item.find_or_create_personal_time_for(course_user)
+        next if item_is_open_and_straggling(personal_time, reference_time)
+
         shift_start_at(personal_time, reference_time, personal_point, reference_point,
                        precomputed_data[:learning_rate_ema])
         reset_bonus_end_at(personal_time, reference_time)
@@ -55,8 +57,8 @@ class FomoPersonalizationStrategy < BasePersonalizationStrategy
     [reference_point, personal_point]
   end
 
-  # Checks if the lesson plan item should be skipped. If skipped, the timings for this item will not be adjusted.
-  # Currently, it checks for the following conditions, for it to NOT be skipped:
+  # Checks if the lesson plan item cannot be shifted. If cannot, the timings for this item will not be adjusted.
+  # Currently, it checks for the following conditions, for it to be possible to be shifted:
   # - Item has personal times
   # - Item is not submitted
   # - Item's personal time isn't fixed
@@ -66,16 +68,19 @@ class FomoPersonalizationStrategy < BasePersonalizationStrategy
   # @param [Course::LessonPlan::Item] item The item that we are checking.
   # @param [Hash{Integer=>ActiveSupport::TimeWithZone|nil}] submitted_items A hash of submitted lesson plan items' ID
   #   to their submitted time, if relevant/available.
-  # @return [Boolean] Whether the item should be skipped.
-  def should_skip_item(course_user, item, submitted_items)
-    if !item.has_personal_times? || item.id.in?(submitted_items.keys) || item.personal_time_for(course_user)&.fixed?
-      return true
-    end
+  # @return [Boolean] Whether the item cannot be shifted.
+  def cannot_shift_item(course_user, item, submitted_items)
+    !item.has_personal_times? || item.id.in?(submitted_items.keys) || item.personal_time_for(course_user)&.fixed?
+  end
 
-    # If the user was previously on the stragglers algorithm and just switched over, and has already open
-    # items, we want to keep those items as they are
-    reference_time = item.reference_time_for(course_user)
-    personal_time = item.find_or_create_personal_time_for(course_user)
+  # Checks if the item is already open with a deadline shifted back by stragglers algorithm.
+  # If the user was previously on the stragglers algorithm and just switched over, and has already open
+  # items, we want to keep those items as they are
+  #
+  # @param [Course::PersonalTime] personal_time Personal time that we are checking.
+  # @param [Course::ReferenceTime] reference_time Reference time that we are referring.
+  # @return [Boolean] Whether the item is already open with a deadline shifted back by stragglers a
+  def item_is_open_and_straggling(personal_time, reference_time)
     personal_time.end_at && personal_time.end_at > reference_time.end_at && personal_time.start_at < Time.zone.now
   end
 
