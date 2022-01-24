@@ -21,9 +21,9 @@ module Course::Assessment::AssessmentsHelper
     end
   end
 
-  def condition_not_satisfied(assessment)
-    cannot?(:attempt, assessment) &&
-      assessment.start_at < Time.zone.now &&
+  def condition_not_satisfied(can_attempt_assessment, assessment, assessment_time)
+    !can_attempt_assessment &&
+      assessment_time.start_at < Time.zone.now &&
       !assessment.conditions_satisfied_by?(current_course_user)
   end
 

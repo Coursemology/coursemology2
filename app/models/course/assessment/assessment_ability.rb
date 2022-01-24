@@ -70,7 +70,6 @@ module Course::Assessment::AssessmentAbility
 
   def allow_students_attempt_assessment
     can :attempt, Course::Assessment do |assessment|
-      course_user = user.course_users.find_by(course: assessment.course)
       assessment.published? && assessment.self_directed_started?(course_user) &&
         assessment.conditions_satisfied_by?(course_user)
     end

@@ -1,4 +1,7 @@
 - assessment_time = @items_hash[assessment.id].time_for(current_course_user)
+- assessment_with_loaded_timeline = @items_hash[assessment.id].actable
+// assessment_with_loaded_timeline is passed below since the timeline is already preloaded and will be checked
+- can_attempt_assessment = can?(:attempt, assessment_with_loaded_timeline)
 = content_tag_for(:tr, assessment, class: time_period_class(assessment_time) + draft_class(assessment))
   th colspan=2
     - if assessment.view_password
@@ -30,7 +33,7 @@
         = link_to course_achievement_path(current_course, achievement) do
           = display_achievement_badge(achievement)
   td.table-start-at
-    - if condition_not_satisfied(assessment)
+    - if condition_not_satisfied(can_attempt_assessment, assessment_with_loaded_timeline, assessment_time)
       div.condition-not-satisfied data-toggle='tooltip' title="#{t('.condition_not_satisfied')}"
         = render partial: 'course/lesson_plan/items/personal_or_ref_time',
                  locals: { item: @items_hash[assessment.id], course_user: current_course_user, attribute: :start_at, datetime_format: :short }
@@ -50,4 +53,4 @@
         = render partial: 'course/lesson_plan/items/personal_or_ref_time',
                  locals: { item: @items_hash[assessment.id], course_user: current_course_user, attribute: :end_at, datetime_format: :short }
   td.table-buttons colspan=2
-    = render 'assessment_management_buttons', assessment: assessment
+    = render 'assessment_management_buttons', assessment: assessment, can_attempt_assessment: can_attempt_assessment

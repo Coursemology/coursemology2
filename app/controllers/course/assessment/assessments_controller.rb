@@ -9,8 +9,10 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
 
   def index
     @assessments = @assessments.ordered_by_date_and_title.with_submissions_by(current_user)
+
     @items_hash = @course.lesson_plan_items.where(actable_id: @assessments.pluck(:id),
                                                   actable_type: Course::Assessment.name).
+                  preload(actable: :conditions).
                   with_reference_times_for(current_course_user).
                   with_personal_times_for(current_course_user).
                   to_h do |item|
