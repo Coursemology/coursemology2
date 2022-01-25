@@ -1,5 +1,6 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
+import { MemoryRouter } from 'react-router-dom';
 import CourseAPI from 'api/course';
 import storeCreator from 'course/survey/store';
 import ResponseShow, { UnconnectedResponseShow } from '../index';
@@ -9,16 +10,19 @@ describe('<ResponseShow />', () => {
     const surveyId = '1';
     const responseId = '1';
     const spyFetch = jest.spyOn(CourseAPI.survey.responses, 'fetch');
+    const responseUrl = `/courses/${courseId}/surveys/${surveyId}/responses/${responseId}/edit`;
 
     mount(
-      <ResponseShow
-        {...{
-          survey: {},
-          courseId,
-          surveyId,
-          match: { params: { responseId } },
-        }}
-      />,
+      <MemoryRouter initialEntries={[responseUrl]}>
+        <ResponseShow
+          {...{
+            survey: {},
+            courseId,
+            surveyId,
+            match: { params: { responseId } },
+          }}
+        />
+      </MemoryRouter>,
       buildContextOptions(storeCreator({})),
     );
     await sleep(1);
