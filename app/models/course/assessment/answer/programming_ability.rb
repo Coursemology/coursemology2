@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 module Course::Assessment::Answer::ProgrammingAbility
   def define_permissions
-    if user
-      allow_students_create_programming_files
-      allow_students_destroy_programming_files
-      allow_students_download_programming_files
+    if course_user
+      allow_create_programming_files
+      allow_destroy_programming_files
+      allow_download_programming_files
 
-      allow_staff_download_programming_files if course_user&.staff?
+      allow_staff_download_programming_files if course_user.staff?
     end
 
     super
   end
 
-  def allow_students_create_programming_files
+  def allow_create_programming_files
     can :create_programming_files, Course::Assessment::Answer::Programming do |programming_answer|
       multiple_file_submission?(programming_answer.question) &&
         creator?(programming_answer.submission) &&
@@ -21,7 +21,7 @@ module Course::Assessment::Answer::ProgrammingAbility
     end
   end
 
-  def allow_students_destroy_programming_files
+  def allow_destroy_programming_files
     can :destroy_programming_file, Course::Assessment::Answer::Programming do |programming_answer|
       multiple_file_submission?(programming_answer.question) &&
         creator?(programming_answer.submission) &&
@@ -30,7 +30,7 @@ module Course::Assessment::Answer::ProgrammingAbility
     end
   end
 
-  def allow_students_download_programming_files
+  def allow_download_programming_files
     can :download, Course::Assessment::Answer::ProgrammingFile,
         answer: { submission: { creator_id: user.id } }
   end

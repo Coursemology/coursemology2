@@ -3,38 +3,33 @@ module Course::MaterialsAbilityComponent
   include AbilityHost::Component
 
   def define_permissions
-    if user
-      allow_students_show_materials
-      allow_students_upload_materials
-      allow_staff_read_materials
-      allow_teaching_staff_manage_materials
+    if course_user
+      allow_show_materials
+      allow_upload_materials
+      allow_staff_read_materials if course_user.staff?
+      allow_teaching_staff_manage_materials if course_user.teaching_staff?
     end
 
+    disallow_superusers_change_root_and_linked_folders
     super
   end
 
   private
 
-  def material_all_course_users_hash
-    { folder: course_all_course_users_hash }
+  def material_course_hash
+    { folder: { course_id: course.id } }
   end
 
-  def material_course_staff_hash
-    { folder: course_staff_hash }
-  end
+  def allow_show_materials
+    if course_user.student?
+      valid_materials_hashes.each do |properties|
+        can :read, Course::Material, material_course_hash.deep_merge(properties)
+      end
 
-  def material_course_teaching_staff_hash
-    { folder: course_teaching_staff_hash }
-  end
-
-  def allow_students_show_materials
-    valid_materials_hashes.each do |properties|
-      can :read, Course::Material, material_all_course_users_hash.deep_merge(properties)
-    end
-
-    opened_material_hashes.each do |properties|
-      can [:read, :download],
-          Course::Material::Folder, course_all_course_users_hash.reverse_merge(properties)
+      opened_material_hashes.each do |properties|
+        can [:read, :download],
+            Course::Material::Folder, { course_id: course.id }.reverse_merge(properties)
+      end
     end
 
     can :read_owner, Course::Material::Folder do |folder|
@@ -43,24 +38,27 @@ module Course::MaterialsAbilityComponent
     end
   end
 
-  def allow_students_upload_materials
+  def allow_upload_materials
     alias_action :new_materials, :upload_materials, to: :upload
-    can :upload, Course::Material::Folder, course_all_course_users_hash.
+    can :upload, Course::Material::Folder, { course_id: course.id }.
       reverse_merge(can_student_upload: true)
     can :manage, Course::Material, creator: user
   end
 
   def allow_staff_read_materials
-    can :read, Course::Material, material_course_staff_hash
-    can [:read, :download], Course::Material::Folder, course_staff_hash
+    can :read, Course::Material, material_course_hash
+    can [:read, :download], Course::Material::Folder, { course_id: course.id }
   end
 
   def allow_teaching_staff_manage_materials
-    can :manage, Course::Material, material_course_teaching_staff_hash
+    can :manage, Course::Material, material_course_hash
 
-    can :upload, Course::Material::Folder, course_teaching_staff_hash
+    can :upload, Course::Material::Folder, { course_id: course.id }
     can :manage, Course::Material::Folder,
-        course_teaching_staff_hash.reverse_merge(concrete_folder_hash)
+        { course_id: course.id }.reverse_merge(concrete_folder_hash)
+  end
+
+  def disallow_superusers_change_root_and_linked_folders
     # Do not allow admin to edit linked folders
     cannot [:update, :destroy], Course::Material::Folder do |folder|
       folder.owner_id.present?
@@ -89,7 +87,6 @@ module Course::MaterialsAbilityComponent
     # Add materials with parent assessments that open early due to personalized timeline
     # Dealing with personal times is too complicated to represent as a hash of conditions
     # Instead, we eagerly fetch all the ids we want and return a trivial hash that matches these ids
-    course_user = user && course && course.course_users.find_by(user: user)
     personal_times_opened_folder_hash =
       course_user &&
       {

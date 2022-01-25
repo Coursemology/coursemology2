@@ -3,13 +3,13 @@ module Course::DiscussionsAbilityComponent
   include AbilityHost::Component
 
   def define_permissions
-    if user
+    if course_user
       allow_course_users_show_topics
       allow_course_users_mark_topics_as_read
       allow_course_teaching_staff_manage_discussion_topics
       allow_course_users_create_posts
       allow_course_users_reply_and_vote_posts
-      allow_course_teaching_staff_manage_posts
+      allow_course_teaching_staff_manage_posts if course_user.teaching_staff?
       allow_course_users_update_delete_own_post
     end
 
@@ -19,11 +19,11 @@ module Course::DiscussionsAbilityComponent
   private
 
   def allow_course_users_show_topics
-    can [:read, :pending], Course::Discussion::Topic, course_all_course_users_hash
+    can [:read, :pending], Course::Discussion::Topic, course_id: course.id
   end
 
   def allow_course_users_mark_topics_as_read
-    can :mark_as_read, Course::Discussion::Topic, course_all_course_users_hash
+    can :mark_as_read, Course::Discussion::Topic, course_id: course.id
   end
 
   def allow_course_teaching_staff_manage_discussion_topics
@@ -35,11 +35,11 @@ module Course::DiscussionsAbilityComponent
   end
 
   def allow_course_users_reply_and_vote_posts
-    can [:reply, :vote], Course::Discussion::Post, topic: course_all_course_users_hash
+    can [:reply, :vote], Course::Discussion::Post, topic: { course_id: course.id }
   end
 
   def allow_course_teaching_staff_manage_posts
-    can :manage, Course::Discussion::Post, topic: course_teaching_staff_hash
+    can :manage, Course::Discussion::Post, topic: { course_id: course.id }
   end
 
   def allow_course_users_update_delete_own_post

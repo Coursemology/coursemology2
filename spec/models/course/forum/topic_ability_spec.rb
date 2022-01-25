@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe Course::Forum::Topic, type: :model do
   let!(:instance) { Instance.default }
   with_tenant(:instance) do
-    subject(:ability) { Ability.new(user) }
+    subject(:ability) { Ability.new(user, course, course_user) }
     let(:course) { create(:course) }
     let(:forum) { create(:forum, course: course) }
     let(:shown_topic) { build_stubbed(:forum_topic, forum: forum) }
@@ -13,7 +13,8 @@ RSpec.describe Course::Forum::Topic, type: :model do
     let(:question_topic) { build_stubbed(:forum_topic, topic_type: :question, forum: forum) }
 
     context 'when the user is a Course Student' do
-      let(:user) { create(:course_student, course: course).user }
+      let(:course_user) { create(:course_student, course: course) }
+      let(:user) { course_user.user }
       let(:my_shown_topic) do
         build_stubbed(:forum_topic, forum: forum, hidden: false, creator: user)
       end
@@ -38,14 +39,16 @@ RSpec.describe Course::Forum::Topic, type: :model do
     end
 
     context 'when the user is a Course Staff' do
-      let(:user) { create(:course_manager, course: course).user }
+      let(:course_user) { create(:course_manager, course: course) }
+      let(:user) { course_user.user }
 
       it { is_expected.to be_able_to(:manage, shown_topic) }
       it { is_expected.to be_able_to(:manage, hidden_topic) }
     end
 
     context 'when the user is a Course Observer' do
-      let(:user) { create(:course_observer, course: course).user }
+      let(:course_user) { create(:course_observer, course: course) }
+      let(:user) { course_user.user }
 
       it { is_expected.to be_able_to(:show, shown_topic) }
       it { is_expected.to be_able_to(:show, hidden_topic) }

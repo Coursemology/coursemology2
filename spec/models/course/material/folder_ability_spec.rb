@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe Course::Material::Folder, type: :model do
   let!(:instance) { Instance.default }
   with_tenant(:instance) do
-    subject(:ability) { Ability.new(user) }
+    subject(:ability) { Ability.new(user, course, course_user) }
     let(:course) { create(:course) }
     let(:root_folder) { course.root_folder }
     let(:valid_folder) { build_stubbed(:folder, course: course) }
@@ -24,7 +24,8 @@ RSpec.describe Course::Material::Folder, type: :model do
              course: course, start_at: 1.day.from_now).folder
     end
     context 'when the user is a Course Student' do
-      let(:user) { create(:course_student, course: course).user }
+      let(:course_user) { create(:course_student, course: course) }
+      let(:user) { course_user.user }
 
       it { is_expected.to be_able_to(:show, valid_folder) }
       it { is_expected.not_to be_able_to(:show, not_started_folder) }
@@ -39,7 +40,8 @@ RSpec.describe Course::Material::Folder, type: :model do
     end
 
     context 'when the user is a Course Staff' do
-      let(:user) { create(:course_manager, course: course).user }
+      let(:course_user) { create(:course_manager, course: course) }
+      let(:user) { course_user.user }
 
       it { is_expected.to be_able_to(:manage, valid_folder) }
       it { is_expected.to be_able_to(:manage, not_started_folder) }
@@ -57,6 +59,7 @@ RSpec.describe Course::Material::Folder, type: :model do
     end
 
     context 'when the user is a System Administrator' do
+      let(:course_user) { nil }
       let(:user) { create(:administrator) }
 
       it { is_expected.not_to be_able_to(:update, started_linked_folder) }

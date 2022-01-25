@@ -54,7 +54,7 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
                   end
 
     @submissions = Course::Assessment::Submission.by_users(student_ids).
-                   ordered_by_submitted_date.accessible_by(current_ability, :view_all_submissions).
+                   ordered_by_submitted_date.accessible_by(current_ability).
                    page(page_param).calculated(:grade).
                    includes(:assessment, :answers,
                             experience_points_record: { course_user: [:course, :groups] })

@@ -5,12 +5,13 @@ RSpec.describe Course::LessonPlan::Milestone do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
-    subject { Ability.new(user) }
+    subject { Ability.new(user, course, course_user) }
     let(:course) { create(:course) }
     let(:lesson_plan_milestone) { create(:course_lesson_plan_milestone, course: course) }
 
     context 'when the user is a Course Staff' do
-      let(:user) { create(:course_manager, course: course).user }
+      let(:course_user) { create(:course_manager, course: course) }
+      let(:user) { course_user.user }
 
       it { is_expected.to be_able_to(:manage, lesson_plan_milestone) }
 
@@ -21,7 +22,8 @@ RSpec.describe Course::LessonPlan::Milestone do
     end
 
     context 'when the user is a Course Student' do
-      let(:user) { create(:course_student, course: course).user }
+      let(:course_user) { create(:course_student, course: course) }
+      let(:user) { course_user.user }
 
       it { is_expected.to be_able_to(:show, lesson_plan_milestone) }
       it { is_expected.not_to be_able_to(:manage, lesson_plan_milestone) }

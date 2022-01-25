@@ -6,11 +6,13 @@ module Course::CourseAbilityComponent
     if user
       allow_instructors_create_courses
       allow_unregistered_users_registering_courses
+    end
+
+    if course_user
       allow_registered_users_showing_course
-      allow_staff_manage_users
-      allow_owners_managing_course
-      allow_staff_manage_personal_times
-      allow_staff_analyze_videos
+      allow_staff_show_course_users if course_user.staff?
+      define_teaching_staff_course_permissions if course_user.teaching_staff?
+      allow_owners_managing_course if course_user.manager_or_owner?
     end
 
     super
@@ -24,29 +26,38 @@ module Course::CourseAbilityComponent
 
   def allow_unregistered_users_registering_courses
     can :create, Course::EnrolRequest, course: { enrollable: true }
-    can :destroy, Course::EnrolRequest, user: user
+    can :destroy, Course::EnrolRequest, user_id: user.id
   end
 
   def allow_registered_users_showing_course
-    can :read, Course, course_user_hash
+    can :read, Course, id: course.id
   end
 
-  def allow_staff_manage_users
-    can :show_users, Course, staff_hash
-    can :manage_users, Course, teaching_staff_hash
+  def allow_staff_show_course_users
+    can :show_users, Course, id: course.id
+  end
+
+  def define_teaching_staff_course_permissions
+    allow_teaching_staff_manage_users
+    allow_teaching_staff_manage_personal_times
+    allow_teaching_staff_analyze_videos
+  end
+
+  def allow_teaching_staff_manage_users
+    can :manage_users, Course, id: course.id
+  end
+
+  def allow_teaching_staff_manage_personal_times
+    can :manage_personal_times, Course, id: course.id
+  end
+
+  def allow_teaching_staff_analyze_videos
+    can :analyze_videos, Course, id: course.id
   end
 
   def allow_owners_managing_course
-    can :manage, Course, managers_hash
-    can :manage, CourseUser, course_managers_hash
-    can :manage, Course::EnrolRequest, course_managers_hash
-  end
-
-  def allow_staff_manage_personal_times
-    can :manage_personal_times, Course, teaching_staff_hash
-  end
-
-  def allow_staff_analyze_videos
-    can :analyze_videos, Course, teaching_staff_hash
+    can :manage, Course, id: course.id
+    can :manage, CourseUser, course_id: course.id
+    can :manage, Course::EnrolRequest,  course_id: course.id
   end
 end
