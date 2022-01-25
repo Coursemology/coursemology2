@@ -410,7 +410,12 @@ Rails.application.routes.draw do
         post 'mark_as_read', on: :member
       end
 
-      get 'learning_map' => 'learning_map#index'
+      namespace :learning_map do
+        get '/' => 'learning_map#index'
+        post 'add_parent_node' => 'learning_map#add_parent_node'
+        post 'remove_parent_node' => 'learning_map#remove_parent_node'
+        post 'toggle_satisfiability_type' => 'learning_map#toggle_satisfiability_type'
+      end
     end
   end
 
