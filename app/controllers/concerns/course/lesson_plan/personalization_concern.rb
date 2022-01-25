@@ -17,14 +17,14 @@ module Course::LessonPlan::PersonalizationConcern
 
     strategy = case timeline_algorithm
                when 'otot'
-                 OtotPersonalizationStrategy.new
+                 Course::LessonPlan::Strategies::OtotPersonalizationStrategy.new
                when 'fomo'
-                 FomoPersonalizationStrategy.new
+                 Course::LessonPlan::Strategies::FomoPersonalizationStrategy.new
                when 'stragglers'
-                 StragglersPersonalizationStrategy.new
+                 Course::LessonPlan::Strategies::StragglersPersonalizationStrategy.new
                else
                  # Default to fixed.
-                 FixedPersonalizationStrategy.new
+                 Course::LessonPlan::Strategies::FixedPersonalizationStrategy.new
                end
 
     precomputed_data = strategy.precompute_data(course_user)

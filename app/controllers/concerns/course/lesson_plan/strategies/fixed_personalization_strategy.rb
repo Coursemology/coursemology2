@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-class FixedPersonalizationStrategy < BasePersonalizationStrategy
+class Course::LessonPlan::Strategies::FixedPersonalizationStrategy <
+  Course::LessonPlan::Strategies::BasePersonalizationStrategy
   # Returns a hash containing lesson plan item ids to submission time.
   #
   # @param [CourseUser] course_user The course user to compute data for.

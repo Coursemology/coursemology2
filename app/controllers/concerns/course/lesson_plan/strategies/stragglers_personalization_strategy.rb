@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-class StragglersPersonalizationStrategy < BasePersonalizationStrategy
+class Course::LessonPlan::Strategies::StragglersPersonalizationStrategy <
+  Course::LessonPlan::Strategies::BasePersonalizationStrategy
   MIN_LEARNING_RATE = 1.0
   MAX_LEARNING_RATE = 2.0
   HARD_MIN_LEARNING_RATE = 0.8

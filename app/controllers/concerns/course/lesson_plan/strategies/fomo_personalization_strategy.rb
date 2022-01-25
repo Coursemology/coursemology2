@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-class FomoPersonalizationStrategy < BasePersonalizationStrategy
+class Course::LessonPlan::Strategies::FomoPersonalizationStrategy <
+  Course::LessonPlan::Strategies::BasePersonalizationStrategy
   MIN_LEARNING_RATE = 0.67
   MAX_LEARNING_RATE = 1.0
   HARD_MIN_LEARNING_RATE = 0.5
