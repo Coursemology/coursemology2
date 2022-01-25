@@ -42,7 +42,7 @@ class Course::LearningMapController < Course::ComponentController
   def toggle_satisfiability_type
     conditional = get_conditional(node_params[:node_id])
 
-    if conditional.satisfiability_type == :all_conditions.to_s
+    if conditional.satisfiability_type.to_s == :all_conditions.to_s
       conditional.set_at_least_one_condition_satisfiability_type!
     else
       conditional.set_all_conditions_satisfiability_type!
