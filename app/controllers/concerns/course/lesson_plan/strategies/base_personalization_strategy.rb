@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # The BasePersonalizationStrategy declares operations common to all, if not most, personalized timeline algorithms.
 # It also defines the interface to use when calling the algorithm defined by the subclasses.
-class BasePersonalizationStrategy
+class Course::LessonPlan::Strategies::BasePersonalizationStrategy
   include Course::LessonPlan::LearningRateConcern
   # To override any of these constants, simply define the same constant in the subclass.
   LEARNING_RATE_ALPHA = 0.4
