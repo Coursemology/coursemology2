@@ -1,4 +1,5 @@
 = content_tag_for(:tr, group) do
+  td.text-center = group_counter + 1
   th = link_to format_inline_text(group.name), course_group_path(current_course, group)
   - normal_user_count = group.group_users.count { |group_user| !group_user.course_user.phantom? }
   - all_user_count = group.group_users.size

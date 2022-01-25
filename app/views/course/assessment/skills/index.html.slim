@@ -8,6 +8,7 @@
 table.table.skills-list.table-hover
   thead
     tr
+      th.text-center = t('common.serial_number')
       th = Course::Assessment::Skill.human_attribute_name(:title)
       th = Course::Assessment::Skill.human_attribute_name(:description)
       th

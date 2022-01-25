@@ -1,7 +1,7 @@
 <% if @invitation %>
   $('<%= "#user_invitation_#{@invitation.id}"%>').replaceWith(
     '<%= escape_javascript(render partial: 'course/user_invitations/course_user_invitation',
-                                  locals: { invitation: @invitation }) %>'
+                                  locals: { invitation: @invitation, serial_number: @serial_number }) %>'
   );
 <% end %>
 

@@ -108,7 +108,7 @@ RSpec.feature 'Courses: Invitations', js: true do
         within find(content_tag_selector(invitation_to_resend)) do
           find_link(
             nil,
-            href: course_user_invitation_resend_invitation_path(course, invitation_to_resend)
+            href: course_user_invitation_resend_invitation_path(course, invitation_to_resend, serial_number: 2)
           ).click
         end
         wait_for_ajax
