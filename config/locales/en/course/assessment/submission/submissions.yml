@@ -27,3 +27,17 @@ en:
             grading_time: 'Grading Time'
             grader: 'Grader'
             csv_empty: '-'
+          csv_download_service:
+            note: 'N/A: The answer format cannot fit in a single cell.'
+            name: 'Name'
+            email: 'Email'
+            role: 'Role'
+            user_type: 'User Type'
+            status: 'Status'
+            question_title: 'Question Title'
+            question_type: 'Question Type'
+            normal: 'Normal'
+            phantom: 'Phantom'
+            unstarted: 'Unstarted'
+            no_answer: 'No answer'
+

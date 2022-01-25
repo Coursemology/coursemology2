@@ -9,7 +9,7 @@ class Course::Assessment::Submission::DeletingJob < ApplicationJob
     instance = Course.unscoped { assessment.course.instance }
     ActsAsTenant.with_tenant(instance) do
       submissions = assessment.submissions.find(submission_ids)
-      delete_submission(submissions, deleter)
+      delete_submission(assessment, submissions, deleter)
     end
 
     redirect_to course_assessment_submissions_path(assessment.course, assessment)
@@ -19,17 +19,27 @@ class Course::Assessment::Submission::DeletingJob < ApplicationJob
 
   # Delete all submissions for a given assessment.
   #
-  # @param [Course::Submissions] submissions Submissions that are to be deleted.
+  # @param [Course::Assessment] assessment Assessment of which its submissions to be deleted
+  # @param [Course::Assessment::Submissions] submissions Submissions that are to be deleted.
   # @param [User] deleter The user object who would be deleting the submission.
-  def delete_submission(submissions, deleter)
+  def delete_submission(assessment, submissions, deleter)
     User.with_stamper(deleter) do
       Course::Assessment::Submission.transaction do
+        reset_question_bundle_assignments(assessment, submissions) if assessment.randomization == 'prepared'
         submissions.each do |submission|
-          submission.update!('unmark' => 'true') if submission.graded?
-          submission.update!('unsubmit' => 'true') unless submission.attempting?
           submission.destroy!
         end
       end
     end
+  end
+
+  # Remove submission ids from question bundle assignments that are related to the deleted submissions.
+  #
+  # @param [Course::Assessment] assessment Assessment of which its submissions to be deleted
+  # @param [Course::Assessment::Submissions] submissions Submissions that are to be deleted.
+  def reset_question_bundle_assignments(assessment, submissions)
+    submission_ids = submissions.pluck(:id)
+    qbas = assessment.question_bundle_assignments.where('submission_id in (?)', submission_ids).lock!
+    raise ActiveRecord::Rollback unless qbas.update_all(submission_id: nil)
   end
 end

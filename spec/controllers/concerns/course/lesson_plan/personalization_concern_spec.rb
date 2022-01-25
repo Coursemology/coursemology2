@@ -107,5 +107,34 @@ RSpec.describe Course::LessonPlan::PersonalizationConcern do
         expect(course_user.personal_times.count).to eq(course.assessments.count - 1)
       end
     end
+
+    context 'when there are lesson plan items without end times' do
+      let!(:no_end_time_assessment) do
+        create(:course_assessment_assessment, course: course, start_at: 1.days.ago, published: true)
+      end
+
+      it 'still works for fixed algorithm' do
+        course_user = create(:course_user, course: course, timeline_algorithm: 'fixed')
+        create(:course_assessment_submission, assessment: assessment, creator: course_user.user).tap(&:finalise!)
+        dummy_controller.send(:update_personalized_timeline_for, course_user)
+        expect(course_user.personal_times.count).to eq(0)
+      end
+
+      it 'still works for fomo timeline' do
+        course_user = create(:course_user, course: course, timeline_algorithm: 'fomo')
+        create(:course_assessment_submission, assessment: assessment, creator: course_user.user).tap(&:finalise!)
+        dummy_controller.send(:update_personalized_timeline_for, course_user)
+        expect(course_user.personal_times.count).to eq(course.assessments.count - 1)
+      end
+
+      it 'still works for stragglers timeline' do
+        course_user = create(:course_user, course: course, timeline_algorithm: 'stragglers')
+        create(:course_assessment_submission, assessment: assessment, creator: course_user.user).tap(&:finalise!)
+        dummy_controller.send(:update_personalized_timeline_for, course_user)
+        expect(course_user.personal_times.count).to eq(course.assessments.count - 1)
+      end
+
+      # No test for OTOT since as of right now, OTOT is composed of stragglers and fomo
+    end
   end
 end

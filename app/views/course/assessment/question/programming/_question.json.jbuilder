@@ -16,6 +16,7 @@ json.question do
   json.has_auto_gradings @programming_question.auto_gradable? && has_submissions
   json.has_submissions has_submissions
   json.display_autograded_toggle display_autograded_toggle?
+  json.course_gamified current_course.gamified?
   json.autograded_assessment @assessment.autograded?
   json.published_assessment @assessment.published?
   json.attempt_limit @programming_question.attempt_limit

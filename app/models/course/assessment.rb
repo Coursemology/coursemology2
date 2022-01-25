@@ -189,8 +189,12 @@ class Course::Assessment < ApplicationRecord
     session_password.present?
   end
 
-  def downloadable?
-    questions.any?(&:downloadable?)
+  def files_downloadable?
+    questions.any?(&:files_downloadable?)
+  end
+
+  def csv_downloadable?
+    questions.any?(&:csv_downloadable?)
   end
 
   def initialize_duplicate(duplicator, other)

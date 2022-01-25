@@ -2,6 +2,6 @@
 = page_header
 = render partial: 'tabs'
 
-= render partial: 'submissions', locals: { submissions: @submissions, pending: true }
+= render partial: 'submissions', locals: { submissions: @submissions, pending: true, assessments_hash: @assessments_hash }
 
 = paginate @submissions

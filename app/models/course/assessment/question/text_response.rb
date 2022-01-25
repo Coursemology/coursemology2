@@ -64,8 +64,12 @@ class Course::Assessment::Question::TextResponse < ApplicationRecord
     answer.acting_as
   end
 
-  def downloadable?
+  def files_downloadable?
     true
+  end
+
+  def csv_downloadable?
+    !hide_text && !allow_attachment
   end
 
   def initialize_duplicate(duplicator, other)

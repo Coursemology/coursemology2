@@ -157,6 +157,42 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         expect(question_created.time_limit).to eq(question_attributes[:time_limit])
         expect(question_created.attempt_limit).to eq(question_attributes[:attempt_limit])
       end
+
+      describe 'When updating a question', js: true do
+        let(:assessment) { create(:assessment, :autograded, course: course) }
+        let!(:question) do
+          create(:course_assessment_question_programming, :auto_gradable, template_package: true,
+                                                                          assessment: assessment)
+        end
+        let(:student_user) { create(:course_student, course: course).user }
+        let(:submission) { create(:submission, :published, assessment: assessment, creator: student_user) }
+        it 'shows confirmation dialog to update all exp when there is a submission' do
+          submission
+          visit edit_course_assessment_question_programming_path(course, assessment, question)
+          page.find('#programming-question-form-submit').click
+          expect(page).to have_selector('button.confirm-btn')
+        end
+
+        it 'does not show the confirmation dialog when the course is not gamified' do
+          course.update!(gamified: false)
+          visit edit_course_assessment_question_programming_path(course, assessment, question)
+          page.find('#programming-question-form-submit').click
+          expect(page).not_to have_selector('button.confirm-btn')
+        end
+
+        it 'does not show the confirmation dialog when there is no submission' do
+          visit edit_course_assessment_question_programming_path(course, assessment, question)
+          page.find('#programming-question-form-submit').click
+          expect(page).not_to have_selector('button.confirm-btn')
+        end
+
+        it 'does not show the confirmation dialog when the assessment is non-autograded' do
+          assessment.update!(autograded: false)
+          visit edit_course_assessment_question_programming_path(course, assessment, question)
+          page.find('#programming-question-form-submit').click
+          expect(page).not_to have_selector('button.confirm-btn')
+        end
+      end
     end
 
     context 'As a Student' do

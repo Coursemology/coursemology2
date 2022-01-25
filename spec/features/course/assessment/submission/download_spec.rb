@@ -25,7 +25,7 @@ RSpec.describe 'Course: Assessment: Submissions: Download' do
 
         find('#students-tab').click
         find('#submission-dropdown-icon').click
-        expect(page).to have_css('.download-submissions-enabled')
+        expect(page).to have_css('.download-zip-submissions-enabled')
       end
 
       context 'when there are staff' do
@@ -41,7 +41,8 @@ RSpec.describe 'Course: Assessment: Submissions: Download' do
 
           find('#staff-tab').click
           find('#submission-dropdown-icon').click
-          expect(page).to have_css('.download-submissions-enabled')
+          expect(page).to have_css('.download-zip-submissions-enabled')
+          expect(page).to have_css('.download-csv-submissions-enabled')
         end
       end
 
@@ -61,7 +62,8 @@ RSpec.describe 'Course: Assessment: Submissions: Download' do
 
           find('#my-students-tab').click
           find('#submission-dropdown-icon').click
-          expect(page).to have_css('.download-submissions-enabled')
+          expect(page).to have_css('.download-zip-submissions-enabled')
+          expect(page).to have_css('.download-csv-submissions-enabled')
         end
       end
 
@@ -69,7 +71,8 @@ RSpec.describe 'Course: Assessment: Submissions: Download' do
         scenario 'The download button should be disabled', js: true do
           visit course_assessment_submissions_path(course, assessment)
 
-          expect(page).not_to have_css('.download-submissions-enabled')
+          expect(page).not_to have_css('.download-zip-submissions-enabled')
+          expect(page).not_to have_css('.download-csv-submissions-enabled')
         end
       end
 
@@ -80,7 +83,7 @@ RSpec.describe 'Course: Assessment: Submissions: Download' do
           submission
           visit course_assessment_submissions_path(course, assessment)
 
-          expect(page).not_to have_css('.download-submissions-enabled')
+          expect(page).not_to have_css('.download-zip-submissions-enabled')
         end
       end
     end

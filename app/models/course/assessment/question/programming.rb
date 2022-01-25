@@ -92,8 +92,12 @@ class Course::Assessment::Question::Programming < ApplicationRecord
     test_cases.group_by(&:test_case_type)
   end
 
-  def downloadable?
+  def files_downloadable?
     true
+  end
+
+  def csv_downloadable?
+    template_files.size == 1
   end
 
   def initialize_duplicate(duplicator, other)
