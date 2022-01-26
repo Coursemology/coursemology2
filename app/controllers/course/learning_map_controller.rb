@@ -108,39 +108,43 @@ class Course::LearningMapController < Course::ComponentController
       }
     }
 
-    return {all_children: all_children, all_parents: all_parents}
+    { all_children: all_children, all_parents: all_parents }
   end
 
   def generate_nodes_from_conditionals(all_node_relations)
     all_children = all_node_relations[:all_children]
     all_parents = all_node_relations[:all_parents]
 
-    return @conditionals.map { |conditional|
+    @conditionals.map do |conditional|
       id = get_node_id(conditional)
 
       conditional.attributes.merge({
         id: id, unlocked: conditional.conditions_satisfied_by?(current_course_user), children: all_children[id],
-        satisfiability_type: conditional.satisfiability_type, course_material_type: conditional.class.name.demodulize.downcase,
+        satisfiability_type: conditional.satisfiability_type,
+        course_material_type: conditional.class.name.demodulize.downcase,
         content_url: url_for([current_course, conditional]), parents: all_parents[id]
       }).symbolize_keys
-    }
+    end
   end
 
   def generate_node_depths(nodes)
     toposorted_nodes = toposort(nodes)
     depths = init_depths(nodes)
 
-    toposorted_nodes.each { |node|
-      node[:children].each { |child|
-        depths[child[:id]] = depths[node[:id]] + 1 if depths[child[:id]] < depths[node[:id]] + 1
-      }
-    }
+    toposorted_nodes.each do |node|
+      node_id = node[:id]
 
-    return nodes.map { |node| node.merge({ depth: depths[node[:id]] }) }
+      node[:children].each do |child|
+        child_id = child[:id]
+        depths[child_id] = depths[node_id] + 1 if depths[child_id] < depths[node_id] + 1
+      end
+    end
+
+    nodes.map { |node| node.merge({ depth: depths[node[:id]] }) }
   end
 
   def init_depths(nodes)
-    return nodes.map { |node| [node[:id], node[:parents].empty? ? 0 : NEGATIVE_INF] }.to_h
+    nodes.map { |node| [node[:id], node[:parents].empty? ? 0 : NEGATIVE_INF] }.to_h
   end
 
   def toposort(nodes)
@@ -148,18 +152,20 @@ class Course::LearningMapController < Course::ComponentController
     post_order_nodes = []
     node_ids_to_nodes = nodes.map { |node| [node[:id], node] }.to_h
 
-    nodes.each { |node| dfs(node, node_ids_to_nodes, visited_node_ids, post_order_nodes) if !visited_node_ids.include?(node[:id]) }
+    nodes.each do |node|
+      dfs(node, node_ids_to_nodes, visited_node_ids, post_order_nodes) unless visited_node_ids.include?(node[:id])
+    end
 
-    return post_order_nodes.reverse
+    post_order_nodes.reverse
   end
 
   def dfs(node, node_ids_to_nodes, visited_node_ids, post_order_nodes)
     visited_node_ids.add(node[:id])
 
-    node[:children].each { |child|
-      dfs(node_ids_to_nodes[child[:id]], node_ids_to_nodes, visited_node_ids, post_order_nodes) if
-        !visited_node_ids.include?(child[:id])
-    }
+    node[:children].each do |child|
+      dfs(node_ids_to_nodes[child[:id]], node_ids_to_nodes, visited_node_ids, post_order_nodes) unless
+        visited_node_ids.include?(child[:id])
+    end
 
     post_order_nodes.push(node)
   end
@@ -184,21 +190,21 @@ class Course::LearningMapController < Course::ComponentController
     dependent_object = get_conditional(node_id)
     condition.send("#{dependent_object.class.name.demodulize.downcase}=", dependent_object)
 
-    return condition
+    condition
   end
 
   def get_conditional(node_id)
     node_id_tokens = node_id.split(NODE_ID_DELIMITER)
-    return Object.const_get("Course::#{node_id_tokens[0].capitalize}").find(node_id_tokens[1].to_i)
+    Object.const_get("Course::#{node_id_tokens[0].capitalize}").find(node_id_tokens[1].to_i)
   end
 
   def get_condition(parent_node_id, node_id)
     parent_node_id_tokens = parent_node_id.split(NODE_ID_DELIMITER)
     node_id_tokens = node_id.split(NODE_ID_DELIMITER)
 
-    return Object.const_get("Course::Condition::#{parent_node_id_tokens[0].capitalize}").find { |condition|
+    Object.const_get("Course::Condition::#{parent_node_id_tokens[0].capitalize}").find do |condition|
       condition.conditional_id == node_id_tokens[1].to_i &&
-        condition.send("#{parent_node_id_tokens[0].downcase}_id") == parent_node_id_tokens[1].to_i
-    }
+      condition.send("#{parent_node_id_tokens[0].downcase}_id") == parent_node_id_tokens[1].to_i
+    end
   end
 end
