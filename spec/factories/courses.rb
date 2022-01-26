@@ -48,5 +48,12 @@ FactoryBot.define do
     trait :with_logo do
       logo { Rack::Test::UploadedFile.new(File.join(Rails.root, 'spec', 'support', 'minion.png')) }
     end
+
+    trait :with_learning_map_component_enabled do
+      after(:build) do |course|
+        course.instance.set_component_enabled_boolean!(:course_learning_map_component, true)
+        course.set_component_enabled_boolean(:course_learning_map_component, true)
+      end
+    end
   end
 end
