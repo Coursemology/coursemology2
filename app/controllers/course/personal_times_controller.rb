@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::PersonalTimesController < Course::ComponentController
   include Course::LessonPlan::PersonalizationConcern
+  include Course::LessonPlan::LearningRateConcern
 
   before_action :authorize_personal_times!
 

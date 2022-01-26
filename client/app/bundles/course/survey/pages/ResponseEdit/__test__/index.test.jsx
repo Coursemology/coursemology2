@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { MemoryRouter } from 'react-router-dom';
 import { mount } from 'enzyme';
 import CourseAPI from 'api/course';
 import MockAdapter from 'axios-mock-adapter';
@@ -73,7 +74,9 @@ describe('<ResponseEdit />', () => {
     // Mount response show page and wait for data to load
     window.history.pushState({}, '', responseUrl);
     const responseShow = mount(
-      <InjectedResponseEdit {...{ match: { params: { responseId } } }} />,
+      <MemoryRouter initialEntries={[responseUrl]}>
+        <InjectedResponseEdit {...{ match: { params: { responseId } } }} />
+      </MemoryRouter>,
       buildContextOptions(storeCreator({})),
     );
     await sleep(1);

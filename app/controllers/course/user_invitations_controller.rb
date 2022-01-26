@@ -36,6 +36,7 @@ class Course::UserInvitationsController < Course::ComponentController
 
   def resend_invitation
     @invitation = load_invitations.first
+    @serial_number = params[:serial_number]
     if @invitation && invitation_service.resend_invitation(load_invitations)
       flash.now[:success] = t('.success', email: @invitation.email)
     else
