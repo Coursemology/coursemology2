@@ -33,7 +33,7 @@ RSpec.describe Course::LessonPlan::PersonalizationConcern do
       end
 
       it 'does not create any personal times' do
-        dummy_controller.send(:update_personalized_timeline_for, course_user)
+        dummy_controller.send(:update_personalized_timeline_for_user, course_user)
         expect(course_user.personal_times.count).to eq(0)
       end
     end
@@ -45,7 +45,7 @@ RSpec.describe Course::LessonPlan::PersonalizationConcern do
       end
 
       it 'creates personal times' do
-        dummy_controller.send(:update_personalized_timeline_for, course_user)
+        dummy_controller.send(:update_personalized_timeline_for_user, course_user)
         expect(course_user.personal_times.count).to eq(course.assessments.count - 1)
       end
     end
@@ -60,28 +60,28 @@ RSpec.describe Course::LessonPlan::PersonalizationConcern do
 
       it 'creates personal times' do
         submit_assessment(assessment)
-        dummy_controller.send(:update_personalized_timeline_for, course_user)
+        dummy_controller.send(:update_personalized_timeline_for_user, course_user)
         expect(course_user.personal_times.count).to eq(course.assessments.count - 1)
       end
 
       it 'shifts the end_at of non-open items forward' do
         submit_assessment(overdue_assessment)
-        dummy_controller.send(:update_personalized_timeline_for, course_user)
+        dummy_controller.send(:update_personalized_timeline_for_user, course_user)
         original_end_at = yet_to_open_assessment.lesson_plan_item.personal_time_for(course_user).end_at
 
         submit_assessment(assessment)
-        dummy_controller.send(:update_personalized_timeline_for, course_user)
+        dummy_controller.send(:update_personalized_timeline_for_user, course_user)
         new_end_at = yet_to_open_assessment.lesson_plan_item.personal_time_for(course_user).end_at
         expect(new_end_at).to be < original_end_at
       end
 
       it 'does not shift the end_at of already open items forward' do
         submit_assessment(overdue_assessment)
-        dummy_controller.send(:update_personalized_timeline_for, course_user)
+        dummy_controller.send(:update_personalized_timeline_for_user, course_user)
         original_end_at = already_open_assessment.lesson_plan_item.personal_time_for(course_user).end_at
 
         submit_assessment(assessment)
-        dummy_controller.send(:update_personalized_timeline_for, course_user)
+        dummy_controller.send(:update_personalized_timeline_for_user, course_user)
         new_end_at = already_open_assessment.lesson_plan_item.personal_time_for(course_user).end_at
 
         expect(new_end_at).to eq(original_end_at)
@@ -89,7 +89,7 @@ RSpec.describe Course::LessonPlan::PersonalizationConcern do
 
       it 'rounds off to 2359' do
         submit_assessment(overdue_assessment)
-        dummy_controller.send(:update_personalized_timeline_for, course_user)
+        dummy_controller.send(:update_personalized_timeline_for_user, course_user)
         end_at = assessment.lesson_plan_item.personal_time_for(course_user).end_at
         course_tz = course.time_zone
         expect(end_at.in_time_zone(course_tz).strftime('%H:%M')).to eq('23:59')
@@ -103,7 +103,7 @@ RSpec.describe Course::LessonPlan::PersonalizationConcern do
       end
 
       it 'creates personal times' do
-        dummy_controller.send(:update_personalized_timeline_for, course_user)
+        dummy_controller.send(:update_personalized_timeline_for_user, course_user)
         expect(course_user.personal_times.count).to eq(course.assessments.count - 1)
       end
     end
@@ -116,21 +116,21 @@ RSpec.describe Course::LessonPlan::PersonalizationConcern do
       it 'still works for fixed algorithm' do
         course_user = create(:course_user, course: course, timeline_algorithm: 'fixed')
         create(:course_assessment_submission, assessment: assessment, creator: course_user.user).tap(&:finalise!)
-        dummy_controller.send(:update_personalized_timeline_for, course_user)
+        dummy_controller.send(:update_personalized_timeline_for_user, course_user)
         expect(course_user.personal_times.count).to eq(0)
       end
 
       it 'still works for fomo timeline' do
         course_user = create(:course_user, course: course, timeline_algorithm: 'fomo')
         create(:course_assessment_submission, assessment: assessment, creator: course_user.user).tap(&:finalise!)
-        dummy_controller.send(:update_personalized_timeline_for, course_user)
+        dummy_controller.send(:update_personalized_timeline_for_user, course_user)
         expect(course_user.personal_times.count).to eq(course.assessments.count - 1)
       end
 
       it 'still works for stragglers timeline' do
         course_user = create(:course_user, course: course, timeline_algorithm: 'stragglers')
         create(:course_assessment_submission, assessment: assessment, creator: course_user.user).tap(&:finalise!)
-        dummy_controller.send(:update_personalized_timeline_for, course_user)
+        dummy_controller.send(:update_personalized_timeline_for_user, course_user)
         expect(course_user.personal_times.count).to eq(course.assessments.count - 1)
       end
 

@@ -12,7 +12,7 @@ module Course::LessonPlan::PersonalizationConcern
   #   allows students to slow down their learning more effectively.
   # - We don't shift closing dates forward when the item has already opened for the student. This is to
   #   prevent students from being shocked that their deadlines have shifted forward suddenly.
-  def update_personalized_timeline_for(course_user, timeline_algorithm = nil)
+  def update_personalized_timeline_for_user(course_user, timeline_algorithm = nil)
     timeline_algorithm ||= course_user.timeline_algorithm
 
     strategy = case timeline_algorithm

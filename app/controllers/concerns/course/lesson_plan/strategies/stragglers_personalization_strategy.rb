@@ -14,7 +14,9 @@ class Course::LessonPlan::Strategies::StragglersPersonalizationStrategy <
   #
   # @param [CourseUser] course_user The user to adjust the personalized timeline for.
   # @param [Hash] precomputed_data The default data precomputed by precompute_data.
-  def execute(course_user, precomputed_data) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  # @param [Set<Number>|nil] items_to_shift Set of item ids to shift. If provided, only items with ids in this set will
+  #   be shifted.
+  def execute(course_user, precomputed_data, items_to_shift = nil) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     return if precomputed_data[:learning_rate_ema].nil?
 
     @course_tz = course_user.course.time_zone
@@ -23,7 +25,8 @@ class Course::LessonPlan::Strategies::StragglersPersonalizationStrategy <
       precomputed_data[:items].each do |item|
         reference_point, personal_point = update_points(course_user, item, precomputed_data[:submitted_items],
                                                         reference_point, personal_point)
-        next if cannot_shift_item(course_user, item, precomputed_data[:submitted_items], reference_point)
+        next if cannot_shift_item(course_user, item, precomputed_data[:submitted_items], reference_point,
+                                  items_to_shift)
 
         reference_time = item.reference_time_for(course_user)
         personal_time = item.find_or_create_personal_time_for(course_user)
@@ -66,16 +69,20 @@ class Course::LessonPlan::Strategies::StragglersPersonalizationStrategy <
   # - Item is not submitted
   # - Item's personal time isn't fixed
   # - There is an existing reference_point computed from the most recent submission.
+  # - Item ID is in the set of items to shift, if provided
   #
   # @param [CourseUser] course_user The user whose item we are checking.
   # @param [Course::LessonPlan::Item] item The item that we are checking.
   # @param [Hash{Integer=>ActiveSupport::TimeWithZone|nil}] submitted_items A hash of submitted lesson plan items' ID
   #   to their submitted time, if relevant/available.
   # @param [Course::ReferenceTime] reference_time Current reference time to be checked.
+  # @param [Set<Number>|nil] items_to_shift Set of item ids to shift. If provided, only items with ids in this set will
+  #   be shifted.
   # @return [Boolean] Whether the item cannot be shifted.
-  def cannot_shift_item(course_user, item, submitted_items, reference_point)
+  def cannot_shift_item(course_user, item, submitted_items, reference_point, items_to_shift)
     !item.has_personal_times? || item.id.in?(submitted_items.keys) ||
-      item.personal_time_for(course_user)&.fixed? || reference_point.nil?
+      item.personal_time_for(course_user)&.fixed? || reference_point.nil? ||
+      (!items_to_shift.nil? && !items_to_shift.include?(item.id))
   end
 
   # Resets the start_at of the personal_time to that of the reference_time.
