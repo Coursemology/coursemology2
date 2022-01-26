@@ -12,7 +12,9 @@ if Rails.env.production?
 
     config.lograge.custom_options = lambda do |event|
       { level: event.payload[:level],
-        time: Time.zone.now }
+        time: Time.zone.now,
+        user_id: event.payload[:current_user_id],
+        remote_ip: event.payload[:remote_ip] }
     end
 
     config.lograge_sql.extract_event = proc do |event|
