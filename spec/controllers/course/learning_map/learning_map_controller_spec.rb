@@ -84,7 +84,7 @@ RSpec.describe Course::LearningMapController, type: :controller do
         end
       end
 
-      context 'initially "at least one condition conditions"' do
+      context 'initially "at least one condition"' do
         let!(:achievement) { create(:course_achievement, course: course,
                                     satisfiability_type: :at_least_one_condition) }
         subject do
