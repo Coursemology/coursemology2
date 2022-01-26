@@ -11,7 +11,6 @@ import VideoAPI from './Video';
 import AdminAPI from './Admin';
 import LevelAPI from './Level';
 import UserNotificationsAPI from './UserNotifications';
-import LearningMapAPI from './LearningMap';
 import UserEmailSubscriptionsAPI from './UserEmailSubscriptions';
 
 const CourseAPI = {
@@ -28,7 +27,6 @@ const CourseAPI = {
   admin: AdminAPI,
   level: new LevelAPI(),
   userNotifications: new UserNotificationsAPI(),
-  learningMap: new LearningMapAPI(),
   userEmailSubscriptions: new UserEmailSubscriptionsAPI(),
 };
 
