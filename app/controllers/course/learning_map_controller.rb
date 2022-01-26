@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::LearningMapController < Course::ComponentController
   NODE_ID_DELIMITER = '-'
-  NEGATIVE_INF = -1000000000
+  NEGATIVE_INF = -1_000_000_000
 
   add_breadcrumb :index, :course_learning_map_path
 
@@ -11,7 +11,7 @@ class Course::LearningMapController < Course::ComponentController
     respond_to do |format|
       format.html
       format.json do
-        render json: {nodes: map_conditionals_to_nodes, can_modify: current_course_user&.staff?}
+        render json: { nodes: map_conditionals_to_nodes, can_modify: current_course_user&.staff? }
       end
     end
   end
@@ -25,7 +25,7 @@ class Course::LearningMapController < Course::ComponentController
       index
     else
       error_response(condition.errors.full_messages)
-    end        
+    end
   end
 
   def remove_parent_node
@@ -77,52 +77,56 @@ class Course::LearningMapController < Course::ComponentController
   end
 
   def map_conditionals_to_nodes
-    all_node_relations = generate_all_node_relations()
+    all_node_relations = generate_all_node_relations
     nodes = generate_nodes_from_conditionals(all_node_relations)
-    nodes = generate_node_depths(nodes)
-    return nodes
+    generate_node_depths(nodes)
   end
 
   def generate_all_node_relations
-    all_children = {}
-    all_parents = {}
+    relations = init_all_node_relations
+    node_ids_to_children = relations[:node_ids_to_children]
+    node_ids_to_parents = relations[:node_ids_to_parents]
 
-    @conditionals.each { |conditional|
-      node_id = get_node_id(conditional)
-      all_parents[node_id] = []
-      all_children[node_id] = []
-    }
-
-    @conditionals.each { |conditional|
+    @conditionals.each do |conditional|
       node_id = get_node_id(conditional)
 
-      conditional.conditions.each { |condition|
+      conditional.conditions.each do |condition|
         next if condition.actable_type == Course::Condition::Level.name
 
-        type = condition.actable_type.demodulize
-        typed_condition = Object.const_get("Course::Condition::#{type}").find(condition.actable_id)
-        parent_node_id = "#{type.downcase}-#{typed_condition.send("#{type.downcase}_id")}"
+        parent = map_condition_to_parent(condition)
+        node_ids_to_children[parent[:id]].push({ id: node_id, is_satisfied: parent[:is_satisfied] })
+        node_ids_to_parents[node_id].push(parent)
+      end
+    end
 
-        all_children[parent_node_id].push({id: node_id, is_satisfied: typed_condition.satisfied_by?(current_course_user)})
-        all_parents[node_id].push({id: parent_node_id, is_satisfied: typed_condition.satisfied_by?(current_course_user)})
-      }
-    }
+    { node_ids_to_children: node_ids_to_children, node_ids_to_parents: node_ids_to_parents }
+  end
 
-    { all_children: all_children, all_parents: all_parents }
+  def init_all_node_relations
+    { node_ids_to_children: @conditionals.map { |conditional| [get_node_id(conditional), []] }.to_h,
+      node_ids_to_parents: @conditionals.map { |conditional| [get_node_id(conditional), []] }.to_h }
+  end
+
+  def map_condition_to_parent(condition)
+    type = condition.actable_type.demodulize
+    typed_condition = Object.const_get("Course::Condition::#{type}").find(condition.actable_id)
+    id = "#{type.downcase}-#{typed_condition.send("#{type.downcase}_id")}"
+
+    { id: id, is_satisfied: typed_condition.satisfied_by?(current_course_user) }
   end
 
   def generate_nodes_from_conditionals(all_node_relations)
-    all_children = all_node_relations[:all_children]
-    all_parents = all_node_relations[:all_parents]
+    node_ids_to_children = all_node_relations[:node_ids_to_children]
+    node_ids_to_parents = all_node_relations[:node_ids_to_parents]
 
     @conditionals.map do |conditional|
       id = get_node_id(conditional)
 
       conditional.attributes.merge({
-        id: id, unlocked: conditional.conditions_satisfied_by?(current_course_user), children: all_children[id],
+        id: id, unlocked: conditional.conditions_satisfied_by?(current_course_user), children: node_ids_to_children[id],
         satisfiability_type: conditional.satisfiability_type,
         course_material_type: conditional.class.name.demodulize.downcase,
-        content_url: url_for([current_course, conditional]), parents: all_parents[id]
+        content_url: url_for([current_course, conditional]), parents: node_ids_to_parents[id]
       }).symbolize_keys
     end
   end
@@ -204,7 +208,7 @@ class Course::LearningMapController < Course::ComponentController
 
     Object.const_get("Course::Condition::#{parent_node_id_tokens[0].capitalize}").find do |condition|
       condition.conditional_id == node_id_tokens[1].to_i &&
-      condition.send("#{parent_node_id_tokens[0].downcase}_id") == parent_node_id_tokens[1].to_i
+        condition.send("#{parent_node_id_tokens[0].downcase}_id") == parent_node_id_tokens[1].to_i
     end
   end
 end
