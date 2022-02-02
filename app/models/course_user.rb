@@ -47,6 +47,8 @@ class CourseUser < ApplicationRecord
                          inverse_of: :course_user, dependent: :destroy
   has_many :groups, through: :group_users, class_name: Course::Group.name, source: :group
   has_many :personal_times, class_name: Course::PersonalTime.name, inverse_of: :course_user, dependent: :destroy
+  has_many :downloads
+  has_many :materials, through: :downloads
   belongs_to :reference_timeline, class_name: Course::ReferenceTimeline.name, inverse_of: :course_users, optional: true
 
   validate :validate_reference_timeline_belongs_to_course
