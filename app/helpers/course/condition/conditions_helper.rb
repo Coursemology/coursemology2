@@ -19,6 +19,7 @@ module Course::Condition::ConditionsHelper
       hash[Course::Condition::Achievement.name] = :course_achievements_component
       hash[Course::Condition::Assessment.name] = :course_assessments_component
       hash[Course::Condition::Level.name] = :course_levels_component
+      hash[Course::Condition::Material.name] = :course_materials_component
       hash[Course::Condition::Survey.name] = :course_survey_component
       hash[Course::Condition::Video.name] = :course_videos_component
     end

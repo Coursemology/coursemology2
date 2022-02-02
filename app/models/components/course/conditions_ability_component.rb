@@ -12,10 +12,8 @@ module Course::ConditionsAbilityComponent
 
   def allow_teaching_staff_manage_conditions
     can :manage, Course::Condition, course_id: course.id
-    can :manage, Course::Condition::Achievement, condition: { course_id: course.id }
-    can :manage, Course::Condition::Assessment, condition: { course_id: course.id }
-    can :manage, Course::Condition::Level, condition: { course_id: course.id }
-    can :manage, Course::Condition::Survey, condition: { course_id: course.id }
-    can :manage, Course::Condition::Video, condition: { course_id: course.id }
+    Course::Condition::ALL_CONDITIONS.each do |condition|
+      can :manage, condition[:name].constantize, condition: { course_id: course.id }
+    end
   end
 end

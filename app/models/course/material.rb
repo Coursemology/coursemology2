@@ -5,6 +5,9 @@ class Course::Material < ApplicationRecord
 
   belongs_to :folder, inverse_of: :materials, class_name: Course::Material::Folder.name
 
+  has_many :downloads
+  has_many :course_users, through: :downloads
+
   before_save :touch_folder
 
   validate :validate_name_is_unique_among_folders
