@@ -11,7 +11,7 @@ class Course::Material < ApplicationRecord
   has_many :material_conditions, class_name: Course::Condition::Material.name,
                                  inverse_of: :material, dependent: :destroy
 
-  after_create :set_course_id
+  before_create :set_course_id
   before_save :touch_folder
 
   validate :validate_name_is_unique_among_folders
