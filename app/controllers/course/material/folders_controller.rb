@@ -71,10 +71,7 @@ class Course::Material::FoldersController < Course::Material::Controller
   end
 
   def download
-    @materials = (@folder.descendants.select { |f| can?(:read_owner, f) } + [@folder]).
-                 map { |f| f.materials.accessible_by(current_ability) }.flatten
-    zip_filename = @folder.root? ? root_folder_name : @folder.name
-    job = Course::Material::ZipDownloadJob.perform_later(@folder, @materials, zip_filename).job
+    job = schedule_zip_download_job
     respond_to do |format|
       format.html { redirect_to(job_path(job)) }
       format.json { render json: { redirect_url: job_path(job) } }
@@ -100,5 +97,12 @@ class Course::Material::FoldersController < Course::Material::Controller
     flash.now[:danger] = t('course.material.folders.upload_materials.failure',
                            error: @folder.errors.full_messages.to_sentence)
     render 'new_materials'
+  end
+
+  def schedule_zip_download_job
+    @materials = (@folder.descendants.select { |f| can?(:read_owner, f) } + [@folder]).
+                 map { |f| f.materials.accessible_by(current_ability) }.flatten
+    zip_filename = @folder.root? ? root_folder_name : @folder.name
+    Course::Material::ZipDownloadJob.perform_later(@folder, @materials, current_course_user, zip_filename).job
   end
 end
