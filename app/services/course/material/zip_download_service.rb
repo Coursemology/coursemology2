@@ -6,8 +6,8 @@ class Course::Material::ZipDownloadService
     # @param [Course::Material::Folder] folder The folder containing the materials.
     # @param [Array<Course::Material>] materials The materials to be downloaded.
     # @return [String] The path to the zip file.
-    def download_and_zip(folder, materials)
-      service = new(folder, materials)
+    def download_and_zip(folder, materials, course_user)
+      service = new(folder, materials, course_user)
       service.download_and_zip
     end
   end
@@ -19,10 +19,11 @@ class Course::Material::ZipDownloadService
 
   private
 
-  def initialize(folder, materials)
+  def initialize(folder, materials, course_user)
     @folder = folder
     @materials = Array(materials)
     @base_dir = Dir.mktmpdir('coursemology-download-')
+    @course_user = course_user
   end
 
   # Downloads the materials to the the base directory.
@@ -48,6 +49,7 @@ class Course::Material::ZipDownloadService
 
   # Downloads the material and store it in the given directory.
   def download_material(material, folder, dir)
+    Course::Material::Download.upsert(material_id: material.id, course_user_id: @course_user.id)
     file_path = Pathname.new(dir) + material.path.relative_path_from(folder.path)
     file_path.dirname.mkpath
 

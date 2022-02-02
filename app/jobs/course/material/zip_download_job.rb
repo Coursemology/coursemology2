@@ -12,8 +12,8 @@ class Course::Material::ZipDownloadJob < ApplicationJob
   # @param [String] filename The name of the zip file. This defaults to the name of the folder. This
   #   is useful when you don't want to use the name of the folder as the zip filename (such as the
   #   root folder).
-  def perform_tracked(folder, materials, filename = folder.name)
-    zip_file = Course::Material::ZipDownloadService.download_and_zip(folder, materials)
+  def perform_tracked(folder, materials, course_user, filename = folder.name)
+    zip_file = Course::Material::ZipDownloadService.download_and_zip(folder, materials, course_user)
     redirect_to SendFile.send_file(zip_file, "#{Pathname.normalize_filename(filename)}.zip")
   end
 end
