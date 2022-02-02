@@ -53,5 +53,14 @@ RSpec.describe Course::Material, type: :model do
         expect(material.send(:next_valid_name)).to eq("#{common_name} (1)")
       end
     end
+
+    describe '#satisfiable?' do
+      let(:folder) { create(:folder) }
+      let!(:material) { create(:material, folder: folder) }
+
+      it 'is satisfiable' do
+        expect(material.satisfiable?).to be_truthy
+      end
+    end
   end
 end

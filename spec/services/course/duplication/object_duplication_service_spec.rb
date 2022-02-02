@@ -213,6 +213,8 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
       context 'when conditions are present' do
         let(:required_achievement) { create(:course_achievement, course: source_course) }
         let(:required_assessment) { create(:assessment, course: source_course) }
+        let(:required_material_folder) { create(:folder, course: source_course) }
+        let(:required_material) { create(:material, folder: required_material_folder) }
         let(:required_survey) { create(:survey, course: source_course) }
         let(:required_video) { create(:video, course: source_course) }
         let(:unlockable_achievement) do
@@ -221,6 +223,7 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
                    assessment: required_assessment, conditional: unlockable, course: source_course)
             create(:achievement_condition,
                    achievement: required_achievement, conditional: unlockable, course: source_course)
+            create(:material_condition, material: required_material, conditional: unlockable)
             create(:survey_condition,
                    survey: required_survey, conditional: unlockable, course: source_course)
             create(:video_condition,
@@ -233,6 +236,7 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
                    assessment: required_assessment, conditional: unlockable, course: source_course)
             create(:achievement_condition,
                    achievement: required_achievement, conditional: unlockable, course: source_course)
+            create(:material_condition, material: required_material, conditional: unlockable)
             create(:survey_condition,
                    survey: required_survey, conditional: unlockable, course: source_course)
             create(:video_condition,
@@ -264,13 +268,14 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
 
         context 'when conditionals are duplicated after their required items' do
           let(:source_objects) do
-            [required_achievement, required_assessment, required_survey, required_video, unlockable_achievement,
-             unlockable_assessment]
+            [required_achievement, required_assessment, required_material, required_survey,
+             required_video, unlockable_achievement, unlockable_assessment]
           end
 
           it 'duplicates all conditions except level conditions' do
-            expect { duplicate_objects }.to change { Course::Condition.count }.by(8)
-            duplicate_required_achievement, duplicate_required_assessment, duplicate_required_survey,
+            expect { duplicate_objects }.to change { Course::Condition.count }.by(10)
+            duplicate_required_achievement, duplicate_required_assessment,
+              duplicate_required_material, duplicate_required_survey,
               duplicate_required_video, duplicate_unlockable_achievement,
               duplicate_unlockable_assessment = duplicate_objects
 
@@ -278,33 +283,40 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
               to contain_exactly(duplicate_unlockable_achievement, duplicate_unlockable_assessment)
             expect(duplicate_required_assessment.reload.assessment_conditions.map(&:conditional)).
               to contain_exactly(duplicate_unlockable_achievement, duplicate_unlockable_assessment)
+            expect(duplicate_required_material.reload.material_conditions.map(&:conditional)).
+              to contain_exactly(duplicate_unlockable_achievement, duplicate_unlockable_assessment)
             expect(duplicate_required_survey.reload.survey_conditions.map(&:conditional)).
               to contain_exactly(duplicate_unlockable_achievement, duplicate_unlockable_assessment)
             expect(duplicate_required_video.reload.video_conditions.map(&:conditional)).
               to contain_exactly(duplicate_unlockable_achievement, duplicate_unlockable_assessment)
             expect(duplicate_unlockable_achievement.conditions.map(&:actable).map(&:dependent_object)).
               to contain_exactly(duplicate_required_achievement, duplicate_required_assessment,
-                                 duplicate_required_survey, duplicate_required_video)
+                                 duplicate_required_material, duplicate_required_survey,
+                                 duplicate_required_video)
             expect(duplicate_unlockable_assessment.conditions.map(&:actable).map(&:dependent_object)).
               to contain_exactly(duplicate_required_achievement, duplicate_required_assessment,
-                                 duplicate_required_survey, duplicate_required_video)
+                                 duplicate_required_material, duplicate_required_survey,
+                                 duplicate_required_video)
           end
         end
 
         context 'when conditionals are duplicated before their required items' do
           let(:source_objects) do
             [unlockable_achievement, unlockable_assessment, required_achievement,
-             required_assessment, required_survey, required_video]
+             required_assessment, required_material, required_survey, required_video]
           end
 
           it 'duplicates all conditions except level conditions' do
-            expect { duplicate_objects }.to change { Course::Condition.count }.by(8)
+            expect { duplicate_objects }.to change { Course::Condition.count }.by(10)
             duplicate_unlockable_achievement, duplicate_unlockable_assessment, duplicate_required_achievement,
-              duplicate_required_assessment, duplicate_required_survey, duplicate_required_video = duplicate_objects
+              duplicate_required_assessment, duplicate_required_material,
+              duplicate_required_survey, duplicate_required_video = duplicate_objects
 
             expect(duplicate_required_achievement.achievement_conditions.map(&:conditional)).
               to contain_exactly(duplicate_unlockable_achievement, duplicate_unlockable_assessment)
             expect(duplicate_required_assessment.assessment_conditions.map(&:conditional)).
+              to contain_exactly(duplicate_unlockable_achievement, duplicate_unlockable_assessment)
+            expect(duplicate_required_material.reload.material_conditions.map(&:conditional)).
               to contain_exactly(duplicate_unlockable_achievement, duplicate_unlockable_assessment)
             expect(duplicate_required_survey.survey_conditions.map(&:conditional)).
               to contain_exactly(duplicate_unlockable_achievement, duplicate_unlockable_assessment)
@@ -312,10 +324,12 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
               to contain_exactly(duplicate_unlockable_achievement, duplicate_unlockable_assessment)
             expect(duplicate_unlockable_achievement.reload.conditions.map(&:actable).map(&:dependent_object)).
               to contain_exactly(duplicate_required_achievement, duplicate_required_assessment,
-                                 duplicate_required_survey, duplicate_required_video)
+                                 duplicate_required_material, duplicate_required_survey,
+                                 duplicate_required_video)
             expect(duplicate_unlockable_assessment.reload.conditions.map(&:actable).map(&:dependent_object)).
               to contain_exactly(duplicate_required_achievement, duplicate_required_assessment,
-                                 duplicate_required_survey, duplicate_required_video)
+                                 duplicate_required_material, duplicate_required_survey,
+                                 duplicate_required_video)
           end
         end
       end
