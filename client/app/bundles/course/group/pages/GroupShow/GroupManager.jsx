@@ -1,32 +1,34 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Card,
-  CardActions,
-  CardHeader,
-  CardText,
-  DropDownMenu,
-  MenuItem,
-  RaisedButton,
-} from 'material-ui';
+import { Card, CardHeader, CardText, RaisedButton } from 'material-ui';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { connect } from 'react-redux';
 
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import { categoryShape, groupShape } from '../../propTypes';
+
 import translations from './translations.intl';
+import GroupUserTable from './GroupUserTable';
+import SummaryTable from './SummaryTable';
+import { categoryShape, groupShape } from '../../propTypes';
 import actionTypes, { dialogTypes } from '../../constants';
 import GroupFormDialog from '../../forms/GroupFormDialog';
 import GroupCreationForm from '../../forms/GroupCreationForm';
 import { createGroups, updateGroupMembers } from '../../actions';
-import GroupHeader from './GroupHeader';
-import CourseUserTable from './CourseUserTable';
 import { combineGroups, getFinalModifiedGroups } from '../../utils/groups';
-import SummaryTable from './SummaryTable';
 
 const styles = {
   card: {
     marginBottom: '2rem',
+  },
+  cardHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+  },
+  cardHeaderFullWidthTitle: {
+    width: '100%',
+    paddingRight: 0,
   },
   title: {
     fontWeight: 'bold',
@@ -41,16 +43,9 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-between',
   },
-  dropdown: {
-    width: '100%',
-  },
-  dropdownContent: {
-    paddingLeft: 0,
-    paddingRight: 36,
-  },
-  dropdownUnderline: {
-    marginLeft: 0,
-    marginRight: 0,
+  groupButton: {
+    marginBottom: '1rem',
+    marginRight: '1rem',
   },
 };
 
@@ -129,14 +124,10 @@ const GroupManager = ({
     dispatch({ type: actionTypes.MANAGE_GROUPS_END });
   };
 
-  const handleGroupSelect = (_event, _index, value) => {
-    if (value === 0) {
-      handleOpenCreate();
-      return;
-    }
+  const handleGroupSelect = (groupId) => {
     dispatch({
       type: actionTypes.SET_SELECTED_GROUP_ID,
-      selectedGroupId: value,
+      selectedGroupId: groupId,
     });
   };
 
@@ -167,7 +158,17 @@ const GroupManager = ({
       <Card style={styles.card}>
         <CardHeader
           title={
-            <h3 style={styles.title}>Managing Groups for {category.name}</h3>
+            <div style={styles.cardHeader}>
+              <h3 style={styles.title}>Managing Groups for {category.name}</h3>
+              <RaisedButton
+                label="Create Group(s)"
+                onClick={() => {
+                  handleOpenCreate();
+                }}
+                disabled={isUpdating}
+                primary
+              />
+            </div>
           }
           subtitle={
             <FormattedMessage
@@ -175,92 +176,63 @@ const GroupManager = ({
               {...translations.categoryHeaderSubtitle}
             />
           }
+          textStyle={styles.cardHeaderFullWidthTitle}
         />
-        <CardText style={styles.text}>
-          {category.description ?? (
-            <FormattedMessage {...translations.noDescription} />
-          )}
-        </CardText>
-        <CardActions style={styles.actions}>
-          <RaisedButton
-            label="Cancel"
-            onClick={() => {
-              if (modifiedGroups.length > 0) {
-                setIsConfirmingCancel(true);
-                return;
-              }
-              handleCancel();
-            }}
-            disabled={isUpdating}
-          />
-        </CardActions>
-      </Card>
-      <Card style={styles.card}>
         <CardText>
-          <DropDownMenu
-            value={selectedGroupId}
-            onChange={handleGroupSelect}
-            style={styles.dropdown}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'left',
-            }}
-            labelStyle={styles.dropdownContent}
-            underlineStyle={styles.dropdownUnderline}
-            autoWidth={false}
-            disabled={isUpdating}
-          >
-            <MenuItem
-              disabled
-              value={-1}
-              primaryText="Select a group to manage"
-            />
-            <MenuItem value={0} primaryText="Create new group(s)" />
+          <p>
+            {groups.length === 0
+              ? 'You have no groups created. Create one now to get started!'
+              : 'Select one of the groups below to manage its members.'}
+          </p>
+          <div style={styles.groupButtonsContainer}>
             {groups.map((group) => (
-              <MenuItem
+              <RaisedButton
                 key={group.id}
-                value={group.id}
-                primaryText={group.name}
+                label={group.name}
+                style={styles.groupButton}
+                onClick={() => handleGroupSelect(group.id)}
+                secondary={group.id === selectedGroupId}
               />
             ))}
-          </DropDownMenu>
+          </div>
         </CardText>
       </Card>
       {selectedGroup ? (
-        <GroupHeader categoryId={category.id} group={selectedGroup} />
+        <GroupUserTable
+          categoryId={category.id}
+          group={selectedGroup}
+          groups={combinedGroups}
+        />
       ) : null}
-      {selectedGroup ? (
-        <CourseUserTable group={selectedGroup} groups={combinedGroups} />
-      ) : null}
-      {selectedGroup ? (
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            marginTop: '2rem',
-            marginBottom: '2rem',
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          marginTop: '2rem',
+          marginBottom: '2rem',
+        }}
+      >
+        <RaisedButton
+          label="Cancel"
+          style={{ marginRight: '1rem' }}
+          onClick={() => {
+            if (modifiedGroups.length > 0) {
+              setIsConfirmingCancel(true);
+              return;
+            }
+            handleCancel();
           }}
-        >
-          <RaisedButton
-            label="Cancel"
-            style={{ marginRight: '1rem' }}
-            onClick={() => {
-              if (modifiedGroups.length > 0) {
-                setIsConfirmingCancel(true);
-                return;
-              }
-              handleCancel();
-            }}
-            disabled={isUpdating}
-          />
-          <RaisedButton
-            primary
-            label="Save Changes"
-            disabled={modifiedGroups.length === 0 || isUpdating}
-            onClick={() => setIsConfirmingSave(true)}
-          />
-        </div>
-      ) : null}
+          disabled={isUpdating}
+        />
+        <RaisedButton
+          primary
+          label="Save Changes"
+          disabled={
+            selectedGroup == null || modifiedGroups.length === 0 || isUpdating
+          }
+          onClick={() => setIsConfirmingSave(true)}
+        />
+      </div>
 
       <SummaryTable />
 

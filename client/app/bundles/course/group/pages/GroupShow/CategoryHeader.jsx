@@ -40,7 +40,7 @@ const styles = {
     justifyContent: 'space-between',
   },
   buttonMarginRight: {
-    marginRight: 16,
+    marginRight: 8,
   },
 };
 
