@@ -191,7 +191,7 @@ const GroupUserTable = ({
           }),
         ),
       ),
-    [dispatch, group.id],
+    [dispatch, group.name, group.id],
   );
 
   const handleEdit = useCallback(() => {

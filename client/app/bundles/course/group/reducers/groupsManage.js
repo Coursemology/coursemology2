@@ -36,6 +36,21 @@ export default function (state = initialState, action) {
     case actionTypes.SET_SELECTED_GROUP_ID: {
       return { ...state, selectedGroupId: action.selectedGroupId };
     }
+    case actionTypes.UPDATE_GROUP_SUCCESS: {
+      const index = state.modifiedGroups.findIndex(
+        (g) => g.id === action.group.id,
+      );
+      if (index === -1) {
+        return state;
+      }
+      const newModifiedGroups = state.modifiedGroups.splice();
+      newModifiedGroups[index] = {
+        ...newModifiedGroups[index],
+        name: action.group.name,
+        description: action.group.description,
+      };
+      return { ...state, modifiedGroups: newModifiedGroups };
+    }
     case actionTypes.DELETE_GROUP_SUCCESS: {
       const newModifiedGroups = state.modifiedGroups.filter(
         (g) => g.id !== action.id,
