@@ -11,7 +11,11 @@ RSpec.describe Course::Group::GroupsController, type: :controller do
     before { sign_in(admin) }
 
     describe '#update' do
-      subject { patch :update, as: :json, params: { course_id: course, group_category_id: group_category, id: group }.reverse_merge(group_attributes) }
+      subject do
+        patch :update, as: :json,
+                       params: { course_id: course, group_category_id: group_category, id: group }.
+                         reverse_merge(group_attributes)
+      end
 
       context 'when name is present' do
         let(:group_attributes) do
@@ -42,7 +46,9 @@ RSpec.describe Course::Group::GroupsController, type: :controller do
         allow(stub).to receive(:destroy).and_return(false)
         stub
       end
-      subject { delete :destroy, as: :json, params: { course_id: course, group_category_id: group_category, id: group_stub } }
+      subject do
+        delete :destroy, as: :json, params: { course_id: course, group_category_id: group_category, id: group_stub }
+      end
 
       context 'when the group cannot be destroyed' do
         before do
