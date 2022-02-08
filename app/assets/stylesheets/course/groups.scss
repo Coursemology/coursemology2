@@ -14,12 +14,12 @@
     min-width: 132px;
     padding-bottom: 4px;
 
-    & > div {
-      & > button {
+    > div {
+      > button {
         top: -6px !important;
       }
 
-      & > div:nth-child(2) {
+      > div:nth-child(2) {
         height: 36px !important;
         line-height: 40px !important;
       }
