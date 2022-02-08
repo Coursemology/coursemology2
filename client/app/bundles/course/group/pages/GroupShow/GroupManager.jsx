@@ -1,6 +1,6 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Card, CardHeader, CardText, RaisedButton } from 'material-ui';
+import { RaisedButton } from 'material-ui';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { connect } from 'react-redux';
 
@@ -15,38 +15,62 @@ import GroupFormDialog from '../../forms/GroupFormDialog';
 import GroupCreationForm from '../../forms/GroupCreationForm';
 import { createGroups, updateGroupMembers } from '../../actions';
 import { combineGroups, getFinalModifiedGroups } from '../../utils/groups';
+import GroupCard from '../../components/GroupCard';
 
 const styles = {
-  card: {
-    marginBottom: '2rem',
-  },
-  cardHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-  },
-  cardHeaderFullWidthTitle: {
-    width: '100%',
-    paddingRight: 0,
-  },
-  title: {
-    fontWeight: 'bold',
-    marginTop: '0.5rem',
-    marginBottom: 0,
-  },
-  text: {
-    paddingTop: 0,
-  },
-  actions: {
-    padding: 16,
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
   groupButton: {
     marginBottom: '1rem',
     marginRight: '1rem',
   },
+};
+
+const getGroupData = (data, existingNames) => {
+  const groupData = [];
+  const isSingle = data.is_single === 'true' || data.is_single === true;
+  if (isSingle) {
+    groupData.push({ name: data.name, description: data.description });
+  } else {
+    const numToCreate = Number.parseInt(data.num_to_create, 10);
+    for (let i = 1; i <= numToCreate; i += 1) {
+      const name = `${data.name} ${i}`;
+      if (!existingNames.has(name)) {
+        groupData.push({ name });
+      }
+    }
+  }
+  return groupData;
+};
+
+const getCreateGroupMessage = (intl) => (created, failed) => {
+  if (created.length === 0) {
+    if (failed.length === 1) {
+      return intl.formatMessage(translations.createSingleGroupFailure, {
+        groupName: failed[0].name,
+      });
+    }
+    return intl.formatMessage(translations.createMultipleGroupsFailure, {
+      numFailed: failed.length,
+    });
+  }
+  if (created.length === 1 && failed.length === 0) {
+    return intl.formatMessage(translations.createSingleGroupSuccess, {
+      groupName: created[0].name,
+    });
+  }
+
+  return (
+    intl.formatMessage(translations.createMultipleGroupsSuccess, {
+      numCreated: created.length,
+    }) +
+    (failed.length > 0
+      ? ` ${intl.formatMessage(
+          translations.createMultipleGroupsPartialFailure,
+          {
+            numFailed: failed.length,
+          },
+        )}`
+      : '')
+  );
 };
 
 const GroupManager = ({
@@ -61,77 +85,40 @@ const GroupManager = ({
   const [isConfirmingCancel, setIsConfirmingCancel] = useState(false);
   const [isConfirmingSave, setIsConfirmingSave] = useState(false);
 
-  const getCreateGroupMessage = (created, failed) => {
-    if (created.length === 0) {
-      if (failed.length === 1) {
-        return intl.formatMessage(translations.createSingleGroupFailure, {
-          groupName: failed[0].name,
-        });
-      }
-      return intl.formatMessage(translations.createMultipleGroupsFailure, {
-        numFailed: failed.length,
-      });
-    }
-    if (created.length === 1 && failed.length === 0) {
-      return intl.formatMessage(translations.createSingleGroupSuccess, {
-        groupName: created[0].name,
-      });
-    }
-
-    return (
-      intl.formatMessage(translations.createMultipleGroupsSuccess, {
-        numCreated: created.length,
-      }) +
-      (failed.length > 0
-        ? ` ${intl.formatMessage(
-            translations.createMultipleGroupsPartialFailure,
-            {
-              numFailed: failed.length,
-            },
-          )}`
-        : '')
-    );
-  };
-
   const onCreateFormSubmit = useCallback(
     (data) => {
       const existingNames = new Set(groups.map((g) => g.name));
-      const groupData = [];
-      const isSingle = data.is_single === 'true' || data.is_single === true;
-      if (isSingle) {
-        groupData.push({ name: data.name, description: data.description });
-      } else {
-        const numToCreate = Number.parseInt(data.num_to_create, 10);
-        for (let i = 1; i <= numToCreate; i += 1) {
-          const name = `${data.name} ${i}`;
-          if (!existingNames.has(name)) {
-            groupData.push({ name });
-          }
-        }
-      }
+      const groupData = getGroupData(data, existingNames);
       dispatch(
-        createGroups(category.id, { groups: groupData }, getCreateGroupMessage),
+        createGroups(
+          category.id,
+          { groups: groupData },
+          getCreateGroupMessage(intl),
+        ),
       );
     },
-    [dispatch, groups],
+    [dispatch, category.id, groups],
   );
 
   const handleOpenCreate = useCallback(() => {
     dispatch({ type: actionTypes.CREATE_GROUP_FORM_SHOW });
   }, [dispatch]);
 
-  const handleCancel = () => {
+  const handleCancel = useCallback(() => {
     dispatch({ type: actionTypes.MANAGE_GROUPS_END });
-  };
+  }, [dispatch]);
 
-  const handleGroupSelect = (groupId) => {
-    dispatch({
-      type: actionTypes.SET_SELECTED_GROUP_ID,
-      selectedGroupId: groupId,
-    });
-  };
+  const handleGroupSelect = useCallback(
+    (groupId) => {
+      dispatch({
+        type: actionTypes.SET_SELECTED_GROUP_ID,
+        selectedGroupId: groupId,
+      });
+    },
+    [dispatch],
+  );
 
-  const handleSave = () => {
+  const handleSave = useCallback(() => {
     const finalGroups = getFinalModifiedGroups(groups, modifiedGroups).map(
       (g) => ({
         ...g,
@@ -146,57 +133,57 @@ const GroupManager = ({
         'Something went wrong, please try again later!',
       ),
     );
-  };
+  }, [dispatch, category.id, groups, modifiedGroups]);
 
-  const combinedGroups = combineGroups(groups, modifiedGroups);
-  const selectedGroup = combinedGroups.find(
-    (group) => group.id === selectedGroupId,
+  const combinedGroups = useMemo(
+    () => combineGroups(groups, modifiedGroups),
+    [groups, modifiedGroups],
+  );
+  const selectedGroup = useMemo(
+    () => combinedGroups.find((group) => group.id === selectedGroupId),
+    [combinedGroups, selectedGroupId],
+  );
+
+  const titleButtons = useMemo(
+    () => [
+      {
+        label: 'Create Group(s)',
+        onClick: handleOpenCreate,
+        isDisabled: isUpdating,
+      },
+    ],
+    [handleOpenCreate, isUpdating],
   );
 
   return (
     <>
-      <Card style={styles.card}>
-        <CardHeader
-          title={
-            <div style={styles.cardHeader}>
-              <h3 style={styles.title}>Managing Groups for {category.name}</h3>
-              <RaisedButton
-                label="Create Group(s)"
-                onClick={() => {
-                  handleOpenCreate();
-                }}
-                disabled={isUpdating}
-                primary
-              />
-            </div>
-          }
-          subtitle={
-            <FormattedMessage
-              values={{ numGroups: groups.length }}
-              {...translations.categoryHeaderSubtitle}
+      <GroupCard
+        title={`Managing Groups for ${category.name}`}
+        subtitle={
+          <FormattedMessage
+            values={{ numGroups: groups.length }}
+            {...translations.categoryHeaderSubtitle}
+          />
+        }
+        titleButtons={titleButtons}
+      >
+        <p>
+          {groups.length === 0
+            ? 'You have no groups created. Create one now to get started!'
+            : 'Select one of the groups below to manage its members.'}
+        </p>
+        <div>
+          {groups.map((group) => (
+            <RaisedButton
+              key={group.id}
+              label={group.name}
+              style={styles.groupButton}
+              onClick={() => handleGroupSelect(group.id)}
+              secondary={group.id === selectedGroupId}
             />
-          }
-          textStyle={styles.cardHeaderFullWidthTitle}
-        />
-        <CardText>
-          <p>
-            {groups.length === 0
-              ? 'You have no groups created. Create one now to get started!'
-              : 'Select one of the groups below to manage its members.'}
-          </p>
-          <div style={styles.groupButtonsContainer}>
-            {groups.map((group) => (
-              <RaisedButton
-                key={group.id}
-                label={group.name}
-                style={styles.groupButton}
-                onClick={() => handleGroupSelect(group.id)}
-                secondary={group.id === selectedGroupId}
-              />
-            ))}
-          </div>
-        </CardText>
-      </Card>
+          ))}
+        </div>
+      </GroupCard>
       {selectedGroup ? (
         <GroupUserTable
           categoryId={category.id}

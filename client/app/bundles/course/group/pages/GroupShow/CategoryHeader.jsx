@@ -1,13 +1,5 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Card,
-  CardActions,
-  CardHeader,
-  CardText,
-  IconButton,
-  RaisedButton,
-} from 'material-ui';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { connect } from 'react-redux';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
@@ -21,28 +13,7 @@ import { deleteCategory, updateCategory } from '../../actions';
 import { categoryShape } from '../../propTypes';
 import GroupFormDialog from '../../forms/GroupFormDialog';
 import NameDescriptionForm from '../../forms/NameDescriptionForm';
-
-const styles = {
-  card: {
-    marginBottom: '2rem',
-  },
-  title: {
-    fontWeight: 'bold',
-    marginTop: '0.5rem',
-    marginBottom: 0,
-  },
-  text: {
-    paddingTop: 0,
-  },
-  actions: {
-    padding: 16,
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
-  buttonMarginRight: {
-    marginRight: 8,
-  },
-};
+import GroupCard from '../../components/GroupCard';
 
 const CategoryHeader = ({
   category,
@@ -67,7 +38,7 @@ const CategoryHeader = ({
           }),
         ),
       ),
-    [dispatch, updateCategory, category.id],
+    [dispatch, category.id, category.name],
   );
 
   const handleEdit = useCallback(() => {
@@ -88,47 +59,44 @@ const CategoryHeader = ({
     ).then(() => {
       setIsConfirmingDelete(false);
     });
-  });
+  }, [dispatch, category.id, category.name, setIsConfirmingDelete]);
+
+  const bottomButtons = useMemo(
+    () => [
+      {
+        label: <FormattedMessage {...translations.editCategory} />,
+        onClick: handleEdit,
+      },
+      {
+        label: <FormattedMessage {...translations.manageGroups} />,
+        onClick: onManageGroups,
+      },
+      {
+        label: 'Delete Category',
+        onClick: () => setIsConfirmingDelete(true),
+        isRight: true,
+        icon: <DeleteIcon color={red500} />,
+      },
+    ],
+    [handleEdit, onManageGroups, setIsConfirmingDelete],
+  );
 
   return (
     <>
-      <Card style={styles.card}>
-        <CardHeader
-          title={<h3 style={styles.title}>{category.name}</h3>}
-          subtitle={
-            <FormattedMessage
-              values={{ numGroups }}
-              {...translations.categoryHeaderSubtitle}
-            />
-          }
-        />
-        <CardText style={styles.text}>
-          {category.description ?? (
-            <FormattedMessage {...translations.noDescription} />
-          )}
-        </CardText>
-        <CardActions style={styles.actions}>
-          <div>
-            <RaisedButton
-              primary
-              label={<FormattedMessage {...translations.editCategory} />}
-              onClick={handleEdit}
-              style={styles.buttonMarginRight}
-            />
-            <RaisedButton
-              primary
-              label={<FormattedMessage {...translations.manageGroups} />}
-              onClick={onManageGroups}
-            />
-          </div>
-          <IconButton
-            tooltip="Delete Category"
-            onClick={() => setIsConfirmingDelete(true)}
-          >
-            <DeleteIcon color={red500} />
-          </IconButton>
-        </CardActions>
-      </Card>
+      <GroupCard
+        title={category.name}
+        subtitle={
+          <FormattedMessage
+            values={{ numGroups }}
+            {...translations.categoryHeaderSubtitle}
+          />
+        }
+        bottomButtons={bottomButtons}
+      >
+        {category.description ?? (
+          <FormattedMessage {...translations.noDescription} />
+        )}
+      </GroupCard>
       <GroupFormDialog
         dialogTitle={intl.formatMessage(translations.editCategoryHeader)}
         expectedDialogTypes={[dialogTypes.UPDATE_CATEGORY]}

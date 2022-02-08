@@ -10,9 +10,6 @@ export const dialogTypes = mirrorCreator([
 ]);
 
 const actionTypes = mirrorCreator([
-  // For notification
-  'SET_NOTIFICATION',
-
   // For showing a group category
   'FETCH_GROUPS_REQUEST',
   'FETCH_GROUPS_SUCCESS',

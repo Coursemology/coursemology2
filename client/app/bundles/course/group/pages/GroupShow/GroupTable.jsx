@@ -1,8 +1,5 @@
 import React from 'react';
 import {
-  Card,
-  CardHeader,
-  CardText,
   Table,
   TableBody,
   TableHeader,
@@ -16,6 +13,7 @@ import { FormattedMessage } from 'react-intl';
 import { groupShape } from '../../propTypes';
 import translations from './translations.intl';
 import { sortByGroupRole, sortByName } from '../../utils/sort';
+import GroupCard from '../../components/GroupCard';
 
 const roles = {
   normal: 'Normal',
@@ -23,17 +21,6 @@ const roles = {
 };
 
 const styles = {
-  card: {
-    marginBottom: '2rem',
-  },
-  title: {
-    fontWeight: 'bold',
-    marginTop: '0.5rem',
-    marginBottom: 0,
-  },
-  cardText: {
-    paddingTop: 0,
-  },
   empty: {
     paddingTop: '2rem',
     textAlign: 'center',
@@ -46,42 +33,39 @@ const GroupTable = ({ group }) => {
   members.sort(sortByName).sort(sortByGroupRole);
 
   return (
-    <Card style={styles.card}>
-      <CardHeader
-        title={<h3 style={styles.title}>{group.name}</h3>}
-        subtitle={
-          <FormattedMessage
-            values={{ numMembers: members.length ?? 0 }}
-            {...translations.groupHeaderSubtitle}
-          />
-        }
-      />
-      <CardText style={styles.cardText}>
-        <Table selectable={false}>
-          <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-            <TableRow>
-              <TableHeaderColumn>S/N</TableHeaderColumn>
-              <TableHeaderColumn>Name</TableHeaderColumn>
-              <TableHeaderColumn>Role</TableHeaderColumn>
+    <GroupCard
+      title={group.name}
+      subtitle={
+        <FormattedMessage
+          values={{ numMembers: members.length ?? 0 }}
+          {...translations.groupHeaderSubtitle}
+        />
+      }
+    >
+      <Table selectable={false}>
+        <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+          <TableRow>
+            <TableHeaderColumn>S/N</TableHeaderColumn>
+            <TableHeaderColumn>Name</TableHeaderColumn>
+            <TableHeaderColumn>Role</TableHeaderColumn>
+          </TableRow>
+        </TableHeader>
+        <TableBody displayRowCheckbox={false}>
+          {members.map((m, index) => (
+            <TableRow key={m.id}>
+              <TableRowColumn>{index + 1}</TableRowColumn>
+              <TableRowColumn>{m.name}</TableRowColumn>
+              <TableRowColumn>{roles[m.groupRole]}</TableRowColumn>
             </TableRow>
-          </TableHeader>
-          <TableBody displayRowCheckbox={false}>
-            {members.map((m, index) => (
-              <TableRow key={m.id}>
-                <TableRowColumn>{index + 1}</TableRowColumn>
-                <TableRowColumn>{m.name}</TableRowColumn>
-                <TableRowColumn>{roles[m.groupRole]}</TableRowColumn>
-              </TableRow>
-            ))}
-            {members.length === 0 ? (
-              <div style={styles.empty}>
-                This group has no members! Manage groups to assign members now!
-              </div>
-            ) : null}
-          </TableBody>
-        </Table>
-      </CardText>
-    </Card>
+          ))}
+          {members.length === 0 ? (
+            <div style={styles.empty}>
+              This group has no members! Manage groups to assign members now!
+            </div>
+          ) : null}
+        </TableBody>
+      </Table>
+    </GroupCard>
   );
 };
 

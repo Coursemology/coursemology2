@@ -1,8 +1,8 @@
 .course-user-table label {
   font-weight: normal;
-}
 
-.course-user-table label.right-list-item {
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
+  &.right-list-item {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
 }

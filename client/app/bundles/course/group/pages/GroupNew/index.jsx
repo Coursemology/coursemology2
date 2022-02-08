@@ -26,7 +26,7 @@ const PopupDialog = ({ dispatch, intl, isManagingGroups }) => {
           intl.formatMessage(translations.createCategoryFailure),
         ),
       ),
-    [dispatch, createCategory],
+    [dispatch],
   );
 
   const handleOpen = useCallback(() => {

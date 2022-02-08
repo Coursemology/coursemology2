@@ -49,6 +49,7 @@ export default function (state = initialState, action) {
         name: action.group.name,
         description: action.group.description,
       };
+      newModifiedGroups.sort(sortByName);
       return { ...state, modifiedGroups: newModifiedGroups };
     }
     case actionTypes.DELETE_GROUP_SUCCESS: {
