@@ -6,7 +6,8 @@ module Course::GroupsAbilityComponent
     if course_user
       allow_staff_read_groups if course_user.staff?
       allow_teaching_staff_manage_groups if course_user.teaching_staff?
-      allow_group_manager_manage_group
+      allow_group_manager_manage_group unless course_user.teaching_staff?
+      allow_group_manager_read_group_category unless course_user.staff?
     end
 
     super
@@ -15,12 +16,12 @@ module Course::GroupsAbilityComponent
   private
 
   def allow_staff_read_groups
-    can :read, Course::Group, course_id: course.id
+    can :read, Course::Group, group_category: { course_id: course.id }
     can :read, Course::GroupCategory, course_id: course.id
   end
 
   def allow_teaching_staff_manage_groups
-    can :manage, Course::Group, course_id: course.id
+    can :manage, Course::Group, group_category: { course_id: course.id }
     can :manage, Course::GroupCategory, course_id: course.id
   end
 
@@ -28,7 +29,17 @@ module Course::GroupsAbilityComponent
     can :manage, Course::Group, course_group_manager_hash
   end
 
+  def allow_group_manager_read_group_category
+    can :read, Course::GroupCategory, course_group_category_manager_hash
+  end
+
   def course_group_manager_hash
-    { course_id: course.id, group_users: { course_user_id: course_user.id, role: Course::GroupUser.roles[:manager] } }
+    { group_category: { course_id: course.id },
+      group_users: { course_user_id: course_user.id, role: Course::GroupUser.roles[:manager] } }
+  end
+
+  def course_group_category_manager_hash
+    { course_id: course.id,
+      groups: { group_users: { course_user_id: course_user.id, role: Course::GroupUser.roles[:manager] } } }
   end
 end

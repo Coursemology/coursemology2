@@ -29,12 +29,14 @@ const NameDescriptionDialog = ({
   isConfirmationDialogOpen,
   children,
 }) => {
-  const handleClose = useCallback(() => {
-    dispatch({
-      type: actionTypes.DIALOG_CANCEL,
-      payload: { isPristine: pristine },
-    });
-  }, [dispatch, pristine]);
+  const handleClose = useCallback(
+    () =>
+      dispatch({
+        type: actionTypes.DIALOG_CANCEL,
+        payload: { isPristine: pristine },
+      }),
+    [dispatch, pristine],
+  );
 
   const formActions = useMemo(
     () => [

@@ -12,6 +12,8 @@ export function fetchGroupData(groupCategoryId) {
           type: actionTypes.FETCH_GROUPS_SUCCESS,
           groupCategory: response.data.groupCategory,
           groups: response.data.groups,
+          canManageCategory: response.data.canManageCategory,
+          canManageGroups: response.data.canManageGroups,
         });
       })
       .catch(() => {
@@ -20,10 +22,10 @@ export function fetchGroupData(groupCategoryId) {
   };
 }
 
-export function fetchCourseUsers() {
+export function fetchCourseUsers(groupCategoryId) {
   return (dispatch) =>
     CourseAPI.groups
-      .fetchCourseUsers()
+      .fetchCourseUsers(groupCategoryId)
       .then((response) => {
         dispatch({
           type: actionTypes.FETCH_USERS_SUCCESS,

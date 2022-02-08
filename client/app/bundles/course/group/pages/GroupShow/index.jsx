@@ -41,6 +41,8 @@ const Category = ({
   isManagingGroups,
   hasFetchError,
   notification,
+  canManageCategory,
+  canManageGroups,
 }) => {
   useEffect(() => {
     if (groupCategoryId) {
@@ -48,9 +50,12 @@ const Category = ({
     }
   }, [groupCategoryId]);
 
+  // This is done as a separate call since it shouldn't slow down the render
   useEffect(() => {
-    dispatch(fetchCourseUsers());
-  }, []);
+    if (groupCategoryId) {
+      dispatch(fetchCourseUsers(groupCategoryId));
+    }
+  }, [groupCategoryId]);
 
   if (isFetching) {
     return <LoadingIndicator />;
@@ -70,7 +75,7 @@ const Category = ({
 
   return (
     <>
-      {isManagingGroups ? (
+      {canManageGroups && isManagingGroups ? (
         <GroupManager category={groupCategory} groups={groups} />
       ) : (
         <>
@@ -80,6 +85,8 @@ const Category = ({
             onManageGroups={() =>
               dispatch({ type: actionTypes.MANAGE_GROUPS_START })
             }
+            canManageCategory={canManageCategory}
+            canManageGroups={canManageGroups}
           />
           {groups.map((group) => (
             <GroupTableCard key={group.id} group={group} />
@@ -97,6 +104,8 @@ const Category = ({
 Category.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   isManagingGroups: PropTypes.bool.isRequired,
+  canManageCategory: PropTypes.bool.isRequired,
+  canManageGroups: PropTypes.bool.isRequired,
   hasFetchError: PropTypes.bool.isRequired,
   groupCategoryId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   groupCategory: categoryShape,
@@ -110,6 +119,8 @@ export default connect((state) => ({
   hasFetchError: state.groupsFetch.hasFetchError,
   groupCategory: state.groupsFetch.groupCategory,
   groups: state.groupsFetch.groups,
+  canManageCategory: state.groupsFetch.canManageCategory,
+  canManageGroups: state.groupsFetch.canManageGroups,
   notification: state.notificationPopup,
   isManagingGroups: state.groupsManage.isManagingGroups,
 }))(Category);

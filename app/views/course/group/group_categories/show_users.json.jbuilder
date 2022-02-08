@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 json.courseUsers @course_users do |course_user|
   json.id course_user.id
   json.name course_user.name

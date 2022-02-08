@@ -30,14 +30,17 @@ export default class GroupsAPI extends BaseCourseAPI {
   /**
    * Fetches an array of users in this course.
    *
+   * @param {number | string} groupCategoryId - Category that we're fetching users for.
    * @return {Promise}
    * - Success response: {
    *   users: [CourseUser],
    * }
    * - Error response: { error: string }
    */
-  fetchCourseUsers() {
-    return this.getClient().get(`${this._getUrlPrefix()}/users`);
+  fetchCourseUsers(groupCategoryId) {
+    return this.getClient().get(
+      `${this._getUrlPrefix()}/${groupCategoryId}/users`,
+    );
   }
 
   /**

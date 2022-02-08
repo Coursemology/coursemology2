@@ -142,9 +142,8 @@ const GroupCreationForm = ({
   }, [numToCreate, conflictingNames]);
 
   const handleChange = useCallback(
-    (value) => {
-      dispatch(change(formNames.GROUP, 'is_single', value === 'is_single'));
-    },
+    (value) =>
+      dispatch(change(formNames.GROUP, 'is_single', value === 'is_single')),
     [dispatch],
   );
 

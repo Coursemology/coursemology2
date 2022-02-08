@@ -6,6 +6,8 @@ const initialState = {
   hasFetchError: false,
   groupCategory: null,
   groups: [],
+  canManageCategory: false,
+  canManageGroups: false,
 };
 
 export default function (state = initialState, action) {
@@ -23,6 +25,8 @@ export default function (state = initialState, action) {
         groupCategory: action.groupCategory,
         groups: newGroups,
         isFetching: false,
+        canManageCategory: action.canManageCategory,
+        canManageGroups: action.canManageGroups,
       };
     }
     case actionTypes.FETCH_GROUPS_FAILURE: {

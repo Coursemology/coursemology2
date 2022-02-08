@@ -50,7 +50,7 @@ class Course::ExperiencePoints::Disbursement
   #
   # @return [Course::Group|nil] The group that this disbursement is for
   def group
-    @group ||= group_id && course.group_categories.groups.find_by(id: group_id)
+    @group ||= group_id && course.groups.find_by(id: group_id)
   end
 
   # Saves the newly built experience points records.

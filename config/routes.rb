@@ -350,12 +350,9 @@ Rails.application.routes.draw do
         resources :group_categories, path: 'groups', except: [:new, :edit] do
           member do
             get 'info' => 'group_categories#show_info'
+            get 'users' => 'group_categories#show_users'
             post 'groups' => 'group_categories#create_groups'
             patch 'group_members' => 'group_categories#update_group_members'
-          end
-
-          collection do
-            get 'users' => 'group_categories#show_users'
           end
 
           resources :groups, only: [:update, :destroy]

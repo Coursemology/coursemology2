@@ -166,7 +166,7 @@ const GroupManager = ({
     (data) => {
       const existingNames = new Set(groups.map((g) => g.name));
       const groupData = getGroupData(data, existingNames);
-      dispatch(
+      return dispatch(
         createGroups(
           category.id,
           { groups: groupData },
@@ -177,21 +177,22 @@ const GroupManager = ({
     [dispatch, category.id, groups],
   );
 
-  const handleOpenCreate = useCallback(() => {
-    dispatch({ type: actionTypes.CREATE_GROUP_FORM_SHOW });
-  }, [dispatch]);
+  const handleOpenCreate = useCallback(
+    () => dispatch({ type: actionTypes.CREATE_GROUP_FORM_SHOW }),
+    [dispatch],
+  );
 
-  const handleCancel = useCallback(() => {
-    dispatch({ type: actionTypes.MANAGE_GROUPS_END });
-  }, [dispatch]);
+  const handleCancel = useCallback(
+    () => dispatch({ type: actionTypes.MANAGE_GROUPS_END }),
+    [dispatch],
+  );
 
   const handleGroupSelect = useCallback(
-    (groupId) => {
+    (groupId) =>
       dispatch({
         type: actionTypes.SET_SELECTED_GROUP_ID,
         selectedGroupId: groupId,
-      });
-    },
+      }),
     [dispatch],
   );
 
@@ -202,7 +203,7 @@ const GroupManager = ({
         members: g.members.map((m) => ({ ...m, role: m.groupRole })),
       }),
     );
-    dispatch(
+    return dispatch(
       updateGroupMembers(
         category.id,
         { groups: finalGroups },

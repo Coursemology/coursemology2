@@ -69,12 +69,17 @@ const CategoryCard = ({
   intl,
   onManageGroups,
   dispatch,
+  canManageCategory,
+  canManageGroups,
 }) => {
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
 
   const onFormSubmit = useCallback(
-    (data) =>
-      dispatch(
+    (data) => {
+      if (!canManageCategory) {
+        return undefined;
+      }
+      return dispatch(
         updateCategory(
           category.id,
           data,
@@ -85,8 +90,9 @@ const CategoryCard = ({
             categoryName: category.name,
           }),
         ),
-      ),
-    [dispatch, category.id, category.name],
+      );
+    },
+    [dispatch, category.id, category.name, canManageCategory],
   );
 
   const handleEdit = useCallback(() => {
@@ -94,7 +100,11 @@ const CategoryCard = ({
   }, [dispatch]);
 
   const handleDelete = useCallback(() => {
-    dispatch(
+    if (!canManageCategory) {
+      return undefined;
+    }
+
+    return dispatch(
       deleteCategory(
         category.id,
         intl.formatMessage(translations.deleteSuccess, {
@@ -107,27 +117,44 @@ const CategoryCard = ({
     ).then(() => {
       setIsConfirmingDelete(false);
     });
-  }, [dispatch, category.id, category.name, setIsConfirmingDelete]);
+  }, [
+    dispatch,
+    category.id,
+    category.name,
+    setIsConfirmingDelete,
+    canManageCategory,
+  ]);
 
-  const bottomButtons = useMemo(
-    () => [
-      {
+  const bottomButtons = useMemo(() => {
+    const result = [];
+    if (canManageCategory) {
+      result.push({
         label: <FormattedMessage {...translations.edit} />,
         onClick: handleEdit,
-      },
-      {
+      });
+    }
+    if (canManageGroups) {
+      result.push({
         label: <FormattedMessage {...translations.manage} />,
         onClick: onManageGroups,
-      },
-      {
+      });
+    }
+    if (canManageCategory) {
+      result.push({
         label: <FormattedMessage {...translations.delete} />,
         onClick: () => setIsConfirmingDelete(true),
         isRight: true,
         icon: <DeleteIcon color={red500} />,
-      },
-    ],
-    [handleEdit, onManageGroups, setIsConfirmingDelete],
-  );
+      });
+    }
+    return result;
+  }, [
+    handleEdit,
+    onManageGroups,
+    setIsConfirmingDelete,
+    canManageCategory,
+    canManageGroups,
+  ]);
 
   return (
     <>
@@ -142,29 +169,33 @@ const CategoryCard = ({
           <FormattedMessage {...translations.noDescription} />
         )}
       </GroupCard>
-      <GroupFormDialog
-        dialogTitle={intl.formatMessage(translations.dialogTitle)}
-        expectedDialogTypes={[dialogTypes.UPDATE_CATEGORY]}
-      >
-        <NameDescriptionForm
-          onSubmit={onFormSubmit}
-          initialValues={{
-            name: category.name,
-            description: category.description,
-          }}
-        />
-      </GroupFormDialog>
-      <ConfirmationDialog
-        confirmDiscard={!isConfirmingDelete}
-        confirmDelete={isConfirmingDelete}
-        open={isConfirmingDelete}
-        onCancel={() => {
-          setIsConfirmingDelete(false);
-        }}
-        onConfirm={() => {
-          handleDelete();
-        }}
-      />
+      {canManageCategory && (
+        <>
+          <GroupFormDialog
+            dialogTitle={intl.formatMessage(translations.dialogTitle)}
+            expectedDialogTypes={[dialogTypes.UPDATE_CATEGORY]}
+          >
+            <NameDescriptionForm
+              onSubmit={onFormSubmit}
+              initialValues={{
+                name: category.name,
+                description: category.description,
+              }}
+            />
+          </GroupFormDialog>
+          <ConfirmationDialog
+            confirmDiscard={!isConfirmingDelete}
+            confirmDelete={isConfirmingDelete}
+            open={isConfirmingDelete}
+            onCancel={() => {
+              setIsConfirmingDelete(false);
+            }}
+            onConfirm={() => {
+              handleDelete();
+            }}
+          />
+        </>
+      )}
     </>
   );
 };
@@ -174,6 +205,8 @@ CategoryCard.propTypes = {
   dispatch: PropTypes.func.isRequired,
   numGroups: PropTypes.number.isRequired,
   onManageGroups: PropTypes.func.isRequired,
+  canManageCategory: PropTypes.bool.isRequired,
+  canManageGroups: PropTypes.bool.isRequired,
   intl: intlShape,
 };
 

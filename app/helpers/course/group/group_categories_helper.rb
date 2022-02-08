@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 module Course::Group::GroupCategoriesHelper
-  def display_groups_tabs
-    return nil if current_course.group_categories.count <= 1
+  include Course::Group::GroupManagerConcern
 
-    active_category = params[:id] || current_course.group_categories.first
+  def display_groups_tabs
+    return nil if viewable_group_categories.count <= 1
+
+    active_category = params[:id] || viewable_group_categories.first
 
     tabs do
-      current_course.group_categories.each do |item|
+      viewable_group_categories.ordered_by_name.each do |item|
         # If this is the category previously set as active because there was no category parameter in the URL,
         # pass a hash to `nav_to` so it will show the category as active.
         # See https://github.com/doabit/bootstrap-sass-extras/blob/6aa549b91a66055a5f5e37400dbe44f4d17f09c3/app/helpers/nav_helper.rb#L32

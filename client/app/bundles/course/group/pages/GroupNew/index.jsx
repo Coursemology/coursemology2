@@ -35,22 +35,35 @@ const styles = {
   },
 };
 
-const PopupDialog = ({ dispatch, intl, isManagingGroups }) => {
+const PopupDialog = ({
+  dispatch,
+  intl,
+  isManagingGroups,
+  canManageCategory,
+}) => {
   const onFormSubmit = useCallback(
-    (data) =>
-      dispatch(
+    (data) => {
+      if (!canManageCategory) {
+        return undefined;
+      }
+      return dispatch(
         createCategory(
           data,
           intl.formatMessage(translations.success),
           intl.formatMessage(translations.failure),
         ),
-      ),
-    [dispatch],
+      );
+    },
+    [dispatch, canManageCategory],
   );
 
   const handleOpen = useCallback(() => {
     dispatch({ type: actionTypes.CREATE_CATEGORY_FORM_SHOW });
   }, [dispatch]);
+
+  if (!canManageCategory) {
+    return null;
+  }
 
   return (
     <>
@@ -74,9 +87,11 @@ const PopupDialog = ({ dispatch, intl, isManagingGroups }) => {
 PopupDialog.propTypes = {
   dispatch: PropTypes.func.isRequired,
   isManagingGroups: PropTypes.bool.isRequired,
+  canManageCategory: PropTypes.bool.isRequired,
   intl: intlShape,
 };
 
 export default connect((state) => ({
   isManagingGroups: state.groupsManage.isManagingGroups,
+  canManageCategory: state.groupsFetch.canManageCategory,
 }))(injectIntl(PopupDialog));

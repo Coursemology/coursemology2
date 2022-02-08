@@ -213,26 +213,29 @@ const GroupUserManager = ({
     [dispatch, categoryId, group.name, group.id],
   );
 
-  const handleEdit = useCallback(() => {
-    dispatch({ type: actionTypes.UPDATE_GROUP_FORM_SHOW });
-  }, [dispatch]);
+  const handleEdit = useCallback(
+    () => dispatch({ type: actionTypes.UPDATE_GROUP_FORM_SHOW }),
+    [dispatch],
+  );
 
-  const handleDelete = useCallback(() => {
-    dispatch(
-      deleteGroup(
-        categoryId,
-        group.id,
-        intl.formatMessage(translations.deleteSuccess, {
-          groupName: group.name,
-        }),
-        intl.formatMessage(translations.deleteFailure, {
-          groupName: group.name,
-        }),
-      ),
-    ).then(() => {
-      setIsConfirmingDelete(false);
-    });
-  }, [dispatch, categoryId, group.id, group.name, setIsConfirmingDelete]);
+  const handleDelete = useCallback(
+    () =>
+      dispatch(
+        deleteGroup(
+          categoryId,
+          group.id,
+          intl.formatMessage(translations.deleteSuccess, {
+            groupName: group.name,
+          }),
+          intl.formatMessage(translations.deleteFailure, {
+            groupName: group.name,
+          }),
+        ),
+      ).then(() => {
+        setIsConfirmingDelete(false);
+      }),
+    [dispatch, categoryId, group.id, group.name, setIsConfirmingDelete],
+  );
 
   const onCheck = useCallback(
     (user) => {
@@ -247,7 +250,7 @@ const GroupUserManager = ({
         ],
       };
       newGroup.members.sort(sortByName).sort(sortByGroupRole);
-      dispatch({
+      return dispatch({
         type: actionTypes.MODIFY_GROUP,
         group: newGroup,
       });
@@ -261,7 +264,7 @@ const GroupUserManager = ({
         ...group,
         members: group.members.filter((m) => m.id !== user.id),
       };
-      dispatch({
+      return dispatch({
         type: actionTypes.MODIFY_GROUP,
         group: newGroup,
       });
@@ -271,7 +274,7 @@ const GroupUserManager = ({
 
   const onChangeRole = useCallback(
     (value, user) => {
-      if (user.groupRole === value) return;
+      if (user.groupRole === value) return undefined;
       const newGroup = {
         ...group,
         members: [
@@ -283,7 +286,7 @@ const GroupUserManager = ({
         ],
       };
       newGroup.members.sort(sortByName).sort(sortByGroupRole);
-      dispatch({
+      return dispatch({
         type: actionTypes.MODIFY_GROUP,
         group: newGroup,
       });
