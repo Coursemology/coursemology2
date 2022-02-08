@@ -1593,9 +1593,9 @@ var ROUTES = (function() {
 // user_session => /users/sign_in(.:format)
   // function(options)
   user_session_path: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"users",false],[2,[7,"/",false],[2,[6,"sign_in",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]),
-// users_course_group_categories => /courses/:course_id/groups/users(.:format)
-  // function(course_id, options)
-  users_course_group_categories_path: Utils.route([["course_id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"groups",false],[2,[7,"/",false],[2,[6,"users",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]),
+// users_course_group_category => /courses/:course_id/groups/:id/users(.:format)
+  // function(course_id, id, options)
+  users_course_group_category_path: Utils.route([["course_id",true],["id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"groups",false],[2,[7,"/",false],[2,[3,"id",false],[2,[7,"/",false],[2,[6,"users",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]]]),
 // vote_course_forum_topic_post => /courses/:course_id/forums/:forum_id/topics/:topic_id/posts/:id/vote(.:format)
   // function(course_id, forum_id, topic_id, id, options)
   vote_course_forum_topic_post_path: Utils.route([["course_id",true],["forum_id",true],["topic_id",true],["id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"forums",false],[2,[7,"/",false],[2,[3,"forum_id",false],[2,[7,"/",false],[2,[6,"topics",false],[2,[7,"/",false],[2,[3,"topic_id",false],[2,[7,"/",false],[2,[6,"posts",false],[2,[7,"/",false],[2,[3,"id",false],[2,[7,"/",false],[2,[6,"vote",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]]]]]]]]]]])}
