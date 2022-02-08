@@ -1,8 +1,28 @@
-.course-user-table label {
+.group-user-manager label {
   font-weight: normal;
 
-  &.right-list-item {
-    padding-top: 0 !important;
+  &.has-dropdown {
     padding-bottom: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  .group-user-manager-list-item-dropdown {
+    height: 36px !important;
+    margin-top: -0.5rem;
+    margin-bottom: 0;
+    font-size: 13px !important;
+    padding-bottom: 4px;
+    min-width: 132px;
+
+    & > div {
+      & > button {
+        top: -6px !important;
+      }
+
+      & > div:nth-child(2) {
+        height: 36px !important;
+        line-height: 40px !important;
+      }
+    }
   }
 }

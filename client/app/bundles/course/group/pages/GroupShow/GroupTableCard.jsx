@@ -26,9 +26,12 @@ const styles = {
     textAlign: 'center',
     color: grey700,
   },
+  rowHeight: {
+    height: 36,
+  },
 };
 
-const GroupTable = ({ group }) => {
+const GroupTableCard = ({ group }) => {
   const members = [...group.members];
   members.sort(sortByName).sort(sortByGroupRole);
 
@@ -44,18 +47,22 @@ const GroupTable = ({ group }) => {
     >
       <Table selectable={false}>
         <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-          <TableRow>
-            <TableHeaderColumn>S/N</TableHeaderColumn>
-            <TableHeaderColumn>Name</TableHeaderColumn>
-            <TableHeaderColumn>Role</TableHeaderColumn>
+          <TableRow style={styles.rowHeight}>
+            <TableHeaderColumn style={styles.rowHeight}>S/N</TableHeaderColumn>
+            <TableHeaderColumn style={styles.rowHeight}>Name</TableHeaderColumn>
+            <TableHeaderColumn style={styles.rowHeight}>Role</TableHeaderColumn>
           </TableRow>
         </TableHeader>
         <TableBody displayRowCheckbox={false}>
           {members.map((m, index) => (
-            <TableRow key={m.id}>
-              <TableRowColumn>{index + 1}</TableRowColumn>
-              <TableRowColumn>{m.name}</TableRowColumn>
-              <TableRowColumn>{roles[m.groupRole]}</TableRowColumn>
+            <TableRow key={m.id} style={styles.rowHeight}>
+              <TableRowColumn style={styles.rowHeight}>
+                {index + 1}
+              </TableRowColumn>
+              <TableRowColumn style={styles.rowHeight}>{m.name}</TableRowColumn>
+              <TableRowColumn style={styles.rowHeight}>
+                {roles[m.groupRole]}
+              </TableRowColumn>
             </TableRow>
           ))}
           {members.length === 0 ? (
@@ -69,8 +76,8 @@ const GroupTable = ({ group }) => {
   );
 };
 
-GroupTable.propTypes = {
+GroupTableCard.propTypes = {
   group: groupShape.isRequired,
 };
 
-export default GroupTable;
+export default GroupTableCard;

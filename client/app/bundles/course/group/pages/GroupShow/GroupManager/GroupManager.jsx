@@ -6,16 +6,16 @@ import { connect } from 'react-redux';
 
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 
-import translations from './translations.intl';
-import GroupUserTable from './GroupUserTable';
-import SummaryTable from './SummaryTable';
-import { categoryShape, groupShape } from '../../propTypes';
-import actionTypes, { dialogTypes } from '../../constants';
-import GroupFormDialog from '../../forms/GroupFormDialog';
-import GroupCreationForm from '../../forms/GroupCreationForm';
-import { createGroups, updateGroupMembers } from '../../actions';
-import { combineGroups, getFinalModifiedGroups } from '../../utils/groups';
-import GroupCard from '../../components/GroupCard';
+import translations from '../translations.intl';
+import GroupUserManager from './GroupUserManager';
+import ChangeSummaryTable from './ChangeSummaryTable';
+import { categoryShape, groupShape } from '../../../propTypes';
+import actionTypes, { dialogTypes } from '../../../constants';
+import GroupFormDialog from '../../../forms/GroupFormDialog';
+import GroupCreationForm from '../../../forms/GroupCreationForm';
+import { createGroups, updateGroupMembers } from '../../../actions';
+import { combineGroups, getFinalModifiedGroups } from '../../../utils/groups';
+import GroupCard from '../../../components/GroupCard';
 
 const styles = {
   groupButton: {
@@ -185,7 +185,7 @@ const GroupManager = ({
         </div>
       </GroupCard>
       {selectedGroup ? (
-        <GroupUserTable
+        <GroupUserManager
           categoryId={category.id}
           group={selectedGroup}
           groups={combinedGroups}
@@ -221,7 +221,7 @@ const GroupManager = ({
         />
       </div>
 
-      <SummaryTable />
+      <ChangeSummaryTable />
 
       <GroupFormDialog
         dialogTitle={intl.formatMessage(translations.newGroup)}

@@ -15,7 +15,7 @@ import GroupFormDialog from '../../forms/GroupFormDialog';
 import NameDescriptionForm from '../../forms/NameDescriptionForm';
 import GroupCard from '../../components/GroupCard';
 
-const CategoryHeader = ({
+const CategoryCard = ({
   category,
   numGroups,
   intl,
@@ -124,7 +124,7 @@ const CategoryHeader = ({
   );
 };
 
-CategoryHeader.propTypes = {
+CategoryCard.propTypes = {
   category: categoryShape.isRequired,
   dispatch: PropTypes.func.isRequired,
   numGroups: PropTypes.number.isRequired,
@@ -132,4 +132,4 @@ CategoryHeader.propTypes = {
   intl: intlShape,
 };
 
-export default connect()(injectIntl(CategoryHeader));
+export default connect()(injectIntl(CategoryCard));

@@ -8,8 +8,8 @@ import ErrorCard from 'lib/components/ErrorCard';
 import NotificationBar, {
   notificationShape,
 } from 'lib/components/NotificationBar';
-import CategoryHeader from './CategoryHeader';
-import GroupTable from './GroupTable';
+import CategoryCard from './CategoryCard';
+import GroupTableCard from './GroupTableCard';
 import translations from './translations.intl';
 import { categoryShape, groupShape } from '../../propTypes';
 import { fetchCourseUsers, fetchGroupData } from '../../actions';
@@ -59,7 +59,7 @@ const Category = ({
         <GroupManager category={groupCategory} groups={groups} />
       ) : (
         <>
-          <CategoryHeader
+          <CategoryCard
             category={groupCategory}
             numGroups={groups.length}
             onManageGroups={() =>
@@ -67,7 +67,7 @@ const Category = ({
             }
           />
           {groups.map((group) => (
-            <GroupTable key={group.id} group={group} />
+            <GroupTableCard key={group.id} group={group} />
           ))}
           {groups.length === 0 ? (
             <Note message={<FormattedMessage {...translations.noGroups} />} />
