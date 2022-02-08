@@ -444,7 +444,7 @@ GEM
       json
     record_tag_helper (1.0.1)
       actionview (>= 5)
-    redis (4.5.1)
+    redis (4.6.0)
     redis-actionpack (5.2.0)
       actionpack (>= 5, < 7)
       redis-rack (>= 2.1.0, < 3)
@@ -542,7 +542,7 @@ GEM
     should_not (1.1.0)
     shoulda-matchers (5.1.0)
       activesupport (>= 5.2.0)
-    sidekiq (6.3.1)
+    sidekiq (6.4.1)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
