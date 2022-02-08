@@ -11,35 +11,27 @@ RSpec.describe Course::Group, type: :model do
     let(:owner) { create(:user) }
     let(:course) { create(:course, creator: owner) }
     let(:course_owner) { course.course_users.find_by(user: owner) }
-    let(:group) { create(:course_group, course: course) }
+    let(:group_category) { create(:course_group_category, course: course) }
+    let(:group) { create(:course_group, group_category: group_category) }
 
     describe '#initialize' do
-      subject { Course::Group.new(course: course, name: 'group') }
-
-      # TODO: Remove when using Rails 5.0
-      self::MANAGER_ROLE = :manager
+      subject { Course::Group.new(group_category: group_category, name: 'group') }
 
       context 'when the group creator is a course_user of the course' do
-        subject { Course::Group.new(course: course, creator: owner) }
+        subject { Course::Group.new(group_category: group_category, creator: owner) }
 
-        it 'sets the group creator as the manager of the group' do
-          expect(subject.group_users.length).to eq(1)
-          group_manager = subject.group_users.first
-          expect(group_manager.course_user).to eq(course_owner)
-          expect(group_manager.role).to eq('manager')
+        it 'does not set the group creator as the manager of the group' do
+          expect(subject.group_users.length).to eq(0)
         end
       end
 
       context 'when the group creator is not a course_user of the course' do
         let(:other_course) { create(:course) }
         let(:other_course_creator) { other_course.course_users.find_by(user: other_course.creator) }
-        subject { Course::Group.new(course: other_course, creator: owner) }
+        subject { Course::Group.new(group_category: group_category, creator: owner) }
 
-        it 'sets the course owner as the manager of the group' do
-          expect(subject.group_users.length).to eq(1)
-          group_manager = subject.group_users.first
-          expect(group_manager.course_user).to eq(other_course_creator)
-          expect(group_manager.role).to eq('manager')
+        it 'does not set the course owner as the manager of the group' do
+          expect(subject.group_users.length).to eq(0)
         end
       end
 
@@ -48,15 +40,14 @@ RSpec.describe Course::Group, type: :model do
           subject.creator = subject.updater = owner
           subject.save!
         end
-        it 'sets the user as the owner of the group' do
-          expect(subject.group_users.exists?(course_user: course_owner,
-                                             role: self.class::MANAGER_ROLE)).
-            to be_truthy
+        it 'does not set the user as the owner of the group' do
+          expect(subject.group_users.exists?(course_user: course_owner, role: :manager)).
+            to be_falsey
         end
       end
 
       context 'when multiple group_users reference a same user' do
-        subject { create(:course_group, course: course) }
+        subject { create(:course_group, group_category: group_category) }
         let(:course_user) { create(:course_user, course: course) }
         let!(:group_users) { Array.new(2) { subject.group_users.build(course_user: course_user) } }
 
@@ -91,8 +82,7 @@ RSpec.describe Course::Group, type: :model do
         let!(:achievements) { create_list(:course_user_achievement, 5, course_user: student) }
 
         it 'returns the average achievement count' do
-          average_count = 1.0 * student.course_user_achievements.count /
-                          group.course_users.students.count
+          average_count = 1.0 * student.course_user_achievements.count / group.course_users.students.count
           expect(subject).to eq(average_count)
         end
       end
@@ -114,8 +104,8 @@ RSpec.describe Course::Group, type: :model do
         end
 
         it 'returns the average experience points' do
-          average_count = 1.0 * group.course_users.map(&:experience_points).reduce(:+) /
-                          group.course_users.students.count
+          average_count = 1.0 * group.course_users.map(&:experience_points).reduce(:+) / group.
+                          course_users.students.count
           expect(subject).to eq(average_count)
         end
       end
@@ -152,7 +142,7 @@ RSpec.describe Course::Group, type: :model do
       end
 
       it 'returns groups sorted by average experience points' do
-        course.group_categories.groups.ordered_by_experience_points.each_cons(2) do |group1, group2|
+        course.groups.ordered_by_experience_points.each_cons(2) do |group1, group2|
           expect(group1.average_experience_points).to be >= group2.average_experience_points
         end
       end
@@ -165,7 +155,7 @@ RSpec.describe Course::Group, type: :model do
       let!(:later_group) { create(:course_group, course: course) }
 
       it 'returns groups sorted by average achievement count' do
-        course.group_categories.groups.ordered_by_average_achievement_count.each_cons(2) do |group1, group2|
+        course.groups.ordered_by_average_achievement_count.each_cons(2) do |group1, group2|
           expect(group1.average_achievement_count).to be >= group2.average_achievement_count
         end
       end
@@ -183,7 +173,7 @@ RSpec.describe Course::Group, type: :model do
 
         it 'returns the group who obtained the achievement count first' do
           expect(group.average_achievement_count).to eq(later_group.average_achievement_count)
-          course.group_categories.groups.ordered_by_average_achievement_count.each_cons(2) do |group1, group2|
+          course.groups.ordered_by_average_achievement_count.each_cons(2) do |group1, group2|
             expect(group1.last_obtained_achievement).to be <= group2.last_obtained_achievement
           end
         end

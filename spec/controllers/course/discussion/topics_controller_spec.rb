@@ -97,10 +97,12 @@ RSpec.describe Course::Discussion::TopicsController do
 
         context 'when the user has students' do
           before do
-            group = create(:course_group, course: course, creator: staff)
+            group = create(:course_group, course: course)
             student_course_user = course.course_users.find_by(user_id: student)
             create(:course_group_user,
                    course: course, group: group, course_user: student_course_user)
+            staff_course_user = course.course_users.find_by(user_id: staff)
+            create(:course_group_manager, course: course, group: group, course_user: staff_course_user)
           end
 
           it "shows my students' topics" do
@@ -134,10 +136,12 @@ RSpec.describe Course::Discussion::TopicsController do
 
         context 'when the user has students' do
           before do
-            group = create(:course_group, course: course, creator: staff)
+            group = create(:course_group, course: course)
             student_course_user = course.course_users.find_by(user_id: student)
             create(:course_group_user,
                    course: course, group: group, course_user: student_course_user)
+            staff_course_user = course.course_users.find_by(user_id: staff)
+            create(:course_group_manager, course: course, group: group, course_user: staff_course_user)
           end
 
           it "shows my students' pending topics" do
