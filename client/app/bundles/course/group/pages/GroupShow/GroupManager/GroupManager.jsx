@@ -1,12 +1,16 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { RaisedButton } from 'material-ui';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+  defineMessages,
+} from 'react-intl';
 import { connect } from 'react-redux';
 
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 
-import translations from '../translations.intl';
 import GroupUserManager from './GroupUserManager';
 import ChangeSummaryTable from './ChangeSummaryTable';
 import { categoryShape, groupShape } from '../../../propTypes';
@@ -17,9 +21,85 @@ import { createGroups, updateGroupMembers } from '../../../actions';
 import { combineGroups, getFinalModifiedGroups } from '../../../utils/groups';
 import GroupCard from '../../../components/GroupCard';
 
+const translations = defineMessages({
+  createSingleSuccess: {
+    id: 'course.group.show.groupManager.createSingle.success',
+    defaultMessage: '{groupName} was successfully created.',
+  },
+  createSingleFailure: {
+    id: 'course.group.show.groupManager.createSingle.fail',
+    defaultMessage: 'Failed to create {groupName}.',
+  },
+  createMultipleSuccess: {
+    id: 'course.group.show.groupManager.createMultiple.success',
+    defaultMessage:
+      '{numCreated} {numCreated, plural, one {group was} other {groups were}} successfully created.',
+  },
+  createMultiplePartialFailure: {
+    id: 'course.group.show.groupManager.createMultiple.partialFail',
+    defaultMessage:
+      'Failed to create {numFailed} {numFailed, plural, one {group} other {groups}}.',
+  },
+  createMultipleFailure: {
+    id: 'course.group.show.groupManager.createMultiple.fail',
+    defaultMessage: 'Failed to create {numFailed} groups.',
+  },
+  updateMembersSuccess: {
+    id: 'course.group.show.groupManager.updateMembers.success',
+    defaultMessage: 'Groups have been successfully updated.',
+  },
+  updateMembersFailure: {
+    id: 'course.group.show.groupManager.updateMembers.failure',
+    defaultMessage: 'Something went wrong, please try again later!',
+  },
+  subtitle: {
+    id: 'course.group.show.groupManager.subtitle',
+    defaultMessage:
+      '{numGroups} {numGroups, plural, one {group} other {groups}}',
+  },
+  dialogTitle: {
+    id: 'course.group.show.groupManager.dialogTitle',
+    defaultMessage: 'New Group(s)',
+  },
+  create: {
+    id: 'course.group.show.groupManager.create',
+    defaultMessage: 'Create Group(s)',
+  },
+  noneCreated: {
+    id: 'course.group.show.groupManager.noneCreated',
+    defaultMessage:
+      'You have no groups created. Create one now to get started!',
+  },
+  noneSelected: {
+    id: 'course.group.show.groupManager.noneSelected',
+    defaultMessage: 'Select one of the groups below to manage its members.',
+  },
+  title: {
+    id: 'course.group.show.groupManager.title',
+    defaultMessage: 'Managing Groups for {categoryName}',
+  },
+  cancel: {
+    id: 'course.group.show.groupManager.cancel',
+    defaultMessage: 'Cancel',
+  },
+  saveChanges: {
+    id: 'course.group.show.groupManager.saveChanges',
+    defaultMessage: 'Save Changes',
+  },
+});
+
 const styles = {
   groupButton: {
     marginBottom: '1rem',
+    marginRight: '1rem',
+  },
+  bottomButtonContainer: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    marginTop: '2rem',
+    marginBottom: '2rem',
+  },
+  cancelButton: {
     marginRight: '1rem',
   },
 };
@@ -44,31 +124,28 @@ const getGroupData = (data, existingNames) => {
 const getCreateGroupMessage = (intl) => (created, failed) => {
   if (created.length === 0) {
     if (failed.length === 1) {
-      return intl.formatMessage(translations.createSingleGroupFailure, {
+      return intl.formatMessage(translations.createSingleFailure, {
         groupName: failed[0].name,
       });
     }
-    return intl.formatMessage(translations.createMultipleGroupsFailure, {
+    return intl.formatMessage(translations.createMultipleFailure, {
       numFailed: failed.length,
     });
   }
   if (created.length === 1 && failed.length === 0) {
-    return intl.formatMessage(translations.createSingleGroupSuccess, {
+    return intl.formatMessage(translations.createSingleSuccess, {
       groupName: created[0].name,
     });
   }
 
   return (
-    intl.formatMessage(translations.createMultipleGroupsSuccess, {
+    intl.formatMessage(translations.createMultipleSuccess, {
       numCreated: created.length,
     }) +
     (failed.length > 0
-      ? ` ${intl.formatMessage(
-          translations.createMultipleGroupsPartialFailure,
-          {
-            numFailed: failed.length,
-          },
-        )}`
+      ? ` ${intl.formatMessage(translations.createMultiplePartialFailure, {
+          numFailed: failed.length,
+        })}`
       : '')
   );
 };
@@ -129,8 +206,8 @@ const GroupManager = ({
       updateGroupMembers(
         category.id,
         { groups: finalGroups },
-        'Successfully updated groups!',
-        'Something went wrong, please try again later!',
+        intl.formatMessage(translations.updateMembersSuccess),
+        intl.formatMessage(translations.updateMembersFailure),
       ),
     );
   }, [dispatch, category.id, groups, modifiedGroups]);
@@ -147,7 +224,7 @@ const GroupManager = ({
   const titleButtons = useMemo(
     () => [
       {
-        label: 'Create Group(s)',
+        label: <FormattedMessage {...translations.create} />,
         onClick: handleOpenCreate,
         isDisabled: isUpdating,
       },
@@ -158,19 +235,26 @@ const GroupManager = ({
   return (
     <>
       <GroupCard
-        title={`Managing Groups for ${category.name}`}
+        title={
+          <FormattedMessage
+            {...translations.title}
+            values={{ categoryName: category.name }}
+          />
+        }
         subtitle={
           <FormattedMessage
             values={{ numGroups: groups.length }}
-            {...translations.categoryHeaderSubtitle}
+            {...translations.subtitle}
           />
         }
         titleButtons={titleButtons}
       >
         <p>
-          {groups.length === 0
-            ? 'You have no groups created. Create one now to get started!'
-            : 'Select one of the groups below to manage its members.'}
+          {groups.length === 0 ? (
+            <FormattedMessage {...translations.noneCreated} />
+          ) : (
+            <FormattedMessage {...translations.noneSelected} />
+          )}
         </p>
         <div>
           {groups.map((group) => (
@@ -191,17 +275,10 @@ const GroupManager = ({
           groups={combinedGroups}
         />
       ) : null}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          marginTop: '2rem',
-          marginBottom: '2rem',
-        }}
-      >
+      <div style={styles.bottomButtonContainer}>
         <RaisedButton
-          label="Cancel"
-          style={{ marginRight: '1rem' }}
+          label={<FormattedMessage {...translations.cancel} />}
+          style={styles.cancelButton}
           onClick={() => {
             if (modifiedGroups.length > 0) {
               setIsConfirmingCancel(true);
@@ -213,7 +290,7 @@ const GroupManager = ({
         />
         <RaisedButton
           primary
-          label="Save Changes"
+          label={<FormattedMessage {...translations.saveChanges} />}
           disabled={
             selectedGroup == null || modifiedGroups.length === 0 || isUpdating
           }
@@ -224,7 +301,7 @@ const GroupManager = ({
       <ChangeSummaryTable />
 
       <GroupFormDialog
-        dialogTitle={intl.formatMessage(translations.newGroup)}
+        dialogTitle={intl.formatMessage(translations.dialogTitle)}
         expectedDialogTypes={[dialogTypes.CREATE_GROUP]}
       >
         <GroupCreationForm

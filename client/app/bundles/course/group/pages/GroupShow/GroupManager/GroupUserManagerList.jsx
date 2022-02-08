@@ -10,7 +10,31 @@ import {
   Subheader,
 } from 'material-ui';
 import { grey400 } from 'material-ui/styles/colors';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { memberShape } from '../../../propTypes';
+
+const translations = defineMessages({
+  normal: {
+    id: 'course.group.show.groupUserManagerList.normal',
+    defaultMessage: 'Normal',
+  },
+  manager: {
+    id: 'course.group.show.groupUserManagerList.manager',
+    defaultMessage: 'Manager',
+  },
+  noUsersFound: {
+    id: 'course.group.show.groupUserManagerList.noUsersFound',
+    defaultMessage: 'No users found',
+  },
+  students: {
+    id: 'course.group.show.groupUserManagerList.students',
+    defaultMessage: 'Students',
+  },
+  staff: {
+    id: 'course.group.show.groupUserManagerList.staff',
+    defaultMessage: 'Staff',
+  },
+});
 
 const styles = {
   list: {
@@ -65,8 +89,14 @@ const GroupUserManagerListItem = ({
             }
             iconStyle={colour ? { fill: colour.light } : undefined}
           >
-            <MenuItem value="normal" primaryText="Normal" />
-            <MenuItem value="manager" primaryText="Manager" />
+            <MenuItem
+              value="normal"
+              primaryText={<FormattedMessage {...translations.normal} />}
+            />
+            <MenuItem
+              value="manager"
+              primaryText={<FormattedMessage {...translations.manager} />}
+            />
           </DropDownMenu>
         </div>
       ) : (
@@ -108,11 +138,16 @@ const GroupUserManagerList = ({
 }) => (
   <List style={styles.list}>
     {students.length === 0 && staff.length === 0 ? (
-      <ListItem style={{ color: grey400 }} primaryText="No users found" />
+      <ListItem
+        style={{ color: grey400 }}
+        primaryText={<FormattedMessage {...translations.noUsersFound} />}
+      />
     ) : null}
     {students.length > 0 && (
       <>
-        <Subheader>Students</Subheader>
+        <Subheader>
+          <FormattedMessage {...translations.students} />
+        </Subheader>
         {students.map((user) => {
           const colour = colourMap[user.id];
           return (
@@ -132,7 +167,9 @@ const GroupUserManagerList = ({
     {staff.length > 0 && (
       <>
         {students.length > 0 && <Divider style={styles.divider} />}
-        <Subheader>Staff</Subheader>
+        <Subheader>
+          <FormattedMessage {...translations.staff} />
+        </Subheader>
         {staff.map((user) => {
           const colour = colourMap[user.id];
           return (

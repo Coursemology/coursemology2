@@ -4,14 +4,13 @@ import { change, Field, Form, formValueSelector, reduxForm } from 'redux-form';
 import { red500 } from 'material-ui/styles/colors';
 import { connect } from 'react-redux';
 import { Tab, Tabs } from 'material-ui';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 
 import ErrorText, { errorProps } from 'lib/components/ErrorText';
 import formTranslations from 'lib/translations/form';
 import TextField from 'lib/components/redux-form/TextField';
 
 import actionTypes, { formNames } from '../constants';
-import translations from './translations.intl';
 import { groupShape } from '../propTypes';
 
 const styles = {
@@ -32,6 +31,37 @@ const styles = {
     color: red500,
   },
 };
+
+const translations = defineMessages({
+  name: {
+    id: 'course.group.groupForm.name',
+    defaultMessage: 'Name',
+  },
+  description: {
+    id: 'course.group.groupForm.description',
+    defaultMessage: 'Description (Optional)',
+  },
+  nameLength: {
+    id: 'course.group.groupForm.nameLength',
+    defaultMessage: 'The name is too long!',
+  },
+  prefix: {
+    id: 'course.group.groupForm.prefix',
+    defaultMessage: 'Prefix',
+  },
+  numToCreate: {
+    id: 'course.group.groupForm.numToCreate',
+    defaultMessage: 'Number to Create',
+  },
+  numToCreateMin: {
+    id: 'course.group.groupForm.numToCreateMin',
+    defaultMessage: 'Minimum 2',
+  },
+  numToCreateMax: {
+    id: 'course.group.groupForm.numToCreateMax',
+    defaultMessage: 'Maximum 50',
+  },
+});
 
 const MIN_NUM_TO_CREATE = 2;
 const MAX_NUM_TO_CREATE = 50;

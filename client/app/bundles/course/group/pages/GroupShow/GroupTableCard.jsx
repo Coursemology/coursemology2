@@ -9,11 +9,35 @@ import {
 } from 'material-ui';
 import { grey700 } from 'material-ui/styles/colors';
 
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { groupShape } from '../../propTypes';
-import translations from './translations.intl';
 import { sortByGroupRole, sortByName } from '../../utils/sort';
 import GroupCard from '../../components/GroupCard';
+
+const translations = defineMessages({
+  subtitle: {
+    id: 'course.group.show.groupTableCard.subtitle',
+    defaultMessage:
+      '{numMembers} {numMembers, plural, one {member} other {members}}',
+  },
+  serialNumber: {
+    id: 'course.group.show.groupTableCard.serialNumber',
+    defaultMessage: 'S/N',
+  },
+  name: {
+    id: 'course.group.show.groupTableCard.name',
+    defaultMessage: 'Name',
+  },
+  role: {
+    id: 'course.group.show.groupTableCard.role',
+    defaultMessage: 'Role',
+  },
+  noMembers: {
+    id: 'course.group.show.groupTableCard.noMembers',
+    defaultMessage:
+      'This group has no members! Manage groups to assign members now!',
+  },
+});
 
 const roles = {
   normal: 'Normal',
@@ -41,16 +65,22 @@ const GroupTableCard = ({ group }) => {
       subtitle={
         <FormattedMessage
           values={{ numMembers: members.length ?? 0 }}
-          {...translations.groupHeaderSubtitle}
+          {...translations.subtitle}
         />
       }
     >
       <Table selectable={false}>
         <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
           <TableRow style={styles.rowHeight}>
-            <TableHeaderColumn style={styles.rowHeight}>S/N</TableHeaderColumn>
-            <TableHeaderColumn style={styles.rowHeight}>Name</TableHeaderColumn>
-            <TableHeaderColumn style={styles.rowHeight}>Role</TableHeaderColumn>
+            <TableHeaderColumn style={styles.rowHeight}>
+              <FormattedMessage {...translations.serialNumber} />
+            </TableHeaderColumn>
+            <TableHeaderColumn style={styles.rowHeight}>
+              <FormattedMessage {...translations.name} />
+            </TableHeaderColumn>
+            <TableHeaderColumn style={styles.rowHeight}>
+              <FormattedMessage {...translations.role} />
+            </TableHeaderColumn>
           </TableRow>
         </TableHeader>
         <TableBody displayRowCheckbox={false}>
@@ -67,7 +97,7 @@ const GroupTableCard = ({ group }) => {
           ))}
           {members.length === 0 ? (
             <div style={styles.empty}>
-              This group has no members! Manage groups to assign members now!
+              <FormattedMessage {...translations.noMembers} />
             </div>
           ) : null}
         </TableBody>

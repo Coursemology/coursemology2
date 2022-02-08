@@ -9,10 +9,51 @@ import {
 import { red100, blue100, green100 } from 'material-ui/styles/colors';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import GroupCard from '../../../components/GroupCard';
 import { groupShape } from '../../../propTypes';
 import { getSummaryOfModifications } from '../../../utils/groups';
+
+const translations = defineMessages({
+  serialNumber: {
+    id: 'course.group.show.changeSummary.serialNumber',
+    defaultMessage: 'S/N',
+  },
+  name: {
+    id: 'course.group.show.changeSummary.name',
+    defaultMessage: 'Name',
+  },
+  role: {
+    id: 'course.group.show.changeSummary.role',
+    defaultMessage: 'Role',
+  },
+  change: {
+    id: 'course.group.show.changeSummary.change',
+    defaultMessage: 'Change',
+  },
+  add: {
+    id: 'course.group.show.changeSummary.add',
+    defaultMessage: 'Added to group',
+  },
+  switch: {
+    id: 'course.group.show.changeSummary.switch',
+    defaultMessage: 'Role switched from {oldRole} to {newRole}',
+  },
+  remove: {
+    id: 'course.group.show.changeSummary.remove',
+    defaultMessage: 'Removed from group',
+  },
+  title: {
+    id: 'course.group.show.changeSummary.title',
+    defaultMessage: 'Summary of Changes',
+  },
+  subtitle: {
+    id: 'course.group.show.changeSummary.subtitle',
+    defaultMessage:
+      '{numGroups} {numGroups, plural, one {group} other {groups}} modified',
+  },
+});
 
 const styles = {
   groupTitle: {
@@ -46,10 +87,13 @@ const ChangeSummaryTable = ({ groups, modifiedGroups }) => {
 
   return (
     <GroupCard
-      title="Summary of Changes"
-      subtitle={`${modifiedGroupSummaries.length} group${
-        modifiedGroupSummaries.length === 1 ? '' : 's'
-      } modified`}
+      title={<FormattedMessage {...translations.title} />}
+      subtitle={
+        <FormattedMessage
+          values={{ numGroups: modifiedGroupSummaries.length }}
+          {...translations.subtitle}
+        />
+      }
     >
       {modifiedGroupSummaries.map((group, groupIndex) => (
         <>
@@ -65,16 +109,16 @@ const ChangeSummaryTable = ({ groups, modifiedGroups }) => {
             <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
               <TableRow style={styles.rowHeight}>
                 <TableHeaderColumn style={styles.rowHeight}>
-                  S/N
+                  <FormattedMessage {...translations.serialNumber} />
                 </TableHeaderColumn>
                 <TableHeaderColumn style={styles.rowHeight}>
-                  Name
+                  <FormattedMessage {...translations.name} />
                 </TableHeaderColumn>
                 <TableHeaderColumn style={styles.rowHeight}>
-                  Role
+                  <FormattedMessage {...translations.role} />
                 </TableHeaderColumn>
                 <TableHeaderColumn style={styles.rowHeight}>
-                  Change
+                  <FormattedMessage {...translations.change} />
                 </TableHeaderColumn>
               </TableRow>
             </TableHeader>
@@ -94,7 +138,7 @@ const ChangeSummaryTable = ({ groups, modifiedGroups }) => {
                     {roles[m.groupRole]}
                   </TableRowColumn>
                   <TableRowColumn style={styles.rowHeight}>
-                    Added to group
+                    <FormattedMessage {...translations.add} />
                   </TableRowColumn>
                 </TableRow>
               ))}
@@ -113,9 +157,16 @@ const ChangeSummaryTable = ({ groups, modifiedGroups }) => {
                     {roles[m.groupRole]}
                   </TableRowColumn>
                   <TableRowColumn style={styles.rowHeight}>
-                    Role switched from{' '}
-                    {roles[m.groupRole === 'normal' ? 'manager' : 'normal']} to{' '}
-                    {roles[m.groupRole]}
+                    <FormattedMessage
+                      values={{
+                        oldRole:
+                          roles[
+                            m.groupRole === 'normal' ? 'manager' : 'normal'
+                          ],
+                        newRole: roles[m.groupRole],
+                      }}
+                      {...translations.switch}
+                    />
                   </TableRowColumn>
                 </TableRow>
               ))}
@@ -134,7 +185,7 @@ const ChangeSummaryTable = ({ groups, modifiedGroups }) => {
                     {roles[m.groupRole]}
                   </TableRowColumn>
                   <TableRowColumn style={styles.rowHeight}>
-                    Removed from group
+                    <FormattedMessage {...translations.remove} />
                   </TableRowColumn>
                 </TableRow>
               ))}

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { reduxForm, Field, Form } from 'redux-form';
 import { connect } from 'react-redux';
 
@@ -8,7 +8,21 @@ import ErrorText, { errorProps } from 'lib/components/ErrorText';
 import TextField from 'lib/components/redux-form/TextField';
 import formTranslations from 'lib/translations/form';
 import { formNames } from '../constants';
-import translations from './translations.intl';
+
+const translations = defineMessages({
+  name: {
+    id: 'course.group.nameDescriptionForm.name',
+    defaultMessage: 'Name',
+  },
+  description: {
+    id: 'course.group.nameDescriptionForm.description',
+    defaultMessage: 'Description (Optional)',
+  },
+  nameLength: {
+    id: 'course.group.nameDescriptionForm.nameLength',
+    defaultMessage: 'The name is too long!',
+  },
+});
 
 const styles = {
   flexCol: {

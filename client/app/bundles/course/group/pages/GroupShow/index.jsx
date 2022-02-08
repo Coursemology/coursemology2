@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import ErrorCard from 'lib/components/ErrorCard';
@@ -10,12 +10,27 @@ import NotificationBar, {
 } from 'lib/components/NotificationBar';
 import CategoryCard from './CategoryCard';
 import GroupTableCard from './GroupTableCard';
-import translations from './translations.intl';
 import { categoryShape, groupShape } from '../../propTypes';
 import { fetchCourseUsers, fetchGroupData } from '../../actions';
 import GroupManager from './GroupManager';
 import actionTypes from '../../constants';
 import Note from '../../components/Note';
+
+const translations = defineMessages({
+  fetchFailure: {
+    id: 'course.group.show.fetchFailure',
+    defaultMessage: 'Failed to fetch group data! Please reload and try again.',
+  },
+  noCategory: {
+    id: 'course.group.show.noCategory',
+    defaultMessage: "You don't have a group category created! Create one now!",
+  },
+  noGroups: {
+    id: 'course.group.show.noGroup',
+    defaultMessage:
+      "You don't have any groups under this category! Manage groups now to get started!",
+  },
+});
 
 const Category = ({
   dispatch,

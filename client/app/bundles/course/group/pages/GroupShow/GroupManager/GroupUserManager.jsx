@@ -12,21 +12,77 @@ import {
   red500,
 } from 'material-ui/styles/colors';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
+import {
+  defineMessages,
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { courseUserShape, groupShape } from '../../../propTypes';
 import actionTypes, { dialogTypes } from '../../../constants';
 import { sortByGroupRole, sortByName } from '../../../utils/sort';
-import translations from '../translations.intl';
 import { deleteGroup, updateGroup } from '../../../actions';
 import NameDescriptionForm from '../../../forms/NameDescriptionForm';
 import GroupFormDialog from '../../../forms/GroupFormDialog';
 import GroupCard from '../../../components/GroupCard';
 import GroupUserManagerList from './GroupUserManagerList';
 
+const translations = defineMessages({
+  updateSuccess: {
+    id: 'course.group.show.groupUserManager.update.success',
+    defaultMessage: '{groupName} was successfully updated.',
+  },
+  updateFailure: {
+    id: 'course.group.show.groupUserManager.update.fail',
+    defaultMessage: 'Failed to update {groupName}.',
+  },
+  deleteSuccess: {
+    id: 'course.group.show.groupUserManager.delete.success',
+    defaultMessage: '{groupName} was successfully deleted.',
+  },
+  deleteFailure: {
+    id: 'course.group.show.groupUserManager.delete.fail',
+    defaultMessage: 'Failed to delete {groupName}.',
+  },
+  edit: {
+    id: 'course.group.show.groupUserManager.edit',
+    defaultMessage: 'Edit Details',
+  },
+  delete: {
+    id: 'course.group.show.groupUserManager.delete',
+    defaultMessage: 'Delete Group',
+  },
+  subtitle: {
+    id: 'course.group.show.groupUserManager.subtitle',
+    defaultMessage:
+      '{numMembers} {numMembers, plural, one {member} other {members}}',
+  },
+  noDescription: {
+    id: 'course.group.show.groupUserManager.noDescription',
+    defaultMessage: 'No description available.',
+  },
+  dialogTitle: {
+    id: 'course.group.show.groupUserManager.dialogTitle',
+    defaultMessage: 'Edit Group',
+  },
+  searchPlaceholder: {
+    id: 'course.group.show.groupUserManager.searchPlaceholder',
+    defaultMessage: 'Search by Name (separate by comma to search multiple)',
+  },
+  hideStudents: {
+    id: 'course.group.show.groupUserManager.hideStudents',
+    defaultMessage:
+      'Hide students who are already in a group under this category',
+  },
+});
+
 const styles = {
+  groupDescription: {
+    marginBottom: '2rem',
+  },
   listContainerContainer: {
     display: 'flex',
     alignItems: 'flex-end',
@@ -146,10 +202,10 @@ const GroupUserManager = ({
           categoryId,
           group.id,
           data,
-          intl.formatMessage(translations.updateGroupSuccess, {
+          intl.formatMessage(translations.updateSuccess, {
             groupName: group.name,
           }),
-          intl.formatMessage(translations.updateGroupFailure, {
+          intl.formatMessage(translations.updateFailure, {
             groupName: group.name,
           }),
         ),
@@ -166,10 +222,10 @@ const GroupUserManager = ({
       deleteGroup(
         categoryId,
         group.id,
-        intl.formatMessage(translations.deleteGroupSuccess, {
+        intl.formatMessage(translations.deleteSuccess, {
           groupName: group.name,
         }),
-        intl.formatMessage(translations.deleteGroupFailure, {
+        intl.formatMessage(translations.deleteFailure, {
           groupName: group.name,
         }),
       ),
@@ -246,11 +302,11 @@ const GroupUserManager = ({
   const titleButtons = useMemo(
     () => [
       {
-        label: <FormattedMessage {...translations.editGroup} />,
+        label: <FormattedMessage {...translations.edit} />,
         onClick: handleEdit,
       },
       {
-        label: 'Delete Group',
+        label: <FormattedMessage {...translations.delete} />,
         onClick: () => setIsConfirmingDelete(true),
         icon: <DeleteIcon color={red500} />,
       },
@@ -289,12 +345,12 @@ const GroupUserManager = ({
         subtitle={
           <FormattedMessage
             values={{ numMembers: group.members?.length ?? 0 }}
-            {...translations.groupHeaderSubtitle}
+            {...translations.subtitle}
           />
         }
         titleButtons={titleButtons}
       >
-        <p style={{ marginBottom: '2rem' }}>
+        <p style={styles.groupDescription}>
           {group.description ?? (
             <FormattedMessage {...translations.noDescription} />
           )}
@@ -304,7 +360,9 @@ const GroupUserManager = ({
             <div style={styles.header}>Users that can be added</div>
             <TextField
               style={styles.textField}
-              hintText="Search by Name (separate by comma to search multiple)"
+              hintText={
+                <FormattedMessage {...translations.searchPlaceholder} />
+              }
               value={availableSearch}
               onChange={(_, value) => setAvailableSearch(value)}
             />
@@ -322,7 +380,9 @@ const GroupUserManager = ({
             <div style={styles.header}>Users in group</div>
             <TextField
               style={styles.textField}
-              hintText="Search by Name (separate by comma to search multiple)"
+              hintText={
+                <FormattedMessage {...translations.searchPlaceholder} />
+              }
               value={selectedSearch}
               onChange={(_, value) => setSelectedSearch(value)}
             />
@@ -338,7 +398,7 @@ const GroupUserManager = ({
           </div>
         </div>
         <Checkbox
-          label="Hide students who are already in a group under this category"
+          label={<FormattedMessage {...translations.hideStudents} />}
           style={styles.checkbox}
           checked={hideInGroup}
           onCheck={(_, value) => setHideInGroup(value)}
@@ -346,7 +406,7 @@ const GroupUserManager = ({
       </GroupCard>
 
       <GroupFormDialog
-        dialogTitle={intl.formatMessage(translations.editGroupHeader)}
+        dialogTitle={intl.formatMessage(translations.dialogTitle)}
         expectedDialogTypes={[dialogTypes.UPDATE_GROUP]}
       >
         <NameDescriptionForm
