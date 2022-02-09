@@ -18,7 +18,6 @@ class Course::Assessment < ApplicationRecord
   before_validation :assign_folder_attributes
   after_commit :grade_with_new_test_cases, on: :update
   before_save :save_tab
-  before_save :update_personal_times, if: -> { (end_at_changed? || start_at_changed?) && !new_record? }
 
   enum randomization: { prepared: 0 }
 
@@ -295,9 +294,5 @@ class Course::Assessment < ApplicationRecord
   def save_tab
     tab.category.save if tab&.category && !tab.category.persisted?
     tab.save if tab && !tab.persisted?
-  end
-
-  def update_personal_times
-    Course::LessonPlan::CoursewidePersonalizedTimelineUpdateJob.perform_later(lesson_plan_item)
   end
 end
