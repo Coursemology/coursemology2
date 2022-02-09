@@ -23,6 +23,8 @@ module Course::Assessment::Submission::WorkflowEventConcern
 
     # Trigger timeline recomputation
     # NB: We are not recomputing on unsubmission because unsubmit is not done by the student
+    #     It will recompute again when resubmission occurs. This also prevents the timings for
+    #     the unsubmitted item from changing e.g. from other submissions that the student has done.
     update_personalized_timeline_for_user(course_user)
   end
 
