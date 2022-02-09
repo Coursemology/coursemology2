@@ -32,8 +32,13 @@ RSpec.describe Course::LessonPlan::PersonalizationConcern do
         create(:course_assessment_submission, assessment: assessment, creator: course_user.user).tap(&:finalise!)
       end
 
-      it 'does not create any personal times' do
+      it 'does not create any personal times when performed on user' do
         dummy_controller.send(:update_personalized_timeline_for_user, course_user)
+        expect(course_user.personal_times.count).to eq(0)
+      end
+
+      it 'does not create any personal times for user when performed on item' do
+        dummy_controller.send(:update_personalized_timeline_for_item, assessment.lesson_plan_item)
         expect(course_user.personal_times.count).to eq(0)
       end
     end
@@ -44,9 +49,19 @@ RSpec.describe Course::LessonPlan::PersonalizationConcern do
         create(:course_assessment_submission, assessment: assessment, creator: course_user.user).tap(&:finalise!)
       end
 
-      it 'creates personal times' do
+      it 'creates personal times for unsubmitted assessments when performed on user' do
         dummy_controller.send(:update_personalized_timeline_for_user, course_user)
         expect(course_user.personal_times.count).to eq(course.assessments.count - 1)
+      end
+
+      it 'creates a single personal time for user when performed on unsubmitted item' do
+        dummy_controller.send(:update_personalized_timeline_for_item, yet_to_open_assessment.lesson_plan_item)
+        expect(course_user.personal_times.count).to eq(1)
+      end
+
+      it 'creates no personal times for user when performed on submitted item' do
+        dummy_controller.send(:update_personalized_timeline_for_item, assessment.lesson_plan_item)
+        expect(course_user.personal_times.count).to eq(0)
       end
     end
 
@@ -58,10 +73,22 @@ RSpec.describe Course::LessonPlan::PersonalizationConcern do
           tap(&:finalise!)
       end
 
-      it 'creates personal times' do
+      it 'creates personal times for unsubmitted assessments when performed on user' do
         submit_assessment(assessment)
         dummy_controller.send(:update_personalized_timeline_for_user, course_user)
         expect(course_user.personal_times.count).to eq(course.assessments.count - 1)
+      end
+
+      it 'creates a single personal time for user when performed on unsubmitted item' do
+        submit_assessment(assessment)
+        dummy_controller.send(:update_personalized_timeline_for_item, yet_to_open_assessment.lesson_plan_item)
+        expect(course_user.personal_times.count).to eq(1)
+      end
+
+      it 'creates no personal times for user when performed on submitted item' do
+        submit_assessment(assessment)
+        dummy_controller.send(:update_personalized_timeline_for_item, assessment.lesson_plan_item)
+        expect(course_user.personal_times.count).to eq(0)
       end
 
       it 'shifts the end_at of non-open items forward' do
@@ -102,9 +129,19 @@ RSpec.describe Course::LessonPlan::PersonalizationConcern do
         create(:course_assessment_submission, assessment: assessment, creator: course_user.user).tap(&:finalise!)
       end
 
-      it 'creates personal times' do
+      it 'creates personal times for unsubmitted assessments when performed on user' do
         dummy_controller.send(:update_personalized_timeline_for_user, course_user)
         expect(course_user.personal_times.count).to eq(course.assessments.count - 1)
+      end
+
+      it 'creates a single personal time for user when performed on unsubmitted item' do
+        dummy_controller.send(:update_personalized_timeline_for_item, yet_to_open_assessment.lesson_plan_item)
+        expect(course_user.personal_times.count).to eq(1)
+      end
+
+      it 'creates no personal times for user when performed on submitted item' do
+        dummy_controller.send(:update_personalized_timeline_for_item, assessment.lesson_plan_item)
+        expect(course_user.personal_times.count).to eq(0)
       end
     end
 
