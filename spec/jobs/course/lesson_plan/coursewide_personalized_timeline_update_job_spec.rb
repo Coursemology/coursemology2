@@ -6,11 +6,14 @@ RSpec.describe Course::LessonPlan::CoursewidePersonalizedTimelineUpdateJob do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:timeline_algorithm) { 'fomo' }
-    let!(:assessment) { create(:assessment, course: course, start_at: 1.day.from_now, end_at: 10.days.from_now, published: true) }
+    let!(:assessment) do
+      create(:assessment, course: course, start_at: 1.day.from_now, end_at: 10.days.from_now, published: true)
+    end
     let(:course_user) { create(:course_user, course: course, timeline_algorithm: timeline_algorithm) }
     let(:submitted_assessment) { create(:assessment, course: course, end_at: 3.days.from_now, published: true) }
     let(:submission) do
-      create(:course_assessment_submission, assessment: submitted_assessment, creator: course_user.user).tap(&:finalise!)
+      create(:course_assessment_submission, assessment: submitted_assessment,
+                                            creator: course_user.user).tap(&:finalise!)
     end
     subject { Course::LessonPlan::CoursewidePersonalizedTimelineUpdateJob }
 

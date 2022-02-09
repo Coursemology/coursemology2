@@ -38,8 +38,9 @@ class Course::LessonPlan::Strategies::StragglersPersonalizationStrategy <
       end
     end
 
-    # We will only fix items if no specific items to shift are provided. Otherwise, the intent of the run of this algorithm
-    # would be to update the personal times for those items, and not so much the adjustment based on learning rate.
+    # We will only fix items if no specific items to shift are provided. Otherwise, the intent of the run of this
+    # algorithm would be to update the personal times for those items, and not so much to adjust/fix times based on
+    # learning rate.
     fix_items(course_user, precomputed_data[:items], precomputed_data[:submitted_items]) if items_to_shift.nil?
   end
 
