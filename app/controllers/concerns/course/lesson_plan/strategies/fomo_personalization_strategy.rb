@@ -45,7 +45,7 @@ class Course::LessonPlan::Strategies::FomoPersonalizationStrategy <
   # If the item should act, returns an array [new_reference_point, new_personal_point] computed with that item.
   # If the item should not act, then the original reference_point and personal_point will be returned.
   #
-  # @param [CourseUser] course_user The user to update points for for.
+  # @param [CourseUser] course_user The user to update points for.
   # @param [Course::LessonPlan::Item] item The item to reference for the update of points.
   # @param [Hash{Integer=>ActiveSupport::TimeWithZone|nil}] submitted_items A hash of submitted lesson plan items' ID to
   #   their submitted time, if relevant/available.

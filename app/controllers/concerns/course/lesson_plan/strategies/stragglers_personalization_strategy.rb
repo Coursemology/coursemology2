@@ -38,7 +38,9 @@ class Course::LessonPlan::Strategies::StragglersPersonalizationStrategy <
       end
     end
 
-    fix_items(course_user, precomputed_data[:items], precomputed_data[:submitted_items])
+    # We will only fix items if no specific items to shift are provided. Otherwise, the intent of the run of this algorithm
+    # would be to update the personal times for those items, and not so much the adjustment based on learning rate.
+    fix_items(course_user, precomputed_data[:items], precomputed_data[:submitted_items]) if items_to_shift.nil?
   end
 
   private
@@ -47,7 +49,7 @@ class Course::LessonPlan::Strategies::StragglersPersonalizationStrategy <
   # If the item should act, returns an array [new_reference_point, new_personal_point] computed with that item.
   # If the item should not act, then the original reference_point and personal_point will be returned.
   #
-  # @param [CourseUser] course_user The user to update points for for.
+  # @param [CourseUser] course_user The user to update points for.
   # @param [Course::LessonPlan::Item] item The item to reference for the update of points.
   # @param [Hash{Integer=>ActiveSupport::TimeWithZone|nil}] submitted_items A hash of submitted lesson plan items' ID to
   #   their submitted time, if relevant/available.
