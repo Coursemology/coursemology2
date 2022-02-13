@@ -9,7 +9,7 @@ RSpec.describe Course::LessonPlan::TodosHelper do
         item = create(:course_lesson_plan_item, start_at: end_at - 1.day, end_at: end_at)
         create(:course_lesson_plan_todo, item: item)
       end
-      subject { helper.todo_status_class(todo) }
+      subject { helper.todo_status_class(todo.item) }
 
       context 'when end_at has not passed' do
         let(:end_at) { 2.days.from_now }

@@ -2,10 +2,10 @@
 module Course::LessonPlan::TodosHelper
   # A helper to add a CSS class for each todo, based on the workflow state.
   #
-  # @param [Course::LessonPlan::Todo] todo The actual todo.
+  # @param [Course::ReferenceTime] timeline_for_todo The reference timeline for the actual todo.
   # @return [Array<String>] CSS class to be added to the todo tag.
-  def todo_status_class(todo)
-    if todo.item.end_at && todo.item.end_at < Time.zone.now
+  def todo_status_class(timeline_for_todo)
+    if timeline_for_todo.end_at && timeline_for_todo.end_at < Time.zone.now
       ['danger']
     else
       []
