@@ -61,10 +61,6 @@ const PopupDialog = ({
     dispatch({ type: actionTypes.CREATE_CATEGORY_FORM_SHOW });
   }, [dispatch]);
 
-  if (!canManageCategory) {
-    return null;
-  }
-
   return (
     <>
       <RaisedButton
