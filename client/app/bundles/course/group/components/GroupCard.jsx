@@ -71,7 +71,7 @@ function mapButtonObjectToElement(button, isLast) {
   if (button.icon) {
     return (
       <IconButton
-        key={button.label}
+        key={button.label.props.id}
         tooltip={button.label}
         onClick={button.onClick}
         style={{
@@ -85,7 +85,7 @@ function mapButtonObjectToElement(button, isLast) {
   }
   return (
     <RaisedButton
-      key={button.label}
+      key={button.label.props.id}
       label={button.label}
       onClick={button.onClick}
       primary
