@@ -2,40 +2,32 @@
 class Course::Group::GroupCategoriesController < Course::ComponentController
   include Course::Group::GroupManagerConcern
 
-  load_resource :group_category, class: Course::GroupCategory
+  load_and_authorize_resource :group_category, class: Course::GroupCategory
   before_action :add_group_breadcrumb
 
   def index
     if viewable_group_categories.exists?
       redirect_to course_group_category_path(current_course, viewable_group_categories.ordered_by_name.first)
     else
-      # We test if the user can read an arbitrary category
-      category = Course::GroupCategory.new(course: current_course)
-      authorize! :read, category
-
       render 'index'
     end
   end
 
   def show
-    authorize! :read, @group_category
   end
 
   def show_info
-    authorize! :read, @group_category
     @groups = @group_category.groups.accessible_by(current_ability).ordered_by_name.includes(group_users: :course_user)
     @can_manage_category = can?(:manage, @group_category)
     @can_manage_groups = @can_manage_category || !@groups.empty?
   end
 
   def show_users
-    authorize! :read, @group_category
     @course_users = current_course.course_users.order_alphabetically
   end
 
   def create
     @group_category = Course::GroupCategory.new(group_category_params.reverse_merge(course: current_course))
-    authorize! :manage, @group_category
     if @group_category.save
       render json: @group_category, status: :ok
     else
@@ -44,7 +36,6 @@ class Course::Group::GroupCategoriesController < Course::ComponentController
   end
 
   def create_groups
-    authorize! :manage, @group_category
     @created_groups = []
     @failed_groups = []
     groups_params[:groups].each do |group|
@@ -58,7 +49,6 @@ class Course::Group::GroupCategoriesController < Course::ComponentController
   end
 
   def update
-    authorize! :manage, @group_category
     if @group_category.update(group_category_params)
       render json: @group_category, status: :ok
     else
@@ -69,7 +59,6 @@ class Course::Group::GroupCategoriesController < Course::ComponentController
   def update_group_members
     update_groups_params[:groups].each do |group|
       existing_group = Course::Group.preload(:group_users).find_by_id(group[:id])
-      authorize! :manage, existing_group
       existing_users = existing_group.group_users.map { |u| [u.course_user.id, u] }.to_h
       new_users = group[:members].map { |u| [u[:id], u] }.to_h
       partitioned_users = partition_new_users(new_users, existing_users)
@@ -82,7 +71,6 @@ class Course::Group::GroupCategoriesController < Course::ComponentController
   end
 
   def destroy
-    authorize! :manage, @group_category
     if @group_category.destroy
       render json: { id: @group_category.id }, status: :ok
     else

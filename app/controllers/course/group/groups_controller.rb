@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 class Course::Group::GroupsController < Course::ComponentController
-  load_resource :group, class: Course::Group
+  load_and_authorize_resource :group, class: Course::Group
 
   def update
-    authorize! :manage, @group
     unless @group.update(group_params)
       render json: { errors: @group.errors }, status: :bad_request
       return
@@ -12,7 +11,6 @@ class Course::Group::GroupsController < Course::ComponentController
   end
 
   def destroy
-    authorize! :manage, @group
     if @group.destroy
       render json: { id: @group.id }, status: :ok
     else

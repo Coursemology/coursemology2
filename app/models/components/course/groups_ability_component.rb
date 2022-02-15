@@ -17,7 +17,7 @@ module Course::GroupsAbilityComponent
 
   def allow_staff_read_groups
     can :read, Course::Group, group_category: { course_id: course.id }
-    can :read, Course::GroupCategory, course_id: course.id
+    can [:read, :show_info, :show_users], Course::GroupCategory, course_id: course.id
   end
 
   def allow_teaching_staff_manage_groups
@@ -30,7 +30,7 @@ module Course::GroupsAbilityComponent
   end
 
   def allow_group_manager_read_group_category
-    can :read, Course::GroupCategory, course_group_category_manager_hash
+    can [:read, :show_info, :show_users], Course::GroupCategory, course_group_category_manager_hash
   end
 
   def course_group_manager_hash
