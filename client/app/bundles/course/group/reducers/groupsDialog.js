@@ -2,7 +2,6 @@ import actionTypes, { dialogTypes } from '../constants';
 
 const initialState = {
   isShown: false,
-  isConfirmationDialogOpen: false,
   dialogType: dialogTypes.CREATE_CATEGORY,
   isDisabled: false,
 };
@@ -38,20 +37,7 @@ export default function (state = initialState, action) {
       };
     }
     case actionTypes.DIALOG_CANCEL: {
-      if (action.payload.isPristine) {
-        return { ...state, isShown: false };
-      }
-      return { ...state, isConfirmationDialogOpen: true };
-    }
-    case actionTypes.DIALOG_CONFIRM_CANCEL: {
-      return { ...state, isConfirmationDialogOpen: false };
-    }
-    case actionTypes.DIALOG_CONFIRM_DISCARD: {
-      return {
-        ...state,
-        isConfirmationDialogOpen: false,
-        isShown: false,
-      };
+      return { ...state, isShown: false };
     }
     case actionTypes.SET_IS_DISABLED_TRUE:
     case actionTypes.CREATE_CATEGORY_REQUEST:

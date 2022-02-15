@@ -1,24 +1,12 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { isPristine, submit } from 'redux-form';
-import { Dialog, FlatButton } from 'material-ui';
-import { FormattedMessage } from 'react-intl';
-
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import formTranslations from 'lib/translations/form';
-import modalFormStyles from 'lib/styles/ModalForm.scss';
-
 import { connect } from 'react-redux';
+
+import FormDialogue from 'lib/components/FormDialogue';
 import actionTypes, { formNames } from '../constants';
 
-const styles = {
-  dialog: {
-    width: '80%',
-    maxWidth: 700,
-  },
-};
-
-const NameDescriptionDialog = ({
+const GroupFormDialog = ({
   dialogTitle,
   expectedDialogTypes,
   dispatch,
@@ -26,7 +14,6 @@ const NameDescriptionDialog = ({
   isDisabled,
   isShown,
   dialogType,
-  isConfirmationDialogOpen,
   children,
 }) => {
   const handleClose = useCallback(
@@ -38,64 +25,33 @@ const NameDescriptionDialog = ({
     [dispatch, pristine],
   );
 
-  const formActions = useMemo(
-    () => [
-      <FlatButton
-        label={<FormattedMessage {...formTranslations.cancel} />}
-        primary
-        onClick={handleClose}
-        disabled={isDisabled}
-        key="group-popup-dialog-cancel-button"
-      />,
-      <FlatButton
-        label={<FormattedMessage {...formTranslations.submit} />}
-        className="btn-submit"
-        primary
-        onClick={() => dispatch(submit(formNames.GROUP))}
-        disabled={isDisabled}
-        key="group-popup-dialog-submit-button"
-      />,
-    ],
-    [handleClose, isDisabled, dispatch],
+  const handleSubmit = useCallback(
+    () => dispatch(submit(formNames.GROUP)),
+    [dispatch],
   );
 
   const isExpectedDialogType = expectedDialogTypes.includes(dialogType);
 
   return (
-    <>
-      <Dialog
-        title={dialogTitle}
-        modal={false}
-        open={isShown && isExpectedDialogType}
-        actions={formActions}
-        onRequestClose={handleClose}
-        autoScrollBodyContent
-        contentStyle={styles.dialog}
-        bodyClassName={modalFormStyles.modalForm}
-      >
-        {children}
-      </Dialog>
-      <ConfirmationDialog
-        confirmDiscard
-        open={isConfirmationDialogOpen && isExpectedDialogType}
-        onCancel={() => {
-          dispatch({ type: actionTypes.DIALOG_CONFIRM_CANCEL });
-        }}
-        onConfirm={() => {
-          dispatch({ type: actionTypes.DIALOG_CONFIRM_DISCARD });
-        }}
-      />
-    </>
+    <FormDialogue
+      title={dialogTitle}
+      open={isShown && isExpectedDialogType}
+      disabled={isDisabled}
+      hideForm={handleClose}
+      skipConfirmation={pristine}
+      submitForm={handleSubmit}
+    >
+      {children}
+    </FormDialogue>
   );
 };
 
-NameDescriptionDialog.propTypes = {
+GroupFormDialog.propTypes = {
   dialogTitle: PropTypes.string.isRequired,
   expectedDialogTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
   dispatch: PropTypes.func.isRequired,
   isPristine: PropTypes.bool,
   isShown: PropTypes.bool.isRequired,
-  isConfirmationDialogOpen: PropTypes.bool.isRequired,
   isDisabled: PropTypes.bool.isRequired,
   dialogType: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
@@ -104,4 +60,4 @@ NameDescriptionDialog.propTypes = {
 export default connect((state) => ({
   ...state.groupsDialog,
   isPristine: isPristine(formNames.GROUP)(state),
-}))(NameDescriptionDialog);
+}))(GroupFormDialog);
