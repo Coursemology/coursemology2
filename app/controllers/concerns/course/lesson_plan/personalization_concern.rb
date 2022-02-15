@@ -41,7 +41,7 @@ module Course::LessonPlan::PersonalizationConcern
   # Only the timing for the lesson plan item will be shifted. Generally, you should only call this if the timing of the
   # lesson plan item has shifted, or other personalized timeline related changes have been made for a specific item.
   def update_personalized_timeline_for_item(lesson_plan_item)
-    course = lesson_plan_item.course
+    course = lesson_plan_item.course.includes(:course_users)
     course.course_users.each do |course_user|
       update_personalized_timeline_for_user(course_user, nil, Set[lesson_plan_item.id])
     end
