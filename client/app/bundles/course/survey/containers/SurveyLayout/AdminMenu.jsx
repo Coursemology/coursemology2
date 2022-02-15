@@ -3,10 +3,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
-import IconButton from 'material-ui/IconButton';
+import { IconButton } from '@material-ui/core';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import MoreVert from '@material-ui/icons/MoreVert';
 import { getStyles } from 'material-ui/AppBar/AppBar';
 import * as surveyActions from 'course/survey/actions/surveys';
 import { showDeleteConfirmation } from 'course/survey/actions';
@@ -119,7 +119,7 @@ class AdminMenu extends React.Component {
         iconStyle={styles.iconButtonIconStyle}
         iconButtonElement={
           <IconButton>
-            <MoreVertIcon />
+            <MoreVert nativeColor="white" />
           </IconButton>
         }
       >

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Slider from 'material-ui/Slider';
+import Slider from 'material-ui/Slider'; // MUI v4
 
 import styles from '../VideoPlayer.scss';
 import { changePlayerVolume } from '../../actions/video';

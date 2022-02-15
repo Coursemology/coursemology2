@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import { FieldArray } from 'redux-form';
 import RaisedButton from 'material-ui/RaisedButton';
-import { white } from 'material-ui/styles/colors';
+import { white } from '@material-ui/core/colors';
 
 import ImportedFileView from './ImportedFileView';
 import Editor from '../components/Editor';

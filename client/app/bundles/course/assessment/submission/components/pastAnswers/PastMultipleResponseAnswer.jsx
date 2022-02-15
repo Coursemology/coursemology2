@@ -1,5 +1,5 @@
 import React from 'react';
-import { green50 } from 'material-ui/styles/colors';
+import { green } from '@material-ui/core/colors';
 import { RadioButton } from 'material-ui/RadioButton';
 
 import { answerShape, questionShape } from '../../propTypes';
@@ -17,7 +17,7 @@ function MultipleResponse({ question, answer }) {
             <div
               style={
                 option.correct && selectedOptions.indexOf(option.id) !== -1
-                  ? { backgroundColor: green50 }
+                  ? { backgroundColor: green[50] }
                   : null
               }
               dangerouslySetInnerHTML={{ __html: option.option.trim() }}

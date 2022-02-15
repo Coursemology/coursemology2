@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import Subheader from 'material-ui/Subheader';
+import { ListSubheader } from '@material-ui/core';
 import surveyTranslations from 'course/survey/translations';
 import { surveyShape } from 'course/survey/propTypes';
 import * as surveyActions from 'course/survey/actions/surveys';
@@ -36,15 +36,17 @@ class SurveyShow extends React.Component {
       return null;
     }
     if (!sections || sections.length < 1) {
-      return <Subheader>{intl.formatMessage(translations.empty)}</Subheader>;
+      return (
+        <ListSubheader>{intl.formatMessage(translations.empty)}</ListSubheader>
+      );
     }
     const lastIndex = sections.length - 1;
 
     return (
       <>
-        <Subheader>
+        <ListSubheader>
           {intl.formatMessage(surveyTranslations.questions)}
-        </Subheader>
+        </ListSubheader>
         {sections.map((section, index) => (
           <Section
             key={section.id}

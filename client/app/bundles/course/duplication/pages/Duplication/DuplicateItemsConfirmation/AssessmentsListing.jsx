@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import Subheader from 'material-ui/Subheader';
-import { Card, CardText } from 'material-ui/Card';
+import { Card, CardContent, ListSubheader } from '@material-ui/core';
 import { defaultComponentTitles } from 'course/translations.intl';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { categoryShape } from 'course/duplication/propTypes';
@@ -116,13 +115,13 @@ class AssessmentsListing extends React.Component {
 
     return (
       <Card key={category ? category.id : 'default'}>
-        <CardText>
+        <CardContent>
           {categoryRow}
           {hasOrphanAssessments &&
             AssessmentsListing.renderTabTree(null, orphanAssessments)}
           {hasOrphanTabs && tabsTrees(orphanTabs)}
           {category && tabsTrees(category.tabs)}
-        </CardText>
+        </CardContent>
       </Card>
     );
   }
@@ -169,11 +168,11 @@ class AssessmentsListing extends React.Component {
 
     return (
       <>
-        <Subheader>
+        <ListSubheader>
           <FormattedMessage
             {...defaultComponentTitles.course_assessments_component}
           />
-        </Subheader>
+        </ListSubheader>
         {categoriesTrees.map((category) =>
           AssessmentsListing.renderCategoryCard(category, null, null),
         )}

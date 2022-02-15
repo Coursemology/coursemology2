@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import Snackbar from 'material-ui/Snackbar';
+import { Snackbar } from '@material-ui/core';
 
 export const notificationShape = PropTypes.shape({
   message: PropTypes.oneOfType([
@@ -38,7 +38,7 @@ export default class NotificationBar extends React.Component {
     }
     return (
       <Snackbar
-        bodyStyle={{
+        style={{
           height: 'auto',
           maxWidth: '100%',
           whiteSpace: 'pre-line',

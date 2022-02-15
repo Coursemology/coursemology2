@@ -4,21 +4,17 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import ReactTooltip from 'react-tooltip';
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
-import Toggle from 'material-ui/Toggle';
-import RaisedButton from 'material-ui/RaisedButton';
-import CircularProgress from 'material-ui/CircularProgress';
 import { Tabs, Tab } from 'material-ui/Tabs';
-import GroupIcon from 'material-ui/svg-icons/social/group';
-import PersonIcon from 'material-ui/svg-icons/social/person';
-import PersonOutlineIcon from 'material-ui/svg-icons/social/person-outline';
 import {
-  red100,
-  yellow100,
-  grey100,
-  green100,
-  blue100,
-  blue500,
-} from 'material-ui/styles/colors';
+  Button,
+  CircularProgress,
+  FormControlLabel,
+  Switch,
+} from '@material-ui/core';
+import { blue, green, grey, yellow, red } from '@material-ui/core/colors';
+import Group from '@material-ui/icons/Group';
+import Person from '@material-ui/icons/Person';
+import PersonOutline from '@material-ui/icons/PersonOutline';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import NotificationBar, {
@@ -53,11 +49,11 @@ const styles = {
   },
   histogramCells: {
     common: { transition: 'flex .5s, min-width .5s' },
-    unstarted: { backgroundColor: red100 },
-    attempting: { backgroundColor: yellow100 },
-    submitted: { backgroundColor: grey100 },
-    graded: { backgroundColor: blue100 },
-    published: { backgroundColor: green100 },
+    unstarted: { backgroundColor: red[100] },
+    attempting: { backgroundColor: yellow[100] },
+    submitted: { backgroundColor: grey[100] },
+    graded: { backgroundColor: blue[100] },
+    published: { backgroundColor: green[100] },
   },
 };
 
@@ -175,63 +171,71 @@ class VisibleSubmissionsIndex extends React.Component {
           {this.renderHistogram(shownSubmissions)}
         </CardText>
         <CardActions>
-          <Toggle
-            className="toggle-phantom"
+          <FormControlLabel
+            control={
+              <Switch
+                checked={includePhantoms}
+                className="toggle-phantom"
+                color="primary"
+                onChange={() =>
+                  this.setState({ includePhantoms: !includePhantoms })
+                }
+              />
+            }
             label={
-              <FormattedMessage {...submissionsTranslations.includePhantoms} />
+              <b>
+                <FormattedMessage
+                  {...submissionsTranslations.includePhantoms}
+                />
+              </b>
             }
-            labelPosition="right"
-            toggled={includePhantoms}
-            onToggle={() =>
-              this.setState({ includePhantoms: !includePhantoms })
-            }
+            labelPlacement="end"
           />
           {canPublishGrades && (
-            <RaisedButton
+            <Button
+              variant="contained"
+              color="primary"
               disabled={
                 disableButtons ||
                 !VisibleSubmissionsIndex.canPublish(shownSubmissions)
               }
-              primary
-              label={
-                <FormattedMessage {...submissionsTranslations.publishGrades} />
-              }
-              labelPosition="before"
-              icon={isPublishing ? <CircularProgress size={24} /> : null}
               onClick={() => this.setState({ publishConfirmation: true })}
-            />
+            >
+              <FormattedMessage {...submissionsTranslations.publishGrades} />
+              {isPublishing && <CircularProgress size={24} />}
+            </Button>
           )}
           {canForceSubmit && (
-            <RaisedButton
+            <Button
+              variant="contained"
+              color="primary"
               disabled={
                 disableButtons ||
                 !VisibleSubmissionsIndex.canForceSubmitOrRemind(
                   shownSubmissions,
                 )
               }
-              primary
-              label={
-                <FormattedMessage {...submissionsTranslations.forceSubmit} />
-              }
-              labelPosition="before"
-              icon={isForceSubmitting ? <CircularProgress size={24} /> : null}
               onClick={() => this.setState({ forceSubmitConfirmation: true })}
-            />
+            >
+              <FormattedMessage {...submissionsTranslations.forceSubmit} />
+              {isForceSubmitting && <CircularProgress size={24} />}
+            </Button>
           )}
           {showRemindButton && (
-            <RaisedButton
+            <Button
+              variant="contained"
+              color="primary"
               disabled={
                 disableButtons ||
                 !VisibleSubmissionsIndex.canForceSubmitOrRemind(
                   shownSubmissions,
                 )
               }
-              primary
-              label={<FormattedMessage {...submissionsTranslations.remind} />}
-              labelPosition="before"
-              icon={isReminding ? <CircularProgress size={24} /> : null}
               onClick={() => this.setState({ remindConfirmation: true })}
-            />
+            >
+              <FormattedMessage {...submissionsTranslations.remind} />
+              {isReminding && <CircularProgress size={24} />}
+            </Button>
           )}
         </CardActions>
       </Card>
@@ -263,14 +267,14 @@ class VisibleSubmissionsIndex extends React.Component {
     };
     return (
       <Tabs
-        inkBarStyle={{ backgroundColor: blue500, height: 5, marginTop: -5 }}
-        tabItemContainerStyle={{ backgroundColor: grey100 }}
+        inkBarStyle={{ backgroundColor: blue[500], height: 5, marginTop: -5 }}
+        tabItemContainerStyle={{ backgroundColor: grey[100] }}
       >
         {filteredSubmissions.myStudentAllSubmissions.length > 0 ? (
           <Tab
             id="my-students-tab"
-            buttonStyle={{ color: blue500 }}
-            icon={<GroupIcon style={{ color: blue500 }} />}
+            buttonStyle={{ color: blue[500] }}
+            icon={<Group style={{ color: blue[500] }} />}
             label={<FormattedMessage {...submissionsTranslations.myStudents} />}
             onActive={() => this.setState({ tab: 'my-students-tab' })}
           >
@@ -306,8 +310,8 @@ class VisibleSubmissionsIndex extends React.Component {
         ) : null}
         <Tab
           id="students-tab"
-          buttonStyle={{ color: blue500 }}
-          icon={<PersonIcon style={{ color: blue500 }} />}
+          buttonStyle={{ color: blue[500] }}
+          icon={<Person style={{ color: blue[500] }} />}
           label={<FormattedMessage {...submissionsTranslations.students} />}
           onActive={() => this.setState({ tab: 'students-tab' })}
         >
@@ -338,8 +342,8 @@ class VisibleSubmissionsIndex extends React.Component {
         </Tab>
         <Tab
           id="staff-tab"
-          buttonStyle={{ color: blue500 }}
-          icon={<PersonOutlineIcon style={{ color: blue500 }} />}
+          buttonStyle={{ color: blue[500] }}
+          icon={<PersonOutline style={{ color: blue[500] }} />}
           label={<FormattedMessage {...submissionsTranslations.staff} />}
           onActive={() => this.setState({ tab: 'staff-tab' })}
         >

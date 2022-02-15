@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import ReactSummernote from 'react-summernote';
-import TextFieldLabel from 'material-ui/TextField/TextFieldLabel';
+import { InputLabel } from '@material-ui/core';
 import axios from 'lib/axios';
 
 import { i18nLocale } from 'lib/helpers/server-context';
@@ -139,20 +139,19 @@ class MaterialSummernote extends React.Component {
           paddingTop: this.props.label ? '2.5em' : 0,
         }}
       >
-        <TextFieldLabel
-          muiTheme={this.context.muiTheme}
+        <InputLabel
+          disabled={this.props.disabled}
+          htmlFor={this.props.field}
+          shrink
           style={{
             pointerEvents: 'none',
             color: this.props.disabled
               ? disabledTextColor
               : testFieldLabelColor,
           }}
-          htmlFor={this.props.field}
-          shrink
-          disabled={this.props.disabled}
         >
           {this.props.label}
-        </TextFieldLabel>
+        </InputLabel>
         <textarea
           name={this.props.name}
           id={this.props.inputId}

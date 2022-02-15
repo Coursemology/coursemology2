@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
+import { Button, TableCell, TableRow } from '@material-ui/core';
 import { injectIntl } from 'react-intl';
-import { grey300 } from 'material-ui/styles/colors';
+import { grey } from '@material-ui/core/colors';
 import styles from './OnlineEditorView.scss';
 
 class NewPackageFile extends React.Component {
@@ -27,15 +27,21 @@ class NewPackageFile extends React.Component {
 
     if (showDeleteButton) {
       deleteButton = (
-        <RaisedButton
-          backgroundColor={grey300}
-          icon={<i className="fa fa-trash" />}
+        <Button
+          variant="contained"
           disabled={isLoading}
           onClick={() => {
             this.props.deleteNewPackageFile(this.props.fileType, index);
           }}
-          style={{ minWidth: '40px', width: '40px' }}
-        />
+          style={{
+            backgroundColor: grey[300],
+            height: '40px',
+            minWidth: '40px',
+            width: '40px',
+          }}
+        >
+          <i className="fa fa-trash" />
+        </Button>
       );
       addFileButtonStyle.display = 'none';
       rowStyle = {};
@@ -43,10 +49,10 @@ class NewPackageFile extends React.Component {
 
     return (
       <TableRow style={rowStyle}>
-        <TableHeaderColumn className={styles.deleteButtonCell}>
+        <TableCell className={styles.deleteButtonCell}>
           {deleteButton}
-        </TableHeaderColumn>
-        <TableRowColumn>
+        </TableCell>
+        <TableCell>
           <RaisedButton
             className={styles.fileInputButton}
             label={this.props.buttonLabel}
@@ -65,7 +71,7 @@ class NewPackageFile extends React.Component {
             />
           </RaisedButton>
           <div style={{ display: 'inline-block' }}>{filename}</div>
-        </TableRowColumn>
+        </TableCell>
       </TableRow>
     );
   }

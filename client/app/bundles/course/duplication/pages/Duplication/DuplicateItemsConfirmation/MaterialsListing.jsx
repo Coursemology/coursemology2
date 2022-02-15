@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import Subheader from 'material-ui/Subheader';
-import { Card, CardText } from 'material-ui/Card';
+import { Card, CardContent, ListSubheader } from '@material-ui/core';
 import { defaultComponentTitles } from 'course/translations.intl';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { folderShape } from 'course/duplication/propTypes';
@@ -110,16 +109,16 @@ class MaterialsListing extends React.Component {
 
     return (
       <div>
-        <Subheader>
+        <ListSubheader>
           <FormattedMessage
             {...defaultComponentTitles.course_materials_component}
           />
-        </Subheader>
+        </ListSubheader>
         <Card>
-          <CardText>
+          <CardContent>
             {MaterialsListing.renderRootRow()}
             {folderTrees}
-          </CardText>
+          </CardContent>
         </Card>
       </div>
     );

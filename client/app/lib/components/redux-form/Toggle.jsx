@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import MaterialToggle from 'material-ui/Toggle';
-import { red500 } from 'material-ui/styles/colors';
+import { red } from '@material-ui/core/colors';
+
 import createComponent from './createComponent';
 import mapError from './mapError';
 
 const errorStyle = {
-  color: red500,
+  color: red[500],
 };
 
 // Toggle implementation with an error displayed at the bottom.

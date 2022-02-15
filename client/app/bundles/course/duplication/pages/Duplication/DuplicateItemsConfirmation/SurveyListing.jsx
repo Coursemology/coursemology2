@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import Checkbox from 'material-ui/Checkbox';
-import Subheader from 'material-ui/Subheader';
-import { Card, CardText } from 'material-ui/Card';
+import { Card, CardContent, ListSubheader } from '@material-ui/core';
 import { defaultComponentTitles } from 'course/translations.intl';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { surveyShape } from 'course/duplication/propTypes';
@@ -45,13 +44,15 @@ class SurveyListing extends React.Component {
 
     return (
       <>
-        <Subheader>
+        <ListSubheader>
           <FormattedMessage
             {...defaultComponentTitles.course_survey_component}
           />
-        </Subheader>
+        </ListSubheader>
         <Card>
-          <CardText>{selectedSurveys.map(SurveyListing.renderRow)}</CardText>
+          <CardContent>
+            {selectedSurveys.map(SurveyListing.renderRow)}
+          </CardContent>
         </Card>
       </>
     );

@@ -8,8 +8,7 @@ import {
   intlShape,
 } from 'react-intl';
 
-import Paper from 'material-ui/Paper';
-import Subheader from 'material-ui/Subheader';
+import { ListSubheader, Paper } from '@material-ui/core';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 
 import TitleBar from 'lib/components/TitleBar';
@@ -223,16 +222,16 @@ class Duplication extends React.Component {
 
     if (!modesAllowed || modesAllowed.length < 1) {
       return (
-        <Subheader>
+        <ListSubheader>
           <FormattedMessage {...translations.duplicationDisabled} />
-        </Subheader>
+        </ListSubheader>
       );
     }
     if (!enabledComponents || enabledComponents.length < 1) {
       return (
-        <Subheader>
+        <ListSubheader>
           <FormattedMessage {...translations.noComponentsEnabled} />
-        </Subheader>
+        </ListSubheader>
       );
     }
 

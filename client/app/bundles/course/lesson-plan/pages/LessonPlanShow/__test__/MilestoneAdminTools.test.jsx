@@ -22,21 +22,21 @@ describe('<MilestoneAdminTools />', () => {
   it('hides admin tools for dummy milestone', () => {
     const milestone = { id: undefined, title: 'Ungrouped Items' };
     expect(
-      buildShallowWrapper(true, milestone).find('RaisedButton').length,
+      buildShallowWrapper(true, milestone).find('WithStyles(Button)').length,
     ).toBe(0);
   });
 
   it('hides admin tools when user does not have permissions', () => {
     const milestone = { id: 4, title: 'User-defined Milestone' };
     expect(
-      buildShallowWrapper(false, milestone).find('RaisedButton').length,
+      buildShallowWrapper(false, milestone).find('WithStyles(Button)').length,
     ).toBe(0);
   });
 
   it('shows admin tools when user has permissions', () => {
     const milestone = { id: 4, title: 'User-defined Milestone' };
     expect(
-      buildShallowWrapper(true, milestone).find('RaisedButton').length,
+      buildShallowWrapper(true, milestone).find('WithStyles(Button)').length,
     ).toBe(2);
   });
 
@@ -57,7 +57,10 @@ describe('<MilestoneAdminTools />', () => {
       contextOptions,
     );
 
-    const deleteButton = wrapper.find('RaisedButton').last().find('button');
+    const deleteButton = wrapper
+      .find('WithStyles(Button)')
+      .last()
+      .find('button');
     deleteButton.simulate('click');
     const confirmButton = deleteConfirmation
       .find('ConfirmationDialog')
@@ -88,7 +91,10 @@ describe('<MilestoneAdminTools />', () => {
       contextOptions,
     );
 
-    const editButton = wrapper.find('RaisedButton').first().find('button');
+    const editButton = wrapper
+      .find('WithStyles(Button)')
+      .first()
+      .find('button');
     editButton.simulate('click');
 
     const dialogInline = milestoneFormDialog

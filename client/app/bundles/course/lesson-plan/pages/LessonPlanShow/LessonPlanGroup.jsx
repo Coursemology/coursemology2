@@ -3,9 +3,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Element } from 'react-scroll';
-import Divider from 'material-ui/Divider';
 import { Card, CardText, CardTitle } from 'material-ui/Card';
-import { grey50 } from 'material-ui/styles/colors';
+import { Divider } from '@material-ui/core';
+import { grey } from '@material-ui/core/colors';
 import moment, { longDate } from 'lib/moment';
 import LessonPlanItem from './LessonPlanItem';
 import MilestoneAdminTools from './MilestoneAdminTools';
@@ -61,7 +61,7 @@ class LessonPlanGroup extends React.Component {
             <span dangerouslySetInnerHTML={{ __html: description }} />
           </span>
         }
-        style={{ backgroundColor: grey50 }}
+        style={{ backgroundColor: grey[50] }}
       />
     );
   }

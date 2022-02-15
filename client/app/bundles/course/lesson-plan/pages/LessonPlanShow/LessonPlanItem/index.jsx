@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CardText } from 'material-ui/Card';
-import Divider from 'material-ui/Divider';
+import { CardContent, Divider } from '@material-ui/core';
 import Details from './Details';
 import Material from './Material';
 import AdminTools from './AdminTools';
@@ -43,7 +42,7 @@ const LessonPlanItem = (props) => {
           location,
         }}
       />
-      <CardText>
+      <CardContent>
         {materials &&
           materials.map((material) => (
             <Material
@@ -52,7 +51,7 @@ const LessonPlanItem = (props) => {
               url={material.url}
             />
           ))}
-      </CardText>
+      </CardContent>
       <AdminTools {...{ item }} />
     </div>
   );

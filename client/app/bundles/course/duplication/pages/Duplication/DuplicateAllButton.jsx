@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { submit, isValid } from 'redux-form';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import CircularProgress from 'material-ui/CircularProgress';
-import RaisedButton from 'material-ui/RaisedButton';
+import { Button, CircularProgress } from '@material-ui/core';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import { formNames, duplicationModes } from 'course/duplication/constants';
 
@@ -54,12 +53,14 @@ class DuplicateAllButton extends React.Component {
     return (
       <>
         <div style={styles.buttonContainer}>
-          <RaisedButton
-            secondary
+          <Button
+            variant="contained"
+            color="secondary"
             disabled={disabled}
-            label={<FormattedMessage {...translations.duplicateCourse} />}
             onClick={() => this.setState({ confirmationOpen: true })}
-          />
+          >
+            <FormattedMessage {...translations.duplicateCourse} />
+          </Button>
           {(isDuplicating || isDuplicationSuccess) && (
             <CircularProgress size={36} style={styles.spinner} />
           )}

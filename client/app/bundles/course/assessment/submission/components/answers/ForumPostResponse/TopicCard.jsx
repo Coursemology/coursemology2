@@ -1,14 +1,8 @@
 import React from 'react';
-import {
-  CardHeader,
-  RaisedButton,
-  Card,
-  CardText,
-  CardActions,
-  Divider,
-  FontIcon,
-} from 'material-ui';
-import { indigo50 } from 'material-ui/styles/colors';
+import { CardHeader, Card, CardText, CardActions, FontIcon } from 'material-ui';
+import { Button, Divider } from '@material-ui/core';
+import { indigo } from '@material-ui/core/colors';
+
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
@@ -38,7 +32,7 @@ const translations = defineMessages({
 
 const styles = {
   cardHeader: {
-    backgroundColor: indigo50,
+    backgroundColor: indigo[50],
     padding: '8px 16px',
   },
   cardActions: {
@@ -103,13 +97,15 @@ export default class TopicCard extends React.Component {
         />
         <Divider />
         <CardActions expandable style={styles.cardActions}>
-          <RaisedButton
-            label={<FormattedMessage {...translations.viewTopicInNewTab} />}
+          <Button
+            variant="contained"
             href={getForumTopicURL(courseId, forumId, topicPostPack.topic.ic)}
+            style={{ marginBottom: 16 }}
             target="_blank"
-            labelPosition="before"
-            icon={<FontIcon className="fa fa-external-link" />}
-          />
+          >
+            <FormattedMessage {...translations.viewTopicInNewTab} />
+            <FontIcon className="fa fa-external-link" />
+          </Button>
         </CardActions>
         <Divider />
         <CardText expandable>

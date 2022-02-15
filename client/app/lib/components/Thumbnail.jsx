@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
+import { Button } from '@material-ui/core';
 import formTranslations from 'lib/translations/form';
 
 const styles = {
@@ -86,12 +86,13 @@ class Thumbnail extends React.PureComponent {
         : () => this.setState({ open: true });
 
     const actions = [
-      <FlatButton
-        label={<FormattedMessage {...formTranslations.close} />}
-        primary
-        onClick={() => this.setState({ open: false })}
+      <Button
+        color="primary"
         key="thumbnail-close-button"
-      />,
+        onClick={() => this.setState({ open: false })}
+      >
+        <FormattedMessage {...formTranslations.close} />
+      </Button>,
     ];
 
     return (

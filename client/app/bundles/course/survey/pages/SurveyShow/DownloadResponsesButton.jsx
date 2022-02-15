@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import RaisedButton from 'material-ui/RaisedButton';
+import { Button } from '@material-ui/core';
 import { downloadSurvey } from 'course/survey/actions/surveys';
 
 const translations = defineMessages({
@@ -21,13 +21,13 @@ const styles = {
 class DownloadResponsesButton extends React.Component {
   render() {
     return (
-      <>
-        <RaisedButton
-          label={<FormattedMessage {...translations.download} />}
-          onClick={() => this.props.dispatch(downloadSurvey())}
-          style={styles.button}
-        />
-      </>
+      <Button
+        variant="contained"
+        onClick={() => this.props.dispatch(downloadSurvey())}
+        style={styles.button}
+      >
+        <FormattedMessage {...translations.download} />
+      </Button>
     );
   }
 }

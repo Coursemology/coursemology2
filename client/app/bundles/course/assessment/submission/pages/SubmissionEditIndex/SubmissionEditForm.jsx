@@ -6,22 +6,12 @@ import { injectIntl, intlShape } from 'react-intl';
 import { Element, scroller } from 'react-scroll';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
-import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
-import Paper from 'material-ui/Paper';
-import {
-  red100,
-  red200,
-  red900,
-  yellow900,
-  grey100,
-  blue500,
-  white,
-} from 'material-ui/styles/colors';
+import { Button, CircularProgress, Paper } from '@material-ui/core';
+import { blue, grey, yellow, red, white } from '@material-ui/core/colors';
 
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import {
   explanationShape,
@@ -139,7 +129,11 @@ class SubmissionEditForm extends Component {
         <>
           {jobError ? (
             <Paper
-              style={{ padding: 10, backgroundColor: red100, marginBottom: 20 }}
+              style={{
+                padding: 10,
+                backgroundColor: red[100],
+                marginBottom: 20,
+              }}
             >
               {intl.formatMessage(translations.autogradeFailure)}
             </Paper>
@@ -160,7 +154,7 @@ class SubmissionEditForm extends Component {
             <RaisedButton
               id="run-code"
               style={styles.formButton}
-              backgroundColor={red900}
+              backgroundColor={red[900]}
               secondary
               label={runCodeLabel}
               onClick={() => handleSubmitAnswer(answerId)}
@@ -200,10 +194,10 @@ class SubmissionEditForm extends Component {
           <CardHeader
             style={{
               ...styles.explanationHeader,
-              backgroundColor: red200,
+              backgroundColor: red[200],
             }}
             title={title}
-            titleColor={red900}
+            titleColor={red[900]}
           />
           {explanation.explanations.every(
             (exp) => exp.trim().length === 0,
@@ -247,8 +241,8 @@ class SubmissionEditForm extends Component {
 
     return (
       <Tabs
-        inkBarStyle={{ backgroundColor: blue500, height: 5, marginTop: -5 }}
-        tabItemContainerStyle={{ backgroundColor: grey100 }}
+        inkBarStyle={{ backgroundColor: blue[500], height: 5, marginTop: -5 }}
+        tabItemContainerStyle={{ backgroundColor: grey[100] }}
         initialSelectedIndex={initialStep}
       >
         {questionIds.map((id, index) => {
@@ -257,7 +251,7 @@ class SubmissionEditForm extends Component {
           const topic = topics[topicId];
           return (
             <Tab
-              buttonStyle={{ color: blue500 }}
+              buttonStyle={{ color: blue[500] }}
               key={id}
               label={intl.formatMessage(translations.questionNumber, {
                 number: index + 1,
@@ -448,7 +442,7 @@ class SubmissionEditForm extends Component {
       return (
         <RaisedButton
           style={styles.formButton}
-          backgroundColor={red900}
+          backgroundColor={red[900]}
           secondary
           label={intl.formatMessage(translations.unsubmit)}
           onClick={() => this.setState({ unsubmitConfirmation: true })}
@@ -476,7 +470,7 @@ class SubmissionEditForm extends Component {
       return (
         <RaisedButton
           style={styles.formButton}
-          backgroundColor={yellow900}
+          backgroundColor={yellow[900]}
           labelColor={white}
           label={intl.formatMessage(translations.mark)}
           onClick={handleMark}
@@ -493,7 +487,7 @@ class SubmissionEditForm extends Component {
       return (
         <RaisedButton
           style={styles.formButton}
-          backgroundColor={yellow900}
+          backgroundColor={yellow[900]}
           labelColor={white}
           label={intl.formatMessage(translations.unmark)}
           onClick={handleUnmark}
@@ -522,7 +516,7 @@ class SubmissionEditForm extends Component {
       return (
         <RaisedButton
           style={styles.formButton}
-          backgroundColor={red900}
+          backgroundColor={red[900]}
           secondary
           label={intl.formatMessage(translations.publish)}
           onClick={handlePublish}
@@ -590,11 +584,12 @@ class SubmissionEditForm extends Component {
       <Dialog
         title={intl.formatMessage(translations.examDialogTitle)}
         actions={
-          <FlatButton
-            primary
-            label="OK"
+          <Button
+            color="primary"
             onClick={() => this.setState({ examNotice: false })}
-          />
+          >
+            OK
+          </Button>
         }
         modal
         open={this.state.examNotice}

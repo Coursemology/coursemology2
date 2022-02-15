@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
 import { Card } from 'material-ui/Card';
-import RaisedButton from 'material-ui/RaisedButton';
-import { red900 } from 'material-ui/styles/colors';
+import { Button } from '@material-ui/core';
 import history from 'lib/history';
 
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
@@ -72,13 +71,15 @@ class SubmissionEmptyForm extends Component {
       this.props;
     if (graderView && !attempting) {
       return (
-        <RaisedButton
-          style={styles.formButton}
-          primary
-          label={intl.formatMessage(translations.saveGrade)}
-          onClick={handleSaveGrade}
+        <Button
+          variant="contained"
+          color="primary"
           disabled={isSaving}
-        />
+          onClick={handleSaveGrade}
+          style={styles.formButton}
+        >
+          {intl.formatMessage(translations.saveGrade)}
+        </Button>
       );
     }
     return null;
@@ -90,13 +91,15 @@ class SubmissionEmptyForm extends Component {
       return (
         <div style={styles.submitContainer}>
           <FormattedMessage {...translations.submitNoQuestionExplain} />
-          <RaisedButton
-            style={styles.formButton}
-            secondary
-            label={intl.formatMessage(translations.ok)}
-            onClick={this.submitAndRedirect}
+          <Button
+            variant="contained"
+            color="primary"
             disabled={isSaving}
-          />
+            onClick={this.submitAndRedirect}
+            style={styles.formButton}
+          >
+            {intl.formatMessage(translations.ok)}
+          </Button>
         </div>
       );
     }
@@ -107,14 +110,15 @@ class SubmissionEmptyForm extends Component {
     const { intl, graderView, submitted, published, isSaving } = this.props;
     if (graderView && (submitted || published)) {
       return (
-        <RaisedButton
-          style={styles.formButton}
-          backgroundColor={red900}
-          secondary
-          label={intl.formatMessage(translations.unsubmit)}
-          onClick={() => this.setState({ unsubmitConfirmation: true })}
+        <Button
+          variant="contained"
+          color="secondary"
           disabled={isSaving}
-        />
+          onClick={() => this.setState({ unsubmitConfirmation: true })}
+          style={styles.formButton}
+        >
+          {intl.formatMessage(translations.unsubmit)}
+        </Button>
       );
     }
     return null;

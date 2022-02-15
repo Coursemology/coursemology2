@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, CardText } from 'material-ui/Card';
+import { Card, CardContent } from '@material-ui/core';
 import Thumbnail from 'lib/components/Thumbnail';
 
 const styles = {
@@ -59,9 +59,9 @@ class OptionsListItem extends React.PureComponent {
         )}
         <div style={styles.gridOptionBody}>
           {optionText ? (
-            <CardText>
+            <CardContent>
               <p dangerouslySetInnerHTML={{ __html: optionText }} />
-            </CardText>
+            </CardContent>
           ) : null}
           {widget}
         </div>

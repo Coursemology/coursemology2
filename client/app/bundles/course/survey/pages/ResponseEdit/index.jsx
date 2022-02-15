@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Card, CardText } from 'material-ui/Card';
-import Subheader from 'material-ui/Subheader';
+import { ListSubheader } from '@material-ui/core';
 import surveyTranslations from 'course/survey/translations';
 import { surveyShape, responseShape } from 'course/survey/propTypes';
 import {
@@ -77,9 +77,9 @@ class ResponseEdit extends React.Component {
     const initialValues = buildInitialValues(survey, response);
     return (
       <>
-        <Subheader>
+        <ListSubheader>
           <FormattedMessage {...surveyTranslations.questions} />
-        </Subheader>
+        </ListSubheader>
         <ResponseForm
           onSubmit={this.handleUpdateResponse}
           {...{ response, flags, initialValues }}

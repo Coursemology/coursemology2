@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import RaisedButton from 'material-ui/RaisedButton';
+import { Button } from '@material-ui/core';
 import MaterialSummernote from 'lib/components/MaterialSummernote';
 
 import style from '../Discussion.scss';
@@ -53,18 +53,22 @@ function Editor(props) {
       <div className={style.editorExtraElement}>{props.children}</div>
       <div className={style.editorButtons}>
         {props.showCancel && (
-          <RaisedButton
-            label={props.cancelButtonText}
-            onClick={props.onCancel}
+          <Button
+            variant="contained"
             disabled={props.disabled}
-          />
+            onClick={props.onCancel}
+          >
+            {props.cancelButtonText}
+          </Button>
         )}
-        <RaisedButton
-          label={props.submitButtonText}
-          primary
-          onClick={props.onSubmit}
+        <Button
+          variant="contained"
+          color="primary"
           disabled={props.disabled}
-        />
+          onClick={props.onSubmit}
+        >
+          {props.submitButtonText}
+        </Button>
       </div>
       <div style={{ clear: 'both' }} />
     </>

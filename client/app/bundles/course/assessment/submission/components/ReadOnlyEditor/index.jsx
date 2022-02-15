@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 
-import Toggle from 'material-ui/Toggle';
+import { FormControlLabel, Switch } from '@material-ui/core';
 import NarrowEditor from './NarrowEditor';
 import WideEditor from './WideEditor';
 import { annotationShape } from '../../propTypes';
@@ -148,20 +148,24 @@ class ReadOnlyEditor extends Component {
     const { intl } = this.props;
     return (
       this.props.annotations.length > 0 && (
-        <Toggle
-          style={{ width: 'auto', marginLeft: 'auto' }}
-          labelStyle={{ width: 'auto' }}
-          label={intl.formatMessage(translations.expandComments)}
-          labelPosition="left"
-          toggled={this.isAllExpanded()}
+        <FormControlLabel
+          control={
+            <Switch
+              checked={this.isAllExpanded()}
+              color="primary"
+              onChange={(e) => {
+                if (e.target.checked) {
+                  this.setAllCommentStateExpanded();
+                } else {
+                  this.setAllCommentStateCollapsed();
+                }
+              }}
+            />
+          }
           disabled={this.props.annotations.length === 0}
-          onToggle={(e) => {
-            if (e.target.checked) {
-              this.setAllCommentStateExpanded();
-            } else {
-              this.setAllCommentStateCollapsed();
-            }
-          }}
+          label={<b>{intl.formatMessage(translations.expandComments)}</b>}
+          labelPlacement="end"
+          style={{ width: 'auto', marginLeft: 'auto', float: 'right' }}
         />
       )
     );
@@ -171,15 +175,20 @@ class ReadOnlyEditor extends Component {
     const { intl } = this.props;
     const { editorMode } = this.state;
     return (
-      <Toggle
-        style={{ width: 'auto', marginLeft: 'auto' }}
-        labelStyle={{ width: 'auto' }}
-        label={intl.formatMessage(translations.showCommentsPanel)}
-        labelPosition="left"
-        toggled={editorMode === EDITOR_MODE_WIDE}
-        onToggle={() => {
-          this.showCommentsPanel();
-        }}
+      <FormControlLabel
+        control={
+          <Switch
+            checked={editorMode === EDITOR_MODE_WIDE}
+            color="primary"
+            onChange={() => {
+              this.showCommentsPanel();
+            }}
+          />
+        }
+        disabled={this.props.annotations.length === 0}
+        label={<b>{intl.formatMessage(translations.showCommentsPanel)}</b>}
+        labelPlacement="end"
+        style={{ width: 'auto', marginLeft: 'auto', float: 'right' }}
       />
     );
   }
@@ -209,8 +218,10 @@ class ReadOnlyEditor extends Component {
     };
     return (
       <>
-        {this.renderShowCommentsPanel()}
-        {this.renderExpandAllToggle()}
+        <div style={{ display: 'flex' }}>
+          {this.renderShowCommentsPanel()}
+          {this.renderExpandAllToggle()}
+        </div>
         {this.renderEditor(editorProps)}
       </>
     );

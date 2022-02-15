@@ -2,20 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
 import {
+  IconButton,
+  ListSubheader,
   Table,
   TableBody,
-  TableHeader,
-  TableHeaderColumn,
+  TableCell,
+  TableHead,
   TableRow,
-  TableRowColumn,
-} from 'material-ui/Table';
-import Subheader from 'material-ui/Subheader';
-import IconButton from 'material-ui/IconButton';
+} from '@material-ui/core';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
-import NewIcon from 'material-ui/svg-icons/content/add';
-import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
-import DeleteIcon from 'material-ui/svg-icons/action/delete';
+import Add from '@material-ui/icons/Add';
+import Edit from '@material-ui/icons/Edit';
+import Delete from '@material-ui/icons/Delete';
 import translations from './translations.intl';
 
 const styles = {
@@ -28,16 +27,16 @@ class ConditionList extends React.Component {
   renderTopHeader() {
     return (
       <TableRow>
-        <TableHeaderColumn colSpan="4">
+        <TableCell colSpan="4">
           <h3>
             <FormattedMessage {...translations.title} />
           </h3>
-        </TableHeaderColumn>
-        <TableHeaderColumn colSpan="2" style={styles.alignRight}>
+        </TableCell>
+        <TableCell colSpan="2" style={styles.alignRight}>
           <IconMenu
             iconButtonElement={
               <IconButton>
-                <NewIcon />
+                <Add />
               </IconButton>
             }
             anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
@@ -48,7 +47,7 @@ class ConditionList extends React.Component {
               <MenuItem key={url.name} primaryText={url.name} href={url.url} />
             ))}
           </IconMenu>
-        </TableHeaderColumn>
+        </TableCell>
       </TableRow>
     );
   }
@@ -56,35 +55,31 @@ class ConditionList extends React.Component {
   renderHeaderRows() {
     if (this.props.conditions.length > 0) {
       return (
-        <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+        <TableHead>
           {this.renderTopHeader()}
           <TableRow>
-            <TableHeaderColumn colSpan="1">
+            <TableCell colSpan="1">
               <FormattedMessage {...translations.type} />
-            </TableHeaderColumn>
-            <TableHeaderColumn colSpan="3">
+            </TableCell>
+            <TableCell colSpan="3">
               <FormattedMessage {...translations.description} />
-            </TableHeaderColumn>
-            <TableHeaderColumn colSpan="2" />
+            </TableCell>
+            <TableCell colSpan="2" />
           </TableRow>
-        </TableHeader>
+        </TableHead>
       );
     }
-    return (
-      <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-        {this.renderTopHeader()}
-      </TableHeader>
-    );
+    return <TableHead>{this.renderTopHeader()}</TableHead>;
   }
 
   renderConditionRows() {
     return this.props.conditions.map((condition) => (
       <TableRow key={condition.edit_url}>
-        <TableRowColumn colSpan="1">{condition.type}</TableRowColumn>
-        <TableRowColumn colSpan="3">{condition.description}</TableRowColumn>
-        <TableRowColumn colSpan="2" style={styles.alignRight}>
+        <TableCell colSpan="1">{condition.type}</TableCell>
+        <TableCell colSpan="3">{condition.description}</TableCell>
+        <TableCell colSpan="2" style={styles.alignRight}>
           <IconButton href={condition.edit_url}>
-            <EditIcon />
+            <Edit nativeColor="black" />
           </IconButton>
 
           <IconButton
@@ -94,9 +89,9 @@ class ConditionList extends React.Component {
               translations.deleteConfirm,
             )}
           >
-            <DeleteIcon />
+            <Delete nativeColor="black" />
           </IconButton>
-        </TableRowColumn>
+        </TableCell>
       </TableRow>
     ));
   }
@@ -104,16 +99,16 @@ class ConditionList extends React.Component {
   render() {
     return (
       <div>
-        <Table selectable={false}>
+        <Table>
           {this.renderHeaderRows()}
-          <TableBody className="conditions-list" displayRowCheckbox={false}>
+          <TableBody className="conditions-list">
             {this.renderConditionRows()}
           </TableBody>
         </Table>
         {this.props.conditions.length === 0 && (
-          <Subheader>
+          <ListSubheader>
             <FormattedMessage {...translations.empty} />
-          </Subheader>
+          </ListSubheader>
         )}
       </div>
     );

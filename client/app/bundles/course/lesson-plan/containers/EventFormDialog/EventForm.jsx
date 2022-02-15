@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { reduxForm, Field, Form } from 'redux-form';
-import AutoCompleteFilters from 'material-ui/AutoComplete';
+import AutoCompleteFilters from 'material-ui/AutoComplete'; // MUI v5
 import TextField from 'lib/components/redux-form/TextField';
 import RichTextField from 'lib/components/redux-form/RichTextField';
 import AutoComplete from 'lib/components/redux-form/AutoComplete';

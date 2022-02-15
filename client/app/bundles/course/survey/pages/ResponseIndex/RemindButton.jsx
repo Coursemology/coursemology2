@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import RaisedButton from 'material-ui/RaisedButton';
+import { Button } from '@material-ui/core';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import { sendReminderEmail } from 'course/survey/actions/surveys';
 
@@ -48,10 +48,12 @@ class RemindButton extends React.Component {
   render() {
     return (
       <>
-        <RaisedButton
-          label={<FormattedMessage {...translations.remind} />}
+        <Button
+          variant="contained"
           onClick={() => this.setState({ open: true })}
-        />
+        >
+          <FormattedMessage {...translations.remind} />
+        </Button>
         <ConfirmationDialog
           open={this.state.open}
           message={

@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import Subheader from 'material-ui/Subheader';
-import { Card, CardText } from 'material-ui/Card';
+import { Card, CardContent, ListSubheader } from '@material-ui/core';
 import { defaultComponentTitles } from 'course/translations.intl';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { videoTabShape } from 'course/duplication/propTypes';
@@ -100,19 +99,19 @@ class VideoListing extends React.Component {
 
     return (
       <>
-        <Subheader>
+        <ListSubheader>
           <FormattedMessage
             {...defaultComponentTitles.course_videos_component}
           />
-        </Subheader>
+        </ListSubheader>
         <Card>
-          <CardText>
+          <CardContent>
             {tabTrees.map(VideoListing.renderTab)}
             <div key="default">
               {orphanedVideos.length > 0 && VideoListing.renderDefaultTabRow()}
               {orphanedVideos.map(VideoListing.renderVideoRow)}
             </div>
-          </CardText>
+          </CardContent>
         </Card>
       </>
     );

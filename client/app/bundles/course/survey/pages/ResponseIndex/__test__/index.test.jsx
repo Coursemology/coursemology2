@@ -101,7 +101,7 @@ describe('<ResponseIndex />', () => {
     const statsCard = responseIndex.find('Card').last();
     const submittedChip = statsCard.find('Chip').last();
     expect(submittedChip.text()).toEqual('0 Submitted');
-    statsCard.find('Toggle').first().props().onToggle(null, true);
+    statsCard.find('WithStyles(Switch)').first().props().onChange(null, true);
     expect(submittedChip.text()).toEqual('2 Submitted');
   });
 });

@@ -4,16 +4,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
-import FlatButton from 'material-ui/FlatButton';
 import {
+  Button,
   Table,
   TableBody,
+  TableCell,
   TableFooter,
-  TableHeader,
-  TableHeaderColumn,
+  TableHead,
   TableRow,
-  TableRowColumn,
-} from 'material-ui/Table';
+} from '@material-ui/core';
 import transitions from 'material-ui/styles/transitions';
 
 import 'ace-builds/src-noconflict/mode-python';
@@ -98,19 +97,19 @@ class OnlineEditorPythonView extends React.Component {
           showExpandableButton
         />
         <CardText expandable style={{ padding: 0 }}>
-          <Table selectable={false}>
-            <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+          <Table>
+            <TableHead>
               <TableRow>
-                <TableHeaderColumn className={styles.deleteButtonCell} />
-                <TableHeaderColumn>
+                <TableCell className={styles.deleteButtonCell} />
+                <TableCell>
                   {this.props.intl.formatMessage(translations.fileNameHeader)}
-                </TableHeaderColumn>
-                <TableHeaderColumn>
+                </TableCell>
+                <TableCell>
                   {this.props.intl.formatMessage(translations.fileSizeHeader)}
-                </TableHeaderColumn>
+                </TableCell>
               </TableRow>
-            </TableHeader>
-            <TableBody displayRowCheckbox={false}>
+            </TableHead>
+            <TableBody>
               {this.props.data.get('data_files').map(renderDataFile)}
             </TableBody>
           </Table>
@@ -151,10 +150,8 @@ class OnlineEditorPythonView extends React.Component {
           showExpandableButton
         />
         <CardText expandable style={{ padding: 0 }}>
-          <Table selectable={false}>
-            <TableBody displayRowCheckbox={false}>
-              {newPackageFilesRows}
-            </TableBody>
+          <Table>
+            <TableBody>{newPackageFilesRows}</TableBody>
           </Table>
         </CardText>
       </Card>
@@ -206,31 +203,32 @@ class OnlineEditorPythonView extends React.Component {
           showExpandableButton
         />
         <CardText expandable style={{ padding: 0 }}>
-          <Table selectable={false}>
-            <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+          <Table>
+            <TableHead>
               <TableRow>
-                <TableHeaderColumn className={styles.deleteButtonCell} />
-                <TableHeaderColumn>{identifier}</TableHeaderColumn>
-                <TableHeaderColumn>{expression}</TableHeaderColumn>
-                <TableHeaderColumn>{expected}</TableHeaderColumn>
-                <TableHeaderColumn>{hint}</TableHeaderColumn>
+                <TableCell className={styles.deleteButtonCell} />
+                <TableCell>{identifier}</TableCell>
+                <TableCell>{expression}</TableCell>
+                <TableCell>{expected}</TableCell>
+                <TableCell>{hint}</TableCell>
               </TableRow>
-            </TableHeader>
-            <TableBody displayRowCheckbox={false}>{rows}</TableBody>
-            <TableFooter adjustForCheckbox={false}>
+            </TableHead>
+            <TableBody>{rows}</TableBody>
+            <TableFooter>
               <TableRow>
-                <TableRowColumn colSpan="5" style={{ textAlign: 'center' }}>
-                  <FlatButton
-                    label={this.props.intl.formatMessage(
-                      translations.addNewTestButton,
-                    )}
-                    icon={<i className="fa fa-plus" />}
+                <TableCell colSpan="5" style={{ textAlign: 'center' }}>
+                  <Button
                     disabled={
                       this.props.isLoading || numAllTestCases >= MAX_TEST_CASES
                     }
                     onClick={this.testCaseCreateHandler(type)}
-                  />
-                </TableRowColumn>
+                  >
+                    <i className="fa fa-plus" />
+                    {this.props.intl.formatMessage(
+                      translations.addNewTestButton,
+                    )}
+                  </Button>
+                </TableCell>
               </TableRow>
             </TableFooter>
           </Table>

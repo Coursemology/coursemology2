@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import Popover from 'material-ui/Popover';
-import RaisedButton from 'material-ui/RaisedButton';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
-import Done from 'material-ui/svg-icons/action/done';
+import { Button } from '@material-ui/core';
+import Done from '@material-ui/icons/Done';
 import { scribingTranslations as translations } from '../../translations';
 import { scribbleShape } from '../../propTypes';
 
@@ -74,11 +74,9 @@ class LayersComponent extends Component {
         <label style={popoverStyles.layersLabel}>
           {intl.formatMessage(translations.layersLabelText)}
         </label>
-        <RaisedButton
-          onClick={onClick}
-          label={layers && `${layers[0].creator_name.substring(0, 6)}...`}
-          disabled={disabled}
-        />
+        <Button variant="contained" onClick={onClick} disabled={disabled}>
+          {layers && `${layers[0].creator_name.substring(0, 6)}...`}
+        </Button>
         {this.renderLayersPopover()}
       </>
     ) : null;

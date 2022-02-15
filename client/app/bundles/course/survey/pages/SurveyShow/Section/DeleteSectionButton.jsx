@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import FlatButton from 'material-ui/FlatButton';
+import { Button } from '@material-ui/core';
+
 import { showDeleteConfirmation } from 'course/survey/actions';
 import { deleteSurveySection } from 'course/survey/actions/sections';
 
@@ -34,11 +35,12 @@ class DeleteSectionButton extends React.PureComponent {
 
   render() {
     return (
-      <FlatButton
-        label={<FormattedMessage {...translations.deleteSection} />}
-        onClick={this.deleteSectionHandler}
+      <Button
         disabled={this.props.disabled}
-      />
+        onClick={this.deleteSectionHandler}
+      >
+        <FormattedMessage {...translations.deleteSection} />
+      </Button>
     );
   }
 }

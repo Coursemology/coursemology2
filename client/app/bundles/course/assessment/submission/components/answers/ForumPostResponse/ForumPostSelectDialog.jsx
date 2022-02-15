@@ -1,6 +1,8 @@
 import React from 'react';
-import { Dialog, FlatButton } from 'material-ui';
-import { cyan500 } from 'material-ui/styles/colors';
+import { Dialog } from 'material-ui';
+import { Button } from '@material-ui/core';
+import { cyan } from '@material-ui/core/colors';
+
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
@@ -45,7 +47,7 @@ const translations = defineMessages({
 const styles = {
   dialogTitle: {
     color: 'white',
-    background: cyan500,
+    background: cyan[500],
     lineHeight: '85%',
   },
   dialogTitleText: {
@@ -203,25 +205,26 @@ export default class ForumPostSelectDialog extends React.Component {
       );
 
     const actions = [
-      <FlatButton
-        label={<FormattedMessage {...translations.cancelButton} />}
-        secondary
-        onClick={() => this.props.setIsVisible(false)}
+      <Button
+        color="secondary"
         key="forum-post-dialog-cancel-button"
-      />,
-      <FlatButton
-        label={
-          <FormattedMessage
-            values={{ numPosts: numPostsSelected }}
-            {...translations.selectButton}
-          />
-        }
-        primary
-        onClick={() => this.saveChanges()}
-        key="forum-post-dialog-select-button"
-        disabled={hasNoChanges}
+        onClick={() => this.props.setIsVisible(false)}
+      >
+        <FormattedMessage {...translations.cancelButton} />
+      </Button>,
+      <Button
+        color="primary"
         className="select-posts-button"
-      />,
+        disabled={hasNoChanges}
+        key="forum-post-dialog-select-button"
+        onClick={() => this.saveChanges()}
+        style={styles.expandButton}
+      >
+        <FormattedMessage
+          values={{ numPosts: numPostsSelected }}
+          {...translations.selectButton}
+        />
+      </Button>,
     ];
 
     return (

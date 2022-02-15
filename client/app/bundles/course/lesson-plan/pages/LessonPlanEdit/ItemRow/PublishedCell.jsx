@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Toggle from 'material-ui/Toggle';
+import { Switch } from '@material-ui/core';
 
 const styles = {
   toggle: {
@@ -13,10 +13,11 @@ class PublishedCell extends React.PureComponent {
     const { published, onToggle } = this.props;
     return (
       <td>
-        <Toggle
-          toggled={published}
-          onToggle={onToggle}
-          inputStyle={styles.toggle}
+        <Switch
+          checked={published}
+          color="primary"
+          onChange={onToggle}
+          style={styles.toggle}
         />
       </td>
     );

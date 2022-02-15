@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import Subheader from 'material-ui/Subheader';
+import { ListSubheader } from '@material-ui/core';
 import Checkbox from 'material-ui/Checkbox';
 import { defaultComponentTitles } from 'course/translations.intl';
 import { duplicableItemTypes } from 'course/duplication/constants';
@@ -63,9 +63,9 @@ class SurveysSelector extends React.Component {
 
     if (surveys.length < 1) {
       return (
-        <Subheader>
+        <ListSubheader>
           <FormattedMessage {...translations.noItems} />
-        </Subheader>
+        </ListSubheader>
       );
     }
 

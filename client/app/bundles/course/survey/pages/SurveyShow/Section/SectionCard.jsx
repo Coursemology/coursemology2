@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Card, CardText, CardTitle, CardActions } from 'material-ui/Card';
-import Subheader from 'material-ui/Subheader';
+import { ListSubheader } from '@material-ui/core';
 import { surveyShape, sectionShape } from 'course/survey/propTypes';
 import Question from './Question';
 import NewQuestionButton from './NewQuestionButton';
@@ -81,9 +81,9 @@ class SectionCard extends React.Component {
         {section.questions.length > 1 ? this.renderActions() : null}
         <CardText>
           {section.questions.length < 1 ? (
-            <Subheader>
+            <ListSubheader>
               <FormattedMessage {...translations.noQuestions} />
-            </Subheader>
+            </ListSubheader>
           ) : null}
           {section.questions.map((question, index) => (
             <Question

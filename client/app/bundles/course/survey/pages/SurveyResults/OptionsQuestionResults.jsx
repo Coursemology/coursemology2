@@ -2,19 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { CardText } from 'material-ui/Card';
-import Chip from 'material-ui/Chip';
-import Toggle from 'material-ui/Toggle';
-import RaisedButton from 'material-ui/RaisedButton';
 import {
+  Button,
+  CardContent,
+  Chip,
+  Switch,
   Table,
   TableBody,
-  TableHeader,
-  TableHeaderColumn,
+  TableCell,
+  TableHead,
   TableRow,
-  TableRowColumn,
-} from 'material-ui/Table';
-import { cyan500, grey50, grey300 } from 'material-ui/styles/colors';
+} from '@material-ui/core';
+import { cyan, grey } from '@material-ui/core/colors';
+
 import Thumbnail from 'lib/components/Thumbnail';
 import { sorts } from 'course/survey/utils';
 import { questionTypes } from 'course/survey/constants';
@@ -36,8 +36,8 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: cyan500,
-    color: grey50,
+    backgroundColor: cyan[500],
+    color: grey[50],
     height: 24,
     borderRadius: 5,
   },
@@ -45,14 +45,14 @@ const styles = {
     display: 'flex',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: grey300,
+    backgroundColor: grey[300],
     width: '100%',
     height: 24,
     borderRadius: 5,
   },
   percentage: {
     marginLeft: 5,
-    color: cyan500,
+    color: cyan[500],
     fontWeight: 'bold',
   },
   percentageHeader: {
@@ -152,18 +152,22 @@ class OptionsQuestionResults extends React.Component {
     return (
       <div style={styles.optionStudentNames}>
         {students.map((student) => (
-          <Chip key={student.id} style={styles.nameChip}>
-            <Link to={student.response_path}>
-              {student.phantom ? (
-                <FormattedMessage
-                  {...translations.phantomStudentName}
-                  values={{ name: student.name }}
-                />
-              ) : (
-                student.name
-              )}
-            </Link>
-          </Chip>
+          <Chip
+            key={student.id}
+            style={styles.nameChip}
+            label={
+              <Link to={student.response_path}>
+                {student.phantom ? (
+                  <FormattedMessage
+                    {...translations.phantomStudentName}
+                    values={{ name: student.name }}
+                  />
+                ) : (
+                  student.name
+                )}
+              </Link>
+            }
+          />
         ))}
       </div>
     );
@@ -180,9 +184,9 @@ class OptionsQuestionResults extends React.Component {
 
     return (
       <TableRow key={id}>
-        <TableRowColumn>{index + 1}</TableRowColumn>
+        <TableCell>{index + 1}</TableCell>
         {hasImage ? (
-          <TableRowColumn>
+          <TableCell>
             {imageUrl ? (
               <Thumbnail
                 src={imageUrl}
@@ -192,17 +196,17 @@ class OptionsQuestionResults extends React.Component {
             ) : (
               []
             )}
-          </TableRowColumn>
+          </TableCell>
         ) : null}
-        <TableRowColumn colSpan={hasImage ? 3 : 6} style={styles.wrapText}>
+        <TableCell colSpan={hasImage ? 3 : 6} style={styles.wrapText}>
           {optionText || imageName || null}
-        </TableRowColumn>
-        <TableRowColumn>{breakdown[id].count}</TableRowColumn>
-        <TableRowColumn colSpan={6}>
+        </TableCell>
+        <TableCell>{breakdown[id].count}</TableCell>
+        <TableCell colSpan={6}>
           {anonymous
             ? OptionsQuestionResults.renderPercentageBar(percentage)
             : OptionsQuestionResults.renderStudentList(breakdown[id].students)}
-        </TableRowColumn>
+        </TableCell>
       </TableRow>
     );
   }
@@ -255,19 +259,19 @@ class OptionsQuestionResults extends React.Component {
     const quantity = this.props.options.length;
 
     return (
-      <CardText style={styles.expandToggleStyle}>
-        <RaisedButton
-          label={
-            <FormattedMessage
-              {...translations[labelTranslation]}
-              values={{ quantity }}
-            />
-          }
+      <CardContent style={styles.expandToggleStyle}>
+        <Button
+          variant="contained"
           onClick={() =>
             this.setState((state) => ({ expanded: !state.expanded }))
           }
-        />
-      </CardText>
+        >
+          <FormattedMessage
+            {...translations[labelTranslation]}
+            values={{ quantity }}
+          />
+        </Button>
+      </CardContent>
     );
   }
 
@@ -286,18 +290,18 @@ class OptionsQuestionResults extends React.Component {
 
     return (
       <Table wrapperStyle={styles.tableWrapper}>
-        <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+        <TableHead>
           <TableRow>
-            <TableHeaderColumn>
+            <TableCell>
               <FormattedMessage {...translations.serial} />
-            </TableHeaderColumn>
-            <TableHeaderColumn colSpan={hasImage ? 4 : 6}>
+            </TableCell>
+            <TableCell colSpan={hasImage ? 4 : 6}>
               <FormattedMessage {...optionsHeaderTranslation} />
-            </TableHeaderColumn>
-            <TableHeaderColumn>
+            </TableCell>
+            <TableCell>
               <FormattedMessage {...translations.count} />
-            </TableHeaderColumn>
-            <TableHeaderColumn colSpan={6}>
+            </TableCell>
+            <TableCell colSpan={6}>
               <div style={styles.percentageHeader}>
                 <FormattedMessage
                   {...translations[anonymous ? 'percentage' : 'respondents']}
@@ -308,16 +312,17 @@ class OptionsQuestionResults extends React.Component {
                       anonymous ? 'sortByPercentage' : 'sortByCount'
                     ]}
                   />
-                  <Toggle
-                    onToggle={(_, value) =>
+                  <Switch
+                    color="primary"
+                    onChange={(_, value) =>
                       this.setState({ sortByPercentage: value })
                     }
                   />
                 </div>
               </div>
-            </TableHeaderColumn>
+            </TableCell>
           </TableRow>
-        </TableHeader>
+        </TableHead>
         <TableBody displayRowCheckbox={false}>
           {options
             .sort(sortMethod)

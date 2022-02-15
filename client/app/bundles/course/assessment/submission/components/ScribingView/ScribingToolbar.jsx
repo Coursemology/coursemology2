@@ -1,12 +1,12 @@
 /* eslint react/sort-comp: "off" */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
 import FontIcon from 'material-ui/FontIcon';
 import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar';
-import MaterialTooltip from 'material-ui/internal/Tooltip';
-import { blue500 } from 'material-ui/styles/colors';
+import { Tooltip } from '@material-ui/core';
+import { blue } from '@material-ui/core/colors';
 
 import SavingIndicator from './SavingIndicator';
 import ToolDropdown from './ToolDropdown';
@@ -104,7 +104,6 @@ class ScribingToolbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      hoveredToolTip: '',
       colorDropdowns: initializeColorDropdowns(),
       popoverColorPickerAnchor: undefined,
       popovers: initializePopovers(),
@@ -247,18 +246,6 @@ class ScribingToolbar extends Component {
     this.props.setRedo(this.props.answerId);
   };
 
-  onMouseEnter(toolType) {
-    this.setState({
-      hoveredToolTip: toolType,
-    });
-  }
-
-  onMouseLeave = () => {
-    this.setState({
-      hoveredToolTip: '',
-    });
-  };
-
   // Helpers
 
   setSelectedShape = (shape) => {
@@ -292,12 +279,12 @@ class ScribingToolbar extends Component {
   };
 
   render() {
-    const { intl, scribing } = this.props;
+    const { scribing } = this.props;
     const lineToolStyle = {
       ...styles.customLine,
       background:
         this.props.scribing.selectedTool === scribingTools.LINE
-          ? blue500
+          ? blue[500]
           : 'rgba(0, 0, 0, 0.4)',
     };
     const toolBarStyle = !scribing.isCanvasLoaded
@@ -384,8 +371,7 @@ class ScribingToolbar extends Component {
               false
             }
             toolType={scribingTools.TYPE}
-            tooltip={intl.formatMessage(translations.text)}
-            showTooltip={this.state.hoveredToolTip === scribingTools.TYPE}
+            tooltip={<FormattedMessage {...translations.text} />}
             currentTool={this.props.scribing.selectedTool}
             onClickIcon={this.onClickTypingIcon}
             colorBarBackground={
@@ -393,8 +379,6 @@ class ScribingToolbar extends Component {
             }
             onClickChevron={this.onClickTypingChevron}
             iconClassname="fa fa-font"
-            onMouseEnter={() => this.onMouseEnter(scribingTools.TYPE)}
-            onMouseLeave={this.onMouseLeave}
           />
           {scribing.activeObject && scribing.activeObject.type === 'i-text' ? (
             <TypePopover
@@ -447,8 +431,7 @@ class ScribingToolbar extends Component {
               false
             }
             toolType={scribingTools.DRAW}
-            tooltip={intl.formatMessage(translations.pencil)}
-            showTooltip={this.state.hoveredToolTip === scribingTools.DRAW}
+            tooltip={<FormattedMessage {...translations.pencil} />}
             currentTool={this.props.scribing.selectedTool}
             onClick={this.onClickDrawingMode}
             colorBarBackground={
@@ -458,8 +441,6 @@ class ScribingToolbar extends Component {
               this.onClickPopover(event, scribingPopoverTypes.DRAW)
             }
             iconClassname="fa fa-pencil"
-            onMouseEnter={() => this.onMouseEnter(scribingTools.DRAW)}
-            onMouseLeave={this.onMouseLeave}
           />
           {scribing.activeObject && scribing.activeObject.type === 'path' ? (
             <DrawPopover
@@ -514,8 +495,7 @@ class ScribingToolbar extends Component {
               false
             }
             toolType={scribingTools.LINE}
-            tooltip={intl.formatMessage(translations.line)}
-            showTooltip={this.state.hoveredToolTip === scribingTools.LINE}
+            tooltip={<FormattedMessage {...translations.line} />}
             currentTool={this.props.scribing.selectedTool}
             onClick={this.onClickLineMode}
             colorBarBackground={
@@ -533,8 +513,6 @@ class ScribingToolbar extends Component {
                 }
               />
             )}
-            onMouseEnter={() => this.onMouseEnter(scribingTools.LINE)}
-            onMouseLeave={this.onMouseLeave}
           />
           {scribing.activeObject && scribing.activeObject.type === 'line' ? (
             <LinePopover
@@ -611,8 +589,7 @@ class ScribingToolbar extends Component {
               false
             }
             toolType={scribingTools.SHAPE}
-            tooltip={intl.formatMessage(translations.shape)}
-            showTooltip={this.state.hoveredToolTip === scribingTools.SHAPE}
+            tooltip={<FormattedMessage {...translations.shape} />}
             currentTool={this.props.scribing.selectedTool}
             onClick={this.onClickShapeMode}
             colorBarBorder={
@@ -621,8 +598,6 @@ class ScribingToolbar extends Component {
             colorBarBackground={
               this.props.scribing.colors[scribingToolColor.SHAPE_FILL]
             }
-            onMouseEnter={() => this.onMouseEnter(scribingTools.SHAPE)}
-            onMouseLeave={this.onMouseLeave}
             onClickChevron={(event) =>
               this.onClickPopover(event, scribingPopoverTypes.SHAPE)
             }
@@ -744,129 +719,103 @@ class ScribingToolbar extends Component {
           />
         </ToolbarGroup>
         <ToolbarGroup>
-          <FontIcon
-            className="fa fa-mouse-pointer"
-            color={
-              this.props.scribing.selectedTool === scribingTools.SELECT
-                ? blue500
-                : undefined
-            }
-            onClick={this.onClickSelectionMode}
-            onMouseEnter={() => this.onMouseEnter(scribingTools.SELECT)}
-            onMouseLeave={this.onMouseLeave}
-            hoverColor={blue500}
+          <Tooltip
+            placement="top"
+            title={<FormattedMessage {...translations.select} />}
           >
-            <MaterialTooltip
-              horizontalPosition="center"
-              label={intl.formatMessage(translations.select)}
-              show={this.state.hoveredToolTip === scribingTools.SELECT}
-              verticalPosition="top"
+            <FontIcon
+              className="fa fa-mouse-pointer"
+              color={
+                this.props.scribing.selectedTool === scribingTools.SELECT
+                  ? blue[500]
+                  : undefined
+              }
+              onClick={this.onClickSelectionMode}
+              hoverColor={blue[500]}
             />
-          </FontIcon>
-          <FontIcon
-            className="fa fa-undo"
-            onClick={this.onClickUndo}
-            onMouseEnter={() => this.onMouseEnter(scribingTools.UNDO)}
-            onMouseLeave={this.onMouseLeave}
-            style={
-              this.props.scribing.currentStateIndex < 1
-                ? styles.disabled
-                : undefined
-            }
-            hoverColor={blue500}
+          </Tooltip>
+          <Tooltip
+            placement="top"
+            title={<FormattedMessage {...translations.undo} />}
           >
-            <MaterialTooltip
-              horizontalPosition="center"
-              label={intl.formatMessage(translations.undo)}
-              show={this.state.hoveredToolTip === scribingTools.UNDO}
-              verticalPosition="top"
+            <FontIcon
+              className="fa fa-undo"
+              onClick={this.onClickUndo}
+              style={
+                this.props.scribing.currentStateIndex < 1
+                  ? styles.disabled
+                  : undefined
+              }
+              hoverColor={blue[500]}
             />
-          </FontIcon>
-          <FontIcon
-            className="fa fa-repeat"
-            onClick={this.onClickRedo}
-            onMouseEnter={() => this.onMouseEnter(scribingTools.REDO)}
-            onMouseLeave={this.onMouseLeave}
-            style={
-              this.props.scribing.currentStateIndex >=
-              this.props.scribing.canvasStates.length - 1
-                ? styles.disabled
-                : undefined
-            }
-            hoverColor={blue500}
+          </Tooltip>
+          <Tooltip
+            placement="top"
+            title={<FormattedMessage {...translations.redo} />}
           >
-            <MaterialTooltip
-              horizontalPosition="center"
-              label={intl.formatMessage(translations.redo)}
-              show={this.state.hoveredToolTip === scribingTools.REDO}
-              verticalPosition="top"
+            <FontIcon
+              className="fa fa-repeat"
+              onClick={this.onClickRedo}
+              onMouseEnter={() => this.onMouseEnter(scribingTools.REDO)}
+              onMouseLeave={this.onMouseLeave}
+              style={
+                this.props.scribing.currentStateIndex >=
+                this.props.scribing.canvasStates.length - 1
+                  ? styles.disabled
+                  : undefined
+              }
+              hoverColor={blue[500]}
             />
-          </FontIcon>
+          </Tooltip>
         </ToolbarGroup>
         <ToolbarGroup>
-          <FontIcon
-            className="fa fa-arrows"
-            style={
-              this.props.scribing.selectedTool === scribingTools.MOVE
-                ? { color: blue500 }
-                : {}
-            }
-            onClick={this.onClickMoveMode}
-            onMouseEnter={() => this.onMouseEnter(scribingTools.MOVE)}
-            onMouseLeave={this.onMouseLeave}
-            hoverColor={blue500}
+          <Tooltip
+            placement="top"
+            title={<FormattedMessage {...translations.move} />}
           >
-            <MaterialTooltip
-              horizontalPosition="center"
-              label={intl.formatMessage(translations.move)}
-              show={this.state.hoveredToolTip === scribingTools.MOVE}
-              verticalPosition="top"
+            <FontIcon
+              className="fa fa-arrows"
+              style={
+                this.props.scribing.selectedTool === scribingTools.MOVE
+                  ? { color: blue[500] }
+                  : {}
+              }
+              onClick={this.onClickMoveMode}
+              hoverColor={blue[500]}
             />
-          </FontIcon>
-          <FontIcon
-            className="fa fa-search-plus"
-            onClick={this.onClickZoomIn}
-            onMouseEnter={() => this.onMouseEnter(scribingTools.ZOOM_IN)}
-            onMouseLeave={this.onMouseLeave}
-            hoverColor={blue500}
+          </Tooltip>
+          <Tooltip
+            placement="top"
+            title={<FormattedMessage {...translations.zoomIn} />}
           >
-            <MaterialTooltip
-              horizontalPosition="center"
-              label={intl.formatMessage(translations.zoomIn)}
-              show={this.state.hoveredToolTip === scribingTools.ZOOM_IN}
-              verticalPosition="top"
+            <FontIcon
+              className="fa fa-search-plus"
+              onClick={this.onClickZoomIn}
+              hoverColor={blue[500]}
             />
-          </FontIcon>
-          <FontIcon
-            className="fa fa-search-minus"
-            onClick={this.onClickZoomOut}
-            onMouseEnter={() => this.onMouseEnter(scribingTools.ZOOM_OUT)}
-            onMouseLeave={this.onMouseLeave}
-            hoverColor={blue500}
+          </Tooltip>
+          <Tooltip
+            placement="top"
+            title={<FormattedMessage {...translations.zoomOut} />}
           >
-            <MaterialTooltip
-              horizontalPosition="center"
-              label={intl.formatMessage(translations.zoomOut)}
-              show={this.state.hoveredToolTip === scribingTools.ZOOM_OUT}
-              verticalPosition="top"
+            <FontIcon
+              className="fa fa-search-minus"
+              onClick={this.onClickZoomOut}
+              hoverColor={blue[500]}
             />
-          </FontIcon>
+          </Tooltip>
         </ToolbarGroup>
         <ToolbarGroup>
-          <FontIcon
-            className="fa fa-trash-o"
-            onClick={this.onClickDelete}
-            onMouseEnter={() => this.onMouseEnter(scribingTools.DELETE)}
-            onMouseLeave={this.onMouseLeave}
-            hoverColor={blue500}
+          <Tooltip
+            placement="top"
+            title={<FormattedMessage {...translations.delete} />}
           >
-            <MaterialTooltip
-              horizontalPosition="center"
-              label={intl.formatMessage(translations.delete)}
-              show={this.state.hoveredToolTip === scribingTools.DELETE}
-              verticalPosition="top"
+            <FontIcon
+              className="fa fa-trash-o"
+              onClick={this.onClickDelete}
+              hoverColor={blue[500]}
             />
-          </FontIcon>
+          </Tooltip>
         </ToolbarGroup>
         <ToolbarGroup>
           <SavingIndicator

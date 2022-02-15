@@ -2,28 +2,19 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { Prompt } from 'react-router-dom';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import Hotkeys from 'react-hot-keys';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
-import Paper from 'material-ui/Paper';
 import {
-  white,
-  red100,
-  red200,
-  red900,
-  green200,
-  green300,
-  green500,
-  green700,
-  green900,
-  lightBlue400,
-  blue800,
-} from 'material-ui/styles/colors';
+  Button,
+  CircularProgress,
+  Paper,
+  SvgIcon,
+  Tooltip,
+} from '@material-ui/core';
+import { blue, green, lightBlue, red, white } from '@material-ui/core/colors';
 import { Stepper, Step, StepButton, StepLabel } from 'material-ui/Stepper';
-import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
-import SvgIcon from 'material-ui/SvgIcon';
-import MaterialTooltip from 'material-ui/internal/Tooltip';
 
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
@@ -62,6 +53,12 @@ const styles = {
     marginBottom: 10,
     marginRight: 10,
   },
+  contineButton: {
+    backgroundColor: green[500],
+    labelColor: white,
+    marginBottom: 10,
+    marginRight: 10,
+  },
 };
 
 class SubmissionEditStepForm extends Component {
@@ -81,7 +78,6 @@ class SubmissionEditStepForm extends Component {
       submitConfirmation: false,
       unsubmitConfirmation: false,
       resetConfirmation: false,
-      hoveredToolTip: '',
     };
   }
 
@@ -122,18 +118,6 @@ class SubmissionEditStepForm extends Component {
       });
     }
   }
-
-  onMouseEnter(toolType) {
-    this.setState({
-      hoveredToolTip: toolType,
-    });
-  }
-
-  onMouseLeave = () => {
-    this.setState({
-      hoveredToolTip: '',
-    });
-  };
 
   shouldRenderContinueButton() {
     const { stepIndex } = this.state;
@@ -203,10 +187,10 @@ class SubmissionEditStepForm extends Component {
           <CardHeader
             style={{
               ...styles.explanationHeader,
-              backgroundColor: explanation.correct ? green200 : red200,
+              backgroundColor: explanation.correct ? green[200] : red[200],
             }}
             title={title}
-            titleColor={explanation.correct ? green900 : red900}
+            titleColor={explanation.correct ? green[900] : red[900]}
           />
           {explanation.explanations.every(
             (exp) => exp.trim().length === 0,
@@ -232,7 +216,7 @@ class SubmissionEditStepForm extends Component {
     if (type === questionTypes.Programming && jobError) {
       return (
         <Paper
-          style={{ padding: 10, backgroundColor: red100, marginBottom: 20 }}
+          style={{ padding: 10, backgroundColor: red[100], marginBottom: 20 }}
         >
           {intl.formatMessage(translations.autogradeFailure)}
         </Paper>
@@ -253,15 +237,19 @@ class SubmissionEditStepForm extends Component {
 
     if (question.type === questionTypes.Programming) {
       return (
-        <RaisedButton
-          style={styles.formButton}
-          backgroundColor={white}
-          label={intl.formatMessage(translations.reset)}
-          onClick={() =>
-            this.setState({ resetConfirmation: true, resetAnswerId: answerId })
-          }
+        <Button
+          variant="contained"
           disabled={isAutograding || isResetting || isSaving}
-        />
+          onClick={() =>
+            this.setState({
+              resetConfirmation: true,
+              resetAnswerId: answerId,
+            })
+          }
+          style={styles.formButton}
+        >
+          {intl.formatMessage(translations.reset)}
+        </Button>
       );
     }
     return null;
@@ -299,21 +287,17 @@ class SubmissionEditStepForm extends Component {
           disabled={isAutograding || isResetting || isSaving}
           filter={() => true}
         />
-        <RaisedButton
-          style={styles.formButton}
-          secondary
-          label={intl.formatMessage(translations.submit)}
-          onClick={() => handleSubmitAnswer(answerId)}
-          disabled={isAutograding || isResetting || isSaving}
-          onMouseEnter={() => this.onMouseEnter('SUBMIT')}
-          onMouseLeave={this.onMouseLeave}
-        >
-          <MaterialTooltip
-            label={intl.formatMessage(translations.submitTooltip)}
-            show={this.state.hoveredToolTip === 'SUBMIT'}
-            verticalPosition="top"
-          />
-        </RaisedButton>
+        <Tooltip title={<FormattedMessage {...translations.submitTooltip} />}>
+          <Button
+            variant="contained"
+            color="secondary"
+            disabled={isAutograding || isResetting || isSaving}
+            onClick={() => handleSubmitAnswer(answerId)}
+            style={styles.formButton}
+          >
+            {intl.formatMessage(translations.submit)}
+          </Button>
+        </Tooltip>
       </>
     );
   }
@@ -322,14 +306,25 @@ class SubmissionEditStepForm extends Component {
     const { intl } = this.props;
     if (this.shouldRenderContinueButton()) {
       return (
-        <RaisedButton
-          style={styles.formButton}
-          backgroundColor={green500}
-          labelColor={white}
-          label={intl.formatMessage(translations.continue)}
-          onClick={() => this.handleNext()}
-          disabled={this.shouldDisableContinueButton()}
-        />
+        <>
+          <RaisedButton
+            style={styles.formButton}
+            backgroundColor={green[500]}
+            labelColor={white}
+            label={intl.formatMessage(translations.continue)}
+            onClick={() => this.handleNext()}
+            disabled={this.shouldDisableContinueButton()}
+          />
+
+          <Button
+            color="secondary"
+            disabled={this.shouldDisableContinueButton()}
+            onClick={() => this.handleNext()}
+            style={styles.formButton}
+          >
+            {intl.formatMessage(translations.continue)}
+          </Button>
+        </>
       );
     }
     return null;
@@ -407,7 +402,7 @@ class SubmissionEditStepForm extends Component {
       return (
         <RaisedButton
           style={styles.formButton}
-          backgroundColor={red900}
+          backgroundColor={red[900]}
           secondary
           label={intl.formatMessage(translations.unsubmit)}
           onClick={() => this.setState({ unsubmitConfirmation: true })}
@@ -497,9 +492,9 @@ class SubmissionEditStepForm extends Component {
           let stepButtonColor = '';
           const isCurrentQuestion = index === stepIndex;
           if (explanations[questionId] && explanations[questionId].correct) {
-            stepButtonColor = isCurrentQuestion ? green700 : green300;
+            stepButtonColor = isCurrentQuestion ? green[700] : green[300];
           } else {
-            stepButtonColor = isCurrentQuestion ? blue800 : lightBlue400;
+            stepButtonColor = isCurrentQuestion ? blue[800] : lightBlue[400];
           }
           if (published || skippable || graderView || index <= maxStep) {
             return (
@@ -507,7 +502,7 @@ class SubmissionEditStepForm extends Component {
                 <StepButton
                   iconContainerStyle={{ padding: 0 }}
                   icon={
-                    <SvgIcon color={stepButtonColor}>
+                    <SvgIcon nativeColor={stepButtonColor}>
                       <circle cx="12" cy="12" r="12" />
                       <text
                         x="12"

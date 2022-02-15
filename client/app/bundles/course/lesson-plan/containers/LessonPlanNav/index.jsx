@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { scroller } from 'react-scroll';
-import RaisedButton from 'material-ui/RaisedButton';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
-import KeyboardArrowUp from 'material-ui/svg-icons/hardware/keyboard-arrow-up';
+import { Button } from '@material-ui/core';
+import KeyboardArrowUp from '@material-ui/icons/KeyboardArrowUp';
 
 const translations = defineMessages({
   goto: {
@@ -56,14 +56,15 @@ class LessonPlanNav extends React.Component {
 
     return (
       <>
-        <RaisedButton
-          secondary
+        <Button
+          variant="contained"
+          color="secondary"
           onClick={this.handleClick}
-          label={<FormattedMessage {...translations.goto} />}
-          labelPosition="before"
-          icon={<KeyboardArrowUp />}
           style={styles.navButton}
-        />
+        >
+          <FormattedMessage {...translations.goto} />
+          <KeyboardArrowUp />
+        </Button>
         <Popover
           open={this.state.open}
           anchorEl={this.state.anchorEl}

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
+import { Button } from '@material-ui/core';
 import translations from 'lib/translations/form';
 
 const styles = {
@@ -20,11 +20,9 @@ class Popup extends React.Component {
   render() {
     const { title, children, actionButtons, onDismiss } = this.props;
     const dismissButton = (
-      <FlatButton
-        primary
-        label={<FormattedMessage {...translations.dismiss} />}
-        onClick={onDismiss}
-      />
+      <Button color="primary" onClick={onDismiss}>
+        <FormattedMessage {...translations.dismiss} />
+      </Button>
     );
 
     return (

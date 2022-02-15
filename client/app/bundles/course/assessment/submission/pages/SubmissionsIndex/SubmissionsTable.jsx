@@ -2,23 +2,23 @@ import React from 'react';
 import ReactTooltip from 'react-tooltip';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import {
-  Table,
-  TableBody,
-  TableHeader,
-  TableHeaderColumn,
-  TableRow,
-} from 'material-ui/Table';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import { red600, red900, pink600 } from 'material-ui/styles/colors';
-import IconButton from 'material-ui/IconButton';
-import CircularProgress from 'material-ui/CircularProgress';
-import DownloadIcon from 'material-ui/svg-icons/file/file-download';
+import {
+  CircularProgress,
+  IconButton,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from '@material-ui/core';
+import { pink, red } from '@material-ui/core/colors';
+import Delete from '@material-ui/icons/Delete';
+import GetApp from '@material-ui/icons/GetApp'; // TODO MUI - Change to download once icons lib is updated
+import MoreVert from '@material-ui/icons/MoreVert';
+import RemoveCircle from '@material-ui/icons/RemoveCircle';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import DeleteIcon from 'material-ui/svg-icons/action/delete';
-import RemoveCircle from 'material-ui/svg-icons/content/remove-circle';
 import { assessmentShape } from '../../propTypes';
 import { workflowStates } from '../../constants';
 import translations from '../../translations';
@@ -27,7 +27,7 @@ import SubmissionsTableRow from './SubmissionsTableRow';
 
 const styles = {
   unstartedText: {
-    color: red600,
+    color: red[600],
     fontWeight: 'bold',
   },
   tableCell: {
@@ -223,7 +223,7 @@ export default class SubmissionsTable extends React.Component {
       <IconMenu
         iconButtonElement={
           <IconButton id="submission-dropdown-icon">
-            <MoreVertIcon />
+            <MoreVert />
           </IconButton>
         }
       >
@@ -238,11 +238,7 @@ export default class SubmissionsTable extends React.Component {
           }
           disabled={downloadFilesAnswerDisabled}
           leftIcon={
-            isDownloadingFiles ? (
-              <CircularProgress size={30} />
-            ) : (
-              <DownloadIcon />
-            )
+            isDownloadingFiles ? <CircularProgress size={30} /> : <GetApp />
           }
           onClick={
             downloadFilesAnswerDisabled ? null : () => handleDownload('zip')
@@ -259,7 +255,7 @@ export default class SubmissionsTable extends React.Component {
           }
           disabled={downloadCsvAnswerDisabled}
           leftIcon={
-            isDownloadingCsv ? <CircularProgress size={30} /> : <DownloadIcon />
+            isDownloadingCsv ? <CircularProgress size={30} /> : <GetApp />
           }
           onClick={
             downloadCsvAnswerDisabled ? null : () => handleDownload('csv')
@@ -279,7 +275,7 @@ export default class SubmissionsTable extends React.Component {
             isStatisticsDownloading ? (
               <CircularProgress size={30} />
             ) : (
-              <DownloadIcon />
+              <GetApp />
             )
           }
           onClick={downloadStatisticsDisabled ? null : handleDownloadStatistics}
@@ -301,7 +297,7 @@ export default class SubmissionsTable extends React.Component {
               isUnsubmitting ? (
                 <CircularProgress size={30} />
               ) : (
-                <RemoveCircle color={pink600} />
+                <RemoveCircle nativeColor={pink[600]} />
               )
             }
             onClick={() => this.setState({ unsubmitAllConfirmation: true })}
@@ -324,7 +320,7 @@ export default class SubmissionsTable extends React.Component {
               isDeleting ? (
                 <CircularProgress size={30} />
               ) : (
-                <DeleteIcon color={red900} />
+                <Delete nativeColor={red[900]} />
               )
             }
             onClick={() => this.setState({ deleteAllConfirmation: true })}
@@ -338,23 +334,21 @@ export default class SubmissionsTable extends React.Component {
     const { assessment } = this.props;
 
     const tableHeaderColumnFor = (field) => (
-      <TableHeaderColumn style={styles.tableCell}>
+      <TableCell style={styles.tableCell}>
         <FormattedMessage {...submissionsTranslations[field]} />
-      </TableHeaderColumn>
+      </TableCell>
     );
 
     const tableHeaderCenterColumnFor = (field) => (
-      <TableHeaderColumn
-        style={{ ...styles.tableCell, ...styles.tableCenterCell }}
-      >
+      <TableCell style={{ ...styles.tableCell, ...styles.tableCenterCell }}>
         <FormattedMessage {...submissionsTranslations[field]} />
-      </TableHeaderColumn>
+      </TableCell>
     );
 
     return (
       <>
-        <Table selectable={false}>
-          <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+        <Table>
+          <TableHead>
             <TableRow>
               {tableHeaderColumnFor('userName')}
               {tableHeaderCenterColumnFor('submissionStatus')}
@@ -364,18 +358,16 @@ export default class SubmissionsTable extends React.Component {
                 : null}
               {tableHeaderCenterColumnFor('dateSubmitted')}
               {tableHeaderCenterColumnFor('dateGraded')}
-              <TableHeaderColumn
+              <TableCell
                 style={{ ...styles.tableCell, ...styles.tableCenterCell }}
               >
                 {this.renderDownloadDropdown()}
                 {this.renderUnsubmitAllConfirmation()}
                 {this.renderDeleteAllConfirmation()}
-              </TableHeaderColumn>
+              </TableCell>
             </TableRow>
-          </TableHeader>
-          <TableBody displayRowCheckbox={false}>
-            {this.renderRowUsers()}
-          </TableBody>
+          </TableHead>
+          <TableBody>{this.renderRowUsers()}</TableBody>
         </Table>
         {this.renderRowTooltips()}
       </>

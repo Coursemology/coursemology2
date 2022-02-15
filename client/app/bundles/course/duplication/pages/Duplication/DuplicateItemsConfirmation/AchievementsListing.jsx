@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import Checkbox from 'material-ui/Checkbox';
-import Subheader from 'material-ui/Subheader';
-import { Card, CardText } from 'material-ui/Card';
+import { Card, CardContent, ListSubheader } from '@material-ui/core';
 import { defaultComponentTitles } from 'course/translations.intl';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { achievementShape } from 'course/duplication/propTypes';
@@ -59,15 +58,15 @@ class AchievementsListing extends React.Component {
 
     return (
       <>
-        <Subheader>
+        <ListSubheader>
           <FormattedMessage
             {...defaultComponentTitles.course_achievements_component}
           />
-        </Subheader>
+        </ListSubheader>
         <Card>
-          <CardText>
+          <CardContent>
             {selectedAchievements.map(AchievementsListing.renderRow)}
-          </CardText>
+          </CardContent>
         </Card>
       </>
     );

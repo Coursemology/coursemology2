@@ -15,13 +15,7 @@ exports[`<ResponseShow /> shows form and admin buttons if user has permissions a
       }
     />
   </Card>
-  <Table
-    allRowsSelected={false}
-    fixedFooter={true}
-    fixedHeader={true}
-    height="inherit"
-    multiSelectable={false}
-    selectable={true}
+  <WithStyles(Table)
     style={
       Object {
         "marginTop": 10,
@@ -29,74 +23,40 @@ exports[`<ResponseShow /> shows form and admin buttons if user has permissions a
       }
     }
   >
-    <TableBody
-      allRowsSelected={false}
-      deselectOnClickaway={true}
-      displayRowCheckbox={false}
-      multiSelectable={false}
-      preScanRows={true}
-      selectable={true}
-      style={Object {}}
-    >
-      <TableRow
-        displayBorder={true}
-        hoverable={false}
-        hovered={false}
-        selectable={false}
-        striped={false}
-      >
-        <TableHeaderColumn>
+    <WithStyles(TableBody)>
+      <WithStyles(TableRow)>
+        <WithStyles(TableCell)>
           Student
-        </TableHeaderColumn>
-        <TableRowColumn
-          hoverable={false}
-        >
+        </WithStyles(TableCell)>
+        <WithStyles(TableCell)>
           Staff
-        </TableRowColumn>
-      </TableRow>
-      <TableRow
-        displayBorder={true}
-        hoverable={false}
-        hovered={false}
-        selectable={false}
-        striped={false}
-      >
-        <TableHeaderColumn>
+        </WithStyles(TableCell)>
+      </WithStyles(TableRow)>
+      <WithStyles(TableRow)>
+        <WithStyles(TableCell)>
           Submitted At
-        </TableHeaderColumn>
-        <TableRowColumn
-          hoverable={false}
-        >
+        </WithStyles(TableCell)>
+        <WithStyles(TableCell)>
           01 Jan 2100, 12:00am
-        </TableRowColumn>
-      </TableRow>
-      <TableRow
-        displayBorder={true}
-        hoverable={false}
-        hovered={false}
-        selectable={false}
-        striped={false}
-      >
-        <TableHeaderColumn>
+        </WithStyles(TableCell)>
+      </WithStyles(TableRow)>
+      <WithStyles(TableRow)>
+        <WithStyles(TableCell)>
           Last Updated At
-        </TableHeaderColumn>
-        <TableRowColumn
-          hoverable={false}
-        >
+        </WithStyles(TableCell)>
+        <WithStyles(TableCell)>
           13 Jan 2100, 12:00am
-        </TableRowColumn>
-      </TableRow>
-    </TableBody>
-  </Table>
-  <Subheader
-    inset={false}
-  >
+        </WithStyles(TableCell)>
+      </WithStyles(TableRow)>
+    </WithStyles(TableBody)>
+  </WithStyles(Table)>
+  <WithStyles(ListSubheader)>
     <FormattedMessage
       defaultMessage="Questions"
       id="course.surveys.questions"
       values={Object {}}
     />
-  </Subheader>
+  </WithStyles(ListSubheader)>
   <ReduxForm
     flags={
       Object {

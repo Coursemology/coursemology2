@@ -2,9 +2,9 @@ import Immutable from 'immutable';
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card } from 'material-ui/Card';
 import { Tabs, Tab } from 'material-ui/Tabs';
-import { cyan500, grey300 } from 'material-ui/styles/colors';
+import { Card } from '@material-ui/core';
+import { cyan, grey } from '@material-ui/core/colors';
 
 const propTypes = {
   templates: PropTypes.instanceOf(Immutable.List).isRequired,
@@ -38,9 +38,9 @@ const UploadedPackageTemplateView = (props) => {
         tabItemContainerStyle={{
           backgroundColor: 'white',
           borderBottom: '1px solid',
-          borderColor: grey300,
+          borderColor: grey[300],
         }}
-        inkBarStyle={{ backgroundColor: cyan500 }}
+        inkBarStyle={{ backgroundColor: cyan[500] }}
       >
         {templateTabs}
       </Tabs>

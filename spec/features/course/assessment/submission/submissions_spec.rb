@@ -60,7 +60,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         end
 
         # Phantom student did not attempt submissions
-        find('div.toggle-phantom').click
+        find('.toggle-phantom').click
         expect(page).to have_text(phantom_student.name)
         expect(page).to have_text('Not Started')
 

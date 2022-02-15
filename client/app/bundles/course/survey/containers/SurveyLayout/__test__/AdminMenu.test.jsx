@@ -96,6 +96,12 @@ describe('<AdminMenu />', () => {
       .find('RenderToLayer')
       .first()
       .instance();
+    // console.warn(123);
+    // console.warn(updateButton.debug());
+    // console.warn(surveyFormDialogue.find('Modal').debug())
+    // console.warn(surveyFormDialogue.find('Dialog').first().children().debug())
+    // console.warn(dialogInline.children().debug())
+    // console.warn(mount(dialogInline.props.render(), contextOptions).debug());
     const sectionForm = mount(dialogInline.props.render(), contextOptions).find(
       'form',
     );

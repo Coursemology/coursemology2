@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Block from 'material-ui/svg-icons/content/block';
+import Block from '@material-ui/icons/Block';
 
 const styles = {
   // TODO: lower position of the icon so that it aligns with adjacent text

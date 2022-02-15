@@ -7,11 +7,11 @@ import { injectIntl, intlShape } from 'react-intl';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
-import Toggle from 'material-ui/Toggle';
-import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
 import { Tabs, Tab } from 'material-ui/Tabs';
-import { red500 } from 'material-ui/styles/colors';
+import { Button, FormControlLabel, Switch } from '@material-ui/core';
+import { red } from '@material-ui/core/colors';
+
 import MaterialSummernote from 'lib/components/MaterialSummernote';
 import ChipInput from 'material-ui-chip-input';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
@@ -507,14 +507,13 @@ class ProgrammingQuestionForm extends React.Component {
       <>
         <h3>{label}</h3>
         {downloadNode}
-        <RaisedButton
+        <Button
           className={styles.fileInputButton}
-          label={newPackageButton}
-          labelPosition="before"
-          containerElement="label"
-          primary
+          variant="contained"
+          color="primary"
           disabled={this.props.data.get('is_loading')}
         >
+          {newPackageButton}
           <input
             type="file"
             name={ProgrammingQuestionForm.getInputName(field)}
@@ -523,11 +522,11 @@ class ProgrammingQuestionForm extends React.Component {
             disabled={this.props.data.get('is_loading')}
             onChange={this.onPackageUploadFileChange}
           />
-        </RaisedButton>
+        </Button>
         <div style={{ display: 'inline-block' }}>
           {newFilename || noFileMessage}
         </div>
-        <div style={{ color: red500, whiteSpace: 'pre-wrap' }}>
+        <div style={{ color: red[500], whiteSpace: 'pre-wrap' }}>
           {packageError}
         </div>
       </>
@@ -699,17 +698,21 @@ class ProgrammingQuestionForm extends React.Component {
                 'question',
                 'display_autograded_toggle',
               ]) ? (
-                <Toggle
-                  label={autogradedLabel}
-                  labelPosition="right"
-                  toggled={autograded}
-                  onToggle={(e) => {
-                    if (hasAutoGradings) return;
-                    this.handleChange('autograded', e.target.checked);
-                  }}
-                  readOnly={hasAutoGradings}
-                  disabled={this.props.data.get('is_loading')}
-                  style={{ margin: '1em 0' }}
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={autograded}
+                      color="primary"
+                      onChange={(e) => {
+                        if (hasAutoGradings) return;
+                        this.handleChange('autograded', e.target.checked);
+                      }}
+                    />
+                  }
+                  disabled={
+                    this.props.data.get('is_loading') || hasAutoGradings
+                  }
+                  label={<b>{autogradedLabel}</b>}
                   name="question_programming[autograded]"
                 />
               ) : null}
@@ -805,20 +808,19 @@ class ProgrammingQuestionForm extends React.Component {
               this.props.actions.clearSubmissionMessage();
             }}
           />
-          <RaisedButton
+          <Button
+            variant="contained"
             className={styles.submitButton}
-            label={this.submitButtonText()}
-            labelPosition="before"
-            primary
+            color="primary"
+            disabled={this.props.data.get('is_loading')}
             id="programming-question-form-submit"
             type="submit"
-            disabled={this.props.data.get('is_loading')}
-            icon={
-              this.props.data.get('is_loading') ? (
-                <i className="fa fa-spinner fa-lg fa-spin" />
-              ) : null
-            }
-          />
+          >
+            {this.submitButtonText()}
+            {this.props.data.get('is_loading') ? (
+              <i className="fa fa-spinner fa-lg fa-spin" />
+            ) : null}
+          </Button>
           {this.state.confirmationOpen && (
             <ConfirmationDialog
               message={this.props.intl.formatMessage(

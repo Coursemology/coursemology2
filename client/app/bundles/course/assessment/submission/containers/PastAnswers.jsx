@@ -5,7 +5,7 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { Card, CardText } from 'material-ui/Card';
-import { yellow100 } from 'material-ui/styles/colors';
+import { yellow } from '@material-ui/core/colors';
 
 import selectPastAnswers from '../actions/history';
 import translations from '../translations';
@@ -45,7 +45,7 @@ class PastAnswers extends Component {
         return <div dangerouslySetInnerHTML={{ __html: answer.answer_text }} />;
       default:
         return (
-          <Card style={{ backgroundColor: yellow100 }}>
+          <Card style={{ backgroundColor: yellow[100] }}>
             <CardText>
               <span>
                 {intl.formatMessage(translations.rendererNotImplemented)}
@@ -77,7 +77,7 @@ class PastAnswers extends Component {
       return selectedAnswerIds.map(this.renderReadOnlyPastAnswer);
     }
     return (
-      <Card style={{ backgroundColor: yellow100 }}>
+      <Card style={{ backgroundColor: yellow[100] }}>
         <CardText>
           <FormattedMessage {...translations.noAnswerSelected} />
         </CardText>

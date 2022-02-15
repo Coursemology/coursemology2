@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import { Overlay } from 'react-overlays';
-import { grey200, grey400 } from 'material-ui/styles/colors';
+import { grey } from '@material-ui/core/colors';
 
 import AddCommentIcon from './AddCommentIcon';
 import OverlayTooltip from './OverlayTooltip';
@@ -13,7 +13,7 @@ const styles = {
   editor: {
     borderStyle: 'solid',
     borderWidth: 1,
-    borderColor: grey200,
+    borderColor: grey[200],
     borderRadius: 5,
     padding: 5,
     width: '100%',
@@ -34,18 +34,18 @@ const styles = {
     justifyContent: 'space-between',
     borderRightWidth: 1,
     borderRightStyle: 'solid',
-    borderRightColor: grey200,
+    borderRightColor: grey[200],
     padding: '0 5px',
   },
   editorLineNumberWithComments: {
     height: 20,
     alignItems: 'center',
-    backgroundColor: grey400,
+    backgroundColor: grey[400],
     display: 'flex',
     justifyContent: 'space-between',
     borderRightWidth: 1,
     borderRightStyle: 'solid',
-    borderRightColor: grey200,
+    borderRightColor: grey[200],
     padding: '0 5px',
   },
 };

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Paper from 'material-ui/Paper';
-import RaisedButton from 'material-ui/RaisedButton';
+import { Button, Paper } from '@material-ui/core';
 
 import Annotations from '../../containers/Annotations';
 import PostPreview from '../../containers/PostPreview';
@@ -53,12 +52,13 @@ export default class WideComments extends Component {
           }}
           onClick={() => onClick(lineNumber)}
         >
-          <RaisedButton
-            style={styles.minimiseButton}
+          <Button
+            variant="contained"
             onClick={() => collapseLine(lineNumber)}
+            style={styles.minimiseButton}
           >
             <span className="fa fa-chevron-down" />
-          </RaisedButton>
+          </Button>
           <Annotations
             answerId={answerId}
             fileId={fileId}
@@ -72,7 +72,7 @@ export default class WideComments extends Component {
       <Paper
         key={lineNumber}
         style={styles.collapsed}
-        zDepth={1}
+        elevation={1}
         onClick={() => expandLine(lineNumber)}
       >
         <PostPreview style={styles.postPreview} annotation={annotation} />

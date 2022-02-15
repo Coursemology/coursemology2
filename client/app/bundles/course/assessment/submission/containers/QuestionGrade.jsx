@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Paper from 'material-ui/Paper';
-import { grey100 } from 'material-ui/styles/colors';
+import { Paper } from '@material-ui/core';
+import { grey } from '@material-ui/core/colors';
 
 import { questionGradeShape, questionShape } from '../propTypes';
 import actionTypes from '../constants';
@@ -74,7 +74,7 @@ class VisibleQuestionGrade extends Component {
       <Paper style={styles.container}>
         <div
           style={{
-            backgroundColor: grey100,
+            backgroundColor: grey[100],
             display: 'inline-block',
             padding: 20,
           }}

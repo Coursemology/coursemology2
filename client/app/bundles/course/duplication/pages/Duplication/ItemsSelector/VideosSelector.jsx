@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import Subheader from 'material-ui/Subheader';
+import { ListSubheader } from '@material-ui/core';
 import { defaultComponentTitles } from 'course/translations.intl';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { setItemSelectedBoolean } from 'course/duplication/actions';
@@ -90,9 +90,9 @@ class VideosSelector extends React.Component {
 
     if (tabs.length < 1) {
       return (
-        <Subheader>
+        <ListSubheader>
           <FormattedMessage {...translations.noItems} />
-        </Subheader>
+        </ListSubheader>
       );
     }
 

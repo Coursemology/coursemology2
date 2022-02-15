@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import { Field } from 'redux-form';
-import IconButton from 'material-ui/IconButton';
 import Checkbox from 'material-ui/Checkbox';
 import RadioButton from 'material-ui/RadioButton';
-import CloseIcon from 'material-ui/svg-icons/navigation/close';
-import PhotoIcon from 'material-ui/svg-icons/image/photo';
-import { grey700, grey600 } from 'material-ui/styles/colors';
+import { IconButton } from '@material-ui/core';
+import { grey } from '@material-ui/core/colors';
+import Close from '@material-ui/icons/Close';
+import Photo from '@material-ui/icons/Photo';
 import TextField from 'lib/components/redux-form/TextField';
 import Thumbnail from 'lib/components/Thumbnail';
 
@@ -68,7 +68,7 @@ class QuestionFormOption extends React.Component {
       <div style={styles.imageUploaderDiv}>
         <label htmlFor={fieldId}>
           <IconButton {...{ disabled }} onClick={() => this.fileInput.click()}>
-            <PhotoIcon color={grey700} />
+            <Photo nativeColor={disabled ? undefined : grey[700]} />
           </IconButton>
         </label>
         <input
@@ -170,7 +170,7 @@ class QuestionFormOption extends React.Component {
           {...{ index, disabled }}
         />
         <IconButton onClick={handleRemove} {...{ disabled }}>
-          <CloseIcon color={grey600} />
+          <Close nativeColor={disabled ? undefined : grey[600]} />
         </IconButton>
       </div>
     );

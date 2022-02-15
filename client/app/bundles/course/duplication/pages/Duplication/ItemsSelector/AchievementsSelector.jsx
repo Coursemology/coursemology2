@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import Subheader from 'material-ui/Subheader';
+import { ListSubheader } from '@material-ui/core';
 import Checkbox from 'material-ui/Checkbox';
 import Thumbnail from 'lib/components/Thumbnail';
 import { defaultComponentTitles } from 'course/translations.intl';
@@ -87,9 +87,9 @@ class AchievementsSelector extends React.Component {
 
     if (achievements.length < 1) {
       return (
-        <Subheader>
+        <ListSubheader>
           <FormattedMessage {...translations.noItems} />
-        </Subheader>
+        </ListSubheader>
       );
     }
 

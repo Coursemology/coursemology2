@@ -15,15 +15,17 @@ exports[`<Material /> renders the material 1`] = `
   }
   insetChildren={false}
   leftAvatar={
-    <Avatar
-      icon={<ActionAssignment />}
-      size={32}
+    <WithStyles(Avatar)
       style={
         Object {
+          "height": "32px",
           "top": 8,
+          "width": "32px",
         }
       }
-    />
+    >
+      <pure(AssignmentIcon) />
+    </WithStyles(Avatar)>
   }
   nestedItems={Array []}
   nestedLevel={0}
@@ -37,13 +39,11 @@ exports[`<Material /> renders the material 1`] = `
   primaryText="Uploaded Material"
   primaryTogglesNestedList={false}
   rightAvatar={
-    <IconButton
-      disableTouchRipple={false}
-      disabled={false}
-      iconStyle={Object {}}
+    <WithStyles(IconButton)
       onClick={[Function]}
       style={
         Object {
+          "color": "black",
           "height": 24,
           "marginRight": 16,
           "padding": 4,
@@ -51,10 +51,8 @@ exports[`<Material /> renders the material 1`] = `
           "width": 24,
         }
       }
-      tooltipPosition="bottom-center"
-      touch={false}
     >
-      <ActionDelete
+      <pure(DeleteIcon)
         data-for="delete-file-button"
         data-tip={true}
         data-tip-disable={true}
@@ -72,7 +70,7 @@ exports[`<Material /> renders the material 1`] = `
           values={Object {}}
         />
       </ReactTooltip>
-    </IconButton>
+    </WithStyles(IconButton)>
   }
   secondaryText={
     <div
@@ -97,19 +95,15 @@ exports[`<Material /> renders the material 1`] = `
 
 exports[`<MaterialList /> renders the component with materials 1`] = `
 <Fragment>
-  <Divider
-    inset={false}
-  />
+  <WithStyles(Divider) />
   <List>
-    <Subheader
-      inset={false}
-    >
+    <WithStyles(ListSubheader)>
       <FormattedMessage
         defaultMessage="Files"
         id="course.assessment.MaterialList.uploadedFiles"
         values={Object {}}
       />
-    </Subheader>
+    </WithStyles(ListSubheader)>
     <Material
       deleting={false}
       disabled={true}
@@ -132,26 +126,18 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
       data-for="add-files-button"
       data-tip={true}
     >
-      <FlatButton
-        containerElement="label"
+      <WithStyles(Button)
+        component="label"
         disabled={true}
         fullWidth={true}
-        icon={<ContentAdd />}
-        label="Add Files"
-        labelPosition="after"
-        labelStyle={Object {}}
-        onKeyboardFocus={[Function]}
-        onMouseEnter={[Function]}
-        onMouseLeave={[Function]}
-        onTouchStart={[Function]}
-        primary={false}
-        secondary={false}
         style={
           Object {
             "verticalAlign": "middle",
           }
         }
       >
+        <pure(AddIcon) />
+        Add Files
         <input
           disabled={true}
           multiple={true}
@@ -168,7 +154,7 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
           }
           type="file"
         />
-      </FlatButton>
+      </WithStyles(Button)>
     </div>
     <ReactTooltip
       clickable={false}
@@ -184,9 +170,7 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
       />
     </ReactTooltip>
   </List>
-  <Divider
-    inset={false}
-  />
+  <WithStyles(Divider) />
   <NotificationBar
     autoHideDuration={5000}
   />

@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import RaisedButton from 'material-ui/RaisedButton';
+import { Button } from '@material-ui/core';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
-import Done from 'material-ui/svg-icons/action/done';
-import KeyboardArrowDown from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
+import Done from '@material-ui/icons/Done';
+import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import { setColumnVisibility } from 'course/lesson-plan/actions';
 import { fields } from 'course/lesson-plan/constants';
 import fieldTranslations from 'course/lesson-plan/translations';
@@ -58,13 +58,14 @@ class ColumnVisibilityDropdown extends React.Component {
 
     return (
       <div style={styles.dropdown}>
-        <RaisedButton
-          secondary
+        <Button
+          variant="contained"
+          color="secondary"
           onClick={this.handleClick}
-          label={<FormattedMessage {...translations.label} />}
-          labelPosition="before"
-          icon={<KeyboardArrowDown />}
-        />
+        >
+          <FormattedMessage {...translations.label} />
+          <KeyboardArrowDown />
+        </Button>
         <Popover
           open={this.state.open}
           anchorEl={this.state.anchorEl}

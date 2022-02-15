@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Checkbox from 'material-ui/Checkbox';
 import RadioButton from 'material-ui/RadioButton';
-import IconButton from 'material-ui/IconButton';
-import CloseIcon from 'material-ui/svg-icons/navigation/close';
-import { grey600 } from 'material-ui/styles/colors';
+import { IconButton } from '@material-ui/core';
+import { grey } from '@material-ui/core/colors';
+import Close from '@material-ui/icons/Close';
 import Thumbnail from 'lib/components/Thumbnail';
 
 const styles = {
@@ -76,7 +76,7 @@ class QuestionFormDeletedOptions extends React.Component {
               )}
               <span style={styles.optionBody}>{option.option}</span>
               <IconButton onClick={handleRestore} {...{ disabled }}>
-                <CloseIcon color={grey600} />
+                <Close nativeColor={disabled ? undefined : grey[600]} />
               </IconButton>
             </div>
           );

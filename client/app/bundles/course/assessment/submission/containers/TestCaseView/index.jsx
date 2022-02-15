@@ -5,24 +5,17 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 
 import ReactTooltip from 'react-tooltip';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
-import WrongIcon from 'material-ui/svg-icons/navigation/close';
-import CorrectIcon from 'material-ui/svg-icons/action/done';
 import {
-  red50,
-  yellow100,
-  green50,
-  red100,
-  green100,
-} from 'material-ui/styles/colors';
-import {
+  Paper,
   Table,
-  TableHeader,
-  TableHeaderColumn,
   TableBody,
+  TableCell,
+  TableHead,
   TableRow,
-  TableRowColumn,
-} from 'material-ui/Table';
-import Paper from 'material-ui/Paper';
+} from '@material-ui/core';
+import { green, yellow, red } from '@material-ui/core/colors';
+import Check from '@material-ui/icons/Check';
+import Clear from '@material-ui/icons/Clear';
 
 import ExpandableText from 'lib/components/ExpandableText';
 import { testCaseShape } from '../../propTypes';
@@ -31,14 +24,8 @@ import { workflowStates } from '../../constants';
 const styles = {
   testCaseRow: {
     unattempted: {},
-    correct: { backgroundColor: green50 },
-    wrong: { backgroundColor: red50 },
-  },
-  testCaseCell: {
-    padding: '0.5em',
-    textOverflow: 'initial',
-    whiteSpace: 'normal',
-    wordBreak: 'break-word',
+    correct: { backgroundColor: green[50] },
+    wrong: { backgroundColor: red[50] },
   },
   testCasesContainer: {
     marginBottom: 20,
@@ -193,13 +180,15 @@ export class VisibleTestCaseView extends Component {
     }, true);
     let headerStyle = {};
     if (collapsible) {
-      headerStyle = { backgroundColor: passedTestCases ? green100 : red100 };
+      headerStyle = {
+        backgroundColor: passedTestCases ? green[100] : red[100],
+      };
     }
 
     const tableHeaderColumnFor = (field) => (
-      <TableHeaderColumn style={styles.testCaseCell}>
+      <TableCell style={styles.testCaseCell}>
         <FormattedMessage {...translations[field]} />
-      </TableHeaderColumn>
+      </TableCell>
     );
 
     const title = VisibleTestCaseView.renderTitle(testCaseType, warn);
@@ -213,8 +202,8 @@ export class VisibleTestCaseView extends Component {
           style={headerStyle}
         />
         <CardText expandable={collapsible}>
-          <Table selectable={false} style={{}}>
-            <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+          <Table>
+            <TableHead>
               <TableRow>
                 {canReadTests && tableHeaderColumnFor('identifier')}
                 {tableHeaderColumnFor('expression')}
@@ -223,8 +212,8 @@ export class VisibleTestCaseView extends Component {
                   tableHeaderColumnFor('output')}
                 {tableHeaderColumnFor('passed')}
               </TableRow>
-            </TableHeader>
-            <TableBody displayRowCheckbox={false}>
+            </TableHead>
+            <TableBody>
               {testCases.map(this.renderTestCaseRow.bind(this))}
             </TableBody>
           </Table>
@@ -243,11 +232,11 @@ export class VisibleTestCaseView extends Component {
     let testCaseIcon;
     if (testCase.passed !== undefined) {
       testCaseResult = testCase.passed ? 'correct' : 'wrong';
-      testCaseIcon = testCase.passed ? <CorrectIcon /> : <WrongIcon />;
+      testCaseIcon = testCase.passed ? <Check /> : <Clear />;
     }
 
     const tableRowColumnFor = (field) => (
-      <TableRowColumn style={styles.testCaseCell}>{field}</TableRowColumn>
+      <TableCell style={styles.testCaseCell}>{field}</TableCell>
     );
 
     const outputStyle = { whiteSpace: 'pre-wrap', fontFamily: 'monospace' };
@@ -314,7 +303,7 @@ export class VisibleTestCaseView extends Component {
           <Paper
             style={{
               padding: 10,
-              backgroundColor: yellow100,
+              backgroundColor: yellow[100],
               marginBottom: 20,
             }}
           >

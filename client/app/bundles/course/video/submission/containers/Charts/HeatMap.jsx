@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Bar } from 'react-chartjs-2';
-import Toggle from 'material-ui/Toggle';
+import { FormControlLabel, Switch } from '@material-ui/core';
 import { injectIntl, intlShape } from 'react-intl';
 import { formatTimestamp } from 'lib/helpers/videoHelpers';
 import { videoDefaults } from 'lib/constants/videoConstants';
@@ -195,15 +195,21 @@ class HeatMap extends React.Component {
       : HeatMap.renderUnscaledChart(data, options);
     return (
       <div>
-        <Toggle
-          label={this.props.intl.formatMessage(
-            translations.barGraphScalingLabel,
-          )}
-          labelPosition="right"
-          onToggle={(_, toggled) => {
-            this.setState({ scaledMode: toggled });
-          }}
-          toggled={this.state.scaledMode}
+        <FormControlLabel
+          control={
+            <Switch
+              checked={this.state.scaledMode}
+              color="primary"
+              onChange={(_, toggled) => {
+                this.setState({ scaledMode: toggled });
+              }}
+            />
+          }
+          label={
+            <b>
+              {this.props.intl.formatMessage(translations.barGraphScalingLabel)}
+            </b>
+          }
         />
         <br />
         {chartElem}

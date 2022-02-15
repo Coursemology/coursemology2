@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
-import IconButton from 'material-ui/IconButton';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import { IconButton } from '@material-ui/core';
+import MoreVert from '@material-ui/icons/MoreVert';
 
 import { deletePostFromServer, updatePost } from '../../actions/discussion';
 
@@ -32,7 +32,7 @@ function PostMenu(props) {
       <IconMenu
         iconButtonElement={
           <IconButton>
-            <MoreVertIcon />
+            <MoreVert />
           </IconButton>
         }
         anchorOrigin={{ horizontal: 'right', vertical: 'top' }}

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FieldArray } from 'redux-form';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Card, CardText, CardTitle } from 'material-ui/Card';
-import { red500 } from 'material-ui/styles/colors';
+import { red } from '@material-ui/core/colors';
 import ResponseAnswer from './ResponseAnswer';
 
 const styles = {
@@ -14,7 +14,7 @@ const styles = {
     marginBottom: 15,
   },
   errorText: {
-    color: red500,
+    color: red[500],
   },
 };
 

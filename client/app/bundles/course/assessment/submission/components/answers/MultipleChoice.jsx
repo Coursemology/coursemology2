@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { green50 } from 'material-ui/styles/colors';
+import { green } from '@material-ui/core/colors';
 import { RadioButton } from 'material-ui/RadioButton';
 
 import { questionShape } from '../../propTypes';
@@ -25,7 +25,7 @@ function MultipleChoiceOptions({
             <div
               style={
                 option.correct && readOnly && (showMcqMrqSolution || graderView)
-                  ? { backgroundColor: green50 }
+                  ? { backgroundColor: green[50] }
                   : null
               }
               dangerouslySetInnerHTML={{ __html: option.option.trim() }}

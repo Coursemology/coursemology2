@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { reduxForm, Form } from 'redux-form';
 
-import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
+import { Button } from '@material-ui/core';
 
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import InputField from '../../components/InputField';
@@ -281,19 +281,18 @@ class ScribingQuestionForm extends React.Component {
 
           {this.renderSnackbars()}
 
-          <RaisedButton
+          <Button
+            variant="contained"
             className={styles.submitButton}
-            label={this.submitButtonText()}
-            labelPosition="before"
-            primary
-            type="submit"
+            color="primary"
             disabled={this.props.data.isLoading || submitting}
-            icon={
-              this.props.data.isSubmitting ? (
-                <i className="fa fa-spinner fa-lg fa-spin" />
-              ) : null
-            }
-          />
+            type="submit"
+          >
+            {this.submitButtonText()}
+            {this.props.data.isSubmitting ? (
+              <i className="fa fa-spinner fa-lg fa-spin" />
+            ) : null}
+          </Button>
         </Form>
       </>
     );

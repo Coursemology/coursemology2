@@ -7,7 +7,7 @@ import SelectField from 'lib/components/redux-form/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import Toggle from 'lib/components/redux-form/Toggle';
 import DisplayTextField from 'material-ui/TextField';
-import Subheader from 'material-ui/Subheader';
+import { ListSubheader } from '@material-ui/core';
 import formTranslations from 'lib/translations/form';
 import translations from 'course/survey/translations';
 import { questionTypes, formNames } from 'course/survey/constants';
@@ -204,18 +204,18 @@ class QuestionForm extends React.Component {
     ) {
       return (
         <div>
-          <Subheader>
+          <ListSubheader>
             {intl.formatMessage(questionFormTranslations.optionsToDelete)}
-          </Subheader>
+          </ListSubheader>
           <FieldArray
             name="optionsToDelete"
             component={QuestionFormDeletedOptions}
             {...{ disabled, addToOptions }}
             {...props}
           />
-          <Subheader>
+          <ListSubheader>
             {intl.formatMessage(questionFormTranslations.optionsToKeep)}
-          </Subheader>
+          </ListSubheader>
         </div>
       );
     }
