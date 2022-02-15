@@ -55,7 +55,7 @@ class Course::PersonalTimesController < Course::ComponentController
 
   def recompute
     @course_user = CourseUser.find_by(course: @course, id: params[:user_id])
-    update_personalized_timeline_for(@course_user) if @course_user.present?
+    update_personalized_timeline_for_user(@course_user) if @course_user.present?
     redirect_to course_user_personal_times_path, success: t('.success', name: @course_user.name)
   end
 

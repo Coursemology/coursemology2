@@ -7,7 +7,9 @@ class Course::LessonPlan::Strategies::OtotPersonalizationStrategy <
   #
   # @param [CourseUser] course_user The user to adjust the personalized timeline for.
   # @param [Hash] precomputed_data The default data precomputed by precompute_data.
-  def execute(course_user, precomputed_data)
+  # @param [Set<Number>|nil] items_to_shift Set of item ids to shift. If provided, only items with ids in this set will
+  #   be shifted.
+  def execute(course_user, precomputed_data, items_to_shift = nil)
     return if precomputed_data[:learning_rate_ema].nil?
 
     # Apply the appropriate algo depending on student's leaning rate
@@ -16,6 +18,6 @@ class Course::LessonPlan::Strategies::OtotPersonalizationStrategy <
                    else
                      Course::LessonPlan::Strategies::StragglersPersonalizationStrategy.new
                    end
-    new_strategy.execute(course_user, precomputed_data)
+    new_strategy.execute(course_user, precomputed_data, items_to_shift)
   end
 end

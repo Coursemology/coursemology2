@@ -12,7 +12,7 @@ module Course::UsersControllerManagementConcern
   def update # :nodoc:
     @course_user.assign_attributes(course_user_params)
     # Recompute personal timeline if algorithm changed
-    update_personalized_timeline_for(@course_user) if @course_user.timeline_algorithm_changed?
+    update_personalized_timeline_for_user(@course_user) if @course_user.timeline_algorithm_changed?
     if @course_user.save
       flash.now[:success] = t('course.users.update.success', name: @course_user.name)
     else
