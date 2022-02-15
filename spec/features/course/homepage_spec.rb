@@ -6,25 +6,27 @@ RSpec.feature 'Course: Homepage' do
 
   with_tenant(:instance) do
     let(:course) { create(:course, :enrollable) }
+    let(:course_user) { create(:course_student, course: course) }
+    let(:registered_user) { course_user.user }
     let(:feed_notifications) do
       notifications = []
       # Achievement gained notification
       achievement = create(:course_achievement, course: course)
-      achievement_activity = create(:activity, :achievement_gained, object: achievement)
+      achievement_activity = create(:activity, :achievement_gained, actor: registered_user, object: achievement)
       notifications << create(:course_notification, :feed,
                               activity: achievement_activity,
                               course: course)
 
       # Assessment attempted notification
       assessment = create(:assessment, course: course)
-      assessment_activity = create(:activity, :assessment_attempted, object: assessment)
+      assessment_activity = create(:activity, :assessment_attempted, actor: registered_user, object: assessment)
       notifications << create(:course_notification, :feed,
                               activity: assessment_activity,
                               course: course)
 
       # Level reached notification
       level = create(:course_level, course: course)
-      level_activity = create(:activity, :level_reached, object: level)
+      level_activity = create(:activity, :level_reached, actor: registered_user, object: level)
       notifications << create(:course_notification, :feed,
                               activity: level_activity,
                               course: course)
@@ -32,21 +34,21 @@ RSpec.feature 'Course: Homepage' do
       # Forum topic created notification
       forum = create(:forum, course: course)
       topic = create(:forum_topic, forum: forum)
-      topic_activity = create(:activity, :forum_topic_created, object: topic)
+      topic_activity = create(:activity, :forum_topic_created, actor: registered_user, object: topic)
       notifications << create(:course_notification, :feed,
                               activity: topic_activity,
                               course: course)
 
       # Forum post replied notification
       post = create(:course_discussion_post, topic: topic.acting_as)
-      post_replied_activity = create(:activity, :forum_post_replied, object: post)
+      post_replied_activity = create(:activity, :forum_post_replied, actor: registered_user, object: post)
       notifications << create(:course_notification, :feed,
                               activity: post_replied_activity,
                               course: course)
 
       # Video attempted notification
       video = create(:video, course: course)
-      video_activity = create(:activity, :video_attempted, object: video)
+      video_activity = create(:activity, :video_attempted, actor: registered_user, object: video)
       notifications << create(:course_notification, :feed,
                               activity: video_activity,
                               course: course)
@@ -99,8 +101,7 @@ RSpec.feature 'Course: Homepage' do
     end
 
     context 'As a user registered for the course' do
-      let(:course_user) { create(:course_student, course: course) }
-      let(:user) { course_user.user }
+      let(:user) { registered_user }
 
       scenario 'I can visit the course homepage' do
         visit course_path(course)

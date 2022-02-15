@@ -31,7 +31,7 @@ gem 'active_record-acts_as', git: 'https://github.com/ekowidianto/active_record-
 # Organise ActiveRecord model into a tree structure
 gem 'edge'
 # Upsert action for Postgres
-gem 'active_record_upsert', '0.10.1'
+gem 'active_record_upsert', '0.11.1'
 # Create pretty URLs and work with human-friendly strings
 gem 'friendly_id'
 
@@ -44,7 +44,7 @@ gem 'uglifier', '>= 1.3.0'
 # https://github.com/rails/webpacker/blob/4f65c5ee58666bbe58b234c48d47ec7d48fab4d8/CHANGELOG.md
 gem 'webpacker', '<= 5.4.4'
 # Internationalisation for JavaScript.
-gem 'i18n-js', '<= 3.9.0'
+gem 'i18n-js', '<= 3.10.0'
 
 # Routes from JavaScript
 gem 'js-routes'
@@ -188,7 +188,7 @@ gem 'acts_as_tenant'
 gem 'http_accept_language'
 
 # User authentication
-gem 'devise', '4.7.3'
+gem 'devise', '4.8.1'
 gem 'devise_masquerade'
 gem 'devise-multi_email'
 
