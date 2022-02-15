@@ -35,26 +35,18 @@ const styles = {
   },
 };
 
-const PopupDialog = ({
-  dispatch,
-  intl,
-  isManagingGroups,
-  canManageCategory,
-}) => {
+// Assumption: If the new button shows, it means that the user is able to create categories.
+const PopupDialog = ({ dispatch, intl, isManagingGroups }) => {
   const onFormSubmit = useCallback(
-    (data) => {
-      if (!canManageCategory) {
-        return undefined;
-      }
-      return dispatch(
+    (data) =>
+      dispatch(
         createCategory(
           data,
           intl.formatMessage(translations.success),
           intl.formatMessage(translations.failure),
         ),
-      );
-    },
-    [dispatch, canManageCategory],
+      ),
+    [dispatch],
   );
 
   const handleOpen = useCallback(() => {
@@ -83,11 +75,9 @@ const PopupDialog = ({
 PopupDialog.propTypes = {
   dispatch: PropTypes.func.isRequired,
   isManagingGroups: PropTypes.bool.isRequired,
-  canManageCategory: PropTypes.bool.isRequired,
   intl: intlShape,
 };
 
 export default connect((state) => ({
   isManagingGroups: state.groupsManage.isManagingGroups,
-  canManageCategory: state.groupsFetch.canManageCategory,
 }))(injectIntl(PopupDialog));
