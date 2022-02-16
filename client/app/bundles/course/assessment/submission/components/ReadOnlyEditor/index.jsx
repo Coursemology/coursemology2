@@ -164,8 +164,7 @@ class ReadOnlyEditor extends Component {
           }
           disabled={this.props.annotations.length === 0}
           label={<b>{intl.formatMessage(translations.expandComments)}</b>}
-          labelPlacement="end"
-          style={{ width: 'auto', marginLeft: 'auto', float: 'right' }}
+          labelPlacement="start"
         />
       )
     );
@@ -187,8 +186,7 @@ class ReadOnlyEditor extends Component {
         }
         disabled={this.props.annotations.length === 0}
         label={<b>{intl.formatMessage(translations.showCommentsPanel)}</b>}
-        labelPlacement="end"
-        style={{ width: 'auto', marginLeft: 'auto', float: 'right' }}
+        labelPlacement="start"
       />
     );
   }
@@ -218,7 +216,7 @@ class ReadOnlyEditor extends Component {
     };
     return (
       <>
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           {this.renderShowCommentsPanel()}
           {this.renderExpandAllToggle()}
         </div>

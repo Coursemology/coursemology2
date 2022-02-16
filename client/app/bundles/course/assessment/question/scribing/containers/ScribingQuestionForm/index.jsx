@@ -287,6 +287,7 @@ class ScribingQuestionForm extends React.Component {
             color="primary"
             disabled={this.props.data.isLoading || submitting}
             type="submit"
+            style={{ marginBottom: '1em' }}
           >
             {this.submitButtonText()}
             {this.props.data.isSubmitting ? (

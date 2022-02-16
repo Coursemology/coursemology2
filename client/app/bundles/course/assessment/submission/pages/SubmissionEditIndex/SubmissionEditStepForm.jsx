@@ -4,17 +4,21 @@ import { reduxForm } from 'redux-form';
 import { Prompt } from 'react-router-dom';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import Hotkeys from 'react-hot-keys';
-import { Card, CardHeader, CardText } from 'material-ui/Card';
 import {
   Button,
+  Card,
+  CardHeader,
+  CardContent,
   CircularProgress,
   Paper,
+  Step,
+  Stepper,
+  StepButton,
+  StepLabel,
   SvgIcon,
   Tooltip,
 } from '@material-ui/core';
 import { blue, green, lightBlue, red, white } from '@material-ui/core/colors';
-import { Stepper, Step, StepButton, StepLabel } from 'material-ui/Stepper';
-import RaisedButton from 'material-ui/RaisedButton';
 
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
@@ -187,19 +191,20 @@ class SubmissionEditStepForm extends Component {
           <CardHeader
             style={{
               ...styles.explanationHeader,
+              color: explanation.correct ? green[900] : red[900],
               backgroundColor: explanation.correct ? green[200] : red[200],
             }}
             title={title}
-            titleColor={explanation.correct ? green[900] : red[900]}
+            titleTypographyProps={{ variant: 'body2' }}
           />
           {explanation.explanations.every(
             (exp) => exp.trim().length === 0,
           ) ? null : (
-            <CardText>
+            <CardContent>
               {explanation.explanations.map((exp, idx) => (
                 <div key={idx} dangerouslySetInnerHTML={{ __html: exp }} />
               ))}
-            </CardText>
+            </CardContent>
           )}
         </Card>
       );
@@ -306,25 +311,18 @@ class SubmissionEditStepForm extends Component {
     const { intl } = this.props;
     if (this.shouldRenderContinueButton()) {
       return (
-        <>
-          <RaisedButton
-            style={styles.formButton}
-            backgroundColor={green[500]}
-            labelColor={white}
-            label={intl.formatMessage(translations.continue)}
-            onClick={() => this.handleNext()}
-            disabled={this.shouldDisableContinueButton()}
-          />
-
-          <Button
-            color="secondary"
-            disabled={this.shouldDisableContinueButton()}
-            onClick={() => this.handleNext()}
-            style={styles.formButton}
-          >
-            {intl.formatMessage(translations.continue)}
-          </Button>
-        </>
+        <Button
+          variant="contained"
+          disabled={this.shouldDisableContinueButton()}
+          onClick={() => this.handleNext()}
+          style={{
+            ...styles.formButton,
+            backgroundColor: green[500],
+            color: 'white',
+          }}
+        >
+          {intl.formatMessage(translations.continue)}
+        </Button>
       );
     }
     return null;
@@ -347,13 +345,15 @@ class SubmissionEditStepForm extends Component {
       this.props;
     if (attempting) {
       return (
-        <RaisedButton
-          style={styles.formButton}
-          primary
-          label={intl.formatMessage(translations.saveDraft)}
-          onClick={handleSaveDraft}
+        <Button
+          variant="contained"
+          color="primary"
           disabled={pristine || isSaving}
-        />
+          onClick={handleSaveDraft}
+          style={styles.formButton}
+        >
+          {intl.formatMessage(translations.saveDraft)}
+        </Button>
       );
     }
     return null;
@@ -363,12 +363,14 @@ class SubmissionEditStepForm extends Component {
     const { intl, graderView, attempting, handleSaveGrade } = this.props;
     if (graderView && !attempting) {
       return (
-        <RaisedButton
-          style={styles.formButton}
-          primary
-          label={intl.formatMessage(translations.saveGrade)}
+        <Button
+          variant="contained"
+          color="primary"
           onClick={handleSaveGrade}
-        />
+          style={styles.formButton}
+        >
+          {intl.formatMessage(translations.saveGrade)}
+        </Button>
       );
     }
     return null;
@@ -384,13 +386,15 @@ class SubmissionEditStepForm extends Component {
     } = this.props;
     if (attempting && (allowPartialSubmission || allConsideredCorrect)) {
       return (
-        <RaisedButton
-          style={styles.formButton}
-          secondary
-          label={intl.formatMessage(translations.finalise)}
-          onClick={() => this.setState({ submitConfirmation: true })}
+        <Button
+          variant="contained"
+          color="secondary"
           disabled={isSaving}
-        />
+          onClick={() => this.setState({ submitConfirmation: true })}
+          style={styles.formButton}
+        >
+          {intl.formatMessage(translations.finalise)}
+        </Button>
       );
     }
     return null;
@@ -400,13 +404,14 @@ class SubmissionEditStepForm extends Component {
     const { intl, graderView, attempting } = this.props;
     if (graderView && !attempting) {
       return (
-        <RaisedButton
-          style={styles.formButton}
-          backgroundColor={red[900]}
-          secondary
-          label={intl.formatMessage(translations.unsubmit)}
+        <Button
+          variant="contained"
+          color="secondary"
           onClick={() => this.setState({ unsubmitConfirmation: true })}
-        />
+          style={styles.formButton}
+        >
+          {intl.formatMessage(translations.unsubmit)}
+        </Button>
       );
     }
     return null;
@@ -484,8 +489,8 @@ class SubmissionEditStepForm extends Component {
     return (
       <Stepper
         activeStep={stepIndex}
-        linear={false}
         connector={<div />}
+        nonLinear
         style={{ justifyContent: 'center', flexWrap: 'wrap' }}
       >
         {questionIds.map((questionId, index) => {
@@ -500,7 +505,6 @@ class SubmissionEditStepForm extends Component {
             return (
               <Step key={questionId} active={index <= maxStep}>
                 <StepButton
-                  iconContainerStyle={{ padding: 0 }}
                   icon={
                     <SvgIcon nativeColor={stepButtonColor}>
                       <circle cx="12" cy="12" r="12" />
@@ -522,7 +526,7 @@ class SubmissionEditStepForm extends Component {
           }
           return (
             <Step key={questionId}>
-              <StepLabel iconContainerStyle={{ padding: 0 }} />
+              <StepLabel />
             </Step>
           );
         })}

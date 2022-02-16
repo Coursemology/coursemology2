@@ -54,6 +54,10 @@ const styles = {
     marginTop: 20,
     marginBottom: 0,
   },
+  horizontalRule: {
+    marginTop: 10,
+    marginBottom: 10,
+  },
   progressStyle: {
     display: 'inline-block',
     verticalAlign: 'middle',
@@ -199,7 +203,7 @@ class SubmissionAnswer extends Component {
         <h3 style={{ display: 'inline-block' }}>{question.displayTitle}</h3>
         {this.renderHistoryToggle(question)}
         <div dangerouslySetInnerHTML={{ __html: question.description }} />
-        <hr />
+        <hr style={styles.horizontalRule} />
         {answerId
           ? renderer({
               question,

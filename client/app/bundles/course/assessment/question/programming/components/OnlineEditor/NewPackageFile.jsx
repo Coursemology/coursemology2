@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import RaisedButton from 'material-ui/RaisedButton';
 import { Button, TableCell, TableRow } from '@material-ui/core';
 import { injectIntl } from 'react-intl';
 import { grey } from '@material-ui/core/colors';
@@ -53,15 +52,15 @@ class NewPackageFile extends React.Component {
           {deleteButton}
         </TableCell>
         <TableCell>
-          <RaisedButton
+          <Button
+            variant="contained"
+            color="primary"
+            component="label"
             className={styles.fileInputButton}
-            label={this.props.buttonLabel}
-            labelPosition="before"
-            containerElement="label"
-            primary
             disabled={isLoading}
             style={addFileButtonStyle}
           >
+            {this.props.buttonLabel}
             <input
               type="file"
               name={NewPackageFile.getPackageFileName(this.props.fileType)}
@@ -69,7 +68,7 @@ class NewPackageFile extends React.Component {
               disabled={isLoading}
               onChange={this.newPackageFileChangeHandler(index)}
             />
-          </RaisedButton>
+          </Button>
           <div style={{ display: 'inline-block' }}>{filename}</div>
         </TableCell>
       </TableRow>
