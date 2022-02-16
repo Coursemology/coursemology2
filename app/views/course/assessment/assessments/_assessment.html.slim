@@ -1,4 +1,8 @@
-= content_tag_for(:tr, assessment, class: time_period_class(assessment) + draft_class(assessment))
+- assessment_time = @items_hash[assessment.id].time_for(current_course_user)
+- assessment_with_loaded_timeline = @items_hash[assessment.id].actable
+// assessment_with_loaded_timeline is passed below since the timeline is already preloaded and will be checked
+- can_attempt_assessment = can?(:attempt, assessment_with_loaded_timeline)
+= content_tag_for(:tr, assessment, class: time_period_class(assessment_time) + draft_class(assessment))
   th colspan=2
     - if assessment.view_password
       span title=t('.view_password_set')
@@ -6,6 +10,9 @@
     - unless assessment.published?
       span title=draft_message(assessment)
         => fa_icon 'ban'.freeze
+    - if assessment.autograded? && !current_course_user&.student?
+      span title=t('.autograded_assessment')
+        => fa_icon 'check-circle'.freeze
     - unless current_course_user&.student? && current_course_user&.timeline_algorithm == 'fixed'
       = render partial: 'course/lesson_plan/items/personal_time_boolean_icons', locals: { item: assessment }
     = link_to(format_inline_text(assessment.title),
@@ -15,7 +22,7 @@
     td.table-base-exp = assessment.base_exp
   - if show_bonus_attributes?
     td.table-time-bonus-exp
-      - if assessment.bonus_end_at.present? && assessment.time_bonus_exp > 0
+      - if assessment_time.bonus_end_at.present? && assessment.time_bonus_exp > 0
         = assessment.time_bonus_exp
       - else
         = '-'
@@ -26,24 +33,24 @@
         = link_to course_achievement_path(current_course, achievement) do
           = display_achievement_badge(achievement)
   td.table-start-at
-    - if condition_not_satisfied(assessment)
+    - if condition_not_satisfied(can_attempt_assessment, assessment_with_loaded_timeline, assessment_time)
       div.condition-not-satisfied data-toggle='tooltip' title="#{t('.condition_not_satisfied')}"
         = render partial: 'course/lesson_plan/items/personal_or_ref_time',
-                 locals: { item: assessment, course_user: current_course_user, attribute: :start_at, datetime_format: :short }
+                 locals: { item: @items_hash[assessment.id], course_user: current_course_user, attribute: :start_at, datetime_format: :short }
     - else
       = render partial: 'course/lesson_plan/items/personal_or_ref_time',
-               locals: { item: assessment, course_user: current_course_user, attribute: :start_at, datetime_format: :short }
+               locals: { item: @items_hash[assessment.id], course_user: current_course_user, attribute: :start_at, datetime_format: :short }
   - if show_bonus_attributes?
     td.table-bonus-cut-off
-      - if assessment.bonus_end_at.present? && assessment.time_bonus_exp > 0
+      - if assessment_time.bonus_end_at.present? && assessment.time_bonus_exp > 0
         = render partial: 'course/lesson_plan/items/personal_or_ref_time',
-                 locals: { item: assessment, course_user: current_course_user, attribute: :bonus_end_at, datetime_format: :short }
+                 locals: { item: @items_hash[assessment.id], course_user: current_course_user, attribute: :bonus_end_at, datetime_format: :short }
       - else
         = '-'
   - if show_end_at?
     td.table-end-at
-      - if assessment.end_at.present?
+      - if assessment_time.end_at.present?
         = render partial: 'course/lesson_plan/items/personal_or_ref_time',
-                 locals: { item: assessment, course_user: current_course_user, attribute: :end_at, datetime_format: :short }
+                 locals: { item: @items_hash[assessment.id], course_user: current_course_user, attribute: :end_at, datetime_format: :short }
   td.table-buttons colspan=2
-    = render 'assessment_management_buttons', assessment: assessment
+    = render 'assessment_management_buttons', assessment: assessment, can_attempt_assessment: can_attempt_assessment

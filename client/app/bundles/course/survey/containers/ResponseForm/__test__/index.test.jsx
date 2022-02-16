@@ -1,9 +1,12 @@
 import { mount } from 'enzyme';
+import { MemoryRouter } from 'react-router-dom';
 import storeCreator from 'course/survey/store';
 import ResponseForm, {
   buildInitialValues,
   buildResponsePayload,
 } from '../index';
+
+const courseId = 1;
 
 const responseData = {
   response: {
@@ -110,10 +113,16 @@ describe('<ResponseForm />', () => {
     const mockEndpoint = jest.fn();
     const onSubmit = (data) => mockEndpoint(buildResponsePayload(data));
     const responseForm = mount(
-      <ResponseForm
-        {...{ response, flags, onSubmit }}
-        initialValues={buildInitialValues(survey, response)}
-      />,
+      <MemoryRouter
+        initialEntries={[
+          `/courses/${courseId}/surveys/${survey.id}/responses/${response.id}/edit`,
+        ]}
+      >
+        <ResponseForm
+          {...{ response, flags, onSubmit }}
+          initialValues={buildInitialValues(survey, response)}
+        />
+      </MemoryRouter>,
       buildContextOptions(storeCreator({})),
     );
 

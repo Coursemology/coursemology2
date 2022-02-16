@@ -81,7 +81,7 @@ class Course::Settings::Email < ApplicationRecord
 
   # Build default email settings when a new assessment category is initialised.
   def self.after_assessment_category_initialize(category)
-    return if (category.persisted? && category.setting_emails.exists?) || !category.course
+    return if category.persisted? || !category.setting_emails.empty? || !category.course
 
     default_email_settings = [{ assessments: :opening_reminder },
                               { assessments: :closing_reminder },

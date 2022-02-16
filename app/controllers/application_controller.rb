@@ -69,5 +69,8 @@ class ApplicationController < ActionController::Base
                       else
                         'ERROR'
                       end
+
+    payload[:remote_ip] = request.ip
+    payload[:current_user_id] = current_user.id if current_user.present?
   end
 end

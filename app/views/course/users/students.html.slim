@@ -8,6 +8,7 @@ div.users
     table.table.table-striped.table-hover
       thead
         tr
+          th.text-center = t('common.serial_number')
           th = t('common.name')
           th = t('common.email')
           - if current_course.show_personalized_timeline_features?
@@ -16,11 +17,12 @@ div.users
           th
 
       tbody
-        - @course_users.each do |user|
+        - @course_users.each.with_index(1) do |user, index|
           = content_tag_for(:tr, user, 'data-action' => course_user_path(current_course, user),
                                        'data-method' => 'patch',
                                        class: 'course-user')
             = simple_fields_for user, resource: :course_user do |f|
+              td.text-center = index
               th = f.input :name, label: false
               td = f.object.user.email
               - if current_course.show_personalized_timeline_features?

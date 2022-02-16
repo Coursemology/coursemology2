@@ -5,14 +5,15 @@ RSpec.describe Course::LessonPlan::Event do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
-    subject { Ability.new(user) }
+    subject { Ability.new(user, course, course_user) }
     let(:course) { create(:course) }
     let(:student) { create(:course_student, course: course) }
     let(:survey) { create(:survey, *survey_traits, course: course) }
     let(:survey_traits) { [] }
 
     context 'when the user is a Course Teaching Staff' do
-      let(:user) { create(:course_teaching_assistant, course: course).user }
+      let(:course_user) { create(:course_teaching_assistant, course: course) }
+      let(:user) { course_user.user }
 
       it { is_expected.to be_able_to(:manage, survey) }
 
@@ -56,7 +57,8 @@ RSpec.describe Course::LessonPlan::Event do
     end
 
     context 'when the user is a Course Observer' do
-      let(:user) { create(:course_observer, course: course).user }
+      let(:course_user) { create(:course_observer, course: course) }
+      let(:user) { course_user.user }
 
       it { is_expected.not_to be_able_to(:manage, survey) }
 
@@ -102,6 +104,7 @@ RSpec.describe Course::LessonPlan::Event do
     end
 
     context 'when the user is a Course Student' do
+      let(:course_user) { student }
       let(:user) { student.user }
 
       context 'when the survey is published' do

@@ -4,18 +4,20 @@ require 'rails_helper'
 RSpec.describe Course::Condition::Assessment do
   let!(:instance) { Instance.default }
   with_tenant(:instance) do
-    subject { Ability.new(user) }
+    subject { Ability.new(user, course, course_user) }
     let(:course) { create(:course) }
     let(:condition) { create(:assessment_condition, course: course) }
 
     context 'when the user is a Course Staff' do
-      let(:user) { create(:course_manager, course: course).user }
+      let(:course_user) { create(:course_manager, course: course) }
+      let(:user) { course_user.user }
 
       it { is_expected.to be_able_to(:manage, condition) }
     end
 
     context 'when the user is a Course Student' do
-      let(:user) { create(:course_student, course: course).user }
+      let(:course_user) { create(:course_student, course: course) }
+      let(:user) { course_user.user }
 
       context 'when the assessment is published but has not started' do
         let(:not_started_assessment) do

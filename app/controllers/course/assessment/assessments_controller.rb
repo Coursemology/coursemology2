@@ -9,6 +9,15 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
 
   def index
     @assessments = @assessments.ordered_by_date_and_title.with_submissions_by(current_user)
+
+    @items_hash = @course.lesson_plan_items.where(actable_id: @assessments.pluck(:id),
+                                                  actable_type: Course::Assessment.name).
+                  preload(actable: :conditions).
+                  with_reference_times_for(current_course_user).
+                  with_personal_times_for(current_course_user).
+                  to_h do |item|
+      [item.actable_id, item]
+    end
     @conditional_service = Course::Assessment::AchievementPreloadService.new(@assessments)
   end
 
@@ -179,9 +188,9 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   #
   # @return [Hash{Integer => Course::QuestionAssessment}]
   def question_assessments_hash
-    @question_assessments_hash ||= @assessment.question_assessments.map do |qa|
+    @question_assessments_hash ||= @assessment.question_assessments.to_h do |qa|
       [qa.id, qa]
-    end.to_h
+    end
   end
 
   # Checks if a proposed question ordering is valid

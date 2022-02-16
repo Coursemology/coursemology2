@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
+import { Prompt } from 'react-router-dom';
 import { injectIntl, intlShape } from 'react-intl';
 import Hotkeys from 'react-hot-keys';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
@@ -83,6 +84,25 @@ class SubmissionEditStepForm extends Component {
       hoveredToolTip: '',
     };
   }
+
+  componentDidMount() {
+    window.addEventListener('beforeunload', this.handleUnload);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('beforeunload', this.handleUnload);
+  }
+
+  handleUnload = (e) => {
+    if (!this.props.pristine) {
+      e.preventDefault();
+      // For Chrome to show warning when navigating away from the page, we need to
+      // indicate the returnValue below.
+      e.returnValue = '';
+      return '';
+    }
+    return null;
+  };
 
   handleNext() {
     const { maxStep, stepIndex } = this.state;
@@ -565,6 +585,19 @@ class SubmissionEditStepForm extends Component {
     );
   }
 
+  renderNavigateAwayWarning() {
+    const isDirty = !this.props.pristine;
+    return (
+      <Prompt
+        when={isDirty}
+        message={(action) =>
+          // Note: POP refers to back action in a browser.
+          action === 'POP'
+        }
+      />
+    );
+  }
+
   render() {
     return (
       <div style={styles.questionContainer}>
@@ -575,6 +608,8 @@ class SubmissionEditStepForm extends Component {
         {this.renderSubmitDialog()}
         {this.renderUnsubmitDialog()}
         {this.renderResetDialog()}
+
+        {this.renderNavigateAwayWarning()}
       </div>
     );
   }

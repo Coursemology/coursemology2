@@ -196,7 +196,7 @@ class VisibleSubmissionEditIndex extends Component {
   }
 
   validateSubmit = () => {
-    const { dispatch, form } = this.props;
+    const { dispatch, form, questions } = this.props;
     const answers = Object.values(form.values);
     /**
      * Assume there are syncErrors in the form initially.
@@ -205,6 +205,12 @@ class VisibleSubmissionEditIndex extends Component {
      * Therefore we need to manually touch all the fields
      */
     answers.forEach((answer = {}) => {
+      if (
+        answer.questionId in questions &&
+        questions[answer.questionId].type !== 'VoiceResponse'
+      ) {
+        return;
+      }
       const answerId = answer.id;
       Object.keys(answer).forEach((key) => {
         dispatch(touch(formNames.SUBMISSION, `${answerId}.${key}`));

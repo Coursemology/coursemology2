@@ -31,7 +31,7 @@ class VisibleProgrammingImportEditor extends Component {
         {fields.map((answerId, index) => {
           const file = fields.get(index);
           if (readOnly) {
-            const content = file.content.split('\n');
+            const content = file.highlighted_content.split('\n');
             return (
               <ReadOnlyEditor
                 key={answerId}
@@ -72,7 +72,7 @@ class VisibleProgrammingImportEditor extends Component {
     const { displayFileIndex } = this.state;
     const file = answer.files_attributes[displayFileIndex];
     if (file) {
-      const content = file.content.split('\n');
+      const content = file.highlighted_content.split('\n');
       return (
         <ReadOnlyEditor
           key={answer.id}

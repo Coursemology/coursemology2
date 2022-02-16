@@ -1,6 +1,7 @@
 tbody
   - if skill_branch
     = content_tag_for(:tr, skill_branch) do
+      td.text-center = skill_branch_counter + 1
       th = skill_branch.title
       td = format_html(skill_branch.description)
       td
@@ -11,6 +12,7 @@ tbody
             = delete_button([current_course, :assessments, skill_branch])
   - else
     tr
+      td.text-center = skill_branch_counter + 1
       th colspan=3
         = t('.uncategorised')
 

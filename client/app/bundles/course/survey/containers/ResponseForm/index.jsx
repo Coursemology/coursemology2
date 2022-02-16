@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { reduxForm, FieldArray, Form, getFormValues } from 'redux-form';
+import { Prompt } from 'react-router-dom';
 import RaisedButton from 'material-ui/RaisedButton';
 import formTranslations from 'lib/translations/form';
 import { formNames } from 'course/survey/constants';
@@ -93,6 +94,25 @@ class ResponseForm extends Component {
     );
   }
 
+  componentDidMount() {
+    window.addEventListener('beforeunload', this.handleUnload);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('beforeunload', this.handleUnload);
+  }
+
+  handleUnload = (e) => {
+    if (!this.props.pristine) {
+      e.preventDefault();
+      // For Chrome to show warning when navigating away from the page, we need to
+      // indicate the returnValue below.
+      e.returnValue = '';
+      return '';
+    }
+    return null;
+  };
+
   renderSaveButton() {
     const {
       pristine,
@@ -147,6 +167,20 @@ class ResponseForm extends Component {
     );
   }
 
+  renderNavigateAwayWarning() {
+    const isDirty = !this.props.pristine;
+
+    return (
+      <Prompt
+        when={isDirty}
+        message={(action) =>
+          // Note: POP refers to back action in a browser.
+          action === 'POP'
+        }
+      />
+    );
+  }
+
   render() {
     const {
       handleSubmit,
@@ -165,6 +199,7 @@ class ResponseForm extends Component {
         <br />
         {!readOnly && this.renderSaveButton()}
         {!readOnly && this.renderSubmitButton()}
+        {this.renderNavigateAwayWarning()}
       </Form>
     );
   }

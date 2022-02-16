@@ -1,6 +1,7 @@
 import { Component, Suspense, lazy } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
+import { Prompt } from 'react-router-dom';
 import { injectIntl, intlShape } from 'react-intl';
 import { Element, scroller } from 'react-scroll';
 import { Tabs, Tab } from 'material-ui/Tabs';
@@ -84,7 +85,24 @@ class SubmissionEditForm extends Component {
           : initialStep;
       scroller.scrollTo(`step${initialStep}`, { offset: -60 });
     }
+
+    window.addEventListener('beforeunload', this.handleUnload);
   }
+
+  componentWillUnmount() {
+    window.removeEventListener('beforeunload', this.handleUnload);
+  }
+
+  handleUnload = (e) => {
+    if (!this.props.pristine) {
+      e.preventDefault();
+      // For Chrome to show warning when navigating away from the page, we need to
+      // indicate the returnValue below.
+      e.returnValue = '';
+      return '';
+    }
+    return null;
+  };
 
   renderAutogradeSubmissionButton() {
     const {
@@ -586,6 +604,19 @@ class SubmissionEditForm extends Component {
     );
   }
 
+  renderNavigateAwayWarning() {
+    const isDirty = !this.props.pristine;
+    return (
+      <Prompt
+        when={isDirty}
+        message={(action) =>
+          // Note: POP refers to back action in a browser.
+          action === 'POP'
+        }
+      />
+    );
+  }
+
   render() {
     const { tabbedView } = this.props;
     return (
@@ -604,10 +635,12 @@ class SubmissionEditForm extends Component {
         {this.renderUnmarkButton()}
         {this.renderPublishButton()}
 
-        {this.state.submitConfirmation && this.renderSubmitDialog()}
-        {this.state.unsubmitConfirmation && this.renderUnsubmitDialog()}
-        {this.state.resetConfirmation && this.renderResetDialog()}
+        {this.renderSubmitDialog()}
+        {this.renderUnsubmitDialog()}
+        {this.renderResetDialog()}
         {this.renderExamDialog()}
+
+        {this.renderNavigateAwayWarning()}
       </Card>
     );
   }

@@ -34,15 +34,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   def load_or_create_answers
     return unless @submission.attempting?
 
-    new_answers = questions_to_attempt.not_answered(@submission).attempt(@submission)
-    new_answers_created = new_answers.map do |answer|
-      # When there are no existing answers, the first one will be the current_answer.
-      if answer.new_record?
-        answer.current_answer = true
-        answer.save!
-      end
-    end
-    new_answers_created = new_answers_created.reduce(false) { |acc, elem| acc || elem }
+    new_answers_created = @submission.create_new_answers
     @submission.answers.reload if new_answers_created && @submission.answers.loaded?
   end
 
@@ -124,7 +116,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   end
 
   def questions_to_attempt
-    @questions_to_attempt ||= @submission.assessment.questions
+    @questions_to_attempt ||= @submission.questions
   end
 
   # Find the questions for this submission without submission_questions.
@@ -138,14 +130,17 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     new_submission_questions = []
     questions_without_submission_questions.each do |question|
       new_submission_questions <<
-        @submission.submission_questions.build(question: question)
+        Course::Assessment::SubmissionQuestion.new(submission: @submission, question: question)
     end
-    new_submission_questions.each(&:save!)
+
+    ActiveRecord::Base.transaction do
+      Course::Assessment::SubmissionQuestion.import! new_submission_questions, recursive: true
+    end
 
     new_submission_questions.any?
   end
 
-  def update_submission
+  def update_submission # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/MethodLength
     @submission.class.transaction do
       unless unsubmit? || unmark?
         update_answers_params[:answers]&.each do |answer_params|
@@ -153,7 +148,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
 
           answer = @submission.answers.includes(:actable).find { |a| a.id == answer_params[:id].to_i }
           if answer && !update_answer(answer, answer_params)
-            logger.error("failed to update answer #{answer.errors.inspect}")
+            logger.error("Failed to update answer #{answer.errors.inspect}")
             raise ActiveRecord::Rollback
           end
         end

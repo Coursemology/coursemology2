@@ -179,13 +179,17 @@ class ProgrammingQuestionForm extends Component {
     e.preventDefault();
     if (!this.validationCheck()) return;
 
-    const autograded = this.props.data.getIn(['question', 'autograded']);
+    const autogradedAssessment = this.props.data.getIn([
+      'question',
+      'autograded_assessment',
+    ]);
     const hasSubmissions = this.props.data.getIn([
       'question',
       'has_submissions',
     ]);
+    const gamified = this.props.data.getIn(['question', 'course_gamified']);
 
-    if (autograded && hasSubmissions) {
+    if (gamified && autogradedAssessment && hasSubmissions) {
       this.setState((prevState) => ({
         confirmationOpen: !prevState.confirmationOpen,
       }));
