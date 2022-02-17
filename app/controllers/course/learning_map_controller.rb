@@ -3,6 +3,7 @@ class Course::LearningMapController < Course::ComponentController
   NODE_ID_DELIMITER = '-'
   NEGATIVE_INF = -1_000_000_000
 
+  before_action :authorize_learning_map
   add_breadcrumb :index, :course_learning_map_path
 
   def index
@@ -11,7 +12,7 @@ class Course::LearningMapController < Course::ComponentController
     respond_to do |format|
       format.html
       format.json do
-        render json: { nodes: map_conditionals_to_nodes, can_modify: current_course_user&.staff? }
+        render json: { nodes: map_conditionals_to_nodes, can_modify: current_course_user&.teaching_staff? }
       end
     end
   end
@@ -55,13 +56,17 @@ class Course::LearningMapController < Course::ComponentController
     end
   end
 
+  private
+
+  def authorize_learning_map
+    authorize!(:manage, @conditionals)
+  end
+
   # @return [Course::LearningMapComponent]
   # @return [nil] If component is disabled.
   def component
     current_component_host[:course_learning_map_component]
   end
-
-  private
 
   def error_response(errors)
     respond_to do |format|
@@ -73,7 +78,7 @@ class Course::LearningMapController < Course::ComponentController
   end
 
   def init_conditionals
-    @conditionals = Course::Condition.conditionals_for(current_course)
+    @conditionals = Course::Condition.preload(:conditions).conditionals_for(current_course)
   end
 
   def map_conditionals_to_nodes
@@ -123,8 +128,8 @@ class Course::LearningMapController < Course::ComponentController
       id = get_node_id(conditional)
 
       conditional.attributes.merge({
-        id: id, unlocked: conditional.conditions_satisfied_by?(current_course_user), children: node_ids_to_children[id],
-        satisfiability_type: conditional.satisfiability_type,
+        id: id, unlocked: conditional.conditions_satisfied_by?(current_course_user),
+        children: node_ids_to_children[id], satisfiability_type: conditional.satisfiability_type,
         course_material_type: conditional.class.name.demodulize.downcase,
         content_url: url_for([current_course, conditional]), parents: node_ids_to_parents[id]
       }).symbolize_keys
