@@ -114,7 +114,7 @@ class Course::LearningMapController < Course::ComponentController
 
   def map_condition_to_parent(condition)
     type = condition.actable_type.demodulize
-    typed_condition = Object.const_get("Course::Condition::#{type}").find(condition.actable_id)
+    typed_condition = Object.const_get("Course::Condition::#{type}").preload(:actable).find(condition.actable_id)
     id = "#{type.downcase}-#{typed_condition.send("#{type.downcase}_id")}"
 
     { id: id, is_satisfied: typed_condition.satisfied_by?(current_course_user) }
