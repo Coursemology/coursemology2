@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_26_161011) do
+ActiveRecord::Schema.define(version: 2022_02_02_073459) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -483,6 +483,11 @@ ActiveRecord::Schema.define(version: 2021_12_26_161011) do
     t.integer "minimum_level", null: false
   end
 
+  create_table "course_condition_materials", force: :cascade do |t|
+    t.bigint "material_id", null: false
+    t.index ["material_id"], name: "fk__course_condition_materials_material_id"
+  end
+
   create_table "course_condition_surveys", id: :serial, force: :cascade do |t|
     t.bigint "survey_id", null: false
     t.index ["survey_id"], name: "fk__course_condition_surveys_survey_id"
@@ -742,6 +747,16 @@ ActiveRecord::Schema.define(version: 2021_12_26_161011) do
     t.index ["course_id"], name: "fk__course_levels_course_id"
   end
 
+  create_table "course_material_downloads", force: :cascade do |t|
+    t.integer "course_user_id", null: false
+    t.integer "material_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["course_user_id", "material_id"], name: "index_downloads_on_course_user_and_materials", unique: true
+    t.index ["course_user_id"], name: "index_course_material_downloads_on_course_user_id"
+    t.index ["material_id"], name: "index_course_material_downloads_on_material_id"
+  end
+
   create_table "course_material_folders", id: :serial, force: :cascade do |t|
     t.integer "parent_id"
     t.integer "course_id", null: false
@@ -773,6 +788,8 @@ ActiveRecord::Schema.define(version: 2021_12_26_161011) do
     t.integer "updater_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "satisfiability_type", default: 0
+    t.integer "course_id"
     t.index "folder_id, lower((name)::text)", name: "index_course_materials_on_folder_id_and_name", unique: true
     t.index ["creator_id"], name: "fk__course_materials_creator_id"
     t.index ["folder_id"], name: "fk__course_materials_folder_id"
@@ -1336,6 +1353,7 @@ ActiveRecord::Schema.define(version: 2021_12_26_161011) do
   add_foreign_key "course_assessments", "users", column: "updater_id", name: "fk_course_assessments_updater_id"
   add_foreign_key "course_condition_achievements", "course_achievements", column: "achievement_id", name: "fk_course_condition_achievements_achievement_id"
   add_foreign_key "course_condition_assessments", "course_assessments", column: "assessment_id", name: "fk_course_condition_assessments_assessment_id"
+  add_foreign_key "course_condition_materials", "course_materials", column: "material_id", name: "fk_course_condition_materials_material_id"
   add_foreign_key "course_condition_surveys", "course_surveys", column: "survey_id", name: "fk_course_condition_surveys_survey_id"
   add_foreign_key "course_condition_videos", "course_videos", column: "video_id", name: "fk_course_condition_videos_video_id"
   add_foreign_key "course_conditions", "courses", name: "fk_course_conditions_course_id"

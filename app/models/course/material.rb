@@ -1,10 +1,17 @@
 # frozen_string_literal: true
 class Course::Material < ApplicationRecord
+  acts_as_conditional
   has_one_attachment
   include DuplicationStateTrackingConcern
 
   belongs_to :folder, inverse_of: :materials, class_name: Course::Material::Folder.name
 
+  has_many :downloads
+  has_many :course_users, through: :downloads
+  has_many :material_conditions, class_name: Course::Condition::Material.name,
+                                 inverse_of: :material, dependent: :destroy
+
+  before_create :set_course_id
   before_save :touch_folder
 
   validate :validate_name_is_unique_among_folders
@@ -57,6 +64,7 @@ class Course::Material < ApplicationRecord
                     # remain a child of the root folder.
                     duplicator.options[:destination_course].root_folder
                   end
+    initialize_duplicate_conditions(duplicator, other)
     self.updated_at = other.updated_at
     self.created_at = other.created_at
     set_duplication_flag
@@ -66,7 +74,21 @@ class Course::Material < ApplicationRecord
     self.name = next_valid_name
   end
 
+  def permitted_for!(_course_user)
+  end
+
+  def precluded_for!(_course_user)
+  end
+
+  def satisfiable?
+    true
+  end
+
   private
+
+  def set_course_id
+    self.course_id = folder.course_id
+  end
 
   # TODO: Not threadsafe, consider making all folders as materials
   # Make sure that material won't have the same name with other child folders in the folder
@@ -76,5 +98,13 @@ class Course::Material < ApplicationRecord
 
     conflicts = folder.children.where('name ILIKE ?', name)
     errors.add(:name, :taken) unless conflicts.empty?
+  end
+
+  # Set up conditions that depend on this material and conditions that this material depends on.
+  def initialize_duplicate_conditions(duplicator, other)
+    duplicate_conditions(duplicator, other)
+    material_conditions << other.material_conditions.
+                           select { |condition| duplicator.duplicated?(condition.conditional) }.
+                           map { |condition| duplicator.duplicate(condition) }
   end
 end

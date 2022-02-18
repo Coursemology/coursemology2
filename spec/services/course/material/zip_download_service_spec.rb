@@ -12,6 +12,7 @@ RSpec.describe Course::Material::ZipDownloadService do
     # m_b  f_d
     #       |
     #      m_d
+    let(:course_user) { create(:course_user) }
     let(:folder_a) { create(:folder) }
     let(:folder_b) { create(:folder, parent: folder_a) }
     let(:folder_c) { create(:folder, parent: folder_a) }
@@ -20,7 +21,7 @@ RSpec.describe Course::Material::ZipDownloadService do
     let(:material_b) { create(:material, folder: folder_b) }
     let(:material_d) { create(:material, folder: folder_d) }
     let(:materials) { [material_a, material_b, material_d] }
-    let(:service) { Course::Material::ZipDownloadService.send(:new, folder_a, materials) }
+    let(:service) { Course::Material::ZipDownloadService.send(:new, folder_a, materials, course_user) }
 
     describe '#download_to_base_dir' do
       let(:dir) { service.instance_variable_get(:@base_dir) }
@@ -66,11 +67,20 @@ RSpec.describe Course::Material::ZipDownloadService do
           expect(File.exist?(folder_c_path)).to be_truthy
           expect(File.exist?(folder_d_path)).to be_truthy
         end
+
+        it 'updates the course user material downloads table' do
+          expect(Course::Material::Download.exists?(course_user_id: course_user.id,
+                                                    material_id: material_a.id)).to be_truthy
+          expect(Course::Material::Download.exists?(course_user_id: course_user.id,
+                                                    material_id: material_b.id)).to be_truthy
+          expect(Course::Material::Download.exists?(course_user_id: course_user.id,
+                                                    material_id: material_d.id)).to be_truthy
+        end
       end
 
       context 'when some of the materials are selected' do
         let(:service) do
-          Course::Material::ZipDownloadService.send(:new, folder_a, [material_a, material_b])
+          Course::Material::ZipDownloadService.send(:new, folder_a, [material_a, material_b], course_user)
         end
 
         it 'only downloads the selected materials' do
@@ -111,7 +121,7 @@ RSpec.describe Course::Material::ZipDownloadService do
     end
 
     describe '.download_and_zip' do
-      subject { Course::Material::ZipDownloadService.download_and_zip(folder_a, materials) }
+      subject { Course::Material::ZipDownloadService.download_and_zip(folder_a, materials, course_user) }
 
       it 'downloads and zips the folder' do
         expect(File.exist?(subject)).to be_truthy
