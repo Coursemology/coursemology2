@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_26_161011) do
+ActiveRecord::Schema.define(version: 2022_02_10_151644) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -922,6 +922,22 @@ ActiveRecord::Schema.define(version: 2021_12_26_161011) do
     t.index ["updater_id"], name: "fk__course_surveys_updater_id"
   end
 
+  create_table "course_tag_relationships", force: :cascade do |t|
+    t.integer "tag_id", null: false
+    t.integer "child_tag_id", null: false
+    t.index ["child_tag_id"], name: "index_course_tag_relationships_on_child_tag_id"
+    t.index ["tag_id"], name: "index_course_tag_relationships_on_tag_id"
+  end
+
+  create_table "course_tags", force: :cascade do |t|
+    t.bigint "course_id", null: false
+    t.text "title", null: false
+    t.text "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["course_id"], name: "index_course_tags_on_course_id"
+  end
+
   create_table "course_user_achievements", id: :serial, force: :cascade do |t|
     t.integer "course_user_id"
     t.integer "achievement_id"
@@ -1419,6 +1435,7 @@ ActiveRecord::Schema.define(version: 2021_12_26_161011) do
   add_foreign_key "course_survey_sections", "course_surveys", column: "survey_id", name: "fk_course_survey_sections_survey_id"
   add_foreign_key "course_surveys", "users", column: "creator_id", name: "fk_course_surveys_creator_id"
   add_foreign_key "course_surveys", "users", column: "updater_id", name: "fk_course_surveys_updater_id"
+  add_foreign_key "course_tags", "courses"
   add_foreign_key "course_user_achievements", "course_achievements", column: "achievement_id", name: "fk_course_user_achievements_achievement_id"
   add_foreign_key "course_user_achievements", "course_users", name: "fk_course_user_achievements_course_user_id"
   add_foreign_key "course_user_email_unsubscriptions", "course_settings_emails"
