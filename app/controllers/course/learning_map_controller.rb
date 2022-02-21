@@ -3,7 +3,7 @@ class Course::LearningMapController < Course::ComponentController
   NODE_ID_DELIMITER = '-'
   NEGATIVE_INF = -1_000_000_000
 
-  before_action :authorize_learning_map
+  before_action :authorize_update, only: [:add_parent_node, :remove_parent_node, :toggle_satisfiability_type]
   add_breadcrumb :index, :course_learning_map_path
 
   def index
@@ -58,7 +58,7 @@ class Course::LearningMapController < Course::ComponentController
 
   private
 
-  def authorize_learning_map
+  def authorize_update
     authorize!(:manage, @conditionals)
   end
 
