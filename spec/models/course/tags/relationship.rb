@@ -31,7 +31,7 @@ RSpec.describe Course::Tag::Relationship, type: :model do
 
         let(:subject) { create(:course_tag_relationship, tag: tag2, child_tag: tag1) }
 
-        it 'throws an error' do
+        it 'results in an error' do
           expect(subject.errors[:cyclic_tags]).to include("cannot add ancestor tag as a child of a tag")
           subject.save!
         end
@@ -47,7 +47,7 @@ RSpec.describe Course::Tag::Relationship, type: :model do
 
         let(:subject) { create(:course_tag_relationship, tag: tag3, child_tag: tag1) }
 
-        it 'throws an error' do
+        it 'results in an error' do
           expect(subject.errors[:cyclic_tags]).to include("cannot add ancestor tag as a child of a tag")
           subject.save!
         end
