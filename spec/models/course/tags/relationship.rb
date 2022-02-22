@@ -52,6 +52,19 @@ RSpec.describe Course::Tag::Relationship, type: :model do
           subject.save!
         end
       end
+
+      context 'two identical tag relationships (uniqueness scope)' do
+        before do
+          tag_relationship = create(:course_tag_relationship, tag: tag1, child_tag: tag2)
+          tag_relationship.save!
+        end
+
+        let(:subject) { create(:course_tag_relationship, tag: tag1, child_tag: tag2) }
+
+        it 'results in an error' do
+          expect { subject }.to raise_error(ActiveRecord::RecordInvalid)
+        end
+      end
     end
   end
 end
