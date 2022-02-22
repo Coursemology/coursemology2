@@ -8,7 +8,9 @@ class Course::Tag < ApplicationRecord
 
   def initialize_duplicate(duplicator, other)
     self.course = duplicator.options[:destination_course]
-    # TODO
+    relationships << other.relationships.
+                     select { |relationship| duplicator.duplicated?(relationship) }.
+                     map { |relationship| duplicator.duplicate(relationship) }
   end
 
   def is_ancestor_tag_id(tag_id)
