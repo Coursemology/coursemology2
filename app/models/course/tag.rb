@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Tag < ApplicationRecord
   validates :title, length: { maximum: 255 }, presence: true
   validates :course, presence: true
@@ -13,10 +14,10 @@ class Course::Tag < ApplicationRecord
                      map { |relationship| duplicator.duplicate(relationship) }
   end
 
-  def is_ancestor_tag_id(tag_id)
+  def ancestor_tag_id?(tag_id)
     return true if id == tag_id
 
     parent_tag = Course::Tag::Relationship.find_by(child_tag: self)
-    parent_tag ? Course::Tag.find(parent_tag.tag_id).is_ancestor_tag_id(tag_id) : false
+    parent_tag ? Course::Tag.find(parent_tag.tag_id).ancestor_tag_id?(tag_id) : false
   end
 end

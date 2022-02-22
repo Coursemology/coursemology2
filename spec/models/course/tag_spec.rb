@@ -9,21 +9,21 @@ RSpec.describe Course::Tag, type: :model do
   with_tenant(:instance) do
     let(:course) { create(:course) }
 
-    describe '#is_ancestor_tag_id' do
+    describe '#ancestor_tag_id?' do
       let(:subject) { create(:course_tag, course: course) }
       let(:other_tag) { create(:course_tag, course: course) }
 
       context 'tag without a parent' do
         it 'returns true for its own ID' do
-          expect(subject.is_ancestor_tag_id(subject.id)).to be_truthy
+          expect(subject.ancestor_tag_id?(subject.id)).to be_truthy
         end
 
         it 'returns false for a non-existent tag ID' do
-          expect(subject.is_ancestor_tag_id(0)).to be_falsey
+          expect(subject.ancestor_tag_id?(0)).to be_falsey
         end
 
         it 'returns false for an unrelated tag ID' do
-          expect(subject.is_ancestor_tag_id(other_tag.id)).to be_falsey
+          expect(subject.ancestor_tag_id?(other_tag.id)).to be_falsey
         end
       end
 
@@ -35,11 +35,11 @@ RSpec.describe Course::Tag, type: :model do
         end
 
         it 'returns true for its parent tag ID' do
-          expect(subject.is_ancestor_tag_id(parent_tag.id)).to be_truthy
+          expect(subject.ancestor_tag_id?(parent_tag.id)).to be_truthy
         end
 
         it 'returns false for an unrelated tag ID' do
-          expect(subject.is_ancestor_tag_id(other_tag.id)).to be_falsey
+          expect(subject.ancestor_tag_id?(other_tag.id)).to be_falsey
         end
       end
 
@@ -54,15 +54,15 @@ RSpec.describe Course::Tag, type: :model do
         end
 
         it 'returns true for its parent tag ID' do
-          expect(subject.is_ancestor_tag_id(parent_tag.id)).to be_truthy
+          expect(subject.ancestor_tag_id?(parent_tag.id)).to be_truthy
         end
 
         it 'returns true for its ancestor tag ID' do
-          expect(subject.is_ancestor_tag_id(ancestor_tag.id)).to be_truthy
+          expect(subject.ancestor_tag_id?(ancestor_tag.id)).to be_truthy
         end
 
         it 'returns false for an unrelated tag ID' do
-          expect(subject.is_ancestor_tag_id(other_tag.id)).to be_falsey
+          expect(subject.ancestor_tag_id?(other_tag.id)).to be_falsey
         end
       end
     end

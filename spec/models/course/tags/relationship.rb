@@ -16,7 +16,7 @@ RSpec.describe Course::Tag::Relationship, type: :model do
 
       context 'acyclic relationship' do
         let(:subject) { create(:course_tag_relationship, tag: tag1, child_tag: tag2) }
-  
+
         it 'saves successfully' do
           expect(subject.errors[:cyclic_tags]).to be_empty
           subject.save!
@@ -32,7 +32,7 @@ RSpec.describe Course::Tag::Relationship, type: :model do
         let(:subject) { create(:course_tag_relationship, tag: tag2, child_tag: tag1) }
 
         it 'results in an error' do
-          expect(subject.errors[:cyclic_tags]).to include("cannot add ancestor tag as a child of a tag")
+          expect(subject.errors[:cyclic_tags]).to include('cannot add ancestor tag as a child of a tag')
           subject.save!
         end
       end
@@ -48,7 +48,7 @@ RSpec.describe Course::Tag::Relationship, type: :model do
         let(:subject) { create(:course_tag_relationship, tag: tag3, child_tag: tag1) }
 
         it 'results in an error' do
-          expect(subject.errors[:cyclic_tags]).to include("cannot add ancestor tag as a child of a tag")
+          expect(subject.errors[:cyclic_tags]).to include('cannot add ancestor tag as a child of a tag')
           subject.save!
         end
       end

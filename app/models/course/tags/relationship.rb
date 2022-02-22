@@ -9,8 +9,8 @@ class Course::Tag::Relationship < ApplicationRecord
   private
 
   def validate_acyclic_relationship
-    return unless tag.is_ancestor_tag_id(child_tag.id)
+    return unless tag.ancestor_tag_id?(child_tag.id)
 
-    errors.add(:cyclic_tags, "cannot add ancestor tag as a child of a tag") if tag.is_ancestor_tag_id(child_tag.id)
+    errors.add(:cyclic_tags, 'cannot add ancestor tag as a child of a tag') if tag.ancestor_tag_id?(child_tag.id)
   end
 end
