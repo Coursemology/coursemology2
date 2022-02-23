@@ -176,11 +176,11 @@ export default class CommentCard extends Component {
           <CardHeader
             avatar={<Avatar src={avatar} style={styles.avatar} />}
             title={name}
-            titleTypographyProps={{ display: 'inline-block', marginright: 20 }}
+            titleTypographyProps={{ display: 'block', marginright: 20 }}
             subheader={`${CommentCard.formatDateTime(createdAt)}${
               isDelayed ? ' (delayed comment)' : ''
             }`}
-            subheaderTypographyProps={{ display: 'inline-block' }}
+            subheaderTypographyProps={{ display: 'block' }}
             style={styles.cardHeader}
           />
           <div style={styles.buttonContainer}>
