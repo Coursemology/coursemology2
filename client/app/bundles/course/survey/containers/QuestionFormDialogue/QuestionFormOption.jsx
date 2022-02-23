@@ -70,7 +70,7 @@ class QuestionFormOption extends React.Component {
             disabled={disabled}
             onClick={() => this.fileInput.click()}
           >
-            <Photo nativeColor={disabled ? undefined : grey[700]} />
+            <Photo htmlColor={disabled ? undefined : grey[700]} />
           </IconButton>
         </label>
         <input
@@ -172,7 +172,7 @@ class QuestionFormOption extends React.Component {
           {...{ index, disabled }}
         />
         <IconButton disabled={disabled} onClick={handleRemove}>
-          <Close nativeColor={disabled ? undefined : grey[600]} />
+          <Close htmlColor={disabled ? undefined : grey[600]} />
         </IconButton>
       </div>
     );

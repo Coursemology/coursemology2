@@ -25,7 +25,7 @@ class Material extends React.PureComponent {
     const { name, url } = this.props;
     return (
       <div style={styles.material}>
-        <Description style={styles.icon} nativeColor={grey[700]} />
+        <Description style={styles.icon} htmlColor={grey[700]} />
         <a href={url}>{name}</a>
       </div>
     );

@@ -34,7 +34,7 @@ function Controls(props) {
       <Tooltip title={<FormattedMessage {...translations.toggleLive} />}>
         <IconButton onClick={() => props.onAutoScrollToggle(!props.autoScroll)}>
           <OndemandVideo
-            nativeColor={
+            htmlColor={
               props.autoScroll ? activeColor[500] : inactiveColor[700]
             }
           />
