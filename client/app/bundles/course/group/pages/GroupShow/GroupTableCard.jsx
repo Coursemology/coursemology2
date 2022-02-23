@@ -40,7 +40,7 @@ const translations = defineMessages({
 });
 
 const roles = {
-  normal: 'Normal',
+  normal: 'Member',
   manager: 'Manager',
 };
 

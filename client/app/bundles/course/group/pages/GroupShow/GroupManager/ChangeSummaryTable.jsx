@@ -70,7 +70,7 @@ const styles = {
 };
 
 const roles = {
-  normal: 'Normal',
+  normal: 'Member',
   manager: 'Manager',
 };
 

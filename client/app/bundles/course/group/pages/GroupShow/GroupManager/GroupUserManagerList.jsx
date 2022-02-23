@@ -16,7 +16,7 @@ import { memberShape } from '../../../propTypes';
 const translations = defineMessages({
   normal: {
     id: 'course.group.show.groupUserManagerList.normal',
-    defaultMessage: 'Normal',
+    defaultMessage: 'Member',
   },
   manager: {
     id: 'course.group.show.groupUserManagerList.manager',
