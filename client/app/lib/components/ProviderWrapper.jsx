@@ -61,6 +61,12 @@ const theme = createTheme({
         zIndex: 1800,
       },
     },
+    MuiStepLabel: {
+      iconContainer: {
+        paddingLeft: '2px',
+        paddingRight: '2px',
+      },
+    },
     MuiTableCell: {
       root: {
         padding: '8px 14px',
