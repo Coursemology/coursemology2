@@ -1,11 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<Material /> renders the material 1`] = `
-<WithStyles(ListItem)
+<WithStyles(ForwardRef(ListItem))
   button={true}
 >
-  <WithStyles(ListItemAvatar)>
-    <WithStyles(Avatar)
+  <WithStyles(ForwardRef(ListItemAvatar))>
+    <WithStyles(ForwardRef(Avatar))
       style={
         Object {
           "height": "32px",
@@ -13,10 +13,10 @@ exports[`<Material /> renders the material 1`] = `
         }
       }
     >
-      <pure(AssignmentIcon) />
-    </WithStyles(Avatar)>
-  </WithStyles(ListItemAvatar)>
-  <WithStyles(ListItemText)
+      <Memo(ForwardRef(AssignmentIcon)) />
+    </WithStyles(ForwardRef(Avatar))>
+  </WithStyles(ForwardRef(ListItemAvatar))>
+  <WithStyles(ForwardRef(ListItemText))
     primary="Uploaded Material"
     secondary={
       <div
@@ -30,8 +30,8 @@ exports[`<Material /> renders the material 1`] = `
       </div>
     }
   />
-  <WithStyles(ListItemSecondaryAction)>
-    <WithStyles(IconButton)
+  <WithStyles(ForwardRef(ListItemSecondaryAction))>
+    <WithStyles(ForwardRef(IconButton))
       onClick={[Function]}
       style={
         Object {
@@ -43,7 +43,7 @@ exports[`<Material /> renders the material 1`] = `
         }
       }
     >
-      <pure(DeleteIcon)
+      <Memo(ForwardRef(DeleteIcon))
         data-for="delete-file-button"
         data-tip={true}
         data-tip-disable={true}
@@ -61,16 +61,16 @@ exports[`<Material /> renders the material 1`] = `
           values={Object {}}
         />
       </ReactTooltip>
-    </WithStyles(IconButton)>
-  </WithStyles(ListItemSecondaryAction)>
-</WithStyles(ListItem)>
+    </WithStyles(ForwardRef(IconButton))>
+  </WithStyles(ForwardRef(ListItemSecondaryAction))>
+</WithStyles(ForwardRef(ListItem))>
 `;
 
 exports[`<MaterialList /> renders the component with materials 1`] = `
 <Fragment>
-  <WithStyles(Divider) />
-  <WithStyles(List)>
-    <WithStyles(ListSubheader)
+  <WithStyles(ForwardRef(Divider)) />
+  <WithStyles(ForwardRef(List))>
+    <WithStyles(ForwardRef(ListSubheader))
       disableSticky={true}
     >
       <FormattedMessage
@@ -78,7 +78,7 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
         id="course.assessment.MaterialList.uploadedFiles"
         values={Object {}}
       />
-    </WithStyles(ListSubheader)>
+    </WithStyles(ForwardRef(ListSubheader))>
     <Material
       deleting={false}
       disabled={true}
@@ -101,7 +101,7 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
       data-for="add-files-button"
       data-tip={true}
     >
-      <WithStyles(Button)
+      <WithStyles(ForwardRef(Button))
         component="label"
         disabled={true}
         fullWidth={true}
@@ -111,7 +111,7 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
           }
         }
       >
-        <pure(AddIcon) />
+        <Memo(ForwardRef(AddIcon)) />
         Add Files
         <input
           disabled={true}
@@ -129,7 +129,7 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
           }
           type="file"
         />
-      </WithStyles(Button)>
+      </WithStyles(ForwardRef(Button))>
     </div>
     <ReactTooltip
       clickable={false}
@@ -144,8 +144,8 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
         values={Object {}}
       />
     </ReactTooltip>
-  </WithStyles(List)>
-  <WithStyles(Divider) />
+  </WithStyles(ForwardRef(List))>
+  <WithStyles(ForwardRef(Divider)) />
   <Memo(NotificationBar)
     autoHideDuration={5000}
   />

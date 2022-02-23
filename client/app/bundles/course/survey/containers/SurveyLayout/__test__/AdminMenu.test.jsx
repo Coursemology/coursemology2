@@ -41,7 +41,9 @@ describe('<AdminMenu />', () => {
     const iconButton = adminMenu.find('button').first();
     iconButton.simulate('click');
 
-    const deleteButton = adminMenu.find('ButtonBase').last();
+    const deleteButton = adminMenu
+      .find('WithStyles(ForwardRef(ButtonBase))')
+      .last();
     deleteButton.simulate('click');
 
     const confirmDeleteButton = deleteConfirmation
@@ -82,7 +84,9 @@ describe('<AdminMenu />', () => {
     const iconButton = adminMenu.find('button').first();
     iconButton.simulate('click');
 
-    const updateButton = adminMenu.find('ButtonBase').last();
+    const updateButton = adminMenu
+      .find('WithStyles(ForwardRef(ButtonBase))')
+      .last();
     updateButton.simulate('click');
 
     surveyFormDialogue.update();
