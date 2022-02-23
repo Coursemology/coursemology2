@@ -5,9 +5,9 @@ import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
 import {
   Button,
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
+  ExpansionPanel,
+  ExpansionPanelDetails,
+  ExpansionPanelSummary,
   Fade,
   Table,
   TableBody,
@@ -93,19 +93,19 @@ class OnlineEditorCppView extends React.Component {
     };
 
     return (
-      <Accordion
+      <ExpansionPanel
         defaultExpanded
         style={{
           margin: 0,
         }}
       >
-        <AccordionSummary
+        <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
           style={{ fontSize: 14, fontWeight: 'bold', margin: 0 }}
         >
           {header}
-        </AccordionSummary>
-        <AccordionDetails style={{ padding: 0 }}>
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails style={{ padding: 0 }}>
           <Table>
             <TableHead>
               <TableRow>
@@ -122,8 +122,8 @@ class OnlineEditorCppView extends React.Component {
               {this.props.data.get(fileType).map(renderDataFile)}
             </TableBody>
           </Table>
-        </AccordionDetails>
-      </Accordion>
+        </ExpansionPanelDetails>
+      </ExpansionPanel>
     );
   }
 
@@ -151,24 +151,24 @@ class OnlineEditorCppView extends React.Component {
       .map(renderNewFile);
 
     return (
-      <Accordion
+      <ExpansionPanel
         defaultExpanded
         style={{
           margin: 0,
         }}
       >
-        <AccordionSummary
+        <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
           style={{ fontSize: 16, fontWeight: 'bold', margin: 0 }}
         >
           {header}
-        </AccordionSummary>
-        <AccordionDetails style={{ padding: 0 }}>
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails style={{ padding: 0 }}>
           <Table>
             <TableBody>{newPackageFilesRows}</TableBody>
           </Table>
-        </AccordionDetails>
-      </Accordion>
+        </ExpansionPanelDetails>
+      </ExpansionPanel>
     );
   }
 
@@ -209,19 +209,19 @@ class OnlineEditorCppView extends React.Component {
     ));
 
     return (
-      <Accordion
+      <ExpansionPanel
         defaultExpanded
         style={{
           margin: 0,
         }}
       >
-        <AccordionSummary
+        <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
           style={{ fontSize: 16, fontWeight: 'bold', margin: 0 }}
         >
           {header}
-        </AccordionSummary>
-        <AccordionDetails style={{ padding: 0 }}>
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails style={{ padding: 0 }}>
           <Table>
             <TableHead>
               <TableRow>
@@ -251,8 +251,8 @@ class OnlineEditorCppView extends React.Component {
               </TableRow>
             </TableFooter>
           </Table>
-        </AccordionDetails>
-      </Accordion>
+        </ExpansionPanelDetails>
+      </ExpansionPanel>
     );
   }
 
@@ -278,7 +278,7 @@ class OnlineEditorCppView extends React.Component {
     const testCases = data.get('test_cases');
     const testCaseError = data.getIn(['test_cases', 'error']);
     const errorTextElement = testCaseError && (
-      <Fade in={testCaseError}>
+      <Fade in={!!testCaseError}>
         <div
           style={{
             fontSize: 12,

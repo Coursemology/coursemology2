@@ -36,7 +36,7 @@ class TestCase extends React.Component {
       <>
         <TextField
           disabled={this.props.isLoading}
-          error={test.getIn(['error', field])}
+          error={!!test.getIn(['error', field])}
           fullWidth
           helperText={test.getIn(['error', field]) && placeholder}
           multiline

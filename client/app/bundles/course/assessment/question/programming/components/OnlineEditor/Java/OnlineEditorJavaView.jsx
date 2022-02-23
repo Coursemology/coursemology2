@@ -337,7 +337,7 @@ class OnlineEditorJavaView extends React.Component {
     const testCases = data.get('test_cases');
     const testCaseError = data.getIn(['test_cases', 'error']);
     const errorTextElement = testCaseError && (
-      <Fade in={testCaseError}>
+      <Fade in={!!testCaseError}>
         <div
           style={{
             fontSize: 12,
@@ -540,6 +540,7 @@ class OnlineEditorJavaView extends React.Component {
             />
             <input
               hidden
+              readOnly
               name="question_programming[submit_as_file]"
               value={submitAsFile}
             />

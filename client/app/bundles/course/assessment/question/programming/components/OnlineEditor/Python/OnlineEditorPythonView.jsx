@@ -277,7 +277,7 @@ class OnlineEditorPythonView extends React.Component {
     const testCases = data.get('test_cases');
     const testCaseError = data.getIn(['test_cases', 'error']);
     const errorTextElement = testCaseError && (
-      <Fade in={testCaseError}>
+      <Fade in={!!testCaseError}>
         <div
           style={{
             fontSize: 12,
