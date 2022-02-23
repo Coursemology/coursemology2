@@ -320,7 +320,7 @@ class ProgrammingQuestionForm extends Component {
       <div key={field}>
         <FormControl
           disabled={this.props.data.get('is_loading')}
-          error={error}
+          error={!!error}
           style={{ marginTop: 14, width: '100%' }}
         >
           <InputLabel>{(required ? '* ' : '') + label}</InputLabel>
@@ -374,7 +374,7 @@ class ProgrammingQuestionForm extends Component {
       <div title={placeholder}>
         <TextField
           disabled={this.props.data.get('is_loading')}
-          error={error}
+          error={!!error}
           fullWidth
           label={(required ? '* ' : '') + label}
           helperText={error}
