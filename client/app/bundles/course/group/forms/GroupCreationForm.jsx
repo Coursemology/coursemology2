@@ -61,6 +61,15 @@ const translations = defineMessages({
     id: 'course.group.groupForm.numToCreateMax',
     defaultMessage: 'Maximum 50',
   },
+  multipleGroupsWillBeCreated: {
+    id: 'course.group.groupForm.multipleGroupsWillBeCreated',
+    defaultMessage: 'This will create groups {name} 1 to {name} {numToCreate}.',
+  },
+  duplicateGroups: {
+    id: 'course.group.groupForm.duplicateGroups',
+    defaultMessage:
+      'The following group(s) already exist and will not be created again: {duplicateNames}.',
+  },
 });
 
 const MIN_NUM_TO_CREATE = 2;
@@ -203,13 +212,18 @@ const GroupCreationForm = ({
             numToCreate >= MIN_NUM_TO_CREATE &&
             numToCreate <= MAX_NUM_TO_CREATE ? (
               <div style={styles.note}>
-                This will create groups {name} 1 to {name} {numToCreate}.
+                <FormattedMessage
+                  values={{ name, numToCreate }}
+                  {...translations.multipleGroupsWillBeCreated}
+                />
               </div>
             ) : null}
             {conflictingNames.length > 0 ? (
               <div style={styles.warning}>
-                The following group(s) already exist and will not be created
-                again: {conflictingNames.join(', ')}.
+                <FormattedMessage
+                  values={{ duplicateNames: conflictingNames.join(', ') }}
+                  {...translations.duplicateGroups}
+                />
               </div>
             ) : null}
           </div>
