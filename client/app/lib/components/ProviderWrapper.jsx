@@ -11,7 +11,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import zh from 'react-intl/locale-data/zh';
 import palette from '../../theme/palette';
-import { black, grey, white } from '../../theme/colors';
+import { black, white } from '../../theme/colors';
 
 import ErrorBoundary from './ErrorBoundary';
 import translations from '../../../build/locales/locales.json';

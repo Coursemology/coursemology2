@@ -37,7 +37,7 @@ class SurveyLayout extends Component {
         }
         iconElementLeft={
           <IconButton onClick={() => history.push(backLocation)}>
-            <ArrowBack nativeColor="white" />
+            <ArrowBack htmlColor="white" />
           </IconButton>
         }
       />

@@ -460,7 +460,7 @@ class SubmissionEditStepForm extends Component {
               <Step key={questionId} active={index <= maxStep}>
                 <StepButton
                   icon={
-                    <SvgIcon nativeColor={stepButtonColor}>
+                    <SvgIcon htmlColor={stepButtonColor}>
                       <circle cx="12" cy="12" r="12" />
                       <text
                         x="12"

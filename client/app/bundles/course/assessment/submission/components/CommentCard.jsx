@@ -199,7 +199,7 @@ export default class CommentCard extends Component {
                 onClick={() => this.onDelete()}
                 style={styles.headerButton}
               >
-                <Delete nativeColor={red[500]} />
+                <Delete htmlColor={red[500]} />
               </Button>
             ) : null}
           </div>

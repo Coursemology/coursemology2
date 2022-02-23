@@ -164,7 +164,7 @@ export default class SubmissionsTableRow extends Component {
           onClick={() => this.setState({ deleteConfirmation: true })}
           style={styles.button}
         >
-          <Delete nativeColor={disabled ? undefined : red[900]} />
+          <Delete htmlColor={disabled ? undefined : red[900]} />
         </IconButton>
       </span>
     );
@@ -213,7 +213,7 @@ export default class SubmissionsTableRow extends Component {
         <a href={getSubmissionLogsURL(courseId, assessmentId, submission.id)}>
           <IconButton style={styles.button}>
             <History
-              nativeColor={submission.logCount > 1 ? red[600] : blue[600]}
+              htmlColor={submission.logCount > 1 ? red[600] : blue[600]}
             />
           </IconButton>
         </a>
@@ -260,7 +260,7 @@ export default class SubmissionsTableRow extends Component {
           onClick={() => this.setState({ unsubmitConfirmation: true })}
           style={styles.button}
         >
-          <RemoveCircle nativeColor={disabled ? undefined : pink[600]} />
+          <RemoveCircle htmlColor={disabled ? undefined : pink[600]} />
         </IconButton>
       </span>
     );

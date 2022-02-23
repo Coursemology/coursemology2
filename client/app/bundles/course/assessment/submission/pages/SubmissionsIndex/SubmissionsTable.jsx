@@ -233,7 +233,7 @@ export default class SubmissionsTable extends Component {
               {isUnsubmitting ? (
                 <CircularProgress size={30} />
               ) : (
-                <RemoveCircle nativeColor={pink[600]} />
+                <RemoveCircle htmlColor={pink[600]} />
               )}
               <FormattedMessage
                 {...submissionsTranslations.unsubmitAllSubmissions}
@@ -253,7 +253,7 @@ export default class SubmissionsTable extends Component {
               {isDeleting ? (
                 <CircularProgress size={30} />
               ) : (
-                <Delete nativeColor={red[900]} />
+                <Delete htmlColor={red[900]} />
               )}
               <FormattedMessage
                 {...submissionsTranslations.deleteAllSubmissions}

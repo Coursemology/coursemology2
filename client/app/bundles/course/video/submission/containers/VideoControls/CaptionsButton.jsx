@@ -23,7 +23,7 @@ function CaptionsButton(props) {
       onClick={() => props.onClick(props.captionsState)}
     >
       <ClosedCaption
-        nativeColor={
+        htmlColor={
           props.captionsState === captionsStates.ON ? 'black' : grey[400]
         }
       />
