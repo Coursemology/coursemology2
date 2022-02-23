@@ -16,7 +16,8 @@ class Course::LessonPlan::Strategies::FixedPersonalizationStrategy <
   # @param [CourseUser] course_user The course user to compute data for.
   # @param [Hash{Integer=>ActiveSupport::TimeWithZone|nil}] precompute_data A hash of submitted lesson plan items' ID to
   #   their submitted time, if relevant/available.
-  def execute(course_user, precompute_data)
+  # @param [Set<Number>|nil] items_to_shift Unused and does not affect behaviour.
+  def execute(course_user, precompute_data, _items_to_shift)
     course_user.personal_times.where(fixed: false).
       where.not(lesson_plan_item_id: precompute_data.keys).delete_all
   end

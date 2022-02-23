@@ -113,6 +113,9 @@ class Course::LessonPlan::Item < ApplicationRecord
            to: :default_reference_time
   before_validation :link_default_reference_time
 
+  # TODO(#3448): Consider creating personal times if new_record?
+  before_save :update_personal_times, if: -> { (end_at_changed? || start_at_changed?) && !new_record? }
+
   # Returns a frozen CourseReferenceTime or CoursePersonalTime.
   # The calling function is responsible for eager-loading both associations if calling time_for on a lot of items.
   # TODO(#3902): Lookup user's reference timeline before defaulting to default reference timeline
@@ -276,5 +279,9 @@ class Course::LessonPlan::Item < ApplicationRecord
     return unless time_bonus_exp && time_bonus_exp > 0 && bonus_end_at.blank?
 
     errors.add(:bonus_end_at, :required)
+  end
+
+  def update_personal_times
+    Course::LessonPlan::CoursewidePersonalizedTimelineUpdateJob.perform_later(self)
   end
 end
