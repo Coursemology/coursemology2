@@ -86,6 +86,15 @@ const translations = defineMessages({
     id: 'course.group.show.groupManager.saveChanges',
     defaultMessage: 'Save Changes',
   },
+  confirmDiscard: {
+    id: 'course.group.show.groupManager.confirmDiscard',
+    defaultMessage: 'Are you sure you wish to discard the changes made?',
+  },
+  confirmSave: {
+    id: 'course.group.show.groupManager.confirmSave',
+    defaultMessage:
+      'Are you sure you wish to save all changes made to the groups under this category?',
+  },
 });
 
 const styles = {
@@ -332,6 +341,11 @@ const GroupManager = ({
             handleSave();
           }
         }}
+        message={
+          isConfirmingCancel
+            ? intl.formatMessage(translations.confirmDiscard)
+            : intl.formatMessage(translations.confirmSave)
+        }
       />
     </>
   );

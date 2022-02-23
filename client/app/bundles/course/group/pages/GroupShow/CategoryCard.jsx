@@ -48,6 +48,10 @@ const translations = defineMessages({
     id: 'course.group.show.categoryCard.delete',
     defaultMessage: 'Delete Category',
   },
+  confirmDelete: {
+    id: 'course.group.show.categoryCard.confirmDelete',
+    defaultMessage: 'Are you sure you wish to delete {categoryName}?',
+  },
   subtitle: {
     id: 'course.group.show.categoryCard.subtitle',
     defaultMessage:
@@ -193,6 +197,9 @@ const CategoryCard = ({
             onConfirm={() => {
               handleDelete();
             }}
+            message={intl.formatMessage(translations.confirmDelete, {
+              categoryName: category.name,
+            })}
           />
         </>
       )}
