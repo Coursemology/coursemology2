@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Slider from 'material-ui/Slider'; // MUI v4
+import { Slider } from '@material-ui/core';
 
 import styles from '../VideoPlayer.scss';
 import { changePlayerVolume } from '../../actions/video';
@@ -23,8 +23,7 @@ function VolumeSlider(props) {
         max={props.fineTuningScale}
         step={1}
         value={props.volume * props.fineTuningScale}
-        sliderStyle={{ margin: 0 }}
-        onChange={(_, newValue) => {
+        onChange={(event, newValue) => {
           props.onVolumeChange(newValue / props.fineTuningScale);
         }}
       />
