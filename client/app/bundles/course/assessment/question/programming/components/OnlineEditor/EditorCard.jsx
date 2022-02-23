@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import {
-  ExpansionPanel,
-  ExpansionPanelDetails,
-  ExpansionPanelSummary,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AceEditor from 'react-ace';
@@ -38,8 +38,8 @@ class EditorCard extends React.Component {
   render() {
     const { mode, field, value, header, subtitle, isLoading } = this.props;
     return (
-      <ExpansionPanel defaultExpanded style={styles.panel}>
-        <ExpansionPanelSummary
+      <Accordion defaultExpanded style={styles.panel}>
+        <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           style={styles.panelSummary}
         >
@@ -48,8 +48,8 @@ class EditorCard extends React.Component {
             <br />
             <div style={styles.panelSummarySubtitle}>{subtitle}</div>
           </div>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails style={{ padding: 0 }}>
+        </AccordionSummary>
+        <AccordionDetails style={{ padding: 0 }}>
           <textarea
             name={EditorCard.getInputName(field)}
             value={value}
@@ -68,8 +68,8 @@ class EditorCard extends React.Component {
             editorProps={{ $blockScrolling: true }}
             setOptions={{ useSoftTabs: true, readOnly: isLoading }}
           />
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
+        </AccordionDetails>
+      </Accordion>
     );
   }
 }

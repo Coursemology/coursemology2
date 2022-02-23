@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import {
+  Accordion,
+  AccordionSummary,
   CardContent,
   Checkbox,
-  ExpansionPanel,
-  ExpansionPanelSummary,
   IconButton,
   Menu,
   MenuItem,
@@ -172,13 +172,13 @@ class QuestionCard extends React.Component {
     const { question, expanded } = this.props;
     const cursorStyle = this.state.hovered ? { cursor: 'move' } : null;
     return (
-      <ExpansionPanel
+      <Accordion
         expanded={expanded}
         onMouseOver={() => this.setState({ hovered: true })}
         onMouseOut={() => this.setState({ hovered: false })}
         style={{ ...styles.card, ...cursorStyle }}
       >
-        <ExpansionPanelSummary>
+        <AccordionSummary>
           {this.renderAdminMenu()}
           <div style={styles.panelSummaryText}>
             <p dangerouslySetInnerHTML={{ __html: question.description }} />
@@ -188,11 +188,11 @@ class QuestionCard extends React.Component {
               </p>
             ) : null}
           </div>
-        </ExpansionPanelSummary>
+        </AccordionSummary>
         <CardContent style={styles.field}>
           {QuestionCard.renderSpecificFields(question)}
         </CardContent>
-      </ExpansionPanel>
+      </Accordion>
     );
   }
 }

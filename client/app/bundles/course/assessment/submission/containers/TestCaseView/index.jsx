@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import ReactTooltip from 'react-tooltip';
 import {
-  ExpansionPanel,
-  ExpansionPanelDetails,
-  ExpansionPanelSummary,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Paper,
   Table,
   TableBody,
@@ -141,12 +141,12 @@ export class VisibleTestCaseView extends Component {
 
   static renderOutputStream(outputStreamType, output, showStaffOnlyWarning) {
     return (
-      <ExpansionPanel
+      <Accordion
         defaultExpanded={false}
         id={outputStreamType}
         style={styles.panel}
       >
-        <ExpansionPanelSummary
+        <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           style={styles.panelSummary}
         >
@@ -155,11 +155,11 @@ export class VisibleTestCaseView extends Component {
             {showStaffOnlyWarning &&
               VisibleTestCaseView.renderStaffOnlyOutputStreamWarning()}
           </>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
+        </AccordionSummary>
+        <AccordionDetails>
           <pre style={{ width: '100%' }}>{output}</pre>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
+        </AccordionDetails>
+      </Accordion>
     );
   }
 
@@ -206,18 +206,18 @@ export class VisibleTestCaseView extends Component {
     const title = VisibleTestCaseView.renderTitle(testCaseType, warn);
 
     return (
-      <ExpansionPanel
+      <Accordion
         defaultExpanded={!collapsible}
         id={testCaseType}
         style={styles.panel}
       >
-        <ExpansionPanelSummary
+        <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           style={headerStyle}
         >
           {title}
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
+        </AccordionSummary>
+        <AccordionDetails>
           <Table>
             <TableHead>
               <TableRow>
@@ -233,8 +233,8 @@ export class VisibleTestCaseView extends Component {
               {testCases.map(this.renderTestCaseRow.bind(this))}
             </TableBody>
           </Table>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
+        </AccordionDetails>
+      </Accordion>
     );
   }
 
