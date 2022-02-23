@@ -51,11 +51,24 @@ const theme = createTheme({
       content: {
         margin: 0,
         '&$expanded': { margin: 0 },
+    MuiMenuItem: {
+      root: {
+        height: '48px',
       },
     },
     MuiModal: {
       root: {
         zIndex: 1800,
+      },
+    },
+    MuiTableCell: {
+      root: {
+        padding: '8px 14px',
+        height: '48px',
+      },
+      head: {
+        color: grey[500],
+        padding: '16px 16px',
       },
     },
     MuiTabs: {
