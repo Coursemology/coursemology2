@@ -18,7 +18,7 @@ import {
   SvgIcon,
   Tooltip,
 } from '@material-ui/core';
-import { blue, green, lightBlue, red, white } from '@material-ui/core/colors';
+import { blue, green, lightBlue, red } from '@material-ui/core/colors';
 
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
@@ -59,7 +59,7 @@ const styles = {
   },
   contineButton: {
     backgroundColor: green[500],
-    labelColor: white,
+    labelColor: 'white',
     marginBottom: 10,
     marginRight: 10,
   },

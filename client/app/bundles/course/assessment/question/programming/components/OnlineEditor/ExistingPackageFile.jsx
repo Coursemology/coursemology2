@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import { Button, TableCell, TableRow } from '@material-ui/core';
-import { grey, white } from '@material-ui/core/colors';
+import { grey } from '@material-ui/core/colors';
 
 import styles from './OnlineEditorView.scss';
 
@@ -26,7 +26,7 @@ function ExistingPackageFile(props) {
     isLast,
   } = props;
   const buttonClass = toDelete ? 'fa fa-undo' : 'fa fa-trash';
-  const buttonColor = toDelete ? white : grey[300];
+  const buttonColor = toDelete ? 'white' : grey[300];
   const rowStyle = toDelete
     ? { textDecoration: 'line-through', backgroundColor: grey[100] }
     : {};
