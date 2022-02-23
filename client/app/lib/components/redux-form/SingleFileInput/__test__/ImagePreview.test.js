@@ -37,7 +37,7 @@ describe('<SingleFileInput />', () => {
     });
 
     // SvgIcon is the element of the placeholder 'InsertDriveFileIcon'
-    expect(imagePreview.find('SvgIcon').length).toBe(1);
+    expect(imagePreview.find('WithStyles(ForwardRef(SvgIcon))').length).toBe(1);
     // No img element is rendered
     expect(imagePreview.find('img').length).toBe(0);
   });
@@ -89,8 +89,10 @@ describe('<SingleFileInput />', () => {
       },
     );
 
-    expect(imagePreview.find('Badge').exists()).toEqual(true);
-    imagePreview.find('IconButton').simulate('click');
+    expect(imagePreview.find('WithStyles(ForwardRef(Badge))').exists()).toEqual(
+      true,
+    );
+    imagePreview.find('WithStyles(ForwardRef(IconButton))').simulate('click');
     expect(onCancel).toHaveBeenCalled();
   });
 });

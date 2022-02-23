@@ -351,7 +351,7 @@ class ScribingToolbar extends Component {
       <Grid
         container
         direction="row"
-        justify="space-between"
+        justifyContent="space-between"
         alignItems="center"
         style={{
           ...toolBarStyle,

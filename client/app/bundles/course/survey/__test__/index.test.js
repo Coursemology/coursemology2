@@ -49,6 +49,6 @@ describe('Surveys', () => {
     expect(spyIndex).toHaveBeenCalled();
     indexPage.update();
     expect(indexPage.find('AddButton').length).toBe(1);
-    expect(indexPage.find('Table')).toHaveLength(1);
+    expect(indexPage.find('WithStyles(ForwardRef(Table))')).toHaveLength(1);
   });
 });

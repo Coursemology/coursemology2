@@ -31,7 +31,7 @@ describe('<LessonPlanSettings />', () => {
       buildContextOptions(store),
     );
 
-    const toggles = lessonPlanSettings.find('WithStyles(Switch)');
+    const toggles = lessonPlanSettings.find('WithStyles(ForwardRef(Switch))');
     // Enabled? and Visible? toggles.
     expect(toggles.length).toBe(2);
 

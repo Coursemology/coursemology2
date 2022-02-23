@@ -76,13 +76,17 @@ describe('<SurveyResults />', () => {
 
     // Toggling 'include phantoms' should result in one more entry
     surveyResults.update();
-    const rowsPriorToToggle = surveyResults.find('TableRow').length;
+    const rowsPriorToToggle = surveyResults.find(
+      'WithStyles(ForwardRef(TableRow))',
+    ).length;
     const includePhantomToggle = surveyResults
-      .find('WithStyles(Switch)')
+      .find('WithStyles(ForwardRef(Switch))')
       .first();
     includePhantomToggle.props().onChange(null, false);
     surveyResults.update();
-    const rowsAfterToggle = surveyResults.find('TableRow').length;
+    const rowsAfterToggle = surveyResults.find(
+      'WithStyles(ForwardRef(TableRow))',
+    ).length;
     expect(rowsAfterToggle).toBe(rowsPriorToToggle - 1);
   });
 });

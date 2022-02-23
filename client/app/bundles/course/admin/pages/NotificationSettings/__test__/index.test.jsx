@@ -26,7 +26,7 @@ describe('<NotificationSettings />', () => {
       buildContextOptions(store),
     );
 
-    const toggles = notificationSettings.find('WithStyles(Switch)');
+    const toggles = notificationSettings.find('WithStyles(ForwardRef(Switch))');
     expect(toggles.length).toBe(2);
 
     const toggle = toggles.first();

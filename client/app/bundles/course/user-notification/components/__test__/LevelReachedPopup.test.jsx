@@ -9,7 +9,7 @@ function popupDialogWrapper(notification) {
     <LevelReachedPopup notification={notification} />,
     contextOptions,
   );
-  const dialogInline = wrapper.find('WithStyles(Dialog)');
+  const dialogInline = wrapper.find('WithStyles(ForwardRef(Dialog))');
   return dialogInline;
 }
 
@@ -22,7 +22,7 @@ describe('<LevelReachedPopup />', () => {
     });
 
     it('does not show a link to the leaderboard', () => {
-      expect(wrapper.find('WithStyles(Button)').length).toBe(1);
+      expect(wrapper.find('WithStyles(ForwardRef(Button))').length).toBe(1);
       expect(wrapper.find('p').length).toBe(0);
     });
   });
@@ -35,7 +35,7 @@ describe('<LevelReachedPopup />', () => {
     });
 
     it('shows leaderboard button and message', () => {
-      expect(wrapper.find('WithStyles(Button)').length).toBe(2);
+      expect(wrapper.find('WithStyles(ForwardRef(Button))').length).toBe(2);
       expect(wrapper.find('p').length).toBe(1);
     });
   });
@@ -48,7 +48,7 @@ describe('<LevelReachedPopup />', () => {
     });
 
     it('shows leaderboard button but not message', () => {
-      expect(wrapper.find('WithStyles(Button)').length).toBe(2);
+      expect(wrapper.find('WithStyles(ForwardRef(Button))').length).toBe(2);
       expect(wrapper.find('p').length).toBe(0);
     });
   });

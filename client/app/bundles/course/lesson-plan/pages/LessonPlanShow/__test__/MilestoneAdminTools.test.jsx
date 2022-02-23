@@ -22,21 +22,27 @@ describe('<MilestoneAdminTools />', () => {
   it('hides admin tools for dummy milestone', () => {
     const milestone = { id: undefined, title: 'Ungrouped Items' };
     expect(
-      buildShallowWrapper(true, milestone).find('WithStyles(Button)').length,
+      buildShallowWrapper(true, milestone).find(
+        'WithStyles(ForwardRef(Button))',
+      ).length,
     ).toBe(0);
   });
 
   it('hides admin tools when user does not have permissions', () => {
     const milestone = { id: 4, title: 'User-defined Milestone' };
     expect(
-      buildShallowWrapper(false, milestone).find('WithStyles(Button)').length,
+      buildShallowWrapper(false, milestone).find(
+        'WithStyles(ForwardRef(Button))',
+      ).length,
     ).toBe(0);
   });
 
   it('shows admin tools when user has permissions', () => {
     const milestone = { id: 4, title: 'User-defined Milestone' };
     expect(
-      buildShallowWrapper(true, milestone).find('WithStyles(Button)').length,
+      buildShallowWrapper(true, milestone).find(
+        'WithStyles(ForwardRef(Button))',
+      ).length,
     ).toBe(2);
   });
 
@@ -58,7 +64,7 @@ describe('<MilestoneAdminTools />', () => {
     );
 
     const deleteButton = wrapper
-      .find('WithStyles(Button)')
+      .find('WithStyles(ForwardRef(Button))')
       .last()
       .find('button');
     deleteButton.simulate('click');
@@ -92,7 +98,7 @@ describe('<MilestoneAdminTools />', () => {
     );
 
     const editButton = wrapper
-      .find('WithStyles(Button)')
+      .find('WithStyles(ForwardRef(Button))')
       .first()
       .find('button');
     editButton.simulate('click');
