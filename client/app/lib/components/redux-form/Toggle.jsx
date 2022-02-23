@@ -20,7 +20,7 @@ const propTypes = {
 const styles = {
   toggleFieldStyle: {
     height: '30px',
-    margin: '8px 0px 0px -16px',
+    margin: '8px 0px 0px -8px',
   },
   errorText: { margin: 0 },
 };
