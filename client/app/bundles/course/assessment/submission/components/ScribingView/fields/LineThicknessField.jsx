@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import Slider from 'material-ui/Slider'; // MUI v4
+import { Slider } from '@material-ui/core';
 import { scribingTranslations as translations } from '../../../translations';
 
 const propTypes = {
@@ -35,7 +35,7 @@ const styles = {
     color: 'rgba(0, 0, 0, 0.3)',
   },
   slider: {
-    padding: '30px 0px',
+    padding: '60px 0px',
   },
 };
 
