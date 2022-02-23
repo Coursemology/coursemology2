@@ -76,7 +76,7 @@ class CourseDropdownMenu extends PureComponent {
           <Tooltip title={<FormattedMessage {...translations.currentCourse} />}>
             <IconButton onClick={onHome}>
               <MyLocation
-                nativeColor={
+                htmlColor={
                   currentCourseId === selectedCourseId ? blue[500] : null
                 }
               />

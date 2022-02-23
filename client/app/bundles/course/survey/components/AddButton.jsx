@@ -16,7 +16,7 @@ const propTypes = {
 
 const AddButton = ({ onClick }) => (
   <Fab color="primary" {...{ onClick }} style={styles.floatingButton}>
-    <Add nativeColor="white" />
+    <Add htmlColor="white" />
   </Fab>
 );
 

@@ -38,7 +38,7 @@ function NextVideoButton(props) {
         data-method={props.isPostRequest ? 'post' : ''}
         href={props.url}
       >
-        <SkipNext nativeColor="black" />
+        <SkipNext htmlColor="black" />
       </IconButton>
     </Tooltip>
   );

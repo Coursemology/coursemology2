@@ -133,7 +133,7 @@ class AdminMenu extends Component {
     return (
       <>
         <IconButton onClick={this.handleClick}>
-          <MoreVert nativeColor="white" />
+          <MoreVert htmlColor="white" />
         </IconButton>
         <Menu
           id="admin-menu"

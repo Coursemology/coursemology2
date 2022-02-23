@@ -93,7 +93,7 @@ class ConditionList extends Component {
             style={styles.alignMiddle}
             id={condition.delete_url}
           >
-            <Delete nativeColor="black" />
+            <Delete htmlColor="black" />
           </IconButton>
         </TableCell>
       </TableRow>
@@ -130,7 +130,7 @@ class ConditionList extends Component {
         </TableCell>
         <TableCell colSpan="2" style={styles.alignRight}>
           <IconButton className="add-condition-btn" onClick={this.handleClick}>
-            <Add />
+            <Add htmlColor="black"/>
           </IconButton>
           <Menu
             id="condition-menu"
