@@ -98,7 +98,7 @@ VisibleAnnotations.propTypes = {
     isSubmittingNormalComment: PropTypes.bool,
     isSubmittingDelayedComment: PropTypes.bool,
     isUpdatingComment: PropTypes.bool,
-    annotations: {},
+    annotations: PropTypes.object,
   }),
   fileId: PropTypes.number.isRequired,
   lineNumber: PropTypes.number.isRequired,
