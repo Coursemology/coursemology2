@@ -2,11 +2,11 @@
 
 exports[`<Toggle /> renders a toggle with an error 1`] = `
 <div
-  className="MuiFormControl-root-1 MuiFormControl-fullWidth-4"
+  className="MuiFormControl-root MuiFormControl-fullWidth"
 >
-  <WithStyles(WithFormControlContext(FormControlLabel))
+  <WithStyles(ForwardRef(FormControlLabel))
     control={
-      <WithStyles(Switch)
+      <ForwardRef(WithStyles)
         checked={false}
         color="primary"
         onChange={[MockFunction]}
@@ -17,11 +17,11 @@ exports[`<Toggle /> renders a toggle with an error 1`] = `
     style={
       Object {
         "height": "30px",
-        "margin": "8px 0px 0px -16px",
+        "margin": "8px 0px 0px -8px",
       }
     }
   />
-  <WithStyles(WithFormControlContext(FormHelperText))
+  <WithStyles(ForwardRef(FormHelperText))
     error={true}
     style={
       Object {
@@ -30,17 +30,17 @@ exports[`<Toggle /> renders a toggle with an error 1`] = `
     }
   >
     Ooops
-  </WithStyles(WithFormControlContext(FormHelperText))>
+  </WithStyles(ForwardRef(FormHelperText))>
 </div>
 `;
 
 exports[`<Toggle /> renders a toggled toggle 1`] = `
 <div
-  className="MuiFormControl-root-1 MuiFormControl-fullWidth-4"
+  className="MuiFormControl-root MuiFormControl-fullWidth"
 >
-  <WithStyles(WithFormControlContext(FormControlLabel))
+  <WithStyles(ForwardRef(FormControlLabel))
     control={
-      <WithStyles(Switch)
+      <ForwardRef(WithStyles)
         checked={true}
         color="primary"
         onChange={[MockFunction]}
@@ -51,7 +51,7 @@ exports[`<Toggle /> renders a toggled toggle 1`] = `
     style={
       Object {
         "height": "30px",
-        "margin": "8px 0px 0px -16px",
+        "margin": "8px 0px 0px -8px",
       }
     }
   />

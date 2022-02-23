@@ -40,7 +40,7 @@ describe('<SurveyLayout />', () => {
     );
     surveyLayout
       .find('TitleBar')
-      .find('WithStyles(IconButton)')
+      .find('WithStyles(ForwardRef(IconButton))')
       .simulate('click');
 
     expect(spyHistoryPush).toHaveBeenCalledWith(`/courses/${courseId}/surveys`);
