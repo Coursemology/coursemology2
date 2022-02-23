@@ -10,7 +10,7 @@ import styles from '../VideoPlayer.scss';
 import { changeCaptionsState } from '../../actions/video';
 
 const propTypes = {
-  captionsState: PropTypes.bool.isRequired,
+  captionsState: PropTypes.string.isRequired,
   onClick: PropTypes.func,
 };
 

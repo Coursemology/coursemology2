@@ -48,7 +48,7 @@ const propTypes = {
   duration: PropTypes.number,
   playerVolume: PropTypes.number,
   playbackRate: PropTypes.number,
-  captionsState: PropTypes.bool,
+  captionsState: PropTypes.string,
   forceSeek: PropTypes.bool,
   initialSeekTime: PropTypes.number,
   onPlayerProgress: PropTypes.func,
