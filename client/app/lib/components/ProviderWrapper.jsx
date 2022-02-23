@@ -4,8 +4,8 @@ import { PersistGate } from 'redux-persist/lib/integration/react';
 import { IntlProvider, addLocaleData } from 'react-intl';
 import { i18nLocale } from 'lib/helpers/server-context';
 import {
-  MuiThemeProvider as V3MuiThemeProvider,
-  createMuiTheme,
+  MuiThemeProvider as V4MuiThemeProvider,
+  createTheme,
 } from '@material-ui/core/styles';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
@@ -26,13 +26,12 @@ const propTypes = {
   children: PropTypes.element.isRequired,
 };
 
-const theme = createMuiTheme({
+const theme = createTheme({
   palette,
   // https://material-ui.com/customization/themes/#typography---html-font-size
   // https://material-ui.com/style/typography/#migration-to-typography-v2
   typography: {
     htmlFontSize: 10,
-    useNextVariants: true,
   },
   overrides: {
     MuiButton: {
@@ -43,7 +42,7 @@ const theme = createMuiTheme({
     },
     MuiDialogContent: {
       root: {
-        color: grey[600],
+        color: 'black',
         fontSize: '16px',
         fontFamily: `'Roboto', 'sans-serif'`,
       },
@@ -94,9 +93,9 @@ const ProviderWrapper = ({ store, persistor, children }) => {
 
   providers = (
     <IntlProvider locale={i18nLocale} messages={messages}>
-      <V3MuiThemeProvider theme={theme}>
+      <V4MuiThemeProvider theme={theme}>
         <MuiThemeProvider>{providers}</MuiThemeProvider>
-      </V3MuiThemeProvider>
+      </V4MuiThemeProvider>
     </IntlProvider>
   );
 
