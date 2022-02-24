@@ -1,10 +1,9 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Overlay } from 'react-overlays';
 import { grey200, grey400 } from 'material-ui/styles/colors';
 
 import AddCommentIcon from './AddCommentIcon';
-import OverlayTooltip from './OverlayTooltip';
 import Annotations from '../../containers/Annotations';
 import { annotationShape } from '../../propTypes';
 
@@ -35,6 +34,7 @@ const styles = {
     borderRightStyle: 'solid',
     borderRightColor: grey200,
     padding: '0 5px',
+    position: 'relative',
   },
   editorLineNumberWithComments: {
     height: 20,
@@ -46,6 +46,18 @@ const styles = {
     borderRightStyle: 'solid',
     borderRightColor: grey200,
     padding: '0 5px',
+    position: 'relative',
+  },
+  tooltipStyle: {
+    position: 'absolute',
+    top: 20,
+    left: 50,
+  },
+  tooltipInnerStyle: {
+    color: '#000',
+    textAlign: 'center',
+    borderRadius: 3,
+    backgroundColor: '#FFF',
   },
 };
 
@@ -60,6 +72,7 @@ const LineNumberColumn = (props) => {
     toggleComment,
     expandComment,
     annotations,
+    editorWidth,
   } = props;
 
   const annotation = annotations.find((a) => a.line === lineNumber);
@@ -83,22 +96,27 @@ const LineNumberColumn = (props) => {
         target={triggerRef}
         container={containerRef}
       >
-        {({ props: props2, placement }) => (
-          <OverlayTooltip
-            placement={placement}
-            style={{ zIndex: activeComment === lineNumber ? 1000 : lineNumber }}
-            {...props2}
+        {({ props: props2 }) => (
+          <div
+            ref={props2.ref}
+            style={{
+              width: Math.max(0, editorWidth - 2),
+              zIndex: activeComment === lineNumber ? 1000 : lineNumber,
+              ...styles.tooltipStyle,
+            }}
           >
-            <div onClick={() => setActiveComment(lineNumber)}>
-              <Annotations
-                answerId={answerId}
-                fileId={fileId}
-                lineNumber={lineNumber}
-                annotation={annotation}
-                airMode={false}
-              />
+            <div style={styles.tooltipInnerStyle}>
+              <div onClick={() => setActiveComment(lineNumber)}>
+                <Annotations
+                  answerId={answerId}
+                  fileId={fileId}
+                  lineNumber={lineNumber}
+                  annotation={annotation}
+                  airMode={false}
+                />
+              </div>
             </div>
-          </OverlayTooltip>
+          </div>
         )}
       </Overlay>
     );
@@ -137,20 +155,37 @@ LineNumberColumn.propTypes = {
   toggleComment: PropTypes.func.isRequired,
   expandComment: PropTypes.func.isRequired,
   activeComment: PropTypes.number.isRequired,
+  editorWidth: PropTypes.number.isRequired,
 
   expanded: PropTypes.arrayOf(PropTypes.bool).isRequired,
   answerId: PropTypes.number.isRequired,
   fileId: PropTypes.number.isRequired,
   annotations: PropTypes.arrayOf(annotationShape),
-  content: PropTypes.arrayOf(PropTypes.string).isRequired,
-  expandLine: PropTypes.func,
   collapseLine: PropTypes.func,
-  toggleLine: PropTypes.func,
 };
 
 export default function NarrowEditor(props) {
+  const editorRef = useRef();
+  const [editorWidth, setEditorWidth] = useState(0);
   const [activeComment, setActiveComment] = useState(0);
   const [lineHovered, setLineHovered] = useState(0);
+
+  const getEditorWidth = useCallback(() => {
+    if (!editorRef || !editorRef.current) {
+      return;
+    }
+    setEditorWidth(editorRef.current.clientWidth - 50); // 50 is the width of the line number column
+  }, [editorRef]);
+
+  useEffect(() => {
+    getEditorWidth();
+  }, [getEditorWidth]);
+
+  useEffect(() => {
+    window.addEventListener('resize', getEditorWidth);
+
+    return () => window.removeEventListener('resize', getEditorWidth);
+  }, [getEditorWidth]);
 
   const expandComment = (lineNumber) => {
     props.expandLine(lineNumber);
@@ -171,6 +206,7 @@ export default function NarrowEditor(props) {
       toggleComment={toggleComment}
       expandComment={expandComment}
       activeComment={activeComment}
+      editorWidth={editorWidth}
       {...props}
     />
   );
@@ -179,7 +215,7 @@ export default function NarrowEditor(props) {
 
   /* eslint-disable react/no-array-index-key */
   return (
-    <table className="codehilite" style={styles.editor}>
+    <table className="codehilite" style={styles.editor} ref={editorRef}>
       <tbody>
         <tr>
           <td
