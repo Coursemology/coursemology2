@@ -219,7 +219,8 @@ class OnlineEditorJavaView extends Component {
                     {'}'}; // Make function calls
                   </p>
                   <p style={{ marginBottom: 0 }}>
-                    {'setAttribute("expression", "addOneToArray([0,0,0])");'}
+                    setAttribute(&quot;expression&quot;,
+                    &quot;addOneToArray([0,0,0])&quot;);
                     {' // Override the default expression displayed'}
                   </p>
                 </pre>
