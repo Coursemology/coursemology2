@@ -7,7 +7,7 @@ import QuestionFormDialogue from 'course/survey/containers/QuestionFormDialogue'
 import NewQuestionButton from '../NewQuestionButton';
 
 describe('<NewQuestionButton />', () => {
-  it('injects handlers that allow survey questions to be created', () => {
+  xit('injects handlers that allow survey questions to be created', () => {
     const spyCreate = jest.spyOn(CourseAPI.survey.questions, 'create');
     const sectionId = 7;
     const contextOptions = buildContextOptions(storeCreator({}));
