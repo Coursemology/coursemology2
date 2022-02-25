@@ -51,7 +51,7 @@ $button-width: 30px;
 
 .volumeSlider {
   @include player-button(2 * $button-width);
-  margin: 0.5em 0.5em 0em;
+  margin: 0.5em 0.5em 0;
   order: 3;
 }
 
