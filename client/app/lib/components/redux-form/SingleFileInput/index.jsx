@@ -56,7 +56,7 @@ class SingleFileInput extends React.Component {
   };
 
   onCancel = (e) => {
-    this.setState({ file: null }, this.updateStore(''));
+    this.setState({ file: null }, this.updateStore(undefined));
     e.stopPropagation();
   };
 

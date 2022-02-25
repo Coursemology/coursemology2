@@ -21,7 +21,11 @@ export default class DeleteButton extends React.Component {
   renderIcon() {
     return (
       <Tooltip title={<FormattedMessage {...translations.removeFile} />}>
-        <IconButton onClick={this.props.handleCancel} style={styles.badgeStyle}>
+        <IconButton
+          onClick={this.props.handleCancel}
+          size="small"
+          style={styles.badgeStyle}
+        >
           <Close />
         </IconButton>
       </Tooltip>
