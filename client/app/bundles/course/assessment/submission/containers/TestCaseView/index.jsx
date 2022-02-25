@@ -211,10 +211,7 @@ export class VisibleTestCaseView extends Component {
         id={testCaseType}
         style={styles.panel}
       >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          style={headerStyle}
-        >
+        <AccordionSummary expandIcon={<ExpandMoreIcon />} style={headerStyle}>
           {title}
         </AccordionSummary>
         <AccordionDetails>
