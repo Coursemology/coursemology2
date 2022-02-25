@@ -435,7 +435,7 @@ class OnlineEditorJavaView extends Component {
               name={OnlineEditorJavaView.getTestInputName(type, 'inline_code')}
               value={test.get('inline_code')}
               style={{ display: 'none' }}
-              readOnly="true"
+              readOnly
             />
             <AceEditor
               mode="java"

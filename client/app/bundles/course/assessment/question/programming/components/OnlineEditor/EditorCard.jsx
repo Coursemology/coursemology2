@@ -54,7 +54,7 @@ class EditorCard extends Component {
             name={EditorCard.getInputName(field)}
             value={value}
             style={{ display: 'none' }}
-            readOnly="true"
+            readOnly
           />
           <AceEditor
             mode={mode}
