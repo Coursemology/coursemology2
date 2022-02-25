@@ -159,7 +159,7 @@ class SubmissionAnswer extends Component {
             <FormControlLabel
               control={
                 <Switch
-                  checked={viewHistory}
+                  checked={viewHistory || false}
                   className="toggle-history"
                   color="primary"
                   onChange={() =>

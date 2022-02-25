@@ -203,10 +203,10 @@ class VisibleSubmissionsIndex extends React.Component {
                 disableButtons ||
                 !VisibleSubmissionsIndex.canPublish(shownSubmissions)
               }
+              endIcon={isPublishing && <CircularProgress size={24} />}
               onClick={() => this.setState({ publishConfirmation: true })}
             >
               <FormattedMessage {...submissionsTranslations.publishGrades} />
-              {isPublishing && <CircularProgress size={24} />}
             </Button>
           )}
           {canForceSubmit && (
@@ -219,10 +219,10 @@ class VisibleSubmissionsIndex extends React.Component {
                   shownSubmissions,
                 )
               }
+              endIcon={isForceSubmitting && <CircularProgress size={24} />}
               onClick={() => this.setState({ forceSubmitConfirmation: true })}
             >
               <FormattedMessage {...submissionsTranslations.forceSubmit} />
-              {isForceSubmitting && <CircularProgress size={24} />}
             </Button>
           )}
           {showRemindButton && (
@@ -235,10 +235,10 @@ class VisibleSubmissionsIndex extends React.Component {
                   shownSubmissions,
                 )
               }
+              endIcon={isReminding && <CircularProgress size={24} />}
               onClick={() => this.setState({ remindConfirmation: true })}
             >
               <FormattedMessage {...submissionsTranslations.remind} />
-              {isReminding && <CircularProgress size={24} />}
             </Button>
           )}
         </CardActions>
