@@ -9,6 +9,10 @@ import ReactTooltip from 'react-tooltip';
 import Material from './Material';
 
 const translations = defineMessages({
+  addFiles: {
+    id: 'course.material.addFiles',
+    defaultMessage: 'Add Files',
+  },
   disableNewFile: {
     id: 'course.material.disableNewFile',
     defaultMessage:
@@ -106,10 +110,10 @@ const MaterialList = (props) => {
           component="label"
           disabled={!enableMaterialsAction}
           fullWidth
+          startIcon={<Add />}
           style={styles.newFileButton}
         >
-          <Add />
-          Add Files
+          <FormattedMessage {...translations.addFiles} />
           <input
             type="file"
             multiple

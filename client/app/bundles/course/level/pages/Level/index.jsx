@@ -188,8 +188,8 @@ class Level extends Component {
               disabled={isSaving}
               id="add-level"
               onClick={this.handleCreateLevel()}
+              startIcon={<i className="fa fa-plus" />}
             >
-              <i className="fa fa-plus" />
               <FormattedMessage {...translations.addNewLevel} />
             </Button>
           </TableCell>

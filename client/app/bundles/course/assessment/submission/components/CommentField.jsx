@@ -79,9 +79,11 @@ export default class CommentField extends Component {
           color="primary"
           disabled={disableCommentButton}
           onClick={() => createComment(value)}
+          startIcon={
+            isSubmittingNormalComment ? <CircularProgress size={24} /> : null
+          }
           style={{ marginRight: 10, marginBotton: 10 }}
         >
-          {isSubmittingNormalComment ? <CircularProgress size={24} /> : null}
           <FormattedMessage {...translations.comment} />
         </Button>
         {renderDelayedCommentButton && (
@@ -91,11 +93,13 @@ export default class CommentField extends Component {
               color="primary"
               disabled={disableCommentButton}
               onClick={() => createComment(value, true)}
+              startIcon={
+                isSubmittingNormalComment ? (
+                  <CircularProgress size={24} />
+                ) : null
+              }
               style={{ marginRight: 10, marginBotton: 10 }}
             >
-              {isSubmittingNormalComment ? (
-                <CircularProgress size={24} />
-              ) : null}
               <FormattedMessage {...translations.commentDelayed} />
             </Button>
             <ReactTooltip id={`delayed-comment-button-${inputId}`}>

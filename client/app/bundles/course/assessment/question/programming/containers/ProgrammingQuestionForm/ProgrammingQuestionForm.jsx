@@ -831,13 +831,15 @@ class ProgrammingQuestionForm extends Component {
             className={styles.submitButton}
             color="primary"
             disabled={this.props.data.get('is_loading')}
+            endIcon={
+              this.props.data.get('is_loading') ? (
+                <i className="fa fa-spinner fa-lg fa-spin" />
+              ) : null
+            }
             id="programming-question-form-submit"
             type="submit"
           >
             {this.submitButtonText()}
-            {this.props.data.get('is_loading') ? (
-              <i className="fa fa-spinner fa-lg fa-spin" />
-            ) : null}
           </Button>
           {this.state.confirmationOpen && (
             <ConfirmationDialog

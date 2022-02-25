@@ -58,10 +58,10 @@ class ColumnVisibilityDropdown extends Component {
         <Button
           variant="contained"
           color="secondary"
+          endIcon={<KeyboardArrowDown />}
           onClick={this.handleClick}
         >
           <FormattedMessage {...translations.label} />
-          <KeyboardArrowDown />
         </Button>
         <Popover
           open={this.state.open}
