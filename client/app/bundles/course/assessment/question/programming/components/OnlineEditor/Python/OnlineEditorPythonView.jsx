@@ -240,8 +240,8 @@ class OnlineEditorPythonView extends React.Component {
                       this.props.isLoading || numAllTestCases >= MAX_TEST_CASES
                     }
                     onClick={this.testCaseCreateHandler(type)}
+                    startIcon={<i className="fa fa-plus" />}
                   >
-                    <i className="fa fa-plus" />
                     {this.props.intl.formatMessage(
                       translations.addNewTestButton,
                     )}

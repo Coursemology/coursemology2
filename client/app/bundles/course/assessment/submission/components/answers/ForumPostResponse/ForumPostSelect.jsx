@@ -168,13 +168,15 @@ export default class ForumPostSelect extends React.Component {
               color="primary"
               disabled={this.state.hasErrorFetchingPosts || maxPosts === 0}
               onClick={() => this.setState({ isDialogVisible: true })}
+              startIcon={
+                <i
+                  className="fa fa-paperclip"
+                  style={styles.clipIcon}
+                  aria-hidden="true"
+                />
+              }
               style={{ marginBottom: 16 }}
             >
-              <i
-                className="fa fa-paperclip"
-                style={styles.clipIcon}
-                aria-hidden="true"
-              />
               <FormattedMessage
                 values={{ maxPosts }}
                 {...translations.selectPostsButton}

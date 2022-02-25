@@ -56,11 +56,11 @@ class LessonPlanNav extends React.Component {
         <Button
           variant="contained"
           color="secondary"
+          endIcon={<KeyboardArrowUp />}
           onClick={this.handleClick}
           style={styles.navButton}
         >
           <FormattedMessage {...translations.goto} />
-          <KeyboardArrowUp />
         </Button>
         <Popover
           open={this.state.open}

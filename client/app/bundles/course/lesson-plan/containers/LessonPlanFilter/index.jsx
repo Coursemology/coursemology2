@@ -52,10 +52,10 @@ class LessonPlanFilter extends React.Component {
         <Button
           variant="contained"
           color="secondary"
+          endIcon={<KeyboardArrowUp />}
           onClick={this.handleClick}
         >
           <FormattedMessage {...translations.filter} />
-          <KeyboardArrowUp />
         </Button>
         <Popover
           open={this.state.open}

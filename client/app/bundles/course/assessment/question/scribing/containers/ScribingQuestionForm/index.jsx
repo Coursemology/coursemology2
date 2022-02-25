@@ -283,13 +283,15 @@ class ScribingQuestionForm extends React.Component {
             className={styles.submitButton}
             color="primary"
             disabled={this.props.data.isLoading || submitting}
+            endIcon={
+              this.props.data.isSubmitting ? (
+                <i className="fa fa-spinner fa-lg fa-spin" />
+              ) : null
+            }
             type="submit"
             style={{ marginBottom: '1em' }}
           >
             {this.submitButtonText()}
-            {this.props.data.isSubmitting ? (
-              <i className="fa fa-spinner fa-lg fa-spin" />
-            ) : null}
           </Button>
         </Form>
       </>
