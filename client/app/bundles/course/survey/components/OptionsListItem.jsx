@@ -12,7 +12,7 @@ const styles = {
     width: '100%',
   },
   optionText: {
-    margin: 0,
+    margin: '0 0 0 10px',
   },
   image: {
     maxHeight: 150,
