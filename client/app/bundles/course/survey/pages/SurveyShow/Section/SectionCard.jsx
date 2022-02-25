@@ -19,7 +19,7 @@ import MoveDownButton from './MoveDownButton';
 
 const styles = {
   card: {
-    marginBottom: 0,
+    marginBottom: 15,
   },
   expandIcon: {
     float: 'right',

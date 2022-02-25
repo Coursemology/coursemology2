@@ -28,6 +28,7 @@ const styles = {
   },
   widget: {
     padding: 0,
+    marginRight: 10,
     width: 'auto',
   },
   optionBody: {

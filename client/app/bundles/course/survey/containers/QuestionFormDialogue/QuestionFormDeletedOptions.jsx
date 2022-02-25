@@ -16,6 +16,7 @@ const styles = {
     width: 'auto',
   },
   optionBody: {
+    color: grey[600],
     width: '60%',
   },
   image: {
