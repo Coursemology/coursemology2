@@ -229,7 +229,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         find('.delete-submissions-enabled').click
         accept_confirm_dialog
         wait_for_job
-
+        sleep 1
         expect(page).to_not have_button(delete_btn)
 
         expect(randomized_assessment.submissions).to be_empty

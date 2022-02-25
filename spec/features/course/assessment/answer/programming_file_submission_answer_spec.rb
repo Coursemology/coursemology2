@@ -32,7 +32,8 @@ RSpec.describe 'Course: Assessments: Submissions: Programming File Submission An
         file_input.set(file_path)
 
         # The file should show in the dropzone
-        expect(file_view).to have_css('span', count: 1)
+        # There are 2 span elements (text and ripple) for mui chip
+        expect(file_view).to have_css('span', count: 2)
         expect(dropzone).to have_css('span', text: 'template_file')
 
         # Upload the file
@@ -40,9 +41,10 @@ RSpec.describe 'Course: Assessments: Submissions: Programming File Submission An
 
         # The upload should be successful and the staged file should not be in the dropzone
         # The newly uploaded file should show as a new file tab
+        # There are 2 span elements (text and ripple) for mui chip
         expect(dropzone).to have_no_css('span', text: 'template_file')
         expect(file_view).to have_css('span', text: 'template_file')
-        expect(file_view).to have_css('span', count: 2)
+        expect(file_view).to have_css('span', count: 4)
 
         # Stage the same file again and attempt to upload
         # (Need to set to another file first before setting again to the first file)
@@ -52,8 +54,9 @@ RSpec.describe 'Course: Assessments: Submissions: Programming File Submission An
 
         # The upload should fail and the staged file should remain in the dropzone
         # There should still be only 2 files in the question
+        # There are 2 span elements (text and ripple) for mui chip
         expect(dropzone).to have_css('span', text: 'template_file')
-        expect(file_view).to have_css('span', count: 2)
+        expect(file_view).to have_css('span', count: 4)
       end
 
       scenario 'I can delete existing programming files', js: true do
@@ -62,7 +65,8 @@ RSpec.describe 'Course: Assessments: Submissions: Programming File Submission An
         file_view = find('strong', text: 'Uploaded Files:').find(:xpath, '..')
 
         # There should be a single programming file in the submission
-        expect(file_view).to have_css('span', count: 1)
+        # There are 2 span elements (text and ripple) for mui chip
+        expect(file_view).to have_css('span', count: 2)
 
         # Click on the delete button and confirm
         delete_button = file_view.find('svg')
