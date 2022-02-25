@@ -143,6 +143,10 @@ export default class ForumPostSelect extends Component {
   }
 
   renderSelectedPostPacks(postPacks) {
+    if (!postPacks) {
+      return null;
+    }
+
     return postPacks.map((postPack) => (
       <div key={`selected-post-pack-${postPack.corePost.id}`}>
         <SelectedPostCard
