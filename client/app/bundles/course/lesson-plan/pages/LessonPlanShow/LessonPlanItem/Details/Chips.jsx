@@ -23,6 +23,9 @@ const styles = {
   chip: {
     margin: 4,
   },
+  chipIcon: {
+    fontSize: '1.8rem',
+  },
   chipsWrapper: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -102,7 +105,7 @@ class Chips extends React.Component {
       <Chip
         avatar={
           <Avatar style={styles.avatar}>
-            <DateRange />
+            <DateRange style={styles.chipIcon}/>
           </Avatar>
         }
         label={formatDateRange(startAt, endAt)}
