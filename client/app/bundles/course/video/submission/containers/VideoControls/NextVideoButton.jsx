@@ -22,8 +22,8 @@ function NextVideoButton(props) {
   if (!props.url) {
     return (
       <Tooltip title={<FormattedMessage {...translations.noNextVideo} />}>
-        <div>
-          <IconButton className={styles.nextVideo} disabled>
+        <div className={styles.nextVideo}>
+          <IconButton disabled>
             <SkipNext />
           </IconButton>
         </div>
