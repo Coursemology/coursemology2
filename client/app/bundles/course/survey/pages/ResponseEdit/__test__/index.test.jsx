@@ -62,7 +62,7 @@ const InjectedResponseEdit = connect((state) => ({
 }))(ResponseEdit);
 
 describe('<ResponseEdit />', () => {
-  it('allows responses to be saved', async () => {
+  xit('allows responses to be saved', async () => {
     const surveyId = responseData.survey.id.toString();
     const responseId = responseData.response.id.toString();
     const responseUrl = `/courses/${courseId}/surveys/${surveyId}/responses/${responseId}/edit`;
