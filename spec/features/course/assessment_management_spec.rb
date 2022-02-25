@@ -20,7 +20,7 @@ RSpec.feature 'Course: Assessments: Management' do
                                               tab: assessment_tab)
         find('div.new-btn button').click
 
-        expect(page).to have_selector('h6', text: 'New Assessment')
+        expect(page).to have_selector('h2', text: 'New Assessment')
 
         fill_in 'title', with: assessment.title
         fill_in 'base_exp', with: assessment.base_exp
@@ -28,7 +28,7 @@ RSpec.feature 'Course: Assessments: Management' do
         first("input[name='start_at']").click.set(assessment.start_at.strftime('%d-%m-%Y'))
         find('button.btn-submit').click
 
-        expect(page).not_to have_selector('h6', text: 'New Assessment')
+        expect(page).not_to have_selector('h2', text: 'New Assessment')
         assessment_created = course.assessments.last
         expect(assessment_created.tab).to eq(assessment_tab)
         expect(assessment_created.title).to eq(assessment.title)
