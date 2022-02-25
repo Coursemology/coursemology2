@@ -1,5 +1,4 @@
-/* eslint-disable new-cap */
-import { Component } from 'react';
+import { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
@@ -21,14 +20,26 @@ const translations = defineMessages({
   },
 });
 
-class SurveyShow extends Component {
-  componentDidMount() {
-    const { dispatch, surveyId } = this.props;
+const SurveyShow = ({
+  dispatch,
+  surveyId,
+  isLoading,
+  disabled,
+  intl,
+  survey,
+  courseId,
+  manager,
+}) => {
+  useEffect(() => {
     dispatch(surveyActions.fetchSurvey(surveyId));
-  }
+  }, [dispatch, surveyId]);
 
-  renderBody(survey) {
-    const { intl, isLoading, disabled } = this.props;
+  const managerToUse = useMemo(
+    () => manager ?? createDragDropManager(HTML5Backend),
+    [manager],
+  );
+
+  const renderBody = () => {
     const { sections, canUpdate } = survey;
     if (isLoading) {
       return <LoadingIndicator />;
@@ -56,19 +67,15 @@ class SurveyShow extends Component {
         ))}
       </>
     );
-  }
+  };
 
-  render() {
-    const { survey, disabled, courseId, manager } = this.props;
-    const managerToUse = manager ?? createDragDropManager(HTML5Backend);
-    return (
-      <DndProvider manager={managerToUse}>
-        <SurveyDetails {...{ survey, courseId, disabled }} />
-        {this.renderBody(survey)}
-      </DndProvider>
-    );
-  }
-}
+  return (
+    <DndProvider manager={managerToUse} key={1}>
+      <SurveyDetails {...{ survey, courseId, disabled }} />
+      {renderBody(survey)}
+    </DndProvider>
+  );
+};
 
 SurveyShow.propTypes = {
   dispatch: PropTypes.func.isRequired,
