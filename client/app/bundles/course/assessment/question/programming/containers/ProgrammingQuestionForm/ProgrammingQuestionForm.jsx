@@ -325,7 +325,7 @@ class ProgrammingQuestionForm extends Component {
         >
           <InputLabel>{(required ? '* ' : '') + label}</InputLabel>
           <Select
-            value={value}
+            value={value || ''}
             onChange={(event) => {
               onChange(event.target.value);
             }}
@@ -383,7 +383,11 @@ class ProgrammingQuestionForm extends Component {
           onChange={(event) => {
             this.handleChange(field, event.target.value);
           }}
-          onWheel={type === 'number' && ((event) => event.currentTarget.blur())}
+          onWheel={
+            type === 'number'
+              ? (event) => event.currentTarget.blur()
+              : undefined
+          }
           style={{ marginTop: 14, width: '100%' }}
           type={type}
           value={value}
