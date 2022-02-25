@@ -105,7 +105,7 @@ class Chips extends React.Component {
       <Chip
         avatar={
           <Avatar style={styles.avatar}>
-            <DateRange style={styles.chipIcon}/>
+            <DateRange style={styles.chipIcon} />
           </Avatar>
         }
         label={formatDateRange(startAt, endAt)}
