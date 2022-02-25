@@ -105,14 +105,18 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
         component="label"
         disabled={true}
         fullWidth={true}
+        startIcon={<UNDEFINED />}
         style={
           Object {
             "verticalAlign": "middle",
           }
         }
       >
-        <Memo(ForwardRef(AddIcon)) />
-        Add Files
+        <FormattedMessage
+          defaultMessage="Add Files"
+          id="course.material.addFiles"
+          values={Object {}}
+        />
         <input
           disabled={true}
           multiple={true}
