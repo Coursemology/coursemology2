@@ -148,7 +148,7 @@ const CategoryCard = ({
         label: <FormattedMessage {...translations.delete} />,
         onClick: () => setIsConfirmingDelete(true),
         isRight: true,
-        icon: <Delete nativeColor={red[500]} />,
+        icon: <Delete htmlColor={red[500]} />,
       });
     }
     return result;

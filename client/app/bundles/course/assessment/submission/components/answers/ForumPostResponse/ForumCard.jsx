@@ -2,9 +2,9 @@ import { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import {
   Button,
-  ExpansionPanel,
-  ExpansionPanelActions,
-  ExpansionPanelSummary,
+  Accordion,
+  AccordionActions,
+  AccordionSummary,
   Divider,
   Icon,
 } from '@material-ui/core';
@@ -37,11 +37,11 @@ const translations = defineMessages({
 });
 
 const styles = {
-  expansionPanelSummary: {
+  AccordionSummary: {
     backgroundColor: cyan[50],
     padding: '8px 16px',
   },
-  expansionPanelActions: {
+  AccordionActions: {
     padding: 16,
   },
   container: {
@@ -86,15 +86,15 @@ export default class ForumCard extends Component {
       .filter((pack) => postPackIds.has(pack.corePost.id)).length;
 
     return (
-      <ExpansionPanel
+      <Accordion
         expanded={this.state.isExpanded}
         onChange={this.handleIsExpandedChange}
         style={this.props.style}
         className="forum-card"
       >
-        <ExpansionPanelSummary
+        <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
-          style={styles.expansionPanelSummary}
+          style={styles.AccordionSummary}
         >
           <CardTitle
             title={this.props.forumTopicPostPack.forum.name}
@@ -113,9 +113,9 @@ export default class ForumCard extends Component {
               )
             }
           />
-        </ExpansionPanelSummary>
+        </AccordionSummary>
         <Divider />
-        <ExpansionPanelActions style={styles.expansionPanelActions}>
+        <AccordionActions style={styles.AccordionActions}>
           <Button
             variant="contained"
             href={getForumURL(
@@ -128,7 +128,7 @@ export default class ForumCard extends Component {
             <FormattedMessage {...translations.viewForumInNewTab} />
             <Icon className="fa fa-external-link" style={styles.icon} />
           </Button>
-        </ExpansionPanelActions>
+        </AccordionActions>
         <Divider />
         <div style={styles.container}>
           {forumTopicPostPack.topicPostPacks.map((topicPostPack, index) => (
@@ -150,7 +150,7 @@ export default class ForumCard extends Component {
             />
           ))}
         </div>
-      </ExpansionPanel>
+      </Accordion>
     );
   }
 }
