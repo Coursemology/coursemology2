@@ -25,11 +25,11 @@ describe('<NotificationSettings />', () => {
       buildContextOptions(store),
     );
 
-    const toggles = notificationSettings.find('Toggle');
+    const toggles = notificationSettings.find('WithStyles(Switch)');
     expect(toggles).toHaveLength(2);
 
     const toggle = toggles.first();
-    toggle.props().onToggle(null, true);
+    toggle.props().onChange(null, true);
     const expectedPayload = {
       email_settings: {
         component: 'sample_component',

@@ -5,7 +5,7 @@ import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { createDragDropManager } from 'dnd-core';
-import Subheader from 'material-ui/Subheader';
+import { ListSubheader } from '@material-ui/core';
 import surveyTranslations from 'course/survey/translations';
 import { surveyShape } from 'course/survey/propTypes';
 import * as surveyActions from 'course/survey/actions/surveys';
@@ -48,15 +48,19 @@ const SurveyShow = ({
       return null;
     }
     if (!sections || sections.length < 1) {
-      return <Subheader>{intl.formatMessage(translations.empty)}</Subheader>;
+      return (
+        <ListSubheader disableSticky>
+          {intl.formatMessage(translations.empty)}
+        </ListSubheader>
+      );
     }
     const lastIndex = sections.length - 1;
 
     return (
       <>
-        <Subheader>
+        <ListSubheader disableSticky>
           {intl.formatMessage(surveyTranslations.questions)}
-        </Subheader>
+        </ListSubheader>
         {sections.map((section, index) => (
           <Section
             key={section.id}

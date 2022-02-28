@@ -2,9 +2,9 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
 import { Field } from 'redux-form';
-import Chip from 'material-ui/Chip';
-import { Card, CardText } from 'material-ui/Card';
-import FileUploadIcon from 'material-ui/svg-icons/file/file-upload';
+import { Card, CardContent, Chip } from '@material-ui/core';
+import Publish from '@material-ui/icons/Publish'; // TODO MUI - Change to upload once icons lib is updated
+
 import { defineMessages, FormattedMessage } from 'react-intl';
 
 const translations = defineMessages({
@@ -71,7 +71,7 @@ class FileInput extends Component {
     const { disabled } = this.props;
     const { dropzoneActive } = this.state;
     if (dropzoneActive) {
-      return <FileUploadIcon style={{ width: 60, height: 60 }} />;
+      return <Publish style={{ width: 60, height: 60 }} />;
     }
 
     if (!files || !files.length) {
@@ -88,9 +88,7 @@ class FileInput extends Component {
     return (
       <div style={styles.wrapper}>
         {files.map((f) => (
-          <Chip style={styles.chip} key={f.name}>
-            {f.name}
-          </Chip>
+          <Chip key={f.name} label={f.name} style={styles.chip} />
         ))}
       </div>
     );
@@ -118,7 +116,7 @@ class FileInput extends Component {
           name={name}
         >
           <Card style={styles.paper}>
-            <CardText>{this.displayFileNames(value)}</CardText>
+            <CardContent>{this.displayFileNames(value)}</CardContent>
           </Card>
         </Dropzone>
         {error && touched ? error : ''}

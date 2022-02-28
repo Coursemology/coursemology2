@@ -2,8 +2,9 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FieldArray } from 'redux-form';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Card, CardText, CardTitle } from 'material-ui/Card';
-import { red500 } from 'material-ui/styles/colors';
+import { Card, CardContent, CardHeader } from '@material-ui/core';
+
+import { red } from '@material-ui/core/colors';
 import ResponseAnswer from './ResponseAnswer';
 
 const styles = {
@@ -14,7 +15,7 @@ const styles = {
     marginBottom: 15,
   },
   errorText: {
-    color: red500,
+    color: red[500],
   },
 };
 
@@ -31,12 +32,12 @@ class ResponseSection extends Component {
     const { fields, disabled } = props;
 
     return (
-      <CardText>
+      <CardContent>
         {fields.map((member, index) => {
           const question = fields.get(index);
           return (
             <Card key={question.id} style={styles.questionCard}>
-              <CardText>
+              <CardContent>
                 <p
                   dangerouslySetInnerHTML={{
                     __html: `${index + 1}. ${question.description}`,
@@ -49,11 +50,11 @@ class ResponseSection extends Component {
                     <FormattedMessage {...translations.noAnswer} />
                   </div>
                 )}
-              </CardText>
+              </CardContent>
             </Card>
           );
         })}
-      </CardText>
+      </CardContent>
     );
   }
 
@@ -67,9 +68,9 @@ class ResponseSection extends Component {
 
     return (
       <Card style={styles.card}>
-        <CardTitle
+        <CardHeader
           title={section.title}
-          subtitle={
+          subheader={
             <div dangerouslySetInnerHTML={{ __html: section.description }} />
           }
         />

@@ -3,22 +3,22 @@ import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import ReactTooltip from 'react-tooltip';
-import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
-import Toggle from 'material-ui/Toggle';
-import RaisedButton from 'material-ui/RaisedButton';
-import CircularProgress from 'material-ui/CircularProgress';
-import { Tabs, Tab } from 'material-ui/Tabs';
-import GroupIcon from 'material-ui/svg-icons/social/group';
-import PersonIcon from 'material-ui/svg-icons/social/person';
-import PersonOutlineIcon from 'material-ui/svg-icons/social/person-outline';
 import {
-  red100,
-  yellow100,
-  grey100,
-  green100,
-  blue100,
-  blue500,
-} from 'material-ui/styles/colors';
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  CircularProgress,
+  FormControlLabel,
+  Tab,
+  Tabs,
+  Switch,
+} from '@material-ui/core';
+import { blue, green, grey, yellow, red } from '@material-ui/core/colors';
+import Group from '@material-ui/icons/Group';
+import Person from '@material-ui/icons/Person';
+import PersonOutline from '@material-ui/icons/PersonOutline';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import NotificationBar, {
@@ -53,11 +53,11 @@ const styles = {
   },
   histogramCells: {
     common: { transition: 'flex .5s, min-width .5s' },
-    unstarted: { backgroundColor: red100 },
-    attempting: { backgroundColor: yellow100 },
-    submitted: { backgroundColor: grey100 },
-    graded: { backgroundColor: blue100 },
-    published: { backgroundColor: green100 },
+    unstarted: { backgroundColor: red[100] },
+    attempting: { backgroundColor: yellow[100] },
+    submitted: { backgroundColor: grey[100] },
+    graded: { backgroundColor: blue[100] },
+    published: { backgroundColor: green[100] },
   },
 };
 
@@ -154,68 +154,76 @@ class VisibleSubmissionsIndex extends Component {
 
     return (
       <Card style={{ marginBottom: 20 }}>
-        <CardHeader title={<h3>{title}</h3>} subtitle="Submissions" />
-        <CardText style={{ paddingTop: 0 }}>
+        <CardHeader title={<h3>{title}</h3>} subheader="Submissions" />
+        <CardContent style={{ paddingTop: 0, paddingBottom: 0 }}>
           {this.renderHistogram(shownSubmissions)}
-        </CardText>
-        <CardActions>
-          <Toggle
-            className="toggle-phantom"
+          <FormControlLabel
+            control={
+              <Switch
+                checked={includePhantoms}
+                className="toggle-phantom"
+                color="primary"
+                onChange={() =>
+                  this.setState({ includePhantoms: !includePhantoms })
+                }
+              />
+            }
             label={
-              <FormattedMessage {...submissionsTranslations.includePhantoms} />
+              <b>
+                <FormattedMessage
+                  {...submissionsTranslations.includePhantoms}
+                />
+              </b>
             }
-            labelPosition="right"
-            toggled={includePhantoms}
-            onToggle={() =>
-              this.setState({ includePhantoms: !includePhantoms })
-            }
+            labelPlacement="end"
           />
+        </CardContent>
+        <CardActions>
           {canPublishGrades && (
-            <RaisedButton
+            <Button
+              variant="contained"
+              color="primary"
               disabled={
                 disableButtons ||
                 !VisibleSubmissionsIndex.canPublish(shownSubmissions)
               }
-              primary
-              label={
-                <FormattedMessage {...submissionsTranslations.publishGrades} />
-              }
-              labelPosition="before"
-              icon={isPublishing ? <CircularProgress size={24} /> : null}
               onClick={() => this.setState({ publishConfirmation: true })}
-            />
+            >
+              <FormattedMessage {...submissionsTranslations.publishGrades} />
+              {isPublishing && <CircularProgress size={24} />}
+            </Button>
           )}
           {canForceSubmit && (
-            <RaisedButton
+            <Button
+              variant="contained"
+              color="primary"
               disabled={
                 disableButtons ||
                 !VisibleSubmissionsIndex.canForceSubmitOrRemind(
                   shownSubmissions,
                 )
               }
-              primary
-              label={
-                <FormattedMessage {...submissionsTranslations.forceSubmit} />
-              }
-              labelPosition="before"
-              icon={isForceSubmitting ? <CircularProgress size={24} /> : null}
               onClick={() => this.setState({ forceSubmitConfirmation: true })}
-            />
+            >
+              <FormattedMessage {...submissionsTranslations.forceSubmit} />
+              {isForceSubmitting && <CircularProgress size={24} />}
+            </Button>
           )}
           {showRemindButton && (
-            <RaisedButton
+            <Button
+              variant="contained"
+              color="primary"
               disabled={
                 disableButtons ||
                 !VisibleSubmissionsIndex.canForceSubmitOrRemind(
                   shownSubmissions,
                 )
               }
-              primary
-              label={<FormattedMessage {...submissionsTranslations.remind} />}
-              labelPosition="before"
-              icon={isReminding ? <CircularProgress size={24} /> : null}
               onClick={() => this.setState({ remindConfirmation: true })}
-            />
+            >
+              <FormattedMessage {...submissionsTranslations.remind} />
+              {isReminding && <CircularProgress size={24} />}
+            </Button>
           )}
         </CardActions>
       </Card>
@@ -330,7 +338,12 @@ class VisibleSubmissionsIndex extends Component {
     );
   }
 
-  renderTabs(filteredSubmissions, handleParams) {
+  renderTable(
+    shownSubmissions,
+    handleActionParams,
+    confirmDialogValue,
+    isActive,
+  ) {
     const { courseId, assessmentId } = this.props.match.params;
     const {
       dispatch,
@@ -354,110 +367,60 @@ class VisibleSubmissionsIndex extends Component {
       isDeleting,
     };
     return (
+      <SubmissionsTable
+        confirmDialogValue={confirmDialogValue}
+        handleDownload={(downloadFormat) =>
+          dispatch(downloadSubmissions(handleActionParams, downloadFormat))
+        }
+        handleDownloadStatistics={() =>
+          dispatch(downloadStatistics(handleActionParams))
+        }
+        handleUnsubmitAll={() =>
+          dispatch(unsubmitAllSubmissions(handleActionParams))
+        }
+        handleDeleteAll={() =>
+          dispatch(deleteAllSubmissions(handleActionParams))
+        }
+        isActive={isActive}
+        submissions={shownSubmissions}
+        {...props}
+      />
+    );
+  }
+
+  renderTabs(myStudentsExist) {
+    return (
       <Tabs
-        inkBarStyle={{ backgroundColor: blue500, height: 5, marginTop: -5 }}
-        tabItemContainerStyle={{ backgroundColor: grey100 }}
+        onChange={(event, value) => {
+          this.setState({ tab: value });
+        }}
+        style={{ backgroundColor: grey[100], color: blue[500] }}
+        TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
+        value={this.state.tab}
+        variant="fullWidth"
       >
-        {filteredSubmissions.myStudentAllSubmissions.length > 0 ? (
+        {myStudentsExist && (
           <Tab
             id="my-students-tab"
-            buttonStyle={{ color: blue500 }}
-            icon={<GroupIcon style={{ color: blue500 }} />}
+            style={{ color: blue[500] }}
+            icon={<Group style={{ color: blue[500] }} />}
             label={<FormattedMessage {...submissionsTranslations.myStudents} />}
-            onActive={() => this.setState({ tab: 'my-students-tab' })}
-          >
-            <SubmissionsTable
-              submissions={filteredSubmissions.myStudentSubmissions}
-              handleDownload={(downloadFormat) =>
-                dispatch(
-                  downloadSubmissions(
-                    handleParams.handleMyStudentsParams,
-                    downloadFormat,
-                  ),
-                )
-              }
-              handleDownloadStatistics={() =>
-                dispatch(
-                  downloadStatistics(handleParams.handleMyStudentsParams),
-                )
-              }
-              handleUnsubmitAll={() =>
-                dispatch(
-                  unsubmitAllSubmissions(handleParams.handleMyStudentsParams),
-                )
-              }
-              handleDeleteAll={() =>
-                dispatch(
-                  deleteAllSubmissions(handleParams.handleMyStudentsParams),
-                )
-              }
-              confirmDialogValue="your students"
-              {...props}
-            />
-          </Tab>
-        ) : null}
+            value="my-students-tab"
+          />
+        )}
         <Tab
           id="students-tab"
-          buttonStyle={{ color: blue500 }}
-          icon={<PersonIcon style={{ color: blue500 }} />}
+          icon={<Person style={{ color: blue[500] }} />}
           label={<FormattedMessage {...submissionsTranslations.students} />}
-          onActive={() => this.setState({ tab: 'students-tab' })}
-        >
-          <SubmissionsTable
-            submissions={filteredSubmissions.studentSubmissions}
-            handleDownload={(downloadFormat) =>
-              dispatch(
-                downloadSubmissions(
-                  handleParams.handleStudentsParams,
-                  downloadFormat,
-                ),
-              )
-            }
-            handleDownloadStatistics={() =>
-              dispatch(downloadStatistics(handleParams.handleStudentsParams))
-            }
-            handleUnsubmitAll={() =>
-              dispatch(
-                unsubmitAllSubmissions(handleParams.handleStudentsParams),
-              )
-            }
-            handleDeleteAll={() =>
-              dispatch(deleteAllSubmissions(handleParams.handleStudentsParams))
-            }
-            confirmDialogValue="students"
-            {...props}
-          />
-        </Tab>
+          value="students-tab"
+        />
+
         <Tab
           id="staff-tab"
-          buttonStyle={{ color: blue500 }}
-          icon={<PersonOutlineIcon style={{ color: blue500 }} />}
+          icon={<PersonOutline style={{ color: blue[500] }} />}
           label={<FormattedMessage {...submissionsTranslations.staff} />}
-          onActive={() => this.setState({ tab: 'staff-tab' })}
-        >
-          <SubmissionsTable
-            submissions={filteredSubmissions.staffSubmissions}
-            handleDownload={(downloadFormat) =>
-              dispatch(
-                downloadSubmissions(
-                  handleParams.handleStaffParams,
-                  downloadFormat,
-                ),
-              )
-            }
-            handleDownloadStatistics={() =>
-              dispatch(downloadStatistics(handleParams.handleStaffParams))
-            }
-            handleUnsubmitAll={() =>
-              dispatch(unsubmitAllSubmissions(handleParams.handleStaffParams))
-            }
-            handleDeleteAll={() =>
-              dispatch(deleteAllSubmissions(handleParams.handleStaffParams))
-            }
-            confirmDialogValue="staff"
-            {...props}
-          />
-        </Tab>
+          value="staff-tab"
+        />
       </Tabs>
     );
   }
@@ -493,12 +456,6 @@ class VisibleSubmissionsIndex extends Component {
       : submissions.filter(
           (s) => !s.courseUser.isStudent && !s.courseUser.phantom,
         );
-    const filteredSubmissions = {
-      myStudentAllSubmissions,
-      myStudentSubmissions,
-      studentSubmissions,
-      staffSubmissions,
-    };
 
     const handleMyStudentsParams = includePhantoms
       ? selectedUserType.my_students_w_phantom
@@ -509,11 +466,8 @@ class VisibleSubmissionsIndex extends Component {
     const handleStaffParams = includePhantoms
       ? selectedUserType.staff_w_phantom
       : selectedUserType.staff;
-    const handleParams = {
-      handleMyStudentsParams,
-      handleStudentsParams,
-      handleStaffParams,
-    };
+
+    const myStudentsExist = myStudentAllSubmissions.length > 0;
 
     let shownSubmissions; // shownSubmissions are submissions currently shown on the active tab on the page
     let handleActionParams;
@@ -535,7 +489,26 @@ class VisibleSubmissionsIndex extends Component {
     return (
       <>
         {this.renderHeader(shownSubmissions)}
-        {this.renderTabs(filteredSubmissions, handleParams)}
+        {this.renderTabs(myStudentsExist)}
+        {myStudentsExist &&
+          this.renderTable(
+            myStudentSubmissions,
+            handleMyStudentsParams,
+            'your students',
+            tab === 'my-students-tab',
+          )}
+        {this.renderTable(
+          staffSubmissions,
+          handleStaffParams,
+          'staff',
+          tab === 'staff-tab',
+        )}
+        {this.renderTable(
+          studentSubmissions,
+          handleStudentsParams,
+          'students',
+          tab === 'students-tab',
+        )}
         {publishConfirmation &&
           this.renderPublishConfirmation(shownSubmissions, handleActionParams)}
         {forceSubmitConfirmation &&

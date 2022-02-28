@@ -2,8 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { grey600 } from 'material-ui/styles/colors';
-
+import { grey } from '@material-ui/core/colors';
 import { postShape, topicShape } from '../propTypes';
 import CommentCard from '../components/CommentCard';
 import CommentField from '../components/CommentField';
@@ -32,7 +31,7 @@ class VisibleComments extends Component {
 
     return (
       <div>
-        <h4 style={{ color: grey600 }}>
+        <h4 style={{ color: grey['600'] }}>
           <FormattedMessage {...translations.comments} />
         </h4>
         {posts.map(

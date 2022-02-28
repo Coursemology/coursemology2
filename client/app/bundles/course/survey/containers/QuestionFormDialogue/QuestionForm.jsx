@@ -2,12 +2,10 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import { reduxForm, Field, FieldArray, Form } from 'redux-form';
-import TextField from 'lib/components/redux-form/TextField';
-import SelectField from 'lib/components/redux-form/SelectField';
-import MenuItem from 'material-ui/MenuItem';
+import renderTextField from 'lib/components/redux-form/TextField';
+import renderSelectField from 'lib/components/redux-form/SelectField';
 import Toggle from 'lib/components/redux-form/Toggle';
-import DisplayTextField from 'material-ui/TextField';
-import Subheader from 'material-ui/Subheader';
+import { ListSubheader, MenuItem, TextField } from '@material-ui/core';
 import formTranslations from 'lib/translations/form';
 import translations from 'course/survey/translations';
 import { questionTypes, formNames } from 'course/survey/constants';
@@ -23,8 +21,6 @@ const styles = {
   },
   numberOfResponsesField: {
     style: { flex: 1 },
-    inputStyle: { width: '80%' },
-    underlineStyle: { width: '80%' },
   },
   toggle: {
     marginTop: 10,
@@ -171,15 +167,15 @@ class QuestionForm extends Component {
     );
   }
 
-  renderNumberOfResponsesField(name, floatingLabelText) {
-    const { intl, disabled } = this.props;
+  renderNumberOfResponsesField(name, label) {
+    const { disabled } = this.props;
     return (
       <Field
-        component={TextField}
+        component={renderTextField}
         type="number"
         {...styles.numberOfResponsesField}
-        placeholder={intl.formatMessage(questionFormTranslations.noRestriction)}
-        {...{ name, floatingLabelText, disabled }}
+        placeholder={questionFormTranslations.noRestriction.defaultMessage}
+        {...{ name, label, disabled }}
       />
     );
   }
@@ -211,18 +207,18 @@ class QuestionForm extends Component {
     ) {
       return (
         <div>
-          <Subheader>
+          <ListSubheader disableSticky>
             {intl.formatMessage(questionFormTranslations.optionsToDelete)}
-          </Subheader>
+          </ListSubheader>
           <FieldArray
             name="optionsToDelete"
             component={QuestionFormDeletedOptions}
             {...{ disabled, addToOptions }}
             {...props}
           />
-          <Subheader>
+          <ListSubheader disableSticky>
             {intl.formatMessage(questionFormTranslations.optionsToKeep)}
-          </Subheader>
+          </ListSubheader>
         </div>
       );
     }
@@ -245,7 +241,6 @@ class QuestionForm extends Component {
       <>
         <Field
           name="grid_view"
-          labelPosition="right"
           label={intl.formatMessage(questionFormTranslations.gridView)}
           component={Toggle}
           parse={Boolean}
@@ -267,14 +262,13 @@ class QuestionForm extends Component {
       : 0;
 
     return (
-      <DisplayTextField
+      <TextField
         disabled
         name="filled_options"
         value={numberOfFilledOptions}
-        {...styles.numberOfResponsesField}
-        floatingLabelText={intl.formatMessage(
-          questionFormTranslations.optionCount,
-        )}
+        label={intl.formatMessage(questionFormTranslations.optionCount)}
+        fullWidth
+        style={{ marginBottom: 12, marginTop: 14, marginRight: 16 }}
       />
     );
   }
@@ -288,36 +282,32 @@ class QuestionForm extends Component {
       <Form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
         <Field
           name="question_type"
-          floatingLabelText={intl.formatMessage(translations.questionType)}
-          component={SelectField}
+          label={intl.formatMessage(translations.questionType)}
+          component={renderSelectField}
           style={styles.questionType}
           {...{ disabled }}
         >
-          <MenuItem
-            value={TEXT}
-            primaryText={intl.formatMessage(translations.textResponse)}
-          />
-          <MenuItem
-            value={MULTIPLE_CHOICE}
-            primaryText={intl.formatMessage(translations.multipleChoice)}
-          />
-          <MenuItem
-            value={MULTIPLE_RESPONSE}
-            primaryText={intl.formatMessage(translations.multipleResponse)}
-          />
+          <MenuItem value={TEXT}>
+            {intl.formatMessage(translations.textResponse)}
+          </MenuItem>
+          <MenuItem value={MULTIPLE_CHOICE}>
+            {intl.formatMessage(translations.multipleChoice)}
+          </MenuItem>
+          <MenuItem value={MULTIPLE_RESPONSE}>
+            {intl.formatMessage(translations.multipleResponse)}
+          </MenuItem>
         </Field>
         <Field
           fullWidth
           name="description"
-          floatingLabelText={intl.formatMessage(translations.questionText)}
-          component={TextField}
-          multiLine
-          rows={2}
+          label={intl.formatMessage(translations.questionText)}
+          component={renderTextField}
+          multiline
+          rows={4}
           {...{ disabled }}
         />
         <Field
           name="required"
-          labelPosition="right"
           label={intl.formatMessage(questionFormTranslations.required)}
           component={Toggle}
           parse={Boolean}

@@ -1,7 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import Chip from 'material-ui/Chip';
-import Avatar from 'material-ui/Avatar';
+import { Avatar, Chip } from '@material-ui/core';
 
 const colors = {
   red: '#ffaaaa',
@@ -53,10 +52,18 @@ class BarChart extends Component {
     return (
       <div style={styles.legend}>
         {this.props.data.map((segment) => (
-          <Chip key={segment.color} style={styles.chip}>
-            <Avatar backgroundColor={colors[segment.color]} />
-            {segment.count} {segment.label}
-          </Chip>
+          <Chip
+            avatar={
+              <Avatar style={{ backgroundColor: colors[segment.color] }} />
+            }
+            key={segment.color}
+            label={
+              <span>
+                {segment.count} {segment.label}
+              </span>
+            }
+            style={styles.chip}
+          />
         ))}
       </div>
     );

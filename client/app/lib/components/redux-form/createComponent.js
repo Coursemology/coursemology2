@@ -8,7 +8,7 @@ import { injectIntl } from 'react-intl';
  * Material UI component needs.
  * Format of the redux-from props (input of the mapProps function):
  * {
- *   input: {name: stirng, value: any, onChange: function, ...},
+ *   input: {name: string, value: any, onChange: function, ...},
  *   meta: {touched: boolean, pristine: boolean, error: string, ...}
  *   otherProps: {}  // Other props that passed to the <Field /> input: label, intl, etc...
  * }

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { reduxForm, Field, Form } from 'redux-form';
-import TextField from 'lib/components/redux-form/TextField';
+import renderTextField from 'lib/components/redux-form/TextField';
 import formTranslations from 'lib/translations/form';
 import translations from 'course/survey/translations';
 import { formNames } from 'course/survey/constants';
@@ -24,17 +24,17 @@ const SectionForm = ({ handleSubmit, intl, onSubmit, disabled }) => (
     <Field
       fullWidth
       name="title"
-      floatingLabelText={intl.formatMessage(translations.title)}
-      component={TextField}
+      label={intl.formatMessage(translations.title)}
+      component={renderTextField}
       {...{ disabled }}
     />
     <br />
     <Field
       fullWidth
       name="description"
-      floatingLabelText={intl.formatMessage(translations.description)}
-      component={TextField}
-      multiLine
+      label={intl.formatMessage(translations.description)}
+      component={renderTextField}
+      multiline
       rows={2}
       {...{ disabled }}
     />

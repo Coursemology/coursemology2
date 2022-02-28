@@ -1,6 +1,12 @@
 import { Component } from 'react';
-import { Dialog, FlatButton } from 'material-ui';
-import { cyan500 } from 'material-ui/styles/colors';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from '@material-ui/core';
+import { cyan } from '@material-ui/core/colors';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
@@ -44,25 +50,20 @@ const translations = defineMessages({
 
 const styles = {
   dialogTitle: {
-    color: 'white',
-    background: cyan500,
+    background: cyan[500],
     lineHeight: '85%',
   },
   dialogTitleText: {
+    color: 'white',
     fontSize: 22,
     marginTop: 0,
     marginBottom: 4,
   },
   dialogSubtitleText: {
+    color: 'white',
     fontSize: 14,
     marginBottom: 0,
     opacity: 0.9,
-  },
-  dialog: {
-    position: 'absolute',
-    left: '50%',
-    top: '50%',
-    transform: 'translate(-50%, -50%)',
   },
   noPostsText: {
     marginTop: 16,
@@ -141,7 +142,7 @@ export default class ForumPostSelectDialog extends Component {
     const numPostsSelected = this.state.selectedPostPacks.length;
 
     return (
-      <div style={styles.dialogTitle}>
+      <>
         <h2 style={styles.dialogTitleText}>
           <strong>
             <FormattedMessage
@@ -153,7 +154,7 @@ export default class ForumPostSelectDialog extends Component {
         <p style={styles.dialogSubtitleText}>
           <FormattedMessage {...translations.dialogSubtitle} />
         </p>
-      </div>
+      </>
     );
   }
 
@@ -203,39 +204,40 @@ export default class ForumPostSelectDialog extends Component {
       );
 
     const actions = [
-      <FlatButton
-        label={<FormattedMessage {...translations.cancelButton} />}
-        secondary
-        onClick={() => this.props.setIsVisible(false)}
+      <Button
+        color="secondary"
         key="forum-post-dialog-cancel-button"
-      />,
-      <FlatButton
-        label={
-          <FormattedMessage
-            values={{ numPosts: numPostsSelected }}
-            {...translations.selectButton}
-          />
-        }
-        primary
-        onClick={() => this.saveChanges()}
-        key="forum-post-dialog-select-button"
-        disabled={hasNoChanges}
+        onClick={() => this.props.setIsVisible(false)}
+      >
+        <FormattedMessage {...translations.cancelButton} />
+      </Button>,
+      <Button
+        color="primary"
         className="select-posts-button"
-      />,
+        disabled={hasNoChanges}
+        key="forum-post-dialog-select-button"
+        onClick={() => this.saveChanges()}
+        style={styles.expandButton}
+      >
+        <FormattedMessage
+          values={{ numPosts: numPostsSelected }}
+          {...translations.selectButton}
+        />
+      </Button>,
     ];
 
     return (
       <Dialog
-        title={this.renderDialogTitle()}
-        actions={actions}
-        modal={false}
+        fullWidth
+        maxWidth="md"
         open={this.props.isVisible}
-        onRequestClose={() => this.props.setIsVisible(false)}
-        autoScrollBodyContent
-        autoDetectWindowHeight
-        contentStyle={styles.dialog}
+        onClose={() => this.props.setIsVisible(false)}
       >
-        {this.renderPostMenu()}
+        <DialogTitle disableTypography style={styles.dialogTitle}>
+          {this.renderDialogTitle()}
+        </DialogTitle>
+        <DialogContent>{this.renderPostMenu()}</DialogContent>
+        <DialogActions>{actions}</DialogActions>
       </Dialog>
     );
   }

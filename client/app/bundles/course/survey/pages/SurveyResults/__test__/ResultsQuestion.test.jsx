@@ -70,10 +70,7 @@ const testExpandLongQuestion = (question) => {
     buildContextOptions(storeCreator({})),
   );
   expect(resultsQuestion.find('Table')).toHaveLength(0);
-  const expandButton = resultsQuestion
-    .find('RaisedButton')
-    .first()
-    .find('button');
+  const expandButton = resultsQuestion.find('Button').first().find('button');
   expandButton.simulate('click');
   expect(resultsQuestion.find('Table')).toHaveLength(1);
 };
@@ -106,8 +103,8 @@ describe('<ResultsQuestion />', () => {
       resultsQuestion.find('TableRow').last().find('td').at(3);
     const lastOptionCountBeforeSort = lastOptionCountCell().text();
     expect(lastOptionCountBeforeSort).toBe('1');
-    const sortToggle = resultsQuestion.find('Toggle').first();
-    sortToggle.props().onToggle(null, true);
+    const sortToggle = resultsQuestion.find('WithStyles(Switch)').first();
+    sortToggle.props().onChange(null, true);
     resultsQuestion.update();
     const lastOptionCountAfterSort = lastOptionCountCell().text();
     expect(lastOptionCountAfterSort).toBe('0');

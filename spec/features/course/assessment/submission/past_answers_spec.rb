@@ -26,8 +26,8 @@ RSpec.describe 'Course: Assessment: Submissions: Past Answers', js: true do
         visit edit_course_assessment_submission_path(course, assessment, submission)
         (0..4).each do |step_number|
           within(%([name="step#{step_number}"])) do
-            expect(page).to have_selector('div.toggle-history')
-            find('div.toggle-history').click
+            expect(page).to have_selector('.toggle-history')
+            find('.toggle-history').click
             expect(page).to have_selector('label', text: 'Past Answers')
           end
         end
@@ -41,8 +41,8 @@ RSpec.describe 'Course: Assessment: Submissions: Past Answers', js: true do
         visit edit_course_assessment_submission_path(course, assessment, submission)
         (0..4).each do |step_number|
           within(%([name="step#{step_number}"])) do
-            expect(page).to have_selector('div.toggle-history')
-            find('div.toggle-history').click
+            expect(page).to have_selector('.toggle-history')
+            find('.toggle-history').click
             expect(page).to have_selector('label', text: 'Past Answers')
           end
         end

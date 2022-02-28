@@ -1,36 +1,59 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<Toggle /> renders a toggle with an error 1`] = `
-<div>
-  <Toggle
-    defaultToggled={false}
-    disabled={false}
-    labelPosition="left"
+<div
+  className="MuiFormControl-root-1 MuiFormControl-fullWidth-4"
+>
+  <WithStyles(WithFormControlContext(FormControlLabel))
+    control={
+      <WithStyles(Switch)
+        checked={false}
+        color="primary"
+        onChange={[MockFunction]}
+      />
+    }
+    label={<b />}
     name="Not very awesome toggle"
-    onToggle={[MockFunction]}
-    toggled={false}
-  />
-  <div
     style={
       Object {
-        "color": "#f44336",
+        "height": "30px",
+        "margin": "8px 0px 0px -16px",
+      }
+    }
+  />
+  <WithStyles(WithFormControlContext(FormHelperText))
+    error={true}
+    style={
+      Object {
+        "margin": 0,
       }
     }
   >
     Ooops
-  </div>
+  </WithStyles(WithFormControlContext(FormHelperText))>
 </div>
 `;
 
 exports[`<Toggle /> renders a toggled toggle 1`] = `
-<div>
-  <Toggle
-    defaultToggled={false}
-    disabled={false}
-    labelPosition="left"
+<div
+  className="MuiFormControl-root-1 MuiFormControl-fullWidth-4"
+>
+  <WithStyles(WithFormControlContext(FormControlLabel))
+    control={
+      <WithStyles(Switch)
+        checked={true}
+        color="primary"
+        onChange={[MockFunction]}
+      />
+    }
+    label={<b />}
     name="Awesome toggle"
-    onToggle={[MockFunction]}
-    toggled={true}
+    style={
+      Object {
+        "height": "30px",
+        "margin": "8px 0px 0px -16px",
+      }
+    }
   />
 </div>
 `;

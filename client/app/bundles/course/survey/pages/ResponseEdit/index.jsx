@@ -2,8 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Card, CardText } from 'material-ui/Card';
-import Subheader from 'material-ui/Subheader';
+import { Card, CardContent, ListSubheader } from '@material-ui/core';
 import surveyTranslations from 'course/survey/translations';
 import { surveyShape, responseShape } from 'course/survey/propTypes';
 import {
@@ -77,9 +76,9 @@ class ResponseEdit extends Component {
     const initialValues = buildInitialValues(survey, response);
     return (
       <>
-        <Subheader>
+        <ListSubheader disableSticky>
           <FormattedMessage {...surveyTranslations.questions} />
-        </Subheader>
+        </ListSubheader>
         <ResponseForm
           onSubmit={this.handleUpdateResponse}
           {...{ response, flags, initialValues }}
@@ -94,7 +93,7 @@ class ResponseEdit extends Component {
       <>
         {survey.description ? (
           <Card>
-            <CardText
+            <CardContent
               dangerouslySetInnerHTML={{ __html: survey.description }}
             />
           </Card>

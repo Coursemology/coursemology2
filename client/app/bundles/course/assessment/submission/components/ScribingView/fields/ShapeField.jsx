@@ -1,9 +1,7 @@
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import FontIcon from 'material-ui/FontIcon';
-import FlatButton from 'material-ui/FlatButton';
-import { blue500 } from 'material-ui/styles/colors';
-
+import { Button, Icon } from '@material-ui/core';
+import { blue } from '@material-ui/core/colors';
 import { scribingTranslations as translations } from '../../../translations';
 import { scribingShapes } from '../../../constants';
 
@@ -18,36 +16,37 @@ const ShapeField = (props) => {
 
   return (
     <>
-      <FlatButton
-        label={intl.formatMessage(translations.rectangle)}
-        primary={currentShape === scribingShapes.RECT}
+      <Button
+        color={currentShape === scribingShapes.RECT ? 'primary' : undefined}
+        className="forum-post-expand-button"
         onClick={() => setSelectedShape(scribingShapes.RECT)}
-        icon={
-          <FontIcon
-            color={
-              currentShape === scribingShapes.RECT
-                ? blue500
-                : 'rgba(0, 0, 0, 0.4)'
-            }
-            className="fa fa-square-o"
-          />
-        }
-      />
-      <FlatButton
-        label={intl.formatMessage(translations.ellipse)}
-        primary={currentShape === scribingShapes.ELLIPSE}
+      >
+        <Icon
+          className="fa fa-square-o"
+          style={
+            currentShape === scribingShapes.RECT
+              ? { color: blue[500] }
+              : { color: 'rgba(0, 0, 0, 0.4)' }
+          }
+        />
+        {intl.formatMessage(translations.rectangle)}
+      </Button>
+
+      <Button
+        color={currentShape === scribingShapes.ELLIPSE ? 'primary' : undefined}
+        className="forum-post-expand-button"
         onClick={() => setSelectedShape(scribingShapes.ELLIPSE)}
-        icon={
-          <FontIcon
-            color={
-              currentShape === scribingShapes.ELLIPSE
-                ? blue500
-                : 'rgba(0, 0, 0, 0.4)'
-            }
-            className="fa fa-circle-o"
-          />
-        }
-      />
+      >
+        <Icon
+          className="fa fa-circle-o"
+          style={
+            currentShape === scribingShapes.ELLIPSE
+              ? { color: blue[500] }
+              : { color: 'rgba(0, 0, 0, 0.4)' }
+          }
+        />
+        {intl.formatMessage(translations.ellipse)}
+      </Button>
     </>
   );
 };

@@ -2,7 +2,8 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import FlatButton from 'material-ui/FlatButton';
+import { Button } from '@material-ui/core';
+
 import { changeSectionOrder } from 'course/survey/actions/sections';
 
 const translations = defineMessages({
@@ -37,11 +38,9 @@ class MoveUpButton extends Component {
 
   render() {
     return (
-      <FlatButton
-        label={<FormattedMessage {...translations.moveSectionUp} />}
-        onClick={this.moveSectionUp}
-        disabled={this.props.disabled}
-      />
+      <Button disabled={this.props.disabled} onClick={this.moveSectionUp}>
+        <FormattedMessage {...translations.moveSectionUp} />
+      </Button>
     );
   }
 }

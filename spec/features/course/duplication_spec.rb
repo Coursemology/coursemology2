@@ -53,18 +53,16 @@ RSpec.feature 'Course: Duplication' do
           visit course_duplication_path(course)
 
           find('.source-course-dropdown').click
-          find("[role='menuitem']", text: source_course.title).click
+          find("[role='option']", text: source_course.title).click
 
           find("input[value='OBJECT']", visible: false).click
 
           find('.destination-course-dropdown').click
-          find("[role='menuitem']", text: course.title).click
+          find("[role='option']", text: course.title).click
 
           find('.items-selector-menu span span', text: 'Assessments').click
-          find('span', text: assessment_title).
-            find(:xpath, '../../../..').
-            find('input', visible: false).
-            click
+          find(:xpath, '//*[@id="course-duplication"]
+                        /div/div/div[2]/div[6]/div/div[2]/div[2]/label/span[1]', visible: false).click
 
           click_on 'Duplicate Items'
           click_on 'Duplicate'
@@ -79,12 +77,12 @@ RSpec.feature 'Course: Duplication' do
           visit course_duplication_path(course)
 
           find('.source-course-dropdown').click
-          find("[role='menuitem']", text: source_course.title).click
+          find("[role='option']", text: source_course.title).click
 
           # Work around for cabybara/redux-form issue:
           # https://github.com/erikras/redux-form/issues/686
-          fill_in 'New Title', with: ''
-          fill_in 'New Title', with: new_course_title
+          fill_in 'new_title', with: ''
+          fill_in 'new_title', with: new_course_title
 
           click_on 'Duplicate Course'
           click_on 'Continue'

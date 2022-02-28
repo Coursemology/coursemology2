@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
 
-import Chip from 'material-ui/Chip';
-import { green100 } from 'material-ui/styles/colors';
+import { Chip } from '@material-ui/core';
 
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import { fileShape } from '../propTypes';
@@ -74,19 +73,18 @@ class VisibleImportedFileView extends Component {
           })
       : null;
 
-    const chipColor = displayFileIndex === index ? green100 : null;
+    const chipColor = displayFileIndex === index ? 'primary' : undefined;
     const staged = file.staged || false;
-
     return staged ? null : (
       <Chip
+        clickable
+        color={chipColor}
         key={file.id}
-        style={styles.chip}
-        onRequestDelete={onRequestDelete}
-        backgroundColor={chipColor}
+        label={file.filename}
         onClick={() => handleFileTabbing(index)}
-      >
-        {file.filename}
-      </Chip>
+        onDelete={onRequestDelete}
+        style={styles.chip}
+      />
     );
   }
 

@@ -17,7 +17,7 @@ describe('<RemindButton />', () => {
       .first()
       .instance().cancelButton;
     ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(cancelButton));
-    remindButton.find('button').simulate('click');
+    remindButton.find('button').first().simulate('click');
     const confirmButton = remindButton
       .find('ConfirmationDialog')
       .first()

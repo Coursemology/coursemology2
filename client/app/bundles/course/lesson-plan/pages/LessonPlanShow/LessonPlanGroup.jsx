@@ -3,9 +3,16 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Element } from 'react-scroll';
-import Divider from 'material-ui/Divider';
-import { Card, CardText, CardTitle } from 'material-ui/Card';
-import { grey50 } from 'material-ui/styles/colors';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  Collapse,
+  Divider,
+  IconButton,
+} from '@material-ui/core';
+import { grey } from '@material-ui/core/colors';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import moment, { longDate } from 'lib/moment';
 import LessonPlanItem from './LessonPlanItem';
 import MilestoneAdminTools from './MilestoneAdminTools';
@@ -25,9 +32,6 @@ const styles = {
   card: {
     marginTop: 20,
   },
-  cardContainer: {
-    paddingBottom: 0,
-  },
   milestoneTitle: {
     display: 'flex',
     justifyContent: 'space-between',
@@ -38,50 +42,43 @@ const styles = {
   divider: {
     height: 2,
   },
+  expandIconRotated: {
+    padding: 0,
+    transform: 'rotate(180deg)',
+  },
+  expandIcon: {
+    padding: 0,
+  },
 };
 
 class LessonPlanGroup extends Component {
-  static renderMilestoneCardTitle(milestone) {
-    const { title, description, start_at } = milestone;
-
-    return (
-      <CardTitle
-        actAsExpander
-        showExpandableButton
-        title={
-          <div style={styles.milestoneTitle}>
-            {title}
-            <MilestoneAdminTools milestone={milestone} />
-          </div>
-        }
-        subtitle={
-          <span>
-            {moment(start_at).format(longDate)}
-            <br />
-            <span dangerouslySetInnerHTML={{ __html: description }} />
-          </span>
-        }
-        style={{ backgroundColor: grey50 }}
-      />
-    );
+  constructor(props) {
+    super(props);
+    this.state = { expanded: props.initiallyExpanded };
   }
 
   static renderNoItemsMessage() {
     return (
       <>
         <Divider style={styles.divider} />
-        <CardText>
+        <CardContent>
           <FormattedMessage {...translations.noItems} />
-        </CardText>
+        </CardContent>
       </>
     );
   }
+
+  handleExpandClick = () => {
+    this.setState((prevState) => ({
+      expanded: !prevState.expanded,
+    }));
+  };
 
   renderDefaultMilestone() {
     const {
       group: { items },
     } = this.props;
-    return LessonPlanGroup.renderMilestoneCardTitle({
+    return this.renderMilestoneCardTitle({
       id: null,
       title: <FormattedMessage {...translations.ungroupedItems} />,
       description: null,
@@ -89,9 +86,45 @@ class LessonPlanGroup extends Component {
     });
   }
 
+  renderMilestoneCardTitle(milestone) {
+    const { title, description, start_at } = milestone;
+
+    return (
+      <CardHeader
+        style={{ backgroundColor: grey[50] }}
+        subheader={
+          <span>
+            {moment(start_at).format(longDate)}
+            <br />
+            <span dangerouslySetInnerHTML={{ __html: description }} />
+          </span>
+        }
+        subheaderTypographyProps={{ variant: 'subtitle2' }}
+        title={
+          <div style={styles.milestoneTitle}>
+            {title}
+            <div>
+              <MilestoneAdminTools milestone={milestone} />
+              <IconButton
+                onClick={this.handleExpandClick}
+                style={
+                  this.state.expanded
+                    ? styles.expandIconRotated
+                    : styles.expandIcon
+                }
+              >
+                <ExpandMoreIcon />
+              </IconButton>
+            </div>
+          </div>
+        }
+        titleTypographyProps={{ variant: 'h6' }}
+      />
+    );
+  }
+
   render() {
     const {
-      initiallyExpanded,
       group: { id, milestone, items },
     } = this.props;
     if (!milestone && items.length < 1) {
@@ -100,21 +133,19 @@ class LessonPlanGroup extends Component {
 
     return (
       <Element name={id}>
-        <Card
-          initiallyExpanded={initiallyExpanded}
-          style={styles.card}
-          containerStyle={styles.cardContainer}
-        >
+        <Card style={styles.card}>
           {milestone
-            ? LessonPlanGroup.renderMilestoneCardTitle(milestone)
+            ? this.renderMilestoneCardTitle(milestone)
             : this.renderDefaultMilestone()}
-          <CardText expandable style={styles.items}>
-            {items.length > 0
-              ? items.map((item) => (
-                  <LessonPlanItem key={item.id} {...{ item }} />
-                ))
-              : LessonPlanGroup.renderNoItemsMessage()}
-          </CardText>
+          <Collapse in={this.state.expanded} unmountOnExit>
+            <CardContent style={styles.items}>
+              {items.length > 0
+                ? items.map((item) => (
+                    <LessonPlanItem key={item.id} {...{ item }} />
+                  ))
+                : LessonPlanGroup.renderNoItemsMessage()}
+            </CardContent>
+          </Collapse>
         </Card>
       </Element>
     );

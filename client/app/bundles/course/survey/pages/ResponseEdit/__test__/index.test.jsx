@@ -88,7 +88,7 @@ describe('<ResponseEdit />', () => {
     const newAnswer = 'New Answer';
     textResponse.simulate('change', { target: { value: newAnswer } });
     const submitButton = responseForm
-      .find('RaisedButton')
+      .find('Button')
       .at(1)
       .find('button')
       .first();

@@ -61,17 +61,17 @@ describe('<MaterialUploader />', () => {
         materials: [uploadedMaterial],
       });
 
-    const materailUploder = mount(
+    const materialUploader = mount(
       <ProviderWrapper>
         <MaterialUploader materials={materials} folderId={folderId} />
       </ProviderWrapper>,
     );
 
-    expect(materailUploder.find('Material')).toHaveLength(2);
+    expect(materialUploader.find('Material')).toHaveLength(2);
 
     const spyUpload = jest.spyOn(CourseAPI.materialFolders, 'upload');
     // Upload a file
-    materailUploder.find('input[type="file"]').simulate('change', {
+    materialUploader.find('input[type="file"]').simulate('change', {
       target: {
         files: [{ name: 'Uploading file' }],
       },
@@ -79,6 +79,6 @@ describe('<MaterialUploader />', () => {
 
     await sleep(1);
     expect(spyUpload).toHaveBeenCalled();
-    expect(materailUploder.find('Material')).toHaveLength(3);
+    expect(materialUploader.find('Material')).toHaveLength(3);
   });
 });

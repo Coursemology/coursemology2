@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
-import ClosedCaption from 'material-ui/svg-icons/av/closed-caption';
-import IconButton from 'material-ui/IconButton';
+import { IconButton } from '@material-ui/core';
 import { captionsStates } from 'lib/constants/videoConstants';
 import { connect } from 'react-redux';
-import { black, grey400 } from 'material-ui/styles/colors';
+import { black, grey } from '@material-ui/core/colors';
+import ClosedCaption from '@material-ui/icons/ClosedCaption';
 
 import styles from '../VideoPlayer.scss';
 import { changeCaptionsState } from '../../actions/video';
@@ -23,7 +23,9 @@ function CaptionsButton(props) {
       onClick={() => props.onClick(props.captionsState)}
     >
       <ClosedCaption
-        color={props.captionsState === captionsStates.ON ? black : grey400}
+        nativeColor={
+          props.captionsState === captionsStates.ON ? black : grey[400]
+        }
       />
     </IconButton>
   );

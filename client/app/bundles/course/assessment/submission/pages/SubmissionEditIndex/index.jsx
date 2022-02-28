@@ -2,12 +2,16 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-
-import { Card, CardHeader, CardText, CardActions } from 'material-ui/Card';
-import Toggle from 'material-ui/Toggle';
+import {
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  FormControlLabel,
+  Switch,
+} from '@material-ui/core';
+import InsertDriveFile from '@material-ui/icons/InsertDriveFile';
 import { touch } from 'redux-form';
-import FileIcon from 'material-ui/svg-icons/editor/insert-drive-file';
-
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import NotificationBar, {
   notificationShape,
@@ -263,7 +267,7 @@ class VisibleSubmissionEditIndex extends Component {
 
     const renderFile = (file, index) => (
       <div key={index}>
-        <FileIcon style={{ verticalAlign: 'middle' }} />
+        <InsertDriveFile style={{ verticalAlign: 'middle' }} />
         <a href={file.url}>
           <span>{file.name}</span>
         </a>
@@ -274,16 +278,16 @@ class VisibleSubmissionEditIndex extends Component {
       <Card style={{ marginBottom: 20 }}>
         <CardHeader title={<h3>{assessment.title}</h3>} />
         {assessment.description ? (
-          <CardText
+          <CardContent
             dangerouslySetInnerHTML={{ __html: assessment.description }}
           />
         ) : null}
-        {assessment.files.length > 0 ? (
-          <CardText>
+        {assessment.files.length > 0 && (
+          <CardContent>
             <h4>Files</h4>
             {assessment.files.map(renderFile)}
-          </CardText>
-        ) : null}
+          </CardContent>
+        )}
         <CardActions>
           {submission.isGrader && this.renderStudentViewToggle()}
         </CardActions>
@@ -423,16 +427,27 @@ class VisibleSubmissionEditIndex extends Component {
 
   renderStudentViewToggle() {
     return (
-      <Toggle
-        label={<FormattedMessage {...translations.studentView} />}
-        labelPosition="right"
-        onToggle={(_, enabled) => {
-          if (enabled) {
-            this.props.dispatch(enterStudentView());
-          } else {
-            this.props.dispatch(exitStudentView());
-          }
-        }}
+      <FormControlLabel
+        control={
+          <Switch
+            className="toggle-phantom"
+            color="primary"
+            onChange={(_, enabled) => {
+              if (enabled) {
+                this.props.dispatch(enterStudentView());
+              } else {
+                this.props.dispatch(exitStudentView());
+              }
+            }}
+          />
+        }
+        label={
+          <b>
+            <FormattedMessage {...translations.studentView} />
+          </b>
+        }
+        labelPlacement="end"
+        style={{ marginLeft: '0.5px' }}
       />
     );
   }
