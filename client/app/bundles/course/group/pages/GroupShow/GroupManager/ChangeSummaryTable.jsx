@@ -1,12 +1,11 @@
 import {
   Table,
   TableBody,
-  TableHeader,
-  TableHeaderColumn,
+  TableCell,
+  TableHead,
   TableRow,
-  TableRowColumn,
-} from 'material-ui';
-import { red100, blue100, green100 } from 'material-ui/styles/colors';
+} from '@material-ui/core';
+import { blue, green, red } from '@material-ui/core/colors';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
@@ -95,7 +94,7 @@ const ChangeSummaryTable = ({ groups, modifiedGroups }) => {
       }
     >
       {modifiedGroupSummaries.map((group, groupIndex) => (
-        <>
+        <div key={`group_${group.id}`}>
           <h3
             style={{
               ...styles.groupTitle,
@@ -104,58 +103,52 @@ const ChangeSummaryTable = ({ groups, modifiedGroups }) => {
           >
             {group.name}
           </h3>
-          <Table selectable={false}>
-            <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+          <Table>
+            <TableHead>
               <TableRow style={styles.rowHeight}>
-                <TableHeaderColumn style={styles.rowHeight}>
+                <TableCell style={styles.rowHeight}>
                   <FormattedMessage {...translations.serialNumber} />
-                </TableHeaderColumn>
-                <TableHeaderColumn style={styles.rowHeight}>
+                </TableCell>
+                <TableCell style={styles.rowHeight}>
                   <FormattedMessage {...translations.name} />
-                </TableHeaderColumn>
-                <TableHeaderColumn style={styles.rowHeight}>
+                </TableCell>
+                <TableCell style={styles.rowHeight}>
                   <FormattedMessage {...translations.role} />
-                </TableHeaderColumn>
-                <TableHeaderColumn style={styles.rowHeight}>
+                </TableCell>
+                <TableCell style={styles.rowHeight}>
                   <FormattedMessage {...translations.change} />
-                </TableHeaderColumn>
+                </TableCell>
               </TableRow>
-            </TableHeader>
-            <TableBody displayRowCheckbox={false}>
+            </TableHead>
+            <TableBody>
               {group.added.map((m, index) => (
                 <TableRow
                   key={m.id}
-                  style={{ ...styles.rowHeight, backgroundColor: green100 }}
+                  style={{ ...styles.rowHeight, backgroundColor: green[100] }}
                 >
-                  <TableRowColumn style={styles.rowHeight}>
-                    {index + 1}
-                  </TableRowColumn>
-                  <TableRowColumn style={styles.rowHeight}>
-                    {m.name}
-                  </TableRowColumn>
-                  <TableRowColumn style={styles.rowHeight}>
+                  <TableCell style={styles.rowHeight}>{index + 1}</TableCell>
+                  <TableCell style={styles.rowHeight}>{m.name}</TableCell>
+                  <TableCell style={styles.rowHeight}>
                     {roles[m.groupRole]}
-                  </TableRowColumn>
-                  <TableRowColumn style={styles.rowHeight}>
+                  </TableCell>
+                  <TableCell style={styles.rowHeight}>
                     <FormattedMessage {...translations.add} />
-                  </TableRowColumn>
+                  </TableCell>
                 </TableRow>
               ))}
               {group.updated.map((m, index) => (
                 <TableRow
                   key={m.id}
-                  style={{ ...styles.rowHeight, backgroundColor: blue100 }}
+                  style={{ ...styles.rowHeight, backgroundColor: blue[100] }}
                 >
-                  <TableRowColumn style={styles.rowHeight}>
+                  <TableCell style={styles.rowHeight}>
                     {index + 1 + group.added.length}
-                  </TableRowColumn>
-                  <TableRowColumn style={styles.rowHeight}>
-                    {m.name}
-                  </TableRowColumn>
-                  <TableRowColumn style={styles.rowHeight}>
+                  </TableCell>
+                  <TableCell style={styles.rowHeight}>{m.name}</TableCell>
+                  <TableCell style={styles.rowHeight}>
                     {roles[m.groupRole]}
-                  </TableRowColumn>
-                  <TableRowColumn style={styles.rowHeight}>
+                  </TableCell>
+                  <TableCell style={styles.rowHeight}>
                     <FormattedMessage
                       values={{
                         oldRole:
@@ -166,31 +159,29 @@ const ChangeSummaryTable = ({ groups, modifiedGroups }) => {
                       }}
                       {...translations.switch}
                     />
-                  </TableRowColumn>
+                  </TableCell>
                 </TableRow>
               ))}
               {group.removed.map((m, index) => (
                 <TableRow
                   key={m.id}
-                  style={{ ...styles.rowHeight, backgroundColor: red100 }}
+                  style={{ ...styles.rowHeight, backgroundColor: red[100] }}
                 >
-                  <TableRowColumn style={styles.rowHeight}>
+                  <TableCell style={styles.rowHeight}>
                     {index + 1 + group.added.length + group.updated.length}
-                  </TableRowColumn>
-                  <TableRowColumn style={styles.rowHeight}>
-                    {m.name}
-                  </TableRowColumn>
-                  <TableRowColumn style={styles.rowHeight}>
+                  </TableCell>
+                  <TableCell style={styles.rowHeight}>{m.name}</TableCell>
+                  <TableCell style={styles.rowHeight}>
                     {roles[m.groupRole]}
-                  </TableRowColumn>
-                  <TableRowColumn style={styles.rowHeight}>
+                  </TableCell>
+                  <TableCell style={styles.rowHeight}>
                     <FormattedMessage {...translations.remove} />
-                  </TableRowColumn>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
-        </>
+        </div>
       ))}
     </GroupCard>
   );

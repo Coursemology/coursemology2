@@ -59,15 +59,15 @@ const NameDescriptionForm = ({ submitting, handleSubmit, onSubmit, error }) => (
       <Field
         name="name"
         component={TextField}
-        floatingLabelText={<FormattedMessage {...translations.name} />}
+        label={<FormattedMessage {...translations.name} />}
         disabled={submitting}
         style={styles.flexChild}
       />
       <Field
         name="description"
         component={TextField}
-        floatingLabelText={<FormattedMessage {...translations.description} />}
-        multiLine
+        label={<FormattedMessage {...translations.description} />}
+        multiline
         disabled={submitting}
         rows={2}
         rowsMax={4}
