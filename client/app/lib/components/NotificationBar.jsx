@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Snackbar } from '@material-ui/core';
@@ -66,7 +66,7 @@ NotificationBar.propTypes = {
   autoHideDuration: PropTypes.number,
 };
 
-export default React.memo(
+export default memo(
   NotificationBar,
   (prevProps, nextProps) => prevProps.notification === nextProps.notification,
 );
