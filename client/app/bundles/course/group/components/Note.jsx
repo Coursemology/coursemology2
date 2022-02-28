@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-import { Card, CardHeader, CardText } from 'material-ui';
-import { orange900, orange200 } from 'material-ui/styles/colors';
+import { Card, CardHeader, CardContent } from '@material-ui/core';
+import { orange } from '@material-ui/core/colors';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
 const styles = {
@@ -12,7 +12,10 @@ const styles = {
   cardHeader: {
     borderRadius: '5px 5px 0 0',
     padding: 12,
-    backgroundColor: orange200,
+    backgroundColor: orange[200],
+  },
+  cardHeaderTitle: {
+    color: orange[900],
     fontWeight: 'bold',
   },
 };
@@ -29,9 +32,9 @@ const Note = ({ message }) => (
     <CardHeader
       style={styles.cardHeader}
       title={<FormattedMessage {...translations.noteHeader} />}
-      titleColor={orange900}
+      titleTypographyProps={{ variant: 'body2', style: styles.cardHeaderTitle }}
     />
-    <CardText>{message}</CardText>
+    <CardContent>{message}</CardContent>
   </Card>
 );
 

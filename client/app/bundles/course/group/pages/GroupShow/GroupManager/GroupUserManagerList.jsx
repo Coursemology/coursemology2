@@ -2,13 +2,14 @@ import PropTypes from 'prop-types';
 import {
   Checkbox,
   Divider,
-  DropDownMenu,
   List,
   ListItem,
+  ListItemText,
+  ListSubheader,
   MenuItem,
-  Subheader,
-} from 'material-ui';
-import { grey400 } from 'material-ui/styles/colors';
+  Select,
+} from '@material-ui/core';
+import { grey } from '@material-ui/core/colors';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { memberShape } from '../../../propTypes';
 
@@ -43,22 +44,26 @@ const styles = {
   },
   listItem: {
     height: 36,
-    fontSize: 13,
-    paddingTop: 6,
-    paddingBottom: 6,
+    marginTop: 6,
+    marginBottom: 6,
     display: 'flex',
     alignItems: 'center',
-    width: '100%',
   },
   listItemWithDropdown: {
     height: '100%',
-    width: '100%',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  listItemText: {
+    marginBottm: 5,
+  },
+  listItemTextSize: {
+    fontSize: 13,
+  },
   checkbox: {
-    top: 6,
+    width: 'auto',
+    padding: 0,
   },
   divider: {
     marginTop: 16,
@@ -74,47 +79,46 @@ const GroupUserManagerListItem = ({
   isChecked,
 }) => (
   <ListItem
+    button
     className={showDropdown ? 'has-dropdown' : ''}
-    primaryText={
-      showDropdown ? (
-        <div style={styles.listItemWithDropdown}>
-          <div>{user.name}</div>
-          <DropDownMenu
-            className="group-user-manager-list-item-dropdown"
-            value={user.groupRole}
-            onChange={(_, _2, value) => onChangeDropdown(value, user)}
-            underlineStyle={
-              colour ? { borderTopColor: colour.dark } : undefined
-            }
-            iconStyle={colour ? { fill: colour.light } : undefined}
-          >
-            <MenuItem
-              value="normal"
-              primaryText={<FormattedMessage {...translations.normal} />}
-            />
-            <MenuItem
-              value="manager"
-              primaryText={<FormattedMessage {...translations.manager} />}
-            />
-          </DropDownMenu>
-        </div>
-      ) : (
-        <div>{user.name}</div>
-      )
-    }
-    leftCheckbox={
-      <Checkbox
-        style={styles.checkbox}
-        checked={isChecked}
-        onCheck={() => onCheck(user)}
-      />
-    }
     style={
       colour
         ? { ...styles.listItem, backgroundColor: colour.light }
         : styles.listItem
     }
-  />
+  >
+    <Checkbox
+      checked={isChecked}
+      color="primary"
+      onChange={() => onCheck(user)}
+      style={styles.checkbox}
+    />
+    <ListItemText
+      style={styles.listItemText}
+      primaryTypographyProps={{ style: styles.listItemTextSize }}
+    >
+      {showDropdown ? (
+        <div style={styles.listItemWithDropdown}>
+          <div onClick={() => onCheck(user)}>{user.name}</div>
+          <Select
+            className="group-user-manager-list-item-dropdown"
+            onChange={(event) => onChangeDropdown(event.target.value, user)}
+            value={user.groupRole}
+            style={styles.listItemTextSize}
+          >
+            <MenuItem value="normal" style={styles.listItemTextSize}>
+              <FormattedMessage {...translations.normal} />
+            </MenuItem>
+            <MenuItem value="manager" style={styles.listItemTextSize}>
+              <FormattedMessage {...translations.manager} />
+            </MenuItem>
+          </Select>
+        </div>
+      ) : (
+        <div onClick={() => onCheck(user)}>{user.name}</div>
+      )}
+    </ListItemText>
+  </ListItem>
 );
 
 GroupUserManagerListItem.propTypes = {
@@ -137,16 +141,17 @@ const GroupUserManagerList = ({
 }) => (
   <List style={styles.list}>
     {students.length === 0 && staff.length === 0 ? (
-      <ListItem
-        style={{ color: grey400 }}
-        primaryText={<FormattedMessage {...translations.noUsersFound} />}
-      />
+      <ListItem button style={{ color: grey[400] }}>
+        <ListItemText>
+          <FormattedMessage {...translations.noUsersFound} />
+        </ListItemText>
+      </ListItem>
     ) : null}
     {students.length > 0 && (
       <>
-        <Subheader>
+        <ListSubheader disableSticky>
           <FormattedMessage {...translations.students} />
-        </Subheader>
+        </ListSubheader>
         {students.map((user) => {
           const colour = colourMap[user.id];
           return (
@@ -166,9 +171,9 @@ const GroupUserManagerList = ({
     {staff.length > 0 && (
       <>
         {students.length > 0 && <Divider style={styles.divider} />}
-        <Subheader>
+        <ListSubheader disableSticky>
           <FormattedMessage {...translations.staff} />
-        </Subheader>
+        </ListSubheader>
         {staff.map((user) => {
           const colour = colourMap[user.id];
           return (

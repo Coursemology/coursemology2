@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { RaisedButton } from 'material-ui';
+import { Button } from '@material-ui/core';
 import {
   injectIntl,
   intlShape,
@@ -55,13 +55,15 @@ const PopupDialog = ({ dispatch, intl, isManagingGroups }) => {
 
   return (
     <>
-      <RaisedButton
-        label={<FormattedMessage {...translations.new} />}
-        primary
+      <Button
+        variant="contained"
+        color="primary"
+        disabled={isManagingGroups}
         onClick={handleOpen}
         style={styles.newButton}
-        disabled={isManagingGroups}
-      />
+      >
+        <FormattedMessage {...translations.new} />
+      </Button>
       <GroupFormDialog
         dialogTitle={intl.formatMessage(translations.new)}
         expectedDialogTypes={[dialogTypes.CREATE_CATEGORY]}
