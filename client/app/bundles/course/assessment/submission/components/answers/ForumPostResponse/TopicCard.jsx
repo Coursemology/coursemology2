@@ -1,9 +1,9 @@
 import React from 'react';
 import {
   Button,
-  ExpansionPanel,
-  ExpansionPanelActions,
-  ExpansionPanelSummary,
+  Accordion,
+  AccordionActions,
+  AccordionSummary,
   Divider,
   Icon,
 } from '@material-ui/core';
@@ -38,11 +38,11 @@ const translations = defineMessages({
 });
 
 const styles = {
-  expansionPanelSummary: {
+  AccordionSummary: {
     backgroundColor: indigo[50],
     padding: '8px 16px',
   },
-  expansionPanelActions: {
+  AccordionActions: {
     padding: 16,
   },
   container: {
@@ -78,15 +78,15 @@ export default class TopicCard extends React.Component {
     ).length;
 
     return (
-      <ExpansionPanel
+      <Accordion
         expanded={this.state.isExpanded}
         onChange={this.handleIsExpandedChange}
         style={this.props.style}
         className="topic-card"
       >
-        <ExpansionPanelSummary
+        <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
-          style={styles.expansionPanelSummary}
+          style={styles.AccordionSummary}
         >
           <CardTitle
             title={this.props.topicPostPack.topic.title}
@@ -105,9 +105,9 @@ export default class TopicCard extends React.Component {
               )
             }
           />
-        </ExpansionPanelSummary>
+        </AccordionSummary>
         <Divider />
-        <ExpansionPanelActions style={styles.expansionPanelActions}>
+        <AccordionActions style={styles.AccordionActions}>
           <Button
             variant="contained"
             endIcon={
@@ -119,7 +119,7 @@ export default class TopicCard extends React.Component {
           >
             <FormattedMessage {...translations.viewTopicInNewTab} />
           </Button>
-        </ExpansionPanelActions>
+        </AccordionActions>
         <Divider />
         <div style={styles.container}>
           {topicPostPack.postPacks.map((postPack, index) => (
@@ -138,7 +138,7 @@ export default class TopicCard extends React.Component {
             />
           ))}
         </div>
-      </ExpansionPanel>
+      </Accordion>
     );
   }
 }

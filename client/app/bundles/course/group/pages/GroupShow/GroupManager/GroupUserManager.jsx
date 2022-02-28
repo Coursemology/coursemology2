@@ -304,7 +304,7 @@ const GroupUserManager = ({
       {
         label: <FormattedMessage {...translations.delete} />,
         onClick: () => setIsConfirmingDelete(true),
-        icon: <Delete nativeColor={red[500]} />,
+        icon: <Delete htmlColor={red[500]} />,
       },
     ],
     [handleEdit, setIsConfirmingDelete],
