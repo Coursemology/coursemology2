@@ -1,9 +1,9 @@
 import React, { useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { change, Field, Form, formValueSelector, reduxForm } from 'redux-form';
-import { red500 } from 'material-ui/styles/colors';
 import { connect } from 'react-redux';
-import { Tab, Tabs } from 'material-ui';
+import { Tab, Tabs } from '@material-ui/core';
+import { red } from '@material-ui/core/colors';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
 import ErrorText, { errorProps } from 'lib/components/ErrorText';
@@ -28,7 +28,7 @@ const styles = {
   warning: {
     marginTop: '0.25rem',
     fontSize: '1.5rem',
-    color: red500,
+    color: red[500],
   },
 };
 
@@ -151,7 +151,7 @@ const GroupCreationForm = ({
   }, [numToCreate, conflictingNames]);
 
   const handleChange = useCallback(
-    (value) =>
+    (event, value) =>
       dispatch(change(formNames.GROUP, 'is_single', value === 'is_single')),
     [dispatch],
   );
@@ -162,73 +162,72 @@ const GroupCreationForm = ({
       <Tabs
         value={isSingle ? 'is_single' : 'is_multiple'}
         onChange={handleChange}
+        variant="fullWidth"
       >
-        <Tab label="Single" value="is_single">
-          <div style={styles.flexCol}>
-            <Field
-              name="name"
-              component={TextField}
-              floatingLabelText={<FormattedMessage {...translations.name} />}
-              disabled={submitting}
-              style={styles.flexChild}
-            />
-            <Field
-              name="description"
-              component={TextField}
-              floatingLabelText={
-                <FormattedMessage {...translations.description} />
-              }
-              multiLine
-              disabled={submitting}
-              rows={2}
-              rowsMax={4}
-              style={styles.flexChild}
-            />
-          </div>
-        </Tab>
-        <Tab label="Multiple" value="is_multiple">
-          <div style={styles.flexCol}>
-            <Field
-              name="name"
-              component={TextField}
-              floatingLabelText={<FormattedMessage {...translations.prefix} />}
-              disabled={submitting}
-              style={styles.flexChild}
-            />
-            <Field
-              name="num_to_create"
-              component={TextField}
-              floatingLabelText={
-                <FormattedMessage {...translations.numToCreate} />
-              }
-              type="number"
-              onWheel={(event) => event.currentTarget.blur()}
-              disabled={submitting}
-              style={styles.flexChild}
-              min={MIN_NUM_TO_CREATE}
-              max={MAX_NUM_TO_CREATE}
-            />
-            {name &&
-            numToCreate >= MIN_NUM_TO_CREATE &&
-            numToCreate <= MAX_NUM_TO_CREATE ? (
-              <div style={styles.note}>
-                <FormattedMessage
-                  values={{ name, numToCreate }}
-                  {...translations.multipleGroupsWillBeCreated}
-                />
-              </div>
-            ) : null}
-            {conflictingNames.length > 0 ? (
-              <div style={styles.warning}>
-                <FormattedMessage
-                  values={{ duplicateNames: conflictingNames.join(', ') }}
-                  {...translations.duplicateGroups}
-                />
-              </div>
-            ) : null}
-          </div>
-        </Tab>
+        <Tab label="Single" value="is_single" />
+        <Tab label="Multiple" value="is_multiple" />
       </Tabs>
+      {isSingle && (
+        <div style={styles.flexCol}>
+          <Field
+            name="name"
+            component={TextField}
+            label={<FormattedMessage {...translations.name} />}
+            disabled={submitting}
+            style={styles.flexChild}
+          />
+          <Field
+            name="description"
+            component={TextField}
+            label={<FormattedMessage {...translations.description} />}
+            multiline
+            disabled={submitting}
+            rows={2}
+            rowsMax={4}
+            style={styles.flexChild}
+          />
+        </div>
+      )}
+      {!isSingle && (
+        <div style={styles.flexCol}>
+          <Field
+            name="name"
+            component={TextField}
+            label={<FormattedMessage {...translations.prefix} />}
+            disabled={submitting}
+            style={styles.flexChild}
+          />
+          <Field
+            name="num_to_create"
+            component={TextField}
+            label={<FormattedMessage {...translations.numToCreate} />}
+            type="number"
+            onWheel={(event) => event.currentTarget.blur()}
+            disabled={submitting}
+            style={styles.flexChild}
+            min={MIN_NUM_TO_CREATE}
+            max={MAX_NUM_TO_CREATE}
+          />
+          {name &&
+          numToCreate >= MIN_NUM_TO_CREATE &&
+          numToCreate <= MAX_NUM_TO_CREATE ? (
+            <div style={styles.note}>
+              <FormattedMessage
+                values={{ name, numToCreate }}
+                {...translations.multipleGroupsWillBeCreated}
+              />
+            </div>
+          ) : null}
+          {conflictingNames.length > 0 ? (
+            <div style={styles.warning}>
+              <FormattedMessage
+                values={{ duplicateNames: conflictingNames.join(', ') }}
+                {...translations.duplicateGroups}
+              />
+            </div>
+          ) : null}
+        </div>
+      )}
     </Form>
   );
 };

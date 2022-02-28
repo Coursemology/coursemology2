@@ -2,12 +2,11 @@ import React from 'react';
 import {
   Table,
   TableBody,
-  TableHeader,
-  TableHeaderColumn,
+  TableCell,
+  TableHead,
   TableRow,
-  TableRowColumn,
-} from 'material-ui';
-import { grey700 } from 'material-ui/styles/colors';
+} from '@material-ui/core';
+import { grey } from '@material-ui/core/colors';
 
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { groupShape } from '../../propTypes';
@@ -48,7 +47,7 @@ const styles = {
   empty: {
     paddingTop: '2rem',
     textAlign: 'center',
-    color: grey700,
+    color: grey[700],
   },
   rowHeight: {
     height: 36,
@@ -69,39 +68,37 @@ const GroupTableCard = ({ group }) => {
         />
       }
     >
-      <Table selectable={false}>
-        <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+      <Table>
+        <TableHead>
           <TableRow style={styles.rowHeight}>
-            <TableHeaderColumn style={styles.rowHeight}>
+            <TableCell style={styles.rowHeight}>
               <FormattedMessage {...translations.serialNumber} />
-            </TableHeaderColumn>
-            <TableHeaderColumn style={styles.rowHeight}>
+            </TableCell>
+            <TableCell style={styles.rowHeight}>
               <FormattedMessage {...translations.name} />
-            </TableHeaderColumn>
-            <TableHeaderColumn style={styles.rowHeight}>
+            </TableCell>
+            <TableCell style={styles.rowHeight}>
               <FormattedMessage {...translations.role} />
-            </TableHeaderColumn>
+            </TableCell>
           </TableRow>
-        </TableHeader>
-        <TableBody displayRowCheckbox={false}>
+        </TableHead>
+        <TableBody>
           {members.map((m, index) => (
             <TableRow key={m.id} style={styles.rowHeight}>
-              <TableRowColumn style={styles.rowHeight}>
-                {index + 1}
-              </TableRowColumn>
-              <TableRowColumn style={styles.rowHeight}>{m.name}</TableRowColumn>
-              <TableRowColumn style={styles.rowHeight}>
+              <TableCell style={styles.rowHeight}>{index + 1}</TableCell>
+              <TableCell style={styles.rowHeight}>{m.name}</TableCell>
+              <TableCell style={styles.rowHeight}>
                 {roles[m.groupRole]}
-              </TableRowColumn>
+              </TableCell>
             </TableRow>
           ))}
-          {members.length === 0 ? (
-            <div style={styles.empty}>
-              <FormattedMessage {...translations.noMembers} />
-            </div>
-          ) : null}
         </TableBody>
       </Table>
+      {members.length === 0 ? (
+        <div style={styles.empty}>
+          <FormattedMessage {...translations.noMembers} />
+        </div>
+      ) : null}
     </GroupCard>
   );
 };

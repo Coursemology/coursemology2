@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { RaisedButton } from 'material-ui';
+import { Button } from '@material-ui/core';
 import {
   FormattedMessage,
   injectIntl,
@@ -268,13 +268,15 @@ const GroupManager = ({
         </p>
         <div>
           {groups.map((group) => (
-            <RaisedButton
+            <Button
+              variant="contained"
+              color={group.id === selectedGroupId ? 'secondary' : 'default'}
               key={group.id}
-              label={group.name}
               style={styles.groupButton}
               onClick={() => handleGroupSelect(group.id)}
-              secondary={group.id === selectedGroupId}
-            />
+            >
+              {group.name}
+            </Button>
           ))}
         </div>
       </GroupCard>
@@ -286,8 +288,8 @@ const GroupManager = ({
         />
       ) : null}
       <div style={styles.bottomButtonContainer}>
-        <RaisedButton
-          label={<FormattedMessage {...translations.cancel} />}
+        <Button
+          variant="contained"
           style={styles.cancelButton}
           onClick={() => {
             if (modifiedGroups.length > 0) {
@@ -297,15 +299,19 @@ const GroupManager = ({
             handleCancel();
           }}
           disabled={isUpdating}
-        />
-        <RaisedButton
-          primary
-          label={<FormattedMessage {...translations.saveChanges} />}
+        >
+          <FormattedMessage {...translations.cancel} />
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
           disabled={
             selectedGroup == null || modifiedGroups.length === 0 || isUpdating
           }
           onClick={() => setIsConfirmingSave(true)}
-        />
+        >
+          <FormattedMessage {...translations.saveChanges} />
+        </Button>
       </div>
 
       <ChangeSummaryTable />
