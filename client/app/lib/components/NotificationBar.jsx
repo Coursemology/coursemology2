@@ -66,4 +66,7 @@ NotificationBar.propTypes = {
   autoHideDuration: PropTypes.number,
 };
 
-export default NotificationBar;
+export default React.memo(
+  NotificationBar,
+  (prevProps, nextProps) => prevProps.notification === nextProps.notification,
+);
