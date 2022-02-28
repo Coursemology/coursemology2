@@ -146,7 +146,7 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
     </ReactTooltip>
   </WithStyles(List)>
   <WithStyles(Divider) />
-  <NotificationBar
+  <Memo(NotificationBar)
     autoHideDuration={5000}
   />
 </Fragment>
