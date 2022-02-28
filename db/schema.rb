@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_26_161011) do
+ActiveRecord::Schema.define(version: 2022_01_11_183806) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -642,6 +642,20 @@ ActiveRecord::Schema.define(version: 2021_12_26_161011) do
     t.index ["updater_id"], name: "fk__course_forums_updater_id"
   end
 
+  create_table "course_group_categories", force: :cascade do |t|
+    t.bigint "course_id", null: false
+    t.string "name", default: "", null: false
+    t.text "description"
+    t.bigint "creator_id", null: false
+    t.bigint "updater_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["course_id", "name"], name: "index_course_group_categories_on_course_id_and_name", unique: true
+    t.index ["course_id"], name: "fk__course_group_categories_course_id"
+    t.index ["creator_id"], name: "fk__course_group_categories_creator_id"
+    t.index ["updater_id"], name: "fk__course_group_categories_updater_id"
+  end
+
   create_table "course_group_users", id: :serial, force: :cascade do |t|
     t.integer "group_id", null: false
     t.integer "course_user_id", null: false
@@ -658,16 +672,16 @@ ActiveRecord::Schema.define(version: 2021_12_26_161011) do
   end
 
   create_table "course_groups", id: :serial, force: :cascade do |t|
-    t.integer "course_id", null: false
     t.string "name", limit: 255, null: false
     t.integer "creator_id", null: false
     t.integer "updater_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "description"
-    t.index ["course_id", "name"], name: "index_course_groups_on_course_id_and_name", unique: true
-    t.index ["course_id"], name: "fk__course_groups_course_id"
+    t.bigint "group_category_id", null: false
     t.index ["creator_id"], name: "fk__course_groups_creator_id"
+    t.index ["group_category_id", "name"], name: "index_course_groups_on_group_category_id_and_name", unique: true
+    t.index ["group_category_id"], name: "fk__course_groups_group_category_id"
     t.index ["updater_id"], name: "fk__course_groups_updater_id"
   end
 
@@ -1367,11 +1381,14 @@ ActiveRecord::Schema.define(version: 2021_12_26_161011) do
   add_foreign_key "course_forums", "courses", name: "fk_course_forums_course_id"
   add_foreign_key "course_forums", "users", column: "creator_id", name: "fk_course_forums_creator_id"
   add_foreign_key "course_forums", "users", column: "updater_id", name: "fk_course_forums_updater_id"
+  add_foreign_key "course_group_categories", "courses"
+  add_foreign_key "course_group_categories", "users", column: "creator_id"
+  add_foreign_key "course_group_categories", "users", column: "updater_id"
   add_foreign_key "course_group_users", "course_groups", column: "group_id", name: "fk_course_group_users_course_group_id"
   add_foreign_key "course_group_users", "course_users", name: "fk_course_group_users_course_user_id"
   add_foreign_key "course_group_users", "users", column: "creator_id", name: "fk_course_group_users_creator_id"
   add_foreign_key "course_group_users", "users", column: "updater_id", name: "fk_course_group_users_updater_id"
-  add_foreign_key "course_groups", "courses", name: "fk_course_groups_course_id"
+  add_foreign_key "course_groups", "course_group_categories", column: "group_category_id"
   add_foreign_key "course_groups", "users", column: "creator_id", name: "fk_course_groups_creator_id"
   add_foreign_key "course_groups", "users", column: "updater_id", name: "fk_course_groups_updater_id"
   add_foreign_key "course_learning_maps", "courses", name: "fk_course_learning_maps_course_id"

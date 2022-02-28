@@ -335,8 +335,9 @@ RSpec.describe CourseUser, type: :model do
     context 'when there are students in groups' do
       let(:group_owner) { create(:course_manager, course: course) }
       before do
-        group = create(:course_group, course: course, creator: group_owner.user)
+        group = create(:course_group, course: course)
         create(:course_group_user, course: course, group: group, course_user: student)
+        create(:course_group_manager, course: course, group: group, course_user: group_owner)
       end
 
       describe '#my_students' do

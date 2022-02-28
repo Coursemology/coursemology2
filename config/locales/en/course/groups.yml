@@ -1,30 +1,12 @@
 en:
   course:
     groups:
-      sidebar_title: :'course.groups.index.header'
+      sidebar_title: :'course.group.group_categories.index.header'
       index:
-        header: 'Groups'
-        name: 'Name'
-        members: 'Members'
-        phantom: 'Phantom'
-        total: 'Total'
-        managers: 'Managers'
-      show:
-        managers: :'course.groups.index.managers'
-        members: 'Members'
-      new:
-        header: 'New Group'
-      create:
-        success: 'Group %{name} was created.'
-      edit:
-        header: 'Edit Group'
-        add_user: 'Add User'
-        name: 'Name'
-        role: 'Role'
-      update:
-        success: 'Group %{name} was updated.'
-      destroy:
-        success: 'Group %{name} was deleted.'
-      group_user_fields:
-        remove: 'Remove'
-        phantom_user_label: '%{name} (Phantom User)'
+        header: :'course.group.group_categories.index.header'
+    group:
+      group_categories:
+        index:
+          header: 'Groups'
+        show:
+          header: 'Groups'

@@ -124,9 +124,9 @@ en:
           pending: :'course.assessment.submissions.pending.header'
         sessions:
           new: :'course.assessment.sessions.new.header'
-      groups:
-        index: :'course.groups.index.header'
-        new: :'course.groups.new.header'
+      group:
+        group_categories:
+          index: :'course.group.group_categories.index.header'
       lesson_plan:
         controller:
           index: :'course.lesson_plan.items.index.header'

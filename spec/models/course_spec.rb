@@ -13,7 +13,8 @@ RSpec.describe Course, type: :model do
     it { is_expected.to have_many(:announcements).dependent(:destroy) }
     it { is_expected.to have_many(:achievements).dependent(:destroy) }
     it { is_expected.to have_many(:levels).dependent(:destroy) }
-    it { is_expected.to have_many(:groups).dependent(:destroy) }
+    it { is_expected.to have_many(:group_categories).dependent(:destroy) }
+    it { is_expected.to have_many(:groups).through(:group_categories) }
     it { is_expected.to have_many(:assessment_categories).dependent(:destroy) }
     it { is_expected.to have_many(:assessments).through(:assessment_categories) }
     it { is_expected.to have_many(:assessment_skills).dependent(:destroy) }
