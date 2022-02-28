@@ -1,8 +1,30 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
-import { Card, CardHeader, CardText } from 'material-ui/Card';
+import {
+  ExpansionPanel,
+  ExpansionPanelDetails,
+  ExpansionPanelSummary,
+} from '@material-ui/core';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AceEditor from 'react-ace';
+
+const styles = {
+  panel: {
+    margin: 0,
+  },
+  panelSummary: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    margin: 0,
+  },
+  panelSummaryText: {
+    flexDirection: 'column',
+  },
+  panelSummarySubtitle: {
+    color: 'grey',
+  },
+};
 
 class EditorCard extends Component {
   static getInputName(field) {
@@ -16,15 +38,18 @@ class EditorCard extends Component {
   render() {
     const { mode, field, value, header, subtitle, isLoading } = this.props;
     return (
-      <Card containerStyle={{ paddingBottom: 0 }} initiallyExpanded>
-        <CardHeader
-          title={header}
-          textStyle={{ fontWeight: 'bold' }}
-          subtitle={subtitle}
-          actAsExpander
-          showExpandableButton
-        />
-        <CardText expandable style={{ padding: 0 }}>
+      <ExpansionPanel defaultExpanded style={styles.panel}>
+        <ExpansionPanelSummary
+          expandIcon={<ExpandMoreIcon />}
+          style={styles.panelSummary}
+        >
+          <div style={styles.panelSummaryText}>
+            {header}
+            <br />
+            <div style={styles.panelSummarySubtitle}>{subtitle}</div>
+          </div>
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails style={{ padding: 0 }}>
           <textarea
             name={EditorCard.getInputName(field)}
             value={value}
@@ -43,8 +68,8 @@ class EditorCard extends Component {
             editorProps={{ $blockScrolling: true }}
             setOptions={{ useSoftTabs: true, readOnly: isLoading }}
           />
-        </CardText>
-      </Card>
+        </ExpansionPanelDetails>
+      </ExpansionPanel>
     );
   }
 }

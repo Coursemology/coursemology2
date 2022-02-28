@@ -1,7 +1,12 @@
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from '@material-ui/core';
 import translations from 'lib/translations/form';
 
 const styles = {
@@ -18,24 +23,20 @@ const styles = {
 const Popup = (props) => {
   const { title, children, actionButtons, onDismiss } = props;
   const dismissButton = (
-    <FlatButton
-      primary
-      label={<FormattedMessage {...translations.dismiss} />}
-      onClick={onDismiss}
-    />
+    <Button color="primary" key="dismiss-button" onClick={onDismiss}>
+      <FormattedMessage {...translations.dismiss} />
+    </Button>
   );
 
   return (
-    <Dialog
-      open
-      title={title}
-      actions={[...actionButtons, dismissButton]}
-      contentStyle={styles.dialog}
-      titleStyle={styles.centralise}
-      bodyStyle={styles.centralise}
-      onRequestClose={props.onDismiss}
-    >
-      {children}
+    <Dialog onClose={onDismiss} open maxWidth="xl">
+      <DialogTitle style={styles.centralise}>{title}</DialogTitle>
+      <DialogContent style={{ ...styles.dialog, ...styles.centralise }}>
+        {children}
+      </DialogContent>
+      <DialogActions>
+        {actionButtons} {dismissButton}
+      </DialogActions>
     </Dialog>
   );
 };

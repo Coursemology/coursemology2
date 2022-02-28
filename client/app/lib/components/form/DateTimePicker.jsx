@@ -7,12 +7,11 @@ import {
   KeyboardTimePicker,
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
-import DateRange from 'material-ui/svg-icons/action/date-range';
-import KeyboardArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
-import KeyboardArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
-import Schedule from 'material-ui/svg-icons/action/schedule';
+import DateRange from '@material-ui/icons/DateRange';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import Schedule from '@material-ui/icons/Schedule';
 import MomentUtils from '@date-io/moment';
-import { MuiThemeProvider, createTheme } from '@material-ui/core';
 
 const translations = defineMessages({
   datePlaceholder: {
@@ -58,18 +57,6 @@ const styles = {
     width: styleConstants.iconWidth,
   },
 };
-
-const datetimepickerTheme = createTheme({
-  // https://material-ui.com/customization/themes/#typography---html-font-size
-  // https://material-ui.com/style/typography/#migration-to-typography-v2
-  typography: {
-    htmlFontSize: 10,
-    useNextVariants: true,
-  },
-  zIndex: {
-    modal: 1800,
-  },
-});
 
 const propTypes = {
   name: PropTypes.string.isRequired,
@@ -235,39 +222,37 @@ class DateTimePicker extends PureComponent {
 
     return (
       <MuiPickersUtilsProvider utils={MomentUtils}>
-        <MuiThemeProvider theme={datetimepickerTheme}>
-          <div style={{ ...styles.dateTimePicker, ...style }}>
-            <KeyboardDatePicker
-              {...{ name, disabled }}
-              style={styles.dateTextField}
-              onChange={this.updateDate}
-              clearable={clearable}
-              keyboardIcon={<DateRange style={styles.pickerIcon} />}
-              leftArrowIcon={<KeyboardArrowLeft />}
-              rightArrowIcon={<KeyboardArrowRight />}
-              format="DD-MM-YYYY"
-              label={floatingLabelText}
-              placeholder={intl.formatMessage(translations.datePlaceholder)}
-              error={!!errorText || !!this.state.dateError}
-              // We want this component's error message to take priority over the parent's
-              helperText={this.state.dateError || errorText}
-              value={value || null}
-            />
-            <KeyboardTimePicker
-              {...{ name, disabled }}
-              style={styles.timeTextField}
-              onChange={this.updateTime}
-              clearable={clearable}
-              keyboardIcon={<Schedule style={styles.pickerIcon} />}
-              placeholder={intl.formatMessage(translations.timePlaceholder)}
-              label="24-hr clock"
-              error={!!this.state.timeError}
-              helperText={this.state.timeError}
-              value={value || null}
-              format="HH:mm"
-            />
-          </div>
-        </MuiThemeProvider>
+        <div style={{ ...styles.dateTimePicker, ...style }}>
+          <KeyboardDatePicker
+            {...{ name, disabled }}
+            style={styles.dateTextField}
+            onChange={this.updateDate}
+            clearable={clearable}
+            keyboardIcon={<DateRange style={styles.pickerIcon} />}
+            leftArrowIcon={<KeyboardArrowLeft />}
+            rightArrowIcon={<KeyboardArrowRight />}
+            format="DD-MM-YYYY"
+            label={floatingLabelText}
+            placeholder={intl.formatMessage(translations.datePlaceholder)}
+            error={!!errorText || !!this.state.dateError}
+            // We want this component's error message to take priority over the parent's
+            helperText={this.state.dateError || errorText}
+            value={value || null}
+          />
+          <KeyboardTimePicker
+            {...{ name, disabled }}
+            style={styles.timeTextField}
+            onChange={this.updateTime}
+            clearable={clearable}
+            keyboardIcon={<Schedule style={styles.pickerIcon} />}
+            placeholder={intl.formatMessage(translations.timePlaceholder)}
+            label="24-hr clock"
+            error={!!this.state.timeError}
+            helperText={this.state.timeError}
+            value={value || null}
+            format="HH:mm"
+          />
+        </div>
       </MuiPickersUtilsProvider>
     );
   }

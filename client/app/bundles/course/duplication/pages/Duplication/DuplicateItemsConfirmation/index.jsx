@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import ReactTooltip from 'react-tooltip';
-import Subheader from 'material-ui/Subheader';
-import { Card, CardText } from 'material-ui/Card';
+import { Card, CardContent, ListSubheader } from '@material-ui/core';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import {
   hideDuplicateItemsConfirmation,
@@ -71,17 +70,17 @@ class DuplicateItemsConfirmation extends Component {
 
     return (
       <>
-        <Subheader>
+        <ListSubheader disableSticky>
           <FormattedMessage {...translations.destinationCourse} />
-        </Subheader>
+        </ListSubheader>
         <Card>
-          <CardText>
+          <CardContent>
             <h4>
               <a href={url} target="_blank" rel="noopener noreferrer">
                 {destinationCourse.title}
               </a>
             </h4>
-          </CardText>
+          </CardContent>
         </Card>
       </>
     );

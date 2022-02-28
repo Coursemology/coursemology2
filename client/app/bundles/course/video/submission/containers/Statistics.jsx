@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Tab, Tabs } from 'material-ui/Tabs';
+import { Tab, Tabs } from '@material-ui/core';
 import ProgressGraph from './Charts/ProgressGraph';
 import HeatMap from './Charts/HeatMap';
 import styles from './Statistics.scss';
@@ -23,17 +24,37 @@ const propTypes = {
   watchFrequency: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
 
-const Statistics = ({ watchFrequency, sessions }) => (
-  <Tabs className={styles.statisticsGraphView}>
-    <Tab label="Frequency Graph">
-      <br />
-      <HeatMap watchFrequency={watchFrequency} />
-    </Tab>
-    <Tab label="Progress Graph">
-      <ProgressGraph sessions={sessions} />
-    </Tab>
-  </Tabs>
-);
+const Statistics = ({ watchFrequency, sessions }) => {
+  const [tabValue, setTabValue] = useState(1);
+
+  const tabContent = () => (
+    <>
+      <div style={{ ...(tabValue === 1 ? {} : { display: 'none' }) }}>
+        <HeatMap watchFrequency={watchFrequency} />
+      </div>
+      <div style={{ ...(tabValue === 2 ? {} : { display: 'none' }) }}>
+        <ProgressGraph sessions={sessions} />
+      </div>
+    </>
+  );
+  return (
+    <>
+      <Tabs
+        className={styles.statisticsGraphView}
+        onChange={(event, value) => {
+          setTabValue(value);
+        }}
+        style={{ paddingBottom: 0 }}
+        value={tabValue}
+        variant="fullWidth"
+      >
+        <Tab label="Frequency Graph" value={1} />
+        <Tab label="Progress Graph" value={2} />
+      </Tabs>
+      {tabContent()}
+    </>
+  );
+};
 
 Statistics.propTypes = propTypes;
 

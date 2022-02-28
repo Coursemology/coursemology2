@@ -35,7 +35,7 @@ const translations = defineMessages({
   },
   saveGrade: {
     id: 'course.assessment.submission.saveGrade',
-    defaultMessage: 'Save',
+    defaultMessage: 'Save Grade',
   },
   finalise: {
     id: 'course.assessment.submission.finalise',

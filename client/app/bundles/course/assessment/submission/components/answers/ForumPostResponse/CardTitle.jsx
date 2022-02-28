@@ -1,8 +1,10 @@
-import { grey600 } from 'material-ui/styles/colors';
+import { grey } from '@material-ui/core/colors';
+
 import PropTypes from 'prop-types';
 
 const styles = {
   cardTitle: {
+    color: 'black',
     display: 'flex',
     flexDirection: 'column',
     maxWidth: 600,
@@ -11,7 +13,7 @@ const styles = {
     textOverflow: 'ellipsis',
   },
   typeLabel: {
-    color: grey600,
+    color: grey[600],
     fontSize: 12,
     marginBottom: -3,
   },

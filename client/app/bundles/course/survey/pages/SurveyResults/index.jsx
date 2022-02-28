@@ -2,9 +2,13 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import Subheader from 'material-ui/Subheader';
-import Toggle from 'material-ui/Toggle';
-import { Card, CardText } from 'material-ui/Card';
+import {
+  Card,
+  CardContent,
+  FormControlLabel,
+  ListSubheader,
+  Switch,
+} from '@material-ui/core';
 import surveyTranslations from 'course/survey/translations';
 import { fetchResults } from 'course/survey/actions/surveys';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
@@ -71,9 +75,9 @@ class SurveyResults extends Component {
     }
     if (noSections) {
       return (
-        <Subheader>
+        <ListSubheader disableSticky>
           <FormattedMessage {...translations.noSections} />
-        </Subheader>
+        </ListSubheader>
       );
     }
 
@@ -84,7 +88,7 @@ class SurveyResults extends Component {
     return (
       <>
         <Card>
-          <CardText>
+          <CardContent>
             <h4>
               <FormattedMessage
                 {...translations.responsesCount}
@@ -96,20 +100,29 @@ class SurveyResults extends Component {
                 <FormattedMessage {...translations.noPhantoms} />
               </p>
             ) : (
-              <Toggle
-                label={<FormattedMessage {...translations.includePhantoms} />}
-                labelPosition="right"
-                toggled={this.state.includePhantoms}
-                onToggle={(_, value) =>
-                  this.setState({ includePhantoms: value })
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={this.state.includePhantoms}
+                    color="primary"
+                    onChange={(_, value) =>
+                      this.setState({ includePhantoms: value })
+                    }
+                  />
                 }
+                label={
+                  <b>
+                    <FormattedMessage {...translations.includePhantoms} />
+                  </b>
+                }
+                labelPlacement="end"
               />
             )}
-          </CardText>
+          </CardContent>
         </Card>
-        <Subheader>
+        <ListSubheader disableSticky>
           <FormattedMessage {...surveyTranslations.questions} />
-        </Subheader>
+        </ListSubheader>
         {this.props.sections.map((section, index) => (
           <ResultsSection
             key={section.id}

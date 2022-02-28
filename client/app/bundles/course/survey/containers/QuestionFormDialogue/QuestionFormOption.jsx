@@ -2,13 +2,11 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import { Field } from 'redux-form';
-import IconButton from 'material-ui/IconButton';
-import Checkbox from 'material-ui/Checkbox';
-import RadioButton from 'material-ui/RadioButton';
-import CloseIcon from 'material-ui/svg-icons/navigation/close';
-import PhotoIcon from 'material-ui/svg-icons/image/photo';
-import { grey700, grey600 } from 'material-ui/styles/colors';
-import TextField from 'lib/components/redux-form/TextField';
+import { Checkbox, IconButton, Radio } from '@material-ui/core';
+import { grey } from '@material-ui/core/colors';
+import Close from '@material-ui/icons/Close';
+import Photo from '@material-ui/icons/Photo';
+import renderTextField from 'lib/components/redux-form/TextField';
 import Thumbnail from 'lib/components/Thumbnail';
 
 const optionTranslations = defineMessages({
@@ -29,6 +27,7 @@ const styles = {
     alignItems: 'center',
   },
   widget: {
+    padding: 0,
     width: 'auto',
   },
   optionBody: {
@@ -67,8 +66,11 @@ class QuestionFormOption extends Component {
     return (
       <div style={styles.imageUploaderDiv}>
         <label htmlFor={fieldId}>
-          <IconButton {...{ disabled }} onClick={() => this.fileInput.click()}>
-            <PhotoIcon color={grey700} />
+          <IconButton
+            disabled={disabled}
+            onClick={() => this.fileInput.click()}
+          >
+            <Photo nativeColor={disabled ? undefined : grey[700]} />
           </IconButton>
         </label>
         <input
@@ -124,9 +126,9 @@ class QuestionFormOption extends Component {
         <small>{imageFileName}</small>
         <Field
           fullWidth
-          multiLine
+          multiline
           name={`${member}.option`}
-          component={TextField}
+          component={renderTextField}
           {...{ placeholder, disabled }}
         />
       </div>
@@ -137,7 +139,7 @@ class QuestionFormOption extends Component {
     const { multipleResponse, multipleChoice } = this.props;
     let widget = null;
     if (multipleChoice) {
-      widget = <RadioButton disabled style={styles.widget} />;
+      widget = <Radio disabled style={styles.widget} />;
     } else if (multipleResponse) {
       widget = <Checkbox disabled style={styles.widget} />;
     }
@@ -169,8 +171,8 @@ class QuestionFormOption extends Component {
           component={this.renderImageField}
           {...{ index, disabled }}
         />
-        <IconButton onClick={handleRemove} {...{ disabled }}>
-          <CloseIcon color={grey600} />
+        <IconButton disabled={disabled} onClick={handleRemove}>
+          <Close nativeColor={disabled ? undefined : grey[600]} />
         </IconButton>
       </div>
     );

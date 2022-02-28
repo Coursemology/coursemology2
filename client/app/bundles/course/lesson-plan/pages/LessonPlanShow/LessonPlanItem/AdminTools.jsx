@@ -3,9 +3,9 @@ import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
-import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
-import DeleteIcon from 'material-ui/svg-icons/action/delete';
-import RaisedButton from 'material-ui/RaisedButton';
+import Edit from '@material-ui/icons/Edit';
+import Delete from '@material-ui/icons/Delete';
+import { Button } from '@material-ui/core';
 import {
   showEventForm,
   updateEvent,
@@ -116,16 +116,20 @@ class AdminTools extends PureComponent {
 
     return (
       <span style={styles.tools}>
-        <RaisedButton
-          icon={<EditIcon />}
+        <Button
+          variant="contained"
           onClick={this.showEditEventDialog}
           style={styles.edit}
-        />
-        <RaisedButton
-          icon={<DeleteIcon />}
+        >
+          <Edit />
+        </Button>
+        <Button
+          variant="contained"
           onClick={this.deleteEventHandler}
           style={styles.delete}
-        />
+        >
+          <Delete />
+        </Button>
       </span>
     );
   }

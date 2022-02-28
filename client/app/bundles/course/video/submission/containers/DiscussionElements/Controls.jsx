@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import IconButton from 'material-ui/IconButton';
-import OnDemandVideo from 'material-ui/svg-icons/notification/ondemand-video';
-import Refresh from 'material-ui/svg-icons/navigation/refresh';
-import { intlShape, injectIntl } from 'react-intl';
+import { IconButton, Tooltip } from '@material-ui/core';
+import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
 import {
-  cyan500 as activeColor,
-  grey700 as inactiveColor,
-} from 'material-ui/styles/colors';
+  cyan as activeColor,
+  grey as inactiveColor,
+} from '@material-ui/core/colors';
+import OndemandVideo from '@material-ui/icons/OndemandVideo';
+import Refresh from '@material-ui/icons/Refresh';
 
 import { changeAutoScroll, refreshDiscussion } from '../../actions/discussion';
 import translations from '../../translations';
@@ -30,12 +30,15 @@ function Controls(props) {
       <IconButton onClick={props.onRefresh}>
         <Refresh />
       </IconButton>
-      <IconButton
-        tooltip={props.intl.formatMessage(translations.toggleLive)}
-        onClick={() => props.onAutoScrollToggle(!props.autoScroll)}
-      >
-        <OnDemandVideo color={props.autoScroll ? activeColor : inactiveColor} />
-      </IconButton>
+      <Tooltip title={<FormattedMessage {...translations.toggleLive} />}>
+        <IconButton onClick={() => props.onAutoScrollToggle(!props.autoScroll)}>
+          <OndemandVideo
+            nativeColor={
+              props.autoScroll ? activeColor[500] : inactiveColor[700]
+            }
+          />
+        </IconButton>
+      </Tooltip>
     </>
   );
 }

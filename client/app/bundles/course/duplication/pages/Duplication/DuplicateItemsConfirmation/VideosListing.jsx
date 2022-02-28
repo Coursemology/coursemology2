@@ -2,8 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import Subheader from 'material-ui/Subheader';
-import { Card, CardText } from 'material-ui/Card';
+import { Card, CardContent, ListSubheader } from '@material-ui/core';
 import { defaultComponentTitles } from 'course/translations.intl';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { videoTabShape } from 'course/duplication/propTypes';
@@ -33,7 +32,7 @@ class VideoListing extends Component {
 
   static renderTab(tab) {
     return (
-      <div key={tab.id}>
+      <div key={`tab_video_${tab.id}`}>
         {VideoListing.renderTabRow(tab)}
         {tab.videos.map(VideoListing.renderVideoRow)}
       </div>
@@ -59,10 +58,10 @@ class VideoListing extends Component {
     return (
       <IndentedCheckbox
         checked
-        key={video.id}
+        key={`video_${video.id}`}
         indentLevel={1}
         label={
-          <span>
+          <span style={{ display: 'flex', alignItems: 'centre' }}>
             <TypeBadge itemType={VIDEO} />
             <UnpublishedIcon tooltipId="itemUnpublished" />
             {video.title}
@@ -100,19 +99,19 @@ class VideoListing extends Component {
 
     return (
       <>
-        <Subheader>
+        <ListSubheader disableSticky>
           <FormattedMessage
             {...defaultComponentTitles.course_videos_component}
           />
-        </Subheader>
+        </ListSubheader>
         <Card>
-          <CardText>
+          <CardContent>
             {tabTrees.map(VideoListing.renderTab)}
-            <div key="default">
+            <div key="video_default">
               {orphanedVideos.length > 0 && VideoListing.renderDefaultTabRow()}
               {orphanedVideos.map(VideoListing.renderVideoRow)}
             </div>
-          </CardText>
+          </CardContent>
         </Card>
       </>
     );

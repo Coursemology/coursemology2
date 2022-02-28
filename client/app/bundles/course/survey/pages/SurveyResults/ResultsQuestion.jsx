@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Card, CardText } from 'material-ui/Card';
+import { Card, CardContent } from '@material-ui/core';
 import { FormattedMessage } from 'react-intl';
 import formTranslations from 'lib/translations/form';
 import { questionTypes } from 'course/survey/constants';
@@ -60,7 +60,7 @@ class ResultsQuestion extends Component {
 
     return (
       <Card style={styles.card}>
-        <CardText>
+        <CardContent>
           <p
             dangerouslySetInnerHTML={{
               __html: `${index + 1}. ${question.description}`,
@@ -71,7 +71,7 @@ class ResultsQuestion extends Component {
               <FormattedMessage {...formTranslations.starRequired} />
             </p>
           ) : null}
-        </CardText>
+        </CardContent>
         {this.renderSpecificResults()}
       </Card>
     );

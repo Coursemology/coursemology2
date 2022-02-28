@@ -1,25 +1,34 @@
 import PropTypes from 'prop-types';
-import Checkbox from 'material-ui/Checkbox';
+import { Checkbox, FormControlLabel } from '@material-ui/core';
 
 const styles = {
   tabSize: 15,
   row: {
     display: 'flex',
+    alignItems: 'center',
   },
   label: {
     width: 'auto',
+    margin: '5px 0',
   },
 };
 
-const IndentedCheckbox = ({ indentLevel, children, ...props }) => {
-  const checkboxStyle = { marginLeft: indentLevel * styles.tabSize };
+const IndentedCheckbox = ({ indentLevel, children, label, ...props }) => {
+  const checkboxStyle = {
+    marginLeft: indentLevel * styles.tabSize,
+    padding: '0 12px',
+  };
   if (children) {
     checkboxStyle.width = 'auto';
   }
 
   return (
     <div style={styles.row}>
-      <Checkbox labelStyle={styles.label} style={checkboxStyle} {...props} />
+      <FormControlLabel
+        control={<Checkbox color="primary" style={checkboxStyle} {...props} />}
+        label={<b>{label}</b>}
+        style={styles.label}
+      />
       {children}
     </div>
   );
@@ -28,6 +37,7 @@ const IndentedCheckbox = ({ indentLevel, children, ...props }) => {
 IndentedCheckbox.propTypes = {
   indentLevel: PropTypes.number,
   children: PropTypes.node,
+  label: PropTypes.node,
 };
 
 IndentedCheckbox.defaultProps = {

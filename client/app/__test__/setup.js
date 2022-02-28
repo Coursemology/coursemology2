@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { IntlProvider, intlShape } from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-
+// import { createMuiTheme } from '@material-ui/core/styles';
 import Enzyme from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 
@@ -15,8 +15,11 @@ const timeZone = 'Asia/Singapore';
 const intlProvider = new IntlProvider({ locale: 'en', timeZone }, {});
 const courseId = '1';
 
+// To replace v0 style below once all v0 components have been removed
 const muiTheme = getMuiTheme();
+// const theme = createMuiTheme();
 const intl = intlProvider.getChildContext().intl;
+
 const buildContextOptions = (store) => ({
   context: { intl, store, muiTheme },
   childContextTypes: {

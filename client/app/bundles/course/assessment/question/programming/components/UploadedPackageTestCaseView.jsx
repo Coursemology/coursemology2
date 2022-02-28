@@ -1,15 +1,15 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
-import { Card, CardHeader } from 'material-ui/Card';
 import {
+  Card,
+  CardHeader,
   Table,
   TableBody,
-  TableHeader,
-  TableHeaderColumn,
+  TableCell,
+  TableHead,
   TableRow,
-  TableRowColumn,
-} from 'material-ui/Table';
+} from '@material-ui/core';
 import ExpandableText from 'lib/components/ExpandableText';
 
 import styles from './UploadedPackageTestCaseView.scss';
@@ -71,40 +71,40 @@ class UploadedPackageTestCaseView extends Component {
           id={`question_programming_test_case_${test.get('id')}`}
           key={test.get('id')}
         >
-          <TableHeaderColumn className={styles.testCaseCell}>
+          <TableCell className={styles.testCaseCell}>
             {test.get('identifier')}
-          </TableHeaderColumn>
-          <TableRowColumn className={styles.testCaseCell}>
+          </TableCell>
+          <TableCell className={styles.testCaseCell}>
             <ExpandableText text={test.get('expression')} />
-          </TableRowColumn>
-          <TableRowColumn className={styles.testCaseCell}>
+          </TableCell>
+          <TableCell className={styles.testCaseCell}>
             <ExpandableText text={test.get('expected')} />
-          </TableRowColumn>
-          <TableRowColumn className={styles.testCaseCell}>
+          </TableCell>
+          <TableCell className={styles.testCaseCell}>
             {test.get('hint')}
-          </TableRowColumn>
+          </TableCell>
         </TableRow>
       ));
 
       return (
-        <Table selectable={false}>
-          <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+        <Table>
+          <TableHead>
             <TableRow>
-              <TableHeaderColumn>
+              <TableCell>
                 {this.props.intl.formatMessage(translations.identifierHeader)}
-              </TableHeaderColumn>
-              <TableHeaderColumn>
+              </TableCell>
+              <TableCell>
                 {this.props.intl.formatMessage(translations.expressionHeader)}
-              </TableHeaderColumn>
-              <TableHeaderColumn>
+              </TableCell>
+              <TableCell>
                 {this.props.intl.formatMessage(translations.expectedHeader)}
-              </TableHeaderColumn>
-              <TableHeaderColumn>
+              </TableCell>
+              <TableCell>
                 {this.props.intl.formatMessage(translations.hintHeader)}
-              </TableHeaderColumn>
+              </TableCell>
             </TableRow>
-          </TableHeader>
-          <TableBody displayRowCheckbox={false}>{rows}</TableBody>
+          </TableHead>
+          <TableBody>{rows}</TableBody>
         </Table>
       );
     }

@@ -5,17 +5,18 @@ import moment, { formatLongDateTime } from 'lib/moment';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import mirrorCreator from 'mirror-creator';
-import { Card, CardText } from 'material-ui/Card';
-import Toggle from 'material-ui/Toggle';
-import { red500 } from 'material-ui/styles/colors';
 import {
+  Card,
+  CardContent,
+  FormControlLabel,
   Table,
   TableBody,
-  TableHeader,
-  TableHeaderColumn,
+  TableCell,
+  TableHead,
   TableRow,
-  TableRowColumn,
-} from 'material-ui/Table';
+  Switch,
+} from '@material-ui/core';
+import { red } from '@material-ui/core/colors';
 import BarChart from 'lib/components/BarChart';
 import { fetchResponses } from 'course/survey/actions/responses';
 import surveyTranslations from 'course/survey/translations';
@@ -26,7 +27,7 @@ import RemindButton from './RemindButton';
 
 const styles = {
   red: {
-    color: red500,
+    color: red[500],
   },
   table: {
     maxWidth: 600,
@@ -39,9 +40,6 @@ const styles = {
   },
   statsHeader: {
     marginBottom: 30,
-  },
-  toggle: {
-    marginTop: 30,
   },
 };
 
@@ -156,46 +154,46 @@ class ResponseIndex extends Component {
   static renderTable(responses, survey) {
     return (
       <Table>
-        <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+        <TableHead>
           <TableRow>
-            <TableHeaderColumn colSpan={2}>
+            <TableCell colSpan={2}>
               <FormattedMessage {...translations.name} />
-            </TableHeaderColumn>
-            <TableHeaderColumn>
+            </TableCell>
+            <TableCell>
               <FormattedMessage {...translations.responseStatus} />
-            </TableHeaderColumn>
-            <TableHeaderColumn>
+            </TableCell>
+            <TableCell>
               <FormattedMessage {...translations.submittedAt} />
-            </TableHeaderColumn>
-            <TableHeaderColumn>
+            </TableCell>
+            <TableCell>
               <FormattedMessage {...translations.updatedAt} />
-            </TableHeaderColumn>
-            <TableHeaderColumn />
+            </TableCell>
+            <TableCell />
           </TableRow>
-        </TableHeader>
-        <TableBody displayRowCheckbox={false} showRowHover>
+        </TableHead>
+        <TableBody>
           {responses.map((response) => (
             <TableRow key={response.course_user.id}>
-              <TableRowColumn colSpan={2}>
+              <TableCell colSpan={2}>
                 <a href={response.course_user.path}>
                   {response.course_user.name}
                 </a>
-              </TableRowColumn>
-              <TableRowColumn>
+              </TableCell>
+              <TableCell>
                 {ResponseIndex.renderReponseStatus(response, survey)}
-              </TableRowColumn>
-              <TableRowColumn>
+              </TableCell>
+              <TableCell>
                 {ResponseIndex.renderSubmittedAt(response, survey)}
-              </TableRowColumn>
-              <TableRowColumn>
+              </TableCell>
+              <TableCell>
                 {ResponseIndex.renderUpdatedAt(response, survey)}
-              </TableRowColumn>
-              <TableRowColumn>
+              </TableCell>
+              <TableCell>
                 {response.status === responseStatus.SUBMITTED &&
                 response.canUnsubmit ? (
                   <UnsubmitButton responseId={response.id} />
                 ) : null}
-              </TableRowColumn>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -266,36 +264,32 @@ class ResponseIndex extends Component {
     return (
       <Card style={styles.detailsCard}>
         <Table style={styles.table}>
-          <TableBody displayRowCheckbox={false}>
+          <TableBody>
             <TableRow>
-              <TableRowColumn>
+              <TableCell>
                 <FormattedMessage {...surveyTranslations.opensAt} />
-              </TableRowColumn>
-              <TableRowColumn>
-                {formatLongDateTime(survey.start_at)}
-              </TableRowColumn>
+              </TableCell>
+              <TableCell>{formatLongDateTime(survey.start_at)}</TableCell>
             </TableRow>
             <TableRow>
-              <TableRowColumn>
+              <TableCell>
                 <FormattedMessage {...surveyTranslations.expiresAt} />
-              </TableRowColumn>
-              <TableRowColumn>
-                {formatLongDateTime(survey.end_at)}
-              </TableRowColumn>
+              </TableCell>
+              <TableCell>{formatLongDateTime(survey.end_at)}</TableCell>
             </TableRow>
             <TableRow>
-              <TableRowColumn>
+              <TableCell>
                 <FormattedMessage {...surveyTranslations.closingRemindedAt} />
-              </TableRowColumn>
-              <TableRowColumn>
+              </TableCell>
+              <TableCell>
                 {formatLongDateTime(survey.closing_reminded_at, '-')}
-              </TableRowColumn>
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
-        <CardText>
+        <CardContent>
           <RemindButton />
-        </CardText>
+        </CardContent>
       </Card>
     );
   }
@@ -320,20 +314,28 @@ class ResponseIndex extends Component {
 
     return (
       <Card style={styles.statsCard}>
-        <CardText>
+        <CardContent>
           <h3 style={styles.statsHeader}>
             <FormattedMessage {...translations.stats} />
           </h3>
           <BarChart data={chartData} />
-          <Toggle
-            style={styles.toggle}
-            labelPosition="right"
-            label={<FormattedMessage {...translations.includePhantoms} />}
-            onToggle={(_, value) =>
-              this.setState({ includePhantomsInStats: value })
+          <FormControlLabel
+            control={
+              <Switch
+                checked={this.state.includePhantomsInStats}
+                color="primary"
+                onChange={(_, value) =>
+                  this.setState({ includePhantomsInStats: value })
+                }
+              />
+            }
+            label={
+              <b>
+                <FormattedMessage {...translations.includePhantoms} />
+              </b>
             }
           />
-        </CardText>
+        </CardContent>
       </Card>
     );
   }

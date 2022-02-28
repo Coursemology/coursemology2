@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import RaisedButton from 'material-ui/RaisedButton';
+import { Button } from '@material-ui/core';
 import { downloadSurvey } from 'course/survey/actions/surveys';
 
 const translations = defineMessages({
@@ -18,13 +18,13 @@ const styles = {
 };
 
 const DownloadResponsesButton = ({ dispatch }) => (
-  <>
-    <RaisedButton
-      label={<FormattedMessage {...translations.download} />}
-      onClick={() => dispatch(downloadSurvey())}
-      style={styles.button}
-    />
-  </>
+  <Button
+    variant="contained"
+    onClick={() => dispatch(downloadSurvey())}
+    style={styles.button}
+  >
+    <FormattedMessage {...translations.download} />
+  </Button>
 );
 
 DownloadResponsesButton.propTypes = {

@@ -7,7 +7,7 @@
  *   3) An object - { id: 'translations.module.id', defaultValue: 'Translated Error' }
  * @param intl
  */
-const formatMessage = (errorOrWarning, intl) => {
+export const formatErrorMessage = (errorOrWarning, intl) => {
   if (!errorOrWarning || typeof errorOrWarning === 'string') {
     return errorOrWarning;
   }
@@ -34,7 +34,7 @@ const mapError = (
     ? {
         ...inputProps,
         ...props,
-        [errorProp]: formatMessage(errorOrWarning, intl),
+        [errorProp]: formatErrorMessage(errorOrWarning, intl),
       }
     : { ...inputProps, ...props };
 };

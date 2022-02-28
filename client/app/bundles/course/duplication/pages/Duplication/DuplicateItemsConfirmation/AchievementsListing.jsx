@@ -2,9 +2,13 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import Checkbox from 'material-ui/Checkbox';
-import Subheader from 'material-ui/Subheader';
-import { Card, CardText } from 'material-ui/Card';
+import {
+  Card,
+  CardContent,
+  Checkbox,
+  FormControlLabel,
+  ListSubheader,
+} from '@material-ui/core';
 import { defaultComponentTitles } from 'course/translations.intl';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { achievementShape } from 'course/duplication/propTypes';
@@ -17,16 +21,21 @@ const styles = {
     maxWidth: 24,
     marginRight: 5,
   },
+  row: {
+    alignItems: 'center',
+    display: 'flex',
+    width: 'auto',
+  },
 };
 
 class AchievementsListing extends Component {
   static renderRow(achievement) {
     return (
-      <Checkbox
-        checked
-        key={achievement.id}
+      <FormControlLabel
+        control={<Checkbox checked color="primary" />}
+        key={`achievement_${achievement.id}`}
         label={
-          <span>
+          <span style={{ display: 'flex', alignItems: 'centre' }}>
             <TypeBadge itemType={duplicableItemTypes.ACHIEVEMENT} />
             <UnpublishedIcon tooltipId="itemUnpublished" />
             <img
@@ -37,6 +46,7 @@ class AchievementsListing extends Component {
             {achievement.title}
           </span>
         }
+        style={styles.row}
       />
     );
   }
@@ -59,15 +69,15 @@ class AchievementsListing extends Component {
 
     return (
       <>
-        <Subheader>
+        <ListSubheader disableSticky>
           <FormattedMessage
             {...defaultComponentTitles.course_achievements_component}
           />
-        </Subheader>
+        </ListSubheader>
         <Card>
-          <CardText>
+          <CardContent>
             {selectedAchievements.map(AchievementsListing.renderRow)}
-          </CardText>
+          </CardContent>
         </Card>
       </>
     );

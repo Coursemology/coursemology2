@@ -31,11 +31,11 @@ describe('<UserEmailSubscriptions />', () => {
       buildContextOptions(store),
     );
 
-    const toggles = userEmailSubscriptions.find('Toggle');
+    const toggles = userEmailSubscriptions.find('WithStyles(Switch)');
     expect(toggles).toHaveLength(1);
 
     const toggle = toggles.last();
-    toggle.props().onToggle(null, true);
+    toggle.props().onChange(null, true);
     const expectedPayload = {
       show_all_settings: true,
       component: null,

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import { reduxForm, Field, Form } from 'redux-form';
-import TextField from 'lib/components/redux-form/TextField';
+import renderTextField from 'lib/components/redux-form/TextField';
 import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
 import formTranslations from 'lib/translations/form';
 import { formNames } from 'course/duplication/constants';
@@ -38,8 +38,8 @@ const NewCourseForm = (props) => {
       <Field
         fullWidth
         name="new_title"
-        floatingLabelText={intl.formatMessage(translations.newTitle)}
-        component={TextField}
+        label={intl.formatMessage(translations.newTitle)}
+        component={renderTextField}
         {...{ disabled }}
       />
       <Field

@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { SketchPicker } from 'react-color';
-import Checkbox from 'material-ui/Checkbox';
-import Popover, { PopoverAnimationVertical } from 'material-ui/Popover';
+import { Checkbox, FormControlLabel, Popover } from '@material-ui/core';
 import { scribingTranslations as translations } from '../../../translations';
 
 const propTypes = {
@@ -58,7 +57,7 @@ const popoverStyles = {
     horizontal: 'left',
     vertical: 'bottom',
   },
-  targetOrigin: {
+  transformOrigin: {
     horizontal: 'left',
     vertical: 'top',
   },
@@ -83,17 +82,23 @@ const ColorPickerField = (props) => {
     <>
       <div>
         {noFillOnCheck ? (
-          <Checkbox
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={noFillValue}
+                color="primary"
+                label={intl.formatMessage(translations.noFill)}
+                onChange={(event, checked) => {
+                  noFillOnCheck(checked);
+                  if (checked) {
+                    onChangeCompleteColorPicker(
+                      `rgba(${rgbaValues[1]},${rgbaValues[2]},${rgbaValues[3]},0)`,
+                    );
+                  }
+                }}
+              />
+            }
             label={intl.formatMessage(translations.noFill)}
-            checked={noFillValue}
-            onCheck={(event, checked) => {
-              noFillOnCheck(checked);
-              if (checked) {
-                onChangeCompleteColorPicker(
-                  `rgba(${rgbaValues[1]},${rgbaValues[2]},${rgbaValues[3]},0)`,
-                );
-              }
-            }}
           />
         ) : null}
       </div>
@@ -118,13 +123,12 @@ const ColorPickerField = (props) => {
           aria-label="Color Picker"
         />
         <Popover
-          style={styles.toolDropdowns}
           open={colorPickerPopoverOpen}
           anchorEl={colorPickerPopoverAnchorEl}
           anchorOrigin={popoverStyles.anchorOrigin}
-          targetOrigin={popoverStyles.targetOrigin}
-          onRequestClose={onRequestCloseColorPickerPopover}
-          animation={PopoverAnimationVertical}
+          onClose={onRequestCloseColorPickerPopover}
+          transformOrigin={popoverStyles.transformOrigin}
+          style={styles.toolDropdowns}
         >
           <SketchPicker
             color={colorPickerColor}

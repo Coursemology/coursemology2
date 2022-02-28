@@ -14,19 +14,6 @@ $black: #000000;
   flex: 1 100%;
 }
 
-.fileInputField {
-  display: none;
-}
-
-.skillMenu {
-  max-height: 80vh;
-  overflow-y: scroll;
-}
-
-.skillOption {
-  display: none;
-}
-
 .warningText {
   color: $black;
   padding: 10px;
@@ -47,18 +34,6 @@ $black: #000000;
     flex: 1 auto;
     padding-left: 1em;
   }
-}
-
-.fileInputButton {
-  cursor: pointer;
-  display: none;
-  margin-right: 1em;
-  margin-top: 0.5em;
-}
-
-.submitButton {
-  margin-bottom: 1em;
-  margin-top: 1em;
 }
 
 .fileInputDiv {

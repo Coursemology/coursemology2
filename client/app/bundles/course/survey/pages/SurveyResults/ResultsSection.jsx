@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
-import { Card, CardText, CardTitle } from 'material-ui/Card';
+import { Card, CardContent, CardHeader } from '@material-ui/core';
+
 import { sectionShape } from 'course/survey/propTypes';
 import ResultsQuestion from './ResultsQuestion';
 
@@ -11,20 +12,20 @@ const styles = {
 
 const ResultsSection = ({ section, includePhantoms, anonymous }) => (
   <Card style={styles.card}>
-    <CardTitle
+    <CardHeader
       title={section.title}
-      subtitle={
+      subheader={
         <div dangerouslySetInnerHTML={{ __html: section.description }} />
       }
     />
-    <CardText>
+    <CardContent>
       {section.questions.map((question, index) => (
         <ResultsQuestion
           key={question.id}
           {...{ question, index, includePhantoms, anonymous }}
         />
       ))}
-    </CardText>
+    </CardContent>
   </Card>
 );
 

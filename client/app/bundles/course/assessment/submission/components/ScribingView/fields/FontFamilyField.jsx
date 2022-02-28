@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
+import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
 import { scribingTranslations as translations } from '../../../translations';
 
 const propTypes = {
@@ -13,6 +12,7 @@ const propTypes = {
 const styles = {
   select: {
     width: '210px',
+    maxHeight: 150,
   },
 };
 
@@ -60,21 +60,24 @@ const FontFamilyField = (props) => {
 
   fontFamilies.forEach((font) => {
     menuItems.push(
-      <MenuItem key={font.key} value={font.value} primaryText={font.key} />,
+      <MenuItem key={font.key} value={font.value}>
+        {font.key}
+      </MenuItem>,
     );
   });
 
   return (
     <div>
-      <SelectField
-        floatingLabelText={intl.formatMessage(translations.fontFamily)}
-        value={fontFamilyValue}
-        onChange={onChangeFontFamily}
-        maxHeight={150}
-        style={styles.select}
-      >
-        {menuItems}
-      </SelectField>
+      <FormControl>
+        <InputLabel>{intl.formatMessage(translations.fontFamily)}</InputLabel>
+        <Select
+          value={fontFamilyValue}
+          onChange={onChangeFontFamily}
+          style={styles.select}
+        >
+          {menuItems}
+        </Select>
+      </FormControl>
     </div>
   );
 };
