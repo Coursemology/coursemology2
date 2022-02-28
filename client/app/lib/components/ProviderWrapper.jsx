@@ -48,10 +48,12 @@ const theme = createTheme({
         fontFamily: `'Roboto', 'sans-serif'`,
       },
     },
-    MuiExpansionPanelSummary: {
+    MuiAccordionSummary: {
       content: {
         margin: 0,
         '&$expanded': { margin: 0 },
+      },
+    },
     MuiMenuItem: {
       root: {
         height: '48px',
