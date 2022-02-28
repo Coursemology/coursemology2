@@ -2,16 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import Subheader from 'material-ui/Subheader';
-import Checkbox from 'material-ui/Checkbox';
+import { ListSubheader } from '@material-ui/core';
 import Thumbnail from 'lib/components/Thumbnail';
 import { defaultComponentTitles } from 'course/translations.intl';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { setItemSelectedBoolean } from 'course/duplication/actions';
 import { achievementShape } from 'course/duplication/propTypes';
+import BulkSelectors from 'course/duplication/components/BulkSelectors';
+import IndentedCheckbox from 'course/duplication/components/IndentedCheckbox';
 import TypeBadge from 'course/duplication/components/TypeBadge';
 import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
-import BulkSelectors from 'course/duplication/components/BulkSelectors';
 
 const translations = defineMessages({
   noItems: {
@@ -52,24 +52,24 @@ class AchievementsSelector extends React.Component {
     const { dispatch, selectedItems } = this.props;
     const checked =
       !!selectedItems[duplicableItemTypes.ACHIEVEMENT][achievement.id];
-
+    const label = (
+      <span style={{ display: 'flex', alignItems: 'centre' }}>
+        <TypeBadge itemType={duplicableItemTypes.ACHIEVEMENT} />
+        {achievement.published || <UnpublishedIcon />}
+        <Thumbnail
+          src={achievement.url}
+          style={styles.badge}
+          rootStyle={styles.badgeContainer}
+        />
+        {achievement.title}
+      </span>
+    );
     return (
-      <Checkbox
+      <IndentedCheckbox
         key={achievement.id}
-        label={
-          <span>
-            <TypeBadge itemType={duplicableItemTypes.ACHIEVEMENT} />
-            {achievement.published || <UnpublishedIcon />}
-            <Thumbnail
-              src={achievement.url}
-              style={styles.badge}
-              rootStyle={styles.badgeContainer}
-            />
-            {achievement.title}
-          </span>
-        }
+        label={label}
         checked={checked}
-        onCheck={(e, value) =>
+        onChange={(e, value) =>
           dispatch(
             setItemSelectedBoolean(
               duplicableItemTypes.ACHIEVEMENT,
@@ -87,9 +87,9 @@ class AchievementsSelector extends React.Component {
 
     if (achievements.length < 1) {
       return (
-        <Subheader>
+        <ListSubheader disableSticky>
           <FormattedMessage {...translations.noItems} />
-        </Subheader>
+        </ListSubheader>
       );
     }
 

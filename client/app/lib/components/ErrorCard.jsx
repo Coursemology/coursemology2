@@ -1,6 +1,6 @@
 import React from 'react';
-import { Card, CardHeader, CardText } from 'material-ui';
-import { red200, red900 } from 'material-ui/styles/colors';
+import { Card, CardHeader, CardContent } from '@material-ui/core';
+import { red } from '@material-ui/core/colors';
 import PropTypes from 'prop-types';
 
 const styles = {
@@ -12,7 +12,10 @@ const styles = {
   header: {
     borderRadius: '5px 5px 0 0',
     padding: 12,
-    backgroundColor: red200,
+    backgroundColor: red[200],
+  },
+  headerTitle: {
+    color: red[900],
     fontWeight: 'bold',
   },
 };
@@ -28,9 +31,9 @@ export default function Error({
       <CardHeader
         style={{ ...styles.header, ...headerStyles }}
         title="Error"
-        titleColor={red900}
+        titleTypographyProps={{ variant: 'body2', style: styles.headerTitle }}
       />
-      <CardText style={messageStyles}>{message}</CardText>
+      <CardContent style={messageStyles}>{message}</CardContent>
     </Card>
   );
 }

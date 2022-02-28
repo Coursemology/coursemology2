@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import FlatButton from 'material-ui/FlatButton';
+import { Button } from '@material-ui/core';
 
 import styles from '../Discussion.scss';
 import NewReplyContainer from './NewReplyContainer';
@@ -24,7 +24,9 @@ function Reply(props) {
     </div>
   ) : (
     <div className={styles.replyContainer}>
-      <FlatButton label="Reply" primary onClick={props.onTriggerReply} />
+      <Button color="primary" onClick={props.onTriggerReply}>
+        Reply
+      </Button>
     </div>
   );
 }

@@ -1,11 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from '@material-ui/core';
 import formTranslations from 'lib/translations/form';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import modalFormStyles from '../styles/ModalForm.scss';
 
 const propTypes = {
   title: PropTypes.string,
@@ -52,37 +56,39 @@ class FormDialogue extends React.Component {
   render() {
     const { intl, title, disabled, open, submitForm, children } = this.props;
     const formActions = [
-      <FlatButton
-        label={intl.formatMessage(formTranslations.cancel)}
-        primary
-        onClick={this.handleFormClose}
+      <Button
+        color="primary"
         key="form-dialogue-cancel-button"
+        onClick={this.handleFormClose}
         {...{ disabled }}
-      />,
-      <FlatButton
+      >
+        {intl.formatMessage(formTranslations.cancel)}
+      </Button>,
+      <Button
         ref={(button) => {
           this.submitButton = button;
         }}
-        label={intl.formatMessage(formTranslations.submit)}
-        primary
-        keyboardFocused
-        onClick={submitForm}
+        color="primary"
+        className="btn-submit"
         key="form-dialogue-submit-button"
+        onClick={submitForm}
         {...{ disabled }}
-      />,
+      >
+        {intl.formatMessage(formTranslations.submit)}
+      </Button>,
     ];
 
     return (
-      <div>
+      <>
         <Dialog
-          {...{ title, open }}
-          actions={formActions}
-          modal={false}
-          onRequestClose={this.handleFormClose}
-          autoScrollBodyContent
-          bodyClassName={modalFormStyles.modalForm}
+          fullWidth
+          maxWidth="md"
+          open={open}
+          onClose={this.handleFormClose}
         >
-          {children}
+          <DialogTitle>{title}</DialogTitle>
+          <DialogContent>{children}</DialogContent>
+          <DialogActions>{formActions}</DialogActions>
         </Dialog>
         <ConfirmationDialog
           confirmDiscard
@@ -90,7 +96,7 @@ class FormDialogue extends React.Component {
           onCancel={this.handleDiscardCancel}
           onConfirm={this.handleDiscard}
         />
-      </div>
+      </>
     );
   }
 }

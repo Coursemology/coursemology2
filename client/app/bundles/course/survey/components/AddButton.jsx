@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
+import Add from '@material-ui/icons/Add';
+import { Fab } from '@material-ui/core';
+import { white } from '@material-ui/core/colors';
 
 const styles = {
   floatingButton: {
@@ -16,9 +17,9 @@ const propTypes = {
 };
 
 const AddButton = ({ onClick }) => (
-  <FloatingActionButton style={styles.floatingButton} {...{ onClick }}>
-    <ContentAdd />
-  </FloatingActionButton>
+  <Fab color="primary" {...{ onClick }} style={styles.floatingButton}>
+    <Add nativeColor={white} />
+  </Fab>
 );
 
 AddButton.propTypes = propTypes;

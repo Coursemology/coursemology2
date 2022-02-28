@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import Popover, { PopoverAnimationVertical } from 'material-ui/Popover';
-import Menu from 'material-ui/Menu';
-
+import { Paper, Popover } from '@material-ui/core';
 import FontFamilyField from '../fields/FontFamilyField';
 import FontSizeField from '../fields/FontSizeField';
 import ColorPickerField from '../fields/ColorPickerField';
@@ -30,8 +28,8 @@ const styles = {
   toolDropdowns: {
     padding: '10px',
   },
-  menu: {
-    padding: '5px',
+  paper: {
+    padding: '10px',
     maxHeight: '250px',
     overflowY: 'auto',
   },
@@ -42,7 +40,7 @@ const popoverStyles = {
     horizontal: 'left',
     vertical: 'bottom',
   },
-  targetOrigin: {
+  transformOrigin: {
     horizontal: 'left',
     vertical: 'top',
   },
@@ -68,15 +66,14 @@ const TypePopover = (props) => {
 
   return (
     <Popover
-      style={styles.toolDropdowns}
       open={open}
       anchorEl={anchorEl}
       anchorOrigin={popoverStyles.anchorOrigin}
-      targetOrigin={popoverStyles.targetOrigin}
-      onRequestClose={onRequestClose}
-      animation={PopoverAnimationVertical}
+      onClose={onRequestClose}
+      transformOrigin={popoverStyles.transformOrigin}
+      style={styles.toolDropdowns}
     >
-      <Menu style={styles.menu}>
+      <Paper style={styles.paper}>
         <h4>{intl.formatMessage(translations.text)}</h4>
         <FontFamilyField
           fontFamilyValue={fontFamilyValue}
@@ -94,7 +91,7 @@ const TypePopover = (props) => {
           colorPickerColor={colorPickerColor}
           onChangeCompleteColorPicker={onChangeCompleteColorPicker}
         />
-      </Menu>
+      </Paper>
     </Popover>
   );
 };

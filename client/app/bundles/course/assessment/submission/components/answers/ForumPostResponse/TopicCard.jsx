@@ -1,14 +1,15 @@
 import React from 'react';
 import {
-  CardHeader,
-  RaisedButton,
-  Card,
-  CardText,
-  CardActions,
+  Button,
+  ExpansionPanel,
+  ExpansionPanelActions,
+  ExpansionPanelSummary,
   Divider,
-  FontIcon,
-} from 'material-ui';
-import { indigo50 } from 'material-ui/styles/colors';
+  Icon,
+} from '@material-ui/core';
+import { indigo } from '@material-ui/core/colors';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
@@ -37,12 +38,18 @@ const translations = defineMessages({
 });
 
 const styles = {
-  cardHeader: {
-    backgroundColor: indigo50,
+  expansionPanelSummary: {
+    backgroundColor: indigo[50],
     padding: '8px 16px',
   },
-  cardActions: {
+  expansionPanelActions: {
     padding: 16,
+  },
+  container: {
+    padding: 16,
+  },
+  icon: {
+    marginLeft: 12,
   },
   nonLastPostOption: {
     marginBottom: 16,
@@ -57,7 +64,7 @@ export default class TopicCard extends React.Component {
     };
   }
 
-  handleIsExpandedChange = (isExpanded) => {
+  handleIsExpandedChange = (event, isExpanded) => {
     this.setState({ isExpanded });
   };
 
@@ -71,48 +78,48 @@ export default class TopicCard extends React.Component {
     ).length;
 
     return (
-      <Card
+      <ExpansionPanel
         expanded={this.state.isExpanded}
-        onExpandChange={this.handleIsExpandedChange}
+        onChange={this.handleIsExpandedChange}
         style={this.props.style}
         className="topic-card"
       >
-        <CardHeader
-          title={
-            <CardTitle
-              title={this.props.topicPostPack.topic.title}
-              type={
-                numSelectedInTopic > 0 ? (
-                  <FormattedMessage
-                    values={{
-                      numSelected: numSelectedInTopic,
-                    }}
-                    {...translations.topicCardTitleTypeSelected}
-                  />
-                ) : (
-                  <FormattedMessage
-                    {...translations.topicCardTitleTypeNoneSelected}
-                  />
-                )
-              }
-            />
-          }
-          actAsExpander
-          showExpandableButton
-          style={styles.cardHeader}
-        />
-        <Divider />
-        <CardActions expandable style={styles.cardActions}>
-          <RaisedButton
-            label={<FormattedMessage {...translations.viewTopicInNewTab} />}
-            href={getForumTopicURL(courseId, forumId, topicPostPack.topic.ic)}
-            target="_blank"
-            labelPosition="before"
-            icon={<FontIcon className="fa fa-external-link" />}
+        <ExpansionPanelSummary
+          expandIcon={<ExpandMoreIcon />}
+          style={styles.expansionPanelSummary}
+        >
+          <CardTitle
+            title={this.props.topicPostPack.topic.title}
+            type={
+              numSelectedInTopic > 0 ? (
+                <FormattedMessage
+                  values={{
+                    numSelected: numSelectedInTopic,
+                  }}
+                  {...translations.topicCardTitleTypeSelected}
+                />
+              ) : (
+                <FormattedMessage
+                  {...translations.topicCardTitleTypeNoneSelected}
+                />
+              )
+            }
           />
-        </CardActions>
+        </ExpansionPanelSummary>
         <Divider />
-        <CardText expandable>
+        <ExpansionPanelActions style={styles.expansionPanelActions}>
+          <Button
+            variant="contained"
+            href={getForumTopicURL(courseId, forumId, topicPostPack.topic.ic)}
+            style={{ marginBottom: 16 }}
+            target="_blank"
+          >
+            <FormattedMessage {...translations.viewTopicInNewTab} />
+            <Icon className="fa fa-external-link" style={styles.icon} />
+          </Button>
+        </ExpansionPanelActions>
+        <Divider />
+        <div style={styles.container}>
           {topicPostPack.postPacks.map((postPack, index) => (
             <ForumPostOption
               postPack={postPack}
@@ -128,8 +135,8 @@ export default class TopicCard extends React.Component {
               }
             />
           ))}
-        </CardText>
-      </Card>
+        </div>
+      </ExpansionPanel>
     );
   }
 }

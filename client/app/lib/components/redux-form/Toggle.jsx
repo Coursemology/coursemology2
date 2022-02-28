@@ -1,37 +1,61 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import MaterialToggle from 'material-ui/Toggle';
-import { red500 } from 'material-ui/styles/colors';
+import {
+  FormControl,
+  FormControlLabel,
+  FormHelperText,
+  Switch,
+} from '@material-ui/core';
 import createComponent from './createComponent';
 import mapError from './mapError';
 
-const errorStyle = {
-  color: red500,
+const propTypes = {
+  checked: PropTypes.bool,
+  disabled: PropTypes.bool,
+  errorText: PropTypes.node,
+  label: PropTypes.node,
+  onToggle: PropTypes.func,
 };
 
-// Toggle implementation with an error displayed at the bottom.
-class Toggle extends React.Component {
-  render() {
-    const { errorText, ...props } = this.props;
-    return (
-      <div>
-        <MaterialToggle {...props} />
-        {errorText && <div style={errorStyle}>{errorText}</div>}
-      </div>
-    );
-  }
-}
-
-Toggle.propTypes = {
-  errorText: PropTypes.string,
+const styles = {
+  toggleFieldStyle: {
+    height: '30px',
+    margin: '8px 0px 0px -16px',
+  },
+  errorText: { margin: 0 },
 };
 
-export default createComponent(
-  Toggle,
-  ({ input: { onChange, value, ...inputProps }, ...props }) => ({
-    // Take out the required fields and send the rest of the props to mapError().
-    ...mapError({ ...props, input: inputProps }),
-    toggled: !!value,
-    onToggle: onChange,
-  }),
-);
+const renderToggleField = React.forwardRef((props, ref) => {
+  const { checked, disabled, errorText, label, onToggle, ...custom } = props;
+  const isError = !!errorText;
+  return (
+    <FormControl disabled={disabled} error={isError} fullWidth>
+      <FormControlLabel
+        control={
+          <Switch checked={checked} color="primary" onChange={onToggle} />
+        }
+        label={<b>{label}</b>}
+        {...custom}
+        ref={ref}
+        style={styles.toggleFieldStyle}
+      />
+      {isError && (
+        <FormHelperText error={isError} style={styles.errorText}>
+          {errorText}
+        </FormHelperText>
+      )}
+    </FormControl>
+  );
+});
+
+renderToggleField.displayName = `ToggleField`;
+renderToggleField.name = 'ToggleField';
+renderToggleField.propTypes = propTypes;
+
+const mapProps = ({ input: { value, onChange, ...inputProps }, ...props }) => ({
+  ...mapError({ ...props, input: inputProps }),
+  checked: !!value,
+  onToggle: onChange,
+});
+
+export default createComponent(renderToggleField, mapProps);

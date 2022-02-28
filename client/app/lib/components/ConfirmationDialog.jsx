@@ -1,8 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+} from '@material-ui/core';
 import formTranslations from 'lib/translations/form';
 
 const buttonStyle = {
@@ -54,63 +58,64 @@ class ConfirmationDialog extends React.Component {
     }
 
     const actions = [
-      <FlatButton
-        primary
-        keyboardFocused
+      <Button
+        color="primary"
         className="cancel-btn"
         disabled={disableCancelButton}
+        key="confirmation-dialog-cancel-button"
         onClick={onCancel}
-        style={buttonStyle}
-        label={cancelButtonText || intl.formatMessage(formTranslations.cancel)}
         ref={(button) => {
           this.cancelButton = button;
         }}
-        key="confirmation-dialog-cancel-button"
-      />,
-      <FlatButton
-        primary
+        style={buttonStyle}
+      >
+        {cancelButtonText || intl.formatMessage(formTranslations.cancel)}
+      </Button>,
+      <Button
+        color="primary"
         className="confirm-btn"
         disabled={disableConfirmButton}
+        key="confirmation-dialog-confirm-button"
         onClick={onConfirm}
-        style={buttonStyle}
-        label={confirmationButtonText}
         ref={(button) => {
           this.confirmButton = button;
         }}
-        key="confirmation-dialog-confirm-button"
-      />,
+        style={buttonStyle}
+      >
+        {confirmationButtonText}
+      </Button>,
     ];
 
     if (onConfirmSecondary) {
       const confirmButtonSecondary = [
-        <FlatButton
-          primary
+        <Button
+          color="primary"
           className="confirm-btn"
           disabled={disableConfirmButton}
+          key="confirmation-dialog-confirm-secondary-button"
           onClick={onConfirmSecondary}
-          style={buttonStyle}
-          label={confirmationSecondaryButtonText}
           ref={(button) => {
             this.confirmButtonSecondary = button;
           }}
-          key="confirmation-dialog-confirm-secondary-button"
-        />,
+          style={buttonStyle}
+        >
+          {confirmationSecondaryButtonText}
+        </Button>,
       ];
       actions.push(...confirmButtonSecondary);
     }
 
     return (
-      <div>
-        <Dialog
-          {...{ open, actions }}
-          modal={false}
-          onRequestClose={onCancel}
-          style={{ zIndex: 9999 }}
-          autoScrollBodyContent
-        >
-          {confirmationMessage}
-        </Dialog>
-      </div>
+      <Dialog
+        fullWidth
+        onClose={onCancel}
+        open={open}
+        maxWidth="md"
+        style={{ zIndex: 9999 }}
+      >
+        <DialogContent>{confirmationMessage}</DialogContent>
+        <DialogActions>{actions}</DialogActions>
+      </Dialog>
     );
   }
 }

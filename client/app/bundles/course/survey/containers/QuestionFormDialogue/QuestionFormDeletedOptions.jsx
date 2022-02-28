@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Checkbox from 'material-ui/Checkbox';
-import RadioButton from 'material-ui/RadioButton';
-import IconButton from 'material-ui/IconButton';
-import CloseIcon from 'material-ui/svg-icons/navigation/close';
-import { grey600 } from 'material-ui/styles/colors';
+import { Checkbox, IconButton, Radio } from '@material-ui/core';
+import { grey } from '@material-ui/core/colors';
+import Close from '@material-ui/icons/Close';
 import Thumbnail from 'lib/components/Thumbnail';
 
 const styles = {
@@ -14,6 +12,7 @@ const styles = {
     alignItems: 'center',
   },
   widget: {
+    padding: 0,
     width: 'auto',
   },
   optionBody: {
@@ -38,7 +37,7 @@ class QuestionFormDeletedOptions extends React.Component {
     const { multipleResponse, multipleChoice } = this.props;
     let widget = null;
     if (multipleChoice) {
-      widget = <RadioButton disabled style={styles.widget} />;
+      widget = <Radio disabled style={styles.widget} />;
     } else if (multipleResponse) {
       widget = <Checkbox disabled style={styles.widget} />;
     }
@@ -75,8 +74,8 @@ class QuestionFormDeletedOptions extends React.Component {
                 <div style={styles.imageSpacer} />
               )}
               <span style={styles.optionBody}>{option.option}</span>
-              <IconButton onClick={handleRestore} {...{ disabled }}>
-                <CloseIcon color={grey600} />
+              <IconButton disabled={disabled} onClick={handleRestore}>
+                <Close nativeColor={disabled ? undefined : grey[600]} />
               </IconButton>
             </div>
           );

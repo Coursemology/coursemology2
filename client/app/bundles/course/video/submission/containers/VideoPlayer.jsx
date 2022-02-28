@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Paper from 'material-ui/Paper';
+import { Paper } from '@material-ui/core';
 import { connect } from 'react-redux';
 import {
   playerStates,
@@ -222,7 +222,7 @@ class VideoPlayer extends React.Component {
     );
 
     return (
-      <Paper zDepth={2} className={styles.videoPaperContainer}>
+      <Paper elevation={2} className={styles.videoPaperContainer}>
         {videoPlayer}
         {controls}
       </Paper>

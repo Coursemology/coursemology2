@@ -7,11 +7,13 @@ import {
   injectIntl,
   intlShape,
 } from 'react-intl';
-
-import Paper from 'material-ui/Paper';
-import Subheader from 'material-ui/Subheader';
-import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
-
+import {
+  ListSubheader,
+  FormControlLabel,
+  Paper,
+  Radio,
+  RadioGroup,
+} from '@material-ui/core';
 import TitleBar from 'lib/components/TitleBar';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import DateTimePicker from 'lib/components/form/DateTimePicker';
@@ -126,7 +128,7 @@ class Duplication extends React.Component {
           selectedCourseId={sourceCourse.id}
           currentCourseId={currentCourseId}
           prompt={intl.formatMessage(translations.selectSourceCourse)}
-          onChange={(e, index, value) => dispatch(changeSourceCourse(value))}
+          onChange={(event) => dispatch(changeSourceCourse(event.target.value))}
           onHome={() => dispatch(changeSourceCourse(currentCourseId))}
           disabled={isChangingCourse}
         />
@@ -168,21 +170,37 @@ class Duplication extends React.Component {
   renderToCourseModeSelector() {
     const { dispatch, duplicationMode } = this.props;
     return (
-      <RadioButtonGroup
+      <RadioGroup
         name="duplicationMode"
-        style={styles.radioButtonGroup}
-        valueSelected={duplicationMode}
+        value={duplicationMode}
         onChange={(_, mode) => dispatch(setDuplicationMode(mode))}
+        style={styles.radioButtonGroup}
       >
-        <RadioButton
+        <FormControlLabel
+          key={duplicationModes.COURSE}
+          control={
+            <Radio color="primary" style={{ padding: 0, paddingLeft: 12 }} />
+          }
           value={duplicationModes.COURSE}
-          label={<FormattedMessage {...translations.newCourse} />}
+          label={
+            <b>
+              <FormattedMessage {...translations.newCourse} />
+            </b>
+          }
         />
-        <RadioButton
+        <FormControlLabel
+          key={duplicationModes.OBJECT}
+          control={
+            <Radio color="primary" style={{ padding: 0, paddingLeft: 12 }} />
+          }
           value={duplicationModes.OBJECT}
-          label={<FormattedMessage {...translations.existingCourse} />}
+          label={
+            <b>
+              <FormattedMessage {...translations.existingCourse} />
+            </b>
+          }
         />
-      </RadioButtonGroup>
+      </RadioGroup>
     );
   }
 
@@ -223,16 +241,16 @@ class Duplication extends React.Component {
 
     if (!modesAllowed || modesAllowed.length < 1) {
       return (
-        <Subheader>
+        <ListSubheader disableSticky>
           <FormattedMessage {...translations.duplicationDisabled} />
-        </Subheader>
+        </ListSubheader>
       );
     }
     if (!enabledComponents || enabledComponents.length < 1) {
       return (
-        <Subheader>
+        <ListSubheader disableSticky>
           <FormattedMessage {...translations.noComponentsEnabled} />
-        </Subheader>
+        </ListSubheader>
       );
     }
 

@@ -29,14 +29,7 @@ describe('<NewMilestoneButton />', () => {
       start_at: new Date('2016-12-31T16:00:00.000Z'),
     };
     const startAt = '01-01-2017';
-    const dialogInline = milestoneFormDialog
-      .find('RenderToLayer')
-      .first()
-      .instance();
-    const milestoneForm = mount(
-      dialogInline.props.render(),
-      contextOptions,
-    ).find('form');
+    const milestoneForm = milestoneFormDialog.find('form');
     const titleInput = milestoneForm.find('input[name="title"]');
     titleInput.simulate('change', { target: { value: milestoneData.title } });
     const startAtDateInput = milestoneForm

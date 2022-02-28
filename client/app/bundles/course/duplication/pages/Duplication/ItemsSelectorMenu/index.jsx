@@ -2,9 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import Avatar from 'material-ui/Avatar';
-import { List, ListItem } from 'material-ui/List';
-import { cyan500 } from 'material-ui/styles/colors';
+import {
+  Avatar,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+} from '@material-ui/core';
+import { cyan } from '@material-ui/core/colors';
 import {
   duplicableItemTypes,
   itemSelectorPanels as panels,
@@ -28,6 +33,8 @@ const {
 
 const styles = {
   countAvatar: {
+    height: '30px',
+    width: '30px',
     margin: 5,
   },
   duplicateButton: {
@@ -47,19 +54,20 @@ class ItemsSelectorMenu extends React.Component {
     }
 
     return (
-      <ListItem
-        leftAvatar={
+      <ListItem button onClick={() => dispatch(setItemSelectorPanel(panelKey))}>
+        <ListItemAvatar>
           <Avatar
-            style={styles.countAvatar}
-            size={30}
-            backgroundColor={count > 0 ? cyan500 : null}
+            style={{
+              ...styles.countAvatar,
+              backgroundColor: count > 0 ? cyan[500] : null,
+            }}
           >
             {count}
           </Avatar>
-        }
-        onClick={() => dispatch(setItemSelectorPanel(panelKey))}
-      >
-        <FormattedMessage {...defaultComponentTitles[titleKey]} />
+        </ListItemAvatar>
+        <ListItemText>
+          <FormattedMessage {...defaultComponentTitles[titleKey]} />
+        </ListItemText>
       </ListItem>
     );
   }
@@ -121,7 +129,7 @@ class ItemsSelectorMenu extends React.Component {
               'course_videos_component',
               videosComponentCount,
             )}
-        <ListItem disabled style={styles.duplicateButton}>
+        <ListItem style={styles.duplicateButton}>
           <DuplicateButton />
         </ListItem>
       </List>

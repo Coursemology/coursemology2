@@ -1,11 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import MenuItem from 'material-ui/MenuItem';
-import DropDownMenu from 'material-ui/DropDownMenu';
-import IconButton from 'material-ui/IconButton';
-import MyLocation from 'material-ui/svg-icons/maps/my-location';
-import { blue500 } from 'material-ui/styles/colors';
+import { IconButton, MenuItem, Select, Tooltip } from '@material-ui/core';
+import { blue } from '@material-ui/core/colors';
+import MyLocation from '@material-ui/icons/MyLocation';
 import { courseListingShape } from 'course/duplication/propTypes';
 import TypeBadge from 'course/duplication/components/TypeBadge';
 
@@ -44,7 +42,11 @@ class CourseDropdownMenu extends React.PureComponent {
         </span>
       );
 
-    return <MenuItem key={course.id} value={course.id} primaryText={title} />;
+    return (
+      <MenuItem key={course.id} value={course.id}>
+        {title}
+      </MenuItem>
+    );
   };
 
   render() {
@@ -62,24 +64,24 @@ class CourseDropdownMenu extends React.PureComponent {
       <>
         <p style={styles.prompt}>{prompt}</p>
         <div style={styles.dropdownRow}>
-          <DropDownMenu
-            autoWidth={false}
-            style={styles.dropDown}
-            value={selectedCourseId}
-            onChange={onChange}
+          <Select
             disabled={disabled}
+            onChange={onChange}
+            value={selectedCourseId}
+            style={styles.dropDown}
             {...dropDownMenuProps}
           >
             {courses.map(this.renderCourseMenuItem)}
-          </DropDownMenu>
-          <IconButton
-            tooltip={<FormattedMessage {...translations.currentCourse} />}
-            onClick={onHome}
-          >
-            <MyLocation
-              color={currentCourseId === selectedCourseId ? blue500 : null}
-            />
-          </IconButton>
+          </Select>
+          <Tooltip title={<FormattedMessage {...translations.currentCourse} />}>
+            <IconButton onClick={onHome}>
+              <MyLocation
+                nativeColor={
+                  currentCourseId === selectedCourseId ? blue[500] : null
+                }
+              />
+            </IconButton>
+          </Tooltip>
         </div>
       </>
     );

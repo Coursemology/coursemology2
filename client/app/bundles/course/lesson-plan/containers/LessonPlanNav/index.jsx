@@ -3,11 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { scroller } from 'react-scroll';
-import RaisedButton from 'material-ui/RaisedButton';
-import Popover from 'material-ui/Popover';
-import Menu from 'material-ui/Menu';
-import MenuItem from 'material-ui/MenuItem';
-import KeyboardArrowUp from 'material-ui/svg-icons/hardware/keyboard-arrow-up';
+import { Button, MenuItem, MenuList, Popover } from '@material-ui/core';
+import KeyboardArrowUp from '@material-ui/icons/KeyboardArrowUp';
 
 const translations = defineMessages({
   goto: {
@@ -56,22 +53,23 @@ class LessonPlanNav extends React.Component {
 
     return (
       <>
-        <RaisedButton
-          secondary
+        <Button
+          variant="contained"
+          color="secondary"
           onClick={this.handleClick}
-          label={<FormattedMessage {...translations.goto} />}
-          labelPosition="before"
-          icon={<KeyboardArrowUp />}
           style={styles.navButton}
-        />
+        >
+          <FormattedMessage {...translations.goto} />
+          <KeyboardArrowUp />
+        </Button>
         <Popover
           open={this.state.open}
           anchorEl={this.state.anchorEl}
           anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
-          targetOrigin={{ horizontal: 'left', vertical: 'bottom' }}
-          onRequestClose={this.handleRequestClose}
+          onClose={this.handleRequestClose}
+          transformOrigin={{ horizontal: 'left', vertical: 'bottom' }}
         >
-          <Menu maxHeight={450}>
+          <MenuList style={{ maxHeight: 450 }}>
             {groups.map((group) => {
               if (!group.milestone) {
                 return null;
@@ -79,15 +77,16 @@ class LessonPlanNav extends React.Component {
               return (
                 <MenuItem
                   key={group.id}
-                  primaryText={group.milestone.title}
                   onClick={() => {
                     scroller.scrollTo(group.id, { offset: -50 });
                     this.setState({ open: false });
                   }}
-                />
+                >
+                  {group.milestone.title}
+                </MenuItem>
               );
             })}
-          </Menu>
+          </MenuList>
         </Popover>
       </>
     );

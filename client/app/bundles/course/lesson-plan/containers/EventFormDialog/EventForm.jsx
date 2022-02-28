@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { reduxForm, Field, Form } from 'redux-form';
-import AutoCompleteFilters from 'material-ui/AutoComplete';
-import TextField from 'lib/components/redux-form/TextField';
+import AutoCompleteFilters from 'material-ui/AutoComplete'; // MUI v5
+import renderTextField from 'lib/components/redux-form/TextField';
 import RichTextField from 'lib/components/redux-form/RichTextField';
 import AutoComplete from 'lib/components/redux-form/AutoComplete';
 import Toggle from 'lib/components/redux-form/Toggle';
@@ -79,8 +79,8 @@ const EventForm = ({
     <Field
       fullWidth
       name="title"
-      floatingLabelText={<FormattedMessage {...translations[TITLE]} />}
-      component={TextField}
+      label={<FormattedMessage {...translations[TITLE]} />}
+      component={renderTextField}
       {...{ disabled }}
     />
     <div style={styles.columns}>
@@ -114,7 +114,7 @@ const EventForm = ({
       name="description"
       label={<FormattedMessage {...translations[DESCRIPTION]} />}
       component={RichTextField}
-      multiLine
+      multiline
       rows={2}
       {...{ disabled }}
     />
@@ -142,7 +142,6 @@ const EventForm = ({
       component={Toggle}
       parse={Boolean}
       label={<FormattedMessage {...translations[PUBLISHED]} />}
-      labelPosition="right"
       style={styles.toggle}
       disabled={disabled}
     />

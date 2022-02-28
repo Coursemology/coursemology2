@@ -24,7 +24,7 @@ function TextResponse({ question, readOnly, answerId, graderView }) {
     <Field
       name={`${answerId}[answer_text]`}
       component={RichTextField}
-      multiLine
+      multiline
     />
   );
 

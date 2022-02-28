@@ -3,22 +3,22 @@ import ReactTooltip from 'react-tooltip';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import {
+  CircularProgress,
+  IconButton,
+  Menu,
+  MenuItem,
   Table,
   TableBody,
-  TableHeader,
-  TableHeaderColumn,
+  TableCell,
+  TableHead,
   TableRow,
-} from 'material-ui/Table';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import { red600, red900, pink600 } from 'material-ui/styles/colors';
-import IconButton from 'material-ui/IconButton';
-import CircularProgress from 'material-ui/CircularProgress';
-import DownloadIcon from 'material-ui/svg-icons/file/file-download';
+} from '@material-ui/core';
+import { pink, red } from '@material-ui/core/colors';
+import Delete from '@material-ui/icons/Delete';
+import GetApp from '@material-ui/icons/GetApp'; // TODO MUI - Change to download once icons lib is updated
+import MoreVert from '@material-ui/icons/MoreVert';
+import RemoveCircle from '@material-ui/icons/RemoveCircle';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import DeleteIcon from 'material-ui/svg-icons/action/delete';
-import RemoveCircle from 'material-ui/svg-icons/content/remove-circle';
 import { assessmentShape } from '../../propTypes';
 import { workflowStates } from '../../constants';
 import translations from '../../translations';
@@ -26,8 +26,11 @@ import submissionsTranslations from './translations';
 import SubmissionsTableRow from './SubmissionsTableRow';
 
 const styles = {
+  hideTable: {
+    display: 'none',
+  },
   unstartedText: {
-    color: red600,
+    color: red[600],
     fontWeight: 'bold',
   },
   tableCell: {
@@ -48,12 +51,26 @@ export default class SubmissionsTable extends React.Component {
     this.state = {
       unsubmitAllConfirmation: false,
       deleteAllConfirmation: false,
+      anchorEl: null,
     };
   }
 
   componentDidUpdate() {
     ReactTooltip.rebuild();
   }
+
+  handleClickMenu = (event) => {
+    // This prevents ghost click.
+    event.preventDefault();
+
+    this.setState({
+      anchorEl: event.currentTarget,
+    });
+  };
+
+  handleCloseMenu = () => {
+    this.setState({ anchorEl: null });
+  };
 
   canDownloadStatistics = () => {
     const { submissions } = this.props;
@@ -220,141 +237,131 @@ export default class SubmissionsTable extends React.Component {
     const unsubmitAllDisabled = disabled || !this.canUnsubmitAll();
     const deleteAllDisabled = disabled || !this.canDeleteAll();
     return (
-      <IconMenu
-        iconButtonElement={
-          <IconButton id="submission-dropdown-icon">
-            <MoreVertIcon />
-          </IconButton>
-        }
-      >
-        <MenuItem
-          className={
-            downloadFilesAnswerDisabled
-              ? 'download-zip-submissions-disabled'
-              : 'download-zip-submissions-enabled'
-          }
-          primaryText={
-            <FormattedMessage {...submissionsTranslations.downloadZipAnswers} />
-          }
-          disabled={downloadFilesAnswerDisabled}
-          leftIcon={
-            isDownloadingFiles ? (
-              <CircularProgress size={30} />
-            ) : (
-              <DownloadIcon />
-            )
-          }
-          onClick={
-            downloadFilesAnswerDisabled ? null : () => handleDownload('zip')
-          }
-        />
-        <MenuItem
-          className={
-            downloadCsvAnswerDisabled
-              ? 'download-csv-submissions-disabled'
-              : 'download-csv-submissions-enabled'
-          }
-          primaryText={
-            <FormattedMessage {...submissionsTranslations.downloadCsvAnswers} />
-          }
-          disabled={downloadCsvAnswerDisabled}
-          leftIcon={
-            isDownloadingCsv ? <CircularProgress size={30} /> : <DownloadIcon />
-          }
-          onClick={
-            downloadCsvAnswerDisabled ? null : () => handleDownload('csv')
-          }
-        />
-        <MenuItem
-          className={
-            downloadStatisticsDisabled
-              ? 'download-statistics-disabled'
-              : 'download-statistics-enabled'
-          }
-          primaryText={
-            <FormattedMessage {...submissionsTranslations.downloadStatistics} />
-          }
-          disabled={downloadStatisticsDisabled}
-          leftIcon={
-            isStatisticsDownloading ? (
-              <CircularProgress size={30} />
-            ) : (
-              <DownloadIcon />
-            )
-          }
-          onClick={downloadStatisticsDisabled ? null : handleDownloadStatistics}
-        />
-        {assessment.canUnsubmitSubmission ? (
+      <>
+        <IconButton
+          id="submission-dropdown-icon"
+          onClick={this.handleClickMenu}
+        >
+          <MoreVert />
+        </IconButton>
+        <Menu
+          id="submissions-table-menu"
+          anchorEl={this.state.anchorEl}
+          disableAutoFocusItem
+          onClick={this.handleCloseMenu}
+          onClose={this.handleCloseMenu}
+          open={Boolean(this.state.anchorEl)}
+        >
           <MenuItem
             className={
-              unsubmitAllDisabled
-                ? 'unsubmit-submissions-disabled'
-                : 'unsubmit-submissions-enabled'
+              downloadFilesAnswerDisabled
+                ? 'download-zip-submissions-disabled'
+                : 'download-zip-submissions-enabled'
             }
-            primaryText={
+            disabled={downloadFilesAnswerDisabled}
+            onClick={
+              downloadFilesAnswerDisabled ? null : () => handleDownload('zip')
+            }
+          >
+            {isDownloadingFiles ? <CircularProgress size={30} /> : <GetApp />}
+            <FormattedMessage {...submissionsTranslations.downloadZipAnswers} />
+          </MenuItem>
+          <MenuItem
+            className={
+              downloadCsvAnswerDisabled
+                ? 'download-csv-submissions-disabled'
+                : 'download-csv-submissions-enabled'
+            }
+            disabled={downloadCsvAnswerDisabled}
+            onClick={
+              downloadCsvAnswerDisabled ? null : () => handleDownload('csv')
+            }
+          >
+            {isDownloadingCsv ? <CircularProgress size={30} /> : <GetApp />}
+            <FormattedMessage {...submissionsTranslations.downloadCsvAnswers} />
+          </MenuItem>
+          <MenuItem
+            className={
+              downloadStatisticsDisabled
+                ? 'download-statistics-disabled'
+                : 'download-statistics-enabled'
+            }
+            disabled={downloadStatisticsDisabled}
+            onClick={
+              downloadStatisticsDisabled ? null : handleDownloadStatistics
+            }
+          >
+            {isStatisticsDownloading ? (
+              <CircularProgress size={30} />
+            ) : (
+              <GetApp />
+            )}
+            <FormattedMessage {...submissionsTranslations.downloadStatistics} />
+          </MenuItem>
+          {assessment.canUnsubmitSubmission ? (
+            <MenuItem
+              className={
+                unsubmitAllDisabled
+                  ? 'unsubmit-submissions-disabled'
+                  : 'unsubmit-submissions-enabled'
+              }
+              disabled={unsubmitAllDisabled}
+              onClick={() => this.setState({ unsubmitAllConfirmation: true })}
+            >
+              {isUnsubmitting ? (
+                <CircularProgress size={30} />
+              ) : (
+                <RemoveCircle nativeColor={pink[600]} />
+              )}
               <FormattedMessage
                 {...submissionsTranslations.unsubmitAllSubmissions}
               />
-            }
-            disabled={unsubmitAllDisabled}
-            leftIcon={
-              isUnsubmitting ? (
+            </MenuItem>
+          ) : null}
+          {assessment.canDeleteAllSubmissions ? (
+            <MenuItem
+              className={
+                deleteAllDisabled
+                  ? 'delete-submissions-disabled'
+                  : 'delete-submissions-enabled'
+              }
+              disabled={deleteAllDisabled}
+              onClick={() => this.setState({ deleteAllConfirmation: true })}
+            >
+              {isDeleting ? (
                 <CircularProgress size={30} />
               ) : (
-                <RemoveCircle color={pink600} />
-              )
-            }
-            onClick={() => this.setState({ unsubmitAllConfirmation: true })}
-          />
-        ) : null}
-        {assessment.canDeleteAllSubmissions ? (
-          <MenuItem
-            className={
-              deleteAllDisabled
-                ? 'delete-submissions-disabled'
-                : 'delete-submissions-enabled'
-            }
-            primaryText={
+                <Delete nativeColor={red[900]} />
+              )}
               <FormattedMessage
                 {...submissionsTranslations.deleteAllSubmissions}
               />
-            }
-            disabled={deleteAllDisabled}
-            leftIcon={
-              isDeleting ? (
-                <CircularProgress size={30} />
-              ) : (
-                <DeleteIcon color={red900} />
-              )
-            }
-            onClick={() => this.setState({ deleteAllConfirmation: true })}
-          />
-        ) : null}
-      </IconMenu>
+            </MenuItem>
+          ) : null}
+        </Menu>
+      </>
     );
   }
 
   render() {
-    const { assessment } = this.props;
+    const { assessment, isActive } = this.props;
 
     const tableHeaderColumnFor = (field) => (
-      <TableHeaderColumn style={styles.tableCell}>
+      <TableCell style={styles.tableCell}>
         <FormattedMessage {...submissionsTranslations[field]} />
-      </TableHeaderColumn>
+      </TableCell>
     );
 
     const tableHeaderCenterColumnFor = (field) => (
-      <TableHeaderColumn
-        style={{ ...styles.tableCell, ...styles.tableCenterCell }}
-      >
+      <TableCell style={{ ...styles.tableCell, ...styles.tableCenterCell }}>
         <FormattedMessage {...submissionsTranslations[field]} />
-      </TableHeaderColumn>
+      </TableCell>
     );
 
     return (
       <>
-        <Table selectable={false}>
-          <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+        <Table style={{ ...(isActive ? {} : styles.hideTable) }}>
+          <TableHead>
             <TableRow>
               {tableHeaderColumnFor('userName')}
               {tableHeaderCenterColumnFor('submissionStatus')}
@@ -364,18 +371,16 @@ export default class SubmissionsTable extends React.Component {
                 : null}
               {tableHeaderCenterColumnFor('dateSubmitted')}
               {tableHeaderCenterColumnFor('dateGraded')}
-              <TableHeaderColumn
+              <TableCell
                 style={{ ...styles.tableCell, ...styles.tableCenterCell }}
               >
                 {this.renderDownloadDropdown()}
                 {this.renderUnsubmitAllConfirmation()}
                 {this.renderDeleteAllConfirmation()}
-              </TableHeaderColumn>
+              </TableCell>
             </TableRow>
-          </TableHeader>
-          <TableBody displayRowCheckbox={false}>
-            {this.renderRowUsers()}
-          </TableBody>
+          </TableHead>
+          <TableBody>{this.renderRowUsers()}</TableBody>
         </Table>
         {this.renderRowTooltips()}
       </>
@@ -408,4 +413,5 @@ SubmissionsTable.propTypes = {
   handleUnsubmitAll: PropTypes.func,
   handleDeleteAll: PropTypes.func,
   confirmDialogValue: PropTypes.string,
+  isActive: PropTypes.bool,
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Divider from 'material-ui/Divider';
+import { Divider } from '@material-ui/core';
 import { formatTimestamp } from 'lib/helpers/videoHelpers';
 
 import styles from '../Discussion.scss';

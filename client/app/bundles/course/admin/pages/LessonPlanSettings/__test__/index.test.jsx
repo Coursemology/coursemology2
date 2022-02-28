@@ -31,12 +31,12 @@ describe('<LessonPlanSettings />', () => {
       buildContextOptions(store),
     );
 
-    const toggles = lessonPlanSettings.find('Toggle');
+    const toggles = lessonPlanSettings.find('WithStyles(Switch)');
     // Enabled? and Visible? toggles.
     expect(toggles.length).toBe(2);
 
     const toggle = toggles.first();
-    toggle.props().onToggle(null, true);
+    toggle.props().onChange(null, true);
     const expectedPayload = {
       lesson_plan_settings: {
         lesson_plan_item_settings: {

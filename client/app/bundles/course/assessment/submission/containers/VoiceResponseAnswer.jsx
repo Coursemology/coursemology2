@@ -2,16 +2,16 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { red500 } from 'material-ui/styles/colors';
 import {
   injectIntl,
   intlShape,
   defineMessages,
   FormattedMessage,
 } from 'react-intl';
-import FlatButton from 'material-ui/FlatButton';
-import MicIcon from 'material-ui/svg-icons/av/mic';
-import StopIcon from 'material-ui/svg-icons/av/stop';
+import { Button } from '@material-ui/core';
+import { red } from '@material-ui/core/colors';
+import Mic from '@material-ui/icons/Mic';
+import Stop from '@material-ui/icons/Stop';
 import SingleFileInput from 'lib/components/redux-form/SingleFileInput';
 import recorderHelper from '../../utils/recorderHelper';
 import sharedConstants from '../../../../../lib/constants/sharedConstants';
@@ -54,7 +54,7 @@ const styles = {
     verticalAlign: 'middle',
   },
   errorStyle: {
-    color: red500,
+    color: red[500],
   },
 };
 
@@ -148,24 +148,26 @@ class VoiceResponseAnswer extends Component {
           />
         </div>
         <div>
-          <FlatButton
-            primary
+          <Button
+            color="primary"
             disabled={recording}
-            icon={<MicIcon />}
-            label={intl.formatMessage(translations.startRecording)}
             onClick={this.onStartRecord}
-          />
-          <FlatButton
-            primary
-            secondary
-            icon={<StopIcon />}
-            label={intl.formatMessage(translations.stopRecording)}
+          >
+            <Mic />
+            {intl.formatMessage(translations.startRecording)}
+          </Button>
+
+          <Button
+            color="primary"
             disabled={
               !recording ||
               recordingComponentId !== this.currentRecordingComponentId()
             }
             onClick={this.onStopRecord(field)}
-          />
+          >
+            <Stop />
+            {intl.formatMessage(translations.stopRecording)}
+          </Button>
         </div>
       </div>
     );

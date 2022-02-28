@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import InsertDriveFileIcon from 'material-ui/svg-icons/editor/insert-drive-file';
-import { grey400, grey900 } from 'material-ui/styles/colors';
+import InsertDriveFile from '@material-ui/icons/InsertDriveFile';
+import { grey } from '@material-ui/core/colors';
 import DeleteButton from './DeleteButton';
 import translations from './translations';
 
@@ -26,10 +26,10 @@ function renderImage(imageSrc, fileName) {
     <img src={imageSrc} style={styles.image} alt={fileName} />
   ) : (
     <div>
-      <InsertDriveFileIcon
+      <InsertDriveFile
         style={{
           ...styles.fileIcon,
-          color: fileName ? grey900 : grey400,
+          color: fileName ? grey[900] : grey[400],
         }}
       />
     </div>

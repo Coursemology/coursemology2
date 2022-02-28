@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field, Form } from 'redux-form';
-import TextField from 'lib/components/redux-form/TextField';
+import renderTextField from 'lib/components/redux-form/TextField';
 import RichTextField from 'lib/components/redux-form/RichTextField';
 import formTranslations from 'lib/translations/form';
 import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
@@ -29,8 +29,8 @@ const MilestoneForm = ({ handleSubmit, onSubmit, disabled }) => (
     <Field
       fullWidth
       name="title"
-      floatingLabelText={<FormattedMessage {...translations[TITLE]} />}
-      component={TextField}
+      label={<FormattedMessage {...translations[TITLE]} />}
+      component={renderTextField}
       {...{ disabled }}
     />
     <br />
@@ -39,7 +39,7 @@ const MilestoneForm = ({ handleSubmit, onSubmit, disabled }) => (
       name="description"
       label={<FormattedMessage {...translations[DESCRIPTION]} />}
       component={RichTextField}
-      multiLine
+      multiline
       rows={2}
       {...{ disabled }}
     />

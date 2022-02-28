@@ -32,14 +32,7 @@ describe('<NewQuestionButton />', () => {
     // Fill section form with title
     const questionText = 'Question: Is it true?';
     const optionText = 'Yes';
-    const dialogInline = questionFormDialogue
-      .find('RenderToLayer')
-      .first()
-      .instance();
-    const questionForm = mount(
-      dialogInline.props.render(),
-      contextOptions,
-    ).find('form');
+    const questionForm = questionFormDialogue.find('form');
     const descriptionInput = questionForm.find('textarea[name="description"]');
     descriptionInput.simulate('change', { target: { value: questionText } });
     const optionInput = questionForm

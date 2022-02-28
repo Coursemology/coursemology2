@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import DropDownMenu from 'material-ui/DropDownMenu';
-import MenuItem from 'material-ui/MenuItem';
+import { MenuItem, Select } from '@material-ui/core';
 import { videoDefaults } from 'lib/constants/videoConstants';
-
 import styles from '../VideoPlayer.scss';
 import { changePlaybackRate } from '../../actions/video';
 
@@ -20,19 +18,20 @@ const defaultProps = {
 
 function PlayBackRateSelector(props) {
   const rateElements = props.availableRates.map((rate) => (
-    <MenuItem key={rate} value={rate} primaryText={`${rate}X`} />
+    <MenuItem key={rate} style={{ fontSize: '0.9em' }} value={rate}>
+      {`${rate}X`}
+    </MenuItem>
   ));
 
   return (
     <span className={styles.playbackRate}>
-      <DropDownMenu
+      <Select
+        onChange={(event) => props.rateChanged(event.target.value)}
+        style={{ fontSize: '0.9em' }}
         value={props.rate}
-        onChange={(_e, _index, value) => props.rateChanged(value)}
-        labelStyle={{ fontSize: '0.9em' }}
-        menuItemStyle={{ fontSize: '0.9em' }}
       >
         {rateElements}
-      </DropDownMenu>
+      </Select>
     </span>
   );
 }

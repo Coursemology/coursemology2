@@ -21,7 +21,7 @@ function renderTextField(readOnly, answerId) {
     <Field
       name={`${answerId}[answer_text]`}
       component={RichTextField}
-      multiLine
+      multiline
     />
   );
 }
@@ -62,7 +62,7 @@ class ForumPostResponse extends Component {
           open={this.state.notificationMessage !== ''}
           notification={{ message: this.state.notificationMessage }}
           autoHideDuration={4000}
-          onRequestClose={() => this.setState({ notificationMessage: '' })}
+          onClose={() => this.setState({ notificationMessage: '' })}
         />
       </>
     );

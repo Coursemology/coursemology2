@@ -39,8 +39,11 @@ describe('<SurveyLayout />', () => {
       </Router>,
       buildContextOptions(store),
     );
+    surveyLayout
+      .find('TitleBar')
+      .find('WithStyles(IconButton)')
+      .simulate('click');
 
-    surveyLayout.find('TitleBar').prop('onLeftIconButtonClick')();
     expect(spyHistoryPush).toHaveBeenCalledWith(`/courses/${courseId}/surveys`);
   });
 });

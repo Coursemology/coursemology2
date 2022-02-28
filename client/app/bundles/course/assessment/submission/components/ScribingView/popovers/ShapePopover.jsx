@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import Popover, { PopoverAnimationVertical } from 'material-ui/Popover';
-import Menu from 'material-ui/Menu';
-import Divider from 'material-ui/Divider';
+import { Divider, Paper, Popover } from '@material-ui/core';
 
 import LineStyleField from '../fields/LineStyleField';
 import LineThicknessField from '../fields/LineThicknessField';
@@ -44,8 +42,8 @@ const styles = {
   toolDropdowns: {
     padding: '10px',
   },
-  menu: {
-    padding: '5px',
+  paper: {
+    padding: '10px',
     maxHeight: '250px',
     overflowY: 'auto',
   },
@@ -56,7 +54,7 @@ const popoverStyles = {
     horizontal: 'left',
     vertical: 'bottom',
   },
-  targetOrigin: {
+  transformOrigin: {
     horizontal: 'left',
     vertical: 'top',
   },
@@ -157,20 +155,19 @@ class ShapePopover extends Component {
 
     return (
       <Popover
-        style={styles.toolDropdowns}
         open={open}
         anchorEl={anchorEl}
         anchorOrigin={popoverStyles.anchorOrigin}
-        targetOrigin={popoverStyles.targetOrigin}
-        onRequestClose={onRequestClose}
-        animation={PopoverAnimationVertical}
+        onClose={onRequestClose}
+        transformOrigin={popoverStyles.transformOrigin}
+        style={styles.toolDropdowns}
       >
-        <Menu style={styles.menu}>
+        <Paper style={styles.paper}>
           {displayShapeField ? this.renderShapeComponent() : undefined}
           {this.renderBorderComponent()}
           <Divider />
           {this.renderFillComponent()}
-        </Menu>
+        </Paper>
       </Popover>
     );
   }

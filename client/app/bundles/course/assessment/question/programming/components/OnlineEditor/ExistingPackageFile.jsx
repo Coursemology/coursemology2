@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
-import { TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
-import RaisedButton from 'material-ui/RaisedButton';
-import { grey100, grey300, white } from 'material-ui/styles/colors';
+import { Button, TableCell, TableRow } from '@material-ui/core';
+import { grey, white } from '@material-ui/core/colors';
+
 import styles from './OnlineEditorView.scss';
 
 function formatBytes(bytes, decimals) {
@@ -26,9 +26,9 @@ function ExistingPackageFile(props) {
     isLast,
   } = props;
   const buttonClass = toDelete ? 'fa fa-undo' : 'fa fa-trash';
-  const buttonColor = toDelete ? white : grey300;
+  const buttonColor = toDelete ? white : grey[300];
   const rowStyle = toDelete
-    ? { textDecoration: 'line-through', backgroundColor: grey100 }
+    ? { textDecoration: 'line-through', backgroundColor: grey[100] }
     : {};
   if (isLast) {
     rowStyle.borderBottom = 'none';
@@ -36,25 +36,31 @@ function ExistingPackageFile(props) {
 
   return (
     <TableRow style={rowStyle}>
-      <TableHeaderColumn className={styles.deleteButtonCell}>
-        <RaisedButton
-          backgroundColor={buttonColor}
-          icon={<i className={buttonClass} />}
+      <TableCell className={styles.deleteButtonCell}>
+        <Button
+          variant="contained"
           disabled={isLoading}
           onClick={() => {
             deleteExistingPackageFile(props.fileType, filename, !toDelete);
           }}
-          style={{ minWidth: '40px', width: '40px' }}
-        />
+          style={{
+            backgroundColor: buttonColor,
+            height: '40px',
+            minWidth: '40px',
+            width: '40px',
+          }}
+        >
+          <i className={buttonClass} />
+        </Button>
         <input
           type="checkbox"
           hidden
           name={`question_programming[${`${fileType}_to_delete`}][${filename}]`}
           checked={toDelete}
         />
-      </TableHeaderColumn>
-      <TableRowColumn>{filename}</TableRowColumn>
-      <TableRowColumn>{formatBytes(filesize, 2)}</TableRowColumn>
+      </TableCell>
+      <TableCell>{filename}</TableCell>
+      <TableCell>{formatBytes(filesize, 2)}</TableCell>
     </TableRow>
   );
 }

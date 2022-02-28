@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { red500 } from 'material-ui/styles/colors';
+import { red } from '@material-ui/core/colors';
 
 /**
  * Standardises the way errors are shown in redux forms.
@@ -10,7 +10,7 @@ const ErrorText = ({ errors }) => {
     return null;
   }
   if (errors.constructor === String) {
-    return <div style={{ color: red500 }}>{errors}</div>;
+    return <div style={{ color: red[500] }}>{errors}</div>;
   }
   if (errors.constructor === Array) {
     return (

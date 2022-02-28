@@ -1,14 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Card, CardText } from 'material-ui/Card';
-import TextField from 'material-ui/TextField';
-import Checkbox from 'material-ui/Checkbox';
-import RadioButton from 'material-ui/RadioButton';
-import IconButton from 'material-ui/IconButton';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import {
+  CardContent,
+  Checkbox,
+  ExpansionPanel,
+  ExpansionPanelSummary,
+  IconButton,
+  Menu,
+  MenuItem,
+  Radio,
+  TextField,
+} from '@material-ui/core';
+import MoreVert from '@material-ui/icons/MoreVert';
 import formTranslations from 'lib/translations/form';
 import { questionTypes } from 'course/survey/constants';
 import { questionShape } from 'course/survey/propTypes';
@@ -17,6 +21,7 @@ import OptionsListItem from 'course/survey/components/OptionsListItem';
 
 const styles = {
   optionWidget: {
+    padding: 0,
     width: 'auto',
   },
   grid: {
@@ -25,26 +30,22 @@ const styles = {
   },
   gridOptionWidget: {
     marginTop: 5,
+    padding: 0,
     width: 'auto',
-  },
-  gridOptionWidgetIcon: {
-    margin: 0,
   },
   adminMenu: {
     position: 'absolute',
     right: 8,
-    top: 12,
-  },
-  cardText: {
-    position: 'relative',
-    paddingTop: 34,
-    paddingRight: 64,
+    top: 0,
   },
   card: {
     marginBottom: 15,
   },
   fields: {
     marginTop: 0,
+  },
+  panelSummaryText: {
+    flexDirection: 'column',
   },
   required: {
     fontStyle: 'italic',
@@ -74,13 +75,7 @@ class QuestionCard extends React.Component {
       <div style={styles.grid}>
         {question.options.map((option) => {
           const { option: optionText, image_url: imageUrl } = option;
-          const widget = (
-            <Widget
-              disabled
-              style={styles.gridOptionWidget}
-              iconStyle={styles.gridOptionWidgetIcon}
-            />
-          );
+          const widget = <Widget disabled style={styles.gridOptionWidget} />;
           return (
             <OptionsListItem
               grid
@@ -96,7 +91,7 @@ class QuestionCard extends React.Component {
   static renderOptionsFields(question) {
     const { MULTIPLE_CHOICE, MULTIPLE_RESPONSE } = questionTypes;
     const widget = {
-      [MULTIPLE_CHOICE]: RadioButton,
+      [MULTIPLE_CHOICE]: Radio,
       [MULTIPLE_RESPONSE]: Checkbox,
     }[question.question_type];
     if (!widget) {
@@ -110,9 +105,9 @@ class QuestionCard extends React.Component {
   static renderTextField() {
     return (
       <TextField
-        fullWidth
         disabled
-        hintText={<FormattedMessage {...translations.textResponse} />}
+        fullWidth
+        label={<FormattedMessage {...translations.textResponse} />}
       />
     );
   }
@@ -127,8 +122,21 @@ class QuestionCard extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { hovered: false };
+    this.state = { anchorEl: null, hovered: false };
   }
+
+  handleClick = (event) => {
+    // This prevents ghost click.
+    event.preventDefault();
+
+    this.setState({
+      anchorEl: event.currentTarget,
+    });
+  };
+
+  handleClose = () => {
+    this.setState({ anchorEl: null });
+  };
 
   renderAdminMenu() {
     const { adminFunctions } = this.props;
@@ -138,18 +146,25 @@ class QuestionCard extends React.Component {
     }
 
     return (
-      <IconMenu
-        iconButtonElement={
-          <IconButton>
-            <MoreVertIcon />
-          </IconButton>
-        }
-        style={styles.adminMenu}
-      >
-        {adminFunctions.map(({ label, handler }) => (
-          <MenuItem key={label} primaryText={label} onClick={handler} />
-        ))}
-      </IconMenu>
+      <>
+        <IconButton onClick={this.handleClick} style={styles.adminMenu}>
+          <MoreVert />
+        </IconButton>
+        <Menu
+          id="question-admin-menu"
+          anchorEl={this.state.anchorEl}
+          disableAutoFocusItem
+          onClick={this.handleClose}
+          onClose={this.handleClose}
+          open={Boolean(this.state.anchorEl)}
+        >
+          {adminFunctions.map(({ label, handler }) => (
+            <MenuItem key={label} onClick={handler}>
+              {label}
+            </MenuItem>
+          ))}
+        </Menu>
+      </>
     );
   }
 
@@ -157,25 +172,27 @@ class QuestionCard extends React.Component {
     const { question, expanded } = this.props;
     const cursorStyle = this.state.hovered ? { cursor: 'move' } : null;
     return (
-      <Card
-        style={{ ...styles.card, ...cursorStyle }}
+      <ExpansionPanel
+        expanded={expanded}
         onMouseOver={() => this.setState({ hovered: true })}
         onMouseOut={() => this.setState({ hovered: false })}
-        {...{ expanded }}
+        style={{ ...styles.card, ...cursorStyle }}
       >
-        <CardText style={styles.cardText}>
+        <ExpansionPanelSummary>
           {this.renderAdminMenu()}
-          <p dangerouslySetInnerHTML={{ __html: question.description }} />
-          {question.required ? (
-            <p style={styles.required}>
-              <FormattedMessage {...formTranslations.starRequired} />
-            </p>
-          ) : null}
-        </CardText>
-        <CardText expandable style={styles.fields}>
+          <div style={styles.panelSummaryText}>
+            <p dangerouslySetInnerHTML={{ __html: question.description }} />
+            {question.required ? (
+              <p style={styles.required}>
+                <FormattedMessage {...formTranslations.starRequired} />
+              </p>
+            ) : null}
+          </div>
+        </ExpansionPanelSummary>
+        <CardContent style={styles.field}>
           {QuestionCard.renderSpecificFields(question)}
-        </CardText>
-      </Card>
+        </CardContent>
+      </ExpansionPanel>
     );
   }
 }

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field, Form } from 'redux-form';
 import ConditionList from 'lib/components/course/ConditionList';
-import TextField from 'lib/components/redux-form/TextField';
+import renderTextField from 'lib/components/redux-form/TextField';
 import RichTextField from 'lib/components/redux-form/RichTextField';
 import Toggle from 'lib/components/redux-form/Toggle';
 import SingleFileInput, {
@@ -61,8 +61,8 @@ const AchievementForm = ({
     <Field
       fullWidth
       name="title"
-      component={TextField}
-      floatingLabelText={<FormattedMessage {...translations.title} />}
+      component={renderTextField}
+      label={<FormattedMessage {...translations.title} />}
       disabled={submitting}
     />
     <br />
@@ -85,7 +85,6 @@ const AchievementForm = ({
       parse={Boolean}
       component={Toggle}
       label={<FormattedMessage {...translations.published} />}
-      labelPosition="right"
       style={styles.toggle}
       disabled={submitting}
     />

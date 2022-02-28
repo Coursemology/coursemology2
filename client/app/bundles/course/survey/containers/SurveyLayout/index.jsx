@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
-import IconButton from 'material-ui/IconButton';
-import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
+import { IconButton } from '@material-ui/core';
+import ArrowBack from '@material-ui/icons/ArrowBack';
 import history from 'lib/history';
 import TitleBar from 'lib/components/TitleBar';
 import { surveyShape } from 'course/survey/propTypes';
@@ -36,11 +36,10 @@ class SurveyLayout extends React.Component {
           showAdminMenu ? <AdminMenu {...{ survey, surveyId }} /> : null
         }
         iconElementLeft={
-          <IconButton>
-            <ArrowBack />
+          <IconButton onClick={() => history.push(backLocation)}>
+            <ArrowBack nativeColor="white" />
           </IconButton>
         }
-        onLeftIconButtonClick={() => history.push(backLocation)}
       />
     );
   }

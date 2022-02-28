@@ -4,13 +4,12 @@ import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import moment from 'lib/moment';
 import DatePicker from 'material-ui-pickers/DatePicker';
 import TimePicker from 'material-ui-pickers/TimePicker';
-import DateRange from 'material-ui/svg-icons/action/date-range';
-import KeyboardArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
-import KeyboardArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
-import Schedule from 'material-ui/svg-icons/action/schedule';
+import DateRange from '@material-ui/icons/DateRange';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import Schedule from '@material-ui/icons/Schedule';
 import MuiPickersUtilsProvider from 'material-ui-pickers/MuiPickersUtilsProvider';
 import MomentUtils from '@date-io/moment';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
 
 const translations = defineMessages({
   datePlaceholder: {
@@ -48,22 +47,6 @@ const styles = {
     width: styleConstants.iconWidth,
   },
 };
-
-const datetimepickerTheme = createMuiTheme({
-  // https://material-ui.com/customization/themes/#typography---html-font-size
-  // https://material-ui.com/style/typography/#migration-to-typography-v2
-  typography: {
-    htmlFontSize: 10,
-    useNextVariants: true,
-  },
-  overrides: {
-    MuiModal: {
-      root: {
-        zIndex: 1800,
-      },
-    },
-  },
-});
 
 const propTypes = {
   name: PropTypes.string.isRequired,
@@ -157,38 +140,36 @@ class DateTimePicker extends React.PureComponent {
 
     return (
       <MuiPickersUtilsProvider utils={MomentUtils}>
-        <MuiThemeProvider theme={datetimepickerTheme}>
-          <div style={{ ...styles.dateTimePicker, ...style }}>
-            <DatePicker
-              {...{ name, disabled }}
-              style={styles.dateTextField}
-              onChange={this.updateDate}
-              clearable={clearable}
-              keyboard
-              keyboardIcon={<DateRange style={styles.pickerIcon} />}
-              leftArrowIcon={<KeyboardArrowLeft />}
-              rightArrowIcon={<KeyboardArrowRight />}
-              format="DD-MM-YYYY"
-              label={floatingLabelText}
-              emptyLabel={intl.formatMessage(translations.datePlaceholder)}
-              error={!!errorText || !!this.state.dateError}
-              helperText={errorText || this.state.dateError}
-              value={value || null}
-            />
-            <TimePicker
-              {...{ name, disabled }}
-              style={styles.timeTextField}
-              onChange={this.updateTime}
-              clearable={clearable}
-              keyboard
-              keyboardIcon={<Schedule style={styles.pickerIcon} />}
-              emptyLabel={intl.formatMessage(translations.timePlaceholder)}
-              error={!!this.state.timeError}
-              helperText={this.state.timeError}
-              value={value || null}
-            />
-          </div>
-        </MuiThemeProvider>
+        <div style={{ ...styles.dateTimePicker, ...style }}>
+          <DatePicker
+            {...{ name, disabled }}
+            style={styles.dateTextField}
+            onChange={this.updateDate}
+            clearable={clearable}
+            keyboard
+            keyboardIcon={<DateRange style={styles.pickerIcon} />}
+            leftArrowIcon={<KeyboardArrowLeft />}
+            rightArrowIcon={<KeyboardArrowRight />}
+            format="DD-MM-YYYY"
+            label={floatingLabelText}
+            emptyLabel={intl.formatMessage(translations.datePlaceholder)}
+            error={!!errorText || !!this.state.dateError}
+            helperText={errorText || this.state.dateError}
+            value={value || null}
+          />
+          <TimePicker
+            {...{ name, disabled }}
+            style={styles.timeTextField}
+            onChange={this.updateTime}
+            clearable={clearable}
+            keyboard
+            keyboardIcon={<Schedule style={styles.pickerIcon} />}
+            emptyLabel={intl.formatMessage(translations.timePlaceholder)}
+            error={!!this.state.timeError}
+            helperText={this.state.timeError}
+            value={value || null}
+          />
+        </div>
       </MuiPickersUtilsProvider>
     );
   }

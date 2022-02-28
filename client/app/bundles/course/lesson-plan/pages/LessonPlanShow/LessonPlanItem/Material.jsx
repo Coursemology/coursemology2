@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Description from 'material-ui/svg-icons/action/description';
-import { grey700 } from 'material-ui/styles/colors';
+import Description from '@material-ui/icons/Description';
+import { grey } from '@material-ui/core/colors';
 
 const styles = {
   material: {
@@ -25,7 +25,7 @@ class Material extends React.PureComponent {
     const { name, url } = this.props;
     return (
       <div style={styles.material}>
-        <Description style={styles.icon} color={grey700} />
+        <Description style={styles.icon} nativeColor={grey[700]} />
         <a href={url}>{name}</a>
       </div>
     );

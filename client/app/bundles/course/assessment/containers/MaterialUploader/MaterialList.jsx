@@ -1,11 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, defineMessages } from 'react-intl';
-import { List } from 'material-ui/List';
-import Subheader from 'material-ui/Subheader';
-import FlatButton from 'material-ui/FlatButton';
-import Divider from 'material-ui/Divider';
-import ContentAdd from 'material-ui/svg-icons/content/add';
+import { Button, Divider, List, ListSubheader } from '@material-ui/core';
+import Add from '@material-ui/icons/Add';
 import NotificationBar, {
   notificationShape,
 } from 'lib/components/NotificationBar';
@@ -106,14 +103,14 @@ const MaterialList = (props) => {
         data-for="add-files-button"
         data-tip-disable={enableMaterialsAction}
       >
-        <FlatButton
-          fullWidth
-          label="Add Files"
-          icon={<ContentAdd />}
-          containerElement="label"
-          style={styles.newFileButton}
+        <Button
+          component="label"
           disabled={!enableMaterialsAction}
+          fullWidth
+          style={styles.newFileButton}
         >
+          <Add />
+          Add Files
           <input
             type="file"
             multiple
@@ -121,7 +118,7 @@ const MaterialList = (props) => {
             onChange={onFileInputChange}
             disabled={!enableMaterialsAction}
           />
-        </FlatButton>
+        </Button>
       </div>
       <ReactTooltip id="add-files-button">
         <FormattedMessage {...translations.disableNewFile} />
@@ -134,7 +131,7 @@ const MaterialList = (props) => {
       <Divider />
       <List>
         {(materials.length > 0 || uploadingMaterials.length > 0) && (
-          <Subheader>{header}</Subheader>
+          <ListSubheader disableSticky>{header}</ListSubheader>
         )}
         {materialNodes}
         {uploadingMaterialNodes}

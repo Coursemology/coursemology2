@@ -4,19 +4,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
 import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
-import { Card, CardHeader, CardText } from 'material-ui/Card';
-import FlatButton from 'material-ui/FlatButton';
-import Toggle from 'material-ui/Toggle';
 import {
+  Button,
+  ExpansionPanel,
+  ExpansionPanelDetails,
+  ExpansionPanelSummary,
+  Fade,
+  FormControlLabel,
   Table,
   TableBody,
+  TableCell,
   TableFooter,
-  TableHeader,
-  TableHeaderColumn,
+  TableHead,
   TableRow,
-  TableRowColumn,
-} from 'material-ui/Table';
-import transitions from 'material-ui/styles/transitions';
+  Switch,
+} from '@material-ui/core';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import 'ace-builds/src-noconflict/mode-java';
 import 'ace-builds/src-noconflict/theme-monokai';
@@ -101,32 +104,37 @@ class OnlineEditorJavaView extends React.Component {
     };
 
     return (
-      <Card initiallyExpanded>
-        <CardHeader
-          title={header}
-          textStyle={{ fontWeight: 'bold' }}
-          actAsExpander
-          showExpandableButton
-        />
-        <CardText expandable style={{ padding: 0 }}>
-          <Table selectable={false}>
-            <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+      <ExpansionPanel
+        defaultExpanded
+        style={{
+          margin: 0,
+        }}
+      >
+        <ExpansionPanelSummary
+          expandIcon={<ExpandMoreIcon />}
+          style={{ fontSize: 14, fontWeight: 'bold', margin: 0 }}
+        >
+          {header}
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails style={{ padding: 0 }}>
+          <Table>
+            <TableHead>
               <TableRow>
-                <TableHeaderColumn className={styles.deleteButtonCell} />
-                <TableHeaderColumn>
+                <TableCell className={styles.deleteButtonCell} />
+                <TableCell>
                   {this.props.intl.formatMessage(translations.fileNameHeader)}
-                </TableHeaderColumn>
-                <TableHeaderColumn>
+                </TableCell>
+                <TableCell>
                   {this.props.intl.formatMessage(translations.fileSizeHeader)}
-                </TableHeaderColumn>
+                </TableCell>
               </TableRow>
-            </TableHeader>
-            <TableBody displayRowCheckbox={false}>
+            </TableHead>
+            <TableBody>
               {this.props.data.get(fileType).map(renderDataFile)}
             </TableBody>
           </Table>
-        </CardText>
-      </Card>
+        </ExpansionPanelDetails>
+      </ExpansionPanel>
     );
   }
 
@@ -155,21 +163,24 @@ class OnlineEditorJavaView extends React.Component {
       .map(renderNewFile);
 
     return (
-      <Card initiallyExpanded>
-        <CardHeader
-          title={header}
-          textStyle={{ fontWeight: 'bold' }}
-          actAsExpander
-          showExpandableButton
-        />
-        <CardText expandable style={{ padding: 0 }}>
-          <Table selectable={false}>
-            <TableBody displayRowCheckbox={false}>
-              {newPackageFilesRows}
-            </TableBody>
+      <ExpansionPanel
+        defaultExpanded
+        style={{
+          margin: 0,
+        }}
+      >
+        <ExpansionPanelSummary
+          expandIcon={<ExpandMoreIcon />}
+          style={{ fontSize: 16, fontWeight: 'bold', margin: 0 }}
+        >
+          {header}
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails style={{ padding: 0 }}>
+          <Table>
+            <TableBody>{newPackageFilesRows}</TableBody>
           </Table>
-        </CardText>
-      </Card>
+        </ExpansionPanelDetails>
+      </ExpansionPanel>
     );
   }
 
@@ -218,7 +229,7 @@ class OnlineEditorJavaView extends React.Component {
       }
       return (
         <TableRow id={index} style={editorStyle} key={`java-editor-${index}`}>
-          <TableRowColumn
+          <TableCell
             colSpan="6"
             style={{ textAlign: 'center', paddingLeft: 0, paddingRight: 0 }}
           >
@@ -242,7 +253,7 @@ class OnlineEditorJavaView extends React.Component {
               editorProps={{ $blockScrolling: true }}
               setOptions={{ useSoftTabs: true, readOnly: this.props.isLoading }}
             />
-          </TableRowColumn>
+          </TableCell>
         </TableRow>
       );
     });
@@ -255,45 +266,51 @@ class OnlineEditorJavaView extends React.Component {
     });
 
     return (
-      <Card initiallyExpanded>
-        <CardHeader
-          title={header}
-          textStyle={{ fontWeight: 'bold' }}
-          actAsExpander
-          showExpandableButton
-        />
-        <CardText expandable style={{ padding: 0 }}>
-          <Table selectable={false}>
-            <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+      <ExpansionPanel
+        defaultExpanded
+        style={{
+          margin: 0,
+        }}
+      >
+        <ExpansionPanelSummary
+          expandIcon={<ExpandMoreIcon />}
+          style={{ fontSize: 16, fontWeight: 'bold', margin: 0 }}
+        >
+          {header}
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails style={{ padding: 0 }}>
+          <Table>
+            <TableHead>
               <TableRow>
-                <TableHeaderColumn className={styles.deleteButtonCell} />
-                <TableHeaderColumn>{identifier}</TableHeaderColumn>
-                <TableHeaderColumn>{expression}</TableHeaderColumn>
-                <TableHeaderColumn>{expected}</TableHeaderColumn>
-                <TableHeaderColumn>{hint}</TableHeaderColumn>
-                <TableHeaderColumn />
+                <TableCell className={styles.deleteButtonCell} />
+                <TableCell>{identifier}</TableCell>
+                <TableCell>{expression}</TableCell>
+                <TableCell>{expected}</TableCell>
+                <TableCell>{hint}</TableCell>
+                <TableCell />
               </TableRow>
-            </TableHeader>
-            <TableBody displayRowCheckbox={false}>{testCaseRows}</TableBody>
-            <TableFooter adjustForCheckbox={false}>
+            </TableHead>
+            <TableBody>{testCaseRows}</TableBody>
+            <TableFooter>
               <TableRow>
-                <TableRowColumn colSpan="6" style={{ textAlign: 'center' }}>
-                  <FlatButton
-                    label={this.props.intl.formatMessage(
-                      translations.addNewTestButton,
-                    )}
-                    icon={<i className="fa fa-plus" />}
+                <TableCell colSpan="6" style={{ textAlign: 'center' }}>
+                  <Button
                     disabled={
                       this.props.isLoading || numAllTestCases >= MAX_TEST_CASES
                     }
                     onClick={this.testCaseCreateHandler(type)}
-                  />
-                </TableRowColumn>
+                  >
+                    <i className="fa fa-plus" />
+                    {this.props.intl.formatMessage(
+                      translations.addNewTestButton,
+                    )}
+                  </Button>
+                </TableCell>
               </TableRow>
             </TableFooter>
           </Table>
-        </CardText>
-      </Card>
+        </ExpansionPanelDetails>
+      </ExpansionPanel>
     );
   }
 
@@ -320,17 +337,18 @@ class OnlineEditorJavaView extends React.Component {
     const testCases = data.get('test_cases');
     const testCaseError = data.getIn(['test_cases', 'error']);
     const errorTextElement = testCaseError && (
-      <div
-        style={{
-          fontSize: 12,
-          lineHeight: '12px',
-          color: this.context.muiTheme.textField.errorColor,
-          transition: transitions.easeOut(),
-          marginBottom: '1em',
-        }}
-      >
-        {testCaseError}
-      </div>
+      <Fade in={testCaseError}>
+        <div
+          style={{
+            fontSize: 12,
+            lineHeight: '12px',
+            color: this.context.muiTheme.textField.errorColor,
+            marginBottom: '1em',
+          }}
+        >
+          {testCaseError}
+        </div>
+      </Fade>
     );
 
     return (
@@ -506,23 +524,26 @@ class OnlineEditorJavaView extends React.Component {
       <div id="java-online-editor">
         {autograded && (
           <div className={styles.submitAsFileToggle}>
-            <Toggle
-              label={toggleLabel}
-              labelPosition="right"
-              toggled={submitAsFile}
-              onToggle={(e) => {
-                if (hasSubmissions) return;
-                this.props.actions.toggleSubmitAsFile(e.target.checked);
-              }}
-              readOnly={hasSubmissions}
-              disabled={isLoading}
-              style={{ margin: '1em 0', paddingTop: 10 }}
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={submitAsFile}
+                  color="primary"
+                  onChange={(e) => {
+                    if (hasSubmissions) return;
+                    this.props.actions.toggleSubmitAsFile(e.target.checked);
+                  }}
+                />
+              }
+              disabled={isLoading || hasSubmissions}
+              label={<b>{toggleLabel}</b>}
             />
             <input
               hidden
               name="question_programming[submit_as_file]"
               value={submitAsFile}
             />
+            <br />
             <FormattedMessage
               id="course.assessment.question.programming.onlineEditorJavaView.fileSubmissionDescription"
               defaultMessage={

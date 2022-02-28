@@ -42,10 +42,7 @@ describe('<AdminMenu />', () => {
     const iconButton = adminMenu.find('button').first();
     iconButton.simulate('click');
 
-    const menuCardNode = adminMenu.find('RenderToLayer').first().instance();
-    const deleteButton = mount(menuCardNode.props.render(), contextOptions)
-      .find('EnhancedButton')
-      .first();
+    const deleteButton = adminMenu.find('ButtonBase').last();
     deleteButton.simulate('click');
 
     const confirmDeleteButton = deleteConfirmation
@@ -86,19 +83,12 @@ describe('<AdminMenu />', () => {
     const iconButton = adminMenu.find('button').first();
     iconButton.simulate('click');
 
-    const menuCardNode = adminMenu.find('RenderToLayer').first().instance();
-    const updateButton = mount(menuCardNode.props.render(), contextOptions)
-      .find('EnhancedButton')
-      .first();
+    const updateButton = adminMenu.find('ButtonBase').last();
     updateButton.simulate('click');
 
-    const dialogInline = surveyFormDialogue
-      .find('RenderToLayer')
-      .first()
-      .instance();
-    const sectionForm = mount(dialogInline.props.render(), contextOptions).find(
-      'form',
-    );
+    surveyFormDialogue.update();
+
+    const sectionForm = surveyFormDialogue.find('form');
     const description = 'To update description';
     const descriptionInput = sectionForm.find('textarea[name="description"]');
     descriptionInput.simulate('change', { target: { value: description } });

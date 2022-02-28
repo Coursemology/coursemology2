@@ -48,9 +48,8 @@
 }
 
 .fileInputButton {
-  cursor: pointer;
-  margin-right: 1em;
-  margin-top: 0.5em;
+  cursor: pointer !important;
+  margin-right: 1em !important;
 }
 
 .uploadPackageInput {
@@ -68,6 +67,6 @@
 }
 
 .submitButton {
-  margin-bottom: 1em;
-  margin-top: 1em;
+  margin-bottom: 1em !important;
+  margin-top: 1em !important;
 }

@@ -1,7 +1,6 @@
 import React from 'react';
-import { green50 } from 'material-ui/styles/colors';
-import { RadioButton } from 'material-ui/RadioButton';
-
+import { green } from '@material-ui/core/colors';
+import { Radio, FormControlLabel } from '@material-ui/core';
 import { answerShape, questionShape } from '../../propTypes';
 
 function MultipleResponse({ question, answer }) {
@@ -9,21 +8,25 @@ function MultipleResponse({ question, answer }) {
   return (
     <>
       {question.options.map((option) => (
-        <RadioButton
-          key={option.id}
-          value={option.id}
+        <FormControlLabel
           checked={selectedOptions.indexOf(option.id) !== -1}
-          label={
-            <div
-              style={
-                option.correct && selectedOptions.indexOf(option.id) !== -1
-                  ? { backgroundColor: green50 }
-                  : null
-              }
-              dangerouslySetInnerHTML={{ __html: option.option.trim() }}
-            />
-          }
+          control={<Radio color="primary" style={{ padding: '0 12px' }} />}
           disabled
+          key={option.id}
+          label={
+            <b>
+              <div
+                style={
+                  option.correct && selectedOptions.indexOf(option.id) !== -1
+                    ? { backgroundColor: green[50] }
+                    : null
+                }
+                dangerouslySetInnerHTML={{ __html: option.option.trim() }}
+              />
+            </b>
+          }
+          style={{ width: '100%' }}
+          value={option.id.toString()}
         />
       ))}
     </>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { green50, red700 } from 'material-ui/styles/colors';
+import { green, red } from '@material-ui/core/colors';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
@@ -33,7 +33,7 @@ const styles = {
   },
   label: {
     padding: '12px 16px',
-    backgroundColor: green50,
+    backgroundColor: green[50],
     cursor: 'pointer',
     display: 'flex',
     justifyContent: 'space-between',
@@ -44,7 +44,7 @@ const styles = {
     alignItems: 'center',
   },
   trashButton: {
-    color: red700,
+    color: red[700],
     border: 0,
     padding: 0,
     fontSize: 16,

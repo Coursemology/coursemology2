@@ -1,11 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import IconButton from 'material-ui/IconButton';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import { IconButton, Menu, MenuItem } from '@material-ui/core';
+import MoreVert from '@material-ui/icons/MoreVert';
 
 import { deletePostFromServer, updatePost } from '../../actions/discussion';
 
@@ -21,7 +18,20 @@ const defaultProps = {
   canDelete: true,
 };
 
-function PostMenu(props) {
+const PostMenu = (props) => {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    // This prevents ghost click.
+    event.preventDefault();
+
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   // Do not show if user doesn't even have options
   if (!props.canUpdate && !props.canDelete) {
     return null;
@@ -29,25 +39,25 @@ function PostMenu(props) {
 
   return (
     <div style={{ float: 'right' }}>
-      <IconMenu
-        iconButtonElement={
-          <IconButton>
-            <MoreVertIcon />
-          </IconButton>
-        }
-        anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
-        targetOrigin={{ horizontal: 'right', vertical: 'top' }}
+      <IconButton onClick={handleClick}>
+        <MoreVert />
+      </IconButton>
+      <Menu
+        id="postn-menu"
+        anchorEl={anchorEl}
+        disableAutoFocusItem
+        onClick={handleClose}
+        onClose={handleClose}
+        open={Boolean(anchorEl)}
       >
-        {props.canUpdate && (
-          <MenuItem primaryText="Edit" onClick={props.onEdit} />
-        )}
+        {props.canUpdate && <MenuItem onClick={props.onEdit}>Edit</MenuItem>}
         {props.canDelete && (
-          <MenuItem primaryText="Delete" onClick={props.onDelete} />
+          <MenuItem onClick={props.onDelete}>Delete</MenuItem>
         )}
-      </IconMenu>
+      </Menu>
     </div>
   );
-}
+};
 
 PostMenu.propTypes = propTypes;
 PostMenu.defaultProps = defaultProps;

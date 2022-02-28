@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
-import RaisedButton from 'material-ui/RaisedButton';
-import CircularProgress from 'material-ui/CircularProgress';
+import { Button, CircularProgress } from '@material-ui/core';
 import MaterialSummernote from 'lib/components/MaterialSummernote';
 import ReactTooltip from 'react-tooltip';
 
@@ -75,29 +74,30 @@ export default class CommentField extends Component {
           onKeyDown={(e) => this.onKeyDown(e)}
           value={value}
         />
-        <RaisedButton
-          primary
-          style={{ marginRight: 10, marginBotton: 10 }}
-          label={<FormattedMessage {...translations.comment} />}
-          onClick={() => createComment(value)}
+        <Button
+          variant="contained"
+          color="primary"
           disabled={disableCommentButton}
-          icon={
-            isSubmittingNormalComment ? <CircularProgress size={24} /> : null
-          }
-        />
+          onClick={() => createComment(value)}
+          style={{ marginRight: 10, marginBotton: 10 }}
+        >
+          {isSubmittingNormalComment ? <CircularProgress size={24} /> : null}
+          <FormattedMessage {...translations.comment} />
+        </Button>
         {renderDelayedCommentButton && (
           <span data-tip data-for={`delayed-comment-button-${inputId}`}>
-            <RaisedButton
-              primary
-              label={<FormattedMessage {...translations.commentDelayed} />}
-              onClick={() => createComment(value, true)}
+            <Button
+              variant="contained"
+              color="primary"
               disabled={disableCommentButton}
-              icon={
-                isSubmittingDelayedComment ? (
-                  <CircularProgress size={24} />
-                ) : null
-              }
-            />
+              onClick={() => createComment(value, true)}
+              style={{ marginRight: 10, marginBotton: 10 }}
+            >
+              {isSubmittingNormalComment ? (
+                <CircularProgress size={24} />
+              ) : null}
+              <FormattedMessage {...translations.commentDelayed} />
+            </Button>
             <ReactTooltip id={`delayed-comment-button-${inputId}`}>
               <FormattedMessage {...translations.commentDelayedDescription} />
             </ReactTooltip>

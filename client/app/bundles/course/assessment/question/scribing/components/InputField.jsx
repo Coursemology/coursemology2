@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import TextField from 'lib/components/redux-form/TextField';
+import renderTextField from 'lib/components/redux-form/TextField';
 import { questionNamePrefix, questionIdPrefix } from '../constants';
 
 const propTypes = {
@@ -24,11 +24,10 @@ const InputField = (props) => {
         name={questionNamePrefix + field}
         id={questionIdPrefix + field}
         validate={validate}
-        floatingLabelText={(required ? '* ' : '') + label}
-        floatingLabelFixed
+        label={(required ? '* ' : '') + label}
         fullWidth
         type={type}
-        component={TextField}
+        component={renderTextField}
         disabled={isLoading}
       />
     </div>

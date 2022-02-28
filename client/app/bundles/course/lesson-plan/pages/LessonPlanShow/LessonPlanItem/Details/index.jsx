@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CardText, CardTitle } from 'material-ui/Card';
+import { CardContent, CardHeader } from '@material-ui/core';
 import Chips from './Chips';
 
 class Details extends React.PureComponent {
   renderTitle() {
     const { title, itemPath } = this.props;
     return (
-      <CardTitle title={itemPath ? <a href={itemPath}>{title}</a> : title} />
+      <CardHeader title={itemPath ? <a href={itemPath}>{title}</a> : title} />
     );
   }
 
@@ -16,7 +16,7 @@ class Details extends React.PureComponent {
     if (!description) {
       return null;
     }
-    return <CardText dangerouslySetInnerHTML={{ __html: description }} />;
+    return <CardContent dangerouslySetInnerHTML={{ __html: description }} />;
   }
 
   render() {

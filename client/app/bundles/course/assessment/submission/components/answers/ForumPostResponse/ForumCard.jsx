@@ -1,15 +1,15 @@
 import React from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import {
-  RaisedButton,
-  FontIcon,
-  Card,
-  CardText,
-  CardActions,
-  CardHeader,
+  Button,
+  ExpansionPanel,
+  ExpansionPanelActions,
+  ExpansionPanelSummary,
   Divider,
-} from 'material-ui';
-import { cyan50 } from 'material-ui/styles/colors';
+  Icon,
+} from '@material-ui/core';
+import { cyan } from '@material-ui/core/colors';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import PropTypes from 'prop-types';
 
 import {
@@ -37,15 +37,18 @@ const translations = defineMessages({
 });
 
 const styles = {
-  cardHeader: {
-    backgroundColor: cyan50,
+  expansionPanelSummary: {
+    backgroundColor: cyan[50],
     padding: '8px 16px',
   },
-  cardActions: {
+  expansionPanelActions: {
     padding: 16,
   },
   container: {
-    paddingBottom: 8, // As there is already some bottom padding from the last topic card
+    padding: 16,
+  },
+  icon: {
+    marginLeft: 12,
   },
   nonLastTopicCard: {
     marginBottom: 16,
@@ -60,7 +63,7 @@ export default class ForumCard extends React.Component {
     };
   }
 
-  handleIsExpandedChange = (isExpanded) => {
+  handleIsExpandedChange = (event, isExpanded) => {
     this.setState({ isExpanded });
   };
 
@@ -83,51 +86,51 @@ export default class ForumCard extends React.Component {
       .filter((pack) => postPackIds.has(pack.corePost.id)).length;
 
     return (
-      <Card
+      <ExpansionPanel
         expanded={this.state.isExpanded}
-        onExpandChange={this.handleIsExpandedChange}
+        onChange={this.handleIsExpandedChange}
         style={this.props.style}
         className="forum-card"
       >
-        <CardHeader
-          title={
-            <CardTitle
-              title={this.props.forumTopicPostPack.forum.name}
-              type={
-                numPostsSelectedInForum > 0 ? (
-                  <FormattedMessage
-                    {...translations.forumCardTitleTypeSelected}
-                    values={{
-                      numSelected: numPostsSelectedInForum,
-                    }}
-                  />
-                ) : (
-                  <FormattedMessage
-                    {...translations.forumCardTitleTypeNoneSelected}
-                  />
-                )
-              }
-            />
-          }
-          actAsExpander
-          showExpandableButton
-          style={styles.cardHeader}
-        />
+        <ExpansionPanelSummary
+          expandIcon={<ExpandMoreIcon />}
+          style={styles.expansionPanelSummary}
+        >
+          <CardTitle
+            title={this.props.forumTopicPostPack.forum.name}
+            type={
+              numPostsSelectedInForum > 0 ? (
+                <FormattedMessage
+                  {...translations.forumCardTitleTypeSelected}
+                  values={{
+                    numSelected: numPostsSelectedInForum,
+                  }}
+                />
+              ) : (
+                <FormattedMessage
+                  {...translations.forumCardTitleTypeNoneSelected}
+                />
+              )
+            }
+          />
+        </ExpansionPanelSummary>
         <Divider />
-        <CardActions expandable style={styles.cardActions}>
-          <RaisedButton
-            label={<FormattedMessage {...translations.viewForumInNewTab} />}
+        <ExpansionPanelActions style={styles.expansionPanelActions}>
+          <Button
+            variant="contained"
             href={getForumURL(
               forumTopicPostPack.course.id,
               forumTopicPostPack.forum.id,
             )}
+            style={{ marginBottom: 16 }}
             target="_blank"
-            labelPosition="before"
-            icon={<FontIcon className="fa fa-external-link" />}
-          />
-        </CardActions>
+          >
+            <FormattedMessage {...translations.viewForumInNewTab} />
+            <Icon className="fa fa-external-link" style={styles.icon} />
+          </Button>
+        </ExpansionPanelActions>
         <Divider />
-        <CardText expandable style={styles.container}>
+        <div style={styles.container}>
           {forumTopicPostPack.topicPostPacks.map((topicPostPack, index) => (
             <TopicCard
               topicPostPack={topicPostPack}
@@ -146,8 +149,8 @@ export default class ForumCard extends React.Component {
               }
             />
           ))}
-        </CardText>
-      </Card>
+        </div>
+      </ExpansionPanel>
     );
   }
 }

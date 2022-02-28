@@ -1,6 +1,6 @@
 import React from 'react';
-import { RaisedButton } from 'material-ui';
-import { grey700 } from 'material-ui/styles/colors';
+import { Button } from '@material-ui/core';
+import { grey } from '@material-ui/core/colors';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
@@ -47,7 +47,7 @@ const styles = {
     marginBottom: 16,
   },
   instruction: {
-    color: grey700,
+    color: grey[700],
     fontSize: 14,
     marginBottom: 12,
   },
@@ -163,25 +163,23 @@ export default class ForumPostSelect extends React.Component {
         {this.renderInstruction(postPacks, maxPosts)}
         {!this.props.readOnly && (
           <>
-            <RaisedButton
-              label={
-                <FormattedMessage
-                  values={{ maxPosts }}
-                  {...translations.selectPostsButton}
-                />
-              }
-              icon={
-                <i
-                  className="fa fa-paperclip"
-                  style={styles.clipIcon}
-                  aria-hidden="true"
-                />
-              }
-              primary
-              onClick={() => this.setState({ isDialogVisible: true })}
+            <Button
+              variant="contained"
+              color="primary"
               disabled={this.state.hasErrorFetchingPosts || maxPosts === 0}
+              onClick={() => this.setState({ isDialogVisible: true })}
               style={{ marginBottom: 16 }}
-            />
+            >
+              <i
+                className="fa fa-paperclip"
+                style={styles.clipIcon}
+                aria-hidden="true"
+              />
+              <FormattedMessage
+                values={{ maxPosts }}
+                {...translations.selectPostsButton}
+              />
+            </Button>
             <ForumPostSelectDialog
               forumTopicPostPacks={this.state.forumTopicPostPacks}
               selectedPostPacks={postPacks}

@@ -3,10 +3,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
-import { grey50 } from 'material-ui/styles/colors';
-import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
-import DeleteIcon from 'material-ui/svg-icons/action/delete';
-import RaisedButton from 'material-ui/RaisedButton';
+import { Button } from '@material-ui/core';
+import Edit from '@material-ui/icons/Edit';
+import Delete from '@material-ui/icons/Delete';
 import {
   showMilestoneForm,
   updateMilestone,
@@ -44,7 +43,7 @@ const styles = {
   delete: {
     minWidth: 40,
     marginLeft: 10,
-    marginRight: 50,
+    marginRight: 20,
   },
 };
 
@@ -98,18 +97,20 @@ class MilestoneAdminTools extends React.PureComponent {
 
     return (
       <span>
-        <RaisedButton
-          backgroundColor={grey50}
-          icon={<EditIcon />}
+        <Button
+          variant="contained"
           onClick={this.showEditMilestoneDialog}
           style={styles.edit}
-        />
-        <RaisedButton
-          backgroundColor={grey50}
-          icon={<DeleteIcon />}
+        >
+          <Edit />
+        </Button>
+        <Button
+          variant="contained"
           onClick={this.deleteMilestoneHandler}
           style={styles.delete}
-        />
+        >
+          <Delete />
+        </Button>
       </span>
     );
   }

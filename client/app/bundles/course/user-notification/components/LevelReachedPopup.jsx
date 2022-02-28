@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl, intlShape } from 'react-intl';
-import Avatar from 'material-ui/Avatar';
-import FlatButton from 'material-ui/FlatButton';
-import StarIcon from 'material-ui/svg-icons/toggle/star';
-import { deepOrange400, yellow500 } from 'material-ui/styles/colors';
+import { Avatar, Button } from '@material-ui/core';
+import { deepOrange, yellow } from '@material-ui/core/colors';
+import Star from '@material-ui/icons/Star';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import Popup from 'course/user-notification/components/Popup';
 
@@ -25,22 +24,34 @@ const translations = defineMessages({
 });
 
 const styles = {
+  avatar: {
+    backgroundColor: deepOrange[400],
+    color: yellow[500],
+    height: '200px',
+    width: '200px',
+  },
   leaderboardMessage: {
     textAlign: 'center',
     marginTop: 30,
+  },
+  starSvg: {
+    height: '200px',
+    width: '200px',
   },
 };
 
 const LevelReachedPopup = ({ notification, onDismiss, intl }) => {
   const leaderboardButton = notification.leaderboardEnabled ? (
-    <FlatButton
-      primary
-      label={intl.formatMessage(translations.leaderboard)}
+    <Button
+      color="primary"
+      key="leaderboard-button"
       onClick={() => {
         onDismiss();
         window.location.href = `/courses/${getCourseId()}/leaderboard`;
       }}
-    />
+    >
+      {intl.formatMessage(translations.leaderboard)}
+    </Button>
   ) : null;
 
   return (
@@ -51,12 +62,9 @@ const LevelReachedPopup = ({ notification, onDismiss, intl }) => {
       actionButtons={[leaderboardButton]}
       onDismiss={onDismiss}
     >
-      <Avatar
-        size={200}
-        color={yellow500}
-        backgroundColor={deepOrange400}
-        icon={<StarIcon />}
-      />
+      <Avatar style={styles.avatar}>
+        <Star style={styles.starSvg} />
+      </Avatar>
       {notification.leaderboardEnabled && notification.leaderboardPosition ? (
         <p style={styles.leaderboardMessage}>
           {intl.formatMessage(translations.leaderboardMessage, {

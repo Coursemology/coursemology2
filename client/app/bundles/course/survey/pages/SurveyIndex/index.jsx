@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import Subheader from 'material-ui/Subheader';
+import { ListSubheader } from '@material-ui/core';
 import TitleBar from 'lib/components/TitleBar';
 import { fetchSurveys } from 'course/survey/actions/surveys';
 import surveyTranslations from 'course/survey/translations';
@@ -37,9 +37,9 @@ class SurveyIndex extends React.Component {
     }
     if (surveys.length < 1) {
       return (
-        <Subheader>
+        <ListSubheader disableSticky>
           <FormattedMessage {...translations.noSurveys} />
-        </Subheader>
+        </ListSubheader>
       );
     }
     return <SurveysTable {...{ courseId }} />;

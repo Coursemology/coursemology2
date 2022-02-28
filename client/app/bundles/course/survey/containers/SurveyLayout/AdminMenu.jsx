@@ -3,11 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
-import IconButton from 'material-ui/IconButton';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import { getStyles } from 'material-ui/AppBar/AppBar';
+import { IconButton, Menu, MenuItem } from '@material-ui/core';
+import MoreVert from '@material-ui/icons/MoreVert';
 import * as surveyActions from 'course/survey/actions/surveys';
 import { showDeleteConfirmation } from 'course/survey/actions';
 import { formatSurveyFormData } from 'course/survey/utils';
@@ -41,6 +38,27 @@ const translations = defineMessages({
 });
 
 class AdminMenu extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      anchorEl: null,
+    };
+  }
+
+  handleClick = (event) => {
+    // This prevents ghost click.
+    event.preventDefault();
+
+    this.setState({
+      anchorEl: event.currentTarget,
+    });
+  };
+
+  handleClose = () => {
+    this.setState({ anchorEl: null });
+  };
+
   updateSurveyHandler = (data) => {
     const { dispatch, intl, surveyId } = this.props;
     const { updateSurvey } = surveyActions;
@@ -112,30 +130,32 @@ class AdminMenu extends React.Component {
     if (!survey.canUpdate && !survey.canDelete) {
       return null;
     }
-    const styles = getStyles(this.props, this.context);
 
     return (
-      <IconMenu
-        iconStyle={styles.iconButtonIconStyle}
-        iconButtonElement={
-          <IconButton>
-            <MoreVertIcon />
-          </IconButton>
-        }
-      >
-        {survey.canUpdate ? (
-          <MenuItem
-            primaryText={intl.formatMessage(translations.editSurvey)}
-            onClick={this.showEditSurveyForm}
-          />
-        ) : null}
-        {survey.canDelete ? (
-          <MenuItem
-            primaryText={intl.formatMessage(translations.deleteSurvey)}
-            onClick={this.deleteSurveyHandler}
-          />
-        ) : null}
-      </IconMenu>
+      <>
+        <IconButton onClick={this.handleClick}>
+          <MoreVert nativeColor="white" />
+        </IconButton>
+        <Menu
+          id="admin-menu"
+          anchorEl={this.state.anchorEl}
+          disableAutoFocusItem
+          onClick={this.handleClose}
+          onClose={this.handleClose}
+          open={Boolean(this.state.anchorEl)}
+        >
+          {survey.canUpdate && (
+            <MenuItem onClick={this.showEditSurveyForm}>
+              {intl.formatMessage(translations.editSurvey)}
+            </MenuItem>
+          )}
+          {survey.canDelete && (
+            <MenuItem onClick={this.deleteSurveyHandler}>
+              {intl.formatMessage(translations.deleteSurvey)}
+            </MenuItem>
+          )}
+        </Menu>
+      </>
     );
   }
 }

@@ -3,12 +3,10 @@ import { FormattedMessage } from 'react-intl';
 import {
   Table,
   TableBody,
-  TableHeader,
-  TableHeaderColumn,
+  TableCell,
+  TableHead,
   TableRow,
-  TableRowColumn,
-} from 'material-ui/Table';
-
+} from '@material-ui/core';
 import { questionShape } from '../propTypes';
 import translations from '../translations';
 
@@ -19,28 +17,28 @@ function renderTextResponseSolutions(question) {
       <h4>
         <FormattedMessage {...translations.solutions} />
       </h4>
-      <Table selectable={false}>
-        <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+      <Table>
+        <TableHead>
           <TableRow>
-            <TableHeaderColumn>
+            <TableCell>
               <FormattedMessage {...translations.type} />
-            </TableHeaderColumn>
-            <TableHeaderColumn>
+            </TableCell>
+            <TableCell>
               <FormattedMessage {...translations.solution} />
-            </TableHeaderColumn>
-            <TableHeaderColumn>
+            </TableCell>
+            <TableCell>
               <FormattedMessage {...translations.grade} />
-            </TableHeaderColumn>
+            </TableCell>
           </TableRow>
-        </TableHeader>
-        <TableBody displayRowCheckbox={false}>
+        </TableHead>
+        <TableBody>
           {question.solutions.map((solution) => (
             <TableRow key={solution.id}>
-              <TableRowColumn>{solution.solutionType}</TableRowColumn>
-              <TableRowColumn style={{ whiteSpace: 'pre-wrap' }}>
+              <TableCell>{solution.solutionType}</TableCell>
+              <TableCell style={{ whiteSpace: 'pre-wrap' }}>
                 {solution.solution}
-              </TableRowColumn>
-              <TableRowColumn>{solution.grade}</TableRowColumn>
+              </TableCell>
+              <TableCell>{solution.grade}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -56,44 +54,44 @@ function renderTextResponseComprehensionPoint(point) {
       <h5>
         <FormattedMessage {...translations.point} />
       </h5>
-      <Table selectable={false}>
-        <TableBody displayRowCheckbox={false}>
+      <Table>
+        <TableBody>
           <TableRow>
-            <TableRowColumn>
+            <TableCell>
               <FormattedMessage {...translations.pointGrade} />
-            </TableRowColumn>
-            <TableRowColumn>{point.pointGrade}</TableRowColumn>
-            <TableRowColumn />
-            <TableRowColumn />
+            </TableCell>
+            <TableCell>{point.pointGrade}</TableCell>
+            <TableCell />
+            <TableCell />
           </TableRow>
           <TableRow>
-            <TableHeaderColumn>
+            <TableCell>
               <FormattedMessage {...translations.type} />
-            </TableHeaderColumn>
-            <TableHeaderColumn>
+            </TableCell>
+            <TableCell>
               <FormattedMessage {...translations.solution} />
-            </TableHeaderColumn>
-            <TableHeaderColumn>
+            </TableCell>
+            <TableCell>
               <FormattedMessage {...translations.solutionLemma} />
-            </TableHeaderColumn>
-            <TableHeaderColumn>
+            </TableCell>
+            <TableCell>
               <FormattedMessage {...translations.information} />
-            </TableHeaderColumn>
+            </TableCell>
           </TableRow>
           {point.solutions.map((solution) => (
             <TableRow key={solution.id}>
-              <TableRowColumn>
+              <TableCell>
                 <FormattedMessage {...translations[solution.solutionType]} />
-              </TableRowColumn>
-              <TableRowColumn style={{ whiteSpace: 'pre-wrap' }}>
+              </TableCell>
+              <TableCell style={{ whiteSpace: 'pre-wrap' }}>
                 {solution.solution}
-              </TableRowColumn>
-              <TableRowColumn style={{ whiteSpace: 'pre-wrap' }}>
+              </TableCell>
+              <TableCell style={{ whiteSpace: 'pre-wrap' }}>
                 {solution.solutionLemma}
-              </TableRowColumn>
-              <TableRowColumn style={{ whiteSpace: 'pre-wrap' }}>
+              </TableCell>
+              <TableCell style={{ whiteSpace: 'pre-wrap' }}>
                 {solution.information}
-              </TableRowColumn>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -109,21 +107,21 @@ function renderTextResponseComprehensionGroup(group) {
       <h4>
         <FormattedMessage {...translations.group} />
       </h4>
-      <Table selectable={false}>
-        <TableBody displayRowCheckbox={false}>
+      <Table>
+        <TableBody>
           <TableRow>
-            <TableRowColumn>
+            <TableCell>
               <FormattedMessage {...translations.maximumGroupGrade} />
-            </TableRowColumn>
-            <TableRowColumn>{group.maximumGroupGrade}</TableRowColumn>
-            <TableRowColumn />
-            <TableRowColumn />
+            </TableCell>
+            <TableCell>{group.maximumGroupGrade}</TableCell>
+            <TableCell />
+            <TableCell />
           </TableRow>
           {group.points.map((point) => (
             <TableRow key={point.id}>
-              <TableRowColumn colSpan={4}>
+              <TableCell colSpan={4}>
                 {renderTextResponseComprehensionPoint(point)}
-              </TableRowColumn>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

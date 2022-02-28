@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
-import { Card, CardText } from 'material-ui/Card';
-import { yellow100 } from 'material-ui/styles/colors';
+import {
+  Card,
+  CardContent,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+} from '@material-ui/core';
+import { yellow } from '@material-ui/core/colors';
 
 import selectPastAnswers from '../actions/history';
 import translations from '../translations';
@@ -45,12 +50,12 @@ class PastAnswers extends Component {
         return <div dangerouslySetInnerHTML={{ __html: answer.answer_text }} />;
       default:
         return (
-          <Card style={{ backgroundColor: yellow100 }}>
-            <CardText>
+          <Card style={{ backgroundColor: yellow[100] }}>
+            <CardContent>
               <span>
                 {intl.formatMessage(translations.rendererNotImplemented)}
               </span>
-            </CardText>
+            </CardContent>
           </Card>
         );
     }
@@ -77,10 +82,10 @@ class PastAnswers extends Component {
       return selectedAnswerIds.map(this.renderReadOnlyPastAnswer);
     }
     return (
-      <Card style={{ backgroundColor: yellow100 }}>
-        <CardText>
+      <Card style={{ backgroundColor: yellow[100] }}>
+        <CardContent>
           <FormattedMessage {...translations.noAnswerSelected} />
-        </CardText>
+        </CardContent>
       </Card>
     );
   }
@@ -96,30 +101,26 @@ class PastAnswers extends Component {
     const selectedAnswers = selectedAnswerIds.map(
       (answerId) => answers[answerId],
     );
-
     const renderOption = (answerId, index) => {
       const answer = answers[answerId];
       return (
-        <MenuItem
-          key={index}
-          insetChildren
-          checked={selectedAnswerIds.indexOf(answerId) > -1}
-          value={answer}
-          primaryText={formatDateTime(answer.createdAt)}
-        />
+        <MenuItem key={index} value={answer}>
+          {formatDateTime(answer.createdAt)}
+        </MenuItem>
       );
     };
 
     return (
-      <SelectField
-        floatingLabelText={intl.formatMessage(translations.pastAnswers)}
-        multiple
-        value={selectedAnswers}
-        onChange={handleSelectPastAnswers}
-        style={{ float: 'right' }}
-      >
-        {answerIds.map(renderOption)}
-      </SelectField>
+      <FormControl style={{ float: 'right', width: 300 }}>
+        <InputLabel>{intl.formatMessage(translations.pastAnswers)}</InputLabel>
+        <Select
+          multiple
+          value={selectedAnswers || 'test'}
+          onChange={handleSelectPastAnswers}
+        >
+          {answerIds.map(renderOption)}
+        </Select>
+      </FormControl>
     );
   }
 
@@ -169,8 +170,8 @@ function mapStateToProps(state, ownProps) {
 function mapDispatchToProps(dispatch, ownProps) {
   const { question } = ownProps;
   return {
-    handleSelectPastAnswers: (event, index, answers) =>
-      dispatch(selectPastAnswers(question.id, answers)),
+    handleSelectPastAnswers: (event) =>
+      dispatch(selectPastAnswers(question.id, event.target.value)),
   };
 }
 

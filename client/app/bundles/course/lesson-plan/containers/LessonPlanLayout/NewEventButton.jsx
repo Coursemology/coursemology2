@@ -7,7 +7,7 @@ import {
   intlShape,
   FormattedMessage,
 } from 'react-intl';
-import RaisedButton from 'material-ui/RaisedButton';
+import { Button } from '@material-ui/core';
 import { showEventForm, createEvent } from 'course/lesson-plan/actions';
 
 const translations = defineMessages({
@@ -50,11 +50,9 @@ class NewEventButton extends React.Component {
     }
 
     return (
-      <RaisedButton
-        primary
-        label={<FormattedMessage {...translations.newEvent} />}
-        onClick={this.showForm}
-      />
+      <Button variant="contained" color="primary" onClick={this.showForm}>
+        <FormattedMessage {...translations.newEvent} />
+      </Button>
     );
   }
 }

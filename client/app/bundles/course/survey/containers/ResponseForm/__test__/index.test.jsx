@@ -142,17 +142,14 @@ describe('<ResponseForm />', () => {
     let lastMRQOptionCheckbox = multipleResponseAnswer
       .find('OptionsListItem')
       .last()
-      .find('Checkbox');
-    lastMRQOptionCheckbox.props().onCheck(null, true);
+      .find('WithStyles(Checkbox)');
+    lastMRQOptionCheckbox.props().onChange(null, true);
 
     const submitButton = responseForm.find('button').last();
     submitButton.simulate('click');
     updateResponse();
 
-    const textResponseAnswerError = textResponseAnswer
-      .find('div')
-      .last()
-      .text();
+    const textResponseAnswerError = textResponseAnswer.find('p').last().text();
     expect(textResponseAnswerError).toEqual('Required');
 
     const multipleChoiceAnswerError = multipleChoiceAnswer
@@ -205,15 +202,15 @@ describe('<ResponseForm />', () => {
     const firstMCQOptionRadio = multipleChoiceAnswer
       .find('OptionsListItem')
       .first()
-      .find('RadioButton');
+      .find('WithStyles(Radio)');
     firstMCQOptionRadio
       .props()
-      .onCheck(null, firstMCQOptionRadio.props().value);
+      .onChange({ target: { value: firstMCQOptionRadio.props().value } });
     lastMRQOptionCheckbox = multipleResponseAnswer
       .find('OptionsListItem')
       .last()
-      .find('Checkbox');
-    lastMRQOptionCheckbox.props().onCheck(null, false);
+      .find('WithStyles(Checkbox)');
+    lastMRQOptionCheckbox.props().onChange(null, false);
 
     submitButton.simulate('click');
     const submitExpectedPayload = {

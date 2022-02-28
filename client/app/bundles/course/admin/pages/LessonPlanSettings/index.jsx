@@ -3,16 +3,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import Subheader from 'material-ui/Subheader';
-import Toggle from 'material-ui/Toggle';
 import {
+  ListSubheader,
+  Switch,
   Table,
   TableBody,
-  TableHeader,
-  TableHeaderColumn,
+  TableCell,
+  TableHead,
   TableRow,
-  TableRowColumn,
-} from 'material-ui/Table';
+} from '@material-ui/core';
 import NotificationPopup from 'lib/containers/NotificationPopup';
 import { updateLessonPlanSettings } from 'course/admin/actions/lesson-plan-items';
 import translations from './translations.intl';
@@ -83,20 +82,22 @@ class LessonPlanSettings extends React.Component {
       <TableRow
         key={setting.component + setting.category_title + setting.tab_title}
       >
-        <TableRowColumn colSpan={2}>{categoryTitle}</TableRowColumn>
-        <TableRowColumn colSpan={3}>{tabTitle}</TableRowColumn>
-        <TableRowColumn>
-          <Toggle
-            toggled={setting.enabled}
-            onToggle={this.handleLessonPlanItemEnabledUpdate(setting)}
+        <TableCell colSpan={2}>{categoryTitle}</TableCell>
+        <TableCell colSpan={3}>{tabTitle}</TableCell>
+        <TableCell>
+          <Switch
+            checked={setting.enabled}
+            color="primary"
+            onChange={this.handleLessonPlanItemEnabledUpdate(setting)}
           />
-        </TableRowColumn>
-        <TableRowColumn>
-          <Toggle
-            toggled={setting.visible}
-            onToggle={this.handleLessonPlanItemVisibleUpdate(setting)}
+        </TableCell>
+        <TableCell>
+          <Switch
+            checked={setting.visible}
+            color="primary"
+            onChange={this.handleLessonPlanItemVisibleUpdate(setting)}
           />
-        </TableRowColumn>
+        </TableCell>
       </TableRow>
     );
   }
@@ -106,19 +107,21 @@ class LessonPlanSettings extends React.Component {
 
     return (
       <TableRow key={setting.component}>
-        <TableRowColumn colSpan={5}>{componentTitle}</TableRowColumn>
-        <TableRowColumn>
-          <Toggle
-            toggled={setting.enabled}
-            onToggle={this.handleLessonPlanItemEnabledUpdate(setting)}
+        <TableCell colSpan={5}>{componentTitle}</TableCell>
+        <TableCell>
+          <Switch
+            checked={setting.enabled}
+            color="primary"
+            onChange={this.handleLessonPlanItemEnabledUpdate(setting)}
           />
-        </TableRowColumn>
-        <TableRowColumn>
-          <Toggle
-            toggled={setting.visible}
-            onToggle={this.handleLessonPlanItemVisibleUpdate(setting)}
+        </TableCell>
+        <TableCell>
+          <Switch
+            checked={setting.visible}
+            color="primary"
+            onChange={this.handleLessonPlanItemVisibleUpdate(setting)}
           />
-        </TableRowColumn>
+        </TableCell>
       </TableRow>
     );
   }
@@ -132,9 +135,9 @@ class LessonPlanSettings extends React.Component {
 
     if (assessmentItemSettings.length < 1) {
       return (
-        <Subheader>
+        <ListSubheader disableSticky>
           <FormattedMessage {...translations.noLessonPlanItems} />
-        </Subheader>
+        </ListSubheader>
       );
     }
 
@@ -146,23 +149,23 @@ class LessonPlanSettings extends React.Component {
           />
         </h3>
         <Table>
-          <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+          <TableHead>
             <TableRow>
-              <TableHeaderColumn colSpan={2}>
+              <TableCell colSpan={2}>
                 <FormattedMessage {...translations.assessmentCategory} />
-              </TableHeaderColumn>
-              <TableHeaderColumn colSpan={3}>
+              </TableCell>
+              <TableCell colSpan={3}>
                 <FormattedMessage {...translations.assessmentTab} />
-              </TableHeaderColumn>
-              <TableHeaderColumn>
+              </TableCell>
+              <TableCell>
                 <FormattedMessage {...translations.enabled} />
-              </TableHeaderColumn>
-              <TableHeaderColumn>
+              </TableCell>
+              <TableCell>
                 <FormattedMessage {...translations.visible} />
-              </TableHeaderColumn>
+              </TableCell>
             </TableRow>
-          </TableHeader>
-          <TableBody displayRowCheckbox={false}>
+          </TableHead>
+          <TableBody>
             {assessmentItemSettings.map((item) =>
               this.renderAssessmentSettingRow(item),
             )}
@@ -183,9 +186,9 @@ class LessonPlanSettings extends React.Component {
 
     if (componentItemSettings.length < 1) {
       return (
-        <Subheader>
+        <ListSubheader disableSticky>
           <FormattedMessage {...translations.noLessonPlanItems} />
-        </Subheader>
+        </ListSubheader>
       );
     }
 
@@ -195,20 +198,20 @@ class LessonPlanSettings extends React.Component {
           <FormattedMessage {...translations.lessonPlanComponentItemSettings} />
         </h3>
         <Table>
-          <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+          <TableHead>
             <TableRow>
-              <TableHeaderColumn colSpan={5}>
+              <TableCell colSpan={5}>
                 <FormattedMessage {...translations.component} />
-              </TableHeaderColumn>
-              <TableHeaderColumn>
+              </TableCell>
+              <TableCell>
                 <FormattedMessage {...translations.enabled} />
-              </TableHeaderColumn>
-              <TableHeaderColumn>
+              </TableCell>
+              <TableCell>
                 <FormattedMessage {...translations.visible} />
-              </TableHeaderColumn>
+              </TableCell>
             </TableRow>
-          </TableHeader>
-          <TableBody displayRowCheckbox={false}>
+          </TableHead>
+          <TableBody>
             {componentItemSettings.map((item) =>
               this.renderComponentSettingRow(item),
             )}
