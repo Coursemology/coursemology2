@@ -91,7 +91,7 @@ RSpec.describe Course::AssessmentNotifier, type: :mailer do
         let!(:group_user) { create(:course_group_user, group: group, course_user: course_user) }
 
         it 'sends an email notification' do
-          expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(2)
+          expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
         end
       end
     end

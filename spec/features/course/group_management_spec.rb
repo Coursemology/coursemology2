@@ -6,10 +6,12 @@ RSpec.feature 'Courses: Groups' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let!(:groups) { create_list(:course_group, 3, course: course) }
+    let(:group_category1) { create(:course_group_category, course: course) }
+    let!(:group_category2) { create(:course_group_category, course: course) }
+    let!(:groups) { create_list(:course_group, 3, group_category: group_category1) }
     before { login_as(user, scope: :user) }
 
-    context 'As a Course manager' do
+    context 'As a Course Manager' do
       let(:user) { create(:course_manager, course: course).user }
 
       scenario 'I can view the Group Sidebar item' do
@@ -18,58 +20,87 @@ RSpec.feature 'Courses: Groups' do
         expect(page).to have_selector('li', text: 'course.groups.sidebar_title')
       end
 
-      scenario 'I can view all the groups in course' do
-        visit course_groups_path(course)
+      scenario 'I can view all the group categories in course', js: true do
+        visit course_group_category_path(course, group_category1)
 
-        expect(page).to have_link(nil, href: new_course_group_path(course))
+        expect(page).to have_selector('h1', text: I18n.t('course.group.group_categories.show.header'))
+
+        expect(page).to have_selector('h3', text: group_category1.name)
+        expect(page).to have_link(group_category2.name, href: course_group_category_path(course, group_category2))
+
+        click_link group_category2.name
+
+        expect(page).to have_selector('h3', text: group_category2.name)
+        expect(page).to have_link(group_category1.name, href: course_group_category_path(course, group_category1))
+      end
+
+      scenario 'I can view all the groups under a group category', js: true do
+        visit course_group_category_path(course, group_category1)
 
         groups.each do |group|
-          expect(page).to have_selector('th', text: group.name)
-          expect(page).to have_link(nil, href: edit_course_group_path(course, group))
-          expect(page).to have_link(nil, href: course_group_path(course, group))
+          expect(page).to have_selector('h3', text: group.name)
         end
       end
 
-      let!(:course_users) { create_list(:course_student, 3, course: course) }
-      let(:sample_course_user) { course_users.sample }
-      scenario 'I can create a group' do
-        visit new_course_group_path(course)
+      # scenario 'I can create a group category', js: true do
+      #   visit course_group_category_path(course, group_category1)
+      #   expect(page).to have_text('NEW CATEGORY')
 
-        click_button 'create'
-        expect(page).to have_css('div.has-error')
+      #   click_on 'NEW CATEGORY'
 
-        fill_in 'group_name', with: 'Group name'
+      #   fill_in 'name', with: 'Group Category Name'
+      #   fill_in 'description', with: 'Random description'
 
-        within '#group_course_user_ids' do
-          find("option[value='#{sample_course_user.id}']").select_option
-        end
+      #   click_button 'submit'
 
-        click_button 'create'
-        expect(sample_course_user.groups.count).to eq(1)
-      end
+      #   wait_for_ajax
 
-      let(:group) { create(:course_group, course: course) }
-      scenario 'I cannot set the group title to empty' do
-        visit edit_course_group_path(course, group)
+      #   expect(page).to have_selector('h3', text: 'Group Category Name')
+      #   expect(page).to have_selector('div', text: 'Random description')
+      #   expect(course.reload.group_categories.count).to eq(3)
+      # end
 
-        fill_in 'group_name', with: ''
-        click_button 'update'
-        expect(page).to have_css('div.has-error')
-      end
+      # let!(:course_users) { create_list(:course_student, 3, course: course) }
+      # let(:sample_course_user) { course_users.sample }
 
-      let!(:group_to_delete) { create(:course_group, course: course) }
-      scenario 'I can delete a group' do
-        group_delete_path = course_group_path(course, group_to_delete)
+      # scenario 'I can create a group' do
+      #   visit new_course_group_path(course)
 
-        visit course_groups_path(course)
+      #   click_button 'create'
+      #   expect(page).to have_css('div.has-error')
 
-        expect do
-          find_link(nil, class: 'delete', href: group_delete_path).click
-        end.to change { course.groups.count }.by(-1)
+      #   fill_in 'group_name', with: 'Group name'
 
-        expect(page).to have_selector('div',
-                                      text: I18n.t('course.groups.destroy.success'))
-      end
+      #   within '#group_course_user_ids' do
+      #     find("option[value='#{sample_course_user.id}']").select_option
+      #   end
+
+      #   click_button 'create'
+      #   expect(sample_course_user.groups.count).to eq(1)
+      # end
+
+      # let(:group) { create(:course_group, course: course) }
+      # scenario 'I cannot set the group title to empty' do
+      #   visit edit_course_group_path(course, group)
+
+      #   fill_in 'group_name', with: ''
+      #   click_button 'update'
+      #   expect(page).to have_css('div.has-error')
+      # end
+
+      # let!(:group_to_delete) { create(:course_group, course: course) }
+      # scenario 'I can delete a group' do
+      #   group_delete_path = course_group_path(course, group_to_delete)
+
+      #   visit course_groups_path(course)
+
+      #   expect do
+      #     find_link(nil, class: 'delete', href: group_delete_path).click
+      #   end.to change { course.groups.count }.by(-1)
+
+      #   expect(page).to have_selector('div',
+      #                                 text: I18n.t('course.groups.destroy.success'))
+      # end
     end
 
     context 'As a Group Manager' do
@@ -85,31 +116,31 @@ RSpec.feature 'Courses: Groups' do
         expect(page).to have_selector('li', text: 'course.groups.sidebar_title')
       end
 
-      scenario 'I can edit my group' do
-        visit edit_course_group_path(course, group)
-        new_name = 'New Group'
+      # scenario 'I can edit my group' do
+      #   visit edit_course_group_path(course, group)
+      #   new_name = 'New Group'
 
-        fill_in 'group_name', with: ''
-        click_button 'update'
-        expect(page).to have_css('div.has-error')
+      #   fill_in 'group_name', with: ''
+      #   click_button 'update'
+      #   expect(page).to have_css('div.has-error')
 
-        fill_in 'group_name', with: new_name
-        click_button 'update'
-        expect(page).to have_selector('div', text: I18n.t('course.groups.update.success'))
-        expect(group.reload.name).to eq(new_name)
-      end
+      #   fill_in 'group_name', with: new_name
+      #   click_button 'update'
+      #   expect(page).to have_selector('div', text: I18n.t('course.groups.update.success'))
+      #   expect(group.reload.name).to eq(new_name)
+      # end
 
-      scenario 'I can delete my group' do
-        delete_path = course_group_path(course, group)
+      # scenario 'I can delete my group' do
+      #   delete_path = course_group_path(course, group)
 
-        visit course_groups_path(course)
+      #   visit course_groups_path(course)
 
-        expect do
-          find_link(nil, class: 'delete', href: delete_path).click
-        end.to change { course.groups.count }.by(-1)
+      #   expect do
+      #     find_link(nil, class: 'delete', href: delete_path).click
+      #   end.to change { course.groups.count }.by(-1)
 
-        expect(page).to have_selector('div', text: I18n.t('course.groups.destroy.success'))
-      end
+      #   expect(page).to have_selector('div', text: I18n.t('course.groups.destroy.success'))
+      # end
     end
 
     context 'As a Course Student' do

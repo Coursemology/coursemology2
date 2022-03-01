@@ -1,16 +1,13 @@
 # frozen_string_literal: true
 class Course::Group < ApplicationRecord
-  after_initialize :set_defaults, if: :new_record?
-  before_validation :set_defaults, if: :new_record?
-
   validates :name, length: { maximum: 255 }, presence: true
   validates :creator, presence: true
   validates :updater, presence: true
-  validates :course, presence: true
-  validates :name, uniqueness: { scope: [:course_id], if: -> { course_id? && name_changed? } }
-  validates :course_id, uniqueness: { scope: [:name], if: -> { name? && course_id_changed? } }
+  validates :group_category, presence: true
+  validates :name, uniqueness: { scope: [:group_category_id], if: -> { group_category_id? && name_changed? } }
+  validates :group_category_id, uniqueness: { scope: [:name], if: -> { name? && group_category_id_changed? } }
 
-  belongs_to :course, inverse_of: :groups
+  belongs_to :group_category, inverse_of: :groups
   has_many :group_users, -> { order_by_course_user_name },
            inverse_of: :group, dependent: :destroy, class_name: Course::GroupUser.name,
            foreign_key: :group_id
@@ -78,31 +75,6 @@ class Course::Group < ApplicationRecord
   scope :ordered_by_name, -> { order(name: :asc) }
 
   private
-
-  # Set default values
-  def set_defaults
-    return unless should_create_manager?
-
-    group_users.build(course_user: default_group_manager, role: :manager,
-                      creator: creator, updater: updater)
-  end
-
-  # Checks if the current group has sufficient information to have a manager, but does not
-  # currently exist.
-  #
-  # @return [Boolean]
-  def should_create_manager?
-    course && creator && group_users.manager.count == 0
-  end
-
-  # Returns the default course_user to be a group_manager.
-  # This will be the creator of the group is a course_user in the course, otherwise it
-  # the group_manager will be the course_creator.
-  #
-  # @return [CourseUser]
-  def default_group_manager
-    course.course_users.find_by(user: creator) || course.course_users.find_by(user: course.creator)
-  end
 
   # Validate that the new users are unique.
   #
