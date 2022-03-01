@@ -2,10 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { reduxForm, Field, Form } from 'redux-form';
-import AutoCompleteFilters from 'material-ui/AutoComplete'; // MUI v5
 import renderTextField from 'lib/components/redux-form/TextField';
 import RichTextField from 'lib/components/redux-form/RichTextField';
-import AutoComplete from 'lib/components/redux-form/AutoComplete';
+import renderAutoCompleteField from 'lib/components/redux-form/AutoComplete';
 import Toggle from 'lib/components/redux-form/Toggle';
 import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
 import formTranslations from 'lib/translations/form';
@@ -86,25 +85,21 @@ const EventForm = ({
     <div style={styles.columns}>
       <Field
         fullWidth
-        openOnFocus
+        selectOnFocus
         name="event_type"
-        floatingLabelText={<FormattedMessage {...translations[EVENT_TYPE]} />}
-        component={AutoComplete}
-        dataSource={eventTypes}
-        filter={AutoCompleteFilters.caseInsensitiveFilter}
-        menuProps={{ desktop: true }}
+        label={<FormattedMessage {...translations[EVENT_TYPE]} />}
+        component={renderAutoCompleteField}
+        options={eventTypes}
         style={styles.eventType}
         {...{ disabled }}
       />
       <Field
         fullWidth
-        openOnFocus
+        selectOnFocus
         name="location"
-        floatingLabelText={<FormattedMessage {...translations[LOCATION]} />}
-        component={AutoComplete}
-        dataSource={eventLocations}
-        filter={AutoCompleteFilters.caseInsensitiveFilter}
-        menuProps={{ desktop: true }}
+        label={<FormattedMessage {...translations[LOCATION]} />}
+        component={renderAutoCompleteField}
+        options={eventLocations}
         style={styles.oneColumn}
         {...{ disabled }}
       />
