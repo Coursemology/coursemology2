@@ -16,6 +16,7 @@ import {
   TableHead,
   TableRow,
 } from '@material-ui/core';
+import { red } from '@material-ui/core/colors';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import 'ace-builds/src-noconflict/mode-c_cpp';
@@ -50,10 +51,6 @@ const propTypes = {
   intl: intlShape.isRequired,
 };
 
-const contextTypes = {
-  muiTheme: PropTypes.object.isRequired,
-};
-
 class OnlineEditorCppView extends Component {
   testCaseCreateHandler(type) {
     return (e) => {
@@ -75,7 +72,7 @@ class OnlineEditorCppView extends Component {
           style={{
             fontSize: 12,
             lineHeight: '12px',
-            color: this.context.muiTheme.textField.errorColor,
+            color: red[500],
             marginBottom: '1em',
           }}
         >
@@ -397,6 +394,5 @@ class OnlineEditorCppView extends Component {
 }
 
 OnlineEditorCppView.propTypes = propTypes;
-OnlineEditorCppView.contextTypes = contextTypes;
 
 export default injectIntl(OnlineEditorCppView);
