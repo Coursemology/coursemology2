@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ChipInput from 'material-ui-chip-input';
+import { TextField } from '@material-ui/core';
+import { Autocomplete } from '@material-ui/lab';
 import createComponent from './createComponent';
 
 export const optionShape = PropTypes.shape({
   id: PropTypes.number,
-  text: PropTypes.string,
+  title: PropTypes.string,
 });
 
 const propTypes = {
@@ -14,52 +15,55 @@ const propTypes = {
   value: PropTypes.arrayOf(PropTypes.number),
   options: PropTypes.arrayOf(optionShape),
   error: PropTypes.string,
-  isLoading: PropTypes.bool,
+  disabled: PropTypes.bool,
 };
 
 const styles = {
-  menuStyle: {
+  listboxStyle: {
     maxHeight: '80vh',
     overflowY: 'auto',
   },
 };
 
-const MultiSelect = (props) => {
-  const { label, value, options, error, isLoading, onChange } = props;
-
+const renderMultiSelectField = React.forwardRef((props, ref) => {
+  const { label, value, options, error, disabled, onChange } = props;
   const seletedOptions = value.map((v) => options.find((o) => o.id === v));
 
   return (
-    <ChipInput
-      value={seletedOptions}
-      dataSource={options}
-      dataSourceConfig={{ value: 'id', text: 'title' }}
-      onBeforeRequestAdd={(chip) => {
-        // don't allow adding of arbitrary values by typing
-        if (typeof chip === 'string' || chip instanceof String) {
-          return false;
-        }
-        return true;
-      }}
-      onRequestAdd={(addedChip) => {
-        onChange([...value, addedChip.id]);
-      }}
-      onRequestDelete={(deletedChipId) => {
-        const values = value.filter((v) => v !== deletedChipId);
-        onChange(values);
-      }}
-      floatingLabelText={label}
-      floatingLabelFixed
-      openOnFocus
+    <Autocomplete
+      disabled={disabled}
+      filterSelectedOptions
       fullWidth
-      disabled={isLoading}
-      errorText={error}
-      menuStyle={styles.menuStyle}
+      getOptionLabel={(option) => option.title}
+      getOptionSelected={(option, val) => option.id === val.id}
+      ListboxProps={{ style: styles.listboxStyle }}
+      multiple
+      options={options}
+      onChange={(event, val) => {
+        const selectedOptionIds = val.map((option) => option.id);
+        onChange(selectedOptionIds);
+      }}
+      ref={ref}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          variant="standard"
+          error={!!error}
+          helperText={error}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          label={label}
+        />
+      )}
+      value={seletedOptions}
     />
   );
-};
+});
 
-MultiSelect.propTypes = propTypes;
+renderMultiSelectField.displayName = `MultiSelectField`;
+renderMultiSelectField.name = 'MultiSelectField';
+renderMultiSelectField.propTypes = propTypes;
 
 const mapProps = ({ input, ...props }) => ({
   value: input.value,
@@ -67,4 +71,4 @@ const mapProps = ({ input, ...props }) => ({
   ...props,
 });
 
-export default createComponent(MultiSelect, mapProps);
+export default createComponent(renderMultiSelectField, mapProps);

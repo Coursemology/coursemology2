@@ -18,10 +18,10 @@ import {
   Tabs,
   TextField,
 } from '@material-ui/core';
+import { Autocomplete } from '@material-ui/lab';
 import { red } from '@material-ui/core/colors';
 
 import MaterialSummernote from 'lib/components/MaterialSummernote';
-import ChipInput from 'material-ui-chip-input';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 
 import BuildLog from '../../components/BuildLog';
@@ -166,14 +166,12 @@ class ProgrammingQuestionForm extends React.Component {
     const currentSkillsWithoutId = currentSkills.filter(
       (v) => v.get('id') !== id,
     );
-
     if (currentSkills.size === currentSkillsWithoutId.size) {
       // id is for a new skill to be added
       const newSkill = this.props.data
         .getIn(['question', 'skills'])
         .filter((v) => v.get('id') === id)
         .first();
-
       if (newSkill) {
         this.props.actions.updateSkills(currentSkills.push(newSkill));
       }
@@ -181,6 +179,12 @@ class ProgrammingQuestionForm extends React.Component {
       // id is for a selected skill to be removed
       this.props.actions.updateSkills(currentSkillsWithoutId);
     }
+  };
+
+  onChangeSkills = (ids) => {
+    const allSkills = this.props.data.getIn(['question', 'skills']);
+    const updatedSkills = allSkills.filter((v) => ids.includes(v.get('id')));
+    this.props.actions.updateSkills(updatedSkills);
   };
 
   onSubmit = (e) => {
@@ -351,22 +355,32 @@ class ProgrammingQuestionForm extends React.Component {
   renderMultiSelectSkillsField(label, field, value, options, error) {
     return (
       <div key={field}>
-        <ChipInput
-          id={ProgrammingQuestionForm.getInputId(field)}
-          value={value}
-          dataSource={options}
-          dataSourceConfig={{ value: 'id', text: 'title' }}
-          onRequestAdd={(chip) => {
-            this.onSelectSkills(chip.id);
-          }}
-          onRequestDelete={this.onSelectSkills}
-          floatingLabelText={label}
-          floatingLabelFixed
-          openOnFocus
-          fullWidth
+        <Autocomplete
           disabled={this.props.data.get('is_loading')}
-          errorText={error}
-          menuStyle={{ maxHeight: '80vh', overflowY: 'scroll' }}
+          filterSelectedOptions
+          fullWidth
+          getOptionLabel={(option) => option.title}
+          getOptionSelected={(option, val) => option.id === val.id}
+          ListboxProps={{ style: { maxHeight: '80vh', overflowY: 'scroll' } }}
+          multiple
+          onChange={(event, val) => {
+            const selectedOptionIds = val.map((option) => option.id);
+            this.onChangeSkills(selectedOptionIds);
+          }}
+          options={options}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              variant="standard"
+              error={!!error}
+              helperText={error}
+              label={label}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+          )}
+          value={value}
         />
         <select
           name={`${ProgrammingQuestionForm.getInputName(
