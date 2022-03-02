@@ -6256,13 +6256,12 @@ material-colors@^1.2.1:
   resolved "https://registry.yarnpkg.com/material-colors/-/material-colors-1.2.6.tgz#6d1958871126992ceecc72f4bcc4d8f010865f46"
   integrity sha512-6qE4B9deFBIa9YSpOc9O0Sgc43zTeVYbgDT5veRKSlB2+ZuHNoVVxA1L/ckMUayV9Ay9y7Z/SZCLcGteW9i7bg==
 
-material-ui-chip-input@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/material-ui-chip-input/-/material-ui-chip-input-1.1.0.tgz#46550074da358fcfe075350181c315c9a405dc7d"
-  integrity sha512-95JsxYtzBFUyvzLC0Ae8qo1h8heu9wcSgnGjF/Sy9QQ9pL/ufLVUyjS8uFULW4kEyeNZbZurux3KZKC3FLnoqg==
+material-ui-chip-input@^0.19.0:
+  version "0.19.0"
+  resolved "https://registry.yarnpkg.com/material-ui-chip-input/-/material-ui-chip-input-0.19.0.tgz#f837f93557f4369522d8446e8a4aeb94d36e90fa"
+  integrity sha512-dmyMNnKlmnqUkRRogGYPTaAfheZNR7PycmimqHl8wk/fwIF6jZkvOJrJDBCK7pf/P4K2btTTtkC0TQaZ7JKLew==
   dependencies:
-    classnames "^2.2.5"
-    prop-types "^15.6.1"
+    prop-types "^15.5.7"
 
 material-ui@^0.20.2:
   version "0.20.2"
@@ -7514,9 +7513,9 @@ react-shallow-renderer@^16.13.1:
   version "2.0.0"
   resolved "https://codeload.github.com/zhuhanming/react-summernote/tar.gz/f12a57ecc6b3da02880053fc7e271035e572230d"
   dependencies:
-    codemirror "^5.65.2"
-    prop-types "^15.8.1"
-    summernote "github:zhuhanming/summernote#v1.1"
+    codemirror "^5.26.0"
+    prop-types "^15.5.10"
+    summernote "^0.8.15"
 
 react-test-renderer@^17.0.0, react-test-renderer@^17.0.2:
   version "17.0.2"
