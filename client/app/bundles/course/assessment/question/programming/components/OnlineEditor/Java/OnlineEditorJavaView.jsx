@@ -19,6 +19,7 @@ import {
   TableRow,
   Switch,
 } from '@material-ui/core';
+import { red } from '@material-ui/core/colors';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import 'ace-builds/src-noconflict/mode-java';
@@ -53,10 +54,6 @@ const propTypes = {
   autograded: PropTypes.bool.isRequired,
   hasSubmissions: PropTypes.bool.isRequired,
   intl: intlShape.isRequired,
-};
-
-const contextTypes = {
-  muiTheme: PropTypes.object.isRequired,
 };
 
 class OnlineEditorJavaView extends React.Component {
@@ -342,7 +339,7 @@ class OnlineEditorJavaView extends React.Component {
           style={{
             fontSize: 12,
             lineHeight: '12px',
-            color: this.context.muiTheme.textField.errorColor,
+            color: red[500],
             marginBottom: '1em',
           }}
         >
@@ -601,6 +598,5 @@ class OnlineEditorJavaView extends React.Component {
 }
 
 OnlineEditorJavaView.propTypes = propTypes;
-OnlineEditorJavaView.contextTypes = contextTypes;
 
 export default injectIntl(OnlineEditorJavaView);

@@ -168,8 +168,4 @@ AdminMenu.propTypes = {
   dispatch: PropTypes.func.isRequired,
 };
 
-AdminMenu.contextTypes = {
-  muiTheme: PropTypes.object.isRequired,
-};
-
 export default connect()(injectIntl(AdminMenu));
