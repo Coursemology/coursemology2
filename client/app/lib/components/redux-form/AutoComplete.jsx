@@ -53,11 +53,11 @@ const renderAutoCompleteField = React.forwardRef((props, ref) => {
         ref={ref}
         renderInput={(params) => (
           <TextField
+            {...params}
             InputLabelProps={{
               shrink: true,
             }}
             label={label}
-            {...params}
           />
         )}
         value={value}
