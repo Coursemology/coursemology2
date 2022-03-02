@@ -4,11 +4,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/lib/integration/react';
 import { IntlProvider, addLocaleData } from 'react-intl';
 import { i18nLocale } from 'lib/helpers/server-context';
-import {
-  MuiThemeProvider as V4MuiThemeProvider,
-  createTheme,
-} from '@material-ui/core/styles';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import zh from 'react-intl/locale-data/zh';
 import palette from '../../theme/palette';
@@ -115,9 +111,7 @@ const ProviderWrapper = ({ store, persistor, children }) => {
 
   providers = (
     <IntlProvider locale={i18nLocale} messages={messages}>
-      <V4MuiThemeProvider theme={theme}>
-        <MuiThemeProvider>{providers}</MuiThemeProvider>
-      </V4MuiThemeProvider>
+      <MuiThemeProvider theme={theme}>{providers}</MuiThemeProvider>
     </IntlProvider>
   );
 
