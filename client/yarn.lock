@@ -2987,10 +2987,10 @@ code-point-at@^1.0.0:
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
   integrity sha1-DQcLTQQ6W+ozovGkDi7bPZpMz3c=
 
-codemirror@^5.26.0:
-  version "5.64.0"
-  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.64.0.tgz#182eec65b62178e3cd1de8f9d88ab819cfe5f625"
-  integrity sha512-fqr6CtDQdJ6iNMbD8NX2gH2G876nNDk+TO1rrYkgWnqQdO3O1Xa9tK6q+psqhJJgE5SpbaDcgdfLmukoUVE8pg==
+codemirror@^5.65.2:
+  version "5.65.2"
+  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.65.2.tgz#5799a70cb3d706e10f60e267245e3a75205d3dd9"
+  integrity sha512-SZM4Zq7XEC8Fhroqe3LxbEEX1zUPWH1wMr5zxiBuiUF64iYOUH/JI88v4tBag8MiBS8B8gRv8O1pPXGYXQ4ErA==
 
 collect-v8-coverage@^1.0.0:
   version "1.0.1"
@@ -7158,7 +7158,7 @@ prop-types@^15.5.10, prop-types@^15.5.6, prop-types@^15.5.7, prop-types@^15.6.0,
     object-assign "^4.1.1"
     react-is "^16.8.1"
 
-prop-types@^15.7.2, prop-types@^15.8.0:
+prop-types@^15.7.2, prop-types@^15.8.0, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -7510,13 +7510,13 @@ react-shallow-renderer@^16.13.1:
     object-assign "^4.1.1"
     react-is "^16.12.0 || ^17.0.0"
 
-"react-summernote@github:ekowidianto/react-summernote":
+"react-summernote@github:zhuhanming/react-summernote#v1.1":
   version "2.0.0"
-  resolved "https://codeload.github.com/ekowidianto/react-summernote/tar.gz/a280f9d5ccc23e7ac604b0fb33e175735b3fa23e"
+  resolved "https://codeload.github.com/zhuhanming/react-summernote/tar.gz/f12a57ecc6b3da02880053fc7e271035e572230d"
   dependencies:
-    codemirror "^5.26.0"
-    prop-types "^15.5.10"
-    summernote "^0.8.15"
+    codemirror "^5.65.2"
+    prop-types "^15.8.1"
+    summernote "github:zhuhanming/summernote#v1.1"
 
 react-test-renderer@^17.0.0, react-test-renderer@^17.0.2:
   version "17.0.2"
@@ -8529,10 +8529,9 @@ style-loader@^3.3.1:
   resolved "https://registry.yarnpkg.com/style-loader/-/style-loader-3.3.1.tgz#057dfa6b3d4d7c7064462830f9113ed417d38575"
   integrity sha512-GPcQ+LDJbrcxHORTRes6Jy2sfvK2kS6hpSfI/fXhPt+spVzxF6LJ1dHLN9zIGmVaaP044YKaIatFaufENRiDoQ==
 
-summernote@^0.8.15:
+"summernote@github:zhuhanming/summernote#v1.1":
   version "0.8.20"
-  resolved "https://registry.yarnpkg.com/summernote/-/summernote-0.8.20.tgz#395905f2cec0aceebc712edc019d91b8ef88f7cf"
-  integrity sha512-W9RhjQjsn+b1s9xiJQgJbCiYGJaDAc9CdEqXo+D13WuStG8lCdtKaO5AiNiSSMJsQJN2EfGSwbBQt+SFE2B8Kw==
+  resolved "https://codeload.github.com/zhuhanming/summernote/tar.gz/418f9b2b0f1402556643b78ae5e3e7ebeee245c6"
 
 supports-color@^2.0.0:
   version "2.0.0"

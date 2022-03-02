@@ -200,7 +200,7 @@ class MaterialSummernote extends Component {
                   ['style', ['style']],
                   ['font', ['bold', 'underline', 'inlineCode', 'clear']],
                   ['script', ['superscript', 'subscript']],
-                  ...(this.props.airModeColor ? ['color', ['color']] : []),
+                  ...(this.props.airModeColor ? [['color', ['color']]] : []),
                   ['para', ['ul', 'ol', 'paragraph']],
                   ['table', ['table']],
                   ['insert', ['link', 'picture']],
