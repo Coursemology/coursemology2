@@ -404,6 +404,7 @@ class ProgrammingQuestionForm extends Component {
     return (
       <div key={field}>
         <Autocomplete
+          id={ProgrammingQuestionForm.getInputId(field)}
           disabled={this.props.data.get('is_loading')}
           filterSelectedOptions
           fullWidth
