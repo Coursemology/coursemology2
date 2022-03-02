@@ -76,3 +76,9 @@ table.codehilite {
 .attachment-uploader {
   margin-bottom: 1em;
 }
+
+// Summernote defaults
+.note-editor.note-frame .note-editing-area .note-editable,
+.note-editor .note-editing-area .note-editable {
+  color: #000;
+}

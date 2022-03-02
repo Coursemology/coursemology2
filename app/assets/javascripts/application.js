@@ -21,7 +21,7 @@
 //= require twitter/typeahead
 //= require bootstrap-tokenfield
 //= require simple_form-bootstrap
-//= require summernote/summernote.min
+//= require summernote
 //= require layout
 //= require cocoon
 //= require_tree .
