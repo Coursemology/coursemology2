@@ -6,7 +6,7 @@ exports[`<Toggle /> renders a toggle with an error 1`] = `
 >
   <WithStyles(ForwardRef(FormControlLabel))
     control={
-      <ForwardRef(WithStyles)
+      <WithStyles(ForwardRef(Switch))
         checked={false}
         color="primary"
         onChange={[MockFunction]}
@@ -40,7 +40,7 @@ exports[`<Toggle /> renders a toggled toggle 1`] = `
 >
   <WithStyles(ForwardRef(FormControlLabel))
     control={
-      <ForwardRef(WithStyles)
+      <WithStyles(ForwardRef(Switch))
         checked={true}
         color="primary"
         onChange={[MockFunction]}

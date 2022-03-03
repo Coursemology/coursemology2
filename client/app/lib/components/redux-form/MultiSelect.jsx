@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import { TextField } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
@@ -24,7 +25,7 @@ const styles = {
   },
 };
 
-const renderMultiSelectField = React.forwardRef((props, ref) => {
+const renderMultiSelectField = forwardRef((props, ref) => {
   const { label, value, options, error, disabled, onChange } = props;
   const seletedOptions = value.map((v) => options.find((o) => o.id === v));
 

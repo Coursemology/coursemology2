@@ -105,7 +105,7 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
         component="label"
         disabled={true}
         fullWidth={true}
-        startIcon={<UNDEFINED />}
+        startIcon={<Memo />}
         style={
           Object {
             "verticalAlign": "middle",

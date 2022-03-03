@@ -108,7 +108,8 @@ const responseData = {
 };
 
 describe('<ResponseForm />', () => {
-  xit('validates answers when submitting but not when saving', () => {
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip('validates answers when submitting but not when saving', () => {
     const { flags, response, survey } = responseData;
     const mockEndpoint = jest.fn();
     const onSubmit = (data) => mockEndpoint(buildResponsePayload(data));

@@ -130,7 +130,7 @@ class ConditionList extends Component {
         </TableCell>
         <TableCell colSpan="2" style={styles.alignRight}>
           <IconButton className="add-condition-btn" onClick={this.handleClick}>
-            <Add htmlColor="black"/>
+            <Add htmlColor="black" />
           </IconButton>
           <Menu
             id="condition-menu"
