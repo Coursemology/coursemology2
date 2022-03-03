@@ -7,7 +7,8 @@ import EventFormDialog from 'course/lesson-plan/containers/EventFormDialog';
 import NewEventButton from '../NewEventButton';
 
 describe('<NewEventButton />', () => {
-  xit('allows event to be created via EventFormDialog', () => {
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip('allows event to be created via EventFormDialog', () => {
     const spyCreate = jest.spyOn(CourseAPI.lessonPlan, 'createEvent');
     const store = storeCreator({ flags: { canManageLessonPlan: true } });
     const contextOptions = buildContextOptions(store);

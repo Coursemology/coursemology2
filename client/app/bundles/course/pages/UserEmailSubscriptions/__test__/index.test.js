@@ -31,7 +31,9 @@ describe('<UserEmailSubscriptions />', () => {
       buildContextOptions(store),
     );
 
-    const toggles = userEmailSubscriptions.find('WithStyles(ForwardRef(Switch))');
+    const toggles = userEmailSubscriptions.find(
+      'WithStyles(ForwardRef(Switch))',
+    );
     expect(toggles).toHaveLength(1);
 
     const toggle = toggles.last();
