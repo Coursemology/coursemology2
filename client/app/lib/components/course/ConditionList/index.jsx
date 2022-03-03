@@ -80,7 +80,7 @@ class ConditionList extends Component {
         <TableCell colSpan="3">{condition.description}</TableCell>
         <TableCell colSpan="2" style={styles.alignRight}>
           <IconButton href={condition.edit_url}>
-            <Edit nativeColor="black" />
+            <Edit htmlColor="black" />
           </IconButton>
 
           <IconButton
