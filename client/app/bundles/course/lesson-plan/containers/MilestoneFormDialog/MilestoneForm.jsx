@@ -44,7 +44,7 @@ const MilestoneForm = ({ handleSubmit, onSubmit, disabled }) => (
     />
     <Field
       name="start_at"
-      floatingLabelText={<FormattedMessage {...translations[START_AT]} />}
+      label={<FormattedMessage {...translations[START_AT]} />}
       component={DateTimePicker}
       {...{ disabled }}
     />

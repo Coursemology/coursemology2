@@ -115,7 +115,7 @@ const EventForm = ({
     <div style={styles.columns}>
       <Field
         name="start_at"
-        floatingLabelText={<FormattedMessage {...translations[START_AT]} />}
+        label={<FormattedMessage {...translations[START_AT]} />}
         component={DateTimePicker}
         afterChange={(_, newStartAt) =>
           shiftEndDate(formNames.EVENT, newStartAt, formValues)
@@ -125,7 +125,7 @@ const EventForm = ({
       />
       <Field
         name="end_at"
-        floatingLabelText={<FormattedMessage {...translations[END_AT]} />}
+        label={<FormattedMessage {...translations[END_AT]} />}
         component={DateTimePicker}
         style={styles.oneColumn}
         {...{ disabled }}

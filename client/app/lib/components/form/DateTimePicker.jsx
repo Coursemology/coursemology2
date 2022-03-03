@@ -60,7 +60,7 @@ const styles = {
 
 const propTypes = {
   name: PropTypes.string.isRequired,
-  floatingLabelText: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   value: PropTypes.oneOfType([
     PropTypes.instanceOf(Date),
     PropTypes.instanceOf(moment),
@@ -205,15 +205,8 @@ class DateTimePicker extends PureComponent {
   };
 
   render() {
-    const {
-      intl,
-      floatingLabelText,
-      errorText,
-      name,
-      disabled,
-      style,
-      clearable,
-    } = this.props;
+    const { intl, label, errorText, name, disabled, style, clearable } =
+      this.props;
     let value = this.props.value;
     // Convert string value to Date, which is expected by Date/TimePicker
     if (value && typeof value === 'string') {
@@ -232,7 +225,7 @@ class DateTimePicker extends PureComponent {
             leftArrowIcon={<KeyboardArrowLeft />}
             rightArrowIcon={<KeyboardArrowRight />}
             format="DD-MM-YYYY"
-            label={floatingLabelText}
+            label={label}
             placeholder={intl.formatMessage(translations.datePlaceholder)}
             error={!!errorText || !!this.state.dateError}
             // We want this component's error message to take priority over the parent's
