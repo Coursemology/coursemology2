@@ -44,7 +44,7 @@ const NewCourseForm = (props) => {
       />
       <Field
         name="new_start_at"
-        floatingLabelText={intl.formatMessage(translations.newStartAt)}
+        label={intl.formatMessage(translations.newStartAt)}
         component={DateTimePicker}
         {...{ disabled }}
       />

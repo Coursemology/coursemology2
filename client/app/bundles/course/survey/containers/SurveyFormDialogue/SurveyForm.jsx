@@ -133,7 +133,7 @@ const SurveyForm = ({
     <div style={styles.columns}>
       <Field
         name="start_at"
-        floatingLabelText={intl.formatMessage(translations.opensAt)}
+        label={intl.formatMessage(translations.opensAt)}
         component={DateTimePicker}
         afterChange={(_, newStartAt) =>
           shiftEndDate(formNames.SURVEY, newStartAt, formValues)
@@ -143,7 +143,7 @@ const SurveyForm = ({
       />
       <Field
         name="end_at"
-        floatingLabelText={intl.formatMessage(translations.expiresAt)}
+        label={intl.formatMessage(translations.expiresAt)}
         component={DateTimePicker}
         style={styles.oneColumn}
         {...{ disabled }}

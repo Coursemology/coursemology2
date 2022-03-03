@@ -189,7 +189,7 @@ class Duplication extends Component {
           disabled
           name="start_at"
           value={sourceCourse.start_at}
-          floatingLabelText={intl.formatMessage(translations.startAt)}
+          label={intl.formatMessage(translations.startAt)}
         />
       </>
     );

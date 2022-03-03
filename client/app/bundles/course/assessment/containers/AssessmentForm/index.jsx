@@ -337,7 +337,7 @@ class AssessmentForm extends Component {
             name="end_at"
             component={DateTimePicker}
             clearable
-            floatingLabelText={<FormattedMessage {...translations.endAt} />}
+            label={<FormattedMessage {...translations.endAt} />}
             style={styles.flexChild}
             disabled={submitting}
           />
@@ -346,9 +346,7 @@ class AssessmentForm extends Component {
               name="bonus_end_at"
               component={DateTimePicker}
               clearable
-              floatingLabelText={
-                <FormattedMessage {...translations.bonusEndAt} />
-              }
+              label={<FormattedMessage {...translations.bonusEndAt} />}
               style={styles.flexChild}
               disabled={submitting}
             />
