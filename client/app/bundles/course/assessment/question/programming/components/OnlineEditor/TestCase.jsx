@@ -72,6 +72,9 @@ class TestCase extends Component {
         error={!!test.getIn(['error', field])}
         fullWidth
         helperText={test.getIn(['error', field]) && placeholder}
+        InputLabelProps={{
+          shrink: true,
+        }}
         multiline
         name={TestCase.getTestInputName(this.props.type, field)}
         onChange={(event) => {

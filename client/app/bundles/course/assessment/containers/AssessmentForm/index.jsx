@@ -24,7 +24,6 @@ const styles = {
   },
   flexChild: {
     flex: 1,
-    marginLeft: 10,
   },
   toggle: {
     marginTop: 16,

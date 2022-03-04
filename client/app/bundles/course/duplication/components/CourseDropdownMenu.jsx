@@ -67,7 +67,7 @@ class CourseDropdownMenu extends PureComponent {
           <Select
             disabled={disabled}
             onChange={onChange}
-            value={selectedCourseId}
+            value={selectedCourseId || ''}
             style={styles.dropDown}
             {...dropDownMenuProps}
           >

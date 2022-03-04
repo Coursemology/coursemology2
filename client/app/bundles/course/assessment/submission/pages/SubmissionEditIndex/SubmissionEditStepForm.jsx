@@ -59,7 +59,7 @@ const styles = {
   },
   contineButton: {
     backgroundColor: green[500],
-    labelColor: 'white',
+    color: 'white',
     marginBottom: 10,
     marginRight: 10,
   },
@@ -177,16 +177,16 @@ class SubmissionEditStepForm extends Component {
 
   renderContinueButton() {
     const { intl } = this.props;
+    const disabled = this.shouldDisableContinueButton();
     if (this.shouldRenderContinueButton()) {
       return (
         <Button
           variant="contained"
-          disabled={this.shouldDisableContinueButton()}
+          disabled={disabled}
           onClick={() => this.handleNext()}
           style={{
             ...styles.formButton,
-            backgroundColor: green[500],
-            color: 'white',
+            ...(!disabled && styles.contineButton),
           }}
         >
           {intl.formatMessage(translations.continue)}

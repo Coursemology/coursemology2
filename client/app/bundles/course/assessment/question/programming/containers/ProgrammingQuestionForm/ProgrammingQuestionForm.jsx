@@ -383,6 +383,9 @@ class ProgrammingQuestionForm extends Component {
           label={(required ? '* ' : '') + label}
           helperText={error}
           id={ProgrammingQuestionForm.getInputId(field)}
+          InputLabelProps={{
+            shrink: true,
+          }}
           name={ProgrammingQuestionForm.getInputName(field)}
           onChange={(event) => {
             this.handleChange(field, event.target.value);
