@@ -168,8 +168,12 @@ GroupCard.propTypes = {
   titleButtons: PropTypes.arrayOf(groupCardTitleButtonShape),
   bottomButtons: PropTypes.arrayOf(groupCardBottomButtonShape),
   className: PropTypes.string,
-  children: PropTypes.oneOfType([PropTypes.array, PropTypes.element])
-    .isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.element,
+    PropTypes.string,
+    PropTypes.object,
+  ]).isRequired,
 };
 
 export default GroupCard;

@@ -80,7 +80,7 @@ class ConditionList extends Component {
         <TableCell colSpan="3">{condition.description}</TableCell>
         <TableCell colSpan="2" style={styles.alignRight}>
           <IconButton href={condition.edit_url}>
-            <Edit htmlColor="black" />
+            <Edit htmlColor="black" style={{ padding: 0 }} />
           </IconButton>
 
           <IconButton
@@ -93,7 +93,7 @@ class ConditionList extends Component {
             style={styles.alignMiddle}
             id={condition.delete_url}
           >
-            <Delete htmlColor="black" />
+            <Delete htmlColor="black" style={{ padding: 0 }} />
           </IconButton>
         </TableCell>
       </TableRow>

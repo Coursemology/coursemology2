@@ -43,6 +43,7 @@ const styles = {
   },
   fields: {
     marginTop: 0,
+    paddingTop: 0,
   },
   panelSummaryText: {
     flexDirection: 'column',
@@ -189,7 +190,7 @@ class QuestionCard extends Component {
             ) : null}
           </div>
         </AccordionSummary>
-        <CardContent style={styles.field}>
+        <CardContent style={styles.fields}>
           {QuestionCard.renderSpecificFields(question)}
         </CardContent>
       </Accordion>

@@ -31,6 +31,10 @@ const styles = {
   button: {
     marginRight: 15,
   },
+  toggleContainer: {
+    paddingTop: 0,
+    paddingBottom: 0,
+  },
 };
 
 class SurveyDetails extends Component {
@@ -79,7 +83,7 @@ class SurveyDetails extends Component {
     }
 
     return (
-      <CardContent>
+      <CardContent style={styles.toggleContainer}>
         <FormControlLabel
           control={
             <Switch
