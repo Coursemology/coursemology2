@@ -78,7 +78,20 @@ table.codehilite {
 }
 
 // Summernote defaults
+.note-editor,
+.note-editor.note-airframe {
+  border: 1px solid #e4e4e4;
+  overflow: visible;
+}
+
+.note-editor.note-airframe .note-editing-area .note-editable,
 .note-editor.note-frame .note-editing-area .note-editable,
 .note-editor .note-editing-area .note-editable {
+  padding: 10px 10px;
   color: #000;
+}
+
+.note-editor .note-popover .popover-content {
+  line-height: 2.5;
+  padding: 5px 0 5px 5px;
 }

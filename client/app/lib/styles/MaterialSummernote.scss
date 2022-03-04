@@ -6,11 +6,35 @@
     box-sizing: border-box;
   }
 
+  .btn {
+    border-radius: 2px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    margin-bottom: 0;
+    padding: 6px 12px;
+    text-align: center;
+    touch-action: manipulation;
+    user-select: none;
+    white-space: nowrap;
+  }
+
   *,
   :active,
   :focus,
   :hover {
     outline: 0 !important;
+  }
+
+  .note-editor .note-toolbar .btn,
+  .note-editor .popover-content .btn,
+  .note-popover .note-toolbar .btn,
+  .note-popover .popover-content .btn {
+    border-radius: 2px !important;
+    box-shadow: none !important;
+    height: 35px;
   }
 
   .note-editor,
@@ -21,7 +45,7 @@
 
   .note-editor .note-editing-area .note-editable,
   .note-editor.note-airframe .note-editing-area .note-editable {
-    padding: 20px 23px;
+    padding: 10px;
   }
 }
 // scss-lint:enable ImportantRule MergeableSelector QualifyingElement ColorVariable
