@@ -31,6 +31,12 @@ textarea.code {
 .note-editor {
   @extend .note-editor, .note-frame;
   @extend .panel;
+
+  .note-popover .popover-content {
+    line-height: 2.5;
+    padding: 5px;
+    padding-right: 0;
+  }
 }
 
 table.codehilite {
@@ -78,20 +84,17 @@ table.codehilite {
 }
 
 // Summernote defaults
+$summernote-border-color: #e4e4e4;
+
 .note-editor,
 .note-editor.note-airframe {
-  border: 1px solid #e4e4e4;
+  border: 1px solid $summernote-border-color;
   overflow: visible;
 }
 
 .note-editor.note-airframe .note-editing-area .note-editable,
 .note-editor.note-frame .note-editing-area .note-editable,
 .note-editor .note-editing-area .note-editable {
-  padding: 10px 10px;
-  color: #000;
-}
-
-.note-editor .note-popover .popover-content {
-  line-height: 2.5;
-  padding: 5px 0 5px 5px;
+  color: black;
+  padding: 10px;
 }
