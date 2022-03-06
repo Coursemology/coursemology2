@@ -85,6 +85,7 @@ table.codehilite {
 
 // Summernote defaults
 $summernote-border-color: #e4e4e4;
+$summernote-font-color: #000000;
 
 .note-editor,
 .note-editor.note-airframe {
@@ -95,6 +96,6 @@ $summernote-border-color: #e4e4e4;
 .note-editor.note-airframe .note-editing-area .note-editable,
 .note-editor.note-frame .note-editing-area .note-editable,
 .note-editor .note-editing-area .note-editable {
-  color: black;
+  color: $summernote-font-color;
   padding: 10px;
 }
