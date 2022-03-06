@@ -213,11 +213,12 @@ gem 'simple_form'
 gem 'simple_form-bootstrap', git: 'https://github.com/raymondtangsc/simple_form-bootstrap'
 # Dynamic nested forms
 gem 'cocoon'
+gem 'momentjs-rails' # Needed for bootstrap3-datetimepicker-rails
 gem 'bootstrap3-datetimepicker-rails'
 gem 'bootstrap-select-rails'
 gem 'bootstrap_tokenfield_rails'
 gem 'twitter-typeahead-rails'
-gem 'summernote-rails'
+gem 'summernote-rails', git: 'https://github.com/noesya/summernote-rails'
 
 # Using CarrierWave for file uploads
 gem 'carrierwave'

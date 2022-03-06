@@ -8,7 +8,6 @@ import {
 } from 'material-ui';
 import { red100, blue100, green100 } from 'material-ui/styles/colors';
 import PropTypes from 'prop-types';
-import React from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import GroupCard from '../../../components/GroupCard';

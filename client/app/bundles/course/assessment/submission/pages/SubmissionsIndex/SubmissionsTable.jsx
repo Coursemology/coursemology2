@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import ReactTooltip from 'react-tooltip';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
@@ -42,7 +42,7 @@ const styles = {
   },
 };
 
-export default class SubmissionsTable extends React.Component {
+export default class SubmissionsTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -62,6 +62,13 @@ export default class SubmissionsTable extends React.Component {
       submissions.some((s) => s.workflowState !== workflowStates.Unstarted)
     );
   };
+
+  canDeleteAll() {
+    const { submissions } = this.props;
+    return submissions.some(
+      (s) => s.workflowState !== workflowStates.Unstarted,
+    );
+  }
 
   canDownloadAnswers(downloadFormat) {
     const { assessment, submissions } = this.props;
@@ -85,91 +92,6 @@ export default class SubmissionsTable extends React.Component {
       (s) =>
         s.workflowState !== workflowStates.Unstarted &&
         s.workflowState !== workflowStates.Attempting,
-    );
-  }
-
-  canDeleteAll() {
-    const { submissions } = this.props;
-    return submissions.some(
-      (s) => s.workflowState !== workflowStates.Unstarted,
-    );
-  }
-
-  renderRowUsers() {
-    const {
-      dispatch,
-      courseId,
-      assessmentId,
-      submissions,
-      assessment,
-      isDownloadingFiles,
-      isDownloadingCsv,
-      isStatisticsDownloading,
-      isUnsubmitting,
-      isDeleting,
-    } = this.props;
-
-    const props = {
-      dispatch,
-      courseId,
-      assessmentId,
-      assessment,
-      isDownloadingFiles,
-      isDownloadingCsv,
-      isStatisticsDownloading,
-      isUnsubmitting,
-      isDeleting,
-    };
-
-    return submissions.map((submission) => (
-      <SubmissionsTableRow
-        key={submission.courseUser.id}
-        submission={submission}
-        {...props}
-      />
-    ));
-  }
-
-  renderRowTooltips = () => {
-    const tooltipIds = [
-      'phantom-user',
-      'unpublished-grades',
-      'access-logs',
-      'unsubmit-button',
-      'delete-button',
-    ];
-    const formattedMessages = [
-      submissionsTranslations.phantom,
-      submissionsTranslations.publishNotice,
-      submissionsTranslations.accessLogs,
-      submissionsTranslations.unsubmitSubmission,
-      submissionsTranslations.deleteSubmission,
-    ];
-    return tooltipIds.map((tooltipId, index) => (
-      <ReactTooltip key={tooltipId} id={tooltipId} effect="solid">
-        <FormattedMessage {...formattedMessages[index]} />
-      </ReactTooltip>
-    ));
-  };
-
-  renderUnsubmitAllConfirmation() {
-    const { handleUnsubmitAll, confirmDialogValue } = this.props;
-    const { unsubmitAllConfirmation } = this.state;
-    return (
-      <ConfirmationDialog
-        open={unsubmitAllConfirmation}
-        onCancel={() => this.setState({ unsubmitAllConfirmation: false })}
-        onConfirm={() => {
-          this.setState({ unsubmitAllConfirmation: false });
-          handleUnsubmitAll();
-        }}
-        message={
-          <FormattedMessage
-            {...translations.unsubmitAllConfirmation}
-            values={{ users: confirmDialogValue }}
-          />
-        }
-      />
     );
   }
 
@@ -331,6 +253,84 @@ export default class SubmissionsTable extends React.Component {
           />
         ) : null}
       </IconMenu>
+    );
+  }
+
+  renderRowTooltips = () => {
+    const tooltipIds = [
+      'phantom-user',
+      'unpublished-grades',
+      'access-logs',
+      'unsubmit-button',
+      'delete-button',
+    ];
+    const formattedMessages = [
+      submissionsTranslations.phantom,
+      submissionsTranslations.publishNotice,
+      submissionsTranslations.accessLogs,
+      submissionsTranslations.unsubmitSubmission,
+      submissionsTranslations.deleteSubmission,
+    ];
+    return tooltipIds.map((tooltipId, index) => (
+      <ReactTooltip key={tooltipId} id={tooltipId} effect="solid">
+        <FormattedMessage {...formattedMessages[index]} />
+      </ReactTooltip>
+    ));
+  };
+
+  renderRowUsers() {
+    const {
+      dispatch,
+      courseId,
+      assessmentId,
+      submissions,
+      assessment,
+      isDownloadingFiles,
+      isDownloadingCsv,
+      isStatisticsDownloading,
+      isUnsubmitting,
+      isDeleting,
+    } = this.props;
+
+    const props = {
+      dispatch,
+      courseId,
+      assessmentId,
+      assessment,
+      isDownloadingFiles,
+      isDownloadingCsv,
+      isStatisticsDownloading,
+      isUnsubmitting,
+      isDeleting,
+    };
+
+    return submissions.map((submission) => (
+      <SubmissionsTableRow
+        key={submission.courseUser.id}
+        submission={submission}
+        {...props}
+      />
+    ));
+  }
+
+  renderUnsubmitAllConfirmation() {
+    const { handleUnsubmitAll, confirmDialogValue } = this.props;
+    const { unsubmitAllConfirmation } = this.state;
+    return (
+      <ConfirmationDialog
+        open={unsubmitAllConfirmation}
+        onCancel={() => this.setState({ unsubmitAllConfirmation: false })}
+        onConfirm={() => {
+          this.setState({ unsubmitAllConfirmation: false });
+          handleUnsubmitAll();
+        }}
+        message={
+          <FormattedMessage
+            {...translations.unsubmitAllConfirmation}
+            values={{ users: confirmDialogValue }}
+          />
+        }
+      />
     );
   }
 

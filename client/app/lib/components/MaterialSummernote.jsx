@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import ReactSummernote from 'react-summernote';
@@ -35,12 +35,11 @@ const contextTypes = {
   muiTheme: PropTypes.object.isRequired,
 };
 
-class MaterialSummernote extends React.Component {
+class MaterialSummernote extends Component {
   constructor(props) {
     super(props);
     this.state = { isFocused: false };
     this.reactSummernote = null;
-    this.inlineCodeButton = this.inlineCodeButton.bind(this);
   }
 
   onChange = (e) => {
@@ -62,23 +61,7 @@ class MaterialSummernote extends React.Component {
     }
   };
 
-  uploadImage = (image, onImageUploaded) => {
-    const formData = new FormData();
-    formData.append('file', image);
-    formData.append('name', image.name);
-
-    axios
-      .post('/attachments', formData)
-      .then((response) => response.data)
-      .then((data) => {
-        if (data.success) {
-          onImageUploaded(data.id);
-        }
-      });
-  };
-
-  /* eslint class-methods-use-this: "off" */
-  inlineCodeButton() {
+  inlineCodeButton = () => {
     const ui = $.summernote.ui;
 
     const button = ui.button({
@@ -108,7 +91,22 @@ class MaterialSummernote extends React.Component {
     });
 
     return button.render();
-  }
+  };
+
+  uploadImage = (image, onImageUploaded) => {
+    const formData = new FormData();
+    formData.append('file', image);
+    formData.append('name', image.name);
+
+    axios
+      .post('/attachments', formData)
+      .then((response) => response.data)
+      .then((data) => {
+        if (data.success) {
+          onImageUploaded(data.id);
+        }
+      });
+  };
 
   render() {
     const {
@@ -202,7 +200,7 @@ class MaterialSummernote extends React.Component {
                   ['style', ['style']],
                   ['font', ['bold', 'underline', 'inlineCode', 'clear']],
                   ['script', ['superscript', 'subscript']],
-                  ...(this.props.airModeColor ? ['color', ['color']] : []),
+                  ...(this.props.airModeColor ? [['color', ['color']]] : []),
                   ['para', ['ul', 'ol', 'paragraph']],
                   ['table', ['table']],
                   ['insert', ['link', 'picture']],

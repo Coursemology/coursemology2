@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Element } from 'react-scroll';
@@ -40,7 +40,7 @@ const styles = {
   },
 };
 
-class LessonPlanGroup extends React.Component {
+class LessonPlanGroup extends Component {
   static renderMilestoneCardTitle(milestone) {
     const { title, description, start_at } = milestone;
 
@@ -125,7 +125,7 @@ LessonPlanGroup.propTypes = {
   group: PropTypes.shape({
     id: PropTypes.string,
     milestone: PropTypes.object,
-    items: PropTypes.arrayOf({}),
+    items: PropTypes.arrayOf(PropTypes.object),
   }).isRequired,
   initiallyExpanded: PropTypes.bool,
 };

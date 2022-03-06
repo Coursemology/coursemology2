@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -22,7 +22,7 @@ const translations = defineMessages({
 const sameDate = (a, b) =>
   (!a && !b) || (a && b && moment(a).isSame(b, 'minute'));
 
-class MilestoneRow extends React.Component {
+class MilestoneRow extends Component {
   updateMilestoneStartAt = (_, newDate) => {
     const { id, title, startAt, dispatch } = this.props;
     if (sameDate(startAt, newDate)) {

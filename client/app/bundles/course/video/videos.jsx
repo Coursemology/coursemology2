@@ -1,4 +1,3 @@
-import React from 'react';
 import { render } from 'react-dom';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 import HeatMap from './submission/containers/Charts/HeatMap';
@@ -6,7 +5,7 @@ import storeCreator from './submission/store';
 import styles from './submission/containers/Statistics.scss';
 import VideoPlayer from './submission/containers/VideoPlayer';
 
-$(document).ready(() => {
+$(() => {
   const mountNode = document.getElementById('video-overall-stats');
 
   if (!mountNode) {

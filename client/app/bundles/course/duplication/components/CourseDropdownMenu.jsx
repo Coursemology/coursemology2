@@ -1,4 +1,4 @@
-import React from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import MenuItem from 'material-ui/MenuItem';
@@ -31,7 +31,7 @@ const translations = defineMessages({
   },
 });
 
-class CourseDropdownMenu extends React.PureComponent {
+class CourseDropdownMenu extends PureComponent {
   renderCourseMenuItem = (course) => {
     const { currentHost } = this.props;
     const title =

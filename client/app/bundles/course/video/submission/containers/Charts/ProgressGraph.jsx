@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
@@ -93,7 +93,7 @@ const defaultProps = {
   onMarkerClick: () => {},
 };
 
-class ProgressGraph extends React.Component {
+class ProgressGraph extends Component {
   constructor(props) {
     super(props);
     this.displayDataCache = {};
@@ -101,38 +101,11 @@ class ProgressGraph extends React.Component {
     this.state = { selectedSessionId: Object.keys(props.sessions)[0] };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.displayDataCache = {};
     if (!nextProps[this.state.selectedSessionId]) {
       this.setState({ selectedSessionId: Object.keys(nextProps.sessions)[0] });
     }
-  }
-
-  processEvents(events, sessionStartTime, sessionEndTime, videoEndTime) {
-    const processedEvents = events.map((event) => {
-      const eventTime = Date.parse(event.eventTime);
-      const x = (eventTime - sessionStartTime.getTime()) / 1000;
-      const y = event.videoTime;
-      const type = event.eventType;
-      return { x, y, type };
-    });
-
-    const endTimeOffset =
-      (sessionEndTime.getTime() - sessionStartTime.getTime()) / 1000;
-
-    return [
-      {
-        x: 0,
-        y: 0,
-        type: this.props.intl.formatMessage(translations.sessionStartLabel),
-      },
-      ...processedEvents,
-      {
-        x: endTimeOffset,
-        y: videoEndTime,
-        type: this.props.intl.formatMessage(translations.sessionEndLabel),
-      },
-    ];
   }
 
   computeData(id) {
@@ -154,6 +127,26 @@ class ProgressGraph extends React.Component {
       videoEnd,
     );
     return this.displayDataCache[id];
+  }
+
+  generateMouseOptions(data) {
+    return {
+      onClick: (_, elements) => {
+        if (elements.length < 1) {
+          return;
+        }
+        const element = elements[0];
+        const { y } = data.datasets[element._datasetIndex].data[element._index];
+
+        this.props.onMarkerClick(y);
+      },
+      hover: {
+        onHover: (event, elements) => {
+          const style = event.target.style;
+          style.cursor = elements.length > 0 ? 'pointer' : 'default';
+        },
+      },
+    };
   }
 
   generateToolTipOptions() {
@@ -189,54 +182,31 @@ class ProgressGraph extends React.Component {
     };
   }
 
-  generateMouseOptions(data) {
-    return {
-      onClick: (_, elements) => {
-        if (elements.length < 1) {
-          return;
-        }
-        const element = elements[0];
-        const { y } = data.datasets[element._datasetIndex].data[element._index];
+  processEvents(events, sessionStartTime, sessionEndTime, videoEndTime) {
+    const processedEvents = events.map((event) => {
+      const eventTime = Date.parse(event.eventTime);
+      const x = (eventTime - sessionStartTime.getTime()) / 1000;
+      const y = event.videoTime;
+      const type = event.eventType;
+      return { x, y, type };
+    });
 
-        this.props.onMarkerClick(y);
+    const endTimeOffset =
+      (sessionEndTime.getTime() - sessionStartTime.getTime()) / 1000;
+
+    return [
+      {
+        x: 0,
+        y: 0,
+        type: this.props.intl.formatMessage(translations.sessionStartLabel),
       },
-      hover: {
-        onHover: (event, elements) => {
-          const style = event.target.style;
-          style.cursor = elements.length > 0 ? 'pointer' : 'default';
-        },
+      ...processedEvents,
+      {
+        x: endTimeOffset,
+        y: videoEndTime,
+        type: this.props.intl.formatMessage(translations.sessionEndLabel),
       },
-    };
-  }
-
-  renderPlot() {
-    const displayData = this.computeData(this.state.selectedSessionId);
-    if (!displayData) {
-      return <Scatter />;
-    }
-
-    const data = {
-      datasets: [
-        {
-          ...graphDataLineOptions,
-          label: new Date(
-            this.props.sessions[this.state.selectedSessionId].sessionStart,
-          ).toLocaleString(),
-          data: displayData,
-        },
-      ],
-    };
-
-    return (
-      <Scatter
-        data={data}
-        options={{
-          ...graphGlobalOptions(this.props.intl, this.props.videoDuration),
-          ...this.generateMouseOptions(data),
-          ...this.generateToolTipOptions(),
-        }}
-      />
-    );
+    ];
   }
 
   renderDropDown() {
@@ -266,6 +236,36 @@ class ProgressGraph extends React.Component {
       >
         {items}
       </SelectField>
+    );
+  }
+
+  renderPlot() {
+    const displayData = this.computeData(this.state.selectedSessionId);
+    if (!displayData) {
+      return <Scatter />;
+    }
+
+    const data = {
+      datasets: [
+        {
+          ...graphDataLineOptions,
+          label: new Date(
+            this.props.sessions[this.state.selectedSessionId].sessionStart,
+          ).toLocaleString(),
+          data: displayData,
+        },
+      ],
+    };
+
+    return (
+      <Scatter
+        data={data}
+        options={{
+          ...graphGlobalOptions(this.props.intl, this.props.videoDuration),
+          ...this.generateMouseOptions(data),
+          ...this.generateToolTipOptions(),
+        }}
+      />
     );
   }
 

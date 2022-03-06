@@ -1,4 +1,3 @@
-import React from 'react';
 import { green50 } from 'material-ui/styles/colors';
 import { RadioButton } from 'material-ui/RadioButton';
 

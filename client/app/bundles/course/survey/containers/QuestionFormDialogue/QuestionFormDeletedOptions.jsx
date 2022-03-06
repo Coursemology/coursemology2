@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Checkbox from 'material-ui/Checkbox';
 import RadioButton from 'material-ui/RadioButton';
@@ -33,7 +33,7 @@ const styles = {
   },
 };
 
-class QuestionFormDeletedOptions extends React.Component {
+class QuestionFormDeletedOptions extends Component {
   renderWidget() {
     const { multipleResponse, multipleChoice } = this.props;
     let widget = null;

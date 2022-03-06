@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import {
   CardHeader,
   RaisedButton,
@@ -49,7 +49,7 @@ const styles = {
   },
 };
 
-export default class TopicCard extends React.Component {
+export default class TopicCard extends Component {
   constructor(props) {
     super(props);
     this.state = {

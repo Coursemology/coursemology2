@@ -1,11 +1,10 @@
-import React from 'react';
 import { render } from 'react-dom';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 import storeCreator from './store';
 import AssessmentEditPage from './pages/AssessmentEdit';
 import { categoryAndTabTitle } from './utils';
 
-$(document).ready(() => {
+$(() => {
   const mountNode = document.getElementById('assessment-edit');
   if (mountNode) {
     const dataAttr = mountNode.getAttribute('data');

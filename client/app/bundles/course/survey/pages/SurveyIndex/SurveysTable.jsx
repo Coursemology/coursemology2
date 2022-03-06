@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
@@ -37,7 +37,7 @@ const styles = {
   },
 };
 
-class SurveysTable extends React.Component {
+class SurveysTable extends Component {
   renderPublishToggle(survey) {
     const { dispatch } = this.props;
     if (!survey.canUpdate) {

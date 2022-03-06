@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
 import {
@@ -16,15 +16,101 @@ import MenuItem from 'material-ui/MenuItem';
 import NewIcon from 'material-ui/svg-icons/content/add';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
+import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import translations from './translations.intl';
 
 const styles = {
   alignRight: {
     textAlign: 'right',
   },
+  alignMiddle: {
+    verticalAlign: 'middle',
+  },
 };
 
-class ConditionList extends React.Component {
+class ConditionList extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      deletionUrl: '',
+      isDeleting: false,
+    };
+  }
+
+  onConfirmDelete() {
+    // TODO: Refactor the below into a ConditionAPI
+    const form = $('<form>', {
+      method: 'POST',
+      action: this.state.deletionUrl,
+    });
+
+    const token = $('<input>', {
+      type: 'hidden',
+      name: 'authenticity_token',
+      value: $.rails.csrfToken(),
+    });
+
+    const method = $('<input>', {
+      name: '_method',
+      type: 'hidden',
+      value: 'DELETE',
+    });
+
+    // This will refresh the page
+    form.append(token, method).appendTo(document.body).submit();
+  }
+
+  renderConditionRows() {
+    return this.props.conditions.map((condition) => (
+      <TableRow key={condition.edit_url}>
+        <TableRowColumn colSpan="1">{condition.type}</TableRowColumn>
+        <TableRowColumn colSpan="3">{condition.description}</TableRowColumn>
+        <TableRowColumn colSpan="2" style={styles.alignRight}>
+          <IconButton href={condition.edit_url}>
+            <EditIcon />
+          </IconButton>
+
+          <IconButton
+            onClick={() =>
+              this.setState({
+                isDeleting: true,
+                deletionUrl: condition.delete_url,
+              })
+            }
+            style={styles.alignMiddle}
+            id={condition.delete_url}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </TableRowColumn>
+      </TableRow>
+    ));
+  }
+
+  renderHeaderRows() {
+    if (this.props.conditions.length > 0) {
+      return (
+        <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+          {this.renderTopHeader()}
+          <TableRow>
+            <TableHeaderColumn colSpan="1">
+              <FormattedMessage {...translations.type} />
+            </TableHeaderColumn>
+            <TableHeaderColumn colSpan="3">
+              <FormattedMessage {...translations.description} />
+            </TableHeaderColumn>
+            <TableHeaderColumn colSpan="2" />
+          </TableRow>
+        </TableHeader>
+      );
+    }
+    return (
+      <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+        {this.renderTopHeader()}
+      </TableHeader>
+    );
+  }
+
   renderTopHeader() {
     return (
       <TableRow>
@@ -53,54 +139,6 @@ class ConditionList extends React.Component {
     );
   }
 
-  renderHeaderRows() {
-    if (this.props.conditions.length > 0) {
-      return (
-        <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-          {this.renderTopHeader()}
-          <TableRow>
-            <TableHeaderColumn colSpan="1">
-              <FormattedMessage {...translations.type} />
-            </TableHeaderColumn>
-            <TableHeaderColumn colSpan="3">
-              <FormattedMessage {...translations.description} />
-            </TableHeaderColumn>
-            <TableHeaderColumn colSpan="2" />
-          </TableRow>
-        </TableHeader>
-      );
-    }
-    return (
-      <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-        {this.renderTopHeader()}
-      </TableHeader>
-    );
-  }
-
-  renderConditionRows() {
-    return this.props.conditions.map((condition) => (
-      <TableRow key={condition.edit_url}>
-        <TableRowColumn colSpan="1">{condition.type}</TableRowColumn>
-        <TableRowColumn colSpan="3">{condition.description}</TableRowColumn>
-        <TableRowColumn colSpan="2" style={styles.alignRight}>
-          <IconButton href={condition.edit_url}>
-            <EditIcon />
-          </IconButton>
-
-          <IconButton
-            href={condition.delete_url}
-            data-method="delete"
-            data-confirm={this.props.intl.formatMessage(
-              translations.deleteConfirm,
-            )}
-          >
-            <DeleteIcon />
-          </IconButton>
-        </TableRowColumn>
-      </TableRow>
-    ));
-  }
-
   render() {
     return (
       <div>
@@ -115,6 +153,13 @@ class ConditionList extends React.Component {
             <FormattedMessage {...translations.empty} />
           </Subheader>
         )}
+        <ConfirmationDialog
+          confirmDelete
+          open={this.state.isDeleting}
+          message={this.props.intl.formatMessage(translations.deleteConfirm)}
+          onCancel={() => this.setState({ isDeleting: false })}
+          onConfirm={() => this.onConfirmDelete()}
+        />
       </div>
     );
   }

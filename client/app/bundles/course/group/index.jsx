@@ -1,4 +1,3 @@
-import React from 'react';
 import { render } from 'react-dom';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 import storeCreator from './store';
@@ -6,7 +5,7 @@ import GroupIndex from './pages/GroupIndex';
 import GroupShow from './pages/GroupShow';
 import GroupNew from './pages/GroupNew';
 
-$(document).ready(() => {
+$(() => {
   const categoryShowMountNode = document.getElementById(
     'course-group-show-component',
   );

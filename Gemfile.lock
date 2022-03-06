@@ -44,6 +44,13 @@ GIT
     rwordnet (2.0.0)
 
 GIT
+  remote: https://github.com/noesya/summernote-rails
+  revision: 6dcff6c2a0e56492dbbcaf0a91ccc5898e6be922
+  specs:
+    summernote-rails (0.8.20.1)
+      railties (>= 3.1)
+
+GIT
   remote: https://github.com/raymondtangsc/rails_utils.git
   revision: 5c8c0caacf08985ae14c5d007529a09d5f284da0
   branch: full-sanitize-flash
@@ -365,7 +372,7 @@ GEM
       rake
     mini_magick (4.11.0)
     mini_mime (1.1.2)
-    mini_portile2 (2.6.1)
+    mini_portile2 (2.8.0)
     minitest (5.15.0)
     momentjs-rails (2.20.1)
       railties (>= 3.1)
@@ -373,8 +380,8 @@ GEM
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
     nio4r (2.5.8)
-    nokogiri (1.12.5)
-      mini_portile2 (~> 2.6.1)
+    nokogiri (1.13.3)
+      mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     orm_adapter (0.5.0)
     parallel (1.21.0)
@@ -580,8 +587,6 @@ GEM
       sprockets (>= 3.0.0)
     ssrf_filter (1.0.7)
     stackprof (0.2.19)
-    summernote-rails (0.8.12.0)
-      railties (>= 3.1)
     temple (0.8.2)
     terminal-table (3.0.2)
       unicode-display_width (>= 1.1.1, < 3)
@@ -691,6 +696,7 @@ DEPENDENCIES
   loofah (>= 2.2.1)
   mimemagic (= 0.3.10)
   mini_magick
+  momentjs-rails
   nokogiri (>= 1.8.1)
   parallel_tests
   pg
@@ -729,7 +735,7 @@ DEPENDENCIES
   spring
   sprockets (< 4.0.0)
   stackprof
-  summernote-rails
+  summernote-rails!
   themes_on_rails (>= 0.3.1)!
   traceroute
   twitter-typeahead-rails
@@ -745,4 +751,4 @@ DEPENDENCIES
   yard
 
 BUNDLED WITH
-   2.2.22
+   2.2.32

@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useMemo } from 'react';
+import { useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { change, Field, Form, formValueSelector, reduxForm } from 'redux-form';
 import { red500 } from 'material-ui/styles/colors';

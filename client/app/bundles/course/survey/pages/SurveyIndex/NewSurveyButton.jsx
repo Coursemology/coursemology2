@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
@@ -38,7 +38,7 @@ const aWeekStartingTomorrow = () => {
   };
 };
 
-class NewSurveyButton extends React.Component {
+class NewSurveyButton extends Component {
   createSurveyHandler = (data) => {
     const { dispatch, intl } = this.props;
 

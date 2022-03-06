@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
@@ -61,18 +61,18 @@ const styles = {
   },
 };
 
-class VisibleSubmissionsIndex extends React.Component {
-  static canPublish(shownSubmissions) {
-    return shownSubmissions.some(
-      (s) => s.workflowState === workflowStates.Graded,
-    );
-  }
-
+class VisibleSubmissionsIndex extends Component {
   static canForceSubmitOrRemind(shownSubmissions) {
     return shownSubmissions.some(
       (s) =>
         s.workflowState === workflowStates.Unstarted ||
         s.workflowState === workflowStates.Attempting,
+    );
+  }
+
+  static canPublish(shownSubmissions) {
+    return shownSubmissions.some(
+      (s) => s.workflowState === workflowStates.Graded,
     );
   }
 
@@ -105,48 +105,32 @@ class VisibleSubmissionsIndex extends React.Component {
     }
   }
 
-  renderHistogram(submissionHistogram) {
-    const { includePhantoms } = this.state;
-    const workflowStatesArray = Object.values(workflowStates);
-
-    const initialCounts = workflowStatesArray.reduce(
-      (counts, w) => ({ ...counts, [w]: 0 }),
-      {},
-    );
-    const submissionStateCounts = submissionHistogram.reduce(
-      (counts, submission) => {
-        if (includePhantoms || !submission.courseUser.phantom) {
-          return {
-            ...counts,
-            [submission.workflowState]: counts[submission.workflowState] + 1,
-          };
-        }
-        return counts;
-      },
-      initialCounts,
-    );
+  renderForceSubmitConfirmation(shownSubmissions, handleForceSubmitParams) {
+    const { dispatch, assessment } = this.props;
+    const { forceSubmitConfirmation } = this.state;
+    const values = {
+      unattempted: shownSubmissions.filter(
+        (s) => s.workflowState === workflowStates.Unstarted,
+      ).length,
+      attempting: shownSubmissions.filter(
+        (s) => s.workflowState === workflowStates.Attempting,
+      ).length,
+      selectedUsers: selectedUserTypeDisplay[handleForceSubmitParams],
+    };
+    const message = assessment.autograded
+      ? translations.forceSubmitConfirmationAutograded
+      : translations.forceSubmitConfirmation;
 
     return (
-      <div style={styles.histogram}>
-        {workflowStatesArray.map((w) => {
-          const count = submissionStateCounts[w];
-          const cellStyle = {
-            ...styles.histogramCells.common,
-            ...styles.histogramCells[w],
-            flex: count,
-            minWidth: count > 0 ? 50 : 0,
-          };
-
-          return (
-            <div key={w} style={cellStyle} data-tip data-for={w}>
-              {count > 0 ? count : null}
-              <ReactTooltip id={w} effect="solid">
-                <FormattedMessage {...translations[w]} />
-              </ReactTooltip>
-            </div>
-          );
-        })}
-      </div>
+      <ConfirmationDialog
+        open={forceSubmitConfirmation}
+        onCancel={() => this.setState({ forceSubmitConfirmation: false })}
+        onConfirm={() => {
+          dispatch(forceSubmitSubmissions(handleForceSubmitParams));
+          this.setState({ forceSubmitConfirmation: false });
+        }}
+        message={<FormattedMessage {...message} values={values} />}
+      />
     );
   }
 
@@ -235,6 +219,114 @@ class VisibleSubmissionsIndex extends React.Component {
           )}
         </CardActions>
       </Card>
+    );
+  }
+
+  renderHistogram(submissionHistogram) {
+    const { includePhantoms } = this.state;
+    const workflowStatesArray = Object.values(workflowStates);
+
+    const initialCounts = workflowStatesArray.reduce(
+      (counts, w) => ({ ...counts, [w]: 0 }),
+      {},
+    );
+    const submissionStateCounts = submissionHistogram.reduce(
+      (counts, submission) => {
+        if (includePhantoms || !submission.courseUser.phantom) {
+          return {
+            ...counts,
+            [submission.workflowState]: counts[submission.workflowState] + 1,
+          };
+        }
+        return counts;
+      },
+      initialCounts,
+    );
+
+    return (
+      <div style={styles.histogram}>
+        {workflowStatesArray.map((w) => {
+          const count = submissionStateCounts[w];
+          const cellStyle = {
+            ...styles.histogramCells.common,
+            ...styles.histogramCells[w],
+            flex: count,
+            minWidth: count > 0 ? 50 : 0,
+          };
+
+          return (
+            <div key={w} style={cellStyle} data-tip data-for={w}>
+              {count > 0 ? count : null}
+              <ReactTooltip id={w} effect="solid">
+                <FormattedMessage {...translations[w]} />
+              </ReactTooltip>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
+  renderPublishConfirmation(shownSubmissions, handlePublishParams) {
+    const { dispatch } = this.props;
+    const { publishConfirmation } = this.state;
+
+    const values = {
+      graded: shownSubmissions.filter(
+        (s) => s.workflowState === workflowStates.Graded,
+      ).length,
+      selectedUsers: selectedUserTypeDisplay[handlePublishParams],
+    };
+
+    return (
+      <ConfirmationDialog
+        open={publishConfirmation}
+        onCancel={() => this.setState({ publishConfirmation: false })}
+        onConfirm={() => {
+          dispatch(publishSubmissions(handlePublishParams));
+          this.setState({ publishConfirmation: false });
+        }}
+        message={
+          <FormattedMessage
+            {...translations.publishConfirmation}
+            values={values}
+          />
+        }
+      />
+    );
+  }
+
+  renderReminderConfirmation(shownSubmissions, handleRemindParams) {
+    const { dispatch } = this.props;
+    const { assessmentId } = this.props.match.params;
+    const { remindConfirmation } = this.state;
+    const values = {
+      unattempted: shownSubmissions.filter(
+        (s) => s.workflowState === workflowStates.Unstarted,
+      ).length,
+      attempting: shownSubmissions.filter(
+        (s) => s.workflowState === workflowStates.Attempting,
+      ).length,
+      selectedUsers: selectedUserTypeDisplay[handleRemindParams],
+    };
+
+    return (
+      <ConfirmationDialog
+        open={remindConfirmation}
+        onCancel={() => this.setState({ remindConfirmation: false })}
+        onConfirm={() => {
+          dispatch(
+            sendAssessmentReminderEmail(assessmentId, handleRemindParams),
+          );
+          this.setState({ remindConfirmation: false });
+        }}
+        message={
+          <FormattedMessage
+            {...translations.sendReminderEmailConfirmation}
+            values={values}
+          />
+        }
+      />
     );
   }
 
@@ -367,98 +459,6 @@ class VisibleSubmissionsIndex extends React.Component {
           />
         </Tab>
       </Tabs>
-    );
-  }
-
-  renderPublishConfirmation(shownSubmissions, handlePublishParams) {
-    const { dispatch } = this.props;
-    const { publishConfirmation } = this.state;
-
-    const values = {
-      graded: shownSubmissions.filter(
-        (s) => s.workflowState === workflowStates.Graded,
-      ).length,
-      selectedUsers: selectedUserTypeDisplay[handlePublishParams],
-    };
-
-    return (
-      <ConfirmationDialog
-        open={publishConfirmation}
-        onCancel={() => this.setState({ publishConfirmation: false })}
-        onConfirm={() => {
-          dispatch(publishSubmissions(handlePublishParams));
-          this.setState({ publishConfirmation: false });
-        }}
-        message={
-          <FormattedMessage
-            {...translations.publishConfirmation}
-            values={values}
-          />
-        }
-      />
-    );
-  }
-
-  renderForceSubmitConfirmation(shownSubmissions, handleForceSubmitParams) {
-    const { dispatch, assessment } = this.props;
-    const { forceSubmitConfirmation } = this.state;
-    const values = {
-      unattempted: shownSubmissions.filter(
-        (s) => s.workflowState === workflowStates.Unstarted,
-      ).length,
-      attempting: shownSubmissions.filter(
-        (s) => s.workflowState === workflowStates.Attempting,
-      ).length,
-      selectedUsers: selectedUserTypeDisplay[handleForceSubmitParams],
-    };
-    const message = assessment.autograded
-      ? translations.forceSubmitConfirmationAutograded
-      : translations.forceSubmitConfirmation;
-
-    return (
-      <ConfirmationDialog
-        open={forceSubmitConfirmation}
-        onCancel={() => this.setState({ forceSubmitConfirmation: false })}
-        onConfirm={() => {
-          dispatch(forceSubmitSubmissions(handleForceSubmitParams));
-          this.setState({ forceSubmitConfirmation: false });
-        }}
-        message={<FormattedMessage {...message} values={values} />}
-      />
-    );
-  }
-
-  renderReminderConfirmation(shownSubmissions, handleRemindParams) {
-    const { dispatch } = this.props;
-    const { assessmentId } = this.props.match.params;
-    const { remindConfirmation } = this.state;
-    const values = {
-      unattempted: shownSubmissions.filter(
-        (s) => s.workflowState === workflowStates.Unstarted,
-      ).length,
-      attempting: shownSubmissions.filter(
-        (s) => s.workflowState === workflowStates.Attempting,
-      ).length,
-      selectedUsers: selectedUserTypeDisplay[handleRemindParams],
-    };
-
-    return (
-      <ConfirmationDialog
-        open={remindConfirmation}
-        onCancel={() => this.setState({ remindConfirmation: false })}
-        onConfirm={() => {
-          dispatch(
-            sendAssessmentReminderEmail(assessmentId, handleRemindParams),
-          );
-          this.setState({ remindConfirmation: false });
-        }}
-        message={
-          <FormattedMessage
-            {...translations.sendReminderEmailConfirmation}
-            values={values}
-          />
-        }
-      />
     );
   }
 

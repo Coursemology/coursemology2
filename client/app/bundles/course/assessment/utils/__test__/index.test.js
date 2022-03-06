@@ -46,8 +46,8 @@ describe('categoryAndTabTitle', () => {
     const title1 = 'Foo';
     const title2 = 'Bar';
 
-    expect(categoryAndTabTitle(title1, title2, true)).toEqual(title1);
-    expect(categoryAndTabTitle(title1, title2, false)).toEqual(
+    expect(categoryAndTabTitle(title1, title2, true)).toBe(title1);
+    expect(categoryAndTabTitle(title1, title2, false)).toBe(
       `${title1} > ${title2}`,
     );
   });

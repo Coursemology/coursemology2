@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
@@ -36,7 +36,7 @@ const styles = {
   },
 };
 
-class ItemsSelectorMenu extends React.Component {
+class ItemsSelectorMenu extends Component {
   renderSidebarItem(panelKey, titleKey, count) {
     const { dispatch, enabledComponents } = this.props;
     if (!enabledComponents.includes(panelKey)) {

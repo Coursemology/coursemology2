@@ -3,7 +3,7 @@ import { IntlProvider, intlShape } from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 import Enzyme from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -16,6 +16,7 @@ const intlProvider = new IntlProvider({ locale: 'en', timeZone }, {});
 const courseId = '1';
 
 const muiTheme = getMuiTheme();
+const intl = intlProvider.getChildContext().intl;
 const buildContextOptions = (store) => ({
   context: { intl, store, muiTheme },
   childContextTypes: {
@@ -28,7 +29,7 @@ const buildContextOptions = (store) => ({
 // Global variables
 global.courseId = courseId;
 global.window = window;
-global.intl = intlProvider.getChildContext().intl;
+global.intl = intl;
 global.intlShape = intlShape;
 global.muiTheme = muiTheme;
 global.$ = jQuery;
@@ -50,8 +51,6 @@ global.sleep = sleep;
 
 // summernote does not work well with jsdom in tests, stub it to normal text field.
 jest.mock('lib/components/redux-form/RichTextField', () => {
-  const TextField = require.requireActual(
-    'lib/components/redux-form/TextField',
-  );
+  const TextField = jest.requireActual('lib/components/redux-form/TextField');
   return TextField;
 });

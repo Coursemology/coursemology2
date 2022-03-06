@@ -1,4 +1,3 @@
-import React from 'react';
 import { mount } from 'enzyme';
 import { MemoryRouter } from 'react-router-dom';
 import store from 'course/assessment/submission/store';
@@ -62,7 +61,7 @@ describe('<ProgrammingFile />', () => {
       buildContextOptions(store),
     );
 
-    expect(programmingFile.find('a').length).toBe(1);
+    expect(programmingFile.find('a')).toHaveLength(1);
   });
 
   it('does not render download link for files with empty content', async () => {
@@ -95,6 +94,6 @@ describe('<ProgrammingFile />', () => {
       buildContextOptions(store),
     );
 
-    expect(programmingFile.find('a').length).toBe(0);
+    expect(programmingFile.find('a')).toHaveLength(0);
   });
 });

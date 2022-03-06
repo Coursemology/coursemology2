@@ -55,8 +55,8 @@ commands:
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-            nvm install v14.16.1
-            nvm alias default 14.16.1
+            nvm install v14.18.2
+            nvm alias default 14.18.2
 
             echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
             echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
@@ -64,9 +64,9 @@ commands:
       # Restore cached Node dependencies
       - restore_cache:
           keys:
-            - v14.16.1-node-{{ checksum "client/yarn.lock" }}
+            - v14.18.2-node-{{ checksum "client/yarn.lock" }}
             # Fallback to using the latest cache if no exact match is found
-            - v14.16.1-node-
+            - v14.18.2-node-
 
       # Update Node dependencies
       - run: cd client && yarn install && cd -
@@ -75,7 +75,7 @@ commands:
       - save_cache:
           paths:
             - ./client/node_modules
-          key: v14.16.1-node-{{ checksum "client/yarn.lock" }}
+          key: v14.18.2-node-{{ checksum "client/yarn.lock" }}
 
   build_client:
     steps:
@@ -136,7 +136,7 @@ jobs:
           command: |
             bundle exec rake db:setup
           environment:
-            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+            DATABASE_URL: 'postgres://ubuntu@localhost:5432/coursemology_test'
 
       # Run tests!
       - run:
@@ -154,7 +154,7 @@ jobs:
               --format progress \
               $TEST_FILES
           environment:
-            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+            DATABASE_URL: 'postgres://ubuntu@localhost:5432/coursemology_test'
 
       # Collect reports
       - store_test_results:
@@ -239,7 +239,7 @@ jobs:
           command: |
             bundle exec rake db:setup
           environment:
-            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+            DATABASE_URL: 'postgres://ubuntu@localhost:5432/coursemology_test'
 
       # Run i18n checks!
       - run:
@@ -249,7 +249,7 @@ jobs:
             bundle exec i18n-tasks missing
             bundle exec rake factory_bot:lint
           environment:
-            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+            DATABASE_URL: 'postgres://ubuntu@localhost:5432/coursemology_test'
 
 workflows:
   version: 2

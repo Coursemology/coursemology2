@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 
@@ -23,8 +23,6 @@ class ReadOnlyEditor extends Component {
     const initialEditorMode =
       props.annotations.length > 0 ? EDITOR_MODE_WIDE : EDITOR_MODE_NARROW;
     this.state = { expanded, editorMode: initialEditorMode };
-
-    this.showCommentsPanel = this.showCommentsPanel.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -56,6 +54,15 @@ class ReadOnlyEditor extends Component {
     }
   }
 
+  setAllCommentStateCollapsed() {
+    const { expanded } = this.state;
+    const newExpanded = expanded.slice(0);
+    newExpanded.forEach((_, index) => {
+      newExpanded[index] = false;
+    });
+    this.setState({ expanded: newExpanded });
+  }
+
   setAllCommentStateExpanded() {
     const { expanded } = this.state;
     const { annotations } = this.props;
@@ -71,12 +78,10 @@ class ReadOnlyEditor extends Component {
     this.setState({ expanded: newExpanded });
   }
 
-  setAllCommentStateCollapsed() {
+  setCollapsedLine(lineNumber) {
     const { expanded } = this.state;
     const newExpanded = expanded.slice(0);
-    newExpanded.forEach((_, index) => {
-      newExpanded[index] = false;
-    });
+    newExpanded[lineNumber - 1] = false;
     this.setState({ expanded: newExpanded });
   }
 
@@ -90,19 +95,14 @@ class ReadOnlyEditor extends Component {
     this.setState({ expanded: newExpanded });
   }
 
-  setCollapsedLine(lineNumber) {
-    const { expanded } = this.state;
-    const newExpanded = expanded.slice(0);
-    newExpanded[lineNumber - 1] = false;
-    this.setState({ expanded: newExpanded });
-  }
-
-  toggleCommentLine(lineNumber) {
-    const { expanded } = this.state;
-    const newExpanded = expanded.slice(0);
-    newExpanded[lineNumber - 1] = !newExpanded[lineNumber - 1];
-    this.setState({ expanded: newExpanded });
-  }
+  showCommentsPanel = () => {
+    this.setAllCommentStateCollapsed();
+    if (this.state.editorMode === EDITOR_MODE_NARROW) {
+      this.setState({ editorMode: EDITOR_MODE_WIDE });
+    } else {
+      this.setState({ editorMode: EDITOR_MODE_NARROW });
+    }
+  };
 
   isAllExpanded() {
     const { expanded } = this.state;
@@ -135,13 +135,21 @@ class ReadOnlyEditor extends Component {
     return false;
   }
 
-  showCommentsPanel() {
-    this.setAllCommentStateCollapsed();
-    if (this.state.editorMode === EDITOR_MODE_NARROW) {
-      this.setState({ editorMode: EDITOR_MODE_WIDE });
-    } else {
-      this.setState({ editorMode: EDITOR_MODE_NARROW });
-    }
+  toggleCommentLine(lineNumber) {
+    const { expanded } = this.state;
+    const newExpanded = expanded.slice(0);
+    newExpanded[lineNumber - 1] = !newExpanded[lineNumber - 1];
+    this.setState({ expanded: newExpanded });
+  }
+
+  renderEditor(editorProps) {
+    const { editorMode } = this.state;
+
+    return editorMode === EDITOR_MODE_NARROW ? (
+      <NarrowEditor {...editorProps} />
+    ) : (
+      <WideEditor {...editorProps} />
+    );
   }
 
   renderExpandAllToggle() {
@@ -181,16 +189,6 @@ class ReadOnlyEditor extends Component {
           this.showCommentsPanel();
         }}
       />
-    );
-  }
-
-  renderEditor(editorProps) {
-    const { editorMode } = this.state;
-
-    return editorMode === EDITOR_MODE_NARROW ? (
-      <NarrowEditor {...editorProps} />
-    ) : (
-      <WideEditor {...editorProps} />
     );
   }
 

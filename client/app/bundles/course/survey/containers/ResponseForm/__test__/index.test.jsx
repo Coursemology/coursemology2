@@ -1,4 +1,3 @@
-import React from 'react';
 import { mount } from 'enzyme';
 import { MemoryRouter } from 'react-router-dom';
 import storeCreator from 'course/survey/store';
@@ -153,14 +152,14 @@ describe('<ResponseForm />', () => {
       .find('div')
       .last()
       .text();
-    expect(textResponseAnswerError).toEqual('Required');
+    expect(textResponseAnswerError).toBe('Required');
 
     const multipleChoiceAnswerError = multipleChoiceAnswer
       .find('renderMultipleChoiceOptions')
       .find('p')
       .first()
       .text();
-    expect(multipleChoiceAnswerError).toEqual(
+    expect(multipleChoiceAnswerError).toBe(
       'Please select at least 1 option(s).',
     );
 
@@ -169,7 +168,7 @@ describe('<ResponseForm />', () => {
       .find('p')
       .first()
       .text();
-    expect(multipleResponseAnswerError).toEqual(
+    expect(multipleResponseAnswerError).toBe(
       'Please select at most 2 option(s).',
     );
 

@@ -1,19 +1,28 @@
 module.exports = {
   parser: 'babel-eslint',
+  plugins: ['jest'],
   extends: [
     'airbnb',
     'eslint:recommended',
     'plugin:react/recommended',
+    'plugin:react/jsx-runtime',
+    'plugin:import/recommended',
     'prettier',
   ],
   settings: {
     'import/resolver': {
-      node: {},
-      webpack: {},
+      alias: {
+        map: [
+          ['lib', './app/lib'],
+          ['api', './app/api'],
+          ['course', './app/bundles/course'],
+          ['testUtils', './app/__test__/utils'],
+        ],
+        extensions: ['.js', '.jsx'],
+      },
     },
     react: {
-      // TODO: Update this to 'detect' once React is upgraded >=16.9
-      version: '16.8.6',
+      version: 'detect',
     },
   },
   rules: {
@@ -34,7 +43,7 @@ module.exports = {
     'jsx-a11y/mouse-events-have-key-events': 'off',
     'jsx-a11y/no-static-element-interactions': 'off',
     'max-len': ['warn', 120],
-    camelcase: ['warn', { properties: 'never' }],
+    camelcase: ['warn', { properties: 'never', allow: ['^UNSAFE_'] }],
     'comma-dangle': ['error', 'always-multiline'],
     'func-names': 'off',
     'no-multi-str': 'off',
@@ -55,4 +64,54 @@ module.exports = {
     File: true,
     FileReader: true,
   },
+  overrides: [
+    {
+      files: [
+        '**/__test__/**/*.js',
+        '**/__test__/**/*.jsx',
+        '**/*.test.js',
+        '**/*.test.jsx',
+        '**/*.spec.js',
+        '**/*.spec.jsx',
+      ],
+      env: {
+        jest: true,
+      },
+      globals: {
+        courseId: true,
+        intl: true,
+        intlShape: true,
+        sleep: true,
+        buildContextOptions: true,
+        localStorage: true,
+      },
+      rules: {
+        'jest/no-disabled-tests': 'error',
+        'jest/no-focused-tests': 'error',
+        'jest/no-alias-methods': 'error',
+        'jest/no-identical-title': 'error',
+        'jest/no-jasmine-globals': 'error',
+        'jest/no-jest-import': 'error',
+        'jest/no-test-prefixes': 'error',
+        'jest/no-done-callback': 'error',
+        'jest/no-test-return-statement': 'error',
+        'jest/prefer-to-be': 'error',
+        'jest/prefer-to-contain': 'error',
+        'jest/prefer-to-have-length': 'error',
+        'jest/prefer-spy-on': 'error',
+        'jest/valid-expect': 'error',
+        'jest/no-deprecated-functions': 'error',
+        'react/no-find-dom-node': 'off',
+        'react/jsx-filename-extension': 'off',
+        'import/no-extraneous-dependencies': 'off',
+        'import/extensions': 'off',
+        'import/no-unresolved': [
+          'error',
+          {
+            ignore: ['utils/'],
+          },
+        ],
+      },
+    },
+  ],
 };

@@ -1,4 +1,3 @@
-import React from 'react';
 import { mount } from 'enzyme';
 import CourseAPI from 'api/course';
 import storeCreator from 'course/survey/store';

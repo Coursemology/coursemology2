@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardHeader, CardText } from 'material-ui';
 import { orange900, orange200 } from 'material-ui/styles/colors';

@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
@@ -101,112 +101,9 @@ const styles = {
   },
 };
 
-class Duplication extends React.Component {
+class Duplication extends Component {
   componentDidMount() {
     this.props.dispatch(fetchObjectsList());
-  }
-
-  renderFromCourseMain() {
-    const {
-      currentHost,
-      currentCourseId,
-      sourceCourse,
-      sourceCourses,
-      isChangingCourse,
-      intl,
-      dispatch,
-    } = this.props;
-
-    return (
-      <>
-        <CourseDropdownMenu
-          dropDownMenuProps={{ className: 'source-course-dropdown' }}
-          currentHost={currentHost}
-          courses={sourceCourses}
-          selectedCourseId={sourceCourse.id}
-          currentCourseId={currentCourseId}
-          prompt={intl.formatMessage(translations.selectSourceCourse)}
-          onChange={(e, index, value) => dispatch(changeSourceCourse(value))}
-          onHome={() => dispatch(changeSourceCourse(currentCourseId))}
-          disabled={isChangingCourse}
-        />
-        <DateTimePicker
-          disabled
-          name="start_at"
-          value={sourceCourse.start_at}
-          floatingLabelText={intl.formatMessage(translations.startAt)}
-        />
-      </>
-    );
-  }
-
-  renderToCourseSidebar() {
-    const { dispatch, modesAllowed } = this.props;
-    const header = (
-      <h3>
-        <FormattedMessage {...translations.toCourse} />
-      </h3>
-    );
-
-    const isSingleValidMode =
-      modesAllowed &&
-      modesAllowed.length === 1 &&
-      duplicationModes[modesAllowed[0]];
-    if (isSingleValidMode) {
-      dispatch(setDuplicationMode(modesAllowed[0]));
-      return header;
-    }
-
-    return (
-      <>
-        {header}
-        {this.renderToCourseModeSelector()}
-      </>
-    );
-  }
-
-  renderToCourseModeSelector() {
-    const { dispatch, duplicationMode } = this.props;
-    return (
-      <RadioButtonGroup
-        name="duplicationMode"
-        style={styles.radioButtonGroup}
-        valueSelected={duplicationMode}
-        onChange={(_, mode) => dispatch(setDuplicationMode(mode))}
-      >
-        <RadioButton
-          value={duplicationModes.COURSE}
-          label={<FormattedMessage {...translations.newCourse} />}
-        />
-        <RadioButton
-          value={duplicationModes.OBJECT}
-          label={<FormattedMessage {...translations.existingCourse} />}
-        />
-      </RadioButtonGroup>
-    );
-  }
-
-  renderItemsSelectorSidebar() {
-    const { duplicationMode, isCourseSelected } = this.props;
-
-    if (duplicationMode === duplicationModes.COURSE) {
-      return (
-        <div style={styles.sidebar}>
-          <DuplicateAllButton />
-        </div>
-      );
-    }
-    if (isCourseSelected) {
-      return (
-        <div>
-          <h3 style={styles.itemsSidebarHeader}>
-            <FormattedMessage {...translations.items} />
-          </h3>
-          <ItemsSelectorMenu />
-        </div>
-      );
-    }
-    return <div />;
   }
 
   renderBody() {
@@ -259,6 +156,109 @@ class Duplication extends React.Component {
           <div />
         )}
       </div>
+    );
+  }
+
+  renderFromCourseMain() {
+    const {
+      currentHost,
+      currentCourseId,
+      sourceCourse,
+      sourceCourses,
+      isChangingCourse,
+      intl,
+      dispatch,
+    } = this.props;
+
+    return (
+      <>
+        <CourseDropdownMenu
+          dropDownMenuProps={{ className: 'source-course-dropdown' }}
+          currentHost={currentHost}
+          courses={sourceCourses}
+          selectedCourseId={sourceCourse.id}
+          currentCourseId={currentCourseId}
+          prompt={intl.formatMessage(translations.selectSourceCourse)}
+          onChange={(e, index, value) => dispatch(changeSourceCourse(value))}
+          onHome={() => dispatch(changeSourceCourse(currentCourseId))}
+          disabled={isChangingCourse}
+        />
+        <DateTimePicker
+          disabled
+          name="start_at"
+          value={sourceCourse.start_at}
+          floatingLabelText={intl.formatMessage(translations.startAt)}
+        />
+      </>
+    );
+  }
+
+  renderItemsSelectorSidebar() {
+    const { duplicationMode, isCourseSelected } = this.props;
+
+    if (duplicationMode === duplicationModes.COURSE) {
+      return (
+        <div style={styles.sidebar}>
+          <DuplicateAllButton />
+        </div>
+      );
+    }
+    if (isCourseSelected) {
+      return (
+        <div>
+          <h3 style={styles.itemsSidebarHeader}>
+            <FormattedMessage {...translations.items} />
+          </h3>
+          <ItemsSelectorMenu />
+        </div>
+      );
+    }
+    return <div />;
+  }
+
+  renderToCourseModeSelector() {
+    const { dispatch, duplicationMode } = this.props;
+    return (
+      <RadioButtonGroup
+        name="duplicationMode"
+        style={styles.radioButtonGroup}
+        valueSelected={duplicationMode}
+        onChange={(_, mode) => dispatch(setDuplicationMode(mode))}
+      >
+        <RadioButton
+          value={duplicationModes.COURSE}
+          label={<FormattedMessage {...translations.newCourse} />}
+        />
+        <RadioButton
+          value={duplicationModes.OBJECT}
+          label={<FormattedMessage {...translations.existingCourse} />}
+        />
+      </RadioButtonGroup>
+    );
+  }
+
+  renderToCourseSidebar() {
+    const { dispatch, modesAllowed } = this.props;
+    const header = (
+      <h3>
+        <FormattedMessage {...translations.toCourse} />
+      </h3>
+    );
+
+    const isSingleValidMode =
+      modesAllowed &&
+      modesAllowed.length === 1 &&
+      duplicationModes[modesAllowed[0]];
+    if (isSingleValidMode) {
+      dispatch(setDuplicationMode(modesAllowed[0]));
+      return header;
+    }
+
+    return (
+      <>
+        {header}
+        {this.renderToCourseModeSelector()}
+      </>
     );
   }
 

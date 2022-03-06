@@ -25,6 +25,9 @@ function loadCurrentModule() {
 }
 
 function loadModules() {
+  if (module.hot) {
+    module.hot.accept();
+  }
   // Initializers
   require('lib/initializers/ace-editor');
   require('lib/initializers/confirm-dialog');

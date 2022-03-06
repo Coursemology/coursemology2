@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { submit } from 'redux-form';
@@ -20,7 +20,7 @@ const styles = {
   },
 };
 
-class EditPage extends React.Component {
+class EditPage extends Component {
   onFormSubmit = (data) => {
     // Remove view_password and session_password field if password is disabled
     const viewPassword = data.password_protected ? data.view_password : null;

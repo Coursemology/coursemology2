@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
@@ -27,7 +27,7 @@ const backLocations = (courseId, surveyId, Page) => {
   }
 };
 
-class SurveyLayout extends React.Component {
+class SurveyLayout extends Component {
   static renderTitleBar(survey, surveyId, showAdminMenu, backLocation) {
     return (
       <TitleBar

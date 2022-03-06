@@ -4,7 +4,7 @@ export const lessonPlanTypesGroups = PropTypes.arrayOf(
   PropTypes.shape({
     id: PropTypes.string,
     milestone: PropTypes.object,
-    items: PropTypes.arrayOf({}),
+    items: PropTypes.arrayOf(PropTypes.object),
   }),
 );
 

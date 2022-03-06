@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -36,7 +36,7 @@ const styles = {
   },
 };
 
-class ResponseShow extends React.Component {
+class ResponseShow extends Component {
   componentDidMount() {
     const {
       dispatch,
@@ -45,40 +45,6 @@ class ResponseShow extends React.Component {
       },
     } = this.props;
     dispatch(fetchResponse(responseId));
-  }
-
-  renderSubmissionInfo() {
-    const { response } = this.props;
-    return (
-      <Table style={styles.submissionInfoTable}>
-        <TableBody displayRowCheckbox={false}>
-          <TableRow selectable={false}>
-            <TableHeaderColumn>Student</TableHeaderColumn>
-            <TableRowColumn>{response.creator_name}</TableRowColumn>
-          </TableRow>
-          <TableRow selectable={false}>
-            <TableHeaderColumn>Submitted At</TableHeaderColumn>
-            <TableRowColumn>
-              {response.submitted_at ? (
-                formatLongDateTime(response.submitted_at)
-              ) : (
-                <FormattedMessage {...translations.notSubmitted} />
-              )}
-            </TableRowColumn>
-          </TableRow>
-          <TableRow selectable={false}>
-            <TableHeaderColumn>Last Updated At</TableHeaderColumn>
-            <TableRowColumn>
-              {response.submitted_at ? (
-                formatLongDateTime(response.updated_at)
-              ) : (
-                <FormattedMessage {...translations.notSubmitted} />
-              )}
-            </TableRowColumn>
-          </TableRow>
-        </TableBody>
-      </Table>
-    );
   }
 
   renderBody() {
@@ -121,6 +87,40 @@ class ResponseShow extends React.Component {
         endAt={survey.end_at}
         submittedAt={response.submitted_at}
       />
+    );
+  }
+
+  renderSubmissionInfo() {
+    const { response } = this.props;
+    return (
+      <Table style={styles.submissionInfoTable}>
+        <TableBody displayRowCheckbox={false}>
+          <TableRow selectable={false}>
+            <TableHeaderColumn>Student</TableHeaderColumn>
+            <TableRowColumn>{response.creator_name}</TableRowColumn>
+          </TableRow>
+          <TableRow selectable={false}>
+            <TableHeaderColumn>Submitted At</TableHeaderColumn>
+            <TableRowColumn>
+              {response.submitted_at ? (
+                formatLongDateTime(response.submitted_at)
+              ) : (
+                <FormattedMessage {...translations.notSubmitted} />
+              )}
+            </TableRowColumn>
+          </TableRow>
+          <TableRow selectable={false}>
+            <TableHeaderColumn>Last Updated At</TableHeaderColumn>
+            <TableRowColumn>
+              {response.submitted_at ? (
+                formatLongDateTime(response.updated_at)
+              ) : (
+                <FormattedMessage {...translations.notSubmitted} />
+              )}
+            </TableRowColumn>
+          </TableRow>
+        </TableBody>
+      </Table>
     );
   }
 

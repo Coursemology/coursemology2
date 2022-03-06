@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import AppBar from 'material-ui/AppBar';
 
@@ -22,7 +21,7 @@ const TitleBar = ({ style, iconElementLeft, ...props }) => (
 
 TitleBar.propTypes = {
   onClick: PropTypes.func,
-  style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  style: PropTypes.object,
   iconElementLeft: PropTypes.node,
 };
 

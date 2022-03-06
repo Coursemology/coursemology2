@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 import RailsConfirmationDialog from 'lib/components/RailsConfirmationDialog';
@@ -123,6 +122,6 @@ function overrideConfirmDialog() {
   };
 }
 
-$(document).ready(() => {
+$(() => {
   overrideConfirmDialog();
 });

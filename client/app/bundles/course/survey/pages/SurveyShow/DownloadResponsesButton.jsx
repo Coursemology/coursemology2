@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -18,19 +17,15 @@ const styles = {
   },
 };
 
-class DownloadResponsesButton extends React.Component {
-  render() {
-    return (
-      <>
-        <RaisedButton
-          label={<FormattedMessage {...translations.download} />}
-          onClick={() => this.props.dispatch(downloadSurvey())}
-          style={styles.button}
-        />
-      </>
-    );
-  }
-}
+const DownloadResponsesButton = ({ dispatch }) => (
+  <>
+    <RaisedButton
+      label={<FormattedMessage {...translations.download} />}
+      onClick={() => dispatch(downloadSurvey())}
+      style={styles.button}
+    />
+  </>
+);
 
 DownloadResponsesButton.propTypes = {
   dispatch: PropTypes.func.isRequired,

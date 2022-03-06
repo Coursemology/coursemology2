@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
@@ -60,14 +60,13 @@ class VisibleProgrammingImportEditor extends Component {
   constructor(props) {
     super(props);
     this.state = { displayFileIndex: 0 };
-    this.handleDeleteFile = this.handleDeleteFile.bind(this);
   }
 
-  handleDeleteFile(fileId) {
+  handleDeleteFile = (fileId) => {
     const { dispatch, answerId, answers } = this.props;
     dispatch(deleteFile(answerId, fileId, answers));
     this.setState({ displayFileIndex: 0 });
-  }
+  };
 
   renderProgrammingHistoryEditor(answer) {
     const { displayFileIndex } = this.state;

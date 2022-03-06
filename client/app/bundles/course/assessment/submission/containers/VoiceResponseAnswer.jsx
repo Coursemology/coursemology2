@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
@@ -13,8 +13,8 @@ import FlatButton from 'material-ui/FlatButton';
 import MicIcon from 'material-ui/svg-icons/av/mic';
 import StopIcon from 'material-ui/svg-icons/av/stop';
 import SingleFileInput from 'lib/components/redux-form/SingleFileInput';
+import sharedConstants from 'lib/constants/sharedConstants';
 import recorderHelper from '../../utils/recorderHelper';
-import sharedConstants from '../../../../../lib/constants/sharedConstants';
 import {
   setRecording,
   setNotRecording,
@@ -100,17 +100,6 @@ class VoiceResponseAnswer extends Component {
     return `voice_response_${question.id}`;
   };
 
-  renderSingleFileInputChildren = (props) => (
-    <div style={styles.singleFileInputChildrenWrapper}>
-      <div style={styles.singleFileInputChildren}>
-        <div>
-          <FormattedMessage {...translations.chooseVoiceFileExplain} />
-        </div>
-        {props.file && props.file.name}
-      </div>
-    </div>
-  );
-
   renderAudio = (field) => {
     const {
       input: { value },
@@ -191,6 +180,17 @@ class VoiceResponseAnswer extends Component {
       </div>
     );
   };
+
+  renderSingleFileInputChildren = (props) => (
+    <div style={styles.singleFileInputChildrenWrapper}>
+      <div style={styles.singleFileInputChildren}>
+        <div>
+          <FormattedMessage {...translations.chooseVoiceFileExplain} />
+        </div>
+        {props.file && props.file.name}
+      </div>
+    </div>
+  );
 
   render() {
     const { question, recording, recordingComponentId, readOnly, answerId } =
