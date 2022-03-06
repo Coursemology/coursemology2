@@ -44,13 +44,6 @@ GIT
     rwordnet (2.0.0)
 
 GIT
-  remote: https://github.com/noesya/summernote-rails
-  revision: 6dcff6c2a0e56492dbbcaf0a91ccc5898e6be922
-  specs:
-    summernote-rails (0.8.20.1)
-      railties (>= 3.1)
-
-GIT
   remote: https://github.com/raymondtangsc/rails_utils.git
   revision: 5c8c0caacf08985ae14c5d007529a09d5f284da0
   branch: full-sanitize-flash
@@ -76,6 +69,13 @@ GIT
   specs:
     themes_on_rails (0.4.0)
       rails (>= 3.2)
+
+GIT
+  remote: https://github.com/zhuhanming/summernote-rails
+  revision: 6dcff6c2a0e56492dbbcaf0a91ccc5898e6be922
+  specs:
+    summernote-rails (0.8.20.1)
+      railties (>= 3.1)
 
 GEM
   remote: https://rubygems.org/
