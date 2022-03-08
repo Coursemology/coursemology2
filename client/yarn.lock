@@ -3727,10 +3727,10 @@ eslint-config-airbnb@^18.2.1:
     object.assign "^4.1.2"
     object.entries "^1.1.2"
 
-eslint-config-prettier@^8.3.0:
-  version "8.4.0"
-  resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-8.4.0.tgz#8e6d17c7436649e98c4c2189868562921ef563de"
-  integrity sha512-CFotdUcMY18nGRo5KGsnNxpznzhkopOcOo0InID+sgQssPrzjvsyKZPvOgymTFeHrFuC3Tzdf2YndhXtULK9Iw==
+eslint-config-prettier@^8.5.0:
+  version "8.5.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-8.5.0.tgz#5a81680ec934beca02c7b1a61cf8ca34b66feab1"
+  integrity sha512-obmWKLUNCnhtQRKc+tmnYuQl0pFU1ibYJQ5BGhTVB08bHe9wC8qUeG7c08dj9XX+AuPj1YSGSQIHl1pnDHZR0Q==
 
 eslint-import-resolver-alias@^1.1.2:
   version "1.1.2"
@@ -7364,10 +7364,10 @@ react-router@^4.3.1:
     prop-types "^15.6.1"
     warning "^4.0.1"
 
-react-scroll@^1.8.4:
-  version "1.8.5"
-  resolved "https://registry.yarnpkg.com/react-scroll/-/react-scroll-1.8.5.tgz#fea09ccffbbab97c3e3e19acd6a35dccd29b258f"
-  integrity sha512-VcYFWDV2yGeuqeVCt3vxWTGWT4yCcefXOgvNZ16hSD0QTFzNNWiyZKWAVEgmz22PTKJlwRkspALaFI5+cr73OQ==
+react-scroll@^1.8.6:
+  version "1.8.6"
+  resolved "https://registry.yarnpkg.com/react-scroll/-/react-scroll-1.8.6.tgz#134a7adc61c0fa0f71b1cfcaa82e6736b6c52549"
+  integrity sha512-VbbvjzLXvCjr2kiiG/lpLFim6mHpkXMdvOXQqwoSnUKyQPNmAo72r46x9C5PTLPSJq/dBd0gwrlZnnxqj5Yz1Q==
   dependencies:
     lodash.throttle "^4.1.1"
     prop-types "^15.7.2"
