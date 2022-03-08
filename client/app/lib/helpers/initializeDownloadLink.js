@@ -36,7 +36,7 @@ function waitForJob(url, $link) {
             window.location.href = response.redirect_url;
           }
           hideSpinner($link);
-        } else if (response.status === 'submitted') {
+        } else if (response.status === 'accepted') {
           waitForJob(url, $link);
         } else if (response.status === 'errored') {
           hideSpinner($link);
