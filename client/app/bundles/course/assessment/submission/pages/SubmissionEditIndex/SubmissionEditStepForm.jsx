@@ -4,13 +4,7 @@ import { reduxForm } from 'redux-form';
 import { Prompt } from 'react-router-dom';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import Hotkeys from 'react-hot-keys';
-import {
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Tooltip,
-} from '@material-ui/core';
+import { Button, Card, CardContent, CardHeader } from '@material-ui/core';
 import {
   CircularProgress,
   Paper,
@@ -19,6 +13,7 @@ import {
   StepButton,
   StepLabel,
   SvgIcon,
+  Tooltip,
 } from '@mui/material';
 import { blue, green, lightBlue, red } from '@mui/material/colors';
 

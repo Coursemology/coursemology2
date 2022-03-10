@@ -9,12 +9,8 @@ import {
   CardContent,
   FormControlLabel,
   Switch,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
 } from '@material-ui/core';
-
+import { Table, TableBody, TableCell, TableRow } from '@mui/material';
 import libTranslations from 'lib/translations';
 import history from 'lib/history';
 import surveyTranslations from 'course/survey/translations';

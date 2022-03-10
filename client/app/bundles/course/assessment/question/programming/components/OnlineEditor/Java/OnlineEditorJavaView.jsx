@@ -11,14 +11,16 @@ import {
   AccordionSummary,
   Fade,
   FormControlLabel,
+  Switch,
+} from '@material-ui/core';
+import {
   Table,
   TableBody,
   TableCell,
   TableFooter,
   TableHead,
   TableRow,
-  Switch,
-} from '@material-ui/core';
+} from '@mui/material';
 import { red } from '@mui/material/colors';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 

@@ -69,13 +69,13 @@ const testExpandLongQuestion = (question) => {
     </MemoryRouter>,
     buildContextOptions(storeCreator({})),
   );
-  expect(resultsQuestion.find('WithStyles(ForwardRef(Table))')).toHaveLength(0);
+  expect(resultsQuestion.find('ForwardRef(Table)')).toHaveLength(0);
   const expandButton = resultsQuestion
     .find('WithStyles(ForwardRef(Button))')
     .first()
     .find('button');
   expandButton.simulate('click');
-  expect(resultsQuestion.find('WithStyles(ForwardRef(Table))')).toHaveLength(1);
+  expect(resultsQuestion.find('ForwardRef(Table)')).toHaveLength(1);
 };
 
 describe('<ResultsQuestion />', () => {
@@ -103,11 +103,7 @@ describe('<ResultsQuestion />', () => {
       buildContextOptions(storeCreator({})),
     );
     const lastOptionCountCell = () =>
-      resultsQuestion
-        .find('WithStyles(ForwardRef(TableRow))')
-        .last()
-        .find('td')
-        .at(3);
+      resultsQuestion.find('ForwardRef(TableRow)').last().find('td').at(3);
     const lastOptionCountBeforeSort = lastOptionCountCell().text();
     expect(lastOptionCountBeforeSort).toBe('1');
     const sortToggle = resultsQuestion

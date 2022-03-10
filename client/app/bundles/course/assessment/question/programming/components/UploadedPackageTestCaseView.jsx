@@ -1,15 +1,14 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
+import { Card, CardHeader } from '@material-ui/core';
 import {
-  Card,
-  CardHeader,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-} from '@material-ui/core';
+} from '@mui/material';
 import ExpandableText from 'lib/components/ExpandableText';
 
 import styles from './UploadedPackageTestCaseView.scss';

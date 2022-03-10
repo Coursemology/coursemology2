@@ -5,17 +5,14 @@ import moment, { formatLongDateTime } from 'lib/moment';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import mirrorCreator from 'mirror-creator';
+import { Card, CardContent, FormControlLabel, Switch } from '@material-ui/core';
 import {
-  Card,
-  CardContent,
-  FormControlLabel,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-  Switch,
-} from '@material-ui/core';
+} from '@mui/material';
 import { red } from '@mui/material/colors';
 import BarChart from 'lib/components/BarChart';
 import { fetchResponses } from 'course/survey/actions/responses';

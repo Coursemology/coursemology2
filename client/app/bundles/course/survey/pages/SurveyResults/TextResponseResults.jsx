@@ -2,15 +2,14 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { Button, CardContent } from '@material-ui/core';
 import {
-  Button,
-  CardContent,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-} from '@material-ui/core';
+} from '@mui/material';
 
 const styles = {
   expandableThreshold: 10,

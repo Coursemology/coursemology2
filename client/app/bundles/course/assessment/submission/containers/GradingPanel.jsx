@@ -2,15 +2,14 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
+import { Card, CardContent } from '@material-ui/core';
 import {
-  Card,
-  CardContent,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-} from '@material-ui/core';
+} from '@mui/material';
 import ReactTooltip from 'react-tooltip';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
