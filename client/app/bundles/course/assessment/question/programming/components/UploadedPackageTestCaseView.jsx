@@ -1,8 +1,9 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
-import { Card, CardHeader } from '@material-ui/core';
 import {
+  Card,
+  CardHeader,
   Table,
   TableBody,
   TableCell,

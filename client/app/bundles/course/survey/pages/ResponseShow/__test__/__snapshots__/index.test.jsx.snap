@@ -2,15 +2,15 @@
 
 exports[`<ResponseShow /> shows form and admin buttons if user has permissions and page is loaded 1`] = `
 <Fragment>
-  <WithStyles(ForwardRef(Card))>
-    <WithStyles(ForwardRef(CardContent))
+  <ForwardRef(Card)>
+    <ForwardRef(CardContent)
       dangerouslySetInnerHTML={
         Object {
           "__html": "Description",
         }
       }
     />
-  </WithStyles(ForwardRef(Card))>
+  </ForwardRef(Card)>
   <ForwardRef(Table)
     style={
       Object {

@@ -2,7 +2,8 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
-import { Button, Card } from '@material-ui/core';
+import { Button } from '@material-ui/core';
+import { Card } from '@mui/material';
 import history from 'lib/history';
 
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */

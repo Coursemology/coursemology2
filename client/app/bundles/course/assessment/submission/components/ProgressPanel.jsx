@@ -1,7 +1,15 @@
 import { Component } from 'react';
 import { injectIntl, intlShape } from 'react-intl';
-import { Card, CardContent, CardHeader } from '@material-ui/core';
-import { Paper, Table, TableBody, TableCell, TableRow } from '@mui/material';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+} from '@mui/material';
 import { blue, green, grey, red, yellow } from '@mui/material/colors';
 import Warning from '@mui/icons-material/Warning';
 

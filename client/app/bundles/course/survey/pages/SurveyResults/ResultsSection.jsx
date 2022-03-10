@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Card, CardContent, CardHeader } from '@material-ui/core';
+import { Card, CardContent, CardHeader } from '@mui/material';
 
 import { sectionShape } from 'course/survey/propTypes';
 import ResultsQuestion from './ResultsQuestion';

@@ -2,8 +2,9 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Button, CardContent } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import {
+  CardContent,
   Table,
   TableBody,
   TableCell,

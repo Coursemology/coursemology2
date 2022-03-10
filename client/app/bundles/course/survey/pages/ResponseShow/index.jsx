@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { formatLongDateTime } from 'lib/moment';
-import { Card, CardContent } from '@material-ui/core';
 import {
+  Card,
+  CardContent,
   ListSubheader,
   Table,
   TableBody,

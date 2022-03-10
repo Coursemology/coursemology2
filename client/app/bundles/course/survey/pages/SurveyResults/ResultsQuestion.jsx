@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Card, CardContent } from '@material-ui/core';
+import { Card, CardContent } from '@mui/material';
 import { FormattedMessage } from 'react-intl';
 import formTranslations from 'lib/translations/form';
 import { questionTypes } from 'course/survey/constants';

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Card, CardHeader, CardContent } from '@material-ui/core';
+import { Card, CardHeader, CardContent } from '@mui/material';
 import { orange } from '@mui/material/colors';
 import { defineMessages, FormattedMessage } from 'react-intl';
 

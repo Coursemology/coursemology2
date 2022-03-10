@@ -1,12 +1,11 @@
+import { Button, IconButton } from '@material-ui/core';
 import {
-  Button,
   Card,
   CardActions,
   CardContent,
   CardHeader,
-  IconButton,
-} from '@material-ui/core';
-import { Tooltip } from '@mui/material';
+  Tooltip,
+} from '@mui/material';
 import PropTypes from 'prop-types';
 
 export const groupCardTitleButtonShape = PropTypes.shape({

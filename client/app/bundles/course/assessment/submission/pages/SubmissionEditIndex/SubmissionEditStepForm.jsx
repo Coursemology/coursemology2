@@ -4,8 +4,11 @@ import { reduxForm } from 'redux-form';
 import { Prompt } from 'react-router-dom';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import Hotkeys from 'react-hot-keys';
-import { Button, Card, CardContent, CardHeader } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import {
+  Card,
+  CardContent,
+  CardHeader,
   CircularProgress,
   Paper,
   Step,
