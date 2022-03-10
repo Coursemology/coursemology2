@@ -11,7 +11,7 @@ import {
   Divider,
   IconButton,
 } from '@material-ui/core';
-import { grey } from '@material-ui/core/colors';
+import { grey } from '@mui/material/colors';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import moment, { longDate } from 'lib/moment';
 import LessonPlanItem from './LessonPlanItem';

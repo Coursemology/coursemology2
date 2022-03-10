@@ -16,7 +16,7 @@ import {
   TableRow,
   Switch,
 } from '@material-ui/core';
-import { red } from '@material-ui/core/colors';
+import { red } from '@mui/material/colors';
 import BarChart from 'lib/components/BarChart';
 import { fetchResponses } from 'course/survey/actions/responses';
 import surveyTranslations from 'course/survey/translations';

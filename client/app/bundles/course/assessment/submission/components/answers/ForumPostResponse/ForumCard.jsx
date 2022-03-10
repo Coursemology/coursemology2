@@ -8,7 +8,7 @@ import {
   Divider,
   Icon,
 } from '@material-ui/core';
-import { cyan } from '@material-ui/core/colors';
+import { cyan } from '@mui/material/colors';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import PropTypes from 'prop-types';
 

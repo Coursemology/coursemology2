@@ -15,7 +15,7 @@ import {
   Tabs,
   Switch,
 } from '@material-ui/core';
-import { blue, green, grey, yellow, red } from '@material-ui/core/colors';
+import { blue, green, grey, yellow, red } from '@mui/material/colors';
 import Group from '@material-ui/icons/Group';
 import Person from '@material-ui/icons/Person';
 import PersonOutline from '@material-ui/icons/PersonOutline';

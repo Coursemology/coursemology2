@@ -7,7 +7,7 @@ import {
   Divider,
   Icon,
 } from '@material-ui/core';
-import { indigo } from '@material-ui/core/colors';
+import { indigo } from '@mui/material/colors';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import PropTypes from 'prop-types';

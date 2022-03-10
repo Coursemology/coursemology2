@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { grey } from '@material-ui/core/colors';
+import { grey } from '@mui/material/colors';
 
 import WideComments from './WideComments';
 import AddCommentIcon from './AddCommentIcon';

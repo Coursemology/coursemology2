@@ -2,7 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Paper } from '@material-ui/core';
-import { grey } from '@material-ui/core/colors';
+import { grey } from '@mui/material/colors';
 
 import { questionGradeShape, questionShape } from '../propTypes';
 import actionTypes from '../constants';

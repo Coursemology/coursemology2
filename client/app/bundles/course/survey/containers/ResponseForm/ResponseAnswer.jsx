@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import { Checkbox, Radio } from '@material-ui/core';
-import { red } from '@material-ui/core/colors';
+import { red } from '@mui/material/colors';
 import formTranslations from 'lib/translations/form';
 import renderTextField from 'lib/components/redux-form/TextField';
 import { questionTypes } from 'course/survey/constants';

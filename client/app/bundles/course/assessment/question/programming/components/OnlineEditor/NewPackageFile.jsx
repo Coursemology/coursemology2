@@ -2,7 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, TableCell, TableRow } from '@material-ui/core';
 import { injectIntl } from 'react-intl';
-import { grey } from '@material-ui/core/colors';
+import { grey } from '@mui/material/colors';
 import styles from './OnlineEditorView.scss';
 
 class NewPackageFile extends Component {

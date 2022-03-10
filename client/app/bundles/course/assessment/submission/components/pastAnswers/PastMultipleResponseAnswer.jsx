@@ -1,5 +1,5 @@
 import { Radio, FormControlLabel } from '@material-ui/core';
-import { green } from '@material-ui/core/colors';
+import { green } from '@mui/material/colors';
 import { answerShape, questionShape } from '../../propTypes';
 
 function MultipleResponse({ question, answer }) {

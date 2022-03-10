@@ -1,4 +1,4 @@
-import * as colors from '@material-ui/core/colors';
+import * as colors from '@mui/material/colors';
 
 import { black, white } from './colors';
 

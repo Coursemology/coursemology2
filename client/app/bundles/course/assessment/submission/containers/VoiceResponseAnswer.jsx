@@ -9,7 +9,7 @@ import {
   FormattedMessage,
 } from 'react-intl';
 import { Button } from '@material-ui/core';
-import { red } from '@material-ui/core/colors';
+import { red } from '@mui/material/colors';
 import Mic from '@material-ui/icons/Mic';
 import Stop from '@material-ui/icons/Stop';
 import SingleFileInput from 'lib/components/redux-form/SingleFileInput';

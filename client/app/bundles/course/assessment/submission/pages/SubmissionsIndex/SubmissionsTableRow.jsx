@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import moment from 'lib/moment';
 import { Icon, IconButton, TableCell, TableRow } from '@material-ui/core';
-import { blue, pink, red } from '@material-ui/core/colors';
+import { blue, pink, red } from '@mui/material/colors';
 import Delete from '@material-ui/icons/Delete';
 import History from '@material-ui/icons/History';
 import RemoveCircle from '@material-ui/icons/RemoveCircle';

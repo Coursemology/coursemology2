@@ -9,7 +9,7 @@ import {
   MenuItem,
   Select,
 } from '@material-ui/core';
-import { grey } from '@material-ui/core/colors';
+import { grey } from '@mui/material/colors';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { memberShape } from '../../../propTypes';
 

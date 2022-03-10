@@ -16,7 +16,7 @@ import {
   TableHead,
   TableRow,
 } from '@material-ui/core';
-import { red } from '@material-ui/core/colors';
+import { red } from '@mui/material/colors';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import 'ace-builds/src-noconflict/mode-c_cpp';

@@ -5,7 +5,7 @@ import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
 import {
   cyan as activeColor,
   grey as inactiveColor,
-} from '@material-ui/core/colors';
+} from '@mui/material/colors';
 import OndemandVideo from '@material-ui/icons/OndemandVideo';
 import Refresh from '@material-ui/icons/Refresh';
 

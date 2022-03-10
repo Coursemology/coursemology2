@@ -2,7 +2,7 @@ import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { IconButton, MenuItem, Select, Tooltip } from '@material-ui/core';
-import { blue } from '@material-ui/core/colors';
+import { blue } from '@mui/material/colors';
 import MyLocation from '@material-ui/icons/MyLocation';
 import { courseListingShape } from 'course/duplication/propTypes';
 import TypeBadge from 'course/duplication/components/TypeBadge';

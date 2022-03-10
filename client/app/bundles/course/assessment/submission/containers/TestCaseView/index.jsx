@@ -14,7 +14,7 @@ import {
   TableHead,
   TableRow,
 } from '@material-ui/core';
-import { green, yellow, red } from '@material-ui/core/colors';
+import { green, yellow, red } from '@mui/material/colors';
 import Check from '@material-ui/icons/Check';
 import Clear from '@material-ui/icons/Clear';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
