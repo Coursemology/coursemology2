@@ -1,4 +1,4 @@
-import { Avatar } from '@material-ui/core';
+import { Avatar } from '@mui/material';
 import InsertDriveFile from '@material-ui/icons/InsertDriveFile';
 import ImagePreview from './ImagePreview';
 

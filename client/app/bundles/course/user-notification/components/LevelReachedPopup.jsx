@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl, intlShape } from 'react-intl';
-import { Avatar, Button } from '@material-ui/core';
+import { Button } from '@material-ui/core';
+import { Avatar } from '@mui/material';
 import { deepOrange, yellow } from '@mui/material/colors';
 import Star from '@material-ui/icons/Star';
 import { getCourseId } from 'lib/helpers/url-helpers';
