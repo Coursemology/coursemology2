@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { FormattedMessage, defineMessages } from 'react-intl';
-import { Button, Divider, List, ListSubheader } from '@material-ui/core';
+import { Button, List, ListSubheader } from '@material-ui/core';
+import { Divider } from '@mui/material';
 import Add from '@material-ui/icons/Add';
 import NotificationBar, {
   notificationShape,

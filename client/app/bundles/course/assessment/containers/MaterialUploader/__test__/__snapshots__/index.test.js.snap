@@ -68,7 +68,7 @@ exports[`<Material /> renders the material 1`] = `
 
 exports[`<MaterialList /> renders the component with materials 1`] = `
 <Fragment>
-  <WithStyles(ForwardRef(Divider)) />
+  <ForwardRef(Divider) />
   <WithStyles(ForwardRef(List))>
     <WithStyles(ForwardRef(ListSubheader))
       disableSticky={true}
@@ -149,7 +149,7 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
       />
     </ReactTooltip>
   </WithStyles(ForwardRef(List))>
-  <WithStyles(ForwardRef(Divider)) />
+  <ForwardRef(Divider) />
   <Memo(NotificationBar)
     autoHideDuration={5000}
   />
