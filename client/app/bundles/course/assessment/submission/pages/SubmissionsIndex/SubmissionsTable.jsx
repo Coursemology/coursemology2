@@ -13,7 +13,7 @@ import {
   TableHead,
   TableRow,
 } from '@material-ui/core';
-import { pink, red } from '@material-ui/core/colors';
+import { pink, red } from '@mui/material/colors';
 import Delete from '@material-ui/icons/Delete';
 import GetApp from '@material-ui/icons/GetApp'; // TODO MUI - Change to download once icons lib is updated
 import MoreVert from '@material-ui/icons/MoreVert';

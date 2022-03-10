@@ -10,7 +10,7 @@ import {
   MenuItem,
   Select,
 } from '@material-ui/core';
-import { yellow } from '@material-ui/core/colors';
+import { yellow } from '@mui/material/colors';
 
 import selectPastAnswers from '../actions/history';
 import translations from '../translations';

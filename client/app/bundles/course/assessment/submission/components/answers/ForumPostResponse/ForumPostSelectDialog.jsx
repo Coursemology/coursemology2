@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogTitle,
 } from '@material-ui/core';
-import { cyan } from '@material-ui/core/colors';
+import { cyan } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 

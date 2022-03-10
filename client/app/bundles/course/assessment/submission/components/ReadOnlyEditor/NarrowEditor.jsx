@@ -1,7 +1,7 @@
 import { useRef, useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Overlay } from 'react-overlays';
-import { grey } from '@material-ui/core/colors';
+import { grey } from '@mui/material/colors';
 
 import AddCommentIcon from './AddCommentIcon';
 import Annotations from '../../containers/Annotations';

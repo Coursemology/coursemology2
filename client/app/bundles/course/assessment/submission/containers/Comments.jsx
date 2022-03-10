@@ -2,7 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { grey } from '@material-ui/core/colors';
+import { grey } from '@mui/material/colors';
 import { postShape, topicShape } from '../propTypes';
 import CommentCard from '../components/CommentCard';
 import CommentField from '../components/CommentField';

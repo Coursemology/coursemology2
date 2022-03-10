@@ -13,7 +13,7 @@ import {
   TableHead,
   TableRow,
 } from '@material-ui/core';
-import { cyan, grey } from '@material-ui/core/colors';
+import { cyan, grey } from '@mui/material/colors';
 
 import Thumbnail from 'lib/components/Thumbnail';
 import { sorts } from 'course/survey/utils';

@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Icon, Tooltip } from '@material-ui/core';
-import { blue } from '@material-ui/core/colors';
+import { blue } from '@mui/material/colors';
 
 const propTypes = {
   activeObject: PropTypes.object,

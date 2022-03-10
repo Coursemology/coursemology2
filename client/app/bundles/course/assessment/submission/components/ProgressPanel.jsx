@@ -10,7 +10,7 @@ import {
   TableCell,
   TableRow,
 } from '@material-ui/core';
-import { blue, green, grey, red, yellow } from '@material-ui/core/colors';
+import { blue, green, grey, red, yellow } from '@mui/material/colors';
 import Warning from '@material-ui/icons/Warning';
 
 import { formatDateTime } from '../utils';

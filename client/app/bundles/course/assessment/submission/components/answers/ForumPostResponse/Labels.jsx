@@ -1,4 +1,4 @@
-import { orange, red } from '@material-ui/core/colors';
+import { orange, red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 

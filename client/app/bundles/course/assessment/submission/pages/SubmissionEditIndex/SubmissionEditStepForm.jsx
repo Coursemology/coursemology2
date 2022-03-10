@@ -18,7 +18,7 @@ import {
   SvgIcon,
   Tooltip,
 } from '@material-ui/core';
-import { blue, green, lightBlue, red } from '@material-ui/core/colors';
+import { blue, green, lightBlue, red } from '@mui/material/colors';
 
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { change, Field, Form, formValueSelector, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { Tab, Tabs } from '@material-ui/core';
-import { red } from '@material-ui/core/colors';
+import { red } from '@mui/material/colors';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
 import ErrorText, { errorProps } from 'lib/components/ErrorText';

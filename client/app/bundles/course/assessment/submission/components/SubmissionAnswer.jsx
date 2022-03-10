@@ -13,7 +13,7 @@ import {
   FormControlLabel,
   Switch,
 } from '@material-ui/core';
-import { yellow } from '@material-ui/core/colors';
+import { yellow } from '@mui/material/colors';
 
 import {
   questionShape,

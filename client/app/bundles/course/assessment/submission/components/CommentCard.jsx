@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardContent,
 } from '@material-ui/core';
-import { grey, orange, red } from '@material-ui/core/colors';
+import { grey, orange, red } from '@mui/material/colors';
 import Delete from '@material-ui/icons/Delete';
 import Edit from '@material-ui/icons/Edit';
 import { defineMessages, FormattedMessage } from 'react-intl';

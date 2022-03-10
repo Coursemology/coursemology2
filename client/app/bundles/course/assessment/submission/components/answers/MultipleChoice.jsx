@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { FormControlLabel, Radio } from '@material-ui/core';
-import { green } from '@material-ui/core/colors';
+import { green } from '@mui/material/colors';
 import { questionShape } from '../../propTypes';
 
 function MultipleChoiceOptions({

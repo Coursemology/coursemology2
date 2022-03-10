@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardContent } from '@material-ui/core';
-import { red } from '@material-ui/core/colors';
+import { red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
 const styles = {

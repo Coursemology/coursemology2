@@ -1,4 +1,4 @@
-import { grey } from '@material-ui/core/colors';
+import { grey } from '@mui/material/colors';
 
 import PropTypes from 'prop-types';
 

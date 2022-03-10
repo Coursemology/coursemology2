@@ -19,7 +19,7 @@ import {
   TextField,
 } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
-import { red } from '@material-ui/core/colors';
+import { red } from '@mui/material/colors';
 
 import MaterialSummernote from 'lib/components/MaterialSummernote';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';

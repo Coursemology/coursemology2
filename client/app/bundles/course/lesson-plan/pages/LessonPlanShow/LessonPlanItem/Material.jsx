@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import Description from '@material-ui/icons/Description';
-import { grey } from '@material-ui/core/colors';
+import { grey } from '@mui/material/colors';
 
 const styles = {
   material: {

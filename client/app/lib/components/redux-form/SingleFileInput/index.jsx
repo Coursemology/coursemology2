@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { fieldMetaPropTypes } from 'redux-form';
 import { FormattedMessage, intlShape } from 'react-intl';
 import Dropzone from 'react-dropzone';
-import { grey, red } from '@material-ui/core/colors';
+import { grey, red } from '@mui/material/colors';
 
 import createComponent from '../createComponent';
 import mapError from '../mapError';
