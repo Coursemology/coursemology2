@@ -5,7 +5,7 @@ exports[`<Material /> renders the material 1`] = `
   button={true}
 >
   <WithStyles(ForwardRef(ListItemAvatar))>
-    <WithStyles(ForwardRef(Avatar))
+    <ForwardRef(Avatar)
       style={
         Object {
           "height": "32px",
@@ -14,7 +14,7 @@ exports[`<Material /> renders the material 1`] = `
       }
     >
       <Memo(ForwardRef(AssignmentIcon)) />
-    </WithStyles(ForwardRef(Avatar))>
+    </ForwardRef(Avatar)>
   </WithStyles(ForwardRef(ListItemAvatar))>
   <WithStyles(ForwardRef(ListItemText))
     primary="Uploaded Material"

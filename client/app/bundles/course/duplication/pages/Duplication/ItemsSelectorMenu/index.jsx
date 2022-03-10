@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import {
-  Avatar,
   List,
   ListItem,
   ListItemAvatar,
   ListItemText,
 } from '@material-ui/core';
+import { Avatar } from '@mui/material';
 import { cyan } from '@mui/material/colors';
 import {
   duplicableItemTypes,
