@@ -29,7 +29,7 @@ RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers', js
           # Click correct answer
           page.
             find(:xpath, '//*[@id="course-assessment-submission"]
-                          /div[2]/form/div/label[1]/span[1]/span[1]/input', visible: false).
+                          /div[2]/form/div/label[1]/span[1]/input', visible: false).
             click
 
           click_button('Save Draft')
