@@ -4,9 +4,8 @@ import {
   Accordion,
   AccordionActions,
   AccordionSummary,
-  Icon,
 } from '@material-ui/core';
-import { Divider } from '@mui/material';
+import { Divider, Icon } from '@mui/material';
 import { indigo } from '@mui/material/colors';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 

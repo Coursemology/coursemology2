@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Tooltip } from '@material-ui/core';
+import { Tooltip } from '@material-ui/core';
+import { Icon } from '@mui/material';
 import { blue } from '@mui/material/colors';
 
 const propTypes = {
