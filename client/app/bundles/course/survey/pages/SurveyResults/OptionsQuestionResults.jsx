@@ -5,7 +5,6 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import {
   Button,
   CardContent,
-  Chip,
   Switch,
   Table,
   TableBody,
@@ -14,6 +13,7 @@ import {
   TableRow,
 } from '@material-ui/core';
 import { cyan, grey } from '@mui/material/colors';
+import { Chip } from '@mui/material';
 
 import Thumbnail from 'lib/components/Thumbnail';
 import { sorts } from 'course/survey/utils';

@@ -1,8 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Chip } from '@material-ui/core';
-import { Avatar } from '@mui/material';
+import { Avatar, Chip } from '@mui/material';
 import Block from '@material-ui/icons/Block';
 import DateRange from '@material-ui/icons/DateRange';
 import InfoOutlined from '@material-ui/icons/InfoOutlined';

@@ -102,7 +102,7 @@ describe('<ResponseIndex />', () => {
 
     // Include phantom students in statistics
     const statsCard = responseIndex.find('WithStyles(ForwardRef(Card))').last();
-    const submittedChip = statsCard.find('WithStyles(ForwardRef(Chip))').last();
+    const submittedChip = statsCard.find('ForwardRef(Chip)').last();
     expect(submittedChip.text()).toBe('0 Submitted');
     statsCard
       .find('WithStyles(ForwardRef(Switch))')

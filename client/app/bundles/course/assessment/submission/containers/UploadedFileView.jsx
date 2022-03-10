@@ -2,9 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
-
-import { Chip } from '@material-ui/core';
-
+import { Chip } from '@mui/material';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import { attachmentShape } from '../propTypes';
 import destroy from '../actions/attachments';
