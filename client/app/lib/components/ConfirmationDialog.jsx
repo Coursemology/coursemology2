@@ -1,12 +1,8 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-} from '@material-ui/core';
+import { Button } from '@material-ui/core';
+import { Dialog, DialogActions, DialogContent } from '@mui/material';
 import formTranslations from 'lib/translations/form';
 
 const buttonStyle = {

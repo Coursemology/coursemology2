@@ -1,11 +1,11 @@
 import { Component } from 'react';
+import { Button } from '@material-ui/core';
 import {
-  Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-} from '@material-ui/core';
+} from '@mui/material';
 import { cyan } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -233,7 +233,7 @@ export default class ForumPostSelectDialog extends Component {
         open={this.props.isVisible}
         onClose={() => this.props.setIsVisible(false)}
       >
-        <DialogTitle disableTypography style={styles.dialogTitle}>
+        <DialogTitle style={styles.dialogTitle}>
           {this.renderDialogTitle()}
         </DialogTitle>
         <DialogContent>{this.renderPostMenu()}</DialogContent>

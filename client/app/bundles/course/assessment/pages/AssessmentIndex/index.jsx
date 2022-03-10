@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { submit, isPristine } from 'redux-form';
 import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
+import { Button } from '@material-ui/core';
 import {
-  Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-} from '@material-ui/core';
+} from '@mui/material';
 import NotificationBar, {
   notificationShape,
 } from 'lib/components/NotificationBar';

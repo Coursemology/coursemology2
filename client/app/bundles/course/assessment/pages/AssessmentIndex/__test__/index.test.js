@@ -15,8 +15,8 @@ describe('<AssessmentIndex />', () => {
 
     const newBtn = indexPage.find('button');
     newBtn.simulate('click');
-    expect(
-      indexPage.find('WithStyles(ForwardRef(Dialog))').first().props().open,
-    ).toBe(true);
+    expect(indexPage.find('ForwardRef(Dialog)').first().props().open).toBe(
+      true,
+    );
   });
 });

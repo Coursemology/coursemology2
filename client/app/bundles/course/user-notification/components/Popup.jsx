@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import { Button } from '@material-ui/core';
 import {
-  Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-} from '@material-ui/core';
+} from '@mui/material';
 import translations from 'lib/translations/form';
 
 const styles = {
