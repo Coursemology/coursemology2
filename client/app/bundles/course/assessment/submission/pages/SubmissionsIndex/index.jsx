@@ -9,12 +9,12 @@ import {
   CardActions,
   CardContent,
   CardHeader,
-  CircularProgress,
   FormControlLabel,
   Tab,
   Tabs,
   Switch,
 } from '@material-ui/core';
+import { CircularProgress } from '@mui/material';
 import { blue, green, grey, yellow, red } from '@mui/material/colors';
 import Group from '@material-ui/icons/Group';
 import Person from '@material-ui/icons/Person';

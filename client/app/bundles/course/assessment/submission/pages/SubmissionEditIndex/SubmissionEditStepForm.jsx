@@ -9,7 +9,6 @@ import {
   Card,
   CardContent,
   CardHeader,
-  CircularProgress,
   Paper,
   Step,
   Stepper,
@@ -18,6 +17,7 @@ import {
   SvgIcon,
   Tooltip,
 } from '@material-ui/core';
+import { CircularProgress } from '@mui/material';
 import { blue, green, lightBlue, red } from '@mui/material/colors';
 
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
