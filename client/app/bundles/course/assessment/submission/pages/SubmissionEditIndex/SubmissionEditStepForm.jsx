@@ -9,14 +9,17 @@ import {
   Card,
   CardContent,
   CardHeader,
+  SvgIcon,
+  Tooltip,
+} from '@material-ui/core';
+import {
+  CircularProgress,
+  Paper,
   Step,
   Stepper,
   StepButton,
   StepLabel,
-  SvgIcon,
-  Tooltip,
-} from '@material-ui/core';
-import { CircularProgress, Paper } from '@mui/material';
+} from '@mui/material';
 import { blue, green, lightBlue, red } from '@mui/material/colors';
 
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
@@ -444,7 +447,7 @@ class SubmissionEditStepForm extends Component {
         activeStep={stepIndex}
         connector={<div />}
         nonLinear
-        style={{ justifyContent: 'center', flexWrap: 'wrap' }}
+        style={{ justifyContent: 'center', flexWrap: 'wrap', padding: 24 }}
       >
         {questionIds.map((questionId, index) => {
           let stepButtonColor = '';
