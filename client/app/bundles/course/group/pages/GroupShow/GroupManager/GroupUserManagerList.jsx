@@ -105,6 +105,7 @@ const GroupUserManagerListItem = ({
             onChange={(event) => onChangeDropdown(event.target.value, user)}
             value={user.groupRole}
             style={styles.listItemTextSize}
+            variant="standard"
           >
             <MenuItem value="normal" style={styles.listItemTextSize}>
               <FormattedMessage {...translations.normal} />

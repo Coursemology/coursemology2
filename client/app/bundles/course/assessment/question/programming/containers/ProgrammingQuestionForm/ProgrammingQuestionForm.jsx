@@ -326,6 +326,7 @@ class ProgrammingQuestionForm extends Component {
           disabled={this.props.data.get('is_loading')}
           error={!!error}
           style={{ marginTop: 14, width: '100%' }}
+          variant="standard"
         >
           <InputLabel>{(required ? '* ' : '') + label}</InputLabel>
           <Select
@@ -333,6 +334,7 @@ class ProgrammingQuestionForm extends Component {
             onChange={(event) => {
               onChange(event.target.value);
             }}
+            variant="standard"
           >
             {selectFieldOptions}
           </Select>
@@ -398,6 +400,7 @@ class ProgrammingQuestionForm extends Component {
           style={{ marginTop: 14, width: '100%' }}
           type={type}
           value={value}
+          variant="standard"
         />
       </div>
     );

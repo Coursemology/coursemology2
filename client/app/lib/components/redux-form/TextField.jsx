@@ -33,6 +33,7 @@ const renderTextField = forwardRef((props, ref) => {
       {...custom}
       ref={ref}
       style={styles.textFieldStyle}
+      variant="standard"
     />
   );
 });

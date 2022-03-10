@@ -29,7 +29,12 @@ const renderToggleField = forwardRef((props, ref) => {
   const { checked, disabled, errorText, label, onToggle, ...custom } = props;
   const isError = !!errorText;
   return (
-    <FormControl disabled={disabled} error={isError} fullWidth>
+    <FormControl
+      disabled={disabled}
+      error={isError}
+      fullWidth
+      variant="standard"
+    >
       <FormControlLabel
         control={
           <Switch checked={checked} color="primary" onChange={onToggle} />

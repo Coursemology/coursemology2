@@ -40,9 +40,16 @@ const renderSelectField = forwardRef((props, ref) => {
       error={isError}
       fullWidth
       style={styles.selectFieldStyle}
+      variant="standard"
     >
       <InputLabel>{label}</InputLabel>
-      <Select ref={ref} onChange={onChange} value={value} {...custom}>
+      <Select
+        ref={ref}
+        onChange={onChange}
+        value={value}
+        {...custom}
+        variant="standard"
+      >
         {children}
       </Select>
       {isError && (

@@ -30,12 +30,13 @@ const FontSizeField = (props) => {
 
   return (
     <div>
-      <FormControl>
+      <FormControl variant="standard">
         <InputLabel>{intl.formatMessage(translations.fontSize)}</InputLabel>
         <Select
           value={fontSizeValue}
           onChange={onChangeFontSize}
           style={styles.select}
+          variant="standard"
         >
           {menuItems}
         </Select>

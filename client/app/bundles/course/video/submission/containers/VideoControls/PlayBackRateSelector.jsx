@@ -28,6 +28,7 @@ function PlayBackRateSelector(props) {
         onChange={(event) => props.rateChanged(event.target.value)}
         style={{ fontSize: '0.9em' }}
         value={props.rate}
+        variant="standard"
       >
         {rateElements}
       </Select>

@@ -87,6 +87,7 @@ class TestCase extends Component {
         }}
         type="text"
         value={test.get(field)}
+        variant="standard"
       />
     );
   }

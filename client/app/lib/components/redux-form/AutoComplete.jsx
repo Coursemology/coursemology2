@@ -44,6 +44,7 @@ const renderAutoCompleteField = React.forwardRef((props, ref) => {
       error={isError}
       fullWidth
       style={styles.autoCompleteFieldStyle}
+      variant="standard"
     >
       <Autocomplete
         freeSolo
@@ -58,6 +59,7 @@ const renderAutoCompleteField = React.forwardRef((props, ref) => {
               shrink: true,
             }}
             label={label}
+            variant="standard"
           />
         )}
         value={value}
