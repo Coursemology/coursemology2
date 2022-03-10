@@ -2,7 +2,8 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
-import { Grid, Icon, Tooltip } from '@material-ui/core';
+import { Tooltip } from '@material-ui/core';
+import { Grid, Icon } from '@mui/material';
 import { blue, grey } from '@mui/material/colors';
 import SavingIndicator from './SavingIndicator';
 import ToolDropdown from './ToolDropdown';

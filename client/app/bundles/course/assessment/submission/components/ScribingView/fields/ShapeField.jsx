@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import { Button, Icon } from '@material-ui/core';
+import { Button } from '@material-ui/core';
+import { Icon } from '@mui/material';
 import { blue } from '@mui/material/colors';
 import { scribingTranslations as translations } from '../../../translations';
 import { scribingShapes } from '../../../constants';
