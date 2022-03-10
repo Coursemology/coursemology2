@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import Add from '@material-ui/icons/Add';
+import Add from '@mui/icons-material/Add';
 import { Fab } from '@material-ui/core';
 
 const styles = {

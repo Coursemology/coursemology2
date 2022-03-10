@@ -2,10 +2,10 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Avatar, Chip } from '@mui/material';
-import Block from '@material-ui/icons/Block';
-import DateRange from '@material-ui/icons/DateRange';
-import InfoOutlined from '@material-ui/icons/InfoOutlined';
-import Room from '@material-ui/icons/Room';
+import Block from '@mui/icons-material/Block';
+import DateRange from '@mui/icons-material/DateRange';
+import InfoOutlined from '@mui/icons-material/InfoOutlined';
+import Room from '@mui/icons-material/Room';
 import { red } from '@mui/material/colors';
 import moment, { shortDateTime, shortTime } from 'lib/moment';
 

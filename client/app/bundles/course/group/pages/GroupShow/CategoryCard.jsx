@@ -8,7 +8,7 @@ import {
 } from 'react-intl';
 import { connect } from 'react-redux';
 import { red } from '@mui/material/colors';
-import Delete from '@material-ui/icons/Delete';
+import Delete from '@mui/icons-material/Delete';
 
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 

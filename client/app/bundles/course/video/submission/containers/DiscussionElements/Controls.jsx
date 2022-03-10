@@ -6,8 +6,8 @@ import {
   cyan as activeColor,
   grey as inactiveColor,
 } from '@mui/material/colors';
-import OndemandVideo from '@material-ui/icons/OndemandVideo';
-import Refresh from '@material-ui/icons/Refresh';
+import OndemandVideo from '@mui/icons-material/OndemandVideo';
+import Refresh from '@mui/icons-material/Refresh';
 
 import { changeAutoScroll, refreshDiscussion } from '../../actions/discussion';
 import translations from '../../translations';

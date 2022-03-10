@@ -20,7 +20,7 @@ import {
   Switch,
 } from '@material-ui/core';
 import { red } from '@mui/material/colors';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import 'ace-builds/src-noconflict/mode-java';
 import 'ace-builds/src-noconflict/theme-monokai';

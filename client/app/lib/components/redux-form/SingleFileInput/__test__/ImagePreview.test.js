@@ -34,9 +34,7 @@ describe('<SingleFileInput />', () => {
     });
 
     // SvgIcon is the element of the placeholder 'InsertDriveFileIcon'
-    expect(imagePreview.find('WithStyles(ForwardRef(SvgIcon))')).toHaveLength(
-      1,
-    );
+    expect(imagePreview.find('ForwardRef(SvgIcon)')).toHaveLength(1);
     // No img element is rendered
     expect(imagePreview.find('img')).toHaveLength(0);
   });

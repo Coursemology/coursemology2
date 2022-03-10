@@ -12,7 +12,7 @@ import {
   Radio,
   TextField,
 } from '@material-ui/core';
-import MoreVert from '@material-ui/icons/MoreVert';
+import MoreVert from '@mui/icons-material/MoreVert';
 import formTranslations from 'lib/translations/form';
 import { questionTypes } from 'course/survey/constants';
 import { questionShape } from 'course/survey/propTypes';

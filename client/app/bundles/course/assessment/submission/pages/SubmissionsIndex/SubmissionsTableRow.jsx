@@ -4,9 +4,9 @@ import { FormattedMessage } from 'react-intl';
 import moment from 'lib/moment';
 import { Icon, IconButton, TableCell, TableRow } from '@material-ui/core';
 import { blue, pink, red } from '@mui/material/colors';
-import Delete from '@material-ui/icons/Delete';
-import History from '@material-ui/icons/History';
-import RemoveCircle from '@material-ui/icons/RemoveCircle';
+import Delete from '@mui/icons-material/Delete';
+import History from '@mui/icons-material/History';
+import RemoveCircle from '@mui/icons-material/RemoveCircle';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import {
   getCourseUserURL,

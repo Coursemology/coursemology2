@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { FormControlLabel, TextField } from '@material-ui/core';
 import { Checkbox } from '@mui/material';
 import { blue, green, red } from '@mui/material/colors';
-import CompareArrows from '@material-ui/icons/CompareArrows';
-import Delete from '@material-ui/icons/Delete';
+import CompareArrows from '@mui/icons-material/CompareArrows';
+import Delete from '@mui/icons-material/Delete';
 import {
   defineMessages,
   FormattedMessage,

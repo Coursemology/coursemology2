@@ -5,8 +5,8 @@ import { Field } from 'redux-form';
 import { IconButton, Radio } from '@material-ui/core';
 import { Checkbox } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import Close from '@material-ui/icons/Close';
-import Photo from '@material-ui/icons/Photo';
+import Close from '@mui/icons-material/Close';
+import Photo from '@mui/icons-material/Photo';
 import renderTextField from 'lib/components/redux-form/TextField';
 import Thumbnail from 'lib/components/Thumbnail';
 

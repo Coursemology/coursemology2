@@ -32,7 +32,7 @@ describe('<SingleFileInput />', () => {
 
     const avatar = badgePreview.find('ForwardRef(Avatar)').first();
     // SvgIcon is the element of the placeholder 'InsertDriveFileIcon'
-    expect(avatar.find('WithStyles(ForwardRef(SvgIcon))')).toHaveLength(1);
+    expect(avatar.find('ForwardRef(SvgIcon)')).toHaveLength(1);
     // No img element is rendered
     expect(avatar.find('img')).toHaveLength(0);
   });

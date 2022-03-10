@@ -3,7 +3,7 @@ import { IconButton } from '@material-ui/core';
 import { captionsStates } from 'lib/constants/videoConstants';
 import { connect } from 'react-redux';
 import { grey } from '@mui/material/colors';
-import ClosedCaption from '@material-ui/icons/ClosedCaption';
+import ClosedCaption from '@mui/icons-material/ClosedCaption';
 
 import styles from '../VideoPlayer.scss';
 import { changeCaptionsState } from '../../actions/video';

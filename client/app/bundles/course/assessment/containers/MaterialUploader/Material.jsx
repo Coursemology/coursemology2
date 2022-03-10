@@ -10,8 +10,8 @@ import {
   ListItemSecondaryAction,
 } from '@material-ui/core';
 import { Avatar, CircularProgress } from '@mui/material';
-import Assignment from '@material-ui/icons/Assignment';
-import Delete from '@material-ui/icons/Delete';
+import Assignment from '@mui/icons-material/Assignment';
+import Delete from '@mui/icons-material/Delete';
 import ReactTooltip from 'react-tooltip';
 
 const styles = {
