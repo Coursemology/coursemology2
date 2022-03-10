@@ -12,13 +12,12 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  Snackbar,
   Switch,
   Tab,
   Tabs,
   TextField,
 } from '@material-ui/core';
-import { Autocomplete } from '@mui/material';
+import { Autocomplete, Snackbar } from '@mui/material';
 import { red } from '@mui/material/colors';
 
 import MaterialSummernote from 'lib/components/MaterialSummernote';
@@ -834,6 +833,7 @@ class ProgrammingQuestionForm extends Component {
           {this.renderBuildLogView()}
 
           <Snackbar
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
             open={this.props.data.get('has_errors')}
             message={this.props.intl.formatMessage(
               translations.resolveErrorsMessage,
@@ -844,6 +844,7 @@ class ProgrammingQuestionForm extends Component {
             }}
           />
           <Snackbar
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
             open={this.props.data.get('show_submission_message')}
             message={this.props.data.get('submission_message')}
             autoHideDuration={2000}
