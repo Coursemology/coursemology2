@@ -35,6 +35,14 @@ const themeSettings = {
     htmlFontSize: 10,
   },
   overrides: {
+    MuiAppBar: {
+      // When there is a MUI Dialog component, somehow
+      // the color of appbar is changed... smh
+      root: {
+        background: `${palette.primary.main} !important`,
+        color: 'white !important',
+      },
+    },
     MuiButton: {
       contained: {
         color: black,
