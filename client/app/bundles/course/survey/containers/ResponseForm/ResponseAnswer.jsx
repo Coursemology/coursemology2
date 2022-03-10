@@ -2,7 +2,8 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { defineMessages, injectIntl, intlShape } from 'react-intl';
-import { Checkbox, Radio } from '@material-ui/core';
+import { Radio } from '@material-ui/core';
+import { Checkbox } from '@mui/material';
 import { red } from '@mui/material/colors';
 import formTranslations from 'lib/translations/form';
 import renderTextField from 'lib/components/redux-form/TextField';
@@ -100,7 +101,6 @@ class ResponseAnswer extends Component {
           {options.map((option) => {
             const widget = (
               <Checkbox
-                color="primary"
                 style={grid ? styles.gridOptionWidget : styles.listOptionWidget}
                 disabled={disabled}
                 checked={value.indexOf(option.id) !== -1}

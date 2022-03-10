@@ -33,7 +33,7 @@ describe('ColorPickerField', () => {
     });
 
     expect(
-      colorPickerField.find('WithStyles(ForwardRef(Checkbox))').prop('checked'),
+      colorPickerField.find('ForwardRef(Checkbox)').prop('checked'),
     ).toBe(true);
   });
 });
