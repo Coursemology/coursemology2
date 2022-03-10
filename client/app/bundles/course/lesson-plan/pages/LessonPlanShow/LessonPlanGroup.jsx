@@ -7,10 +7,10 @@ import {
   Card,
   CardContent,
   CardHeader,
-  Collapse,
   Divider,
   IconButton,
 } from '@material-ui/core';
+import { Collapse } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import moment, { longDate } from 'lib/moment';

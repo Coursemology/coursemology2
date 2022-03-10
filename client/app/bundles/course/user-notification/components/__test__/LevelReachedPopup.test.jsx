@@ -8,7 +8,7 @@ function popupDialogWrapper(notification) {
     <LevelReachedPopup notification={notification} />,
     contextOptions,
   );
-  const dialogInline = wrapper.find('WithStyles(ForwardRef(Dialog))');
+  const dialogInline = wrapper.find('ForwardRef(Dialog)');
   return dialogInline;
 }
 

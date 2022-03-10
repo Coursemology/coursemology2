@@ -1,13 +1,13 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
+import { Button } from '@material-ui/core';
 import {
-  Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-} from '@material-ui/core';
+} from '@mui/material';
 import formTranslations from 'lib/translations/form';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 
