@@ -3,7 +3,6 @@ import ReactTooltip from 'react-tooltip';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import {
-  CircularProgress,
   IconButton,
   Menu,
   MenuItem,
@@ -13,6 +12,7 @@ import {
   TableHead,
   TableRow,
 } from '@material-ui/core';
+import { CircularProgress } from '@mui/material';
 import { pink, red } from '@mui/material/colors';
 import Delete from '@material-ui/icons/Delete';
 import GetApp from '@material-ui/icons/GetApp'; // TODO MUI - Change to download once icons lib is updated

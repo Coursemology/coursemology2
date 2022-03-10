@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { submit, isValid } from 'redux-form';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Button, CircularProgress } from '@material-ui/core';
+import { Button } from '@material-ui/core';
+import { CircularProgress } from '@mui/material';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import { formNames, duplicationModes } from 'course/duplication/constants';
 

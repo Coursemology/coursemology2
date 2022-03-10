@@ -9,7 +9,6 @@ import {
   Card,
   CardContent,
   CardHeader,
-  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -18,6 +17,7 @@ import {
   Tab,
   Tabs,
 } from '@material-ui/core';
+import { CircularProgress } from '@mui/material';
 import { blue, grey, yellow, red } from '@mui/material/colors';
 
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */

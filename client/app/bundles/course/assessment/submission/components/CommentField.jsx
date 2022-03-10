@@ -1,7 +1,8 @@
 import { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
-import { Button, CircularProgress } from '@material-ui/core';
+import { Button } from '@material-ui/core';
+import { CircularProgress } from '@mui/material';
 import MaterialSummernote from 'lib/components/MaterialSummernote';
 import ReactTooltip from 'react-tooltip';
 

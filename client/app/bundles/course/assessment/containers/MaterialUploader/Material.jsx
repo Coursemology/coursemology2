@@ -3,14 +3,13 @@ import PropTypes from 'prop-types';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { formatLongDateTime } from 'lib/moment';
 import {
-  CircularProgress,
   IconButton,
   ListItem,
   ListItemAvatar,
   ListItemText,
   ListItemSecondaryAction,
 } from '@material-ui/core';
-import { Avatar } from '@mui/material';
+import { Avatar, CircularProgress } from '@mui/material';
 import Assignment from '@material-ui/icons/Assignment';
 import Delete from '@material-ui/icons/Delete';
 import ReactTooltip from 'react-tooltip';
