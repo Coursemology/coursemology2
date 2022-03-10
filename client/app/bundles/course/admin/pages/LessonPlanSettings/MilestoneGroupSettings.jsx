@@ -2,7 +2,8 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { FormControlLabel, Radio, RadioGroup } from '@material-ui/core';
+import { FormControlLabel } from '@material-ui/core';
+import { Radio, RadioGroup } from '@mui/material';
 import { updateLessonPlanSettings } from 'course/admin/actions/lesson-plan-items';
 import { initialState as defaultSettings } from 'course/lesson-plan/reducers/flags';
 
@@ -68,25 +69,19 @@ class MilestoneGroupSettings extends Component {
         >
           <FormControlLabel
             key="all"
-            control={
-              <Radio color="primary" style={{ padding: 0, paddingLeft: 12 }} />
-            }
+            control={<Radio style={{ padding: 0, paddingLeft: 12 }} />}
             value="all"
             label={<FormattedMessage {...translations.expandAll} />}
           />
           <FormControlLabel
             key="none"
-            control={
-              <Radio color="primary" style={{ padding: 0, paddingLeft: 12 }} />
-            }
+            control={<Radio style={{ padding: 0, paddingLeft: 12 }} />}
             value="none"
             label={<FormattedMessage {...translations.expandNone} />}
           />
           <FormControlLabel
             key="current"
-            control={
-              <Radio color="primary" style={{ padding: 0, paddingLeft: 12 }} />
-            }
+            control={<Radio style={{ padding: 0, paddingLeft: 12 }} />}
             value="current"
             label={<FormattedMessage {...translations.expandCurrent} />}
           />

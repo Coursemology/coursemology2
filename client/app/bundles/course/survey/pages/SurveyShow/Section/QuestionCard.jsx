@@ -5,13 +5,12 @@ import {
   Accordion,
   AccordionSummary,
   CardContent,
-  Checkbox,
   IconButton,
   Menu,
   MenuItem,
-  Radio,
   TextField,
 } from '@material-ui/core';
+import { Checkbox, Radio } from '@mui/material';
 import MoreVert from '@mui/icons-material/MoreVert';
 import formTranslations from 'lib/translations/form';
 import { questionTypes } from 'course/survey/constants';

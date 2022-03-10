@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { FormControlLabel, Radio } from '@material-ui/core';
+import { FormControlLabel } from '@material-ui/core';
+import { Radio } from '@mui/material';
 import { green } from '@mui/material/colors';
 import { questionShape } from '../../propTypes';
 
@@ -16,7 +17,7 @@ function MultipleChoiceOptions({
       {question.options.map((option) => (
         <FormControlLabel
           checked={option.id === value}
-          control={<Radio color="primary" style={{ padding: '0 12px' }} />}
+          control={<Radio style={{ padding: '0 12px' }} />}
           disabled={readOnly}
           key={option.id}
           label={

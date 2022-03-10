@@ -202,14 +202,14 @@ describe('<ResponseForm />', () => {
     const firstMCQOptionRadio = multipleChoiceAnswer
       .find('OptionsListItem')
       .first()
-      .find('WithStyles(ForwardRef(Radio))');
+      .find('ForwardRef(Radio)');
     firstMCQOptionRadio
       .props()
       .onChange({ target: { value: firstMCQOptionRadio.props().value } });
     lastMRQOptionCheckbox = multipleResponseAnswer
       .find('OptionsListItem')
       .last()
-      .find('WithStyles(ForwardRef(Checkbox))');
+      .find('ForwardRef(Checkbox)');
     lastMRQOptionCheckbox.props().onChange(null, false);
 
     submitButton.simulate('click');

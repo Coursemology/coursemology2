@@ -2,8 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { defineMessages, injectIntl, intlShape } from 'react-intl';
-import { Radio } from '@material-ui/core';
-import { Checkbox } from '@mui/material';
+import { Checkbox, Radio } from '@mui/material';
 import { red } from '@mui/material/colors';
 import formTranslations from 'lib/translations/form';
 import renderTextField from 'lib/components/redux-form/TextField';
@@ -62,7 +61,6 @@ class ResponseAnswer extends Component {
             const id = option.id;
             const widget = (
               <Radio
-                color="primary"
                 value={id}
                 style={grid ? styles.gridOptionWidget : styles.listOptionWidget}
                 onChange={(event) =>
