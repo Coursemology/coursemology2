@@ -86,10 +86,8 @@ describe('<SingleFileInput />', () => {
       },
     );
 
-    expect(imagePreview.find('WithStyles(ForwardRef(Badge))').exists()).toBe(
-      true,
-    );
-    imagePreview.find('WithStyles(ForwardRef(IconButton))').simulate('click');
+    expect(imagePreview.find('ForwardRef(Badge)').exists()).toBe(true);
+    imagePreview.find('ForwardRef(IconButton)').simulate('click');
     expect(onCancel).toHaveBeenCalled();
   });
 });
