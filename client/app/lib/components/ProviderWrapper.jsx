@@ -4,6 +4,11 @@ import { PersistGate } from 'redux-persist/lib/integration/react';
 import { IntlProvider, addLocaleData } from 'react-intl';
 import { i18nLocale } from 'lib/helpers/server-context';
 import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
+import {
+  createTheme as createThemeV5,
+  adaptV4Theme,
+  ThemeProvider,
+} from '@mui/material/styles';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import zh from 'react-intl/locale-data/zh';
 import palette from '../../theme/palette';
@@ -22,7 +27,7 @@ const propTypes = {
   children: PropTypes.element.isRequired,
 };
 
-const theme = createTheme({
+const themeSettings = {
   palette,
   // https://material-ui.com/customization/themes/#typography---html-font-size
   // https://material-ui.com/style/typography/#migration-to-typography-v2
@@ -82,7 +87,10 @@ const theme = createTheme({
       },
     },
   },
-});
+};
+
+const theme = createTheme(themeSettings);
+const themeV5 = createThemeV5(adaptV4Theme(themeSettings));
 
 const ProviderWrapper = ({ store, persistor, children }) => {
   const availableForeignLocales = { zh };
@@ -110,7 +118,9 @@ const ProviderWrapper = ({ store, persistor, children }) => {
 
   providers = (
     <IntlProvider locale={i18nLocale} messages={messages}>
-      <MuiThemeProvider theme={theme}>{providers}</MuiThemeProvider>
+      <ThemeProvider theme={themeV5}>
+        <MuiThemeProvider theme={theme}>{providers}</MuiThemeProvider>{' '}
+      </ThemeProvider>
     </IntlProvider>
   );
 
