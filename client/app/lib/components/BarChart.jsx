@@ -1,7 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Chip } from '@material-ui/core';
-import { Avatar } from '@mui/material';
+import { Avatar, Chip } from '@mui/material';
 
 const colors = {
   red: '#ffaaaa',

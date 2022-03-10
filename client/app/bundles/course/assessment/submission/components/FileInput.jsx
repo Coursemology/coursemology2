@@ -2,7 +2,8 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
 import { Field } from 'redux-form';
-import { Card, CardContent, Chip } from '@material-ui/core';
+import { Card, CardContent } from '@material-ui/core';
+import { Chip } from '@mui/material';
 import Publish from '@material-ui/icons/Publish'; // TODO MUI - Change to upload once icons lib is updated
 
 import { defineMessages, FormattedMessage } from 'react-intl';
