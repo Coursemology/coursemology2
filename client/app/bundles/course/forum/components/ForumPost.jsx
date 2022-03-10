@@ -1,12 +1,6 @@
 import { Component } from 'react';
-import {
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Divider,
-} from '@material-ui/core';
-import { Avatar } from '@mui/material';
+import { Button, Card, CardContent, CardHeader } from '@material-ui/core';
+import { Avatar, Divider } from '@mui/material';
 import PropTypes from 'prop-types';
 import moment from 'lib/moment';
 import { defineMessages, FormattedMessage } from 'react-intl';

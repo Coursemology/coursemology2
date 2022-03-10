@@ -3,14 +3,8 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Element } from 'react-scroll';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  Divider,
-  IconButton,
-} from '@material-ui/core';
-import { Collapse } from '@mui/material';
+import { Card, CardContent, CardHeader, IconButton } from '@material-ui/core';
+import { Collapse, Divider } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import moment, { longDate } from 'lib/moment';

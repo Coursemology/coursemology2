@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import {
-  Divider,
   List,
   ListItem,
   ListItemText,
@@ -8,7 +7,7 @@ import {
   MenuItem,
   Select,
 } from '@material-ui/core';
-import { Checkbox } from '@mui/material';
+import { Checkbox, Divider } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { memberShape } from '../../../propTypes';
