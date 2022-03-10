@@ -88,13 +88,9 @@ describe('<ResponseIndex />', () => {
 
     expect(spyIndex).toHaveBeenCalled();
     responseIndex.update();
-    const tableBodies = responseIndex.find('WithStyles(ForwardRef(TableBody))');
-    const phantomStudentRows = tableBodies
-      .at(2)
-      .find('WithStyles(ForwardRef(TableRow))');
-    const realStudentRows = tableBodies
-      .at(1)
-      .find('WithStyles(ForwardRef(TableRow))');
+    const tableBodies = responseIndex.find('ForwardRef(TableBody)');
+    const phantomStudentRows = tableBodies.at(2).find('ForwardRef(TableRow)');
+    const realStudentRows = tableBodies.at(1).find('ForwardRef(TableRow)');
     const getStatus = (row) => row.find('td').at(1).text();
     expect(getStatus(phantomStudentRows.first())).toBe('Submitted');
     expect(getStatus(realStudentRows.first())).toBe('Not Started');

@@ -9,13 +9,15 @@ import {
   AccordionDetails,
   AccordionSummary,
   Fade,
+} from '@material-ui/core';
+import {
   Table,
   TableBody,
   TableCell,
   TableFooter,
   TableHead,
   TableRow,
-} from '@material-ui/core';
+} from '@mui/material';
 import { red } from '@mui/material/colors';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 

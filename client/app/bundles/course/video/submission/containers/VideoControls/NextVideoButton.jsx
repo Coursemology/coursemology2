@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
-import { IconButton, Tooltip } from '@material-ui/core';
+import { IconButton } from '@material-ui/core';
+import { Tooltip } from '@mui/material';
 import SkipNext from '@mui/icons-material/SkipNext';
 import { connect } from 'react-redux';
 import { FormattedMessage, intlShape, injectIntl } from 'react-intl';

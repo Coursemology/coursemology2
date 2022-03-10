@@ -5,7 +5,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
-} from '@material-ui/core';
+} from '@mui/material';
 import { questionShape } from '../propTypes';
 import translations from '../translations';
 

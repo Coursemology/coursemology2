@@ -4,7 +4,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
-} from '@material-ui/core';
+} from '@mui/material';
 import { blue, green, red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';

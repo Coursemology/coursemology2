@@ -1,17 +1,15 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
+import { IconButton, Menu, MenuItem } from '@material-ui/core';
 import {
-  IconButton,
-  Menu,
-  MenuItem,
+  ListSubheader,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-} from '@material-ui/core';
-import { ListSubheader } from '@mui/material';
+} from '@mui/material';
 import Add from '@mui/icons-material/Add';
 import Edit from '@mui/icons-material/Edit';
 import Delete from '@mui/icons-material/Delete';

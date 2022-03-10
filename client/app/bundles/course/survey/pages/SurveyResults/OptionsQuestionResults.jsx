@@ -2,18 +2,16 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { Button, CardContent, Switch } from '@material-ui/core';
 import {
-  Button,
-  CardContent,
-  Switch,
+  Chip,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-} from '@material-ui/core';
+} from '@mui/material';
 import { cyan, grey } from '@mui/material/colors';
-import { Chip } from '@mui/material';
 
 import Thumbnail from 'lib/components/Thumbnail';
 import { sorts } from 'course/survey/utils';

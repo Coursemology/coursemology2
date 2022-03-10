@@ -11,7 +11,7 @@ exports[`<ResponseShow /> shows form and admin buttons if user has permissions a
       }
     />
   </WithStyles(ForwardRef(Card))>
-  <WithStyles(ForwardRef(Table))
+  <ForwardRef(Table)
     style={
       Object {
         "marginTop": 10,
@@ -19,33 +19,33 @@ exports[`<ResponseShow /> shows form and admin buttons if user has permissions a
       }
     }
   >
-    <WithStyles(ForwardRef(TableBody))>
-      <WithStyles(ForwardRef(TableRow))>
-        <WithStyles(ForwardRef(TableCell))>
+    <ForwardRef(TableBody)>
+      <ForwardRef(TableRow)>
+        <ForwardRef(TableCell)>
           Student
-        </WithStyles(ForwardRef(TableCell))>
-        <WithStyles(ForwardRef(TableCell))>
+        </ForwardRef(TableCell)>
+        <ForwardRef(TableCell)>
           Staff
-        </WithStyles(ForwardRef(TableCell))>
-      </WithStyles(ForwardRef(TableRow))>
-      <WithStyles(ForwardRef(TableRow))>
-        <WithStyles(ForwardRef(TableCell))>
+        </ForwardRef(TableCell)>
+      </ForwardRef(TableRow)>
+      <ForwardRef(TableRow)>
+        <ForwardRef(TableCell)>
           Submitted At
-        </WithStyles(ForwardRef(TableCell))>
-        <WithStyles(ForwardRef(TableCell))>
+        </ForwardRef(TableCell)>
+        <ForwardRef(TableCell)>
           01 Jan 2100, 12:00am
-        </WithStyles(ForwardRef(TableCell))>
-      </WithStyles(ForwardRef(TableRow))>
-      <WithStyles(ForwardRef(TableRow))>
-        <WithStyles(ForwardRef(TableCell))>
+        </ForwardRef(TableCell)>
+      </ForwardRef(TableRow)>
+      <ForwardRef(TableRow)>
+        <ForwardRef(TableCell)>
           Last Updated At
-        </WithStyles(ForwardRef(TableCell))>
-        <WithStyles(ForwardRef(TableCell))>
+        </ForwardRef(TableCell)>
+        <ForwardRef(TableCell)>
           13 Jan 2100, 12:00am
-        </WithStyles(ForwardRef(TableCell))>
-      </WithStyles(ForwardRef(TableRow))>
-    </WithStyles(ForwardRef(TableBody))>
-  </WithStyles(ForwardRef(Table))>
+        </ForwardRef(TableCell)>
+      </ForwardRef(TableRow)>
+    </ForwardRef(TableBody)>
+  </ForwardRef(Table)>
   <ForwardRef(ListSubheader)
     disableSticky={true}
   >

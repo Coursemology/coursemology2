@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
-import { Button, TableCell, TableRow } from '@material-ui/core';
+import { Button } from '@material-ui/core';
+import { TableCell, TableRow } from '@mui/material';
 import { grey } from '@mui/material/colors';
 
 import styles from './OnlineEditorView.scss';

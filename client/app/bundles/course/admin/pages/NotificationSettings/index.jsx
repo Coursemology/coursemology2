@@ -2,15 +2,15 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import { Switch } from '@material-ui/core';
 import {
-  Switch,
+  ListSubheader,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-} from '@material-ui/core';
-import { ListSubheader } from '@mui/material';
+} from '@mui/material';
 import NotificationPopup from 'lib/containers/NotificationPopup';
 import { updateNotificationSetting } from 'course/admin/actions/notifications';
 import adminTranslations from 'course/translations.intl';

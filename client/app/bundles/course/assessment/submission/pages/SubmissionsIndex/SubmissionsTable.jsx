@@ -2,17 +2,15 @@ import { Component } from 'react';
 import ReactTooltip from 'react-tooltip';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import { IconButton, Menu, MenuItem } from '@material-ui/core';
 import {
-  IconButton,
-  Menu,
-  MenuItem,
+  CircularProgress,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-} from '@material-ui/core';
-import { CircularProgress } from '@mui/material';
+} from '@mui/material';
 import { pink, red } from '@mui/material/colors';
 import Delete from '@mui/icons-material/Delete';
 import GetApp from '@mui/icons-material/GetApp'; // TODO MUI - Change to download once icons lib is updated

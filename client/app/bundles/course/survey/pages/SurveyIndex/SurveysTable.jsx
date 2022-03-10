@@ -3,17 +3,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
+import { Button, FormControlLabel, Switch } from '@material-ui/core';
 import {
-  Button,
-  FormControlLabel,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-  Switch,
-} from '@material-ui/core';
-
+} from '@mui/material';
 import history from 'lib/history';
 import { formatShortDateTime } from 'lib/moment';
 import translations from 'course/survey/translations';
