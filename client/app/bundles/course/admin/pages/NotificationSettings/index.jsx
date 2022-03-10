@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import {
-  ListSubheader,
   Switch,
   Table,
   TableBody,
@@ -11,6 +10,7 @@ import {
   TableHead,
   TableRow,
 } from '@material-ui/core';
+import { ListSubheader } from '@mui/material';
 import NotificationPopup from 'lib/containers/NotificationPopup';
 import { updateNotificationSetting } from 'course/admin/actions/notifications';
 import adminTranslations from 'course/translations.intl';

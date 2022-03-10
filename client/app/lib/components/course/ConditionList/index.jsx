@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
 import {
   IconButton,
-  ListSubheader,
   Menu,
   MenuItem,
   Table,
@@ -12,6 +11,7 @@ import {
   TableHead,
   TableRow,
 } from '@material-ui/core';
+import { ListSubheader } from '@mui/material';
 import Add from '@mui/icons-material/Add';
 import Edit from '@mui/icons-material/Edit';
 import Delete from '@mui/icons-material/Delete';

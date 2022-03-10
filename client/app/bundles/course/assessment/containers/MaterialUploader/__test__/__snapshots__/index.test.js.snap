@@ -70,7 +70,7 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
 <Fragment>
   <ForwardRef(Divider) />
   <WithStyles(ForwardRef(List))>
-    <WithStyles(ForwardRef(ListSubheader))
+    <ForwardRef(ListSubheader)
       disableSticky={true}
     >
       <FormattedMessage
@@ -78,7 +78,7 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
         id="course.assessment.MaterialList.uploadedFiles"
         values={Object {}}
       />
-    </WithStyles(ForwardRef(ListSubheader))>
+    </ForwardRef(ListSubheader)>
     <Material
       deleting={false}
       disabled={true}

@@ -6,12 +6,12 @@ import { formatLongDateTime } from 'lib/moment';
 import {
   Card,
   CardContent,
-  ListSubheader,
   Table,
   TableBody,
   TableCell,
   TableRow,
 } from '@material-ui/core';
+import { ListSubheader } from '@mui/material';
 import surveyTranslations from 'course/survey/translations';
 import { surveyShape, responseShape } from 'course/survey/propTypes';
 import { fetchResponse } from 'course/survey/actions/responses';

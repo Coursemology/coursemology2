@@ -46,7 +46,7 @@ exports[`<ResponseShow /> shows form and admin buttons if user has permissions a
       </WithStyles(ForwardRef(TableRow))>
     </WithStyles(ForwardRef(TableBody))>
   </WithStyles(ForwardRef(Table))>
-  <WithStyles(ForwardRef(ListSubheader))
+  <ForwardRef(ListSubheader)
     disableSticky={true}
   >
     <FormattedMessage
@@ -54,7 +54,7 @@ exports[`<ResponseShow /> shows form and admin buttons if user has permissions a
       id="course.surveys.questions"
       values={Object {}}
     />
-  </WithStyles(ForwardRef(ListSubheader))>
+  </ForwardRef(ListSubheader)>
   <ReduxForm
     flags={
       Object {

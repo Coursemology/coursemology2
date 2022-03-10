@@ -1,13 +1,8 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import {
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  ListSubheader,
-} from '@material-ui/core';
+import { Card, CardActions, CardContent, CardHeader } from '@material-ui/core';
+import { ListSubheader } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { surveyShape, sectionShape } from 'course/survey/propTypes';
 import Question from './Question';

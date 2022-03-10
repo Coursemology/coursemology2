@@ -7,8 +7,8 @@ import {
   injectIntl,
   intlShape,
 } from 'react-intl';
-import { ListSubheader, FormControlLabel } from '@material-ui/core';
-import { Paper, Radio, RadioGroup } from '@mui/material';
+import { FormControlLabel } from '@material-ui/core';
+import { ListSubheader, Paper, Radio, RadioGroup } from '@mui/material';
 import TitleBar from 'lib/components/TitleBar';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import DateTimePicker from 'lib/components/form/DateTimePicker';
