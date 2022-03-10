@@ -48,7 +48,7 @@ RSpec.describe 'Course: Assessments: Submissions: Text Response Answers', js: tr
 
         expect(dropzone).to have_no_css('span', text: 'text.txt')
         expect(file_view).to have_css('span', text: 'text.txt')
-        expect(file_view).to have_css('span', count: 3)
+        expect(file_view).to have_css('span', count: 2)
         expect(answer.specific.attachments).not_to be_empty
       end
 
