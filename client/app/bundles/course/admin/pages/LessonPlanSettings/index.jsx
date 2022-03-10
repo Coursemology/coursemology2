@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import {
-  ListSubheader,
   Switch,
   Table,
   TableBody,
@@ -12,6 +11,7 @@ import {
   TableHead,
   TableRow,
 } from '@material-ui/core';
+import { ListSubheader } from '@mui/material';
 import NotificationPopup from 'lib/containers/NotificationPopup';
 import { updateLessonPlanSettings } from 'course/admin/actions/lesson-plan-items';
 import translations from './translations.intl';

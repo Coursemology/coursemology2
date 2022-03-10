@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import {
-  ListSubheader,
   Table,
   TableBody,
   TableCell,
@@ -11,6 +10,7 @@ import {
   TableRow,
   Switch,
 } from '@material-ui/core';
+import { ListSubheader } from '@mui/material';
 import NotificationPopup from 'lib/containers/NotificationPopup';
 import {
   fetchUserEmailSubscriptions,

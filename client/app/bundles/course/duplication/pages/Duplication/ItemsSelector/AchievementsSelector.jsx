@@ -2,7 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { ListSubheader } from '@material-ui/core';
+import { ListSubheader } from '@mui/material';
 import Thumbnail from 'lib/components/Thumbnail';
 import { defaultComponentTitles } from 'course/translations.intl';
 import { duplicableItemTypes } from 'course/duplication/constants';

@@ -2,7 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { ListSubheader } from '@material-ui/core';
+import { ListSubheader } from '@mui/material';
 import TitleBar from 'lib/components/TitleBar';
 import { fetchSurveys } from 'course/survey/actions/surveys';
 import surveyTranslations from 'course/survey/translations';

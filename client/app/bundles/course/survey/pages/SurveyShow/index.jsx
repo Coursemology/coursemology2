@@ -5,7 +5,7 @@ import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { createDragDropManager } from 'dnd-core';
-import { ListSubheader } from '@material-ui/core';
+import { ListSubheader } from '@mui/material';
 import surveyTranslations from 'course/survey/translations';
 import { surveyShape } from 'course/survey/propTypes';
 import * as surveyActions from 'course/survey/actions/surveys';
