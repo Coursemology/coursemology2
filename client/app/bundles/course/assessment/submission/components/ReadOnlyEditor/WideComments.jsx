@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Paper } from '@material-ui/core';
-
+import { Button } from '@material-ui/core';
+import { Paper } from '@mui/material';
 import Annotations from '../../containers/Annotations';
 import PostPreview from '../../containers/PostPreview';
 import { annotationShape } from '../../propTypes';

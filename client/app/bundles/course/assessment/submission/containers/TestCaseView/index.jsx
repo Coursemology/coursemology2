@@ -7,13 +7,13 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Paper,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
 } from '@material-ui/core';
+import { Paper } from '@mui/material';
 import { green, yellow, red } from '@mui/material/colors';
 import Check from '@mui/icons-material/Check';
 import Clear from '@mui/icons-material/Clear';

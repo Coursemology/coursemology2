@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import { Paper, Popover } from '@material-ui/core';
-
+import { Popover } from '@material-ui/core';
+import { Paper } from '@mui/material';
 import LineStyleField from '../fields/LineStyleField';
 import LineThicknessField from '../fields/LineThicknessField';
 import ColorPickerField from '../fields/ColorPickerField';
