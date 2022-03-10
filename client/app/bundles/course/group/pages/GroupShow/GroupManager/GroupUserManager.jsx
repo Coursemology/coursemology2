@@ -1,7 +1,8 @@
 import { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Checkbox, FormControlLabel, TextField } from '@material-ui/core';
+import { FormControlLabel, TextField } from '@material-ui/core';
+import { Checkbox } from '@mui/material';
 import { blue, green, red } from '@mui/material/colors';
 import CompareArrows from '@material-ui/icons/CompareArrows';
 import Delete from '@material-ui/icons/Delete';
@@ -394,7 +395,6 @@ const GroupUserManager = ({
         <FormControlLabel
           control={
             <Checkbox
-              color="primary"
               checked={hideInGroup}
               onChange={(_, checked) => setHideInGroup(checked)}
             />

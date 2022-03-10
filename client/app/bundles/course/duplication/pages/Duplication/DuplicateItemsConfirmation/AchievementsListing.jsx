@@ -5,10 +5,10 @@ import { FormattedMessage } from 'react-intl';
 import {
   Card,
   CardContent,
-  Checkbox,
   FormControlLabel,
   ListSubheader,
 } from '@material-ui/core';
+import { Checkbox } from '@mui/material';
 import { defaultComponentTitles } from 'course/translations.intl';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { achievementShape } from 'course/duplication/propTypes';
@@ -32,7 +32,7 @@ class AchievementsListing extends Component {
   static renderRow(achievement) {
     return (
       <FormControlLabel
-        control={<Checkbox checked color="primary" />}
+        control={<Checkbox checked />}
         key={`achievement_${achievement.id}`}
         label={
           <span style={{ display: 'flex', alignItems: 'centre' }}>

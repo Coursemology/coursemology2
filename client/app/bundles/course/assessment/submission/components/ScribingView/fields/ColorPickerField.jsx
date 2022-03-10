@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { SketchPicker } from 'react-color';
-import { Checkbox, FormControlLabel, Popover } from '@material-ui/core';
+import { FormControlLabel, Popover } from '@material-ui/core';
+import { Checkbox } from '@mui/material';
 import { scribingTranslations as translations } from '../../../translations';
 
 const propTypes = {
@@ -86,7 +87,6 @@ const ColorPickerField = (props) => {
             control={
               <Checkbox
                 checked={noFillValue}
-                color="primary"
                 label={intl.formatMessage(translations.noFill)}
                 onChange={(event, checked) => {
                   noFillOnCheck(checked);

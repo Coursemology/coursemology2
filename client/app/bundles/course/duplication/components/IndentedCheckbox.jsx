@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
-import { Checkbox, FormControlLabel } from '@material-ui/core';
+import { FormControlLabel } from '@material-ui/core';
+import { Checkbox } from '@mui/material';
 
 const styles = {
   tabSize: 15,
@@ -25,7 +26,7 @@ const IndentedCheckbox = ({ indentLevel, children, label, ...props }) => {
   return (
     <div style={styles.row}>
       <FormControlLabel
-        control={<Checkbox color="primary" style={checkboxStyle} {...props} />}
+        control={<Checkbox style={checkboxStyle} {...props} />}
         label={<b>{label}</b>}
         style={styles.label}
       />

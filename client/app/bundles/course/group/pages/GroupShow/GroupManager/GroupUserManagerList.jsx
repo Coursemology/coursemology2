@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import {
-  Checkbox,
   Divider,
   List,
   ListItem,
@@ -9,6 +8,7 @@ import {
   MenuItem,
   Select,
 } from '@material-ui/core';
+import { Checkbox } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { memberShape } from '../../../propTypes';
@@ -89,7 +89,6 @@ const GroupUserManagerListItem = ({
   >
     <Checkbox
       checked={isChecked}
-      color="primary"
       onChange={() => onCheck(user)}
       style={styles.checkbox}
     />
