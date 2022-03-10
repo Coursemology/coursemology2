@@ -9,7 +9,6 @@ import {
   Card,
   CardContent,
   CardHeader,
-  SvgIcon,
   Tooltip,
 } from '@material-ui/core';
 import {
@@ -19,6 +18,7 @@ import {
   Stepper,
   StepButton,
   StepLabel,
+  SvgIcon,
 } from '@mui/material';
 import { blue, green, lightBlue, red } from '@mui/material/colors';
 
@@ -64,6 +64,10 @@ const styles = {
     color: 'white',
     marginBottom: 10,
     marginRight: 10,
+  },
+  stepButton: {
+    margin: '-24px -16px',
+    padding: '24px 16px',
   },
 };
 
