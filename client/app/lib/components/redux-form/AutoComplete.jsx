@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormControl, FormHelperText, TextField } from '@material-ui/core';
-import { Autocomplete } from '@material-ui/lab';
+import { TextField } from '@material-ui/core';
+import { Autocomplete } from '@mui/material';
 import createComponent from './createComponent';
 import mapError from './mapError';
 
@@ -23,7 +23,6 @@ const styles = {
   autoCompleteFieldStyle: {
     margin: '14px 10px 12px 0px',
   },
-  errorText: { margin: 0 },
 };
 
 const renderAutoCompleteField = React.forwardRef((props, ref) => {
@@ -37,40 +36,31 @@ const renderAutoCompleteField = React.forwardRef((props, ref) => {
     value,
     ...custom
   } = props;
-  const isError = !!errorText;
   return (
-    <FormControl
+    <Autocomplete
       disabled={disabled}
-      error={isError}
+      freeSolo
       fullWidth
-      style={styles.autoCompleteFieldStyle}
-      variant="standard"
-    >
-      <Autocomplete
-        freeSolo
-        onChange={onChange}
-        onInputChange={onInputChange}
-        options={options}
-        ref={ref}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            label={label}
-            variant="standard"
-          />
-        )}
-        value={value}
-        {...custom}
-      />
-      {isError && (
-        <FormHelperText error={isError} style={styles.errorText}>
-          {errorText}
-        </FormHelperText>
+      onChange={onChange}
+      onInputChange={onInputChange}
+      options={options}
+      ref={ref}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          error={!!errorText}
+          helperText={errorText}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          label={label}
+          style={styles.autoCompleteFieldStyle}
+          variant="standard"
+        />
       )}
-    </FormControl>
+      value={value}
+      {...custom}
+    />
   );
 });
 
