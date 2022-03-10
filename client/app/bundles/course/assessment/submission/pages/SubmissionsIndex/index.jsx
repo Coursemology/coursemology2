@@ -3,18 +3,14 @@ import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import ReactTooltip from 'react-tooltip';
+import { Button, FormControlLabel, Tab, Tabs, Switch } from '@material-ui/core';
 import {
-  Button,
   Card,
   CardActions,
   CardContent,
   CardHeader,
-  FormControlLabel,
-  Tab,
-  Tabs,
-  Switch,
-} from '@material-ui/core';
-import { CircularProgress } from '@mui/material';
+  CircularProgress,
+} from '@mui/material';
 import { blue, green, grey, yellow, red } from '@mui/material/colors';
 import Group from '@mui/icons-material/Group';
 import Person from '@mui/icons-material/Person';

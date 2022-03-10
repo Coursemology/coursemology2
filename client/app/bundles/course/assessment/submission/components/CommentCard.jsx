@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Card, CardHeader, CardContent } from '@material-ui/core';
-import { Avatar } from '@mui/material';
+import { Button } from '@material-ui/core';
+import { Avatar, Card, CardHeader, CardContent } from '@mui/material';
 import { grey, orange, red } from '@mui/material/colors';
 import Delete from '@mui/icons-material/Delete';
 import Edit from '@mui/icons-material/Edit';

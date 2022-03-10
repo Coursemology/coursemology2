@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardContent } from '@material-ui/core';
+import { Card, CardHeader, CardContent } from '@mui/material';
 import { red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 

@@ -1,6 +1,6 @@
 import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { CardContent, CardHeader } from '@material-ui/core';
+import { CardContent, CardHeader } from '@mui/material';
 import Chips from './Chips';
 
 class Details extends PureComponent {

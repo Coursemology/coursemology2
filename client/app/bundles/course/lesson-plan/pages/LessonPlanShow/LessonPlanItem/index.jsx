@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
-import { CardContent } from '@material-ui/core';
-import { Divider } from '@mui/material';
+import { CardContent, Divider } from '@mui/material';
 import Details from './Details';
 import Material from './Material';
 import AdminTools from './AdminTools';

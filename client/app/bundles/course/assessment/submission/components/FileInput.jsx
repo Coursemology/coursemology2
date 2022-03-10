@@ -2,8 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
 import { Field } from 'redux-form';
-import { Card, CardContent } from '@material-ui/core';
-import { Chip } from '@mui/material';
+import { Card, CardContent, Chip } from '@mui/material';
 import FileUpload from '@mui/icons-material/FileUpload';
 
 import { defineMessages, FormattedMessage } from 'react-intl';
