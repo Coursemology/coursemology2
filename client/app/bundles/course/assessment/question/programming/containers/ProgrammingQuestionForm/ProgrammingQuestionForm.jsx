@@ -18,7 +18,7 @@ import {
   Tabs,
   TextField,
 } from '@material-ui/core';
-import { Autocomplete } from '@material-ui/lab';
+import { Autocomplete } from '@mui/material';
 import { red } from '@mui/material/colors';
 
 import MaterialSummernote from 'lib/components/MaterialSummernote';
@@ -415,7 +415,7 @@ class ProgrammingQuestionForm extends Component {
           filterSelectedOptions
           fullWidth
           getOptionLabel={(option) => option.title}
-          getOptionSelected={(option, val) => option.id === val.id}
+          isOptionEqualToValue={(option, val) => option.id === val.id}
           ListboxProps={{ style: { maxHeight: '80vh', overflowY: 'scroll' } }}
           multiple
           onChange={(event, val) => {
