@@ -9,7 +9,6 @@ import {
   Card,
   CardContent,
   CardHeader,
-  Paper,
   Tab,
   Tabs,
 } from '@material-ui/core';
@@ -19,6 +18,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Paper,
 } from '@mui/material';
 import { blue, grey, yellow, red } from '@mui/material/colors';
 

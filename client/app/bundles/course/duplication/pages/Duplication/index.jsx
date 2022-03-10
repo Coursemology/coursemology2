@@ -10,10 +10,10 @@ import {
 import {
   ListSubheader,
   FormControlLabel,
-  Paper,
   Radio,
   RadioGroup,
 } from '@material-ui/core';
+import { Paper } from '@mui/material';
 import TitleBar from 'lib/components/TitleBar';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import DateTimePicker from 'lib/components/form/DateTimePicker';

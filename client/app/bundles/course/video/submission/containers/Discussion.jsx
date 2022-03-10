@@ -1,8 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Paper } from '@material-ui/core';
-import { Divider } from '@mui/material';
+import { Divider, Paper } from '@mui/material';
 import styles from './Discussion.scss';
 import NewPostContainer from './DiscussionElements/NewPostContainer';
 import Topic from './DiscussionElements/Topic';

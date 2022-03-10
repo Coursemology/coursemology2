@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Paper } from '@material-ui/core';
+import { Paper } from '@mui/material';
 import { connect } from 'react-redux';
 import {
   playerStates,

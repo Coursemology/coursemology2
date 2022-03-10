@@ -4,12 +4,12 @@ import {
   Card,
   CardContent,
   CardHeader,
-  Paper,
   Table,
   TableBody,
   TableCell,
   TableRow,
 } from '@material-ui/core';
+import { Paper } from '@mui/material';
 import { blue, green, grey, red, yellow } from '@mui/material/colors';
 import Warning from '@mui/icons-material/Warning';
 
