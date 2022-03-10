@@ -2,7 +2,8 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { reduxForm, Form } from 'redux-form';
-import { Button, Snackbar } from '@material-ui/core';
+import { Button } from '@material-ui/core';
+import { Snackbar } from '@mui/material';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import InputField from '../../components/InputField';
 import SummernoteField from '../../components/SummernoteField';
@@ -121,6 +122,7 @@ class ScribingQuestionForm extends Component {
     return (
       <>
         <Snackbar
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
           open={this.props.invalid && this.props.submitFailed}
           message={this.props.intl.formatMessage(
             translations.resolveErrorsMessage,
@@ -128,6 +130,7 @@ class ScribingQuestionForm extends Component {
           autoHideDuration={5000}
         />
         <Snackbar
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
           open={
             (this.props.data.error &&
               this.props.data.saveErrors &&
@@ -143,6 +146,7 @@ class ScribingQuestionForm extends Component {
           }}
         />
         <Snackbar
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
           open={
             (this.props.data.error &&
               this.props.data.saveErrors &&
@@ -155,6 +159,7 @@ class ScribingQuestionForm extends Component {
           autoHideDuration={5000}
         />
         <Snackbar
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
           open={this.props.submitting}
           message={this.props.intl.formatMessage(
             translations.submittingMessage,
