@@ -3,8 +3,8 @@ import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
-import Edit from '@material-ui/icons/Edit';
-import Delete from '@material-ui/icons/Delete';
+import Edit from '@mui/icons-material/Edit';
+import Delete from '@mui/icons-material/Delete';
 import { Button } from '@material-ui/core';
 import {
   showEventForm,

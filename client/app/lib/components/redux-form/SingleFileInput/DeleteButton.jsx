@@ -2,7 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { IconButton, Tooltip } from '@material-ui/core';
 import { Badge } from '@mui/material';
-import Close from '@material-ui/icons/Close';
+import Close from '@mui/icons-material/Close';
 import { FormattedMessage } from 'react-intl';
 import translations from './translations';
 

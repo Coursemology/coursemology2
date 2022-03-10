@@ -1,5 +1,5 @@
 import { Avatar } from '@mui/material';
-import InsertDriveFile from '@material-ui/icons/InsertDriveFile';
+import InsertDriveFile from '@mui/icons-material/InsertDriveFile';
 import ImagePreview from './ImagePreview';
 
 const styles = {

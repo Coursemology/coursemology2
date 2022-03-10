@@ -10,8 +10,8 @@ import {
 } from 'react-intl';
 import { Button } from '@material-ui/core';
 import { red } from '@mui/material/colors';
-import Mic from '@material-ui/icons/Mic';
-import Stop from '@material-ui/icons/Stop';
+import Mic from '@mui/icons-material/Mic';
+import Stop from '@mui/icons-material/Stop';
 import SingleFileInput from 'lib/components/redux-form/SingleFileInput';
 import sharedConstants from 'lib/constants/sharedConstants';
 import recorderHelper from '../../utils/recorderHelper';

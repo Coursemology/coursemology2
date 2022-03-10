@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import Block from '@material-ui/icons/Block';
+import Block from '@mui/icons-material/Block';
 
 const styles = {
   // TODO: lower position of the icon so that it aligns with adjacent text

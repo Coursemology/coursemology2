@@ -7,10 +7,10 @@ import {
   KeyboardTimePicker,
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
-import DateRange from '@material-ui/icons/DateRange';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import Schedule from '@material-ui/icons/Schedule';
+import DateRange from '@mui/icons-material/DateRange';
+import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import Schedule from '@mui/icons-material/Schedule';
 import MomentUtils from '@date-io/moment';
 
 const translations = defineMessages({

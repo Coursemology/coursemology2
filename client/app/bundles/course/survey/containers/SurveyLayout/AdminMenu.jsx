@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import { IconButton, Menu, MenuItem } from '@material-ui/core';
-import MoreVert from '@material-ui/icons/MoreVert';
+import MoreVert from '@mui/icons-material/MoreVert';
 import * as surveyActions from 'course/survey/actions/surveys';
 import { showDeleteConfirmation } from 'course/survey/actions';
 import { formatSurveyFormData } from 'course/survey/utils';

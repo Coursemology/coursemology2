@@ -3,7 +3,7 @@ import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import { Button } from '@material-ui/core';
 import { Avatar } from '@mui/material';
 import { deepOrange, yellow } from '@mui/material/colors';
-import Star from '@material-ui/icons/Star';
+import Star from '@mui/icons-material/Star';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import Popup from 'course/user-notification/components/Popup';
 

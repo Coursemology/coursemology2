@@ -2,7 +2,7 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { IconButton, Menu, MenuItem } from '@material-ui/core';
-import MoreVert from '@material-ui/icons/MoreVert';
+import MoreVert from '@mui/icons-material/MoreVert';
 
 import { deletePostFromServer, updatePost } from '../../actions/discussion';
 

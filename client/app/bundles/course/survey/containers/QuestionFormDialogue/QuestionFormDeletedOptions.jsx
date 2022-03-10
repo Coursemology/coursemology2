@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { IconButton, Radio } from '@material-ui/core';
 import { Checkbox } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import Close from '@material-ui/icons/Close';
+import Close from '@mui/icons-material/Close';
 import Thumbnail from 'lib/components/Thumbnail';
 
 const styles = {

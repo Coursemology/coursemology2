@@ -12,9 +12,9 @@ import {
   TableHead,
   TableRow,
 } from '@material-ui/core';
-import Add from '@material-ui/icons/Add';
-import Edit from '@material-ui/icons/Edit';
-import Delete from '@material-ui/icons/Delete';
+import Add from '@mui/icons-material/Add';
+import Edit from '@mui/icons-material/Edit';
+import Delete from '@mui/icons-material/Delete';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import translations from './translations.intl';
 

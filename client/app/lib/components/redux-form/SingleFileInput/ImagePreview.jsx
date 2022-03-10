@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import InsertDriveFile from '@material-ui/icons/InsertDriveFile';
+import InsertDriveFile from '@mui/icons-material/InsertDriveFile';
 import { grey } from '@mui/material/colors';
 import DeleteButton from './DeleteButton';
 import translations from './translations';

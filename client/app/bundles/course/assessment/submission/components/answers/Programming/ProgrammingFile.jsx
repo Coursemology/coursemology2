@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Paper } from '@material-ui/core';
 import { yellow } from '@mui/material/colors';
-import Warning from '@material-ui/icons/Warning';
+import Warning from '@mui/icons-material/Warning';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router';
 

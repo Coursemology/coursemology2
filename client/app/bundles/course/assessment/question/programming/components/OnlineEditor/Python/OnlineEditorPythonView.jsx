@@ -17,7 +17,7 @@ import {
   TableRow,
 } from '@material-ui/core';
 import { red } from '@mui/material/colors';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import 'ace-builds/src-noconflict/mode-python';
 import 'ace-builds/src-noconflict/theme-monokai';
