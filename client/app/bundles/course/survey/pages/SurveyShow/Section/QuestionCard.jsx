@@ -117,6 +117,7 @@ class QuestionCard extends Component {
         disabled
         fullWidth
         label={<FormattedMessage {...translations.textResponse} />}
+        variant="standard"
       />
     );
   }

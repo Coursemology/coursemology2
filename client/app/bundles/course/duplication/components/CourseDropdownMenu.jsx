@@ -70,6 +70,7 @@ class CourseDropdownMenu extends PureComponent {
             value={selectedCourseId || ''}
             style={styles.dropDown}
             {...dropDownMenuProps}
+            variant="standard"
           >
             {courses.map(this.renderCourseMenuItem)}
           </Select>

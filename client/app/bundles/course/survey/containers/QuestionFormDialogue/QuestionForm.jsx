@@ -269,6 +269,7 @@ class QuestionForm extends Component {
         label={intl.formatMessage(questionFormTranslations.optionCount)}
         fullWidth
         style={{ marginBottom: 12, marginTop: 14, marginRight: 16 }}
+        variant="standard"
       />
     );
   }

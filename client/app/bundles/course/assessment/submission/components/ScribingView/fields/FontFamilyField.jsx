@@ -68,12 +68,13 @@ const FontFamilyField = (props) => {
 
   return (
     <div>
-      <FormControl>
+      <FormControl variant="standard">
         <InputLabel>{intl.formatMessage(translations.fontFamily)}</InputLabel>
         <Select
           value={fontFamilyValue}
           onChange={onChangeFontFamily}
           style={styles.select}
+          variant="standard"
         >
           {menuItems}
         </Select>

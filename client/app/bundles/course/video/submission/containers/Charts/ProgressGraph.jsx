@@ -222,7 +222,7 @@ class ProgressGraph extends Component {
 
     return (
       <div style={{ padding: '20px 0' }}>
-        <FormControl>
+        <FormControl variant="standard">
           <InputLabel>
             {this.props.intl.formatMessage(translations.selectSession)}
           </InputLabel>
@@ -232,6 +232,7 @@ class ProgressGraph extends Component {
               this.setState({ selectedSessionId: event.target.value })
             }
             style={{ maxHeight: 300, width: 200 }}
+            variant="standard"
           >
             {items}
           </Select>

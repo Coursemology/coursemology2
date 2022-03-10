@@ -76,6 +76,7 @@ class LevelRow extends Component {
         }}
         type="text"
         value={experiencePointsThreshold}
+        variant="standard"
       />
     );
   }

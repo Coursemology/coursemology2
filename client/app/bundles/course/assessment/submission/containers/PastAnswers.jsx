@@ -76,12 +76,13 @@ class PastAnswers extends Component {
     };
 
     return (
-      <FormControl style={{ float: 'right', width: 300 }}>
+      <FormControl style={{ float: 'right', width: 300 }} variant="standard">
         <InputLabel>{intl.formatMessage(translations.pastAnswers)}</InputLabel>
         <Select
           multiple
           value={selectedAnswers || 'test'}
           onChange={handleSelectPastAnswers}
+          variant="standard"
         >
           {answerIds.map(renderOption)}
         </Select>

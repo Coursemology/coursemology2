@@ -359,6 +359,7 @@ const GroupUserManager = ({
               onChange={(event) => setAvailableSearch(event.target.value)}
               style={styles.textField}
               value={availableSearch}
+              variant="standard"
             />
             <GroupUserManagerList
               students={availableStudents}
@@ -377,6 +378,7 @@ const GroupUserManager = ({
               onChange={(event) => setSelectedSearch(event.target.value)}
               style={styles.textField}
               value={selectedSearch}
+              variant="standard"
             />
             <GroupUserManagerList
               students={selectedStudents}
