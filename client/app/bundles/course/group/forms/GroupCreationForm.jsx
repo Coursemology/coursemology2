@@ -2,14 +2,12 @@ import { useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { change, Field, Form, formValueSelector, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import { Tab, Tabs } from '@material-ui/core';
+import { Tab, Tabs } from '@mui/material';
 import { red } from '@mui/material/colors';
 import { defineMessages, FormattedMessage } from 'react-intl';
-
 import ErrorText, { errorProps } from 'lib/components/ErrorText';
 import formTranslations from 'lib/translations/form';
 import TextField from 'lib/components/redux-form/TextField';
-
 import actionTypes, { formNames } from '../constants';
 import { groupShape } from '../propTypes';
 
@@ -160,6 +158,8 @@ const GroupCreationForm = ({
     <Form onSubmit={handleSubmit(onSubmit)}>
       <ErrorText errors={error} />
       <Tabs
+        indicatorColor="primary"
+        textColor="inherit"
         value={isSingle ? 'is_single' : 'is_multiple'}
         onChange={handleChange}
         variant="fullWidth"

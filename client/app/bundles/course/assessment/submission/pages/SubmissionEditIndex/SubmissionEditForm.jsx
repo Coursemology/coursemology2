@@ -4,7 +4,7 @@ import { reduxForm } from 'redux-form';
 import { Prompt } from 'react-router-dom';
 import { injectIntl, intlShape } from 'react-intl';
 import { Element, scroller } from 'react-scroll';
-import { Button, Tab, Tabs } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import {
   Card,
   CardContent,
@@ -15,6 +15,8 @@ import {
   DialogContent,
   DialogTitle,
   Paper,
+  Tab,
+  Tabs,
 } from '@mui/material';
 import { blue, grey, yellow, red } from '@mui/material/colors';
 

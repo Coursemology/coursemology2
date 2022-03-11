@@ -13,11 +13,9 @@ import {
   MenuItem,
   Select,
   Switch,
-  Tab,
-  Tabs,
   TextField,
 } from '@material-ui/core';
-import { Autocomplete, Snackbar } from '@mui/material';
+import { Autocomplete, Snackbar, Tab, Tabs } from '@mui/material';
 import { red } from '@mui/material/colors';
 
 import MaterialSummernote from 'lib/components/MaterialSummernote';
@@ -562,6 +560,8 @@ class ProgrammingQuestionForm extends Component {
 
     return (
       <Tabs
+        indicatorColor="primary"
+        textColor="inherit"
         value={showEditOnline ? 'editor' : 'upload-package'}
         onChange={onTestTypeChange}
         style={{ margin: '1em 0' }}

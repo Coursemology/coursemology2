@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import Immutable from 'immutable';
-
 import PropTypes from 'prop-types';
-import { Tab, Tabs } from '@material-ui/core';
-import { Card, CardContent } from '@mui/material';
+import { Card, CardContent, Tab, Tabs } from '@mui/material';
 import { grey } from '@mui/material/colors';
 
 const propTypes = {
