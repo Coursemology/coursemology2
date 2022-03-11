@@ -8,6 +8,7 @@ import {
   createTheme as createThemeV5,
   adaptV4Theme,
   ThemeProvider,
+  StyledEngineProvider,
 } from '@mui/material/styles';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import zh from 'react-intl/locale-data/zh';
@@ -57,8 +58,12 @@ const themeSettings = {
       },
     },
     MuiAccordionSummary: {
+      root: {
+        width: '100%',
+      },
       content: {
         margin: 0,
+        paddingLeft: '16px',
         '&$expanded': { margin: 0 },
       },
     },
@@ -126,9 +131,11 @@ const ProviderWrapper = ({ store, persistor, children }) => {
 
   providers = (
     <IntlProvider locale={i18nLocale} messages={messages}>
-      <ThemeProvider theme={themeV5}>
-        <MuiThemeProvider theme={theme}>{providers}</MuiThemeProvider>{' '}
-      </ThemeProvider>
+      <StyledEngineProvider injectFirst>
+        <ThemeProvider theme={themeV5}>
+          <MuiThemeProvider theme={theme}>{providers}</MuiThemeProvider>{' '}
+        </ThemeProvider>
+      </StyledEngineProvider>
     </IntlProvider>
   );
 

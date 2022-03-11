@@ -7,8 +7,6 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-} from '@material-ui/core';
-import {
   Paper,
   Table,
   TableBody,

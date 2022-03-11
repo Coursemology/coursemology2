@@ -5,8 +5,9 @@ import {
   Accordion,
   AccordionActions,
   AccordionSummary,
-} from '@material-ui/core';
-import { Divider, Icon } from '@mui/material';
+  Divider,
+  Icon,
+} from '@mui/material';
 import { cyan } from '@mui/material/colors';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import PropTypes from 'prop-types';

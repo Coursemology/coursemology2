@@ -1,11 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-} from '@material-ui/core';
+import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AceEditor from 'react-ace';
 

@@ -1,16 +1,14 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import { IconButton, Menu, MenuItem, TextField } from '@material-ui/core';
 import {
   Accordion,
   AccordionSummary,
   CardContent,
-  IconButton,
-  Menu,
-  MenuItem,
-  TextField,
-} from '@material-ui/core';
-import { Checkbox, Radio } from '@mui/material';
+  Checkbox,
+  Radio,
+} from '@mui/material';
 import MoreVert from '@mui/icons-material/MoreVert';
 import formTranslations from 'lib/translations/form';
 import { questionTypes } from 'course/survey/constants';
@@ -180,7 +178,6 @@ class QuestionCard extends Component {
         style={{ ...styles.card, ...cursorStyle }}
       >
         <AccordionSummary>
-          {this.renderAdminMenu()}
           <div style={styles.panelSummaryText}>
             <p dangerouslySetInnerHTML={{ __html: question.description }} />
             {question.required ? (
@@ -189,6 +186,7 @@ class QuestionCard extends Component {
               </p>
             ) : null}
           </div>
+          {this.renderAdminMenu()}
         </AccordionSummary>
         <CardContent style={styles.fields}>
           {QuestionCard.renderSpecificFields(question)}
