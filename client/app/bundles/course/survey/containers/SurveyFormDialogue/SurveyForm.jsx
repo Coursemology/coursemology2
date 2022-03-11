@@ -9,7 +9,7 @@ import { reduxForm, Field, Form } from 'redux-form';
 import ReactTooltip from 'react-tooltip';
 import renderTextField from 'lib/components/redux-form/TextField';
 import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
-import Toggle from 'lib/components/redux-form/Toggle';
+import renderToggleField from 'lib/components/redux-form/Toggle';
 import formTranslations from 'lib/translations/form';
 import translations from 'course/survey/translations';
 import { formNames } from 'course/survey/constants';
@@ -181,7 +181,7 @@ const SurveyForm = ({
     </div>
     <Field
       name="allow_response_after_end"
-      component={Toggle}
+      component={renderToggleField}
       parse={Boolean}
       label={intl.formatMessage(translations.allowResponseAfterEnd)}
       style={styles.toggle}
@@ -192,7 +192,7 @@ const SurveyForm = ({
     </div>
     <Field
       name="allow_modify_after_submit"
-      component={Toggle}
+      component={renderToggleField}
       parse={Boolean}
       label={intl.formatMessage(translations.allowModifyAfterSubmit)}
       style={styles.toggle}
@@ -203,7 +203,7 @@ const SurveyForm = ({
     </div>
     <Field
       name="anonymous"
-      component={Toggle}
+      component={renderToggleField}
       parse={Boolean}
       label={intl.formatMessage(translations.anonymous)}
       style={styles.toggle}

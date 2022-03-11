@@ -5,8 +5,11 @@ import moment, { formatLongDateTime } from 'lib/moment';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import mirrorCreator from 'mirror-creator';
-import { Card, CardContent, FormControlLabel, Switch } from '@material-ui/core';
 import {
+  Card,
+  CardContent,
+  FormControlLabel,
+  Switch,
   Table,
   TableBody,
   TableCell,

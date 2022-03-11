@@ -1,11 +1,7 @@
 import { forwardRef } from 'react';
 import PropTypes from 'prop-types';
-import {
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
-  Switch,
-} from '@material-ui/core';
+import { FormControl } from '@material-ui/core';
+import { FormControlLabel, FormHelperText, Switch } from '@mui/material';
 import createComponent from './createComponent';
 import mapError from './mapError';
 

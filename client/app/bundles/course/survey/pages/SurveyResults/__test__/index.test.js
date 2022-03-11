@@ -77,7 +77,7 @@ describe('<SurveyResults />', () => {
     surveyResults.update();
     const rowsPriorToToggle = surveyResults.find('ForwardRef(TableRow)').length;
     const includePhantomToggle = surveyResults
-      .find('WithStyles(ForwardRef(Switch))')
+      .find('ForwardRef(Switch)')
       .first();
     includePhantomToggle.props().onChange(null, false);
     surveyResults.update();

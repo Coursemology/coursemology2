@@ -2,8 +2,13 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { FormControlLabel, Switch } from '@material-ui/core';
-import { Card, CardContent, ListSubheader } from '@mui/material';
+import {
+  Card,
+  CardContent,
+  ListSubheader,
+  FormControlLabel,
+  Switch,
+} from '@mui/material';
 import surveyTranslations from 'course/survey/translations';
 import { fetchResults } from 'course/survey/actions/surveys';
 import LoadingIndicator from 'lib/components/LoadingIndicator';

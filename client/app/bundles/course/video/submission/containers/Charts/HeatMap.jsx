@@ -2,7 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Bar } from 'react-chartjs-2';
-import { FormControlLabel, Switch } from '@material-ui/core';
+import { FormControlLabel, Switch } from '@mui/material';
 import { injectIntl, intlShape } from 'react-intl';
 import { formatTimestamp } from 'lib/helpers/videoHelpers';
 import { videoDefaults } from 'lib/constants/videoConstants';

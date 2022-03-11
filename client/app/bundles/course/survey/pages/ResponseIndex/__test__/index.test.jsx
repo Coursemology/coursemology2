@@ -97,14 +97,10 @@ describe('<ResponseIndex />', () => {
     expect(getStatus(realStudentRows.last())).toBe('Responding');
 
     // Include phantom students in statistics
-    const statsCard = responseIndex.find('WithStyles(ForwardRef(Card))').last();
+    const statsCard = responseIndex.find('ForwardRef(Card)').last();
     const submittedChip = statsCard.find('ForwardRef(Chip)').last();
     expect(submittedChip.text()).toBe('0 Submitted');
-    statsCard
-      .find('WithStyles(ForwardRef(Switch))')
-      .first()
-      .props()
-      .onChange(null, true);
+    statsCard.find('ForwardRef(Switch)').first().props().onChange(null, true);
     expect(submittedChip.text()).toBe('2 Submitted');
   });
 });
