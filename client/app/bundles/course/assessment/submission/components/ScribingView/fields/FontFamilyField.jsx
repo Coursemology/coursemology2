@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
+import { FormControl, InputLabel, Select } from '@material-ui/core';
+import { MenuItem } from '@mui/material';
 import { scribingTranslations as translations } from '../../../translations';
 
 const propTypes = {

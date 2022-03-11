@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field, Form, formValueSelector, change } from 'redux-form';
 import { connect } from 'react-redux';
-import { MenuItem } from '@material-ui/core';
+import { MenuItem } from '@mui/material';
 import ErrorText, { errorProps } from 'lib/components/ErrorText';
 import ConditionList from 'lib/components/course/ConditionList';
 import renderTextField from 'lib/components/redux-form/TextField';
