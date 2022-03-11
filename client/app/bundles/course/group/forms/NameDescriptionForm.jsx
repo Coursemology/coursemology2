@@ -4,7 +4,7 @@ import { reduxForm, Field, Form } from 'redux-form';
 import { connect } from 'react-redux';
 
 import ErrorText, { errorProps } from 'lib/components/ErrorText';
-import TextField from 'lib/components/redux-form/TextField';
+import renderTextField from 'lib/components/redux-form/TextField';
 import formTranslations from 'lib/translations/form';
 import { formNames } from '../constants';
 
@@ -58,19 +58,19 @@ const NameDescriptionForm = ({ submitting, handleSubmit, onSubmit, error }) => (
     <div style={styles.flexCol}>
       <Field
         name="name"
-        component={TextField}
+        component={renderTextField}
         label={<FormattedMessage {...translations.name} />}
         disabled={submitting}
         style={styles.flexChild}
       />
       <Field
         name="description"
-        component={TextField}
+        component={renderTextField}
         label={<FormattedMessage {...translations.description} />}
         multiline
         disabled={submitting}
-        rows={2}
-        rowsMax={4}
+        minRows={2}
+        maxRows={4}
         style={styles.flexChild}
       />
     </div>

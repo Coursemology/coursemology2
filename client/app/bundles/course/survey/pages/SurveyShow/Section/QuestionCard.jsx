@@ -1,7 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { TextField } from '@material-ui/core';
 import {
   Accordion,
   AccordionSummary,
@@ -11,6 +10,7 @@ import {
   Menu,
   MenuItem,
   Radio,
+  TextField,
 } from '@mui/material';
 import MoreVert from '@mui/icons-material/MoreVert';
 import formTranslations from 'lib/translations/form';
