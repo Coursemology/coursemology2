@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { IconButton } from '@material-ui/core';
-import { Tooltip } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
 import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
 import {
   cyan as activeColor,

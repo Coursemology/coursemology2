@@ -2,9 +2,9 @@ import { Component } from 'react';
 import ReactTooltip from 'react-tooltip';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { IconButton } from '@material-ui/core';
 import {
   CircularProgress,
+  IconButton,
   Menu,
   MenuItem,
   Table,

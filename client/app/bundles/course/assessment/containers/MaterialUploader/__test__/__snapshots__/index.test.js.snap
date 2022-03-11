@@ -31,7 +31,7 @@ exports[`<Material /> renders the material 1`] = `
     }
   />
   <ForwardRef(ListItemSecondaryAction)>
-    <WithStyles(ForwardRef(IconButton))
+    <ForwardRef(IconButton)
       onClick={[Function]}
       style={
         Object {
@@ -61,7 +61,7 @@ exports[`<Material /> renders the material 1`] = `
           values={Object {}}
         />
       </ReactTooltip>
-    </WithStyles(ForwardRef(IconButton))>
+    </ForwardRef(IconButton)>
   </ForwardRef(ListItemSecondaryAction)>
 </ForwardRef(ListItem)>
 `;

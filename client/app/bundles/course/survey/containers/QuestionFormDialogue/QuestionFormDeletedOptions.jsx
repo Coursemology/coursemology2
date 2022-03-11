@@ -1,7 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { IconButton } from '@material-ui/core';
-import { Checkbox, Radio } from '@mui/material';
+import { Checkbox, IconButton, Radio } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import Close from '@mui/icons-material/Close';
 import Thumbnail from 'lib/components/Thumbnail';

@@ -2,10 +2,10 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { formatLongDateTime } from 'lib/moment';
-import { IconButton } from '@material-ui/core';
 import {
   Avatar,
   CircularProgress,
+  IconButton,
   ListItem,
   ListItemAvatar,
   ListItemText,

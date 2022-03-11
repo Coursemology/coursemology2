@@ -85,7 +85,10 @@ describe('<SingleFileInput />', () => {
     );
 
     expect(imagePreview.find('ForwardRef(Badge)').exists()).toBe(true);
-    imagePreview.find('ForwardRef(IconButton)').simulate('click');
+    imagePreview
+      .find('ForwardRef(IconButton)')
+      .find('button')
+      .simulate('click');
     expect(onCancel).toHaveBeenCalled();
   });
 });

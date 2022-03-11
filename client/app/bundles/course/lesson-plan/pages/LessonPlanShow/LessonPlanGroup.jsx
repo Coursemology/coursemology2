@@ -3,13 +3,13 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Element } from 'react-scroll';
-import { IconButton } from '@material-ui/core';
 import {
   Card,
   CardContent,
   CardHeader,
   Collapse,
   Divider,
+  IconButton,
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
