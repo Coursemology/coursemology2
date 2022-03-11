@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Tab, Tabs } from '@material-ui/core';
+import { Tab, Tabs } from '@mui/material';
 import ProgressGraph from './Charts/ProgressGraph';
 import HeatMap from './Charts/HeatMap';
 import styles from './Statistics.scss';
@@ -40,6 +40,8 @@ const Statistics = ({ watchFrequency, sessions }) => {
   return (
     <>
       <Tabs
+        indicatorColor="primary"
+        textColor="inherit"
         className={styles.statisticsGraphView}
         onChange={(event, value) => {
           setTabValue(value);
