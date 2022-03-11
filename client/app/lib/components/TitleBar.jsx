@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
-import { Toolbar, Typography } from '@material-ui/core';
-import { AppBar } from '@mui/material';
+import { AppBar, Toolbar, Typography } from '@mui/material';
 
 const styles = {
   bar: {
