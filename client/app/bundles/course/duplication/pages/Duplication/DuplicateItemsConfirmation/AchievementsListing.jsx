@@ -2,7 +2,13 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { Card, CardContent, Checkbox, FormControlLabel, ListSubheader } from '@mui/material';
+import {
+  Card,
+  CardContent,
+  Checkbox,
+  FormControlLabel,
+  ListSubheader,
+} from '@mui/material';
 import { defaultComponentTitles } from 'course/translations.intl';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { achievementShape } from 'course/duplication/propTypes';

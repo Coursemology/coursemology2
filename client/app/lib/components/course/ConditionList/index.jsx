@@ -1,8 +1,8 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
-import { IconButton } from '@material-ui/core';
 import {
+  IconButton,
   ListSubheader,
   Menu,
   MenuItem,
