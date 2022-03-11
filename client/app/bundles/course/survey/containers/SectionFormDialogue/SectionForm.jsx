@@ -35,7 +35,7 @@ const SectionForm = ({ handleSubmit, intl, onSubmit, disabled }) => (
       label={intl.formatMessage(translations.description)}
       component={renderTextField}
       multiline
-      rows={2}
+      minRows={2}
       {...{ disabled }}
     />
   </Form>

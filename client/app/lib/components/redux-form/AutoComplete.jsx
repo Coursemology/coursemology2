@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { TextField } from '@material-ui/core';
-import { Autocomplete } from '@mui/material';
+import { Autocomplete, TextField } from '@mui/material';
 import createComponent from './createComponent';
 import mapError from './mapError';
 

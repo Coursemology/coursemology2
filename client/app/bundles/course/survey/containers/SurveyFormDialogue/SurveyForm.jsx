@@ -127,7 +127,7 @@ const SurveyForm = ({
       label={intl.formatMessage(translations.description)}
       component={renderTextField}
       multiline
-      rows={2}
+      minRows={2}
       {...{ disabled }}
     />
     <div style={styles.columns}>

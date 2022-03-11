@@ -1,8 +1,8 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Button, TextField } from '@material-ui/core';
-import { TableRow, TableCell } from '@mui/material';
+import { Button } from '@material-ui/core';
+import { TableRow, TableCell, TextField } from '@mui/material';
 import Delete from '@mui/icons-material/Delete';
 
 const translations = defineMessages({

@@ -5,8 +5,7 @@ import { reduxForm, Field, FieldArray, Form } from 'redux-form';
 import renderTextField from 'lib/components/redux-form/TextField';
 import renderSelectField from 'lib/components/redux-form/SelectField';
 import renderToggleField from 'lib/components/redux-form/Toggle';
-import { TextField } from '@material-ui/core';
-import { ListSubheader, MenuItem } from '@mui/material';
+import { ListSubheader, MenuItem, TextField } from '@mui/material';
 import formTranslations from 'lib/translations/form';
 import translations from 'course/survey/translations';
 import { questionTypes, formNames } from 'course/survey/constants';
@@ -305,7 +304,7 @@ class QuestionForm extends Component {
           label={intl.formatMessage(translations.questionText)}
           component={renderTextField}
           multiline
-          rows={4}
+          minRows={4}
           {...{ disabled }}
         />
         <Field

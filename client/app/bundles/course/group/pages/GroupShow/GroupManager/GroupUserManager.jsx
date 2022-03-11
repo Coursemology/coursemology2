@@ -1,8 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormControlLabel, TextField } from '@material-ui/core';
-import { Checkbox } from '@mui/material';
+import { Checkbox, FormControlLabel, TextField } from '@mui/material';
 import { blue, green, red } from '@mui/material/colors';
 import CompareArrows from '@mui/icons-material/CompareArrows';
 import Delete from '@mui/icons-material/Delete';
