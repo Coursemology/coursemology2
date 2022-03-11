@@ -4,7 +4,7 @@ import { reduxForm, Field, Form } from 'redux-form';
 import renderTextField from 'lib/components/redux-form/TextField';
 import RichTextField from 'lib/components/redux-form/RichTextField';
 import renderAutoCompleteField from 'lib/components/redux-form/AutoComplete';
-import Toggle from 'lib/components/redux-form/Toggle';
+import renderToggleField from 'lib/components/redux-form/Toggle';
 import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
 import formTranslations from 'lib/translations/form';
 import translations from 'course/lesson-plan/translations';
@@ -133,7 +133,7 @@ const EventForm = ({
     </div>
     <Field
       name="published"
-      component={Toggle}
+      component={renderToggleField}
       parse={Boolean}
       label={<FormattedMessage {...translations[PUBLISHED]} />}
       style={styles.toggle}

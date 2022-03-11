@@ -3,13 +3,15 @@ import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import ReactTooltip from 'react-tooltip';
-import { Button, FormControlLabel, Switch } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import {
   Card,
   CardActions,
   CardContent,
   CardHeader,
   CircularProgress,
+  FormControlLabel,
+  Switch,
   Tab,
   Tabs,
 } from '@mui/material';

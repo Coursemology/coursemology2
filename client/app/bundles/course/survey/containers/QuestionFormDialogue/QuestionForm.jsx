@@ -4,7 +4,7 @@ import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import { reduxForm, Field, FieldArray, Form } from 'redux-form';
 import renderTextField from 'lib/components/redux-form/TextField';
 import renderSelectField from 'lib/components/redux-form/SelectField';
-import Toggle from 'lib/components/redux-form/Toggle';
+import renderToggleField from 'lib/components/redux-form/Toggle';
 import { MenuItem, TextField } from '@material-ui/core';
 import { ListSubheader } from '@mui/material';
 import formTranslations from 'lib/translations/form';
@@ -243,7 +243,7 @@ class QuestionForm extends Component {
         <Field
           name="grid_view"
           label={intl.formatMessage(questionFormTranslations.gridView)}
-          component={Toggle}
+          component={renderToggleField}
           parse={Boolean}
           style={styles.toggle}
           {...{ disabled }}
@@ -311,7 +311,7 @@ class QuestionForm extends Component {
         <Field
           name="required"
           label={intl.formatMessage(questionFormTranslations.required)}
-          component={Toggle}
+          component={renderToggleField}
           parse={Boolean}
           style={styles.toggle}
           {...{ disabled }}

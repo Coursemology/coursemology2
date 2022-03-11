@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { formatLongDateTime } from 'lib/moment';
-import { Button, FormControlLabel, Switch } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import {
   Card,
   CardContent,
+  FormControlLabel,
+  Switch,
   Table,
   TableBody,
   TableCell,

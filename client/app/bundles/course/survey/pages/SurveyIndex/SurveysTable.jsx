@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { Button, FormControlLabel, Switch } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import {
+  FormControlLabel,
+  Switch,
   Table,
   TableBody,
   TableCell,
@@ -39,30 +41,25 @@ class SurveysTable extends Component {
     }
 
     return (
-      <FormControlLabel
-        control={
-          <Switch
-            checked={survey.published}
-            color="primary"
-            onChange={(event, value) =>
-              dispatch(
-                updateSurvey(
-                  survey.id,
-                  { survey: { published: value } },
-                  <FormattedMessage
-                    {...translations.updateSuccess}
-                    values={survey}
-                  />,
-                  <FormattedMessage
-                    {...translations.updateFailure}
-                    values={survey}
-                  />,
-                ),
-              )
-            }
-          />
+      <Switch
+        checked={survey.published}
+        color="primary"
+        onChange={(event, value) =>
+          dispatch(
+            updateSurvey(
+              survey.id,
+              { survey: { published: value } },
+              <FormattedMessage
+                {...translations.updateSuccess}
+                values={survey}
+              />,
+              <FormattedMessage
+                {...translations.updateFailure}
+                values={survey}
+              />,
+            ),
+          )
         }
-        labelPlacement="end"
       />
     );
   }

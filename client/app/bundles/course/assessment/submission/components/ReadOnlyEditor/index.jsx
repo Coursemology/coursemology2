@@ -1,8 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-
-import { FormControlLabel, Switch } from '@material-ui/core';
+import { FormControlLabel, Switch } from '@mui/material';
 import NarrowEditor from './NarrowEditor';
 import WideEditor from './WideEditor';
 import { annotationShape } from '../../propTypes';

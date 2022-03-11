@@ -106,9 +106,7 @@ describe('<ResultsQuestion />', () => {
       resultsQuestion.find('ForwardRef(TableRow)').last().find('td').at(3);
     const lastOptionCountBeforeSort = lastOptionCountCell().text();
     expect(lastOptionCountBeforeSort).toBe('1');
-    const sortToggle = resultsQuestion
-      .find('WithStyles(ForwardRef(Switch))')
-      .first();
+    const sortToggle = resultsQuestion.find('ForwardRef(Switch)').first();
     sortToggle.props().onChange(null, true);
     resultsQuestion.update();
     const lastOptionCountAfterSort = lastOptionCountCell().text();

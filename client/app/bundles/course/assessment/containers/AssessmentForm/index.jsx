@@ -8,7 +8,7 @@ import ErrorText, { errorProps } from 'lib/components/ErrorText';
 import ConditionList from 'lib/components/course/ConditionList';
 import renderTextField from 'lib/components/redux-form/TextField';
 import RichTextField from 'lib/components/redux-form/RichTextField';
-import Toggle from 'lib/components/redux-form/Toggle';
+import renderToggleField from 'lib/components/redux-form/Toggle';
 import renderSelectField from 'lib/components/redux-form/SelectField';
 import formTranslations from 'lib/translations/form';
 import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
@@ -142,7 +142,7 @@ class AssessmentForm extends Component {
       <>
         <Field
           name="randomization"
-          component={Toggle}
+          component={renderToggleField}
           parse={Boolean}
           label={<FormattedMessage {...translations.enableRandomization} />}
           style={styles.toggle}
@@ -162,7 +162,7 @@ class AssessmentForm extends Component {
         <>
           <Field
             name="skippable"
-            component={Toggle}
+            component={renderToggleField}
             parse={Boolean}
             label={<FormattedMessage {...translations.skippable} />}
             style={styles.toggle}
@@ -170,7 +170,7 @@ class AssessmentForm extends Component {
           />
           <Field
             name="allow_partial_submission"
-            component={Toggle}
+            component={renderToggleField}
             parse={Boolean}
             label={
               <FormattedMessage {...translations.allowPartialSubmission} />
@@ -180,7 +180,7 @@ class AssessmentForm extends Component {
           />
           <Field
             name="show_mcq_answer"
-            component={Toggle}
+            component={renderToggleField}
             parse={Boolean}
             label={<FormattedMessage {...translations.showMcqAnswer} />}
             style={styles.toggle}
@@ -214,7 +214,7 @@ class AssessmentForm extends Component {
         </Field>
         <Field
           name="delayed_grade_publication"
-          component={Toggle}
+          component={renderToggleField}
           parse={Boolean}
           label={<FormattedMessage {...translations.delayedGradePublication} />}
           style={styles.toggle}
@@ -225,7 +225,7 @@ class AssessmentForm extends Component {
         </div>
         <Field
           name="password_protected"
-          component={Toggle}
+          component={renderToggleField}
           parse={Boolean}
           label={<FormattedMessage {...translations.passwordProtection} />}
           style={styles.toggle}
@@ -377,7 +377,7 @@ class AssessmentForm extends Component {
         {editing && (
           <Field
             name="published"
-            component={Toggle}
+            component={renderToggleField}
             parse={Boolean}
             label={<FormattedMessage {...translations.published} />}
             style={styles.toggle}
@@ -387,7 +387,7 @@ class AssessmentForm extends Component {
 
         <Field
           name="autograded"
-          component={Toggle}
+          component={renderToggleField}
           parse={Boolean}
           label={
             modeSwitching ? (
@@ -408,7 +408,7 @@ class AssessmentForm extends Component {
 
         <Field
           name="block_student_viewing_after_submitted"
-          component={Toggle}
+          component={renderToggleField}
           parse={Boolean}
           label={
             <FormattedMessage
@@ -423,7 +423,7 @@ class AssessmentForm extends Component {
 
         <Field
           name="show_mcq_mrq_solution"
-          component={Toggle}
+          component={renderToggleField}
           parse={Boolean}
           label={<FormattedMessage {...translations.showMcqMrqSolution} />}
           style={styles.toggle}
@@ -440,7 +440,7 @@ class AssessmentForm extends Component {
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <Field
             name="use_public"
-            component={Toggle}
+            component={renderToggleField}
             parse={Boolean}
             label={<FormattedMessage {...translations.usePublic} />}
             style={styles.flexChild}
@@ -448,7 +448,7 @@ class AssessmentForm extends Component {
           />
           <Field
             name="use_private"
-            component={Toggle}
+            component={renderToggleField}
             parse={Boolean}
             label={<FormattedMessage {...translations.usePrivate} />}
             style={styles.flexChild}
@@ -456,7 +456,7 @@ class AssessmentForm extends Component {
           />
           <Field
             name="use_evaluation"
-            component={Toggle}
+            component={renderToggleField}
             parse={Boolean}
             label={<FormattedMessage {...translations.useEvaluation} />}
             style={styles.flexChild}
@@ -466,7 +466,7 @@ class AssessmentForm extends Component {
 
         <Field
           name="show_private"
-          component={Toggle}
+          component={renderToggleField}
           parse={Boolean}
           label={<FormattedMessage {...translations.showPrivate} />}
           style={styles.toggle}
@@ -477,7 +477,7 @@ class AssessmentForm extends Component {
         </div>
         <Field
           name="show_evaluation"
-          component={Toggle}
+          component={renderToggleField}
           parse={Boolean}
           label={<FormattedMessage {...translations.showEvaluation} />}
           style={styles.toggle}
@@ -493,7 +493,7 @@ class AssessmentForm extends Component {
           <>
             <Field
               name="has_personal_times"
-              component={Toggle}
+              component={renderToggleField}
               parse={Boolean}
               label={<FormattedMessage {...translations.hasPersonalTimes} />}
               style={styles.toggle}
@@ -504,7 +504,7 @@ class AssessmentForm extends Component {
             </div>
             <Field
               name="affects_personal_times"
-              component={Toggle}
+              component={renderToggleField}
               parse={Boolean}
               label={
                 <FormattedMessage {...translations.affectsPersonalTimes} />

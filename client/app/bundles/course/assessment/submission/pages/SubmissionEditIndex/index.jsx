@@ -2,8 +2,14 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { FormControlLabel, Switch } from '@material-ui/core';
-import { Card, CardActions, CardContent, CardHeader } from '@mui/material';
+import {
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  FormControlLabel,
+  Switch,
+} from '@mui/material';
 import InsertDriveFile from '@mui/icons-material/InsertDriveFile';
 import { touch } from 'redux-form';
 import LoadingIndicator from 'lib/components/LoadingIndicator';

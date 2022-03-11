@@ -6,8 +6,13 @@ import {
   defineMessages,
   FormattedMessage,
 } from 'react-intl';
-import { FormControlLabel, Switch } from '@material-ui/core';
-import { Card, CardContent, CircularProgress } from '@mui/material';
+import {
+  Card,
+  CardContent,
+  CircularProgress,
+  FormControlLabel,
+  Switch,
+} from '@mui/material';
 import { yellow } from '@mui/material/colors';
 
 import {
