@@ -2,8 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { FormControlLabel } from '@material-ui/core';
-import { Radio, RadioGroup } from '@mui/material';
+import { FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import { updateLessonPlanSettings } from 'course/admin/actions/lesson-plan-items';
 import { initialState as defaultSettings } from 'course/lesson-plan/reducers/flags';
 

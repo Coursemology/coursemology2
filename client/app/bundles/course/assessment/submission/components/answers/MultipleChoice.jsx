@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { FormControlLabel } from '@material-ui/core';
-import { Radio } from '@mui/material';
+import { FormControlLabel, Radio } from '@mui/material';
 import { green } from '@mui/material/colors';
 import { questionShape } from '../../propTypes';
 

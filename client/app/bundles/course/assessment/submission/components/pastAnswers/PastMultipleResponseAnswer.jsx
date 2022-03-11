@@ -1,5 +1,4 @@
-import { FormControlLabel } from '@material-ui/core';
-import { Radio } from '@mui/material';
+import { FormControlLabel, Radio } from '@mui/material';
 import { green } from '@mui/material/colors';
 import { answerShape, questionShape } from '../../propTypes';
 
