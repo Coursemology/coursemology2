@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<Material /> renders the material 1`] = `
-<WithStyles(ForwardRef(ListItem))
+<ForwardRef(ListItem)
   button={true}
 >
-  <WithStyles(ForwardRef(ListItemAvatar))>
+  <ForwardRef(ListItemAvatar)>
     <ForwardRef(Avatar)
       style={
         Object {
@@ -15,8 +15,8 @@ exports[`<Material /> renders the material 1`] = `
     >
       <Memo(ForwardRef(AssignmentIcon)) />
     </ForwardRef(Avatar)>
-  </WithStyles(ForwardRef(ListItemAvatar))>
-  <WithStyles(ForwardRef(ListItemText))
+  </ForwardRef(ListItemAvatar)>
+  <ForwardRef(ListItemText)
     primary="Uploaded Material"
     secondary={
       <div
@@ -30,7 +30,7 @@ exports[`<Material /> renders the material 1`] = `
       </div>
     }
   />
-  <WithStyles(ForwardRef(ListItemSecondaryAction))>
+  <ForwardRef(ListItemSecondaryAction)>
     <WithStyles(ForwardRef(IconButton))
       onClick={[Function]}
       style={
@@ -62,14 +62,14 @@ exports[`<Material /> renders the material 1`] = `
         />
       </ReactTooltip>
     </WithStyles(ForwardRef(IconButton))>
-  </WithStyles(ForwardRef(ListItemSecondaryAction))>
-</WithStyles(ForwardRef(ListItem))>
+  </ForwardRef(ListItemSecondaryAction)>
+</ForwardRef(ListItem)>
 `;
 
 exports[`<MaterialList /> renders the component with materials 1`] = `
 <Fragment>
   <ForwardRef(Divider) />
-  <WithStyles(ForwardRef(List))>
+  <ForwardRef(List)>
     <ForwardRef(ListSubheader)
       disableSticky={true}
     >
@@ -148,7 +148,7 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
         values={Object {}}
       />
     </ReactTooltip>
-  </WithStyles(ForwardRef(List))>
+  </ForwardRef(List)>
   <ForwardRef(Divider) />
   <Memo(NotificationBar)
     autoHideDuration={5000}

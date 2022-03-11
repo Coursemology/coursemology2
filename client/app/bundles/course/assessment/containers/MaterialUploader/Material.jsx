@@ -2,14 +2,15 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { formatLongDateTime } from 'lib/moment';
+import { IconButton } from '@material-ui/core';
 import {
-  IconButton,
+  Avatar,
+  CircularProgress,
   ListItem,
   ListItemAvatar,
   ListItemText,
   ListItemSecondaryAction,
-} from '@material-ui/core';
-import { Avatar, CircularProgress } from '@mui/material';
+} from '@mui/material';
 import Assignment from '@mui/icons-material/Assignment';
 import Delete from '@mui/icons-material/Delete';
 import ReactTooltip from 'react-tooltip';
