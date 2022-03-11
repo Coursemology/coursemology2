@@ -7,7 +7,6 @@ import { injectIntl, intlShape } from 'react-intl';
 import {
   Button,
   FormControl,
-  FormControlLabel,
   FormHelperText,
   InputLabel,
   Select,
@@ -15,6 +14,7 @@ import {
 } from '@material-ui/core';
 import {
   Autocomplete,
+  FormControlLabel,
   MenuItem,
   Snackbar,
   Switch,
