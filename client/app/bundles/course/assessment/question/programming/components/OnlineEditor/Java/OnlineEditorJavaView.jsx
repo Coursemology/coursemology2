@@ -4,16 +4,11 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
 import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
+import { Button, Fade, FormControlLabel, Switch } from '@material-ui/core';
 import {
-  Button,
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Fade,
-  FormControlLabel,
-  Switch,
-} from '@material-ui/core';
-import {
   Table,
   TableBody,
   TableCell,
