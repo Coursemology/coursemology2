@@ -2,8 +2,8 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
-import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
-import { Card, CardContent } from '@mui/material';
+import { FormControl, InputLabel, Select } from '@material-ui/core';
+import { Card, CardContent, MenuItem } from '@mui/material';
 import { yellow } from '@mui/material/colors';
 
 import selectPastAnswers from '../actions/history';

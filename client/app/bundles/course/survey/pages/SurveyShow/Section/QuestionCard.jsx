@@ -1,12 +1,14 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { IconButton, Menu, MenuItem, TextField } from '@material-ui/core';
+import { IconButton, TextField } from '@material-ui/core';
 import {
   Accordion,
   AccordionSummary,
   CardContent,
   Checkbox,
+  Menu,
+  MenuItem,
   Radio,
 } from '@mui/material';
 import MoreVert from '@mui/icons-material/MoreVert';

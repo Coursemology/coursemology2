@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { MenuItem, Select } from '@material-ui/core';
+import { Select } from '@material-ui/core';
+import { MenuItem } from '@mui/material';
 import { videoDefaults } from 'lib/constants/videoConstants';
 import styles from '../VideoPlayer.scss';
 import { changePlaybackRate } from '../../actions/video';
