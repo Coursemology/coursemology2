@@ -17,12 +17,12 @@ const buildShallowWrapper = (item) => {
 describe('<AdminTools />', () => {
   it('does not show admin menu for lesson plan events', () => {
     const wrapper = buildShallowWrapper({ title: 'Event', eventId: 7 });
-    expect(wrapper.find('WithStyles(ForwardRef(Button))')).toHaveLength(2);
+    expect(wrapper.find('ForwardRef(Button)')).toHaveLength(2);
   });
 
   it('does not show admin menu for non-event lesson plan items', () => {
     const wrapper = buildShallowWrapper({ title: 'eventId absent' });
-    expect(wrapper.find('WithStyles(ForwardRef(Button))')).toHaveLength(0);
+    expect(wrapper.find('ForwardRef(Button)')).toHaveLength(0);
   });
 
   it('allows event to be deleted', () => {
@@ -34,7 +34,7 @@ describe('<AdminTools />', () => {
     const wrapper = mount(<AdminTools item={{ eventId }} />, contextOptions);
 
     const deleteButton = wrapper
-      .find('WithStyles(ForwardRef(Button))')
+      .find('ForwardRef(Button)')
       .last()
       .find('button');
     deleteButton.simulate('click');
@@ -76,7 +76,7 @@ describe('<AdminTools />', () => {
     );
 
     const editButton = wrapper
-      .find('WithStyles(ForwardRef(Button))')
+      .find('ForwardRef(Button)')
       .first()
       .find('button');
     editButton.simulate('click');

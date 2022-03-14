@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';

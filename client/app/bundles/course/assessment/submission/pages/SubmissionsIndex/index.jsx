@@ -3,8 +3,8 @@ import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import ReactTooltip from 'react-tooltip';
-import { Button } from '@material-ui/core';
 import {
+  Button,
   Card,
   CardActions,
   CardContent,

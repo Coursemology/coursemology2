@@ -3,11 +3,12 @@ import Immutable from 'immutable';
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
-import { Button, Fade } from '@material-ui/core';
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Button,
+  Fade,
   Table,
   TableBody,
   TableCell,

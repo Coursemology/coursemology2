@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { scroller } from 'react-scroll';
-import { Button } from '@material-ui/core';
-import { MenuItem, MenuList, Popover } from '@mui/material';
+import { Button, MenuItem, MenuList, Popover } from '@mui/material';
 import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUp';
 
 const translations = defineMessages({

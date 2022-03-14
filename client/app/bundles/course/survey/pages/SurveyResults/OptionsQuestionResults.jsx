@@ -2,8 +2,8 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Button } from '@material-ui/core';
 import {
+  Button,
   CardContent,
   Chip,
   Switch,
@@ -261,7 +261,7 @@ class OptionsQuestionResults extends Component {
     return (
       <CardContent style={styles.expandToggleStyle}>
         <Button
-          variant="contained"
+          variant="outlined"
           onClick={() =>
             this.setState((state) => ({ expanded: !state.expanded }))
           }

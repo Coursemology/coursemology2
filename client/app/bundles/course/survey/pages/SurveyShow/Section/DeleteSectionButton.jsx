@@ -2,7 +2,7 @@ import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 
 import { showDeleteConfirmation } from 'course/survey/actions';
 import { deleteSurveySection } from 'course/survey/actions/sections';
@@ -36,6 +36,7 @@ class DeleteSectionButton extends PureComponent {
   render() {
     return (
       <Button
+        color="secondary"
         disabled={this.props.disabled}
         onClick={this.deleteSectionHandler}
       >

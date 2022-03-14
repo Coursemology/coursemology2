@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 import MaterialSummernote from 'lib/components/MaterialSummernote';
 
 import style from '../Discussion.scss';
@@ -54,8 +54,10 @@ function Editor(props) {
         {props.showCancel && (
           <Button
             variant="contained"
+            color="secondary"
             disabled={props.disabled}
             onClick={props.onCancel}
+            style={{ marginRight: 8 }}
           >
             {props.cancelButtonText}
           </Button>

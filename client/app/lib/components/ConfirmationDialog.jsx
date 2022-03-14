@@ -1,8 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import { Button } from '@material-ui/core';
-import { Dialog, DialogActions, DialogContent } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent } from '@mui/material';
 import formTranslations from 'lib/translations/form';
 
 const buttonStyle = {
@@ -55,7 +54,7 @@ class ConfirmationDialog extends Component {
 
     const actions = [
       <Button
-        color="primary"
+        color="secondary"
         className="cancel-btn"
         disabled={disableCancelButton}
         key="confirmation-dialog-cancel-button"

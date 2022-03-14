@@ -15,8 +15,8 @@ import {
   saveLevels,
 } from 'course/level/actions';
 import { defaultComponentTitles } from 'course/translations.intl';
-import { Button } from '@material-ui/core';
 import {
+  Button,
   Table,
   TableBody,
   TableCell,

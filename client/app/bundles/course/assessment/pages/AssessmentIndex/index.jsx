@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { submit, isPristine } from 'redux-form';
 import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
-import { Button } from '@material-ui/core';
 import {
+  Button,
   Dialog,
   DialogActions,
   DialogContent,

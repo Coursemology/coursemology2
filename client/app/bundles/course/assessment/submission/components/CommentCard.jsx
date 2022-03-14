@@ -1,7 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '@material-ui/core';
-import { Avatar, Card, CardHeader, CardContent } from '@mui/material';
+import { Avatar, Button, Card, CardHeader, CardContent } from '@mui/material';
 import { grey, orange, red } from '@mui/material/colors';
 import Delete from '@mui/icons-material/Delete';
 import Edit from '@mui/icons-material/Edit';
@@ -142,7 +141,10 @@ export default class CommentCard extends Component {
             value={editValue}
           />
           <div style={styles.buttonContainer}>
-            <Button onClick={() => this.setState({ editMode: false })}>
+            <Button
+              color="secondary"
+              onClick={() => this.setState({ editMode: false })}
+            >
               <FormattedMessage {...translations.cancel} />
             </Button>
             <Button color="primary" onClick={() => this.onSave()}>
@@ -185,7 +187,7 @@ export default class CommentCard extends Component {
                 onClick={() => this.toggleEditMode()}
                 style={styles.headerButton}
               >
-                <Edit />
+                <Edit htmlColor="black" />
               </Button>
             ) : null}
             {canDestroy ? (

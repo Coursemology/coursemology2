@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 
 import styles from '../Discussion.scss';
 import NewReplyContainer from './NewReplyContainer';

@@ -71,7 +71,7 @@ const testExpandLongQuestion = (question) => {
   );
   expect(resultsQuestion.find('ForwardRef(Table)')).toHaveLength(0);
   const expandButton = resultsQuestion
-    .find('WithStyles(ForwardRef(Button))')
+    .find('ForwardRef(Button)')
     .first()
     .find('button');
   expandButton.simulate('click');

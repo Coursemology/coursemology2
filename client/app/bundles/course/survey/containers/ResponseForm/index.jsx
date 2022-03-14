@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { reduxForm, FieldArray, Form, getFormValues } from 'redux-form';
 import { Prompt } from 'react-router-dom';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 import formTranslations from 'lib/translations/form';
 import { formNames } from 'course/survey/constants';
 import { responseShape } from 'course/survey/propTypes';

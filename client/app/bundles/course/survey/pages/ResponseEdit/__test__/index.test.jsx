@@ -89,7 +89,7 @@ describe('<ResponseEdit />', () => {
     const newAnswer = 'New Answer';
     textResponse.simulate('change', { target: { value: newAnswer } });
     const submitButton = responseForm
-      .find('WithStyles(ForwardRef(Button))')
+      .find('ForwardRef(Button)')
       .at(1)
       .find('button')
       .first();

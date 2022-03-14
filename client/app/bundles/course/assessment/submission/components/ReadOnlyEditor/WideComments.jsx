@@ -1,7 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '@material-ui/core';
-import { Paper } from '@mui/material';
+import { Button, Paper } from '@mui/material';
 import Annotations from '../../containers/Annotations';
 import PostPreview from '../../containers/PostPreview';
 import { annotationShape } from '../../propTypes';
@@ -53,7 +52,8 @@ export default class WideComments extends Component {
           onClick={() => onClick(lineNumber)}
         >
           <Button
-            variant="contained"
+            variant="outlined"
+            color="info"
             onClick={() => collapseLine(lineNumber)}
             style={styles.minimiseButton}
           >

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 import { showDuplicateItemsConfirmation } from 'course/duplication/actions';
 import DuplicateItemsConfirmation from './DuplicateItemsConfirmation';
 

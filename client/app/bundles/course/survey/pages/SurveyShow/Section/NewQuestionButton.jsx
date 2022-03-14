@@ -7,7 +7,7 @@ import {
   intlShape,
   FormattedMessage,
 } from 'react-intl';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 import {
   showQuestionForm,
   createSurveyQuestion,
@@ -69,6 +69,7 @@ class NewQuestionButton extends Component {
   render() {
     return (
       <Button
+        variant="contained"
         color="primary"
         disabled={this.props.disabled}
         onClick={this.showNewQuestionForm}

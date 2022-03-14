@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { formatLongDateTime } from 'lib/moment';
-import { Button } from '@material-ui/core';
 import {
+  Button,
   Card,
   CardContent,
   FormControlLabel,
@@ -185,7 +185,7 @@ class SurveyDetails extends Component {
           ) : null}
           {survey.canViewResults ? (
             <Button
-              variant="contained"
+              variant="outlined"
               onClick={() =>
                 history.push(
                   `/courses/${courseId}/surveys/${survey.id}/results`,
@@ -198,7 +198,7 @@ class SurveyDetails extends Component {
           ) : null}
           {survey.canViewResults ? (
             <Button
-              variant="contained"
+              variant="outlined"
               onClick={() =>
                 history.push(
                   `/courses/${courseId}/surveys/${survey.id}/responses`,

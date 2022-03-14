@@ -49,6 +49,7 @@ const NotificationBar = (props) => {
         height: 'auto',
         maxWidth: '100%',
         whiteSpace: 'pre-line',
+        zIndex: 9999,
       }}
       open={open}
       onClose={handleClose}

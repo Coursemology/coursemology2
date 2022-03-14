@@ -12,7 +12,7 @@ import {
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import zh from 'react-intl/locale-data/zh';
 import palette from '../../theme/palette';
-import { black, grey, white } from '../../theme/colors';
+import { grey } from '../../theme/colors';
 
 import ErrorBoundary from './ErrorBoundary';
 import translations from '../../../build/locales/locales.json';
@@ -41,12 +41,6 @@ const themeSettings = {
       root: {
         background: `${palette.primary.main} !important`,
         color: 'white !important',
-      },
-    },
-    MuiButton: {
-      contained: {
-        color: black,
-        backgroundColor: white,
       },
     },
     MuiDialogContent: {
