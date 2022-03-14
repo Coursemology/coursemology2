@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { IntlProvider, intlShape } from 'react-intl';
-import { createTheme } from '@material-ui/core/styles';
+import { createTheme } from '@mui/material/styles';
 import Enzyme from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 

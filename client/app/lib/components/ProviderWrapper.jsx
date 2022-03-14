@@ -3,12 +3,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/lib/integration/react';
 import { IntlProvider, addLocaleData } from 'react-intl';
 import { i18nLocale } from 'lib/helpers/server-context';
-import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
-import {
-  createTheme as createThemeV5,
-  adaptV4Theme,
-  ThemeProvider,
-} from '@mui/material/styles';
+import { createTheme, adaptV4Theme, ThemeProvider } from '@mui/material/styles';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import zh from 'react-intl/locale-data/zh';
 import palette from '../../theme/palette';
@@ -89,8 +84,7 @@ const themeSettings = {
   },
 };
 
-const theme = createTheme(themeSettings);
-const themeV5 = createThemeV5(adaptV4Theme(themeSettings));
+const themeV5 = createTheme(adaptV4Theme(themeSettings));
 
 const ProviderWrapper = ({ store, persistor, children }) => {
   const availableForeignLocales = { zh };
@@ -118,9 +112,7 @@ const ProviderWrapper = ({ store, persistor, children }) => {
 
   providers = (
     <IntlProvider locale={i18nLocale} messages={messages}>
-      <ThemeProvider theme={themeV5}>
-        <MuiThemeProvider theme={theme}>{providers}</MuiThemeProvider>{' '}
-      </ThemeProvider>
+      <ThemeProvider theme={themeV5}>{providers}</ThemeProvider>
     </IntlProvider>
   );
 
