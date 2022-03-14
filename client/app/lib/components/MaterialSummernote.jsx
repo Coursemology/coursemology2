@@ -2,7 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import ReactSummernote from 'react-summernote';
-import { InputLabel } from '@material-ui/core';
+import { InputLabel } from '@mui/material';
 import { cyan } from '@mui/material/colors';
 import axios from 'lib/axios';
 
