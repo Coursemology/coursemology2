@@ -67,7 +67,7 @@ const themeSettings = {
     },
     MuiModal: {
       root: {
-        zIndex: 1800,
+        zIndex: 1,
       },
     },
     MuiStepLabel: {
@@ -84,12 +84,6 @@ const themeSettings = {
       head: {
         color: grey[500],
         padding: '16px 16px',
-      },
-    },
-    MuiTabs: {
-      root: {
-        backgroundColor: palette.primary.main,
-        color: 'white',
       },
     },
   },

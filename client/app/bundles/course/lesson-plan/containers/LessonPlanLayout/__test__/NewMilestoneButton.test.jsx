@@ -6,6 +6,30 @@ import storeCreator from 'course/lesson-plan/store';
 import MilestoneFormDialog from 'course/lesson-plan/containers/MilestoneFormDialog';
 import NewMilestoneButton from '../NewMilestoneButton';
 
+beforeEach(() => {
+  // add window.matchMedia
+  // this is necessary for the date picker to be rendered in desktop mode.
+  // if this is not provided, the mobile mode is rendered, which might lead to unexpected behavior
+  Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    value: (query) => ({
+      media: query,
+      // this is the media query that @material-ui/pickers uses to determine if a device is a desktop device
+      matches: query === '(pointer: fine)',
+      onchange: () => {},
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      addListener: () => {},
+      removeListener: () => {},
+      dispatchEvent: () => false,
+    }),
+  });
+});
+
+afterEach(() => {
+  delete window.matchMedia;
+});
+
 describe('<NewMilestoneButton />', () => {
   it('allows milestone to be created via MilestoneFormDialog', () => {
     const spyCreate = jest.spyOn(CourseAPI.lessonPlan, 'createMilestone');
