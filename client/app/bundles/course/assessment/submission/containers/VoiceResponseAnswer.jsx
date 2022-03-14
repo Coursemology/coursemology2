@@ -8,7 +8,7 @@ import {
   defineMessages,
   FormattedMessage,
 } from 'react-intl';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 import { red } from '@mui/material/colors';
 import Mic from '@mui/icons-material/Mic';
 import Stop from '@mui/icons-material/Stop';
@@ -147,7 +147,7 @@ class VoiceResponseAnswer extends Component {
           </Button>
 
           <Button
-            color="primary"
+            color="secondary"
             disabled={
               !recording ||
               recordingComponentId !== this.currentRecordingComponentId()

@@ -4,8 +4,8 @@ import { reduxForm } from 'redux-form';
 import { Prompt } from 'react-router-dom';
 import { injectIntl, intlShape } from 'react-intl';
 import { Element, scroller } from 'react-scroll';
-import { Button } from '@material-ui/core';
 import {
+  Button,
   Card,
   CardContent,
   CardHeader,

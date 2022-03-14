@@ -101,7 +101,7 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
       data-for="add-files-button"
       data-tip={true}
     >
-      <WithStyles(ForwardRef(Button))
+      <ForwardRef(Button)
         component="label"
         disabled={true}
         fullWidth={true}
@@ -133,7 +133,7 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
           }
           type="file"
         />
-      </WithStyles(ForwardRef(Button))>
+      </ForwardRef(Button)>
     </div>
     <ReactTooltip
       clickable={false}

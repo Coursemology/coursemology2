@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import { FieldArray } from 'redux-form';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 import ImportedFileView from './ImportedFileView';
 import Editor from '../components/Editor';
 import FileInput from '../components/FileInput';

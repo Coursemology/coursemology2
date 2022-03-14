@@ -2,7 +2,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl, intlShape } from 'react-intl';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 import QuestionFormOption from './QuestionFormOption';
 
 const styles = {

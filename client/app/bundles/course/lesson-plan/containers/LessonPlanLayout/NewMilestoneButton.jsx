@@ -7,7 +7,7 @@ import {
   intlShape,
   FormattedMessage,
 } from 'react-intl';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 import { showMilestoneForm, createMilestone } from 'course/lesson-plan/actions';
 
 const translations = defineMessages({

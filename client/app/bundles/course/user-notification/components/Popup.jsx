@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Button } from '@material-ui/core';
 import {
+  Button,
   Dialog,
   DialogActions,
   DialogContent,

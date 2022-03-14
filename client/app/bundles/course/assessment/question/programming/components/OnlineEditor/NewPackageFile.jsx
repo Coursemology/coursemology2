@@ -1,7 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '@material-ui/core';
-import { TableCell, TableRow } from '@mui/material';
+import { Button, TableCell, TableRow } from '@mui/material';
 import { injectIntl } from 'react-intl';
 import { grey } from '@mui/material/colors';
 import styles from './OnlineEditorView.scss';
@@ -35,6 +34,7 @@ class NewPackageFile extends Component {
           }}
           style={{
             backgroundColor: grey[300],
+            color: 'black',
             height: '40px',
             minWidth: '40px',
             width: '40px',

@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 import {
   FormattedMessage,
   injectIntl,
@@ -269,8 +269,8 @@ const GroupManager = ({
         <div>
           {groups.map((group) => (
             <Button
-              variant="contained"
-              color={group.id === selectedGroupId ? 'secondary' : 'default'}
+              variant={group.id === selectedGroupId ? 'contained' : 'outlined'}
+              color="secondary"
               key={group.id}
               style={styles.groupButton}
               onClick={() => handleGroupSelect(group.id)}
@@ -290,6 +290,7 @@ const GroupManager = ({
       <div style={styles.bottomButtonContainer}>
         <Button
           variant="contained"
+          color="secondary"
           style={styles.cancelButton}
           onClick={() => {
             if (modifiedGroups.length > 0) {

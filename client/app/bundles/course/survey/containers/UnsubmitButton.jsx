@@ -2,7 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import { unsubmitResponse } from 'course/survey/actions/responses';
 

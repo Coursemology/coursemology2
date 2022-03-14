@@ -3,7 +3,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import moment from 'lib/moment';
 import history from 'lib/history';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 import { createResponse } from 'course/survey/actions/responses';
 
 const translations = defineMessages({

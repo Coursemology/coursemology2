@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 import history from 'lib/history';
 
 const translations = defineMessages({
@@ -22,7 +22,7 @@ const ExitEditModeButton = ({
   },
 }) => (
   <Button
-    variant="contained"
+    variant="outlined"
     onClick={() => history.push(`/courses/${courseId}/lesson_plan/`)}
     style={styles.button}
   >

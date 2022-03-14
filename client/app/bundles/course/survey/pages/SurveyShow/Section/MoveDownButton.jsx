@@ -2,7 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 
 import { changeSectionOrder } from 'course/survey/actions/sections';
 
@@ -38,7 +38,11 @@ class MoveDownButton extends Component {
 
   render() {
     return (
-      <Button disabled={this.props.disabled} onClick={this.moveSectionDown}>
+      <Button
+        variant="outlined"
+        disabled={this.props.disabled}
+        onClick={this.moveSectionDown}
+      >
         <FormattedMessage {...translations.moveSectionDown} />
       </Button>
     );

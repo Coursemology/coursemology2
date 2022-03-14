@@ -2,8 +2,7 @@ import Immutable from 'immutable';
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import { Button } from '@material-ui/core';
-import { TableCell, TableRow, TextField } from '@mui/material';
+import { Button, TableCell, TableRow, TextField } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import styles from './OnlineEditorView.scss';
 import translations from './OnlineEditorView.intl';
@@ -116,6 +115,7 @@ class TestCase extends Component {
             onClick={this.testCaseDeleteHandler(type, index)}
             style={{
               backgroundColor: grey[300],
+              color: 'black',
               height: '40px',
               minWidth: '40px',
               width: '40px',

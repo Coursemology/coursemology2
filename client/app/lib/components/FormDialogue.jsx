@@ -1,8 +1,8 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import { Button } from '@material-ui/core';
 import {
+  Button,
   Dialog,
   DialogActions,
   DialogContent,
@@ -57,7 +57,7 @@ class FormDialogue extends Component {
     const { intl, title, disabled, open, submitForm, children } = this.props;
     const formActions = [
       <Button
-        color="primary"
+        color="secondary"
         key="form-dialogue-cancel-button"
         onClick={this.handleFormClose}
         {...{ disabled }}

@@ -5,7 +5,6 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import {
-  Button,
   FormControl,
   FormHelperText,
   InputLabel,
@@ -13,6 +12,7 @@ import {
 } from '@material-ui/core';
 import {
   Autocomplete,
+  Button,
   FormControlLabel,
   MenuItem,
   Snackbar,

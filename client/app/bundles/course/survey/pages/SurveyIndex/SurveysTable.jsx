@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { Button } from '@material-ui/core';
 import {
+  Button,
   Switch,
   Table,
   TableBody,
@@ -123,7 +123,7 @@ class SurveysTable extends Component {
                 <div style={styles.buttonsColumn}>
                   {survey.canViewResults ? (
                     <Button
-                      variant="contained"
+                      variant="outlined"
                       onClick={() =>
                         history.push(
                           `/courses/${courseId}/surveys/${survey.id}/results`,
@@ -136,7 +136,7 @@ class SurveysTable extends Component {
                   ) : null}
                   {survey.canViewResults ? (
                     <Button
-                      variant="contained"
+                      variant="outlined"
                       onClick={() =>
                         history.push(
                           `/courses/${courseId}/surveys/${survey.id}/responses`,

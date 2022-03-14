@@ -4,8 +4,8 @@ import { reduxForm } from 'redux-form';
 import { Prompt } from 'react-router-dom';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import Hotkeys from 'react-hot-keys';
-import { Button } from '@material-ui/core';
 import {
+  Button,
   Card,
   CardContent,
   CardHeader,
@@ -304,7 +304,8 @@ class SubmissionEditStepForm extends Component {
     if (question.type === questionTypes.Programming) {
       return (
         <Button
-          variant="contained"
+          variant="outlined"
+          color="info"
           disabled={isAutograding || isResetting || isSaving}
           onClick={() =>
             this.setState({

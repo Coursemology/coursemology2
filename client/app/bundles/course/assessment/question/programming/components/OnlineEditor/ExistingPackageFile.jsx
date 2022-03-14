@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
-import { Button } from '@material-ui/core';
-import { TableCell, TableRow } from '@mui/material';
+import { Button, TableCell, TableRow } from '@mui/material';
 import { grey } from '@mui/material/colors';
 
 import styles from './OnlineEditorView.scss';
@@ -45,6 +44,7 @@ function ExistingPackageFile(props) {
           }}
           style={{
             backgroundColor: buttonColor,
+            color: 'black',
             height: '40px',
             minWidth: '40px',
             width: '40px',

@@ -1,8 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import { Button } from '@material-ui/core';
-import { MenuItem, MenuList, Popover } from '@mui/material';
+import { Button, MenuItem, MenuList, Popover } from '@mui/material';
 import Done from '@mui/icons-material/Done';
 import { scribingTranslations as translations } from '../../translations';
 import { scribbleShape } from '../../propTypes';
