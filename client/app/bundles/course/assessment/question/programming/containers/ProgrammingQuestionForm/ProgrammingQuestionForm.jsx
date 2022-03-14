@@ -21,7 +21,7 @@ import {
   Tabs,
   TextField,
 } from '@mui/material';
-import { red } from '@mui/material/colors';
+import { blue, grey, red } from '@mui/material/colors';
 
 import MaterialSummernote from 'lib/components/MaterialSummernote';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
@@ -565,11 +565,14 @@ class ProgrammingQuestionForm extends Component {
 
     return (
       <Tabs
-        indicatorColor="primary"
-        textColor="inherit"
+        style={{
+          backgroundColor: grey[100],
+          color: blue[500],
+          margin: '1em 0',
+        }}
+        TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
         value={showEditOnline ? 'editor' : 'upload-package'}
         onChange={onTestTypeChange}
-        style={{ margin: '1em 0' }}
         variant="fullWidth"
       >
         <Tab

@@ -2,26 +2,11 @@ import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import moment from 'lib/moment';
-import {
-  KeyboardDatePicker,
-  KeyboardTimePicker,
-  MuiPickersUtilsProvider,
-} from '@material-ui/pickers';
-import DateRange from '@mui/icons-material/DateRange';
-import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
-import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import Schedule from '@mui/icons-material/Schedule';
-import MomentUtils from '@date-io/moment';
+import { TextField } from '@mui/material';
+import { DatePicker, LocalizationProvider, TimePicker } from '@mui/lab';
+import AdapterMoment from '@mui/lab/AdapterMoment';
 
 const translations = defineMessages({
-  datePlaceholder: {
-    id: 'lib.components.form.DateTimePicker.datePlaceholder',
-    defaultMessage: 'dd-mm-yyyy',
-  },
-  timePlaceholder: {
-    id: 'lib.components.form.DateTimePicker.timePlaceholder',
-    defaultMessage: 'hh:mm',
-  },
   invalidDate: {
     id: 'lib.components.form.DateTimePicker.invalidDate',
     defaultMessage: 'Invalid date',
@@ -50,6 +35,7 @@ const styles = {
   },
   timeTextField: {
     width: styleConstants.timeFieldWidth,
+    marginRight: styleConstants.dateTimeGap,
   },
   pickerIcon: {
     margins: 0,
@@ -205,8 +191,7 @@ class DateTimePicker extends PureComponent {
   };
 
   render() {
-    const { intl, label, errorText, name, disabled, style, clearable } =
-      this.props;
+    const { label, errorText, name, disabled, style, clearable } = this.props;
     let value = this.props.value;
     // Convert string value to Date, which is expected by Date/TimePicker
     if (value && typeof value === 'string') {
@@ -214,39 +199,55 @@ class DateTimePicker extends PureComponent {
     }
 
     return (
-      <MuiPickersUtilsProvider utils={MomentUtils}>
+      <LocalizationProvider dateAdapter={AdapterMoment}>
         <div style={{ ...styles.dateTimePicker, ...style }}>
-          <KeyboardDatePicker
-            {...{ name, disabled }}
-            style={styles.dateTextField}
-            onChange={this.updateDate}
+          <DatePicker
             clearable={clearable}
-            keyboardIcon={<DateRange style={styles.pickerIcon} />}
-            leftArrowIcon={<KeyboardArrowLeft />}
-            rightArrowIcon={<KeyboardArrowRight />}
-            format="DD-MM-YYYY"
+            disabled={disabled}
+            inputFormat="DD-MM-YYYY"
             label={label}
-            placeholder={intl.formatMessage(translations.datePlaceholder)}
-            error={!!errorText || !!this.state.dateError}
-            // We want this component's error message to take priority over the parent's
-            helperText={this.state.dateError || errorText}
+            mask="__-__-____"
+            onChange={this.updateDate}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                name={name}
+                error={!!errorText || !!this.state.dateError}
+                helperText={this.state.dateError || errorText}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                style={styles.dateTextField}
+                variant="standard"
+              />
+            )}
             value={value || null}
           />
-          <KeyboardTimePicker
-            {...{ name, disabled }}
-            style={styles.timeTextField}
-            onChange={this.updateTime}
+          <TimePicker
+            ampm={false}
             clearable={clearable}
-            keyboardIcon={<Schedule style={styles.pickerIcon} />}
-            placeholder={intl.formatMessage(translations.timePlaceholder)}
-            label="24-hr clock"
-            error={!!this.state.timeError}
-            helperText={this.state.timeError}
-            value={value || null}
+            disabled={disabled}
             format="HH:mm"
+            label="24-hr clock"
+            mask="__:__"
+            onChange={this.updateTime}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                name={name}
+                error={!!this.state.timeError}
+                helperText={this.state.timeError}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                style={styles.timeTextField}
+                variant="standard"
+              />
+            )}
+            value={value || null}
           />
         </div>
-      </MuiPickersUtilsProvider>
+      </LocalizationProvider>
     );
   }
 }
