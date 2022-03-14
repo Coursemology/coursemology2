@@ -5,16 +5,14 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import {
-  FormControl,
-  FormHelperText,
-  InputLabel,
-  Select,
-} from '@material-ui/core';
-import {
   Autocomplete,
   Button,
+  FormControl,
   FormControlLabel,
+  FormHelperText,
+  InputLabel,
   MenuItem,
+  Select,
   Snackbar,
   Switch,
   Tab,
@@ -330,7 +328,7 @@ class ProgrammingQuestionForm extends Component {
           style={{ marginTop: 14, width: '100%' }}
           variant="standard"
         >
-          <InputLabel>{(required ? '* ' : '') + label}</InputLabel>
+          <InputLabel shrink>{(required ? '* ' : '') + label}</InputLabel>
           <Select
             value={value || ''}
             onChange={(event) => {

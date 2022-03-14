@@ -1,8 +1,7 @@
 import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Select } from '@material-ui/core';
-import { IconButton, MenuItem, Tooltip } from '@mui/material';
+import { IconButton, MenuItem, Select, Tooltip } from '@mui/material';
 import { blue } from '@mui/material/colors';
 import MyLocation from '@mui/icons-material/MyLocation';
 import { courseListingShape } from 'course/duplication/propTypes';

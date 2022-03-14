@@ -1,7 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormControl, InputLabel, Select } from '@material-ui/core';
-import { MenuItem } from '@mui/material';
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { Scatter } from 'react-chartjs-2';
 import { injectIntl, intlShape } from 'react-intl';

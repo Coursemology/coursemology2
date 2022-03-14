@@ -2,7 +2,11 @@
 
 exports[`<Toggle /> renders a toggle with an error 1`] = `
 <div
-  className="MuiFormControl-root MuiFormControl-fullWidth"
+  style={
+    Object {
+      "width": "100%",
+    }
+  }
 >
   <ForwardRef(FormControlLabel)
     control={
@@ -36,7 +40,11 @@ exports[`<Toggle /> renders a toggle with an error 1`] = `
 
 exports[`<Toggle /> renders a toggled toggle 1`] = `
 <div
-  className="MuiFormControl-root MuiFormControl-fullWidth"
+  style={
+    Object {
+      "width": "100%",
+    }
+  }
 >
   <ForwardRef(FormControlLabel)
     control={
