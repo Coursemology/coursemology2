@@ -51,7 +51,7 @@ MultipleChoiceOptions.propTypes = {
   graderView: PropTypes.bool,
   input: PropTypes.shape({
     onChange: PropTypes.func,
-    value: PropTypes.string,
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   }).isRequired,
 };
 

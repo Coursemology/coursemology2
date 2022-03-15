@@ -132,7 +132,11 @@ class ResponseShow extends Component {
     if (!canUnsubmit || isLoading || !response.submitted_at) {
       return null;
     }
-    return <UnsubmitButton responseId={response.id} />;
+    return (
+      <span style={{ marginLeft: 12 }}>
+        <UnsubmitButton responseId={response.id} />
+      </span>
+    );
   }
 
   render() {

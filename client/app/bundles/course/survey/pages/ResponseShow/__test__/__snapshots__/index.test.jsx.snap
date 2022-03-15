@@ -84,9 +84,17 @@ exports[`<ResponseShow /> shows form and admin buttons if user has permissions a
     submittedAt="2099-12-31T16:00:00.000Z"
     surveyId={2}
   />
-  <Connect(UnsubmitButton)
-    responseId={2}
-  />
+  <span
+    style={
+      Object {
+        "marginLeft": 12,
+      }
+    }
+  >
+    <Connect(UnsubmitButton)
+      responseId={2}
+    />
+  </span>
 </Fragment>
 `;
 

@@ -4,6 +4,7 @@ const styles = {
   loading: {
     display: 'flex',
     justifyContent: 'center',
+    marginTop: 24,
     width: '100%',
   },
   loadingInnerDiv: {
