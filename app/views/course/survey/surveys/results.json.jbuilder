@@ -23,7 +23,7 @@ json.sections @sections do |section|
       if question.text?
         json.(answer, :text_response)
       else
-        json.(answer, :question_option_ids)
+        json.question_option_ids answer.options.pluck(:question_option_id)
       end
     end
   end
