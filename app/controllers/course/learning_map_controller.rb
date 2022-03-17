@@ -91,12 +91,17 @@ class Course::LearningMapController < Course::ComponentController
     relations = init_all_node_relations
     node_ids_to_children = relations[:node_ids_to_children]
     node_ids_to_parents = relations[:node_ids_to_parents]
+    node_ids_to_unlock_level = relations[:node_ids_to_unlock_level]
 
     @conditionals.each do |conditional|
       node_id = get_node_id(conditional)
 
       conditional.conditions.each do |condition|
-        next if condition.actable_type == Course::Condition::Level.name
+        if condition.actable_type == Course::Condition::Level.name
+          level_condition = Course::Condition::Level.find(condition.actable_id)
+          node_ids_to_unlock_level[node_id] = level_condition.minimum_level
+          next
+        end
 
         parent = map_condition_to_parent(condition)
         node_ids_to_children[parent[:id]].push({ id: node_id, is_satisfied: parent[:is_satisfied] })
@@ -104,12 +109,14 @@ class Course::LearningMapController < Course::ComponentController
       end
     end
 
-    { node_ids_to_children: node_ids_to_children, node_ids_to_parents: node_ids_to_parents }
+    { node_ids_to_children: node_ids_to_children, node_ids_to_parents: node_ids_to_parents,
+      node_ids_to_unlock_level: node_ids_to_unlock_level }
   end
 
   def init_all_node_relations
     { node_ids_to_children: @conditionals.map { |conditional| [get_node_id(conditional), []] }.to_h,
-      node_ids_to_parents: @conditionals.map { |conditional| [get_node_id(conditional), []] }.to_h }
+      node_ids_to_parents: @conditionals.map { |conditional| [get_node_id(conditional), []] }.to_h,
+      node_ids_to_unlock_level: @conditionals.map { |conditional| [get_node_id(conditional), 0] }.to_h }
   end
 
   def map_condition_to_parent(condition)
@@ -123,15 +130,23 @@ class Course::LearningMapController < Course::ComponentController
   def generate_nodes_from_conditionals(all_node_relations)
     node_ids_to_children = all_node_relations[:node_ids_to_children]
     node_ids_to_parents = all_node_relations[:node_ids_to_parents]
+    node_ids_to_unlock_level = all_node_relations[:node_ids_to_unlock_level]
 
     @conditionals.map do |conditional|
       id = get_node_id(conditional)
+      num_students_unlocked = 0
+      current_course.course_users.students.each { |student|
+        num_students_unlocked += 1 if conditional.conditions_satisfied_by?(student)
+      }
+      total_num_students = current_course.course_users.students.count
+      unlock_rate = total_num_students > 0 ? num_students_unlocked / total_num_students : 0
 
       conditional.attributes.merge({
         id: id, unlocked: conditional.conditions_satisfied_by?(current_course_user),
         children: node_ids_to_children[id], satisfiability_type: conditional.satisfiability_type,
         course_material_type: conditional.class.name.demodulize.downcase,
-        content_url: url_for([current_course, conditional]), parents: node_ids_to_parents[id]
+        content_url: url_for([current_course, conditional]), parents: node_ids_to_parents[id],
+        unlock_rate: unlock_rate, unlock_level: node_ids_to_unlock_level[id]
       }).symbolize_keys
     end
   end
