@@ -76,7 +76,7 @@
     "ace-builds": "^1.4.13",
     "axios": "^0.26.1",
     "babel-loader": "^8.2.3",
-    "babel-plugin-react-intl": "^7.9.4",
+    "babel-plugin-react-intl": "^8.2.25",
     "chart.js": "^3.7.0",
     "css-loader": "^6.7.1",
     "dnd-core": "^14.0.1",
