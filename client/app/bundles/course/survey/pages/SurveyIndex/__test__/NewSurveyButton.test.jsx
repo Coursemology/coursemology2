@@ -6,6 +6,13 @@ import storeCreator from 'course/survey/store';
 import SurveyFormDialogue from 'course/survey/containers/SurveyFormDialogue';
 import NewSurveyButton from '../NewSurveyButton';
 
+const mockUsedNavigate = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockUsedNavigate,
+}));
+
 beforeEach(() => {
   // add window.matchMedia
   // this is necessary for the date picker to be rendered in desktop mode.

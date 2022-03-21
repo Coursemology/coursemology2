@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { reduxForm, FieldArray, Form, getFormValues } from 'redux-form';
-import { Prompt } from 'react-router-dom';
+// import { Prompt } from 'react-router-dom';
 import { Button } from '@mui/material';
 import formTranslations from 'lib/translations/form';
 import { formNames } from 'course/survey/constants';
@@ -171,19 +171,19 @@ class ResponseForm extends Component {
     );
   }
 
-  renderNavigateAwayWarning() {
-    const isDirty = !this.props.pristine;
+  // renderNavigateAwayWarning() {
+  //   const isDirty = !this.props.pristine;
 
-    return (
-      <Prompt
-        when={isDirty}
-        message={(action) =>
-          // Note: POP refers to back action in a browser.
-          action === 'POP'
-        }
-      />
-    );
-  }
+  //   return (
+  //     <Prompt
+  //       when={isDirty}
+  //       message={(action) =>
+  //         // Note: POP refers to back action in a browser.
+  //         action === 'POP'
+  //       }
+  //     />
+  //   );
+  // }
 
   render() {
     const {
@@ -203,7 +203,7 @@ class ResponseForm extends Component {
         <br />
         {!readOnly && this.renderSaveButton()}
         {!readOnly && this.renderSubmitButton()}
-        {this.renderNavigateAwayWarning()}
+        {/* {this.renderNavigateAwayWarning()} */}
       </Form>
     );
   }
