@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Button } from '@mui/material';
-import history from 'lib/history';
+import { useNavigate } from 'react-router-dom';
+import { getCourseId } from 'lib/helpers/url-helpers';
 
 const translations = defineMessages({
   enterEditMode: {
@@ -16,26 +16,18 @@ const styles = {
   },
 };
 
-const EnterEditModeButton = ({
-  match: {
-    params: { courseId },
-  },
-}) => (
-  <Button
-    variant="outlined"
-    onClick={() => history.push(`/courses/${courseId}/lesson_plan/edit/`)}
-    style={styles.button}
-  >
-    <FormattedMessage {...translations.enterEditMode} />
-  </Button>
-);
-
-EnterEditModeButton.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      courseId: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
+const EnterEditModeButton = () => {
+  const navigate = useNavigate();
+  const courseId = getCourseId();
+  return (
+    <Button
+      variant="outlined"
+      onClick={() => navigate(`/courses/${courseId}/lesson_plan/edit/`)}
+      style={styles.button}
+    >
+      <FormattedMessage {...translations.enterEditMode} />
+    </Button>
+  );
 };
 
 export default EnterEditModeButton;
