@@ -1,6 +1,5 @@
 import { render } from 'react-dom';
-import { Router } from 'react-router-dom';
-import history from 'lib/history';
+import { BrowserRouter } from 'react-router-dom';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 import PopupNotifier from 'course/user-notification/containers/PopupNotifier';
 import storeCreator from 'course/user-notification/store';
@@ -13,9 +12,9 @@ $(() => {
 
     render(
       <ProviderWrapper {...{ store }}>
-        <Router history={history}>
+        <BrowserRouter>
           <PopupNotifier />
-        </Router>
+        </BrowserRouter>
       </ProviderWrapper>,
       mountNode,
     );
