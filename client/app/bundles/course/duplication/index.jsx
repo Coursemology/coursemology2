@@ -1,6 +1,5 @@
 import { render } from 'react-dom';
-import { Router } from 'react-router-dom';
-import history from 'lib/history';
+import { BrowserRouter } from 'react-router-dom';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 import DuplicationLayout from 'course/duplication/containers/DuplicationLayout';
 import storeCreator from './store';
@@ -13,9 +12,9 @@ $(() => {
 
     render(
       <ProviderWrapper {...{ store }}>
-        <Router history={history}>
+        <BrowserRouter>
           <DuplicationLayout />
-        </Router>
+        </BrowserRouter>
       </ProviderWrapper>,
       mountNode,
     );
