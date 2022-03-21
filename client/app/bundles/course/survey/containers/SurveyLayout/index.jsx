@@ -24,17 +24,19 @@ const SurveyLayout = ({ surveys }) => {
 
   return (
     <>
-      <TitleBar
-        title={survey.title}
-        iconElementRight={
-          surveyId ? <AdminMenu {...{ survey, surveyId }} /> : null
-        }
-        iconElementLeft={
-          <IconButton onClick={() => navigate(-1)}>
-            <ArrowBack htmlColor="white" />
-          </IconButton>
-        }
-      />
+      {survey && (
+        <TitleBar
+          title={survey.title}
+          iconElementRight={
+            surveyId ? <AdminMenu {...{ survey, surveyId }} /> : null
+          }
+          iconElementLeft={
+            <IconButton onClick={() => navigate(-1)}>
+              <ArrowBack htmlColor="white" />
+            </IconButton>
+          }
+        />
+      )}
       <Routes>
         <Route
           path=""

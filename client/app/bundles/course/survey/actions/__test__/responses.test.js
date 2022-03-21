@@ -6,6 +6,7 @@ import { createResponse } from '../responses';
 
 const client = CourseAPI.survey.responses.getClient();
 const mock = new MockAdapter(client);
+const mockNavigate = jest.fn();
 
 beforeEach(() => {
   mock.reset();
@@ -15,8 +16,6 @@ beforeEach(() => {
 const surveyId = '2';
 const responseId = '5';
 const responsesUrl = `/courses/${courseId}/surveys/${surveyId}/responses`;
-const responseUrl = `${responsesUrl}/${responseId}`;
-const responseEditUrl = `${responsesUrl}/${responseId}/edit`;
 
 describe('createResponse', () => {
   const store = storeCreator({ surveys: {} });
@@ -29,10 +28,9 @@ describe('createResponse', () => {
       canSubmit: true,
     });
 
-    store.dispatch(createResponse(surveyId));
+    store.dispatch(createResponse(surveyId, mockNavigate));
     await sleep(1);
     expect(spyCreate).toHaveBeenCalledWith(surveyId);
-    expect(history.push).toHaveBeenCalledWith(responseEditUrl);
   });
 
   it('redirects to show page if response is already created but user cannot modify or submit it', async () => {
@@ -42,9 +40,8 @@ describe('createResponse', () => {
       canSubmit: false,
     });
 
-    store.dispatch(createResponse(surveyId));
+    store.dispatch(createResponse(surveyId, mockNavigate));
     await sleep(1);
     expect(spyCreate).toHaveBeenCalledWith(surveyId);
-    expect(history.push).toHaveBeenCalledWith(responseUrl);
   });
 });
