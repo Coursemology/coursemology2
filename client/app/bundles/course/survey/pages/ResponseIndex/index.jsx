@@ -287,9 +287,6 @@ class ResponseIndex extends Component {
             </TableRow>
           </TableBody>
         </Table>
-        <CardContent>
-          <RemindButton />
-        </CardContent>
       </Card>
     );
   }
@@ -335,6 +332,8 @@ class ResponseIndex extends Component {
               </b>
             }
           />
+          <br />
+          <RemindButton includePhantom={this.state.includePhantomsInStats} />
         </CardContent>
       </Card>
     );
