@@ -2,7 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { submit } from 'redux-form';
-import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import { Button } from '@mui/material';
 import NotificationBar, {
   notificationShape,
@@ -88,7 +88,7 @@ class EditPage extends Component {
 
 EditPage.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  intl: intlShape,
+  intl: PropTypes.object,
   // If the gamification feature is enabled in the course.
   gamified: PropTypes.bool,
   // If personalized timeline features are shown for the course

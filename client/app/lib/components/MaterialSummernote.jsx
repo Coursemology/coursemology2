@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, defineMessages, intlShape } from 'react-intl';
+import { injectIntl, defineMessages } from 'react-intl';
 import ReactSummernote from 'react-summernote';
 import { InputLabel } from '@mui/material';
 import { cyan } from '@mui/material/colors';
@@ -29,7 +29,7 @@ const propTypes = {
   value: PropTypes.string,
   airMode: PropTypes.bool,
   airModeColor: PropTypes.bool,
-  intl: intlShape,
+  intl: PropTypes.object,
 };
 
 class MaterialSummernote extends Component {

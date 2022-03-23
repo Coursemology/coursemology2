@@ -2,12 +2,7 @@ import { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button } from '@mui/material';
-import {
-  injectIntl,
-  intlShape,
-  FormattedMessage,
-  defineMessages,
-} from 'react-intl';
+import { injectIntl, FormattedMessage, defineMessages } from 'react-intl';
 
 import actionTypes, { dialogTypes } from '../../constants';
 import { createCategory } from '../../actions';
@@ -77,7 +72,7 @@ const PopupDialog = ({ dispatch, intl, isManagingGroups }) => {
 PopupDialog.propTypes = {
   dispatch: PropTypes.func.isRequired,
   isManagingGroups: PropTypes.bool.isRequired,
-  intl: intlShape,
+  intl: PropTypes.object,
 };
 
 export default connect((state) => ({

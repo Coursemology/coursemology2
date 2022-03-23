@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { defineMessages, injectIntl, intlShape } from 'react-intl';
+import { defineMessages, injectIntl } from 'react-intl';
 import { reduxForm, Field, Form } from 'redux-form';
 import renderTextField from 'lib/components/redux-form/TextField';
 import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
@@ -57,7 +57,7 @@ NewCourseForm.propTypes = {
   disabled: PropTypes.bool.isRequired,
 
   handleSubmit: PropTypes.func.isRequired,
-  intl: intlShape,
+  intl: PropTypes.object,
 };
 
 export default reduxForm({

@@ -1,11 +1,6 @@
 import { useCallback, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import {
-  defineMessages,
-  FormattedMessage,
-  injectIntl,
-  intlShape,
-} from 'react-intl';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { red } from '@mui/material/colors';
 import Delete from '@mui/icons-material/Delete';
@@ -214,7 +209,7 @@ CategoryCard.propTypes = {
   onManageGroups: PropTypes.func.isRequired,
   canManageCategory: PropTypes.bool.isRequired,
   canManageGroups: PropTypes.bool.isRequired,
-  intl: intlShape,
+  intl: PropTypes.object,
 };
 
 export default connect()(injectIntl(CategoryCard));

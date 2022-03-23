@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { Scatter } from 'react-chartjs-2';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { formatTimestamp } from 'lib/helpers/videoHelpers';
 import { videoDefaults } from 'lib/constants/videoConstants';
 import { connect } from 'react-redux';
@@ -67,7 +67,7 @@ const graphDataLineOptions = {
 };
 
 const propTypes = {
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 
   sessions: PropTypes.objectOf(
     PropTypes.shape({

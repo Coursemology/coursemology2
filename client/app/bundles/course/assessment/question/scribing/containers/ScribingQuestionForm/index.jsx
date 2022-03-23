@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { reduxForm, Form } from 'redux-form';
 import { Button, Snackbar } from '@mui/material';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
@@ -25,7 +25,7 @@ const propTypes = {
   }),
   data: dataShape.isRequired,
   scribingId: PropTypes.string,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   // Redux-form proptypes
   formValues: PropTypes.shape({
     question_scribing: PropTypes.shape(questionShape),

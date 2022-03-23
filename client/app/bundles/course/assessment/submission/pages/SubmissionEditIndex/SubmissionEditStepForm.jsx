@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import Hotkeys from 'react-hot-keys';
 import {
   Button,
@@ -605,7 +605,7 @@ class SubmissionEditStepForm extends Component {
 }
 
 SubmissionEditStepForm.propTypes = {
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 
   graderView: PropTypes.bool.isRequired,
   maxStep: PropTypes.number.isRequired,

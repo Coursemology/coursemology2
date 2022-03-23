@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { fieldMetaPropTypes } from 'redux-form';
-import { FormattedMessage, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import Dropzone from 'react-dropzone';
 import { grey, red } from '@mui/material/colors';
 
@@ -118,7 +118,7 @@ SingleFileInput.propTypes = {
   }),
   errorMessage: PropTypes.string,
   required: PropTypes.bool,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   accept: PropTypes.string,
   previewComponent: PropTypes.func,
 };

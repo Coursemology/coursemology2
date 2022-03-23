@@ -1,12 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {
-  defineMessages,
-  FormattedMessage,
-  injectIntl,
-  intlShape,
-} from 'react-intl';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import {
   FormControlLabel,
   ListSubheader,
@@ -301,7 +296,7 @@ Duplication.propTypes = {
   sourceCourses: courseListingShape,
 
   dispatch: PropTypes.func.isRequired,
-  intl: intlShape,
+  intl: PropTypes.object,
 };
 
 export default connect(({ duplication }) => ({

@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { defineMessages, injectIntl, intlShape } from 'react-intl';
+import { defineMessages, injectIntl } from 'react-intl';
 import { Checkbox, Radio } from '@mui/material';
 import { red } from '@mui/material/colors';
 import formTranslations from 'lib/translations/form';
@@ -232,7 +232,7 @@ ResponseAnswer.propTypes = {
   question: questionShape,
   disabled: PropTypes.bool.isRequired,
 
-  intl: intlShape,
+  intl: PropTypes.object,
 };
 
 export default injectIntl(ResponseAnswer);

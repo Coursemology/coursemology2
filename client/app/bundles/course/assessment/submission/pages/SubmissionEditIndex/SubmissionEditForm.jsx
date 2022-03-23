@@ -1,7 +1,7 @@
 import { Component, Suspense, lazy } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { Element, scroller } from 'react-scroll';
 import {
   Button,
@@ -673,7 +673,7 @@ class SubmissionEditForm extends Component {
 }
 
 SubmissionEditForm.propTypes = {
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 
   graderView: PropTypes.bool.isRequired,
   canUpdate: PropTypes.bool.isRequired,

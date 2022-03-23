@@ -1,11 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  injectIntl,
-  intlShape,
-  defineMessages,
-  FormattedMessage,
-} from 'react-intl';
+import { injectIntl, defineMessages, FormattedMessage } from 'react-intl';
 import {
   Card,
   CardContent,
@@ -215,7 +210,7 @@ class SubmissionAnswer extends Component {
 }
 
 SubmissionAnswer.propTypes = {
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   handleToggleViewHistoryMode: PropTypes.func.isRequired,
   historyQuestions: PropTypes.objectOf(historyQuestionShape),
   questionsFlags: PropTypes.objectOf(questionFlagsShape),

@@ -1,12 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {
-  injectIntl,
-  defineMessages,
-  intlShape,
-  FormattedMessage,
-} from 'react-intl';
+import { injectIntl, defineMessages, FormattedMessage } from 'react-intl';
 import { Button } from '@mui/material';
 import {
   showQuestionForm,
@@ -85,7 +80,7 @@ NewQuestionButton.propTypes = {
   disabled: PropTypes.bool,
 
   dispatch: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 NewQuestionButton.defaultProps = {

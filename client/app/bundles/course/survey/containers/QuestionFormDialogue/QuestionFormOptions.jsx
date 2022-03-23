@@ -1,7 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { defineMessages, injectIntl, intlShape } from 'react-intl';
+import { defineMessages, injectIntl } from 'react-intl';
 import { Button } from '@mui/material';
 import QuestionFormOption from './QuestionFormOption';
 
@@ -89,7 +89,7 @@ class QuestionFormOptions extends Component {
 }
 
 QuestionFormOptions.propTypes = {
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
   fields: PropTypes.shape({
     map: PropTypes.func.isRequired,

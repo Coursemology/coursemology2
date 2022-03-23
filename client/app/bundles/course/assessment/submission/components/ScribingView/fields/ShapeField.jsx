@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { Button, Icon } from '@mui/material';
 import { blue } from '@mui/material/colors';
 import { scribingTranslations as translations } from '../../../translations';
 import { scribingShapes } from '../../../constants';
 
 const propTypes = {
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   currentShape: PropTypes.string.isRequired,
   setSelectedShape: PropTypes.func,
 };

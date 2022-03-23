@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
-import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import { Button, Card } from '@mui/material';
 import history from 'lib/history';
 
@@ -160,7 +160,7 @@ class SubmissionEmptyForm extends Component {
 }
 
 SubmissionEmptyForm.propTypes = {
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 
   graderView: PropTypes.bool.isRequired,
   canUpdate: PropTypes.bool.isRequired,

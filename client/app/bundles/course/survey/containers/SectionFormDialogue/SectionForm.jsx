@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { reduxForm, Field, Form } from 'redux-form';
 import renderTextField from 'lib/components/redux-form/TextField';
 import formTranslations from 'lib/translations/form';
@@ -44,7 +44,7 @@ const SectionForm = ({ handleSubmit, intl, onSubmit, disabled }) => (
 SectionForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
 };
 

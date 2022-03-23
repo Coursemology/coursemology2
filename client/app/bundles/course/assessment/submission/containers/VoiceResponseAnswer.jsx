@@ -2,12 +2,7 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import {
-  injectIntl,
-  intlShape,
-  defineMessages,
-  FormattedMessage,
-} from 'react-intl';
+import { injectIntl, defineMessages, FormattedMessage } from 'react-intl';
 import { Button } from '@mui/material';
 import { red } from '@mui/material/colors';
 import Mic from '@mui/icons-material/Mic';
@@ -222,7 +217,7 @@ VoiceResponseAnswer.propTypes = {
   dispatch: PropTypes.func.isRequired,
   recordingComponentId: PropTypes.string.isRequired,
   recording: PropTypes.bool.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {

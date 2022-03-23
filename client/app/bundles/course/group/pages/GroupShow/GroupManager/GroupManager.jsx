@@ -1,12 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from '@mui/material';
-import {
-  FormattedMessage,
-  injectIntl,
-  intlShape,
-  defineMessages,
-} from 'react-intl';
+import { FormattedMessage, injectIntl, defineMessages } from 'react-intl';
 import { connect } from 'react-redux';
 
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
@@ -365,7 +360,7 @@ GroupManager.propTypes = {
   selectedGroupId: PropTypes.number.isRequired,
   modifiedGroups: PropTypes.arrayOf(groupShape).isRequired,
   isUpdating: PropTypes.bool.isRequired,
-  intl: intlShape,
+  intl: PropTypes.object,
 };
 
 export default connect((state) => ({

@@ -1,10 +1,5 @@
 import PropTypes from 'prop-types';
-import {
-  defineMessages,
-  injectIntl,
-  intlShape,
-  FormattedMessage,
-} from 'react-intl';
+import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import { reduxForm, Field, Form } from 'redux-form';
 import ReactTooltip from 'react-tooltip';
 import renderTextField from 'lib/components/redux-form/TextField';
@@ -98,7 +93,7 @@ const propTypes = {
   shiftEndDate: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   disableAnonymousToggle: PropTypes.bool,
   disabled: PropTypes.bool,
 };

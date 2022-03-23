@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import {
   Card,
   CardContent,
@@ -310,7 +310,7 @@ class VisibleGradingPanel extends Component {
 }
 
 VisibleGradingPanel.propTypes = {
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   gamified: PropTypes.bool.isRequired,
   grading: gradingShape.isRequired,
   questionIds: PropTypes.arrayOf(PropTypes.number),

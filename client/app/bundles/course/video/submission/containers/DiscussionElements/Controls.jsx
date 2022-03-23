@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { IconButton, Tooltip } from '@mui/material';
-import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import {
   cyan as activeColor,
   grey as inactiveColor,
@@ -13,7 +13,7 @@ import { changeAutoScroll, refreshDiscussion } from '../../actions/discussion';
 import translations from '../../translations';
 
 const propTypes = {
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 
   autoScroll: PropTypes.bool,
   onAutoScrollToggle: PropTypes.func,

@@ -1,7 +1,7 @@
 /* eslint-disable new-cap */
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, defineMessages, intlShape } from 'react-intl';
+import { injectIntl, defineMessages } from 'react-intl';
 import { connect } from 'react-redux';
 import { DragSource, DropTarget } from 'react-dnd';
 import { showDeleteConfirmation } from 'course/survey/actions';
@@ -210,7 +210,7 @@ Question.propTypes = {
   expanded: PropTypes.bool.isRequired,
 
   dispatch: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   connectDropTarget: PropTypes.func.isRequired,
   connectDragSource: PropTypes.func.isRequired,
   isDragging: PropTypes.bool.isRequired,

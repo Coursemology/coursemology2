@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { intlShape, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { FieldArray } from 'redux-form';
 import { Button } from '@mui/material';
 import ImportedFileView from './ImportedFileView';
@@ -159,7 +159,7 @@ class VisibleProgrammingImportEditor extends Component {
 }
 
 VisibleProgrammingImportEditor.propTypes = {
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   dispatch: PropTypes.func,
   submissionId: PropTypes.number,
   questionId: PropTypes.number,
