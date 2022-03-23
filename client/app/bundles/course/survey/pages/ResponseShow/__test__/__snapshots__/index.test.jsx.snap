@@ -49,7 +49,7 @@ exports[`<ResponseShow /> shows form and admin buttons if user has permissions a
   <ForwardRef(ListSubheader)
     disableSticky={true}
   >
-    <FormattedMessage
+    <MemoizedFormattedMessage
       defaultMessage="Questions"
       id="course.surveys.questions"
     />
