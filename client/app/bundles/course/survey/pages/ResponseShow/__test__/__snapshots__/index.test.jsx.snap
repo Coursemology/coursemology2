@@ -52,7 +52,6 @@ exports[`<ResponseShow /> shows form and admin buttons if user has permissions a
     <FormattedMessage
       defaultMessage="Questions"
       id="course.surveys.questions"
-      values={Object {}}
     />
   </ForwardRef(ListSubheader)>
   <ReduxForm

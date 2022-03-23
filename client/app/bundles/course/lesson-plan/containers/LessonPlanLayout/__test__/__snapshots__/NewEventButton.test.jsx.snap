@@ -16,7 +16,6 @@ exports[`<NewEventButton /> is hidden when canManageLessonPlan is false 1`] = `
           "formatDate": [Function],
           "formatDateToParts": [Function],
           "formatDisplayName": [Function],
-          "formatHTMLMessage": [Function],
           "formatList": [Function],
           "formatMessage": [Function],
           "formatNumber": [Function],
@@ -40,6 +39,7 @@ exports[`<NewEventButton /> is hidden when canManageLessonPlan is false 1`] = `
           "onError": [Function],
           "textComponent": Symbol(react.fragment),
           "timeZone": "Asia/Singapore",
+          "wrapRichTextChunksInFragment": undefined,
         }
       }
     >
