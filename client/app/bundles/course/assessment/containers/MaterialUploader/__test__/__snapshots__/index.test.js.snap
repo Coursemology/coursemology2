@@ -56,7 +56,14 @@ exports[`<Material /> renders the material 1`] = `
         wrapper="div"
       >
         <MemoizedFormattedMessage
-          defaultMessage="This action is unavailable as the Materials Component is disabled in the Admin Settings"
+          defaultMessage={
+            Array [
+              Object {
+                "type": 0,
+                "value": "This action is unavailable as the Materials Component is disabled in the Admin Settings",
+              },
+            ]
+          }
           id="course.material.disableDelete"
         />
       </ReactTooltip>
@@ -73,7 +80,14 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
       disableSticky={true}
     >
       <MemoizedFormattedMessage
-        defaultMessage="Files"
+        defaultMessage={
+          Array [
+            Object {
+              "type": 0,
+              "value": "Files",
+            },
+          ]
+        }
         id="course.assessment.MaterialList.uploadedFiles"
       />
     </ForwardRef(ListSubheader)>
@@ -111,7 +125,14 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
         }
       >
         <MemoizedFormattedMessage
-          defaultMessage="Add Files"
+          defaultMessage={
+            Array [
+              Object {
+                "type": 0,
+                "value": "Add Files",
+              },
+            ]
+          }
           id="course.material.addFiles"
         />
         <input
@@ -140,7 +161,14 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
       wrapper="div"
     >
       <MemoizedFormattedMessage
-        defaultMessage="This action is unavailable as the Materials Component is disabled in the Admin Settings"
+        defaultMessage={
+          Array [
+            Object {
+              "type": 0,
+              "value": "This action is unavailable as the Materials Component is disabled in the Admin Settings",
+            },
+          ]
+        }
         id="course.material.disableNewFile"
       />
     </ReactTooltip>

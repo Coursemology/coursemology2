@@ -12,6 +12,12 @@
     "@babel/plugin-syntax-dynamic-import",
     "@babel/plugin-proposal-class-properties",
 
-    ["react-intl", { "messagesDir": "./build/messages/" }]
+    [
+      "formatjs",
+      {
+        "idInterpolationPattern": "[sha512:contenthash:base64:6]",
+        "ast": true
+      }
+    ]
   ]
 }
