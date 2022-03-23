@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { mount } from 'enzyme';
 import ImagePreview from '../ImagePreview';
 
@@ -9,13 +8,7 @@ describe('<SingleFileInput />', () => {
   it('renders with url and name', () => {
     const imagePreview = mount(
       <ImagePreview originalName="bar" originalUrl="foo" />,
-      {
-        context: { intl, muiTheme }, // eslint-disable-line no-undef
-        childContextTypes: {
-          intl: intlShape,
-          muiTheme: PropTypes.object,
-        },
-      },
+      buildContextOptions(),
     );
 
     const img = imagePreview.find('img').first();
@@ -25,13 +18,7 @@ describe('<SingleFileInput />', () => {
   });
 
   it('renders a placeholder when no url is provided', () => {
-    const imagePreview = mount(<ImagePreview />, {
-      context: { intl, muiTheme }, // eslint-disable-line no-undef
-      childContextTypes: {
-        intl: intlShape,
-        muiTheme: PropTypes.object,
-      },
-    });
+    const imagePreview = mount(<ImagePreview />, buildContextOptions());
 
     // SvgIcon is the element of the placeholder 'InsertDriveFileIcon'
     expect(imagePreview.find('ForwardRef(SvgIcon)')).toHaveLength(1);
@@ -46,13 +33,7 @@ describe('<SingleFileInput />', () => {
         originalName="bar"
         originalUrl="foo"
       />,
-      {
-        context: { intl, muiTheme }, // eslint-disable-line no-undef
-        childContextTypes: {
-          intl: intlShape,
-          muiTheme: PropTypes.object,
-        },
-      },
+      buildContextOptions(),
     );
 
     const img = imagePreview.find('img').first();
@@ -61,13 +42,7 @@ describe('<SingleFileInput />', () => {
   });
 
   it('does not render the delete button when no image is selected', () => {
-    const imagePreview = mount(<ImagePreview />, {
-      context: { intl, muiTheme }, // eslint-disable-line no-undef
-      childContextTypes: {
-        intl: intlShape,
-        muiTheme: PropTypes.object,
-      },
-    });
+    const imagePreview = mount(<ImagePreview />, buildContextOptions());
 
     expect(imagePreview.find('Badge').exists()).toBe(false);
   });
@@ -75,13 +50,7 @@ describe('<SingleFileInput />', () => {
   it('calls the cancel function when delete button is clicked', () => {
     const imagePreview = mount(
       <ImagePreview file={imageFile} handleCancel={onCancel} />,
-      {
-        context: { intl, muiTheme }, // eslint-disable-line no-undef
-        childContextTypes: {
-          intl: intlShape,
-          muiTheme: PropTypes.object,
-        },
-      },
+      buildContextOptions(),
     );
 
     expect(imagePreview.find('ForwardRef(Badge)').exists()).toBe(true);

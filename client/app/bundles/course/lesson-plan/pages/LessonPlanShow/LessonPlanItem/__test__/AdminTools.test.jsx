@@ -15,6 +15,7 @@ const buildShallowWrapper = (item) => {
   )
     .children()
     .dive()
+    .dive()
     .dive();
 };
 

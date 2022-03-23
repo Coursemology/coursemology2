@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { MemoryRouter } from 'react-router-dom';
 import { mount } from 'enzyme';
 import shallowUntil from 'testUtils/shallowUntil';
@@ -159,13 +158,7 @@ describe('ScribingToolbar', () => {
   it('renders tool popovers', async () => {
     const scribingToolbar = shallowUntil(
       <ScribingToolbar {...props} />,
-      {
-        context: { intl, muiTheme }, // eslint-disable-line no-undef
-        childContextTypes: {
-          intl: intlShape,
-          muiTheme: PropTypes.object,
-        },
-      },
+      buildContextOptions(),
       'ScribingToolbar',
     );
 
@@ -175,7 +168,7 @@ describe('ScribingToolbar', () => {
       },
     });
     scribingToolbar.update();
-    expect(scribingToolbar.find('InjectIntl(TypePopover)').prop('open')).toBe(
+    expect(scribingToolbar.find('injectIntl(TypePopover)').prop('open')).toBe(
       true,
     );
   });
@@ -183,13 +176,7 @@ describe('ScribingToolbar', () => {
   it('renders color pickers', async () => {
     const scribingToolbar = shallowUntil(
       <ScribingToolbar {...props} />,
-      {
-        context: { intl, muiTheme }, // eslint-disable-line no-undef
-        childContextTypes: {
-          intl: intlShape,
-          muiTheme: PropTypes.object,
-        },
-      },
+      buildContextOptions(),
       'ScribingToolbar',
     );
 
@@ -201,7 +188,7 @@ describe('ScribingToolbar', () => {
     scribingToolbar.update();
     expect(
       scribingToolbar
-        .find('InjectIntl(TypePopover)')
+        .find('injectIntl(TypePopover)')
         .prop('colorPickerPopoverOpen'),
     ).toBe(true);
 
@@ -213,7 +200,7 @@ describe('ScribingToolbar', () => {
     scribingToolbar.update();
     expect(
       scribingToolbar
-        .find('InjectIntl(TypePopover)')
+        .find('injectIntl(TypePopover)')
         .prop('colorPickerPopoverOpen'),
     ).toBe(false);
   });

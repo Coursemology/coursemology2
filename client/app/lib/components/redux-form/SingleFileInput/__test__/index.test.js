@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { mount } from 'enzyme';
 import SingleFileInput from '../index';
 
@@ -29,13 +28,7 @@ describe('<SingleFileInput />', () => {
         }}
         meta={reduxFormFieldMetaDefaults}
       />,
-      {
-        context: { intl, muiTheme }, // eslint-disable-line no-undef
-        childContextTypes: {
-          intl: intlShape,
-          muiTheme: PropTypes.object,
-        },
-      },
+      buildContextOptions(),
     );
 
     expect(singleFileInput.find('.file-name').exists()).toBe(true);
@@ -51,13 +44,7 @@ describe('<SingleFileInput />', () => {
         meta={reduxFormFieldMetaDefaults}
         previewComponent={() => <span>Preview</span>}
       />,
-      {
-        context: { intl, muiTheme }, // eslint-disable-line no-undef
-        childContextTypes: {
-          intl: intlShape,
-          muiTheme: PropTypes.object,
-        },
-      },
+      buildContextOptions(),
     );
 
     expect(singleFileInput.find('span').exists()).toBe(true);
@@ -81,13 +68,7 @@ describe('<SingleFileInput />', () => {
           onChange: jest.fn(),
         }}
       />,
-      {
-        context: { intl, muiTheme }, // eslint-disable-line no-undef
-        childContextTypes: {
-          intl: intlShape,
-          muiTheme: PropTypes.object,
-        },
-      },
+      buildContextOptions(),
     );
 
     expect(singleFileInput.find('.error-message')).toHaveLength(1);

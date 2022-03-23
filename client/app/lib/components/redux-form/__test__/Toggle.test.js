@@ -11,10 +11,7 @@ describe('<Toggle />', () => {
           onChange: jest.fn(),
         }}
       />,
-      {
-        context: { intl },
-        childContextTypes: { intl: intlShape },
-      },
+      buildContextOptions(),
       'Toggle',
     );
 
@@ -34,10 +31,7 @@ describe('<Toggle />', () => {
           touched: true,
         }}
       />,
-      {
-        context: { intl },
-        childContextTypes: { intl: intlShape },
-      },
+      buildContextOptions(),
       'Toggle',
     );
 

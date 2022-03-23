@@ -63,7 +63,11 @@ describe('<MaterialUploader />', () => {
 
     const materialUploader = mount(
       <ProviderWrapper>
-        <MaterialUploader materials={materials} folderId={folderId} />
+        <MaterialUploader
+          materials={materials}
+          folderId={folderId}
+          enableMaterialsAction
+        />
       </ProviderWrapper>,
     );
 

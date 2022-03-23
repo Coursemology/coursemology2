@@ -15,6 +15,7 @@ const buildShallowWrapper = (canManageLessonPlan, milestone) => {
   )
     .children()
     .dive()
+    .dive()
     .dive();
 };
 

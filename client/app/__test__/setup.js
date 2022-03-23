@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
-import { IntlProvider, intlShape } from 'react-intl';
+import { createIntl, createIntlCache, IntlProvider } from 'react-intl';
 import { createTheme } from '@mui/material/styles';
 import Enzyme from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
@@ -12,32 +12,35 @@ require('@babel/polyfill');
 const jQuery = require('jquery');
 
 const timeZone = 'Asia/Singapore';
-const intlProvider = new IntlProvider({ locale: 'en', timeZone }, {});
+const intlCache = createIntlCache();
+const intl = createIntl({ locale: 'en', timeZone }, intlCache);
+
 const courseId = '1';
 
 const muiTheme = createTheme();
-const intl = intlProvider.getChildContext().intl;
 
 const buildContextOptions = (store) => {
   // eslint-disable-next-line react/prop-types
   function WrapWithProviders({ children }) {
-    return <Provider store={store}>{children}</Provider>;
+    return (
+      <IntlProvider {...intl}>
+        <Provider store={store}>{children}</Provider>
+      </IntlProvider>
+    );
   }
   return {
-    context: { intl, muiTheme },
+    context: { muiTheme },
     childContextTypes: {
       muiTheme: PropTypes.object,
-      intl: intlShape,
     },
-    wrappingComponent: store ? WrapWithProviders : null,
+    wrappingComponent: store ? WrapWithProviders : IntlProvider,
+    wrappingComponentProps: store ? null : intl,
   };
 };
 
 // Global variables
 global.courseId = courseId;
 global.window = window;
-global.intl = intl;
-global.intlShape = intlShape;
 global.muiTheme = muiTheme;
 global.$ = jQuery;
 global.jQuery = jQuery;
