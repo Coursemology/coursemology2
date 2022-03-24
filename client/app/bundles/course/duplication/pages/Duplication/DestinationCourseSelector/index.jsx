@@ -13,17 +13,13 @@ import { courseShape, sourceCourseShape } from 'course/duplication/propTypes';
 import NewCourseForm from './NewCourseForm';
 
 const translations = defineMessages({
-  selectDestinationCoursePrompt: {
-    id: 'course.duplication.DestinationCourseSelector.selectDestinationCoursePrompt',
-    defaultMessage: 'Select destination course:',
-  },
   defaultTitle: {
     id: 'course.duplication.DestinationCourseSelector.defaultTitle',
     defaultMessage: '{title} (Copied at {timestamp})',
   },
-  success: {
-    id: 'course.duplication.DestinationCourseSelector.success',
-    defaultMessage: 'Duplication is successful. Redirecting to the new course.',
+  failure: {
+    id: 'course.duplication.DestinationCourseSelector.failure',
+    defaultMessage: 'Duplication failed.',
   },
   pending: {
     id: 'course.duplication.DestinationCourseSelector.pending',
@@ -32,9 +28,13 @@ const translations = defineMessages({
     You may close the window while duplication is in progress and\n\
     you will also receive an email with a link to the new course when it becomes available.',
   },
-  failure: {
-    id: 'course.duplication.DestinationCourseSelector.failure',
-    defaultMessage: 'Duplication failed.',
+  selectDestinationCoursePrompt: {
+    id: 'course.duplication.DestinationCourseSelector.selectDestinationCoursePrompt',
+    defaultMessage: 'Select destination course:',
+  },
+  success: {
+    id: 'course.duplication.DestinationCourseSelector.success',
+    defaultMessage: 'Duplication is successful. Redirecting to the new course.',
   },
 });
 

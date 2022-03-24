@@ -18,6 +18,10 @@ const translations = defineMessages({
     defaultMessage:
       'This action is unavailable as the Materials Component is disabled in the Admin Settings',
   },
+  uploadedFiles: {
+    id: 'course.assessment.MaterialList.uploadedFiles',
+    defaultMessage: 'Files',
+  },
 });
 
 const propTypes = {
@@ -71,12 +75,7 @@ const MaterialList = (props) => {
     onFileInputChange,
     enableMaterialsAction,
   } = props;
-  const header = (
-    <FormattedMessage
-      id="course.assessment.MaterialList.uploadedFiles"
-      defaultMessage="Files"
-    />
-  );
+  const header = <FormattedMessage {...translations.uploadedFiles} />;
 
   const materialNodes = materials.map((material) => (
     <Material

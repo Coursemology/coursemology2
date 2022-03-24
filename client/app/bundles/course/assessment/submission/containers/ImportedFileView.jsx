@@ -8,10 +8,6 @@ import { fileShape } from '../propTypes';
 import { workflowStates } from '../constants';
 
 const translations = defineMessages({
-  uploadedFiles: {
-    id: 'course.assessment.submission.ImportedFileView.uploadedFiles',
-    defaultMessage: 'Uploaded Files:',
-  },
   deleteConfirmation: {
     id: 'course.assessment.submission.ImportedFileView.deleteConfirmation',
     defaultMessage: 'Are you sure you want to delete this file?',
@@ -19,6 +15,10 @@ const translations = defineMessages({
   noFiles: {
     id: 'course.assessment.submission.ImportedFileView.noFiles',
     defaultMessage: 'No files uploaded.',
+  },
+  uploadedFiles: {
+    id: 'course.assessment.submission.ImportedFileView.uploadedFiles',
+    defaultMessage: 'Uploaded Files:',
   },
 });
 

@@ -6,6 +6,10 @@ import { Button } from '@mui/material';
 import { showMilestoneForm, createMilestone } from 'course/lesson-plan/actions';
 
 const translations = defineMessages({
+  failure: {
+    id: 'course.lessonPlan.NewMilestoneButton.failure',
+    defaultMessage: 'Failed to create milestone.',
+  },
   newMilestone: {
     id: 'course.lessonPlan.NewMilestoneButton.newMilestone',
     defaultMessage: 'New Milestone',
@@ -13,10 +17,6 @@ const translations = defineMessages({
   success: {
     id: 'course.lessonPlan.NewMilestoneButton.success',
     defaultMessage: 'Milestone created.',
-  },
-  failure: {
-    id: 'course.lessonPlan.NewMilestoneButton.failure',
-    defaultMessage: 'Failed to create milestone.',
   },
 });
 

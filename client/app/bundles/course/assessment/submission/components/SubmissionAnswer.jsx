@@ -26,14 +26,14 @@ const translations = defineMessages({
       'There is no answer submitted for this question - this might be caused by \
                     the addition of this question after the submission is submitted.',
   },
+  noPastAnswers: {
+    id: 'course.assessment.submission.noPastAnswers',
+    defaultMessage: 'No past answers.',
+  },
   rendererNotImplemented: {
     id: 'course.assessment.submission.rendererNotImplemented',
     defaultMessage:
       'The display for this question type has not been implemented yet.',
-  },
-  noPastAnswers: {
-    id: 'course.assessment.submission.noPastAnswers',
-    defaultMessage: 'No past answers.',
   },
   viewPastAnswers: {
     id: 'course.assessment.submission.viewPastAnswers',

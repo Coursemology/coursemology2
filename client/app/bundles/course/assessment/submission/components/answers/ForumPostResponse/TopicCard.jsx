@@ -9,16 +9,13 @@ import {
 } from '@mui/material';
 import { indigo } from '@mui/material/colors';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
-
 import {
   topicOverviewShape,
   postPackShape,
 } from 'course/assessment/submission/propTypes';
 import { getForumTopicURL } from 'lib/helpers/url-builders';
-
 import CardTitle from './CardTitle';
 import ForumPostOption from './ForumPostOption';
 

@@ -14,6 +14,14 @@ import {
 } from 'course/lesson-plan/actions';
 
 const translations = defineMessages({
+  deleteFailure: {
+    id: 'course.lessonPlan.LessonPlanShow.LessonPlanItem.AdminTools.deleteFailure',
+    defaultMessage: 'Failed to delete event.',
+  },
+  deleteSuccess: {
+    id: 'course.lessonPlan.LessonPlanShow.LessonPlanItem.AdminTools.deleteSuccess',
+    defaultMessage: 'Event deleted.',
+  },
   editEvent: {
     id: 'course.lessonPlan.LessonPlanShow.LessonPlanItem.AdminTools.editEvent',
     defaultMessage: 'Edit Event',
@@ -25,14 +33,6 @@ const translations = defineMessages({
   updateFailure: {
     id: 'course.lessonPlan.LessonPlanShow.LessonPlanItem.AdminTools.updateFailure',
     defaultMessage: 'Failed to update event.',
-  },
-  deleteSuccess: {
-    id: 'course.lessonPlan.LessonPlanShow.LessonPlanItem.AdminTools.deleteSuccess',
-    defaultMessage: 'Event deleted.',
-  },
-  deleteFailure: {
-    id: 'course.lessonPlan.LessonPlanShow.LessonPlanItem.AdminTools.deleteFailure',
-    defaultMessage: 'Failed to delete event.',
   },
 });
 

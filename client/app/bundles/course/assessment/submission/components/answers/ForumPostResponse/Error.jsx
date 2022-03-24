@@ -1,6 +1,14 @@
 import { Card, CardContent, CardHeader } from '@mui/material';
 import { red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
+import { defineMessages, FormattedMessage } from 'react-intl';
+
+const translations = defineMessages({
+  error: {
+    id: 'course.assessment.submission.answer.forumPostResponse.error',
+    defaultMessage: 'Error',
+  },
+});
 
 const styles = {
   card: {
@@ -19,7 +27,10 @@ const styles = {
 export default function Error({ message }) {
   return (
     <Card style={styles.card}>
-      <CardHeader style={styles.header} title="Error" />
+      <CardHeader
+        style={styles.header}
+        title={<FormattedMessage {...translations.error} />}
+      />
       <CardContent>{message}</CardContent>
     </Card>
   );

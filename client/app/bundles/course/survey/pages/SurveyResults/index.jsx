@@ -20,17 +20,17 @@ const translations = defineMessages({
     id: 'course.surveys.SurveyResults.includePhantoms',
     defaultMessage: 'Include Phantom Students',
   },
-  responsesCount: {
-    id: 'course.surveys.SurveyResults.responsesCount',
-    defaultMessage: 'Number of Responses: {count}',
+  noPhantoms: {
+    id: 'course.surveys.SurveyResults.noPhantoms',
+    defaultMessage: 'No phantom student responses.',
   },
   noSections: {
     id: 'course.surveys.SurveyResults.noSections',
     defaultMessage: 'This survey does not have any questions yet.',
   },
-  noPhantoms: {
-    id: 'course.surveys.SurveyResults.noPhantoms',
-    defaultMessage: 'No phantom student responses.',
+  responsesCount: {
+    id: 'course.surveys.SurveyResults.responsesCount',
+    defaultMessage: 'Number of Responses: {count}',
   },
 });
 

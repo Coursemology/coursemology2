@@ -13,13 +13,13 @@ import ReadOnlyEditor from '../../../containers/ReadOnlyEditor';
 import { fileShape } from '../../../propTypes';
 
 const translations = defineMessages({
-  sizeTooBig: {
-    id: 'course.assessment.submission.answer.programming.sizeTooBig',
-    defaultMessage: 'The file is too big and cannot be displayed.',
-  },
   downloadFile: {
     id: 'course.assessment.submission.answer.programming.downloadFile',
     defaultMessage: 'Download File',
+  },
+  sizeTooBig: {
+    id: 'course.assessment.submission.answer.programming.sizeTooBig',
+    defaultMessage: 'The file is too big and cannot be displayed.',
   },
 });
 

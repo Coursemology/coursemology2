@@ -1,21 +1,21 @@
 import { defineMessages } from 'react-intl';
 
 const translations = defineMessages({
-  newAssessment: {
-    id: 'course.assessment.newAssessment',
-    defaultMessage: 'New Assessment',
-  },
-  new: {
-    id: 'course.assessment.new',
-    defaultMessage: 'New',
+  creationFailure: {
+    id: 'course.assessment.create.fail',
+    defaultMessage: 'Failed to create assessment.',
   },
   creationSuccess: {
     id: 'course.assessment.create.success',
     defaultMessage: 'Assessment was created.',
   },
-  creationFailure: {
-    id: 'course.assessment.create.fail',
-    defaultMessage: 'Failed to create assessment.',
+  new: {
+    id: 'course.assessment.new',
+    defaultMessage: 'New',
+  },
+  newAssessment: {
+    id: 'course.assessment.newAssessment',
+    defaultMessage: 'New Assessment',
   },
 });
 

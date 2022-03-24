@@ -7,10 +7,6 @@ import { createResponse } from 'course/survey/actions/responses';
 import { useNavigate } from 'react-router-dom';
 
 const translations = defineMessages({
-  start: {
-    id: 'course.surveys.RespondButton.start',
-    defaultMessage: 'Start',
-  },
   continue: {
     id: 'course.surveys.RespondButton.continue',
     defaultMessage: 'Continue',
@@ -19,13 +15,17 @@ const translations = defineMessages({
     id: 'course.surveys.RespondButton.expired',
     defaultMessage: 'Expired',
   },
-  view: {
-    id: 'course.surveys.RespondButton.view',
-    defaultMessage: 'View',
-  },
   notOpen: {
     id: 'course.surveys.RespondButton.notOpen',
     defaultMessage: 'Not Open',
+  },
+  start: {
+    id: 'course.surveys.RespondButton.start',
+    defaultMessage: 'Start',
+  },
+  view: {
+    id: 'course.surveys.RespondButton.view',
+    defaultMessage: 'View',
   },
 });
 

@@ -1,13 +1,17 @@
 import { defineMessages } from 'react-intl';
 
 const translations = defineMessages({
-  setting: {
-    id: 'course.admin.NotificationSettings.setting',
-    defaultMessage: 'Setting',
-  },
   description: {
     id: 'course.admin.NotificationSettings.description',
     defaultMessage: 'Description',
+  },
+  emailSettings: {
+    id: 'course.admin.NotificationSettings.emailSettings',
+    defaultMessage: 'Email Settings',
+  },
+  noEmailSettings: {
+    id: 'course.admin.NotificationSettings.noEmailSettings',
+    defaultMessage: 'None of the enabled components have email settings.',
   },
   phantom: {
     id: 'course.admin.NotificationSettings.phantom',
@@ -17,22 +21,18 @@ const translations = defineMessages({
     id: 'course.admin.NotificationSettings.regular',
     defaultMessage: 'Regular',
   },
-  emailSettings: {
-    id: 'course.admin.NotificationSettings.emailSettings',
-    defaultMessage: 'Email Settings',
-  },
-  updateSuccess: {
-    id: 'course.admin.NotificationSettings.updateSuccess',
-    defaultMessage:
-      'The email setting "{setting}" for {user} users has been {action}.',
+  setting: {
+    id: 'course.admin.NotificationSettings.setting',
+    defaultMessage: 'Setting',
   },
   updateFailure: {
     id: 'course.admin.NotificationSettings.updateFailure',
     defaultMessage: 'Failed to update setting "{setting}".',
   },
-  noEmailSettings: {
-    id: 'course.admin.NotificationSettings.noEmailSettings',
-    defaultMessage: 'None of the enabled components have email settings.',
+  updateSuccess: {
+    id: 'course.admin.NotificationSettings.updateSuccess',
+    defaultMessage:
+      'The email setting "{setting}" for {user} users has been {action}.',
   },
 });
 
@@ -64,14 +64,6 @@ export const settingComponents = defineMessages({
 });
 
 export const settingTitles = defineMessages({
-  new_announcement: {
-    id: 'course.admin.NotificationSettings.settingTitles.new_announcement',
-    defaultMessage: 'New Announcement',
-  },
-  opening_reminder: {
-    id: 'course.admin.NotificationSettings.settingTitles.opening_reminder',
-    defaultMessage: 'Opening Reminder',
-  },
   closing_reminder: {
     id: 'course.admin.NotificationSettings.settingTitles.closing_reminder',
     defaultMessage: 'Closing Reminder',
@@ -84,9 +76,17 @@ export const settingTitles = defineMessages({
     id: 'course.admin.NotificationSettings.settingTitles.grades_released',
     defaultMessage: 'Grades Released',
   },
+  new_announcement: {
+    id: 'course.admin.NotificationSettings.settingTitles.new_announcement',
+    defaultMessage: 'New Announcement',
+  },
   new_comment: {
     id: 'course.admin.NotificationSettings.settingTitles.new_comment',
     defaultMessage: 'New Comment',
+  },
+  new_enrol_request: {
+    id: 'course.admin.NotificationSettings.settingTitles.new_enrol_request',
+    defaultMessage: 'New Enrol Request',
   },
   new_submission: {
     id: 'course.admin.NotificationSettings.settingTitles.new_submission',
@@ -96,13 +96,13 @@ export const settingTitles = defineMessages({
     id: 'course.admin.NotificationSettings.settingTitles.new_topic',
     defaultMessage: 'New Topic',
   },
+  opening_reminder: {
+    id: 'course.admin.NotificationSettings.settingTitles.opening_reminder',
+    defaultMessage: 'Opening Reminder',
+  },
   post_replied: {
     id: 'course.admin.NotificationSettings.settingTitles.post_replied',
     defaultMessage: 'New Post and Reply',
-  },
-  new_enrol_request: {
-    id: 'course.admin.NotificationSettings.settingTitles.new_enrol_request',
-    defaultMessage: 'New Enrol Request',
   },
 });
 
@@ -149,10 +149,6 @@ export const settingDescriptions = defineMessages({
     defaultMessage:
       'Notify users who are subscribed to a forum topic when a reply is made to that topic.',
   },
-  surveys_opening_reminder: {
-    id: 'course.admin.NotificationSettings.settingDescriptions.survey_opening_reminder',
-    defaultMessage: 'Notify users when a new survey is available.',
-  },
   surveys_closing_reminder: {
     id: 'course.admin.NotificationSettings.settingDescriptions.survey_closing_reminder',
     defaultMessage: 'Notify students when a survey is about to expire.',
@@ -162,18 +158,22 @@ export const settingDescriptions = defineMessages({
     defaultMessage:
       'Notify staff when with a list of students who receive a survey closing reminder.',
   },
-  videos_opening_reminder: {
-    id: 'course.admin.NotificationSettings.settingDescriptions.videos_opening_reminder',
-    defaultMessage: 'Notify users when a new video is available.',
+  surveys_opening_reminder: {
+    id: 'course.admin.NotificationSettings.settingDescriptions.survey_opening_reminder',
+    defaultMessage: 'Notify users when a new survey is available.',
+  },
+  users_new_enrol_request: {
+    id: 'course.admin.NotificationSettings.settingDescriptions.users_new_enrol_request',
+    defaultMessage: 'Notify staff when users request to enrol in the course.',
   },
   videos_closing_reminder: {
     id: 'course.admin.NotificationSettings.settingDescriptions.videos_closing_reminder',
     defaultMessage:
       'Notify students when a video submission is about to be due.',
   },
-  users_new_enrol_request: {
-    id: 'course.admin.NotificationSettings.settingDescriptions.users_new_enrol_request',
-    defaultMessage: 'Notify staff when users request to enrol in the course.',
+  videos_opening_reminder: {
+    id: 'course.admin.NotificationSettings.settingDescriptions.videos_opening_reminder',
+    defaultMessage: 'Notify users when a new video is available.',
   },
 });
 

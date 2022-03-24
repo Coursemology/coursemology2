@@ -2,25 +2,23 @@ import { Component } from 'react';
 import { green, red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
-
 import { postPackShape } from 'course/assessment/submission/propTypes';
 import ForumPost from 'course/forum/components/ForumPost';
 import { getForumTopicURL, getForumURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
-
 import Labels from './Labels';
 import ParentPost from './ParentPost';
 
 const MAX_NAME_LENGTH = 30;
 
 const translations = defineMessages({
-  topicDeleted: {
-    id: 'course.assessment.submission.answer.forumPostResponse.topicDeleted',
-    defaultMessage: 'Post made under a topic that was subsequently deleted.',
-  },
   postMadeUnder: {
     id: 'course.assessment.submission.answer.forumPostResponse.postMadeUnder',
     defaultMessage: 'Post made under {topicUrl} in {forumUrl}',
+  },
+  topicDeleted: {
+    id: 'course.assessment.submission.answer.forumPostResponse.topicDeleted',
+    defaultMessage: 'Post made under a topic that was subsequently deleted.',
   },
 });
 

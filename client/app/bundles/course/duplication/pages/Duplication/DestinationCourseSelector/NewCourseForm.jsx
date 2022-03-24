@@ -7,13 +7,13 @@ import formTranslations from 'lib/translations/form';
 import { formNames } from 'course/duplication/constants';
 
 const translations = defineMessages({
-  newTitle: {
-    id: 'course.duplication.NewCourseForm.newTitle',
-    defaultMessage: 'New Title',
-  },
   newStartAt: {
     id: 'course.duplication.NewCourseForm.newStartAt',
     defaultMessage: 'New Start Date',
+  },
+  newTitle: {
+    id: 'course.duplication.NewCourseForm.newTitle',
+    defaultMessage: 'New Title',
   },
 });
 

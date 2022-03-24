@@ -10,6 +10,10 @@ import {
 } from 'course/survey/actions/sections';
 
 const translations = defineMessages({
+  failure: {
+    id: 'course.surveys.NewSectionButton.failure',
+    defaultMessage: 'Failed to create question.',
+  },
   newSection: {
     id: 'course.surveys.NewSectionButton.newSection',
     defaultMessage: 'New Section',
@@ -17,10 +21,6 @@ const translations = defineMessages({
   success: {
     id: 'course.surveys.NewSectionButton.success',
     defaultMessage: 'Section created.',
-  },
-  failure: {
-    id: 'course.surveys.NewSectionButton.failure',
-    defaultMessage: 'Failed to create question.',
   },
 });
 

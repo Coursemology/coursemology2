@@ -9,13 +9,13 @@ import { updateMilestone } from 'course/lesson-plan/actions';
 import { fields } from 'course/lesson-plan/constants';
 
 const translations = defineMessages({
-  updateSuccess: {
-    id: 'course.lessonPlan.LessonPlanEdit.MilestoneRow.updateSuccess',
-    defaultMessage: "'{title}' was updated.",
-  },
   updateFailed: {
     id: 'course.lessonPlan.LessonPlanEdit.MilestoneRow.updateFailed',
     defaultMessage: 'Failed to update milestone date.',
+  },
+  updateSuccess: {
+    id: 'course.lessonPlan.LessonPlanEdit.MilestoneRow.updateSuccess',
+    defaultMessage: "'{title}' was updated.",
   },
 });
 

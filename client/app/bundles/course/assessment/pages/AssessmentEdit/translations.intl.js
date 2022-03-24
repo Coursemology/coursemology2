@@ -5,13 +5,13 @@ const translations = defineMessages({
     id: 'course.assessment.edit.update',
     defaultMessage: 'Update',
   },
-  updateSuccess: {
-    id: 'course.assessment.update.success',
-    defaultMessage: 'Assessment was updated.',
-  },
   updateFailure: {
     id: 'course.assessment.update.fail',
     defaultMessage: 'Failed to update assessment.',
+  },
+  updateSuccess: {
+    id: 'course.assessment.update.success',
+    defaultMessage: 'Assessment was updated.',
   },
 });
 

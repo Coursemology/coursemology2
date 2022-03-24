@@ -7,6 +7,10 @@ import { Button } from '@mui/material';
 import { changeSectionOrder } from 'course/survey/actions/sections';
 
 const translations = defineMessages({
+  failure: {
+    id: 'course.surveys.MoveDownButton.failure',
+    defaultMessage: 'Failed to move section down.',
+  },
   moveSectionDown: {
     id: 'course.surveys.MoveDownButton.moveSectionDown',
     defaultMessage: 'Move Section Down',
@@ -14,10 +18,6 @@ const translations = defineMessages({
   success: {
     id: 'course.surveys.MoveDownButton.success',
     defaultMessage: 'Section successfully moved down.',
-  },
-  failure: {
-    id: 'course.surveys.MoveDownButton.failure',
-    defaultMessage: 'Failed to move section down.',
   },
 });
 

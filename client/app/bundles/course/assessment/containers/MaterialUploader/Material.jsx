@@ -33,14 +33,14 @@ const styles = {
 };
 
 const translations = defineMessages({
-  uploading: {
-    id: 'course.material.uploading',
-    defaultMessage: 'Uploading',
-  },
   disableDelete: {
     id: 'course.material.disableDelete',
     defaultMessage:
       'This action is unavailable as the Materials Component is disabled in the Admin Settings',
+  },
+  uploading: {
+    id: 'course.material.uploading',
+    defaultMessage: 'Uploading',
   },
 });
 

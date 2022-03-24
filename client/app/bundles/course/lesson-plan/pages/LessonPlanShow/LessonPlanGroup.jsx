@@ -18,13 +18,13 @@ import LessonPlanItem from './LessonPlanItem';
 import MilestoneAdminTools from './MilestoneAdminTools';
 
 const translations = defineMessages({
-  ungroupedItems: {
-    id: 'course.lessonPlan.LessonPlanGroup.ungroupedItems',
-    defaultMessage: 'Ungrouped Items',
-  },
   noItems: {
     id: 'course.lessonPlan.LessonPlanGroup.noItems',
     defaultMessage: 'No items for this milestone.',
+  },
+  ungroupedItems: {
+    id: 'course.lessonPlan.LessonPlanGroup.ungroupedItems',
+    defaultMessage: 'Ungrouped Items',
   },
 });
 

@@ -18,6 +18,13 @@ import {
 } from '../actions/index';
 
 const translations = defineMessages({
+  chooseVoiceFileExplain: {
+    id: 'course.assessment.submission.answer.chooseVoiceFileExplain',
+    defaultMessage:
+      'Drag your audio file here, or click to select an audio file. \
+                     Only wav and mp3 formats are supported. Alternatively, you may use the \
+                     recorder below to record your response',
+  },
   startRecording: {
     id: 'course.assessment.submission.answer.startRecording',
     defaultMessage: 'Start Recording',
@@ -25,13 +32,6 @@ const translations = defineMessages({
   stopRecording: {
     id: 'course.assessment.submission.answer.stopRecording',
     defaultMessage: 'Stop Recording',
-  },
-  chooseVoiceFileExplain: {
-    id: 'course.assessment.submission.answer.chooseVoiceFileExplain',
-    defaultMessage:
-      'Drag your audio file here, or click to select an audio file. \
-                     Only wav and mp3 formats are supported. Alternatively, you may use the \
-                     recorder below to record your response',
   },
 });
 

@@ -6,13 +6,13 @@ import MaterialSummernote from 'lib/components/MaterialSummernote';
 import style from '../Discussion.scss';
 
 const translations = defineMessages({
-  comment: {
-    id: 'course.video.DiscussionElements.Editor.commentDefault',
-    defaultMessage: 'Comment',
-  },
   cancel: {
     id: 'course.video.DiscussionElements.Editor.cancelDefault',
     defaultMessage: 'Cancel',
+  },
+  comment: {
+    id: 'course.video.DiscussionElements.Editor.commentDefault',
+    defaultMessage: 'Comment',
   },
   prompt: {
     id: 'course.video.DiscussionElements.Editor.prompt',

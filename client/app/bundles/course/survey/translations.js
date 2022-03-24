@@ -1,41 +1,17 @@
 import { defineMessages } from 'react-intl';
 
 const translations = defineMessages({
-  surveys: {
-    id: 'course.surveys',
-    defaultMessage: 'Surveys',
-  },
-  title: {
-    id: 'course.surveys.fields.title',
-    defaultMessage: 'Title',
-  },
-  description: {
-    id: 'course.surveys.fields.description',
-    defaultMessage: 'Description',
-  },
-  opensAt: {
-    id: 'course.surveys.fields.openAt',
-    defaultMessage: 'Opens At',
-  },
-  expiresAt: {
-    id: 'course.surveys.fields.expiresAt',
-    defaultMessage: 'Expires At',
-  },
-  closingRemindedAt: {
-    id: 'course.surveys.fields.closingRemindedAt',
-    defaultMessage: 'Last Reminder Sent At',
-  },
-  anonymous: {
-    id: 'course.surveys.fields.anonymous',
-    defaultMessage: 'Anonymous',
+  allowModifyAfterSubmit: {
+    id: 'course.surveys.fields.allowModifyAfterSubmit',
+    defaultMessage: 'Allow Submitted Responses To Be Modified',
   },
   allowResponseAfterEnd: {
     id: 'course.surveys.fields.allowResponseAfterEnd',
     defaultMessage: 'Allow Responses After Survey Expires',
   },
-  allowModifyAfterSubmit: {
-    id: 'course.surveys.fields.allowModifyAfterSubmit',
-    defaultMessage: 'Allow Submitted Responses To Be Modified',
+  anonymous: {
+    id: 'course.surveys.fields.anonymous',
+    defaultMessage: 'Anonymous',
   },
   basePoints: {
     id: 'course.surveys.fields.basePoints',
@@ -45,33 +21,25 @@ const translations = defineMessages({
     id: 'course.surveys.fields.bonusPoints',
     defaultMessage: 'Bonus Points',
   },
-  published: {
-    id: 'course.surveys.fields.published',
-    defaultMessage: 'Published',
+  closingRemindedAt: {
+    id: 'course.surveys.fields.closingRemindedAt',
+    defaultMessage: 'Last Reminder Sent At',
   },
-  questionText: {
-    id: 'course.surveys.questionText',
-    defaultMessage: 'Question Text',
+  deleteFailure: {
+    id: 'course.surveys.deleteFailure',
+    defaultMessage: 'Failed to delete survey.',
   },
-  questions: {
-    id: 'course.surveys.questions',
-    defaultMessage: 'Questions',
+  deleteSuccess: {
+    id: 'course.surveys.deleteSuccess',
+    defaultMessage: 'Survey "{title}" deleted.',
   },
-  questionType: {
-    id: 'course.surveys.questions.fields.questionType',
-    defaultMessage: 'Question Type',
+  description: {
+    id: 'course.surveys.fields.description',
+    defaultMessage: 'Description',
   },
-  textResponse: {
-    id: 'course.surveys.questions.fields.questionTypes.textResponse',
-    defaultMessage: 'Text Response Question',
-  },
-  multipleChoice: {
-    id: 'course.surveys.questions.fields.questionTypes.multipleChoice',
-    defaultMessage: 'Multiple Choice Question',
-  },
-  multipleResponse: {
-    id: 'course.surveys.questions.fields.questionTypes.multipleResponse',
-    defaultMessage: 'Multiple Response Question',
+  expiresAt: {
+    id: 'course.surveys.fields.expiresAt',
+    defaultMessage: 'Expires At',
   },
   maxOptions: {
     id: 'course.surveys.questions.fields.maxOptions',
@@ -81,33 +49,65 @@ const translations = defineMessages({
     id: 'course.surveys.questions.fields.minOptions',
     defaultMessage: 'Minimum Allowed Responses',
   },
-  updateSuccess: {
-    id: 'course.surveys.updateSuccess',
-    defaultMessage: 'Survey "{title}" updated.',
+  multipleChoice: {
+    id: 'course.surveys.questions.fields.questionTypes.multipleChoice',
+    defaultMessage: 'Multiple Choice Question',
   },
-  updateFailure: {
-    id: 'course.surveys.updateFailure',
-    defaultMessage: 'Failed to update survey.',
+  multipleResponse: {
+    id: 'course.surveys.questions.fields.questionTypes.multipleResponse',
+    defaultMessage: 'Multiple Response Question',
   },
-  requestFailure: {
-    id: 'course.surveys.requestFailure',
-    defaultMessage: 'An error occurred while processing your request.',
+  opensAt: {
+    id: 'course.surveys.fields.openAt',
+    defaultMessage: 'Opens At',
   },
-  deleteSuccess: {
-    id: 'course.surveys.deleteSuccess',
-    defaultMessage: 'Survey "{title}" deleted.',
+  published: {
+    id: 'course.surveys.fields.published',
+    defaultMessage: 'Published',
   },
-  deleteFailure: {
-    id: 'course.surveys.deleteFailure',
-    defaultMessage: 'Failed to delete survey.',
+  questions: {
+    id: 'course.surveys.questions',
+    defaultMessage: 'Questions',
+  },
+  questionText: {
+    id: 'course.surveys.questionText',
+    defaultMessage: 'Question Text',
+  },
+  questionType: {
+    id: 'course.surveys.questions.fields.questionType',
+    defaultMessage: 'Question Type',
+  },
+  responses: {
+    id: 'course.surveys.responses',
+    defaultMessage: 'Responses',
   },
   results: {
     id: 'course.surveys.results',
     defaultMessage: 'Results',
   },
-  responses: {
-    id: 'course.surveys.responses',
-    defaultMessage: 'Responses',
+  requestFailure: {
+    id: 'course.surveys.requestFailure',
+    defaultMessage: 'An error occurred while processing your request.',
+  },
+  surveys: {
+    id: 'course.surveys',
+    defaultMessage: 'Surveys',
+  },
+  textResponse: {
+    id: 'course.surveys.questions.fields.questionTypes.textResponse',
+    defaultMessage: 'Text Response Question',
+  },
+  title: {
+    id: 'course.surveys.fields.title',
+    defaultMessage: 'Title',
+  },
+  updateFailure: {
+    id: 'course.surveys.updateFailure',
+    defaultMessage: 'Failed to update survey.',
+  },
+  updateSuccess: {
+    id: 'course.surveys.updateSuccess',
+    defaultMessage: 'Survey "{title}" updated.',
   },
 });
 

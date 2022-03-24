@@ -12,13 +12,13 @@ import moment from 'lib/moment';
 import { postShape } from '../propTypes';
 
 const translations = defineMessages({
-  deleteConfirmation: {
-    id: 'course.assessment.submission.CommentCard.deleteConfirmation',
-    defaultMessage: 'Are you sure you want to delete this comment?',
-  },
   cancel: {
     id: 'course.assessment.submission.CommentCard.cancel',
     defaultMessage: 'Cancel',
+  },
+  deleteConfirmation: {
+    id: 'course.assessment.submission.CommentCard.deleteConfirmation',
+    defaultMessage: 'Are you sure you want to delete this comment?',
   },
   save: {
     id: 'course.assessment.submission.CommentCard.save',

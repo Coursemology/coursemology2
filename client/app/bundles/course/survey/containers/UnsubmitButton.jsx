@@ -13,23 +13,23 @@ const styles = {
 };
 
 const translations = defineMessages({
-  unsubmit: {
-    id: 'course.surveys.UnsubmitButton.unsubmit',
-    defaultMessage: 'Unsubmit',
-  },
-  unsubmitSuccess: {
-    id: 'course.surveys.UnsubmitButton.unsubmitSuccess',
-    defaultMessage: 'The response has been unsubmitted.',
-  },
-  unsubmitFailure: {
-    id: 'course.surveys.UnsubmitButton.unsubmitFailure',
-    defaultMessage: 'Unsubmit Failed.',
-  },
   confirm: {
     id: 'course.surveys.UnsubmitButton.confirm',
     defaultMessage:
       'Once unsubmitted, you will not be able to submit on behalf of a student. \
       Are you sure that you want to unsubmit?',
+  },
+  unsubmit: {
+    id: 'course.surveys.UnsubmitButton.unsubmit',
+    defaultMessage: 'Unsubmit',
+  },
+  unsubmitFailure: {
+    id: 'course.surveys.UnsubmitButton.unsubmitFailure',
+    defaultMessage: 'Unsubmit Failed.',
+  },
+  unsubmitSuccess: {
+    id: 'course.surveys.UnsubmitButton.unsubmitSuccess',
+    defaultMessage: 'The response has been unsubmitted.',
   },
 });
 

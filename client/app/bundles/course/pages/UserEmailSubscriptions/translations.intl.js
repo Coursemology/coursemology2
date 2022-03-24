@@ -5,37 +5,37 @@ const translations = defineMessages({
     id: 'course.UserEmailSubscriptions.component',
     defaultMessage: 'Topic',
   },
-  setting: {
-    id: 'course.UserEmailSubscriptions.setting',
-    defaultMessage: 'Setting',
-  },
   description: {
     id: 'course.UserEmailSubscriptions.description',
     defaultMessage: 'Description',
-  },
-  enabled: {
-    id: 'course.UserEmailSubscriptions.enabled',
-    defaultMessage: 'Enabled?',
   },
   emailSubscriptions: {
     id: 'course.UserEmailSubscriptions.emailSubscriptions',
     defaultMessage: 'Email Subscriptions',
   },
-  updateSuccess: {
-    id: 'course.UserEmailSubscriptions.updateSuccess',
-    defaultMessage: 'Email subscription for "{topic}" has been {action}.',
+  enabled: {
+    id: 'course.UserEmailSubscriptions.enabled',
+    defaultMessage: 'Enabled?',
   },
-  updateFailure: {
-    id: 'course.UserEmailSubscriptions.updateFailure',
-    defaultMessage: 'Failed to update email subscription for "{topic}".',
+  noEmailSubscriptionSettings: {
+    id: 'course.UserEmailSubscriptions.noEmailSubscriptionSettings',
+    defaultMessage: 'There is no available email subscription setting.',
+  },
+  setting: {
+    id: 'course.UserEmailSubscriptions.setting',
+    defaultMessage: 'Setting',
   },
   unsubscribeSuccess: {
     id: 'course.UserEmailSubscriptions.unsubscribeSuccess',
     defaultMessage: 'You have successfully unsubscribed from the topics above.',
   },
-  noEmailSubscriptionSettings: {
-    id: 'course.UserEmailSubscriptions.noEmailSubscriptionSettings',
-    defaultMessage: 'There is no available email subscription setting.',
+  updateFailure: {
+    id: 'course.UserEmailSubscriptions.updateFailure',
+    defaultMessage: 'Failed to update email subscription for "{topic}".',
+  },
+  updateSuccess: {
+    id: 'course.UserEmailSubscriptions.updateSuccess',
+    defaultMessage: 'Email subscription for "{topic}" has been {action}.',
   },
   viewAllEmailSubscriptionSettings: {
     id: 'course.UserEmailSubscriptions.viewAllEmailSubscriptionSettings',
@@ -75,10 +75,6 @@ export const subscriptionTitles = defineMessages({
     id: 'course.UserEmailSubscriptions.subscriptionTitles.new_announcement',
     defaultMessage: 'New Announcement',
   },
-  opening_reminder: {
-    id: 'course.UserEmailSubscriptions.subscriptionTitles.opening_reminder',
-    defaultMessage: 'Opening Reminder',
-  },
   closing_reminder: {
     id: 'course.UserEmailSubscriptions.subscriptionTitles.closing_reminder',
     defaultMessage: 'Closing Reminder',
@@ -95,6 +91,10 @@ export const subscriptionTitles = defineMessages({
     id: 'course.UserEmailSubscriptions.subscriptionTitles.new_comment',
     defaultMessage: 'Submission Comment',
   },
+  new_enrol_request: {
+    id: 'course.UserEmailSubscriptions.subscriptionTitles.new_enrol_request',
+    defaultMessage: 'New Enrol Request',
+  },
   new_submission: {
     id: 'course.UserEmailSubscriptions.subscriptionTitles.new_submission',
     defaultMessage: 'New Submission',
@@ -103,13 +103,13 @@ export const subscriptionTitles = defineMessages({
     id: 'course.UserEmailSubscriptions.subscriptionTitles.new_topic',
     defaultMessage: 'New Topic',
   },
+  opening_reminder: {
+    id: 'course.UserEmailSubscriptions.subscriptionTitles.opening_reminder',
+    defaultMessage: 'Opening Reminder',
+  },
   post_replied: {
     id: 'course.UserEmailSubscriptions.subscriptionTitles.post_replied',
     defaultMessage: 'New Post and Reply',
-  },
-  new_enrol_request: {
-    id: 'course.UserEmailSubscriptions.subscriptionTitles.new_enrol_request',
-    defaultMessage: 'New Enrol Request',
   },
 });
 
@@ -117,10 +117,6 @@ export const subscriptionDescriptions = defineMessages({
   announcements_new_announcement: {
     id: 'course.UserEmailSubscriptions.subscriptionDescriptions.announcements_new_announcement',
     defaultMessage: 'Stay notified whenever a new announcement is made.',
-  },
-  assessments_opening_reminder: {
-    id: 'course.UserEmailSubscriptions.subscriptionDescriptions.assessments_opening_reminder',
-    defaultMessage: 'Be notified when a new assignment is available.',
   },
   assessments_closing_reminder: {
     id: 'course.UserEmailSubscriptions.subscriptionDescriptions.assessments_closing_reminder',
@@ -144,6 +140,10 @@ export const subscriptionDescriptions = defineMessages({
     id: 'course.UserEmailSubscriptions.subscriptionDescriptions.assessments_new_submission',
     defaultMessage: 'Be notified when your student creates a new submission.',
   },
+  assessments_opening_reminder: {
+    id: 'course.UserEmailSubscriptions.subscriptionDescriptions.assessments_opening_reminder',
+    defaultMessage: 'Be notified when a new assignment is available.',
+  },
   forums_new_topic: {
     id: 'course.UserEmailSubscriptions.subscriptionDescriptions.forums_new_topic',
     defaultMessage:
@@ -154,10 +154,6 @@ export const subscriptionDescriptions = defineMessages({
     defaultMessage:
       'Be notified when there are posts and replies for forum topics you are subscribed to.',
   },
-  surveys_opening_reminder: {
-    id: 'course.UserEmailSubscriptions.subscriptionDescriptions.surveys_opening_reminder',
-    defaultMessage: 'Be notified when a new survey is available.',
-  },
   surveys_closing_reminder: {
     id: 'course.UserEmailSubscriptions.subscriptionDescriptions.surveys_closing_reminder',
     defaultMessage: 'Be notified when a survey is about to expire.',
@@ -167,17 +163,21 @@ export const subscriptionDescriptions = defineMessages({
     defaultMessage:
       'Receive an email containing a list of students who receive closing reminders for a survey.',
   },
-  videos_opening_reminder: {
-    id: 'course.UserEmailSubscriptions.subscriptionDescriptions.videos_opening_reminder.',
-    defaultMessage: 'Be notified when a new video is available.',
+  surveys_opening_reminder: {
+    id: 'course.UserEmailSubscriptions.subscriptionDescriptions.surveys_opening_reminder',
+    defaultMessage: 'Be notified when a new survey is available.',
+  },
+  users_new_enrol_request: {
+    id: 'course.UserEmailSubscriptions.subscriptionDescriptions.users_new_enrol_request',
+    defaultMessage: 'Be notified when a new course enrolment request is made.',
   },
   videos_closing_reminder: {
     id: 'course.UserEmailSubscriptions.subscriptionDescriptions.videos_closing_reminder',
     defaultMessage: 'Be notified when a video is about to expire.',
   },
-  users_new_enrol_request: {
-    id: 'course.UserEmailSubscriptions.subscriptionDescriptions.users_new_enrol_request',
-    defaultMessage: 'Be notified when a new course enrolment request is made.',
+  videos_opening_reminder: {
+    id: 'course.UserEmailSubscriptions.subscriptionDescriptions.videos_opening_reminder.',
+    defaultMessage: 'Be notified when a new video is available.',
   },
 });
 

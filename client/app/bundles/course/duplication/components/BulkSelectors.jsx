@@ -2,13 +2,13 @@ import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
 const translations = defineMessages({
-  selectAll: {
-    id: 'course.duplication.BulkSelectors.selectAll',
-    defaultMessage: 'Select All',
-  },
   deselectAll: {
     id: 'course.duplication.BulkSelectors.deselectAll',
     defaultMessage: 'Deselect All',
+  },
+  selectAll: {
+    id: 'course.duplication.BulkSelectors.selectAll',
+    defaultMessage: 'Select All',
   },
 });
 

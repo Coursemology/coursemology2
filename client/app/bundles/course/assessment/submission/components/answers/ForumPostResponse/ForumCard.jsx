@@ -11,13 +11,11 @@ import {
 import { cyan } from '@mui/material/colors';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import PropTypes from 'prop-types';
-
 import {
   forumTopicPostPackShape,
   postPackShape,
 } from 'course/assessment/submission/propTypes';
 import { getForumURL } from 'lib/helpers/url-builders';
-
 import CardTitle from './CardTitle';
 import TopicCard from './TopicCard';
 

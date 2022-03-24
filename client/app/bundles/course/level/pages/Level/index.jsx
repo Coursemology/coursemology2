@@ -27,17 +27,17 @@ import {
 import LevelRow from 'course/level/components/LevelRow';
 
 const translations = defineMessages({
+  addNewLevel: {
+    id: 'course.level.Level.addNewLevel',
+    defaultMessage: 'Add New Level',
+  },
   levelHeader: {
     id: 'course.level.Level.levelHeader',
     defaultMessage: 'Levels',
   },
-  thresholdHeader: {
-    id: 'course.level.Level.thresholdHeader',
-    defaultMessage: 'Threshold',
-  },
-  addNewLevel: {
-    id: 'course.level.Level.addNewLevel',
-    defaultMessage: 'Add New Level',
+  saveFailure: {
+    id: 'course.level.Level.saveFailure',
+    defaultMessage: 'Level saving failed, please try again.',
   },
   saveLevels: {
     id: 'course.level.Level.saveLevels',
@@ -47,9 +47,9 @@ const translations = defineMessages({
     id: 'course.level.Level.saveSuccess',
     defaultMessage: 'Levels Saved',
   },
-  saveFailure: {
-    id: 'course.level.Level.saveFailure',
-    defaultMessage: 'Level saving failed, please try again.',
+  thresholdHeader: {
+    id: 'course.level.Level.thresholdHeader',
+    defaultMessage: 'Threshold',
   },
 });
 

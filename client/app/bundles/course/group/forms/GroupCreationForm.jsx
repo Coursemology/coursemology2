@@ -31,21 +31,21 @@ const styles = {
 };
 
 const translations = defineMessages({
-  name: {
-    id: 'course.group.groupForm.name',
-    defaultMessage: 'Name',
-  },
   description: {
     id: 'course.group.groupForm.description',
     defaultMessage: 'Description (Optional)',
   },
+  multipleGroupsWillBeCreated: {
+    id: 'course.group.groupForm.multipleGroupsWillBeCreated',
+    defaultMessage: 'This will create groups {name} 1 to {name} {numToCreate}.',
+  },
+  name: {
+    id: 'course.group.groupForm.name',
+    defaultMessage: 'Name',
+  },
   nameLength: {
     id: 'course.group.groupForm.nameLength',
     defaultMessage: 'The name is too long!',
-  },
-  prefix: {
-    id: 'course.group.groupForm.prefix',
-    defaultMessage: 'Prefix',
   },
   numToCreate: {
     id: 'course.group.groupForm.numToCreate',
@@ -59,14 +59,9 @@ const translations = defineMessages({
     id: 'course.group.groupForm.numToCreateMax',
     defaultMessage: 'Maximum 50',
   },
-  multipleGroupsWillBeCreated: {
-    id: 'course.group.groupForm.multipleGroupsWillBeCreated',
-    defaultMessage: 'This will create groups {name} 1 to {name} {numToCreate}.',
-  },
-  duplicateGroups: {
-    id: 'course.group.groupForm.duplicateGroups',
-    defaultMessage:
-      'The following group(s) already exist and will not be created again: {duplicateNames}.',
+  prefix: {
+    id: 'course.group.groupForm.prefix',
+    defaultMessage: 'Prefix',
   },
 });
 

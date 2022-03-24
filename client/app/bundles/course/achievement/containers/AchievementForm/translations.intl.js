@@ -1,9 +1,9 @@
 import { defineMessages } from 'react-intl';
 
 const translations = defineMessages({
-  title: {
-    id: 'course.achievement.form.title',
-    defaultMessage: 'Title',
+  badge: {
+    id: 'course.achievement.form.badge',
+    defaultMessage: 'Badge',
   },
   description: {
     id: 'course.achievement.form.description',
@@ -13,9 +13,9 @@ const translations = defineMessages({
     id: 'course.achievement.form.published',
     defaultMessage: 'Published',
   },
-  badge: {
-    id: 'course.achievement.form.badge',
-    defaultMessage: 'Badge',
+  title: {
+    id: 'course.achievement.form.title',
+    defaultMessage: 'Title',
   },
 });
 

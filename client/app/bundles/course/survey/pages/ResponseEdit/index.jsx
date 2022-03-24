@@ -18,21 +18,21 @@ import ResponseForm, {
 } from 'course/survey/containers/ResponseForm';
 
 const translations = defineMessages({
-  saveSuccess: {
-    id: 'course.surveys.ResponseEdit.saveSuccess',
-    defaultMessage: 'Your response has been saved.',
-  },
   saveFailure: {
     id: 'course.surveys.ResponseEdit.saveFailure',
     defaultMessage: 'Saving Failed.',
   },
-  submitSuccess: {
-    id: 'course.surveys.ResponseEdit.submitSuccess',
-    defaultMessage: 'Your response has been submitted.',
+  saveSuccess: {
+    id: 'course.surveys.ResponseEdit.saveSuccess',
+    defaultMessage: 'Your response has been saved.',
   },
   submitFailure: {
     id: 'course.surveys.ResponseEdit.submitFailure',
     defaultMessage: 'Submit Failed.',
+  },
+  submitSuccess: {
+    id: 'course.surveys.ResponseEdit.submitSuccess',
+    defaultMessage: 'Your response has been submitted.',
   },
 });
 

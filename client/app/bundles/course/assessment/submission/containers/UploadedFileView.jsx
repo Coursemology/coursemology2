@@ -9,10 +9,6 @@ import destroy from '../actions/attachments';
 import { workflowStates } from '../constants';
 
 const translations = defineMessages({
-  uploadedFiles: {
-    id: 'course.assessment.submission.UploadedFileView.uploadedFiles',
-    defaultMessage: 'Uploaded Files:',
-  },
   deleteConfirmation: {
     id: 'course.assessment.submission.UploadedFileView.deleteConfirmation',
     defaultMessage: 'Are you sure you want to delete this attachment?',
@@ -20,6 +16,10 @@ const translations = defineMessages({
   noFiles: {
     id: 'course.assessment.submission.UploadedFileView.noFiles',
     defaultMessage: 'No files uploaded.',
+  },
+  uploadedFiles: {
+    id: 'course.assessment.submission.UploadedFileView.uploadedFiles',
+    defaultMessage: 'Uploaded Files:',
   },
 });
 

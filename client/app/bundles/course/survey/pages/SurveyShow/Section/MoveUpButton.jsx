@@ -7,6 +7,10 @@ import { Button } from '@mui/material';
 import { changeSectionOrder } from 'course/survey/actions/sections';
 
 const translations = defineMessages({
+  failure: {
+    id: 'course.surveys.MoveUpButton.failure',
+    defaultMessage: 'Failed to move section up.',
+  },
   moveSectionUp: {
     id: 'course.surveys.MoveUpButton.moveSectionUp',
     defaultMessage: 'Move Section Up',
@@ -14,10 +18,6 @@ const translations = defineMessages({
   success: {
     id: 'course.surveys.MoveUpButton.success',
     defaultMessage: 'Section successfully moved up.',
-  },
-  failure: {
-    id: 'course.surveys.MoveUpButton.failure',
-    defaultMessage: 'Failed to move section up.',
   },
 });
 

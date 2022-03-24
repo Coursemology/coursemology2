@@ -8,13 +8,13 @@ import DateCell from './DateCell';
 import PublishedCell from './PublishedCell';
 
 const translations = defineMessages({
-  updateSuccess: {
-    id: 'course.lessonPlan.LessonPlanEdit.ItemRow.updateSuccess',
-    defaultMessage: "'{title}' was updated.",
-  },
   updateFailed: {
     id: 'course.lessonPlan.LessonPlanEdit.ItemRow.updateFailed',
     defaultMessage: 'Failed to update {title}.',
+  },
+  updateSuccess: {
+    id: 'course.lessonPlan.LessonPlanEdit.ItemRow.updateSuccess',
+    defaultMessage: "'{title}' was updated.",
   },
 });
 

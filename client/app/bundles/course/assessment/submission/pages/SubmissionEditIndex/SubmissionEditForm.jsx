@@ -148,7 +148,7 @@ class SubmissionEditForm extends Component {
             color="primary"
             onClick={() => this.setState({ examNotice: false })}
           >
-            OK
+            {intl.formatMessage(translations.ok)}
           </Button>
         </DialogActions>
       </Dialog>

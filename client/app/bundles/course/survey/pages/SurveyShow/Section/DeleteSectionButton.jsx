@@ -8,6 +8,10 @@ import { showDeleteConfirmation } from 'course/survey/actions';
 import { deleteSurveySection } from 'course/survey/actions/sections';
 
 const translations = defineMessages({
+  failure: {
+    id: 'course.surveys.DeleteSectionButton.failure',
+    defaultMessage: 'Failed to delete section.',
+  },
   deleteSection: {
     id: 'course.surveys.DeleteSectionButton.deleteSection',
     defaultMessage: 'Delete Section',
@@ -15,10 +19,6 @@ const translations = defineMessages({
   success: {
     id: 'course.surveys.DeleteSectionButton.success',
     defaultMessage: 'Section deleted.',
-  },
-  failure: {
-    id: 'course.surveys.DeleteSectionButton.failure',
-    defaultMessage: 'Failed to delete section.',
   },
 });
 

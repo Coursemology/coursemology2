@@ -6,10 +6,6 @@ import MaterialSummernote from 'lib/components/MaterialSummernote';
 import ReactTooltip from 'react-tooltip';
 
 const translations = defineMessages({
-  prompt: {
-    id: 'course.assessment.submission.commentField.prompt',
-    defaultMessage: 'Enter your comment here',
-  },
   comment: {
     id: 'course.assessment.submission.commentField.comment',
     defaultMessage: 'Comment',
@@ -22,6 +18,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.commentField.commentDelayedDescription',
     defaultMessage:
       'This comment will only be visible to students after the grades for this submission are published.',
+  },
+  prompt: {
+    id: 'course.assessment.submission.commentField.prompt',
+    defaultMessage: 'Enter your comment here',
   },
 });
 

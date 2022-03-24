@@ -9,19 +9,16 @@ import {
 import { cyan } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
-
 import {
   forumTopicPostPackShape,
   postPackShape,
 } from 'course/assessment/submission/propTypes';
-
 import ForumCard from './ForumCard';
 
 const translations = defineMessages({
-  maxPostsSelected: {
-    id: 'course.assessment.submission.answer.forumPostResponse.maxPostsSelected',
-    defaultMessage:
-      'You have already selected the max number of posts allowed.',
+  cancelButton: {
+    id: 'course.assessment.submission.answer.forumPostResponse.cancelButton',
+    defaultMessage: 'Cancel',
   },
   dialogTitle: {
     id: 'course.assessment.submission.answer.forumPostResponse.dialogTitle',
@@ -32,14 +29,15 @@ const translations = defineMessages({
     id: 'course.assessment.submission.answer.forumPostResponse.dialogSubtitle',
     defaultMessage: 'Click on the post to include it for submission.',
   },
+  maxPostsSelected: {
+    id: 'course.assessment.submission.answer.forumPostResponse.maxPostsSelected',
+    defaultMessage:
+      'You have already selected the max number of posts allowed.',
+  },
   noPosts: {
     id: 'course.assessment.submission.answer.forumPostResponse.noPosts',
     defaultMessage:
       'You currently do not have any posts. Create one on the forums now!',
-  },
-  cancelButton: {
-    id: 'course.assessment.submission.answer.forumPostResponse.cancelButton',
-    defaultMessage: 'Cancel',
   },
   selectButton: {
     id: 'course.assessment.submission.answer.forumPostResponse.selectButton',

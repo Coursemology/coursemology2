@@ -34,33 +34,25 @@ const translations = defineMessages({
     id: 'course.duplication.Duplication.duplicateData',
     defaultMessage: 'Duplicate Data',
   },
-  fromCourse: {
-    id: 'course.duplication.Duplication.fromCourse',
-    defaultMessage: 'From',
-  },
-  toCourse: {
-    id: 'course.duplication.Duplication.toCourse',
-    defaultMessage: 'To',
-  },
-  items: {
-    id: 'course.duplication.Duplication.items',
-    defaultMessage: 'Selected Items',
-  },
-  startAt: {
-    id: 'course.duplication.Duplication.startAt',
-    defaultMessage: 'Start Date',
-  },
-  newCourse: {
-    id: 'course.duplication.Duplication.newCourse',
-    defaultMessage: 'New Course',
+  duplicationDisabled: {
+    id: 'course.duplication.Duplication.duplicationDisabled',
+    defaultMessage: 'Duplication is disabled for this course.',
   },
   existingCourse: {
     id: 'course.duplication.Duplication.existingCourse',
     defaultMessage: 'Existing Course',
   },
-  duplicationDisabled: {
-    id: 'course.duplication.Duplication.duplicationDisabled',
-    defaultMessage: 'Duplication is disabled for this course.',
+  fromCourse: {
+    id: 'course.duplication.Duplication.fromCourse',
+    defaultMessage: 'From',
+  },
+  items: {
+    id: 'course.duplication.Duplication.items',
+    defaultMessage: 'Selected Items',
+  },
+  newCourse: {
+    id: 'course.duplication.Duplication.newCourse',
+    defaultMessage: 'New Course',
   },
   noComponentsEnabled: {
     id: 'course.duplication.Duplication.noComponentsEnabled',
@@ -71,6 +63,14 @@ const translations = defineMessages({
   selectSourceCourse: {
     id: 'course.duplication.Duplication.selectSourceCourse',
     defaultMessage: 'Select course to duplicate from:',
+  },
+  startAt: {
+    id: 'course.duplication.Duplication.startAt',
+    defaultMessage: 'Start Date',
+  },
+  toCourse: {
+    id: 'course.duplication.Duplication.toCourse',
+    defaultMessage: 'To',
   },
 });
 

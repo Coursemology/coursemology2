@@ -6,6 +6,10 @@ import { Button } from '@mui/material';
 import { showEventForm, createEvent } from 'course/lesson-plan/actions';
 
 const translations = defineMessages({
+  failure: {
+    id: 'course.lessonPlan.NewEventButton.failure',
+    defaultMessage: 'Failed to create event.',
+  },
   newEvent: {
     id: 'course.lessonPlan.NewEventButton.newEvent',
     defaultMessage: 'New Event',
@@ -13,10 +17,6 @@ const translations = defineMessages({
   success: {
     id: 'course.lessonPlan.NewEventButton.success',
     defaultMessage: 'Event created.',
-  },
-  failure: {
-    id: 'course.lessonPlan.NewEventButton.failure',
-    defaultMessage: 'Failed to create event.',
   },
 });
 

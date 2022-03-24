@@ -86,29 +86,13 @@ const styles = {
 };
 
 const translations = defineMessages({
-  serial: {
-    id: 'course.surveys.OptionsQuestionResults.serial',
-    defaultMessage: 'S/N',
-  },
-  respondents: {
-    id: 'course.surveys.OptionsQuestionResults.respondents',
-    defaultMessage: 'Respondents',
-  },
   count: {
     id: 'course.surveys.OptionsQuestionResults.count',
     defaultMessage: 'Count',
   },
-  percentage: {
-    id: 'course.surveys.OptionsQuestionResults.percentage',
-    defaultMessage: 'Percentage',
-  },
-  sortByPercentage: {
-    id: 'course.surveys.OptionsQuestionResults.sortByPercentage',
-    defaultMessage: 'Sort By Percentage',
-  },
-  sortByCount: {
-    id: 'course.surveys.OptionsQuestionResults.sortByCount',
-    defaultMessage: 'Sort By Count',
+  hideOptions: {
+    id: 'course.surveys.OptionsQuestionResults.hideOptions',
+    defaultMessage: 'Hide All {quantity} Options',
   },
   multipleChoiceOption: {
     id: 'course.surveys.OptionsQuestionResults.multipleChoiceOption',
@@ -118,17 +102,33 @@ const translations = defineMessages({
     id: 'course.surveys.OptionsQuestionResults.multipleResponseOption',
     defaultMessage: 'Multiple Response Option',
   },
-  showOptions: {
-    id: 'course.surveys.OptionsQuestionResults.showOptions',
-    defaultMessage: 'Show All {quantity} Options',
-  },
-  hideOptions: {
-    id: 'course.surveys.OptionsQuestionResults.hideOptions',
-    defaultMessage: 'Hide All {quantity} Options',
+  percentage: {
+    id: 'course.surveys.OptionsQuestionResults.percentage',
+    defaultMessage: 'Percentage',
   },
   phantomStudentName: {
     id: 'course.surveys.OptionsQuestionResults.phantomStudentName',
     defaultMessage: '{name} (Phantom)',
+  },
+  respondents: {
+    id: 'course.surveys.OptionsQuestionResults.respondents',
+    defaultMessage: 'Respondents',
+  },
+  serial: {
+    id: 'course.surveys.OptionsQuestionResults.serial',
+    defaultMessage: 'S/N',
+  },
+  showOptions: {
+    id: 'course.surveys.OptionsQuestionResults.showOptions',
+    defaultMessage: 'Show All {quantity} Options',
+  },
+  sortByCount: {
+    id: 'course.surveys.OptionsQuestionResults.sortByCount',
+    defaultMessage: 'Sort By Count',
+  },
+  sortByPercentage: {
+    id: 'course.surveys.OptionsQuestionResults.sortByPercentage',
+    defaultMessage: 'Sort By Percentage',
   },
 });
 

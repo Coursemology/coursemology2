@@ -3,15 +3,15 @@ import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
 const translations = defineMessages({
-  postEdited: {
-    id: 'course.assessment.submission.answer.forumPostResponse.postEdited',
-    defaultMessage:
-      'Post has been edited in the forums. Showing post saved at point of submission.',
-  },
   postDeleted: {
     id: 'course.assessment.submission.answer.forumPostResponse.postDeleted',
     defaultMessage:
       'Post has been deleted from the forum topic. Showing post saved at point of submission.',
+  },
+  postEdited: {
+    id: 'course.assessment.submission.answer.forumPostResponse.postEdited',
+    defaultMessage:
+      'Post has been edited in the forums. Showing post saved at point of submission.',
   },
 });
 

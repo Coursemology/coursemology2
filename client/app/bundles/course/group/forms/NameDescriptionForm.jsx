@@ -9,13 +9,13 @@ import formTranslations from 'lib/translations/form';
 import { formNames } from '../constants';
 
 const translations = defineMessages({
-  name: {
-    id: 'course.group.nameDescriptionForm.name',
-    defaultMessage: 'Name',
-  },
   description: {
     id: 'course.group.nameDescriptionForm.description',
     defaultMessage: 'Description (Optional)',
+  },
+  name: {
+    id: 'course.group.nameDescriptionForm.name',
+    defaultMessage: 'Name',
   },
   nameLength: {
     id: 'course.group.nameDescriptionForm.nameLength',

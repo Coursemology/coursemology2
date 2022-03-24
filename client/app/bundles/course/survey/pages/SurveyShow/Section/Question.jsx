@@ -12,17 +12,9 @@ import * as questionActions from 'course/survey/actions/questions';
 import QuestionCard from './QuestionCard';
 
 const translations = defineMessages({
-  editQuestion: {
-    id: 'course.surveys.Question.editQuestion',
-    defaultMessage: 'Edit Question',
-  },
-  updateSuccess: {
-    id: 'course.surveys.Question.updateSuccess',
-    defaultMessage: 'Question updated.',
-  },
-  updateFailure: {
-    id: 'course.surveys.Question.updateFailure',
-    defaultMessage: 'Failed to update question.',
+  deleteFailure: {
+    id: 'course.surveys.Question.deleteFailure',
+    defaultMessage: 'Failed to delete question.',
   },
   deleteQuestion: {
     id: 'course.surveys.Question.deleteQuestion',
@@ -32,17 +24,25 @@ const translations = defineMessages({
     id: 'course.surveys.Question.deleteSuccess',
     defaultMessage: 'Question deleted.',
   },
-  deleteFailure: {
-    id: 'course.surveys.Question.deleteFailure',
-    defaultMessage: 'Failed to delete question.',
+  editQuestion: {
+    id: 'course.surveys.Question.editQuestion',
+    defaultMessage: 'Edit Question',
+  },
+  reorderFailure: {
+    id: 'course.surveys.Question.reorderFailure',
+    defaultMessage: 'Failed to move question.',
   },
   reorderSuccess: {
     id: 'course.surveys.Question.reorderSuccess',
     defaultMessage: 'Question moved.',
   },
-  reorderFailure: {
-    id: 'course.surveys.Question.reorderFailure',
-    defaultMessage: 'Failed to move question.',
+  updateFailure: {
+    id: 'course.surveys.Question.updateFailure',
+    defaultMessage: 'Failed to update question.',
+  },
+  updateSuccess: {
+    id: 'course.surveys.Question.updateSuccess',
+    defaultMessage: 'Question updated.',
   },
 });
 

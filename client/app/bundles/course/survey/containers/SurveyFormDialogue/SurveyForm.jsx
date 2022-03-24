@@ -26,9 +26,12 @@ const styles = {
 };
 
 const surveyFormTranslations = defineMessages({
-  startEndValidationError: {
-    id: 'course.surveys.SurveyForm.startEndValidationError',
-    defaultMessage: "Must be after 'Opens At'",
+  allowModifyAfterSubmitHint: {
+    id: 'course.surveys.SurveyForm.allowModifyAfterSubmitHint',
+    defaultMessage:
+      'Allow students to modify their responses after they have submitted it. If \
+      this is disabled, you will have to manually unsubmit their responses to allow them to \
+      edit it.',
   },
   allowResponseAfterEndHint: {
     id: 'course.surveys.SurveyForm.allowResponseAfterEndHint',
@@ -36,13 +39,6 @@ const surveyFormTranslations = defineMessages({
       'Allow students to submit responses after the survey has expired. \
       If this is enabled, students who submit before the deadline will get both the base and bonus \
       points, whereas students who submit after the deadline will only be awarded the base points.',
-  },
-  allowModifyAfterSubmitHint: {
-    id: 'course.surveys.SurveyForm.allowModifyAfterSubmitHint',
-    defaultMessage:
-      'Allow students to modify their responses after they have submitted it. If \
-      this is disabled, you will have to manually unsubmit their responses to allow them to \
-      edit it.',
   },
   anonymousHint: {
     id: 'course.surveys.SurveyForm.anonymousHint',
@@ -55,6 +51,10 @@ const surveyFormTranslations = defineMessages({
     id: 'course.surveys.SurveyForm.hasStudentResponse',
     defaultMessage:
       'At least one student has responded to this survey. You may not remove anonymity.',
+  },
+  startEndValidationError: {
+    id: 'course.surveys.SurveyForm.startEndValidationError',
+    defaultMessage: "Must be after 'Opens At'",
   },
   timeBonusExpTooltip: {
     id: 'course.surveys.SurveyForm.timeBonusExpTooltip',

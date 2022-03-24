@@ -3,10 +3,8 @@ import { Button } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
-
 import CourseAPI from 'api/course';
 import { questionShape } from 'course/assessment/submission/propTypes';
-
 import ForumPostSelectDialog from './ForumPostSelectDialog';
 import SelectedPostCard from './SelectedPostCard';
 

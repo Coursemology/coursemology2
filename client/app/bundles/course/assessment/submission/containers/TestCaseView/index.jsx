@@ -40,21 +40,27 @@ const styles = {
 };
 
 const translations = defineMessages({
-  testCases: {
-    id: 'course.assessment.submission.TestCaseView.testCases',
-    defaultMessage: 'Test Cases',
+  autogradeProgress: {
+    id: 'course.assessment.submission.TestCaseView.autogradeProgress',
+    defaultMessage:
+      'The answer is currently being evaluated, come back after a while \
+                    to see the latest results.',
   },
-  identifier: {
-    id: 'course.assessment.submission.TestCaseView.identifier',
-    defaultMessage: 'Identifier',
+  evaluationTestCases: {
+    id: 'course.assessment.submission.TestCaseView.evaluationTestCases',
+    defaultMessage: 'Evaluation Test Cases',
+  },
+  expected: {
+    id: 'course.assessment.submission.TestCaseView.expected',
+    defaultMessage: 'Expected',
   },
   expression: {
     id: 'course.assessment.submission.TestCaseView.experession',
     defaultMessage: 'Expression',
   },
-  expected: {
-    id: 'course.assessment.submission.TestCaseView.expected',
-    defaultMessage: 'Expected',
+  identifier: {
+    id: 'course.assessment.submission.TestCaseView.identifier',
+    defaultMessage: 'Identifier',
   },
   output: {
     id: 'course.assessment.submission.TestCaseView.output',
@@ -64,23 +70,13 @@ const translations = defineMessages({
     id: 'course.assessment.submission.TestCaseView.passed',
     defaultMessage: 'Passed',
   },
-  publicTestCases: {
-    id: 'course.assessment.submission.TestCaseView.publicTestCases',
-    defaultMessage: 'Public Test Cases',
-  },
   privateTestCases: {
     id: 'course.assessment.submission.TestCaseView.privateTestCases',
     defaultMessage: 'Private Test Cases',
   },
-  evaluationTestCases: {
-    id: 'course.assessment.submission.TestCaseView.evaluationTestCases',
-    defaultMessage: 'Evaluation Test Cases',
-  },
-  staffOnlyTestCases: {
-    id: 'course.assessment.submission.TestCaseView.staffOnlyTestCases',
-    defaultMessage:
-      'You are able to view these test cases because you are staff. \
-                    Students will not be able to see them.',
+  publicTestCases: {
+    id: 'course.assessment.submission.TestCaseView.publicTestCases',
+    defaultMessage: 'Public Test Cases',
   },
   staffOnlyOutputStream: {
     id: 'course.assessment.submission.TestCaseView.staffOnlyOutputStream',
@@ -88,19 +84,23 @@ const translations = defineMessages({
       'You can view the output streams because you are staff. \
                     Students will not be able to see them.',
   },
-  standardOutput: {
-    id: 'course.assessment.submission.TestCaseView.standardOutput',
-    defaultMessage: 'Standard Output',
+  staffOnlyTestCases: {
+    id: 'course.assessment.submission.TestCaseView.staffOnlyTestCases',
+    defaultMessage:
+      'You are able to view these test cases because you are staff. \
+                    Students will not be able to see them.',
   },
   standardError: {
     id: 'course.assessment.submission.TestCaseView.standardError',
     defaultMessage: 'Standard Error',
   },
-  autogradeProgress: {
-    id: 'course.assessment.submission.TestCaseView.autogradeProgress',
-    defaultMessage:
-      'The answer is currently being evaluated, come back after a while \
-                    to see the latest results.',
+  standardOutput: {
+    id: 'course.assessment.submission.TestCaseView.standardOutput',
+    defaultMessage: 'Standard Output',
+  },
+  testCases: {
+    id: 'course.assessment.submission.TestCaseView.testCases',
+    defaultMessage: 'Test Cases',
   },
 });
 

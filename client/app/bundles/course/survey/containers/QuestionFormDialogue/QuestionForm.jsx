@@ -32,14 +32,13 @@ const styles = {
 };
 
 const questionFormTranslations = defineMessages({
-  required: {
-    id: 'course.surveys.QuestionForm.required',
-    defaultMessage: 'Required',
+  atLeastOne: {
+    id: 'course.surveys.QuestionForm.atLeastOne',
+    defaultMessage: 'Should be at least 1',
   },
-  requiredHint: {
-    id: 'course.surveys.QuestionForm.requiredHint',
-    defaultMessage:
-      'When selected, student must answer this question in order to complete the survey.',
+  atLeastZero: {
+    id: 'course.surveys.QuestionForm.atLeastZero',
+    defaultMessage: 'Should be at least 0',
   },
   gridView: {
     id: 'course.surveys.QuestionForm.gridView',
@@ -59,14 +58,6 @@ const questionFormTranslations = defineMessages({
     id: 'course.surveys.QuestionForm.noMoreThanFilledOptions',
     defaultMessage: 'Should not be more than the valid option count',
   },
-  atLeastOne: {
-    id: 'course.surveys.QuestionForm.atLeastOne',
-    defaultMessage: 'Should be at least 1',
-  },
-  atLeastZero: {
-    id: 'course.surveys.QuestionForm.atLeastZero',
-    defaultMessage: 'Should be at least 0',
-  },
   notLessThanMin: {
     id: 'course.surveys.QuestionForm.notLessThanMin',
     defaultMessage: 'Should not be less than minimum',
@@ -79,13 +70,22 @@ const questionFormTranslations = defineMessages({
     id: 'course.surveys.QuestionForm.optionCount',
     defaultMessage: 'Valid Option Count',
   },
+  optionsToDelete: {
+    id: 'course.surveys.QuestionForm.optionsToDelete',
+    defaultMessage: 'Options To Delete',
+  },
   optionsToKeep: {
     id: 'course.surveys.QuestionForm.optionsToKeep',
     defaultMessage: 'Options To Keep',
   },
-  optionsToDelete: {
-    id: 'course.surveys.QuestionForm.optionsToDelete',
-    defaultMessage: 'Options To Delete',
+  required: {
+    id: 'course.surveys.QuestionForm.required',
+    defaultMessage: 'Required',
+  },
+  requiredHint: {
+    id: 'course.surveys.QuestionForm.requiredHint',
+    defaultMessage:
+      'When selected, student must answer this question in order to complete the survey.',
   },
 });
 

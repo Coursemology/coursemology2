@@ -10,13 +10,13 @@ import renderTextField from 'lib/components/redux-form/TextField';
 import Thumbnail from 'lib/components/Thumbnail';
 
 const optionTranslations = defineMessages({
-  optionPlaceholder: {
-    id: 'course.surveys.QuestionForm.optionPlaceholder',
-    defaultMessage: 'Option {index}',
-  },
   noCaption: {
     id: 'course.surveys.QuestionForm.noCaption',
     defaultMessage: 'No Caption for Option {index}',
+  },
+  optionPlaceholder: {
+    id: 'course.surveys.QuestionForm.optionPlaceholder',
+    defaultMessage: 'Option {index}',
   },
 });
 

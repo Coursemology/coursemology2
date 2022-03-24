@@ -10,6 +10,10 @@ import GroupFormDialog from '../../forms/GroupFormDialog';
 import NameDescriptionForm from '../../forms/NameDescriptionForm';
 
 const translations = defineMessages({
+  failure: {
+    id: 'course.group.new.createCategory.fail',
+    defaultMessage: 'Failed to create group category.',
+  },
   new: {
     id: 'course.group.new.new',
     defaultMessage: 'New Category',
@@ -17,10 +21,6 @@ const translations = defineMessages({
   success: {
     id: 'course.group.new.createCategory.success',
     defaultMessage: 'Group category was created.',
-  },
-  failure: {
-    id: 'course.group.new.createCategory.fail',
-    defaultMessage: 'Failed to create group category.',
   },
 });
 

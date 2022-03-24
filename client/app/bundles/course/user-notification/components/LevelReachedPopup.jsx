@@ -7,10 +7,6 @@ import { getCourseId } from 'lib/helpers/url-helpers';
 import Popup from 'course/user-notification/components/Popup';
 
 const translations = defineMessages({
-  reached: {
-    id: 'course.userNotification.LevelReachedPopup.reached',
-    defaultMessage: 'Level {levelNumber} Reached!',
-  },
   leaderboard: {
     id: 'course.userNotification.LevelReachedPopup.leaderboard',
     defaultMessage: 'Leaderboard',
@@ -19,6 +15,10 @@ const translations = defineMessages({
     id: 'course.userNotification.LevelReachedPopup.leaderboardMessage',
     defaultMessage:
       'You are currently at position {position} on the leaderboard. Good work!',
+  },
+  reached: {
+    id: 'course.userNotification.LevelReachedPopup.reached',
+    defaultMessage: 'Level {levelNumber} Reached!',
   },
 });
 

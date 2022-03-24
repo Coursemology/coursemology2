@@ -1,9 +1,7 @@
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
-
 import { forumPostShape } from 'course/assessment/submission/propTypes';
 import ForumPost from 'course/forum/components/ForumPost';
-
 import Labels from './Labels';
 
 const translations = defineMessages({

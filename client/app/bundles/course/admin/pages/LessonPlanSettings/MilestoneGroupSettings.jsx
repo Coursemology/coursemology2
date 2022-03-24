@@ -11,29 +11,29 @@ const translations = defineMessages({
     id: 'course.admin.lessonPlanSettings.MilestoneGroupSettings.header',
     defaultMessage: 'Milestone Groups Settings',
   },
-  explanation: {
-    id: 'course.admin.lessonPlanSettings.MilestoneGroupSettings.explanation',
-    defaultMessage: 'When lesson plan page is loaded,',
-  },
   expandAll: {
     id: 'course.admin.lessonPlanSettings.MilestoneGroupSettings.expandAll',
     defaultMessage: 'Expand all milestone groups',
-  },
-  expandNone: {
-    id: 'course.admin.lessonPlanSettings.MilestoneGroupSettings.expandNone',
-    defaultMessage: 'Collapse all milestone groups',
   },
   expandCurrent: {
     id: 'course.admin.lessonPlanSettings.MilestoneGroupSettings.expandCurrent',
     defaultMessage: 'Expand just the current milestone group',
   },
-  updateSuccess: {
-    id: 'course.admin.lessonPlanSettings.MilestoneGroupSettings.updateSuccess',
-    defaultMessage: 'Updated milestone groups settings.',
+  expandNone: {
+    id: 'course.admin.lessonPlanSettings.MilestoneGroupSettings.expandNone',
+    defaultMessage: 'Collapse all milestone groups',
+  },
+  explanation: {
+    id: 'course.admin.lessonPlanSettings.MilestoneGroupSettings.explanation',
+    defaultMessage: 'When lesson plan page is loaded,',
   },
   updateFailure: {
     id: 'course.admin.lessonPlanSettings.MilestoneGroupSettings.updateFailure',
     defaultMessage: 'Failed to update milestone groups settings.',
+  },
+  updateSuccess: {
+    id: 'course.admin.lessonPlanSettings.MilestoneGroupSettings.updateSuccess',
+    defaultMessage: 'Updated milestone groups settings.',
   },
 });
 

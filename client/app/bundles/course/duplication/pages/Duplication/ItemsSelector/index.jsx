@@ -11,13 +11,13 @@ import MaterialsSelector from './MaterialsSelector';
 import VideosSelector from './VideosSelector';
 
 const translations = defineMessages({
-  pleaseSelectItems: {
-    id: 'course.duplication.ItemsSelector.pleaseSelectItems',
-    defaultMessage: 'Please select items to duplicate via the sidebar.',
-  },
   componentDisabled: {
     id: 'course.duplication.ItemsSelector.componentDisabled',
     defaultMessage: 'This component is not enabled for the destination course.',
+  },
+  pleaseSelectItems: {
+    id: 'course.duplication.ItemsSelector.pleaseSelectItems',
+    defaultMessage: 'Please select items to duplicate via the sidebar.',
   },
 });
 

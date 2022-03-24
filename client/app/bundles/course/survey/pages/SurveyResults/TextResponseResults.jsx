@@ -25,9 +25,13 @@ const styles = {
 };
 
 const translations = defineMessages({
-  serial: {
-    id: 'course.surveys.TextResponseResults.serial',
-    defaultMessage: 'S/N',
+  hideResponses: {
+    id: 'course.surveys.TextResponseResults.hideResponses',
+    defaultMessage: 'Hide Responses',
+  },
+  phantomStudentName: {
+    id: 'course.surveys.TextResponseResults.phantomStudentName',
+    defaultMessage: '{name} (Phantom)',
   },
   respondent: {
     id: 'course.surveys.TextResponseResults.respondent',
@@ -37,19 +41,15 @@ const translations = defineMessages({
     id: 'course.surveys.TextResponseResults.responses',
     defaultMessage: 'Responses',
   },
+  serial: {
+    id: 'course.surveys.TextResponseResults.serial',
+    defaultMessage: 'S/N',
+  },
   showResponses: {
     id: 'course.surveys.TextResponseResults.showResponses',
     defaultMessage:
       'Show Responses ({quantity}/{total} responded{phantoms, plural, \
       =0 {} one {, {phantoms} Phantom} other {, {phantoms} Phantoms}})',
-  },
-  hideResponses: {
-    id: 'course.surveys.TextResponseResults.hideResponses',
-    defaultMessage: 'Hide Responses',
-  },
-  phantomStudentName: {
-    id: 'course.surveys.TextResponseResults.phantomStudentName',
-    defaultMessage: '{name} (Phantom)',
   },
 });
 

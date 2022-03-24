@@ -11,6 +11,14 @@ import { questionTypes } from 'course/survey/constants';
 import { formatQuestionFormData } from 'course/survey/utils';
 
 const translations = defineMessages({
+  addQuestion: {
+    id: 'course.surveys.NewQuestionButton.addQuestion',
+    defaultMessage: 'Add Question',
+  },
+  failure: {
+    id: 'course.surveys.NewQuestionButton.failure',
+    defaultMessage: 'Failed to create question.',
+  },
   newQuestion: {
     id: 'course.surveys.NewQuestionButton.title',
     defaultMessage: 'New Question',
@@ -18,14 +26,6 @@ const translations = defineMessages({
   success: {
     id: 'course.surveys.NewQuestionButton.success',
     defaultMessage: 'Question created.',
-  },
-  failure: {
-    id: 'course.surveys.NewQuestionButton.failure',
-    defaultMessage: 'Failed to create question.',
-  },
-  addQuestion: {
-    id: 'course.surveys.NewQuestionButton.addQuestion',
-    defaultMessage: 'Add Question',
   },
 });
 

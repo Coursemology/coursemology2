@@ -12,29 +12,29 @@ import { surveyShape } from 'course/survey/propTypes';
 import { useNavigate } from 'react-router-dom';
 
 const translations = defineMessages({
-  editSurvey: {
-    id: 'course.surveys.SurveyLayout.AdminMenu.editSurvey',
-    defaultMessage: 'Edit Survey',
-  },
-  deleteSurvey: {
-    id: 'course.surveys.SurveyLayout.AdminMenu.deleteSurvey',
-    defaultMessage: 'Delete Survey',
-  },
-  updateSuccess: {
-    id: 'course.surveys.SurveyLayout.AdminMenu.updateSuccess',
-    defaultMessage: 'Survey "{title}" updated.',
-  },
-  updateFailure: {
-    id: 'course.surveys.SurveyLayout.AdminMenu.updateFailure',
-    defaultMessage: 'Failed to update survey.',
+  deleteFailure: {
+    id: 'course.surveys.SurveyLayout.AdminMenu.deleteFailure',
+    defaultMessage: 'Failed to delete survey.',
   },
   deleteSuccess: {
     id: 'course.surveys.SurveyLayout.AdminMenu.deleteSuccess',
     defaultMessage: 'Survey "{title}" deleted.',
   },
-  deleteFailure: {
-    id: 'course.surveys.SurveyLayout.AdminMenu.deleteFailure',
-    defaultMessage: 'Failed to delete survey.',
+  deleteSurvey: {
+    id: 'course.surveys.SurveyLayout.AdminMenu.deleteSurvey',
+    defaultMessage: 'Delete Survey',
+  },
+  editSurvey: {
+    id: 'course.surveys.SurveyLayout.AdminMenu.editSurvey',
+    defaultMessage: 'Edit Survey',
+  },
+  updateFailure: {
+    id: 'course.surveys.SurveyLayout.AdminMenu.updateFailure',
+    defaultMessage: 'Failed to update survey.',
+  },
+  updateSuccess: {
+    id: 'course.surveys.SurveyLayout.AdminMenu.updateSuccess',
+    defaultMessage: 'Survey "{title}" updated.',
   },
 });
 

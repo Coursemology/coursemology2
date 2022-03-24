@@ -8,6 +8,10 @@ import { formatSurveyFormData } from 'course/survey/utils';
 import AddButton from 'course/survey/components/AddButton';
 
 const translations = defineMessages({
+  failure: {
+    id: 'course.surveys.NewSurveyButton.failure',
+    defaultMessage: 'Failed to create survey.',
+  },
   newSurvey: {
     id: 'course.surveys.NewSurveyButton.title',
     defaultMessage: 'New Survey',
@@ -15,10 +19,6 @@ const translations = defineMessages({
   success: {
     id: 'course.surveys.NewSurveyButton.success',
     defaultMessage: 'Survey "{title}" created.',
-  },
-  failure: {
-    id: 'course.surveys.NewSurveyButton.failure',
-    defaultMessage: 'Failed to create survey.',
   },
 });
 
