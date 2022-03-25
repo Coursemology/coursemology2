@@ -42,6 +42,7 @@ const styles = {
     padding: '8px 16px',
   },
   AccordionActions: {
+    justifyContent: 'flex-start',
     padding: 16,
   },
   container: {
@@ -122,7 +123,6 @@ export default class ForumCard extends Component {
               forumTopicPostPack.course.id,
               forumTopicPostPack.forum.id,
             )}
-            style={{ marginBottom: 16 }}
             target="_blank"
           >
             <FormattedMessage {...translations.viewForumInNewTab} />
