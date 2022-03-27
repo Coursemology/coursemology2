@@ -5,6 +5,7 @@ import FontIcon from 'material-ui/FontIcon';
 import { connect } from 'react-redux';
 import { selectParentNode } from 'course/learning-map/actions';
 import ReactTooltip from 'react-tooltip';
+import UnlockRateDisplay from '../UnlockRateDisplay';
 
 const styles = {
   connectionPoint: {
@@ -134,14 +135,11 @@ const Node = (props) => {
             </div>
             {
               canModify &&
-              <>
-                <div>
-                  Unlock rate:
-                </div>
-                <div>
-                  {`${(node.unlock_rate * 100).toFixed(2)}%`}
-                </div>
-              </>
+              <UnlockRateDisplay
+                nodeId={node.id}
+                unlockRate={node.unlock_rate}
+                width={0.6 * styles.wrapper.width}
+              />
             }
           </CardText>
           <div style={styles.connectionPoint}>
