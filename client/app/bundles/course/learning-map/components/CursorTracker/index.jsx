@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useXarrow } from 'react-xarrows';
 import { connect } from 'react-redux';
+import { elementTypes } from '../../constants';
 
 const styles = {
   tracker: {
@@ -20,7 +21,7 @@ const CursorTracker = (props) => {
   const {
     id,
     nodes,
-    selectedParentNodeId,
+    selectedElement,
   } = props;
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   const ref = useRef(null);
@@ -47,7 +48,7 @@ const CursorTracker = (props) => {
       ref={ref}
       style={{
         ...styles.wrapper,
-        zIndex: selectedParentNodeId ? nodes.length + 1 : 1,
+        zIndex: selectedElement.type === elementTypes.parentNode ? nodes.length + 1 : 1,
       }}
     >
       <div
@@ -65,7 +66,7 @@ const CursorTracker = (props) => {
 
 const mapStateToProps = (state) => ({
   nodes: state.learningMap.nodes,
-  selectedParentNodeId: state.learningMap.selectedParentNodeId,
+  selectedElement: state.learningMap.selectedElement,
 });
 
 export default connect(mapStateToProps)(CursorTracker);

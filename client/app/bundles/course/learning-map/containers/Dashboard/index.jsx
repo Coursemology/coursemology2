@@ -7,6 +7,7 @@ import { removeParentNode, toggleSatisfiabilityType } from 'course/learning-map/
 import ReactTooltip from 'react-tooltip';
 import RefreshIndicator from 'material-ui/RefreshIndicator';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import { elementTypes } from '../../constants';
 
 const styles = {
   content: {
@@ -39,9 +40,7 @@ const Dashboard = (props) => {
     isLoading,
     nodes,
     response,
-    selectedArrowId,
-    selectedParentNodeId,
-    selectedGateId,
+    selectedElement,
   } = props;
 
   const [deleteArrowConfirmation, setDeleteArrowConfirmation] = useState(false);
@@ -49,14 +48,14 @@ const Dashboard = (props) => {
   const deleteArrow = () => {
     setDeleteArrowConfirmation(false);
 
-    if (selectedArrowId) {
-      const arrowIdTokens = selectedArrowId.split('-to-');
+    if (selectedElement.type === elementTypes.arrow) {
+      const arrowIdTokens = selectedElement.id.split('-to-');
       dispatch(removeParentNode(arrowIdTokens[0], arrowIdTokens[1]));
     }
   };
 
   const toggleNodeSatisfiabilityType = () => {
-    if (selectedGateId) {
+    if (selectedElement.type === elementTypes.gate) {
       const node = getNodeForSelectedGate();
       dispatch(toggleSatisfiabilityType(node.id));
     }
@@ -70,11 +69,11 @@ const Dashboard = (props) => {
   };
 
   const getNodeForSelectedGate = () => {
-    return nodes.find((node) => node.id === selectedGateId.split('-gate')[0]);
+    return nodes.find((node) => node.id === selectedElement.id.split('-gate')[0]);
   };
 
   const selectedArrowDisplay = () => {
-    const ids = selectedArrowId.split('-to-');
+    const ids = selectedElement.id.split('-to-');
     const fromNodeTitle = nodes.find((node) => node.id === ids[0]).title;
     const toNodeTitle = nodes.find((node) => node.id === ids[1]).title;
 
@@ -87,7 +86,7 @@ const Dashboard = (props) => {
   const selectedConditionNodeDisplay = () => {
     return {
       color: `${orange200}`,
-      text: `Creating arrow from: ${nodes.find((node) => node.id === selectedParentNodeId).title}`,
+      text: `Creating arrow from: ${nodes.find((node) => node.id === selectedElement.id).title}`,
     };
   };
 
@@ -112,18 +111,16 @@ const Dashboard = (props) => {
       return responseDisplay();
     }
     
-    if (selectedArrowId) {
-      return selectedArrowDisplay();
+    switch (selectedElement.type) {
+      case elementTypes.arrow:
+        return selectedArrowDisplay();
+      case elementTypes.gate:
+        return selectedGateDisplay();
+      case elementTypes.parentNode:
+        return selectedConditionNodeDisplay();
+      default:
+        return defaultDisplay();
     }
-    
-    if (selectedParentNodeId) {
-      return selectedConditionNodeDisplay();
-    }
-    if (selectedGateId) {
-      return selectedGateDisplay();
-    }
-
-    return defaultDisplay();
   };
 
   const selectedArrowIcon = () => {
@@ -169,15 +166,14 @@ const Dashboard = (props) => {
   };
 
   const getActionIcons = () => {
-    if (selectedArrowId) {
-      return selectedArrowIcon();
+    switch (selectedElement.type) {
+      case elementTypes.arrow:
+        return selectedArrowIcon();
+      case elementTypes.gate:
+        return selectedGateIcon();
+      default:
+        return <></>
     }
-
-    if (selectedGateId) {
-      return selectedGateIcon();
-    }
-
-    return <></>
   };
 
   const {
@@ -217,9 +213,7 @@ const mapStateToProps = (state) => ({
   isLoading: state.learningMap.isLoading,
   nodes: state.learningMap.nodes,
   response: state.learningMap.response,
-  selectedArrowId: state.learningMap.selectedArrowId,
-  selectedParentNodeId: state.learningMap.selectedParentNodeId,
-  selectedGateId: state.learningMap.selectedGateId,
+  selectedElement: state.learningMap.selectedElement,
 });
 
 export default connect(mapStateToProps)(Dashboard);

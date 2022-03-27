@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { addParentNode, selectGate } from 'course/learning-map/actions';
 import ReactTooltip from 'react-tooltip';
 import { green300, red300 } from 'material-ui/styles/colors';
+import { elementTypes } from '../../constants';
 
 const styles = {
   andGate: {
@@ -55,11 +56,12 @@ const Gate = (props) => {
     getGateId,
     getGateInputId,
     node,
-    selectedParentNodeId,
-    selectedGateId,
+    selectedElement,
   } = props;
   const id = getGateId(node.id);
   const zIndex = node.depth + 2;
+  const isSelected = selectedElement.type === elementTypes.gate && selectedElement.id === id;
+  const isParentNodeSelected = selectedElement.type === elementTypes.parentNode;
 
   const onGateClick = (event) => {
     if (canModify) {
@@ -69,8 +71,10 @@ const Gate = (props) => {
   };
 
   const onConnectionPointClick = (event, nodeId) => {
-    event.stopPropagation();
-    dispatch(addParentNode(selectedParentNodeId, nodeId));
+    if (selectedElement.type === elementTypes.parentNode) {
+      event.stopPropagation();
+      dispatch(addParentNode(selectedElement.id, nodeId));
+    }
   };
 
   const isAndGate = () => {
@@ -89,7 +93,7 @@ const Gate = (props) => {
     return (
       <div
         id={id}
-        style={{...styles.andGate, ...(selectedGateId === id) && styles.selectedGate, zIndex: zIndex}}
+        style={{...styles.andGate, ...(isSelected) && styles.selectedGate, zIndex: zIndex}}
       >
         {
           node.parents.sort((parent1, parent2) => parent1.id.localeCompare(parent2.id)).map(parent => {
@@ -113,7 +117,7 @@ const Gate = (props) => {
     return (
       <div
         id={id}
-        style={{...styles.orGate, ...(selectedGateId === id) && styles.selectedGate, zIndex: zIndex}}
+        style={{...styles.orGate, ...(isSelected) && styles.selectedGate, zIndex: zIndex}}
       >
         {
           node.parents.sort((parent1, parent2) => parent1.id.localeCompare(parent2.id)).map(parent => {
@@ -142,7 +146,7 @@ const Gate = (props) => {
           id={getGateInputId(true, '', node.id)}
           style={{
             ...styles.summaryGate,
-            ...(selectedGateId === id) && styles.selectedGate,
+            ...(isSelected) && styles.selectedGate,
             backgroundColor: getGateBackgroundColor(node.unlocked),
             zIndex: zIndex,
           }}
@@ -186,9 +190,9 @@ const Gate = (props) => {
         </div>
         <ConnectionPoint
           id={getGateConnectionPointId(node.id)}
-          isActive={selectedParentNodeId}
+          isActive={isParentNodeSelected}
           onClick={(event) => onConnectionPointClick(event, node.id)}
-          zIndex={selectedParentNodeId ? 9999 : zIndex}
+          zIndex={isParentNodeSelected ? 9999 : zIndex}
         />
       </div>
     </>
@@ -197,8 +201,7 @@ const Gate = (props) => {
 
 const mapStateToProps = (state) => ({
   canModify: state.learningMap.canModify,
-  selectedParentNodeId: state.learningMap.selectedParentNodeId,
-  selectedGateId: state.learningMap.selectedGateId,
+  selectedElement: state.learningMap.selectedElement,
 });
 
 export default connect(mapStateToProps)(Gate);

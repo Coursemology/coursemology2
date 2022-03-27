@@ -4,6 +4,7 @@ import GateToNodeArrows from '../GateToNodeArrows';
 import NodeToGateArrows from '../NodeToGateArrows';
 import { connect } from 'react-redux';
 import Xarrow from 'react-xarrows';
+import { elementTypes } from '../../constants';
 
 const arrowAnchorPositions = ['left', 'right'];
 
@@ -23,7 +24,7 @@ const ArrowOverlay = React.memo((props) => {
     getGateInputId,
     getNodeConnectionPointId,
     nodes,
-    selectedParentNodeId,
+    selectedElement,
   } = props;
 
   const getArrowId = (parentNodeId, childNodeId) => {
@@ -47,9 +48,9 @@ const ArrowOverlay = React.memo((props) => {
         getGateConnectionPointId={getGateConnectionPointId}
       />
       {
-        selectedParentNodeId &&
+        selectedElement.type === elementTypes.parentNode &&
         <Xarrow
-          start={getNodeConnectionPointId(selectedParentNodeId)}
+          start={getNodeConnectionPointId(selectedElement.id)}
           startAnchor={arrowAnchorPositions}
           end={cursorTrackerId}
           endAnchor={arrowAnchorPositions}
@@ -66,7 +67,7 @@ const ArrowOverlay = React.memo((props) => {
 
 const mapStateToProps = (state) => ({
   nodes: state.learningMap.nodes,
-  selectedParentNodeId: state.learningMap.selectedParentNodeId,
+  selectedElement: state.learningMap.selectedElement,
 });
 
 export default connect(mapStateToProps)(ArrowOverlay);

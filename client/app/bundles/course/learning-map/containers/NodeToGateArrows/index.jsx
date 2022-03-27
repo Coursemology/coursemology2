@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { selectArrow } from 'course/learning-map/actions';
 import Xarrow from 'react-xarrows';
+import { elementTypes } from '../../constants';
 
 const NodeToGateArrows = (props) => {
   const {
@@ -14,7 +15,7 @@ const NodeToGateArrows = (props) => {
     getGateInputId,
     getNodeConnectionPointId,
     nodes,
-    selectedArrowId,
+    selectedElement,
   } = props;
 
   const onArrowClick = (event, arrowId) => {
@@ -43,7 +44,7 @@ const NodeToGateArrows = (props) => {
                   startAnchor={arrowAnchorPositions}
                   end={getGateInputId(nodeIdsToIsSummaryGate[child.id], node.id, child.id)}
                   endAnchor={arrowAnchorPositions}
-                  color={selectedArrowId === arrowId ? arrowProperties.selectColor : arrowProperties.defaultColor}
+                  color={selectedElement.type === elementTypes.arrow && selectedElement.id === arrowId ? arrowProperties.selectColor : arrowProperties.defaultColor}
                   dashness={!canModify && !child.is_satisfied}
                   divContainerProps={{id: arrowId}}
                   divContainerStyle={{position: 'relative', cursor: canModify && 'pointer', zIndex: node.depth + 2}}
@@ -63,7 +64,7 @@ const NodeToGateArrows = (props) => {
 const mapStateToProps = (state) => ({
   canModify: state.learningMap.canModify,
   nodes: state.learningMap.nodes,
-  selectedArrowId: state.learningMap.selectedArrowId,
+  selectedElement: state.learningMap.selectedElement,
 });
 
 export default connect(mapStateToProps)(NodeToGateArrows);

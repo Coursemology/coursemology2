@@ -1,13 +1,11 @@
-import actionTypes from '../constants';
+import { actionTypes, elementTypes } from '../constants';
 
 const initialState = {
   canModify: false,
   isLoading: false,
   nodes: [],
   response: {},
-  selectedArrowId: '',
-  selectedParentNodeId: '',
-  selectedGateId: '',
+  selectedElement: {},
 };
 
 export default function (state = initialState, action) {
@@ -39,7 +37,7 @@ export default function (state = initialState, action) {
           didSucceed: true,
           message: 'Successfully added arrow.',
         },
-        selectedParentNodeId: '',
+        selectedElement: {},
       };
 
     case actionTypes.ADD_PARENT_NODE_FAILURE:
@@ -50,7 +48,7 @@ export default function (state = initialState, action) {
           didSucceed: false,
           message: 'Failed to add arrow.',
         },
-        selectedParentNodeId: '',
+        selectedElement: {},
       };
     
     case actionTypes.REMOVE_PARENT_NODE_SUCCESS:
@@ -62,7 +60,7 @@ export default function (state = initialState, action) {
           didSucceed: true,
           message: 'Successfully removed arrow.',
         },
-        selectedArrowId: '',
+        selectedElement: {},
       };
 
     case actionTypes.REMOVE_PARENT_NODE_FAILURE:
@@ -73,33 +71,37 @@ export default function (state = initialState, action) {
           didSucceed: false,
           message: 'Failed to remove arrow.',
         },
-        selectedArrowId: '',
+        selectedElement: {},
       };
     
     case actionTypes.SELECT_ARROW:
       return {
         ...state,
         response: {},
-        selectedArrowId: action.selectedArrowId,
-        selectedParentNodeId: '',
-        selectedGateId: '',
+        selectedElement: {
+          type: elementTypes.arrow,
+          id: action.selectedArrowId,
+        },
       };
     
     case actionTypes.SELECT_GATE:
       return {
         ...state,
-        selectedArrowId: '',
-        selectedParentNodeId: '',
-        selectedGateId: action.selectedGateId,
+        response: {},
+        selectedElement: {
+          type: elementTypes.gate,
+          id: action.selectedGateId,
+        },
       };
 
     case actionTypes.SELECT_PARENT_NODE:
       return {
         ...state,
         response: {},
-        selectedArrowId: '',
-        selectedParentNodeId: action.selectedParentNodeId,
-        selectedGateId: '',
+        selectedElement: {
+          type: elementTypes.parentNode,
+          id: action.selectedParentNodeId,
+        },
       };
 
     case actionTypes.TOGGLE_SATISFIABILITY_TYPE_SUCCESS:
@@ -111,7 +113,7 @@ export default function (state = initialState, action) {
           didSucceed: true,
           message: 'Successfully toggled satisfiability type.',
         },
-        selectedGateId: '',
+        selectedElement: {},
       };
     
     case actionTypes.TOGGLE_SATISFIABILITY_TYPE_FAILURE:
@@ -122,16 +124,14 @@ export default function (state = initialState, action) {
           didSucceed: false,
           message: 'Failed to toggle satisfiability type.',
         },
-        selectedGateId: '',
+        selectedElement: {},
       };
 
     case actionTypes.RESET_SELECTION:
       return {
         ...state,
         response: {},
-        selectedArrowId: '',
-        selectedParentNodeId: '',
-        selectedGateId: '',
+        selectedElement: {},
       };
 
     case actionTypes.LOADING:

@@ -16,4 +16,10 @@ const actionTypes = mirrorCreator([
   'LOADING',
 ]);
 
-export default actionTypes;
+const elementTypes = {
+  arrow: 'arrow',
+  gate: 'gate',
+  parentNode: 'parentNode',
+};
+
+export { actionTypes, elementTypes };

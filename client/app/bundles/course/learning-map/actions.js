@@ -1,5 +1,5 @@
 import CourseAPI from 'api/course';
-import actionTypes from './constants';
+import { actionTypes } from './constants';
 
 export function fetchNodes() {
   return (dispatch) => {

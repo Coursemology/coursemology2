@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { selectParentNode } from 'course/learning-map/actions';
 import ReactTooltip from 'react-tooltip';
 import UnlockRateDisplay from '../UnlockRateDisplay';
+import { elementTypes } from '../../constants';
 
 const styles = {
   connectionPoint: {
@@ -70,7 +71,7 @@ const Node = (props) => {
     dispatch,
     getNodeConnectionPointId,
     node,
-    selectedParentNodeId,
+    selectedElement,
   } = props;
 
   const onConnectionPointClick = (event) => {
@@ -145,7 +146,7 @@ const Node = (props) => {
           <div style={styles.connectionPoint}>
             <ConnectionPoint
               id={getNodeConnectionPointId(node.id)}
-              isActive={canModify && selectedParentNodeId === ''}
+              isActive={canModify && selectedElement.type !== elementTypes.parentNode}
               onClick={(event) => onConnectionPointClick(event, node.id)}
               zIndex={'inherit'}
             />
@@ -159,7 +160,7 @@ const Node = (props) => {
 
 const mapStateToProps = (state) => ({
   canModify: state.learningMap.canModify,
-  selectedParentNodeId: state.learningMap.selectedParentNodeId,
+  selectedElement: state.learningMap.selectedElement,
 });
 
 export default connect(mapStateToProps)(Node);
