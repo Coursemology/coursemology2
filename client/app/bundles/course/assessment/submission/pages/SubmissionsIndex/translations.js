@@ -31,6 +31,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.submissions.dateGraded',
     defaultMessage: 'Graded At',
   },
+  grader: {
+    id: 'course.assessment.submission.submissions.grader',
+    defaultMessage: 'Grader(s)',
+  },
   download: {
     id: 'course.assessment.submission.submissions.download',
     defaultMessage: 'Download',
