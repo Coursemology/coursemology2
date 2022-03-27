@@ -2,9 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { resetSelection } from 'course/learning-map/actions';
 import Levels from '../Levels';
-import { Xwrapper } from 'react-xarrows';
 import ArrowOverlay from '../ArrowOverlay';
 import CursorTracker from '../../components/CursorTracker';
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import { Xwrapper } from 'react-xarrows';
 
 const styles = {
   cursorPosition: {
@@ -12,7 +13,6 @@ const styles = {
   },
   wrapper: {
     outline: 'none',
-    overflow: 'auto',
     width: '100%',
   },
 };
@@ -43,33 +43,43 @@ const Canvas = (props) => {
   };
 
   return (
-    <Xwrapper>
-      <div
-        onClick={() => dispatch(resetSelection())}
-        style={styles.wrapper}
-        tabIndex={0}
-      >
-        <Levels
-          gateInputSizeThreshold={gateInputSizeThreshold}
-          getGateConnectionPointId={getGateConnectionPointId}
-          getGateId={getGateId}
-          getGateInputId={getGateInputId}
-          getNodeConnectionPointId={getNodeConnectionPointId}
-        /> 
-        <CursorTracker
-          arrowAnchorPositions={arrowAnchorPositions}
-          id={cursorTrackerId}
-          getNodeConnectionPointId={getNodeConnectionPointId}
-        />
-        <ArrowOverlay
-          cursorTrackerId={cursorTrackerId}
-          gateInputSizeThreshold={gateInputSizeThreshold}
-          getGateConnectionPointId={getGateConnectionPointId}
-          getGateInputId={getGateInputId}
-          getNodeConnectionPointId={getNodeConnectionPointId}
-        />
-      </div>
-    </Xwrapper>
+    <TransformWrapper
+      doubleClick={{disabled: true}}
+      limitToBounds={false}
+      pinch={{disabled: true}}
+      minScale={0.2}
+      wheel={{disabled: true}}
+    >
+      <TransformComponent>
+        <div
+          onClick={() => dispatch(resetSelection())}
+          style={styles.wrapper}
+          tabIndex={0}
+        >
+          <Xwrapper>
+            <Levels
+              gateInputSizeThreshold={gateInputSizeThreshold}
+              getGateConnectionPointId={getGateConnectionPointId}
+              getGateId={getGateId}
+              getGateInputId={getGateInputId}
+              getNodeConnectionPointId={getNodeConnectionPointId}
+            /> 
+            <CursorTracker
+              arrowAnchorPositions={arrowAnchorPositions}
+              id={cursorTrackerId}
+              getNodeConnectionPointId={getNodeConnectionPointId}
+            />
+            <ArrowOverlay
+              cursorTrackerId={cursorTrackerId}
+              gateInputSizeThreshold={gateInputSizeThreshold}
+              getGateConnectionPointId={getGateConnectionPointId}
+              getGateInputId={getGateInputId}
+              getNodeConnectionPointId={getNodeConnectionPointId}
+            />
+          </Xwrapper>
+        </div>
+      </TransformComponent>
+    </TransformWrapper>
   );
 }
 
