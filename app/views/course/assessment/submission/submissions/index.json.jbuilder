@@ -1,5 +1,7 @@
 # frozen_string_literal: true
-submissions_hash ||= @submissions.map { |s| [s.course_user_id, s] }.to_h
+submissions_hash ||= @submissions.map { |s| [s.creator_id, s] }.to_h
+course_users_hash ||= @course_users.map { |cu| [cu.user_id, [cu.id, cu.name]] }.to_h
+course_users_hash[0] = [0, 'System']
 
 json.assessment do
   json.title @assessment.title
@@ -17,7 +19,6 @@ json.assessment do
 end
 
 my_students_set = Set.new(@my_students.map(&:id))
-current_course_user = current_course.course_users.find_by(user: current_user)
 
 json.submissions @course_users do |course_user|
   json.courseUser do
@@ -26,10 +27,10 @@ json.submissions @course_users do |course_user|
     json.phantom course_user.phantom?
     json.myStudent my_students_set.include?(course_user.id) if course_user.student?
     json.isStudent course_user.student?
-    json.isCurrentUser course_user == current_course_user
+    json.isCurrentUser course_user == @current_course_user
   end
 
-  submission = submissions_hash[course_user.id]
+  submission = submissions_hash[course_user.user_id]
   if submission
     json.id submission.id
     json.workflowState submission.workflow_state
@@ -38,6 +39,13 @@ json.submissions @course_users do |course_user|
     json.dateSubmitted submission.submitted_at&.iso8601
     json.dateGraded submission.graded_at&.iso8601
     json.logCount submission.log_count
+    json.graders do
+      json.array! submission.grader_ids do |grader_id|
+        cu = course_users_hash[grader_id] || [0, 'Undefined']
+        json.id cu[0]
+        json.name cu[1]
+      end
+    end
   else
     json.workflowState 'unstarted'
   end
