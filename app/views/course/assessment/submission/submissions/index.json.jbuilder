@@ -41,7 +41,7 @@ json.submissions @course_users do |course_user|
     json.logCount submission.log_count
     json.graders do
       json.array! submission.grader_ids do |grader_id|
-        cu = course_users_hash[grader_id] || [0, 'Undefined']
+        cu = course_users_hash[grader_id] || [0, 'Unknown']
         json.id cu[0]
         json.name cu[1]
       end
