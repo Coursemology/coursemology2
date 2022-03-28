@@ -133,7 +133,7 @@
     "webpack-manifest-plugin": "^5.0.0"
   },
   "devDependencies": {
-    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.6",
+    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.7",
     "axios-mock-adapter": "^1.20.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.1.0",
