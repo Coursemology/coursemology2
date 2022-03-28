@@ -332,6 +332,25 @@ export default class SubmissionsTableRow extends Component {
           {SubmissionsTableRow.formatDate(submission.dateGraded)}
         </TableRowColumn>
         <TableRowColumn style={tableCenterCellStyle}>
+          {submission.graders && submission.graders.length > 0
+            ? submission.graders.map((grader) => (
+                <div key={`grader_${grader.id}`}>
+                  {!grader.id || grader.id === 0 ? (
+                    <div style={styles.nameWrapper}>{grader.name}</div>
+                  ) : (
+                    <a
+                      style={styles.nameWrapper}
+                      href={getCourseUserURL(courseId, grader.id)}
+                    >
+                      {grader.name}
+                    </a>
+                  )}
+                  <br />
+                </div>
+              ))
+            : null}
+        </TableRowColumn>
+        <TableRowColumn style={tableCenterCellStyle}>
           {this.renderSubmissionLogsLink(submission)}
           {this.renderUnsubmitButton(submission)}
           {this.renderDeleteButton(submission)}
@@ -357,6 +376,12 @@ SubmissionsTableRow.propTypes = {
     pointsAwarded: PropTypes.number,
     dateSubmitted: PropTypes.string,
     dateGraded: PropTypes.string,
+    graders: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string,
+        id: PropTypes.number,
+      }),
+    ),
   }),
   assessment: assessmentShape.isRequired,
   courseId: PropTypes.string.isRequired,

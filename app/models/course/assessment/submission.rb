@@ -79,10 +79,6 @@ class Course::Assessment::Submission < ApplicationRecord
   has_many :question_bundle_assignments, class_name: Course::Assessment::QuestionBundleAssignment.name,
                                          inverse_of: :submission, dependent: :destroy
 
-  # @!attribute [r] graders
-  #   The graders associated with this submission.
-  has_many :graders, through: :answers, class_name: User.name
-
   belongs_to :publisher, class_name: User.name, inverse_of: nil, optional: true
 
   has_many :logs, class_name: Course::Assessment::Submission::Log.name,
@@ -113,6 +109,15 @@ class Course::Assessment::Submission < ApplicationRecord
       where('course_assessment_answers.submission_id = course_assessment_submissions.id
              AND course_assessment_answers.current_answer = true').
       select('sum(course_assessment_answers.grade)')
+  end)
+
+  # @!attribute [r] grader_ids
+  #   Returns the grader_ids of a submission
+  calculated :grader_ids, (lambda do
+    Course::Assessment::Answer.unscope(:order).
+      where('course_assessment_answers.submission_id = course_assessment_submissions.id
+             AND course_assessment_answers.current_answer = true').
+      select('ARRAY_REMOVE(ARRAY_AGG(DISTINCT(course_assessment_answers.grader_id)), NULL)')
   end)
 
   # @!method self.by_user(user)
