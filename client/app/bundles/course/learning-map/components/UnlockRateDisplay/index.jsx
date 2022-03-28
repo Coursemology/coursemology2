@@ -1,10 +1,15 @@
 import React from 'react';
 import FontIcon from 'material-ui/FontIcon';
-import ReactTooltip from 'react-tooltip';
 
 const styles = {
+  content: {
+    fontSize: 10,
+    margin: 'auto',
+    position: 'absolute',
+  },
   filledPortion: {
     backgroundColor: 'rgba(109, 242, 145)',
+    height: '100%',
   },
   icon: {
     fontSize: '12px',
@@ -13,10 +18,11 @@ const styles = {
   },
   unfilledPortion: {
     backgroundColor: 'white',
+    height: '100%',
   },
   unlockRateBar: {
+    alignItems: 'center',
     border: '1px solid black',
-    cursor: 'pointer',
     display: 'flex',
     flexDirection: 'row',
     height: 12,
@@ -26,7 +32,6 @@ const styles = {
 
 const UnlockRateDisplay = (props) => {
   const {
-    nodeId,
     unlockRate,
     width,
   } = props;
@@ -37,20 +42,13 @@ const UnlockRateDisplay = (props) => {
         className={'fa fa-unlock'}
         style={styles.icon}
       />
-      <div
-        data-tip
-        data-for={`${nodeId}-unlockBar`}
-        style={{...styles.unlockRateBar, width: width}}
-      >
-        <div style={{... styles.filledPortion, width: unlockRate * width}}></div>
-        <div style={{... styles.unfilledPortion, width: width - (unlockRate * width)}}></div>
+      <div style={{...styles.unlockRateBar, width: width}}>
+        <div style={{...styles.filledPortion, width: unlockRate * width}}></div>
+        <div style={{...styles.unfilledPortion, width: width - (unlockRate * width)}}></div>
+        <div style={{...styles.content, width: width}}>
+          { `${(unlockRate * 100).toFixed(2)}%` }
+        </div>
       </div>
-      <ReactTooltip
-        id={`${nodeId}-unlockBar`}
-        style={{zIndex: 9999}}
-      >
-        { `${(unlockRate * 100).toFixed(2)}% of students have unlocked this node` }
-      </ReactTooltip>
     </div>
   );
 };
