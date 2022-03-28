@@ -8,6 +8,7 @@ const GateToNodeArrows = (props) => {
     arrowProperties,
     getGateConnectionPointId,
     nodes,
+    scale,
   } = props;
 
   return (
@@ -22,7 +23,8 @@ const GateToNodeArrows = (props) => {
           color={arrowProperties.defaultColor}
           divContainerStyle={{position: 'relative'}}
           headSize={arrowProperties.headSize}
-          strokeWidth={arrowProperties.strokeWidth}
+          strokeWidth={arrowProperties.strokeWidth * scale}
+          SVGcanvasStyle={{transform: `scale(${1 / scale})`}}
         />
       );
     })

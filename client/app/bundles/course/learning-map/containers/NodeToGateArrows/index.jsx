@@ -16,6 +16,7 @@ const NodeToGateArrows = (props) => {
     getNodeConnectionPointId,
     nodes,
     selectedElement,
+    scale,
   } = props;
 
   const onArrowClick = (event, arrowId) => {
@@ -50,7 +51,8 @@ const NodeToGateArrows = (props) => {
                   divContainerStyle={{position: 'relative', cursor: canModify && 'pointer', zIndex: node.depth + 2}}
                   headSize={arrowProperties.headSize}
                   passProps={{onClick: (event) => onArrowClick(event, arrowId)}}
-                  strokeWidth={arrowProperties.strokeWidth}
+                  strokeWidth={arrowProperties.strokeWidth * scale}
+                  SVGcanvasStyle={{transform: `scale(${1 / scale})`}}
                 />
               );
             })

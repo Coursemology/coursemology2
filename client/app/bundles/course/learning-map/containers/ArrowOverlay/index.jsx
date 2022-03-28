@@ -24,6 +24,7 @@ const ArrowOverlay = React.memo((props) => {
     getGateInputId,
     getNodeConnectionPointId,
     nodes,
+    scale,
     selectedElement,
   } = props;
 
@@ -40,12 +41,14 @@ const ArrowOverlay = React.memo((props) => {
         getArrowId={getArrowId}
         getGateInputId={getGateInputId}
         getNodeConnectionPointId={getNodeConnectionPointId}
+        scale={scale}
       />
       <GateToNodeArrows
         arrowAnchorPositions={arrowAnchorPositions}
         arrowProperties={arrowProperties}
         getGateId={getGateId}
         getGateConnectionPointId={getGateConnectionPointId}
+        scale={scale}
       />
       {
         selectedElement.type === elementTypes.parentNode &&
@@ -54,7 +57,7 @@ const ArrowOverlay = React.memo((props) => {
           startAnchor={arrowAnchorPositions}
           end={cursorTrackerId}
           endAnchor={arrowAnchorPositions}
-          strokeWidth={2}
+          strokeWidth={2 * scale}
           color={`${grey500}`}
           divContainerStyle={{zIndex: nodes.length + 1}}
           curve={0.5}
