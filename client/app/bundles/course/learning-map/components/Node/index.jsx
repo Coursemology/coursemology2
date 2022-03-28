@@ -4,7 +4,6 @@ import ConnectionPoint from '../ConnectionPoint';
 import FontIcon from 'material-ui/FontIcon';
 import { connect } from 'react-redux';
 import { selectParentNode } from 'course/learning-map/actions';
-import ReactTooltip from 'react-tooltip';
 import UnlockRateDisplay from '../UnlockRateDisplay';
 import { elementTypes } from '../../constants';
 
@@ -35,7 +34,6 @@ const styles = {
     position: 'absolute',
   },
   icon: {
-    cursor: 'pointer',
     fontSize: '12px',
     padding: '0px',
   },
@@ -54,15 +52,6 @@ const icons = {
   material: 'fa fa-folder',
   survey: 'fa fa-pie-chart',
   video: 'fa fa-video-camera',
-}
-
-const iconTooltips = {
-  achievement: 'Achievement',
-  assessment: 'Assessment',
-  lock: 'Locked',
-  material: 'File',
-  survey: 'Survey',
-  video: 'Video',
 }
 
 const Node = (props) => {
@@ -92,38 +81,22 @@ const Node = (props) => {
           {
             node.unlock_level > 0 &&
             <>
-              <div
-                data-tip
-                data-for={`${node.id}-unlock-level`}
-                style={{cursor: 'pointer', position: 'absolute', top: 0, left: 0}}>
+              <div style={{cursor: 'pointer', position: 'absolute', top: 0, left: 0}}>
                 L{node.unlock_level}
               </div>
-              <ReactTooltip id={`${node.id}-unlock-level`}>
-                { `Additional unlock criteria: Reach level ${node.unlock_level}` }
-              </ReactTooltip>
             </>
           }
           <FontIcon
             className={icons[node.course_material_type]}
-            data-tip
-            data-for={`${node.id}-type-icon`}
             style={styles.icon}
           />
-          <ReactTooltip id={`${node.id}-type-icon`}>
-            { iconTooltips[node.course_material_type] }
-          </ReactTooltip>
           {
             !canModify && !node.unlocked &&
             <>
               <FontIcon
                 className={icons.lock}
-                data-tip
-                data-for={`${node.id}-lock-icon`}
                 style={{...styles.icon, marginLeft: 4, opacity: 1.0}}
               />
-              <ReactTooltip id={`${node.id}-lock-icon`}>
-                { iconTooltips.lock }
-              </ReactTooltip>
             </>
           }
         </CardHeader>
@@ -153,7 +126,6 @@ const Node = (props) => {
           </div>
         </div>
       </Card>
-      
     </>
   );
 };

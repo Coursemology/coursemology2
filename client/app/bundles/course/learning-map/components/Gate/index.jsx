@@ -2,7 +2,6 @@ import React from 'react';
 import ConnectionPoint from '../ConnectionPoint';
 import { connect } from 'react-redux';
 import { addParentNode, selectGate } from 'course/learning-map/actions';
-import ReactTooltip from 'react-tooltip';
 import { green300, red300 } from 'material-ui/styles/colors';
 import { elementTypes } from '../../constants';
 
@@ -169,24 +168,11 @@ const Gate = (props) => {
     return orGate();
   };
 
-  const tooltipMetadata = {
-    id: `${id}-tooltip`,
-    message: `Satisfy ${ isAndGate() ? 'all conditions' : 'at least one condition' } to unlock`,
-  };
-
   return (
     <>
       <div style={{...styles.wrapper}}>
-        <div
-          data-tip
-          data-for={tooltipMetadata.id}
-        >
-          <div onClick={event => onGateClick(event)}>
-            { getGate() }
-          </div>
-          <ReactTooltip id={tooltipMetadata.id}>
-            { tooltipMetadata.message }
-          </ReactTooltip>
+        <div onClick={event => onGateClick(event)}>
+          { getGate() }
         </div>
         <ConnectionPoint
           id={getGateConnectionPointId(node.id)}
