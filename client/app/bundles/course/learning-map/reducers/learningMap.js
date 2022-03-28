@@ -46,7 +46,7 @@ export default function (state = initialState, action) {
         isLoading: false,
         response: {
           didSucceed: false,
-          message: 'Failed to add arrow.',
+          message: `Failed to add arrow.${ action.errorMessage && ` (${action.errorMessage})`}`,
         },
         selectedElement: {},
       };
@@ -69,7 +69,7 @@ export default function (state = initialState, action) {
         isLoading: false,
         response: {
           didSucceed: false,
-          message: 'Failed to remove arrow.',
+          message: `Failed to remove arrow.${ action.errorMessage && ` (${action.errorMessage})`}`,
         },
         selectedElement: {},
       };
@@ -122,7 +122,7 @@ export default function (state = initialState, action) {
         isLoading: false,
         response: {
           didSucceed: false,
-          message: 'Failed to toggle satisfiability type.',
+          message: `Failed to toggle satisfiability type.${ action.errorMessage && ` (${action.errorMessage})`}`,
         },
         selectedElement: {},
       };

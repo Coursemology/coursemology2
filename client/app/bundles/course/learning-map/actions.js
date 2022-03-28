@@ -31,8 +31,11 @@ export function addParentNode(parentNodeId, nodeId) {
           type: actionTypes.ADD_PARENT_NODE_SUCCESS,
           nodes: response.data.nodes,
         });
-      }).catch(() => {
-        dispatch({ type: actionTypes.ADD_PARENT_NODE_FAILURE });
+      }).catch((error) => {
+        dispatch({ 
+          type: actionTypes.ADD_PARENT_NODE_FAILURE,
+          errorMessage: getErrorMessage(error),
+        });
       });
     };
   }
@@ -50,8 +53,11 @@ export function removeParentNode(parentNodeId, nodeId) {
         type: actionTypes.REMOVE_PARENT_NODE_SUCCESS,
         nodes: response.data.nodes,
       });
-    }).catch(() => {
-      dispatch({ type: actionTypes.REMOVE_PARENT_NODE_FAILURE });
+    }).catch((error) => {
+      dispatch({
+        type: actionTypes.REMOVE_PARENT_NODE_FAILURE,
+        errorMessage: getErrorMessage(error),
+      });
     });
   };
 }
@@ -100,8 +106,17 @@ export function toggleSatisfiabilityType(nodeId) {
         type: actionTypes.TOGGLE_SATISFIABILITY_TYPE_SUCCESS,
         nodes: response.data.nodes,
       });
-    }).catch(() => {
-      dispatch({ type: actionTypes.TOGGLE_SATISFIABILITY_TYPE_FAILURE });
+    }).catch((error) => {
+      dispatch({
+        type: actionTypes.TOGGLE_SATISFIABILITY_TYPE_FAILURE,
+        errorMessage: getErrorMessage(error),
+      });
     });
   };
+}
+
+function getErrorMessage(error) {
+  const errors = error.response.data.errors;
+  console.log(errors);
+  return errors.length > 0 ? errors[0] : '';
 }
