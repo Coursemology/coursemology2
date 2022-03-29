@@ -117,6 +117,5 @@ export function toggleSatisfiabilityType(nodeId) {
 
 function getErrorMessage(error) {
   const errors = error.response.data.errors;
-  console.log(errors);
   return errors.length > 0 ? errors[0] : '';
 }
