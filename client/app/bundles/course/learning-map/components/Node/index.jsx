@@ -37,6 +37,17 @@ const styles = {
     fontSize: 12,
     padding: '0px',
   },
+  lockIcon: {
+    marginLeft: 4,
+    opacity: 1.0,
+  },
+  unlockLevel: {
+    cursor: 'pointer',
+    fontSize: 12,
+    left: 0,
+    position: 'absolute',
+    top: 0,
+  },
   wrapper: {
     border: '1px solid black',
     margin: 20,
@@ -87,8 +98,8 @@ const Node = (props) => {
           {
             node.unlock_level > 0 &&
             <>
-              <div style={{cursor: 'pointer', position: 'absolute', top: 0, left: 0}}>
-                L{node.unlock_level}
+              <div style={styles.unlockLevel}>
+                Level {node.unlock_level}
               </div>
             </>
           }
@@ -101,7 +112,7 @@ const Node = (props) => {
             <>
               <FontIcon
                 className={icons.lock}
-                style={{...styles.icon, marginLeft: 4, opacity: 1.0}}
+                style={{...styles.icon, ...styles.lockIcon}}
               />
             </>
           }
