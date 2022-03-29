@@ -9,7 +9,11 @@ import AdminTools from '../AdminTools';
 
 const buildShallowWrapper = (item) => {
   const store = storeCreator({ flags: { canManageLessonPlan: true } });
-  return shallow(<AdminTools item={item} />, buildContextOptions(store))
+  return shallow(
+    <AdminTools item={item} store={store} />,
+    buildContextOptions(),
+  )
+    .children()
     .dive()
     .dive();
 };

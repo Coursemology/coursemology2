@@ -56,6 +56,8 @@ exports[`<ResponseShow /> shows form and admin buttons if user has permissions a
     />
   </ForwardRef(ListSubheader)>
   <ReduxForm
+    destroyOnUnmount={true}
+    enableReinitialize={true}
     flags={
       Object {
         "canModify": true,
@@ -65,7 +67,13 @@ exports[`<ResponseShow /> shows form and admin buttons if user has permissions a
         "isResponseCreator": true,
       }
     }
+    forceUnregisterOnUnmount={false}
+    form="SURVEY_RESPONSE"
+    getFormState={[Function]}
     initialValues={Object {}}
+    keepDirtyOnReinitialize={false}
+    persistentSubmitErrors={false}
+    pure={true}
     readOnly={true}
     response={
       Object {
@@ -75,6 +83,14 @@ exports[`<ResponseShow /> shows form and admin buttons if user has permissions a
         "updated_at": "2100-01-12T16:00:00.000Z",
       }
     }
+    shouldAsyncValidate={[Function]}
+    shouldError={[Function]}
+    shouldValidate={[Function]}
+    shouldWarn={[Function]}
+    submitAsSideEffect={false}
+    touchOnBlur={true}
+    touchOnChange={false}
+    updateUnregisteredFields={false}
   />
   <Connect(RespondButton)
     canModify={true}
