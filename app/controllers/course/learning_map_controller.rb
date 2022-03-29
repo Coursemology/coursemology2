@@ -91,7 +91,7 @@ class Course::LearningMapController < Course::ComponentController
     generate_node_depths(nodes)
   end
 
-  def generate_all_node_relations
+  def generate_all_node_relations # rubocop:disable Metrics/AbcSize
     relations = init_all_node_relations
     node_ids_to_children = relations[:node_ids_to_children]
     node_ids_to_parents = relations[:node_ids_to_parents]
@@ -131,7 +131,7 @@ class Course::LearningMapController < Course::ComponentController
     { id: id, is_satisfied: typed_condition.satisfied_by?(current_course_user) }
   end
 
-  def generate_nodes_from_conditionals(all_node_relations)
+  def generate_nodes_from_conditionals(all_node_relations) # rubocop:disable Metrics/AbcSize
     node_ids_to_children = all_node_relations[:node_ids_to_children]
     node_ids_to_parents = all_node_relations[:node_ids_to_parents]
     node_ids_to_unlock_level = all_node_relations[:node_ids_to_unlock_level]
@@ -139,9 +139,9 @@ class Course::LearningMapController < Course::ComponentController
     @conditionals.map do |conditional|
       id = get_node_id(conditional)
       num_students_unlocked = 0
-      current_course.course_users.students.each { |student|
+      current_course.course_users.students.each do |student|
         num_students_unlocked += 1 if conditional.conditions_satisfied_by?(student)
-      }
+      end
       total_num_students = current_course.course_users.students.count
       unlock_rate = total_num_students > 0 ? 1.0 * num_students_unlocked / total_num_students : 0.0
 
