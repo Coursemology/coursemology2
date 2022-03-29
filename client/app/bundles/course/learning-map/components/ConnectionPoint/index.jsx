@@ -20,14 +20,13 @@ const ConnectionPoint = (props) => {
     id,
     isActive,
     onClick,
-    zIndex,
   } = props;
 
   return (
     <div
       className={isActive ? classStyles.selectableConnectionPoint : undefined}
       onClick={isActive ? onClick : undefined}
-      style={{...styles.connectionPoint, zIndex: zIndex}}
+      style={styles.connectionPoint}
     >
       {/* For centering arrow starting point inside the circle */}
       <div id={id}></div>

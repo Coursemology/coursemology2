@@ -127,7 +127,6 @@ const Node = (props) => {
               id={getNodeConnectionPointId(node.id)}
               isActive={canModify}
               onClick={(event) => onConnectionPointClick(event, node.id)}
-              zIndex={'inherit'}
             />
             {
               isNodeMenuDisplayed &&
