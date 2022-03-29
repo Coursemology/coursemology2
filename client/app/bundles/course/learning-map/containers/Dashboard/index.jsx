@@ -87,7 +87,7 @@ const Dashboard = (props) => {
 
     return {
       color: `${orange200}`,
-      text: `Selected arrow: ${fromNodeTitle} ---> ${toNodeTitle}`,
+      text: `Selected condition: ${fromNodeTitle} ---> ${toNodeTitle}`,
     };
   };
 
@@ -133,7 +133,7 @@ const Dashboard = (props) => {
           onClick={() => setDeleteArrowConfirmation(true)}
         />
         <ReactTooltip id={tooltipId}>
-          Delete this arrow
+          Delete this condition
         </ReactTooltip>
       </>
     );
@@ -209,7 +209,7 @@ const Dashboard = (props) => {
       <ConfirmationDialog
         confirmDelete
         open={deleteArrowConfirmation}
-        message={'Are you sure that you want to delete this arrow?'}
+        message={'Are you sure that you want to delete this condition?'}
         onCancel={() => setDeleteArrowConfirmation(false)}
         onConfirm={() => deleteArrow()}
       />

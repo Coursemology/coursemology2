@@ -35,7 +35,7 @@ export default function (state = initialState, action) {
         nodes: action.nodes,
         response: {
           didSucceed: true,
-          message: 'Successfully added arrow.',
+          message: 'Successfully added condition.',
         },
         selectedElement: {},
       };
@@ -46,7 +46,7 @@ export default function (state = initialState, action) {
         isLoading: false,
         response: {
           didSucceed: false,
-          message: `Failed to add arrow.${ action.errorMessage && ` (${action.errorMessage})`}`,
+          message: `Failed to add condition.${ action.errorMessage && ` (${action.errorMessage})`}`,
         },
         selectedElement: {},
       };
@@ -58,7 +58,7 @@ export default function (state = initialState, action) {
         nodes: action.nodes,
         response: {
           didSucceed: true,
-          message: 'Successfully removed arrow.',
+          message: 'Successfully deleted condition.',
         },
         selectedElement: {},
       };
@@ -69,7 +69,7 @@ export default function (state = initialState, action) {
         isLoading: false,
         response: {
           didSucceed: false,
-          message: `Failed to remove arrow.${ action.errorMessage && ` (${action.errorMessage})`}`,
+          message: `Failed to delete condition.${ action.errorMessage && ` (${action.errorMessage})`}`,
         },
         selectedElement: {},
       };
