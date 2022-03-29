@@ -12,6 +12,12 @@ module Course::Assessment::AssessmentAbility
       define_manager_assessment_permissions if course_user.manager_or_owner?
     end
 
+    # The attachment_reference controller is not inherited from the course controller,
+    # while course_user above is only initialized for controller inherited from the course controller.
+    # As such, course_user is nil when destroy_attachment is called from the attachment_references controller.
+    # Therefore, we separate the permission below and check for user instead of course_user to define the permission
+    # for destroy_attachment.
+    allow_to_destroy_own_attachments_text_response_question if user
     super
   end
 
@@ -34,7 +40,6 @@ module Course::Assessment::AssessmentAbility
     allow_read_material
     allow_create_assessment_submission
     allow_update_own_assessment_submission
-    allow_to_destroy_own_attachments_text_response_question
   end
 
   def allow_read_assessments

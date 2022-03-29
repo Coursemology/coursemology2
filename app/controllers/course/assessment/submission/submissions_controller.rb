@@ -33,7 +33,7 @@ class Course::Assessment::Submission::SubmissionsController < \
       format.html {} # rubocop:disable Lint/EmptyBlock
       format.json do
         @assessment = @assessment.calculated(:maximum_grade)
-        @submissions = @submissions.calculated(:log_count, :graded_at, :grade)
+        @submissions = @submissions.calculated(:log_count, :graded_at, :grade, :grader_ids)
         @my_students = current_course_user&.my_students || []
         @course_users = current_course.course_users.order_phantom_user.order_alphabetically
       end
