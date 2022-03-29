@@ -22,8 +22,6 @@ const styles = {
   }
 };
 
-const arrowAnchorPositions = ['left', 'right'];
-
 const Canvas = () => {
   const gateInputSizeThreshold = 5;
   const cursorTrackerId = 'cursor-tracker';
@@ -54,7 +52,7 @@ const Canvas = () => {
     const newScale = isZoomingIn ? Math.min(state.scale * zoomScale, maxScale) : Math.max(state.scale / zoomScale, minScale);
     setTransform(state.positionX, state.positionY, newScale);
     setScale(newScale);
-  }
+  };
 
   return (
     <TransformWrapper
@@ -72,8 +70,8 @@ const Canvas = () => {
         <>
           <Xwrapper>
             <ZoomActionElements
-              zoomIn={() => { onZoom(setTransform, true) }}
-              zoomOut={() => { onZoom(setTransform, false) }}
+              zoomIn={() => onZoom(setTransform, true)}
+              zoomOut={() => onZoom(setTransform, false)}
             />
             <div
               style={styles.wrapper}
