@@ -3,6 +3,7 @@ class Course::LearningMapController < Course::ComponentController
   NODE_ID_DELIMITER = '-'
   NEGATIVE_INF = -1_000_000_000
 
+  before_action :authorize_learning_map
   before_action :authorize_update, only: [:add_parent_node, :remove_parent_node, :toggle_satisfiability_type]
   add_breadcrumb :index, :course_learning_map_path
 
@@ -57,6 +58,10 @@ class Course::LearningMapController < Course::ComponentController
   end
 
   private
+
+  def authorize_learning_map
+    authorize!(:read, Course::LearningMap)
+  end
 
   def authorize_update
     authorize!(:manage, @conditionals)
@@ -139,7 +144,7 @@ class Course::LearningMapController < Course::ComponentController
         num_students_unlocked += 1 if conditional.conditions_satisfied_by?(student)
       }
       total_num_students = current_course.course_users.students.count
-      unlock_rate = total_num_students > 0 ? num_students_unlocked / total_num_students : 0
+      unlock_rate = total_num_students > 0 ? 1.0 * num_students_unlocked / total_num_students : 0.0
 
       conditional.attributes.merge({
         id: id, unlocked: conditional.conditions_satisfied_by?(current_course_user),
