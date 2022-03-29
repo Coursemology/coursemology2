@@ -19,9 +19,8 @@ class Course::LearningMapController < Course::ComponentController
   end
 
   def add_parent_node
-    condition = create_condition(parent_and_node_id_pair_params[:parent_node_id])
     conditional = get_conditional(parent_and_node_id_pair_params[:node_id])
-    condition.conditional = conditional
+    condition = create_condition(parent_and_node_id_pair_params[:parent_node_id], conditional)
 
     if condition.save
       index
@@ -211,13 +210,14 @@ class Course::LearningMapController < Course::ComponentController
     "#{conditional.class.name.demodulize.downcase}#{NODE_ID_DELIMITER}#{conditional.id}"
   end
 
-  def create_condition(node_id)
+  def create_condition(node_id, conditional)
     node_id_tokens = node_id.split(NODE_ID_DELIMITER)
 
     condition = Object.const_get("Course::Condition::#{node_id_tokens[0].capitalize}").new
     condition.course = current_course
     dependent_object = get_conditional(node_id)
     condition.send("#{dependent_object.class.name.demodulize.downcase}=", dependent_object)
+    condition.conditional = conditional
 
     condition
   end
