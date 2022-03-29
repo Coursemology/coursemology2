@@ -20,7 +20,7 @@ const config = {
   },
 
   output: {
-    filename: '[name].js',
+    filename: development ? '[name].js' : '[name]-[contenthash].js',
     path: path.join(__dirname, '..', 'public', 'webpack'),
     publicPath: '/webpack/',
   },
