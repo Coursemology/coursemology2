@@ -3,9 +3,7 @@ module Course::LearningMapAbilityComponent
   include AbilityHost::Component
 
   def define_permissions
-    if course_user
-      allow_read_learning_map
-    end
+    allow_read_learning_map if course_user
     super
   end
 
