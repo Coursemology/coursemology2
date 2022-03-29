@@ -3,7 +3,7 @@ import { Card, CardText } from 'material-ui/Card';
 import { connect } from 'react-redux';
 import { green200, orange200, red200 } from 'material-ui/styles/colors';
 import FontIcon from 'material-ui/FontIcon';
-import { removeParentNode, toggleSatisfiabilityType } from 'course/learning-map/actions';
+import { removeParentNode, resetSelection, toggleSatisfiabilityType } from 'course/learning-map/actions';
 import ReactTooltip from 'react-tooltip';
 import RefreshIndicator from 'material-ui/RefreshIndicator';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
@@ -17,7 +17,6 @@ const styles = {
     justifyContent: 'center',
   },
   icon: {
-    color: 'red',
     cursor: 'pointer',
     fontSize: '18px',
     marginLeft: '20px',
@@ -30,7 +29,7 @@ const styles = {
     bottom: 0,
     position: 'sticky',
     textAlign: 'center',
-    zIndex: 1000,
+    zIndex: 999,
   },
 };
 
@@ -44,6 +43,11 @@ const Dashboard = (props) => {
   } = props;
 
   const [deleteArrowConfirmation, setDeleteArrowConfirmation] = useState(false);
+  const isEmptyResponse = (
+    response
+    && Object.keys(response).length === 0
+    && Object.getPrototypeOf(response) === Object.prototype
+  );
 
   const deleteArrow = () => {
     setDeleteArrowConfirmation(false);
@@ -61,15 +65,19 @@ const Dashboard = (props) => {
     }
   };
 
+  const getNodeForSelectedGate = () => {
+    return nodes.find((node) => node.id === selectedElement.id.split('-gate')[0]);
+  };
+
+  const reset = () => {
+    dispatch(resetSelection());
+  };
+
   const responseDisplay = () => {
     return {
       color: response.didSucceed ? `${green200}` : `${red200}`,
       text: response.message,
     };
-  };
-
-  const getNodeForSelectedGate = () => {
-    return nodes.find((node) => node.id === selectedElement.id.split('-gate')[0]);
   };
 
   const selectedArrowDisplay = () => {
@@ -80,13 +88,6 @@ const Dashboard = (props) => {
     return {
       color: `${orange200}`,
       text: `Selected arrow: ${fromNodeTitle} ---> ${toNodeTitle}`,
-    };
-  };
-
-  const selectedConditionNodeDisplay = () => {
-    return {
-      color: `${orange200}`,
-      text: `Creating arrow from: ${nodes.find((node) => node.id === selectedElement.id).title}`,
     };
   };
 
@@ -105,19 +106,15 @@ const Dashboard = (props) => {
   };
 
   const getDisplay = () => {
-    if (!(response
-      && Object.keys(response).length === 0
-      && Object.getPrototypeOf(response) === Object.prototype)) {
+    if (!isEmptyResponse) {
       return responseDisplay();
     }
-    
+
     switch (selectedElement.type) {
       case elementTypes.arrow:
         return selectedArrowDisplay();
       case elementTypes.gate:
         return selectedGateDisplay();
-      case elementTypes.parentNode:
-        return selectedConditionNodeDisplay();
       default:
         return defaultDisplay();
     }
@@ -127,19 +124,18 @@ const Dashboard = (props) => {
     const tooltipId = 'learning-map-dashboard-delete-arrow-icon-tooltip';
 
     return (
-      <div
-      data-tip
-      data-for={tooltipId}>
-      <FontIcon
-        className={'fa fa-trash'}
-        style={{...styles.icon}}
-        onClick={() => setDeleteArrowConfirmation(true)}
-      >
-      </FontIcon>
-      <ReactTooltip id={tooltipId}>
-        Delete this arrow
-      </ReactTooltip>
-    </div>
+      <>
+        <FontIcon
+          className={'fa fa-trash'}
+          data-tip
+          data-for={tooltipId}
+          style={{...styles.icon, color: 'red'}}
+          onClick={() => setDeleteArrowConfirmation(true)}
+        />
+        <ReactTooltip id={tooltipId}>
+          Delete this arrow
+        </ReactTooltip>
+      </>
     );
   };
 
@@ -148,11 +144,11 @@ const Dashboard = (props) => {
     const tooltipId = 'learning-map-dashboard-toggle-satisfiability-type-icon-tooltip';
 
     return (
-      <div
-        data-tip
-        data-for={tooltipId}>
+      <>
         <FontIcon
           className={'fa fa-toggle-on'}
+          data-tip
+          data-for={tooltipId}
           style={styles.icon}
           onClick={() => toggleNodeSatisfiabilityType()}
         >
@@ -161,19 +157,23 @@ const Dashboard = (props) => {
           Toggle satisfiability type to
             {` ${node.satisfiability_type === 'all_conditions' ? '\"at least one condition\"' : '\"all conditions\"'}`}
         </ReactTooltip>
-      </div>
+      </>
     );
   };
 
-  const getActionIcons = () => {
-    switch (selectedElement.type) {
-      case elementTypes.arrow:
-        return selectedArrowIcon();
-      case elementTypes.gate:
-        return selectedGateIcon();
-      default:
-        return <></>
+  const getActionElements = () => {
+    if (selectedElement.type) {
+      switch (selectedElement.type) {
+        case elementTypes.arrow:
+          return selectedArrowIcon();
+        case elementTypes.gate:
+          return selectedGateIcon();
+        default:
+          return <></>
+      }
     }
+
+    return <></>
   };
 
   const {
@@ -186,7 +186,15 @@ const Dashboard = (props) => {
       <Card style={{...styles.wrapper, backgroundColor: color}}>
         <CardText style={styles.content}>
           { text }
-          { getActionIcons() }
+          { getActionElements() }
+          {
+            (!isEmptyResponse || selectedElement.type) &&
+            <FontIcon
+              className={'fa fa-window-close'}
+              style={{...styles.icon}}
+              onClick={() => reset()}
+            />
+          }
           { isLoading &&
             <RefreshIndicator
               top={0}
