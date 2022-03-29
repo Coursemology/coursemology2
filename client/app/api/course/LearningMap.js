@@ -11,7 +11,8 @@ export default class LearningMapAPI extends BaseCourseAPI {
   *     course_material_type: string, content_url: string,
   *     children: Array.<{ id: string, is_satisfied: boolean }>,
   *     parents: Array.<{ id: string, is_satisfied: boolean }>,
-  *     ... // Other fields specific to the individual course material type
+  *     unlock_rate: number, unlock_level: number,
+  *     ... (Other fields specific to the individual course material type)
   *   }>,
   *   can_modify: boolean
   * }
@@ -31,7 +32,8 @@ export default class LearningMapAPI extends BaseCourseAPI {
   *     course_material_type: string, content_url: string,
   *     children: Array.<{ id: string, is_satisfied: boolean }>,
   *     parents: Array.<{ id: string, is_satisfied: boolean }>,
-  *     ... // Other fields specific to the individual course material type
+  *     unlock_rate: number, unlock_level: number,
+  *     ... (Other fields specific to the individual course material type)
   *   }>,
   *   can_modify: boolean
   * }
@@ -51,7 +53,8 @@ export default class LearningMapAPI extends BaseCourseAPI {
   *     course_material_type: string, content_url: string,
   *     children: Array.<{ id: string, is_satisfied: boolean }>,
   *     parents: Array.<{ id: string, is_satisfied: boolean }>,
-  *     ... // Other fields specific to the individual course material type
+  *     unlock_rate: number, unlock_level: number,
+  *     ... (Other fields specific to the individual course material type)
   *   }>,
   *   can_modify: boolean
   * }
@@ -71,7 +74,8 @@ export default class LearningMapAPI extends BaseCourseAPI {
   *     course_material_type: string, content_url: string,
   *     children: Array.<{ id: string, is_satisfied: boolean }>,
   *     parents: Array.<{ id: string, is_satisfied: boolean }>,
-  *     ... // Other fields specific to the individual course material type
+  *     unlock_rate: number, unlock_level: number,
+  *     ... (Other fields specific to the individual course material type)
   *   }>,
   *   can_modify: boolean
   * }
