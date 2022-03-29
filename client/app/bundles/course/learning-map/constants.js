@@ -9,7 +9,6 @@ const actionTypes = mirrorCreator([
   'REMOVE_PARENT_NODE_FAILURE',
   'SELECT_ARROW',
   'SELECT_GATE',
-  'SELECT_PARENT_NODE',
   'TOGGLE_SATISFIABILITY_TYPE_SUCCESS',
   'TOGGLE_SATISFIABILITY_TYPE_FAILURE',
   'RESET_SELECTION',
@@ -19,7 +18,6 @@ const actionTypes = mirrorCreator([
 const elementTypes = {
   arrow: 'arrow',
   gate: 'gate',
-  parentNode: 'parentNode',
 };
 
 export { actionTypes, elementTypes };

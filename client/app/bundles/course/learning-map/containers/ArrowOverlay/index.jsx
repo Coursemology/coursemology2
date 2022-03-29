@@ -3,8 +3,6 @@ import { grey500 } from 'material-ui/styles/colors';
 import GateToNodeArrows from '../GateToNodeArrows';
 import NodeToGateArrows from '../NodeToGateArrows';
 import { connect } from 'react-redux';
-import Xarrow from 'react-xarrows';
-import { elementTypes } from '../../constants';
 
 const arrowAnchorPositions = ['left', 'right'];
 
@@ -17,15 +15,12 @@ const arrowProperties = {
 
 const ArrowOverlay = React.memo((props) => {
   const {
-    cursorTrackerId,
     gateInputSizeThreshold,
     getGateId,
     getGateConnectionPointId,
     getGateInputId,
     getNodeConnectionPointId,
-    nodes,
     scale,
-    selectedElement,
   } = props;
 
   const getArrowId = (parentNodeId, childNodeId) => {
@@ -50,20 +45,6 @@ const ArrowOverlay = React.memo((props) => {
         getGateConnectionPointId={getGateConnectionPointId}
         scale={scale}
       />
-      {
-        selectedElement.type === elementTypes.parentNode &&
-        <Xarrow
-          start={getNodeConnectionPointId(selectedElement.id)}
-          startAnchor={arrowAnchorPositions}
-          end={cursorTrackerId}
-          endAnchor={arrowAnchorPositions}
-          strokeWidth={2 * scale}
-          color={`${grey500}`}
-          divContainerStyle={{zIndex: nodes.length + 1}}
-          curve={0.5}
-          headSize={4}
-        />
-      }
     </>
   );
 });

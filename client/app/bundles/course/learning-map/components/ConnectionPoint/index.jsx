@@ -8,10 +8,10 @@ const styles = {
     border: '2px solid black',
     borderRadius: '50%',
     display: 'flex',
-    height: '10px',
+    height: 10,
     justifyContent: 'center',
     position: 'relative',
-    width: '10px',
+    width: 10,
   },
 };
 

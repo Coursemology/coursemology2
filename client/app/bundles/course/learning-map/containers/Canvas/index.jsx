@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
 import Levels from '../Levels';
 import ArrowOverlay from '../ArrowOverlay';
-import CursorTracker from '../../components/CursorTracker';
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { Xwrapper } from 'react-xarrows';
 import ZoomActionElements from '../../components/ZoomActionElements';
@@ -25,7 +24,7 @@ const styles = {
 
 const arrowAnchorPositions = ['left', 'right'];
 
-const Canvas = (props) => {
+const Canvas = () => {
   const gateInputSizeThreshold = 5;
   const cursorTrackerId = 'cursor-tracker';
   const transformRef = useRef(null);
@@ -86,11 +85,6 @@ const Canvas = (props) => {
                   getGateConnectionPointId={getGateConnectionPointId}
                   getGateId={getGateId}
                   getGateInputId={getGateInputId}
-                  getNodeConnectionPointId={getNodeConnectionPointId}
-                />
-                <CursorTracker
-                  arrowAnchorPositions={arrowAnchorPositions}
-                  id={cursorTrackerId}
                   getNodeConnectionPointId={getNodeConnectionPointId}
                 />
                 <ArrowOverlay

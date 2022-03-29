@@ -19,26 +19,24 @@ export function fetchNodes() {
 }
 
 export function addParentNode(parentNodeId, nodeId) {
-  if (parentNodeId !== '') {
-    return (dispatch) => {
-      dispatch({ type: actionTypes.LOADING });
+  return (dispatch) => {
+    dispatch({ type: actionTypes.LOADING });
 
-      return CourseAPI.learningMap.addParentNode({
-        parent_node_id: parentNodeId,
-        node_id: nodeId,
-      }).then((response) => {
-        dispatch({
-          type: actionTypes.ADD_PARENT_NODE_SUCCESS,
-          nodes: response.data.nodes,
-        });
-      }).catch((error) => {
-        dispatch({ 
-          type: actionTypes.ADD_PARENT_NODE_FAILURE,
-          errorMessage: getErrorMessage(error),
-        });
+    return CourseAPI.learningMap.addParentNode({
+      parent_node_id: parentNodeId,
+      node_id: nodeId,
+    }).then((response) => {
+      dispatch({
+        type: actionTypes.ADD_PARENT_NODE_SUCCESS,
+        nodes: response.data.nodes,
       });
-    };
-  }
+    }).catch((error) => {
+      dispatch({ 
+        type: actionTypes.ADD_PARENT_NODE_FAILURE,
+        errorMessage: getErrorMessage(error),
+      });
+    });
+  };
 }
 
 export function removeParentNode(parentNodeId, nodeId) {
@@ -76,15 +74,6 @@ export function selectGate(gateId) {
     dispatch({
       type: actionTypes.SELECT_GATE,
       selectedGateId: gateId,
-    });
-  };
-}
-
-export function selectParentNode(nodeId) {
-  return (dispatch) => {
-    dispatch({ 
-      type: actionTypes.SELECT_PARENT_NODE,
-      selectedParentNodeId: nodeId,
     });
   };
 }

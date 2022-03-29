@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import ConnectionPoint from '../ConnectionPoint';
 import FontIcon from 'material-ui/FontIcon';
 import { connect } from 'react-redux';
-import { selectParentNode } from 'course/learning-map/actions';
 import UnlockRateDisplay from '../UnlockRateDisplay';
 import { elementTypes } from '../../constants';
+import NodeMenu from '../NodeMenu';
 
 const styles = {
   connectionPoint: {
@@ -34,10 +34,11 @@ const styles = {
     position: 'absolute',
   },
   icon: {
-    fontSize: '12px',
+    fontSize: 12,
     padding: '0px',
   },
   wrapper: {
+    border: '1px solid black',
     margin: 20,
     padding: 4,
     position: 'relative',
@@ -57,7 +58,6 @@ const icons = {
 const Node = (props) => {
   const {
     canModify,
-    dispatch,
     getNodeConnectionPointId,
     node,
     selectedElement,
@@ -65,14 +65,20 @@ const Node = (props) => {
 
   const onConnectionPointClick = (event) => {
     event.stopPropagation();
-    dispatch(selectParentNode(node.id))
+    setIsNodeMenuDisplayed(true);
   };
+
+  const [isNodeMenuDisplayed, setIsNodeMenuDisplayed] = useState(false);
 
   return (
     <>
       <Card
         id={node.id}
-        style={{...styles.wrapper, border: '1px solid black', opacity: `${!canModify && !node.unlocked ? 0.2 : 1.0}`, zIndex: node.depth + 2 }}
+        style={{
+          ...styles.wrapper,
+          opacity: `${!canModify && !node.unlocked ? 0.2 : 1.0}`,
+          zIndex: isNodeMenuDisplayed ? 999 : node.depth + 2
+        }}
       >
         <CardHeader
           style={styles.header}
@@ -119,10 +125,17 @@ const Node = (props) => {
           <div style={styles.connectionPoint}>
             <ConnectionPoint
               id={getNodeConnectionPointId(node.id)}
-              isActive={canModify && selectedElement.type !== elementTypes.parentNode}
+              isActive={canModify}
               onClick={(event) => onConnectionPointClick(event, node.id)}
               zIndex={'inherit'}
             />
+            {
+              isNodeMenuDisplayed &&
+              <NodeMenu
+                closeMenuCallback={() => setIsNodeMenuDisplayed(false)}
+                parentNode={node}
+              />
+            }
           </div>
         </div>
       </Card>

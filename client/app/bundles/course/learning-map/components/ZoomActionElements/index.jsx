@@ -13,7 +13,7 @@ const styles = {
     position: 'absolute',
     right: 20,
     width: '100%',
-    zIndex: 9999,
+    zIndex: 999,
   },
 };
 

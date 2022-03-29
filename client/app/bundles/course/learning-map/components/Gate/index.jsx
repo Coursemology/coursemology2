@@ -1,7 +1,7 @@
 import React from 'react';
 import ConnectionPoint from '../ConnectionPoint';
 import { connect } from 'react-redux';
-import { addParentNode, selectGate } from 'course/learning-map/actions';
+import { selectGate } from 'course/learning-map/actions';
 import { green300, red300 } from 'material-ui/styles/colors';
 import { elementTypes } from '../../constants';
 
@@ -60,19 +60,11 @@ const Gate = (props) => {
   const id = getGateId(node.id);
   const zIndex = node.depth + 2;
   const isSelected = selectedElement.type === elementTypes.gate && selectedElement.id === id;
-  const isParentNodeSelected = selectedElement.type === elementTypes.parentNode;
 
   const onGateClick = (event) => {
     if (canModify) {
       event.stopPropagation();
       dispatch(selectGate(id));
-    }
-  };
-
-  const onConnectionPointClick = (event, nodeId) => {
-    if (selectedElement.type === elementTypes.parentNode) {
-      event.stopPropagation();
-      dispatch(addParentNode(selectedElement.id, nodeId));
     }
   };
 
@@ -174,12 +166,7 @@ const Gate = (props) => {
         <div onClick={event => onGateClick(event)}>
           { getGate() }
         </div>
-        <ConnectionPoint
-          id={getGateConnectionPointId(node.id)}
-          isActive={isParentNodeSelected}
-          onClick={(event) => onConnectionPointClick(event, node.id)}
-          zIndex={isParentNodeSelected ? 9999 : zIndex}
-        />
+        <ConnectionPoint id={getGateConnectionPointId(node.id)} />
       </div>
     </>
   );
