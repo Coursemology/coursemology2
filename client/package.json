@@ -117,7 +117,7 @@
     "react-scroll": "^1.8.6",
     "react-summernote": "github:zhuhanming/react-summernote#v1.2",
     "react-tooltip": "^4.2.21",
-    "redux": "^4.1.1",
+    "redux": "^4.1.2",
     "redux-form": "^7.4.3",
     "redux-immutable": "^4.0.0",
     "redux-persist": "^6.0.0",
