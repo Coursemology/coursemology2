@@ -80,35 +80,19 @@ const Gate = (props) => {
     return canModify ? 'white' : isSatisfied ? `${green300}` : `${red300}`;
   };
 
-  const andGate = () => {
-    return (
-      <div
-        id={id}
-        style={{...styles.andGate, ...(isSelected) && styles.selectedGate, zIndex: zIndex}}
-      >
-        {
-          node.parents.sort((parent1, parent2) => parent1.id.localeCompare(parent2.id)).map(parent => {
-            const inputId = getGateInputId(false, parent.id, node.id);
-
-            return (              
-              <div
-                id={inputId}
-                key={inputId}
-                style={{...styles.andGateInput, backgroundColor: getGateBackgroundColor(parent.is_satisfied)}}
-              >
-              </div>
-            );
-          })
-        }
-      </div>
-    );
+  const getAndGate = () => {
+    return getNonSummaryGate(styles.andGate, styles.andGateInput);
   };
 
-  const orGate = () => {
+  const getOrGate = () => {
+    return getNonSummaryGate(styles.orGate, styles.orGateInput);
+  };
+
+  const getNonSummaryGate = (gateWrapperStyle, gateInputStyle) => {
     return (
       <div
         id={id}
-        style={{...styles.orGate, ...(isSelected) && styles.selectedGate, zIndex: zIndex}}
+        style={{...gateWrapperStyle, ...(isSelected) && styles.selectedGate, zIndex: zIndex}}
       >
         {
           node.parents.sort((parent1, parent2) => parent1.id.localeCompare(parent2.id)).map(parent => {
@@ -118,7 +102,7 @@ const Gate = (props) => {
               <div
                 id={inputId}
                 key={inputId}
-                style={{...styles.orGateInput, backgroundColor: getGateBackgroundColor(node.unlocked)}}
+                style={{...gateInputStyle, backgroundColor: getGateBackgroundColor(node.unlocked)}}
               >
               </div>
             );
@@ -128,7 +112,7 @@ const Gate = (props) => {
     );
   };
 
-  const summaryGate = () => {
+  const getSummaryGate = () => {
     const numSatisfiedConditions = node.parents.filter(parent => parent.is_satisfied).length;
 
     return (
@@ -150,14 +134,14 @@ const Gate = (props) => {
 
   const getGate = () => {
     if (isSummaryGate()) {
-      return summaryGate();
+      return getSummaryGate();
     }
 
     if (isAndGate()) {
-      return andGate();
+      return getAndGate();
     }
 
-    return orGate();
+    return getOrGate();
   };
 
   return (
