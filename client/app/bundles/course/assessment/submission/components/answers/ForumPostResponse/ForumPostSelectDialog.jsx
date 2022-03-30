@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { Dialog, FlatButton } from 'material-ui';
 import { cyan500 } from 'material-ui/styles/colors';
 import PropTypes from 'prop-types';
@@ -76,7 +76,7 @@ const styles = {
   },
 };
 
-export default class ForumPostSelectDialog extends React.Component {
+export default class ForumPostSelectDialog extends Component {
   constructor(props) {
     super(props);
     this.state = {

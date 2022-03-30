@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -23,7 +23,7 @@ const datePropType = PropTypes.oneOfType([
   PropTypes.instanceOf(Date),
 ]);
 
-class ItemRow extends React.Component {
+class ItemRow extends Component {
   updateItem = (payload) => {
     const { id, title, dispatch } = this.props;
     const successMessage = (

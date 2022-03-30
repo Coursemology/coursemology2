@@ -3,7 +3,7 @@
 
 = div_for(notification) do
   // TODO: Display user image here.
-  - user_link = link_to_user(activity.actor)
+  - user_link = link_to_user(@course_users_hash[activity.actor_id])
   - achievement_link = link_to achievement.title, course_achievement_path(current_course, achievement)
   => t('.gained_achievement_html', user: user_link, achievement: achievement_link)
   i.clearfix.timestamp = format_datetime(activity.created_at)

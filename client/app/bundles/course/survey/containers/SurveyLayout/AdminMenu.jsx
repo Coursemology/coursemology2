@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
@@ -40,17 +40,19 @@ const translations = defineMessages({
   },
 });
 
-class AdminMenu extends React.Component {
-  updateSurveyHandler = (data) => {
-    const { dispatch, intl, surveyId } = this.props;
-    const { updateSurvey } = surveyActions;
+class AdminMenu extends Component {
+  deleteSurveyHandler = () => {
+    const { survey, dispatch, intl, surveyId } = this.props;
+    const { deleteSurvey } = surveyActions;
 
-    const payload = formatSurveyFormData(data);
-    const successMessage = intl.formatMessage(translations.updateSuccess, data);
-    const failureMessage = intl.formatMessage(translations.updateFailure);
-    return dispatch(
-      updateSurvey(surveyId, payload, successMessage, failureMessage),
+    const successMessage = intl.formatMessage(
+      translations.deleteSuccess,
+      survey,
     );
+    const failureMessage = intl.formatMessage(translations.deleteFailure);
+    const handleDelete = () =>
+      dispatch(deleteSurvey(surveyId, successMessage, failureMessage));
+    return dispatch(showDeleteConfirmation(handleDelete));
   };
 
   showEditSurveyForm = () => {
@@ -93,18 +95,16 @@ class AdminMenu extends React.Component {
     );
   };
 
-  deleteSurveyHandler = () => {
-    const { survey, dispatch, intl, surveyId } = this.props;
-    const { deleteSurvey } = surveyActions;
+  updateSurveyHandler = (data) => {
+    const { dispatch, intl, surveyId } = this.props;
+    const { updateSurvey } = surveyActions;
 
-    const successMessage = intl.formatMessage(
-      translations.deleteSuccess,
-      survey,
+    const payload = formatSurveyFormData(data);
+    const successMessage = intl.formatMessage(translations.updateSuccess, data);
+    const failureMessage = intl.formatMessage(translations.updateFailure);
+    return dispatch(
+      updateSurvey(surveyId, payload, successMessage, failureMessage),
     );
-    const failureMessage = intl.formatMessage(translations.deleteFailure);
-    const handleDelete = () =>
-      dispatch(deleteSurvey(surveyId, successMessage, failureMessage));
-    return dispatch(showDeleteConfirmation(handleDelete));
   };
 
   render() {

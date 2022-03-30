@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -17,7 +17,7 @@ const translations = defineMessages({
   },
 });
 
-class LessonPlanFilter extends React.Component {
+class LessonPlanFilter extends Component {
   constructor(props) {
     super(props);
 

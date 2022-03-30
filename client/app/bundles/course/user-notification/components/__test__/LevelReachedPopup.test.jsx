@@ -1,4 +1,3 @@
-import React from 'react';
 import { mount } from 'enzyme';
 import storeCreator from 'course/user-notification/store';
 import LevelReachedPopup from '../LevelReachedPopup';
@@ -22,8 +21,8 @@ describe('<LevelReachedPopup />', () => {
     });
 
     it('does not show a link to the leaderboard', () => {
-      expect(wrapper.find('FlatButton').length).toBe(1);
-      expect(wrapper.find('p').length).toBe(0);
+      expect(wrapper.find('FlatButton')).toHaveLength(1);
+      expect(wrapper.find('p')).toHaveLength(0);
     });
   });
 
@@ -35,8 +34,8 @@ describe('<LevelReachedPopup />', () => {
     });
 
     it('shows leaderboard button and message', () => {
-      expect(wrapper.find('FlatButton').length).toBe(2);
-      expect(wrapper.find('p').length).toBe(1);
+      expect(wrapper.find('FlatButton')).toHaveLength(2);
+      expect(wrapper.find('p')).toHaveLength(1);
     });
   });
 
@@ -48,8 +47,8 @@ describe('<LevelReachedPopup />', () => {
     });
 
     it('shows leaderboard button but not message', () => {
-      expect(wrapper.find('FlatButton').length).toBe(2);
-      expect(wrapper.find('p').length).toBe(0);
+      expect(wrapper.find('FlatButton')).toHaveLength(2);
+      expect(wrapper.find('p')).toHaveLength(0);
     });
   });
 });

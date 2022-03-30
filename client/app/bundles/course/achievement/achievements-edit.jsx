@@ -1,10 +1,9 @@
-import React from 'react';
 import { render } from 'react-dom';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 import storeCreator from './store';
 import AchievementEditPage from './pages/AchievementEdit';
 
-$(document).ready(() => {
+$(() => {
   const mountNode = document.getElementById('achievement-edit');
   if (mountNode) {
     const dataAttr = mountNode.getAttribute('data');

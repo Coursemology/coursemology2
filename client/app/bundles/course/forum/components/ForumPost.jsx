@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { Divider, Card, CardHeader, CardText, FlatButton } from 'material-ui';
 import PropTypes from 'prop-types';
 import moment from 'lib/moment';
@@ -25,7 +25,7 @@ const styles = {
   expandButton: { marginTop: 8 },
 };
 
-export default class ForumPost extends React.Component {
+export default class ForumPost extends Component {
   constructor(props) {
     super(props);
     this.state = {

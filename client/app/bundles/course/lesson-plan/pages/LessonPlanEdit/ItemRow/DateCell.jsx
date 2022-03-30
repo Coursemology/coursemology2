@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'lib/moment';
 import DateTimePicker from 'lib/components/form/DateTimePicker';
@@ -10,7 +10,7 @@ const datePropType = PropTypes.oneOfType([
   PropTypes.instanceOf(Date),
 ]);
 
-class DateCell extends React.Component {
+class DateCell extends Component {
   /**
    * Updates a date value for a lesson plan item if the date has changed.
    * If it is start_at that is shifted, shift existing end dates by the same amount.

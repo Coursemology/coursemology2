@@ -124,7 +124,7 @@ RSpec.describe 'Extension: Acts as Conditional', type: :model do
         end
 
         context 'at least one condition is satisfied' do
-          it 'returns false' do
+          it 'returns true' do
             allow(subject).to receive(:conditions).and_return([satisfied_condition,
                                                                unsatisfied_condition])
             expect(subject.conditions_satisfied_by?(double)).to be_truthy

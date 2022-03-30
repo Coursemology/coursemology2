@@ -1,3 +1,3 @@
 # frozen_string_literal: true
-module Course::GroupsHelper
+module Course::LearningMapHelper
 end

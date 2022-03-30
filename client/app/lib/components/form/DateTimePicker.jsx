@@ -1,16 +1,18 @@
-import React from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import moment from 'lib/moment';
-import DatePicker from 'material-ui-pickers/DatePicker';
-import TimePicker from 'material-ui-pickers/TimePicker';
+import {
+  KeyboardDatePicker,
+  KeyboardTimePicker,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
 import DateRange from 'material-ui/svg-icons/action/date-range';
 import KeyboardArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
 import KeyboardArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
 import Schedule from 'material-ui/svg-icons/action/schedule';
-import MuiPickersUtilsProvider from 'material-ui-pickers/MuiPickersUtilsProvider';
 import MomentUtils from '@date-io/moment';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
+import { MuiThemeProvider, createTheme } from '@material-ui/core';
 
 const translations = defineMessages({
   datePlaceholder: {
@@ -20,6 +22,14 @@ const translations = defineMessages({
   timePlaceholder: {
     id: 'lib.components.form.DateTimePicker.timePlaceholder',
     defaultMessage: 'hh:mm',
+  },
+  invalidDate: {
+    id: 'lib.components.form.DateTimePicker.invalidDate',
+    defaultMessage: 'Invalid date',
+  },
+  invalidTime: {
+    id: 'lib.components.form.DateTimePicker.invalidTime',
+    defaultMessage: 'Invalid time',
   },
 });
 
@@ -49,19 +59,15 @@ const styles = {
   },
 };
 
-const datetimepickerTheme = createMuiTheme({
+const datetimepickerTheme = createTheme({
   // https://material-ui.com/customization/themes/#typography---html-font-size
   // https://material-ui.com/style/typography/#migration-to-typography-v2
   typography: {
     htmlFontSize: 10,
     useNextVariants: true,
   },
-  overrides: {
-    MuiModal: {
-      root: {
-        zIndex: 1800,
-      },
-    },
+  zIndex: {
+    modal: 1800,
   },
 });
 
@@ -82,7 +88,31 @@ const propTypes = {
   style: PropTypes.object,
 };
 
-class DateTimePicker extends React.PureComponent {
+/**
+ * Unfortunately, the behaviour of this component is not exactly ideal, as there
+ * are two fields - date and time, but they share the same Date object. What thus
+ * happens is that keyboard interactions, i.e. when users manually enter the date
+ * and time, are quite wonky.
+ *
+ * For example, if the user deletes the entry from the time field, we would ideally
+ * want to set it to null, i.e. no time specified, but doing so would also clear
+ * the date field, which is not what a user would expect. As such, we would have
+ * to instead set the time to 00:00, but doing so is also not exactly expected,
+ * since the user will see 00:00 pop up after deleting the data from the field.
+ *
+ * We face a similar issue when the user deletes the date field entry, where the
+ * time field will also be cleared since the date is set to null.
+ *
+ * We can't exactly treat all null values as invalid values as well, since there
+ * may be optional datetime inputs. As such, we need to be capable of storing
+ * null values for the datetime.
+ *
+ * TODO: To look into fixing the abovementioned solution. One possible way would
+ * be to simply prevent keyboard inputs, and only allow the usage of the pickers.
+ * Another would be to upgrade the picker dependencies and hope that the handling
+ * that comes shipped with the newer versions handle these better than we can.
+ */
+class DateTimePicker extends PureComponent {
   static displayState(dateTime) {
     return {
       displayedDate: dateTime ? moment(dateTime).format('DD-MM-YYYY') : '',
@@ -98,10 +128,45 @@ class DateTimePicker extends React.PureComponent {
     this.state = DateTimePicker.displayState(props.value);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const dateTime = nextProps.value;
     this.setState(DateTimePicker.displayState(dateTime));
   }
+
+  updateDate = (newDate) => {
+    if (newDate === null) {
+      this.setState({ dateError: '' });
+      this.updateDateTime(null);
+      return;
+    }
+    const { date, months, years } = moment(newDate).toObject();
+    const toCheck = [date, months, years];
+
+    // We will only continue processing if date, months and years are ALL specified.
+    // The reasons for this are:
+    // - If the user is manually entering the date via keyboard, then until the user
+    //   finishes typing the entire date, some of the fields above will be NaN.
+    // - If we allow the above situation to proceed, this.props.value will be "corrupted"
+    //   and become an invalid date.
+    // - On the other hand, if we return early until all fields are specified, we will
+    //   naturally obtain a valid date once all fields are here.
+    // - Note that picking the date via the datepicker isn't affected, since all 3 fields
+    //   will be specified for such a situation.
+    if (!toCheck.every((num) => num != null && !Number.isNaN(num))) {
+      // We will not clear the current datetime for now, since that will be very jarring
+      // when the user deletes one character and the entire field resets to dd-mm-yyyy.
+      this.setState({
+        dateError: this.props.intl.formatMessage(translations.invalidDate),
+      });
+      return;
+    }
+
+    const newDateTime = this.props.value
+      ? moment(this.props.value).set({ date, months, years })
+      : moment({ date, months, years });
+    this.setState({ dateError: '' });
+    this.updateDateTime(newDateTime.toDate());
+  };
 
   updateDateTime = (newDateTime) => {
     const { onBlur, onChange } = this.props;
@@ -115,27 +180,40 @@ class DateTimePicker extends React.PureComponent {
     }
   };
 
-  updateDate = (newDate) => {
-    if (newDate === null) {
-      this.updateDateTime(null);
-      return;
-    }
-    const { date, months, years } = moment(newDate).toObject();
-    const newDateTime = this.props.value
-      ? moment(this.props.value).set({ date, months, years })
-      : moment({ date, months, years });
-    this.updateDateTime(newDateTime.toDate());
-  };
-
   updateTime = (newTime) => {
     if (newTime === null) {
-      this.updateDateTime(null);
+      this.setState({ timeError: '' });
+      // If there is already a date object, we don't want to just clear it, which
+      // will be very disruptive if the user is also using the Date field, since
+      // their date value will also just disappear.
+      //
+      // Instead, we will set it to 00:00.
+      if (!this.props.value) {
+        this.updateDateTime(null);
+        return;
+      }
+      const resetDateTime = moment(this.props.value).set({
+        hours: 0,
+        minutes: 0,
+      });
+      this.updateDateTime(resetDateTime.toDate());
       return;
     }
     const { hours, minutes } = moment(newTime).toObject();
+    const toCheck = [hours, minutes];
+
+    // See comment under updateDate on rationale for early termination here.
+    if (!toCheck.every((num) => num != null && !Number.isNaN(num))) {
+      this.setState({
+        timeError: this.props.intl.formatMessage(translations.invalidTime),
+      });
+      return;
+    }
+
     const newDateTime = this.props.value
       ? moment(this.props.value).set({ hours, minutes })
       : moment({ hours, minutes });
+    this.setState({ timeError: '' });
     this.updateDateTime(newDateTime.toDate());
   };
 
@@ -159,33 +237,34 @@ class DateTimePicker extends React.PureComponent {
       <MuiPickersUtilsProvider utils={MomentUtils}>
         <MuiThemeProvider theme={datetimepickerTheme}>
           <div style={{ ...styles.dateTimePicker, ...style }}>
-            <DatePicker
+            <KeyboardDatePicker
               {...{ name, disabled }}
               style={styles.dateTextField}
               onChange={this.updateDate}
               clearable={clearable}
-              keyboard
               keyboardIcon={<DateRange style={styles.pickerIcon} />}
               leftArrowIcon={<KeyboardArrowLeft />}
               rightArrowIcon={<KeyboardArrowRight />}
               format="DD-MM-YYYY"
               label={floatingLabelText}
-              emptyLabel={intl.formatMessage(translations.datePlaceholder)}
+              placeholder={intl.formatMessage(translations.datePlaceholder)}
               error={!!errorText || !!this.state.dateError}
-              helperText={errorText || this.state.dateError}
+              // We want this component's error message to take priority over the parent's
+              helperText={this.state.dateError || errorText}
               value={value || null}
             />
-            <TimePicker
+            <KeyboardTimePicker
               {...{ name, disabled }}
               style={styles.timeTextField}
               onChange={this.updateTime}
               clearable={clearable}
-              keyboard
               keyboardIcon={<Schedule style={styles.pickerIcon} />}
-              emptyLabel={intl.formatMessage(translations.timePlaceholder)}
+              placeholder={intl.formatMessage(translations.timePlaceholder)}
+              label="24-hr clock"
               error={!!this.state.timeError}
               helperText={this.state.timeError}
               value={value || null}
+              format="HH:mm"
             />
           </div>
         </MuiThemeProvider>

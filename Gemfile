@@ -5,7 +5,7 @@ source 'https://rubygems.org'
 gem 'tzinfo-data', platforms: [:mswin, :mswin64]
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.0.4.4'
+gem 'rails', '~> 6.0.4.7'
 
 # Use PostgreSQL for the backend
 gem 'pg'
@@ -31,7 +31,7 @@ gem 'active_record-acts_as', git: 'https://github.com/ekowidianto/active_record-
 # Organise ActiveRecord model into a tree structure
 gem 'edge'
 # Upsert action for Postgres
-gem 'active_record_upsert', '0.10.1'
+gem 'active_record_upsert', '0.11.1'
 # Create pretty URLs and work with human-friendly strings
 gem 'friendly_id'
 
@@ -44,7 +44,7 @@ gem 'uglifier', '>= 1.3.0'
 # https://github.com/rails/webpacker/blob/4f65c5ee58666bbe58b234c48d47ec7d48fab4d8/CHANGELOG.md
 gem 'webpacker', '<= 5.4.4'
 # Internationalisation for JavaScript.
-gem 'i18n-js', '<= 3.9.0'
+gem 'i18n-js', '<= 3.10.0'
 
 # Routes from JavaScript
 gem 'js-routes'
@@ -188,7 +188,7 @@ gem 'acts_as_tenant'
 gem 'http_accept_language'
 
 # User authentication
-gem 'devise', '4.7.3'
+gem 'devise', '4.8.1'
 gem 'devise_masquerade'
 gem 'devise-multi_email'
 
@@ -213,11 +213,12 @@ gem 'simple_form'
 gem 'simple_form-bootstrap', git: 'https://github.com/raymondtangsc/simple_form-bootstrap'
 # Dynamic nested forms
 gem 'cocoon'
+gem 'momentjs-rails' # Needed for bootstrap3-datetimepicker-rails
 gem 'bootstrap3-datetimepicker-rails'
 gem 'bootstrap-select-rails'
 gem 'bootstrap_tokenfield_rails'
 gem 'twitter-typeahead-rails'
-gem 'summernote-rails'
+gem 'summernote-rails', git: 'https://github.com/zhuhanming/summernote-rails'
 
 # Using CarrierWave for file uploads
 gem 'carrierwave'
@@ -245,5 +246,5 @@ gem 'loofah', '>= 2.2.1'
 gem 'rails-html-sanitizer', '>= 1.0.4'
 
 gem 'sprockets', '< 4.0.0'
-gem 'mimemagic', '0.3.10'
+gem 'mimemagic', '0.4.3'
 gem 'ffi', '>= 1.14.2'

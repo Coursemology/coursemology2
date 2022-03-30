@@ -1,10 +1,9 @@
-import React from 'react';
 import { render } from 'react-dom';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 import storeCreator from './store';
 import AchievementIndexPage from './pages/AchievementIndex';
 
-$(document).ready(() => {
+$(() => {
   const mountNode = $('.new-btn')[0];
 
   if (mountNode) {

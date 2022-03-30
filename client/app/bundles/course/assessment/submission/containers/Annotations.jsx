@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
@@ -98,7 +98,7 @@ VisibleAnnotations.propTypes = {
     isSubmittingNormalComment: PropTypes.bool,
     isSubmittingDelayedComment: PropTypes.bool,
     isUpdatingComment: PropTypes.bool,
-    annotations: {},
+    annotations: PropTypes.object,
   }),
   fileId: PropTypes.number.isRequired,
   lineNumber: PropTypes.number.isRequired,

@@ -1,4 +1,3 @@
-import React from 'react';
 import { withRouter, Route, Switch } from 'react-router-dom';
 import NotificationPopup from 'lib/containers/NotificationPopup';
 import DeleteConfirmation from 'lib/containers/DeleteConfirmation';

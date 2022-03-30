@@ -1,6 +1,6 @@
 import Immutable from 'immutable';
 
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
@@ -52,7 +52,7 @@ const contextTypes = {
   muiTheme: PropTypes.object.isRequired,
 };
 
-class OnlineEditorCppView extends React.Component {
+class OnlineEditorCppView extends Component {
   testCaseCreateHandler(type) {
     return (e) => {
       e.preventDefault();
@@ -61,6 +61,129 @@ class OnlineEditorCppView extends React.Component {
         this.props.actions.createTestCase(type);
       }
     };
+  }
+
+  renderAutogradedFields() {
+    const { intl, data } = this.props;
+    const testCases = data.get('test_cases');
+    const testCaseError = data.getIn(['test_cases', 'error']);
+    const errorTextElement = testCaseError && (
+      <div
+        style={{
+          fontSize: 12,
+          lineHeight: '12px',
+          color: this.context.muiTheme.textField.errorColor,
+          transition: transitions.easeOut(),
+          marginBottom: '1em',
+        }}
+      >
+        {testCaseError}
+      </div>
+    );
+
+    return (
+      <>
+        <div style={{ marginBottom: '1em' }}>
+          {this.renderEditorCard(
+            intl.formatMessage(translations.solutionTitle),
+            intl.formatMessage(translations.solutionSubtitle),
+            'solution',
+          )}
+          {this.renderEditorCard(
+            intl.formatMessage(translations.prependTitle),
+            intl.formatMessage(translations.prependSubtitle),
+            'prepend',
+          )}
+          {this.renderEditorCard(
+            intl.formatMessage(translations.appendTitle),
+            intl.formatMessage(cppTranslations.appendSubtitle),
+            'append',
+          )}
+        </div>
+        <h3>{intl.formatMessage(translations.dataFilesHeader)}</h3>
+        {this.renderExistingPackageFiles(
+          'data_files',
+          this.props.intl.formatMessage(translations.currentDataFilesHeader),
+        )}
+        {this.renderNewPackageFiles(
+          'data_files',
+          this.props.intl.formatMessage(translations.newDataFilesHeader),
+          intl.formatMessage(translations.addDataFileButton),
+        )}
+        <h3>{intl.formatMessage(translations.testCasesHeader)}</h3>
+        <div style={{ marginBottom: '0.5em' }}>
+          <FormattedMessage
+            id="course.assessment.question.programming.onlineEditorCppView.testCasesDescription"
+            defaultMessage={
+              '{note}: The expression in the {expression} column will be compared with the ' +
+              'expression in the {expected} column using {expect_star} assertions from the ' +
+              '{googletest}. Floating point numbers are formatted with {tostring}.'
+            }
+            values={{
+              note: (
+                <b>
+                  {intl.formatMessage(translations.testCaseDescriptionNote)}
+                </b>
+              ),
+              expression: (
+                <b>{intl.formatMessage(translations.expressionHeader)}</b>
+              ),
+              expected: (
+                <b>{intl.formatMessage(translations.expectedHeader)}</b>
+              ),
+              expect_star: <code>EXPECT_*</code>,
+              googletest: (
+                <a href="https://github.com/google/googletest">
+                  {intl.formatMessage(
+                    translations.testCaseDescriptionGoogleTest,
+                  )}
+                </a>
+              ),
+              tostring: (
+                <code>
+                  <a href="http://en.cppreference.com/w/cpp/string/basic_string/to_string">
+                    std::to_string
+                  </a>
+                </code>
+              ),
+            }}
+          />
+        </div>
+        {errorTextElement}
+        {this.renderTestCases(
+          intl.formatMessage(translations.publicTestCases),
+          testCases,
+          'public',
+        )}
+        {this.renderTestCases(
+          intl.formatMessage(translations.privateTestCases),
+          testCases,
+          'private',
+        )}
+        {this.renderTestCases(
+          intl.formatMessage(translations.evaluationTestCases),
+          testCases,
+          'evaluation',
+        )}
+      </>
+    );
+  }
+
+  renderEditorCard(header, subtitle, field) {
+    const value = this.props.data.get(field) || '';
+    return (
+      <EditorCard
+        {...{
+          updateCodeBlock: this.props.actions.updateCodeBlock,
+          mode: 'c_cpp',
+          field,
+          value,
+          header,
+          subtitle,
+          isLoading: this.props.isLoading,
+        }}
+      />
+    );
   }
 
   renderExistingPackageFiles(fileType, header) {
@@ -237,129 +360,6 @@ class OnlineEditorCppView extends React.Component {
           </Table>
         </CardText>
       </Card>
-    );
-  }
-
-  renderEditorCard(header, subtitle, field) {
-    const value = this.props.data.get(field) || '';
-    return (
-      <EditorCard
-        {...{
-          updateCodeBlock: this.props.actions.updateCodeBlock,
-          mode: 'c_cpp',
-          field,
-          value,
-          header,
-          subtitle,
-          isLoading: this.props.isLoading,
-        }}
-      />
-    );
-  }
-
-  renderAutogradedFields() {
-    const { intl, data } = this.props;
-    const testCases = data.get('test_cases');
-    const testCaseError = data.getIn(['test_cases', 'error']);
-    const errorTextElement = testCaseError && (
-      <div
-        style={{
-          fontSize: 12,
-          lineHeight: '12px',
-          color: this.context.muiTheme.textField.errorColor,
-          transition: transitions.easeOut(),
-          marginBottom: '1em',
-        }}
-      >
-        {testCaseError}
-      </div>
-    );
-
-    return (
-      <>
-        <div style={{ marginBottom: '1em' }}>
-          {this.renderEditorCard(
-            intl.formatMessage(translations.solutionTitle),
-            intl.formatMessage(translations.solutionSubtitle),
-            'solution',
-          )}
-          {this.renderEditorCard(
-            intl.formatMessage(translations.prependTitle),
-            intl.formatMessage(translations.prependSubtitle),
-            'prepend',
-          )}
-          {this.renderEditorCard(
-            intl.formatMessage(translations.appendTitle),
-            intl.formatMessage(cppTranslations.appendSubtitle),
-            'append',
-          )}
-        </div>
-        <h3>{intl.formatMessage(translations.dataFilesHeader)}</h3>
-        {this.renderExistingPackageFiles(
-          'data_files',
-          this.props.intl.formatMessage(translations.currentDataFilesHeader),
-        )}
-        {this.renderNewPackageFiles(
-          'data_files',
-          this.props.intl.formatMessage(translations.newDataFilesHeader),
-          intl.formatMessage(translations.addDataFileButton),
-        )}
-        <h3>{intl.formatMessage(translations.testCasesHeader)}</h3>
-        <div style={{ marginBottom: '0.5em' }}>
-          <FormattedMessage
-            id="course.assessment.question.programming.onlineEditorCppView.testCasesDescription"
-            defaultMessage={
-              '{note}: The expression in the {expression} column will be compared with the ' +
-              'expression in the {expected} column using {expect_star} assertions from the ' +
-              '{googletest}. Floating point numbers are formatted with {tostring}.'
-            }
-            values={{
-              note: (
-                <b>
-                  {intl.formatMessage(translations.testCaseDescriptionNote)}
-                </b>
-              ),
-              expression: (
-                <b>{intl.formatMessage(translations.expressionHeader)}</b>
-              ),
-              expected: (
-                <b>{intl.formatMessage(translations.expectedHeader)}</b>
-              ),
-              expect_star: <code>EXPECT_*</code>,
-              googletest: (
-                <a href="https://github.com/google/googletest">
-                  {intl.formatMessage(
-                    translations.testCaseDescriptionGoogleTest,
-                  )}
-                </a>
-              ),
-              tostring: (
-                <code>
-                  <a href="http://en.cppreference.com/w/cpp/string/basic_string/to_string">
-                    std::to_string
-                  </a>
-                </code>
-              ),
-            }}
-          />
-        </div>
-        {errorTextElement}
-        {this.renderTestCases(
-          intl.formatMessage(translations.publicTestCases),
-          testCases,
-          'public',
-        )}
-        {this.renderTestCases(
-          intl.formatMessage(translations.privateTestCases),
-          testCases,
-          'private',
-        )}
-        {this.renderTestCases(
-          intl.formatMessage(translations.evaluationTestCases),
-          testCases,
-          'evaluation',
-        )}
-      </>
     );
   }
 

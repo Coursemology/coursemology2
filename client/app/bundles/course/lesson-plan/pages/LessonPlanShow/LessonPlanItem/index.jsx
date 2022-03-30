@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { CardText } from 'material-ui/Card';
 import Divider from 'material-ui/Divider';

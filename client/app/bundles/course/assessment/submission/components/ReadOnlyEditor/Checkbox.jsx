@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 
 export default class Checkbox extends Component {
@@ -22,7 +22,7 @@ export default class Checkbox extends Component {
 }
 
 Checkbox.propTypes = {
-  style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  style: PropTypes.object,
   checked: PropTypes.bool.isRequired,
   disabled: PropTypes.bool.isRequired,
   indeterminate: PropTypes.bool,

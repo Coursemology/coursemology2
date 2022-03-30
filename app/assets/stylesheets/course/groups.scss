@@ -1,0 +1,28 @@
+.group-user-manager label {
+  font-weight: normal;
+
+  &.has-dropdown {
+    padding-bottom: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  .group-user-manager-list-item-dropdown {
+    font-size: 13px !important;
+    height: 36px !important;
+    margin-bottom: 0;
+    margin-top: -0.5rem;
+    min-width: 132px;
+    padding-bottom: 4px;
+
+    > div {
+      > button {
+        top: -6px !important;
+      }
+
+      > div:nth-child(2) {
+        height: 36px !important;
+        line-height: 40px !important;
+      }
+    }
+  }
+}

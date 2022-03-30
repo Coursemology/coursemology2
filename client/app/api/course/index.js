@@ -12,6 +12,7 @@ import AdminAPI from './Admin';
 import LevelAPI from './Level';
 import UserNotificationsAPI from './UserNotifications';
 import UserEmailSubscriptionsAPI from './UserEmailSubscriptions';
+import GroupsAPI from './Groups';
 
 const CourseAPI = {
   achievements: new AchievementsAPI(),
@@ -28,6 +29,7 @@ const CourseAPI = {
   level: new LevelAPI(),
   userNotifications: new UserNotificationsAPI(),
   userEmailSubscriptions: new UserEmailSubscriptionsAPI(),
+  groups: new GroupsAPI(),
 };
 
 Object.freeze(CourseAPI);

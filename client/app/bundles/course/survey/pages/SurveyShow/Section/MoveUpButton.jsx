@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -20,7 +20,7 @@ const translations = defineMessages({
   },
 });
 
-class MoveUpButton extends React.Component {
+class MoveUpButton extends Component {
   moveSectionUp = () => {
     const { dispatch, sectionIndex } = this.props;
     const successMessage = <FormattedMessage {...translations.success} />;

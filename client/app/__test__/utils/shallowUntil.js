@@ -38,7 +38,9 @@ function until(selector, options) {
  */
 export default function shallowUntil(component, options, selector) {
   if (selector === undefined) {
+    // eslint-disable-next-line no-param-reassign
     selector = options;
+    // eslint-disable-next-line no-param-reassign
     options = undefined;
   }
   return until.call(shallow(component, options), selector, options);

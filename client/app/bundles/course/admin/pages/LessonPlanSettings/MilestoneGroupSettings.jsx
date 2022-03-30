@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -37,7 +37,7 @@ const translations = defineMessages({
   },
 });
 
-class MilestoneGroupSettings extends React.Component {
+class MilestoneGroupSettings extends Component {
   handleUpdate = (_, milestonesExpanded) => {
     const { dispatch } = this.props;
     const payload = {

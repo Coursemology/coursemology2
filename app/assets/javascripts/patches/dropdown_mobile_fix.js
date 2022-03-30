@@ -11,7 +11,7 @@
     });
   }
 
-  $(document).ready(function () {
+  $(function () {
     initializeDropdownEventListener();
   });
 })(jQuery);

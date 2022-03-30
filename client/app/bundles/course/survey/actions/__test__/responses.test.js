@@ -9,7 +9,7 @@ const mock = new MockAdapter(client);
 
 beforeEach(() => {
   mock.reset();
-  history.push = jest.fn();
+  jest.spyOn(history, 'push').mockImplementation();
 });
 
 const surveyId = '2';

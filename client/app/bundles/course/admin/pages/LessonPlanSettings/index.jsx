@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
@@ -18,7 +18,7 @@ import { updateLessonPlanSettings } from 'course/admin/actions/lesson-plan-items
 import translations from './translations.intl';
 import MilestoneGroupSettings from './MilestoneGroupSettings';
 
-class LessonPlanSettings extends React.Component {
+class LessonPlanSettings extends Component {
   // Ensure both enabled and visible values are sent in the payload.
   // Send the current value for visible when changing enabled.
   handleLessonPlanItemEnabledUpdate = (setting) => {

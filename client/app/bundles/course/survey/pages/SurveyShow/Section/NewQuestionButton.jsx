@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
@@ -34,7 +34,7 @@ const translations = defineMessages({
   },
 });
 
-class NewQuestionButton extends React.Component {
+class NewQuestionButton extends Component {
   createQuestionHandler = (data) => {
     const { dispatch } = this.props;
 

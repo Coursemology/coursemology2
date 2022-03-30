@@ -1,5 +1,5 @@
 /* eslint-disable react/no-array-index-key */
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import FlatButton from 'material-ui/FlatButton';
@@ -34,7 +34,7 @@ const optionsTranslations = defineMessages({
   },
 });
 
-class QuestionFormOptions extends React.Component {
+class QuestionFormOptions extends Component {
   handleSelectFiles = (event) => {
     const { fields } = this.props;
     const options = fields.getAll();

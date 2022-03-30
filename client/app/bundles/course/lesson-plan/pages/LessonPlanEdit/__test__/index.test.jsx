@@ -1,4 +1,3 @@
-import React from 'react';
 import { mount } from 'enzyme';
 import storeCreator from 'course/lesson-plan/store';
 import LessonPlanEdit from '../index';
@@ -37,7 +36,7 @@ describe('<LessonPlanEdit />', () => {
       buildContextOptions(store),
     );
 
-    expect(lessonPlanEdit.find('ItemRow').length).toBe(1);
-    expect(lessonPlanEdit.find('MilestoneRow').length).toBe(1);
+    expect(lessonPlanEdit.find('ItemRow')).toHaveLength(1);
+    expect(lessonPlanEdit.find('MilestoneRow')).toHaveLength(1);
   });
 });

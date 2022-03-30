@@ -18,7 +18,7 @@ RSpec.feature 'Course: Student Statistics' do
       let(:teaching_assistant) { create(:course_teaching_assistant, course: course) }
       let(:user) { teaching_assistant.user }
       let(:group) { create(:course_group, course: course) }
-      let(:other_group) { create(:course_group, :without_users, course: course) }
+      let(:other_group) { create(:course_group, course: course) }
       let(:group_manager) do
         create(:course_group_manager, group: group, course_user: teaching_assistant)
       end

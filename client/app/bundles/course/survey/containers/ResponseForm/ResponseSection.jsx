@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FieldArray } from 'redux-form';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -26,7 +26,7 @@ const translations = defineMessages({
   },
 });
 
-class ResponseSection extends React.Component {
+class ResponseSection extends Component {
   static renderQuestions(props) {
     const { fields, disabled } = props;
 

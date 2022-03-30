@@ -54,7 +54,7 @@ RSpec.feature 'Course: Assessments' do
         condition_delete_path =
           course_assessment_condition_assessment_path(course, assessment, assessment_condition)
         expect do
-          find_link(nil, href: condition_delete_path).click
+          find_button(condition_delete_path).click
           accept_confirm_dialog
           expect(page).to have_selector('div.alert-success')
         end.to change { assessment.conditions.count }.by(-1)

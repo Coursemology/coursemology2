@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import { reduxForm, Field, Form } from 'redux-form';
@@ -31,29 +30,27 @@ const validate = (values) => {
   return errors;
 };
 
-class NewCourseForm extends React.Component {
-  render() {
-    const { handleSubmit, intl, onSubmit, disabled } = this.props;
+const NewCourseForm = (props) => {
+  const { handleSubmit, intl, onSubmit, disabled } = props;
 
-    return (
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <Field
-          fullWidth
-          name="new_title"
-          floatingLabelText={intl.formatMessage(translations.newTitle)}
-          component={TextField}
-          {...{ disabled }}
-        />
-        <Field
-          name="new_start_at"
-          floatingLabelText={intl.formatMessage(translations.newStartAt)}
-          component={DateTimePicker}
-          {...{ disabled }}
-        />
-      </Form>
-    );
-  }
-}
+  return (
+    <Form onSubmit={handleSubmit(onSubmit)}>
+      <Field
+        fullWidth
+        name="new_title"
+        floatingLabelText={intl.formatMessage(translations.newTitle)}
+        component={TextField}
+        {...{ disabled }}
+      />
+      <Field
+        name="new_start_at"
+        floatingLabelText={intl.formatMessage(translations.newStartAt)}
+        component={DateTimePicker}
+        {...{ disabled }}
+      />
+    </Form>
+  );
+};
 
 NewCourseForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,

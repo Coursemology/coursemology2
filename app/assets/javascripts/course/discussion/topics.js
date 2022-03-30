@@ -29,7 +29,7 @@
     // TODO: Display error messages.
   }
 
-  $(document).ready(function () {
+  $(function () {
     showCommentBoxes();
     DISCUSSION_POST_HELPERS.initializeToolbar(document, DOCUMENT_SELECTOR);
   });

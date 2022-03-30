@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
@@ -31,7 +31,7 @@ const styles = {
   },
 };
 
-class UserEmailSubscriptions extends React.Component {
+class UserEmailSubscriptions extends Component {
   handleFetchAllUserEmailSubscriptions = () => {
     const { dispatch } = this.props;
     dispatch(fetchUserEmailSubscriptions());
@@ -90,6 +90,42 @@ class UserEmailSubscriptions extends React.Component {
     }
   }
 
+  renderEmailSettingsTable() {
+    const { userEmailSubscriptions } = this.props;
+
+    if (userEmailSubscriptions.length === 0) {
+      return (
+        <Subheader>
+          <FormattedMessage {...translations.noEmailSubscriptionSettings} />
+        </Subheader>
+      );
+    }
+
+    return (
+      <Table>
+        <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+          <TableRow>
+            <TableHeaderColumn colSpan={2}>
+              <FormattedMessage {...translations.component} />
+            </TableHeaderColumn>
+            <TableHeaderColumn colSpan={3}>
+              <FormattedMessage {...translations.setting} />
+            </TableHeaderColumn>
+            <TableHeaderColumn colSpan={7}>
+              <FormattedMessage {...translations.description} />
+            </TableHeaderColumn>
+            <TableHeaderColumn>
+              <FormattedMessage {...translations.enabled} />
+            </TableHeaderColumn>
+          </TableRow>
+        </TableHeader>
+        <TableBody displayRowCheckbox={false}>
+          {userEmailSubscriptions.map((item) => this.renderRow(item))}
+        </TableBody>
+      </Table>
+    );
+  }
+
   renderRow(setting) {
     const componentTitle =
       setting.component_title ??
@@ -132,42 +168,6 @@ class UserEmailSubscriptions extends React.Component {
           />
         </TableRowColumn>
       </TableRow>
-    );
-  }
-
-  renderEmailSettingsTable() {
-    const { userEmailSubscriptions } = this.props;
-
-    if (userEmailSubscriptions.length === 0) {
-      return (
-        <Subheader>
-          <FormattedMessage {...translations.noEmailSubscriptionSettings} />
-        </Subheader>
-      );
-    }
-
-    return (
-      <Table>
-        <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
-          <TableRow>
-            <TableHeaderColumn colSpan={2}>
-              <FormattedMessage {...translations.component} />
-            </TableHeaderColumn>
-            <TableHeaderColumn colSpan={3}>
-              <FormattedMessage {...translations.setting} />
-            </TableHeaderColumn>
-            <TableHeaderColumn colSpan={7}>
-              <FormattedMessage {...translations.description} />
-            </TableHeaderColumn>
-            <TableHeaderColumn>
-              <FormattedMessage {...translations.enabled} />
-            </TableHeaderColumn>
-          </TableRow>
-        </TableHeader>
-        <TableBody displayRowCheckbox={false}>
-          {userEmailSubscriptions.map((item) => this.renderRow(item))}
-        </TableBody>
-      </Table>
     );
   }
 

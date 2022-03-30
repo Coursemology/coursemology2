@@ -1,4 +1,3 @@
-import React from 'react';
 import { grey600 } from 'material-ui/styles/colors';
 import PropTypes from 'prop-types';
 
@@ -18,16 +17,14 @@ const styles = {
   },
 };
 
-export default class CardTitle extends React.Component {
-  render() {
-    return (
-      <div style={styles.cardTitle}>
-        <div style={styles.typeLabel}>{this.props.type}</div>
-        <div>{this.props.title}</div>
-      </div>
-    );
-  }
-}
+const CardTitle = ({ type, title }) => (
+  <div style={styles.cardTitle}>
+    <div style={styles.typeLabel}>{type}</div>
+    <div>{title}</div>
+  </div>
+);
+
+export default CardTitle;
 
 CardTitle.propTypes = {
   title: PropTypes.string.isRequired,

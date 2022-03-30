@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -20,7 +20,7 @@ const translations = defineMessages({
   },
 });
 
-class MaterialsSelector extends React.Component {
+class MaterialsSelector extends Component {
   folderSetAll = (folder) => (value) => {
     this.props.dispatch(setItemSelectedBoolean(FOLDER, folder.id, value));
     folder.subfolders.forEach((subfolder) =>
@@ -30,27 +30,6 @@ class MaterialsSelector extends React.Component {
       this.props.dispatch(setItemSelectedBoolean(MATERIAL, material.id, value));
     });
   };
-
-  renderMaterial(material, indentLevel) {
-    const { dispatch, selectedItems } = this.props;
-    const checked = !!selectedItems[MATERIAL][material.id];
-
-    return (
-      <IndentedCheckbox
-        key={material.id}
-        label={
-          <span>
-            <TypeBadge itemType={MATERIAL} />
-            {material.name}
-          </span>
-        }
-        onCheck={(e, value) =>
-          dispatch(setItemSelectedBoolean(MATERIAL, material.id, value))
-        }
-        {...{ checked, indentLevel }}
-      />
-    );
-  }
 
   renderFolder(folder, indentLevel) {
     const { dispatch, selectedItems } = this.props;
@@ -83,6 +62,27 @@ class MaterialsSelector extends React.Component {
           this.renderFolder(subfolder, indentLevel + 1),
         )}
       </div>
+    );
+  }
+
+  renderMaterial(material, indentLevel) {
+    const { dispatch, selectedItems } = this.props;
+    const checked = !!selectedItems[MATERIAL][material.id];
+
+    return (
+      <IndentedCheckbox
+        key={material.id}
+        label={
+          <span>
+            <TypeBadge itemType={MATERIAL} />
+            {material.name}
+          </span>
+        }
+        onCheck={(e, value) =>
+          dispatch(setItemSelectedBoolean(MATERIAL, material.id, value))
+        }
+        {...{ checked, indentLevel }}
+      />
     );
   }
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -24,7 +24,7 @@ const translations = defineMessages({
   },
 });
 
-class AssessmentsListing extends React.Component {
+class AssessmentsListing extends Component {
   static renderAssessmentRow(assessment) {
     return (
       <IndentedCheckbox
@@ -38,6 +38,53 @@ class AssessmentsListing extends React.Component {
             {assessment.title}
           </span>
         }
+      />
+    );
+  }
+
+  static renderCategoryCard(category, orphanTabs, orphanAssessments) {
+    const hasOrphanAssessments =
+      orphanAssessments && orphanAssessments.length > 0;
+    const hasOrphanTabs = orphanTabs && orphanTabs.length > 0;
+    const categoryRow = category
+      ? AssessmentsListing.renderCategoryRow(category)
+      : AssessmentsListing.renderDefaultCategoryRow();
+    const tabsTrees = (tabs) =>
+      tabs &&
+      tabs.map((tab) => AssessmentsListing.renderTabTree(tab, tab.assessments));
+
+    return (
+      <Card key={category ? category.id : 'default'}>
+        <CardText>
+          {categoryRow}
+          {hasOrphanAssessments &&
+            AssessmentsListing.renderTabTree(null, orphanAssessments)}
+          {hasOrphanTabs && tabsTrees(orphanTabs)}
+          {category && tabsTrees(category.tabs)}
+        </CardText>
+      </Card>
+    );
+  }
+
+  static renderCategoryRow(category) {
+    return (
+      <IndentedCheckbox
+        checked
+        label={
+          <span>
+            <TypeBadge itemType={CATEGORY} />
+            {category.title}
+          </span>
+        }
+      />
+    );
+  }
+
+  static renderDefaultCategoryRow() {
+    return (
+      <IndentedCheckbox
+        disabled
+        label={<FormattedMessage {...translations.defaultCategory} />}
       />
     );
   }
@@ -77,53 +124,6 @@ class AssessmentsListing extends React.Component {
           children.length > 0 &&
           children.map(AssessmentsListing.renderAssessmentRow)}
       </div>
-    );
-  }
-
-  static renderDefaultCategoryRow() {
-    return (
-      <IndentedCheckbox
-        disabled
-        label={<FormattedMessage {...translations.defaultCategory} />}
-      />
-    );
-  }
-
-  static renderCategoryRow(category) {
-    return (
-      <IndentedCheckbox
-        checked
-        label={
-          <span>
-            <TypeBadge itemType={CATEGORY} />
-            {category.title}
-          </span>
-        }
-      />
-    );
-  }
-
-  static renderCategoryCard(category, orphanTabs, orphanAssessments) {
-    const hasOrphanAssessments =
-      orphanAssessments && orphanAssessments.length > 0;
-    const hasOrphanTabs = orphanTabs && orphanTabs.length > 0;
-    const categoryRow = category
-      ? AssessmentsListing.renderCategoryRow(category)
-      : AssessmentsListing.renderDefaultCategoryRow();
-    const tabsTrees = (tabs) =>
-      tabs &&
-      tabs.map((tab) => AssessmentsListing.renderTabTree(tab, tab.assessments));
-
-    return (
-      <Card key={category ? category.id : 'default'}>
-        <CardText>
-          {categoryRow}
-          {hasOrphanAssessments &&
-            AssessmentsListing.renderTabTree(null, orphanAssessments)}
-          {hasOrphanTabs && tabsTrees(orphanTabs)}
-          {category && tabsTrees(category.tabs)}
-        </CardText>
-      </Card>
     );
   }
 

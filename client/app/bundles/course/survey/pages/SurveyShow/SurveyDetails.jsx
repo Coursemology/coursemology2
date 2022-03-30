@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
@@ -25,7 +25,7 @@ const styles = {
   },
 };
 
-class SurveyDetails extends React.Component {
+class SurveyDetails extends Component {
   handlePublishToggle = (event, value) => {
     const { dispatch, survey } = this.props;
     dispatch(

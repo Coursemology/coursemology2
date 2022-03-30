@@ -31,6 +31,12 @@ textarea.code {
 .note-editor {
   @extend .note-editor, .note-frame;
   @extend .panel;
+
+  .note-popover .popover-content {
+    line-height: 2.5;
+    padding: 5px;
+    padding-right: 0;
+  }
 }
 
 table.codehilite {
@@ -75,4 +81,21 @@ table.codehilite {
 
 .attachment-uploader {
   margin-bottom: 1em;
+}
+
+// Summernote defaults
+$summernote-border-color: #e4e4e4;
+$summernote-font-color: #000000;
+
+.note-editor,
+.note-editor.note-airframe {
+  border: 1px solid $summernote-border-color;
+  overflow: visible;
+}
+
+.note-editor.note-airframe .note-editing-area .note-editable,
+.note-editor.note-frame .note-editing-area .note-editable,
+.note-editor .note-editing-area .note-editable {
+  color: $summernote-font-color;
+  padding: 10px;
 }

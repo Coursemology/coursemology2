@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardText } from 'material-ui/Card';
 import { FormattedMessage } from 'react-intl';
@@ -17,16 +17,7 @@ const styles = {
   },
 };
 
-class ResultsQuestion extends React.Component {
-  renderTextResults() {
-    const {
-      includePhantoms,
-      question: { answers },
-      anonymous,
-    } = this.props;
-    return <TextResponseResults {...{ includePhantoms, answers, anonymous }} />;
-  }
-
+class ResultsQuestion extends Component {
   renderOptionsResults() {
     const {
       question: { options, answers, question_type: questionType },
@@ -53,6 +44,15 @@ class ResultsQuestion extends React.Component {
       return null;
     }
     return renderer.call(this);
+  }
+
+  renderTextResults() {
+    const {
+      includePhantoms,
+      question: { answers },
+      anonymous,
+    } = this.props;
+    return <TextResponseResults {...{ includePhantoms, answers, anonymous }} />;
   }
 
   render() {

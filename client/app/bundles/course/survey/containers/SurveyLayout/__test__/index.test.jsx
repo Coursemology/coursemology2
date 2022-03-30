@@ -1,4 +1,3 @@
-import React from 'react';
 import { mount } from 'enzyme';
 import { Router } from 'react-router-dom';
 import history from 'lib/history';

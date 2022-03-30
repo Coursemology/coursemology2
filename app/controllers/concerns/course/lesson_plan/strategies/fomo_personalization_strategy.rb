@@ -13,7 +13,9 @@ class Course::LessonPlan::Strategies::FomoPersonalizationStrategy <
   #
   # @param [CourseUser] course_user The user to adjust the personalized timeline for.
   # @param [Hash] precomputed_data The default data precomputed by precompute_data.
-  def execute(course_user, precomputed_data) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  # @param [Set<Number>|nil] items_to_shift Set of item ids to shift. If provided, only items with ids in this set will
+  #   be shifted.
+  def execute(course_user, precomputed_data, items_to_shift = nil) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     return if precomputed_data[:learning_rate_ema].nil?
 
     @course_tz = course_user.course.time_zone
@@ -22,7 +24,7 @@ class Course::LessonPlan::Strategies::FomoPersonalizationStrategy <
       precomputed_data[:items].each do |item|
         reference_point, personal_point = update_points(course_user, item, precomputed_data[:submitted_items],
                                                         reference_point, personal_point)
-        next if cannot_shift_item(course_user, item, precomputed_data[:submitted_items])
+        next if cannot_shift_item(course_user, item, precomputed_data[:submitted_items], items_to_shift)
 
         reference_time = item.reference_time_for(course_user)
         personal_time = item.find_or_create_personal_time_for(course_user)
@@ -43,7 +45,7 @@ class Course::LessonPlan::Strategies::FomoPersonalizationStrategy <
   # If the item should act, returns an array [new_reference_point, new_personal_point] computed with that item.
   # If the item should not act, then the original reference_point and personal_point will be returned.
   #
-  # @param [CourseUser] course_user The user to update points for for.
+  # @param [CourseUser] course_user The user to update points for.
   # @param [Course::LessonPlan::Item] item The item to reference for the update of points.
   # @param [Hash{Integer=>ActiveSupport::TimeWithZone|nil}] submitted_items A hash of submitted lesson plan items' ID to
   #   their submitted time, if relevant/available.
@@ -64,14 +66,18 @@ class Course::LessonPlan::Strategies::FomoPersonalizationStrategy <
   # - Item is not submitted
   # - Item's personal time isn't fixed
   # - Item isn't currently open with an adjusted end_at from stragglers algorithm
+  # - Item ID is in the set of items to shift, if provided
   #
   # @param [CourseUser] course_user The user whose item we are checking.
   # @param [Course::LessonPlan::Item] item The item that we are checking.
   # @param [Hash{Integer=>ActiveSupport::TimeWithZone|nil}] submitted_items A hash of submitted lesson plan items' ID
   #   to their submitted time, if relevant/available.
+  # @param [Set<Number>|nil] items_to_shift Set of item ids to shift. If provided, only items with ids in this set will
+  #   be shifted.
   # @return [Boolean] Whether the item cannot be shifted.
-  def cannot_shift_item(course_user, item, submitted_items)
-    !item.has_personal_times? || item.id.in?(submitted_items.keys) || item.personal_time_for(course_user)&.fixed?
+  def cannot_shift_item(course_user, item, submitted_items, items_to_shift)
+    !item.has_personal_times? || item.id.in?(submitted_items.keys) || item.personal_time_for(course_user)&.fixed? ||
+      (!items_to_shift.nil? && !items_to_shift.include?(item.id))
   end
 
   # Checks if the item is already open with a deadline shifted back by stragglers algorithm.

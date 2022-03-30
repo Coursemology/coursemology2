@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
@@ -16,29 +16,7 @@ const styles = {
   },
 };
 
-class LessonPlanEdit extends React.Component {
-  renderHeader() {
-    const { columnsVisible } = this.props;
-
-    const headerFor = (field) => (
-      <th>
-        <FormattedMessage {...translations[field]} />
-      </th>
-    );
-    return (
-      <thead>
-        <tr>
-          {columnsVisible[ITEM_TYPE] ? headerFor(ITEM_TYPE) : null}
-          {headerFor(TITLE)}
-          {columnsVisible[START_AT] ? headerFor(START_AT) : null}
-          {columnsVisible[BONUS_END_AT] ? headerFor(BONUS_END_AT) : null}
-          {columnsVisible[END_AT] ? headerFor(END_AT) : null}
-          {columnsVisible[PUBLISHED] ? headerFor(PUBLISHED) : null}
-        </tr>
-      </thead>
-    );
-  }
-
+class LessonPlanEdit extends Component {
   renderGroup = (group) => {
     const { id, milestone, items } = group;
 
@@ -72,6 +50,28 @@ class LessonPlanEdit extends React.Component {
 
     return rows;
   };
+
+  renderHeader() {
+    const { columnsVisible } = this.props;
+
+    const headerFor = (field) => (
+      <th>
+        <FormattedMessage {...translations[field]} />
+      </th>
+    );
+    return (
+      <thead>
+        <tr>
+          {columnsVisible[ITEM_TYPE] ? headerFor(ITEM_TYPE) : null}
+          {headerFor(TITLE)}
+          {columnsVisible[START_AT] ? headerFor(START_AT) : null}
+          {columnsVisible[BONUS_END_AT] ? headerFor(BONUS_END_AT) : null}
+          {columnsVisible[END_AT] ? headerFor(END_AT) : null}
+          {columnsVisible[PUBLISHED] ? headerFor(PUBLISHED) : null}
+        </tr>
+      </thead>
+    );
+  }
 
   render() {
     const { groups } = this.props;

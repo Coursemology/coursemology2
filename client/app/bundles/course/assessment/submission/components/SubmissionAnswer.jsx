@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
   injectIntl,
@@ -103,28 +103,6 @@ class SubmissionAnswer extends Component {
     }
   }
 
-  renderMissingRenderer() {
-    const { intl } = this.props;
-    return (
-      <Card style={{ backgroundColor: yellow100 }}>
-        <CardText>
-          <span>{intl.formatMessage(translations.rendererNotImplemented)}</span>
-        </CardText>
-      </Card>
-    );
-  }
-
-  renderMissingAnswerPanel() {
-    const { intl } = this.props;
-    return (
-      <Card id="missing-answer" style={{ backgroundColor: yellow100 }}>
-        <CardText>
-          <span>{intl.formatMessage(translations.missingAnswer)}</span>
-        </CardText>
-      </Card>
-    );
-  }
-
   renderHistoryToggle(question) {
     const {
       handleToggleViewHistoryMode,
@@ -176,6 +154,28 @@ class SubmissionAnswer extends Component {
       );
     }
     return null;
+  }
+
+  renderMissingAnswerPanel() {
+    const { intl } = this.props;
+    return (
+      <Card id="missing-answer" style={{ backgroundColor: yellow100 }}>
+        <CardText>
+          <span>{intl.formatMessage(translations.missingAnswer)}</span>
+        </CardText>
+      </Card>
+    );
+  }
+
+  renderMissingRenderer() {
+    const { intl } = this.props;
+    return (
+      <Card style={{ backgroundColor: yellow100 }}>
+        <CardText>
+          <span>{intl.formatMessage(translations.rendererNotImplemented)}</span>
+        </CardText>
+      </Card>
+    );
   }
 
   render() {

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 
 import ProgrammingImportEditor from '../../containers/ProgrammingImportEditor';
 import ReadOnlyEditor from '../../containers/ReadOnlyEditor';

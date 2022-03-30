@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
@@ -32,7 +32,23 @@ const styles = {
   },
 };
 
-class LevelRow extends React.Component {
+class LevelRow extends Component {
+  renderDeleteButton() {
+    const { deleteLevel, disabled, levelNumber } = this.props;
+
+    return (
+      <RaisedButton
+        id={`delete_${levelNumber}`}
+        name={`delete_${levelNumber}`}
+        backgroundColor={grey300}
+        icon={<DeleteIcon />}
+        onClick={deleteLevel(levelNumber)}
+        disabled={disabled}
+        style={{ minWidth: '40px', width: '40px' }}
+      />
+    );
+  }
+
   renderInput() {
     const {
       disabled,
@@ -60,22 +76,6 @@ class LevelRow extends React.Component {
           sortLevels();
         }}
         value={experiencePointsThreshold}
-      />
-    );
-  }
-
-  renderDeleteButton() {
-    const { deleteLevel, disabled, levelNumber } = this.props;
-
-    return (
-      <RaisedButton
-        id={`delete_${levelNumber}`}
-        name={`delete_${levelNumber}`}
-        backgroundColor={grey300}
-        icon={<DeleteIcon />}
-        onClick={deleteLevel(levelNumber)}
-        disabled={disabled}
-        style={{ minWidth: '40px', width: '40px' }}
       />
     );
   }

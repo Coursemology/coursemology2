@@ -1,6 +1,6 @@
 require('jquery-ui/ui/widgets/sortable');
 
-$(document).ready(() => {
+$(() => {
   // When items are removed, there might be gaps in the weights.
   function updateWeights() {
     $('.weight input').val((index) => index + 1);

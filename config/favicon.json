@@ -17,9 +17,7 @@
         "declare_only_default_icon": true
       }
     },
-    "desktop_browser": [
-
-    ],
+    "desktop_browser": [],
     "windows": {
       "picture_aspect": "no_change",
       "background_color": "#ffc40d",

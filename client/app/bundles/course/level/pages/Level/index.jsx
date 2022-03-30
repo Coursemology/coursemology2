@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -90,7 +90,7 @@ const styles = {
   },
 };
 
-class Level extends React.Component {
+class Level extends Component {
   static renderTableHeader() {
     return (
       <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
@@ -107,43 +107,25 @@ class Level extends React.Component {
     );
   }
 
-  constructor(props) {
-    super(props);
-
-    this.handleUpdateExpThreshold = this.handleUpdateExpThreshold.bind(this);
-    this.handleLevelTextBlur = this.handleLevelTextBlur.bind(this);
-    this.handleCreateLevel = this.handleCreateLevel.bind(this);
-    this.handleDeleteLevel = this.handleDeleteLevel.bind(this);
-    this.handleSaveLevels = this.handleSaveLevels.bind(this);
-  }
-
   componentDidMount() {
     this.props.dispatch(fetchLevels());
   }
 
-  handleUpdateExpThreshold(levelNumber, newValue) {
-    this.props.dispatch(updateExpThreshold(levelNumber, newValue));
-  }
+  handleCreateLevel = () => (e) => {
+    e.preventDefault();
+    this.props.dispatch(addLevel());
+  };
 
-  handleLevelTextBlur() {
+  handleDeleteLevel = (levelNumber) => (e) => {
+    e.preventDefault();
+    this.props.dispatch(deleteLevel(levelNumber));
+  };
+
+  handleLevelTextBlur = () => {
     this.props.dispatch(sortLevels());
-  }
+  };
 
-  handleCreateLevel() {
-    return (e) => {
-      e.preventDefault();
-      this.props.dispatch(addLevel());
-    };
-  }
-
-  handleDeleteLevel(levelNumber) {
-    return (e) => {
-      e.preventDefault();
-      this.props.dispatch(deleteLevel(levelNumber));
-    };
-  }
-
-  handleSaveLevels() {
+  handleSaveLevels = () => {
     const { dispatch, levels } = this.props;
     return (e) => {
       e.preventDefault();
@@ -157,12 +139,44 @@ class Level extends React.Component {
         dispatch(saveLevels(levels, successMessage, failureMessage));
       }
     };
-  }
+  };
+
+  handleUpdateExpThreshold = (levelNumber, newValue) => {
+    this.props.dispatch(updateExpThreshold(levelNumber, newValue));
+  };
 
   // Only the first element of the levels prop should be 0 as it is the default threshold.
   // User input should not contain any zeroes for threshold.
   levelsHaveError() {
     return this.props.levels.slice(1).some((element) => element === 0);
+  }
+
+  renderBody() {
+    const { canManage, levels, isSaving } = this.props;
+    const rows = levels.slice(1).map((experiencePointsThreshold, index) => {
+      const key = `level-row-${index}`;
+      return (
+        <LevelRow
+          deleteLevel={this.handleDeleteLevel}
+          disabled={isSaving}
+          levelNumber={index + 1}
+          sortLevels={this.handleLevelTextBlur}
+          updateExpThreshold={this.handleUpdateExpThreshold}
+          key={key}
+          {...{ canManage, experiencePointsThreshold }}
+        />
+      );
+    });
+
+    return (
+      <div style={styles.body}>
+        <Table className="table levels-list" fixedHeader={false}>
+          {Level.renderTableHeader()}
+          <TableBody>{rows}</TableBody>
+          {canManage && this.renderTableFooter()}
+        </Table>
+      </div>
+    );
   }
 
   renderTableFooter() {
@@ -199,34 +213,6 @@ class Level extends React.Component {
           <TableRowColumn />
         </TableRow>
       </TableFooter>
-    );
-  }
-
-  renderBody() {
-    const { canManage, levels, isSaving } = this.props;
-    const rows = levels.slice(1).map((experiencePointsThreshold, index) => {
-      const key = `level-row-${index}`;
-      return (
-        <LevelRow
-          deleteLevel={this.handleDeleteLevel}
-          disabled={isSaving}
-          levelNumber={index + 1}
-          sortLevels={this.handleLevelTextBlur}
-          updateExpThreshold={this.handleUpdateExpThreshold}
-          key={key}
-          {...{ canManage, experiencePointsThreshold }}
-        />
-      );
-    });
-
-    return (
-      <div style={styles.body}>
-        <Table className="table levels-list" fixedHeader={false}>
-          {Level.renderTableHeader()}
-          <TableBody>{rows}</TableBody>
-          {canManage && this.renderTableFooter()}
-        </Table>
-      </div>
     );
   }
 

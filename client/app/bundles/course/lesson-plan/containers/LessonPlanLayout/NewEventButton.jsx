@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
@@ -25,7 +25,7 @@ const translations = defineMessages({
   },
 });
 
-class NewEventButton extends React.Component {
+class NewEventButton extends Component {
   createEventHandler = (data) => {
     const { dispatch } = this.props;
     const successMessage = <FormattedMessage {...translations.success} />;

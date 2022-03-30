@@ -39,6 +39,9 @@ class JobsController < ApplicationController
   end
 
   def show_submitted_job
-    response.status = :accepted
+    respond_to do |format|
+      format.html { response.status = :accepted }
+      format.json { render json: { status: :accepted } }
+    end
   end
 end

@@ -346,7 +346,18 @@ Rails.application.routes.draw do
       get 'staff' => 'users#staff', as: :users_staff
       patch 'upgrade_to_staff' => 'users#upgrade_to_staff', as: :users_upgrade_to_staff
 
-      resources :groups
+      scope module: :group do
+        resources :group_categories, path: 'groups', except: [:new, :edit] do
+          member do
+            get 'info' => 'group_categories#show_info'
+            get 'users' => 'group_categories#show_users'
+            post 'groups' => 'group_categories#create_groups'
+            patch 'group_members' => 'group_categories#update_group_members'
+          end
+
+          resources :groups, only: [:update, :destroy]
+        end
+      end
 
       namespace :material, path: 'materials' do
         resources :folders, except: [:index, :new, :create] do
@@ -410,7 +421,12 @@ Rails.application.routes.draw do
         post 'mark_as_read', on: :member
       end
 
-      get 'learning_map' => 'learning_map#index'
+      resource :learning_map, only: [:index] do
+        get '/' => 'learning_map#index'
+        post 'add_parent_node' => 'learning_map#add_parent_node'
+        post 'remove_parent_node' => 'learning_map#remove_parent_node'
+        post 'toggle_satisfiability_type' => 'learning_map#toggle_satisfiability_type'
+      end
     end
   end
 

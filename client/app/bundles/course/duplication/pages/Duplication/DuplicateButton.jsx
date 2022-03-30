@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -27,34 +26,32 @@ const styles = {
   },
 };
 
-class DuplicateButton extends React.Component {
-  render() {
-    const { dispatch, isCourseSelected, isItemSelected, isChangingCourse } =
-      this.props;
+const DuplicateButton = (props) => {
+  const { dispatch, isCourseSelected, isItemSelected, isChangingCourse } =
+    props;
 
-    let label;
-    if (!isCourseSelected) {
-      label = 'selectCourse';
-    } else if (!isItemSelected) {
-      label = 'selectItem';
-    } else {
-      label = 'duplicateItems';
-    }
-
-    return (
-      <>
-        <RaisedButton
-          secondary
-          disabled={!isCourseSelected || !isItemSelected || isChangingCourse}
-          label={<FormattedMessage {...translations[label]} />}
-          onClick={() => dispatch(showDuplicateItemsConfirmation())}
-          style={styles.button}
-        />
-        <DuplicateItemsConfirmation />
-      </>
-    );
+  let label;
+  if (!isCourseSelected) {
+    label = 'selectCourse';
+  } else if (!isItemSelected) {
+    label = 'selectItem';
+  } else {
+    label = 'duplicateItems';
   }
-}
+
+  return (
+    <>
+      <RaisedButton
+        secondary
+        disabled={!isCourseSelected || !isItemSelected || isChangingCourse}
+        label={<FormattedMessage {...translations[label]} />}
+        onClick={() => dispatch(showDuplicateItemsConfirmation())}
+        style={styles.button}
+      />
+      <DuplicateItemsConfirmation />
+    </>
+  );
+};
 
 DuplicateButton.propTypes = {
   isChangingCourse: PropTypes.bool,

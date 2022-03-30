@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import { Field } from 'redux-form';
@@ -60,7 +60,7 @@ const styles = {
   },
 };
 
-class QuestionFormOption extends React.Component {
+class QuestionFormOption extends Component {
   renderImageField = (fieldProps) => {
     const { input, index, disabled } = fieldProps;
     const fieldId = `option-${index}-image-field`;

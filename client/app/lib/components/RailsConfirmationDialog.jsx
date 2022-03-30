@@ -1,22 +1,21 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 
-class RailsConfirmationDialog extends React.Component {
+class RailsConfirmationDialog extends Component {
   constructor(props) {
     super(props);
     this.state = { open: true, disableButtons: false };
-    this.onConfirm = this.onConfirm.bind(this);
     this.onConfirmSecondary = this.props.onConfirmSecondaryCallback
       ? this.onConfirmSecondary.bind(this)
       : null;
   }
 
   // Disable buttons once the confirm button is clicked, then do confirm callback.
-  onConfirm() {
+  onConfirm = () => {
     this.setState({ disableButtons: true });
     this.props.onConfirmCallback();
-  }
+  };
 
   // Disable buttons once the secondary confirm button is clicked, then do confirm callback.
   onConfirmSecondary() {

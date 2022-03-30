@@ -1,4 +1,3 @@
-import React from 'react';
 import { mount } from 'enzyme';
 import CourseAPI from 'api/course';
 import storeCreator from 'course/admin/store';
@@ -33,7 +32,7 @@ describe('<LessonPlanSettings />', () => {
 
     const toggles = lessonPlanSettings.find('Toggle');
     // Enabled? and Visible? toggles.
-    expect(toggles.length).toBe(2);
+    expect(toggles).toHaveLength(2);
 
     const toggle = toggles.first();
     toggle.props().onToggle(null, true);

@@ -67,9 +67,8 @@ RSpec.feature 'Course: Achievements' do
 
         # Delete achievement condition
         expect do
-          find_link(
-            nil, href: course_achievement_condition_achievement_path(course, achievement,
-                                                                     achievement_condition)
+          find_button(
+            course_achievement_condition_achievement_path(course, achievement, achievement_condition)
           ).click
           accept_confirm_dialog
         end.to change { achievement.conditions.count }.by(-1)
@@ -115,9 +114,8 @@ RSpec.feature 'Course: Achievements' do
 
         # Delete achievement condition
         expect do
-          find_link(
-            nil, href: course_achievement_condition_assessment_path(course, achievement,
-                                                                    assessment_condition)
+          find_button(
+            course_achievement_condition_assessment_path(course, achievement, assessment_condition)
           ).click
           accept_confirm_dialog
         end.to change { achievement.conditions.count }.by(-1)
@@ -155,8 +153,8 @@ RSpec.feature 'Course: Achievements' do
 
         # Delete level condition
         expect do
-          find_link(
-            nil, href: course_achievement_condition_level_path(course, achievement, level_condition)
+          find_button(
+            course_achievement_condition_level_path(course, achievement, level_condition)
           ).click
           accept_confirm_dialog
         end.to change { achievement.conditions.count }.by(-1)
@@ -201,9 +199,8 @@ RSpec.feature 'Course: Achievements' do
 
         # Delete survey condition
         expect do
-          find_link(
-            nil, href: course_achievement_condition_survey_path(course, achievement,
-                                                                survey_condition)
+          find_button(
+            course_achievement_condition_survey_path(course, achievement, survey_condition)
           ).click
           accept_confirm_dialog
         end.to change { achievement.conditions.count }.by(-1)

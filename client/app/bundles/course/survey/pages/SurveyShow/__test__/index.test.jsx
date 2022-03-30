@@ -1,11 +1,10 @@
-/* eslint-disable new-cap */
-import React from 'react';
 import { mount } from 'enzyme';
 import { connect } from 'react-redux';
-import CourseAPI from 'api/course';
+import { TestBackend } from 'react-dnd-test-backend';
+import { createDragDropManager } from 'dnd-core';
 import MockAdapter from 'axios-mock-adapter';
-import TestBackend from 'react-dnd-test-backend';
-import { DragDropContext } from 'react-dnd';
+
+import CourseAPI from 'api/course';
 import storeCreator from 'course/survey/store';
 import { ConnectedSurveyShow } from '../index';
 
@@ -66,18 +65,17 @@ const surveyData = {
 };
 
 /**
- * Wraps a component into a DragDropContext that uses the TestBackend.
+ * Injects TestBackend into a SurveyShow component.
  */
-function wrapInTestContext(DecoratedComponent) {
-  class TestContextContainer extends React.Component {
-    render() {
-      return <DecoratedComponent {...this.props} />;
-    }
-  }
-  const mapStateToProps = (state) => ({ survey: state.surveys[0] || {} });
-  return connect(mapStateToProps)(
-    DragDropContext(TestBackend)(TestContextContainer),
+function getSurveyShowWithTestBackend() {
+  const manager = createDragDropManager(TestBackend);
+
+  const SurveyShowWithTestBackend = (props) => (
+    <ConnectedSurveyShow manager={manager} {...props} />
   );
+
+  const mapStateToProps = (state) => ({ survey: state.surveys[0] || {} });
+  return [connect(mapStateToProps)(SurveyShowWithTestBackend), manager];
 }
 
 beforeEach(() => {
@@ -98,9 +96,9 @@ describe('<SurveyShow />', () => {
     // Mount showPage and wait for survey data to load
     window.history.pushState({}, '', surveyUrl);
     const store = storeCreator({ surveys: {} });
-    const WrappedSurveyShow = wrapInTestContext(ConnectedSurveyShow);
+    const [SurveyShowWithTestBackend, manager] = getSurveyShowWithTestBackend();
     const showPage = mount(
-      <WrappedSurveyShow
+      <SurveyShowWithTestBackend
         {...{ courseId, surveyId: surveyData.id.toString() }}
       />,
       buildContextOptions(store),
@@ -123,7 +121,9 @@ describe('<SurveyShow />', () => {
       .instance()
       .getDecoratedComponentInstance()
       .getDecoratedComponentInstance().DOMNode;
-    targetQuestionDOMNode.getBoundingClientRect = jest.fn();
+    jest
+      .spyOn(targetQuestionDOMNode, 'getBoundingClientRect')
+      .mockImplementation();
     targetQuestionDOMNode.getBoundingClientRect.mockReturnValue({
       bottom: 200,
       height: 100,
@@ -134,13 +134,7 @@ describe('<SurveyShow />', () => {
     });
 
     // Simulate dragging first question down past the mid-line of the second question
-    const dragDropContext = showPage
-      .find('DragDropContext(TestContextContainer)')
-      .first();
-    const dragDropBackend = dragDropContext
-      .instance()
-      .getManager()
-      .getBackend();
+    const dragDropBackend = manager.getBackend();
     const sourceQuestionHandlerId = sourceQuestion
       .instance()
       .getDecoratedComponentInstance()
@@ -173,7 +167,9 @@ describe('<SurveyShow />', () => {
     const targetSectionDOMNode = tragetSection
       .instance()
       .getDecoratedComponentInstance().DOMNode;
-    targetSectionDOMNode.getBoundingClientRect = jest.fn();
+    jest
+      .spyOn(targetSectionDOMNode, 'getBoundingClientRect')
+      .mockImplementation();
     targetSectionDOMNode.getBoundingClientRect.mockReturnValue({
       bottom: 400,
       height: 100,
@@ -185,13 +181,13 @@ describe('<SurveyShow />', () => {
 
     // Continue dragging question down into the next section
     const targetSectionHandlerId = tragetSection.instance().getHandlerId();
-    expect(sections.first().props().section.questions.length).toBe(2);
-    expect(sections.last().props().section.questions.length).toBe(0);
+    expect(sections.first().props().section.questions).toHaveLength(2);
+    expect(sections.last().props().section.questions).toHaveLength(0);
     dragDropBackend.simulateHover([], { clientOffset: { x: 0, y: 350 } });
     dragDropBackend.simulateHover([targetSectionHandlerId]);
     updateSections();
-    expect(sections.first().props().section.questions.length).toBe(1);
-    expect(sections.last().props().section.questions.length).toBe(1);
+    expect(sections.first().props().section.questions).toHaveLength(1);
+    expect(sections.last().props().section.questions).toHaveLength(1);
 
     // Ordering should be saved on end drag
     dragDropBackend.simulateEndDrag();

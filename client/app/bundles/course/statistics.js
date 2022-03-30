@@ -4,4 +4,4 @@ function initializeTabs() {
   $(MY_STUDENT_SELECTOR).tab('show');
 }
 
-$(document).ready(initializeTabs);
+$(initializeTabs);

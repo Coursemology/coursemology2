@@ -1,4 +1,3 @@
-import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { mount } from 'enzyme';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
@@ -78,6 +77,6 @@ describe('ScribingView', () => {
         </MemoryRouter>
       </ProviderWrapper>,
     );
-    expect(editPage.find('canvas').length).toBe(1);
+    expect(editPage.find('canvas')).toHaveLength(1);
   });
 });

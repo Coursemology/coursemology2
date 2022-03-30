@@ -54,7 +54,9 @@ class Course::LessonPlan::Strategies::BasePersonalizationStrategy
   #
   # @param [CourseUser] course_user The course user to execute the strategy on.
   # @param [Hash|nil] precomputed_data Data to determine strategy execution.
-  def execute(_course_user, _precomputed_data)
+  # @param [Set<Number>|nil] items_to_shift Set of item ids to shift. If provided, only items with ids in this set will
+  #   be shifted.
+  def execute(_course_user, _precomputed_data, _items_to_shift = nil)
     raise NotImplementedError, 'Subclasses must implmement a execute method.'
   end
 
