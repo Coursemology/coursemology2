@@ -66,13 +66,27 @@ class Course::Condition::Survey < ApplicationRecord
   end
 
   def validate_survey_condition
+    validate_references_self
     validate_unique_dependency unless duplicating?
+    validate_acyclic_dependency
+  end
+
+  def validate_references_self
+    return unless survey == conditional
+
+    errors.add(:survey, :references_self)
   end
 
   def validate_unique_dependency
     return unless required_surveys_for(conditional).include?(survey)
 
     errors.add(:survey, :unique_dependency)
+  end
+
+  def validate_acyclic_dependency
+    return unless cyclic?
+
+    errors.add(:survey, :cyclic_dependency)
   end
 
   # Given a conditional object, returns all surveys that it requires.
