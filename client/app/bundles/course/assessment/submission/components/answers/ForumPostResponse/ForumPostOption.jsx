@@ -1,10 +1,6 @@
 import { Component } from 'react';
-import {
-  white,
-  blueGrey200,
-  green50,
-  green300,
-} from 'material-ui/styles/colors';
+import { blueGrey, green } from '@mui/material/colors';
+
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 
@@ -17,15 +13,15 @@ const styles = {
   general: {
     wordBreak: 'break-all',
     cursor: 'pointer',
-    backgroundColor: white,
+    backgroundColor: 'white',
   },
   selected: {
-    backgroundColor: green50,
-    borderColor: green300,
+    backgroundColor: green[50],
+    borderColor: green[300],
     boxShadow: 'rgb(0 0 0 / 12%) 0px 1px 6px, rgb(0 0 0 / 12%) 0px 1px 4px',
   },
   unselected: {
-    borderColor: blueGrey200,
+    borderColor: blueGrey[200],
     boxShadow: 'none',
   },
 };

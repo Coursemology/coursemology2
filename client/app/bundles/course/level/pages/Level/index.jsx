@@ -15,19 +15,15 @@ import {
   saveLevels,
 } from 'course/level/actions';
 import { defaultComponentTitles } from 'course/translations.intl';
-
-import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
 import {
+  Button,
   Table,
   TableBody,
+  TableCell,
   TableFooter,
-  TableHeader,
-  TableHeaderColumn,
+  TableHead,
   TableRow,
-  TableRowColumn,
-} from 'material-ui/Table';
-
+} from '@mui/material';
 import LevelRow from 'course/level/components/LevelRow';
 
 const translations = defineMessages({
@@ -93,17 +89,17 @@ const styles = {
 class Level extends Component {
   static renderTableHeader() {
     return (
-      <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+      <TableHead>
         <TableRow>
-          <TableHeaderColumn style={styles.levelHeader}>
+          <TableCell style={styles.levelHeader}>
             <FormattedMessage {...translations.levelHeader} />
-          </TableHeaderColumn>
-          <TableHeaderColumn style={styles.thresholdHeader}>
+          </TableCell>
+          <TableCell style={styles.thresholdHeader}>
             <FormattedMessage {...translations.thresholdHeader} />
-          </TableHeaderColumn>
-          <TableHeaderColumn />
+          </TableCell>
+          <TableCell />
         </TableRow>
-      </TableHeader>
+      </TableHead>
     );
   }
 
@@ -170,7 +166,7 @@ class Level extends Component {
 
     return (
       <div style={styles.body}>
-        <Table className="table levels-list" fixedHeader={false}>
+        <Table className="table levels-list">
           {Level.renderTableHeader()}
           <TableBody>{rows}</TableBody>
           {canManage && this.renderTableFooter()}
@@ -183,34 +179,36 @@ class Level extends Component {
     const { isSaving } = this.props;
 
     return (
-      <TableFooter adjustForCheckbox={false}>
+      <TableFooter>
         <TableRow>
-          <TableRowColumn />
-          <TableRowColumn colSpan="1" style={styles.addNewLevel}>
-            <FlatButton
-              id="add-level"
-              icon={<i className="fa fa-plus" />}
-              label={<FormattedMessage {...translations.addNewLevel} />}
+          <TableCell />
+          <TableCell colSpan="1" style={styles.addNewLevel}>
+            <Button
               disabled={isSaving}
+              id="add-level"
               onClick={this.handleCreateLevel()}
-            />
-          </TableRowColumn>
-          <TableRowColumn />
+              startIcon={<i className="fa fa-plus" />}
+            >
+              <FormattedMessage {...translations.addNewLevel} />
+            </Button>
+          </TableCell>
+          <TableCell />
         </TableRow>
         <TableRow>
-          <TableRowColumn style={styles.saveLevels}>
-            <RaisedButton
-              id="save-levels"
-              style={styles.formButton}
-              type="submit"
-              label={<FormattedMessage {...translations.saveLevels} />}
+          <TableCell style={styles.saveLevels}>
+            <Button
+              variant="contained"
+              color="primary"
               disabled={isSaving}
-              primary
+              id="save-levels"
               onClick={this.handleSaveLevels()}
-            />
-          </TableRowColumn>
-          <TableRowColumn />
-          <TableRowColumn />
+              style={styles.formButton}
+            >
+              <FormattedMessage {...translations.saveLevels} />
+            </Button>
+          </TableCell>
+          <TableCell />
+          <TableCell />
         </TableRow>
       </TableFooter>
     );

@@ -28,15 +28,10 @@ describe('<EditSectionButton />', () => {
       contextOptions,
     );
     editSectionButton.find('button').simulate('click');
+    sectionFormDialogue.update();
 
     const newDescription = 'Added later';
-    const dialogInline = sectionFormDialogue
-      .find('RenderToLayer')
-      .first()
-      .instance();
-    const sectionForm = mount(dialogInline.props.render(), contextOptions).find(
-      'form',
-    );
+    const sectionForm = sectionFormDialogue.find('form');
     const descriptionInput = sectionForm.find('textarea[name="description"]');
     descriptionInput.simulate('change', { target: { value: newDescription } });
 

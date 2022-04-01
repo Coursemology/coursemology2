@@ -1,8 +1,26 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
-import { Card, CardHeader, CardText } from 'material-ui/Card';
+import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AceEditor from 'react-ace';
+
+const styles = {
+  panel: {
+    margin: 0,
+  },
+  panelSummary: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    margin: 0,
+  },
+  panelSummaryText: {
+    flexDirection: 'column',
+  },
+  panelSummarySubtitle: {
+    color: 'grey',
+  },
+};
 
 class EditorCard extends Component {
   static getInputName(field) {
@@ -16,20 +34,23 @@ class EditorCard extends Component {
   render() {
     const { mode, field, value, header, subtitle, isLoading } = this.props;
     return (
-      <Card containerStyle={{ paddingBottom: 0 }} initiallyExpanded>
-        <CardHeader
-          title={header}
-          textStyle={{ fontWeight: 'bold' }}
-          subtitle={subtitle}
-          actAsExpander
-          showExpandableButton
-        />
-        <CardText expandable style={{ padding: 0 }}>
+      <Accordion defaultExpanded style={styles.panel}>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          style={styles.panelSummary}
+        >
+          <div style={styles.panelSummaryText}>
+            {header}
+            <br />
+            <div style={styles.panelSummarySubtitle}>{subtitle}</div>
+          </div>
+        </AccordionSummary>
+        <AccordionDetails style={{ padding: 0 }}>
           <textarea
             name={EditorCard.getInputName(field)}
             value={value}
             style={{ display: 'none' }}
-            readOnly="true"
+            readOnly
           />
           <AceEditor
             mode={mode}
@@ -43,8 +64,8 @@ class EditorCard extends Component {
             editorProps={{ $blockScrolling: true }}
             setOptions={{ useSoftTabs: true, readOnly: isLoading }}
           />
-        </CardText>
-      </Card>
+        </AccordionDetails>
+      </Accordion>
     );
   }
 }

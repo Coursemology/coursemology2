@@ -60,7 +60,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         end
 
         # Phantom student did not attempt submissions
-        find('div.toggle-phantom').click
+        find('.toggle-phantom').click
         expect(page).to have_text(phantom_student.name)
         expect(page).to have_text('Not Started')
 
@@ -229,7 +229,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         find('.delete-submissions-enabled').click
         accept_confirm_dialog
         wait_for_job
-
+        sleep 1
         expect(page).to_not have_button(delete_btn)
 
         expect(randomized_assessment.submissions).to be_empty

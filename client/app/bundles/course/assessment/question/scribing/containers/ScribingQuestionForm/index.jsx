@@ -2,10 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { reduxForm, Form } from 'redux-form';
-
-import RaisedButton from 'material-ui/RaisedButton';
-import Snackbar from 'material-ui/Snackbar';
-
+import { Button, Snackbar } from '@mui/material';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import InputField from '../../components/InputField';
 import SummernoteField from '../../components/SummernoteField';
@@ -124,6 +121,7 @@ class ScribingQuestionForm extends Component {
     return (
       <>
         <Snackbar
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
           open={this.props.invalid && this.props.submitFailed}
           message={this.props.intl.formatMessage(
             translations.resolveErrorsMessage,
@@ -131,6 +129,7 @@ class ScribingQuestionForm extends Component {
           autoHideDuration={5000}
         />
         <Snackbar
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
           open={
             (this.props.data.error &&
               this.props.data.saveErrors &&
@@ -141,11 +140,12 @@ class ScribingQuestionForm extends Component {
             translations.submitFailureMessage,
           )}
           autoHideDuration={5000}
-          onRequestClose={() => {
+          onClose={() => {
             this.props.actions.clearSubmitError();
           }}
         />
         <Snackbar
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
           open={
             (this.props.data.error &&
               this.props.data.saveErrors &&
@@ -158,6 +158,7 @@ class ScribingQuestionForm extends Component {
           autoHideDuration={5000}
         />
         <Snackbar
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
           open={this.props.submitting}
           message={this.props.intl.formatMessage(
             translations.submittingMessage,
@@ -281,19 +282,21 @@ class ScribingQuestionForm extends Component {
 
           {this.renderSnackbars()}
 
-          <RaisedButton
+          <Button
+            variant="contained"
             className={styles.submitButton}
-            label={this.submitButtonText()}
-            labelPosition="before"
-            primary
-            type="submit"
+            color="primary"
             disabled={this.props.data.isLoading || submitting}
-            icon={
+            endIcon={
               this.props.data.isSubmitting ? (
                 <i className="fa fa-spinner fa-lg fa-spin" />
               ) : null
             }
-          />
+            type="submit"
+            style={{ marginBottom: '1em' }}
+          >
+            {this.submitButtonText()}
+          </Button>
         </Form>
       </>
     );

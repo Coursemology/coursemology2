@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter, Route, Switch } from 'react-router-dom';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import Subheader from 'material-ui/Subheader';
-import { Card, CardText } from 'material-ui/Card';
+import { Card, CardContent, ListSubheader } from '@mui/material';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import NotificationPopup from 'lib/containers/NotificationPopup';
 import DeleteConfirmation from 'lib/containers/DeleteConfirmation';
@@ -66,9 +65,9 @@ class LessonPlanLayout extends Component {
 
     if (!groups || groups.length < 1) {
       return (
-        <Subheader>
+        <ListSubheader disableSticky>
           <FormattedMessage {...translations.empty} />
-        </Subheader>
+        </ListSubheader>
       );
     }
 
@@ -91,7 +90,7 @@ class LessonPlanLayout extends Component {
 
     return (
       <Card>
-        <CardText>
+        <CardContent>
           <Route exact path={lessonPlanPath} component={EnterEditModeButton} />
           <Route
             exact
@@ -105,7 +104,7 @@ class LessonPlanLayout extends Component {
             path={`${lessonPlanPath}/edit`}
             component={ColumnVisibilityDropdown}
           />
-        </CardText>
+        </CardContent>
       </Card>
     );
   }

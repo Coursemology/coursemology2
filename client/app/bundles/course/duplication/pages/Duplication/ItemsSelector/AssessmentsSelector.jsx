@@ -2,7 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import Subheader from 'material-ui/Subheader';
+import { ListSubheader } from '@mui/material';
 import { defaultComponentTitles } from 'course/translations.intl';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { setItemSelectedBoolean } from 'course/duplication/actions';
@@ -46,7 +46,7 @@ class AssessmentsSelector extends Component {
     const { id, title, published } = assessment;
     const checked = !!selectedItems[ASSESSMENT][id];
     const label = (
-      <span>
+      <span style={{ display: 'flex', alignItems: 'centre' }}>
         <TypeBadge itemType={ASSESSMENT} />
         {published || <UnpublishedIcon />}
         {title}
@@ -59,7 +59,7 @@ class AssessmentsSelector extends Component {
         label={label}
         checked={checked}
         indentLevel={2}
-        onCheck={(e, value) =>
+        onChange={(e, value) =>
           dispatch(setItemSelectedBoolean(ASSESSMENT, id, value))
         }
       />
@@ -82,7 +82,7 @@ class AssessmentsSelector extends Component {
               {title}
             </span>
           }
-          onCheck={(e, value) =>
+          onChange={(e, value) =>
             dispatch(setItemSelectedBoolean(CATEGORY, id, value))
           }
         >
@@ -110,7 +110,7 @@ class AssessmentsSelector extends Component {
               {title}
             </span>
           }
-          onCheck={(e, value) =>
+          onChange={(e, value) =>
             dispatch(setItemSelectedBoolean(TAB, id, value))
           }
         >
@@ -137,9 +137,9 @@ class AssessmentsSelector extends Component {
         {categories.length > 0 ? (
           categories.map((category) => this.renderCategoryTree(category))
         ) : (
-          <Subheader>
+          <ListSubheader disableSticky>
             <FormattedMessage {...translations.noItems} />
-          </Subheader>
+          </ListSubheader>
         )}
       </>
     );

@@ -2,7 +2,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl, intlShape } from 'react-intl';
-import FlatButton from 'material-ui/FlatButton';
+import { Button } from '@mui/material';
 import QuestionFormOption from './QuestionFormOption';
 
 const styles = {
@@ -65,18 +65,15 @@ class QuestionFormOptions extends Component {
           />
         ))}
         <div style={styles.buttons}>
-          <FlatButton
-            primary
-            label={intl.formatMessage(optionsTranslations.addOption)}
+          <Button
+            color="primary"
+            disabled={disabled}
             onClick={() => fields.push({})}
-            {...{ disabled }}
-          />
-          <FlatButton
-            primary
-            containerElement="label"
-            label={intl.formatMessage(optionsTranslations.bulkUploadImages)}
-            {...{ disabled }}
           >
+            {intl.formatMessage(optionsTranslations.addOption)}
+          </Button>
+          <Button color="primary" component="label" disabled={disabled}>
+            {intl.formatMessage(optionsTranslations.bulkUploadImages)}
             <input
               type="file"
               style={styles.imageUploader}
@@ -84,7 +81,7 @@ class QuestionFormOptions extends Component {
               multiple
               {...{ disabled }}
             />
-          </FlatButton>
+          </Button>
         </div>
       </>
     );

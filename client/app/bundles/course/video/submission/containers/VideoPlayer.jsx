@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import Paper from 'material-ui/Paper';
+import { Paper } from '@mui/material';
 import { connect } from 'react-redux';
 import {
   playerStates,
@@ -48,7 +48,7 @@ const propTypes = {
   duration: PropTypes.number,
   playerVolume: PropTypes.number,
   playbackRate: PropTypes.number,
-  captionsState: PropTypes.bool,
+  captionsState: PropTypes.string,
   forceSeek: PropTypes.bool,
   initialSeekTime: PropTypes.number,
   onPlayerProgress: PropTypes.func,
@@ -222,7 +222,7 @@ class VideoPlayer extends Component {
     );
 
     return (
-      <Paper zDepth={2} className={styles.videoPaperContainer}>
+      <Paper elevation={2} className={styles.videoPaperContainer}>
         {videoPlayer}
         {controls}
       </Paper>

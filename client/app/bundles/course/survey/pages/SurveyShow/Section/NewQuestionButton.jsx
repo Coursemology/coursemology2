@@ -7,7 +7,7 @@ import {
   intlShape,
   FormattedMessage,
 } from 'react-intl';
-import FlatButton from 'material-ui/FlatButton';
+import { Button } from '@mui/material';
 import {
   showQuestionForm,
   createSurveyQuestion,
@@ -68,12 +68,14 @@ class NewQuestionButton extends Component {
 
   render() {
     return (
-      <FlatButton
-        primary
-        label={<FormattedMessage {...translations.addQuestion} />}
-        onClick={this.showNewQuestionForm}
+      <Button
+        variant="contained"
+        color="primary"
         disabled={this.props.disabled}
-      />
+        onClick={this.showNewQuestionForm}
+      >
+        <FormattedMessage {...translations.addQuestion} />
+      </Button>
     );
   }
 }

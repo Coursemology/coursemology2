@@ -1,9 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Paper from 'material-ui/Paper';
-import Divider from 'material-ui/Divider';
-
+import { Divider, Paper } from '@mui/material';
 import styles from './Discussion.scss';
 import NewPostContainer from './DiscussionElements/NewPostContainer';
 import Topic from './DiscussionElements/Topic';
@@ -63,7 +61,7 @@ class Discussion extends Component {
 
   render() {
     return (
-      <Paper zDepth={2} className={styles.rootContainer}>
+      <Paper className={styles.rootContainer}>
         <div className={styles.newCommentEditor}>
           <NewPostContainer>
             <Controls />

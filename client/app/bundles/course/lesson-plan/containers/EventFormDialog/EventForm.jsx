@@ -1,11 +1,10 @@
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { reduxForm, Field, Form } from 'redux-form';
-import AutoCompleteFilters from 'material-ui/AutoComplete';
-import TextField from 'lib/components/redux-form/TextField';
+import renderTextField from 'lib/components/redux-form/TextField';
 import RichTextField from 'lib/components/redux-form/RichTextField';
-import AutoComplete from 'lib/components/redux-form/AutoComplete';
-import Toggle from 'lib/components/redux-form/Toggle';
+import renderAutoCompleteField from 'lib/components/redux-form/AutoComplete';
+import renderToggleField from 'lib/components/redux-form/Toggle';
 import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
 import formTranslations from 'lib/translations/form';
 import translations from 'course/lesson-plan/translations';
@@ -78,32 +77,28 @@ const EventForm = ({
     <Field
       fullWidth
       name="title"
-      floatingLabelText={<FormattedMessage {...translations[TITLE]} />}
-      component={TextField}
+      label={<FormattedMessage {...translations[TITLE]} />}
+      component={renderTextField}
       {...{ disabled }}
     />
     <div style={styles.columns}>
       <Field
         fullWidth
-        openOnFocus
+        selectOnFocus
         name="event_type"
-        floatingLabelText={<FormattedMessage {...translations[EVENT_TYPE]} />}
-        component={AutoComplete}
-        dataSource={eventTypes}
-        filter={AutoCompleteFilters.caseInsensitiveFilter}
-        menuProps={{ desktop: true }}
+        label={<FormattedMessage {...translations[EVENT_TYPE]} />}
+        component={renderAutoCompleteField}
+        options={eventTypes}
         style={styles.eventType}
         {...{ disabled }}
       />
       <Field
         fullWidth
-        openOnFocus
+        selectOnFocus
         name="location"
-        floatingLabelText={<FormattedMessage {...translations[LOCATION]} />}
-        component={AutoComplete}
-        dataSource={eventLocations}
-        filter={AutoCompleteFilters.caseInsensitiveFilter}
-        menuProps={{ desktop: true }}
+        label={<FormattedMessage {...translations[LOCATION]} />}
+        component={renderAutoCompleteField}
+        options={eventLocations}
         style={styles.oneColumn}
         {...{ disabled }}
       />
@@ -113,14 +108,14 @@ const EventForm = ({
       name="description"
       label={<FormattedMessage {...translations[DESCRIPTION]} />}
       component={RichTextField}
-      multiLine
+      multiline
       rows={2}
       {...{ disabled }}
     />
     <div style={styles.columns}>
       <Field
         name="start_at"
-        floatingLabelText={<FormattedMessage {...translations[START_AT]} />}
+        label={<FormattedMessage {...translations[START_AT]} />}
         component={DateTimePicker}
         afterChange={(_, newStartAt) =>
           shiftEndDate(formNames.EVENT, newStartAt, formValues)
@@ -130,7 +125,7 @@ const EventForm = ({
       />
       <Field
         name="end_at"
-        floatingLabelText={<FormattedMessage {...translations[END_AT]} />}
+        label={<FormattedMessage {...translations[END_AT]} />}
         component={DateTimePicker}
         style={styles.oneColumn}
         {...{ disabled }}
@@ -138,10 +133,9 @@ const EventForm = ({
     </div>
     <Field
       name="published"
-      component={Toggle}
+      component={renderToggleField}
       parse={Boolean}
       label={<FormattedMessage {...translations[PUBLISHED]} />}
-      labelPosition="right"
       style={styles.toggle}
       disabled={disabled}
     />

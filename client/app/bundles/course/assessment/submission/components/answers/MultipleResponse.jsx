@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { green50 } from 'material-ui/styles/colors';
-import Checkbox from 'material-ui/Checkbox';
-
+import { FormControlLabel, Checkbox } from '@mui/material';
+import { green } from '@mui/material/colors';
 import { questionShape } from '../../propTypes';
 
 function MultipleResponseOptions({
@@ -15,12 +14,26 @@ function MultipleResponseOptions({
   return (
     <>
       {question.options.map((option) => (
-        <Checkbox
+        <FormControlLabel
+          checked={input.value.indexOf(option.id) !== -1}
+          control={<Checkbox style={{ padding: '0 12px' }} />}
           disabled={readOnly}
           key={option.id}
-          value={option.id}
-          checked={input.value.indexOf(option.id) !== -1}
-          onCheck={(event, isInputChecked) => {
+          label={
+            <b>
+              <div
+                style={
+                  option.correct &&
+                  readOnly &&
+                  (showMcqMrqSolution || graderView)
+                    ? { backgroundColor: green[50], verticalAlign: 'middle' }
+                    : { verticalAlign: 'middle' }
+                }
+                dangerouslySetInnerHTML={{ __html: option.option.trim() }}
+              />
+            </b>
+          }
+          onChange={(event, isInputChecked) => {
             const newValue = [...input.value];
             if (isInputChecked) {
               newValue.push(option.id);
@@ -29,17 +42,8 @@ function MultipleResponseOptions({
             }
             return input.onChange(newValue);
           }}
-          label={
-            <div
-              style={
-                option.correct && readOnly && (showMcqMrqSolution || graderView)
-                  ? { backgroundColor: green50 }
-                  : null
-              }
-              dangerouslySetInnerHTML={{ __html: option.option.trim() }}
-            />
-          }
-          labelStyle={{ verticalAlign: 'middle' }}
+          style={{ width: '100%' }}
+          value={option.id.toString()}
         />
       ))}
     </>

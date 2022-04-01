@@ -7,9 +7,9 @@ import {
 } from 'react-intl';
 import { reduxForm, Field, Form } from 'redux-form';
 import ReactTooltip from 'react-tooltip';
-import TextField from 'lib/components/redux-form/TextField';
+import renderTextField from 'lib/components/redux-form/TextField';
 import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
-import Toggle from 'lib/components/redux-form/Toggle';
+import renderToggleField from 'lib/components/redux-form/Toggle';
 import formTranslations from 'lib/translations/form';
 import translations from 'course/survey/translations';
 import { formNames } from 'course/survey/constants';
@@ -116,24 +116,24 @@ const SurveyForm = ({
     <Field
       fullWidth
       name="title"
-      floatingLabelText={intl.formatMessage(translations.title)}
-      component={TextField}
+      label={intl.formatMessage(translations.title)}
+      component={renderTextField}
       {...{ disabled }}
     />
     <br />
     <Field
       fullWidth
       name="description"
-      floatingLabelText={intl.formatMessage(translations.description)}
-      component={TextField}
-      multiLine
-      rows={2}
+      label={intl.formatMessage(translations.description)}
+      component={renderTextField}
+      multiline
+      minRows={2}
       {...{ disabled }}
     />
     <div style={styles.columns}>
       <Field
         name="start_at"
-        floatingLabelText={intl.formatMessage(translations.opensAt)}
+        label={intl.formatMessage(translations.opensAt)}
         component={DateTimePicker}
         afterChange={(_, newStartAt) =>
           shiftEndDate(formNames.SURVEY, newStartAt, formValues)
@@ -143,7 +143,7 @@ const SurveyForm = ({
       />
       <Field
         name="end_at"
-        floatingLabelText={intl.formatMessage(translations.expiresAt)}
+        label={intl.formatMessage(translations.expiresAt)}
         component={DateTimePicker}
         style={styles.oneColumn}
         {...{ disabled }}
@@ -153,8 +153,8 @@ const SurveyForm = ({
       <div style={styles.oneColumn}>
         <Field
           name="base_exp"
-          floatingLabelText={intl.formatMessage(translations.basePoints)}
-          component={TextField}
+          label={intl.formatMessage(translations.basePoints)}
+          component={renderTextField}
           type="number"
           onWheel={(event) => event.currentTarget.blur()}
           {...{ disabled }}
@@ -168,8 +168,8 @@ const SurveyForm = ({
       >
         <Field
           name="time_bonus_exp"
-          floatingLabelText={intl.formatMessage(translations.bonusPoints)}
-          component={TextField}
+          label={intl.formatMessage(translations.bonusPoints)}
+          component={renderTextField}
           type="number"
           onWheel={(event) => event.currentTarget.blur()}
           disabled={formValues && !formValues.allow_response_after_end}
@@ -181,10 +181,9 @@ const SurveyForm = ({
     </div>
     <Field
       name="allow_response_after_end"
-      component={Toggle}
+      component={renderToggleField}
       parse={Boolean}
       label={intl.formatMessage(translations.allowResponseAfterEnd)}
-      labelPosition="right"
       style={styles.toggle}
       disabled={disabled}
     />
@@ -193,10 +192,9 @@ const SurveyForm = ({
     </div>
     <Field
       name="allow_modify_after_submit"
-      component={Toggle}
+      component={renderToggleField}
       parse={Boolean}
       label={intl.formatMessage(translations.allowModifyAfterSubmit)}
-      labelPosition="right"
       style={styles.toggle}
       disabled={disabled}
     />
@@ -205,10 +203,9 @@ const SurveyForm = ({
     </div>
     <Field
       name="anonymous"
-      component={Toggle}
+      component={renderToggleField}
       parse={Boolean}
       label={intl.formatMessage(translations.anonymous)}
-      labelPosition="right"
       style={styles.toggle}
       disabled={disableAnonymousToggle || disabled}
     />

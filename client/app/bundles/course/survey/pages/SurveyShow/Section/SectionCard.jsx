@@ -1,8 +1,14 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Card, CardText, CardTitle, CardActions } from 'material-ui/Card';
-import Subheader from 'material-ui/Subheader';
+import {
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  ListSubheader,
+} from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { surveyShape, sectionShape } from 'course/survey/propTypes';
 import Question from './Question';
 import NewQuestionButton from './NewQuestionButton';
@@ -14,6 +20,13 @@ import MoveDownButton from './MoveDownButton';
 const styles = {
   card: {
     marginBottom: 15,
+  },
+  expandIcon: {
+    float: 'right',
+  },
+  expandIconRotated: {
+    float: 'right',
+    transform: 'rotate(180deg)',
   },
   subtitle: {
     paddingRight: 64,
@@ -65,25 +78,38 @@ class SectionCard extends Component {
       survey: { draggedQuestion },
     } = this.props;
     return (
-      <Card
-        style={styles.card}
-        expanded={this.state.expanded}
-        onExpandChange={(value) => this.setState({ expanded: value })}
-      >
-        <CardTitle
-          title={section.title}
-          subtitle={
+      <Card style={styles.card}>
+        <CardHeader
+          title={
+            <>
+              {section.title}
+              {section.questions.length > 0 && (
+                <ExpandMoreIcon
+                  onClick={() =>
+                    this.setState((prevState) => ({
+                      expanded: !prevState.expanded,
+                    }))
+                  }
+                  style={
+                    this.state.expanded
+                      ? styles.expandIcon
+                      : styles.expandIconRotated
+                  }
+                />
+              )}
+            </>
+          }
+          subheader={
             <div dangerouslySetInnerHTML={{ __html: section.description }} />
           }
-          subtitleStyle={styles.subtitle}
-          showExpandableButton={section.questions.length > 0}
+          subheaderTypographyProps={{ style: styles.subtitle }}
         />
         {section.questions.length > 1 ? this.renderActions() : null}
-        <CardText>
+        <CardContent>
           {section.questions.length < 1 ? (
-            <Subheader>
+            <ListSubheader disableSticky>
               <FormattedMessage {...translations.noQuestions} />
-            </Subheader>
+            </ListSubheader>
           ) : null}
           {section.questions.map((question, index) => (
             <Question
@@ -92,7 +118,7 @@ class SectionCard extends Component {
               {...{ question, index, sectionIndex, draggedQuestion }}
             />
           ))}
-        </CardText>
+        </CardContent>
         {this.renderActions()}
       </Card>
     );

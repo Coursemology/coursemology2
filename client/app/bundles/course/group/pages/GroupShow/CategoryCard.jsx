@@ -7,8 +7,8 @@ import {
   intlShape,
 } from 'react-intl';
 import { connect } from 'react-redux';
-import DeleteIcon from 'material-ui/svg-icons/action/delete';
-import { red500 } from 'material-ui/styles/colors';
+import { red } from '@mui/material/colors';
+import Delete from '@mui/icons-material/Delete';
 
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 
@@ -148,7 +148,7 @@ const CategoryCard = ({
         label: <FormattedMessage {...translations.delete} />,
         onClick: () => setIsConfirmingDelete(true),
         isRight: true,
-        icon: <DeleteIcon color={red500} />,
+        icon: <Delete htmlColor={red[500]} />,
       });
     }
     return result;

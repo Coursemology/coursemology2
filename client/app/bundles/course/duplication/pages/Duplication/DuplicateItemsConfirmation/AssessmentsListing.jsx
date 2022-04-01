@@ -2,8 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import Subheader from 'material-ui/Subheader';
-import { Card, CardText } from 'material-ui/Card';
+import { Card, CardContent, ListSubheader } from '@mui/material';
 import { defaultComponentTitles } from 'course/translations.intl';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { categoryShape } from 'course/duplication/propTypes';
@@ -30,9 +29,9 @@ class AssessmentsListing extends Component {
       <IndentedCheckbox
         checked
         indentLevel={2}
-        key={assessment.id}
+        key={`assessment_${assessment.id}`}
         label={
-          <span>
+          <span style={{ display: 'flex', alignItems: 'centre' }}>
             <TypeBadge itemType={ASSESSMENT} />
             <UnpublishedIcon tooltipId="itemUnpublished" />
             {assessment.title}
@@ -54,14 +53,20 @@ class AssessmentsListing extends Component {
       tabs.map((tab) => AssessmentsListing.renderTabTree(tab, tab.assessments));
 
     return (
-      <Card key={category ? category.id : 'default'}>
-        <CardText>
+      <Card
+        key={
+          category
+            ? `category_assessment_${category.id}`
+            : 'category_assessment_default'
+        }
+      >
+        <CardContent>
           {categoryRow}
           {hasOrphanAssessments &&
             AssessmentsListing.renderTabTree(null, orphanAssessments)}
           {hasOrphanTabs && tabsTrees(orphanTabs)}
           {category && tabsTrees(category.tabs)}
-        </CardText>
+        </CardContent>
       </Card>
     );
   }
@@ -116,7 +121,7 @@ class AssessmentsListing extends Component {
 
   static renderTabTree(tab, children) {
     return (
-      <div key={tab ? tab.id : 'default'}>
+      <div key={tab ? `tab_assessment_${tab.id}` : 'tab_assessment_default'}>
         {tab
           ? AssessmentsListing.renderTabRow(tab)
           : AssessmentsListing.renderDefaultTabRow()}
@@ -169,11 +174,11 @@ class AssessmentsListing extends Component {
 
     return (
       <>
-        <Subheader>
+        <ListSubheader disableSticky>
           <FormattedMessage
             {...defaultComponentTitles.course_assessments_component}
           />
-        </Subheader>
+        </ListSubheader>
         {categoriesTrees.map((category) =>
           AssessmentsListing.renderCategoryCard(category, null, null),
         )}

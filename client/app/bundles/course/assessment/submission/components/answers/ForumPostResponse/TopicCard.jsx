@@ -1,14 +1,15 @@
 import { Component } from 'react';
 import {
-  CardHeader,
-  RaisedButton,
-  Card,
-  CardText,
-  CardActions,
+  Button,
+  Accordion,
+  AccordionActions,
+  AccordionSummary,
   Divider,
-  FontIcon,
-} from 'material-ui';
-import { indigo50 } from 'material-ui/styles/colors';
+  Icon,
+} from '@mui/material';
+import { indigo } from '@mui/material/colors';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
@@ -37,12 +38,19 @@ const translations = defineMessages({
 });
 
 const styles = {
-  cardHeader: {
-    backgroundColor: indigo50,
+  AccordionSummary: {
+    backgroundColor: indigo[50],
     padding: '8px 16px',
   },
-  cardActions: {
+  AccordionActions: {
+    justifyContent: 'flex-start',
     padding: 16,
+  },
+  container: {
+    padding: 16,
+  },
+  icon: {
+    marginLeft: 12,
   },
   nonLastPostOption: {
     marginBottom: 16,
@@ -57,7 +65,7 @@ export default class TopicCard extends Component {
     };
   }
 
-  handleIsExpandedChange = (isExpanded) => {
+  handleIsExpandedChange = (event, isExpanded) => {
     this.setState({ isExpanded });
   };
 
@@ -71,48 +79,49 @@ export default class TopicCard extends Component {
     ).length;
 
     return (
-      <Card
+      <Accordion
         expanded={this.state.isExpanded}
-        onExpandChange={this.handleIsExpandedChange}
+        onChange={this.handleIsExpandedChange}
         style={this.props.style}
         className="topic-card"
       >
-        <CardHeader
-          title={
-            <CardTitle
-              title={this.props.topicPostPack.topic.title}
-              type={
-                numSelectedInTopic > 0 ? (
-                  <FormattedMessage
-                    values={{
-                      numSelected: numSelectedInTopic,
-                    }}
-                    {...translations.topicCardTitleTypeSelected}
-                  />
-                ) : (
-                  <FormattedMessage
-                    {...translations.topicCardTitleTypeNoneSelected}
-                  />
-                )
-              }
-            />
-          }
-          actAsExpander
-          showExpandableButton
-          style={styles.cardHeader}
-        />
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          style={styles.AccordionSummary}
+        >
+          <CardTitle
+            title={this.props.topicPostPack.topic.title}
+            type={
+              numSelectedInTopic > 0 ? (
+                <FormattedMessage
+                  values={{
+                    numSelected: numSelectedInTopic,
+                  }}
+                  {...translations.topicCardTitleTypeSelected}
+                />
+              ) : (
+                <FormattedMessage
+                  {...translations.topicCardTitleTypeNoneSelected}
+                />
+              )
+            }
+          />
+        </AccordionSummary>
         <Divider />
-        <CardActions expandable style={styles.cardActions}>
-          <RaisedButton
-            label={<FormattedMessage {...translations.viewTopicInNewTab} />}
+        <AccordionActions style={styles.AccordionActions}>
+          <Button
+            variant="contained"
+            endIcon={
+              <Icon className="fa fa-external-link" style={styles.icon} />
+            }
             href={getForumTopicURL(courseId, forumId, topicPostPack.topic.ic)}
             target="_blank"
-            labelPosition="before"
-            icon={<FontIcon className="fa fa-external-link" />}
-          />
-        </CardActions>
+          >
+            <FormattedMessage {...translations.viewTopicInNewTab} />
+          </Button>
+        </AccordionActions>
         <Divider />
-        <CardText expandable>
+        <div style={styles.container}>
           {topicPostPack.postPacks.map((postPack, index) => (
             <ForumPostOption
               postPack={postPack}
@@ -128,8 +137,8 @@ export default class TopicCard extends Component {
               }
             />
           ))}
-        </CardText>
-      </Card>
+        </div>
+      </Accordion>
     );
   }
 }

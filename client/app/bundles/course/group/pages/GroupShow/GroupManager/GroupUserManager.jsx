@@ -1,17 +1,10 @@
 import { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Checkbox, TextField } from 'material-ui';
-import Icon from 'material-ui/svg-icons/action/compare-arrows';
-import {
-  red100,
-  green100,
-  green300,
-  blue100,
-  blue300,
-  red500,
-} from 'material-ui/styles/colors';
-import DeleteIcon from 'material-ui/svg-icons/action/delete';
+import { Checkbox, FormControlLabel, TextField } from '@mui/material';
+import { blue, green, red } from '@mui/material/colors';
+import CompareArrows from '@mui/icons-material/CompareArrows';
+import Delete from '@mui/icons-material/Delete';
 import {
   defineMessages,
   FormattedMessage,
@@ -311,7 +304,7 @@ const GroupUserManager = ({
       {
         label: <FormattedMessage {...translations.delete} />,
         onClick: () => setIsConfirmingDelete(true),
-        icon: <DeleteIcon color={red500} />,
+        icon: <Delete htmlColor={red[500]} />,
       },
     ],
     [handleEdit, setIsConfirmingDelete],
@@ -321,14 +314,14 @@ const GroupUserManager = ({
     const result = {};
     [...availableStudents, ...availableStaff].forEach((u) => {
       if (originalMemberMap.has(u.id)) {
-        result[u.id] = { light: red100 };
+        result[u.id] = { light: red[100] };
       }
     });
     [...selectedStudents, ...selectedStaff].forEach((u) => {
       if (!originalMemberMap.has(u.id)) {
-        result[u.id] = { light: green100, dark: green300 };
+        result[u.id] = { light: green[100], dark: green[300] };
       } else if (originalMemberMap.get(u.id).groupRole !== u.groupRole) {
-        result[u.id] = { light: blue100, dark: blue300 };
+        result[u.id] = { light: blue[100], dark: blue[300] };
       }
     });
     return result;
@@ -362,12 +355,11 @@ const GroupUserManager = ({
           <div style={{ ...styles.listContainer, marginRight: '1rem' }}>
             <div style={styles.header}>Users that can be added</div>
             <TextField
+              label={<FormattedMessage {...translations.searchPlaceholder} />}
+              onChange={(event) => setAvailableSearch(event.target.value)}
               style={styles.textField}
-              hintText={
-                <FormattedMessage {...translations.searchPlaceholder} />
-              }
               value={availableSearch}
-              onChange={(_, value) => setAvailableSearch(value)}
+              variant="standard"
             />
             <GroupUserManagerList
               students={availableStudents}
@@ -377,17 +369,16 @@ const GroupUserManager = ({
             />
           </div>
           <div style={styles.middleBar}>
-            <Icon />
+            <CompareArrows />
           </div>
           <div style={{ ...styles.listContainer, marginLeft: '1rem' }}>
             <div style={styles.header}>Users in group</div>
             <TextField
+              label={<FormattedMessage {...translations.searchPlaceholder} />}
+              onChange={(event) => setSelectedSearch(event.target.value)}
               style={styles.textField}
-              hintText={
-                <FormattedMessage {...translations.searchPlaceholder} />
-              }
               value={selectedSearch}
-              onChange={(_, value) => setSelectedSearch(value)}
+              variant="standard"
             />
             <GroupUserManagerList
               students={selectedStudents}
@@ -400,11 +391,15 @@ const GroupUserManager = ({
             />
           </div>
         </div>
-        <Checkbox
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={hideInGroup}
+              onChange={(_, checked) => setHideInGroup(checked)}
+            />
+          }
           label={<FormattedMessage {...translations.hideStudents} />}
           style={styles.checkbox}
-          checked={hideInGroup}
-          onCheck={(_, value) => setHideInGroup(value)}
         />
       </GroupCard>
 

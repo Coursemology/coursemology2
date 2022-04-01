@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import Toggle from 'material-ui/Toggle';
+import { Switch } from '@mui/material';
 
 const styles = {
   toggle: {
@@ -11,10 +11,11 @@ const PublishedCell = (props) => {
   const { published, onToggle } = props;
   return (
     <td>
-      <Toggle
-        toggled={published}
-        onToggle={onToggle}
-        inputStyle={styles.toggle}
+      <Switch
+        checked={published}
+        color="primary"
+        onChange={onToggle}
+        style={styles.toggle}
       />
     </td>
   );

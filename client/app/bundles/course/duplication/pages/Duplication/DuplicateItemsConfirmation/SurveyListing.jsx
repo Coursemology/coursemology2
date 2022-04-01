@@ -2,28 +2,41 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import Checkbox from 'material-ui/Checkbox';
-import Subheader from 'material-ui/Subheader';
-import { Card, CardText } from 'material-ui/Card';
+import {
+  Card,
+  CardContent,
+  Checkbox,
+  FormControlLabel,
+  ListSubheader,
+} from '@mui/material';
 import { defaultComponentTitles } from 'course/translations.intl';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { surveyShape } from 'course/duplication/propTypes';
 import TypeBadge from 'course/duplication/components/TypeBadge';
 import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
 
+const styles = {
+  row: {
+    alignItems: 'center',
+    display: 'flex',
+    width: 'auto',
+  },
+};
+
 class SurveyListing extends Component {
   static renderRow(survey) {
     return (
-      <Checkbox
-        checked
-        key={survey.id}
+      <FormControlLabel
+        control={<Checkbox checked />}
+        key={`survey_${survey.id}`}
         label={
-          <span>
+          <span style={{ display: 'flex', alignItems: 'centre' }}>
             <TypeBadge itemType={duplicableItemTypes.SURVEY} />
             <UnpublishedIcon tooltipId="itemUnpublished" />
             {survey.title}
           </span>
         }
+        style={styles.row}
       />
     );
   }
@@ -45,13 +58,15 @@ class SurveyListing extends Component {
 
     return (
       <>
-        <Subheader>
+        <ListSubheader disableSticky>
           <FormattedMessage
             {...defaultComponentTitles.course_survey_component}
           />
-        </Subheader>
+        </ListSubheader>
         <Card>
-          <CardText>{selectedSurveys.map(SurveyListing.renderRow)}</CardText>
+          <CardContent>
+            {selectedSurveys.map(SurveyListing.renderRow)}
+          </CardContent>
         </Card>
       </>
     );

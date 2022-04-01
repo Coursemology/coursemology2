@@ -7,7 +7,8 @@ import {
   intlShape,
   FormattedMessage,
 } from 'react-intl';
-import FlatButton from 'material-ui/FlatButton';
+import { Button } from '@mui/material';
+
 import {
   showSectionForm,
   updateSurveySection,
@@ -57,11 +58,9 @@ class EditSectionButton extends Component {
 
   render() {
     return (
-      <FlatButton
-        label={<FormattedMessage {...translations.editSection} />}
-        onClick={this.showEditSectionForm}
-        disabled={this.props.disabled}
-      />
+      <Button disabled={this.props.disabled} onClick={this.showEditSectionForm}>
+        <FormattedMessage {...translations.editSection} />
+      </Button>
     );
   }
 }

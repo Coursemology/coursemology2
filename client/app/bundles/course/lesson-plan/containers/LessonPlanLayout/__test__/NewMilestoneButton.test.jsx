@@ -6,6 +6,30 @@ import storeCreator from 'course/lesson-plan/store';
 import MilestoneFormDialog from 'course/lesson-plan/containers/MilestoneFormDialog';
 import NewMilestoneButton from '../NewMilestoneButton';
 
+beforeEach(() => {
+  // add window.matchMedia
+  // this is necessary for the date picker to be rendered in desktop mode.
+  // if this is not provided, the mobile mode is rendered, which might lead to unexpected behavior
+  Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    value: (query) => ({
+      media: query,
+      // this is the media query that @material-ui/pickers uses to determine if a device is a desktop device
+      matches: query === '(pointer: fine)',
+      onchange: () => {},
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      addListener: () => {},
+      removeListener: () => {},
+      dispatchEvent: () => false,
+    }),
+  });
+});
+
+afterEach(() => {
+  delete window.matchMedia;
+});
+
 describe('<NewMilestoneButton />', () => {
   it('allows milestone to be created via MilestoneFormDialog', () => {
     const spyCreate = jest.spyOn(CourseAPI.lessonPlan, 'createMilestone');
@@ -28,14 +52,7 @@ describe('<NewMilestoneButton />', () => {
       start_at: new Date('2016-12-31T16:00:00.000Z'),
     };
     const startAt = '01-01-2017';
-    const dialogInline = milestoneFormDialog
-      .find('RenderToLayer')
-      .first()
-      .instance();
-    const milestoneForm = mount(
-      dialogInline.props.render(),
-      contextOptions,
-    ).find('form');
+    const milestoneForm = milestoneFormDialog.find('form');
     const titleInput = milestoneForm.find('input[name="title"]');
     titleInput.simulate('change', { target: { value: milestoneData.title } });
     const startAtDateInput = milestoneForm

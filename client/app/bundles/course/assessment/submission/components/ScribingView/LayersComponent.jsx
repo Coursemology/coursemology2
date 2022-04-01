@@ -1,11 +1,8 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import Popover from 'material-ui/Popover';
-import RaisedButton from 'material-ui/RaisedButton';
-import Menu from 'material-ui/Menu';
-import MenuItem from 'material-ui/MenuItem';
-import Done from 'material-ui/svg-icons/action/done';
+import { Button, MenuItem, MenuList, Popover } from '@mui/material';
+import Done from '@mui/icons-material/Done';
 import { scribingTranslations as translations } from '../../translations';
 import { scribbleShape } from '../../propTypes';
 
@@ -25,7 +22,7 @@ const popoverStyles = {
     horizontal: 'left',
     vertical: 'bottom',
   },
-  targetOrigin: {
+  transformOrigin: {
     horizontal: 'left',
     vertical: 'top',
   },
@@ -49,19 +46,21 @@ class LayersComponent extends Component {
         open={open}
         anchorEl={anchorEl}
         anchorOrigin={popoverStyles.anchorOrigin}
-        targetOrigin={popoverStyles.targetOrigin}
-        onRequestClose={onRequestClose}
+        onClose={onRequestClose}
+        transformOrigin={popoverStyles.transformOrigin}
       >
-        <Menu>
+        <MenuList>
           {layers.map((layer) => (
             <MenuItem
               key={layer.creator_id}
-              primaryText={layer.creator_name}
               onClick={() => onClickLayer(layer)}
-              rightIcon={layer.isDisplayed ? <Done /> : null}
-            />
+              style={{ display: 'flex', justifyContent: 'space-between' }}
+            >
+              {layer.creator_name}
+              {layer.isDisplayed && <Done />}
+            </MenuItem>
           ))}
-        </Menu>
+        </MenuList>
       </Popover>
     ) : null;
   }
@@ -74,11 +73,9 @@ class LayersComponent extends Component {
         <label style={popoverStyles.layersLabel}>
           {intl.formatMessage(translations.layersLabelText)}
         </label>
-        <RaisedButton
-          onClick={onClick}
-          label={layers && `${layers[0].creator_name.substring(0, 6)}...`}
-          disabled={disabled}
-        />
+        <Button variant="contained" onClick={onClick} disabled={disabled}>
+          {layers && `${layers[0].creator_name.substring(0, 6)}...`}
+        </Button>
         {this.renderLayersPopover()}
       </>
     ) : null;

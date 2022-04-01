@@ -19,14 +19,14 @@ RSpec.feature 'Course: Achievements' do
 
         # Open new achievement modal and fill up fields.
         find('div.new-btn button').click
-        expect(page).to have_selector('h3', text: 'New Achievement')
+        expect(page).to have_selector('h2', text: 'New Achievement')
         achievement = attributes_for(:course_achievement, course: course)
         fill_in 'title', with: achievement[:title]
 
         # Create the achievement
         expect do
           find('button.btn-submit').click
-          expect(page).not_to have_selector('h3', text: 'New Achievement')
+          expect(page).not_to have_selector('h2', text: 'New Achievement')
         end.to change { course.achievements.count }.by(1)
         achievement_created = course.achievements.last
         expect(page).to have_text(achievement[:title])

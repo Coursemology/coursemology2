@@ -1,10 +1,7 @@
 import PropTypes from 'prop-types';
 import { FormattedMessage, defineMessages } from 'react-intl';
-import { List } from 'material-ui/List';
-import Subheader from 'material-ui/Subheader';
-import FlatButton from 'material-ui/FlatButton';
-import Divider from 'material-ui/Divider';
-import ContentAdd from 'material-ui/svg-icons/content/add';
+import { Button, List, ListSubheader, Divider } from '@mui/material';
+import Add from '@mui/icons-material/Add';
 import NotificationBar, {
   notificationShape,
 } from 'lib/components/NotificationBar';
@@ -12,6 +9,10 @@ import ReactTooltip from 'react-tooltip';
 import Material from './Material';
 
 const translations = defineMessages({
+  addFiles: {
+    id: 'course.material.addFiles',
+    defaultMessage: 'Add Files',
+  },
   disableNewFile: {
     id: 'course.material.disableNewFile',
     defaultMessage:
@@ -105,14 +106,14 @@ const MaterialList = (props) => {
         data-for="add-files-button"
         data-tip-disable={enableMaterialsAction}
       >
-        <FlatButton
-          fullWidth
-          label="Add Files"
-          icon={<ContentAdd />}
-          containerElement="label"
-          style={styles.newFileButton}
+        <Button
+          component="label"
           disabled={!enableMaterialsAction}
+          fullWidth
+          startIcon={<Add />}
+          style={styles.newFileButton}
         >
+          <FormattedMessage {...translations.addFiles} />
           <input
             type="file"
             multiple
@@ -120,7 +121,7 @@ const MaterialList = (props) => {
             onChange={onFileInputChange}
             disabled={!enableMaterialsAction}
           />
-        </FlatButton>
+        </Button>
       </div>
       <ReactTooltip id="add-files-button">
         <FormattedMessage {...translations.disableNewFile} />
@@ -133,7 +134,7 @@ const MaterialList = (props) => {
       <Divider />
       <List>
         {(materials.length > 0 || uploadingMaterials.length > 0) && (
-          <Subheader>{header}</Subheader>
+          <ListSubheader disableSticky>{header}</ListSubheader>
         )}
         {materialNodes}
         {uploadingMaterialNodes}

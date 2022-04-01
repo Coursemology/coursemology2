@@ -2,16 +2,15 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { CardText } from 'material-ui/Card';
-import RaisedButton from 'material-ui/RaisedButton';
 import {
+  Button,
+  CardContent,
   Table,
   TableBody,
-  TableHeader,
-  TableHeaderColumn,
+  TableCell,
+  TableHead,
   TableRow,
-  TableRowColumn,
-} from 'material-ui/Table';
+} from '@mui/material';
 
 const styles = {
   expandableThreshold: 10,
@@ -73,33 +72,33 @@ class TextResponseResults extends Component {
   static renderTextResultsTable(answers, anonymous) {
     return (
       <Table>
-        <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+        <TableHead>
           <TableRow>
-            <TableHeaderColumn colSpan={2}>
+            <TableCell colSpan={2}>
               <FormattedMessage {...translations.serial} />
-            </TableHeaderColumn>
+            </TableCell>
             {anonymous ? null : (
-              <TableHeaderColumn colSpan={5}>
+              <TableCell colSpan={5}>
                 <FormattedMessage {...translations.respondent} />
-              </TableHeaderColumn>
+              </TableCell>
             )}
-            <TableHeaderColumn colSpan={15}>
+            <TableCell colSpan={15}>
               <FormattedMessage {...translations.responses} />
-            </TableHeaderColumn>
+            </TableCell>
           </TableRow>
-        </TableHeader>
-        <TableBody displayRowCheckbox={false}>
+        </TableHead>
+        <TableBody>
           {answers.map((answer, index) => (
             <TableRow key={answer.id}>
-              <TableRowColumn colSpan={2}>{index + 1}</TableRowColumn>
+              <TableCell colSpan={2}>{index + 1}</TableCell>
               {anonymous ? null : (
-                <TableRowColumn colSpan={5} style={styles.wrapText}>
+                <TableCell colSpan={5} style={styles.wrapText}>
                   {TextResponseResults.renderStudentName(answer)}
-                </TableRowColumn>
+                </TableCell>
               )}
-              <TableRowColumn colSpan={15} style={styles.wrapText}>
+              <TableCell colSpan={15} style={styles.wrapText}>
                 {answer.text_response}
-              </TableRowColumn>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -125,19 +124,19 @@ class TextResponseResults extends Component {
       ? 'hideResponses'
       : 'showResponses';
     return (
-      <CardText style={styles.expandToggleStyle}>
-        <RaisedButton
-          label={
-            <FormattedMessage
-              {...translations[labelTranslation]}
-              values={values}
-            />
-          }
+      <CardContent style={styles.expandToggleStyle}>
+        <Button
+          variant="outlined"
           onClick={() =>
             this.setState((state) => ({ expanded: !state.expanded }))
           }
-        />
-      </CardText>
+        >
+          <FormattedMessage
+            {...translations[labelTranslation]}
+            values={values}
+          />
+        </Button>
+      </CardContent>
     );
   }
 

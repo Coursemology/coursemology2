@@ -1,8 +1,6 @@
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import Popover, { PopoverAnimationVertical } from 'material-ui/Popover';
-import Menu from 'material-ui/Menu';
-
+import { Paper, Popover } from '@mui/material';
 import LineThicknessField from '../fields/LineThicknessField';
 import ColorPickerField from '../fields/ColorPickerField';
 import { scribingTranslations as translations } from '../../../translations';
@@ -26,8 +24,8 @@ const styles = {
   toolDropdowns: {
     padding: '10px',
   },
-  menu: {
-    padding: '5px',
+  paper: {
+    padding: '10px',
     maxHeight: '250px',
     overflowY: 'auto',
   },
@@ -38,7 +36,7 @@ const popoverStyles = {
     horizontal: 'left',
     vertical: 'bottom',
   },
-  targetOrigin: {
+  transformOrigin: {
     horizontal: 'left',
     vertical: 'top',
   },
@@ -62,15 +60,14 @@ const DrawPopover = (props) => {
 
   return (
     <Popover
-      style={styles.toolDropdowns}
       open={open}
       anchorEl={anchorEl}
       anchorOrigin={popoverStyles.anchorOrigin}
-      targetOrigin={popoverStyles.targetOrigin}
-      onRequestClose={onRequestClose}
-      animation={PopoverAnimationVertical}
+      onClose={onRequestClose}
+      transformOrigin={popoverStyles.transformOrigin}
+      style={styles.toolDropdowns}
     >
-      <Menu style={styles.menu}>
+      <Paper style={styles.paper}>
         <h4>{intl.formatMessage(translations.pencil)} </h4>
         <LineThicknessField
           toolThicknessValue={toolThicknessValue}
@@ -84,7 +81,7 @@ const DrawPopover = (props) => {
           colorPickerColor={colorPickerColor}
           onChangeCompleteColorPicker={onChangeCompleteColorPicker}
         />
-      </Menu>
+      </Paper>
     </Popover>
   );
 };

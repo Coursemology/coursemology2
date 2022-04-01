@@ -4,16 +4,24 @@ import Immutable from 'immutable';
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
-import TextField from 'material-ui/TextField';
-import Toggle from 'material-ui/Toggle';
-import RaisedButton from 'material-ui/RaisedButton';
-import Snackbar from 'material-ui/Snackbar';
-import { Tabs, Tab } from 'material-ui/Tabs';
-import { red500 } from 'material-ui/styles/colors';
+import {
+  Autocomplete,
+  Button,
+  FormControl,
+  FormControlLabel,
+  FormHelperText,
+  InputLabel,
+  MenuItem,
+  Select,
+  Snackbar,
+  Switch,
+  Tab,
+  Tabs,
+  TextField,
+} from '@mui/material';
+import { blue, grey, red } from '@mui/material/colors';
+
 import MaterialSummernote from 'lib/components/MaterialSummernote';
-import ChipInput from 'material-ui-chip-input';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 
 import BuildLog from '../../components/BuildLog';
@@ -158,14 +166,12 @@ class ProgrammingQuestionForm extends Component {
     const currentSkillsWithoutId = currentSkills.filter(
       (v) => v.get('id') !== id,
     );
-
     if (currentSkills.size === currentSkillsWithoutId.size) {
       // id is for a new skill to be added
       const newSkill = this.props.data
         .getIn(['question', 'skills'])
         .filter((v) => v.get('id') === id)
         .first();
-
       if (newSkill) {
         this.props.actions.updateSkills(currentSkills.push(newSkill));
       }
@@ -173,6 +179,12 @@ class ProgrammingQuestionForm extends Component {
       // id is for a selected skill to be removed
       this.props.actions.updateSkills(currentSkillsWithoutId);
     }
+  };
+
+  onChangeSkills = (ids) => {
+    const allSkills = this.props.data.getIn(['question', 'skills']);
+    const updatedSkills = allSkills.filter((v) => ids.includes(v.get('id')));
+    this.props.actions.updateSkills(updatedSkills);
   };
 
   onSubmit = (e) => {
@@ -303,24 +315,31 @@ class ProgrammingQuestionForm extends Component {
       </option>
     ));
     const selectFieldOptions = options.map((opt) => (
-      <MenuItem value={opt.id} key={opt.id} primaryText={opt.name} />
+      <MenuItem value={opt.id} key={opt.id}>
+        {opt.name}
+      </MenuItem>
     ));
 
     return (
       <div key={field}>
-        <SelectField
-          floatingLabelText={(required ? '* ' : '') + label}
-          floatingLabelFixed
-          value={value}
-          onChange={(e, key, id) => {
-            onChange(id);
-          }}
+        <FormControl
           disabled={this.props.data.get('is_loading')}
-          errorText={error}
-          fullWidth
+          error={!!error}
+          style={{ marginTop: 14, width: '100%' }}
+          variant="standard"
         >
-          {selectFieldOptions}
-        </SelectField>
+          <InputLabel shrink>{(required ? '* ' : '') + label}</InputLabel>
+          <Select
+            value={value || ''}
+            onChange={(event) => {
+              onChange(event.target.value);
+            }}
+            variant="standard"
+          >
+            {selectFieldOptions}
+          </Select>
+          <FormHelperText>{error}</FormHelperText>
+        </FormControl>
         <select
           name={ProgrammingQuestionForm.getInputName(field)}
           value={value || ''}
@@ -360,19 +379,28 @@ class ProgrammingQuestionForm extends Component {
     return (
       <div title={placeholder}>
         <TextField
-          type={type}
-          name={ProgrammingQuestionForm.getInputName(field)}
-          id={ProgrammingQuestionForm.getInputId(field)}
-          onChange={(e, newValue) => {
-            this.handleChange(field, newValue);
-          }}
-          onWheel={type === 'number' && ((event) => event.currentTarget.blur())}
-          errorText={error}
-          floatingLabelText={(required ? '* ' : '') + label}
-          floatingLabelFixed
           disabled={this.props.data.get('is_loading')}
-          value={value}
+          error={!!error}
           fullWidth
+          label={(required ? '* ' : '') + label}
+          helperText={error}
+          id={ProgrammingQuestionForm.getInputId(field)}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          name={ProgrammingQuestionForm.getInputName(field)}
+          onChange={(event) => {
+            this.handleChange(field, event.target.value);
+          }}
+          onWheel={
+            type === 'number'
+              ? (event) => event.currentTarget.blur()
+              : undefined
+          }
+          style={{ marginTop: 14, width: '100%' }}
+          type={type}
+          value={value}
+          variant="standard"
         />
       </div>
     );
@@ -381,22 +409,33 @@ class ProgrammingQuestionForm extends Component {
   renderMultiSelectSkillsField(label, field, value, options, error) {
     return (
       <div key={field}>
-        <ChipInput
+        <Autocomplete
           id={ProgrammingQuestionForm.getInputId(field)}
-          value={value}
-          dataSource={options}
-          dataSourceConfig={{ value: 'id', text: 'title' }}
-          onRequestAdd={(chip) => {
-            this.onSelectSkills(chip.id);
-          }}
-          onRequestDelete={this.onSelectSkills}
-          floatingLabelText={label}
-          floatingLabelFixed
-          openOnFocus
-          fullWidth
           disabled={this.props.data.get('is_loading')}
-          errorText={error}
-          menuStyle={{ maxHeight: '80vh', overflowY: 'scroll' }}
+          filterSelectedOptions
+          fullWidth
+          getOptionLabel={(option) => option.title}
+          isOptionEqualToValue={(option, val) => option.id === val.id}
+          ListboxProps={{ style: { maxHeight: '80vh', overflowY: 'scroll' } }}
+          multiple
+          onChange={(event, val) => {
+            const selectedOptionIds = val.map((option) => option.id);
+            this.onChangeSkills(selectedOptionIds);
+          }}
+          options={options}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              variant="standard"
+              error={!!error}
+              helperText={error}
+              label={label}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+          )}
+          value={value}
         />
         <select
           name={`${ProgrammingQuestionForm.getInputName(
@@ -468,14 +507,13 @@ class ProgrammingQuestionForm extends Component {
       <>
         <h3>{label}</h3>
         {downloadNode}
-        <RaisedButton
+        <Button
           className={styles.fileInputButton}
-          label={newPackageButton}
-          labelPosition="before"
-          containerElement="label"
-          primary
+          variant="contained"
+          color="primary"
           disabled={this.props.data.get('is_loading')}
         >
+          {newPackageButton}
           <input
             type="file"
             name={ProgrammingQuestionForm.getInputName(field)}
@@ -484,11 +522,11 @@ class ProgrammingQuestionForm extends Component {
             disabled={this.props.data.get('is_loading')}
             onChange={this.onPackageUploadFileChange}
           />
-        </RaisedButton>
+        </Button>
         <div style={{ display: 'inline-block' }}>
           {newFilename || noFileMessage}
         </div>
-        <div style={{ color: red500, whiteSpace: 'pre-wrap' }}>
+        <div style={{ color: red[500], whiteSpace: 'pre-wrap' }}>
           {packageError}
         </div>
       </>
@@ -515,30 +553,39 @@ class ProgrammingQuestionForm extends Component {
       return null;
     }
 
-    const onTestTypeChange = (editOnline) => {
+    const onTestTypeChange = (event, value) => {
       if (this.props.data.get('is_loading')) return;
-      this.props.actions.updateProgrammingQuestion('edit_online', editOnline);
+      this.props.actions.updateProgrammingQuestion(
+        'edit_online',
+        value === 'editor',
+      );
     };
 
     return (
       <Tabs
-        value={showEditOnline}
+        style={{
+          backgroundColor: grey[100],
+          color: blue[500],
+          margin: '1em 0',
+        }}
+        TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
+        value={showEditOnline ? 'editor' : 'upload-package'}
         onChange={onTestTypeChange}
-        style={{ margin: '1em 0' }}
+        variant="fullWidth"
       >
         <Tab
           id="test-case-editor-tab"
           label={this.props.intl.formatMessage(
             translations.editTestsOnlineButton,
           )}
-          value
+          value="editor"
         />
         <Tab
           id="upload-package-tab"
           label={this.props.intl.formatMessage(
             translations.uploadPackageButton,
           )}
-          value={false}
+          value="upload-package"
         />
       </Tabs>
     );
@@ -699,17 +746,21 @@ class ProgrammingQuestionForm extends Component {
                 'question',
                 'display_autograded_toggle',
               ]) ? (
-                <Toggle
-                  label={autogradedLabel}
-                  labelPosition="right"
-                  toggled={autograded}
-                  onToggle={(e) => {
-                    if (hasAutoGradings) return;
-                    this.handleChange('autograded', e.target.checked);
-                  }}
-                  readOnly={hasAutoGradings}
-                  disabled={this.props.data.get('is_loading')}
-                  style={{ margin: '1em 0' }}
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={autograded}
+                      color="primary"
+                      onChange={(e) => {
+                        if (hasAutoGradings) return;
+                        this.handleChange('autograded', e.target.checked);
+                      }}
+                    />
+                  }
+                  disabled={
+                    this.props.data.get('is_loading') || hasAutoGradings
+                  }
+                  label={<b>{autogradedLabel}</b>}
                   name="question_programming[autograded]"
                 />
               ) : null}
@@ -788,37 +839,40 @@ class ProgrammingQuestionForm extends Component {
           {this.renderBuildLogView()}
 
           <Snackbar
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
             open={this.props.data.get('has_errors')}
             message={this.props.intl.formatMessage(
               translations.resolveErrorsMessage,
             )}
             autoHideDuration={5000}
-            onRequestClose={() => {
+            onClose={() => {
               this.props.actions.clearHasError();
             }}
           />
           <Snackbar
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
             open={this.props.data.get('show_submission_message')}
             message={this.props.data.get('submission_message')}
             autoHideDuration={2000}
-            onRequestClose={() => {
+            onClose={() => {
               this.props.actions.clearSubmissionMessage();
             }}
           />
-          <RaisedButton
+          <Button
+            variant="contained"
             className={styles.submitButton}
-            label={this.submitButtonText()}
-            labelPosition="before"
-            primary
-            id="programming-question-form-submit"
-            type="submit"
+            color="primary"
             disabled={this.props.data.get('is_loading')}
-            icon={
+            endIcon={
               this.props.data.get('is_loading') ? (
                 <i className="fa fa-spinner fa-lg fa-spin" />
               ) : null
             }
-          />
+            id="programming-question-form-submit"
+            type="submit"
+          >
+            {this.submitButtonText()}
+          </Button>
           {this.state.confirmationOpen && (
             <ConfirmationDialog
               message={this.props.intl.formatMessage(

@@ -2,14 +2,12 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import moment from 'lib/moment';
-import { TableRow, TableRowColumn } from 'material-ui/Table';
-import FontIcon from 'material-ui/FontIcon';
-import { red600, red900, blue600, pink600 } from 'material-ui/styles/colors';
-import IconButton from 'material-ui/IconButton';
-import HistoryIcon from 'material-ui/svg-icons/action/history';
+import { Icon, IconButton, TableCell, TableRow } from '@mui/material';
+import { blue, pink, red } from '@mui/material/colors';
+import Delete from '@mui/icons-material/Delete';
+import History from '@mui/icons-material/History';
+import RemoveCircle from '@mui/icons-material/RemoveCircle';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import DeleteIcon from 'material-ui/svg-icons/action/delete';
-import RemoveCircle from 'material-ui/svg-icons/content/remove-circle';
 import {
   getCourseUserURL,
   getEditSubmissionURL,
@@ -27,7 +25,7 @@ import {
 const styles = {
   chip: {
     margin: 4,
-    backgroundColor: blue600,
+    backgroundColor: blue[600],
   },
   nameWrapper: {
     display: 'inline',
@@ -39,7 +37,7 @@ const styles = {
     marginRight: '2px',
   },
   unstartedText: {
-    color: red600,
+    color: red[600],
     fontWeight: 'bold',
   },
   tableCell: {
@@ -52,7 +50,7 @@ const styles = {
     textAlign: 'center',
   },
   button: {
-    fontSize: 8,
+    padding: '0.25em 0.4em',
   },
 };
 
@@ -68,14 +66,12 @@ export default class SubmissionsTableRow extends Component {
   static renderPhantomUserIcon(submission) {
     if (submission.courseUser.phantom) {
       return (
-        <>
-          <FontIcon
-            data-tip
-            data-for="phantom-user"
-            className="fa fa-user-secret fa-xs"
-            style={styles.phantomIcon}
-          />
-        </>
+        <Icon
+          className="fa fa-user-secret fa-xs"
+          data-for="phantom-user"
+          data-tip
+          style={styles.phantomIcon}
+        />
       );
     }
     return null;
@@ -163,10 +159,12 @@ export default class SubmissionsTableRow extends Component {
       <span className="delete-button" data-for="delete-button" data-tip>
         <IconButton
           id={`delete-button-${submission.courseUser.id}`}
-          onClick={() => this.setState({ deleteConfirmation: true })}
           disabled={disabled}
+          onClick={() => this.setState({ deleteConfirmation: true })}
+          size="large"
+          style={styles.button}
         >
-          <DeleteIcon color={red900} />
+          <Delete htmlColor={disabled ? undefined : red[900]} />
         </IconButton>
       </span>
     );
@@ -213,8 +211,10 @@ export default class SubmissionsTableRow extends Component {
     return (
       <span className="submission-access-logs" data-for="access-logs" data-tip>
         <a href={getSubmissionLogsURL(courseId, assessmentId, submission.id)}>
-          <IconButton>
-            <HistoryIcon color={submission.logCount > 1 ? red600 : blue600} />
+          <IconButton size="large" style={styles.button}>
+            <History
+              htmlColor={submission.logCount > 1 ? red[600] : blue[600]}
+            />
           </IconButton>
         </a>
       </span>
@@ -256,10 +256,12 @@ export default class SubmissionsTableRow extends Component {
       <span className="unsubmit-button" data-for="unsubmit-button" data-tip>
         <IconButton
           id={`unsubmit-button-${submission.courseUser.id}`}
-          onClick={() => this.setState({ unsubmitConfirmation: true })}
           disabled={disabled}
+          onClick={() => this.setState({ unsubmitConfirmation: true })}
+          size="large"
+          style={styles.button}
         >
-          <RemoveCircle color={pink600} />
+          <RemoveCircle htmlColor={disabled ? undefined : pink[600]} />
         </IconButton>
       </span>
     );
@@ -303,7 +305,7 @@ export default class SubmissionsTableRow extends Component {
     };
     return (
       <TableRow className="submission-row" key={submission.courseUser.id}>
-        <TableRowColumn style={styles.tableCell}>
+        <TableCell style={styles.tableCell}>
           {SubmissionsTableRow.renderPhantomUserIcon(submission)}
           <a
             style={styles.nameWrapper}
@@ -311,27 +313,27 @@ export default class SubmissionsTableRow extends Component {
           >
             {submission.courseUser.name}
           </a>
-        </TableRowColumn>
-        <TableRowColumn style={tableCenterCellStyle}>
+        </TableCell>
+        <TableCell style={tableCenterCellStyle}>
           {this.renderSubmissionWorkflowState(submission)}
-        </TableRowColumn>
-        <TableRowColumn style={tableCenterCellStyle}>
+        </TableCell>
+        <TableCell style={tableCenterCellStyle}>
           {this.getGradeString(submission)}
-        </TableRowColumn>
+        </TableCell>
         {assessment.gamified ? (
-          <TableRowColumn style={tableCenterCellStyle}>
+          <TableCell style={tableCenterCellStyle}>
             {submission.pointsAwarded !== undefined
               ? submission.pointsAwarded
               : null}
-          </TableRowColumn>
+          </TableCell>
         ) : null}
-        <TableRowColumn style={tableCenterCellStyle}>
+        <TableCell style={tableCenterCellStyle}>
           {SubmissionsTableRow.formatDate(submission.dateSubmitted)}
-        </TableRowColumn>
-        <TableRowColumn style={tableCenterCellStyle}>
+        </TableCell>
+        <TableCell style={tableCenterCellStyle}>
           {SubmissionsTableRow.formatDate(submission.dateGraded)}
-        </TableRowColumn>
-        <TableRowColumn style={tableCenterCellStyle}>
+        </TableCell>
+        <TableCell style={tableCenterCellStyle}>
           {submission.graders && submission.graders.length > 0
             ? submission.graders.map((grader) => (
                 <div key={`grader_${grader.id}`}>
@@ -349,14 +351,14 @@ export default class SubmissionsTableRow extends Component {
                 </div>
               ))
             : null}
-        </TableRowColumn>
-        <TableRowColumn style={tableCenterCellStyle}>
+        </TableCell>
+        <TableCell style={tableCenterCellStyle}>
           {this.renderSubmissionLogsLink(submission)}
           {this.renderUnsubmitButton(submission)}
           {this.renderDeleteButton(submission)}
           {unsubmitConfirmation && this.renderUnsubmitDialog(submission)}
           {deleteConfirmation && this.renderDeleteDialog(submission)}
-        </TableRowColumn>
+        </TableCell>
       </TableRow>
     );
   }

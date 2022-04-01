@@ -1,7 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { Scatter } from 'react-chartjs-2';
 import { injectIntl, intlShape } from 'react-intl';
@@ -215,27 +214,30 @@ class ProgressGraph extends Component {
       const session = this.props.sessions[key];
       const startTime = new Date(session.sessionStart);
       return (
-        <MenuItem
-          key={key}
-          value={key}
-          primaryText={startTime.toLocaleString()}
-        />
+        <MenuItem key={key} value={key}>
+          {startTime.toLocaleString()}
+        </MenuItem>
       );
     });
 
     return (
-      <SelectField
-        floatingLabelText={this.props.intl.formatMessage(
-          translations.selectSession,
-        )}
-        maxHeight={300}
-        value={this.state.selectedSessionId}
-        onChange={(_event, _key, selectedSessionId) =>
-          this.setState({ selectedSessionId })
-        }
-      >
-        {items}
-      </SelectField>
+      <div style={{ padding: '20px 0' }}>
+        <FormControl variant="standard">
+          <InputLabel>
+            {this.props.intl.formatMessage(translations.selectSession)}
+          </InputLabel>
+          <Select
+            value={this.state.selectedSessionId}
+            onChange={(event) =>
+              this.setState({ selectedSessionId: event.target.value })
+            }
+            style={{ maxHeight: 300, width: 200 }}
+            variant="standard"
+          >
+            {items}
+          </Select>
+        </FormControl>
+      </div>
     );
   }
 

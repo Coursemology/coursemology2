@@ -6,10 +6,15 @@ import {
   defineMessages,
   FormattedMessage,
 } from 'react-intl';
-import { Card, CardText } from 'material-ui/Card';
-import CircularProgress from 'material-ui/CircularProgress';
-import Toggle from 'material-ui/Toggle';
-import { yellow100 } from 'material-ui/styles/colors';
+import {
+  Card,
+  CardContent,
+  CircularProgress,
+  FormControlLabel,
+  Switch,
+} from '@mui/material';
+import { yellow } from '@mui/material/colors';
+
 import {
   questionShape,
   historyQuestionShape,
@@ -55,8 +60,6 @@ const styles = {
     marginRight: 10,
   },
   toggleStyle: {
-    width: 170,
-    display: 'inline-block',
     float: 'right',
   },
 };
@@ -130,21 +133,29 @@ class SubmissionAnswer extends Component {
           {isLoading ? (
             <CircularProgress size={30} style={styles.progressStyle} />
           ) : null}
-          <Toggle
-            className="toggle-history"
-            label={intl.formatMessage(translations.viewPastAnswers)}
-            style={styles.toggleStyle}
-            toggled={viewHistory}
-            disabled={disabled}
-            onToggle={() =>
-              handleToggleViewHistoryMode(
-                !viewHistory,
-                submissionQuestionId,
-                id,
-                answersLoaded,
-              )
-            }
-          />
+          <>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={viewHistory || false}
+                  className="toggle-history"
+                  color="primary"
+                  onChange={() =>
+                    handleToggleViewHistoryMode(
+                      !viewHistory,
+                      submissionQuestionId,
+                      id,
+                      answersLoaded,
+                    )
+                  }
+                />
+              }
+              disabled={disabled}
+              label={<b>{intl.formatMessage(translations.viewPastAnswers)}</b>}
+              labelPlacement="start"
+              style={styles.toggleStyle}
+            />
+          </>
           {noPastAnswers ? (
             <div style={{ float: 'right' }}>
               <FormattedMessage {...translations.noPastAnswers} />
@@ -159,10 +170,10 @@ class SubmissionAnswer extends Component {
   renderMissingAnswerPanel() {
     const { intl } = this.props;
     return (
-      <Card id="missing-answer" style={{ backgroundColor: yellow100 }}>
-        <CardText>
+      <Card id="missing-answer" style={{ backgroundColor: yellow[100] }}>
+        <CardContent>
           <span>{intl.formatMessage(translations.missingAnswer)}</span>
-        </CardText>
+        </CardContent>
       </Card>
     );
   }
@@ -170,10 +181,10 @@ class SubmissionAnswer extends Component {
   renderMissingRenderer() {
     const { intl } = this.props;
     return (
-      <Card style={{ backgroundColor: yellow100 }}>
-        <CardText>
+      <Card style={{ backgroundColor: yellow[100] }}>
+        <CardContent>
           <span>{intl.formatMessage(translations.rendererNotImplemented)}</span>
-        </CardText>
+        </CardContent>
       </Card>
     );
   }

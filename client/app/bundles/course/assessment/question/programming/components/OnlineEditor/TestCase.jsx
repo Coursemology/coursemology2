@@ -2,10 +2,8 @@ import Immutable from 'immutable';
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import { TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
-import { grey300 } from 'material-ui/styles/colors';
+import { Button, TableCell, TableRow, TextField } from '@mui/material';
+import { grey } from '@mui/material/colors';
 import styles from './OnlineEditorView.scss';
 import translations from './OnlineEditorView.intl';
 
@@ -35,52 +33,61 @@ class TestCase extends Component {
 
   renderCodeEditorButton(type, index, showCodeEditor) {
     return (
-      <TableRowColumn style={{ paddingLeft: 10, paddingRight: 10 }}>
+      <TableCell style={{ paddingLeft: 10, paddingRight: 10 }}>
         {showCodeEditor ? (
-          <RaisedButton
+          <Button
+            variant="contained"
             className={styles.codeEditorButtonCell}
-            label={this.props.intl.formatMessage(
+            color="primary"
+            disabled={this.props.isLoading}
+            onClick={this.inlineCodeEditorHandler(type, index, !showCodeEditor)}
+            style={{ marginRight: 0, width: 30 }}
+          >
+            {this.props.intl.formatMessage(
               translations.hideTestCaseCodeEditorButton,
             )}
-            labelPosition="before"
-            containerElement="label"
-            primary
+          </Button>
+        ) : (
+          <Button
+            variant="contained"
+            className={styles.codeEditorButtonCell}
+            color="primary"
             disabled={this.props.isLoading}
             onClick={this.inlineCodeEditorHandler(type, index, !showCodeEditor)}
             style={{ marginRight: 0, width: 30 }}
-          />
-        ) : (
-          <RaisedButton
-            className={styles.codeEditorButtonCell}
-            label={this.props.intl.formatMessage(
+          >
+            {this.props.intl.formatMessage(
               translations.showTestCaseCodeEditorButton,
             )}
-            labelPosition="before"
-            containerElement="label"
-            primary
-            disabled={this.props.isLoading}
-            onClick={this.inlineCodeEditorHandler(type, index, !showCodeEditor)}
-            style={{ marginRight: 0, width: 30 }}
-          />
+          </Button>
         )}
-      </TableRowColumn>
+      </TableCell>
     );
   }
 
   renderInput(test, field, placeholder, index) {
     return (
       <TextField
-        type="text"
-        name={TestCase.getTestInputName(this.props.type, field)}
-        onChange={(e, newValue) => {
-          this.props.updateTestCase(this.props.type, index, field, newValue);
-        }}
-        hintText={placeholder}
-        errorText={test.getIn(['error', field])}
         disabled={this.props.isLoading}
-        value={test.get(field)}
+        error={!!test.getIn(['error', field])}
         fullWidth
-        multiLine
+        helperText={test.getIn(['error', field]) && placeholder}
+        InputLabelProps={{
+          shrink: true,
+        }}
+        multiline
+        name={TestCase.getTestInputName(this.props.type, field)}
+        onChange={(event) => {
+          this.props.updateTestCase(
+            this.props.type,
+            index,
+            field,
+            event.target.value,
+          );
+        }}
+        type="text"
+        value={test.get(field)}
+        variant="standard"
       />
     );
   }
@@ -100,29 +107,36 @@ class TestCase extends Component {
     } = this.props;
     return (
       <TableRow>
-        <TableHeaderColumn className={styles.deleteButtonCell}>
-          <RaisedButton
-            name={TestCase.getTestInputName(type, 'inlineCode')}
-            backgroundColor={grey300}
-            icon={<i className="fa fa-trash" />}
+        <TableCell className={styles.deleteButtonCell}>
+          <Button
+            variant="contained"
             disabled={isLoading}
+            name={TestCase.getTestInputName(type, 'inlineCode')}
             onClick={this.testCaseDeleteHandler(type, index)}
-            style={{ minWidth: '40px', width: '40px' }}
-          />
-        </TableHeaderColumn>
-        <TableRowColumn className={styles.testCell}>
+            style={{
+              backgroundColor: grey[300],
+              color: 'black',
+              height: '40px',
+              minWidth: '40px',
+              width: '40px',
+            }}
+          >
+            <i className="fa fa-trash" />
+          </Button>
+        </TableCell>
+        <TableCell className={styles.testCell}>
           test_
           {type}_{displayedIndex}
-        </TableRowColumn>
-        <TableRowColumn className={styles.testCell}>
+        </TableCell>
+        <TableCell className={styles.testCell}>
           {this.renderInput(test, 'expression', expression, index)}
-        </TableRowColumn>
-        <TableRowColumn className={styles.testCell}>
+        </TableCell>
+        <TableCell className={styles.testCell}>
           {this.renderInput(test, 'expected', expected, index)}
-        </TableRowColumn>
-        <TableRowColumn className={styles.testCell}>
+        </TableCell>
+        <TableCell className={styles.testCell}>
           {this.renderInput(test, 'hint', hint, index)}
-        </TableRowColumn>
+        </TableCell>
         {enableInlineCodeEditor
           ? this.renderCodeEditorButton(type, index, showCodeEditor)
           : null}
