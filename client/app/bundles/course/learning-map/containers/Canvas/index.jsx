@@ -9,6 +9,9 @@ const styles = {
   cursorPosition: {
     position: 'absolute',
   },
+  transformComponentWrapper: {
+    width: '100%',
+  },
   wrapper: {
     outline: 'none',
     overflow: 'hidden',
@@ -19,7 +22,7 @@ const styles = {
   zoomAnimation: {
     animationTime: 300,
     animationType: 'easeOutCubic',
-  }
+  },
 };
 
 const Canvas = () => {
@@ -61,10 +64,10 @@ const Canvas = () => {
       pinch={{disabled: true}}
       minScale={0.2}
       maxScale={1.5}
+      ref={transformRef}
       wheel={{disabled: true}}
       zoomIn={styles.zoomAnimation}
       zoomOut={styles.zoomAnimation}
-      ref={transformRef}
     >
       {({ setTransform }) => (
         <>
@@ -77,7 +80,7 @@ const Canvas = () => {
               style={styles.wrapper}
               tabIndex={0}
             >
-              <TransformComponent>
+              <TransformComponent wrapperStyle={styles.transformComponentWrapper}>
                 <Levels
                   gateInputSizeThreshold={gateInputSizeThreshold}
                   getGateConnectionPointId={getGateConnectionPointId}
