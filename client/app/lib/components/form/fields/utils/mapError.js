@@ -17,6 +17,9 @@ export const formatErrorMessage = (errorOrWarning, intl) => {
   if (intl && typeof errorOrWarning === 'object') {
     return intl.formatMessage(errorOrWarning);
   }
+  if (typeof errorOrWarning === 'object') {
+    return errorOrWarning.defaultMessage;
+  }
   return errorOrWarning;
 };
 
