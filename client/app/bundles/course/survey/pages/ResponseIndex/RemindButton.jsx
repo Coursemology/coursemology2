@@ -20,7 +20,12 @@ const translations = defineMessages({
   confirmation: {
     id: 'course.surveys.ResponseIndex.RemindButton.confirmation',
     defaultMessage:
-      'Send emails to all students who have not completed the survey?',
+      'Send emails to all students (excluding phantoms) who have not completed the survey?',
+  },
+  confirmationAll: {
+    id: 'course.surveys.ResponseIndex.RemindButton.confirmationAll',
+    defaultMessage:
+      'Send emails to all students (including phantoms) who have not completed the survey?',
   },
   success: {
     id: 'course.surveys.ResponseIndex.RemindButton.success',
@@ -41,7 +46,13 @@ class RemindButton extends Component {
   handleConfirm = () => {
     const successMessage = <FormattedMessage {...translations.success} />;
     const failureMessage = <FormattedMessage {...translations.failure} />;
-    this.props.dispatch(sendReminderEmail(successMessage, failureMessage));
+    this.props.dispatch(
+      sendReminderEmail(
+        successMessage,
+        failureMessage,
+        this.props.includePhantom,
+      ),
+    );
     this.setState({ open: false });
   };
 
@@ -61,7 +72,11 @@ class RemindButton extends Component {
               <FormattedMessage {...translations.explanation} />
               <br />
               <br />
-              <FormattedMessage {...translations.confirmation} />
+              {this.props.includePhantom ? (
+                <FormattedMessage {...translations.confirmationAll} />
+              ) : (
+                <FormattedMessage {...translations.confirmation} />
+              )}
             </>
           }
           onCancel={() => this.setState({ open: false })}
@@ -74,6 +89,7 @@ class RemindButton extends Component {
 
 RemindButton.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  includePhantom: PropTypes.bool.isRequired,
 };
 
 export default connect()(RemindButton);

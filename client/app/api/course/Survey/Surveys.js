@@ -132,9 +132,12 @@ export default class SurveysAPI extends BaseSurveyAPI {
    * success response: {}
    * error response: {}
    */
-  remind() {
+  remind(includePhantom) {
     return this.getClient().post(
       `${this._getUrlPrefix()}/${this.getSurveyId()}/remind`,
+      {
+        include_phantom: includePhantom,
+      },
     );
   }
 
