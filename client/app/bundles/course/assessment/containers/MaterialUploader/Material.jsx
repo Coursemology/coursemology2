@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { formatLongDateTime } from 'lib/moment';
@@ -54,7 +54,7 @@ const propTypes = {
   disabled: PropTypes.bool,
 };
 
-class Material extends Component {
+class Material extends PureComponent {
   onDelete = (e) => {
     e.preventDefault();
     const { id, name, onMaterialDelete } = this.props;

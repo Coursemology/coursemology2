@@ -1,20 +1,21 @@
-import { Component } from 'react';
+/* eslint-disable camelcase */
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { reduxForm, Field, Form, formValueSelector, change } from 'redux-form';
 import { connect } from 'react-redux';
-import { MenuItem } from '@mui/material';
-import ErrorText, { errorProps } from 'lib/components/ErrorText';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Controller, useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
+import FormRichTextField from 'lib/components/form/fields/RichTextField';
+import FormSelectField from 'lib/components/form/fields/SelectField';
+import FormTextField from 'lib/components/form/fields/TextField';
+import FormToggleField from 'lib/components/form/fields/ToggleField';
+import ErrorText from 'lib/components/ErrorText';
 import ConditionList from 'lib/components/course/ConditionList';
-import renderTextField from 'lib/components/redux-form/TextField';
-import RichTextField from 'lib/components/redux-form/RichTextField';
-import renderToggleField from 'lib/components/redux-form/Toggle';
-import renderSelectField from 'lib/components/redux-form/SelectField';
 import formTranslations from 'lib/translations/form';
-import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
 import { achievementTypesConditionAttributes, typeMaterial } from 'lib/types';
 import translations from './translations.intl';
-import { formNames } from '../../constants';
 import MaterialUploader from '../MaterialUploader';
 import { fetchTabs } from './actions';
 
@@ -37,517 +38,733 @@ const styles = {
   },
 };
 
-const isFieldBlank = (str) => str === undefined || str === '' || str === null;
+const validationSchema = yup.object({
+  title: yup.string().required(formTranslations.required),
+  tab_id: yup.number(),
+  description: yup.string(),
+  start_at: yup.date().nullable().required(formTranslations.required),
+  end_at: yup
+    .date()
+    .nullable()
+    .min(yup.ref('start_at'), translations.startEndValidationError),
+  bonus_end_at: yup
+    .date()
+    .nullable()
+    .min(yup.ref('start_at'), translations.startEndValidationError),
+  base_exp: yup
+    .number()
+    .typeError(formTranslations.required)
+    .required(formTranslations.required),
+  time_bonus_exp: yup
+    .number()
+    .typeError(formTranslations.required)
+    .required(formTranslations.required),
+  published: yup.bool(),
+  autograded: yup.bool(),
+  block_student_viewing_after_submitted: yup.bool(),
+  skippable: yup.bool(),
+  allow_partial_submission: yup.bool(),
+  show_mcq_answer: yup.bool(),
+  tabbed_view: yup.bool().when('autograded', {
+    is: false,
+    then: yup.bool().required(formTranslations.required),
+  }),
+  delayed_grade_publication: yup.bool(),
+  password_protected: yup
+    .bool()
+    .when(
+      ['view_password', 'session_password'],
+      (view_password, session_password, schema) =>
+        schema.test({
+          test: (password_protected) =>
+            // Check if there is at least 1 password type when password_protectd
+            // is enabled.
+            password_protected ? session_password || view_password : true,
+          message: translations.passwordRequired,
+        }),
+    ),
+  view_password: yup.string().nullable(),
+  session_password: yup.string().nullable(),
+  show_mcq_mrq_solution: yup.bool(),
+  use_public: yup.bool(),
+  use_private: yup.bool(),
+  use_evaluation: yup
+    .bool()
+    .when(['use_public', 'use_private'], (use_public, use_private, schema) =>
+      schema.test({
+        // Check if there is at least 1 selected test case.
+        test: (use_evaluation) => use_public || use_private || use_evaluation,
+        message: translations.noTestCaseChosenError,
+      }),
+    ),
+  show_private: yup.bool(),
+  show_evaluation: yup.bool(),
+  randomization: yup.bool(),
+  has_personal_times: yup.bool(),
+  affects_personal_times: yup.bool(),
+});
 
-const isEndDatePassedStartDate = (startAt, endAt) =>
-  startAt && endAt && new Date(startAt) >= new Date(endAt);
+const onStartAtChange = (nextStartAt, watch, setValue) => {
+  const prevStartAt = watch('start_at');
+  const prevEndAt = watch('end_at');
+  const prevBonusEndAt = watch('bonus_end_at');
 
-const isTestCaseChosen = (usePublic, usePrivate, useEvaluation) =>
-  !(usePublic || usePrivate || useEvaluation);
+  const newStartTime = nextStartAt && new Date(nextStartAt).getTime();
+  const oldStartTime = prevStartAt && new Date(prevStartAt).getTime();
+  const oldEndTime = prevEndAt && new Date(prevEndAt).getTime();
+  const oldBonusTime = prevBonusEndAt && new Date(prevBonusEndAt).getTime();
 
-const validate = (values) => {
-  const errors = {};
-
-  const requiredFields = ['title', 'base_exp', 'time_bonus_exp', 'start_at'];
-  if (!values.autograded) {
-    requiredFields.push('tabbed_view');
-  }
-
-  requiredFields.forEach((field) => {
-    if (isFieldBlank(values[field])) {
-      errors[field] = formTranslations.required;
-    }
-  });
-
-  if (values.password_protected) {
-    if (
-      isFieldBlank(values.view_password) &&
-      isFieldBlank(values.session_password)
-    ) {
-      errors.password_protected = translations.passwordRequired;
-    }
-  }
-
-  if (isEndDatePassedStartDate(values.start_at, values.end_at)) {
-    errors.end_at = translations.startEndValidationError;
-  }
-
+  // Shift end_at time
   if (
-    isTestCaseChosen(
-      values.use_public,
-      values.use_private,
-      values.use_evaluation,
-    )
+    newStartTime &&
+    oldStartTime &&
+    oldEndTime &&
+    oldStartTime <= oldEndTime
   ) {
-    errors.use_evaluation = translations.noTestCaseChosenError;
+    const nextEndAt = new Date(oldEndTime + (newStartTime - oldStartTime));
+    setValue('end_at', nextEndAt);
   }
 
-  return errors;
+  // Shift bonus_end_at time
+  if (
+    newStartTime &&
+    oldStartTime &&
+    oldBonusTime &&
+    oldStartTime <= oldBonusTime
+  ) {
+    const nextBonusEndAt = new Date(
+      oldBonusTime + (newStartTime - oldStartTime),
+    );
+    setValue('bonus_end_at', nextBonusEndAt);
+  }
 };
 
-class AssessmentForm extends Component {
-  componentDidMount() {
-    const { dispatch, editing } = this.props;
-    // TODO: Shift the fetchTabs only when the selection menu is clicked on. This would
-    //  prevent unnecessary loading of the tabs every time the assessment form is loaded.
+const UpdatedAssessmentForm = (props) => {
+  const {
+    conditionAttributes,
+    disabled,
+    dispatch,
+    editing,
+    gamified,
+    folderAttributes,
+    initialValues,
+    modeSwitching,
+    onSubmit,
+    randomizationAllowed,
+    showPersonalizedTimelineFeatures,
+    tabs,
+  } = props;
+  const {
+    control,
+    handleSubmit,
+    setError,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm({
+    defaultValues: initialValues,
+    resolver: yupResolver(validationSchema),
+  });
+  const autograded = watch('autograded');
+  const passwordProtected = watch('password_protected');
+  const startAt = watch('start_at');
+
+  // Load all tabs if data is loaded, otherwise fall back to current assessment tab.
+  const loadedTabs = tabs || watch('tabs');
+
+  useEffect(() => {
     if (editing) {
       const failureMessage = (
         <FormattedMessage {...translations.fetchTabFailure} />
       );
       dispatch(fetchTabs(failureMessage));
     }
-  }
+  }, []);
 
-  onStartAtChange = (_, newStartAt) => {
-    const {
-      start_at: startAt,
-      end_at: endAt,
-      bonus_end_at: bonusEndAt,
-      dispatch,
-    } = this.props;
-    const newStartTime = newStartAt && newStartAt.getTime();
-    const oldStartTime = startAt && new Date(startAt).getTime();
-    const oldEndTime = endAt && new Date(endAt).getTime();
-    const oldBonusTime = bonusEndAt && new Date(bonusEndAt).getTime();
+  const renderPasswordFields = () => (
+    <div>
+      <Controller
+        name="view_password"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormTextField
+            field={field}
+            fieldState={fieldState}
+            disabled={disabled}
+            placeholder={translations.viewPassword.defaultMessage}
+            fullWidth
+            InputLabelProps={{
+              shrink: true,
+            }}
+            renderIf={passwordProtected}
+            required
+            style={styles.flexChild}
+            variant="standard"
+          />
+        )}
+      />
+      <div style={styles.hint}>
+        <FormattedMessage {...translations.viewPasswordHint} />
+      </div>
 
-    // Shift end_at time
-    if (
-      newStartTime &&
-      oldStartTime &&
-      oldEndTime &&
-      oldStartTime <= oldEndTime
-    ) {
-      const newEndAt = new Date(oldEndTime + (newStartTime - oldStartTime));
-      dispatch(change(formNames.ASSESSMENT, 'end_at', newEndAt));
-    }
+      <Controller
+        name="session_password"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormTextField
+            field={field}
+            fieldState={fieldState}
+            disabled={disabled}
+            placeholder={translations.sessionPassword.defaultMessage}
+            fullWidth
+            InputLabelProps={{
+              shrink: true,
+            }}
+            renderIf={passwordProtected}
+            required
+            style={styles.flexChild}
+            variant="standard"
+          />
+        )}
+      />
+      <div style={styles.hint}>
+        <FormattedMessage {...translations.sessionPasswordHint} />
+      </div>
+    </div>
+  );
 
-    // Shift bonus_end_at time
-    if (
-      newStartTime &&
-      oldStartTime &&
-      oldBonusTime &&
-      oldStartTime <= oldBonusTime
-    ) {
-      const newBonusTime = new Date(
-        oldBonusTime + (newStartTime - oldStartTime),
-      );
-      dispatch(change(formNames.ASSESSMENT, 'bonus_end_at', newBonusTime));
-    }
-  };
-
-  renderEnableRandomizationField() {
-    const { submitting } = this.props;
-
-    return (
-      <>
-        <Field
-          name="randomization"
-          component={renderToggleField}
-          parse={Boolean}
-          label={<FormattedMessage {...translations.enableRandomization} />}
-          style={styles.toggle}
-          disabled={submitting}
-        />
-        <div style={styles.hint}>
-          <FormattedMessage {...translations.enableRandomizationHint} />
-        </div>
-      </>
-    );
-  }
-
-  renderExtraOptions() {
-    const { submitting } = this.props;
-    if (this.props.autograded) {
+  const renderExtraOptions = () => {
+    if (autograded) {
       return (
-        <>
-          <Field
+        <div>
+          <Controller
             name="skippable"
-            component={renderToggleField}
-            parse={Boolean}
-            label={<FormattedMessage {...translations.skippable} />}
-            style={styles.toggle}
-            disabled={submitting}
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormToggleField
+                field={field}
+                fieldState={fieldState}
+                disabled={disabled}
+                label={<FormattedMessage {...translations.skippable} />}
+                renderIf={autograded}
+                style={styles.toggle}
+              />
+            )}
           />
-          <Field
+          <Controller
             name="allow_partial_submission"
-            component={renderToggleField}
-            parse={Boolean}
-            label={
-              <FormattedMessage {...translations.allowPartialSubmission} />
-            }
-            style={styles.toggle}
-            disabled={submitting}
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormToggleField
+                field={field}
+                fieldState={fieldState}
+                disabled={disabled}
+                label={
+                  <FormattedMessage {...translations.allowPartialSubmission} />
+                }
+                renderIf={autograded}
+                style={styles.toggle}
+              />
+            )}
           />
-          <Field
+          <Controller
             name="show_mcq_answer"
-            component={renderToggleField}
-            parse={Boolean}
-            label={<FormattedMessage {...translations.showMcqAnswer} />}
-            style={styles.toggle}
-            disabled={submitting}
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormToggleField
+                field={field}
+                fieldState={fieldState}
+                disabled={disabled}
+                label={<FormattedMessage {...translations.showMcqAnswer} />}
+                renderIf={autograded}
+                style={styles.toggle}
+              />
+            )}
           />
           <div style={styles.hint}>
             <FormattedMessage {...translations.showMcqAnswerHint} />
           </div>
-        </>
+        </div>
       );
     }
-
+    const options = [
+      {
+        value: false,
+        label: <FormattedMessage {...translations.singlePage} />,
+      },
+      {
+        value: true,
+        label: <FormattedMessage {...translations.tabbedView} />,
+      },
+    ];
     return (
       <>
-        <Field
+        <Controller
           name="tabbed_view"
-          component={renderSelectField}
-          label={<FormattedMessage {...translations.layout} />}
-          type="boolean"
-          disabled={submitting}
-        >
-          <MenuItem value={false}>
-            <FormattedMessage {...translations.singlePage} />
-          </MenuItem>
-          <MenuItem
-            // eslint-disable-next-line react/jsx-boolean-value
-            value={true}
-          >
-            <FormattedMessage {...translations.tabbedView} />
-          </MenuItem>
-        </Field>
-        <Field
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormSelectField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              label={<FormattedMessage {...translations.tab} />}
+              options={options}
+              renderIf={!autograded}
+              type="boolean"
+            />
+          )}
+        />
+        <Controller
           name="delayed_grade_publication"
-          component={renderToggleField}
-          parse={Boolean}
-          label={<FormattedMessage {...translations.delayedGradePublication} />}
-          style={styles.toggle}
-          disabled={submitting}
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormToggleField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              label={
+                <FormattedMessage {...translations.delayedGradePublication} />
+              }
+              renderIf={!autograded}
+              style={styles.toggle}
+            />
+          )}
         />
         <div style={styles.hint}>
           <FormattedMessage {...translations.delayedGradePublicationHint} />
         </div>
-        <Field
+
+        <Controller
           name="password_protected"
-          component={renderToggleField}
-          parse={Boolean}
-          label={<FormattedMessage {...translations.passwordProtection} />}
-          style={styles.toggle}
-          disabled={submitting}
-        />
-
-        {this.props.password_protected && this.renderPasswordFields()}
-      </>
-    );
-  }
-
-  renderPasswordFields() {
-    const { submitting } = this.props;
-
-    return (
-      <div>
-        <Field
-          name="view_password"
-          component={renderTextField}
-          placeholder={translations.viewPassword.defaultMessage}
-          fullWidth
-          autoComplete="off"
-          disabled={submitting}
-        />
-        <div style={styles.hint}>
-          <FormattedMessage {...translations.viewPasswordHint} />
-        </div>
-
-        <Field
-          name="session_password"
-          component={renderTextField}
-          placeholder={translations.sessionPassword.defaultMessage}
-          fullWidth
-          autoComplete="off"
-          disabled={submitting}
-        />
-        <div style={styles.hint}>
-          <FormattedMessage {...translations.sessionPasswordHint} />
-        </div>
-      </div>
-    );
-  }
-
-  renderTabs() {
-    const { tabs, editing, submitting } = this.props;
-
-    return (
-      <Field
-        name="tab_id"
-        component={renderSelectField}
-        label={<FormattedMessage {...translations.tab} />}
-        disabled={editing && submitting}
-      >
-        {tabs &&
-          tabs.map((tab) => (
-            <MenuItem key={tab.tab_id} value={tab.tab_id}>
-              {tab.title}
-            </MenuItem>
-          ))}
-      </Field>
-    );
-  }
-
-  render() {
-    const {
-      handleSubmit,
-      onSubmit,
-      gamified,
-      showPersonalizedTimelineFeatures,
-      modeSwitching,
-      submitting,
-      editing,
-      folderAttributes,
-      conditionAttributes,
-      randomizationAllowed,
-      error,
-    } = this.props;
-
-    return (
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <ErrorText errors={error} />
-        <div style={styles.flexGroup}>
-          <Field
-            name="title"
-            component={renderTextField}
-            style={styles.flexChild}
-            label={<FormattedMessage {...translations.title} />}
-            disabled={submitting}
-          />
-          {editing && this.renderTabs()}
-        </div>
-        <Field
-          name="description"
-          component={RichTextField}
-          label={<FormattedMessage {...translations.description} />}
-          disabled={submitting}
-        />
-        <div style={styles.flexGroup}>
-          <Field
-            name="start_at"
-            component={DateTimePicker}
-            label={<FormattedMessage {...translations.startAt} />}
-            style={styles.flexChild}
-            disabled={submitting}
-            afterChange={this.onStartAtChange}
-          />
-          <Field
-            name="end_at"
-            component={DateTimePicker}
-            clearable
-            label={<FormattedMessage {...translations.endAt} />}
-            style={styles.flexChild}
-            disabled={submitting}
-          />
-          {gamified && (
-            <Field
-              name="bonus_end_at"
-              component={DateTimePicker}
-              clearable
-              label={<FormattedMessage {...translations.bonusEndAt} />}
-              style={styles.flexChild}
-              disabled={submitting}
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormToggleField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              label={<FormattedMessage {...translations.passwordProtection} />}
+              renderIf={!autograded}
+              style={styles.toggle}
             />
           )}
-        </div>
-        {gamified && (
-          <div style={styles.flexGroup}>
-            <Field
-              name="base_exp"
-              component={renderTextField}
-              label={<FormattedMessage {...translations.baseExp} />}
-              type="number"
-              onWheel={(event) => event.currentTarget.blur()}
-              style={styles.flexChild}
-              disabled={submitting}
-            />
-            <Field
-              name="time_bonus_exp"
-              component={renderTextField}
-              label={<FormattedMessage {...translations.timeBonusExp} />}
-              type="number"
-              onWheel={(event) => event.currentTarget.blur()}
-              style={styles.flexChild}
-              disabled={submitting}
-            />
-          </div>
-        )}
-
-        {editing && (
-          <Field
-            name="published"
-            component={renderToggleField}
-            parse={Boolean}
-            label={<FormattedMessage {...translations.published} />}
-            style={styles.toggle}
-            disabled={submitting}
-          />
-        )}
-
-        <Field
-          name="autograded"
-          component={renderToggleField}
-          parse={Boolean}
-          label={
-            modeSwitching ? (
-              <FormattedMessage {...translations.autograded} />
-            ) : (
-              <FormattedMessage {...translations.modeSwitchingDisabled} />
-            )
-          }
-          style={styles.toggle}
-          disabled={!modeSwitching || submitting}
         />
-
-        {modeSwitching && (
-          <div style={styles.hint}>
-            <FormattedMessage {...translations.autogradedHint} />
-          </div>
-        )}
-
-        <Field
-          name="block_student_viewing_after_submitted"
-          component={renderToggleField}
-          parse={Boolean}
-          label={
-            <FormattedMessage
-              {...translations.blockStudentViewingAfterSubmitted}
-            />
-          }
-          style={styles.toggle}
-          disabled={submitting}
-        />
-
-        {this.renderExtraOptions()}
-
-        <Field
-          name="show_mcq_mrq_solution"
-          component={renderToggleField}
-          parse={Boolean}
-          label={<FormattedMessage {...translations.showMcqMrqSolution} />}
-          style={styles.toggle}
-          disabled={submitting}
-        />
-        <div style={styles.hint}>
-          <FormattedMessage {...translations.showMcqMrqSolutionHint} />
-        </div>
-
-        <div style={styles.conditions}>
-          <FormattedMessage {...translations.autogradeTestCasesHint} />
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <Field
-            name="use_public"
-            component={renderToggleField}
-            parse={Boolean}
-            label={<FormattedMessage {...translations.usePublic} />}
-            style={styles.flexChild}
-            disabled={submitting}
-          />
-          <Field
-            name="use_private"
-            component={renderToggleField}
-            parse={Boolean}
-            label={<FormattedMessage {...translations.usePrivate} />}
-            style={styles.flexChild}
-            disabled={submitting}
-          />
-          <Field
-            name="use_evaluation"
-            component={renderToggleField}
-            parse={Boolean}
-            label={<FormattedMessage {...translations.useEvaluation} />}
-            style={styles.flexChild}
-            disabled={submitting}
-          />
-        </div>
-
-        <Field
-          name="show_private"
-          component={renderToggleField}
-          parse={Boolean}
-          label={<FormattedMessage {...translations.showPrivate} />}
-          style={styles.toggle}
-          disabled={submitting}
-        />
-        <div style={styles.hint}>
-          <FormattedMessage {...translations.showPrivateHint} />
-        </div>
-        <Field
-          name="show_evaluation"
-          component={renderToggleField}
-          parse={Boolean}
-          label={<FormattedMessage {...translations.showEvaluation} />}
-          style={styles.toggle}
-          disabled={submitting}
-        />
-        <div style={styles.hint}>
-          <FormattedMessage {...translations.showEvaluationHint} />
-        </div>
-
-        {randomizationAllowed && this.renderEnableRandomizationField()}
-
-        {showPersonalizedTimelineFeatures && (
-          <>
-            <Field
-              name="has_personal_times"
-              component={renderToggleField}
-              parse={Boolean}
-              label={<FormattedMessage {...translations.hasPersonalTimes} />}
-              style={styles.toggle}
-              disabled={submitting}
-            />
-            <div style={styles.hint}>
-              <FormattedMessage {...translations.hasPersonalTimesHint} />
-            </div>
-            <Field
-              name="affects_personal_times"
-              component={renderToggleField}
-              parse={Boolean}
-              label={
-                <FormattedMessage {...translations.affectsPersonalTimes} />
-              }
-              style={styles.toggle}
-              disabled={submitting}
-            />
-            <div style={styles.hint}>
-              <FormattedMessage {...translations.affectsPersonalTimesHint} />
-            </div>
-          </>
-        )}
-
-        {folderAttributes && (
-          <>
-            <br />
-            <MaterialUploader
-              enableMaterialsAction={folderAttributes.enable_materials_action}
-              folderId={folderAttributes.folder_id}
-              materials={folderAttributes.materials}
-            />
-          </>
-        )}
-        {editing && conditionAttributes && (
-          <div style={styles.conditions}>
-            <ConditionList
-              newConditionUrls={conditionAttributes.new_condition_urls}
-              conditions={conditionAttributes.conditions}
-            />
-          </div>
-        )}
-      </Form>
+        {passwordProtected && renderPasswordFields()}
+      </>
     );
-  }
-}
+  };
 
-AssessmentForm.defaultProps = {
+  const renderTabs = () => {
+    const options = loadedTabs.map((tab) => ({
+      value: tab.tab_id,
+      label: tab.title,
+    }));
+    return (
+      <Controller
+        name="tab_id"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormSelectField
+            field={field}
+            fieldState={fieldState}
+            disabled={disabled}
+            label={<FormattedMessage {...translations.tab} />}
+            options={options}
+          />
+        )}
+      />
+    );
+  };
+
+  return (
+    <form
+      encType="multipart/form-data"
+      id="assessment-form"
+      noValidate
+      onSubmit={handleSubmit((data) => onSubmit(data, setError))}
+    >
+      <ErrorText errors={errors} />
+      <div style={styles.flexGroup}>
+        <Controller
+          name="title"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormTextField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              label={<FormattedMessage {...translations.title} />}
+              fullWidth
+              InputLabelProps={{
+                shrink: true,
+              }}
+              required
+              style={styles.flexChild}
+              variant="standard"
+            />
+          )}
+        />
+        {editing && renderTabs(loadedTabs, disabled)}
+      </div>
+      <Controller
+        name="description"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormRichTextField
+            field={field}
+            fieldState={fieldState}
+            disabled={disabled}
+            label={<FormattedMessage {...translations.description} />}
+            fullWidth
+            InputLabelProps={{
+              shrink: true,
+            }}
+            variant="standard"
+          />
+        )}
+      />
+      <div style={styles.flexGroup}>
+        <Controller
+          name="start_at"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormDateTimePickerField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              label={<FormattedMessage {...translations.startAt} />}
+              afterChangeField={(newValue) =>
+                onStartAtChange(newValue, watch, setValue)
+              }
+              style={styles.flexChild}
+            />
+          )}
+        />
+        <Controller
+          name="end_at"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormDateTimePickerField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              label={<FormattedMessage {...translations.endAt} />}
+              minDate={startAt}
+              style={styles.flexChild}
+            />
+          )}
+        />
+        {gamified && (
+          <Controller
+            name="bonus_end_at"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormDateTimePickerField
+                field={field}
+                fieldState={fieldState}
+                disabled={disabled}
+                label={<FormattedMessage {...translations.bonusEndAt} />}
+                minDate={startAt}
+                style={styles.flexChild}
+              />
+            )}
+          />
+        )}
+      </div>
+      {gamified && (
+        <div style={styles.flexGroup}>
+          <Controller
+            name="base_exp"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormTextField
+                field={field}
+                fieldState={fieldState}
+                disabled={disabled}
+                fullWidth
+                label={<FormattedMessage {...translations.baseExp} />}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                onWheel={(event) => event.currentTarget.blur()}
+                style={styles.flexChild}
+                type="number"
+                variant="standard"
+              />
+            )}
+          />
+          <Controller
+            name="time_bonus_exp"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormTextField
+                field={field}
+                fieldState={fieldState}
+                disabled={disabled}
+                fullWidth
+                label={<FormattedMessage {...translations.timeBonusExp} />}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                onWheel={(event) => event.currentTarget.blur()}
+                style={styles.flexChild}
+                type="number"
+                variant="standard"
+              />
+            )}
+          />
+        </div>
+      )}
+
+      {editing && (
+        <Controller
+          name="published"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormToggleField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              label={<FormattedMessage {...translations.published} />}
+              style={styles.toggle}
+            />
+          )}
+        />
+      )}
+
+      <Controller
+        name="autograded"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormToggleField
+            field={field}
+            fieldState={fieldState}
+            disabled={!modeSwitching || disabled}
+            label={
+              modeSwitching ? (
+                <FormattedMessage {...translations.autograded} />
+              ) : (
+                <FormattedMessage {...translations.modeSwitchingDisabled} />
+              )
+            }
+            style={styles.toggle}
+          />
+        )}
+      />
+
+      {modeSwitching && (
+        <div style={styles.hint}>
+          <FormattedMessage {...translations.autogradedHint} />
+        </div>
+      )}
+
+      <Controller
+        name="block_student_viewing_after_submitted"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormToggleField
+            field={field}
+            fieldState={fieldState}
+            disabled={disabled}
+            label={
+              <FormattedMessage
+                {...translations.blockStudentViewingAfterSubmitted}
+              />
+            }
+            style={styles.toggle}
+          />
+        )}
+      />
+
+      {renderExtraOptions()}
+
+      <Controller
+        name="show_mcq_mrq_solution"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormToggleField
+            field={field}
+            fieldState={fieldState}
+            disabled={disabled}
+            label={<FormattedMessage {...translations.showMcqMrqSolution} />}
+            style={styles.toggle}
+          />
+        )}
+      />
+      <div style={styles.hint}>
+        <FormattedMessage {...translations.showMcqMrqSolutionHint} />
+      </div>
+
+      <div style={styles.conditions}>
+        <FormattedMessage {...translations.autogradeTestCasesHint} />
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <Controller
+          name="use_public"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormToggleField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              label={<FormattedMessage {...translations.usePublic} />}
+              style={styles.flexChild}
+            />
+          )}
+        />
+        <Controller
+          name="use_private"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormToggleField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              label={<FormattedMessage {...translations.usePrivate} />}
+              style={styles.flexChild}
+            />
+          )}
+        />
+        <Controller
+          name="use_evaluation"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormToggleField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              label={<FormattedMessage {...translations.useEvaluation} />}
+              style={styles.flexChild}
+            />
+          )}
+        />
+      </div>
+
+      <Controller
+        name="show_private"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormToggleField
+            field={field}
+            fieldState={fieldState}
+            disabled={disabled}
+            label={<FormattedMessage {...translations.showPrivate} />}
+            style={styles.toggle}
+          />
+        )}
+      />
+      <div style={styles.hint}>
+        <FormattedMessage {...translations.showPrivateHint} />
+      </div>
+      <Controller
+        name="show_evaluation"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormToggleField
+            field={field}
+            fieldState={fieldState}
+            disabled={disabled}
+            label={<FormattedMessage {...translations.showEvaluation} />}
+            style={styles.toggle}
+          />
+        )}
+      />
+      <div style={styles.hint}>
+        <FormattedMessage {...translations.showEvaluationHint} />
+      </div>
+
+      {randomizationAllowed && (
+        <>
+          <Controller
+            name="randomization"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormToggleField
+                field={field}
+                fieldState={fieldState}
+                disabled={disabled}
+                label={
+                  <FormattedMessage {...translations.enableRandomization} />
+                }
+                style={styles.toggle}
+              />
+            )}
+          />
+          <div style={styles.hint}>
+            <FormattedMessage {...translations.enableRandomizationHint} />
+          </div>
+        </>
+      )}
+
+      {showPersonalizedTimelineFeatures && (
+        <>
+          <Controller
+            name="has_personal_times"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormToggleField
+                field={field}
+                fieldState={fieldState}
+                disabled={disabled}
+                label={<FormattedMessage {...translations.hasPersonalTimes} />}
+                style={styles.toggle}
+              />
+            )}
+          />
+          <div style={styles.hint}>
+            <FormattedMessage {...translations.hasPersonalTimesHint} />
+          </div>
+
+          <Controller
+            name="affects_personal_times"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormToggleField
+                field={field}
+                fieldState={fieldState}
+                disabled={disabled}
+                label={
+                  <FormattedMessage {...translations.affectsPersonalTimes} />
+                }
+                style={styles.toggle}
+              />
+            )}
+          />
+          <div style={styles.hint}>
+            <FormattedMessage {...translations.affectsPersonalTimesHint} />
+          </div>
+        </>
+      )}
+
+      {folderAttributes && (
+        <>
+          <br />
+          <MaterialUploader
+            enableMaterialsAction={folderAttributes.enable_materials_action}
+            folderId={folderAttributes.folder_id}
+            materials={folderAttributes.materials}
+          />
+        </>
+      )}
+      {editing && conditionAttributes && (
+        <div style={styles.conditions}>
+          <ConditionList
+            newConditionUrls={conditionAttributes.new_condition_urls}
+            conditions={conditionAttributes.conditions}
+          />
+        </div>
+      )}
+    </form>
+  );
+};
+
+UpdatedAssessmentForm.defaultProps = {
   gamified: true,
 };
 
-AssessmentForm.propTypes = {
+UpdatedAssessmentForm.propTypes = {
+  disabled: PropTypes.bool,
   dispatch: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
   start_at: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
   end_at: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
   bonus_end_at: PropTypes.oneOfType([
@@ -557,7 +774,6 @@ AssessmentForm.propTypes = {
   autograded: PropTypes.bool,
   password_protected: PropTypes.bool,
   showPersonalizedTimelineFeatures: PropTypes.bool,
-  submitting: PropTypes.bool,
   tabs: PropTypes.arrayOf(
     PropTypes.shape({
       tab_id: PropTypes.number,
@@ -566,8 +782,6 @@ AssessmentForm.propTypes = {
   ),
   // If randomization is enabled for the assessment
   randomization: PropTypes.bool,
-  error: errorProps,
-  // Above are props from redux-form.
 
   onSubmit: PropTypes.func.isRequired,
   // If the Form is in editing mode, `published` button will be displayed.
@@ -589,28 +803,13 @@ AssessmentForm.propTypes = {
   }),
   // Condtions will be displayed if the attributes are present.
   conditionAttributes: achievementTypesConditionAttributes,
+  initialValues: PropTypes.object,
 };
 
-const formSelector = formValueSelector(formNames.ASSESSMENT);
-
-function mapStateToProps(state) {
+function mapStateToPropsUpdated(state) {
   return {
-    // Load all tabs if data is loaded, otherwise fall back to current assessment tab.
-    tabs: state.editPage.tabs || formSelector(state, 'tabs'),
-    ...formSelector(
-      state,
-      'start_at',
-      'end_at',
-      'bonus_end_at',
-      'autograded',
-      'password_protected',
-    ),
+    tabs: state.editPage.tabs,
   };
 }
 
-export default connect(mapStateToProps)(
-  reduxForm({
-    form: formNames.ASSESSMENT,
-    validate,
-  })(AssessmentForm),
-);
+export default connect(mapStateToPropsUpdated)(UpdatedAssessmentForm);
