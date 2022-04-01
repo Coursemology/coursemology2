@@ -20,7 +20,7 @@ const translations = defineMessages({
   confirmation: {
     id: 'course.surveys.ResponseIndex.RemindButton.confirmation',
     defaultMessage:
-      'Send emails to all students (excl. phantom) who have not completed the survey?',
+      'Send emails to all students (excluding phantoms) who have not completed the survey?',
   },
   confirmationAll: {
     id: 'course.surveys.ResponseIndex.RemindButton.confirmationAll',
