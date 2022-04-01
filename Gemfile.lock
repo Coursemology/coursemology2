@@ -289,7 +289,7 @@ GEM
       activesupport (>= 5.0)
     high_voltage (3.1.2)
     highline (2.0.3)
-    html-pipeline (2.14.0)
+    html-pipeline (2.14.1)
       activesupport (>= 2)
       nokogiri (>= 1.4)
     html_tokenizer (0.0.7)
