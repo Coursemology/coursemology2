@@ -13,10 +13,6 @@ export default function (state = initialState, action) {
       return { ...state, visible: true };
     }
     case actionTypes.ACHIEVEMENT_FORM_CANCEL: {
-      if (action.payload.pristine) {
-        return { ...state, visible: false };
-      }
-
       return { ...state, confirmationDialogOpen: true };
     }
     case actionTypes.ACHIEVEMENT_FORM_CONFIRM_CANCEL: {

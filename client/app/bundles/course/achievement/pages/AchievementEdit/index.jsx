@@ -1,7 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { submit } from 'redux-form';
 import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
 import { Button } from '@mui/material';
 import NotificationBar, {
@@ -11,7 +10,6 @@ import { achievementTypesConditionAttributes } from 'lib/types';
 import AchievementForm from '../../containers/AchievementForm';
 import * as actions from '../../actions';
 import translations from './translations.intl';
-import { formNames } from '../../constants';
 
 const styles = {
   buttonContainer: {
@@ -21,26 +19,28 @@ const styles = {
 };
 
 class EditPage extends Component {
-  onFormSubmit = (data) => {
+  onFormSubmit = (data, setError) => {
     const attributes = { ...data };
-    const { intl } = this.props;
+    const { dispatch, intl } = this.props;
 
-    return this.props.dispatch(
+    return dispatch(
       actions.updateAchievement(
         data.id,
         { achievement: attributes },
         intl.formatMessage(translations.updateSuccess),
         intl.formatMessage(translations.updateFailure),
+        setError,
       ),
     );
   };
 
   render() {
-    const { initialValues, conditionAttributes, dispatch } = this.props;
-
+    const { initialValues, conditionAttributes, disabled, notification } =
+      this.props;
     return (
       <>
         <AchievementForm
+          disabled={disabled}
           editing
           onSubmit={this.onFormSubmit}
           conditionAttributes={conditionAttributes}
@@ -51,13 +51,14 @@ class EditPage extends Component {
             variant="contained"
             color="primary"
             className="btn-submit"
-            disabled={this.props.disabled}
-            onClick={() => dispatch(submit(formNames.ACHIEVEMENT))}
+            disabled={disabled}
+            form="achievement-form"
+            type="submit"
           >
             <FormattedMessage {...translations.updateAchievement} />
           </Button>
         </div>
-        <NotificationBar notification={this.props.notification} />
+        <NotificationBar notification={notification} />
       </>
     );
   }
