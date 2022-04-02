@@ -1,5 +1,5 @@
 import React from 'react';
-import FontIcon from 'material-ui/FontIcon';
+import { Icon } from '@mui/material';
 
 const styles = {
   content: {
@@ -38,7 +38,7 @@ const UnlockRateDisplay = (props) => {
 
   return (
     <div>
-      <FontIcon
+      <Icon
         className={'fa fa-unlock'}
         style={styles.icon}
       />

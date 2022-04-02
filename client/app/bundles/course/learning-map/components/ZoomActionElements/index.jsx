@@ -1,5 +1,7 @@
 import React from 'react';
-import RaisedButton from 'material-ui/RaisedButton';
+import { Button } from '@mui/material';
+import { FormattedMessage } from 'react-intl';
+import translations from '../../translations.intl'
 
 const styles = {
   actionButton: {
@@ -25,20 +27,26 @@ const ZoomActionElements = (props) => {
 
   return (
     <div style={styles.wrapper}>
-      <RaisedButton
+      <Button
         label={'Zoom In'}
-        primary
+        color='primary'
         className='btn-submit'
         onClick={() => zoomIn()}
         style={styles.actionButton}
-      />
-      <RaisedButton
+        variant='contained'
+      >
+        <FormattedMessage {...translations.zoomIn} />
+      </Button>
+      <Button
         label={'Zoom Out'}
-        primary
+        color='primary'
         className='btn-submit'
         onClick={() => zoomOut()}
         style={styles.actionButton}
-      />
+        variant='contained'
+      >
+        <FormattedMessage {...translations.zoomOut} />
+      </Button>
     </div>
   );
 };

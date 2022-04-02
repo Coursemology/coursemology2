@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
-import { Card, CardText } from 'material-ui/Card';
+import {
+  Card,
+  CardContent,
+  CircularProgress,
+  Icon,
+} from '@mui/material';
 import { connect } from 'react-redux';
-import { green200, orange200, red200 } from 'material-ui/styles/colors';
-import FontIcon from 'material-ui/FontIcon';
 import { removeParentNode, resetSelection, toggleSatisfiabilityType } from 'course/learning-map/actions';
 import ReactTooltip from 'react-tooltip';
-import RefreshIndicator from 'material-ui/RefreshIndicator';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import { elementTypes } from '../../constants';
+
+const red = '#f08080';
+const orange = '#ffa500';
+const green = '#00ff7f';
 
 const styles = {
   content: {
@@ -16,14 +22,15 @@ const styles = {
     flexDirection: 'row',
     justifyContent: 'center',
   },
+  circularProgress: {
+    marginLeft: 12,
+    position: 'relative',
+  },
   icon: {
     cursor: 'pointer',
     fontSize: '18px',
     marginLeft: '20px',
     padding: '0px',
-  },
-  refreshIndicator: {
-    position: 'relative',
   },
   wrapper: {
     bottom: 0,
@@ -75,7 +82,7 @@ const Dashboard = (props) => {
 
   const responseDisplay = () => {
     return {
-      color: response.didSucceed ? `${green200}` : `${red200}`,
+      color: response.didSucceed ? `${green}` : `${red}`,
       text: response.message,
     };
   };
@@ -86,14 +93,14 @@ const Dashboard = (props) => {
     const toNodeTitle = nodes.find((node) => node.id === ids[1]).title;
 
     return {
-      color: `${orange200}`,
+      color: `${orange}`,
       text: `Selected condition: ${fromNodeTitle} ---> ${toNodeTitle}`,
     };
   };
 
   const selectedGateDisplay = () => {
     return {
-      color: `${orange200}`,
+      color: `${orange}`,
       text: `Selected gate for: ${getNodeForSelectedGate().title}`,
     };
   };
@@ -125,7 +132,7 @@ const Dashboard = (props) => {
 
     return (
       <>
-        <FontIcon
+        <Icon
           className={'fa fa-trash'}
           data-tip
           data-for={tooltipId}
@@ -145,14 +152,14 @@ const Dashboard = (props) => {
 
     return (
       <>
-        <FontIcon
+        <Icon
           className={'fa fa-toggle-on'}
           data-tip
           data-for={tooltipId}
           style={styles.icon}
           onClick={() => toggleNodeSatisfiabilityType()}
         >
-        </FontIcon>
+        </Icon>
         <ReactTooltip id={tooltipId}>
           Toggle satisfiability type to
             {` ${node.satisfiability_type === 'all_conditions' ? '\"at least one condition\"' : '\"all conditions\"'}`}
@@ -184,27 +191,24 @@ const Dashboard = (props) => {
   return (
     <>
       <Card style={{...styles.wrapper, backgroundColor: color}}>
-        <CardText style={styles.content}>
+        <CardContent style={styles.content}>
           { text }
           { getActionElements() }
           {
             (!isEmptyResponse || selectedElement.type) &&
-            <FontIcon
+            <Icon
               className={'fa fa-window-close'}
               style={{...styles.icon}}
               onClick={() => reset()}
             />
           }
           { isLoading &&
-            <RefreshIndicator
-              top={0}
-              left={20}
+            <CircularProgress
               size={30}
-              status='loading'
-              style={styles.refreshIndicator}
+              style={styles.circularProgress}
             />
           }
-        </CardText>
+        </CardContent>
       </Card>
       <ConfirmationDialog
         confirmDelete

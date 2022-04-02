@@ -1,10 +1,27 @@
 import React, { useState } from 'react';
-import { Card, CardHeader, CardText } from 'material-ui/Card';
+import {
+  Card,
+  CardContent,
+  Icon
+} from '@mui/material';
 import ConnectionPoint from '../ConnectionPoint';
-import FontIcon from 'material-ui/FontIcon';
 import { connect } from 'react-redux';
 import UnlockRateDisplay from '../UnlockRateDisplay';
 import NodeMenu from '../NodeMenu';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+// Allows NodeMenu to overflow the Card MUI component (i.e. the Node)
+const theme = createTheme({
+  components: {
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          overflow: 'visible',
+        },
+      },
+    },
+  },
+});
 
 const styles = {
   connectionPoint: {
@@ -86,73 +103,78 @@ const Node = (props) => {
 
   return (
     <>
-      <div style={{...styles.wrapper, zIndex: zIndex}}>
-        <Card
-          id={node.id}
-          style={{
-            ...styles.node,
-            opacity: `${!canModify && !node.unlocked ? 0.2 : 1.0}`,
-            zIndex: zIndex
-          }}
-        >
-          <CardHeader
-            style={styles.header}
-            textStyle={styles.headerText}
+      <div
+        style={{...styles.wrapper, zIndex: zIndex}}
+      >
+        <ThemeProvider theme={theme}>
+          <Card
+            id={node.id}
+            style={{
+              ...styles.node,
+              opacity: `${!canModify && !node.unlocked ? 0.2 : 1.0}`,
+              zIndex: zIndex
+            }}
           >
-            {
-              node.unlock_level > 0 &&
-              <>
-                <div style={styles.unlockLevel}>
-                  Level {node.unlock_level}
-                </div>
-              </>
-            }
-            <FontIcon
-              className={icons[node.course_material_type]}
-              style={styles.icon}
-            />
-            {
-              !canModify && !node.unlocked &&
-              <>
-                <FontIcon
-                  className={icons.lock}
-                  style={{...styles.icon, ...styles.lockIcon}}
-                />
-              </>
-            }
-          </CardHeader>
-          <div style={styles.content}>
-            <CardText style={styles.contentText}>
-              <div>
-                <a target='_blank' href={`${node.content_url}`}>
-                {node.title}
-                </a>
-              </div>
+            <CardContent
+              style={styles.header}
+              textStyle={styles.headerText}
+            >
               {
-                canModify &&
-                <UnlockRateDisplay
-                  nodeId={node.id}
-                  unlockRate={node.unlock_rate}
-                  width={0.6 * styles.wrapper.width}
-                />
+                node.unlock_level > 0 &&
+                <>
+                  <div style={styles.unlockLevel}>
+                    Level {node.unlock_level}
+                  </div>
+                </>
               }
-            </CardText>
-            <div style={styles.connectionPoint}>
-              <ConnectionPoint
-                id={getNodeConnectionPointId(node.id)}
-                isActive={canModify}
-                onClick={(event) => onConnectionPointClick(event, node.id)}
+              <Icon
+                className={icons[node.course_material_type]}
+                style={styles.icon}
               />
               {
-                isNodeMenuDisplayed &&
-                <NodeMenu
-                  closeMenuCallback={() => setIsNodeMenuDisplayed(false)}
-                  parentNode={node}
-                />
+                !canModify && !node.unlocked &&
+                <>
+                  <Icon
+                    className={icons.lock}
+                    style={{...styles.icon, ...styles.lockIcon}}
+                  />
+                </>
               }
+            </CardContent>
+            <div style={styles.content}>
+              <CardContent style={styles.contentText}>
+                <div>
+                  <a target='_blank' href={`${node.content_url}`}>
+                  {node.title}
+                  </a>
+                </div>
+                {
+                  canModify &&
+                  <UnlockRateDisplay
+                    nodeId={node.id}
+                    unlockRate={node.unlock_rate}
+                    width={0.6 * styles.wrapper.width}
+                  />
+                }
+              </CardContent>
+              <div style={styles.connectionPoint}>
+                <ConnectionPoint
+                  id={getNodeConnectionPointId(node.id)}
+                  isActive={canModify}
+                  onClick={(event) => onConnectionPointClick(event, node.id)}
+                />
+                {
+                  isNodeMenuDisplayed &&
+                  <NodeMenu
+                    style={{zIndex: 999}}
+                    closeMenuCallback={() => setIsNodeMenuDisplayed(false)}
+                    parentNode={node}
+                  />
+                }
+              </div>
             </div>
-          </div>
-        </Card>
+          </Card>
+        </ThemeProvider>
       </div>
     </>
   );

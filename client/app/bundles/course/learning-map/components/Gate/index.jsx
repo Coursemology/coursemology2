@@ -2,8 +2,10 @@ import React from 'react';
 import ConnectionPoint from '../ConnectionPoint';
 import { connect } from 'react-redux';
 import { selectGate } from 'course/learning-map/actions';
-import { green300, red300 } from 'material-ui/styles/colors';
 import { elementTypes } from '../../constants';
+
+const red = '#f08080';
+const green = '#00ff7f';
 
 const styles = {
   andGate: {
@@ -77,7 +79,7 @@ const Gate = (props) => {
   };
 
   const getGateBackgroundColor = (isSatisfied) => {
-    return canModify ? 'white' : isSatisfied ? `${green300}` : `${red300}`;
+    return canModify ? 'white' : isSatisfied ? `${green}` : `${red}`;
   };
 
   const getAndGate = () => {

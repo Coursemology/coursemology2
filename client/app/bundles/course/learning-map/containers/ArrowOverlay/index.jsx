@@ -1,5 +1,4 @@
 import React from 'react';
-import { grey500 } from 'material-ui/styles/colors';
 import GateToNodeArrows from '../GateToNodeArrows';
 import NodeToGateArrows from '../NodeToGateArrows';
 import { connect } from 'react-redux';
@@ -7,7 +6,7 @@ import { connect } from 'react-redux';
 const arrowAnchorPositions = ['left', 'right'];
 
 const arrowProperties = {
-  defaultColor: `${grey500}`,
+  defaultColor: '#808080',
   headSize: 4,
   selectColor: '#3297fd',
   strokeWidth: 2,
