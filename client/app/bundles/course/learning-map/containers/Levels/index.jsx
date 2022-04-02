@@ -2,6 +2,8 @@ import React from 'react';
 import Gate from '../../components/Gate';
 import Node from '../../components/Node';
 import { connect } from 'react-redux';
+import { nodeShape } from '../../propTypes';
+import PropTypes from 'prop-types';
 
 const styles = {
   level: {
@@ -77,5 +79,14 @@ const Levels = React.memo((props) => {
 const mapStateToProps = (state) => ({
   nodes: state.learningMap.nodes,
 });
+
+Levels.propTypes = {
+  gateInputSizeThreshold: PropTypes.number.isRequired,
+  getGateConnectionPointId: PropTypes.func.isRequired,
+  getGateId: PropTypes.func.isRequired,
+  getGateInputId: PropTypes.func.isRequired,
+  getGateNodeConnectionPointId: PropTypes.func.isRequired,
+  nodes: nodeShape.isRequired,
+};
 
 export default connect(mapStateToProps)(Levels);
