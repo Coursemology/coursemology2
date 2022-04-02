@@ -53,4 +53,13 @@ const mapStateToProps = (state) => ({
   selectedElement: state.learningMap.selectedElement,
 });
 
+ArrowOverlay.propTypes = {
+  gateInputSizeThreshold: PropTypes.number.isRequired,
+  getGateId: PropTypes.func.isRequired,
+  getGateConnectionPointId: PropTypes.func.isRequired,
+  getGateInputId: PropTypes.func.isRequired,
+  getNodeConnectionPointId: PropTypes.func.isRequired,
+  scale: PropTypes.number.isRequired,
+};
+
 export default connect(mapStateToProps)(ArrowOverlay);
