@@ -1,5 +1,10 @@
 import PropTypes from 'prop-types';
 
+export const relatedNodeShape = PropTypes.shape({
+  id: PropTypes.string,
+  is_satisfied: PropTypes.bool,
+});
+
 export const nodeShape = PropTypes.shape({
   id: PropTypes.string.isRequired,
   unlocked: PropTypes.bool.isRequired,
@@ -8,8 +13,8 @@ export const nodeShape = PropTypes.shape({
   depth: PropTypes.number.isRequired,
   children: PropTypes.arrayOf(relatedNodeShape).isRequired,
   parents: PropTypes.arrayOf(relatedNodeShape).isRequired,
-  unlockRate: PropTypes.number.isRequired,
-  unlockLevel: PropTypes.number.isRequired,
+  unlock_rate: PropTypes.number.isRequired,
+  unlock_level: PropTypes.number.isRequired,
 });
 
 export const responseShape = PropTypes.shape({
@@ -27,9 +32,4 @@ export const arrowProperties = PropTypes.shape({
   headSize: PropTypes.string,
   selectColor: PropTypes.string,
   strokeWidth: PropTypes.string,
-});
-
-export const relatedNodeShape = PropTypes.shape({
-  id: PropTypes.string,
-  is_satisfied: PropTypes.bool,
 });
