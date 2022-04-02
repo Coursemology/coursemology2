@@ -75,7 +75,7 @@
     "@mui/icons-material": "^5.5.1",
     "@mui/lab": "^5.0.0-alpha.71",
     "@mui/material": "^5.5.3",
-    "@mui/styles": "^5.4.4",
+    "@mui/styles": "^5.5.3",
     "ace-builds": "^1.4.13",
     "axios": "^0.26.1",
     "babel-loader": "^8.2.4",
@@ -129,7 +129,7 @@
     "script-loader": "^0.7.2",
     "style-loader": "^3.3.1",
     "webfontloader": "^1.6.28",
-    "webpack": "^5.70.0",
+    "webpack": "^5.71.0",
     "webpack-cli": "^4.9.1",
     "webpack-manifest-plugin": "^5.0.0"
   },
