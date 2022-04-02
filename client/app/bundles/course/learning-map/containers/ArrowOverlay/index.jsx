@@ -2,6 +2,7 @@ import React from 'react';
 import GateToNodeArrows from '../GateToNodeArrows';
 import NodeToGateArrows from '../NodeToGateArrows';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 const arrowAnchorPositions = ['left', 'right'];
 
