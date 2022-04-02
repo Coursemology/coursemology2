@@ -2,26 +2,16 @@
 
 exports[`<ResponseShow /> shows form and admin buttons if user has permissions and page is loaded 1`] = `
 <Fragment>
-  <Card
-    expandable={false}
-    expanded={null}
-    initiallyExpanded={false}
-  >
-    <CardText
+  <ForwardRef(Card)>
+    <ForwardRef(CardContent)
       dangerouslySetInnerHTML={
         Object {
           "__html": "Description",
         }
       }
     />
-  </Card>
-  <Table
-    allRowsSelected={false}
-    fixedFooter={true}
-    fixedHeader={true}
-    height="inherit"
-    multiSelectable={false}
-    selectable={true}
+  </ForwardRef(Card)>
+  <ForwardRef(Table)
     style={
       Object {
         "marginTop": 10,
@@ -29,74 +19,42 @@ exports[`<ResponseShow /> shows form and admin buttons if user has permissions a
       }
     }
   >
-    <TableBody
-      allRowsSelected={false}
-      deselectOnClickaway={true}
-      displayRowCheckbox={false}
-      multiSelectable={false}
-      preScanRows={true}
-      selectable={true}
-      style={Object {}}
-    >
-      <TableRow
-        displayBorder={true}
-        hoverable={false}
-        hovered={false}
-        selectable={false}
-        striped={false}
-      >
-        <TableHeaderColumn>
+    <ForwardRef(TableBody)>
+      <ForwardRef(TableRow)>
+        <ForwardRef(TableCell)>
           Student
-        </TableHeaderColumn>
-        <TableRowColumn
-          hoverable={false}
-        >
+        </ForwardRef(TableCell)>
+        <ForwardRef(TableCell)>
           Staff
-        </TableRowColumn>
-      </TableRow>
-      <TableRow
-        displayBorder={true}
-        hoverable={false}
-        hovered={false}
-        selectable={false}
-        striped={false}
-      >
-        <TableHeaderColumn>
+        </ForwardRef(TableCell)>
+      </ForwardRef(TableRow)>
+      <ForwardRef(TableRow)>
+        <ForwardRef(TableCell)>
           Submitted At
-        </TableHeaderColumn>
-        <TableRowColumn
-          hoverable={false}
-        >
+        </ForwardRef(TableCell)>
+        <ForwardRef(TableCell)>
           01 Jan 2100, 12:00am
-        </TableRowColumn>
-      </TableRow>
-      <TableRow
-        displayBorder={true}
-        hoverable={false}
-        hovered={false}
-        selectable={false}
-        striped={false}
-      >
-        <TableHeaderColumn>
+        </ForwardRef(TableCell)>
+      </ForwardRef(TableRow)>
+      <ForwardRef(TableRow)>
+        <ForwardRef(TableCell)>
           Last Updated At
-        </TableHeaderColumn>
-        <TableRowColumn
-          hoverable={false}
-        >
+        </ForwardRef(TableCell)>
+        <ForwardRef(TableCell)>
           13 Jan 2100, 12:00am
-        </TableRowColumn>
-      </TableRow>
-    </TableBody>
-  </Table>
-  <Subheader
-    inset={false}
+        </ForwardRef(TableCell)>
+      </ForwardRef(TableRow)>
+    </ForwardRef(TableBody)>
+  </ForwardRef(Table)>
+  <ForwardRef(ListSubheader)
+    disableSticky={true}
   >
     <FormattedMessage
       defaultMessage="Questions"
       id="course.surveys.questions"
       values={Object {}}
     />
-  </Subheader>
+  </ForwardRef(ListSubheader)>
   <ReduxForm
     flags={
       Object {
@@ -126,9 +84,17 @@ exports[`<ResponseShow /> shows form and admin buttons if user has permissions a
     submittedAt="2099-12-31T16:00:00.000Z"
     surveyId={2}
   />
-  <Connect(UnsubmitButton)
-    responseId={2}
-  />
+  <span
+    style={
+      Object {
+        "marginLeft": 12,
+      }
+    }
+  >
+    <Connect(UnsubmitButton)
+      responseId={2}
+    />
+  </span>
 </Fragment>
 `;
 

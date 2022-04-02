@@ -1,9 +1,8 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
-import RaisedButton from 'material-ui/RaisedButton';
+import { Button, TableCell, TableRow } from '@mui/material';
 import { injectIntl } from 'react-intl';
-import { grey300 } from 'material-ui/styles/colors';
+import { grey } from '@mui/material/colors';
 import styles from './OnlineEditorView.scss';
 
 class NewPackageFile extends Component {
@@ -27,15 +26,22 @@ class NewPackageFile extends Component {
 
     if (showDeleteButton) {
       deleteButton = (
-        <RaisedButton
-          backgroundColor={grey300}
-          icon={<i className="fa fa-trash" />}
+        <Button
+          variant="contained"
           disabled={isLoading}
           onClick={() => {
             this.props.deleteNewPackageFile(this.props.fileType, index);
           }}
-          style={{ minWidth: '40px', width: '40px' }}
-        />
+          style={{
+            backgroundColor: grey[300],
+            color: 'black',
+            height: '40px',
+            minWidth: '40px',
+            width: '40px',
+          }}
+        >
+          <i className="fa fa-trash" />
+        </Button>
       );
       addFileButtonStyle.display = 'none';
       rowStyle = {};
@@ -43,19 +49,19 @@ class NewPackageFile extends Component {
 
     return (
       <TableRow style={rowStyle}>
-        <TableHeaderColumn className={styles.deleteButtonCell}>
+        <TableCell className={styles.deleteButtonCell}>
           {deleteButton}
-        </TableHeaderColumn>
-        <TableRowColumn>
-          <RaisedButton
+        </TableCell>
+        <TableCell>
+          <Button
+            variant="contained"
+            color="primary"
+            component="label"
             className={styles.fileInputButton}
-            label={this.props.buttonLabel}
-            labelPosition="before"
-            containerElement="label"
-            primary
             disabled={isLoading}
             style={addFileButtonStyle}
           >
+            {this.props.buttonLabel}
             <input
               type="file"
               name={NewPackageFile.getPackageFileName(this.props.fileType)}
@@ -63,9 +69,9 @@ class NewPackageFile extends Component {
               disabled={isLoading}
               onChange={this.newPackageFileChangeHandler(index)}
             />
-          </RaisedButton>
+          </Button>
           <div style={{ display: 'inline-block' }}>{filename}</div>
-        </TableRowColumn>
+        </TableCell>
       </TableRow>
     );
   }

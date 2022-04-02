@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
-import IconButton from 'material-ui/IconButton';
-import SkipNext from 'material-ui/svg-icons/av/skip-next';
+import { IconButton, Tooltip } from '@mui/material';
+import SkipNext from '@mui/icons-material/SkipNext';
 import { connect } from 'react-redux';
-import { intlShape, injectIntl } from 'react-intl';
+import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
 
 import styles from '../VideoPlayer.scss';
 import translations from '../../translations';
@@ -21,25 +21,26 @@ const defaultProps = {
 function NextVideoButton(props) {
   if (!props.url) {
     return (
-      <IconButton
-        tooltip={props.intl.formatMessage(translations.noNextVideo)}
-        className={styles.nextVideo}
-        disabled
-      >
-        <SkipNext />
-      </IconButton>
+      <Tooltip title={<FormattedMessage {...translations.noNextVideo} />}>
+        <div className={styles.nextVideo}>
+          <IconButton disabled>
+            <SkipNext />
+          </IconButton>
+        </div>
+      </Tooltip>
     );
   }
 
   return (
-    <IconButton
-      tooltip={props.intl.formatMessage(translations.watchNextVideo)}
-      className={styles.nextVideo}
-      href={props.url}
-      data-method={props.isPostRequest ? 'post' : ''}
-    >
-      <SkipNext />
-    </IconButton>
+    <Tooltip title={<FormattedMessage {...translations.watchNextVideo} />}>
+      <IconButton
+        className={styles.nextVideo}
+        data-method={props.isPostRequest ? 'post' : ''}
+        href={props.url}
+      >
+        <SkipNext htmlColor="black" />
+      </IconButton>
+    </Tooltip>
   );
 }
 

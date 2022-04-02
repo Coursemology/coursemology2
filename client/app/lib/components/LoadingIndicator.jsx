@@ -1,9 +1,10 @@
-import RefreshIndicator from 'material-ui/RefreshIndicator';
+import { CircularProgress } from '@mui/material';
 
 const styles = {
   loading: {
     display: 'flex',
     justifyContent: 'center',
+    marginTop: 24,
     width: '100%',
   },
   loadingInnerDiv: {
@@ -14,7 +15,7 @@ const styles = {
 const LoadingIndicator = () => (
   <div style={styles.loading}>
     <div style={styles.loadingInnerDiv}>
-      <RefreshIndicator top={50} left={0} size={60} status="loading" />
+      <CircularProgress size={60} />
     </div>
   </div>
 );

@@ -2,16 +2,15 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import Subheader from 'material-ui/Subheader';
-import Toggle from 'material-ui/Toggle';
 import {
+  ListSubheader,
+  Switch,
   Table,
   TableBody,
-  TableHeader,
-  TableHeaderColumn,
+  TableCell,
+  TableHead,
   TableRow,
-  TableRowColumn,
-} from 'material-ui/Table';
+} from '@mui/material';
 import NotificationPopup from 'lib/containers/NotificationPopup';
 import {
   fetchUserEmailSubscriptions,
@@ -95,31 +94,31 @@ class UserEmailSubscriptions extends Component {
 
     if (userEmailSubscriptions.length === 0) {
       return (
-        <Subheader>
+        <ListSubheader disableSticky>
           <FormattedMessage {...translations.noEmailSubscriptionSettings} />
-        </Subheader>
+        </ListSubheader>
       );
     }
 
     return (
       <Table>
-        <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+        <TableHead>
           <TableRow>
-            <TableHeaderColumn colSpan={2}>
+            <TableCell colSpan={2}>
               <FormattedMessage {...translations.component} />
-            </TableHeaderColumn>
-            <TableHeaderColumn colSpan={3}>
+            </TableCell>
+            <TableCell colSpan={3}>
               <FormattedMessage {...translations.setting} />
-            </TableHeaderColumn>
-            <TableHeaderColumn colSpan={7}>
+            </TableCell>
+            <TableCell colSpan={7}>
               <FormattedMessage {...translations.description} />
-            </TableHeaderColumn>
-            <TableHeaderColumn>
+            </TableCell>
+            <TableCell>
               <FormattedMessage {...translations.enabled} />
-            </TableHeaderColumn>
+            </TableCell>
           </TableRow>
-        </TableHeader>
-        <TableBody displayRowCheckbox={false}>
+        </TableHead>
+        <TableBody>
           {userEmailSubscriptions.map((item) => this.renderRow(item))}
         </TableBody>
       </Table>
@@ -156,17 +155,18 @@ class UserEmailSubscriptions extends Component {
           setting.setting
         }
       >
-        <TableRowColumn colSpan={2}>{componentTitle}</TableRowColumn>
-        <TableRowColumn colSpan={3}>{settingTitle}</TableRowColumn>
-        <TableRowColumn colSpan={7} style={styles.wrapText}>
+        <TableCell colSpan={2}>{componentTitle}</TableCell>
+        <TableCell colSpan={3}>{settingTitle}</TableCell>
+        <TableCell colSpan={7} style={styles.wrapText}>
           {settingDescription}
-        </TableRowColumn>
-        <TableRowColumn>
-          <Toggle
-            toggled={setting.enabled}
-            onToggle={this.handleUserEmailSubscriptionsUpdate(setting)}
+        </TableCell>
+        <TableCell>
+          <Switch
+            checked={setting.enabled}
+            color="primary"
+            onChange={this.handleUserEmailSubscriptionsUpdate(setting)}
           />
-        </TableRowColumn>
+        </TableCell>
       </TableRow>
     );
   }

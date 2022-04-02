@@ -2,7 +2,8 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import ReactSummernote from 'react-summernote';
-import TextFieldLabel from 'material-ui/TextField/TextFieldLabel';
+import { InputLabel } from '@mui/material';
+import { cyan } from '@mui/material/colors';
 import axios from 'lib/axios';
 
 import { i18nLocale } from 'lib/helpers/server-context';
@@ -29,10 +30,6 @@ const propTypes = {
   airMode: PropTypes.bool,
   airModeColor: PropTypes.bool,
   intl: intlShape,
-};
-
-const contextTypes = {
-  muiTheme: PropTypes.object.isRequired,
 };
 
 class MaterialSummernote extends Component {
@@ -109,20 +106,9 @@ class MaterialSummernote extends Component {
   };
 
   render() {
-    const {
-      baseTheme,
-      textField: {
-        focusColor,
-        floatingLabelColor,
-        disabledTextColor,
-        backgroundColor,
-      },
-    } = this.context.muiTheme;
-
     const testFieldLabelColor = this.state.isFocused
-      ? focusColor
-      : floatingLabelColor;
-
+      ? cyan[500]
+      : 'rgba(0, 0, 0, 0.3)';
     return (
       <div
         key={this.props.field}
@@ -131,26 +117,25 @@ class MaterialSummernote extends Component {
           width: '100%',
           display: 'inline-block',
           position: 'relative',
-          backgroundColor,
-          fontFamily: baseTheme.fontFamily,
+          backgroundColor: 'transparent',
+          fontFamily: 'Roboto, sans-serif',
           cursor: this.props.disabled ? 'not-allowed' : 'auto',
-          paddingTop: this.props.label ? '2.5em' : 0,
+          paddingTop: this.props.label ? '1em' : 0,
         }}
       >
-        <TextFieldLabel
-          muiTheme={this.context.muiTheme}
+        <InputLabel
+          disabled={this.props.disabled}
+          htmlFor={this.props.field}
+          shrink
           style={{
             pointerEvents: 'none',
             color: this.props.disabled
-              ? disabledTextColor
+              ? 'rgba(0, 0, 0, 0.3)'
               : testFieldLabelColor,
           }}
-          htmlFor={this.props.field}
-          shrink
-          disabled={this.props.disabled}
         >
           {this.props.label}
-        </TextFieldLabel>
+        </InputLabel>
         <textarea
           name={this.props.name}
           id={this.props.inputId}
@@ -237,7 +222,6 @@ class MaterialSummernote extends Component {
 }
 
 MaterialSummernote.propTypes = propTypes;
-MaterialSummernote.contextTypes = contextTypes;
 MaterialSummernote.defaultProps = {
   airModeColor: true,
 };

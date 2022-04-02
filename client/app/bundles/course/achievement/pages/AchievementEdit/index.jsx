@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { submit } from 'redux-form';
 import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
-import RaisedButton from 'material-ui/RaisedButton';
+import { Button } from '@mui/material';
 import NotificationBar, {
   notificationShape,
 } from 'lib/components/NotificationBar';
@@ -47,13 +47,15 @@ class EditPage extends Component {
           initialValues={initialValues}
         />
         <div style={styles.buttonContainer}>
-          <RaisedButton
-            label={<FormattedMessage {...translations.updateAchievement} />}
-            primary
+          <Button
+            variant="contained"
+            color="primary"
             className="btn-submit"
             disabled={this.props.disabled}
             onClick={() => dispatch(submit(formNames.ACHIEVEMENT))}
-          />
+          >
+            <FormattedMessage {...translations.updateAchievement} />
+          </Button>
         </div>
         <NotificationBar notification={this.props.notification} />
       </>

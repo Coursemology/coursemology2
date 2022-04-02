@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { fieldMetaPropTypes } from 'redux-form';
 import { FormattedMessage, intlShape } from 'react-intl';
 import Dropzone from 'react-dropzone';
-import { grey300, red500 } from 'material-ui/styles/colors';
+import { grey, red } from '@mui/material/colors';
+
 import createComponent from '../createComponent';
 import mapError from '../mapError';
 import FilePreview from './FilePreview';
@@ -12,14 +13,14 @@ import BadgePreview from './BadgePreview';
 
 const styles = {
   dropzone: {
-    backgroundColor: grey300,
+    backgroundColor: grey[300],
     borderRadius: 5,
     padding: 20,
     textAlign: 'center',
     width: '100%',
   },
   fileLabelError: {
-    color: red500,
+    color: red[500],
     display: 'inline-block',
   },
 };
@@ -51,7 +52,7 @@ class SingleFileInput extends Component {
   }
 
   onCancel = (e) => {
-    this.setState({ file: null }, this.updateStore(''));
+    this.setState({ file: null }, this.updateStore(undefined));
     e.stopPropagation();
   };
 

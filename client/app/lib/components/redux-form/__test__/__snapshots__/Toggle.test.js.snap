@@ -1,36 +1,67 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<Toggle /> renders a toggle with an error 1`] = `
-<div>
-  <Toggle
-    defaultToggled={false}
-    disabled={false}
-    labelPosition="left"
+<div
+  style={
+    Object {
+      "width": "100%",
+    }
+  }
+>
+  <ForwardRef(FormControlLabel)
+    control={
+      <ForwardRef(Switch)
+        checked={false}
+        color="primary"
+        onChange={[MockFunction]}
+      />
+    }
+    label={<b />}
     name="Not very awesome toggle"
-    onToggle={[MockFunction]}
-    toggled={false}
-  />
-  <div
     style={
       Object {
-        "color": "#f44336",
+        "height": "30px",
+        "margin": "8px 0px 0px -8px",
+      }
+    }
+  />
+  <ForwardRef(FormHelperText)
+    error={true}
+    style={
+      Object {
+        "margin": 0,
       }
     }
   >
     Ooops
-  </div>
+  </ForwardRef(FormHelperText)>
 </div>
 `;
 
 exports[`<Toggle /> renders a toggled toggle 1`] = `
-<div>
-  <Toggle
-    defaultToggled={false}
-    disabled={false}
-    labelPosition="left"
+<div
+  style={
+    Object {
+      "width": "100%",
+    }
+  }
+>
+  <ForwardRef(FormControlLabel)
+    control={
+      <ForwardRef(Switch)
+        checked={true}
+        color="primary"
+        onChange={[MockFunction]}
+      />
+    }
+    label={<b />}
     name="Awesome toggle"
-    onToggle={[MockFunction]}
-    toggled={true}
+    style={
+      Object {
+        "height": "30px",
+        "margin": "8px 0px 0px -8px",
+      }
+    }
   />
 </div>
 `;

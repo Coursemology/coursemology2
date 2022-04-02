@@ -1,15 +1,13 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import FontIcon from 'material-ui/FontIcon';
-import MaterialTooltip from 'material-ui/internal/Tooltip';
-import { blue500 } from 'material-ui/styles/colors';
+import { Icon, Tooltip } from '@mui/material';
+import { blue } from '@mui/material/colors';
 
 const propTypes = {
   activeObject: PropTypes.object,
   disabled: PropTypes.bool,
   toolType: PropTypes.string.isRequired,
-  tooltip: PropTypes.string,
-  showTooltip: PropTypes.bool,
+  tooltip: PropTypes.node,
   currentTool: PropTypes.string.isRequired,
   onClick: PropTypes.func,
   onClickIcon: PropTypes.func,
@@ -18,8 +16,6 @@ const propTypes = {
   colorBarBackground: PropTypes.string,
   iconClassname: PropTypes.string,
   iconComponent: PropTypes.func,
-  onMouseEnter: PropTypes.func,
-  onMouseLeave: PropTypes.func,
 };
 
 const style = {
@@ -92,61 +88,49 @@ export default class ToolDropdown extends Component {
       this.props;
     const iconStyle = disabled
       ? style.disabled
-      : { color: currentTool === toolType ? blue500 : 'rgba(0, 0, 0, 0.4)' };
+      : { color: currentTool === toolType ? blue[500] : 'rgba(0, 0, 0, 0.4)' };
 
     return iconComponent ? (
       iconComponent()
     ) : (
-      <FontIcon className={iconClassname} style={iconStyle} />
+      <Icon className={iconClassname} style={iconStyle} />
     );
   }
 
   render() {
-    const {
-      disabled,
-      onClick,
-      onClickIcon,
-      onClickChevron,
-      tooltip,
-      showTooltip,
-      onMouseEnter,
-      onMouseLeave,
-    } = this.props;
+    const { disabled, onClick, onClickIcon, onClickChevron, tooltip } =
+      this.props;
 
     return (
-      <div
-        role="button"
-        tabIndex="0"
-        style={disabled ? { ...style.tool, ...style.disabled } : style.tool}
-        onClick={(event) => (disabled ? () => {} : onClick && onClick(event))}
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
-      >
+      <Tooltip placement="top" title={tooltip}>
         <div
           role="button"
           tabIndex="0"
-          style={style.innerTool}
-          onClick={onClickIcon}
+          style={disabled ? { ...style.tool, ...style.disabled } : style.tool}
+          onClick={(event) => (disabled ? () => {} : onClick && onClick(event))}
         >
-          {this.renderIcon()}
-          <MaterialTooltip
-            horizontalPosition="center"
-            label={tooltip}
-            show={showTooltip}
-            verticalPosition="top"
-          />
-          {this.renderColorBar()}
+          <div
+            role="button"
+            tabIndex="0"
+            style={style.innerTool}
+            onClick={onClickIcon}
+          >
+            {this.renderIcon()}
+            {this.renderColorBar()}
+          </div>
+          <div style={style.innerTool}>
+            <Icon
+              className="fa fa-chevron-down"
+              style={
+                disabled
+                  ? { ...style.chevron, ...style.disabled }
+                  : style.chevron
+              }
+              onClick={!disabled ? onClickChevron : undefined}
+            />
+          </div>
         </div>
-        <div style={style.innerTool}>
-          <FontIcon
-            className="fa fa-chevron-down"
-            style={
-              disabled ? { ...style.chevron, ...style.disabled } : style.chevron
-            }
-            onClick={!disabled ? onClickChevron : undefined}
-          />
-        </div>
-      </div>
+      </Tooltip>
     );
   }
 }

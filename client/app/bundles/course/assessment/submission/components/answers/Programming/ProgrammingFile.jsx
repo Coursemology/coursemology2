@@ -1,9 +1,8 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-
-import { yellow100 } from 'material-ui/styles/colors';
-import Paper from 'material-ui/Paper';
-import WarningIcon from 'material-ui/svg-icons/alert/warning';
+import { Paper } from '@mui/material';
+import { yellow } from '@mui/material/colors';
+import Warning from '@mui/icons-material/Warning';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router';
 
@@ -60,8 +59,8 @@ class ProgrammingFile extends Component {
 
     if (file.highlighted_content === null) {
       return (
-        <Paper style={{ backgroundColor: yellow100, padding: 10 }}>
-          <WarningIcon style={styles.warningIcon} />
+        <Paper style={{ backgroundColor: yellow[100], padding: 10 }}>
+          <Warning style={styles.warningIcon} />
           <span>
             <FormattedMessage {...translations.sizeTooBig} />
             &nbsp;

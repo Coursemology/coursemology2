@@ -57,7 +57,9 @@ class DestinationCourseSelector extends Component {
         selectedCourseId={destinationCourseId}
         currentCourseId={currentCourseId}
         prompt={intl.formatMessage(translations.selectDestinationCoursePrompt)}
-        onChange={(e, index, value) => dispatch(setDestinationCourseId(value))}
+        onChange={(event) =>
+          dispatch(setDestinationCourseId(event.target.value))
+        }
         onHome={() => dispatch(setDestinationCourseId(currentCourseId))}
       />
     );

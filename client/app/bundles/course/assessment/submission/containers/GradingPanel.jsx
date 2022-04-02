@@ -2,17 +2,16 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
-import { Card, CardText } from 'material-ui/Card';
 import {
+  Card,
+  CardContent,
   Table,
-  TableHeader,
   TableBody,
+  TableCell,
+  TableHead,
   TableRow,
-  TableHeaderColumn,
-  TableRowColumn,
-} from 'material-ui/Table';
+} from '@mui/material';
 import ReactTooltip from 'react-tooltip';
-
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { formatDateTime } from '../utils';
@@ -141,15 +140,13 @@ class VisibleGradingPanel extends Component {
     }
     return (
       <TableRow key={question.id}>
-        <TableHeaderColumn style={styles.headerColumn} colSpan={2}>
+        <TableCell style={styles.headerColumn} colSpan={2}>
           {question.displayTitle}
-        </TableHeaderColumn>
+        </TableCell>
         {showGrader ? (
-          <TableHeaderColumn style={styles.headerColumn}>
-            {graderInfo}
-          </TableHeaderColumn>
+          <TableCell style={styles.headerColumn}>{graderInfo}</TableCell>
         ) : null}
-        <TableRowColumn>{`${questionGrade} / ${question.maximumGrade}`}</TableRowColumn>
+        <TableCell>{`${questionGrade} / ${question.maximumGrade}`}</TableCell>
       </TableRow>
     );
   }
@@ -178,27 +175,23 @@ class VisibleGradingPanel extends Component {
     return (
       <div>
         <h4>{intl.formatMessage(translations.gradeSummary)}</h4>
-        <Table selectable={false} style={styles.table}>
-          <TableHeader
-            adjustForCheckbox={false}
-            displaySelectAll={false}
-            enableSelectAll={false}
-          >
+        <Table style={styles.table}>
+          <TableHead>
             <TableRow>
-              <TableHeaderColumn style={styles.headerColumn} colSpan={2}>
+              <TableCell style={styles.headerColumn} colSpan={2}>
                 {intl.formatMessage(translations.question)}
-              </TableHeaderColumn>
+              </TableCell>
               {showGrader ? (
-                <TableHeaderColumn style={styles.headerColumn}>
+                <TableCell style={styles.headerColumn}>
                   {intl.formatMessage(translations.grader)}
-                </TableHeaderColumn>
+                </TableCell>
               ) : null}
-              <TableHeaderColumn style={styles.headerColumn}>
+              <TableCell style={styles.headerColumn}>
                 {intl.formatMessage(translations.totalGrade)}
-              </TableHeaderColumn>
+              </TableCell>
             </TableRow>
-          </TableHeader>
-          <TableBody displayRowCheckbox={false}>
+          </TableHead>
+          <TableBody>
             {questionIds.map((questionId) =>
               this.renderGradeRow(questions[questionId], showGrader),
             )}
@@ -256,18 +249,18 @@ class VisibleGradingPanel extends Component {
 
     const tableRow = (field, value) => (
       <TableRow>
-        <TableHeaderColumn style={styles.headerColumn} columnNumber={0}>
+        <TableCell style={styles.headerColumn}>
           <FormattedMessage {...translations[field]} />
-        </TableHeaderColumn>
-        <TableRowColumn>{value}</TableRowColumn>
+        </TableCell>
+        <TableCell>{value}</TableCell>
       </TableRow>
     );
 
     return (
       <div>
         <h4>{intl.formatMessage(translations.statistics)}</h4>
-        <Table selectable={false} style={styles.table}>
-          <TableBody displayRowCheckbox={false}>
+        <Table style={styles.table}>
+          <TableBody>
             {tableRow('student', submitter)}
             {tableRow('status', this.renderSubmissionStatus())}
             {shouldRenderGrading
@@ -308,8 +301,8 @@ class VisibleGradingPanel extends Component {
     return (
       <div style={styles.panel}>
         <Card>
-          <CardText>{this.renderSubmissionTable()}</CardText>
-          <CardText>{this.renderGradeTable()}</CardText>
+          <CardContent>{this.renderSubmissionTable()}</CardContent>
+          <CardContent>{this.renderGradeTable()}</CardContent>
         </Card>
       </div>
     );

@@ -22,13 +22,7 @@ describe('<NewSectionButton />', () => {
 
     // Fill section form with title
     const section = { title: 'Funky section title' };
-    const dialogInline = sectionFormDialogue
-      .find('RenderToLayer')
-      .first()
-      .instance();
-    const sectionForm = mount(dialogInline.props.render(), contextOptions).find(
-      'form',
-    );
+    const sectionForm = sectionFormDialogue.find('form');
     const titleInput = sectionForm.find('input[name="title"]');
     titleInput.simulate('change', { target: { value: section.title } });
 

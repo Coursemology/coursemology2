@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { green50 } from 'material-ui/styles/colors';
-import { RadioButton } from 'material-ui/RadioButton';
-
+import { FormControlLabel, Radio } from '@mui/material';
+import { green } from '@mui/material/colors';
 import { questionShape } from '../../propTypes';
 
 function MultipleChoiceOptions({
@@ -15,22 +14,30 @@ function MultipleChoiceOptions({
   return (
     <>
       {question.options.map((option) => (
-        <RadioButton
-          key={option.id}
-          value={option.id}
-          onCheck={(event, buttonValue) => onChange(buttonValue)}
+        <FormControlLabel
           checked={option.id === value}
-          label={
-            <div
-              style={
-                option.correct && readOnly && (showMcqMrqSolution || graderView)
-                  ? { backgroundColor: green50 }
-                  : null
-              }
-              dangerouslySetInnerHTML={{ __html: option.option.trim() }}
-            />
-          }
+          control={<Radio style={{ padding: '0 12px' }} />}
           disabled={readOnly}
+          key={option.id}
+          label={
+            <b>
+              <div
+                style={
+                  option.correct &&
+                  readOnly &&
+                  (showMcqMrqSolution || graderView)
+                    ? { backgroundColor: green[50] }
+                    : null
+                }
+                dangerouslySetInnerHTML={{ __html: option.option.trim() }}
+              />
+            </b>
+          }
+          onChange={(event) => {
+            onChange(parseInt(event.target.value, 10));
+          }}
+          style={{ width: '100%' }}
+          value={option.id.toString()}
         />
       ))}
     </>
@@ -44,7 +51,7 @@ MultipleChoiceOptions.propTypes = {
   graderView: PropTypes.bool,
   input: PropTypes.shape({
     onChange: PropTypes.func,
-    value: PropTypes.number,
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   }).isRequired,
 };
 

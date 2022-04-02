@@ -2,12 +2,9 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import RaisedButton from 'material-ui/RaisedButton';
-import Popover from 'material-ui/Popover';
-import Menu from 'material-ui/Menu';
-import MenuItem from 'material-ui/MenuItem';
-import Done from 'material-ui/svg-icons/action/done';
-import KeyboardArrowDown from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
+import { Button, MenuItem, MenuList, Popover } from '@mui/material';
+import Done from '@mui/icons-material/Done';
+import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import { setColumnVisibility } from 'course/lesson-plan/actions';
 import { fields } from 'course/lesson-plan/constants';
 import fieldTranslations from 'course/lesson-plan/translations';
@@ -58,39 +55,40 @@ class ColumnVisibilityDropdown extends Component {
 
     return (
       <div style={styles.dropdown}>
-        <RaisedButton
-          secondary
+        <Button
+          variant="contained"
+          color="secondary"
+          endIcon={<KeyboardArrowDown />}
           onClick={this.handleClick}
-          label={<FormattedMessage {...translations.label} />}
-          labelPosition="before"
-          icon={<KeyboardArrowDown />}
-        />
+        >
+          <FormattedMessage {...translations.label} />
+        </Button>
         <Popover
           open={this.state.open}
           anchorEl={this.state.anchorEl}
           anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
-          targetOrigin={{ horizontal: 'left', vertical: 'top' }}
-          onRequestClose={this.handleRequestClose}
+          onClose={this.handleRequestClose}
+          transformOrigin={{ horizontal: 'left', vertical: 'top' }}
         >
-          <Menu>
+          <MenuList style={{ maxHeight: 450 }}>
             {[ITEM_TYPE, START_AT, BONUS_END_AT, END_AT, PUBLISHED].map(
               (field) => {
                 const isVisible = columnsVisible[field];
                 return (
                   <MenuItem
                     key={field}
-                    primaryText={
-                      <FormattedMessage {...fieldTranslations[field]} />
-                    }
-                    rightIcon={isVisible ? <Done /> : <span />}
                     onClick={() =>
                       dispatch(setColumnVisibility(field, !isVisible))
                     }
-                  />
+                    style={{ display: 'flex', justifyContent: 'space-between' }}
+                  >
+                    <FormattedMessage {...fieldTranslations[field]} />
+                    {isVisible && <Done />}
+                  </MenuItem>
                 );
               },
             )}
-          </Menu>
+          </MenuList>
         </Popover>
       </div>
     );

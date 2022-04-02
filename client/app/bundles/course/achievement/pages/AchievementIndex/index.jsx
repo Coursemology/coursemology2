@@ -3,15 +3,18 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { submit, isPristine } from 'redux-form';
 import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
-import Dialog from 'material-ui/Dialog';
-import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from '@mui/material';
 import NotificationBar, {
   notificationShape,
 } from 'lib/components/NotificationBar';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import formTranslations from 'lib/translations/form';
-import modalFormStyles from 'lib/styles/ModalForm.scss';
 import AchievementForm from '../../containers/AchievementForm';
 import * as actions from '../../actions';
 import translations from './translations.intl';
@@ -55,21 +58,23 @@ class PopupDialog extends Component {
     const { intl, dispatch, badge } = this.props;
 
     const formActions = [
-      <FlatButton
-        label={<FormattedMessage {...formTranslations.cancel} />}
-        primary
+      <Button
+        color="primary"
         disabled={this.props.disabled}
-        onClick={this.handleClose}
         key="achievement-popup-dialog-cancel-button"
-      />,
-      <FlatButton
-        label={<FormattedMessage {...formTranslations.submit} />}
+        onClick={this.handleClose}
+      >
+        <FormattedMessage {...formTranslations.cancel} />
+      </Button>,
+      <Button
+        color="primary"
         className="btn-submit"
-        primary
-        onClick={() => dispatch(submit(formNames.ACHIEVEMENT))}
         disabled={this.props.disabled}
         key="achievement-popup-dialog-submit-button"
-      />,
+        onClick={() => dispatch(submit(formNames.ACHIEVEMENT))}
+      >
+        <FormattedMessage {...formTranslations.submit} />
+      </Button>,
     ];
 
     const initialValues = {
@@ -79,26 +84,29 @@ class PopupDialog extends Component {
 
     return (
       <>
-        <RaisedButton
-          label={intl.formatMessage(translations.new)}
-          primary
+        <Button
+          variant="contained"
+          color="primary"
           onClick={this.handleOpen}
           style={styles.newButton}
-        />
-        <Dialog
-          title={intl.formatMessage(translations.newAchievement)}
-          modal={false}
-          open={this.props.visible}
-          actions={formActions}
-          onRequestClose={this.handleClose}
-          autoScrollBodyContent
-          contentStyle={styles.dialog}
-          bodyClassName={modalFormStyles.modalForm}
         >
-          <AchievementForm
-            onSubmit={this.onFormSubmit}
-            initialValues={initialValues}
-          />
+          {intl.formatMessage(translations.new)}
+        </Button>
+        <Dialog
+          onClose={this.handleClose}
+          open={this.props.visible}
+          maxWidth="xl"
+        >
+          <DialogTitle>
+            {intl.formatMessage(translations.newAchievement)}
+          </DialogTitle>
+          <DialogContent>
+            <AchievementForm
+              onSubmit={this.onFormSubmit}
+              initialValues={initialValues}
+            />
+          </DialogContent>
+          <DialogActions>{formActions}</DialogActions>
         </Dialog>
         <ConfirmationDialog
           confirmDiscard

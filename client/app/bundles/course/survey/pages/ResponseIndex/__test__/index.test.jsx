@@ -88,19 +88,19 @@ describe('<ResponseIndex />', () => {
 
     expect(spyIndex).toHaveBeenCalled();
     responseIndex.update();
-    const tableBodies = responseIndex.find('TableBody');
-    const phantomStudentRows = tableBodies.at(2).find('TableRow');
-    const realStudentRows = tableBodies.at(1).find('TableRow');
+    const tableBodies = responseIndex.find('ForwardRef(TableBody)');
+    const phantomStudentRows = tableBodies.at(2).find('ForwardRef(TableRow)');
+    const realStudentRows = tableBodies.at(1).find('ForwardRef(TableRow)');
     const getStatus = (row) => row.find('td').at(1).text();
     expect(getStatus(phantomStudentRows.first())).toBe('Submitted');
     expect(getStatus(realStudentRows.first())).toBe('Not Started');
     expect(getStatus(realStudentRows.last())).toBe('Responding');
 
     // Include phantom students in statistics
-    const statsCard = responseIndex.find('Card').last();
-    const submittedChip = statsCard.find('Chip').last();
+    const statsCard = responseIndex.find('ForwardRef(Card)').last();
+    const submittedChip = statsCard.find('ForwardRef(Chip)').last();
     expect(submittedChip.text()).toBe('0 Submitted');
-    statsCard.find('Toggle').first().props().onToggle(null, true);
+    statsCard.find('ForwardRef(Switch)').first().props().onChange(null, true);
     expect(submittedChip.text()).toBe('2 Submitted');
   });
 });

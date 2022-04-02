@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field, Form, formValueSelector, change } from 'redux-form';
 import { connect } from 'react-redux';
-import MenuItem from 'material-ui/MenuItem';
+import { MenuItem } from '@mui/material';
 import ErrorText, { errorProps } from 'lib/components/ErrorText';
 import ConditionList from 'lib/components/course/ConditionList';
-import TextField from 'lib/components/redux-form/TextField';
+import renderTextField from 'lib/components/redux-form/TextField';
 import RichTextField from 'lib/components/redux-form/RichTextField';
-import Toggle from 'lib/components/redux-form/Toggle';
-import SelectField from 'lib/components/redux-form/SelectField';
+import renderToggleField from 'lib/components/redux-form/Toggle';
+import renderSelectField from 'lib/components/redux-form/SelectField';
 import formTranslations from 'lib/translations/form';
 import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
 import { achievementTypesConditionAttributes, typeMaterial } from 'lib/types';
@@ -24,7 +24,6 @@ const styles = {
   },
   flexChild: {
     flex: 1,
-    marginLeft: 10,
   },
   toggle: {
     marginTop: 16,
@@ -143,10 +142,9 @@ class AssessmentForm extends Component {
       <>
         <Field
           name="randomization"
-          component={Toggle}
+          component={renderToggleField}
           parse={Boolean}
           label={<FormattedMessage {...translations.enableRandomization} />}
-          labelPosition="right"
           style={styles.toggle}
           disabled={submitting}
         />
@@ -164,30 +162,27 @@ class AssessmentForm extends Component {
         <>
           <Field
             name="skippable"
-            component={Toggle}
+            component={renderToggleField}
             parse={Boolean}
             label={<FormattedMessage {...translations.skippable} />}
-            labelPosition="right"
             style={styles.toggle}
             disabled={submitting}
           />
           <Field
             name="allow_partial_submission"
-            component={Toggle}
+            component={renderToggleField}
             parse={Boolean}
             label={
               <FormattedMessage {...translations.allowPartialSubmission} />
             }
-            labelPosition="right"
             style={styles.toggle}
             disabled={submitting}
           />
           <Field
             name="show_mcq_answer"
-            component={Toggle}
+            component={renderToggleField}
             parse={Boolean}
             label={<FormattedMessage {...translations.showMcqAnswer} />}
-            labelPosition="right"
             style={styles.toggle}
             disabled={submitting}
           />
@@ -202,29 +197,26 @@ class AssessmentForm extends Component {
       <>
         <Field
           name="tabbed_view"
-          component={SelectField}
-          floatingLabelText={<FormattedMessage {...translations.layout} />}
-          floatingLabelFixed
-          fullWidth
+          component={renderSelectField}
+          label={<FormattedMessage {...translations.layout} />}
           type="boolean"
           disabled={submitting}
         >
-          <MenuItem
-            value={false}
-            primaryText={<FormattedMessage {...translations.singlePage} />}
-          />
+          <MenuItem value={false}>
+            <FormattedMessage {...translations.singlePage} />
+          </MenuItem>
           <MenuItem
             // eslint-disable-next-line react/jsx-boolean-value
             value={true}
-            primaryText={<FormattedMessage {...translations.tabbedView} />}
-          />
+          >
+            <FormattedMessage {...translations.tabbedView} />
+          </MenuItem>
         </Field>
         <Field
           name="delayed_grade_publication"
-          component={Toggle}
+          component={renderToggleField}
           parse={Boolean}
           label={<FormattedMessage {...translations.delayedGradePublication} />}
-          labelPosition="right"
           style={styles.toggle}
           disabled={submitting}
         />
@@ -233,10 +225,9 @@ class AssessmentForm extends Component {
         </div>
         <Field
           name="password_protected"
-          component={Toggle}
+          component={renderToggleField}
           parse={Boolean}
           label={<FormattedMessage {...translations.passwordProtection} />}
-          labelPosition="right"
           style={styles.toggle}
           disabled={submitting}
         />
@@ -253,8 +244,8 @@ class AssessmentForm extends Component {
       <div>
         <Field
           name="view_password"
-          component={TextField}
-          hintText={<FormattedMessage {...translations.viewPassword} />}
+          component={renderTextField}
+          placeholder={translations.viewPassword.defaultMessage}
           fullWidth
           autoComplete="off"
           disabled={submitting}
@@ -265,8 +256,8 @@ class AssessmentForm extends Component {
 
         <Field
           name="session_password"
-          component={TextField}
-          hintText={<FormattedMessage {...translations.sessionPassword} />}
+          component={renderTextField}
+          placeholder={translations.sessionPassword.defaultMessage}
           fullWidth
           autoComplete="off"
           disabled={submitting}
@@ -284,19 +275,15 @@ class AssessmentForm extends Component {
     return (
       <Field
         name="tab_id"
-        component={SelectField}
-        style={styles.flexChild}
-        floatingLabelText={<FormattedMessage {...translations.tab} />}
-        floatingLabelFixed
+        component={renderSelectField}
+        label={<FormattedMessage {...translations.tab} />}
         disabled={editing && submitting}
       >
         {tabs &&
           tabs.map((tab) => (
-            <MenuItem
-              key={tab.tab_id}
-              value={tab.tab_id}
-              primaryText={tab.title}
-            />
+            <MenuItem key={tab.tab_id} value={tab.tab_id}>
+              {tab.title}
+            </MenuItem>
           ))}
       </Field>
     );
@@ -323,14 +310,13 @@ class AssessmentForm extends Component {
         <div style={styles.flexGroup}>
           <Field
             name="title"
-            component={TextField}
+            component={renderTextField}
             style={styles.flexChild}
-            floatingLabelText={<FormattedMessage {...translations.title} />}
+            label={<FormattedMessage {...translations.title} />}
             disabled={submitting}
           />
           {editing && this.renderTabs()}
         </div>
-        <br />
         <Field
           name="description"
           component={RichTextField}
@@ -341,7 +327,7 @@ class AssessmentForm extends Component {
           <Field
             name="start_at"
             component={DateTimePicker}
-            floatingLabelText={<FormattedMessage {...translations.startAt} />}
+            label={<FormattedMessage {...translations.startAt} />}
             style={styles.flexChild}
             disabled={submitting}
             afterChange={this.onStartAtChange}
@@ -350,7 +336,7 @@ class AssessmentForm extends Component {
             name="end_at"
             component={DateTimePicker}
             clearable
-            floatingLabelText={<FormattedMessage {...translations.endAt} />}
+            label={<FormattedMessage {...translations.endAt} />}
             style={styles.flexChild}
             disabled={submitting}
           />
@@ -359,9 +345,7 @@ class AssessmentForm extends Component {
               name="bonus_end_at"
               component={DateTimePicker}
               clearable
-              floatingLabelText={
-                <FormattedMessage {...translations.bonusEndAt} />
-              }
+              label={<FormattedMessage {...translations.bonusEndAt} />}
               style={styles.flexChild}
               disabled={submitting}
             />
@@ -371,8 +355,8 @@ class AssessmentForm extends Component {
           <div style={styles.flexGroup}>
             <Field
               name="base_exp"
-              component={TextField}
-              floatingLabelText={<FormattedMessage {...translations.baseExp} />}
+              component={renderTextField}
+              label={<FormattedMessage {...translations.baseExp} />}
               type="number"
               onWheel={(event) => event.currentTarget.blur()}
               style={styles.flexChild}
@@ -380,10 +364,8 @@ class AssessmentForm extends Component {
             />
             <Field
               name="time_bonus_exp"
-              component={TextField}
-              floatingLabelText={
-                <FormattedMessage {...translations.timeBonusExp} />
-              }
+              component={renderTextField}
+              label={<FormattedMessage {...translations.timeBonusExp} />}
               type="number"
               onWheel={(event) => event.currentTarget.blur()}
               style={styles.flexChild}
@@ -395,10 +377,9 @@ class AssessmentForm extends Component {
         {editing && (
           <Field
             name="published"
-            component={Toggle}
+            component={renderToggleField}
             parse={Boolean}
             label={<FormattedMessage {...translations.published} />}
-            labelPosition="right"
             style={styles.toggle}
             disabled={submitting}
           />
@@ -406,7 +387,7 @@ class AssessmentForm extends Component {
 
         <Field
           name="autograded"
-          component={Toggle}
+          component={renderToggleField}
           parse={Boolean}
           label={
             modeSwitching ? (
@@ -415,7 +396,6 @@ class AssessmentForm extends Component {
               <FormattedMessage {...translations.modeSwitchingDisabled} />
             )
           }
-          labelPosition="right"
           style={styles.toggle}
           disabled={!modeSwitching || submitting}
         />
@@ -428,14 +408,13 @@ class AssessmentForm extends Component {
 
         <Field
           name="block_student_viewing_after_submitted"
-          component={Toggle}
+          component={renderToggleField}
           parse={Boolean}
           label={
             <FormattedMessage
               {...translations.blockStudentViewingAfterSubmitted}
             />
           }
-          labelPosition="right"
           style={styles.toggle}
           disabled={submitting}
         />
@@ -444,10 +423,9 @@ class AssessmentForm extends Component {
 
         <Field
           name="show_mcq_mrq_solution"
-          component={Toggle}
+          component={renderToggleField}
           parse={Boolean}
           label={<FormattedMessage {...translations.showMcqMrqSolution} />}
-          labelPosition="right"
           style={styles.toggle}
           disabled={submitting}
         />
@@ -462,28 +440,25 @@ class AssessmentForm extends Component {
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <Field
             name="use_public"
-            component={Toggle}
+            component={renderToggleField}
             parse={Boolean}
             label={<FormattedMessage {...translations.usePublic} />}
-            labelPosition="right"
             style={styles.flexChild}
             disabled={submitting}
           />
           <Field
             name="use_private"
-            component={Toggle}
+            component={renderToggleField}
             parse={Boolean}
             label={<FormattedMessage {...translations.usePrivate} />}
-            labelPosition="right"
             style={styles.flexChild}
             disabled={submitting}
           />
           <Field
             name="use_evaluation"
-            component={Toggle}
+            component={renderToggleField}
             parse={Boolean}
             label={<FormattedMessage {...translations.useEvaluation} />}
-            labelPosition="right"
             style={styles.flexChild}
             disabled={submitting}
           />
@@ -491,10 +466,9 @@ class AssessmentForm extends Component {
 
         <Field
           name="show_private"
-          component={Toggle}
+          component={renderToggleField}
           parse={Boolean}
           label={<FormattedMessage {...translations.showPrivate} />}
-          labelPosition="right"
           style={styles.toggle}
           disabled={submitting}
         />
@@ -503,10 +477,9 @@ class AssessmentForm extends Component {
         </div>
         <Field
           name="show_evaluation"
-          component={Toggle}
+          component={renderToggleField}
           parse={Boolean}
           label={<FormattedMessage {...translations.showEvaluation} />}
-          labelPosition="right"
           style={styles.toggle}
           disabled={submitting}
         />
@@ -520,10 +493,9 @@ class AssessmentForm extends Component {
           <>
             <Field
               name="has_personal_times"
-              component={Toggle}
+              component={renderToggleField}
               parse={Boolean}
               label={<FormattedMessage {...translations.hasPersonalTimes} />}
-              labelPosition="right"
               style={styles.toggle}
               disabled={submitting}
             />
@@ -532,12 +504,11 @@ class AssessmentForm extends Component {
             </div>
             <Field
               name="affects_personal_times"
-              component={Toggle}
+              component={renderToggleField}
               parse={Boolean}
               label={
                 <FormattedMessage {...translations.affectsPersonalTimes} />
               }
-              labelPosition="right"
               style={styles.toggle}
               disabled={submitting}
             />

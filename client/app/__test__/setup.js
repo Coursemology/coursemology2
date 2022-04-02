@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import { IntlProvider, intlShape } from 'react-intl';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-
+import { createTheme } from '@mui/material/styles';
 import Enzyme from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 
@@ -15,8 +14,9 @@ const timeZone = 'Asia/Singapore';
 const intlProvider = new IntlProvider({ locale: 'en', timeZone }, {});
 const courseId = '1';
 
-const muiTheme = getMuiTheme();
+const muiTheme = createTheme();
 const intl = intlProvider.getChildContext().intl;
+
 const buildContextOptions = (store) => ({
   context: { intl, store, muiTheme },
   childContextTypes: {

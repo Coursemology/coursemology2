@@ -2,8 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Card, CardText } from 'material-ui/Card';
-import RaisedButton from 'material-ui/RaisedButton';
+import { Button, Card, CardContent } from '@mui/material';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { postShape, annotationShape } from '../propTypes';
@@ -50,7 +49,7 @@ class VisibleAnnotations extends Component {
 
     return (
       <Card style={styles.card}>
-        <CardText style={{ textAlign: 'left' }}>
+        <CardContent style={{ textAlign: 'left' }}>
           {posts.map(
             (post) =>
               (graderView || !post.isDelayed) && (
@@ -79,13 +78,15 @@ class VisibleAnnotations extends Component {
               renderDelayedCommentButton={renderDelayedCommentButton}
             />
           ) : (
-            <RaisedButton
-              primary
-              label={<FormattedMessage {...translations.comment} />}
+            <Button
+              variant="contained"
+              color="primary"
               onClick={() => this.setState({ fieldVisible: true })}
-            />
+            >
+              <FormattedMessage {...translations.comment} />
+            </Button>
           )}
-        </CardText>
+        </CardContent>
       </Card>
     );
   }

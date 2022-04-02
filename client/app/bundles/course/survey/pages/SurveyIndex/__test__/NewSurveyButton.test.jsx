@@ -6,6 +6,30 @@ import storeCreator from 'course/survey/store';
 import SurveyFormDialogue from 'course/survey/containers/SurveyFormDialogue';
 import NewSurveyButton from '../NewSurveyButton';
 
+beforeEach(() => {
+  // add window.matchMedia
+  // this is necessary for the date picker to be rendered in desktop mode.
+  // if this is not provided, the mobile mode is rendered, which might lead to unexpected behavior
+  Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    value: (query) => ({
+      media: query,
+      // this is the media query that @material-ui/pickers uses to determine if a device is a desktop device
+      matches: query === '(pointer: fine)',
+      onchange: () => {},
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      addListener: () => {},
+      removeListener: () => {},
+      dispatchEvent: () => false,
+    }),
+  });
+});
+
+afterEach(() => {
+  delete window.matchMedia;
+});
+
 describe('<NewSurveyButton />', () => {
   it('injects handlers that allow surveys to be created', () => {
     const spyCreate = jest.spyOn(CourseAPI.survey.surveys, 'create');
@@ -36,13 +60,7 @@ describe('<NewSurveyButton />', () => {
 
     const startAt = '01-01-2017';
     const startTime = '00:00';
-    const dialogInline = surveyFormDialogue
-      .find('RenderToLayer')
-      .first()
-      .instance();
-    const surveyForm = mount(dialogInline.props.render(), contextOptions).find(
-      'form',
-    );
+    const surveyForm = surveyFormDialogue.find('form');
     const titleInput = surveyForm.find('input[name="title"]');
     titleInput.simulate('change', { target: { value: survey.title } });
     const startAtDateInput = surveyForm.find('input[name="start_at"]').first();

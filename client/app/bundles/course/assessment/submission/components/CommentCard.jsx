@@ -1,11 +1,9 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import Avatar from 'material-ui/Avatar';
-import { Card, CardHeader, CardText } from 'material-ui/Card';
-import FlatButton from 'material-ui/FlatButton';
-import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
-import DeleteIcon from 'material-ui/svg-icons/action/delete';
-import { red500, grey100, orange100 } from 'material-ui/styles/colors';
+import { Avatar, Button, Card, CardHeader, CardContent } from '@mui/material';
+import { grey, orange, red } from '@mui/material/colors';
+import Delete from '@mui/icons-material/Delete';
+import Edit from '@mui/icons-material/Edit';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import MaterialSummernote from 'lib/components/MaterialSummernote';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
@@ -18,9 +16,21 @@ const translations = defineMessages({
     id: 'course.assessment.submission.CommentCard.deleteConfirmation',
     defaultMessage: 'Are you sure you want to delete this comment?',
   },
+  cancel: {
+    id: 'course.assessment.submission.CommentCard.cancel',
+    defaultMessage: 'Cancel',
+  },
+  save: {
+    id: 'course.assessment.submission.CommentCard.save',
+    defaultMessage: 'Save',
+  },
 });
 
 const styles = {
+  avatar: {
+    height: '25px',
+    width: '25px',
+  },
   card: {
     marginBottom: 20,
   },
@@ -28,13 +38,13 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: grey100,
+    backgroundColor: grey[100],
   },
   delayedHeader: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: orange100,
+    backgroundColor: orange[100],
   },
   cardHeader: {
     padding: 6,
@@ -131,19 +141,15 @@ export default class CommentCard extends Component {
             value={editValue}
           />
           <div style={styles.buttonContainer}>
-            <FlatButton
-              style={styles.editButton}
-              labelStyle={styles.editButton}
-              label="Cancel"
+            <Button
+              color="secondary"
               onClick={() => this.setState({ editMode: false })}
-            />
-            <FlatButton
-              style={styles.deleteButton}
-              labelStyle={styles.deleteButton}
-              label="Save"
-              primary
-              onClick={() => this.onSave()}
-            />
+            >
+              <FormattedMessage {...translations.cancel} />
+            </Button>
+            <Button color="primary" onClick={() => this.onSave()}>
+              <FormattedMessage {...translations.save} />
+            </Button>
           </div>
         </>
       );
@@ -165,39 +171,39 @@ export default class CommentCard extends Component {
       <Card id={CommentCard.postIdentifier(id)} style={styles.card}>
         <div style={isDelayed ? styles.delayedHeader : styles.header}>
           <CardHeader
-            style={styles.cardHeader}
+            avatar={<Avatar src={avatar} style={styles.avatar} />}
             title={name}
-            subtitle={`${CommentCard.formatDateTime(createdAt)}${
+            titleTypographyProps={{ display: 'block', marginright: 20 }}
+            subheader={`${CommentCard.formatDateTime(createdAt)}${
               isDelayed ? ' (delayed comment)' : ''
             }`}
-            titleStyle={{ display: 'inline-block', marginRight: 20 }}
-            subtitleStyle={{ display: 'inline-block' }}
-            avatar={<Avatar src={avatar} size={25} />}
+            subheaderTypographyProps={{ display: 'block' }}
+            style={styles.cardHeader}
           />
           <div style={styles.buttonContainer}>
             {canUpdate ? (
-              <FlatButton
+              <Button
                 className="edit-comment"
-                style={styles.headerButton}
-                labelStyle={styles.headerButton}
-                icon={<EditIcon />}
                 onClick={() => this.toggleEditMode()}
-              />
+                style={styles.headerButton}
+              >
+                <Edit htmlColor="black" />
+              </Button>
             ) : null}
             {canDestroy ? (
-              <FlatButton
+              <Button
                 className="delete-comment"
-                style={styles.headerButton}
-                labelStyle={styles.headerButton}
-                icon={<DeleteIcon color={red500} />}
                 onClick={() => this.onDelete()}
-              />
+                style={styles.headerButton}
+              >
+                <Delete htmlColor={red[500]} />
+              </Button>
             ) : null}
           </div>
         </div>
-        <CardText style={styles.commentContent}>
+        <CardContent style={styles.commentContent}>
           {this.renderCommentContent()}
-        </CardText>
+        </CardContent>
         <ConfirmationDialog
           confirmDelete
           open={this.state.deleteConfirmation}

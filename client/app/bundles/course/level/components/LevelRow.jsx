@@ -1,11 +1,8 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
-import RaisedButton from 'material-ui/RaisedButton';
-import DeleteIcon from 'material-ui/svg-icons/action/delete';
-import TextField from 'material-ui/TextField';
-import { grey300 } from 'material-ui/styles/colors';
+import { Button, TableRow, TableCell, TextField } from '@mui/material';
+import Delete from '@mui/icons-material/Delete';
 
 const translations = defineMessages({
   zeroThresholdError: {
@@ -37,15 +34,17 @@ class LevelRow extends Component {
     const { deleteLevel, disabled, levelNumber } = this.props;
 
     return (
-      <RaisedButton
+      <Button
+        variant="contained"
+        color="secondary"
+        disabled={disabled}
         id={`delete_${levelNumber}`}
         name={`delete_${levelNumber}`}
-        backgroundColor={grey300}
-        icon={<DeleteIcon />}
         onClick={deleteLevel(levelNumber)}
-        disabled={disabled}
         style={{ minWidth: '40px', width: '40px' }}
-      />
+      >
+        <Delete />
+      </Button>
     );
   }
 
@@ -59,23 +58,25 @@ class LevelRow extends Component {
     } = this.props;
     return (
       <TextField
-        type="text"
-        name={`level_${levelNumber}`}
-        onChange={(e, newValue) => {
-          updateExpThreshold(levelNumber, newValue);
-        }}
         disabled={disabled}
-        errorText={
+        error={experiencePointsThreshold === 0}
+        helperText={
           experiencePointsThreshold === 0 ? (
             <FormattedMessage {...translations.zeroThresholdError} />
           ) : (
             ''
           )
         }
+        name={`level_${levelNumber}`}
         onBlur={() => {
           sortLevels();
         }}
+        onChange={(event) => {
+          updateExpThreshold(levelNumber, event.target.value);
+        }}
+        type="text"
         value={experiencePointsThreshold}
+        variant="standard"
       />
     );
   }
@@ -85,15 +86,13 @@ class LevelRow extends Component {
 
     return (
       <TableRow>
-        <TableRowColumn style={styles.levelNumber}>
-          {levelNumber}
-        </TableRowColumn>
-        <TableRowColumn style={styles.threshold}>
+        <TableCell style={styles.levelNumber}>{levelNumber}</TableCell>
+        <TableCell style={styles.threshold}>
           {canManage ? this.renderInput() : experiencePointsThreshold}
-        </TableRowColumn>
-        <TableHeaderColumn style={styles.deleteButtonCell}>
+        </TableCell>
+        <TableCell style={styles.deleteButtonCell}>
           {canManage && this.renderDeleteButton()}
-        </TableHeaderColumn>
+        </TableCell>
       </TableRow>
     );
   }

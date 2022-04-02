@@ -1,4 +1,4 @@
-import { red100, orange100 } from 'material-ui/styles/colors';
+import { orange, red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
@@ -23,10 +23,10 @@ const styles = {
     alignItems: 'center',
   },
   labelEdited: {
-    backgroundColor: orange100,
+    backgroundColor: orange[100],
   },
   labelDeleted: {
-    backgroundColor: red100,
+    backgroundColor: red[100],
   },
   iconWidth: {
     width: 20,

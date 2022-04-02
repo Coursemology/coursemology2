@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { reduxForm, FieldArray, Form, getFormValues } from 'redux-form';
 import { Prompt } from 'react-router-dom';
-import RaisedButton from 'material-ui/RaisedButton';
+import { Button } from '@mui/material';
 import formTranslations from 'lib/translations/form';
 import { formNames } from 'course/survey/constants';
 import { responseShape } from 'course/survey/propTypes';
@@ -125,14 +125,16 @@ class ResponseForm extends Component {
     }
 
     return (
-      <RaisedButton
+      <Button
+        variant="contained"
+        color="primary"
+        disabled={isSubmitting || pristine}
+        onClick={() => onSubmit({ ...formValues, submit: false })}
         style={styles.formButton}
         type="submit"
-        primary
-        label={<FormattedMessage {...formTranslations.save} />}
-        onClick={() => onSubmit({ ...formValues, submit: false })}
-        disabled={isSubmitting || pristine}
-      />
+      >
+        <FormattedMessage {...formTranslations.save} />
+      </Button>
     );
   }
 
@@ -156,14 +158,16 @@ class ResponseForm extends Component {
       : formTranslations.submit;
 
     return (
-      <RaisedButton
+      <Button
+        variant="contained"
+        color="primary"
+        disabled={isSubmitting || !!response.submitted_at}
+        onClick={handleSubmit((data) => onSubmit({ ...data, submit: true }))}
         style={styles.formButton}
         type="submit"
-        primary
-        label={<FormattedMessage {...submitButtonTranslation} />}
-        onClick={handleSubmit((data) => onSubmit({ ...data, submit: true }))}
-        disabled={isSubmitting || !!response.submitted_at}
-      />
+      >
+        <FormattedMessage {...submitButtonTranslation} />
+      </Button>
     );
   }
 

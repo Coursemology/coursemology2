@@ -17,12 +17,12 @@ const buildShallowWrapper = (item) => {
 describe('<AdminTools />', () => {
   it('does not show admin menu for lesson plan events', () => {
     const wrapper = buildShallowWrapper({ title: 'Event', eventId: 7 });
-    expect(wrapper.find('RaisedButton')).toHaveLength(2);
+    expect(wrapper.find('ForwardRef(Button)')).toHaveLength(2);
   });
 
   it('does not show admin menu for non-event lesson plan items', () => {
     const wrapper = buildShallowWrapper({ title: 'eventId absent' });
-    expect(wrapper.find('RaisedButton')).toHaveLength(0);
+    expect(wrapper.find('ForwardRef(Button)')).toHaveLength(0);
   });
 
   it('allows event to be deleted', () => {
@@ -33,7 +33,10 @@ describe('<AdminTools />', () => {
     const eventId = 55;
     const wrapper = mount(<AdminTools item={{ eventId }} />, contextOptions);
 
-    const deleteButton = wrapper.find('RaisedButton').last().find('button');
+    const deleteButton = wrapper
+      .find('ForwardRef(Button)')
+      .last()
+      .find('button');
     deleteButton.simulate('click');
 
     const confirmDeleteButton = deleteConfirmation
@@ -72,16 +75,14 @@ describe('<AdminTools />', () => {
       contextOptions,
     );
 
-    const editButton = wrapper.find('RaisedButton').first().find('button');
-    editButton.simulate('click');
-
-    const dialogInline = eventFormDialog
-      .find('RenderToLayer')
+    const editButton = wrapper
+      .find('ForwardRef(Button)')
       .first()
-      .instance();
-    const eventForm = mount(dialogInline.props.render(), contextOptions).find(
-      'form',
-    );
+      .find('button');
+    editButton.simulate('click');
+    eventFormDialog.update();
+
+    const eventForm = eventFormDialog.find('form');
     const description = 'Add nice description';
     const descriptionInput = eventForm.find('textarea[name="description"]');
     descriptionInput.simulate('change', { target: { value: description } });

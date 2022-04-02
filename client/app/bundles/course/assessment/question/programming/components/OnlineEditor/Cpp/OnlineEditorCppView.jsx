@@ -3,18 +3,21 @@ import Immutable from 'immutable';
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
-import { Card, CardHeader, CardText } from 'material-ui/Card';
-import FlatButton from 'material-ui/FlatButton';
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Button,
+  Fade,
   Table,
   TableBody,
+  TableCell,
   TableFooter,
-  TableHeader,
-  TableHeaderColumn,
+  TableHead,
   TableRow,
-  TableRowColumn,
-} from 'material-ui/Table';
-import transitions from 'material-ui/styles/transitions';
+} from '@mui/material';
+import { red } from '@mui/material/colors';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import 'ace-builds/src-noconflict/mode-c_cpp';
 import 'ace-builds/src-noconflict/theme-monokai';
@@ -48,10 +51,6 @@ const propTypes = {
   intl: intlShape.isRequired,
 };
 
-const contextTypes = {
-  muiTheme: PropTypes.object.isRequired,
-};
-
 class OnlineEditorCppView extends Component {
   testCaseCreateHandler(type) {
     return (e) => {
@@ -68,17 +67,18 @@ class OnlineEditorCppView extends Component {
     const testCases = data.get('test_cases');
     const testCaseError = data.getIn(['test_cases', 'error']);
     const errorTextElement = testCaseError && (
-      <div
-        style={{
-          fontSize: 12,
-          lineHeight: '12px',
-          color: this.context.muiTheme.textField.errorColor,
-          transition: transitions.easeOut(),
-          marginBottom: '1em',
-        }}
-      >
-        {testCaseError}
-      </div>
+      <Fade in={!!testCaseError}>
+        <div
+          style={{
+            fontSize: 12,
+            lineHeight: '12px',
+            color: red[500],
+            marginBottom: '1em',
+          }}
+        >
+          {testCaseError}
+        </div>
+      </Fade>
     );
 
     return (
@@ -214,32 +214,37 @@ class OnlineEditorCppView extends Component {
     };
 
     return (
-      <Card initiallyExpanded>
-        <CardHeader
-          title={header}
-          textStyle={{ fontWeight: 'bold' }}
-          actAsExpander
-          showExpandableButton
-        />
-        <CardText expandable style={{ padding: 0 }}>
-          <Table selectable={false}>
-            <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+      <Accordion
+        defaultExpanded
+        style={{
+          margin: 0,
+        }}
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          style={{ fontSize: 14, fontWeight: 'bold', margin: 0 }}
+        >
+          {header}
+        </AccordionSummary>
+        <AccordionDetails style={{ padding: 0 }}>
+          <Table>
+            <TableHead>
               <TableRow>
-                <TableHeaderColumn className={styles.deleteButtonCell} />
-                <TableHeaderColumn>
+                <TableCell className={styles.deleteButtonCell} />
+                <TableCell>
                   {this.props.intl.formatMessage(translations.fileNameHeader)}
-                </TableHeaderColumn>
-                <TableHeaderColumn>
+                </TableCell>
+                <TableCell>
                   {this.props.intl.formatMessage(translations.fileSizeHeader)}
-                </TableHeaderColumn>
+                </TableCell>
               </TableRow>
-            </TableHeader>
-            <TableBody displayRowCheckbox={false}>
-              {this.props.data.get('data_files').map(renderDataFile)}
+            </TableHead>
+            <TableBody>
+              {this.props.data.get(fileType).map(renderDataFile)}
             </TableBody>
           </Table>
-        </CardText>
-      </Card>
+        </AccordionDetails>
+      </Accordion>
     );
   }
 
@@ -267,21 +272,24 @@ class OnlineEditorCppView extends Component {
       .map(renderNewFile);
 
     return (
-      <Card initiallyExpanded>
-        <CardHeader
-          title={header}
-          textStyle={{ fontWeight: 'bold' }}
-          actAsExpander
-          showExpandableButton
-        />
-        <CardText expandable style={{ padding: 0 }}>
-          <Table selectable={false}>
-            <TableBody displayRowCheckbox={false}>
-              {newPackageFilesRows}
-            </TableBody>
+      <Accordion
+        defaultExpanded
+        style={{
+          margin: 0,
+        }}
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          style={{ fontSize: 16, fontWeight: 'bold', margin: 0 }}
+        >
+          {header}
+        </AccordionSummary>
+        <AccordionDetails style={{ padding: 0 }}>
+          <Table>
+            <TableBody>{newPackageFilesRows}</TableBody>
           </Table>
-        </CardText>
-      </Card>
+        </AccordionDetails>
+      </Accordion>
     );
   }
 
@@ -322,44 +330,50 @@ class OnlineEditorCppView extends Component {
     ));
 
     return (
-      <Card initiallyExpanded>
-        <CardHeader
-          title={header}
-          textStyle={{ fontWeight: 'bold' }}
-          actAsExpander
-          showExpandableButton
-        />
-        <CardText expandable style={{ padding: 0 }}>
-          <Table selectable={false}>
-            <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+      <Accordion
+        defaultExpanded
+        style={{
+          margin: 0,
+        }}
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          style={{ fontSize: 16, fontWeight: 'bold', margin: 0 }}
+        >
+          {header}
+        </AccordionSummary>
+        <AccordionDetails style={{ padding: 0 }}>
+          <Table>
+            <TableHead>
               <TableRow>
-                <TableHeaderColumn className={styles.deleteButtonCell} />
-                <TableHeaderColumn>{identifier}</TableHeaderColumn>
-                <TableHeaderColumn>{expression}</TableHeaderColumn>
-                <TableHeaderColumn>{expected}</TableHeaderColumn>
-                <TableHeaderColumn>{hint}</TableHeaderColumn>
+                <TableCell className={styles.deleteButtonCell} />
+                <TableCell>{identifier}</TableCell>
+                <TableCell>{expression}</TableCell>
+                <TableCell>{expected}</TableCell>
+                <TableCell>{hint}</TableCell>
               </TableRow>
-            </TableHeader>
-            <TableBody displayRowCheckbox={false}>{rows}</TableBody>
-            <TableFooter adjustForCheckbox={false}>
+            </TableHead>
+            <TableBody>{rows}</TableBody>
+            <TableFooter>
               <TableRow>
-                <TableRowColumn colSpan="5" style={{ textAlign: 'center' }}>
-                  <FlatButton
-                    label={this.props.intl.formatMessage(
-                      translations.addNewTestButton,
-                    )}
-                    icon={<i className="fa fa-plus" />}
+                <TableCell colSpan="5" style={{ textAlign: 'center' }}>
+                  <Button
                     disabled={
                       this.props.isLoading || numAllTestCases >= MAX_TEST_CASES
                     }
                     onClick={this.testCaseCreateHandler(type)}
-                  />
-                </TableRowColumn>
+                    startIcon={<i className="fa fa-plus" />}
+                  >
+                    {this.props.intl.formatMessage(
+                      translations.addNewTestButton,
+                    )}
+                  </Button>
+                </TableCell>
               </TableRow>
             </TableFooter>
           </Table>
-        </CardText>
-      </Card>
+        </AccordionDetails>
+      </Accordion>
     );
   }
 
@@ -380,6 +394,5 @@ class OnlineEditorCppView extends Component {
 }
 
 OnlineEditorCppView.propTypes = propTypes;
-OnlineEditorCppView.contextTypes = contextTypes;
 
 export default injectIntl(OnlineEditorCppView);

@@ -7,7 +7,7 @@ import {
   intlShape,
   FormattedMessage,
 } from 'react-intl';
-import RaisedButton from 'material-ui/RaisedButton';
+import { Button } from '@mui/material';
 import { showMilestoneForm, createMilestone } from 'course/lesson-plan/actions';
 
 const translations = defineMessages({
@@ -56,12 +56,14 @@ class NewMilestoneButton extends Component {
     }
 
     return (
-      <RaisedButton
-        primary
-        label={<FormattedMessage {...translations.newMilestone} />}
+      <Button
+        variant="contained"
+        color="primary"
         onClick={this.showForm}
         style={styles.button}
-      />
+      >
+        <FormattedMessage {...translations.newMilestone} />
+      </Button>
     );
   }
 }

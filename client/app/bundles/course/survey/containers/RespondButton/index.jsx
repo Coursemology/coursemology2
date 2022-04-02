@@ -3,7 +3,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import moment from 'lib/moment';
 import history from 'lib/history';
-import RaisedButton from 'material-ui/RaisedButton';
+import { Button } from '@mui/material';
 import { createResponse } from 'course/survey/actions/responses';
 
 const translations = defineMessages({
@@ -50,16 +50,13 @@ const RespondButton = ({
   let labelTranslation = translations.notOpen;
   let onClick = () => {};
   let disabled = false;
-  let primary = false;
 
   if (isStarted && (canModify || canSubmit)) {
     labelTranslation = submittedAt ? translations.view : translations.continue;
     onClick = goToResponseEdit;
-    primary = !submittedAt;
   } else if (!isStarted && (canRespond || canModify || canSubmit)) {
     labelTranslation = translations.start;
     onClick = goToResponseCreate;
-    primary = true;
   } else if (submittedAt) {
     // From this case on, both canModify and canSubmit both false
     labelTranslation = translations.view;
@@ -76,10 +73,9 @@ const RespondButton = ({
   }
 
   return (
-    <RaisedButton
-      label={<FormattedMessage {...labelTranslation} />}
-      {...{ onClick, disabled, primary }}
-    />
+    <Button variant="contained" color="primary" {...{ onClick, disabled }}>
+      <FormattedMessage {...labelTranslation} />
+    </Button>
   );
 };
 

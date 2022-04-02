@@ -2,43 +2,37 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-
 import ReactTooltip from 'react-tooltip';
-import { Card, CardHeader, CardText } from 'material-ui/Card';
-import WrongIcon from 'material-ui/svg-icons/navigation/close';
-import CorrectIcon from 'material-ui/svg-icons/action/done';
 import {
-  red50,
-  yellow100,
-  green50,
-  red100,
-  green100,
-} from 'material-ui/styles/colors';
-import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Paper,
   Table,
-  TableHeader,
-  TableHeaderColumn,
   TableBody,
+  TableCell,
+  TableHead,
   TableRow,
-  TableRowColumn,
-} from 'material-ui/Table';
-import Paper from 'material-ui/Paper';
-
+} from '@mui/material';
+import { green, yellow, red } from '@mui/material/colors';
+import Check from '@mui/icons-material/Check';
+import Clear from '@mui/icons-material/Clear';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandableText from 'lib/components/ExpandableText';
 import { testCaseShape } from '../../propTypes';
 import { workflowStates } from '../../constants';
 
 const styles = {
+  panel: {
+    margin: 0,
+  },
+  panelSummary: {
+    fontSize: 16,
+  },
   testCaseRow: {
     unattempted: {},
-    correct: { backgroundColor: green50 },
-    wrong: { backgroundColor: red50 },
-  },
-  testCaseCell: {
-    padding: '0.5em',
-    textOverflow: 'initial',
-    whiteSpace: 'normal',
-    wordBreak: 'break-word',
+    correct: { backgroundColor: green[50] },
+    wrong: { backgroundColor: red[50] },
   },
   testCasesContainer: {
     marginBottom: 20,
@@ -113,21 +107,25 @@ const translations = defineMessages({
 export class VisibleTestCaseView extends Component {
   static renderOutputStream(outputStreamType, output, showStaffOnlyWarning) {
     return (
-      <Card id={outputStreamType}>
-        <CardHeader
-          showExpandableButton
-          title={
-            <>
-              <FormattedMessage {...translations[outputStreamType]} />
-              {showStaffOnlyWarning &&
-                VisibleTestCaseView.renderStaffOnlyOutputStreamWarning()}
-            </>
-          }
-        />
-        <CardText expandable>
-          <pre>{output}</pre>
-        </CardText>
-      </Card>
+      <Accordion
+        defaultExpanded={false}
+        id={outputStreamType}
+        style={styles.panel}
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          style={styles.panelSummary}
+        >
+          <>
+            <FormattedMessage {...translations[outputStreamType]} />
+            {showStaffOnlyWarning &&
+              VisibleTestCaseView.renderStaffOnlyOutputStreamWarning()}
+          </>
+        </AccordionSummary>
+        <AccordionDetails>
+          <pre style={{ width: '100%' }}>{output}</pre>
+        </AccordionDetails>
+      </Accordion>
     );
   }
 
@@ -184,11 +182,11 @@ export class VisibleTestCaseView extends Component {
     let testCaseIcon;
     if (testCase.passed !== undefined) {
       testCaseResult = testCase.passed ? 'correct' : 'wrong';
-      testCaseIcon = testCase.passed ? <CorrectIcon /> : <WrongIcon />;
+      testCaseIcon = testCase.passed ? <Check /> : <Clear />;
     }
 
     const tableRowColumnFor = (field) => (
-      <TableRowColumn style={styles.testCaseCell}>{field}</TableRowColumn>
+      <TableCell style={styles.testCaseCell}>{field}</TableCell>
     );
 
     const outputStyle = { whiteSpace: 'pre-wrap', fontFamily: 'monospace' };
@@ -241,30 +239,34 @@ export class VisibleTestCaseView extends Component {
       }
       return val;
     }, true);
-    let headerStyle = {};
+    let headerStyle = { ...styles.panelSummary };
     if (collapsible) {
-      headerStyle = { backgroundColor: passedTestCases ? green100 : red100 };
+      headerStyle = {
+        ...headerStyle,
+        backgroundColor: passedTestCases ? green[100] : red[100],
+      };
     }
 
     const tableHeaderColumnFor = (field) => (
-      <TableHeaderColumn style={styles.testCaseCell}>
+      <TableCell style={styles.testCaseCell}>
         <FormattedMessage {...translations[field]} />
-      </TableHeaderColumn>
+      </TableCell>
     );
 
     const title = VisibleTestCaseView.renderTitle(testCaseType, warn);
 
     return (
-      <Card id={testCaseType}>
-        <CardHeader
-          title={title}
-          actAsExpander={collapsible}
-          showExpandableButton={collapsible}
-          style={headerStyle}
-        />
-        <CardText expandable={collapsible}>
-          <Table selectable={false} style={{}}>
-            <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+      <Accordion
+        defaultExpanded={!collapsible}
+        id={testCaseType}
+        style={styles.panel}
+      >
+        <AccordionSummary expandIcon={<ExpandMoreIcon />} style={headerStyle}>
+          {title}
+        </AccordionSummary>
+        <AccordionDetails>
+          <Table>
+            <TableHead>
               <TableRow>
                 {canReadTests && tableHeaderColumnFor('identifier')}
                 {tableHeaderColumnFor('expression')}
@@ -273,13 +275,13 @@ export class VisibleTestCaseView extends Component {
                   tableHeaderColumnFor('output')}
                 {tableHeaderColumnFor('passed')}
               </TableRow>
-            </TableHeader>
-            <TableBody displayRowCheckbox={false}>
+            </TableHead>
+            <TableBody>
               {testCases.map(this.renderTestCaseRow.bind(this))}
             </TableBody>
           </Table>
-        </CardText>
-      </Card>
+        </AccordionDetails>
+      </Accordion>
     );
   }
 
@@ -314,7 +316,7 @@ export class VisibleTestCaseView extends Component {
           <Paper
             style={{
               padding: 10,
-              backgroundColor: yellow100,
+              backgroundColor: yellow[100],
               marginBottom: 20,
             }}
           >

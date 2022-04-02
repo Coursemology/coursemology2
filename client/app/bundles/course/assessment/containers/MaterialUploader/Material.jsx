@@ -2,32 +2,30 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { formatLongDateTime } from 'lib/moment';
-import IconButton from 'material-ui/IconButton';
-import { ListItem } from 'material-ui/List';
-import CircularProgress from 'material-ui/CircularProgress';
-import Avatar from 'material-ui/Avatar';
-import ActionAssignment from 'material-ui/svg-icons/action/assignment';
-import DeleteIcon from 'material-ui/svg-icons/action/delete';
+import {
+  Avatar,
+  CircularProgress,
+  IconButton,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  ListItemSecondaryAction,
+} from '@mui/material';
+import Assignment from '@mui/icons-material/Assignment';
+import Delete from '@mui/icons-material/Delete';
 import ReactTooltip from 'react-tooltip';
 
 const styles = {
-  root: {
-    fontSize: 14,
-    lineHeight: '14px',
-  },
-  innerDiv: {
-    paddingTop: 8,
-    paddingBottom: 8,
-  },
   avatar: {
-    top: 8,
+    height: '32px',
+    width: '32px',
   },
   iconButton: {
+    color: 'black',
     width: 24,
     height: 24,
     padding: 4,
     marginRight: 16,
-    top: 8,
   },
   secondaryText: {
     fontSize: 12,
@@ -71,11 +69,11 @@ class Material extends Component {
 
     return (
       <IconButton
+        disabled={disabled}
         onClick={this.onDelete}
         style={styles.iconButton}
-        disabled={disabled}
       >
-        <DeleteIcon
+        <Delete
           data-tip
           data-for="delete-file-button"
           data-tip-disable={!disabled}
@@ -101,17 +99,15 @@ class Material extends Component {
     const { name } = this.props;
 
     return (
-      <ListItem
-        disableKeyboardFocus
-        primaryText={name}
-        rightAvatar={this.renderIcon()}
-        leftAvatar={
-          <Avatar size={32} style={styles.avatar} icon={<ActionAssignment />} />
-        }
-        secondaryText={this.renderSecondaryText()}
-        style={styles.root}
-        innerDivStyle={styles.innerDiv}
-      />
+      <ListItem button>
+        <ListItemAvatar>
+          <Avatar style={styles.avatar}>
+            <Assignment />
+          </Avatar>
+        </ListItemAvatar>
+        <ListItemText primary={name} secondary={this.renderSecondaryText()} />
+        <ListItemSecondaryAction>{this.renderIcon()}</ListItemSecondaryAction>
+      </ListItem>
     );
   }
 }

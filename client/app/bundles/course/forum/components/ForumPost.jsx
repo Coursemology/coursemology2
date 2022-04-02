@@ -1,5 +1,12 @@
 import { Component } from 'react';
-import { Divider, Card, CardHeader, CardText, FlatButton } from 'material-ui';
+import {
+  Avatar,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  Divider,
+} from '@mui/material';
 import PropTypes from 'prop-types';
 import moment from 'lib/moment';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -46,18 +53,18 @@ export default class ForumPost extends Component {
   render() {
     return (
       <Card
-        style={{ ...styles.default, ...this.props.style }}
         className="forum-post"
+        style={{ ...styles.default, ...this.props.style }}
       >
         <CardHeader
+          avatar={<Avatar src={this.props.post.avatar} />}
           title={this.props.post.userName}
-          subtitle={moment(this.props.post.updatedAt).format(
+          subheader={moment(this.props.post.updatedAt).format(
             'MMM DD, YYYY h:mma',
           )}
-          avatar={this.props.post.avatar}
         />
         <Divider />
-        <CardText>
+        <CardContent>
           <div
             dangerouslySetInnerHTML={{ __html: this.props.post.text }}
             ref={(divElement) => {
@@ -72,26 +79,28 @@ export default class ForumPost extends Component {
             }}
           />
           {this.state.isExpandable && (
-            <FlatButton
-              label={
-                this.state.isExpanded ? (
+            <>
+              <Button
+                color="primary"
+                className="forum-post-expand-button"
+                id="add-level"
+                onClick={(event) => {
+                  event.persist();
+                  this.setState((oldState) => ({
+                    isExpanded: !oldState.isExpanded,
+                  }));
+                }}
+                style={styles.expandButton}
+              >
+                {this.state.isExpanded ? (
                   <FormattedMessage {...translations.showLess} />
                 ) : (
                   <FormattedMessage {...translations.showMore} />
-                )
-              }
-              onClick={(event) => {
-                event.persist();
-                this.setState((oldState) => ({
-                  isExpanded: !oldState.isExpanded,
-                }));
-              }}
-              style={styles.expandButton}
-              primary
-              className="forum-post-expand-button"
-            />
+                )}
+              </Button>
+            </>
           )}
-        </CardText>
+        </CardContent>
       </Card>
     );
   }

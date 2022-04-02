@@ -1,11 +1,12 @@
 import {
+  Button,
   Card,
   CardActions,
+  CardContent,
   CardHeader,
-  CardText,
   IconButton,
-  RaisedButton,
-} from 'material-ui';
+  Tooltip,
+} from '@mui/material';
 import PropTypes from 'prop-types';
 
 export const groupCardTitleButtonShape = PropTypes.shape({
@@ -68,27 +69,30 @@ const styles = {
 function mapButtonObjectToElement(button, isLast) {
   if (button.icon) {
     return (
-      <IconButton
-        key={button.label.props.id}
-        tooltip={button.label}
-        onClick={button.onClick}
-        style={{
-          ...styles.iconButton,
-          ...(isLast ? {} : styles.nonLastButton),
-        }}
-      >
-        {button.icon}
-      </IconButton>
+      <Tooltip title={button.label} key={`tooltip_${button.label.props.id}`}>
+        <IconButton
+          key={button.label.props.id}
+          onClick={button.onClick}
+          style={{
+            ...styles.iconButton,
+            ...(isLast ? {} : styles.nonLastButton),
+          }}
+        >
+          {button.icon}
+        </IconButton>
+      </Tooltip>
     );
   }
   return (
-    <RaisedButton
+    <Button
+      variant="contained"
+      color="primary"
       key={button.label.props.id}
-      label={button.label}
       onClick={button.onClick}
-      primary
       style={isLast ? undefined : styles.nonLastButton}
-    />
+    >
+      {button.label}
+    </Button>
   );
 }
 
@@ -121,13 +125,16 @@ const GroupCard = ({
             )}
           </div>
         }
-        subtitle={subtitle}
-        textStyle={
-          titleButtons.length > 0 ? styles.cardHeaderFullWidthTitle : {}
+        titleTypographyProps={
+          titleButtons.length > 0
+            ? { style: styles.cardHeaderFullWidthTitle }
+            : {}
         }
+        subheader={subtitle}
+        subheaderTypographyProps={{ variant: 'subtitle2' }}
       />
     ) : null}
-    <CardText style={styles.body}>{children}</CardText>
+    <CardContent style={styles.body}>{children}</CardContent>
     {bottomButtons.length > 0 ? (
       <CardActions style={styles.actions}>
         <div>
@@ -161,7 +168,12 @@ GroupCard.propTypes = {
   titleButtons: PropTypes.arrayOf(groupCardTitleButtonShape),
   bottomButtons: PropTypes.arrayOf(groupCardBottomButtonShape),
   className: PropTypes.string,
-  children: PropTypes.element.isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.element,
+    PropTypes.string,
+    PropTypes.object,
+  ]).isRequired,
 };
 
 export default GroupCard;

@@ -1,13 +1,12 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import Avatar from 'material-ui/Avatar';
-import Chip from 'material-ui/Chip';
-import Block from 'material-ui/svg-icons/content/block';
-import Room from 'material-ui/svg-icons/action/room';
-import DateRange from 'material-ui/svg-icons/action/date-range';
-import InfoOutline from 'material-ui/svg-icons/action/info-outline';
-import { red700 } from 'material-ui/styles/colors';
+import { Avatar, Chip } from '@mui/material';
+import Block from '@mui/icons-material/Block';
+import DateRange from '@mui/icons-material/DateRange';
+import InfoOutlined from '@mui/icons-material/InfoOutlined';
+import Room from '@mui/icons-material/Room';
+import { red } from '@mui/material/colors';
 import moment, { shortDateTime, shortTime } from 'lib/moment';
 
 const translations = defineMessages({
@@ -18,14 +17,24 @@ const translations = defineMessages({
 });
 
 const styles = {
+  avatar: {
+    color: '#fff',
+  },
   chip: {
     margin: 4,
+  },
+  chipIcon: {
+    fontSize: '1.8rem',
   },
   chipsWrapper: {
     display: 'flex',
     flexWrap: 'wrap',
     paddingLeft: 16,
     paddingRight: 16,
+  },
+  notPublishedAvatar: {
+    color: '#fff',
+    backgroundColor: red[700],
   },
 };
 
@@ -61,10 +70,15 @@ class Chips extends Component {
   renderDateTimeRangeChip() {
     const { startAt, endAt } = this.props;
     return (
-      <Chip style={styles.chip}>
-        <Avatar icon={<DateRange />} />
-        {formatDateRange(startAt, endAt)}
-      </Chip>
+      <Chip
+        avatar={
+          <Avatar style={styles.avatar}>
+            <DateRange style={styles.chipIcon} />
+          </Avatar>
+        }
+        label={formatDateRange(startAt, endAt)}
+        style={styles.chip}
+      />
     );
   }
 
@@ -74,10 +88,15 @@ class Chips extends Component {
       return null;
     }
     return (
-      <Chip style={styles.chip}>
-        <Avatar icon={<Room />} />
-        {location}
-      </Chip>
+      <Chip
+        avatar={
+          <Avatar style={styles.avatar}>
+            <Room />
+          </Avatar>
+        }
+        label={location}
+        style={styles.chip}
+      />
     );
   }
 
@@ -86,20 +105,30 @@ class Chips extends Component {
       return null;
     }
     return (
-      <Chip style={styles.chip}>
-        <Avatar icon={<Block />} backgroundColor={red700} />
-        <FormattedMessage {...translations.notPublished} />
-      </Chip>
+      <Chip
+        avatar={
+          <Avatar style={styles.notPublishedAvatar}>
+            <Block />
+          </Avatar>
+        }
+        label={<FormattedMessage {...translations.notPublished} />}
+        style={styles.chip}
+      />
     );
   }
 
   renderTypeTagChip() {
     const { itemType } = this.props;
     return (
-      <Chip style={styles.chip}>
-        <Avatar icon={<InfoOutline />} />
-        {itemType}
-      </Chip>
+      <Chip
+        avatar={
+          <Avatar style={styles.avatar}>
+            <InfoOutlined />
+          </Avatar>
+        }
+        label={itemType}
+        style={styles.chip}
+      />
     );
   }
 

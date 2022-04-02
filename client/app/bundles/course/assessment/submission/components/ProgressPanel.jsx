@@ -1,16 +1,17 @@
 import { Component } from 'react';
 import { injectIntl, intlShape } from 'react-intl';
-import { Card, CardHeader, CardText } from 'material-ui/Card';
-import Paper from 'material-ui/Paper';
-import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
 import {
-  red100,
-  yellow100,
-  grey100,
-  green100,
-  blue100,
-} from 'material-ui/styles/colors';
-import WarningIcon from 'material-ui/svg-icons/alert/warning';
+  Card,
+  CardContent,
+  CardHeader,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+} from '@mui/material';
+import { blue, green, grey, red, yellow } from '@mui/material/colors';
+import Warning from '@mui/icons-material/Warning';
 
 import { formatDateTime } from '../utils';
 import { submissionShape } from '../propTypes';
@@ -20,16 +21,16 @@ import { workflowStates } from '../constants';
 const styles = {
   header: {
     attempting: {
-      backgroundColor: yellow100,
+      backgroundColor: yellow[100],
     },
     submitted: {
-      backgroundColor: grey100,
+      backgroundColor: grey[100],
     },
     graded: {
-      backgroundColor: blue100,
+      backgroundColor: blue[100],
     },
     published: {
-      backgroundColor: green100,
+      backgroundColor: green[100],
     },
   },
   warningIcon: {
@@ -45,14 +46,14 @@ class ProgressPanel extends Component {
   renderLateWarning() {
     const { intl } = this.props;
     return (
-      <CardText>
-        <Paper style={{ backgroundColor: red100, padding: 10 }}>
-          <WarningIcon style={styles.warningIcon} />
+      <CardContent>
+        <Paper style={{ backgroundColor: red[100], padding: 10 }}>
+          <Warning style={styles.warningIcon} />
           <span id="late-submission">
             {intl.formatMessage(translations.lateSubmission)}
           </span>
         </Paper>
-      </CardText>
+      </CardContent>
     );
   }
 
@@ -68,23 +69,21 @@ class ProgressPanel extends Component {
     }[workflowState];
 
     return (
-      <Table selectable={false} style={styles.table}>
-        <TableBody displayRowCheckbox={false}>
+      <Table style={styles.table}>
+        <TableBody>
           <TableRow>
-            <TableRowColumn>
+            <TableCell>
               {intl.formatMessage(translations[displayedTime])}
-            </TableRowColumn>
-            <TableRowColumn>
-              {formatDateTime(submission[displayedTime])}
-            </TableRowColumn>
+            </TableCell>
+            <TableCell>{formatDateTime(submission[displayedTime])}</TableCell>
           </TableRow>
           {workflowState === workflowStates.Graded ||
           workflowState === workflowStates.Published ? (
             <TableRow>
-              <TableRowColumn>
+              <TableCell>
                 {intl.formatMessage(translations.totalGrade)}
-              </TableRowColumn>
-              <TableRowColumn>{`${submission.grade} / ${submission.maximumGrade}`}</TableRowColumn>
+              </TableCell>
+              <TableCell>{`${submission.grade} / ${submission.maximumGrade}`}</TableCell>
             </TableRow>
           ) : null}
         </TableBody>
@@ -101,7 +100,9 @@ class ProgressPanel extends Component {
         <CardHeader
           id="submission-by"
           title={intl.formatMessage(translations.submissionBy, { submitter })}
-          subtitle={title}
+          titleTypographyProps={{ variant: 'subtitle1' }}
+          subheader={title}
+          subheaderTypographyProps={{ variant: 'subtitle2' }}
           style={styles.header[workflowState]}
         />
         {late && workflowState === workflowStates.Submitted

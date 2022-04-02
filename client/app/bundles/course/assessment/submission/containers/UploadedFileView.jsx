@@ -2,9 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
-
-import Chip from 'material-ui/Chip';
-
+import { Chip } from '@mui/material';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import { attachmentShape } from '../propTypes';
 import destroy from '../actions/attachments';
@@ -52,7 +50,7 @@ class VisibleUploadedFileView extends Component {
   renderAttachment(attachment) {
     const { canDestroyAttachments } = this.props;
 
-    const onRequestDelete = canDestroyAttachments
+    const onDelete = canDestroyAttachments
       ? () =>
           this.setState({
             deleteConfirmation: true,
@@ -62,17 +60,19 @@ class VisibleUploadedFileView extends Component {
 
     return (
       <Chip
+        clickable
         key={attachment.id}
+        label={
+          <a
+            href={VisibleUploadedFileView.buildAttachmentUrl(attachment)}
+            download
+          >
+            {attachment.name}
+          </a>
+        }
+        onDelete={onDelete}
         style={styles.chip}
-        onRequestDelete={onRequestDelete}
-      >
-        <a
-          href={VisibleUploadedFileView.buildAttachmentUrl(attachment)}
-          download
-        >
-          {attachment.name}
-        </a>
-      </Chip>
+      />
     );
   }
 

@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import { FieldArray } from 'redux-form';
-import RaisedButton from 'material-ui/RaisedButton';
-import { white } from 'material-ui/styles/colors';
-
+import { Button } from '@mui/material';
 import ImportedFileView from './ImportedFileView';
 import Editor from '../components/Editor';
 import FileInput from '../components/FileInput';
@@ -143,15 +141,16 @@ class VisibleProgrammingImportEditor extends Component {
                 dispatch(stageFiles(submissionId, answerId, filesToImport))
               }
             />
-            <RaisedButton
-              style={styles.formButton}
-              backgroundColor={white}
-              label={intl.formatMessage(translations.uploadFiles)}
+            <Button
+              variant="contained"
+              disabled={disableImport}
               onClick={() =>
                 dispatch(importFiles(answerId, answers, question.language))
               }
-              disabled={disableImport}
-            />
+              style={styles.formButton}
+            >
+              {intl.formatMessage(translations.uploadFiles)}
+            </Button>
           </>
         )}
       </>

@@ -1,48 +1,62 @@
+import { useState } from 'react';
 import Immutable from 'immutable';
-
 import PropTypes from 'prop-types';
-import { Card } from 'material-ui/Card';
-import { Tabs, Tab } from 'material-ui/Tabs';
-import { cyan500, grey300 } from 'material-ui/styles/colors';
+import { Card, CardContent, Tab, Tabs } from '@mui/material';
+import { grey } from '@mui/material/colors';
 
 const propTypes = {
   templates: PropTypes.instanceOf(Immutable.List).isRequired,
 };
 
 const UploadedPackageTemplateView = (props) => {
-  const templateTabs = props.templates.map((template) => {
-    const id = template.get('id');
-    const name = template.get('filename');
+  const [tabValue, setTabValue] = useState(0);
 
+  const templateTabs = props.templates.map((template, index) => {
+    const id = `tab_header_${template.get('id')}`;
+    const name = template.get('filename');
     return (
       <Tab
         className="template-tab"
-        label={name}
-        value={id}
         key={id}
+        label={name}
         style={{ textTransform: 'none', color: 'black' }}
-      >
-        <div
-          className="template-content"
-          dangerouslySetInnerHTML={{ __html: template.get('content') }}
-        />
-      </Tab>
+        value={index}
+      />
+    );
+  });
+
+  const templateTabContents = props.templates.map((template, index) => {
+    const id = `tab_content_${template.get('id')}`;
+    return (
+      <div
+        className="template-content"
+        dangerouslySetInnerHTML={{ __html: template.get('content') }}
+        key={id}
+        style={{ ...(index === tabValue ? {} : { display: 'none' }) }}
+      />
     );
   });
 
   return (
     <Card>
       <Tabs
-        contentContainerStyle={{ padding: '0.5em' }}
-        tabItemContainerStyle={{
+        onChange={(event, value) => {
+          setTabValue(value);
+        }}
+        style={{
           backgroundColor: 'white',
           borderBottom: '1px solid',
-          borderColor: grey300,
+          borderColor: grey[300],
         }}
-        inkBarStyle={{ backgroundColor: cyan500 }}
+        TabIndicatorProps={{ color: 'primary', style: { height: 3 } }}
+        value={tabValue}
+        variant="fullWidth"
       >
         {templateTabs}
       </Tabs>
+      <CardContent style={{ paddingBottom: 0 }}>
+        {templateTabContents}
+      </CardContent>
     </Card>
   );
 };

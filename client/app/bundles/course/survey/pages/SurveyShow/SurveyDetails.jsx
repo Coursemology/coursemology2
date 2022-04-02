@@ -3,10 +3,17 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { formatLongDateTime } from 'lib/moment';
-import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
-import { Card, CardText } from 'material-ui/Card';
-import Toggle from 'material-ui/Toggle';
-import RaisedButton from 'material-ui/RaisedButton';
+import {
+  Button,
+  Card,
+  CardContent,
+  FormControlLabel,
+  Switch,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+} from '@mui/material';
 import libTranslations from 'lib/translations';
 import history from 'lib/history';
 import surveyTranslations from 'course/survey/translations';
@@ -22,6 +29,10 @@ const styles = {
   },
   button: {
     marginRight: 15,
+  },
+  toggleContainer: {
+    paddingTop: 0,
+    paddingBottom: 0,
   },
 };
 
@@ -52,7 +63,7 @@ class SurveyDetails extends Component {
     }
 
     return (
-      <CardText>
+      <CardContent>
         <h4>
           <FormattedMessage {...surveyTranslations.description} />
         </h4>
@@ -60,7 +71,7 @@ class SurveyDetails extends Component {
           style={{ whiteSpace: 'pre-line' }}
           dangerouslySetInnerHTML={{ __html: survey.description }}
         />
-      </CardText>
+      </CardContent>
     );
   }
 
@@ -71,14 +82,19 @@ class SurveyDetails extends Component {
     }
 
     return (
-      <CardText>
-        <Toggle
+      <CardContent style={styles.toggleContainer}>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={survey.published}
+              color="primary"
+              onChange={this.handlePublishToggle}
+            />
+          }
           label={<FormattedMessage {...surveyTranslations.published} />}
-          labelPosition="right"
-          toggled={survey.published}
-          onToggle={this.handlePublishToggle}
+          labelPlacement="end"
         />
-      </CardText>
+      </CardContent>
     );
   }
 
@@ -91,107 +107,107 @@ class SurveyDetails extends Component {
       <Card>
         <div>
           <Table style={styles.table}>
-            <TableBody displayRowCheckbox={false}>
+            <TableBody>
               <TableRow>
-                <TableRowColumn>
+                <TableCell>
                   <FormattedMessage {...surveyTranslations.opensAt} />
-                </TableRowColumn>
-                <TableRowColumn>
-                  {formatLongDateTime(survey.start_at)}
-                </TableRowColumn>
+                </TableCell>
+                <TableCell>{formatLongDateTime(survey.start_at)}</TableCell>
               </TableRow>
               <TableRow>
-                <TableRowColumn>
+                <TableCell>
                   <FormattedMessage {...surveyTranslations.expiresAt} />
-                </TableRowColumn>
-                <TableRowColumn>
-                  {formatLongDateTime(survey.end_at)}
-                </TableRowColumn>
+                </TableCell>
+                <TableCell>{formatLongDateTime(survey.end_at)}</TableCell>
               </TableRow>
               <TableRow>
-                <TableRowColumn>
+                <TableCell>
                   <FormattedMessage {...surveyTranslations.basePoints} />
-                </TableRowColumn>
-                <TableRowColumn>{survey.base_exp}</TableRowColumn>
+                </TableCell>
+                <TableCell>{survey.base_exp}</TableCell>
               </TableRow>
               <TableRow>
-                <TableRowColumn>
+                <TableCell>
                   <FormattedMessage {...surveyTranslations.bonusPoints} />
-                </TableRowColumn>
-                <TableRowColumn>
+                </TableCell>
+                <TableCell>
                   {survey.allow_response_after_end
                     ? survey.time_bonus_exp
                     : '-'}
-                </TableRowColumn>
+                </TableCell>
               </TableRow>
               <TableRow>
-                <TableRowColumn>
+                <TableCell>
                   <FormattedMessage {...surveyTranslations.anonymous} />
-                </TableRowColumn>
-                <TableRowColumn>
+                </TableCell>
+                <TableCell>
                   <FormattedMessage
                     {...libTranslations[survey.anonymous ? 'yes' : 'no']}
                   />
-                </TableRowColumn>
+                </TableCell>
               </TableRow>
               <TableRow>
-                <TableRowColumn>
+                <TableCell>
                   <FormattedMessage
                     {...surveyTranslations.allowResponseAfterEnd}
                   />
-                </TableRowColumn>
-                <TableRowColumn>
+                </TableCell>
+                <TableCell>
                   <FormattedMessage
                     {...libTranslations[
                       survey.allow_response_after_end ? 'yes' : 'no'
                     ]}
                   />
-                </TableRowColumn>
+                </TableCell>
               </TableRow>
               <TableRow>
-                <TableRowColumn>
+                <TableCell>
                   <FormattedMessage
                     {...surveyTranslations.allowModifyAfterSubmit}
                   />
-                </TableRowColumn>
-                <TableRowColumn>
+                </TableCell>
+                <TableCell>
                   <FormattedMessage
                     {...libTranslations[
                       survey.allow_modify_after_submit ? 'yes' : 'no'
                     ]}
                   />
-                </TableRowColumn>
+                </TableCell>
               </TableRow>
             </TableBody>
           </Table>
         </div>
         {this.renderPublishToggle()}
         {this.renderDescription()}
-        <CardText>
+        <CardContent>
           {survey.canCreateSection ? (
             <NewSectionButton {...{ disabled }} />
           ) : null}
           {survey.canViewResults ? (
-            <RaisedButton
-              style={styles.button}
-              label={<FormattedMessage {...surveyTranslations.results} />}
+            <Button
+              variant="outlined"
               onClick={() =>
                 history.push(
                   `/courses/${courseId}/surveys/${survey.id}/results`,
                 )
               }
-            />
+              style={styles.button}
+            >
+              <FormattedMessage {...surveyTranslations.results} />
+            </Button>
           ) : null}
           {survey.canViewResults ? (
-            <RaisedButton
-              style={styles.button}
-              label={<FormattedMessage {...surveyTranslations.responses} />}
+            <Button
+              variant="outlined"
               onClick={() =>
                 history.push(
                   `/courses/${courseId}/surveys/${survey.id}/responses`,
                 )
               }
-            />
+              style={styles.button}
+            >
+              <FormattedMessage {...surveyTranslations.responses} />
+            </Button>
           ) : null}
           <DownloadResponsesButton />
           <RespondButton
@@ -205,7 +221,7 @@ class SurveyDetails extends Component {
             endAt={survey.end_at}
             submittedAt={survey.response && survey.response.submitted_at}
           />
-        </CardText>
+        </CardContent>
       </Card>
     );
   }

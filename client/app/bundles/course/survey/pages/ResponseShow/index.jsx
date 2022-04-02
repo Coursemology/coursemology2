@@ -3,15 +3,15 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { formatLongDateTime } from 'lib/moment';
-import { Card, CardText } from 'material-ui/Card';
-import Subheader from 'material-ui/Subheader';
 import {
+  Card,
+  CardContent,
+  ListSubheader,
   Table,
   TableBody,
+  TableCell,
   TableRow,
-  TableHeaderColumn,
-  TableRowColumn,
-} from 'material-ui/Table';
+} from '@mui/material';
 import surveyTranslations from 'course/survey/translations';
 import { surveyShape, responseShape } from 'course/survey/propTypes';
 import { fetchResponse } from 'course/survey/actions/responses';
@@ -57,9 +57,9 @@ class ResponseShow extends Component {
     return (
       <>
         {this.renderSubmissionInfo()}
-        <Subheader>
+        <ListSubheader disableSticky>
           <FormattedMessage {...surveyTranslations.questions} />
-        </Subheader>
+        </ListSubheader>
         <ResponseForm readOnly {...{ response, flags, initialValues }} />
       </>
     );
@@ -94,30 +94,30 @@ class ResponseShow extends Component {
     const { response } = this.props;
     return (
       <Table style={styles.submissionInfoTable}>
-        <TableBody displayRowCheckbox={false}>
-          <TableRow selectable={false}>
-            <TableHeaderColumn>Student</TableHeaderColumn>
-            <TableRowColumn>{response.creator_name}</TableRowColumn>
+        <TableBody>
+          <TableRow>
+            <TableCell>Student</TableCell>
+            <TableCell>{response.creator_name}</TableCell>
           </TableRow>
-          <TableRow selectable={false}>
-            <TableHeaderColumn>Submitted At</TableHeaderColumn>
-            <TableRowColumn>
+          <TableRow>
+            <TableCell>Submitted At</TableCell>
+            <TableCell>
               {response.submitted_at ? (
                 formatLongDateTime(response.submitted_at)
               ) : (
                 <FormattedMessage {...translations.notSubmitted} />
               )}
-            </TableRowColumn>
+            </TableCell>
           </TableRow>
-          <TableRow selectable={false}>
-            <TableHeaderColumn>Last Updated At</TableHeaderColumn>
-            <TableRowColumn>
+          <TableRow>
+            <TableCell>Last Updated At</TableCell>
+            <TableCell>
               {response.submitted_at ? (
                 formatLongDateTime(response.updated_at)
               ) : (
                 <FormattedMessage {...translations.notSubmitted} />
               )}
-            </TableRowColumn>
+            </TableCell>
           </TableRow>
         </TableBody>
       </Table>
@@ -132,7 +132,11 @@ class ResponseShow extends Component {
     if (!canUnsubmit || isLoading || !response.submitted_at) {
       return null;
     }
-    return <UnsubmitButton responseId={response.id} />;
+    return (
+      <span style={{ marginLeft: 12 }}>
+        <UnsubmitButton responseId={response.id} />
+      </span>
+    );
   }
 
   render() {
@@ -142,7 +146,7 @@ class ResponseShow extends Component {
       <>
         {survey.description ? (
           <Card>
-            <CardText
+            <CardContent
               dangerouslySetInnerHTML={{ __html: survey.description }}
             />
           </Card>
