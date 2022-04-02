@@ -8,7 +8,14 @@ import ConnectionPoint from '../ConnectionPoint';
 import { connect } from 'react-redux';
 import UnlockRateDisplay from '../UnlockRateDisplay';
 import NodeMenu from '../NodeMenu';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {
+  createTheme,
+  ThemeProvider,
+} from '@mui/material/styles';
+import { FormattedMessage } from 'react-intl';
+import translations from '../../translations.intl';
+import { nodeShape } from '../../propTypes';
+import PropTypes from 'prop-types';
 
 // Allows NodeMenu to overflow the Card MUI component (i.e. the Node)
 const theme = createTheme({
@@ -67,6 +74,7 @@ const styles = {
     cursor: 'pointer',
     fontSize: 12,
     left: 0,
+    marginLeft: 4,
     position: 'absolute',
     top: 0,
   },
@@ -123,7 +131,10 @@ const Node = (props) => {
                 node.unlock_level > 0 &&
                 <>
                   <div style={styles.unlockLevel}>
-                    Level {node.unlock_level}
+                    <FormattedMessage
+                      {...translations.unlockLevel}
+                      values={{ unlockLevel: node.unlock_level }}
+                    />
                   </div>
                 </>
               }
@@ -166,8 +177,7 @@ const Node = (props) => {
                 {
                   isNodeMenuDisplayed &&
                   <NodeMenu
-                    style={{zIndex: 999}}
-                    closeMenuCallback={() => setIsNodeMenuDisplayed(false)}
+                    onCloseMenu={() => setIsNodeMenuDisplayed(false)}
                     parentNode={node}
                   />
                 }
@@ -184,5 +194,11 @@ const mapStateToProps = (state) => ({
   canModify: state.learningMap.canModify,
   selectedElement: state.learningMap.selectedElement,
 });
+
+Node.propTypes = {
+  canModify: PropTypes.bool.isRequired,
+  getNodeConnectionPointId: PropTypes.func.isRequired,
+  node: nodeShape.isRequired,
+};
 
 export default connect(mapStateToProps)(Node);
