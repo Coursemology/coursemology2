@@ -2,7 +2,17 @@ import React from 'react';
 import ConnectionPoint from '../ConnectionPoint';
 import { connect } from 'react-redux';
 import { selectGate } from 'course/learning-map/actions';
-import { elementTypes } from '../../constants';
+import {
+  elementTypes,
+  satisfiabilityTypes,
+} from '../../constants';
+import { FormattedMessage } from 'react-intl';
+import translations from '../../translations.intl';
+import {
+  nodeShape,
+  selectedElementShape,
+} from '../../propTypes';
+import PropTypes from 'prop-types';
 
 const red = '#f08080';
 const green = '#00ff7f';
@@ -71,7 +81,7 @@ const Gate = (props) => {
   };
 
   const isAndGate = () => {
-    return node.satisfiability_type === 'all_conditions';
+    return node.satisfiability_type === satisfiabilityTypes.allConditions;
   };
 
   const isSummaryGate = () => {
@@ -128,7 +138,10 @@ const Gate = (props) => {
             zIndex: zIndex,
           }}
         >
-          {`${numSatisfiedConditions}/${node.parents.length}`}
+          <FormattedMessage
+            {...translations.summaryGateContent}
+            values={{ numerator: numSatisfiedConditions, denominator: node.parents.length }}
+          />
         </div>
       </div>
     );
@@ -162,5 +175,16 @@ const mapStateToProps = (state) => ({
   canModify: state.learningMap.canModify,
   selectedElement: state.learningMap.selectedElement,
 });
+
+Node.propTypes = {
+  canModify: PropTypes.bool.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  gateInputSizeThreshold: PropTypes.number.isRequired,
+  getGateConnectionPointId: PropTypes.func.isRequired,
+  getGateId: PropTypes.func.isRequired,
+  getGateInputId: PropTypes.func.isRequired,
+  node: nodeShape.isRequired,
+  selectedElement: selectedElementShape.isRequired,
+};
 
 export default connect(mapStateToProps)(Gate);
