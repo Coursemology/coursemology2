@@ -3,6 +3,12 @@ import { connect } from 'react-redux';
 import { selectArrow } from 'course/learning-map/actions';
 import Xarrow from 'react-xarrows';
 import { elementTypes } from '../../constants';
+import {
+  arrowProperties,
+  nodeShape,
+  selectedElementShape,
+} from '../../propTypes';
+import PropTypes from 'prop-types';
 
 const NodeToGateArrows = (props) => {
   const {
@@ -68,6 +74,20 @@ const mapStateToProps = (state) => ({
   nodes: state.learningMap.nodes,
   selectedElement: state.learningMap.selectedElement,
 });
+
+NodeToGateArrows.propTypes = {
+  arrowAnchorPositions: PropTypes.arrayOf(PropTypes.string).isRequired,
+  arrowProperties: arrowProperties.isRequired,
+  canModify: PropTypes.bool.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  gateInputSizeThreshold: PropTypes.number.isRequired,
+  getArrowId: PropTypes.func.isRequired,
+  getGateInputId: PropTypes.func.isRequired,
+  getNodeConnectionPointId: PropTypes.func.isRequired,
+  nodes: nodeShape.isRequired,
+  selectedElement: selectedElementShape.isRequired,
+  scale: PropTypes.number.isRequired,
+};
 
 export default connect(mapStateToProps)(NodeToGateArrows);
 
