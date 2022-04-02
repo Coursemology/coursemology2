@@ -20,4 +20,9 @@ const elementTypes = {
   gate: 'gate',
 };
 
-export { actionTypes, elementTypes };
+const satisfiabilityTypes = {
+  allConditions: 'all_conditions',
+  atLeastOneCondition: 'at_least_one_condition',
+}
+
+export { actionTypes, elementTypes, satisfiabilityTypes };
