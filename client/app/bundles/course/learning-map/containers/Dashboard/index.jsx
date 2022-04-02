@@ -266,6 +266,7 @@ const mapStateToProps = (state) => ({
   response: state.learningMap.response,
   selectedElement: state.learningMap.selectedElement,
 });
+
 Dashboard.propTypes = {
   dispatch: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
