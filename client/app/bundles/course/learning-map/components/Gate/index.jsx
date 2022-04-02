@@ -176,7 +176,7 @@ const mapStateToProps = (state) => ({
   selectedElement: state.learningMap.selectedElement,
 });
 
-Node.propTypes = {
+Gate.propTypes = {
   canModify: PropTypes.bool.isRequired,
   dispatch: PropTypes.func.isRequired,
   gateInputSizeThreshold: PropTypes.number.isRequired,
