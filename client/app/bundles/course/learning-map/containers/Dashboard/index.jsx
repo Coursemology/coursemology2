@@ -6,10 +6,28 @@ import {
   Icon,
 } from '@mui/material';
 import { connect } from 'react-redux';
-import { removeParentNode, resetSelection, toggleSatisfiabilityType } from 'course/learning-map/actions';
+import {
+  removeParentNode,
+  resetSelection,
+  toggleSatisfiabilityType,
+} from 'course/learning-map/actions';
 import ReactTooltip from 'react-tooltip';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import { elementTypes } from '../../constants';
+import {
+  elementTypes,
+  satisfiabilityTypes,
+} from '../../constants';
+import translations from '../../translations.intl';
+import {
+  FormattedMessage,
+  injectIntl,
+} from 'react-intl';
+import {
+  nodeShape,
+  responseShape,
+  selectedElementShape,
+} from '../../propTypes';
+import PropTypes from 'prop-types';
 
 const red = '#f08080';
 const orange = '#ffa500';
@@ -43,6 +61,7 @@ const styles = {
 const Dashboard = (props) => {
   const {
     dispatch,
+    intl,
     isLoading,
     nodes,
     response,
@@ -82,8 +101,12 @@ const Dashboard = (props) => {
 
   const responseDisplay = () => {
     return {
-      color: response.didSucceed ? `${green}` : `${red}`,
-      text: response.message,
+      color: response.didSucceed ? green : red,
+      text:
+      <FormattedMessage
+        {...translations.responseDashboardMessage}
+        values={{ responseMessage: response.message }}
+      />,
     };
   };
 
@@ -93,22 +116,30 @@ const Dashboard = (props) => {
     const toNodeTitle = nodes.find((node) => node.id === ids[1]).title;
 
     return {
-      color: `${orange}`,
-      text: `Selected condition: ${fromNodeTitle} ---> ${toNodeTitle}`,
+      color: orange,
+      text:
+      <FormattedMessage
+        {...translations.selectedArrowDashboardMessage}
+        values={{ fromNode: fromNodeTitle, toNode: toNodeTitle }}
+      />,
     };
   };
 
   const selectedGateDisplay = () => {
     return {
-      color: `${orange}`,
-      text: `Selected gate for: ${getNodeForSelectedGate().title}`,
+      color: orange,
+      text: 
+      <FormattedMessage
+        {...translations.selectedGateDashboardMessage}
+        values={{ node: getNodeForSelectedGate().title }}
+      />,
     };
   };
 
   const defaultDisplay = () => {
     return {
       color: 'white',
-      text: 'Learning Map',
+      text: <FormattedMessage {...translations.defaultDashboardMessage}/>,
     };
   };
 
@@ -140,7 +171,9 @@ const Dashboard = (props) => {
           onClick={() => setDeleteArrowConfirmation(true)}
         />
         <ReactTooltip id={tooltipId}>
-          Delete this condition
+          <FormattedMessage
+            {...translations.deleteCondition}
+          />
         </ReactTooltip>
       </>
     );
@@ -161,8 +194,13 @@ const Dashboard = (props) => {
         >
         </Icon>
         <ReactTooltip id={tooltipId}>
-          Toggle satisfiability type to
-            {` ${node.satisfiability_type === 'all_conditions' ? '\"at least one condition\"' : '\"all conditions\"'}`}
+          <FormattedMessage
+            {...translations.toggleSatisfiabilityType}
+            values={{ satisfiabilityType: node.satisfiability_type === satisfiabilityTypes.allConditions ?
+              '\"at least one condition\"' :
+              '\"all conditions\"'
+            }}
+          />
         </ReactTooltip>
       </>
     );
@@ -213,7 +251,7 @@ const Dashboard = (props) => {
       <ConfirmationDialog
         confirmDelete
         open={deleteArrowConfirmation}
-        message={'Are you sure that you want to delete this condition?'}
+        message={intl.formatMessage(translations.conditionDeletionConfirmation)}
         onCancel={() => setDeleteArrowConfirmation(false)}
         onConfirm={() => deleteArrow()}
       />
@@ -227,5 +265,11 @@ const mapStateToProps = (state) => ({
   response: state.learningMap.response,
   selectedElement: state.learningMap.selectedElement,
 });
+Dashboard.propTypes = {
+  isLoading: PropTypes.bool.isRequired,
+  nodes: nodeShape.isRequired,
+  response: responseShape.isRequired,
+  selectedElement: selectedElementShape.isRequired,
+};
 
-export default connect(mapStateToProps)(Dashboard);
+export default connect(mapStateToProps)(injectIntl(Dashboard));
