@@ -21,6 +21,7 @@ import translations from '../../translations.intl';
 import {
   FormattedMessage,
   injectIntl,
+  intlShape,
 } from 'react-intl';
 import {
   nodeShape,
@@ -266,6 +267,8 @@ const mapStateToProps = (state) => ({
   selectedElement: state.learningMap.selectedElement,
 });
 Dashboard.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  intl: intlShape.isRequired,
   isLoading: PropTypes.bool.isRequired,
   nodes: nodeShape.isRequired,
   response: responseShape.isRequired,
