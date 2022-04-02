@@ -8,7 +8,17 @@ import {
   MenuItem,
 } from '@mui/material';
 import { addParentNode } from 'course/learning-map/actions';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {
+  createTheme,
+  ThemeProvider,
+} from '@mui/material/styles';
+import { FormattedMessage } from 'react-intl';
+import translations from '../../translations.intl';
+import PropTypes from 'prop-types';
+import {
+  nodeShape,
+  relatedNodeShape,
+} from '../../propTypes';
 
 // Remove padding from top of MenuList
 const theme = createTheme({
@@ -49,16 +59,18 @@ const styles = {
 
 const NodeMenu = (props) => {
   const {
-    closeMenuCallback,
     dispatch,
     nodes,
+    onCloseMenu,
     parentNode,
   } = props;
 
   const onClickMenuItem = (selectedNode) => {
-    closeMenuCallback();
+    onCloseMenu();
     dispatch(addParentNode(parentNode.id, selectedNode.id));
   }
+
+  console.log(nodes);
 
   return (
     <ThemeProvider theme={theme}>
@@ -67,10 +79,10 @@ const NodeMenu = (props) => {
           inset={false}
           style={styles.header}
         >
-          Add condition to:
+          <FormattedMessage {...translations.addCondition} />
           <Icon
             className='fa fa-window-close'
-            onClick={() => closeMenuCallback()}
+            onClick={() => onCloseMenu()}
             style={styles.closeIcon}
           />
         </ListSubheader>
@@ -94,5 +106,12 @@ const NodeMenu = (props) => {
 const mapStateToProps = (state) => ({
   nodes: state.learningMap.nodes,
 });
+
+NodeMenu.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  nodes: PropTypes.arrayOf(nodeShape).isRequired,
+  onCloseMenu: PropTypes.func.isRequired,
+  parentNode: relatedNodeShape,
+};
 
 export default connect(mapStateToProps)(NodeMenu);
