@@ -44,7 +44,7 @@ GateToNodeArrows.propTypes = {
   arrowAnchorPositions: PropTypes.arrayOf(PropTypes.string).isRequired,
   arrowProperties: arrowProperties.isRequired,
   getGateConnectionPointId: PropTypes.func.isRequired,
-  nodes: nodeShape.isRequired,
+  nodes: PropTypes.arrayOf(nodeShape).isRequired,
   scale: PropTypes.number.isRequired,
 };
 

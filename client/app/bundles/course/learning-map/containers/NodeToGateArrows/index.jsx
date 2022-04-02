@@ -84,7 +84,7 @@ NodeToGateArrows.propTypes = {
   getArrowId: PropTypes.func.isRequired,
   getGateInputId: PropTypes.func.isRequired,
   getNodeConnectionPointId: PropTypes.func.isRequired,
-  nodes: nodeShape.isRequired,
+  nodes: PropTypes.arrayOf(nodeShape).isRequired,
   selectedElement: selectedElementShape.isRequired,
   scale: PropTypes.number.isRequired,
 };

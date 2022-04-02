@@ -271,7 +271,7 @@ Dashboard.propTypes = {
   dispatch: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  nodes: nodeShape.isRequired,
+  nodes: PropTypes.arrayOf(nodeShape).isRequired,
   response: responseShape.isRequired,
   selectedElement: selectedElementShape.isRequired,
 };

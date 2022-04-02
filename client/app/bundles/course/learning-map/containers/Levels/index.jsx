@@ -85,8 +85,8 @@ Levels.propTypes = {
   getGateConnectionPointId: PropTypes.func.isRequired,
   getGateId: PropTypes.func.isRequired,
   getGateInputId: PropTypes.func.isRequired,
-  getGateNodeConnectionPointId: PropTypes.func.isRequired,
-  nodes: nodeShape.isRequired,
+  getNodeConnectionPointId: PropTypes.func.isRequired,
+  nodes: PropTypes.arrayOf(nodeShape).isRequired,
 };
 
 export default connect(mapStateToProps)(Levels);

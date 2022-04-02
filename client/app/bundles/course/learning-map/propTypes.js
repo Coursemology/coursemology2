@@ -29,7 +29,7 @@ export const selectedElementShape = PropTypes.shape({
 
 export const arrowProperties = PropTypes.shape({
   defaultColor: PropTypes.string,
-  headSize: PropTypes.string,
+  headSize: PropTypes.number,
   selectColor: PropTypes.string,
-  strokeWidth: PropTypes.string,
+  strokeWidth: PropTypes.number,
 });
