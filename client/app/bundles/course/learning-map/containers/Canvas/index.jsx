@@ -1,7 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React,{ useRef, useState } from 'react';
 import Levels from '../Levels';
 import ArrowOverlay from '../ArrowOverlay';
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import {
+  TransformWrapper,
+  TransformComponent,
+} from "react-zoom-pan-pinch";
 import { Xwrapper } from 'react-xarrows';
 import ZoomActionElements from '../../components/ZoomActionElements';
 
