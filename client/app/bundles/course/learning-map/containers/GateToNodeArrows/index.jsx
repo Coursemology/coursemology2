@@ -19,6 +19,7 @@ const GateToNodeArrows = (props) => {
   return (
     nodes.map(node => {
       return (
+        node.depth > 0 &&
         <Xarrow
           key={node.id}
           start={getGateConnectionPointId(node.id)}

@@ -54,14 +54,17 @@ const Levels = React.memo((props) => {
               style={styles.nodeWithGate}
             >
               <>
-                <Gate
-                  gateInputSizeThreshold={gateInputSizeThreshold}
-                  getGateConnectionPointId={getGateConnectionPointId}
-                  getGateId={getGateId}
-                  getGateInputId={getGateInputId}
-                  key={getGateId(node.id)}
-                  node={node}
-                />
+                {
+                  node.depth > 0 &&
+                  <Gate
+                    gateInputSizeThreshold={gateInputSizeThreshold}
+                    getGateConnectionPointId={getGateConnectionPointId}
+                    getGateId={getGateId}
+                    getGateInputId={getGateInputId}
+                    key={getGateId(node.id)}
+                    node={node}
+                  />
+                }
                 <Node
                   key={node.id}
                   node={node}
