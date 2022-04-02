@@ -2,6 +2,7 @@ import React from 'react';
 import { Icon } from '@mui/material';
 import { FormattedMessage } from 'react-intl';
 import translations from '../../translations.intl';
+import PropTypes from 'prop-types';
 
 const styles = {
   content: {
