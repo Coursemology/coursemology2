@@ -1,5 +1,6 @@
 import React from 'react';
 import classStyles from './ConnectionPoint.scss';
+import PropTypes from 'prop-types';
 
 const styles = {
   connectionPoint: {
@@ -32,6 +33,12 @@ const ConnectionPoint = (props) => {
       <div id={id}></div>
     </div>
   );
+};
+
+ConnectionPoint.propTypes = {
+  id: PropTypes.string.isRequired,
+  isActive: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default ConnectionPoint;
