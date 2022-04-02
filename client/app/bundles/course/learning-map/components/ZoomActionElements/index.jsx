@@ -1,7 +1,8 @@
 import React from 'react';
 import { Button } from '@mui/material';
 import { FormattedMessage } from 'react-intl';
-import translations from '../../translations.intl'
+import translations from '../../translations.intl';
+import PropTypes from 'prop-types';
 
 const styles = {
   actionButton: {
@@ -49,6 +50,11 @@ const ZoomActionElements = (props) => {
       </Button>
     </div>
   );
+};
+
+ZoomActionElements.propTypes = {
+  zoomIn: PropTypes.func.isRequired,
+  zoomOut: PropTypes.func.isRequired,
 };
 
 export default ZoomActionElements;
