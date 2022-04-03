@@ -46,7 +46,8 @@ class Course::LessonPlan::Strategies::BasePersonalizationStrategy
                            [learning_rate_ema, effective_max].min].max
     end
 
-    { submitted_items: submitted_items, items: items, learning_rate_ema: learning_rate_ema }
+    { submitted_items: submitted_items, items: items, learning_rate_ema: learning_rate_ema,
+      effective_min: effective_min, effective_max: effective_max }
   end
 
   # Executes the relevant personalization strategy for the given course user, using the given precomputed

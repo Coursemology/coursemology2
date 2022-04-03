@@ -32,7 +32,7 @@ class Course::LessonPlan::Strategies::OtotPersonalizationStrategy <
     end
 
     { submitted_items: submitted_items, items: items, learning_rate_ema: bounded_learning_rate_ema,
-      original_learning_rate_ema: learning_rate_ema }
+      original_learning_rate_ema: learning_rate_ema, effective_min: effective_min, effective_max: effective_max }
   end
 
   # Applies the appropriate algorithm strategy for the student based on the student's learning rate.
