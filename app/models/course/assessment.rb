@@ -68,6 +68,8 @@ class Course::Assessment < ApplicationRecord
                                        through: :question_bundles
   has_many :question_bundle_assignments, class_name: Course::Assessment::QuestionBundleAssignment.name,
                                          inverse_of: :assessment, dependent: :destroy
+  has_one :duplication_traceable, class_name: DuplicationTraceable::Assessment.name,
+                                  inverse_of: :assessment, dependent: :destroy
 
   validate :tab_in_same_course
   validate :selected_test_type_for_grading
@@ -123,6 +125,8 @@ class Course::Assessment < ApplicationRecord
       where.not(tab_id: actable_data).
       select(Course::LessonPlan::Item.arel_table[:id])
   end)
+
+  delegate :source, :source=, to: :duplication_traceable
 
   def self.use_relative_model_naming?
     true
