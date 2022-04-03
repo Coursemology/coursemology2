@@ -93,6 +93,15 @@ class Duplicator
         source_object.dup.tap do |duplicate|
           @duplicated_objects[key] = duplicate
           duplicate.initialize_duplicate(self, key)
+
+          # Set duplication source, if it's being tracked for this class.
+          if duplicate.class.method_defined?(:duplication_traceable)
+            traceable = DuplicationTraceable.duplication_traceable_class_of(duplicate)
+            duplicate.duplication_traceable = traceable.initialize_with_dest(duplicate,
+                                                                             source_id: source_object.id,
+                                                                             creator: @options[:current_user],
+                                                                             updater: @options[:current_user])
+          end
         end
       end
     end
