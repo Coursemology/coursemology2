@@ -3,6 +3,7 @@ json.partial! 'user_list_data', course_user: course_user, should_show_timeline: 
 
 is_student_and_gamified = current_course.gamified? && course_user.student?
 can_read_progress = can?(:read, Course::ExperiencePointsRecord.new(course_user: course_user))
+can_read_statistics = can?(:read_statistics, current_course)
 
 if can_read_progress && is_student_and_gamified
   json.experiencePointsRecordsUrl course_user_experience_points_records_path(current_course, @course_user)
@@ -32,3 +33,5 @@ if @learning_rate_record.present?
   json.learningRateEffectiveMin @learning_rate_record.effective_min
   json.learningRateEffectiveMax @learning_rate_record.effective_max
 end
+
+json.canReadStatistics can_read_statistics
