@@ -6,12 +6,6 @@ import ErrorCard from 'lib/components/ErrorCard';
 import DataTable from 'lib/components/DataTable';
 import { staffIndexShape } from '../../../propTypes/staff';
 
-const options = {
-  downloadOptions: {
-    filename: 'staff',
-  },
-};
-
 const translations = defineMessages({
   error: {
     id: 'course.statistics.staff.error',
@@ -41,6 +35,12 @@ const translations = defineMessages({
   tableTitle: {
     id: 'course.statistics.staff.tableTitle',
     defaultMessage: 'Staff Statistics',
+  },
+});
+
+const options = (intl) => ({
+  downloadOptions: {
+    filename: intl.formatMessage(translations.tableTitle),
   },
 });
 
@@ -105,7 +105,7 @@ const StaffStatistics = ({ staff, isFetching, isError, intl }) => {
       title={intl.formatMessage(translations.tableTitle)}
       data={staff}
       columns={columns}
-      options={options}
+      options={options(intl)}
     />
   );
 };
