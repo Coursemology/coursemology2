@@ -1,20 +1,12 @@
+import { Box, Tooltip } from '@mui/material';
 import PropTypes from 'prop-types';
-import LinearProgress from '@mui/material/LinearProgress';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import { green, orange, red } from '@mui/material/colors';
+import { useMemo } from 'react';
 import { defineMessages, injectIntl } from 'react-intl';
-
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import ErrorCard from 'lib/components/ErrorCard';
 import DataTable from 'lib/components/DataTable';
 import { studentsIndexShape } from '../../../propTypes/students';
-
-const options = {
-  filterType: 'multiselect',
-  downloadOptions: {
-    filename: 'students',
-  },
-};
 
 const translations = defineMessages({
   error: {
@@ -38,58 +30,75 @@ const translations = defineMessages({
     id: 'course.statistics.student.experiencePoints',
     defaultMessage: 'Experience Points',
   },
-  videoSubmissionCount: {
-    id: 'course.statistics.student.videoSubmissionCount',
-    defaultMessage: 'Videos Watched (Total: {courseVideoCount})',
-  },
-  videoPercentWatched: {
-    id: 'course.statistics.student.videoPercentWatched',
-    defaultMessage: 'Average % Watched',
+  courseCompletion: {
+    id: 'course.statistics.student.courseCompletion',
+    defaultMessage: 'Course Completion',
   },
   tableTitle: {
     id: 'course.statistics.student.tableTitle',
-    defaultMessage: 'Student Statistics',
+    defaultMessage: 'Student Submission Statistics',
   },
 });
 
-function LinearProgressWithLabel(props) {
+const Circle = ({ value }) => {
+  // eslint-disable-next-line no-nested-ternary
+  const color = value >= 80 ? green[100] : value >= 40 ? orange[100] : red[100];
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-      <Box sx={{ width: '100%', mr: 1 }}>
-        <LinearProgress variant="determinate" {...props} />
-      </Box>
-      <Box sx={{ minWidth: 35 }}>
-        <Typography variant="body2" color="text.secondary">{`${Math.round(
-          props.value ?? 0,
-        )}%`}</Typography>
-      </Box>
-    </Box>
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <Tooltip title={`${value}%`}>
+        <div>
+          <Box
+            component="div"
+            width={20}
+            height={20}
+            borderRadius="50%"
+            bgcolor={color}
+          />
+        </div>
+      </Tooltip>
+    </div>
   );
-}
+};
 
-LinearProgressWithLabel.propTypes = {
-  /**
-   * Value between 0 and 100.
-   */
-  value: PropTypes.number,
+Circle.propTypes = {
+  value: PropTypes.number.isRequired,
 };
 
 const StudentsStatistics = ({
   isCourseGamified,
-  showVideo,
-  courseVideoCount,
   hasGroupManagers,
   students,
+  assessments,
   isFetching,
   isError,
   intl,
 }) => {
-  if (isFetching) {
+  if (isFetching || assessments == null) {
     return <LoadingIndicator />;
   }
   if (isError) {
     return <ErrorCard message={intl.formatMessage(translations.error)} />;
   }
+
+  const mappedStudents = useMemo(
+    () =>
+      students.map((s) => ({
+        ...s,
+        courseCompletion:
+          assessments.length > 0
+            ? Math.round(
+                10000 * (s.numAssessmentsCompleted / assessments.length),
+              ) / 100
+            : 0,
+      })),
+    [students, assessments],
+  );
 
   const columns = [
     {
@@ -98,6 +107,23 @@ const StudentsStatistics = ({
       options: {
         filter: false,
         sort: true,
+        setCellProps: () => ({
+          style: {
+            position: 'sticky',
+            left: 0,
+            background: 'white',
+            zIndex: 101,
+          },
+        }),
+        setCellHeaderProps: () => ({
+          style: {
+            position: 'sticky',
+            left: 0,
+            top: 0, // In case header is fixed
+            background: 'white',
+            zIndex: 102,
+          },
+        }),
       },
     },
   ];
@@ -118,6 +144,7 @@ const StudentsStatistics = ({
       options: {
         filter: true,
         sort: true,
+        alignCenter: true,
       },
     });
     columns.push({
@@ -126,37 +153,49 @@ const StudentsStatistics = ({
       options: {
         filter: false,
         sort: true,
-      },
-    });
-  }
-  if (showVideo) {
-    columns.push({
-      name: 'videoSubmissionCount',
-      label: intl.formatMessage(translations.videoSubmissionCount, {
-        courseVideoCount,
-      }),
-    });
-    columns.push({
-      name: 'videoPercentWatched',
-      label: intl.formatMessage(translations.videoPercentWatched),
-      options: {
-        filter: false,
-        sort: true,
-        customBodyRender: (value) => (
-          <Box sx={{ width: '100%' }}>
-            <LinearProgressWithLabel value={value} />
-          </Box>
-        ),
+        alignCenter: true,
       },
     });
   }
 
+  columns.push({
+    name: 'courseCompletion',
+    label: intl.formatMessage(translations.courseCompletion),
+    options: {
+      filter: true,
+      sort: false,
+      alignCenter: true,
+      customBodyRender: (value) => `${value}%`,
+    },
+  });
+
+  assessments.forEach((a) => {
+    columns.push({
+      name: `${a.id}`,
+      label: a.title,
+      options: {
+        sort: true,
+        alignCenter: true,
+        customBodyRender: (value) => {
+          if (value == null) {
+            return null;
+          }
+          return <Circle value={value} />;
+        },
+      },
+    });
+  });
+
   return (
     <DataTable
       title={intl.formatMessage(translations.tableTitle)}
-      data={students}
+      data={mappedStudents}
       columns={columns}
-      options={options}
+      options={{
+        downloadOptions: {
+          filename: intl.formatMessage(translations.tableTitle),
+        },
+      }}
     />
   );
 };
