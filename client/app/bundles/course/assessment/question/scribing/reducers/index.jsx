@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { reducer as formReducer } from 'redux-form';
+import notificationPopup from 'lib/reducers/notificationPopup';
 import scribingQuestionReducer, {
   initialState as scribingQuestionState,
 } from './scribingQuestionReducer';
@@ -9,6 +9,6 @@ export const initialStates = {
 };
 
 export default combineReducers({
+  notificationPopup,
   scribingQuestion: scribingQuestionReducer,
-  form: formReducer,
 });
