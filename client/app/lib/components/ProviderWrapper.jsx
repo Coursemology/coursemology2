@@ -84,20 +84,18 @@ const themeSettings = {
   },
 };
 
-const themeV5 = createTheme(adaptV4Theme(themeSettings));
+export const adaptedTheme = adaptV4Theme(themeSettings);
+
+const themeV5 = createTheme(adaptedTheme);
 
 const ProviderWrapper = ({ store, persistor, children }) => {
   const availableForeignLocales = { zh };
   const localeWithoutRegionCode = i18nLocale.toLowerCase().split(/[_-]+/)[0];
 
   let messages;
-  if (
-    localeWithoutRegionCode !== 'en' &&
-    availableForeignLocales[localeWithoutRegionCode]
-  ) {
+  if (localeWithoutRegionCode !== 'en' && availableForeignLocales[localeWithoutRegionCode]) {
     addLocaleData(availableForeignLocales[localeWithoutRegionCode]);
-    messages =
-      translations[localeWithoutRegionCode] || translations[i18nLocale];
+    messages = translations[localeWithoutRegionCode] || translations[i18nLocale];
   }
 
   let providers = children;
