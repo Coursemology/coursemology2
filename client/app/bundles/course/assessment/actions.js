@@ -4,13 +4,13 @@ import CourseAPI from 'api/course';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { getCourseId } from 'lib/helpers/url-helpers';
 
-import actionTypes from './constants';
 import {
-  processSubmission,
-  processAssessment,
   processAncestor,
+  processAssessment,
   processCourseUser,
+  processSubmission,
 } from './utils/statisticsUtils';
+import actionTypes from './constants';
 
 export const fetchAssessments = async (categoryId, tabId) => {
   const response = await CourseAPI.assessment.assessments.index(
