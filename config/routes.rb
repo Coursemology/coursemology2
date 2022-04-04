@@ -388,10 +388,11 @@ Rails.application.routes.draw do
         end
       end
 
-      get 'statistics/my_students'
-      get 'statistics/all_students'
-      get 'statistics/download'
-      get 'statistics/staff'
+      namespace :statistics do
+        get '/' => 'statistics#index'
+        get 'course/students' => 'aggregate#all_students'
+        get 'course/staff' => 'aggregate#all_staff'
+      end
 
       scope module: :video do
         resources :videos, except: [:new, :edit] do
