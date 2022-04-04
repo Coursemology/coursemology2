@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 graded_staff = @staff.reject { |staff| staff.published_submissions.empty? }
 
 json.staff graded_staff do |staff|
