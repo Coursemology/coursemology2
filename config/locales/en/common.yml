@@ -1,6 +1,5 @@
 en:
   common:
-    serial_number: "S/N"
     new: "New"
     not_started: "Not started"
     ended: "Ended"
