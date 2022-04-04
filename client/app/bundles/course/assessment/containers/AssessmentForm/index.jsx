@@ -167,7 +167,6 @@ const UpdatedAssessmentForm = (props) => {
   });
   const autograded = watch('autograded');
   const passwordProtected = watch('password_protected');
-  const startAt = watch('start_at');
 
   // Load all tabs if data is loaded, otherwise fall back to current assessment tab.
   const loadedTabs = tabs || watch('tabs');
@@ -354,6 +353,10 @@ const UpdatedAssessmentForm = (props) => {
   };
 
   const renderTabs = () => {
+    if (!loadedTabs) {
+      return null;
+    }
+
     const options = loadedTabs.map((tab) => ({
       value: tab.tab_id,
       label: tab.title,
@@ -448,7 +451,6 @@ const UpdatedAssessmentForm = (props) => {
               fieldState={fieldState}
               disabled={disabled}
               label={<FormattedMessage {...translations.endAt} />}
-              minDate={startAt}
               style={styles.flexChild}
             />
           )}
@@ -463,7 +465,6 @@ const UpdatedAssessmentForm = (props) => {
                 fieldState={fieldState}
                 disabled={disabled}
                 label={<FormattedMessage {...translations.bonusEndAt} />}
-                minDate={startAt}
                 style={styles.flexChild}
               />
             )}

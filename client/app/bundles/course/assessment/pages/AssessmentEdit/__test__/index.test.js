@@ -1,4 +1,5 @@
 import { mount } from 'enzyme';
+import { act } from 'react-dom/test-utils';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 import CourseAPI from 'api/course';
 import storeCreator from '../../../store';
@@ -18,6 +19,7 @@ describe('<AssessmentEdit />', () => {
     use_public: true,
     use_private: true,
     use_evaluation: true,
+    tabs: [{ tab_id: 0, tab_title: 'test' }],
   };
 
   it('renders the edit page', async () => {
@@ -31,13 +33,13 @@ describe('<AssessmentEdit />', () => {
     expect(autogradedInput.props().value).toBeFalsy();
 
     // Select field for Tab and Layout
-    expect(editPage.find('SelectField')).toHaveLength(2);
+    expect(editPage.find('FormSelectField')).toHaveLength(2);
     expect(editPage.find('input[name="password_protected"]')).toHaveLength(1);
     expect(editPage.find('input[name="skippable"]')).toHaveLength(0);
 
     // Enable autograded field
     autogradedInput.simulate('change', { target: { value: true } });
-    expect(editPage.find('SelectField')).toHaveLength(1); // Only Tab, no more Layout Field
+    expect(editPage.find('FormSelectField')).toHaveLength(1); // Only Tab, no more Layout Field
     expect(editPage.find('input[name="password_protected"]')).toHaveLength(0);
     expect(editPage.find('input[name="skippable"]')).toHaveLength(1);
 
@@ -48,7 +50,9 @@ describe('<AssessmentEdit />', () => {
 
     const spy = jest.spyOn(CourseAPI.assessment.assessments, 'update');
     const form = editPage.find('form');
-    form.simulate('submit');
+    await act(async () => {
+      form.simulate('submit');
+    });
     expect(spy).toHaveBeenCalledWith(id, {
       assessment: {
         ...initialValues,
@@ -65,10 +69,6 @@ describe('<AssessmentEdit />', () => {
       <ProviderWrapper store={store}>
         <AssessmentEdit id={id} modeSwitching initialValues={initialValues} />
       </ProviderWrapper>,
-    );
-
-    expect(editPage.find('input[name="bonus_end_at"]').length).toBeGreaterThan(
-      0,
     );
     expect(editPage.find('input[name="base_exp"]').length).toBeGreaterThan(0);
     expect(

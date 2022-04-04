@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom';
 import { shallow, mount } from 'enzyme';
-import ReactTestUtils from 'react-dom/test-utils';
+import ReactTestUtils, { act } from 'react-dom/test-utils';
 import CourseAPI from 'api/course';
 import DeleteConfirmation from 'lib/containers/DeleteConfirmation';
 import storeCreator from 'course/lesson-plan/store';
@@ -52,15 +52,15 @@ describe('<AdminTools />', () => {
     expect(spy).toHaveBeenCalledWith(eventId);
   });
 
-  it('allows event to be edited', () => {
+  it('allows event to be edited', async () => {
     const spy = jest.spyOn(CourseAPI.lessonPlan, 'updateEvent');
     const store = storeCreator({ flags: { canManageLessonPlan: true } });
     const contextOptions = buildContextOptions(store);
     const eventId = 55;
     const eventData = {
       title: 'Original title',
-      start_at: '2017-01-04T02:03:00.000+08:00',
-      end_at: '2017-01-05T02:03:00.000+08:00',
+      start_at: new Date('2017-01-04T02:03:00.000+08:00'),
+      end_at: new Date('2017-01-05T02:03:00.000+08:00'),
       published: false,
       event_type: 'Recitation',
     };
@@ -91,11 +91,9 @@ describe('<AdminTools />', () => {
     const descriptionInput = eventForm.find('textarea[name="description"]');
     descriptionInput.simulate('change', { target: { value: description } });
 
-    const submitButton = eventFormDialog
-      .find('FormDialogue')
-      .first()
-      .instance().submitButton;
-    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton));
+    await act(async () => {
+      eventForm.simulate('submit');
+    });
 
     const expectedPayload = {
       lesson_plan_event: {
