@@ -80,7 +80,7 @@ const SubmissionDoughnut = ({ submissions, allStudents, intl }) => {
 SubmissionDoughnut.propTypes = {
   submissions: PropTypes.arrayOf(submissionRecordsShape).isRequired,
   allStudents: PropTypes.arrayOf(courseUserShape).isRequired,
-  intl: PropTypes.object,
+  intl: PropTypes.object.isRequired,
 };
 
 export default injectIntl(SubmissionDoughnut);
