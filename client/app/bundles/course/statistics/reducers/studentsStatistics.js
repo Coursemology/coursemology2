@@ -4,10 +4,9 @@ const initialState = {
   isFetching: false,
   isError: false,
   students: [],
+  assessments: [],
   isCourseGamified: false,
   hasGroupManagers: false,
-  showVideo: false,
-  courseVideoCount: 0,
 };
 
 export default function (state = initialState, action) {
@@ -22,9 +21,8 @@ export default function (state = initialState, action) {
         ...state,
         isFetching: false,
         students: action.students,
+        assessments: action.assessments,
         isCourseGamified: action.isCourseGamified,
-        showVideo: action.showVideo,
-        courseVideoCount: action.courseVideoCount,
         hasGroupManagers: action.hasGroupManagers,
       };
     }

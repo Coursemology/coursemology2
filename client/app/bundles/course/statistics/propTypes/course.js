@@ -1,10 +1,55 @@
 import PropTypes from 'prop-types';
 
 import { notificationShape } from 'lib/components/NotificationBar';
-import { intlShape } from 'react-intl';
 
-// eslint-disable-next-line import/prefer-default-export
+export const assessmentShape = PropTypes.shape({
+  id: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+  startAt: PropTypes.object.isRequired,
+  endAt: PropTypes.object,
+});
+
+export const submissionShape = PropTypes.shape({
+  id: PropTypes.number.isRequired, // user id
+  name: PropTypes.string.isRequired, // user name
+  isPhantom: PropTypes.bool.isRequired, // user isPhantom
+  submissions: PropTypes.arrayOf(
+    PropTypes.shape({
+      assessmentId: PropTypes.number.isRequired,
+      submittedAt: PropTypes.object.isRequired,
+    }),
+  ),
+});
+
+export const studentShape = PropTypes.shape({
+  id: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  isPhantom: PropTypes.bool.isRequired,
+  numSubmissions: PropTypes.number.isRequired,
+  correctness: PropTypes.number,
+  learningRate: PropTypes.number,
+  achievementCount: PropTypes.number,
+  level: PropTypes.number,
+  experiencePoints: PropTypes.number,
+  experiencePointsLink: PropTypes.string,
+  videoSubmissionCount: PropTypes.number,
+  videoSubmissionLink: PropTypes.string,
+  videoPercentWatched: PropTypes.number,
+});
+
 export const courseIndexShape = PropTypes.shape({
-  intl: intlShape.isRequired,
+  assessments: PropTypes.arrayOf(assessmentShape),
+  submissions: PropTypes.arrayOf(submissionShape),
+  students: PropTypes.arrayOf(studentShape),
+  hasPersonalizedTimeline: PropTypes.bool.isRequired,
+  isCourseGamified: PropTypes.bool.isRequired,
+  showVideo: PropTypes.bool.isRequired,
+  courseVideoCount: PropTypes.number.isRequired,
+
+  isFetchingProgression: PropTypes.bool.isRequired,
+  isErrorProgression: PropTypes.bool.isRequired,
+  isFetchingPerformance: PropTypes.bool.isRequired,
+  isErrorPerformance: PropTypes.bool.isRequired,
+
   notification: notificationShape, // Centralised across course, students and staff
 });

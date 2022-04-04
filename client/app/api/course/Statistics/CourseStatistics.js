@@ -8,8 +8,12 @@ export default class CourseStatisticsAPI extends BaseCourseAPI {
    * - Their tutors
    * - Their level
    * - Their experience points
-   * - Their number of videos watched
-   * - Their average video watch percentage
+   * - All their submission data:
+   *   - Whether they have submitted
+   *   - Their grade for the submission, if graded
+   *   - The assessment the submission is for
+   *
+   * And a list of assessment data as well.
    */
   fetchAllStudentStatistics() {
     return this.getClient().get(`${this._getUrlPrefix()}/students`);
@@ -24,6 +28,21 @@ export default class CourseStatisticsAPI extends BaseCourseAPI {
    */
   fetchAllStaffStatistics() {
     return this.getClient().get(`${this._getUrlPrefix()}/staff`);
+  }
+
+  /**
+   * Fetches course progression statistics, which comprise of assessment data and relevant student
+   * submission data.
+   */
+  fetchCourseProgressionStatistics() {
+    return this.getClient().get(`${this._getUrlPrefix()}/course/progression`);
+  }
+
+  /**
+   * Fetches course performance statistics, which comprises of various performance metrics.
+   */
+  fetchCoursePerformanceStatistics() {
+    return this.getClient().get(`${this._getUrlPrefix()}/course/performance`);
   }
 
   _getUrlPrefix() {
