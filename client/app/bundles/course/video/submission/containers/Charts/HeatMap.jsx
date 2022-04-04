@@ -118,7 +118,7 @@ class HeatMap extends Component {
       if (elements.length < 1) {
         return;
       }
-      this.props.onBarClick(elements[0]._index); // Index is the video time
+      this.props.onBarClick(elements[0].index); // Index is the video time
     },
     onHover: (event, elements) => {
       const style = event.native.target.style;
