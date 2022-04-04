@@ -11,12 +11,22 @@ import NotificationBar from 'lib/components/NotificationBar';
 
 import StudentsStatistics from './students';
 import StaffStatistics from './staff';
-import { fetchStudentsStatistics, fetchStaffStatistics } from '../../actions';
+import CourseStatistics from './course';
+import {
+  fetchStudentsStatistics,
+  fetchStaffStatistics,
+  fetchCourseProgressionStatistics,
+  fetchCoursePerformanceStatistics,
+} from '../../actions';
 import { courseIndexShape } from '../../propTypes/course';
 import { studentsIndexShape } from '../../propTypes/students';
 import { staffIndexShape } from '../../propTypes/staff';
 
 const translations = defineMessages({
+  course: {
+    id: 'course.statistics.tabs.course',
+    defaultMessage: 'Course',
+  },
   students: {
     id: 'course.statistics.tabs.students',
     defaultMessage: 'Students',
@@ -24,6 +34,14 @@ const translations = defineMessages({
   staff: {
     id: 'course.statistics.tabs.staff',
     defaultMessage: 'Staff',
+  },
+  courseProgressionFailure: {
+    id: 'course.statistics.failures.courseProgression',
+    defaultMessage: 'Failed to fetch course progression data!',
+  },
+  coursePerformanceFailure: {
+    id: 'course.statistics.failures.coursePerformance',
+    defaultMessage: 'Failed to fetch course performance data!',
   },
   studentsFailure: {
     id: 'course.statistics.failures.students',
@@ -77,6 +95,22 @@ const StatisticsIndex = ({
 
   useEffect(() => {
     dispatch(
+      fetchCourseProgressionStatistics(
+        intl.formatMessage(translations.courseProgressionFailure),
+      ),
+    );
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(
+      fetchCoursePerformanceStatistics(
+        intl.formatMessage(translations.coursePerformanceFailure),
+      ),
+    );
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(
       fetchStudentsStatistics(intl.formatMessage(translations.studentsFailure)),
     );
   }, [dispatch]);
@@ -101,19 +135,26 @@ const StatisticsIndex = ({
             aria-label="Statistics Index Tabs"
           >
             <Tab
-              label={intl.formatMessage(translations.students)}
+              label={intl.formatMessage(translations.course)}
               {...a11yProps(0)}
             />
             <Tab
-              label={intl.formatMessage(translations.staff)}
+              label={intl.formatMessage(translations.students)}
               {...a11yProps(1)}
+            />
+            <Tab
+              label={intl.formatMessage(translations.staff)}
+              {...a11yProps(2)}
             />
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
-          <StudentsStatistics {...studentsStatistics} />
+          <CourseStatistics {...courseStatistics} />
         </TabPanel>
         <TabPanel value={value} index={1}>
+          <StudentsStatistics {...studentsStatistics} />
+        </TabPanel>
+        <TabPanel value={value} index={2}>
           <StaffStatistics {...staffStatistics} />
         </TabPanel>
       </Box>
