@@ -1,35 +1,6 @@
 en:
   course:
     statistics:
-      student:
-        header: 'Student Statistics'
-      my_students:
-        header: "My Students' Statistics"
-        download_my_students: "Download My Students' Statistics"
-      all_students:
-        header: "All Students' Statistics"
-        download_all_students: "Download All Students' Statistics"
-      tabs:
-        my_students_tab: 'My Students'
-        all_students_tab: 'All Students'
-      course_student_statistics:
-        phantom_students: 'Phantom Students'
-      table:
-        tutor: 'Tutor(s)'
-        experience_points: 'Experience Points'
-        video_watched: 'Videos Watched (Total: %{total})'
-        percent_watched: 'Average % Watched'
-        progress: '%{progress} %'
-      staff:
-        header: 'Staff Statistics'
-        name: 'Staff Name'
-        marked: '#Marked'
-        students: '#Students'
-        average_time: 'Average Time Per Assignment'
-        stddev: 'Standard Deviation'
-        no_statistics: 'There are no staff statistics as nothing has been graded yet.'
-      csv_download_service:
-        email: 'Email'
-        user_type: 'User Type'
-        phantom: 'Phantom'
-        normal: 'Normal'
+      header: 'Statistics'
+      index:
+        header: 'Statistics'

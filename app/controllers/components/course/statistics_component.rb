@@ -11,30 +11,13 @@ class Course::StatisticsComponent < SimpleDelegator
 
     [
       {
-        key: :student_statistics,
+        key: :statistics,
         icon: 'bar-chart',
-        title: t('course.statistics.student.header'),
+        title: t('course.statistics.header'),
         type: :admin,
         weight: 2,
-        path: statistics_student_url
-      },
-      {
-        key: :staff_statistics,
-        icon: 'bar-chart',
-        title: I18n.t('course.statistics.staff.header'),
-        type: :admin,
-        weight: 3,
-        path: course_statistics_staff_path(current_course)
+        path: course_statistics_path(current_course)
       }
     ]
-  end
-
-  # Path for the student statistics tab depends on whether the user has students.
-  def statistics_student_url
-    if current_course_user&.my_students&.any?
-      course_statistics_my_students_path(current_course)
-    else
-      course_statistics_all_students_path(current_course)
-    end
   end
 end
