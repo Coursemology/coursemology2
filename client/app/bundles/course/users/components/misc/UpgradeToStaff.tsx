@@ -15,7 +15,10 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { CourseUserBasicMiniEntity, StaffRole } from 'types/course/courseUsers';
+import {
+  CourseUserBasicMiniEntity,
+  StaffRoles,
+} from 'types/course/courseUsers';
 import { AppDispatch, AppState } from 'types/store';
 
 import { STAFF_ROLES } from 'lib/constants/sharedConstants';
@@ -62,8 +65,8 @@ const UpgradeToStaff: FC<Props> = (props) => {
   const [selectedStudents, setSelectedStudents] = useState<
     CourseUserBasicMiniEntity[]
   >([]);
-  const [role, setRole] = useState<StaffRole>(
-    Object.keys(STAFF_ROLES)[0] as StaffRole, // object.keys returns string[]; we know it is a StaffRole
+  const [role, setRole] = useState<StaffRoles>(
+    Object.keys(STAFF_ROLES)[0] as StaffRoles, // object.keys returns string[]; we know it is a StaffRoles
   );
   const dispatch = useDispatch<AppDispatch>();
 

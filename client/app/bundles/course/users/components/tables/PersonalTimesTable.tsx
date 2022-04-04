@@ -12,12 +12,22 @@ import {
 } from '@mui/material';
 import { PersonalTimeMiniEntity } from 'types/course/personalTimes';
 
-import { ITEM_ACTABLE_TYPES } from 'lib/constants/sharedConstants';
 import { getAssessmentURL, getVideoURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import tableTranslations from 'lib/translations/table';
 
 import PersonalTimeEditor from '../misc/PersonalTimeEditor';
+
+const ITEM_ACTABLE_TYPES = {
+  video: {
+    name: 'Course::Video',
+    value: 'video',
+  },
+  assessment: {
+    name: 'Course::Assessment',
+    value: 'assessment',
+  },
+};
 
 interface Props extends WrappedComponentProps {
   personalTimes: PersonalTimeMiniEntity[];

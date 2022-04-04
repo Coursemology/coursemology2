@@ -20,23 +20,23 @@ export const TIMELINE_ALGORITHMS = [
   { value: 'otot', label: 'Otot' },
 ];
 
-export const USER_ROLES: UserRoles = {
+export const USER_ROLES: Record<UserRoles, string> = {
   normal: 'Normal',
   administrator: 'Administrator',
 };
 
-export const INSTANCE_USER_ROLES: InstanceUserRoles = {
+export const INSTANCE_USER_ROLES: Record<InstanceUserRoles, string> = {
   normal: 'Normal',
   instructor: 'Instructor',
   administrator: 'Administrator',
 };
 
-export const ROLE_REQUEST_ROLES: RoleRequestRoles = {
+export const ROLE_REQUEST_ROLES: Record<RoleRequestRoles, string> = {
   instructor: 'Instructor',
   administrator: 'Administrator',
 };
 
-export const COURSE_USER_ROLES: CourseUserRoles = {
+export const COURSE_USER_ROLES: Record<CourseUserRoles, string> = {
   student: 'Student',
   teaching_assistant: 'Teaching Assistant',
   manager: 'Manager',
@@ -45,18 +45,7 @@ export const COURSE_USER_ROLES: CourseUserRoles = {
 };
 
 export const { student, ...staffRoles } = COURSE_USER_ROLES;
-export const STAFF_ROLES: StaffRoles = staffRoles;
-
-export const ITEM_ACTABLE_TYPES = {
-  video: {
-    name: 'Course::Video',
-    value: 'video',
-  },
-  assessment: {
-    name: 'Course::Assessment',
-    value: 'assessment',
-  },
-};
+export const STAFF_ROLES: Record<StaffRoles, string> = staffRoles;
 
 export const AVAILABLE_LOCALES: { [key in Locale]: string } = {
   en: 'English',
@@ -70,6 +59,5 @@ export default {
   ROLE_REQUEST_ROLES,
   COURSE_USER_ROLES,
   STAFF_ROLES,
-  ITEM_ACTABLE_TYPES,
   AVAILABLE_LOCALES,
 };

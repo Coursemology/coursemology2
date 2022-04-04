@@ -4,7 +4,7 @@ import {
   CourseUserEntity,
   CourseUserMiniEntity,
   LearningRateRecordsEntity,
-  StaffRole,
+  StaffRoles,
   UpdateCourseUserPatchData,
 } from 'types/course/courseUsers';
 import {
@@ -161,7 +161,7 @@ export function updateUser(
 
 export function upgradeToStaff(
   users: CourseUserBasicMiniEntity[],
-  role: StaffRole,
+  role: StaffRoles,
 ): Operation {
   return async (dispatch) =>
     CourseAPI.users.upgradeToStaff(users, role).then((response) => {

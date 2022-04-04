@@ -18,7 +18,7 @@ import { AppDispatch } from 'types/store';
 import {
   InstanceAdminStats,
   InstanceUserMiniEntity,
-  InstanceUserRole,
+  InstanceUserRoles,
 } from 'types/system/instance/users';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
@@ -90,7 +90,7 @@ const UsersTable: FC<Props> = (props) => {
     ) as InstanceUserMiniEntity;
     const newUser = {
       ...user,
-      role: newRole as InstanceUserRole,
+      role: newRole as InstanceUserRoles,
     };
     return dispatch(updateUser(user.id, newUser))
       .then(() => {

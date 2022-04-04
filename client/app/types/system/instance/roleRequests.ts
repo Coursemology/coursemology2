@@ -1,8 +1,8 @@
-import { RoleRequestRole } from './users';
+import { RoleRequestRoles } from './users';
 
 export interface RoleRequestBasicListData {
   id: number;
-  role: RoleRequestRole;
+  role: RoleRequestRoles;
   organization: string;
   designation: string;
   reason: string;
@@ -37,7 +37,7 @@ export interface RoleRequestRowData extends RoleRequestMiniEntity {
 }
 
 export interface UserRoleRequestForm {
-  role: RoleRequestRole;
+  role: RoleRequestRoles;
   organization: string;
   designation: string;
   reason: string;

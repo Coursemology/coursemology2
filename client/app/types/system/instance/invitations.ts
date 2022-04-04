@@ -1,4 +1,4 @@
-import { InstanceUserListData, InstanceUserRole } from './users';
+import { InstanceUserListData, InstanceUserRoles } from './users';
 
 export interface IndividualInvites {
   invitations: IndividualInvite[];
@@ -23,7 +23,7 @@ export interface InvitationMiniEntity {
   name: string;
   email: string;
   confirmed: boolean;
-  role: InstanceUserRole;
+  role: InstanceUserRoles;
   invitationKey: string;
   sentAt?: string;
   confirmedAt?: string;
@@ -34,7 +34,7 @@ export interface InvitationListData {
   name: string;
   email: string;
   confirmed: boolean;
-  role: InstanceUserRole;
+  role: InstanceUserRoles;
   invitationKey: string;
   sentAt?: string;
   confirmedAt?: string;
