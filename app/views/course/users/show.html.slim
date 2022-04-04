@@ -1,4 +1,5 @@
 - can_read_progress = can?(:read, Course::ExperiencePointsRecord.new(course_user: @course_user))
+- can_read_statistics = can?(:read_statistics, current_course)
 - add_breadcrumb format_inline_text(@course_user.name)
 = page_header
 
@@ -29,6 +30,12 @@ div.row
     h2 = t('.achievements_header')
     div.row.automatically-clear
       = render partial: 'achievement', collection: @course_user.achievements
+
+/ For now, we will disallow students from viewing their own learning rate changes
+- if current_course.show_personalized_timeline_features && @course_user.student? && can_read_statistics
+  div.row
+    h2 = t('.learning_rate')
+    div#user-statistics data="#{{ course_user_id: @course_user.id }.to_json}"
 
 - all_skill_branches = @skills_service.skill_branches
 - if can_read_progress && all_skill_branches.present?

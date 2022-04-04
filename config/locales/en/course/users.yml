@@ -45,6 +45,7 @@ en:
           zero: 'No achievements'
           one: 'One achievement'
           other: '%{count} achievements'
+        learning_rate: 'Learning Rate'
         topic_mastery: 'Topic Mastery'
         grade_for_skill: '%{grade}/%{total_grade} points'
         manage_email_subscription: 'Manage email subscriptions'

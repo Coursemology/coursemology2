@@ -394,6 +394,7 @@ Rails.application.routes.draw do
         get 'course/course/performance' => 'aggregate#course_performance'
         get 'assessment/:id' => 'assessments#assessment'
         get 'assessment/:id/ancestors' => 'assessments#ancestors'
+        get 'user/:user_id/learning_rate_records' => 'users#learning_rate_records'
       end
 
       scope module: :video do
