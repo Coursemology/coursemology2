@@ -1663,6 +1663,18 @@
   dependencies:
     dequal "^2.0.2"
 
+"@sgratzl/boxplots@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@sgratzl/boxplots/-/boxplots-1.3.0.tgz#c9063d98e33a15f880cf4bd3531be71497e2a94e"
+  integrity sha512-2BRWv+WOH58pwzSgP50buoXgxQic+4auz3BF0wiIUXS8D3QGkdBNgsNdQO1754Tm/0uEwly0R3WaCiGnoYWcmA==
+
+"@sgratzl/chartjs-chart-boxplot@^3.7.1":
+  version "3.7.1"
+  resolved "https://registry.yarnpkg.com/@sgratzl/chartjs-chart-boxplot/-/chartjs-chart-boxplot-3.7.1.tgz#cbe5c31cc2bc1b3c37c6fa3bca8b7781ebcc62d4"
+  integrity sha512-DYyOedq9CVFcDQZbRekyZAu/Bg0SUgaa19hsl4ikU85Di2DPdaiC/tFIkwHS6YB4L1GMWNvY+TDUODMYRFjhxA==
+  dependencies:
+    "@sgratzl/boxplots" "^1.3.0"
+
 "@sinonjs/commons@^1.7.0":
   version "1.8.3"
   resolved "https://registry.yarnpkg.com/@sinonjs/commons/-/commons-1.8.3.tgz#3802ddd21a50a949b6721ddd72da36e67e7f1b2d"
