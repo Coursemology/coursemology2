@@ -20,6 +20,7 @@ import LevelAPI from './Level';
 import MaterialFoldersAPI from './MaterialFolders';
 import MaterialsAPI from './Materials';
 import PersonalTimesAPI from './PersonalTimes';
+import StatisticsAPI from './Statistics';
 import SurveyAPI from './Survey';
 import UserEmailSubscriptionsAPI from './UserEmailSubscriptions';
 import UserInvitationsAPI from './UserInvitations';
@@ -30,34 +31,35 @@ import VideoSubmissionsAPI from './VideoSubmissions';
 
 const CourseAPI = {
   achievements: new AchievementsAPI(),
+  admin: AdminAPI,
   announcements: new AnnouncementsAPI(),
   assessment: AssessmentAPI,
   comments: new CommentsAPI(),
   conditions: new ConditionsAPI(),
   courses: new CoursesAPI(),
+  disbursement: new DisbursementAPI(),
+  duplication: new DuplicationAPI(),
+  enrolRequests: new EnrolRequestsAPI(),
+  experiencePointsRecord: new ExperiencePointsRecordAPI(),
   folders: new FoldersAPI(),
+  forum: ForumAPI,
+  groups: new GroupsAPI(),
+  leaderboard: new LeaderboardAPI(),
+  learningMap: new LearningMapAPI(),
+  lessonPlan: new LessonPlanAPI(),
+  level: new LevelAPI(),
   materials: new MaterialsAPI(),
   materialFolders: new MaterialFoldersAPI(),
-  lessonPlan: new LessonPlanAPI(),
-  duplication: new DuplicationAPI(),
-  survey: SurveyAPI,
-  video: VideoAPI,
-  admin: AdminAPI,
-  level: new LevelAPI(),
-  userNotifications: new UserNotificationsAPI(),
-  userEmailSubscriptions: new UserEmailSubscriptionsAPI(),
-  groups: new GroupsAPI(),
-  learningMap: new LearningMapAPI(),
-  users: new UsersAPI(),
-  leaderboard: new LeaderboardAPI(),
-  userInvitations: new UserInvitationsAPI(),
-  enrolRequests: new EnrolRequestsAPI(),
   personalTimes: new PersonalTimesAPI(),
+  statistics: StatisticsAPI,
   submissions: new SubmissionsAPI(),
-  disbursement: new DisbursementAPI(),
-  forum: ForumAPI,
-  experiencePointsRecord: new ExperiencePointsRecordAPI(),
+  survey: SurveyAPI,
+  users: new UsersAPI(),
+  userInvitations: new UserInvitationsAPI(),
+  video: VideoAPI,
   videoSubmissions: new VideoSubmissionsAPI(),
+  userEmailSubscriptions: new UserEmailSubscriptionsAPI(),
+  userNotifications: new UserNotificationsAPI(),
 };
 
 Object.freeze(CourseAPI);
