@@ -3,7 +3,7 @@ class Course::LessonPlan::Strategies::FomoPersonalizationStrategy <
   Course::LessonPlan::Strategies::BasePersonalizationStrategy
   MIN_OVERALL_LIMIT = 0.67 # Means that the fastest that a course can be completed is in 0.67 of the course duration
   MAX_OVERALL_LIMIT = 1.0
-  HARD_MIN_LEARNING_RATE = 0.5 
+  HARD_MIN_LEARNING_RATE = 0.5
   DATE_ROUNDING_THRESHOLD = 0.8
 
   # Shifts start_at of relevant lesson plan items and resets the bonus_end_at and end_at

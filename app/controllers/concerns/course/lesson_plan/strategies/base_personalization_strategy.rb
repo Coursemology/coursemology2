@@ -40,9 +40,11 @@ class Course::LessonPlan::Strategies::BasePersonalizationStrategy
     )
     unless learning_rate_ema.nil?
       settings = course_user.course.settings_personalized_timeline
-      effective_min, effective_max = compute_learning_rate_effective_limits(course_user, items, submitted_items,
-                                                                            min_overall_limit(settings, learning_rate_ema),
-                                                                            max_overall_limit(settings, learning_rate_ema))
+      effective_min, effective_max = compute_learning_rate_effective_limits(
+        course_user, items, submitted_items,
+        min_overall_limit(settings, learning_rate_ema),
+        max_overall_limit(settings, learning_rate_ema)
+      )
       bounded_learning_rate_ema = [hard_min_learning_rate(settings, learning_rate_ema), effective_min,
                                    [learning_rate_ema, effective_max].min].max
       if settings&.hard_max_learning_rate
