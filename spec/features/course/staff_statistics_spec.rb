@@ -79,6 +79,7 @@ RSpec.feature 'Course: Statistics: Staff' do
       end
 
       scenario 'I can view staff summary' do
+        pending 'Migrated staff statistics to React-side'
         visit course_statistics_staff_path(course)
 
         expect(page).to have_selector('li', text: I18n.t('course.statistics.staff.header'))
@@ -115,7 +116,7 @@ RSpec.feature 'Course: Statistics: Staff' do
       scenario 'I cannot see the sidebar item' do
         visit course_path(course)
 
-        expect(page).not_to have_selector('li', text: I18n.t('course.statistics.staff.header'))
+        expect(page).not_to have_selector('li', text: I18n.t('course.statistics.header'))
       end
     end
   end
