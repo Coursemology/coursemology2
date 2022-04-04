@@ -389,6 +389,8 @@ Rails.application.routes.draw do
         get '/' => 'statistics#index'
         get 'course/students' => 'aggregate#all_students'
         get 'course/staff' => 'aggregate#all_staff'
+        get 'course/course/progression' => 'aggregate#course_progression'
+        get 'course/course/performance' => 'aggregate#course_performance'
       end
 
       scope module: :video do

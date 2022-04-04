@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class CourseUser < ApplicationRecord
+class CourseUser < ApplicationRecord # rubocop:disable Metrics/ClassLength
   include CourseUser::StaffConcern
   include CourseUser::LevelProgressConcern
   include CourseUser::TodoConcern
@@ -103,6 +103,23 @@ class CourseUser < ApplicationRecord
       where('course_video_tabs.course_id = course_users.course_id')
   end)
 
+  # @!attribute [r] latest_learning_rate
+  #   Returns the learning rate of the last computed learning rate record.
+  calculated :latest_learning_rate, (lambda do
+    Course::LearningRateRecord.select(:learning_rate).limit(1).order(created_at: :desc).
+      where('course_learning_rate_records.course_user_id = course_users.id')
+  end)
+
+  # @!attribute [r] assessment_submission_count
+  #   Returns the total number of submitted assessment submissions by CourseUser in this course
+  calculated :assessment_submission_count, (lambda do
+    Course::Assessment::Submission.select('count(*)').
+      joins(assessment: { tab: :category }).
+      where('course_assessment_submissions.creator_id = course_users.user_id').
+      where('course_assessment_categories.course_id = course_users.course_id').
+      where(course_assessment_submissions: { workflow_state: [:submitted, :graded, :published] })
+  end)
+
   scope :staff, -> { where(role: STAFF_ROLES) }
   scope :teaching_staff, -> { where(role: TEACHING_STAFF_ROLES) }
   scope :teaching_assistant_and_manager, (lambda do
@@ -115,6 +132,10 @@ class CourseUser < ApplicationRecord
   scope :without_phantom_users, -> { where(phantom: false) }
   scope :with_course_statistics, -> { all.calculated(:experience_points, :achievement_count) }
   scope :with_video_statistics, -> { all.calculated(:video_percent_watched, :video_submission_count) }
+  scope :with_performance_statistics, lambda {
+    all.calculated(:experience_points, :achievement_count, :video_percent_watched,
+                   :video_submission_count, :latest_learning_rate, :assessment_submission_count)
+  }
 
   # Order course_users by experience points for use in the course leaderboard.
   #   In the event of a tie in points, the scope will then sort by course_users who

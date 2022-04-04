@@ -1,7 +1,19 @@
 # frozen_string_literal: true
 # This is named aggregate controller as naming this as course controller leads to name conflict issues
-class Course::Statistics::AggregateController < Course::Statistics::Controller
-  before_action :preload_levels, only: [:all_students]
+class Course::Statistics::AggregateController < Course::Statistics::Controller # rubocop:disable Metrics/ClassLength
+  def course_progression
+    @assessment_info_array = assessment_info_array
+    @user_submission_array = user_submission_array
+  end
+
+  def course_performance
+    preload_levels
+    @students = students
+    @course_videos = current_course.videos
+    @course_video_count = @course_videos.exists? ? @course_videos.count : 0
+    @correctness_hash = correctness_hash
+    @has_personalized_timeline = current_course.show_personalized_timeline_features?
+  end
 
   def all_staff
     @staff = current_course.course_users.teaching_assistant_and_manager.includes(:group_users)
@@ -9,15 +21,137 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
   end
 
   def all_students
-    all_students = course_users.students.ordered_by_experience_points.with_video_statistics
-    @phantom_students, @students = all_students.partition(&:phantom?)
+    preload_levels
+    @assessments = Course::Assessment.with_default_reference_time.published.
+                   where(course_id: current_course.id).
+                   pluck(:id, :title, :start_at).
+                   sort_by { |a| a[2] }
+    @students = course_users.students.ordered_by_experience_points
     @service = group_manager_preload_service
+    @assessment_scores_hash = assessment_scores_hash
   end
 
   private
 
+  def assessment_info_array
+    @assessment_info_array ||= Course::Assessment.published.with_default_reference_time.
+                               where.not(course_reference_times: { end_at: nil }).
+                               where(course_id: current_course.id).
+                               pluck(:id, :title, :start_at, :end_at)
+  end
+
+  def user_submission_array # rubocop:disable Metrics/AbcSize
+    submission_data_arr = Course::Assessment::Submission.joins(creator: :course_users).
+                          where(assessment_id: assessment_info_array.map { |i| i[0] },
+                                course_users: { course_id: current_course.id, role: :student }).
+                          group(:creator_id, 'course_users.name', 'course_users.phantom').
+                          pluck(:creator_id, 'course_users.name', 'course_users.phantom',
+                                'json_agg(assessment_id)', 'array_agg(submitted_at)')
+
+    submission_data_arr.map do |sub_data|
+      assessment_to_submitted_at = sub_data[3].zip(sub_data[4]).map do |assessment_id, submitted_at|
+        if submitted_at.nil?
+          nil
+        else
+          [assessment_id, submitted_at]
+        end
+      end.compact
+
+      [sub_data[0], sub_data[1], sub_data[2], assessment_to_submitted_at] # id, name, phantom, [ass_id, sub_at]
+    end
+  end
+
+  def correctness_hash
+    query = CourseUser.find_by_sql(<<-SQL.squish
+      SELECT
+        id,
+        AVG(correctness) AS correctness
+      FROM (
+        SELECT
+          cu.id AS id,
+          sum(caa.grade) / sum(caq.maximum_grade) AS correctness
+        FROM
+          course_assessment_categories cat
+          INNER JOIN course_assessment_tabs tab
+          ON tab.category_id = cat.id
+          INNER JOIN course_assessments ca
+          ON ca.tab_id = tab.id
+          INNER JOIN course_assessment_submissions cas
+          ON cas.assessment_id = ca.id
+          INNER JOIN course_assessment_answers caa
+          ON caa.submission_id = cas.id
+          INNER JOIN course_assessment_questions caq
+          ON caa.question_id = caq.id
+          INNER JOIN course_users cu
+          ON cu.user_id = cas.creator_id
+        WHERE
+          cat.course_id = #{current_course.id}
+          AND caa.current_answer IS true
+          AND cas.workflow_state IN ('graded', 'published')
+          AND cu.course_id = #{current_course.id}
+          AND cu.role = 0
+        GROUP BY
+          cu.id,
+          cas.assessment_id
+        HAVING
+          sum(caq.maximum_grade) > 0
+      ) course_user_assessment_correctness
+      GROUP BY
+        id
+    SQL
+                                  )
+    query.map { |u| [u.id, u.correctness] }.to_h
+  end
+
+  # TODO: Fix edge case for assessments with total grade of 0
+  def assessment_scores_hash
+    query = CourseUser.find_by_sql(<<-SQL.squish
+      SELECT
+        cu.id AS id,
+        cas.assessment_id AS assessment_id,
+        sum(caa.grade) / sum(caq.maximum_grade) AS correctness
+      FROM
+        course_assessment_categories cat
+        INNER JOIN course_assessment_tabs tab
+        ON tab.category_id = cat.id
+        INNER JOIN course_assessments ca
+        ON ca.tab_id = tab.id
+        INNER JOIN course_assessment_submissions cas
+        ON cas.assessment_id = ca.id
+        INNER JOIN course_assessment_answers caa
+        ON caa.submission_id = cas.id
+        INNER JOIN course_assessment_questions caq
+        ON caa.question_id = caq.id
+        INNER JOIN course_users cu
+        ON cu.user_id = cas.creator_id
+      WHERE
+        cat.course_id = #{current_course.id}
+        AND caa.current_answer IS true
+        AND cas.workflow_state IN ('graded', 'published')
+        AND cu.course_id = #{current_course.id}
+        AND cu.role = 0
+      GROUP BY
+        cu.id,
+        cas.assessment_id
+      HAVING
+        sum(caq.maximum_grade) > 0
+    SQL
+                                  )
+    result = {}
+    query.each do |u|
+      result[u.id] = {} if result[u.id].nil?
+
+      result[u.id][u.assessment_id] = u.correctness
+    end
+    result
+  end
+
   def course_users
     @course_users ||= current_course.course_users.includes(:groups)
+  end
+
+  def students
+    @students = current_course.course_users.students.with_performance_statistics
   end
 
   def group_manager_preload_service
