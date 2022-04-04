@@ -30,6 +30,7 @@ const config = {
     alias: {
       lib: path.resolve('./app/lib'),
       api: path.resolve('./app/api'),
+      theme: path.resolve('./app/theme'),
       course: path.resolve('./app/bundles/course'),
       testUtils: path.resolve('./app/__test__/utils'),
     },

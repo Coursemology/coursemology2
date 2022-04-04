@@ -15,6 +15,7 @@ module.exports = {
         map: [
           ['lib', './app/lib'],
           ['api', './app/api'],
+          ['theme', './app/theme'],
           ['course', './app/bundles/course'],
           ['testUtils', './app/__test__/utils'],
         ],
