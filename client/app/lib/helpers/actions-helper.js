@@ -6,7 +6,9 @@
  * @param {Object} errors errors returned from RoR in the form of { name<string>: error<string[]>,  }
  */
 export function setReactHookFormError(setError, errors) {
-  Object.entries(errors).forEach(([name, error]) =>
-    setError(name, { message: error.toString() }),
-  );
+  if (setError) {
+    Object.entries(errors).forEach(([name, error]) =>
+      setError(name, { message: error.toString() }),
+    );
+  }
 }
