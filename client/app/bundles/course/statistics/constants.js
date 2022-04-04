@@ -1,0 +1,12 @@
+import mirrorCreator from 'mirror-creator';
+
+const actionTypes = mirrorCreator([
+  'FETCH_STUDENTS_STATISTICS_REQUEST',
+  'FETCH_STUDENTS_STATISTICS_SUCCESS',
+  'FETCH_STUDENTS_STATISTICS_FAILURE',
+  'FETCH_STAFF_STATISTICS_REQUEST',
+  'FETCH_STAFF_STATISTICS_SUCCESS',
+  'FETCH_STAFF_STATISTICS_FAILURE',
+]);
+
+export default actionTypes;
