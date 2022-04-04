@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 class Course::LessonPlan::Strategies::StragglersPersonalizationStrategy <
   Course::LessonPlan::Strategies::BasePersonalizationStrategy
-  MIN_LEARNING_RATE = 1.0
-  MAX_LEARNING_RATE = 2.0
+  MIN_OVERALL_LIMIT = 1.0
+  MAX_OVERALL_LIMIT = 2.0 # Means that the default latest that a course can be completed is 2x the duration
   HARD_MIN_LEARNING_RATE = 0.8
   DATE_ROUNDING_THRESHOLD = 0.2
   STRAGGLERS_FIXES = 1
