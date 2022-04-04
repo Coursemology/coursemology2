@@ -19,7 +19,8 @@ const options = {
 const translations = defineMessages({
   error: {
     id: 'course.statistics.student.error',
-    defaultMessage: 'Something went wrong when fetching student statistics! Please refresh to try again.',
+    defaultMessage:
+      'Something went wrong when fetching student statistics! Please refresh to try again.',
   },
   name: {
     id: 'course.statistics.student.name',
@@ -58,7 +59,9 @@ function LinearProgressWithLabel(props) {
         <LinearProgress variant="determinate" {...props} />
       </Box>
       <Box sx={{ minWidth: 35 }}>
-        <Typography variant="body2" color="text.secondary">{`${Math.round(props.value ?? 0)}%`}</Typography>
+        <Typography variant="body2" color="text.secondary">{`${Math.round(
+          props.value ?? 0,
+        )}%`}</Typography>
       </Box>
     </Box>
   );
@@ -129,7 +132,9 @@ const StudentsStatistics = ({
   if (showVideo) {
     columns.push({
       name: 'videoSubmissionCount',
-      label: intl.formatMessage(translations.videoSubmissionCount, { courseVideoCount }),
+      label: intl.formatMessage(translations.videoSubmissionCount, {
+        courseVideoCount,
+      }),
     });
     columns.push({
       name: 'videoPercentWatched',

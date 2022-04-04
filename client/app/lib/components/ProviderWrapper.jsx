@@ -93,9 +93,13 @@ const ProviderWrapper = ({ store, persistor, children }) => {
   const localeWithoutRegionCode = i18nLocale.toLowerCase().split(/[_-]+/)[0];
 
   let messages;
-  if (localeWithoutRegionCode !== 'en' && availableForeignLocales[localeWithoutRegionCode]) {
+  if (
+    localeWithoutRegionCode !== 'en' &&
+    availableForeignLocales[localeWithoutRegionCode]
+  ) {
     addLocaleData(availableForeignLocales[localeWithoutRegionCode]);
-    messages = translations[localeWithoutRegionCode] || translations[i18nLocale];
+    messages =
+      translations[localeWithoutRegionCode] || translations[i18nLocale];
   }
 
   let providers = children;

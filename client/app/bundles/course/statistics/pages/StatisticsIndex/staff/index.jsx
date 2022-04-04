@@ -15,7 +15,8 @@ const options = {
 const translations = defineMessages({
   error: {
     id: 'course.statistics.staff.error',
-    defaultMessage: 'Something went wrong when fetching staff statistics! Please refresh to try again.',
+    defaultMessage:
+      'Something went wrong when fetching staff statistics! Please refresh to try again.',
   },
   name: {
     id: 'course.statistics.staff.name',
@@ -100,7 +101,12 @@ const StaffStatistics = ({ staff, isFetching, isError, intl }) => {
   );
 
   return (
-    <DataTable title={intl.formatMessage(translations.tableTitle)} data={staff} columns={columns} options={options} />
+    <DataTable
+      title={intl.formatMessage(translations.tableTitle)}
+      data={staff}
+      columns={columns}
+      options={options}
+    />
   );
 };
 
