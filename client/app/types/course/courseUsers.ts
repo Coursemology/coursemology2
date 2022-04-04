@@ -1,6 +1,4 @@
-import { Permissions, Roles } from 'types';
-
-import { COURSE_USER_ROLES, STAFF_ROLES } from 'lib/constants/sharedConstants';
+import { Permissions } from 'types';
 
 import {
   UserSkillBranchListData,
@@ -20,46 +18,44 @@ export type ManageCourseUsersPermissions = Permissions<
   | 'canRegisterWithCode'
 >;
 
-export type CourseUserRoles = Roles<
-  'student' | 'teaching_assistant' | 'manager' | 'owner' | 'observer'
->;
+export type CourseUserRoles =
+  | 'student'
+  | 'teaching_assistant'
+  | 'manager'
+  | 'owner'
+  | 'observer';
 
-export type StaffRoles = Roles<
-  'teaching_assistant' | 'manager' | 'owner' | 'observer'
->;
-
-export type CourseUserRole = keyof typeof COURSE_USER_ROLES;
-export type StaffRole = keyof typeof STAFF_ROLES;
+export type StaffRoles = Exclude<CourseUserRoles, 'student'>;
 
 export interface CourseUserBasicListData {
   id: number;
   name: string;
   userUrl?: string;
   imageUrl?: string;
-  role?: CourseUserRole;
+  role?: CourseUserRoles;
 }
 
 export interface CourseUserListData extends CourseUserBasicListData {
-  phantom?: boolean;
   email: string;
-  role: CourseUserRole;
+  role: CourseUserRoles;
+  phantom?: boolean;
   timelineAlgorithm?: TimelineAlgorithm;
 }
 
 export interface CourseUserBasicMiniEntity {
-  id: number;
-  name: string;
-  userUrl?: string;
-  imageUrl?: string;
-  role?: CourseUserRole;
+  id: CourseUserBasicListData['id'];
+  name: CourseUserBasicListData['name'];
+  userUrl?: CourseUserBasicListData['userUrl'];
+  imageUrl?: CourseUserBasicListData['userUrl'];
+  role?: CourseUserBasicListData['role'];
 }
 
 export interface CourseUserMiniEntity extends CourseUserBasicMiniEntity {
-  phantom?: boolean;
-  email: string;
-  role: CourseUserRole;
+  phantom?: CourseUserListData['phantom'];
+  email: CourseUserListData['email'];
+  role: CourseUserListData['role'];
+  timelineAlgorithm?: CourseUserListData['timelineAlgorithm'];
   referenceTimelineId?: number | null;
-  timelineAlgorithm?: TimelineAlgorithm;
   groups?: string[];
 }
 
@@ -95,7 +91,7 @@ export interface CourseUserFormData {
   name: string;
   phantom: boolean;
   timelineAlgorithm?: TimelineAlgorithm;
-  role?: CourseUserRole;
+  role?: CourseUserRoles;
 }
 
 /**
@@ -107,7 +103,7 @@ export interface UpdateCourseUserPatchData {
     phantom?: boolean;
     timeline_algorithm?: TimelineAlgorithm;
     reference_timeline_id?: number | null;
-    role?: CourseUserRole;
+    role?: CourseUserRoles;
   };
 }
 

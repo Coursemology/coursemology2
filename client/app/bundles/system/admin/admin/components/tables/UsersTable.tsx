@@ -15,7 +15,7 @@ import {
   TableState,
 } from 'types/components/DataTable';
 import { AppDispatch } from 'types/store';
-import { AdminStats, UserMiniEntity, UserRole } from 'types/users';
+import { AdminStats, UserMiniEntity, UserRoles } from 'types/users';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
 import InlineEditTextField from 'lib/components/form/fields/DataTableInlineEditable/TextField';
@@ -111,7 +111,7 @@ const UsersTable: FC<Props> = (props) => {
     ) as UserMiniEntity;
     const newUser = {
       ...user,
-      role: newRole as UserRole,
+      role: newRole as UserRoles,
     };
     return dispatch(updateUser(user.id, newUser))
       .then(() => {

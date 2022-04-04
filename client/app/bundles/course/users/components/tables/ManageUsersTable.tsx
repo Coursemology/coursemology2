@@ -20,7 +20,7 @@ import {
 } from 'types/components/DataTable';
 import {
   CourseUserMiniEntity,
-  CourseUserRole,
+  CourseUserRoles,
   CourseUserRowData,
 } from 'types/course/courseUsers';
 import { TimelineAlgorithm } from 'types/course/personalTimes';
@@ -317,8 +317,8 @@ const ManageUsersTable = (props: ManageUsersTableProps): JSX.Element => {
   const handleRoleUpdate = (
     userId: CourseUserMiniEntity['id'],
     userName: CourseUserMiniEntity['name'],
-    role: CourseUserRole,
-    updateValue: (role: CourseUserRole) => void,
+    role: CourseUserRoles,
+    updateValue: (role: CourseUserRoles) => void,
   ): void => {
     setSubmitting(true);
 
@@ -638,7 +638,7 @@ const ManageUsersTable = (props: ManageUsersTableProps): JSX.Element => {
                 handleRoleUpdate(
                   userId,
                   userName,
-                  e.target.value as CourseUserRole,
+                  e.target.value as CourseUserRoles,
                   updateValue,
                 )
               }

@@ -1,19 +1,13 @@
-import { Roles } from 'types';
+export type InstanceUserRoles = 'normal' | 'administrator' | 'instructor';
 
-export type InstanceUserRoles = Roles<
-  'normal' | 'administrator' | 'instructor'
->;
-export type InstanceUserRole = keyof InstanceUserRoles;
-
-export type RoleRequestRoles = Roles<'administrator' | 'instructor'>;
-export type RoleRequestRole = keyof RoleRequestRoles;
+export type RoleRequestRoles = Exclude<InstanceUserRoles, 'normal'>;
 
 export interface InstanceUserListData {
   id: number;
   userId: string;
   name: string;
   email: string;
-  role: InstanceUserRole;
+  role: InstanceUserRoles;
   courses: number;
 }
 
@@ -41,7 +35,7 @@ export interface InstanceUserBasicPhotoMiniEntity
 
 export interface InstanceUserMiniEntity extends InstanceUserBasicMiniEntity {
   email: string;
-  role: InstanceUserRole;
+  role: InstanceUserRoles;
   courses: number;
 }
 

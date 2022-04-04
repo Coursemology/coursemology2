@@ -1,10 +1,10 @@
 import { FC } from 'react';
-import { CourseUserRole } from 'types/course/courseUsers';
+import { CourseUserRoles } from 'types/course/courseUsers';
 
 import LearningRateRecords from './LearningRateRecords';
 
 interface UserStatisticsProps {
-  userRole: CourseUserRole;
+  userRole: CourseUserRoles;
 }
 
 const UserStatistics: FC<UserStatisticsProps> = (props) => {

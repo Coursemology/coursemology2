@@ -6,13 +6,6 @@ export type Permissions<T extends string> = {
 };
 
 /**
- * User or course user role types.
- */
-export type Roles<T extends string> = {
-  [key in T]: string;
-};
-
-/**
  * Recursive array of type T (eg [1, 2, [1, 2]])
  */
 export type RecursiveArray<T> = (T | RecursiveArray<T>)[];
