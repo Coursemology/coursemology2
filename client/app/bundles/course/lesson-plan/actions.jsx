@@ -1,11 +1,11 @@
 import CourseAPI from 'api/course';
-import { submit, SubmissionError } from 'redux-form';
+import { setReactHookFormError } from 'lib/helpers/actions-helper';
 import {
   setNotification,
   resetDeleteConfirmation,
   showDeleteConfirmation,
 } from 'lib/actions';
-import actionTypes, { formNames } from 'course/lesson-plan/constants';
+import actionTypes from 'course/lesson-plan/constants';
 
 export { setNotification, resetDeleteConfirmation, showDeleteConfirmation };
 
@@ -53,12 +53,6 @@ export function hideMilestoneForm() {
   return { type: actionTypes.MILESTONE_FORM_HIDE };
 }
 
-export function submitMilestoneForm() {
-  return (dispatch) => {
-    dispatch(submit(formNames.MILESTONE));
-  };
-}
-
 export function showEventForm(formParams) {
   return { type: actionTypes.EVENT_FORM_SHOW, formParams };
 }
@@ -67,13 +61,12 @@ export function hideEventForm() {
   return { type: actionTypes.EVENT_FORM_HIDE };
 }
 
-export function submitEventForm() {
-  return (dispatch) => {
-    dispatch(submit(formNames.EVENT));
-  };
-}
-
-export function createMilestone(values, successMessage, failureMessage) {
+export function createMilestone(
+  values,
+  successMessage,
+  failureMessage,
+  setError,
+) {
   return (dispatch) => {
     dispatch({ type: actionTypes.MILESTONE_CREATE_REQUEST });
     return CourseAPI.lessonPlan
@@ -88,16 +81,21 @@ export function createMilestone(values, successMessage, failureMessage) {
       })
       .catch((error) => {
         dispatch({ type: actionTypes.MILESTONE_CREATE_FAILURE });
+        setNotification(failureMessage)(dispatch);
         if (error.response && error.response.data) {
-          throw new SubmissionError(error.response.data.errors);
-        } else {
-          setNotification(failureMessage)(dispatch);
+          setReactHookFormError(setError, error.response.data.errors);
         }
       });
   };
 }
 
-export function updateMilestone(id, values, successMessage, failureMessage) {
+export function updateMilestone(
+  id,
+  values,
+  successMessage,
+  failureMessage,
+  setError,
+) {
   return (dispatch) => {
     dispatch({ type: actionTypes.MILESTONE_UPDATE_REQUEST });
     return CourseAPI.lessonPlan
@@ -113,10 +111,9 @@ export function updateMilestone(id, values, successMessage, failureMessage) {
       })
       .catch((error) => {
         dispatch({ type: actionTypes.MILESTONE_UPDATE_FAILURE });
+        setNotification(failureMessage)(dispatch);
         if (error.response && error.response.data) {
-          throw new SubmissionError(error.response.data.errors);
-        } else {
-          setNotification(failureMessage)(dispatch);
+          setReactHookFormError(setError, error.response.data.errors);
         }
       });
   };
@@ -160,7 +157,7 @@ export function updateItem(id, values, successMessage, failureMessage) {
   };
 }
 
-export function createEvent(values, successMessage, failureMessage) {
+export function createEvent(values, successMessage, failureMessage, setError) {
   return (dispatch) => {
     dispatch({ type: actionTypes.EVENT_CREATE_REQUEST });
     return CourseAPI.lessonPlan
@@ -175,16 +172,21 @@ export function createEvent(values, successMessage, failureMessage) {
       })
       .catch((error) => {
         dispatch({ type: actionTypes.EVENT_CREATE_FAILURE });
+        setNotification(failureMessage)(dispatch);
         if (error.response && error.response.data) {
-          throw new SubmissionError(error.response.data.errors);
-        } else {
-          setNotification(failureMessage)(dispatch);
+          setReactHookFormError(setError, error.response.data.errors);
         }
       });
   };
 }
 
-export function updateEvent(eventId, values, successMessage, failureMessage) {
+export function updateEvent(
+  eventId,
+  values,
+  successMessage,
+  failureMessage,
+  setError,
+) {
   return (dispatch) => {
     dispatch({ type: actionTypes.EVENT_UPDATE_REQUEST });
     return CourseAPI.lessonPlan
@@ -200,10 +202,9 @@ export function updateEvent(eventId, values, successMessage, failureMessage) {
       })
       .catch((error) => {
         dispatch({ type: actionTypes.EVENT_UPDATE_FAILURE });
+        setNotification(failureMessage)(dispatch);
         if (error.response && error.response.data) {
-          throw new SubmissionError(error.response.data.errors);
-        } else {
-          setNotification(failureMessage)(dispatch);
+          setReactHookFormError(setError, error.response.data.errors);
         }
       });
   };

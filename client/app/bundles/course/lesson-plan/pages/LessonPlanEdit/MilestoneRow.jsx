@@ -23,7 +23,7 @@ const sameDate = (a, b) =>
   (!a && !b) || (a && b && moment(a).isSame(b, 'minute'));
 
 class MilestoneRow extends Component {
-  updateMilestoneStartAt = (_, newDate) => {
+  updateMilestoneStartAt = (_, newDate, setError) => {
     const { id, title, startAt, dispatch } = this.props;
     if (sameDate(startAt, newDate)) {
       return;
@@ -39,6 +39,7 @@ class MilestoneRow extends Component {
         { start_at: newDate },
         successMessage,
         failureMessage,
+        setError,
       ),
     );
   };

@@ -77,7 +77,7 @@ class MilestoneAdminTools extends PureComponent {
     );
   };
 
-  updateMilestoneHandler = (data) => {
+  updateMilestoneHandler = (data, setError) => {
     const {
       dispatch,
       intl,
@@ -86,7 +86,9 @@ class MilestoneAdminTools extends PureComponent {
 
     const successMessage = intl.formatMessage(translations.updateSuccess);
     const failureMessage = intl.formatMessage(translations.updateFailure);
-    return dispatch(updateMilestone(id, data, successMessage, failureMessage));
+    return dispatch(
+      updateMilestone(id, data, successMessage, failureMessage, setError),
+    );
   };
 
   render() {

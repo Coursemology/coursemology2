@@ -39,7 +39,15 @@ class NewEventButton extends Component {
       showEventForm({
         onSubmit: this.createEventHandler,
         formTitle: intl.formatMessage(translations.newEvent),
-        initialValues: {},
+        initialValues: {
+          title: '',
+          event_type: '',
+          location: '',
+          description: '',
+          start_at: null,
+          end_at: null,
+          published: false,
+        },
       }),
     );
   };
