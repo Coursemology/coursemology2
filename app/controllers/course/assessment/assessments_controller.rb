@@ -142,6 +142,11 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
     render json: requirements
   end
 
+  # This endpoint provides the view. The actual data is fetched client-side from the statistics module.
+  def statistics
+    authorize!(:read_statistics, current_course)
+  end
+
   protected
 
   def load_assessment_options
