@@ -81,9 +81,11 @@ const FormDateTimePickerField = (props) => {
                   : params.error &&
                     formatErrorMessage(translations.invalidDateTime)
               }
+              name={field.name}
               InputLabelProps={{
                 shrink: true,
               }}
+              ref={field.ref}
               style={styles.dateTimeTextField}
               variant="standard"
             />
@@ -92,6 +94,10 @@ const FormDateTimePickerField = (props) => {
       </div>
     </LocalizationProvider>
   );
+};
+
+FormDateTimePickerField.defaultProps = {
+  renderIf: true,
 };
 
 FormDateTimePickerField.propTypes = {

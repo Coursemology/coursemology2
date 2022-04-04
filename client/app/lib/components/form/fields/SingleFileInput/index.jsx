@@ -2,6 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
 import { grey, red } from '@mui/material/colors';
+import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
 import FilePreview from './FilePreview';
 import ImagePreview from './ImagePreview';
 import BadgePreview from './BadgePreview';
@@ -67,11 +68,11 @@ class FormSingleFileInput extends Component {
 
   renderErrorMessage = () => {
     const {
-      fieldState: { isTouched, error },
+      fieldState: { error },
     } = this.props;
-    return isTouched && error ? (
+    return error ? (
       <div className="error-message" style={styles.fileLabelError}>
-        {error.message}
+        {formatErrorMessage(error.message)}
       </div>
     ) : null;
   };

@@ -5,39 +5,27 @@ import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
 import propsAreEqual from './utils/propsAreEqual';
 
 const styles = {
-  listboxStyle: {
-    maxHeight: '80vh',
-    overflowY: 'auto',
+  autoCompleteFieldStyle: {
+    margin: '14px 10px 12px 0px',
   },
 };
 
-const FormMultiSelectField = (props) => {
+const FormAutoCompleteField = (props) => {
   const { field, fieldState, disabled, label, options, renderIf, ...custom } =
     props;
   if (!renderIf) {
     return null;
   }
-  const selectedOptions = field.value.map((v) =>
-    options.find((o) => o.id === v),
-  );
 
   return (
     <Autocomplete
       {...field}
       disabled={disabled}
-      filterSelectedOptions
+      freeSolo
       fullWidth
-      getOptionLabel={(option) => option.title}
-      isOptionEqualToValue={(option, val) => option.id === val.id}
-      ListboxProps={{ style: styles.listboxStyle }}
-      multiple
+      onChange={(event, newValue) => field.onChange(newValue)}
+      onInputChange={(event, newValue) => field.onChange(newValue)}
       options={options}
-      onChange={(event, val) => {
-        const selectedOptionIds = val.map((option) => option.id);
-        field.onChange(selectedOptionIds);
-      }}
-      value={selectedOptions}
-      {...custom}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -49,29 +37,26 @@ const FormMultiSelectField = (props) => {
           InputLabelProps={{
             shrink: true,
           }}
+          style={styles.autoCompleteFieldStyle}
           variant="standard"
         />
       )}
+      {...custom}
     />
   );
 };
 
-FormMultiSelectField.defaultProps = {
+FormAutoCompleteField.defaultProps = {
   renderIf: true,
 };
 
-export const optionShape = PropTypes.shape({
-  id: PropTypes.number,
-  title: PropTypes.string,
-});
-
-FormMultiSelectField.propTypes = {
+FormAutoCompleteField.propTypes = {
   field: PropTypes.object.isRequired,
   fieldState: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
   label: PropTypes.node,
-  options: PropTypes.arrayOf(optionShape),
+  options: PropTypes.arrayOf(PropTypes.string),
   renderIf: PropTypes.bool,
 };
 
-export default memo(FormMultiSelectField, propsAreEqual);
+export default memo(FormAutoCompleteField, propsAreEqual);

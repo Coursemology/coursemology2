@@ -27,6 +27,7 @@ const FormToggleField = (props) => {
       <FormControlLabel
         control={
           <Switch
+            {...field}
             checked={field.value}
             color="primary"
             onChange={field.onChange}
