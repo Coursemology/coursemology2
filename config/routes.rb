@@ -196,6 +196,7 @@ Rails.application.routes.draw do
           post 'reorder', on: :member
           post 'authenticate', on: :member
           post 'remind', on: :member
+          get 'statistics', on: :member
 
           resources :questions, only: [] do
             post 'duplicate/:destination_assessment_id', on: :member, action: 'duplicate', as: :duplicate
@@ -391,6 +392,8 @@ Rails.application.routes.draw do
         get 'course/staff' => 'aggregate#all_staff'
         get 'course/course/progression' => 'aggregate#course_progression'
         get 'course/course/performance' => 'aggregate#course_performance'
+        get 'assessment/:id' => 'assessments#assessment'
+        get 'assessment/:id/ancestors' => 'assessments#ancestors'
       end
 
       scope module: :video do
