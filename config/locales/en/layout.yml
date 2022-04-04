@@ -31,6 +31,8 @@ en:
         title: 'Email'
       lesson_plan:
         title: 'Lesson Plan'
+      personalized_timeline:
+        title: 'Personalized Timeline'
     course_users:
       title: 'Manage Users'
     duplication:

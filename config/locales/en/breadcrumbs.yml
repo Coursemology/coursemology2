@@ -51,6 +51,8 @@ en:
           edit: :'layouts.course_admin.notifications.title'
         lesson_plan_settings:
           edit: :'layouts.course_admin.lesson_plan.title'
+        personalized_timeline_settings:
+          edit: :'layouts.course_admin.personalized_timeline.title'
       users:
         index: 'Users'
         students: :'course.users.students.header'
