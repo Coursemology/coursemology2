@@ -1,13 +1,14 @@
 - add_breadcrumb format_inline_text(@assessment.title)
 = page_header format_inline_text(@assessment.title) do
-  - if @assessment.randomization.present?
-    = render 'assessment_question_bundle_buttons', assessment: @assessment
-  - can_attempt_assessment = can?(:attempt, @assessment)
-  = render 'assessment_management_buttons', assessment: @assessment, can_attempt_assessment: can_attempt_assessment
-  - if can?(:manage, @assessment)
-    div.btn-group
-      = edit_button([current_course, @assessment])
-      = delete_button([current_course, @assessment])
+  div.btn-toolbar
+    - if @assessment.randomization.present?
+      = render 'assessment_question_bundle_buttons', assessment: @assessment
+    - can_attempt_assessment = can?(:attempt, @assessment)
+    = render 'assessment_management_buttons', assessment: @assessment, can_attempt_assessment: can_attempt_assessment, show_statistics: true
+    - if can?(:manage, @assessment)
+      div.btn-group
+        = edit_button([current_course, @assessment])
+        = delete_button([current_course, @assessment])
 
 = div_for(@assessment, 'data-assessment-id' => @assessment.id) do
   - unless @assessment.description.blank?

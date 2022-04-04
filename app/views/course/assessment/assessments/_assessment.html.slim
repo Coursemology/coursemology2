@@ -53,4 +53,4 @@
         = render partial: 'course/lesson_plan/items/personal_or_ref_time',
                  locals: { item: @items_hash[assessment.id], course_user: current_course_user, attribute: :end_at, datetime_format: :short }
   td.table-buttons colspan=2
-    = render 'assessment_management_buttons', assessment: assessment, can_attempt_assessment: can_attempt_assessment
+    = render 'assessment_management_buttons', assessment: assessment, can_attempt_assessment: can_attempt_assessment, show_statistics: false
