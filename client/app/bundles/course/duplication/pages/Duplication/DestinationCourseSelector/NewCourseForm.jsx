@@ -1,10 +1,12 @@
 import PropTypes from 'prop-types';
-import { defineMessages, injectIntl, intlShape } from 'react-intl';
-import { reduxForm, Field, Form } from 'redux-form';
-import renderTextField from 'lib/components/redux-form/TextField';
-import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
+import { defineMessages, FormattedMessage } from 'react-intl';
+import { Controller, useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
+import FormTextField from 'lib/components/form/fields/TextField';
+import ErrorText from 'lib/components/ErrorText';
 import formTranslations from 'lib/translations/form';
-import { formNames } from 'course/duplication/constants';
 
 const translations = defineMessages({
   newTitle: {
@@ -17,50 +19,71 @@ const translations = defineMessages({
   },
 });
 
-const validate = (values) => {
-  const errors = {};
-
-  const requiredFields = ['new_title', 'new_start_at'];
-  requiredFields.forEach((field) => {
-    if (!values[field]) {
-      errors[field] = formTranslations.required;
-    }
-  });
-
-  return errors;
-};
+const validationSchema = yup.object({
+  new_title: yup.string().required(formTranslations.required),
+  new_start_at: yup.string().nullable().required(formTranslations.required),
+});
 
 const NewCourseForm = (props) => {
-  const { handleSubmit, intl, onSubmit, disabled } = props;
+  const { onSubmit, initialValues, disabled } = props;
+  const {
+    control,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm({
+    mode: 'all',
+    defaultValues: initialValues,
+    resolver: yupResolver(validationSchema),
+  });
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
-      <Field
-        fullWidth
-        name="new_title"
-        label={intl.formatMessage(translations.newTitle)}
-        component={renderTextField}
-        {...{ disabled }}
-      />
-      <Field
-        name="new_start_at"
-        label={intl.formatMessage(translations.newStartAt)}
-        component={DateTimePicker}
-        {...{ disabled }}
-      />
-    </Form>
+    <>
+      <form
+        id="new-course-form"
+        noValidate
+        onSubmit={handleSubmit((data) => onSubmit(data, setError))}
+      >
+        <ErrorText errors={errors} />
+        <Controller
+          name="new_title"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormTextField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              label={<FormattedMessage {...translations.newTitle} />}
+              fullWidth
+              InputLabelProps={{
+                shrink: true,
+              }}
+              required
+              variant="standard"
+            />
+          )}
+        />
+        <Controller
+          name="new_start_at"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormDateTimePickerField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              label={<FormattedMessage {...translations.newStartAt} />}
+            />
+          )}
+        />
+      </form>
+    </>
   );
 };
 
 NewCourseForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
-
-  handleSubmit: PropTypes.func.isRequired,
-  intl: intlShape,
+  initialValues: PropTypes.object,
+  onSubmit: PropTypes.func.isRequired,
 };
 
-export default reduxForm({
-  form: formNames.NEW_COURSE,
-  validate,
-})(injectIntl(NewCourseForm));
+export default NewCourseForm;

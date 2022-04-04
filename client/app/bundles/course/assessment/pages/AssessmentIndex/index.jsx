@@ -73,7 +73,6 @@ class PopupDialog extends Component {
         form="assessment-form"
         key="assessment-popup-dialog-submit-button"
         type="submit"
-        // onClick={() => dispatch(submit(formNames.ASSESSMENT))}
       >
         <FormattedMessage {...formTranslations.submit} />
       </Button>,
