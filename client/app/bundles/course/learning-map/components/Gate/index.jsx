@@ -156,7 +156,7 @@ const Gate = (props) => {
     <>
       <div style={{ ...styles.wrapper }}>
         <div onClick={(event) => onGateClick(event)}>{getGate()}</div>
-        <ConnectionPoint id={getGateConnectionPointId(node.id)} />
+        <ConnectionPoint id={getGateConnectionPointId(node.id)} isActive={false} />
       </div>
     </>
   );

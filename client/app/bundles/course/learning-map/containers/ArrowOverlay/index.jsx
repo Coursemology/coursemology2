@@ -16,7 +16,6 @@ const arrowProperties = {
 const ArrowOverlay = (props) => {
   const {
     gateInputSizeThreshold,
-    getGateId,
     getGateConnectionPointId,
     getGateInputId,
     getNodeConnectionPointId,
@@ -40,7 +39,6 @@ const ArrowOverlay = (props) => {
       <GateToNodeArrows
         arrowAnchorPositions={arrowAnchorPositions}
         arrowProperties={arrowProperties}
-        getGateId={getGateId}
         getGateConnectionPointId={getGateConnectionPointId}
         scale={scale}
       />
@@ -55,7 +53,6 @@ const mapStateToProps = (state) => ({
 
 ArrowOverlay.propTypes = {
   gateInputSizeThreshold: PropTypes.number.isRequired,
-  getGateId: PropTypes.func.isRequired,
   getGateConnectionPointId: PropTypes.func.isRequired,
   getGateInputId: PropTypes.func.isRequired,
   getNodeConnectionPointId: PropTypes.func.isRequired,

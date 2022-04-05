@@ -33,7 +33,7 @@ const ConnectionPoint = (props) => {
 ConnectionPoint.propTypes = {
   id: PropTypes.string.isRequired,
   isActive: PropTypes.bool.isRequired,
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func,
 };
 
 export default ConnectionPoint;
