@@ -123,10 +123,7 @@ const Node = (props) => {
               zIndex,
             }}
           >
-            <CardContent
-              style={styles.header}
-              textStyle={styles.headerText}
-            >
+            <CardContent style={styles.header}>
               {
                 node.unlock_level > 0 &&
                 <>
