@@ -1,9 +1,9 @@
-import { submit, SubmissionError } from 'redux-form';
+import { setReactHookFormError } from 'lib/helpers/actions-helper';
 import CourseAPI from 'api/course';
 import pollJob from 'lib/helpers/job-helpers';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import translations from '../translations';
-import actionTypes, { formNames } from '../constants';
+import actionTypes from '../constants';
 import { setNotification } from './index';
 
 const DOWNLOAD_JOB_POLL_INTERVAL = 2000;
@@ -16,17 +16,12 @@ export function hideSurveyForm() {
   return { type: actionTypes.SURVEY_FORM_HIDE };
 }
 
-export function submitSurveyForm() {
-  return (dispatch) => {
-    dispatch(submit(formNames.SURVEY));
-  };
-}
-
 export function createSurvey(
   surveyFields,
   successMessage,
   failureMessage,
   navigate,
+  setError,
 ) {
   return (dispatch) => {
     dispatch({ type: actionTypes.CREATE_SURVEY_REQUEST });
@@ -45,10 +40,9 @@ export function createSurvey(
       .catch((error) => {
         dispatch({ type: actionTypes.CREATE_SURVEY_FAILURE });
         if (error.response && error.response.data) {
-          throw new SubmissionError(error.response.data.errors);
-        } else {
-          setNotification(failureMessage)(dispatch);
+          setReactHookFormError(setError, error.response.data.errors);
         }
+        dispatch(setNotification(failureMessage));
       });
   };
 }
@@ -94,6 +88,7 @@ export function updateSurvey(
   surveyFields,
   successMessage,
   failureMessage,
+  setError,
 ) {
   return (dispatch) => {
     dispatch({ type: actionTypes.UPDATE_SURVEY_REQUEST, surveyId });
@@ -110,10 +105,9 @@ export function updateSurvey(
       .catch((error) => {
         dispatch({ type: actionTypes.UPDATE_SURVEY_FAILURE, surveyId });
         if (error.response && error.response.data) {
-          throw new SubmissionError(error.response.data.errors);
-        } else {
-          setNotification(failureMessage)(dispatch);
+          setReactHookFormError(setError, error.response.data.errors);
         }
+        dispatch(setNotification(failureMessage));
       });
   };
 }
