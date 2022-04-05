@@ -1,18 +1,17 @@
-import React from 'react';
-import ConnectionPoint from '../ConnectionPoint';
 import { connect } from 'react-redux';
 import { selectGate } from 'course/learning-map/actions';
+import { FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
+import ConnectionPoint from '../ConnectionPoint';
 import {
   elementTypes,
   satisfiabilityTypes,
 } from '../../constants';
-import { FormattedMessage } from 'react-intl';
 import translations from '../../translations.intl';
 import {
   nodeShape,
   selectedElementShape,
 } from '../../propTypes';
-import PropTypes from 'prop-types';
 
 const red = '#f08080';
 const green = '#00ff7f';
@@ -80,48 +79,36 @@ const Gate = (props) => {
     }
   };
 
-  const isAndGate = () => {
-    return node.satisfiability_type === satisfiabilityTypes.allConditions;
-  };
-
-  const isSummaryGate = () => {
-    return node.parents.length > gateInputSizeThreshold;
-  };
+  const isAndGate = () => node.satisfiability_type === satisfiabilityTypes.allConditions;
+  const isSummaryGate = () => node.parents.length > gateInputSizeThreshold;
 
   const getGateBackgroundColor = (isSatisfied) => {
-    return canModify ? 'white' : isSatisfied ? `${green}` : `${red}`;
-  };
+    if (canModify) {
+      return 'white';
+    }
 
-  const getAndGate = () => {
-    return getNonSummaryGate(styles.andGate, styles.andGateInput);
-  };
-
-  const getOrGate = () => {
-    return getNonSummaryGate(styles.orGate, styles.orGateInput);
-  };
-
+    return isSatisfied ? `${green}` : `${red}`;
+  }
+  
   const getNonSummaryGate = (gateWrapperStyle, gateInputStyle) => {
-    return (
-      <div
-        id={id}
-        style={{...gateWrapperStyle, ...(isSelected) && styles.selectedGate, zIndex: zIndex}}
-      >
-        {
-          node.parents.sort((parent1, parent2) => parent1.id.localeCompare(parent2.id)).map(parent => {
-            const inputId = getGateInputId(false, parent.id, node.id);
+    <div
+      id={id}
+      style={{...gateWrapperStyle, ...(isSelected) && styles.selectedGate, zIndex}}
+    >
+      {
+        node.parents.sort((parent1, parent2) => parent1.id.localeCompare(parent2.id)).map(parent => {
+          const inputId = getGateInputId(false, parent.id, node.id);
 
-            return (
-              <div
-                id={inputId}
-                key={inputId}
-                style={{...gateInputStyle, backgroundColor: getGateBackgroundColor(node.unlocked)}}
-              >
-              </div>
-            );
-          })
-        }
-      </div>
-    );
+          return (
+            <div
+              id={inputId}
+              key={inputId}
+              style={{...gateInputStyle, backgroundColor: getGateBackgroundColor(node.unlocked)}}
+            />
+          );
+        })
+      }
+    </div>
   };
 
   const getSummaryGate = () => {
@@ -135,7 +122,7 @@ const Gate = (props) => {
             ...styles.summaryGate,
             ...(isSelected) && styles.selectedGate,
             backgroundColor: getGateBackgroundColor(node.unlocked),
-            zIndex: zIndex,
+            zIndex,
           }}
         >
           <FormattedMessage
@@ -152,11 +139,9 @@ const Gate = (props) => {
       return getSummaryGate();
     }
 
-    if (isAndGate()) {
-      return getAndGate();
-    }
-
-    return getOrGate();
+    return isAndGate()
+      ? getNonSummaryGate(styles.andGate, styles.andGateInput)
+      : getNonSummaryGate(styles.orGate, styles.orGateInput);
   };
 
   return (
