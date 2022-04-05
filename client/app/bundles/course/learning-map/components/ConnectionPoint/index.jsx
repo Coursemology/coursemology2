@@ -1,6 +1,5 @@
-import React from 'react';
-import classStyles from './ConnectionPoint.scss';
 import PropTypes from 'prop-types';
+import classStyles from './ConnectionPoint.scss';
 
 const styles = {
   connectionPoint: {
@@ -30,7 +29,7 @@ const ConnectionPoint = (props) => {
       style={styles.connectionPoint}
     >
       {/* For centering arrow starting point inside the circle */}
-      <div id={id}></div>
+      <div id={id} />
     </div>
   );
 };
