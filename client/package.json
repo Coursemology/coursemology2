@@ -9,7 +9,7 @@
   "scripts": {
     "test": "TZ=Asia/Singapore yarn run jest --coverage",
     "testci": "TZ=Asia/Singapore yarn run jest --maxWorkers=4 --coverage",
-    "build:test": "export NODE_ENV=test && yarn run build:translations && webpack -w --node-env=production",
+    "build:test": "export NODE_ENV=test && yarn run build:translations && webpack -w --node-env=none",
     "build:production": "export NODE_ENV=production && yarn run build:translations && webpack --node-env=production",
     "build:development": "yarn run build:translations && webpack serve",
     "build:translations": "babel-node scripts/aggregate-translations.js",
@@ -157,7 +157,7 @@
     "react-dnd-test-backend": "^15.1.2",
     "react-test-renderer": "^17.0.2",
     "redux-logger": "^3.0.6",
-    "webpack-dev-server": "^4.7.1"
+    "webpack-dev-server": "^4.8.0"
   },
   "license": "MIT",
   "repository": "git+https://github.com/Coursemology/coursemology2.git",
