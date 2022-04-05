@@ -1,10 +1,5 @@
 import { useState } from 'react';
-import {
-  Card,
-  CardContent,
-  CircularProgress,
-  Icon,
-} from '@mui/material';
+import { Card, CardContent, CircularProgress, Icon } from '@mui/material';
 import { connect } from 'react-redux';
 import {
   removeParentNode,
@@ -13,16 +8,9 @@ import {
 } from 'course/learning-map/actions';
 import ReactTooltip from 'react-tooltip';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import {
-  FormattedMessage,
-  injectIntl,
-  intlShape,
-} from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import PropTypes from 'prop-types';
-import {
-  elementTypes,
-  satisfiabilityTypes,
-} from '../../constants';
+import { elementTypes, satisfiabilityTypes } from '../../constants';
 import translations from '../../translations.intl';
 import {
   nodeShape,
@@ -60,21 +48,13 @@ const styles = {
 };
 
 const Dashboard = (props) => {
-  const {
-    dispatch,
-    intl,
-    isLoading,
-    nodes,
-    response,
-    selectedElement,
-  } = props;
+  const { dispatch, intl, isLoading, nodes, response, selectedElement } = props;
 
   const [deleteArrowConfirmation, setDeleteArrowConfirmation] = useState(false);
-  const isEmptyResponse = (
-    response
-    && Object.keys(response).length === 0
-    && Object.getPrototypeOf(response) === Object.prototype
-  );
+  const isEmptyResponse =
+    response &&
+    Object.keys(response).length === 0 &&
+    Object.getPrototypeOf(response) === Object.prototype;
 
   const deleteArrow = () => {
     setDeleteArrowConfirmation(false);
@@ -85,7 +65,8 @@ const Dashboard = (props) => {
     }
   };
 
-  const getNodeForSelectedGate = () => nodes.find((node) => node.id === selectedElement.id.split('-gate')[0]);
+  const getNodeForSelectedGate = () =>
+    nodes.find((node) => node.id === selectedElement.id.split('-gate')[0]);
 
   const toggleNodeSatisfiabilityType = () => {
     if (selectedElement.type === elementTypes.gate) {
@@ -98,16 +79,15 @@ const Dashboard = (props) => {
     dispatch(resetSelection());
   };
 
-  const responseDisplay = () => (
-    {
-      color: response.didSucceed ? green : red,
-      text:
+  const responseDisplay = () => ({
+    color: response.didSucceed ? green : red,
+    text: (
       <FormattedMessage
         {...translations.responseDashboardMessage}
         values={{ responseMessage: response.message }}
-      />,
-    }
-  );
+      />
+    ),
+  });
 
   const selectedArrowDisplay = () => {
     const ids = selectedElement.id.split('-to-');
@@ -116,31 +96,29 @@ const Dashboard = (props) => {
 
     return {
       color: orange,
-      text:
-      <FormattedMessage
-        {...translations.selectedArrowDashboardMessage}
-        values={{ fromNode: fromNodeTitle, toNode: toNodeTitle }}
-      />,
+      text: (
+        <FormattedMessage
+          {...translations.selectedArrowDashboardMessage}
+          values={{ fromNode: fromNodeTitle, toNode: toNodeTitle }}
+        />
+      ),
     };
   };
 
-  const selectedGateDisplay = () => (
-    {
-      color: orange,
-      text: 
+  const selectedGateDisplay = () => ({
+    color: orange,
+    text: (
       <FormattedMessage
         {...translations.selectedGateDashboardMessage}
         values={{ node: getNodeForSelectedGate().title }}
-      />,
-    }
-  );
+      />
+    ),
+  });
 
-  const defaultDisplay = () => (
-    {
-      color: 'white',
-      text: <FormattedMessage {...translations.defaultDashboardMessage}/>,
-    }
-  );
+  const defaultDisplay = () => ({
+    color: 'white',
+    text: <FormattedMessage {...translations.defaultDashboardMessage} />,
+  });
 
   const getDisplay = () => {
     if (!isEmptyResponse) {
@@ -163,16 +141,14 @@ const Dashboard = (props) => {
     return (
       <>
         <Icon
-          className='fa fa-trash'
+          className="fa fa-trash"
           data-tip
           data-for={tooltipId}
-          style={{...styles.icon, color: 'red'}}
+          style={{ ...styles.icon, color: 'red' }}
           onClick={() => setDeleteArrowConfirmation(true)}
         />
         <ReactTooltip id={tooltipId}>
-          <FormattedMessage
-            {...translations.deleteCondition}
-          />
+          <FormattedMessage {...translations.deleteCondition} />
         </ReactTooltip>
       </>
     );
@@ -180,12 +156,13 @@ const Dashboard = (props) => {
 
   const selectedGateIcon = () => {
     const node = getNodeForSelectedGate();
-    const tooltipId = 'learning-map-dashboard-toggle-satisfiability-type-icon-tooltip';
+    const tooltipId =
+      'learning-map-dashboard-toggle-satisfiability-type-icon-tooltip';
 
     return (
       <>
         <Icon
-          className='fa fa-toggle-on'
+          className="fa fa-toggle-on"
           data-tip
           data-for={tooltipId}
           style={styles.icon}
@@ -194,13 +171,16 @@ const Dashboard = (props) => {
         <ReactTooltip id={tooltipId}>
           <FormattedMessage
             {...translations.toggleSatisfiabilityType}
-            values={{ satisfiabilityType: node.satisfiability_type === satisfiabilityTypes.allConditions ?
-              '"at least one condition"' :
-              '"all conditions"'}
-            }
+            values={{
+              satisfiabilityType:
+                node.satisfiability_type === satisfiabilityTypes.allConditions
+                  ? '"at least one condition"'
+                  : '"all conditions"',
+            }}
           />
         </ReactTooltip>
-      </>);
+      </>
+    );
   };
 
   const getActionElements = () => {
@@ -211,38 +191,31 @@ const Dashboard = (props) => {
         case elementTypes.gate:
           return selectedGateIcon();
         default:
-          return <></>
+          return <></>;
       }
     }
 
-    return <></>
+    return <></>;
   };
 
-  const {
-    color,
-    text,
-  } = getDisplay();
+  const { color, text } = getDisplay();
 
   return (
     <>
-      <Card style={{...styles.wrapper, backgroundColor: color}}>
+      <Card style={{ ...styles.wrapper, backgroundColor: color }}>
         <CardContent style={styles.content}>
-          { text }
-          { getActionElements() }
-          {
-            (!isEmptyResponse || selectedElement.type) &&
+          {text}
+          {getActionElements()}
+          {(!isEmptyResponse || selectedElement.type) && (
             <Icon
-              className='fa fa-window-close'
-              style={{...styles.icon}}
+              className="fa fa-window-close"
+              style={{ ...styles.icon }}
               onClick={() => reset()}
             />
-          }
-          { isLoading &&
-            <CircularProgress
-              size={30}
-              style={styles.circularProgress}
-            />
-          }
+          )}
+          {isLoading && (
+            <CircularProgress size={30} style={styles.circularProgress} />
+          )}
         </CardContent>
       </Card>
       <ConfirmationDialog

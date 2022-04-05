@@ -33,21 +33,20 @@ const styles = {
 };
 
 const UnlockRateDisplay = (props) => {
-  const {
-    unlockRate,
-    width,
-  } = props;
+  const { unlockRate, width } = props;
 
   return (
     <div>
-      <Icon
-        className='fa fa-unlock'
-        style={styles.icon}
-      />
-      <div style={{...styles.unlockRateBar, width}}>
-        <div style={{...styles.filledPortion, width: unlockRate * width}}/>
-        <div style={{...styles.unfilledPortion, width: width - (unlockRate * width)}}/>
-        <div style={{...styles.content, width}}>
+      <Icon className="fa fa-unlock" style={styles.icon} />
+      <div style={{ ...styles.unlockRateBar, width }}>
+        <div style={{ ...styles.filledPortion, width: unlockRate * width }} />
+        <div
+          style={{
+            ...styles.unfilledPortion,
+            width: width - unlockRate * width,
+          }}
+        />
+        <div style={{ ...styles.content, width }}>
           <FormattedMessage
             {...translations.unlockRate}
             values={{ unlockRate: (unlockRate * 100).toFixed(2) }}

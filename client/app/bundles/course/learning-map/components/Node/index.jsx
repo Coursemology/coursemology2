@@ -1,14 +1,7 @@
 import { useState } from 'react';
-import {
-  Card,
-  CardContent,
-  Icon,
-} from '@mui/material';
+import { Card, CardContent, Icon } from '@mui/material';
 import { connect } from 'react-redux';
-import {
-  createTheme,
-  ThemeProvider,
-} from '@mui/material/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import ConnectionPoint from '../ConnectionPoint';
@@ -92,14 +85,10 @@ const icons = {
   material: 'fa fa-folder',
   survey: 'fa fa-pie-chart',
   video: 'fa fa-video-camera',
-}
+};
 
 const Node = (props) => {
-  const {
-    canModify,
-    getNodeConnectionPointId,
-    node,
-  } = props;
+  const { canModify, getNodeConnectionPointId, node } = props;
 
   const [isNodeMenuDisplayed, setIsNodeMenuDisplayed] = useState(false);
   const zIndex = isNodeMenuDisplayed ? 999 : node.depth + 2;
@@ -111,9 +100,7 @@ const Node = (props) => {
 
   return (
     <>
-      <div
-        style={{...styles.wrapper, zIndex}}
-      >
+      <div style={{ ...styles.wrapper, zIndex }}>
         <ThemeProvider theme={theme}>
           <Card
             id={node.id}
@@ -124,8 +111,7 @@ const Node = (props) => {
             }}
           >
             <CardContent style={styles.header}>
-              {
-                node.unlock_level > 0 &&
+              {node.unlock_level > 0 && (
                 <>
                   <div style={styles.unlockLevel}>
                     <FormattedMessage
@@ -134,40 +120,38 @@ const Node = (props) => {
                     />
                   </div>
                 </>
-              }
+              )}
               <Icon
                 className={icons[node.course_material_type]}
                 style={styles.icon}
               />
-              {
-                !canModify && !node.unlocked &&
+              {!canModify && !node.unlocked && (
                 <>
                   <Icon
                     className={icons.lock}
-                    style={{...styles.icon, ...styles.lockIcon}}
+                    style={{ ...styles.icon, ...styles.lockIcon }}
                   />
                 </>
-              }
+              )}
             </CardContent>
             <div style={styles.content}>
               <CardContent style={styles.contentText}>
                 <div>
                   <a
-                    target='_blank'
+                    target="_blank"
                     href={`${node.content_url}`}
-                    rel='noreferrer'
+                    rel="noreferrer"
                   >
-                  {node.title}
+                    {node.title}
                   </a>
                 </div>
-                {
-                  canModify &&
+                {canModify && (
                   <UnlockRateDisplay
                     nodeId={node.id}
                     unlockRate={node.unlock_rate}
                     width={0.6 * styles.wrapper.width}
                   />
-                }
+                )}
               </CardContent>
               <div style={styles.connectionPoint}>
                 <ConnectionPoint
@@ -175,13 +159,12 @@ const Node = (props) => {
                   isActive={canModify}
                   onClick={(event) => onConnectionPointClick(event, node.id)}
                 />
-                {
-                  isNodeMenuDisplayed &&
+                {isNodeMenuDisplayed && (
                   <NodeMenu
                     onCloseMenu={() => setIsNodeMenuDisplayed(false)}
                     parentNode={node}
                   />
-                }
+                )}
               </div>
             </div>
           </Card>

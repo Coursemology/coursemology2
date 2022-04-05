@@ -3,15 +3,9 @@ import { selectGate } from 'course/learning-map/actions';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import ConnectionPoint from '../ConnectionPoint';
-import {
-  elementTypes,
-  satisfiabilityTypes,
-} from '../../constants';
+import { elementTypes, satisfiabilityTypes } from '../../constants';
 import translations from '../../translations.intl';
-import {
-  nodeShape,
-  selectedElementShape,
-} from '../../propTypes';
+import { nodeShape, selectedElementShape } from '../../propTypes';
 
 const red = '#f08080';
 const green = '#00ff7f';
@@ -70,7 +64,8 @@ const Gate = (props) => {
   } = props;
   const id = getGateId(node.id);
   const zIndex = node.depth + 2;
-  const isSelected = selectedElement.type === elementTypes.gate && selectedElement.id === id;
+  const isSelected =
+    selectedElement.type === elementTypes.gate && selectedElement.id === id;
 
   const onGateClick = (event) => {
     if (canModify) {
@@ -79,7 +74,8 @@ const Gate = (props) => {
     }
   };
 
-  const isAndGate = () => node.satisfiability_type === satisfiabilityTypes.allConditions;
+  const isAndGate = () =>
+    node.satisfiability_type === satisfiabilityTypes.allConditions;
   const isSummaryGate = () => node.parents.length > gateInputSizeThreshold;
 
   const getGateBackgroundColor = (isSatisfied) => {
@@ -88,30 +84,40 @@ const Gate = (props) => {
     }
 
     return isSatisfied ? `${green}` : `${red}`;
-  }
-  
-  const getNonSummaryGate = (gateWrapperStyle, gateInputStyle) =>
+  };
+
+  const getNonSummaryGate = (gateWrapperStyle, gateInputStyle) => (
     <div
       id={id}
-      style={{...gateWrapperStyle, ...(isSelected) && styles.selectedGate, zIndex}}
+      style={{
+        ...gateWrapperStyle,
+        ...(isSelected && styles.selectedGate),
+        zIndex,
+      }}
     >
-      {
-        node.parents.sort((parent1, parent2) => parent1.id.localeCompare(parent2.id)).map(parent => {
+      {node.parents
+        .sort((parent1, parent2) => parent1.id.localeCompare(parent2.id))
+        .map((parent) => {
           const inputId = getGateInputId(false, parent.id, node.id);
 
           return (
             <div
               id={inputId}
               key={inputId}
-              style={{...gateInputStyle, backgroundColor: getGateBackgroundColor(node.unlocked)}}
+              style={{
+                ...gateInputStyle,
+                backgroundColor: getGateBackgroundColor(node.unlocked),
+              }}
             />
           );
-        })
-      }
+        })}
     </div>
+  );
 
   const getSummaryGate = () => {
-    const numSatisfiedConditions = node.parents.filter(parent => parent.is_satisfied).length;
+    const numSatisfiedConditions = node.parents.filter(
+      (parent) => parent.is_satisfied,
+    ).length;
 
     return (
       <div id={id}>
@@ -119,14 +125,17 @@ const Gate = (props) => {
           id={getGateInputId(true, '', node.id)}
           style={{
             ...styles.summaryGate,
-            ...(isSelected) && styles.selectedGate,
+            ...(isSelected && styles.selectedGate),
             backgroundColor: getGateBackgroundColor(node.unlocked),
             zIndex,
           }}
         >
           <FormattedMessage
             {...translations.summaryGateContent}
-            values={{ numerator: numSatisfiedConditions, denominator: node.parents.length }}
+            values={{
+              numerator: numSatisfiedConditions,
+              denominator: node.parents.length,
+            }}
           />
         </div>
       </div>
@@ -145,10 +154,8 @@ const Gate = (props) => {
 
   return (
     <>
-      <div style={{...styles.wrapper}}>
-        <div onClick={event => onGateClick(event)}>
-          { getGate() }
-        </div>
+      <div style={{ ...styles.wrapper }}>
+        <div onClick={(event) => onGateClick(event)}>{getGate()}</div>
         <ConnectionPoint id={getGateConnectionPointId(node.id)} />
       </div>
     </>

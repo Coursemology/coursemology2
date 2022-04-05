@@ -20,30 +20,27 @@ const styles = {
 };
 
 const ZoomActionElements = (props) => {
-  const {
-    zoomIn,
-    zoomOut,
-  } = props;
+  const { zoomIn, zoomOut } = props;
 
   return (
     <div style={styles.wrapper}>
       <Button
-        label='Zoom In'
-        color='primary'
-        className='btn-submit'
+        label="Zoom In"
+        color="primary"
+        className="btn-submit"
         onClick={() => zoomIn()}
         style={styles.actionButton}
-        variant='contained'
+        variant="contained"
       >
         <FormattedMessage {...translations.zoomIn} />
       </Button>
       <Button
-        label='Zoom Out'
-        color='primary'
-        className='btn-submit'
+        label="Zoom Out"
+        color="primary"
+        className="btn-submit"
         onClick={() => zoomOut()}
         style={styles.actionButton}
-        variant='contained'
+        variant="contained"
       >
         <FormattedMessage {...translations.zoomOut} />
       </Button>

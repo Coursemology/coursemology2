@@ -7,17 +7,11 @@ import {
   MenuItem,
 } from '@mui/material';
 import { addParentNode } from 'course/learning-map/actions';
-import {
-  createTheme,
-  ThemeProvider,
-} from '@mui/material/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import translations from '../../translations.intl';
-import {
-  nodeShape,
-  relatedNodeShape,
-} from '../../propTypes';
+import { nodeShape, relatedNodeShape } from '../../propTypes';
 
 // Remove padding from top of MenuList
 const theme = createTheme({
@@ -57,42 +51,32 @@ const styles = {
 };
 
 const NodeMenu = (props) => {
-  const {
-    dispatch,
-    nodes,
-    onCloseMenu,
-    parentNode,
-  } = props;
+  const { dispatch, nodes, onCloseMenu, parentNode } = props;
 
   const onClickMenuItem = (selectedNode) => {
     onCloseMenu();
     dispatch(addParentNode(parentNode.id, selectedNode.id));
-  }
+  };
 
   return (
     <ThemeProvider theme={theme}>
       <MenuList style={styles.wrapper}>
-        <ListSubheader
-          inset={false}
-          style={styles.header}
-        >
+        <ListSubheader inset={false} style={styles.header}>
           <FormattedMessage {...translations.addCondition} />
           <Icon
-            className='fa fa-window-close'
+            className="fa fa-window-close"
             onClick={() => onCloseMenu()}
             style={styles.closeIcon}
           />
         </ListSubheader>
-        {
-          nodes.map((node) =>
-            <MenuItem
-              key={`${node.id}-list-item`}
-              onClick={() => onClickMenuItem(node)}
-            >
-              <ListItemText>{node.title}</ListItemText>
-            </MenuItem>,
-          )
-        }
+        {nodes.map((node) => (
+          <MenuItem
+            key={`${node.id}-list-item`}
+            onClick={() => onClickMenuItem(node)}
+          >
+            <ListItemText>{node.title}</ListItemText>
+          </MenuItem>
+        ))}
       </MenuList>
     </ThemeProvider>
   );

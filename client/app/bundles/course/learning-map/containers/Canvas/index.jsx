@@ -1,8 +1,5 @@
 import { useRef, useState } from 'react';
-import {
-  TransformWrapper,
-  TransformComponent,
-} from "react-zoom-pan-pinch";
+import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import { Xwrapper } from 'react-xarrows';
 import Levels from '../Levels';
 import ArrowOverlay from '../ArrowOverlay';
@@ -38,10 +35,13 @@ const Canvas = () => {
   const minScale = 0.25;
 
   const getGateInputId = (isSummaryGate, parentNodeId, childNodeId) =>
-    isSummaryGate ? `${childNodeId}-summary-gate` : `${parentNodeId}-to-${childNodeId}-gate-input`;
+    isSummaryGate
+      ? `${childNodeId}-summary-gate`
+      : `${parentNodeId}-to-${childNodeId}-gate-input`;
 
   const getGateId = (nodeId) => `${nodeId}-gate`;
-  const getGateConnectionPointId = (nodeId) => `${getGateId(nodeId)}-connection-point`;
+  const getGateConnectionPointId = (nodeId) =>
+    `${getGateId(nodeId)}-connection-point`;
 
   const getNodeConnectionPointId = (nodeId) => `${nodeId}-connection-point`;
 
@@ -56,13 +56,13 @@ const Canvas = () => {
 
   return (
     <TransformWrapper
-      doubleClick={{disabled: true}}
+      doubleClick={{ disabled: true }}
       limitToBounds={false}
-      pinch={{disabled: true}}
+      pinch={{ disabled: true }}
       minScale={0.2}
       maxScale={1.5}
       ref={transformRef}
-      wheel={{disabled: true}}
+      wheel={{ disabled: true }}
       zoomIn={styles.zoomAnimation}
       zoomOut={styles.zoomAnimation}
     >
@@ -74,7 +74,9 @@ const Canvas = () => {
               zoomOut={() => onZoom(setTransform, false)}
             />
             <div style={styles.wrapper}>
-              <TransformComponent wrapperStyle={styles.transformComponentWrapper}>
+              <TransformComponent
+                wrapperStyle={styles.transformComponentWrapper}
+              >
                 <Levels
                   gateInputSizeThreshold={gateInputSizeThreshold}
                   getGateConnectionPointId={getGateConnectionPointId}
@@ -97,6 +99,6 @@ const Canvas = () => {
       )}
     </TransformWrapper>
   );
-}
+};
 
 export default Canvas;

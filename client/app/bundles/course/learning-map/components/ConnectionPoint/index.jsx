@@ -16,11 +16,7 @@ const styles = {
 };
 
 const ConnectionPoint = (props) => {
-  const {
-    id,
-    isActive,
-    onClick,
-  } = props;
+  const { id, isActive, onClick } = props;
 
   return (
     <div

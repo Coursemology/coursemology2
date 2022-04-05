@@ -13,22 +13,19 @@ const styles = {
 };
 
 const LearningMap = (props) => {
-  const {
-    dispatch,
-    isLoading,
-  } = props;
+  const { dispatch, isLoading } = props;
 
   useEffect(() => {
     dispatch(fetchNodes());
   }, []);
 
   return (
-    <div style={{...isLoading && styles.loading}}>
+    <div style={{ ...(isLoading && styles.loading) }}>
       <Canvas />
       <Dashboard />
     </div>
   );
-}
+};
 
 const mapStateToProps = (state) => ({
   isLoading: state.learningMap.isLoading,

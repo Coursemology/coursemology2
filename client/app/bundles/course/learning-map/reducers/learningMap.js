@@ -27,7 +27,7 @@ export default function (state = initialState, action) {
           message: 'Failed to load learning map. Please try again later.',
         },
       };
-    
+
     case actionTypes.ADD_PARENT_NODE_SUCCESS:
       return {
         ...state,
@@ -46,11 +46,13 @@ export default function (state = initialState, action) {
         isLoading: false,
         response: {
           didSucceed: false,
-          message: `Failed to add condition.${ action.errorMessage && ` (${action.errorMessage})`}`,
+          message: `Failed to add condition.${
+            action.errorMessage && ` (${action.errorMessage})`
+          }`,
         },
         selectedElement: {},
       };
-    
+
     case actionTypes.REMOVE_PARENT_NODE_SUCCESS:
       return {
         ...state,
@@ -69,11 +71,13 @@ export default function (state = initialState, action) {
         isLoading: false,
         response: {
           didSucceed: false,
-          message: `Failed to delete condition.${ action.errorMessage && ` (${action.errorMessage})`}`,
+          message: `Failed to delete condition.${
+            action.errorMessage && ` (${action.errorMessage})`
+          }`,
         },
         selectedElement: {},
       };
-    
+
     case actionTypes.SELECT_ARROW:
       return {
         ...state,
@@ -83,7 +87,7 @@ export default function (state = initialState, action) {
           id: action.selectedArrowId,
         },
       };
-    
+
     case actionTypes.SELECT_GATE:
       return {
         ...state,
@@ -115,14 +119,16 @@ export default function (state = initialState, action) {
         },
         selectedElement: {},
       };
-    
+
     case actionTypes.TOGGLE_SATISFIABILITY_TYPE_FAILURE:
       return {
         ...state,
         isLoading: false,
         response: {
           didSucceed: false,
-          message: `Failed to toggle satisfiability type.${ action.errorMessage && ` (${action.errorMessage})`}`,
+          message: `Failed to toggle satisfiability type.${
+            action.errorMessage && ` (${action.errorMessage})`
+          }`,
         },
         selectedElement: {},
       };

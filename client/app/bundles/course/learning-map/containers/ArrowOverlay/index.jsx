@@ -23,7 +23,8 @@ const ArrowOverlay = (props) => {
     scale,
   } = props;
 
-  const getArrowId = (parentNodeId, childNodeId) => `${parentNodeId}-to-${childNodeId}`;
+  const getArrowId = (parentNodeId, childNodeId) =>
+    `${parentNodeId}-to-${childNodeId}`;
 
   return (
     <>
