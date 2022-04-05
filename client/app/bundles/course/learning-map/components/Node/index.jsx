@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Card,
   CardContent,
-  Icon
+  Icon,
 } from '@mui/material';
-import ConnectionPoint from '../ConnectionPoint';
 import { connect } from 'react-redux';
-import UnlockRateDisplay from '../UnlockRateDisplay';
-import NodeMenu from '../NodeMenu';
 import {
   createTheme,
   ThemeProvider,
 } from '@mui/material/styles';
 import { FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
+import ConnectionPoint from '../ConnectionPoint';
+import UnlockRateDisplay from '../UnlockRateDisplay';
+import NodeMenu from '../NodeMenu';
 import translations from '../../translations.intl';
 import { nodeShape } from '../../propTypes';
-import PropTypes from 'prop-types';
 
 // Allows NodeMenu to overflow the Card MUI component (i.e. the Node)
 const theme = createTheme({
@@ -101,18 +101,18 @@ const Node = (props) => {
     node,
   } = props;
 
+  const [isNodeMenuDisplayed, setIsNodeMenuDisplayed] = useState(false);
+  const zIndex = isNodeMenuDisplayed ? 999 : node.depth + 2;
+
   const onConnectionPointClick = (event) => {
     event.stopPropagation();
     setIsNodeMenuDisplayed(true);
   };
 
-  const [isNodeMenuDisplayed, setIsNodeMenuDisplayed] = useState(false);
-  const zIndex = isNodeMenuDisplayed ? 999 : node.depth + 2;
-
   return (
     <>
       <div
-        style={{...styles.wrapper, zIndex: zIndex}}
+        style={{...styles.wrapper, zIndex}}
       >
         <ThemeProvider theme={theme}>
           <Card
@@ -120,7 +120,7 @@ const Node = (props) => {
             style={{
               ...styles.node,
               opacity: `${!canModify && !node.unlocked ? 0.2 : 1.0}`,
-              zIndex: zIndex
+              zIndex,
             }}
           >
             <CardContent
@@ -155,7 +155,11 @@ const Node = (props) => {
             <div style={styles.content}>
               <CardContent style={styles.contentText}>
                 <div>
-                  <a target='_blank' href={`${node.content_url}`}>
+                  <a
+                    target='_blank'
+                    href={`${node.content_url}`}
+                    rel='noreferrer'
+                  >
                   {node.title}
                   </a>
                 </div>

@@ -90,7 +90,7 @@ const Gate = (props) => {
     return isSatisfied ? `${green}` : `${red}`;
   }
   
-  const getNonSummaryGate = (gateWrapperStyle, gateInputStyle) => {
+  const getNonSummaryGate = (gateWrapperStyle, gateInputStyle) =>
     <div
       id={id}
       style={{...gateWrapperStyle, ...(isSelected) && styles.selectedGate, zIndex}}
@@ -109,7 +109,6 @@ const Gate = (props) => {
         })
       }
     </div>
-  };
 
   const getSummaryGate = () => {
     const numSatisfiedConditions = node.parents.filter(parent => parent.is_satisfied).length;
