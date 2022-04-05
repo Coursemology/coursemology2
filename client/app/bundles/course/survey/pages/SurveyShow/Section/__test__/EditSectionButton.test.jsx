@@ -1,6 +1,5 @@
-import ReactDOM from 'react-dom';
+import { act } from 'react-dom/test-utils';
 import { mount } from 'enzyme';
-import ReactTestUtils from 'react-dom/test-utils';
 import CourseAPI from 'api/course';
 import storeCreator from 'course/survey/store';
 import SectionFormDialogue from 'course/survey/containers/SectionFormDialogue';
@@ -12,7 +11,7 @@ const section = {
 };
 
 describe('<EditSectionButton />', () => {
-  it('injects handlers that allow survey sections to be edited', () => {
+  it('injects handlers that allow survey sections to be edited', async () => {
     const surveyId = 1;
     const spyUpdate = jest.spyOn(CourseAPI.survey.sections, 'update');
 
@@ -35,11 +34,9 @@ describe('<EditSectionButton />', () => {
     const descriptionInput = sectionForm.find('textarea[name="description"]');
     descriptionInput.simulate('change', { target: { value: newDescription } });
 
-    const submitButton = sectionFormDialogue
-      .find('FormDialogue')
-      .first()
-      .instance().submitButton;
-    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton));
+    await act(async () => {
+      sectionForm.simulate('submit');
+    });
 
     const expectedPayload = {
       section: { title: section.title, description: newDescription },

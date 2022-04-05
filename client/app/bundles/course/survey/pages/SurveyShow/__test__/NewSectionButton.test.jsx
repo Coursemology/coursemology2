@@ -1,13 +1,12 @@
-import ReactDOM from 'react-dom';
+import { act } from 'react-dom/test-utils';
 import { mount } from 'enzyme';
-import ReactTestUtils from 'react-dom/test-utils';
 import CourseAPI from 'api/course';
 import storeCreator from 'course/survey/store';
 import SectionFormDialogue from 'course/survey/containers/SectionFormDialogue';
 import NewSectionButton from '../NewSectionButton';
 
 describe('<NewSectionButton />', () => {
-  it('injects handlers that allow survey sections to be created', () => {
+  it('injects handlers that allow survey sections to be created', async () => {
     const spyCreate = jest.spyOn(CourseAPI.survey.sections, 'create');
     const contextOptions = buildContextOptions(storeCreator({}));
     const newSectionButton = mount(<NewSectionButton />, contextOptions);
@@ -21,17 +20,15 @@ describe('<NewSectionButton />', () => {
     ).toBe(true);
 
     // Fill section form with title
-    const section = { title: 'Funky section title' };
+    const section = { title: 'Funky section title', description: '' };
     const sectionForm = sectionFormDialogue.find('form');
     const titleInput = sectionForm.find('input[name="title"]');
     titleInput.simulate('change', { target: { value: section.title } });
 
     // Submit section form
-    const submitButton = sectionFormDialogue
-      .find('FormDialogue')
-      .first()
-      .instance().submitButton;
-    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton));
+    await act(async () => {
+      sectionForm.simulate('submit');
+    });
     expect(spyCreate).toHaveBeenCalledWith({ section });
   });
 });

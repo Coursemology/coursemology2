@@ -36,13 +36,13 @@ const styles = {
 };
 
 class NewSectionButton extends Component {
-  createSectionHandler = (data) => {
+  createSectionHandler = (data, setError) => {
     const { dispatch } = this.props;
     const payload = { section: data };
     const successMessage = <FormattedMessage {...translations.success} />;
     const failureMessage = <FormattedMessage {...translations.failure} />;
     return dispatch(
-      createSurveySection(payload, successMessage, failureMessage),
+      createSurveySection(payload, successMessage, failureMessage, setError),
     );
   };
 
@@ -52,6 +52,10 @@ class NewSectionButton extends Component {
       showSectionForm({
         onSubmit: this.createSectionHandler,
         formTitle: intl.formatMessage(translations.newSection),
+        initialValues: {
+          title: '',
+          description: '',
+        },
       }),
     );
   };
