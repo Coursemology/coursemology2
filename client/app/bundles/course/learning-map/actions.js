@@ -1,6 +1,12 @@
 import CourseAPI from 'api/course';
 import { actionTypes } from './constants';
 
+
+function getErrorMessage(error) {
+  const errors = error.response.data.errors;
+  return errors.length > 0 ? errors[0] : '';
+}
+
 export function fetchNodes() {
   return (dispatch) => {
     dispatch({ type: actionTypes.LOADING });
@@ -102,9 +108,4 @@ export function toggleSatisfiabilityType(nodeId) {
       });
     });
   };
-}
-
-function getErrorMessage(error) {
-  const errors = error.response.data.errors;
-  return errors.length > 0 ? errors[0] : '';
 }
