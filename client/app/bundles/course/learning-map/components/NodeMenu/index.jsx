@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import {
   Icon,
@@ -13,8 +12,8 @@ import {
   ThemeProvider,
 } from '@mui/material/styles';
 import { FormattedMessage } from 'react-intl';
-import translations from '../../translations.intl';
 import PropTypes from 'prop-types';
+import translations from '../../translations.intl';
 import {
   nodeShape,
   relatedNodeShape,
@@ -54,7 +53,7 @@ const styles = {
     position: 'absolute',
     top: -10,
     width: 300,
-  }
+  },
 };
 
 const NodeMenu = (props) => {
@@ -69,8 +68,6 @@ const NodeMenu = (props) => {
     onCloseMenu();
     dispatch(addParentNode(parentNode.id, selectedNode.id));
   }
-
-  console.log(nodes);
 
   return (
     <ThemeProvider theme={theme}>
@@ -87,16 +84,14 @@ const NodeMenu = (props) => {
           />
         </ListSubheader>
         {
-          nodes.map((node) => {
-            return (
-              <MenuItem
-                key={`${node.id}-list-item`}
-                onClick={() => onClickMenuItem(node)}
-              >
-                <ListItemText>{node.title}</ListItemText>
-              </MenuItem>
-            )
-          })
+          nodes.map((node) =>
+            <MenuItem
+              key={`${node.id}-list-item`}
+              onClick={() => onClickMenuItem(node)}
+            >
+              <ListItemText>{node.title}</ListItemText>
+            </MenuItem>,
+          )
         }
       </MenuList>
     </ThemeProvider>
