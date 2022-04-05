@@ -5,6 +5,7 @@ const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
 const env = process.env.NODE_ENV || 'development';
 const development = env === 'development';
+const none = env === 'none';
 const travis = process.env.TRAVIS === 'true';
 
 const config = {
@@ -20,7 +21,7 @@ const config = {
   },
 
   output: {
-    filename: development ? '[name].js' : '[name]-[contenthash].js',
+    filename: development || none ? '[name].js' : '[name]-[contenthash].js',
     path: path.join(__dirname, '..', 'public', 'webpack'),
     publicPath: '/webpack/',
   },
