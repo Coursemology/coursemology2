@@ -1,8 +1,8 @@
 import React from 'react';
-import GateToNodeArrows from '../GateToNodeArrows';
-import NodeToGateArrows from '../NodeToGateArrows';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import GateToNodeArrows from '../GateToNodeArrows';
+import NodeToGateArrows from '../NodeToGateArrows';
 
 const arrowAnchorPositions = ['left', 'right'];
 
@@ -13,7 +13,7 @@ const arrowProperties = {
   strokeWidth: 2,
 };
 
-const ArrowOverlay = React.memo((props) => {
+const ArrowOverlay = (props) => {
   const {
     gateInputSizeThreshold,
     getGateId,
@@ -23,9 +23,7 @@ const ArrowOverlay = React.memo((props) => {
     scale,
   } = props;
 
-  const getArrowId = (parentNodeId, childNodeId) => {
-    return `${parentNodeId}-to-${childNodeId}`
-  };
+  const getArrowId = (parentNodeId, childNodeId) => `${parentNodeId}-to-${childNodeId}`;
 
   return (
     <>
@@ -47,7 +45,7 @@ const ArrowOverlay = React.memo((props) => {
       />
     </>
   );
-});
+};
 
 const mapStateToProps = (state) => ({
   nodes: state.learningMap.nodes,
@@ -63,4 +61,4 @@ ArrowOverlay.propTypes = {
   scale: PropTypes.number.isRequired,
 };
 
-export default connect(mapStateToProps)(ArrowOverlay);
+export default connect(mapStateToProps)(React.memo(ArrowOverlay));

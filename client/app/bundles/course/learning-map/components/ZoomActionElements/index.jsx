@@ -1,8 +1,7 @@
-import React from 'react';
 import { Button } from '@mui/material';
 import { FormattedMessage } from 'react-intl';
-import translations from '../../translations.intl';
 import PropTypes from 'prop-types';
+import translations from '../../translations.intl';
 
 const styles = {
   actionButton: {
@@ -29,7 +28,7 @@ const ZoomActionElements = (props) => {
   return (
     <div style={styles.wrapper}>
       <Button
-        label={'Zoom In'}
+        label='Zoom In'
         color='primary'
         className='btn-submit'
         onClick={() => zoomIn()}
@@ -39,7 +38,7 @@ const ZoomActionElements = (props) => {
         <FormattedMessage {...translations.zoomIn} />
       </Button>
       <Button
-        label={'Zoom Out'}
+        label='Zoom Out'
         color='primary'
         className='btn-submit'
         onClick={() => zoomOut()}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Card,
   CardContent,
@@ -14,21 +14,21 @@ import {
 import ReactTooltip from 'react-tooltip';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import {
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
+import PropTypes from 'prop-types';
+import {
   elementTypes,
   satisfiabilityTypes,
 } from '../../constants';
 import translations from '../../translations.intl';
 import {
-  FormattedMessage,
-  injectIntl,
-  intlShape,
-} from 'react-intl';
-import {
   nodeShape,
   responseShape,
   selectedElementShape,
 } from '../../propTypes';
-import PropTypes from 'prop-types';
 
 const red = '#f08080';
 const orange = '#ffa500';
@@ -85,6 +85,8 @@ const Dashboard = (props) => {
     }
   };
 
+  const getNodeForSelectedGate = () => nodes.find((node) => node.id === selectedElement.id.split('-gate')[0]);
+
   const toggleNodeSatisfiabilityType = () => {
     if (selectedElement.type === elementTypes.gate) {
       const node = getNodeForSelectedGate();
@@ -92,24 +94,20 @@ const Dashboard = (props) => {
     }
   };
 
-  const getNodeForSelectedGate = () => {
-    return nodes.find((node) => node.id === selectedElement.id.split('-gate')[0]);
-  };
-
   const reset = () => {
     dispatch(resetSelection());
   };
 
-  const responseDisplay = () => {
-    return {
+  const responseDisplay = () => (
+    {
       color: response.didSucceed ? green : red,
       text:
       <FormattedMessage
         {...translations.responseDashboardMessage}
         values={{ responseMessage: response.message }}
       />,
-    };
-  };
+    }
+  );
 
   const selectedArrowDisplay = () => {
     const ids = selectedElement.id.split('-to-');
@@ -126,23 +124,23 @@ const Dashboard = (props) => {
     };
   };
 
-  const selectedGateDisplay = () => {
-    return {
+  const selectedGateDisplay = () => (
+    {
       color: orange,
       text: 
       <FormattedMessage
         {...translations.selectedGateDashboardMessage}
         values={{ node: getNodeForSelectedGate().title }}
       />,
-    };
-  };
+    }
+  );
 
-  const defaultDisplay = () => {
-    return {
+  const defaultDisplay = () => (
+    {
       color: 'white',
       text: <FormattedMessage {...translations.defaultDashboardMessage}/>,
-    };
-  };
+    }
+  );
 
   const getDisplay = () => {
     if (!isEmptyResponse) {
@@ -165,7 +163,7 @@ const Dashboard = (props) => {
     return (
       <>
         <Icon
-          className={'fa fa-trash'}
+          className='fa fa-trash'
           data-tip
           data-for={tooltipId}
           style={{...styles.icon, color: 'red'}}
@@ -187,24 +185,22 @@ const Dashboard = (props) => {
     return (
       <>
         <Icon
-          className={'fa fa-toggle-on'}
+          className='fa fa-toggle-on'
           data-tip
           data-for={tooltipId}
           style={styles.icon}
           onClick={() => toggleNodeSatisfiabilityType()}
-        >
-        </Icon>
+        />
         <ReactTooltip id={tooltipId}>
           <FormattedMessage
             {...translations.toggleSatisfiabilityType}
             values={{ satisfiabilityType: node.satisfiability_type === satisfiabilityTypes.allConditions ?
-              '\"at least one condition\"' :
-              '\"all conditions\"'
-            }}
+              '"at least one condition"' :
+              '"all conditions"'}
+            }
           />
         </ReactTooltip>
-      </>
-    );
+      </>);
   };
 
   const getActionElements = () => {
@@ -236,7 +232,7 @@ const Dashboard = (props) => {
           {
             (!isEmptyResponse || selectedElement.type) &&
             <Icon
-              className={'fa fa-window-close'}
+              className='fa fa-window-close'
               style={{...styles.icon}}
               onClick={() => reset()}
             />

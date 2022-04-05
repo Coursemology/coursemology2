@@ -1,8 +1,7 @@
-import React from 'react';
 import { Icon } from '@mui/material';
 import { FormattedMessage } from 'react-intl';
-import translations from '../../translations.intl';
 import PropTypes from 'prop-types';
+import translations from '../../translations.intl';
 
 const styles = {
   content: {
@@ -42,13 +41,13 @@ const UnlockRateDisplay = (props) => {
   return (
     <div>
       <Icon
-        className={'fa fa-unlock'}
+        className='fa fa-unlock'
         style={styles.icon}
       />
-      <div style={{...styles.unlockRateBar, width: width}}>
-        <div style={{...styles.filledPortion, width: unlockRate * width}}></div>
-        <div style={{...styles.unfilledPortion, width: width - (unlockRate * width)}}></div>
-        <div style={{...styles.content, width: width}}>
+      <div style={{...styles.unlockRateBar, width}}>
+        <div style={{...styles.filledPortion, width: unlockRate * width}}/>
+        <div style={{...styles.unfilledPortion, width: width - (unlockRate * width)}}/>
+        <div style={{...styles.content, width}}>
           <FormattedMessage
             {...translations.unlockRate}
             values={{ unlockRate: (unlockRate * 100).toFixed(2) }}

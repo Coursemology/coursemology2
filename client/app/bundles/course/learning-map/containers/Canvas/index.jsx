@@ -1,11 +1,11 @@
-import React,{ useRef, useState } from 'react';
-import Levels from '../Levels';
-import ArrowOverlay from '../ArrowOverlay';
+import { useRef, useState } from 'react';
 import {
   TransformWrapper,
   TransformComponent,
 } from "react-zoom-pan-pinch";
 import { Xwrapper } from 'react-xarrows';
+import Levels from '../Levels';
+import ArrowOverlay from '../ArrowOverlay';
 import ZoomActionElements from '../../components/ZoomActionElements';
 
 const styles = {
@@ -37,25 +37,19 @@ const Canvas = () => {
   const maxScale = 1.5;
   const minScale = 0.25;
 
-  const getGateInputId = (isSummaryGate, parentNodeId, childNodeId) => {
-    return isSummaryGate ? `${childNodeId}-summary-gate` : `${parentNodeId}-to-${childNodeId}-gate-input`;
-  };
+  const getGateInputId = (isSummaryGate, parentNodeId, childNodeId) =>
+    isSummaryGate ? `${childNodeId}-summary-gate` : `${parentNodeId}-to-${childNodeId}-gate-input`;
 
-  const getGateId = (nodeId) => {
-    return `${nodeId}-gate`;
-  };
+  const getGateId = (nodeId) => `${nodeId}-gate`;
+  const getGateConnectionPointId = (nodeId) => `${getGateId(nodeId)}-connection-point`;
 
-  const getGateConnectionPointId = (nodeId) => {
-    return `${getGateId(nodeId)}-connection-point`;
-  };
-
-  const getNodeConnectionPointId = (nodeId) => {
-    return `${nodeId}-connection-point`;
-  };
+  const getNodeConnectionPointId = (nodeId) => `${nodeId}-connection-point`;
 
   const onZoom = (setTransform, isZoomingIn) => {
     const state = transformRef.current.state;
-    const newScale = isZoomingIn ? Math.min(state.scale * zoomScale, maxScale) : Math.max(state.scale / zoomScale, minScale);
+    const newScale = isZoomingIn
+      ? Math.min(state.scale * zoomScale, maxScale)
+      : Math.max(state.scale / zoomScale, minScale);
     setTransform(state.positionX, state.positionY, newScale);
     setScale(newScale);
   };
@@ -79,10 +73,7 @@ const Canvas = () => {
               zoomIn={() => onZoom(setTransform, true)}
               zoomOut={() => onZoom(setTransform, false)}
             />
-            <div
-              style={styles.wrapper}
-              tabIndex={0}
-            >
+            <div style={styles.wrapper}>
               <TransformComponent wrapperStyle={styles.transformComponentWrapper}>
                 <Levels
                   gateInputSizeThreshold={gateInputSizeThreshold}

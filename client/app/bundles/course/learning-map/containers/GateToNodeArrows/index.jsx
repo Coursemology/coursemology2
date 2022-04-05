@@ -1,11 +1,10 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import Xarrow from 'react-xarrows';
+import PropTypes from 'prop-types';
 import {
-  arrowProperties,
+  arrowPropertiesShape,
   nodeShape,
 } from '../../propTypes';
-import PropTypes from 'prop-types';
 
 const GateToNodeArrows = (props) => {
   const {
@@ -17,23 +16,21 @@ const GateToNodeArrows = (props) => {
   } = props;
 
   return (
-    nodes.map(node => {
-      return (
-        node.depth > 0 &&
-        <Xarrow
-          key={node.id}
-          start={getGateConnectionPointId(node.id)}
-          startAnchor={arrowAnchorPositions}
-          end={node.id}
-          endAnchor={arrowAnchorPositions}
-          color={arrowProperties.defaultColor}
-          divContainerStyle={{position: 'relative'}}
-          headSize={arrowProperties.headSize}
-          strokeWidth={arrowProperties.strokeWidth * scale}
-          SVGcanvasStyle={{transform: `scale(${1 / scale})`}}
-        />
-      );
-    })
+    nodes.map(node => 
+      node.depth > 0 &&
+      <Xarrow
+        key={node.id}
+        start={getGateConnectionPointId(node.id)}
+        startAnchor={arrowAnchorPositions}
+        end={node.id}
+        endAnchor={arrowAnchorPositions}
+        color={arrowProperties.defaultColor}
+        divContainerStyle={{position: 'relative'}}
+        headSize={arrowProperties.headSize}
+        strokeWidth={arrowProperties.strokeWidth * scale}
+        SVGcanvasStyle={{transform: `scale(${1 / scale})`}}
+      />,
+    )
   );
 };
 
@@ -43,7 +40,7 @@ const mapStateToProps = (state) => ({
 
 GateToNodeArrows.propTypes = {
   arrowAnchorPositions: PropTypes.arrayOf(PropTypes.string).isRequired,
-  arrowProperties: arrowProperties.isRequired,
+  arrowProperties: arrowPropertiesShape.isRequired,
   getGateConnectionPointId: PropTypes.func.isRequired,
   nodes: PropTypes.arrayOf(nodeShape).isRequired,
   scale: PropTypes.number.isRequired,

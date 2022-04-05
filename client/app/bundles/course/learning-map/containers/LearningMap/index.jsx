@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { fetchNodes } from 'course/learning-map/actions';
 import Canvas from '../Canvas';
 import Dashboard from '../Dashboard';
-import PropTypes from 'prop-types';
 
 const styles = {
   loading: {

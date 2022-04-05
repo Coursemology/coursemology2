@@ -1,4 +1,3 @@
-import React from 'react';
 import { render } from 'react-dom';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 import LearningMap from './containers/LearningMap';
@@ -13,7 +12,7 @@ $(document).ready(() => {
       <ProviderWrapper {...{ store }}>
         <LearningMap />
       </ProviderWrapper>,
-      mountNode
+      mountNode,
     );
   }
 });

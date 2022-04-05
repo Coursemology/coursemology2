@@ -1,9 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { nodeShape } from '../../propTypes';
 import Gate from '../../components/Gate';
 import Node from '../../components/Node';
-import { connect } from 'react-redux';
-import { nodeShape } from '../../propTypes';
-import PropTypes from 'prop-types';
 
 const styles = {
   level: {
@@ -25,7 +25,7 @@ const styles = {
   },
 };
 
-const Levels = React.memo((props) => {
+const Levels = (props) => {
   const {
     gateInputSizeThreshold,
     getGateConnectionPointId,
@@ -36,7 +36,7 @@ const Levels = React.memo((props) => {
   } = props;
 
   const maxDepth = nodes.length > 0 ? nodes.reduce((prev, cur) => cur.depth > prev.depth ? cur : prev).depth : 0;
-  const levels = [...Array(maxDepth + 1)].map(index => new Array());
+  const levels = [...Array(maxDepth + 1)].map(() => []);
   nodes.forEach(node => levels[node.depth].push(node));
 
   return (
@@ -44,7 +44,7 @@ const Levels = React.memo((props) => {
       {
         levels.map((level, index) =>
         <div
-          key={index}
+          key={`level-${index + 1}`}
           style={styles.level}
         >
           {
@@ -71,13 +71,13 @@ const Levels = React.memo((props) => {
                   getNodeConnectionPointId={getNodeConnectionPointId}
                 />
               </>
-            </div>
+            </div>,
           )}
-        </div>
+        </div>,
       )}
     </div>
   );
-});
+};
 
 const mapStateToProps = (state) => ({
   nodes: state.learningMap.nodes,
@@ -92,4 +92,4 @@ Levels.propTypes = {
   nodes: PropTypes.arrayOf(nodeShape).isRequired,
 };
 
-export default connect(mapStateToProps)(Levels);
+export default connect(mapStateToProps)(React.memo(Levels));
