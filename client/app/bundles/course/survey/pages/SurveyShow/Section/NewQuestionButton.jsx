@@ -35,14 +35,14 @@ const translations = defineMessages({
 });
 
 class NewQuestionButton extends Component {
-  createQuestionHandler = (data) => {
+  createQuestionHandler = (data, setError) => {
     const { dispatch } = this.props;
 
     const payload = formatQuestionFormData(data);
     const successMessage = <FormattedMessage {...translations.success} />;
     const failureMessage = <FormattedMessage {...translations.failure} />;
     return dispatch(
-      createSurveyQuestion(payload, successMessage, failureMessage),
+      createSurveyQuestion(payload, successMessage, failureMessage, setError),
     );
   };
 
@@ -56,11 +56,44 @@ class NewQuestionButton extends Component {
         initialValues: {
           section_id: sectionId,
           question_type: questionTypes.MULTIPLE_RESPONSE,
-          required: false,
           description: '',
+          required: false,
+          grid_view: false,
           min_options: null,
           max_options: null,
-          options: [{}, {}, {}, {}],
+          options: [
+            {
+              weight: null,
+              option: '',
+              image_url: '',
+              image_name: '',
+              file: null,
+            },
+            {
+              weight: null,
+              option: '',
+              image_url: '',
+              image_name: '',
+              file: null,
+            },
+            {
+              weight: null,
+              option: '',
+              image_url: '',
+              image_name: '',
+              file: null,
+            },
+            {
+              weight: null,
+              option: '',
+              image_url: '',
+              image_name: '',
+              file: null,
+            },
+          ],
+          // optionsToDelete is not used for new question but only edit question.
+          // However, it is added here to avoid uncontrolled field warning.
+          optionsToDelete: [],
         },
       }),
     );

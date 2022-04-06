@@ -1,8 +1,6 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getFormValues, isPristine } from 'redux-form';
-import { formNames } from 'course/survey/constants';
 import * as actionCreators from 'course/survey/actions/questions';
 import FormDialogue from 'lib/components/FormDialogue';
 import QuestionForm from './QuestionForm';
@@ -11,8 +9,6 @@ function mapStateToProps({ questionForm, ...state }) {
   return {
     ...questionForm,
     ...state,
-    pristine: isPristine(formNames.SURVEY_QUESTION)(state),
-    formValues: getFormValues(formNames.SURVEY_QUESTION)(state),
   };
 }
 
@@ -20,7 +16,6 @@ const propTypes = {
   dispatch: PropTypes.func.isRequired,
   visible: PropTypes.bool.isRequired,
   disabled: PropTypes.bool.isRequired,
-  pristine: PropTypes.bool.isRequired,
   formTitle: PropTypes.string,
   onSubmit: PropTypes.func.isRequired,
   initialValues: PropTypes.shape({
@@ -30,43 +25,32 @@ const propTypes = {
     end_at: PropTypes.instanceOf(Date),
     base_exp: PropTypes.number,
   }).isRequired,
-  formValues: PropTypes.object,
 };
 
 const QuestionFormDialogue = ({
   dispatch,
   visible,
   disabled,
-  pristine,
-  formValues,
   formTitle,
   initialValues,
   onSubmit,
 }) => {
-  const {
-    hideQuestionForm,
-    submitQuestionForm,
-    addToOptions,
-    addToOptionsToDelete,
-  } = bindActionCreators(actionCreators, dispatch);
+  const { hideQuestionForm } = bindActionCreators(actionCreators, dispatch);
 
   return (
     <FormDialogue
       title={formTitle}
-      hideForm={hideQuestionForm}
-      submitForm={submitQuestionForm}
-      skipConfirmation={pristine}
-      disabled={disabled}
       open={visible}
+      skipConfirmation={false}
+      disabled={disabled}
+      form="survey-section-question-form"
+      hideForm={hideQuestionForm}
     >
       <QuestionForm
         {...{
-          formValues,
+          disabled,
           initialValues,
           onSubmit,
-          disabled,
-          addToOptions,
-          addToOptionsToDelete,
         }}
       />
     </FormDialogue>

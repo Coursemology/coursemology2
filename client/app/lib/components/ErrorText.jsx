@@ -1,12 +1,17 @@
 import { memo } from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 import { red } from '@mui/material/colors';
 
 /**
  * Standardises the way errors are shown in redux/react-hook forms.
  */
 const ErrorText = ({ errors }) => {
-  if (!errors) {
+  if (
+    !errors ||
+    (errors.constructor === Object && Object.keys(errors).length === 0) ||
+    (errors.constructor === Array && errors.length === 0)
+  ) {
     return null;
   }
   if (errors.constructor === String) {
@@ -25,7 +30,14 @@ const ErrorText = ({ errors }) => {
   if (errors.constructor === Object && errors.base) {
     return <ErrorText key={errors.base} errors={errors.base.message} />;
   }
-  return null;
+  return (
+    <div style={{ color: red[500] }}>
+      <FormattedMessage
+        id="lib.component.error"
+        defaultMessage="Failed submitting this form. Please try again."
+      />
+    </div>
+  );
 };
 
 export const errorProps = PropTypes.oneOfType([
