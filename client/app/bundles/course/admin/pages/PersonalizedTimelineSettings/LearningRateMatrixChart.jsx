@@ -3,14 +3,17 @@ import { color } from 'chart.js/helpers';
 import PropTypes from 'prop-types';
 
 import MatrixChart from 'lib/components/charts/MatrixChart';
-import { processLearningRateRecordsIntoChartData } from './utils';
+import {
+  LEARNING_RATE_BUCKET_SIZE,
+  processLearningRateRecordsIntoChartData,
+} from './utils';
 import { learningRateRecordShape } from './propTypes';
 
 const LearningRateMatrixChart = ({ learningRateRecords }) => {
   if (learningRateRecords.length === 0) {
     return 'No Data';
   }
-  const [chartData, numX, numY] = useMemo(
+  const [chartData, numX, numY, maxV] = useMemo(
     () => processLearningRateRecordsIntoChartData(learningRateRecords),
     [learningRateRecords],
   );
@@ -22,12 +25,12 @@ const LearningRateMatrixChart = ({ learningRateRecords }) => {
         data: chartData,
         backgroundColor(c) {
           const value = c.dataset.data[c.dataIndex].v;
-          const alpha = (10 + value) / 60;
+          const alpha = value / maxV;
           return color('green').alpha(alpha).rgbString();
         },
         borderColor(c) {
           const value = c.dataset.data[c.dataIndex].v;
-          const alpha = (10 + value) / 60;
+          const alpha = value / maxV;
           return color('green').alpha(alpha).darken(0.3).rgbString();
         },
         borderWidth: 1,
@@ -47,6 +50,7 @@ const LearningRateMatrixChart = ({ learningRateRecords }) => {
 
   const scales = {
     y: {
+      reverse: false,
       ticks: {
         maxRotation: 0,
         autoSkip: true,
@@ -102,7 +106,9 @@ const LearningRateMatrixChart = ({ learningRateRecords }) => {
           label(context) {
             const v = context.dataset.data[context.dataIndex];
             return [
-              `Learning Rate Range: ${v.y}% - ${v.y + 10}%`,
+              `Learning Rate Range: [${v.y}%, ${
+                v.y + LEARNING_RATE_BUCKET_SIZE
+              }%)`,
               `Number of Students: ${v.v} `,
             ];
           },

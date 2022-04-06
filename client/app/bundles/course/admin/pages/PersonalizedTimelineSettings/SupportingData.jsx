@@ -6,9 +6,15 @@ import LoadingIndicator from 'lib/components/LoadingIndicator';
 import LearningRateMatrixChart from './LearningRateMatrixChart';
 import { learningRateRecordShape } from './propTypes';
 
+const styles = {
+  root: {
+    marginBottom: '2rem',
+  },
+};
+
 // To add more supporting data as we go along
 const SupportingData = ({ learningRateRecords, isFetching }) => (
-  <Card variant="outlined">
+  <Card style={styles.root} variant="outlined">
     <CardContent>
       <Typography gutterBottom variant="h6" component="div" fontWeight="bold">
         Supporting Data
