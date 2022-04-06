@@ -157,7 +157,7 @@
     "react-dnd-test-backend": "^15.1.2",
     "react-test-renderer": "^17.0.2",
     "redux-logger": "^3.0.6",
-    "webpack-dev-server": "^4.7.1"
+    "webpack-dev-server": "^4.8.1"
   },
   "license": "MIT",
   "repository": "git+https://github.com/Coursemology/coursemology2.git",
