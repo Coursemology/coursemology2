@@ -1,7 +1,6 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FieldArray } from 'redux-form';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { useFieldArray } from 'react-hook-form';
 import { Card, CardContent, CardHeader } from '@mui/material';
 import { red } from '@mui/material/colors';
 import ResponseAnswer from './ResponseAnswer';
@@ -26,70 +25,62 @@ const translations = defineMessages({
   },
 });
 
-class ResponseSection extends Component {
-  static renderQuestions(props) {
-    const { fields, disabled } = props;
-
-    return (
+const ResponseSection = (props) => {
+  const { control, disabled, section, sectionIndex } = props;
+  const { fields: questionFields } = useFieldArray({
+    control,
+    // To update below
+    name: `sections.${sectionIndex}.questions`,
+  });
+  if (section.questions.length < 1) {
+    return <div />;
+  }
+  return (
+    <Card style={styles.card}>
+      <CardHeader
+        title={section.title}
+        subheader={
+          <div dangerouslySetInnerHTML={{ __html: section.description }} />
+        }
+      />
       <CardContent>
-        {fields.map((member, index) => {
-          const question = fields.get(index);
-          return (
-            <Card key={question.id} style={styles.questionCard}>
-              <CardContent>
-                <p
-                  dangerouslySetInnerHTML={{
-                    __html: `${index + 1}. ${question.description}`,
+        {questionFields.map((question, questionIndex) => (
+          <Card key={question.id} style={styles.questionCard}>
+            <CardContent>
+              <p
+                dangerouslySetInnerHTML={{
+                  __html: `${questionIndex + 1}. ${question.description}`,
+                }}
+              />
+              {question.answer && question.answer.present ? (
+                <ResponseAnswer
+                  {...{
+                    control,
+                    disabled,
+                    section,
+                    sectionIndex,
+                    question,
+                    questionIndex,
                   }}
                 />
-                {question.answer && question.answer.present ? (
-                  <ResponseAnswer {...{ member, question, disabled }} />
-                ) : (
-                  <div style={styles.errorText}>
-                    <FormattedMessage {...translations.noAnswer} />
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          );
-        })}
+              ) : (
+                <div style={styles.errorText}>
+                  <FormattedMessage {...translations.noAnswer} />
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        ))}
       </CardContent>
-    );
-  }
-
-  render() {
-    const { member, index, fields, disabled } = this.props;
-    const section = fields.get(index);
-
-    if (section.questions.length < 1) {
-      return <div />;
-    }
-
-    return (
-      <Card style={styles.card}>
-        <CardHeader
-          title={section.title}
-          subheader={
-            <div dangerouslySetInnerHTML={{ __html: section.description }} />
-          }
-        />
-        <FieldArray
-          name={`${member}.questions`}
-          component={ResponseSection.renderQuestions}
-          disabled={disabled}
-        />
-      </Card>
-    );
-  }
-}
+    </Card>
+  );
+};
 
 ResponseSection.propTypes = {
-  member: PropTypes.string.isRequired,
-  index: PropTypes.number.isRequired,
-  fields: PropTypes.shape({
-    get: PropTypes.func.isRequired,
-  }).isRequired,
+  control: PropTypes.object.isRequired,
   disabled: PropTypes.bool.isRequired,
+  section: PropTypes.object.isRequired,
+  sectionIndex: PropTypes.number.isRequired,
 };
 
 export default ResponseSection;

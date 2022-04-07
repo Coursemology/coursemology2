@@ -1,33 +1,11 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Field } from 'redux-form';
 import { defineMessages, injectIntl, intlShape } from 'react-intl';
-import { Checkbox, Radio } from '@mui/material';
-import { red } from '@mui/material/colors';
+import { Controller } from 'react-hook-form';
+import FormTextField from 'lib/components/form/fields/TextField';
 import formTranslations from 'lib/translations/form';
-import renderTextField from 'lib/components/redux-form/TextField';
 import { questionTypes } from 'course/survey/constants';
-import { questionShape } from 'course/survey/propTypes';
-import OptionsListItem from 'course/survey/components/OptionsListItem';
-
-const styles = {
-  errorText: {
-    color: red[500],
-  },
-  grid: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  listOptionWidget: {
-    width: 'auto',
-    padding: 0,
-  },
-  gridOptionWidget: {
-    marginTop: 5,
-    width: 'auto',
-    padding: 0,
-  },
-};
+import MultipleChoiceOptionsField from './components/MultipleChoiceOptionsField';
+import MultipleResponseOptionsField from './components/MultipleResponseOptionsField';
 
 const responseFormTranslations = defineMessages({
   selectAtLeast: {
@@ -40,199 +18,189 @@ const responseFormTranslations = defineMessages({
   },
 });
 
-class ResponseAnswer extends Component {
-  static renderMultipleChoiceOptions(props) {
-    const {
+const checkTextResponseRequired = (value, question, intl) =>
+  question.required && !value
+    ? intl.formatMessage(formTranslations.required)
+    : true;
+
+const checkMultipleChoiceRequired = (value, question, intl) =>
+  question.required && (!value || value.length < 1)
+    ? intl.formatMessage(responseFormTranslations.selectAtLeast, { count: 1 })
+    : true;
+
+const checkQuantitySelected = (options, question, intl) => {
+  const {
+    required,
+    min_options: minOptions,
+    max_options: maxOptions,
+  } = question;
+  const optionCount = options.length;
+
+  // Skip checks if question is not required and student doesn't intend to answer it.
+  if (!required && optionCount === 0) {
+    return true;
+  }
+
+  if (minOptions && optionCount < minOptions) {
+    return intl.formatMessage(responseFormTranslations.selectAtLeast, {
+      count: minOptions,
+    });
+  }
+  if (maxOptions && optionCount > maxOptions) {
+    return intl.formatMessage(responseFormTranslations.selectAtMost, {
+      count: maxOptions,
+    });
+  }
+
+  return true;
+};
+
+const renderTextResponseField = (props) => {
+  const { control, disabled, intl, question, questionIndex, sectionIndex } =
+    props;
+
+  return (
+    <Controller
+      name={`sections.${sectionIndex}.questions.${questionIndex}.answer.text_response`}
+      control={control}
+      render={({ field, fieldState }) => (
+        <FormTextField
+          field={field}
+          fieldState={fieldState}
+          disabled={disabled}
+          fullWidth
+          InputLabelProps={{
+            shrink: true,
+          }}
+          multiline
+          variant="standard"
+        />
+      )}
+      rules={{ validate: (v) => checkTextResponseRequired(v, question, intl) }}
+    />
+  );
+};
+
+const renderMultipleChoiceField = (props) => {
+  const { control, disabled, intl, question, questionIndex, sectionIndex } =
+    props;
+
+  return (
+    <Controller
+      name={`sections.${sectionIndex}.questions.${questionIndex}.answer.question_option_ids`}
+      control={control}
+      render={({ field, fieldState }) => (
+        <MultipleChoiceOptionsField
+          field={field}
+          fieldState={fieldState}
+          disabled={disabled}
+          question={question}
+        />
+      )}
+      rules={{
+        validate: (v) => checkMultipleChoiceRequired(v, question, intl),
+      }}
+    />
+  );
+};
+
+const renderMultipleResponseField = (props) => {
+  const { control, disabled, intl, question, questionIndex, sectionIndex } =
+    props;
+
+  return (
+    <Controller
+      name={`sections.${sectionIndex}.questions.${questionIndex}.answer.question_option_ids`}
+      control={control}
+      render={({ field, fieldState }) => (
+        <MultipleResponseOptionsField
+          field={field}
+          fieldState={fieldState}
+          disabled={disabled}
+          question={question}
+        />
+      )}
+      rules={{
+        validate: (v) => checkQuantitySelected(v, question, intl),
+      }}
+    />
+  );
+};
+
+const ResponseAnswer = (props) => {
+  const { TEXT, MULTIPLE_CHOICE, MULTIPLE_RESPONSE } = questionTypes;
+  const { control, disabled, intl, question, questionIndex, sectionIndex } =
+    props;
+  if (!question) {
+    return <div />;
+  }
+  const renderer = {
+    [TEXT]: renderTextResponseField({
+      control,
       disabled,
-      input: { onChange, value },
-      meta: { touched, dirty, error },
-      question: { grid_view: grid, options },
-    } = props;
-    const selectedOption = value && value.length > 0 && value[0];
-
-    return (
-      <>
-        {(dirty || touched) && error ? (
-          <p style={styles.errorText}>{error}</p>
-        ) : null}
-        <div style={grid ? styles.grid : {}}>
-          {options.map((option) => {
-            const { option: optionText, image_url: imageUrl } = option;
-            const id = option.id;
-            const widget = (
-              <Radio
-                value={id}
-                style={grid ? styles.gridOptionWidget : styles.listOptionWidget}
-                onChange={(event) =>
-                  onChange([parseInt(event.target.value, 10)])
-                }
-                checked={id === selectedOption}
-                disabled={disabled}
-              />
-            );
-            return (
-              <OptionsListItem
-                key={option.id}
-                {...{ optionText, imageUrl, widget, grid }}
-              />
-            );
-          })}
-        </div>
-      </>
-    );
-  }
-
-  static renderMultipleResponseOptions(props) {
-    const {
+      intl,
+      question,
+      questionIndex,
+      sectionIndex,
+    }),
+    [MULTIPLE_CHOICE]: renderMultipleChoiceField({
+      control,
       disabled,
-      input: { value, onChange },
-      meta: { touched, dirty, error },
-      question: { grid_view: grid, options },
-    } = props;
-
-    return (
-      <>
-        {(dirty || touched) && error ? (
-          <p style={styles.errorText}>{error}</p>
-        ) : null}
-        <div style={grid ? styles.grid : {}}>
-          {options.map((option) => {
-            const widget = (
-              <Checkbox
-                style={grid ? styles.gridOptionWidget : styles.listOptionWidget}
-                disabled={disabled}
-                checked={value.indexOf(option.id) !== -1}
-                onChange={(event, checked) => {
-                  const newValue = [...value];
-                  if (checked) {
-                    newValue.push(option.id);
-                  } else {
-                    newValue.splice(newValue.indexOf(option.id), 1);
-                  }
-                  return onChange(newValue);
-                }}
-              />
-            );
-            const { option: optionText, image_url: imageUrl } = option;
-            return (
-              <OptionsListItem
-                key={option.id}
-                {...{ optionText, imageUrl, widget, grid }}
-              />
-            );
-          })}
-        </div>
-      </>
-    );
+      intl,
+      question,
+      questionIndex,
+      sectionIndex,
+    }),
+    [MULTIPLE_RESPONSE]: renderMultipleResponseField({
+      control,
+      disabled,
+      intl,
+      question,
+      questionIndex,
+      sectionIndex,
+    }),
+  }[question.question_type];
+  if (!renderer) {
+    return <div />;
   }
+  return renderer;
+};
 
-  checkMultipleChoiceRequired = (value) => {
-    const { question, intl } = this.props;
-    return question.required && (!value || value.length < 1)
-      ? intl.formatMessage(responseFormTranslations.selectAtLeast, { count: 1 })
-      : undefined;
-  };
+//   checkQuantitySelected = (options) => {
+//     const { question, intl } = this.props;
+//     const {
+//       required,
+//       min_options: minOptions,
+//       max_options: maxOptions,
+//     } = question;
+//     const optionCount = options.length;
 
-  checkQuantitySelected = (options) => {
-    const { question, intl } = this.props;
-    const {
-      required,
-      min_options: minOptions,
-      max_options: maxOptions,
-    } = question;
-    const optionCount = options.length;
+//     // Skip checks if question is not required and student doesn't intend to answer it.
+//     if (!required && optionCount === 0) {
+//       return undefined;
+//     }
 
-    // Skip checks if question is not required and student doesn't intend to answer it.
-    if (!required && optionCount === 0) {
-      return undefined;
-    }
+//     if (minOptions && optionCount < minOptions) {
+//       return intl.formatMessage(responseFormTranslations.selectAtLeast, {
+//         count: minOptions,
+//       });
+//     }
+//     if (maxOptions && optionCount > maxOptions) {
+//       return intl.formatMessage(responseFormTranslations.selectAtMost, {
+//         count: maxOptions,
+//       });
+//     }
 
-    if (minOptions && optionCount < minOptions) {
-      return intl.formatMessage(responseFormTranslations.selectAtLeast, {
-        count: minOptions,
-      });
-    }
-    if (maxOptions && optionCount > maxOptions) {
-      return intl.formatMessage(responseFormTranslations.selectAtMost, {
-        count: maxOptions,
-      });
-    }
-
-    return undefined;
-  };
-
-  checkTextResponseRequired = (value) => {
-    const { question } = this.props;
-    return question.required && !value ? formTranslations.required : undefined;
-  };
-
-  renderMultipleChoiceField() {
-    const { member, question, disabled } = this.props;
-
-    return (
-      <Field
-        name={`${member}.answer.question_option_ids`}
-        component={ResponseAnswer.renderMultipleChoiceOptions}
-        validate={this.checkMultipleChoiceRequired}
-        {...{ question, disabled }}
-      />
-    );
-  }
-
-  renderMultipleResponseField() {
-    const { member, question, disabled } = this.props;
-
-    return (
-      <Field
-        name={`${member}.answer.question_option_ids`}
-        component={ResponseAnswer.renderMultipleResponseOptions}
-        validate={this.checkQuantitySelected}
-        {...{ question, disabled }}
-      />
-    );
-  }
-
-  renderTextResponseField() {
-    const { member, disabled } = this.props;
-
-    return (
-      <Field
-        fullWidth
-        name={`${member}.answer.text_response`}
-        component={renderTextField}
-        disabled={disabled}
-        validate={this.checkTextResponseRequired}
-        multiline
-      />
-    );
-  }
-
-  render() {
-    const { TEXT, MULTIPLE_CHOICE, MULTIPLE_RESPONSE } = questionTypes;
-    const { question } = this.props;
-    if (!question) {
-      return <div />;
-    }
-
-    const renderer = {
-      [TEXT]: this.renderTextResponseField,
-      [MULTIPLE_CHOICE]: this.renderMultipleChoiceField,
-      [MULTIPLE_RESPONSE]: this.renderMultipleResponseField,
-    }[question.question_type];
-    if (!renderer) {
-      return <div />;
-    }
-
-    return renderer.call(this);
-  }
-}
+//     return undefined;
+//   };
 
 ResponseAnswer.propTypes = {
-  member: PropTypes.string.isRequired,
-  question: questionShape,
+  control: PropTypes.object.isRequired,
   disabled: PropTypes.bool.isRequired,
-
   intl: intlShape,
+  question: PropTypes.object,
+  questionIndex: PropTypes.number.isRequired,
+  sectionIndex: PropTypes.number.isRequired,
 };
 
 export default injectIntl(ResponseAnswer);

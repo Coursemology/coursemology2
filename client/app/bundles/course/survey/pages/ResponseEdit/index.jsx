@@ -52,7 +52,7 @@ const ResponseEdit = (props) => {
     dispatch(fetchEditableResponse(responseId));
   }, [dispatch, responseId]);
 
-  const handleUpdateResponse = (data) => {
+  const handleUpdateResponse = (data, setError) => {
     const { saveSuccess, saveFailure, submitSuccess, submitFailure } =
       translations;
     const payload = buildResponsePayload(data);
@@ -70,6 +70,7 @@ const ResponseEdit = (props) => {
         successMessage,
         failureMessage,
         navigate,
+        setError,
       ),
     );
   };

@@ -1,12 +1,11 @@
 /* eslint-disable camelcase */
-import { Component } from 'react';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { reduxForm, FieldArray, Form, getFormValues } from 'redux-form';
 import { Button } from '@mui/material';
+import { useFieldArray, useForm } from 'react-hook-form';
+import ErrorText from 'lib/components/ErrorText';
 import formTranslations from 'lib/translations/form';
-import { formNames } from 'course/survey/constants';
 import { responseShape } from 'course/survey/propTypes';
 import ResponseSection from './ResponseSection';
 
@@ -24,7 +23,7 @@ const responseFormTranslations = defineMessages({
 });
 
 /**
- * Merges response answers into survey data to form initialValues for redux-form.
+ * Merges response answers into survey data to form initialValues for react-hook-form.
  */
 export const buildInitialValues = (survey, response) => {
   if (!survey || !response || !response.answers) {
@@ -53,7 +52,7 @@ export const buildInitialValues = (survey, response) => {
 };
 
 /**
- * Transforms the redux-form data into the JSON shape that the endpoint expects to receive.
+ * Transforms the react-hook-form data into the JSON shape that the endpoint expects to receive.
  */
 export const buildResponsePayload = (data) => {
   const getFormattedAnswer = (question) => {
@@ -75,50 +74,48 @@ export const buildResponsePayload = (data) => {
   return { response: { answers_attributes, submit: data.submit } };
 };
 
-class ResponseForm extends Component {
-  static renderSections(props) {
-    const { fields, disabled } = props;
-    return (
-      <>
-        {fields.map((member, index) => {
-          const section = fields.get(index);
-          return (
-            <ResponseSection
-              key={section.id}
-              {...{ member, index, fields, disabled }}
-            />
-          );
-        })}
-      </>
-    );
-  }
+const ResponseForm = (props) => {
+  const {
+    initialValues,
+    onSubmit,
+    readOnly,
+    response,
+    flags: { canSubmit, canModify, isResponseCreator },
+  } = props;
+  const {
+    control,
+    handleSubmit,
+    reset,
+    setError,
+    formState: { errors, isSubmitting, isDirty },
+  } = useForm({
+    defaultValues: initialValues,
+  });
+  const { fields } = useFieldArray({
+    control,
+    name: 'sections',
+  });
 
-  componentDidMount() {
-    window.addEventListener('beforeunload', this.handleUnload);
-  }
+  useEffect(() => {
+    reset(initialValues);
+  }, [initialValues]);
 
-  componentWillUnmount() {
-    window.removeEventListener('beforeunload', this.handleUnload);
-  }
-
-  handleUnload = (e) => {
-    if (!this.props.pristine) {
+  // eslint-disable-next-line consistent-return
+  const handleUnload = (e) => {
+    if (isDirty) {
       e.preventDefault();
-      // For Chrome to show warning when navigating away from the page, we need to
-      // indicate the returnValue below.
+      // Chrome
       e.returnValue = '';
       return '';
     }
-    return null;
   };
 
-  renderSaveButton() {
-    const {
-      pristine,
-      onSubmit,
-      formValues,
-      flags: { canModify, isSubmitting },
-    } = this.props;
+  useEffect(() => {
+    window.addEventListener('beforeunload', handleUnload);
+    return () => window.removeEventListener('beforeunload', handleUnload);
+  });
+
+  const renderSaveButton = () => {
     if (!canModify) {
       return null;
     }
@@ -127,24 +124,19 @@ class ResponseForm extends Component {
       <Button
         variant="contained"
         color="primary"
-        disabled={isSubmitting || pristine}
-        onClick={() => onSubmit({ ...formValues, submit: false })}
+        disabled={isSubmitting || !isDirty}
         style={styles.formButton}
+        onClick={handleSubmit((data) =>
+          onSubmit({ ...data, submit: false }, setError),
+        )}
         type="submit"
       >
         <FormattedMessage {...formTranslations.save} />
       </Button>
     );
-  }
+  };
 
-  renderSubmitButton() {
-    const {
-      handleSubmit,
-      onSubmit,
-      response,
-      flags: { canSubmit, isResponseCreator, isSubmitting },
-    } = this.props;
-
+  const renderSubmitButton = () => {
     if (!isResponseCreator) {
       return null;
     }
@@ -161,37 +153,37 @@ class ResponseForm extends Component {
         variant="contained"
         color="primary"
         disabled={isSubmitting || !!response.submitted_at}
-        onClick={handleSubmit((data) => onSubmit({ ...data, submit: true }))}
         style={styles.formButton}
+        onClick={handleSubmit((data) =>
+          onSubmit({ ...data, submit: true }, setError),
+        )}
         type="submit"
       >
         <FormattedMessage {...submitButtonTranslation} />
       </Button>
     );
-  }
+  };
 
-  render() {
-    const {
-      handleSubmit,
-      onSubmit,
-      flags: { canSubmit, canModify, isSubmitting },
-      readOnly,
-    } = this.props;
-
-    return (
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <FieldArray
-          name="sections"
-          component={ResponseForm.renderSections}
-          disabled={isSubmitting || readOnly || !(canModify || canSubmit)}
-        />
-        <br />
-        {!readOnly && this.renderSaveButton()}
-        {!readOnly && this.renderSubmitButton()}
-      </Form>
-    );
-  }
-}
+  return (
+    <>
+      <form encType="multipart/form-data" id="survey-response-form" noValidate>
+        <ErrorText errors={errors} />
+        {fields.map((section, sectionIndex) => {
+          const disabled =
+            isSubmitting || readOnly || !(canModify || canSubmit);
+          return (
+            <ResponseSection
+              key={section.id}
+              {...{ disabled, control, sectionIndex, section }}
+            />
+          );
+        })}
+        {!readOnly && renderSaveButton()}
+        {!readOnly && renderSubmitButton()}
+      </form>
+    </>
+  );
+};
 
 ResponseForm.propTypes = {
   readOnly: PropTypes.bool,
@@ -203,10 +195,7 @@ ResponseForm.propTypes = {
   }),
   response: responseShape,
   onSubmit: PropTypes.func,
-  pristine: PropTypes.bool.isRequired,
-  formValues: PropTypes.shape({}),
-
-  handleSubmit: PropTypes.func.isRequired,
+  initialValues: PropTypes.object,
 };
 
 ResponseForm.defaultProps = {
@@ -216,11 +205,4 @@ ResponseForm.defaultProps = {
   onSubmit: () => {},
 };
 
-export default reduxForm({
-  form: formNames.SURVEY_RESPONSE,
-  enableReinitialize: true,
-})(
-  connect((state) => ({
-    formValues: getFormValues(formNames.SURVEY_RESPONSE)(state),
-  }))(ResponseForm),
-);
+export default ResponseForm;
