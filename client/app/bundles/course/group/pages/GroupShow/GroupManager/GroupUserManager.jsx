@@ -15,7 +15,7 @@ import {
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 
 import { courseUserShape, groupShape } from '../../../propTypes';
-import actionTypes, { dialogTypes, formNames } from '../../../constants';
+import actionTypes, { dialogTypes } from '../../../constants';
 import { sortByGroupRole, sortByName } from '../../../utils/sort';
 import { deleteGroup, updateGroup } from '../../../actions';
 import NameDescriptionForm from '../../../forms/NameDescriptionForm';
@@ -407,7 +407,6 @@ const GroupUserManager = ({
       <GroupFormDialog
         dialogTitle={intl.formatMessage(translations.dialogTitle)}
         expectedDialogTypes={[dialogTypes.UPDATE_GROUP]}
-        form={formNames.GROUP}
       >
         <NameDescriptionForm
           onSubmit={onFormSubmit}

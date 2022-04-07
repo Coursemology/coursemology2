@@ -12,7 +12,7 @@ export function createCategory(
 ) {
   return (dispatch) => {
     dispatch({ type: actionTypes.CREATE_CATEGORY_REQUEST });
-    console.log(name);
+
     return CourseAPI.groups
       .createCategory({ name, description })
       .then((response) => {

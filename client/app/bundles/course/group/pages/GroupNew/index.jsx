@@ -9,7 +9,7 @@ import {
   defineMessages,
 } from 'react-intl';
 import NotificationPopup from 'lib/containers/NotificationPopup';
-import actionTypes, { dialogTypes, formNames } from '../../constants';
+import actionTypes, { dialogTypes } from '../../constants';
 import { createCategory } from '../../actions';
 import GroupFormDialog from '../../forms/GroupFormDialog';
 import NameDescriptionForm from '../../forms/NameDescriptionForm';
@@ -68,7 +68,6 @@ const PopupDialog = ({ dispatch, intl, isManagingGroups }) => {
       <GroupFormDialog
         dialogTitle={intl.formatMessage(translations.new)}
         expectedDialogTypes={[dialogTypes.CREATE_CATEGORY]}
-        form={formNames.GROUP}
       >
         <NameDescriptionForm
           onSubmit={onFormSubmit}

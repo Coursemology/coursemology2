@@ -12,7 +12,7 @@ import Delete from '@mui/icons-material/Delete';
 
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 
-import actionTypes, { dialogTypes, formNames } from '../../constants';
+import actionTypes, { dialogTypes } from '../../constants';
 import { deleteCategory, updateCategory } from '../../actions';
 import { categoryShape } from '../../propTypes';
 import GroupFormDialog from '../../forms/GroupFormDialog';
@@ -179,7 +179,6 @@ const CategoryCard = ({
           <GroupFormDialog
             dialogTitle={intl.formatMessage(translations.dialogTitle)}
             expectedDialogTypes={[dialogTypes.UPDATE_CATEGORY]}
-            form={formNames.GROUP}
           >
             <NameDescriptionForm
               onSubmit={onFormSubmit}

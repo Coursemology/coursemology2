@@ -48,6 +48,7 @@ const NameDescriptionForm = (props) => {
     defaultValues: initialValues,
     resolver: yupResolver(validationSchema),
   });
+
   return (
     <form
       id={formNames.GROUP}

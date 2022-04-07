@@ -5,7 +5,7 @@ import { getCourseId } from 'lib/helpers/url-helpers';
 import actionTypes from '../constants';
 
 // Group data is of the form of { name: string, description: string? }[].
-export function createGroups(id, groupData, getCreatedGroupsMessage) {
+export function createGroups(id, groupData, getCreatedGroupsMessage, setError) {
   return (dispatch) => {
     dispatch({ type: actionTypes.CREATE_GROUP_REQUEST });
     return CourseAPI.groups
@@ -19,11 +19,15 @@ export function createGroups(id, groupData, getCreatedGroupsMessage) {
           getCreatedGroupsMessage(response.data.groups, response.data.failed),
         )(dispatch);
       })
-      .catch(() => {
+      .catch((error) => {
         dispatch({ type: actionTypes.CREATE_GROUP_FAILURE });
         setNotification(getCreatedGroupsMessage(0, groupData.groups.length))(
           dispatch,
         );
+
+        if (error.response && error.response.data) {
+          setReactHookFormError(setError, error.response.data.errors);
+        }
       });
   };
 }
