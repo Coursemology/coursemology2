@@ -72,7 +72,7 @@
     "@babel/runtime": "^7.17.8",
     "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11.8.1",
-    "@mui/icons-material": "^5.5.1",
+    "@mui/icons-material": "^5.6.0",
     "@mui/lab": "^5.0.0-alpha.75",
     "@mui/material": "^5.5.3",
     "@mui/styles": "^5.5.3",
@@ -157,7 +157,7 @@
     "react-dnd-test-backend": "^15.1.2",
     "react-test-renderer": "^17.0.2",
     "redux-logger": "^3.0.6",
-    "webpack-dev-server": "^4.7.1"
+    "webpack-dev-server": "^4.8.1"
   },
   "license": "MIT",
   "repository": "git+https://github.com/Coursemology/coursemology2.git",
