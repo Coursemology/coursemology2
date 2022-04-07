@@ -15,6 +15,7 @@ const GroupFormDialog = ({
   isShown,
   dialogType,
   children,
+  form,
 }) => {
   const handleClose = useCallback(
     () =>
@@ -38,8 +39,8 @@ const GroupFormDialog = ({
       open={isShown && isExpectedDialogType}
       disabled={isDisabled}
       hideForm={handleClose}
-      skipConfirmation={pristine}
-      submitForm={handleSubmit}
+      skipConfirmation={false}
+      {...(form ? { form } : { submitForm: handleSubmit })}
     >
       {children}
     </FormDialogue>
@@ -55,6 +56,7 @@ GroupFormDialog.propTypes = {
   isDisabled: PropTypes.bool.isRequired,
   dialogType: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
+  form: PropTypes.string.isRequired,
 };
 
 export default connect((state) => ({

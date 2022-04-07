@@ -12,7 +12,7 @@ import Delete from '@mui/icons-material/Delete';
 
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 
-import actionTypes, { dialogTypes } from '../../constants';
+import actionTypes, { dialogTypes, formNames } from '../../constants';
 import { deleteCategory, updateCategory } from '../../actions';
 import { categoryShape } from '../../propTypes';
 import GroupFormDialog from '../../forms/GroupFormDialog';
@@ -79,7 +79,7 @@ const CategoryCard = ({
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
 
   const onFormSubmit = useCallback(
-    (data) => {
+    (data, setError) => {
       if (!canManageCategory) {
         return undefined;
       }
@@ -93,6 +93,7 @@ const CategoryCard = ({
           intl.formatMessage(translations.updateFailure, {
             categoryName: category.name,
           }),
+          setError,
         ),
       );
     },
@@ -178,6 +179,7 @@ const CategoryCard = ({
           <GroupFormDialog
             dialogTitle={intl.formatMessage(translations.dialogTitle)}
             expectedDialogTypes={[dialogTypes.UPDATE_CATEGORY]}
+            form={formNames.GROUP}
           >
             <NameDescriptionForm
               onSubmit={onFormSubmit}
