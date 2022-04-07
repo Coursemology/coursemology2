@@ -1,14 +1,10 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { reduxForm } from 'redux-form';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
 import { Button, Card } from '@mui/material';
 import history from 'lib/history';
-
-/* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import GradingPanel from '../../containers/GradingPanel';
-import { formNames } from '../../constants';
 import translations from '../../translations';
 
 const styles = {
@@ -36,16 +32,31 @@ const styles = {
   },
 };
 
-class SubmissionEmptyForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      unsubmitConfirmation: false,
-    };
+const SubmissionEmptyForm = (props) => {
+  const [unsubmitConfirmation, setUnsubmitConfirmation] = useState(false);
+  const {
+    attempting,
+    canUpdate,
+    categoryId,
+    courseId,
+    graderView,
+    handleSaveGrade,
+    handleSubmit,
+    handleUnsubmit,
+    intl,
+    isSaving,
+    published,
+    submitted,
+    tabId,
+  } = props;
+
+  const needShowSubmitButton = attempting && canUpdate;
+  const needShowUnsubmitButton = graderView && (submitted || published);
+  if (!needShowSubmitButton && !needShowUnsubmitButton) {
+    return null;
   }
 
-  submitAndRedirect = () => {
-    const { handleSubmit, courseId, categoryId, tabId } = this.props;
+  const submitAndRedirect = () => {
     handleSubmit()
       .then(() =>
         history.push(
@@ -57,17 +68,14 @@ class SubmissionEmptyForm extends Component {
       });
   };
 
-  renderGradingPanel() {
-    const { attempting } = this.props;
+  const renderGradingPanel = () => {
     if (!attempting) {
       return <GradingPanel />;
     }
     return null;
-  }
+  };
 
-  renderSaveGradeButton() {
-    const { intl, graderView, attempting, handleSaveGrade, isSaving } =
-      this.props;
+  const renderSaveGradeButton = () => {
     if (graderView && !attempting) {
       return (
         <Button
@@ -82,10 +90,9 @@ class SubmissionEmptyForm extends Component {
       );
     }
     return null;
-  }
+  };
 
-  renderSubmitButton() {
-    const { intl, canUpdate, attempting, isSaving } = this.props;
+  const renderSubmitButton = () => {
     if (attempting && canUpdate) {
       return (
         <div style={styles.submitContainer}>
@@ -94,7 +101,7 @@ class SubmissionEmptyForm extends Component {
             variant="contained"
             color="primary"
             disabled={isSaving}
-            onClick={this.submitAndRedirect}
+            onClick={submitAndRedirect}
             style={styles.formButton}
           >
             {intl.formatMessage(translations.ok)}
@@ -103,17 +110,16 @@ class SubmissionEmptyForm extends Component {
       );
     }
     return null;
-  }
+  };
 
-  renderUnsubmitButton() {
-    const { intl, graderView, submitted, published, isSaving } = this.props;
+  const renderUnsubmitButton = () => {
     if (graderView && (submitted || published)) {
       return (
         <Button
           variant="contained"
           color="secondary"
           disabled={isSaving}
-          onClick={() => this.setState({ unsubmitConfirmation: true })}
+          onClick={() => setUnsubmitConfirmation(true)}
           style={styles.formButton}
         >
           {intl.formatMessage(translations.unsubmit)}
@@ -121,43 +127,30 @@ class SubmissionEmptyForm extends Component {
       );
     }
     return null;
-  }
+  };
 
-  renderUnsubmitDialog() {
-    const { unsubmitConfirmation } = this.state;
-    const { intl, handleUnsubmit } = this.props;
-    return (
-      <ConfirmationDialog
-        open={unsubmitConfirmation}
-        onCancel={() => this.setState({ unsubmitConfirmation: false })}
-        onConfirm={() => {
-          this.setState({ unsubmitConfirmation: false });
-          handleUnsubmit();
-        }}
-        message={intl.formatMessage(translations.unsubmitConfirmation)}
-      />
-    );
-  }
+  const renderUnsubmitDialog = () => (
+    <ConfirmationDialog
+      open={unsubmitConfirmation}
+      onCancel={() => setUnsubmitConfirmation(false)}
+      onConfirm={() => {
+        setUnsubmitConfirmation(false);
+        handleUnsubmit();
+      }}
+      message={intl.formatMessage(translations.unsubmitConfirmation)}
+    />
+  );
 
-  render() {
-    const { canUpdate, attempting, graderView, submitted, published } =
-      this.props;
-    const needShowSubmitButton = attempting && canUpdate;
-    const needShowUnsubmitButton = graderView && (submitted || published);
-    if (!needShowSubmitButton && !needShowUnsubmitButton) {
-      return null;
-    }
-    return (
-      <Card style={styles.questionCardContainer}>
-        {this.renderGradingPanel()}
-        {this.renderSaveGradeButton()}
-        {this.renderSubmitButton()}
-        {this.renderUnsubmitButton()}
-        {this.renderUnsubmitDialog()}
-      </Card>
-    );
-  }
-}
+  return (
+    <Card style={styles.questionCardContainer}>
+      {renderGradingPanel()}
+      {renderSaveGradeButton()}
+      {renderSubmitButton()}
+      {renderUnsubmitButton()}
+      {renderUnsubmitDialog()}
+    </Card>
+  );
+};
 
 SubmissionEmptyForm.propTypes = {
   intl: intlShape.isRequired,
@@ -179,6 +172,4 @@ SubmissionEmptyForm.propTypes = {
   handleUnsubmit: PropTypes.func,
 };
 
-export default reduxForm({
-  form: formNames.SUBMISSION,
-})(injectIntl(SubmissionEmptyForm));
+export default injectIntl(SubmissionEmptyForm);
