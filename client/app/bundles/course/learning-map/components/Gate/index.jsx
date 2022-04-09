@@ -2,13 +2,14 @@ import { connect } from 'react-redux';
 import { selectGate } from 'course/learning-map/actions';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
+import { red, green } from '@mui/material/colors';
 import ConnectionPoint from '../ConnectionPoint';
 import { elementTypes, satisfiabilityTypes } from '../../constants';
 import translations from '../../translations.intl';
 import { nodeShape, selectedElementShape } from '../../propTypes';
 
-const red = '#f08080';
-const green = '#00ff7f';
+//const red = red[400]; //'#f08080';
+//const green = green[400]; //'#00ff7f';
 
 const styles = {
   andGate: {
@@ -83,7 +84,7 @@ const Gate = (props) => {
       return 'white';
     }
 
-    return isSatisfied ? `${green}` : `${red}`;
+    return isSatisfied ? `${green[300]}` : `${red[300]}`;
   };
 
   const getNonSummaryGate = (gateWrapperStyle, gateInputStyle) => (

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Card, CardContent, CircularProgress, Icon } from '@mui/material';
+import { green, orange, red } from '@mui/material/colors';
 import { connect } from 'react-redux';
 import {
   removeParentNode,
@@ -17,10 +18,6 @@ import {
   responseShape,
   selectedElementShape,
 } from '../../propTypes';
-
-const red = '#f08080';
-const orange = '#ffa500';
-const green = '#00ff7f';
 
 const styles = {
   content: {
@@ -80,7 +77,7 @@ const Dashboard = (props) => {
   };
 
   const responseDisplay = () => ({
-    color: response.didSucceed ? green : red,
+    color: response.didSucceed ? green[300] : red[200],
     text: (
       <FormattedMessage
         {...translations.responseDashboardMessage}
@@ -95,7 +92,7 @@ const Dashboard = (props) => {
     const toNodeTitle = nodes.find((node) => node.id === ids[1]).title;
 
     return {
-      color: orange,
+      color: orange[400],
       text: (
         <FormattedMessage
           {...translations.selectedArrowDashboardMessage}
@@ -106,7 +103,7 @@ const Dashboard = (props) => {
   };
 
   const selectedGateDisplay = () => ({
-    color: orange,
+    color: orange[400],
     text: (
       <FormattedMessage
         {...translations.selectedGateDashboardMessage}
