@@ -74,6 +74,7 @@ class Course < ApplicationRecord
 
   has_one :learning_map, dependent: :destroy
   has_many :setting_emails, class_name: Course::Settings::Email.name, inverse_of: :course, dependent: :destroy
+  has_many :tags, dependent: :destroy
 
   accepts_nested_attributes_for :invitations, :assessment_categories, :video_tabs
 
