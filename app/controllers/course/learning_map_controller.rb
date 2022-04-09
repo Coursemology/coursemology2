@@ -91,7 +91,7 @@ class Course::LearningMapController < Course::ComponentController
     generate_node_depths(nodes)
   end
 
-  def generate_all_node_relations # rubocop:disable Metrics/AbcSize
+  def generate_all_node_relations # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     relations = init_all_node_relations
     node_ids_to_children = relations[:node_ids_to_children]
     node_ids_to_parents = relations[:node_ids_to_parents]
