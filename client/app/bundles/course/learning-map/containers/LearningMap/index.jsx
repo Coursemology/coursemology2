@@ -17,7 +17,7 @@ const LearningMap = (props) => {
 
   useEffect(() => {
     dispatch(fetchNodes());
-  }, []);
+  }, [dispatch]);
 
   return (
     <div style={{ ...(isLoading && styles.loading) }}>
