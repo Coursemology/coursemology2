@@ -25,14 +25,14 @@ const styles = {
   },
 };
 
+const gateInputSizeThreshold = 5;
+const zoomScale = 1.25;
+const maxScale = 1.5;
+const minScale = 0.25;
+
 const Canvas = () => {
-  const gateInputSizeThreshold = 5;
-  const cursorTrackerId = 'cursor-tracker';
   const transformRef = useRef(null);
   const [scale, setScale] = useState(1);
-  const zoomScale = 1.25;
-  const maxScale = 1.5;
-  const minScale = 0.25;
 
   const getGateInputId = (isSummaryGate, parentNodeId, childNodeId) =>
     isSummaryGate
@@ -85,7 +85,6 @@ const Canvas = () => {
                   getNodeConnectionPointId={getNodeConnectionPointId}
                 />
                 <ArrowOverlay
-                  cursorTrackerId={cursorTrackerId}
                   gateInputSizeThreshold={gateInputSizeThreshold}
                   getGateConnectionPointId={getGateConnectionPointId}
                   getGateInputId={getGateInputId}
