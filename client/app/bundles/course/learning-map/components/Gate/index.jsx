@@ -8,9 +8,6 @@ import { elementTypes, satisfiabilityTypes } from '../../constants';
 import translations from '../../translations.intl';
 import { nodeShape, selectedElementShape } from '../../propTypes';
 
-//const red = red[400]; //'#f08080';
-//const green = green[400]; //'#00ff7f';
-
 const styles = {
   andGate: {
     border: '1px solid black',

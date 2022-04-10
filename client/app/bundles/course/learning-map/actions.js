@@ -106,7 +106,6 @@ export function toggleSatisfiabilityType(nodeId) {
         node_id: nodeId,
       })
       .then((response) => {
-        console.log(response);
         dispatch({
           type: actionTypes.TOGGLE_SATISFIABILITY_TYPE_SUCCESS,
           nodes: response.data.nodes,
