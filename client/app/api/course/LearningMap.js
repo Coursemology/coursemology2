@@ -9,8 +9,8 @@ export default class LearningMapAPI extends BaseCourseAPI {
    *   nodes: Array.<{
    *     id: string, unlocked: boolean, satisfiabilityType: string,
    *     courseMaterialType: string, contentUrl: string,
-   *     children: Array.<{ id: string, is_satisfied: boolean }>,
-   *     parents: Array.<{ id: string, is_satisfied: boolean }>,
+   *     children: Array.<{ id: string, isSatisfied: boolean }>,
+   *     parents: Array.<{ id: string, isSatisfied: boolean }>,
    *     unlockRate: number, unlockLevel: number,
    *     ... (Other fields specific to the individual course material type)
    *   }>,
@@ -30,8 +30,8 @@ export default class LearningMapAPI extends BaseCourseAPI {
    *   nodes: Array.<{
    *     id: string, unlocked: boolean, satisfiabilityType: string,
    *     courseMaterialType: string, contentUrl: string,
-   *     children: Array.<{ id: string, is_satisfied: boolean }>,
-   *     parents: Array.<{ id: string, is_satisfied: boolean }>,
+   *     children: Array.<{ id: string, isSatisfied: boolean }>,
+   *     parents: Array.<{ id: string, isSatisfied: boolean }>,
    *     unlockRate: number, unlockLevel: number,
    *     ... (Other fields specific to the individual course material type)
    *   }>,
@@ -54,8 +54,8 @@ export default class LearningMapAPI extends BaseCourseAPI {
    *   nodes: Array.<{
    *     id: string, unlocked: boolean, satisfiabilityType: string,
    *     courseMaterialType: string, contentUrl: string,
-   *     children: Array.<{ id: string, is_satisfied: boolean }>,
-   *     parents: Array.<{ id: string, is_satisfied: boolean }>,
+   *     children: Array.<{ id: string, isSatisfied: boolean }>,
+   *     parents: Array.<{ id: string, isSatisfied: boolean }>,
    *     unlockRate: number, unlockLevel: number,
    *     ... (Other fields specific to the individual course material type)
    *   }>,
@@ -78,8 +78,8 @@ export default class LearningMapAPI extends BaseCourseAPI {
    *   nodes: Array.<{
    *     id: string, unlocked: boolean, satisfiabilityType: string,
    *     courseMaterialType: string, contentUrl: string,
-   *     children: Array.<{ id: string, is_satisfied: boolean }>,
-   *     parents: Array.<{ id: string, is_satisfied: boolean }>,
+   *     children: Array.<{ id: string, isSatisfied: boolean }>,
+   *     parents: Array.<{ id: string, isSatisfied: boolean }>,
    *     unlockRate: number, unlockLevel: number,
    *     ... (Other fields specific to the individual course material type)
    *   }>,
