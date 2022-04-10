@@ -7,14 +7,14 @@ export default class LearningMapAPI extends BaseCourseAPI {
    * @return {Promise}
    * success response: {
    *   nodes: Array.<{
-   *     id: string, unlocked: boolean, satisfiability_type: string,
-   *     course_material_type: string, content_url: string,
+   *     id: string, unlocked: boolean, satisfiabilityType: string,
+   *     courseMaterialType: string, contentUrl: string,
    *     children: Array.<{ id: string, is_satisfied: boolean }>,
    *     parents: Array.<{ id: string, is_satisfied: boolean }>,
-   *     unlock_rate: number, unlock_level: number,
+   *     unlockRate: number, unlockLevel: number,
    *     ... (Other fields specific to the individual course material type)
    *   }>,
-   *   can_modify: boolean
+   *   canModify: boolean
    * }
    * error response: { errors: Array.<string> }
    */
@@ -28,14 +28,14 @@ export default class LearningMapAPI extends BaseCourseAPI {
    * @return {Promise}
    * success response: {
    *   nodes: Array.<{
-   *     id: string, unlocked: boolean, satisfiability_type: string,
-   *     course_material_type: string, content_url: string,
+   *     id: string, unlocked: boolean, satisfiabilityType: string,
+   *     courseMaterialType: string, contentUrl: string,
    *     children: Array.<{ id: string, is_satisfied: boolean }>,
    *     parents: Array.<{ id: string, is_satisfied: boolean }>,
-   *     unlock_rate: number, unlock_level: number,
+   *     unlockRate: number, unlockLevel: number,
    *     ... (Other fields specific to the individual course material type)
    *   }>,
-   *   can_modify: boolean
+   *   canModify: boolean
    * }
    * error response: { errors: Array.<string> }
    */
@@ -52,14 +52,14 @@ export default class LearningMapAPI extends BaseCourseAPI {
    * @return {Promise}
    * success response: {
    *   nodes: Array.<{
-   *     id: string, unlocked: boolean, satisfiability_type: string,
-   *     course_material_type: string, content_url: string,
+   *     id: string, unlocked: boolean, satisfiabilityType: string,
+   *     courseMaterialType: string, contentUrl: string,
    *     children: Array.<{ id: string, is_satisfied: boolean }>,
    *     parents: Array.<{ id: string, is_satisfied: boolean }>,
-   *     unlock_rate: number, unlock_level: number,
+   *     unlockRate: number, unlockLevel: number,
    *     ... (Other fields specific to the individual course material type)
    *   }>,
-   *   can_modify: boolean
+   *   canModify: boolean
    * }
    * error response: { errors: Array.<string> }
    */
@@ -76,14 +76,14 @@ export default class LearningMapAPI extends BaseCourseAPI {
    * @return {Promise}
    * success response: {
    *   nodes: Array.<{
-   *     id: string, unlocked: boolean, satisfiability_type: string,
-   *     course_material_type: string, content_url: string,
+   *     id: string, unlocked: boolean, satisfiabilityType: string,
+   *     courseMaterialType: string, contentUrl: string,
    *     children: Array.<{ id: string, is_satisfied: boolean }>,
    *     parents: Array.<{ id: string, is_satisfied: boolean }>,
-   *     unlock_rate: number, unlock_level: number,
+   *     unlockRate: number, unlockLevel: number,
    *     ... (Other fields specific to the individual course material type)
    *   }>,
-   *   can_modify: boolean
+   *   canModify: boolean
    * }
    * error response: { errors: Array.<string> }
    */
