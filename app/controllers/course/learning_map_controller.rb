@@ -136,6 +136,7 @@ class Course::LearningMapController < Course::ComponentController
     node_ids_to_parents = all_node_relations[:node_ids_to_parents]
     node_ids_to_unlock_level = all_node_relations[:node_ids_to_unlock_level]
     students = current_course.course_users.students
+    total_num_students = students.count
 
     @conditionals.map do |conditional|
       id = get_node_id(conditional)
@@ -143,7 +144,6 @@ class Course::LearningMapController < Course::ComponentController
       students.each do |student|
         num_students_unlocked += 1 if conditional.conditions_satisfied_by?(student)
       end
-      total_num_students = current_course.course_users.students.count
       unlock_rate = total_num_students > 0 ? 1.0 * num_students_unlocked / total_num_students : 0.0
 
       conditional.attributes.merge({
