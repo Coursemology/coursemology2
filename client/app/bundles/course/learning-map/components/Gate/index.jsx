@@ -76,7 +76,7 @@ const Gate = (props) => {
   };
 
   const isAndGate = () =>
-    node.satisfiability_type === satisfiabilityTypes.allConditions;
+    node.satisfiabilityType === satisfiabilityTypes.allConditions;
   const isSummaryGate = () => node.parents.length > gateInputSizeThreshold;
 
   const getGateBackgroundColor = (isSatisfied) => {
@@ -117,7 +117,7 @@ const Gate = (props) => {
 
   const getSummaryGate = () => {
     const numSatisfiedConditions = node.parents.filter(
-      (parent) => parent.is_satisfied,
+      (parent) => parent.isSatisfied,
     ).length;
 
     return (

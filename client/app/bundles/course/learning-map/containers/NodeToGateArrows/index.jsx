@@ -62,7 +62,7 @@ const NodeToGateArrows = (props) => {
                   ? arrowProperties.selectColor
                   : arrowProperties.defaultColor
               }
-              dashness={!canModify && !child.is_satisfied}
+              dashness={!canModify && !child.isSatisfied}
               divContainerProps={{ id: arrowId }}
               divContainerStyle={{
                 position: 'relative',

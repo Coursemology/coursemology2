@@ -111,18 +111,18 @@ const Node = (props) => {
             }}
           >
             <CardContent style={styles.header}>
-              {node.unlock_level > 0 && (
+              {node.unlockLevel > 0 && (
                 <>
                   <div style={styles.unlockLevel}>
                     <FormattedMessage
                       {...translations.unlockLevel}
-                      values={{ unlockLevel: node.unlock_level }}
+                      values={{ unlockLevel: node.unlockLevel }}
                     />
                   </div>
                 </>
               )}
               <Icon
-                className={icons[node.course_material_type]}
+                className={icons[node.courseMaterialType]}
                 style={styles.icon}
               />
               {!canModify && !node.unlocked && (
@@ -139,7 +139,7 @@ const Node = (props) => {
                 <div>
                   <a
                     target="_blank"
-                    href={`${node.content_url}`}
+                    href={`${node.contentUrl}`}
                     rel="noreferrer"
                   >
                     {node.title}
@@ -148,7 +148,7 @@ const Node = (props) => {
                 {canModify && (
                   <UnlockRateDisplay
                     nodeId={node.id}
-                    unlockRate={node.unlock_rate}
+                    unlockRate={node.unlockRate}
                     width={0.6 * styles.wrapper.width}
                   />
                 )}

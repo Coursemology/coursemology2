@@ -8,12 +8,10 @@ class Course::LearningMapController < Course::ComponentController
   add_breadcrumb :index, :course_learning_map_path
 
   def index
-    init_conditionals
-
     respond_to do |format|
       format.html
       format.json do
-        render json: { nodes: map_conditionals_to_nodes, can_modify: current_course_user&.teaching_staff? }
+        prepare_response_data
       end
     end
   end
@@ -23,7 +21,8 @@ class Course::LearningMapController < Course::ComponentController
     condition = create_condition(parent_and_node_id_pair_params[:parent_node_id], conditional)
 
     if condition.save
-      index
+      prepare_response_data
+      render action: :index
     else
       error_response(condition.errors.full_messages)
     end
@@ -34,7 +33,8 @@ class Course::LearningMapController < Course::ComponentController
                               parent_and_node_id_pair_params[:node_id])
 
     if condition.destroy
-      index
+      prepare_response_data
+      render action: :index
     else
       error_response(condition.errors.full_messages)
     end
@@ -50,7 +50,8 @@ class Course::LearningMapController < Course::ComponentController
     end
 
     if conditional.save
-      index
+      prepare_response_data
+      render action: :index
     else
       error_response(conditional.errors.full_messages)
     end
@@ -81,8 +82,10 @@ class Course::LearningMapController < Course::ComponentController
     end
   end
 
-  def init_conditionals
+  def prepare_response_data
     @conditionals = Course::Condition.preload(:conditions).conditionals_for(current_course)
+    @nodes = map_conditionals_to_nodes
+    @can_modify = current_course_user&.teaching_staff?
   end
 
   def map_conditionals_to_nodes

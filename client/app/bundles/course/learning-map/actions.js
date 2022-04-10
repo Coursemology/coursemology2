@@ -16,7 +16,7 @@ export function fetchNodes() {
         dispatch({
           type: actionTypes.FETCH_LEARNING_MAP_SUCCESS,
           nodes: response.data.nodes,
-          canModify: response.data.can_modify,
+          canModify: response.data.canModify,
         });
       })
       .catch(() => {
@@ -106,6 +106,7 @@ export function toggleSatisfiabilityType(nodeId) {
         node_id: nodeId,
       })
       .then((response) => {
+        console.log(response);
         dispatch({
           type: actionTypes.TOGGLE_SATISFIABILITY_TYPE_SUCCESS,
           nodes: response.data.nodes,

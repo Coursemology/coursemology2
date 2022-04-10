@@ -170,7 +170,7 @@ const Dashboard = (props) => {
             {...translations.toggleSatisfiabilityType}
             values={{
               satisfiabilityType:
-                node.satisfiability_type === satisfiabilityTypes.allConditions
+                node.satisfiabilityType === satisfiabilityTypes.allConditions
                   ? '"at least one condition"'
                   : '"all conditions"',
             }}
