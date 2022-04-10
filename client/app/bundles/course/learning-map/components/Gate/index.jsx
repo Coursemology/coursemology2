@@ -81,7 +81,7 @@ const Gate = (props) => {
       return 'white';
     }
 
-    return isSatisfied ? `${green[300]}` : `${red[300]}`;
+    return isSatisfied ? green[300] : red[300];
   };
 
   const getNonSummaryGate = (gateWrapperStyle, gateInputStyle) => (
