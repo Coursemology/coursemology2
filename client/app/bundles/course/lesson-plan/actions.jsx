@@ -112,7 +112,7 @@ export function updateMilestone(
       .catch((error) => {
         dispatch({ type: actionTypes.MILESTONE_UPDATE_FAILURE });
         setNotification(failureMessage)(dispatch);
-        if (error.response && error.response.data) {
+        if (error.response && error.response.data && setError) {
           setReactHookFormError(setError, error.response.data.errors);
         }
       });
