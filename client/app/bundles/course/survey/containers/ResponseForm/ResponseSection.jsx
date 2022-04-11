@@ -29,7 +29,6 @@ const ResponseSection = (props) => {
   const { control, disabled, section, sectionIndex } = props;
   const { fields: questionFields } = useFieldArray({
     control,
-    // To update below
     name: `sections.${sectionIndex}.questions`,
   });
   if (section.questions.length < 1) {
