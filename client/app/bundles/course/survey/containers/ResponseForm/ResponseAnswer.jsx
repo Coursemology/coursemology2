@@ -166,34 +166,6 @@ const ResponseAnswer = (props) => {
   return renderer;
 };
 
-//   checkQuantitySelected = (options) => {
-//     const { question, intl } = this.props;
-//     const {
-//       required,
-//       min_options: minOptions,
-//       max_options: maxOptions,
-//     } = question;
-//     const optionCount = options.length;
-
-//     // Skip checks if question is not required and student doesn't intend to answer it.
-//     if (!required && optionCount === 0) {
-//       return undefined;
-//     }
-
-//     if (minOptions && optionCount < minOptions) {
-//       return intl.formatMessage(responseFormTranslations.selectAtLeast, {
-//         count: minOptions,
-//       });
-//     }
-//     if (maxOptions && optionCount > maxOptions) {
-//       return intl.formatMessage(responseFormTranslations.selectAtMost, {
-//         count: maxOptions,
-//       });
-//     }
-
-//     return undefined;
-//   };
-
 ResponseAnswer.propTypes = {
   control: PropTypes.object.isRequired,
   disabled: PropTypes.bool.isRequired,
