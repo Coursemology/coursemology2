@@ -96,8 +96,8 @@ class Course::LessonPlan::Strategies::ElasticPersonalizationStrategy < # rubocop
     end
 
     new_end_at = round_to_date(
-      points[:slow_personal_point] +
-        ((reference_time.end_at - points[:slow_reference_point]) * [@slow_down_ratio, MAX_OVERALL_LIMIT].min),
+      points[:slow_personal_point] + ((reference_time.end_at - points[:slow_reference_point]) *
+        [@slow_down_ratio, MAX_OVERALL_LIMIT].min),
       @course_tz,
       to_2359: true # rubocop:disable Naming/VariableNumber
     )
@@ -141,8 +141,8 @@ class Course::LessonPlan::Strategies::ElasticPersonalizationStrategy < # rubocop
     end
 
     new_start_at = round_to_date(
-      points[:fast_personal_point] + ((reference_time.start_at - points[:fast_reference_point]) * [@speed_up_ratio,
-                                                                                                   MIN_OVERALL_LIMIT].max),
+      points[:fast_personal_point] + ((reference_time.start_at - points[:fast_reference_point]) *
+        [@speed_up_ratio, MIN_OVERALL_LIMIT].max),
       @course_tz,
       to_2359: true # rubocop:disable Naming/VariableNumber
     )
