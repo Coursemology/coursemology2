@@ -40,6 +40,7 @@ RSpec.describe Course, type: :model do
     it { should delegate_method(:default_level?).to(:levels) }
     it { should delegate_method(:mass_update_levels).to(:levels) }
     it { should delegate_method(:source).to(:duplication_traceable).allow_nil }
+    it { should delegate_method(:source=).to(:duplication_traceable).with_arguments(nil).allow_nil }
 
     context 'when course is created' do
       subject { Course.new(creator: owner, updater: owner) }
