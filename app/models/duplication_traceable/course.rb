@@ -10,7 +10,7 @@ class DuplicationTraceable::Course < ApplicationRecord
     Course.name
   end
 
-  def self.initialize_with_dest(dest, options)
+  def self.initialize_with_dest(dest, **options)
     new(course: dest, **options)
   end
 end
