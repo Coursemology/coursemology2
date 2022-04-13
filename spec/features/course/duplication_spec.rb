@@ -92,6 +92,7 @@ RSpec.feature 'Course: Duplication' do
           duplicated_course = Course.find_by(title: new_course_title)
           expect(duplicated_course).to be_present
           expect(duplicated_course.assessments.where(title: assessment_title).count).to eq(1)
+          expect(duplicated_course.source.id).to eq(source_course.id)
         end
       end
     end
