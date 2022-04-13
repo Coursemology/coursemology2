@@ -84,7 +84,7 @@ export default class ForumPostSelect extends Component {
     CourseAPI.assessment.answer.forumPostResponse
       .fetchSelectedPostPacks(this.props.answerId)
       .then((response) => {
-        this.props.input.onChange(response.data.selected_post_packs);
+        this.props.field.onChange(response.data.selected_post_packs);
       })
       .catch(() => {
         this.props.onErrorMessage(
@@ -99,18 +99,18 @@ export default class ForumPostSelect extends Component {
     if (this.props.readOnly) {
       return;
     }
-    const postPacks = this.props.input.value;
+    const postPacks = this.props.field.value;
     const newPostPacks = postPacks.filter(
       (pack) => pack.corePost.id !== postPack.corePost.id,
     );
-    this.props.input.onChange(newPostPacks);
+    this.props.field.onChange(newPostPacks);
   }
 
   updatePostPackSelection(postPacks) {
     if (this.props.readOnly) {
       return;
     }
-    this.props.input.onChange(postPacks);
+    this.props.field.onChange(postPacks);
   }
 
   renderInstruction(postPacks, maxPosts) {
@@ -159,7 +159,7 @@ export default class ForumPostSelect extends Component {
   }
 
   render() {
-    const postPacks = this.props.input.value;
+    const postPacks = this.props.field.value;
     const maxPosts = this.props.question.maxPosts;
 
     return (
@@ -211,7 +211,7 @@ ForumPostSelect.propTypes = {
   question: questionShape.isRequired,
   answerId: PropTypes.number.isRequired,
   readOnly: PropTypes.bool.isRequired,
-  input: PropTypes.object.isRequired,
+  field: PropTypes.object.isRequired,
   onErrorMessage: PropTypes.func.isRequired,
   handleNotificationMessage: PropTypes.func.isRequired,
 };

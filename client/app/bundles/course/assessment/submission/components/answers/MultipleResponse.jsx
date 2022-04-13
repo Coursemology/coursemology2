@@ -1,61 +1,59 @@
+import { memo } from 'react';
 import PropTypes from 'prop-types';
-import { Field } from 'redux-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import { FormControlLabel, Checkbox } from '@mui/material';
 import { green } from '@mui/material/colors';
 import { questionShape } from '../../propTypes';
+import propsAreEqual from '../../../../../../lib/components/form/fields/utils/propsAreEqual';
 
-function MultipleResponseOptions({
+const MultipleResponseOptions = ({
   readOnly,
   showMcqMrqSolution,
   graderView,
   question,
-  input,
-}) {
-  return (
-    <>
-      {question.options.map((option) => (
-        <FormControlLabel
-          checked={input.value.indexOf(option.id) !== -1}
-          control={<Checkbox style={{ padding: '0 12px' }} />}
-          disabled={readOnly}
-          key={option.id}
-          label={
-            <b>
-              <div
-                style={
-                  option.correct &&
-                  readOnly &&
-                  (showMcqMrqSolution || graderView)
-                    ? { backgroundColor: green[50], verticalAlign: 'middle' }
-                    : { verticalAlign: 'middle' }
-                }
-                dangerouslySetInnerHTML={{ __html: option.option.trim() }}
-              />
-            </b>
+  field: { onChange, value },
+}) => (
+  <>
+    {question.options.map((option) => (
+      <FormControlLabel
+        checked={value.indexOf(option.id) !== -1}
+        control={<Checkbox style={{ padding: '0 12px' }} />}
+        disabled={readOnly}
+        key={option.id}
+        label={
+          <b>
+            <div
+              style={
+                option.correct && readOnly && (showMcqMrqSolution || graderView)
+                  ? { backgroundColor: green[50], verticalAlign: 'middle' }
+                  : { verticalAlign: 'middle' }
+              }
+              dangerouslySetInnerHTML={{ __html: option.option.trim() }}
+            />
+          </b>
+        }
+        onChange={(event, isInputChecked) => {
+          const newValue = [...value];
+          if (isInputChecked) {
+            newValue.push(option.id);
+          } else {
+            newValue.splice(newValue.indexOf(option.id), 1);
           }
-          onChange={(event, isInputChecked) => {
-            const newValue = [...input.value];
-            if (isInputChecked) {
-              newValue.push(option.id);
-            } else {
-              newValue.splice(newValue.indexOf(option.id), 1);
-            }
-            return input.onChange(newValue);
-          }}
-          style={{ width: '100%' }}
-          value={option.id.toString()}
-        />
-      ))}
-    </>
-  );
-}
+          return onChange(newValue);
+        }}
+        style={{ width: '100%' }}
+        value={option.id.toString()}
+      />
+    ))}
+  </>
+);
 
 MultipleResponseOptions.propTypes = {
   question: questionShape,
   readOnly: PropTypes.bool,
   showMcqMrqSolution: PropTypes.bool,
   graderView: PropTypes.bool,
-  input: PropTypes.shape({
+  field: PropTypes.shape({
     onChange: PropTypes.func,
     value: PropTypes.arrayOf(PropTypes.number),
   }).isRequired,
@@ -65,21 +63,30 @@ MultipleResponseOptions.defaultProps = {
   readOnly: false,
 };
 
-function MultipleResponse({
-  question,
-  readOnly,
-  showMcqMrqSolution,
-  graderView,
-  answerId,
-}) {
+const MemoMultipleResponseOptions = memo(
+  MultipleResponseOptions,
+  propsAreEqual,
+);
+
+const MultipleResponse = (props) => {
+  const { question, readOnly, showMcqMrqSolution, graderView, answerId } =
+    props;
+  const { control } = useFormContext();
+
   return (
-    <Field
-      name={`${answerId}[option_ids]`}
-      component={MultipleResponseOptions}
-      {...{ question, readOnly, showMcqMrqSolution, graderView }}
+    <Controller
+      name={`${answerId}.option_ids`}
+      control={control}
+      render={({ field, fieldState }) => (
+        <MemoMultipleResponseOptions
+          field={field}
+          fieldState={fieldState}
+          {...{ question, readOnly, showMcqMrqSolution, graderView }}
+        />
+      )}
     />
   );
-}
+};
 
 MultipleResponse.propTypes = {
   question: questionShape,

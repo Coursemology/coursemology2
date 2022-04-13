@@ -37,7 +37,7 @@ class ProgrammingFile extends Component {
       <>
         <h5>{file.filename}</h5>
         <Editor
-          name={`${fieldName}[content]`}
+          name={`${fieldName}.content`}
           filename={file.filename}
           language={language}
         />

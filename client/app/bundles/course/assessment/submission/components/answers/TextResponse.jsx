@@ -1,38 +1,59 @@
 import PropTypes from 'prop-types';
-import { Field } from 'redux-form';
-import RichTextField from 'lib/components/redux-form/RichTextField';
-
+import { Controller, useFormContext } from 'react-hook-form';
+import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import { questionShape } from '../../propTypes';
 import UploadedFileView from '../../containers/UploadedFileView';
 import TextResponseSolutions from '../TextResponseSolutions';
 import FileInput from '../FileInput';
 
-function TextResponse({ question, readOnly, answerId, graderView }) {
+const TextResponse = (props) => {
+  const { question, readOnly, answerId, graderView } = props;
+  const { control } = useFormContext();
   const allowUpload = question.allowAttachment;
 
   const readOnlyAnswer = (
-    <Field
-      name={`${answerId}[answer_text]`}
-      component={(props) => (
-        <div dangerouslySetInnerHTML={{ __html: props.input.value }} />
+    <Controller
+      name={`${answerId}.answer_text`}
+      control={control}
+      render={({ field }) => (
+        <div dangerouslySetInnerHTML={{ __html: field.value }} />
       )}
     />
   );
 
   const richtextAnswer = (
-    <Field
-      name={`${answerId}[answer_text]`}
-      component={RichTextField}
-      multiline
+    <Controller
+      name={`${answerId}.answer_text`}
+      control={control}
+      render={({ field, fieldState }) => (
+        <FormRichTextField
+          field={field}
+          fieldState={fieldState}
+          fullWidth
+          InputLabelProps={{
+            shrink: true,
+          }}
+          multiline
+          renderIf={!readOnly && !question.autogradable}
+          variant="standard"
+        />
+      )}
     />
   );
 
   const plaintextAnswer = (
-    <Field
-      name={`${answerId}[answer_text]`}
-      component="textarea"
-      style={{ width: '100%' }}
-      rows={5}
+    <Controller
+      name={`${answerId}.answer_text`}
+      control={control}
+      render={({ field }) => (
+        <textarea
+          name={`${answerId}.answer_text`}
+          onChange={field.onChange}
+          value={field.value || ''}
+          style={{ width: '100%' }}
+          rows={5}
+        />
+      )}
     />
   );
 
@@ -46,18 +67,22 @@ function TextResponse({ question, readOnly, answerId, graderView }) {
       {graderView && <TextResponseSolutions question={question} />}
       {allowUpload && <UploadedFileView questionId={question.id} />}
       {allowUpload && !readOnly && (
-        <FileInput name={`${answerId}[files]`} disabled={readOnly} />
+        <FileInput
+          control={control}
+          name={`${answerId}.files`}
+          disabled={readOnly}
+        />
       )}
     </div>
   );
-}
+};
 
 TextResponse.propTypes = {
   question: questionShape,
   readOnly: PropTypes.bool,
   answerId: PropTypes.number,
   graderView: PropTypes.bool,
-  input: PropTypes.shape({
+  field: PropTypes.shape({
     value: PropTypes.string,
   }),
 };

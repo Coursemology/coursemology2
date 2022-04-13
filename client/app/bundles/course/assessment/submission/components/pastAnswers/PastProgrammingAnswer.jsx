@@ -1,5 +1,4 @@
 import { Component } from 'react';
-
 import ProgrammingImportEditor from '../../containers/ProgrammingImportEditor';
 import ReadOnlyEditor from '../../containers/ReadOnlyEditor';
 import TestCaseView from '../../containers/TestCaseView';
