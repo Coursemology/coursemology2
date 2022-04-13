@@ -6,8 +6,8 @@ import { Button, Card, CardContent } from '@mui/material';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { postShape, annotationShape } from '../propTypes';
-import CommentCard from '../components/CommentCard';
-import CommentField from '../components/CommentField';
+import CommentCard from '../components/comment/CommentCard';
+import CommentField from '../components/comment/CommentField';
 import * as annotationActions from '../actions/annotations';
 import { workflowStates } from '../constants';
 

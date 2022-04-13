@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Field } from 'redux-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import {
   injectIntl,
   intlShape,
@@ -12,7 +12,7 @@ import { Button } from '@mui/material';
 import { red } from '@mui/material/colors';
 import Mic from '@mui/icons-material/Mic';
 import Stop from '@mui/icons-material/Stop';
-import SingleFileInput from 'lib/components/redux-form/SingleFileInput';
+import FormSingleFileInput from 'lib/components/form/fields/SingleFileInput';
 import sharedConstants from 'lib/constants/sharedConstants';
 import recorderHelper from '../../utils/recorderHelper';
 import {
@@ -38,6 +38,10 @@ const translations = defineMessages({
                      Only wav and mp3 formats are supported. Alternatively, you may use the \
                      recorder below to record your response',
   },
+  pleaseRecordYourVoice: {
+    id: 'course.assessment.submission.answer.pleaseRecordYourVoice',
+    defaultMessage: 'Please record your voice',
+  },
 });
 
 const styles = {
@@ -56,6 +60,13 @@ const styles = {
   errorStyle: {
     color: red[500],
   },
+};
+const checkVoiceResponseRecorded = (value, intl) => {
+  const { file, url } = value;
+  if (url || file instanceof File) {
+    return true;
+  }
+  return intl.formatMessage(translations.pleaseRecordYourVoice);
 };
 
 class VoiceResponseAnswer extends Component {
@@ -80,9 +91,7 @@ class VoiceResponseAnswer extends Component {
   onStopRecord = (field) => () => {
     const { dispatch } = this.props;
     recorderHelper.stopRecord().then((file) => {
-      const {
-        input: { onChange, value = {} },
-      } = field;
+      const { onChange, value = {} } = field;
       const { url, name } = value;
       /**
        * check SingleFileInput about the format of the single file
@@ -101,9 +110,7 @@ class VoiceResponseAnswer extends Component {
   };
 
   renderAudio = (field) => {
-    const {
-      input: { value },
-    } = field;
+    const { value } = field;
     const { file, url } = value;
     let finalUrl;
     if (file) {
@@ -121,7 +128,13 @@ class VoiceResponseAnswer extends Component {
     return null;
   };
 
-  renderAudioInput = (readOnly, recording, recordingComponentId, field) => {
+  renderAudioInput = (
+    readOnly,
+    recording,
+    recordingComponentId,
+    field,
+    fieldState,
+  ) => {
     if (readOnly) {
       return null;
     }
@@ -129,10 +142,11 @@ class VoiceResponseAnswer extends Component {
     return (
       <div>
         <div style={styles.fileInputWrapper}>
-          <SingleFileInput
+          <FormSingleFileInput
+            field={field}
+            fieldState={fieldState}
             disabled={readOnly}
             accept={sharedConstants.SUPPORTED_VOICE_FILE_TYPES.join()}
-            {...field}
             previewComponent={this.renderSingleFileInputChildren}
           />
         </div>
@@ -162,9 +176,15 @@ class VoiceResponseAnswer extends Component {
     );
   };
 
-  renderFile = ({ readOnly, recording, recordingComponentId, ...field }) => {
-    const error = field && field.meta && field.meta.error;
-    const touched = field && field.meta && field.meta.touched;
+  renderFile = ({
+    field,
+    fieldState,
+    readOnly,
+    recording,
+    recordingComponentId,
+  }) => {
+    const error = fieldState.error;
+
     return (
       <div>
         {this.renderAudioInput(
@@ -172,13 +192,10 @@ class VoiceResponseAnswer extends Component {
           recording,
           recordingComponentId,
           field,
+          fieldState,
         )}
         {this.renderAudio(field)}
-        {touched && error ? (
-          <div style={styles.errorStyle}>
-            <FormattedMessage {...error} />
-          </div>
-        ) : null}
+        {error ? <div style={styles.errorStyle}>{error.message}</div> : null}
       </div>
     );
   };
@@ -195,18 +212,32 @@ class VoiceResponseAnswer extends Component {
   );
 
   render() {
-    const { question, recording, recordingComponentId, readOnly, answerId } =
-      this.props;
+    const {
+      control,
+      question,
+      recording,
+      recordingComponentId,
+      readOnly,
+      answerId,
+      intl,
+    } = this.props;
     return (
       <div>
-        <Field
+        <Controller
           name={`${answerId}.file`}
-          readOnly={readOnly}
-          answerId={answerId}
-          recording={recording}
-          recordingComponentId={recordingComponentId}
-          question={question}
-          component={this.renderFile}
+          control={control}
+          render={({ field, fieldState }) =>
+            this.renderFile({
+              field,
+              fieldState,
+              readOnly,
+              answerId,
+              recording,
+              recordingComponentId,
+              question,
+            })
+          }
+          rules={{ validate: (v) => checkVoiceResponseRecorded(v, intl) }}
         />
       </div>
     );
@@ -214,6 +245,7 @@ class VoiceResponseAnswer extends Component {
 }
 
 VoiceResponseAnswer.propTypes = {
+  control: PropTypes.object.isRequired,
   answerId: PropTypes.number.isRequired,
   readOnly: PropTypes.bool.isRequired,
   question: PropTypes.shape({
@@ -225,6 +257,11 @@ VoiceResponseAnswer.propTypes = {
   intl: intlShape.isRequired,
 };
 
+const VoiceResponseAnswerWithFormContext = (props) => {
+  const { control } = useFormContext();
+  return <VoiceResponseAnswer control={control} {...props} />;
+};
+
 function mapStateToProps(state) {
   return {
     recording: state.recorder.recording,
@@ -232,4 +269,6 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(injectIntl(VoiceResponseAnswer));
+export default connect(mapStateToProps)(
+  injectIntl(VoiceResponseAnswerWithFormContext),
+);
