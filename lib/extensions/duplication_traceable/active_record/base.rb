@@ -29,7 +29,7 @@ module Extensions::DuplicationTraceable::ActiveRecord::Base
 
     # Sets the source id.
     def source=(item)
-      self.source_id = item.id
+      self.source_id = item&.id
     end
   end
 end
