@@ -56,6 +56,15 @@ RSpec.describe 'Extension: Acts as Duplication Traceable', type: :model do
         subject.source = course
         expect(subject.source).to eq(course)
       end
+
+      describe 'validations' do
+        it 'checks that the source exists' do
+          subject.source_id = -1
+          expect(subject).to_not be_valid
+          expect(subject.errors[:source_id]).to include(I18n.t('activerecord.errors.models.duplication_traceable.' \
+                                                               'attributes.source_id.must_exist'))
+        end
+      end
     end
   end
 end
