@@ -22,7 +22,7 @@ RSpec.describe 'Course: Assessments: Submissions: Forum Post Response Answers', 
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         answer_id = submission.answers.first.id
-        summernote_selector = "textarea[name=\"#{answer_id}[answer_text]\"]"
+        summernote_selector = "textarea[name=\"#{answer_id}.answer_text\"]"
         expect(page).to have_selector(summernote_selector, visible: false)
         fill_in_react_summernote summernote_selector, ''
         fill_in_react_summernote summernote_selector, 'Testing Save Draft'
@@ -40,7 +40,7 @@ RSpec.describe 'Course: Assessments: Submissions: Forum Post Response Answers', 
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         answer_id = submission.answers.first.id
-        summernote_selector = "textarea[name=\"#{answer_id}[answer_text]\"]"
+        summernote_selector = "textarea[name=\"#{answer_id}.answer_text\"]"
         expect(page).to have_selector(summernote_selector, visible: false)
         fill_in_react_summernote summernote_selector, ''
         fill_in_react_summernote summernote_selector, 'Testing Finalising'
@@ -49,7 +49,7 @@ RSpec.describe 'Course: Assessments: Submissions: Forum Post Response Answers', 
         accept_confirm_dialog do
           wait_for_job
         end
-        expect(page).not_to have_field(name: "#{answer_id}[answer_text]")
+        expect(page).not_to have_field(name: "#{answer_id}.answer_text]")
       end
 
       scenario 'I cannot see the text box for a question with answer text disabled' do
@@ -59,7 +59,7 @@ RSpec.describe 'Course: Assessments: Submissions: Forum Post Response Answers', 
 
         visit edit_course_assessment_submission_path(course, assessment, submission)
         answer_id = submission.answers.first.id
-        expect(page).not_to have_field(name: "#{answer_id}[answer_text]")
+        expect(page).not_to have_field(name: "#{answer_id}.answer_text")
       end
 
       scenario 'I can see a modal for selecting forum posts' do
