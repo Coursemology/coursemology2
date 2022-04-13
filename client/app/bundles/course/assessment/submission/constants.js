@@ -253,7 +253,6 @@ const actionTypes = mirrorCreator([
   'IMPORT_FILES_REQUEST',
   'IMPORT_FILES_SUCCESS',
   'IMPORT_FILES_FAILURE',
-  'STAGE_FILES',
   // View Past Answer History action types
   'TOGGLE_VIEW_HISTORY_MODE',
   'SELECT_PAST_ANSWERS',

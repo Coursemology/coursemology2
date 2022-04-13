@@ -11,13 +11,11 @@ import {
   Switch,
 } from '@mui/material';
 import InsertDriveFile from '@mui/icons-material/InsertDriveFile';
-import { touch } from 'redux-form';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import NotificationBar, {
   notificationShape,
 } from 'lib/components/NotificationBar';
 import withRouter from 'lib/components/withRouter';
-import { setNotification } from 'lib/actions';
 import { getUrlParameter } from 'lib/helpers/url-helpers';
 import ProgressPanel from '../../components/ProgressPanel';
 import SubmissionEditForm from './SubmissionEditForm';
@@ -48,11 +46,10 @@ import {
   questionFlagsShape,
   questionShape,
   historyQuestionShape,
-  reduxFormShape,
   submissionShape,
   topicShape,
 } from '../../propTypes';
-import { formNames, workflowStates } from '../../constants';
+import { workflowStates } from '../../constants';
 import translations from '../../translations';
 
 class VisibleSubmissionEditIndex extends Component {
@@ -107,26 +104,6 @@ class VisibleSubmissionEditIndex extends Component {
     dispatch(publish(params.submissionId, Object.values(grading), exp));
   }
 
-  handleReset(answerId) {
-    const {
-      dispatch,
-      form,
-      match: { params },
-    } = this.props;
-    const questionId = form.values[answerId].questionId;
-    dispatch(resetAnswer(params.submissionId, answerId, questionId));
-  }
-
-  handleSaveDraft() {
-    const {
-      dispatch,
-      form,
-      match: { params },
-    } = this.props;
-    const answers = Object.values(form.values);
-    dispatch(saveDraft(params.submissionId, answers));
-  }
-
   handleSaveGrade() {
     const {
       dispatch,
@@ -138,32 +115,6 @@ class VisibleSubmissionEditIndex extends Component {
     const published = workflowState === workflowStates.Published;
     dispatch(
       saveGrade(params.submissionId, Object.values(grading), exp, published),
-    );
-  }
-
-  handleSubmit() {
-    const {
-      dispatch,
-      form,
-      match: { params },
-    } = this.props;
-    const answers = Object.values(form.values);
-    return this.validateSubmit().then(
-      () => dispatch(finalise(params.submissionId, answers)),
-      () => setNotification(translations.submitError)(dispatch),
-    );
-  }
-
-  handleSubmitAnswer(answerId) {
-    const {
-      dispatch,
-      form,
-      match: { params },
-    } = this.props;
-    const answer = form.values[answerId] || {};
-    return this.validateSubmitAnswer(answerId).then(
-      () => dispatch(submitAnswer(params.submissionId, answer)),
-      () => setNotification(translations.submitError)(dispatch),
     );
   }
 
@@ -200,55 +151,38 @@ class VisibleSubmissionEditIndex extends Component {
     dispatch(unsubmit(params.submissionId));
   }
 
-  validateSubmit = () => {
-    const { dispatch, form, questions } = this.props;
-    const answers = Object.values(form.values);
-    /**
-     * Assume there are syncErrors in the form initially.
-     * If the user did not change any field, and press submit button directly,
-     * all the fields will not be touched, hence, errors will no be shown.
-     * Therefore we need to manually touch all the fields
-     */
-    answers.forEach((answer = {}) => {
-      if (
-        answer.questionId in questions &&
-        questions[answer.questionId].type !== 'VoiceResponse'
-      ) {
-        return;
-      }
-      const answerId = answer.id;
-      Object.keys(answer).forEach((key) => {
-        dispatch(touch(formNames.SUBMISSION, `${answerId}.${key}`));
-      });
-    });
-
-    const hasError = Object.values(form.syncErrors || {}).some(
-      (answerError) => Object.keys(answerError).length !== 0,
-    );
-
-    if (hasError) {
-      return Promise.reject();
-    }
-    return Promise.resolve();
+  onReset = (answerId, setValue) => {
+    const {
+      answers,
+      dispatch,
+      match: { params },
+    } = this.props;
+    const questionId = answers.initial[answerId].questionId;
+    dispatch(resetAnswer(params.submissionId, answerId, questionId, setValue));
   };
 
-  validateSubmitAnswer = (answerId) => {
-    const { dispatch, form } = this.props;
-    const answer = form.values[answerId] || {};
-    const answerError = form.syncErrors && form.syncErrors[answerId];
-    /**
-     * Similar reason to validateSubmit.
-     * If the user did not change any field, and press submit button directly, we need to manually
-     * touch all the fields of the answer, in order to show the syncErrors.
-     */
-    Object.keys(answer || {}).forEach((key) => {
-      dispatch(touch(formNames.SUBMISSION, `${answerId}.${key}`));
-    });
+  onSaveDraft = (data) => {
+    const {
+      dispatch,
+      match: { params },
+    } = this.props;
+    dispatch(saveDraft(params.submissionId, data));
+  };
 
-    if (Object.keys(answerError || {}).length !== 0) {
-      return Promise.reject();
-    }
-    return Promise.resolve();
+  onSubmit = (data) => {
+    const {
+      dispatch,
+      match: { params },
+    } = this.props;
+    dispatch(finalise(params.submissionId, data));
+  };
+
+  onSubmitAnswer = (answerId, answer, setValue) => {
+    const {
+      dispatch,
+      match: { params },
+    } = this.props;
+    dispatch(submitAnswer(params.submissionId, answerId, answer, setValue));
   };
 
   allConsideredCorrect() {
@@ -299,6 +233,7 @@ class VisibleSubmissionEditIndex extends Component {
   renderContent() {
     const { newSubmission, step } = this.state;
     const {
+      answers,
       assessment: {
         autograded,
         delayedGradePublication,
@@ -349,12 +284,13 @@ class VisibleSubmissionEditIndex extends Component {
     if (autograded) {
       return (
         <SubmissionEditStepForm
-          handleSaveDraft={() => this.handleSaveDraft()}
+          initialValues={answers.initial}
+          onReset={this.onReset}
+          onSaveDraft={this.onSaveDraft}
+          onSubmit={this.onSubmit}
+          onSubmitAnswer={this.onSubmitAnswer}
           handleSaveGrade={() => this.handleSaveGrade()}
-          handleSubmit={() => this.handleSubmit()}
           handleUnsubmit={() => this.handleUnsubmit()}
-          handleSubmitAnswer={(answerId) => this.handleSubmitAnswer(answerId)}
-          handleReset={(answerId) => this.handleReset(answerId)}
           handleAutogradeSubmission={() => this.handleAutogradeSubmission()}
           handleToggleViewHistoryMode={this.handleToggleViewHistoryMode}
           explanations={explanations}
@@ -381,12 +317,13 @@ class VisibleSubmissionEditIndex extends Component {
     }
     return (
       <SubmissionEditForm
-        handleSaveDraft={() => this.handleSaveDraft()}
-        handleSubmit={() => this.handleSubmit()}
+        initialValues={answers.initial}
+        onReset={this.onReset}
+        onSaveDraft={this.onSaveDraft}
+        onSubmit={this.onSubmit}
+        onSubmitAnswer={this.onSubmitAnswer}
         handleUnsubmit={() => this.handleUnsubmit()}
         handleSaveGrade={() => this.handleSaveGrade()}
-        handleSubmitAnswer={(answerId) => this.handleSubmitAnswer(answerId)}
-        handleReset={(answerId) => this.handleReset(answerId)}
         handleAutogradeSubmission={() => this.handleAutogradeSubmission()}
         handleMark={() => this.handleMark()}
         handleUnmark={() => this.handleUnmark()}
@@ -479,10 +416,10 @@ VisibleSubmissionEditIndex.propTypes = {
       submissionId: PropTypes.string,
     }),
   }),
+  answers: PropTypes.object,
   assessment: assessmentShape,
   exp: PropTypes.number,
   explanations: PropTypes.objectOf(explanationShape),
-  form: reduxFormShape,
   grading: gradingShape.isRequired,
   notification: notificationShape,
   posts: PropTypes.objectOf(postShape),
@@ -502,7 +439,7 @@ function mapStateToProps(state) {
     assessment: state.assessment,
     exp: state.grading.exp,
     explanations: state.explanations,
-    form: state.form[formNames.SUBMISSION],
+    answers: state.answers,
     grading: state.grading.questions,
     notification: state.notification,
     posts: state.posts,
