@@ -139,7 +139,7 @@ class MaterialSummernote extends Component {
           name={this.props.name}
           id={this.props.inputId}
           required={this.props.required}
-          value={this.props.value}
+          value={this.props.value || ''}
           style={{ display: 'none' }}
           onChange={this.onChange}
           disabled={this.props.disabled}

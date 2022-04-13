@@ -22,7 +22,7 @@ const styles = {
 };
 
 /**
- * Creates a Single file input component for use with Redux Forms.
+ * Creates a Single file input component for use with react hook form.
  * The display of the file can be customized by passing a component or function as the `previewComponent` prop.
  * The PreviewComponent may accept the following props:
  *   - file: the selected file
@@ -30,14 +30,6 @@ const styles = {
  *   - originalUrl: the URL of the last uploaded file
  *   - handleCancel: event handler to clear the input
  *
- * Additional format of form props (see createComponent for base set):
- * {
- *   ...createComponent,
- *   value: {
- *      url, // URL of preview of existing file if it is an image, otherwise nil.
- *     name, // Name of existing file, if any.
- *   },
- * }
  */
 // TODO: Use the input element as a controller component - https://reactjs.org/docs/forms.html
 class FormSingleFileInput extends Component {
