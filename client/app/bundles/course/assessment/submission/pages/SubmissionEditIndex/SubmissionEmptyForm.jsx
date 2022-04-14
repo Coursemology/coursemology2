@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
+import { useForm } from 'react-hook-form';
 import { Button, Card } from '@mui/material';
 import history from 'lib/history';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import GradingPanel from '../../containers/GradingPanel';
+import { formNames } from '../../constants';
 import translations from '../../translations';
 
 const styles = {
@@ -41,7 +43,7 @@ const SubmissionEmptyForm = (props) => {
     courseId,
     graderView,
     handleSaveGrade,
-    handleSubmit,
+    onSubmit,
     handleUnsubmit,
     intl,
     isSaving,
@@ -50,6 +52,8 @@ const SubmissionEmptyForm = (props) => {
     tabId,
   } = props;
 
+  const { handleSubmit } = useForm();
+
   const needShowSubmitButton = attempting && canUpdate;
   const needShowUnsubmitButton = graderView && (submitted || published);
   if (!needShowSubmitButton && !needShowUnsubmitButton) {
@@ -57,7 +61,7 @@ const SubmissionEmptyForm = (props) => {
   }
 
   const submitAndRedirect = () => {
-    handleSubmit()
+    onSubmit()
       .then(() =>
         history.push(
           `/courses/${courseId}/assessments?category=${categoryId}&tab=${tabId}`,
@@ -101,7 +105,8 @@ const SubmissionEmptyForm = (props) => {
             variant="contained"
             color="primary"
             disabled={isSaving}
-            onClick={submitAndRedirect}
+            form={formNames.SUBMISSION}
+            type="submit"
             style={styles.formButton}
           >
             {intl.formatMessage(translations.ok)}
@@ -143,11 +148,16 @@ const SubmissionEmptyForm = (props) => {
 
   return (
     <Card style={styles.questionCardContainer}>
-      {renderGradingPanel()}
-      {renderSaveGradeButton()}
-      {renderSubmitButton()}
-      {renderUnsubmitButton()}
-      {renderUnsubmitDialog()}
+      <form
+        id={formNames.SUBMISSION}
+        onSubmit={handleSubmit(() => submitAndRedirect())}
+      >
+        {renderGradingPanel()}
+        {renderSaveGradeButton()}
+        {renderSubmitButton()}
+        {renderUnsubmitButton()}
+        {renderUnsubmitDialog()}
+      </form>
     </Card>
   );
 };
@@ -168,8 +178,8 @@ SubmissionEmptyForm.propTypes = {
   tabId: PropTypes.number.isRequired,
 
   handleSaveGrade: PropTypes.func,
-  handleSubmit: PropTypes.func,
   handleUnsubmit: PropTypes.func,
+  onSubmit: PropTypes.func,
 };
 
 export default injectIntl(SubmissionEmptyForm);

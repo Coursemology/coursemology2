@@ -269,7 +269,7 @@ class VisibleSubmissionEditIndex extends Component {
           categoryId={categoryId}
           tabId={tabId}
           handleSaveGrade={() => this.handleSaveGrade()}
-          handleSubmit={() => this.handleSubmit()}
+          onSubmit={() => this.onSubmit()}
           handleUnsubmit={() => this.handleUnsubmit()}
           graderView={graderView}
           canUpdate={canUpdate}
