@@ -92,6 +92,10 @@ RSpec.feature 'Course: Duplication' do
           duplicated_course = Course.find_by(title: new_course_title)
           expect(duplicated_course).to be_present
           expect(duplicated_course.assessments.where(title: assessment_title).count).to eq(1)
+
+          # As only course and assessment duplication source tracing is currently supported,
+          # we will only test for these two
+          expect(duplicated_course.assessments.where(title: assessment_title).first.source.id).to eq(assessment.id)
           expect(duplicated_course.source.id).to eq(source_course.id)
         end
       end
