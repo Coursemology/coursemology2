@@ -83,9 +83,8 @@ class Course::LessonPlan::Strategies::StragglersPersonalizationStrategy <
   #   be shifted.
   # @return [Boolean] Whether the item cannot be shifted.
   def cannot_shift_item(course_user, item, submitted_items, reference_point, items_to_shift)
-    !item.has_personal_times? || item.id.in?(submitted_items.keys) ||
-      item.personal_time_for(course_user)&.fixed? || reference_point.nil? ||
-      (!items_to_shift.nil? && !items_to_shift.include?(item.id))
+    !item.has_personal_times? || item.id.in?(submitted_items.keys) || item.personal_time_for(course_user)&.fixed? ||
+      reference_point.nil? || (!items_to_shift.nil? && !items_to_shift.include?(item.id))
   end
 
   # Resets the start_at of the personal_time to that of the reference_time.
