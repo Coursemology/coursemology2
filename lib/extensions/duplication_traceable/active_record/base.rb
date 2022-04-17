@@ -22,6 +22,11 @@ module Extensions::DuplicationTraceable::ActiveRecord::Base
 
   module DuplicationTraceableInstanceMethods
     extend ActiveSupport::Concern
+
+    included do
+      validate :source_exists
+    end
+
     # Returns the source object, if any.
     def source
       source_id && self.class.dependent_class.constantize.find(source_id)
@@ -29,7 +34,15 @@ module Extensions::DuplicationTraceable::ActiveRecord::Base
 
     # Sets the source id.
     def source=(item)
-      self.source_id = item.id
+      self.source_id = item&.id
+    end
+
+    private
+
+    def source_exists
+      source
+    rescue ActiveRecord::RecordNotFound
+      errors.add(:source_id, I18n.t('activerecord.errors.models.duplication_traceable.attributes.source_id.must_exist'))
     end
   end
 end

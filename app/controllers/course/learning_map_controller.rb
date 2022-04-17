@@ -3,27 +3,26 @@ class Course::LearningMapController < Course::ComponentController
   NODE_ID_DELIMITER = '-'
   NEGATIVE_INF = -1_000_000_000
 
+  before_action :authorize_learning_map
   before_action :authorize_update, only: [:add_parent_node, :remove_parent_node, :toggle_satisfiability_type]
   add_breadcrumb :index, :course_learning_map_path
 
   def index
-    init_conditionals
-
     respond_to do |format|
       format.html
       format.json do
-        render json: { nodes: map_conditionals_to_nodes, can_modify: current_course_user&.teaching_staff? }
+        prepare_response_data
       end
     end
   end
 
   def add_parent_node
-    condition = create_condition(parent_and_node_id_pair_params[:parent_node_id])
     conditional = get_conditional(parent_and_node_id_pair_params[:node_id])
-    condition.conditional = conditional
+    condition = create_condition(parent_and_node_id_pair_params[:parent_node_id], conditional)
 
     if condition.save
-      index
+      prepare_response_data
+      render action: :index
     else
       error_response(condition.errors.full_messages)
     end
@@ -34,7 +33,8 @@ class Course::LearningMapController < Course::ComponentController
                               parent_and_node_id_pair_params[:node_id])
 
     if condition.destroy
-      index
+      prepare_response_data
+      render action: :index
     else
       error_response(condition.errors.full_messages)
     end
@@ -50,13 +50,18 @@ class Course::LearningMapController < Course::ComponentController
     end
 
     if conditional.save
-      index
+      prepare_response_data
+      render action: :index
     else
       error_response(conditional.errors.full_messages)
     end
   end
 
   private
+
+  def authorize_learning_map
+    authorize!(:read, Course::LearningMap)
+  end
 
   def authorize_update
     authorize!(:manage, @conditionals)
@@ -77,8 +82,10 @@ class Course::LearningMapController < Course::ComponentController
     end
   end
 
-  def init_conditionals
+  def prepare_response_data
     @conditionals = Course::Condition.preload(:conditions).conditionals_for(current_course)
+    @nodes = map_conditionals_to_nodes
+    @can_modify = current_course_user&.teaching_staff?
   end
 
   def map_conditionals_to_nodes
@@ -87,16 +94,21 @@ class Course::LearningMapController < Course::ComponentController
     generate_node_depths(nodes)
   end
 
-  def generate_all_node_relations
+  def generate_all_node_relations # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     relations = init_all_node_relations
     node_ids_to_children = relations[:node_ids_to_children]
     node_ids_to_parents = relations[:node_ids_to_parents]
+    node_ids_to_unlock_level = relations[:node_ids_to_unlock_level]
 
     @conditionals.each do |conditional|
       node_id = get_node_id(conditional)
 
       conditional.conditions.each do |condition|
-        next if condition.actable_type == Course::Condition::Level.name
+        if condition.actable_type == Course::Condition::Level.name
+          level_condition = Course::Condition::Level.find(condition.actable_id)
+          node_ids_to_unlock_level[node_id] = level_condition.minimum_level
+          next
+        end
 
         parent = map_condition_to_parent(condition)
         node_ids_to_children[parent[:id]].push({ id: node_id, is_satisfied: parent[:is_satisfied] })
@@ -104,12 +116,14 @@ class Course::LearningMapController < Course::ComponentController
       end
     end
 
-    { node_ids_to_children: node_ids_to_children, node_ids_to_parents: node_ids_to_parents }
+    { node_ids_to_children: node_ids_to_children, node_ids_to_parents: node_ids_to_parents,
+      node_ids_to_unlock_level: node_ids_to_unlock_level }
   end
 
   def init_all_node_relations
     { node_ids_to_children: @conditionals.map { |conditional| [get_node_id(conditional), []] }.to_h,
-      node_ids_to_parents: @conditionals.map { |conditional| [get_node_id(conditional), []] }.to_h }
+      node_ids_to_parents: @conditionals.map { |conditional| [get_node_id(conditional), []] }.to_h,
+      node_ids_to_unlock_level: @conditionals.map { |conditional| [get_node_id(conditional), 0] }.to_h }
   end
 
   def map_condition_to_parent(condition)
@@ -120,18 +134,27 @@ class Course::LearningMapController < Course::ComponentController
     { id: id, is_satisfied: typed_condition.satisfied_by?(current_course_user) }
   end
 
-  def generate_nodes_from_conditionals(all_node_relations)
+  def generate_nodes_from_conditionals(all_node_relations) # rubocop:disable Metrics/AbcSize
     node_ids_to_children = all_node_relations[:node_ids_to_children]
     node_ids_to_parents = all_node_relations[:node_ids_to_parents]
+    node_ids_to_unlock_level = all_node_relations[:node_ids_to_unlock_level]
+    students = current_course.course_users.students
+    total_num_students = students.count
 
     @conditionals.map do |conditional|
       id = get_node_id(conditional)
+      num_students_unlocked = 0
+      students.each do |student|
+        num_students_unlocked += 1 if conditional.conditions_satisfied_by?(student)
+      end
+      unlock_rate = total_num_students > 0 ? 1.0 * num_students_unlocked / total_num_students : 0.0
 
       conditional.attributes.merge({
         id: id, unlocked: conditional.conditions_satisfied_by?(current_course_user),
         children: node_ids_to_children[id], satisfiability_type: conditional.satisfiability_type,
         course_material_type: conditional.class.name.demodulize.downcase,
-        content_url: url_for([current_course, conditional]), parents: node_ids_to_parents[id]
+        content_url: url_for([current_course, conditional]), parents: node_ids_to_parents[id],
+        unlock_rate: unlock_rate, unlock_level: node_ids_to_unlock_level[id]
       }).symbolize_keys
     end
   end
@@ -191,13 +214,14 @@ class Course::LearningMapController < Course::ComponentController
     "#{conditional.class.name.demodulize.downcase}#{NODE_ID_DELIMITER}#{conditional.id}"
   end
 
-  def create_condition(node_id)
+  def create_condition(node_id, conditional)
     node_id_tokens = node_id.split(NODE_ID_DELIMITER)
 
     condition = Object.const_get("Course::Condition::#{node_id_tokens[0].capitalize}").new
     condition.course = current_course
     dependent_object = get_conditional(node_id)
     condition.send("#{dependent_object.class.name.demodulize.downcase}=", dependent_object)
+    condition.conditional = conditional
 
     condition
   end

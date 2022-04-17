@@ -1,0 +1,6 @@
+$green: #2be809 !default;
+
+.selectableConnectionPoint:hover {
+  box-shadow: 0 0 10px 5px $green;
+  cursor: pointer;
+}
