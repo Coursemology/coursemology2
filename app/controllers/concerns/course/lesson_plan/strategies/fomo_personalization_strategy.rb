@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 class Course::LessonPlan::Strategies::FomoPersonalizationStrategy <
   Course::LessonPlan::Strategies::BasePersonalizationStrategy
-  MIN_LEARNING_RATE = 0.67
-  MAX_LEARNING_RATE = 1.0
+  MIN_OVERALL_LIMIT = 0.67 # Means that the fastest that a course can be completed is in 0.67 of the course duration
+  MAX_OVERALL_LIMIT = 1.0
   HARD_MIN_LEARNING_RATE = 0.5
   DATE_ROUNDING_THRESHOLD = 0.8
 

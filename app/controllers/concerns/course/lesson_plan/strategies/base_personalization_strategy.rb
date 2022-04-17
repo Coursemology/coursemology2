@@ -5,8 +5,8 @@ class Course::LessonPlan::Strategies::BasePersonalizationStrategy
   include Course::LessonPlan::LearningRateConcern
   # To override any of these constants, simply define the same constant in the subclass.
   LEARNING_RATE_ALPHA = 0.4
-  MIN_LEARNING_RATE = 1.0
-  MAX_LEARNING_RATE = 1.0
+  MIN_OVERALL_LIMIT = 1.0 # The fastest that a student can finish a course
+  MAX_OVERALL_LIMIT = 1.0 # The slowest that a student can finish a course
   HARD_MIN_LEARNING_RATE = 1.0
   # How generously we round off. E.g. if `threshold` = 0.5, then a datetime with a time of > 0.5 * 1.day will be
   # snapped to the next day.
@@ -39,15 +39,22 @@ class Course::LessonPlan::Strategies::BasePersonalizationStrategy
       course_user, items_affecting_personal_times, submitted_items, self.class::LEARNING_RATE_ALPHA
     )
     unless learning_rate_ema.nil?
-      effective_min, effective_max = compute_learning_rate_effective_limits(course_user, items, submitted_items,
-                                                                            self.class::MIN_LEARNING_RATE,
-                                                                            self.class::MAX_LEARNING_RATE)
-      learning_rate_ema = [self.class::HARD_MIN_LEARNING_RATE, effective_min,
-                           [learning_rate_ema, effective_max].min].max
+      settings = course_user.course.settings_personalized_timeline
+      effective_min, effective_max = compute_learning_rate_effective_limits(
+        course_user, items, submitted_items,
+        min_overall_limit(settings, learning_rate_ema),
+        max_overall_limit(settings, learning_rate_ema)
+      )
+      bounded_learning_rate_ema = [hard_min_learning_rate(settings, learning_rate_ema), effective_min,
+                                   [learning_rate_ema, effective_max].min].max
+      if settings&.hard_max_learning_rate
+        bounded_learning_rate_ema = [bounded_learning_rate_ema,
+                                     settings.hard_max_learning_rate].min
+      end
     end
 
-    { submitted_items: submitted_items, items: items, learning_rate_ema: learning_rate_ema,
-      effective_min: effective_min, effective_max: effective_max }
+    { submitted_items: submitted_items, items: items, learning_rate_ema: bounded_learning_rate_ema,
+      original_learning_rate_ema: learning_rate_ema, effective_min: effective_min, effective_max: effective_max }
   end
 
   # Executes the relevant personalization strategy for the given course user, using the given precomputed
@@ -62,6 +69,18 @@ class Course::LessonPlan::Strategies::BasePersonalizationStrategy
   end
 
   protected
+
+  def min_overall_limit(settings, _learning_rate_ema)
+    settings&.min_overall_limit || self.class::MIN_OVERALL_LIMIT
+  end
+
+  def max_overall_limit(settings, _learning_rate_ema)
+    settings&.max_overall_limit || self.class::MAX_OVERALL_LIMIT
+  end
+
+  def hard_min_learning_rate(settings, _learning_rate_ema)
+    settings&.hard_min_learning_rate || self.class::HARD_MIN_LEARNING_RATE
+  end
 
   # Round to "nearest" date in course's timezone, NOT user's timezone.
   #

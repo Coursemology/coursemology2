@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course < ApplicationRecord
+class Course < ApplicationRecord # rubocop:disable Metrics/ClassLength
   include Course::LessonPlanConcern
   include Course::SearchConcern
   include Course::DuplicationConcern
@@ -74,6 +74,8 @@ class Course < ApplicationRecord
 
   has_one :learning_map, dependent: :destroy
   has_many :setting_emails, class_name: Course::Settings::Email.name, inverse_of: :course, dependent: :destroy
+  has_one :settings_personalized_timeline, class_name: Course::Settings::PersonalizedTimeline.name,
+                                           inverse_of: :course, dependent: :destroy
   has_one :duplication_traceable, class_name: DuplicationTraceable::Course.name,
                                   inverse_of: :course, dependent: :destroy
 
