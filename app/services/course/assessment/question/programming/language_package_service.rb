@@ -24,7 +24,7 @@ class Course::Assessment::Question::Programming::LanguagePackageService
   #
   # @return [Boolean]
   def autograded?
-    @test_params.key?(:autograded)
+    @test_params.key?(:autograded) && (@test_params[:autograded] == true || @test_params[:autograded] == 'true')
   end
 
   # Array of arguments used to create template files for non-autograded programming question.

@@ -126,7 +126,7 @@ class Course::Assessment < ApplicationRecord
       select(Course::LessonPlan::Item.arel_table[:id])
   end)
 
-  delegate :source, :source=, to: :duplication_traceable
+  delegate :source, :source=, to: :duplication_traceable, allow_nil: true
 
   def self.use_relative_model_naming?
     true

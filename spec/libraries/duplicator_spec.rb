@@ -414,6 +414,38 @@ RSpec.describe Duplicator, type: :model do
       t.integer :parent_id, foreign_key: { references: :complex_active_records, primary_key: :id }
     end
 
+    class DuplicationTraceableActiveRecordWithSource < ApplicationRecord
+      acts_as_duplication_traceable
+
+      validates :active_record_with_source, presence: true
+      belongs_to :active_record_with_source, class_name: 'ActiveRecordWithSource', inverse_of: :duplication_traceable
+
+      def self.dependent_class
+        'ActiveRecordWithSource'
+      end
+
+      def self.initialize_with_dest(dest, **options)
+        new(active_record_with_source: dest, **options)
+      end
+    end
+
+    class ActiveRecordWithSource < ApplicationRecord
+      has_one :duplication_traceable, class_name: 'DuplicationTraceableActiveRecordWithSource',
+                                      inverse_of: :active_record_with_source, dependent: :destroy
+      delegate :source, :source=, to: :duplication_traceable
+
+      def initialize_duplicate(_duplicator, _other)
+      end
+    end
+
+    temporary_table(:duplication_traceable_active_record_with_sources) do |t|
+      t.bigint :active_record_with_source_id, null: false
+    end
+
+    temporary_table(:active_record_with_sources) do |t|
+      t.integer :data
+    end
+
     def create_ar_cyclic_graph
       #
       #       ------> c3 ------
@@ -770,6 +802,29 @@ RSpec.describe Duplicator, type: :model do
               duplicated_objects = @duplicator.instance_variable_get(:@duplicated_objects)
               expect(duplicated_objects.length).to eq(12)
             end
+          end
+        end
+      end
+    end
+
+    with_temporary_table(:active_record_with_sources) do
+      with_temporary_table(:duplication_traceable_active_record_with_sources) do
+        context 'when ActiveRecordWithSource objects are duplicated' do
+          before(:each) do
+            @arws = ActiveRecordWithSource.create(data: 1)
+          end
+
+          it 'has its source defined' do
+            duplicator = Duplicator.new
+
+            expect do
+              @dup_arws = duplicator.duplicate(@arws)
+              @dup_arws.save
+            end.to change { ActiveRecordWithSource.count }.by(1)
+
+            expect(@arws.data).to eq(@dup_arws.data)
+            expect(@arws.id).to_not eq(@dup_arws.id)
+            expect(@dup_arws.source).to eq(@arws)
           end
         end
       end

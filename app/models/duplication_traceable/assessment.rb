@@ -10,7 +10,7 @@ class DuplicationTraceable::Assessment < ApplicationRecord
     Course::Assessment.name
   end
 
-  def self.initialize_with_dest(dest, options)
+  def self.initialize_with_dest(dest, **options)
     new(assessment: dest, **options)
   end
 end
