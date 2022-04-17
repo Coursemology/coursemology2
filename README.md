@@ -68,8 +68,10 @@ Coursemology uses [Ruby on Rails](http://rubyonrails.org/). In addition, some fr
    ```sh
    # Start the webpack dev server:
    $ cd client && yarn build:development
+   ```
 
-   # Run this command to compile the assets before running the test suite.
+   Either way, run this command to compile the assets before running the test suite.
+   ```
    $ cd client && yarn build:test
    ```
 

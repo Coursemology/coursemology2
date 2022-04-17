@@ -13,6 +13,10 @@ RSpec.describe Course::Assessment do
   it { is_expected.to have_many(:submissions).dependent(:destroy) }
   it { is_expected.to have_many(:conditions) }
   it { is_expected.to have_many(:assessment_conditions).dependent(:destroy) }
+  it { is_expected.to have_one(:duplication_traceable).dependent(:destroy) }
+
+  it { should delegate_method(:source).to(:duplication_traceable).allow_nil }
+  it { should delegate_method(:source=).to(:duplication_traceable).with_arguments(nil).allow_nil }
 
   let(:instance) { Instance.default }
   with_tenant(:instance) do

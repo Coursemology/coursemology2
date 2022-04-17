@@ -1,3 +1,2 @@
 web: bundle exec rails server
 client: cd client && yarn build:development
-test: cd client && yarn build:test
