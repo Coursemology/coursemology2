@@ -164,6 +164,9 @@ Rails.application.routes.draw do
         get 'lesson_plan' => 'lesson_plan_settings#edit'
         patch 'lesson_plan' => 'lesson_plan_settings#update'
 
+        get 'personalized_timeline' => 'personalized_timeline_settings#edit'
+        get 'personalized_timeline/learning_rates' => 'personalized_timeline_settings#learning_rates'
+
         namespace 'assessments' do
           resources :categories, only: [:new, :create, :destroy] do
             resources :tabs, only: [:new, :create, :destroy]

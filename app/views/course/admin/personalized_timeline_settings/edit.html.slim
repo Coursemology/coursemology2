@@ -1,0 +1,11 @@
+#personalized-timeline-settings data="#{{
+  min_overall_limit: @min_overall_limit,
+  max_overall_limit: @max_overall_limit,
+  hard_min_learning_rate: @hard_min_learning_rate,
+  hard_max_learning_rate: @hard_max_learning_rate,
+  assessment_submission_time_weight: @assessment_submission_time_weight,
+  assessment_grade_weight: @assessment_grade_weight,
+  video_watch_percentage_weight: @video_watch_percentage_weight,
+  earliest_open_at: @earliest_open_at&.iso8601,
+  latest_end_at: @latest_end_at&.iso8601
+}.to_json}"

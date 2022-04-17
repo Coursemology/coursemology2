@@ -2887,6 +2887,11 @@ chartjs-adapter-moment@^1.0.0:
   resolved "https://registry.yarnpkg.com/chartjs-adapter-moment/-/chartjs-adapter-moment-1.0.0.tgz#9174b1093c68bcfe285aff24f7388ad60d44e8f7"
   integrity sha512-PqlerEvQcc5hZLQ/NQWgBxgVQ4TRdvkW3c/t+SUEQSj78ia3hgLkf2VZ2yGJtltNbEEFyYGm+cA6XXevodYvWA==
 
+chartjs-chart-matrix@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/chartjs-chart-matrix/-/chartjs-chart-matrix-1.1.1.tgz#cf8b8f664ad9d3df894943c1f40c31f67219d291"
+  integrity sha512-0ZNP2Jib4GD/V8BOV1H5myB4RCmdmb3KJ8M9unhCByxojKpAiB70Z/AEc/Uy2Y01bTGLArToqzYpzBMYhDh0uw==
+
 chartjs-plugin-zoom@^1.2.0:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/chartjs-plugin-zoom/-/chartjs-plugin-zoom-1.2.1.tgz#7e350ba20d907f397d0c055239dcc67d326df705"

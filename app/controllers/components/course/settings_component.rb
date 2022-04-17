@@ -32,12 +32,15 @@ class Course::SettingsComponent < SimpleDelegator
   end
 
   def settings_sidebar_items
+    can_manage_personal_times =
+      current_course.show_personalized_timeline_features? && can?(:manage_personal_times, current_course)
     [
       settings_index_item,
       settings_components_item,
       settings_sidebar_item,
-      settings_notifications
-    ]
+      settings_notifications,
+      can_manage_personal_times ? settings_personalized_timeline : nil
+    ].compact
   end
 
   def settings_index_item
@@ -73,6 +76,15 @@ class Course::SettingsComponent < SimpleDelegator
       type: :settings,
       weight: 12,
       path: course_admin_notifications_path(current_course)
+    }
+  end
+
+  def settings_personalized_timeline
+    {
+      title: t('layouts.course_admin.personalized_timeline.title'),
+      type: :settings,
+      weight: 13,
+      path: course_admin_personalized_timeline_path(current_course)
     }
   end
 end
