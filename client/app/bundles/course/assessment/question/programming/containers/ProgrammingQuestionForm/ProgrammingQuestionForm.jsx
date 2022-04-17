@@ -746,23 +746,35 @@ class ProgrammingQuestionForm extends Component {
                 'question',
                 'display_autograded_toggle',
               ]) ? (
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={autograded}
-                      color="primary"
-                      onChange={(e) => {
-                        if (hasAutoGradings) return;
-                        this.handleChange('autograded', e.target.checked);
-                      }}
-                    />
-                  }
-                  disabled={
-                    this.props.data.get('is_loading') || hasAutoGradings
-                  }
-                  label={<b>{autogradedLabel}</b>}
-                  name="question_programming[autograded]"
-                />
+                <>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={autograded}
+                        color="primary"
+                        onChange={(e) => {
+                          if (hasAutoGradings) return;
+                          this.handleChange('autograded', e.target.checked);
+                        }}
+                      />
+                    }
+                    name={ProgrammingQuestionForm.getInputName('autograded')}
+                    disabled={
+                      this.props.data.get('is_loading') || hasAutoGradings
+                    }
+                    label={<b>{autogradedLabel}</b>}
+                  />
+                  <input
+                    type="hidden"
+                    name={ProgrammingQuestionForm.getInputName('autograded')}
+                    id={ProgrammingQuestionForm.getInputId('autograded')}
+                    value={autograded}
+                    style={{ display: 'none' }}
+                    readOnly={
+                      this.props.data.get('is_loading') || hasAutoGradings
+                    }
+                  />
+                </>
               ) : null}
             </div>
             <div className={styles.memoryLimitInput}>
