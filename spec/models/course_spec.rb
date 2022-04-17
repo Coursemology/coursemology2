@@ -28,8 +28,19 @@ RSpec.describe Course, type: :model do
     it { is_expected.to have_many(:surveys).through(:lesson_plan_items) }
     it { is_expected.to have_many(:videos).through(:lesson_plan_items) }
     it { is_expected.to have_many(:setting_emails).dependent(:destroy) }
+    it { is_expected.to have_one(:duplication_traceable).dependent(:destroy) }
 
     it { is_expected.to validate_presence_of(:title) }
+
+    it { should delegate_method(:staff).to(:course_users) }
+    it { should delegate_method(:instructors).to(:course_users) }
+    it { should delegate_method(:managers).to(:course_users) }
+    it { should delegate_method(:user?).to(:course_users) }
+    it { should delegate_method(:level_for).to(:levels) }
+    it { should delegate_method(:default_level?).to(:levels) }
+    it { should delegate_method(:mass_update_levels).to(:levels) }
+    it { should delegate_method(:source).to(:duplication_traceable).allow_nil }
+    it { should delegate_method(:source=).to(:duplication_traceable).with_arguments(nil).allow_nil }
 
     context 'when course is created' do
       subject { Course.new(creator: owner, updater: owner) }
