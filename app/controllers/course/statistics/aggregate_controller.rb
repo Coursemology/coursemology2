@@ -69,7 +69,7 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller #
       FROM (
         SELECT
           cu.id AS id,
-          sum(caa.grade) / sum(caq.maximum_grade) AS correctness
+          SUM(caa.grade) / SUM(caq.maximum_grade) AS correctness
         FROM
           course_assessment_categories cat
           INNER JOIN course_assessment_tabs tab
@@ -94,7 +94,7 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller #
           cu.id,
           cas.assessment_id
         HAVING
-          sum(caq.maximum_grade) > 0
+          SUM(caq.maximum_grade) > 0
       ) course_user_assessment_correctness
       GROUP BY
         id
@@ -109,7 +109,7 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller #
       SELECT
         cu.id AS id,
         cas.assessment_id AS assessment_id,
-        sum(caa.grade) / sum(caq.maximum_grade) AS correctness
+        SUM(caa.grade) / SUM(caq.maximum_grade) AS correctness
       FROM
         course_assessment_categories cat
         INNER JOIN course_assessment_tabs tab
@@ -134,7 +134,7 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller #
         cu.id,
         cas.assessment_id
       HAVING
-        sum(caq.maximum_grade) > 0
+        SUM(caq.maximum_grade) > 0
     SQL
                                   )
     result = {}
