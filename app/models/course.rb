@@ -113,7 +113,7 @@ class Course < ApplicationRecord
   delegate :level_for, to: :levels
   delegate :default_level?, to: :levels
   delegate :mass_update_levels, to: :levels
-  delegate :source, :source=, to: :duplication_traceable
+  delegate :source, :source=, to: :duplication_traceable, allow_nil: true
 
   def self.use_relative_model_naming?
     true
