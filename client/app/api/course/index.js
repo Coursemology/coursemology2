@@ -13,6 +13,7 @@ import LevelAPI from './Level';
 import UserNotificationsAPI from './UserNotifications';
 import UserEmailSubscriptionsAPI from './UserEmailSubscriptions';
 import GroupsAPI from './Groups';
+import LearningMapAPI from './LearningMap';
 import StatisticsAPI from './Statistics';
 
 const CourseAPI = {
@@ -31,6 +32,7 @@ const CourseAPI = {
   userNotifications: new UserNotificationsAPI(),
   userEmailSubscriptions: new UserEmailSubscriptionsAPI(),
   groups: new GroupsAPI(),
+  learningMap: new LearningMapAPI(),
   statistics: StatisticsAPI,
 };
 
