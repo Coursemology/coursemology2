@@ -130,7 +130,7 @@ class Course::Assessment < ApplicationRecord
     joins(lesson_plan_item: :default_reference_time)
   end)
 
-  delegate :source, :source=, to: :duplication_traceable
+  delegate :source, :source=, to: :duplication_traceable, allow_nil: true
 
   def self.use_relative_model_naming?
     true

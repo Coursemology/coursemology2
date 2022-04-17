@@ -7,6 +7,8 @@ RSpec.describe Course::LearningMapController, type: :controller do
   with_tenant(:instance) do
     let!(:course) { create(:course, :with_learning_map_component_enabled) }
     let!(:user) { create(:administrator) }
+    # needed for the add_parent_node test to pass when the conditionals are evaluated
+    let!(:course_staff) { create(:course_teaching_assistant, course: course, user: user) }
 
     before { sign_in(user) }
 
