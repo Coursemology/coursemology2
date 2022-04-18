@@ -207,7 +207,7 @@ class CourseUser < ApplicationRecord
   end
 
   def latest_learning_rate_record
-    learning_rate_records.limit(1).order(created_at: :desc)
+    learning_rate_records.limit(1)
   end
 
   private
