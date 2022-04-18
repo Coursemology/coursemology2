@@ -7,15 +7,9 @@ RSpec.describe Course::LearningRateRecord, type: :model do
   it { is_expected.to validate_presence_of(:learning_rate) }
   it { is_expected.to validate_presence_of(:effective_min) }
   it { is_expected.to validate_presence_of(:effective_max) }
-  it 'ensures that learning rate is greater or equal to 0' do
-    expect(subject).to validate_numericality_of(:learning_rate).is_greater_than_or_equal_to(0)
-  end
-  it 'ensures that effective min is greater or equal to 0' do
-    expect(subject).to validate_numericality_of(:effective_min).is_greater_than_or_equal_to(0)
-  end
-  it 'ensures that effective max is greater or equal to 0' do
-    expect(subject).to validate_numericality_of(:effective_max).is_greater_than_or_equal_to(0)
-  end
+  it { is_expected.to validate_numericality_of(:learning_rate).is_greater_than_or_equal_to(0) }
+  it { is_expected.to validate_numericality_of(:effective_min) }
+  it { is_expected.to validate_numericality_of(:effective_max) }
 
   let!(:instance) { Instance.default }
   with_tenant(:instance) do

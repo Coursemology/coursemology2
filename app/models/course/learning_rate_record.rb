@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 class Course::LearningRateRecord < ApplicationRecord
   validates :learning_rate, presence: true, numericality: { greater_than_or_equal_to: 0 }
-  validates :effective_min, presence: true, numericality: { greater_than_or_equal_to: 0 }
-  validates :effective_max, presence: true, numericality: { greater_than_or_equal_to: 0 }
+  # It is possible for effective limits to go negative, so we won't check for that
+  validates :effective_min, presence: true, numericality: true
+  validates :effective_max, presence: true, numericality: true
   validates :course_user, presence: true
   validate :learning_rate_between_effective_min_and_max
 
