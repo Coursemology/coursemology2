@@ -8,6 +8,9 @@ class Course::LearningRateRecord < ApplicationRecord
 
   belongs_to :course_user, inverse_of: :learning_rate_records
 
+  # Newest learning rates first
+  default_scope { order(created_at: :desc) }
+
   def learning_rate_between_effective_min_and_max
     return if effective_min <= learning_rate && learning_rate <= effective_max
 
