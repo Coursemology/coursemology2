@@ -10,9 +10,10 @@ import MilestoneAdminTools from '../MilestoneAdminTools';
 const buildShallowWrapper = (canManageLessonPlan, milestone) => {
   const store = storeCreator({ flags: { canManageLessonPlan } });
   return shallow(
-    <MilestoneAdminTools milestone={milestone} />,
-    buildContextOptions(store),
+    <MilestoneAdminTools milestone={milestone} store={store} />,
+    buildContextOptions(),
   )
+    .children()
     .dive()
     .dive();
 };

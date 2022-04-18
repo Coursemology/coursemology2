@@ -62,8 +62,9 @@ describe('<ResponseShow />', () => {
         survey={survey}
         {...responseFormData}
         {...urlParams}
+        store={storeCreator({})}
       />,
-      buildContextOptions(storeCreator({})),
+      buildContextOptions(),
     );
     expect(responseShow).toMatchSnapshot();
   });
@@ -95,8 +96,9 @@ describe('<ResponseShow />', () => {
         survey={{}}
         {...responseFormData}
         {...urlParams}
+        store={storeCreator({})}
       />,
-      buildContextOptions(storeCreator({})),
+      buildContextOptions(),
     );
     expect(responseShow).toMatchSnapshot();
   });

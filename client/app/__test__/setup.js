@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { Provider } from 'react-redux';
 import { IntlProvider, intlShape } from 'react-intl';
 import { createTheme } from '@mui/material/styles';
 import Enzyme from 'enzyme';
@@ -17,14 +18,20 @@ const courseId = '1';
 const muiTheme = createTheme();
 const intl = intlProvider.getChildContext().intl;
 
-const buildContextOptions = (store) => ({
-  context: { intl, store, muiTheme },
-  childContextTypes: {
-    muiTheme: PropTypes.object,
-    store: PropTypes.object,
-    intl: intlShape,
-  },
-});
+const buildContextOptions = (store) => {
+  // eslint-disable-next-line react/prop-types
+  function WrapWithProviders({ children }) {
+    return <Provider store={store}>{children}</Provider>;
+  }
+  return {
+    context: { intl, muiTheme },
+    childContextTypes: {
+      muiTheme: PropTypes.object,
+      intl: intlShape,
+    },
+    wrappingComponent: store ? WrapWithProviders : null,
+  };
+};
 
 // Global variables
 global.courseId = courseId;

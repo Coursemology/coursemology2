@@ -84,7 +84,7 @@ export default class ForumPostSelect extends Component {
     CourseAPI.assessment.answer.forumPostResponse
       .fetchSelectedPostPacks(this.props.answerId)
       .then((response) => {
-        this.props.input.onChange(response.data.selectedPostPacks);
+        this.props.input.onChange(response.data.selected_post_packs);
       })
       .catch(() => {
         this.props.onErrorMessage(
