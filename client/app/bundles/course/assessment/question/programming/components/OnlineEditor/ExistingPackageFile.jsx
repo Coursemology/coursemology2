@@ -56,7 +56,8 @@ function ExistingPackageFile(props) {
           type="checkbox"
           hidden
           name={`question_programming[${`${fileType}_to_delete`}][${filename}]`}
-          defaultChecked={toDelete}
+          readOnly
+          checked={toDelete}
         />
       </TableCell>
       <TableCell>{filename}</TableCell>
