@@ -37,6 +37,11 @@ RSpec.describe Course::LessonPlan::PersonalizationConcern do
         expect(course_user.personal_times.count).to eq(0)
       end
 
+      it 'does not create any learning rate records' do
+        dummy_controller.send(:update_personalized_timeline_for_user, course_user)
+        expect(course_user.learning_rate_records.count).to eq(0)
+      end
+
       it 'does not create any personal times for user when performed on item' do
         dummy_controller.send(:update_personalized_timeline_for_item, assessment.lesson_plan_item)
         expect(course_user.personal_times.count).to eq(0)
@@ -62,6 +67,11 @@ RSpec.describe Course::LessonPlan::PersonalizationConcern do
       it 'creates no personal times for user when performed on submitted item' do
         dummy_controller.send(:update_personalized_timeline_for_item, assessment.lesson_plan_item)
         expect(course_user.personal_times.count).to eq(0)
+      end
+
+      it 'creates a learning rate record' do
+        dummy_controller.send(:update_personalized_timeline_for_user, course_user)
+        expect(course_user.learning_rate_records.count).to eq(1)
       end
     end
 
@@ -89,6 +99,12 @@ RSpec.describe Course::LessonPlan::PersonalizationConcern do
         submit_assessment(assessment)
         dummy_controller.send(:update_personalized_timeline_for_item, assessment.lesson_plan_item)
         expect(course_user.personal_times.count).to eq(0)
+      end
+
+      it 'creates a learning rate record' do
+        submit_assessment(assessment)
+        dummy_controller.send(:update_personalized_timeline_for_user, course_user)
+        expect(course_user.learning_rate_records.count).to eq(1)
       end
 
       it 'shifts the end_at of non-open items forward' do
@@ -142,6 +158,11 @@ RSpec.describe Course::LessonPlan::PersonalizationConcern do
       it 'creates no personal times for user when performed on submitted item' do
         dummy_controller.send(:update_personalized_timeline_for_item, assessment.lesson_plan_item)
         expect(course_user.personal_times.count).to eq(0)
+      end
+
+      it 'creates a learning rate record' do
+        dummy_controller.send(:update_personalized_timeline_for_user, course_user)
+        expect(course_user.learning_rate_records.count).to eq(1)
       end
     end
 
