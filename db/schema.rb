@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_11_183806) do
+ActiveRecord::Schema.define(version: 2022_03_07_174407) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1136,6 +1136,29 @@ ActiveRecord::Schema.define(version: 2022_01_11_183806) do
     t.index ["updater_id"], name: "fk__courses_updater_id"
   end
 
+  create_table "duplication_traceable_assessments", force: :cascade do |t|
+    t.bigint "assessment_id", null: false
+    t.index ["assessment_id"], name: "fk__duplication_traceable_assessments_assessment_id"
+  end
+
+  create_table "duplication_traceable_courses", force: :cascade do |t|
+    t.bigint "course_id", null: false
+    t.index ["course_id"], name: "fk__duplication_traceable_courses_course_id"
+  end
+
+  create_table "duplication_traceables", force: :cascade do |t|
+    t.string "actable_type"
+    t.bigint "actable_id"
+    t.integer "source_id"
+    t.bigint "creator_id", null: false
+    t.bigint "updater_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["actable_type", "actable_id"], name: "index_duplication_traceables_actable", unique: true
+    t.index ["creator_id"], name: "fk__duplication_traceables_creator_id"
+    t.index ["updater_id"], name: "fk__duplication_traceables_updater_id"
+  end
+
   create_table "generic_announcements", id: :serial, force: :cascade do |t|
     t.string "type", limit: 255, null: false
     t.integer "instance_id"
@@ -1474,6 +1497,10 @@ ActiveRecord::Schema.define(version: 2022_01_11_183806) do
   add_foreign_key "courses", "instances", name: "fk_courses_instance_id"
   add_foreign_key "courses", "users", column: "creator_id", name: "fk_courses_creator_id"
   add_foreign_key "courses", "users", column: "updater_id", name: "fk_courses_updater_id"
+  add_foreign_key "duplication_traceable_assessments", "course_assessments", column: "assessment_id"
+  add_foreign_key "duplication_traceable_courses", "courses"
+  add_foreign_key "duplication_traceables", "users", column: "creator_id"
+  add_foreign_key "duplication_traceables", "users", column: "updater_id"
   add_foreign_key "generic_announcements", "instances", name: "fk_generic_announcements_instance_id"
   add_foreign_key "generic_announcements", "users", column: "creator_id", name: "fk_generic_announcements_creator_id"
   add_foreign_key "generic_announcements", "users", column: "updater_id", name: "fk_generic_announcements_updater_id"

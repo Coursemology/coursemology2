@@ -83,7 +83,7 @@ class Duplicator
   #
   # @param [#initialize_duplicate] source_object The object to be duplicated.
   # @return duplicated_object A reference to the duplicated object.
-  def duplicate_object(source_object)
+  def duplicate_object(source_object) # rubocop:disable Metrics/AbcSize
     return nil unless source_object
 
     @duplicated_objects.fetch(source_object) do |key|
@@ -93,6 +93,15 @@ class Duplicator
         source_object.dup.tap do |duplicate|
           @duplicated_objects[key] = duplicate
           duplicate.initialize_duplicate(self, key)
+
+          # Set duplication source, if it's being tracked for this class.
+          if duplicate.class.method_defined?(:duplication_traceable)
+            traceable = duplicate.class.reflect_on_association(:duplication_traceable).options[:class_name].constantize
+            duplicate.duplication_traceable = traceable.initialize_with_dest(duplicate,
+                                                                             source_id: source_object.id,
+                                                                             creator: @options[:current_user],
+                                                                             updater: @options[:current_user])
+          end
         end
       end
     end

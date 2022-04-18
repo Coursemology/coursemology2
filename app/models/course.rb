@@ -74,6 +74,8 @@ class Course < ApplicationRecord
 
   has_one :learning_map, dependent: :destroy
   has_many :setting_emails, class_name: Course::Settings::Email.name, inverse_of: :course, dependent: :destroy
+  has_one :duplication_traceable, class_name: DuplicationTraceable::Course.name,
+                                  inverse_of: :course, dependent: :destroy
 
   accepts_nested_attributes_for :invitations, :assessment_categories, :video_tabs
 
@@ -111,6 +113,7 @@ class Course < ApplicationRecord
   delegate :level_for, to: :levels
   delegate :default_level?, to: :levels
   delegate :mass_update_levels, to: :levels
+  delegate :source, :source=, to: :duplication_traceable, allow_nil: true
 
   def self.use_relative_model_naming?
     true
