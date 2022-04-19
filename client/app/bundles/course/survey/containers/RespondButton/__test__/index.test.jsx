@@ -6,12 +6,6 @@ import RespondButton from '../index';
 
 const client = CourseAPI.survey.responses.getClient();
 const mock = new MockAdapter(client);
-const mockUsedNavigate = jest.fn();
-
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockUsedNavigate,
-}));
 
 beforeEach(() => {
   mock.reset();

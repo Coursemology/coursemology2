@@ -24,7 +24,6 @@ import LoadingIndicator from 'lib/components/LoadingIndicator';
 import NotificationBar, {
   notificationShape,
 } from 'lib/components/NotificationBar';
-import withRouter from 'lib/components/withRouter';
 import {
   fetchSubmissions,
   publishSubmissions,
@@ -573,4 +572,4 @@ function mapStateToProps(state) {
 }
 
 const SubmissionsIndex = connect(mapStateToProps)(VisibleSubmissionsIndex);
-export default withRouter(SubmissionsIndex);
+export default SubmissionsIndex;

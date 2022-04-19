@@ -1,8 +1,10 @@
 /* eslint-disable import/no-extraneous-dependencies, import/extensions, import/no-unresolved */
 
 import { render } from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
+import { Router } from 'react-router';
+import history from 'lib/history';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
+
 import store from './store';
 import SubmissionsLayout from './containers/SubmissionsLayout';
 
@@ -12,9 +14,9 @@ $(() => {
   if (mountNode) {
     render(
       <ProviderWrapper store={store}>
-        <BrowserRouter>
+        <Router history={history}>
           <SubmissionsLayout />
-        </BrowserRouter>
+        </Router>
       </ProviderWrapper>,
       mountNode,
     );

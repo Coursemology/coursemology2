@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { useState } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
@@ -9,7 +9,6 @@ import * as surveyActions from 'course/survey/actions/surveys';
 import { showDeleteConfirmation } from 'course/survey/actions';
 import { formatSurveyFormData } from 'course/survey/utils';
 import { surveyShape } from 'course/survey/propTypes';
-import { useNavigate } from 'react-router-dom';
 
 const translations = defineMessages({
   editSurvey: {
@@ -38,16 +37,17 @@ const translations = defineMessages({
   },
 });
 
-const AdminMenu = (props) => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const { dispatch, intl, survey, surveyId } = props;
-  const navigate = useNavigate();
+class AdminMenu extends Component {
+  constructor(props) {
+    super(props);
 
-  if (!survey.canUpdate && !survey.canDelete) {
-    return null;
+    this.state = {
+      anchorEl: null,
+    };
   }
 
-  const deleteSurveyHandler = () => {
+  deleteSurveyHandler = () => {
+    const { survey, dispatch, intl, surveyId } = this.props;
     const { deleteSurvey } = surveyActions;
     const successMessage = intl.formatMessage(
       translations.deleteSuccess,
@@ -55,35 +55,25 @@ const AdminMenu = (props) => {
     );
     const failureMessage = intl.formatMessage(translations.deleteFailure);
     const handleDelete = () =>
-      dispatch(
-        deleteSurvey(surveyId, successMessage, failureMessage, navigate),
-      );
+      dispatch(deleteSurvey(surveyId, successMessage, failureMessage));
     return dispatch(showDeleteConfirmation(handleDelete));
   };
 
-  const handleClick = (event) => {
+  handleClick = (event) => {
     // This prevents ghost click.
     event.preventDefault();
 
-    setAnchorEl(event.currentTarget);
+    this.setState({
+      anchorEl: event.currentTarget,
+    });
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
+  handleClose = () => {
+    this.setState({ anchorEl: null });
   };
 
-  const updateSurveyHandler = (data) => {
-    const { updateSurvey } = surveyActions;
-
-    const payload = formatSurveyFormData(data);
-    const successMessage = intl.formatMessage(translations.updateSuccess, data);
-    const failureMessage = intl.formatMessage(translations.updateFailure);
-    return dispatch(
-      updateSurvey(surveyId, payload, successMessage, failureMessage),
-    );
-  };
-
-  const showEditSurveyForm = () => {
+  showEditSurveyForm = () => {
+    const { survey, dispatch, intl } = this.props;
     const { showSurveyForm } = surveyActions;
     const {
       title,
@@ -110,7 +100,7 @@ const AdminMenu = (props) => {
 
     return dispatch(
       showSurveyForm({
-        onSubmit: updateSurveyHandler,
+        onSubmit: this.updateSurveyHandler,
         formTitle: intl.formatMessage(translations.editSurvey),
         hasStudentResponse,
         initialValues: {
@@ -122,33 +112,52 @@ const AdminMenu = (props) => {
     );
   };
 
-  return (
-    <>
-      <IconButton onClick={handleClick}>
-        <MoreVert htmlColor="white" />
-      </IconButton>
-      <Menu
-        id="admin-menu"
-        anchorEl={anchorEl}
-        disableAutoFocusItem
-        onClick={handleClose}
-        onClose={handleClose}
-        open={Boolean(anchorEl)}
-      >
-        {survey.canUpdate && (
-          <MenuItem onClick={showEditSurveyForm}>
-            {intl.formatMessage(translations.editSurvey)}
-          </MenuItem>
-        )}
-        {survey.canDelete && (
-          <MenuItem onClick={deleteSurveyHandler}>
-            {intl.formatMessage(translations.deleteSurvey)}
-          </MenuItem>
-        )}
-      </Menu>
-    </>
-  );
-};
+  updateSurveyHandler = (data) => {
+    const { dispatch, intl, surveyId } = this.props;
+    const { updateSurvey } = surveyActions;
+
+    const payload = formatSurveyFormData(data);
+    const successMessage = intl.formatMessage(translations.updateSuccess, data);
+    const failureMessage = intl.formatMessage(translations.updateFailure);
+    return dispatch(
+      updateSurvey(surveyId, payload, successMessage, failureMessage),
+    );
+  };
+
+  render() {
+    const { intl, survey } = this.props;
+    if (!survey.canUpdate && !survey.canDelete) {
+      return null;
+    }
+
+    return (
+      <>
+        <IconButton onClick={this.handleClick}>
+          <MoreVert htmlColor="white" />
+        </IconButton>
+        <Menu
+          id="admin-menu"
+          anchorEl={this.state.anchorEl}
+          disableAutoFocusItem
+          onClick={this.handleClose}
+          onClose={this.handleClose}
+          open={Boolean(this.state.anchorEl)}
+        >
+          {survey.canUpdate && (
+            <MenuItem onClick={this.showEditSurveyForm}>
+              {intl.formatMessage(translations.editSurvey)}
+            </MenuItem>
+          )}
+          {survey.canDelete && (
+            <MenuItem onClick={this.deleteSurveyHandler}>
+              {intl.formatMessage(translations.deleteSurvey)}
+            </MenuItem>
+          )}
+        </Menu>
+      </>
+    );
+  }
+}
 
 AdminMenu.propTypes = {
   survey: surveyShape,

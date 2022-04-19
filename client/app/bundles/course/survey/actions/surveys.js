@@ -1,5 +1,6 @@
 import { submit, SubmissionError } from 'redux-form';
 import CourseAPI from 'api/course';
+import history from 'lib/history';
 import pollJob from 'lib/helpers/job-helpers';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import translations from '../translations';
@@ -22,12 +23,7 @@ export function submitSurveyForm() {
   };
 }
 
-export function createSurvey(
-  surveyFields,
-  successMessage,
-  failureMessage,
-  navigate,
-) {
+export function createSurvey(surveyFields, successMessage, failureMessage) {
   return (dispatch) => {
     dispatch({ type: actionTypes.CREATE_SURVEY_REQUEST });
     return CourseAPI.survey.surveys
@@ -40,7 +36,7 @@ export function createSurvey(
         dispatch(hideSurveyForm());
         setNotification(successMessage)(dispatch);
         const courseId = getCourseId();
-        navigate(`/courses/${courseId}/surveys/${response.data.id}`);
+        history.push(`/courses/${courseId}/surveys/${response.data.id}`);
       })
       .catch((error) => {
         dispatch({ type: actionTypes.CREATE_SURVEY_FAILURE });
@@ -118,18 +114,13 @@ export function updateSurvey(
   };
 }
 
-export function deleteSurvey(
-  surveyId,
-  successMessage,
-  failureMessage,
-  navigate,
-) {
+export function deleteSurvey(surveyId, successMessage, failureMessage) {
   return (dispatch) => {
     dispatch({ type: actionTypes.DELETE_SURVEY_REQUEST, surveyId });
     return CourseAPI.survey.surveys
       .delete(surveyId)
       .then(() => {
-        navigate(`/courses/${getCourseId()}/surveys/`);
+        history.push(`/courses/${getCourseId()}/surveys/`);
         dispatch({
           surveyId,
           type: actionTypes.DELETE_SURVEY_SUCCESS,

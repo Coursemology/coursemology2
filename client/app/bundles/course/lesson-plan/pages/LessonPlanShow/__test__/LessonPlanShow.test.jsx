@@ -36,13 +36,6 @@ const data = {
   visibility: { Event: true },
 };
 
-const mockUsedNavigate = jest.fn();
-
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockUsedNavigate,
-}));
-
 describe('<LessonPlanShow />', () => {
   const contextOptions = buildContextOptions(storeCreator());
 

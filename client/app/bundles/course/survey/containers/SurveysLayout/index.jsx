@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { withRouter, Route, Switch } from 'react-router-dom';
 import NotificationPopup from 'lib/containers/NotificationPopup';
 import DeleteConfirmation from 'lib/containers/DeleteConfirmation';
 import SurveyFormDialogue from 'course/survey/containers/SurveyFormDialogue';
@@ -16,12 +16,13 @@ const SurveysLayout = () => {
       <SectionFormDialogue />
       <DeleteConfirmation />
       <NotificationPopup />
-      <Routes>
-        <Route exact path={surveyRoot} element={<SurveyIndex />} />
-        <Route path={`${surveyRoot}/:surveyId/*`} element={<SurveyLayout />} />
-      </Routes>
+
+      <Switch>
+        <Route exact path={surveyRoot} component={SurveyIndex} />
+        <Route path={`${surveyRoot}/:surveyId`} component={SurveyLayout} />
+      </Switch>
     </>
   );
 };
 
-export default SurveysLayout;
+export default withRouter(SurveysLayout);
