@@ -2,8 +2,12 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { scroller } from 'react-scroll';
+import { Card, CardContent } from '@mui/material';
 import moment from 'lib/moment';
 import { lessonPlanTypesGroups } from 'lib/types';
+import EnterEditModeButton from 'course/lesson-plan/containers/LessonPlanLayout/EnterEditModeButton';
+import NewMilestoneButton from 'course/lesson-plan/containers/LessonPlanLayout/NewMilestoneButton';
+import NewEventButton from 'course/lesson-plan/containers/LessonPlanLayout/NewEventButton';
 import LessonPlanGroup from './LessonPlanGroup';
 
 class LessonPlanShow extends Component {
@@ -71,8 +75,23 @@ class LessonPlanShow extends Component {
     );
   }
 
+  renderHeader = () => (
+    <Card>
+      <CardContent>
+        <EnterEditModeButton />
+        <NewMilestoneButton />
+        <NewEventButton />
+      </CardContent>
+    </Card>
+  );
+
   render() {
-    return <>{this.props.groups.map((group) => this.renderGroup(group))}</>;
+    return (
+      <>
+        {this.renderHeader()}
+        {this.props.groups.map((group) => this.renderGroup(group))}
+      </>
+    );
   }
 }
 

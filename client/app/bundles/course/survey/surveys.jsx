@@ -1,6 +1,5 @@
 import { render } from 'react-dom';
-import { Router } from 'react-router-dom';
-import history from 'lib/history';
+import { BrowserRouter } from 'react-router-dom';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 import SurveysLayout from './containers/SurveysLayout';
 import storeCreator from './store';
@@ -13,9 +12,9 @@ $(() => {
 
     render(
       <ProviderWrapper {...{ store }}>
-        <Router history={history}>
+        <BrowserRouter>
           <SurveysLayout />
-        </Router>
+        </BrowserRouter>
       </ProviderWrapper>,
       mountNode,
     );

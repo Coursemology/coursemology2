@@ -7,6 +7,13 @@ import storeCreator from 'course/survey/store';
 import SurveyFormDialogue from 'course/survey/containers/SurveyFormDialogue';
 import AdminMenu from '../AdminMenu';
 
+const mockUsedNavigate = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockUsedNavigate,
+}));
+
 describe('<AdminMenu />', () => {
   it('does not render button if user cannot edit or update', () => {
     const survey = {

@@ -16,6 +16,7 @@ import LoadingIndicator from 'lib/components/LoadingIndicator';
 import NotificationBar, {
   notificationShape,
 } from 'lib/components/NotificationBar';
+import withRouter from 'lib/components/withRouter';
 import { setNotification } from 'lib/actions';
 import { getUrlParameter } from 'lib/helpers/url-helpers';
 import ProgressPanel from '../../components/ProgressPanel';
@@ -517,7 +518,7 @@ function mapStateToProps(state) {
   };
 }
 
-const SubmissionEditIndex = connect(mapStateToProps)(
-  VisibleSubmissionEditIndex,
+const SubmissionEditIndex = withRouter(
+  connect(mapStateToProps)(VisibleSubmissionEditIndex),
 );
 export default SubmissionEditIndex;
