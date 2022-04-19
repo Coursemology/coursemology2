@@ -1,7 +1,6 @@
 import { Component, Suspense, lazy } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
-import { Prompt } from 'react-router-dom';
 import { injectIntl, intlShape } from 'react-intl';
 import { Element, scroller } from 'react-scroll';
 import {
@@ -639,19 +638,6 @@ class SubmissionEditForm extends Component {
     );
   }
 
-  renderNavigateAwayWarning() {
-    const isDirty = !this.props.pristine;
-    return (
-      <Prompt
-        when={isDirty}
-        message={(action) =>
-          // Note: POP refers to back action in a browser.
-          action === 'POP'
-        }
-      />
-    );
-  }
-
   render() {
     const { tabbedView } = this.props;
     return (
@@ -681,8 +667,6 @@ class SubmissionEditForm extends Component {
         {this.renderUnsubmitDialog()}
         {this.renderResetDialog()}
         {this.renderExamDialog()}
-
-        {this.renderNavigateAwayWarning()}
       </Card>
     );
   }

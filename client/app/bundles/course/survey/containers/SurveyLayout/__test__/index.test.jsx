@@ -17,24 +17,26 @@ const surveys = [
   },
 ];
 
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'), // use actual for all non-hook parts
+  useParams: () => ({
+    courseId: '0',
+    surveyId: surveys[0].id.toString(),
+  }),
+}));
+
 describe('<SurveyLayout />', () => {
   it('changes location when the back button is pressed', async () => {
     const surveyId = surveys[0].id.toString();
-    const showPageUrl = `/courses/${courseId}/surveys/${surveyId}/`;
+    const indexPageUrl = '/courses/0/surveys';
+    const showPageUrl = `/courses/0/surveys/${surveyId}/`;
+    history.push(indexPageUrl);
     history.push(showPageUrl);
-    const spyHistoryPush = jest.spyOn(history, 'push');
     const store = storeCreator({ surveys: { surveys } });
 
-    const routerParams = {
-      match: {
-        params: { courseId, surveyId },
-        url: showPageUrl,
-        isExact: true,
-      },
-    };
     const surveyLayout = mount(
-      <Router history={history}>
-        <SurveyLayout {...routerParams} />
+      <Router location={history.location} navigator={history}>
+        <SurveyLayout />
       </Router>,
       buildContextOptions(store),
     );
@@ -44,6 +46,6 @@ describe('<SurveyLayout />', () => {
       .find('button')
       .simulate('click');
 
-    expect(spyHistoryPush).toHaveBeenCalledWith(`/courses/${courseId}/surveys`);
+    expect(history.location.pathname).toBe(indexPageUrl);
   });
 });

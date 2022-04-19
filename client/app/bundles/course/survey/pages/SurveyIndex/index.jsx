@@ -8,6 +8,7 @@ import { fetchSurveys } from 'course/survey/actions/surveys';
 import surveyTranslations from 'course/survey/translations';
 import { surveyShape } from 'course/survey/propTypes';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
+import withRouter from 'lib/components/withRouter';
 import SurveysTable from './SurveysTable';
 import NewSurveyButton from './NewSurveyButton';
 
@@ -75,4 +76,4 @@ const mapStateToProps = (state) => ({
   isLoading: state.surveysFlags.isLoadingSurveys,
 });
 
-export default connect(mapStateToProps)(SurveyIndex);
+export default withRouter(connect(mapStateToProps)(SurveyIndex));

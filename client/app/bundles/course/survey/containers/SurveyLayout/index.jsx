@@ -1,10 +1,8 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Route, Switch } from 'react-router-dom';
+import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
 import { IconButton } from '@mui/material';
 import ArrowBack from '@mui/icons-material/ArrowBack';
-import history from 'lib/history';
 import TitleBar from 'lib/components/TitleBar';
 import { surveyShape } from 'course/survey/propTypes';
 import SurveyShow from 'course/survey/pages/SurveyShow';
@@ -14,102 +12,63 @@ import ResponseEdit from 'course/survey/pages/ResponseEdit';
 import ResponseIndex from 'course/survey/pages/ResponseIndex';
 import AdminMenu from './AdminMenu';
 
-const backLocations = (courseId, surveyId, Page) => {
-  switch (Page) {
-    case SurveyResults:
-    case ResponseIndex:
-      return `/courses/${courseId}/surveys/${surveyId}`;
-    case SurveyShow:
-    case ResponseShow:
-    case ResponseEdit:
-    default:
-      return `/courses/${courseId}/surveys`;
-  }
+const SurveyLayout = ({ surveys }) => {
+  const navigate = useNavigate();
+  const params = useParams();
+  const surveyId = params.surveyId;
+  const courseId = params.courseId;
+  const survey =
+    surveys && surveys.length > 0
+      ? surveys.find((s) => String(s.id) === String(params.surveyId))
+      : {};
+
+  return (
+    <>
+      {survey && (
+        <TitleBar
+          title={survey.title}
+          iconElementRight={
+            surveyId ? <AdminMenu {...{ survey, surveyId }} /> : null
+          }
+          iconElementLeft={
+            <IconButton onClick={() => navigate(-1)}>
+              <ArrowBack htmlColor="white" />
+            </IconButton>
+          }
+        />
+      )}
+      <Routes>
+        <Route
+          path=""
+          element={<SurveyShow {...{ survey, courseId, surveyId }} />}
+        />
+        <Route
+          exact
+          path="/results"
+          element={<SurveyResults {...{ survey, courseId, surveyId }} />}
+        />
+        <Route
+          exact
+          path="/responses"
+          element={<ResponseIndex {...{ survey, courseId, surveyId }} />}
+        />
+        <Route
+          exact
+          path="/responses/:responseId"
+          element={<ResponseShow {...{ survey, courseId, surveyId }} />}
+        />
+        <Route
+          exact
+          path="/responses/:responseId/edit"
+          element={<ResponseEdit {...{ survey, courseId, surveyId }} />}
+        />
+      </Routes>
+    </>
+  );
 };
-
-class SurveyLayout extends Component {
-  static renderTitleBar(survey, surveyId, showAdminMenu, backLocation) {
-    return (
-      <TitleBar
-        title={survey.title}
-        iconElementRight={
-          showAdminMenu ? <AdminMenu {...{ survey, surveyId }} /> : null
-        }
-        iconElementLeft={
-          <IconButton onClick={() => history.push(backLocation)}>
-            <ArrowBack htmlColor="white" />
-          </IconButton>
-        }
-      />
-    );
-  }
-
-  render() {
-    const {
-      surveys,
-      match: {
-        url,
-        isExact,
-        params: { courseId, surveyId },
-      },
-    } = this.props;
-    const survey =
-      surveys && surveys.length > 0
-        ? surveys.find((s) => String(s.id) === String(surveyId))
-        : {};
-    const surveyUrl = url.slice(-1) === '/' ? url : `${url}/`;
-
-    const renderWithProps = (Page) => (props) =>
-      (
-        <>
-          {SurveyLayout.renderTitleBar(
-            survey,
-            surveyId,
-            isExact,
-            backLocations(courseId, surveyId, Page),
-          )}
-          <Page {...{ survey, courseId, surveyId }} {...props} />
-        </>
-      );
-
-    return (
-      <Switch>
-        <Route exact path={url} render={renderWithProps(SurveyShow)} />
-        <Route
-          exact
-          path={`${surveyUrl}results`}
-          render={renderWithProps(SurveyResults)}
-        />
-        <Route
-          exact
-          path={`${surveyUrl}responses`}
-          render={renderWithProps(ResponseIndex)}
-        />
-        <Route
-          exact
-          path={`${surveyUrl}responses/:responseId`}
-          render={renderWithProps(ResponseShow)}
-        />
-        <Route
-          exact
-          path={`${surveyUrl}responses/:responseId/edit`}
-          render={renderWithProps(ResponseEdit)}
-        />
-      </Switch>
-    );
-  }
-}
 
 SurveyLayout.propTypes = {
   surveys: PropTypes.arrayOf(surveyShape),
-  match: PropTypes.shape({
-    url: PropTypes.string,
-    isExact: PropTypes.bool,
-    params: PropTypes.shape({
-      courseId: PropTypes.string.isRequired,
-      surveyId: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
 };
 
 export default connect((state) => ({ surveys: state.surveys }))(SurveyLayout);

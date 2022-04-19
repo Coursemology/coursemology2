@@ -1,6 +1,7 @@
-import { Component } from 'react';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Card, CardContent, ListSubheader } from '@mui/material';
 import surveyTranslations from 'course/survey/translations';
@@ -10,6 +11,7 @@ import {
   updateResponse,
 } from 'course/survey/actions/responses';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
+import withRouter from 'lib/components/withRouter';
 import ResponseForm, {
   buildInitialValues,
   buildResponsePayload,
@@ -34,24 +36,23 @@ const translations = defineMessages({
   },
 });
 
-class ResponseEdit extends Component {
-  componentDidMount() {
-    const {
-      dispatch,
-      match: {
-        params: { responseId },
-      },
-    } = this.props;
-    dispatch(fetchEditableResponse(responseId));
-  }
+const ResponseEdit = (props) => {
+  const {
+    dispatch,
+    flags,
+    match: {
+      params: { responseId },
+    },
+    response,
+    survey,
+  } = props;
+  const navigate = useNavigate();
 
-  handleUpdateResponse = (data) => {
-    const {
-      dispatch,
-      match: {
-        params: { responseId },
-      },
-    } = this.props;
+  useEffect(() => {
+    dispatch(fetchEditableResponse(responseId));
+  }, [dispatch, responseId]);
+
+  const handleUpdateResponse = (data) => {
     const { saveSuccess, saveFailure, submitSuccess, submitFailure } =
       translations;
     const payload = buildResponsePayload(data);
@@ -63,12 +64,17 @@ class ResponseEdit extends Component {
     );
 
     return dispatch(
-      updateResponse(responseId, payload, successMessage, failureMessage),
+      updateResponse(
+        responseId,
+        payload,
+        successMessage,
+        failureMessage,
+        navigate,
+      ),
     );
   };
 
-  renderBody() {
-    const { survey, response, flags } = this.props;
+  const renderBody = () => {
     if (flags.isLoading) {
       return <LoadingIndicator />;
     }
@@ -80,29 +86,26 @@ class ResponseEdit extends Component {
           <FormattedMessage {...surveyTranslations.questions} />
         </ListSubheader>
         <ResponseForm
-          onSubmit={this.handleUpdateResponse}
+          onSubmit={handleUpdateResponse}
           {...{ response, flags, initialValues }}
         />
       </>
     );
-  }
+  };
 
-  render() {
-    const { survey } = this.props;
-    return (
-      <>
-        {survey.description ? (
-          <Card>
-            <CardContent
-              dangerouslySetInnerHTML={{ __html: survey.description }}
-            />
-          </Card>
-        ) : null}
-        {this.renderBody()}
-      </>
-    );
-  }
-}
+  return (
+    <>
+      {survey.description ? (
+        <Card>
+          <CardContent
+            dangerouslySetInnerHTML={{ __html: survey.description }}
+          />
+        </Card>
+      ) : null}
+      {renderBody()}
+    </>
+  );
+};
 
 ResponseEdit.propTypes = {
   survey: surveyShape,
@@ -118,4 +121,4 @@ ResponseEdit.propTypes = {
   dispatch: PropTypes.func.isRequired,
 };
 
-export default connect((state) => state.responseForm)(ResponseEdit);
+export default withRouter(connect((state) => state.responseForm)(ResponseEdit));

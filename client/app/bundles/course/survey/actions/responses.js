@@ -1,18 +1,17 @@
 import { SubmissionError } from 'redux-form';
 import CourseAPI from 'api/course';
-import history from 'lib/history';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import actionTypes from '../constants';
 import { setNotification } from './index';
 
-export function createResponse(surveyId) {
+export function createResponse(surveyId, navigate) {
   const courseId = getCourseId();
   const goToResponse = (responseId) =>
-    history.push(
+    navigate(
       `/courses/${courseId}/surveys/${surveyId}/responses/${responseId}`,
     );
   const goToResponseEdit = (responseId) =>
-    history.push(
+    navigate(
       `/courses/${courseId}/surveys/${surveyId}/responses/${responseId}/edit`,
     );
 
@@ -93,6 +92,7 @@ export function updateResponse(
   payload,
   successMessage,
   failureMessage,
+  navigate,
 ) {
   return (dispatch) => {
     dispatch({ type: actionTypes.UPDATE_RESPONSE_REQUEST });
@@ -110,7 +110,7 @@ export function updateResponse(
 
         if (payload.response.submit && !data.flags.canModify) {
           const courseId = getCourseId();
-          history.push(`/courses/${courseId}/surveys/`);
+          navigate(`/courses/${courseId}/surveys/`);
         }
 
         setNotification(successMessage)(dispatch);

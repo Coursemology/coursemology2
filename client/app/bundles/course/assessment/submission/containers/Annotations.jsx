@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
+import withRouter from 'lib/components/withRouter';
 import { Button, Card, CardContent } from '@mui/material';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
