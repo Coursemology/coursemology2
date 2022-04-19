@@ -50,7 +50,7 @@ const ResponseEdit = (props) => {
 
   useEffect(() => {
     dispatch(fetchEditableResponse(responseId));
-  }, [responseId]);
+  }, [dispatch, responseId]);
 
   const handleUpdateResponse = (data) => {
     const { saveSuccess, saveFailure, submitSuccess, submitFailure } =

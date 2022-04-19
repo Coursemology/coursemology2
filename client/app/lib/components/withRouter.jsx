@@ -6,12 +6,3 @@ export default function withRouter(Child) {
     return <Child {...props} match={{ params }} />;
   };
 }
-
-// const withRouter = (Child) => (props) => {
-//   const params = useParams();
-//   return <Child {...props} match={{ params }} />;
-// };
-
-// withRouter.propTypes = {
-//   Child: PropTypes.node,
-// };
