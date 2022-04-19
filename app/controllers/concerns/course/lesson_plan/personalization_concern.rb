@@ -35,6 +35,14 @@ module Course::LessonPlan::PersonalizationConcern
 
     precomputed_data = strategy.precompute_data(course_user)
     strategy.execute(course_user, precomputed_data, items_to_shift)
+    return if precomputed_data[:learning_rate_ema].nil?
+
+    # Log the information for future usages
+    learning_rate_record = Course::LearningRateRecord.new(course_user: course_user,
+                                                          learning_rate: precomputed_data[:learning_rate_ema],
+                                                          effective_min: precomputed_data[:effective_min],
+                                                          effective_max: precomputed_data[:effective_max])
+    learning_rate_record.save!
   end
 
   # Updates the personalized timeline for all course users in the course of the given lesson plan item.
