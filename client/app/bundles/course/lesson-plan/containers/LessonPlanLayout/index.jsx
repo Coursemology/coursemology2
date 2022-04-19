@@ -1,9 +1,9 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter, Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Card, CardContent, ListSubheader } from '@mui/material';
+import { ListSubheader } from '@mui/material';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import NotificationPopup from 'lib/containers/NotificationPopup';
 import DeleteConfirmation from 'lib/containers/DeleteConfirmation';
@@ -16,11 +16,6 @@ import LessonPlanFilter from 'course/lesson-plan/containers/LessonPlanFilter';
 import LessonPlanNav from 'course/lesson-plan/containers/LessonPlanNav';
 import MilestoneFormDialog from 'course/lesson-plan/containers/MilestoneFormDialog';
 import EventFormDialog from 'course/lesson-plan/containers/EventFormDialog';
-import ColumnVisibilityDropdown from 'course/lesson-plan/containers/ColumnVisibilityDropdown';
-import ExitEditModeButton from './ExitEditModeButton';
-import EnterEditModeButton from './EnterEditModeButton';
-import NewMilestoneButton from './NewMilestoneButton';
-import NewEventButton from './NewEventButton';
 
 const translations = defineMessages({
   empty: {
@@ -72,40 +67,14 @@ class LessonPlanLayout extends Component {
     }
 
     return (
-      <Switch>
-        <Route exact path={lessonPlanPath} component={LessonPlanShow} />
+      <Routes>
+        <Route exact path={lessonPlanPath} element={<LessonPlanShow />} />
         <Route
           exact
           path={`${lessonPlanPath}/edit`}
-          component={LessonPlanEdit}
+          element={<LessonPlanEdit />}
         />
-      </Switch>
-    );
-  }
-
-  renderHeader() {
-    if (!this.props.canManageLessonPlan) {
-      return null;
-    }
-
-    return (
-      <Card>
-        <CardContent>
-          <Route exact path={lessonPlanPath} component={EnterEditModeButton} />
-          <Route
-            exact
-            path={`${lessonPlanPath}/edit`}
-            component={ExitEditModeButton}
-          />
-          <NewMilestoneButton />
-          <Route path={lessonPlanPath} component={NewEventButton} />
-          <Route
-            exact
-            path={`${lessonPlanPath}/edit`}
-            component={ColumnVisibilityDropdown}
-          />
-        </CardContent>
-      </Card>
+      </Routes>
     );
   }
 
@@ -113,7 +82,6 @@ class LessonPlanLayout extends Component {
     return (
       <div style={styles.mainBody}>
         <TitleBar title={<FormattedMessage {...translations.lessonPlan} />} />
-        {this.renderHeader()}
         {this.renderBody()}
         <div style={styles.tools}>
           <LessonPlanNav />
@@ -136,10 +104,8 @@ LessonPlanLayout.propTypes = {
   dispatch: PropTypes.func.isRequired,
 };
 
-export default withRouter(
-  connect((state) => ({
-    isLoading: state.lessonPlan.isLoading,
-    groups: state.lessonPlan.groups,
-    canManageLessonPlan: state.flags.canManageLessonPlan,
-  }))(LessonPlanLayout),
-);
+export default connect((state) => ({
+  isLoading: state.lessonPlan.isLoading,
+  groups: state.lessonPlan.groups,
+  canManageLessonPlan: state.flags.canManageLessonPlan,
+}))(LessonPlanLayout);

@@ -12,6 +12,13 @@ import { ConnectedSurveyShow } from '../index';
 const client = CourseAPI.survey.surveys.getClient();
 const mock = new MockAdapter(client);
 
+const mockUsedNavigate = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockUsedNavigate,
+}));
+
 const surveyData = {
   id: 1,
   title: 'Test survey',

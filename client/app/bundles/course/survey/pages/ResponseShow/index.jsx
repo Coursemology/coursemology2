@@ -16,6 +16,7 @@ import surveyTranslations from 'course/survey/translations';
 import { surveyShape, responseShape } from 'course/survey/propTypes';
 import { fetchResponse } from 'course/survey/actions/responses';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
+import withRouter from 'lib/components/withRouter';
 import ResponseForm, {
   buildInitialValues,
 } from 'course/survey/containers/ResponseForm';
@@ -178,4 +179,4 @@ ResponseShow.propTypes = {
 };
 
 export const UnconnectedResponseShow = ResponseShow;
-export default connect((state) => state.responseForm)(ResponseShow);
+export default withRouter(connect((state) => state.responseForm)(ResponseShow));
