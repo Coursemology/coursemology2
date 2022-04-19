@@ -571,8 +571,6 @@ const SubmissionEditStepForm = (props) => {
       </Card>
       {renderUnsubmitDialog()}
       {renderResetDialog()}
-
-      {renderNavigateAwayWarning()}
     </div>
   );
 };

@@ -628,7 +628,6 @@ const SubmissionEditForm = (props) => {
       {renderUnsubmitDialog()}
       {renderResetDialog()}
       {renderExamDialog()}
-
     </Card>
   );
 };
