@@ -2,14 +2,9 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { Card, CardContent } from '@mui/material';
 import translations from 'course/lesson-plan/translations';
 import { fields } from 'course/lesson-plan/constants';
 import { lessonPlanTypesGroups } from 'lib/types';
-import ColumnVisibilityDropdown from 'course/lesson-plan/containers/ColumnVisibilityDropdown';
-import ExitEditModeButton from 'course/lesson-plan/containers/LessonPlanLayout/ExitEditModeButton';
-import NewMilestoneButton from 'course/lesson-plan/containers/LessonPlanLayout/NewMilestoneButton';
-import NewEventButton from 'course/lesson-plan/containers/LessonPlanLayout/NewEventButton';
 import MilestoneRow from './MilestoneRow';
 import ItemRow from './ItemRow';
 
@@ -56,18 +51,7 @@ class LessonPlanEdit extends Component {
     return rows;
   };
 
-  renderHeader = () => (
-    <Card>
-      <CardContent>
-        <ExitEditModeButton />
-        <NewMilestoneButton />
-        <NewEventButton />
-        <ColumnVisibilityDropdown />
-      </CardContent>
-    </Card>
-  );
-
-  renderTableHeader() {
+  renderHeader() {
     const { columnsVisible } = this.props;
 
     const headerFor = (field) => (
@@ -93,15 +77,12 @@ class LessonPlanEdit extends Component {
     const { groups } = this.props;
 
     return (
-      <>
-        {this.renderHeader()}
-        <div style={styles.page}>
-          <table>
-            {this.renderTableHeader()}
-            <tbody>{groups.map(this.renderGroup)}</tbody>
-          </table>
-        </div>
-      </>
+      <div style={styles.page}>
+        <table>
+          {this.renderHeader()}
+          <tbody>{groups.map(this.renderGroup)}</tbody>
+        </table>
+      </div>
     );
   }
 }

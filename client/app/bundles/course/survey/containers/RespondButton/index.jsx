@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import moment from 'lib/moment';
+import history from 'lib/history';
 import { Button } from '@mui/material';
 import { createResponse } from 'course/survey/actions/responses';
-import { useNavigate } from 'react-router-dom';
 
 const translations = defineMessages({
   start: {
@@ -43,10 +43,9 @@ const RespondButton = ({
 }) => {
   const isStarted = !!responseId;
   const responsePath = `/courses/${courseId}/surveys/${surveyId}/responses/${responseId}`;
-  const navigate = useNavigate();
-  const goToResponseShow = () => navigate(responsePath);
-  const goToResponseEdit = () => navigate(`${responsePath}/edit`);
-  const goToResponseCreate = () => dispatch(createResponse(surveyId, navigate));
+  const goToResponseShow = () => history.push(responsePath);
+  const goToResponseEdit = () => history.push(`${responsePath}/edit`);
+  const goToResponseCreate = () => dispatch(createResponse(surveyId));
 
   let labelTranslation = translations.notOpen;
   let onClick = () => {};

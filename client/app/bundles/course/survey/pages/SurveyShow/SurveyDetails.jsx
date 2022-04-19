@@ -1,7 +1,7 @@
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { useNavigate } from 'react-router-dom';
 import { formatLongDateTime } from 'lib/moment';
 import {
   Button,
@@ -15,6 +15,7 @@ import {
   TableRow,
 } from '@mui/material';
 import libTranslations from 'lib/translations';
+import history from 'lib/history';
 import surveyTranslations from 'course/survey/translations';
 import { surveyShape } from 'course/survey/propTypes';
 import { updateSurvey } from 'course/survey/actions/surveys';
@@ -35,12 +36,9 @@ const styles = {
   },
 };
 
-const SurveyDetails = (props) => {
-  const { survey, courseId, disabled } = props;
-  const navigate = useNavigate();
-
-  const handlePublishToggle = (event, value) => {
-    const { dispatch } = props;
+class SurveyDetails extends Component {
+  handlePublishToggle = (event, value) => {
+    const { dispatch, survey } = this.props;
     dispatch(
       updateSurvey(
         survey.id,
@@ -57,7 +55,9 @@ const SurveyDetails = (props) => {
     );
   };
 
-  const renderDescription = () => {
+  renderDescription() {
+    const { survey } = this.props;
+
     if (!survey.description) {
       return null;
     }
@@ -73,9 +73,10 @@ const SurveyDetails = (props) => {
         />
       </CardContent>
     );
-  };
+  }
 
-  const renderPublishToggle = () => {
+  renderPublishToggle() {
+    const { survey } = this.props;
     if (!survey.canUpdate) {
       return null;
     }
@@ -87,7 +88,7 @@ const SurveyDetails = (props) => {
             <Switch
               checked={survey.published}
               color="primary"
-              onChange={handlePublishToggle}
+              onChange={this.handlePublishToggle}
             />
           }
           label={<FormattedMessage {...surveyTranslations.published} />}
@@ -95,127 +96,136 @@ const SurveyDetails = (props) => {
         />
       </CardContent>
     );
-  };
-
-  if (!survey) {
-    return null;
   }
-  return (
-    <Card>
-      <div>
-        <Table style={styles.table}>
-          <TableBody>
-            <TableRow>
-              <TableCell>
-                <FormattedMessage {...surveyTranslations.opensAt} />
-              </TableCell>
-              <TableCell>{formatLongDateTime(survey.start_at)}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <FormattedMessage {...surveyTranslations.expiresAt} />
-              </TableCell>
-              <TableCell>{formatLongDateTime(survey.end_at)}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <FormattedMessage {...surveyTranslations.basePoints} />
-              </TableCell>
-              <TableCell>{survey.base_exp}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <FormattedMessage {...surveyTranslations.bonusPoints} />
-              </TableCell>
-              <TableCell>
-                {survey.allow_response_after_end ? survey.time_bonus_exp : '-'}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <FormattedMessage {...surveyTranslations.anonymous} />
-              </TableCell>
-              <TableCell>
-                <FormattedMessage
-                  {...libTranslations[survey.anonymous ? 'yes' : 'no']}
-                />
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <FormattedMessage
-                  {...surveyTranslations.allowResponseAfterEnd}
-                />
-              </TableCell>
-              <TableCell>
-                <FormattedMessage
-                  {...libTranslations[
-                    survey.allow_response_after_end ? 'yes' : 'no'
-                  ]}
-                />
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <FormattedMessage
-                  {...surveyTranslations.allowModifyAfterSubmit}
-                />
-              </TableCell>
-              <TableCell>
-                <FormattedMessage
-                  {...libTranslations[
-                    survey.allow_modify_after_submit ? 'yes' : 'no'
-                  ]}
-                />
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </div>
-      {renderPublishToggle()}
-      {renderDescription()}
-      <CardContent>
-        {survey.canCreateSection ? (
-          <NewSectionButton {...{ disabled }} />
-        ) : null}
-        {survey.canViewResults ? (
-          <Button
-            variant="outlined"
-            onClick={() =>
-              navigate(`/courses/${courseId}/surveys/${survey.id}/results`)
-            }
-            style={styles.button}
-          >
-            <FormattedMessage {...surveyTranslations.results} />
-          </Button>
-        ) : null}
-        {survey.canViewResults ? (
-          <Button
-            variant="outlined"
-            onClick={() =>
-              navigate(`/courses/${courseId}/surveys/${survey.id}/responses`)
-            }
-            style={styles.button}
-          >
-            <FormattedMessage {...surveyTranslations.responses} />
-          </Button>
-        ) : null}
-        <DownloadResponsesButton />
-        <RespondButton
-          courseId={courseId}
-          surveyId={survey.id}
-          responseId={survey.response && survey.response.id}
-          canRespond={survey.canRespond}
-          canModify={!!survey.response && survey.response.canModify}
-          canSubmit={!!survey.response && survey.response.canSubmit}
-          startAt={survey.start_at}
-          endAt={survey.end_at}
-          submittedAt={survey.response && survey.response.submitted_at}
-        />
-      </CardContent>
-    </Card>
-  );
-};
+
+  render() {
+    const { survey, courseId, disabled } = this.props;
+    if (!survey) {
+      return null;
+    }
+    return (
+      <Card>
+        <div>
+          <Table style={styles.table}>
+            <TableBody>
+              <TableRow>
+                <TableCell>
+                  <FormattedMessage {...surveyTranslations.opensAt} />
+                </TableCell>
+                <TableCell>{formatLongDateTime(survey.start_at)}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <FormattedMessage {...surveyTranslations.expiresAt} />
+                </TableCell>
+                <TableCell>{formatLongDateTime(survey.end_at)}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <FormattedMessage {...surveyTranslations.basePoints} />
+                </TableCell>
+                <TableCell>{survey.base_exp}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <FormattedMessage {...surveyTranslations.bonusPoints} />
+                </TableCell>
+                <TableCell>
+                  {survey.allow_response_after_end
+                    ? survey.time_bonus_exp
+                    : '-'}
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <FormattedMessage {...surveyTranslations.anonymous} />
+                </TableCell>
+                <TableCell>
+                  <FormattedMessage
+                    {...libTranslations[survey.anonymous ? 'yes' : 'no']}
+                  />
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <FormattedMessage
+                    {...surveyTranslations.allowResponseAfterEnd}
+                  />
+                </TableCell>
+                <TableCell>
+                  <FormattedMessage
+                    {...libTranslations[
+                      survey.allow_response_after_end ? 'yes' : 'no'
+                    ]}
+                  />
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <FormattedMessage
+                    {...surveyTranslations.allowModifyAfterSubmit}
+                  />
+                </TableCell>
+                <TableCell>
+                  <FormattedMessage
+                    {...libTranslations[
+                      survey.allow_modify_after_submit ? 'yes' : 'no'
+                    ]}
+                  />
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </div>
+        {this.renderPublishToggle()}
+        {this.renderDescription()}
+        <CardContent>
+          {survey.canCreateSection ? (
+            <NewSectionButton {...{ disabled }} />
+          ) : null}
+          {survey.canViewResults ? (
+            <Button
+              variant="outlined"
+              onClick={() =>
+                history.push(
+                  `/courses/${courseId}/surveys/${survey.id}/results`,
+                )
+              }
+              style={styles.button}
+            >
+              <FormattedMessage {...surveyTranslations.results} />
+            </Button>
+          ) : null}
+          {survey.canViewResults ? (
+            <Button
+              variant="outlined"
+              onClick={() =>
+                history.push(
+                  `/courses/${courseId}/surveys/${survey.id}/responses`,
+                )
+              }
+              style={styles.button}
+            >
+              <FormattedMessage {...surveyTranslations.responses} />
+            </Button>
+          ) : null}
+          <DownloadResponsesButton />
+          <RespondButton
+            courseId={courseId}
+            surveyId={survey.id}
+            responseId={survey.response && survey.response.id}
+            canRespond={survey.canRespond}
+            canModify={!!survey.response && survey.response.canModify}
+            canSubmit={!!survey.response && survey.response.canSubmit}
+            startAt={survey.start_at}
+            endAt={survey.end_at}
+            submittedAt={survey.response && survey.response.submitted_at}
+          />
+        </CardContent>
+      </Card>
+    );
+  }
+}
 
 SurveyDetails.propTypes = {
   survey: surveyShape,

@@ -1,6 +1,6 @@
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import moment from 'lib/moment';
 import { showSurveyForm, createSurvey } from 'course/survey/actions/surveys';
@@ -38,27 +38,22 @@ const aWeekStartingTomorrow = () => {
   };
 };
 
-const NewSurveyButton = (props) => {
-  const { canCreate } = props;
-  const navigate = useNavigate();
-
-  const createSurveyHandler = (data) => {
-    const { dispatch, intl } = props;
+class NewSurveyButton extends Component {
+  createSurveyHandler = (data) => {
+    const { dispatch, intl } = this.props;
 
     const payload = formatSurveyFormData(data);
     const successMessage = intl.formatMessage(translations.success, data);
     const failureMessage = intl.formatMessage(translations.failure);
-    return dispatch(
-      createSurvey(payload, successMessage, failureMessage, navigate),
-    );
+    return dispatch(createSurvey(payload, successMessage, failureMessage));
   };
 
-  const showNewSurveyForm = () => {
-    const { dispatch, intl } = props;
+  showNewSurveyForm = () => {
+    const { dispatch, intl } = this.props;
 
     return dispatch(
       showSurveyForm({
-        onSubmit: createSurveyHandler,
+        onSubmit: this.createSurveyHandler,
         formTitle: intl.formatMessage(translations.newSurvey),
         initialValues: {
           base_exp: 0,
@@ -69,8 +64,11 @@ const NewSurveyButton = (props) => {
     );
   };
 
-  return canCreate ? <AddButton onClick={showNewSurveyForm} /> : <div />;
-};
+  render() {
+    const { canCreate } = this.props;
+    return canCreate ? <AddButton onClick={this.showNewSurveyForm} /> : <div />;
+  }
+}
 
 NewSurveyButton.propTypes = propTypes;
 

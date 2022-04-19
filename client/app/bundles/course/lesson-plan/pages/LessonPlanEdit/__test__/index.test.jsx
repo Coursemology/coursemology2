@@ -22,13 +22,6 @@ const groupData = {
   ],
 };
 
-const mockUsedNavigate = jest.fn();
-
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockUsedNavigate,
-}));
-
 describe('<LessonPlanEdit />', () => {
   it('renders item and milestone rows', () => {
     const store = storeCreator({

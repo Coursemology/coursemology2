@@ -1,4 +1,5 @@
-import { Routes, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
+
 import SubmissionEditIndex from '../pages/SubmissionEditIndex';
 import SubmissionsIndex from '../pages/SubmissionsIndex';
 
@@ -9,10 +10,10 @@ const SubmissionsLayout = () => {
     '/courses/:courseId/assessments/:assessmentId/submissions/:submissionId/edit';
 
   return (
-    <Routes>
-      <Route exact path={submissionsIndex} element={<SubmissionsIndex />} />
-      <Route exact path={submissionEdit} element={<SubmissionEditIndex />} />
-    </Routes>
+    <Switch>
+      <Route exact path={submissionsIndex} component={SubmissionsIndex} />
+      <Route exact path={submissionEdit} component={SubmissionEditIndex} />
+    </Switch>
   );
 };
 
