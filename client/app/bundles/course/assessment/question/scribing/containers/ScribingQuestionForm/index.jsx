@@ -19,7 +19,7 @@ import translations from './ScribingQuestionForm.intl';
 import { dataShape } from '../../propTypes';
 
 const validationSchema = yup.object({
-  title: yup.string().required(formTranslations.required),
+  title: yup.string().nullable(),
   description: yup.string().nullable(),
   staff_only_comments: yup.string().nullable(),
   skills: yup.array().nullable(),
@@ -112,7 +112,6 @@ const ScribingQuestionForm = (props) => {
             InputLabelProps={{
               shrink: true,
             }}
-            required
             variant="standard"
           />
         )}
