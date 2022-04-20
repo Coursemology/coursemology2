@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { Controller, useFormContext } from 'react-hook-form';
 import { FormControlLabel, Radio } from '@mui/material';
 import { green } from '@mui/material/colors';
+import propsAreEqual from 'lib/components/form/fields/utils/propsAreEqual';
 import { questionShape } from '../../propTypes';
-import propsAreEqual from '../../../../../../lib/components/form/fields/utils/propsAreEqual';
 
 const MultipleChoiceOptions = ({
   readOnly,
