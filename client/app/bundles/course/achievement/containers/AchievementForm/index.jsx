@@ -18,7 +18,7 @@ import translations from './translations.intl';
 const validationSchema = yup.object({
   title: yup.string().required(formTranslations.required),
   description: yup.string().nullable(),
-  published: yup.bool(),
+  published: yup.bool().required(formTranslations.required),
 });
 
 const AchievementForm = (props) => {
