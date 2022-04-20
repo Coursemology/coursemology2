@@ -139,7 +139,7 @@ const onStartAtChange = (nextStartAt, watch, setValue) => {
   }
 };
 
-const UpdatedAssessmentForm = (props) => {
+const AssessmentForm = (props) => {
   const {
     conditionAttributes,
     disabled,
@@ -759,11 +759,11 @@ const UpdatedAssessmentForm = (props) => {
   );
 };
 
-UpdatedAssessmentForm.defaultProps = {
+AssessmentForm.defaultProps = {
   gamified: true,
 };
 
-UpdatedAssessmentForm.propTypes = {
+AssessmentForm.propTypes = {
   disabled: PropTypes.bool,
   dispatch: PropTypes.func.isRequired,
   start_at: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
@@ -807,10 +807,10 @@ UpdatedAssessmentForm.propTypes = {
   initialValues: PropTypes.object,
 };
 
-function mapStateToPropsUpdated(state) {
+function mapStateToProps(state) {
   return {
     tabs: state.editPage.tabs,
   };
 }
 
-export default connect(mapStateToPropsUpdated)(UpdatedAssessmentForm);
+export default connect(mapStateToProps)(AssessmentForm);

@@ -38,7 +38,7 @@ const validationSchema = yup.object({
     ),
 });
 
-const UpdatedScribingQuestionForm = (props) => {
+const ScribingQuestionForm = (props) => {
   const {
     actions: { createScribingQuestion, updateScribingQuestion },
     data,
@@ -233,7 +233,7 @@ const UpdatedScribingQuestionForm = (props) => {
   );
 };
 
-UpdatedScribingQuestionForm.propTypes = {
+ScribingQuestionForm.propTypes = {
   actions: PropTypes.shape({
     createScribingQuestion: PropTypes.func.isRequired,
     fetchSkills: PropTypes.func.isRequired,
@@ -246,4 +246,4 @@ UpdatedScribingQuestionForm.propTypes = {
   scribingId: PropTypes.string,
 };
 
-export default UpdatedScribingQuestionForm;
+export default ScribingQuestionForm;

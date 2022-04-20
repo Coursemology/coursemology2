@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import NotificationPopup from 'lib/containers/NotificationPopup';
 import { getScribingId } from 'lib/helpers/url-helpers';
-import UpdatedScribingQuestionForm from './containers/ScribingQuestionForm';
+import ScribingQuestionForm from './containers/ScribingQuestionForm';
 import * as scribingQuestionActionCreators from './actions/scribingQuestionActionCreators';
 import { questionShape } from './propTypes';
 import translations from './containers/ScribingQuestionForm/ScribingQuestionForm.intl';
@@ -72,7 +72,7 @@ const ScribingQuestion = (props) => {
 
   return (
     <>
-      <UpdatedScribingQuestionForm
+      <ScribingQuestionForm
         actions={actions}
         data={scribingQuestion}
         initialValues={initialValues}
