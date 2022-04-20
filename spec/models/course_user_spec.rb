@@ -15,6 +15,7 @@ RSpec.describe CourseUser, type: :model do
   it { is_expected.to have_many(:group_users).dependent(:destroy) }
   it { is_expected.to have_many(:groups).through(:group_users).source(:group) }
   it { is_expected.to have_many(:email_unsubscriptions).dependent(:destroy) }
+  it { is_expected.to have_many(:learning_rate_records).dependent(:destroy) }
 
   let!(:instance) { create :instance }
   with_tenant(:instance) do
@@ -329,6 +330,16 @@ RSpec.describe CourseUser, type: :model do
 
       it 'returns achievement by date obtained and not by achievement weight' do
         expect(student.achievements.ordered_by_date_obtained).to eq([achievement1, achievement2])
+      end
+    end
+
+    describe '#latest_learning_rate_record' do
+      it 'returns the latest learning rate record' do
+        create(:learning_rate_record, course_user: student, learning_rate: 1)
+        create(:learning_rate_record, course_user: student, learning_rate: 1.1)
+        latest = create(:learning_rate_record, course_user: student, learning_rate: 1.2)
+
+        expect(student.latest_learning_rate_record).to eq(latest)
       end
     end
 
