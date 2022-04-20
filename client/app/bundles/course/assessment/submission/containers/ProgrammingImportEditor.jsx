@@ -20,8 +20,12 @@ const styles = {
   },
 };
 
-const renderSelectProgrammingFileEditor = (props) => {
-  const { answerId, readOnly, language, displayFileIndex } = props;
+const SelectProgrammingFileEditor = ({
+  answerId,
+  readOnly,
+  language,
+  displayFileIndex,
+}) => {
   const { control } = useFormContext();
   const { fields } = useFieldArray({
     control,
@@ -71,6 +75,13 @@ const renderSelectProgrammingFileEditor = (props) => {
       })}
     </>
   );
+};
+
+SelectProgrammingFileEditor.propTypes = {
+  answerId: PropTypes.number,
+  readOnly: PropTypes.bool,
+  language: PropTypes.string,
+  displayFileIndex: PropTypes.number,
 };
 
 const renderProgrammingHistoryEditor = (answer, displayFileIndex) => {
@@ -166,16 +177,20 @@ const VisibleProgrammingImportEditor = (props) => {
           viewHistory={viewHistory}
         />
       )}
-      {viewHistory
-        ? renderProgrammingHistoryEditor(answers[answerId], displayFileIndex)
-        : renderSelectProgrammingFileEditor({
+      {viewHistory ? (
+        renderProgrammingHistoryEditor(answers[answerId], displayFileIndex)
+      ) : (
+        <SelectProgrammingFileEditor
+          {...{
             answerId,
             readOnly,
             question,
             displayFileIndex,
             viewHistory,
             language: parseLanguages(question.language),
-          })}
+          }}
+        />
+      )}
       {readOnly || viewHistory ? null : (
         <>
           <FileInputField

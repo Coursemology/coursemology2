@@ -8,7 +8,7 @@ import TestCaseView from '../../../containers/TestCaseView';
 import { parseLanguages } from '../../../utils';
 import { questionShape } from '../../../propTypes';
 
-const renderProgrammingFiles = ({ readOnly, answerId, language }) => {
+const ProgrammingFiles = ({ readOnly, answerId, language }) => {
   const { control } = useFormContext();
 
   const { fields } = useFieldArray({
@@ -54,11 +54,11 @@ const Programming = (props) => {
           {...{ readOnly, question }}
         />
       ) : (
-        renderProgrammingFiles({
-          readOnly,
-          answerId,
-          language: parseLanguages(question.language),
-        })
+        <ProgrammingFiles
+          readOnly={readOnly}
+          answerId={answerId}
+          language={parseLanguages(question.language)}
+        />
       )}
       <TestCaseView questionId={question.id} />
     </div>
