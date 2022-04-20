@@ -118,7 +118,14 @@ class PopupDialog extends Component {
         >
           {intl.formatMessage(translations.new)}
         </Button>
-        <Dialog onClose={this.handleClose} open={visible} maxWidth="md">
+        <Dialog
+          onClose={this.handleClose}
+          open={visible}
+          maxWidth="md"
+          style={{
+            zIndex: 9999,
+          }}
+        >
           <DialogTitle>
             {intl.formatMessage(translations.newAssessment)}
           </DialogTitle>
