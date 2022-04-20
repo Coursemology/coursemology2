@@ -45,6 +45,10 @@ const translations = defineMessages({
 });
 
 const styles = {
+  audioButtons: {
+    marginTop: 8,
+    marginBottom: 8,
+  },
   fileInputWrapper: {
     width: '60%',
   },
@@ -110,8 +114,9 @@ class VoiceResponseAnswer extends Component {
   };
 
   renderAudio = (field) => {
-    const { value } = field;
-    const { file, url } = value;
+    const {
+      value: { file, url },
+    } = field;
     let finalUrl;
     if (file) {
       finalUrl = URL.createObjectURL(file);
@@ -150,7 +155,7 @@ class VoiceResponseAnswer extends Component {
             previewComponent={this.renderSingleFileInputChildren}
           />
         </div>
-        <div>
+        <div style={styles.audioButtons}>
           <Button
             color="primary"
             disabled={recording}
