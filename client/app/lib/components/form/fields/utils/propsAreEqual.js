@@ -23,15 +23,20 @@ const propsAreEqual = (prevProps, nextProps) => {
   const { disabled: nextDisabled } = nextProps;
   const { renderIf: prevRenderIf } = prevProps;
   const { renderIf: nextRenderIf } = nextProps;
+  // Only for SelectField
+  const { options: prevOptions } = prevProps;
+  const { options: nextOptions } = nextProps;
   const valueIsUnchanged = prevValue === nextValue;
   const errorIsUnchanged = prevError === nextError;
   const isDisabledUnchanged = prevDisabled === nextDisabled;
   const isRenderIfUnchanged = prevRenderIf === nextRenderIf;
+  const isOptionsUnchanged = prevOptions === nextOptions;
   return (
     valueIsUnchanged &&
     errorIsUnchanged &&
     isDisabledUnchanged &&
-    isRenderIfUnchanged
+    isRenderIfUnchanged &&
+    isOptionsUnchanged
   );
 };
 
