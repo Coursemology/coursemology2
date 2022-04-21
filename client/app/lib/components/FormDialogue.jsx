@@ -87,6 +87,9 @@ class FormDialogue extends Component {
           maxWidth="md"
           open={open}
           onClose={this.handleFormClose}
+          style={{
+            zIndex: 9999,
+          }}
         >
           <DialogTitle>{title}</DialogTitle>
           <DialogContent>{children}</DialogContent>
