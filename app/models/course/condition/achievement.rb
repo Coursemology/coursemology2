@@ -35,6 +35,20 @@ class Course::Condition::Achievement < ApplicationRecord
     course_user.achievements.exists?(achievement.id)
   end
 
+  def compute_satisfaction_information(course_users)
+    satisfaction_information = Array.new(course_users.length, 0)
+    user_achievements = Course::UserAchievement.where(course_user: course_users).where(achievement: achievement)
+    #puts 'adwjnadwjnkdaw'
+    #puts user_achievements.length
+    user_achievements.each do |a|
+      #puts 'adnjadwnjkadwjnkadwjnkadwnjk'
+      #puts a
+    end
+    #puts 'adwnadwjnadwjkndawdajknw'
+    #puts satisfaction_information
+    return satisfaction_information
+  end
+
   # Class that the condition depends on.
   def self.dependent_class
     Course::Achievement.name

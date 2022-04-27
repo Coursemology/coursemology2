@@ -47,6 +47,11 @@ class Course::Condition::Assessment < ApplicationRecord
     end
   end
 
+  def compute_satisfaction_information(users)
+    satisfaction_information = Array.new(users.length, 0)
+    return satisfaction_information
+  end
+
   # Class that the condition depends on.
   def self.dependent_class
     Course::Assessment.name

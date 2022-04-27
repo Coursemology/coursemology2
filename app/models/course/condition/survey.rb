@@ -33,6 +33,11 @@ class Course::Condition::Survey < ApplicationRecord
     submitted_response_by_user(course_user)
   end
 
+  def compute_satisfaction_information(users)
+    satisfaction_information = Array.new(users.length, 0)
+    return satisfaction_information
+  end
+
   # Class that the condition depends on.
   def self.dependent_class
     Course::Survey.name

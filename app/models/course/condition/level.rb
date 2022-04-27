@@ -26,6 +26,11 @@ class Course::Condition::Level < ApplicationRecord
     course_user.level_number >= minimum_level
   end
 
+  def compute_satisfaction_information(users)
+    satisfaction_information = Array.new(users.length, 0)
+    return satisfaction_information
+  end
+
   def initialize_duplicate(duplicator, other)
     self.conditional = duplicator.duplicate(other.conditional)
     self.course = duplicator.options[:destination_course]
