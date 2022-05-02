@@ -96,12 +96,12 @@ function fetchImportResult(redirectAssessment, successMessage, failureMessage) {
           import_result: { import_errored: importErrored },
         } = response.data;
 
-        dispatch(setSubmissionMessage(successMessage));
-
         if (importErrored) {
           dispatch(submitFormEndEvaluating(response.data));
           dispatch(submitFormLoading(false));
+          dispatch(setSubmissionMessage(failureMessage));
         } else {
+          dispatch(setSubmissionMessage(successMessage));
           window.location = redirectAssessment;
         }
       })
@@ -130,7 +130,7 @@ function submitFormEvaluate(
       .then((response) => {
         const status = response.data.status;
 
-        if (status === 'submitted') {
+        if (status === 'submitted' || status === 'accepted') {
           dispatch(submitFormStartEvaluating());
 
           setTimeout(() => {
