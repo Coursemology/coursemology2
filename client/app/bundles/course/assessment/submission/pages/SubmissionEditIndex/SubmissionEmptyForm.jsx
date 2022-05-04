@@ -73,65 +73,68 @@ const SubmissionEmptyForm = (props) => {
   };
 
   const renderGradingPanel = () => {
-    if (!attempting) {
-      return <GradingPanel />;
+    if (attempting) {
+      return null;
     }
-    return null;
+    return <GradingPanel />;
   };
 
   const renderSaveGradeButton = () => {
-    if (graderView && !attempting) {
-      return (
+    const shouldRenderSaveGradeButton = graderView && !attempting;
+    if (!shouldRenderSaveGradeButton) {
+      return null;
+    }
+    return (
+      <Button
+        variant="contained"
+        color="primary"
+        disabled={isSaving}
+        onClick={handleSaveGrade}
+        style={styles.formButton}
+      >
+        {intl.formatMessage(translations.saveGrade)}
+      </Button>
+    );
+  };
+
+  const renderSubmitButton = () => {
+    const shouldRenderSubmitButton = attempting && canUpdate;
+    if (!shouldRenderSubmitButton) {
+      return null;
+    }
+    return (
+      <div style={styles.submitContainer}>
+        <FormattedMessage {...translations.submitNoQuestionExplain} />
         <Button
           variant="contained"
           color="primary"
           disabled={isSaving}
-          onClick={handleSaveGrade}
+          form={formNames.SUBMISSION}
+          type="submit"
           style={styles.formButton}
         >
-          {intl.formatMessage(translations.saveGrade)}
+          {intl.formatMessage(translations.ok)}
         </Button>
-      );
-    }
-    return null;
-  };
-
-  const renderSubmitButton = () => {
-    if (attempting && canUpdate) {
-      return (
-        <div style={styles.submitContainer}>
-          <FormattedMessage {...translations.submitNoQuestionExplain} />
-          <Button
-            variant="contained"
-            color="primary"
-            disabled={isSaving}
-            form={formNames.SUBMISSION}
-            type="submit"
-            style={styles.formButton}
-          >
-            {intl.formatMessage(translations.ok)}
-          </Button>
-        </div>
-      );
-    }
-    return null;
+      </div>
+    );
   };
 
   const renderUnsubmitButton = () => {
-    if (graderView && (submitted || published)) {
-      return (
-        <Button
-          variant="contained"
-          color="secondary"
-          disabled={isSaving}
-          onClick={() => setUnsubmitConfirmation(true)}
-          style={styles.formButton}
-        >
-          {intl.formatMessage(translations.unsubmit)}
-        </Button>
-      );
+    const shouldRenderUnsubmitButton = graderView && (submitted || published);
+    if (!shouldRenderUnsubmitButton) {
+      return null;
     }
-    return null;
+    return (
+      <Button
+        variant="contained"
+        color="secondary"
+        disabled={isSaving}
+        onClick={() => setUnsubmitConfirmation(true)}
+        style={styles.formButton}
+      >
+        {intl.formatMessage(translations.unsubmit)}
+      </Button>
+    );
   };
 
   const renderUnsubmitDialog = () => (

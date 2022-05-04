@@ -16,7 +16,7 @@ const { TITLE, DESCRIPTION, START_AT } = fields;
 const validationSchema = yup.object({
   title: yup.string().required(formTranslations.required),
   description: yup.string().nullable(),
-  start_at: yup.date().nullable().required(formTranslations.required),
+  start_at: yup.date().required(formTranslations.required),
 });
 
 const MilestoneForm = (props) => {

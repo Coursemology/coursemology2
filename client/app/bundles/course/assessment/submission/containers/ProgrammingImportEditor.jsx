@@ -86,18 +86,19 @@ SelectProgrammingFileEditor.propTypes = {
 
 const renderProgrammingHistoryEditor = (answer, displayFileIndex) => {
   const file = answer.files_attributes[displayFileIndex];
-  if (file) {
-    const content = file.highlighted_content.split('\n');
-    return (
-      <ReadOnlyEditor
-        key={answer.id}
-        answerId={answer.id}
-        fileId={file.id}
-        content={content}
-      />
-    );
+  if (!file) {
+    return null;
   }
-  return null;
+
+  const content = file.highlighted_content.split('\n');
+  return (
+    <ReadOnlyEditor
+      key={answer.id}
+      answerId={answer.id}
+      fileId={file.id}
+      content={content}
+    />
+  );
 };
 
 const stageFiles = async (props) => {

@@ -253,6 +253,7 @@ const QuestionForm = (props) => {
   );
 
   useEffect(() => {
+    // To add an option field by default when all other option fields are deleted.
     if (optionsFields.length === 0) {
       optionsAppend({
         weight: null,
@@ -269,30 +270,32 @@ const QuestionForm = (props) => {
   const isMultipleResponse = MULTIPLE_RESPONSE === questionType;
 
   const renderOptionsToDelete = () => {
-    if (deletedOptions && deletedOptions.length > 0) {
-      return (
-        <div>
-          <ListSubheader disableSticky>
-            <FormattedMessage {...questionFormTranslations.optionsToDelete} />
-          </ListSubheader>
-          <QuestionFormDeletedOptions
-            fieldsConfig={{
-              control,
-              fields: controlledDeletedOptionsFields,
-              append: deletedOptionsAppend,
-              remove: deletedOptionsRemove,
-            }}
-            optionsAppend={optionsAppend}
-            multipleChoice={isMultipleChoice}
-            multipleResponse={isMultipleResponse}
-          />
-          <ListSubheader disableSticky>
-            <FormattedMessage {...questionFormTranslations.optionsToKeep} />
-          </ListSubheader>
-        </div>
-      );
+    const shouldRenderOptionsToDelete =
+      deletedOptions && deletedOptions.length > 0;
+    if (!shouldRenderOptionsToDelete) {
+      return null;
     }
-    return null;
+    return (
+      <div>
+        <ListSubheader disableSticky>
+          <FormattedMessage {...questionFormTranslations.optionsToDelete} />
+        </ListSubheader>
+        <QuestionFormDeletedOptions
+          fieldsConfig={{
+            control,
+            fields: controlledDeletedOptionsFields,
+            append: deletedOptionsAppend,
+            remove: deletedOptionsRemove,
+          }}
+          optionsAppend={optionsAppend}
+          multipleChoice={isMultipleChoice}
+          multipleResponse={isMultipleResponse}
+        />
+        <ListSubheader disableSticky>
+          <FormattedMessage {...questionFormTranslations.optionsToKeep} />
+        </ListSubheader>
+      </div>
+    );
   };
 
   const renderSpecificFields = () => {
@@ -408,70 +411,66 @@ const QuestionForm = (props) => {
   };
 
   return (
-    <>
-      <form
-        encType="multipart/form-data"
-        id="survey-section-question-form"
-        noValidate
-        onSubmit={handleSubmit((data) => onSubmit(data, setError))}
-      >
-        <ErrorText errors={errors} />
-        <Controller
-          name="question_type"
-          control={control}
-          render={({ field, fieldState }) => (
-            <FormSelectField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              label={<FormattedMessage {...translations.questionType} />}
-              options={questionOptions}
-              required
-              style={styles.questionType}
-            />
-          )}
-        />
-        <Controller
-          name="description"
-          control={control}
-          render={({ field, fieldState }) => (
-            <FormTextField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              label={<FormattedMessage {...translations.questionText} />}
-              fullWidth
-              InputLabelProps={{
-                shrink: true,
-              }}
-              minRows={4}
-              multiline
-              required
-              variant="standard"
-            />
-          )}
-        />
-        <Controller
-          name="required"
-          control={control}
-          render={({ field, fieldState }) => (
-            <FormToggleField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              label={
-                <FormattedMessage {...questionFormTranslations.required} />
-              }
-              style={styles.toggle}
-            />
-          )}
-        />
-        <p style={styles.hint}>
-          <FormattedMessage {...questionFormTranslations.requiredHint} />
-        </p>
-        {!isTextResponse && renderSpecificFields()}
-      </form>
-    </>
+    <form
+      encType="multipart/form-data"
+      id="survey-section-question-form"
+      noValidate
+      onSubmit={handleSubmit((data) => onSubmit(data, setError))}
+    >
+      <ErrorText errors={errors} />
+      <Controller
+        name="question_type"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormSelectField
+            field={field}
+            fieldState={fieldState}
+            disabled={disabled}
+            label={<FormattedMessage {...translations.questionType} />}
+            options={questionOptions}
+            required
+            style={styles.questionType}
+          />
+        )}
+      />
+      <Controller
+        name="description"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormTextField
+            field={field}
+            fieldState={fieldState}
+            disabled={disabled}
+            label={<FormattedMessage {...translations.questionText} />}
+            fullWidth
+            InputLabelProps={{
+              shrink: true,
+            }}
+            minRows={4}
+            multiline
+            required
+            variant="standard"
+          />
+        )}
+      />
+      <Controller
+        name="required"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormToggleField
+            field={field}
+            fieldState={fieldState}
+            disabled={disabled}
+            label={<FormattedMessage {...questionFormTranslations.required} />}
+            style={styles.toggle}
+          />
+        )}
+      />
+      <p style={styles.hint}>
+        <FormattedMessage {...questionFormTranslations.requiredHint} />
+      </p>
+      {!isTextResponse && renderSpecificFields()}
+    </form>
   );
 };
 

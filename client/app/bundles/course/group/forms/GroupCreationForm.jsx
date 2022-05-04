@@ -139,7 +139,7 @@ const GroupCreationForm = (props) => {
     } else {
       dispatch({ type: actionTypes.SET_IS_DISABLED_FALSE });
     }
-  }, [numToCreate, conflictingNames]);
+  }, [dispatch, numToCreate, conflictingNames, isSingle]);
 
   return (
     <form

@@ -178,7 +178,7 @@ const AssessmentForm = (props) => {
       );
       dispatch(fetchTabs(failureMessage));
     }
-  }, []);
+  }, [dispatch]);
 
   const renderPasswordFields = () => (
     <div>

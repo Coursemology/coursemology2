@@ -101,9 +101,7 @@ const SubmissionEditStepForm = (props) => {
     topics,
   } = props;
 
-  let initialStep = step || 0;
-  initialStep = initialStep < 0 ? 0 : initialStep;
-  initialStep = initialStep > maxInitialStep ? maxInitialStep : initialStep;
+  const initialStep = Math.min(maxInitialStep, Math.max(0, step || 0));
 
   const [submitConfirmation, setSubmitConfirmation] = useState(false);
   const [unsubmitConfirmation, setUnsubmitConfirmation] = useState(false);
@@ -127,21 +125,6 @@ const SubmissionEditStepForm = (props) => {
   useEffect(() => {
     reset(initialValues);
   }, [initialValues]);
-
-  // eslint-disable-next-line consistent-return
-  const handleUnload = (e) => {
-    if (isDirty) {
-      e.preventDefault();
-      // Chrome
-      e.returnValue = '';
-      return '';
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener('beforeunload', handleUnload);
-    return () => window.removeEventListener('beforeunload', handleUnload);
-  }, []);
 
   const handleNext = () => {
     setMaxStep(Math.max(maxStep, stepIndex + 1));
@@ -200,22 +183,22 @@ const SubmissionEditStepForm = (props) => {
 
   const renderContinueButton = () => {
     const disabled = shouldDisableContinueButton();
-    if (shouldRenderContinueButton()) {
-      return (
-        <Button
-          variant="contained"
-          disabled={disabled}
-          onClick={() => handleNext()}
-          style={{
-            ...styles.formButton,
-            ...(!disabled && styles.contineButton),
-          }}
-        >
-          {intl.formatMessage(translations.continue)}
-        </Button>
-      );
+    if (!shouldRenderContinueButton()) {
+      return null;
     }
-    return null;
+    return (
+      <Button
+        variant="contained"
+        disabled={disabled}
+        onClick={() => handleNext()}
+        style={{
+          ...styles.formButton,
+          ...(!disabled && styles.contineButton),
+        }}
+      >
+        {intl.formatMessage(translations.continue)}
+      </Button>
+    );
   };
 
   const renderExplanationPanel = (question) => {
@@ -287,10 +270,10 @@ const SubmissionEditStepForm = (props) => {
   };
 
   const renderGradingPanel = () => {
-    if (!attempting) {
-      return <GradingPanel />;
+    if (attempting) {
+      return null;
     }
-    return null;
+    return <GradingPanel />;
   };
 
   const renderQuestionGrading = (id) => {
@@ -342,37 +325,38 @@ const SubmissionEditStepForm = (props) => {
   );
 
   const renderSaveDraftButton = () => {
-    if (attempting) {
-      return (
-        <Button
-          variant="contained"
-          color="primary"
-          disabled={!isDirty || isSaving}
-          onClick={handleSubmit((data) => onSaveDraft({ ...data }))}
-          style={styles.formButton}
-        >
-          {intl.formatMessage(translations.saveDraft)}
-        </Button>
-      );
+    if (!attempting) {
+      return null;
     }
-    return null;
+    return (
+      <Button
+        variant="contained"
+        color="primary"
+        disabled={!isDirty || isSaving}
+        onClick={handleSubmit((data) => onSaveDraft({ ...data }))}
+        style={styles.formButton}
+      >
+        {intl.formatMessage(translations.saveDraft)}
+      </Button>
+    );
   };
 
   const renderSaveGradeButton = () => {
-    if (graderView && !attempting) {
-      return (
-        <Button
-          variant="contained"
-          color="primary"
-          disabled={isSaving}
-          onClick={handleSaveGrade}
-          style={styles.formButton}
-        >
-          {intl.formatMessage(translations.saveGrade)}
-        </Button>
-      );
+    const shouldRenderSaveGradeButton = graderView && !attempting;
+    if (!shouldRenderSaveGradeButton) {
+      return null;
     }
-    return null;
+    return (
+      <Button
+        variant="contained"
+        color="primary"
+        disabled={isSaving}
+        onClick={handleSaveGrade}
+        style={styles.formButton}
+      >
+        {intl.formatMessage(translations.saveGrade)}
+      </Button>
+    );
   };
 
   const renderSubmitButton = () => {
@@ -427,20 +411,21 @@ const SubmissionEditStepForm = (props) => {
   );
 
   const renderUnsubmitButton = () => {
-    if (graderView && !attempting) {
-      return (
-        <Button
-          variant="contained"
-          color="secondary"
-          disabled={isSaving}
-          onClick={() => setUnsubmitConfirmation(true)}
-          style={styles.formButton}
-        >
-          {intl.formatMessage(translations.unsubmit)}
-        </Button>
-      );
+    const shouldRenderUnsubmitButton = graderView && !attempting;
+    if (!shouldRenderUnsubmitButton) {
+      return null;
     }
-    return null;
+    return (
+      <Button
+        variant="contained"
+        color="secondary"
+        disabled={isSaving}
+        onClick={() => setUnsubmitConfirmation(true)}
+        style={styles.formButton}
+      >
+        {intl.formatMessage(translations.unsubmit)}
+      </Button>
+    );
   };
 
   const renderUnsubmitDialog = () => (

@@ -100,21 +100,6 @@ const ResponseForm = (props) => {
     reset(initialValues);
   }, [initialValues]);
 
-  // eslint-disable-next-line consistent-return
-  const handleUnload = (e) => {
-    if (isDirty) {
-      e.preventDefault();
-      // Chrome
-      e.returnValue = '';
-      return '';
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener('beforeunload', handleUnload);
-    return () => window.removeEventListener('beforeunload', handleUnload);
-  });
-
   const renderSaveButton = () => {
     if (!canModify) {
       return null;
@@ -165,23 +150,20 @@ const ResponseForm = (props) => {
   };
 
   return (
-    <>
-      <form encType="multipart/form-data" id="survey-response-form" noValidate>
-        <ErrorText errors={errors} />
-        {fields.map((section, sectionIndex) => {
-          const disabled =
-            isSubmitting || readOnly || !(canModify || canSubmit);
-          return (
-            <ResponseSection
-              key={section.id}
-              {...{ disabled, control, sectionIndex, section }}
-            />
-          );
-        })}
-        {!readOnly && renderSaveButton()}
-        {!readOnly && renderSubmitButton()}
-      </form>
-    </>
+    <form encType="multipart/form-data" id="survey-response-form" noValidate>
+      <ErrorText errors={errors} />
+      {fields.map((section, sectionIndex) => {
+        const disabled = isSubmitting || readOnly || !(canModify || canSubmit);
+        return (
+          <ResponseSection
+            key={section.id}
+            {...{ disabled, control, sectionIndex, section }}
+          />
+        );
+      })}
+      {!readOnly && renderSaveButton()}
+      {!readOnly && renderSubmitButton()}
+    </form>
   );
 };
 

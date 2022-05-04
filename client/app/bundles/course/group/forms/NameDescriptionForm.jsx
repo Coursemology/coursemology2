@@ -33,7 +33,10 @@ const styles = {
   },
 };
 const validationSchema = yup.object({
-  name: yup.string().required(formTranslations.required),
+  name: yup
+    .string()
+    .required(formTranslations.required)
+    .max(255, formTranslations.nameLength),
   description: yup.string().nullable(),
 });
 
