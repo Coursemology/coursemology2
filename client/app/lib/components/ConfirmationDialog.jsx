@@ -25,6 +25,7 @@ class ConfirmationDialog extends Component {
       confirmSubmit,
       disableCancelButton,
       disableConfirmButton,
+      form,
     } = this.props;
 
     let confirmationButtonText = intl.formatMessage(formTranslations.continue);
@@ -72,6 +73,7 @@ class ConfirmationDialog extends Component {
         disabled={disableConfirmButton}
         key="confirmation-dialog-confirm-button"
         onClick={onConfirm}
+        {...(form ? { form, type: 'submit' } : {})}
         ref={(button) => {
           this.confirmButton = button;
         }}
@@ -129,7 +131,7 @@ ConfirmationDialog.propTypes = {
   confirmSubmit: PropTypes.bool,
   disableCancelButton: PropTypes.bool,
   disableConfirmButton: PropTypes.bool,
-
+  form: PropTypes.string,
   intl: intlShape.isRequired,
 };
 

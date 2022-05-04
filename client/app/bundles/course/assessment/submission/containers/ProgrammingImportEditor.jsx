@@ -1,18 +1,17 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
-import { FieldArray } from 'redux-form';
 import { Button } from '@mui/material';
 import ImportedFileView from './ImportedFileView';
 import Editor from '../components/Editor';
-import FileInput from '../components/FileInput';
+import FileInputField from '../components/FileInput';
 import ReadOnlyEditor from './ReadOnlyEditor';
-import { importFiles, deleteFile, stageFiles } from '../actions';
+import { importFiles, deleteFile } from '../actions';
 import translations from '../translations';
 import { questionShape, fileShape } from '../propTypes';
 import { parseLanguages } from '../utils';
-import { formNames } from '../constants';
 
 const styles = {
   formButton: {
@@ -21,142 +20,209 @@ const styles = {
   },
 };
 
-class VisibleProgrammingImportEditor extends Component {
-  static renderSelectProgrammingFileEditor(props) {
-    const { fields, readOnly, language, displayFileIndex } = props;
-    return (
-      <>
-        {fields.map((answerId, index) => {
-          const file = fields.get(index);
-          if (readOnly) {
-            const content = file.highlighted_content.split('\n');
-            return (
-              <ReadOnlyEditor
-                key={answerId}
-                answerId={parseInt(answerId.split('[')[0], 10)}
-                fileId={file.id}
-                content={content}
-              />
-            );
-          }
-          if (index === displayFileIndex && !file.staged) {
-            return (
-              <Editor
-                key={answerId}
-                name={`${answerId}[content]`}
-                filename={file.filename}
-                language={language}
-              />
-            );
-          }
-          return null;
-        })}
-      </>
-    );
-  }
+const SelectProgrammingFileEditor = ({
+  answerId,
+  readOnly,
+  language,
+  displayFileIndex,
+}) => {
+  const { control } = useFormContext();
+  const { fields } = useFieldArray({
+    control,
+    name: `${answerId}.files_attributes`,
+  });
 
-  constructor(props) {
-    super(props);
-    this.state = { displayFileIndex: 0 };
-  }
+  const currentFields = useWatch({
+    control,
+    name: `${answerId}.files_attributes`,
+  });
 
-  handleDeleteFile = (fileId) => {
-    const { dispatch, answerId, answers } = this.props;
-    dispatch(deleteFile(answerId, fileId, answers));
-    this.setState({ displayFileIndex: 0 });
-  };
+  const controlledProgrammingFields =
+    currentFields.length === fields.length
+      ? fields.map((field, index) => ({
+          ...field,
+          ...currentFields[index],
+        }))
+      : currentFields;
 
-  renderProgrammingHistoryEditor(answer) {
-    const { displayFileIndex } = this.state;
-    const file = answer.files_attributes[displayFileIndex];
-    if (file) {
-      const content = file.highlighted_content.split('\n');
-      return (
-        <ReadOnlyEditor
-          key={answer.id}
-          answerId={answer.id}
-          fileId={file.id}
-          content={content}
-        />
-      );
-    }
+  return (
+    <>
+      {controlledProgrammingFields.map((field, index) => {
+        const file = field;
+        if (readOnly) {
+          const content = file.highlighted_content.split('\n');
+          return (
+            <ReadOnlyEditor
+              key={file.id}
+              answerId={answerId}
+              fileId={file.id}
+              content={content}
+            />
+          );
+        }
+        if (index === displayFileIndex && !file.staged) {
+          return (
+            <Editor
+              control={control}
+              key={file.id}
+              name={`${answerId}.files_attributes.${index}.content`}
+              filename={file.filename}
+              language={language}
+            />
+          );
+        }
+        return null;
+      })}
+    </>
+  );
+};
+
+SelectProgrammingFileEditor.propTypes = {
+  answerId: PropTypes.number,
+  readOnly: PropTypes.bool,
+  language: PropTypes.string,
+  displayFileIndex: PropTypes.number,
+};
+
+const renderProgrammingHistoryEditor = (answer, displayFileIndex) => {
+  const file = answer.files_attributes[displayFileIndex];
+  if (!file) {
     return null;
   }
 
-  render() {
-    const {
-      dispatch,
-      submissionId,
-      questionId,
-      answerId,
-      readOnly,
-      question,
-      intl,
-      answers,
-      isSaving,
-      viewHistory,
-    } = this.props;
-    const { displayFileIndex } = this.state;
-    const files = answers[answerId].files_attributes;
-    const stagedFiles = files.filter((file) => file.staged).length > 0;
-    const disableImport = !stagedFiles || isSaving;
-    return (
-      <>
-        {readOnly ? null : (
-          <ImportedFileView
-            submissionId={submissionId}
-            questionId={questionId}
-            displayFileIndex={displayFileIndex}
-            handleDeleteFile={this.handleDeleteFile}
-            handleFileTabbing={(index) =>
-              this.setState({ displayFileIndex: index })
-            }
-            files={files}
-            viewHistory={viewHistory}
-          />
-        )}
-        {viewHistory ? (
-          this.renderProgrammingHistoryEditor(answers[answerId])
-        ) : (
-          <FieldArray
-            name={`${answerId}[files_attributes]`}
-            component={
-              VisibleProgrammingImportEditor.renderSelectProgrammingFileEditor
-            }
-            {...{
-              readOnly,
-              question,
-              displayFileIndex,
-              viewHistory,
-              language: parseLanguages(question.language),
-            }}
-          />
-        )}
-        {readOnly || viewHistory ? null : (
-          <>
-            <FileInput
-              name={`${answerId}[import_files]`}
-              disabled={isSaving}
-              callback={(filesToImport) =>
-                dispatch(stageFiles(submissionId, answerId, filesToImport))
-              }
-            />
-            <Button
-              variant="contained"
-              disabled={disableImport}
-              onClick={() =>
-                dispatch(importFiles(answerId, answers, question.language))
-              }
-              style={styles.formButton}
-            >
-              {intl.formatMessage(translations.uploadFiles)}
-            </Button>
-          </>
-        )}
-      </>
+  const content = file.highlighted_content.split('\n');
+  return (
+    <ReadOnlyEditor
+      key={answer.id}
+      answerId={answer.id}
+      fileId={file.id}
+      content={content}
+    />
+  );
+};
+
+const stageFiles = async (props) => {
+  const { answerId, answers, filesToImport, setValue } = props;
+
+  // Create a map of promises that will resolve all files are read
+  const readerPromises = Object.keys(filesToImport).map(
+    (key) =>
+      new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsText(filesToImport[key]);
+        reader.onload = (e) => {
+          resolve(e.target.result);
+        };
+      }),
+  );
+
+  // Detects when all of the promises are fully loaded
+  Promise.all(readerPromises).then((results) => {
+    const newFiles = [];
+    Object.keys(filesToImport).forEach((key, index) => {
+      const obj = filesToImport[key];
+      const file = {
+        filename: obj.name,
+        staged: true,
+        content: results[index],
+      };
+      newFiles.push(file);
+    });
+
+    // Removes previously staged files
+    const filteredFiles = answers[`${answerId}`].files_attributes.filter(
+      (file) => !file.staged,
     );
-  }
-}
+
+    setValue(`${answerId}.files_attributes`, filteredFiles.concat(newFiles));
+  });
+};
+
+const VisibleProgrammingImportEditor = (props) => {
+  const [displayFileIndex, setDisplayFileIndex] = useState(0);
+  const { control, setValue } = useFormContext();
+  const {
+    dispatch,
+    submissionId,
+    questionId,
+    answerId,
+    readOnly,
+    question,
+    intl,
+    historyAnswers,
+    isSaving,
+    viewHistory,
+  } = props;
+  const answers = viewHistory ? historyAnswers : useWatch({ control });
+  const files =
+    answers[answerId].files_attributes ||
+    answers[`${answerId}`].files_attributes;
+  const stagedFiles = files.filter((file) => file.staged).length > 0;
+  const disableImport = !stagedFiles || isSaving;
+
+  const handleDeleteFile = (fileId) => {
+    dispatch(deleteFile(answerId, fileId, answers, setValue));
+    setDisplayFileIndex(0);
+  };
+
+  return (
+    <>
+      {readOnly ? null : (
+        <ImportedFileView
+          submissionId={submissionId}
+          questionId={questionId}
+          displayFileIndex={displayFileIndex}
+          handleDeleteFile={handleDeleteFile}
+          handleFileTabbing={(index) => setDisplayFileIndex(index)}
+          files={files}
+          viewHistory={viewHistory}
+        />
+      )}
+      {viewHistory ? (
+        renderProgrammingHistoryEditor(answers[answerId], displayFileIndex)
+      ) : (
+        <SelectProgrammingFileEditor
+          {...{
+            answerId,
+            readOnly,
+            question,
+            displayFileIndex,
+            viewHistory,
+            language: parseLanguages(question.language),
+          }}
+        />
+      )}
+      {readOnly || viewHistory ? null : (
+        <>
+          <FileInputField
+            name={`${answerId}.import_files`}
+            disabled={isSaving}
+            callback={(filesToImport) =>
+              stageFiles({
+                answerId,
+                answers,
+                filesToImport,
+                setValue,
+              })
+            }
+          />
+          <Button
+            variant="contained"
+            disabled={disableImport}
+            onClick={() =>
+              dispatch(
+                importFiles(answerId, answers, question.language, setValue),
+              )
+            }
+            style={styles.formButton}
+          >
+            {intl.formatMessage(translations.uploadFiles)}
+          </Button>
+        </>
+      )}
+    </>
+  );
+};
 
 VisibleProgrammingImportEditor.propTypes = {
   intl: intlShape.isRequired,
@@ -168,7 +234,7 @@ VisibleProgrammingImportEditor.propTypes = {
   readOnly: PropTypes.bool,
   viewHistory: PropTypes.bool,
   isSaving: PropTypes.bool,
-  answers: PropTypes.shape({
+  historyAnswers: PropTypes.shape({
     id: PropTypes.number,
     questionId: PropTypes.number,
     files_attributes: PropTypes.arrayOf(fileShape),
@@ -177,14 +243,12 @@ VisibleProgrammingImportEditor.propTypes = {
 
 function mapStateToProps(state, ownProps) {
   const { questionId, answerId, question, readOnly, viewHistory } = ownProps;
-  const { submission, form, dispatch, submissionFlags, history } = state;
+  const { submission, dispatch, submissionFlags, history } = state;
 
   const submissionId = submission.id;
-  let answers;
+  let historyAnswers;
   if (viewHistory) {
-    answers = history.answers;
-  } else {
-    answers = form[formNames.SUBMISSION].values;
+    historyAnswers = history.answers;
   }
   const isSaving = submissionFlags.isSaving;
 
@@ -196,7 +260,7 @@ function mapStateToProps(state, ownProps) {
     question,
     readOnly,
     isSaving,
-    answers,
+    historyAnswers,
   };
 }
 

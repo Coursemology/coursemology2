@@ -25,11 +25,9 @@ const updateResponseUrl = `/courses/${courseId}/assessments/${assessmentId}/ques
 const redirectUrl = `/courses/${courseId}/assessments/${assessmentId}`;
 
 const mockFields = {
-  question_scribing: {
-    title: 'Scribing Exercise',
-    maximum_grade: 10,
-    skill_ids: [],
-  },
+  title: 'Scribing Exercise',
+  maximum_grade: 10,
+  skill_ids: [],
 };
 
 const processedMockFields = {

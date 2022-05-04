@@ -1,4 +1,5 @@
 import { mount } from 'enzyme';
+import { act } from 'react-dom/test-utils';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 import CourseAPI from 'api/course';
 import storeCreator from '../../../store';
@@ -35,7 +36,9 @@ describe('<AchievementEdit />', () => {
 
     const spy = jest.spyOn(CourseAPI.achievements, 'update');
     const form = editPage.find('form');
-    form.simulate('submit');
+    await act(async () => {
+      form.simulate('submit');
+    });
 
     // Check that API call is made.
     const formData = new FormData();

@@ -1,28 +1,33 @@
 import PropTypes from 'prop-types';
-import { Field } from 'redux-form';
-import AceEditor from 'lib/components/redux-form/AceEditor';
+import { Controller, useFormContext } from 'react-hook-form';
+import AceEditorField from 'lib/components/form/fields/AceEditorField';
 
 const Editor = (props) => {
   const { readOnly, filename, name, language } = props;
+  const { control } = useFormContext();
+
   return (
-    <Field
-      component={AceEditor}
+    <Controller
       name={name}
-      filename={filename}
-      mode={language}
-      theme="github"
-      width="100%"
-      minLines={25}
-      maxLines={25}
-      editorProps={{ $blockScrolling: true }}
-      setOptions={{ useSoftTabs: true }}
-      readOnly={readOnly}
-      style={{ marginBottom: 10 }}
+      control={control}
+      render={({ field }) => (
+        <AceEditorField
+          field={field}
+          filename={filename}
+          mode={language}
+          theme="github"
+          width="100%"
+          minLines={25}
+          maxLines={25}
+          editorProps={{ $blockScrolling: true }}
+          setOptions={{ useSoftTabs: true }}
+          readOnly={readOnly}
+          style={{ marginBottom: 10 }}
+        />
+      )}
     />
   );
 };
-
-export default Editor;
 
 Editor.propTypes = {
   readOnly: PropTypes.bool,
@@ -34,3 +39,5 @@ Editor.propTypes = {
 Editor.defaultProps = {
   readOnly: false,
 };
+
+export default Editor;

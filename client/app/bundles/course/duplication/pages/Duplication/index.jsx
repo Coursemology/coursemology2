@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import TitleBar from 'lib/components/TitleBar';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
-import DateTimePicker from 'lib/components/form/DateTimePicker';
+import DateTimePicker from 'lib/components/fields/DateTimePicker';
 import {
   fetchObjectsList,
   setDuplicationMode,

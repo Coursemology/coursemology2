@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import { reducer as formReducer } from 'redux-form';
 import notificationPopup from 'lib/reducers/notificationPopup';
 import groupsFetch from './groupsFetch';
 import groupsDialog from './groupsDialog';
@@ -10,5 +9,4 @@ export default combineReducers({
   groupsFetch,
   groupsDialog,
   groupsManage,
-  form: formReducer,
 });

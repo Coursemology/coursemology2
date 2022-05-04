@@ -79,7 +79,7 @@ const CategoryCard = ({
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
 
   const onFormSubmit = useCallback(
-    (data) => {
+    (data, setError) => {
       if (!canManageCategory) {
         return undefined;
       }
@@ -93,6 +93,7 @@ const CategoryCard = ({
           intl.formatMessage(translations.updateFailure, {
             categoryName: category.name,
           }),
+          setError,
         ),
       );
     },

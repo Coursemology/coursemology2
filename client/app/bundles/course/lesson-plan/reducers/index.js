@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import { reducer as formReducer } from 'redux-form';
 import notificationPopup from 'lib/reducers/notificationPopup';
 import deleteConfirmation from 'lib/reducers/deleteConfirmation';
 import flags from './flags';
@@ -14,5 +13,4 @@ export default combineReducers({
   lessonPlan,
   eventForm,
   milestoneForm,
-  form: formReducer,
 });

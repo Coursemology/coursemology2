@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Checkbox, IconButton, Radio } from '@mui/material';
 import { grey } from '@mui/material/colors';
@@ -33,9 +32,26 @@ const styles = {
   },
 };
 
-class QuestionFormDeletedOptions extends Component {
-  renderWidget() {
-    const { multipleResponse, multipleChoice } = this.props;
+const handleRestore = (remove, index, field, optionsAppend) => {
+  remove(index);
+  optionsAppend({ ...field });
+};
+
+const QuestionFormDeletedOptions = (props) => {
+  const {
+    disabled,
+    fieldsConfig,
+    multipleChoice,
+    multipleResponse,
+    optionsAppend,
+  } = props;
+  const { fields, remove } = fieldsConfig;
+
+  if (!fields || fields.length < 1) {
+    return null;
+  }
+
+  const renderWidget = () => {
     let widget = null;
     if (multipleChoice) {
       widget = <Radio disabled style={styles.widget} />;
@@ -43,59 +59,46 @@ class QuestionFormDeletedOptions extends Component {
       widget = <Checkbox disabled style={styles.widget} />;
     }
     return widget;
-  }
+  };
 
-  render() {
-    const { fields, disabled, addToOptions } = this.props;
-
-    // eslint-disable-next-line react/prop-types
-    if (!fields || fields.length < 1) {
-      return null;
-    }
-
-    return (
-      <>
-        {fields.map((member, index) => {
-          const option = fields.get(index);
-          const handleRestore = () => {
-            fields.remove(index);
-            addToOptions(option);
-          };
-
-          return (
-            <div style={styles.option} key={option.id}>
-              {this.renderWidget()}
-              {option.image_url ? (
-                <Thumbnail
-                  src={option.image_url}
-                  style={styles.image}
-                  containerStyle={styles.imageContainer}
-                />
-              ) : (
-                <div style={styles.imageSpacer} />
-              )}
-              <span style={styles.optionBody}>{option.option}</span>
-              <IconButton disabled={disabled} onClick={handleRestore}>
-                <Close htmlColor={disabled ? undefined : grey[600]} />
-              </IconButton>
-            </div>
-          );
-        })}
-      </>
-    );
-  }
-}
+  return (
+    <>
+      {fields.map((field, index) => (
+        <div style={styles.option} key={field.id}>
+          {renderWidget()}
+          {field.image_url ? (
+            <Thumbnail
+              src={field.image_url}
+              style={styles.image}
+              containerStyle={styles.imageContainer}
+            />
+          ) : (
+            <div style={styles.imageSpacer} />
+          )}
+          <span style={styles.optionBody}>{field.option}</span>
+          <IconButton
+            disabled={disabled}
+            onClick={() => handleRestore(remove, index, field, optionsAppend)}
+          >
+            <Close htmlColor={disabled ? undefined : grey[600]} />
+          </IconButton>
+        </div>
+      ))}
+    </>
+  );
+};
 
 QuestionFormDeletedOptions.propTypes = {
-  multipleResponse: PropTypes.bool,
-  multipleChoice: PropTypes.bool,
   disabled: PropTypes.bool,
-  addToOptions: PropTypes.func.isRequired,
-  fields: PropTypes.shape({
-    map: PropTypes.func.isRequired,
-    get: PropTypes.func.isRequired,
+  fieldsConfig: PropTypes.shape({
+    control: PropTypes.object.isRequired,
+    fields: PropTypes.arrayOf(PropTypes.object).isRequired,
+    append: PropTypes.func.isRequired,
     remove: PropTypes.func.isRequired,
-  }).isRequired,
+  }),
+  multipleChoice: PropTypes.bool,
+  multipleResponse: PropTypes.bool,
+  optionsAppend: PropTypes.func.isRequired,
 };
 
 export default QuestionFormDeletedOptions;

@@ -1,6 +1,6 @@
-import { Component } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { reduxForm } from 'redux-form';
+import { useForm, FormProvider } from 'react-hook-form';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import Hotkeys from 'react-hot-keys';
 import {
@@ -21,6 +21,7 @@ import { blue, green, lightBlue, red } from '@mui/material/colors';
 
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import ErrorText from 'lib/components/ErrorText';
 import {
   explanationShape,
   questionShape,
@@ -34,7 +35,6 @@ import GradingPanel from '../../containers/GradingPanel';
 import Comments from '../../containers/Comments';
 import { formNames, questionTypes } from '../../constants';
 import translations from '../../translations';
-import submissionFormValidate from './submissionFormValidate';
 
 const styles = {
   questionContainer: {
@@ -68,67 +68,76 @@ const styles = {
   },
 };
 
-class SubmissionEditStepForm extends Component {
-  static isLastQuestion(questionIds, stepIndex) {
-    return stepIndex + 1 === questionIds.length;
-  }
+const isLastQuestion = (questionIds, stepIndex) =>
+  stepIndex + 1 === questionIds.length;
 
-  constructor(props) {
-    super(props);
-    let initialStep = props.step || 0;
-    initialStep = initialStep < 0 ? 0 : initialStep;
-    initialStep = initialStep > props.maxStep ? props.maxStep : initialStep;
+const SubmissionEditStepForm = (props) => {
+  const {
+    allConsideredCorrect,
+    allowPartialSubmission,
+    attempting,
+    explanations,
+    graderView,
+    onReset,
+    onSaveDraft,
+    onSubmit,
+    onSubmitAnswer,
+    handleSaveGrade,
+    handleToggleViewHistoryMode,
+    handleUnsubmit,
+    historyQuestions,
+    initialValues,
+    intl,
+    isSaving,
+    maxStep: maxInitialStep,
+    published,
+    questionIds,
+    questions,
+    questionsFlags,
+    showMcqAnswer,
+    showMcqMrqSolution,
+    skippable,
+    step,
+    topics,
+  } = props;
 
-    this.state = {
-      maxStep: props.maxStep,
-      stepIndex: initialStep,
-      submitConfirmation: false,
-      unsubmitConfirmation: false,
-      resetConfirmation: false,
-    };
-  }
+  const initialStep = Math.min(maxInitialStep, Math.max(0, step || 0));
 
-  componentDidMount() {
-    window.addEventListener('beforeunload', this.handleUnload);
-  }
+  const [submitConfirmation, setSubmitConfirmation] = useState(false);
+  const [unsubmitConfirmation, setUnsubmitConfirmation] = useState(false);
+  const [resetConfirmation, setResetConfirmation] = useState(false);
+  const [resetAnswerId, setResetAnswerId] = useState(null);
+  const [maxStep, setMaxStep] = useState(maxInitialStep);
+  const [stepIndex, setStepIndex] = useState(initialStep);
 
-  componentWillUnmount() {
-    window.removeEventListener('beforeunload', this.handleUnload);
-  }
+  const methods = useForm({
+    defaultValues: initialValues,
+  });
 
-  handleUnload = (e) => {
-    if (!this.props.pristine) {
-      e.preventDefault();
-      // For Chrome to show warning when navigating away from the page, we need to
-      // indicate the returnValue below.
-      e.returnValue = '';
-      return '';
-    }
-    return null;
+  const {
+    getValues,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors, isDirty },
+  } = methods;
+
+  useEffect(() => {
+    reset(initialValues);
+  }, [initialValues]);
+
+  const handleNext = () => {
+    setMaxStep(Math.max(maxStep, stepIndex + 1));
+    setStepIndex(stepIndex + 1);
   };
 
-  handleNext() {
-    const { maxStep, stepIndex } = this.state;
-    this.setState({
-      maxStep: Math.max(maxStep, stepIndex + 1),
-      stepIndex: stepIndex + 1,
-    });
-  }
-
-  handleStepClick(index) {
-    const { published, skippable, graderView } = this.props;
-    const { maxStep } = this.state;
-
+  const handleStepClick = (index) => {
     if (published || skippable || graderView || index <= maxStep) {
-      this.setState({
-        stepIndex: index,
-      });
+      setStepIndex(index);
     }
-  }
+  };
 
-  shouldDisableContinueButton() {
-    const { stepIndex } = this.state;
-    const { explanations, questionIds, isSaving, showMcqAnswer } = this.props;
+  const shouldDisableContinueButton = () => {
     const questionId = questionIds[stepIndex];
 
     if (isSaving) {
@@ -140,17 +149,12 @@ class SubmissionEditStepForm extends Component {
     }
 
     return showMcqAnswer;
-  }
+  };
 
-  shouldRenderContinueButton() {
-    const { stepIndex } = this.state;
-    const { questionIds } = this.props;
-    return !SubmissionEditStepForm.isLastQuestion(questionIds, stepIndex);
-  }
+  const shouldRenderContinueButton = () =>
+    !isLastQuestion(questionIds, stepIndex);
 
-  renderAnswerLoadingIndicator() {
-    const { stepIndex } = this.state;
-    const { questionIds, questionsFlags } = this.props;
+  const renderAnswerLoadingIndicator = () => {
     const id = questionIds[stepIndex];
     const { isAutograding, isResetting } = questionsFlags[id] || {};
 
@@ -158,10 +162,9 @@ class SubmissionEditStepForm extends Component {
       return <CircularProgress size={36} style={{ position: 'absolute' }} />;
     }
     return null;
-  }
+  };
 
-  renderAutogradingErrorPanel(id) {
-    const { intl, questionsFlags, questions } = this.props;
+  const renderAutogradingErrorPanel = (id) => {
     const { jobError } = questionsFlags[id] || {};
     const { type } = questions[id];
 
@@ -176,31 +179,29 @@ class SubmissionEditStepForm extends Component {
     }
 
     return null;
-  }
+  };
 
-  renderContinueButton() {
-    const { intl } = this.props;
-    const disabled = this.shouldDisableContinueButton();
-    if (this.shouldRenderContinueButton()) {
-      return (
-        <Button
-          variant="contained"
-          disabled={disabled}
-          onClick={() => this.handleNext()}
-          style={{
-            ...styles.formButton,
-            ...(!disabled && styles.contineButton),
-          }}
-        >
-          {intl.formatMessage(translations.continue)}
-        </Button>
-      );
+  const renderContinueButton = () => {
+    const disabled = shouldDisableContinueButton();
+    if (!shouldRenderContinueButton()) {
+      return null;
     }
-    return null;
-  }
+    return (
+      <Button
+        variant="contained"
+        disabled={disabled}
+        onClick={() => handleNext()}
+        style={{
+          ...styles.formButton,
+          ...(!disabled && styles.contineButton),
+        }}
+      >
+        {intl.formatMessage(translations.continue)}
+      </Button>
+    );
+  };
 
-  renderExplanationPanel(question) {
-    const { intl, explanations } = this.props;
+  const renderExplanationPanel = (question) => {
     const explanation = explanations[question.id];
 
     if (explanation && explanation.correct !== null) {
@@ -249,23 +250,16 @@ class SubmissionEditStepForm extends Component {
       /* eslint-enable react/no-array-index-key */
     }
     return null;
-  }
+  };
 
-  renderFinaliseButton() {
-    const {
-      intl,
-      attempting,
-      allConsideredCorrect,
-      isSaving,
-      allowPartialSubmission,
-    } = this.props;
+  const renderFinaliseButton = () => {
     if (attempting && (allowPartialSubmission || allConsideredCorrect)) {
       return (
         <Button
           variant="contained"
           color="secondary"
           disabled={isSaving}
-          onClick={() => this.setState({ submitConfirmation: true })}
+          onClick={() => setSubmitConfirmation(true)}
           style={styles.formButton}
         >
           {intl.formatMessage(translations.finalise)}
@@ -273,28 +267,23 @@ class SubmissionEditStepForm extends Component {
       );
     }
     return null;
-  }
+  };
 
-  renderGradingPanel() {
-    const { attempting } = this.props;
-    if (!attempting) {
-      return <GradingPanel />;
+  const renderGradingPanel = () => {
+    if (attempting) {
+      return null;
     }
-    return null;
-  }
+    return <GradingPanel />;
+  };
 
-  renderQuestionGrading(id) {
-    const { attempting, published, graderView } = this.props;
+  const renderQuestionGrading = (id) => {
     const editable = !attempting && graderView;
     const visible = editable || published;
 
     return visible ? <QuestionGrade id={id} editable={editable} /> : null;
-  }
+  };
 
-  renderResetButton() {
-    const { stepIndex } = this.state;
-    const { intl, questionIds, questions, questionsFlags, isSaving } =
-      this.props;
+  const renderResetButton = () => {
     const id = questionIds[stepIndex];
     const question = questions[id];
     const { answerId } = question;
@@ -306,12 +295,10 @@ class SubmissionEditStepForm extends Component {
           variant="outlined"
           color="info"
           disabled={isAutograding || isResetting || isSaving}
-          onClick={() =>
-            this.setState({
-              resetConfirmation: true,
-              resetAnswerId: answerId,
-            })
-          }
+          onClick={() => {
+            setResetConfirmation(true);
+            setResetAnswerId(answerId);
+          }}
           style={styles.formButton}
         >
           {intl.formatMessage(translations.reset)}
@@ -319,75 +306,141 @@ class SubmissionEditStepForm extends Component {
       );
     }
     return null;
-  }
+  };
 
-  renderResetDialog() {
-    const { resetConfirmation, resetAnswerId } = this.state;
-    const { intl, handleReset } = this.props;
+  const renderResetDialog = () => (
+    <ConfirmationDialog
+      open={resetConfirmation}
+      onCancel={() => {
+        setResetConfirmation(false);
+        setResetAnswerId(null);
+      }}
+      onConfirm={() => {
+        setResetConfirmation(false);
+        setResetAnswerId(null);
+        onReset(resetAnswerId, setValue);
+      }}
+      message={intl.formatMessage(translations.resetConfirmation)}
+    />
+  );
+
+  const renderSaveDraftButton = () => {
+    if (!attempting) {
+      return null;
+    }
     return (
-      <ConfirmationDialog
-        open={resetConfirmation}
-        onCancel={() =>
-          this.setState({ resetConfirmation: false, resetAnswerId: null })
-        }
-        onConfirm={() => {
-          this.setState({ resetConfirmation: false, resetAnswerId: null });
-          handleReset(resetAnswerId);
-        }}
-        message={intl.formatMessage(translations.resetConfirmation)}
-      />
+      <Button
+        variant="contained"
+        color="primary"
+        disabled={!isDirty || isSaving}
+        onClick={handleSubmit((data) => onSaveDraft({ ...data }))}
+        style={styles.formButton}
+      >
+        {intl.formatMessage(translations.saveDraft)}
+      </Button>
     );
-  }
+  };
 
-  renderSaveDraftButton() {
-    const { intl, pristine, attempting, handleSaveDraft, isSaving } =
-      this.props;
-    if (attempting) {
-      return (
-        <Button
-          variant="contained"
-          color="primary"
-          disabled={pristine || isSaving}
-          onClick={handleSaveDraft}
-          style={styles.formButton}
-        >
-          {intl.formatMessage(translations.saveDraft)}
-        </Button>
-      );
+  const renderSaveGradeButton = () => {
+    const shouldRenderSaveGradeButton = graderView && !attempting;
+    if (!shouldRenderSaveGradeButton) {
+      return null;
     }
-    return null;
-  }
+    return (
+      <Button
+        variant="contained"
+        color="primary"
+        disabled={isSaving}
+        onClick={handleSaveGrade}
+        style={styles.formButton}
+      >
+        {intl.formatMessage(translations.saveGrade)}
+      </Button>
+    );
+  };
 
-  renderSaveGradeButton() {
-    const { intl, graderView, attempting, handleSaveGrade } = this.props;
-    if (graderView && !attempting) {
-      return (
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleSaveGrade}
-          style={styles.formButton}
-        >
-          {intl.formatMessage(translations.saveGrade)}
-        </Button>
-      );
+  const renderSubmitButton = () => {
+    const id = questionIds[stepIndex];
+    const question = questions[id];
+    const { answerId } = question;
+    const { isAutograding, isResetting } = questionsFlags[id] || {};
+    if (
+      [questionTypes.MultipleChoice, questionTypes.MultipleResponse].includes(
+        question.type,
+      ) &&
+      question.autogradable &&
+      !showMcqAnswer
+    ) {
+      return null;
     }
-    return null;
-  }
+    return (
+      <>
+        <Hotkeys
+          keyName="command+enter,control+enter"
+          onKeyDown={() =>
+            onSubmitAnswer(answerId, getValues(`${answerId}`), setValue)
+          }
+          disabled={isAutograding || isResetting || isSaving}
+          filter={() => true}
+        />
+        <Tooltip title={<FormattedMessage {...translations.submitTooltip} />}>
+          <Button
+            variant="contained"
+            color="secondary"
+            disabled={isAutograding || isResetting || isSaving}
+            onClick={() =>
+              onSubmitAnswer(answerId, getValues(`${answerId}`), setValue)
+            }
+            style={styles.formButton}
+          >
+            {intl.formatMessage(translations.submit)}
+          </Button>
+        </Tooltip>
+      </>
+    );
+  };
 
-  renderStepQuestion() {
-    const { stepIndex } = this.state;
-    const {
-      attempting,
-      questionIds,
-      questions,
-      historyQuestions,
-      topics,
-      graderView,
-      showMcqMrqSolution,
-      handleToggleViewHistoryMode,
-      questionsFlags,
-    } = this.props;
+  const renderSubmitDialog = () => (
+    <ConfirmationDialog
+      open={submitConfirmation}
+      onCancel={() => setSubmitConfirmation(false)}
+      onConfirm={() => setSubmitConfirmation(false)}
+      form={formNames.SUBMISSION}
+      message={intl.formatMessage(translations.submitConfirmation)}
+    />
+  );
+
+  const renderUnsubmitButton = () => {
+    const shouldRenderUnsubmitButton = graderView && !attempting;
+    if (!shouldRenderUnsubmitButton) {
+      return null;
+    }
+    return (
+      <Button
+        variant="contained"
+        color="secondary"
+        disabled={isSaving}
+        onClick={() => setUnsubmitConfirmation(true)}
+        style={styles.formButton}
+      >
+        {intl.formatMessage(translations.unsubmit)}
+      </Button>
+    );
+  };
+
+  const renderUnsubmitDialog = () => (
+    <ConfirmationDialog
+      open={unsubmitConfirmation}
+      onCancel={() => setUnsubmitConfirmation(false)}
+      onConfirm={() => {
+        setUnsubmitConfirmation(false);
+        handleUnsubmit();
+      }}
+      message={intl.formatMessage(translations.unsubmitConfirmation)}
+    />
+  );
+
+  const renderStepQuestion = () => {
     const id = questionIds[stepIndex];
     const question = questions[id];
     const { answerId, topicId } = question;
@@ -406,41 +459,32 @@ class SubmissionEditStepForm extends Component {
             handleToggleViewHistoryMode,
           }}
         />
-        {this.renderAutogradingErrorPanel(id)}
-        {this.renderExplanationPanel(question)}
-        {this.renderQuestionGrading(id)}
-        {this.renderGradingPanel()}
+        {renderAutogradingErrorPanel(id)}
+        {renderExplanationPanel(question)}
+        {renderQuestionGrading(id)}
+        {renderGradingPanel()}
         {attempting ? (
           <div>
-            {this.renderResetButton()}
-            {this.renderSubmitButton()}
-            {this.renderContinueButton()}
-            {this.renderAnswerLoadingIndicator()}
+            {renderResetButton()}
+            {renderSubmitButton()}
+            {renderContinueButton()}
+            {renderAnswerLoadingIndicator()}
           </div>
         ) : null}
         <div>
-          {this.renderSaveGradeButton()}
-          {this.renderSaveDraftButton()}
-          {this.renderFinaliseButton()}
-          {this.renderUnsubmitButton()}
+          {renderSaveGradeButton()}
+          {renderSaveDraftButton()}
+          {renderFinaliseButton()}
+          {renderUnsubmitButton()}
         </div>
         <hr />
         <Comments topic={topic} />
       </>
     );
-  }
+  };
 
-  renderStepper() {
-    const { maxStep, stepIndex } = this.state;
-    const {
-      published,
-      skippable,
-      graderView,
-      questionIds = [],
-      explanations,
-    } = this.props;
-
-    if (questionIds.length <= 1) {
+  const renderStepper = () => {
+    if (!questionIds || questionIds.length <= 1) {
       return null;
     }
 
@@ -477,7 +521,7 @@ class SubmissionEditStepForm extends Component {
                       </text>
                     </SvgIcon>
                   }
-                  onClick={() => this.handleStepClick(index)}
+                  onClick={() => handleStepClick(index)}
                   style={styles.stepButton}
                 />
               </Step>
@@ -491,120 +535,33 @@ class SubmissionEditStepForm extends Component {
         })}
       </Stepper>
     );
-  }
+  };
 
-  renderSubmitButton() {
-    const { stepIndex } = this.state;
-    const {
-      intl,
-      questionIds,
-      questions,
-      questionsFlags,
-      handleSubmitAnswer,
-      isSaving,
-      showMcqAnswer,
-    } = this.props;
-    const id = questionIds[stepIndex];
-    const question = questions[id];
-    const { answerId } = question;
-    const { isAutograding, isResetting } = questionsFlags[id] || {};
-    if (
-      [questionTypes.MultipleChoice, questionTypes.MultipleResponse].includes(
-        question.type,
-      ) &&
-      question.autogradable &&
-      !showMcqAnswer
-    ) {
-      return null;
-    }
-    return (
-      <>
-        <Hotkeys
-          keyName="command+enter,control+enter"
-          onKeyDown={() => handleSubmitAnswer(answerId)}
-          disabled={isAutograding || isResetting || isSaving}
-          filter={() => true}
-        />
-        <Tooltip title={<FormattedMessage {...translations.submitTooltip} />}>
-          <Button
-            variant="contained"
-            color="secondary"
-            disabled={isAutograding || isResetting || isSaving}
-            onClick={() => handleSubmitAnswer(answerId)}
-            style={styles.formButton}
+  return (
+    <div style={styles.questionContainer}>
+      {renderStepper()}
+      <Card style={styles.questionCardContainer}>
+        <FormProvider {...methods}>
+          <form
+            encType="multipart/form-data"
+            id={formNames.SUBMISSION}
+            onSubmit={handleSubmit((data) => onSubmit({ ...data }))}
+            noValidate
           >
-            {intl.formatMessage(translations.submit)}
-          </Button>
-        </Tooltip>
-      </>
-    );
-  }
-
-  renderSubmitDialog() {
-    const { submitConfirmation } = this.state;
-    const { intl, handleSubmit } = this.props;
-    return (
-      <ConfirmationDialog
-        open={submitConfirmation}
-        onCancel={() => this.setState({ submitConfirmation: false })}
-        onConfirm={() => {
-          this.setState({ submitConfirmation: false });
-          handleSubmit();
-        }}
-        message={intl.formatMessage(translations.submitConfirmation)}
-      />
-    );
-  }
-
-  renderUnsubmitButton() {
-    const { intl, graderView, attempting } = this.props;
-    if (graderView && !attempting) {
-      return (
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => this.setState({ unsubmitConfirmation: true })}
-          style={styles.formButton}
-        >
-          {intl.formatMessage(translations.unsubmit)}
-        </Button>
-      );
-    }
-    return null;
-  }
-
-  renderUnsubmitDialog() {
-    const { unsubmitConfirmation } = this.state;
-    const { intl, handleUnsubmit } = this.props;
-    return (
-      <ConfirmationDialog
-        open={unsubmitConfirmation}
-        onCancel={() => this.setState({ unsubmitConfirmation: false })}
-        onConfirm={() => {
-          this.setState({ unsubmitConfirmation: false });
-          handleUnsubmit();
-        }}
-        message={intl.formatMessage(translations.unsubmitConfirmation)}
-      />
-    );
-  }
-
-  render() {
-    return (
-      <div style={styles.questionContainer}>
-        {this.renderStepper()}
-        <Card style={styles.questionCardContainer}>
-          <form>{this.renderStepQuestion()}</form>
-        </Card>
-        {this.renderSubmitDialog()}
-        {this.renderUnsubmitDialog()}
-        {this.renderResetDialog()}
-      </div>
-    );
-  }
-}
+            <ErrorText errors={errors} />
+            {renderStepQuestion()}
+            {renderSubmitDialog()}
+          </form>
+        </FormProvider>
+      </Card>
+      {renderUnsubmitDialog()}
+      {renderResetDialog()}
+    </div>
+  );
+};
 
 SubmissionEditStepForm.propTypes = {
+  initialValues: PropTypes.object.isRequired,
   intl: intlShape.isRequired,
 
   graderView: PropTypes.bool.isRequired,
@@ -626,19 +583,14 @@ SubmissionEditStepForm.propTypes = {
   questionsFlags: PropTypes.objectOf(questionFlagsShape),
   topics: PropTypes.objectOf(topicShape),
   isSaving: PropTypes.bool.isRequired,
-  pristine: PropTypes.bool,
 
-  handleSubmit: PropTypes.func,
+  onReset: PropTypes.func,
+  onSaveDraft: PropTypes.func,
+  onSubmit: PropTypes.func,
+  onSubmitAnswer: PropTypes.func,
   handleUnsubmit: PropTypes.func,
-  handleSaveDraft: PropTypes.func,
   handleSaveGrade: PropTypes.func,
-  handleSubmitAnswer: PropTypes.func,
-  handleReset: PropTypes.func,
   handleToggleViewHistoryMode: PropTypes.func,
 };
 
-export default reduxForm({
-  form: formNames.SUBMISSION,
-  validate: submissionFormValidate,
-  destroyOnUnmount: false, // preserve form data after navigating to different step
-})(injectIntl(SubmissionEditStepForm));
+export default injectIntl(SubmissionEditStepForm);

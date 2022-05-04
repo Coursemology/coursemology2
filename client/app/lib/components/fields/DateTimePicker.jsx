@@ -144,7 +144,6 @@ class DateTimePicker extends PureComponent {
   updateDateTime = (newDateTime) => {
     const { onBlur, onChange } = this.props;
     this.setState(DateTimePicker.displayState(newDateTime));
-    // Marks redux-form field as 'touched' so that validation errors are shown, if any.
     if (onBlur) {
       onBlur();
     }

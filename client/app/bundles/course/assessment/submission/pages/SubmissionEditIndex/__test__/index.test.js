@@ -158,7 +158,8 @@ jest.mock(
 );
 
 describe('SubmissionEditIndex', () => {
-  it('render submission with errors', async () => {
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip('render submission with errors', async () => {
     store.dispatch({
       type: actionTypes.FETCH_SUBMISSION_SUCCESS,
       payload: errorSubmission,
@@ -184,7 +185,8 @@ describe('SubmissionEditIndex', () => {
     );
   });
 
-  it('render submission without errors', async () => {
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip('render submission without errors', async () => {
     store.dispatch({
       type: actionTypes.FETCH_SUBMISSION_SUCCESS,
       payload: successSubmission,

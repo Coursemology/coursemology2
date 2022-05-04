@@ -46,13 +46,19 @@ class EditSectionButton extends Component {
     );
   };
 
-  updateSectionHandler = (data) => {
+  updateSectionHandler = (data, setError) => {
     const { dispatch, section } = this.props;
     const payload = { section: data };
     const successMessage = <FormattedMessage {...translations.success} />;
     const failureMessage = <FormattedMessage {...translations.failure} />;
     return dispatch(
-      updateSurveySection(section.id, payload, successMessage, failureMessage),
+      updateSurveySection(
+        section.id,
+        payload,
+        successMessage,
+        failureMessage,
+        setError,
+      ),
     );
   };
 

@@ -1,75 +1,79 @@
+import { memo } from 'react';
 import PropTypes from 'prop-types';
-import { Field } from 'redux-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import { FormControlLabel, Radio } from '@mui/material';
 import { green } from '@mui/material/colors';
+import propsAreEqual from 'lib/components/form/fields/utils/propsAreEqual';
 import { questionShape } from '../../propTypes';
 
-function MultipleChoiceOptions({
+const MultipleChoiceOptions = ({
   readOnly,
   showMcqMrqSolution,
   graderView,
   question,
-  input: { onChange, value },
-}) {
-  return (
-    <>
-      {question.options.map((option) => (
-        <FormControlLabel
-          checked={option.id === value}
-          control={<Radio style={{ padding: '0 12px' }} />}
-          disabled={readOnly}
-          key={option.id}
-          label={
-            <b>
-              <div
-                style={
-                  option.correct &&
-                  readOnly &&
-                  (showMcqMrqSolution || graderView)
-                    ? { backgroundColor: green[50] }
-                    : null
-                }
-                dangerouslySetInnerHTML={{ __html: option.option.trim() }}
-              />
-            </b>
-          }
-          onChange={(event) => {
-            onChange(parseInt(event.target.value, 10));
-          }}
-          style={{ width: '100%' }}
-          value={option.id.toString()}
-        />
-      ))}
-    </>
-  );
-}
+  field: { onChange, value },
+}) => (
+  <>
+    {question.options.map((option) => (
+      <FormControlLabel
+        checked={option.id === value[0]}
+        control={<Radio style={{ padding: '0 12px' }} />}
+        disabled={readOnly}
+        key={option.id}
+        label={
+          <b>
+            <div
+              style={
+                option.correct && readOnly && (showMcqMrqSolution || graderView)
+                  ? { backgroundColor: green[50] }
+                  : null
+              }
+              dangerouslySetInnerHTML={{ __html: option.option.trim() }}
+            />
+          </b>
+        }
+        onChange={(event) => {
+          onChange([parseInt(event.target.value, 10)]);
+        }}
+        style={{ width: '100%' }}
+        value={option.id.toString()}
+      />
+    ))}
+  </>
+);
 
 MultipleChoiceOptions.propTypes = {
   question: questionShape,
   readOnly: PropTypes.bool,
   showMcqMrqSolution: PropTypes.bool,
   graderView: PropTypes.bool,
-  input: PropTypes.shape({
+  field: PropTypes.shape({
     onChange: PropTypes.func,
-    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    value: PropTypes.arrayOf(PropTypes.number),
   }).isRequired,
 };
 
-function MultipleChoice({
-  question,
-  readOnly,
-  showMcqMrqSolution,
-  graderView,
-  answerId,
-}) {
+const MemoMultipleChoiceOptions = memo(MultipleChoiceOptions, propsAreEqual);
+
+const MultipleChoice = (props) => {
+  const { question, readOnly, showMcqMrqSolution, graderView, answerId } =
+    props;
+  const { control } = useFormContext();
+
   return (
-    <Field
-      name={`${answerId}[option_ids][0]`}
-      component={MultipleChoiceOptions}
-      {...{ question, readOnly, showMcqMrqSolution, graderView }}
+    <Controller
+      name={`${answerId}.option_ids`}
+      control={control}
+      render={({ field, fieldState }) => (
+        <MemoMultipleChoiceOptions
+          field={field}
+          fieldState={fieldState}
+          {...{ question, readOnly, showMcqMrqSolution, graderView }}
+        />
+      )}
     />
   );
-}
+};
 
 MultipleChoice.propTypes = {
   question: questionShape,

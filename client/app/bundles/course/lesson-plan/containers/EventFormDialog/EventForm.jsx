@@ -1,14 +1,18 @@
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { reduxForm, Field, Form } from 'redux-form';
-import renderTextField from 'lib/components/redux-form/TextField';
-import RichTextField from 'lib/components/redux-form/RichTextField';
-import renderAutoCompleteField from 'lib/components/redux-form/AutoComplete';
-import renderToggleField from 'lib/components/redux-form/Toggle';
-import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
+import { Controller, useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import FormAutoCompleteField from 'lib/components/form/fields/AutoCompleteField';
+import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
+import FormRichTextField from 'lib/components/form/fields/RichTextField';
+import FormTextField from 'lib/components/form/fields/TextField';
+import FormToggleField from 'lib/components/form/fields/ToggleField';
+import ErrorText from 'lib/components/ErrorText';
+import { shiftDateField } from 'lib/helpers/form-helpers';
 import formTranslations from 'lib/translations/form';
 import translations from 'course/lesson-plan/translations';
-import { formNames, fields } from 'course/lesson-plan/constants';
+import { fields } from 'course/lesson-plan/constants';
 
 const {
   TITLE,
@@ -43,116 +47,168 @@ const validationTranslations = defineMessages({
   },
 });
 
-const validate = (values) => {
-  const errors = {};
+const validationSchema = yup.object({
+  title: yup.string().required(formTranslations.required),
+  event_type: yup.string().nullable().required(formTranslations.required),
+  location: yup.string().nullable(),
+  description: yup.string().nullable(),
+  start_at: yup.date().nullable().required(formTranslations.required),
+  end_at: yup
+    .date()
+    .nullable()
+    .min(yup.ref('start_at'), validationTranslations.startEndValidationError),
+  published: yup.bool(),
+});
 
-  const requiredFields = ['title', 'start_at', 'event_type'];
-  requiredFields.forEach((field) => {
-    if (!values[field]) {
-      errors[field] = formTranslations.required;
-    }
+const EventForm = (props) => {
+  const { onSubmit, initialValues, disabled, eventTypes, eventLocations } =
+    props;
+  const {
+    control,
+    handleSubmit,
+    setError,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm({
+    defaultValues: initialValues,
+    resolver: yupResolver(validationSchema),
   });
 
-  if (
-    values.end_at &&
-    values.start_at &&
-    new Date(values.start_at) >= new Date(values.end_at)
-  ) {
-    errors.end_at = validationTranslations.startEndValidationError;
-  }
-
-  return errors;
+  return (
+    <>
+      <form
+        id="event-form"
+        noValidate
+        onSubmit={handleSubmit((data) => onSubmit(data, setError))}
+      >
+        <ErrorText errors={errors} />
+        <Controller
+          name="title"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormTextField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              label={<FormattedMessage {...translations[TITLE]} />}
+              fullWidth
+              InputLabelProps={{
+                shrink: true,
+              }}
+              required
+              variant="standard"
+            />
+          )}
+        />
+        <div style={styles.columns}>
+          <Controller
+            name="event_type"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormAutoCompleteField
+                field={field}
+                fieldState={fieldState}
+                disabled={disabled}
+                fullWidth
+                label={<FormattedMessage {...translations[EVENT_TYPE]} />}
+                options={eventTypes}
+                selectOnFocus
+                style={styles.eventType}
+              />
+            )}
+          />
+          <Controller
+            name="location"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormAutoCompleteField
+                field={field}
+                fieldState={fieldState}
+                disabled={disabled}
+                fullWidth
+                label={<FormattedMessage {...translations[LOCATION]} />}
+                options={eventLocations}
+                selectOnFocus
+                style={styles.eventType}
+              />
+            )}
+          />
+        </div>
+        <Controller
+          name="description"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormRichTextField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              label={<FormattedMessage {...translations[DESCRIPTION]} />}
+              fullWidth
+              multiline
+              InputLabelProps={{
+                shrink: true,
+              }}
+              rows={2}
+              variant="standard"
+            />
+          )}
+        />
+        <div style={styles.columns}>
+          <Controller
+            name="start_at"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormDateTimePickerField
+                field={field}
+                fieldState={fieldState}
+                disabled={disabled}
+                label={<FormattedMessage {...translations[START_AT]} />}
+                afterChangeField={(newStartAt) =>
+                  shiftDateField(newStartAt, watch, setValue)
+                }
+                style={styles.oneColumn}
+              />
+            )}
+          />
+          <Controller
+            name="end_at"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormDateTimePickerField
+                field={field}
+                fieldState={fieldState}
+                disabled={disabled}
+                label={<FormattedMessage {...translations[END_AT]} />}
+                style={styles.oneColumn}
+              />
+            )}
+          />
+        </div>
+        <Controller
+          name="published"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormToggleField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              label={<FormattedMessage {...translations[PUBLISHED]} />}
+              style={styles.toggle}
+            />
+          )}
+        />
+      </form>
+    </>
+  );
 };
-
-const EventForm = ({
-  handleSubmit,
-  onSubmit,
-  disabled,
-  formValues,
-  shiftEndDate,
-  eventTypes,
-  eventLocations,
-}) => (
-  <Form onSubmit={handleSubmit(onSubmit)}>
-    <Field
-      fullWidth
-      name="title"
-      label={<FormattedMessage {...translations[TITLE]} />}
-      component={renderTextField}
-      {...{ disabled }}
-    />
-    <div style={styles.columns}>
-      <Field
-        fullWidth
-        selectOnFocus
-        name="event_type"
-        label={<FormattedMessage {...translations[EVENT_TYPE]} />}
-        component={renderAutoCompleteField}
-        options={eventTypes}
-        style={styles.eventType}
-        {...{ disabled }}
-      />
-      <Field
-        fullWidth
-        selectOnFocus
-        name="location"
-        label={<FormattedMessage {...translations[LOCATION]} />}
-        component={renderAutoCompleteField}
-        options={eventLocations}
-        style={styles.oneColumn}
-        {...{ disabled }}
-      />
-    </div>
-    <Field
-      fullWidth
-      name="description"
-      label={<FormattedMessage {...translations[DESCRIPTION]} />}
-      component={RichTextField}
-      multiline
-      rows={2}
-      {...{ disabled }}
-    />
-    <div style={styles.columns}>
-      <Field
-        name="start_at"
-        label={<FormattedMessage {...translations[START_AT]} />}
-        component={DateTimePicker}
-        afterChange={(_, newStartAt) =>
-          shiftEndDate(formNames.EVENT, newStartAt, formValues)
-        }
-        style={styles.oneColumn}
-        {...{ disabled }}
-      />
-      <Field
-        name="end_at"
-        label={<FormattedMessage {...translations[END_AT]} />}
-        component={DateTimePicker}
-        style={styles.oneColumn}
-        {...{ disabled }}
-      />
-    </div>
-    <Field
-      name="published"
-      component={renderToggleField}
-      parse={Boolean}
-      label={<FormattedMessage {...translations[PUBLISHED]} />}
-      style={styles.toggle}
-      disabled={disabled}
-    />
-  </Form>
-);
 
 EventForm.propTypes = {
+  disabled: PropTypes.bool,
   eventTypes: PropTypes.arrayOf(PropTypes.string),
   eventLocations: PropTypes.arrayOf(PropTypes.string),
-  formValues: PropTypes.shape({}),
-  shiftEndDate: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
+  initialValues: PropTypes.object,
   onSubmit: PropTypes.func.isRequired,
-  disabled: PropTypes.bool,
 };
 
-export default reduxForm({
-  form: formNames.EVENT,
-  validate,
-})(EventForm);
+export default EventForm;

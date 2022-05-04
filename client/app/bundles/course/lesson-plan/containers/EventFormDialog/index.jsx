@@ -1,11 +1,8 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getFormValues, isPristine } from 'redux-form';
 import FormDialogue from 'lib/components/FormDialogue';
-import { formNames } from 'course/lesson-plan/constants';
 import * as actionCreators from 'course/lesson-plan/actions';
-import * as libActionCreators from 'lib/actions';
 import EventForm from './EventForm';
 
 const EventFormDialog = ({
@@ -14,16 +11,10 @@ const EventFormDialog = ({
   formTitle,
   initialValues,
   onSubmit,
-  pristine,
   dispatch,
-  formValues,
   items,
 }) => {
-  const { hideEventForm, submitEventForm } = bindActionCreators(
-    actionCreators,
-    dispatch,
-  );
-  const { shiftEndDate } = bindActionCreators(libActionCreators, dispatch);
+  const { hideEventForm } = bindActionCreators(actionCreators, dispatch);
 
   const { eventTypes, eventLocations } = items.reduce(
     (values, item) => {
@@ -43,13 +34,13 @@ const EventFormDialog = ({
     <FormDialogue
       title={formTitle}
       open={visible}
-      submitForm={submitEventForm}
-      skipConfirmation={pristine}
+      skipConfirmation={false}
       disabled={disabled}
+      form="event-form"
       hideForm={hideEventForm}
     >
       <EventForm
-        {...{ initialValues, onSubmit, disabled, shiftEndDate, formValues }}
+        {...{ initialValues, onSubmit, disabled }}
         eventTypes={[...new Set(eventTypes)]}
         eventLocations={[...new Set(eventLocations)]}
       />
@@ -84,15 +75,11 @@ EventFormDialog.propTypes = {
       lesson_plan_item_type: PropTypes.arrayOf(PropTypes.string),
     }),
   ),
-  formValues: PropTypes.shape({}),
   onSubmit: PropTypes.func.isRequired,
-  pristine: PropTypes.bool.isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 
 export default connect(({ eventForm, ...state }) => ({
   ...eventForm,
   items: state.lessonPlan.items,
-  pristine: isPristine(formNames.EVENT)(state),
-  formValues: getFormValues(formNames.EVENT)(state),
 }))(EventFormDialog);

@@ -1,9 +1,7 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { isPristine } from 'redux-form';
 import FormDialogue from 'lib/components/FormDialogue';
-import { formNames } from 'course/lesson-plan/constants';
 import * as actionCreators from 'course/lesson-plan/actions';
 import MilestoneForm from './MilestoneForm';
 
@@ -13,21 +11,17 @@ const MilestoneFormDialog = ({
   formTitle,
   initialValues,
   onSubmit,
-  pristine,
   dispatch,
 }) => {
-  const { hideMilestoneForm, submitMilestoneForm } = bindActionCreators(
-    actionCreators,
-    dispatch,
-  );
+  const { hideMilestoneForm } = bindActionCreators(actionCreators, dispatch);
 
   return (
     <FormDialogue
       title={formTitle}
       open={visible}
-      submitForm={submitMilestoneForm}
-      skipConfirmation={pristine}
+      skipConfirmation={false}
       disabled={disabled}
+      form="milestone-form"
       hideForm={hideMilestoneForm}
     >
       <MilestoneForm {...{ initialValues, onSubmit, disabled }} />
@@ -50,11 +44,9 @@ MilestoneFormDialog.propTypes = {
     start_at: PropTypes.string,
   }),
   onSubmit: PropTypes.func.isRequired,
-  pristine: PropTypes.bool.isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 
-export default connect(({ milestoneForm, ...state }) => ({
+export default connect(({ milestoneForm }) => ({
   ...milestoneForm,
-  pristine: isPristine(formNames.MILESTONE)(state),
 }))(MilestoneFormDialog);

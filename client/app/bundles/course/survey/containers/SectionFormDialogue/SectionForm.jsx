@@ -1,54 +1,82 @@
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
-import { reduxForm, Field, Form } from 'redux-form';
-import renderTextField from 'lib/components/redux-form/TextField';
+import { FormattedMessage } from 'react-intl';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Controller, useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import ErrorText from 'lib/components/ErrorText';
+import FormTextField from 'lib/components/form/fields/TextField';
 import formTranslations from 'lib/translations/form';
 import translations from 'course/survey/translations';
-import { formNames } from 'course/survey/constants';
 
-const validate = (values) => {
-  const errors = {};
+const validationSchema = yup.object({
+  title: yup.string().required(formTranslations.required),
+  description: yup.string(),
+});
 
-  const requiredFields = ['title'];
-  requiredFields.forEach((field) => {
-    if (!values[field]) {
-      errors[field] = formTranslations.required;
-    }
+const SectionForm = (props) => {
+  const { onSubmit, disabled, initialValues } = props;
+  const {
+    control,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm({
+    defaultValues: initialValues,
+    resolver: yupResolver(validationSchema),
   });
 
-  return errors;
+  return (
+    <form
+      id="survey-section-form"
+      noValidate
+      onSubmit={handleSubmit((data) => onSubmit(data, setError))}
+    >
+      <ErrorText errors={errors} />
+      <Controller
+        name="title"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormTextField
+            field={field}
+            fieldState={fieldState}
+            disabled={disabled}
+            label={<FormattedMessage {...translations.title} />}
+            fullWidth
+            InputLabelProps={{
+              shrink: true,
+            }}
+            required
+            variant="standard"
+          />
+        )}
+      />
+      <Controller
+        name="description"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormTextField
+            field={field}
+            fieldState={fieldState}
+            disabled={disabled}
+            label={<FormattedMessage {...translations.description} />}
+            fullWidth
+            multiline
+            InputLabelProps={{
+              shrink: true,
+            }}
+            rows={2}
+            variant="standard"
+          />
+        )}
+      />
+    </form>
+  );
 };
-
-const SectionForm = ({ handleSubmit, intl, onSubmit, disabled }) => (
-  <Form onSubmit={handleSubmit(onSubmit)}>
-    <Field
-      fullWidth
-      name="title"
-      label={intl.formatMessage(translations.title)}
-      component={renderTextField}
-      {...{ disabled }}
-    />
-    <br />
-    <Field
-      fullWidth
-      name="description"
-      label={intl.formatMessage(translations.description)}
-      component={renderTextField}
-      multiline
-      minRows={2}
-      {...{ disabled }}
-    />
-  </Form>
-);
 
 SectionForm.propTypes = {
-  handleSubmit: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
   disabled: PropTypes.bool,
+  initialValues: PropTypes.object.isRequired,
+  onSubmit: PropTypes.func.isRequired,
 };
 
-export default reduxForm({
-  form: formNames.SURVEY_SECTION,
-  validate,
-})(injectIntl(SectionForm));
+export default SectionForm;

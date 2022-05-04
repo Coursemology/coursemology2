@@ -172,7 +172,7 @@ const GroupManager = ({
   const [isConfirmingSave, setIsConfirmingSave] = useState(false);
 
   const onCreateFormSubmit = useCallback(
-    (data) => {
+    (data, setError) => {
       const existingNames = new Set(groups.map((g) => g.name));
       const groupData = getGroupData(data, existingNames);
       return dispatch(
@@ -180,6 +180,7 @@ const GroupManager = ({
           category.id,
           { groups: groupData },
           getCreateGroupMessage(intl),
+          setError,
         ),
       );
     },
@@ -323,7 +324,12 @@ const GroupManager = ({
       >
         <GroupCreationForm
           onSubmit={onCreateFormSubmit}
-          initialValues={{ is_single: true }}
+          initialValues={{
+            name: '',
+            description: '',
+            num_to_create: 0,
+            is_single: true,
+          }}
           existingGroups={groups}
         />
       </GroupFormDialog>

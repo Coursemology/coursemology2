@@ -1,14 +1,19 @@
-import { Component } from 'react';
+/* eslint-disable camelcase */
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { defineMessages, injectIntl, intlShape } from 'react-intl';
-import { reduxForm, Field, FieldArray, Form } from 'redux-form';
-import renderTextField from 'lib/components/redux-form/TextField';
-import renderSelectField from 'lib/components/redux-form/SelectField';
-import renderToggleField from 'lib/components/redux-form/Toggle';
-import { ListSubheader, MenuItem, TextField } from '@mui/material';
+import { defineMessages, FormattedMessage } from 'react-intl';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { ListSubheader, TextField } from '@mui/material';
+import { red } from '@mui/material/colors';
+import FormSelectField from 'lib/components/form/fields/SelectField';
+import FormTextField from 'lib/components/form/fields/TextField';
+import FormToggleField from 'lib/components/form/fields/ToggleField';
+import ErrorText from 'lib/components/ErrorText';
 import formTranslations from 'lib/translations/form';
 import translations from 'course/survey/translations';
-import { questionTypes, formNames } from 'course/survey/constants';
+import { questionTypes } from 'course/survey/constants';
 import QuestionFormOptions from './QuestionFormOptions';
 import QuestionFormDeletedOptions from './QuestionFormDeletedOptions';
 
@@ -63,6 +68,10 @@ const questionFormTranslations = defineMessages({
     id: 'course.surveys.QuestionForm.atLeastOne',
     defaultMessage: 'Should be at least 1',
   },
+  atLeastOneOptions: {
+    id: 'course.surveys.QuestionForm.atLeastOneOptions',
+    defaultMessage: 'At least 1 option below is required',
+  },
   atLeastZero: {
     id: 'course.surveys.QuestionForm.atLeastZero',
     defaultMessage: 'Should be at least 0',
@@ -89,254 +98,386 @@ const questionFormTranslations = defineMessages({
   },
 });
 
+const { TEXT, MULTIPLE_CHOICE, MULTIPLE_RESPONSE } = questionTypes;
+
+const questionOptions = [
+  {
+    value: TEXT,
+    label: <FormattedMessage {...translations.textResponse} />,
+  },
+  {
+    value: MULTIPLE_CHOICE,
+    label: <FormattedMessage {...translations.multipleChoice} />,
+  },
+  {
+    value: MULTIPLE_RESPONSE,
+    label: <FormattedMessage {...translations.multipleResponse} />,
+  },
+];
+
 const countFilledOptions = (options) =>
   options.filter(
     (option) => option && (option.option || option.file || option.image_url),
   ).length;
 
-const validate = (values) => {
-  const { MULTIPLE_CHOICE, MULTIPLE_RESPONSE } = questionTypes;
-  const errors = {};
+const validationSchema = yup.object({
+  question_type: yup.string().required(formTranslations.required),
+  description: yup.string().required(formTranslations.required),
+  required: yup.bool(),
+  grid_view: yup.bool(),
+  min_options: yup
+    .number()
+    .transform((v) => (v === '' || Number.isNaN(v) ? null : v))
+    .nullable()
+    .test(
+      'lessThanFilledOptions',
+      questionFormTranslations.lessThanFilledOptions,
+      function () {
+        if (
+          this.parent.question_type === MULTIPLE_RESPONSE &&
+          this.parent.min_options
+        ) {
+          return !(
+            this.parent.min_options >= countFilledOptions(this.parent.options)
+          );
+        }
+        return true;
+      },
+    )
+    .test('atLeastZero', questionFormTranslations.atLeastZero, function () {
+      if (
+        this.parent.question_type === MULTIPLE_RESPONSE &&
+        this.parent.min_options
+      ) {
+        return !(this.parent.min_options < 0);
+      }
+      return true;
+    }),
+  max_options: yup
+    .number()
+    .transform((v) => (v === '' || Number.isNaN(v) ? null : v))
+    .nullable()
+    .test(
+      'noMoreThanFilledOptions',
+      questionFormTranslations.noMoreThanFilledOptions,
+      function () {
+        if (
+          this.parent.question_type === MULTIPLE_RESPONSE &&
+          this.parent.max_options
+        ) {
+          return !(
+            this.parent.max_options > countFilledOptions(this.parent.options)
+          );
+        }
+        return true;
+      },
+    )
+    .test(
+      'notLessThanMin',
+      questionFormTranslations.notLessThanMin,
+      function () {
+        if (
+          this.parent.question_type === MULTIPLE_RESPONSE &&
+          this.parent.max_options
+        ) {
+          return !(
+            this.parent.min_options &&
+            this.parent.min_options > this.parent.max_options
+          );
+        }
+        return true;
+      },
+    ),
+  options: yup
+    .array()
+    .test('required', questionFormTranslations.atLeastOneOptions, function () {
+      if (
+        (this.parent.question_type === MULTIPLE_CHOICE ||
+          this.parent.question_type === MULTIPLE_RESPONSE) &&
+        countFilledOptions(this.parent.options) < 1
+      ) {
+        return false;
+      }
+      return true;
+    }),
+});
 
-  const requiredFields = ['question_type', 'description'];
-  requiredFields.forEach((field) => {
-    if (!values[field]) {
-      errors[field] = formTranslations.required;
-    }
+const QuestionForm = (props) => {
+  const { disabled, initialValues, onSubmit } = props;
+  const {
+    control,
+    handleSubmit,
+    setError,
+    watch,
+    formState: { errors },
+  } = useForm({
+    defaultValues: initialValues,
+    resolver: yupResolver(validationSchema),
+  });
+  const {
+    fields: optionsFields,
+    append: optionsAppend,
+    remove: optionsRemove,
+  } = useFieldArray({
+    control,
+    name: 'options',
   });
 
-  const filledOptions = countFilledOptions(values.options);
-  if (
-    (values.question_type === MULTIPLE_CHOICE ||
-      values.question_type === MULTIPLE_RESPONSE) &&
-    filledOptions < 1
-  ) {
-    errors.options = [{ option: formTranslations.required }];
-  }
+  const {
+    fields: deletedOptionsFields,
+    append: deletedOptionsAppend,
+    remove: deletedOptionsRemove,
+  } = useFieldArray({
+    control,
+    name: 'optionsToDelete',
+  });
 
-  if (values.question_type === MULTIPLE_RESPONSE && values.min_options) {
-    if (values.min_options >= filledOptions) {
-      errors.min_options = questionFormTranslations.lessThanFilledOptions;
-    } else if (values.min_options < 0) {
-      errors.min_options = questionFormTranslations.atLeastZero;
+  const questionType = watch('question_type');
+  const options = watch('options');
+  const deletedOptions = watch('optionsToDelete');
+
+  // When the values in any of the array options fields are changed,
+  // 'fields' from useFieldArray are not updated but the internal values of options
+  // are already updated in useForm. We then use watch to extract the updated options values
+  // and update those to controlledFields as seen below.
+  const controlledOptionsFields = optionsFields.map((field, index) => ({
+    ...field,
+    ...options[index],
+  }));
+
+  const controlledDeletedOptionsFields = deletedOptionsFields.map(
+    (field, index) => ({
+      ...field,
+      ...deletedOptions[index],
+    }),
+  );
+
+  useEffect(() => {
+    // To add an option field by default when all other option fields are deleted.
+    if (optionsFields.length === 0) {
+      optionsAppend({
+        weight: null,
+        option: '',
+        image_url: '',
+        image_name: '',
+        file: null,
+      });
     }
-  }
+  }, [optionsFields.length === 0]);
 
-  if (values.question_type === MULTIPLE_RESPONSE && values.max_options) {
-    if (values.max_options < 1) {
-      errors.max_options = questionFormTranslations.atLeastOne;
-    } else if (values.max_options > filledOptions) {
-      errors.max_options = questionFormTranslations.noMoreThanFilledOptions;
-    } else if (values.min_options && values.min_options > values.max_options) {
-      errors.max_options = questionFormTranslations.notLessThanMin;
+  const isTextResponse = TEXT === questionType;
+  const isMultipleChoice = MULTIPLE_CHOICE === questionType;
+  const isMultipleResponse = MULTIPLE_RESPONSE === questionType;
+
+  const renderOptionsToDelete = () => {
+    const shouldRenderOptionsToDelete =
+      deletedOptions && deletedOptions.length > 0;
+    if (!shouldRenderOptionsToDelete) {
+      return null;
     }
-  }
-
-  return errors;
-};
-
-class QuestionForm extends Component {
-  renderMultipleChoiceFields() {
     return (
       <div>
-        {this.renderTiledViewToggle()}
-        {this.renderValidOptionCount()}
-        {this.renderOptionFields({ multipleChoice: true })}
-      </div>
-    );
-  }
-
-  renderMultipleResponseFields() {
-    const { intl } = this.props;
-    return (
-      <div>
-        {this.renderTiledViewToggle()}
-        <div style={styles.numberOfResponsesDiv}>
-          {this.renderValidOptionCount()}
-          {this.renderNumberOfResponsesField(
-            'min_options',
-            intl.formatMessage(translations.minOptions),
-          )}
-          {this.renderNumberOfResponsesField(
-            'max_options',
-            intl.formatMessage(translations.maxOptions),
-          )}
-        </div>
-        {this.renderOptionFields({ multipleResponse: true })}
-      </div>
-    );
-  }
-
-  renderNumberOfResponsesField(name, label) {
-    const { disabled } = this.props;
-    return (
-      <Field
-        component={renderTextField}
-        type="number"
-        {...styles.numberOfResponsesField}
-        placeholder={questionFormTranslations.noRestriction.defaultMessage}
-        {...{ name, label, disabled }}
-      />
-    );
-  }
-
-  renderOptionFields(props) {
-    const { disabled, addToOptionsToDelete } = this.props;
-
-    return (
-      <div>
-        {this.renderOptionsToDelete(props)}
-        <FieldArray
-          name="options"
-          component={QuestionFormOptions}
-          {...{ disabled, addToOptionsToDelete }}
-          {...props}
+        <ListSubheader disableSticky>
+          <FormattedMessage {...questionFormTranslations.optionsToDelete} />
+        </ListSubheader>
+        <QuestionFormDeletedOptions
+          fieldsConfig={{
+            control,
+            fields: controlledDeletedOptionsFields,
+            append: deletedOptionsAppend,
+            remove: deletedOptionsRemove,
+          }}
+          optionsAppend={optionsAppend}
+          multipleChoice={isMultipleChoice}
+          multipleResponse={isMultipleResponse}
         />
+        <ListSubheader disableSticky>
+          <FormattedMessage {...questionFormTranslations.optionsToKeep} />
+        </ListSubheader>
       </div>
     );
-  }
+  };
 
-  renderOptionsToDelete(props) {
-    const { intl, disabled, formValues, addToOptions } = this.props;
-    if (
-      formValues &&
-      // eslint-disable-next-line react/prop-types
-      formValues.optionsToDelete &&
-      // eslint-disable-next-line react/prop-types
-      formValues.optionsToDelete.length > 0
-    ) {
-      return (
-        <div>
-          <ListSubheader disableSticky>
-            {intl.formatMessage(questionFormTranslations.optionsToDelete)}
-          </ListSubheader>
-          <FieldArray
-            name="optionsToDelete"
-            component={QuestionFormDeletedOptions}
-            {...{ disabled, addToOptions }}
-            {...props}
-          />
-          <ListSubheader disableSticky>
-            {intl.formatMessage(questionFormTranslations.optionsToKeep)}
-          </ListSubheader>
-        </div>
-      );
-    }
-    return null;
-  }
+  const renderSpecificFields = () => {
+    const numberOfFilledOptions = options ? countFilledOptions(options) : 0;
 
-  renderSpecificFields(questionType) {
-    const { MULTIPLE_CHOICE, MULTIPLE_RESPONSE } = questionTypes;
-    const renderer = {
-      [MULTIPLE_CHOICE]: this.renderMultipleChoiceFields,
-      [MULTIPLE_RESPONSE]: this.renderMultipleResponseFields,
-    }[questionType];
-
-    return renderer ? renderer.call(this) : null;
-  }
-
-  renderTiledViewToggle() {
-    const { intl, disabled } = this.props;
     return (
-      <>
-        <Field
+      <div>
+        <Controller
           name="grid_view"
-          label={intl.formatMessage(questionFormTranslations.gridView)}
-          component={renderToggleField}
-          parse={Boolean}
-          style={styles.toggle}
-          {...{ disabled }}
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormToggleField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              label={
+                <FormattedMessage {...questionFormTranslations.gridView} />
+              }
+              style={styles.toggle}
+            />
+          )}
         />
         <p style={styles.hint}>
-          {intl.formatMessage(questionFormTranslations.gridViewHint)}
+          <FormattedMessage {...questionFormTranslations.gridViewHint} />
         </p>
-      </>
+
+        <div style={styles.numberOfResponsesDiv}>
+          <TextField
+            disabled
+            name="filled_options"
+            value={numberOfFilledOptions}
+            label={
+              <FormattedMessage {...questionFormTranslations.optionCount} />
+            }
+            fullWidth
+            style={{ marginBottom: 12, marginTop: 14, marginRight: 16 }}
+            variant="standard"
+          />
+          {isMultipleResponse && (
+            <>
+              <Controller
+                name="min_options"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <FormTextField
+                    field={field}
+                    fieldState={fieldState}
+                    disabled={disabled}
+                    fullWidth
+                    label={<FormattedMessage {...translations.minOptions} />}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    onWheel={(event) => event.currentTarget.blur()}
+                    placeholder={
+                      questionFormTranslations.noRestriction.defaultMessage
+                    }
+                    renderIf={isMultipleResponse}
+                    style={styles.numberOfResponsesField}
+                    type="number"
+                    variant="standard"
+                  />
+                )}
+              />
+              <Controller
+                name="max_options"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <FormTextField
+                    field={field}
+                    fieldState={fieldState}
+                    disabled={disabled}
+                    fullWidth
+                    label={<FormattedMessage {...translations.maxOptions} />}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    onWheel={(event) => event.currentTarget.blur()}
+                    placeholder={
+                      questionFormTranslations.noRestriction.defaultMessage
+                    }
+                    renderIf={isMultipleResponse}
+                    style={styles.numberOfResponsesField}
+                    type="number"
+                    variant="standard"
+                  />
+                )}
+              />
+            </>
+          )}
+        </div>
+        <div>
+          {renderOptionsToDelete()}
+          {errors.options && (
+            <div style={{ color: red[500] }}>
+              <FormattedMessage {...errors.options.message} />
+            </div>
+          )}
+          <QuestionFormOptions
+            fieldsConfig={{
+              control,
+              fields: controlledOptionsFields,
+              append: optionsAppend,
+              remove: optionsRemove,
+            }}
+            deletedOptionsAppend={deletedOptionsAppend}
+            multipleChoice={isMultipleChoice}
+            multipleResponse={isMultipleResponse}
+          />
+        </div>
+      </div>
     );
-  }
+  };
 
-  renderValidOptionCount() {
-    const { intl, formValues } = this.props;
-    const numberOfFilledOptions = formValues
-      ? // eslint-disable-next-line react/prop-types
-        countFilledOptions(formValues.options)
-      : 0;
-
-    return (
-      <TextField
-        disabled
-        name="filled_options"
-        value={numberOfFilledOptions}
-        label={intl.formatMessage(questionFormTranslations.optionCount)}
-        fullWidth
-        style={{ marginBottom: 12, marginTop: 14, marginRight: 16 }}
-        variant="standard"
+  return (
+    <form
+      encType="multipart/form-data"
+      id="survey-section-question-form"
+      noValidate
+      onSubmit={handleSubmit((data) => onSubmit(data, setError))}
+    >
+      <ErrorText errors={errors} />
+      <Controller
+        name="question_type"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormSelectField
+            field={field}
+            fieldState={fieldState}
+            disabled={disabled}
+            label={<FormattedMessage {...translations.questionType} />}
+            options={questionOptions}
+            required
+            style={styles.questionType}
+          />
+        )}
       />
-    );
-  }
-
-  render() {
-    const { handleSubmit, intl, onSubmit, disabled, formValues } = this.props;
-    const { TEXT, MULTIPLE_CHOICE, MULTIPLE_RESPONSE } = questionTypes;
-    const questionType = formValues && formValues.question_type;
-
-    return (
-      <Form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
-        <Field
-          name="question_type"
-          label={intl.formatMessage(translations.questionType)}
-          component={renderSelectField}
-          style={styles.questionType}
-          {...{ disabled }}
-        >
-          <MenuItem value={TEXT}>
-            {intl.formatMessage(translations.textResponse)}
-          </MenuItem>
-          <MenuItem value={MULTIPLE_CHOICE}>
-            {intl.formatMessage(translations.multipleChoice)}
-          </MenuItem>
-          <MenuItem value={MULTIPLE_RESPONSE}>
-            {intl.formatMessage(translations.multipleResponse)}
-          </MenuItem>
-        </Field>
-        <Field
-          fullWidth
-          name="description"
-          label={intl.formatMessage(translations.questionText)}
-          component={renderTextField}
-          multiline
-          minRows={4}
-          {...{ disabled }}
-        />
-        <Field
-          name="required"
-          label={intl.formatMessage(questionFormTranslations.required)}
-          component={renderToggleField}
-          parse={Boolean}
-          style={styles.toggle}
-          {...{ disabled }}
-        />
-        <p style={styles.hint}>
-          {intl.formatMessage(questionFormTranslations.requiredHint)}
-        </p>
-        {this.renderSpecificFields(questionType)}
-      </Form>
-    );
-  }
-}
+      <Controller
+        name="description"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormTextField
+            field={field}
+            fieldState={fieldState}
+            disabled={disabled}
+            label={<FormattedMessage {...translations.questionText} />}
+            fullWidth
+            InputLabelProps={{
+              shrink: true,
+            }}
+            minRows={4}
+            multiline
+            required
+            variant="standard"
+          />
+        )}
+      />
+      <Controller
+        name="required"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormToggleField
+            field={field}
+            fieldState={fieldState}
+            disabled={disabled}
+            label={<FormattedMessage {...questionFormTranslations.required} />}
+            style={styles.toggle}
+          />
+        )}
+      />
+      <p style={styles.hint}>
+        <FormattedMessage {...questionFormTranslations.requiredHint} />
+      </p>
+      {!isTextResponse && renderSpecificFields()}
+    </form>
+  );
+};
 
 QuestionForm.propTypes = {
-  formValues: PropTypes.shape({
-    question_type: PropTypes.string,
-  }),
-  handleSubmit: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-  addToOptions: PropTypes.func.isRequired,
-  addToOptionsToDelete: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
   disabled: PropTypes.bool,
+  onSubmit: PropTypes.func.isRequired,
+  initialValues: PropTypes.object.isRequired,
 };
 
-export default reduxForm({
-  form: formNames.SURVEY_QUESTION,
-  validate,
-})(injectIntl(QuestionForm));
+export default QuestionForm;

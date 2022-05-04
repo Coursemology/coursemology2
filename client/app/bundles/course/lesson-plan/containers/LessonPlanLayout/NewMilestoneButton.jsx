@@ -32,11 +32,13 @@ const styles = {
 };
 
 class NewMilestoneButton extends Component {
-  createMilestoneHandler = (data) => {
+  createMilestoneHandler = (data, setError) => {
     const { dispatch } = this.props;
     const successMessage = <FormattedMessage {...translations.success} />;
     const failureMessage = <FormattedMessage {...translations.failure} />;
-    return dispatch(createMilestone(data, successMessage, failureMessage));
+    return dispatch(
+      createMilestone(data, successMessage, failureMessage, setError),
+    );
   };
 
   showForm = () => {
@@ -45,7 +47,7 @@ class NewMilestoneButton extends Component {
       showMilestoneForm({
         onSubmit: this.createMilestoneHandler,
         formTitle: intl.formatMessage(translations.newMilestone),
-        initialValues: {},
+        initialValues: { title: '', description: '', start_at: null },
       }),
     );
   };
