@@ -18,7 +18,7 @@ RSpec.feature 'Course: Achievements' do
         visit course_achievements_path(course)
 
         # Open new achievement modal and fill up fields.
-        find('div.new-btn button').click
+        find('button.new-achievement-button').click
         expect(page).to have_selector('h2', text: 'New Achievement')
         achievement = attributes_for(:course_achievement, course: course)
         fill_in 'title', with: achievement[:title]
@@ -34,60 +34,53 @@ RSpec.feature 'Course: Achievements' do
 
         # Edit the achivement
         visit edit_course_achievement_path(course, achievement_created)
-        expect(page).
-          to have_selector('h1', text: I18n.t('course.achievement.achievements.edit.header'))
+        expect(page).to have_selector('h5', text: 'Edit Achievement')
         new_achievement = attributes_for(:course_achievement, course: course)
         fill_in 'title', with: new_achievement[:title]
 
         # Edit the achievement
         find('.btn-submit').click
-        expect(page).
-          not_to have_selector('h1', text: I18n.t('course.achievement.achievements.edit.header'))
+        expect(page).not_to have_selector('h5', text: 'Edit Achievement')
         expect(current_path).to eq(course_achievements_path(course))
         expect(page).to have_text(new_achievement[:title])
       end
 
-      scenario 'I can delete an achievement' do
+      scenario 'I can delete an achievement', js: true do
         achievement = create(:course_achievement, course: course)
         visit course_achievements_path(course)
 
-        within find(content_tag_selector(achievement)) do
-          # first is used because a duplicate set of buttons are used for mobile view.
-          expect { first(:css, 'a.delete').click }.to change { course.achievements.count }.by(-1)
-        end
-        expect(page).to have_selector('div', text: I18n.t('course.achievement.achievements.'\
-                                                          'destroy.success'))
+        expect do
+          find("button.achievement-delete-#{achievement.id}").click
+          accept_confirm_dialog
+        end.to change { course.achievements.count }.by(-1)
       end
 
-      scenario 'I can award a manually-awarded achievement to a student' do
+      scenario 'I can award a manually-awarded achievement to a student', js: true do
         manual_achievement = create(:course_achievement, course: course)
         auto_achievement = create(:course_achievement, course: course)
         create(:course_condition_achievement, course: course, conditional: auto_achievement)
 
         student = create(:course_student, course: course)
-        course_user_id = "achievement_course_user_ids_#{student.id}"
         phantom_user = create(:course_student, :phantom, course: course)
-        phantom_user_id = "achievement_course_user_ids_#{phantom_user.id}"
 
         visit course_achievements_path(course)
+        expect(page).to have_selector("button.achievement-award-#{auto_achievement.id}")
+        expect(page).to have_selector("button.achievement-award-#{manual_achievement.id}")
 
-        expect(page).to have_content_tag_for(auto_achievement)
-        expect(page).
-          not_to have_link(nil,
-                           href: course_achievement_course_users_path(course, auto_achievement))
+        find("button.achievement-award-#{manual_achievement.id}").click
 
-        within find(content_tag_selector(manual_achievement)) do
-          # first is used because a duplicate set of buttons are used for mobile view.
-          first(:link, href: course_achievement_course_users_path(course, manual_achievement)).click
-        end
+        normal_user_checkbox = page.find("#checkbox_#{student.id}", visible: false)
+        phantom_user_checkbox = page.find("#checkbox_#{phantom_user.id}", visible: false)
 
-        expect(page).to have_unchecked_field(course_user_id)
-        expect(page).to have_unchecked_field(phantom_user_id)
-        check course_user_id
-        check phantom_user_id
+        expect(normal_user_checkbox.checked?).to be_falsey
+        expect(phantom_user_checkbox.checked?).to be_falsey
+
+        normal_user_checkbox.check
+        phantom_user_checkbox.check
 
         expect do
-          click_button I18n.t('course.achievement.course_users.course_users_form.button')
+          find_button('Save Changes').click
+          accept_confirm_dialog
         end.to change(manual_achievement.course_users, :count).by(2)
       end
     end

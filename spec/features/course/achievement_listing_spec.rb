@@ -16,25 +16,27 @@ RSpec.feature 'Course: Achievements' do
       visit course_achievements_path(course)
     end
 
-    context 'As an Course Manager' do
+    context 'As a Course Manager', js: true do
       let(:user) { create(:course_manager, course: course).user }
 
       scenario 'I can view all achievements' do
         achievements.each do |achievement|
-          expect(page).to have_content_tag_for(achievement)
-          expect(page).to have_link(nil, href: edit_course_achievement_path(course, achievement))
+          expect(page).to have_selector("button.achievement-award-#{achievement.id}")
+          expect(page).to have_selector("button.achievement-edit-#{achievement.id}")
+          expect(page).to have_selector("button.achievement-delete-#{achievement.id}")
           expect(page).to have_link(nil, href: course_achievement_path(course, achievement))
         end
       end
     end
 
-    context 'As an Course Student' do
+    context 'As a Course Student', js: true do
       let!(:course_student1) { create(:course_student, course: course) }
       let!(:course_student2) { create(:course_student, course: course) }
       let!(:phantom_user) { create(:course_student, :phantom, course: course) }
       let!(:user) { course_student1.user }
       before do
         create(:course_user_achievement, course_user: course_student1, achievement: achievement1)
+        create(:course_user_achievement, course_user: course_student1, achievement: achievement2)
         create(:course_user_achievement, course_user: course_student2, achievement: achievement2)
       end
 
@@ -42,18 +44,19 @@ RSpec.feature 'Course: Achievements' do
         visit course_achievements_path(course)
 
         # Ensure no 'New' button for achievement creation
-        expect(page).not_to have_selector('.page-header .new-btn')
-        expect(page).to have_no_content_tag_for(draft_achievement)
+        expect(page).not_to have_selector('.button.new-achievement-button')
+        expect(page).not_to have_link(nil, href: course_achievement_path(course, draft_achievement))
 
-        expect(page).not_to have_link(nil, href: edit_course_achievement_path(course, achievement1))
-        expect(page).not_to have_link(nil, href: edit_course_achievement_path(course, achievement2))
+        expect(page).not_to have_selector("button.achievement-award-#{achievement1.id}")
+        expect(page).not_to have_selector("button.achievement-edit-#{achievement1.id}")
+        expect(page).not_to have_selector("button.achievement-delete-#{achievement1.id}")
 
-        expect(page).to have_content_tag_for(achievement1)
-        expect(page).to have_content_tag_for(achievement2)
-        # Achievement obtained by course_user
-        expect(page).to have_tag('tr.achievement.granted', count: 1)
-        # Achievement not yet obtained by course_user
-        expect(page).to have_tag('tr.achievement.locked', count: 1)
+        expect(page).not_to have_selector("button.achievement-award-#{achievement2.id}")
+        expect(page).not_to have_selector("button.achievement-edit-#{achievement2.id}")
+        expect(page).not_to have_selector("button.achievement-delete-#{achievement2.id}")
+
+        expect(page).to have_link(nil, href: course_achievement_path(course, achievement1))
+        expect(page).to have_link(nil, href: course_achievement_path(course, achievement2))
       end
 
       scenario 'I can view the Achievement Sidebar item' do
@@ -64,16 +67,18 @@ RSpec.feature 'Course: Achievements' do
       end
 
       scenario 'I can view all users who have obtained an achievement' do
-        [achievement1, achievement2].each do |achievement|
+        [achievement2].each do |achievement|
           visit course_achievement_path(course, achievement)
 
           obtained = achievement.course_users
           not_obtained = course.course_users - obtained
 
-          obtained.each { |course_user| expect(page).to have_content_tag_for(course_user) }
-          not_obtained.each { |course_user| expect(page).to have_no_content_tag_for(course_user) }
+          obtained.each { |course_user| expect(page).to have_link(nil, href: course_user_path(course, course_user)) }
+          not_obtained.each do |course_user|
+            expect(page).not_to have_link(nil, href: course_user_path(course, course_user))
+          end
 
-          expect(page).to have_no_content_tag_for(phantom_user)
+          expect(page).not_to have_link(nil, href: course_user_path(course, phantom_user))
         end
       end
     end
