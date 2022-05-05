@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import { CircularProgress } from '@mui/material';
 
 const styles = {
@@ -7,14 +8,11 @@ const styles = {
     marginTop: 24,
     width: '100%',
   },
-  loadingInnerDiv: {
-    position: 'relative',
-  },
 };
 
-const LoadingIndicator = () => (
+const LoadingIndicator: FC<{}> = () => (
   <div style={styles.loading}>
-    <div style={styles.loadingInnerDiv}>
+    <div style={{ position: 'absolute' }}>
       <CircularProgress size={60} />
     </div>
   </div>
