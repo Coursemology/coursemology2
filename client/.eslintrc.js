@@ -13,13 +13,15 @@ module.exports = {
     'import/resolver': {
       alias: {
         map: [
-          ['theme', './app/theme'],
-          ['lib', './app/lib'],
           ['api', './app/api'],
+          ['lib', './app/lib'],
+          ['theme', './app/theme'],
+          ['types', './app/types'],
+          ['utilities', './app/utilities'],
           ['course', './app/bundles/course'],
           ['testUtils', './app/__test__/utils'],
         ],
-        extensions: ['.js', '.jsx'],
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
       },
     },
     react: {
@@ -35,6 +37,16 @@ module.exports = {
     'react/no-unused-prop-types': ['warn', { skipShapeProps: true }],
     'react/prefer-stateless-function': 'off',
     'react/require-default-props': 'off',
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      {
+        js: 'never',
+        jsx: 'never',
+        ts: 'never',
+        tsx: 'never',
+      },
+    ],
     'import/no-extraneous-dependencies': ['warn', { devDependencies: true }],
     'import/prefer-default-export': 'warn',
     'jsx-a11y/anchor-is-valid': 'off',
@@ -64,8 +76,33 @@ module.exports = {
     FormData: true,
     File: true,
     FileReader: true,
+    JSX: true,
   },
   overrides: [
+    {
+      files: ['*.ts', '*.tsx'],
+      extends: [
+        'airbnb-typescript',
+        'eslint:recommended',
+        'plugin:prettier/recommended',
+        'plugin:react/recommended',
+        'plugin:@typescript-eslint/eslint-recommended',
+      ],
+      parser: '@typescript-eslint/parser',
+      parserOptions: {
+        project: './tsconfig.json',
+        tsconfigRootDir: __dirname,
+        sourceType: 'module',
+      },
+      plugins: ['@typescript-eslint', 'react-hooks'],
+      rules: {
+        '@typescript-eslint/no-unused-vars': ['warn', { args: 'none' }],
+        'no-unused-vars': 'off',
+        'react-hooks/rules-of-hooks': 'warn',
+        'react/react-in-jsx-scope': 'off',
+        'no-param-reassign': 'off',
+      },
+    },
     {
       files: [
         '**/__test__/**/*.js',

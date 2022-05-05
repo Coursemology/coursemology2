@@ -26,11 +26,13 @@ const config = {
   },
 
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
     alias: {
-      theme: path.resolve('./app/theme'),
-      lib: path.resolve('./app/lib'),
       api: path.resolve('./app/api'),
+      lib: path.resolve('./app/lib'),
+      theme: path.resolve('./app/theme'),
+      types: path.resolve('./app/types'),
+      utilities: path.resolve('./app/utilities'),
       course: path.resolve('./app/bundles/course'),
       testUtils: path.resolve('./app/__test__/utils'),
     },
@@ -67,6 +69,11 @@ const config = {
       {
         test: /\.jsx?$/,
         use: 'babel-loader',
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
         exclude: /node_modules/,
       },
       {
