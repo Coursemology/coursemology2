@@ -45,6 +45,18 @@ module ApplicationFormattersHelper
     end
   end
 
+  # Return the given user's image url.
+  #
+  # @param [User] user The user to display
+  # @return [String] A url for the image.
+  def user_image(user)
+    if user.nil? || user.profile_photo.medium.url.nil?
+      image_path('user_silhouette.svg')
+    else
+      image_path(user.profile_photo.medium.url)
+    end
+  end
+
   # Links to the given User.
   #
   # @param [User] user The User to display.
