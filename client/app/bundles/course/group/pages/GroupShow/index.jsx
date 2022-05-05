@@ -2,8 +2,9 @@ import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
 import ErrorCard from 'lib/components/ErrorCard';
+import LoadingIndicator from 'lib/components/LoadingIndicator';
+import Note from 'lib/components/Note';
 import NotificationBar, {
   notificationShape,
 } from 'lib/components/NotificationBar';
@@ -13,7 +14,6 @@ import { categoryShape, groupShape } from '../../propTypes';
 import { fetchCourseUsers, fetchGroupData } from '../../actions';
 import GroupManager from './GroupManager';
 import actionTypes from '../../constants';
-import Note from '../../components/Note';
 
 const translations = defineMessages({
   fetchFailure: {
