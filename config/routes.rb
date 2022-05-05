@@ -186,7 +186,7 @@ Rails.application.routes.draw do
       scope module: :achievement do
         resources :achievements, except: [:new] do
           concerns :conditional
-          resources :course_users, only: [:index]
+          get :achievement_course_users, on: :member
           post 'reorder', on: :collection
         end
       end
