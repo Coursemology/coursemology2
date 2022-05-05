@@ -62,13 +62,13 @@ module TrackableJob::SpecHelpers
   end
 
   def visit_current_path
-    tries ||= 5
+    tries ||= 10
     visit current_path
   rescue Selenium::WebDriver::Error::UnknownError => e
     tries -= 1
     raise e if tries < 1
 
-    sleep 0.1
+    sleep 0.2
     retry
   end
 
