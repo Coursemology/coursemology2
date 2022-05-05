@@ -48,22 +48,15 @@ RSpec.describe Course::Achievement::ControllerHelper do
       end
     end
 
-    describe '#display_locked_achievement_badge' do
-      it 'displays the locked achievement badge' do
-        expect(helper.display_locked_achievement_badge).
-          to have_tag('img', with: { 'src^': '/assets/achievement_locked-' })
-      end
-    end
-
     describe '#achievement_status_class' do
       subject { helper.achievement_status_class(achievement, course_user) }
 
       context 'when the course user is a staff member' do
         let(:course_user) { create(:course_teaching_assistant, course: achievement.course) }
 
-        it 'returns an empty array' do
-          expect(subject).to eq([])
-          expect(helper.achievement_status_class(achievement, nil)).to eq([])
+        it 'returns nil result' do
+          expect(subject).to eq(nil)
+          expect(helper.achievement_status_class(achievement, nil)).to eq(nil)
         end
       end
 
@@ -71,7 +64,7 @@ RSpec.describe Course::Achievement::ControllerHelper do
         let(:course_user) { create(:course_student, course: achievement.course) }
 
         it 'returns an array with the locked class' do
-          expect(subject).to contain_exactly('locked')
+          expect(subject).to eq('locked')
         end
 
         context 'when the course user obtains the achievement' do
@@ -80,7 +73,7 @@ RSpec.describe Course::Achievement::ControllerHelper do
           end
 
           it 'returns an array with the granted class' do
-            expect(subject).to contain_exactly('granted')
+            expect(subject).to eq('granted')
           end
         end
       end
