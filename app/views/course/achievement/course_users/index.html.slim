@@ -1,9 +1,0 @@
-- add_breadcrumb format_inline_text(@achievement.title)
-= page_header format_inline_text(@achievement.title)
-
-= render partial: 'achievement', object: @achievement
-
-div.alert.alert-info
-  = simple_format(t('.notice'))
-
-= render partial: 'course_users_form', locals: { course: @course, achievement: @achievement }
