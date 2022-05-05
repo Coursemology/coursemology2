@@ -1,0 +1,86 @@
+import { FC, useState } from 'react';
+import { defineMessages, injectIntl } from 'react-intl';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { AchievementMiniEntity } from 'types/course/achievements';
+import { AppDispatch } from 'types/store';
+import DeleteButton from 'lib/components/buttons/DeleteButton';
+import EditButton from 'lib/components/buttons/EditButton';
+import { getCourseId } from 'lib/helpers/url-helpers';
+import { deleteAchievement } from '../../operations';
+import AwardButton from './AwardButton';
+
+interface OwnProps {
+  achievement: AchievementMiniEntity;
+  navigateToIndex: boolean;
+  intl?: any;
+}
+
+const translations = defineMessages({
+  deletionSuccess: {
+    id: 'course.achievement.delete.success',
+    defaultMessage: 'Achievement was deleted.',
+  },
+  deletionFailure: {
+    id: 'course.achievement.delete.fail',
+    defaultMessage: 'Failed to delete achievement.',
+  },
+  automaticAward: {
+    id: 'course.achievement.award.automatic',
+    defaultMessage:
+      'Automatically-awarded achievements cannot be manually awarded to students.',
+  },
+});
+
+const AchievementManagementButtons: FC<OwnProps> = (props) => {
+  const { achievement, intl, navigateToIndex } = props;
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const onEdit = () => {
+    navigate(`/courses/${getCourseId()}/achievements/${achievement.id}/edit`);
+  };
+
+  const onDelete = (): Promise<void> => {
+    setIsDeleting(true);
+    return dispatch(
+      deleteAchievement(
+        achievement.id,
+        intl.formatMessage(translations.deletionSuccess),
+        intl.formatMessage(translations.deletionFailure),
+        navigateToIndex,
+        navigate,
+      ),
+    ).finally(() => setIsDeleting(false));
+  };
+
+  const managementButtons = (
+    <div style={{ whiteSpace: 'nowrap' }}>
+      <AwardButton
+        className={`achievement-award-${achievement.id}`}
+        achievementId={achievement.id}
+        disabled={!achievement.permissions.canAward}
+        tooltipText={intl.formatMessage(translations.automaticAward)}
+      />
+      {achievement.permissions.canEdit && (
+        <EditButton
+          className={`achievement-edit-${achievement.id}`}
+          onClick={onEdit}
+        />
+      )}
+      {achievement.permissions.canDelete && (
+        <DeleteButton
+          className={`achievement-delete-${achievement.id}`}
+          disabled={isDeleting}
+          onClick={onDelete}
+          withDialog
+        />
+      )}
+    </div>
+  );
+
+  return managementButtons;
+};
+
+export default injectIntl(AchievementManagementButtons);
