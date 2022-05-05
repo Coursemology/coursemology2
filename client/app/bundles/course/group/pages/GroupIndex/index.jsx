@@ -1,6 +1,6 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 
-import Note from '../../components/Note';
+import Note from 'lib/components/Note';
 
 const translations = defineMessages({
   noCategory: {

@@ -56,7 +56,7 @@ const styles = {
     alignItems: 'center',
   },
   listItemText: {
-    marginBottm: 5,
+    marginBottom: 5,
   },
   listItemTextSize: {
     fontSize: 13,
