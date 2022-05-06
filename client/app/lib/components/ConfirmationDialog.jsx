@@ -123,6 +123,7 @@ class ConfirmationDialog extends Component {
         open={open}
         maxWidth="md"
         style={{ zIndex: 9999 }}
+        data-testid="ConfirmationDialog"
       >
         <DialogContent>{confirmationMessage}</DialogContent>
         <DialogActions>{actions}</DialogActions>

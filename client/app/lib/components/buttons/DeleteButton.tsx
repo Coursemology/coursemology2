@@ -37,8 +37,9 @@ const DeleteButton = ({
             }}
             color="error"
             {...props}
+            data-testid="DeleteIconButton"
           >
-            <Delete />
+            <Delete data-testid="DeleteIcon" />
           </IconButton>
         </span>
       </CustomTooltip>

@@ -13,7 +13,7 @@ const styles = {
 const LoadingIndicator: FC = () => (
   <div style={styles.loading}>
     <div style={{ position: 'absolute' }}>
-      <CircularProgress size={60} />
+      <CircularProgress size={60} data-testid="CircularProgress" />
     </div>
   </div>
 );
