@@ -19,6 +19,9 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "outDir": "dist",
+    "paths": {
+      "test-utils": ["utilities/test-utils"]
+    },
     "pretty": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
@@ -29,5 +32,5 @@
   "include": [
     "./app/**/*"
   ],
-  "exclude": ["node_modules", "build", "dist", "./app/__test__/**/*"]
+  "exclude": ["node_modules", "build", "dist"]
 }

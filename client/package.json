@@ -18,7 +18,8 @@
     "lint-tests": "eslint . --ext .test.js --ext .test.jsx --ext .test.ts --ext .test.tsx --cache",
     "lint": "yarn run lint-src && yarn run lint-tests && prettier --check \"**/*.{js,jsx,ts,tsx}\"",
     "lint-fix": "yarn run lint-src --fix && yarn run lint-tests --fix && prettier --write \"**/*.{js,jsx,ts,tsx}\"",
-    "postinstall": "cd vendor/recorderjs && NODE_ENV=development yarn install"
+    "postinstall": "cd vendor/recorderjs && NODE_ENV=development yarn install",
+    "check-types": "tsc"
   },
   "cacheDirectories": [
     "node_modules",
@@ -152,6 +153,9 @@
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.18.6",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^12.1.5",
+    "@types/jest": "^27.5.0",
     "@types/jquery": "^3.5.14",
     "@types/react": "^18.0.5",
     "@types/react-dom": "^18.0.5",
@@ -162,6 +166,7 @@
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^28.1.3",
+    "babel-plugin-react-remove-properties": "^0.3.0",
     "enzyme": "^3.11.0",
     "enzyme-to-json": "^3.6.2",
     "eslint": "^7.32.0",
@@ -182,6 +187,7 @@
     "prettier": "^2.7.1",
     "react-dnd-test-backend": "^15.1.2",
     "redux-logger": "^3.0.6",
+    "ts-jest": "^28.0.1",
     "ts-loader": "^9.3.1",
     "typescript": "^4.7.4",
     "webpack-dev-server": "^4.10.0"
