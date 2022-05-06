@@ -1,0 +1,84 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PageHeader /> when there is a return link matches the snapshot 1`] = `
+<body>
+  <div>
+    <div
+      style="flex-grow: 1;"
+    >
+      <header
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation4 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionFixed mui-fixed css-11b3ww9-MuiPaper-root-MuiAppBar-root"
+        data-testid="TitleBar"
+        style="z-index: 0; position: static; margin-bottom: 16px;"
+      >
+        <div
+          class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular css-1t29gy6-MuiToolbar-root"
+        >
+          <div
+            style="margin-left: -16px; margin-right: 8px;"
+          >
+            <button
+              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+              data-testid="ArrowBackIconButton"
+              tabindex="0"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                color="white"
+                data-testid="ArrowBack"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
+                />
+              </svg>
+              <span
+                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              />
+            </button>
+          </div>
+          <h5
+            class="MuiTypography-root MuiTypography-h5 css-mlfmu-MuiTypography-root"
+            style="flex-grow: 1;"
+          >
+            Test Title 2
+          </h5>
+        </div>
+      </header>
+    </div>
+  </div>
+</body>
+`;
+
+exports[`<PageHeader /> when there is no return link matches the snapshot 1`] = `
+<body>
+  <div>
+    <div
+      style="flex-grow: 1;"
+    >
+      <header
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation4 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionFixed mui-fixed css-11b3ww9-MuiPaper-root-MuiAppBar-root"
+        data-testid="TitleBar"
+        style="z-index: 0; position: static; margin-bottom: 16px;"
+      >
+        <div
+          class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular css-1t29gy6-MuiToolbar-root"
+        >
+          <div
+            style="margin-left: -16px; margin-right: 8px;"
+          />
+          <h5
+            class="MuiTypography-root MuiTypography-h5 css-mlfmu-MuiTypography-root"
+            style="flex-grow: 1;"
+          >
+            Test Title 1
+          </h5>
+        </div>
+      </header>
+    </div>
+  </div>
+</body>
+`;

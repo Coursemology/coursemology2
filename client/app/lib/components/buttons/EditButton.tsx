@@ -15,8 +15,13 @@ const EditButton = ({
 }: Props): JSX.Element => (
   <CustomTooltip title={tooltip}>
     <span>
-      <IconButton onClick={onClick} color="inherit" {...props}>
-        <Edit />
+      <IconButton
+        onClick={onClick}
+        color="inherit"
+        {...props}
+        data-testid="EditIconButton"
+      >
+        <Edit data-testid="EditIcon" />
       </IconButton>
     </span>
   </CustomTooltip>
