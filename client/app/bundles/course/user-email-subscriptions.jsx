@@ -3,7 +3,7 @@ import ProviderWrapper from 'lib/components/ProviderWrapper';
 import UserEmailSubscriptions from 'course/pages/UserEmailSubscriptions';
 import storeCreator from './store';
 
-$(document).ready(() => {
+$(() => {
   const mountNode = document.getElementById('user-email-subscriptions');
 
   if (mountNode) {
