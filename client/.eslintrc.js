@@ -172,10 +172,16 @@ module.exports = {
     },
     {
       files: [
+        '**/__test__/**/*.ts',
+        '**/__test__/**/*.tsx',
         '**/__test__/**/*.js',
         '**/__test__/**/*.jsx',
+        '**/*.test.ts',
+        '**/*.test.tsx',
         '**/*.test.js',
         '**/*.test.jsx',
+        '**/*.spec.ts',
+        '**/*.spec.tsx',
         '**/*.spec.js',
         '**/*.spec.jsx',
       ],
@@ -212,7 +218,7 @@ module.exports = {
         'import/no-unresolved': [
           'error',
           {
-            ignore: ['utils/'],
+            ignore: ['utils/', 'utilities/'],
           },
         ],
       },

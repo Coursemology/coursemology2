@@ -7,18 +7,25 @@
         "runtime": "automatic"
       }
     ],
-    "@babel/preset-typescript",
+    "@babel/preset-typescript"
   ],
   "plugins": [
     "@babel/plugin-syntax-dynamic-import",
     "@babel/plugin-proposal-class-properties",
-
     [
       "formatjs",
       {
         "idInterpolationPattern": "[sha512:contenthash:base64:6]",
         "ast": true
       }
-    ]
-  ]
+    ],
+    ["react-intl", { "messagesDir": "./build/messages/" }]
+  ],
+  "env": {
+    "production": {
+      "plugins": [
+        ["react-remove-properties", {"properties": ["data-testid"]}]
+      ]
+    }
+  }
 }
