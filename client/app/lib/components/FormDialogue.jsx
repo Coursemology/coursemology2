@@ -88,7 +88,9 @@ class FormDialogue extends Component {
           open={open}
           onClose={this.handleFormClose}
           style={{
-            zIndex: 9999,
+            maxHeight: 1700,
+            position: 'absolute',
+            top: 40,
           }}
         >
           <DialogTitle>{title}</DialogTitle>
