@@ -14,6 +14,7 @@ const TextResponse = (props) => {
   const readOnlyAnswer = (
     <Controller
       name={`${answerId}.answer_text`}
+      key={`${answerId}.answer_text`}
       control={control}
       render={({ field }) => (
         <div dangerouslySetInnerHTML={{ __html: field.value }} />
@@ -24,6 +25,7 @@ const TextResponse = (props) => {
   const richtextAnswer = (
     <Controller
       name={`${answerId}.answer_text`}
+      key={`${answerId}.answer_text`}
       control={control}
       render={({ field, fieldState }) => (
         <FormRichTextField
@@ -44,6 +46,7 @@ const TextResponse = (props) => {
   const plaintextAnswer = (
     <Controller
       name={`${answerId}.answer_text`}
+      key={`${answerId}.answer_text`}
       control={control}
       render={({ field }) => (
         <textarea

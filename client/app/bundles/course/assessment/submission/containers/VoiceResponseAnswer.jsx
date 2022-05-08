@@ -230,6 +230,7 @@ class VoiceResponseAnswer extends Component {
       <div>
         <Controller
           name={`${answerId}.file`}
+          key={`${answerId}.file`}
           control={control}
           render={({ field, fieldState }) =>
             this.renderFile({

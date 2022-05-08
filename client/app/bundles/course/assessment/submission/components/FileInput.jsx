@@ -159,6 +159,7 @@ const FileInputField = ({ name, disabled, callback, ...custom }) => {
   return (
     <Controller
       name={name}
+      key={name}
       control={control}
       render={({ field, fieldState }) => (
         <FileInput
