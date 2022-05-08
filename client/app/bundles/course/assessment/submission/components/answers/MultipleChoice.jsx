@@ -58,8 +58,8 @@ const MemoMultipleChoiceOptions = memo(
   (prevProps, nextProps) => {
     const { id: prevId } = prevProps.question;
     const { id: nextId } = nextProps.question;
-    const { graderView: prevGraderView } = prevProps.readOnly;
-    const { graderView: nextGraderView } = nextProps.readOnly;
+    const { graderView: prevGraderView } = prevProps.graderView;
+    const { graderView: nextGraderView } = nextProps.graderView;
     const isQuestionIdUnchanged = prevId === nextId;
     const isGraderViewUnchanged = prevGraderView === nextGraderView;
     return (
@@ -78,6 +78,7 @@ const MultipleChoice = (props) => {
   return (
     <Controller
       name={`${answerId}.option_ids`}
+      key={`${answerId}.option_ids`}
       control={control}
       render={({ field, fieldState }) => (
         <MemoMultipleChoiceOptions
