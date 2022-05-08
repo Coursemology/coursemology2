@@ -65,7 +65,19 @@ MultipleResponseOptions.defaultProps = {
 
 const MemoMultipleResponseOptions = memo(
   MultipleResponseOptions,
-  propsAreEqual,
+  (prevProps, nextProps) => {
+    const { id: prevId } = prevProps.question;
+    const { id: nextId } = nextProps.question;
+    const { graderView: prevGraderView } = prevProps.readOnly;
+    const { graderView: nextGraderView } = nextProps.readOnly;
+    const isQuestionIdUnchanged = prevId === nextId;
+    const isGraderViewUnchanged = prevGraderView === nextGraderView;
+    return (
+      isQuestionIdUnchanged &&
+      isGraderViewUnchanged &&
+      propsAreEqual(prevProps, nextProps)
+    );
+  },
 );
 
 const MultipleResponse = (props) => {

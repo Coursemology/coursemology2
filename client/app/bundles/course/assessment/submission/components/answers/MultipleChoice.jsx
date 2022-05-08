@@ -53,7 +53,22 @@ MultipleChoiceOptions.propTypes = {
   }).isRequired,
 };
 
-const MemoMultipleChoiceOptions = memo(MultipleChoiceOptions, propsAreEqual);
+const MemoMultipleChoiceOptions = memo(
+  MultipleChoiceOptions,
+  (prevProps, nextProps) => {
+    const { id: prevId } = prevProps.question;
+    const { id: nextId } = nextProps.question;
+    const { graderView: prevGraderView } = prevProps.readOnly;
+    const { graderView: nextGraderView } = nextProps.readOnly;
+    const isQuestionIdUnchanged = prevId === nextId;
+    const isGraderViewUnchanged = prevGraderView === nextGraderView;
+    return (
+      isQuestionIdUnchanged &&
+      isGraderViewUnchanged &&
+      propsAreEqual(prevProps, nextProps)
+    );
+  },
+);
 
 const MultipleChoice = (props) => {
   const { question, readOnly, showMcqMrqSolution, graderView, answerId } =
