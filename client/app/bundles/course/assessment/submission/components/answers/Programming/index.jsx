@@ -49,12 +49,14 @@ const Programming = (props) => {
     <div>
       {fileSubmission ? (
         <ProgrammingImportEditor
+          key={question.id}
           questionId={question.id}
           answerId={answerId}
           {...{ readOnly, question }}
         />
       ) : (
         <ProgrammingFiles
+          key={question.id}
           readOnly={readOnly}
           answerId={answerId}
           language={parseLanguages(question.language)}

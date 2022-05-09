@@ -16,7 +16,6 @@ const ForumPostResponse = (props) => {
     readOnly ? (
       <Controller
         name={`${answerId}.answer_text`}
-        key={`${answerId}.answer_text`}
         control={control}
         render={({ field }) => (
           <div dangerouslySetInnerHTML={{ __html: field.value }} />
@@ -25,7 +24,6 @@ const ForumPostResponse = (props) => {
     ) : (
       <Controller
         name={`${answerId}.answer_text`}
-        key={`${answerId}.answer_text`}
         control={control}
         render={({ field, fieldState }) => (
           <FormRichTextField
@@ -46,7 +44,6 @@ const ForumPostResponse = (props) => {
     <>
       <Controller
         name={`${answerId}.selected_post_packs`}
-        key={`${answerId}.selected_post_packs`}
         control={control}
         render={({ field }) => (
           <ForumPostSelect

@@ -9,7 +9,6 @@ const Editor = (props) => {
   return (
     <Controller
       name={name}
-      key={name}
       control={control}
       render={({ field }) => (
         <AceEditorField

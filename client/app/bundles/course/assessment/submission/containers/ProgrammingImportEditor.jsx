@@ -154,6 +154,14 @@ const VisibleProgrammingImportEditor = (props) => {
     viewHistory,
   } = props;
   const answers = viewHistory ? historyAnswers : useWatch({ control });
+
+  // When an assessment is submitted/unsubmitted,
+  // the form is somehow not reset yet and the answers for the new answerId
+  // can't be found.
+  if (!answers[answerId]) {
+    return null;
+  }
+
   const files =
     answers[answerId].files_attributes ||
     answers[`${answerId}`].files_attributes;
