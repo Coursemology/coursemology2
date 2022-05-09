@@ -16,7 +16,7 @@ const MultipleChoiceOptions = ({
   <>
     {question.options.map((option) => (
       <FormControlLabel
-        checked={option.id === value[0]}
+        checked={value && value.length > 0 && option.id === value[0]}
         control={<Radio style={{ padding: '0 12px' }} />}
         disabled={readOnly}
         key={option.id}
@@ -78,7 +78,6 @@ const MultipleChoice = (props) => {
   return (
     <Controller
       name={`${answerId}.option_ids`}
-      key={`${answerId}.option_ids`}
       control={control}
       render={({ field, fieldState }) => (
         <MemoMultipleChoiceOptions

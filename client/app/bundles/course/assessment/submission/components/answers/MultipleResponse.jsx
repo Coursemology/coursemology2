@@ -88,7 +88,6 @@ const MultipleResponse = (props) => {
   return (
     <Controller
       name={`${answerId}.option_ids`}
-      key={`${answerId}.option_ids`}
       control={control}
       render={({ field, fieldState }) => (
         <MemoMultipleResponseOptions
