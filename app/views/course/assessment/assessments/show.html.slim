@@ -71,6 +71,9 @@
     - @assessment.specific_conditions.each do |condition|
       = content_tag_for(:li, condition) do
         = condition.title
+    - if @assessment.start_at > Time.zone.now
+      li = t('.time_not_satisfied',
+             start_at: @assessment.start_at)
 
   - if @assessment_conditions
     h3 = t('.finish_to_unlock')
