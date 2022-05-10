@@ -32,21 +32,18 @@
       - achievement_conditionals.each do |achievement|
         = link_to course_achievement_path(current_course, achievement) do
           = display_achievement_badge(achievement)
-  td.table-start-at
-    - start_at_tooltip_title = nil
+  td.table-start-attd.table-start-at
     - if assessment_not_unlocked(assessment_time)
-      - start_at_tooltip_title = ".assessment_not_unlocked"
+      div.condition-not-satisfied data-toggle='tooltip' title="#{t('.assessment_not_unlocked')}"
+        = render partial: 'course/lesson_plan/items/personal_or_ref_time',
+                 locals: { item: @items_hash[assessment.id], course_user: current_course_user, attribute: :start_at, datetime_format: :short }
     - elsif condition_not_satisfied(can_attempt_assessment, assessment_with_loaded_timeline, assessment_time)
-      - start_at_tooltip_title = ".condition_not_satisfied"
-
-    - if start_at_tooltip_title
-      div.condition-not-satisfied data-toggle='tooltip' title="#{t(start_at_tooltip_title)}"
+      div.condition-not-satisfied data-toggle='tooltip' title="#{t('.condition_not_satisfied')}"
         = render partial: 'course/lesson_plan/items/personal_or_ref_time',
                  locals: { item: @items_hash[assessment.id], course_user: current_course_user, attribute: :start_at, datetime_format: :short }
     - else
-        = render partial: 'course/lesson_plan/items/personal_or_ref_time',
-                 locals: { item: @items_hash[assessment.id], course_user: current_course_user, attribute: :start_at, datetime_format: :short }
-
+      = render partial: 'course/lesson_plan/items/personal_or_ref_time',
+               locals: { item: @items_hash[assessment.id], course_user: current_course_user, attribute: :start_at, datetime_format: :short }
   - if show_bonus_attributes?
     td.table-bonus-cut-off
       - if assessment_time.bonus_end_at.present? && assessment.time_bonus_exp > 0
