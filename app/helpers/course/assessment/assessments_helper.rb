@@ -22,9 +22,9 @@ module Course::Assessment::AssessmentsHelper
   end
 
   def condition_not_satisfied(can_attempt_assessment, assessment, assessment_time)
-    !can_attempt_assessment &&
-      assessment_time.start_at < Time.zone.now &&
-      !assessment.conditions_satisfied_by?(current_course_user)
+    (!can_attempt_assessment &&
+      !assessment.conditions_satisfied_by?(current_course_user)) ||
+      assessment_time.start_at > Time.zone.now
   end
 
   def show_bonus_attributes?
