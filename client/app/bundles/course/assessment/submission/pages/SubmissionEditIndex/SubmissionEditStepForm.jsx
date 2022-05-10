@@ -474,7 +474,11 @@ const SubmissionEditStepForm = (props) => {
         <div>
           {renderSaveGradeButton()}
           {renderSaveDraftButton()}
-          {renderFinaliseButton()}
+
+          <div style={{ display: 'inline', float: 'right' }}>
+            {renderFinaliseButton()}
+          </div>
+
           {renderUnsubmitButton()}
         </div>
         <hr />
