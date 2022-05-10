@@ -614,7 +614,7 @@ const SubmissionEditForm = (props) => {
           {renderSaveGradeButton()}
           {renderAutogradeSubmissionButton()}
 
-          <div style={{display: "inline", float: "right"}}>
+          <div style={{ display: 'inline', float: 'right' }}>
             {renderSubmitButton()}
           </div>
 
