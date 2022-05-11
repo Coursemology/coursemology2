@@ -2,8 +2,10 @@
   span.fa-stack.fa-5x
     = fa_icon 'circle-thin', class: 'fa-stack-2x'
     = fa_icon 'lock', class: 'fa-stack-1x'
-  p.text-center = t('.message')
-  - if !assessment_not_unlocked(@assessment.time_for(current_course_user))
+  - if assessment_not_unlocked(@assessment.time_for(current_course_user))
+    p.text-center = t('.assessment_not_unlocked')
+  - else
+    p.text-center = t('.message_unlock')
     = simple_form_for :assessment, url: authenticate_course_assessment_path(current_course, @assessment), method: :post do |f|
       = f.input :password, label: false, required: false, placeholder: t('.placeholder')
 
