@@ -123,8 +123,6 @@ class PopupDialog extends Component {
           open={visible}
           maxWidth="md"
           style={{
-            maxHeight: 1700,
-            position: 'absolute',
             top: 40,
           }}
         >
