@@ -3,8 +3,8 @@
     = fa_icon 'circle-thin', class: 'fa-stack-2x'
     = fa_icon 'lock', class: 'fa-stack-1x'
   p.text-center = t('.message')
+  - if !assessment_not_unlocked(@assessment.time_for(current_course_user))
+    = simple_form_for :assessment, url: authenticate_course_assessment_path(current_course, @assessment), method: :post do |f|
+      = f.input :password, label: false, required: false, placeholder: t('.placeholder')
 
-  = simple_form_for :assessment, url: authenticate_course_assessment_path(current_course, @assessment), method: :post do |f|
-    = f.input :password, label: false, required: false, placeholder: t('.placeholder')
-
-    = f.submit t('.continue'), class: ['btn', 'btn-primary']
+      = f.submit t('.continue'), class: ['btn', 'btn-primary']
