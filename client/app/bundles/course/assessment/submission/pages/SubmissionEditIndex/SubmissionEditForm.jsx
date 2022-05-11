@@ -14,10 +14,12 @@ import {
   DialogContent,
   DialogTitle,
   Paper,
-  Tab,
-  Tabs,
+  Step,
+  Stepper,
+  StepButton,
+  SvgIcon,
 } from '@mui/material';
-import { blue, grey, yellow, red } from '@mui/material/colors';
+import { blue, yellow, red } from '@mui/material/colors';
 
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
@@ -56,6 +58,10 @@ const styles = {
   formButton: {
     marginBottom: 10,
     marginRight: 10,
+  },
+  stepButton: {
+    marginBottom: 5,
+    marginRight: 5,
   },
   loadingComment: {
     marginTop: 10,
@@ -475,30 +481,46 @@ const SubmissionEditForm = (props) => {
     />
   );
 
-  const renderTabbedQuestions = () => (
-    <Tabs
-      onChange={(event, value) => {
-        setStepIndex(value);
-      }}
-      style={{ backgroundColor: grey[100], color: blue[500] }}
-      TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
-      value={stepIndex}
-      variant="fullWidth"
+  const renderSteppedQuestions = () => (
+    <Stepper
+      activeStep={stepIndex}
+      connector={<div />}
+      nonLinear
+      style={{ justifyContent: 'center', flexWrap: 'wrap', padding: 10 }}
     >
-      {questionIds.map((id, index) => (
-        <Tab
-          key={id}
-          label={intl.formatMessage(translations.questionNumber, {
-            number: index + 1,
-          })}
-          style={{ minWidth: 10 }}
-          value={index}
-        />
-      ))}
-    </Tabs>
+      {questionIds.map((id, index) => {
+        let stepButtonColor = '';
+        const isCurrentQuestion = index === stepIndex;
+        stepButtonColor = isCurrentQuestion ? blue[800] : blue[400];
+        return (
+          <Step key={id} sx={{ width: 55, height: 50 }}>
+            <StepButton
+              icon={
+                <SvgIcon htmlColor={stepButtonColor}>
+                  <circle cx="12" cy="12" r="12" />
+                  <text
+                    x="12"
+                    y="16"
+                    textAnchor="middle"
+                    fontSize="12"
+                    fill="#fff"
+                  >
+                    {index + 1}
+                  </text>
+                </SvgIcon>
+              }
+              onClick={() => {
+                setStepIndex(index);
+              }}
+              style={styles.stepButton}
+            />
+          </Step>
+        );
+      })}
+    </Stepper>
   );
 
-  const renderTabbedQuestionsContent = () => {
+  const renderSteppedQuestionsContent = () => {
     const questionId = questionIds[stepIndex];
     const question = questions[questionId];
     const { answerId, topicId, viewHistory } = question;
@@ -602,8 +624,8 @@ const SubmissionEditForm = (props) => {
 
           {tabbedView ? (
             <>
-              {renderTabbedQuestions()}
-              {renderTabbedQuestionsContent()}
+              {renderSteppedQuestions()}
+              {renderSteppedQuestionsContent()}
             </>
           ) : (
             renderQuestions()
