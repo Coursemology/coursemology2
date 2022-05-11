@@ -486,6 +486,10 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
           expect { duplicate_objects }.to change { destination_course.surveys.count }.by(1)
           expect(duplicate_objects.first.title).to eq(survey.title)
         end
+
+        it 'does not copy over closing_reminded_at' do
+          expect(duplicate_objects.first.closing_reminded_at).to be_nil
+        end
       end
 
       context 'when a video tab is selected' do
