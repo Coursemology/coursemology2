@@ -88,8 +88,6 @@ class FormDialogue extends Component {
           open={open}
           onClose={this.handleFormClose}
           style={{
-            maxHeight: 1700,
-            position: 'absolute',
             top: 40,
           }}
         >
