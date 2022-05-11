@@ -75,7 +75,7 @@ en:
           failure: 'Could not delete assessment: %{error}'
         authenticate:
           header: 'Input Password'
-          message: 'The assessment is locked, please input the password.'
+          message: 'The assessment is locked.'
           placeholder: 'Password'
           continue: 'Continue'
         assessment_management_buttons:
