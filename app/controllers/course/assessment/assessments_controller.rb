@@ -79,7 +79,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def authenticate
-    if assessment_not_unlocked(@assessment.time_for(current_course_user))
+    if assessment_not_started(@assessment.time_for(current_course_user))
       render json: { success: false }
     elsif authentication_service.authenticate(params.require(:assessment).permit(:password)[:password])
       render json: { success: true }
