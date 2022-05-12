@@ -33,8 +33,8 @@
         = link_to course_achievement_path(current_course, achievement) do
           = display_achievement_badge(achievement)
   td.table-start-attd.table-start-at
-    - if assessment_not_unlocked(assessment_time)
-      div.condition-not-satisfied data-toggle='tooltip' title="#{t('.assessment_not_unlocked')}"
+    - if assessment_not_started(assessment_time)
+      div.condition-not-satisfied data-toggle='tooltip' title="#{t('.assessment_not_started')}"
         = render partial: 'course/lesson_plan/items/personal_or_ref_time',
                  locals: { item: @items_hash[assessment.id], course_user: current_course_user, attribute: :start_at, datetime_format: :short }
     - elsif condition_not_satisfied(can_attempt_assessment, assessment_with_loaded_timeline, assessment_time)

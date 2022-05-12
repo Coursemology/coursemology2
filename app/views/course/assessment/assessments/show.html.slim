@@ -71,8 +71,8 @@
     - @assessment.specific_conditions.each do |condition|
       = content_tag_for(:li, condition) do
         = condition.title
-    - if assessment_not_unlocked(@assessment.time_for(current_course_user))
-      li = t('.assessment_not_unlocked',
+    - if assessment_not_started(@assessment.time_for(current_course_user))
+      li = t('.assessment_not_started',
              start_at: format_datetime(@assessment.time_for(current_course_user).start_at, :long))
 
   - if @assessment_conditions
