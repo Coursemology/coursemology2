@@ -75,7 +75,7 @@ en:
           failure: 'Could not delete assessment: %{error}'
         authenticate:
           header: 'Input Password'
-          assessment_not_unlocked: 'The assessment is not unlocked yet.'
+          assessment_not_unlocked: 'The assessment will be unlocked on %{start_at}.'
           message_unlock: 'The assessment is locked, please input the password.'
           placeholder: 'Password'
           continue: 'Continue'

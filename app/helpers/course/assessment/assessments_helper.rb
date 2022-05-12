@@ -28,7 +28,7 @@ module Course::Assessment::AssessmentsHelper
   end
 
   def assessment_not_unlocked(assessment_time)
-    assessment_time.start_at >= Time.zone.now
+    assessment_time.start_at > Time.zone.now
   end
 
   def show_bonus_attributes?
