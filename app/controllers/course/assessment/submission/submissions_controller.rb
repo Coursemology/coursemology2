@@ -155,7 +155,7 @@ class Course::Assessment::Submission::SubmissionsController < \
                     status: :bad_request
     end
     job = Course::Assessment::Submission::StatisticsDownloadJob.
-          perform_later(current_user, submission_ids).job
+          perform_later(current_course, current_user, submission_ids).job
     respond_to do |format|
       format.html { redirect_to(job_path(job)) }
       format.json { render json: { redirect_url: job_path(job) } }
