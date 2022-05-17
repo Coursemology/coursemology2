@@ -102,8 +102,12 @@ const SubmissionEditForm = (props) => {
     showMcqMrqSolution,
     submitted,
     tabbedView,
+    maxStep: maxInitialStep,
+    step,
     topics,
   } = props;
+
+  let initialStep = Math.min(maxInitialStep, Math.max(0, step || 0));
 
   const [examNotice, setExamNotice] = useState(
     newSubmission && passwordProtected,
@@ -112,7 +116,7 @@ const SubmissionEditForm = (props) => {
   const [unsubmitConfirmation, setUnsubmitConfirmation] = useState(false);
   const [resetConfirmation, setResetConfirmation] = useState(false);
   const [resetAnswerId, setResetAnswerId] = useState(null);
-  const [stepIndex, setStepIndex] = useState(0);
+  const [stepIndex, setStepIndex] = useState(initialStep);
 
   const methods = useForm({
     defaultValues: initialValues,
@@ -131,7 +135,7 @@ const SubmissionEditForm = (props) => {
   }, [initialValues]);
 
   useEffect(() => {
-    let initialStep = props.step;
+    initialStep = props.step;
 
     if (initialStep !== null && !tabbedView) {
       initialStep = initialStep < 0 ? 0 : initialStep;
@@ -666,6 +670,7 @@ SubmissionEditForm.propTypes = {
   newSubmission: PropTypes.bool.isRequired,
   passwordProtected: PropTypes.bool.isRequired,
   tabbedView: PropTypes.bool.isRequired,
+  maxStep: PropTypes.number.isRequired,
   step: PropTypes.number,
 
   showMcqMrqSolution: PropTypes.bool.isRequired,

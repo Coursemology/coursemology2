@@ -345,6 +345,7 @@ class VisibleSubmissionEditIndex extends Component {
         questions={questions}
         historyQuestions={historyQuestions}
         questionsFlags={questionsFlags}
+        maxStep={maxStep === undefined ? questionIds.length - 1 : maxStep}
         step={step}
         tabbedView={tabbedView}
         topics={topics}
