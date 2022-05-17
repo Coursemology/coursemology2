@@ -2,8 +2,8 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import moment from 'lib/moment';
-import { Icon, IconButton, TableCell, TableRow } from '@mui/material';
-import { blue, pink, red } from '@mui/material/colors';
+import { Chip, Icon, IconButton, Link, TableCell, TableRow } from '@mui/material';
+import { blue, green, pink, red, yellow } from '@mui/material/colors';
 import Delete from '@mui/icons-material/Delete';
 import History from '@mui/icons-material/History';
 import RemoveCircle from '@mui/icons-material/RemoveCircle';
@@ -36,9 +36,27 @@ const styles = {
     fontSize: '14px',
     marginRight: '2px',
   },
-  unstartedText: {
+  unstartedChip: {
     color: red[600],
     fontWeight: 'bold',
+    width: 100,
+  },
+  attemptingChip: {
+    border: '5px solid',
+    borderColor: yellow[500],
+    width: 100,
+  },
+  submittedChip: {
+    border: '5px solid',
+    borderColor: green[200],
+    width: 100,
+  },
+  gradedChip: {
+    backgroundColor: green[200],
+  },
+  publishedChip: {
+    backgroundColor: green[200],
+    width: 100,
   },
   tableCell: {
     padding: '0.5em',
@@ -80,7 +98,7 @@ export default class SubmissionsTableRow extends Component {
   static renderUnpublishedWarning(submission) {
     if (submission.workflowState !== workflowStates.Graded) return null;
     return (
-      <span style={{ display: 'inline-block', marginRight: 5 }}>
+      <span style={{ display: 'inline-block'}}>
         <a data-tip data-for="unpublished-grades" data-offset="{'left' : -8}">
           <i className="fa fa-exclamation-triangle" />
         </a>
@@ -223,22 +241,48 @@ export default class SubmissionsTableRow extends Component {
 
   renderSubmissionWorkflowState(submission) {
     const { courseId, assessmentId } = this.props;
-
-    if (submission.workflowState === workflowStates.Unstarted) {
-      return (
-        <div style={styles.unstartedText}>
-          <FormattedMessage {...translations[submission.workflowState]} />
-        </div>
-      );
-    }
-
     return (
-      <>
-        {SubmissionsTableRow.renderUnpublishedWarning(submission)}
-        <a href={getEditSubmissionURL(courseId, assessmentId, submission.id)}>
-          <FormattedMessage {...translations[submission.workflowState]} />
-        </a>
-      </>
+      // <>
+      //   {SubmissionsTableRow.renderUnpublishedWarning(submission)}
+      //   <a href={getEditSubmissionURL(courseId, assessmentId, submission.id)}>
+      //     <FormattedMessage {...translations[submission.workflowState]} />
+      //   </a>
+      // </>
+      (submission.workflowState == workflowStates.Unstarted) ? (
+        <FormattedMessage {...translations[submission.workflowState]}>
+        {(msg) => (
+          <Chip 
+            icon = {SubmissionsTableRow.renderUnpublishedWarning(submission)}
+            label = {msg}
+            style = {styles.unstartedChip}
+            variant = {"outlined"}
+          />
+        )}
+      </FormattedMessage>
+      ) : (
+          <FormattedMessage {...translations[submission.workflowState]}>
+          {(msg) => (
+            <Chip
+              clickable = {submission.workflowState != workflowStates.Unstarted}
+              component={Link}
+              href = {getEditSubmissionURL(courseId, assessmentId, submission.id)}
+              icon = {SubmissionsTableRow.renderUnpublishedWarning(submission)}
+              label = {msg}
+              style = {submission.workflowState == workflowStates.Attempting
+                  ? styles.attemptingChip
+                  : submission.workflowState == workflowStates.Submitted
+                  ? styles.submittedChip
+                  : submission.workflowState == workflowStates.Graded
+                  ? styles.gradedChip
+                  : styles.publishedChip}
+              variant = {submission.workflowState == workflowStates.Graded
+                || submission.workflowState == workflowStates.Published
+                ? "filled" : "outlined"}
+            />
+          )}
+        </FormattedMessage>
+      )
+
     );
   }
 
