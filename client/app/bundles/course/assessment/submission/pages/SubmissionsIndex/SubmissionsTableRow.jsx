@@ -42,12 +42,10 @@ const styles = {
     width: 100,
   },
   attemptingChip: {
-    border: '5px solid',
     borderColor: yellow[500],
     width: 100,
   },
   submittedChip: {
-    border: '5px solid',
     borderColor: green[200],
     width: 100,
   },
@@ -242,12 +240,6 @@ export default class SubmissionsTableRow extends Component {
   renderSubmissionWorkflowState(submission) {
     const { courseId, assessmentId } = this.props;
     return (
-      // <>
-      //   {SubmissionsTableRow.renderUnpublishedWarning(submission)}
-      //   <a href={getEditSubmissionURL(courseId, assessmentId, submission.id)}>
-      //     <FormattedMessage {...translations[submission.workflowState]} />
-      //   </a>
-      // </>
       (submission.workflowState == workflowStates.Unstarted) ? (
         <FormattedMessage {...translations[submission.workflowState]}>
         {(msg) => (
