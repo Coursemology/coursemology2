@@ -21,6 +21,7 @@ const translations = defineMessages({
 const styles = {
   card: {
     minWidth: 250,
+    border: '0.2px solid #e3e3e3',
   },
 };
 
