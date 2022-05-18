@@ -1,6 +1,5 @@
 import { useRef, useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Overlay } from 'react-overlays';
 import { grey } from '@mui/material/colors';
 
 import AddCommentIcon from './AddCommentIcon';
@@ -49,9 +48,9 @@ const styles = {
     position: 'relative',
   },
   tooltipStyle: {
-    position: 'absolute',
-    top: 20,
-    left: 50,
+    position: 'relative',
+    top: 0,
+    left: 0,
   },
   tooltipInnerStyle: {
     color: '#000',
@@ -62,9 +61,6 @@ const styles = {
 };
 
 const LineNumberColumn = (props) => {
-  const triggerRef = useRef(null);
-  const containerRef = useRef(null);
-
   const {
     lineNumber,
     lineHovered,
@@ -78,48 +74,30 @@ const LineNumberColumn = (props) => {
   const annotation = annotations.find((a) => a.line === lineNumber);
 
   const renderComments = () => {
-    const {
-      answerId,
-      fileId,
-      expanded,
-      collapseLine,
-      activeComment,
-      setActiveComment,
-    } = props;
+    const { answerId, fileId, expanded } = props;
 
-    return (
-      <Overlay
-        show={expanded[lineNumber - 1]}
-        onHide={() => collapseLine(lineNumber)}
-        placement="right"
-        rootClose
-        target={triggerRef}
-        container={containerRef}
-      >
-        {({ props: props2 }) => (
-          <div
-            ref={props2.ref}
-            style={{
-              width: Math.max(0, editorWidth - 2),
-              zIndex: activeComment === lineNumber ? 1000 : lineNumber,
-              ...styles.tooltipStyle,
-            }}
-          >
-            <div style={styles.tooltipInnerStyle}>
-              <div onClick={() => setActiveComment(lineNumber)}>
-                <Annotations
-                  answerId={answerId}
-                  fileId={fileId}
-                  lineNumber={lineNumber}
-                  annotation={annotation}
-                  airMode={false}
-                />
-              </div>
-            </div>
+    if (expanded[lineNumber - 1]) {
+      return (
+        <div
+          style={{
+            width: Math.max(0, editorWidth - 2),
+            maxWidth: 850,
+            ...styles.tooltipStyle,
+          }}
+        >
+          <div style={styles.tooltipInnerStyle}>
+            <Annotations
+              answerId={answerId}
+              fileId={fileId}
+              lineNumber={lineNumber}
+              annotation={annotation}
+              airMode={false}
+            />
           </div>
-        )}
-      </Overlay>
-    );
+        </div>
+      );
+    }
+    return <></>;
   };
 
   return (
@@ -133,13 +111,11 @@ const LineNumberColumn = (props) => {
         onClick={() => toggleComment(lineNumber)}
         onMouseOver={() => setLineHovered(lineNumber)}
         onMouseOut={() => setLineHovered(0)}
-        ref={containerRef}
       >
         <div>{lineNumber}</div>
         <AddCommentIcon
           onClick={() => expandComment(lineNumber)}
           hovered={lineHovered === lineNumber}
-          ref={triggerRef}
         />
       </div>
       {renderComments(lineNumber)}
@@ -151,23 +127,19 @@ LineNumberColumn.propTypes = {
   lineNumber: PropTypes.number.isRequired,
   lineHovered: PropTypes.number.isRequired,
   setLineHovered: PropTypes.func.isRequired,
-  setActiveComment: PropTypes.func.isRequired,
   toggleComment: PropTypes.func.isRequired,
   expandComment: PropTypes.func.isRequired,
-  activeComment: PropTypes.number.isRequired,
   editorWidth: PropTypes.number.isRequired,
 
   expanded: PropTypes.arrayOf(PropTypes.bool).isRequired,
   answerId: PropTypes.number.isRequired,
   fileId: PropTypes.number.isRequired,
   annotations: PropTypes.arrayOf(annotationShape),
-  collapseLine: PropTypes.func,
 };
 
 export default function NarrowEditor(props) {
   const editorRef = useRef();
   const [editorWidth, setEditorWidth] = useState(0);
-  const [activeComment, setActiveComment] = useState(0);
   const [lineHovered, setLineHovered] = useState(0);
 
   const getEditorWidth = useCallback(() => {
@@ -189,12 +161,10 @@ export default function NarrowEditor(props) {
 
   const expandComment = (lineNumber) => {
     props.expandLine(lineNumber);
-    setActiveComment(lineNumber);
   };
 
   const toggleComment = (lineNumber) => {
     props.toggleLine(lineNumber);
-    setActiveComment(lineNumber);
   };
 
   const renderLineNumberColumn = (lineNumber) => (
@@ -202,10 +172,8 @@ export default function NarrowEditor(props) {
       lineNumber={lineNumber}
       lineHovered={lineHovered}
       setLineHovered={setLineHovered}
-      setActiveComment={setActiveComment}
       toggleComment={toggleComment}
       expandComment={expandComment}
-      activeComment={activeComment}
       editorWidth={editorWidth}
       {...props}
     />
@@ -213,50 +181,43 @@ export default function NarrowEditor(props) {
 
   const { content } = props;
 
-  /* eslint-disable react/no-array-index-key */
   return (
     <table className="codehilite" style={styles.editor} ref={editorRef}>
       <tbody>
-        <tr>
-          <td
-            style={{
-              width: 50,
-              userSelect: 'none',
-              paddingBottom: 20,
-              verticalAlign: 'top',
-            }}
-          >
-            {content.map((line, index) => (
-              <div key={`${index}-${line}`}>
-                {renderLineNumberColumn(index + 1)}
+        {content.map((line, index) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <tr key={`${index}-${line}`}>
+            <td
+              style={{
+                width: 50,
+                userSelect: 'none',
+                verticalAlign: 'top',
+              }}
+            >
+              {renderLineNumberColumn(index + 1)}
+            </td>
+
+            <td
+              style={{
+                display: 'block',
+                overflowX: 'visible',
+                verticalAlign: 'top',
+              }}
+            >
+              <div style={styles.editorLine}>
+                <pre style={{ overflow: 'visible' }}>
+                  <code
+                    dangerouslySetInnerHTML={{ __html: line }}
+                    style={{ whiteSpace: 'inherit' }}
+                  />
+                </pre>
               </div>
-            ))}
-          </td>
-          <td
-            style={{
-              display: 'block',
-              overflowX: 'scroll',
-              verticalAlign: 'top',
-            }}
-          >
-            <div style={{ display: 'inline-block' }}>
-              {content.map((line, index) => (
-                <div key={`${index}-${line}`} style={styles.editorLine}>
-                  <pre style={{ overflow: 'visible' }}>
-                    <code
-                      dangerouslySetInnerHTML={{ __html: line }}
-                      style={{ whiteSpace: 'inherit' }}
-                    />
-                  </pre>
-                </div>
-              ))}
-            </div>
-          </td>
-        </tr>
+            </td>
+          </tr>
+        ))}
       </tbody>
     </table>
   );
-  /* eslint-enable react/no-array-index-key */
 }
 
 NarrowEditor.propTypes = {
