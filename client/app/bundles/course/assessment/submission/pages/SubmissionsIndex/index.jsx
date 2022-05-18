@@ -44,8 +44,8 @@ import {
 } from '../../constants';
 import translations from '../../translations';
 import submissionsTranslations from './translations';
-import rootStyle from './SubmissionsStyle';
 import { useTheme } from '@mui/material/styles';
+import { style } from '@mui/system';
 
 const styles = {
   histogram: {
@@ -245,9 +245,8 @@ const VisibleSubmissionsIndex = (props) => {
       initialCounts,
     );
 
-    console.log(theme.palette);
     return (
-      <div style={rootStyle.submissionsHistogram.style}>
+      <div style={styles.histogram}>
         {workflowStatesArray.map((w) => {
           const count = submissionStateCounts[w];
           const cellStyle = {
@@ -565,5 +564,5 @@ function mapStateToProps(state) {
   };
 }
 
-const SubmissionsIndexConnect = connect(mapStateToProps)(VisibleSubmissionsIndex);
-export default withRouter(SubmissionsIndexConnect);
+const SubmissionsIndex = connect(mapStateToProps)(VisibleSubmissionsIndex);
+export default withRouter(SubmissionsIndex);
