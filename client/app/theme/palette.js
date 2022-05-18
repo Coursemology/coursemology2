@@ -1,5 +1,5 @@
 import * as colors from '@mui/material/colors';
-
+import { blue, green, grey, yellow, red } from '@mui/material/colors';
 import { black, white } from './colors';
 
 const palette = {
@@ -43,6 +43,13 @@ const palette = {
     main: '#E69F22',
     light: '#FDF8F3',
     dark: '#95591E',
+  },
+  status: {
+    unstarted: red[100],
+    attempting: yellow[100],
+    submitted: grey[100],
+    graded: blue[100],
+    published: green[100],
   },
   danger: {
     contrastText: white,
