@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import moment from 'lib/moment';
@@ -21,12 +21,9 @@ import {
   unsubmitSubmission,
   deleteSubmission,
 } from '../../actions/submissions';
+import { useTheme } from '@emotion/react';
 
 const styles = {
-  chip: {
-    margin: 4,
-    backgroundColor: blue[600],
-  },
   nameWrapper: {
     display: 'inline',
     flexWrap: 'nowrap',
@@ -36,24 +33,7 @@ const styles = {
     fontSize: '14px',
     marginRight: '2px',
   },
-  unstartedChip: {
-    color: red[600],
-    fontWeight: 'bold',
-    width: 100,
-  },
-  attemptingChip: {
-    borderColor: yellow[500],
-    width: 100,
-  },
-  submittedChip: {
-    borderColor: green[200],
-    width: 100,
-  },
-  gradedChip: {
-    backgroundColor: green[200],
-  },
-  publishedChip: {
-    backgroundColor: green[200],
+  chip: {
     width: 100,
   },
   tableCell: {
@@ -70,16 +50,21 @@ const styles = {
   },
 };
 
-export default class SubmissionsTableRow extends Component {
-  static formatDate(date) {
+const SubmissionsTableRow = React.memo((props) => {
+  const theme = useTheme();
+  const [state, setState] = useState({
+    unsubmitConfirmation: false,
+    deleteConfirmation: false,
+  });
+  const formatDate = (date) => {
     return date ? moment(date).format('DD MMM HH:mm') : null;
-  }
+  };
 
-  static formatGrade(grade) {
+  const formatGrade = (grade) => {
     return grade !== null ? grade.toFixed(1) : null;
-  }
+  };
 
-  static renderPhantomUserIcon(submission) {
+  const renderPhantomUserIcon = (submission) => {
     if (submission.courseUser.phantom) {
       return (
         <Icon
@@ -91,9 +76,9 @@ export default class SubmissionsTableRow extends Component {
       );
     }
     return null;
-  }
+  };
 
-  static renderUnpublishedWarning(submission) {
+  const renderUnpublishedWarning = (submission) => {
     if (submission.workflowState !== workflowStates.Graded) return null;
     return (
       <span style={{ display: 'inline-block'}}>
@@ -104,53 +89,30 @@ export default class SubmissionsTableRow extends Component {
     );
   }
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      unsubmitConfirmation: false,
-      deleteConfirmation: false,
-    };
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return (
-      this.props.submission.workflowState !==
-        nextProps.submission.workflowState ||
-      this.props.isDownloadingFiles !== nextProps.isDownloadingFiles ||
-      this.props.isDownloadingCsv !== nextProps.isDownloadingCsv ||
-      this.props.isStatisticsDownloading !==
-        nextProps.isStatisticsDownloading ||
-      this.props.isUnsubmitting !== nextProps.isUnsubmitting ||
-      this.props.isDeleting !== nextProps.isDeleting ||
-      this.state.unsubmitConfirmation !== nextState.unsubmitConfirmation ||
-      this.state.deleteConfirmation !== nextState.deleteConfirmation
-    );
-  }
-
-  getGradeString(submission) {
+  const getGradeString = (submission) => {
     if (submission.workflowState === workflowStates.Unstarted) return null;
 
-    const { assessment } = this.props;
+    const { assessment } = props;
     const gradeString =
       submission.workflowState === workflowStates.Attempting ||
       submission.workflowState === workflowStates.Submitted
         ? '--'
-        : SubmissionsTableRow.formatGrade(submission.grade);
-    const maximumGradeString = SubmissionsTableRow.formatGrade(
+        : formatGrade(submission.grade);
+    const maximumGradeString = formatGrade(
       assessment.maximumGrade,
     );
 
     return `${gradeString} / ${maximumGradeString}`;
   }
 
-  disableButtons() {
+  const disableButtons = () => {
     const {
       isDownloadingFiles,
       isDownloadingCsv,
       isStatisticsDownloading,
       isDeleting,
       isUnsubmitting,
-    } = this.props;
+    } = props;
     return (
       isStatisticsDownloading ||
       isDownloadingFiles ||
@@ -160,10 +122,10 @@ export default class SubmissionsTableRow extends Component {
     );
   }
 
-  renderDeleteButton(submission) {
-    const { assessment } = this.props;
+  const renderDeleteButton = (submission) => {
+    const { assessment } = props;
     const disabled =
-      this.disableButtons() ||
+      disableButtons() ||
       submission.workflowState === workflowStates.Unstarted;
     if (
       !assessment.canDeleteAllSubmissions &&
@@ -176,7 +138,7 @@ export default class SubmissionsTableRow extends Component {
         <IconButton
           id={`delete-button-${submission.courseUser.id}`}
           disabled={disabled}
-          onClick={() => this.setState({ deleteConfirmation: true })}
+          onClick={() => setState({ deleteConfirmation: true })}
           size="large"
           style={styles.button}
         >
@@ -186,9 +148,9 @@ export default class SubmissionsTableRow extends Component {
     );
   }
 
-  renderDeleteDialog(submission) {
-    const { deleteConfirmation } = this.state;
-    const { dispatch } = this.props;
+  const renderDeleteDialog = (submission) => {
+    const { deleteConfirmation } = state;
+    const { dispatch } = props;
     const values = { name: submission.courseUser.name };
     const successMessage = (
       <FormattedMessage
@@ -199,10 +161,10 @@ export default class SubmissionsTableRow extends Component {
     return (
       <ConfirmationDialog
         open={deleteConfirmation}
-        onCancel={() => this.setState({ deleteConfirmation: false })}
+        onCancel={() => setState({ deleteConfirmation: false })}
         onConfirm={() => {
           dispatch(deleteSubmission(submission.id, successMessage));
-          this.setState({ deleteConfirmation: false });
+          setState({ deleteConfirmation: false });
         }}
         message={
           <FormattedMessage
@@ -214,8 +176,8 @@ export default class SubmissionsTableRow extends Component {
     );
   }
 
-  renderSubmissionLogsLink(submission) {
-    const { assessment, courseId, assessmentId } = this.props;
+  const renderSubmissionLogsLink = (submission) => {
+    const { assessment, courseId, assessmentId } = props;
 
     if (
       !assessment.passwordProtected ||
@@ -237,17 +199,17 @@ export default class SubmissionsTableRow extends Component {
     );
   }
 
-  renderSubmissionWorkflowState(submission) {
-    const { courseId, assessmentId } = this.props;
+  const renderSubmissionWorkflowState = (submission) => {
+    const { courseId, assessmentId } = props;
     return (
       (submission.workflowState == workflowStates.Unstarted) ? (
         <FormattedMessage {...translations[submission.workflowState]}>
         {(msg) => (
           <Chip 
-            icon = {SubmissionsTableRow.renderUnpublishedWarning(submission)}
+            icon = {renderUnpublishedWarning(submission)}
             label = {msg}
-            style = {styles.unstartedChip}
-            variant = {"outlined"}
+            style = {{...styles.chip, backgroundColor: theme.palette.status[submission.workflowState]}}
+            variant = {"filled"}
           />
         )}
       </FormattedMessage>
@@ -258,18 +220,10 @@ export default class SubmissionsTableRow extends Component {
               clickable = {submission.workflowState != workflowStates.Unstarted}
               component={Link}
               href = {getEditSubmissionURL(courseId, assessmentId, submission.id)}
-              icon = {SubmissionsTableRow.renderUnpublishedWarning(submission)}
+              icon = {renderUnpublishedWarning(submission)}
               label = {msg}
-              style = {submission.workflowState == workflowStates.Attempting
-                  ? styles.attemptingChip
-                  : submission.workflowState == workflowStates.Submitted
-                  ? styles.submittedChip
-                  : submission.workflowState == workflowStates.Graded
-                  ? styles.gradedChip
-                  : styles.publishedChip}
-              variant = {submission.workflowState == workflowStates.Graded
-                || submission.workflowState == workflowStates.Published
-                ? "filled" : "outlined"}
+              style = {{...(submission.workflowState != workflowStates.Graded && styles.chip), backgroundColor: theme.palette.status[submission.workflowState]}}
+              variant = {"filled"}
             />
           )}
         </FormattedMessage>
@@ -278,11 +232,11 @@ export default class SubmissionsTableRow extends Component {
     );
   }
 
-  renderUnsubmitButton(submission) {
-    const { assessment } = this.props;
+  const renderUnsubmitButton = (submission) => {
+    const { assessment } = props;
 
     const disabled =
-      this.disableButtons() ||
+      disableButtons() ||
       submission.workflowState === workflowStates.Unstarted ||
       submission.workflowState === workflowStates.Attempting;
 
@@ -293,7 +247,7 @@ export default class SubmissionsTableRow extends Component {
         <IconButton
           id={`unsubmit-button-${submission.courseUser.id}`}
           disabled={disabled}
-          onClick={() => this.setState({ unsubmitConfirmation: true })}
+          onClick={() => setState({ unsubmitConfirmation: true })}
           size="large"
           style={styles.button}
         >
@@ -303,9 +257,9 @@ export default class SubmissionsTableRow extends Component {
     );
   }
 
-  renderUnsubmitDialog(submission) {
-    const { unsubmitConfirmation } = this.state;
-    const { dispatch } = this.props;
+  const renderUnsubmitDialog = (submission) => {
+    const { unsubmitConfirmation } = state;
+    const { dispatch } = props;
     const values = { name: submission.courseUser.name };
     const successMessage = (
       <FormattedMessage
@@ -317,10 +271,10 @@ export default class SubmissionsTableRow extends Component {
     return (
       <ConfirmationDialog
         open={unsubmitConfirmation}
-        onCancel={() => this.setState({ unsubmitConfirmation: false })}
+        onCancel={() => setState({ unsubmitConfirmation: false })}
         onConfirm={() => {
           dispatch(unsubmitSubmission(submission.id, successMessage));
-          this.setState({ unsubmitConfirmation: false });
+          setState({ unsubmitConfirmation: false });
         }}
         message={
           <FormattedMessage
@@ -332,9 +286,9 @@ export default class SubmissionsTableRow extends Component {
     );
   }
 
-  renderUser(submission) {
-    const { courseId, assessment } = this.props;
-    const { unsubmitConfirmation, deleteConfirmation } = this.state;
+  const renderUser = (submission) => {
+    const { courseId, assessment } = props;
+    const { unsubmitConfirmation, deleteConfirmation } = state;
     const tableCenterCellStyle = {
       ...styles.tableCell,
       ...styles.tableCenterCell,
@@ -342,7 +296,7 @@ export default class SubmissionsTableRow extends Component {
     return (
       <TableRow className="submission-row" key={submission.courseUser.id}>
         <TableCell style={styles.tableCell}>
-          {SubmissionsTableRow.renderPhantomUserIcon(submission)}
+          {renderPhantomUserIcon(submission)}
           <a
             style={styles.nameWrapper}
             href={getCourseUserURL(courseId, submission.courseUser.id)}
@@ -351,10 +305,10 @@ export default class SubmissionsTableRow extends Component {
           </a>
         </TableCell>
         <TableCell style={tableCenterCellStyle}>
-          {this.renderSubmissionWorkflowState(submission)}
+          {renderSubmissionWorkflowState(submission)}
         </TableCell>
         <TableCell style={tableCenterCellStyle}>
-          {this.getGradeString(submission)}
+          {getGradeString(submission)}
         </TableCell>
         {assessment.gamified ? (
           <TableCell style={tableCenterCellStyle}>
@@ -364,10 +318,10 @@ export default class SubmissionsTableRow extends Component {
           </TableCell>
         ) : null}
         <TableCell style={tableCenterCellStyle}>
-          {SubmissionsTableRow.formatDate(submission.dateSubmitted)}
+          {formatDate(submission.dateSubmitted)}
         </TableCell>
         <TableCell style={tableCenterCellStyle}>
-          {SubmissionsTableRow.formatDate(submission.dateGraded)}
+          {formatDate(submission.dateGraded)}
         </TableCell>
         <TableCell style={tableCenterCellStyle}>
           {submission.graders && submission.graders.length > 0
@@ -389,21 +343,21 @@ export default class SubmissionsTableRow extends Component {
             : null}
         </TableCell>
         <TableCell style={tableCenterCellStyle}>
-          {this.renderSubmissionLogsLink(submission)}
-          {this.renderUnsubmitButton(submission)}
-          {this.renderDeleteButton(submission)}
-          {unsubmitConfirmation && this.renderUnsubmitDialog(submission)}
-          {deleteConfirmation && this.renderDeleteDialog(submission)}
+          {renderSubmissionLogsLink(submission)}
+          {renderUnsubmitButton(submission)}
+          {renderDeleteButton(submission)}
+          {unsubmitConfirmation && renderUnsubmitDialog(submission)}
+          {deleteConfirmation && renderDeleteDialog(submission)}
         </TableCell>
       </TableRow>
     );
   }
 
-  render() {
-    const { submission } = this.props;
-    return this.renderUser(submission);
-  }
-}
+
+  const { submission } = props;
+  return renderUser(submission);
+
+});
 
 SubmissionsTableRow.propTypes = {
   dispatch: PropTypes.func.isRequired,
@@ -430,3 +384,5 @@ SubmissionsTableRow.propTypes = {
   isUnsubmitting: PropTypes.bool.isRequired,
   isDeleting: PropTypes.bool.isRequired,
 };
+
+export default SubmissionsTableRow;
