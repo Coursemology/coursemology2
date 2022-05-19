@@ -138,7 +138,7 @@ const SubmissionsTableRow = React.memo((props) => {
         <IconButton
           id={`delete-button-${submission.courseUser.id}`}
           disabled={disabled}
-          onClick={() => setState({ deleteConfirmation: true })}
+          onClick={() => setState({ ...state, deleteConfirmation: true })}
           size="large"
           style={styles.button}
         >
@@ -161,10 +161,10 @@ const SubmissionsTableRow = React.memo((props) => {
     return (
       <ConfirmationDialog
         open={deleteConfirmation}
-        onCancel={() => setState({ deleteConfirmation: false })}
+        onCancel={() => setState({ ...state, deleteConfirmation: false })}
         onConfirm={() => {
           dispatch(deleteSubmission(submission.id, successMessage));
-          setState({ deleteConfirmation: false });
+          setState({ ...state, deleteConfirmation: false });
         }}
         message={
           <FormattedMessage
@@ -247,7 +247,7 @@ const SubmissionsTableRow = React.memo((props) => {
         <IconButton
           id={`unsubmit-button-${submission.courseUser.id}`}
           disabled={disabled}
-          onClick={() => setState({ unsubmitConfirmation: true })}
+          onClick={() => setState({ ...state, unsubmitConfirmation: true })}
           size="large"
           style={styles.button}
         >
@@ -271,10 +271,10 @@ const SubmissionsTableRow = React.memo((props) => {
     return (
       <ConfirmationDialog
         open={unsubmitConfirmation}
-        onCancel={() => setState({ unsubmitConfirmation: false })}
+        onCancel={() => setState({ ...state, unsubmitConfirmation: false })}
         onConfirm={() => {
           dispatch(unsubmitSubmission(submission.id, successMessage));
-          setState({ unsubmitConfirmation: false });
+          setState({ ...state, unsubmitConfirmation: false });
         }}
         message={
           <FormattedMessage
