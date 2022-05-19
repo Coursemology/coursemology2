@@ -15,7 +15,6 @@ import {
   Tab,
   Tabs,
 } from '@mui/material';
-import { blue, grey } from '@mui/material/colors';
 import Group from '@mui/icons-material/Group';
 import Person from '@mui/icons-material/Person';
 import PersonOutline from '@mui/icons-material/PersonOutline';
@@ -57,7 +56,7 @@ const styles = {
 };
 
 const VisibleSubmissionsIndex = (props) => {
-  const theme = useTheme();
+  const palette = useTheme().palette;
   const [state, setState] = useState({
     publishConfirmation: false,
     forceSubmitConfirmation: false,
@@ -153,7 +152,7 @@ const VisibleSubmissionsIndex = (props) => {
           const count = submissionStateCounts[w];
           const cellStyle = {
             ...styles.histogramCells,
-            backgroundColor: theme.palette.status[w],
+            backgroundColor: palette.status[w],
             flex: count,
             minWidth: count > 0 ? 50 : 0,
           };
@@ -380,7 +379,7 @@ const VisibleSubmissionsIndex = (props) => {
       onChange={(event, value) => {
         setState({ ...state, tab: value });
       }}
-      style={{ backgroundColor: grey[100], color: blue[500] }}
+      style={{ backgroundColor: palette.background.default, color: palette.icon.person }}
       TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
       value={state.tab}
       variant="fullWidth"
@@ -388,22 +387,22 @@ const VisibleSubmissionsIndex = (props) => {
       {myStudentsExist && (
         <Tab
           id="my-students-tab"
-          style={{ color: blue[500] }}
-          icon={<Group style={{ color: blue[500] }} />}
+          style={{ color: palette.icon.person }}
+          icon={<Group style={{ color: palette.icon.person }} />}
           label={<FormattedMessage {...submissionsTranslations.myStudents} />}
           value="my-students-tab"
         />
       )}
       <Tab
         id="students-tab"
-        icon={<Person style={{ color: blue[500] }} />}
+        icon={<Person style={{ color: palette.icon.person }} />}
         label={<FormattedMessage {...submissionsTranslations.students} />}
         value="students-tab"
       />
 
       <Tab
         id="staff-tab"
-        icon={<PersonOutline style={{ color: blue[500] }} />}
+        icon={<PersonOutline style={{ color: palette.icon.person }} />}
         label={<FormattedMessage {...submissionsTranslations.staff} />}
         value="staff-tab"
       />

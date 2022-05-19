@@ -10,7 +10,6 @@ import {
   TableCell,
   TableRow,
 } from '@mui/material';
-import { blue, pink, red } from '@mui/material/colors';
 import Delete from '@mui/icons-material/Delete';
 import History from '@mui/icons-material/History';
 import RemoveCircle from '@mui/icons-material/RemoveCircle';
@@ -58,7 +57,7 @@ const styles = {
 };
 
 const SubmissionsTableRow = React.memo((props) => {
-  const theme = useTheme();
+  const palette = useTheme().palette;
   const [state, setState] = useState({
     unsubmitConfirmation: false,
     deleteConfirmation: false,
@@ -143,7 +142,7 @@ const SubmissionsTableRow = React.memo((props) => {
           size="large"
           style={styles.button}
         >
-          <Delete htmlColor={disabled ? undefined : red[900]} />
+          <Delete htmlColor={disabled ? undefined : palette.icon.delete} />
         </IconButton>
       </span>
     );
@@ -192,7 +191,7 @@ const SubmissionsTableRow = React.memo((props) => {
         <a href={getSubmissionLogsURL(courseId, assessmentId, submission.id)}>
           <IconButton size="large" style={styles.button}>
             <History
-              htmlColor={submission.logCount > 1 ? red[600] : blue[600]}
+              htmlColor={palette.icon.history[submission.logCount > 1 ? "none" : "default"] }
             />
           </IconButton>
         </a>
@@ -210,7 +209,7 @@ const SubmissionsTableRow = React.memo((props) => {
             label={msg}
             style={{
               ...styles.chip,
-              backgroundColor: theme.palette.status[submission.workflowState],
+              backgroundColor: palette.status[submission.workflowState],
             }}
             variant="filled"
           />
@@ -228,7 +227,7 @@ const SubmissionsTableRow = React.memo((props) => {
             style={{
               ...(submission.workflowState !== workflowStates.Graded &&
                 styles.chip),
-              backgroundColor: theme.palette.status[submission.workflowState],
+              backgroundColor: palette.status[submission.workflowState],
             }}
             variant="filled"
           />
@@ -256,7 +255,7 @@ const SubmissionsTableRow = React.memo((props) => {
           size="large"
           style={styles.button}
         >
-          <RemoveCircle htmlColor={disabled ? undefined : pink[600]} />
+          <RemoveCircle htmlColor={disabled ? undefined : palette.icon.unsubmit} />
         </IconButton>
       </span>
     );
