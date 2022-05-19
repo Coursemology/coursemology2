@@ -1,5 +1,4 @@
 import * as colors from '@mui/material/colors';
-import { blue, green, grey, yellow, red } from '@mui/material/colors';
 import { workflowStates } from '../bundles/course/assessment/submission/constants';
 import { black, white } from './colors';
 
@@ -46,11 +45,20 @@ const palette = {
     dark: '#95591E',
   },
   status: {
-    [workflowStates.Unstarted]: red[100],
-    [workflowStates.Attempting]: yellow[100],
-    [workflowStates.Submitted]: grey[100],
-    [workflowStates.Graded]: blue[100],
-    [workflowStates.Published]: green[100],
+    [workflowStates.Unstarted]: colors.red[100],
+    [workflowStates.Attempting]: colors.yellow[100],
+    [workflowStates.Submitted]: colors.grey[100],
+    [workflowStates.Graded]: colors.blue[100],
+    [workflowStates.Published]: colors.green[100],
+  },
+  icon: {
+    person: colors.blue[500],
+    history: {
+      none: colors.red[600],
+      default: colors.blue[600],
+    },
+    unsubmit: colors.pink[600],
+    delete: colors.red[900],
   },
   danger: {
     contrastText: white,
@@ -71,7 +79,7 @@ const palette = {
   },
   background: {
     paper: white,
-    default: '#f8fafc',
+    default: colors.grey[100],
   },
   contrastThreshold: 3,
   tonalOffset: 0.1,
