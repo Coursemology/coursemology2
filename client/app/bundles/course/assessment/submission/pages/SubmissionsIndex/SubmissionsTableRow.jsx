@@ -2,8 +2,15 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import moment from 'lib/moment';
-import { Chip, Icon, IconButton, Link, TableCell, TableRow } from '@mui/material';
-import { blue, green, pink, red, yellow } from '@mui/material/colors';
+import {
+  Chip,
+  Icon,
+  IconButton,
+  Link,
+  TableCell,
+  TableRow,
+} from '@mui/material';
+import { blue, pink, red } from '@mui/material/colors';
 import Delete from '@mui/icons-material/Delete';
 import History from '@mui/icons-material/History';
 import RemoveCircle from '@mui/icons-material/RemoveCircle';
@@ -13,6 +20,7 @@ import {
   getEditSubmissionURL,
   getSubmissionLogsURL,
 } from 'lib/helpers/url-builders';
+import { useTheme } from '@emotion/react';
 import { assessmentShape } from '../../propTypes';
 import { workflowStates } from '../../constants';
 import translations from '../../translations';
@@ -21,7 +29,6 @@ import {
   unsubmitSubmission,
   deleteSubmission,
 } from '../../actions/submissions';
-import { useTheme } from '@emotion/react';
 
 const styles = {
   nameWrapper: {
@@ -56,13 +63,10 @@ const SubmissionsTableRow = React.memo((props) => {
     unsubmitConfirmation: false,
     deleteConfirmation: false,
   });
-  const formatDate = (date) => {
-    return date ? moment(date).format('DD MMM HH:mm') : null;
-  };
+  const formatDate = (date) =>
+    date ? moment(date).format('DD MMM HH:mm') : null;
 
-  const formatGrade = (grade) => {
-    return grade !== null ? grade.toFixed(1) : null;
-  };
+  const formatGrade = (grade) => (grade !== null ? grade.toFixed(1) : null);
 
   const renderPhantomUserIcon = (submission) => {
     if (submission.courseUser.phantom) {
@@ -81,13 +85,13 @@ const SubmissionsTableRow = React.memo((props) => {
   const renderUnpublishedWarning = (submission) => {
     if (submission.workflowState !== workflowStates.Graded) return null;
     return (
-      <span style={{ display: 'inline-block'}}>
+      <span style={{ display: 'inline-block' }}>
         <a data-tip data-for="unpublished-grades" data-offset="{'left' : -8}">
           <i className="fa fa-exclamation-triangle" />
         </a>
       </span>
     );
-  }
+  };
 
   const getGradeString = (submission) => {
     if (submission.workflowState === workflowStates.Unstarted) return null;
@@ -98,12 +102,10 @@ const SubmissionsTableRow = React.memo((props) => {
       submission.workflowState === workflowStates.Submitted
         ? '--'
         : formatGrade(submission.grade);
-    const maximumGradeString = formatGrade(
-      assessment.maximumGrade,
-    );
+    const maximumGradeString = formatGrade(assessment.maximumGrade);
 
     return `${gradeString} / ${maximumGradeString}`;
-  }
+  };
 
   const disableButtons = () => {
     const {
@@ -120,13 +122,12 @@ const SubmissionsTableRow = React.memo((props) => {
       isDeleting ||
       isUnsubmitting
     );
-  }
+  };
 
   const renderDeleteButton = (submission) => {
     const { assessment } = props;
     const disabled =
-      disableButtons() ||
-      submission.workflowState === workflowStates.Unstarted;
+      disableButtons() || submission.workflowState === workflowStates.Unstarted;
     if (
       !assessment.canDeleteAllSubmissions &&
       !submission.courseUser.isCurrentUser
@@ -146,7 +147,7 @@ const SubmissionsTableRow = React.memo((props) => {
         </IconButton>
       </span>
     );
-  }
+  };
 
   const renderDeleteDialog = (submission) => {
     const { deleteConfirmation } = state;
@@ -174,7 +175,7 @@ const SubmissionsTableRow = React.memo((props) => {
         }
       />
     );
-  }
+  };
 
   const renderSubmissionLogsLink = (submission) => {
     const { assessment, courseId, assessmentId } = props;
@@ -197,40 +198,44 @@ const SubmissionsTableRow = React.memo((props) => {
         </a>
       </span>
     );
-  }
+  };
 
   const renderSubmissionWorkflowState = (submission) => {
     const { courseId, assessmentId } = props;
-    return (
-      (submission.workflowState == workflowStates.Unstarted) ? (
-        <FormattedMessage {...translations[submission.workflowState]}>
+    return submission.workflowState === workflowStates.Unstarted ? (
+      <FormattedMessage {...translations[submission.workflowState]}>
         {(msg) => (
-          <Chip 
-            icon = {renderUnpublishedWarning(submission)}
-            label = {msg}
-            style = {{...styles.chip, backgroundColor: theme.palette.status[submission.workflowState]}}
-            variant = {"filled"}
+          <Chip
+            icon={renderUnpublishedWarning(submission)}
+            label={msg}
+            style={{
+              ...styles.chip,
+              backgroundColor: theme.palette.status[submission.workflowState],
+            }}
+            variant="filled"
           />
         )}
       </FormattedMessage>
-      ) : (
-          <FormattedMessage {...translations[submission.workflowState]}>
-          {(msg) => (
-            <Chip
-              clickable = {submission.workflowState != workflowStates.Unstarted}
-              component={Link}
-              href = {getEditSubmissionURL(courseId, assessmentId, submission.id)}
-              icon = {renderUnpublishedWarning(submission)}
-              label = {msg}
-              style = {{...(submission.workflowState != workflowStates.Graded && styles.chip), backgroundColor: theme.palette.status[submission.workflowState]}}
-              variant = {"filled"}
-            />
-          )}
-        </FormattedMessage>
-      )
-
+    ) : (
+      <FormattedMessage {...translations[submission.workflowState]}>
+        {(msg) => (
+          <Chip
+            clickable={submission.workflowState !== workflowStates.Unstarted}
+            component={Link}
+            href={getEditSubmissionURL(courseId, assessmentId, submission.id)}
+            icon={renderUnpublishedWarning(submission)}
+            label={msg}
+            style={{
+              ...(submission.workflowState !== workflowStates.Graded &&
+                styles.chip),
+              backgroundColor: theme.palette.status[submission.workflowState],
+            }}
+            variant="filled"
+          />
+        )}
+      </FormattedMessage>
     );
-  }
+  };
 
   const renderUnsubmitButton = (submission) => {
     const { assessment } = props;
@@ -255,7 +260,7 @@ const SubmissionsTableRow = React.memo((props) => {
         </IconButton>
       </span>
     );
-  }
+  };
 
   const renderUnsubmitDialog = (submission) => {
     const { unsubmitConfirmation } = state;
@@ -284,7 +289,7 @@ const SubmissionsTableRow = React.memo((props) => {
         }
       />
     );
-  }
+  };
 
   const renderUser = (submission) => {
     const { courseId, assessment } = props;
@@ -351,12 +356,10 @@ const SubmissionsTableRow = React.memo((props) => {
         </TableCell>
       </TableRow>
     );
-  }
-
+  };
 
   const { submission } = props;
   return renderUser(submission);
-
 });
 
 SubmissionsTableRow.propTypes = {
@@ -384,5 +387,7 @@ SubmissionsTableRow.propTypes = {
   isUnsubmitting: PropTypes.bool.isRequired,
   isDeleting: PropTypes.bool.isRequired,
 };
+
+SubmissionsTableRow.displayName = 'SubmissionsTableRow';
 
 export default SubmissionsTableRow;
