@@ -82,7 +82,7 @@ const VisibleSubmissionsIndex = (props) => {
       // eslint-disable-next-line react/no-did-update-set-state
       setState({ ...state, tab: 'students-tab' });
     }
-  }, [state.tab]);
+  });
 
   const canForceSubmitOrRemind = (shownSubmissions) =>
     shownSubmissions.some(
