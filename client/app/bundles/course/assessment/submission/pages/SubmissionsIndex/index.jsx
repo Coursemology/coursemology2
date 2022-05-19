@@ -59,7 +59,6 @@ const styles = {
 
 const VisibleSubmissionsIndex = (props) => {
   const theme = useTheme();
-  console.log(theme);
   const [state, setState] = useState({
     publishConfirmation: false,
     forceSubmitConfirmation: false,
@@ -85,6 +84,7 @@ const VisibleSubmissionsIndex = (props) => {
       setState({...state, tab: 'students-tab' });
     }
   }, [state.tab]);
+  console.log(state);
 
   const canForceSubmitOrRemind = (shownSubmissions) => {
     return shownSubmissions.some(
@@ -118,10 +118,10 @@ const VisibleSubmissionsIndex = (props) => {
     return (
       <ConfirmationDialog
         open={forceSubmitConfirmation}
-        onCancel={() => setState({ forceSubmitConfirmation: false })}
+        onCancel={() => setState({...state, forceSubmitConfirmation: false })}
         onConfirm={() => {
           dispatch(forceSubmitSubmissions(handleForceSubmitParams));
-          setState({ forceSubmitConfirmation: false });
+          setState({...state, forceSubmitConfirmation: false });
         }}
         message={<FormattedMessage {...message} values={values} />}
       />
@@ -158,7 +158,7 @@ const VisibleSubmissionsIndex = (props) => {
                 className="toggle-phantom"
                 color="primary"
                 onChange={() =>
-                  setState({ includePhantoms: !includePhantoms })
+                  setState({...state, includePhantoms: !includePhantoms })
                 }
               />
             }
@@ -182,7 +182,7 @@ const VisibleSubmissionsIndex = (props) => {
                 !canPublish(shownSubmissions)
               }
               endIcon={isPublishing && <CircularProgress size={24} />}
-              onClick={() => setState({ publishConfirmation: true })}
+              onClick={() => setState({...state, publishConfirmation: true })}
             >
               <FormattedMessage {...submissionsTranslations.publishGrades} />
             </Button>
@@ -198,7 +198,7 @@ const VisibleSubmissionsIndex = (props) => {
                 )
               }
               endIcon={isForceSubmitting && <CircularProgress size={24} />}
-              onClick={() => setState({ forceSubmitConfirmation: true })}
+              onClick={() => setState({...state, forceSubmitConfirmation: true })}
             >
               <FormattedMessage {...submissionsTranslations.forceSubmit} />
             </Button>
@@ -214,7 +214,7 @@ const VisibleSubmissionsIndex = (props) => {
                 )
               }
               endIcon={isReminding && <CircularProgress size={24} />}
-              onClick={() => setState({ remindConfirmation: true })}
+              onClick={() => setState({...state, remindConfirmation: true })}
             >
               <FormattedMessage {...submissionsTranslations.remind} />
             </Button>
@@ -283,10 +283,10 @@ const VisibleSubmissionsIndex = (props) => {
     return (
       <ConfirmationDialog
         open={publishConfirmation}
-        onCancel={() => setState({ publishConfirmation: false })}
+        onCancel={() => setState({ ...state, publishConfirmation: false })}
         onConfirm={() => {
           dispatch(publishSubmissions(handlePublishParams));
-          setState({ publishConfirmation: false });
+          setState({ ...state, publishConfirmation: false });
         }}
         message={
           <FormattedMessage
@@ -315,12 +315,12 @@ const VisibleSubmissionsIndex = (props) => {
     return (
       <ConfirmationDialog
         open={remindConfirmation}
-        onCancel={() => setState({ remindConfirmation: false })}
+        onCancel={() => setState({ ...state, remindConfirmation: false })}
         onConfirm={() => {
           dispatch(
             sendAssessmentReminderEmail(assessmentId, handleRemindParams),
           );
-          setState({ remindConfirmation: false });
+          setState({ ...state, remindConfirmation: false });
         }}
         message={
           <FormattedMessage
@@ -339,6 +339,7 @@ const VisibleSubmissionsIndex = (props) => {
     isActive,
   ) => {
     const { courseId, assessmentId } = props.match.params;
+
     const {
       dispatch,
       assessment,
@@ -360,6 +361,7 @@ const VisibleSubmissionsIndex = (props) => {
       isUnsubmitting,
       isDeleting,
     };
+
     return (
       <SubmissionsTable
         confirmDialogValue={confirmDialogValue}
@@ -386,7 +388,7 @@ const VisibleSubmissionsIndex = (props) => {
     return (
       <Tabs
         onChange={(event, value) => {
-          setState({ tab: value });
+          setState({ ...state, tab: value });
         }}
         style={{ backgroundColor: grey[100], color: blue[500] }}
         TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}

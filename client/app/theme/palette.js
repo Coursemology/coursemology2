@@ -1,5 +1,6 @@
 import * as colors from '@mui/material/colors';
 import { blue, green, grey, yellow, red } from '@mui/material/colors';
+import { workflowStates } from '../bundles/course/assessment/submission/constants';
 import { black, white } from './colors';
 
 const palette = {
@@ -45,11 +46,11 @@ const palette = {
     dark: '#95591E',
   },
   status: {
-    unstarted: red[100],
-    attempting: yellow[100],
-    submitted: grey[100],
-    graded: blue[100],
-    published: green[100],
+    [workflowStates.Unstarted]: red[100],
+    [workflowStates.Attempting]: yellow[100],
+    [workflowStates.Submitted]: grey[100],
+    [workflowStates.Graded]: blue[100],
+    [workflowStates.Published]: green[100],
   },
   danger: {
     contrastText: white,
