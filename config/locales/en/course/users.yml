@@ -14,7 +14,9 @@ en:
         invited: 'Invited'
       algorithm:
         fixed: 'Fixed'
-        naive: 'Naive'
+        stragglers: 'Stragglers'
+        otot: 'Otot'
+        fomo: 'Fomo'
       tabs:
         students: :'course.users.students.header'
         staff: :'course.users.staff.header'

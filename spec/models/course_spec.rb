@@ -30,6 +30,8 @@ RSpec.describe Course, type: :model do
     it { is_expected.to have_many(:setting_emails).dependent(:destroy) }
     it { is_expected.to have_one(:duplication_traceable).dependent(:destroy) }
 
+    it { is_expected.to define_enum_for(:default_timeline_algorithm) }
+
     it { is_expected.to validate_presence_of(:title) }
 
     it { should delegate_method(:staff).to(:course_users) }

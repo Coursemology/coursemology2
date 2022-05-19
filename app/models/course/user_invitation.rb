@@ -11,6 +11,7 @@ class Course::UserInvitation < ApplicationRecord
   validate :no_existing_unconfirmed_invitation
 
   enum role: CourseUser.roles
+  enum timeline_algorithm: CourseUser.timeline_algorithms
 
   belongs_to :course, inverse_of: :invitations
   belongs_to :confirmer, class_name: User.name, inverse_of: nil, optional: true

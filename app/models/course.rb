@@ -27,6 +27,8 @@ class Course < ApplicationRecord
   validates :instance, presence: true
   validates :conditional_satisfiability_evaluation_time, presence: true
 
+  enum default_timeline_algorithm: CourseUser.timeline_algorithms
+
   has_many :enrol_requests, inverse_of: :course, dependent: :destroy
   has_many :course_users, inverse_of: :course, dependent: :destroy
   has_many :users, through: :course_users
@@ -257,10 +259,15 @@ class Course < ApplicationRecord
     self.start_at ||= Time.zone.now.beginning_of_hour
     self.end_at ||= self.start_at + 1.month
     self.default_reference_timeline ||= reference_timelines.new(default: true)
+    self.default_timeline_algorithm ||= 0 # 'fixed' algorithm
 
     return unless creator && course_users.empty?
 
-    course_users.build(user: creator, role: :owner, creator: creator, updater: updater)
+    course_users.build(user: creator,
+                       role: :owner,
+                       creator: creator,
+                       updater: updater,
+                       timeline_algorithm: default_timeline_algorithm)
   end
 
   def validate_only_one_default_reference_timeline

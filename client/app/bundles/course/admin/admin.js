@@ -9,4 +9,12 @@ $(() => {
       $('div.advance-start-at-time').hide();
     }
   });
+
+  $('#course_show_personalized_timeline_features').change(function () {
+    if ($(this).is(':checked')) {
+      $('div.personalized-timeline-feature').show();
+    } else {
+      $('div.personalized-timeline-feature').hide();
+    }
+  });
 });

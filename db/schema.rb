@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_15_192851) do
+ActiveRecord::Schema.define(version: 2022_05_19_055836) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -979,6 +979,7 @@ ActiveRecord::Schema.define(version: 2022_03_15_192851) do
     t.integer "confirmer_id"
     t.integer "role", default: 0, null: false
     t.boolean "phantom", default: false, null: false
+    t.integer "timeline_algorithm"
     t.index "lower((email)::text)", name: "index_course_user_invitations_on_email"
     t.index ["confirmer_id"], name: "fk__course_user_invitations_confirmer_id"
     t.index ["course_id", "email"], name: "index_course_user_invitations_on_course_id_and_email", unique: true
@@ -1140,6 +1141,7 @@ ActiveRecord::Schema.define(version: 2022_03_15_192851) do
     t.string "time_zone", limit: 255
     t.boolean "show_personalized_timeline_features", default: false, null: false
     t.datetime "conditional_satisfiability_evaluation_time", default: "2021-10-24 10:31:32"
+    t.integer "default_timeline_algorithm", default: 0, null: false
     t.index ["creator_id"], name: "fk__courses_creator_id"
     t.index ["instance_id"], name: "fk__courses_instance_id"
     t.index ["registration_key"], name: "index_courses_on_registration_key", unique: true
