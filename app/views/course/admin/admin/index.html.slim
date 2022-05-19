@@ -16,6 +16,14 @@
     = f.input :end_at
     = f.input :gamified, hint: t('.gamified_label')
     = f.input :show_personalized_timeline_features, hint: t('.show_personalized_timeline_features_label')
+
+    div.personalized-timeline-feature style="#{ current_course.show_personalized_timeline_features ? '' : 'display: none' }"
+      = f.input :default_timeline_algorithm, hint: t('.default_timeline_algorithm_label'),
+                as: :select,
+                collection: CourseUser.timeline_algorithms.keys,
+                include_blank: false,
+                label_method: lambda {|k| t("course.users.algorithm.#{k}")}
+
     = f.input :time_zone, hint: t('.time_zone_label')
 
     - max_time = current_course.advance_start_at_duration

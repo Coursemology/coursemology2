@@ -12,6 +12,7 @@ FactoryBot.define do
     show_personalized_timeline_features { true }
     published { false }
     enrollable { false }
+    default_timeline_algorithm { 0 }
 
     trait :published do
       published { true }

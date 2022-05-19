@@ -111,6 +111,7 @@ class User < ApplicationRecord
                          name: invitation.name,
                          role: invitation.role,
                          phantom: invitation.phantom,
+                         timeline_algorithm: invitation.timeline_algorithm,
                          creator: self,
                          updater: self)
     when Instance::UserInvitation::INVITATION_KEY_IDENTIFIER
