@@ -85,10 +85,10 @@ const SubmissionsTableRow = React.memo((props) => {
   const renderUnpublishedWarning = (submission) => {
     if (submission.workflowState !== workflowStates.Graded) return null;
     return (
-      <span style={{ display: 'inline-block' }}>
-        <a data-tip data-for="unpublished-grades" data-offset="{'left' : -8}">
+      <span style={{ display: 'inline-block', paddingLeft: 5}}>
+        <div data-tip data-for="unpublished-grades" data-offset="{'left' : -8}">
           <i className="fa fa-exclamation-triangle" />
-        </a>
+        </div>
       </span>
     );
   };
