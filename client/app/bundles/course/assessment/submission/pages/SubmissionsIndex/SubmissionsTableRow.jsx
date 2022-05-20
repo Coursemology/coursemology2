@@ -56,12 +56,13 @@ const styles = {
   },
 };
 
-const SubmissionsTableRow = React.memo((props) => {
+const SubmissionsTableRow = (props) => {
   const palette = useTheme().palette;
   const [state, setState] = useState({
     unsubmitConfirmation: false,
     deleteConfirmation: false,
   });
+
   const formatDate = (date) =>
     date ? moment(date).format('DD MMM HH:mm') : null;
 
@@ -191,7 +192,11 @@ const SubmissionsTableRow = React.memo((props) => {
         <a href={getSubmissionLogsURL(courseId, assessmentId, submission.id)}>
           <IconButton size="large" style={styles.button}>
             <History
-              htmlColor={palette.icon.history[submission.logCount > 1 ? "none" : "default"] }
+              htmlColor={
+                palette.icon.history[
+                  submission.logCount > 1 ? 'none' : 'default'
+                ]
+              }
             />
           </IconButton>
         </a>
@@ -255,7 +260,9 @@ const SubmissionsTableRow = React.memo((props) => {
           size="large"
           style={styles.button}
         >
-          <RemoveCircle htmlColor={disabled ? undefined : palette.icon.unsubmit} />
+          <RemoveCircle
+            htmlColor={disabled ? undefined : palette.icon.unsubmit}
+          />
         </IconButton>
       </span>
     );
@@ -359,7 +366,7 @@ const SubmissionsTableRow = React.memo((props) => {
 
   const { submission } = props;
   return renderUser(submission);
-});
+};
 
 SubmissionsTableRow.propTypes = {
   dispatch: PropTypes.func.isRequired,
@@ -389,4 +396,13 @@ SubmissionsTableRow.propTypes = {
 
 SubmissionsTableRow.displayName = 'SubmissionsTableRow';
 
-export default SubmissionsTableRow;
+export default React.memo(
+  SubmissionsTableRow,
+  (prevProps, nextProps) =>
+    prevProps.submission.workflowState === nextProps.submission.workflowState &&
+    prevProps.isDownloadingFiles === nextProps.isDownloadingFiles &&
+    prevProps.isDownloadingCsv === nextProps.isDownloadingCsv &&
+    prevProps.isStatisticsDownloading === nextProps.isStatisticsDownloading &&
+    prevProps.isUnsubmitting === nextProps.isUnsubmitting &&
+    prevProps.isDeleting === nextProps.isDeleting,
+);
