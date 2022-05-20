@@ -21,6 +21,7 @@ import {
   unsubmitSubmission,
   deleteSubmission,
 } from '../../actions/submissions';
+import UnsubmitButton from '../../../../survey/containers/UnsubmitButton';
 
 const styles = {
   nameWrapper: {
@@ -184,11 +185,7 @@ const SubmissionsTableRow = (props) => {
           <IconButton size="large" style={styles.button}>
             <History
               htmlColor={
-<<<<<<< HEAD
                 palette.submissionIcon.history[
-=======
-                palette.icon.history[
->>>>>>> refactor(surveys): update barchart to follow submissions barchart, fix linting and spelling errors, fix bug on value for my-student-tab
                   submission.logCount > 1 ? 'none' : 'default'
                 ]
               }
@@ -253,23 +250,15 @@ const SubmissionsTableRow = (props) => {
     if (!assessment.canUnsubmitSubmission) return null;
 
     return (
-      <span className="unsubmit-button" data-for="unsubmit-button" data-tip>
-        <IconButton
-          id={`unsubmit-button-${submission.courseUser.id}`}
-          disabled={disabled}
-          onClick={() => setState({ ...state, unsubmitConfirmation: true })}
-          size="large"
-          style={styles.button}
-        >
-          <RemoveCircle
-<<<<<<< HEAD
-            htmlColor={disabled ? undefined : palette.submissionIcon.unsubmit}
-=======
-            htmlColor={disabled ? undefined : palette.icon.unsubmit}
->>>>>>> refactor(surveys): update barchart to follow submissions barchart, fix linting and spelling errors, fix bug on value for my-student-tab
-          />
-        </IconButton>
-      </span>
+      <>
+        <UnsubmitButton
+          buttonId={submission.courseUser.id} 
+          color={palette.submissionIcon.unsubmit}
+          setState={setState}
+          state={state}
+          isUnsubmitting={disabled}
+        />
+      </>
     );
   };
 

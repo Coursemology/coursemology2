@@ -2,36 +2,16 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Button } from '@mui/material';
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import { IconButton } from '@mui/material';
+import RemoveCircle from '@mui/icons-material/RemoveCircle';
+
 import { unsubmitResponse } from 'course/survey/actions/responses';
 
 const styles = {
   formButton: {
-    marginRight: 10,
+    padding: '0.25em 0.4em',
   },
 };
-
-const translations = defineMessages({
-  unsubmit: {
-    id: 'course.surveys.UnsubmitButton.unsubmit',
-    defaultMessage: 'Unsubmit',
-  },
-  unsubmitSuccess: {
-    id: 'course.surveys.UnsubmitButton.unsubmitSuccess',
-    defaultMessage: 'The response has been unsubmitted.',
-  },
-  unsubmitFailure: {
-    id: 'course.surveys.UnsubmitButton.unsubmitFailure',
-    defaultMessage: 'Unsubmit Failed.',
-  },
-  confirm: {
-    id: 'course.surveys.UnsubmitButton.confirm',
-    defaultMessage:
-      'Once unsubmitted, you will not be able to submit on behalf of a student. \
-      Are you sure that you want to unsubmit?',
-  },
-});
 
 class UnsubmitButton extends Component {
   constructor(props) {
@@ -40,14 +20,14 @@ class UnsubmitButton extends Component {
   }
 
   handleUnsubmitResponse = () => {
-    const { dispatch, responseId } = this.props;
+    const { dispatch, buttonId } = this.props;
     const { unsubmitSuccess, unsubmitFailure } = translations;
     const successMessage = <FormattedMessage {...unsubmitSuccess} />;
     const failureMessage = <FormattedMessage {...unsubmitFailure} />;
 
     this.setState({ open: false });
     return dispatch(
-      unsubmitResponse(responseId, successMessage, failureMessage),
+      unsubmitResponse(buttonId, successMessage, failureMessage),
     );
   };
 
@@ -55,33 +35,35 @@ class UnsubmitButton extends Component {
     const { isUnsubmitting } = this.props;
     return (
       <>
-        <Button
-          variant="contained"
-          color="secondary"
-          disabled={isUnsubmitting}
-          onClick={() => this.setState({ open: true })}
-          style={styles.formButton}
-        >
-          <FormattedMessage {...translations.unsubmit} />
-        </Button>
-        <ConfirmationDialog
-          message={<FormattedMessage {...translations.confirm} />}
-          open={this.state.open}
-          onCancel={() => this.setState({ open: false })}
-          onConfirm={this.handleUnsubmitResponse}
-        />
+        <span className="unsubmit-button" data-for="unsubmit-button" data-tip>
+          <IconButton
+            id={`unsubmit-button-${this.props.buttonId}`}
+            disabled={isUnsubmitting}
+            onClick={() => this.props.setState({ ...this.props.state, unsubmitConfirmation: true })}
+            size="large"
+            style={styles.formButton}
+          >
+            <RemoveCircle
+              htmlColor={isUnsubmitting ? undefined : this.props.color}
+            />
+          </IconButton>
+        </span>
+
+
       </>
     );
   }
 }
 
 UnsubmitButton.propTypes = {
-  responseId: PropTypes.number.isRequired,
-
+  buttonId: PropTypes.number.isRequired,
+  color: PropTypes.string.isRequired,
   isUnsubmitting: PropTypes.bool.isRequired,
   dispatch: PropTypes.func.isRequired,
+  setState: PropTypes.func.isRequired,
+  state: PropTypes.object.isRequired,
 };
 
-export default connect((state) => ({
-  isUnsubmitting: state.surveysFlags.isUnsubmittingResponse,
+export default connect((state, ownProps) => ({
+  isUnsubmitting: state.surveysFlags ? state.surveysFlags.isUnsubmittingResponse : ownProps.isUnsubmitting,
 }))(UnsubmitButton);
