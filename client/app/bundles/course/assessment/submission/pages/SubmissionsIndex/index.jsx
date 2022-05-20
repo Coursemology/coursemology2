@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import ReactTooltip from 'react-tooltip';
 import {
   Button,
   Card,
@@ -44,16 +43,7 @@ import {
 } from '../../constants';
 import translations from '../../translations';
 import submissionsTranslations from './translations';
-
-const styles = {
-  histogram: {
-    borderRadius: 10,
-    display: 'flex',
-    overflow: 'hidden',
-    textAlign: 'center',
-  },
-  histogramCells: { transition: 'flex .5s, min-width .5s' },
-};
+import BarChart from '../../../../../../lib/components/BarChart';
 
 const VisibleSubmissionsIndex = (props) => {
   const palette = useTheme().palette;
@@ -125,7 +115,7 @@ const VisibleSubmissionsIndex = (props) => {
     );
   };
 
-  const renderHistogram = (submissionHistogram) => {
+  const renderBarChart = (submissionBarChart) => {
     const { includePhantoms } = state;
     const workflowStatesArray = Object.values(workflowStates);
 
@@ -133,7 +123,7 @@ const VisibleSubmissionsIndex = (props) => {
       (counts, w) => ({ ...counts, [w]: 0 }),
       {},
     );
-    const submissionStateCounts = submissionHistogram.reduce(
+    const submissionStateCounts = submissionBarChart.reduce(
       (counts, submission) => {
         if (includePhantoms || !submission.courseUser.phantom) {
           return {
@@ -146,28 +136,18 @@ const VisibleSubmissionsIndex = (props) => {
       initialCounts,
     );
 
-    return (
-      <div style={styles.histogram}>
-        {workflowStatesArray.map((w) => {
-          const count = submissionStateCounts[w];
-          const cellStyle = {
-            ...styles.histogramCells,
-            backgroundColor: palette.status[w],
-            flex: count,
-            minWidth: count > 0 ? 50 : 0,
-          };
+    const data = workflowStatesArray
+      .map((w) => {
+        const count = submissionStateCounts[w];
+        return {
+          count,
+          color: palette.status[w],
+          label: <FormattedMessage {...translations[w]} />,
+        };
+      })
+      .filter((seg) => seg.count > 0);
 
-          return (
-            <div key={w} style={cellStyle} data-tip data-for={w}>
-              {count > 0 ? count : null}
-              <ReactTooltip id={w} effect="solid">
-                <FormattedMessage {...translations[w]} />
-              </ReactTooltip>
-            </div>
-          );
-        })}
-      </div>
-    );
+    return <BarChart data={data} />;
   };
 
   const renderHeader = (shownSubmissions) => {
@@ -192,7 +172,7 @@ const VisibleSubmissionsIndex = (props) => {
       <Card style={{ marginBottom: 20 }}>
         <CardHeader title={<h3>{title}</h3>} subheader="Submissions" />
         <CardContent style={{ paddingTop: 0, paddingBottom: 0 }}>
-          {renderHistogram(shownSubmissions)}
+          {renderBarChart(shownSubmissions)}
           <FormControlLabel
             control={
               <Switch
@@ -379,9 +359,16 @@ const VisibleSubmissionsIndex = (props) => {
       onChange={(event, value) => {
         setState({ ...state, tab: value });
       }}
-      style={{ backgroundColor: palette.background.default, color: palette.icon.person }}
+      style={{
+        backgroundColor: palette.background.default,
+        color: palette.icon.person,
+      }}
       TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
-      value={state.tab}
+      value={
+        !myStudentsExist && state.tab === 'my-students-tab'
+          ? 'students-tab'
+          : state.tab
+      }
       variant="fullWidth"
     >
       {myStudentsExist && (

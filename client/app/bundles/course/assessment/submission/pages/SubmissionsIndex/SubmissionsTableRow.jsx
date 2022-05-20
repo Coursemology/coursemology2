@@ -191,7 +191,11 @@ const SubmissionsTableRow = React.memo((props) => {
         <a href={getSubmissionLogsURL(courseId, assessmentId, submission.id)}>
           <IconButton size="large" style={styles.button}>
             <History
-              htmlColor={palette.icon.history[submission.logCount > 1 ? "none" : "default"] }
+              htmlColor={
+                palette.icon.history[
+                  submission.logCount > 1 ? 'none' : 'default'
+                ]
+              }
             />
           </IconButton>
         </a>
@@ -255,7 +259,9 @@ const SubmissionsTableRow = React.memo((props) => {
           size="large"
           style={styles.button}
         >
-          <RemoveCircle htmlColor={disabled ? undefined : palette.icon.unsubmit} />
+          <RemoveCircle
+            htmlColor={disabled ? undefined : palette.icon.unsubmit}
+          />
         </IconButton>
       </span>
     );

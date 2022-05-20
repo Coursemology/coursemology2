@@ -108,7 +108,7 @@ class MaterialUploader extends PureComponent {
     }));
   }
 
-  // Remove materials from uploading list and add new materials from server reponse to existing
+  // Remove materials from uploading list and add new materials from server response to existing
   // materials list.
   updateMaterials(materials, response) {
     const uploadingMaterials = this.state.uploadingMaterials.filter(
