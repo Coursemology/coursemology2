@@ -379,7 +379,10 @@ const VisibleSubmissionsIndex = (props) => {
       onChange={(event, value) => {
         setState({ ...state, tab: value });
       }}
-      style={{ backgroundColor: palette.background.default, color: palette.icon.person }}
+      style={{
+        backgroundColor: palette.background.default,
+        color: palette.icon.person,
+      }}
       TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
       value={state.tab}
       variant="fullWidth"
