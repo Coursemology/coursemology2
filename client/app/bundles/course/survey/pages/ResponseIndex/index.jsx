@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment, { formatLongDateTime } from 'lib/moment';
@@ -23,7 +23,9 @@ import surveyTranslations from 'course/survey/translations';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import UnsubmitButton from 'course/survey/containers/UnsubmitButton';
 import { surveyShape, responseShape } from 'course/survey/propTypes';
+import { useTheme } from '@emotion/react';
 import RemindButton from './RemindButton';
+import { workflowStates } from '../../../assessment/submission/constants';
 
 const styles = {
   red: {
@@ -92,8 +94,18 @@ const translations = defineMessages({
   },
 });
 
-class ResponseIndex extends Component {
-  static computeStatuses(responses) {
+const ResponseIndex = (props) => {
+  const palette = useTheme().palette;
+  const [state, setState] = useState({
+    includePhantomsInStats: false,
+  });
+
+  useEffect(() => {
+    const { dispatch } = props;
+    dispatch(fetchResponses());
+  }, []);
+
+  const computeStatuses = (responses) => {
     const summary = {
       [responseStatus.NOT_STARTED]: 0,
       [responseStatus.SUBMITTED]: 0,
@@ -115,9 +127,81 @@ class ResponseIndex extends Component {
     });
 
     return { responses: responsesWithStatuses, summary };
-  }
+  };
 
-  static renderPhantomTable(responses, survey) {
+  const renderUpdatedAt = (response, survey) => {
+    if (!response.submitted_at) {
+      return null;
+    }
+    const updatedAt = formatLongDateTime(response.updated_at);
+    if (survey.end_at && moment(response.updated_at).isAfter(survey.end_at)) {
+      return <div style={styles.red}>{updatedAt}</div>;
+    }
+    return updatedAt;
+  };
+
+  const renderResponseStatus = (response, survey) => {
+    const status = <FormattedMessage {...translations[response.status]} />;
+    if (response.status === responseStatus.NOT_STARTED) {
+      return <div style={styles.red}>{status}</div>;
+    }
+    return survey.anonymous ? status : <Link to={response.path}>{status}</Link>;
+  };
+
+  const renderSubmittedAt = (response, survey) => {
+    if (!response.submitted_at) {
+      return null;
+    }
+    const submittedAt = formatLongDateTime(response.submitted_at);
+    if (survey.end_at && moment(response.submitted_at).isAfter(survey.end_at)) {
+      return <div style={styles.red}>{submittedAt}</div>;
+    }
+    return submittedAt;
+  };
+
+  const renderTable = (responses, survey) => (
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell colSpan={2}>
+            <FormattedMessage {...translations.name} />
+          </TableCell>
+          <TableCell>
+            <FormattedMessage {...translations.responseStatus} />
+          </TableCell>
+          <TableCell>
+            <FormattedMessage {...translations.submittedAt} />
+          </TableCell>
+          <TableCell>
+            <FormattedMessage {...translations.updatedAt} />
+          </TableCell>
+          <TableCell />
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {responses.map((response) => (
+          <TableRow key={response.course_user.id}>
+            <TableCell colSpan={2}>
+              <a href={response.course_user.path}>
+                {response.course_user.name}
+              </a>
+            </TableCell>
+            <TableCell>{renderResponseStatus(response, survey)}</TableCell>
+            <TableCell>{renderSubmittedAt(response, survey)}</TableCell>
+            <TableCell>{renderUpdatedAt(response, survey)}</TableCell>
+            <TableCell>
+              {response.status === responseStatus.SUBMITTED &&
+              response.canUnsubmit ? (
+                <UnsubmitButton responseId={response.id} />
+              ) : null}
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+
+  const renderPhantomTable = (responses, survey) => {
     if (responses.length < 1) {
       return null;
     }
@@ -127,105 +211,61 @@ class ResponseIndex extends Component {
         <h1>
           <FormattedMessage {...translations.phantoms} />
         </h1>
-        {ResponseIndex.renderTable(responses, survey)}
+        {renderTable(responses, survey)}
       </div>
     );
-  }
+  };
 
-  static renderReponseStatus(response, survey) {
-    const status = <FormattedMessage {...translations[response.status]} />;
-    if (response.status === responseStatus.NOT_STARTED) {
-      return <div style={styles.red}>{status}</div>;
-    }
-    return survey.anonymous ? status : <Link to={response.path}>{status}</Link>;
-  }
-
-  static renderSubmittedAt(response, survey) {
-    if (!response.submitted_at) {
-      return null;
-    }
-    const submittedAt = formatLongDateTime(response.submitted_at);
-    if (survey.end_at && moment(response.submitted_at).isAfter(survey.end_at)) {
-      return <div style={styles.red}>{submittedAt}</div>;
-    }
-    return submittedAt;
-  }
-
-  static renderTable(responses, survey) {
-    return (
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell colSpan={2}>
-              <FormattedMessage {...translations.name} />
-            </TableCell>
-            <TableCell>
-              <FormattedMessage {...translations.responseStatus} />
-            </TableCell>
-            <TableCell>
-              <FormattedMessage {...translations.submittedAt} />
-            </TableCell>
-            <TableCell>
-              <FormattedMessage {...translations.updatedAt} />
-            </TableCell>
-            <TableCell />
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {responses.map((response) => (
-            <TableRow key={response.course_user.id}>
-              <TableCell colSpan={2}>
-                <a href={response.course_user.path}>
-                  {response.course_user.name}
-                </a>
-              </TableCell>
-              <TableCell>
-                {ResponseIndex.renderReponseStatus(response, survey)}
-              </TableCell>
-              <TableCell>
-                {ResponseIndex.renderSubmittedAt(response, survey)}
-              </TableCell>
-              <TableCell>
-                {ResponseIndex.renderUpdatedAt(response, survey)}
-              </TableCell>
-              <TableCell>
-                {response.status === responseStatus.SUBMITTED &&
-                response.canUnsubmit ? (
-                  <UnsubmitButton responseId={response.id} />
-                ) : null}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    );
-  }
-
-  static renderUpdatedAt(response, survey) {
-    if (!response.submitted_at) {
-      return null;
-    }
-    const updatedAt = formatLongDateTime(response.updated_at);
-    if (survey.end_at && moment(response.updated_at).isAfter(survey.end_at)) {
-      return <div style={styles.red}>{updatedAt}</div>;
-    }
-    return updatedAt;
-  }
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      includePhantomsInStats: false,
+  const renderStats = (realResponsesStatuses, phantomResponsesStatuses) => {
+    const { NOT_STARTED, RESPONDING, SUBMITTED } = responseStatus;
+    const dataColor = {
+      [NOT_STARTED]: palette.status[workflowStates.Unstarted],
+      [RESPONDING]: palette.status[workflowStates.Attempting],
+      [SUBMITTED]: palette.status[workflowStates.Published],
     };
-  }
+    const chartData = [NOT_STARTED, RESPONDING, SUBMITTED].map((data) => {
+      const count = state.includePhantomsInStats
+        ? realResponsesStatuses[data] + phantomResponsesStatuses[data]
+        : realResponsesStatuses[data];
+      return {
+        count,
+        color: dataColor[data],
+        label: <FormattedMessage {...translations[data]} />,
+      };
+    });
 
-  componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch(fetchResponses());
-  }
+    return (
+      <Card style={styles.statsCard}>
+        <CardContent>
+          <h3 style={styles.statsHeader}>
+            <FormattedMessage {...translations.stats} />
+          </h3>
+          <BarChart data={chartData} />
+          <FormControlLabel
+            control={
+              <Switch
+                checked={state.includePhantomsInStats}
+                color="primary"
+                onChange={(_, value) =>
+                  setState({ includePhantomsInStats: value })
+                }
+              />
+            }
+            label={
+              <b>
+                <FormattedMessage {...translations.includePhantoms} />
+              </b>
+            }
+          />
+          <br />
+          <RemindButton includePhantom={state.includePhantomsInStats} />
+        </CardContent>
+      </Card>
+    );
+  };
 
-  renderBody() {
-    const { survey, responses, isLoading } = this.props;
+  const renderBody = () => {
+    const { survey, responses, isLoading } = props;
     if (isLoading) {
       return <LoadingIndicator />;
     }
@@ -244,23 +284,23 @@ class ResponseIndex extends Component {
     const {
       responses: realResponsesWithStatuses,
       summary: realResponsesStatuses,
-    } = ResponseIndex.computeStatuses(realResponses);
+    } = computeStatuses(realResponses);
     const {
       responses: phantomResponsesWithStatuses,
       summary: phantomResponsesStatuses,
-    } = ResponseIndex.computeStatuses(phantomResponses);
+    } = computeStatuses(phantomResponses);
 
     return (
       <div>
-        {this.renderStats(realResponsesStatuses, phantomResponsesStatuses)}
-        {ResponseIndex.renderTable(realResponsesWithStatuses, survey)}
-        {ResponseIndex.renderPhantomTable(phantomResponsesWithStatuses, survey)}
+        {renderStats(realResponsesStatuses, phantomResponsesStatuses)}
+        {renderTable(realResponsesWithStatuses, survey)}
+        {renderPhantomTable(phantomResponsesWithStatuses, survey)}
       </div>
     );
-  }
+  };
 
-  renderHeader() {
-    const { survey } = this.props;
+  const renderHeader = () => {
+    const { survey } = props;
     return (
       <Card style={styles.detailsCard}>
         <Table style={styles.table}>
@@ -289,65 +329,15 @@ class ResponseIndex extends Component {
         </Table>
       </Card>
     );
-  }
+  };
 
-  renderStats(realResponsesStatuses, phantomResponsesStatuses) {
-    const { NOT_STARTED, RESPONDING, SUBMITTED } = responseStatus;
-    const dataColor = {
-      [NOT_STARTED]: 'red',
-      [RESPONDING]: 'yellow',
-      [SUBMITTED]: 'green',
-    };
-    const chartData = [NOT_STARTED, RESPONDING, SUBMITTED].map((state) => {
-      const count = this.state.includePhantomsInStats
-        ? realResponsesStatuses[state] + phantomResponsesStatuses[state]
-        : realResponsesStatuses[state];
-      return {
-        count,
-        color: dataColor[state],
-        label: <FormattedMessage {...translations[state]} />,
-      };
-    });
-
-    return (
-      <Card style={styles.statsCard}>
-        <CardContent>
-          <h3 style={styles.statsHeader}>
-            <FormattedMessage {...translations.stats} />
-          </h3>
-          <BarChart data={chartData} />
-          <FormControlLabel
-            control={
-              <Switch
-                checked={this.state.includePhantomsInStats}
-                color="primary"
-                onChange={(_, value) =>
-                  this.setState({ includePhantomsInStats: value })
-                }
-              />
-            }
-            label={
-              <b>
-                <FormattedMessage {...translations.includePhantoms} />
-              </b>
-            }
-          />
-          <br />
-          <RemindButton includePhantom={this.state.includePhantomsInStats} />
-        </CardContent>
-      </Card>
-    );
-  }
-
-  render() {
-    return (
-      <div>
-        {this.renderHeader()}
-        {this.renderBody()}
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      {renderHeader()}
+      {renderBody()}
+    </div>
+  );
+};
 
 ResponseIndex.propTypes = {
   survey: surveyShape,
@@ -356,4 +346,4 @@ ResponseIndex.propTypes = {
   isLoading: PropTypes.bool.isRequired,
 };
 
-export default connect((state) => state.responses)(ResponseIndex);
+export default connect((rootState) => rootState.responses)(ResponseIndex);
