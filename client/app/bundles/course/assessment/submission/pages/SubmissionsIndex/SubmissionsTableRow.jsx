@@ -184,7 +184,11 @@ const SubmissionsTableRow = (props) => {
           <IconButton size="large" style={styles.button}>
             <History
               htmlColor={
+<<<<<<< HEAD
                 palette.submissionIcon.history[
+=======
+                palette.icon.history[
+>>>>>>> refactor(surveys): update barchart to follow submissions barchart, fix linting and spelling errors, fix bug on value for my-student-tab
                   submission.logCount > 1 ? 'none' : 'default'
                 ]
               }
@@ -258,7 +262,11 @@ const SubmissionsTableRow = (props) => {
           style={styles.button}
         >
           <RemoveCircle
+<<<<<<< HEAD
             htmlColor={disabled ? undefined : palette.submissionIcon.unsubmit}
+=======
+            htmlColor={disabled ? undefined : palette.icon.unsubmit}
+>>>>>>> refactor(surveys): update barchart to follow submissions barchart, fix linting and spelling errors, fix bug on value for my-student-tab
           />
         </IconButton>
       </span>
