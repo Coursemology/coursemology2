@@ -2,7 +2,6 @@ import { Component } from 'react';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import ReactTooltip from 'react-tooltip';
 import {
   Button,
   Card,
@@ -44,6 +43,7 @@ import {
 } from '../../constants';
 import translations from '../../translations';
 import submissionsTranslations from './translations';
+<<<<<<< HEAD
 
 const styles = {
   histogram: {
@@ -56,6 +56,9 @@ const styles = {
     common: { transition: 'flex .5s, min-width .5s' },
   },
 };
+=======
+import BarChart from '../../../../../../lib/components/BarChart';
+>>>>>>> 48d289d2c (refactor(surveys): update barchart to follow submissions barchart, fix linting and spelling errors, fix bug on value for my-student-tab)
 
 class VisibleSubmissionsIndex extends Component {
   static canForceSubmitOrRemind(shownSubmissions) {
@@ -128,7 +131,46 @@ class VisibleSubmissionsIndex extends Component {
         message={<FormattedMessage {...message} values={values} />}
       />
     );
+<<<<<<< HEAD
   }
+=======
+  };
+
+  const renderBarChart = (submissionBarChart) => {
+    const { includePhantoms } = state;
+    const workflowStatesArray = Object.values(workflowStates);
+
+    const initialCounts = workflowStatesArray.reduce(
+      (counts, w) => ({ ...counts, [w]: 0 }),
+      {},
+    );
+    const submissionStateCounts = submissionBarChart.reduce(
+      (counts, submission) => {
+        if (includePhantoms || !submission.courseUser.phantom) {
+          return {
+            ...counts,
+            [submission.workflowState]: counts[submission.workflowState] + 1,
+          };
+        }
+        return counts;
+      },
+      initialCounts,
+    );
+
+    const data = workflowStatesArray
+      .map((w) => {
+        const count = submissionStateCounts[w];
+        return {
+          count,
+          color: palette.status[w],
+          label: <FormattedMessage {...translations[w]} />,
+        };
+      })
+      .filter((seg) => seg.count > 0);
+
+    return <BarChart data={data} />;
+  };
+>>>>>>> 48d289d2c (refactor(surveys): update barchart to follow submissions barchart, fix linting and spelling errors, fix bug on value for my-student-tab)
 
   renderHeader(shownSubmissions) {
     const {
@@ -152,7 +194,11 @@ class VisibleSubmissionsIndex extends Component {
       <Card style={{ marginBottom: 20 }}>
         <CardHeader title={<h3>{title}</h3>} subheader="Submissions" />
         <CardContent style={{ paddingTop: 0, paddingBottom: 0 }}>
+<<<<<<< HEAD
           {this.renderHistogram(shownSubmissions)}
+=======
+          {renderBarChart(shownSubmissions)}
+>>>>>>> 48d289d2c (refactor(surveys): update barchart to follow submissions barchart, fix linting and spelling errors, fix bug on value for my-student-tab)
           <FormControlLabel
             control={
               <Switch
@@ -384,6 +430,7 @@ class VisibleSubmissionsIndex extends Component {
     );
   }
 
+<<<<<<< HEAD
   renderTabs(myStudentsExist) {
     return (
       <Tabs
@@ -407,6 +454,26 @@ class VisibleSubmissionsIndex extends Component {
             value="my-students-tab"
           />
         )}
+=======
+  const renderTabs = (myStudentsExist) => (
+    <Tabs
+      onChange={(event, value) => {
+        setState({ ...state, tab: value });
+      }}
+      style={{
+        backgroundColor: palette.background.default,
+        color: palette.icon.person,
+      }}
+      TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
+      value={
+        !myStudentsExist && state.tab === 'my-students-tab'
+          ? 'students-tab'
+          : state.tab
+      }
+      variant="fullWidth"
+    >
+      {myStudentsExist && (
+>>>>>>> 48d289d2c (refactor(surveys): update barchart to follow submissions barchart, fix linting and spelling errors, fix bug on value for my-student-tab)
         <Tab
           id="students-tab"
           icon={<Person style={{ color: palette.submissionIcon.person }} />}
