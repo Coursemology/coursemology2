@@ -270,7 +270,7 @@ export function refreshDiscussion() {
 }
 
 /**
- * Produces a thunk to submit a reply to the server and waits for a reponse.
+ * Produces a thunk to submit a reply to the server and waits for a response.
  *
  * The new reply is then added to the application state with addReply(..).
  *

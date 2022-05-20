@@ -2,7 +2,6 @@ import { Component } from 'react';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import ReactTooltip from 'react-tooltip';
 import {
   Button,
   Card,
@@ -44,18 +43,7 @@ import {
 } from '../../constants';
 import translations from '../../translations';
 import submissionsTranslations from './translations';
-
-const styles = {
-  histogram: {
-    borderRadius: 10,
-    display: 'flex',
-    overflow: 'hidden',
-    textAlign: 'center',
-  },
-  histogramCells: {
-    common: { transition: 'flex .5s, min-width .5s' },
-  },
-};
+import BarChart from '../../../../../../lib/components/BarChart';
 
 class VisibleSubmissionsIndex extends Component {
   static canForceSubmitOrRemind(shownSubmissions) {
@@ -128,7 +116,42 @@ class VisibleSubmissionsIndex extends Component {
         message={<FormattedMessage {...message} values={values} />}
       />
     );
-  }
+  };
+
+  renderBarChart = (submissionBarChart) => {
+    const { includePhantoms } = this.state;
+    const workflowStatesArray = Object.values(workflowStates);
+
+    const initialCounts = workflowStatesArray.reduce(
+      (counts, w) => ({ ...counts, [w]: 0 }),
+      {},
+    );
+    const submissionStateCounts = submissionBarChart.reduce(
+      (counts, submission) => {
+        if (includePhantoms || !submission.courseUser.phantom) {
+          return {
+            ...counts,
+            [submission.workflowState]: counts[submission.workflowState] + 1,
+          };
+        }
+        return counts;
+      },
+      initialCounts,
+    );
+
+    const data = workflowStatesArray
+      .map((w) => {
+        const count = submissionStateCounts[w];
+        return {
+          count,
+          color: palette.submissionStatus[w],
+          label: <FormattedMessage {...translations[w]} />,
+        };
+      })
+      .filter((seg) => seg.count > 0);
+
+    return <BarChart data={data} />;
+  };
 
   renderHeader(shownSubmissions) {
     const {
@@ -152,7 +175,7 @@ class VisibleSubmissionsIndex extends Component {
       <Card style={{ marginBottom: 20 }}>
         <CardHeader title={<h3>{title}</h3>} subheader="Submissions" />
         <CardContent style={{ paddingTop: 0, paddingBottom: 0 }}>
-          {this.renderHistogram(shownSubmissions)}
+          {this.renderBarChart(shownSubmissions)}
           <FormControlLabel
             control={
               <Switch
@@ -223,51 +246,6 @@ class VisibleSubmissionsIndex extends Component {
           )}
         </CardActions>
       </Card>
-    );
-  }
-
-  renderHistogram(submissionHistogram) {
-    const { includePhantoms } = this.state;
-    const workflowStatesArray = Object.values(workflowStates);
-
-    const initialCounts = workflowStatesArray.reduce(
-      (counts, w) => ({ ...counts, [w]: 0 }),
-      {},
-    );
-    const submissionStateCounts = submissionHistogram.reduce(
-      (counts, submission) => {
-        if (includePhantoms || !submission.courseUser.phantom) {
-          return {
-            ...counts,
-            [submission.workflowState]: counts[submission.workflowState] + 1,
-          };
-        }
-        return counts;
-      },
-      initialCounts,
-    );
-
-    return (
-      <div style={styles.histogram}>
-        {workflowStatesArray.map((w) => {
-          const count = submissionStateCounts[w];
-          const cellStyle = {
-            ...styles.histogramCells.common,
-            backgroundColor: palette.submissionStatus[w],
-            flex: count,
-            minWidth: count > 0 ? 50 : 0,
-          };
-
-          return (
-            <div key={w} style={cellStyle} data-tip data-for={w}>
-              {count > 0 ? count : null}
-              <ReactTooltip id={w} effect="solid">
-                <FormattedMessage {...translations[w]} />
-              </ReactTooltip>
-            </div>
-          );
-        })}
-      </div>
     );
   }
 
