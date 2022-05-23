@@ -218,7 +218,6 @@ const ResponseIndex = (props) => {
 
   const renderStats = (realResponsesStatuses, phantomResponsesStatuses) => {
     const { NOT_STARTED, RESPONDING, SUBMITTED } = responseStatus;
-    console.log(palette);
     const dataColor = {
       [NOT_STARTED]: palette && palette.status[workflowStates.Unstarted],
       [RESPONDING]: palette && palette.status[workflowStates.Attempting],
