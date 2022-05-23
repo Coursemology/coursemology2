@@ -95,7 +95,7 @@ const translations = defineMessages({
 });
 
 const ResponseIndex = (props) => {
-  const palette = useTheme().palette;
+  const { palette } = useTheme();
   const [state, setState] = useState({
     includePhantomsInStats: false,
   });
@@ -218,10 +218,11 @@ const ResponseIndex = (props) => {
 
   const renderStats = (realResponsesStatuses, phantomResponsesStatuses) => {
     const { NOT_STARTED, RESPONDING, SUBMITTED } = responseStatus;
+    console.log(palette);
     const dataColor = {
-      [NOT_STARTED]: palette.status[workflowStates.Unstarted],
-      [RESPONDING]: palette.status[workflowStates.Attempting],
-      [SUBMITTED]: palette.status[workflowStates.Published],
+      [NOT_STARTED]: palette && palette.status[workflowStates.Unstarted],
+      [RESPONDING]: palette && palette.status[workflowStates.Attempting],
+      [SUBMITTED]: palette && palette.status[workflowStates.Published],
     };
     const chartData = [NOT_STARTED, RESPONDING, SUBMITTED].map((data) => {
       const count = state.includePhantomsInStats
