@@ -19,7 +19,10 @@ import {
 } from '@mui/material';
 import { red } from '@mui/material/colors';
 import BarChart from 'lib/components/BarChart';
-import { fetchResponses, unsubmitResponse } from 'course/survey/actions/responses';
+import {
+  fetchResponses,
+  unsubmitResponse,
+} from 'course/survey/actions/responses';
 import surveyTranslations from 'course/survey/translations';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import UnsubmitButton from 'course/survey/containers/UnsubmitButton';
@@ -58,6 +61,11 @@ const responseStatus = mirrorCreator([
 const ResponseIndex = (props) => {
   const { dispatch, survey, responses, isLoading } = props;
   const { palette } = useTheme();
+  const dataColor = {
+    [NOT_STARTED]: palette && palette.submissionStatus[workflowStates.Unstarted],
+    [RESPONDING]: palette && palette.submissionStatus[workflowStates.Attempting],
+    [SUBMITTED]: palette && palette.submissionStatus[workflowStates.Published],
+  };
   const [state, setState] = useState({
     includePhantomsInStats: false,
     unsubmitConfirmation: false,
@@ -102,32 +110,31 @@ const ResponseIndex = (props) => {
     return updatedAt;
   };
 
-  const renderResponseStatus = (response, survey) => {
-
-      return (
-        <FormattedMessage {...translations[response.status]}>
-          {msg => (
-            <Chip
-              clickable={response.status !== responseStatus.NOT_STARTED 
-                && !survey.anonymous}
-              label={msg}
-              component={response.status !== responseStatus.NOT_STARTED 
-                && !survey.anonymous ? Link : null}
-              to={response.path}
-              style={{
-                ...styles.chip,
-                backgroundColor: survey.anonymous 
-                  ? palette.status.Submitted // grey colour
-                  : dataColor[response.status],
-              }}
-              variant="filled"
-            />
-          )}
-        </FormattedMessage>
-      );
-
-
-  };
+  const renderResponseStatus = (response, survey) => (
+    <FormattedMessage {...translations[response.status]}>
+      {(msg) => (
+        <Chip
+          clickable={
+            response.status !== responseStatus.NOT_STARTED && !survey.anonymous
+          }
+          label={msg}
+          component={
+            response.status !== responseStatus.NOT_STARTED && !survey.anonymous
+              ? Link
+              : null
+          }
+          to={response.path}
+          style={{
+            ...styles.chip,
+            backgroundColor: survey.anonymous
+              ? palette.status.Submitted // grey colour
+              : dataColor[response.status],
+          }}
+          variant="filled"
+        />
+      )}
+    </FormattedMessage>
+  );
 
   const renderSubmittedAt = (response) => {
     if (!response.submitted_at) {
@@ -141,15 +148,13 @@ const ResponseIndex = (props) => {
   };
 
   const handleUnsubmitResponse = () => {
-    const { dispatch, buttonId } = this.props;
+    const { dispatch, buttonId } = props;
     const { unsubmitSuccess, unsubmitFailure } = translations;
     const successMessage = <FormattedMessage {...unsubmitSuccess} />;
     const failureMessage = <FormattedMessage {...unsubmitFailure} />;
 
-    this.setState({ open: false });
-    return dispatch(
-      unsubmitResponse(buttonId, successMessage, failureMessage),
-    );
+    setState({ open: false });
+    return dispatch(unsubmitResponse(buttonId, successMessage, failureMessage));
   };
 
   const renderTable = (tableResponses) => (
@@ -186,8 +191,8 @@ const ResponseIndex = (props) => {
               {response.status === responseStatus.SUBMITTED &&
               response.canUnsubmit ? (
                 <>
-                  <UnsubmitButton 
-                    buttonId={response.id} 
+                  <UnsubmitButton
+                    buttonId={response.id}
                     color={palette.icon.unsubmit}
                     setState={setState}
                     state={state}
@@ -198,11 +203,12 @@ const ResponseIndex = (props) => {
                   <ConfirmationDialog
                     message={<FormattedMessage {...translations.confirm} />}
                     open={state.unsubmitConfirmation}
-                    onCancel={() => setState({ ...state, unsubmitConfirmation: false })}
+                    onCancel={() =>
+                      setState({ ...state, unsubmitConfirmation: false })
+                    }
                     onConfirm={handleUnsubmitResponse}
                   />
                 </>
-
               ) : null}
             </TableCell>
           </TableRow>
@@ -304,7 +310,6 @@ const ResponseIndex = (props) => {
       responses: phantomResponsesWithStatuses,
       summary: phantomResponsesStatuses,
     } = computeStatuses(phantomResponses);
-    console.log(responses);
 
     return (
       <div>
@@ -357,6 +362,7 @@ ResponseIndex.propTypes = {
   dispatch: PropTypes.func.isRequired,
   responses: PropTypes.arrayOf(responseShape),
   isLoading: PropTypes.bool.isRequired,
+  buttonId: PropTypes.number.isRequired,
 };
 
 export default connect((rootState) => rootState.responses)(ResponseIndex);

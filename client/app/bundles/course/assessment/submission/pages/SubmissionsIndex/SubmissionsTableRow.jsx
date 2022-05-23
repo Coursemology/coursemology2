@@ -6,7 +6,6 @@ import { Chip, Icon, IconButton, TableCell, TableRow } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import Delete from '@mui/icons-material/Delete';
 import History from '@mui/icons-material/History';
-import RemoveCircle from '@mui/icons-material/RemoveCircle';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import {
   getCourseUserURL,
