@@ -7,7 +7,7 @@ const responseStatus = mirrorCreator([
   'RESPONDING',
 ]);
 
-export const translations = defineMessages({
+const translations = defineMessages({
   name: {
     id: 'course.surveys.ResponseIndex.name',
     defaultMessage: 'Name',
@@ -67,3 +67,5 @@ export const translations = defineMessages({
       Are you sure that you want to unsubmit?',
   },
 });
+
+export default translations;
