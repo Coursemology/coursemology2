@@ -95,8 +95,5 @@ describe('<ResponseIndex />', () => {
     expect(getStatus(phantomStudentRows.first())).toBe('Submitted');
     expect(getStatus(realStudentRows.first())).toBe('Not Started');
     expect(getStatus(realStudentRows.last())).toBe('Responding');
-
-    // Include phantom students in statistics
-    const statsCard = responseIndex.find('ForwardRef(Card)').last();
   });
 });
