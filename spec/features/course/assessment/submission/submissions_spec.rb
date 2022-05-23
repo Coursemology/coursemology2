@@ -99,11 +99,11 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         visit course_assessment_submissions_path(course, assessment)
         find('#students-tab').click
 
-        expect(page).to have_text('Graded but not published')
+        expect(page).to have_text('Graded, unpublished')
         click_button('Publish Grades')
         accept_confirm_dialog
         wait_for_job
-        expect(page).not_to have_text('Graded but not published')
+        expect(page).not_to have_text('Graded, unpublished')
 
         expect(graded_submission.reload).to be_published
         expect(graded_submission.publisher).to eq(user)
@@ -145,7 +145,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         find('.unsubmit-submissions-enabled').click
         accept_confirm_dialog
         wait_for_job
-        expect(page).not_to have_text('Graded but not published')
+        expect(page).not_to have_text('Graded, unpublished')
 
         find('#submission-dropdown-icon').click
         expect(page).not_to have_css('.unsubmit-submissions-enabled')

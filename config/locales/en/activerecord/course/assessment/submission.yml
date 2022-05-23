@@ -9,7 +9,7 @@ en:
         graded_at: :'activerecord.attributes.course/assessment/answer.graded_at'
         attempting: 'Attempting'
         submitted: 'Submitted'
-        graded: 'Graded but not published'
+        graded: 'Graded, unpublished'
         published: 'Graded'
     errors:
       models:
